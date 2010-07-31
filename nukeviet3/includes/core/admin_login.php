@@ -109,6 +109,7 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 else
 {
 	$nv_Request->set_Session( 'admin_login_redirect', $client_info['selfurl'] );
+    $nv_username = "";
 }
 
 if ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_global.php" ) )
