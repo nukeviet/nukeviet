@@ -2,14 +2,10 @@ User-agent: *
 Disallow: /admin/
 Disallow: /cache/
 Disallow: /data/
-Disallow: /images/
 Disallow: /includes/
 Disallow: /install/
-Disallow: /js/
 Disallow: /language/
 Disallow: /logs/
 Disallow: /modules/
 Disallow: /sess/
-Disallow: /themes/
 Disallow: /tmp/
-Disallow: /uploads/
