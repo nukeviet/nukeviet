@@ -27,7 +27,6 @@ function validUserLog( $array_user, $remember, $opid )
         'last_ip' => $array_user['last_ip'], //
         'current_login' => NV_CURRENTTIME, //
         'last_login' => intval( $array_user['last_login'] ), //
-        'current_mode' => $mode, //
         'last_openid' => $array_user['last_openid'], //
         'current_openid' => $opid );
 
