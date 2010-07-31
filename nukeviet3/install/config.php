@@ -28,7 +28,7 @@ $global_config['session_prefix'] = "";
 $global_config['sitekey'] = "";
 
 $global_config['site_timezone'] = "Asia/Bangkok";
-$global_config['gzip_method'] = 0;
+$global_config['gzip_method'] = 1;
 
 $global_config['proxy_blocker'] = 0;
 $global_config['str_referer_blocker'] = 0;
