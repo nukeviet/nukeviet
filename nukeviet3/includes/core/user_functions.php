@@ -335,8 +335,8 @@ function showBanners ( $id )
         else
         {
             $link_i = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=banners&amp;" . NV_OP_VARIABLE . "=click&amp;id=" . $banners['id'];
-            $return .= "<a href=\"" . $link_i . "\" target=\"_blank\" title=\"" . $banners['file_alt'] . "\">
-            				<img alt=\"" . $banners['file_alt'] . "\" border=\"0\" src=\"" . NV_BASE_SITEURL . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\"/>
+            $return .= "<a href=\"" . $link_i . "\" onclick=\"this.target='_blank'\" title=\"" . $banners['file_alt'] . "\">
+            				<img alt=\"" . $banners['file_alt'] . "\" style=\"border-width:0px\" src=\"" . NV_BASE_SITEURL . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\" />
             			</a>";
         }
         $return .= "</div>\n";
