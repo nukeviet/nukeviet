@@ -6,14 +6,20 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3/25/2010 18:6
  */
+
 if ( ! function_exists( 'nv_block_voting' ) )
 {
-    function nv_block_voting ( )
+    /**
+     * nv_block_voting()
+     * 
+     * @return
+     */
+    function nv_block_voting()
     {
-        global $db, $my_head, $site_mods, $global_config;
-        
+        global $db, $my_head, $site_mods, $global_config, $client_info;
+
         $content = "";
-        
+
         if ( isset( $site_mods['voting'] ) )
         {
             $table = NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'];
@@ -28,9 +34,9 @@ if ( ! function_exists( 'nv_block_voting' ) )
                 if ( $db->sql_numrows( $result ) > 0 )
                 {
                     $module_file = $site_mods['voting']['module_file'];
-                    
+
                     include_once ( NV_ROOTDIR . "/modules/" . $module_file . "/language/" . NV_LANG_INTERFACE . ".php" );
-                    
+
                     if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $module_file . "/global.voting.tpl" ) )
                     {
                         $block_theme = $global_config['site_theme'];
@@ -39,26 +45,25 @@ if ( ! function_exists( 'nv_block_voting' ) )
                     {
                         $block_theme = "default";
                     }
-                    
+
                     $my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
                     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $module_file . "/js/user.js\"></script>\n";
                     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
                     $my_head .= "<script type=\"text/javascript\">
 				    	Shadowbox.init();
 					</script>";
-                    
+
                     $action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";
-                    
-                    $voting_array = array(  //
-                        "checkss" => md5( $vid . session_id() . $global_config['sitekey'] ), //
-						"accept" => $accept, //
-						"errsm" => $accept > 1 ? sprintf( $lang_module['voting_warning_all'], $accept ) : $lang_module['voting_warning_accept1'], //
-						"vid" => $vid, //
-						"question" => $question, //
-						"action" => $action, //
-						"langresult" => $lang_module['voting_result'], //
-						"langsubmit" => $lang_module['voting_hits'] 
-                    ); //
+
+                    $voting_array = array( //
+                        "checkss" => md5( $vid . $client_info['session_id'] . $global_config['sitekey'] ), //
+                        "accept" => $accept, //
+                        "errsm" => $accept > 1 ? sprintf( $lang_module['voting_warning_all'], $accept ) : $lang_module['voting_warning_accept1'], //
+                        "vid" => $vid, //
+                        "question" => $question, //
+                        "action" => $action, //
+                        "langresult" => $lang_module['voting_result'], //
+                        "langsubmit" => $lang_module['voting_hits'] ); //
                     $xtpl = new XTemplate( "global.voting.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_file );
                     $xtpl->assign( 'VOTING', $voting_array );
                     while ( $row = $db->sql_fetchrow( $result ) )

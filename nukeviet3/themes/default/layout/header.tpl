@@ -18,16 +18,6 @@
         {THEME_SITE_JS}
         <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/jquery.dropdownPlain.js">
         </script>
-        <script type="text/javascript">
-            jQuery(document).ready(function(){
-                var zIndexNumber = 1000;
-                $('div').each(function(){
-                    $(this).css('zIndex', zIndexNumber);
-                    zIndexNumber -= 10;
-                });
-            });
-        </script>
-                
         <!--[if IE 6]>
             <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/ie6.css" />
             <script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>

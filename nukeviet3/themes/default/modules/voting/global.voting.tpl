@@ -11,8 +11,9 @@
         </p><!-- END: result1 -->
         <div style="padding-top: 10px;" class="clearfix">
             <div class="submit">
-                <input class="submit" type="button" value="{VOTING.langsubmit}" onclick="nv_sendvoting(this.form, '{VOTING.vid}', '{VOTING.accept}', '{VOTING.checkss}', '{VOTING.errsm}');"/>
-            </div><a class="forgot fl" title="{VOTING.langresult}" href="#" onclick="nv_sendvoting(this.form, '{VOTING.vid}', 0, '{VOTING.checkss}', '');">{VOTING.langresult}</a>
+                <input class="submit" type="button" value="{VOTING.langsubmit}" onclick="nv_sendvoting(this.form, '{VOTING.vid}', '{VOTING.accept}', '{VOTING.checkss}', '{VOTING.errsm}');" />
+            </div>
+            <a class="forgot fl" title="{VOTING.langresult}" href="javascript:void(0);" onclick="nv_sendvoting(this.form, '{VOTING.vid}', 0, '{VOTING.checkss}', '');">{VOTING.langresult}</a>
         </div>
     </fieldset>
 </form>
