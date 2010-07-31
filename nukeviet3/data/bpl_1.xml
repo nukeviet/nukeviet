@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plan>
+  <id>1</id>
+  <lang></lang>
+  <title>Quan cao giua trang</title>
+  <form>sequential</form>
+  <width>510</width>
+  <height>100</height>
+  <banners>
+    <banners_item>
+      <id>3</id>
+      <title>Quan cao giua trang</title>
+      <clid>0</clid>
+      <file_name>uploads/banners/vndads___05.jpg</file_name>
+      <file_ext>jpg</file_ext>
+      <file_mime>image/jpeg</file_mime>
+      <file_width>470</file_width>
+      <file_height>60</file_height>
+      <file_alt></file_alt>
+      <file_click>http://nukeviet.vn</file_click>
+    </banners_item>
+  </banners>
+</plan>

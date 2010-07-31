@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Createdate 3-6-2010 0:14
+ */
+if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+$difftimeout = 360;
+$id = $nv_Request->get_int( 'id', 'post', 0 );
+$content = filter_text_input( 'content', 'post', '', 1 );
+$code = filter_text_input( 'code', 'post', '' );
+$checkss = filter_text_input( 'checkss', 'post' );
+$status = $module_config[$module_name]['auto_postcomm'];
+if ( defined( 'NV_IS_USER' ) )
+{
+    $name = $user_info['username'];
+    $email = $user_info['email'];
+}
+elseif ( defined( 'NV_IS_ADMIN' ) )
+{
+    $name = $admin_info['username'];
+    $email = $admin_info['email'];
+    $status = 1;
+}
+else
+{
+    $name = filter_text_input( 'name', 'post', '', 1 );
+    $email = filter_text_input( 'email', 'post', '' );
+}
+
+$contents = "";
+
+if ( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $name != "" and nv_check_valid_email( $email ) == "" and $code != "" and $content != "" )
+{
+    $timeout = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'cookie', 0 );
+    if ( ! nv_capcha_txt( $code ) )
+    {
+        $contents = "ERR_" . $lang_global['securitycodeincorrect'];
+    }
+    elseif ( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
+    {
+        $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_comments` (`cid`, `id`, `content`, `post_time`, `post_name`, `post_email`, `post_ip`, `status`) VALUES (NULL, " . $id . "," . $db->dbescape( $content ) . ", UNIX_TIMESTAMP(), " . $db->dbescape( $name ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ")";
+        $result = $db->sql_query( $sql );
+        if ( $result )
+        {
+            $page = 0;
+            list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` where `id`= '" . $id . "' AND `status`=1" ) );
+            $page = ceil( ( $numf - $per_page_comment ) / $per_page_comment ) * $per_page_comment;
+            if ( $page < 0 ) $page = 0;
+            $nv_Request->set_Cookie( $module_name . '_' . $op . '_' . $id, NV_CURRENTTIME );
+            $contents = "OK_" . $id . "_" . $checkss . "_" . $page . "_" . $lang_module['comment_success'];
+        }
+        else
+        {
+            $contents = "ERR_" . $lang_module['comment_unsuccess'];
+        }
+    }
+    else
+    {
+        $timeout = ceil( ( $difftimeout - NV_CURRENTTIME + $timeout ) / 60 );
+        $timeoutmsg = sprintf( $lang_module['comment_timeout'], $timeout );
+        $contents = "ERR_" . $timeoutmsg;
+    }
+}
+else
+{
+    $contents = "ERR_" . $lang_module['comment_unsuccess'];
+}
+
+include ( NV_ROOTDIR . "/includes/header.php" );
+echo $contents;
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
+?>

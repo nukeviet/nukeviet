@@ -1,0 +1,121 @@
+.banner_plan {
+	background: #FFF;
+	border: 1px solid #DADADA;
+	margin-bottom: 10px;
+	padding: 5px
+}
+
+.detail {
+	display: block;
+	float: right
+}
+
+.module_info {
+	font: normal 13px/ 18px Arial, Verdana, sans-serif;
+	margin-bottom: 10px;
+	padding: 10px 0px 5px 0px
+}
+
+.plan_content {
+	margin-bottom: 10px;
+	padding: 5px 0px 5px 5px
+}
+
+.plan_title {
+	background: #F0F0F0;
+	padding: 5px 0px 5px 5px
+}
+
+.plan_title a {
+	color: #cb0000;
+	font-weight: bold;
+	text-decoration: none
+}
+
+#client_login {
+	background: #F0F0F0;
+	border: 1px solid #DADADA;
+	float: right;
+	margin-top: 15px;
+	position: relative;
+	padding: 5px;
+	width: 350px
+}
+
+#client_login div.lt {
+	clear: both;
+	height: 24px
+}
+
+#client_login input[type="text"],#client_login input[type="password"] {
+	float: right;
+	position: relative;
+	width: 250px
+}
+
+#client_login input[type="text"].captcha {
+	width: 100px
+}
+
+#client_login label {
+	float: left;
+	position: relative
+}
+
+#clinfo {
+	background: #FFF;
+	border: 1px solid #DADADA;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	padding: 5px
+}
+
+#clinfo div.deact {
+	clear: both;
+	font: normal 13px/ 30px Arial, Verdana, sans-serif;
+	background: #FFF;
+	padding: 0px 5px 0px 5px
+}
+
+#clinfo div.act {
+	clear: both;
+	font: normal 13px/ 30px Arial, Verdana, sans-serif;
+	background: #F0F0F0;
+	padding: 0px 5px 0px 5px
+}
+
+#clinfo div.value {
+	float: right;
+	position: relative;
+	font: normal 13px/ 30px Arial, Verdana, sans-serif;
+	width: 300px
+}
+
+.cledit {
+	background: #F0F0F0;
+	border: 1px solid #DADADA;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	padding: 5px;
+}
+
+.cledit div.lt {
+	clear: both;
+	height: 24px
+}
+
+.cledit input[type="text"],.cledit input[type="password"] {
+	float: right;
+	position: relative;
+	width: 280px
+}
+
+.cledit label {
+	float: left;
+	position: relative
+}
+
+.plan_title a:hover {
+	color: #0943ae;
+	text-decoration: underline
+}

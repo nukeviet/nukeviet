@@ -1,0 +1,204 @@
+<?php
+
+/**
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @copyright 2009
+ * @createdate 12/30/2009 6:18
+ */
+
+define( 'NV_ADMIN', true );
+
+//Ket noi den mainfile.php nam o thu muc goc.
+$realpath_mainfile = "";
+
+$temp_dir = str_replace( '\\\\', '/', dirname( __file__ ) );
+$temp_path = "/../";
+for ( $i = 0; $i < 10; $i++ )
+{
+    $realpath_mainfile = @realpath( $temp_dir . $temp_path . 'mainfile.php' );
+    if ( ! empty( $realpath_mainfile ) ) break;
+    $temp_path .= "../";
+}
+
+unset( $temp_dir, $temp_path );
+
+if ( empty( $realpath_mainfile ) ) die();
+
+require_once ( $realpath_mainfile );
+
+ob_start();
+
+//Admin dang nhap
+if ( ! defined( 'NV_IS_ADMIN' ) or ! isset( $admin_info ) or empty( $admin_info ) )
+{
+    require_once ( NV_ROOTDIR . "/includes/core/admin_access.php" );
+    require_once ( NV_ROOTDIR . "/includes/core/admin_login.php" );
+    exit;
+}
+
+if ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_global.php" ) )
+{
+    require_once ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_global.php" );
+} elseif ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_global.php" ) )
+{
+    require_once ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_global.php" );
+} elseif ( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
+{
+    require_once ( NV_ROOTDIR . "/language/en/admin_global.php" );
+}
+
+include_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
+
+$admin_mods = array();
+$admin_mods['siteinfo'] = array( 'custom_title' => $lang_global['mod_siteinfo'] );
+$admin_mods['authors'] = array( 'custom_title' => $lang_global['mod_authors'] );
+$admin_mods['upload'] = array( 'custom_title' => "" );
+
+if ( defined( 'NV_IS_SPADMIN' ) )
+{
+    $admin_mods['groups'] = array( 'custom_title' => $lang_global['mod_groups'] );
+    if ( defined( 'NV_IS_GODADMIN' ) )
+    {
+        $admin_mods['database'] = array( 'custom_title' => $lang_global['mod_database'] );
+        $admin_mods['cronjobs'] = array( 'custom_title' => $lang_global['mod_cronjobs'] );
+        $admin_mods['settings'] = array( 'custom_title' => $lang_global['mod_settings'] );
+    }
+    $admin_mods['language'] = array( 'custom_title' => $lang_global['mod_language'] );
+    $admin_mods['modules'] = array( 'custom_title' => $lang_global['mod_modules'] );
+    $admin_mods['themes'] = array( 'custom_title' => $lang_global['mod_themes'] );
+}
+
+$module_name = strtolower( filter_text_input( NV_NAME_VARIABLE, 'post,get', 'siteinfo' ) );
+
+if ( ! empty( $module_name ) )
+{
+    $include_functions = $include_file = $lang_file = $mod_theme_file = "";
+    $module_data = $module_file = $module_name;
+
+    $op = filter_text_input( NV_OP_VARIABLE, 'post,get', 'main' );
+    if ( empty( $op ) or $op == "functions" )
+    {
+        $op = "main";
+    }
+
+    $site_mods = nv_site_mods();
+    if ( empty( $site_mods ) and $module_name != "language" )
+    {
+
+        $sql = "SELECT `setup` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `lang`='" . NV_LANG_DATA . "'";
+        $result = $db->sql_query( $sql );
+        list( $setup ) = $db->sql_fetchrow( $result );
+        if ( empty( $setup ) )
+        {
+            $module_name = "language";
+            $op = "data";
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+            exit();
+        }
+    }
+
+    $menu_top = array();
+    if ( isset( $admin_mods[$module_name] ) )
+    {
+        $module_info = $admin_mods[$module_name];
+        $module_file = $module_name;
+        $include_functions = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_name . "/functions.php";
+        $include_file = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_name . "/" . $op . ".php";
+        
+        //ket noi voi file ngon ngu cua module
+        if ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $module_file . ".php" ) )
+        {
+            require_once ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $module_file . ".php" );
+        } elseif ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $module_file . ".php" ) )
+        {
+            require_once ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $module_file . ".php" );
+        } elseif ( file_exists( NV_ROOTDIR . "/language/en/admin_" . $module_file . ".php" ) )
+        {
+            require_once ( NV_ROOTDIR . "/language/en/admin_" . $module_file . ".php" );
+        }
+    } elseif ( isset( $site_mods[$module_name] ) )
+    {
+        $module_info = $site_mods[$module_name];
+        $module_file = $module_info['module_file'];
+        $module_data = $module_info['module_data'];
+        $include_functions = NV_ROOTDIR . "/modules/" . $module_file . "/admin.functions.php";
+        $include_file = NV_ROOTDIR . "/modules/" . $module_file . "/admin/" . $op . ".php";
+
+        //Ket noi ngon ngu cua module
+        if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php" ) )
+        {
+            require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php" );
+        } elseif ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php" ) )
+        {
+            require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php" );
+        } elseif ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php" ) )
+        {
+            require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php" );
+        }
+    }
+
+    if ( file_exists( $include_functions ) and file_exists( $include_file ) )
+    {
+        define( 'NV_IS_MODADMIN', true );
+        
+        $array_lang_admin = array();
+        
+        if ( $global_config['lang_multi'] )
+        {
+            foreach ( $global_config['allow_adminlangs'] as $lang_i )
+            {
+                if ( file_exists( NV_ROOTDIR . "/language/" . $lang_i . "/global.php" ) )
+                {
+                    $array_lang_admin[$lang_i] = $language_array[$lang_i]['name'];
+                }
+            }
+        }
+
+        //ket noi voi giao dien chung cua admin
+        require_once ( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/theme.php" );
+
+        // Ket noi giao dien cua module
+        $global_config['module_theme'] = "";
+        if ( is_dir( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/modules/" . $module_file . "/" ) )
+        {
+            $global_config['module_theme'] = $global_config['admin_theme'];
+        } elseif ( is_dir( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/" ) )
+        {
+            $global_config['module_theme'] = "admin_default";
+        }
+
+        $allow_func = array();
+        require_once ( $include_functions );
+        if ( in_array( $op, $allow_func ) )
+        {
+            $admin_menu_mods = array();
+            $admin_menu_mods['upload'] = $lang_global['mod_upload'];
+            
+            if ( ! empty( $menu_top ) and ! empty( $submenu ) )
+            {
+                $admin_menu_mods[$module_name] = $menu_top['custom_title'];
+            }
+            
+            foreach ( $site_mods as $key => $value )
+            {
+                $admin_menu_mods[$key] = $value['custom_title'];
+            }
+            
+            require_once ( $include_file );
+            exit();
+        }
+        else
+        {
+            nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['admin_no_allow_func'] );
+        }
+    } elseif ( isset( $site_mods[$module_name] ) and $op == "main" )
+    {
+        $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `admin_file`='0' WHERE `title`=" . $db->dbescape( $module_name );
+        $db->sql_query( $sql );
+    }
+}
+
+nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
+
+?>

@@ -1,0 +1,42 @@
+#toolbar {
+	position: absolute;
+	top: expression(eval(document.compatMode &&           document.compatMode ==
+		   
+		    'CSS1Compat') ?           document.documentElement.scrollTop + 
+		         (    
+		    document.documentElement.clientHeight-this.clientHeight ) -
+		        1 :  
+		   
+		    document.body.scrollTop +           (    
+		    document.body.clientHeight-this.clientHeight ) -         1 );
+}
+
+.icon-drag,.icon-module,.icon-users,.icon-logout {
+	background-position: 0 6px;
+}
+
+.sliderwrapper .contentdiv h3 {
+	left: 8px;
+	bottom: 10px;
+}
+
+#topnews ul.lastest-news a {
+	margin-top: -18px;
+}
+
+ul.nav ul.subnav li a {
+	text-indent: 0;
+	padding-left: 10px;
+}
+
+div.news_column div.fullwidth {
+	width: 98%;
+}
+
+#news_detail {
+	width: 99.5%;
+}
+
+div.keywords {
+	width: 99%;
+}

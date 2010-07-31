@@ -1,0 +1,72 @@
+/* Tabs
+ ----------------------------------*/
+.ui-tabs {
+	position: relative;
+}
+
+/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+.ui-tabs .ui-tabs-nav {
+	margin: 0;
+	width: 100%;
+}
+
+.ui-tabs .ui-tabs-nav li {
+	position: relative;
+	border-bottom: 0 !important;
+	padding: 0;
+	white-space: nowrap;
+	height: 23px;
+	display: inline;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+	float: left;
+	margin-top: 6px;
+	padding: 0 4px;
+	font-weight: normal;
+	color: #333;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+	margin-bottom: 0;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+	color: #fff;
+	display: block;
+	float: left;
+	height: 23px;
+	background: url(../images/tabs_arrow_down.jpg) no-repeat bottom center;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a span {
+	background: #fff url(../images/tabs_l.png) no-repeat top left;
+	float: left;
+	height: 18px;
+	padding: 0 0 0 4px;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a span span {
+	background: url(../images/tabs_r.png) no-repeat top right;
+	padding: 0 4px 0 0;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a,.ui-tabs .ui-tabs-nav li.ui-state-disabled a,.ui-tabs .ui-tabs-nav li.ui-state-processing a
+	{
+	cursor: text;
+}
+
+.ui-tabs .ui-tabs-nav li a,.ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a
+	{
+	cursor: pointer;
+}
+
+/* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel {
+	display: block;
+	border-width: 0;
+}
+
+.ui-tabs .ui-tabs-hide {
+	display: none !important;
+}

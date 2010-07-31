@@ -1,0 +1,69 @@
+.contact {
+	height: auto;
+	margin: 10px auto;
+}
+
+.contact .title {
+	margin-bottom: 10px;
+}
+
+.contact .content {
+	
+}
+
+.contact .content div {
+	margin: 4px 0;
+}
+
+.contact .txttextArea {
+	width: 98%;
+}
+
+.contact .txtInput {
+	width: 98%;
+}
+
+.contact .txtCaptcha {
+	width: 152px;
+}
+
+.contact label {
+	float: left;
+	width: 150px;
+}
+
+.contact .hometext {
+	margin-top: 10px;
+}
+
+.contact .row {
+	width: auto;
+	height: 22px;
+}
+
+.err {
+	color: #ff0000;
+	font-weight: bold;
+	margin-bottom: 10px;
+	padding: 10px;
+	text-align: center;
+}
+
+.capcha1 {
+	
+}
+
+.capcha1 input {
+	float: left
+}
+
+.capcha1 img {
+	float: left
+}
+
+.bt_reset1 {
+	background: url(../images/contact/refresh.png) center no-repeat;
+	border: 0;
+	width: 22px;
+	height: 22px;
+}

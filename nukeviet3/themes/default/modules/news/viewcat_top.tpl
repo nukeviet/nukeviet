@@ -1,0 +1,27 @@
+<!-- BEGIN: main --><!-- BEGIN: breakcolumn --><h3 class="breakcolumn"><!-- BEGIN: loop --><a href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}">{BREAKCOLUMN.title}</a><!-- BEGIN: arrow --><span class="breakcolumn">&raquo;</span><!-- END: arrow --><!-- END: loop --></h3>
+<!-- END: breakcolumn -->
+<div class="news_column">
+    <div class="news-content bordersilver white clearfix">
+        <!-- BEGIN: catcontent -->
+        <div class="items border_b clearfix">
+            <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" height="{IMGHEIGHT0}"/></a><!-- END: image --><h2><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h2>
+            <p>
+                {CONTENT.hometext}
+            </p>
+            <!-- BEGIN: adminlink -->
+            <p style="text-align : right;">
+                {ADMINLINK}
+            </p>
+            <!-- END: adminlink -->
+        </div>
+        <!-- END: catcontent -->
+        <ul class="related">
+            <!-- BEGIN: catcontentloop -->
+            <li>
+                <a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+            </li>
+            <!-- END: catcontentloop -->
+        </ul>
+    </div>
+</div>
+<!-- END: main -->

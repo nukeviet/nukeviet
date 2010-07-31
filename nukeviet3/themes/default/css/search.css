@@ -1,0 +1,141 @@
+.sea-frame {
+	padding: 10px;
+	margin: auto;
+	border: #CCC 1px solid;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	background: #F0F0F0;
+}
+
+.sea-title {
+	font-weight: bold;
+	font-size: 12px;
+	color: #069;
+	width: 300px;
+	margin: auto;
+}
+
+.sea-form {
+	padding: 10px;
+	width: 310px;
+	margin: auto;
+}
+
+.intxt {
+	width: 200px;
+	font-size: 12px;
+	height: 14px;
+}
+
+.cltxt {
+	font-size: 12px;
+}
+
+.sl2 {
+	width: 206px;
+	font-size: 12px;
+}
+
+.bt-search {
+	width: 208px;
+}
+
+.result-frame {
+	padding: 10px;
+	margin: auto;
+	border: #CCC 1px solid;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.result-title {
+	color: #069;
+	font-weight: bold;
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+.cl-result {
+	border-bottom: #CCC 1px solid;
+	padding-bottom: 20px;
+	margin-bottom: 10px;
+}
+
+.cl-info {
+	font-weight: bold;
+	text-align: center;
+	font-size: 12px;
+}
+
+.linktitle {
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.linktitle {
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.linktitle a {
+	color: #069;
+	font-weight: bold;
+	text-decoration: none
+}
+
+.linktitle a:hover {
+	color: #F60;
+	text-decoration: underline;
+}
+
+.result-content {
+	font-size: 11px;
+	font-family: Tahoma
+}
+
+.keyword {
+	background: #FF3
+}
+
+.cl-viewall {
+	font-weight: bold;
+	text-align: right;
+	font-size: 13px;
+	padding-bottom: 5px;
+	padding-top: 10px;
+}
+
+.cl-viewall a {
+	color: #069;
+	text-decoration: none
+}
+
+.cl-viewall a:hover {
+	color: #F60;
+	text-decoration: none
+}
+
+.cl-viewpages {
+	text-align: center;
+	padding-top: 10px;
+	color: #09C;
+}
+
+.cl-viewpages span {
+	padding: 3px;
+	color: #000;
+}
+
+.cl-viewpages span a {
+	color: #069;
+	text-decoration: none
+}
+
+.cl-viewpages span a:hover {
+	color: #F00;
+}
+
+.cl-viewpages span strong {
+	color: #000;
+	text-decoration: none
+}

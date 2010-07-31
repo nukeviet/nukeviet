@@ -1,0 +1,30 @@
+<!-- BEGIN: main --><h3 class="breakcolumn"><a href="{TOPIC_TOP_LINK}" title="{TOPIC_TOP_TITLE}">{TOPIC_TOP_TITLE}</a><span class="breakcolumn">&raquo;</span></h3>
+<!-- BEGIN: topic -->
+<div class="news_column">
+    <div class="items clearfix">
+        <!-- BEGIN: homethumb --><a href="{TOPIC.link}" title="{TOPIC.title}"><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" height="{TOPIC.height}"/></a><!-- END: homethumb --><h2><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h2>
+        <p>
+            <span class="time">{TIME}</span>
+            | <span class="date">{DATE}</span>
+        </p>
+        <p>
+            {TOPIC.hometext}
+        </p>
+        <!-- BEGIN: adminlink -->
+        <p style="text-align : right;">
+            {ADMINLINK}
+        </p>
+        <!-- END: adminlink -->
+    </div>
+</div>
+<!-- END: topic --><!-- BEGIN: other -->
+<ul class="related">
+    <!-- BEGIN: loop -->
+    <li>
+        <a title="{TOPIC_OTHER.title}" href="{TOPIC_OTHER.link}">{TOPIC_OTHER.title}</a>
+        <span class="date">({TOPIC_OTHER.publtime})</span>
+    </li>
+    <!-- END: loop -->
+</ul>
+<!-- END: other -->
+<!-- END: main -->
