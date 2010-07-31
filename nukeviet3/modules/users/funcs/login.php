@@ -60,7 +60,8 @@ function set_reg_attribs( $attribs )
     $reg_attribs['openid'] = $attribs['id'];
     $reg_attribs['opid'] = $crypt->hash( $attribs['id'] );
 
-    $nickname = array_shift( explode( "@", $attribs['contact/email'] ) );
+    $nickname = explode( "@", $attribs['contact/email'] );
+    $nickname = array_shift( $nickname );
 
     if ( $attribs['server'] == 'yahoo' )
     {
@@ -358,9 +359,9 @@ function openidLogin_Res1( $attribs )
         $option = 3;
     }
 
+    $contents = "";
     if ( $option == 3 )
     {
-        $contents = "";
         $error = "";
         if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
         {
