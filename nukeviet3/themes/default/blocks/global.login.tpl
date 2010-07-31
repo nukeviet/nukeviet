@@ -1,6 +1,5 @@
 <!-- BEGIN: main -->
 <form action="{USER_LOGIN}" method="post" class="login clearfix">
-    <input name="nv_redirect" value="{REDIRECT}" type="hidden" />
     <fieldset>
         <p>
             <label for="block_login_iavim">
@@ -26,6 +25,7 @@
         </p><!-- END: captcha -->
         <div style="padding-top: 10px;" class="clearfix">
             <div class="submit">
+                <input name="nv_redirect" value="{REDIRECT}" type="hidden" />
                 <input type="submit" value="{LANG.loginsubmit}" />
             </div><a class="forgot fl" title="{LANG.lostpass}" href="{USER_LOSTPASS}">{LANG.lostpass}?</a>
         </div>
