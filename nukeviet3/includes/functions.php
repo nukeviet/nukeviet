@@ -55,15 +55,9 @@ if ( ! function_exists( 'array_intersect_key' ) )
 
 function nv_parse_ini_file ( $filename, $process_sections = false )
 {
-    global $sys_info;
     $process_sections = ( bool )$process_sections;
     
     if ( ! file_exists( $filename ) || ! is_readable( $filename ) ) return false;
-    
-    if ( function_exists( 'parse_ini_file' ) and ! in_array( 'parse_ini_file', $sys_info['disable_functions'] ) )
-    {
-        return parse_ini_file( $filename, $process_sections );
-    }
     
     $data = file( $filename );
     $ini = array();
