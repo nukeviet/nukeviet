@@ -14,7 +14,6 @@ $admins = array();
 if ( $nv_Request->isset_request( 'id', 'get' ) )
 {
 	$admin_id = $nv_Request->get_int( 'id', 'get', 0 );
-	$query = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` ORDER BY `lev` ASC";
 	$query = "SELECT t1.admin_id as admin_id, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,   
                 t2.username as username, t2.email as email, t2.full_name as full_name, t2.view_mail as view_mail, t2.regdate as regdate
              FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE `admin_id`=" . $admin_id;
@@ -28,7 +27,6 @@ if ( $nv_Request->isset_request( 'id', 'get' ) )
 }
 else
 {
-	$query = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` ORDER BY `lev` ASC";
 	$query = "SELECT t1.admin_id as admin_id, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,   
             t2.username as username, t2.email as email, t2.full_name as full_name, t2.view_mail as view_mail, t2.regdate as regdate
              FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid ORDER BY t1.lev ASC";
