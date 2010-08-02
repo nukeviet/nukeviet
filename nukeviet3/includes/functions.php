@@ -1012,6 +1012,47 @@ function nv_string_to_filename ( $word )
     return preg_replace( '/\W-/', '', $word );
 }
 
+if ( ! function_exists( 'mime_content_type' ) )
+{
+
+    /**
+     * mime_content_type()
+     * 
+     * @param mixed $filename
+     * @return
+     */
+    function mime_content_type( $filename )
+    {
+        if ( empty( $filename ) ) return false;
+
+        $ext = strtolower( array_pop( explode( '.', $filename ) ) );
+
+        if ( empty( $ext ) ) return false;
+
+        if ( function_exists( 'finfo_open' ) )
+        {
+            $finfo = finfo_open( FILEINFO_MIME );
+            $mimetype = finfo_file( $finfo, $filename );
+            finfo_close( $finfo );
+            return $mimetype;
+        }
+        else
+        {
+            $mime_types = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini' );
+            
+            if ( array_key_exists( $ext, $mime_types ) )
+            {
+                if ( is_string( $mime_types[$ext] ) ) return $mime_types[$ext];
+                else  return $mime_types[$ext][0];
+            }
+            else
+            {
+                return 'application/octet-stream';
+            }
+        }
+    }
+}
+
 /**
  * nv_get_allowed_ext()
  * 
