@@ -1266,6 +1266,32 @@ function nv_deletefile ( $file, $delsub = false )
 }
 
 /**
+ * nv_copyfile()
+ * 
+ * @param mixed $file
+ * @param mixed $newfile
+ * @return
+ */
+function nv_copyfile( $file, $newfile )
+{
+    if ( ! copy( $file, $newfile ) )
+    {
+        $content = @file_get_contents( $file );
+        $openedfile = fopen( $newfile, "w" );
+        fwrite( $openedfile, $content );
+        fclose( $openedfile );
+
+        if ( $content === false ) return false;
+    }
+
+    if ( file_exists( $newfile ) )
+    {
+        return true;
+    }
+    return false;
+}
+
+/**
  * nv_renamefile()
  * 
  * @param mixed $file
@@ -1302,7 +1328,7 @@ function nv_renamefile ( $file, $newname )
     );
     if ( ! @rename( $realpath, $pathinfo['dirname'] . '/' . $newname ) )
     {
-        if ( ! @copy ( $realpath, $pathinfo['dirname'] . '/' . $newname ) )
+        if ( ! @nv_copyfile ( $realpath, $pathinfo['dirname'] . '/' . $newname ) )
         {
             return array( 
                 0, sprintf( $lang_global['error_rename_failed'], $pathinfo['basename'], $newname ) 
