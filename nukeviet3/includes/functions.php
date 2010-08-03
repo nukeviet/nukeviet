@@ -1300,9 +1300,19 @@ function nv_renamefile ( $file, $newname )
     if ( ! is_dir( $realpath ) and $pathinfo['extension'] != nv_getextension( $newname ) ) return array( 
         0, sprintf( $lang_global['error_rename_extension_changed'], $newname, $pathinfo['basename'] ) 
     );
-    if ( ! @rename( $realpath, $pathinfo['dirname'] . '/' . $newname ) ) return array( 
-        0, sprintf( $lang_global['error_rename_failed'], $pathinfo['basename'], $newname ) 
-    );
+    if ( ! @rename( $realpath, $pathinfo['dirname'] . '/' . $newname ) )
+    {
+        if ( ! @copy ( $realpath, $pathinfo['dirname'] . '/' . $newname ) )
+        {
+            return array( 
+                0, sprintf( $lang_global['error_rename_failed'], $pathinfo['basename'], $newname ) 
+            );
+        }
+        else
+        {
+            @nv_deletefile ( $realpath );
+        }
+    }
     return array( 
         1, sprintf( $lang_global['file_has_been_renamed'], $pathinfo['basename'], $newname ) 
     );
