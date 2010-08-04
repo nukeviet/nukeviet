@@ -20,14 +20,13 @@
 	color: #999;
 }
 
-.register {
-	
-}
 
-.register .content {
-	
+.register input {
+	display:block;
 }
-
+.register .error{
+	color:#ff0000;
+}
 #users #info {
 	padding: 0 0 20px 0;
 	color: #B5291E;
