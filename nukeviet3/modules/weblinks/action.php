@@ -39,7 +39,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   PRIMARY KEY (`id`),
   KEY `catid` (`catid`),
   KEY `status` (`status`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat` (
   `catid` mediumint(8) unsigned NOT NULL auto_increment,
@@ -56,13 +56,13 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `edit_time` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`catid`),
   UNIQUE KEY `parentid` (`parentid`,`title`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` (
   `name` varchar(20) default NULL,
   `value` varchar(255) default NULL,
   PRIMARY KEY  (`name`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report` (
   `id` int(11) DEFAULT NULL,
@@ -76,7 +76,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `report_os_name` varchar(100) NOT NULL,
   `report_note` varchar(255) NOT NULL,
   KEY `id` (`id`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` (`name`, `value`) VALUES
 ('intro', ''),

@@ -27,7 +27,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `full_name` (`full_name`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -47,7 +47,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `reply_aid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `sender_name` (`sender_name`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows` (`id`, `full_name`, `phone`, `fax`, `email`, `note`, `admins`, `act`)  VALUES (NULL, 'Webmaster', ' ', '', ' ', '', '1/1/1/0;', 1)";
 ?>

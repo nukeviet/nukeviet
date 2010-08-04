@@ -8,7 +8,7 @@
  */
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about' );
+define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting' );
 
 function nv_create_table_sys ( $lang )
 {
@@ -34,7 +34,7 @@ function nv_create_table_sys ( $lang )
   `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `admins` varchar(255) NOT NULL,
   PRIMARY KEY (`title`)
-)";
+) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_blocks` (
   bid int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -59,7 +59,7 @@ function nv_create_table_sys ( $lang )
   KEY func_id (func_id),
   KEY exp_time (exp_time),
   KEY theme (theme)
-)";
+) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (
   `func_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -73,7 +73,7 @@ function nv_create_table_sys ( $lang )
   `setting` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`func_id`),
   UNIQUE KEY `func_name` (`func_name`,`in_module`)
-)";
+) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_counter` (
   `c_type` varchar(100) NOT NULL,
@@ -81,7 +81,7 @@ function nv_create_table_sys ( $lang )
   `c_count` int(11) unsigned NOT NULL DEFAULT '0',
   `last_update` int(11) NOT NULL DEFAULT '0',
   UNIQUE KEY `c_type` (`c_type`,`c_val`)
-)";
+) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_searchkeys` (
   `id` varchar(32) NOT NULL DEFAULT '',
@@ -91,7 +91,7 @@ function nv_create_table_sys ( $lang )
   KEY (`id`),
   KEY `keys` (`keys`),
   KEY `search_engine` (`search_engine`)
-)";
+) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_referer_stats` (
   `host` varchar(255) NOT NULL,
@@ -111,14 +111,14 @@ function nv_create_table_sys ( $lang )
   `last_update` int(11) NOT NULL DEFAULT '0',
   UNIQUE KEY `host` (`host`),
   KEY `total` (`total`)
-)";
+) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modthemes` (
       `func_id` int(11) DEFAULT NULL,
       `layout` varchar(100) DEFAULT NULL,
       `theme` varchar(100) DEFAULT NULL,
       UNIQUE KEY `func_id` (`func_id`,`layout`,`theme`)
-    )";
+    ) ENGINE=MyISAM";
     
     $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_counter` (`c_type`, `c_val`, `c_count`, `last_update`) VALUES
         ('c_time', 'start', 0, 0),

@@ -47,7 +47,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   PRIMARY KEY (`id`),
   KEY `userid` (`userid`),
   KEY `catid` (`catid`) 
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories` (
   `cid` int(11) NOT NULL AUTO_INCREMENT,
@@ -59,7 +59,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `cdescription` text NOT NULL,
   PRIMARY KEY (`cid`),
   UNIQUE KEY `title` (`title`,`parentid`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments` (
   `tid` int(11) NOT NULL AUTO_INCREMENT,
@@ -72,14 +72,14 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `status` varchar(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`tid`),
   KEY `lid` (`lid`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` (
   `name` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL,
   PRIMARY KEY (`name`),
   UNIQUE KEY `name` (`name`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_stat` (
   `id` int(11) DEFAULT NULL,
@@ -88,13 +88,13 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `comments` int(11) DEFAULT NULL,
   `rates` int(11) DEFAULT '1',
   UNIQUE KEY `id` (`id`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report` (
   `id` int(11) DEFAULT NULL,
   `content` varchar(255) DEFAULT NULL,
   `date_up` int(11) unsigned NOT NULL DEFAULT '0'
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -118,7 +118,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`),
   UNIQUE KEY `id` (`id`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` (`name`, `value`) VALUES
 ('deslimit', '1'),

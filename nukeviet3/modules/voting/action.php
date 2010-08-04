@@ -28,7 +28,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`vid`),
   UNIQUE KEY `question` (`question`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -37,6 +37,6 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `hitstotal` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `vid` (`vid`,`title`)
-)";
+) ENGINE=MyISAM";
 
 ?>

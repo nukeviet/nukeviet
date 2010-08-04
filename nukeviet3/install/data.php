@@ -33,14 +33,14 @@ $sql_create_table[] = "CREATE TABLE `" . NV_AUTHORS_GLOBALTABLE . "` (
   `last_ip` varchar(45) NOT NULL,
   `last_agent` varchar(255) NOT NULL,
   PRIMARY KEY (`admin_id`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_config` (
   `config` varchar(50) NOT NULL,
   `content` mediumtext NOT NULL,
   `edit_time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`config`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_question` (
   `qid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -51,7 +51,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_question` (
   `edit_time` int(11) unsigned NOT NULL,
   PRIMARY KEY (`qid`),
   UNIQUE KEY `title` (`title`,`lang`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
   `userid` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -85,7 +85,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
   PRIMARY KEY (`userid`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
   `userid` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -101,7 +101,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
   UNIQUE KEY `login` (`username`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_openid` (
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -111,7 +111,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_openid` (
   PRIMARY KEY (`opid`),
   KEY `userid` (`userid`),
   KEY `email` (`email`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_CONFIG_GLOBALTABLE . "` (
   `lang` varchar(3) NOT NULL DEFAULT 'sys',
@@ -119,7 +119,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_CONFIG_GLOBALTABLE . "` (
   `config_name` varchar(30) NOT NULL DEFAULT '',
   `config_value` varchar(255) NOT NULL DEFAULT '',
   UNIQUE KEY `lang` (`lang`,`module`,`config_name`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_CRONJOBS_GLOBALTABLE . "` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -137,7 +137,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_CRONJOBS_GLOBALTABLE . "` (
   PRIMARY KEY (`id`),
   KEY `cron_name` (`cron_name`),
   KEY `is_sys` (`is_sys`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_GROUPS_GLOBALTABLE . "` (
   `group_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -151,7 +151,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_GROUPS_GLOBALTABLE . "` (
   PRIMARY KEY (`group_id`),
   UNIQUE KEY `title` (`title`),
   KEY `exp_time` (`exp_time`)
-) AUTO_INCREMENT=10";
+) ENGINE=MyISAM AUTO_INCREMENT=10";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -159,7 +159,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` (
   `lang_key` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `filelang` (`idfile`,`lang_key`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` (
   `idfile` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -168,7 +168,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` (
   `langtype` varchar(50) NOT NULL,
   PRIMARY KEY (`idfile`),
   UNIQUE KEY `module` (`module`,`admin_file`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_SESSIONS_GLOBALTABLE . "` (
   `session_id` varchar(50) DEFAULT NULL,
@@ -186,13 +186,13 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_setup` (
   `version` varchar(100) NOT NULL,
   `setup_time` int(11) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `lang` (`lang`,`module`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_setup_language` (
   `lang` char(2) NOT NULL,
   `setup` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`lang`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_setup_modules` (
   `title` varchar(55) NOT NULL,
@@ -205,7 +205,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_setup_modules`
   `author` text NOT NULL,
   `note` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`title`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_click` (
   `bid` mediumint(8) NOT NULL DEFAULT '0',
@@ -224,7 +224,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_click`
   KEY `click_country` (`click_country`),
   KEY `click_browse_key` (`click_browse_key`),
   KEY `click_os_key` (`click_os_key`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_clients` (
 `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -248,7 +248,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_client
   UNIQUE KEY `login` (`login`),
   UNIQUE KEY `email` (`email`),
   KEY `full_name` (`full_name`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_plans` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -261,7 +261,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_plans`
   `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `title` (`title`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_rows` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -286,7 +286,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_rows` 
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`),
   KEY `clid` (`clid`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
         ('registertype', '1', 1274757036),

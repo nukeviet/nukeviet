@@ -59,7 +59,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   PRIMARY KEY (`catid`),
   UNIQUE KEY `alias` (`alias`),
   KEY `parentid` (`parentid`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources` (
   `sourceid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -71,7 +71,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `edit_time` int(11) unsigned NOT NULL,
   PRIMARY KEY (`sourceid`),
   UNIQUE KEY `title` (`title`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics` (
   `topicid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -87,7 +87,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   PRIMARY KEY (`topicid`),
   UNIQUE KEY `title` (`title`),
   UNIQUE KEY `alias` (`alias`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat` (
   `bid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -104,7 +104,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   PRIMARY KEY (`bid`),
   UNIQUE KEY `title` (`title`),
   UNIQUE KEY `alias` (`alias`)
-)";
+) ENGINE=MyISAM";
 
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments` (
@@ -119,14 +119,14 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   PRIMARY KEY (`cid`),
   KEY `post_time` (`post_time`),
   KEY `id` (`id`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block` (
   `bid` int(11) unsigned NOT NULL,
   `id` int(11) unsigned NOT NULL,
   `weight` int(11) unsigned NOT NULL,
   UNIQUE KEY `bid` (`bid`,`id`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -170,7 +170,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   KEY `publtime` (`publtime`),
   KEY `exptime` (`exptime`),
   KEY `listcatid` (`listcatid`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_log` (
    `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -218,7 +218,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   KEY `publtime` (`publtime`),
   KEY `exptime` (`exptime`),
   KEY `listcatid` (`listcatid`)
-)";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";
 $sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'per_page', '20')";

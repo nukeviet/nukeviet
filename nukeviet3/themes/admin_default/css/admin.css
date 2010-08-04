@@ -600,16 +600,16 @@ table.tab1 td {
 
 #ver_menu {
 	padding-bottom: 6px;
-	text-indent: 24px
+	text-indent: 20px
 }
 
 #ver_menu a {
-	background: #e4e4e4 url('../images/vertical_menu_bg.jpg') no-repeat left
-		top;
+	background: #e4e4e4 url('../images/vertical_menu_bg.jpg') no-repeat left top;
 	color: #333;
 	display: block;
 	font: bold 11px/ 24px Tahoma, Arial, sans-serif;
 	height: 25px;
+	white-space:nowrap;
 	text-decoration: none
 }
 
@@ -628,11 +628,11 @@ table.tab1 td {
 }
 
 #ver_menu a.sub_normal {
-	background: #f5fbfe url('../images/vertical_menu_bg.jpg') no-repeat left
-		-75px;
+	background: #f5fbfe url('../images/vertical_menu_bg.jpg') no-repeat left -75px;
 	color: #333;
 	padding-right: 5px;
-	text-align: right
+	text-align: right;
+	text-indent:0;
 }
 
 div.quote blockquote.error,#middle_column_r div.info span {
