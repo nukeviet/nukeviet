@@ -22,10 +22,8 @@
             <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/ie6.css" />
             <script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
             <script type="text/javascript">
-            DD_belatedPNG.fix('#');
+                DD_belatedPNG.fix('#');
             </script>
-            <style>
-            </style>
         <![endif]-->
     </head>
     <body>
