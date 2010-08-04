@@ -117,7 +117,7 @@ $(function(){
 				</select><input type="button" id="uploadfile" value="Upload" style="margin-left:10px;"/>
 				<form enctype="multipart/form-data" action="" name="uploadimg" id="uploadimg" style="display:none" method="POST">
 					<input type="hidden" name="path" value="' . ( ! empty( $imgfolder ) ? $imgfolder : $path ) . '"/>
-					' . $lang_module['upload_image'] . ' <input type="file" name="fileupload"/> ' . $lang_module['upload_otherurl'] . ' <input type="text" name="imgurl"/> <input type="submit" value="GO" name="confirm"/>
+					' . $lang_module['upload_file'] . ' <input type="file" name="fileupload"/> ' . $lang_module['upload_otherurl'] . ' <input type="text" name="imgurl"/> <input type="submit" value="GO" name="confirm"/>
 				</form>
 				<br />
 				<div id="imglist" name="imglist" style="height:360px;width:590px;vertical-align:top;padding:10px"></div>
