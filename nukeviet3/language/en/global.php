@@ -212,7 +212,7 @@ $lang_global['changpass'] = "Change pass";
 $lang_global['edituser'] = "Account";
 $lang_global['browse_file'] = "Browse";
 $lang_global['browse_image'] = "Browse";
-$lang_global['openid_login'] = "Đăng nhập bằng OpenID";
+$lang_global['openid_login'] = "Login with OpenID";
 $lang_global['google_openid_login'] = "Google";
 $lang_global['yahoo_openid_login'] = "Yahoo";
 
