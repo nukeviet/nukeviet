@@ -342,6 +342,7 @@ function main()
 		{
 			$contents .= $m['count'] . "<br />";
 			$proc = ceil(($m['count'] / $ctsm['max']) * 100);
+			$xtpl->assign('M', $m);
 			$xtpl->assign('SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif");
 			$xtpl->assign('HEIGHT', $proc * 2);
 
