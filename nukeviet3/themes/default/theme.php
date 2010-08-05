@@ -51,7 +51,6 @@ function nv_site_theme ( $contents )
     if ( $global_config['lang_multi'] and count( $global_config['allow_sitelangs'] ) > 1 )
     {
         $xtpl->assign( 'SELECTLANGSITE', $lang_global['langsite'] );
-        $xtpl->assign( 'LANG_TITLE', $lang_global['langsite'] );
         foreach ( $global_config['allow_sitelangs'] as $lang_i )
         {
             $langname = $language_array[$lang_i]['name'];

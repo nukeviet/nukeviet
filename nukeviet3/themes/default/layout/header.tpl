@@ -33,7 +33,7 @@
                     <a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/logo.gif" alt="{THEME_LOGO_TITLE}" /></a>
                 </div><!-- BEGIN: language -->
                 <div class="language">
-                    {LANG_TITLE}
+                	Select language
                     <select name="lang">
                         <!-- BEGIN: langitem --><option value="{LANGSITEURL}" title="{SELECTLANGSITE}">{LANGSITENAME}</option>
                         <!-- END: langitem --><!-- BEGIN: langcuritem --><option value="{LANGSITEURL}" title="{SELECTLANGSITE}" selected="selected">{LANGSITENAME}</option>
