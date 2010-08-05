@@ -9,7 +9,7 @@
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 global $global_config, $module_name, $module_data, $global_array_cat;
 $blocknewsid = 1;
-$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1.exptime, t1.title, t1.alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $blocknewsid . " AND t1.inhome='1' and  t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime >" . NV_CURRENTTIME . ") ORDER BY t2.weight ASC";
+$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1.exptime, t1.title, t1.alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $blocknewsid . " AND t1.status= 1 AND t1.inhome='1' and  t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime >" . NV_CURRENTTIME . ") ORDER BY t2.weight ASC";
 $result = $db->sql_query( $sql );
 $num = $db->sql_numrows( $result );
 if ( $num )
