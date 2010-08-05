@@ -41,6 +41,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     {
         $error[] = $lang_module['error_invalid_url'];
     }
+    $link = nv_htmlspecialchars($link);
     $template = filter_text_input( 'template', 'post', "", 1 );
     $typeblock = filter_text_input( 'typeblock', 'post', "", 1 );
     $xmodule = filter_text_input( 'module', 'post', "", 1 );
