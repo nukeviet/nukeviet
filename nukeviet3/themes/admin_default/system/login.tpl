@@ -8,14 +8,14 @@
         <meta name="copyright" content="Copyright (c) {SITE_NAME}" />
         <meta name="robots" content="noindex, nofollow" />
         <title>{SITE_NAME} | {PAGE_TITLE}</title>
-        <link rel="stylesheet" type="text/css" href="{CSS}" />
+        <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
         <script type="text/javascript">
-            var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{NICKMAX}', '{NICKMIN}', '{PASSMAX}', '{PASSMIN}', '{GFX_NUM}');
-            var login_error_account = '{LOGIN_ERROR_ACCOUNT}';
-            var login_error_password = '{LOGIN_ERROR_PASSWORD}';
-            var login_error_security = '{LOGIN_ERROR_SECURITY}';
+            var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{GFX_NUM}');
+            <!-- BEGIN: jscaptcha -->
+            	var login_error_security = '{LOGIN_ERROR_SECURITY}';
+            <!-- END: jscaptcha -->
         </script>
-        <script type="text/javascript" src="{JS}"></script>
+        <script type="text/javascript" src="{NV_BASE_SITEURL}js/admin_login.js"></script>
         <!--[if IE 6]>
             <script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
             <script type="text/javascript">
@@ -59,7 +59,8 @@
                             <li>
                                 <label>{N_PASSWORD}:</label>
                                 <input name="nv_password" type="password" id="password" maxlength="{PASSMAX}" />
-                            </li><!-- BEGIN: captcha -->
+                            </li>
+                            <!-- BEGIN: captcha -->
                             <li>
                                 <label>{N_CAPTCHA}:</label>
                                 <input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" style="width:60px;"/><img id="vimg" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{NV_BASE_SITEURL}?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" title="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha();"/>

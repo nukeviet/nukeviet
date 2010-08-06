@@ -10,18 +10,20 @@
         <title>{SITE_NAME} | {PAGE_TITLE}</title>
         <link rel="stylesheet" type="text/css" href="{CSS}" />
         <script type="text/javascript">
-            var jsi = new Array('{SITELANG}', '{PASSMIN}', '{PASSMAX}');
-        </script>
-        <script type="text/javascript" src="{JS}">
+            function nv_checkadminlogin_submit()
+            {
+               var password = document.getElementById( 'password' );
+               if(password.value==''){
+               {
+            	   return false;
+               }
+               return true;
+            }            
         </script>
         <!--[if IE 6]>
             <script src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
             <script>
-            /* EXAMPLE */
-            DD_belatedPNG.fix('.submitform, img');
-            /* string argument can be any CSS selector */
-            /* .png_bg example is unnecessary */
-            /* change it to what suits you! */
+            	DD_belatedPNG.fix('.submitform, img');
             </script>
         <![endif]-->
     </head>
@@ -52,7 +54,7 @@
                                 <label>
                                     {N_PASSWORD}:
                                 </label>
-                                <input name="nv_password" type="password" id="password" maxlength="{PASSMAX}" />
+                                <input name="nv_password" type="password" id="password" />
                             </li>
                         </ul>
                         <input name="redirect" value="{REDIRECT}" type="hidden"/>

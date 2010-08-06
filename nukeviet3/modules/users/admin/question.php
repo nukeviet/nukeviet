@@ -142,7 +142,7 @@ if ( $nv_Request->isset_request( 'qlist', 'post' ) )
             }
             $contents .= "</select></td>\n";
             $contents .= "<td><input name=\"hidden_" . $row['qid'] . "\" id=\"hidden_" . $row['qid'] . "\" type=\"hidden\" value=\"" . $row['title'] . "\" />";
-            $contents .= "<input type=\"text\" name=\"title_" . $row['qid'] . "\" id=\"title_" . $row['qid'] . "\" value=\"" . $row['title'] . "\" style=\"width:650px\" />\n";
+            $contents .= "<input type=\"text\" name=\"title_" . $row['qid'] . "\" id=\"title_" . $row['qid'] . "\" value=\"" . $row['title'] . "\" style=\"width:550px\" />\n";
             $contents .= "<span class=\"edit_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_save_title(" . $row['qid'] . ");\">" . $lang_module['save'] . "</a></span>\n";
             $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_question(" . $row['qid'] . ")\">" . $lang_global['delete'] . "</a></span></td>\n";
             $contents .= "</tr>\n";

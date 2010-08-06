@@ -5,10 +5,7 @@
  * @createdate 19/3/2010 22:58
  */
 
-var mailfilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-var numcheck = /^([0-9])+$/;
-var namecheck = /^([a-zA-Z0-9_-])+$/;
-var passcheck = /^([a-zA-Z0-9_\.\-])+$/;
+var seccodecheck = /^([a-zA-Z0-9])+$/;
 
 if (typeof (jsi) == 'undefined')
 	var jsi = new Array();
@@ -19,15 +16,7 @@ if (!jsi[1])
 if (!jsi[2])
 	jsi[2] = 0;
 if (!jsi[3])
-	jsi[3] = 15;
-if (!jsi[4])
-	jsi[4] = 5;
-if (!jsi[5])
-	jsi[5] = 15;
-if (!jsi[6])
-	jsi[6] = 5;
-if (!jsi[7])
-	jsi[7] = 6;
+	jsi[3] = 6;
 
 var strHref = window.location.href;
 if (strHref.indexOf("?") > -1) {
@@ -41,20 +30,8 @@ if (strHref.indexOf("?") > -1) {
 
 // ---------------------------------------
 
-function nv_checkadminlogin_login(login) {
-	return (login.value.length >= jsi[4] && login.value.length <= jsi[3] && namecheck.test(login.value)) ? true : false;
-}
-
-// ---------------------------------------
-
-function nv_checkadminlogin_password(password) {
-	return (password.value.length >= jsi[6] && password.value.length <= jsi[5] && passcheck.test(password.value)) ? true : false;
-}
-
-// ---------------------------------------
-
 function nv_checkadminlogin_seccode(seccode) {
-	return (seccode.value.length == jsi[7] && namecheck.test(seccode.value)) ? true : false;
+	return (seccode.value.length == jsi[3] && seccodecheck.test(seccode.value)) ? true : false;
 }
 
 // ---------------------------------------
@@ -71,18 +48,6 @@ function nv_randomPassword(plength) {
 // ---------------------------------------
 
 function nv_checkadminlogin_submit() {
-	var login = document.getElementById('login');
-	var password = document.getElementById('password');
-	if (!nv_checkadminlogin_login(login)) {
-		alert(login_error_account);
-		login.focus();
-		return false;
-	}
-	if (!nv_checkadminlogin_password(password)) {
-		alert(login_error_password);
-		password.focus();
-		return false;
-	}
 	if (jsi[2] == 1) {
 		var seccode = document.getElementById('seccode');
 		if (!nv_checkadminlogin_seccode(seccode)) {
@@ -91,7 +56,14 @@ function nv_checkadminlogin_submit() {
 			return false;
 		}
 	}
-	return true;
+	var login = document.getElementById('login');
+	var password = document.getElementById('password');
+	if (login.value!='' && password.value!=''){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 // ---------------------------------------

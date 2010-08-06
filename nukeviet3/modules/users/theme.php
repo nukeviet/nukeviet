@@ -15,7 +15,6 @@ if ( ! defined( 'NV_IS_MOD_USER' ) )
 function user_register( $gfx_chk, $array_register, $siteterms, $data_questions )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
-
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
     $my_head .= "<script type=\"text/javascript\">\n";
     $my_head .= "$(document).ready(function(){

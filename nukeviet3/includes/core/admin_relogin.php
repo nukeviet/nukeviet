@@ -25,12 +25,10 @@ if ( defined( "NV_IS_ADMIN" ) )
 			if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			{
 				if ( $client_info['is_myreferer'] != 1 ) die( 'Wrong URL' );
-
-				$nv_password = filter_text_input( 'nv_password', 'post' );
-				$check_pass = nv_check_valid_pass( $nv_password, NV_APASSMAX, NV_APASSMIN );
-				if ( ! empty( $check_pass ) )
+				$nv_password = filter_text_input( 'nv_password', 'post','', '', 50);
+				if ( empty( $nv_password ) )
 				{
-					$error = $check_pass;
+					$error = $lang_global['password_empty'];
 				}
 				else
 				{
@@ -105,11 +103,8 @@ if ( defined( "NV_IS_ADMIN" ) )
 			$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 			$xtpl->assign( 'PAGE_TITLE', $lang_global['admin_page'] );
 			$xtpl->assign( 'CSS', NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/css/login.css" );
-			$xtpl->assign( 'JS', NV_BASE_SITEURL . "js/admin_relogin.js" );
 			$xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 			$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-			$xtpl->assign( 'PASSMAX', NV_APASSMAX );
-			$xtpl->assign( 'PASSMIN', NV_APASSMIN );
 			$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . "images/" . $global_config['site_logo'] );
 			$xtpl->assign( 'LOGO_WIDTH', $size[0] );
 			$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
