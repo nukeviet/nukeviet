@@ -657,13 +657,13 @@ Site administrator
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['active_not_allow'] = "Neposkytnou se registrovat";
+$lang_module['active_not_allow'] = "Registrovat nepovolen";
 /*
 	 vietnam:	  Không cho phép đăng ký
 	 english:	  Not grant to register
 */
 
-$lang_module['edit_error_email_exist'] = "Váš email použít v jiném účtu. Prosím, vyberte jiný účet.";
+$lang_module['edit_error_email_exist'] = "Váš email již existuje. Prosím, vyberte jiný email.";
 /*
 	 vietnam:	  Email đã được thành viên khác sử dụng. Hãy chọn email khác
 	 english:	  Your email used in another account. Please choose another account.
@@ -717,19 +717,19 @@ $lang_module['level1'] = "Super Administrator";
 	 english:	  Super Administrator
 */
 
-$lang_module['level2'] = "Obecné Administrator";
+$lang_module['level2'] = "Obecný Administrator";
 /*
 	 vietnam:	  Quản trị chung
 	 english:	  General Administrator
 */
 
-$lang_module['level3'] = "Prostor pro správu";
+$lang_module['level3'] = "Správce oblasti";
 /*
 	 vietnam:	  Quản trị bộ phận
 	 english:	  Area Administrative
 */
 
-$lang_module['admin_add'] = "Set na admin";
+$lang_module['admin_add'] = "Zvolit na admin";
 /*
 	 vietnam:	  Chọn làm Quản trị
 	 english:	  Set to admin

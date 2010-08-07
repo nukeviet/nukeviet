@@ -705,7 +705,7 @@ $lang_module['delete'] = "Vymazat";
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['upload_captcha'] = "Kód \$ lang_global ['browse_image']";
+$lang_module['upload_captcha'] = "Ověření kod \$ lang_global ['browse_image']";
 /*
 	 vietnam:	  Mã bảo vệ
 	 english:	  code \$lang_global['browse_image']

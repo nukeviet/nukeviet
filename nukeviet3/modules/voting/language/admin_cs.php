@@ -219,7 +219,7 @@ $lang_module['warning'] = "Poznámka: Někteří rozhodnou, že povolí menší 
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['add_answervote'] = "Přidat odpověď";
+$lang_module['add_answervote'] = "Přidat možnost na odpověď";
 /*
 	 vietnam:	  Thêm phương án trả lời
 	 english:	  Add answer

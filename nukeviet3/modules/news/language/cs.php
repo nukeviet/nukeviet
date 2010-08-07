@@ -501,13 +501,13 @@ $lang_module['group_view'] = "Pouze člen skupiny mohou zobrazit!";
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['topnews'] = "Novinky";
+$lang_module['topnews'] = "Top první zpráv";
 /*
 	 vietnam:	  Tin tiêu điểm
 	 english:	  Top News
 */
 
-$lang_module['lastest'] = "Novinky";
+$lang_module['lastest'] = "Nejnovější zprávy";
 /*
 	 vietnam:	  Tin mới nhất
 	 english:	  Lastest News

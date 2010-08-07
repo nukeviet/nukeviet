@@ -701,19 +701,19 @@ $lang_module['img_size_title'] = "Velikost obrázku";
 	 english:	  Image size
 */
 
-$lang_module['st_login'] = "Pravidelné přihlášení";
+$lang_module['st_login'] = "Normalní přihlášení";
 /*
 	 vietnam:	  Đăng nhập theo kiểu thông thường
 	 english:	  Regular login
 */
 
-$lang_module['st_login2'] = "Pravidelné přihlášení";
+$lang_module['st_login2'] = "Možnost pro normalní přihlášení";
 /*
 	 vietnam:	  Khả năng đăng nhập thông thường
 	 english:	  Regular login
 */
 
-$lang_module['admin_login'] = "Přihlásit se do admin účtu";
+$lang_module['admin_login'] = "Přihlásit se pomocí admin účtu";
 /*
 	 vietnam:	  Đăng nhập nhờ tài khoản Admin
 	 english:	  Login by admin account
@@ -731,31 +731,31 @@ $lang_module['openid_login2'] = "Přihlásit se pomocí OpenID další";
 	 english:	  Login using other OpenID
 */
 
-$lang_module['openid_note1'] = "Chcete-li protokolování v této OpenID, musíte propojit se svým existuje účtu. Prosím, prohlašuji vaše přihlašovací údaje (vyžaduje pouze jednou)";
+$lang_module['openid_note1'] = "Chcete-li přihlásit v této OpenID, můžete propojit se svým vychozím účtem. Prosím, prohlašuji vaše přihlašovací údaje (vyžaduje pouze jednou)";
 /*
 	 vietnam:	  Để đăng nhập bằng OpenID này, bạn có thể kết nối nó với tài khoản đã được đăng ký trước đây. Hãy khai báo thông tin đăng nhập (Việc này chỉ phải làm 1 lần duy nhất)
 	 english:	  To logging in by this OpenID, you must link it with your exists account. Please declare your login information (require only one time)
 */
 
-$lang_module['openid_note2'] = "Je to poprvé, přihlášení s tímto OpenID. Pro přihlášení si můžete vybrat jeden z těchto plánů";
+$lang_module['openid_note2'] = "Je to poprvé, přihlášení s tímto OpenID. Pro přihlášení si můžete vybrat jeden z těchto možnosti";
 /*
 	 vietnam:	  Lần đầu tiên bạn đăng nhập bằng OpenID này. Để đăng nhập, bạn có thể chọn một trong các phương án sau đây
 	 english:	  It's the first time you login with this OpenID. To login, you can choose one of  those plans
 */
 
-$lang_module['openid_note3'] = "Registrovat nový účet a odkaz na tuto OpenID";
+$lang_module['openid_note3'] = "Registrovat nový účet a vložit odkaz na tuto OpenID";
 /*
 	 vietnam:	  Đăng ký một tài khoản mới và gán OpenID này vào tài khoản đó
 	 english:	  Register a new account and link this OpenID
 */
 
-$lang_module['openid_note4'] = "Přihlásit se účet vytvoří automatickým systémem";
+$lang_module['openid_note4'] = "Přihlásit se automatické pomocí účet vytvoření systému";
 /*
 	 vietnam:	  Đăng nhập tự động bằng một tài khoản do hệ thống tự tạo
 	 english:	  Login with account create automatic by system
 */
 
-$lang_module['openid_note5'] = "Přihlásit se váš účet existuje";
+$lang_module['openid_note5'] = "Přihlásit se váš bývalý účet ";
 /*
 	 vietnam:	  Đăng nhập bằng tài khoản mà bạn đăng ký trước đây
 	 english:	  Login with your exists account
@@ -809,7 +809,7 @@ $lang_module['canceled_authentication'] = "Zrušili jste přístup OpenID";
 	 english:	  You canceled access by OpenID
 */
 
-$lang_module['not_logged_in'] = "Pořád se přihlásit do OpenID";
+$lang_module['not_logged_in'] = "Nepřihlasili jste pomocí OpenID";
 /*
 	 vietnam:	  Bạn Chưa đăng nhập bằng OpenID
 	 english:	  You still not login by OpenID
@@ -821,25 +821,25 @@ $lang_module['logged_in_failed'] = "OpenID server neposkytuje některé požadov
 	 english:	  OpenID server doesn't provide some required information to login to our website
 */
 
-$lang_module['openid_confirm_failed'] = "Kterou jste nám poskytli špatné informace";
+$lang_module['openid_confirm_failed'] = "Přihlasili jste se špatným údajem";
 /*
 	 vietnam:	  Rất tiếc là bạn đã khai báo sai
 	 english:	  You provided wrong infomation
 */
 
-$lang_module['openid_confirm_info'] = "Vaše OpenID je možné použít na této stránce, <br /> ale email \$ s neexistuje. <br /> Pokud jste majitelem účtu prostřednictvím tohoto e-mailu, <br /> uveďte prosím heslo. <br />";
+$lang_module['openid_confirm_info'] = "Vaše OpenID není registrovat na této stránce, <br /> ale email \$ s je už používán. <br /> Pokud tento email je váš, <br /> uveďte prosím heslo. <br />";
 /*
 	 vietnam:	  OpenID của bạn chưa được đăng ký trên website này,<br />nhưng email %s đã được sử dụng.<br />Nếu tài khoản sử dụng email này là của bạn,<br />hãy xác nhận bằng cách khai báo mật khẩu đăng nhập.<br />Nếu mật khẩu được khẳng định,<br />kể từ lần đăng nhập sau bạn sẽ không phải thực hiện thao tác này
 	 english:	  Your OpenID can be use on this site,<br  />but email \$s exists.<br  />If you are owner of account using this email,<br  />please provide password.<br  />
 */
 
-$lang_module['openid_active_info'] = "Vítejte%1\$s, <br /> <br /> svého účtu na stránkách%2\$s počkat na aktivaci. Chcete-li aktivovat, klikněte na následující odkaz: <br /> <br /> URL:%3\$s <br /> <br /> Informace: <br /> <br /> účtu:%4\$s <br /> Email:%5\$s <br /> Heslo:%6\$s <br /> OpenID:%7\$s <br /> <br /> Aktivovat odkaz bude v platnosti%8\$s <br /> <br /> Toto je automaticky zaslán e-mail z webu%2\$s. Pokud jste o tom neví, že jeho obsah, prosím, smažte ji. <br /> <br /> <br /> <br /> Stránek admin";
+$lang_module['openid_active_info'] = "Vítejte%1\$s, <br /> <br /> Váš učet na stránkách%2\$s počkat na aktivaci. Chcete-li aktivovat, klikněte na následující odkaz: <br /> <br /> URL:%3\$s <br /> <br /> Informace: <br /> <br /> účtu:%4\$s <br /> Email:%5\$s <br /> Heslo:%6\$s <br /> OpenID:%7\$s <br /> <br /> Aktivovat odkaz bude v platnosti%8\$s <br /> <br /> Zpráva je automatické zaslán do vašeho emailu od webu%2\$s. Pokud nerozumíte o obsahu  zprávy, prosím, smažte ji. <br /> <br /> <br /> <br /> Stránek admin";
 /*
 	 vietnam:	  Xin chào %1\$s,<br /><br />Tài khoản của bạn tại website %2\$s đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: %3\$s<br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: %4\$s<br />Email: %5\$s<br />Mật khẩu: %6\$s<br />OpenID: %7\$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %8\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site
 	 english:	  Welcom %1\$s,<br  /><br  />Your account at website %2\$s wait to activate. To activate it, click link below:<br  /><br  />URL: %3\$s<br  /><br  />Information:<br  /><br  />Account:%4\$s<br  />Email: %5\$s<br  />Password: %6\$s<br  />OpenID: %7\$s<br  /><br  />Activate link will be expired at %8\$s<br  /><br  />This is automatic sent email from website %2\$s. If you doesn't know about it's content, please delete it.<br  /><br  /><br  /><br  />Site admin
 */
 
-$lang_module['openid_register_info'] = "Vítejte v%1\$s, <br /> <br /> svého účtu na stránkách%2\$s aktivován. Můžete přihlášení do OpenID, nebo vašeho účtu. Vaše informace o účtu: <br /> <br /> URL:%3\$s <br /> <br /> účtu:%4\$s <br /> <br /> Heslo:%5\$s <br /> <br /> OpenID:%6\$s <br /> <br /> Toto je e-mail automaticky zaslán na internetových stránkách%2\$s. Pokud jste o tom neví, že jeho obsah, prosím, smažte ji. <br /> <br /> stránek admin";
+$lang_module['openid_register_info'] = "Vítejte v%1\$s, <br /> <br /> Váš učet na stránkách%2\$s je aktivován. Můžete přihlášit pomocí OpenID, nebo pomocí váš účet. Vaše informace o účtu: <br /> <br /> URL:%3\$s <br /> <br /> účtu:%4\$s <br /> <br /> Heslo:%5\$s <br /> <br /> OpenID:%6\$s <br /> <br /> To je e-mail automaticky zaslán na stránkách%2\$s. Pokud nerozumíte o obsahu  zprávy, prosím, smažte ji. <br /> <br /> stránek admin";
 /*
 	 vietnam:	  Xin chào %1\$s,<br /><br />Tài khoản của bạn tại website %2\$s đã được kích hoạt. Bạn có thể đăng nhập bằng OpenID hoặc bằng tài khoản nếu trong quá trình đăng ký bạn đã khai báo mật khẩu. Dưới đây là thông tin tài khoản:<br /><br />URL: %3\$s<br /><br />Tên tài khoản: %4\$s<br /><br />Mật khẩu: %5\$s<br /><br />OpenID: %6\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site
 	 english:	  Welcome %1\$s,<br  /><br  />Your account at website %2\$s activated. You can logging in by OpenID or your account. Your account information:<br  /><br  />URL: %3\$s<br  /><br  />Account: %4\$s<br  /><br  /> Password: %5\$s<br  /><br  />OpenID: %6\$s<br  /><br  />This is an email automatic sent from website %2\$s. If you doesn't know about it's content, please delete it. <br  /><br  />Site admin
@@ -851,7 +851,7 @@ $lang_module['openid_register'] = "Zaregistrovat přes OpenID";
 	 english:	  Register through OpenID
 */
 
-$lang_module['openid_lostpass_info'] = "Váš účet pouze přihlášení ačkoli OpenID. Nemůžeme poskytovat nové heslo pro vás. Prosím kontaktujte admin stránek pro více informací.";
+$lang_module['openid_lostpass_info'] = "Váš účet může přihlašen pouze přes OpenID,proto nemůžeme poskytovat nové heslo pro vás. Prosím kontaktujte admin stránek pro více informací.";
 /*
 	 vietnam:	  Vì tài khoản của bạn chỉ được phép đăng nhập qua OpenID nên chúng tôi không thể cung cấp mật khẩu đăng nhập mới cho bạn. Hãy liên hệ với quản trị site để biết thêm chi tiết
 	 english:	  Your account only login though OpenID. We can't provide new password for you. Please contact site admin for more information.
@@ -863,19 +863,19 @@ $lang_module['lostpass_no_info1'] = "Prázdné uživatelské jméno nebo email";
 	 english:	  Empty user name or email
 */
 
-$lang_module['lostpass_no_info2'] = "Nemůžete najít účet Vasich poskytly informace";
+$lang_module['lostpass_no_info2'] = "Nemůže najít účet s zadanou informace";
 /*
 	 vietnam:	  Không tìm thấy tài khoản phù hợp với thông tin mà bạn vừa khai báo
 	 english:	  Can't find account match your provided information
 */
 
-$lang_module['lostpass_page_title'] = "Získat heslo";
+$lang_module['lostpass_page_title'] = "Obnovit heslo";
 /*
 	 vietnam:	  Khôi phục mật khẩu thành viên
 	 english:	  Get password
 */
 
-$lang_module['lostpass_question_empty'] = "Ty nejsou specifické tajnou otázku nebo odpověď. Nemůžeme poskytovat nové heslo pro vás. Prosím kontaktujte admin stránek pro více informací";
+$lang_module['lostpass_question_empty'] = "Ty nejsou specifické tajnou otázku nebo odpověď. Nemůžeme poskytovat nové heslo pro vás při přihlasování. Prosím kontaktujte admin stránek pro více informací";
 /*
 	 vietnam:	  Câu hỏi dự phòng hoặc câu trả lời chưa được khai báo khi đăng ký tài khoản nên chúng tôi không thể cung cấp mật khẩu mới cho bạn. Hãy liên hệ với quản trị site để biết thêm chi tiết
 	 english:	  You doesn't specific secret question or answer. We can't provide new password for you. Please contact site admin for more information
@@ -893,7 +893,7 @@ $lang_module['field'] = "Uživatelské jméno nebo email";
 	 english:	  User name or email
 */
 
-$lang_module['lostpass_question'] = "Otázka";
+$lang_module['lostpass_question'] = "Odpověďte";
 /*
 	 vietnam:	  Hãy trả lời câu hỏi
 	 english:	  Question
@@ -917,7 +917,7 @@ $lang_module['lostactivelink_question_empty'] = "Ty nejsou specifické tajnou ot
 	 english:	  You doesn't specific secret question or answer. We can't provide new activate link for you. Please contact site admin for more information
 */
 
-$lang_module['openid_lostactivelink_info'] = "Ty účet zaregistrovat přes OpenID. Nemůžeme poskytovat nové aktivovat odkaz pro vás. Prosím kontaktujte admin stránek pro více informací";
+$lang_module['openid_lostactivelink_info'] = "Váš účet zaregistroval přes OpenID. Nemůžeme poskytovat nové aktivovat odkaz pro vás. Prosím kontaktujte admin stránek pro více informací";
 /*
 	 vietnam:	  Vì tài khoản của bạn đăng ký qua OpenID nên chúng tôi không thể cung cấp link kích hoạt mới cho bạn. Hãy liên hệ với quản trị site để biết thêm chi tiết
 	 english:	  You account register through OpenID. We can't provide new activate link for you. Please contact site admin for more information
@@ -929,25 +929,25 @@ $lang_module['lostactivelink_no_info1'] = "Prázdné uživatelské jméno nebo e
 	 english:	  Empty user name or email
 */
 
-$lang_module['lostactivelink_no_info2'] = "Nemůžete najít účet Vasich poskytly informace";
+$lang_module['lostactivelink_no_info2'] = "Nemůžete najít účet se zadanou informací";
 /*
 	 vietnam:	  Không tìm thấy tài khoản phù hợp với thông tin mà bạn vừa khai báo
 	 english:	  Can't find account match your provided information
 */
 
-$lang_module['lostactivelink_send'] = "Aktivujte odkaz poslal na email%s";
+$lang_module['lostactivelink_send'] = "Aktivování odkaz byl zaslán na email%s";
 /*
 	 vietnam:	  Link kích hoạt tài khoản đã được gửi đến email %s
 	 english:	  Activate link sent to email %s
 */
 
-$lang_module['lostactivelink_submit'] = "Předložit";
+$lang_module['lostactivelink_submit'] = "Potvrdit";
 /*
 	 vietnam:	  Gửi yêu cầu
 	 english:	  Submit
 */
 
-$lang_module['resend_activelink'] = "Neobdrží-li aktivovat odkaz po registrovaných";
+$lang_module['resend_activelink'] = "Byl zaregistrován , ale nepřišel odkaz pro aktivovat";
 /*
 	 vietnam:	  Đã đăng ký nhưng không nhận được link kích hoạt?
 	 english:	  Not receive activate link after registered
@@ -971,7 +971,7 @@ $lang_module['changequestion_info'] = "Hlavní rysy tajnou otázku";
 	 english:	  Main features of secret question
 */
 
-$lang_module['changequestion_info1'] = "Chcete-li získat nové aktivaci odkazu, kdy registr";
+$lang_module['changequestion_info1'] = "Chcete-li získat nové aktivaci odkazu při zaregistrování";
 /*
 	 vietnam:	  Để xin lại link kích hoạt khi đăng ký thành viên
 	 english:	  To get new activate link when register
@@ -983,7 +983,7 @@ $lang_module['changequestion_info2'] = "Chcete-li získat nové heslo, pokud jst
 	 english:	  To get new password when you forgot password
 */
 
-$lang_module['changequestion_step1'] = "Ve snaze změnit svůj tajný otázka, musíte poskytnout heslo";
+$lang_module['changequestion_step1'] = "Chcete-li změnit rezervy otázky- odpověd,musíte zadat heslo ";
 /*
 	 vietnam:	  Để thay đổi câu hỏi - câu trả lời dự phòng, bạn cần khai báo mật khẩu
 	 english:	  In order to change your secret question, you must provide password
@@ -1031,13 +1031,13 @@ $lang_module['current_mode'] = "Aktuální přihlášení";
 	 english:	  Current login
 */
 
-$lang_module['current_login'] = "Na";
+$lang_module['current_login'] = "V";
 /*
 	 vietnam:	  Vào
 	 english:	  At
 */
 
-$lang_module['or_activate_account'] = "nebo aktivovat svůj účet neexistuje";
+$lang_module['or_activate_account'] = "nebo aktivovat svůj účet";
 /*
 	 vietnam:	  hoặc kích hoạt tài khoản mà bạn đã đăng ký
 	 english:	  or activate your exists account
@@ -1055,19 +1055,19 @@ $lang_module['ip'] = "Podle IP";
 	 english:	  By IP
 */
 
-$lang_module['pass_empty_note'] = "Warnning: Nemůžete používat pravidelně přihlašovací údaje, protože jste neobsahuje konkrétní heslo. Prosím, klikněte <a href=\"%s\"> zde </ a> k vytvoření hesla";
+$lang_module['pass_empty_note'] = "Pozor: Nezadali jste heslo, proto nemůzete normálně přihlásit . Prosím, klikněte <a href=\"%s\"> zde </ a> k vytvoření hesla";
 /*
 	 vietnam:	  Chú ý: Bạn chưa khai báo mật khẩu nên sẽ không thể đăng nhập theo cách thông thường. Hãy click <a href=\"%s\">vào đây</a> để tạo mật khẩu
 	 english:	  Warnning: You can't using regular login because you doesn't specific password. Please click <a href=\"%s\">here</a> to create password
 */
 
-$lang_module['question_empty_note'] = "Warnning: Nemůžete používat zapomenuté heslo vlastnost, protože jste neobsahuje konkrétní tajnou otázku. Prosím, klikněte <a href=\"%s\"> zde </ a> na konkrétní";
+$lang_module['question_empty_note'] = "Pozor :Nezadali jste rezervy otázky,proto nemůze obnovit učet při zapomenutí údaje. Prosím, klikněte <a href=\"%s\"> zde </ a> na prohlašení";
 /*
 	 vietnam:	  Chú ý: Bạn chưa khai báo câu hỏi-câu trả lời dự phòng nên sẽ không thể phục hồi tài khoản khi quên thông tin đăng nhập. Hãy click <a href=\"%s\">vào đây</a> để khai báo
 	 english:	  Warnning: You can't using lost password feature because you doesn't specific secret question. Please click <a href=\"%s\">here</a> to specific
 */
 
-$lang_module['change_name_info'] = "Warnning: Můžete změnit své uživatelské jméno pouze jedno. Tato funkce vypne na příštím přihlášení. Prosím, klikněte <a href=\"%s\"> zde </ a> pro změnu";
+$lang_module['change_name_info'] = "Pozor: Můžete změnit pouze jednou uživatelské jméno. Tato funkce nebude fungovat na příštím přihlášení. Prosím, klikněte <a href=\"%s\"> zde </ a> pro změnu";
 /*
 	 vietnam:	  Chú ý: Đây là lần duy nhất bạn có quyền thay đổi tên đăng nhập. Chức năng này sẽ bị tắt kể từ lần đăng nhập sau. Hãy click <a href=\"%s\">vào đây</a> để thay đổi
 	 english:	  Warnning: You can change your username only one. This feature will disable on next login. Please click <a href=\"%s\">here</a> to change
@@ -1079,19 +1079,19 @@ $lang_module['openid_del'] = "Vymazat";
 	 english:	  Delete
 */
 
-$lang_module['openid_active_confirm_info'] = "Vaše OpenID je možné použít na těchto stránkách, <br /> ale email%s byl použit jiný účet. <br /> Pokud jste majitelem tohoto účtu, <br /> uveďte prosím své heslo. <br /> Pokud váš heslo zápas, <br /> váš účet se aktivuje na příští /> <br přihlášení";
+$lang_module['openid_active_confirm_info'] = "Vaše OpenID není zaregistrován na těchto stránkách, <br /> ale email%s byl používán na uživatelský  účet. <br /> Pokud jste majitelem tohoto účtu, <br /> uveďte prosím své heslo. <br /> Pokud váš heslo je potvrděn, <br /> váš účet bude se aktivovat na příští /> <br přihlášení";
 /*
 	 vietnam:	  OpenID của bạn chưa được đăng ký trên website này,<br />nhưng email %s đã được sử dụng để đăng ký thành viên.<br />Nếu tài khoản sử dụng email này là của bạn,<br />hãy xác nhận bằng cách khai báo mật khẩu đăng nhập.<br />Nếu mật khẩu được khẳng định,<br />tài khoản sẽ được kích hoạt và kể từ lần đăng nhập sau<br />bạn sẽ không phải thực hiện thao tác này
 	 english:	  Your OpenID can be use on this website,<br  />but email %s was used by another account.<br  />If you are owner of this account,<br  />please provide your password.<br  />If your password match,<br  />your account will activate on next login<br  />
 */
 
-$lang_module['openid_activate_account'] = "Aktivovat účet OpenID";
+$lang_module['openid_activate_account'] = "Aktivovat účet pomocí OpenID";
 /*
 	 vietnam:	  Kích hoạt tài khoản bằng OpenID
 	 english:	  Activate account by OpenID
 */
 
-$lang_module['openid_is_exists'] = "Tento OpenID byl použit. <br /> Prosím, vyberte jiný OpenID";
+$lang_module['openid_is_exists'] = "Tento OpenID byl použitý. <br /> Prosím, vyberte jiný OpenID";
 /*
 	 vietnam:	  Rất tiếc là OpenID này đã được sử dụng.<br />Hãy thử chọn một nhà cung cấp khác
 	 english:	  This OpenID was used.<br  />Please choose another OpenID
@@ -1103,13 +1103,13 @@ $lang_module['openid_add_new'] = "Přidat další OpenID na svůj účet";
 	 english:	  Add another OpenID to your account
 */
 
-$lang_module['email_is_exists'] = "Váš email OpenID byla použita. <br /> Prosím, vyberte jiný OpenID";
+$lang_module['email_is_exists'] = "Váš email OpenID byla použitá. <br /> Prosím, vyberte jiný OpenID";
 /*
 	 vietnam:	  Rất tiếc là email của OpenID này đã được sử dụng.<br />Hãy thử chọn một nhà cung cấp khác
 	 english:	  Your OpenID's email was used.<br  />Please choose another OpenID
 */
 
-$lang_module['error_update_users_info'] = "Chyba: Systém nemůže aktualizovat své uživatelské informace, obraťte se prosím na webu admin.";
+$lang_module['error_update_users_info'] = "Chyba: Systém nemůže aktualizovat informace  svého uživatele,kontaktujte  se prosím na webu admin.";
 /*
 	 vietnam:	  Xin lỗi:hệ thống không cập nhật được thông tin thành viên của bạn, xin liên hệ với quản trị site để được hướng dẫn.
 	 english:	  Error: System cannot update your user infomation, please contact site admin.

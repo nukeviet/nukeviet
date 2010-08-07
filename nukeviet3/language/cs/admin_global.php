@@ -195,31 +195,31 @@ $lang_global['ftp_error_path'] = "Chyba: Špatná konfigurace na vzdálenou cest
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_global['login_error_account'] = "Chyba: Uživatelské jméno nebylo oznámeno nebo prohlášeno za neplatné. (Pouze písmena, číslice a podtržítka latinské abecedy. Minimum%1\$s znaky, maximálně%1\$s znaků)";
+$lang_global['login_error_account'] = "Chyba: Uživatelské jméno nebylo správné nebo prohlášeno za neplatné. (Pouze písmena, číslice a podtržítka latinské abecedy. Minimum%1\$s znaky, maximálně%1\$s znaků)";
 /*
 	 vietnam:	  Lỗi: Tài khoản Admin chưa được khai báo hoặc khai báo không hợp lệ! (Không ít hơn %1\$s ký tự, không nhiều hơn %2\$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới)
 	 english:	  Error: Username was not announced or declared invalid. (Only letters, numbers and underscores the Latin alphabet. Minimum %1\$s characters, maximum %1\$s characters)
 */
 
-$lang_global['login_error_password'] = "Chyba: Heslo nebyla oznámena nebo prohlášeno za neplatné. (Pouze písmena, číslice a podtržítka latinské abecedy. Minimum%1\$s znaky, maximálně%1\$s znaků)";
+$lang_global['login_error_password'] = "Chyba: Heslo nebylo správné nebo prohlášeno za neplatné. (Pouze písmena, číslice a podtržítka latinské abecedy. Minimum%1\$s znaky, maximálně%1\$s znaků)";
 /*
 	 vietnam:	  Lỗi: Password của Admin chưa được khai báo hoặc khai báo không hợp lệ! (Không ít hơn %1\$s ký tự, không nhiều hơn %2\$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới)
 	 english:	  Error: Password has not announced or declared invalid. (Only letters, numbers and underscores the Latin alphabet. Minimum %1\$s characters, maximum %1\$s characters)
 */
 
-$lang_global['login_error_security'] = "Chyba: Bezpečnostní kód není platný! (Pouze latinské abecedy. Musí mít%1\$s znaků)";
+$lang_global['login_error_security'] = "Chyba: Kód ověrění nebyla prohlášena nebo  neplatná! (Pouze latinské abecedy. Musí mít%1\$s znaků)";
 /*
 	 vietnam:	  Lỗi: Mã kiểm tra chưa được khai báo hoặc khai báo không hợp lệ! (Phải có %1\$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin và số)
 	 english:	  Error: Security Code not valid ! (Only Latin alphabet. Must have %1\$s characters)
 */
 
-$lang_global['error_zlib_support'] = "Chyba: Váš server nepodporuje zlib rozšíření, třeba byste kontaktovat vašeho poskytovatele hostingových služeb s cílem umožnit zlib prodloužení.";
+$lang_global['error_zlib_support'] = "Chyba: Váš server nepodporuje zlib,kontaktuje vašeho poskytovatele hostingových služeb,aby umožnil zlib mohou využít funkce.";
 /*
 	 vietnam:	  Lỗi: Máy chủ của bạn không hỗ trợ thư viện zlib, bạn cần liên hệ với nhà cung cấp dịch vụ hosting bật thư viện zlib để có thể sử dụng tính năng này.
 	 english:	  Error: Your server does not support zlib extension, You need contact your hosting provider to enable the zlib extension.
 */
 
-$lang_global['error_zip_extension'] = "Chyba: Váš server nepodporuje ZIP rozšíření, třeba byste kontaktovat vašeho poskytovatele hostingových služeb s cílem umožnit rozšíření ZIP.";
+$lang_global['error_zip_extension'] = "Chyba: Váš server nepodporuje extension ZIP ,kontaktujte vašeho hostingových služeb,aby umožnil extension ZIP.";
 /*
 	 vietnam:	  Lỗi: Máy chủ của bạn không hỗ trợ extension ZIP, bạn cần liên hệ với nhà cung cấp dịch vụ hosting bật extension ZIP để có thể sử dụng tính năng này.
 	 english:	  Error: Your server does not support ZIP extension, You need contact your hosting provider to enable the ZIP extension.

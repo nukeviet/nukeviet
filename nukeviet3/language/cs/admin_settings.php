@@ -339,13 +339,13 @@ $lang_module['version_updatenew'] = "Aktualizovat nová verze";
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['bot_name'] = "Server jméno";
+$lang_module['bot_name'] = "Název serveru";
 /*
 	 vietnam:	  Tên máy chủ
 	 english:	  Server's name
 */
 
-$lang_module['bot_agent'] = "UserAgent";
+$lang_module['bot_agent'] = "UserAgent serveru";
 /*
 	 vietnam:	  UserAgent của máy chủ
 	 english:	  UserAgent
@@ -369,31 +369,31 @@ $lang_module['site_keywords'] = "Klíčová slova";
 	 english:	  Keywords
 */
 
-$lang_module['site_logo'] = "Webu logo";
+$lang_module['site_logo'] = "Webové logo";
 /*
 	 vietnam:	  Tên file logo của site
 	 english:	  Site's logo
 */
 
-$lang_module['site_email'] = "Webu e-mailem";
+$lang_module['site_email'] = "Webový e-mail";
 /*
 	 vietnam:	  Email của site
 	 english:	  Site's email
 */
 
-$lang_module['error_send_email'] = "Chyba odesílání pošty";
+$lang_module['error_send_email'] = "Email na přijetí chybu";
 /*
 	 vietnam:	  Email nhận thông báo lỗi
 	 english:	  Error send mail
 */
 
-$lang_module['site_phone'] = "Stránky telefonu";
+$lang_module['site_phone'] = "Telefon stránky";
 /*
 	 vietnam:	  Điện thoại liên hệ site
 	 english:	  Site's phone
 */
 
-$lang_module['lang_multi'] = "Aktivovat multi-jazyk";
+$lang_module['lang_multi'] = "Aktivovat více jazyků";
 /*
 	 vietnam:	  Kích hoạt đa ngôn ngữ
 	 english:	  Activate multi-language
@@ -405,25 +405,25 @@ $lang_module['site_lang'] = "Výchozí jazyk";
 	 english:	  Default language
 */
 
-$lang_module['site_timezone'] = "Webu časové pásmo";
+$lang_module['site_timezone'] = "Webové časové pásmo";
 /*
 	 vietnam:	  Múi giờ của site
 	 english:	  Site's timezone
 */
 
-$lang_module['date_pattern'] = "Datum Formát zobrazení";
+$lang_module['date_pattern'] = "Formát k zobrazení datum";
 /*
 	 vietnam:	  Kiểu hiển thị ngày tháng năm
 	 english:	  Date display format
 */
 
-$lang_module['time_pattern'] = "Zobrazení času ve formátu";
+$lang_module['time_pattern'] = "Formát k zobrazení času";
 /*
 	 vietnam:	  Kiểu hiển thị giờ phút
 	 english:	  Time display format
 */
 
-$lang_module['online_upd'] = "Aktivujte uživatelů sledování online";
+$lang_module['online_upd'] = "Aktivujte k sledováním online uživatelům";
 /*
 	 vietnam:	  Kích hoạt tiện ích đếm số người online
 	 english:	  Activate monitoring online users
@@ -441,7 +441,7 @@ $lang_module['statistic'] = "Aktivovat statistiky";
 	 english:	  Activate statistics
 */
 
-$lang_module['proxy_blocker'] = "Blok proxy";
+$lang_module['proxy_blocker'] = "Blokovat proxy";
 /*
 	 vietnam:	  Kiểm tra và chặn các máy tình dùng proxy
 	 english:	  Block proxy
@@ -453,7 +453,7 @@ $lang_module['proxy_blocker_0'] = "Nekontrolovat";
 	 english:	  Don't check
 */
 
-$lang_module['proxy_blocker_1'] = "Nízký";
+$lang_module['proxy_blocker_1'] = "Lehce";
 /*
 	 vietnam:	  Kiểm tra nhẹ
 	 english:	  Low
@@ -465,7 +465,7 @@ $lang_module['proxy_blocker_2'] = "Střední";
 	 english:	  Medium
 */
 
-$lang_module['proxy_blocker_3'] = "Vysoký";
+$lang_module['proxy_blocker_3'] = "Absolutní";
 /*
 	 vietnam:	  Kiểm tra tuyệt đối
 	 english:	  High
@@ -477,7 +477,7 @@ $lang_module['str_referer_blocker'] = "Aktivovat blok příchodů";
 	 english:	  Activate block referers
 */
 
-$lang_module['my_domains'] = "Domény";
+$lang_module['my_domains'] = "Domény stránek jsou oddělené čárkami";
 /*
 	 vietnam:	  Các domain chạy site, cách nhau bỏi dấu phảy
 	 english:	  Domains
@@ -489,7 +489,7 @@ $lang_module['cookie_prefix'] = "Cookie prefix";
 	 english:	  Cookie prefix
 */
 
-$lang_module['session_prefix'] = "Zasedání je prefix";
+$lang_module['session_prefix'] = "Prefix session";
 /*
 	 vietnam:	  Tiền tố session
 	 english:	  Session's prefix

@@ -135,19 +135,19 @@ $lang_module['upload_height'] = "Výška";
 	 english:	  Height
 */
 
-$lang_module['upload_file'] = "Upload souborů";
+$lang_module['upload_file'] = "Nahrát soubor";
 /*
 	 vietnam:	  Upload file
 	 english:	  Upload file
 */
 
-$lang_module['rename'] = "Přejmenovat";
+$lang_module['rename'] = "Přejmenovat soubor";
 /*
 	 vietnam:	  Đổi tên file
 	 english:	  Rename
 */
 
-$lang_module['renamefolder'] = "Přejmenovat";
+$lang_module['renamefolder'] = "Přejmenovat složka";
 /*
 	 vietnam:	  Đổi tên folder
 	 english:	  Rename
@@ -171,19 +171,19 @@ $lang_module['rename_newname'] = "Nový název:";
 	 english:	  New name:
 */
 
-$lang_module['rename_noname'] = "Myslíte si nastavit nový název souboru?";
+$lang_module['rename_noname'] = "Nepojmenoval jste pro název souboru?";
 /*
 	 vietnam:	  Bạn chưa đặt tên cho file?
 	 english:	  Do you set new file's name?
 */
 
-$lang_module['rename_nonamefolder'] = "Myslíte si nastavit nový název složky?";
+$lang_module['rename_nonamefolder'] = "Nepojmenoval jste pro název složky?";
 /*
 	 vietnam:	  Bạn chưa đặt tên cho folder?
 	 english:	  Do you set new folder's name?
 */
 
-$lang_module['preview'] = "Preview";
+$lang_module['preview'] = "Předchozí";
 /*
 	 vietnam:	  Xem trước
 	 english:	  Preview
@@ -195,7 +195,7 @@ $lang_module['nopreview'] = "Soubor nepodporuje náhled.";
 	 english:	  File doesn't support preview.
 */
 
-$lang_module['movefolder'] = "Tah";
+$lang_module['movefolder'] = "Přesunout";
 /*
 	 vietnam:	  Chuyển đến thư mục
 	 english:	  Move
@@ -225,7 +225,7 @@ $lang_module['select'] = "Vybrat";
 	 english:	  Select
 */
 
-$lang_module['move'] = "Tah";
+$lang_module['move'] = "Přesunout";
 /*
 	 vietnam:	  Di chuyển
 	 english:	  Move

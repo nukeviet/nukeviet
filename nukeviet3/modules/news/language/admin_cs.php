@@ -927,7 +927,7 @@ $lang_module['topic_num_news'] = "Téma";
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['add_block_cat'] = "Přidat bloku skupiny";
+$lang_module['add_block_cat'] = "Přidat blok skupiny";
 /*
 	 vietnam:	  Thêm nhóm block
 	 english:	  Add block group
@@ -939,13 +939,13 @@ $lang_module['edit_block_cat'] = "Upravit blok skupiny";
 	 english:	  Edit block groups
 */
 
-$lang_module['content_block'] = "je blok obsah";
+$lang_module['content_block'] = "Příspěvky bloku";
 /*
 	 vietnam:	  Bài viết thuộc các block
 	 english:	  is block content
 */
 
-$lang_module['adddefaultblock'] = "Vyberte výchozí při vytváření článku";
+$lang_module['adddefaultblock'] = "Vyberte formát při vytvoření článku";
 /*
 	 vietnam:	  Chọn mặc định khi tạo bài viết
 	 english:	  Select the default when creating article

@@ -111,7 +111,7 @@ $lang_module['sendcontactok'] = "Děkujeme Vám za Váš zájem! budeme odpovíd
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['sendinfo'] = "Tento e-mail poslal kontaktní funkce na stránkách%1\$s. <br /> informací o odesílateli <br /> <strong> Jméno </ strong>:%2\$s <br /> <strong> E-mail </ strong> :%3\$s <br /> <strong> IP </ strong>:%4\$s <br /> <strong> zasláno na </ strong>:%5\$s";
+$lang_module['sendinfo'] = "Tento e-mail poslal přes kontaktní funkce na stránkách%1\$s. <br /> informace o odesílateli <br /> <strong> Přímení a Jméno </ strong>:%2\$s <br /> <strong> E-mail </ strong> :%3\$s <br /> <strong> IP </ strong>:%4\$s <br /> <strong> zasláno na </ strong>:%5\$s";
 /*
 	 vietnam:	  Thư này được gửi thông qua tiện ích Liên hệ tại website %1\$s.<br />Thông tin về người gửi<br /><strong>Họ và tên</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>IP</strong>: %4\$s<br /><strong>Gửi đến bộ phận</strong>: %5\$s
 	 english:	  This email sent by contact function at website %1\$s.<br />Sender information<br /><strong>Name</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>IP</strong>: %4\$s<br /><strong>Sent to</strong>: %5\$s

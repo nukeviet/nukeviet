@@ -315,19 +315,19 @@ $lang_module['save_download'] = "Klikněte zde pro stažení souboru.";
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['dump_autobackup'] = "Aktivovat automatické zálohování";
+$lang_module['dump_autobackup'] = "Aktivovat automatické k zálohování";
 /*
 	 vietnam:	  Kích hoạt tiện ích lưu CSDL
 	 english:	  Activate auto backup
 */
 
-$lang_module['dump_backup_ext'] = "Přípona souboru";
+$lang_module['dump_backup_ext'] = "Ukládat formáty souboru";
 /*
 	 vietnam:	  Định dạng lưu CSDL
 	 english:	  File extension
 */
 
-$lang_module['dump_backup_day'] = "Soubor čísel";
+$lang_module['dump_backup_day'] = "Počet souboru";
 /*
 	 vietnam:	  Số lượng file lưu CSDL.
 	 english:	  File numbers

@@ -333,19 +333,19 @@ $lang_module['nv_error_exit_module'] = "Modul jazyk neexistuje";
 
 
 /*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['nv_lang_check'] = "Jazykové zkoušky";
+$lang_module['nv_lang_check'] = "Vyzkoušet jazyku";
 /*
 	 vietnam:	  Kiểm tra ngôn ngữ
 	 english:	  Language testing
 */
 
-$lang_module['nv_lang_check_title'] = "Podívejte se na jazyk nebyl přeložit";
+$lang_module['nv_lang_check_title'] = "Zkontrolujte jszyku,který nebyl překladán";
 /*
 	 vietnam:	  Kiểm tra ngôn ngữ chưa được dịch
 	 english:	  Check the language has not been translate
 */
 
-$lang_module['nv_lang_data_source'] = "Displej s jazykem";
+$lang_module['nv_lang_data_source'] = "Zobrazení s jazykem";
 /*
 	 vietnam:	  Hiển thị cùng ngôn ngữ
 	 english:	  Display the with language
