@@ -28,7 +28,7 @@
                 <label for="femail">
                     {LANG.email}:
                 </label>
-                <input type="text" maxlength="60" value="{CONTENT.femail}" id="femail" name="femail" class="txtInput" />
+                <input type="text" maxlength="60" value="{CONTENT.femail}" id="femail_iavim" name="femail" class="txtInput" />
             </div>
             <!-- END: iguest -->
             <!-- BEGIN: iuser -->
@@ -42,7 +42,7 @@
                 <label for="femail">
                     {LANG.email}:
                 </label>
-                <input type="text" maxlength="60" value="{CONTENT.femail}" id="femail" name="femail" class="txtInput" disabled="disabled" />
+                <input type="text" maxlength="60" value="{CONTENT.femail}" id="femail_iavim" name="femail" class="txtInput" disabled="disabled" />
             </div>
             <!-- END: iuser -->
             <div class="fphone">
@@ -70,7 +70,7 @@
                 <label for="fcode">
                     {LANG.captcha}:
                 </label>
-                <input type="text" maxlength="6" value="" id="fcode" name="fcode" class="txtCaptcha" />
+                <input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="txtCaptcha" />
                 <img height="22" name="vimg" src="{NV_BASE_SITEURL}?scaptcha=captcha" title="{LANG.captcha}" alt="{LANG.captcha}" id="vimg" />
                 <img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','commentseccode_iavim');"/>
             </div>

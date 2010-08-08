@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -276,9 +276,6 @@ $lang_module['admin_send2mail_title'] = "Odeslat kontakt na e-mail";
 	 english:	  Send to email user
 */
 
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
 $lang_module['delall'] = "Smazat všechny";
 /*
 	 vietnam:	  Xóa tất cả

@@ -1,7 +1,7 @@
 function sendcontact( num )
 {
    var sendname = document.getElementById( 'fname' );
-   var sendemail = document.getElementById( 'femail' );
+   var sendemail = document.getElementById( 'femail_iavim' );
    var sendtitle = document.getElementById( 'ftitle' );
    var sendcontent = document.getElementById( 'fcon' );
    var bt = document.getElementById( 'btsend' );
@@ -37,11 +37,11 @@ function sendcontact( num )
       return false;
    }
 
-   var seccode = document.getElementById( 'fcode' );
+   var seccode = document.getElementById( 'fcode_iavim' );
    if( ( seccode.value.length != num ) || ! nv_namecheck.test( seccode.value ) )
    {
       alert( nv_code );
-      nv_change_captcha( 'vimg', 'fcode' );
+      nv_change_captcha( 'vimg', 'fcode_iavim' );
       bt.disabled = false;
       seccode.focus();
       return false;

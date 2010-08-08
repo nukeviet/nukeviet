@@ -57,17 +57,17 @@ function nv_SendMail2User ( $cid, $fcontent, $ftitle, $femail, $full_name )
             $result = $db->sql_query( $sql );
             while ( $row = $db->sql_fetchrow( $result ) )
             {
-                if ( ! in_array( $row['admin_email'], $email_list ) )
+                if ( nv_check_valid_email( $row['admin_email'] ) == "" )
                 {
                     $email_list[] = $row['admin_email'];
                 }
             }
         }
     }
-    
+    $email_list = array_unique( $email_list );
     if ( ! empty( $email_list ) )
     {
-        $from = array( 
+    	$from = array( 
             $full_name, $femail 
         );
         foreach ( $email_list as $to )

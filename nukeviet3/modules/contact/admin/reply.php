@@ -53,56 +53,67 @@ if ( ! $is_read )
 
 $admin_name = $admin_info['full_name'];
 if ( empty( $admin_name ) ) $admin_name = $admin_info['username'];
-
+$mess_content = "";
+$contents = "";
 if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
     $mess_content = nv_editor_filter_textarea( 'mess_content', '', NV_ALLOWED_HTML_TAGS, true );
-
+    
     if ( strip_tags( $mess_content ) != "" )
     {
         list( $from ) = $db->sql_fetchrow( $db->sql_query( "SELECT `email` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $row['cid'] ) );
-        if ( empty( $from ) )
+        if ( nv_check_valid_email( $from ) != "" )
         {
             $from = $admin_info['email'];
         }
-
-        $from = array( $admin_name, $from );
-
+        
+        $from = array( 
+            $admin_name, $from 
+        );
+        
         $subject = "Re: " . $row['title'];
-
+        
         if ( nv_sendmail( $from, $row['sender_email'], $subject, $mess_content ) )
         {
             $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_send` SET `is_reply`=1, 
             `reply_content`=" . $db->dbescape( $mess_content ) . ", 
             `reply_time`=" . NV_CURRENTTIME . ", `reply_aid`=" . $admin_info['admin_id'] . " WHERE `id`=" . $id;
             $result = $db->sql_query( $sql );
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=view&id=" . $id );
+            die();
+        }
+        else
+        {
+            $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
+            $contents .= "<blockquote class=\"error\"><span>" . $lang_global['error_sendmail_admin'] . "</span></blockquote>\n";
+            $contents .= "</div>\n";
+            $contents .= "<div class=\"clear\"></div>\n";
         }
     }
 
-    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=view&id=" . $id );
-    die();
 }
-
-$mess_content = "<br /><br />--<br />Best regards,<br /><br />" . $admin_name . "<br />";
-if ( ! empty( $admin_info['position'] ) )
+else
 {
-    $mess_content .= $admin_info['position'] . "<br />";
+    $mess_content .= "<br /><br />--<br />Best regards,<br /><br />" . $admin_name . "<br />";
+    if ( ! empty( $admin_info['position'] ) )
+    {
+        $mess_content .= $admin_info['position'] . "<br />";
+    }
+    $mess_content .= "<br />";
+    $mess_content .= "E-mail: " . $admin_info['email'] . "<br />";
+    $mess_content .= "Website: " . $global_config['site_name'] . "<br />" . $global_config['site_url'] . "<br /><br />";
+    
+    $mess_content .= "--------------------------------------------------------------------------------<br />";
+    $mess_content .= "<strong>From:</strong> " . $row['sender_name'] . " [mailto:" . $row['sender_email'] . "]<br />";
+    $mess_content .= "<strong>Sent:</strong> " . date( "r", $row['send_time'] ) . "<br />";
+    $mess_content .= "<strong>To:</strong> " . $contact_allowed['view'][$row['cid']] . "<br />";
+    $mess_content .= "<strong>Subject:</strong> " . $row['title'] . "<br /><br />";
+    $mess_content .= $row['content'];
 }
-$mess_content .= "<br />";
-$mess_content .= "E-mail: " . $admin_info['email'] . "<br />";
-$mess_content .= "Website: " . $global_config['site_name'] . "<br />" . $global_config['site_url'] . "<br /><br />";
-
-$mess_content .= "--------------------------------------------------------------------------------<br />";
-$mess_content .= "<strong>From:</strong> " . $row['sender_name'] . " [mailto:" . $row['sender_email'] . "]<br />";
-$mess_content .= "<strong>Sent:</strong> " . date( "r", $row['send_time'] ) . "<br />";
-$mess_content .= "<strong>To:</strong> " . $contact_allowed['view'][$row['cid']] . "<br />";
-$mess_content .= "<strong>Subject:</strong> " . $row['title'] . "<br /><br />";
-$mess_content .= $row['content'];
 
 $mess_content = nv_htmlspecialchars( $mess_content );
 
-$contents = "";
-$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=".$id."\" method=\"post\">";
+$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id . "\" method=\"post\">";
 $contents .= "<input name=\"save\" type=\"hidden\" value=\"1\" />\n";
 $contents .= "<div style=\"margin-top:8px;margin-bottom:8px;\">\n";
 if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )

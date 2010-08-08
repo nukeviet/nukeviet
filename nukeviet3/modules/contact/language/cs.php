@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -108,9 +108,6 @@ $lang_module['sendcontactok'] = "Děkujeme Vám za Váš zájem! budeme odpovíd
 	 english:	  Thank you! We will reply as soon as possible.
 */
 
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
 $lang_module['sendinfo'] = "Tento e-mail poslal přes kontaktní funkce na stránkách%1\$s. <br /> informace o odesílateli <br /> <strong> Přímení a Jméno </ strong>:%2\$s <br /> <strong> E-mail </ strong> :%3\$s <br /> <strong> IP </ strong>:%4\$s <br /> <strong> zasláno na </ strong>:%5\$s";
 /*
 	 vietnam:	  Thư này được gửi thông qua tiện ích Liên hệ tại website %1\$s.<br />Thông tin về người gửi<br /><strong>Họ và tên</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>IP</strong>: %4\$s<br /><strong>Gửi đến bộ phận</strong>: %5\$s
