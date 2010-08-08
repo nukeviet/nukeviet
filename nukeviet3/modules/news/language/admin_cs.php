@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -220,6 +220,18 @@ $lang_module['edit_sources'] = "Upravit zdroje";
 /*
 	 vietnam:	  Sửa nguồn tin
 	 english:	  Edit sources
+*/
+
+$lang_module['add_block_cat'] = "Přidat blok skupiny";
+/*
+	 vietnam:	  Thêm nhóm block
+	 english:	  Add block group
+*/
+
+$lang_module['edit_block_cat'] = "Upravit blok skupiny";
+/*
+	 vietnam:	  Sửa nhóm block
+	 english:	  Edit block groups
 */
 
 $lang_module['link'] = "URL zdroje";
@@ -502,6 +514,12 @@ $lang_module['content_cat'] = "Kategorie";
 /*
 	 vietnam:	  Chủ đề của bài viết
 	 english:	  Categories
+*/
+
+$lang_module['content_block'] = "Příspěvky bloku";
+/*
+	 vietnam:	  Bài viết thuộc các block
+	 english:	  is block content
 */
 
 $lang_module['content_topic'] = "je téma obsah";
@@ -864,6 +882,12 @@ $lang_module['block'] = "Bloky";
 	 english:	  Blocks
 */
 
+$lang_module['adddefaultblock'] = "Vyberte formát při vytvoření článku";
+/*
+	 vietnam:	  Chọn mặc định khi tạo bài viết
+	 english:	  Select the default when creating article
+*/
+
 $lang_module['source_logo'] = "Zdroj logo";
 /*
 	 vietnam:	  Logo nguồn tin
@@ -922,33 +946,6 @@ $lang_module['topic_num_news'] = "Téma";
 /*
 	 vietnam:	  bài viết
 	 english:	  Topic
-*/
-
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['add_block_cat'] = "Přidat blok skupiny";
-/*
-	 vietnam:	  Thêm nhóm block
-	 english:	  Add block group
-*/
-
-$lang_module['edit_block_cat'] = "Upravit blok skupiny";
-/*
-	 vietnam:	  Sửa nhóm block
-	 english:	  Edit block groups
-*/
-
-$lang_module['content_block'] = "Příspěvky bloku";
-/*
-	 vietnam:	  Bài viết thuộc các block
-	 english:	  is block content
-*/
-
-$lang_module['adddefaultblock'] = "Vyberte formát při vytvoření článku";
-/*
-	 vietnam:	  Chọn mặc định khi tạo bài viết
-	 english:	  Select the default when creating article
 */
 
 
