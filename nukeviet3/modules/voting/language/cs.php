@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:14 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -18,10 +18,10 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC.. All rights re
 $lang_translator['info'] ="YM: datvietinfo2010 ";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['voting_hits'] = "Komentář";
+$lang_module['voting_hits'] = "Hlasování";
 /*
 	 vietnam:	  Bình chọn
-	 english:	  Comment
+	 english:	  Voting
 */
 
 $lang_module['voting_result'] = "Výsledek";

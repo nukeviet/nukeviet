@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -84,6 +84,24 @@ $lang_module['upload_size'] = "Velikost";
 	 english:	  Size
 */
 
+$lang_module['upload_width'] = "Šířka";
+/*
+	 vietnam:	  Rộng
+	 english:	  Width
+*/
+
+$lang_module['upload_height'] = "Výška";
+/*
+	 vietnam:	  Cao
+	 english:	  Height
+*/
+
+$lang_module['upload_file'] = "Nahrát soubor";
+/*
+	 vietnam:	  Upload file
+	 english:	  Upload file
+*/
+
 $lang_module['upload_otherurl'] = "Jiný URL";
 /*
 	 vietnam:	  hoặc URL
@@ -118,27 +136,6 @@ $lang_module['type_flash'] = "Blesk";
 /*
 	 vietnam:	  Flash
 	 english:	  Flash
-*/
-
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['upload_width'] = "Šířka";
-/*
-	 vietnam:	  Rộng
-	 english:	  Width
-*/
-
-$lang_module['upload_height'] = "Výška";
-/*
-	 vietnam:	  Cao
-	 english:	  Height
-*/
-
-$lang_module['upload_file'] = "Nahrát soubor";
-/*
-	 vietnam:	  Upload file
-	 english:	  Upload file
 */
 
 $lang_module['rename'] = "Přejmenovat soubor";

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jul 31, 2010, 01:12:43 PM
+* @Createdate Aug 08, 2010, 11:22:02 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -18,7 +18,7 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['voting_hits'] = "Comment";
+$lang_module['voting_hits'] = "Voting";
 $lang_module['voting_result'] = "Result";
 $lang_module['EDIT'] = "Edit";
 $lang_module['DELETE'] = "Delete";

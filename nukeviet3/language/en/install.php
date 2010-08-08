@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jul 31, 2010, 01:12:43 PM
+* @Createdate Aug 08, 2010, 11:22:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -95,8 +95,9 @@ $lang_module['db_pass'] = "Password";
 $lang_module['db_pass_note'] = "Database' password";
 $lang_module['db_name'] = "Database name";
 $lang_module['db_name_note'] = "Prefix for database name";
+$lang_module['db_detete'] = "Delete the existing tables";
 $lang_module['prefix'] = "prefix";
-$lang_module['db_err_prefix'] = "Error: Prefix currently used";
+$lang_module['db_err_prefix'] = "Error: Prefix database has been used";
 $lang_module['enter_form'] = "Enter form";
 $lang_module['sitename'] = "Site name";
 $lang_module['err_sitename'] = "You must provide site name";
@@ -120,7 +121,5 @@ $lang_module['finish'] = "Finish";
 $lang_module['checkfileconfig'] = "Please re-check";
 $lang_module['movefileconfig'] = "You need to move config.php file from tmp folder to site root folder, then click to check button to re-check";
 $lang_module['copyright'] = "Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement";
-
-$lang_module['db_err_prefix'] = "Error: Prefix database has been used";
 
 ?>

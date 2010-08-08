@@ -18,7 +18,7 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. Tous droits r�
 $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['voting_hits'] = "Confirmer";
+$lang_module['voting_hits'] = "Vote";
 $lang_module['voting_result'] = "Résultat";
 $lang_module['EDIT'] = "Éditer";
 $lang_module['DELETE'] = "Supprimer";

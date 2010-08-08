@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:14 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -150,6 +150,12 @@ $lang_module['voting_question_head'] = ": Vložte prosím svůj komentář";
 	 english:	  : Please enter your comment
 */
 
+$lang_module['add_answervote'] = "Přidat možnost na odpověď";
+/*
+	 vietnam:	  Thêm phương án trả lời
+	 english:	  Add answer
+*/
+
 $lang_module['voting_continue'] = "Pokračovat";
 /*
 	 vietnam:	  Chuyển sang bước
@@ -214,15 +220,6 @@ $lang_module['warning'] = "Poznámka: Někteří rozhodnou, že povolí menší 
 /*
 	 vietnam:	  Lưu ý: số cho phép chọn phải nhỏ hơn hoặc bằng số lựa chọn
 	 english:	  Note: selectable must smaller than available
-*/
-
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['add_answervote'] = "Přidat možnost na odpověď";
-/*
-	 vietnam:	  Thêm phương án trả lời
-	 english:	  Add answer
 */
 
 

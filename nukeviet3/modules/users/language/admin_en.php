@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jul 31, 2010, 01:12:43 PM
+* @Createdate Aug 08, 2010, 11:22:02 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -110,13 +110,12 @@ $lang_module['edit_add_error'] = "Can't update member information!";
 $lang_module['edit_error_question'] = "Empty secret question";
 $lang_module['edit_error_answer'] = "Empty answer";
 $lang_module['edit_error_group'] = "Please select group for member";
+$lang_module['account_deny_name'] = "Sorry, Account %s banned.";
 $lang_module['awaiting_active'] = "Activate";
 $lang_module['delconfirm_message'] = "Do you realy want to delete selected member?";
 $lang_module['delconfirm_email'] = "Send notification email:";
 $lang_module['delconfirm_email_yes'] = "Yes";
 $lang_module['delconfirm_ok'] = "Ok!";
-$lang_module['account_deny_name'] = "Sorry, Account %s banned.";
-
 $lang_module['delconfirm_email_title'] = "Email notification to delete account";
 $lang_module['delconfirm_email_content'] = "Hi %1\$s,
 

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:14 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -366,6 +366,12 @@ $lang_module['type_reg'] = "Režim registrovat";
 	 english:	  Register type
 */
 
+$lang_module['active_not_allow'] = "Registrovat nepovolen";
+/*
+	 vietnam:	  Không cho phép đăng ký
+	 english:	  Not grant to register
+*/
+
 $lang_module['active_admin_check'] = "Admin aktivní";
 /*
 	 vietnam:	  Người quản trị kích hoạt
@@ -516,6 +522,12 @@ $lang_module['edit_error_email'] = "Nesprávné email";
 	 english:	  Incorrect email
 */
 
+$lang_module['edit_error_email_exist'] = "Váš email již existuje. Prosím, vyberte jiný email.";
+/*
+	 vietnam:	  Email đã được thành viên khác sử dụng. Hãy chọn email khác
+	 english:	  Your email used in another account. Please choose another account.
+*/
+
 $lang_module['edit_error_permission'] = "Nemůžete změnit informace o účtech.";
 /*
 	 vietnam:	  Bạn không có quyền thay đổi thông tin của tài khoản này.
@@ -556,6 +568,12 @@ $lang_module['edit_error_group'] = "Prosím, vyberte skupinu pro člena";
 /*
 	 vietnam:	  Hãy chọn group cho thành viên
 	 english:	  Please select group for member
+*/
+
+$lang_module['account_deny_name'] = "Omlouváme se, účet%s zakázala.";
+/*
+	 vietnam:	  Rất tiếc, tài khoản %s đã bị cấm sử dụng để đăng ký thành viên mới
+	 english:	  Sorry, Account %s banned.
 */
 
 $lang_module['awaiting_active'] = "Aktivovat";
@@ -622,12 +640,6 @@ $lang_module['adduser_register'] = "Váš účet byl vytvořen";
 	 english:	  Your account was created
 */
 
-$lang_module['account_deny_name'] = "Omlouváme se, účet%s zakázala.";
-/*
-	 vietnam:	  Rất tiếc, tài khoản %s đã bị cấm sử dụng để đăng ký thành viên mới
-	 english:	  Sorry, Account %s banned.
-*/
-
 $lang_module['adduser_register_info'] = "Dobrý den%1\$s,
 
 Váš účet na internetových stránkách%2\$s aktivován. Vaše přihlašovací údaje:
@@ -652,21 +664,6 @@ Password: %5\$s
 This is email automatic sending from website %2\$s.
 
 Site administrator
-*/
-
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['active_not_allow'] = "Registrovat nepovolen";
-/*
-	 vietnam:	  Không cho phép đăng ký
-	 english:	  Not grant to register
-*/
-
-$lang_module['edit_error_email_exist'] = "Váš email již existuje. Prosím, vyberte jiný email.";
-/*
-	 vietnam:	  Email đã được thành viên khác sử dụng. Hãy chọn email khác
-	 english:	  Your email used in another account. Please choose another account.
 */
 
 $lang_module['allow_openid'] = "Povolit pomocí OpenID";

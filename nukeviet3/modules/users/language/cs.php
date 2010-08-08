@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -674,9 +674,6 @@ $lang_module['lostpass_active_error_link'] = "Chyba nesprávný odkaz";
 	 english:	  error link lostpass
 */
 
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
 $lang_module['changepass_title'] = "Změna hesla";
 /*
 	 vietnam:	  Đổi mật khẩu
@@ -755,7 +752,7 @@ $lang_module['openid_note4'] = "Přihlásit se automatické pomocí účet vytvo
 	 english:	  Login with account create automatic by system
 */
 
-$lang_module['openid_note5'] = "Přihlásit se váš bývalý účet ";
+$lang_module['openid_note5'] = "Přihlásit se váš bývalý účet";
 /*
 	 vietnam:	  Đăng nhập bằng tài khoản mà bạn đăng ký trước đây
 	 english:	  Login with your exists account
@@ -983,7 +980,7 @@ $lang_module['changequestion_info2'] = "Chcete-li získat nové heslo, pokud jst
 	 english:	  To get new password when you forgot password
 */
 
-$lang_module['changequestion_step1'] = "Chcete-li změnit rezervy otázky- odpověd,musíte zadat heslo ";
+$lang_module['changequestion_step1'] = "Chcete-li změnit rezervy otázky- odpověd,musíte zadat heslo";
 /*
 	 vietnam:	  Để thay đổi câu hỏi - câu trả lời dự phòng, bạn cần khai báo mật khẩu
 	 english:	  In order to change your secret question, you must provide password
