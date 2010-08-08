@@ -658,7 +658,6 @@ function user_openid_administrator( $data )
 
     $xtpl = new XTemplate( "openid_administrator.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-    $xtpl->assign( 'OPENID_LOGIN', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $attribs['server'] . "&amp;result=1" );
     $xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/openid.gif" );
     $xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
     $xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
