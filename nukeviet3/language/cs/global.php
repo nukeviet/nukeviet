@@ -150,12 +150,6 @@ $lang_global['nickname_empty'] = "Uživatelské jméno nebyla prohlášena";
 	 english:	  Username has not been declared
 */
 
-$lang_global['nicknameincorrect'] = "Přihlašovací jméno \"<strong>%s </ strong>\" je neplatný. To přijímají pouze latinská písmena, číslice a podtržítka";
-/*
-	 vietnam:	  Tên tài khoản &ldquo;<strong>%s</strong>&rdquo; không hợp lệ. Chỉ chấp nhận các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới
-	 english:	  Username &ldquo;<strong>%s</strong>&rdquo; is invalid. It only accept latin characters, numbers and underscore
-*/
-
 $lang_global['nicknamelong'] = "Přihlašovací jméno \"<strong>%1\$s </ strong>\" příliš dlouhý. Limit \"<strong>%2\$d </ strong>\" znaky";
 /*
 	 vietnam:	  Tên tài khoản &ldquo;<strong>%1\$s</strong>&rdquo; quá dài. Giới hạn ở mức &ldquo;<strong>%2\$d</strong>&rdquo; ký tự
@@ -168,22 +162,10 @@ $lang_global['nicknameadjective'] = "Přihlašovací jméno \"<strong>%1\$s </ s
 	 english:	  Username &ldquo;<strong>%1\$s</strong>&rdquo; too short. Minimum &ldquo;<strong>%2\$d</strong>&rdquo; characters
 */
 
-$lang_global['nicknamenospaces'] = "Přihlašovací jméno \"<strong>%s </ strong>\" obsahuje prostor. Znaky musí být v písemné formě společně";
-/*
-	 vietnam:	  Tên tài khoản &ldquo;<strong>%s</strong>&rdquo; có chứa khoảng trắng. Các ký tự phải được viết liền nhau
-	 english:	  Username &ldquo;<strong>%s</strong>&rdquo; contains a space. Characters must be written together
-*/
-
 $lang_global['password_empty'] = "Heslo nebyla prohlášena";
 /*
 	 vietnam:	  Mật khẩu đăng nhập chưa được khai báo
 	 english:	  Password has not been declared
-*/
-
-$lang_global['passwordincorrect'] = "Heslo \"<strong>%s </ strong>\" je neplatný. To přijímají pouze latinská písmena, číslice a podtržítka";
-/*
-	 vietnam:	  Mật khẩu &ldquo;<strong>%s</strong>&rdquo; không hợp lệ. Chỉ chấp nhận các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới
-	 english:	  Password &ldquo;<strong>%s</strong>&rdquo; is invalid. It only accept latin characters, numbers and underscore
 */
 
 $lang_global['passwordlong'] = "Heslo \"<strong>%1\$s </ strong>\" příliš dlouhý. limit \"<strong>%2\$d </ strong>\" znaky";
@@ -196,12 +178,6 @@ $lang_global['passwordadjective'] = "Heslo \"<strong>%1\$s </ strong>\", příli
 /*
 	 vietnam:	  Mật khẩu &ldquo;<strong>%1\$s</strong>&rdquo; quá ngắn. Ít nhất phải có &ldquo;<strong>%2\$d</strong>&rdquo; ký tự
 	 english:	  Password &ldquo;<strong>%1\$s</strong>&rdquo; too short. Minimum có &ldquo;<strong>%2\$d</strong>&rdquo; characters
-*/
-
-$lang_global['passwordnospaces'] = "Heslo \"<strong>%s </ strong>\" obsahuje prostor. V dopise musí být v písemné formě společně";
-/*
-	 vietnam:	  Mật khẩu &ldquo;<strong>%s</strong>&rdquo; có chứa khoảng trắng. Các ký tự phải được viết liền nhau
-	 english:	  Password &ldquo;<strong>%s</strong>&rdquo; contains a space. The letter must be written together
 */
 
 $lang_global['passwordsincorrect'] = "Heslo \"<strong>%1\$s </ strong>\" a \"<strong>%2\$s </ strong>\" jiní. Prosím prohlásit znovu";

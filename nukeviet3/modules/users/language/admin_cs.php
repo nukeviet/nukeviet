@@ -498,12 +498,6 @@ $lang_module['edit_save'] = "Přijmout";
 	 english:	  Accept
 */
 
-$lang_module['edit_error_username'] = "Uživatelské jméno prázdné nebo obsahovat znaky neumožňuje";
-/*
-	 vietnam:	  Tên người dùng không được để trống hoặc chứa các kí tự không hợp lệ
-	 english:	  User name empty or contain characters doesn't allow
-*/
-
 $lang_module['edit_error_username_exist'] = "Uživatelské jméno používané jiným členem. Prosím, vyberte jiné jméno";
 /*
 	 vietnam:	  Tên người dùng này đã được thành viên khác sử dụng. Hãy chọn tên khác
@@ -626,6 +620,12 @@ $lang_module['adduser_register'] = "Váš účet byl vytvořen";
 /*
 	 vietnam:	  Tài khoản của bạn đã được tạo
 	 english:	  Your account was created
+*/
+
+$lang_module['account_deny_name'] = "Omlouváme se, účet%s zakázala.";
+/*
+	 vietnam:	  Rất tiếc, tài khoản %s đã bị cấm sử dụng để đăng ký thành viên mới
+	 english:	  Sorry, Account %s banned.
 */
 
 $lang_module['adduser_register_info'] = "Dobrý den%1\$s,

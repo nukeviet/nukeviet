@@ -23,7 +23,9 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['is_user_forum'] = $nv_Request->get_int( 'is_user_forum', 'post', 0 );
 	$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
 	$array_config['openid_servers'] = ! empty( $array_config['openid_servers'] ) ? implode( ",", $array_config['openid_servers'] ) : "";
-
+	if ($array_config['is_user_forum']){
+		$array_config['openid_mode'] = 0;
+	}
 	foreach ( $array_config as $config_name => $config_value )
 	{
 		$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET 

@@ -82,9 +82,10 @@ $lang_module['db_pass'] = "Mật khẩu";
 $lang_module['db_pass_note'] = "Mật khẩu của username được phân quyền với database";
 $lang_module['db_name'] = "Tên cơ sở dữ liệu";
 $lang_module['db_name_note'] = "Một số hostting đặt tiếp đầu tố cho tên database";
+$lang_module['db_detete'] = "Xóa các bảng dữ liệu đã tồn tại";
 $lang_module['prefix'] = "Tiếp đầu tố";
 
-$lang_module['db_err_prefix'] = "Lỗi: thông số  (prefix) Tiếp đầu tố đã được sử dụng";
+$lang_module['db_err_prefix'] = "Lỗi: (prefix) Tiếp đầu tố đã được sử dụng";
 
 $lang_module['enter_form'] = "Nhập thông tin";
 $lang_module['sitename'] = "Tên site";

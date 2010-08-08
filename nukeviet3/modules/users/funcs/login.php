@@ -609,8 +609,8 @@ $error = "";
 
 if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
 {
-    $nv_username = filter_text_input( 'nv_login', 'post', '', '', 100);
-    $nv_password = filter_text_input( 'nv_password', 'post', '', '', 50);
+    $nv_username = filter_text_input( 'nv_login', 'post', '', '', 100 );
+    $nv_password = filter_text_input( 'nv_password', 'post', '', '', 50 );
     $nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
     $nv_redirect = filter_text_input( 'nv_redirect', 'post,get', '' );
     //$check_login = nv_check_valid_login( $nv_username, NV_UNICKMAX, NV_UNICKMIN );
@@ -621,7 +621,7 @@ if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
     {
         $error = $lang_global['securitycodeincorrect'];
     }
- 	elseif ( empty( $nv_username ) )
+    elseif ( empty( $nv_username ) )
     {
         $error = $lang_global['nickname_empty'];
     }
@@ -637,31 +637,30 @@ if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
         }
         else
         {
-            $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `username`=" . $db->dbescape( $nv_username );
+            $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . md5( $nv_username ) . "'";
             $result = $db->sql_query( $sql );
-            $numrows = $db->sql_numrows( $result );
-            if ( $numrows != 1 )
+            $error = $lang_global['loginincorrect'];
+            while ( $row = $db->sql_fetchrow( $result ) )
             {
-                $error = $lang_global['loginincorrect'];
-            }
-            else
-            {
-                $row = $db->sql_fetchrow( $result );
-                
-                if ( empty( $row['password'] ) or ! $crypt->validate( $nv_password, $row['password'] ) )
+                if ( $row['username'] == $nv_username )
                 {
-                    $error = $lang_global['loginincorrect'];
-                }
-                else
-                {
-                    if ( ! $row['active'] )
+                    if ( empty( $row['password'] ) or ! $crypt->validate( $nv_password, $row['password'] ) )
                     {
-                        $error = $lang_module['login_no_active'];
+                        $error = $lang_global['loginincorrect'];
                     }
                     else
                     {
-                        validUserLog( $row, 1, '' );
+                        if ( ! $row['active'] )
+                        {
+                            $error = $lang_module['login_no_active'];
+                        }
+                        else
+                        {
+                            $error = "";
+                            validUserLog( $row, 1, '' );
+                        }
                     }
+                    break;
                 }
             }
         }

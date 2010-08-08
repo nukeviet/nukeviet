@@ -630,5 +630,6 @@ $lang_module['copyright'] = "Poznámka:Uvedený článek je přetištěný na we
 	 english:	  Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement
 */
 
+$lang_module['db_err_prefix'] = "Chyba: Prefix databáze byla použita";
 
 ?>

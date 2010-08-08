@@ -558,10 +558,8 @@ function nv_check_valid_login ( $login, $max, $min )
     global $lang_global, $global_config;
     $login = strip_tags( trim( $login ) );
     if ( empty( $login ) ) return $lang_global['nickname_empty'];
-    elseif ( ! preg_match( $global_config['check_username'], $login ) ) return sprintf( $lang_global['nicknameincorrect'], $login );
     elseif ( strlen( $login ) > $max ) return sprintf( $lang_global['nicknamelong'], $login, $max );
     elseif ( strlen( $login ) < $min ) return sprintf( $lang_global['nicknameadjective'], $login, $min );
-    elseif ( strrpos( $login, ' ' ) > 0 ) return sprintf( $lang_global['nicknamenospaces'], $login );
     else return "";
 }
 
@@ -578,10 +576,8 @@ function nv_check_valid_pass ( $pass, $max, $min )
     global $lang_global, $global_config;
     $pass = strip_tags( trim( $pass ) );
     if ( empty( $pass ) ) return $lang_global['password_empty'];
-    elseif ( ! preg_match( $global_config['check_pass'], $pass ) ) return sprintf( $lang_global['passwordincorrect'], $pass );
     elseif ( strlen( $pass ) > $max ) return sprintf( $lang_global['passwordlong'], $pass, $max );
     elseif ( strlen( $pass ) < $min ) return sprintf( $lang_global['passwordadjective'], $pass, $min );
-    elseif ( strrpos( $pass, ' ' ) > 0 ) return sprintf( $lang_global['passwordnospaces'], $pass );
     else return "";
 }
 
@@ -613,7 +609,7 @@ function nv_capcha_txt ( $seccode, $scaptcha = "captcha" )
 {
     global $sys_info, $global_config, $nv_Request;
     
-    $scaptcha = preg_replace( '/[^a-z0-9\-]/', '', $scaptcha );
+    $scaptcha = preg_replace( '/[^a-z0-9]/', '', $scaptcha );
     $skeycaptcha = ( $scaptcha == "captcha" ) ? "random_num" : "random_" . substr( $scaptcha, 0, 20 );
     
     $seccode = strtoupper( $seccode );
@@ -1021,14 +1017,14 @@ if ( ! function_exists( 'mime_content_type' ) )
      * @param mixed $filename
      * @return
      */
-    function mime_content_type( $filename )
+    function mime_content_type ( $filename )
     {
         if ( empty( $filename ) ) return false;
-
+        
         $ext = strtolower( array_pop( explode( '.', $filename ) ) );
-
+        
         if ( empty( $ext ) ) return false;
-
+        
         if ( function_exists( 'finfo_open' ) )
         {
             $finfo = finfo_open( FILEINFO_MIME );
@@ -1043,7 +1039,7 @@ if ( ! function_exists( 'mime_content_type' ) )
             if ( array_key_exists( $ext, $mime_types ) )
             {
                 if ( is_string( $mime_types[$ext] ) ) return $mime_types[$ext];
-                else  return $mime_types[$ext][0];
+                else return $mime_types[$ext][0];
             }
             else
             {
@@ -1272,7 +1268,7 @@ function nv_deletefile ( $file, $delsub = false )
  * @param mixed $newfile
  * @return
  */
-function nv_copyfile( $file, $newfile )
+function nv_copyfile ( $file, $newfile )
 {
     if ( ! copy( $file, $newfile ) )
     {
@@ -1280,10 +1276,10 @@ function nv_copyfile( $file, $newfile )
         $openedfile = fopen( $newfile, "w" );
         fwrite( $openedfile, $content );
         fclose( $openedfile );
-
+        
         if ( $content === false ) return false;
     }
-
+    
     if ( file_exists( $newfile ) )
     {
         return true;
@@ -1328,7 +1324,7 @@ function nv_renamefile ( $file, $newname )
     );
     if ( ! @rename( $realpath, $pathinfo['dirname'] . '/' . $newname ) )
     {
-        if ( ! @nv_copyfile ( $realpath, $pathinfo['dirname'] . '/' . $newname ) )
+        if ( ! @nv_copyfile( $realpath, $pathinfo['dirname'] . '/' . $newname ) )
         {
             return array( 
                 0, sprintf( $lang_global['error_rename_failed'], $pathinfo['basename'], $newname ) 
@@ -1336,7 +1332,7 @@ function nv_renamefile ( $file, $newname )
         }
         else
         {
-            @nv_deletefile ( $realpath );
+            @nv_deletefile( $realpath );
         }
     }
     return array( 

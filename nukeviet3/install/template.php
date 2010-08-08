@@ -156,6 +156,10 @@ function nv_step_5 ( $db_config, $nextstep )
     $xtpl->assign( 'CURRENTLANG', NV_LANG_DATA );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'DATADASE', $db_config );
+    if ( $db_config['num_table'] > 0 )
+    {
+        $xtpl->parse( 'step.db_detete' );
+    }
     if ( ! empty( $db_config['error'] ) )
     {
         $xtpl->parse( 'step.errordata' );

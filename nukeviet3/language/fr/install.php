@@ -120,5 +120,5 @@ $lang_module['finish'] = "Terminer";
 $lang_module['checkfileconfig'] = "Vérifier";
 $lang_module['movefileconfig'] = "Veuillez déplacer le fichier config.php dans le répertoire tmp vers le répertoire de racine du site, puis cliquez sur Vérifier";
 $lang_module['copyright'] = "Merci de citer le lien vers l'article originale si vous le reproduisez sur les autres sites";
-
+$lang_module['db_err_prefix'] = "Erreur: base de données préfixe a été utilisé";
 ?>

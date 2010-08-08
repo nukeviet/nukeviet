@@ -38,8 +38,8 @@ else
 
 if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 {
-    $nv_username = filter_text_input( 'nv_login', 'post','', '', 100);
-    $nv_password = filter_text_input( 'nv_password', 'post','', '', 50 );
+    $nv_username = filter_text_input( 'nv_login', 'post', '', '', 100 );
+    $nv_password = filter_text_input( 'nv_password', 'post', '', '', 50 );
     if ( $global_config['gfx_chk'] == 1 )
     {
         $nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
@@ -63,23 +63,34 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
             define( 'NV_IS_MOD_USER', true );
             require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
         }
-        $query = $db->constructQuery( "SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE t2.username = [s] AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1", $nv_username );
-        $result = $db->sql_query( $query );
-        $numrows = $db->sql_numrows( $result );
-        if ( $numrows != 1 )
+        $userid = 0;
+        $error = $lang_global['loginincorrect'];
+        $sql = "SELECT userid, username, password FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . md5( $nv_username ) . "'";
+        $result = $db->sql_query( $sql );
+        $error = $lang_global['loginincorrect'];
+        while ( $row = $db->sql_fetchrow( $result ) )
         {
-            $error = $lang_global['loginincorrect'];
+            if ( $row['username'] == $nv_username and $crypt->validate( $nv_password, $row['password'] ) )
+            {
+                $userid = $row['userid'];
+                 break;
+            }
         }
-        else
+        
+        if ( $userid > 0 )
         {
-            $row = $db->sql_fetchrow( $result );
-            $db->sql_freeresult( $result );
-            if ( ! $crypt->validate( $nv_password, $row['admin_pass'] ) )
+            $query = "SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE t1.admin_id = " . $userid . " AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1";
+            $result = $db->sql_query( $query );
+            $numrows = $db->sql_numrows( $result );
+            if ( $numrows != 1 )
             {
                 $error = $lang_global['loginincorrect'];
             }
             else
             {
+                $row = $db->sql_fetchrow( $result );
+                $db->sql_freeresult( $result );
+                
                 $current_login = NV_CURRENTTIME;
                 $admin_id = intval( $row['admin_id'] );
                 $admin_lev = intval( $row['admin_lev'] );
@@ -142,7 +153,7 @@ $xtpl = new XTemplate( "login.tpl", $dir_template );
 $xtpl->assign( 'CHARSET', $global_config['site_charset'] );
 $xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 $xtpl->assign( 'PAGE_TITLE', $lang_global['admin_page'] );
-$xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme']);
+$xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme'] );
 $xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -168,7 +179,7 @@ $xtpl->assign( 'LINKLOSTPASS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE
 if ( $global_config['gfx_chk'] == 1 )
 {
     $xtpl->parse( 'main.jscaptcha' );
-	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
+    $xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
     $xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );
     $xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
     $xtpl->assign( 'GFX_NUM', NV_GFX_NUM );

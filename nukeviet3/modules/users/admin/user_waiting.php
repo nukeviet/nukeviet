@@ -47,13 +47,14 @@ if ( $nv_Request->isset_request( 'act', 'get' ) )
     $row = $db->sql_fetchrow( $result );
 
     $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
-    `userid`, `username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
+    `userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
     `regdate`, `website`, `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, 
     `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, `active`, `checknum`, 
     `last_login`, `last_ip`, `last_agent`, `last_openid`
     ) VALUES (
     NULL, 
     " . $db->dbescape( $row['username'] ) . ", 
+    " . $db->dbescape( md5($row['username']) ) . ", 
     " . $db->dbescape( $row['password'] ) . ", 
     " . $db->dbescape( $row['email'] ) . ", 
     " . $db->dbescape( $row['full_name'] ) . ", 

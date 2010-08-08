@@ -56,6 +56,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_question` (
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
   `userid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) NOT NULL DEFAULT '',
+  `md5username` char(32) NOT NULL DEFAULT '',
   `password` varchar(50) NOT NULL DEFAULT '',
   `email` varchar(100) NOT NULL DEFAULT '',
   `full_name` varchar(255) NOT NULL DEFAULT '',
@@ -84,12 +85,14 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
   `last_openid` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`userid`),
   UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  KEY `md5username` (`md5username`)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
   `userid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) NOT NULL DEFAULT '',
+  `md5username` char(32) NOT NULL DEFAULT '',
   `password` varchar(50) NOT NULL DEFAULT '',
   `email` varchar(100) NOT NULL DEFAULT '',
   `full_name` varchar(255) NOT NULL DEFAULT '',
@@ -328,7 +331,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'allow_sitelangs', '" . NV_LANG_DATA . "'),
 ('sys', 'global', 'allow_adminlangs', '" . implode( ",", $languageslist ) . "'),
 ('sys', 'global', 'read_type', '0'),
-('sys', 'global', 'is_url_rewrite', '0'),
+('sys', 'global', 'is_url_rewrite', '" . $global_config['is_url_rewrite'] . "'),
 ('sys', 'global', 'rewrite_optional', '0'),
 ('sys', 'global', 'gzip_method', '" . $global_config['gzip_method'] . "'),
 ('sys', 'global', 'is_user_forum', '0'),

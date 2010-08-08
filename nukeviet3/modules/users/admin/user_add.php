@@ -36,7 +36,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     $_user['sig'] = filter_text_textarea( 'sig', '', NV_ALLOWED_HTML_TAGS );
     $_user['birthday'] = filter_text_input( 'birthday', 'post', '', 1, 10 );
     $_user['in_groups'] = $nv_Request->get_typed_array( 'group', 'post', 'int' );
-
+    
     if ( ! empty( $_user['website'] ) )
     {
         if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $_user['website'] ) )
@@ -48,35 +48,48 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
             $_user['website'] = "";
         }
     }
-
+    
     if ( ( $error_username = nv_check_valid_login( $_user['username'], NV_UNICKMAX, NV_UNICKMIN ) ) != "" )
     {
         $error = $error_username;
-    } elseif ( ( $error_xemail = nv_check_valid_email( $_user['email'] ) ) != "" )
+    }
+    elseif ( $_user['username'] != $db->fixdb( $_user['username'] ) )
+    {
+    	$error = sprintf( $lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>' );
+    }
+    elseif ( ( $error_xemail = nv_check_valid_email( $_user['email'] ) ) != "" )
     {
         $error = $error_xemail;
-    } elseif ( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `username`=" . $db->dbescape( $_user['username'] ) ) ) != 0 )
+    }
+    elseif ( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username`=" . $db->dbescape( md5( $_user['username'] ) ) ) ) != 0 )
     {
         $error = $lang_module['edit_error_username_exist'];
-    } elseif ( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+    }
+    elseif ( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
     {
         $error = $lang_module['edit_error_email_exist'];
-    } elseif ( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+    }
+    elseif ( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
     {
         $error = $lang_module['edit_error_email_exist'];
-    } elseif ( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+    }
+    elseif ( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
     {
         $error = $lang_module['edit_error_email_exist'];
-    } elseif ( ( $check_pass = nv_check_valid_pass( $_user['password1'], NV_UPASSMAX, NV_UPASSMIN ) ) != "" )
+    }
+    elseif ( ( $check_pass = nv_check_valid_pass( $_user['password1'], NV_UPASSMAX, NV_UPASSMIN ) ) != "" )
     {
         $error = $check_pass;
-    } elseif ( $_user['password1'] != $_user['password2'] )
+    }
+    elseif ( $_user['password1'] != $_user['password2'] )
     {
         $error = $lang_module['edit_error_password'];
-    } elseif ( empty( $_user['question'] ) )
+    }
+    elseif ( empty( $_user['question'] ) )
     {
         $error = $lang_module['edit_error_question'];
-    } elseif ( empty( $_user['answer'] ) )
+    }
+    elseif ( empty( $_user['answer'] ) )
     {
         $error = $lang_module['edit_error_answer'];
     }
@@ -87,7 +100,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         {
             $_user['gender'] = "";
         }
-
+        
         unset( $m );
         if ( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $_user['birthday'], $m ) )
         {
@@ -97,18 +110,19 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         {
             $_user['birthday'] = 0;
         }
-
+        
         $_user['in_groups'] = ( ! empty( $_user['in_groups'] ) ) ? implode( ',', $_user['in_groups'] ) : '';
-
+        
         $password = $crypt->hash( $_user['password1'] );
-
+        
         $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
-        `userid`, `username`, `password`, `email`, `full_name`, `gender`, `birthday`, `sig`, `regdate`, 
+        `userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `birthday`, `sig`, `regdate`, 
         `website`, `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, `answer`, `passlostkey`, `view_mail`, 
         `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) 
         VALUES(
 		NULL, 
 		" . $db->dbescape( $_user['username'] ) . ",
+		" . $db->dbescape( md5( $_user['username'] ) ) . ",
 		" . $db->dbescape( $password ) . ",
 		" . $db->dbescape( $_user['email'] ) . ",
 		" . $db->dbescape( $_user['full_name'] ) . ",
@@ -129,35 +143,37 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         1, 
         " . $db->dbescape( $_user['in_groups'] ) . ", 
         1, '', 0, '', '', '')";
-
+        
         $userid = $db->sql_query_insert_id( $sql );
-
+        
         if ( $userid )
         {
             if ( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
             {
                 @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
-
-                $upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, 80, 80 );
+                
+                $upload = new upload( array( 
+                    'images' 
+                ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, 80, 80 );
                 $upload_info = $upload->save_file( $_FILES['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
-
+                
                 @unlink( $_FILES['photo']['tmp_name'] );
-
+                
                 if ( empty( $upload_info['error'] ) )
                 {
                     @chmod( $upload_info['name'], 0644 );
-
+                    
                     $file_name = str_replace( NV_ROOTDIR . "/", "", $upload_info['name'] );
-
+                    
                     $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape( $file_name ) . " WHERE `userid`=" . $userid;
                     $db->sql_query( $sql );
                 }
             }
-
+            
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
             exit();
         }
-
+        
         $error = $lang_module['edit_add_error'];
     }
 }
@@ -170,11 +186,17 @@ else
     $_user['in_groups'] = array();
 }
 
-$genders = array( //
-    'N' => array( 'key' => 'N', 'title' => $lang_module['NA'], 'selected' => '' ), //
-    'M' => array( 'key' => 'M', 'title' => $lang_module['male'], 'selected' => $_user['gender'] == "M" ? " selected=\"selected\"" : "" ), //
-    'F' => array( 'key' => 'F', 'title' => $lang_module['female'], 'selected' => $_user['gender'] == "F" ? " selected=\"selected\"" : "" ) //
-    );
+$genders = array(  //
+    'N' => array( 
+    'key' => 'N', 'title' => $lang_module['NA'], 'selected' => '' 
+), //
+'M' => array( 
+    'key' => 'M', 'title' => $lang_module['male'], 'selected' => $_user['gender'] == "M" ? " selected=\"selected\"" : "" 
+), //
+'F' => array( 
+    'key' => 'F', 'title' => $lang_module['female'], 'selected' => $_user['gender'] == "F" ? " selected=\"selected\"" : "" 
+)  //
+);
 
 $_user['view_mail'] = $_user['view_mail'] ? " checked=\"checked\"" : "";
 
@@ -185,7 +207,9 @@ if ( ! empty( $groups_list ) )
 {
     foreach ( $groups_list as $group_id => $grtl )
     {
-        $groups[] = array( 'id' => $group_id, 'title' => $grtl, 'checked' => ( ! empty( $_user['in_groups'] ) and in_array( $group_id, $_user['in_groups'] ) ) ? " checked=\"checked\"" : "", );
+        $groups[] = array( 
+            'id' => $group_id, 'title' => $grtl, 'checked' => ( ! empty( $_user['in_groups'] ) and in_array( $group_id, $_user['in_groups'] ) ) ? " checked=\"checked\"" : "" 
+        );
     }
 }
 

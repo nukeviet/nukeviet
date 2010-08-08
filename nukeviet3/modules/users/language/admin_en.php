@@ -99,7 +99,6 @@ $lang_module['edit_title'] = "Edit";
 $lang_module['edit_password_note'] = "Leave 2 frame below blank if you don't want to change password";
 $lang_module['edit_avatar_note'] = "Leave blank if you don't want to change avatar mới";
 $lang_module['edit_save'] = "Accept";
-$lang_module['edit_error_username'] = "User name empty or contain characters doesn't allow";
 $lang_module['edit_error_username_exist'] = "User name used by another member. Please choose another name";
 $lang_module['edit_error_photo'] = "File type doesn't allowed";
 $lang_module['edit_error_email'] = "Incorrect email";
@@ -116,6 +115,8 @@ $lang_module['delconfirm_message'] = "Do you realy want to delete selected membe
 $lang_module['delconfirm_email'] = "Send notification email:";
 $lang_module['delconfirm_email_yes'] = "Yes";
 $lang_module['delconfirm_ok'] = "Ok!";
+$lang_module['account_deny_name'] = "Sorry, Account %s banned.";
+
 $lang_module['delconfirm_email_title'] = "Email notification to delete account";
 $lang_module['delconfirm_email_content'] = "Hi %1\$s,
 

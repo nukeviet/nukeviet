@@ -101,7 +101,6 @@ $lang_module['edit_title'] = "Modifier les coordonnées du membre";
 $lang_module['edit_password_note'] = "Laissez vide ces 2 cases si vous ne voulez pas changer le mot de passe";
 $lang_module['edit_avatar_note'] = "Laissez vide si vous ne voulez pas changer avatar";
 $lang_module['edit_save'] = "Sauvegarder";
-$lang_module['edit_error_username'] = "Erreur: Nom d'utilisateur vide ou non conforme";
 $lang_module['edit_error_username_exist'] = "Ce nom d'utilisateur a été utilisé, merci de choisir un autre";
 $lang_module['edit_error_photo'] = "Type de photo interdit";
 $lang_module['edit_error_email'] = "E-mail invalide";
@@ -113,6 +112,8 @@ $lang_module['edit_add_error'] = "Erreur: impossible de mettre à jour les coord
 $lang_module['edit_error_question'] = "Il faut choisir une question secrète";
 $lang_module['edit_error_answer'] = "Merci de donner une réponse à la question secrète";
 $lang_module['edit_error_group'] = "Sélectionnez un groupe";
+$lang_module['account_deny_name'] = "Désolé, le compte %s est interdit";
+
 $lang_module['awaiting_active'] = "Activer";
 $lang_module['delconfirm_message'] = "Vous êtes sûr de vouloir supprimer?";
 $lang_module['delconfirm_email'] = "Envoyer un e-mail de notification:";

@@ -234,7 +234,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_blocks` (`bi
 (139, 5, 'Thăm dò ý kiến', '', 'file', 'global.voting.php', 'default', '', '[RIGHT]', 0, '1', '0', 'global', 1, 22, 3),
 (140, 5, 'Thăm dò ý kiến', '', 'file', 'global.voting.php', 'default', '', '[RIGHT]', 0, '1', '0', 'global', 1, 24, 3),
 (141, 5, 'Thăm dò ý kiến', '', 'file', 'global.voting.php', 'default', '', '[RIGHT]', 0, '1', '0', 'global', 1, 20, 3),
-(142, 6, 'Tin nổi bật', '', 'file', 'module.block_headline.php', 'default', '', '[TOP]', 0, '1', '0', 'news', 0, 4, 1),
+(142, 6, 'Tin nổi bật', '', 'file', 'module.block_headline.php', 'no_title', '', '[TOP]', 0, '1', '0', 'news', 0, 4, 1),
 (143, 7, 'Quảng cáo giữa trang', '', 'banner', '1', 'default', 'no_title', '[TOP]', 0, '1', '0', '', 1, 1, 1),
 (144, 7, 'Quảng cáo giữa trang', '', 'banner', '1', 'default', 'no_title', '[TOP]', 0, '1', '0', '', 1, 46, 1),
 (145, 7, 'Quảng cáo giữa trang', '', 'banner', '1', 'default', 'no_title', '[TOP]', 0, '1', '0', '', 1, 35, 1),
@@ -313,10 +313,10 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_blocks` (`bi
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_news_cat` VALUES
 (1, 0, 'Tin tức', 'Tin-tuc', '', '', '', 1, 1, 0, 'viewcat_main_right', 3, '8,12,9', 1, 3, '', '', 1274986690, 1274986690, 1300986690, 0, ''), 
-(2, 0, 'Sản phẩm', 'San-pham', '', '', '', 2, 5, 0, 'viewcat_main_right', 3, '4,5,6', 1, 3, '', '', 1274986705, 1274986705, 1300986705, 0, ''), 
+(2, 0, 'Sản phẩm', 'San-pham', '', '', '', 2, 5, 0, 'viewcat_main_right', 3, '', 1, 3, '', '', 1274986705, 1274986705, 1300986705, 0, ''), 
 (8, 1, 'Thông cáo báo chí', 'thong-cao-bao-chi', '', '', '', 1, 2, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1274987105, 1274987244, 1300987105, 0, ''), 
 (9, 1, 'Tin công nghệ', 'Tin-cong-nghe', '', '', '', 3, 4, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1274987212, 1274987212, 1300987212, 0, ''), 
-(10, 0, 'Đối tác', 'Doi-tac', '', '', '', 3, 9, 0, 'viewcat_main_right', 2, '13,3', 1, 3, '', '', 1274987460, 1274987460, 1300987460, 0, ''), 
+(10, 0, 'Đối tác', 'Doi-tac', '', '', '', 3, 9, 0, 'viewcat_main_right', 2, '', 1, 3, '', '', 1274987460, 1274987460, 1300987460, 0, ''), 
 (11, 0, 'Tuyển dụng', 'Tuyen-dung', '', '', '', 4, 12, 0, 'viewcat_page_new', 0, '', 1, 3, '', '', 1274987538, 1274987538, 1300987538, 0, ''), 
 (12, 1, 'Bản tin nội bộ', 'Ban-tin-noi-bo', '', '', '', 2, 3, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1274987902, 1274987902, 1300987902, 0, '')";
 
@@ -333,9 +333,9 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_news_sources
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_news_topics` VALUES
 (1, 'NukeViet 3', 'NukeViet-3', '', '', 'NukeViet 3', 1, 'NukeViet 3', 1274990212, 1274990212)";
 
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_news_block_cat` (`bid`, `adddefault`, `title`, `alias`, `image`, `thumbnail`, `description`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES
-(1, 0, 'Block Tin nóng', 'Block-Tin-nong', '', '', 'Block Tin nóng', 1, '', 1279945710, 1279956943),
-(2, 1, 'Block các tin mới', 'Block-cac-tin-moi', '', '', 'Block các tin mới', 2, '', 1279945725, 1279956445)";
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_news_block_cat` (`bid`, `adddefault`, `number`,`title`, `alias`, `image`, `thumbnail`, `description`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES
+(1, 0, 5,'Tin tiêu điểm', 'Tin-tieu-diem', '', '', 'Tin tiêu điểm', 1, '', 1279945710, 1279956943),
+(2, 1, 5, 'Tin mới nhất', 'Tin-moi-nhat', '', '', 'Tin tiêu điểm', 2, '', 1279945725, 1279956445)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_news_block` VALUES
 (1, 5, 3), 

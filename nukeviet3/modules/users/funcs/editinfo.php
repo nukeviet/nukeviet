@@ -18,29 +18,34 @@ if ( ! defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 if ( defined( 'NV_IS_USER_FORUM' ) )
 {
     require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/editinfo.php' );
-    exit;
+    exit();
 }
 
-function nv_check_username_change( $login )
+function nv_check_username_change ( $login )
 {
     global $db, $lang_module, $user_info;
-
+    
     $error = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
+    
+    if ( $login != $db->fixdb( $login ) )
+    {
+        return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
+    }
     if ( $error != "" ) return $error;
-
+    
     $sql = "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_name'";
     $result = $db->sql_query( $sql );
     list( $deny_name ) = $db->sql_fetchrow( $result );
     $db->sql_freeresult();
-
+    
     if ( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $user_info['userid'] . " AND `username`=" . $db->dbescape( $login );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], '<strong>' . $login . '</strong>' );
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`!=" . $user_info['userid'] . " AND `username`=" . $db->dbescape( $login );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], '<strong>' . $login . '</strong>' );
-
+    
     return "";
 }
 
@@ -50,29 +55,29 @@ function nv_check_username_change( $login )
  * @param mixed $email
  * @return
  */
-function nv_check_email_change( $email )
+function nv_check_email_change ( $email )
 {
     global $db, $lang_module, $user_info;
-
+    
     $error = nv_check_valid_email( $email );
     if ( $error != "" ) return $error;
-
+    
     $sql = "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email'";
     $result = $db->sql_query( $sql );
     list( $deny_email ) = $db->sql_fetchrow( $result );
     $db->sql_freeresult();
-
+    
     if ( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], '<strong>' . $email . '</strong>' );
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $user_info['userid'] . " AND `email`=" . $db->dbescape( $email );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], '<strong>' . $email . '</strong>' );
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $email );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], '<strong>' . $email . '</strong>' );
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`!=" . $user_info['userid'] . " AND `email`=" . $db->dbescape( $email );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], '<strong>' . $email . '</strong>' );
-
+    
     return "";
 }
 
@@ -90,18 +95,18 @@ if ( $nv_Request->isset_request( 'changequestion', 'get' ) )
     $oldpassword = $row['password'];
     $oldquestion = $row['question'];
     $oldanswer = $row['answer'];
-
+    
     $page_title = $mod_title = $lang_module['change_question_pagetitle'];
     $key_words = $module_info['keywords'];
-
+    
     $array_data['your_question'] = $oldquestion;
     $array_data['answer'] = $oldanswer;
     $array_data['nv_password'] = filter_text_input( 'nv_password', 'post', '' );
     $array_data['send'] = $nv_Request->get_bool( 'send', 'post', false );
-
+    
     $step = 1;
     $error = "";
-
+    
     if ( empty( $oldpassword ) )
     {
         $step = 2;
@@ -113,7 +118,7 @@ if ( $nv_Request->isset_request( 'changequestion', 'get' ) )
             if ( $crypt->validate( $array_data['nv_password'], $oldpassword ) or $array_data['nv_password'] == md5( $oldpassword ) )
             {
                 $step = 2;
-
+                
                 if ( strlen( $array_data['nv_password'] ) < 32 )
                 {
                     $array_data['nv_password'] = md5( $crypt->hash( $array_data['nv_password'] ) );
@@ -126,18 +131,19 @@ if ( $nv_Request->isset_request( 'changequestion', 'get' ) )
             }
         }
     }
-
+    
     if ( $step == 2 )
     {
         if ( $array_data['send'] )
         {
             $array_data['your_question'] = filter_text_input( 'your_question', 'post', '', 1, 255 );
             $array_data['answer'] = filter_text_input( 'answer', 'post', '', 1, 255 );
-
+            
             if ( empty( $array_data['your_question'] ) )
             {
                 $error = $lang_module['your_question_empty'];
-            } elseif ( empty( $array_data['answer'] ) )
+            }
+            elseif ( empty( $array_data['answer'] ) )
             {
                 $error = $lang_module['answer_empty'];
             }
@@ -148,21 +154,21 @@ if ( $nv_Request->isset_request( 'changequestion', 'get' ) )
                 `answer`=" . $db->dbescape( $array_data['answer'] ) . " 
                 WHERE `userid`=" . $user_info['userid'];
                 $db->sql_query( $sql );
-
+                
                 $contents = user_info_exit( $lang_module['change_question_ok'] );
                 $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
-
+                
                 include ( NV_ROOTDIR . "/includes/header.php" );
                 echo nv_site_theme( $contents );
                 include ( NV_ROOTDIR . "/includes/footer.php" );
-                exit;
+                exit();
             }
         }
     }
-
+    
     $array_data['step'] = $step;
     $array_data['info'] = empty( $error ) ? $lang_module['changequestion_step' . $array_data['step']] : "<span style=\"color:#fb490b;\">" . $error . "</span>";
-
+    
     if ( $step == 2 )
     {
         $array_data['questions'] = array();
@@ -174,13 +180,13 @@ if ( $nv_Request->isset_request( 'changequestion', 'get' ) )
             $array_data['questions'][$row['title']] = $row['title'];
         }
     }
-
+    
     $contents = user_changequestion( $array_data );
-
+    
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_site_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
-    exit;
+    exit();
 }
 
 //Thay doi thong tin khac
@@ -207,7 +213,7 @@ if ( $checkss == $array_data['checkss'] )
     $array_data['fax'] = filter_text_input( 'fax', 'post', '', 1, 100 );
     $array_data['mobile'] = filter_text_input( 'mobile', 'post', '', 1, 100 );
     $array_data['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
-
+    
     if ( $array_data['allowloginchange'] )
     {
         $array_data['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
@@ -217,7 +223,7 @@ if ( $checkss == $array_data['checkss'] )
             $error[] = $lang_module['account'];
         }
     }
-
+    
     if ( $array_data['allowmailchange'] )
     {
         $array_data['email'] = filter_text_input( 'email', 'post', '', 1, 100 );
@@ -227,7 +233,7 @@ if ( $checkss == $array_data['checkss'] )
             $error[] = $lang_module['email'];
         }
     }
-
+    
     if ( empty( $array_data['full_name'] ) )
     {
         $array_data['full_name'] = $row['full_name'];
@@ -237,9 +243,9 @@ if ( $checkss == $array_data['checkss'] )
             $array_data['full_name'] = $row['username'];
         }
     }
-
+    
     if ( $array_data['gender'] != "M" and $array_data['gender'] != "F" ) $array_data['gender'] = "";
-
+    
     if ( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array_data['birthday'] ) )
     {
         unset( $m );
@@ -250,15 +256,15 @@ if ( $checkss == $array_data['checkss'] )
     {
         $array_data['birthday'] = 0;
     }
-
+    
     if ( ! empty( $array_data['yim'] ) and ! preg_match( "/^([a-zA-Z0-9\_\.]+)$/", $array_data['yim'] ) )
     {
         $array_data['yim'] = $row['yim'];
         $error[] = $lang_module['yahoo'];
     }
-
+    
     if ( $array_data['gender'] == "N" ) $array_data['gender'] = "";
-
+    
     if ( ! empty( $array_data['website'] ) )
     {
         if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array_data['website'] ) )
@@ -271,11 +277,12 @@ if ( $checkss == $array_data['checkss'] )
             $error[] = $lang_module['website'];
         }
     }
-
+    
     if ( $array_data['view_mail'] != 1 ) $array_data['view_mail'] = 0;
-
+    
     $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET 
     `username`=" . $db->dbescape_string( $array_data['username'] ) . ", 
+    `md5username`=" . $db->dbescape_string( md5( $array_data['username'] ) ) . ", 
     `email`=" . $db->dbescape_string( $array_data['email'] ) . ", 
     `full_name`=" . $db->dbescape_string( $array_data['full_name'] ) . ", 
     `gender`=" . $db->dbescape_string( $array_data['gender'] ) . ", 
@@ -289,27 +296,29 @@ if ( $checkss == $array_data['checkss'] )
     `view_mail`=" . $db->dbescape_string( $array_data['view_mail'] ) . " 
     WHERE `userid`=" . $user_info['userid'];
     $db->sql_query( $sql );
-
+    
     if ( isset( $_FILES['avatar'] ) and is_uploaded_file( $_FILES['avatar']['tmp_name'] ) )
     {
         @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
-
-        $upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, 80, 80 );
+        
+        $upload = new upload( array( 
+            'images' 
+        ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, 80, 80 );
         $upload_info = $upload->save_file( $_FILES['avatar'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
-
+        
         @unlink( $_FILES['avatar']['tmp_name'] );
-
+        
         if ( empty( $upload_info['error'] ) )
         {
             @chmod( $upload_info['name'], 0644 );
-
+            
             if ( ! empty( $array_data['photo'] ) and is_file( NV_ROOTDIR . '/' . $array_data['photo'] ) )
             {
                 @nv_deletefile( NV_ROOTDIR . '/' . $array_data['photo'] );
             }
-
+            
             $file_name = str_replace( NV_ROOTDIR . "/", "", $upload_info['name'] );
-
+            
             $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape_string( $file_name ) . " WHERE `userid`=" . $user_info['userid'];
             $db->sql_query( $sql );
         }
@@ -318,7 +327,7 @@ if ( $checkss == $array_data['checkss'] )
             $error[] = $lang_module['avata'];
         }
     }
-
+    
     $info = $lang_module['editinfo_ok'];
     $sec = 3;
     if ( ! empty( $error ) )
@@ -327,14 +336,14 @@ if ( $checkss == $array_data['checkss'] )
         $info = $info . ", " . sprintf( $lang_module['editinfo_error'], "<span style=\"color:#fb490b;\">" . $error . "</span>" );
         $sec = 5;
     }
-
+    
     $contents = user_info_exit( $info );
     $contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
-
+    
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_site_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
-    exit;
+    exit();
 }
 else
 {
@@ -353,9 +362,15 @@ else
 $array_data['view_mail'] = $array_data['view_mail'] ? " selected=\"selected\"" : "";
 
 $array_data['gender_array'] = array();
-$array_data['gender_array']['N'] = array( 'value' => 'N', 'title' => 'N/A', 'selected' => '' );
-$array_data['gender_array']['M'] = array( 'value' => 'M', 'title' => $lang_module['male'], 'selected' => ( $array_data['gender'] == 'M' ? " selected=\"selected\"" : "" ) );
-$array_data['gender_array']['F'] = array( 'value' => 'F', 'title' => $lang_module['female'], 'selected' => ( $array_data['gender'] == 'F' ? " selected=\"selected\"" : "" ) );
+$array_data['gender_array']['N'] = array( 
+    'value' => 'N', 'title' => 'N/A', 'selected' => '' 
+);
+$array_data['gender_array']['M'] = array( 
+    'value' => 'M', 'title' => $lang_module['male'], 'selected' => ( $array_data['gender'] == 'M' ? " selected=\"selected\"" : "" ) 
+);
+$array_data['gender_array']['F'] = array( 
+    'value' => 'F', 'title' => $lang_module['female'], 'selected' => ( $array_data['gender'] == 'F' ? " selected=\"selected\"" : "" ) 
+);
 
 $contents = user_info( $array_data );
 

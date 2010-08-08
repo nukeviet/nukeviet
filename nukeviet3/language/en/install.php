@@ -121,4 +121,6 @@ $lang_module['checkfileconfig'] = "Please re-check";
 $lang_module['movefileconfig'] = "You need to move config.php file from tmp folder to site root folder, then click to check button to re-check";
 $lang_module['copyright'] = "Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement";
 
+$lang_module['db_err_prefix'] = "Error: Prefix database has been used";
+
 ?>

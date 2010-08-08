@@ -236,9 +236,6 @@ $global_config['check_block_module'] = "/^module\.([a-zA-Z0-9\-\_]+)\.php$/";
 $global_config['check_theme'] = "/^[a-zA-Z0-9-]+$/";
 $global_config['check_theme_admin'] = "/^(admin)\_[a-zA-Z0-9-]+$/";
 
-$global_config['check_username'] = "/^[a-zA-Z0-9][a-zA-Z0-9\_]*$/ ";
-$global_config['check_pass'] = "/^[a-zA-Z0-9\_]*$/ ";
-
 $global_config['check_email'] = "/^[_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/";
 $global_config['check_cron'] = "/^(cron)\_[a-zA-Z0-9\_]+$/";
 $global_config['check_op_layout'] = "/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/";
