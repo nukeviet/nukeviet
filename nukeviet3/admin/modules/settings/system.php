@@ -15,24 +15,101 @@ $submit = $nv_Request->get_string( 'submit', 'post' );
 
 $errormess = "";
 $array_config_global = $global_config;
+$themeadmin_array = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] );
+$images = nv_scandir( NV_ROOTDIR . '/images', "/^([a-zA-Z0-9\_\-\.]+)\.(gif|jpg|jpeg|png)$/" );
+$allow_sitelangs = array();
+foreach ( $global_config['allow_sitelangs'] as $lang_i )
+{
+    if ( file_exists( NV_ROOTDIR . "/language/" . $lang_i . "/global.php" ) )
+    {
+        $allow_sitelangs[] = $lang_i;
+    }
+}
+
+$proxy_blocker_array = array(  //
+    0 => $lang_module['proxy_blocker_0'], //
+1 => $lang_module['proxy_blocker_1'], //
+2 => $lang_module['proxy_blocker_2'], //
+3 => $lang_module['proxy_blocker_3']  //
+);
 
 if ( $submit )
 {
     $array_config_global = array();
     $array_config_global['admin_theme'] = filter_text_input( 'admin_theme', 'post', '', 1, 255 );
+    if ( empty( $array_config_global['admin_theme'] ) or ! in_array( $array_config_global['admin_theme'], $themeadmin_array ) )
+    {
+        $array_config_global['admin_theme'] = $global_config['admin_theme'];
+    }
     $array_config_global['gfx_chk'] = $nv_Request->get_int( 'gfx_chk', 'post' );
     
     $array_config_global['site_keywords'] = filter_text_input( 'site_keywords', 'post', '', 1, 255 );
+    if ( ! empty( $array_config_global['site_keywords'] ) )
+    {
+        $site_keywords = array_map( "trim", explode( ",", $array_config_global['site_keywords'] ) );
+        $array_config_global['site_keywords'] = array();
+        if ( ! empty( $site_keywords ) )
+        {
+            foreach ( $site_keywords as $keywords )
+            {
+                if ( ! empty( $keywords ) and ! is_numeric( $keywords ) )
+                {
+                    $array_config_global['site_keywords'][] = $keywords;
+                }
+            }
+        }
+        $array_config_global['site_keywords'] = ( ! empty( $array_config_global['site_keywords'] ) ) ? implode( ", ", $array_config_global['site_keywords'] ) : "";
+    }
+    
     $array_config_global['site_logo'] = filter_text_input( 'site_logo', 'post', '', 1, 255 );
+    if ( ! in_array( $array_config_global['site_logo'], $images ) )
+    {
+        $array_config_global['site_logo'] = "logo.png";
+    }
     $array_config_global['site_email'] = filter_text_input( 'site_email', 'post', '', 1, 255 );
+    if ( nv_check_valid_email( $array_config_global['site_email'] ) != '' )
+    {
+        $array_config_global['site_email'] = $global_config['site_email'];
+    }
     $array_config_global['error_send_email'] = filter_text_input( 'error_send_email', 'post', '', 1, 255 );
+    if ( nv_check_valid_email( $array_config_global['error_send_email'] ) != '' )
+    {
+        $array_config_global['error_send_email'] = $global_config['error_send_email'];
+    }
+    
     $array_config_global['site_phone'] = filter_text_input( 'site_phone', 'post', '', 1, 255 );
     $array_config_global['site_lang'] = filter_text_input( 'site_lang', 'post', '', 1, 255 );
+    if ( ! in_array( $array_config_global['site_lang'], $allow_sitelangs ) )
+    {
+        $array_config_global['site_lang'] = 'vi';
+    }
     
     $array_config_global['site_timezone'] = filter_text_input( 'site_timezone', 'post', '', 1, 255 );
     $array_config_global['date_pattern'] = filter_text_input( 'date_pattern', 'post', '', 1, 255 );
     $array_config_global['time_pattern'] = filter_text_input( 'time_pattern', 'post', '', 1, 255 );
     $array_config_global['my_domains'] = filter_text_input( 'my_domains', 'post', '', 1, 255 );
+    
+    $my_domains = array( 
+        NV_SERVER_NAME 
+    );
+    if ( ! empty( $array_config_global['my_domains'] ) )
+    {
+        $array_config_global['my_domains'] = array_map( "trim", explode( ",", $array_config_global['my_domains'] ) );
+        foreach ( $array_config_global['my_domains'] as $dm )
+        {
+            if ( ! empty( $dm ) )
+            {
+                $dm2 = ( ! preg_match( "/^(http|https|ftp|gopher)\:\/\//", $dm ) ) ? "http://" . $dm : $dm;
+                if ( nv_is_url( $dm2 ) )
+                {
+                    $my_domains[] = $dm;
+                }
+            }
+        }
+    }
+    $my_domains = array_unique( $my_domains );
+    $array_config_global['my_domains'] = implode( ",", $my_domains );
+    
     $array_config_global['cookie_prefix'] = filter_text_input( 'cookie_prefix', 'post', '', 1, 255 );
     $array_config_global['session_prefix'] = filter_text_input( 'session_prefix', 'post', '', 1, 255 );
     
@@ -41,9 +118,12 @@ if ( $submit )
     $array_config_global['statistic'] = $nv_Request->get_int( 'statistic', 'post' );
     $array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
     $array_config_global['proxy_blocker'] = $nv_Request->get_int( 'proxy_blocker', 'post' );
+    if ( ! isset( $proxy_blocker_array[$array_config_global['proxy_blocker']] ) )
+    {
+        $array_config_global['proxy_blocker'] = 0;
+    }
     $array_config_global['str_referer_blocker'] = $nv_Request->get_int( 'str_referer_blocker', 'post' );
     
-   
     if ( $sys_info['supports_rewrite'] !== false )
     {
         $array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post' );
@@ -69,188 +149,12 @@ if ( $submit )
     
     if ( isset( $array_config_global['is_url_rewrite'] ) and $array_config_global['is_url_rewrite'] == 1 )
     {
-        $reval = $filename = "";
-        if ( $sys_info['supports_rewrite'] == "rewrite_mode_iis" )
+        require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
+        $errormess = nv_rewrite_change( $array_config_global['rewrite_optional'], $array_config_global['user_forum'] );
+        if ( ! empty( $errormess ) )
         {
-            $filename = "web.config";
-            $reval = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-            $reval .= "<configuration>\n";
-            $reval .= "    <system.webServer>\n";
-            $reval .= "        <rewrite>\n";
-            $reval .= "            <rules>\n";
-            if ( $array_config_global['rewrite_optional'] )
-            {
-                $reval .= "                <rule name=\"Imported Rule 5\">\n";
-                $reval .= "                    <match url=\"^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)/$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "={R:2}&amp;id={R:3}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                $reval .= "                <rule name=\"Imported Rule 52\">\n";
-                $reval .= "                    <match url=\"^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "={R:2}&amp;id={R:3}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                
-                $reval .= "                <rule name=\"Imported Rule 4\">\n";
-                $reval .= "                    <match url=\"^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "={R:2}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                $reval .= "                <rule name=\"Imported Rule 42\">\n";
-                $reval .= "                    <match url=\"^([a-z0-9-]+)/([a-zA-Z0-9-/]+)$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "={R:2}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                
-                $reval .= "                <rule name=\"Imported Rule 3\">\n";
-                $reval .= "                    <match url=\"" . NV_ADMINDIR . "[/]*$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"" . NV_ADMINDIR . "/index.php\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                if ( defined( 'DIR_FORUM' ) and DIR_FORUM != "" and is_dir( NV_ROOTDIR . "/" . DIR_FORUM ) )
-                {
-                    $reval .= "                <rule name=\"Imported Rule 32\">\n";
-                    $reval .= "                    <match url=\"" . DIR_FORUM . "[/]*$\" ignoreCase=\"false\" />\n";
-                    $reval .= "                    <action type=\"Rewrite\" url=\"" . DIR_FORUM . "/index.php\" appendQueryString=\"false\" />\n";
-                    $reval .= "                </rule>\n";
-                }
-                $reval .= "                <rule name=\"Imported Rule 2\">\n";
-                $reval .= "                    <match url=\"^([a-z0-9-]+)/$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                
-                $reval .= "                <rule name=\"Imported Rule 22\">\n";
-                $reval .= "                    <match url=\"^([a-z0-9-]+)$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-            
-            }
-            else
-            {
-                $reval .= "                <rule name=\"Imported Rule 5\">\n";
-                $reval .= "                    <match url=\"^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)/$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "={R:3}&amp;id={R:4}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                $reval .= "                <rule name=\"Imported Rule 52\">\n";
-                $reval .= "                    <match url=\"^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "={R:3}&amp;id={R:4}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                $reval .= "                <rule name=\"Imported Rule 4\">\n";
-                $reval .= "                    <match url=\"^([a-z-]+)/([a-z-]+)/([a-zA-Z0-9-/]+)/$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "={R:3}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                $reval .= "                <rule name=\"Imported Rule 42\">\n";
-                $reval .= "                    <match url=\"^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "={R:3}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                $reval .= "                <rule name=\"Imported Rule 3\">\n";
-                $reval .= "                    <match url=\"^([a-z-]+)/([a-z0-9-]+)/$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                $reval .= "                <rule name=\"Imported Rule 32\">\n";
-                $reval .= "                    <match url=\"^([a-z-]+)/([a-z0-9-]+)$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                $reval .= "                <rule name=\"Imported Rule 2\">\n";
-                $reval .= "                    <match url=\"" . NV_ADMINDIR . "[/]*$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"" . NV_ADMINDIR . "/index.php\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                if ( defined( 'DIR_FORUM' ) and DIR_FORUM != "" and is_dir( NV_ROOTDIR . "/" . DIR_FORUM ) )
-                {
-                    $reval .= "                <rule name=\"Imported Rule 22\">\n";
-                    $reval .= "                    <match url=\"" . DIR_FORUM . "[/]*$\" ignoreCase=\"false\" />\n";
-                    $reval .= "                    <action type=\"Rewrite\" url=\"" . DIR_FORUM . "/index.php\" appendQueryString=\"false\" />\n";
-                    $reval .= "                </rule>\n";
-                }
-                $reval .= "                <rule name=\"Imported Rule 1\">\n";
-                $reval .= "                    <match url=\"^([a-z0-9-]+)/$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-                $reval .= "                <rule name=\"Imported Rule 12\">\n";
-                $reval .= "                    <match url=\"^([a-z0-9-]+)$\" ignoreCase=\"false\" />\n";
-                $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}\" appendQueryString=\"false\" />\n";
-                $reval .= "                </rule>\n";
-            
-            }
-            $reval .= "            </rules>\n";
-            $reval .= "        </rewrite>\n";
-            $reval .= "    </system.webServer>\n";
-            $reval .= "</configuration>\n";
-        }
-        elseif ( $sys_info['supports_rewrite'] == "rewrite_mode_apache" )
-        {
-            $filename = ".htaccess";
-            $htaccess = "";
-            
-            $reval = "##################################################################################\n";
-            $reval .= "#nukeviet_rewrite_start //Please do not change the contents of the following lines\n";
-            $reval .= "##################################################################################\n\n";
-            $reval .= "#Options +FollowSymLinks\n\n";
-            $reval .= "<IfModule mod_rewrite.c>\n";
-            $reval .= "RewriteEngine On\n";
-            $reval .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
-            $reval .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
-            if ( $array_config_global['rewrite_optional'] )
-            {
-                $reval .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)/$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2&id=$3\n";
-                $reval .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2&id=$3\n";
-                $reval .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2\n";
-                $reval .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2\n";
-                $reval .= "RewriteRule ^" . NV_ADMINDIR . "[/]*$ " . NV_ADMINDIR . "/index.php\n";
-                if ( defined( 'DIR_FORUM' ) and DIR_FORUM != "" and is_dir( NV_ROOTDIR . "/" . DIR_FORUM ) )
-                {
-                    $reval .= "RewriteRule ^" . DIR_FORUM . "[/]*$ " . DIR_FORUM . "/index.php\n";
-                }
-                $reval .= "RewriteRule ^([a-z0-9-]+)/$ index.php?" . NV_NAME_VARIABLE . "=$1\n";
-                $reval .= "RewriteRule ^([a-z0-9-]+)$ index.php?" . NV_NAME_VARIABLE . "=$1\n";
-            }
-            else
-            {
-                $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3&id=$4\n";
-                $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3&id=$4\n";
-                $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3\n";
-                $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3\n";
-                $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2\n";
-                $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2\n";
-                $reval .= "RewriteRule ^" . NV_ADMINDIR . "[/]*$ " . NV_ADMINDIR . "/index.php\n";
-                if ( defined( 'DIR_FORUM' ) and DIR_FORUM != "" and is_dir( NV_ROOTDIR . "/" . DIR_FORUM ) )
-                {
-                    $reval .= "RewriteRule ^" . DIR_FORUM . "[/]*$ " . DIR_FORUM . "/index.php\n";
-                }
-                $reval .= "RewriteRule ^([a-z-]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1\n";
-                $reval .= "RewriteRule ^([a-z-]+)$ index.php?" . NV_LANG_VARIABLE . "=$1\n";
-            }
-            $reval .= "</IfModule>\n\n";
-            $reval .= "#nukeviet_rewrite_end\n";
-            $reval .= "##################################################################################\n\n";
-            
-            if ( file_exists( NV_ROOTDIR . '/' . $filename ) )
-            {
-                $htaccess = @file_get_contents( NV_ROOTDIR . '/' . $filename );
-                if ( ! empty( $htaccess ) )
-                {
-                    $htaccess = preg_replace( "/[\n]*[\#]+[\n]+\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end[\n]+[\#]+[\n]*/s", "\n", $htaccess );
-                    $htaccess = trim( $htaccess );
-                }
-            }
-            $htaccess .= "\n\n" . $reval;
-            $reval = $htaccess;
-        }
-        if ( ! empty( $filename ) and ! empty( $reval ) )
-        {
-            $savefile = true;
-            try
-            {
-                file_put_contents( NV_ROOTDIR . "/" . $filename, $reval, LOCK_EX );
-                if ( ! file_exists( NV_ROOTDIR . "/" . $filename ) or filesize( NV_ROOTDIR . "/" . $filename ) == 0 )
-                {
-                    $errormess .= sprintf( $lang_module['err_writable'], NV_BASE_SITEURL . $filename );
-                    $savefile = false;
-                }
-            }
-            catch ( Exception $e )
-            {
-                $savefile = false;
-            }
-            if ( ! $savefile )
-            {
-                $errormess .= sprintf( $lang_module['err_writable'], NV_BASE_SITEURL . $filename );
-            }
+            $array_config_global['is_url_rewrite'] = 0;
+            $array_config_global['rewrite_optional'] = 0;
         }
     }
     nv_save_file_config_global();
@@ -279,8 +183,6 @@ if ( $submit )
     }
 }
 
-$themeadmin_array = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] );
-
 $captcha_array = array(  //
     0 => $lang_module['captcha_0'], //
 1 => $lang_module['captcha_1'], //
@@ -290,13 +192,6 @@ $captcha_array = array(  //
 5 => $lang_module['captcha_5'], //
 6 => $lang_module['captcha_6'], //
 7 => $lang_module['captcha_7']  //
-);
-
-$proxy_blocker_array = array(  //
-    0 => $lang_module['proxy_blocker_0'], //
-1 => $lang_module['proxy_blocker_1'], //
-2 => $lang_module['proxy_blocker_2'], //
-3 => $lang_module['proxy_blocker_3']  //
 );
 
 $array_config_global['gzip_method'] = ( $global_config['gzip_method'] ) ? " checked" : "";
@@ -345,15 +240,12 @@ if ( $sys_info['supports_rewrite'] !== false and $global_config['lang_multi'] ==
     $xtpl->parse( 'main.rewrite_optional' );
 }
 
-foreach ( $global_config['allow_sitelangs'] as $lang_i )
+foreach ( $allow_sitelangs as $lang_i )
 {
-    if ( file_exists( NV_ROOTDIR . "/language/" . $lang_i . "/global.php" ) )
-    {
-        $xtpl->assign( 'LANGOP', $lang_i );
-        $xtpl->assign( 'SELECTED', ( $lang_i == $global_config['site_lang'] ) ? "selected='selected'" : "" );
-        $xtpl->assign( 'LANGVALUE', $language_array[$lang_i]['name'] );
-        $xtpl->parse( 'main.site_lang_option' );
-    }
+    $xtpl->assign( 'LANGOP', $lang_i );
+    $xtpl->assign( 'SELECTED', ( $lang_i == $global_config['site_lang'] ) ? "selected='selected'" : "" );
+    $xtpl->assign( 'LANGVALUE', $language_array[$lang_i]['name'] );
+    $xtpl->parse( 'main.site_lang_option' );
 }
 
 $timezone_array = array_keys( nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/timezone.ini', true ) );
