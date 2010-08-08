@@ -100,6 +100,4 @@ $lang_module['member_view'] = "Chỉ thành viên mới có quyền xem mục n�
 $lang_module['admin_view'] = "Chỉ người quản trị mới có quyền xem mục này!";
 $lang_module['group_view'] = "Chỉ có nhóm thành viên mới có quyền xem mục này!";
 
-$lang_module['topnews'] = "Tin tiêu điểm";
-$lang_module['lastest'] = "Tin mới nhất";
 ?>

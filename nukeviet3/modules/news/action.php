@@ -10,7 +10,7 @@
 if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $sql_drop_module = array();
-$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_%'" );
+$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_" . $module_data . "\_%'" );
 $num_table = intval( $db->sql_numrows( $result ) );
 if ( $num_table > 0 )
 {
@@ -92,6 +92,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat` (
   `bid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `adddefault` tinyint(4) NOT NULL DEFAULT '0',
+  `number` mediumint(4) NOT NULL DEFAULT '10',
   `title` varchar(255) NOT NULL DEFAULT '',
   `alias` varchar(255) NOT NULL DEFAULT '',
   `image` varchar(255) NOT NULL,

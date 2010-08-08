@@ -98,7 +98,5 @@ $lang_module['keywords'] = "Key";
 $lang_module['member_view'] = "Only member can view!";
 $lang_module['admin_view'] = "Only admin can view!";
 $lang_module['group_view'] = "Only group member can view!";
-$lang_module['topnews'] = "Top News";
-$lang_module['lastest'] = "Lastest News";
 
 ?>

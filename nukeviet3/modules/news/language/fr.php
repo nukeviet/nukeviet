@@ -98,7 +98,5 @@ $lang_module['keywords'] = "Mot clé";
 $lang_module['member_view'] = "Cette section est réservée uniquement aux membres!";
 $lang_module['admin_view'] = "Cette section est réservée uniquement aux administrateurs!";
 $lang_module['group_view'] = "Cette section est réservé uniquement aux groupes de membres!";
-$lang_module['topnews'] = "Populairs";
-$lang_module['lastest'] = "Récents";
 
 ?>

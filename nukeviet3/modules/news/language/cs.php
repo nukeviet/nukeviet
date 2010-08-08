@@ -498,20 +498,4 @@ $lang_module['group_view'] = "Pouze člen skupiny mohou zobrazit!";
 	 english:	  Only group member can view!
 */
 
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['topnews'] = "Top první zpráv";
-/*
-	 vietnam:	  Tin tiêu điểm
-	 english:	  Top News
-*/
-
-$lang_module['lastest'] = "Nejnovější zprávy";
-/*
-	 vietnam:	  Tin mới nhất
-	 english:	  Lastest News
-*/
-
-
 ?>

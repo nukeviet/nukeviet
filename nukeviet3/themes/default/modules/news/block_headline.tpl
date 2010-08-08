@@ -1,12 +1,12 @@
 <!-- BEGIN: main -->
 <div id="topnews">
     <div class="indent clearfix">
-        <!-- BEGIN: lastest_news_img -->
+        <!-- BEGIN: hots_news_img -->
         <div class="headline span-8 last fl">
             <div id="slider1" class="sliderwrapper">
                 <!-- BEGIN: loop -->
                 <div class="contentdiv clearfix">
-                    <a title="{LASTEST.title}" href="{LASTEST.link}"><img src="{LASTEST.image.url}" alt="{LASTEST.image.alt}" width="{LASTEST.image.width}" height="{LASTEST.image.height}" /></a><h3><a title="{LASTEST.title}" href="{LASTEST.link}">{LASTEST.title}</a></h3>
+                    <a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}"><img src="{HOTSNEWS.image_url}" alt="{HOTSNEWS.image_alt}" width="{HOTSNEWS.image_width}" height="{HOTSNEWS.image_height}" /></a><h3><a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}">{HOTSNEWS.title}</a></h3>
                 </div>
                 <!-- END: loop -->
             </div>
@@ -28,31 +28,20 @@
                 })
             </script>
         </div>
-        <!-- END: lastest_news_img -->
+        <!-- END: hots_news_img -->
         <div id="tabs" class="fr tabs" style="width:180px;">
             <ul>
+                <!-- BEGIN: loop_tabs_title -->
                 <li>
-                    <a href="#tabs-1"><span><span>{LANG.topnews}</span></span></a>
+                    <a href="#tabs-{TAB_TITLE.id}"><span><span>{TAB_TITLE.title}</span></span></a>
                 </li>
-                <li>
-                    <a href="#tabs-2"><span><span>{LANG.lastest}</span></span></a>
-                </li>
+                <!-- END: loop_tabs_title -->
             </ul>
             <div class="clear">
             </div>
-            <div id="tabs-1">
-                <!-- BEGIN: hot_news -->
-                <ul class="lastest-news">
-                    <!-- BEGIN: loop -->
-                    <li>
-                        <a title="{HOT.title}" href="{HOT.link}">{HOT.title}</a>
-                    </li>
-                    <!-- END: loop -->
-                </ul>
-                <!-- END: hot_news -->
-            </div>
-            <div id="tabs-2">
-                <!-- BEGIN: lastest_news -->
+			<!-- BEGIN: loop_tabs_content -->
+            <div id="tabs-{TAB_TITLE.id}">
+                <!-- BEGIN: content -->
                 <ul class="lastest-news">
                     <!-- BEGIN: loop -->
                     <li>
@@ -60,8 +49,9 @@
                     </li>
                     <!-- END: loop -->
                 </ul>
-                <!-- END: lastest_news -->
+                <!-- END: content -->
             </div>
+			<!-- END: loop_tabs_content -->
         </div>
     </div>
 </div>

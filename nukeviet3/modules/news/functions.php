@@ -68,7 +68,7 @@ while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i
 
 foreach ( $global_array_cat as $catid_i => $array_cat_i )
 {
-    if ( $array_cat_i['parentid'] == 0 )
+    if ($catid_i > 0 AND $array_cat_i['parentid'] == 0 )
     {
         $act = 0;
         $submenu = array();
