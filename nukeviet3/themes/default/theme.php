@@ -65,7 +65,7 @@ function nv_site_theme ( $contents )
         }
         $xtpl->parse( 'main.language' );
     }
-    $a = $b;
+    
     foreach ( $site_mods as $modname => $modvalues )
     {
         if ( ! empty( $modvalues['in_menu'] ) )

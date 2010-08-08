@@ -1187,7 +1187,7 @@ function nv_delete_all_cache ( )
 {
     $files = scandir( NV_ROOTDIR . "/" . NV_CACHEDIR );
     $files2 = array_diff( $files, array( 
-        ".", "..", ".htaccess", "index.html" 
+        ".", "..", ".htaccess", "index.html", ".svn"
     ) );
     foreach ( $files2 as $f )
     {
