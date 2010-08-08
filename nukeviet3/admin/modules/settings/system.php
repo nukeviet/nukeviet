@@ -16,7 +16,6 @@ $submit = $nv_Request->get_string( 'submit', 'post' );
 $errormess = "";
 $array_config_global = $global_config;
 $themeadmin_array = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] );
-$images = nv_scandir( NV_ROOTDIR . '/images', "/^([a-zA-Z0-9\_\-\.]+)\.(gif|jpg|jpeg|png)$/" );
 $allow_sitelangs = array();
 foreach ( $global_config['allow_sitelangs'] as $lang_i )
 {
@@ -61,11 +60,6 @@ if ( $submit )
         $array_config_global['site_keywords'] = ( ! empty( $array_config_global['site_keywords'] ) ) ? implode( ", ", $array_config_global['site_keywords'] ) : "";
     }
     
-    $array_config_global['site_logo'] = filter_text_input( 'site_logo', 'post', '', 1, 255 );
-    if ( ! in_array( $array_config_global['site_logo'], $images ) )
-    {
-        $array_config_global['site_logo'] = "logo.png";
-    }
     $array_config_global['site_email'] = filter_text_input( 'site_email', 'post', '', 1, 255 );
     if ( nv_check_valid_email( $array_config_global['site_email'] ) != '' )
     {

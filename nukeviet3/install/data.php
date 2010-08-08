@@ -298,7 +298,6 @@ $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`confi
 
 $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
 ('sys', 'global', 'site_keywords', 'Nukeviet, portal, mysql, php'),
-('sys', 'global', 'site_logo', 'logo.png'),
 ('sys', 'global', 'site_phone', ''),
 ('sys', 'global', 'site_lang', '" . NV_LANG_DATA . "'),
 ('sys', 'global', 'admin_theme', 'admin_default'),

@@ -84,3 +84,4 @@
                     </fieldset>
                 </form>
             </div>
+            {THEME_ERROR_INFO}

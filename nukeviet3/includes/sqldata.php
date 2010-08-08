@@ -618,6 +618,7 @@ function nv_create_table_sys ( $lang )
     
     $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
         ('" . $lang . "', 'global', 'site_name', 'NUKEVIET CMS 3.0'),
+    	('" . $lang . "', 'global', 'site_logo', 'logo.png'),
     	('" . $lang . "', 'global', 'site_description', 'NUKEVIET CMS 3.0 Developed by Vinades.,Jsc'),
         ('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
         ('" . $lang . "', 'global', 'site_home_module', 'news'),

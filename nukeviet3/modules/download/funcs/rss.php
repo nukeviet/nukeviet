@@ -32,7 +32,7 @@ $content = '<?xml version="1.0" encoding="utf-8"?>
 <generator>Nukeviet Version ' . $global_config ['version'] . '</generator>
 
 <image>
-<url>' . NV_BASE_SITEURL . 'images/logo.png</url>
+<url>' . NV_BASE_SITEURL . 'images/'.$global_config['site_logo'].'</url>
 <title>' . $module_name . '</title>
 <link>' . NV_MY_DOMAIN . NV_BASE_SITEURL . '</link>
 </image>';

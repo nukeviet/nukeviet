@@ -14,6 +14,7 @@ $page_title = $lang_module['lang_site_config'];
 if ( defined( 'NV_EDITOR' ) ) require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 
 $submit = $nv_Request->get_string( 'submit', 'post' );
+$images = nv_scandir( NV_ROOTDIR . '/images', "/^([a-zA-Z0-9\_\-\.]+)\.(gif|jpg|jpeg|png)$/" );
 
 $errormess = "";
 
@@ -22,13 +23,18 @@ if ( $submit )
     $array_config = array();
     $array_config['site_theme'] = filter_text_input( 'site_theme', 'post', '', 1, 255 );
     $array_config['site_name'] = filter_text_input( 'site_name', 'post', '', 1, 255 );
-    
+    $array_config['site_logo'] = filter_text_input( 'site_logo', 'post', '', 1, 255 );
+    if ( ! in_array( $array_config['site_logo'], $images ) )
+    {
+        $array_config['site_logo'] = "logo.png";
+    }
     $array_config['site_home_module'] = filter_text_input( 'site_home_module', 'post', '', 1, 255 );
     $array_config['site_description'] = filter_text_input( 'site_description', 'post', '', 1, 255 );
     $array_config['disable_site'] = $nv_Request->get_int( 'disable_site', 'post' );
     $array_config['disable_site_content'] = filter_text_textarea( 'disable_site_content', '', NV_ALLOWED_HTML_TAGS );
-    if (empty($array_config['disable_site_content'])){
-    	$array_config['disable_site_content'] = $lang_global['disable_site_content'];
+    if ( empty( $array_config['disable_site_content'] ) )
+    {
+        $array_config['disable_site_content'] = $lang_global['disable_site_content'];
     }
     $array_config['disable_site_content'] = nv_nl2br( $array_config['disable_site_content'], '<br />' ); // dung de save vao csdl
     foreach ( $array_config as $config_name => $config_value )
@@ -47,8 +53,8 @@ if ( $submit )
     nv_delete_all_cache(); //xoa toan bo cache
     if ( empty( $errormess ) )
     {
-        Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass() );
-        exit();
+        //Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass() );
+        //exit();
     }
     else
     {
@@ -74,25 +80,14 @@ while ( list( $theme ) = $db->sql_fetchrow( $result ) )
     }
 }
 
-$lang_setting[] = array(  //
-    "page_title" => $page_title, //
-"template" => $lang_module['theme'], //
-"sitename" => $lang_module['sitename'], //
-"module" => $lang_module['default_module'], //
-"description" => $lang_module['description'], //
-"captcha" => $lang_module['captcha'], //
-"site_disable" => $lang_module['site_disable'], //
-"disable_content" => $lang_module['disable_content'], //
-"submit" => $lang_module['submit']  //
-);
-
 $global_config['disable_site_content'] = nv_br2nl( $global_config['disable_site_content'] ); // dung de lay data tu CSDL
 $global_config['disable_site_content'] = nv_htmlspecialchars( $global_config['disable_site_content'] );
 
 $value_setting[] = array(  //
     "sitename" => $global_config['site_name'], //
-"description" => $global_config['site_description'], //
-"disable_content" => $global_config['disable_site_content']  //
+    "site_logo" => $global_config['site_logo'], //
+	"description" => $global_config['site_description'], //
+	"disable_content" => $global_config['disable_site_content']  //
 );
 
 $module_array = array();
@@ -105,10 +100,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 }
 
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name . "" );
-foreach ( $lang_setting as $lang_setting_i )
-{
-    $xtpl->assign( 'LANG', $lang_setting_i );
-}
+$xtpl->assign( 'LANG', $lang_module );
 foreach ( $value_setting as $value_setting_i )
 {
     $xtpl->assign( 'VALUE', $value_setting_i );

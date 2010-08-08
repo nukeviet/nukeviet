@@ -1,7 +1,9 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
     <table class="tab1" summary="">
-        <caption>{LANG.page_title}</caption>
+        <caption>
+            {LANG.page_title}
+        </caption>
         <tbody class="second">
             <tr>
                 <td>
@@ -26,23 +28,13 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.site_keywords}</strong>
                 </td>
                 <td>
                     <input type="text" name="site_keywords" value="{DATA.site_keywords}" style="width: 450px"/>
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
-                    <strong>{LANG.site_logo}</strong>
-                </td>
-                <td>
-                    <input type="text" name="site_logo" value="{DATA.site_logo}" style="width: 450px"/>
                 </td>
             </tr>
         </tbody>
@@ -56,7 +48,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.error_send_email}</strong>
@@ -66,7 +58,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.site_phone}</strong>
@@ -83,7 +75,8 @@
                 </td>
                 <td>
                     <select name="admin_theme">
-                        <!-- BEGIN: admin_theme --><option value="{SITE_THEME_ADMIN}"{SELECTED}>{SITE_THEME_ADMIN}  </option>
+                        <!-- BEGIN: admin_theme -->
+						<option value="{SITE_THEME_ADMIN}"{SELECTED}>{SITE_THEME_ADMIN}  </option>
                         <!-- END: site_theme -->
                     </select>
                 </td>
@@ -98,8 +91,8 @@
                 <input type="checkbox" value="1" name="is_url_rewrite" {CHECKED1} />
             </td>
         </tr>
-        <!-- END: support_rewrite -->
-        <!-- BEGIN: rewrite_optional -->
+		<!-- END: support_rewrite -->
+		<!-- BEGIN: rewrite_optional -->
         <tr>
             <td>
                 <strong>{LANG.rewrite_optional}</strong>
@@ -108,7 +101,7 @@
                 <input type="checkbox" value="1" name="rewrite_optional" {CHECKED2} />
             </td>
         </tr>
-        <!-- END: rewrite_optional -->
+		<!-- END: rewrite_optional -->
         <tbody class="second">
             <tr>
                 <td>
@@ -116,13 +109,14 @@
                 </td>
                 <td>
                     <select name="gfx_chk">
-                        <!-- BEGIN: opcaptcha --><option value="{GFX_CHK_VALUE}"{GFX_CHK_SELECTED}>{GFX_CHK_TITLE}  </option>
+                        <!-- BEGIN: opcaptcha -->
+						<option value="{GFX_CHK_VALUE}"{GFX_CHK_SELECTED}>{GFX_CHK_TITLE}  </option>
                         <!-- END: opcaptcha -->
                     </select>
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.site_timezone}</strong>
@@ -130,13 +124,13 @@
                 <td>
                     <select name="site_timezone">
                         <!-- BEGIN: opsite_timezone -->
-						<option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE}  </option>
+							<option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE}  </option>
                         <!-- END: opsite_timezone -->
                     </select>
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.date_pattern}</strong>
@@ -146,7 +140,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.time_pattern}</strong>
@@ -156,13 +150,13 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.gzip_method}</strong>
                 </td>
                 <td>
-                	 <input type="checkbox" value="1" name="gzip_method" {DATA.gzip_method} />
+                    <input type="checkbox" value="1" name="gzip_method" {DATA.gzip_method} />
                 </td>
             </tr>
         </tbody>
@@ -193,7 +187,8 @@
                 </td>
                 <td>
                     <select name="proxy_blocker">
-                        <!-- BEGIN: proxy_blocker --><option value="{PROXYOP}" {PROXYSELECTED}>{PROXYVALUE}  </option>
+                        <!-- BEGIN: proxy_blocker -->
+						<option value="{PROXYOP}" {PROXYSELECTED}>{PROXYVALUE}  </option>
                         <!-- END: proxy_blocker -->
                     </select>
                 </td>
@@ -243,5 +238,4 @@
     <div style="width: 200px; margin: 10px auto; text-align: center;">
         <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/>
     </div>
-</form>
-<!-- END: main -->
+</form><!-- END: main -->

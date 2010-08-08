@@ -21,6 +21,10 @@ function nv_site_theme ( $contents )
     {
         $my_head .= "<link rel=\"stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['site_theme'] . "/css/admin.css\" type=\"text/css\" />";
     }
+    if ( defined( 'NV_DISPLAY_ERRORS_LIST' ) and NV_DISPLAY_ERRORS_LIST != 0 )
+    {
+        $my_head .= "<link rel=\"stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['site_theme'] . "/css/tab_info.css\" type=\"text/css\" />";
+    }
     
     $xtpl = new XTemplate( "layout." . $module_info['funcs'][$op]['layout'] . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout/" );
     $xtpl->assign( 'LANG', $lang_global );
@@ -61,7 +65,7 @@ function nv_site_theme ( $contents )
         }
         $xtpl->parse( 'main.language' );
     }
-    
+    $a = $b;
     foreach ( $site_mods as $modname => $modvalues )
     {
         if ( ! empty( $modvalues['in_menu'] ) )
