@@ -78,14 +78,14 @@ if ( empty( $global_config['openid_servers'] ) ) $global_config['openid_mode'] =
 if ( $global_config['is_user_forum'] )
 {
     $forum_files = @scandir( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' );
-    if (!empty($forum_files)  and  in_array( 'is_user.php', $forum_files ) and in_array( 'changepass.php', $forum_files ) and in_array( 'editinfo.php', $forum_files ) and in_array( 'login.php', $forum_files ) and in_array( 'logout.php', $forum_files ) and in_array( 'lostpass.php', $forum_files ) and in_array( 'register.php', $forum_files ) )
+    if ( ! empty( $forum_files ) and in_array( 'is_user.php', $forum_files ) and in_array( 'changepass.php', $forum_files ) and in_array( 'editinfo.php', $forum_files ) and in_array( 'login.php', $forum_files ) and in_array( 'logout.php', $forum_files ) and in_array( 'lostpass.php', $forum_files ) and in_array( 'register.php', $forum_files ) )
     {
         define( 'NV_IS_USER_FORUM', true );
         $global_config['openid_mode'] = 0;
     }
     else
     {
-		$global_config['is_user_forum'] = 0;
+        $global_config['is_user_forum'] = 0;
     }
 }
 
@@ -113,6 +113,7 @@ define( 'NV_CURRENT24HOUR_1NUM', date( 'G', NV_CURRENTTIME ) ); //0-23
 define( 'NV_CURRENTMIN_2NUM', date( 'i', NV_CURRENTTIME ) ); //00-59
 define( 'NV_DEL_ONLINE_TIME', ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME ) ); //Thoi gian xoa tinh trang online
 
+
 $global_config['log_errors_list'] = NV_LOG_ERRORS_LIST;
 $global_config['display_errors_list'] = NV_DISPLAY_ERRORS_LIST;
 $global_config['send_errors_list'] = NV_SEND_ERRORS_LIST;
@@ -123,7 +124,9 @@ $global_config['error_log_fileext'] = NV_LOGS_EXT;
 //Ket noi voi class Error_handler
 require_once ( NV_ROOTDIR . '/includes/class/error.class.php' );
 $ErrorHandler = new Error( $global_config );
-set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
+set_error_handler( array( 
+    &$ErrorHandler, 'error_handler' 
+) );
 
 if ( empty( $global_config['allow_sitelangs'] ) or empty( $global_config['allow_adminlangs'] ) )
 {
@@ -159,7 +162,9 @@ $client_info['ip'] = $ips->remote_ip;
 if ( $client_info['ip'] == "none" ) trigger_error( 'Error: Your IP address is not correct', 256 ); //Neu khong co IP
 if ( nv_is_banIp( $client_info['ip'] ) ) trigger_error( "Hi and Good-bye!!!", 256 ); //IP Ban
 
+
 if ( $global_config['proxy_blocker'] != 0 ) //Chan proxy
+
 
 {
     $client_info['is_proxy'] = $ips->nv_check_proxy();
@@ -191,15 +196,18 @@ $global_config['cookie_domain'] = $nv_Request->cookie_domain; //vd: .mydomain1.c
 $global_config['site_url'] = $nv_Request->site_url; //vd: http://mydomain1.com/ten_thu_muc_chua_site
 $global_config['my_domains'] = $nv_Request->my_domains; //vd: "mydomain1.com,mydomain2.com"
 
+
 $sys_info['register_globals'] = $nv_Request->is_register_globals; //0 = khong, 1 = bat
 $sys_info['magic_quotes_gpc'] = $nv_Request->is_magic_quotes_gpc; // 0 = khong, 1 = co
 $sys_info['sessionpath'] = $nv_Request->session_save_path; //vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
+
 
 $client_info['session_id'] = $nv_Request->session_id; //ten cua session
 $client_info['referer'] = $nv_Request->referer; //referer
 $client_info['is_myreferer'] = $nv_Request->referer_key; //0 = referer tu ben ngoai site, 1 = referer noi bo, 2 = khong co referer
 $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri; //trang dang xem
 $client_info['agent'] = $nv_Request->user_agent; //HTTP_USER_AGENT
+
 
 define( 'NV_SERVER_NAME', $nv_Request->server_name ); //vd: mydomain1.com
 define( 'NV_SERVER_PROTOCOL', $nv_Request->server_protocol ); //vd: http
@@ -214,8 +222,9 @@ define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( s
 define( 'NV_UPLOAD_MAX_FILESIZE', min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), NV_MAX_SIZE ) );
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh duong dan thuc den thu muc upload
 
+
 if ( preg_match( "/^[0-9]{10,}$/", $nv_Request->get_string( 'nocache', 'get', '' ) ) and //Xac dinh co phai AJAX hay khong
-    $client_info['is_myreferer'] === 1 ) define( 'NV_IS_AJAX', true );
+$client_info['is_myreferer'] === 1 ) define( 'NV_IS_AJAX', true );
 
 //Chan truy cap neu HTTP_USER_AGENT == 'none'
 if ( NV_USER_AGENT == "none" )
@@ -236,18 +245,27 @@ $client_info['is_mobile'] = nv_checkmobile();
 //if ($client_info['is_mobile'])
 //	trigger_error('Sorry! Website does not support the browser your mobile', 256);
 
+
 //Ket noi voi class chong flood
 if ( defined( 'NV_IS_FLOOD_BLOCKER' ) and NV_IS_FLOOD_BLOCKER == 1 and ! $nv_Request->isset_request( 'admin', 'session' ) and //
-    ( ! $nv_Request->isset_request( 'second', 'get' ) or ( $nv_Request->isset_request( 'second', 'get' ) and $client_info['is_myreferer'] != 1 ) ) )
+( ! $nv_Request->isset_request( 'second', 'get' ) or ( $nv_Request->isset_request( 'second', 'get' ) and $client_info['is_myreferer'] != 1 ) ) )
 {
     require_once ( NV_ROOTDIR . '/includes/core/flood_blocker.php' );
 }
 
 //Xac dinh borwser cua client
-$client_info['browser'] = $client_info['is_bot'] ? array( 'key' => "Unknown", 'name' => 'Unknown' ) : array_combine( array( 'key', 'name' ), explode( "|", nv_getBrowser( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
+$client_info['browser'] = $client_info['is_bot'] ? array( 
+    'key' => "Unknown", 'name' => 'Unknown' 
+) : array_combine( array( 
+    'key', 'name' 
+), explode( "|", nv_getBrowser( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
 
 //Xac dinh OS cua client
-$client_info['client_os'] = $client_info['is_bot'] ? array( 'key' => "Robot", 'name' => $client_info['bot_info']['name'] ) : array_combine( array( 'key', 'name' ), explode( "|", nv_getOs( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/os.ini' ) ) );
+$client_info['client_os'] = $client_info['is_bot'] ? array( 
+    'key' => "Robot", 'name' => $client_info['bot_info']['name'] 
+) : array_combine( array( 
+    'key', 'name' 
+), explode( "|", nv_getOs( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/os.ini' ) ) );
 
 //Captcha
 if ( $nv_Request->isset_request( 'scaptcha', 'get' ) )
@@ -268,6 +286,7 @@ if ( ! empty( $db->error ) )
 }
 unset( $db_config['dbpass'] );
 //Ten cac table cua CSDL dung chung cho he thong
+
 
 define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
 define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
@@ -384,11 +403,16 @@ if ( defined( "NV_IS_ADMIN" ) )
             define( 'NV_IS_MOD_USER', true );
             require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/logout.php' );
         }
-        else{
+        else
+        {
             $nv_Request->unset_request( 'nvloginhash', 'cookie' );
         }
         require_once ( NV_ROOTDIR . "/includes/core/admin_logout.php" );
     }
+}
+elseif ( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
+{
+    $global_config['disable_site'] = 1;
 }
 
 //Dinh chi hoat dong cua site
@@ -398,7 +422,8 @@ if ( ! defined( "NV_ADMIN" ) )
     {
         $disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
         nv_info_die( $global_config['site_description'], $global_config['disable_site_title'], $disable_site_content );
-    } elseif ( defined( "NV_IS_ADMIN" ) and ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
+    }
+    elseif ( !defined( "NV_IS_ADMIN" ) and ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
     {
         Header( "Location: " . NV_BASE_SITEURL );
         exit();
