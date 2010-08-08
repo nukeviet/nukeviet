@@ -43,6 +43,12 @@ elseif ( $mod == "adddefault" and $bid > 0 )
     $db->sql_query( $sql );
     $content = "OK_" . $bid;
 }
+elseif ( $mod == "numlinks" and $new_vid >= 0 and $new_vid <= 50 )
+{
+    $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `number`=" . $new_vid . " WHERE `bid`=" . intval( $bid );
+    $db->sql_query( $sql );
+    $content = "OK_" . $bid;
+}
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $content;

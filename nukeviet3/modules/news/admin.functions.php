@@ -328,6 +328,7 @@ function nv_show_block_cat_list ( )
         $contents .= "<td style=\"width:40px;\">ID</td>\n";
         $contents .= "<td>" . $lang_module['name'] . "</td>\n";
         $contents .= "<td>" . $lang_module['adddefaultblock'] . "</td>\n";
+        $contents .= "<td style=\"width:60px;\">" . $lang_module['numlinks'] . "</td>\n";
         $contents .= "<td style=\"width:100px;\"></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</thead>\n";
@@ -363,6 +364,12 @@ function nv_show_block_cat_list ( )
                 $contents .= "<option value=\"" . $key . "\"" . ( $key == $row['adddefault'] ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
             }
             $contents .= "</select></td>\n";
+            $contents .= "<td align=\"center\"><select id=\"id_numlinks_" . $row['bid'] . "\" onchange=\"nv_chang_block_cat('" . $row['bid'] . "','numlinks');\">\n";
+            for ( $i = 1; $i <= 30; $i ++ )
+            {
+                $contents .= "<option value=\"" . $i . "\"" . ( $i == $row['number'] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+            }
+            $contents .= "</select></td>\n";            
             $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $row['bid'] . "#edit\">" . $lang_global['edit'] . "</a></span>\n";
             $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_block_cat(" . $row['bid'] . ")\">" . $lang_global['delete'] . "</a></span></td>\n";
             $contents .= "</tr>\n";
