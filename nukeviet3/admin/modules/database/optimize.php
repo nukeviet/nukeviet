@@ -22,7 +22,7 @@ else
 
 $totalfree = 0;
 $tabs = array();
-$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "_%'" );
+$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
 while ( $item = $db->sql_fetch_assoc( $result ) )
 {
 	if ( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['Name'], $tables ) ) )
