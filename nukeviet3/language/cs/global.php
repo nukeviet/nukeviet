@@ -30,7 +30,7 @@ $lang_global['site_info'] = "Oznámení ze systému";
 	 english:	  Notifications from the system
 */
 
-$lang_global['welcome'] = "Vítejte na návštěvě webových stránkách%s";
+$lang_global['welcome'] = "Vítejte na návštěvě webových stránkách %s";
 /*
 	 vietnam:	  Thân ái chào mừng bạn trên website của %s
 	 english:	  Welcome to visit website of %s
@@ -108,7 +108,7 @@ $lang_global['admin_logout_question'] = "Jste si jisti, že se odhlásit z účt
 	 english:	  Are you sure to logout from administrator account ?
 */
 
-$lang_global['admin_ipincorrect'] = "IP:%s. litujeme.nepoužíváte tuto IP pro přístup k této oblasti!";
+$lang_global['admin_ipincorrect'] = "IP: %s. litujeme.nepoužíváte tuto IP pro přístup k této oblasti!";
 /*
 	 vietnam:	  Bạn đang truy cập bằng IP: %s. Rất tiếc IP này không được cấp phép truy cập vào khu vực quản lý site!
 	 english:	  IP: %s. We are very sorry.You can't use this IP to access this area!
@@ -306,7 +306,7 @@ $lang_global['site_rss'] = "RSS - NOVINKY";
 	 english:	  RSS - NEWS
 */
 
-$lang_global['copyright'] = "© Copyright%s. Všechna práva vyhrazena";
+$lang_global['copyright'] = "© Copyright %s. Všechna práva vyhrazena";
 /*
 	 vietnam:	  &copy; Copyright %s. All right reserved
 	 english:	  &copy; Copyright %s. All right reserved
@@ -336,7 +336,7 @@ $lang_global['email_empty'] = "Email nebyl prohlášen";
 	 english:	  Email has not been declared
 */
 
-$lang_global['email_incorrect'] = "Email \"<strong>%s </ strong>\" je neplatný";
+$lang_global['email_incorrect'] = "Email \"<strong> %s </ strong>\" je neplatný";
 /*
 	 vietnam:	  Email &ldquo;<strong>%s</strong>&rdquo; không đúng quy định
 	 english:	  Email &ldquo;<strong>%s</strong>&rdquo; is invalid
@@ -774,97 +774,103 @@ $lang_global['recreate'] = "Znovu instralovat";
 	 english:	  Reinstall
 */
 
-$lang_global['error_directory_does_not_exist'] = "Adresář%s neexistuje";
+$lang_global['error_directory_does_not_exist'] = "Adresář %s neexistuje";
 /*
 	 vietnam:	  Thực hiện %s không tồn tại
 	 english:	  Directory %s does not exist
 */
 
-$lang_global['error_directory_can_not_write'] = "Adresář%s nelze psat";
+$lang_global['error_directory_can_not_write'] = "Adresář %s nelze psat";
 /*
 	 vietnam:	  Thư mục %s không cho phép ghi
 	 english:	  Directory %s can't not write
 */
 
-$lang_global['error_create_directories_name_invalid'] = "Název adresáře:%s nepřijímá";
+$lang_global['error_create_directories_name_invalid'] = "Název adresáře: %s nepřijímá";
 /*
 	 vietnam:	  Tên thư mục %s không được chấp nhận
 	 english:	  Directory name:%s does not accept
 */
 
-$lang_global['error_create_directories_failed'] = "Systém nelze vytvořit adresář%s, protože z neznámého důvodu";
+$lang_global['error_create_directories_failed'] = "Systém nelze vytvořit adresář %s, protože z neznámého důvodu";
 /*
 	 vietnam:	  Hệ thống không thể tạo thư mục %s vì một lý do không xác định
 	 english:	  System can't create directory %s because some unknown reason
 */
 
-$lang_global['error_create_directories_name_used'] = "Adresář:%s již existuje";
+$lang_global['error_create_directories_name_used'] = "Adresář: %s již existuje";
 /*
 	 vietnam:	  Thư mục %s đã tồn tại
 	 english:	  Directory: %s already exist
 */
 
-$lang_global['directory_was_created'] = "Adresář:%s byl úspěšně vytvořen";
+$lang_global['directory_was_created'] = "Adresář: %s byl úspěšně vytvořen";
 /*
 	 vietnam:	  Thư mục %s đã được tạo thành công
 	 english:	  Directory: %s has created successfully
 */
 
-$lang_global['non_existent_file'] = "Neexistuje soubor nebo adresář%s";
+$lang_global['non_existent_file'] = "Neexistuje soubor nebo adresář %s";
 /*
 	 vietnam:	  Không tồn tại file hay thư mục %s
 	 english:	  Does not exist file or directory %s
 */
 
-$lang_global['error_delete_forbidden'] = "Soubor nebo adresář%s jsou zakázány smazat";
+$lang_global['error_delete_forbidden'] = "Soubor nebo adresář %s jsou zakázány smazat";
 /*
 	 vietnam:	  File hoặc thư mục %s bị cấm xóa
 	 english:	  File or directory %s are forbidden to delete
 */
 
-$lang_global['error_delete_subdirectories_not_empty'] = "Adresář%s obsahuje soubor nebo subdirectory.Prosím odstranit";
+$lang_global['error_delete_subdirectories_not_empty'] = "Adresář %s obsahuje soubor nebo subdirectory.Prosím odstranit";
 /*
 	 vietnam:	  Thư mục %s có chứa file hoặc thư mục con. Hãy xóa chúng trước đã
 	 english:	  Directory %s stores file or subdirectory.Please delete them before
 */
 
-$lang_global['error_delete_subdirectories_failed'] = "Systém nemůže smazat adresář%s, protože z neznámého důvodu";
+$lang_global['error_delete_subdirectories_failed'] = "Systém nemůže smazat adresář %s, protože z neznámého důvodu";
 /*
 	 vietnam:	  Hệ thống không thể xóa thư mục %s vì một lý do không xác định
 	 english:	  System can't delete directory %s because some unknown reason
 */
 
-$lang_global['file_deleted'] = "Soubor%s vymazal";
+$lang_global['error_delete_failed'] = "Systém nemůže smazat soubor %s, protože z neznámého důvodu";
+/*
+	 vietnam:	  Hệ thống không thể xóa file %s vì một lý do không xác định
+	 english:	  System can't delete file %s because some unknown reason
+*/
+
+$lang_global['file_deleted'] = "Soubor %s vymazal";
 /*
 	 vietnam:	  File %s đã được xóa
 	 english:	  File %s deleted
 */
 
-$lang_global['directory_deleted'] = "Adresář%s vymazal";
+$lang_global['directory_deleted'] = "Adresář %s vymazal";
 /*
 	 vietnam:	  Thư mục %s đã được xóa
 	 english:	  Directory %s deleted
 */
 
-$lang_global['error_rename_forbidden'] = "Soubor nebo adresář%s nelze přejmenovat";
+$lang_global['error_rename_forbidden'] = "Soubor nebo adresář %s nelze přejmenovat";
 /*
 	 vietnam:	  File hoặc thư mục %s bị cấm đổi tên
 	 english:	  File or Directory %s can't rename
 */
 
-$lang_global['error_rename_file_exists'] = "Soubor nebo adresář%s již existuje";
+$lang_global['error_rename_file_exists'] = "Soubor nebo adresář %s již existuje";
 /*
 	 vietnam:	  File hoặc thư mục %s đã tồn tại
 	 english:	  File or Directory %s already exist
 */
 
-$lang_global['error_rename_directories_invalid'] = "Nový název adresáře%s je neplatný";
+$lang_global['error_rename_directories_invalid'] = "Nový název adresáře %s je neplatný";
 /*
 	 vietnam:	  Tên thư mục mới %s không được chấp nhận
 	 english:	  New directory name %s is invalid
 */
 
-$lang_global['error_rename_file_invalid'] = "Nový název souboru%s je nepřijmout";
+$lang_global['error_rename_file_invalid'] = "Nový název souboru %s je nepřijmout";
 /*
 	 vietnam:	  Tên file mới %s không được chấp nhận
 	 english:	  New file name  %s is not accepted
@@ -1020,7 +1026,7 @@ $lang_global['error_sendmail_admin'] = "Chyba: Systém nemůže poslat mailem, p
 	 english:	  Error: system not send mail, Please contact administrator, to setting send mail
 */
 
-$lang_global['error_sendmail_subject'] = "Chybové hlášení z webových stránek%s";
+$lang_global['error_sendmail_subject'] = "Chybové hlášení z webových stránek %s";
 /*
 	 vietnam:	  Thông báo lỗi từ website %s
 	 english:	  Error report from website %s

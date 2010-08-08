@@ -158,6 +158,7 @@ $lang_global['non_existent_file'] = "Không tồn tại file hay thư mục %s";
 $lang_global['error_delete_forbidden'] = "File hoặc thư mục %s bị cấm xóa";
 $lang_global['error_delete_subdirectories_not_empty'] = "Thư mục %s có chứa file hoặc thư mục con. Hãy xóa chúng trước đã";
 $lang_global['error_delete_subdirectories_failed'] = "Hệ thống không thể xóa thư mục %s vì một lý do không xác định";
+$lang_global['error_delete_failed'] = "Hệ thống không thể xóa file %s vì một lý do không xác định";
 $lang_global['file_deleted'] = "File %s đã được xóa";
 $lang_global['directory_deleted'] = "Thư mục %s đã được xóa";
 $lang_global['error_rename_forbidden'] = "File hoặc thư mục %s bị cấm đổi tên";

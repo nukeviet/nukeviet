@@ -154,6 +154,7 @@ $lang_global['non_existent_file'] = "Fichier ou répertoire inexistant %s";
 $lang_global['error_delete_forbidden'] = "Fichier ou répertoir %s interdit d'être supprimé";
 $lang_global['error_delete_subdirectories_not_empty'] = "Répertoire %s contient des fichiers ou sous-répertoires. Il faut les supprimer d'abord";
 $lang_global['error_delete_subdirectories_failed'] = "Impossible de supprimer la répertoire %s par une raison inconnue";
+$lang_global['error_delete_failed'] = "Impossible de supprimer la dossier %s par une raison inconnue";
 $lang_global['file_deleted'] = "Fichier %s a été supprimé";
 $lang_global['directory_deleted'] = "Répertoire %s a été supprimé";
 $lang_global['error_rename_forbidden'] = "Fichier ou répertoire  %s interdit d'être renommé";

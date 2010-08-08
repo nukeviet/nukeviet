@@ -154,6 +154,7 @@ $lang_global['non_existent_file'] = "Does not exist file or directory %s";
 $lang_global['error_delete_forbidden'] = "File or directory %s are forbidden to delete";
 $lang_global['error_delete_subdirectories_not_empty'] = "Directory %s stores file or subdirectory.Please delete them before";
 $lang_global['error_delete_subdirectories_failed'] = "System can't delete directory %s because some unknown reason";
+$lang_global['error_delete_failed'] = "System can't delete file %s because some unknown reason";
 $lang_global['file_deleted'] = "File %s deleted";
 $lang_global['directory_deleted'] = "Directory %s deleted";
 $lang_global['error_rename_forbidden'] = "File or Directory %s can't rename";
