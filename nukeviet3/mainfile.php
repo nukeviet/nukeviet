@@ -36,7 +36,7 @@ $contents = "";
 $submenu = array();
 $select_options = array();
 $error_info = array();
-unset( $key_words, $page_title, $mod_title, $editor, $editor_password, $my_head );
+unset( $key_words, $page_title, $mod_title, $editor, $editor_password, $my_head, $description );
 
 //Xac dinh thu muc goc cua site
 define( 'NV_ROOTDIR', pathinfo( str_replace( '\\', '/', __file__ ), PATHINFO_DIRNAME ) );
