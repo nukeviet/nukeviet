@@ -98,7 +98,7 @@ $submenu['banners_list'] = $lang_module['banners_list'];
 $submenu['add_banner'] = $lang_module['add_banner'];
 
 $allow_func = array( 
-    'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat' 
+    'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat','del_banner' 
 );
 
 define( 'NV_IS_FILE_ADMIN', true );
@@ -995,7 +995,8 @@ function nv_banners_list_theme ( $contents )
 
 function nv_b_list_theme ( $contents )
 {
-    $return = "<table summary=\"" . $contents['caption'] . "\" class=\"tab1\">\n";
+    global $lang_module,$module_name;
+	$return = "<table summary=\"" . $contents['caption'] . "\" class=\"tab1\">\n";
     $return .= "<caption>" . $contents['caption'] . "</caption>\n";
     $return .= "<col span=\"5\" style=\"white-space:nowrap\" />\n";
     $return .= "<col style=\"width:50px;white-space:nowrap\" />\n";
@@ -1032,7 +1033,7 @@ function nv_b_list_theme ( $contents )
             $return .= "<td><input name=\"" . $values['act'][0] . "\" id=\"" . $values['act'][0] . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['act'][2] . "\"" . ( $values['act'][1] == '1' ? " checked=\"checked\"" : "" ) . " /></td>\n";
             $return .= "<td><span class=\"search_icon\"><a href=\"" . $values['view'] . "\">" . $contents['view'] . "</a></span> | \n";
             $return .= "<span class=\"edit_icon\"><a href=\"" . $values['edit'] . "\">" . $contents['edit'] . "</a></span> | \n";
-            $return .= "<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"" . $values['del'] . "\">" . $contents['del'] . "</a></span></td>\n";
+            $return .= "<span class=\"delete_icon\"><a class='delfile' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=del_banner&amp;id=" . $b_id . "\">" . $contents['del'] . "</a></span></td>\n";
             $return .= "</tr>\n";
             $return .= "</tbody>\n";
             $a ++;
@@ -1040,15 +1041,37 @@ function nv_b_list_theme ( $contents )
     }
     
     $return .= "</table>\n";
+    $return .= "
+				<script type='text/javascript'>
+				$(function(){
+					$('a[class=delfile]').click(function(event){
+						event.preventDefault();
+						if (confirm('".$lang_module['file_del_confirm']."'))
+						{
+							var href= $(this).attr('href');
+							$.ajax({	
+								type: 'POST',
+								url: href,
+								data:'',
+								success: function(data){				
+									alert(data);
+									window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name."&amp;".NV_OP_VARIABLE."=banner_list';
+								}
+							});
+						}
+					});
+				});
+				</script>
+				";
     return $return;
 }
 
 function nv_info_b_theme ( $contents )
 {
-    $return = "<div style=\"HEIGHT:27px;MARGIN-TOP:3px;POSITION:absolute;RIGHT:10px;TEXT-ALIGN:right;\">\n";
+    global $lang_module,$module_name;
+	$return = "<div style=\"HEIGHT:27px;MARGIN-TOP:3px;POSITION:absolute;RIGHT:10px;TEXT-ALIGN:right;\">\n";
     $return .= "<a class=\"button2\" href=\"" . $contents['edit'][0] . "\"><span><span>" . $contents['edit'][1] . "</span></span></a>\n";
     if ( isset( $contents['act'] ) ) $return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"" . $contents['act'][0] . "\"><span><span>" . $contents['act'][1] . "</span></span></a>\n";
-    $return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"" . $contents['del'][0] . "\"><span><span>" . $contents['del'][1] . "</span></span></a>\n";
     $return .= " </div>\n";
     
     $return .= " <table summary = \"" . $contents['caption'] . "\" class=\"tab1\">\n";
@@ -1093,8 +1116,28 @@ function nv_info_b_theme ( $contents )
     $return .= "</table>\n";
     
     $return .= "<div id=\"" . $contents['containerid'] . "\"></div>\n";
-    return $return;
-    
+    $return .= "
+			<script type='text/javascript'>
+			$(function(){
+				$('a[class=delfile]').click(function(event){
+					event.preventDefault();
+					if (confirm('".$lang_module['file_del_confirm']."'))
+					{
+						var href= $(this).attr('href');
+						$.ajax({	
+							type: 'POST',
+							url: href,
+							data:'',
+							success: function(data){				
+								alert(data);
+								window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name."&amp;".NV_OP_VARIABLE."=banner_list';
+							}
+						});
+					}
+				});
+			});
+			</script>
+			";
     return $return;
 }
 

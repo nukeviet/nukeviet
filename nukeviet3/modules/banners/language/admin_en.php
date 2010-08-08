@@ -127,5 +127,7 @@ $lang_module['click_ref'] = "Link";
 $lang_module['main_caption'] = "Advertising need to hanhle";
 $lang_module['deact_list'] = "List suspend advertising";
 $lang_module['form'] = "Type";
-
+$lang_module['file_del_confirm'] = "Do you want delete?";
+$lang_module['delfile_success'] = "Delete ok!";
+$lang_module['delfile_error'] = "Delete error";
 ?>

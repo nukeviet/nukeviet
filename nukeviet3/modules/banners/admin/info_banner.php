@@ -48,7 +48,7 @@ $contents['caption'] = sprintf( $lang_module['info_banner_caption'], $row['title
 $contents['edit'] = array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_banner&amp;id=" . $id, $lang_global['edit'] );
 $contents['del'] = array( "nv_b_del2(" . $id . ");", $lang_global['delete'] );
 if ( $row['act'] != '2' ) $contents['act'] = array( "nv_b_chang_act2(" . $id . ");", $lang_module['change_act'] );
-
+$contents['rows'][] = array( 'id', $row['id'] );
 $contents['rows'][] = array( $lang_module['title'], $row['title'] );
 $contents['rows'][] = array( $lang_module['in_plan'], $ptitle );
 $contents['rows'][] = array( $lang_module['of_client'], $cl_full_name );

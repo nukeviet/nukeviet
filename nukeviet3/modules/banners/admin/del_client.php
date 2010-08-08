@@ -41,7 +41,7 @@ if ( ! empty( $banners_id ) )
 {
 	$banners_id = implode( ",", $banners_id );
 
-	$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . NV_BANNERS_CLICK_GLOBALTABLE . "_%'" );
+	$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . NV_BANNERS_CLICK_GLOBALTABLE . "\_%'" );
 	while ( $item = $db->sql_fetch_assoc( $result ) )
 	{
 		$query = "DELETE FROM `" . $item['Name'] . "` WHERE `bid` IN (" . $banners_id . ")";

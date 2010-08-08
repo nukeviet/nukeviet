@@ -127,5 +127,7 @@ $lang_module['click_ref'] = "Từ trang";
 $lang_module['main_caption'] = "Các Quảng cáo cần xử lý";
 $lang_module['deact_list'] = "Danh sách các Quảng cáo đang bị đình chỉ hoạt động";
 $lang_module['form'] = "Kiểu thể hiện";
-
+$lang_module['file_del_confirm'] = "Bạn có muốn xóa?";
+$lang_module['delfile_success'] = "Đã xóa xong";
+$lang_module['delfile_error'] = "Xóa lỗi";
 ?>
