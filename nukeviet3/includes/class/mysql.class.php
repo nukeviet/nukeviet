@@ -540,7 +540,7 @@ class sql_db
      * @param mixed $value
      * @return
      */
-    private function fixdb ( $value )
+    public function fixdb ( $value )
     {
         $value = str_replace( '\'', '&#039;', $value );
         $value = preg_replace( array( 
