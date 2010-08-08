@@ -637,30 +637,24 @@ if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
         }
         else
         {
+            $error = $lang_global['loginincorrect'];
+            
             $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . md5( $nv_username ) . "'";
             $result = $db->sql_query( $sql );
-            $error = $lang_global['loginincorrect'];
-            while ( $row = $db->sql_fetchrow( $result ) )
+            if ( $db->sql_numrows( $result ) == 1 )
             {
-                if ( $row['username'] == $nv_username )
+                $row = $db->sql_fetchrow( $result );
+                if ( $row['username'] == $nv_username and $crypt->validate( $nv_password, $row['password'] ) )
                 {
-                    if ( empty( $row['password'] ) or ! $crypt->validate( $nv_password, $row['password'] ) )
+                    if ( ! $row['active'] )
                     {
-                        $error = $lang_global['loginincorrect'];
+                        $error = $lang_module['login_no_active'];
                     }
                     else
                     {
-                        if ( ! $row['active'] )
-                        {
-                            $error = $lang_module['login_no_active'];
-                        }
-                        else
-                        {
-                            $error = "";
-                            validUserLog( $row, 1, '' );
-                        }
+                        $error = "";
+                        validUserLog( $row, 1, '' );
                     }
-                    break;
                 }
             }
         }

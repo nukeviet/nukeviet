@@ -85,8 +85,8 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
   `last_openid` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`userid`),
   UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`),
-  KEY `md5username` (`md5username`)
+  UNIQUE KEY `md5username` (`md5username`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
@@ -102,7 +102,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
   `checknum` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`userid`),
   UNIQUE KEY `login` (`username`),
-  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `md5username` (`md5username`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM";
 

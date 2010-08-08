@@ -64,29 +64,24 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
             require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
         }
         $userid = 0;
-        $error = $lang_global['loginincorrect'];
         $sql = "SELECT userid, username, password FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . md5( $nv_username ) . "'";
         $result = $db->sql_query( $sql );
-        $error = $lang_global['loginincorrect'];
-        while ( $row = $db->sql_fetchrow( $result ) )
+        if ( $db->sql_numrows( $result ) == 1 )
         {
+            $row = $db->sql_fetchrow( $result );
             if ( $row['username'] == $nv_username and $crypt->validate( $nv_password, $row['password'] ) )
             {
                 $userid = $row['userid'];
-                 break;
             }
         }
         
+        $error = $lang_global['loginincorrect'];
         if ( $userid > 0 )
         {
             $query = "SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE t1.admin_id = " . $userid . " AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1";
             $result = $db->sql_query( $query );
             $numrows = $db->sql_numrows( $result );
-            if ( $numrows != 1 )
-            {
-                $error = $lang_global['loginincorrect'];
-            }
-            else
+            if ( $numrows == 1 )
             {
                 $row = $db->sql_fetchrow( $result );
                 $db->sql_freeresult( $result );
@@ -114,6 +109,8 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                     $nv_Request->unset_request( 'admin_login_redirect', 'session' );
                     if ( ! empty( $r ) ) $redirect = $r;
                 }
+                
+                $error = "";
                 nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . $redirect . "\" />" );
                 die();
             }
