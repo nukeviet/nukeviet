@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -486,10 +486,10 @@ $lang_module['prefix'] = "prefix";
 	 english:	  prefix
 */
 
-$lang_module['db_err_prefix'] = "Chyba: Prefix v současné době je používán";
+$lang_module['db_err_prefix'] = "Chyba: Prefix databáze byla použita";
 /*
-	 vietnam:	  Lỗi: thông số  (prefix) Tiếp đầu tố đã được sử dụng
-	 english:	  Error: Prefix currently used
+	 vietnam:	  Lỗi: (prefix) Tiếp đầu tố đã được sử dụng
+	 english:	  Error: Prefix database has been used
 */
 
 $lang_module['enter_form'] = "Zadejte formulář";
@@ -630,6 +630,14 @@ $lang_module['copyright'] = "Poznámka:Uvedený článek je přetištěný na we
 	 english:	  Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement
 */
 
-$lang_module['db_err_prefix'] = "Chyba: Prefix databáze byla použita";
+
+
+/*---------------------------------------- language untested ----------------------------------------------*/
+$lang_module['db_detete'] = "Odstranit stávající tabulky";
+/*
+	 vietnam:	  Xóa các bảng dữ liệu đã tồn tại
+	 english:	  Delete the existing tables
+*/
+
 
 ?>

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -336,9 +336,6 @@ $lang_module['version_updatenew'] = "Aktualizovat nová verze";
 	 english:	  update new version
 */
 
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
 $lang_module['bot_name'] = "Název serveru";
 /*
 	 vietnam:	  Tên máy chủ

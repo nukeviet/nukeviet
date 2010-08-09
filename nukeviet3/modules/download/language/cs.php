@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -384,6 +384,12 @@ $lang_module['upload_image'] = "Obrázky";
 	 english:	  Images
 */
 
+$lang_module['upload_captcha'] = "Ověření kod \$ lang_global ['browse_image']";
+/*
+	 vietnam:	  Mã bảo vệ
+	 english:	  code \$lang_global['browse_image']
+*/
+
 $lang_module['upload_allowtype'] = "Povolené formát: gif, jpg, png";
 /*
 	 vietnam:	  Định dạng cho phép gif,jpg,png
@@ -700,15 +706,6 @@ $lang_module['delete'] = "Vymazat";
 /*
 	 vietnam:	  Xóa
 	 english:	  Delete
-*/
-
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
-$lang_module['upload_captcha'] = "Ověření kod \$ lang_global ['browse_image']";
-/*
-	 vietnam:	  Mã bảo vệ
-	 english:	  code \$lang_global['browse_image']
 */
 
 $lang_module['file_del_confirm'] = "Opravdu chcete smazat?";

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -192,9 +192,6 @@ $lang_global['ftp_error_path'] = "Chyba: Špatná konfigurace na vzdálenou cest
 	 english:	  Error: Wrong configuration in Remote path
 */
 
-
-
-/*---------------------------------------- language untested ----------------------------------------------*/
 $lang_global['login_error_account'] = "Chyba: Uživatelské jméno nebylo správné nebo prohlášeno za neplatné. (Pouze písmena, číslice a podtržítka latinské abecedy. Minimum%1\$s znaky, maximálně%1\$s znaků)";
 /*
 	 vietnam:	  Lỗi: Tài khoản Admin chưa được khai báo hoặc khai báo không hợp lệ! (Không ít hơn %1\$s ký tự, không nhiều hơn %2\$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới)

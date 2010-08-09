@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 06, 2010, 09:58:35 AM
+* @Createdate Aug 08, 2010, 11:22:13 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -670,6 +670,27 @@ $lang_module['form'] = "Typ";
 /*
 	 vietnam:	  Kiểu thể hiện
 	 english:	  Type
+*/
+
+
+
+/*---------------------------------------- language untested ----------------------------------------------*/
+$lang_module['file_del_confirm'] = "Přejete si smazat?";
+/*
+	 vietnam:	  Bạn có muốn xóa?
+	 english:	  Do you want delete?
+*/
+
+$lang_module['delfile_success'] = "Smazat soubor úspěch";
+/*
+	 vietnam:	  Đã xóa xong
+	 english:	  Delete ok!
+*/
+
+$lang_module['delfile_error'] = "odstranit chyby";
+/*
+	 vietnam:	  Xóa lỗi
+	 english:	  Delete error
 */
 
 

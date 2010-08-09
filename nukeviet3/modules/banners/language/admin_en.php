@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jul 31, 2010, 01:12:43 PM
+* @Createdate Aug 08, 2010, 11:22:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -130,4 +130,5 @@ $lang_module['form'] = "Type";
 $lang_module['file_del_confirm'] = "Do you want delete?";
 $lang_module['delfile_success'] = "Delete ok!";
 $lang_module['delfile_error'] = "Delete error";
+
 ?>
