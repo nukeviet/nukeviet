@@ -210,7 +210,7 @@ $lang_global['add_block'] = "Thêm block vào khu vực này";
 $lang_global['edit_block'] = "Sửa";
 $lang_global['delete_block'] = "Xóa";
 $lang_global['outgroup_block'] = "Bỏ ra khỏi nhóm";
-$lang_global['block_delete_confirm'] = "Chú ý: Khi xóa block này hệ thống sẽ xóa tại tất cả các vị trí khác, bạn có chắc chắn thực hiện ?";
+$lang_global['block_delete_confirm'] = "Chú ý: Khi xóa block này hệ thống sẽ xóa cả nhóm block tại tất cả các vị trí khác, bạn có chắc chắn thực hiện? Nếu chỉ muốn xóa một mình nó, bạn nên tách nhóm block trước khi xóa.";
 $lang_global['block_outgroup_confirm'] = "Việc này sẽ loại bỏ block này ra khỏi 1 nhóm và tạo nhóm mới chứa block này nếu block này đang nằm trong một nhóm có từ 2 block trở lên. Bạn có chắc muốn bỏ block này ra khỏi nhóm?";
 
 $lang_global['wellcome'] = "Xin chào";
