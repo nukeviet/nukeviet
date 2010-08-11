@@ -102,7 +102,7 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                 $nv_Request->set_Session( 'online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0' );
                 define( 'NV_IS_ADMIN', true );
                 
-                $redirect = $global_config['site_url'] . '/' . NV_ADMINDIR;
+                $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
                 if ( $nv_Request->isset_request( 'admin_login_redirect', 'session' ) )
                 {
                     $r = $nv_Request->get_string( 'admin_login_redirect', 'session', '' );
@@ -119,7 +119,7 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 }
 else
 {
-    $nv_Request->set_Session( 'admin_login_redirect', $client_info['selfurl'] );
+    $nv_Request->set_Session( 'admin_login_redirect', $nv_Request->request_uri );
     $nv_username = "";
 }
 

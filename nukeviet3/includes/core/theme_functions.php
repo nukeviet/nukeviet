@@ -135,8 +135,6 @@ function nv_info_die ( $page_title = "", $info_title, $info_content, $adminlink 
         $tpl_path = NV_ROOTDIR . "/themes/default/system";
     }
     
-    $xtpl = new XTemplate( "error_info.tpl", $tpl_path );
-    
     $size = @getimagesize( NV_ROOTDIR . '/images/' . $global_config['site_logo'] );
     
     $xtpl = new XTemplate( "info_die.tpl", $tpl_path );
@@ -144,7 +142,7 @@ function nv_info_die ( $page_title = "", $info_title, $info_content, $adminlink 
     $xtpl->assign( 'SITE_CHERSET', $global_config['site_charset'] );
     $xtpl->assign( 'PAGE_TITLE', $page_title );
     $xtpl->assign( 'HOME_LINK', $global_config['site_url'] );
-    $xtpl->assign( 'LOGO', $global_config['site_url'] . "/images/" . $global_config['site_logo'] );
+    $xtpl->assign( 'LOGO', NV_BASE_SITEURL . "images/" . $global_config['site_logo'] );
     $xtpl->assign( 'WIDTH', $size[0] );
     $xtpl->assign( 'HEIGHT', $size[1] );
     $xtpl->assign( 'INFO_TITLE', $info_title );
@@ -152,7 +150,7 @@ function nv_info_die ( $page_title = "", $info_title, $info_content, $adminlink 
     $xtpl->assign( 'GO_HOMEPAGE', $lang_global['go_homepage'] );
     if ( defined( 'NV_IS_ADMIN' ) )
     {
-        $xtpl->assign( 'ADMIN_LINK', $global_config['site_url'] . "/" . NV_ADMINDIR . "/index.php" );
+        $xtpl->assign( 'ADMIN_LINK', NV_BASE_SITEURL . NV_ADMINDIR . "/index.php" );
         $xtpl->assign( 'GO_ADMINPAGE', $lang_global['admin_page'] );
         $xtpl->parse( 'main.adminlink' );
     }
