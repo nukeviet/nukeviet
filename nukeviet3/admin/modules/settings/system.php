@@ -144,7 +144,7 @@ if ( $submit )
     if ( isset( $array_config_global['is_url_rewrite'] ) and $array_config_global['is_url_rewrite'] == 1 )
     {
         require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
-        $errormess = nv_rewrite_change( $array_config_global['rewrite_optional'], $array_config_global['user_forum'] );
+        $errormess = nv_rewrite_change( $array_config_global);
         if ( ! empty( $errormess ) )
         {
             $array_config_global['is_url_rewrite'] = 0;

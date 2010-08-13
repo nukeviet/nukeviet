@@ -15,7 +15,7 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  * @param mixed $rewrite_optional
  * @return
  */
-function nv_rewrite_change ( $rewrite_optional, $user_forum )
+function nv_rewrite_change ( $array_config_global )
 {
     global $sys_info, $lang_module;
     $reval = $filename = "";
