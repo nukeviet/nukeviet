@@ -60,6 +60,7 @@ $lang_module['nv_lang_error_exit'] = "Erreur: aucune langue n'a été enregistr�
 $lang_module['nv_data_note'] = "Pour ajouter une nouvelle langue de données, vous devez créer une langue de l'interface, exporter vers fichiers, et autoriser l'affichage à l'administration";
 $lang_module['nv_setup'] = "Déjà installé";
 $lang_module['nv_setup_new'] = "Installer";
+$lang_module['nv_setup_delete'] = "Supprimer la langue des données";
 $lang_module['nv_data_setup'] = "Données de cette langue a été installées";
 $lang_module['nv_data_setup_ok'] = "Installation réussie, le système vous transfèrera vers l'installation de modules, <br><br>Vous devez installer les modules nécessaires et activer ces modules";
 $lang_module['nv_lang_readok'] = "Lecture réussie de langue d'interface, aller à la liste des fichiers.";

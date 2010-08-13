@@ -270,6 +270,13 @@ $lang_module['nv_setup_new'] = "Nové nastavení";
 	 english:	  New setup
 */
 
+
+$lang_module['nv_setup_delete'] = "Smazat data jazyk";
+/*
+	 vietnam:	  Xóa ngôn ngữ data
+	 english:	  Delete data language
+*/
+
 $lang_module['nv_data_setup'] = "Data z tohoto jazyku byl nainstalován";
 /*
 	 vietnam:	  Data Ngôn ngữ này đã được cài đặt

@@ -10,6 +10,24 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting,rss' );
 
+function nv_delete_table_sys ( $lang )
+{
+    global $db_config, $global_config;
+    $sql_drop_table = array();
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modules`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_blocks`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modfuncs`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_counter`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_searchkeys`";
+    
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_referer_stats`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modthemes`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modfuncs`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_counter`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_searchkeys`";
+    return $sql_drop_table;
+}
+
 function nv_create_table_sys ( $lang )
 {
     global $db_config, $global_config;

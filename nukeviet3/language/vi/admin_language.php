@@ -60,6 +60,7 @@ $lang_module['nv_lang_error_exit'] = "Lỗi: hiện tại chưa có ngôn ngữ 
 $lang_module['nv_data_note'] = "Để thêm mới ngôn ngữ dữ liệu, bạn cần tạo trước ngôn ngữ giao diện, xuất ra file và cấu hình cho phép hiển thị trong admin";
 $lang_module['nv_setup'] = "Đã được cài đặt";
 $lang_module['nv_setup_new'] = "Cài đặt mới";
+$lang_module['nv_setup_delete'] = "Xóa ngôn ngữ data";
 $lang_module['nv_data_setup'] = "Data Ngôn ngữ này đã được cài đặt";
 $lang_module['nv_data_setup_ok'] = "Cài đặt thành công, Hệ thống sẽ chuyển tới phần cấu hình site";
 $lang_module['nv_lang_readok'] = "Thực hiện xong việc đọc ngôn ngữ giao diện, hệ thống sẽ tự động chuyển sang danh sách các file.";

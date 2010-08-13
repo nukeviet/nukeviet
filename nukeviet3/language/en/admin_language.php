@@ -60,6 +60,7 @@ $lang_module['nv_lang_error_exit'] = "Error: The current language does not have 
 $lang_module['nv_data_note'] = "To add a new language data, the first you need to create the interface language, output file and configuration for display in admin";
 $lang_module['nv_setup'] = "Installed";
 $lang_module['nv_setup_new'] = "New setup";
+$lang_module['nv_setup_delete'] = "Delete data language";
 $lang_module['nv_data_setup'] = "Data of this language has been installed";
 $lang_module['nv_data_setup_ok'] = "Successful installation, the system will move to site configuration";
 $lang_module['nv_lang_readok'] = "Done reading the language interface, the system will automatically switch to the file list";
