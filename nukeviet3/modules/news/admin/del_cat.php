@@ -141,15 +141,22 @@ if ( $catid > 0 )
     }
     if ( $contents == "NO_" . $catid )
     {
-        $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE catid=" . $catid . "";
-        if ( $db->sql_query( $query ) )
+        if ( $delallcheckss == md5( $catid . session_id() ) )
         {
-            $db->sql_freeresult();
-            nv_fix_cat_order();
-            $db->sql_query( "DROP TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "`" );
-            $contents = "OK_" . $parentid;
+            $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE catid=" . $catid . "";
+            if ( $db->sql_query( $query ) )
+            {
+                $db->sql_freeresult();
+                nv_fix_cat_order();
+                $db->sql_query( "DROP TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "`" );
+                $contents = "OK_" . $parentid;
+            }
+            nv_del_cache_module();
         }
-        nv_del_cache_module();
+        else
+        {
+            $contents = "CONFIRM_" . $catid . "_" . md5( $catid . session_id() );
+        }
     }
 }
 if ( defined( 'NV_IS_AJAX' ) )
