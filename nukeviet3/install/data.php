@@ -336,7 +336,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'is_user_forum', '0'),
 ('sys', 'global', 'openid_mode', '1'),
 ('sys', 'global', 'openid_servers', 'yahoo,google,myopenid'),
-('sys', 'global', 'version', '3.0.06')";
+('sys', 'global', 'version', '" . $global_config['version'] . "')";
 
 $sql_create_table[] = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `cron_name`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`) VALUES
 (1, 'Xoa  cac dong ghi tinh trang online da cu trong CSDL', 1262293200, 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 1276839725, 1),
