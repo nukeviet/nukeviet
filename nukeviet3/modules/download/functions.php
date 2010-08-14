@@ -95,10 +95,10 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
         }
     }
 
+    $list2 = array();
+    
     if ( ! empty( $list ) )
     {
-        $list2 = array();
-
         foreach ( $list as $row )
         {
             if ( ! $row['parentid'] or isset( $list[$row['parentid']] ) )
