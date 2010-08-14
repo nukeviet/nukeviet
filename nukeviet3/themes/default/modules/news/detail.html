@@ -21,8 +21,7 @@
                 <!-- END: allowed_save -->
             </ul>
         </div>
-        <div style="clear: both;">
-        </div>
+        <div style="clear: both;"></div>
         <!-- BEGIN: showhometext -->
         <div id="hometext">
             <!-- BEGIN: imgthumb -->
@@ -42,9 +41,7 @@
             </p>
         </div>
         <!-- END: imgfull --><!-- END: showhometext -->
-        <div class="bodytext">
-            {DETAIL.bodytext}
-        </div>
+        <div class="bodytext">{DETAIL.bodytext}</div>
         <!-- BEGIN: author --><!-- BEGIN: name -->
         <p style="text-align: right;">
             <strong>{LANG.author}: </strong>{DETAIL.author}
@@ -54,21 +51,15 @@
             <strong>{LANG.source}: </strong>{DETAIL.source}
         </p>
         <!-- END: source --><!-- END: author --><!-- BEGIN: copyright -->
-        <div style="margin: 5px auto; background-color: #66ccff; padding: 10px; color: #fff;">
-            {COPYRIGHT}
-        </div>
+        <div style="margin: 5px auto; background-color: #66ccff; padding: 10px; color: #fff;">{COPYRIGHT}</div>
         <!-- END: copyright -->
     </div>
     <!-- BEGIN: adminlink -->
-    <p style="text-align: right;">
-        {ADMINLINK}
-    </p>
+    <p style="text-align: right;">{ADMINLINK}</p>
     <!-- END: adminlink --><!-- BEGIN: allowed_rating -->
     <form id="form3B" act>
         <div class="clearfix">
-            <div id="stringrating">
-                {STRINGRATING}
-            </div>
+            <div id="stringrating">{STRINGRATING}</div>
             <div style="padding: 5px;">
                 <input class="hover-star" type="radio" value="1" title="{LANGSTAR.verypoor}" /><input class="hover-star" type="radio" value="2" title="{LANGSTAR.poor}" /><input class="hover-star" type="radio" value="3" title="{LANGSTAR.ok}" /><input class="hover-star" type="radio" value="4" title="{LANGSTAR.good}" /><input class="hover-star" type="radio" value="5" title="{LANGSTAR.verygood}" /><span id="hover-test" style="margin: 0 0 0 20px;">{LANGSTAR.note}</span>
             </div>
@@ -117,16 +108,12 @@
                 <a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);">
                 <img src="{IMGSHOWCOMMENT}" alt="Show comment" /><strong>{LANG.comment_view}</strong>
             </li>
-            <li>
-            </a>
+            <li></a>
             -- <a onclick="nv_show_hidden('formcomment',2);" href="javascript:void(0);"><img alt="Add comment" src="{IMGADDCOMMENT}" /><strong>{LANG.comment_send}</strong></a>
         </li>
         </ul>
-        <div class="clearfix">
-        </div>
-        <div id="showcomment">
-            {COMMENTCONTENT}
-        </div>
+        <div class="clearfix"></div>
+        <div id="showcomment">{COMMENTCONTENT}</div>
         <div id="formcomment">
             <div class="add">
                 <img alt="Comment add" src="{IMGADDCOMMENT}" /><strong>{LANG.comment_title}</strong>
@@ -147,8 +134,7 @@
                 <label>
                     <strong>{LANG.comment_content}</strong>
                 </label>
-                <textarea style="width: 400px;" cols="50" rows="5" id="commentcontent">
-                </textarea>
+                <textarea style="width: 400px;" cols="50" rows="5" id="commentcontent"></textarea>
             </div>
             <div class="captcha">
                 <label>
@@ -204,8 +190,6 @@
 <!-- END: main -->
 <!-- BEGIN: no_permission -->
 <div id="no_permission">
-    <p>
-        {NO_PERMISSION}
-    </p>
+    <p>{NO_PERMISSION}</p>
 </div>
 <!-- END: no_permission -->

@@ -8,7 +8,7 @@
  */
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 if ( ! in_array( $op, array( 
-    'viewcat', 'detail', 'topic' 
+    'viewcat', 'detail'
 ) ) )
 {
     define( 'NV_IS_MOD_NEWS', true );
@@ -68,7 +68,7 @@ while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i
 
 foreach ( $global_array_cat as $catid_i => $array_cat_i )
 {
-    if ($catid_i > 0 AND $array_cat_i['parentid'] == 0 )
+    if ( $catid_i > 0 and $array_cat_i['parentid'] == 0 )
     {
         $act = 0;
         $submenu = array();
@@ -107,26 +107,12 @@ $per_page_comment = 5;
 $per_page = $module_config[$module_name]['per_page'];
 $st_links = $module_config[$module_name]['st_links'];
 $count_op = count( $array_op );
-if ( ! empty( $array_op ) )
+if ( ! empty( $array_op ) and $op == "main" )
 {
     if ( $catid == 0 )
     {
         $contents = $lang_module['nocatpage'] . $array_op[0];
-        if ( substr( $array_op[0], 0, 6 ) == "topic-" )
-        {
-            $topicalias = substr( $array_op[0], 6 );
-            list( $topicid, $topictitle ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `alias`=" . $db->dbescape( $topicalias ) . "" ) );
-            if ( $topicid > 0 )
-            {
-                $contents = "";
-                $op = "topic";
-                if ( $count_op > 1 )
-                {
-                    $page = intval( substr( $array_op[1], 5 ) );
-                }
-            }
-        }
-        elseif ( substr( $array_op[1], 0, 5 ) == "page-" )
+        if ( substr( $array_op[1], 0, 5 ) == "page-" )
         {
             $page = intval( substr( $array_op[1], 5 ) );
         }

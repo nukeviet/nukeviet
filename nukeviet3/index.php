@@ -61,15 +61,17 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
         {
             $array_op = array();
             $op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
-            if ( ! preg_match( $global_config['check_op'], $op ) or ! isset( $module_info['funcs'][$op] ) )
+            if ( ! isset( $module_info['funcs'][$op] ) )
             {
-                if ( preg_match( "/^[a-z0-9\-\/]+$/i", $op ) )
-                {
-                    $array_op = explode( "/", $op );
-                }
+                $list_op = $op;
                 $op = 'main';
+                if ( preg_match( "/^[a-z0-9\-\/]+$/i", $list_op ) )
+                {
+                    $array_op = explode( "/", $list_op );
+                    $op = ( isset( $module_info['funcs'][$array_op[0]] ) ) ? $array_op[0] : 'main';
+                }
             }
-
+            
             //Xac dinh quyen dieu hanh module
             if ( $module_info['is_modadmin'] )
             {
@@ -94,26 +96,29 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
                     }
                 }
             }
-
+            
             //Ket noi ngon ngu cua module
             if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/" . NV_LANG_INTERFACE . ".php" ) )
             {
                 require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/language/" . NV_LANG_INTERFACE . ".php" );
-            } elseif ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/en.php" ) )
+            }
+            elseif ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/en.php" ) )
             {
                 require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/language/en.php" );
             }
-
+            
             //Ket noi giao dien chung
             if ( ! empty( $module_info['theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $module_info['theme'] . "/theme.php" ) )
             {
                 require_once ( NV_ROOTDIR . "/themes/" . $module_info['theme'] . "/theme.php" );
                 $global_config['module_theme'] = $module_info['theme'];
-            } elseif ( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/theme.php" ) )
+            }
+            elseif ( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/theme.php" ) )
             {
                 require_once ( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/theme.php" );
                 $global_config['module_theme'] = $global_config['site_theme'];
-            } elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/theme.php" ) )
+            }
+            elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/theme.php" ) )
             {
                 require_once ( NV_ROOTDIR . "/themes/default/theme.php" );
                 $global_config['module_theme'] = "default";
@@ -122,13 +127,13 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
             {
                 trigger_error( "Error!  Does not exist themes default", 256 );
             }
-
+            
             //Ket noi voi file functions.php, file chua cac function dung chung cho ca module
             if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/functions.php" ) )
             {
                 require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/functions.php" );
             }
-
+            
             //Xac dinh template module
             $module_info['template'] = $global_config['module_theme'];
             if ( ! file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file ) )
@@ -138,21 +143,22 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
                     $module_info['template'] = "default";
                 }
             }
-
+            
             if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php" ) )
             {
                 require_once ( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php" );
-            } elseif ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/theme.php" ) )
+            }
+            elseif ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/theme.php" ) )
             {
                 require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/theme.php" );
             }
-
+            
             if ( ! defined( 'NV_IS_AJAX' ) )
             {
                 if ( $module_info['submenu'] ) nv_create_submenu();
                 $nv_array_block_contents = nv_blocks_content();
             }
-
+            
             //Ket noi voi cac op cua module de thuc hien
             require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/" . $op . ".php" );
             exit();

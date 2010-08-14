@@ -109,6 +109,10 @@ if ( $allowed )
         exit();
     }
     
+    $news_contents['url_sendmail'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . "";
+    $news_contents['url_print'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . "";
+    $news_contents['url_savefile'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=savefile/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . "";
+    
     $sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` = '" . $news_contents['sourceid'] . "'";
     $result = $db->sql_query( $sql );
     
@@ -154,7 +158,7 @@ if ( $allowed )
         while ( $row = $db->sql_fetchrow( $topic ) )
         {
             $catid_arr = explode( ",", $row['listcatid'] );
-            $topiclink = "" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic-" . $topic_alias . "";
+            $topiclink = "" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topic_alias . "";
             $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_arr[0]]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
             $topic_array[] = array( 
                 "title" => $row['title'], "link" => $link, "time" => nv_date( "d/m/Y", $row['publtime'] ), "topiclink" => $topiclink, "topictitle" => $topic_title 

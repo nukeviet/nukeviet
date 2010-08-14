@@ -562,17 +562,17 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     }
     if ( $news_contents['allowed_send'] == 1 )
     {
-        $xtpl->assign( 'URL_SENDMAIL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail&amp;catid=" . $catid . "&amp;id=" . $news_contents['id'] . "" );
+        $xtpl->assign( 'URL_SENDMAIL', $news_contents['url_sendmail'] );
         $xtpl->parse( 'main.allowed_send' );
     }
     if ( $news_contents['allowed_print'] == 1 )
     {
-        $xtpl->assign( 'URL_PRINT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print&amp;catid=" . $catid . "&amp;id=" . $news_contents['id'] . "" );
+        $xtpl->assign( 'URL_PRINT', $news_contents['url_print'] );
         $xtpl->parse( 'main.allowed_print' );
     }
     if ( $news_contents['allowed_save'] == 1 )
     {
-        $xtpl->assign( 'URL_SAVEFILE', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=savefile&amp;catid=" . $catid . "&amp;id=" . $news_contents['id'] . "" );
+        $xtpl->assign( 'URL_SAVEFILE', $news_contents['url_savefile'] );
         $xtpl->parse( 'main.allowed_save' );
     }
     if ( $news_contents['allowed_rating'] == 1 )
@@ -736,7 +736,7 @@ function topic_theme ( $topic_array, $topic_other_array )
     global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config;
     $xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'TOPIC_TOP_TITLE', $topictitle );
-    $xtpl->assign( 'TOPIC_TOP_LINK', "" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic-" . $topicalias . "" );
+    $xtpl->assign( 'TOPIC_TOP_LINK', "" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias . "" );
     if ( ! empty( $topic_array ) )
     {
         foreach ( $topic_array as $topic_array_i )
@@ -825,6 +825,10 @@ function sendmail_themme ( $sendmail )
     $script .= "	});\n";
     $script .= "}\n";
     $script .= "</script>\n";
+    if ( NV_LANG_INTERFACE == 'vi' )
+    {
+        $script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
+    }
     
     $sendmail['script'] = $script;
     $xtpl = new XTemplate( "sendmail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
