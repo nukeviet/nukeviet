@@ -1,35 +1,178 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @copyright 2009
  * @createdate 12/31/2009 2:29
  */
+
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
-$submenu['content'] = $lang_module['download_addfile'];
-$submenu['cat'] = $lang_module['download_catmanager'];
-$submenu['report'] = $lang_module['download_report'];
+
 $submenu['filequeue'] = $lang_module['download_filequeue'];
+$submenu['report'] = $lang_module['download_report'];
+$submenu['cat'] = $lang_module['download_catmanager'];
 $submenu['comment'] = $lang_module['download_comment'];
 $submenu['config'] = $lang_module['download_config'];
-$allow_func = array( 
-    'main', 'down', 'filequeue', 'content', 'editfilequeue', 'delfile', 'delfilequeue', 'delfilelist', 'delfilequeuelist', 'report', 'delreport', 'config', 'updateconfig', 'cat', 'ordercat', 'editcat', 'delcat', 'addcat', 'tag', 'comment', 'del_comment', 'active_comment', 'actcat', 'actfile' 
-);
+
+$allow_func = array( 'main', 'filequeue', 'report', 'config', 'cat', 'comment' );
+
 define( 'NV_IS_FILE_ADMIN', true );
 
-#get sub cat
-function getsubcat ( $parentid, $i )
+/**
+ * get_allow_exts()
+ * 
+ * @return
+ */
+function get_allow_exts()
 {
-    global $db, $module_name, $module_data, $catparent;
-    $sql = $db->sql_query( "SELECT cid,title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE parentid = " . $parentid . " ORDER BY weight" );
-    $i .= $i;
-    $content = '';
-    while ( $subcat = $db->sql_fetchrow( $sql ) )
+    global $global_config;
+
+    $all_file_ext = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
+    $file_allowed_ext = ( array )$global_config['file_allowed_ext'];
+
+    $exts = array();
+    if ( ! empty( $file_allowed_ext ) )
     {
-        $sel = ( $subcat['cid'] == $catparent ) ? ' selected' : '';
-        $content .= "<option value='" . $subcat['cid'] . "' " . $sel . ">" . $i . $subcat['title'] . "</option>";
-        $content .= getsubcat( $subcat['cid'], $i );
+        foreach ( $file_allowed_ext as $type )
+        {
+            if ( ! empty( $type ) and isset( $all_file_ext[$type] ) )
+            {
+                foreach ( $all_file_ext[$type] as $e => $m )
+                {
+                    if ( ! in_array( $e, $global_config['forbid_extensions'] ) and ! in_array( $m, $global_config['forbid_mimes'] ) )
+                    {
+                        $exts[$e] = is_array( $m ) ? implode( ", ", $m ) : $m;
+                    }
+                }
+            }
+        }
     }
-    return $content;
+
+    return $exts;
 }
+
+/**
+ * nv_setcats()
+ * 
+ * @param mixed $list2
+ * @param mixed $id
+ * @param mixed $list
+ * @param integer $m
+ * @param integer $num
+ * @return
+ */
+function nv_setcats( $list2, $id, $list, $m = 0, $num = 0 )
+{
+    $num++;
+    $defis = "";
+    for ( $i = 0; $i < $num; $i++ )
+    {
+        $defis .= "--";
+    }
+
+    if ( isset( $list[$id] ) )
+    {
+        foreach ( $list[$id] as $value )
+        {
+            if ( $value['id'] != $m )
+            {
+                $list2[$value['id']] = $value;
+                $list2[$value['id']]['name'] = "|" . $defis . "&gt; " . $list2[$value['id']]['name'];
+                if ( isset( $list[$value['id']] ) )
+                {
+                    $list2 = nv_setcats( $list2, $value['id'], $list, $m, $num );
+                }
+            }
+        }
+    }
+    return $list2;
+}
+
+/**
+ * nv_listcats()
+ * 
+ * @param mixed $parentid
+ * @param integer $m
+ * @return
+ */
+function nv_listcats( $parentid, $m = 0 )
+{
+    global $db, $module_data;
+
+    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` ORDER BY `parentid`,`weight` ASC";
+    $result = $db->sql_query( $sql );
+    $list = array();
+    while ( $row = $db->sql_fetchrow( $result ) )
+    {
+        $list[$row['parentid']][] = array( //
+            'id' => ( int )$row['id'], //
+            'parentid' => ( int )$row['parentid'], //
+            'title' => $row['title'], //
+            'alias' => $row['alias'], //
+            'description' => $row['description'], //
+            'who_view' => ( int )$row['who_view'], //
+            'groups_view' => ! empty( $row['groups_view'] ) ? explode( ",", $row['groups_view'] ) : array(), //
+            'who_download' => ( int )$row['who_download'], //
+            'groups_download' => ! empty( $row['groups_download'] ) ? explode( ",", $row['groups_download'] ) : array(), //
+            'weight' => ( int )$row['weight'], //
+            'status' => $row['weight'], //
+            'name' => $row['title'], //
+            'selected' => $parentid == $row['id'] ? " selected=\"selected\"" : "" //
+            );
+    }
+
+    if ( empty( $list ) )
+    {
+        return $list;
+    }
+
+    $list2 = array();
+    foreach ( $list[0] as $value )
+    {
+        if ( $value['id'] != $m )
+        {
+            $list2[$value['id']] = $value;
+            if ( isset( $list[$value['id']] ) )
+            {
+                $list2 = nv_setcats( $list2, $value['id'], $list, $m );
+            }
+        }
+    }
+
+    return $list2;
+}
+
+//Check file
+if ( $nv_Request->isset_request( 'check', 'post' ) )
+{
+    if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+
+    $url = $nv_Request->get_string( 'url', 'post', '' );
+    $is_myurl = $nv_Request->get_int( 'is_myurl', 'post', 0 );
+
+    if ( empty( $url ) ) die( $lang_module['file_checkUrl_error'] );
+
+    if ( $is_myurl )
+    {
+        $url = NV_MY_DOMAIN . $url;
+        if ( ! nv_is_url( $url ) ) die( $lang_module['file_checkUrl_error'] );
+        if ( ! nv_check_url( $url ) ) die( $lang_module['file_checkUrl_error'] );
+    }
+    else
+    {
+        $url = trim( $url );
+        $url = nv_nl2br( $url, "<br />" );
+        $url = explode( "<br />", $url );
+        $url = array_map( "trim", $url );
+        foreach ( $url as $l )
+        {
+            if ( ! nv_is_url( $l ) ) die( $lang_module['file_checkUrl_error'] );
+            if ( ! nv_check_url( $l ) ) die( $lang_module['file_checkUrl_error'] );
+        }
+    }
+
+    die( $lang_module['file_checkUrl_ok'] );
+}
+
 ?>

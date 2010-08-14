@@ -6,38 +6,73 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3/9/2010 23:25
  */
-global $db, $global_config,$module_data, $module_name;
 
-function getSubcategory($parentid)
+if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
+
+/**
+ * getSubcategory()
+ * 
+ * @param mixed $subcats
+ * @param mixed $list_cats
+ * @param mixed $content
+ * @return
+ */
+function getSubcategory( $subcats, $list_cats, &$content )
 {
-	global $db, $module_data, $module_name;
-	$sql = $db->sql_query ( "SELECT cid,title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE parentid = " . $parentid." ORDER BY weight" );
-	$data = '<ul>';
-	while ($sqlsubcat = $db->sql_fetchrow($sql))
-	{
-		$data .= "\n<li><a href=\"".NV_BASE_SITEURL."?".NV_LANG_VARIABLE."=".NV_LANG_DATA."&amp;".NV_NAME_VARIABLE."=".$module_name."&amp;" . NV_OP_VARIABLE . "=viewcat&id=".$sqlsubcat['cid']."\">".$sqlsubcat['title']."</a>";
-		$data .= getSubcategory($sqlsubcat['cid']);
-		$data .= "</li>\n";
-	}
-	$data .= '</ul>';
-	return $data;
+    global $module_name;
+    if ( ! empty( $subcats ) )
+    {
+        $content .= "<ul>\n";
+        foreach ( $subcats as $sub )
+        {
+            $content .= "<li>\n";
+            $content .= "<a href=\"" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;cat=" . $list_cats[$sub]['alias'] . "\">" . $list_cats[$sub]['title'] . "</a>";
+            getSubcategory( $list_cats[$sub]['subcats'], $list_cats, &$content );
+            $content .= "</li>\n";
+        }
+        $content .= "</ul>\n";
+    }
 }
-$sqlcat ="Select cid, title from `" . NV_PREFIXLANG . "_" . $module_data . "_categories` where parentid =0 AND active=1 ORDER BY `weight` ASC";
-$resultcat = $db->sql_query($sqlcat);
-if ($db->sql_numrows($resultcat) > 0)
+
+/**
+ * block_list_cat()
+ * 
+ * @return
+ */
+function block_list_cat()
 {
-	$menunews = "<link rel=\"stylesheet\" href=\"".NV_BASE_SITEURL."themes/default/css/menu_news.css\"/>\n";
-	$menunews .= "<script type=\"text/javascript\" src=\"".NV_BASE_SITEURL."js/menu_news.js\"></script>\n";
-	$menunews .= "<div class=\"sidebarmenu\"><ul id=\"sidebarmenu1\">";
-	while ($cat = $db->sql_fetchrow($resultcat))
-	{
-		$menunews .= "\n<li><a href=\"".NV_BASE_SITEURL."?".NV_LANG_VARIABLE."=".NV_LANG_DATA."&amp;".NV_NAME_VARIABLE."=".$module_name."&amp;" . NV_OP_VARIABLE . "=viewcat&id=".$cat['cid']."\">".$cat['title']."</a>";
-		$menunews .= getSubcategory($cat['cid']);
-		$menunews .= '</li>';
-	}
-	$menunews .= '</ul></div><br>';
+    global $module_name;
+
+    $content = "";
+
+    if ( $module_name == "download" )
+    {
+        $list_cats = nv_list_cats();
+
+        if ( ! empty( $list_cats ) )
+        {
+            $content .= "<link rel=\"stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/default/css/menu_news.css\" />\n";
+            $content .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/menu_news.js\"></script>\n";
+            $content .= "<div class=\"sidebarmenu\">\n";
+            $content .= "<ul id=\"sidebarmenu1\">\n";
+
+            foreach ( $list_cats as $cat )
+            {
+                if ( ! $cat['parentid'] )
+                {
+                    $content .= "<li>\n";
+                    $content .= "<a href=\"" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;cat=" . $cat['alias'] . "\">" . $cat['title'] . "</a>\n";
+                    getSubcategory( $cat['subcats'], $list_cats, &$content );
+                    $content .= "</li>\n";
+                }
+            }
+            $content .= "</ul>\n";
+            $content .= "</div>\n";
+        }
+    }
+    return $content;
 }
-$content .= $menunews;
-unset($menunews);
+
+$content = block_list_cat();
 
 ?>

@@ -15,144 +15,127 @@ $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $la
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories`";
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments`";
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config`";
-$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_stat`";
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report`";
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp`";
 
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `userid` int(11) DEFAULT NULL,
-  `title` varchar(255) NOT NULL DEFAULT '',
-  `catid` int(11) DEFAULT NULL,
-  `alias` varchar(255) NOT NULL DEFAULT '',
-  `description` mediumtext,
-  `introtext` text NOT NULL,
-  `uploadtime` int(11) DEFAULT NULL,
-  `author` varchar(255) DEFAULT NULL,
-  `authoremail` varchar(255) DEFAULT NULL,
-  `homepage` text,
-  `fileupload` varchar(255) DEFAULT NULL,
-  `version` varchar(20) DEFAULT NULL,
-  `linkdirect` text,
-  `filesize` varchar(255) DEFAULT NULL,
-  `fileimage` varchar(255) DEFAULT NULL,
-  `tags` varchar(255) DEFAULT NULL,
-  `active` int(1) DEFAULT NULL,
-  `copyright` text NOT NULL,
-  `view` int(11) NOT NULL DEFAULT '0',
-  `download` int(11) NOT NULL DEFAULT '0',
-  `comment` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `userid` (`userid`),
-  KEY `catid` (`catid`) 
-) ENGINE=MyISAM";
-
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories` (
-  `cid` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(50) NOT NULL,
-  `parentid` int(11) NOT NULL DEFAULT '0',
-  `weight` int(11) NOT NULL DEFAULT '0',
-  `active` int(1) NOT NULL DEFAULT '1',
-  `alias` varchar(50) NOT NULL,
-  `cdescription` text NOT NULL,
-  PRIMARY KEY (`cid`),
-  UNIQUE KEY `title` (`title`,`parentid`)
-) ENGINE=MyISAM";
-
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments` (
-  `tid` int(11) NOT NULL AUTO_INCREMENT,
-  `lid` int(11) NOT NULL DEFAULT '0',
-  `date` int(11) DEFAULT NULL,
-  `name` varchar(60) NOT NULL,
-  `email` varchar(60) DEFAULT NULL,
-  `host_name` varchar(60) DEFAULT NULL,
-  `comment` text NOT NULL,
-  `status` varchar(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`tid`),
-  KEY `lid` (`lid`)
-) ENGINE=MyISAM";
-
-$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` (
-  `name` varchar(255) NOT NULL,
-  `value` varchar(255) NOT NULL,
-  PRIMARY KEY (`name`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM";
-
-$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_stat` (
-  `id` int(11) DEFAULT NULL,
-  `views` int(11) DEFAULT '0',
-  `downloads` int(11) DEFAULT '0',
-  `comments` int(11) DEFAULT NULL,
-  `rates` int(11) DEFAULT '1',
-  UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM";
-
-$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report` (
-  `id` int(11) DEFAULT NULL,
-  `content` varchar(255) DEFAULT NULL,
-  `date_up` int(11) unsigned NOT NULL DEFAULT '0'
-) ENGINE=MyISAM";
-
-$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL DEFAULT '0',
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `catid` mediumint(8) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
-  `catid` int(11) DEFAULT NULL,
-  `description` text,
-  `introtext` text NOT NULL,
-  `uploadtime` int(11) DEFAULT NULL,
-  `author` varchar(255) DEFAULT NULL,
-  `authoremail` varchar(255) DEFAULT NULL,
-  `homepage` varchar(255) DEFAULT NULL,
-  `fileupload` varchar(255) DEFAULT NULL,
-  `version` varchar(20) DEFAULT NULL,
-  `linkdirect` text,
-  `filesize` text,
-  `fileimage` varchar(255) DEFAULT NULL,
-  `tags` varchar(255) DEFAULT NULL,
-  `active` int(1) DEFAULT NULL,
-  `copyright` text NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `description` mediumtext NOT NULL,
+  `introtext` mediumtext NOT NULL,
+  `uploadtime` int(11) unsigned NOT NULL,
+  `updatetime` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL,
+  `user_name` varchar(100) NOT NULL,
+  `author_name` varchar(100) NOT NULL,
+  `author_email` varchar(60) NOT NULL,
+  `author_url` varchar(255) NOT NULL,
+  `fileupload` mediumtext NOT NULL,
+  `linkdirect` mediumtext NOT NULL,
+  `version` varchar(20) NOT NULL,
+  `filesize` int(11) NOT NULL DEFAULT '0',
+  `fileimage` varchar(255) NOT NULL,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `copyright` varchar(255) NOT NULL,
+  `view_hits` int(11) NOT NULL DEFAULT '0',
+  `download_hits` int(11) NOT NULL DEFAULT '0',
+  `comment_allow` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `who_comment` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `groups_comment` varchar(255) NOT NULL,
+  `comment_hits` int(11) NOT NULL DEFAULT '0',
+  `rating_detail` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM";
+  KEY `catid` (`catid`),
+  KEY `user_id` (`user_id`)
+)ENGINE=MyISAM";
 
-$sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` (`name`, `value`) VALUES
-('deslimit', '1'),
-('textlimit', '150'),
-('directlink', '1'),
-('showmessage', '1'),
-('showsubfolder', '1'),
-('numsubfolder', '3'),
-('numfile', '15'),
-('who_view1', '0'),
-('groups_view1', '13'),
-('showcaptcha', '1'),
-('who_view2', '1'),
-('groups_view2', '14'),
-('who_view3', '1'),
-('groups_view3', '15'),
-('who_view4', '0'),
-('groups_view4', ''),
-('who_view5', '0'),
-('groups_view5', ''),
-('who_view6', '0'),
-('groups_view6', '14'),
-('maxfilesize', '1048576'),
-('filetype', 'zip,rar, doc, xls'),
-('filedir', 'files'),
-('filetempdir', 'temp'),
-('showemail', '1');";
-if ( $lang == "vi" )
-{
-    $sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` (`name`, `value`) VALUES('messagecontent', 'Xin chào đến với hệ thống download của chúng tôi. Tại đây các bạn có thể download những phần mềm tiện ích. Chúc bạn tìm được những gì mình muốn.')";
-}
-else
-{
-    $sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` (`name`, `value`) VALUES('messagecontent', 'Welcome to our download system. You can download many utility softwares. Got everything you want.')";
-}
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `catid` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL,
+  `description` mediumtext NOT NULL,
+  `introtext` mediumtext NOT NULL,
+  `uploadtime` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `user_name` varchar(100) NOT NULL,
+  `author_name` varchar(100) NOT NULL,
+  `author_email` varchar(60) NOT NULL,
+  `author_url` varchar(255) NOT NULL,
+  `fileupload` mediumtext NOT NULL,
+  `linkdirect` mediumtext NOT NULL,
+  `version` varchar(20) NOT NULL,
+  `filesize` varchar(255) NOT NULL,
+  `fileimage` varchar(255) NOT NULL,
+  `copyright` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`),
+  KEY `catid` (`catid`)
+)ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `parentid` mediumint(8) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  `description` mediumtext NOT NULL,
+  `who_view` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `groups_view` varchar(255) NOT NULL,
+  `who_download` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `groups_download` varchar(255) NOT NULL,
+  `weight` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `alias` (`alias`,`parentid`)
+)ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `fid` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `subject` varchar(255) NOT NULL,
+  `post_id` mediumint(8) unsigned NOT NULL,
+  `post_name` varchar(100) NOT NULL,
+  `post_email` varchar(60) NOT NULL,
+  `post_ip` varchar(45) NOT NULL,
+  `post_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `comment` mediumtext NOT NULL,
+  `admin_reply` varchar(255) NOT NULL,
+  `admin_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `fid` (`fid`)
+)ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report` (
+  `fid` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `post_ip` varchar(45) NOT NULL,
+  `post_time` int(11) unsigned NOT NULL DEFAULT '0',
+  UNIQUE KEY `fid` (`fid`),
+  KEY `post_time` (`post_time`)
+)ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` (
+  `config_name` varchar(30) NOT NULL,
+  `config_value` varchar(255) NOT NULL,
+  UNIQUE KEY `config_name` (`config_name`)
+)ENGINE=MyISAM";
+
+$sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config` VALUES
+('is_addfile', '1'),
+('is_upload', '1'),
+('who_upload', '1'),
+('groups_upload', ''),
+('maxfilesize', '2097152'),
+('upload_filetype', 'doc,xls,zip,rar'),
+('upload_dir', 'files'),
+('temp_dir', 'temp'),
+('who_autocomment', '0'),
+('groups_autocomment', ''),
+('who_addfile', '0'),
+('groups_addfile', '')";
 
 ?>

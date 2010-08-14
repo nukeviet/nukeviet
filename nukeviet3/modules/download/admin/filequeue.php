@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -7,113 +8,672 @@
  */
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module['download_filequeue'];
-$id = $nv_Request->get_int( 'id', 'get', 0 );
-$sql = "SELECT id, title,catid,active FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp`";
-$numcat = $db->sql_numrows( $db->sql_query( $sql ) );
-$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=filequeue";
-$all_page = ( $numcat > 1 ) ? $numcat : 1;
-$per_page = 10;
-$page = $nv_Request->get_int( 'page', 'get', 0 );
-$contents .= "<table class=\"tab1\">\n";
-$contents .= "<thead>\n";
-$contents .= "<tr>\n";
-$contents .= "<td></td>\n";
-$contents .= "<td>" . $lang_module['filequeue_id'] . "</td>\n";
-$contents .= "<td>" . $lang_module['filequeue_name'] . "</td>\n";
-$contents .= "<td>" . $lang_module['filequeue_cat'] . "</td>\n";
-$contents .= "<td>" . $lang_module['filequeue_active'] . "</td>\n";
-$contents .= "<td align='center'>" . $lang_module['filequeue_feature'] . "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</thead>\n";
-$a = 0;
-$sql = "SELECT id, title, catid,active FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` ORDER BY `id` ASC LIMIT $page,$per_page";
-$result = $db->sql_query( $sql );
-while ( $row = $db->sql_fetchrow( $result ) )
+//Edit - accept file
+if ( $nv_Request->isset_request( 'edit', 'get' ) )
 {
-    $class = ( $a % 2 ) ? " class=\"second\"" : "";
-    $contents .= "<tbody" . $class . ">\n";
-    $contents .= "<tr>\n";
-    $contents .= "<td align=\"center\"><input type='checkbox' class='filelist' value='" . $row['id'] . "'></td>\n";
-    $contents .= "<td align=\"center\">" . $row['id'] . "</td>\n";
-    $contents .= "<td>" . $row['title'] . "</td>\n";
-    $contents .= "<td>";
-    if ( $row['catid'] )
+    $page_title = $lang_module['download_filequeue'];
+
+    $id = $nv_Request->get_int( 'id', 'get', 0 );
+
+    if ( ! $id )
     {
-        $subrow = $db->sql_fetchrow( $db->sql_query( "SELECT cid, title  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE cid=" . $row['catid'] . "" ) );
-        $contents .= "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=file&amp;cid=" . $subrow['cid'] . "\">" . $subrow['title'] . "</a>";
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=filequeue" );
+        exit();
+    }
+
+    $query = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `id`=" . $id;
+    $result = $db->sql_query( $query );
+    $numrows = $db->sql_numrows( $result );
+    if ( $numrows != 1 )
+    {
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=filequeue" );
+        exit();
+    }
+
+    $row = $db->sql_fetchrow( $result );
+
+    $groups_list = nv_groups_list();
+    $array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
+    if ( ! empty( $groups_list ) )
+    {
+        $array_who[] = $lang_global['who_view3'];
+    }
+
+    $sql = "SELECT `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config` WHERE `config_name`='upload_dir'";
+    $result = $db->sql_query( $sql );
+    list( $upload_dir ) = $db->sql_fetchrow( $result );
+
+    $array = array();
+    $is_error = false;
+    $error = "";
+
+    if ( $nv_Request->isset_request( 'submit', 'post' ) )
+    {
+        $array['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
+        $array['title'] = filter_text_input( 'title', 'post', '', 1 );
+        $array['description'] = nv_editor_filter_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
+        $array['introtext'] = filter_text_textarea( 'introtext', '', NV_ALLOWED_HTML_TAGS );
+        $array['user_name'] = filter_text_input( 'user_name', 'post', '', 1 );
+        $array['author_name'] = filter_text_input( 'author_name', 'post', '', 1 );
+        $array['author_email'] = filter_text_input( 'author_email', 'post', '' );
+        $array['author_url'] = filter_text_input( 'author_url', 'post', '' );
+        $array['fileupload'] = ! empty( $row['fileupload'] ) ? explode( "[NV]", $row['fileupload'] ) : array();
+        $array['fileupload2'] = $nv_Request->get_typed_array( 'fileupload2', 'post', 'string' );
+        $array['linkdirect'] = $nv_Request->get_typed_array( 'linkdirect', 'post', 'string' );
+        $array['version'] = filter_text_input( 'version', 'post', '', 1 );
+        $array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
+        $array['fileimage'] = $row['fileimage'];
+        $array['fileimage2'] = filter_text_input( 'fileimage2', 'post', '' );
+        $array['copyright'] = filter_text_input( 'copyright', 'post', '', 1 );
+        $array['comment_allow'] = $nv_Request->get_int( 'comment_allow', 'post', 0 );
+        $array['who_comment'] = $nv_Request->get_int( 'who_comment', 'post', 0 );
+        $array['groups_comment'] = $nv_Request->get_typed_array( 'groups_comment', 'post', 'int' );
+
+        if ( ! empty( $array['author_url'] ) )
+        {
+            if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['author_url'] ) )
+            {
+                $array['author_url'] = "http://" . $array['author_url'];
+            }
+        }
+
+        if ( ! empty( $array['fileupload2'] ) )
+        {
+            $fileupload2 = $array['fileupload2'];
+            $array['fileupload2'] = array();
+            $array['filesize'] = 0;
+            foreach ( $fileupload2 as $file )
+            {
+                if ( ! empty( $file ) )
+                {
+                    $file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
+                    if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
+                    {
+                        $array['fileupload2'][] = $file;
+                        $array['filesize'] += $filesize;
+                    }
+                }
+            }
+        }
+        else
+        {
+            $array['fileupload2'] = array();
+        }
+
+        if ( empty( $array['fileupload2'] ) )
+        {
+            if ( ! empty( $array['fileupload'] ) )
+            {
+                $fileupload = $array['fileupload'];
+                $array['fileupload'] = array();
+                $array['filesize'] = 0;
+                foreach ( $fileupload as $file )
+                {
+                    if ( ! empty( $file ) )
+                    {
+                        $file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
+                        if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
+                        {
+                            $array['fileupload'][] = $file;
+                            $array['filesize'] += $filesize;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                $array['fileupload'] = array();
+            }
+        }
+
+        if ( ! empty( $array['linkdirect'] ) )
+        {
+            $linkdirect = $array['linkdirect'];
+            $array['linkdirect'] = array();
+            foreach ( $linkdirect as $links )
+            {
+                $linkdirect = array();
+                if ( ! empty( $links ) )
+                {
+                    $links = nv_nl2br( $links, "<br />" );
+                    $links = explode( "<br />", $links );
+                    $links = array_map( "trim", $links );
+                    $links = array_unique( $links );
+
+                    foreach ( $links as $link )
+                    {
+                        if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $link ) )
+                        {
+                            $link = "http://" . $link;
+                        }
+                        if ( nv_is_url( $link ) )
+                        {
+                            $linkdirect[] = $link;
+                        }
+                    }
+                }
+
+                if ( ! empty( $linkdirect ) )
+                {
+                    $array['linkdirect'][] = implode( "\n", $linkdirect );
+                }
+            }
+        }
+        else
+        {
+            $array['linkdirect'] = array();
+        }
+        if ( ! empty( $array['linkdirect'] ) )
+        {
+            $array['linkdirect'] = array_unique( $array['linkdirect'] );
+        }
+
+        $sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `title`=" . $db->dbescape( $array['title'] );
+        $result = $db->sql_query( $sql );
+        list( $is_exists ) = $db->sql_fetchrow( $result );
+
+        if ( empty( $array['title'] ) )
+        {
+            $is_error = true;
+            $error = $lang_module['file_error_title'];
+        } elseif ( $is_exists )
+        {
+            $is_error = true;
+            $error = $lang_module['file_title_exists'];
+        } elseif ( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
+        {
+            $is_error = true;
+            $error = $check_valid_email;
+        } elseif ( ! empty( $array['author_url'] ) and ! nv_is_url( $array['author_url'] ) )
+        {
+            $is_error = true;
+            $error = $lang_module['file_error_author_url'];
+        } elseif ( empty( $array['fileupload'] ) and empty( $array['linkdirect'] ) and empty( $array['fileupload2'] ) )
+        {
+            $is_error = true;
+            $error = $lang_module['file_error_fileupload'];
+        }
+        else
+        {
+            $alias = change_alias( $array['title'] );
+            $array['description'] = nv_editor_nl2br( $array['description'] );
+            $array['introtext'] = nv_nl2br( $array['introtext'], "<br />" );
+
+            if ( ! in_array( $array['who_comment'], array_keys( $array_who ) ) )
+            {
+                $array['who_comment'] = 0;
+            }
+
+            $array['groups_comment'] = ( ! empty( $array['groups_comment'] ) ) ? implode( ',', $array['groups_comment'] ) : '';
+
+            if ( $row['user_id'] )
+            {
+                $array['user_name'] = $row['user_name'];
+            }
+
+            if ( ! empty( $array['fileupload2'] ) )
+            {
+                $array['fileupload'] = $array['fileupload2'];
+            } elseif ( ! empty( $array['fileupload'] ) )
+            {
+                $fileupload = $array['fileupload'];
+                $array['fileupload'] = array();
+                foreach ( $fileupload as $file )
+                {
+                    $file = substr( $file, strlen( NV_BASE_SITEURL ) );
+                    $newfile = basename( $file );
+                    $newfile2 = $newfile;
+                    $i = 1;
+                    while ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $upload_dir . '/' . $newfile2 ) )
+                    {
+                        $newfile2 = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $newfile );
+                        $i++;
+                    }
+
+                    if ( @nv_copyfile( NV_ROOTDIR . '/' . $file, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $upload_dir . '/' . $newfile2 ) )
+                    {
+                        $array['fileupload'][] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $upload_dir . '/' . $newfile2;
+                    }
+                }
+            }
+
+            $array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? implode( "[NV]", $array['fileupload'] ) : "";
+            if ( ( ! empty( $array['linkdirect'] ) ) )
+            {
+                $array['linkdirect'] = array_map( "nv_nl2br", $array['linkdirect'] );
+                $array['linkdirect'] = implode( "[NV]", $array['linkdirect'] );
+            }
+            else
+            {
+                $array['linkdirect'] = "";
+            }
+
+            if ( ! empty( $array['fileimage2'] ) )
+            {
+                $array['fileimage'] = $array['fileimage2'];
+            } elseif ( ! empty( $array['fileimage'] ) )
+            {
+                $fileimage = substr( $array['fileimage'], strlen( NV_BASE_SITEURL ) );
+                $array['fileimage'] = "";
+                if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
+                {
+                    $newfile = basename( $fileimage );
+                    $newfile2 = $newfile;
+                    $i = 1;
+                    while ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/images/' . $newfile2 ) )
+                    {
+                        $newfile2 = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $newfile );
+                        $i++;
+                    }
+
+                    if ( @nv_copyfile( NV_ROOTDIR . '/' . $fileimage, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/images/' . $newfile2 ) )
+                    {
+                        $array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/images/' . $newfile2;
+                    }
+                }
+            }
+
+            $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
+                NULL, 
+                " . $array['catid'] . ", 
+                " . $db->dbescape( $array['title'] ) . ", 
+                " . $db->dbescape( $alias ) . ", 
+                " . $db->dbescape( $array['description'] ) . ", 
+                " . $db->dbescape( $array['introtext'] ) . ", 
+                " . $row['uploadtime'] . ", 
+                " . NV_CURRENTTIME . ", 
+                " . $row['user_id'] . ", 
+                " . $db->dbescape( $array['user_name'] ) . ", 
+                " . $db->dbescape( $array['author_name'] ) . ", 
+                " . $db->dbescape( $array['author_email'] ) . ", 
+                " . $db->dbescape( $array['author_url'] ) . ", 
+                " . $db->dbescape( $array['fileupload'] ) . ", 
+                " . $db->dbescape( $array['linkdirect'] ) . ", 
+                " . $db->dbescape( $array['version'] ) . ", 
+                " . $array['filesize'] . ", 
+                " . $db->dbescape( $array['fileimage'] ) . ", 
+                1, 
+                " . $db->dbescape( $array['copyright'] ) . ", 
+                0, 0, 
+                " . $array['comment_allow'] . ", 
+                " . $array['who_comment'] . ", 
+                " . $db->dbescape( $array['groups_comment'] ) . ", 
+                0, '')";
+
+            if ( ! $db->sql_query_insert_id( $sql ) )
+            {
+                $is_error = true;
+                $error = $lang_module['file_error2'];
+            }
+            else
+            {
+                if ( ! empty( $row['fileupload'] ) )
+                {
+                    $row['fileupload'] = explode( "[NV]", $row['fileupload'] );
+
+                    foreach ( $row['fileupload'] as $fileupload )
+                    {
+                        $fileupload = substr( $fileupload, strlen( NV_BASE_SITEURL ) );
+                        if ( file_exists( NV_ROOTDIR . '/' . $fileupload ) )
+                        {
+                            @nv_deletefile( NV_ROOTDIR . '/' . $fileupload );
+                        }
+                    }
+                }
+
+                $fileimage = substr( $row['fileimage'], strlen( NV_BASE_SITEURL ) );
+                if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
+                {
+                    @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );
+                }
+
+                $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `id`=" . $id;
+                $db->sql_query( $sql );
+
+                Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=filequeue" );
+                exit();
+            }
+        }
+
     }
     else
-        $contents .= $lang_module['filequeue_maincat'];
-    $contents .= "</td>\n";
-    $contents .= "<td align=\"center\">" . ( ( $row['active'] ) ? $lang_global['yes'] : $lang_global['no'] ) . "</td>\n";
-    $contents .= "<td align=\"center\">";
-    $contents .= "<span class=\"edit_icon\"><a class='editfile' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=editfilequeue&amp;id=" . $row['id'] . "\">" . $lang_global['edit'] . "</a></span>\n";
-    $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a class='delfile' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delfilequeue&amp;id=" . $row['id'] . "\">" . $lang_global['delete'] . "</a></span></td>\n";
-    $contents .= "</tr>\n";
-    $contents .= "</tbody>\n";
-    $a ++;
+    {
+        $array['catid'] = ( int )$row['catid'];
+        $array['title'] = $row['title'];
+        $array['description'] = nv_editor_br2nl( $row['description'] );
+        $array['introtext'] = nv_br2nl( $row['introtext'] );
+        $array['user_name'] = $row['user_name'];
+        $array['author_name'] = $row['author_name'];
+        $array['author_email'] = $row['author_email'];
+        $array['author_url'] = $row['author_url'];
+        $array['fileupload'] = $row['fileupload'];
+        $array['fileupload2'] = array();
+        $array['linkdirect'] = $row['linkdirect'];
+        $array['version'] = $row['version'];
+        $array['filesize'] = ( int )$row['filesize'];
+        $array['fileimage'] = $row['fileimage'];
+        $array['fileimage2'] = "";
+        $array['copyright'] = $row['copyright'];
+        $array['comment_allow'] = 1;
+        $array['who_comment'] = 0;
+        $array['groups_comment'] = array();
+
+        $array['fileupload'] = ! empty( $array['fileupload'] ) ? explode( "[NV]", $array['fileupload'] ) : array();
+        if ( ! empty( $array['linkdirect'] ) )
+        {
+            $array['linkdirect'] = explode( "[NV]", $array['linkdirect'] );
+            $array['linkdirect'] = array_map( "nv_br2nl", $array['linkdirect'] );
+        }
+        else
+        {
+            $array['linkdirect'] = array();
+        }
+    }
+
+    $array['id'] = ( int )$row['id'];
+
+    if ( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
+    if ( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
+
+    if ( ! count( $array['fileupload2'] ) ) array_push( $array['fileupload2'], "" );
+    if ( ! count( $array['linkdirect'] ) ) array_push( $array['linkdirect'], "" );
+
+    $array['fileupload2_num'] = count( $array['fileupload2'] );
+    $array['linkdirect_num'] = count( $array['linkdirect'] );
+
+    $listcats = nv_listcats( $array['catid'] );
+    if ( empty( $listcats ) )
+    {
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&add=1" );
+        exit();
+    }
+
+    $array['comment_allow'] = $array['comment_allow'] ? " checked=\"checked\"" : "";
+
+    $who_comment = $array['who_comment'];
+    $array['who_comment'] = array();
+    foreach ( $array_who as $key => $who )
+    {
+        $array['who_comment'][] = array( //
+            'key' => $key, //
+            'title' => $who, //
+            'selected' => $key == $who_comment ? " selected=\"selected\"" : "" //
+            );
+    }
+
+    $groups_comment = $array['groups_comment'];
+    $array['groups_comment'] = array();
+    if ( ! empty( $groups_list ) )
+    {
+        foreach ( $groups_list as $key => $title )
+        {
+            $array['groups_comment'][] = array( //
+                'key' => $key, //
+                'title' => $title, //
+                'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : "" //
+                );
+        }
+    }
+
+    if ( defined( 'NV_EDITOR' ) )
+    {
+        require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+    }
+
+    if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+    {
+        $array['description'] = nv_aleditor( 'description', '100%', '300px', $array['description'] );
+    }
+    else
+    {
+        $array['description'] = "<textarea style=\"width:100%; height:300px\" name=\"description\" id=\"description\">" . $array['description'] . "</textarea>";
+    }
+
+    if ( ! $array['filesize'] ) $array['filesize'] = "";
+
+    $xtpl = new XTemplate( "filequeue_edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name );
+    $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;edit=1&amp;id=" . $id );
+    $xtpl->assign( 'LANG', $lang_module );
+    $xtpl->assign( 'DATA', $array );
+    $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+    $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+    $xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/images' );
+    $xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/' . $upload_dir );
+
+    if ( ! empty( $error ) )
+    {
+        $xtpl->assign( 'ERROR', $error );
+        $xtpl->parse( 'main.error' );
+    }
+
+    foreach ( $listcats as $cat )
+    {
+        $xtpl->assign( 'LISTCATS', $cat );
+        $xtpl->parse( 'main.catid' );
+    }
+
+    if ( ! empty( $array['fileupload'] ) )
+    {
+        $a = 0;
+        foreach ( $array['fileupload'] as $file )
+        {
+            $xtpl->assign( 'FILEUPLOAD', array( 'value' => $file, 'key' => $a ) );
+            $xtpl->parse( 'main.fileupload' );
+            $a++;
+        }
+
+        $xtpl->parse( 'main.if_fileupload' );
+    }
+
+    $a = 0;
+    foreach ( $array['fileupload2'] as $file )
+    {
+        $xtpl->assign( 'FILEUPLOAD2', array( 'value' => $file, 'key' => $a ) );
+        $xtpl->parse( 'main.fileupload2' );
+        $a++;
+    }
+
+    $a = 0;
+    foreach ( $array['linkdirect'] as $link )
+    {
+        $xtpl->assign( 'LINKDIRECT', array( 'value' => $link, 'key' => $a ) );
+        $xtpl->parse( 'main.linkdirect' );
+        $a++;
+    }
+
+    if ( ! empty( $array['fileimage'] ) )
+    {
+        $xtpl->parse( 'main.fileimage.if_fileimage' );
+        $xtpl->parse( 'main.fileimage' );
+    }
+
+    foreach ( $array['who_comment'] as $who )
+    {
+        $xtpl->assign( 'WHO_COMMENT', $who );
+        $xtpl->parse( 'main.who_comment' );
+    }
+
+    if ( ! empty( $array['groups_comment'] ) )
+    {
+        foreach ( $array['groups_comment'] as $group )
+        {
+            $xtpl->assign( 'GROUPS_COMMENT', $group );
+            $xtpl->parse( 'main.group_empty.groups_comment' );
+        }
+        $xtpl->parse( 'main.group_empty' );
+    }
+
+    $xtpl->parse( 'main' );
+    $contents = $xtpl->text( 'main' );
+
+    include ( NV_ROOTDIR . "/includes/header.php" );
+    echo nv_admin_theme( $contents );
+    include ( NV_ROOTDIR . "/includes/footer.php" );
+    exit;
 }
-$contents .= "<tfoot><tr><td colspan='6'><span><a href='javascript:void(0);' id='checkall'>" . $lang_module['filequeue_checkall'] . "</a>&nbsp;&nbsp;<a href='javascript:void(0);' id='uncheckall'>" . $lang_module['filequeue_uncheckall'] . "</a>&nbsp;&nbsp;</span><span class=\"delete_icon\"><a id='delfilelist' href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span></span></td></tr></tfoot>";
-$contents .= "</table>\n";
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
-if ( $generate_page != "" ) $contents .= "<br><p align=\"center\">" . $generate_page . "</p>\n";
-$contents .= "<div id='contentedit'></div>";
-$contents .= "
-<script type='text/javascript'>
-$(document).ready(function(){
-$('#checkall').click(function(){
-	$('input:checkbox').each(function(){
-		$(this).attr('checked','checked');
-	});
-});
-$('#uncheckall').click(function(){
-	$('input:checkbox').each(function(){
-		$(this).removeAttr('checked');
-	});
-});
-$('#delfilelist').click(function(){
-	var listfile = [];
-	if (confirm('" . $lang_module['file_del_confirm'] . "'))
-	{
-		$('input.filelist:checked').each(function(){
-			listfile.push($(this).val());
-		});
-		if (listfile.length<1){
-			alert('" . $lang_module['filequeue_error_filequeue'] . "');
-			return false;
-		}
-		$.ajax({	
-			type: 'POST',
-			url: 'index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delfilequeuelist',
-			data:'listfile='+listfile,
-			success: function(data){				
-				alert(data);
-				window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=filequeue';
-			}
-		});
-	}
-});
-$('a[class=\"delfile\"]').click(function(event){
-	event.preventDefault();
-	if (confirm('" . $lang_module['file_del_confirm'] . "'))
-	{
-		var href= $(this).attr('href');
-		$.ajax({	
-			type: 'POST',
-			url: href,
-			data:'',
-			success: function(data){				
-				alert(data);
-				window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=filequeue';
-			}
-		});
-	}
-});
-});
-</script>
-";
+
+//Delete file
+if ( $nv_Request->isset_request( 'del', 'post' ) )
+{
+    if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+
+    $id = $nv_Request->get_int( 'id', 'post', 0 );
+
+    if ( ! $id )
+    {
+        die( "NO" );
+    }
+
+    $query = "SELECT `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `id`=" . $id;
+    $result = $db->sql_query( $query );
+    $numrows = $db->sql_numrows( $result );
+    if ( $numrows != 1 )
+    {
+        die( "NO" );
+    }
+
+    list( $fileupload, $fileimage ) = $db->sql_fetchrow( $result );
+
+    if ( ! empty( $fileupload ) )
+    {
+        $fileupload = explode( "[NV]", $fileupload );
+        foreach ( $fileupload as $file )
+        {
+            $file = substr( $file, strlen( NV_BASE_SITEURL ) );
+            if ( file_exists( NV_ROOTDIR . '/' . $file ) )
+            {
+                @nv_deletefile( NV_ROOTDIR . '/' . $file );
+            }
+        }
+    }
+
+    if ( ! empty( $fileimage ) )
+    {
+        $fileimage = substr( $fileimage, strlen( NV_BASE_SITEURL ) );
+        if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
+        {
+            @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );
+        }
+    }
+
+    $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `id`=" . $id;
+    $db->sql_query( $sql );
+
+    die( "OK" );
+}
+
+//All del
+if ( $nv_Request->isset_request( 'alldel', 'post' ) )
+{
+    if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+
+    $query = "SELECT `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp`";
+    $result = $db->sql_query( $query );
+    $numrows = $db->sql_numrows( $result );
+    if ( ! $numrows )
+    {
+        die( "NO" );
+    }
+
+    while ( list( $fileupload, $fileimage ) = $db->sql_fetchrow( $result ) )
+    {
+        if ( ! empty( $fileupload ) )
+        {
+            $fileupload = explode( "[NV]", $fileupload );
+            foreach ( $fileupload as $file )
+            {
+                $file = substr( $file, strlen( NV_BASE_SITEURL ) );
+                if ( file_exists( NV_ROOTDIR . '/' . $file ) )
+                {
+                    @nv_deletefile( NV_ROOTDIR . '/' . $file );
+                }
+            }
+        }
+
+        if ( ! empty( $fileimage ) )
+        {
+            $fileimage = substr( $fileimage, strlen( NV_BASE_SITEURL ) );
+            if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
+            {
+                @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );
+            }
+        }
+    }
+
+    $sql = "TRUNCATE TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_tmp`";
+    $db->sql_query( $sql );
+
+    die( "OK" );
+}
+
+//List files
+$page_title = $lang_module['download_filequeue'];
+
+$sql = "FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp`";
+
+$sql1 = "SELECT COUNT(*) " . $sql;
+$result1 = $db->sql_query( $sql1 );
+list( $all_file ) = $db->sql_fetchrow( $result1 );
+
+if ( ! $all_file )
+{
+    $contents = "<div style=\"padding-top:15px;text-align:center\">\n";
+    $contents .= "<strong>" . $lang_module['filequeue_empty'] . "</strong>";
+    $contents .= "</div>\n";
+    $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
+
+    include ( NV_ROOTDIR . "/includes/header.php" );
+    echo nv_admin_theme( $contents );
+    include ( NV_ROOTDIR . "/includes/footer.php" );
+    exit;
+}
+
+$listcats = nv_listcats( 0 );
+if ( empty( $listcats ) )
+{
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&add=1" );
+    exit();
+}
+
+$sql2 = "SELECT * " . $sql . " ORDER BY `uploadtime` DESC";
+$result2 = $db->sql_query( $sql2 );
+
+$array = array();
+
+while ( $row = $db->sql_fetchrow( $result2 ) )
+{
+    $array[$row['id']] = array( //
+        'id' => ( int )$row['id'], //
+        'title' => $row['title'], //
+        'cattitle' => $listcats[$row['catid']]['title'], //
+        'catlink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['catid'], //
+        'uploadtime' => nv_date( "d/m/Y H:i", $row['uploadtime'] ), //
+        );
+}
+
+$xtpl = new XTemplate( "filequeue.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'TABLE_CAPTION', $page_title );
+
+if ( ! empty( $array ) )
+{
+    $a = 0;
+    foreach ( $array as $row )
+    {
+        $xtpl->assign( 'CLASS', $a % 2 == 1 ? " class=\"second\"" : "" );
+        $xtpl->assign( 'ROW', $row );
+        $xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=filequeue&amp;edit=1&amp;id=" . $row['id'] );
+        $xtpl->parse( 'main.row' );
+        $a++;
+    }
+}
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

@@ -1,177 +1,187 @@
 <!-- BEGIN: main -->
-<!-- BEGIN: permission -->
-<span style='color:red;display:inline-block;padding:10px'>{permission}</span>
-<!-- END: permission -->
-<!-- BEGIN: script -->
-{script}
-<!-- END: script -->
-<!-- BEGIN: message -->
-<div class="description1">
-<h3>Upload file</h3>
-<P>{MSG}</P>
-<P>{META}</P>
+<div class="page_title" style="margin-bottom:5px">
+    <div class="right2">
+        <a href="{DOWNLOAD}">{LANG.download}</a>
+    </div>
+    {LANG.upload}
 </div>
-<!-- END: message -->
-<!-- BEGIN: content -->
-<div class="description1"  style='padding:5px'>
-<h3>{LANG.upload_title}</h3>
-<form action='' enctype="multipart/form-data" name='formfileupload'	method='post'>
-<table width="100%">
-	<tbody class="upload_tb">
-		<tr>
-			<td style=" color:#F00; font-weight:bold" align="center">{ERROR}</td>
-		</tr>
-    </tbody>
-</table>
-<table>
-    <tbody class="upload_tb">
-        <tr>
-			<td style="width: 150px;">{LANG.upload_filename}</td>
-			<td><input name="title" style="width: 290px;" type="text" value="{DATA.title}"> *</td>
-		</tr>
-		<tr>
-			<td>{LANG.upload_cat}</td>
-			<td><select name="catparent">
-				<!-- BEGIN: selectcat -->
-				<option value="{selectcat.cid}">{selectcat.title}</option>
-				<!-- END: selectcat -->
-			</select></td>
-		</tr>
-		<tr>
-			<td>{LANG.upload_des}</td>
-			<td><textarea id="description" name="description" cols='45' rows='5'>{DATA.description}</textarea>  *</td>
-		</tr>
-		<tr>
-			<td style="width: 150px;">{LANG.upload_image}</td>
-
-			<td><input name="fileimage" id="fileimage" style="width: 290px;" type="file"><br />
-			<span id="imgfiletype">{LANG.upload_allowtype}</span></td>
-		</tr>		
-		<tr>
-			<td style="width: 150px;">{LANG.upload_tag}</td>
-			<td><input value="{DATA.taglist}" name="taglist" style="width: 300px;" type="text"></td>
-		</tr>
-		<tr>
-			<td style="width: 150px;">{LANG.upload_author}</td>
-			<td><input value="{DATA.author}" name="author" style="width: 290px;" type="text"></td>
-		</tr>
-		<tr>
-			<td style="width: 150px;">{LANG.upload_email}</td>
-			<td><input value="{DATA.authoremail}" name="authoremail" style="width: 290px;" type="text"> *</td>
-		</tr>
-		<tr>
-			<td style="width: 150px;">{LANG.upload_homepage}</td>
-			<td><input value="{DATA.homepage}" name="homepage" style="width: 290px;" type="text"></td>
-		</tr>
-		<!-- BEGIN: fileupload -->
-		<tr>
-			<td style="width: 150px;">{LANG.upload_filename}</td>
-			<td><input name="fileupload" id="fileupload" style="width: 290px;" type="file"><br />
-			{LANG.upload_filetype} <span id="filetype">{FILE_TYPE}</span>
-			</td>
-		</tr>
-		<!-- END: fileupload -->
-		<tr>
-			<td style="width: 150px;">{LANG.upload_filelink}</td>
-			<td><textarea cols="45" name="linkdirect">{DATA.linkdirect}</textarea></td>
-		</tr>
-		<tr>
-			<td style="width: 150px;">{LANG.upload_version}</td>
-
-			<td><input value="{DATA.version}" name="version" style="width: 150px;" type="text"></td>
-		</tr>
-		<tr>
-			<td style="width: 150px;">{LANG.upload_filesize}</td>
-			<td><input value="{DATA.filesize}" name="filesize" style="width: 150px;" type="text">
-			{LANG.upload_fileblank}</td>
-		</tr>
-        <tr>
-			<td style="width: 150px;">{LANG.upload_copyright}</td>
-
-			<td><input value="{DATA.copyright}" name="copyright" style="width: 150px;" type="text"></td>
-		</tr>
-		<tr>
-			<td>{LANG.upload_captcha}</td>
-            <td>
-            <input name="captcha" style="width: 70px;float:left" type='text'/> 
-            <img style="vertical-align: top; height: 22px;" src="{BASE_SITE_URL}?scaptcha=captcha" id="vimg" style="float:left">
-            <input type="button" onclick="nv_change_captcha('vimg','commentseccode');" value="" class="bt_reset1"/>
-			</td>
-		</tr>
-        <tr>
-			<td></td>
-            <td><input name="confirm" value="Upload" type='button'></td>
-		</tr>
-	</tbody>
-</table>
+<!-- BEGIN: is_error -->
+<div class="is_error">
+    {ERROR}
+</div>
+<!-- END: is_error -->
+<form id="uploadForm" name="uploadForm" action="{FORM_ACTION}" method="post" class="upload_form" enctype="multipart/form-data">
+    <div class="upload_content">
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.file_title}
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="text" class="txt" name="upload_title" id="upload_title" value="{UPLOAD.title}" style="width:300px" maxlength="255" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.bycat2}
+                </label>
+            </dd>
+            <dt class="fl">
+                <select name="upload_catid" id="upload_catid">
+                    <!-- BEGIN: catid -->
+                    <option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
+                    <!-- END: catid -->
+                </select>
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.author_name}
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="text" class="txt" name="upload_author_name" id="upload_author_name" value="{UPLOAD.author_name}" style="width:300px" maxlength="100" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.author_email}
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="text" class="txt" name="upload_author_email" id="upload_author_email_iavim" value="{UPLOAD.author_email}" style="width:300px" maxlength="60" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.author_url}
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="text" class="txt" name="upload_author_url" id="upload_author_url_iavim" value="{UPLOAD.author_url}" style="width:300px" maxlength="255" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl" style="vertical-align:top">
+                <label>
+                    {LANG.upload_files}<br />
+                    (<em>{LANG.upload_valid_ext_info}: {EXT_ALLOWED}</em>)
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="file" class="txt" name="upload_fileupload" id="upload_fileupload" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.file_linkdirect}<br />
+                    (<em>{LANG.upload_linkdirect_info}</em>)
+                </label>
+            </dd>
+            <dt class="fl">
+                <textarea name="upload_linkdirect" id="upload_linkdirect_iavim">{UPLOAD.linkdirect}</textarea>
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.filesize} (byte)
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="text" class="txt" name="upload_filesize" id="upload_filesize_iavim" value="{UPLOAD.filesize}" style="width:100px" maxlength="15" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.file_version}
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="text" class="txt" name="upload_version" id="upload_version" value="{UPLOAD.version}" style="width:100px" maxlength="20" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.fileimage}<br />
+                    (<em>{LANG.upload_valid_ext_info}: jpg, gif, png</em>)
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="file" class="txt" name="upload_fileimage" id="upload_fileimage" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.copyright}
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="text" class="txt" name="upload_copyright" id="upload_copyright" value="{UPLOAD.copyright}" style="width:300px;" maxlength="255" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.file_introtext}
+                </label>
+            </dd>
+            <dt class="fl">
+                <textarea name="upload_introtext" id="upload_introtext">{UPLOAD.introtext}</textarea>
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.file_description}
+                </label>
+            </dd>
+            <dt class="fl">
+                <textarea name="upload_description" id="upload_description">{UPLOAD.description}</textarea>
+            </dt>
+        </dl>
+        <br />
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.file_username}
+                </label>
+            </dd>
+            <dt class="fl">
+                <input type="text" class="txt" name="upload_user_name" id="upload_user_name" value="{UPLOAD.user_name}"{UPLOAD.disabled} maxlength="100" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                {LANG.file_upload_captcha}
+            </dd>
+            <dt class="fl">
+                <img  style="vertical-align: middle" height="22" name="upload_vimg" id="upload_vimg" src="{NV_BASE_SITEURL}?scaptcha=captcha" title="{GLANG.captcha}" alt="{GLANG.captcha}" />
+                <img style="vertical-align: middle" alt="{GLANG.captcharefresh}" title="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('upload_vimg','upload_seccode_iavim');" />
+            </dt>
+        </dl>
+        <dl class="clearfix">
+            <dd class="fl">
+                <label>
+                    {LANG.file_upload_captcha2}
+                </label>
+            </dd>
+            <dt class="fl" style="width:200px">
+                <input style="width:80px;vertical-align: middle" type="text" value="" name="upload_seccode" id="upload_seccode_iavim" maxlength="{CAPTCHA_MAXLENGTH}" />
+            </dt>
+        </dl>
+    </div>
+    <input type="hidden" name="addfile" value="{UPLOAD.addfile}" />
+    <input type="submit" name="submit" value="{LANG.upload}" />
 </form>
-<script type="text/javascript">
-function verify(myArray,myValue) {
-	var yesno = eval(myArray).join().indexOf(myValue)>=0;
-	return yesno;
-}
-$(function(){
-	$('input[name=confirm]').click(function(event){
-		event.preventDefault();
-		var title = $('input[name=title]').val();
-		if (title.length<5){
-			alert("{LANG.upload_error_title}");
-			$('input[name=title]').focus();
-			return false;
-		}
-		var description = $("textarea[name=description]").val();
-		if (description.length<15){
-			alert("{LANG.upload_error_des}");
-			$('textarea[name=description]').focus();
-			return false;
-		}
-		
-		var authoremail = $("input[name=authoremail]").val();
-		if (description.length>0){
-			if (!nv_mailfilter.test(authoremail)){
-				alert("{LANG.upload_error_email}");
-				return false;
-			}
-		}
-		
-		var fileimage = $("input[name=fileimage]").val();
-		if (fileimage!=''){
-		    var imgextension = fileimage.slice(-3);
-			var imgfiletype = $('#imgfiletype').text();
-			var imgtypearray = imgfiletype.split(',');
-			if (!verify(imgtypearray,imgextension)){
-				alert("{LANG.upload_error_fileimagetype}");
-		    	return false;
-			}
-		}
-		var fileupload = $("input[name=fileupload]").val();
-		<!-- BEGIN: javaup -->
-	    var extension = fileupload.slice(-3);
-		var filetype = $('#filetype').text();
-		var typearray = filetype.split(',');
-		if (!verify(typearray,extension)){
-			alert("{LANG.upload_error_fileupoadtype}");
-	    	return false;
-		}
-		<!-- END: javaup -->
-		var linkdirect = $("textarea[name=linkdirect]").val();
 
-		if (fileupload=='' && linkdirect==''){
-			alert("{LANG.upload_error_fileupoad}");
-			$('input[name=fileupload]').focus();
-			return false;
-		}
-		var captcha = $('input[name=captcha]').val();
-		if (captcha=='' || !nv_name_check(captcha)){
-			alert("{LANG.upload_error_captcha}");
-			return false;
-		} 
-		$("form[name=formfileupload]").submit();
-	});
-});
-</script></div>
-<!-- END: content -->
-<!-- BEGIN: scriptfoot -->
-{scriptfoot}
-<!-- END: scriptfoot -->
 <!-- END: main -->
