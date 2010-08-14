@@ -41,7 +41,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     {
         $error[] = $lang_module['error_invalid_url'];
     }
-    $link = nv_htmlspecialchars($link);
+    $link = nv_htmlspecialchars( $link );
     $template = filter_text_input( 'template', 'post', "", 1 );
     $typeblock = filter_text_input( 'typeblock', 'post', "", 1 );
     $xmodule = filter_text_input( 'module', 'post', "", 1 );
@@ -211,17 +211,30 @@ if ( $bid != 0 )
     $contents .= "<blockquote class='error'><span id='message'>" . $lang_module['block_group_notice'] . "</span></blockquote>\n";
     $contents .= "</div>\n";
 }
+
+$sql = "SELECT `func_id` , `func_custom_name` , `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC";
+$func_result = $db->sql_query( $sql );
+$aray_mod_func = array();
+while ( list( $id_i, $func_custom_name_i, $in_module_i ) = $db->sql_fetchrow( $func_result ) )
+{
+    $aray_mod_func[$in_module_i][] = array( 
+        "id" => $id_i, "func_custom_name" => $func_custom_name_i 
+    );
+}
+
 $contents .= "" . $contents_error . "<div style='clear:both'></div>";
 $contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
 $contents .= "<form method='post' action=''>";
 $contents .= "<table class=\"tab1\" style=\"WIDTH:100%\">\n";
-$contents .= "<tbody style=\"width:150px;white-space:nowrap\" />\n";
+$contents .= "<col style=\"width: 160px; white-space: nowrap;\">";
+$contents .= "<col style=\"width: 600px; white-space: nowrap;\">";
+$contents .= "<tbody>\n";
 $array_typeblock = array( 
     "file" => $lang_module['block_file'], "banner" => $lang_module['block_b_pl'], "html" => $lang_module['block_typehtml'] 
 );
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_type'] . ":</td>\n";
-$contents .= "<td>";
+$contents .= "<td style=\"width: 650px;\">";
 foreach ( $array_typeblock as $b_key => $b_value )
 {
     $ck = ( $row['type'] == $b_key ) ? " checked" : "";
@@ -242,8 +255,11 @@ $sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` ORDER BY `wei
 $result = $db->sql_query( $sql );
 while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 {
-    $sel = ( $m_title == trim( $row['module'] ) ) ? ' selected' : '';
-    $contents .= "<option value=\"" . $m_title . "\" " . $sel . "> " . $m_custom_title . "</option>";
+    if ( isset( $aray_mod_func[$m_title] ) and count( $aray_mod_func[$m_title] ) > 0 )
+    {
+        $sel = ( $m_title == trim( $row['module'] ) ) ? ' selected' : '';
+        $contents .= "<option value=\"" . $m_title . "\" " . $sel . "> " . $m_custom_title . "</option>";
+    }
 }
 $contents .= "</select>";
 $contents .= "<select name=\"file\"></select>\n";
@@ -293,11 +309,11 @@ $row['xhtml'] = ( defined( 'NV_EDITOR' ) ) ? nv_editor_br2nl( $row['xhtml'] ) : 
 $row['xhtml'] = nv_htmlspecialchars( $row['xhtml'] );
 if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 {
-    $contents .= nv_aleditor( "htmlcontent", '800px', '150px', $row['xhtml'] );
+    $contents .= nv_aleditor( "htmlcontent", '700px', '150px', $row['xhtml'] );
 }
 else
 {
-    $contents .= "<textarea style=\"width: 650px\" name=\"htmlcontent\" id=\"htmlcontent\" cols=\"20\" rows=\"8\">" . $row['xhtml'] . "</textarea>";
+    $contents .= "<textarea style=\"width: 700px\" name=\"htmlcontent\" id=\"htmlcontent\" cols=\"20\" rows=\"8\">" . $row['xhtml'] . "</textarea>";
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
@@ -388,7 +404,6 @@ $contents .= "</select>\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
-
 if ( $bid != 0 )
 {
     $contents .= "<tbody>\n";
@@ -412,7 +427,8 @@ $i = 1;
 foreach ( $add_block_module as $b_key => $b_value )
 {
     $ck = ( $row['all_func'] == $b_key ) ? " checked" : "";
-    $contents .= "<label><input type=\"radio\" name=\"all_func\" class='moduletype" . $i . "' value=\"" . $b_key . "\" " . $ck . " />  " . $b_value . "</label> ";
+    $showsdisplay = ( $row['type'] == 'file' and $row['module'] != 'global' and $b_key == 1 ) ? " style='display:none'" : "";
+    $contents .= "<label id='labelmoduletype" . $i . "' " . $showsdisplay . "><input type=\"radio\" name=\"all_func\" class='moduletype" . $i . "' value=\"" . $b_key . "\" " . $ck . " />  " . $b_value . "</label> ";
     $i ++;
 }
 $contents .= "</td>\n";
@@ -422,17 +438,8 @@ $contents .= "</tbody>\n";
 $shows_all_func = ( intval( $row['all_func'] ) ) ? " style='display:none' " : "";
 $contents .= "<tbody " . $shows_all_func . " id='shows_all_func'>\n";
 $contents .= "<tr>\n";
-$contents .= "<td style='vertical-align:top'>" . $lang_module['block_function'] . ":</td>\n";
-$contents .= "<td><label><input type='button' name='checkmod' value='" . $lang_module['block_check'] . "'style='margin-bottom:5px;'/></label><hr />\n";
-$sql = "SELECT `func_id` , `func_custom_name` , `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC";
-$func_result = $db->sql_query( $sql );
-$aray_mod_func = array();
-while ( list( $id_i, $func_custom_name_i, $in_module_i ) = $db->sql_fetchrow( $func_result ) )
-{
-    $aray_mod_func[$in_module_i][] = array( 
-        "id" => $id_i, "func_custom_name" => $func_custom_name_i 
-    );
-}
+$contents .= "<td style='vertical-align:top'>" . $lang_module['block_function'] . ": <br><br><label><input type='button' name='checkmod' value='" . $lang_module['block_check'] . "'style='margin-bottom:5px;'/></label></td>\n";
+$contents .= "<td>\n";
 $contents .= "<div style=\"width: 650px; overflow: auto;\"><table border=\"0\" cellpadding=\"3\" cellspacing=\"3\">";
 $func_list = array();
 if ( $bid > 0 )
@@ -493,6 +500,7 @@ $(function(){
 		if (type!=""){
 			$("select[name=file]").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadblocks&type="+type);
 			if (type!="global"){
+				$("#labelmoduletype1").css({"display":"none"});		
 				$("tr.funclist").css({"display":"none"});
 				$("tr#"+type).css({"display":"block"});
 				var $radios = $("input:radio[name=all_func]");
@@ -500,6 +508,7 @@ $(function(){
 	        	$("#shows_all_func").show();				
 			} else {
 				$("tr.funclist").css({"display":"block"});
+				$("#labelmoduletype1").css({"display":""});	
 			}
 		}
 	});
@@ -509,28 +518,32 @@ $(function(){
     		$("#file").show();
     		$("#banner").hide();
     		$("#html").hide();
+    		var module = $("select[name=module]").val();
+    		if (module!="global"){
+    			$("#labelmoduletype1").css({"display":"none"});	
+    		}
     	} else if (type=="banner"){
     		$("#banner").show();
     		$("#file").hide();
     		$("#html").hide();
+			$("#labelmoduletype1").css({"display":""});		
+    		
     	} else {
     		$("#html").show();
     		$("#file").hide();
     		$("#banner").hide();
+			$("#labelmoduletype1").css({"display":""});		
     	}
 	});
 	
 	$("input[name=all_func]").click(function(){
 		var module = $("select[name=module]").val();
 		var af = $(this).val();
-		if (af==1 && module!="global"){
-			$("input.moduletype2").attr({"checked":"checked"});
-		}
-    	if (af=="0" && module!="global"){
+		if (af=="0" && module!="global"){
     		$("#shows_all_func").show();
     	} else if (module=="global" && af==0){
     		$("#shows_all_func").show();
-    	} else if (af==1 && module=="global") {
+    	} else if (af==1) {
     		$("#shows_all_func").hide();
     	}
 	});
