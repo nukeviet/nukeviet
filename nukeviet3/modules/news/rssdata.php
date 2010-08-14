@@ -9,11 +9,11 @@
 
 if ( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
 $rssarray = array();
-$result2 = $db->sql_query( "SELECT catid, parentid, title, alias, numsubcat, subcatid FROM " . NV_PREFIXLANG . "_news_cat ORDER BY weight,`order`" );
+$result2 = $db->sql_query( "SELECT catid, parentid, title, alias, numsubcat, subcatid FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat ORDER BY weight,`order`" );
 while ( list( $catid, $parentid, $title, $alias, $numsubcat, $subcatid ) = $db->sql_fetchrow( $result2 ) )
 {
     $rssarray[$catid] = array( 
-        'catid' => $catid, 'parentid' => $parentid, 'title' => $title, 'alias' => $alias, 'numsubcat' => $numsubcat, 'subcatid' => $subcatid, 'link' => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_file . "&" . NV_OP_VARIABLE . "=rss&catid=" . $catid 
+        'catid' => $catid, 'parentid' => $parentid, 'title' => $title, 'alias' => $alias, 'numsubcat' => $numsubcat, 'subcatid' => $subcatid, 'link' => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_file . "&" . NV_OP_VARIABLE . "=rss/" . $alias 
     );
 }
 ?>

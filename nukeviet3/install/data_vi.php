@@ -313,7 +313,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_blocks` (`bi
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_news_cat` VALUES
 (1, 0, 'Tin tức', 'Tin-tuc', '', '', '', 1, 1, 0, 'viewcat_main_right', 3, '8,12,9', 1, 3, '', '', 1274986690, 1274986690, 1300986690, 0, ''), 
-(2, 0, 'Sản phẩm', 'San-pham', '', '', '', 2, 5, 0, 'viewcat_main_right', 3, '', 1, 3, '', '', 1274986705, 1274986705, 1300986705, 0, ''), 
+(2, 0, 'Sản phẩm', 'San-pham', '', '', '', 2, 5, 0, 'viewcat_page_new', 0, '', 1, 3, '', '', 1274986705, 1274986705, 1300986705, 0, ''), 
 (8, 1, 'Thông cáo báo chí', 'thong-cao-bao-chi', '', '', '', 1, 2, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1274987105, 1274987244, 1300987105, 0, ''), 
 (9, 1, 'Tin công nghệ', 'Tin-cong-nghe', '', '', '', 3, 4, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1274987212, 1274987212, 1300987212, 0, ''), 
 (10, 0, 'Đối tác', 'Doi-tac', '', '', '', 3, 9, 0, 'viewcat_main_right', 0, '', 1, 3, '', '', 1274987460, 1274987460, 1300987460, 0, ''), 
