@@ -171,7 +171,14 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
                     {
                         if ( defined( 'NV_IS_MODADMIN' ) )
                         {
-                            $users[] = ( int )$row['post_id'];
+                            if ( isset( $users[$row['post_id']] ) )
+                            {
+                                $users[$row['post_id']][] = ( int )$row['id'];
+                            }
+                            else
+                            {
+                                $users[$row['post_id']] = array( $row['id'] );
+                            }
                             $post_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $row['post_id'] . "\">" . $post_name . "</a>";
                         }
                     }
@@ -194,7 +201,14 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
                     {
                         if ( defined( 'NV_IS_ADMIN' ) )
                         {
-                            $admins[] = $row['admin_id'];
+                            if ( isset( $admins[$row['admin_id']] ) )
+                            {
+                                $admins[$row['admin_id']][] = ( int )$row['id'];
+                            }
+                            else
+                            {
+                                $admins[$row['admin_id']] = array( $row['id'] );
+                            }
                             $admin_reply = $row['admin_reply'];
                         }
                         else
@@ -219,36 +233,51 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
 
                 if ( ! empty( $users ) )
                 {
-                    $users = array_unique( $users );
-                    $in = implode( ",", $users );
+                    $in = array_keys( $users );
+                    $in = array_unique( $in );
+                    $in = implode( ",", $in );
 
-                    $query = "SELECT a.view_mail AS view_mail, b.id AS id FROM `" . NV_USERS_GLOBALTABLE . "` a, `" . NV_PREFIXLANG . "_" . $module_data . "_comments` b WHERE a.userid=b.post_id AND a.userid IN (" . $in . ")";
+                    $query = "SELECT `view_mail`, `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $in . ")";
                     $result = $db->sql_query( $query );
-                    while ( $row = $db->sql_fetchrow( $result ) )
+                    while ( list( $view_mail, $userid ) = $db->sql_fetchrow( $result ) )
                     {
-                        if ( ! empty( $array[$row['id']]['post_email'] ) and ( defined( 'NV_IS_ADMIN' ) or $row['view_mail'] ) )
+                        if ( isset( $users[$userid] ) )
                         {
-                            $array[$row['id']]['post_email'] = nv_EncodeEmail( $array[$row['id']]['post_email'] );
-                            $array[$row['id']]['post_name'] .= " (" . $array[$row['id']]['post_email'] . ", " . $array[$row['id']]['post_ip'] . ")";
-                        }
-                        else
-                        {
-                            $array[$row['id']]['post_email'] = "";
+                            foreach ( $users[$userid] as $id )
+                            {
+                                if ( ! empty( $array[$id]['post_email'] ) and ( defined( 'NV_IS_ADMIN' ) or $view_mail ) )
+                                {
+                                    $array[$id]['post_email'] = nv_EncodeEmail( $array[$id]['post_email'] );
+                                    $array[$id]['post_name'] .= " (" . $array[$id]['post_email'] . ", " . $array[$id]['post_ip'] . ")";
+                                }
+                                else
+                                {
+                                    $array[$id]['post_email'] = "";
+                                }
+                            }
                         }
                     }
                 }
 
                 if ( ! empty( $admins ) )
                 {
-                    $admins = array_unique( $admins );
-                    $in = implode( ",", $admins );
+                    $in = array_keys( $admins );
+                    $in = array_unique( $in );
+                    $in = implode( ",", $in );
 
-                    $query = "SELECT a.userid AS admin_id, a.username AS admin_login, a.full_name AS admin_name, b.id AS id FROM `" . NV_USERS_GLOBALTABLE . "` a, `" . NV_PREFIXLANG . "_" . $module_data . "_comments` b WHERE a.userid=b.admin_id AND a.userid IN (" . $in . ")";
+                    $query = "SELECT `userid` AS admin_id, `username` AS admin_login, `full_name` AS admin_name FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $in . ")";
                     $result = $db->sql_query( $query );
-                    while ( $row = $db->sql_fetchrow( $result ) )
+                    while ( list( $admin_id, $admin_login, $admin_name ) = $db->sql_fetchrow( $result ) )
                     {
-                        $admin_name = ! empty( $row['admin_name'] ) ? $row['admin_name'] : $row['admin_login'];
-                        $array[$row['id']]['admin_reply'] = $lang_module['comment_admin_note'] . " <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=authors&amp;id=" . $row['admin_id'] . "\">" . $admin_name . "</a>: " . $array[$row['id']]['admin_reply'];
+                        $admin_name = ! empty( $admin_name ) ? $admin_name : $admin_login;
+
+                        if ( isset( $admins[$admin_id] ) )
+                        {
+                            foreach ( $admins[$admin_id] as $id )
+                            {
+                                $array[$id]['admin_reply'] = $lang_module['comment_admin_note'] . " <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=authors&amp;id=" . $admin_id . "\">" . $admin_name . "</a>: " . $array[$id]['admin_reply'];
+                            }
+                        }
                     }
                 }
 
@@ -261,76 +290,6 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
     }
 
     die( $lang_module['comment_error7'] );
-}
-
-$id = $nv_Request->get_int( 'id', 'get,post' );
-if ( ! $nv_Request->isset_request( 'commentname', 'post' ) )
-{
-    $comment_array = array();
-    list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` where `lid`= '" . $id . "' AND `status`=1" ) );
-    $all_page = ( $numf ) ? $numf : 1;
-    $per_page = 10;
-    $page = $nv_Request->get_int( 'page', 'get', 0 );
-    $sql = "SELECT `comment`, `date`, `name`, `email` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `lid`= '" . $id . "' AND `status`=1 ORDER BY `tid` ASC LIMIT " . $page . "," . $per_page . "";
-    $comment = $db->sql_query( $sql );
-    while ( $row = $db->sql_fetchrow( $comment ) )
-    {
-        //$row ['email'] = ($module_config [$module_name] ['emailcomm']) ? $row ['email'] : "";
-        $comment_array[] = array( "comment" => $row['comment'], "date" => $row['date'], "name" => $row['name'], "email" => $row['email'] );
-    }
-    $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getcomment&amp;id=" . $id . "&amp;page=" . $page;
-    $xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/download" );
-    $k = 0;
-    foreach ( $comment_array as $comment_array_i )
-    {
-        $xtpl->assign( 'TIME', date( "d/m/Y H:i", $comment_array_i['date'] ) );
-        $xtpl->assign( 'NAME', $comment_array_i['name'] );
-        if ( $configdownload['showemail'] and ! empty( $comment_array_i['email'] ) )
-        {
-            $xtpl->assign( 'EMAIL', $comment_array_i['email'] );
-            $xtpl->parse( 'main.detail.emailcomm' );
-        }
-        $xtpl->assign( 'CONTENT', $comment_array_i['comment'] );
-        $xtpl->assign( 'BG', ( $k % 2 ) ? " bg" : "" );
-        $xtpl->parse( 'main.detail' );
-        $k++;
-    }
-    $pagenaver = nv_generate_page( $base_url, $all_page, $per_page, $page, 'tt', true, 'nv_urldecode_ajax', 'showcomment' );
-    if ( ! empty( $pagenaver ) )
-    {
-        $xtpl->assign( 'PAGE', $pagenaver );
-    }
-    $xtpl->parse( 'main' );
-    echo $xtpl->text( 'main' );
-}
-else
-{
-    $name = filter_text_input( 'commentname', 'post', '', 1 );
-    $email = filter_text_input( 'commentemail', 'post', '' );
-    $content = filter_text_input( 'commentcontent', 'post', '', 1 );
-    $captcha = filter_text_input( 'commentseccode', 'post', '' );
-
-    $validemail = nv_check_valid_email( $email );
-    if ( $name == '' )
-    {
-        echo $lang_module['comment_noname'];
-    } elseif ( $validemail )
-    {
-        echo $lang_module['comment_noemail'];
-    } elseif ( $content == '' || strlen( $content ) < 10 )
-    {
-        echo $lang_module['comment_nocontent'];
-    } elseif ( ! nv_capcha_txt( $captcha ) )
-    {
-        echo $lang_module['comment_error_captcha'];
-    }
-    else
-    {
-        $ati = $configdownload['deslimit'];
-        $db->sql_query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_comments VALUES (NULL,' . $id . ',UNIX_TIMESTAMP(),' . $db->dbescape( $name ) . ',' . $db->dbescape( $email ) . ',' . $db->dbescape( $ips->client_ip ) . ',' . $db->dbescape( $content ) . ',' . $ati . ' )' );
-        $db->sql_query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET comment=comment+1 WHERE id=' . $id . '' );
-        echo $lang_module['comment_sucsser'];
-    }
 }
 
 ?>
