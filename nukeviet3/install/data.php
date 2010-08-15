@@ -361,7 +361,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` 
 ('statistics', 1, 0, 'statistics', 'statistics', '3.0.01 1273225635', 1276785143, 'VINADES (contact@vinades.vn)', '')";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_plans` VALUES
-(1, '', 'Quan cao giua trang', '', 'sequential', 510, 100, 1), 
+(1, '', 'Quang cao giua trang', '', 'sequential', 510, 100, 1), 
 (2, '', 'Quang cao trai', '', 'sequential', 190, 500, 1)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_rows` VALUES
