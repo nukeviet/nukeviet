@@ -39,7 +39,7 @@ if ( $id > 0 and $catid > 0 )
         $img = "";
         if ( $content['allowed_print'] == 1 )
         {
-            $link = $global_config['site_url'] . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id . "";
+            $link = $global_config['site_url'] . '/' . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id . "";
             $link = "<a href=\"" . $link . "\" title=\"" . $content['title'] . "\">" . $link . "</a>\n";
             
             if ( $content['imgposition'] == 1 )
