@@ -167,8 +167,11 @@ if ( $nv_Request->isset_request( 'check', 'post' ) )
         $url = array_map( "trim", $url );
         foreach ( $url as $l )
         {
-            if ( ! nv_is_url( $l ) ) die( $lang_module['file_checkUrl_error'] );
-            if ( ! nv_check_url( $l ) ) die( $lang_module['file_checkUrl_error'] );
+            if ( ! empty( $l ) )
+            {
+                if ( ! nv_is_url( $l ) ) die( $lang_module['file_checkUrl_error'] );
+                if ( ! nv_check_url( $l ) ) die( $lang_module['file_checkUrl_error'] );
+            }
         }
     }
 

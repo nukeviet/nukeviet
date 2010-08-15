@@ -36,6 +36,7 @@ if ( $nv_Request->isset_request( 'linkcheck', 'post' ) )
     if ( ! empty( $fileupload ) )
     {
         $fileupload = explode( "[NV]", $fileupload );
+        $fileupload = array_map( "trim", $fileupload );
         foreach ( $fileupload as $file )
         {
             if ( ! empty( $file ) )
@@ -48,11 +49,13 @@ if ( $nv_Request->isset_request( 'linkcheck', 'post' ) )
     if ( ! empty( $linkdirect ) )
     {
         $linkdirect = explode( "[NV]", $linkdirect );
+        $linkdirect = array_map( "trim", $linkdirect );
         foreach ( $linkdirect as $ls )
         {
             if ( ! empty( $ls ) )
             {
                 $ls = explode( "<br />", $ls );
+                $ls = array_map( "trim", $ls );
 
                 foreach ( $ls as $l )
                 {
