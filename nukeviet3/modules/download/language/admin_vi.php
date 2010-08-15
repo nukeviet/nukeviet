@@ -132,5 +132,7 @@ $lang_module['add_linkdirect_items'] = "Thêm nguồn bên ngoài";
 $lang_module['add_linkdirect_items_note'] = "Không được trùng với các nguồn đã liệt kê";
 $lang_module['add_fileupload'] = "Thay file tải lên mới";
 $lang_module['add_new_img'] = "Thay hình minh họa mới";
+$lang_module['is_zip'] = "ZIP file khi download";
+$lang_module['zip_readme'] = "Nội dung file README.txt kèm theo file ZIP";
 
 ?>

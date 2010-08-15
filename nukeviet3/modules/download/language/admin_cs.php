@@ -131,5 +131,7 @@ $lang_module['add_linkdirect_items'] = "Them nguon ben ngoai";
 $lang_module['add_linkdirect_items_note'] = "Khong duoc trung voi cac nguon da liet ke";
 $lang_module['add_fileupload'] = "Thay file tai len moi";
 $lang_module['add_new_img'] = "Thay hinh minh hoa moi";
+$lang_module['is_zip'] = "ZIP file khi download";
+$lang_module['zip_readme'] = "Noi dung file README.txt kem theo file ZIP";
 
 ?>

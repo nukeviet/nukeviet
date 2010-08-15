@@ -74,6 +74,64 @@ if ( ! isset( $session_files['fileupload'][$file]['id'] ) )
 $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `download_hits`=download_hits+1 WHERE `id`=" . intval( $session_files['fileupload'][$file]['id'] );
 $db->sql_query( $sql );
 
+$upload_dir = "files";
+$is_zip = false;
+
+$sql = "SELECT `config_name`, `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config` WHERE `config_name`='upload_dir' OR `config_name`='is_zip'";
+$result = $db->sql_query( $sql );
+while ( $row = $db->sql_fetchrow( $result ) )
+{
+    if ( $row['config_name'] == 'upload_dir' )
+    {
+        $upload_dir = $row['config_value'];
+    } elseif ( $row['config_name'] == 'is_zip' )
+    {
+        $is_zip = ( bool )$row['config_value'];
+    }
+}
+
+if ( $is_zip )
+{
+
+    $upload_dir = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $upload_dir;
+
+    $subfile = nv_pathinfo_filename( $file );
+    $tem_file = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $subfile;
+
+    if ( file_exists( $tem_file ) )
+    {
+        @nv_deletefile( $tem_file );
+    }
+    require_once ( NV_ROOTDIR . '/includes/class/pclzip.class.php' );
+    $zip = new PclZip( $tem_file );
+    $zip->add( $session_files['fileupload'][$file]['src'], PCLZIP_OPT_REMOVE_PATH, $upload_dir );
+
+    if ( isset( $global_config['site_logo'] ) and ! empty( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/images/' . $global_config['site_logo'] ) )
+    {
+        $zip->add( NV_ROOTDIR . '/images/' . $global_config['site_logo'], PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/images' );
+    }
+
+    if ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt' ) )
+    {
+        $zip->add( NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt', PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/' . NV_DATADIR );
+    }
+
+    $filesize = @filesize( $tem_file );
+
+    header( "Pragma: public" );
+    header( "Expires: 0" );
+    header( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
+    header( "Cache-Control: private", false );
+    header( "Content-Type: application/zip" );
+
+    header( "Content-Disposition: attachment; filename=\"" . $subfile . ".zip\";" );
+    header( "Content-Transfer-Encoding: binary" );
+    header( "Content-Length: " . $filesize );
+    readfile( $tem_file );
+
+    exit();
+}
+
 header( "Pragma: public" );
 header( "Expires: 0" );
 header( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );

@@ -19,6 +19,8 @@ if ( ! empty( $groups_list ) )
     $array_who_upload[] = $lang_global['who_view3'];
 }
 
+$readme_file = NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt';
+
 $array_config = array();
 
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
@@ -35,12 +37,15 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $array_config['upload_filetype'] = $nv_Request->get_typed_array( 'upload_filetype', 'post', 'string' );
     $array_config['upload_dir'] = filter_text_input( 'upload_dir', 'post', '' );
     $array_config['temp_dir'] = filter_text_input( 'temp_dir', 'post', '' );
-    
+    $array_config['is_zip'] = $nv_Request->get_int( 'is_zip', 'post', 0 );
+    $array_config['readme'] = filter_text_textarea( 'readme', '' );
+    $array_config['readme'] = strip_tags( $array_config['readme'] );
+
     if ( ! in_array( $array_config['who_addfile'], array_keys( $array_who_upload ) ) )
     {
         $array_config['who_addfile'] = 0;
     }
-    
+
     $array_config['groups_addfile'] = ( ! empty( $array_config['groups_addfile'] ) ) ? implode( ',', $array_config['groups_addfile'] ) : '';
 
     if ( ! in_array( $array_config['who_upload'], array_keys( $array_who_upload ) ) )
@@ -49,7 +54,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     }
 
     $array_config['groups_upload'] = ( ! empty( $array_config['groups_upload'] ) ) ? implode( ',', $array_config['groups_upload'] ) : '';
-    
+
     if ( ! in_array( $array_config['who_autocomment'], array_keys( $array_who_upload ) ) )
     {
         $array_config['who_autocomment'] = 0;
@@ -98,8 +103,23 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 
     foreach ( $array_config as $config_name => $config_value )
     {
-        $query = "REPLACE INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config` VALUES (" . $db->dbescape( $config_name ) . "," . $db->dbescape( $config_value ) . ")";
-        $db->sql_query( $query );
+        if ( $config_name != 'readme' )
+        {
+            $query = "REPLACE INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config` VALUES (" . $db->dbescape( $config_name ) . "," . $db->dbescape( $config_value ) . ")";
+            $db->sql_query( $query );
+        }
+    }
+
+    if ( ! empty( $array_config['readme'] ) )
+    {
+        file_put_contents( $readme_file, $array_config['readme'] );
+    }
+    else
+    {
+        if ( file_exists( $readme_file ) )
+        {
+            @nv_deletefile( $readme_file );
+        }
     }
 
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
@@ -118,6 +138,14 @@ $array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
 $array_config['upload_filetype'] = '';
 $array_config['upload_dir'] = 'files';
 $array_config['temp_dir'] = 'temp';
+$array_config['is_zip'] = 0;
+$array_config['readme'] = '';
+
+if ( file_exists( $readme_file ) )
+{
+    $array_config['readme'] = file_get_contents( $readme_file );
+    $array_config['readme'] = nv_htmlspecialchars( $array_config['readme'] );
+}
 
 $sql = "SELECT `config_name`, `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
 $result = $db->sql_query( $sql );
@@ -128,6 +156,7 @@ while ( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 
 $array_config['is_addfile'] = ! empty( $array_config['is_addfile'] ) ? " checked=\"checked\"" : "";
 $array_config['is_upload'] = ! empty( $array_config['is_upload'] ) ? " checked=\"checked\"" : "";
+$array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? " checked=\"checked\"" : "";
 
 $who_addfile = $array_config['who_addfile'];
 $array_config['who_addfile'] = array();

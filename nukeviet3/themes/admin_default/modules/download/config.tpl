@@ -110,6 +110,22 @@
                     </td>
                 </tr>
             </tbody>
+            <tbody class="second">
+                <tr>
+                    <td>{LANG.is_zip}</td>
+                    <td>
+                        <input name="is_zip" value="1" type="checkbox"{DATA.is_zip} />
+                    </td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td style="vertical-align: top">{LANG.zip_readme}</td>
+                    <td>
+                        <textarea name="readme" cols="20" rows="2" style="width: 100%; height: 300px; overflow: auto">{DATA.readme}</textarea>
+                    </td>
+                </tr>
+            </tbody>
         </table>
         <div style="textarea-align:center;padding-top:15px">
             <input type="submit" name="submit" value="{LANG.config_confirm}" />
