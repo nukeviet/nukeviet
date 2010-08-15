@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3/9/2010 23:25
  */
+if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' ); 
 
 if ( ! function_exists( 'nv_block_counter' ) )
 {

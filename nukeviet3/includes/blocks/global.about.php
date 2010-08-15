@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3/25/2010 18:6
  */
+if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' ); 
 
 if ( ! function_exists( 'nv_message_about' ) )
 {
