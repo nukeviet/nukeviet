@@ -11,24 +11,21 @@ if ( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
 
 $rssarray = array();
 
-/*
-//Cho nay khong hieu muc dich nen tam thoi chua viet.
-//Dong chi Thao xem ho nhe
-
-$result2 = $db->sql_query( "SELECT cid, parentid, title FROM " . NV_PREFIXLANG . "_download_categories ORDER BY weight" );
-
-while ( list( $catid, $parentid, $title ) = $db->sql_fetchrow( $result2 ) )
+$result2 = $db->sql_query( "SELECT id, parentid, title, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories ORDER BY weight" );
+while ( list( $catid, $parentid, $title, $alias ) = $db->sql_fetchrow( $result2 ) )
 {
-    $alias = change_alias( $title );
-    $numsubcat = $db->sql_numrows( $db->sql_query( 'SELECT cid FROM ' . NV_PREFIXLANG . '_download_categories WHERE parentid=' . $catid . '' ) );
-    $resultsubcat = $db->sql_query( 'SELECT cid FROM ' . NV_PREFIXLANG . '_download_categories WHERE parentid="' . $catid . '"' );
+    $resultsubcat = $db->sql_query( 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '"_categories WHERE parentid="' . $catid . '"' );
     $subcatid = array();
     while ( list( $cid ) = $db->sql_fetchrow( $resultsubcat ) )
     {
         $subcatid[] = $cid;
     }
+    $numsubcat = count( $numsubcat );
     $subcatid = implode( ',', $subcatid );
-    $rssarray[$catid] = array( 'catid' => $catid, 'parentid' => $parentid, 'title' => $title, 'alias' => $alias, 'numsubcat' => $numsubcat, 'subcatid' => $subcatid, 'link' => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_file . "&" . NV_OP_VARIABLE . "=rss&catid=" . $catid );
-}*/
+    
+    $rssarray[$catid] = array( 
+        'catid' => $catid, 'parentid' => $parentid, 'title' => $title, 'alias' => $alias, 'numsubcat' => $numsubcat, 'subcatid' => $subcatid, 'link' => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_file . "&" . NV_OP_VARIABLE . "=rss/" . $alias 
+    );
+}
 
 ?>

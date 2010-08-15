@@ -149,7 +149,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
 
             if ( ! $is_error )
             {
-                $sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `alias`=" . $db->dbescape( $alias ) . " AND `parentid`=" . $array['parentid'];
+                $sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `alias`=" . $db->dbescape( $alias );
                 $result = $db->sql_query( $sql );
                 list( $count ) = $db->sql_fetchrow( $result );
 

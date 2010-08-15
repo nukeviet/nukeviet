@@ -29,15 +29,6 @@ function nv_rewrite_change ( $array_config_global )
         $reval .= "            <rules>\n";
         if ( $array_config_global['rewrite_optional'] )
         {
-            $reval .= "                <rule name=\"Imported Rule 5\">\n";
-            $reval .= "                    <match url=\"^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)/$\" ignoreCase=\"false\" />\n";
-            $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "={R:2}&amp;id={R:3}\" appendQueryString=\"false\" />\n";
-            $reval .= "                </rule>\n";
-            $reval .= "                <rule name=\"Imported Rule 52\">\n";
-            $reval .= "                    <match url=\"^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)$\" ignoreCase=\"false\" />\n";
-            $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "={R:2}&amp;id={R:3}\" appendQueryString=\"false\" />\n";
-            $reval .= "                </rule>\n";
-            
             $reval .= "                <rule name=\"Imported Rule 4\">\n";
             $reval .= "                    <match url=\"^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$\" ignoreCase=\"false\" />\n";
             $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "={R:2}\" appendQueryString=\"false\" />\n";
@@ -67,20 +58,11 @@ function nv_rewrite_change ( $array_config_global )
             $reval .= "                    <match url=\"^([a-z0-9-]+)$\" ignoreCase=\"false\" />\n";
             $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}\" appendQueryString=\"false\" />\n";
             $reval .= "                </rule>\n";
-        
         }
         else
         {
-            $reval .= "                <rule name=\"Imported Rule 5\">\n";
-            $reval .= "                    <match url=\"^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)/$\" ignoreCase=\"false\" />\n";
-            $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "={R:3}&amp;id={R:4}\" appendQueryString=\"false\" />\n";
-            $reval .= "                </rule>\n";
-            $reval .= "                <rule name=\"Imported Rule 52\">\n";
-            $reval .= "                    <match url=\"^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)$\" ignoreCase=\"false\" />\n";
-            $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "={R:3}&amp;id={R:4}\" appendQueryString=\"false\" />\n";
-            $reval .= "                </rule>\n";
             $reval .= "                <rule name=\"Imported Rule 4\">\n";
-            $reval .= "                    <match url=\"^([a-z-]+)/([a-z-]+)/([a-zA-Z0-9-/]+)/$\" ignoreCase=\"false\" />\n";
+            $reval .= "                    <match url=\"^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$\" ignoreCase=\"false\" />\n";
             $reval .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "={R:3}\" appendQueryString=\"false\" />\n";
             $reval .= "                </rule>\n";
             $reval .= "                <rule name=\"Imported Rule 42\">\n";
@@ -136,8 +118,6 @@ function nv_rewrite_change ( $array_config_global )
         $reval .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
         if ( $array_config_global['rewrite_optional'] )
         {
-            $reval .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)/$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2&id=$3\n";
-            $reval .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2&id=$3\n";
             $reval .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2\n";
             $reval .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2\n";
             $reval .= "RewriteRule ^" . NV_ADMINDIR . "[/]*$ " . NV_ADMINDIR . "/index.php\n";
@@ -150,8 +130,6 @@ function nv_rewrite_change ( $array_config_global )
         }
         else
         {
-            $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3&id=$4\n";
-            $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/([0-9-/]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3&id=$4\n";
             $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3\n";
             $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/([a-zA-Z0-9-/]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3\n";
             $reval .= "RewriteRule ^([a-z-]+)/([a-z0-9-]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2\n";
@@ -208,7 +186,6 @@ function nv_rewrite_change ( $array_config_global )
 $rewrite = array();
 if ( $global_config['rewrite_optional'] && $global_config['is_url_rewrite'] )
 {
-    $rewrite["#([\"|\']" . NV_BASE_SITEURL . ")[index.php]*\?" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]*)\&[amp;]*id=([0-9]*)([\"|\'])#"] = "\\1\\3/\\4/\\5/\\6";
     $rewrite["#([\"|\']" . NV_BASE_SITEURL . ")[index.php]*\?" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]*)([\"|\'])#"] = "\\1\\3/\\4/\\5";
     $rewrite["#([\"|\']" . NV_BASE_SITEURL . ")[index.php]*\?" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)([\"|\'])#"] = "\\1\\3/\\4";
     $rewrite["#([\"|\']" . NV_BASE_SITEURL . ")[index.php]*\?" . NV_LANG_VARIABLE . "=([a-z-]*)([\"|\'])#"] = "\\1\\3";
@@ -217,7 +194,6 @@ if ( $global_config['rewrite_optional'] && $global_config['is_url_rewrite'] )
 }
 else
 {
-    $rewrite["#([\"|\']" . NV_BASE_SITEURL . ")[index.php]*\?" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]*)\&[amp;]*id=([0-9]*)([\"|\'])#"] = "\\1\\2/\\3/\\4/\\5/\\6";
     $rewrite["#([\"|\']" . NV_BASE_SITEURL . ")[index.php]*\?" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]*)([\"|\'])#"] = "\\1\\2/\\3/\\4/\\5";
     $rewrite["#([\"|\']" . NV_BASE_SITEURL . ")[index.php]*\?" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)([\"|\'])#"] = "\\1\\2/\\3/\\4";
     $rewrite["#([\"|\']" . NV_BASE_SITEURL . ")[index.php]*\?" . NV_LANG_VARIABLE . "=([a-z-]*)([\"|\'])#"] = "\\1\\2/\\3";

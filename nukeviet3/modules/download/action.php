@@ -49,7 +49,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `comment_hits` int(11) NOT NULL DEFAULT '0',
   `rating_detail` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `title` (`title`),
+  UNIQUE KEY `alias` (`alias`),
   KEY `catid` (`catid`),
   KEY `user_id` (`user_id`)
 )ENGINE=MyISAM";
@@ -90,7 +90,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `weight` smallint(4) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `alias` (`alias`,`parentid`)
+  UNIQUE KEY `alias` (`alias`)  
 )ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments` (

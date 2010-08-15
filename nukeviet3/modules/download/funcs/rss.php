@@ -12,14 +12,23 @@ if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 $content = "";
 
 $list_cats = nv_list_cats();
-
 if ( ! empty( $list_cats ) )
 {
-    $catid = $nv_Request->get_int( 'catid', 'get', 0 );
-
     $atomlink = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
-
-    if ( ! empty( $catid ) and isset( $list_cats[$catid] ) )
+    $catalias = isset( $array_op[1] ) ? $array_op[1] : "";
+    $catid = 0;
+    if ( ! empty( $catalias ) )
+    {
+        foreach ( $list_cats as $c )
+        {
+            if ( $c['alias'] == $catalias )
+            {
+                $catid = $c['id'];
+                break;
+            }
+        }
+    }
+    if ( $catid > 0 )
     {
         $sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid . " AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
         $title = $global_config['site_name'] . ' RSS: ' . $module_name . ' - ' . $list_cats[$catid]['title'];
@@ -35,10 +44,8 @@ if ( ! empty( $list_cats ) )
         $description = $global_config['site_description'];
         $channel_link = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
     }
-
     $content .= '<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
-
 <channel>
 <title>' . $title . '</title>
 <link>' . $channel_link . '</link>
@@ -54,11 +61,11 @@ if ( ! empty( $list_cats ) )
 <title>' . $module_name . '</title>
 <link>' . NV_MY_DOMAIN . NV_BASE_SITEURL . '</link>
 </image>';
-
+    
     $result = $db->sql_query( $sql );
     while ( list( $id, $cid, $publtime, $title, $alias, $hometext, $homeimgfile ) = $db->sql_fetchrow( $result ) )
     {
-        $rsslink = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;file=" . $alias;
+        $rsslink = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias;
         $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . $homeimgfile . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
         $content .= '
 	<item>
