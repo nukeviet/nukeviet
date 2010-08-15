@@ -16,7 +16,7 @@
 			<td><input type="text" value="{DATA.name}" name="bot_name[{DATA.id}]" style="width: 200px;" /></td>
 			<td><input type="text" value="{DATA.agent}" name="bot_agent[{DATA.id}]" style="width: 200px;" /></td>
 			<td><input type="text" value="{DATA.ips}" name="bot_ips[{DATA.id}]" style="width: 200px;" /></td>
-			<td><input type="checkbox" checked="{DATA.checked}" value="1" name="bot_allowed[{DATA.id}]" /></td>
+			<td><input type="checkbox" value="1" name="bot_allowed[{DATA.id}]" {DATA.checked} /></td>
 		</tr>
 	</tbody>
 	<!-- END: loop -->

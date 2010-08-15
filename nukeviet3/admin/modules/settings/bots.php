@@ -6,9 +6,7 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
-
 if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
-
 $page_title = $lang_module['bots_config'];
 $errormess = "";
 
@@ -33,7 +31,7 @@ if ( $submit )
             $ips = strip_tags( $bot_ips[$key] );
             $allowed = ( isset( $bot_allowed[$key] ) and intval( $bot_allowed[$key] ) ) ? 1 : 0;
             $bots[$value] = array( 
-                'agent' => $bot_agent[$key], 'ips' => $ips, 'allowed' => $bot_allowed[$key] 
+                'agent' => $bot_agent[$key], 'ips' => $ips, 'allowed' => $allowed 
             );
         }
     }
@@ -58,7 +56,7 @@ foreach ( $bots as $name => $values )
     $array_data['name'] = $name;
     $array_data['agent'] = $values['agent'];
     $array_data['ips'] = $values['ips'];
-    $array_data['checked'] = ( empty( $values['allowed'] ) ) ? "" : "checked";
+    $array_data['checked'] = ( empty( $values['allowed'] ) ) ? "" : "checked=\"checked\"";
     
     $xtpl->assign( 'DATA', $array_data );
     $xtpl->parse( 'main.loop' );
