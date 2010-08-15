@@ -86,7 +86,7 @@
                     var file_checkUrl='{LANG.file_checkUrl}';
                     var file_gourl='{LANG.file_gourl}';
                     </script>
-                    <input type="button" type="text" value="{LANG.add_file_items}" onclick="nv_file_additem();" /> ({LANG.add_file_items_note})
+                    <input type="button" value="{LANG.add_file_items}" onclick="nv_file_additem();" /> ({LANG.add_file_items_note})
                 </td>
             </tr>
         </tbody>
