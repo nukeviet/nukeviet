@@ -53,8 +53,8 @@ if ( $submit )
     nv_delete_all_cache(); //xoa toan bo cache
     if ( empty( $errormess ) )
     {
-        //Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass() );
-        //exit();
+        Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass() );
+        exit();
     }
     else
     {
