@@ -18,7 +18,12 @@ $module_version = array( //
     "date" => "Fri, 7 May 2010 09:47:15 GMT", //
     "author" => "VINADES (contact@vinades.vn)", //
     "note" => "", //
-    "uploads_dir" => array( $module_name, $module_name . "/files", $module_name . "/images", $module_name . "/temp" //
+    "uploads_dir" => array( //
+    $module_name, //
+    $module_name . "/files", //
+    $module_name . "/images", //
+    $module_name . "/temp", //
+    $module_name . "/thumb" //
     ) );
 
 ?>
