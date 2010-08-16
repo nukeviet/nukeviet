@@ -106,8 +106,8 @@ $contents .= "
 	        url: 'index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active_comment',
 	        data:'list='+list+'&active=0',
 	        success: function(data){  
-	            alert(data);
-	            window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=comment';
+	           alert(data);
+	           window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=comment';
 	        }
         });  
 		return false;

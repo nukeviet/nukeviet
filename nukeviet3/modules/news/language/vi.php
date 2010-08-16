@@ -21,6 +21,7 @@ $lang_translator['langtype'] ="lang_module";
 $lang_module['nocatpage'] = "Lỗi không có chủ đề";
 $lang_module['other'] = "Các tin khác";
 $lang_module['more'] = "Xem tiếp...";
+$lang_module['comment_login'] = "Bạn cần đăng nhập thành viên để sử dụng chức năng này";
 $lang_module['comment_success'] = "Bình luận thành công";
 $lang_module['comment_unsuccess'] = "Lỗi trình quá trình xử lý dữ liệu hoặc dữ liệu không đầy đủ";
 $lang_module['comment_title'] = "Gửi bình luận của bạn";

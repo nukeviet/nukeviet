@@ -104,7 +104,8 @@
         <strong>{LANG.keywords}: </strong>
         <!-- BEGIN: loop --><a title="{KEYWORD}" href="{LINK_KEYWORDS}"><em>{KEYWORD}</em></a>{SLASH}<!-- END: loop -->
     </div>
-    <!-- END: keywords --><!-- BEGIN: comment -->
+    <!-- END: keywords -->
+	<!-- BEGIN: comment -->
     <div id="idcomment">
         <ul class="control">
             <li>
@@ -117,6 +118,7 @@
         <div class="clearfix"></div>
         <div id="showcomment">{COMMENTCONTENT}</div>
         <div id="formcomment">
+        	<!-- BEGIN: form -->
             <div class="add">
                 <img alt="Comment add" src="{IMGADDCOMMENT}" /><strong>{LANG.comment_title}</strong>
             </div>
@@ -147,8 +149,15 @@
             <div style="text-align: center;">
                 <input type="button" id="buttoncontent" value="{LANG.comment_submit}" onclick="sendcommment('{NEWSID}', '{NEWSCHECKSS}', '{GFX_NUM}');"/>
             </div>
+			<!-- END: form -->
+			<!-- BEGIN: form_login-->
+				{COMMENT_LOGIN}
+			<!-- END: form_login -->
         </div>
-    </div><!-- END: comment --><!-- BEGIN: topic -->
+    </div>
+	<!-- END: comment -->
+	
+	<!-- BEGIN: topic -->
     <p>
         <strong>{LANG.topic}</strong>
     </p>

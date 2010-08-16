@@ -647,9 +647,11 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
         $xtpl->parse( 'main.adminlink' );
     }
     
-    if ( $commentenable )
+    $xtpl->assign( 'COMMENTCONTENT', $news_contents['comment'] );
+    $xtpl->assign( 'IMGSHOWCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment.png" );
+    $xtpl->assign( 'IMGADDCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment_add.png" );
+    if ( $commentenable == 1 )
     {
-        $xtpl->assign( 'COMMENTCONTENT', $news_contents['comment'] );
         if ( defined( 'NV_IS_ADMIN' ) )
         {
             $xtpl->assign( 'NAME', $admin_info['full_name'] );
@@ -672,11 +674,17 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
         $xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
         $xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
         $xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );
-        $xtpl->assign( 'IMGSHOWCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment.png" );
-        $xtpl->assign( 'IMGADDCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment_add.png" );
         $xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . "?scaptcha=captcha" );
-        $xtpl->parse( 'main.comment' );
+        $xtpl->parse( 'main.comment.form' );
     }
+    elseif ( $commentenable == 2 )
+    {
+        $xtpl->assign( 'COMMENT_LOGIN', $lang_module['comment_login'] );
+        $xtpl->parse( 'main.comment.form_login' );
+    }
+    
+    $xtpl->parse( 'main.comment' );
+    
     if ( ! empty( $related_new_array ) )
     {
         foreach ( $related_new_array as $key => $related_new_array_i )

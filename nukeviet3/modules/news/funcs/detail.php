@@ -169,15 +169,24 @@ if ( $allowed )
     }
     
     //Check: comment
+    $commentenable = 0;
+    
     if ( $news_contents['allowed_comm'] and $module_config[$module_name]['activecomm'] )
     {
         $comment_array = nv_comment_module( $news_contents['id'], 0 );
         $news_contents['comment'] = comment_theme( $comment_array );
-        $commentenable = 1;
+        if ( $news_contents['allowed_comm'] == 1 or ( $news_contents['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) )
+        {
+            $commentenable = 1;
+        }
+        elseif ( $news_contents['allowed_comm'] == 2 )
+        {
+            $commentenable = 2;
+        }
     }
     else
     {
-        $commentenable = 0;
+        $news_contents['comment'] = "";
     }
     if ( $news_contents['allowed_rating'] )
     {
@@ -204,7 +213,6 @@ if ( $allowed )
     $page_title = $news_contents['title'];
     $key_words = $news_contents['keywords'];
     $description = $news_contents['hometext'];
-    
     $contents = detail_theme( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable );
 }
 else
