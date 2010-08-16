@@ -62,6 +62,7 @@ if ( $id > 0 and $catid > 0 )
                     $name, $youremail 
                 );
                 $check = nv_sendmail( $from, $to_mail, $subject, $message );
+                define( 'NV_IS_AJAX', true );
                 if ( $check )
                 {
                     $success = "" . $lang_module['sendmail_success'] . "<strong> " . $to_mail . "</strong>";
@@ -95,12 +96,9 @@ if ( $id > 0 and $catid > 0 )
             "id" => $id, "catid" => $catid, "checkss" => md5( $id . session_id() . $global_config['sitekey'] ), "v_name" => $name, "v_mail" => $youremail, "result" => $result, "action" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id  //
         );
         $contents = sendmail_themme( $sendmail );
-        die("".$contents);
         include ( NV_ROOTDIR . "/includes/header.php" );
         echo $contents;
         include ( NV_ROOTDIR . "/includes/footer.php" );
-        die();
-    
     }
 }
 Header( "Location: " . $global_config['site_url'] );

@@ -77,7 +77,7 @@ if ( $id > 0 and $catid > 0 )
             }
         }
         $result = array( 
-            "url" => $global_config['site_url'], "meta_tags" => nv_html_meta_tags(), "sitename" => $global_config['site_name'], "title" => $content['title'], "alias" => $content['alias'], "image" => $img, "position" => $content['imgposition'], "time" => nv_date( "l - d/m/Y  H:i", $content['publtime'] ), "hometext" => $content['hometext'], "bodytext" => $content['bodytext'], "copyright" => $content['copyright'], "copyvalue" => $module_config[$module_name]['copyright'], "link" => $link, "contact" => $global_config['site_email'], "lang_author" => $lang_module['news_author'], "author" => $content['author'], "lang_source" => $lang_module['news_source'], "source" => $sourcetext 
+            "url" => $global_config['site_url'], "meta_tags" => nv_html_meta_tags(), "sitename" => $global_config['site_name'], "title" => $content['title'], "alias" => $content['alias'], "image" => $img, "position" => $content['imgposition'], "time" => nv_date( "l - d/m/Y  H:i", $content['publtime'] ), "hometext" => $content['hometext'], "bodytext" => $content['bodytext'], "copyright" => $content['copyright'], "copyvalue" => $module_config[$module_name]['copyright'], "link" => $link, "contact" => $global_config['site_email'], "lang_author" => $lang_module['author'], "author" => $content['author'], "lang_source" => $lang_module['news_source'], "source" => $sourcetext 
         );
         $contents = call_user_func( "news_print", $result );
         include ( NV_ROOTDIR . "/includes/header.php" );
