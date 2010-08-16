@@ -76,8 +76,10 @@ $db->sql_query( $sql );
 
 $upload_dir = "files";
 $is_zip = false;
+$is_resume = false;
+$max_speed = 0;
 
-$sql = "SELECT `config_name`, `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config` WHERE `config_name`='upload_dir' OR `config_name`='is_zip'";
+$sql = "SELECT `config_name`, `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config` WHERE `config_name`='upload_dir' OR `config_name`='is_zip' OR `config_name`='is_resume' OR `config_name`='max_speed'";
 $result = $db->sql_query( $sql );
 while ( $row = $db->sql_fetchrow( $result ) )
 {
@@ -87,14 +89,21 @@ while ( $row = $db->sql_fetchrow( $result ) )
     } elseif ( $row['config_name'] == 'is_zip' )
     {
         $is_zip = ( bool )$row['config_value'];
+    } elseif ( $row['config_name'] == 'is_resume' )
+    {
+        $is_resume = ( bool )$row['config_value'];
+    } elseif ( $row['config_name'] == 'max_speed' )
+    {
+        $max_speed = ( int )$row['config_value'];
     }
 }
 
+$file_src = $session_files['fileupload'][$file]['src'];
+$file_basename = $file;
+
 if ( $is_zip )
 {
-
     $upload_dir = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $upload_dir;
-
     $subfile = nv_pathinfo_filename( $file );
     $tem_file = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $subfile;
 
@@ -102,9 +111,12 @@ if ( $is_zip )
     {
         @nv_deletefile( $tem_file );
     }
+
     require_once ( NV_ROOTDIR . '/includes/class/pclzip.class.php' );
+
     $zip = new PclZip( $tem_file );
-    $zip->add( $session_files['fileupload'][$file]['src'], PCLZIP_OPT_REMOVE_PATH, $upload_dir );
+
+    $zip->add( $file_src, PCLZIP_OPT_REMOVE_PATH, $upload_dir );
 
     if ( isset( $global_config['site_logo'] ) and ! empty( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/images/' . $global_config['site_logo'] ) )
     {
@@ -116,42 +128,17 @@ if ( $is_zip )
         $zip->add( NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt', PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/' . NV_DATADIR );
     }
 
-    $filesize = @filesize( $tem_file );
-
-    header( "Pragma: public" );
-    header( "Expires: 0" );
-    header( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
-    header( "Cache-Control: private", false );
-    header( "Content-Type: application/zip" );
-
-    header( "Content-Disposition: attachment; filename=\"" . $subfile . ".zip\";" );
-    header( "Content-Transfer-Encoding: binary" );
-    header( "Content-Length: " . $filesize );
-    readfile( $tem_file );
-
-    exit();
+    if ( file_exists( $tem_file ) )
+    {
+        $file_src = $tem_file;
+        $file_basename = $subfile . '.zip';
+    }
 }
 
-header( "Pragma: public" );
-header( "Expires: 0" );
-header( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
-header( "Cache-Control: private", false );
+require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
 
-if ( ! empty( $session_files['fileupload'][$file]['mime'] ) )
-{
-    header( "Content-Type: " . $session_files['fileupload'][$file]['mime'] );
-}
-
-header( "Content-Disposition: attachment; filename=\"" . $file . "\";" );
-header( "Content-Transfer-Encoding: binary" );
-
-if ( $session_files['fileupload'][$file]['size'] )
-{
-    header( "Content-Length: " . $session_files['fileupload'][$file]['size'] );
-}
-
-readfile( $session_files['fileupload'][$file]['src'] );
-
+$download = new download( $file_src, $file_basename, $is_resume, $max_speed );
+$download->download_file();
 exit();
 
 ?>

@@ -133,5 +133,8 @@ $lang_module['add_fileupload'] = "Thay file tai len moi";
 $lang_module['add_new_img'] = "Thay hinh minh hoa moi";
 $lang_module['is_zip'] = "ZIP file khi download";
 $lang_module['zip_readme'] = "Noi dung file README.txt kem theo file ZIP";
+$lang_module['is_resume'] = "Ho tro che do resume khi download";
+$lang_module['max_speed'] = "Han che toc do tai file";
+$lang_module['kb_sec'] = "KB/sec (0 = khong han che)";
 
 ?>

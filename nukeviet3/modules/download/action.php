@@ -137,6 +137,8 @@ $sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_
 ('groups_autocomment', ''),
 ('who_addfile', '0'),
 ('groups_addfile', ''),
-('is_zip', '1')";
+('is_zip', '1'),
+('is_resume', '1'),
+('max_speed', '0')";
 
 ?>

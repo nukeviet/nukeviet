@@ -40,6 +40,8 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $array_config['is_zip'] = $nv_Request->get_int( 'is_zip', 'post', 0 );
     $array_config['readme'] = filter_text_textarea( 'readme', '' );
     $array_config['readme'] = strip_tags( $array_config['readme'] );
+    $array_config['is_resume'] = $nv_Request->get_int( 'is_resume', 'post', 0 );
+    $array_config['max_speed'] = $nv_Request->get_int( 'max_speed', 'post', 0 );
 
     if ( ! in_array( $array_config['who_addfile'], array_keys( $array_who_upload ) ) )
     {
@@ -140,6 +142,8 @@ $array_config['upload_dir'] = 'files';
 $array_config['temp_dir'] = 'temp';
 $array_config['is_zip'] = 0;
 $array_config['readme'] = '';
+$array_config['is_resume'] = 0;
+$array_config['max_speed'] = 0;
 
 if ( file_exists( $readme_file ) )
 {

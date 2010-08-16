@@ -272,8 +272,6 @@ if ( ! empty( $filealias ) )
                         );
                         $session_files['fileupload'][$new_name] = array(  //
                             'src' => NV_ROOTDIR . '/' . $file2, //
-'size' => $filesize, //
-'mime' => mime_content_type( NV_ROOTDIR . '/' . $file2 ), //
 'id' => $row['id']  //
                         );
                         

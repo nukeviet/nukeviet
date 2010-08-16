@@ -112,6 +112,22 @@
             </tbody>
             <tbody class="second">
                 <tr>
+                    <td>{LANG.is_resume}</td>
+                    <td>
+                        <input name="is_resume" value="1" type="checkbox"{DATA.is_resume} />
+                    </td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>{LANG.max_speed}</td>
+                    <td>
+                        <input name="max_speed" value="{DATA.max_speed}" type="text" style="width:50px" maxlength="4" /> {LANG.kb_sec}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="second">
+                <tr>
                     <td>{LANG.is_zip}</td>
                     <td>
                         <input name="is_zip" value="1" type="checkbox"{DATA.is_zip} />

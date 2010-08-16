@@ -134,5 +134,8 @@ $lang_module['add_fileupload'] = "Thay file tải lên mới";
 $lang_module['add_new_img'] = "Thay hình minh họa mới";
 $lang_module['is_zip'] = "ZIP file khi download";
 $lang_module['zip_readme'] = "Nội dung file README.txt kèm theo file ZIP";
+$lang_module['is_resume'] = "Hỗ trợ chế độ resume khi download";
+$lang_module['max_speed'] = "Hạn chế tốc độ tải file";
+$lang_module['kb_sec'] = "KB/sec (0 = không hạn chế)";
 
 ?>
