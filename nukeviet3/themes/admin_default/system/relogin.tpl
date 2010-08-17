@@ -9,16 +9,26 @@
         <meta name="robots" content="noindex, nofollow" />
         <title>{SITE_NAME} | {PAGE_TITLE}</title>
         <link rel="stylesheet" type="text/css" href="{CSS}" />
+        <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/{SITELANG}.js"></script>
         <script type="text/javascript">
             function nv_checkadminlogin_submit()
             {
                var password = document.getElementById( 'password' );
-               if(password.value==''){
+               if(password.value=='')
                {
             	   return false;
                }
                return true;
-            }            
+            } 
+
+           function nv_admin_logout()
+           {
+              if (confirm(nv_admlogout_confirm[0]))
+              {
+            	  window.location.href = '{NV_BASE_SITEURL}index.php?second=admin_logout&ok=1';
+              }
+              return false;
+           }
         </script>
         <!--[if IE 6]>
             <script src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
@@ -61,6 +71,9 @@
                         <input name="save" id="save" type="hidden" value="1" />
                         <input class="submitform" type="submit" value="{N_SUBMIT}" />
                     </form>
+                    <p align="right" style="padding:10px;">
+                        <a class="lostpass" href="javascript:void(0);" onclick="nv_admin_logout();">{NV_LOGOUT}</a>
+                    </p>                    
                 </div>
             </div>
         </div>

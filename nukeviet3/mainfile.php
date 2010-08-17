@@ -395,20 +395,6 @@ if ( defined( "NV_IS_ADMIN" ) )
             exit();
         }
     }
-    //Admin thoat
-    if ( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( 'second', 'get' ) == "admin_logout" )
-    {
-        if ( defined( 'NV_IS_USER_FORUM' ) )
-        {
-            define( 'NV_IS_MOD_USER', true );
-            require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/logout.php' );
-        }
-        else
-        {
-            $nv_Request->unset_request( 'nvloginhash', 'cookie' );
-        }
-        require_once ( NV_ROOTDIR . "/includes/core/admin_logout.php" );
-    }
 }
 elseif ( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
 {
