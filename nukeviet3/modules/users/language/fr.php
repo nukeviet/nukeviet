@@ -112,11 +112,9 @@ $lang_module['pass_old'] = "Mot de passe actuel";
 $lang_module['pass_new'] = "Nouveau mot de passe";
 $lang_module['pass_new_re'] = "Confirmer le nouveau mot de passe";
 $lang_module['change_pass_ok'] = "Le mot de passe a été changé";
-
 $lang_module['lostpass_subject_email'] = "Instruction de reprise de mot de passe";
 $lang_module['lostpass_active_info'] = "Bonjour %1\$s,\n\nVous nvenez de demander de changer le mot de passe sur le site %2\$s. Pour le changer, suivez le lien ci-dessous:\n\nURL: %3\$s\n\nLes informations à déclarer:\n\nIdentifiant: %4\$s\nE-mail: %5\$s\nCe message est généré automatiquement depuis le site %2\$s. Si vous ne comprenez pas le contenu, merci de le supprimer.\n\nAdministrateur";
 $lang_module['lostpass_content_mess'] = "Nous vous avons envoyé les informations  à %1\$s,<br><br> Suivez les instructions pour ativer votre compte";
-
 $lang_module['lostpass_send_subject_ok'] = "Votre mot de passe a été changé";
 $lang_module['lostpass_send_account_ok'] = "Bonjour %1\$s,<br /><br />Votre mot de passe sur le site %2\$s a été changé. Ci-dessous les nouvelles informations:<br /><br />URL: %3\$s<br />Identifiant: %4\$s<br />Mot de passe: %5\$s<br /><br />Ce message est généré automatiquement depuis le site %2\$s. Si vous ne comprenez pas le contenu, merci de le supprimer.<br /><br />Administrateur";
 $lang_module['lostpass_send_pass'] = "Votre mot de passe a été changé et envoyé à votre email";
@@ -125,7 +123,6 @@ $lang_module['changepass_title'] = "Changer le mot de passe";
 $lang_module['logout_title'] = "Quiter";
 $lang_module['edit_info_title'] = "Éditer";
 $lang_module['img_size_title'] = "Image: 80x80";
-
 //OpenID
 $lang_module['st_login'] = "Identification normale";
 $lang_module['st_login2'] = "Possibilite d'Identification avec un compte normal";
