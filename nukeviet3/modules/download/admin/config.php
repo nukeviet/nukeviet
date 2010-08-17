@@ -161,6 +161,7 @@ while ( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 $array_config['is_addfile'] = ! empty( $array_config['is_addfile'] ) ? " checked=\"checked\"" : "";
 $array_config['is_upload'] = ! empty( $array_config['is_upload'] ) ? " checked=\"checked\"" : "";
 $array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? " checked=\"checked\"" : "";
+$array_config['is_resume'] = ! empty( $array_config['is_resume'] ) ? " checked=\"checked\"" : "";
 
 $who_addfile = $array_config['who_addfile'];
 $array_config['who_addfile'] = array();
