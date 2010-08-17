@@ -122,4 +122,10 @@ $lang_module['movefileconfig'] = "Veuillez déplacer le fichier config.php dans 
 $lang_module['copyright'] = "Merci de citer le lien vers l'article originale si vous le reproduisez sur les autres sites";
 $lang_module['db_detete'] = "Supprimer les tables de données existantes";
 
+$lang_module['question'] = "Question secrète";
+$lang_module['answer_question'] = "Votre réponse";
+$lang_module['your_question_empty'] = "Merci de sélectionner une question secrète";
+$lang_module['answer_empty'] = "Merci de donner la réponse";
+
+
 ?>

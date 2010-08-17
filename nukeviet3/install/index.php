@@ -422,7 +422,7 @@ elseif ( $step == 6 )
     $error = $site_name = $login = $email = $password = $re_password = "";
     if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
     {
-        $site_name = filter_text_input( 'site_name', 'post', '' );
+        $site_name = filter_text_input( 'site_name', 'post', '',1);
         $login = filter_text_input( 'nv_login', 'post', '' );
         $email = filter_text_input( 'nv_email', 'post', '' );
         $password = filter_text_input( 'nv_password', 'post', '' );
@@ -431,12 +431,18 @@ elseif ( $step == 6 )
         $check_pass = nv_check_valid_pass( $password, NV_APASSMAX, NV_APASSMIN );
         $check_email = nv_check_valid_email( $email );
         
+        $question = filter_text_input( 'question', 'post', '', 1 );
+        $answer_question = filter_text_input( 'answer_question', 'post', '', 1 );
+       
         $array_data['site_name'] = $site_name;
         $array_data['nv_login'] = $login;
         $array_data['nv_email'] = $email;
         $array_data['nv_password'] = $password;
         $array_data['re_password'] = $re_password;
         $array_data['nv_login'] = $login;
+        $array_data['question'] = $question;
+        $array_data['answer_question'] = $answer_question;
+        
         $global_config['site_email'] = $email;
         
         $db = new sql_db( $db_config );
@@ -454,7 +460,7 @@ elseif ( $step == 6 )
         }
         elseif ( $login != $db->fixdb( $login ) )
         {
-             $error = sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
+            $error = sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
         }
         elseif ( ! empty( $check_email ) )
         {
@@ -468,6 +474,14 @@ elseif ( $step == 6 )
         {
             $error = sprintf( $lang_global['passwordsincorrect'], $password, $re_password );
         }
+        elseif ( empty( $question ) )
+        {
+            $error = $lang_module['your_question_empty'];;
+        }
+        elseif ( empty( $answer_question ) )
+        {
+            $error = $lang_module['answer_empty'];;
+        }
         else
         {
             $password = $crypt->hash( $password );
@@ -475,7 +489,7 @@ elseif ( $step == 6 )
             
             $db->sql_query( "TRUNCATE TABLE `" . $db_config['prefix'] . "_users`" );
             $sql = "INSERT INTO `" . $db_config['prefix'] . "_users` (`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `sig`, `regdate`, `website`, `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) 
-                VALUES(NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( md5( $login ) ) . ", " . $db->dbescape( $password ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( $login ) . ", '', '', 0, NULL, " . NV_CURRENTTIME . ", '', '', '', '', '', '', '', '', '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '')";
+                VALUES(NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( md5( $login ) ) . ", " . $db->dbescape( $password ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( $login ) . ", '', '', 0, NULL, " . NV_CURRENTTIME . ", '', '', '', '', '', '', " . $db->dbescape( $question ) . ", " . $db->dbescape( $answer_question ) . ", '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '')";
             $userid = $db->sql_query_insert_id( $sql );
             
             $db->sql_query( "TRUNCATE TABLE `" . $db_config['prefix'] . "_authors`" );
@@ -483,7 +497,6 @@ elseif ( $step == 6 )
             if ( $userid > 0 and $db->sql_query( $sql ) )
             {
                 $sql = array();
-                
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'site_email', " . $db->dbescape_string( $global_config['site_email'] ) . ")";
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'error_send_email', " . $db->dbescape_string( $global_config['site_email'] ) . ")";
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'my_domains', " . $db->dbescape_string( NV_SERVER_NAME ) . ")";
@@ -513,16 +526,14 @@ elseif ( $step == 6 )
                     $nv_Request->set_Session( 'maxstep', $step );
                     nv_save_file_config();
                     @rename( NV_ROOTDIR . "/" . $file_config_temp, NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME );
+                    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+                    exit();
                 }
-                Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
-                exit();
             }
             else
             {
-                $nv_Request->set_Session( 'maxstep', 1 );
                 $error = "Error add Administrator";
             }
-        
         }
     }
     $array_data['error'] = $error;

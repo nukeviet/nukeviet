@@ -638,6 +638,9 @@ $lang_module['db_detete'] = "Odstranit stávající tabulky";
 	 vietnam:	  Xóa các bảng dữ liệu đã tồn tại
 	 english:	  Delete the existing tables
 */
-
+$lang_module['question'] = "Vybrat otázka";
+$lang_module['answer_question'] = "Vaše odpověď";
+$lang_module['your_question_empty'] = "Prázdný dotaz";
+$lang_module['answer_empty'] = "Prázdná odpověď";
 
 ?>

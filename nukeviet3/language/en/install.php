@@ -102,7 +102,7 @@ $lang_module['enter_form'] = "Enter form";
 $lang_module['sitename'] = "Site name";
 $lang_module['err_sitename'] = "You must provide site name";
 $lang_module['sitename_note'] = "Website's name. It can be your name, company's name or orgnazation...";
-$lang_module['admin_account'] = "Administrator account";
+$lang_module['admin_account'] = "Admin account";
 $lang_module['admin_account_note'] = "Account must be at least 5 characters, avoid using admin or administrator.";
 $lang_module['admin_email'] = "Email";
 $lang_module['admin_email_note'] = "Email information";
@@ -121,5 +121,10 @@ $lang_module['finish'] = "Finish";
 $lang_module['checkfileconfig'] = "Please re-check";
 $lang_module['movefileconfig'] = "You need to move config.php file from tmp folder to site root folder, then click to check button to re-check";
 $lang_module['copyright'] = "Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement";
+
+$lang_module['question'] = "Select question";
+$lang_module['answer_question'] = "Your answer";
+$lang_module['your_question_empty'] = "Empty question";
+$lang_module['answer_empty'] = "Empty answer";
 
 ?>
