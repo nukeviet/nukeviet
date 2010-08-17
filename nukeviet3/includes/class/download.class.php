@@ -51,16 +51,26 @@ if ( ! defined( 'ALLOWED_SET_TIME_LIMIT' ) )
     }
 }
 
+/**
+ * download
+ * 
+ * @package   
+ * @author NUKEVIET 3.0
+ * @copyright VINADES.,JSC
+ * @version 2010
+ * @access public
+ */
 class download
 {
-    private $properties = array( // just one array to gather all the properties of a download
-        "path" => "", // the real path to the file
-        "name" => "", // to rename the file on the fly
-        "extension" => "", // extension of the file
-        "type" => "", // the type of the file
-        "size" => "", // the file size
-        "resume" => "", // allow / disallow resuming
-        "max_speed" => "" // speed limit (ko) ( 0 = no limit)
+    private $properties = array( //
+        "path" => "", //
+        "name" => "", //
+        "extension" => "", //
+        "type" => "", //
+        "size" => "", //
+        "mtime" => 0, //
+        "resume" => "", //
+        "max_speed" => "" //
         );
 
     /**
@@ -68,19 +78,19 @@ class download
      * 
      * @param mixed $path
      * @param string $name
-     * @param string $resume
+     * @param bool $resume
      * @param integer $max_speed
-     * @return void
-     *  by default, resuming is NOT allowed and there is no speed limit
+     * @return
      */
     public function __construct( $path, $name = '', $resume = false, $max_speed = 0 )
     {
         $this->properties = array( //
             "path" => $path, //
-            "name" => ( $name == "" ) ? substr( strrchr( "/" . $path, "/" ), 1 ) : $name, // if "name" is not specified, th file won't be renamed
-            "extension" => strtolower( array_pop( explode( '.', $path ) ) ), // the file extension
-            "type" => $this->my_mime_content_type( $path ), // the file type
-            "size" => intval( sprintf( "%u", filesize( $path ) ) ), // the file size
+            "name" => ( $name == "" ) ? substr( strrchr( "/" . $path, "/" ), 1 ) : $name, //
+            "extension" => strtolower( array_pop( explode( '.', $path ) ) ), //
+            "type" => $this->my_mime_content_type( $path ), //
+            "size" => intval( sprintf( "%u", filesize( $path ) ) ), //
+            "mtime" => ( $mtime = filemtime( $path ) ) > 0 ? $mtime : time(), //
             "resume" => $resume, //
             "max_speed" => $max_speed //
             );
@@ -147,13 +157,13 @@ class download
      * 
      * @param mixed $property
      * @return
-     * public function to get the value of a property
      */
     public function get_property( $property )
     {
-        if ( array_key_exists( $property, $this->properties ) ) // check if the property do exist
-                 return $this->properties[$property]; // get its value
-        else  return null; // else return null
+        if ( array_key_exists( $property, $this->properties ) ) return $this->properties[$property];
+
+        else  return null;
+
     }
 
     /**
@@ -162,13 +172,14 @@ class download
      * @param mixed $property
      * @param mixed $value
      * @return
-     * public function to set the value of a property
      */
     public function set_property( $property, $value )
     {
         if ( array_key_exists( $property, $this->properties ) )
-        { // check if the property do exist
-            $this->properties[$property] = $value; // set the new value
+        {
+
+            $this->properties[$property] = $value;
+
             return true;
         }
         else  return false;
@@ -177,108 +188,123 @@ class download
     /**
      * download::download_file()
      * 
-     * @return void
-     * public function to start the download
+     * @return
      */
     public function download_file()
     {
-        // if the path is unset, then error !
-        if ( empty( $this->properties['path'] ) or ! file_exists( $this->properties['path'] ) or ! $this->properties['size'] )
+        if ( ! is_readable( $this->properties['path'] ) or ! is_file( $this->properties['path'] ) )
         {
             die( "Nothing to download!" );
         }
-        else
+
+        $seek_start = 0;
+        $seek_end = -1;
+        $data_section = false;
+
+        if ( ( $http_range = nv_getenv( 'HTTP_RANGE' ) ) != "" )
         {
-            // if resuming is allowed ...
-            if ( $this->properties['resume'] )
+            $seek_range = substr( $http_range, strlen( 'bytes=' ) );
+
+            $range = explode( '-', $seek_range );
+
+            if ( ! empty( $range[0] ) )
             {
-                // check if http_range is sent by browser (or download manager)
-                if ( ( $http_range = nv_getenv( 'HTTP_RANGE' ) ) != "" )
-                {
-                    list( $a, $range ) = explode( "=", $http_range );
-                    preg_match( "/([0-9]+)\-([0-9]*)\/?([0-9]*)/", $range, $range_parts ); // parsing Range header
-                    $byte_from = $range_parts[1]; // the download range : from $byte_from ...
-                    $byte_to = $range_parts[2]; // ... to $byte_to
-                    
-                    header( 'HTTP/1.1 206 Partial Content', true, 206 );
-                    header( 'Status: 206 Partial content' );
-                }
-                else
-                {
-                    $byte_from = 0; // if no range header is found, download the whole file from byte 0 ...
-                    $byte_to = $this->properties['size'] - 1; // ... to the last byte
-                    header( 'HTTP/1.1 200 OK', true, 200 );
-                    header( 'Status: 200 OK' );
-                }
+                $seek_start = intval( $range[0] );
+            }
 
-                // if the end byte is not specified, ...
-                if ( $byte_to == "" )
-                {
-                    $byte_to = $this->properties['size'] - 1; // ... set it to the last byte of the file
-                }
+            if ( isset( $range[1] ) and ! empty( $range[1] ) )
+            {
+                $seek_end = intval( $range[1] );
+            }
 
-                //header( "HTTP/1.1 206 Partial Content" ); // send the partial content header
-                // ... else, download the whole file
+            if ( ! $this->properties['resume'] )
+            {
+                $seek_start = 0;
             }
             else
             {
-                $byte_from = 0;
-                $byte_to = $this->properties['size'] - 1;
+                $data_section = true;
             }
+        }
 
-            $download_range = $byte_from . '-' . $byte_to . '/' . $this->properties['size']; // the download range
-            $download_size = $byte_to - $byte_from; // the download length
+        @ob_end_clean();
+        $old_status = ignore_user_abort( true );
+        if ( defined( 'ALLOWED_SET_TIME_LIMIT' ) )
+        {
+            set_time_limit( 0 );
+        }
 
-            // download speed limitation
+        if ( $seek_start > ( $this->properties['size'] - 1 ) )
+        {
+            $seek_start = 0;
+        }
+
+        $res = fopen( $this->properties['path'], 'rb' );
+
+        if ( ! $res )
+        {
+            die( 'File error' );
+        }
+
+        if ( $seek_start ) fseek( $res, $seek_start );
+        if ( $seek_end < $seek_start )
+        {
+            $seek_end = $this->properties['size'] - 1;
+        }
+
+        header( "Pragma: public" );
+        header( "Expires: 0" );
+        header( "Cache-Control:" );
+        header( "Cache-Control: public" );
+        header( "Content-Description: File Transfer" );
+        header( "Content-Type: " . $this->properties['type'] );
+        if ( strstr( $this->nv_getenv( 'HTTP_USER_AGENT' ), "MSIE" ) != false )
+        {
+            header( 'Content-Disposition: attachment; filename="' . urlencode( $this->properties['name'] ) . '";' );
+        }
+        else
+        {
+            header( 'Content-Disposition: attachment; filename="' . $this->properties['name'] . '";' );
+        }
+        header( 'Last-Modified: ' . date( 'D, d M Y H:i:s \G\M\T', $this->properties['mtime'] ) );
+
+        if ( $data_section and $this->properties['resume'] )
+        {
+            header( "HTTP/1.1 206 Partial Content" );
+            header( "Status: 206 Partial Content" );
+            header( 'Accept-Ranges: bytes' );
+            header( "Content-Range: bytes " . $seek_start . "-" . $seek_end . "/" . $this->properties['size'] );
+            header( "Content-Length: " . ( $seek_end - $seek_start + 1 ) );
+        }
+        else
+        {
+            header( "Content-Length: " . $this->properties['size'] );
+        }
+
+        while ( ! ( connection_aborted() or connection_status() == 1 ) and ! feof( $res ) )
+        {
             if ( ( $speed = $this->properties['max_speed'] ) > 0 )
-            { // determine the max speed allowed ...
-                $sleep_time = ( 8 / $speed ) * 1e6; // ... if "max_speed" = 0 then no limit (default)
+            {
+                $sleep_time = ( 8 / $speed ) * 1e6;
             }
             else
             {
                 $sleep_time = 0;
             }
 
-            // send the headers
-            header( "Pragma: public" ); // purge the browser cache
-            header( "Expires: 0" );
-            header( "Cache-Control:" );
-            header( "Cache-Control: public" );
-            header( "Content-Description: File Transfer" );
-            header( "Content-Type: " . $this->properties['type'] ); // file type
-            if ( strstr( $this->nv_getenv('HTTP_USER_AGENT'), "MSIE" ) != false )
-            {
-                header( 'Content-Disposition: attachment; filename="' . urlencode($this->properties['name']) . '";' );
-            }
-            else
-            {
-                header( 'Content-Disposition: attachment; filename="' . $this->properties['name'] . '";' );
-            }
-            header( "Content-Transfer-Encoding: binary" ); // transfer method
-            header( "Content-Range: " . $download_range ); // download range
-            header( "Content-Length: " . $download_size ); // download length
-
-            // send the file content
-            $fp = fopen( $this->properties['path'], "r" ); // open the file
-            if ( ! $fp )
-            {
-                die( 'File error' ); // if $fp is not a valid stream resource, exit
-            }
-
-            fseek( $fp, $byte_from ); // seek to start of missing part
-            while ( ! feof( $fp ) )
-            { // start buffered download
-                if ( defined( 'ALLOWED_SET_TIME_LIMIT' ) )
-                {
-                    set_time_limit( 0 ); // reset time limit for big files (has no effect if php is executed in safe mode)
-                }
-                print ( fread( $fp, 1024 * 8 ) ); // send 8ko
-                flush();
-                usleep( $sleep_time ); // sleep (for speed limitation)
-            }
-            fclose( $fp ); // close the file
-            exit;
+            print ( fread( $res, 1024 * 8 ) );
+            flush();
+            usleep( $sleep_time );
         }
+
+        fclose( $res );
+
+        ignore_user_abort( $old_status );
+        if ( defined( 'ALLOWED_SET_TIME_LIMIT' ) )
+        {
+            set_time_limit( ini_get( "max_execution_time" ) );
+        }
+        exit;
     }
 }
 

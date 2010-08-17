@@ -107,37 +107,52 @@ if ( $is_zip )
     $subfile = nv_pathinfo_filename( $file );
     $tem_file = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $subfile;
 
-    if ( file_exists( $tem_file ) )
-    {
-        @nv_deletefile( $tem_file );
-    }
+    $file_exists = file_exists( $tem_file );
 
-    require_once ( NV_ROOTDIR . '/includes/class/pclzip.class.php' );
-
-    $zip = new PclZip( $tem_file );
-
-    $zip->add( $file_src, PCLZIP_OPT_REMOVE_PATH, $upload_dir );
-
-    if ( isset( $global_config['site_logo'] ) and ! empty( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/images/' . $global_config['site_logo'] ) )
-    {
-        $zip->add( NV_ROOTDIR . '/images/' . $global_config['site_logo'], PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/images' );
-    }
-
-    if ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt' ) )
-    {
-        $zip->add( NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt', PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/' . NV_DATADIR );
-    }
-
-    if ( file_exists( $tem_file ) )
+    if ( $file_exists and filemtime( $tem_file ) > NV_CURRENTTIME - 600 )
     {
         $file_src = $tem_file;
         $file_basename = $subfile . '.zip';
+    }
+    else
+    {
+        if ( $file_exists )
+        {
+            @nv_deletefile( $tem_file );
+        }
+
+        require_once ( NV_ROOTDIR . '/includes/class/pclzip.class.php' );
+
+        $zip = new PclZip( $tem_file );
+
+        $zip->add( $file_src, PCLZIP_OPT_REMOVE_PATH, $upload_dir );
+
+        if ( isset( $global_config['site_logo'] ) and ! empty( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/images/' . $global_config['site_logo'] ) )
+        {
+            $zip->add( NV_ROOTDIR . '/images/' . $global_config['site_logo'], PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/images' );
+        }
+
+        if ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt' ) )
+        {
+            $zip->add( NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt', PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/' . NV_DATADIR );
+        }
+
+        if ( file_exists( $tem_file ) )
+        {
+            $file_src = $tem_file;
+            $file_basename = $subfile . '.zip';
+        }
     }
 }
 
 require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
 
 $download = new download( $file_src, $file_basename, $is_resume, $max_speed );
+if ( $is_zip )
+{
+    $mtime = ( $mtime = filemtime( $session_files['fileupload'][$file]['src'] ) ) > 0 ? $mtime : time();
+    $download->set_property( 'mtime', $mtime );
+}
 $download->download_file();
 exit();
 
