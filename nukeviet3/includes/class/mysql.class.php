@@ -548,8 +548,7 @@ class sql_db
         ), array( 
             "se-lect", "uni0n", "c0ncat", "ch@r", "0utfile", "al-ter", "in-sert", "dr0p", "fr0m", "whe-re", "up-date", "dele-te", "crea-te" 
         ), $value );
-        $value = preg_replace( "/([^\&]+)\#/", "\\1&#x23;", $value );
-        
+        //$value = preg_replace( "/([^\&]+)\#/", "\\1&#x23;", $value );
         return $value;
     }
 

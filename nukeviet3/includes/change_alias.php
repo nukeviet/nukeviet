@@ -11,7 +11,8 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 function change_alias ( $alias )
 {
     $alias = nv_EncString( $alias );
-    
+    $alias = nv_unhtmlspecialchars( $alias );    
+
     //thêm trường hợp các kí tự đặc biệt
     $alias = preg_replace( "/(!|\"|#|$|%|'|̣)/", '', $alias );
     $alias = preg_replace( "/(̀|́|̉|$|>)/", '', $alias );
