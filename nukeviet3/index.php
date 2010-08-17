@@ -17,12 +17,18 @@ if ( defined( 'NV_IS_USER' ) ) die( "Hacking attempt" );
 require_once ( NV_ROOTDIR . "/includes/core/is_user.php" );
 
 //Cap nhat trang thai online
-if ( $global_config['online_upd'] and ! defined( 'NV_IS_AJAX' ) ) require_once ( NV_ROOTDIR . "/includes/core/online.php" );
+if ( $global_config['online_upd'] and ! defined( 'NV_IS_AJAX' ) )
+{
+    require_once ( NV_ROOTDIR . "/includes/core/online.php" );
+}
 
 //Thong ke
 if ( $global_config['statistic'] and ! defined( 'NV_IS_AJAX' ) )
 {
-    if ( ! $nv_Request->isset_request( 'stat', 'session' ) ) require_once ( NV_ROOTDIR . "/includes/core/stat.php" );
+    if ( ! $nv_Request->isset_request( 'statistic_' . NV_LANG_DATA, 'session' ) )
+    {
+        require_once ( NV_ROOTDIR . "/includes/core/stat.php" );
+    }
 }
 
 //Referer + Gqueries
