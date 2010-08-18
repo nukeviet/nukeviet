@@ -162,7 +162,13 @@ $contents .= '
 <script type="text/javascript">
 function insertvaluetofield(){
 	var value = $("#posthidden").val();
-	$("#' . $area . '",opener.document).val(value); 
+	var funcNum = ' . $nv_Request->get_int( 'CKEditorFuncNum', 'get', 0 ) . ';
+	if (funcNum > 0){
+		window.opener.CKEDITOR.tools.callFunction(funcNum, value,"");
+	}
+	else{
+		$("#' . $area . '",opener.document).val(value);
+	} 
 }
 $("div#createfolder").dialog({
 	autoOpen: false,
