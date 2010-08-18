@@ -147,40 +147,44 @@ function nv_blocks_content ( )
         $result_bl = $db->sql_query( $sql_bl );
         while ( $row_bl = $db->sql_fetchrow( $result_bl ) )
         {
-            $groups_view = ( string )$row_bl['groups_view'];
-            $allowed = false;
-            if ( $groups_view == "0" )
+            $__pos = $row_bl['position'];
+            if ( isset( $__blocks_return[$__pos] ) )
             {
-                $allowed = true;
-            }
-            if ( $groups_view == "1" and defined( 'NV_IS_USER' ) )
-            {
-                $allowed = true;
-            }
-            elseif ( $groups_view == "2" and defined( 'NV_IS_MODADMIN' ) )
-            {
-                $allowed = true;
-            }
-            elseif ( defined( 'NV_IS_SPADMIN' ) )
-            {
-                $allowed = true;
-            }
-            elseif ( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) )
-            {
-                $allowed = true;
-            }
-            
-            if ( $allowed )
-            {
-                $title = $row_bl['title'];
-                if ( ! empty( $title ) and ! empty( $row_bl['link'] ) )
+                $groups_view = ( string )$row_bl['groups_view'];
+                $allowed = false;
+                if ( $groups_view == "0" )
                 {
-                    $title = "<a href=\"" . $row_bl['link'] . "\">" . $title . "</a>";
+                    $allowed = true;
                 }
-                # comment this line
-                $__blocks[$row_bl['position']][] = array( 
-                    'bid' => $row_bl['bid'], 'weight' => $row_bl['weight'], 'func_id' => $row_bl['func_id'], 'title' => $title, 'type' => $row_bl['type'], 'file_path' => $row_bl['file_path'], 'template' => $row_bl['template'] 
-                );
+                if ( $groups_view == "1" and defined( 'NV_IS_USER' ) )
+                {
+                    $allowed = true;
+                }
+                elseif ( $groups_view == "2" and defined( 'NV_IS_MODADMIN' ) )
+                {
+                    $allowed = true;
+                }
+                elseif ( defined( 'NV_IS_SPADMIN' ) )
+                {
+                    $allowed = true;
+                }
+                elseif ( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) )
+                {
+                    $allowed = true;
+                }
+                
+                if ( $allowed )
+                {
+                    $title = $row_bl['title'];
+                    if ( ! empty( $title ) and ! empty( $row_bl['link'] ) )
+                    {
+                        $title = "<a href=\"" . $row_bl['link'] . "\">" . $title . "</a>";
+                    }
+                    # comment this line
+                    $__blocks[$__pos][] = array( 
+                        'bid' => $row_bl['bid'], 'weight' => $row_bl['weight'], 'func_id' => $row_bl['func_id'], 'title' => $title, 'type' => $row_bl['type'], 'file_path' => $row_bl['file_path'], 'template' => $row_bl['template'] 
+                    );
+                }
             }
         }
         
@@ -260,7 +264,7 @@ function nv_blocks_content ( )
         foreach ( $__blocks_return as $__pos => $b_content )
         {
             $__blocks_return[$__pos] = '<div class="column" id="' . ( preg_replace( '#\[|\]#', '', $__pos ) ) . '">';
-            $__blocks_return[$__pos] .=     $b_content;
+            $__blocks_return[$__pos] .= $b_content;
             $__blocks_return[$__pos] .= '	<span><a class="addblock" id="' . $__pos . '" href="javascript:void(0)"><img src="' . NV_BASE_SITEURL . 'images/add.png" style="border:none"/> ' . $lang_global['add_block'] . '</a></span>';
             $__blocks_return[$__pos] .= '</div>';
         }
