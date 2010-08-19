@@ -72,7 +72,7 @@
                 </label>
                 <input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="txtCaptcha" />
                 <img height="22" name="vimg" src="{NV_BASE_SITEURL}?scaptcha=captcha" title="{LANG.captcha}" alt="{LANG.captcha}" id="vimg" />
-                <img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','commentseccode_iavim');"/>
+                <img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','fcode_iavim');"/>
             </div>
             <div style="clear:both"></div>
             <div style=" padding-top:5px;">
