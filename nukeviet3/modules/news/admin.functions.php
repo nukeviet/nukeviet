@@ -14,7 +14,7 @@ $submenu['sources'] = $lang_module['sources'];
 $submenu['comment'] = $lang_module['comment'];
 $submenu['setting'] = $lang_module['setting'];
 $allow_func = array( 
-    'main', 'exptime', 'publtime', 'setting', 'content', 'keywords', 'del_content', 'cat', 'change_cat', 'list_cat', 'del_cat', 'topicsnews', 'topics', 'topicdelnews', 'addtotopics', 'change_topic', 'list_topic', 'del_topic', 'topicajax', 'sources', 'change_source', 'list_source', 'del_source', 'sourceajax', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'comment', 'del_comment', 'active_comment' 
+    'main', 'exptime', 'publtime', 'setting', 'content', 'keywords', 'del_content', 'cat', 'change_cat', 'list_cat', 'del_cat', 'topicsnews', 'topics', 'topicdelnews', 'addtotopics', 'change_topic', 'list_topic', 'del_topic', 'topicajax', 'sources', 'change_source', 'list_source', 'del_source', 'sourceajax', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'comment', 'del_comment', 'active_comment','edit_comment' 
 );
 $array_viewcat_full = array( 
     'viewcat_page_new' => $lang_module['viewcat_page_new'], 'viewcat_page_old' => $lang_module['viewcat_page_old'], 'viewcat_main_left' => $lang_module['viewcat_main_left'], 'viewcat_main_right' => $lang_module['viewcat_main_right'], 'viewcat_main_bottom' => $lang_module['viewcat_main_bottom'], 'viewcat_two_column' => $lang_module['viewcat_two_column'] 
