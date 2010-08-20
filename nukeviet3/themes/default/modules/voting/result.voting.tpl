@@ -141,13 +141,14 @@
                         <!-- BEGIN: result -->
                         <dt class="bar-title">{VOTING.title}</dt>
                         <dd class="bar-container">
-                            <div style="width: { WIDTH" id="bar{ID}">&nbsp;</div>
+                            <div style="width: {WIDTH}%;display: block;{BG}" id="bar{ID}">&nbsp;</div>
                             <strong>{WIDTH}%</strong>
                         </dd>
                         <!-- END: result -->
                     </dl>
                     <p>
-                        <strong>{LANG.total}</strong>: {TOTAL} {LANG.counter} - <strong>{LANG.publtime}:</strong>{PUBLTIME}
+                        <strong>{LANG.total}</strong>: {TOTAL} {LANG.counter} - <strong>{LANG.publtime}:</strong>
+                        {PUBLTIME}
                     </p>
                 </div>
             </div>
