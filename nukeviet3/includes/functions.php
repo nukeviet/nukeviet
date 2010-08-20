@@ -1187,7 +1187,7 @@ function nv_delete_all_cache ( )
 {
     $files = scandir( NV_ROOTDIR . "/" . NV_CACHEDIR );
     $files2 = array_diff( $files, array( 
-        ".", "..", ".htaccess", "index.html", ".svn"
+        ".", "..", ".htaccess", "index.html", ".svn" 
     ) );
     foreach ( $files2 as $f )
     {
@@ -1351,12 +1351,19 @@ function nv_chmod_dir ( $conn_id, $dir, $subdir = false )
         $array_cmd_dir[] = $dir;
         if ( $subdir and is_dir( NV_ROOTDIR . '/' . $dir ) )
         {
-            $buff = ftp_nlist( $conn_id, $dir );
-            foreach ( $buff as $dir_i )
+            $list_files = ftp_nlist( $conn_id, $dir );
+            foreach ( $list_files as $file_i )
             {
-                if ( ! in_array( $dir_i, $no_file ) and is_dir( NV_ROOTDIR . '/' . $dir . '/' . $dir_i ) )
+                if ( ! in_array( $file_i, $no_file ) )
                 {
-                    nv_chmod_dir( $conn_id, $dir . '/' . $dir_i, $subdir );
+                    if ( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $file_i ) )
+                    {
+                        nv_chmod_dir( $conn_id, $dir . '/' . $file_i, $subdir );
+                    }
+                    else
+                    {
+                        ftp_chmod( $conn_id, 0777, $dir . '/' . $file_i );
+                    }
                 }
             }
         }
