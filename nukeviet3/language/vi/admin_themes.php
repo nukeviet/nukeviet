@@ -13,11 +13,11 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
     die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['blocks'] = "Quản lý block";
 $lang_module['change_func_name'] = "Thay đổi tên gọi của function &ldquo;%1\$s&rdquo; thuộc module &ldquo;%2\$s&rdquo;";
@@ -159,4 +159,13 @@ $lang_module['block_front_delete_error'] = "Lỗi: không thể xóa block, hãy
 $lang_module['block_front_outgroup_success'] = "Block đã được bỏ ra khỏi nhóm thành công và nằm trong nhóm ";
 $lang_module['block_front_outgroup_cancel'] = "Hiện tại chỉ có duy nhất 1 block nằm trong nhóm này do đó không cần bỏ ra khỏi nhóm";
 $lang_module['block_front_outgroup_error_update'] = "Có lỗi trong quá trình cập nhật dữ liệu";
+#xcopyblock
+$lang_module['xcopyblock'] = 'Sao chép block';
+$lang_module['xcopyblock_to'] = ' sang theme ';
+$lang_module['xcopyblock_from'] = ' từ theme ';
+$lang_module['xcopyblock_position'] = 'Chọn vị trí';
+$lang_module['xcopyblock_process'] = 'Sao chép';
+$lang_module['xcopyblock_no_position'] = 'Hãy chọn ít nhất 1 vị trí để sao chép';
+$lang_module['xcopyblock_notice'] = 'Khi thực hiện hệ thống sẽ xóa các block đã tồn tại ở theme copy sang, vui lòng chờ cho các tiến trình thực hiện thành công.';
+$lang_module['xcopyblock_success'] = 'Quá trình sao chép thành công !';
 ?>

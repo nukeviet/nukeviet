@@ -129,7 +129,6 @@ else
 	$contents .= "</form>";
 	$contents .= '
 <script type="text/javascript">
-// jquery xman 18/05/2010
  $(function(){
  	$("input[name=continue]").click(function(){
  		var themename = $("select[name=themename]").val();
