@@ -1,10 +1,28 @@
-<!-- BEGIN: main --><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- BEGIN: main --> <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{VOTING.question}</title>
         <meta http-equiv="Content-Language" content="vi" />
         {SCRIPT}
+        <script type="text/javascript">
+            $(document).ready(function(){
+                if ($("#poll-results").length > 0) {
+                    animateResults();
+                }
+            });
+            
+            function animateResults(){
+                $("#poll-results div").each(function(){
+                    var percentage = $(this).next().text();
+                    $(this).css({
+                        width: "0%"
+                    }).animate({
+                        width: percentage
+                    }, 'slow');
+                });
+            }
+        </script>
         <style type="text/css">
             body {
                 font-family: arial, verdana, helvetica, sans-serif;
@@ -117,19 +135,19 @@
             <div id="poll-container">
                 <div id="poll-results">
                     <!-- BEGIN: note -->
-                    <p style="text-align:center;color: #0000ff;;">{VOTINGNOTE}</p>
+                    <p style="text-align: center; color: #0000ff;">{VOTINGNOTE}</p>
                     <!-- END: note --><h3>{VOTING.question}</h3>
                     <dl class="graph">
                         <!-- BEGIN: result -->
                         <dt class="bar-title">{VOTING.title}</dt>
                         <dd class="bar-container">
-                            <div style="width: {WIDTH}%;display: block;{BG}" id="bar{ID}">&nbsp;</div>
+                            <div style="width: { WIDTH" id="bar{ID}">&nbsp;</div>
                             <strong>{WIDTH}%</strong>
                         </dd>
                         <!-- END: result -->
                     </dl>
                     <p>
-                        <strong>{LANG.total}</strong>: {TOTAL} {LANG.counter} - <strong>{LANG.publtime}: </strong>{PUBLTIME}
+                        <strong>{LANG.total}</strong>: {TOTAL} {LANG.counter} - <strong>{LANG.publtime}:</strong>{PUBLTIME}
                     </p>
                 </div>
             </div>

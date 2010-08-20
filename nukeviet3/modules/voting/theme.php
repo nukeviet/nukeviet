@@ -13,9 +13,7 @@ function voting_result ( $voting )
 {
     global $module_info, $global_config, $module_file;
     $xtpl = new XTemplate( "result.voting.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-    $script = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n";
-    $script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/poll.js\"></script>\n";
-    $xtpl->assign( 'SCRIPT', $script );
+    $xtpl->assign( 'SCRIPT', "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n" );
     if ( isset( $voting['total'] ) )
     {
         $totalvote = $voting['total'];
