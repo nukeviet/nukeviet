@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 01, 2010, 10:23:22 AM
+* @Createdate Aug 21, 2010, 07:07:54 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -17,6 +17,7 @@ $lang_translator['createdate'] ="21/6/2010, 19:30";
 $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.";
 $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_module";
+
 $lang_module['voting_hits'] = "Voter";
 $lang_module['voting_result'] = "Résultat";
 $lang_module['EDIT'] = "Éditer";

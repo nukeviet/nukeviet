@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 01, 2010, 10:23:21 AM
+* @Createdate Aug 21, 2010, 07:07:54 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -151,5 +151,13 @@ $lang_module['block_front_delete_error'] = "Erreur: Impossible de supprimer le b
 $lang_module['block_front_outgroup_success'] = "Le Block a été éliminé et ajouté au groupe";
 $lang_module['block_front_outgroup_cancel'] = "Il n'est  pas nécessaire de éliminer le block du groupe par ce qu'il y a un seul block dans ce groupe";
 $lang_module['block_front_outgroup_error_update'] = "Erreur de mise à jour de données";
+$lang_module['xcopyblock'] = "Copier les blocks";
+$lang_module['xcopyblock_to'] = "vers";
+$lang_module['xcopyblock_from'] = "à prtir de";
+$lang_module['xcopyblock_position'] = "Choisir la position";
+$lang_module['xcopyblock_process'] = "Copier";
+$lang_module['xcopyblock_no_position'] = "Choisissez au moins 1 position";
+$lang_module['xcopyblock_notice'] = "Le système supprimera les blocks existants au thème cible. Merci de patienter.";
+$lang_module['xcopyblock_success'] = "Copie avec succès!";
 
 ?>

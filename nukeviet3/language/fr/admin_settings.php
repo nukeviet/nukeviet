@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 01, 2010, 10:23:21 AM
+* @Createdate Aug 21, 2010, 07:07:54 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -98,5 +98,38 @@ $lang_module['my_domains'] = "Les domaines du site";
 $lang_module['cookie_prefix'] = "Préfixe de cookie";
 $lang_module['session_prefix'] = "Préfixe de session";
 $lang_module['is_user_forum'] = "Confier la gestion de membres au forum";
+$lang_module['banip'] = "IPs interdits";
+$lang_module['banip_ip'] = "IP";
+$lang_module['banip_timeban'] = "Début";
+$lang_module['banip_timeendban'] = "Fin";
+$lang_module['banip_funcs'] = "Fonctions";
+$lang_module['banip_checkall'] = "Sélectionner tout";
+$lang_module['banip_uncheckall'] = "Desélectionner tout";
+$lang_module['banip_add'] = "Ajouter";
+$lang_module['banip_address'] = "Adresse IP";
+$lang_module['banip_begintime'] = "Commencer";
+$lang_module['banip_endtime'] = "Terminer";
+$lang_module['banip_notice'] = "Note";
+$lang_module['banip_confirm'] = "Confirmer";
+$lang_module['banip_mask_select'] = "Sélectionnez";
+$lang_module['banip_area'] = "Zone interdite";
+$lang_module['banip_nolimit'] = "Perpétuel";
+$lang_module['banip_area_select'] = "Séletionnez la zone";
+$lang_module['banip_noarea'] = "pas encore déterminé";
+$lang_module['banip_del_success'] = "Suppression avec succès!";
+$lang_module['banip_area_front'] = "Site";
+$lang_module['banip_area_admin'] = "Administration";
+$lang_module['banip_area_both'] = "Site et Administration";
+$lang_module['banip_delete_confirm'] = "Êtes-vous sûr de vouloir supprimer cette IP de la liste des IPs interdits?";
+$lang_module['banip_mask'] = "Masque";
+$lang_module['banip_edit'] = "Éditer";
+$lang_module['banip_delete'] = "Supprimer";
+$lang_module['banip_error_ip'] = "Saisissez IP à interdire";
+$lang_module['banip_error_area'] = "Merci de sélectioinner la zone";
+$lang_module['banip_error_validip'] = "Erreur: Adresse IP invalide";
+$lang_module['uploadconfig'] = "Configurer le Transfert";
+$lang_module['uploadconfig_ban_ext'] = "Types de fichier interdits";
+$lang_module['uploadconfig_ban_mime'] = "Types de Mime interdits";
+$lang_module['uploadconfig_types'] = "Types de fichier autorisés";
 
 ?>

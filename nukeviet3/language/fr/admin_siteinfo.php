@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 01, 2010, 10:23:21 AM
+* @Createdate Aug 21, 2010, 07:07:54 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -44,5 +44,13 @@ $lang_module['variables_php'] = "Variables pré-destinés";
 $lang_module['version'] = "Version de système";
 $lang_module['checkversion'] = "Vérifier la version";
 $lang_module['server_api'] = "Protocole entre serveur et PHP";
+$lang_module['chmod'] = "Vérifier les permissions";
+$lang_module['chmod_need'] = "Il faut changer les permissions (chmod 777)";
+$lang_module['chmod_noneed'] = "OK!";
+$lang_module['checkchmod'] = "Changez les permissions (chmode) des répertoires nécessaires";
+$lang_module['checkchmod_error_account'] = "Erreur: compte ftp incorrect";
+$lang_module['checkchmod_error_path'] = "Erreur: chemin incorrect";
+$lang_module['checkchmod_error_unable_chmod'] = "Erreur: impossible de changer les permissions (chmod) des répertoires:";
+$lang_module['checkchmod_success'] = "Changement les permissions avec succès.";
 
 ?>

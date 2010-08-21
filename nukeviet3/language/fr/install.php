@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 01, 2010, 10:23:21 AM
+* @Createdate Aug 21, 2010, 07:07:54 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -95,6 +95,7 @@ $lang_module['db_pass'] = "Mot de passse";
 $lang_module['db_pass_note'] = "Mot de passse de l'utilisateur de Base de données";
 $lang_module['db_name'] = "Nom de Base de données";
 $lang_module['db_name_note'] = "Attention: Quelques hébergeurs ajoutent un préfixe à la base de données";
+$lang_module['db_detete'] = "Supprimer les tables de données existantes";
 $lang_module['prefix'] = "Préfixe des tables";
 $lang_module['db_err_prefix'] = "Erreur: préfixe a été utilisé";
 $lang_module['enter_form'] = "Configurations principales";
@@ -120,12 +121,10 @@ $lang_module['finish'] = "Terminer";
 $lang_module['checkfileconfig'] = "Vérifier";
 $lang_module['movefileconfig'] = "Veuillez déplacer le fichier config.php dans le répertoire tmp vers le répertoire de racine du site, puis cliquez sur Vérifier";
 $lang_module['copyright'] = "Merci de citer le lien vers l'article originale si vous le reproduisez sur les autres sites";
-$lang_module['db_detete'] = "Supprimer les tables de données existantes";
-
 $lang_module['question'] = "Question secrète";
 $lang_module['answer_question'] = "Votre réponse";
 $lang_module['your_question_empty'] = "Merci de sélectionner une question secrète";
 $lang_module['answer_empty'] = "Merci de donner la réponse";
-
+$lang_module['question_note'] = "Vous aurez besoin de question secrète et la réponse au cas où vous oubliez la mot de passe.";
 
 ?>

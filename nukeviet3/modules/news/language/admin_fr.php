@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 01, 2010, 10:23:21 AM
+* @Createdate Aug 21, 2010, 07:07:54 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -142,6 +142,10 @@ $lang_module['msgnocheck'] = "Il faut sélectionner au moins un article";
 $lang_module['comment'] = "Gestion de commentaires";
 $lang_module['activecomm'] = "Activer les commentaires";
 $lang_module['emailcomm'] = "Afficher l'e-mail d'expéditeur";
+$lang_module['comment_edit'] = "Éditer";
+$lang_module['comment_edit_title'] = "Éditer les commentaires";
+$lang_module['comment_edit_active'] = "Activer";
+$lang_module['comment_edit_delete'] = "Supprimer";
 $lang_module['comment_delete'] = "Supprimer";
 $lang_module['comment_funcs'] = "Fonction";
 $lang_module['comment_email'] = "Expéditeur";

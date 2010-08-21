@@ -5,11 +5,10 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 01, 2010, 10:23:22 AM
+* @Createdate Aug 21, 2010, 07:07:54 PM
 */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE'))
-{
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
  die('Stop!!!');
 }
 

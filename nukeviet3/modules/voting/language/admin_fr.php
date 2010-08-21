@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 01, 2010, 10:23:22 AM
+* @Createdate Aug 21, 2010, 07:07:54 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -52,5 +52,6 @@ $lang_module['voting_delete_confirm'] = "Vous êtes sûr de supprimer le sondage
 $lang_module['voting_delete_success'] = "Le sondage a été supprimé !";
 $lang_module['voting_delete_unsuccess'] = "Erreur de suppression de données !";
 $lang_module['warning'] = "Remarque: Nombre d'options doivent être moins ou égale au nombre de réponses données";
+$lang_module['voting_error_content'] = "Remarques: vous devez saisir le contenu de sondage et les réponses";
 
 ?>
