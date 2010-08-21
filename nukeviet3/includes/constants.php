@@ -121,9 +121,6 @@ define( 'NV_ONLINE_UPD_TIME', 300 );
 //Thoi gian luu tru referer, 2592000 = 30 ngay
 define( 'NV_REF_LIVE_TIME', 2592000 );
 
-//Dung luong toi da cua file tai len
-define( 'NV_MAX_SIZE', 20971520 );
-
 //Chieu rong toi da cua hinh tai len
 define( 'NV_MAX_WIDTH', 1500 );
 
@@ -224,8 +221,7 @@ define( "NV_SEND_ERRORS_LIST", E_USER_ERROR ); //Danh sach cac loi se gui den em
 define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul' );
 
 //Phan dau cua trang
-define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 3.0\n * @Author VINADES.,JSC (contact@vinades.vn)\n * @Copyright (C) 2010 VINADES.,JSC. All rights reserved\n * @Createdate " . gmdate( "D, d M Y H:i:s" ) .
-    " GMT\n */" );
+define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 3.0\n * @Author VINADES.,JSC (contact@vinades.vn)\n * @Copyright (C) 2010 VINADES.,JSC. All rights reserved\n * @Createdate " . gmdate( "D, d M Y H:i:s" ) . " GMT\n */" );
 
 $global_config['site_charset'] = "utf-8";
 $global_config['check_module'] = "/^[a-z0-9\-]+$/";

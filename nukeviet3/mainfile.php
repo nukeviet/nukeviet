@@ -67,6 +67,9 @@ else
 
 require_once ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
 
+//Dung luong toi da cua file tai len
+define( 'NV_MAX_SIZE', $global_config['nv_max_size'] );
+
 $global_config['file_allowed_ext'] = ! empty( $global_config['file_allowed_ext'] ) ? explode( ",", $global_config['file_allowed_ext'] ) : array();
 $global_config['forbid_extensions'] = ! empty( $global_config['forbid_extensions'] ) ? explode( ",", $global_config['forbid_extensions'] ) : array();
 $global_config['forbid_mimes'] = ! empty( $global_config['forbid_mimes'] ) ? explode( ",", $global_config['forbid_mimes'] ) : array();
