@@ -100,5 +100,7 @@ $lang_module['keywords'] = "Từ khóa";
 $lang_module['member_view'] = "Chỉ thành viên mới có quyền xem mục này!";
 $lang_module['admin_view'] = "Chỉ người quản trị mới có quyền xem mục này!";
 $lang_module['group_view'] = "Chỉ có nhóm thành viên mới có quyền xem mục này!";
+$lang_module['rating_error1'] = 'Đánh giá không hợp lệ';
+$lang_module['rating_error2'] = 'Bạn đã đánh giá bài viết này rồi';
 
 ?>

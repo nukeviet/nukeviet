@@ -98,5 +98,7 @@ $lang_module['keywords'] = "Mot clé";
 $lang_module['member_view'] = "Cette section est réservée uniquement aux membres!";
 $lang_module['admin_view'] = "Cette section est réservée uniquement aux administrateurs!";
 $lang_module['group_view'] = "Cette section est réservé uniquement aux groupes de membres!";
+$lang_module['rating_error1'] = 'Évaluation invalide';
+$lang_module['file_rating_note2'] = 'Vous avez déjà évaluer cet article alors';
 
 ?>

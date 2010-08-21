@@ -498,5 +498,7 @@ $lang_module['group_view'] = "Pouze člen skupiny mohou zobrazit!";
 	 english:	  Only group member can view!
 */
 
+$lang_module['rating_error1'] = 'Danh gia khong hop le';
+$lang_module['rating_error2'] = 'Ban da danh gia bai viet nay roi';
 
 ?>
