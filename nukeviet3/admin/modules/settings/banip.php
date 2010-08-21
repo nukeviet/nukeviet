@@ -114,14 +114,14 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     {
         if ( $cid > 0 )
         {
-            $db->sql_query( "REPLACE INTO `" . $db_config['prefix'] . "_banip` VALUES (NULL, " . $db->dbescape( $ip ) . "," . $db->dbescape( $mask ) . ",$area,$begintime, $endtime," . $db->dbescape( $notice ) . " )" );
+            $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_banip` SET `ip`=" . $db->dbescape( $ip ) . ", `mask`=" . $db->dbescape( $mask ) . ",`area`=" . $area . ",`begintime`=" . $begintime . ", `endtime`=" . $endtime . ", `notice`=" . $db->dbescape( $notice ) . "" );
         }
         else
         {
-            $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_banip` SET `ip`=" . $db->dbescape( $ip ) . ", `mask`=" . $db->dbescape( $mask ) . ",`area`=" . $area . ",`begintime`=" . $begintime . ", `endtime`=" . $endtime . ", `notice`=" . $db->dbescape( $notice ) . " )" );
+            $db->sql_query( "REPLACE INTO `" . $db_config['prefix'] . "_banip` VALUES (NULL, " . $db->dbescape( $ip ) . "," . $db->dbescape( $mask ) . ",$area,$begintime, $endtime," . $db->dbescape( $notice ) . " )" );
         }
         nv_save_file_banip();
-        Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+       	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
         die();
     }
     else

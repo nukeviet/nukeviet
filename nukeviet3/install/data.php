@@ -300,7 +300,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banip` (
   `endtime` int(11) DEFAULT NULL,
   `notice` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ip` (`ip`),
+  UNIQUE KEY `ip` (`ip`)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
