@@ -44,5 +44,13 @@ $lang_module['variables_php'] = "Các biến tiền định";
 $lang_module['version'] = "Phiên bản NUKEVIET";
 $lang_module['checkversion'] = " Kiểm tra phiên bản";
 $lang_module['server_api'] = "Giao thức giữa máy chủ và PHP";
+$lang_module['chmod'] = "Kiểm tra chmod thư mục";
+$lang_module['chmod_need'] = "Cần chmod 777";
+$lang_module['chmod_noneed'] = "OK !";
+$lang_module['checkchmod'] = "Chmod lại thư mục cần thiết";
+$lang_module['checkchmod_error_account'] = "Tài khoản ftp của bạn không chính xác";
+$lang_module['checkchmod_error_path'] = "Các thư mục đường dẫn không chính xác";
+$lang_module['checkchmod_error_unable_chmod'] = "Không thể chmod thư mục:";
+$lang_module['checkchmod_success'] = "Đã hoàn tất quá trình chmod";
 
 ?>

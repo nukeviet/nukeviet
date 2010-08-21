@@ -24,7 +24,7 @@ if ( function_exists( 'phpinfo' ) and ! in_array( 'phpinfo', $sys_info['disable_
     $submenu['php_info_variables'] = $lang_module['variables_php'];
 }
 $allow_func = array( 
-    'main', 'php_info_configuration', 'php_info_modules', 'php_info_environment', 'php_info_variables' 
+    'main', 'php_info_configuration', 'php_info_modules', 'php_info_environment', 'php_info_variables', 'checkchmod' 
 );
 define( 'NV_IS_FILE_SITEINFO', true );
 
