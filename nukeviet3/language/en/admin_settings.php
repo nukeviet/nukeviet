@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Aug 21, 2010, 02:43:51 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -98,5 +98,38 @@ $lang_module['my_domains'] = "Domains";
 $lang_module['cookie_prefix'] = "Cookie prefix";
 $lang_module['session_prefix'] = "Session's prefix";
 $lang_module['is_user_forum'] = "Switch users management to forum";
+$lang_module['banip'] = "BanIP Manager";
+$lang_module['banip_ip'] = "Ip address";
+$lang_module['banip_timeban'] = "Ban begin time";
+$lang_module['banip_timeendban'] = "Ban end time";
+$lang_module['banip_funcs'] = "Feature";
+$lang_module['banip_checkall'] = "Check all";
+$lang_module['banip_uncheckall'] = "Uncheck all";
+$lang_module['banip_add'] = "Add new";
+$lang_module['banip_address'] = "Address";
+$lang_module['banip_begintime'] = "Begin time";
+$lang_module['banip_endtime'] = "End time";
+$lang_module['banip_notice'] = "Notice";
+$lang_module['banip_confirm'] = "Confirm";
+$lang_module['banip_mask_select'] = "Please select one";
+$lang_module['banip_area'] = "Area";
+$lang_module['banip_nolimit'] = "Unlimit time";
+$lang_module['banip_area_select'] = "Please select an area";
+$lang_module['banip_noarea'] = "No defined";
+$lang_module['banip_del_success'] = "Delete successful !";
+$lang_module['banip_area_front'] = "Frontsite";
+$lang_module['banip_area_admin'] = "Admin area";
+$lang_module['banip_area_both'] = "Both frontsite and admin area";
+$lang_module['banip_delete_confirm'] = "Are you sure to remove this ip from ban list ?";
+$lang_module['banip_mask'] = "Mask IP";
+$lang_module['banip_edit'] = "Edit";
+$lang_module['banip_delete'] = "Delete";
+$lang_module['banip_error_ip'] = "Please enter ip address want to ban";
+$lang_module['banip_error_area'] = "Please select an area";
+$lang_module['banip_error_validip'] = "Error: Please enter a valid Ip address";
+$lang_module['uploadconfig'] = "Upload Config";
+$lang_module['uploadconfig_ban_ext'] = "Forbid Extensions";
+$lang_module['uploadconfig_ban_mime'] = "Forbid Mimies";
+$lang_module['uploadconfig_types'] = "File types allowed";
 
 ?>

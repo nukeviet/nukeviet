@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:02 PM
+* @Createdate Aug 21, 2010, 02:43:51 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -52,5 +52,6 @@ $lang_module['voting_delete_confirm'] = "Are you sure to delete voting ?";
 $lang_module['voting_delete_success'] = "Delete successfully !";
 $lang_module['voting_delete_unsuccess'] = "Error:Delete fail !";
 $lang_module['warning'] = "Note: selectable must smaller than available";
+$lang_module['voting_error_content'] = "Notice: you should input Vote content and all answer question";
 
 ?>

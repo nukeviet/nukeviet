@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:02 PM
+* @Createdate Aug 21, 2010, 02:43:51 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -21,6 +21,7 @@ $lang_translator['langtype'] ="lang_module";
 $lang_module['nocatpage'] = "Error:No topic";
 $lang_module['other'] = "Other";
 $lang_module['more'] = "More";
+$lang_module['comment_login'] = "You must login to use this feature";
 $lang_module['comment_success'] = "Successful comments";
 $lang_module['comment_unsuccess'] = "Error processing the data or incomplete data";
 $lang_module['comment_title'] = "Comment title";

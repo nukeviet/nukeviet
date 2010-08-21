@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Aug 21, 2010, 02:43:51 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -121,10 +121,10 @@ $lang_module['finish'] = "Finish";
 $lang_module['checkfileconfig'] = "Please re-check";
 $lang_module['movefileconfig'] = "You need to move config.php file from tmp folder to site root folder, then click to check button to re-check";
 $lang_module['copyright'] = "Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement";
-
 $lang_module['question'] = "Select question";
 $lang_module['answer_question'] = "Your answer";
 $lang_module['your_question_empty'] = "Empty question";
 $lang_module['answer_empty'] = "Empty answer";
+$lang_module['question_note'] = "You should need security question and answer question if you have been lost your password";
 
 ?>

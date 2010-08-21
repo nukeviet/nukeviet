@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Aug 21, 2010, 02:43:51 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -151,5 +151,13 @@ $lang_module['block_front_delete_error'] = "Error: Unable to delete the block, c
 $lang_module['block_front_outgroup_success'] = "Block was successfully removed from the group and add to group";
 $lang_module['block_front_outgroup_cancel'] = "Currently there is only one block in this group should therefore not removed from group";
 $lang_module['block_front_outgroup_error_update'] = "There are errors in the process of updating data";
+$lang_module['xcopyblock'] = "Block copying";
+$lang_module['xcopyblock_to'] = "target theme";
+$lang_module['xcopyblock_from'] = "from theme";
+$lang_module['xcopyblock_position'] = "Select position";
+$lang_module['xcopyblock_process'] = "Copy";
+$lang_module['xcopyblock_no_position'] = "Please select at least on position to copy";
+$lang_module['xcopyblock_notice'] = "This process will drop all exist blocks in target theme, please wait until all process successful";
+$lang_module['xcopyblock_success'] = "All process has been done !";
 
 ?>

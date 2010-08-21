@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Aug 21, 2010, 02:43:51 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -44,5 +44,13 @@ $lang_module['variables_php'] = "Predefine variables";
 $lang_module['version'] = "NUKEVET version";
 $lang_module['checkversion'] = "Check version";
 $lang_module['server_api'] = "Server API";
+$lang_module['chmod'] = "Check folder permission";
+$lang_module['chmod_need'] = "Need to set permission";
+$lang_module['chmod_noneed'] = "OK !";
+$lang_module['checkchmod'] = "Set permission for all folder needed";
+$lang_module['checkchmod_error_account'] = "Your ftp account is incorrect";
+$lang_module['checkchmod_error_path'] = "Path folder is incorrect";
+$lang_module['checkchmod_error_unable_chmod'] = "Can't set permission";
+$lang_module['checkchmod_success'] = "All done !";
 
 ?>
