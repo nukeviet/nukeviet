@@ -222,6 +222,13 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 {
                     $file = substr( $file, strlen( NV_BASE_SITEURL ) );
                     $newfile = basename( $file );
+                    
+                    unset( $m );
+                    if ( preg_match( "/(.*)(\.[a-zA-Z0-9]{32})(\.[a-zA-Z]+)$/", $newfile, $m ) )
+                    {
+                        $newfile = $m[1] . $m[3];
+                    }
+                    
                     $newfile2 = $newfile;
                     $i = 1;
                     while ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $upload_dir . '/' . $newfile2 ) )
@@ -258,6 +265,13 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
                 {
                     $newfile = basename( $fileimage );
+                    
+                    unset( $m );
+                    if ( preg_match( "/(.*)(\.[a-zA-Z0-9]{32})(\.[a-zA-Z]+)$/", $newfile, $m ) )
+                    {
+                        $newfile = $m[1] . $m[3];
+                    }
+                    
                     $newfile2 = $newfile;
                     $i = 1;
                     while ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/images/' . $newfile2 ) )

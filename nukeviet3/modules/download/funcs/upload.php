@@ -156,7 +156,25 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                 {
                     if ( in_array( $upload_info['ext'], $download_config['upload_filetype'] ) )
                     {
-                        @chmod( $upload_info['name'], 0644 );
+                        mt_srand( ( double )microtime() * 1000000 );
+                        $maxran = 1000000;
+                        $random_num = mt_rand( 0, $maxran );
+                        $random_num = md5( $random_num );
+                        $nv_pathinfo_filename = nv_pathinfo_filename( $upload_info['name'] );
+                        $new_name = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
+
+                        $rename = nv_renamefile( $upload_info['name'], $new_name );
+
+                        if ( $rename[0] == 1 )
+                        {
+                            $fileupload = $new_name;
+                        }
+                        else
+                        {
+                            $fileupload = $upload_info['name'];
+                        }
+
+                        @chmod( $fileupload, 0644 );
                         $fileupload = str_replace( NV_ROOTDIR . '/', "", $upload_info['name'] );
                         $fileupload = NV_BASE_SITEURL . $fileupload;
                         $array['filesize'] = $upload_info['size'];
@@ -197,7 +215,25 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
 
                     if ( empty( $upload_info['error'] ) )
                     {
-                        @chmod( $upload_info['name'], 0644 );
+                        mt_srand( ( double )microtime() * 1000000 );
+                        $maxran = 1000000;
+                        $random_num = mt_rand( 0, $maxran );
+                        $random_num = md5( $random_num );
+                        $nv_pathinfo_filename = nv_pathinfo_filename( $upload_info['name'] );
+                        $new_name = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
+
+                        $rename = nv_renamefile( $upload_info['name'], $new_name );
+
+                        if ( $rename[0] == 1 )
+                        {
+                            $fileimage = $new_name;
+                        }
+                        else
+                        {
+                            $fileimage = $upload_info['name'];
+                        }
+
+                        @chmod( $fileimage, 0644 );
                         $fileimage = str_replace( NV_ROOTDIR . "/", "", $upload_info['name'] );
                         $fileimage = NV_BASE_SITEURL . $fileimage;
                     }
