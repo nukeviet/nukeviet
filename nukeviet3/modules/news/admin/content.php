@@ -384,9 +384,10 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             }
             $id_block_content[] = 0;
             $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `id` = " . $rowcontent['id'] . " AND `bid` NOT IN (" . implode( ",", $id_block_content ) . ")" );
-            foreach ( $array_block_cat_module as $bid_i )
+            $id_block_content = array_keys($array_block_cat_module);
+            foreach ( $id_block_content as $bid_i )
             {
-                nv_news_fix_block( $bid_i );
+                nv_news_fix_block( $bid_i, false);
             }
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
             die();

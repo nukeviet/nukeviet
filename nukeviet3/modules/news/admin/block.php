@@ -71,12 +71,12 @@ $id_array = array();
 $listid = $nv_Request->get_string( 'listid', 'get', '' );
 if ( $listid == "" )
 {
-    $sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `inhome`=1 AND `id` NOT IN(SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . ") ORDER BY `id` DESC LIMIT 0,20";
+    $sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `inhome`=1 AND `id` NOT IN(SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . ") ORDER BY `publtime` DESC LIMIT 0,20";
 }
 else
 {
     $id_array = array_map( "intval", explode( ",", $listid ) );
-    $sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `inhome`=1 AND `id` IN (" . implode( ",", $id_array ) . ") ORDER BY `id` DESC";
+    $sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `inhome`=1 AND `id` IN (" . implode( ",", $id_array ) . ") ORDER BY `publtime` DESC";
 }
 
 $result = $db->sql_query( $sql );
