@@ -195,6 +195,8 @@ function nv_checkfile( mylink, is_myUrl, butt )
       document.getElementById( mylink ).value = '';
       return false;
    }
+   
+   link = rawurlencode( link );
 
    nv_ajax( 'post', script_name, nv_name_variable + '=' + nv_module_name + '&check=1&url=' + link + '&is_myurl=' + is_myUrl + '&num=' + nv_randomPassword( 8 ), '', 'nv_checkfile_result' );
    return false;

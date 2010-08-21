@@ -152,6 +152,8 @@ if ( $nv_Request->isset_request( 'check', 'post' ) )
     $is_myurl = $nv_Request->get_int( 'is_myurl', 'post', 0 );
 
     if ( empty( $url ) ) die( $lang_module['file_checkUrl_error'] );
+    
+    $url = rawurldecode( $url );
 
     if ( $is_myurl )
     {
