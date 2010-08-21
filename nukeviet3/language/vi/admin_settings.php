@@ -118,4 +118,42 @@ $lang_module['session_prefix'] = "Tiền tố session";
 
 $lang_module['is_user_forum'] = "Chuyển quản lý thành viên cho diễn đàn";
 
+#banip
+$lang_module['banip'] = "Quản lý Cấm Ip";
+$lang_module['banip_ip'] = "Ip";
+$lang_module['banip_timeban'] = "Thời gian bắt đầu";
+$lang_module['banip_timeendban'] = "Thời gian kết thúc";
+$lang_module['banip_funcs'] = "Chức năng";
+$lang_module['banip_checkall'] = "Chọn tất cả";
+$lang_module['banip_uncheckall'] = "Bỏ chọn tất cả";
+$lang_module['banip_add'] = "Thêm";
+$lang_module['banip_address'] = "Địa chỉ";
+$lang_module['banip_begintime'] = "Thời gian bắt đầu cấm";
+$lang_module['banip_endtime'] = "Thời gian bắt kết thúc";
+$lang_module['banip_notice'] = "Ghi chú";
+$lang_module['banip_confirm'] = "Chấp nhận";
+$lang_module['banip_mask_select'] = "Hãy chọn";
+$lang_module['banip_area'] = "Khu vực";
+$lang_module['banip_nolimit'] = "Vô thời hạn";
+$lang_module['banip_area_select'] = "Hãy chọn khu vực";
+$lang_module['banip_noarea'] = "Chưa xác định";
+$lang_module['banip_del_success'] = "Đã xóa thành công !";
+$lang_module['banip_area_front'] = "Ngoài site";
+$lang_module['banip_area_admin'] = "Khu vực admin";
+$lang_module['banip_area_both'] = "Cả admin và ngoài site";
+$lang_module['banip_delete_confirm'] = "Bạn có chắc muốn xóa ip này ra khỏi danh sách bị ban?";
+$lang_module['banip_mask'] = "Mask IP";
+$lang_module['banip_edit'] = "Sửa";
+$lang_module['banip_delete'] = "Xóa";
+$lang_module['banip_error_ip'] = "Hãy nhập Ip cần ban";
+$lang_module['banip_error_area'] = "Bạn cần chọn khu vực";
+$lang_module['banip_error_validip'] = "Lỗi: Bạn cần nhập IP đúng chuẩn";
+
+#uploadconfig
+$lang_module['uploadconfig'] = "Cấu hình upload";
+$lang_module['uploadconfig_ban_ext'] = "Phần mở rộng bị cấm";
+$lang_module['uploadconfig_ban_mime'] = "Loại mime bị cấm";
+$lang_module['uploadconfig_types'] = "Loại files cho phép";
+
+
 ?>

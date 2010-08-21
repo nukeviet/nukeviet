@@ -20,9 +20,11 @@ $submenu['system'] = $lang_module['global_config'];
 $submenu['smtp'] = $lang_module['smtp_config'];
 $submenu['ftp'] = $lang_module['ftp_config'];
 $submenu['bots'] = $lang_module['bots_config'];
+$submenu['banip'] = $lang_module['banip'];
+$submenu['uploadconfig'] = $lang_module['uploadconfig'];
 $submenu['checkupdate'] = $lang_module['checkupdate'];
 $allow_func = array( 
-    'main', 'system', 'bots', 'checkupdate', 'smtp', 'ftp' 
+    'main', 'system', 'bots', 'checkupdate', 'smtp', 'ftp','banip','uploadconfig' 
 );
 
 define( 'NV_IS_FILE_SETTINGS', true );
