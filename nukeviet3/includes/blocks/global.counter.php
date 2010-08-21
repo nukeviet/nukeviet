@@ -15,7 +15,7 @@ if ( ! function_exists( 'nv_block_counter' ) )
     {
         global $global_config, $db, $lang_global;
         
-        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.couter.tpl" ) )
+        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.counter.tpl" ) )
         {
             $block_theme = $global_config['site_theme'];
         }
@@ -24,7 +24,7 @@ if ( ! function_exists( 'nv_block_counter' ) )
             $block_theme = "default";
         }
         
-        $xtpl = new XTemplate( "global.couter.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
+        $xtpl = new XTemplate( "global.counter.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
         
         $xtpl->assign( 'LANG', $lang_global );
         $xtpl->assign( 'IMG_PATH', NV_BASE_SITEURL . "themes/" . $block_theme . "/" );
