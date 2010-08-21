@@ -1597,7 +1597,7 @@ function nv_is_url ( $url )
         {
             return false;
         }
-        elseif ( isset( $parts['query'] ) and ! preg_match( "/^[0-9a-z\?\&\=\#\,\;]*$/", $parts['query'] ) )
+        elseif ( isset( $parts['query'] ) and ! preg_match( "/^[0-9a-z\-\_\/\?\&\=\#\.\,\;]*$/", $parts['query'] ) )
         {
             return false;
         }
