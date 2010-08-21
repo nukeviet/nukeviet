@@ -227,12 +227,21 @@ function nv_is_blocker_proxy ( $is_proxy, $proxy_blocker )
 function nv_is_banIp ( $ip )
 {
     global $global_config;
-    if ( ! file_exists( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.config" ) or filesize( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.config" ) == 0 ) return false;
-    $ip_ban = unserialize( file_get_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.config" ) );
-    if ( $ip_ban == array() ) return false;
-    $ip_ban = array_map( "nv_preg_quote", $ip_ban );
-    $ip_ban = implode( "|", $ip_ban );
-    if ( ! empty( $ip_ban ) and preg_match( "/^" . $ip_ban . "/", $ip ) ) return true;
+    if ( file_exists( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.php" ) )
+    {
+        include ( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.php" );
+        $array_banip = ( defined( 'NV_ADMIN' ) ) ? $array_banip_admin : $array_banip_site;
+        foreach ( $array_banip as $ip_i => $array_ip )
+        {
+            if ( $array_ip['begintime'] < NV_CURRENTTIME and $array_ip['endtime'] > NV_CURRENTTIME )
+            {
+                if ( preg_replace( $array_ip['mask'], "", $ip ) == preg_replace( $array_ip['mask'], "", $ip_i ) )
+                {
+                    return true;
+                }
+            }
+        }
+    }
     return false;
 }
 

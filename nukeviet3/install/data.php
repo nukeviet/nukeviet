@@ -291,6 +291,18 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_rows` 
   KEY `clid` (`clid`)
 ) ENGINE=MyISAM";
 
+$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banip` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(32) DEFAULT NULL,
+  `mask` tinyint(4) NOT NULL DEFAULT '0',  
+  `area` tinyint(3) NOT NULL,
+  `begintime` int(11) DEFAULT NULL,
+  `endtime` int(11) DEFAULT NULL,
+  `notice` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ip` (`ip`),
+) ENGINE=MyISAM";
+
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
         ('registertype', '1', 1274757036),
         ('deny_email', 'yoursite.com|mysite.com|localhost|xxx', 1274757036),
@@ -311,7 +323,6 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'dump_backup_ext', 'gz'),
 ('sys', 'global', 'dump_backup_day', '30'),
 ('sys', 'global', 'gfx_chk', '" . $global_config['gfx_chk'] . "'),
-('sys', 'global', 'security_tags', 'script|object|iframe|applet|meta|style|form|img|onmouseover|body'),
 ('sys', 'global', 'file_allowed_ext', 'images,flash,documents,archives'),
 ('sys', 'global', 'forbid_extensions', 'php'),
 ('sys', 'global', 'forbid_mimes', ''),

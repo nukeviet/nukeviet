@@ -21,11 +21,20 @@ $submenu['smtp'] = $lang_module['smtp_config'];
 $submenu['ftp'] = $lang_module['ftp_config'];
 $submenu['bots'] = $lang_module['bots_config'];
 $submenu['banip'] = $lang_module['banip'];
-$submenu['uploadconfig'] = $lang_module['uploadconfig'];
+if ( defined( 'NV_IS_GODADMIN' ) )
+{
+    $submenu['uploadconfig'] = $lang_module['uploadconfig'];
+    $allow_func = array( 
+        'main', 'system', 'bots', 'checkupdate', 'smtp', 'ftp', 'banip', 'uploadconfig' 
+    );
+}
+else
+{
+    $allow_func = array( 
+        'main', 'system', 'bots', 'checkupdate', 'smtp', 'ftp', 'banip'
+    );
+}
 $submenu['checkupdate'] = $lang_module['checkupdate'];
-$allow_func = array( 
-    'main', 'system', 'bots', 'checkupdate', 'smtp', 'ftp','banip','uploadconfig' 
-);
 
 define( 'NV_IS_FILE_SETTINGS', true );
 ?>
