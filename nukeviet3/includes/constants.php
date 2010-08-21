@@ -122,7 +122,7 @@ define( 'NV_ONLINE_UPD_TIME', 300 );
 define( 'NV_REF_LIVE_TIME', 2592000 );
 
 //Dung luong toi da cua file tai len
-define( 'NV_MAX_SIZE', 2097152 );
+define( 'NV_MAX_SIZE', 20971520 );
 
 //Chieu rong toi da cua hinh tai len
 define( 'NV_MAX_WIDTH', 1500 );
