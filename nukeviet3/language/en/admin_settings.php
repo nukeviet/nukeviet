@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Aug 21, 2010, 02:43:51 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Aug 21, 2010, 02:43:51 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['global_config'] = "Systen Config";
 $lang_module['lang_site_config'] = "Site language config";
@@ -131,5 +132,7 @@ $lang_module['uploadconfig'] = "Upload Config";
 $lang_module['uploadconfig_ban_ext'] = "Forbid Extensions";
 $lang_module['uploadconfig_ban_mime'] = "Forbid Mimies";
 $lang_module['uploadconfig_types'] = "File types allowed";
+$lang_module['nv_max_size'] = "upload max site";
+$lang_module['sys_max_size'] = "Your server only allows upload maximum";
 
 ?>

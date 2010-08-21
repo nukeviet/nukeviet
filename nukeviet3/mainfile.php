@@ -67,9 +67,6 @@ else
 
 require_once ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
 
-//Dung luong toi da cua file tai len
-define( 'NV_MAX_SIZE', $global_config['nv_max_size'] );
-
 $global_config['file_allowed_ext'] = ! empty( $global_config['file_allowed_ext'] ) ? explode( ",", $global_config['file_allowed_ext'] ) : array();
 $global_config['forbid_extensions'] = ! empty( $global_config['forbid_extensions'] ) ? explode( ",", $global_config['forbid_extensions'] ) : array();
 $global_config['forbid_mimes'] = ! empty( $global_config['forbid_mimes'] ) ? explode( ",", $global_config['forbid_mimes'] ) : array();
@@ -167,8 +164,6 @@ if ( nv_is_banIp( $client_info['ip'] ) ) trigger_error( "Hi and Good-bye!!!", 25
 
 
 if ( $global_config['proxy_blocker'] != 0 ) //Chan proxy
-
-
 {
     $client_info['is_proxy'] = $ips->nv_check_proxy();
     if ( nv_is_blocker_proxy( $client_info['is_proxy'], $global_config['proxy_blocker'] ) )
@@ -222,7 +217,7 @@ define( "NV_BASE_SITEURL", $nv_Request->base_siteurl . '/' ); //vd: /ten_thu_muc
 define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' ); //vd: /ten_thu_muc_chua_site/admin/
 define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root ); // D:/AppServ/www
 define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) ); //Ngat dong
-define( 'NV_UPLOAD_MAX_FILESIZE', min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), NV_MAX_SIZE ) );
+define( 'NV_UPLOAD_MAX_FILESIZE', min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $global_config['nv_max_size'] ) );
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh duong dan thuc den thu muc upload
 
 
@@ -412,7 +407,7 @@ if ( ! defined( "NV_ADMIN" ) )
         $disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
         nv_info_die( $global_config['site_description'], $global_config['disable_site_title'], $disable_site_content );
     }
-    elseif ( !defined( "NV_IS_ADMIN" ) and ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
+    elseif ( ! defined( "NV_IS_ADMIN" ) and ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
     {
         Header( "Location: " . NV_BASE_SITEURL );
         exit();

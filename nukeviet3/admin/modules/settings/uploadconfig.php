@@ -77,8 +77,9 @@ foreach ( $exts as $ext )
 $contents .= "</td>\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
-
 $contents .= "</tbody>\n";
+
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_mime'] . "</strong></td>\n";
 $contents .= "<td>";
@@ -88,14 +89,15 @@ foreach ( $mimes as $mime )
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
+$contents .= "</tbody>\n";
 
 $contents .= "<tbody class='second'>";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['nv_max_size'] . ": </strong></td>\n";
 $contents .= "<td>";
 $contents .= "<select name=\"nv_max_size\">\n";
-$nv_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) );
-$p_size = $nv_max_size / 100;
+$sys_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) );
+$p_size = $sys_max_size / 100;
 for ( $index = 100; $index > 0; $index -- )
 {
     $size = floor( $index * $p_size );
@@ -106,7 +108,8 @@ for ( $index = 100; $index > 0; $index -- )
     }
     $contents .= "<option value=\"" . $size . "\" " . $sl . ">" . nv_convertfromBytes( $size ) . "</option>\n";
 }
-$contents .= "</select>\n";
+$contents .= "</select> \n";
+$contents .= " (".$lang_module['sys_max_size'].": ".nv_convertfromBytes($sys_max_size).")";
 $contents .= "</td>";
 $contents .= "</tr>";
 $contents .= "</tbody>";

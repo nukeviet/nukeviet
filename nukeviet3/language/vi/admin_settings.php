@@ -154,6 +154,7 @@ $lang_module['uploadconfig'] = "Cấu hình upload";
 $lang_module['uploadconfig_ban_ext'] = "Phần mở rộng bị cấm";
 $lang_module['uploadconfig_ban_mime'] = "Loại mime bị cấm";
 $lang_module['uploadconfig_types'] = "Loại files cho phép";
-
+$lang_module['sys_max_size'] = "Server của bạn chỉ cho phép tải file có dung lượng tối đa";
+$lang_module['nv_max_size'] = "Dung lượng tối đa của file tải lên";
 
 ?>

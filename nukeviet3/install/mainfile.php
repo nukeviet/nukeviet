@@ -149,9 +149,7 @@ define( "NV_BASE_SITEURL", $nv_Request->base_siteurl . '/' ); //vd: /ten_thu_muc
 define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' ); //vd: /ten_thu_muc_chua_site/admin/
 define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root ); // D:/AppServ/www
 define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) ); //Ngat dong
-define( 'NV_UPLOAD_MAX_FILESIZE', min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), NV_MAX_SIZE ) );
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh duong dan thuc den thu muc upload
-
 
 //Chan truy cap neu HTTP_USER_AGENT == 'none'
 if ( NV_USER_AGENT == "none" )
