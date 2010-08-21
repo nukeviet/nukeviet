@@ -12,7 +12,6 @@ if ( defined( 'NV_EDITOR' ) )
     require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 }
 $month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, date( "Y_m" ), true );
-
 $array_block_cat_module = array();
 $id_block_content = array();
 $sql = "SELECT bid, adddefault, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
@@ -384,10 +383,10 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             }
             $id_block_content[] = 0;
             $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `id` = " . $rowcontent['id'] . " AND `bid` NOT IN (" . implode( ",", $id_block_content ) . ")" );
-            $id_block_content = array_keys($array_block_cat_module);
+            $id_block_content = array_keys( $array_block_cat_module );
             foreach ( $id_block_content as $bid_i )
             {
-                nv_news_fix_block( $bid_i, false);
+                nv_news_fix_block( $bid_i, false );
             }
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
             die();
@@ -700,8 +699,9 @@ $contents .= "<script type=\"text/javascript\">\n";
 $contents .= '$("input[name=selectimg]").click(function(){
 						var area = "homeimg";
 						var path= "' . NV_UPLOADS_DIR . '/' . $module_name . '";						
+						var currentpath= "' . NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" ) . '";						
 						var type= "image";
-						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 						return false;
 					});';
 $contents .= "$(document).ready(function() {\n";
