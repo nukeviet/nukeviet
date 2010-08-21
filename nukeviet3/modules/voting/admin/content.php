@@ -78,7 +78,7 @@ if ( ! empty( $submit ) )
         "who_view" => 0, "groups_view" => "", "publ_time" => $begindate, "exp_time" => $enddate, "acceptcm" => $maxoption, "question" => $question 
     );
     
-    if ( ! empty( $question ) and $number_answer > 0 )
+    if ( ! empty( $question ) and $number_answer > 1 )
     {
         $error = $lang_module['voting_error'];
         if ( empty( $vid ) )
