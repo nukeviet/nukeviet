@@ -40,6 +40,6 @@ $global_config['engine_allowed'] = array();
 $global_config['site_theme'] = "default";
 $global_config['gfx_chk'] = 0;
 
-$global_config['version'] = "3.0.07";
+$global_config['version'] = "3.0.08";
 
 ?>
