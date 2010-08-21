@@ -20,10 +20,6 @@ function nv_save_file_banip ( )
         $dbarea = intval( $dbarea );
         if ( $dbendtime == 0 or $dbendtime > NV_CURRENTTIME )
         {
-            if ( $dbendtime == 0 )
-            {
-                $dbendtime = " NV_CURRENTTIME + 86400";
-            }
             switch ( $dbmask )
             {
                 case 3:

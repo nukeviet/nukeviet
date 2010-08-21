@@ -233,7 +233,7 @@ function nv_is_banIp ( $ip )
         $array_banip = ( defined( 'NV_ADMIN' ) ) ? $array_banip_admin : $array_banip_site;
         foreach ( $array_banip as $ip_i => $array_ip )
         {
-            if ( $array_ip['begintime'] < NV_CURRENTTIME and $array_ip['endtime'] > NV_CURRENTTIME )
+            if ( $array_ip['begintime'] < NV_CURRENTTIME and ( $array_ip['endtime'] == 0 or $array_ip['endtime'] > NV_CURRENTTIME ) )
             {
                 if ( preg_replace( $array_ip['mask'], "", $ip ) == preg_replace( $array_ip['mask'], "", $ip_i ) )
                 {
