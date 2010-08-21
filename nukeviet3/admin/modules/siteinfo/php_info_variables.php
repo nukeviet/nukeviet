@@ -11,7 +11,6 @@ if ( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 
 require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
 $array = phpinfo_array( 32, 1 );
-$contents = "";
 if ( ! empty( $array['PHP Variables'] ) )
 {
     $xtpl = new XTemplate( "variables_php.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
@@ -26,11 +25,14 @@ if ( ! empty( $array['PHP Variables'] ) )
     $a = 0;
     foreach ( $array['PHP Variables'] as $key => $value )
     {
-        $xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
-        $xtpl->assign( 'KEY', $key );
-        $xtpl->assign( 'VALUE', $value );
-        $xtpl->parse( 'main.loop' );
-        $a ++;
+        if ( substr( $key, 0, 7 ) != "_COOKIE" and $key != "_SERVER[\"HTTP_COOKIE\"]" )
+        {
+            $xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
+            $xtpl->assign( 'KEY', $key );
+            $xtpl->assign( 'VALUE', $value );
+            $xtpl->parse( 'main.loop' );
+            $a ++;
+        }
     }
     $xtpl->parse( 'main' );
     $contents = $xtpl->text( 'main' );
