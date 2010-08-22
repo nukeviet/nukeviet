@@ -1,12 +1,19 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
+/**
+ * nv_save_file_admin_config()
+ * 
+ * @return
+ */
 function nv_save_file_admin_config ( )
 {
     global $db, $db_config;
@@ -59,6 +66,7 @@ function nv_save_file_admin_config ( )
     return file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/admin_config.php", $content_config, LOCK_EX );
 
 }
+
 $delid = $nv_Request->get_int( 'delid', 'get' );
 if ( ! empty( $delid ) )
 {
@@ -67,6 +75,7 @@ if ( ! empty( $delid ) )
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
     die();
 }
+
 $error = array();
 $contents = "";
 
@@ -225,7 +234,7 @@ if ( ! empty( $error ) )
 $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-$contents .= "<table  class=\"tab1\" style=\"width:550px\">";
+$contents .= "<table  class=\"tab1\">";
 $contents .= "<col span=\"2\" width=\"50%\" valign=\"top\">";
 $contents .= "<thead>
             <tr>
@@ -246,7 +255,7 @@ $contents .= "<tbody class=\"second\">
 </tr>
 </tbody>";
 $contents .= "<tr>
-    <td style=\"text-align: center;\" colspan=\"2\">
+    <td colspan=\"2\">
         <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\">
         <input type=\"hidden\" value=\"1\" name=\"savesetting\">
     </td>
@@ -255,7 +264,7 @@ $contents .= "<tr>
 </form>";
 
 $contents .= "<br />\n";
-$contents .= "<table id=\"iduser\"  class=\"tab1\" style=\"width:550px\">\n";
+$contents .= "<table id=\"iduser\"  class=\"tab1\">\n";
 $contents .= "<caption>" . $lang_module['title_nickname'] . "</caption>";
 $contents .= "<thead>\n";
 $contents .= "<tr align=\"center\">\n";
@@ -296,7 +305,7 @@ $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\"
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<input type=\"hidden\" name =\"uid\" value=\"" . $uid . "\" />";
-$contents .= "<table class=\"tab1\" style=\"width:550px\">\n";
+$contents .= "<table class=\"tab1\">\n";
 $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan='2'><strong>" . $lang_module['nickname_add'] . "</strong></td>\n";
@@ -332,7 +341,7 @@ $contents .= "<td><input type='text' name='endtime1' id='endtime1' value='" . ( 
 $contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'endtime1', 'dd.mm.yyyy', true);\" alt=\"\" height=\"17\">\n";
 $contents .= "</tr>\n";
 $contents .= "<tr>\n";
-$contents .= "<td colspan='2' style='text-align:center'>";
+$contents .= "<td colspan='2'>";
 $contents .= "<input type='submit' value='" . $lang_module['save'] . "' name='submituser'/><br><br>\n";
 if ( ! empty( $uid ) ) $contents .= $lang_module['nochangepass'];
 $contents .= "</td>\n";
@@ -347,7 +356,7 @@ $mask_text_array[2] = "255.255.xxx.xxx";
 $mask_text_array[1] = "255.xxx.xxx.xxx";
 
 $contents .= "<br />\n";
-$contents .= "<table id=\"idip\"  class=\"tab1\" style=\"width:550px\">\n";
+$contents .= "<table id=\"idip\"  class=\"tab1\">\n";
 $contents .= "<caption>" . $lang_module['adminip'] . "</caption>";
 $contents .= "<thead>\n";
 $contents .= "<tr align=\"center\">\n";
@@ -390,7 +399,7 @@ $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\"
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<input type=\"hidden\" name =\"cid\" value=\"" . $cid . "\" />";
-$contents .= "<table class=\"tab1\" style=\"width:550px\">\n";
+$contents .= "<table class=\"tab1\">\n";
 $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan='2'><strong>" . $lang_module['adminip_add'] . "</strong></td>\n";
@@ -435,7 +444,7 @@ $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tr>\n";
-$contents .= "<td colspan='2' style='text-align:center'>";
+$contents .= "<td colspan='2'>";
 $contents .= "<input type='submit' value='" . $lang_module['save'] . "' name='submitip'/><br><br>\n";
 $contents .= $lang_module['adminip_note'];
 $contents .= "</td>\n";
@@ -514,8 +523,11 @@ $contents .= "
 	});
 	</script>
 ";
+
 $page_title = $lang_module['config'];
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>
