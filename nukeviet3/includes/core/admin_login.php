@@ -23,11 +23,7 @@ if ( ! nv_admin_checkfirewall() )
         $server_message = "Administrators Section";
     }
     header( 'WWW-Authenticate: Basic realm="' . $server_message . '"' );
-    header( 'HTTP/1.0 401 Unauthorized' );
-    if ( php_sapi_name() !== 'cgi-fcgi' )
-    {
-        header( 'status: 401 Unauthorized' );
-    }
+    header( NV_HEADERSTATUS . ' 401 Unauthorized' );
     nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />" );
 }
 

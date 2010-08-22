@@ -115,9 +115,10 @@ function nv_admin_checkfirewall ( )
         }
         $auth = nv_set_authorization();
         if ( empty( $auth['auth_user'] ) || empty( $auth['auth_pw'] ) ) return false;
-        if ( isset( $adv_admins[md5( $auth['auth_user'] )] ) )
+        $md5_auth_user = md5( $auth['auth_user'] );
+        if ( isset( $adv_admins[$md5_auth_user] ) )
         {
-            $array_us = $adv_admins[md5( $auth['auth_user'] )];
+            $array_us = $adv_admins[$md5_auth_user];
             if ( $array_us['password'] == md5( $auth['auth_pw'] ) and $array_us['begintime'] < NV_CURRENTTIME and ( $array_us['endtime'] == 0 or $array_us['endtime'] > NV_CURRENTTIME ) )
             {
                 return true;
