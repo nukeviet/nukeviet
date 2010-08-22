@@ -1606,13 +1606,26 @@ function nv_is_url ( $url )
     return true;
 }
 
-function nv_check_url ( $url )
+function nv_check_url( $url, $is_200 = false )
 {
     if ( empty( $url ) ) return false;
     $res = get_headers( $url );
     if ( ! $res ) return false;
-    if ( ! preg_match( "/(200)|(301)/", $res[0] ) ) return false;
-    return true;
+    if ( preg_match( "/(200)/", $res[0] ) ) return true;
+    if ( $is_200 ) return false;
+    if ( preg_match( "/(301)|(302)|(303)/", $res[0] ) )
+    {
+        foreach ( $res as $k => $v )
+        {
+            unset( $matches );
+            if ( preg_match( "/location:\s(.*?)$/is", $v, $matches ) )
+            {
+                $location = trim( $matches[1] );
+                return nv_check_url( $location, true );
+            }
+        }
+    }
+    return false;
 }
 
 function nv_clean60 ( $string, $num = 60 )
