@@ -16,8 +16,18 @@ if ( ! nv_admin_checkip() )
 
 if ( ! nv_admin_checkfirewall() )
 {
-    header( 'WWW-Authenticate: Basic realm="' . $lang_global['firewallsystem'] . '"' );
-    header( NV_HEADERSTATUS . ' Unauthorized' );
+    // remove non US-ASCII to respect RFC2616
+    $server_message = preg_replace( '/[^\x20-\x7e]/i', '', $lang_global['firewallsystem'] );
+    if ( empty( $server_message ) )
+    {
+        $server_message = "Administrators Section";
+    }
+    header( 'WWW-Authenticate: Basic realm="' . $server_message . '"' );
+    header( 'HTTP/1.0 401 Unauthorized' );
+    if ( php_sapi_name() !== 'cgi-fcgi' )
+    {
+        header( 'status: 401 Unauthorized' );
+    }
     nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />" );
 }
 

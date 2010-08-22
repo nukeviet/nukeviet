@@ -17,8 +17,9 @@ $menu_top = array(
 if ( defined( "NV_IS_GODADMIN" ) )
 {
     $submenu['add'] = $lang_module['menuadd'];
+    $submenu['config'] = $lang_module['config'];
     $allow_func = array( 
-        'main', 'add', 'edit', 'del', 'suspend' 
+        'main', 'add', 'edit', 'del', 'suspend', 'config' 
     );
 }
 else

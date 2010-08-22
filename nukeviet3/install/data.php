@@ -35,6 +35,17 @@ $sql_create_table[] = "CREATE TABLE `" . NV_AUTHORS_GLOBALTABLE . "` (
   PRIMARY KEY (`admin_id`)
 ) ENGINE=MyISAM";
 
+$sql_create_table[] = "CREATE TABLE `" . NV_AUTHORS_GLOBALTABLE . "_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `keyname` varchar(32) DEFAULT NULL,
+  `mask` tinyint(4) NOT NULL DEFAULT '0',
+  `begintime` int(11) DEFAULT NULL,
+  `endtime` int(11) DEFAULT NULL,
+  `notice` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `keyname` (`keyname`)
+) ENGINE=MyISAM";
+
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_config` (
   `config` varchar(50) NOT NULL,
   `content` mediumtext NOT NULL,

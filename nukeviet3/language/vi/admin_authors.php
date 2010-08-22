@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Vietnamese
+ * @Createdate May 31, 2010, 08:01:47 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['level1'] = "Tối cao";
 $lang_module['level2'] = "Điều hành chung";
@@ -109,5 +110,36 @@ $lang_module['allow_modify_subdirectories'] = "Được phép đổi tên, xóa 
 
 $lang_module['admin_login_incorrect'] = "Tài khoản &ldquo;<strong>%s</strong>&rdquo; đã có trong danh sách quản trị. Hãy sử dụng một tài khoản khác";
 
+$lang_module['config'] = "Cấu hình";
+$lang_module['adminip'] = "Quản lý IP truy cập khu vực quản trị";
+$lang_module['adminip_ip'] = "Ip";
+$lang_module['adminip_timeban'] = "Thời gian bắt đầu";
+$lang_module['adminip_timeendban'] = "Thời gian kết thúc";
+$lang_module['adminip_funcs'] = "Chức năng";
+$lang_module['adminip_checkall'] = "Chọn tất cả";
+$lang_module['adminip_uncheckall'] = "Bỏ chọn tất cả";
+$lang_module['adminip_add'] = "Thêm địa chỉ IP";
+$lang_module['adminip_address'] = "Địa chỉ";
+$lang_module['adminip_begintime'] = "Thời gian bắt đầu";
+$lang_module['adminip_endtime'] = "Thời gian bắt kết thúc";
+$lang_module['adminip_notice'] = "Ghi chú";
+$lang_module['save'] = "Lưu thay đổi";
+$lang_module['adminip_mask_select'] = "Hãy chọn";
+$lang_module['adminip_nolimit'] = "Vô thời hạn";
+$lang_module['adminip_del_success'] = "Đã xóa thành công !";
+$lang_module['adminip_delete_confirm'] = "Bạn có chắc muốn xóa ip này ra khỏi danh sách?";
+$lang_module['adminip_mask'] = "Mask IP";
+$lang_module['adminip_edit'] = "Sửa địa chỉ IP";
+$lang_module['adminip_delete'] = "Xóa";
+$lang_module['adminip_error_ip'] = "Hãy nhập Ip được truy cập khu vực quản trị ";
+$lang_module['adminip_error_validip'] = "Lỗi: Bạn cần nhập IP đúng chuẩn";
+$lang_module['adminip_note'] = "Chú ý: nếu chọn chế độ Kiểm tra IP, bạn cần nắm được cấu trúc sau: Mỗi số IP được xác định bằng 4 đại lượng A.B.C.D. Nếu số IP của bạn có cả 4 đại lượng A, B, C, D bất biến, hãy chọn giá trị của dòng 'Mask IP' là 255.255.255.255. Nếu chỉ có A, B, C cố định - chọn 255.255.255.xxx v.v...";
+
+$lang_module['title_nickname'] = "Quản lý tài khoản tường lửa khu vực admin";
+$lang_module['admfirewall'] = "Kiểm tra tường lửa cho khu vực admin";
+$lang_module['block_admin_ip'] = "Kiểm tra IP khi truy cập khu vực admin";
+$lang_module['nickname_add'] = "Thêm tài khoản";
+$lang_module['nickname_edit'] = "Sửa tài khoản";
+$lang_module['nicknam_delete_confirm'] = "Bạn có chắc muốn xóa tài khoản này ra khỏi danh sách?";
 
 ?>
