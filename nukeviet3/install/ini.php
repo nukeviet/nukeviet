@@ -45,6 +45,7 @@ $sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' ) ) ? 1 : 0;
 $sys_info['zlib_support'] = ( extension_loaded( 'zlib' ) ) ? 1 : 0;
 $sys_info['session_support'] = ( extension_loaded( 'session' ) ) ? 1 : 0;
 $sys_info['mb_support'] = ( extension_loaded( 'mbstring' ) ) ? 1 : 0;
+$sys_info['iconv_support'] = ( extension_loaded( 'iconv' ) ) ? 1 : 0;
 $sys_info['curl_support'] = ( extension_loaded( 'curl' ) and function_exists( "curl_init" ) and ! in_array( 'curl_init', $sys_info['disable_functions'] ) ) ? 1 : 0;
 $sys_info['allowed_set_time_limit'] = ( ! $sys_info['safe_mode'] and function_exists( "set_time_limit" ) and ! in_array( 'set_time_limit', $sys_info['disable_functions'] ) ) ? 1 : 0;
 
@@ -56,6 +57,9 @@ if ( $os == "LINUX" )
 else{
     $sys_info['ftp_support'] = 0;
 }
+
+//Xac dinh tien ich mo rong lam viec voi string
+$sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ( $sys_info['iconv_support'] ? 'iconv' : 'php' );
 
 //Kiem tra ho tro rewrite
 $sys_info['supports_rewrite'] = false;

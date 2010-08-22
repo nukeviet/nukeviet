@@ -86,7 +86,6 @@ set_error_handler( array(
 //Ket noi voi cac file cau hinh, function va template
 require_once ( NV_ROOTDIR . "/install/ini.php" );
 require_once ( NV_ROOTDIR . '/includes/functions.php' );
-require_once ( NV_ROOTDIR . '/includes/change_alias.php' );
 require_once ( NV_ROOTDIR . '/includes/core/theme_functions.php' );
 require_once ( NV_ROOTDIR . "/includes/class/xtemplate.class.php" );
 
