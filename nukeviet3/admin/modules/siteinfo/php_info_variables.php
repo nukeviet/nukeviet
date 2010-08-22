@@ -23,9 +23,19 @@ if ( ! empty( $array['PHP Variables'] ) )
     $xtpl->assign( 'THEAD0', $thead[0] );
     $xtpl->assign( 'THEAD1', $thead[1] );
     $a = 0;
+    $array_key_no_show = array();
+    $array_key_no_show[] = "_SERVER[\"HTTP_COOKIE\"]";
+    $array_key_no_show[] = "_SERVER[\"PHP_AUTH_USER\"]";
+    $array_key_no_show[] = "_SERVER[\"REMOTE_USER\"]";
+    $array_key_no_show[] = "_SERVER[\"AUTH_USER\"]";
+    $array_key_no_show[] = "_SERVER[\"HTTP_AUTHORIZATION\"]";
+    $array_key_no_show[] = "_SERVER[\"Authorization\"]";
+    $array_key_no_show[] = "_SERVER[\"PHP_AUTH_PW\"]";
+    $array_key_no_show[] = "_SERVER[\"REMOTE_PASSWORD\"]";
+    $array_key_no_show[] = "_SERVER[\"AUTH_PASSWORD\"]";
     foreach ( $array['PHP Variables'] as $key => $value )
     {
-        if ( substr( $key, 0, 7 ) != "_COOKIE" and $key != "_SERVER[\"HTTP_COOKIE\"]" )
+        if ( substr( $key, 0, 7 ) != "_COOKIE" and ! in_array( $key, $array_key_no_show ) )
         {
             $xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
             $xtpl->assign( 'KEY', $key );
