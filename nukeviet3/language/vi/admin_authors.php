@@ -141,5 +141,9 @@ $lang_module['block_admin_ip'] = "Kiểm tra IP khi truy cập khu vực admin";
 $lang_module['nickname_add'] = "Thêm tài khoản";
 $lang_module['nickname_edit'] = "Sửa tài khoản";
 $lang_module['nicknam_delete_confirm'] = "Bạn có chắc muốn xóa tài khoản này ra khỏi danh sách?";
+$lang_module['passwordsincorrect'] = "Mật khẩu bạn nhập hai lần không giống nhau.";
+$lang_module['nochangepass'] = "Nếu không thay đổi mật khẩu bạn không nhập hai trường mật khẩu";
+$lang_module['rule_user'] = "Tài khoản chỉ dùng các ký tự a-zA-Z0-9_-";
+$lang_module['rule_pass'] = "Mật khẩu chỉ dùng các ký tự a-zA-Z0-9_-";
 
 ?>
