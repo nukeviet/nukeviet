@@ -29,13 +29,15 @@ if ( ! empty( $admin_cookie ) )
         $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
         die( $info );
     }
-    
-    if ( ! nv_admin_checkfirewall() )
+    if ( defined( 'NV_ADMIN' ) )
     {
-        $nv_Request->unset_request( 'admin,online', 'session' );
-        $info = "Note: You are not signed in as admin!<br />This Firewall system does not accept your login information!";
-        $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
-        die( $info );
+        if ( ! nv_admin_checkfirewall() )
+        {
+            $nv_Request->unset_request( 'admin,online', 'session' );
+            $info = "Note: You are not signed in as admin!<br />This Firewall system does not accept your login information!";
+            $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
+            die( $info );
+        }
     }
     
     $admin_info = nv_admin_checkdata( $admin_cookie );
