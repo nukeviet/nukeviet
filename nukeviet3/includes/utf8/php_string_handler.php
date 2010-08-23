@@ -155,7 +155,7 @@ function nv_strrpos( $haystack, $needle, $offset = null )
  */
 function nv_strtolower( $string )
 {
-    require_once ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
+    include ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
 
     return strtr( $string, $utf8_lookup['strtolower'] );
 }
@@ -168,7 +168,7 @@ function nv_strtolower( $string )
  */
 function nv_strtoupper( $string )
 {
-    require_once ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
+    include ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
 
     return strtr( $string, $utf8_lookup['strtoupper'] );
 }

@@ -244,7 +244,7 @@ function nv_trim( $str, $charlist = false )
  */
 function nv_EncString( $string )
 {
-    require_once ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
+    include ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
 
     return strtr( $string, $utf8_lookup['romanize'] );
 }
