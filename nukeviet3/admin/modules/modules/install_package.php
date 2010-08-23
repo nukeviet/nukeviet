@@ -81,11 +81,11 @@ else
 	$contents .= "<input type='hidden' name='" . NV_OP_VARIABLE . "' value='" . $op . "'/>";
 	$contents .= "<select name=\"modulename\">\n";
 	$contents .= "<option value=\"0\">" . $lang_module['autoinstall_method_none'] . "</option>\n";
-	$sql = "SELECT module_file, custom_title FROM `" . NV_MODULES_TABLE . "` where `title`=`module_file` ORDER BY `weight` ASC";
+	$sql = "SELECT module_file FROM `" . $db_config['prefix'] . "_setup_modules` where `title`=`module_file` ORDER BY `title` ASC";
 	$result = $db->sql_query( $sql );
 	while ( $row = $db->sql_fetchrow( $result ) )
 	{
-		$contents .= "<option value=\"" . $row['module_file'] . "\">" . $row['custom_title'] . "</option>\n";
+		$contents .= "<option value=\"" . $row['module_file'] . "\">" . $row['module_file'] . "</option>\n";
 	}
 	$contents .= "</select>\n";
 	$contents .= "</td>";
