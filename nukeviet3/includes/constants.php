@@ -128,7 +128,7 @@ define( 'NV_MAX_WIDTH', 1500 );
 define( 'NV_MAX_HEIGHT', 1500 );
 
 //So ky tu toi thieu cua input tim kiem
-define( 'NV_MIN_SEARCH_LENGTH', 1 );
+define( 'NV_MIN_SEARCH_LENGTH', 3 );
 
 //So ky tu toi da cua input tim kiem
 define( 'NV_MAX_SEARCH_LENGTH', 60 );
