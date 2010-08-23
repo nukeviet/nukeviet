@@ -47,6 +47,8 @@ if ( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->ge
         $lang_value = strip_tags( $pozlangval[$i], NV_ALLOWED_HTML_LANG );
         if ( $lang_key != "" and $lang_value != "" )
         {
+            $lang_value = nv_nl2br( $lang_value );
+            $lang_value = str_replace( '<br  />', '<br />', $lang_value );
             $sql = "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`id`, `idfile`, `lang_key`, `lang_" . $dirlang . "`) VALUES (NULL, '" . $idfile . "', '" . mysql_real_escape_string( $lang_key ) . "', '" . mysql_real_escape_string( $lang_value ) . "')";
             $db->sql_query_insert_id( $sql );
         }
@@ -106,7 +108,7 @@ if ( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->ge
                 $contents .= "<tr>";
                 $contents .= "<td></td>";
                 $contents .= "<td>" . $lang_key . "</td>";
-                $contents .= "<td><input type=\"text\" value='" . nv_htmlspecialchars($lang_value). "' name=\"pozauthor[" . $lang_key . "]\" size=\"90\"/></td>";
+                $contents .= "<td><input type=\"text\" value='" . nv_htmlspecialchars( $lang_value ) . "' name=\"pozauthor[" . $lang_key . "]\" size=\"90\"/></td>";
                 $contents .= "</tr>";
                 $contents .= "</tbody>";
             }
@@ -134,7 +136,7 @@ if ( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->ge
             $contents .= "<tr>";
             $contents .= "<td align=\"center\">" . $i . "</td>";
             $contents .= "<td align=\"right\">" . $lang_key . "</td>";
-            $contents .= "<td align=\"left\"><input type=\"text\" value=\"" . nv_htmlspecialchars($lang_value) . "\" name=\"pozlang[" . $id . "]\" size=\"90\" /></td>";
+            $contents .= "<td align=\"left\"><input type=\"text\" value=\"" . nv_htmlspecialchars( $lang_value ) . "\" name=\"pozlang[" . $id . "]\" size=\"90\" /></td>";
             $contents .= "</tr>";
             $contents .= "</tbody>";
         }

@@ -115,6 +115,9 @@ function nv_admin_read_lang ( $dirlang, $module, $admin_file = 1 )
         {
             $check_type_update = false;
             $lang_key = trim( $lang_key );
+            $lang_value = nv_nl2br( $lang_value );
+            $lang_value = str_replace( '<br  />', '<br />', $lang_value );
+            $lang_value = str_replace( '<br>', '<br />', $lang_value );
             if ( $read_type == 0 or $read_type == 1 )
             {
                 $sql = "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`id`, `idfile`, `lang_key`, `lang_" . $dirlang . "`, `update_" . $dirlang . "` " . $string_lang_key . ") VALUES (NULL, '" . $idfile . "', '" . mysql_real_escape_string( $lang_key ) . "', '" . mysql_real_escape_string( $lang_value ) . "',  UNIX_TIMESTAMP( ) " . $string_lang_value . ")";
