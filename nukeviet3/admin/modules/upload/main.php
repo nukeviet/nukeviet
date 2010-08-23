@@ -92,7 +92,7 @@ $contents .= '
 			<td valign="top">
 				<div name="imgfolder" id="imgfolder" size="25" style="width:200px;height:340px;overflow:auto;cursor:pointer">';
 $type = htmlspecialchars( trim( $nv_Request->get_string( 'type', 'get', 'file' ) ), ENT_QUOTES );
-$currentpath = $nv_Request->isset_request( 'path', 'post' ) ? htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post', NV_UPLOADS_DIR ) ), ENT_QUOTES ) : htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', 'get', NV_UPLOADS_DIR ) ), ENT_QUOTES );
+$currentpath = $nv_Request->isset_request( 'path', 'post' ) ? htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post', $path ) ), ENT_QUOTES ) : htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', 'get', $path ) ), ENT_QUOTES );
 $contents .= '	</div>';
 $contents .= '
 <script type="text/javascript">
