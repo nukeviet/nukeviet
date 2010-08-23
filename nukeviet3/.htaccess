@@ -1,1 +1,17 @@
 #nukeviet
+
+<IfModule mod_deflate.c>
+
+  <FilesMatch "\.(css|js|xml)$">
+    SetOutputFilter DEFLATE
+  </FilesMatch>
+
+</IfModule>
+
+<IfModule mod_headers.c>
+
+  <FilesMatch "\.(js|css|xml|gz)$">
+    Header append Vary Accept-Encoding
+  </FilesMatch>
+
+</IfModule>
