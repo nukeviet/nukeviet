@@ -544,11 +544,21 @@ class sql_db
     {
         $value = str_replace( '\'', '&#039;', $value );
         $value = preg_replace( array( 
-            "/select/i", "/union/i", "/concat/i", "/char/i", "/outfile/i", "/alter/i", "/insert/i", "/drop/i", "/from/i", "/where/i", "/update/i", "/delete/i", "/create/i" 
-        ), array( 
-            "se-lect", "uni0n", "c0ncat", "ch@r", "0utfile", "al-ter", "in-sert", "dr0p", "fr0m", "whe-re", "up-date", "dele-te", "crea-te" 
-        ), $value );
-        //$value = preg_replace( "/([^\&]+)\#/", "\\1&#x23;", $value );
+            "/(se)(lect)/i", "/(uni)(on)/i", "/(con)(cat)/i", "/(c)(har)/i", "/(out)(file)/i", "/(al)(ter)/i", "/(in)(sert)/i", "/(d)(rop)/i", "/(f)(rom)/i", "/(whe)(re)/i", "/(up)(date)/i", "/(de)(lete)/i", "/(cre)(ate)/i" 
+        ), "$1-$2", $value );
+        return $value;
+    }
+    
+    /**
+     * sql_db::unfixdb()
+     * 
+     * @param mixed $value
+     * @return
+     */
+    function unfixdb( $value )
+    {
+        $value = str_replace( '\'', '&#039;', $value );
+        $value = preg_replace( array( "/(se)\-(lect)/i", "/(uni)\-(on)/i", "/(con)\-(cat)/i", "/(c)\-(har)/i", "/(out)\-(file)/i", "/(al)\-(ter)/i", "/(in)\-(sert)/i", "/(d)\-(rop)/i", "/(f)\-(rom)/i", "/(whe)\-(re)/i", "/(up)\-(date)/i", "/(de)\-(lete)/i", "/(cre)\-(ate)/i" ), "$1$2", $value );
         return $value;
     }
 

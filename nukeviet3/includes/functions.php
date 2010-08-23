@@ -1709,6 +1709,10 @@ function nv_valid_html( $html, $config, $encoding = 'utf8' )
  */
 function nv_change_buffer( $buffer )
 {
+    global $db;
+    
+    $buffer = $db->unfixdb( $buffer );
+
     $buffer = nv_url_rewrite( $buffer );
     //http://tidy.sourceforge.net/docs/quickref.html
     $config = array( 'doctype' => 'transitional', // Chuan HTML: omit, auto, strict, transitional, user
