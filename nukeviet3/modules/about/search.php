@@ -52,7 +52,7 @@ function result_about_theme( $m_info, $keyword, $xtpl, $limit, $pages, $per_page
             {
                 $url = $URLLink . $alias . "-" . $id;
 
-                $xtpl->assign( 'LINK', $URLLink . $alias );
+                $xtpl->assign( 'LINK', $url );
                 $xtpl->assign( 'TITLEROW', BoldKeywordInStr( $tilterow, $keyword ) );
                 $xtpl->assign( 'CONTENT', BoldKeywordInStr( $content, $keyword ) );
                 $xtpl->parse( 'results.loop_result.result' );
