@@ -16,7 +16,7 @@ if ( defined( 'NV_EDITOR' ) )
     require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 }
 
-$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_contactContent.txt';
+$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . 'Content.txt';
 
 if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
