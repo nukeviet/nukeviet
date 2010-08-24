@@ -21,7 +21,7 @@ $lang_translator['langtype'] ="lang_module";
 $lang_module['global_config'] = "Systém Configurace";
 /*
 	 vietnam:	  Cấu hình chung
-	 english:	  Systen Config
+	 english:	  System Config
 */
 
 $lang_module['lang_site_config'] = "Jazyk configurace";

@@ -19,7 +19,7 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
-$lang_module['global_config'] = "Systen Config";
+$lang_module['global_config'] = "System Config";
 $lang_module['lang_site_config'] = "Site language config";
 $lang_module['bots_config'] = "Server search";
 $lang_module['checkupdate'] = "Check version";
