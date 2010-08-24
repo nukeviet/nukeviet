@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -31,7 +31,7 @@ $lang_module['rewrite'] = "Activer rewrite";
 $lang_module['rewrite_optional'] = "Au cas d'activer rewrite, filtrer les accents sur url";
 $lang_module['site_disable'] = "Site en maintenance";
 $lang_module['disable_content'] = "Notification";
-$lang_module['submit'] = "Sauvegarder";
+$lang_module['submit'] = "Sauver";
 $lang_module['err_writable'] = "Erreur: impossible d'entregister le fichier: %s merci de vérifier les permissions (chmod) de ce fichier.";
 $lang_module['err_supports_rewrite'] = "Erreur: le serveur ne supporte pas le module rewrite";
 $lang_module['captcha'] = "Configuration de captcha";
@@ -50,37 +50,37 @@ $lang_module['port'] = "Porte";
 $lang_module['username'] = "Identifiant";
 $lang_module['password'] = "Mot de passe";
 $lang_module['ftp_path'] = "Chemin d'accès";
-$lang_module['mail_config'] = "Sélection de méthode";
+$lang_module['mail_config'] = "Choisir le méthode";
 $lang_module['type_smtp'] = "SMTP";
 $lang_module['type_linux'] = "Linux Mail";
 $lang_module['type_phpmail'] = "PHPmail";
-$lang_module['smtp_server'] = "Information du serveur";
+$lang_module['smtp_server'] = "Infos du serveur";
 $lang_module['incoming_ssl'] = "Ce serveur demande une connexion sécurisée (SSL)";
 $lang_module['outgoing'] = "Outgoing mail server (SMTP)";
 $lang_module['outgoing_port'] = "Outgoing port(SMTP)";
-$lang_module['smtp_username'] = "Information du compte";
+$lang_module['smtp_username'] = "Infos du compte";
 $lang_module['smtp_login'] = "Nom d'utilisateur";
 $lang_module['smtp_pass'] = "Mot de passe";
 $lang_module['update_error'] = "Erreur: Impossible de vérifier les informations, merci de vérifier plus tard";
 $lang_module['version_latest'] = "Félicitation, Vous avez la dernière version";
 $lang_module['version_no_latest'] = "Vous n'avez pas la dernière version";
-$lang_module['version_info'] = "Information de la nouvelle version";
+$lang_module['version_info'] = "Infos de la nouvelle version";
 $lang_module['version_name'] = "Nom du système:";
 $lang_module['version_number'] = "Version:";
 $lang_module['version_date'] = "Date de publication:";
-$lang_module['version_note'] = "Notes sur la nouvelle version";
+$lang_module['version_note'] = "Notes de la nouvelle version";
 $lang_module['version_download'] = "Vous pouvez télécharger la nouvelle version";
 $lang_module['version_updatenew'] = "Mettre à jour";
-$lang_module['bot_name'] = "Moteur de recherche";
+$lang_module['bot_name'] = "Moteurs de recherche";
 $lang_module['bot_agent'] = "Agent du serveur";
 $lang_module['bot_ips'] = "IP du serveur";
 $lang_module['bot_allowed'] = "Autorisé";
 $lang_module['site_keywords'] = "Mots clés pour les moteurs de recherche";
-$lang_module['site_logo'] = "Nom du fichier de logo du site";
+$lang_module['site_logo'] = "Nom du fichier logo du site";
 $lang_module['site_email'] = "E-mail du site";
 $lang_module['error_send_email'] = "E-mail recevant les notifications d'erreurs";
 $lang_module['site_phone'] = "Téléphone du site";
-$lang_module['lang_multi'] = "Activer le multi-language";
+$lang_module['lang_multi'] = "Activer le multi-langage";
 $lang_module['site_lang'] = "Langue par défaut";
 $lang_module['site_timezone'] = "Fuseau horaire";
 $lang_module['date_pattern'] = "Type d'affichage: Date Mois An";
@@ -100,8 +100,8 @@ $lang_module['session_prefix'] = "Préfixe de session";
 $lang_module['is_user_forum'] = "Confier la gestion de membres au forum";
 $lang_module['banip'] = "IPs interdits";
 $lang_module['banip_ip'] = "IP";
-$lang_module['banip_timeban'] = "Début";
-$lang_module['banip_timeendban'] = "Fin";
+$lang_module['banip_timeban'] = "Commencer";
+$lang_module['banip_timeendban'] = "Terminer";
 $lang_module['banip_funcs'] = "Fonctions";
 $lang_module['banip_checkall'] = "Sélectionner tout";
 $lang_module['banip_uncheckall'] = "Desélectionner tout";
@@ -121,15 +121,17 @@ $lang_module['banip_area_front'] = "Site";
 $lang_module['banip_area_admin'] = "Administration";
 $lang_module['banip_area_both'] = "Site et Administration";
 $lang_module['banip_delete_confirm'] = "Êtes-vous sûr de vouloir supprimer cette IP de la liste des IPs interdits?";
-$lang_module['banip_mask'] = "Masque";
+$lang_module['banip_mask'] = "Masque IP";
 $lang_module['banip_edit'] = "Éditer";
 $lang_module['banip_delete'] = "Supprimer";
 $lang_module['banip_error_ip'] = "Saisissez IP à interdire";
-$lang_module['banip_error_area'] = "Merci de sélectioinner la zone";
+$lang_module['banip_error_area'] = "Merci de sélectionner la zone";
 $lang_module['banip_error_validip'] = "Erreur: Adresse IP invalide";
 $lang_module['uploadconfig'] = "Configurer le Transfert";
-$lang_module['uploadconfig_ban_ext'] = "Types de fichier interdits";
+$lang_module['uploadconfig_ban_ext'] = "Types de fichiers interdits";
 $lang_module['uploadconfig_ban_mime'] = "Types de Mime interdits";
 $lang_module['uploadconfig_types'] = "Types de fichier autorisés";
+$lang_module['sys_max_size'] = "Taille maximum du fichier transféré autorisé par votre serveur";
+$lang_module['nv_max_size'] = "Taille maximum du fichier transféré";
 
 ?>

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -23,16 +23,16 @@ $lang_module['aabout1'] = "Ajouter un article";
 $lang_module['aabout2'] = "Titre";
 $lang_module['aabout3'] = "Ordre";
 $lang_module['aabout4'] = "Status";
-$lang_module['aabout5'] = "Actif";
-$lang_module['aabout6'] = "Inactif";
-$lang_module['aabout7'] = "Supprimer l'article";
+$lang_module['aabout5'] = "Publié";
+$lang_module['aabout6'] = "Dépublié";
+$lang_module['aabout7'] = "Supprimer";
 $lang_module['aabout8'] = "Confirmer cette opératon";
 $lang_module['aabout9'] = "Manque de titre";
 $lang_module['aabout10'] = "Manque de contenu";
 $lang_module['aabout11'] = "Contenu";
-$lang_module['aabout12'] = "Éditer l'article";
-$lang_module['save'] = "Sauvegarder l'article";
-$lang_module['errorsave'] = "Erreur: impossible de mettre à jour le contenu, vérifier le titre";
+$lang_module['aabout12'] = "Éditer";
+$lang_module['save'] = "Sauver";
+$lang_module['errorsave'] = "Erreur: Il est impossible de mettre à jour le contenu, vérifiez le titre";
 $lang_module['saveok'] = "Mise à jour réussie";
 $lang_module['alias'] = "Alias";
 

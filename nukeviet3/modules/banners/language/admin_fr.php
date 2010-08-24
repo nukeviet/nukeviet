@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -23,10 +23,10 @@ $lang_module['edit_client'] = "Modifier les coordonnées du client";
 $lang_module['full_name_empty'] = "Le nom du client n'a pas été déclaré";
 $lang_module['website_incorrect'] = "Site web incorrect";
 $lang_module['yim_incorrect'] = "YIM incorrect";
-$lang_module['add_client_info'] = "Remplir tous les champs ci-dessous pour créer un nouveau client";
+$lang_module['add_client_info'] = "Remplissez tous les champs ci-dessous pour créer un nouveau compte de client";
 $lang_module['edit_client_info'] = "Les champs avec * sont obligatoires";
-$lang_module['login'] = "Compte";
-$lang_module['full_name'] = "Nom et Prénom";
+$lang_module['login'] = "Identifiant";
+$lang_module['full_name'] = "Nom complet";
 $lang_module['email'] = "E-mail";
 $lang_module['website'] = "Site web";
 $lang_module['location'] = "Adresse";
@@ -62,7 +62,7 @@ $lang_module['title'] = "Titre";
 $lang_module['title_empty'] = "Manque de titre";
 $lang_module['size_incorrect'] = "Tailles minimales sont de 50x50px";
 $lang_module['add_plan_info'] = "Remplissez les informations aux champs ci-dessous  pour créer un nouveau block";
-$lang_module['edit_plan_info'] = "Les cases avec * sont obligatoires";
+$lang_module['edit_plan_info'] = "Les chamnps avec * sont obligatoires";
 $lang_module['width'] = "Largeur";
 $lang_module['height'] = "Hauteur";
 $lang_module['blang'] = "Langue";
@@ -70,13 +70,13 @@ $lang_module['blang_all'] = "Toutes les langues";
 $lang_module['size'] = "Tailles de bannière";
 $lang_module['description'] = "Description de Bannière";
 $lang_module['edit_plan'] = "Modifier la bannière";
-$lang_module['info_plan'] = "Information de la bannière";
-$lang_module['info_plan_caption'] = "Information de la bannière &ldquo;<strong>%s</strong>&rdquo;";
-$lang_module['plan_not_selected'] = "Vous n'avez pas sélectionné la bannière";
+$lang_module['info_plan'] = "Infos de la bannière";
+$lang_module['info_plan_caption'] = "Infos de la bannière &ldquo;<strong>%s</strong>&rdquo;";
+$lang_module['plan_not_selected'] = "Vous n'avez pas choisi la bannière";
 $lang_module['click_url_invalid'] = "Lien incorrect";
 $lang_module['file_upload_empty'] = "Manque de bannière";
-$lang_module['upload_blocked'] = "Vous ne pouvez pas ajouter les banières par ce que le transfert d'image et de flash est interdit par le systèbme. Merci de vérifier les configurations du serveur ou de l'administration du site";
-$lang_module['add_banner_info'] = "Pour ajouter une publicité, remplissez les informations aux champs ci-dessous";
+$lang_module['upload_blocked'] = "Vous ne pouvez pas ajouter les banières par ce que le transfert d'image et de flash est interdit par le système. Merci de vérifier les configurations du serveur ou de l'administration du site";
+$lang_module['add_banner_info'] = "Pour ajouter une publicité, remplissez les infos aux champs ci-dessous";
 $lang_module['of_client'] = "Client";
 $lang_module['upload'] = "Fichier image (%s)";
 $lang_module['re_upload'] = "Changer la bannière (%s)";
@@ -90,7 +90,7 @@ $lang_module['edit_banner_info'] = "Les champs avec * sont obligatoirement décl
 $lang_module['file_name'] = "Image";
 $lang_module['banners_list1'] = "Liste des publicités actives";
 $lang_module['banners_list2'] = "Liste des publicités expirées";
-$lang_module['banners_list3'] = "Liste des publicités suspendues";
+$lang_module['banners_list3'] = "Liste des publicités suspens";
 $lang_module['banners_list4'] = "Liste des publicités en attente";
 $lang_module['banners_list_cl'] = "du client &ldquo;<strong>%s</strong>&rdquo;";
 $lang_module['banners_list_pl'] = "de block &ldquo;<strong>%s</strong>&rdquo;";
@@ -103,7 +103,7 @@ $lang_module['img_info2'] = "Format: %1\$s (%2\$s)<br />Taille: %3\$d x %4\$d px
 $lang_module['hits_total'] = "Total clics";
 $lang_module['please_select_month'] = "Consulter les statistiques détaillés";
 $lang_module['info_stat_caption'] = "Statistiques détaillés";
-$lang_module['select'] = "Cliquer pour voir";
+$lang_module['select'] = "Cliquez pour voir";
 $lang_module['info_stat_byday_caption'] = "Totaux clics Par date de  %1\$s l'année %2\$s";
 $lang_module['info_stat_bycountry_caption'] = "Totaux clics Par Location de %1\$s l'année %2\$s";
 $lang_module['info_stat_bybrowse_caption'] = "Totaux clics Par Navigateur de %1\$s l'année %2\$s";
@@ -127,7 +127,7 @@ $lang_module['click_ref'] = "Depuis site";
 $lang_module['main_caption'] = "Les publicités à voir";
 $lang_module['deact_list'] = "Liste des publicités suspens";
 $lang_module['form'] = "Type d'affichage";
-$lang_module['file_del_confirm'] = "Voulez-vous supprimer?";
+$lang_module['file_del_confirm'] = "Êtes-vous sûr de vouloir supprimer?";
 $lang_module['delfile_success'] = "Suppression réussie!";
 $lang_module['delfile_error'] = "Suppression échouée";
 

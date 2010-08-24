@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -31,14 +31,14 @@ $lang_module['statbyos'] = "Par Système d'exploitation";
 $lang_module['statbybot'] = "Par Moteur de recherche";
 $lang_module['statbyreferer'] = "Par Site";
 $lang_module['unknown'] = "Inconnu";
-$lang_module['others'] = "Autre";
+$lang_module['others'] = "Autres";
 $lang_module['viewall'] = "Voir tout";
 $lang_module['country'] = "Pays";
 $lang_module['hits'] = "Clics";
 $lang_module['last_visit'] = "Dernière visite";
 $lang_module['browser'] = "Navigateur";
 $lang_module['os'] = "Systèmes d'exploitation";
-$lang_module['bot'] = "Moteur de recherche";
+$lang_module['bot'] = "Moteurs de recherche";
 $lang_module['referer'] = "Site";
 $lang_module['refererbymonth'] = "Site par mois";
 $lang_module['refererbymonth2'] = "Statistiques de lien depuis le site %d par mois de l'année %d";

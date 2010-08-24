@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -52,7 +52,7 @@ $lang_module['vmodule_add'] = "Ajout mod. virtuel";
 $lang_module['vmodule_name'] = "Nom du nouveau module";
 $lang_module['vmodule_file'] = "Module original";
 $lang_module['vmodule_note'] = "Note";
-$lang_module['vmodule_select'] = "Sélectionner module";
+$lang_module['vmodule_select'] = "Choisir un module";
 $lang_module['vmodule_blockquote'] = "Note: Nom du nouveau module se combine de lettres latines, chiffres et/ou tiret.";
 $lang_module['autoinstall'] = "Auto-Installation";
 $lang_module['autoinstall_method'] = "Sélectionner le procès";
@@ -62,23 +62,23 @@ $lang_module['autoinstall_method_block'] = "Installer Block";
 $lang_module['autoinstall_method_packet'] = "Paqueter Module";
 $lang_module['autoinstall_continue'] = "Suivant";
 $lang_module['autoinstall_back'] = "Précédant";
-$lang_module['autoinstall_error_nomethod'] = "Sélectionnez une méthode d'installation !";
+$lang_module['autoinstall_error_nomethod'] = "Sélectionnez un type d'installation !";
 $lang_module['autoinstall_module_install'] = "Installer";
 $lang_module['autoinstall_module_select_file'] = "Sélectionner le fichier d'installation:";
 $lang_module['autoinstall_module_error_filetype'] = "Erreur: Format zip ou gz obligatoire";
 $lang_module['autoinstall_module_error_nofile'] = "Erreur: Il faut sélectionner un fichier d'installation";
-$lang_module['autoinstall_module_nomethod'] = "Il faut se1lectionner la méthode";
+$lang_module['autoinstall_module_nomethod'] = "Il faut se1lectionner le type";
 $lang_module['autoinstall_module_uploadedfile'] = "Le système a transféré les fichiers:";
 $lang_module['autoinstall_module_uploadedfilesize'] = "Taille:";
 $lang_module['autoinstall_module_uploaded_filenum'] = "Total fichiers + répertoires:";
-$lang_module['autoinstall_module_error_uploadfile'] = "Erreur: impossible transférer les fichiers vers le serveur. Vérifier les permissions (chmod 777) du répertoire tmp";
-$lang_module['autoinstall_module_error_createfile'] = "Erreur: impossible d'enregistrer les fichiers. Vérifier les permissions (chmod 777) du répertoire tmp";
+$lang_module['autoinstall_module_error_uploadfile'] = "Erreur: il est impossible de transférer les fichiers vers le serveur. Vérifier les permissions (chmod 777) du répertoire tmp";
+$lang_module['autoinstall_module_error_createfile'] = "Erreur: il est impossible d'enregistrer les fichiers. Vérifier les permissions (chmod 777) du répertoire tmp";
 $lang_module['autoinstall_module_error_invalidfile'] = "Erreur: Fichier zip incompatible";
 $lang_module['autoinstall_module_error_invalidfile_back'] = "Précédant";
-$lang_module['autoinstall_module_error_warning_install'] = "Impossible d'installer le module ! Supprimer ou déplacer selon l'instruction ci-dessous.";
+$lang_module['autoinstall_module_error_warning_install'] = "Il est impossible d'installer le module ! Supprimez ou déplacez selon l'instruction ci-dessous.";
 $lang_module['autoinstall_module_error_warning_fileexist'] = "Liste des fichiers existants sur le serveur:";
-$lang_module['autoinstall_module_error_warning_invalidfolder'] = "Structure de répertoire imcompatible:";
-$lang_module['autoinstall_module_error_warning_permission_folder'] = "Impossible à créer le répertoire à cause de safe mod on";
+$lang_module['autoinstall_module_error_warning_invalidfolder'] = "Structure du répertoire imcompatible:";
+$lang_module['autoinstall_module_error_warning_permission_folder'] = "Il est impossible à créer le répertoire à cause de safe mod on";
 $lang_module['autoinstall_module_checkfile_notice'] = "Pour continuer l'installation, cliquez sur VÉRIFIER, le système vous aidera a vérifier la compatibilité";
 $lang_module['autoinstall_module_checkfile'] = "VÉRIFIER !";
 $lang_module['autoinstall_module_installdone'] = "INSTALLER...";
@@ -87,7 +87,7 @@ $lang_module['autoinstall_module_unzip_success'] = "Installation est terminée a
 $lang_module['autoinstall_module_unzip_setuppage'] = "À la gestion des modules.";
 $lang_module['autoinstall_module_unzip_filelist'] = "Liste des fichiers décompressés";
 $lang_module['autoinstall_module_unzip_abort'] = "Installation automatique ne peut pas être procédée à cause de la manque de support du serveur.";
-$lang_module['autoinstall_package_select'] = "Sé1ectionner le module pour paqueter";
+$lang_module['autoinstall_package_select'] = "Choisir le module à paqueter";
 $lang_module['autoinstall_package_noselect'] = "Il faut sé1ectionner un module pour paqueter";
 $lang_module['autoinstall_package_processing'] = "Veuillez patienter quelques instants...";
 

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -20,7 +20,7 @@ $lang_translator['langtype'] ="lang_module";
 
 $lang_module['config_per_page'] = "Nombre de liens par page";
 $lang_module['categories'] = "Catégories";
-$lang_module['save'] = "Sauvegarder";
+$lang_module['save'] = "Sauver";
 $lang_module['errorsave'] = "Erreur: Mise à jour de données échouée";
 $lang_module['saveok'] = "Mise à jour réussie";
 $lang_module['alias'] = "Alias";
@@ -28,14 +28,14 @@ $lang_module['name'] = "Titre";
 $lang_module['weight'] = "Position";
 $lang_module['inhome'] = "Page principale";
 $lang_module['numlinks'] = "Nombre de liens";
-$lang_module['add_cat'] = "Ajout de catégories";
+$lang_module['add_cat'] = "Ajouter une catégorie";
 $lang_module['edit_cat'] = "Modifier la catégorie";
 $lang_module['cat_sub'] = "Catégorie";
 $lang_module['cat_sub_sl'] = "Catégorie principale";
 $lang_module['description'] = "Desciption";
 $lang_module['keywords'] = "Mots clés";
-$lang_module['delcat_msg_cat'] = "Erreur: impossible à supprimer la catégorie ayant  %s sous-catégories";
-$lang_module['delcat_msg_rows'] = "Erreur: impossible de supprimer la catégorie ayant %s liens";
+$lang_module['delcat_msg_cat'] = "Erreur: il est impossible à supprimer la catégorie ayant  %s sous-catégories";
+$lang_module['delcat_msg_rows'] = "Erreur: il est impossible de supprimer la catégorie ayant %s liens";
 $lang_module['weblink'] = "Bibliothèque de liens";
 $lang_module['weblink_catlist'] = "Catégories";
 $lang_module['weblink_catrecent'] = "Catégories existantes";
@@ -55,14 +55,14 @@ $lang_module['weblink_yes'] = "Oui";
 $lang_module['weblink_no'] = "Non";
 $lang_module['weblink_submit'] = "Accepter";
 $lang_module['weblink_fileimage'] = "Image";
-$lang_module['weblink_sub_title'] = "Ajout de catégories";
+$lang_module['weblink_sub_title'] = "Ajouter une catégories";
 $lang_module['weblink_sub_error'] = "Erreur: ajout de données échoué";
 $lang_module['weblink_sub_input'] = "Merci de remplir le champ ci-dessous.";
 $lang_module['weblink_edit_title'] = "Éditer la catégorie";
 $lang_module['weblink_del_title'] = "Confirmer la suppression";
 $lang_module['weblink_del_confirm'] = "Êtes-vous sûr de vouloir supprimer la catégorie?";
 $lang_module['weblink_del_success'] = "Suppression réussie!";
-$lang_module['weblink_del_error'] = "Erreur lors de la suppression de données";
+$lang_module['weblink_del_error'] = "Erreur de la suppression de données";
 $lang_module['link_list'] = "Gestion de liens";
 $lang_module['weblink_add_link'] = "Ajout de lien";
 $lang_module['weblink_add_title'] = "Titre";
@@ -94,7 +94,7 @@ $lang_module['weblink_asc'] = "Ascendant";
 $lang_module['weblink_des'] = "Descendant";
 $lang_module['weblink_config_sortoption'] = "Ordre";
 $lang_module['weblink_config_sortbyid'] = "ID";
-$lang_module['weblink_config_sortbyrand'] = "Random";
+$lang_module['weblink_config_sortbyrand'] = "Aléatoire";
 $lang_module['weblink_config_sortbytime'] = "Horaire";
 $lang_module['weblink_config_sortbyhit'] = "Clics";
 $lang_module['weblink_config_showimagelink'] = "Afficher l'image de lien";
@@ -113,8 +113,8 @@ $lang_module['weblink_checkalivelink'] = "Outil de vérification de lien";
 $lang_module['weblink_check_error'] = "<span style=\"color:red\"> Inactif </ span> <br />";
 $lang_module['weblink_check_active'] = "Actif <br />";
 $lang_module['weblink_check_confirm'] = "Continuer";
-$lang_module['weblink_check_notice'] = "Pour vérifier, cliquez sur le bouton Continuer <br /> Merci de patientez un certain temps pour terminer <br /> <br />";
-$lang_module['weblink_link_broken'] = "Rapporter Lien cassé";
+$lang_module['weblink_check_notice'] = "Pour vérifier, cliquez sur Continuer <br /> Merci de patienter un certain temps pour terminer <br /> <br />";
+$lang_module['weblink_link_broken'] = "Rapporter le lien";
 $lang_module['weblink_link_broken_status'] = "Type de lien";
 $lang_module['weblink_link_broken_die'] = "> <span Style=\"color:red\">Cassé </span>";
 $lang_module['weblink_link_broken_bad'] = "<span Style=\"color:red\">Mauvais contenu </span>";

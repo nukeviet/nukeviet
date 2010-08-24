@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -18,22 +18,22 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. Tous droits r�
 $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['note'] = "Vous pouvez nous envoyer un message en remplissant le formulaire ci-dessous. Veuillez remplir toutes les informations nécessaires pour que nous puissions vous répondre.";
+$lang_module['note'] = "Vous pouvez nous envoyer un message en remplissant le formulaire ci-dessous. Veuillez remplir toutes les informations nécessaires pour que nous puissions vous répondre facilement.";
 $lang_module['fullname'] = "Nom complet";
 $lang_module['email'] = "E-mail";
 $lang_module['captcha'] = "Code de sécurité";
-$lang_module['title'] = "Sujet";
+$lang_module['title'] = "Ojet";
 $lang_module['part'] = "Destinataire";
 $lang_module['content'] = "Message";
 $lang_module['reset'] = "Rafraîchir";
 $lang_module['sendcontact'] = "Envoyer";
-$lang_module['error_fullname'] = "Merci de donner votre nom et prénom";
+$lang_module['error_fullname'] = "Merci de donner votre nom complet";
 $lang_module['error_captcha'] = "Code de sécurité incorrect";
-$lang_module['error_title'] = "Manque de Sujet";
+$lang_module['error_title'] = "Manque d'Objet";
 $lang_module['error_part'] = "Sélectionnez le destinataire";
-$lang_module['error_content'] = "Veuillez entrer votre message";
+$lang_module['error_content'] = "Veuillez saisir votre message";
 $lang_module['sendcontactok'] = "Merci de votre message! Nous allons étudier et vous répondre au plus tôt.";
-$lang_module['sendinfo'] = "Ce message a été envoyé par l'outil Contact du site %1\$s.<br  />Expéditeur<br  /><strong>Nom complet</strong>: %2\$s<br  /><strong>E-mail</strong>: %3\$s<br  /><strong>IP</strong>: %4\$s<br  /><strong>Destinataire</strong>: %5\$s";
+$lang_module['sendinfo'] = "Ce message a été envoyé par l'outil Contact du site %1\$s.<br />Expéditeur<br /><strong>Nom complet</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>IP</strong>: %4\$s<br /><strong>Destinataire</strong>: %5\$s";
 $lang_module['phone'] = "Téléphone";
 
 ?>

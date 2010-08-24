@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -29,7 +29,7 @@ $lang_module['report_notice'] = "Merci de sélectionner le motif de rapport";
 $lang_module['report_linkdie'] = "Lien mort";
 $lang_module['report_badlink'] = "Mauvais contenu";
 $lang_module['report_confirm'] = "Envoyer";
-$lang_module['report_success'] = "Merci pour votre information. Nous allons vérifier le plus tôt possible";
+$lang_module['report_success'] = "Merci pour votre info. Nous allons vérifier le plus tôt possible";
 $lang_module['added'] = "Ajouté à";
 $lang_module['hits'] = "Clics";
 $lang_module['notimeout'] = "Attendez %d minutes pour continuer à cliquer";
@@ -42,7 +42,7 @@ $lang_module['description'] = "Détails";
 $lang_module['name'] = "Nom du site";
 $lang_module['taskbar'] = "Outil";
 $lang_module['report_note'] = "Autres";
-$lang_module['error'] = "Erreur: vous n'avez pas sélectionné le motif de votre rapport!";
+$lang_module['error'] = "Erreur: vous n'avez pas choisi le motif de votre rapport!";
 $lang_module['error_word_min'] = "Votre message doit être plus de 10 caractères";
 $lang_module['view_title'] = "Visites";
 $lang_module['next_title'] = "Page suivante";

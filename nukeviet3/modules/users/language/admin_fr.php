@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -63,13 +63,13 @@ $lang_module['show_email'] = "Afficher l'e-mail";
 $lang_module['sig'] = "Signature";
 $lang_module['in_group'] = "est membre du groupe";
 $lang_module['addquestion'] = "Ajouter une question secrète";
-$lang_module['savequestion'] = "Sauvegarder la question secrète";
+$lang_module['savequestion'] = "Sauver la question secrète";
 $lang_module['errornotitle'] = "Vous n'avez pas donné une question secrète";
 $lang_module['errorsave'] = "Erreur: Mise à jour impossible, vérifiez si le titre a été utilisé";
-$lang_module['weight'] = "position";
-$lang_module['save'] = "Sauvegarder";
+$lang_module['weight'] = "Position";
+$lang_module['save'] = "Sauver";
 $lang_module['siteterms'] = "Termes et conditions";
-$lang_module['error_content'] = "Merci de donner les termes et conditions";
+$lang_module['error_content'] = "Merci de donner les termes et conditions générales de l'inscription et de l'utilisation du site";
 $lang_module['saveok'] = "Mise à jour réussie";
 $lang_module['config'] = "Configuration";
 $lang_module['allow_reg'] = "Autoriser l'inscription";
@@ -80,7 +80,7 @@ $lang_module['active_not_allow'] = "Inscription interdite";
 $lang_module['active_admin_check'] = "par administrateur";
 $lang_module['active_all'] = "sans activation";
 $lang_module['active_email'] = "par e-mail";
-$lang_module['deny_email'] = "Mots interdit dans l'e-mail";
+$lang_module['deny_email'] = "Mots interdits dans l'e-mail";
 $lang_module['deny_name'] = "Mots iterdits dans le nom d'utilisateur";
 $lang_module['memberlist_active'] = "Actif";
 $lang_module['memberlist_unactive'] = "Inatif";
@@ -93,15 +93,15 @@ $lang_module['uncheckall'] = "Désélectionner tout";
 $lang_module['delete'] = "Supprimer";
 $lang_module['delete_success'] = "Suppression réussie !";
 $lang_module['active_success'] = "Activation réussie !";
-$lang_module['memberlist_edit'] = "Modifier";
+$lang_module['memberlist_edit'] = "Éditer";
 $lang_module['memberlist_deleteconfirm'] = "Êtes-vous sûr de vouloir supprimer ?";
 $lang_module['edit_title'] = "Modifier les coordonnées du membre";
-$lang_module['edit_password_note'] = "Laissez vide ces 2 cases si vous ne voulez pas changer le mot de passe";
+$lang_module['edit_password_note'] = "Laissez vide ces 2 champs si vous ne voulez pas changer le mot de passe";
 $lang_module['edit_avatar_note'] = "Laissez vide si vous ne voulez pas changer avatar";
-$lang_module['edit_save'] = "Sauvegarder";
+$lang_module['edit_save'] = "Sauver";
 $lang_module['edit_error_username_exist'] = "Ce nom d'utilisateur a été utilisé, merci de choisir un autre";
-$lang_module['edit_error_photo'] = "Type de photo interdit";
-$lang_module['edit_error_email'] = "E-mail invalide";
+$lang_module['edit_error_photo'] = "Erreur: Type de photo interdit";
+$lang_module['edit_error_email'] = "Erreur: E-mail invalide";
 $lang_module['edit_error_email_exist'] = "Cet e-mail a été utilisé. Merci de donner un autre e-mail";
 $lang_module['edit_error_permission'] = "Vous n'êtes pas autorisé de modifier les informations de ce compte.";
 $lang_module['edit_error_password'] = "Erreur: 2 mots de passe ne sont pas les mêmes, merci de vérifier";
@@ -112,10 +112,10 @@ $lang_module['edit_error_answer'] = "Merci de donner une réponse à la question
 $lang_module['edit_error_group'] = "Sélectionnez un groupe";
 $lang_module['account_deny_name'] = "Désolé, le compte %s est interdit";
 $lang_module['awaiting_active'] = "Activer";
-$lang_module['delconfirm_message'] = "Vous êtes sûr de vouloir supprimer?";
+$lang_module['delconfirm_message'] = "Êtes-vous sûr de vouloir supprimer?";
 $lang_module['delconfirm_email'] = "Envoyer un e-mail de notification:";
 $lang_module['delconfirm_email_yes'] = "Oui";
-$lang_module['delconfirm_ok'] = "Confirmer !";
+$lang_module['delconfirm_ok'] = "Confirmer!";
 $lang_module['delconfirm_email_title'] = "Notification de suppression du compte";
 $lang_module['delconfirm_email_content'] = "Bonjour %1\$s,<br /><br />Nous sommes désolé de vous informer la suppression de votre compte sur le site %2\$s.";
 $lang_module['adduser_email'] = "Envoyer la notification:";
@@ -126,12 +126,12 @@ $lang_module['allow_openid'] = "Autoriser l'inscription, l'identification par Op
 $lang_module['openid_servers'] = "Les fournisseurs de OpenID autorisés";
 $lang_module['allow_change_login'] = "Autoriser le changement d'identifiant";
 $lang_module['is_user_forum'] = "Récupérer les membres de forum";
-$lang_module['search_page_title'] = "Résultat de recherche";
-$lang_module['click_to_view'] = "Clicquer pour voir";
+$lang_module['search_page_title'] = "Résultats de recherche";
+$lang_module['click_to_view'] = "Cliquer pour voir";
 $lang_module['level0'] = "Membre";
 $lang_module['level1'] = "Administrateur suprême";
 $lang_module['level2'] = "Administrateur général";
 $lang_module['level3'] = "Administrateur de module";
-$lang_module['admin_add'] = "Ajouter Administrateur";
+$lang_module['admin_add'] = "Ajouter un Administrateur";
 
 ?>

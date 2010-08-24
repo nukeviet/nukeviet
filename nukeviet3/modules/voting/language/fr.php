@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -29,8 +29,8 @@ $lang_module['voting_warning_accept1'] = "Vous devez choisir une réponse";
 $lang_module['voting_confirm'] = "Confirmer";
 $lang_module['okmsg'] = "Le système a été enregistré votre vote.";
 $lang_module['timeoutmsg'] = "Vous avez voté! Merci d'attendre %s minutes pour voter encore une fois.";
-$lang_module['errormsg'] = "Vous devez choisir la réponse!";
-$lang_module['errorupdate'] = "Erreur lors de mise à jour du compteur";
+$lang_module['errormsg'] = "Vous devez choisir une réponse!";
+$lang_module['errorupdate'] = "Erreur de mise à jour du compteur";
 $lang_module['goback'] = "Retourner";
 $lang_module['voting_total'] = "Total";
 $lang_module['voting_counter'] = "votes";

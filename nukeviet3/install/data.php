@@ -327,7 +327,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'date_pattern', 'l, d-m-Y'),
 ('sys', 'global', 'time_pattern', 'H:i'),
 ('sys', 'global', 'block_admin_ip', '0'),
-('sys', 'global', 'admfirewall', '1'),
+('sys', 'global', 'admfirewall', '0'),
 ('sys', 'global', 'online_upd', '1'),
 ('sys', 'global', 'statistic', '1'),
 ('sys', 'global', 'dump_autobackup', '1'),

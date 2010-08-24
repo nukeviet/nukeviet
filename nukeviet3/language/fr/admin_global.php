@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -41,7 +41,7 @@ $lang_global['who_view1'] = "Membres";
 $lang_global['who_view2'] = "Administrateurs";
 $lang_global['who_view3'] = "Groupe de membres";
 $lang_global['groups_view'] = "Les groupes autorisés";
-$lang_global['block_modules'] = "Block de modules";
+$lang_global['block_modules'] = "Blocks de modules";
 $lang_global['hello_admin1'] = "Bonjour %1\$s ! Votre dernière session était à %2\$s";
 $lang_global['hello_admin2'] = "Compte: %1\$s ! Votre session est ouverte depuis %2\$s";
 $lang_global['hello_admin3'] = "Bonjour %1\$s. C'est votre première session d'administration";
@@ -49,7 +49,7 @@ $lang_global['ftp_error_account'] = "Erreur: Impossible de se connecter au serve
 $lang_global['ftp_error_path'] = "Erreur: Chemin d'accès incorrect";
 $lang_global['login_error_account'] = "Erreur: Compte d'Administrateur manquant ou invalide (pas moins de %1\$s caractères, ni plus de  %2\$s caractères. Utilisez uniquement les lettres latines, chiffres et tiret)";
 $lang_global['login_error_password'] = "Erreur: Mot de passe manquant ou invalide! (pas moins de %1\$s caractères, ni plus de %2\$s caractères combinés de lettres latines et chiffres)";
-$lang_global['login_error_security'] = "Erreur: Code de sécurité manquante ou invalide! (il faut %1\$s caractères combinés de lettres latines et chiffres)";
+$lang_global['login_error_security'] = "Erreur: Code de sécurité manquant ou invalide! (il faut %1\$s caractères combinés de lettres latines et chiffres)";
 $lang_global['error_zlib_support'] = "Erreur: votre serveur ne supporte pas l'extension zlib, veuillez demander votre hébergeur de l'activer pour utiliser cette fonction.";
 $lang_global['error_zip_extension'] = "Erreur: votre serveur ne supporte pas l'extension ZIP, veuillez demander votre hébergeur de l'activer pour utiliser cette fonction.";
 

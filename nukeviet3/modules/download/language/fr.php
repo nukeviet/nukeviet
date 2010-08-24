@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -34,25 +34,25 @@ $lang_module['today'] = "Aujourd'hui";
 $lang_module['yesterday'] = "Hier";
 $lang_module['download'] = "Télécharger";
 $lang_module['upload'] = "Transférer";
-$lang_module['report'] = "Rapporter lien cassé";
+$lang_module['report'] = "Rapporter le lien cassé";
 $lang_module['listing_details'] = "Détails";
 $lang_module['file_title'] = "Nom du fichier";
 $lang_module['file_version'] = "Version";
 $lang_module['user_name'] = "Expéditeur";
-$lang_module['copyright'] = "Droit d'auteur";
+$lang_module['copyright'] = "Infos du droit d'auteur";
 $lang_module['filesize'] = "Taille";
 $lang_module['fileimage'] = "Image";
 $lang_module['download_detail'] = "Télécharger";
-$lang_module['download_not_allow_info1'] = "Pour télécharger, vous devez <a href=\"%1\$s\">vous identifier</a> en tant membre. Si vous n'avez pas un compte, vous pouvez vous inscrire en cliquant <a href=\"%2\$s\">ici</a>";
-$lang_module['download_not_allow_info2'] = "Pour télécharger, vous devez vous identifier en tant administrateur";
+$lang_module['download_not_allow_info1'] = "Pour télécharger, vous devez <a href=\"%1\$s\">vous identifier</a> en tant que membre. Si vous n'avez pas un compte, vous pouvez vous inscrire en cliquant <a href=\"%2\$s\">ici</a>";
+$lang_module['download_not_allow_info2'] = "Pour télécharger, vous devez vous identifier en tant qu'administrateur";
 $lang_module['download_fileupload'] = "À partir du site";
 $lang_module['download_linkdirect'] = "À";
 $lang_module['download_wait'] = "Patientez un instant";
-$lang_module['download_wait2'] = "Le navigateur vous déplacer vers le lien nécessaire.<br />Vous pouvez cliquer <a href=\"%s\">ici</a> si vous ne voulez pas attendre";
+$lang_module['download_wait2'] = "Le navigateur vous emmènera vers le lien nécessaire.<br />Vous pouvez cliquer <a href=\"%s\">ici</a> si vous ne voulez pas attendre";
 $lang_module['report_thanks'] = "Nous avons nôté votre rapport de lien cassé. Merci!";
 $lang_module['rating_error1'] = "Évaluation invalide";
 $lang_module['rating_string'] = "Moyen: %1\$s (%2\$d points sur %3\$d évalutations)";
-$lang_module['rating_question'] = "Comment vous évaluez cefichier?";
+$lang_module['rating_question'] = "Comment évaluez-vous ce fichier?";
 $lang_module['file_rating'] = "Évaluer";
 $lang_module['file_your_rating'] = "Votre évalutation";
 $lang_module['file_rating0'] = "Aucune évaluation";
@@ -62,7 +62,7 @@ $lang_module['file_rating3'] = "Moyen";
 $lang_module['file_rating4'] = "Bon";
 $lang_module['file_rating5'] = "Excellent";
 $lang_module['file_rating_note'] = "Cliquez sur les étoiles pour évaluer le fichier";
-$lang_module['file_rating_note2'] = "Vous avez déjà évaluer ce fichier";
+$lang_module['file_rating_note2'] = "Vous avez déjà évalué ce fichier";
 $lang_module['file_rating_note3'] = "Évaluation générale";
 $lang_module['file_admin'] = "Pour l'administrateur de module";
 $lang_module['file_comment_title'] = "Commenter";
@@ -71,7 +71,7 @@ $lang_module['file_comment_post_name'] = "Expéditeur";
 $lang_module['file_comment_useremail'] = "E-mail";
 $lang_module['file_comment_subject'] = "Sujet";
 $lang_module['file_comment_content'] = "Contenu";
-$lang_module['file_comment_captcha'] = "Cod de sécurité";
+$lang_module['file_comment_captcha'] = "Code de sécurité";
 $lang_module['file_comment_send'] = "Envoyer";
 $lang_module['file_comment_post_time'] = "Envoyer au";
 $lang_module['file_comment_re'] = "Commentaire du fichier";
@@ -80,16 +80,16 @@ $lang_module['comment_thanks'] = "Nous avons enregistré votre commentaire. Merc
 $lang_module['comment_thanks2'] = "Votre commentaire est en attente d'aprobation. Merci!";
 $lang_module['comment_error1'] = "Erreur: Commentaire invalide";
 $lang_module['comment_error2'] = "Erreur: Code de sécurité incorrect";
-$lang_module['comment_error3'] = "Erreur: Nom et pré nom n'a pas été déclaré ou trop court";
+$lang_module['comment_error3'] = "Erreur: Nom et prénom n'a pas été déclaré ou trop court";
 $lang_module['comment_error4'] = "Erreur: Sujet n'a pas été déclaré ou trop court";
-$lang_module['comment_error5'] = "Erreur: Contenu n'a pas été déclaré ou trop court";
-$lang_module['comment_error6'] = "Par un raison inconnu, le système ne peut pas enregister votre commentaire. Nous en sommes désolé et nous allons corriger cette erreur technique au plus tôt";
+$lang_module['comment_error5'] = "Erreur: Contenu n'a pas été rentré ou trop court";
+$lang_module['comment_error6'] = "Par un raison inconnu, le système ne peut pas enregistrer votre commentaire. Nous en sommes désolé et nous allons corriger cette erreur technique au plus tôt";
 $lang_module['comment_error7'] = "Erreur: Commentaire introuvable";
 $lang_module['comment_admin_note'] = "Note de l'administrateur";
 $lang_module['comment_form_hidden'] = "Fermer";
 $lang_module['file_error_title'] = "Manque de Sujet !";
 $lang_module['file_title_exists'] = "Erreur: Ce nom a été utilisé, merci d'utiliser un autre nom";
-$lang_module['file_error_author_url'] = "Erreur: Lien de site de l'auteur invalide!";
+$lang_module['file_error_author_url'] = "Erreur: Lien du site de l'auteur invalide!";
 $lang_module['file_error_fileupload'] = "Choisissez un fichier à transférer ou donnez le lien direct!";
 $lang_module['file_catid_exists'] = "Erreur: Merci de choisir la catégorie";
 $lang_module['upload_error1'] = "Erreur: Code de sécurité incorrect";
@@ -104,7 +104,7 @@ $lang_module['add_linkdirect_items'] = "Ajouter une source externe";
 $lang_module['file_introtext'] = "Introduction";
 $lang_module['file_description'] = "Description";
 $lang_module['file_username'] = "Votre nom";
-$lang_module['upload_valid_ext_info'] = "Fichiers autorisés";
+$lang_module['upload_valid_ext_info'] = "Types de Fichier autorisés";
 $lang_module['upload_linkdirect_info'] = "S'il y a plusieurs liens, listez-les un par ligne";
 $lang_module['file_upload_captcha'] = "Code de sécurité";
 $lang_module['file_upload_captcha2'] = "Copier le Code de sécurité";

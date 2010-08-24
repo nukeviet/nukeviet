@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -18,11 +18,11 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. Tous droits r�
 $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['main'] = "Informations générales";
-$lang_module['database_info'] = "Informations générales de Base de données &ldquo;<strong>%s</strong>&rdquo;";
+$lang_module['main'] = "Infos générales";
+$lang_module['database_info'] = "Infos générales de Base de données &ldquo;<strong>%s</strong>&rdquo;";
 $lang_module['tables_info'] = "Tables de base de données &ldquo;<strong>%s</strong>&rdquo;";
-$lang_module['table_caption'] = "Informations génrales de table &ldquo;<strong>%s</strong>&rdquo;";
-$lang_module['table_row_caption'] = "Informations génrales des champs de table &ldquo;<strong>%s</strong>&rdquo;";
+$lang_module['table_caption'] = "Infos générales de table &ldquo;<strong>%s</strong>&rdquo;";
+$lang_module['table_row_caption'] = "Infos générales des champs de table &ldquo;<strong>%s</strong>&rdquo;";
 $lang_module['db_host_info'] = "Serveur MySql";
 $lang_module['db_sql_version'] = "Version de MySql";
 $lang_module['db_proto_info'] = "Version de MySql";
@@ -54,7 +54,7 @@ $lang_module['ext_gz'] = "Fichier Gzip";
 $lang_module['submit'] = "Exécuter";
 $lang_module['third'] = "Totale: %1\$d; Taille: %2\$s; Données excédentaires: %3\$s";
 $lang_module['optimize_result'] = "Le système a optimisé les tables:%1\$s et libéré %2\$s données excédentaires";
-$lang_module['nv_show_tab'] = "Information des tables &ldquo;%s&rdquo;";
+$lang_module['nv_show_tab'] = "Infos des tables &ldquo;%s&rdquo;";
 $lang_module['field_name'] = "Champs";
 $lang_module['field_type'] = "Type";
 $lang_module['field_null'] = "Obligatoire";
@@ -64,8 +64,8 @@ $lang_module['field_extra'] = "Complémentaire";
 $lang_module['php_code'] = "Code PHP";
 $lang_module['sql_code'] = "Code SQL";
 $lang_module['save_data'] = "Sauvegarder";
-$lang_module['save_error'] = "Erreur: impossible de sauvegarder le fichier <br> Merci de vérifier la permission du répertoire: %1\$s, ce répertoire doit être modifiable.";
-$lang_module['save_ok'] = "Sauvegarde réussie";
+$lang_module['save_error'] = "Erreur: il est impossible de sauvegarder le fichier <br /> Merci de vérifier les permissions du répertoire: %1\$s, ce répertoire doit être obligatoirement modifiable.";
+$lang_module['save_ok'] = "Sauvegarder avec succès";
 $lang_module['save_download'] = "Cliquez ici pour télécharger le fichier.";
 $lang_module['dump_autobackup'] = "Activer le sauvegarde automatique de données";
 $lang_module['dump_backup_ext'] = "Type de fichier de données";

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 21, 2010, 07:07:54 PM
+* @Createdate Aug 23, 2010, 09:00:49 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -85,21 +85,13 @@ $lang_module['suspend0'] = "Rétablir l'activité";
 $lang_module['suspend1'] = "Suspendre l'activité";
 $lang_module['clean_history'] = "Supprimer l'historique";
 $lang_module['suspend_sendmail'] = "Envoyer la notification";
-$lang_module['suspend_sendmail_mess1'] = "L'administrateur du site %1\$s informe:
-Votre compte d'administration sur le site %1\$s est suspendu au %2\$s en raison: %3\$s.
-Toute proposition, question... merci d'envoyer à l'adresse %4\$s";
-$lang_module['suspend_sendmail_mess0'] = "L'administration du site %1\$s informe:
-Votre compte d'administration sur le site %1\$s est rétabli au %2\$s.
-Ce compte avait été suspendu en raison: %3\$s";
+$lang_module['suspend_sendmail_mess1'] = "L'administrateur du site %1\$s informe:<br />Votre compte d'administration sur le site %1\$s est suspendu au %2\$s en raison: %3\$s.<br />Toute proposition, question... merci d'envoyer à l'adresse %4\$s";
+$lang_module['suspend_sendmail_mess0'] = "L'administration du site %1\$s informe:<br />Votre compte d'administration sur le site %1\$s est rétabli au %2\$s.<br />Ce compte avait été suspendu en raison: %3\$s";
 $lang_module['suspend_sendmail_title'] = "Notification du site %s";
-$lang_module['delete_sendmail_mess0'] = "L'administrateur du site %1\$s informe:
-Votre compte d'administration sur le site %1\$s est supprimé au %2\$s.
-Toute proposition, question... merci d'envoyer à l'adresse %3\$s";
-$lang_module['delete_sendmail_mess1'] = "L'administrateur du site %1\$s informe:
-Votre compte d'administration sur le site %1\$s est supprimé au %2\$s en raison de: %3\$s.
-Toute proposition, question... merci d'envoyer à l'adresse %4\$s";
+$lang_module['delete_sendmail_mess0'] = "L'administrateur du site %1\$s informe:<br />Votre compte d'administration sur le site %1\$s est supprimé au %2\$s.<br />Toute proposition, question... merci d'envoyer à l'adresse %3\$s";
+$lang_module['delete_sendmail_mess1'] = "L'administrateur du site %1\$s informe:<br />Votre compte d'administration sur le site %1\$s est supprimé au %2\$s en raison de: %3\$s.<br />Toute proposition, question... merci d'envoyer à l'adresse %4\$s";
 $lang_module['delete_sendmail_title'] = "Notification du site %s";
-$lang_module['delete_sendmail_info'] = "Êtes vous sûr de supprimer le compte d'administration &ldquo;<strong>%s</strong>&rdquo;? Remplissez les informations aux champs ci-dessous pour confirmer cette opération";
+$lang_module['delete_sendmail_info'] = "Êtes vous sûr de vouloir supprimer le compte d'administration &ldquo;<strong>%s</strong>&rdquo;? Remplissez les informations aux champs ci-dessous pour confirmer cette opération";
 $lang_module['admin_del_sendmail'] = "Envoyer la notification";
 $lang_module['admin_del_reason'] = "Raison de la suppression";
 $lang_module['allow_files_type'] = "Les types de fichiers authorisés";
@@ -107,5 +99,39 @@ $lang_module['allow_modify_files'] = "Authoriser la modification, la suppression
 $lang_module['allow_create_subdirectories'] = "Authoriser la création des fichiers";
 $lang_module['allow_modify_subdirectories'] = "Authoriser la modification, la suppression des répertoires";
 $lang_module['admin_login_incorrect'] = "Le compte &ldquo;<strong>%s</strong>&rdquo; a été utilisé. Veuillez utiliser un autre nom";
+$lang_module['config'] = "Configuration";
+$lang_module['adminip'] = "Gestion de IP connecté à l'administration";
+$lang_module['adminip_ip'] = "IP";
+$lang_module['adminip_timeban'] = "Commencer";
+$lang_module['adminip_timeendban'] = "Terminer";
+$lang_module['adminip_funcs'] = "Fonctionalités";
+$lang_module['adminip_checkall'] = "Sélectionner tout";
+$lang_module['adminip_uncheckall'] = "Désélectionner tout";
+$lang_module['adminip_add'] = "Ajouter IP";
+$lang_module['adminip_address'] = "Adresse";
+$lang_module['adminip_begintime'] = "Commencer";
+$lang_module['adminip_endtime'] = "Terminer";
+$lang_module['adminip_notice'] = "Note";
+$lang_module['save'] = "Sauver";
+$lang_module['adminip_mask_select'] = "Sélectionnez";
+$lang_module['adminip_nolimit'] = "Perpétuel";
+$lang_module['adminip_del_success'] = "Suppression avec succès!";
+$lang_module['adminip_delete_confirm'] = "Êtes-vous sûr de vouloir supprimer cet IP de la liste?";
+$lang_module['adminip_mask'] = "Masque IP";
+$lang_module['adminip_edit'] = "Éditer";
+$lang_module['adminip_delete'] = "Supprimer";
+$lang_module['adminip_error_ip'] = "Saisissez IP autorisé de connecter à l'administration";
+$lang_module['adminip_error_validip'] = "Erreur: IP invalide";
+$lang_module['adminip_note'] = "Attention: si vous activez le contrôle de IP, vous devez connaitre la structure des adresses IP: un IP se compose de 4 nombres sous forme A.B.C.D. Si tous ces nombres sont constants, sélectionnez le Masque 255.255.255.255. Si A, B  et C sont invariables, il faut choisir 255.255.255.xxx etc...";
+$lang_module['title_nickname'] = "Gestion de compte Parefeu de l'Administration";
+$lang_module['admfirewall'] = "Contrôler le Parefeu de l'Administration";
+$lang_module['block_admin_ip'] = "Vérifier IP lors de la connexion de l'Administration";
+$lang_module['nickname_add'] = "Ajouter un compte";
+$lang_module['nickname_edit'] = "Éditer";
+$lang_module['nicknam_delete_confirm'] = "Êtes-vous sûr de vouloir supprimer ce compte de la liste?";
+$lang_module['passwordsincorrect'] = "Vous avez entré 2 mot de passe différents";
+$lang_module['nochangepass'] = "Laissez vide 2 champs de mot de passe si vous ne voulez pas changer le mot de passe";
+$lang_module['rule_user'] = "Utiliser uniquement les caractères a-zA-Z0-9_- pour le compte";
+$lang_module['rule_pass'] = "Utiliser uniquement les caractères a-zA-Z0-9_- pour le mot de passe";
 
 ?>
