@@ -592,7 +592,7 @@ $contents .= "<div class=\"message_body\"><center>\n";
 $contents .= "<input name=\"publ_date\" id=\"publ_date\" value=\"" . $publ_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
 $contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'publ_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
 $contents .= "<select name=\"phour\">\n";
-for ( $i = 0; $i < 23; $i ++ )
+for ( $i = 0; $i < 24; $i ++ )
 {
     $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $phour ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
@@ -608,10 +608,10 @@ $contents .= "</li>\n";
 $contents .= "<li>\n";
 $contents .= "<p class=\"message_head\"><cite>" . $lang_module['content_exp_date'] . ":</cite> <span class=\"timestamp\">" . $lang_module['content_notetime'] . "</span></p>\n";
 $contents .= "<div class=\"message_body\"><center> \n";
-$contents .= "<input name=\"exp_date\" id=\"exp_date\" value=\"" . $exp_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
+$contents .= "<input name=\"exp_date\" id=\"exp_date\" value=\"" . $exp_date . "\" style=\"width: 90px;\" maxlength=\"10\" type=\"text\">\n";
 $contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
 $contents .= "<select name=\"ehour\">\n";
-for ( $i = 0; $i < 23; $i ++ )
+for ( $i = 0; $i < 24; $i ++ )
 {
     $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $ehour ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }

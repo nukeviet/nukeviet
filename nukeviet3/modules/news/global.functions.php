@@ -234,4 +234,26 @@ function nv_news_page( $base_url, $num_items, $per_page, $start_item, $add_prevn
 	return $page_string;
 }
 
+function nv_save_log_content ( $id )
+{
+    global $db, $db_config, $admin_info, $lang_global, $module_name, $module_data, $op;
+    $log_admin = ( isset( $admin_info['admin_id'] ) ) ? intval( $admin_info['admin_id'] ) : 0;
+    $rowcontent_old = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `id`=" . $id . "" ) );
+    $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_log` (`log_id`, `log_admin`, `hometext`, `bodytext`, `keywords`) VALUES (NULL, '" . $log_admin . "','','','')";
+    $log_id = $db->sql_query_insert_id( $query );
+    if ( $log_id > 0 )
+    {
+        $query_log = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_log` SET `log_time`=" . $db->dbescape( NV_CURRENTTIME ) . " ";
+        foreach ( $rowcontent_old as $key_log => $value_log )
+        {
+            if ( ! is_numeric( $key_log ) )
+            {
+                $query_log .= ", `" . $key_log . "`=" . $db->dbescape( $value_log ) . "";
+            }
+        }
+        $query_log .= " WHERE `log_id` =" . $log_id . "";
+        $db->sql_query( $query_log );
+    }
+}
+
 ?>
