@@ -19,6 +19,6 @@ while ( list ( $catid, $parentid, $title, $alias ) = $db->sql_fetchrow ( $result
 		$subcatid [] = $cid;
 	}
 	$subcatid = implode ( ',', $subcatid );
-	$rssarray [$catid] = array ('catid' => $catid, 'parentid' => $parentid, 'title' => $title, 'alias' => $alias, 'numsubcat' => $numsubcat, 'subcatid' => $subcatid, 'link' => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_file . "&" . NV_OP_VARIABLE . "=rss&catid=" . $catid );
+	$rssarray [$catid] = array ('catid' => $catid, 'parentid' => $parentid, 'title' => $title, 'alias' => $alias, 'numsubcat' => $numsubcat, 'subcatid' => $subcatid, 'link' => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_title . "&" . NV_OP_VARIABLE . "=rss&catid=" . $catid );
 }
 ?>
