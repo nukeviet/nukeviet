@@ -151,6 +151,13 @@ function nv_iChars_check(field_id)
 
 // -----------------------
 
+function nv_iChars_Remove(str)
+{
+   return str.replace(nv_specialchars, "");
+}
+
+// -----------------------
+
 function formatStringAsUriComponent( s )
 {
 
