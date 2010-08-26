@@ -14,6 +14,7 @@ if ( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" )
     $title = filter_text_input( 'title', 'post', '', 1 );
     $module_file = filter_text_input( 'module_file', 'post', '', 1 );
     $note = filter_text_input( 'note', 'post', '', 1 );
+    $title = strtolower(change_alias( $title ));
     if ( ! empty( $title ) and ! empty( $module_file ) and preg_match( $global_config['check_module'], $title ) and preg_match( $global_config['check_module'], $module_file ) )
     {
         $mod_version = "";
