@@ -181,13 +181,6 @@ function formatStringAsUriComponent( s )
 
 // -----------------------
 
-function nv_iChars_Remove(str)
-{
-   return str.replace(nv_specialchars, "");
-}
-
-// -----------------------
-
 function nv_setCookie(name, value, expiredays)
 {
    if (expiredays)
