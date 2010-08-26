@@ -1,6 +1,12 @@
 <?php
 
-/** * @Project NUKEVIET 3.0 * @Author VINADES (contact@vinades.vn) * @Copyright (C) 2010 VINADES. All rights reserved * @Createdate Apr 20, 2010 10:47:41 AM */
+/**
+ * @Project NUKEVIET 3.0
+ * @Author VINADES (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES. All rights reserved
+ * @Createdate Apr 20, 2010 10:47:41 AM
+ */
+
 if ( ! defined( 'NV_SYSTEM' ) )
 {
     die( 'Stop!!!' );
@@ -8,9 +14,15 @@ if ( ! defined( 'NV_SYSTEM' ) )
 
 define( 'NV_IS_MOD_SEARCH', true );
 
-function LoadModulesSearch ( )
+/**
+ * LoadModulesSearch()
+ * 
+ * @return
+ */
+function LoadModulesSearch()
 {
     global $site_mods, $global_config;
+
     $pathmodule = NV_ROOTDIR . "/modules";
     $folder = nv_scandir( $pathmodule, $global_config['check_module'] );
     $arrayfolder = array();
@@ -19,74 +31,109 @@ function LoadModulesSearch ( )
         $pathserch = $pathmodule . "/" . $arr_mod['module_file'] . "/search.php";
         if ( file_exists( $pathserch ) )
         {
-            $arrayfolder[$mod] = array( 
-                "module_name" => $mod, "module_file" => $arr_mod['module_file'], "module_data" => $arr_mod['module_data'], "custom_title" => $arr_mod['custom_title'] 
-            );
+            $arrayfolder[$mod] = array( "module_name" => $mod, "module_file" => $arr_mod['module_file'], "module_data" => $arr_mod['module_data'], "custom_title" => $arr_mod['custom_title'] );
         }
     }
     return $arrayfolder;
 }
 
-function nv_substr_clean ( $string, $start, $length )
+/**
+ * nv_substr_clean()
+ * 
+ * @param mixed $string
+ * @param string $mode
+ * @return
+ */
+function nv_substr_clean( $string, $mode = 'lr' )
 {
-    global $global_config;
-    if ( nv_strlen( $string ) > $length )
+    $strlen = nv_strlen( $string );
+    $pos_bg = nv_strpos( $string, " " ) + 1;
+    $pos_en = nv_strrpos( $string, " " );
+    if ( $mode == 'l' )
     {
-        $string = nv_substr( $string, $start, $length );
-        $pos_bg = nv_strpos( $string, " " ) + 1;
-        $pos_en = nv_strrpos( $string, " " );
-        $string = nv_substr( $string, $pos_bg, $pos_en - $pos_bg );
+        $string = "..." . nv_substr( $string, $pos_bg, $strlen - $pos_bg );
+    } elseif ( $mode == 'r' )
+    {
+        $string = nv_substr( $string, 0, $strlen - $pos_en ) . "...";
+    } elseif ( $mode == 'lr' )
+    {
+        $string = "..." . nv_substr( $string, $pos_bg, $pos_en - $pos_bg ) . "...";
     }
+
     return $string;
 }
 
-function BoldKeywordInStr ( $str, $keyword )
+/**
+ * BoldKeywordInStr()
+ * 
+ * @param mixed $str
+ * @param mixed $keyword
+ * @return
+ */
+function BoldKeywordInStr( $str, $keyword )
 {
-    global $global_config;
-    $str = nv_unhtmlspecialchars( strip_tags( $str ) );
-    $pos = nv_strpos( $str, $keyword );
-    
+    global $db;
+
+    $str = nv_br2nl( $str );
+    $str = nv_nl2br( $str, " " );
+    $str = nv_unhtmlspecialchars( strip_tags( trim( $str ) ) );
+    $str = $db->unfixdb( $str );
+
+    $pos = false;
+
     $keyword .= " " . nv_EncString( $keyword );
     $array_keyword = explode( " ", $keyword );
     $array_keyword = array_unique( $array_keyword );
-    
-    if ( $pos === false )
+
+    foreach ( $array_keyword as $k )
     {
-        foreach ( $array_keyword as $k )
+        unset( $matches );
+        if ( preg_match( "/^(.*?)" . preg_quote( $k ) . "/uis", $str, $matches ) )
         {
-            $pos = nv_strpos( $str, $k );
-            if ( $pos !== false )
+            $strlen = nv_strlen( $str );
+            $kstrlen = nv_strlen( $k );
+            $residual = $strlen - 300;
+            if ( $residual > 0 )
             {
-                break;
+                $lstrlen = nv_strlen( $matches[1] );
+                $rstrlen = $strlen - $lstrlen - $kstrlen;
+
+                $medium = round( ( 300 - $kstrlen ) / 2 );
+                if ( $lstrlen <= $medium )
+                {
+                    $str = nv_clean60( $str, 300 );
+                } elseif ( $rstrlen <= $medium )
+                {
+                    $str = nv_substr( $str, $residual, 300 );
+                    $str = nv_substr_clean( $str, 'l' );
+                }
+                else
+                {
+                    $str = nv_substr( $str, $lstrlen - $medium, $strlen - $lstrlen + $medium );
+                    $str = nv_substr( $str, 0, 300 );
+                    $str = nv_substr_clean( $str, 'lr' );
+                }
             }
+
+            $pos = true;
+            break;
         }
     }
-    
-    if ( $pos === false )
+
+    if ( ! $pos )
     {
-        $str = nv_clean60( $str, 300 );
+        return nv_clean60( $str, 300 );
     }
-    else
+
+    $pattern = array();
+    foreach ( $array_keyword as $k )
     {
-        $index = 0;
-        $strlen = nv_strlen( $str );
-        if ( $strlen > 300 )
-        {
-            if ( $pos > 150 and $pos + 150 <= $strlen )
-            {
-                $index = $pos - 150;
-            }
-            elseif ( $pos + 150 > $strlen )
-            {
-                $index = $strlen - 300;
-            }
-            $str = '...' . nv_substr_clean( $str, $index, 300 ) . '...';
-        }
-        foreach ( $array_keyword as $k )
-        {
-            $str = preg_replace( "/(" . preg_quote( $k ) . ")/i", "<span class=\"keyword\">\\1</span>", $str );
-        }
+        $pattern[] = "/(" . preg_quote( $k ) . ")/uis";
     }
+
+    $str = preg_replace( $pattern, "<span class=\"keyword\">\\1</span>", $str );
+
     return $str;
 }
+
 ?>

@@ -1,43 +1,77 @@
 <?php
 
-/**
- * @Project NUKEVIET 3.0
- * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES. All rights reserved
- * @Createdate 04/05/2010 10:47:41 AM
+/**
+ * @Project NUKEVIET 3.0
+ * @Author VINADES (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES. All rights reserved
+ * @Createdate 04/05/2010 10:47:41 AM
  */
 
 if ( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$page_title = $module_info['custom_title'];
+if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-$key_words = $module_info['keywords'];
+$array_modul = LoadModulesSearch();
 
-$mod_title = isset( $lang_module['search_title_adv'] ) ? $lang_module['search_title_adv'] : $module_info['custom_title'];
+$mod = filter_text_input( 'search_mod', 'get', 'all', 1 );
 
-$key = filter_text_input( 'q', 'post', '', 1, 1000 );
-
-$mod = filter_text_input( 'mod', 'post', 'all', 1 );
-
-$_SESSION["keyword"] = $key;
-
-if ( $mod == 'all' )
-
+if ( ! empty( $mod ) and isset( $array_modul[$mod] ) )
 {
-    
-    $url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
-
+    $mods = array( $mod => $array_modul[$mod] );
+    $limit = 10;
+    $is_generate_page = true;
 }
-
 else
-
 {
-    
-    $url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $mod . "&" . NV_OP_VARIABLE . "=search";
-
+    $mods = $array_modul;
+    $limit = 3;
+    $is_generate_page = false;
 }
 
-Header( 'Location:' . $url );
-exit();
+$key = filter_text_input( 'search_query', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
+$len_key = 0;
+
+$checkss = filter_text_input( 'search_ss', 'get', '', 1, 32 );
+$ss = md5( $client_info['session_id'] . $global_config['sitekey'] );
+
+if ( ! preg_match( "/^[a-z0-9]{32}$/", $checkss ) or $checkss != $ss )
+{
+    $key = "";
+}
+else
+{
+    $key = nv_unhtmlspecialchars( $key );
+    $key = strip_punctuation( $key );
+    $key = trim( $key );
+    $len_key = nv_strlen( $key );
+    $key = nv_htmlspecialchars( $key );
+}
+
+if ( $len_key < NV_MIN_SEARCH_LENGTH )
+{
+    die( '&nbsp;&nbsp;' );
+}
+
+$pages = $nv_Request->get_int( 'page', 'get', 0 );
+
+$contents = "";
+$ss = md5( $client_info['session_id'] . $global_config['sitekey'] );
+
+foreach ( $mods as $m_name => $m_values )
+{
+    $all_page = 0;
+    $result_array = array();
+
+    $dbkeyword = $db->dblikeescape( $key );
+
+    include ( NV_ROOTDIR . "/modules/" . $m_values['module_file'] . "/search.php" );
+
+    if ( ! empty( $all_page ) and ! empty( $result_array ) )
+    {
+        $contents .= result_theme( $result_array, $m_name, $m_values['custom_title'], $key, $ss, $is_generate_page, $pages, $limit, $all_page );
+    }
+}
+
+echo $contents;
 
 ?> 

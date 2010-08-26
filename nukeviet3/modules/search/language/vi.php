@@ -23,7 +23,7 @@ $lang_module['info_title'] = "Tìm và lấy những gì bạn muốn!";
 $lang_module['key_title'] = "Từ tìm kiếm";
 $lang_module['type_search'] = "Tìm kiếm tại";
 $lang_module['search_title'] = "Tìm kiếm";
-$lang_module['search_title_adv'] = "Tìm kiếm nâng cao";
+$lang_module['search_title_adv'] = "Nâng cao";
 $lang_module['search_on_site'] = "Tìm kiếm trên site";
 $lang_module['search_on'] = "Kết quả tìm kiếm trên";
 $lang_module['search_sum_title'] = "Tìm thấy tổng cộng";
@@ -33,7 +33,7 @@ $lang_module['search_on_internet'] = "Tìm trên toàn mạng Internet";
 $lang_module['search_adv_internet'] = "Mở rộng trên Internet";
 $lang_module['search_none'] = "Không tìm thấy dữ liệu nào có liên quan đến";
 $lang_module['search_in_module'] = "trong mục";
-$lang_module['view_all_title'] = "Xem tất cả các kết quả tìm kiếm";
+$lang_module['view_all_title'] = "Xem tất cả";
 $lang_module['pages_title'] = "Trang";
 
 ?>

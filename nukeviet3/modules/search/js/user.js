@@ -1,34 +1,84 @@
-// JavaScript Document
-  /////////////////////////////////////////////////////////////////////
-  function change()
-  {
-	  var slmod = document.getElementById('slmod');
-	  //var btadv = document.getElementById('btadv');
-	  //if ( slmod.value == 'all') { btadv.disabled = true; } else { btadv.disabled = false; }
-  }
-  ///////////////////////////////////////////////////////////////////////////
-  function GoUrl (url) 
-  {
-	  var slmod = document.getElementById('slmod');
-	  if(slmod.value != 'all')
-	  {
-		var fsea = document.getElementById('fsea');
-		fsea.method = 'post';
-		fsea.action = url;
-		fsea.submit();
-	  }
-	  else
-	  {
-	  	alert("please chose module name!");
-	  }
-  }
-  //////////////////////////////////////////////////////////////////////////////
-  function ViewAll(mod)
-  {
-	  var fsea = document.getElementById('fsea');
-	  var slmod = document.getElementById('slmod');
-	  fsea.method = 'get';
-	  fsea.action = '';
-	  slmod.value = mod;
-	  fsea.submit();
-  }
+function nv_send_search( qmin, qmax )
+{
+   var nv_timer = nv_settimeout_disable( 'search_submit', 1000 );
+   var search_query = document.getElementById( 'search_query' );
+   if( search_query.value.length >= qmin && search_query.value.length <= qmax )
+   {
+      var q = formatStringAsUriComponent( search_query.value );
+      search_query.value = q;
+      if( q.length >= qmin && q.length <= qmax )
+      {
+         q = rawurlencode( q );
+         var mod = document.getElementById( 'search_query_mod' ).options[document.getElementById( 'search_query_mod' ).selectedIndex].value;
+         var checkss = document.getElementById( 'search_checkss' ).value;
+         nv_ajax( 'get', nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=adv&search_query=' + q + '&search_mod=' + mod + '&search_ss=' + checkss, '', 'search_result' );
+         return;
+      }
+   }
+   search_query.focus();
+   return false;
+}
+
+//  ---------------------------------------
+
+function nv_search_viewall( mod, qmin, qmax )
+{
+   document.getElementById( 'search_query' ).value = document.getElementById( 'hidden_key' ).value;
+   document.getElementById( 'search_query_mod' ).value = mod;
+   nv_send_search( qmin, qmax );
+   return;
+}
+
+//  ---------------------------------------
+
+function GoUrl ( qmin, qmax )
+{
+   var nv_timer = nv_settimeout_disable( 'search_submit', 1000 );
+   var mod = document.getElementById( 'search_query_mod' ).options[document.getElementById( 'search_query_mod' ).selectedIndex].value;
+
+   if( mod == 'all' || mod == '' )
+   {
+      alert( "please chose module name!" );
+      document.getElementById( 'search_query_mod' ).focus();
+      return false;
+   }
+
+   var link = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + mod + '&' + nv_fc_variable + '=search';
+   var search_query = document.getElementById( 'search_query' );
+   if( search_query.value.length >= qmin && search_query.value.length <= qmax )
+   {
+      var q = formatStringAsUriComponent( search_query.value );
+      if( q.length >= qmin && q.length <= qmax )
+      {
+         q = rawurlencode( q );
+         link = link + '&q=' + q;
+      }
+   }
+   window.location.href = link;
+   return false;
+}
+
+//  ---------------------------------------
+
+function GoGoogle( qmin, qmax )
+{
+   var nv_timer = nv_settimeout_disable( 'search_submit', 1000 );
+   var search_query = document.getElementById( 'search_query' );
+   if( search_query.value.length >= qmin && search_query.value.length <= qmax )
+   {
+      var q = rawurlencode( search_query.value );
+      var mydomain = rawurlencode( document.getElementById( 'mydomain' ).value );
+      var confirm_search_on_internet = document.getElementById( 'confirm_search_on_internet' ).value;
+      var link = 'http://www.google.com/custom?hl=' + nv_sitelang + '&domains=' + mydomain + '&q=' + q;
+      if ( ! confirm( confirm_search_on_internet + ' ?' ) )
+      {
+         link += '&sitesearch=' + mydomain;
+      }
+
+      window.location.href = link;
+      return;
+   }
+
+   search_query.focus();
+   return false;
+}
