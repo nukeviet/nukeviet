@@ -151,6 +151,29 @@ function nv_iChars_check(field_id)
 
 // -----------------------
 
+function formatStringAsUriComponent( s )
+{
+
+   // replace html with whitespace
+   s = s.replace( /<\/?[^>]*>/gm, " " );
+
+   // remove entities
+   s = s.replace( /&[\w]+;/g, "" );
+
+   // remove 'punctuation'
+   s = s.replace ( /[\.\,\"\'\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\^\_\{\}\|\~]/g, "");
+
+   // replace multiple whitespace with single whitespace
+   s = s.replace( /\s{2,}/g, " " );
+
+   // trim whitespace at start and end of title
+   s = s.replace( /^\s+|\s+$/g, "" );
+
+   return s;
+}
+
+// -----------------------
+
 function nv_iChars_Remove(str)
 {
    return str.replace(nv_specialchars, "");
@@ -733,10 +756,10 @@ function nv_check_contentMarquee(res)
 
 // -----------------------
 
-function nv_search_submit(search_query, search_button, minlength, maxlength)
+function nv_search_submit(search_query, topmenu_search_checkss, search_button, minlength, maxlength)
 {
    var query = document.getElementById(search_query);
-   var format_query = trim(nv_iChars_Remove(strip_tags(query.value)));
+   var format_query = formatStringAsUriComponent(query.value);
    var allowed = ( format_query != '' && format_query.length >= minlength && format_query.length <= maxlength) ? true : false;
    if( ! allowed)
    {
@@ -746,7 +769,8 @@ function nv_search_submit(search_query, search_button, minlength, maxlength)
    {
       var sbutton = document.getElementById(search_button);
       sbutton.disabled = true;
-      window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable+'='+nv_sitelang+'&'+nv_name_variable + '=search&q=' + rawurlencode(format_query);
+      var search_checkss = document.getElementById(topmenu_search_checkss).value;
+      window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable+'='+nv_sitelang+'&'+nv_name_variable + '=search&q=' + rawurlencode(format_query) + '&search_checkss=' + search_checkss;
    }
    return false;
 }
