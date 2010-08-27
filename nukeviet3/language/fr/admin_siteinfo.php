@@ -42,15 +42,15 @@ $lang_module['variable'] = "Variable";
 $lang_module['value'] = "Valeur";
 $lang_module['variables_php'] = "Variables pré-destinés";
 $lang_module['version'] = "Version du système";
-$lang_module['checkversion'] = "Vérifier la version";
+$lang_module['checkversion'] = " Vérifier la version";
 $lang_module['server_api'] = "Protocole entre serveur et PHP";
-$lang_module['chmod'] = "Vérifier les permissions";
+$lang_module['chmod'] = "Vérification des permissions";
 $lang_module['chmod_need'] = "Il faut changer les permissions (chmod 777)";
 $lang_module['chmod_noneed'] = "OK!";
-$lang_module['checkchmod'] = "Changez les permissions (chmod) des répertoires nécessaires";
+$lang_module['checkchmod'] = "Changer les permissions des répertoires nécessaires";
 $lang_module['checkchmod_error_account'] = "Erreur: compte ftp incorrect";
-$lang_module['checkchmod_error_path'] = "Erreur: chemin incorrect";
-$lang_module['checkchmod_error_unable_chmod'] = "Erreur: impossible de changer les permissions (chmod) du répertoire:";
+$lang_module['checkchmod_error_path'] = "Erreur: chemin d'accès incorrect";
+$lang_module['checkchmod_error_unable_chmod'] = "Erreur: impossible de changer les permissions du répertoire:";
 $lang_module['checkchmod_success'] = "Changement les permissions avec succès.";
 
 ?>
