@@ -196,7 +196,7 @@ if ( $global_config['lang_multi'] == 1 )
     {
         if ( file_exists( NV_ROOTDIR . "/language/" . $lang_i . "/global.php" ) and file_exists( NV_ROOTDIR . "/language/" . $lang_i . "/admin_global.php" ) )
         {
-            $xtpl->assign( 'LANGOP', $lang_i );
+            $xtpl->assign( 'LANGOP', NV_BASE_ADMINURL . "index.php?langinterface=" . $lang_i );
             $xtpl->assign( 'LANGTITLE', $lang_global['langinterface'] );
             $xtpl->assign( 'SELECTED', ( $lang_i == NV_LANG_INTERFACE ) ? "selected='selected'" : "" );
             $xtpl->assign( 'LANGVALUE', $language_array[$lang_i]['name'] );

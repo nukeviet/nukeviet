@@ -46,8 +46,9 @@
                             <!-- BEGIN: lang_multi -->
                             <li>
                                 <label>{LANGTITLE}:</label>
-                                <select id="langinterface" name="langinterface" onchange="nv_change_lang_login(this.options[this.selectedIndex].value);">
-                                    <!-- BEGIN: option --><option value="{LANGOP}" {SELECTED}>{LANGVALUE}  </option>
+                                <select id="langinterface" name="langinterface" onchange="top.location.href=this.options[this.selectedIndex].value;">
+                                    <!-- BEGIN: option -->
+                                    	<option value="{LANGOP}" {SELECTED}>{LANGVALUE}  </option>
                                     <!-- END: option -->
                                 </select>
                             </li>

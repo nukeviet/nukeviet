@@ -75,7 +75,3 @@ function nv_change_captcha() {
 	document.getElementById('seccode').value = '';
 	return false;
 }
-
-function nv_change_lang_login(newslang) {
-	top.location.href = script_name + '?langinterface=' + newslang
-}
