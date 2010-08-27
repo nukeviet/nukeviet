@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Aug 27, 2010, 02:26:03 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -85,19 +85,11 @@ $lang_module['suspend0'] = "Active";
 $lang_module['suspend1'] = "Suspend";
 $lang_module['clean_history'] = "Clear history";
 $lang_module['suspend_sendmail'] = "Send notify";
-$lang_module['suspend_sendmail_mess1'] = "Information from %1\$s Aministrators:
-Your administrator account %1\$s is suspended %2\$s reason: %3\$s.
-If you have any questions... Email: %4\$s";
-$lang_module['suspend_sendmail_mess0'] = "Information from %1\$s Aministrators:
-Your administrator account %1\$s is active at%2\$s.
-Your account has been suspended because:: %3\$s";
+$lang_module['suspend_sendmail_mess1'] = "Information from %1\$s Aministrators:<br />Your administrator account %1\$s is suspended %2\$s reason: %3\$s.<br />If you have any questions... Email: %4\$s";
+$lang_module['suspend_sendmail_mess0'] = "Information from %1\$s Aministrators:<br />Your administrator account %1\$s is active at%2\$s.<br />Your account has been suspended because:: %3\$s";
 $lang_module['suspend_sendmail_title'] = "Website notify %s";
-$lang_module['delete_sendmail_mess0'] = "Administrator %1\$s notify:
-Your administrator account in %1\$s website deleted  %2\$s.
-If you have any questions... Email %3\$s";
-$lang_module['delete_sendmail_mess1'] = "Administrator %1\$s website notify:
-Your administrator account in %1\$s website deleted %2\$s Reason: %3\$s.
-If you have any questions... Email %4\$s";
+$lang_module['delete_sendmail_mess0'] = "Administrator %1\$s notify:<br />Your administrator account in %1\$s website deleted  %2\$s.<br />If you have any questions... Email %3\$s";
+$lang_module['delete_sendmail_mess1'] = "Administrator %1\$s website notify:<br />Your administrator account in %1\$s website deleted %2\$s Reason: %3\$s.<br />If you have any questions... Email %4\$s";
 $lang_module['delete_sendmail_title'] = "Information from %s website";
 $lang_module['delete_sendmail_info'] = "Do you really want to delete the administrator account &ldquo;<strong>%s</strong>&rdquo;? Please fill in box below to confirm";
 $lang_module['admin_del_sendmail'] = "Send notify";
@@ -107,5 +99,39 @@ $lang_module['allow_modify_files'] = "Allow to edit,delete";
 $lang_module['allow_create_subdirectories'] = "Allow to create directory";
 $lang_module['allow_modify_subdirectories'] = "Allow to change name, delete folder";
 $lang_module['admin_login_incorrect'] = "Account &ldquo;<strong>%s</strong>&rdquo; already exist. Please use other account";
+$lang_module['config'] = "Config";
+$lang_module['adminip'] = "Admin IP";
+$lang_module['adminip_ip'] = "IP";
+$lang_module['adminip_timeban'] = "Start";
+$lang_module['adminip_timeendban'] = "Finish";
+$lang_module['adminip_funcs'] = "Functions";
+$lang_module['adminip_checkall'] = "Check all";
+$lang_module['adminip_uncheckall'] = "Uncheck all";
+$lang_module['adminip_add'] = "Add IP";
+$lang_module['adminip_address'] = "Adresss";
+$lang_module['adminip_begintime'] = "Start";
+$lang_module['adminip_endtime'] = "Finish";
+$lang_module['adminip_notice'] = "Note";
+$lang_module['save'] = "Save";
+$lang_module['adminip_mask_select'] = "Please select";
+$lang_module['adminip_nolimit'] = "Unlimited";
+$lang_module['adminip_del_success'] = "Successfully";
+$lang_module['adminip_delete_confirm'] = "Are you sure you want to remove this IP?";
+$lang_module['adminip_mask'] = "IP Mask";
+$lang_module['adminip_edit'] = "Edit";
+$lang_module['adminip_delete'] = "Delete";
+$lang_module['adminip_error_ip'] = "Please enter admin IP";
+$lang_module['adminip_error_validip'] = "Invalid IP";
+$lang_module['adminip_note'] = "Note: You need basic knowledge about networking to use check IP features!";
+$lang_module['title_nickname'] = "Manage firewall account";
+$lang_module['admfirewall'] = "Check firewall";
+$lang_module['block_admin_ip'] = "Check IP";
+$lang_module['nickname_add'] = "Add";
+$lang_module['nickname_edit'] = "Edit";
+$lang_module['nicknam_delete_confirm'] = "Are you sure you want to remove this account?";
+$lang_module['passwordsincorrect'] = "Password does not match";
+$lang_module['nochangepass'] = "Leave password fields blank if you don't want to change password";
+$lang_module['rule_user'] = "Account only accept letters, numbers and underscore";
+$lang_module['rule_pass'] = "Password only accept letters, numbers and underscore";
 
 ?>
