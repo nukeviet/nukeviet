@@ -75,7 +75,8 @@ function GoGoogle( qmin, qmax )
          link += '&sitesearch=' + mydomain;
       }
 
-      window.location.href = link;
+      //window.location.href = link;
+      window.open(link ,'_blank');
       return;
    }
 
