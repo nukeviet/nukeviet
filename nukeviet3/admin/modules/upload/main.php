@@ -154,7 +154,6 @@ $contents .= '
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.all.css" rel="stylesheet" />
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/jquery/jquery.treeview.css" rel="stylesheet" />
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.treeview.min.js"></script>
-<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery-ui-1.8.2.custom.js"></script>
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/contextmenu/jquery.contextmenu.r2.js"></script>
 <div id="renamefolder" title="' . $lang_module['renamefolder'] . '">' . $lang_module['rename_newname'] . '<input type="text" name="foldername"/></div>

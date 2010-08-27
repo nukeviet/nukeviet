@@ -68,7 +68,7 @@ echo '
 	$("#foldertree").treeview({
 		collapsed: true,
 		unique: true,
-		persist: "cookie"
+		persist: "location"
 	});
     $("span.folder").contextMenu("folder-menu", {
       menuStyle: {
