@@ -2,125 +2,387 @@
 
 /**
  * @Project NUKEVIET 3.0
- * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES. All rights reserved
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @copyright 2009
+ * @createdate 12/31/2009 0:51
  */
 
-if ( ! defined( 'NV_IS_MOD_SEARCH' ) )
+if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
+
+/**
+ * theme_main_download()
+ * 
+ * @param mixed $array
+ * @param mixed $download_config
+ * @param mixed $subs
+ * @param mixed $page_title
+ * @param mixed $generate_page
+ * @return
+ */
+function theme_main_download( $array, $download_config, $subs, $page_title, $generate_page )
 {
-    die( 'Stop!!!' );
+    global $global_config, $lang_module, $lang_global, $module_info, $module_name;
+
+    $xtpl = new XTemplate( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name . "/" );
+    $xtpl->assign( 'LANG', $lang_module );
+    $xtpl->assign( 'GLANG', $lang_global );
+    $xtpl->assign( 'PAGE_TITLE', $page_title );
+    $xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/download/" );
+
+    if ( $download_config['is_addfile_allow'] )
+    {
+        $xtpl->assign( 'UPLOAD', NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=upload" );
+        $xtpl->parse( 'main.is_addfile_allow' );
+    }
+
+    if ( ! empty( $subs ) )
+    {
+        foreach ( $subs as $cat )
+        {
+            $xtpl->assign( 'SUBCAT', $cat );
+
+            if ( ! empty( $cat['description'] ) )
+            {
+                $xtpl->parse( 'main.subcats.li.description' );
+            }
+
+            $xtpl->parse( 'main.subcats.li' );
+        }
+        $xtpl->parse( 'main.subcats' );
+    }
+
+    if ( ! empty( $array ) )
+    {
+        foreach ( $array as $row )
+        {
+            $xtpl->assign( 'ROW', $row );
+
+            if ( ! empty( $row['author_name'] ) )
+            {
+                $xtpl->parse( 'main.row.author_name' );
+            }
+
+            if ( ! empty( $row['fileimage']['src'] ) )
+            {
+                $xtpl->assign( 'FILEIMAGE', $row['fileimage'] );
+                $xtpl->parse( 'main.row.is_image' );
+            }
+
+            if ( defined( 'NV_IS_MODADMIN' ) )
+            {
+                $xtpl->parse( 'main.row.is_admin' );
+            }
+
+            if ( isset( $row['comment_hits'] ) )
+            {
+                $xtpl->parse( 'main.row.comment_allow' );
+            }
+
+            $xtpl->parse( 'main.row' );
+        }
+    }
+
+    if ( ! empty( $generate_page ) )
+    {
+        $xtpl->assign( 'GENERATE_PAGE', $generate_page );
+        $xtpl->parse( 'main.generate_page' );
+    }
+
+    $xtpl->parse( 'main' );
+    return $xtpl->text( 'main' );
 }
 
 /**
- * main_theme()
+ * view_file()
  * 
- * @param mixed $key
- * @param mixed $checkss
- * @param mixed $array_modul
- * @param mixed $mod
+ * @param mixed $row
+ * @param mixed $download_config
+ * @param mixed $page_title
  * @return
  */
-function main_theme( $key, $checkss, $array_modul, $mod )
+function view_file( $row, $download_config, $page_title )
 {
-    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
+    global $global_config, $lang_global, $lang_module, $module_name, $module_info, $my_head;
 
+    if ( ! defined( 'SHADOWBOX' ) and isset( $row['fileimage']['src'] ) and ! empty( $row['fileimage']['src'] ) )
+    {
+        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+        $my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+        $my_head .= "<script type=\"text/javascript\">\n";
+        $my_head .= "Shadowbox.init();\n";
+        $my_head .= "</script>\n";
+
+        define( 'SHADOWBOX', true );
+    }
+
+    $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
+    $my_head .= "<script src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
+    $my_head .= "<link href=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
     $my_head .= "<script type=\"text/javascript\">\n";
     $my_head .= "$(document).ready(function(){
-            $('#form_search').validate({
-                submitHandler: function() { nv_send_search(" . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . "); },
+            $('#commentForm').validate({
+                submitHandler: function() { nv_send_comment(); },
                 rules: {
-                    q: {
+                    comment_uname: {
                     required: true,
-                    rangelength: [" . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . "]
+                    rangelength: [3, 60]
+                    },
+                    
+                    comment_uemail: {
+                    required: true,
+                    email: true
+                    },
+                    
+                    comment_subject: {
+                    required: true,
+                    rangelength: [3, 200]
+                    },
+                    
+                    comment_content: {
+                    required: true,
+                    rangelength: [3, 1000]
+                    },
+                    
+                    comment_seccode: {
+                    required: true,
+                    minlength: " . NV_GFX_NUM . "
                     }
                 }
 			});
           });";
     $my_head .= "  </script>\n";
 
-    $xtpl = new XTemplate( "form.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-
+    $xtpl = new XTemplate( "viewfile.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name . "/" );
     $xtpl->assign( 'LANG', $lang_module );
-    $xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
-    $xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
-    $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
-    $xtpl->assign( 'MODULE_NAME', $module_name );
-    $xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . "index.php" );
-    $xtpl->assign( 'SEARCH_QUERY', $key );
-    $xtpl->assign( 'CHECKSS', $checkss );
-    $xtpl->assign( 'MY_DOMAIN', NV_MY_DOMAIN );
-    $xtpl->assign( 'NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH );
-    $xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
-    if ( ! empty( $array_modul ) )
+    $xtpl->assign( 'GLANG', $lang_global );
+    $xtpl->assign( 'PAGE_TITLE', $page_title );
+    $xtpl->assign( 'ROW', $row );
+
+    if ( $download_config['is_addfile_allow'] )
     {
-        foreach ( $array_modul as $m_name => $m_info )
-        {
-            $m_info['value'] = $m_name;
-            $m_info['selected'] = ( $m_name == $mod ) ? " selected=\"selected\"" : "";
-            $xtpl->assign( 'MOD', $m_info );
-            $xtpl->parse( 'main.select_option' );
-        }
+        $xtpl->assign( 'UPLOAD', NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=upload" );
+        $xtpl->parse( 'main.is_addfile_allow' );
     }
 
-    if ( ! empty( $key ) )
+    if ( isset( $row['fileimage']['src'] ) and ! empty( $row['fileimage']['src'] ) )
     {
-        $xtpl->parse( 'main.is_key' );
+        $xtpl->assign( 'FILEIMAGE', $row['fileimage'] );
+        $xtpl->parse( 'main.is_image' );
     }
+
+    if ( ! empty( $row['description'] ) )
+    {
+        $xtpl->parse( 'main.introtext' );
+    }
+
+    if ( ! empty( $row['comment_allow'] ) )
+    {
+        $xtpl->parse( 'main.comment_allow' );
+    }
+
+    if ( $row['is_download_allow'] )
+    {
+        $xtpl->parse( 'main.report' );
+
+        if ( ! empty( $row['fileupload'] ) )
+        {
+            $xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+
+            $a = 0;
+            foreach ( $row['fileupload'] as $fileupload )
+            {
+                $fileupload['key'] = $a;
+                $xtpl->assign( 'FILEUPLOAD', $fileupload );
+                $xtpl->parse( 'main.download_allow.fileupload.row' );
+                $a++;
+            }
+
+            $xtpl->parse( 'main.download_allow.fileupload' );
+        }
+
+        if ( ! empty( $row['linkdirect'] ) )
+        {
+            foreach ( $row['linkdirect'] as $host => $linkdirect )
+            {
+                $xtpl->assign( 'HOST', $host );
+
+                foreach ( $linkdirect as $link )
+                {
+                    $xtpl->assign( 'LINKDIRECT', $link );
+                    $xtpl->parse( 'main.download_allow.linkdirect.row' );
+                }
+
+                $xtpl->parse( 'main.download_allow.linkdirect' );
+            }
+        }
+
+        $xtpl->parse( 'main.download_allow' );
+    }
+    else
+    {
+        $xtpl->parse( 'main.download_not_allow' );
+    }
+
+    if ( $row['rating_disabled'] )
+    {
+        $xtpl->parse( 'main.disablerating' );
+    }
+
+    if ( defined( 'NV_IS_MODADMIN' ) )
+    {
+        $xtpl->parse( 'main.is_admin' );
+    }
+
+    if ( $row['comment_allow'] )
+    {
+        if ( $row['is_comment_allow'] )
+        {
+            $xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getcomment" );
+            $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+            $xtpl->assign( 'CAPTCHA_MAXLENGTH', NV_GFX_NUM );
+
+            $xtpl->parse( 'main.comment_allow2.is_comment_allow' );
+        }
+        $xtpl->parse( 'main.comment_allow2' );
+    }
+
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );
 }
 
 /**
- * result_theme()
+ * show_comment()
  * 
- * @param mixed $result_array
- * @param mixed $mod
- * @param mixed $mod_custom_title
- * @param mixed $key
- * @param mixed $ss
- * @param mixed $is_generate_page
- * @param mixed $pages
- * @param mixed $limit
- * @param mixed $all_page
+ * @param mixed $array
+ * @param mixed $generate_page
  * @return
  */
-function result_theme( $result_array, $mod, $mod_custom_title, $key, $ss, $is_generate_page, $pages, $limit, $all_page )
+function show_comment( $array, $generate_page )
 {
-    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $db, $module_name;
-    $xtpl = new XTemplate( "result.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+    global $module_info, $module_name, $lang_module, $lang_global;
+
+    $xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name . "/" );
     $xtpl->assign( 'LANG', $lang_module );
-    $xtpl->assign( 'HIDDEN_KEY', $key );
-    $xtpl->assign( 'SEARCH_RESULT_NUM', $all_page );
-    $xtpl->assign( 'MODULE_CUSTOM_TITLE', $mod_custom_title );
-
-    foreach ( $result_array as $result )
+    $xtpl->assign( 'GLANG', $lang_global );
+    if ( ! empty( $array ) )
     {
-        $xtpl->assign( 'RESULT', $result );
-        $xtpl->parse( 'main.result' );
-    }
+        foreach ( $array as $row )
+        {
+            $xtpl->assign( 'ROW', $row );
 
-    $base_url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=adv&amp;search_query=" . rawurlencode( $key ) . "&amp;search_mod=" . $mod . "&amp;search_ss=" . $ss;
+            if ( defined( 'NV_IS_MODADMIN' ) )
+            {
+                $xtpl->parse( 'main.if_not_empty.detail.is_admin' );
+            }
+            $xtpl->parse( 'main.if_not_empty.detail' );
+        }
 
-    if ( $is_generate_page )
-    {
-        $generate_page = nv_generate_page( $base_url, $all_page, $limit, $pages, true, true, 'nv_urldecode_ajax', 'search_result' );
         if ( ! empty( $generate_page ) )
         {
             $xtpl->assign( 'GENERATE_PAGE', $generate_page );
-            $xtpl->parse( 'main.generate_page' );
+            $xtpl->parse( 'main.if_not_empty.generate_page' );
         }
-    }
-    else
-    {
-        if ( $all_page > $limit )
-        {
-            $xtpl->assign( 'MORE', "nv_search_viewall('" . $mod . "', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ")" );
-            $xtpl->parse( 'main.more' );
-        }
+
+        $xtpl->parse( 'main.if_not_empty' );
+
     }
 
+    $xtpl->parse( 'main' );
+    return $xtpl->text( 'main' );
+}
+
+/**
+ * theme_upload()
+ * 
+ * @param mixed $array
+ * @param mixed $list_cats
+ * @param mixed $download_config
+ * @param mixed $error
+ * @return
+ */
+function theme_upload( $array, $list_cats, $download_config, $error )
+{
+    global $module_info, $module_name, $lang_module, $lang_global, $my_head;
+
+    $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+    $my_head .= "<script type=\"text/javascript\">\n";
+    $my_head .= "$(document).ready(function(){
+            $('#uploadForm').validate({
+                rules: {
+                    upload_title: {
+                    required: true,
+                    rangelength: [3, 255]
+                    },
+                    
+                    upload_author_name: {
+                    rangelength: [3, 100]
+                    },
+                    
+                    upload_author_email: {
+                    email: true
+                    },
+                    
+                    upload_author_url: {
+                    url: true
+                    },
+                    
+                    upload_fileupload: {
+                    accept: '" . implode( "|", $download_config['upload_filetype'] ) . "'
+                    },
+                    
+                    upload_filesize: {
+                    number: true
+                    },
+                    
+                    upload_fileimage: {
+                    accept: 'jpg|gif|png'
+                    },
+                    
+                    upload_introtext: {
+                    maxlength: 500
+                    },
+                    
+                    upload_description: {
+                    maxlength: 5000
+                    },
+                    
+                    upload_user_name: {
+                    required: true,
+                    rangelength: [3, 60]
+                    },
+                    
+                    upload_seccode: {
+                    required: true,
+                    minlength: 6
+                    }
+                }
+			});
+          });";
+    $my_head .= "  </script>\n";
+
+    $xtpl = new XTemplate( "upload.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name . "/" );
+    $xtpl->assign( 'LANG', $lang_module );
+    $xtpl->assign( 'GLANG', $lang_global );
+    $xtpl->assign( 'DOWNLOAD', NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name );
+    $xtpl->assign( 'UPLOAD', $array );
+    $xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=upload" );
+    $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+    $xtpl->assign( 'CAPTCHA_MAXLENGTH', NV_GFX_NUM );
+    $xtpl->assign( 'EXT_ALLOWED', implode( ", ", $download_config['upload_filetype'] ) );
+
+    if ( ! empty( $error ) )
+    {
+        $xtpl->assign( 'ERROR', $error );
+        $xtpl->parse( 'main.is_error' );
+    }
+
+    foreach ( $list_cats as $cat )
+    {
+        $cat['selected'] = $array['catid'] == $cat['id'] ? " selected=\"selected\"" : "";
+        $xtpl->assign( 'LISTCATS', $cat );
+        $xtpl->parse( 'main.catid' );
+    }
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );
 }

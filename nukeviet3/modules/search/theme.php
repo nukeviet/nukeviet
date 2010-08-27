@@ -1,85 +1,128 @@
 <?php
 
-/** * @Project NUKEVIET 3.0 * @Author VINADES (contact@vinades.vn) * @Copyright (C) 2010 VINADES. All rights reserved * @Createdate Apr 20, 2010 10:47:41 AM */
+/**
+ * @Project NUKEVIET 3.0
+ * @Author VINADES (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES. All rights reserved
+ * @Createdate Apr 20, 2010 10:47:41 AM
+ */
+
 if ( ! defined( 'NV_IS_MOD_SEARCH' ) )
 {
     die( 'Stop!!!' );
 }
 
-function main_theme ( $key, $array_modul, $mod, $base_url )
+/**
+ * main_theme()
+ * 
+ * @param mixed $key
+ * @param mixed $checkss
+ * @param mixed $array_modul
+ * @param mixed $mod
+ * @return
+ */
+function main_theme( $key, $checkss, $array_modul, $mod )
 {
-    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name;
+    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
+
+    $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+    $my_head .= "<script type=\"text/javascript\">\n";
+    $my_head .= "$(document).ready(function(){
+            $('#form_search').validate({
+                submitHandler: function() { nv_send_search(" . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . "); },
+                rules: {
+                    q: {
+                    required: true,
+                    rangelength: [" . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . "]
+                    }
+                }
+			});
+          });";
+    $my_head .= "  </script>\n";
+
     $xtpl = new XTemplate( "form.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-    $base_url_site = NV_BASE_SITEURL . "?";
+
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
     $xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
     $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
     $xtpl->assign( 'MODULE_NAME', $module_name );
-    $xtpl->assign( 'BASE_URL_SITE', $base_url_site );
-    $xtpl->assign( 'URL_SEARCH_ADV', $base_url );
-    $xtpl->assign( 'KEY', $key );
+    $xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . "index.php" );
+    $xtpl->assign( 'SEARCH_QUERY', $key );
+    $xtpl->assign( 'CHECKSS', $checkss );
+    $xtpl->assign( 'MY_DOMAIN', NV_MY_DOMAIN );
+    $xtpl->assign( 'NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH );
+    $xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
     if ( ! empty( $array_modul ) )
     {
         foreach ( $array_modul as $m_name => $m_info )
         {
-            $xtpl->assign( 'SELECT_NAME', $m_info['custom_title'] );
-            $xtpl->assign( 'SELECT_VALUE', $m_name );
-            if ( $m_name == $mod ) $xtpl->parse( 'main.select_option' );
-            else $xtpl->parse( 'main.option_loop' );
+            $m_info['value'] = $m_name;
+            $m_info['selected'] = ( $m_name == $mod ) ? " selected=\"selected\"" : "";
+            $xtpl->assign( 'MOD', $m_info );
+            $xtpl->parse( 'main.select_option' );
         }
+    }
+
+    if ( ! empty( $key ) )
+    {
+        $xtpl->parse( 'main.is_key' );
     }
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );
 }
 
-function result_all_theme ( $key, $array_modul, $limit, $pages, $per_pages )
+/**
+ * result_theme()
+ * 
+ * @param mixed $result_array
+ * @param mixed $mod
+ * @param mixed $mod_custom_title
+ * @param mixed $key
+ * @param mixed $ss
+ * @param mixed $is_generate_page
+ * @param mixed $pages
+ * @param mixed $limit
+ * @param mixed $all_page
+ * @return
+ */
+function result_theme( $result_array, $mod, $mod_custom_title, $key, $ss, $is_generate_page, $pages, $limit, $all_page )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $db, $module_name;
-    $numall = 0;
-    $xtpl = new XTemplate( "form.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+    $xtpl = new XTemplate( "result.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-    $xtpl->assign( 'KEY', $key );
-    $xtpl->assign( 'MY_DOMAIN', NV_MY_DOMAIN );
-    if ( ! empty( $array_modul ) )
+    $xtpl->assign( 'HIDDEN_KEY', $key );
+    $xtpl->assign( 'SEARCH_RESULT_NUM', $all_page );
+    $xtpl->assign( 'MODULE_CUSTOM_TITLE', $mod_custom_title );
+
+    foreach ( $result_array as $result )
     {
-        foreach ( $array_modul as $m_name => $m_info )
-        {
-            $url = "javascript:ViewAll('" . $m_name . "')";
-            $num = 0;
-            
-            $xtpl->assign( 'TITLE_MOD', $m_info['custom_title'] );
-            if ( function_exists( "result_" . $m_info['module_file'] . "_theme" ) )
-            {
-                $num = call_user_func( "result_" . $m_info['module_file'] . "_theme", $m_info, $key, $xtpl, $limit, $pages, $per_pages );
-            }
-            if ( $num == 0 )
-            {
-                $xtpl->assign( 'KEY', $key );
-                $xtpl->assign( 'INMOD', $m_info['custom_title'] );
-                $xtpl->parse( 'results.loop_result.noneresult' );
-            }
-            $numall = $numall + $num;
-            if ( $num > $limit && $limit > 0 )
-            {
-                $xtpl->assign( 'URL_VIEW_ALL', $url );
-                $xtpl->parse( 'results.loop_result.limit_result' );
-            }
-            if ( $num > $per_pages && $limit == 0 ) // show pages
-            {
-                $url_link = $_SERVER['REQUEST_URI'];
-                $in = strpos( $url_link, '&page' );
-                if ( $in != 0 ) $url_link = substr( $url_link, 0, $in );
-                $generate_page = nv_generate_page( $url_link, $num, $per_pages, $pages );
-                $xtpl->assign( 'VIEW_PAGES', $generate_page );
-                $xtpl->parse( 'results.loop_result.pages_result' );
-            }
-            $xtpl->parse( 'results.loop_result' );
-        }
-        $xtpl->assign( 'NUMRECORD', $numall );
-        $xtpl->parse( 'results' );
+        $xtpl->assign( 'RESULT', $result );
+        $xtpl->parse( 'main.result' );
     }
-    return $xtpl->text( 'results' );
+
+    $base_url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=adv&amp;search_query=" . rawurlencode( $key ) . "&amp;search_mod=" . $mod . "&amp;search_ss=" . $ss;
+
+    if ( $is_generate_page )
+    {
+        $generate_page = nv_generate_page( $base_url, $all_page, $limit, $pages, true, true, 'nv_urldecode_ajax', 'search_result' );
+        if ( ! empty( $generate_page ) )
+        {
+            $xtpl->assign( 'GENERATE_PAGE', $generate_page );
+            $xtpl->parse( 'main.generate_page' );
+        }
+    }
+    else
+    {
+        if ( $all_page > $limit )
+        {
+            $xtpl->assign( 'MORE', "nv_search_viewall('" . $mod . "', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ")" );
+            $xtpl->parse( 'main.more' );
+        }
+    }
+
+    $xtpl->parse( 'main' );
+    return $xtpl->text( 'main' );
 }
 
 ?>
