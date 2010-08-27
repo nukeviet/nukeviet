@@ -356,4 +356,20 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_rows` V
 (2, 'vinades', 2, 0, 'uploads/banners/vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', 'http://vinades.vn', '', '', '', 1275321220, 1275321220, 0, 0, 1), 
 (3, 'Publicité du centre', 1, 0, 'uploads/banners/vndads___05.jpg', 'jpg', 'image/jpeg', 470, 60, '', 'http://nukeviet.vn', '', '', '', 1275321716, 1275321716, 0, 0, 1)";
 
+$array_cron_name = array();
+$array_cron_name[1] = 'Supprimer les anciens registres du status en ligne dans la base de données';
+$array_cron_name[2] = 'Sauvegarder automatique la base de données';
+$array_cron_name[3] = 'Supprimer les fichiers temporaires du répertoire tmp';
+$array_cron_name[4] = 'Supprimer les fichiers ip_logs expirés';
+$array_cron_name[5] = 'Supprimer les fichiers error_log expirés';
+$array_cron_name[6] = 'Envoyer à l\'administrateur l\'e-mail des notifications d\'erreurs';
+$array_cron_name[7] = 'Supprimer les referers expirés';
+
+$result = $db->sql_query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
+while ( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
+{
+    $cron_name = ( isset( $array_cron_name[$id] ) ) ? $array_cron_name[$id] : $run_func;
+    $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` =  " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id;
+}
+$db->sql_freeresult();
 ?>

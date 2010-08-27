@@ -25,6 +25,8 @@ function nv_delete_table_sys ( $lang )
     $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modfuncs`";
     $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_counter`";
     $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_searchkeys`";
+    $sql_drop_table[] = "ALTER TABLE `" . $db_config['prefix'] . "_cronjobs` DROP `" . $lang . "_cron_name`";
+    
     return $sql_drop_table;
 }
 
@@ -646,6 +648,7 @@ function nv_create_table_sys ( $lang )
     $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_language` (`lang`, `setup`) VALUES('" . $lang . "', 1)";
     
     $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modthemes` (`func_id`, `layout`, `theme`) VALUES ('0','" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
+    $sql_create_table[] = "ALTER TABLE `" . $db_config['prefix'] . "_cronjobs` ADD `" . $lang . "_cron_name` VARCHAR( 255 ) NOT NULL DEFAULT ''";
     
     return $sql_create_table;
 }

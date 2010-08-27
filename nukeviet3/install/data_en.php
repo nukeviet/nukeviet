@@ -337,4 +337,21 @@ $copyright = "Note: The above article reprinted at the website or other media so
 
 $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` =  " . $db->dbescape_string( $disable_site_content ) . " WHERE `module` =  'global' AND `config_name` = 'disable_site_content' AND `lang`='" . $lang_data . "'";
 $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` =  " . $db->dbescape_string( $copyright ) . " WHERE `module` =  'news' AND `config_name` = 'copyright' AND `lang`='" . $lang_data . "'";
+
+$array_cron_name = array();
+$array_cron_name[1] = 'Delete expired online status';
+$array_cron_name[2] = 'Automatic backup database';
+$array_cron_name[3] = 'Empty temporary files';
+$array_cron_name[4] = 'Delete IP log files';
+$array_cron_name[5] = 'Delete expired error_log log files';
+$array_cron_name[6] = 'Send error logs to admin';
+$array_cron_name[7] = 'Delete expired referer';
+
+$result = $db->sql_query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
+while ( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
+{
+    $cron_name = ( isset( $array_cron_name[$id] ) ) ? $array_cron_name[$id] : $run_func;
+    $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` =  " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id;
+}
+$db->sql_freeresult();
 ?>

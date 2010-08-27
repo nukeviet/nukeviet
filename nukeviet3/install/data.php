@@ -137,7 +137,6 @@ $sql_create_table[] = "CREATE TABLE `" . NV_CONFIG_GLOBALTABLE . "` (
 
 $sql_create_table[] = "CREATE TABLE `" . NV_CRONJOBS_GLOBALTABLE . "` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `cron_name` varchar(100) NOT NULL,
   `start_time` int(11) unsigned NOT NULL DEFAULT '0',
   `interval` int(11) unsigned NOT NULL DEFAULT '0',
   `run_file` varchar(255) NOT NULL,
@@ -149,7 +148,6 @@ $sql_create_table[] = "CREATE TABLE `" . NV_CRONJOBS_GLOBALTABLE . "` (
   `last_time` int(11) unsigned NOT NULL DEFAULT '0',
   `last_result` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `cron_name` (`cron_name`),
   KEY `is_sys` (`is_sys`)
 ) ENGINE=MyISAM";
 
@@ -361,14 +359,14 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'openid_servers', 'yahoo,google,myopenid'),
 ('sys', 'global', 'version', '" . $global_config['version'] . "')";
 
-$sql_create_table[] = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `cron_name`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`) VALUES
-(1, 'Xoa  cac dong ghi tinh trang online da cu trong CSDL', 1262293200, 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 1276839725, 1),
-(2, 'Tu dong luu CSDL', 1262293200, 1440, 'dump_autobackup.php', 'cron_dump_autobackup', '', 0, 1, 1, 1276826911, 1),
-(3, 'Xoa cac files tam thoi trong thu muc TMP', 1262296800, 60, 'temp_download_destroy.php', 'cron_auto_del_temp_download', '', 0, 1, 1, 1276839725, 1),
-(4, 'Xoa cac files logs truy cap', 1269657620, 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 1276839725, 1),
-(5, 'Xoa cac file error_log qua han', 1271004840, 1440, 'error_log_destroy.php', 'cron_auto_del_error_log', '', 0, 1, 1, 1276793791, 1),
-(6, 'Gui mail cac thong bao loi cho admin', 1271004840, 360, 'error_log_sendmail.php', 'cron_auto_sendmail_error_log', '', 0, 1, 0, 1276177733, 0),
-(7, 'Xoa cac referer qua han', 1276281900, 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 1276839725, 1)";
+$sql_create_table[] = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`) VALUES
+(1, 1262293200, 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 1276839725, 1),
+(2, 1262293200, 1440, 'dump_autobackup.php', 'cron_dump_autobackup', '', 0, 1, 1, 1276826911, 1),
+(3, 1262296800, 60, 'temp_download_destroy.php', 'cron_auto_del_temp_download', '', 0, 1, 1, 1276839725, 1),
+(4, 1269657620, 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 1276839725, 1),
+(5, 1271004840, 1440, 'error_log_destroy.php', 'cron_auto_del_error_log', '', 0, 1, 1, 1276793791, 1),
+(6, 1271004840, 360, 'error_log_sendmail.php', 'cron_auto_sendmail_error_log', '', 0, 1, 0, 1276177733, 0),
+(7, 1276281900, 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 1276839725, 1)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES
 ('about', 0, 1, 'about', 'about', '3.0.01 1270400000', 1270997593, 'VINADES (contact@vinades.vn)', ''),

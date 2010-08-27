@@ -357,4 +357,21 @@ $copyright = "Chú ý: Việc đăng lại bài viết trên ở website hoặc 
 $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` =  " . $db->dbescape_string( $disable_site_content ) . " WHERE `module` =  'global' AND `config_name` = 'disable_site_content' AND `lang`='vi'";
 $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` =  " . $db->dbescape_string( $copyright ) . " WHERE `module` =  'news' AND `config_name` = 'copyright' AND `lang`='vi'";
 
+$array_cron_name = array();
+$array_cron_name[1] = 'Xóa các dòng ghi trạng thái online đã cũ trong CSDL';
+$array_cron_name[2] = 'Tự động lưu CSDL';
+$array_cron_name[3] = 'Xóa các file tạm trong thư mục tmp';
+$array_cron_name[4] = 'Xóa IP log files Xóa các file logo truy cập';
+$array_cron_name[5] = 'Xóa các file error_log quá hạn';
+$array_cron_name[6] = 'Gửi email các thông báo lỗi cho admin';
+$array_cron_name[7] = 'Xóa các referer quá hạn';
+
+$result = $db->sql_query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
+while ( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
+{
+    $cron_name = ( isset( $array_cron_name[$id] ) ) ? $array_cron_name[$id] : $run_func;
+    $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` =  " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id;
+}
+$db->sql_freeresult();
+
 ?>
