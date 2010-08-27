@@ -31,14 +31,28 @@ if ( $id > 0 and $catid > 0 )
         $result = "";
         $check = false;
         $checkss = $nv_Request->get_string( 'checkss', 'post', '' );
+        if ( defined( 'NV_IS_ADMIN' ) )
+        {
+            $name = $admin_info['username'];
+            $youremail = $admin_info['email'];
+        }
+        elseif ( defined( 'NV_IS_USER' ) )
+        {
+            $name = $user_info['username'];
+            $youremail = $user_info['email'];
+        }
+        else
+        {
+            $name = filter_text_input( 'name', 'post', '', 1 );
+            $youremail = filter_text_input( 'youremail', 'post', '' );
+        }
+        $to_mail = $content = "";
         if ( $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $allowed_send == 1 )
         {
             $link = "" . $global_config['site_url'] . "" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id . "";
             $link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
             $nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
             
-            $name = filter_text_input( 'name', 'post', '', 1 );
-            $youremail = filter_text_input( 'youremail', 'post', '' );
             $to_mail = filter_text_input( 'email', 'post', '' );
             $content = filter_text_input( 'content', 'post', '', 1 );
             $err_email = nv_check_valid_email( $to_mail );
@@ -46,7 +60,7 @@ if ( $id > 0 and $catid > 0 )
             $err_name = "";
             $message = "";
             $success = "";
-            if ( $global_config['gfx_chk'] == 1 and ! nv_capcha_txt( $nv_seccode ) )
+            if ( $global_config['gfx_chk'] > 0 and ! nv_capcha_txt( $nv_seccode ) )
             {
                 $err_name = $lang_global['securitycodeincorrect'];
             }
@@ -76,24 +90,8 @@ if ( $id > 0 and $catid > 0 )
                 "err_name" => $err_name, "err_email" => $err_email, "err_yourmail" => $err_youremail, "send_success" => $success, "check" => $check 
             );
         }
-        
-        if ( defined( 'NV_IS_ADMIN' ) )
-        {
-            $name = $admin_info['username'];
-            $youremail = $admin_info['email'];
-        }
-        elseif ( defined( 'NV_IS_USER' ) )
-        {
-            $name = $user_info['username'];
-            $youremail = $user_info['email'];
-        }
-        else
-        {
-            $name = "";
-            $youremail = "";
-        }
         $sendmail = array( 
-            "id" => $id, "catid" => $catid, "checkss" => md5( $id . session_id() . $global_config['sitekey'] ), "v_name" => $name, "v_mail" => $youremail, "result" => $result, "action" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id  //
+            "id" => $id, "catid" => $catid, "checkss" => md5( $id . session_id() . $global_config['sitekey'] ), "v_name" => $name, "v_mail" => $youremail, "to_mail" => $to_mail, "content" => $content, "result" => $result, "action" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id  //
         );
         $contents = sendmail_themme( $sendmail );
         include ( NV_ROOTDIR . "/includes/header.php" );

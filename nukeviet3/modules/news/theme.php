@@ -816,35 +816,17 @@ function sendmail_themme ( $sendmail )
     $script .= "            $(\"#sendmailForm\").validate();\n";
     $script .= "          });\n";
     $script .= "</script>\n";
-    $script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.cookie.js\"></script>\n";
-    $script .= "<script type=\"text/javascript\">\n";
-    $script .= "$(document).ready(function(){remember( '[name=name],[name=youremail],[name=email],[name=content]' );});\n";
-    $script .= "function remember( selector ){\n";
-    $script .= "	$(selector).each(function(){\n";
-    $script .= "		//if this item has been cookied, restore it\n";
-    $script .= "		var name = $(this).attr('name');\n";
-    $script .= "		if( $.cookie( name ) ){\n";
-    $script .= "			$(this).val( $.cookie(name) );\n";
-    $script .= "		}\n";
-    $script .= "		//assign a change function to the item to cookie it\n";
-    $script .= "		$(this).change(function(){\n";
-    $script .= "			$.cookie(name, $(this).val(), { path: '/', expires: 365 });\n";
-    $script .= "		});\n";
-    $script .= "	});\n";
-    $script .= "}\n";
-    $script .= "</script>\n";
     if ( NV_LANG_INTERFACE == 'vi' )
     {
         $script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
     }
-    
     $sendmail['script'] = $script;
     $xtpl = new XTemplate( "sendmail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'SENDMAIL', $sendmail );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
     $xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
-    if ( $global_config['gfx_chk'] == 1 )
+    if ( $global_config['gfx_chk'] > 0 )
     {
         $xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
         $xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );

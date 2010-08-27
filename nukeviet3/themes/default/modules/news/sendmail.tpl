@@ -132,11 +132,11 @@
             <div class="email clearfix">
                 <label for="semail">{LANG.sendmail_email}</label>
                 <em>*</em>
-                <input id="semail" type="text" name="email" class="required email" />
+                <input id="semail" type="text" name="email" value="{SENDMAIL.to_mail}" class="required email" />
             </div>
             <div class="content clearfix">
                 <label for="scontent">{LANG.sendmail_content}</label>
-                <textarea id="scontent" name="content"></textarea>
+                <textarea id="scontent" name="content">{SENDMAIL.content}</textarea>
             </div>
             <!-- BEGIN: captcha -->
             <div class="content clearfix">
@@ -145,7 +145,8 @@
                 <div class="fr" style="width: 250px; display: inline;">
                     <input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" style="width: 60px; float: left !important; margin-top: 2px !important;"/><img class="fl" id="vimg" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{NV_BASE_SITEURL}?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" title="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh fl resfresh1" onclick="nv_change_captcha('vimg','seccode');"/>
                 </div>
-            </div><!-- END: captcha -->
+            </div>
+            <!-- END: captcha -->
             <div class="submit clearfix">
                 <input type="hidden" name="checkss" value="{SENDMAIL.checkss}" /><input type="hidden" name="catid" value="{SENDMAIL.catid}" /><input type="hidden" name="id" value="{SENDMAIL.id}" /><input type="submit" value="{LANG.sendmail_submit}" />
             </div>
