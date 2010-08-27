@@ -1,29 +1,30 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language česky
-* @Createdate Aug 08, 2010, 11:22:13 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language česky
+ * @Createdate Aug 08, 2010, 11:22:13 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="http://datviet.cz";
-$lang_translator['createdate'] ="01/08/2010, 21:40";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC.. All rights reserved";
-$lang_translator['info'] ="YM: datvietinfo2010 ";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "http://datviet.cz";
+$lang_translator['createdate'] = "01/08/2010, 21:40";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC.. All rights reserved";
+$lang_translator['info'] = "YM: datvietinfo2010 ";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['nv_lang_data'] = "Data jazyku";
 /*
 	 vietnam:	  Ngôn ngữ data
 	 english:	  Data language
 */
-
+$lang_module['site_lang'] = "Výchozí jazyk";
 $lang_module['nv_lang_interface'] = "Jazyk rozhraní";
 /*
 	 vietnam:	  Ngôn ngữ giao diện
@@ -270,7 +271,6 @@ $lang_module['nv_setup_new'] = "Nové nastavení";
 	 english:	  New setup
 */
 
-
 $lang_module['nv_setup_delete'] = "Smazat data jazyk";
 /*
 	 vietnam:	  Xóa ngôn ngữ data
@@ -360,6 +360,5 @@ $lang_module['nv_lang_checkallarea'] = "Všechny oblasti";
 	 vietnam:	  Tất cả các khu vực
 	 english:	  All area
 */
-
 
 ?>

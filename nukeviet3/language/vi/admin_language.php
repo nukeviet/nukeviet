@@ -1,24 +1,26 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Vietnamese
+ * @Createdate May 31, 2010, 08:01:47 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['nv_lang_data'] = "Ngôn ngữ data";
+$lang_module['site_lang'] = "Ngôn ngữ mặc định";
 $lang_module['nv_lang_interface'] = "Ngôn ngữ giao diện";
 $lang_module['nv_admin_copy'] = "Tạo n.ngữ giao diện";
 $lang_module['nv_lang_setting'] = "Cấu hình ngôn ngữ giao diện";
@@ -76,9 +78,5 @@ $lang_module['nv_lang_check'] = "Kiểm tra ngôn ngữ";
 $lang_module['nv_lang_check_title'] = "Kiểm tra ngôn ngữ chưa được dịch";
 $lang_module['nv_lang_data_source'] = "Hiển thị cùng ngôn ngữ";
 $lang_module['nv_lang_checkallarea'] = "Tất cả các khu vực";
-
-
-
-
 
 ?>

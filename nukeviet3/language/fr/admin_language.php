@@ -19,6 +19,7 @@ $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['nv_lang_data'] = "Langue de données";
+$lang_module['site_lang'] = "Langue par défaut";
 $lang_module['nv_lang_interface'] = "Langue d'interface";
 $lang_module['nv_admin_copy'] = "Création de langue";
 $lang_module['nv_lang_setting'] = "Configuration";

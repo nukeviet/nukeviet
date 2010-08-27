@@ -17,12 +17,36 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $array_lang_setup[$row['lang']] = intval( $row['setup'] );
 }
 
-$keylang = filter_text_input( 'keylang', 'get', '' );
 $checksess = filter_text_input( 'checksess', 'get', '' );
 $keylang = filter_text_input( 'keylang', 'get', '', 1, 2 );
 $deletekeylang = filter_text_input( 'deletekeylang', 'get', '', 1, 2 );
-
-if ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $global_config['allow_adminlangs'] ) )
+if ( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( "activelang_" . $keylang . session_id() ) )
+{
+    $activelang = $nv_Request->get_int( 'activelang', 'get', 0 );
+    $allow_sitelangs = $global_config['allow_sitelangs'];
+    if ( $activelang )
+    {
+        $allow_sitelangs[] = $keylang;
+    }
+    elseif ( $keylang != $global_config['site_lang'] )
+    {
+        $allow_sitelangs = array_diff( $allow_sitelangs, array( 
+            $keylang 
+        ) );
+    }
+    $allow_sitelangs = array_unique( $allow_sitelangs );
+    $query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( implode( ",", $allow_sitelangs ) ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'allow_sitelangs'";
+    $result = $db->sql_query( $query );
+    
+    nv_save_file_config_global();
+    $contents = "<br><br><br><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
+    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"1;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "\">";
+    include ( NV_ROOTDIR . "/includes/header.php" );
+    echo nv_admin_theme( $contents );
+    include ( NV_ROOTDIR . "/includes/footer.php" );
+    exit();
+}
+elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $global_config['allow_adminlangs'] ) )
 {
     if ( isset( $array_lang_setup[$keylang] ) and $array_lang_setup[$keylang] == 1 )
     {
@@ -160,6 +184,7 @@ $contents .= "  <thead>\n";
 $contents .= "  <tr>";
 $contents .= "      <td>" . $lang_module['nv_lang_key'] . "</td>";
 $contents .= "      <td>" . $lang_module['nv_lang_name'] . "</td>";
+$contents .= "      <td style=\"width: 120px\">" . $lang_module['nv_lang_slsite'] . "</td>";
 $contents .= "      <td></td>";
 $contents .= "  </thead>\n";
 $contents .= "  </tr>";
@@ -167,15 +192,36 @@ $a = 0;
 foreach ( $global_config['allow_adminlangs'] as $keylang )
 {
     $delete = "";
+    $allow_sitelangs = "";
     if ( isset( $array_lang_setup[$keylang] ) and $array_lang_setup[$keylang] == 1 )
     {
         if ( ! in_array( $keylang, $global_config['allow_sitelangs'] ) )
         {
-            $setup = "<span class=\"delete_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&deletekeylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() . "deletekeylang" ) . "\">" . $lang_module['nv_setup_delete'] . "</a></span>";
+            $setup = "<span class=\"delete_icon\"><a onclick=\"return confirm(nv_is_del_confirm[0])\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&deletekeylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() . "deletekeylang" ) . "\">" . $lang_module['nv_setup_delete'] . "</a></span>";
         }
         else
         {
             $setup = $lang_module['nv_setup'];
+        }
+        if ( $keylang != $global_config['site_lang'] )
+        {
+            $selected_yes = $selected_no = "";
+            if ( in_array( $keylang, $global_config['allow_sitelangs'] ) )
+            {
+                $selected_yes = "selected=\"selected\"";
+            }
+            else
+            {
+                $selected_no = "selected=\"selected\"";
+            }
+            
+            $allow_sitelangs = "<select onchange=\"top.location.href=this.options[this.selectedIndex].value;return;\">
+                        <option " . $selected_yes . " value=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=1&amp;checksess=" . md5( "activelang_" . $keylang . session_id() ) . "\">" . $lang_global['yes'] . "</option>
+                        <option " . $selected_no . " value=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=0&amp;checksess=" . md5( "activelang_" . $keylang . session_id() ) . "\">" . $lang_global['no'] . "</option>
+                      </select>";
+        }
+        else{
+        	$allow_sitelangs = $lang_module['site_lang'];
         }
     }
     else
@@ -187,6 +233,7 @@ foreach ( $global_config['allow_adminlangs'] as $keylang )
     $contents .= "  <tr>";
     $contents .= "      <td>" . $keylang . "</td>";
     $contents .= "      <td>" . $language_array[$keylang]['name'] . "</td>";
+    $contents .= "      <td style=\"text-align: center;\">" . $allow_sitelangs . "</td>";
     $contents .= "      <td>" . $setup . "</td>";
     $contents .= "  </tr>";
     $contents .= "  </tbody>\n";

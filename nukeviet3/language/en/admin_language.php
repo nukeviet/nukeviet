@@ -19,6 +19,7 @@ $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['nv_lang_data'] = "Data language";
+$lang_module['site_lang'] = "Default language";
 $lang_module['nv_lang_interface'] = "Interface language";
 $lang_module['nv_admin_copy'] = "Create new language";
 $lang_module['nv_lang_setting'] = "Language config";
