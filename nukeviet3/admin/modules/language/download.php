@@ -33,29 +33,45 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "downloadallfile" . s
             $allowfolder[] = NV_ROOTDIR . "/language/" . $dirlang;
         }
         
-        require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-        if ( file_exists( NV_ROOTDIR . '/'.NV_TEMP_DIR.'/' . $dirlang . '.zip' ) )
+        //package js language
+        if ( file_exists( NV_ROOTDIR . "/js/language/" . $dirlang . ".js" ) )
         {
-            unlink( NV_ROOTDIR . '/'.NV_TEMP_DIR.'/' . $dirlang . '.zip' );
+            $allowfolder[] = NV_ROOTDIR . "/js/language/" . $dirlang . ".js";
         }
-        $zip = new PclZip( NV_ROOTDIR . '/'.NV_TEMP_DIR.'/' . $dirlang . '.zip' );
+        elseif ( file_exists( NV_ROOTDIR . "/js/language/en.js" ) )
+        {
+            $allowfolder[] = NV_ROOTDIR . "/js/language/en.js";
+        }
+        
+        //package samples data
+        if ( file_exists( NV_ROOTDIR . "/install/data_" . $dirlang . ".php" ) )
+        {
+            $allowfolder[] = NV_ROOTDIR . "/install/data_" . $dirlang . ".php";
+        }
+        elseif ( file_exists( NV_ROOTDIR . "/js/install/data_en.php" ) )
+        {
+            $allowfolder[] = NV_ROOTDIR . "/js/install/data_en.php";
+        }
+        
+        $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $dirlang . '.zip';
+        
+        if ( file_exists( $file_src ) )
+        {
+            unlink( $file_src );
+        }
+        
+        //Zip file
+        require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
+        $zip = new PclZip( $file_src );
         $zip->create( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR );
-        $filesize = @filesize( NV_ROOTDIR . '/'.NV_TEMP_DIR.'/' . $dirlang . '.zip' );
-        $contents = array();
-        $contents['mime'] = " application/zip";
-        $contents['fname'] = $dirlang . '.zip';
-        header( 'Content-Description: File Transfer' );
-        header( "Content-Type: " . $contents['mime'] . "; name=\"" . $contents['fname'] . "\"" );
-        header( "Content-Disposition: attachment; filename=\"" . basename( $contents['fname'] ) . "\"" );
-        header( "Content-Transfer-Encoding: binary" );
-        header( 'Expires: 0' );
-        header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
-        header( 'Pragma: public' );
-        header( "Content-Length: " . $filesize );
-        ob_end_clean();
-        flush();
-        readfile( NV_ROOTDIR . '/'.NV_TEMP_DIR.'/' . $dirlang . '.zip' );
+        
+        //Download file
+        require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
+        $file_basename = "Language_" . $dirlang . ".zip";
+        $download = new download( $file_src, $file_basename );
+        $download->download_file();
         exit();
+    
     }
 }
 else

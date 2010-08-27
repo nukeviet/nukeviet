@@ -49,17 +49,10 @@ if ( ! empty( $result ) )
         $contents['fname'] .= '.gz';
     }
     
-    header( 'Content-Description: File Transfer' );
-    header( "Content-Type: " . $content['mime'] . "; name=\"" . $contents['fname'] . "\"" );
-    header( "Content-Disposition: attachment; filename=\"" . basename( $contents['fname'] ) . "\"" );
-    header( "Content-Transfer-Encoding: binary" );
-    header( 'Expires: 0' );
-    header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
-    header( 'Pragma: public' );
-    header( "Content-Length: " . $result[1] );
-    ob_end_clean();
-    flush();
-    readfile( $result[0] );
+    //Download file
+    require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
+    $download = new download( $result[0], basename( $contents['fname'] ) );
+    $download->download_file();
     exit();
 }
 die();

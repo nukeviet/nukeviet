@@ -11,7 +11,7 @@ $page_title = $lang_module['autoinstall_method_packet'];
 if ( $nv_Request->isset_request( 'op', 'post' ) )
 {
     $themename = $nv_Request->get_string( 'themename', 'post' );
-    $tempfolder = NV_ROOTDIR . '/' . NV_TEMP_DIR;
+    $themefolder = array();
     //theme folder
     if ( file_exists( NV_ROOTDIR . '/themes/' . $themename . '/' ) )
     {
@@ -22,12 +22,13 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
         @unlink( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $themename . '.zip' );
     }
     
+    $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '.zip';
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-    $zip = new PclZip( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $themename . '.zip' );
+    $zip = new PclZip( $file_src );
     $zip->create( $themefolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
-    $filesize = @filesize( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $themename . '.zip' );
+    $filesize = @filesize( $file_src );
     $filesize = ( round( $filesize / 1024, 2 ) > 1024 ) ? ( ( round( $filesize / ( pow( 1024, 2 ) ), 2 ) ) > 1024 ) ? ( round( $filesize / ( pow( 1024, 3 ) ), 2 ) ) . 'GB' : ( round( $filesize / ( pow( 1024, 2 ) ), 2 ) ) . 'MB' : round( $filesize / 1024, 2 ) . ' KB';
-    echo '<a href="' . NV_BASE_SITEURL . '' . NV_TEMP_DIR . '/' . $themename . '.zip"><span style="font-size:16px;color:red">' . $themename . '.zip' . ' - ' . $filesize . '</span></a>';
+    echo '<a href="' . NV_BASE_SITEURL . '' . NV_TEMP_DIR . '/' . basename( $file_src ) . '"><span style="font-size:16px;color:red">' . basename( $file_src ) . '' . ' - ' . $filesize . '</span></a>';
 }
 else
 {
