@@ -78,13 +78,37 @@ function nv_site_theme ( $contents )
             if ( ! empty( $modvalues['funcs'] ) )
             {
                 $sub_nav_item = array();
-                foreach ( $modvalues['funcs'] as $key => $sub_item )
+                
+                if ( $modvalues['module_file'] == "news" or $modvalues['module_file'] == "weblinks" )
                 {
-                    if ( $sub_item['in_submenu'] == 1 )
+                    $result2 = $db->sql_query( "SELECT title, alias FROM " . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat where `parentid`='0' AND `inhome`='1' ORDER BY `weight` LIMIT 0,10" );
+                    while ( list( $title_i, $alias_i ) = $db->sql_fetchrow( $result2 ) )
                     {
                         $sub_nav_item[] = array( 
-                            "title" => $sub_item['func_custom_name'], "link" => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $key 
+                            'title' => $title_i, 'link' => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i 
                         );
+                    }
+                }
+                elseif ( $modvalues['module_file'] == "download" )
+                {
+                    $result2 = $db->sql_query( "SELECT title, alias FROM " . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_categories where `parentid`='0' AND `status`='1'ORDER BY `weight` LIMIT 0,10" );
+                    while ( list( $title_i, $alias_i ) = $db->sql_fetchrow( $result2 ) )
+                    {
+                        $sub_nav_item[] = array( 
+                            'title' => $title_i, 'link' => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i 
+                        );
+                    }
+                }
+                else
+                {
+                    foreach ( $modvalues['funcs'] as $key => $sub_item )
+                    {
+                        if ( $sub_item['in_submenu'] == 1 )
+                        {
+                            $sub_nav_item[] = array( 
+                                "title" => $sub_item['func_custom_name'], "link" => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $key 
+                            );
+                        }
                     }
                 }
                 if ( ! empty( $sub_nav_item ) )
