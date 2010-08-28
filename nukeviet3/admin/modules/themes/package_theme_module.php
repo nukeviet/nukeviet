@@ -44,7 +44,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
     $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . $modulename . '.zip';
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
     $zip = new PclZip( $file_src );
-	$zip->create( $themefolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
+	$zip->create( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
     $filesize = @filesize( $file_src );
     $filesize = ( round( $filesize / 1024, 2 ) > 1024 ) ? ( ( round( $filesize / ( pow( 1024, 2 ) ), 2 ) ) > 1024 ) ? ( round( $filesize / ( pow( 1024, 3 ) ), 2 ) ) . 'GB' : ( round( $filesize / ( pow( 1024, 2 ) ), 2 ) ) . 'MB' : round( $filesize / 1024, 2 ) . ' KB';
     echo '<a href="' . NV_BASE_SITEURL . '' . NV_TEMP_DIR . '/' . basename( $file_src ) . '"><span style="font-size:16px;color:red">' . basename( $file_src ) . '' . ' - ' . $filesize . '</span></a>';

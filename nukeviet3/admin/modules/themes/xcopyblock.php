@@ -9,6 +9,8 @@
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['xcopyblock'];
+$selectthemes = $nv_Request->get_string( 'selectthemes', 'cookie', '' );
+
 $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
 $contents .= "<blockquote class='error'><span id='message'>" . $lang_module['xcopyblock_notice'] . "</span></blockquote>\n";
 $contents .= "</div>\n";
@@ -39,7 +41,8 @@ $contents .= $lang_module['xcopyblock_to'] . "<select name=\"theme2\">\n";
 $contents .= "<option value=\"0\">" . $lang_module['autoinstall_method_theme_none'] . "</option>\n";
 foreach ( $theme_list as $value )
 {
-    $contents .= "<option value=\"" . $value . "\">" . $value . "</option>\n";
+    $selected = ( $selectthemes == $value and $selectthemes != "default" ) ? "selected=\"selected\"" : "";
+    $contents .= "<option " . $selected . " value=\"" . $value . "\">" . $value . "</option>\n";
 }
 $contents .= "</select>\n";
 $contents .= "</td>";
