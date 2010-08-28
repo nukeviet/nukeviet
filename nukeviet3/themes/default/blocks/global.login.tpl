@@ -17,7 +17,7 @@
             <label for="block_vimg">
                 {LANG.securitycode} 
             </label>
-            <img id="block_vimg" src="{NV_BASE_SITEURL}?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('block_vimg','block_seccode_iavim');"/>
+            <img id="block_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('block_vimg','block_seccode_iavim');"/>
             <label for="block_seccode_iavim">
                 {LANG.securitycode} 
             </label>

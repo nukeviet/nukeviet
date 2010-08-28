@@ -143,7 +143,7 @@
                 <label for="semail">{LANG.comment_seccode}</label>
                 <em>*</em>
                 <div class="fr" style="width: 250px; display: inline;">
-                    <input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" style="width: 60px; float: left !important; margin-top: 2px !important;"/><img class="fl" id="vimg" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{NV_BASE_SITEURL}?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" title="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh fl resfresh1" onclick="nv_change_captcha('vimg','seccode');"/>
+                    <input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" style="width: 60px; float: left !important; margin-top: 2px !important;"/><img class="fl" id="vimg" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" title="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh fl resfresh1" onclick="nv_change_captcha('vimg','seccode');"/>
                 </div>
             </div>
             <!-- END: captcha -->
