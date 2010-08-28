@@ -20,8 +20,8 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
     $_user['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
     $_user['email'] = filter_text_input( 'email', 'post', '', 1, 100 );
-    $_user['password1'] = filter_text_input( 'password1', 'post', '', 1, NV_UPASSMAX );
-    $_user['password2'] = filter_text_input( 'password2', 'post', '', 1, NV_UPASSMAX );
+    $_user['password1'] = filter_text_input( 'password1', 'post', '', 0, NV_UPASSMAX );
+    $_user['password2'] = filter_text_input( 'password2', 'post', '', 0, NV_UPASSMAX );
     $_user['question'] = filter_text_input( 'question', 'post', '', 1, 255 );
     $_user['answer'] = filter_text_input( 'answer', 'post', '', 1, 255 );
     $_user['full_name'] = filter_text_input( 'full_name', 'post', '', 1, 255 );
@@ -55,7 +55,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     }
     elseif ( $_user['username'] != $db->fixdb( $_user['username'] ) )
     {
-    	$error = sprintf( $lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>' );
+        $error = sprintf( $lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>' );
     }
     elseif ( ( $error_xemail = nv_check_valid_email( $_user['email'] ) ) != "" )
     {
