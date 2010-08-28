@@ -99,6 +99,30 @@ function nv_site_theme ( $contents )
                         );
                     }
                 }
+                elseif ( $modname == "users" )
+                {
+                    if ( defined( 'NV_IS_USER' ) )
+                    {
+                        $in_submenu_users = array( 
+                            "changepass", "openid", "logout" 
+                        );
+                    }
+                    else
+                    {
+                        $in_submenu_users = array( 
+                            "login", "register", "lostpass" 
+                        );
+                    }
+                    foreach ( $modvalues['funcs'] as $key => $sub_item )
+                    {
+                        if ( $sub_item['in_submenu'] == 1 and in_array( $key, $in_submenu_users ) )
+                        {
+                            $sub_nav_item[] = array( 
+                                "title" => $sub_item['func_custom_name'], "link" => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $key 
+                            );
+                        }
+                    }
+                }
                 else
                 {
                     foreach ( $modvalues['funcs'] as $key => $sub_item )
