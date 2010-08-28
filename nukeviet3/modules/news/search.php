@@ -9,12 +9,17 @@
 
 if ( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$sql = "FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_rows` 
+$sql = "SELECT SQL_CALC_FOUND_ROWS `id`,`title`,`alias`,`listcatid`,`hometext`,`bodytext` 
+FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_rows` 
 WHERE " . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( 'bodytext', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( 'hometext', $dbkeyword, $logic ) . " 
-AND ( `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") )";
-$result = $db->sql_query( "SELECT COUNT(*) AS count " . $sql );
+AND ( `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ) 
+LIMIT " . $pages . "," . $limit;
+
+$tmp_re = $db->sql_query( $sql );
+
+$result = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $all_page ) = $db->sql_fetchrow( $result );
 
 if ( $all_page )
@@ -30,7 +35,6 @@ if ( $all_page )
     }
 
     $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
-    $tmp_re = $db->sql_query( "SELECT `id`,`title`,`alias`,`listcatid`,`hometext`,`bodytext` " . $sql . " LIMIT " . $pages . "," . $limit );
 
     while ( list( $id, $tilterow, $alias, $listcatid, $hometext, $bodytext ) = $db->sql_fetchrow( $tmp_re ) )
     {
