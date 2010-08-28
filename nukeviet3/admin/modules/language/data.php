@@ -144,8 +144,8 @@ elseif ( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) an
     define( 'NV_IS_FILE_MODULES', true );
     $lang = $deletekeylang;
     $sql = "SELECT title, module_file, module_data FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` ORDER BY `weight` ASC";
-    $result = $db->sql_query( $sql );
-    while ( list( $title, $module_file, $module_data ) = $db->sql_fetchrow( $result ) )
+    $result_del_module = $db->sql_query( $sql );
+    while ( list( $title, $module_file, $module_data ) = $db->sql_fetchrow( $result_del_module ) )
     {
         if ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action.php' ) )
         {
@@ -170,7 +170,7 @@ elseif ( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) an
     }
     $db->sql_query( "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang` = '" . $deletekeylang . "'" );
     $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_setup_language` WHERE `lang` = '" . $deletekeylang . "'" );
-    Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+    Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
     exit();
 
 }
@@ -220,8 +220,9 @@ foreach ( $global_config['allow_adminlangs'] as $keylang )
                         <option " . $selected_no . " value=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=0&amp;checksess=" . md5( "activelang_" . $keylang . session_id() ) . "\">" . $lang_global['no'] . "</option>
                       </select>";
         }
-        else{
-        	$allow_sitelangs = $lang_module['site_lang'];
+        else
+        {
+            $allow_sitelangs = $lang_module['site_lang'];
         }
     }
     else
