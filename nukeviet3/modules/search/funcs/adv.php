@@ -79,6 +79,11 @@ foreach ( $mods as $m_name => $m_values )
     }
 }
 
+if ( empty( $contents ) )
+{
+    $contents = $lang_module['search_none'] . " &quot;" . $key . "&quot;";
+}
+
 echo $contents;
 
 ?>
