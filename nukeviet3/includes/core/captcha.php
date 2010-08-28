@@ -57,6 +57,9 @@ else
     ImageString( $image, 5, 20, 6, $code, $text_color );
 }
 Header( "Content-type: image/jpeg" );
+header("Cache-Control:");
+header("Pragma:");
+header("Set-Cookie:");
 ImageJPEG( $image, '', 90 );
 ImageDestroy( $image );
 die();
