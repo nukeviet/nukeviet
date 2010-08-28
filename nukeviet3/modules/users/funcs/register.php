@@ -141,8 +141,8 @@ if ( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', 
     if ( $checkss == $array_register['checkss'] )
     {
         $array_register['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
-        $array_register['password'] = filter_text_input( 'password', 'post');
-        $array_register['re_password'] = filter_text_input( 're_password', 'post');
+        $array_register['password'] = filter_text_input( 'password', 'post', '', 1 );
+        $array_register['re_password'] = filter_text_input( 're_password', 'post', '', 1 );
         $array_register['question'] = $nv_Request->get_int( 'question', 'post', 0 );
         if ( ! isset( $data_questions[$array_register['question']] ) ) $array_register['question'] = 0;
         
@@ -278,8 +278,8 @@ if ( $checkss == $array_register['checkss'] )
 {
     $array_register['full_name'] = filter_text_input( 'full_name', 'post', '', 1, 255 );
     $array_register['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
-    $array_register['password'] = filter_text_input( 'password', 'post', '', 1 );
-    $array_register['re_password'] = filter_text_input( 're_password', 'post', '', 1 );
+    $array_register['password'] = filter_text_input( 'password', 'post', '');
+    $array_register['re_password'] = filter_text_input( 're_password', 'post', '');
     $array_register['email'] = filter_text_input( 'email', 'post', '', 1, 100 );
     $array_register['question'] = $nv_Request->get_int( 'question', 'post', 0 );
     if ( ! isset( $data_questions[$array_register['question']] ) ) $array_register['question'] = 0;
