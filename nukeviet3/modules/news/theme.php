@@ -674,7 +674,7 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
         $xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
         $xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
         $xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );
-        $xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . "?scaptcha=captcha" );
+        $xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . "index.php?scaptcha=captcha" );
         $xtpl->parse( 'main.comment.form' );
     }
     elseif ( $commentenable == 2 )

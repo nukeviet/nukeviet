@@ -920,7 +920,7 @@ function nv_change_captcha(imgid,captchaid)
 {
    var vimg = document.getElementById( imgid );
    nocache = nv_randomPassword( 10 );
-   vimg.src = nv_siteroot + '?scaptcha=captcha&nocache=' + nocache;
+   vimg.src = nv_siteroot + 'index.php?scaptcha=captcha&nocache=' + nocache;
    document.getElementById( captchaid ).value = '';
    return false;
 }
