@@ -145,7 +145,7 @@ if ( nv_version_compare( $global_config['version'], "3.0.09" ) < 0 )
     $array_cron_name['fr'][6] = 'Envoyer à l\'administrateur l\'e-mail des notifications d\'erreurs';
     $array_cron_name['fr'][7] = 'Supprimer les referers expirés';
     
-    $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where `lang`!='" . NV_LANG_INTERFACE . "'";
+    $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language`";
     $result_lang = $db->sql_query( $sql );
     while ( list( $lang_i ) = $db->sql_fetchrow( $result_lang ) )
     {
@@ -158,7 +158,7 @@ if ( nv_version_compare( $global_config['version'], "3.0.09" ) < 0 )
         while ( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
         {
             $cron_name = ( isset( $array_cron_name_lang[$id] ) ) ? $array_cron_name_lang[$id] : $run_func;
-            $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_i . "_cron_name` =  " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id;
+            $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_i . "_cron_name` =  " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id );
         }
         $db->sql_freeresult();
     }
