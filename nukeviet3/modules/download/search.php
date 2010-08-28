@@ -63,7 +63,11 @@ function nv_list_cats( $module_data )
 $list_cats = nv_list_cats( $m_values['module_data'] );
 $in = implode( ",", array_keys( $list_cats ) );
 
-$sql = "FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "` WHERE `catid` IN (" . $in . ") AND `title` LIKE '%" . $dbkeyword . "%' OR `description` LIKE '%" . $dbkeyword . "%' OR `introtext` LIKE '%" . $dbkeyword . "%'";
+$sql = "FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "` 
+WHERE `catid` IN (" . $in . ") 
+AND " . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
+OR " . nv_like_logic( 'description', $dbkeyword, $logic ) . " 
+OR " . nv_like_logic( 'introtext', $dbkeyword, $logic );
 $result = $db->sql_query( "SELECT COUNT(*) AS count " . $sql );
 list( $all_page ) = $db->sql_fetchrow( $result );
 
@@ -78,8 +82,8 @@ if ( $all_page )
 
         $result_array[] = array( //
             'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias, //
-            'title' => BoldKeywordInStr( $tilterow, $key ), //
-            'content' => BoldKeywordInStr( $content, $key ) //
+            'title' => BoldKeywordInStr( $tilterow, $key, $logic ), //
+            'content' => BoldKeywordInStr( $content, $key, $logic ) //
             );
     }
 }

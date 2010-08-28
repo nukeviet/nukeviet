@@ -9,7 +9,11 @@
 
 if ( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$sql = "FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_rows` WHERE `title` LIKE '%" . $dbkeyword . "%' OR `bodytext` LIKE '%" . $dbkeyword . "%' OR `hometext` LIKE '%" . $dbkeyword . "%' AND ( `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") )";
+$sql = "FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_rows` 
+WHERE " . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
+OR " . nv_like_logic( 'bodytext', $dbkeyword, $logic ) . " 
+OR " . nv_like_logic( 'hometext', $dbkeyword, $logic ) . " 
+AND ( `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") )";
 $result = $db->sql_query( "SELECT COUNT(*) AS count " . $sql );
 list( $all_page ) = $db->sql_fetchrow( $result );
 
@@ -37,8 +41,8 @@ if ( $all_page )
 
         $result_array[] = array( //
             'link' => $url, //
-            'title' => BoldKeywordInStr( $tilterow, $key ), //
-            'content' => BoldKeywordInStr( $content, $key ) //
+            'title' => BoldKeywordInStr( $tilterow, $key, $logic ), //
+            'content' => BoldKeywordInStr( $content, $key, $logic ) //
             );
     }
 }

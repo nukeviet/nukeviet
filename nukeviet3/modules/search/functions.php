@@ -70,7 +70,7 @@ function nv_substr_clean( $string, $mode = 'lr' )
  * @param mixed $keyword
  * @return
  */
-function BoldKeywordInStr( $str, $keyword )
+function BoldKeywordInStr( $str, $keyword, $logic )
 {
     global $db;
 
@@ -81,9 +81,16 @@ function BoldKeywordInStr( $str, $keyword )
 
     $pos = false;
 
-    $keyword .= " " . nv_EncString( $keyword );
-    $array_keyword = explode( " ", $keyword );
-    $array_keyword = array_unique( $array_keyword );
+    if ( $logic == 'AND' )
+    {
+        $array_keyword = array( $keyword, nv_EncString( $keyword ) );
+    }
+    else
+    {
+        $keyword .= " " . nv_EncString( $keyword );
+        $array_keyword = explode( " ", $keyword );
+        $array_keyword = array_unique( $array_keyword );
+    }
 
     foreach ( $array_keyword as $k )
     {
@@ -131,9 +138,31 @@ function BoldKeywordInStr( $str, $keyword )
         $pattern[] = "/(" . preg_quote( $k ) . ")/uis";
     }
 
-    $str = preg_replace( $pattern, "<span class=\"keyword\">\\1</span>", $str );
+    $str = preg_replace( $pattern, "{\\1}", $str );
+    $str = str_replace( array( "{", "}" ), array( "<span class=\"keyword\">", "</span>" ), $str );
 
     return $str;
+}
+
+/**
+ * nv_like_logic()
+ * 
+ * @param mixed $field
+ * @param mixed $dbkeyword
+ * @param mixed $logic
+ * @return
+ */
+function nv_like_logic( $field, $dbkeyword, $logic )
+{
+    if ( $logic == 'AND' )
+    {
+        $return = "`" . $field . "` LIKE '%" . $dbkeyword . "%'";
+    }
+    else
+    {
+        $return = "`" . $field . "` LIKE '%" . str_replace( " ", "%' OR `" . $field . "` LIKE '%", $dbkeyword ) . "%'";
+    }
+    return $return;
 }
 
 ?>

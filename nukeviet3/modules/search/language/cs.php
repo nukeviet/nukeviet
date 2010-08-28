@@ -120,5 +120,7 @@ $lang_module['pages_title'] = "Strana";
 	 english:	  Page
 */
 
+$lang_module['logic_and'] = "Všechna slova";
+$lang_module['logic_or'] = "Alespoň jedno slovo";
 
 ?>

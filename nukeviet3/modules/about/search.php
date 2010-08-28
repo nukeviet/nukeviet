@@ -9,7 +9,9 @@
 
 if ( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$sql = "FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "` WHERE `title` LIKE '%" . $dbkeyword . "%' OR `bodytext` LIKE '%" . $dbkeyword . "%'";
+$sql = "FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "` 
+WHERE " . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
+OR " . nv_like_logic( 'bodytext', $dbkeyword, $logic );
 $result = $db->sql_query( "SELECT COUNT(*) AS count " . $sql );
 list( $all_page ) = $db->sql_fetchrow( $result );
 
@@ -23,9 +25,9 @@ if ( $all_page )
         $url = $link . $alias . "-" . $id;
 
         $result_array[] = array( //
-            'link' => $link . $alias . "-" . $id, //
-            'title' => BoldKeywordInStr( $tilterow, $key ), //
-            'content' => BoldKeywordInStr( $content, $key ) //
+            'link' => $url, //
+            'title' => BoldKeywordInStr( $tilterow, $key, $logic ), //
+            'content' => BoldKeywordInStr( $content, $key, $logic ) //
             );
     }
 }

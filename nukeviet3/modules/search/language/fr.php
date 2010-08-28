@@ -35,5 +35,7 @@ $lang_module['search_none'] = "Aucun résultat";
 $lang_module['search_in_module'] = "dans le module";
 $lang_module['view_all_title'] = "Voir tous les résultats";
 $lang_module['pages_title'] = "Page";
+$lang_module['logic_and'] = "Tous les mots";
+$lang_module['logic_or'] = "Au moins un mot";
 
 ?>

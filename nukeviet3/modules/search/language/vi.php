@@ -35,5 +35,7 @@ $lang_module['search_none'] = "Không tìm thấy dữ liệu nào có liên qua
 $lang_module['search_in_module'] = "trong mục";
 $lang_module['view_all_title'] = "Xem tất cả";
 $lang_module['pages_title'] = "Trang";
+$lang_module['logic_and'] = "Cả cụm từ";
+$lang_module['logic_or'] = "Tối thiểu 1 từ";
 
 ?>

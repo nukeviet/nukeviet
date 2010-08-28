@@ -21,7 +21,7 @@ if ( ! defined( 'NV_IS_MOD_SEARCH' ) )
  * @param mixed $mod
  * @return
  */
-function main_theme( $key, $checkss, $array_modul, $mod )
+function main_theme( $key, $checkss, $logic, $array_modul, $mod )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
 
@@ -53,6 +53,18 @@ function main_theme( $key, $checkss, $array_modul, $mod )
     $xtpl->assign( 'MY_DOMAIN', NV_MY_DOMAIN );
     $xtpl->assign( 'NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH );
     $xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
+
+    if ( $logic == 'AND' )
+    {
+        $xtpl->assign( 'SEARCH_LOGIC_AND_CHECKED', " checked=\"checked\"" );
+        $xtpl->assign( 'SEARCH_LOGIC_OR_CHECKED', "" );
+    }
+    else
+    {
+        $xtpl->assign( 'SEARCH_LOGIC_AND_CHECKED', "" );
+        $xtpl->assign( 'SEARCH_LOGIC_OR_CHECKED', " checked=\"checked\"" );
+    }
+
     if ( ! empty( $array_modul ) )
     {
         foreach ( $array_modul as $m_name => $m_info )
@@ -86,7 +98,7 @@ function main_theme( $key, $checkss, $array_modul, $mod )
  * @param mixed $all_page
  * @return
  */
-function result_theme( $result_array, $mod, $mod_custom_title, $key, $ss, $is_generate_page, $pages, $limit, $all_page )
+function result_theme( $result_array, $mod, $mod_custom_title, $key, $logic, $ss, $is_generate_page, $pages, $limit, $all_page )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $db, $module_name;
     $xtpl = new XTemplate( "result.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
@@ -101,7 +113,7 @@ function result_theme( $result_array, $mod, $mod_custom_title, $key, $ss, $is_ge
         $xtpl->parse( 'main.result' );
     }
 
-    $base_url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=adv&amp;search_query=" . rawurlencode( $key ) . "&amp;search_mod=" . $mod . "&amp;search_ss=" . $ss;
+    $base_url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=adv&amp;search_query=" . rawurlencode( $key ) . "&amp;search_mod=" . $mod . "&amp;search_ss=" . $ss . "&amp;logic=" . $logic;
 
     if ( $is_generate_page )
     {

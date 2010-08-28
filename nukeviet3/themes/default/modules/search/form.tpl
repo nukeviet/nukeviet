@@ -17,6 +17,15 @@
                     <input class="intxt" id="search_query" name="q" value="{SEARCH_QUERY}" maxlength="{NV_MAX_SEARCH_LENGTH}" />
                 </dt>
             </dl>
+            <dl class="clearfix" style="margin-bottom:5px">
+                <dd class="fl" style="width:100px;text-align:left;">
+                    &nbsp;
+                </dd>
+                <dt class="fl" style="text-align:left;">
+                    <input name="search_logic" id="search_logic_and" type="radio"{SEARCH_LOGIC_AND_CHECKED} value="AND" />{LANG.logic_and} &nbsp; 
+                    <input name="search_logic" id="search_logic_or" type="radio"{SEARCH_LOGIC_OR_CHECKED} value="OR" />{LANG.logic_or}
+                </dt>
+            </dl>            
             <dl class="clearfix">
                 <dd class="fl" style="width:100px;text-align:left;">
                     <label>

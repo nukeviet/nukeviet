@@ -11,7 +11,13 @@ function nv_send_search( qmin, qmax )
          q = rawurlencode( q );
          var mod = document.getElementById( 'search_query_mod' ).options[document.getElementById( 'search_query_mod' ).selectedIndex].value;
          var checkss = document.getElementById( 'search_checkss' ).value;
-         nv_ajax( 'get', nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=adv&search_query=' + q + '&search_mod=' + mod + '&search_ss=' + checkss, '', 'search_result' );
+         var search_logic_and = document.getElementById( 'search_logic_and' );
+         var search_url = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=adv&search_query=' + q + '&search_mod=' + mod + '&search_ss=' + checkss;
+         if( search_logic_and.checked == true )
+         {
+            search_url += '&logic=AND';
+         }
+         nv_ajax( 'get', search_url, '', 'search_result' );
          return;
       }
    }
@@ -74,9 +80,8 @@ function GoGoogle( qmin, qmax )
       {
          link += '&sitesearch=' + mydomain;
       }
-
-      //window.location.href = link;
-      window.open(link ,'_blank');
+      window.open( link , '_blank' );
+      // window.location.href = link;
       return;
    }
 

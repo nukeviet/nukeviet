@@ -18,6 +18,9 @@ $array_modul = LoadModulesSearch();
 $key = filter_text_input( 'q', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
 $len_key = 0;
 
+$logic = filter_text_input( 'logic', 'get', 'OR' );
+if ( $logic != 'AND' ) $logic = 'OR';
+
 $checkss = filter_text_input( 'search_checkss', 'get', '', 1, 32 );
 $ss = md5( $client_info['session_id'] . $global_config['sitekey'] );
 
@@ -29,6 +32,10 @@ if ( ! preg_match( "/^[a-z0-9]{32}$/", $checkss ) or $checkss != $ss )
 if ( ! empty( $key ) )
 {
     $key = nv_unhtmlspecialchars( $key );
+    if ( $logic == 'OR' )
+    {
+        $key = preg_replace( array( "/^([\S]{1})\s/uis", "/\s([\S]{1})\s/uis", "/\s([\S]{1})$/uis" ), " ", $key );
+    }
     $key = strip_punctuation( $key );
     $key = trim( $key );
     $len_key = nv_strlen( $key );
@@ -41,7 +48,7 @@ if ( ! isset( $array_modul[$mod] ) )
     $mod = "all";
 }
 
-$contents = call_user_func( "main_theme", $key, $ss, $array_modul, $mod );
+$contents = call_user_func( "main_theme", $key, $ss, $logic, $array_modul, $mod );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );

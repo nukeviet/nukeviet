@@ -31,6 +31,9 @@ else
 $key = filter_text_input( 'search_query', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
 $len_key = 0;
 
+$logic = filter_text_input( 'logic', 'get', 'OR' );
+if ( $logic != 'AND' ) $logic = 'OR';
+
 $checkss = filter_text_input( 'search_ss', 'get', '', 1, 32 );
 $ss = md5( $client_info['session_id'] . $global_config['sitekey'] );
 
@@ -41,6 +44,10 @@ if ( ! preg_match( "/^[a-z0-9]{32}$/", $checkss ) or $checkss != $ss )
 else
 {
     $key = nv_unhtmlspecialchars( $key );
+    if ( $logic == 'OR' )
+    {
+        $key = preg_replace( array( "/^([\S]{1})\s/uis", "/\s([\S]{1})\s/uis", "/\s([\S]{1})$/uis" ), " ", $key );
+    }
     $key = strip_punctuation( $key );
     $key = trim( $key );
     $len_key = nv_strlen( $key );
@@ -68,10 +75,10 @@ foreach ( $mods as $m_name => $m_values )
 
     if ( ! empty( $all_page ) and ! empty( $result_array ) )
     {
-        $contents .= result_theme( $result_array, $m_name, $m_values['custom_title'], $key, $ss, $is_generate_page, $pages, $limit, $all_page );
+        $contents .= result_theme( $result_array, $m_name, $m_values['custom_title'], $key, $logic, $ss, $is_generate_page, $pages, $limit, $all_page );
     }
 }
 
 echo $contents;
 
-?> 
+?>
