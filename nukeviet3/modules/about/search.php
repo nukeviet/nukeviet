@@ -11,8 +11,8 @@ if ( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS `id`,`title`,`alias`,`bodytext` 
 FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "` 
-WHERE " . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
-OR " . nv_like_logic( 'bodytext', $dbkeyword, $logic ) . " 
+WHERE (" . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
+OR " . nv_like_logic( 'bodytext', $dbkeyword, $logic ) . ") 
 LIMIT " . $pages . "," . $limit;
 
 $tmp_re = $db->sql_query( $sql );

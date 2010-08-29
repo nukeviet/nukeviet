@@ -66,9 +66,9 @@ $in = implode( ",", array_keys( $list_cats ) );
 $sql = "SELECT SQL_CALC_FOUND_ROWS `alias`,`title`,`description`, `introtext`, `catid` 
 FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "` 
 WHERE `catid` IN (" . $in . ") 
-AND " . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
+AND (" . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( 'description', $dbkeyword, $logic ) . " 
-OR " . nv_like_logic( 'introtext', $dbkeyword, $logic ) . " 
+OR " . nv_like_logic( 'introtext', $dbkeyword, $logic ) . ") 
 LIMIT " . $pages . "," . $limit;
 
 $tmp_re = $db->sql_query( $sql );
