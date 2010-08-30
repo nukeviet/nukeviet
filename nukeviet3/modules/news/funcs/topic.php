@@ -56,7 +56,7 @@ if ( $topicid > 0 )
         );
     }
     unset( $query, $row );
-    $base_url = "" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;op=topic/" . $topicalias . "";
+    $base_url = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;op=topic/" . $topicalias . "";
     $contents = topic_theme( $topic_array, $topic_other_array );
     $contents .= nv_news_page( $base_url, $all_page, $per_page, $page );
 }

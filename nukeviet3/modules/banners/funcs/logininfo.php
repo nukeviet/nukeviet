@@ -65,7 +65,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 }
 
 $contents = array();
-$contents['client_info'] = sprintf( $lang_module['client_info'], NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=contact" );
+$contents['client_info'] = sprintf( $lang_module['client_info'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=contact" );
 $contents['login'] = $lang_module['login'];
 $contents['login_input_name'] = "lg_iavim";
 $contents['login_input_maxlength'] = NV_UNICKMAX;

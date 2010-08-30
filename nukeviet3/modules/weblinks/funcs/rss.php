@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_MOD_WEBLINKS' ) ) die( 'Stop!!!' );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
-$atomlink = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
+$atomlink = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
 if ( ! empty( $catid ) )
 {
     $sql = "SELECT id, catid, add_time, title, alias, description, urlimg FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE catid='" . $catid . "' AND status='1' ORDER BY id ASC LIMIT 30";
@@ -41,7 +41,7 @@ $content = '<?xml version="1.0" encoding="utf-8"?>
 
 while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile ) = $db->sql_fetchrow( $result ) )
 {
-    $rsslink = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id;
+    $rsslink = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id;
     $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/$homeimgfile\" width=\"100\" align=\"left\" border=\"0\">" : "";
     $content .= '
 	<item>

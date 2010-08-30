@@ -338,7 +338,7 @@ function showBanners ( $id )
         }
         else
         {
-            $link_i = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=banners&amp;" . NV_OP_VARIABLE . "=click&amp;id=" . $banners['id'];
+            $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=banners&amp;" . NV_OP_VARIABLE . "=click&amp;id=" . $banners['id'];
             $return .= "<a href=\"" . $link_i . "\" onclick=\"this.target='_blank'\" title=\"" . $banners['file_alt'] . "\">
             				<img alt=\"" . $banners['file_alt'] . "\" style=\"border-width:0px\" src=\"" . NV_BASE_SITEURL . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\" />
             			</a>";
@@ -440,7 +440,7 @@ function nv_html_css ( )
 function nv_html_site_rss ( )
 {
     global $rss, $lang_global, $global_config;
-    $return = "<link rel=\"alternate\" href=\"" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=rss\" title=\"" . $lang_global['site_rss'] . "\" type=\"application/rss+xml\" />\n";
+    $return = "<link rel=\"alternate\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=rss\" title=\"" . $lang_global['site_rss'] . "\" type=\"application/rss+xml\" />\n";
     if ( ! empty( $rss ) )
     {
         foreach ( $rss as $rss_item )

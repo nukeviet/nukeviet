@@ -103,7 +103,7 @@ if ( strlen($key) >= NV_MIN_SEARCH_LENGTH)
     $result = $db->sql_query( $sql );
     
     $array_content = array();
-    $url_link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name."&".NV_OP_VARIABLE."=";
+    $url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name."&".NV_OP_VARIABLE."=";
     while ( list( $id, $title, $alias, $listcatid, $hometext, $author, $publtime, $homeimgfile, $sourceid ) = $db->sql_fetchrow( $result ) )
     {
         $array_content[] = array( 

@@ -19,7 +19,7 @@ foreach ( $global_array_cat as $key => $array_subcat )
     $catid = $array_subcat['catid'];
     if ( $parrentid = $catid and $parentid != 0 )
     {
-        $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $array_subcat['alias'];
+        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $array_subcat['alias'];
         $subcat[$parentid][] = array( 
             'catid' => $catid, 'title' => $array_subcat['title'], 'link' => $link 
         );
@@ -30,7 +30,7 @@ foreach ( $global_array_cat as $catid => $array_cat )
     $catid_i = $array_cat['catid'];
     if ( $array_cat['parentid'] == 0 and $catid_i != 0 )
     {
-        $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $array_cat['alias'];
+        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $array_cat['alias'];
         $sub = isset($subcat[$catid_i]) ? $subcat[$catid_i]: array();
         $cat[] = array( 
             'catid' => $catid_i, 'title' => $array_cat['title'], 'link' => $link, 'sub' => $sub 

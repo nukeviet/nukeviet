@@ -21,7 +21,7 @@ foreach ( $global_array_cat as $catid_i => $array_cat_i )
         break;
     }
 }
-$atomlink = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
+$atomlink = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
 if ( ! empty( $catid ) )
 {
     $sql = "SELECT id, listcatid, publtime, title, alias, hometext, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE inhome='1' AND  publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime >" . NV_CURRENTTIME . ") ORDER BY id ASC LIMIT 30";
@@ -54,7 +54,7 @@ while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfil
 {
     $listcatid = end( explode( ',', $listcatid ) );
     list( $cattitle ) = $db->sql_fetchrow( $db->sql_query( "SELECT alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE catid='" . $listcatid . "'" ) );
-    $rsslink = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $cattitle . '/' . $alias . '-' . $id;
+    $rsslink = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $cattitle . '/' . $alias . '-' . $id;
     $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $homeimgfile . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
     $content .= '
 	<item>

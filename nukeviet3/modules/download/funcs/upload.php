@@ -15,7 +15,7 @@ $download_config = initial_config_data();
 
 if ( ! $download_config['is_addfile_allow'] )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
     exit();
 }
 
@@ -23,7 +23,7 @@ $list_cats = nv_list_cats( false, false );
 
 if ( empty( $list_cats ) )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
     exit();
 }
 
@@ -38,7 +38,7 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
 
     if ( empty( $addfile ) or $addfile != md5( $client_info['session_id'] ) )
     {
-        Header( "Location: " . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+        Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
         exit();
     }
 

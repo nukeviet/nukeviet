@@ -85,7 +85,7 @@ if ( empty( $contents ) )
                 "", "" 
             );
             if ( ! empty( $homeimgthumb ) ) $array_img = explode( "|", $homeimgthumb );
-            $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'];
+            $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'];
             $array_catcontent[] = array( 
                 "id" => $id, "publtime" => $publtime, "title" => $title, "link" => $link . "/" . $alias . "-" . $id, "hometext" => $hometext, "imghome" => $array_img[0], "imgthumb" => $array_img[1], "homeimgalt" => $homeimgalt 
             );
@@ -133,7 +133,7 @@ if ( empty( $contents ) )
                 "", "" 
             );
             if ( ! empty( $homeimgthumb ) ) $array_img = explode( "|", $homeimgthumb );
-            $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'];
+            $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'];
             $array_catcontent[] = array( 
                 "id" => $id, "publtime" => $publtime, "title" => $title, "link" => $link . "/" . $alias . "-" . $id, "hometext" => $hometext, "imghome" => $array_img[0], "imgthumb" => $array_img[1], "homeimgalt" => $homeimgalt 
             );

@@ -21,7 +21,7 @@ if ( ! function_exists( 'nv_message_about' ) )
         if ( $num )
         {
             list( $id, $title, $alias, $bodytext ) = $db->sql_fetchrow( $result );
-            $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=about&amp;" . NV_OP_VARIABLE . "=" . $alias;
+            $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=about&amp;" . NV_OP_VARIABLE . "=" . $alias;
             $bodytext = strip_tags( $bodytext );
             $bodytext = nv_clean60( $bodytext, 300 );
             

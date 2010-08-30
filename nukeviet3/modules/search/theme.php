@@ -113,7 +113,7 @@ function result_theme( $result_array, $mod, $mod_custom_title, $key, $logic, $ss
         $xtpl->parse( 'main.result' );
     }
 
-    $base_url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=adv&amp;search_query=" . rawurlencode( $key ) . "&amp;search_mod=" . $mod . "&amp;search_ss=" . $ss . "&amp;logic=" . $logic;
+    $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=adv&amp;search_query=" . rawurlencode( $key ) . "&amp;search_mod=" . $mod . "&amp;search_ss=" . $ss . "&amp;logic=" . $logic;
 
     if ( $is_generate_page )
     {

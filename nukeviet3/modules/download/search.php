@@ -78,7 +78,7 @@ list( $all_page ) = $db->sql_fetchrow( $result );
 
 if ( $all_page )
 {
-    $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
+    $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
     while ( list( $alias, $tilterow, $content, $introtext, $catid ) = $db->sql_fetchrow( $tmp_re ) )
     {

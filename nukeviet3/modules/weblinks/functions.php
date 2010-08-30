@@ -40,7 +40,7 @@ $sql = "SELECT `catid`, `parentid`, `title`, `description`, `catimage`, `alias` 
 $result = $db->sql_query( $sql );
 while ( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alias_i ) = $db->sql_fetchrow( $result ) )
 {
-    $link_i = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
+    $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
     $sql1 = "SELECT count(id) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `catid` = $catid_i";
     $result1 = $db->sql_query( $sql1 );
     list( $count_link ) = $db->sql_fetchrow( $result1 );

@@ -14,7 +14,7 @@ $content = "";
 $list_cats = nv_list_cats();
 if ( ! empty( $list_cats ) )
 {
-    $atomlink = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
+    $atomlink = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
     $catalias = isset( $array_op[1] ) ? $array_op[1] : "";
     $catid = 0;
     if ( ! empty( $catalias ) )
@@ -33,7 +33,7 @@ if ( ! empty( $list_cats ) )
         $sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid . " AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
         $title = $global_config['site_name'] . ' RSS: ' . $module_name . ' - ' . $list_cats[$catid]['title'];
         $description = $list_cats[$catid]['description'];
-        $channel_link = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;cat=" . $list_cats[$catid]['alias'];
+        $channel_link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;cat=" . $list_cats[$catid]['alias'];
     }
     else
     {
@@ -42,7 +42,7 @@ if ( ! empty( $list_cats ) )
         $sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
         $title = $global_config['site_name'] . ' RSS: ' . $module_name;
         $description = $global_config['site_description'];
-        $channel_link = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+        $channel_link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
     }
     $content .= '<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -65,7 +65,7 @@ if ( ! empty( $list_cats ) )
     $result = $db->sql_query( $sql );
     while ( list( $id, $cid, $publtime, $title, $alias, $hometext, $homeimgfile ) = $db->sql_fetchrow( $result ) )
     {
-        $rsslink = NV_MY_DOMAIN . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias;
+        $rsslink = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias;
         $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . $homeimgfile . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
         $content .= '
 	<item>

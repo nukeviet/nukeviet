@@ -632,7 +632,7 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
         {
             $value = trim( $value );
             $value = trim( $value );
-            $keyword = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search&amp;q=" . urlencode( $value ) . "&amp;mod=all";
+            $keyword = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search&amp;q=" . urlencode( $value ) . "&amp;mod=all";
             $xtpl->assign( 'KEYWORD', $value );
             $xtpl->assign( 'LINK_KEYWORDS', $keyword );
             $xtpl->assign( 'SLASH', ( ( $count - 1 ) == $i ) ? '' : ', ' );
@@ -744,7 +744,7 @@ function topic_theme ( $topic_array, $topic_other_array )
     global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config;
     $xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'TOPIC_TOP_TITLE', $topictitle );
-    $xtpl->assign( 'TOPIC_TOP_LINK', "" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias . "" );
+    $xtpl->assign( 'TOPIC_TOP_LINK', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias . "" );
     if ( ! empty( $topic_array ) )
     {
         foreach ( $topic_array as $topic_array_i )

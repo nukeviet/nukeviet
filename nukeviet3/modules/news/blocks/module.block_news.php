@@ -19,7 +19,7 @@ while ( list( $id, $listcatid, $publtime, $exptime, $title, $alias, $homeimgthum
     $catid = end( explode( ",", $listcatid ) );
     $imgurl = "";
     $imagesizex = $imagesizey = 0;
-    $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;
+    $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;
     if ( $homeimgthumb != "" )
     {
         $arr_homeimgthumb = explode( "|", $homeimgthumb );

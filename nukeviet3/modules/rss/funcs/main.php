@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
 
-$base_url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 $contents .= '<img  style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/' . $module_name . '/home.gif"><b>Nguồn cấp Rss</b><br>';
 $result = $db->sql_query( "SELECT title, module_file, custom_title, module_data FROM " . NV_MODULES_TABLE . " WHERE act=1 AND module_file!='rss' ORDER BY weight" );
 while ( $row = $db->sql_fetchrow( $result ) )
@@ -20,7 +20,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $module_data = $row['module_data'];
     if ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/rssdata.php' ) )
     {
-        $contents .= $imgmid2 . "<a href=\"" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_title . "&" . NV_OP_VARIABLE . "=" . $module_name . "\">" . $iconrss . "</a>";
+        $contents .= $imgmid2 . "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_title . "&" . NV_OP_VARIABLE . "=" . $module_name . "\">" . $iconrss . "</a>";
         $contents .= '<strong> ' . $custom_title . "</strong><br>";
         include ( NV_ROOTDIR . '/modules/' . $module_file . '/rssdata.php' );
         switch ( $module_file )

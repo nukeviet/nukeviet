@@ -207,7 +207,7 @@ $array_content = array(  //
 );
 
 $checkss = md5( $client_info['session_id'] . $global_config['sitekey'] );
-$base_url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 $contents = call_user_func( "main_theme", $array_content, $array_rows, $base_url, $checkss );
 
 include ( NV_ROOTDIR . "/includes/header.php" );

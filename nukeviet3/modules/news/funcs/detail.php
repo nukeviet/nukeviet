@@ -127,7 +127,7 @@ if ( $allowed )
     $related_new = $db->sql_query( "SELECT `id`, `title`, `alias`,`publtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` > " . $publtime . " AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `id` ASC LIMIT 0, " . $st_links . "" );
     while ( $row = $db->sql_fetchrow( $related_new ) )
     {
-        $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
+        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
         $related_new_array[] = array( 
             "title" => $row['title'], "time" => nv_date( "d/m/Y", $row['publtime'] ), "link" => $link 
         );
@@ -141,7 +141,7 @@ if ( $allowed )
     $related = $db->sql_query( "SELECT `id`, `title`, `alias`,`publtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . $publtime . " AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `id` DESC LIMIT 0, " . $st_links . "" );
     while ( $row = $db->sql_fetchrow( $related ) )
     {
-        $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
+        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
         $related_array[] = array( 
             "title" => $row['title'], "time" => nv_date( "d/m/Y", $row['publtime'] ), "link" => $link 
         );
@@ -158,8 +158,8 @@ if ( $allowed )
         while ( $row = $db->sql_fetchrow( $topic ) )
         {
             $catid_arr = explode( ",", $row['listcatid'] );
-            $topiclink = "" . NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topic_alias . "";
-            $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_arr[0]]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
+            $topiclink = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topic_alias . "";
+            $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_arr[0]]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
             $topic_array[] = array( 
                 "title" => $row['title'], "link" => $link, "time" => nv_date( "d/m/Y", $row['publtime'] ), "topiclink" => $topiclink, "topictitle" => $topic_title 
             );

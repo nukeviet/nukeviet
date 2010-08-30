@@ -29,7 +29,7 @@ foreach ( $array_bid_content as $i => $array_bid )
     while ( list( $id, $listcatid, $title, $alias, $homeimgfile, $homeimgalt ) = $db->sql_fetchrow( $result ) )
     {
         $arr_catid = explode( ',', $listcatid );
-        $link = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$arr_catid[0]]['alias'] . "/" . $alias . "-" . $id;
+        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$arr_catid[0]]['alias'] . "/" . $alias . "-" . $id;
         $array_content[] = array( 
             'title' => $title, 'link' => $link, 'homeimgfile' => $homeimgfile, 'homeimgalt' => $homeimgalt 
         );

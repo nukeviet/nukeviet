@@ -36,7 +36,7 @@ while ( $row = $db->sql_fetchrow( $sql ) )
     $abouts[$row['id']] = array(  //
         'title' => $row['title'], //
 		'alias' => $row['alias'], //
-		'link' => NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $row['alias'] . "-" . $row['id'], //
+		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $row['alias'] . "-" . $row['id'], //
 		'act' => 0  //
     );
 }

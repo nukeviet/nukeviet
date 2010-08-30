@@ -27,7 +27,7 @@ if ( empty( $contents ) )
     $array_catpage = array();
     $array_cat_other = array();
     $st_links = $st_links;
-    $base_url = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main";
+    $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main";
     $arr_cat_title[] = array( 
         'catid' => 0, 'title' => $site_mods[$module_name]['custom_title'], 'link' => $base_url 
     );
