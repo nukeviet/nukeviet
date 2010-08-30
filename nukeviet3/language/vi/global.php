@@ -20,6 +20,7 @@ $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_global";
 
 $lang_global['Content_Language'] = "vi";
+$lang_global['LanguageName'] = "vietnamese";//khong dich
 $lang_global['site_info'] = "Thông báo từ hệ thống";
 $lang_global['welcome'] = "Thân ái chào mừng bạn trên website của %s";
 $lang_global['disable_site_title'] = "Website tạm ngưng hoạt động";

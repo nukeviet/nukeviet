@@ -361,22 +361,36 @@ function showBanners ( $id )
 function nv_html_meta_tags ( )
 {
     global $global_config, $lang_global, $key_words, $description, $module_info;
+
     $return = "<meta http-equiv=\"Content-Language\" content=\"" . $lang_global['Content_Language'] . "\" />\n";
     $return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
+
     if ( defined( 'NV_IS_ADMIN' ) )
     {
         $return .= "<meta http-equiv=\"refresh\" content=\"" . NV_ADMIN_CHECK_PASS_TIME . "\" />\n";
     }
+
+    $return .= "<meta name=\"language\" content=\"" . $lang_global['LanguageName'] . "\" />\n";
     $return .= "<meta name=\"author\" content=\"" . $global_config['site_name'] . "\" />\n";
     $return .= "<meta name=\"copyright\" content=\"" . $global_config['site_name'] . " [" . $global_config['site_email'] . "]\" />\n";
+
     $ds = ( ! empty( $description ) ) ? $description : $global_config['site_description'];
     $return .= ( ! empty( $ds ) ) ? "<meta name=\"description\" content=\"" . strip_tags( $ds ) . "\" />\n" : "";
-    $kw = "";
-    $kw .= ( ! empty( $key_words ) ) ? $key_words : "";
-    $kw .= ( ! empty( $module_info['keywords'] ) ) ? ( ( ! empty( $kw ) ) ? ", " . $module_info['keywords'] : $module_info['keywords'] ) : "";
-    $kw .= ( ! empty( $global_config['site_keywords'] ) ) ? ( ( ! empty( $kw ) ) ? ", " . $global_config['site_keywords'] : $global_config['site_keywords'] ) : "";
-    $return .= ( ! empty( $kw ) ) ? "<meta name=\"keywords\" content=\"" . nv_strtolower( strip_tags( $kw ) ) . "\" />\n" : "";
+
+    $kw = array();
+    if ( ! empty( $key_words ) ) $kw[] = $key_words;
+    if ( ! empty( $module_info['keywords'] ) ) $kw[] = $module_info['keywords'];
+    if ( ! empty( $global_config['site_keywords'] ) ) $kw[] = $global_config['site_keywords'];
+    if ( ! empty( $kw ) )
+    {
+        $kw = implode( ",", $kw );
+        $kw = preg_replace( "/\,\s+/", ",", $kw );
+        $key_words = nv_strtolower( strip_tags( $kw ) );
+        $return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />\n";
+    }
+
     $return .= "<meta name=\"generator\" content=\"Nukeviet v3.0\" />\n";
+
     return $return;
 }
 

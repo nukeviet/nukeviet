@@ -19,6 +19,7 @@ $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_global";
 
 $lang_global['Content_Language'] = "fr";
+$lang_global['LanguageName'] = "french";//khong dich
 $lang_global['site_info'] = "Information du site";
 $lang_global['welcome'] = "Bienvenu sur le site %s";
 $lang_global['disable_site_title'] = "Site en maintenance";

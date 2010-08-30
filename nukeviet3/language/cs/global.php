@@ -24,6 +24,8 @@ $lang_global['Content_Language'] = "cz";
 	 english:	  en
 */
 
+$lang_global['LanguageName'] = "czech";//khong dich
+
 $lang_global['site_info'] = "Oznámení ze systému";
 /*
 	 vietnam:	  Thông báo từ hệ thống
