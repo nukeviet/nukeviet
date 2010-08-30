@@ -51,7 +51,7 @@ if ( ! empty( $result ) )
     
     //Download file
     require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
-    $download = new download( $result[0], basename( $contents['fname'] ) );
+    $download = new download( $result[0], NV_ROOTDIR . "/" . NV_TEMP_DIR, basename( $contents['fname'] ) );
     $download->download_file();
     exit();
 }

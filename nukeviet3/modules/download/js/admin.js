@@ -195,7 +195,7 @@ function nv_checkfile( mylink, is_myUrl, butt )
       document.getElementById( mylink ).value = '';
       return false;
    }
-   
+
    link = rawurlencode( link );
 
    nv_ajax( 'post', script_name, nv_name_variable + '=' + nv_module_name + '&check=1&url=' + link + '&is_myurl=' + is_myUrl + '&num=' + nv_randomPassword( 8 ), '', 'nv_checkfile_result' );
@@ -216,20 +216,24 @@ function nv_gourl( mylink, is_myUrl, butt )
 
    if( is_myUrl )
    {
-      var protocol = document.location.protocol;
-      var mydomain = document.domain;
-      link = protocol + '//' + mydomain + link;
-   }
+      link = rawurlencode( link );
+      link = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&fdownload=' + link;
+      window.location.href = link;
 
-   if( ! link.match( /^(http|ftp)\:\/\/\w+([\.\-]\w+)*\.\w{2,4}(\:\d+)*([\/\.\-\?\&\%\#]\w+)*\/?$/i ) )
+   }
+   else
    {
-      alert( nv_url );
-      document.getElementById( mylink ).focus();
-      return false;
+      if( ! link.match( /^(http|ftp)\:\/\/\w+([\.\-]\w+)*\.\w{2,4}(\:\d+)*([\/\.\-\?\&\%\#]\w+)*\/?$/i ) )
+      {
+         alert( nv_url );
+         document.getElementById( mylink ).focus();
+      }
+      else
+      {
+         var w = window.open( link );
+         w.focus();
+      }
    }
-
-   var w = window.open( link );
-   w.focus();
    return false;
 }
 

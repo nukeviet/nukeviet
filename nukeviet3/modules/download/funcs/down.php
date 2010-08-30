@@ -100,6 +100,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 
 $file_src = $session_files['fileupload'][$file]['src'];
 $file_basename = $file;
+$directory = NV_UPLOADS_REAL_DIR;
 
 if ( $is_zip )
 {
@@ -113,6 +114,7 @@ if ( $is_zip )
     {
         $file_src = $tem_file;
         $file_basename = $subfile . '.zip';
+        $directory = NV_ROOTDIR . '/' . NV_TEMP_DIR;
     }
     else
     {
@@ -141,13 +143,14 @@ if ( $is_zip )
         {
             $file_src = $tem_file;
             $file_basename = $subfile . '.zip';
+            $directory = NV_ROOTDIR . '/' . NV_TEMP_DIR;
         }
     }
 }
 
 require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
 
-$download = new download( $file_src, $file_basename, $is_resume, $max_speed );
+$download = new download( $file_src, $directory, $file_basename, $is_resume, $max_speed );
 if ( $is_zip )
 {
     $mtime = ( $mtime = filemtime( $session_files['fileupload'][$file]['src'] ) ) > 0 ? $mtime : time();

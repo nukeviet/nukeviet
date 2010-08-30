@@ -38,6 +38,16 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
+if ( ! defined( 'NV_ROOTDIR' ) )
+{
+    define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
+}
+
+if ( ! defined( 'NV_UPLOADS_REAL_DIR' ) )
+{
+    define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/uploads/' );
+}
+
 if ( ! defined( 'NV_MIME_INI_FILE' ) )
 {
     define( "NV_MIME_INI_FILE", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/.." ) . '/ini/mime.ini' ) );
@@ -70,7 +80,8 @@ class download
         "size" => "", //
         "mtime" => 0, //
         "resume" => "", //
-        "max_speed" => "" //
+        "max_speed" => "", //
+        "directory" => "" //
         );
 
     /**
@@ -82,8 +93,16 @@ class download
      * @param integer $max_speed
      * @return
      */
-    public function __construct( $path, $name = '', $resume = false, $max_speed = 0 )
+    public function __construct( $path, $directory, $name = '', $resume = false, $max_speed = 0 )
     {
+        $directory = $this->real_dir( $directory );
+        if ( empty( $directory ) or ! is_dir( $directory ) )
+        {
+            $directory = NV_UPLOADS_REAL_DIR;
+        }
+
+        $path = $this->real_path( $path, $directory );
+
         $this->properties = array( //
             "path" => $path, //
             "name" => ( $name == "" ) ? substr( strrchr( "/" . $path, "/" ), 1 ) : $name, //
@@ -92,8 +111,58 @@ class download
             "size" => intval( sprintf( "%u", filesize( $path ) ) ), //
             "mtime" => ( $mtime = filemtime( $path ) ) > 0 ? $mtime : time(), //
             "resume" => $resume, //
-            "max_speed" => $max_speed //
+            "max_speed" => $max_speed, //
+            "directory" => $directory //
             );
+    }
+
+    /**
+     * download::real_dir()
+     * 
+     * @param mixed $dir
+     * @return
+     */
+    function real_dir( $dir )
+    {
+        if ( empty( $dir ) ) return false;
+        $dir = realpath( $dir );
+        if ( empty( $dir ) ) return false;
+        $dir = str_replace( '\\', '/', $dir );
+        $dir = rtrim( $dir, "\\/" );
+        if ( ! preg_match( "/^(" . nv_preg_quote( NV_ROOTDIR ) . ")(\/[\S]+)/", $dir ) ) return false;
+        return $dir;
+
+    }
+
+    /**
+     * download::real_path()
+     * 
+     * @param mixed $path
+     * @return
+     */
+    function real_path( $path, $dir )
+    {
+        if ( empty( $path ) or ! is_readable( $path ) or ! is_file( $path ) )
+        {
+            return false;
+        }
+
+        $realpath = realpath( $path );
+
+        if ( empty( $realpath ) )
+        {
+            return false;
+        }
+
+        $realpath = str_replace( '\\', '/', $realpath );
+        $realpath = rtrim( $realpath, "\\/" );
+
+        if ( ! preg_match( "/^(" . nv_preg_quote( $dir ) . ")(\/[\S]+)/", $realpath ) )
+        {
+            return false;
+        }
+
+        return $realpath;
     }
 
     /**
@@ -192,7 +261,7 @@ class download
      */
     public function download_file()
     {
-        if ( ! is_readable( $this->properties['path'] ) or ! is_file( $this->properties['path'] ) )
+        if ( ! $this->properties['path'] )
         {
             die( "Nothing to download!" );
         }

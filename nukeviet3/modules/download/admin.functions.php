@@ -152,14 +152,14 @@ if ( $nv_Request->isset_request( 'check', 'post' ) )
     $is_myurl = $nv_Request->get_int( 'is_myurl', 'post', 0 );
 
     if ( empty( $url ) ) die( $lang_module['file_checkUrl_error'] );
-    
+
     $url = rawurldecode( $url );
 
     if ( $is_myurl )
     {
-        $url = NV_MY_DOMAIN . $url;
-        if ( ! nv_is_url( $url ) ) die( $lang_module['file_checkUrl_error'] );
-        if ( ! nv_check_url( $url ) ) die( $lang_module['file_checkUrl_error'] );
+        $url = substr( $url, strlen( NV_BASE_SITEURL ) );
+        $url = NV_ROOTDIR . '/' . $url;
+        if ( ! file_exists( $url ) ) die( $lang_module['file_checkUrl_error'] );
     }
     else
     {
@@ -178,6 +178,24 @@ if ( $nv_Request->isset_request( 'check', 'post' ) )
     }
 
     die( $lang_module['file_checkUrl_ok'] );
+}
+
+//Download file
+if ( $nv_Request->isset_request( 'fdownload', 'get' ) )
+{
+    $file = $nv_Request->get_string( 'fdownload', 'get', '' );
+    if ( ! empty( $file ) )
+    {
+        $file = substr( $file, strlen( NV_BASE_SITEURL ) );
+        $file = NV_ROOTDIR . '/' . $file;
+
+        require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
+
+        $download = new download( $file, NV_UPLOADS_REAL_DIR );
+
+        $download->download_file();
+    }
+    exit();
 }
 
 ?>

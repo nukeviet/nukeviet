@@ -13,7 +13,7 @@ if ( file_exists( $path_filename ) && is_file( $path_filename ) && in_array( NV_
 {
 	//Download file
     require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
-    $download = new download( $path_filename, basename( $path_filename ) );
+    $download = new download( $path_filename, NV_ROOTDIR . '/' . $path, basename( $path_filename ) );
     $download->download_file();
     exit();
 }
