@@ -986,7 +986,8 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
  */
 function nv_string_to_filename( $word )
 {
-    $word = preg_replace( '/^\W+|\W+$/', '', $word );
+    $word = nv_EncString( $word );
+    $word = preg_replace( '/[^a-z0-9\.\-\_ ]/i', '', $word );
     $word = preg_replace( '/\s+/', '_', $word );
     return preg_replace( '/\W-/', '', $word );
 }

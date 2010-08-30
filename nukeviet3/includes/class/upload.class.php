@@ -95,6 +95,7 @@ class upload
     function string_to_filename ( $word )
     {
         $word = nv_EncString( $word );
+        $word = preg_replace( '/[^a-z0-9\.\-\_ ]/i', '', $word );
         $word = preg_replace( '/^\W+|\W+$/', '', $word );
         $word = preg_replace( '/\s+/', '-', $word );
         return strtolower( preg_replace( '/\W-/', '', $word ) );
