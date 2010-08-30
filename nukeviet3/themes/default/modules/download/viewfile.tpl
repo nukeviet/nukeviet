@@ -111,7 +111,7 @@ var comment_subject_defaul = '{ROW.comment_subject}';
             <dt class="fl">
                 <!-- BEGIN: row -->
                 <div class="download_row">
-                    <a id="myfile{FILEUPLOAD.key}" href="{FILEUPLOAD.link}" onclick="nv_download_file(this,'idown');">{FILEUPLOAD.title}</a>
+                    <a id="myfile{FILEUPLOAD.key}" href="{FILEUPLOAD.link}" onclick="nv_download_file('idown','{FILEUPLOAD.title}');return false;">{FILEUPLOAD.title}</a>
                 </div>
                 <!-- END: row -->
             </dt>

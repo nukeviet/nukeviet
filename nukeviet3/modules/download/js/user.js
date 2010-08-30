@@ -24,15 +24,14 @@ function nv_del_row_result( res )
 
 //  ---------------------------------------
 
-function nv_download_file( th, fr )
+function nv_download_file( fr, flnm )
 {
    var download_hits = document.getElementById( 'download_hits' ).innerHTML;
    download_hits = intval( download_hits );
    download_hits = download_hits + 1;
    document.getElementById( 'download_hits' ).innerHTML = download_hits;
-
-   th.target = fr;
-
+   
+   window.open( nv_siteroot + "index.php?" + nv_lang_variable + "=" . nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=down&file=" + flnm, fr);
    return false;
 }
 

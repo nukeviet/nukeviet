@@ -98,6 +98,10 @@ function nv_rewrite_change ( $array_config_global )
             $reval .= "                </rule>\n";
         
         }
+        $reval .= "                <rule name=\"Imported Rule 0\">\n";
+        $reval .= "                    <match url=\"^files/(.+)\" ignoreCase=\"false\" />\n";
+        $reval .= "                    <action type=\"Rewrite\" url=\"index.php\" appendQueryString=\"false\" />\n";
+        $reval .= "                </rule>\n";
         $reval .= "            </rules>\n";
         $reval .= "        </rewrite>\n";
         $reval .= "    </system.webServer>\n";
@@ -142,6 +146,7 @@ function nv_rewrite_change ( $array_config_global )
             $reval .= "RewriteRule ^([a-z-]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1\n";
             $reval .= "RewriteRule ^([a-z-]+)$ index.php?" . NV_LANG_VARIABLE . "=$1\n";
         }
+        $reval .= "RewriteRule ^files/(.+) index.php\n";
         $reval .= "</IfModule>\n\n";
         $reval .= "#nukeviet_rewrite_end\n";
         $reval .= "##################################################################################\n\n";

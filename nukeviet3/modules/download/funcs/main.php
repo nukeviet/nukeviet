@@ -267,7 +267,7 @@ if ( ! empty( $filealias ) )
                     {
                         $new_name = str_replace( "-", "_", $filealias ) . ( $count_file > 1 ? "_part" . str_pad( $a, 2, '0', STR_PAD_LEFT ) : "" ) . "." . nv_getextension( $file );
                         $row['fileupload'][] = array(  //
-                            'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=down&amp;file=" . $new_name, //
+                            'link' => NV_BASE_SITEURL . "files/" . $new_name, //
 'title' => $new_name  //
                         );
                         $session_files['fileupload'][$new_name] = array(  //
