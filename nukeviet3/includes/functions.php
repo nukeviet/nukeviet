@@ -976,6 +976,8 @@ function nv_get_keywords ( $content = "" )
     {
         $pattern_word[] = "/[\s]+([\S]{" . NV_SITEWORDS_MIN_WORD_LENGTH . ",})(\s.*\\1){" . NV_SITEWORDS_MIN_WORD_OCCUR . ",}[\s]+/uis";
     }
+    
+    if ( empty( $pattern_word ) ) return ( "" );
 
     $keywords = array();
     $lenght = 0;
