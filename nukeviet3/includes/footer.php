@@ -18,6 +18,10 @@ if ( ! defined( 'NV_IS_AJAX' ) )
 {
     $page = nv_change_buffer( $page );
 }
+else
+{
+    $page = $db->unfixdb( $page );
+}
 
 //Nen trang
 if ( defined( 'NV_IS_GZIP' ) )

@@ -76,7 +76,6 @@ if ( $id > 0 and $catid > 0 )
                     $name, $youremail 
                 );
                 $check = nv_sendmail( $from, $to_mail, $subject, $message );
-                define( 'NV_IS_AJAX', true );
                 if ( $check )
                 {
                     $success = "" . $lang_module['sendmail_success'] . "<strong> " . $to_mail . "</strong>";
