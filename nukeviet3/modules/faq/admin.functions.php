@@ -126,10 +126,7 @@ function nv_update_keywords( $catid )
 
     $content = implode( " ", $content );
 
-    require_once ( NV_ROOTDIR . '/includes/class/keywords.class.php' );
-
-    $keys = new keywords( NV_SITEWORDS_MIN_WORD_LENGTH, NV_SITEWORDS_MIN_WORD_OCCUR, NV_SITEWORDS_MIN_2WORDS_LENGTH, NV_SITEWORDS_MIN_2WORDS_PHRASE_LENGTH, NV_SITEWORDS_MIN_2WORDS_PHRASE_OCCUR, SITEWORDS_MIN_3WORDS_LENGTH, NV_SITEWORDS_MIN_3WORDS_PHRASE_LENGTH, NV_SITEWORDS_MIN_3WORDS_PHRASE_OCCUR, "", NV_SITEWORDS_MAX_STRLEN );
-    $keywords = $keys->getkeywords( $content );
+    $keywords = nv_get_keywords( $content );
 
     if ( ! empty( $keywords ) )
     {

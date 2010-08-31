@@ -944,6 +944,66 @@ function nv_editor_filter_textarea ( $inputname, $default = '', $allowed_html_ta
 }
 
 /**
+ * nv_get_keywords()
+ * 
+ * @param string $content
+ * @return
+ */
+function nv_get_keywords ( $content = "" )
+{
+    if ( empty( $content ) ) return ( "" );
+
+    $content = nv_unhtmlspecialchars( $content );
+    $content = strip_punctuation( $content );
+    $content = trim( $content );
+    $content = nv_strtolower( $content );
+
+    $content = " " . $content . " ";
+
+    $pattern_word = array();
+
+    if ( NV_SITEWORDS_MIN_3WORDS_LENGTH > 0 and NV_SITEWORDS_MIN_3WORDS_PHRASE_OCCUR > 0 )
+    {
+        $pattern_word[] = "/[\s]+([\S]{" . NV_SITEWORDS_MIN_3WORDS_LENGTH . ",}\s[\S]{" . NV_SITEWORDS_MIN_3WORDS_LENGTH . ",}\s[\S]{" . NV_SITEWORDS_MIN_3WORDS_LENGTH . ",})(\s.*\\1){" . NV_SITEWORDS_MIN_3WORDS_PHRASE_OCCUR . ",}[\s]+/uis";
+    }
+    
+    if ( NV_SITEWORDS_MIN_2WORDS_LENGTH > 0 and NV_SITEWORDS_MIN_2WORDS_PHRASE_OCCUR > 0 )
+    {
+        $pattern_word[] = "/[\s]+([\S]{" . NV_SITEWORDS_MIN_2WORDS_LENGTH . ",}\s[\S]{" . NV_SITEWORDS_MIN_2WORDS_LENGTH . ",})(\s.*\\1){" . NV_SITEWORDS_MIN_2WORDS_PHRASE_OCCUR . ",}[\s]+/uis";
+    }
+
+    if ( NV_SITEWORDS_MIN_WORD_LENGTH > 0 and NV_SITEWORDS_MIN_WORD_OCCUR > 0 )
+    {
+        $pattern_word[] = "/[\s]+([\S]{" . NV_SITEWORDS_MIN_WORD_LENGTH . ",})(\s.*\\1){" . NV_SITEWORDS_MIN_WORD_OCCUR . ",}[\s]+/uis";
+    }
+
+    $keywords = array();
+    $lenght = 0;
+    $max_strlen = min( NV_SITEWORDS_MAX_STRLEN, 300 );
+
+    foreach ( $pattern_word as $pattern )
+    {
+        unset( $matches );
+        while ( preg_match( $pattern, $content, $matches ) )
+        {
+            $keywords[] = $matches[1];
+            $lenght += nv_strlen( $matches[1] );
+
+            $content = preg_replace( "/[\s]+(" . preg_quote( $matches[1] ) . ")[\s]+/uis", " ", $content );
+
+            if ( $lenght >= $max_strlen ) break;
+        }
+
+        if ( $lenght >= $max_strlen ) break;
+    }
+
+    $keywords = array_unique( $keywords );
+    $keywords = implode( ",", $keywords );
+
+    return $keywords;
+}
+
+/**
  * nv_sendmail()
  * 
  * @param mixed $from

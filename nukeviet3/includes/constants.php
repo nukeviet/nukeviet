@@ -142,17 +142,17 @@ define( 'NV_MAX_REQUESTS_60', 40 );
 //So requests toi da trong 5 phut
 define( 'NV_MAX_REQUESTS_300', 150 );
 
-//Cac thiet lap trong siteword
+//ky tu phan cach trong title
 define( "NV_TITLEBAR_DEFIS", " - " );
-define( 'NV_SITEWORDS_MIN_WORD_LENGTH', 2 );
-define( 'NV_SITEWORDS_MIN_WORD_OCCUR', 4 );
+
+//Cac thiet lap trong siteword
+define( 'NV_SITEWORDS_MIN_WORD_LENGTH', 4 );
+define( 'NV_SITEWORDS_MIN_WORD_OCCUR', 5 );
 define( 'NV_SITEWORDS_MIN_2WORDS_LENGTH', 2 );
-define( 'NV_SITEWORDS_MIN_2WORDS_PHRASE_LENGTH', 4 );
-define( 'NV_SITEWORDS_MIN_2WORDS_PHRASE_OCCUR', 3 );
-define( 'SITEWORDS_MIN_3WORDS_LENGTH', 2 );
-define( 'NV_SITEWORDS_MIN_3WORDS_PHRASE_LENGTH', 6 );
-define( 'NV_SITEWORDS_MIN_3WORDS_PHRASE_OCCUR', 3 );
-define( 'NV_SITEWORDS_MAX_STRLEN', 1000 );
+define( 'NV_SITEWORDS_MIN_2WORDS_PHRASE_OCCUR', 2 );
+define( 'SITEWORDS_MIN_3WORDS_LENGTH', 0 );
+define( 'NV_SITEWORDS_MIN_3WORDS_PHRASE_OCCUR', 0 );
+define( 'NV_SITEWORDS_MAX_STRLEN', 300 );
 
 //Mac dinh, neu cac thong so khong thay doi, MySQL khong ket noi moi
 //ma quay lai voi ket noi cu. Neu NEW_LINK = true se khien MySql luon ket noi moi
