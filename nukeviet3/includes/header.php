@@ -44,6 +44,11 @@ else
 
 @Header( "Pragma: no-cache" );
 
+if ( preg_match( "/(Googlebot)/i", $client_info['agent'] ) )
+{
+    @Header( "X-Robots-Tag: index,archive,follow,noodp", true );
+}
+
 ob_start();
 
 ?>
