@@ -3,11 +3,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         {THEME_PAGE_TITLE} {THEME_META_TAGS}
-        <meta name="resource-type" content="document" />
-        <meta name="distribution" content="global" />
-        <meta name="robots" content="index, follow" />
-        <meta name="revisit-after" content="1 days" />
-        <meta name="rating" content="general" />
+        <meta name="robots" content="index, archive, follow, noodp" />
+        <meta name="googlebot" content="index,archive,follow,noodp" />
+        <meta name="msnbot" content="all,index,follow" />
         <link rel="icon" href="{NV_BASE_SITEURL}themes/default/favicon.ico" type="image/vnd.microsoft.icon" />
         <link rel="shortcut icon" href="{NV_BASE_SITEURL}themes/default/favicon.ico" type="image/vnd.microsoft.icon" />
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/reset.css" />
