@@ -953,6 +953,7 @@ function nv_get_keywords ( $content = "" )
 {
     if ( empty( $content ) ) return ( "" );
 
+    $content = strip_tags( $content );
     $content = nv_unhtmlspecialchars( $content );
     $content = strip_punctuation( $content );
     $content = trim( $content );
