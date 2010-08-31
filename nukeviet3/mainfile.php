@@ -218,6 +218,7 @@ define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root ); // D:/AppServ/www
 define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) ); //Ngat dong
 define( 'NV_UPLOAD_MAX_FILESIZE', min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $global_config['nv_max_size'] ) );
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh duong dan thuc den thu muc upload
+define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) ); //Hau to cua file cache
 
 
 if ( preg_match( "/^[0-9]{10,}$/", $nv_Request->get_string( 'nocache', 'get', '' ) ) and //Xac dinh co phai AJAX hay khong

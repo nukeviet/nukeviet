@@ -20,6 +20,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `title` varchar(255) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `bodytext` mediumtext NOT NULL,
+  `keywords` mediumtext NOT NULL,
   `weight` smallint(4) NOT NULL DEFAULT '0',
   `admin_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `add_time` int(11) NOT NULL DEFAULT '0',

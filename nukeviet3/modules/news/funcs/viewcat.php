@@ -14,11 +14,11 @@ if ( ! defined( 'NV_IS_MODADMIN' ) and $page < 100 )
 {
     if ( empty( $set_viewcat ) )
     {
-        $cache_file = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_" . $page . "_" . md5( $global_config['sitekey'] . NV_BASE_SITEURL ) . ".cache";
+        $cache_file = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
     }
     else
     {
-        $cache_file = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_page_" . $page . "_" . md5( $global_config['sitekey'] . NV_BASE_SITEURL ) . ".cache";
+        $cache_file = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_page_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
     }
     if ( file_exists( $cache_file ) )
     {

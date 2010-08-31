@@ -111,35 +111,25 @@ function nv_archive_content_module( $id, $listcatid )
 
 function nv_del_cache_module( $listcatid = "" )
 {
-	global $module_name, $module_data;
-	$files_cache = @scandir( NV_ROOTDIR . "/" . NV_CACHEDIR );
-	if ( ! empty( $files_cache ) and $listcatid != "" )
-	{
-		$arr_catid = explode( ",", $listcatid );
-		foreach ( $arr_catid as $catid_i )
-		{
-			foreach ( $files_cache as $file )
-			{
-				$pregmatch1 = "/^(" . NV_LANG_DATA . "_" . $module_name . "_viewcat_" . $catid_i . ")\_[a-z0-9\_]+.cache$/";
-				$pregmatch2 = "/^(" . NV_LANG_DATA . "_" . $module_name . "_main)\_[a-z0-9\_]+.cache$/";
-				if ( preg_match( $pregmatch1, $file ) or preg_match( $pregmatch2, $file ) )
-				{
-					unlink( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file );
-				}
-			}
-		}
-	} elseif ( ! empty( $files_cache ) and $listcatid == "" )
-	{
-		foreach ( $files_cache as $file )
-		{
-			$pregmatch1 = "/^(" . NV_LANG_DATA . "_" . $module_name . "_viewcat)\_[a-z0-9\_]+.cache$/";
-			$pregmatch2 = "/^(" . NV_LANG_DATA . "_" . $module_name . "_main)\_[a-z0-9\_]+.cache$/";
-			if ( preg_match( $pregmatch1, $file ) or preg_match( $pregmatch2, $file ) )
-			{
-				unlink( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file );
-			}
-		}
-	}
+    global $module_name;
+
+    $patterns = array();
+    $patterns[] = "/^(" . NV_LANG_DATA . "_" . $module_name . "_main)\_[a-z0-9\_]+.cache$/";
+
+    if ( ! empty( $listcatid ) )
+    {
+        $arr_catid = explode( ",", $listcatid );
+
+        foreach ( $arr_catid as $catid_i )
+        {
+            $patterns[] = "/^(" . NV_LANG_DATA . "_" . $module_name . "_viewcat_" . $catid_i . ")\_[a-z0-9\_]+.cache$/";
+        }
+    }
+    else
+    {
+        $patterns[] = "/^(" . NV_LANG_DATA . "_" . $module_name . "_viewcat)\_[a-z0-9\_]+.cache$/";
+    }
+    nv_delete_cache( $patterns );
 }
 
 function nv_link_edit_page( $id )

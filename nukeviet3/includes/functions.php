@@ -11,6 +11,7 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 require_once ( NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php' );
 require_once ( NV_ROOTDIR . '/includes/utf8/utf8_functions.php' );
+require_once ( NV_ROOTDIR . '/includes/core/cache_functions.php' );
 
 if ( ! function_exists( 'array_intersect_key' ) )
 {
@@ -159,7 +160,7 @@ function nv_preg_quote ( $string )
  * @param integer $sorting_order
  * @return
  */
-function nv_scandir ( $directory, $pattern, $sorting_order = 0 )
+function nv_scandir( $directory, $pattern, $sorting_order = 0 )
 {
     $return = array();
     if ( is_dir( $directory ) )
@@ -169,10 +170,28 @@ function nv_scandir ( $directory, $pattern, $sorting_order = 0 )
         {
             foreach ( $files as $file )
             {
-                if ( $file != "." and $file != ".." and preg_match( $pattern, $file ) ) $return[] = $file;
+                if ( $file != "." and $file != ".." and $file != ".htaccess" and $file != "index.html" )
+                {
+                    if ( ! is_array( $pattern ) )
+                    {
+                        if ( preg_match( $pattern, $file ) ) $return[] = $file;
+                    }
+                    else
+                    {
+                        foreach ( $pattern as $p )
+                        {
+                            if ( preg_match( $p, $file ) )
+                            {
+                                $return[] = $file;
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
+
     return $return;
 }
 
@@ -1279,23 +1298,6 @@ function nv_mkdir ( $path, $dir_name )
     return array( 
         1, sprintf( $lang_global['directory_was_created'], $dir_name ), $path . $dir_name 
     );
-}
-
-/**
- * nv_delete_all_cache()
- * 
- * @return
- */
-function nv_delete_all_cache ( )
-{
-    $files = scandir( NV_ROOTDIR . "/" . NV_CACHEDIR );
-    $files2 = array_diff( $files, array( 
-        ".", "..", ".htaccess", "index.html", ".svn" 
-    ) );
-    foreach ( $files2 as $f )
-    {
-        nv_deletefile( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $f, true );
-    }
 }
 
 /**

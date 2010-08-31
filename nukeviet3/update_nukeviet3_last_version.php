@@ -9,7 +9,7 @@
 define( 'NV_ADMIN', true );
 require_once ( str_replace( '\\\\', '/', dirname( __file__ ) ) . '/mainfile.php' );
 require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
-$global_config['new_version'] = "3.0.09";
+$global_config['new_version'] = "3.0.10";
 
 function nv_version_compare ( $version1, $version2 )
 {
@@ -163,6 +163,19 @@ if ( nv_version_compare( $global_config['version'], "3.0.09" ) < 0 )
         $db->sql_freeresult();
     }
 }
+
+if ( nv_version_compare( $global_config['version'], "3.0.10" ) < 0 )
+{
+    $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language`";
+    $result_lang = $db->sql_query( $sql );
+    while ( list( $lang_i ) = $db->sql_fetchrow( $result_lang ) )
+    {
+        $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_about` ADD `keywords` INT( 11 ) MEDIUMTEXT NOT NULL AFTER AFTER `bodytext`" );
+        $db->sql_query( $sql );
+        $db->sql_freeresult();
+    }
+}
+
 $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
 
 nv_save_file_config_global();

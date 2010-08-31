@@ -15,7 +15,7 @@ $contents = "";
 $cache_file = "";
 if ( ! defined( 'NV_IS_MODADMIN' ) )
 {
-    $cache_file = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . md5( $global_config['sitekey'] . NV_BASE_SITEURL ) . ".cache";
+    $cache_file = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . NV_CACHE_PREFIX . ".cache";
     if ( file_exists( $cache_file ) )
     {
         $contents = file_get_contents( $cache_file );
