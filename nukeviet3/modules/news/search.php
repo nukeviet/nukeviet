@@ -39,7 +39,8 @@ if ( $all_page )
     while ( list( $id, $tilterow, $alias, $listcatid, $hometext, $bodytext ) = $db->sql_fetchrow( $tmp_re ) )
     {
         $content = $hometext . $bodytext;
-        $catid = end( explode( ",", $listcatid ) );
+        $catid = explode( ",", $listcatid );
+        $catid = end( $catid );
 
         $url = $link . $array_cat_alias[$catid] . '/' . $alias . "-" . $id;
 

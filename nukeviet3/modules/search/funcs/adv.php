@@ -84,6 +84,9 @@ if ( empty( $contents ) )
     $contents = $lang_module['search_none'] . " &quot;" . $key . "&quot;";
 }
 
+$contents = $db->unfixdb( $contents );
+$contents = nv_url_rewrite($contents);
+
 echo $contents;
 
 ?>
