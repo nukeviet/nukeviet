@@ -166,14 +166,20 @@ if ( nv_version_compare( $global_config['version'], "3.0.09" ) < 0 )
 
 if ( nv_version_compare( $global_config['version'], "3.0.10" ) < 0 )
 {
+    // add keywords module about
     $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language`";
     $result_lang = $db->sql_query( $sql );
     while ( list( $lang_i ) = $db->sql_fetchrow( $result_lang ) )
     {
-        $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_about` ADD `keywords` INT( 11 ) MEDIUMTEXT NOT NULL AFTER AFTER `bodytext`" );
-        $db->sql_query( $sql );
-        $db->sql_freeresult();
+        $sql = "SELECT module_data FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modules` WHERE `module_file`='about'";
+        $result_mod = $db->sql_query( $sql );
+        while ( list( $module_data_i ) = $db->sql_fetchrow( $result_mod ) )
+        {
+            $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_" . $module_data_i . "` ADD `keywords` MEDIUMTEXT NOT NULL AFTER `bodytext`" );
+        }
     }
+    $db->sql_freeresult();
+    //end add keywords module about
 }
 
 $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
