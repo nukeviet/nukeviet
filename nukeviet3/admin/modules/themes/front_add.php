@@ -17,16 +17,7 @@ foreach ( $theme_array as $themes_i )
 {
     $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&selectthemes=" . $themes_i] = $themes_i;
 }
-$selectthemes_old = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site_theme'] );
-$selectthemes = $nv_Request->get_string( 'selectthemes', 'get', $selectthemes_old );
-if ( ! in_array( $selectthemes, $theme_array ) )
-{
-    $selectthemes = $global_config['site_theme'];
-}
-if ( $selectthemes_old != $selectthemes )
-{
-    $nv_Request->set_Cookie( 'selectthemes', $selectthemes, NV_LIVE_COOKIE_TIME );
-}
+$selectthemes = $global_config['site_theme'];
 $page_title = $lang_module['blocks'] . ':' . $selectthemes;
 if ( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
@@ -133,7 +124,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
             $newgroupbl = intval( $maxgroup ) + 1;
             if ( $leavegroup > 0 )
             {
-                $sql = "UPDATE `" . NV_BLOCKS_TABLE . "` SET all_func='0' WHERE groupbl=" . $groupbl . "";
+                $sql = "UPDATE `" . NV_BLOCKS_TABLE . "` SET all_func='0' WHERE groupbl=" . $groupbl . " AND theme='" . $selectthemes . "'";
                 $db->sql_query( $sql );
                 
                 #update all blocks and functions exist
@@ -141,7 +132,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                 {
                     if ( in_array( $func_id, $func_list ) )
                     {
-                        $result = $db->sql_query( "SELECT bid FROM `" . NV_BLOCKS_TABLE . "` WHERE groupbl=" . intval( $groupbl ) . " AND func_id=" . $func_id . "" );
+                        $result = $db->sql_query( "SELECT bid FROM `" . NV_BLOCKS_TABLE . "` WHERE groupbl=" . intval( $groupbl ) . " AND func_id=" . $func_id . " AND theme='" . $selectthemes . "'" );
                         while ( list( $bids ) = $db->sql_fetchrow( $result ) )
                         {
                             $sql = "UPDATE `" . NV_BLOCKS_TABLE . "` SET groupbl='" . $newgroupbl . "', title=" . $db->dbescape( $title ) . ", link =" . $db->dbescape( $link ) . ", type=" . $db->dbescape_string( $typeblock ) . ", file_path=" . $db->dbescape_string( $file_path ) . ", template=" . $db->dbescape( $template ) . ", exp_time=" . $db->dbescape( $exp_time ) . ",position=" . $db->dbescape( $position ) . ", active=" . $active . ", groups_view=" . $db->dbescape( $who_view ) . ", module=" . $db->dbescape( $xmodule ) . " WHERE bid=" . $bids . "";
@@ -164,9 +155,9 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                     $array_funcid_old = array_diff( $func_list, $array_funcid );
                     foreach ( $array_funcid_old as $func_id )
                     {
-                        $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE groupbl='" . $groupbl . "' AND func_id='" . $func_id . "'" );
+                        $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE groupbl='" . $groupbl . "' AND func_id='" . $func_id . "' AND theme='" . $selectthemes . "'" );
                     }
-                    $sql = "UPDATE `" . NV_BLOCKS_TABLE . "` SET `title`=" . $db->dbescape( $title ) . ", `link` =" . $db->dbescape( $link ) . ", `type`=" . $db->dbescape_string( $typeblock ) . ", `file_path`=" . $db->dbescape_string( $file_path ) . ", `template`=" . $db->dbescape( $template ) . ", `exp_time`=" . $db->dbescape( $exp_time ) . ",`position`=" . $db->dbescape( $position ) . ", `active`=" . $active . ", `groups_view`=" . $db->dbescape( $who_view ) . ", `module`=" . $db->dbescape( $xmodule ) . ", `all_func`=" . $all_func . " WHERE `groupbl`=" . $groupbl . "";
+                    $sql = "UPDATE `" . NV_BLOCKS_TABLE . "` SET `title`=" . $db->dbescape( $title ) . ", `link` =" . $db->dbescape( $link ) . ", `type`=" . $db->dbescape_string( $typeblock ) . ", `file_path`=" . $db->dbescape_string( $file_path ) . ", `template`=" . $db->dbescape( $template ) . ", `exp_time`=" . $db->dbescape( $exp_time ) . ",`position`=" . $db->dbescape( $position ) . ", `active`=" . $active . ", `groups_view`=" . $db->dbescape( $who_view ) . ", `module`=" . $db->dbescape( $xmodule ) . ", `all_func`=" . $all_func . " WHERE `groupbl`=" . $groupbl . " AND theme='" . $selectthemes . "'";
                     $db->sql_query( $sql );
                 }
                 else
