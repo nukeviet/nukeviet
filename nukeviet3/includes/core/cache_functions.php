@@ -91,7 +91,7 @@ function nv_db_cache( $sql, $key = '' )
         $a = 0;
         while ( $row = $db->sql_fetch_assoc( $result ) )
         {
-            $key = ! empty( $key ) ? $row[$key] : $a;
+            $key = ( ! empty( $key ) and isset( $row[$key] ) ) ? $row[$key] : $a;
             $list[$key] = $row;
             $a++;
         }
