@@ -59,6 +59,8 @@ if ( $id )
             $db->sql_query( $query );
         }
 
+        $cache['alias'] = $row['alias']; //Dung cho Block
+
         $cache = serialize( $cache );
         nv_set_cache( $cache_file, $cache );
     }
