@@ -205,6 +205,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
             }
             else
             {
+                nv_del_moduleCache();
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
                 exit();
             }
@@ -459,6 +460,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 {
                     nv_FixWeightCat( $row['parentid'] );
                 }
+                
+                nv_del_moduleCache();
 
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
                 exit();
@@ -611,6 +614,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
 
     nv_del_cat( $catid );
     nv_FixWeightCat( $parentid );
+    nv_del_moduleCache();
 
     die( "OK" );
 }
@@ -643,6 +647,9 @@ if ( $nv_Request->isset_request( 'changeweight', 'post' ) )
     }
     $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET `weight`=" . $new . " WHERE `id`=" . $catid;
     $db->sql_query( $sql );
+    
+    nv_del_moduleCache();
+    
     die( "OK" );
 }
 
@@ -665,6 +672,9 @@ if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
 
     $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET `status`=" . $status . " WHERE `id`=" . $catid;
     $db->sql_query( $sql );
+    
+    nv_del_moduleCache();
+    
     die( "OK" );
 }
 

@@ -11,11 +11,11 @@ if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
+$list_cats = nv_list_cats( true );
+
 //dang thao luan
 if ( $nv_Request->isset_request( 'ajax', 'post' ) )
 {
-    $list_cats = nv_list_cats( true );
-
     if ( ! empty( $list_cats ) )
     {
         $in = implode( ",", array_keys( $list_cats ) );
@@ -123,8 +123,6 @@ if ( $nv_Request->isset_request( 'ajax', 'post' ) )
 //list_comment
 if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
 {
-    $list_cats = nv_list_cats( true );
-
     if ( ! empty( $list_cats ) )
     {
         $in = implode( ",", array_keys( $list_cats ) );
@@ -137,25 +135,23 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
             $users = array();
             $admins = array();
 
-            $query = "FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` AS a 
-            INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "` AS b ON a.fid = b.id 
-            WHERE a.fid=" . $id . " AND a.status=1 AND b.catid IN (" . $in . ") AND b.status=1 AND b.comment_allow=1";
+            $page = $nv_Request->get_int( 'page', 'get', 0 );
+            $per_page = 15;
 
-            $query1 = "SELECT COUNT(*) " . $query;
-            $result = $db->sql_query( $query1 );
-            list( $all_page ) = $db->sql_fetchrow( $result );
+            $query = "SELECT SQL_CALC_FOUND_ROWS a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email, 
+            a.post_ip AS post_ip, a.post_time AS post_time, a.comment AS comment, a.admin_reply AS admin_reply, a.admin_id AS admin_id 
+            FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` AS a 
+            INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "` AS b ON a.fid = b.id 
+            WHERE a.fid=" . $id . " AND a.status=1 AND b.catid IN (" . $in . ") AND b.status=1 AND b.comment_allow=1 
+            ORDER BY a.post_time DESC LIMIT " . $page . "," . $per_page;
+
+            $result = $db->sql_query( $query );
+            $query = $db->sql_query( "SELECT FOUND_ROWS()" );
+            list( $all_page ) = $db->sql_fetchrow( $query );
 
             if ( $all_page )
             {
                 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getcomment&amp;list_comment=" . $id;
-                $page = $nv_Request->get_int( 'page', 'get', 0 );
-                $per_page = 15;
-
-                $query = "SELECT a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email, 
-                a.post_ip AS post_ip, a.post_time AS post_time, a.comment AS comment, a.admin_reply AS admin_reply, a.admin_id AS admin_id 
-                " . $query . " 
-                ORDER BY a.post_time DESC LIMIT " . $page . "," . $per_page;
-                $result = $db->sql_query( $query );
 
                 $today = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
                 $yesterday = $today - 86400;

@@ -40,6 +40,19 @@ function nv_delete_all_cache()
 }
 
 /**
+ * nv_del_cache_module()
+ * 
+ * @return void
+ */
+function nv_del_moduleCache()
+{
+    global $module_name;
+
+    $pattern = "/^" . NV_LANG_DATA . "\_" . $module_name . "\_(.*)\_[a-z0-9]{32}\.cache$/i";
+    nv_delete_cache( $pattern );
+}
+
+/**
  * nv_get_cache()
  * 
  * @param mixed $filename
@@ -79,6 +92,10 @@ function nv_db_cache( $sql, $key = '' )
 {
     global $db, $module_name;
 
+    $list = array();
+
+    if ( empty( $sql ) ) return $list;
+
     $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . md5( $sql ) . "_" . NV_CACHE_PREFIX . ".cache";
     if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
     {
@@ -86,18 +103,19 @@ function nv_db_cache( $sql, $key = '' )
     }
     else
     {
-        $result = $db->sql_query( $sql );
-        $list = array();
-        $a = 0;
-        while ( $row = $db->sql_fetch_assoc( $result ) )
+        if ( ( $result = $db->sql_query( $sql ) ) !== false )
         {
-            $key = ( ! empty( $key ) and isset( $row[$key] ) ) ? $row[$key] : $a;
-            $list[$key] = $row;
-            $a++;
-        }
+            $a = 0;
+            while ( $row = $db->sql_fetch_assoc( $result ) )
+            {
+                $key2 = ( ! empty( $key ) and isset( $row[$key] ) ) ? $row[$key] : $a;
+                $list[$key2] = $row;
+                $a++;
+            }
 
-        $cache = serialize( $list );
-        nv_set_cache( $cache_file, $cache );
+            $cache = serialize( $list );
+            nv_set_cache( $cache_file, $cache );
+        }
     }
 
     return $list;
