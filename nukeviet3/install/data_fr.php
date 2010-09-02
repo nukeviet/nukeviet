@@ -7,7 +7,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-function nv_create_table_news ( $catid )
+function nv_create_table_news( $catid )
 {
     global $db, $db_config;
     $db->sql_query( "SET SQL_QUOTE_SHOW_CREATE = 1" );
@@ -30,7 +30,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modules` (`t
 ('statistics', 'statistics', 'statistics', 'Statistiques', 1276520928, 0, '', '', '0', 1, 9, 0, 1, ''),
 ('banners', 'banners', 'banners', 'Publicité', 1270400000, 1, '', '', '0', 0, 5, 1, 1, ''), 
 ('search', 'search', 'search', 'Recherche', 1273474173, 0, '', '', '0', 0, 10, 0, 1, ''), 
-('download', 'download', 'download', 'Télécharger', 1280638246, 1, '', '', '0', 1, 3, 1, 1, ''), 
+('download', 'download', 'download', 'Téléchargement', 1280638246, 1, '', '', '0', 1, 3, 1, 1, ''), 
 ('weblinks', 'weblinks', 'weblinks', 'Liens Webs', 1280638247, 1, '', '', '0', 1, 4, 1, 1, ''), 
 ('rss', 'rss', 'rss', 'Rss', 1280638250, 0, '', '', '0', 0, 11, 1, 1, ''), 
 ('voting', 'voting', 'voting', 'Sondage', 1280638417, 1, '', '', '0', 0, 6, 0, 1, '')";
@@ -59,7 +59,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modfuncs` (`
 (24, 'viewcat', 'Viewcat', 'weblinks', 1, 0, 2, 'left-body-right', ''), 
 (25, 'visitlink', 'Visitlink', 'weblinks', 0, 0, 0, 'left-body-right', ''), 
 (26, 'active', 'Active', 'users', 1, 0, 7, 'left-body-right', ''), 
-(27, 'changepass', 'Changer mot de passe', 'users', 1, 1, 6, 'left-body-right', ''), 
+(27, 'changepass', 'Changer le mot de passe', 'users', 1, 1, 6, 'left-body-right', ''), 
 (28, 'editinfo', 'Editinfo', 'users', 1, 0, 8, 'left-body-right', ''), 
 (29, 'login', 'Se connecter', 'users', 1, 1, 2, 'left-body-right', ''), 
 (30, 'logout', 'Logout', 'users', 1, 0, 3, 'left-body-right', ''), 
@@ -372,4 +372,5 @@ while ( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
     $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` =  " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id;
 }
 $db->sql_freeresult();
+
 ?>

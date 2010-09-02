@@ -1,25 +1,25 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Français
-* @Createdate Aug 23, 2010, 09:00:48 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @Createdate Aug 23, 2010, 09:00:48 PM
+ */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
+if ( ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="Phạm Chí Quang";
-$lang_translator['createdate'] ="21/6/2010, 19:30";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.";
-$lang_translator['info'] ="Langue française pour NukeViet 3";
-$lang_translator['langtype'] ="lang_global";
+$lang_translator['author'] = "Phạm Chí Quang";
+$lang_translator['createdate'] = "21/6/2010, 19:30";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.";
+$lang_translator['info'] = "Langue française pour NukeViet 3";
+$lang_translator['langtype'] = "lang_global";
 
 $lang_global['Content_Language'] = "fr";
-$lang_global['LanguageName'] = "french";//khong dich
 $lang_global['site_info'] = "Information du site";
 $lang_global['welcome'] = "Bienvenu sur le site %s";
 $lang_global['disable_site_title'] = "Site en maintenance";
@@ -133,9 +133,9 @@ $lang_global['lang_en'] = "English";
 $lang_global['option'] = "Option";
 $lang_global['value'] = "Valeur";
 $lang_global['reviews'] = "Évaluer";
-$lang_global['show_queries'] = "Liste des requestes";
+$lang_global['show_queries'] = "Liste des requêtes";
 $lang_global['add'] = "Ajouter";
-$lang_global['edit'] = "Modifier";
+$lang_global['edit'] = "Éditer";
 $lang_global['delete'] = "Supprimer";
 $lang_global['disable'] = "Désactiver";
 $lang_global['activate'] = "Activer";
@@ -210,7 +210,7 @@ $lang_global['changpass'] = "Changer le mot de passe";
 $lang_global['edituser'] = "Compte";
 $lang_global['browse_file'] = "Parcourir...";
 $lang_global['browse_image'] = "Parcourir...";
-$lang_global['openid_login'] = "Connecter avec OpenID";
+$lang_global['openid_login'] = "Se connecter avec OpenID";
 $lang_global['google_openid_login'] = "Google";
 $lang_global['yahoo_openid_login'] = "Yahoo";
 
