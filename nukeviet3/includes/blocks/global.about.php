@@ -19,7 +19,9 @@ if ( ! function_exists( 'nv_message_about' ) )
      */
     function nv_message_about()
     {
-        global $global_config;
+        global $global_config, $site_mods;
+
+        if ( ! isset( $site_mods['about'] ) ) return "";
 
         $pattern = "/^" . NV_LANG_DATA . "\_about\_([0-9]+)\_" . NV_CACHE_PREFIX . "\.cache$/i";
 
