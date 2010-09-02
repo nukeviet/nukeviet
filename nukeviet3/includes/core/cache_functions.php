@@ -69,4 +69,38 @@ function nv_set_cache( $filename, $content )
     return file_put_contents( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $filename, $content, LOCK_EX );
 }
 
+/**
+ * nv_db_cache()
+ * 
+ * @param mixed $sql
+ * @return
+ */
+function nv_db_cache( $sql, $key = '' )
+{
+    global $db, $module_name;
+
+    $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . md5( $sql ) . "_" . NV_CACHE_PREFIX . ".cache";
+    if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
+    {
+        $list = unserialize( $cache );
+    }
+    else
+    {
+        $result = $db->sql_query( $sql );
+        $list = array();
+        $a = 0;
+        while ( $row = $db->sql_fetch_assoc( $result ) )
+        {
+            $key = ! empty( $key ) ? $row[$key] : $a;
+            $list[$key] = $row;
+            $a++;
+        }
+
+        $cache = serialize( $list );
+        nv_set_cache( $cache_file, $cache );
+    }
+
+    return $list;
+}
+
 ?>
