@@ -9,17 +9,22 @@
 
 if ( ! defined( 'NV_IS_MOD_VOTING' ) ) die( 'Stop!!!' );
 
-function voting_result ( $voting )
+/**
+ * voting_result()
+ * 
+ * @param mixed $voting
+ * @return
+ */
+function voting_result( $voting )
 {
     global $module_info, $global_config, $module_file;
+
     $xtpl = new XTemplate( "result.voting.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'SCRIPT', "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n" );
-    if ( isset( $voting['total'] ) )
-    {
-        $totalvote = $voting['total'];
-    }
     $xtpl->assign( 'PUBLTIME', $voting['pubtime'] );
     $xtpl->assign( 'LANG', $voting['lang'] );
+    $xtpl->assign( 'VOTINGQUESTION', $voting['question'] );
+
     if ( ! empty( $voting['note'] ) )
     {
         $xtpl->assign( 'VOTINGNOTE', $voting['note'] );
@@ -28,20 +33,34 @@ function voting_result ( $voting )
     if ( isset( $voting['row'] ) )
     {
         $a = 1;
+        $b = 0;
         foreach ( $voting['row'] as $voting_i )
         {
+            if ( $voting['total'] )
+            {
+                $width = ( $voting_i['hitstotal'] / $voting['total'] ) * 100;
+                $width = round( $width, 2 );
+            }
+            else
+            {
+                $width = 0;
+            }
+
+            if ( $width )
+            {
+                $b++;
+            }
+
             $xtpl->assign( 'VOTING', $voting_i );
-            $xtpl->assign( 'BG', ( ( $a == 1 ) ? 'background-color: rgb(0, 102, 204);' : '' ) );
+            $xtpl->assign( 'BG', ( ( $b % 2 == 1 ) ? 'background-color: rgb(0, 102, 204);' : '' ) );
             $xtpl->assign( 'ID', $a );
-            $width = ( $voting_i['hitstotal'] / $totalvote ) * 100;
-            $width = round( $width, 2 );
             $xtpl->assign( 'WIDTH', $width );
-            $xtpl->assign( 'TOTAL', $totalvote );
+            $xtpl->assign( 'TOTAL', $voting['total'] );
             if ( $voting_i['title'] )
             {
                 $xtpl->parse( 'main.result' );
             }
-            $a ++;
+            $a++;
         }
     }
     $xtpl->parse( 'main' );

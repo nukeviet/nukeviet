@@ -6,9 +6,11 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['voting_edit'];
+
 $error = '';
 $vid = $nv_Request->get_int( 'vid', 'post,get' );
 $submit = $nv_Request->get_string( 'submit', 'post' );
@@ -18,17 +20,17 @@ if ( ! empty( $submit ) )
     $who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
     $groups_view = $nv_Request->get_array( 'groups_view', 'post' );
     $groups_view = implode( ',', $groups_view );
-    
+
     $publ_date = filter_text_input( 'publ_date', 'post', '' );
     $exp_date = filter_text_input( 'exp_date', 'post', '' );
     $maxoption = $nv_Request->get_int( 'maxoption', 'post', 1 );
-    
+
     $array_answervote = $nv_Request->get_array( 'answervote', 'post' );
     $answervotenews = $nv_Request->get_array( 'answervotenews', 'post' );
-    
+
     if ( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date ) ) $publ_date = "";
     if ( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date ) ) $exp_date = "";
-    
+
     if ( empty( $publ_date ) )
     {
         $begindate = NV_CURRENTTIME;
@@ -41,7 +43,7 @@ if ( ! empty( $submit ) )
         preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date, $m );
         $begindate = mktime( $phour, $pmin, 0, $m[2], $m[1], $m[3] );
     }
-    
+
     if ( empty( $exp_date ) )
     {
         $enddate = 0;
@@ -55,7 +57,6 @@ if ( ! empty( $submit ) )
         $enddate = mktime( $ehour, $emin, 0, $m[2], $m[1], $m[3] );
     }
     //end Exprire date
-    
 
     $number_answer = 0;
     foreach ( $array_answervote as $title )
@@ -63,7 +64,7 @@ if ( ! empty( $submit ) )
         $title = trim( strip_tags( $title ) );
         if ( $title != "" )
         {
-            $number_answer ++;
+            $number_answer++;
         }
     }
     foreach ( $answervotenews as $title )
@@ -71,13 +72,11 @@ if ( ! empty( $submit ) )
         $title = trim( strip_tags( $title ) );
         if ( $title != "" )
         {
-            $number_answer ++;
+            $number_answer++;
         }
     }
-    $rowvote = array( 
-        "who_view" => 0, "groups_view" => "", "publ_time" => $begindate, "exp_time" => $enddate, "acceptcm" => $maxoption, "question" => $question 
-    );
-    
+    $rowvote = array( "who_view" => 0, "groups_view" => "", "publ_time" => $begindate, "exp_time" => $enddate, "acceptcm" => $maxoption, "question" => $question );
+
     if ( ! empty( $question ) and $number_answer > 1 )
     {
         $error = $lang_module['voting_error'];
@@ -92,7 +91,7 @@ if ( ! empty( $submit ) )
                 }
             }
             $array_answervote = array();
-            
+
             $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` (`vid`, `question`, `acceptcm`, `admin_id`, `who_view`, `groups_view`, `publ_time`, `exp_time`, `act`) VALUES (NULL, " . $db->dbescape( $question ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
             $vid = $db->sql_query_insert_id( $query );
         }
@@ -105,13 +104,14 @@ if ( ! empty( $submit ) )
                 if ( $title != "" )
                 {
                     $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `title` = " . $db->dbescape( $title ) . " WHERE `id` ='" . intval( $id ) . "' AND `vid` =" . $vid . "" );
-                    $maxoption_data ++;
+                    $maxoption_data++;
                 }
                 else
                 {
                     $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` ='" . intval( $id ) . "' AND `vid` =" . $vid . "" );
                 }
             }
+            
             foreach ( $answervotenews as $key => $title )
             {
                 $title = nv_htmlspecialchars( strip_tags( $title ) );
@@ -120,18 +120,20 @@ if ( ! empty( $submit ) )
                     $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `vid`, `title`, `hitstotal`) VALUES (NULL, " . $db->dbescape( $vid ) . ", " . $db->dbescape( $title ) . ", '0')";
                     if ( $db->sql_query_insert_id( $query ) )
                     {
-                        $maxoption_data ++;
+                        $maxoption_data++;
                     }
                 }
             }
+            
             if ( $maxoption > $maxoption_data )
             {
                 $maxoption = $maxoption_data;
             }
-            
+
             $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `question`=" . $db->dbescape( $question ) . ", `acceptcm` =  " . $maxoption . ", `admin_id` =  " . $admin_info['admin_id'] . ", `who_view`=" . $who_view . ", `groups_view` = " . $db->dbescape( $groups_view ) . ", `publ_time`=" . $begindate . ", `exp_time`=" . $enddate . " WHERE `vid` =" . $vid . "";
             if ( $db->sql_query( $query ) )
             {
+                nv_del_moduleCache( $module_name );
                 $error = "";
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
                 die();
@@ -159,12 +161,12 @@ else
     {
         $queryvote = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE vid=" . $vid . "";
         $rowvote = $db->sql_fetchrow( $db->sql_query( $queryvote ) );
-        
+
         $sql = "SELECT `id`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`='" . $vid . "' ORDER BY `id` ASC";
         $result = $db->sql_query( $sql );
         $maxoption = $db->sql_numrows( $result );
         $maxoption = ( $maxoption > 0 ) ? $maxoption : 1;
-        
+
         while ( list( $id, $title ) = $db->sql_fetchrow( $result ) )
         {
             $array_answervote[$id] = $title;
@@ -172,9 +174,7 @@ else
     }
     else
     {
-        $rowvote = array( 
-            "who_view" => 0, "groups_view" => "", "publ_time" => NV_CURRENTTIME, "exp_time" => "", "acceptcm" => 1, "question" => "" 
-        );
+        $rowvote = array( "who_view" => 0, "groups_view" => "", "publ_time" => NV_CURRENTTIME, "exp_time" => "", "acceptcm" => 1, "question" => "" );
     }
 }
 
@@ -197,19 +197,15 @@ if ( $error != "" )
 $j = 0;
 $contents .= "<form id=\"votingcontent\" method=\"post\" action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&vid=" . $vid . "\">";
 $contents .= "<table class=\"tab1\" id=\"items\">\n";
-$j ++;
+$j++;
 $class = ( $j % 2 == 0 ) ? " class=\"second\"" : "";
 $contents .= "<tbody" . $class . ">\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['voting_allowcm'] . "</td>\n";
 $contents .= "<td>";
 
-$array_who_view = array( 
-    $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] 
-);
-$array_allowed_comm = array( 
-    $lang_global['no'], $lang_global['who_view0'], $lang_global['who_view1'] 
-);
+$array_who_view = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] );
+$array_allowed_comm = array( $lang_global['no'], $lang_global['who_view0'], $lang_global['who_view1'] );
 
 $groups_list = nv_groups_list();
 $tdate = date( "d|m|Y|H|i" );
@@ -245,7 +241,7 @@ $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 
-$j ++;
+$j++;
 $class = ( $j % 2 == 0 ) ? " class=\"second\"" : "";
 $contents .= "<tbody" . $class . ">\n";
 $contents .= "<tr>\n";
@@ -260,12 +256,12 @@ list( $phour, $pmin ) = explode( "|", $tdate );
 $contents .= "<input name=\"publ_date\" id=\"publ_date\" value=\"" . $publ_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
 $contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'publ_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
 $contents .= "<select name=\"phour\">\n";
-for ( $i = 0; $i < 23; $i ++ )
+for ( $i = 0; $i < 23; $i++ )
 {
     $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $phour ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $contents .= "</select>:<select name=\"pmin\">\n";
-for ( $i = 0; $i < 60; $i ++ )
+for ( $i = 0; $i < 60; $i++ )
 {
     $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $pmin ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
@@ -275,7 +271,7 @@ $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 
-$j ++;
+$j++;
 $class = ( $j % 2 == 0 ) ? " class=\"second\"" : "";
 $contents .= "<tbody" . $class . ">\n";
 $contents .= "<tr>\n";
@@ -297,12 +293,12 @@ else
 $contents .= "<input name=\"exp_date\" id=\"exp_date\" value=\"" . $exp_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
 $contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
 $contents .= "<select name=\"ehour\">\n";
-for ( $i = 0; $i < 23; $i ++ )
+for ( $i = 0; $i < 23; $i++ )
 {
     $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $ehour ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $contents .= "</select>:<select name=\"emin\">\n";
-for ( $i = 0; $i < 60; $i ++ )
+for ( $i = 0; $i < 60; $i++ )
 {
     $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $emin ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
@@ -312,13 +308,13 @@ $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 
-$j ++;
+$j++;
 $class = ( $j % 2 == 0 ) ? " class=\"second\"" : "";
 $contents .= "<tbody" . $class . ">\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['voting_maxoption'] . "</td>\n";
 $contents .= "<td><select name=\"maxoption\">\n";
-for ( $i = 1; $i <= $maxoption; $i ++ )
+for ( $i = 1; $i <= $maxoption; $i++ )
 {
     $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $rowvote['acceptcm'] ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
@@ -334,21 +330,21 @@ $contents .= "</tr>\n";
 $items = 0;
 foreach ( $array_answervote as $id => $title )
 {
-    $j ++;
+    $j++;
     $class = ( $j % 2 == 0 ) ? " class=\"second\"" : "";
     $contents .= "<tbody" . $class . ">\n";
     $contents .= "<tr>\n";
-    $contents .= "<td style=\"text-align:right\">" . $lang_module['voting_question_num'] . ( ++ $items ) . "</td>\n";
+    $contents .= "<td style=\"text-align:right\">" . $lang_module['voting_question_num'] . ( ++$items ) . "</td>\n";
     $contents .= "<td><input type=\"text\" value=\"" . $title . "\" name=\"answervote[$id]\" size=\"60\"></td>\n";
     $contents .= "</tr>\n";
     $contents .= "</tbody>\n";
 }
-$j ++;
+$j++;
 $class = ( $j % 2 == 0 ) ? " class=\"second additem\"" : " class=\"additem\"";
 
 $contents .= "<tbody " . $class . ">\n";
 $contents .= "<tr>\n";
-$contents .= "	<td style=\"text-align:right\">" . $lang_module['voting_question_num'] . ( ++ $items ) . "</td>\n";
+$contents .= "	<td style=\"text-align:right\">" . $lang_module['voting_question_num'] . ( ++$items ) . "</td>\n";
 $contents .= "	<td><input type=\"text\" value=\"\" name=\"answervotenews[]\" size=\"60\"></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";

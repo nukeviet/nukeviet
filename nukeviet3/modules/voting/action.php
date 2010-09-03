@@ -7,9 +7,8 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if ( ! defined( 'NV_IS_FILE_MODULES' ) )
-	die( 'Stop!!!' );
-    
+if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+
 $sql_drop_module = array();
 
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "`;";

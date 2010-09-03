@@ -62,10 +62,10 @@ function nv_sendvoting( form, vid, acceptcm, checkss, msg )
    {
       Shadowbox.open(
       {
-         content : '<iframe src=\"' + nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=voting&' + nv_fc_variable + '=main&vid=' + vid + '&checkss=' + checkss + '&lid=' + lid + '\" style=\"width:650px;height:400px\"></iframe>',
+         content : '<iframe src="' + nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=voting&' + nv_fc_variable + '=main&vid=' + vid + '&checkss=' + checkss + '&lid=' + lid + '" border="0" frameborder="0" style="width:670px;height:400px"></iframe>',
          player : 'html',
          height : 400,
-         width : 650
+         width : 670
       }
       );
    }

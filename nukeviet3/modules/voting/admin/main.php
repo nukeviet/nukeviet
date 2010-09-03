@@ -7,7 +7,9 @@
  * @Createdate 2-9-2010 14:43
  */
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
 $page_title = $lang_module['voting_list'];
+
 $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY `vid` ASC";
 $result = $db->sql_query( $sql );
 $num = $db->sql_numrows( $result );
@@ -31,7 +33,7 @@ if ( $num > 0 )
         $sql1 = "SELECT SUM(hitstotal) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`='" . $row['vid'] . "'";
         $result1 = $db->sql_query( $sql1 );
         $totalvote = $db->sql_fetchrow( $result1 );
-        
+
         $contents .= "<tbody" . $class . ">\n";
         $contents .= "<tr>\n";
         $contents .= "<td align=\"center\">" . $row['vid'] . "</td>\n";
@@ -42,7 +44,7 @@ if ( $num > 0 )
         $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $row['vid'] . ", '" . md5( $row['vid'] . session_id() ) . "')\">" . $lang_global['delete'] . "</a></span></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</tbody>\n";
-        $a ++;
+        $a++;
     }
     $contents .= "</table>\n";
     include ( NV_ROOTDIR . "/includes/header.php" );
@@ -54,4 +56,5 @@ else
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content" );
     die();
 }
+
 ?>

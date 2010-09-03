@@ -9,19 +9,17 @@
 
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-if ( ! in_array( $op, array( 
-    'detail', 'result' 
-) ) )
+if ( ! in_array( $op, array( 'detail', 'result' ) ) )
 {
     define( 'NV_IS_MOD_VOTING', true );
 }
 
 if ( ! empty( $array_op ) )
 {
-    if ( substr( $array_op[0], 0, 7 ) == "result-" )
+    unset( $matches );
+    if ( preg_match( "/^result\-([0-9]+)$/", $array_op[0], $matches ) )
     {
-        $array_page = explode( "-", $array_op[0] );
-        $id = intval( end( $array_page ) );
+        $id = ( int )$matches[1];
         $op = "result";
     }
 }
