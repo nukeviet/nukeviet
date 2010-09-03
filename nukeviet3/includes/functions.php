@@ -532,6 +532,28 @@ function nv_is_in_groups( $in_groups, $groups )
 }
 
 /**
+ * nv_set_allow()
+ * 
+ * @param mixed $who
+ * @param mixed $groups
+ * @return
+ */
+function nv_set_allow( $who, $groups )
+{
+    global $user_info;
+
+    if ( ! $who or ( $who == 1 and defined( 'NV_IS_USER' ) ) or ( $who == 2 and defined( 'NV_IS_ADMIN' ) ) )
+    {
+        return true;
+    } elseif ( $who == 3 and ! empty( $groups ) and defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups ) )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * nv_date()
  * 
  * @param mixed $format
