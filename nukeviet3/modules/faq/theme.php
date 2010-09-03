@@ -30,7 +30,7 @@ function theme_main_faq( $list_cats, $mod_title )
     {
         if ( ! $cat['parentid'] )
         {
-            $cat['link'] = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $cat['alias'];
+            $cat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $cat['alias'];
             $cat['name'] = "<a href=\"" . $cat['link'] . "\">" . $cat['title'] . "</a>";
             $xtpl->assign( 'SUBCAT', $cat );
             if ( ! empty( $cat['description'] ) )
@@ -74,7 +74,7 @@ function theme_cat_faq( $list_cats, $catid, $faq, $mod_title )
         foreach ( $list_cats[$catid]['subcats'] as $subcat )
         {
             $cat = $list_cats[$subcat];
-            $cat['link'] = NV_BASE_SITEURL . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $cat['alias'];
+            $cat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $cat['alias'];
             $cat['name'] = "<a href=\"" . $cat['link'] . "\">" . $cat['title'] . "</a>";
             $xtpl->assign( 'SUBCAT', $cat );
             if ( ! empty( $cat['description'] ) )
