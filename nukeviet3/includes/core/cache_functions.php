@@ -44,10 +44,8 @@ function nv_delete_all_cache()
  * 
  * @return void
  */
-function nv_del_moduleCache()
+function nv_del_moduleCache( $module_name )
 {
-    global $module_name;
-
     $pattern = "/^" . NV_LANG_DATA . "\_" . $module_name . "\_(.*)\_[a-z0-9]{32}\.cache$/i";
     nv_delete_cache( $pattern );
 }
@@ -88,7 +86,7 @@ function nv_set_cache( $filename, $content )
  * @param mixed $sql
  * @return
  */
-function nv_db_cache( $sql, $key = '' )
+function nv_db_cache( $sql, $key = '', $modname = '' )
 {
     global $db, $module_name;
 
@@ -96,7 +94,9 @@ function nv_db_cache( $sql, $key = '' )
 
     if ( empty( $sql ) ) return $list;
 
-    $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . md5( $sql ) . "_" . NV_CACHE_PREFIX . ".cache";
+    if ( empty( $modname ) ) $modname = $module_name;
+
+    $cache_file = NV_LANG_DATA . "_" . $modname . "_" . md5( $sql ) . "_" . NV_CACHE_PREFIX . ".cache";
     if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
     {
         $list = unserialize( $cache );
