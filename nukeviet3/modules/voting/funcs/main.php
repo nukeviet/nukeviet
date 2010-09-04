@@ -20,7 +20,8 @@ if ( $checkss != md5( $vid . $client_info['session_id'] . $global_config['siteke
 }
 
 $sql = "SELECT `vid`, `question`,`acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` 
-        FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `act`=1";
+        FROM `" . NV_PREFIXLANG . "_" . $module_data . "` 
+        WHERE `act`=1";
 
 $list = nv_db_cache( $sql, 'vid', 'voting' );
 
