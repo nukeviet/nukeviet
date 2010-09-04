@@ -19,9 +19,11 @@ if ( ! function_exists( 'nv_message_about' ) )
      */
     function nv_message_about()
     {
-        global $global_config, $site_mods;
+        global $global_config, $site_mods, $db;
 
         if ( ! isset( $site_mods['about'] ) ) return "";
+
+        $is_show = false;
 
         $pattern = "/^" . NV_LANG_DATA . "\_about\_([0-9]+)\_" . NV_CACHE_PREFIX . "\.cache$/i";
 
@@ -41,15 +43,38 @@ if ( ! function_exists( 'nv_message_about' ) )
                 $bodytext = strip_tags( $cache['contents'] );
                 $bodytext = nv_clean60( $bodytext, 300 );
 
-                $block_theme = ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.about.tpl" ) ) ? $global_config['site_theme'] : "default";
-
-                $xtpl = new XTemplate( "global.about.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
-                $xtpl->assign( 'LINK', $link );
-                $xtpl->assign( 'TITLE', $title );
-                $xtpl->assign( 'BODYTEXT', $bodytext );
-                $xtpl->parse( 'main' );
-                return $xtpl->text( 'main' );
+                $is_show = true;
             }
+        }
+
+        if ( ! $is_show )
+        {
+            $sql = "SELECT `id`,`title`,`alias`,`bodytext`,`keywords`,`add_time`,`edit_time` FROM `" . NV_PREFIXLANG . "_" . $site_mods['about']['module_data'] . "` ORDER BY rand() DESC LIMIT 1";
+
+            if ( ( $query = $db->sql_query( $sql ) ) !== false )
+            {
+                if ( ( $row = $db->sql_fetchrow( $query ) ) !== false )
+                {
+                    $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=about&amp;" . NV_OP_VARIABLE . "=" . $row['alias'];
+                    $title = $row['title'];
+                    $bodytext = strip_tags( $row['bodytext'] );
+                    $bodytext = nv_clean60( $bodytext, 300 );
+
+                    $is_show = true;
+                }
+            }
+        }
+
+        if ( $is_show )
+        {
+            $block_theme = ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.about.tpl" ) ) ? $global_config['site_theme'] : "default";
+
+            $xtpl = new XTemplate( "global.about.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
+            $xtpl->assign( 'LINK', $link );
+            $xtpl->assign( 'TITLE', $title );
+            $xtpl->assign( 'BODYTEXT', $bodytext );
+            $xtpl->parse( 'main' );
+            return $xtpl->text( 'main' );
         }
 
         return "";
