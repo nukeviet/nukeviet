@@ -97,6 +97,15 @@ foreach ( $global_array_cat as $catid_i => $array_cat_i )
             $array_cat_i['title'], $array_cat_i['link'], $act, 'submenu' => $submenu 
         );
     }
+    
+    //Xac dinh RSS
+    if ( $catid_i )
+    {
+        $rss[] = array( //
+            'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'], //
+            'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_cat_i['alias'] //
+            );
+    }
 }
 unset( $result, $alias_cat_url, $catid_i, $parentid_i, $title_i, $alias_i );
 

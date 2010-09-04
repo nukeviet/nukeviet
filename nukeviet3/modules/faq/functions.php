@@ -11,51 +11,6 @@ if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_FAQ', true );
 
-$alias = "";
-if ( ! empty( $array_op ) )
-{
-    $alias = isset( $array_op[0] ) ? $array_op[0] : "";
-}
-
-$list_cats = nv_list_cats( true );
-
-// Xac dinh ID cua chu de
-$catid = 0;
-foreach ( $list_cats as $c )
-{
-    if ( $c['alias'] == $alias )
-    {
-        $catid = intval( $c['id'] );
-        break;
-    }
-}
-//Het Xac dinh ID cua chu de
-
-//Xac dinh menu
-$nv_vertical_menu = array();
-foreach ( $list_cats as $c )
-{
-    if ( $c['parentid'] == 0 )
-    {
-        $sub_menu = array();
-        $act = ( $c['id'] == $catid ) ? 1 : 0;
-        if ( $act or ( $catid > 0 and $c['id'] == $list_cats[$catid]['parentid'] ) )
-        {
-            foreach ( $c['subcats'] as $catid_i )
-            {
-                $s_c = $list_cats[$catid_i];
-                $s_act = ( $s_c['alias'] == $alias ) ? 1 : 0;
-                $s_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $s_c['alias'];
-                $sub_menu[] = array( $s_c['title'], $s_link, $s_act );
-            }
-        }
-
-        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $c['alias'];
-        $nv_vertical_menu[] = array( $c['title'], $link, $act, 'submenu' => $sub_menu );
-    }
-}
-//Het Xac dinh menu
-
 /**
  * nv_setcats()
  * 
@@ -178,5 +133,64 @@ function update_keywords( $catid, $faq )
 
     return $keywords;
 }
+
+$alias = "";
+if ( ! empty( $array_op ) )
+{
+    $alias = isset( $array_op[0] ) ? $array_op[0] : "";
+}
+
+$list_cats = nv_list_cats( true );
+
+// Xac dinh ID cua chu de
+$catid = 0;
+foreach ( $list_cats as $c )
+{
+    if ( $c['alias'] == $alias )
+    {
+        $catid = intval( $c['id'] );
+        break;
+    }
+}
+//Het Xac dinh ID cua chu de
+
+//Xac dinh menu
+$nv_vertical_menu = array();
+
+//Xac dinh RSS
+$rss[] = array( //
+    'title' => $module_info['custom_title'], //
+    'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss" //
+    );
+
+foreach ( $list_cats as $c )
+{
+    if ( $c['parentid'] == 0 )
+    {
+        $sub_menu = array();
+        $act = ( $c['id'] == $catid ) ? 1 : 0;
+        if ( $act or ( $catid > 0 and $c['id'] == $list_cats[$catid]['parentid'] ) )
+        {
+            foreach ( $c['subcats'] as $catid_i )
+            {
+                $s_c = $list_cats[$catid_i];
+                $s_act = ( $s_c['alias'] == $alias ) ? 1 : 0;
+                $s_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $s_c['alias'];
+                $sub_menu[] = array( $s_c['title'], $s_link, $s_act );
+            }
+        }
+
+        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $c['alias'];
+        $nv_vertical_menu[] = array( $c['title'], $link, $act, 'submenu' => $sub_menu );
+    }
+
+    $rss[] = array( //
+        'title' => $module_info['custom_title'] . ' - ' . $c['title'], //
+        'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $c['alias'] //
+        );
+}
+//Het Xac dinh menu
+//Het Xac dinh RSS
+
 
 ?>

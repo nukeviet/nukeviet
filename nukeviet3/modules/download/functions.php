@@ -175,6 +175,12 @@ if ( $op == "main" )
         //Het Xac dinh ID cua chu de
 
         //Xac dinh menu
+        //Xac dinh RSS
+        $rss[] = array( //
+            'title' => $module_info['custom_title'], //
+            'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss" //
+            );
+        
         foreach ( $list_cats as $c )
         {
             if ( $c['parentid'] == 0 )
@@ -195,8 +201,14 @@ if ( $op == "main" )
                 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $c['alias'];
                 $nv_vertical_menu[] = array( $c['title'], $link, $act, 'submenu' => $sub_menu );
             }
+            
+            $rss[] = array( //
+                'title' => $module_info['custom_title'] . ' - ' . $c['title'], //
+                'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $c['alias'] //
+                );
         }
         //Het Xac dinh menu
+        //Het Xac dinh RSS
     }
 }
 
