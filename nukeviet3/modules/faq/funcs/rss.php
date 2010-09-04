@@ -38,7 +38,7 @@ if ( ! empty( $list_cats ) )
     if ( $catid > 0 )
     {
         $channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_name . ' - ' . $list_cats[$catid]['title'];
-        $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;cat=" . $list_cats[$catid]['alias'];
+        $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$catid]['alias'];
         $channel['description'] = $list_cats[$catid]['description'];
 
         $sql = "SELECT `id`, `catid`, `title`, `question`, `addtime` 
