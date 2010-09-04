@@ -172,6 +172,7 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
         else
         {
             $db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=2 WHERE `title`=" . $db->dbescape( $module_name ) );
+            nv_del_moduleCache( 'modules' );
         }
     }
 }

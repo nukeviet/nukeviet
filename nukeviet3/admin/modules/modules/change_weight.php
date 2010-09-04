@@ -34,6 +34,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 
 $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `weight`=" . $new_weight . " WHERE `title`=" . $db->dbescape( $mod );
 $db->sql_query( $sql );
+nv_del_moduleCache( 'modules' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK_' . $mod;

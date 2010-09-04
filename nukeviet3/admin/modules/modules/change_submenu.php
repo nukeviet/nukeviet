@@ -25,6 +25,7 @@ $row = $db->sql_fetchrow( $result );
 $submenu = $row['submenu'] ? 0 : 1;
 $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `submenu`=" . $submenu . " WHERE `title`=" . $db->dbescape( $mod );
 $db->sql_query( $sql );
+nv_del_moduleCache( 'modules' );
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK_' . $mod;
 include ( NV_ROOTDIR . "/includes/footer.php" );

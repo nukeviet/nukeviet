@@ -72,6 +72,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
     {
         $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape( $custom_title ) . ", `theme`=" . $db->dbescape( $theme ) . ", `keywords`=" . $db->dbescape( $keywords ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `act`='" . $act . "' WHERE `title`=" . $db->dbescape( $mod );
         $db->sql_query( $sql );
+        nv_del_moduleCache( 'modules' );
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
         exit();
     }

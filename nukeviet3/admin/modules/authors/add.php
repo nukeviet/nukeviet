@@ -63,6 +63,7 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
         $mds = array();
         if ( $lev == 3 and ! empty( $modules ) )
         {
+            $is_delCache = false;
             foreach ( array_keys( $site_mods ) as $mod )
             {
                 if ( ! empty( $mod ) and in_array( $mod, $modules ) )
@@ -73,8 +74,14 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
                     $site_mods_admins = implode( ",", $site_mods_admins );
                     $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `admins`=" . $db->dbescape( $site_mods_admins ) . " WHERE `title`=" . $db->dbescape( $mod );
                     $db->sql_query( $sql );
+                    $is_delCache = true;
                     $mds[] = $site_mods[$mod]['custom_title'];
                 }
+            }
+
+            if( $is_delCache )
+            {
+                nv_del_moduleCache( 'modules' );
             }
         }
 

@@ -139,6 +139,11 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
                 $db->sql_query( $sql );
             }
         }
+        
+        if ( ! empty( $add_modules ) or ! empty( $del_modules ) )
+        {
+            nv_del_moduleCache( 'modules' );
+        }
 
         $allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
         $files_level = ( ! empty( $allow_files_type ) ? implode( ",", $allow_files_type ) : "" ) . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;

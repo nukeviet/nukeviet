@@ -16,6 +16,7 @@ $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . "/modules", $global_config[
 $new_modules = array();
 $sql = "SELECT title, module_file, is_sysmod, mod_version FROM `" . $db_config['prefix'] . "_setup_modules` ORDER BY `title` ASC";
 $result = $db->sql_query( $sql );
+$is_delCache = false;
 while ( list( $m, $module_file, $is_sysmod, $mod_version ) = $db->sql_fetchrow( $result ) )
 {
     $new_modules[$m] = array( 
@@ -24,7 +25,12 @@ while ( list( $m, $module_file, $is_sysmod, $mod_version ) = $db->sql_fetchrow( 
     if ( ! in_array( $m, $modules_exit ) )
     {
         $db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=2 WHERE `module_file`=" . $db->dbescape( $m ) );
+        $is_delCache = true;
     }
+}
+if( $is_delCache )
+{
+    nv_del_moduleCache( 'modules' );
 }
 
 // Lay danh sach cac module co trong ngon ngu
@@ -32,6 +38,7 @@ $modules_data = array();
 $iw = 0;
 $sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
+$is_delCache = false;
 while ( $row = $db->sql_fetchrow( $result ) )
 {
     $iw ++;
@@ -39,6 +46,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
     {
         $row['weight'] = $iw;
         $db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `weight`=" . $row['weight'] . " WHERE `title`=" . $db->dbescape( $row['title'] ) . "" );
+        $is_delCache = true;
     }
     $mod = array();
     $m = $row['module_file'];
@@ -105,6 +113,10 @@ while ( $row = $db->sql_fetchrow( $result ) )
 
 }
 $db->sql_freeresult();
+if( $is_delCache )
+{
+    nv_del_moduleCache( 'modules' );
+}
 
 $contents['caption'] = array( 
     $lang_module['caption_actmod'], $lang_module['caption_deactmod'], $lang_module['caption_badmod'], $lang_module['caption_newmod'] 

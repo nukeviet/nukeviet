@@ -24,6 +24,7 @@ $row = $db->sql_fetchrow( $result );
 $in_menu = $row['in_menu'] ? 0 : 1;
 $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `in_menu`=" . $in_menu . " WHERE `title`=" . $db->dbescape( $mod );
 $db->sql_query( $sql );
+nv_del_moduleCache( 'modules' );
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK_' . $mod;
 include ( NV_ROOTDIR . "/includes/footer.php" );

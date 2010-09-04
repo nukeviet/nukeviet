@@ -196,6 +196,7 @@ if ( ! empty( $module_name ) )
     {
         $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `admin_file`='0' WHERE `title`=" . $db->dbescape( $module_name );
         $db->sql_query( $sql );
+        nv_del_moduleCache( 'modules' );
     }
 }
 

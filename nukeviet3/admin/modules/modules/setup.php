@@ -33,6 +33,7 @@ if ( ! empty( $setmodule ) )
             $custom_title = ( isset( $module_version['name'] ) ) ? trim( $module_version['name'] ) : $setmodule;
             $custom_title = preg_replace( '/(\W+)/i', ' ', $custom_title );
             $db->sql_query( "INSERT INTO `" . NV_MODULES_TABLE . "` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`) VALUES (" . $db->dbescape( $setmodule ) . ", " . $db->dbescape( $module_file ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $custom_title ) . ", " . $db->dbescape( NV_CURRENTTIME ) . ", " . $db->dbescape( $admin_file ) . ", '', '', '0', 1, " . $weight . ", 1, 1, '')" );
+            nv_del_moduleCache( 'modules' );
             $return = nv_setup_data_module( NV_LANG_DATA, $setmodule );
             if ( $return == "OK_" . $setmodule )
             {
@@ -51,6 +52,7 @@ $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . "/modules", $global_config[
 $modules_data = array();
 $sql_data = "SELECT * FROM `" . $db_config['prefix'] . "_setup_modules` ORDER BY `addtime` ASC";
 $result = $db->sql_query( $sql_data );
+$is_delCache = false;
 while ( $row = $db->sql_fetchrow( $result ) )
 {
     if ( array_key_exists( $row['module_file'], $modules_exit ) )
@@ -61,7 +63,12 @@ while ( $row = $db->sql_fetchrow( $result ) )
     {
         $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title` = '" . $row['title'] . "'" );
         $db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=2 WHERE `title`='" . $row['title'] . "'" );
+        $is_delCache = true;
     }
+}
+if( $is_delCache )
+{
+    nv_del_moduleCache( 'modules' );
 }
 
 $check_addnews_modules = false;

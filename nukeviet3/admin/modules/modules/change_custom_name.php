@@ -26,6 +26,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	if ( empty( $func_custom_name ) ) $func_custom_name = ucfirst( $row['func_name'] );
 	$sql = "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `func_custom_name`=" . $db->dbescape( $func_custom_name ) . " WHERE `func_id`=" . $id;
 	$db->sql_query( $sql );
+    nv_del_moduleCache( 'modules' );
 	die( "OK|show_funcs|action" );
 }
 else

@@ -57,6 +57,7 @@ if ( $nv_Request->get_int( 'ok', 'post', 0 ) )
     {
         if ( $row['lev'] == 3 )
         {
+            $is_delCache = false;
             foreach ( array_keys( $site_mods ) as $mod )
             {
                 if ( ! empty( $mod ) )
@@ -70,9 +71,14 @@ if ( $nv_Request->get_int( 'ok', 'post', 0 ) )
                             $admins = implode( ",", $admins );
                             $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `admins`=" . $db->dbescape( $admins ) . " WHERE `title`=" . $db->dbescape( $mod );
                             $db->sql_query( $sql );
+                            $is_delCache = true;
                         }
                     }
                 }
+            }
+            if( $is_delCache )
+            {
+                nv_del_moduleCache( 'modules' );
             }
         }
         $query = "DELETE FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id` = " . $admin_id;

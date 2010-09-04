@@ -16,11 +16,15 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  */
 function nv_site_mods ( )
 {
-    global $db, $admin_info, $user_info, $global_config;
+    global $admin_info, $user_info, $global_config;
+
     $sql = "SELECT * FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE m.act = 1 AND f.in_module = m.title ORDER BY m.weight, f.subweight";
-    $result = $db->sql_query( $sql );
+    $list = nv_db_cache( $sql, '', 'modules' );
+
+    if ( empty( $list ) ) return array();
+
     $site_mods = array();
-    while ( $row = $db->sql_fetchrow( $result ) )
+    foreach ( $list as $row )
     {
         $allowed = false;
         $is_modadmin = false;

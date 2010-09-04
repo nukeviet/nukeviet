@@ -35,6 +35,7 @@ if ( $act == 0 and $mod == $global_config['site_home_module'] )
 }
 $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=" . $act . " WHERE `title`=" . $db->dbescape( $mod );
 $db->sql_query( $sql );
+nv_del_moduleCache( 'modules' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK_' . $mod;

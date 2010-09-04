@@ -23,6 +23,7 @@ if ( $func_id > 0 )
         $in_submenu = $row['in_submenu'] ? 0 : 1;
         $sql = "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `in_submenu`=" . $in_submenu . " WHERE `func_id`=" . $func_id;
         $db->sql_query( $sql );
+        nv_del_moduleCache( 'modules' );
         $content = 'OK_' . $func_id;
     }
 }

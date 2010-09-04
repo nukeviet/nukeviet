@@ -38,6 +38,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 
 $sql = "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `subweight`=" . $new_weight . " WHERE `func_id`=" . $fid;
 $db->sql_query( $sql );
+nv_del_moduleCache( 'modules' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK|show_funcs';

@@ -82,6 +82,7 @@ function nv_set_layout_site ( )
     
     $sql = "SELECT title, theme FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
     $result = $db->sql_query( $sql );
+    $is_delCache = false;
     while ( list( $title, $theme ) = $db->sql_fetchrow( $result ) )
     {
         if ( isset( $func_id_mods[$title] ) )
@@ -94,8 +95,14 @@ function nv_set_layout_site ( )
             {
                 $layout = ( isset( $array_layout_func_data[$theme][$func_id] ) ) ? $array_layout_func_data[$theme][$func_id] : $array_layout_func_data[$theme][0];
                 $db->sql_query( "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `layout`=" . $db->dbescape( $layout ) . " WHERE `func_id`=" . $func_id . "" );
+                $is_delCache = true;
             }
         }
+    }
+    
+    if( $is_delCache )
+    {
+        nv_del_moduleCache( 'modules' );
     }
 }
 

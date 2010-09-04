@@ -39,6 +39,7 @@ function nv_fix_module_weight ( )
         $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `weight`=" . $weight . " WHERE `title`=" . $db->dbescape( $row['title'] );
         $db->sql_query( $sql );
     }
+    nv_del_moduleCache( 'modules' );
 }
 
 function nv_fix_subweight ( $mod )
@@ -53,6 +54,7 @@ function nv_fix_subweight ( $mod )
         $subweight ++;
         $sql = "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `subweight`=" . $subweight . " WHERE `func_id`=" . $row['func_id'];
         $db->sql_query( $sql );
+        nv_del_moduleCache( 'modules' );
     }
 }
 
