@@ -133,7 +133,6 @@ if ( $submit )
     
     foreach ( $array_config_global as $config_name => $config_value )
     {
-        $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', " . $db->dbescape_string( $config_name ) . ", " . $db->dbescape_string( $config_value ) . ")" );
         $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET 
         `config_value`=" . $db->dbescape_string( $config_value ) . " 
         WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 

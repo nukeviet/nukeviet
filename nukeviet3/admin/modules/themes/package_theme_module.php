@@ -8,11 +8,6 @@
  */
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
-if ( ! extension_loaded( 'zip' ) )
-{
-    die( "<br><br><br>" . $lang_global['error_zip_extension'] );
-}
-
 $title = $note = $module_file = "";
 $page_title = $lang_module['autoinstall_method_packet'];
 
