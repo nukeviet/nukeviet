@@ -15,7 +15,7 @@ if ( $db->sql_numrows( $result ) > 0 )
     $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET  config_value=" . $db->dbescape_string( $theme ) . " WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'" );
     $global_config['site_theme'] = $theme;
     nv_set_layout_site();
-    nv_delete_all_cache(); //xoa toan bo cache
+    nv_save_file_config_global();
     echo "OK_" . $theme;
 }
 else

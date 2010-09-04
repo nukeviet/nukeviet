@@ -170,6 +170,7 @@ elseif ( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) an
     }
     $db->sql_query( "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang` = '" . $deletekeylang . "'" );
     $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_setup_language` WHERE `lang` = '" . $deletekeylang . "'" );
+    nv_save_file_config_global();
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
     exit();
 

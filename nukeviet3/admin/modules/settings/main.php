@@ -50,7 +50,7 @@ if ( $submit )
         $global_config['site_theme'] = $array_config['site_theme'];
         nv_set_layout_site();
     }
-    nv_delete_all_cache(); //xoa toan bo cache
+    nv_save_file_config_global();
     if ( empty( $errormess ) )
     {
         Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass() );

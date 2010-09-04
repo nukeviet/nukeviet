@@ -68,8 +68,7 @@ if (! empty ( $module_name ) and preg_match ( $global_config ['check_module'], $
 			}
 			nv_deletefile ( NV_UPLOADS_REAL_DIR . '/' . $module_name, true );
 		}
-
-        nv_del_moduleCache( 'modules' );
+		nv_save_file_config_global();		
 	}
 }
 nv_fix_module_weight ();

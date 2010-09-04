@@ -110,7 +110,7 @@ function nv_setup_data_module ( $lang, $module_name )
         //xoa du lieu tai bang _config
         $sql = "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`=" . $db->dbescape( $lang ) . " AND `module`=" . $db->dbescape( $module_name );
         $db->sql_query( $sql );
-        
+        nv_save_file_config_global();
         if ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action.php' ) )
         {
             $sql_recreate_module = array();
@@ -231,6 +231,7 @@ function nv_setup_data_module ( $lang, $module_name )
             }
         }
         $return = 'OK_' . $module_name;
+        nv_save_file_config_global();
     }
     return $return;
 }
