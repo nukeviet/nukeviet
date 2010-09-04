@@ -634,7 +634,7 @@ function nv_create_table_sys ( $lang )
 		('voting', 'voting', 'voting', 'Voting', 1275315261, 1, '', '', '0', 0, 8, 1, 1, ''),
 		('banners', 'banners', 'banners', 'Banners', 1270400000, 1, '', '', '0', 0, 9, 1, 1, ''),
 		('search', 'search', 'search', 'Search', 1273474173, 0, '', '', '0', 0, 10, 1, 1, ''),
-		('rss', 'rss', 'rss', 'Rss', 1279360267, 0, '', '', '0', 0, 11, 1, 1, '')";
+		('rss', 'rss', 'rss', 'Rss', 1279360267, 1, '', '', '0', 0, 11, 1, 1, '')";
     
     $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
         ('" . $lang . "', 'global', 'site_name', 'NUKEVIET CMS 3.0'),

@@ -33,7 +33,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_modules` (`t
 ('voting', 'voting', 'voting', 'Thăm dò ý kiến', 1275315261, 1, '', '', '0', 0, 8, 1, 1, ''),
 ('banners', 'banners', 'banners', 'Quảng cáo', 1270400000, 1, '', '', '0', 0, 9, 1, 1, ''),
 ('search', 'search', 'search', 'Tìm kiếm', 1273474173, 0, '', '', '0', 0, 10, 1, 1, ''),
-('rss', 'rss', 'rss', 'Rss', 1279366705, 0, '', '', '0', 0, 11, 1, 1, '')";
+('rss', 'rss', 'rss', 'Rss', 1279366705, 1, '', '', '0', 0, 11, 1, 1, '')";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_vi_modfuncs`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES

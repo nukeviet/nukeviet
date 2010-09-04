@@ -32,7 +32,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modules` (`t
 ('search', 'search', 'search', 'Recherche', 1273474173, 0, '', '', '0', 0, 10, 0, 1, ''), 
 ('download', 'download', 'download', 'Téléchargement', 1280638246, 1, '', '', '0', 1, 3, 1, 1, ''), 
 ('weblinks', 'weblinks', 'weblinks', 'Liens Webs', 1280638247, 1, '', '', '0', 1, 4, 1, 1, ''), 
-('rss', 'rss', 'rss', 'Rss', 1280638250, 0, '', '', '0', 0, 11, 1, 1, ''), 
+('rss', 'rss', 'rss', 'Rss', 1280638250, 1, '', '', '0', 0, 11, 1, 1, ''), 
 ('voting', 'voting', 'voting', 'Sondage', 1280638417, 1, '', '', '0', 0, 6, 0, 1, '')";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_fr_modfuncs`";
