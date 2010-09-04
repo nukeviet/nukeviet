@@ -113,6 +113,8 @@ function nv_db_cache( $sql, $key = '', $modname = '' )
                 $a++;
             }
 
+            $db->sql_freeresult( $result );
+
             $cache = serialize( $list );
             nv_set_cache( $cache_file, $cache );
         }
