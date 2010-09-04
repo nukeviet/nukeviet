@@ -25,22 +25,17 @@ function nv_get_rss_link ( )
             $contentrss .= $imgmid2 . "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_title . "&" . NV_OP_VARIABLE . "=rss\">" . $iconrss . "</a>";
             $contentrss .= '<strong> ' . $custom_title . "</strong><br>";
             include ( NV_ROOTDIR . '/modules/' . $module_file . '/rssdata.php' );
-            switch ( $module_file )
+            foreach ( $rssarray as $key => $value )
             {
-                case $module_file:
-                    foreach ( $rssarray as $key => $value )
+                if ( $value['parentid'] == 0 )
+                {
+                    $contentrss .= $imgmid . $imgmid2 . "<a href=\"" . $value['link'] . "\">" . $iconrss . '</a> ' . $value['title'] . "<br />";
+                    if ( ! empty( $value['numsubcat'] ) )
                     {
-                        if ( $value['parentid'] == 0 )
-                        {
-                            $contentrss .= $imgmid . $imgmid2 . "<a href=\"" . $value['link'] . "\">" . $iconrss . '</a> ' . $value['title'] . "<br />";
-                            if ( ! empty( $value['numsubcat'] ) )
-                            {
-                                $array_catid = explode( ",", $value['subcatid'] );
-                                $contentrss .= getsubcat( $array_catid, $imgmid . $imgmid );
-                            }
-                        }
+                        $array_catid = explode( ",", $value['subcatid'] );
+                        $contentrss .= getsubcat( $rssarray, $array_catid, $imgmid . $imgmid );
                     }
-                    break;
+                }
             }
         }
     
@@ -48,9 +43,9 @@ function nv_get_rss_link ( )
     return $contentrss;
 }
 
-function getsubcat ( $array_catid, $i )
+function getsubcat ( $rssarray, $array_catid, $i )
 {
-    global $rssarray, $imgmid, $imgmid2, $iconrss;
+    global $imgmid, $imgmid2, $iconrss;
     $content = '';
     foreach ( $array_catid as $sub_catid )
     {

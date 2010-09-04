@@ -171,7 +171,7 @@ function nv_info_die ( $page_title = "", $info_title, $info_content, $adminlink 
  */
 function nv_rss_generate( $channel, $items )
 {
-    global $global_config;
+    global $db, $global_config;
 
     if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout/rss.tpl" ) )
     {
@@ -196,7 +196,7 @@ function nv_rss_generate( $channel, $items )
     if ( file_exists( NV_ROOTDIR . '/images/' . $global_config['site_logo'] ) )
     {
         $image = NV_ROOTDIR . '/images/' . $global_config['site_logo'];
-        $image = nv_ImageInfo( $image, 88, true, NV_UPLOADS_REAL_DIR );
+        $image = nv_ImageInfo( $image, 144, true, NV_UPLOADS_REAL_DIR );
 
         if ( ! empty( $image ) )
         {
@@ -231,7 +231,9 @@ function nv_rss_generate( $channel, $items )
 
     $xtpl->parse( 'main' );
     $content = $xtpl->text( 'main' );
-
+    $content = $db->unfixdb( $content );
+	$content = nv_url_rewrite($content);
+	
     header( "Content-Type: text/xml" );
     header( "Content-Type: application/rss+xml" );
     header( "Content-Encoding: none" );
