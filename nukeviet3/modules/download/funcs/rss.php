@@ -1,25 +1,29 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES. All rights reserved
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * @Project NUKEVIET 3.0 
+ * @Author VINADES (contact@vinades.vn) 
+ * @Copyright (C) 2010 VINADES. All rights reserved 
+ * @Createdate Apr 20, 2010 10:47:41 AM 
  */
 
 if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-$content = "";
-$titlerss = $global_config['site_name'] . ' RSS: ' . $module_name;
-$description = $global_config['site_description'];
-$channel_link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-$atomlink = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
+$channel = array();
+$items = array();
+
+$channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_name;
+$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+$channel['atomlink'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
+$channel['description'] = $global_config['site_description'];
 
 $list_cats = nv_list_cats();
+
 if ( ! empty( $list_cats ) )
 {
     $catalias = isset( $array_op[1] ) ? $array_op[1] : "";
     $catid = 0;
+
     if ( ! empty( $catalias ) )
     {
         foreach ( $list_cats as $c )
@@ -31,78 +35,43 @@ if ( ! empty( $list_cats ) )
             }
         }
     }
+
     if ( $catid > 0 )
     {
-        $sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid . " AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
-        $titlerss = $global_config['site_name'] . ' RSS: ' . $module_name . ' - ' . $list_cats[$catid]['title'];
-        $description = $list_cats[$catid]['description'];
-        $channel_link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;cat=" . $list_cats[$catid]['alias'];
+        $channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_name . ' - ' . $list_cats[$catid]['title'];
+        $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;cat=" . $list_cats[$catid]['alias'];
+        $channel['description'] = $list_cats[$catid]['description'];
+
+        $sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` 
+        FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid . " 
+        AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
     }
     else
     {
         $in = array_keys( $list_cats );
         $in = implode( ",", $in );
-        $sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
+        $sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` 
+        FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") 
+        AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
     }
-    
-    $result = $db->sql_query( $sql );
-    while ( list( $id, $cid, $publtime, $title, $alias, $hometext, $homeimgfile ) = $db->sql_fetchrow( $result ) )
+
+    if ( ( $result = $db->sql_query( $sql ) ) !== false )
     {
-        $rsslink = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias;
-        $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . $homeimgfile . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
-        $content .= '
-			<item>
-				<title>' . $title . '</title>
-				<link>' . $rsslink . '</link>
-				<guid isPermaLink="false">' . $module_name . '_' . $id . '</guid>
-				<description>' . htmlspecialchars( $rimages . $hometext, ENT_QUOTES ) . '</description>
-				<pubDate>' . gmdate( "D, j M Y H:m:s", $publtime ) . ' GMT</pubDate>
-			</item>
-			';
+        while ( list( $id, $cid, $publtime, $title, $alias, $hometext, $homeimgfile ) = $db->sql_fetchrow( $result ) )
+        {
+            $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . NV_MY_DOMAIN . $homeimgfile . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
+            $items[] = array( //
+                'title' => $title, //
+                'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias, //
+                'guid' => $module_name . '_' . $id, //
+                'description' => $rimages . $hometext, //
+                'pubdate' => $publtime //
+                );
+        }
     }
 }
 
-$contentrss = '<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
-<channel>
-<title>' . $titlerss . '</title>
-<link>' . $channel_link . '</link>
-<atom:link href="' . $atomlink . '" rel="self" type="application/rss+xml" />
-<description>' . $description . '</description>
-<language>' . $global_config['site_lang'] . '</language>
-<copyright>' . $global_config['site_name'] . '</copyright>
-<docs>' . NV_MY_DOMAIN . NV_BASE_SITEURL . '?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss</docs>
-<generator>Nukeviet Version ' . $global_config['version'] . '</generator>';
-if ( file_exists( NV_ROOTDIR . '/images/' . $global_config['site_logo'] ) )
-{
-    $size = @getimagesize( NV_ROOTDIR . '/images/' . $global_config['site_logo'] );
-    if ( $size[0] > 144 )
-    {
-        $size[0] = 144;
-        $size[1] = round( ( 144 / $size[0] ) * $size[1] );
-    }
-    if ( $size[1] > 400 )
-    {
-        $size[0] = round( ( 400 / $size[1] ) * $size[0] );
-        $size[1] = 400;
-    }
-    $contentrss .= '<image>
-		<url>' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'images/' . $global_config['site_logo'] . '</url>
-		<title>' . $titlerss . '</title>
-		<link>' . $channel_link . '</link>
-		<width>' . $size[0] . '</width>
-		<height>' . $size[1] . '</height>
-	</image>';
-}
-$contentrss .= $content;
-$contentrss .= '
-</channel>
-</rss>';
-
-header( "Content-Type: text/xml" );
-header( "Content-Type: application/rss+xml" );
-header( "Content-Encoding: none" );
-echo nv_url_rewrite( $contentrss );
+nv_rss_generate( $channel, $items );
 die();
 
 ?>
