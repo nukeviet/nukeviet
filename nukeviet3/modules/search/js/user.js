@@ -1,3 +1,10 @@
+/**
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Createdate 5/9/2010, 1:31
+ */
+
 function nv_send_search( qmin, qmax )
 {
    var nv_timer = nv_settimeout_disable( 'search_submit', 1000 );
@@ -42,9 +49,16 @@ function GoUrl ( qmin, qmax )
    var nv_timer = nv_settimeout_disable( 'search_submit', 1000 );
    var mod = document.getElementById( 'search_query_mod' ).options[document.getElementById( 'search_query_mod' ).selectedIndex].value;
 
-   if( mod == 'all' || mod == '' )
+   // if( mod == 'all' || mod == '' )
+   // {
+   //   alert( "please chose module name!" );
+   //   document.getElementById( 'search_query_mod' ).focus();
+   //   return false;
+   // }
+
+   if( mod != 'news' )
    {
-      alert( "please chose module name!" );
+      alert( "Please choose the module NEWS!" );
       document.getElementById( 'search_query_mod' ).focus();
       return false;
    }
