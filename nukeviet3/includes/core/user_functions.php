@@ -90,7 +90,6 @@ function nv_site_mods ( )
             $site_mods[$m_title]['funcs'][$func_name]['layout'] = $row['layout'];
         }
     }
-    $db->sql_freeresult( $result );
     unset( $row, $allowed, $m_title, $func_name );
     return $site_mods;
 }
