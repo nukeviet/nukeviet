@@ -323,24 +323,27 @@ function viewsubcat_main ( $viewcat, $array_cat )
                 $arrsubcat_s = explode( ",", $array_row_i['subcatid'] );
                 foreach ( $arrsubcat_s as $subcatid_i )
                 {
-                    $xtpl->clear_autoreset();
-                    if ( $exl < 3 )
+                    if ( $global_array_cat[$subcatid_i]['inhome'] == 1 )
                     {
-                        $xtpl->assign( 'SUBCAT', $global_array_cat[$subcatid_i] );
-                        $xtpl->parse( 'main.listcat.subcatloop' );
-                        $xtpl->set_autoreset();
+                        $xtpl->clear_autoreset();
+                        if ( $exl < 3 )
+                        {
+                            $xtpl->assign( 'SUBCAT', $global_array_cat[$subcatid_i] );
+                            $xtpl->parse( 'main.listcat.subcatloop' );
+                            $xtpl->set_autoreset();
+                        }
+                        else
+                        {
+                            $more = array( 
+                                'title' => $lang_module['more'], 'link' => $global_array_cat[$catid]['link'] 
+                            );
+                            $xtpl->assign( 'MORE', $more );
+                            $xtpl->parse( 'main.listcat.subcatmore' );
+                            $xtpl->set_autoreset();
+                            break;
+                        }
+                        $exl ++;
                     }
-                    else
-                    {
-                        $more = array( 
-                            'title' => $lang_module['more'], 'link' => $global_array_cat[$catid]['link'] 
-                        );
-                        $xtpl->assign( 'MORE', $more );
-                        $xtpl->parse( 'main.listcat.subcatmore' );
-                        $xtpl->set_autoreset();
-                        break;
-                    }
-                    $exl ++;
                 }
             }
             $a = 0;
