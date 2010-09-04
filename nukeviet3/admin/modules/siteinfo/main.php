@@ -125,6 +125,8 @@ if ( defined( 'NV_IS_GODADMIN' ) )
         'key' => NV_LOGS_DIR . "/ip_logs", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/ip_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) 
     ), array( 
         'key' => NV_LOGS_DIR . "/ref_logs", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/ref_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) 
+    ), array( 
+        'key' => NV_LOGS_DIR . "/voting_logs", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/voting_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) 
     ) 
     ) 
     );
