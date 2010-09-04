@@ -25,6 +25,8 @@ $new_status = ( int )$new_status;
 $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `act`=" . $new_status . " WHERE `id`=" . $id;
 $db->sql_query( $sql );
 
+nv_del_moduleCache( $module_name );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK';
 include ( NV_ROOTDIR . "/includes/footer.php" );
