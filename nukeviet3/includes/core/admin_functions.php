@@ -100,23 +100,23 @@ function nv_set_layout_site ( )
         }
     }
     
-    if( $is_delCache )
+    if ( $is_delCache )
     {
         nv_del_moduleCache( 'modules' );
     }
 }
 
-function nv_save_file_config_global()
+function nv_save_file_config_global ( )
 {
     global $db;
-
+    
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
     $content_config .= "{\n";
     $content_config .= "    die( 'Stop!!!' );\n";
     $content_config .= "}\n\n";
-
+    
     $sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' ORDER BY `config_name` ASC";
     $result = $db->sql_query( $sql );
     while ( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
@@ -132,6 +132,7 @@ function nv_save_file_config_global()
     }
     $content_config .= "\n";
     $content_config .= "?>";
+    nv_delete_all_cache();
     return file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", $content_config, LOCK_EX );
 }
 

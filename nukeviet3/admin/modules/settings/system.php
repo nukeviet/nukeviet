@@ -151,7 +151,6 @@ if ( $submit )
         }
     }
     nv_save_file_config_global();
-    nv_delete_all_cache(); //xoa toan bo cache
     if ( empty( $errormess ) )
     {
         Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );

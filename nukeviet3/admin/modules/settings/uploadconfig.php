@@ -24,7 +24,6 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`=" . $db->dbescape_string( $mime ) . " WHERE `config_name` = 'forbid_mimes' AND `lang` = 'sys' AND `module`='global' LIMIT 1" );
     $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`=" . $db->dbescape_string( $nv_max_size ) . " WHERE `config_name` = 'nv_max_size' AND `lang` = 'sys' AND `module`='global' LIMIT 1" );
     nv_save_file_config_global();
-    nv_delete_all_cache(); //xoa toan bo cache
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
     die();
 }

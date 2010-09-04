@@ -309,18 +309,17 @@ define( 'NV_COUNTER_TABLE', NV_PREFIXLANG . '_counter' );
 define( 'NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys' );
 define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 
-$sql = $db->constructQuery( "SELECT `module`, `config_name`, `config_value` 
-FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`=[s] ORDER BY `module` ASC", NV_LANG_DATA );
-$result = $db->sql_query( $sql );
-while ( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
+$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `module` ASC";
+$list = nv_db_cache( $sql, '', 'settings' );
+foreach ( $list as $row )
 {
-    if ( $c_module == "global" )
+    if ( $row['module'] == "global" )
     {
-        $global_config[$c_config_name] = $c_config_value;
+        $global_config[$row['config_name']] = $row['config_value'];
     }
     else
     {
-        $module_config[$c_module][$c_config_name] = $c_config_value;
+        $module_config[$row['module']][$row['config_name']] = $row['config_value'];
     }
 }
 

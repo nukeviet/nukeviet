@@ -36,7 +36,6 @@ if ( ! empty( $savesetting ) )
         $db->sql_query( $query );
     }
     $db->sql_freeresult();
-    nv_del_cache_module();
     nv_save_file_config_global();
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
     die();
