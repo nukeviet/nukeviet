@@ -177,6 +177,7 @@ if ( nv_version_compare( $global_config['version'], "3.0.10" ) < 0 )
         {
             $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_" . $module_data_i . "` ADD `keywords` MEDIUMTEXT NOT NULL AFTER `bodytext`" );
         }
+        $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $lang_i . "_modules` SET `admin_file` = '1' WHERE `title` = 'rss'" );
     }
     $db->sql_freeresult();
     //end add keywords module about
@@ -185,8 +186,6 @@ if ( nv_version_compare( $global_config['version'], "3.0.10" ) < 0 )
 $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
 
 nv_save_file_config_global();
-nv_delete_all_cache(); //xoa toan bo cache
-
 
 die( "Update successfully, you should immediately delete this file." );
 
