@@ -79,7 +79,7 @@ if ( empty( $global_config['site_timezone'] ) and defined( 'NV_CLIENT_TIMEZONE_N
 if ( ! empty( $global_config['site_timezone'] ) )
 {
     $ok = false;
-    if ( ! $ok and $sys_info['ini_set_support'] )
+    if ( ! $ok and $sys_info['ini_set_support'] and ! function_exists( 'date_default_timezone_set' ) )
     {
         ini_set( 'date.timezone', $global_config['site_timezone'] );
         if ( strcasecmp( ini_get( 'date.timezone' ), $global_config['site_timezone'] ) == 0 )
