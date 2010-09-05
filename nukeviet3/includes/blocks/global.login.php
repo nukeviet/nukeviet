@@ -10,6 +10,8 @@ if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $openid_servers;
 
+if ( $module_name == 'users' ) return "";
+
 $content = "";
 
 if ( $global_config['allowuserlogin'] and $module_name != "users" )

@@ -19,9 +19,11 @@ if ( ! function_exists( 'nv_message_about' ) )
      */
     function nv_message_about()
     {
-        global $global_config, $site_mods, $db;
+        global $global_config, $site_mods, $db, $module_name;
 
         if ( ! isset( $site_mods['about'] ) ) return "";
+        
+        if ( $module_name == 'about' ) return "";
 
         $is_show = false;
 
