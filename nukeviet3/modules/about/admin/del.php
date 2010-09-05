@@ -22,10 +22,7 @@ $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id` = 
 $db->sql_query( $query );
 if ( $db->sql_affectedrows() > 0 )
 {
-    nv_delete_cache( array( //
-        "/" . nv_preg_quote( NV_LANG_DATA . "_" . $module_name . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache" ) . "/", //
-        "/" . nv_preg_quote( NV_LANG_DATA . "_" . $module_name . "_" . NV_CACHE_PREFIX . ".cache" ) . "/" //
-        ) );
+    nv_del_moduleCache( $module_name );
 }
 else
 {

@@ -81,21 +81,23 @@ function nv_site_theme ( $contents )
                 
                 if ( $modvalues['module_file'] == "news" or $modvalues['module_file'] == "weblinks" )
                 {
-                    $result2 = $db->sql_query( "SELECT title, alias FROM " . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat where `parentid`='0' AND `inhome`='1' ORDER BY `weight` LIMIT 0,10" );
-                    while ( list( $title_i, $alias_i ) = $db->sql_fetchrow( $result2 ) )
+                    $result2 = "SELECT `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat` WHERE `parentid`='0' AND `inhome`='1' ORDER BY `weight` ASC LIMIT 0,10";
+                    $list = nv_db_cache( $result2, '', $modname );
+                    foreach($list as $l)
                     {
                         $sub_nav_item[] = array( 
-                            'title' => $title_i, 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i 
+                            'title' => $l['title'], 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'] 
                         );
                     }
                 }
                 elseif ( $modvalues['module_file'] == "download" )
                 {
-                    $result2 = $db->sql_query( "SELECT title, alias FROM " . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_categories where `parentid`='0' AND `status`='1'ORDER BY `weight` LIMIT 0,10" );
-                    while ( list( $title_i, $alias_i ) = $db->sql_fetchrow( $result2 ) )
+                    $result2 = "SELECT `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_categories` WHERE `parentid`='0' AND `status`='1'ORDER BY `weight` ASC LIMIT 0,10";
+                    $list = nv_db_cache( $result2, '', $modname );
+                    foreach($list as $l)
                     {
                         $sub_nav_item[] = array( 
-                            'title' => $title_i, 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i 
+                            'title' => $l['title'], 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'] 
                         );
                     }
                 }

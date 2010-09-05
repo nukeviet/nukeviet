@@ -58,10 +58,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
         if ( defined( 'IS_EDIT' ) )
         {
-            nv_delete_cache( array( //
-                "/" . nv_preg_quote( NV_LANG_DATA . "_" . $module_name . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache" ) . "/", //
-                "/" . nv_preg_quote( NV_LANG_DATA . "_" . $module_name . "_" . NV_CACHE_PREFIX . ".cache" ) . "/" //
-                ) );
+            nv_del_moduleCache( $module_name );
             
             $query = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET 
             `title`=" . $db->dbescape( $title ) . ", `alias` =  " . $db->dbescape( $alias ) . ", 
