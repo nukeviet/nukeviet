@@ -359,12 +359,10 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
                 $error = $lang_module['errorsave'];
             }
             $db->sql_freeresult();
-            nv_del_cache_module( $rowcontent_old['listcatid'] );
         }
+        nv_del_moduleCache($module_name);
         if ( $error == "" )
         {
-            
-            nv_del_cache_module( $rowcontent['listcatid'] );
             if ( $rowcontent['publtime'] > NV_CURRENTTIME or $rowcontent['exptime'] > 0 )
             {
                 $rowcontent['exptime'] = ( $rowcontent['exptime'] > 0 ) ? $rowcontent['exptime'] : NV_CURRENTTIME + 26000000;

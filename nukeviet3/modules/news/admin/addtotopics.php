@@ -20,6 +20,7 @@ if ($nv_Request->isset_request ( 'topicsid', 'post' ))
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET topicid='$topicsid' WHERE id='$value'";
 		$result = $db->sql_query ( $sql );
 	}
+	nv_del_moduleCache( $module_name );
 	echo $lang_module['topic_update_success'];
 } else
 {

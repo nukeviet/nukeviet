@@ -54,7 +54,7 @@ while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i
             {
                 nv_archive_content_module( $id, $listcatid );
             }
-            nv_del_cache_module( $listcatid );
+            nv_del_moduleCache($module_name);
         }
         list( $minpubltime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(publtime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `publtime` > UNIX_TIMESTAMP()" ) );
         $minpubltime = ( empty( $minpubltime ) ) ? NV_CURRENTTIME + 26000000 : intval( $minpubltime );

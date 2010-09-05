@@ -49,7 +49,7 @@ if ( ! empty( $savecat ) )
             $db->sql_freeresult();
             nv_create_table_rows( $newcatid );
             nv_fix_cat_order();
-            nv_del_cache_module();
+            nv_del_moduleCache($module_name);
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid . "" );
             die();
         }
@@ -74,7 +74,7 @@ if ( ! empty( $savecat ) )
                 $db->sql_query( $sql );
                 nv_fix_cat_order();
             }
-            nv_del_cache_module();
+            nv_del_moduleCache($module_name);
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid . "" );
             die();
         }

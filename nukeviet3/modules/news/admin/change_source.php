@@ -36,6 +36,7 @@ if ( $mod == "weight" and $new_vid > 0 )
 	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `weight`=" . $new_vid . " WHERE `sourceid`=" . intval( $sourceid );
 	$db->sql_query( $sql );
 	$content = "OK_" . $sourceid;
+	nv_del_moduleCache($module_name);
 }
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $content;

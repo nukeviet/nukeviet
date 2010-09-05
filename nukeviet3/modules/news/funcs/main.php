@@ -15,12 +15,13 @@ $contents = "";
 $cache_file = "";
 if ( ! defined( 'NV_IS_MODADMIN' ) )
 {
-    $cache_file = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . NV_CACHE_PREFIX . ".cache";
-    if ( file_exists( $cache_file ) )
+    $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . NV_CACHE_PREFIX . ".cache";
+    if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
     {
-        $contents = file_get_contents( $cache_file );
+        $contents = $cache;
     }
 }
+
 if ( empty( $contents ) )
 {
     $viewcat = $module_config[$module_name]['indexfile'];
@@ -127,9 +128,9 @@ if ( empty( $contents ) )
         //Het cac bai viet cua cac chu de con
         $contents = viewcat_two_column( $array_content, $array_catpage );
     }
-    if ( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" )
+    if ( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )
     {
-        file_put_contents( $cache_file, $contents, LOCK_EX );
+        nv_set_cache( $cache_file, $contents );
     }
 }
 include ( NV_ROOTDIR . "/includes/header.php" );

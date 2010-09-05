@@ -109,29 +109,6 @@ function nv_archive_content_module( $id, $listcatid )
 	$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `archive`='2' WHERE `id`=" . $id . "" );
 }
 
-function nv_del_cache_module( $listcatid = "" )
-{
-    global $module_name;
-
-    $patterns = array();
-    $patterns[] = "/^(" . NV_LANG_DATA . "_" . $module_name . "_main)\_[a-z0-9\_]+.cache$/";
-
-    if ( ! empty( $listcatid ) )
-    {
-        $arr_catid = explode( ",", $listcatid );
-
-        foreach ( $arr_catid as $catid_i )
-        {
-            $patterns[] = "/^(" . NV_LANG_DATA . "_" . $module_name . "_viewcat_" . $catid_i . ")\_[a-z0-9\_]+.cache$/";
-        }
-    }
-    else
-    {
-        $patterns[] = "/^(" . NV_LANG_DATA . "_" . $module_name . "_viewcat)\_[a-z0-9\_]+.cache$/";
-    }
-    nv_delete_cache( $patterns );
-}
-
 function nv_link_edit_page( $id )
 {
 	global $lang_global, $module_name;

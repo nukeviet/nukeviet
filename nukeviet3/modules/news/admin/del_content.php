@@ -29,7 +29,7 @@ elseif ( md5( $id . session_id() ) == $checkss )
 {
     $contents = nv_del_content_module( $id );
 }
-
+nv_del_moduleCache( $module_name );
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
 include ( NV_ROOTDIR . "/includes/footer.php" );

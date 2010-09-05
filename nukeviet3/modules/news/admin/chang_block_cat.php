@@ -49,6 +49,7 @@ elseif ( $mod == "numlinks" and $new_vid >= 0 and $new_vid <= 50 )
     $db->sql_query( $sql );
     $content = "OK_" . $bid;
 }
+nv_del_moduleCache( $module_name );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $content;

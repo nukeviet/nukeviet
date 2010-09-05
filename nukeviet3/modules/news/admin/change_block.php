@@ -15,50 +15,53 @@ $mod = $nv_Request->get_string( 'mod', 'post', '' );
 $new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 $del_list = $nv_Request->get_string( 'del_list', 'post', '' );
 $content = "NO_" . $bid;
-if ( $bid > 0 and $del_list != "" )
+if ( $bid > 0 )
 {
-    $array_id = array_map( "intval", explode( ",", $del_list ) );
-    foreach ( $array_id as $id )
+    if ( $del_list != "" )
     {
-        if ( $id > 0 )
+        $array_id = array_map( "intval", explode( ",", $del_list ) );
+        foreach ( $array_id as $id )
         {
-            $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`=" . $id . "" );
+            if ( $id > 0 )
+            {
+                $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`=" . $id . "" );
+            }
+        }
+        nv_news_fix_block( $bid );
+        $content = "OK_" . $bid;
+    }
+    elseif ( $id > 0 )
+    {
+        list( $bid, $id ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . intval( $bid ) . " AND `id`=" . intval( $id ) . "" ) );
+        if ( $bid > 0 and $id > 0 )
+        {
+            if ( $mod == "weight" and $new_vid > 0 )
+            {
+                $query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`!=" . $id . " ORDER BY `weight` ASC";
+                $result = $db->sql_query( $query );
+                $weight = 0;
+                while ( $row = $db->sql_fetchrow( $result ) )
+                {
+                    $weight ++;
+                    if ( $weight == $new_vid ) $weight ++;
+                    $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $weight . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $row['id'] );
+                    $db->sql_query( $sql );
+                }
+                $db->sql_freeresult();
+                $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $new_vid . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $id );
+                $db->sql_query( $sql );
+                $content = "OK_" . $bid;
+            }
+            elseif ( $mod == "delete" )
+            {
+                $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`=" . intval( $id ) . "" );
+                $content = "OK_" . $bid;
+            }
         }
     }
     nv_news_fix_block( $bid );
-    $content = "OK_" . $bid;
+    nv_del_moduleCache( $module_name );
 }
-elseif ( $bid > 0 and $id > 0 )
-{
-    list( $bid, $id ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . intval( $bid ) . " AND `id`=" . intval( $id ) . "" ) );
-    if ( $bid > 0 and $id > 0 )
-    {
-        if ( $mod == "weight" and $new_vid > 0 )
-        {
-            $query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`!=" . $id . " ORDER BY `weight` ASC";
-            $result = $db->sql_query( $query );
-            $weight = 0;
-            while ( $row = $db->sql_fetchrow( $result ) )
-            {
-                $weight ++;
-                if ( $weight == $new_vid ) $weight ++;
-                $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $weight . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $row['id'] );
-                $db->sql_query( $sql );
-            }
-            $db->sql_freeresult();
-            $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $new_vid . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $id );
-            $db->sql_query( $sql );
-            $content = "OK_" . $bid;
-        }
-        elseif ( $mod == "delete" )
-        {
-            $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`=" . intval( $id ) . "" );
-            nv_news_fix_block( $bid );
-            $content = "OK_" . $bid;
-        }
-    }
-}
-
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $content;
 include ( NV_ROOTDIR . "/includes/footer.php" );

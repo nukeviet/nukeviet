@@ -14,15 +14,15 @@ if ( ! defined( 'NV_IS_MODADMIN' ) and $page < 100 )
 {
     if ( empty( $set_viewcat ) )
     {
-        $cache_file = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
+        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
     }
     else
     {
-        $cache_file = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_page_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
+        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_page_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
     }
-    if ( file_exists( $cache_file ) )
+    if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
     {
-        $contents = file_get_contents( $cache_file );
+        $contents = $cache;
     }
 }
 
@@ -69,7 +69,7 @@ if ( empty( $contents ) )
             );
         }
         
-        $contents = viewcat_page_new($array_catpage, $array_cat_other );
+        $contents = viewcat_page_new( $array_catpage, $array_cat_other );
         $contents .= nv_news_page( $base_url, $all_page, $per_page, $page );
     }
     elseif ( $viewcat == "viewcat_main_left" or $viewcat == "viewcat_main_right" or $viewcat == "viewcat_main_bottom" )
@@ -166,9 +166,9 @@ if ( empty( $contents ) )
         //Het cac bai viet cua cac chu de con
         $contents = call_user_func( $viewcat, $array_catcontent, $array_cat_other );
     }
-    if ( $cache_file != "" and $contents != "" )
+    if ( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )
     {
-        file_put_contents( $cache_file, $contents, LOCK_EX );
+        nv_set_cache( $cache_file, $contents );
     }
 }
 $page_title = $global_array_cat[$catid]['title'];
