@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 31/05/2010, 00:36
  */
+
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( headers_sent() || connection_status() != 0 || connection_aborted() )
@@ -122,6 +123,19 @@ elseif ( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.' ) !== false )
 elseif ( $sys_info['os'] == "LINUX" )
 {
     $sys_info['supports_rewrite'] = "rewrite_mode_apache";
+}
+
+//Xac dinh function nen string
+$sys_info['str_compress'] = array();
+if ( $sys_info['zlib_support'] )
+{
+    if ( function_exists( 'gzcompress' ) and function_exists( 'gzuncompress' ) )
+    {
+        $sys_info['str_compress'] = array( 'gzcompress', 'gzuncompress' );
+    } elseif ( function_exists( 'gzdeflate' ) and function_exists( 'gzinflate' ) )
+    {
+        $sys_info['str_compress'] = array( 'gzdeflate', 'gzinflate' );
+    }
 }
 
 ?>

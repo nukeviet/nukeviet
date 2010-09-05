@@ -58,11 +58,19 @@ function nv_del_moduleCache( $module_name )
  */
 function nv_get_cache( $filename )
 {
+    global $sys_info;
+
     if ( empty( $filename ) or ! preg_match( "/(.*)\.cache/", $filename ) ) return false;
     $filename = basename( $filename );
     if ( ! file_exists( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $filename ) ) return false;
+    $content = file_get_contents( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $filename );
 
-    return file_get_contents( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $filename );
+    if ( isset( $sys_info['str_compress'] ) and ! empty( $sys_info['str_compress'] ) )
+    {
+        $content = call_user_func( $sys_info['str_compress'][1], $content );
+    }
+
+    return $content;
 }
 
 /**
@@ -74,8 +82,15 @@ function nv_get_cache( $filename )
  */
 function nv_set_cache( $filename, $content )
 {
+    global $sys_info;
+
     if ( empty( $filename ) or ! preg_match( "/(.*)\.cache/", $filename ) ) return false;
     $filename = basename( $filename );
+
+    if ( isset( $sys_info['str_compress'] ) and ! empty( $sys_info['str_compress'] ) )
+    {
+        $content = call_user_func( $sys_info['str_compress'][0], $content, 9 );
+    }
 
     return file_put_contents( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $filename, $content, LOCK_EX );
 }
