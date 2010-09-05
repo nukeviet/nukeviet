@@ -37,6 +37,7 @@ if ( ! empty( $savecat ) )
         if ( $db->sql_query_insert_id( $query ) )
         {
             $db->sql_freeresult();
+            nv_del_moduleCache( $module_name );
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
             die();
         }
@@ -73,6 +74,7 @@ if ( ! empty( $savecat ) )
                     nv_fix_cat( $parentid );
                     nv_fix_cat( $parentid_old );
                 }
+                nv_del_moduleCache( $module_name );
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
                 die();
             }

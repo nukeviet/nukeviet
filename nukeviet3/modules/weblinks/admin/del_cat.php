@@ -30,6 +30,7 @@ if ($catid > 0){
 		{
 			$db->sql_freeresult();
 			nv_fix_cat($parentid);
+            nv_del_moduleCache( $module_name );
             $contents = "OK_" . $catid;
         }
     }
