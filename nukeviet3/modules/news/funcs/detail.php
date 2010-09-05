@@ -37,7 +37,7 @@ if ($allowed) {
 				
 				$array_catid = explode ( ",", $news_contents ['listcatid'] );
 				foreach ( $array_catid as $catid_i ) {
-					$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET SET hitstotal=hitstotal+1 WHERE `id`=" . $id;
+					$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET hitstotal=hitstotal+1 WHERE `id`=" . $id;
 					$db->sql_query ( $query );
 				}
 			}
