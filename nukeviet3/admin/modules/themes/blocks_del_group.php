@@ -11,16 +11,15 @@ $list_group = $nv_Request->get_string( 'list', 'post,get' );
 $array_group = explode( ',', $list_group );
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site_theme'] );
 $theme_array = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme'] );
-if ( ! in_array( $selectthemes, $theme_array ) )
+if ( in_array( $selectthemes, $theme_array ) )
 {
-    $selectthemes = $global_config['site_theme'];
-}
-foreach ( $array_group as $groupbl )
-{
-    $group = intval( $groupbl );
-    if ( $group > 0 )
+    foreach ( $array_group as $groupbl )
     {
-        $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE groupbl='" . $group . "' AND theme='" . $selectthemes . "'" );
+        $group = intval( $groupbl );
+        if ( $group > 0 )
+        {
+            $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE groupbl='" . $group . "' AND theme='" . $selectthemes . "'" );
+        }
     }
 }
 echo $lang_module['block_delete_success'];

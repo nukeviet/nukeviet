@@ -114,7 +114,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
             if ( $bid > 0 )
             {
                 list( $groupbl, $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT groupbl, weight FROM `" . NV_BLOCKS_TABLE . "` WHERE bid=" . $bid . "" ) );
-                $result_func = $db->sql_query( "SELECT func_id FROM `" . NV_BLOCKS_TABLE . "` WHERE groupbl=" . intval( $groupbl ) . "" );
+                $result_func = $db->sql_query( "SELECT func_id FROM `" . NV_BLOCKS_TABLE . "` WHERE groupbl=" . intval( $groupbl ) . " AND theme='" . $selectthemes . "'" );
                 while ( list( $func_inlist ) = $db->sql_fetchrow( $result_func ) )
                 {
                     $func_list[] = $func_inlist;

@@ -242,7 +242,7 @@ $(function(){
 		        data:"pos="+pos+"&bid="+id+"&func_id="+func_id+"&group="+group,
 		        success: function(data){
 		        	alert(data);  
-		            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_list&func=' . $functionid . '";
+		            //window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_list&func=' . $functionid . '";
 		        }
 	        });
         } 
