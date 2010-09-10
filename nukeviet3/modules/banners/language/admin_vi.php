@@ -34,6 +34,7 @@ $lang_module['yim'] = "YIM";
 $lang_module['phone'] = "Điện thoại";
 $lang_module['fax'] = "Fax";
 $lang_module['mobile'] = "Mobile";
+$lang_module['uploadtype'] = "Kiểu file được upload";
 $lang_module['add_client_submit'] = "Tạo mới";
 $lang_module['edit_client_submit'] = "Thực hiện";
 $lang_module['login_is_already_in_use'] = "Tài khoản &ldquo;<strong>%s</strong>&rdquo; đã được sử dụng";

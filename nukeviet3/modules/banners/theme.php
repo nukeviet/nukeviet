@@ -11,8 +11,9 @@ if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 function nv_banner_theme_main( $contents )
 {
-	global $global_config, $module_name, $module_info;
+	global $global_config, $module_name, $module_info, $lang_module;
 	$xtpl = new XTemplate( "home.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name );
+	$xtpl->assign('LANG',$lang_module);
 	if ( ! empty( $contents['rows'] ) )
 	{
 		$xtpl->assign( 'MAIN_PAGE_INFO', $contents['info'] );
@@ -21,14 +22,15 @@ function nv_banner_theme_main( $contents )
 		foreach ( $contents['rows'] as $row )
 		{
 			$xtpl->clear_autoreset();
-			$xtpl->assign( 'PLAN_LINK', $row['title'][0] );
-			$xtpl->assign( 'PLAN_TITLE', $row['title'][1] );
+			$xtpl->assign( 'PLAN_TITLE', $row['title'][0] );
 			$xtpl->assign( 'PLAN_LANG_TITLE', $row['blang'][0] );
 			$xtpl->assign( 'PLAN_LANG_NAME', $row['blang'][1] );
 			$xtpl->assign( 'PLAN_SIZE_TITLE', $row['size'][0] );
 			$xtpl->assign( 'PLAN_SIZE_NAME', $row['size'][1] );
 			$xtpl->assign( 'PLAN_FORM_TITLE', $row['form'][0] );
 			$xtpl->assign( 'PLAN_FORM_NAME', $row['form'][1] );
+			$xtpl->assign( 'PLAN_DESCRIPTION_TITLE', $row['description'][0] );
+			$xtpl->assign( 'PLAN_DESCRIPTION_NAME', $row['description'][1] );			
 			$xtpl->assign( 'PLAN_DETAIL', $contents['detail'] );
 			$xtpl->set_autoreset();
 			$xtpl->parse( 'main.if_banner_plan.banner_plan' );
@@ -37,6 +39,12 @@ function nv_banner_theme_main( $contents )
 	}
 	$xtpl->assign( 'CONTAINERID', $contents['containerid'] );
 	$xtpl->assign( 'AJ', $contents['aj'] );
+	if (defined( 'NV_IS_BANNER_CLIENT' )){
+		$xtpl->assign('clientinfo_link',$contents['clientinfo_link']);
+		$xtpl->assign('clientinfo_addads',$contents['clientinfo_addads']);
+		$xtpl->assign('clientinfo_stats',$contents['clientinfo_stats']);
+		$xtpl->parse( 'main.management' );
+	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -79,10 +87,17 @@ function clientinfo_theme( $contents )
 	return $xtpl->text( 'clientinfo' );
 }
 
-function clinfo_theme( $contents )
+function clinfo_theme( $contents,$manament )
 {
-	global $global_config, $module_name, $module_info;
+	global $global_config, $module_name, $module_info, $lang_module;
 	$xtpl = new XTemplate( "clinfo.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name );
+	if (defined ( 'NV_IS_BANNER_CLIENT' )){
+		$xtpl->assign( 'LANG', $lang_module );
+		$xtpl->assign('clientinfo_link',$manament['clientinfo_link']);
+		$xtpl->assign('clientinfo_addads',$manament['clientinfo_addads']);
+		$xtpl->assign('clientinfo_stats',$manament['clientinfo_stats']);
+		$xtpl->parse( 'clinfo.management' );
+	}
 	$a = 0;
 	foreach ( $contents['rows'] as $values )
 	{

@@ -7,6 +7,8 @@
 
 function nv_login_info( containerid )
 {
+/*	alert(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=banners&' + nv_fc_variable + '=logininfo' + '&num=' + nv_randomPassword( 8 ));
+	return false;*/
    nv_ajax( "get", nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=banners&' + nv_fc_variable + '=logininfo' + '&num=' + nv_randomPassword( 8 ), '', containerid );
    return false;
 }
@@ -18,7 +20,6 @@ function nv_cl_login_submit( nick_max, nick_min, pass_max, pass_min, gfx_count, 
    var request_query = nv_fc_variable + '=logininfo&save=1';
 
    var login = document.getElementById( login_id );
-
    var error;
 
    if( login.value.length > nick_max || login.value.length < nick_min || ! nv_namecheck.test( login.value ) )
@@ -29,7 +30,6 @@ function nv_cl_login_submit( nick_max, nick_min, pass_max, pass_min, gfx_count, 
       login.focus();
       return false;
    }
-
    request_query += '&login=' + login.value;
 
    var pass = document.getElementById( pass_id );
@@ -47,7 +47,7 @@ function nv_cl_login_submit( nick_max, nick_min, pass_max, pass_min, gfx_count, 
    if( gfx_chk )
    {
       var sec = document.getElementById( sec_id );
-      if( sec.value.length != gfx_count || ! nv_numcheck.test( sec.value ) )
+      if( sec.value.length != gfx_count)
       {
          error = nv_error_seccode.replace( /\[num\]/g, gfx_count );
          alert( error );

@@ -9,8 +9,10 @@ if (! defined ( 'NV_IS_FILE_ADMIN' ))
 	die ( 'Stop!!!' );
 $id = $nv_Request->get_int ( 'id', 'post,get' );
 $sql = "DELETE FROM " . NV_BANNERS_ROWS_GLOBALTABLE . " WHERE id='$id'";
+$result1 = $db->sql_query ( $sql );
+$sql = "DELETE FROM " . NV_BANNERS_CLICK_GLOBALTABLE . " WHERE bid='$id'";
 $result = $db->sql_query ( $sql );
-if ($result)
+if ($result1 && $result)
 	echo $lang_module['delfile_success'];
 else
 	echo $lang_module['delfile_error'];

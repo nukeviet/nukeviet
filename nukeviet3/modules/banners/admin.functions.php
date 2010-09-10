@@ -206,6 +206,12 @@ function nv_add_client_theme ( $contents )
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
+    $return .= "<tr>\n";
+    $return .= "<td>" . $contents['uploadtype'][0] . ":</td>\n";
+    $return .= "<td></td>\n";
+    $return .= "<td><label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"images\"/>images</label>&nbsp;<label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"flash\"/>flash</label></td>\n";
+    $return .= "</tr>\n";
+    
     $return .= "<tbody>\n";
     $return .= "<tr>\n";
     $return .= "<td></td>\n";
@@ -307,6 +313,13 @@ function nv_edit_client_theme ( $contents )
     $return .= "<td><input name=\"" . $contents['mobile'][1] . "\" id=\"" . $contents['mobile'][1] . "\" type=\"text\" value=\"" . $contents['mobile'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['mobile'][3] . "\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
+    
+    $return .= "<tr>\n";
+    $return .= "<td>" . $contents['uploadtype'][0] . ":</td>\n";
+    $return .= "<td></td>\n";
+	$return .= "<td><label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"images\" ".$contents['uploadtype'][2]."/>images</label>&nbsp;<label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"flash\" ".$contents['uploadtype'][3]."/>flash</label></td>\n";
+    $return .= "</tr>\n";
+    
     $return .= "</table>\n";
     
     $return .= "<br />\n";
@@ -1055,7 +1068,7 @@ function nv_b_list_theme ( $contents )
 								data:'',
 								success: function(data){				
 									alert(data);
-									window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name."&amp;".NV_OP_VARIABLE."=banner_list';
+									window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name."&".NV_OP_VARIABLE."=banners_list';
 								}
 							});
 						}

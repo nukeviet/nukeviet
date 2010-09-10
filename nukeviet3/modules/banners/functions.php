@@ -9,6 +9,16 @@
 
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
+$lang_array = array (
+
+'vi' => $lang_module ['addads_block_lang_vi'], 
+'en' => $lang_module ['addads_block_lang_en'],
+'ru' => $lang_module['addads_block_lang_ru'],
+'zz' => $lang_module['addads_block_lang_zz']
+
+);
+
+
 function nv_banner_client_checkdata ( $cookie )
 {
     global $db;
@@ -51,6 +61,7 @@ function nv_banner_client_checkdata ( $cookie )
                 $banner_client_info['phone'] = $row['phone'];
                 $banner_client_info['fax'] = $row['fax'];
                 $banner_client_info['mobile'] = $row['mobile'];
+                $banner_client_info['uploadtype'] = $row['uploadtype'];
                 $banner_client_info['current_login'] = intval( $row['last_login'] );
                 $banner_client_info['last_login'] = intval( $client['last_login'] );
                 $banner_client_info['current_agent'] = $row['last_agent'];

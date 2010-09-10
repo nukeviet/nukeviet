@@ -32,6 +32,7 @@ if ( ! empty( $row['yim'] ) ) $contents['rows'][] = array( $lang_module['yim'], 
 if ( ! empty( $row['phone'] ) ) $contents['rows'][] = array( $lang_module['phone'], $row['phone'] );
 if ( ! empty( $row['fax'] ) ) $contents['rows'][] = array( $lang_module['fax'], $row['fax'] );
 if ( ! empty( $row['mobile'] ) ) $contents['rows'][] = array( $lang_module['mobile'], $row['mobile'] );
+if ( ! empty( $row['uploadtype'] ) ) $contents['rows'][] = array( $lang_module['uploadtype'], $row['uploadtype'] );
 $contents['rows'][] = array( $lang_module['is_act'], $row['act'] ? $lang_global['yes'] : $lang_global['no'] );
 
 $contents['edit'] = array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_client&amp;id=" . $id, $lang_global['edit'] );

@@ -20,7 +20,7 @@ $contents['rows'] = array();
 while ( $row = $db->sql_fetchrow( $result ) )
 {
     $contents['rows'][$row['id']]['title'] = array( 
-        NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=viewpl&amp;id=" . $row['id'], $row['title'] 
+        $row['title'] 
     );
     $contents['rows'][$row['id']]['blang'] = array( 
         $lang_module['blang'], ( ( ! empty( $row['blang'] ) ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'] ) 
@@ -31,10 +31,16 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $contents['rows'][$row['id']]['form'] = array( 
         $lang_module['form'], $row['form'] 
     );
+    $contents['rows'][$row['id']]['description'] = array( 
+        $lang_module['description'], $row['description'] 
+    );
 }
 
 $contents['containerid'] = "action";
 $contents['aj'] = "nv_login_info('action');";
+$contents['clientinfo_link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=clientinfo";
+$contents['clientinfo_addads'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=addads";
+$contents['clientinfo_stats'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=stats";
 
 $page_title = $module_info['custom_title'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['funcs'][$op]['func_custom_name'];
 $contents = nv_banner_theme_main( $contents );

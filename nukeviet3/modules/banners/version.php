@@ -11,7 +11,7 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' )) die( 'Stop!!!' );
 
 $module_version = array( 
     "name" => "Banners", //
-	"modfuncs" => "main", //
+	"modfuncs" => "main, clientinfo, addads, stats", //
 	"is_sysmod" => 0, //
 	"virtual" => 0, //
 	"version" => "3.0.01", //

@@ -49,9 +49,15 @@ if ( ! empty( $banner_client_info['last_login'] ) )
 {
 	$contents['rows']['last_login'] = array( $lang_global['last_login'], nv_date( "d/m/Y H:i", $banner_client_info['last_login'] ) . " (" . $lang_module['ip'] . ": " . $banner_client_info['last_ip'] . ")" );
 }
-$contents['rows']['current_login'] = array( $lang_global['current_login'], nv_date( "d/m/Y H:i", $banner_client_info['current_login'] ) . " (" . $lang_module['ip'] . ": " . $banner_client_info['current_ip'] . ")" );
+$manament = array();
+$manament['current_login'] = array( $lang_global['current_login'], nv_date( "d/m/Y H:i", $banner_client_info['current_login'] ) . " (" . $lang_module['ip'] . ": " . $banner_client_info['current_ip'] . ")" );
+$manament['clientinfo_link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=clientinfo";
+$manament['clientinfo_addads'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=addads";
+$manament['clientinfo_stats'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=stats";
 
-$contents = clinfo_theme( $contents );
+
+
+$contents = clinfo_theme( $contents,$manament );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
