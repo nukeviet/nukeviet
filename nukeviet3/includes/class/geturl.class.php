@@ -27,20 +27,37 @@ class UrlGetContents
 
     private $url_info = false;
 
+    private $login = '';
+
+    private $password = '';
+
+    private $ref = '';
+
+    private $user_agent = '';
+
     /**
      * UrlGetContents::__construct()
      * 
      * @return
      */
-    function __construct()
+    function __construct( $global_config )
     {
-        if ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false )
+        $this->user_agent = 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by Vinades.,Jsc. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] );
+
+        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        $safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
+
+        if ( ! $safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $disable_functions ) )
         {
-            $disable_functions = array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) );
+            set_time_limit( 0 );
         }
-        else
+
+        if ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) )
         {
-            $disable_functions = array();
+            ini_set( 'allow_url_fopen', 1 );
+            ini_set( 'default_socket_timeout', 120 );
+            ini_set( 'memory_limit', '64M' );
+            ini_set( 'user_agent', $this->user_agent );
         }
 
         if ( extension_loaded( 'curl' ) )
@@ -86,6 +103,11 @@ class UrlGetContents
             }
         }
 
+        if ( function_exists( "file" ) and ! in_array( 'file', $disable_functions ) )
+        {
+            $this->allow_methods[] = 'file';
+        }
+
         if ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' )
         {
             $this->safe_mode = true;
@@ -114,36 +136,35 @@ class UrlGetContents
      * @param string $ref
      * @return
      */
-    private function curl_Get( $url, $login = '', $password = '', $ref = '' )
+    private function curl_Get()
     {
         $curlHandle = curl_init();
         curl_setopt( $curlHandle, CURLOPT_ENCODING, '' );
-        curl_setopt( $curlHandle, CURLOPT_URL, $url );
+        curl_setopt( $curlHandle, CURLOPT_URL, $this->url_info['uri'] );
         curl_setopt( $curlHandle, CURLOPT_HEADER, 0 );
         curl_setopt( $curlHandle, CURLOPT_RETURNTRANSFER, 1 );
 
-        if ( ! empty( $login ) )
+        if ( ! empty( $this->login ) )
         {
             curl_setopt( $curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
-            curl_setopt( CURLOPT_USERPWD, '[' . $login . ']:[' . $password . ']' );
+            curl_setopt( CURLOPT_USERPWD, '[' . $this->login . ']:[' . $this->password . ']' );
         }
 
-        curl_setopt( $curlHandle, CURLOPT_USERAGENT, ini_get( "user_agent" ) );
+        curl_setopt( $curlHandle, CURLOPT_USERAGENT, $this->user_agent );
 
-        if ( ! empty( $ref ) )
+        if ( ! empty( $this->ref ) )
         {
-            curl_setopt( $curlHandle, CURLOPT_REFERER, urlencode( $ref ) );
+            curl_setopt( $curlHandle, CURLOPT_REFERER, urlencode( $this->ref ) );
         }
         else
         {
-            curl_setopt( $curlHandle, CURLOPT_REFERER, $url );
+            curl_setopt( $curlHandle, CURLOPT_REFERER, $this->url_info['uri'] );
         }
 
         if ( ! $this->safe_mode and $this->open_basedir )
         {
             curl_setopt( $curlHandle, CURLOPT_FOLLOWLOCATION, 1 );
             curl_setopt( $curlHandle, CURLOPT_MAXREDIRS, 10 );
-            die( "Den day" );
         }
 
         curl_setopt( $curlHandle, CURLOPT_TIMEOUT, 30 );
@@ -183,7 +204,7 @@ class UrlGetContents
      * @param string $ref
      * @return
      */
-    private function fsockopen_Get( $url, $login = '', $password = '', $ref = '' )
+    private function fsockopen_Get()
     {
         if ( strtolower( $this->url_info['scheme'] ) == 'https' )
         {
@@ -208,7 +229,7 @@ class UrlGetContents
         $request .= "\r\n";
 
         $request .= "Connection: Close\r\n";
-        $request .= "User-Agent: " . ini_get( "user_agent" ) . "\r\n\r\n";
+        $request .= "User-Agent: " . $this->user_agent . "\r\n\r\n";
 
         if ( function_exists( 'gzinflate' ) )
         {
@@ -217,19 +238,19 @@ class UrlGetContents
 
         $request .= "Accept: */*\r\n";
 
-        if ( ! empty( $ref ) )
+        if ( ! empty( $this->ref ) )
         {
-            $request .= "Referer: " . urlencode( $ref ) . "\r\n";
+            $request .= "Referer: " . urlencode( $this->ref ) . "\r\n";
         }
         else
         {
-            $request .= "Referer: " . $url . "\r\n";
+            $request .= "Referer: " . $this->url_info['uri'] . "\r\n";
         }
 
-        if ( ! empty( $login ) )
+        if ( ! empty( $this->login ) )
         {
             $request .= "Authorization: Basic ";
-            $request .= base64_encode( $login . ':' . $password );
+            $request .= base64_encode( $this->login . ':' . $this->password );
             $request .= "\r\n";
         }
 
@@ -283,9 +304,9 @@ class UrlGetContents
      * @param mixed $url
      * @return
      */
-    private function fopen_Get( $url )
+    private function fopen_Get()
     {
-        if ( ( $fd = @fopen( $url, "rb" ) ) === false )
+        if ( ( $fd = @fopen( $this->url_info['uri'], "rb" ) ) === false )
         {
             return false;
         }
@@ -306,9 +327,23 @@ class UrlGetContents
      * @param mixed $url
      * @return
      */
-    private function file_get_contents_Get( $url )
+    private function file_get_contents_Get()
     {
-        return file_get_contents( $url );
+        return file_get_contents( $this->url_info['uri'] );
+    }
+
+    /**
+     * UrlGetContents::file_Get()
+     * 
+     * @param mixed $url
+     * @return void
+     */
+    private function file_Get()
+    {
+        $result = file( $this->url_info['uri'] );
+
+        if ( $result ) return implode( $result );
+        return '';
     }
 
     /**
@@ -357,7 +392,7 @@ class UrlGetContents
         }
 
         //[query] => ?foo=bar&foo2=bar2
-        $url_info['query'] = isset( $url_info['query'] ) ? '?' . $url_info['query'] : '';
+        $url_info['query'] = ( isset( $url_info['query'] ) and ! empty( $url_info['query'] ) ) ? '?' . $url_info['query'] : '';
 
         //[fragment] => bookmark
         $url_info['fragment'] = isset( $url_info['fragment'] ) ? $url_info['fragment'] : '';
@@ -378,11 +413,11 @@ class UrlGetContents
         {
             $url_info['uri'] .= ':' . $url_info['port'];
         }
-        $url_info['uri'] .= $url_info['path'] . '?' . $url_info['query'];
-        if ( $url_info['fragment'] != '' )
+        $url_info['uri'] .= $url_info['path'] . $url_info['query'];
+        /*if ( $url_info['fragment'] != '' )
         {
-            $url_info['uri'] .= '#' . $url_info['fragment'];
-        }
+        $url_info['uri'] .= '#' . $url_info['fragment'];
+        }*/
 
         return $url_info;
     }
@@ -405,55 +440,25 @@ class UrlGetContents
             return false;
         }
 
-        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
-        $safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
+        $this->login = ( string )$login;
+        $this->password = ( string )$password;
+        $this->ref = ( string )$ref;
 
-        if ( ! $safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $disable_functions ) )
+        if ( ! empty( $this->allow_methods ) )
         {
-            set_time_limit( 0 );
-        }
-        if ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) )
-        {
-            ini_set( 'allow_url_fopen', 1 );
-            ini_set( 'default_socket_timeout', 120 );
-            ini_set( 'memory_limit', '64M' );
-        }
-        $result = '';
+            foreach ( $this->allow_methods as $method )
+            {
+                $result = call_user_func( array( &$this, $method . '_Get' ) );
 
-        foreach ( $this->allow_methods as $method )
-        {
-            if ( $method == 'curl' )
-            {
-                $result = $this->curl_Get( $url, $login, $password, $ref );
                 if ( ! empty( $result ) )
                 {
-                    break;
-                }
-            } elseif ( $method == 'fsockopen' )
-            {
-                $result = $this->fsockopen_Get( $url, $login, $password, $ref );
-                if ( ! empty( $result ) )
-                {
-                    break;
-                }
-            } elseif ( $method == 'fopen' )
-            {
-                $result = $this->fopen_Get( $url );
-                if ( ! empty( $result ) )
-                {
-                    break;
-                }
-            } elseif ( $method == 'file_get_contents' )
-            {
-                $result = $this->file_get_contents_Get( $url );
-                if ( ! empty( $result ) )
-                {
+                    return $result;
                     break;
                 }
             }
         }
 
-        return $result;
+        return '';
     }
 }
 
