@@ -26,7 +26,7 @@ function get_version ( )
     else
     {
         include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
-        $getContent = new UrlGetContents();
+        $getContent = new UrlGetContents( $global_config );
         $content = $getContent->get( 'http://update.nukeviet.vn/nukeviet.version.xml' );
         
         if ( $content )

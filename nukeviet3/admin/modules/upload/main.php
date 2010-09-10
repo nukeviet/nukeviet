@@ -44,7 +44,7 @@ if ( $uploadflag )
             if ( in_array( $file_type, $allowed_extensions ) )
             {
                 include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
-                $getContent = new UrlGetContents();
+                $getContent = new UrlGetContents( $global_config );
                 $content = '';
                 $content = $getContent->get( $imgurl );
                 $handle2 = @fopen( NV_ROOTDIR . '/' . $imgfolder . '/' . basename( $imgname ), 'wb' );
