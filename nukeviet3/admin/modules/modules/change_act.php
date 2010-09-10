@@ -23,7 +23,7 @@ if ( $numrows != 1 )
 
 $row = $db->sql_fetchrow( $result );
 $act = intval( $row['act'] );
-if ( $act == 2 and ( ! file_exists( NV_ROOTDIR . "/modules/" . $mod . "/index.php" ) or filesize( NV_ROOTDIR . "/modules/" . $mod . "/index.php" ) == 0 ) )
+if ( $act == 2 and ( ! file_exists( NV_ROOTDIR . "/modules/" . $mod . "/funcs/main.php" ) or filesize( NV_ROOTDIR . "/modules/" . $mod . "/funcs/main.php" ) == 0 ) )
 {
 	die( 'NO_' . $mod );
 }
