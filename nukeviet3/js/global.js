@@ -657,53 +657,56 @@ function nv_is_dst()
 
 // -----------------------
 
-function nv_DigitalClock(div_id)
+function nv_DigitalClock( div_id )
 {
-   if(nv_my_dst)
+   if( document.getElementById( div_id ) )
    {
-      var test_dst = nv_is_dst();
-      if(test_dst) nv_my_ofs += 1;
+      if( nv_my_dst )
+      {
+         var test_dst = nv_is_dst();
+         if( test_dst ) nv_my_ofs += 1;
+      }
+
+      var newDate = new Date();
+      var ofs = newDate.getTimezoneOffset() / 60;
+      newDate.setHours( newDate.getHours() + ofs + nv_my_ofs );
+
+      var intMinutes = newDate.getMinutes();
+      var intSeconds = newDate.getSeconds();
+      if( intMinutes != nv_old_Minute )
+      {
+         nv_old_Minute = intMinutes;
+         var intDay = newDate.getDay();
+         var intMonth = newDate.getMonth();
+         var intWeekday = newDate.getDate();
+         var intYear = newDate.getYear();
+         var intHours = newDate.getHours();
+
+         if ( intYear < 200 ) intYear = intYear + 1900;
+         var strDayName = new String( nv_aryDayName[intDay] );
+         var strDayNameShort = new String( nv_aryDayNS[intDay] );
+         var strMonthName = new String( nv_aryMonth[intMonth] );
+         var strMonthNameShort = new String( nv_aryMS[intMonth] );
+         var strMonthNumber = intMonth + 1;
+         var strYear = new String( intYear );
+         var strYearShort = strYear.substring( 2, 4 );
+
+         if ( intHours <= 9 ) intHours = '0' + intHours;
+         if ( intMinutes  <= 9 ) intMinutes  = '0' + intMinutes;
+         // if ( intSeconds <= 9 ) intSeconds = '0' + intSeconds;
+         if ( intWeekday <= 9 ) intWeekday = '0' + intWeekday;
+         if ( strMonthNumber <= 9 ) strMonthNumber = '0' + strMonthNumber;
+
+         var strClock = '';
+         // strClock = intHours + ':' + intMinutes + ':' + intSeconds + ' ' + GMT
+         // + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' + strMonthNumber
+         // + '/' + intYear;
+         strClock = intHours + ':' + intMinutes + ' ' + nv_my_abbr + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' + strMonthNumber + '/' + intYear;
+         var spnClock = document.getElementById( div_id );
+         spnClock.innerHTML = strClock;
+      }
+      setTimeout( 'nv_DigitalClock("'+div_id+'")', ( 60 - intSeconds ) * 1000 );
    }
-
-   var newDate = new Date();
-   var ofs = newDate.getTimezoneOffset() / 60;
-   newDate.setHours(newDate.getHours() + ofs + nv_my_ofs);
-
-   var intMinutes = newDate.getMinutes();
-   var intSeconds = newDate.getSeconds();
-   if(intMinutes != nv_old_Minute)
-   {
-      nv_old_Minute = intMinutes;
-      var intDay = newDate.getDay();
-      var intMonth = newDate.getMonth();
-      var intWeekday = newDate.getDate();
-      var intYear = newDate.getYear();
-      var intHours = newDate.getHours();
-
-      if (intYear < 200) intYear = intYear + 1900;
-      var strDayName = new String(nv_aryDayName[intDay]);
-      var strDayNameShort = new String(nv_aryDayNS[intDay]);
-      var strMonthName = new String(nv_aryMonth[intMonth]);
-      var strMonthNameShort = new String(nv_aryMS[intMonth]);
-      var strMonthNumber = intMonth + 1;
-      var strYear = new String(intYear);
-      var strYearShort = strYear.substring(2, 4);
-
-      if (intHours <= 9) intHours = '0' + intHours;
-      if (intMinutes  <= 9) intMinutes  = '0' + intMinutes;
-      // if (intSeconds <= 9) intSeconds = '0' + intSeconds;
-      if (intWeekday <= 9) intWeekday = '0' + intWeekday;
-      if (strMonthNumber <= 9) strMonthNumber = '0' + strMonthNumber;
-
-      var strClock = '';
-      // strClock = intHours + ':' + intMinutes + ':' + intSeconds + ' ' + GMT
-		// + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' + strMonthNumber
-		// + '/' + intYear;
-      strClock = intHours + ':' + intMinutes + ' ' + nv_my_abbr + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' + strMonthNumber + '/' + intYear;
-      var spnClock = document.getElementById(div_id);
-      spnClock.innerHTML = strClock;
-   }
-   setTimeout('nv_DigitalClock("'+div_id+'")', (60 - intSeconds) * 1000);
 }
 
 // -----------------------
