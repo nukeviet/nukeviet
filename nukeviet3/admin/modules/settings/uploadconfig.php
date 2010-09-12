@@ -12,6 +12,13 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $type = $nv_Request->get_array( 'type', 'post' );
     $type = implode( ',', $type );
     $ext = $nv_Request->get_array( 'ext', 'post' );
+    $ext[]= "php";
+    $ext[]= "php3";
+    $ext[]= "php4";
+    $ext[]= "php5";
+    $ext[]= "phtml";
+    $ext[]= "inc";
+    $ext = array_unique($ext);
     $ext = implode( ',', $ext );
     $mime = $nv_Request->get_array( 'mime', 'post' );
     $mime = implode( ',', $mime );

@@ -183,7 +183,17 @@ if ( defined( "NV_IS_GODADMIN" ) )
         $db->sql_freeresult();
         //end add keywords module about
     }
+    $forbid_extensions = $global_config['forbid_extensions'];
+    $forbid_extensions[] = "php";
+    $forbid_extensions[] = "php3";
+    $forbid_extensions[] = "php4";
+    $forbid_extensions[] = "php5";
+    $forbid_extensions[] = "phtml";
+    $forbid_extensions[] = "inc";
+    $forbid_extensions = array_unique( $forbid_extensions );
+    $forbid_extensions = implode( ',', $forbid_extensions );
     
+    $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value`=" . $db->dbescape_string( $forbid_extensions ) . " WHERE `config_name` = 'forbid_extensions' AND `lang` = 'sys' AND `module`='global' LIMIT 1" );
     $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
     
     nv_save_file_config_global();
