@@ -78,6 +78,12 @@ $lang_global['mod_upload'] = "Upload";
 	 english:	  Upload
 */
 
+$lang_global['mod_webtools'] = "Webtools";
+/*
+	 vietnam:	  Công cụ quản trị web
+	 english:	  Webtools
+*/
+
 $lang_global['go_clientsector'] = "Domovská stránka";
 /*
 	 vietnam:	  Trang chủ site

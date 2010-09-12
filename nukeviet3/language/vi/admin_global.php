@@ -28,6 +28,7 @@ $lang_global['mod_themes'] = "Quản lý giao diện";
 $lang_global['mod_siteinfo'] = "Thông tin";
 $lang_global['mod_language'] = "Ngôn ngữ";
 $lang_global['mod_upload'] = "Quản lý uploads";
+$lang_global['mod_webtools'] = "Công cụ web";
 $lang_global['go_clientsector'] = "Trang chủ site";
 $lang_global['go_clientmod'] = "Xem ngoài site";
 $lang_global['please_select'] = "Hãy lựa chọn";

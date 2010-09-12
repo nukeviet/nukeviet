@@ -29,6 +29,7 @@ $lang_global['mod_themes'] = "Thèmes";
 $lang_global['mod_siteinfo'] = "Informations";
 $lang_global['mod_language'] = "Langues";
 $lang_global['mod_upload'] = "Transferts";
+$lang_global['mod_webtools'] = "Des outils web";
 $lang_global['go_clientsector'] = "Page d'Accueil";
 $lang_global['go_clientmod'] = "Prévisualiser";
 $lang_global['please_select'] = "Sélectionnez";
