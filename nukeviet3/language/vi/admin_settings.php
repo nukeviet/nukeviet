@@ -59,7 +59,7 @@ $lang_module['type_linux'] = "Linux Mail";
 $lang_module['type_phpmail'] = "PHPmail";
 
 $lang_module['smtp_server'] = "Server Infomation";
-$lang_module['incoming_ssl'] = "This server requires an encrypted connection (SSL)";
+$lang_module['incoming_ssl'] = "Use the following type of encrypted connection";
 $lang_module['outgoing'] = "Outgoing mail server (SMTP)";
 $lang_module['outgoing_port'] = "Outgoing server(SMTP)";
 $lang_module['smtp_username'] = "Logon infomation";

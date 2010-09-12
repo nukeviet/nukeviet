@@ -62,6 +62,11 @@ if ( $nv_Request->isset_request( 'ftp_server', 'post' ) )
         LIMIT 1" );
     }
     nv_save_file_config_global();
+    if ( empty( $error ) )
+    {
+        Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+        exit();
+    }    
 }
 
 $xtpl = new XTemplate( "ftp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name . "" );

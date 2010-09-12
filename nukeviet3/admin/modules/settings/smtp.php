@@ -9,9 +9,13 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['smtp_config'];
+$smtp_encrypted_array = array();
+$smtp_encrypted_array[0] = "None";
+$smtp_encrypted_array[1] = "SSL";
+$smtp_encrypted_array[2] = "TSL";
 
 $array_config = array();
-
+$errormess = "";
 $array_config['mailer_mode'] = filter_text_input( 'mailer_mode', 'post', $global_config['mailer_mode'], 1, 255 );
 $array_config['smtp_host'] = filter_text_input( 'smtp_host', 'post', $global_config['smtp_host'], 1, 255 );
 $array_config['smtp_port'] = filter_text_input( 'smtp_port', 'post', $global_config['smtp_port'], 1, 255 );
@@ -36,7 +40,31 @@ if ( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
         LIMIT 1" );
     }
     nv_save_file_config_global();
+    if ( $array_config['smtp_ssl'] == 1 )
+    {
+        require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
+        $array_phpmod = phpinfo_array( 8, 1 );
+        if ( ! empty( $array_phpmod ) and ! array_key_exists( "openssl", $array_phpmod ) )
+        {
+            $errormess = "Error: Server not support send mail ssl";
+        }
+    }
+    if ( empty( $errormess ) )
+    {
+        Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+        exit();
+    }
 }
+
+$contents = "";
+if ( $errormess != "" )
+{
+    $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
+    $contents .= "<blockquote class=\"error\"><span>" . $errormess . "</span></blockquote>\n";
+    $contents .= "</div>\n";
+    $contents .= "<div class=\"clear\"></div>\n";
+}
+
 $array_config['smtp_ssl_checked'] = ( $array_config['smtp_ssl'] == 1 ) ? "checked" : "";
 
 $array_config['mailer_mode_smtpt'] = ( $array_config['mailer_mode'] == "smtp" ) ? "checked" : "";
@@ -47,8 +75,18 @@ $array_config['mailer_mode_smtpt_show'] = ( $array_config['mailer_mode'] == "smt
 $xtpl = new XTemplate( "smtp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name . "" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
+foreach ( $smtp_encrypted_array as $id => $value )
+{
+    $sl = ( $global_config['smtp_ssl'] == $id ) ? ' selected="selected"' : '';
+    $encrypted = array( 
+        "id" => $id, "value" => $value, "sl" => $sl 
+    );
+    $xtpl->assign( 'EMCRYPTED', $encrypted );
+    $xtpl->parse( 'smtp.encrypted_connection' );
+}
+
 $xtpl->parse( 'smtp' );
-$contents = $xtpl->text( 'smtp' );
+$contents .= $xtpl->text( 'smtp' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

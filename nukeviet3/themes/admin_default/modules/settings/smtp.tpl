@@ -26,7 +26,12 @@
 	</tr>
 	<tr>
 		<td>{LANG.incoming_ssl}</td>
-		<td><input type="checkbox" name="smtp_ssl" value="1" {DATA.smtp_ssl_checked} /></td>
+		<td>
+           <select name="smtp_ssl">
+              <!-- BEGIN: encrypted_connection -->
+              <option value="{EMCRYPTED.id}" {EMCRYPTED.sl}>{EMCRYPTED.value}</option>
+              <!-- END: encrypted_connection -->
+           </select>
 	</tr>
 </table>
 <table class="tab1">
