@@ -266,6 +266,7 @@ function change_alias( $alias )
     $alias = preg_replace( "/\s/", "-", $alias );
     $alias = preg_replace( '/(\-)$/', '', $alias );
     $alias = preg_replace( '/^(\-)/', '', $alias );
+    $alias = preg_replace( '/[\-]+/', '-', $alias );
     return $alias;
 }
 
