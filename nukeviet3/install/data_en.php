@@ -74,7 +74,14 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (54, 'main', 'Main', 'rss', 1, 0, 1, 'left-body-right', ''),
 (55, 'rss', 'Rss', 'news', 0, 0, 0, '', ''),
 (56, 'rss', 'Rss', 'download', 0, 0, 0, '', ''),
-(57, 'rss', 'Rss', 'weblinks', 0, 0, 0, '', '')";
+(57, 'rss', 'Rss', 'weblinks', 0, 0, 0, '', ''),
+(58, 'addads', 'Addads', 'banners', 1, 0, 1, 'left-body-right', ''),
+(59, 'cledit', 'Cledit', 'banners', 0, 0, 0, '', ''),
+(60, 'clientinfo', 'Clientinfo', 'banners', 1, 0, 2, 'left-body-right', ''),
+(61, 'clinfo', 'Clinfo', 'banners', 0, 0, 0, '', ''),
+(62, 'logininfo', 'Logininfo', 'banners', 0, 0, 0, '', ''),
+(63, 'stats', 'Stats', 'banners', 1, 0, 3, 'left-body-right', ''),
+(64, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '', '')";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks` (`bid`, `groupbl`, `title`, `link`, `type`, `file_path`, `theme`, `template`, `position`, `exp_time`, `active`, `groups_view`, `module`, `all_func`, `func_id`, `weight`) VALUES

@@ -179,9 +179,19 @@ if ( defined( "NV_IS_GODADMIN" ) )
                 $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_" . $module_data_i . "` ADD `keywords` MEDIUMTEXT NOT NULL AFTER `bodytext`" );
             }
             $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $lang_i . "_modules` SET `admin_file` = '1' WHERE `title` = 'rss'" );
+            
+            $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_i . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES
+		(NULL, 'addads', 'Addads', 'banners', 1, 0, 1, 'left-body-right', ''),
+		(NULL, 'cledit', 'Cledit', 'banners', 0, 0, 0, '', ''),
+		(NULL, 'clientinfo', 'Clientinfo', 'banners', 1, 0, 2, 'left-body-right', ''),
+		(NULL, 'clinfo', 'Clinfo', 'banners', 0, 0, 0, '', ''),
+		(NULL, 'logininfo', 'Logininfo', 'banners', 0, 0, 0, '', ''),
+		(NULL, 'stats', 'Stats', 'banners', 1, 0, 3, 'left-body-right', ''),
+		(NULL, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '', '')" );
         }
         $db->sql_freeresult();
-        //end add keywords module about
+        
+    //end add keywords module about
     }
     $forbid_extensions = $global_config['forbid_extensions'];
     $forbid_extensions[] = "php";
