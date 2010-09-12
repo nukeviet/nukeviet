@@ -56,7 +56,7 @@ function getsubcat ( $rssarray, $array_catid, $i )
             {
                 $array_sub_cat = $rssarray[$sub_catid];
                 $array_catid2 = explode( ",", $array_sub_cat['subcatid'] );
-                $content .= getsubcat( $array_catid2, $i . $imgmid );
+                $content .= getsubcat($rssarray, $array_catid2, $i . $imgmid );
             }
         }
     }
