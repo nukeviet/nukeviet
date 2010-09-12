@@ -17,13 +17,13 @@ if ( defined( 'NV_IS_USER' ) ) die( "Hacking attempt" );
 require_once ( NV_ROOTDIR . "/includes/core/is_user.php" );
 
 //Cap nhat trang thai online
-if ( $global_config['online_upd'] and ! defined( 'NV_IS_AJAX' ) )
+if ( $global_config['online_upd'] and ! defined( 'NV_IS_AJAX' ) and ! defined( 'NV_IS_MY_USER_AGENT' ) )
 {
     require_once ( NV_ROOTDIR . "/includes/core/online.php" );
 }
 
 //Thong ke
-if ( $global_config['statistic'] and ! defined( 'NV_IS_AJAX' ) )
+if ( $global_config['statistic'] and ! defined( 'NV_IS_AJAX' ) and ! defined( 'NV_IS_MY_USER_AGENT' ) )
 {
     if ( ! $nv_Request->isset_request( 'statistic_' . NV_LANG_DATA, 'session' ) )
     {
@@ -32,7 +32,7 @@ if ( $global_config['statistic'] and ! defined( 'NV_IS_AJAX' ) )
 }
 
 //Referer + Gqueries
-if ( $client_info['is_myreferer'] === 0 )
+if ( $client_info['is_myreferer'] === 0 and ! defined( 'NV_IS_MY_USER_AGENT' ) )
 {
     require_once ( NV_ROOTDIR . "/includes/core/referer.php" );
 }

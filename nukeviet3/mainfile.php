@@ -230,6 +230,12 @@ if ( NV_USER_AGENT == "none" )
     trigger_error( 'We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will  copy websites to your hard drive. If you feel you have gotten this message  in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256 );
 }
 
+//xac dinh co phai User_Agent cua NukeViet hay khong
+if ( NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by Vinades.,Jsc. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] ) )
+{
+    define( 'NV_IS_MY_USER_AGENT', true );
+}
+
 //Xac dinh co phai la bot hay khong
 $client_info['bot_info'] = nv_check_bot();
 $client_info['is_bot'] = ( ! empty( $client_info['bot_info'] ) ) ? 1 : 0;
