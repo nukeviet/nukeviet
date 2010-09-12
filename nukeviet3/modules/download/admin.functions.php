@@ -9,13 +9,14 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
+$submenu['add'] = $lang_module['file_addfile'];
 $submenu['filequeue'] = $lang_module['download_filequeue'];
 $submenu['report'] = $lang_module['download_report'];
 $submenu['cat'] = $lang_module['download_catmanager'];
 $submenu['comment'] = $lang_module['download_comment'];
 $submenu['config'] = $lang_module['download_config'];
 
-$allow_func = array( 'main', 'filequeue', 'report', 'config', 'cat', 'comment' );
+$allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'comment' );
 
 define( 'NV_IS_FILE_ADMIN', true );
 
