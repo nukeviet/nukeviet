@@ -231,7 +231,7 @@ if ( NV_USER_AGENT == "none" )
 }
 
 //xac dinh co phai User_Agent cua NukeViet hay khong
-if ( NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by Vinades.,Jsc. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] ) )
+if ( NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] ) )
 {
     define( 'NV_IS_MY_USER_AGENT', true );
 }

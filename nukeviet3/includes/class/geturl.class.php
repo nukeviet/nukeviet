@@ -42,7 +42,7 @@ class UrlGetContents
      */
     function __construct( $global_config )
     {
-        $this->user_agent = 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by Vinades.,Jsc. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] );
+        $this->user_agent = 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] );
 
         $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
         $safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
