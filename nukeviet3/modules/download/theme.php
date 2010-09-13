@@ -21,9 +21,9 @@ if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
  */
 function theme_main_download( $array, $download_config, $subs, $page_title, $generate_page )
 {
-    global $global_config, $lang_module, $lang_global, $module_info, $module_name;
+    global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file;
 
-    $xtpl = new XTemplate( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name . "/" );
+    $xtpl = new XTemplate( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'GLANG', $lang_global );
     $xtpl->assign( 'PAGE_TITLE', $page_title );
@@ -102,7 +102,7 @@ function theme_main_download( $array, $download_config, $subs, $page_title, $gen
  */
 function view_file( $row, $download_config, $page_title )
 {
-    global $global_config, $lang_global, $lang_module, $module_name, $module_info, $my_head;
+    global $global_config, $lang_global, $lang_module, $module_name, $module_file, $module_info, $my_head;
 
     if ( ! defined( 'SHADOWBOX' ) and isset( $row['fileimage']['src'] ) and ! empty( $row['fileimage']['src'] ) )
     {
@@ -153,7 +153,7 @@ function view_file( $row, $download_config, $page_title )
           });";
     $my_head .= "  </script>\n";
 
-    $xtpl = new XTemplate( "viewfile.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name . "/" );
+    $xtpl = new XTemplate( "viewfile.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'GLANG', $lang_global );
     $xtpl->assign( 'PAGE_TITLE', $page_title );
@@ -260,9 +260,9 @@ function view_file( $row, $download_config, $page_title )
  */
 function show_comment( $array, $generate_page )
 {
-    global $module_info, $module_name, $lang_module, $lang_global;
+    global $module_info, $module_name, $module_file, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name . "/" );
+    $xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'GLANG', $lang_global );
     if ( ! empty( $array ) )
@@ -303,7 +303,7 @@ function show_comment( $array, $generate_page )
  */
 function theme_upload( $array, $list_cats, $download_config, $error )
 {
-    global $module_info, $module_name, $lang_module, $lang_global, $my_head;
+    global $module_info, $module_name, $module_file, $lang_module, $lang_global, $my_head;
 
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
     $my_head .= "<script type=\"text/javascript\">\n";
@@ -361,7 +361,7 @@ function theme_upload( $array, $list_cats, $download_config, $error )
           });";
     $my_head .= "  </script>\n";
 
-    $xtpl = new XTemplate( "upload.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name . "/" );
+    $xtpl = new XTemplate( "upload.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'GLANG', $lang_global );
     $xtpl->assign( 'DOWNLOAD', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name );

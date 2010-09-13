@@ -163,7 +163,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
         );
 }
 
-$xtpl = new XTemplate( "report.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name );
+$xtpl = new XTemplate( "report.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'TABLE_CAPTION', $page_title );

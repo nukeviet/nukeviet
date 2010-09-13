@@ -445,7 +445,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
 
     if ( ! $array['filesize'] ) $array['filesize'] = "";
 
-    $xtpl = new XTemplate( "filequeue_edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name );
+    $xtpl = new XTemplate( "filequeue_edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
     $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;edit=1&amp;id=" . $id );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'DATA', $array );
@@ -665,7 +665,7 @@ while ( $row = $db->sql_fetchrow( $result2 ) )
         );
 }
 
-$xtpl = new XTemplate( "filequeue.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name );
+$xtpl = new XTemplate( "filequeue.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'TABLE_CAPTION', $page_title );

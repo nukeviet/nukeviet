@@ -335,7 +335,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
 
     if ( ! $array['filesize'] ) $array['filesize'] = "";
 
-    $xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name );
+    $xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 
     $report = $report ? "&amp;report=1" : "";
     $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . $id . $report );
@@ -548,7 +548,7 @@ while ( $row = $db->sql_fetchrow( $query2 ) )
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name );
+$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'TABLE_CAPTION', $page_title );
