@@ -260,6 +260,7 @@ elseif ( $step == 5 )
     $db_config['prefix'] = $nv_Request->get_string( 'prefix', 'post', 'nv3' );
     $db_config['db_detete'] = $nv_Request->get_int( 'db_detete', 'post', '0' );
     $db_config['num_table'] = 0;
+    $db_config['create_db'] = 1;
     if ( ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
     {
         $db = new sql_db( $db_config );

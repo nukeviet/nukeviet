@@ -56,6 +56,8 @@ class sql_db
 
     private $db_connect_id = false;
 
+    private $create_db = false;
+
     private $query_result = false;
 
     private $row = array();
@@ -77,6 +79,7 @@ class sql_db
         if ( isset( $db_config['dbname'] ) ) $this->dbname = $db_config['dbname'];
         if ( isset( $db_config['dbuname'] ) ) $this->user = $db_config['dbuname'];
         if ( isset( $db_config['new_link'] ) ) $this->new_link = ( bool )$db_config['new_link'];
+        if ( isset( $db_config['create_db'] ) ) $this->create_db = ( bool )$db_config['create_db'];
         if ( isset( $db_config['persistency'] ) ) $this->persistency = ( bool )$db_config['persistency'];
         
         $this->sql_connect( $db_config['dbpass'] );
@@ -113,9 +116,17 @@ class sql_db
                 $dbselect = @mysql_select_db( $this->dbname );
                 if ( ! $dbselect )
                 {
-                    $this->error = $this->sql_error( sql_db::UNKNOWN_DATABASE );
-                    @mysql_close( $this->db_connect_id );
-                    $this->db_connect_id = false;
+                    if ( $this->create_db )
+                    {
+                        @mysql_query( "CREATE DATABASE " . $this->dbname . "", $this->db_connect_id );
+                        $dbselect = @mysql_select_db( $this->dbname );
+                    }
+                    if ( ! $dbselect )
+                    {
+                        $this->error = $this->sql_error( sql_db::UNKNOWN_DATABASE );
+                        @mysql_close( $this->db_connect_id );
+                        $this->db_connect_id = false;
+                    }
                 }
             }
         }
@@ -548,16 +559,18 @@ class sql_db
         ), "$1-$2", $value );
         return $value;
     }
-    
+
     /**
      * sql_db::unfixdb()
      * 
      * @param mixed $value
      * @return
      */
-    function unfixdb( $value )
+    function unfixdb ( $value )
     {
-        $value = preg_replace( array( "/(se)\-(lect)/i", "/(uni)\-(on)/i", "/(con)\-(cat)/i", "/(c)\-(har)/i", "/(out)\-(file)/i", "/(al)\-(ter)/i", "/(in)\-(sert)/i", "/(d)\-(rop)/i", "/(f)\-(rom)/i", "/(whe)\-(re)/i", "/(up)\-(date)/i", "/(de)\-(lete)/i", "/(cre)\-(ate)/i" ), "$1$2", $value );
+        $value = preg_replace( array( 
+            "/(se)\-(lect)/i", "/(uni)\-(on)/i", "/(con)\-(cat)/i", "/(c)\-(har)/i", "/(out)\-(file)/i", "/(al)\-(ter)/i", "/(in)\-(sert)/i", "/(d)\-(rop)/i", "/(f)\-(rom)/i", "/(whe)\-(re)/i", "/(up)\-(date)/i", "/(de)\-(lete)/i", "/(cre)\-(ate)/i" 
+        ), "$1$2", $value );
         return $value;
     }
 

@@ -111,7 +111,7 @@ $lang_module['admin_pass_note'] = "Password must be at least 6 characters, inclu
 $lang_module['admin_repass'] = "Re-enter password";
 $lang_module['admin_repass_note'] = "Repeat password. It must match the password above!";
 $lang_module['success'] = "Setup successful!";
-$lang_module['del_folder'] = "Welcome! Nukeviet setup successfuly. <b>Please delete install folder</b> on server and login to admin  site to config your site.";
+$lang_module['congratulations'] = "Welcome! Nukeviet setup successfuly. Login to admin  site to config your site.";
 $lang_module['notesupport'] = "All technical support, please contact <a href=http://nukeviet.vn target=_blank><b>forum Nukeviet.VN</b></a>.";
 $lang_module['noteuploads'] = "<b>Note:</b> Please <b>CHMOD uploads and it's sub folders</b> in webroot by 777 to enable files can be upload to host.";
 $lang_module['thanks'] = "Thanks!";

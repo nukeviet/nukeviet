@@ -111,7 +111,7 @@ $lang_module['admin_pass_note'] = "Heslo musí být alespoň 6 znaků, obsahovat
 $lang_module['admin_repass'] = "Zadejte heslo";
 $lang_module['admin_repass_note'] = "Zopakujte heslo. To se musí shodovat s heslem výše!";
 $lang_module['success'] = "Nastavení úspěšně!";
-$lang_module['del_folder'] = "Vítejte! Nukeviet nastavení úspěšně. <b> Prosím smazat instalaci složku </ b> na serveru a přihlášení na admin nebo na vaší stránce.";
+$lang_module['congratulations'] = "Vítejte! Nukeviet nastavení úspěšně. Přihlášení na admin nebo na vaší stránce.";
 $lang_module['notesupport'] = "Veškerá technická podpora, prosím, kontaktujte <a href=http://nukeviet.vn target=_blank> <b> forum Nukeviet.VN </ b> </ a>.";
 $lang_module['noteuploads'] = "<b> Poznámka: </ b> Prosím <b> CHMOD obrázky a to je sub složky </ b> v webroot o 777, aby soubory mohou být nahrát na hostitele.";
 $lang_module['thanks'] = "Děkuj!";

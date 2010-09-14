@@ -100,7 +100,7 @@ $lang_module['admin_pass_note'] = "Mật khẩu phải dài hơn 6 kí tự, và
 $lang_module['admin_repass'] = "Nhập lại mật khẩu";
 $lang_module['admin_repass_note'] = "Nhập lại mật khẩu.";
 $lang_module['success'] = "Bạn đã cài đặt thành công!";
-$lang_module['del_folder'] = "Xin chúc mừng!!! Bạn đã cài đặt thành công hệ thống Nukeviet. <b>Hãy xóa ngay thư mục install</b> khỏi server và đăng nhập vào khu vực quản lý để tiến hành các bước cấu hình site.";
+$lang_module['congratulations'] = "Xin chúc mừng!!! Bạn đã cài đặt thành công hệ thống Nukeviet. Bạn cần đăng nhập vào khu vực quản trị để tiến hành các bước cấu hình site.";
 $lang_module['notesupport'] = "Mọi nhu cầu về hỗ trợ kỹ thuật xin liên hệ tại <a href=http://nukeviet.vn target=_blank><b>diễn đàn Nukeviet.VN</b></a>.";
 $lang_module['noteuploads'] = "<b>Chú ý:</b> Hãy <b>CHMOD thư mục uploads</b> trên webroot và các thư mục con nằm trong nó ở chế độ 777. Nếu không làm việc này ngay, hệ thống sẽ không cho phép bạn upload các tập tin lên host.";
 $lang_module['thanks'] = "Xin cảm ơn và chúc thành công!";

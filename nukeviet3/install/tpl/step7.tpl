@@ -2,7 +2,7 @@
     <!-- BEGIN: finish1 -->
 		<h1 class="install_succesfull">{LANG.success}</h1>
         <br>
-        <p>{LANG.del_folder}
+        <p>{LANG.congratulations}
         <p>{LANG.noteuploads}</p>
         <p>{LANG.notesupport}</p>
         <p>{LANG.thanks}</p>
