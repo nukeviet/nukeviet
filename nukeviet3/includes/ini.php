@@ -31,7 +31,11 @@ if ( $sys_info['ini_set_support'] )
     ini_set( "user_agent", 'NV3' );
     ini_set( "default_charset", $global_config['site_charset'] );
     ini_set( 'sendmail_from', $global_config['site_email'] );
-    ini_set( "memory_limit", "64M" );
+    $memoryLimitMB = ( integer )ini_get( 'memory_limit' );
+    if ( $memoryLimitMB < 64 )
+    {
+        ini_set( "memory_limit", "64M" );
+    }
     ini_set( 'arg_separator.output', '&' );
     ini_set( 'auto_detect_line_endings', 0 );
 }
@@ -131,10 +135,15 @@ if ( $sys_info['zlib_support'] )
 {
     if ( function_exists( 'gzcompress' ) and function_exists( 'gzuncompress' ) )
     {
-        $sys_info['str_compress'] = array( 'gzcompress', 'gzuncompress' );
-    } elseif ( function_exists( 'gzdeflate' ) and function_exists( 'gzinflate' ) )
+        $sys_info['str_compress'] = array( 
+            'gzcompress', 'gzuncompress' 
+        );
+    }
+    elseif ( function_exists( 'gzdeflate' ) and function_exists( 'gzinflate' ) )
     {
-        $sys_info['str_compress'] = array( 'gzdeflate', 'gzinflate' );
+        $sys_info['str_compress'] = array( 
+            'gzdeflate', 'gzinflate' 
+        );
     }
 }
 

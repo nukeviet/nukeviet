@@ -14,7 +14,7 @@ $submenu['sources'] = $lang_module['sources'];
 $submenu['comment'] = $lang_module['comment'];
 $submenu['setting'] = $lang_module['setting'];
 $allow_func = array( 
-    'main', 'exptime', 'publtime', 'setting', 'content', 'keywords', 'del_content', 'cat', 'change_cat', 'list_cat', 'del_cat', 'topicsnews', 'topics', 'topicdelnews', 'addtotopics', 'change_topic', 'list_topic', 'del_topic', 'topicajax', 'sources', 'change_source', 'list_source', 'del_source', 'sourceajax', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'comment', 'del_comment', 'active_comment','edit_comment' 
+    'main', 'exptime', 'publtime', 'setting', 'content', 'keywords', 'del_content', 'cat', 'change_cat', 'list_cat', 'del_cat', 'topicsnews', 'topics', 'topicdelnews', 'addtotopics', 'change_topic', 'list_topic', 'del_topic', 'topicajax', 'sources', 'change_source', 'list_source', 'del_source', 'sourceajax', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'comment', 'del_comment', 'active_comment', 'edit_comment' 
 );
 $array_viewcat_full = array( 
     'viewcat_page_new' => $lang_module['viewcat_page_new'], 'viewcat_page_old' => $lang_module['viewcat_page_old'], 'viewcat_main_left' => $lang_module['viewcat_main_left'], 'viewcat_main_right' => $lang_module['viewcat_main_right'], 'viewcat_main_bottom' => $lang_module['viewcat_main_bottom'], 'viewcat_two_column' => $lang_module['viewcat_two_column'] 
@@ -369,7 +369,7 @@ function nv_show_block_cat_list ( )
             {
                 $contents .= "<option value=\"" . $i . "\"" . ( $i == $row['number'] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
             }
-            $contents .= "</select></td>\n";            
+            $contents .= "</select></td>\n";
             $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $row['bid'] . "#edit\">" . $lang_global['edit'] . "</a></span>\n";
             $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_block_cat(" . $row['bid'] . ")\">" . $lang_global['delete'] . "</a></span></td>\n";
             $contents .= "</tr>\n";
@@ -437,10 +437,9 @@ function nv_content_keywords ( $content )
     if ( $content != "" )
     {
         $arrkw = array();
-        $memory_limit = intval( nv_converttoBytes( ini_get( 'memory_limit' ) ) );
-        if ( $memory_limit > 60000000 and file_exists( NV_ROOTDIR . "/includes/keywords/" . NV_LANG_DATA . ".txt" ) )
+        $memoryLimitMB = ( integer )ini_get( 'memory_limit' );
+        if ( $memoryLimitMB > 60 and file_exists( NV_ROOTDIR . "/includes/keywords/" . NV_LANG_DATA . ".txt" ) )
         {
-            //$memory_limit > 57.220MB
             require_once ( NV_ROOTDIR . "/includes/keywords/" . NV_LANG_DATA . ".txt" );
         }
         $keywords_return = array();

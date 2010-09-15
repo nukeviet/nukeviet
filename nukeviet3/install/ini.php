@@ -30,7 +30,11 @@ if ( $sys_info['ini_set_support'] )
     ini_set( 'allow_url_fopen', 1 );
     ini_set( "user_agent", 'NV3' );
     ini_set( "default_charset", $global_config['site_charset'] );
-    ini_set( "memory_limit", "64M" );
+    $memoryLimitMB = ( integer )ini_get( 'memory_limit' );
+    if ( $memoryLimitMB < 64 )
+    {
+        ini_set( "memory_limit", "64M" );
+    }    
     ini_set( 'arg_separator.output', '&' );
     ini_set( 'auto_detect_line_endings', 0 );
 }
