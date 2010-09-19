@@ -682,7 +682,9 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     }
     elseif ( $commentenable == 2 )
     {
-        $xtpl->assign( 'COMMENT_LOGIN', $lang_module['comment_login'] );
+        global $client_info;
+    	$link_login= NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=".nv_base64_encode($client_info['selfurl']);
+    	$xtpl->assign( 'COMMENT_LOGIN', "<a title=\"".$lang_global['loginsubmit']."\" href=\"".$link_login."\">".$lang_module['comment_login']."</a>");
         $xtpl->parse( 'main.comment.form_login' );
     }
     
