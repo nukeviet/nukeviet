@@ -58,8 +58,6 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
         if ( defined( 'IS_EDIT' ) )
         {
-            nv_del_moduleCache( $module_name );
-            
             $query = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET 
             `title`=" . $db->dbescape( $title ) . ", `alias` =  " . $db->dbescape( $alias ) . ", 
             `bodytext`=" . $db->dbescape( $bodytext ) . ", `keywords`='', `edit_time`=" . NV_CURRENTTIME . " WHERE `id` =" . $id;
@@ -73,9 +71,8 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $bodytext ) . ", '', 
             " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
         }
-        
         $db->sql_query( $query );
-
+        nv_del_moduleCache( $module_name );
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
         die();
     }
