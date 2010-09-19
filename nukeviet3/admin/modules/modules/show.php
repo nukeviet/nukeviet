@@ -136,7 +136,8 @@ function nv_show_funcs ( )
         {
             $show_func = in_array( $func, $modfuncs ) ? 1 : 0;
             $sql = "INSERT INTO `" . NV_MODFUNCS_TABLE . "` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES (NULL, " . $db->dbescape( $func ) . ", " . $db->dbescape( ucfirst( $func ) ) . ", " . $db->dbescape( $mod ) . ", " . $show_func . ", 0, 0, " . $db->dbescape( $layoutdefault ) . ", '')";
-            $db->sql_query( $sql );
+            $func_id = $db->sql_query_insert_id( $sql );
+            nv_setup_block_module($mod, $func_id);
         }
         $is_refresh = true;
         $is_delCache = true;

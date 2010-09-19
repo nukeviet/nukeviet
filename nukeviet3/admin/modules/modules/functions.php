@@ -58,16 +58,22 @@ function nv_fix_subweight ( $mod )
     }
 }
 
-function nv_setup_block_module ( $mod )
+function nv_setup_block_module ( $mod, $func_id = 0 )
 {
     global $db, $db_config, $global_config;
-    $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE func_id IN (SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . ")" );
+    if ( empty( $func_id ) )
+    {
+        $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE func_id IN (SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . ")" );
+    }
     
     $array_funcid = array();
     $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' AND `in_module`=" . $db->dbescape( $mod ) . " ORDER BY `subweight` ASC" );
     while ( list( $func_id_i ) = $db->sql_fetchrow( $func_result ) )
     {
-        $array_funcid[] = $func_id_i;
+        if ( $func_id == 0 or $func_id == $func_id_i )
+        {
+            $array_funcid[] = $func_id_i;
+        }
     }
     
     $weight = 0;
