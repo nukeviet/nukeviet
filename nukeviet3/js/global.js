@@ -698,8 +698,10 @@ function nv_DigitalClock( div_id )
          if ( strMonthNumber <= 9 ) strMonthNumber = '0' + strMonthNumber;
 
          var strClock = '';
-         // strClock = intHours + ':' + intMinutes + ':' + intSeconds + ' ' + GMT
-         // + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' + strMonthNumber
+         // strClock = intHours + ':' + intMinutes + ':' + intSeconds + ' ' +
+			// GMT
+         // + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' +
+			// strMonthNumber
          // + '/' + intYear;
          strClock = intHours + ':' + intMinutes + ' ' + nv_my_abbr + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' + strMonthNumber + '/' + intYear;
          var spnClock = document.getElementById( div_id );
@@ -719,6 +721,9 @@ function nv_search_submit(search_query, topmenu_search_checkss, search_button, m
    if( ! allowed)
    {
       query.value = format_query;
+      messalert = nv_rangelength.replace('{0}', minlength);
+      messalert = messalert.replace('{1}', maxlength);
+      alert(messalert);
    }
    else
    {
