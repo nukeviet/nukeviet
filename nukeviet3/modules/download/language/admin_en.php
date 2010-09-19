@@ -136,5 +136,5 @@ $lang_module['zip_readme'] = "Add README.txt in ZIP file";
 $lang_module['is_resume'] = "Support download resume";
 $lang_module['max_speed'] = "Download speed limit";
 $lang_module['kb_sec'] = "KB/sec (0 = Unlimited)";
-
+$lang_module['alias'] = "Static Link";
 ?>

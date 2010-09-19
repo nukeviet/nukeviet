@@ -135,5 +135,5 @@ $lang_module['zip_readme'] = "Obsah souboru txt se souborem ZIP";
 $lang_module['is_resume'] = "Podpora obnovení při dowload režimu";
 $lang_module['max_speed'] = "Neomezená rychlost  stahnuti soubor";
 $lang_module['kb_sec'] = "KB/sec (0 = neomezeny)";
-
+$lang_module['alias'] = "Statické Link";
 ?>

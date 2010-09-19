@@ -138,4 +138,6 @@ $lang_module['is_resume'] = "Hỗ trợ chế độ resume khi download";
 $lang_module['max_speed'] = "Hạn chế tốc độ tải file";
 $lang_module['kb_sec'] = "KB/sec (0 = không hạn chế)";
 
+$lang_module['alias'] = "Liên kết tĩnh";
+
 ?>

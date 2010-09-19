@@ -15,16 +15,16 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
  * @param integer $parentid
  * @return
  */
-function nv_FixWeightCat( $parentid = 0 )
+function nv_FixWeightCat ( $parentid = 0 )
 {
     global $db, $module_data;
-
+    
     $sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $parentid . " ORDER BY `weight` ASC";
     $result = $db->sql_query( $sql );
     $weight = 0;
     while ( $row = $db->sql_fetchrow( $result ) )
     {
-        $weight++;
+        $weight ++;
         $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'] );
     }
 }
@@ -35,24 +35,24 @@ function nv_FixWeightCat( $parentid = 0 )
  * @param mixed $catid
  * @return
  */
-function nv_del_cat( $catid )
+function nv_del_cat ( $catid )
 {
     global $db, $module_data;
-
+    
     $sql = "SELECT `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $result = $db->sql_query( $sql );
     list( $p ) = $db->sql_fetchrow( $result );
-
+    
     $sql = "SELECT `id`, `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid;
     $result = $db->sql_query( $sql );
-
+    
     $ids = array();
     while ( list( $id, $fileupload, $fileimage ) = $db->sql_fetchrow( $result ) )
     {
         $ids[] = $id;
-
-        //Khong xao file vi co the co truong hop file dung chung
-        /*
+        
+    //Khong xao file vi co the co truong hop file dung chung
+    /*
         if(!empty($fileupload))
         {
         $fileupload = explode("[NV]",$fileupload);
@@ -73,33 +73,35 @@ function nv_del_cat( $catid )
         @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );
         }*/
     }
-
+    
     if ( ! empty( $ids ) )
     {
         $ids = implode( ",", $ids );
         $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `fid` IN (" . $ids . ")";
         $db->sql_query( $sql );
-
+        
         $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE `fid` IN (" . $ids . ")";
         $db->sql_query( $sql );
     }
-
+    
     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid;
     $db->sql_query( $sql );
-
+    
     $sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $catid;
     $result = $db->sql_query( $sql );
     while ( list( $id ) = $db->sql_fetchrow( $result ) )
     {
         nv_del_cat( $id );
     }
-
+    
     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $db->sql_query( $sql );
 }
 
 $groups_list = nv_groups_list();
-$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
+$array_who = array( 
+    $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] 
+);
 if ( ! empty( $groups_list ) )
 {
     $array_who[] = $lang_global['who_view3'];
@@ -112,9 +114,9 @@ $error = "";
 if ( $nv_Request->isset_request( 'add', 'get' ) )
 {
     $page_title = $lang_module['addcat_titlebox'];
-
+    
     $is_error = false;
-
+    
     if ( $nv_Request->isset_request( 'submit', 'post' ) )
     {
         $array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
@@ -124,9 +126,8 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
         $array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
         $array['who_download'] = $nv_Request->get_int( 'who_download', 'post', 0 );
         $array['groups_download'] = $nv_Request->get_typed_array( 'groups_download', 'post', 'int' );
-
-        $alias = change_alias( $array['title'] );
-
+        $array['alias'] = filter_text_input( 'alias', 'post', '' );
+        $array['alias'] = ( $array['alias'] == "" ) ? change_alias($array['title']) : change_alias( $array['alias'] );
         if ( empty( $array['title'] ) )
         {
             $error = $lang_module['error_cat2'];
@@ -139,20 +140,20 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
                 $sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $array['parentid'];
                 $result = $db->sql_query( $sql );
                 list( $count ) = $db->sql_fetchrow( $result );
-
+                
                 if ( ! $count )
                 {
                     $error = $lang_module['error_cat3'];
                     $is_error = true;
                 }
             }
-
+            
             if ( ! $is_error )
             {
-                $sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `alias`=" . $db->dbescape( $alias );
+                $sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `alias`=" . $db->dbescape($array['alias']);
                 $result = $db->sql_query( $sql );
                 list( $count ) = $db->sql_fetchrow( $result );
-
+                
                 if ( $count )
                 {
                     $error = $lang_module['error_cat1'];
@@ -160,34 +161,34 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
                 }
             }
         }
-
+        
         if ( ! $is_error )
         {
             if ( ! in_array( $array['who_view'], array_keys( $array_who ) ) )
             {
                 $array['who_view'] = 0;
             }
-
+            
             $array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
-
+            
             if ( ! in_array( $array['who_download'], array_keys( $array_who ) ) )
             {
                 $array['who_download'] = 0;
             }
-
+            
             $array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
-
+            
             $sql = "SELECT MAX(weight) AS new_weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $array['parentid'];
             $result = $db->sql_query( $sql );
             list( $new_weight ) = $db->sql_fetchrow( $result );
             $new_weight = ( int )$new_weight;
-            $new_weight++;
-
+            $new_weight ++;
+            
             $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_categories` VALUES (
             NULL, 
             " . $array['parentid'] . ", 
             " . $db->dbescape( $array['title'] ) . ", 
-            " . $db->dbescape( $alias ) . ", 
+            " . $db->dbescape( $array['alias'] ) . ", 
             " . $db->dbescape( $array['description'] ) . ", 
             " . $array['who_view'] . ", 
             " . $db->dbescape( $array['groups_view'] ) . ", 
@@ -195,9 +196,9 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
             " . $db->dbescape( $array['groups_download'] ) . ", 
             " . $new_weight . ", 
             1)";
-
+            
             $catid = $db->sql_query_insert_id( $sql );
-
+            
             if ( ! $catid )
             {
                 $error = $lang_module['error_cat4'];
@@ -215,89 +216,94 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
     {
         $array['parentid'] = 0;
         $array['title'] = "";
+        $array['alias'] = "";
         $array['description'] = "";
         $array['who_view'] = 0;
         $array['groups_view'] = array();
         $array['who_download'] = 0;
         $array['groups_download'] = array();
     }
-
-    $listcats = array( array( 'id' => 0, 'name' => $lang_module['category_cat_maincat'], 'selected' => "" ) );
+    
+    $listcats = array( 
+        array( 
+        'id' => 0, 'name' => $lang_module['category_cat_maincat'], 'selected' => "" 
+    ) 
+    );
     $listcats = $listcats + nv_listcats( $array['parentid'] );
-
+    
     $who_view = $array['who_view'];
     $array['who_view'] = array();
     foreach ( $array_who as $key => $who )
     {
-        $array['who_view'][] = array( //
+        $array['who_view'][] = array(  //
             'key' => $key, //
-            'title' => $who, //
-            'selected' => $key == $who_view ? " selected=\"selected\"" : "" //
-            );
+'title' => $who, //
+'selected' => $key == $who_view ? " selected=\"selected\"" : ""  //
+        );
     }
-
+    
     $groups_view = $array['groups_view'];
     $array['groups_view'] = array();
     if ( ! empty( $groups_list ) )
     {
         foreach ( $groups_list as $key => $title )
         {
-            $array['groups_view'][] = array( //
+            $array['groups_view'][] = array(  //
                 'key' => $key, //
-                'title' => $title, //
-                'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : "" //
-                );
+'title' => $title, //
+'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""  //
+            );
         }
     }
-
+    
     $who_download = $array['who_download'];
     $array['who_download'] = array();
     foreach ( $array_who as $key => $who )
     {
-        $array['who_download'][] = array( //
+        $array['who_download'][] = array(  //
             'key' => $key, //
-            'title' => $who, //
-            'selected' => $key == $who_download ? " selected=\"selected\"" : "" //
-            );
+'title' => $who, //
+'selected' => $key == $who_download ? " selected=\"selected\"" : ""  //
+        );
     }
-
+    
     $groups_download = $array['groups_download'];
     $array['groups_download'] = array();
     if ( ! empty( $groups_list ) )
     {
         foreach ( $groups_list as $key => $title )
         {
-            $array['groups_download'][] = array( //
+            $array['groups_download'][] = array(  //
                 'key' => $key, //
-                'title' => $title, //
-                'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : "" //
-                );
+'title' => $title, //
+'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : ""  //
+            );
         }
     }
-
+    
     $xtpl = new XTemplate( "cat_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
     $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;add=1" );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'DATA', $array );
-
+    
     if ( ! empty( $error ) )
     {
         $xtpl->assign( 'ERROR', $error );
         $xtpl->parse( 'main.error' );
     }
-
+    
     foreach ( $listcats as $cat )
     {
         $xtpl->assign( 'LISTCATS', $cat );
         $xtpl->parse( 'main.parentid' );
     }
-
+    
     foreach ( $array['who_view'] as $who )
     {
         $xtpl->assign( 'WHO_VIEW', $who );
         $xtpl->parse( 'main.who_view' );
     }
-
+    
     if ( ! empty( $array['groups_view'] ) )
     {
         foreach ( $array['groups_view'] as $group )
@@ -307,13 +313,13 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
         }
         $xtpl->parse( 'main.group_view_empty' );
     }
-
+    
     foreach ( $array['who_download'] as $who )
     {
         $xtpl->assign( 'WHO_DOWNLOAD', $who );
         $xtpl->parse( 'main.who_download' );
     }
-
+    
     if ( ! empty( $array['groups_download'] ) )
     {
         foreach ( $array['groups_download'] as $group )
@@ -323,44 +329,44 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
         }
         $xtpl->parse( 'main.group_download_empty' );
     }
-
+    
     $xtpl->parse( 'main' );
     $contents = $xtpl->text( 'main' );
-
+    
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
-
-    exit;
+    
+    exit();
 }
 
 //Sua chu de
 if ( $nv_Request->isset_request( 'edit', 'get' ) )
 {
     $page_title = $lang_module['editcat_cat'];
-
+    
     $catid = $nv_Request->get_int( 'catid', 'get', 0 );
-
+    
     if ( empty( $catid ) )
     {
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
         exit();
     }
-
+    
     $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $result = $db->sql_query( $sql );
     $numcat = $db->sql_numrows( $result );
-
+    
     if ( $numcat != 1 )
     {
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
         exit();
     }
-
+    
     $row = $db->sql_fetchrow( $result );
-
+    
     $is_error = false;
-
+    
     if ( $nv_Request->isset_request( 'submit', 'post' ) )
     {
         $array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
@@ -370,8 +376,9 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         $array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
         $array['who_download'] = $nv_Request->get_int( 'who_download', 'post', 0 );
         $array['groups_download'] = $nv_Request->get_typed_array( 'groups_download', 'post', 'int' );
-
-        $alias = change_alias( $array['title'] );
+        
+        $array['alias'] = filter_text_input( 'alias', 'post', '' );
+        $array['alias'] = ( $array['alias'] == "" ) ? change_alias($array['title']) : change_alias( $array['alias'] );
 
         if ( empty( $array['title'] ) )
         {
@@ -385,20 +392,19 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 $sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $array['parentid'];
                 $result = $db->sql_query( $sql );
                 list( $count ) = $db->sql_fetchrow( $result );
-
+                
                 if ( ! $count )
                 {
                     $error = $lang_module['error_cat3'];
                     $is_error = true;
                 }
             }
-
+            
             if ( ! $is_error )
             {
-                $sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`!=" . $catid . " AND `alias`=" . $db->dbescape( $alias ) . " AND `parentid`=" . $array['parentid'];
+                $sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`!=" . $catid . " AND `alias`=" . $db->dbescape($array['alias']);
                 $result = $db->sql_query( $sql );
                 list( $count ) = $db->sql_fetchrow( $result );
-
                 if ( $count )
                 {
                     $error = $lang_module['error_cat1'];
@@ -406,40 +412,40 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 }
             }
         }
-
+        
         if ( ! $is_error )
         {
             if ( ! in_array( $array['who_view'], array_keys( $array_who ) ) )
             {
                 $array['who_view'] = 0;
             }
-
+            
             $array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
-
+            
             if ( ! in_array( $array['who_download'], array_keys( $array_who ) ) )
             {
                 $array['who_download'] = 0;
             }
-
+            
             $array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
-
+            
             if ( $array['parentid'] != $row['parentid'] )
             {
                 $sql = "SELECT MAX(weight) AS new_weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $array['parentid'];
                 $result = $db->sql_query( $sql );
                 list( $new_weight ) = $db->sql_fetchrow( $result );
                 $new_weight = ( int )$new_weight;
-                $new_weight++;
+                $new_weight ++;
             }
             else
             {
                 $new_weight = $row['weight'];
             }
-
+            
             $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET 
             `parentid`=" . $array['parentid'] . ", 
             `title`=" . $db->dbescape( $array['title'] ) . ", 
-            `alias`=" . $db->dbescape( $alias ) . ", 
+            `alias`=" . $db->dbescape( $array['alias'] ) . ", 
             `description`=" . $db->dbescape( $array['description'] ) . ", 
             `who_view`=" . $array['who_view'] . ", 
             `groups_view`=" . $db->dbescape( $array['groups_view'] ) . ", 
@@ -448,7 +454,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
             `weight`=" . $new_weight . " 
             WHERE `id`=" . $catid;
             $result = $db->sql_query( $sql );
-
+            
             if ( ! $result )
             {
                 $error = $lang_module['error_cat5'];
@@ -462,7 +468,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 }
                 
                 nv_del_moduleCache( $module_name );
-
+                
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
                 exit();
             }
@@ -472,89 +478,94 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
     {
         $array['parentid'] = ( int )$row['parentid'];
         $array['title'] = $row['title'];
+        $array['alias'] = $row['alias'];
         $array['description'] = $row['description'];
         $array['who_view'] = ( int )$row['who_view'];
         $array['groups_view'] = ! empty( $row['groups_view'] ) ? explode( ",", $row['groups_view'] ) : array();
         $array['who_download'] = ( int )$row['who_download'];
         $array['groups_download'] = ! empty( $row['groups_download'] ) ? explode( ",", $row['groups_download'] ) : array();
     }
-
-    $listcats = array( array( 'id' => 0, 'name' => $lang_module['category_cat_maincat'], 'selected' => "" ) );
+    
+    $listcats = array( 
+        array( 
+        'id' => 0, 'name' => $lang_module['category_cat_maincat'], 'selected' => "" 
+    ) 
+    );
     $listcats = $listcats + nv_listcats( $array['parentid'], $catid );
-
+    
     $who_view = $array['who_view'];
     $array['who_view'] = array();
     foreach ( $array_who as $key => $who )
     {
-        $array['who_view'][] = array( //
+        $array['who_view'][] = array(  //
             'key' => $key, //
-            'title' => $who, //
-            'selected' => $key == $who_view ? " selected=\"selected\"" : "" //
-            );
+'title' => $who, //
+'selected' => $key == $who_view ? " selected=\"selected\"" : ""  //
+        );
     }
-
+    
     $groups_view = $array['groups_view'];
     $array['groups_view'] = array();
     if ( ! empty( $groups_list ) )
     {
         foreach ( $groups_list as $key => $title )
         {
-            $array['groups_view'][] = array( //
+            $array['groups_view'][] = array(  //
                 'key' => $key, //
-                'title' => $title, //
-                'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : "" //
-                );
+'title' => $title, //
+'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""  //
+            );
         }
     }
-
+    
     $who_download = $array['who_download'];
     $array['who_download'] = array();
     foreach ( $array_who as $key => $who )
     {
-        $array['who_download'][] = array( //
+        $array['who_download'][] = array(  //
             'key' => $key, //
-            'title' => $who, //
-            'selected' => $key == $who_download ? " selected=\"selected\"" : "" //
-            );
+'title' => $who, //
+'selected' => $key == $who_download ? " selected=\"selected\"" : ""  //
+        );
     }
-
+    
     $groups_download = $array['groups_download'];
     $array['groups_download'] = array();
     if ( ! empty( $groups_list ) )
     {
         foreach ( $groups_list as $key => $title )
         {
-            $array['groups_download'][] = array( //
+            $array['groups_download'][] = array(  //
                 'key' => $key, //
-                'title' => $title, //
-                'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : "" //
-                );
+'title' => $title, //
+'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : ""  //
+            );
         }
     }
-
+    
     $xtpl = new XTemplate( "cat_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
     $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;edit=1&amp;catid=" . $catid );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'DATA', $array );
-
+    
     if ( ! empty( $error ) )
     {
         $xtpl->assign( 'ERROR', $error );
         $xtpl->parse( 'main.error' );
     }
-
+    
     foreach ( $listcats as $cat )
     {
         $xtpl->assign( 'LISTCATS', $cat );
         $xtpl->parse( 'main.parentid' );
     }
-
+    
     foreach ( $array['who_view'] as $who )
     {
         $xtpl->assign( 'WHO_VIEW', $who );
         $xtpl->parse( 'main.who_view' );
     }
-
+    
     if ( ! empty( $array['groups_view'] ) )
     {
         foreach ( $array['groups_view'] as $group )
@@ -564,13 +575,13 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         }
         $xtpl->parse( 'main.group_view_empty' );
     }
-
+    
     foreach ( $array['who_download'] as $who )
     {
         $xtpl->assign( 'WHO_DOWNLOAD', $who );
         $xtpl->parse( 'main.who_download' );
     }
-
+    
     if ( ! empty( $array['groups_download'] ) )
     {
         foreach ( $array['groups_download'] as $group )
@@ -580,42 +591,42 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         }
         $xtpl->parse( 'main.group_download_empty' );
     }
-
+    
     $xtpl->parse( 'main' );
     $contents = $xtpl->text( 'main' );
-
+    
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
-
-    exit;
+    
+    exit();
 }
 
 //Xoa chu de
 if ( $nv_Request->isset_request( 'del', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
-
+    
     $catid = $nv_Request->get_int( 'catid', 'post', 0 );
-
+    
     if ( empty( $catid ) )
     {
         die( "NO" );
     }
-
+    
     $sql = "SELECT COUNT(*) AS count, `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $result = $db->sql_query( $sql );
     list( $count, $parentid ) = $db->sql_fetchrow( $result );
-
+    
     if ( $count != 1 )
     {
         die( "NO" );
     }
-
+    
     nv_del_cat( $catid );
     nv_FixWeightCat( $parentid );
     nv_del_moduleCache( $module_name );
-
+    
     die( "OK" );
 }
 
@@ -623,25 +634,25 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
 if ( $nv_Request->isset_request( 'changeweight', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
-
+    
     $catid = $nv_Request->get_int( 'catid', 'post', 0 );
     $new = $nv_Request->get_int( 'new', 'post', 0 );
-
+    
     if ( empty( $catid ) ) die( "NO" );
-
+    
     $query = "SELECT `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $result = $db->sql_query( $query );
     $numrows = $db->sql_numrows( $result );
     if ( $numrows != 1 ) die( 'NO' );
     list( $parentid ) = $db->sql_fetchrow( $result );
-
+    
     $query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`!=" . $catid . " AND `parentid`=" . $parentid . " ORDER BY `weight` ASC";
     $result = $db->sql_query( $query );
     $weight = 0;
     while ( $row = $db->sql_fetchrow( $result ) )
     {
-        $weight++;
-        if ( $weight == $new ) $weight++;
+        $weight ++;
+        if ( $weight == $new ) $weight ++;
         $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
         $db->sql_query( $sql );
     }
@@ -657,19 +668,19 @@ if ( $nv_Request->isset_request( 'changeweight', 'post' ) )
 if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
-
+    
     $catid = $nv_Request->get_int( 'catid', 'post', 0 );
-
+    
     if ( empty( $catid ) ) die( "NO" );
-
+    
     $query = "SELECT `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $result = $db->sql_query( $query );
     $numrows = $db->sql_numrows( $result );
     if ( $numrows != 1 ) die( 'NO' );
-
+    
     list( $status ) = $db->sql_fetchrow( $result );
     $status = $status ? 0 : 1;
-
+    
     $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET `status`=" . $status . " WHERE `id`=" . $catid;
     $db->sql_query( $sql );
     
@@ -728,29 +739,29 @@ while ( $row = $db->sql_fetchrow( $result ) )
     {
         $numsub = "";
     }
-
+    
     $weight = array();
-    for ( $i = 1; $i <= $num; $i++ )
+    for ( $i = 1; $i <= $num; $i ++ )
     {
         $weight[$i]['title'] = $i;
         $weight[$i]['pos'] = $i;
         $weight[$i]['selected'] = ( $i == $row['weight'] ) ? " selected=\"selected\"" : "";
     }
-
+    
     $class = ( $a % 2 ) ? " class=\"second\"" : "";
-
-    $list[$row['id']] = array( //
+    
+    $list[$row['id']] = array(  //
         'id' => ( int )$row['id'], //
-        'title' => $row['title'], //
-        'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['id'], //
-        'numsub' => $numsub, //
-        'parentid' => $parentid, //
-        'weight' => $weight, //
-        'status' => $row['status'] ? " checked=\"checked\"" : "", //
-        'class' => $class //
-        );
-
-    $a++;
+'title' => $row['title'], //
+'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['id'], //
+'numsub' => $numsub, //
+'parentid' => $parentid, //
+'weight' => $weight, //
+'status' => $row['status'] ? " checked=\"checked\"" : "", //
+'class' => $class  //
+    );
+    
+    $a ++;
 }
 
 $xtpl = new XTemplate( "cat_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
@@ -762,13 +773,13 @@ $xtpl->assign( 'LANG', $lang_module );
 foreach ( $list as $row )
 {
     $xtpl->assign( 'ROW', $row );
-
+    
     foreach ( $row['weight'] as $weight )
     {
         $xtpl->assign( 'WEIGHT', $weight );
         $xtpl->parse( 'main.row.weight' );
     }
-
+    
     $xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;edit=1&amp;catid=" . $row['id'] );
     $xtpl->parse( 'main.row' );
 }

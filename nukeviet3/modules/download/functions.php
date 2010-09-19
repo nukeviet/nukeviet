@@ -20,10 +20,10 @@ define( 'NV_IS_MOD_DOWNLOAD', true );
  * @param mixed $is_parentlink
  * @return
  */
-function nv_setcats( $id, $list, $name, $is_parentlink )
+function nv_setcats ( $id, $list, $name, $is_parentlink )
 {
     global $module_name;
-
+    
     if ( $is_parentlink )
     {
         $name = "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list[$id]['alias'] . "\">" . $list[$id]['title'] . "</a> &raquo; " . $name;
@@ -37,7 +37,7 @@ function nv_setcats( $id, $list, $name, $is_parentlink )
     {
         $name = nv_setcats( $parentid, $list, $name, $is_parentlink );
     }
-
+    
     return $name;
 }
 
@@ -48,17 +48,17 @@ function nv_setcats( $id, $list, $name, $is_parentlink )
  * @param bool $is_parentlink
  * @return
  */
-function nv_list_cats( $is_link = false, $is_parentlink = true )
+function nv_list_cats ( $is_link = false, $is_parentlink = true )
 {
     global $module_data, $module_name, $module_info;
-
+    
     $sql = "SELECT `id`,`title`,`alias`,`description`,`who_view`,`groups_view`,`who_download`,`groups_download`, `parentid` 
     FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `status`=1 ORDER BY `parentid`,`weight` ASC";
-
+    
     $list = nv_db_cache( $sql, 'id' );
-
+    
     $list2 = array();
-
+    
     if ( ! empty( $list ) )
     {
         foreach ( $list as $row )
@@ -71,19 +71,19 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
                     $list2[$row['id']]['name'] = $list[$row['id']]['title'];
                     $list2[$row['id']]['is_download_allow'] = ( int )nv_set_allow( $row['who_download'], $row['groups_download'] );
                     $list2[$row['id']]['subcats'] = array();
-
+                    
                     if ( $is_link )
                     {
                         $list2[$row['id']]['name'] = "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list2[$row['id']]['alias'] . "\">" . $list2[$row['id']]['name'] . "</a>";
                     }
-
+                    
                     if ( $row['parentid'] )
                     {
                         $list2[$row['parentid']]['subcats'][] = $row['id'];
-
+                        
                         $list2[$row['id']]['name'] = nv_setcats( $row['parentid'], $list, $list2[$row['id']]['name'], $is_parentlink );
                     }
-
+                    
                     if ( $is_parentlink )
                     {
                         $list2[$row['id']]['name'] = "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $module_info['custom_title'] . "</a> &raquo; " . $list2[$row['id']]['name'];
@@ -92,7 +92,7 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
             }
         }
     }
-
+    
     return $list2;
 }
 
@@ -101,28 +101,28 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
  * 
  * @return
  */
-function initial_config_data()
+function initial_config_data ( )
 {
     global $module_name, $module_data, $module_name;
-
+    
     $sql = "SELECT `config_name`,`config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
-
+    
     $list = nv_db_cache( $sql );
-
+    
     $download_config = array();
     foreach ( $list as $values )
     {
         $download_config[$values['config_name']] = $values['config_value'];
     }
-
+    
     $download_config['upload_filetype'] = ! empty( $download_config['upload_filetype'] ) ? explode( ",", $download_config['upload_filetype'] ) : array();
     if ( ! empty( $download_config['upload_filetype'] ) ) $download_config['upload_filetype'] = array_map( "trim", $download_config['upload_filetype'] );
-
+    
     if ( empty( $download_config['upload_filetype'] ) )
     {
         $download_config['is_upload'] = 0;
     }
-
+    
     if ( $download_config['is_addfile'] )
     {
         $download_config['is_addfile_allow'] = nv_set_allow( $download_config['who_addfile'], $download_config['groups_addfile'] );
@@ -131,7 +131,7 @@ function initial_config_data()
     {
         $download_config['is_addfile_allow'] = false;
     }
-
+    
     if ( $download_config['is_addfile_allow'] and $download_config['is_upload'] )
     {
         $download_config['is_upload_allow'] = nv_set_allow( $download_config['who_upload'], $download_config['groups_upload'] );
@@ -140,9 +140,9 @@ function initial_config_data()
     {
         $download_config['is_upload_allow'] = false;
     }
-
+    
     $download_config['is_autocomment_allow'] = nv_set_allow( $download_config['who_autocomment'], $download_config['groups_autocomment'] );
-
+    
     return $download_config;
 }
 
@@ -152,9 +152,9 @@ if ( $op == "main" )
     $filealias = "";
     $catid = 0;
     $nv_vertical_menu = array();
-
+    
     $list_cats = nv_list_cats( true );
-
+    
     if ( ! empty( $list_cats ) )
     {
         if ( ! empty( $array_op ) )
@@ -162,7 +162,7 @@ if ( $op == "main" )
             $catalias = isset( $array_op[0] ) ? $array_op[0] : "";
             $filealias = isset( $array_op[1] ) ? $array_op[1] : "";
         }
-
+        
         // Xac dinh ID cua chu de
         foreach ( $list_cats as $c )
         {
@@ -172,14 +172,18 @@ if ( $op == "main" )
                 break;
             }
         }
+        //Xem chi tiet
+        if ( $catid > 0 and ! empty( $filealias ) )
+        {
+            $op = "viewfile";
+        }
         //Het Xac dinh ID cua chu de
-
+        
         //Xac dinh menu
         //Xac dinh RSS
-        $rss[] = array( //
-            'title' => $module_info['custom_title'], //
-            'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss" //
-            );
+        $rss[] = array(  //
+            'title' => $module_info['custom_title'], 'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss"  //
+        );
         
         foreach ( $list_cats as $c )
         {
@@ -194,21 +198,24 @@ if ( $op == "main" )
                         $s_c = $list_cats[$catid_i];
                         $s_act = ( $s_c['alias'] == $catalias ) ? 1 : 0;
                         $s_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $s_c['alias'];
-                        $sub_menu[] = array( $s_c['title'], $s_link, $s_act );
+                        $sub_menu[] = array( 
+                            $s_c['title'], $s_link, $s_act 
+                        );
                     }
                 }
-
+                
                 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $c['alias'];
-                $nv_vertical_menu[] = array( $c['title'], $link, $act, 'submenu' => $sub_menu );
+                $nv_vertical_menu[] = array( 
+                    $c['title'], $link, $act, 'submenu' => $sub_menu 
+                );
             }
             
-            $rss[] = array( //
-                'title' => $module_info['custom_title'] . ' - ' . $c['title'], //
-                'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $c['alias'] //
-                );
+            $rss[] = array( 
+                'title' => $module_info['custom_title'] . ' - ' . $c['title'], 'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $c['alias']  //
+            );
         }
         //Het Xac dinh menu
-        //Het Xac dinh RSS
+    //Het Xac dinh RSS
     }
 }
 

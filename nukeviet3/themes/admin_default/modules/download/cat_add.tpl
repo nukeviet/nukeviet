@@ -11,7 +11,7 @@
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post">
     <table class="tab1">
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     {LANG.category_cat_name}
@@ -21,6 +21,16 @@
                 </td>
             </tr>
         </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    {LANG.alias}
+                </td>
+                <td>
+                    <input class="txt" value="{DATA.alias}" name="alias" id="alias" style="width:300px" maxlength="100" />
+                </td>
+            </tr>
+        </tbody>        
         <tbody class="second">
             <tr>
                 <td>

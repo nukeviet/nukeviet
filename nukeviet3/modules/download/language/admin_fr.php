@@ -136,5 +136,5 @@ $lang_module['zip_readme'] = "Contenu du fichier README.txt inclus dans le fichi
 $lang_module['is_resume'] = "Supporter le resume de téléchargement";
 $lang_module['max_speed'] = "Limiter la vitesse de téléchargement";
 $lang_module['kb_sec'] = "KB/sec (0 = sans limite)";
-
+$lang_module['alias'] = "Alias";
 ?>
