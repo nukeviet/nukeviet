@@ -425,6 +425,7 @@ if ( ! empty( $month_upload_dir[0] ) )
     define( "NV_MONTH_UPLOADS_DIR", date( "Y_m" ) );
     define( "NV_MONTH_UPLOADS_REAL_DIR", NV_UPLOADS_REAL_DIR . '/' . NV_MONTH_UPLOADS_DIR );
 }
+define( 'PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' );
 unset( $month_upload_dir );
 
 ?>

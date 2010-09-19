@@ -2060,7 +2060,7 @@
           while (($v_item_handler = @readdir($v_folder_handler)) !== false) {
 
             // ----- Skip '.' and '..'
-            if (($v_item_handler == '.') || ($v_item_handler == '..')) {
+            if (($v_item_handler == '.') || ($v_item_handler == '..') || ($v_item_handler == '.svn')) {
                 continue;
             }
             
