@@ -9,7 +9,7 @@
 define( 'NV_ADMIN', true );
 require_once ( str_replace( '\\\\', '/', dirname( __file__ ) ) . '/mainfile.php' );
 require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
-$global_config['new_version'] = "3.0.10";
+$global_config['new_version'] = "3.0.11";
 
 function nv_version_compare ( $version1, $version2 )
 {
@@ -190,22 +190,24 @@ if ( defined( "NV_IS_GODADMIN" ) )
 		(NULL, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '', '')" );
         }
         $db->sql_freeresult();
+        //end add keywords module about
+        $forbid_extensions = $global_config['forbid_extensions'];
+        $forbid_extensions[] = "php";
+        $forbid_extensions[] = "php3";
+        $forbid_extensions[] = "php4";
+        $forbid_extensions[] = "php5";
+        $forbid_extensions[] = "phtml";
+        $forbid_extensions[] = "inc";
+        $forbid_extensions = array_unique( $forbid_extensions );
+        $forbid_extensions = implode( ',', $forbid_extensions );
         
-    //end add keywords module about
+        $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value`=" . $db->dbescape_string( $forbid_extensions ) . " WHERE `config_name` = 'forbid_extensions' AND `lang` = 'sys' AND `module`='global' LIMIT 1" );
     }
-    $forbid_extensions = $global_config['forbid_extensions'];
-    $forbid_extensions[] = "php";
-    $forbid_extensions[] = "php3";
-    $forbid_extensions[] = "php4";
-    $forbid_extensions[] = "php5";
-    $forbid_extensions[] = "phtml";
-    $forbid_extensions[] = "inc";
-    $forbid_extensions = array_unique( $forbid_extensions );
-    $forbid_extensions = implode( ',', $forbid_extensions );
-    
-    $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value`=" . $db->dbescape_string( $forbid_extensions ) . " WHERE `config_name` = 'forbid_extensions' AND `lang` = 'sys' AND `module`='global' LIMIT 1" );
+    if ( nv_version_compare( $global_config['version'], "3.0.11" ) < 0 )
+    {
+        $db->sql_query( "UPDATE `ALTER TABLE `" . $db_config['prefix'] . "_banners_clients` ADD `uploadtype` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `last_agent`" );
+    }
     $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
-    
     nv_save_file_config_global();
     
     die( "Update successfully, you should immediately delete this file." );

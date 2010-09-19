@@ -256,6 +256,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_client
   `last_login` int(11) unsigned NOT NULL DEFAULT '0',
   `last_ip` varchar(15) NOT NULL,
   `last_agent` varchar(255) NOT NULL,
+  `uploadtype` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`),
   UNIQUE KEY `email` (`email`),
