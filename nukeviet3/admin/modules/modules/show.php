@@ -14,20 +14,20 @@ if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
  * 
  * @return void
  */
-function nv_show_funcs()
+function nv_show_funcs ( )
 {
-    global $db, $nv_Request, $lang_module, $client_info, $module_name, $global_config;
-
+    global $db, $nv_Request, $lang_module, $client_info, $module_name, $global_config, $site_mods;
+    
     $mod = filter_text_input( 'mod', 'get', '' );
-
+    
     if ( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die();
-
+    
     $query = "SELECT `module_file`, `custom_title`, `admin_file` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
     $result = $db->sql_query( $query );
     $numrows = $db->sql_numrows( $result );
-
+    
     if ( $numrows != 1 ) die();
-
+    
     $row = $db->sql_fetchrow( $result );
     $custom_title = $row['custom_title'];
     $module_file = $row['module_file'];
@@ -39,14 +39,14 @@ function nv_show_funcs()
         $db->sql_query( $sql );
         $is_delCache = true;
     }
-
+    
     $local_funcs = nv_scandir( NV_ROOTDIR . '/modules/' . $module_file . '/funcs', $global_config['check_op_file'] );
     if ( ! empty( $local_funcs ) )
     {
         $local_funcs = preg_replace( $global_config['check_op_file'], "\\1", $local_funcs );
         $local_funcs = array_flip( $local_funcs );
     }
-
+    
     $module_version = array();
     $version_file = NV_ROOTDIR . "/modules/" . $module_file . "/version.php";
     if ( file_exists( $version_file ) )
@@ -56,19 +56,21 @@ function nv_show_funcs()
     if ( empty( $module_version ) )
     {
         $timestamp = NV_CURRENTTIME - date( 'Z', NV_CURRENTTIME );
-        $module_version = array( "name" => $mod, //
-            "modfuncs" => "main", //
-            "is_sysmod" => 0, //
-            "virtual" => 0, //
-            "version" => "3.0.01", //
-            "date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
-            "author" => "", //
-            "note" => "" );
+        $module_version = array( 
+            "name" => $mod, //
+			"modfuncs" => "main", //
+			"is_sysmod" => 0, //
+			"virtual" => 0, //
+			"version" => "3.0.01", //
+			"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
+			"author" => "", //
+			"note" => "" 
+        );
     }
     $module_version['submenu'] = isset( $module_version['submenu'] ) ? trim( $module_version['submenu'] ) : "";
     $modfuncs = array_map( "trim", explode( ",", $module_version['modfuncs'] ) );
     $arr_in_submenu = array_map( "trim", explode( ",", $module_version['submenu'] ) );
-
+    
     $data_funcs = array();
     $weight_list = array();
     $query = "SELECT * FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . " ORDER BY `subweight` ASC";
@@ -95,11 +97,11 @@ function nv_show_funcs()
             $weight_list[] = $row['subweight'];
         }
     }
-
+    
     $act_funcs = array_intersect_key( $data_funcs, $local_funcs );
     $old_funcs = array_diff_key( $data_funcs, $local_funcs );
     $new_funcs = array_diff_key( $local_funcs, $data_funcs );
-
+    
     $is_refresh = false;
     if ( ! empty( $old_funcs ) )
     {
@@ -115,9 +117,21 @@ function nv_show_funcs()
         $db->sql_query( "OPTIMIZE TABLE " . NV_MODFUNCS_TABLE );
         $is_refresh = true;
     }
-
+    
     if ( ! empty( $new_funcs ) )
     {
+        $mod_theme = "default";
+        if ( ! empty( $site_mods[$mod]['theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $site_mods[$mod]['theme'] . '/config.ini' ) )
+        {
+            $mod_theme = $site_mods[$mod]['theme'];
+        }
+        if ( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' ) )
+        {
+            $mod_theme = $global_config['site_theme'];
+        }
+        $xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $mod_theme . '/config.ini' );
+        $layoutdefault = ( string )$xml->layoutdefault;
+        
         foreach ( array_keys( $new_funcs ) as $func )
         {
             $show_func = in_array( $func, $modfuncs ) ? 1 : 0;
@@ -127,7 +141,7 @@ function nv_show_funcs()
         $is_refresh = true;
         $is_delCache = true;
     }
-
+    
     if ( $is_refresh )
     {
         nv_fix_subweight( $mod );
@@ -151,24 +165,34 @@ function nv_show_funcs()
     {
         nv_del_moduleCache( 'modules' );
     }
-
+    
     $contents = array();
     $contents['caption'] = sprintf( $lang_module['funcs_list'], $custom_title );
-    $contents['thead'] = array( $lang_module['funcs_subweight'], $lang_module['funcs_in_submenu'], $lang_module['funcs_title'], $lang_module['custom_title'], $lang_module['funcs_layout'] );
+    $contents['thead'] = array( 
+        $lang_module['funcs_subweight'], $lang_module['funcs_in_submenu'], $lang_module['funcs_title'], $lang_module['custom_title'], $lang_module['funcs_layout'] 
+    );
     $contents['weight_list'] = $weight_list;
     foreach ( $act_funcs as $funcs => $values )
     {
         if ( $values['show_func'] )
         {
             $func_id = $values['func_id'];
-            $contents['rows'][$func_id]['weight'] = array( $values['subweight'], "nv_chang_func_weight(" . $func_id . ");" );
-            $contents['rows'][$func_id]['name'] = array( $funcs, $values['func_custom_name'], "nv_change_custom_name(" . $values['func_id'] . ",'action');" );
-            $contents['rows'][$func_id]['layout'] = array( $values['layout'], "nv_chang_func_layout(" . $func_id . ");" );
-            $contents['rows'][$func_id]['in_submenu'] = array( $values['in_submenu'], "nv_chang_func_in_submenu(" . $func_id . ");" );
+            $contents['rows'][$func_id]['weight'] = array( 
+                $values['subweight'], "nv_chang_func_weight(" . $func_id . ");" 
+            );
+            $contents['rows'][$func_id]['name'] = array( 
+                $funcs, $values['func_custom_name'], "nv_change_custom_name(" . $values['func_id'] . ",'action');" 
+            );
+            $contents['rows'][$func_id]['layout'] = array( 
+                $values['layout'], "nv_chang_func_layout(" . $func_id . ");" 
+            );
+            $contents['rows'][$func_id]['in_submenu'] = array( 
+                $values['in_submenu'], "nv_chang_func_in_submenu(" . $func_id . ");" 
+            );
             $contents['rows'][$func_id]['disabled'] = ( in_array( $funcs, $arr_in_submenu ) ) ? "" : " disabled";
         }
     }
-
+    
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo aj_show_funcs_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
