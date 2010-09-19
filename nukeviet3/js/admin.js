@@ -32,3 +32,14 @@ function nv_adminlogout_check(res)
    }
    return false;
 }
+
+function nv_open_browse_file(theURL,winName,w,h,features) {
+	LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+	TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+	settings = 'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition;
+	if(features != '') {
+		settings = settings + ','+features;
+	}
+	window.open(theURL,winName,settings);
+	window.blur();
+}

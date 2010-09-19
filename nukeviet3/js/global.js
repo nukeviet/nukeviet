@@ -711,54 +711,6 @@ function nv_DigitalClock( div_id )
 
 // -----------------------
 
-function nv_MyMarquee()
-{
-
-   var timeX = 32;
-   var newsTick = document.getElementById("MarqueeContainer");
-   var myMar = document.getElementById("MarqueeContent");
-   var newsTickLeft = newsTick.offsetLeft;
-   var myMarLeft = myMar.offsetLeft;
-   var myMarWidth = myMar.offsetWidth;
-   var timer = setTimeout("nv_MyMarquee()", timeX);
-
-   function speedTime()
-   {
-      nv_MyMarquee();
-   }
-   function slowTime()
-   {
-      clearTimeout(timer);
-   }
-
-   newsTick.onmouseover = slowTime;
-   newsTick.onmouseout = speedTime;
-
-   if (myMarLeft >= myMarWidth * ( - 1))
-   {
-      myMar.style.left = (myMarLeft - 1) + "px";
-   }
-   else
-   {
-      myMar.style.left = newsTick.offsetWidth + "px";
-   }
-}
-
-// -----------------------
-
-function nv_check_contentMarquee(res)
-{
-   if(res != '' && res != 'undefined')
-   {
-      var div_content = document.getElementById("MarqueeContainer");
-      div_content.innerHTML = '<div id="MarqueeContent">' + res + '</div>';
-      nv_MyMarquee();
-   }
-   return false;
-}
-
-// -----------------------
-
 function nv_search_submit(search_query, topmenu_search_checkss, search_button, minlength, maxlength)
 {
    var query = document.getElementById(search_query);
@@ -936,14 +888,4 @@ function NewWindow(mypage,myname,w,h,scroll){
 	win = window.open(mypage,myname,settings)
 }
 
-function nv_open_browse_file(theURL,winName,w,h,features) {
-		LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
-		TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
-		settings = 'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition;
-		if(features != '') {
-			settings = settings + ','+features;
-		}
-		window.open(theURL,winName,settings);
-		window.blur();
-}
 nv_check_timezone();
