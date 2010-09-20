@@ -205,7 +205,7 @@ if ( defined( "NV_IS_GODADMIN" ) )
     }
     if ( nv_version_compare( $global_config['version'], "3.0.11" ) < 0 )
     {
-        $db->sql_query( "UPDATE `ALTER TABLE `" . $db_config['prefix'] . "_banners_clients` ADD `uploadtype` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `last_agent`" );
+        $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_banners_clients` ADD `uploadtype` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `last_agent`" );
     }
     $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
     nv_save_file_config_global();
