@@ -23,7 +23,7 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val = '' )
 {
-    global $module_name;
+    global $module_name, $admin_info;
     $currentpath = NV_UPLOADS_DIR;
     $path = NV_UPLOADS_DIR;
     if ( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . date( "Y_m" ) ) )
@@ -77,9 +77,19 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
     $CKEditor->config['filebrowserBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&path=" . $path . "&currentpath=" . $currentpath;
     $CKEditor->config['filebrowserImageBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&type=image&path=" . $path . "&currentpath=" . $currentpath;
     $CKEditor->config['filebrowserFlashBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&type=flash&path=" . $path . "&currentpath=" . $currentpath;
-    //#CKEditor->config['filebrowserUploadUrl'] = "/nukeviet3/admin/editors/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files";
-    //$CKEditor->config['filebrowserImageUploadUrl'] = "/nukeviet3/admin/editors/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images";
-    // $CKEditor->config['filebrowserFlashUploadUrl'] = "/nukeviet3/admin/editors/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash";
+    if ( ! empty( $admin_info['allow_files_type'] ) )
+    {
+        $CKEditor->config['filebrowserUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&currentpath=" . $currentpath;
+    }
+    if ( in_array( 'images', $admin_info['allow_files_type'] ) )
+    {
+        $CKEditor->config['filebrowserImageUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&currentpath=" . $currentpath;
+    }
+    if ( in_array( 'images', $admin_info['allow_files_type'] ) )
+    {
+        $CKEditor->config['filebrowserFlashUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&currentpath=" . $currentpath;
+    }
+    
     $val = nv_unhtmlspecialchars( $val );
     return $CKEditor->editor( $textareaname, $val );
 }
