@@ -23,6 +23,19 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val = '' )
 {
+    global $module_name;
+    $currentpath = NV_UPLOADS_DIR;
+    $path = NV_UPLOADS_DIR;
+    if ( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . date( "Y_m" ) ) )
+    {
+        $currentpath = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" );
+        $path = NV_UPLOADS_DIR . '/' . $module_name;
+    }
+    elseif ( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name ) )
+    {
+        $currentpath = NV_UPLOADS_DIR . '/' . $module_name;
+    }
+    
     // Create class instance.
     $editortoolbar = array( 
         array( 
@@ -61,9 +74,9 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
         "cols" => 80, "rows" => 10 
     );
     
-    $CKEditor->config['filebrowserBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1";
-    $CKEditor->config['filebrowserImageBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&type=image";
-    $CKEditor->config['filebrowserFlashBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&type=flash";
+    $CKEditor->config['filebrowserBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&path=" . $path . "&currentpath=" . $currentpath;
+    $CKEditor->config['filebrowserImageBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&type=image&path=" . $path . "&currentpath=" . $currentpath;
+    $CKEditor->config['filebrowserFlashBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&type=flash&path=" . $path . "&currentpath=" . $currentpath;
     //#CKEditor->config['filebrowserUploadUrl'] = "/nukeviet3/admin/editors/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files";
     //$CKEditor->config['filebrowserImageUploadUrl'] = "/nukeviet3/admin/editors/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images";
     // $CKEditor->config['filebrowserFlashUploadUrl'] = "/nukeviet3/admin/editors/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash";
