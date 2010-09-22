@@ -5,73 +5,75 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
-if (! defined ( 'NV_IS_FILE_MODULES' ))
-	die ( 'Stop!!!' );
+if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $title = $note = $module_file = "";
-$page_title = $lang_module ['autoinstall_module_install'];
-$xauto = NV_ROOTDIR . '/'.NV_TEMP_DIR.'/xauto' . md5( session_id() ) . '.list';
-$filename = NV_ROOTDIR . '/'.NV_TEMP_DIR.'/xauto' . md5( session_id() ) . '.zip';
-$xfolder = NV_ROOTDIR . '/'.NV_TEMP_DIR.'/xfolder' . md5( session_id() ) . '.list';
-if ($nv_Request->isset_request ( 'op', 'post' ))
+$page_title = $lang_module['autoinstall_module_install'];
+$xauto = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( session_id() ) . '.list';
+$filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( session_id() ) . '.zip';
+$xfolder = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'folder_' . md5( session_id() ) . '.list';
+if ( $nv_Request->isset_request( 'op', 'post' ) )
 {
-	require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-
-	$allowfolder = array ('modules', 'themes', 'uploads' );
-	if (is_uploaded_file ( $_FILES ['modulefile'] ['tmp_name'] ))
-	{
-		if (move_uploaded_file ( $_FILES ['modulefile'] ['tmp_name'], $filename ))
-		{
-			$zip = new PclZip (  $filename );
-			$status = $zip->properties ();
-			if ($status ['status'] == 'ok')
-			{
-				$filefolder = '';
-				$validfolder = array();
-				$filelist = '';
-				$filesize = (round ( $_FILES ['modulefile'] ['size'] / 1024, 2 ) > 1024) ? ((round ( $_FILES ['modulefile'] ['size'] / (pow ( 1024, 2 )), 2 )) > 1024) ? (round ( $_FILES ['modulefile'] ['size'] / (pow ( 1024, 3 )), 2 )) . 'GB' : (round ( $_FILES ['modulefile'] ['size'] / (pow ( 1024, 2 )), 2 )) . 'MB' : round ( $_FILES ['modulefile'] ['size'] / 1024, 2 ) . ' KB';
-				$contents .= $lang_module ['autoinstall_module_uploadedfile'] . '<span style="color:red;font-weight:bold">' . $_FILES ['modulefile'] ['name'] . '</span> - ' . $lang_module ['autoinstall_module_uploadedfilesize'] . '<span style="color:red;font-weight:bold">' . $filesize . '</span><br />';
-				#show file and folder
-				$list = $zip->listContent ();
-				$contents .= "<br /><b>" . $lang_module ['autoinstall_module_uploaded_filenum'] . $status ['nb'] . "</b><br />";
-				for($i = 0, $j = 1; $i < sizeof ( $list ); $i ++, $j ++)
-				{
-					if (! $list [$i] ['folder'])
-					{
-						$bytes = $list [$i] ['size'];
-						$bytes = (round ( $bytes / 1024, 2 ) > 1024) ? ((round ( $bytes / (pow ( 1024, 2 )), 2 )) > 1024) ? (round ( $bytes / (pow ( 1024, 3 )), 2 )) . 'GB' : (round ( $bytes / (pow ( 1024, 2 )), 2 )) . 'MB' : round ( $bytes / 1024, 2 ) . ' KB';
-					} else
-					{
-						$bytes = "";
-						$validfolder[]= $list [$i] ['filename'];
-					}
-					$filefolder .= $list [$i] ['filename'] . "\n";
-					$filelist .= '[' . $j . "] " . $list [$i] ['filename'] . " $bytes<br />";
-				}
-				$contents .= '<div style="overflow:auto;height:200px;width:700px">' . $filelist . '</div>';
-				#write filefolder to file 
-				$fh = @fopen ( $xauto, 'w' ) or die ( "" . $lang_module ['autoinstall_module_error_createfile'] . "" );
-				flock ( $fh, LOCK_EX );
-				fwrite ( $fh, $filefolder );
-				flock ( $fh, LOCK_UN );
-				fclose ( $fh );
-				#write folder to file 
-				sort($validfolder);
-				$folderlist='';
-				foreach ($validfolder as $value) {
-					$folderlist.=$value."\n";
-				}
-				$fh = @fopen ( $xfolder, 'w' ) or die ( "" . $lang_module ['autoinstall_module_error_createfile'] . "" );
-				flock ( $fh, LOCK_EX );
-				fwrite ( $fh, $folderlist );
-				flock ( $fh, LOCK_UN );
-				fclose ( $fh );
-				#check to continue
-				$contents .= '
-				<div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module ['autoinstall_package_processing'] . '</div>
+    require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
+    
+    $allowfolder = array( 
+        'modules', 'themes', 'uploads' 
+    );
+    if ( is_uploaded_file( $_FILES['modulefile']['tmp_name'] ) )
+    {
+        if ( move_uploaded_file( $_FILES['modulefile']['tmp_name'], $filename ) )
+        {
+            $zip = new PclZip( $filename );
+            $status = $zip->properties();
+            if ( $status['status'] == 'ok' )
+            {
+                $filefolder = '';
+                $validfolder = array();
+                $filelist = '';
+                $filesize = nv_convertfromBytes( $_FILES['modulefile']['size'] );
+                $contents .= $lang_module['autoinstall_module_uploadedfile'] . '<span style="color:red;font-weight:bold">' . $_FILES['modulefile']['name'] . '</span> - ' . $lang_module['autoinstall_module_uploadedfilesize'] . '<span style="color:red;font-weight:bold">' . $filesize . '</span><br />';
+                #show file and folder
+                $list = $zip->listContent();
+                $contents .= "<br /><b>" . $lang_module['autoinstall_module_uploaded_filenum'] . $status['nb'] . "</b><br />";
+                for ( $i = 0, $j = 1; $i < sizeof( $list ); $i ++, $j ++ )
+                {
+                    if ( ! $list[$i]['folder'] )
+                    {
+                        $bytes = nv_convertfromBytes( $list[$i]['size'] );
+                    }
+                    else
+                    {
+                        $bytes = "";
+                        $validfolder[] = $list[$i]['filename'];
+                    }
+                    $filefolder .= $list[$i]['filename'] . "\n";
+                    $filelist .= '[' . $j . "] " . $list[$i]['filename'] . " $bytes<br />";
+                }
+                $contents .= '<div style="overflow:auto;height:200px;width:700px">' . $filelist . '</div>';
+                #write filefolder to file 
+                $fh = @fopen( $xauto, 'w' ) or die( "" . $lang_module['autoinstall_module_error_createfile'] . "" );
+                flock( $fh, LOCK_EX );
+                fwrite( $fh, $filefolder );
+                flock( $fh, LOCK_UN );
+                fclose( $fh );
+                #write folder to file 
+                sort( $validfolder );
+                $folderlist = '';
+                foreach ( $validfolder as $value )
+                {
+                    $folderlist .= $value . "\n";
+                }
+                $fh = @fopen( $xfolder, 'w' ) or die( "" . $lang_module['autoinstall_module_error_createfile'] . "" );
+                flock( $fh, LOCK_EX );
+                fwrite( $fh, $folderlist );
+                flock( $fh, LOCK_UN );
+                fclose( $fh );
+                #check to continue
+                $contents .= '
+				<div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>
 				<div style="margin-top:20px" id="step1">
-				<h4>' . $lang_module ['autoinstall_module_checkfile_notice'] . '</h4>
+				<h4>' . $lang_module['autoinstall_module_checkfile_notice'] . '</h4>
 				<p style="padding-left:250px">
-				<input style="margin-top:10px;font-size:15px" type="button" name="checkfile" value="' . $lang_module ['autoinstall_module_checkfile'] . '"/>
+				<input style="margin-top:10px;font-size:15px" type="button" name="checkfile" value="' . $lang_module['autoinstall_module_checkfile'] . '"/>
 				</p>
 				</div>
 				<script type="text/javascript">
@@ -86,68 +88,71 @@ if ($nv_Request->isset_request ( 'op', 'post' ))
 				 });
 				</script>
 				';
-			} else
-			{
-				$contents .= $lang_module ['autoinstall_module_error_invalidfile'] . '  <a href="javascript:history.go(-1)">' . $lang_module ['autoinstall_module_error_invalidfile_back'] . '</a>';
-			}
-		} else
-			$contents .= "<span style='color:red'>" . $lang_module ['autoinstall_module_error_uploadfile'] . "</span><br />";
-	}
-	include (NV_ROOTDIR . "/includes/header.php");
-	echo nv_admin_theme ( $contents );
-	include (NV_ROOTDIR . "/includes/footer.php");
-} else
-{
-	$op = $nv_Request->get_string ( 'op', 'get' );
-	$contents .= "<form name='install_module' enctype='multipart/form-data' action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" method=\"post\">";
-	$contents .= "<table summary=\"\" class=\"tab1\">\n";
-	$contents .= "<tbody class=\"second\">";
-	$contents .= "<tr>";
-	$contents .= "<td align=\"right\"><strong>" . $lang_module ['autoinstall_module_select_file'] . ": </strong></td>\n";
-	$contents .= "<td>";
-	$contents .= "<input type='hidden' name='" . NV_OP_VARIABLE . "' value='" . $op . "'/>";
-	$contents .= "<input type='file' name='modulefile'/>";
-	$contents .= "</td>";
-	$contents .= "</tr>";
-	$contents .= "</tbody>";
-	$contents .= "<tr>";
-	$contents .= "<td colspan='2' align='center'>";
-	$contents .= "<input name=\"continue\" type=\"button\" value=\"" . $lang_module ['autoinstall_continue'] . "\" />\n";
-	$contents .= "<input name=\"back\" type=\"button\" value=\"" . $lang_module ['autoinstall_back'] . "\" />\n";
-	$contents .= "</td>";
-	$contents .= "</tr>";
-	$contents .= "</table>";
-	$contents .= "</form>";
-	$contents .= '
-<script type="text/javascript">
-function checkext(myArray,myValue) {
-	var type = eval(myArray).join().indexOf(myValue)>=0;
-	return type;
+            }
+            else
+            {
+                $contents .= $lang_module['autoinstall_module_error_invalidfile'] . '  <a href="javascript:history.go(-1)">' . $lang_module['autoinstall_module_error_invalidfile_back'] . '</a>';
+            }
+        }
+        else
+            $contents .= "<span style='color:red'>" . $lang_module['autoinstall_module_error_uploadfile'] . "</span><br />";
+    }
+    include ( NV_ROOTDIR . "/includes/header.php" );
+    echo nv_admin_theme( $contents );
+    include ( NV_ROOTDIR . "/includes/footer.php" );
 }
- $(function(){
- 	$("input[name=continue]").click(function(){
-		var modulefile = $("input[name=modulefile]").val();
-		if (modulefile==""){
-			alert("' . $lang_module ['autoinstall_module_error_nofile'] . '");
-			return false;
-		}
-		var filezip = modulefile.slice(-3);
-		var filegzip = modulefile.slice(-2);
-		var allowext = new Array("zip","gz");
-		if (!checkext(allowext,filezip) || !checkext(allowext,filegzip)){
-			alert("' . $lang_module ['autoinstall_module_error_filetype'] . '");
-		    return false;
-		}
-		$("form[name=install_module]").submit();
- 	});
- 	$("input[name=back]").click(function(){
- 		$("#content").slideUp();
-		$("#step1").slideDown();
- 	});
-
- });
-</script>
-';
-	echo $contents;
+else
+{
+    $op = $nv_Request->get_string( 'op', 'get' );
+    $contents .= "<form name='install_module' enctype='multipart/form-data' action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" method=\"post\">";
+    $contents .= "<table summary=\"\" class=\"tab1\">\n";
+    $contents .= "<tbody class=\"second\">";
+    $contents .= "<tr>";
+    $contents .= "<td align=\"right\"><strong>" . $lang_module['autoinstall_module_select_file'] . ": </strong></td>\n";
+    $contents .= "<td>";
+    $contents .= "<input type='hidden' name='" . NV_OP_VARIABLE . "' value='" . $op . "'/>";
+    $contents .= "<input type='file' name='modulefile'/>";
+    $contents .= "</td>";
+    $contents .= "</tr>";
+    $contents .= "</tbody>";
+    $contents .= "<tr>";
+    $contents .= "<td colspan='2' align='center'>";
+    $contents .= "<input name=\"continue\" type=\"button\" value=\"" . $lang_module['autoinstall_continue'] . "\" />\n";
+    $contents .= "<input name=\"back\" type=\"button\" value=\"" . $lang_module['autoinstall_back'] . "\" />\n";
+    $contents .= "</td>";
+    $contents .= "</tr>";
+    $contents .= "</table>";
+    $contents .= "</form>";
+    $contents .= '
+				<script type="text/javascript">
+				function checkext(myArray,myValue) {
+					var type = eval(myArray).join().indexOf(myValue)>=0;
+					return type;
+				}
+				 $(function(){
+				 	$("input[name=continue]").click(function(){
+						var modulefile = $("input[name=modulefile]").val();
+						if (modulefile==""){
+							alert("' . $lang_module['autoinstall_module_error_nofile'] . '");
+							return false;
+						}
+						var filezip = modulefile.slice(-3);
+						var filegzip = modulefile.slice(-2);
+						var allowext = new Array("zip","gz");
+						if (!checkext(allowext,filezip) || !checkext(allowext,filegzip)){
+							alert("' . $lang_module['autoinstall_module_error_filetype'] . '");
+						    return false;
+						}
+						$("form[name=install_module]").submit();
+				 	});
+				 	$("input[name=back]").click(function(){
+				 		$("#content").slideUp();
+						$("#step1").slideDown();
+				 	});
+				
+				 });
+				</script>
+				';
+    echo $contents;
 }
 ?>

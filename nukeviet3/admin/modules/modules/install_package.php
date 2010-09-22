@@ -60,9 +60,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
             $allowfolder[] = NV_ROOTDIR . '/themes/admin_default/modules/' . $modulename . '/';
         }
     }
-    
-    $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'module_' . $modulename . '.zip';
-    
+    $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'module_' . $modulename . '_' . md5( nv_genpass( 10 ) . session_id() ) . '.zip';
     if ( file_exists( $file_src ) )
     {
         @unlink( $file_src );
@@ -70,8 +68,9 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
     $zip = new PclZip( $file_src );
     $zip->add( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR );
     $filesize = @filesize( $file_src );
-    $filesize = ( round( $filesize / 1024, 2 ) > 1024 ) ? ( ( round( $filesize / ( pow( 1024, 2 ) ), 2 ) ) > 1024 ) ? ( round( $filesize / ( pow( 1024, 3 ) ), 2 ) ) . 'GB' : ( round( $filesize / ( pow( 1024, 2 ) ), 2 ) ) . 'MB' : round( $filesize / 1024, 2 ) . ' KB';
-    echo '<a href="' . NV_BASE_SITEURL . NV_TEMP_DIR . '/' . basename( $file_src ) . '"><span style="font-size:16px;color:red">' . basename( $file_src ) . '' . ' - ' . $filesize . '</span></a>';
+    $file_name = basename( $file_src );
+    $linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;mod=nv3_module_" . $modulename . ".zip&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . "&amp;filename=" . $file_name;
+    echo '<a href="' . $linkgetfile . '"><span style="font-size:16px;color:red">nv3_module_' . $modulename . '' . ' - ' . nv_convertfromBytes( $filesize ) . '</span></a>';
 }
 else
 {

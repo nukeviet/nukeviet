@@ -14,11 +14,20 @@ $menu_top = array(
 );
 $submenu['setup'] = $lang_module['modules'];
 $submenu['vmodule'] = $lang_module['vmodule_add'];
-$submenu['autoinstall'] = $lang_module['autoinstall'];
 
 $allow_func = array( 
-    'main', 'list', 'setup', 'vmodule', 'autoinstall', 'install_module', 'install_package', 'install_check', 'edit', 'del', 'change_inmenu', 'change_submenu', 'change_weight', 'change_act', 'empty_mod', 'recreate_mod', 'show', 'change_func_weight', 'change_custom_name', 'change_func_submenu', 'change_block_weight' 
+    'main', 'list', 'setup', 'vmodule', 'edit', 'del', 'change_inmenu', 'change_submenu', 'change_weight', 'change_act', 'empty_mod', 'recreate_mod', 'show', 'change_func_weight', 'change_custom_name', 'change_func_submenu', 'change_block_weight' 
 );
+
+if ( defined( "NV_IS_GODADMIN" ) )
+{
+    $submenu['autoinstall'] = $lang_module['autoinstall'];
+    $allow_func[] = "autoinstall";
+    $allow_func[] = "install_module";
+    $allow_func[] = "install_package";
+    $allow_func[] = "install_check";
+    $allow_func[] = "getfile";
+}
 
 define( 'NV_IS_FILE_MODULES', true );
 

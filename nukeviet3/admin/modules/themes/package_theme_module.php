@@ -36,13 +36,15 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
     {
         $allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/images/' . $modulename . '/';
     }
-    $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . $modulename . '.zip';
+    $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . $modulename . '_' . md5( nv_genpass( 10 ) . session_id() ) . '.zip';
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
     $zip = new PclZip( $file_src );
-	$zip->create( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
+    $zip->create( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
+    
     $filesize = @filesize( $file_src );
-    $filesize = ( round( $filesize / 1024, 2 ) > 1024 ) ? ( ( round( $filesize / ( pow( 1024, 2 ) ), 2 ) ) > 1024 ) ? ( round( $filesize / ( pow( 1024, 3 ) ), 2 ) ) . 'GB' : ( round( $filesize / ( pow( 1024, 2 ) ), 2 ) ) . 'MB' : round( $filesize / 1024, 2 ) . ' KB';
-    echo '<a href="' . NV_BASE_SITEURL . '' . NV_TEMP_DIR . '/' . basename( $file_src ) . '"><span style="font-size:16px;color:red">' . basename( $file_src ) . '' . ' - ' . $filesize . '</span></a>';
+    $file_name = basename( $file_src );
+    $linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;mod=nv3_theme_" . $themename . "_" . $modulename . ".zip&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . "&amp;filename=" . $file_name;
+    echo '<a href="' . $linkgetfile . '"><span style="font-size:16px;color:red">nv3_theme_' . $themename . '_' . $modulename . '   - ' . nv_convertfromBytes( $filesize ) . '</span></a>';
 }
 else
 {
@@ -83,7 +85,8 @@ else
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>";
     $contents .= "<td colspan='2' align='center'>";
-    $contents .= "<p id='message' style='color:red;display:none'></p>";
+    $contents .= "<p id='message' style='color:
+    red;display:none'></p>";
     $contents .= "</td>";
     $contents .= "</tr>";
     $contents .= "</tbody>";
@@ -93,24 +96,34 @@ else
 <script type="text/javascript">
  $(function(){
  	$("input[name=continue]").click(function(){
- 		var themename = $("select[name=themename]").val();
- 		var modulename = $("select[name=modulename]").val();
- 		if (themename!=0 && modulename!=0){
+ 		var themename = $
+    ( "select[name=themename]" ) . val();
+ 		var modulename = $
+    ( "select[name=modulename]" ) . val();
+    if ( themename != 0 && modulename != 0 )
+    {
  			$("#message").html("<img src=\'../images/load_bar.gif\'/>' . $lang_module['autoinstall_package_processing'] . '");
- 			$("#message").fadeIn();
- 			$("input[name=continue]").attr("disabled","disabled");
- 			$("input[name=back]").attr("disabled","disabled");
- 			$("#step1").slideUp();
+ 			$
+        ( "#message" ) . fadeIn();
+ 			$
+        ( "input[name=continue]" ) . attr( "disabled", "disabled" );
+ 			$
+        ( "input[name=back]" ) . attr( "disabled", "disabled" );
+ 			$
+        ( "#step1" ) . slideUp();
 			$.ajax({	
 				type: "POST",
 				url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '",
 				data: "themename="+ themename+"&modulename="+modulename+"&' . NV_OP_VARIABLE . '=' . $op . '",
 				success: function(data){				
-					$("input[name=back]").removeAttr("disabled");
-					$("input[name=continue]").removeAttr("disabled");
-					$("#message").html(data);
-				}
-			});
+					$
+        ( "input[name=back]" ) . removeAttr( "disabled" );
+					$
+        ( "input[name=continue]" ) . removeAttr( "disabled" );
+					$
+        ( "#message" ) . html( data );
+    }
+});
  		} else {
  			alert("' . $lang_module['autoinstall_package_noselect_module_theme'] . '");
  			return false;

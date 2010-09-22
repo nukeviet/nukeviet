@@ -25,7 +25,7 @@ function cron_dump_autobackup ( )
     $file_ext = ( $contents['savetype'] == "sql" ) ? "sql" : "sql.gz";
     $log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
     
-    $contents['filename'] = $log_dir . "/" . md5( $client_info['session_id'] ) . "_" . $current_day . "." . $file_ext;
+    $contents['filename'] = $log_dir . "/" . md5( nv_genpass( 10 ) . $client_info['session_id'] ) . "_" . $current_day . "." . $file_ext;
     
     if ( ! file_exists( $contents['filename'] ) )
     {

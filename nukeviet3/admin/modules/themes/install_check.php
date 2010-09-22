@@ -8,9 +8,9 @@
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 $title = $note = $module_file = "";
 
-$xauto = NV_ROOTDIR . '/'.NV_TEMP_DIR.'/xtheme' . md5( session_id() ) . '.list';
-$filename = NV_ROOTDIR . '/'.NV_TEMP_DIR.'/xtheme' . md5( session_id() ) . '.zip';
-$xfolder = NV_ROOTDIR . '/'.NV_TEMP_DIR.'/xthemefolder' . md5( session_id() ) . '.list';
+$xauto = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme' . md5( session_id() ) . '.list';
+$filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme' . md5( session_id() ) . '.zip';
+$xfolder = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'themefolder' . md5( session_id() ) . '.list';
 $file = file( $xauto );
 $errorfile = '';
 
@@ -114,7 +114,7 @@ else
     if ( $dir_not_is_writable != array() )
     {
         echo '<div id="install_content"><h4>' . $lang_module['autoinstall_theme_unzip_abort'] . '</h4>';
-        echo implode("<br>", $dir_not_is_writable);
+        echo implode( "<br>", $dir_not_is_writable );
         echo '<input style="margin-top:10px;font-size:15px" type="button" name="checkfile" value="' . $lang_module['autoinstall_theme_checkfile'] . '"/><br /><br />';
         echo '</div><script type="text/javascript">
         		 $(function(){
