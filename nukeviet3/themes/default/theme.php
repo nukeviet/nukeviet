@@ -41,7 +41,6 @@ function nv_site_theme ( $contents )
     $xtpl->assign( 'THEME_LOGO_TITLE', $global_config['site_name'] );
     $xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA );
     $xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
-    $xtpl->assign( 'THEME_SEARCH_SUBMIT', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
     $xtpl->assign( 'THEME_DIGCLOCK_TEXT', nv_date( "H:i T l, d/m/Y", NV_CURRENTTIME ) );
     $xtpl->assign( 'THEME_RSS_INDEX_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=rss" );
     

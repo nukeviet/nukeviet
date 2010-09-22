@@ -83,11 +83,11 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
     }
     if ( in_array( 'images', $admin_info['allow_files_type'] ) )
     {
-        $CKEditor->config['filebrowserImageUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&currentpath=" . $currentpath;
+        $CKEditor->config['filebrowserImageUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&type=image&currentpath=" . $currentpath;
     }
-    if ( in_array( 'images', $admin_info['allow_files_type'] ) )
+    if ( in_array( 'flash', $admin_info['allow_files_type'] ) )
     {
-        $CKEditor->config['filebrowserFlashUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&currentpath=" . $currentpath;
+        $CKEditor->config['filebrowserFlashUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&type=flash&currentpath=" . $currentpath;
     }
     
     $val = nv_unhtmlspecialchars( $val );

@@ -11,6 +11,19 @@ $imgfolder = htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', 'po
 if ( is_uploaded_file( $_FILES['upload']['tmp_name'] ) && in_array( NV_UPLOADS_DIR, explode( '/', $imgfolder ) ) )
 {
     $CKEditorFuncNum = $nv_Request->get_string( 'CKEditorFuncNum', 'post,get', 0 );
+    $type = $nv_Request->get_string( 'type', 'post,get' );
+    if ( $type == "image" and in_array( 'images', $admin_info['allow_files_type'] ) )
+    {
+        $admin_info['allow_files_type'] = array( 
+            'images' 
+        );
+    }
+    elseif ( $type == "flash" and in_array( 'flash', $admin_info['allow_files_type'] ) )
+    {
+        $admin_info['allow_files_type'] = array( 
+            'flash' 
+        );
+    }
     require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
     $upload = new upload( $admin_info['allow_files_type'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
     $upload_info = $upload->save_file( $_FILES['upload'], NV_ROOTDIR . '/' . $imgfolder, false );
