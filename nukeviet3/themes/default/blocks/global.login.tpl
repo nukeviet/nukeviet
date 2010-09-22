@@ -41,13 +41,17 @@
         <!-- END: openid -->
     </fieldset>
 </form>
-<!-- END: main --><!-- BEGIN: signed -->
+<!-- END: main -->
+<!-- BEGIN: signed -->
 <div class="content signed clearfix">
     <p>
         {LANG.wellcome}: <strong>{USER.full_name}</strong>
     </p>
-    <a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{{USER.full_name}}" class="fl" /></a><!-- BEGIN: admin --><a title="{LANG.logout}" href="{LOGOUT_ADMIN}">{LANG.logout}</a>
-    <!-- END: admin --><a title="{LANG.changpass}" href="{CHANGE_PASS}">{LANG.changpass}</a>
+    <a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.full_name}" class="fl" /></a>
+    <!-- BEGIN: admin -->
+    	<a title="{LANG.logout}" href="{LOGOUT_ADMIN}">{LANG.logout}</a>
+    <!-- END: admin -->
+    <a title="{LANG.changpass}" href="{CHANGE_PASS}">{LANG.changpass}</a>
     <a title="{LANG.edituser}" href="{CHANGE_INFO}">{LANG.edituser}</a>
 </div>
 <!-- END: signed -->
