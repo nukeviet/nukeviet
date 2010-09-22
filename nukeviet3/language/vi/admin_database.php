@@ -74,4 +74,10 @@ $lang_module['dump_autobackup'] = "Kích hoạt tiện ích lưu CSDL";
 $lang_module['dump_backup_ext'] = "Định dạng lưu CSDL";
 $lang_module['dump_backup_day'] = "Số lượng file lưu CSDL.";
 
+$lang_module['file_backup'] = "Data backup";
+$lang_module['file_nb'] = "STT";
+$lang_module['file_name'] = "Tên file";
+$lang_module['file_time'] = "Thời gian backup";
+$lang_module['file_site'] = "Dung lượng";
+
 ?>

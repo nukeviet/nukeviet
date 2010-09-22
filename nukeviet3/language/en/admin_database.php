@@ -71,4 +71,10 @@ $lang_module['dump_autobackup'] = "Activate auto backup";
 $lang_module['dump_backup_ext'] = "File extension";
 $lang_module['dump_backup_day'] = "File numbers";
 
+$lang_module['file_backup'] = "Data backup";
+$lang_module['file_nb'] = "Number";
+$lang_module['file_name'] = "File name";
+$lang_module['file_time'] = "Time";
+$lang_module['file_site'] = "Size";
+
 ?>

@@ -194,179 +194,180 @@ $menu_top = array(
     "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_database'] 
 );
 
+$submenu['file'] = $lang_module['file_backup'];
 $submenu['setting'] = $lang_global['mod_settings'];
 
 $allow_func = array( 
-    'main', 'savefile', 'download', 'optimize', 'setting' 
+    'main', 'savefile', 'download', 'optimize', 'setting', 'file', 'getfile', 'delfile' 
 );
 
 define( 'NV_IS_FILE_DATABASE', true );
 
-function main_theme( $contents )
+function main_theme ( $contents )
 {
-	$return = "";
-	$return .= "<table summary=\"\" class=\"tab1\">\n";
-	$return .= "<caption>" . $contents['captions']['database_info'] . "</caption>\n";
-	$return .= "<col span=\"2\" valign=\"top\" width=\"50%\" />\n";
-	$a = 0;
-	foreach ( $contents['database'] as $key => $value )
-	{
-		$class = ( $a % 2 ) ? " class=\"second\"" : "";
-		$return .= "<tbody" . $class . ">\n";
-		$return .= "<tr>\n";
-		$return .= "<td>" . $key . "</td>\n";
-		$return .= "<td>" . $value . "</td>\n";
-		$return .= "</tr>\n";
-		$return .= "</tbody>\n";
-		$a++;
-	}
-	$return .= "</table>\n";
-
-	$return .= "<div id=\"show_tables\">\n";
-	$return .= "</div>\n";
-	$return .= "<script type=\"text/javascript\">\n";
-	$return .= "nv_show_dbtables();\n";
-	$return .= "</script>\n";
-	$return .= "<br /><br />\n";
-
-	return $return;
+    $return = "";
+    $return .= "<table summary=\"\" class=\"tab1\">\n";
+    $return .= "<caption>" . $contents['captions']['database_info'] . "</caption>\n";
+    $return .= "<col span=\"2\" valign=\"top\" width=\"50%\" />\n";
+    $a = 0;
+    foreach ( $contents['database'] as $key => $value )
+    {
+        $class = ( $a % 2 ) ? " class=\"second\"" : "";
+        $return .= "<tbody" . $class . ">\n";
+        $return .= "<tr>\n";
+        $return .= "<td>" . $key . "</td>\n";
+        $return .= "<td>" . $value . "</td>\n";
+        $return .= "</tr>\n";
+        $return .= "</tbody>\n";
+        $a ++;
+    }
+    $return .= "</table>\n";
+    
+    $return .= "<div id=\"show_tables\">\n";
+    $return .= "</div>\n";
+    $return .= "<script type=\"text/javascript\">\n";
+    $return .= "nv_show_dbtables();\n";
+    $return .= "</script>\n";
+    $return .= "<br /><br />\n";
+    
+    return $return;
 }
 
-function nv_show_tables_theme( $contents )
+function nv_show_tables_theme ( $contents )
 {
-	$return = "";
-	$return .= "<form name=\"myform\" method=\"post\" action=\"" . $contents['action'] . "\" onsubmit=\"nv_chsubmit(this,'tables[]');return false;\">\n";
-	$return .= "<table summary=\"\" class=\"tab1\">\n";
-	$return .= "<caption>" . $contents['captions']['tables_info'] . "</caption>\n";
-	$return .= "<col valign=\"middle\" width=\"10px\" />\n";
-	$return .= "<col span=\"10\" valign=\"top\" />\n";
-	$return .= "<thead>\n";
-	$return .= "<tr>\n";
-	$return .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);\" /></td>\n";
-	foreach ( $contents['columns'] as $value )
-	{
-		$return .= "<td>" . $value . "</td>\n";
-	}
-	$return .= "</tr>\n";
-	$return .= "</thead>\n";
-
-	$return .= "<tfoot>\n";
-	$return .= "<tr>\n";
-	$return .= "<td colspan=\"11\">\n";
-	$return .= "<select id=\"op_name\" name=\"" . $contents['op_name'] . "\" onchange=\"nv_checkForm();\">\n";
-	foreach ( $contents['op'] as $key => $val )
-	{
-		$return .= "<option value=\"" . $key . "\">" . $val . "</option>\n";
-	}
-	$return .= "</select>\n";
-	$return .= "<select id=\"type_name\" name=\"" . $contents['type_name'] . "\">\n";
-	foreach ( $contents['type'] as $key => $val )
-	{
-		$return .= "<option value=\"" . $key . "\">" . $val . "</option>\n";
-	}
-	$return .= "</select>\n";
-	$return .= "<select id=\"ext_name\" name=\"" . $contents['ext_name'] . "\">\n";
-	foreach ( $contents['ext'] as $key => $val )
-	{
-		$return .= "<option value=\"" . $key . "\">" . $val . "</option>\n";
-	}
-	$return .= "</select>\n";
-	$return .= "<input name=\"Submit1\" id=\"subm_form\" type=\"submit\" value=\"" . $contents['submit'] . "\" />\n";
-	$return .= "</td>\n";
-	$return .= "</tr>\n";
-	$return .= "</tfoot>\n";
-
-	$a = 0;
-	foreach ( $contents['rows'] as $key => $values )
-	{
-		$class = ( $a % 2 ) ? " class=\"second\"" : "";
-		$return .= "<tbody" . $class . ">\n";
-		$return .= "<tr>\n";
-		$tag = ( empty( $values[3] ) ) ? "td" : "th";
-		$return .= "<" . $tag . "><input name=\"tables[]\" type=\"checkbox\" value=\"" . $key . "\" onclick=\"nv_UncheckAll(this.form, 'tables[]', 'check_all[]', this.checked);\" /></" . $tag . ">\n";
-		foreach ( $values as $value )
-		{
-			$return .= "<" . $tag . ">" . $value . "</" . $tag . ">\n";
-		}
-		$return .= "</tr>\n";
-		$return .= "</tbody>\n";
-		$a++;
-	}
-	$return .= "<tbody class=\"third\">\n";
-	$return .= "<tr>\n";
-	$return .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);\" /></td>\n";
-	$return .= "<td colspan=\"10\">\n";
-	$return .= "<strong>" . $contents['third'] . "</strong>\n";
-	$return .= "</td>\n";
-	$return .= "</tr>\n";
-	$return .= "</tbody>\n";
-	$return .= "</table>\n";
-	$return .= "</form>\n";
-	$return .= "<br /><br />\n";
-	return $return;
+    $return = "";
+    $return .= "<form name=\"myform\" method=\"post\" action=\"" . $contents['action'] . "\" onsubmit=\"nv_chsubmit(this,'tables[]');return false;\">\n";
+    $return .= "<table summary=\"\" class=\"tab1\">\n";
+    $return .= "<caption>" . $contents['captions']['tables_info'] . "</caption>\n";
+    $return .= "<col valign=\"middle\" width=\"10px\" />\n";
+    $return .= "<col span=\"10\" valign=\"top\" />\n";
+    $return .= "<thead>\n";
+    $return .= "<tr>\n";
+    $return .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);\" /></td>\n";
+    foreach ( $contents['columns'] as $value )
+    {
+        $return .= "<td>" . $value . "</td>\n";
+    }
+    $return .= "</tr>\n";
+    $return .= "</thead>\n";
+    
+    $return .= "<tfoot>\n";
+    $return .= "<tr>\n";
+    $return .= "<td colspan=\"11\">\n";
+    $return .= "<select id=\"op_name\" name=\"" . $contents['op_name'] . "\" onchange=\"nv_checkForm();\">\n";
+    foreach ( $contents['op'] as $key => $val )
+    {
+        $return .= "<option value=\"" . $key . "\">" . $val . "</option>\n";
+    }
+    $return .= "</select>\n";
+    $return .= "<select id=\"type_name\" name=\"" . $contents['type_name'] . "\">\n";
+    foreach ( $contents['type'] as $key => $val )
+    {
+        $return .= "<option value=\"" . $key . "\">" . $val . "</option>\n";
+    }
+    $return .= "</select>\n";
+    $return .= "<select id=\"ext_name\" name=\"" . $contents['ext_name'] . "\">\n";
+    foreach ( $contents['ext'] as $key => $val )
+    {
+        $return .= "<option value=\"" . $key . "\">" . $val . "</option>\n";
+    }
+    $return .= "</select>\n";
+    $return .= "<input name=\"Submit1\" id=\"subm_form\" type=\"submit\" value=\"" . $contents['submit'] . "\" />\n";
+    $return .= "</td>\n";
+    $return .= "</tr>\n";
+    $return .= "</tfoot>\n";
+    
+    $a = 0;
+    foreach ( $contents['rows'] as $key => $values )
+    {
+        $class = ( $a % 2 ) ? " class=\"second\"" : "";
+        $return .= "<tbody" . $class . ">\n";
+        $return .= "<tr>\n";
+        $tag = ( empty( $values[3] ) ) ? "td" : "th";
+        $return .= "<" . $tag . "><input name=\"tables[]\" type=\"checkbox\" value=\"" . $key . "\" onclick=\"nv_UncheckAll(this.form, 'tables[]', 'check_all[]', this.checked);\" /></" . $tag . ">\n";
+        foreach ( $values as $value )
+        {
+            $return .= "<" . $tag . ">" . $value . "</" . $tag . ">\n";
+        }
+        $return .= "</tr>\n";
+        $return .= "</tbody>\n";
+        $a ++;
+    }
+    $return .= "<tbody class=\"third\">\n";
+    $return .= "<tr>\n";
+    $return .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);\" /></td>\n";
+    $return .= "<td colspan=\"10\">\n";
+    $return .= "<strong>" . $contents['third'] . "</strong>\n";
+    $return .= "</td>\n";
+    $return .= "</tr>\n";
+    $return .= "</tbody>\n";
+    $return .= "</table>\n";
+    $return .= "</form>\n";
+    $return .= "<br /><br />\n";
+    return $return;
 }
 
-function nv_show_tab_theme( $contents )
+function nv_show_tab_theme ( $contents )
 {
-	$return = "";
-	$return .= "<div style=\"width:300px;position:relative;float:left\">\n";
-	$return .= "<table summary=\"\" class=\"tab1\" style=\"width:330px\">\n";
-	$return .= "<caption>" . $contents['table']['caption'] . "</caption>\n";
-	$return .= "<col span=\"2\" valign=\"top\" width=\"50%\" />\n";
-	$a = 0;
-	foreach ( $contents['table']['info'] as $key => $value )
-	{
-		$class = ( $a % 2 ) ? " class=\"second\"" : "";
-		$return .= "<tbody" . $class . ">\n";
-		$return .= "<tr>\n";
-		$return .= "<td>" . $value[0] . "</td>\n";
-		$return .= "<td>" . $value[1] . "</td>\n";
-		$return .= "</tr>\n";
-		$return .= "</tbody>\n";
-		$a++;
-	}
-	$return .= "</table>\n";
-	$return .= "</div>\n";
-	$return .= "<div style=\"margin-top:10px;position:relative;float:right;width:490px;\">\n";
-	$return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"nv_show_highlight('php');\"><span><span>" . $contents['table']['show_lang'][0] . "</span></span></a>\n";
-	$return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"nv_show_highlight('sql');\"><span><span>" . $contents['table']['show_lang'][1] . "</span></span></a>\n";
-	$return .= "<div class=\"clear\"></div>\n";
-	$return .= "<div id=\"my_highlight\" style=\"background-color:#F2F2F2;border: 1px solid #CCC;margin-top:10px;padding:10px;\">\n";
-	$return .= $contents['table']['show'];
-	$return .= "</div>\n";
-	$return .= "</div>\n";
-	$return .= "<div class=\"clear\"></div>\n";
-	$return .= "<br />\n";
-
-	$return .= "<table summary=\"\" class=\"tab1\">\n";
-	$return .= "<caption>" . $contents['table']['row']['caption'] . "</caption>\n";
-	$return .= "<col valign=\"top\" width=\"40%\" />\n";
-	$return .= "<col span=\"5\" valign=\"top\" />\n";
-	$return .= "<thead>\n";
-	$return .= "<tr>\n";
-	foreach ( $contents['table']['row']['columns'] as $value )
-	{
-		$return .= "<td>" . $value . "</td>\n";
-	}
-	$return .= "</tr>\n";
-	$return .= "</thead>\n";
-	$a = 0;
-	foreach ( $contents['table']['row']['detail'] as $key => $values )
-	{
-		$class = ( $a % 2 ) ? " class=\"second\"" : "";
-		$return .= "<tbody" . $class . ">\n";
-		$return .= "<tr>\n";
-		foreach ( $values as $value )
-		{
-			$return .= "<td>" . $value . "</td>\n";
-		}
-		$return .= "</tr>\n";
-		$return .= "</tbody>\n";
-		$a++;
-	}
-	$return .= "</table>\n";
-	$return .= "<br /><br />\n";
-	return $return;
+    $return = "";
+    $return .= "<div style=\"width:300px;position:relative;float:left\">\n";
+    $return .= "<table summary=\"\" class=\"tab1\" style=\"width:330px\">\n";
+    $return .= "<caption>" . $contents['table']['caption'] . "</caption>\n";
+    $return .= "<col span=\"2\" valign=\"top\" width=\"50%\" />\n";
+    $a = 0;
+    foreach ( $contents['table']['info'] as $key => $value )
+    {
+        $class = ( $a % 2 ) ? " class=\"second\"" : "";
+        $return .= "<tbody" . $class . ">\n";
+        $return .= "<tr>\n";
+        $return .= "<td>" . $value[0] . "</td>\n";
+        $return .= "<td>" . $value[1] . "</td>\n";
+        $return .= "</tr>\n";
+        $return .= "</tbody>\n";
+        $a ++;
+    }
+    $return .= "</table>\n";
+    $return .= "</div>\n";
+    $return .= "<div style=\"margin-top:10px;position:relative;float:right;width:490px;\">\n";
+    $return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"nv_show_highlight('php');\"><span><span>" . $contents['table']['show_lang'][0] . "</span></span></a>\n";
+    $return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"nv_show_highlight('sql');\"><span><span>" . $contents['table']['show_lang'][1] . "</span></span></a>\n";
+    $return .= "<div class=\"clear\"></div>\n";
+    $return .= "<div id=\"my_highlight\" style=\"background-color:#F2F2F2;border: 1px solid #CCC;margin-top:10px;padding:10px;\">\n";
+    $return .= $contents['table']['show'];
+    $return .= "</div>\n";
+    $return .= "</div>\n";
+    $return .= "<div class=\"clear\"></div>\n";
+    $return .= "<br />\n";
+    
+    $return .= "<table summary=\"\" class=\"tab1\">\n";
+    $return .= "<caption>" . $contents['table']['row']['caption'] . "</caption>\n";
+    $return .= "<col valign=\"top\" width=\"40%\" />\n";
+    $return .= "<col span=\"5\" valign=\"top\" />\n";
+    $return .= "<thead>\n";
+    $return .= "<tr>\n";
+    foreach ( $contents['table']['row']['columns'] as $value )
+    {
+        $return .= "<td>" . $value . "</td>\n";
+    }
+    $return .= "</tr>\n";
+    $return .= "</thead>\n";
+    $a = 0;
+    foreach ( $contents['table']['row']['detail'] as $key => $values )
+    {
+        $class = ( $a % 2 ) ? " class=\"second\"" : "";
+        $return .= "<tbody" . $class . ">\n";
+        $return .= "<tr>\n";
+        foreach ( $values as $value )
+        {
+            $return .= "<td>" . $value . "</td>\n";
+        }
+        $return .= "</tr>\n";
+        $return .= "</tbody>\n";
+        $a ++;
+    }
+    $return .= "</table>\n";
+    $return .= "<br /><br />\n";
+    return $return;
 }
 
 ?>

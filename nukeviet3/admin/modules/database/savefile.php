@@ -36,7 +36,8 @@ $contents = array();
 $contents['tables'] = ( empty( $tables ) ) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
 $contents['type'] = ( $type != "str" ) ? "all" : "str";
 $contents['savetype'] = ( $ext != "sql" ) ? "gz" : "sql";
-$file_name = "backupdata_" . date( "Y-m-d-H-i", time() ) . "." . $contents['savetype'];
+$file_ext = ( $contents['savetype'] == "sql" ) ? "sql" : "sql.gz";
+$file_name = md5( $client_info['session_id'] ) . "_backupdata_" . date( "Y-m-d-H-i", time() ) . "." . $file_ext;
 $contents['filename'] = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup/" . $file_name;
 include ( NV_ROOTDIR . "/includes/core/dump.php" );
 $result = nv_dump_save( $contents );
@@ -47,7 +48,8 @@ if ( empty( $result ) )
 else
 {
     $content = $lang_module['save_ok'];
-    $content .= "<br><br><a href=\"" . NV_BASE_SITEURL . "" . str_replace( NV_ROOTDIR . "/", "", $contents['filename'] ) . "\">" . $lang_module['save_download'] . "</a>";
+    $linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file_name . "&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] );
+    $content .= "<br><br><a href=\"" . $linkgetfile . "\">" . $lang_module['save_download'] . "</a>";
 }
 $page_title = $lang_module['save_data'];
 
