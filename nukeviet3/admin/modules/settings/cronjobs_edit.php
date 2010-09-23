@@ -88,7 +88,7 @@ else
 $contents = array();
 $contents['is_error'] = ! empty( $error ) ? 1 : 0;
 $contents['title'] = ! empty( $error ) ? $error : $lang_module['nv_admin_edit_title'];
-$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$op."&amp;id=" . $id;
+$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id;
 $contents['cron_name'] = array( 
     $lang_module['cron_name'], $cron_name, 100 
 );
@@ -129,7 +129,8 @@ $contents['del'] = array(
 $contents['submit'] = $lang_global['save'];
 $contents = call_user_func( "nv_admin_edit_theme", $contents );
 
-$page_title = $lang_global['mod_cronjobs']." -> ".$lang_module['nv_admin_edit'];
+$page_title = $lang_global['mod_cronjobs'] . " -> " . $lang_module['nv_admin_edit'];
+$set_active_op = "cronjobs";
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

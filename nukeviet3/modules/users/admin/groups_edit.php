@@ -9,7 +9,8 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module['nv_admin_edit'];
+$page_title = $lang_global['mod_groups'] . " -> " . $lang_module['nv_admin_edit'];
+$set_active_op = "groups";
 
 if ( defined( 'NV_EDITOR' ) ) require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 

@@ -123,6 +123,7 @@ $contents['submit'] = $lang_global['submit'];
 $contents = call_user_func( "nv_admin_add_theme", $contents );
 
 $page_title = $lang_global['mod_cronjobs']." -> ".$lang_module['nv_admin_add'];
+$set_active_op = "cronjobs";
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

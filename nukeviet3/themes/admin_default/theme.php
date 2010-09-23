@@ -11,7 +11,7 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_admin_theme ( $contents )
 {
-    global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $array_lang_admin, $my_head;
+    global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head;
     $dir_template = "";
     if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/main.tpl" ) )
     {
@@ -67,7 +67,7 @@ function nv_admin_theme ( $contents )
         $xtpl->parse( 'main.header.nv_add_my_head' );
     }
     $xtpl->assign( 'NV_GO_CLIENTSECTOR', $lang_global['go_clientsector'] );
-    $lang_site = (!empty($site_mods)) ? NV_LANG_DATA : $global_config['site_lang'];
+    $lang_site = ( ! empty( $site_mods ) ) ? NV_LANG_DATA : $global_config['site_lang'];
     $xtpl->assign( 'NV_GO_CLIENTSECTOR_URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_site );
     $xtpl->assign( 'NV_LOGOUT', $lang_global['logout'] );
     
@@ -131,7 +131,7 @@ function nv_admin_theme ( $contents )
             {
                 foreach ( $submenu as $n => $l )
                 {
-                    $xtpl->assign( 'VERTICAL_MENU_SUB_CURRENT', ( ( ! empty( $op ) and $op == $n ) ? " class=\"sub_current\"" : " class=\"sub_normal\"" ) );
+                    $xtpl->assign( 'VERTICAL_MENU_SUB_CURRENT', ( ( ( ! empty( $op ) and $op == $n ) or ( ! empty( $set_active_op ) and $set_active_op == $n ) ) ? " class=\"sub_current\"" : " class=\"sub_normal\"" ) );
                     $xtpl->assign( 'VERTICAL_MENU_SUB_HREF', $m );
                     $xtpl->assign( 'VERTICAL_MENU_SUB_HREF1', $n );
                     $xtpl->assign( 'VERTICAL_MENU_SUB_NAME', $l );

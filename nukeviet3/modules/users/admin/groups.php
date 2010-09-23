@@ -55,7 +55,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
     
     if ( $group_id )
     {
-        $page_title = $lang_module['group_pgtitle'];
+        $page_title = $lang_global['mod_groups'] . " -> " . $lang_module['group_pgtitle'];
         $contents['caption'] = sprintf( $lang_module['group_info'], $row['title'] );
         $contents['containerid'] = "list_users";
         $contents['users_list'] = rawurlencode( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=groups_users&group_id=" . $group_id );

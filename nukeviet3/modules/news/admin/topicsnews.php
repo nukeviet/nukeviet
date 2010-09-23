@@ -7,6 +7,8 @@
  */
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['topic_page'];
+$set_active_op = "topics";
+
 $topicid = $nv_Request->get_int( 'topicid', 'get' );
 $global_array_cat = array();
 $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, del_cache_time, description, keywords, lev FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";

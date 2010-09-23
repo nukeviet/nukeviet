@@ -10,7 +10,7 @@
 define( 'NV_ADMIN', true );
 
 //Ket noi den mainfile.php nam o thu muc goc.
-$realpath_mainfile = "";
+$realpath_mainfile = $set_active_op = "";
 
 $temp_dir = str_replace( '\\\\', '/', dirname( __file__ ) );
 $temp_path = "/../";

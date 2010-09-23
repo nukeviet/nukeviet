@@ -9,6 +9,7 @@
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['block'];
+$set_active_op = "blockcat";
 
 $sql = "SELECT bid, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
