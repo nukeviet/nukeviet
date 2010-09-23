@@ -10,7 +10,7 @@ if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 $page = 0;
 $topicalias = trim( $array_op[1] );
-$page = ( $count_op > 1 ) ? intval( substr( $array_op[2], 5 ) ) : 0;
+$page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-" ) ? intval( substr( $array_op[2], 5 ) ) : 0;
 
 list( $topicid, $topictitle ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `alias`=" . $db->dbescape( $topicalias ) . "" ) );
 if ( $topicid > 0 )
