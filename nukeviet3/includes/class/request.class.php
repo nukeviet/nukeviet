@@ -18,6 +18,7 @@ if ( ! defined( 'NV_EDITORSDIR' ) ) define( 'NV_EDITORSDIR', 'admin/editors' );
 
 if ( ! function_exists( 'color_hex2rgb' ) )
 {
+
     /**
      * color_hex2rgb()
      * 
@@ -182,7 +183,10 @@ class Request
         }
         $this->cookie_key = md5( $this->cookie_key );
         if ( ini_get( 'register_globals' ) == '1' || strtolower( ini_get( 'register_globals' ) ) == 'on' ) $this->is_register_globals = true;
-        if ( get_magic_quotes_gpc() ) $this->is_magic_quotes_gpc = true;
+        if ( function_exists( 'get_magic_quotes_gpc' ) )
+        {
+            if ( get_magic_quotes_gpc() ) $this->is_magic_quotes_gpc = true;
+        }
         if ( PHP_VERSION >= 5.2 && extension_loaded( 'filter' ) && filter_id( ini_get( 'filter.default' ) ) !== FILTER_UNSAFE_RAW ) $this->is_filter = true;
         $this->Initialize( $config['my_domains'] );
         $this->get_cookie_save_path();
@@ -238,6 +242,7 @@ class Request
             }
         }
     }
+
     /**
      * Request::Initialize()
      * 

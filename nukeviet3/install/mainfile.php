@@ -47,7 +47,6 @@ $sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'i
 require_once ( realpath( NV_ROOTDIR . "/install/config.php" ) );
 
 $global_config['my_domains'] = $_SERVER['SERVER_NAME'];
-$global_config['sitekey'] = md5( $global_config['my_domains'] . NV_ROOTDIR . date( "m.Y" ) );
 
 //Ket noi voi cac file constants, config, timezone
 require_once ( NV_ROOTDIR . "/includes/constants.php" );
@@ -75,6 +74,7 @@ $global_config['send_errors_list'] = NV_SEND_ERRORS_LIST;
 $global_config['error_log_path'] = NV_LOGS_DIR . '/error_logs';
 $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
+$global_config['sitekey'] = md5( $global_config['my_domains'] . NV_ROOTDIR . date( "m.Y" ) );
 
 //Ket noi voi class Error_handler
 require_once ( NV_ROOTDIR . '/includes/class/error.class.php' );
