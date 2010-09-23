@@ -52,7 +52,7 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
     $allow_modify_subdirectories = $nv_Request->get_int( 'allow_modify_subdirectories', 'post', 0 );
     $modules = $nv_Request->get_array( 'modules', 'post', array() );
     $position = filter_text_input( 'position', 'post', '', 1 );
-
+    
     if ( empty( $position ) )
     {
         $error = $lang_module['position_incorrect'];
@@ -68,7 +68,7 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
             {
                 if ( ! empty( $mod ) and in_array( $mod, $modules ) )
                 {
-                    $site_mods_admins = ( ( ! empty( $site_mods[$mod]['admins'] ) ) ? "," : "" ) . $userid;
+                    $site_mods_admins = $site_mods[$mod]['admins'] . ( ( ! empty( $site_mods[$mod]['admins'] ) ) ? "," : "" ) . $userid;
                     $site_mods_admins = explode( ",", $site_mods_admins );
                     $site_mods_admins = array_unique( $site_mods_admins );
                     $site_mods_admins = implode( ",", $site_mods_admins );
@@ -78,16 +78,16 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
                     $mds[] = $site_mods[$mod]['custom_title'];
                 }
             }
-
-            if( $is_delCache )
+            
+            if ( $is_delCache )
             {
                 nv_del_moduleCache( 'modules' );
             }
         }
-
+        
         $allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
         $files_level = ( ! empty( $allow_files_type ) ? implode( ",", $allow_files_type ) : "" ) . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
-
+        
         $sql = "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "` 
         (`admin_id`, `editor`, `lev`, `files_level`, `position`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) 
         VALUES (
@@ -99,7 +99,9 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
         0,'', '',0,'','')";
         if ( $db->sql_query( $sql ) )
         {
-            $result = array( 'admin_id' => $userid, 'editor' => $editor, 'lev' => $lev, 'allow_files_type' => $allow_files_type, 'allow_modify_files' => $allow_modify_files, 'allow_create_subdirectories' => $allow_create_subdirectories, 'allow_modify_subdirectories' => $allow_modify_subdirectories, 'position' => $position, 'modules' => ( ! empty( $mds ) ) ? implode( ", ", $mds ) : "" );
+            $result = array( 
+                'admin_id' => $userid, 'editor' => $editor, 'lev' => $lev, 'allow_files_type' => $allow_files_type, 'allow_modify_files' => $allow_modify_files, 'allow_create_subdirectories' => $allow_create_subdirectories, 'allow_modify_subdirectories' => $allow_modify_subdirectories, 'position' => $position, 'modules' => ( ! empty( $mds ) ) ? implode( ", ", $mds ) : "" 
+            );
             nv_admin_add_result( $result );
         }
         else
@@ -114,7 +116,9 @@ else
     $position = $editor = "";
     $lev = 3;
     $modules = array();
-    $allow_files_type = array( 'images', 'archives' );
+    $allow_files_type = array( 
+        'images', 'archives' 
+    );
     $allow_modify_files = $allow_create_subdirectories = $allow_modify_subdirectories = 0;
 }
 
@@ -133,7 +137,9 @@ foreach ( array_keys( $site_mods ) as $mod )
 $contents = array();
 
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add&amp;userid=" . $userid;
-$contents['lev'] = array( $lang_module['lev'], $lev, $lang_module['level2'], $lang_module['level3'] );
+$contents['lev'] = array( 
+    $lang_module['lev'], $lev, $lang_module['level2'], $lang_module['level3'] 
+);
 
 $editors = array();
 
@@ -148,20 +154,34 @@ if ( ! empty( $dirs ) )
 
 if ( ! empty( $editors ) )
 {
-    $contents['editor'] = array( $lang_module['editor'], $editors, $editor, $lang_module['not_use'] );
+    $contents['editor'] = array( 
+        $lang_module['editor'], $editors, $editor, $lang_module['not_use'] 
+    );
 }
 
 if ( ! empty( $global_config['file_allowed_ext'] ) )
 {
-    $contents['allow_files_type'] = array( $lang_module['allow_files_type'], $global_config['file_allowed_ext'], $allow_files_type );
+    $contents['allow_files_type'] = array( 
+        $lang_module['allow_files_type'], $global_config['file_allowed_ext'], $allow_files_type 
+    );
 }
 
-$contents['allow_modify_files'] = array( $lang_module['allow_modify_files'], $allow_modify_files );
-$contents['allow_create_subdirectories'] = array( $lang_module['allow_create_subdirectories'], $allow_create_subdirectories );
-$contents['allow_modify_subdirectories'] = array( $lang_module['allow_modify_subdirectories'], $allow_modify_subdirectories );
+$contents['allow_modify_files'] = array( 
+    $lang_module['allow_modify_files'], $allow_modify_files 
+);
+$contents['allow_create_subdirectories'] = array( 
+    $lang_module['allow_create_subdirectories'], $allow_create_subdirectories 
+);
+$contents['allow_modify_subdirectories'] = array( 
+    $lang_module['allow_modify_subdirectories'], $allow_modify_subdirectories 
+);
 
-$contents['mods'] = array( $lang_module['if_level3_selected'], $mods );
-$contents['position'] = array( $lang_module['position'], $position, $lang_module['position_info'] );
+$contents['mods'] = array( 
+    $lang_module['if_level3_selected'], $mods 
+);
+$contents['position'] = array( 
+    $lang_module['position'], $position, $lang_module['position_info'] 
+);
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['nv_admin_add'];
