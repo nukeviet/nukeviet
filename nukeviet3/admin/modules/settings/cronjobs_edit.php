@@ -4,10 +4,29 @@
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Createdate 2-1-2010 21:35
+ * @Createdate 2-1-2010 21:37
  */
 
-if ( ! defined( 'NV_IS_FILE_CRONJOBS' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
+
+$id = $nv_Request->get_int( 'id', 'get', 0 );
+
+if ( empty( $id ) )
+{
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=cronjobs" );
+    die();
+}
+
+$query = "SELECT * FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND `is_sys`=0";
+$result = $db->sql_query( $query );
+$numrows = $db->sql_numrows( $result );
+if ( empty( $numrows ) )
+{
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=cronjobs" );
+    die();
+}
+
+$row = $db->sql_fetchrow( $result );
 
 $error = "";
 if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
@@ -47,41 +66,29 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             $params = array_map( "trim", $params );
             $params = implode( ",", $params );
         }
-        $sql = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`, `" . NV_LANG_INTERFACE . "_cron_name`) VALUES (
-			NULL, " . $start_time . ", " . $interval . ", " . $db->dbescape( $run_file ) . ", 
-			" . $db->dbescape( $run_func ) . ", " . $db->dbescape( $params ) . ", " . $del . ", 0, 1, 0, 0, " . $db->dbescape( $cron_name ) . ")";
-        $id = $db->sql_query_insert_id( $sql );
-        if ( $id )
-        {
-            $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where `lang`!='" . NV_LANG_INTERFACE . "'";
-            $result = $db->sql_query( $sql );
-            while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
-            {
-                $sql = "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `" . $lang_i . "_cron_name`=" . $db->dbescape( $run_func ) . " WHERE `id`=" . $id;
-                $db->sql_query( $sql );
-            
-            }
-           Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-           die();
-        }
+        
+        $sql = "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `start_time`=" . $start_time . ", `interval`=" . $interval . ", 
+			`run_file`=" . $db->dbescape( $run_file ) . ", `run_func`=" . $db->dbescape( $run_func ) . ", `params`=" . $db->dbescape( $params ) . ", `del`=" . $del . ", `" . NV_LANG_INTERFACE . "_cron_name`=" . $db->dbescape( $cron_name ) . " WHERE `id`=" . $id;
+        $db->sql_query( $sql );
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=cronjobs" );
+        die();
     }
 }
 else
 {
-    $min = intval( NV_CURRENTMIN_2NUM );
-    $hour = NV_CURRENT24HOUR_1NUM;
-    $day = NV_CURRENTDAY_1NUM;
-    $month = intval( NV_CURRENTMONTH_NUM );
-    $year = NV_CURRENTYEAR_FNUM;
-    $interval = 60;
-    $cron_name = $run_file = $run_func = $params = "";
-    $del = 0;
+    $cron_name = $row[NV_LANG_INTERFACE . '_cron_name'];
+    $run_file = $row['run_file'];
+    $run_func = $row['run_func'];
+    $params = ! empty( $row['params'] ) ? implode( ", ", explode( ",", $row['params'] ) ) : "";
+    $interval = intval( $row['interval'] );
+    $del = intval( $row['del'] );
+    list( $min, $hour, $day, $month, $year ) = array_map( "trim", explode( ",", date( "i,G,j,n,Y", $row['start_time'] ) ) );
 }
 
 $contents = array();
 $contents['is_error'] = ! empty( $error ) ? 1 : 0;
-$contents['title'] = ! empty( $error ) ? $error : $lang_module['nv_admin_add_title'];
-$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add";
+$contents['title'] = ! empty( $error ) ? $error : $lang_module['nv_admin_edit_title'];
+$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$op."&amp;id=" . $id;
 $contents['cron_name'] = array( 
     $lang_module['cron_name'], $cron_name, 100 
 );
@@ -119,10 +126,10 @@ $contents['del'] = array(
     $lang_module['is_del'], $del 
 );
 
-$contents['submit'] = $lang_global['submit'];
-$contents = call_user_func( "nv_admin_add_theme", $contents );
+$contents['submit'] = $lang_global['save'];
+$contents = call_user_func( "nv_admin_edit_theme", $contents );
 
-$page_title = $lang_module['nv_admin_add'];
+$page_title = $lang_global['mod_cronjobs']." -> ".$lang_module['nv_admin_edit'];
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

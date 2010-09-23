@@ -60,7 +60,6 @@ if ( defined( 'NV_IS_SPADMIN' ) )
     if ( defined( 'NV_IS_GODADMIN' ) )
     {
         $admin_mods['database'] = array( 'custom_title' => $lang_global['mod_database'] );
-        $admin_mods['cronjobs'] = array( 'custom_title' => $lang_global['mod_cronjobs'] );
         $admin_mods['settings'] = array( 'custom_title' => $lang_global['mod_settings'] );
     }
     $admin_mods['language'] = array( 'custom_title' => $lang_global['mod_language'] );

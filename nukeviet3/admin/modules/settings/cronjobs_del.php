@@ -7,7 +7,7 @@
  * @Createdate 2-1-2010 21:38
  */
 
-if ( ! defined( 'NV_IS_FILE_CRONJOBS' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 $res = false;
