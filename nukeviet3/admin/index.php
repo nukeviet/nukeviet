@@ -53,11 +53,10 @@ include_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
 $admin_mods = array();
 $admin_mods['siteinfo'] = array( 'custom_title' => $lang_global['mod_siteinfo'] );
 $admin_mods['authors'] = array( 'custom_title' => $lang_global['mod_authors'] );
-$admin_mods['upload'] = array( 'custom_title' => "" );
-
 if ( defined( 'NV_IS_SPADMIN' ) )
 {
-    if ( defined( 'NV_IS_GODADMIN' ) )
+    $admin_mods['webtools'] = array( 'custom_title' => $lang_global['mod_webtools'] );
+	if ( defined( 'NV_IS_GODADMIN' ) )
     {
         $admin_mods['database'] = array( 'custom_title' => $lang_global['mod_database'] );
         $admin_mods['settings'] = array( 'custom_title' => $lang_global['mod_settings'] );
@@ -65,8 +64,8 @@ if ( defined( 'NV_IS_SPADMIN' ) )
     $admin_mods['language'] = array( 'custom_title' => $lang_global['mod_language'] );
     $admin_mods['modules'] = array( 'custom_title' => $lang_global['mod_modules'] );
     $admin_mods['themes'] = array( 'custom_title' => $lang_global['mod_themes'] );
-    $admin_mods['webtools'] = array( 'custom_title' => $lang_global['mod_webtools'] );
 }
+$admin_mods['upload'] = array( 'custom_title' => $lang_global['mod_upload'] );
 
 $module_name = strtolower( filter_text_input( NV_NAME_VARIABLE, 'post,get', 'siteinfo' ) );
 
@@ -172,8 +171,6 @@ if ( ! empty( $module_name ) )
         if ( in_array( $op, $allow_func ) )
         {
             $admin_menu_mods = array();
-            $admin_menu_mods['upload'] = $lang_global['mod_upload'];
-            
             if ( ! empty( $menu_top ) and ! empty( $submenu ) )
             {
                 $admin_menu_mods[$module_name] = $menu_top['custom_title'];
