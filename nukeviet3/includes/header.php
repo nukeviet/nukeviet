@@ -9,7 +9,7 @@
 
 if ( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-global $global_config, $sys_info, $lang_global, $nv_Request;
+global $global_config, $sys_info, $client_info, $lang_global, $nv_Request;
 
 //Nen trang
 if ( $sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get( 'output_handler' ) == "" )
