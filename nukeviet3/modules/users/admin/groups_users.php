@@ -7,7 +7,7 @@
  * @Createdate 2-1-2010 15:18
  */
 
-if ( ! defined( 'NV_IS_FILE_GROUPS' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $group_id = $nv_Request->get_int( 'group_id', 'get', 0 );
 
@@ -29,9 +29,8 @@ if ( ! empty( $row['users'] ) )
     $users_in_group['thead'] = array( 
         "UserId", $lang_global['nickname'], $lang_global['full_name'], $lang_global['email'], $lang_global['regdate'], $lang_global['last_login'] 
     );
-    $users_in_group['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=Users&amp;id=";
-    
-    $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=users&amp;group_id=" . $group_id;
+    $users_in_group['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=";
+    $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=groups_users&amp;group_id=" . $group_id;
     $query = "SELECT `userid`, `username`, `email`, `full_name`, `regdate`, `last_login` 
         FROM `" . NV_USERS_GLOBALTABLE . "` 
         WHERE `userid` IN (" . $row['users'] . ") 

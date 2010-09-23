@@ -57,7 +57,6 @@ $admin_mods['upload'] = array( 'custom_title' => "" );
 
 if ( defined( 'NV_IS_SPADMIN' ) )
 {
-    $admin_mods['groups'] = array( 'custom_title' => $lang_global['mod_groups'] );
     if ( defined( 'NV_IS_GODADMIN' ) )
     {
         $admin_mods['database'] = array( 'custom_title' => $lang_global['mod_database'] );

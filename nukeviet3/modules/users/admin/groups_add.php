@@ -7,7 +7,7 @@
  * @Createdate 2-1-2010 14:52
  */
 
-if ( ! defined( 'NV_IS_FILE_GROUPS' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_admin_add'];
 
@@ -45,7 +45,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			'', " . $public . ", 1)";
         if ( $db->sql_query_insert_id( $sql ) )
         {
-            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=groups" );
             die();
         }
     }
@@ -60,7 +60,7 @@ if ( ! empty( $content ) ) $content = nv_htmlspecialchars( $content );
 $contents = array();
 $contents['is_error'] = ! empty( $error ) ? 1 : 0;
 $contents['caption'] = ! empty( $error ) ? $error : $lang_module['nv_admin_add_caption'];
-$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add";
+$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 $contents['title'] = array( 
     $lang_module['title'], $title, 255 
 );

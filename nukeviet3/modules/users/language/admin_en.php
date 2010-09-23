@@ -117,23 +117,11 @@ $lang_module['delconfirm_email'] = "Send notification email:";
 $lang_module['delconfirm_email_yes'] = "Yes";
 $lang_module['delconfirm_ok'] = "Ok!";
 $lang_module['delconfirm_email_title'] = "Email notification to delete account";
-$lang_module['delconfirm_email_content'] = "Hi %1\$s,
-
-We are so sorry to delete your account at website %2\$s.";
+$lang_module['delconfirm_email_content'] = "Hi %1\$s,<br />We are so sorry to delete your account at website %2\$s.";
 $lang_module['adduser_email'] = "Send notification email:";
 $lang_module['adduser_email_yes'] = "Yes";
 $lang_module['adduser_register'] = "Your account was created";
-$lang_module['adduser_register_info'] = "Hi %1\$s,
-
-Your account at website %2\$s activated. Your login information:
-
-URL: %3\$s
-Account: %4\$s
-Password: %5\$s
-
-This is email automatic sending from website %2\$s.
-
-Site administrator";
+$lang_module['adduser_register_info'] = "Hi %1\$s,<br />Your account at website %2\$s activated. Your login information:<br />URL: %3\$s<br />Account: %4\$s<br />Password: %5\$s<br />This is email automatic sending from website %2\$s.<br />Site administrator";
 $lang_module['allow_openid'] = "Allow using OpenID";
 $lang_module['openid_servers'] = "OpenID accepted list";
 $lang_module['allow_change_login'] = "Allow change login name";
@@ -145,5 +133,34 @@ $lang_module['level1'] = "Super Administrator";
 $lang_module['level2'] = "General Administrator";
 $lang_module['level3'] = "Area Administrative";
 $lang_module['admin_add'] = "Set to admin";
+
+$lang_module['nv_admin_add'] = "Add group";
+$lang_module['nv_admin_edit'] = "Edit group";
+$lang_module['title_empty'] = "You do not declare group title";
+$lang_module['nv_admin_add_caption'] = "To create a new group, you need to declare fully in the box below";
+$lang_module['nv_admin_edit_caption'] = "To change content of the group &ldquo;%s&rdquo;, you need to declare fully in the box below";
+$lang_module['title'] = "Group name";
+$lang_module['content'] = "Content";
+$lang_module['add_time'] = "Start date";
+$lang_module['exp_time'] = "Expire date";
+$lang_module['public'] = "Public";
+$lang_module['users'] = "User";
+$lang_module['error_title_exists'] = "Group name &ldquo;%s&rdquo; already exist";
+$lang_module['users_in_group_caption'] = "Member list in group &ldquo;%s&rdquo; (%d group)";
+$lang_module['error_group_not_found'] = "Error: Can't find group";
+$lang_module['error_users_not_found'] = "Group has not member";
+$lang_module['error_not_groups'] = "There are no groups to be established. Click here <a href=\"%s\">vào đây</a> to create a group";
+$lang_module['add_users'] = "Member  &ldquo;%s&rdquo;";
+$lang_module['form_search_label0'] = "Search members by";
+$lang_module['form_search_label1'] = "Keyword (Null = all member)";
+$lang_module['form_search_select0'] = "Name";
+$lang_module['form_search_select1'] = "Email";
+$lang_module['form_search_select2'] = "ID";
+$lang_module['search_not_result'] = "Not found any results";
+$lang_module['search_result_caption'] = "Result";
+$lang_module['group_pgtitle'] = "Detail";
+$lang_module['group_info'] = "Group information &ldquo;%s&rdquo;";
+$lang_module['add_user'] = "Member %1\$s group %2\$s";
+$lang_module['exclude_user'] = "Delete member %1\$s in group %2\$s";
 
 ?>

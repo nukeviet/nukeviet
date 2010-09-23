@@ -7,7 +7,7 @@
  * @Createdate 2-1-2010 15:23
  */
 
-if ( ! defined( 'NV_IS_FILE_GROUPS' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $group_id = $nv_Request->get_int( 'group_id', 'post' );
 

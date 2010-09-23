@@ -135,4 +135,33 @@ $lang_module['level2'] = "Administrateur général";
 $lang_module['level3'] = "Administrateur de module";
 $lang_module['admin_add'] = "Ajouter un Administrateur";
 
+$lang_module['nv_admin_add'] = "Ajouter un groupe";
+$lang_module['nv_admin_edit'] = "Modifier le groupe";
+$lang_module['title_empty'] = "Manque de titre du groupe";
+$lang_module['nv_admin_add_caption'] = "Pour créer un nouveau groupe, remplissez les champs ci-dessous";
+$lang_module['nv_admin_edit_caption'] = "Pour modifier le groupe &ldquo;%s&rdquo;, remplissez les informations aux champs ci-dessous";
+$lang_module['title'] = "Nom du groupe";
+$lang_module['content'] = "Description";
+$lang_module['add_time'] = "Créer";
+$lang_module['exp_time'] = "Expirer";
+$lang_module['public'] = "Publique";
+$lang_module['users'] = "Membres";
+$lang_module['error_title_exists'] = "Ce nom du groupe &ldquo;%s&rdquo; a été utilisé";
+$lang_module['users_in_group_caption'] = "Liste des membres du groupe &ldquo;%s&rdquo; (%d membres)";
+$lang_module['error_group_not_found'] = "Erreur: Groupe introuvable";
+$lang_module['error_users_not_found'] = "Ce groupe n'a pas encore de membres";
+$lang_module['error_not_groups'] = "Aucun groupe a été créé. Cliquez <a href=\"%s\">ici</a> pour créer des groupes";
+$lang_module['add_users'] = "Ajouter les membres au groupe &ldquo;%s&rdquo;";
+$lang_module['form_search_label0'] = "Rechercher les membres";
+$lang_module['form_search_label1'] = "Entrez le mot clé (laisser vide = tout)";
+$lang_module['form_search_select0'] = "Nom";
+$lang_module['form_search_select1'] = "E-mail";
+$lang_module['form_search_select2'] = "ID";
+$lang_module['search_not_result'] = "Aucun résultat";
+$lang_module['search_result_caption'] = "Résultats de la recherche";
+$lang_module['group_pgtitle'] = "Infos détailées";
+$lang_module['group_info'] = "Infos du groupe &ldquo;%s&rdquo;";
+$lang_module['add_user'] = "Ajouter le membre %1\$s au groupe %2\$s";
+$lang_module['exclude_user'] = "Éliminer le membre %1\$s du groupe %2\$s";
+
 ?>

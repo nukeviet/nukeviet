@@ -7,7 +7,7 @@
  * @Createdate 2-1-2010 15:21
  */
 
-if ( ! defined( 'NV_IS_FILE_GROUPS' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_admin_edit'];
 
@@ -26,7 +26,7 @@ $result = $db->sql_query( $query );
 $numrows = $db->sql_numrows( $result );
 if ( empty( $numrows ) )
 {
-    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=groups" );
     die();
 }
 
@@ -61,7 +61,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1)
             SET `title`=" . $db->dbescape( $title ) . ", `content`=" . $db->dbescape( $content ) . ", `exp_time`=" . $exp_time . ", `public`=" . $public . " 
             WHERE `group_id`=" . $group_id;
         $db->sql_query( $sql );
-        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=groups" );
         exit();
     }
 }
@@ -80,7 +80,7 @@ $content = nv_htmlspecialchars( $content );
 $contents = array();
 $contents['is_error'] = ! empty( $error ) ? 1 : 0;
 $contents['caption'] = ! empty( $error ) ? $error : sprintf( $lang_module['nv_admin_edit_caption'], $row['title'] );
-$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;group_id=" . $group_id;
+$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=groups_edit&amp;group_id=" . $group_id;
 $contents['title'] = array( 
     $lang_module['title'], $title, 255 
 );
