@@ -7,9 +7,11 @@
 		<tr>
 			<!-- BEGIN: loop -->
 			<td class="col1">
-				<!-- BEGIN: img -->{M}
-				<br>
-				<img alt="" src="{SRC}" height="{HEIGHT}" width="10"><!-- END: img -->
+				<!-- BEGIN: img -->
+					{M}
+					<br />
+					<img alt="" src="{SRC}" height="{HEIGHT}" width="10" />
+				<!-- END: img -->
 			</td><!-- END: loop -->
 		</tr>
 	</tbody>
@@ -17,8 +19,10 @@
 		<tr>
 			<!-- BEGIN: loop_1 -->
 			<th class="row1">
-				<!-- BEGIN: yc --><strong><span style="text-decoration: underline;">{KEY}</span></strong>
-				<!-- END: yc --><!-- BEGIN: yc_o -->{KEY}<!-- END: yc_o -->
+				<!-- BEGIN: yc -->
+					<strong><span style="text-decoration: underline;">{KEY}</span></strong>
+				<!-- END: yc -->
+				<!-- BEGIN: yc_o -->{KEY}<!-- END: yc_o -->
 			</th>
 			<!-- END: loop_1 -->
 		</tr>
@@ -31,7 +35,7 @@
 		</tr>
 	</tbody>
 </table>
-<br>
+<br />
 <!-- END: year --><!-- BEGIN: month -->
 <table summary="{CTS.caption}" class="statistics">
 	<caption>
@@ -41,9 +45,11 @@
 		<tr>
 			<!-- BEGIN: loop -->
 			<td class="col1">
-				<!-- BEGIN: img -->{M.count}
-				<br>
-				<img alt="" src="{SRC}" height="{HEIGHT}" width="10"><!-- END: img -->
+				<!-- BEGIN: img -->
+				{M.count}
+				<br />
+				<img alt="" src="{SRC}" height="{HEIGHT}" width="10" />
+				<!-- END: img -->
 			</td><!-- END: loop -->
 		</tr>
 	</tbody>
@@ -65,7 +71,7 @@
 		</tr>
 	</tbody>
 </table>
-<br>
+<br />
 <!-- END: month --><!-- BEGIN: day_m -->
 <table summary="{CTS.caption}" class="statistics">
 	<caption>
@@ -75,9 +81,11 @@
 		<tr>
 			<!-- BEGIN: loop -->
 			<td class="col1">
-				<!-- BEGIN: img -->{M}
-				<br>
-				<img alt="" src="{SRC}" height="{HEIGHT}" width="10"><!-- END: img -->
+				<!-- BEGIN: img -->
+				{M}
+				<br />
+				<img alt="" src="{SRC}" height="{HEIGHT}" width="10" />
+				<!-- END: img -->
 			</td><!-- END: loop -->
 		</tr>
 	</tbody>
@@ -99,7 +107,7 @@
 		</tr>
 	</tbody>
 </table>
-<br>
+<br />
 <!-- END: day_m --><!-- BEGIN: day_k -->
 <table summary="{CTS.caption}" class="statistics">
 	<caption>
@@ -109,9 +117,11 @@
 		<tr>
 			<!-- BEGIN: loop -->
 			<td class="col1">
-				<!-- BEGIN: img -->{M.count}
-				<br>
-				<img alt="" src="{SRC}" height="{HEIGHT}" width="10"><!-- END: img -->
+				<!-- BEGIN: img -->
+					{M.count}
+					<br />
+					<img alt="" src="{SRC}" height="{HEIGHT}" width="10" />
+				<!-- END: img -->
 			</td><!-- END: loop -->
 		</tr>
 	</tbody>
@@ -133,7 +143,7 @@
 		</tr>
 	</tbody>
 </table>
-<br>
+<br />
 <!-- END: day_k --><!-- BEGIN: hour -->
 <table summary="{CTS.caption}" class="statistics">
 	<caption>
@@ -143,9 +153,11 @@
 		<tr>
 			<!-- BEGIN: loop -->
 			<td class="col1">
-				<!-- BEGIN: img -->{M}
-				<br>
-				<img alt="" src="{SRC}" height="{HEIGHT}" width="10"><!-- END: img -->
+				<!-- BEGIN: img -->
+				{M}
+				<br />
+				<img alt="" src="{SRC}" height="{HEIGHT}" width="10" />
+				<!-- END: img -->
 			</td><!-- END: loop -->
 		</tr>
 	</tbody>
@@ -167,7 +179,7 @@
 		</tr>
 	</tbody>
 </table>
-<br>
+<br />
 <!-- END: hour --><!-- BEGIN: ct -->
 <table summary="{CTS.caption}" class="statistics">
 	<caption>
@@ -201,7 +213,9 @@
 				{VALUE.1}
 			</td>
 			<td class="col2">
-				<!-- BEGIN: img --><img alt="" src="{SRC}" height="10" width="{WIDTH}"><!-- END: img -->
+				<!-- BEGIN: img -->
+				<img alt="" src="{SRC}" height="10" width="{WIDTH}" />
+				<!-- END: img -->
 			</td>
 			<td style="width: 250px;">
 				{VALUE.2}
@@ -224,7 +238,7 @@
 	</tbody>
 	<!-- END: ot -->
 </table>
-<br>
+<br />
 <!-- END: ct --><!-- BEGIN: br -->
 <table summary="{CTS.caption}" class="statistics">
 	<caption>
@@ -255,7 +269,9 @@
 				{VALUE.0}
 			</td>
 			<td class="col2">
-				<!-- BEGIN: img --><img alt="" src="{SRC}" height="10" width="{WIDTH}"><!-- END: loop -->
+				<!-- BEGIN: img -->
+				<img alt="" src="{SRC}" height="10" width="{WIDTH}" />
+				<!-- END: loop -->
 			</td>
 			<td style="width: 250px;">
 				{VALUE.1}
@@ -278,7 +294,7 @@
 	</tbody>
 	<!-- END: ot -->
 </table>
-<br>
+<br />
 <!-- END: br -->
 <!-- BEGIN: os -->
 <table summary="{CTS.caption}" class="statistics">
@@ -310,7 +326,9 @@
 				{VALUE.0}
 			</td>
 			<td class="col2">
-				<!-- BEGIN: img --><img alt="" src="{SRC}" height="10" width="{WIDTH}"><!-- END: img -->
+				<!-- BEGIN: img -->
+					<img alt="" src="{SRC}" height="10" width="{WIDTH}" />
+					<!-- END: img -->
 			</td>
 			<td style="width: 250px;">
 				{VALUE.1}

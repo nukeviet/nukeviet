@@ -136,7 +136,7 @@
             </div>
             <div class="content clearfix">
                 <label for="scontent">{LANG.sendmail_content}</label>
-                <textarea id="scontent" name="content">{SENDMAIL.content}</textarea>
+                <textarea id="scontent"  name="content" rows="5" cols="20">{SENDMAIL.content}</textarea>
             </div>
             <!-- BEGIN: captcha -->
             <div class="content clearfix">

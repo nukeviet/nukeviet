@@ -16,8 +16,8 @@ if ( ! file_exists( NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] .
     $img_dir = "default";
 }
 
-$iconrss = '<img style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/rss.gif">';
-$imgmid = '<img style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/line1.gif">';
-$imgmid2 = '<img style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/line3.gif">';
-$imgbottom = '<img style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/line2.gif">';
+$iconrss = '<img alt="" style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/rss.gif" />';
+$imgmid = '<img alt="" style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/line1.gif" />';
+$imgmid2 = '<img alt=""  style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/line3.gif" />';
+$imgbottom = '<img alt="" style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/line2.gif" />';
 ?>

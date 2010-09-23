@@ -540,7 +540,7 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $global_array_cat, $arr_cat_title, $my_head, $lang_global, $user_info, $admin_info, $catid;
     
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
-    $my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\" language=\"javascript\"></script>\n";
+    $my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";
     $my_head .= "<link href='" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css' type=\"text/css\" rel=\"stylesheet\"/>\n";
     
     $xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
@@ -683,8 +683,8 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     elseif ( $commentenable == 2 )
     {
         global $client_info;
-    	$link_login= NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=".nv_base64_encode($client_info['selfurl']);
-    	$xtpl->assign( 'COMMENT_LOGIN', "<a title=\"".$lang_global['loginsubmit']."\" href=\"".$link_login."\">".$lang_module['comment_login']."</a>");
+        $link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
+        $xtpl->assign( 'COMMENT_LOGIN', "<a title=\"" . $lang_global['loginsubmit'] . "\" href=\"" . $link_login . "\">" . $lang_module['comment_login'] . "</a>" );
         $xtpl->parse( 'main.comment.form_login' );
     }
     

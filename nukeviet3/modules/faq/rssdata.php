@@ -23,7 +23,7 @@ while ( list( $catid, $parentid, $title, $alias ) = $db->sql_fetchrow( $result2 
     $numsubcat = count( $numsubcat );
     $subcatid = implode( ',', $subcatid );
 
-    $rssarray[$catid] = array( 'catid' => $catid, 'parentid' => $parentid, 'title' => $title, 'alias' => $alias, 'numsubcat' => $numsubcat, 'subcatid' => $subcatid, 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_file . "&" . NV_OP_VARIABLE . "=rss/" . $alias );
+    $rssarray[$catid] = array( 'catid' => $catid, 'parentid' => $parentid, 'title' => $title, 'alias' => $alias, 'numsubcat' => $numsubcat, 'subcatid' => $subcatid, 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_file . "&amp;" . NV_OP_VARIABLE . "=rss/" . $alias );
 }
 
 ?>

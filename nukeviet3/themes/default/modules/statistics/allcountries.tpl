@@ -1,19 +1,19 @@
 <!-- BEGIN: main -->
 <table class="statistics" summary="">
-	<tbody>
-	</tbody>
 	<thead>
-		<td colspan="2">
-			{CTS.thead.0}
-		</td>
-		<td class="align_r">
-			{CTS.thead.1}
-		</td>
-		<td>
-		</td>
-		<td>
-			{CTS.thead.2}
-		</td>
+		<tr>
+			<td colspan="2">
+				{CTS.thead.0}
+			</td>
+			<td class="align_r">
+				{CTS.thead.1}
+			</td>
+			<td>
+			</td>
+			<td>
+				{CTS.thead.2}
+			</td>
+		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
 	<tbody {CLASS}>
@@ -29,7 +29,8 @@
 			</td>
 			<td class="col2">
 				<!-- BEGIN: img -->
-				<img width="{WIDTH}" height="10" src="{SRC}" alt=""><!-- END: img -->
+				<img width="{WIDTH}" height="10" src="{SRC}" alt="" />
+				<!-- END: img -->
 			</td>
 			<td style="width: 250px;">
 				{VALUE.2}
@@ -39,8 +40,8 @@
 	<!-- END: loop -->
 </table>
 <!-- BEGIN: gp -->
-<br/>
-<br/>
+<br />
+<br />
 <div>
 	{CTS.generate_page}
 </div>

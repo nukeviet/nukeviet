@@ -1,12 +1,13 @@
 <!-- BEGIN: main -->
 <table class="statistics" summary="">
-	<tbody></tbody>
 	<thead>
-		<td>{CTS.thead.0}</td>
-		<td style="text-align: right;">{CTS.thead.1}</td>
-		<td></td>
-		<td>{CTS.thead.2}</td>
-		<td></td>
+		<tr>
+			<td>{CTS.thead.0}</td>
+			<td style="text-align: right;">{CTS.thead.1}</td>
+			<td></td>
+			<td>{CTS.thead.2}</td>
+			<td></td>
+		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
 	<tbody {CLASS}>
@@ -16,7 +17,10 @@
 			</td>
 			<td style="text-align: right;">{VALUE.0}</td>
 			<td style="font-size: 8px; width: 300px;">
-				<!-- BEGIN: img --><img width="{WIDTH}" height="10" src="{SRC}" alt=""><!-- END: img --></td>
+				<!-- BEGIN: img -->
+				<img width="{WIDTH}" height="10" src="{SRC}" alt="" />
+				<!-- END: img -->
+			</td>
 			<td style="width: 250px;">{VALUE.1}</td>
 			<td>{VALUE.2}</td>
 		</tr>
@@ -24,8 +28,8 @@
 	<!-- END: loop -->
 </table>
 <!-- BEGIN: gp -->
-<br/>
-<br/>
+<br />
+<br />
 <div>
 	{CTS.generate_page}
 </div>

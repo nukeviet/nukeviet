@@ -22,8 +22,8 @@ function nv_get_rss_link ( )
         $module_data = $row['module_data'];
         if ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/rssdata.php' ) )
         {
-            $contentrss .= $imgmid2 . "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_title . "&" . NV_OP_VARIABLE . "=rss\">" . $iconrss . "</a>";
-            $contentrss .= '<strong> ' . $custom_title . "</strong><br>";
+            $contentrss .= $imgmid2 . "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_title . "&amp;" . NV_OP_VARIABLE . "=rss\">" . $iconrss . "</a>";
+            $contentrss .= '<strong> ' . $custom_title . "</strong><br />";
             include ( NV_ROOTDIR . '/modules/' . $module_file . '/rssdata.php' );
             foreach ( $rssarray as $key => $value )
             {
@@ -70,7 +70,7 @@ if ( file_exists( $content_file ) )
     $contents = file_get_contents( $content_file );
 }
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-$contents .= '<img  style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/' . $module_name . '/home.gif"><b>' . $module_info['custom_title'] . '</b><br>';
+$contents .= '<img  alt="" style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/' . $module_name . '/home.gif" /><b>' . $module_info['custom_title'] . '</b><br />';
 
 $contents .= nv_get_rss_link();
 

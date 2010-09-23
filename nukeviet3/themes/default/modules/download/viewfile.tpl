@@ -254,7 +254,7 @@ var comment_subject_defaul = '{ROW.comment_subject}';
                 </label>
             </dd>
             <dt class="fr">
-                <img  style="vertical-align: middle" height="22" name="vimg" id="vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" title="{GLANG.captcha}" alt="{GLANG.captcha}" />
+                <img  style="vertical-align: middle" height="22" id="vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" title="{GLANG.captcha}" alt="{GLANG.captcha}" />
                 <img style="vertical-align: middle" alt="{GLANG.captcharefresh}" title="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','comment_seccode_iavim');" />
             </dt>
             <dt class="fr" style="width:200px">
