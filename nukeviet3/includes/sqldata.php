@@ -53,6 +53,7 @@ function nv_create_table_sys ( $lang )
   `submenu` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `admins` varchar(255) NOT NULL,
+  `rss` tinyint(4) NOT NULL default '1',  
   PRIMARY KEY (`title`)
 ) ENGINE=MyISAM";
     

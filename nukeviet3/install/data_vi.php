@@ -22,18 +22,18 @@ function nv_create_table_news ( $catid )
 
 $sql_create_table = array();
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_vi_modules`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_modules` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`) VALUES
-('about', 'about', 'about', 'Giới thiệu', 1276333182, 1, '', '', '0', 1, 1, 1, 1, ''),
-('news', 'news', 'news', 'Tin Tức', 1270400000, 1, '', '', '0', 1, 2, 1, 1, ''),
-('download', 'download', 'download', 'Tải file', 1276597148, 1, '', '', '0', 1, 3, 1, 1, ''),
-('weblinks', 'weblinks', 'weblinks', 'Liên kết site', 1276834052, 1, '', '', '0', 1, 4, 1, 1, ''),
-('users', 'users', 'users', 'Thành viên', 1274080277, 1, '', '', '0', 1, 5, 1, 1, ''),
-('contact', 'contact', 'contact', 'Liên hệ', 1275351337, 1, '', '', '0', 1, 6, 1, 1, ''),
-('statistics', 'statistics', 'statistics', 'Thống kê', 1276520928, 0, '', 'truy cập, online, statistics', '0', 1, 7, 1, 1, ''),
-('voting', 'voting', 'voting', 'Thăm dò ý kiến', 1275315261, 1, '', '', '0', 0, 8, 1, 1, ''),
-('banners', 'banners', 'banners', 'Quảng cáo', 1270400000, 1, '', '', '0', 0, 9, 1, 1, ''),
-('search', 'search', 'search', 'Tìm kiếm', 1273474173, 0, '', '', '0', 0, 10, 1, 1, ''),
-('rss', 'rss', 'rss', 'Rss', 1279366705, 1, '', '', '0', 0, 11, 1, 1, '')";
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_modules` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
+('about', 'about', 'about', 'Giới thiệu', 1276333182, 1, '', '', '0', 1, 1, 1, 1, '', 0),
+('news', 'news', 'news', 'Tin Tức', 1270400000, 1, '', '', '0', 1, 2, 1, 1, '', 1),
+('download', 'download', 'download', 'Tải file', 1276597148, 1, '', '', '0', 1, 3, 1, 1, '', 1),
+('weblinks', 'weblinks', 'weblinks', 'Liên kết site', 1276834052, 1, '', '', '0', 1, 4, 1, 1, '', 1),
+('users', 'users', 'users', 'Thành viên', 1274080277, 1, '', '', '0', 1, 5, 1, 1, '', 0),
+('contact', 'contact', 'contact', 'Liên hệ', 1275351337, 1, '', '', '0', 1, 6, 1, 1, '', 0),
+('statistics', 'statistics', 'statistics', 'Thống kê', 1276520928, 0, '', 'truy cập, online, statistics', '0', 1, 7, 1, 1, '', 0),
+('voting', 'voting', 'voting', 'Thăm dò ý kiến', 1275315261, 1, '', '', '0', 0, 8, 1, 1, '', 1),
+('banners', 'banners', 'banners', 'Quảng cáo', 1270400000, 1, '', '', '0', 0, 9, 1, 1, '', 0),
+('search', 'search', 'search', 'Tìm kiếm', 1273474173, 0, '', '', '0', 0, 10, 1, 1, '', 0),
+('rss', 'rss', 'rss', 'Rss', 1279366705, 1, '', '', '0', 0, 11, 1, 1, '', 0)";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_vi_modfuncs`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES

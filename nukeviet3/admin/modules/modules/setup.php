@@ -30,9 +30,8 @@ if ( ! empty( $setmodule ) )
                 include ( $version_file );
             }
             $admin_file = ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin.functions.php" ) and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/main.php" ) ) ? 1 : 0;
-            $custom_title = ( isset( $module_version['name'] ) ) ? trim( $module_version['name'] ) : $setmodule;
-            $custom_title = preg_replace( '/(\W+)/i', ' ', $custom_title );
-            $db->sql_query( "INSERT INTO `" . NV_MODULES_TABLE . "` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`) VALUES (" . $db->dbescape( $setmodule ) . ", " . $db->dbescape( $module_file ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $custom_title ) . ", " . $db->dbescape( NV_CURRENTTIME ) . ", " . $db->dbescape( $admin_file ) . ", '', '', '0', 1, " . $weight . ", 1, 1, '')" );
+            $custom_title = preg_replace( '/(\W+)/i', ' ', $setmodule );
+            $db->sql_query( "INSERT INTO `" . NV_MODULES_TABLE . "` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES (" . $db->dbescape( $setmodule ) . ", " . $db->dbescape( $module_file ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $custom_title ) . ", " . $db->dbescape( NV_CURRENTTIME ) . ", " . $db->dbescape( $admin_file ) . ", '', '', '0', 1, " . $weight . ", 1, 1, '',1)" );
             nv_del_moduleCache( 'modules' );
             $return = nv_setup_data_module( NV_LANG_DATA, $setmodule );
             if ( $return == "OK_" . $setmodule )
@@ -66,7 +65,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
         $is_delCache = true;
     }
 }
-if( $is_delCache )
+if ( $is_delCache )
 {
     nv_del_moduleCache( 'modules' );
 }

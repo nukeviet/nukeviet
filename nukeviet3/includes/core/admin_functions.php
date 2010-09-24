@@ -34,7 +34,7 @@ function nv_site_mods ( )
         if ( $allowed )
         {
             $site_mods[$row['title']] = array( 
-                'module_file' => $row['module_file'], 'module_data' => $row['module_data'], 'custom_title' => $row['custom_title'], 'theme' => $row['theme'], 'keywords' => $row['keywords'], 'groups_view' => $row['groups_view'], 'in_menu' => intval( $row['in_menu'] ), 'submenu' => intval( $row['submenu'] ), 'act' => intval( $row['act'] ), 'admins' => $row['admins'] 
+                'module_file' => $row['module_file'], 'module_data' => $row['module_data'], 'custom_title' => $row['custom_title'], 'theme' => $row['theme'], 'keywords' => $row['keywords'], 'groups_view' => $row['groups_view'], 'in_menu' => intval( $row['in_menu'] ), 'submenu' => intval( $row['submenu'] ), 'act' => intval( $row['act'] ), 'admins' => $row['admins'], 'rss' => $row['rss'] 
             );
         }
     }

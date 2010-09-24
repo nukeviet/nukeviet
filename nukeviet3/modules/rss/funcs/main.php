@@ -13,7 +13,7 @@ function nv_get_rss_link ( )
 {
     global $db, $module_data, $global_config, $imgmid, $imgmid2, $iconrss;
     $contentrss = "";
-    $result = $db->sql_query( "SELECT title, module_file, custom_title, module_data FROM " . NV_MODULES_TABLE . " WHERE act=1 AND module_file!='rss' ORDER BY weight" );
+    $result = $db->sql_query( "SELECT title, module_file, custom_title, module_data FROM " . NV_MODULES_TABLE . " WHERE act=1 AND module_file!='rss' AND rss=1 ORDER BY weight" );
     while ( $row = $db->sql_fetchrow( $result ) )
     {
         $module_title = $row['title'];
@@ -56,7 +56,7 @@ function getsubcat ( $rssarray, $array_catid, $i )
             {
                 $array_sub_cat = $rssarray[$sub_catid];
                 $array_catid2 = explode( ",", $array_sub_cat['subcatid'] );
-                $content .= getsubcat($rssarray, $array_catid2, $i . $imgmid );
+                $content .= getsubcat( $rssarray, $array_catid2, $i . $imgmid );
             }
         }
     }

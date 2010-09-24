@@ -475,16 +475,25 @@ function edit_theme ( $contents )
         $return .= "</tr>\n";
         $return .= "</table>\n";
         $return .= "</div>\n";
-        
+    }
+    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
+    $return .= "<col valign=\"top\" width=\"150px\" />\n";
+    $return .= "<tr>\n";
+    $return .= "<td>" . $contents['act'][0] . ":</td>\n";
+    $return .= "<td><input name=\"act\" id=\"act\" type=\"checkbox\" value=\"1\" " . ( ( $contents['act'][1] == 1 ) ? "checked" : "" ) . " /></td>\n";
+    $return .= "</tr>\n";
+    $return .= "</table>\n";
+    
+    if ( isset( $contents['rss'] ) )
+    {
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<tr>\n";
-        $return .= "<td>" . $contents['act'][0] . ":</td>\n";
-        $return .= "<td><input name=\"act\" id=\"act\" type=\"checkbox\" value=\"1\" " . ( ( $contents['act'][1] == 1 ) ? "checked" : "" ) . " /></td>\n";
+        $return .= "<td>" . $contents['rss'][0] . ":</td>\n";
+        $return .= "<td><input name=\"rss\" id=\"rss\" type=\"checkbox\" value=\"1\" " . ( ( $contents['rss'][1] == 1 ) ? "checked" : "" ) . " /></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
     }
-    
     $return .= "<br />\n";
     $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
     $return .= "<col valign=\"top\" width=\"150px\" />\n";

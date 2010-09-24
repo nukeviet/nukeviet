@@ -39,7 +39,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
     $theme = filter_text_input( 'theme', 'post', '', 1 );
     $keywords = filter_text_input( 'keywords', 'post', '', 1 );
     $act = $nv_Request->get_int( 'act', 'post', 0 );
-    
+    $rss = $nv_Request->get_int( 'rss', 'post', 0 );
     if ( ! empty( $theme ) and ! in_array( $theme, $theme_list ) ) $theme = "";
     if ( ! empty( $keywords ) )
     {
@@ -70,7 +70,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
     }
     if ( $groups_view != "" and $custom_title != "" )
     {
-        $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape( $custom_title ) . ", `theme`=" . $db->dbescape( $theme ) . ", `keywords`=" . $db->dbescape( $keywords ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `act`='" . $act . "' WHERE `title`=" . $db->dbescape( $mod );
+        $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape( $custom_title ) . ", `theme`=" . $db->dbescape( $theme ) . ", `keywords`=" . $db->dbescape( $keywords ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `act`='" . $act . "', `rss`='" . $rss . "'WHERE `title`=" . $db->dbescape( $mod );
         $db->sql_query( $sql );
         nv_del_moduleCache( 'modules' );
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
@@ -87,7 +87,9 @@ else
     $theme = $row['theme'];
     $act = $row['act'];
     $keywords = $row['keywords'];
+    $rss = $row['rss'];
 }
+
 $who_view = 3;
 $groups_view = array();
 if ( $row['groups_view'] == "0" or $row['groups_view'] == "1" or $row['groups_view'] == "2" )
@@ -102,6 +104,14 @@ if ( empty( $custom_title ) ) $custom_title = $mod;
 
 $page_title = sprintf( $lang_module['edit'], $mod );
 $contents = array();
+
+if ( file_exists( NV_ROOTDIR . "/modules/" . $row['module_file'] . "/funcs/rss.php" ) )
+{
+    $contents['rss'] = array( 
+        $lang_module['activate_rss'], $rss 
+    );
+}
+
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;mod=" . $mod;
 $contents['custom_title'] = array( 
     $lang_module['custom_title'], $custom_title, 70 
@@ -112,6 +122,7 @@ $contents['theme'] = array(
 $contents['act'] = array( 
     $lang_global['activate'], $act 
 );
+
 $contents['keywords'] = array( 
     $lang_module['keywords'], $keywords, 255, $lang_module['keywords_info'] 
 );

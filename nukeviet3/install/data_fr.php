@@ -22,18 +22,18 @@ function nv_create_table_news( $catid )
 
 $sql_create_table = array();
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_fr_modules`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modules` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`) VALUES
-('about', 'about', 'about', 'À propos', 1276333182, 1, '', '', '0', 1, 1, 1, 1, ''), 
-('news', 'news', 'news', 'News', 1270400000, 1, '', '', '0', 1, 2, 1, 1, ''), 
-('users', 'users', 'users', 'Compte d&#039;utilisateur', 1274080277, 1, '', '', '0', 1, 7, 1, 1, ''), 
-('contact', 'contact', 'contact', 'Contact', 1275351337, 1, '', '', '0', 1, 8, 1, 1, ''), 
-('statistics', 'statistics', 'statistics', 'Statistiques', 1276520928, 0, '', '', '0', 1, 9, 0, 1, ''),
-('banners', 'banners', 'banners', 'Publicité', 1270400000, 1, '', '', '0', 0, 5, 1, 1, ''), 
-('search', 'search', 'search', 'Recherche', 1273474173, 0, '', '', '0', 0, 10, 0, 1, ''), 
-('download', 'download', 'download', 'Téléchargement', 1280638246, 1, '', '', '0', 1, 3, 1, 1, ''), 
-('weblinks', 'weblinks', 'weblinks', 'Liens Webs', 1280638247, 1, '', '', '0', 1, 4, 1, 1, ''), 
-('rss', 'rss', 'rss', 'Rss', 1280638250, 1, '', '', '0', 0, 11, 1, 1, ''), 
-('voting', 'voting', 'voting', 'Sondage', 1280638417, 1, '', '', '0', 0, 6, 0, 1, '')";
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modules` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
+('about', 'about', 'about', 'À propos', 1276333182, 1, '', '', '0', 1, 1, 1, 1, '', 0), 
+('news', 'news', 'news', 'News', 1270400000, 1, '', '', '0', 1, 2, 1, 1, '', 1), 
+('users', 'users', 'users', 'Compte d&#039;utilisateur', 1274080277, 1, '', '', '0', 1, 7, 1, 1, '', 0), 
+('contact', 'contact', 'contact', 'Contact', 1275351337, 1, '', '', '0', 1, 8, 1, 1, '', 0), 
+('statistics', 'statistics', 'statistics', 'Statistiques', 1276520928, 0, '', '', '0', 1, 9, 0, 1, '', 0),
+('banners', 'banners', 'banners', 'Publicité', 1270400000, 1, '', '', '0', 0, 5, 1, 1, '', 0), 
+('search', 'search', 'search', 'Recherche', 1273474173, 0, '', '', '0', 0, 10, 0, 1, '', 0), 
+('download', 'download', 'download', 'Téléchargement', 1280638246, 1, '', '', '0', 1, 3, 1, 1, '', 1), 
+('weblinks', 'weblinks', 'weblinks', 'Liens Webs', 1280638247, 1, '', '', '0', 1, 4, 1, 1, '', 1), 
+('rss', 'rss', 'rss', 'Rss', 1280638250, 1, '', '', '0', 0, 11, 1, 1, '', 0), 
+('voting', 'voting', 'voting', 'Sondage', 1280638417, 1, '', '', '0', 0, 6, 0, 1, '', 0)";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_fr_modfuncs`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES

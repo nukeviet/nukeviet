@@ -12,7 +12,8 @@ if ( ! defined( 'NV_IS_MOD_FAQ' ) ) die( 'Stop!!!' );
 $channel = array();
 $items = array();
 
-$channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_info['custom_title'];;
+$channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_info['custom_title'];
+;
 $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 $channel['atomlink'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
 $channel['description'] = $global_config['site_description'];
@@ -34,13 +35,13 @@ if ( ! empty( $list_cats ) )
             }
         }
     }
-
+    
     if ( $catid > 0 )
     {
         $channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_name . ' - ' . $list_cats[$catid]['title'];
         $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$catid]['alias'];
         $channel['description'] = $list_cats[$catid]['description'];
-
+        
         $sql = "SELECT `id`, `catid`, `title`, `question`, `addtime` 
         FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid . " 
         AND `status`=1 ORDER BY `weight` ASC LIMIT 30";
@@ -53,18 +54,20 @@ if ( ! empty( $list_cats ) )
         FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") 
         AND `status`=1 ORDER BY `weight` ASC LIMIT 30";
     }
-
-    if ( ( $result = $db->sql_query( $sql ) ) !== false )
+    if ( $module_info['rss'] )
     {
-        while ( list( $id, $cid, $title, $question, $addtime ) = $db->sql_fetchrow( $result ) )
+        if ( ( $result = $db->sql_query( $sql ) ) !== false )
         {
-            $items[] = array( //
-                'title' => $title, //
-                'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "#faq" . $id, //
-                'guid' => $module_name . '_' . $id, //
-                'description' => $lang_module['faq_question'] . ": " . $question, //
-                'pubdate' => $addtime //
+            while ( list( $id, $cid, $title, $question, $addtime ) = $db->sql_fetchrow( $result ) )
+            {
+                $items[] = array(  //
+                    'title' => $title, //
+					'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "#faq" . $id, //
+					'guid' => $module_name . '_' . $id, //
+					'description' => $lang_module['faq_question'] . ": " . $question, //
+					'pubdate' => $addtime  //
                 );
+            }
         }
     }
 }

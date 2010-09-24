@@ -81,6 +81,7 @@ function nv_site_mods ( )
                 $site_mods[$m_title]['in_menu'] = $row['in_menu'];
                 $site_mods[$m_title]['submenu'] = $row['submenu'];
                 $site_mods[$m_title]['is_modadmin'] = $is_modadmin;
+                $site_mods[$m_title]['rss'] = $row['rss'];
             }
             
             $site_mods[$m_title]['funcs'][$func_name]['func_id'] = $row['func_id'];
