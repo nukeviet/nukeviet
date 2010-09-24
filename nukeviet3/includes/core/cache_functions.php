@@ -46,7 +46,7 @@ function nv_delete_all_cache()
  */
 function nv_del_moduleCache( $module_name )
 {
-    $pattern = "/^" . NV_LANG_DATA . "\_" . $module_name . "\_(.*)\_[a-z0-9]{32}\.cache$/i";
+    $pattern = "/^" . NV_LANG_DATA . "\_" . $module_name . "\_(.*)\.cache$/i";
     nv_delete_cache( $pattern );
 }
 
