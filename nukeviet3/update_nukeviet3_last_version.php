@@ -11,43 +11,6 @@ require_once ( str_replace( '\\\\', '/', dirname( __file__ ) ) . '/mainfile.php'
 require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
 $global_config['new_version'] = "3.0.11";
 
-function nv_version_compare ( $version1, $version2 )
-{
-    $v1 = explode( '.', $version1 );
-    $v2 = explode( '.', $version2 );
-    
-    if ( $v1[0] > $v2[0] )
-    {
-        return 1;
-    }
-    
-    if ( $v1[0] < $v2[0] )
-    {
-        return - 1;
-    }
-    
-    if ( $v1[1] > $v2[1] )
-    {
-        return 1;
-    }
-    
-    if ( $v1[1] < $v2[1] )
-    {
-        return - 1;
-    }
-    
-    if ( $v1[2] > $v2[2] )
-    {
-        return 1;
-    }
-    
-    if ( $v1[2] < $v2[2] )
-    {
-        return - 1;
-    }
-    
-    return 0;
-}
 if ( defined( "NV_IS_GODADMIN" ) )
 {
     if ( nv_version_compare( $global_config['version'], "3.0.05" ) < 0 )

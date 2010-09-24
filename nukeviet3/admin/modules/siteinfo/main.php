@@ -31,6 +31,29 @@ function nv_get_lang_module ( $mod )
 }
 
 $info = array();
+
+if ( defined( 'NV_IS_GODADMIN' ) )
+{
+    $field = array();
+    $field[] = array( 
+        'key' => $lang_module['version_user'], 'value' => $global_config['version'] 
+    );
+    $new_version = get_version( 28800 );//kem tra lai sau 8 tieng
+    if ( $new_version != false )
+    {
+        if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
+        {
+            $field[] = array( 
+                'key' => $lang_module['version_news'], 'value' => ( string )$new_version->version 
+            );
+        }
+    }
+    $caption = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&amp;" . NV_OP_VARIABLE . "=checkupdate\">" . $lang_module['checkversion'] . "</a>";
+    $info[] = array(  //
+        'caption' => $caption, 'field' => $field 
+    );
+}
+
 foreach ( $site_mods as $mod => $value )
 {
     if ( file_exists( NV_ROOTDIR . "/modules/" . $value['module_file'] . "/siteinfo.php" ) )

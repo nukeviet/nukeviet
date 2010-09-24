@@ -11,10 +11,15 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 
 define( 'NV_IS_FILE_ADMIN', true );
 
-$menu_top = array( "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_webtools'] );
+$menu_top = array( 
+    "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_webtools'] 
+);
 
+$submenu['delalltemp'] = "delalltemp";
 $submenu['sitemap'] = $lang_module['sitemap'];
 
-$allow_func = array( 'main', 'sitemap' );
+$allow_func = array( 
+    'main', 'sitemap', 'delalltemp' 
+);
 
 ?>

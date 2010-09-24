@@ -136,4 +136,73 @@ function nv_save_file_config_global ( )
     return file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", $content_config, LOCK_EX );
 }
 
+function get_version ( $updatetime = 3600 )
+{
+    global $global_config;
+    
+    $my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.xml';
+    
+    $xmlcontent = false;
+    
+    if ( file_exists( $my_file ) and filemtime( $my_file ) > NV_CURRENTTIME - $updatetime )
+    {
+        $xmlcontent = simplexml_load_file( $my_file );
+    }
+    else
+    {
+        include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+        $getContent = new UrlGetContents( $global_config );
+        $content = $getContent->get( 'http://update.nukeviet.vn/nukeviet.version.xml' );
+        
+        if ( $content )
+        {
+            $xmlcontent = simplexml_load_string( $content );
+            if ( $xmlcontent != false )
+            {
+                file_put_contents( $my_file, $content );
+            }
+        }
+    }
+    
+    return $xmlcontent;
+}
+
+function nv_version_compare ( $version1, $version2 )
+{
+    $v1 = explode( '.', $version1 );
+    $v2 = explode( '.', $version2 );
+    
+    if ( $v1[0] > $v2[0] )
+    {
+        return 1;
+    }
+    
+    if ( $v1[0] < $v2[0] )
+    {
+        return - 1;
+    }
+    
+    if ( $v1[1] > $v2[1] )
+    {
+        return 1;
+    }
+    
+    if ( $v1[1] < $v2[1] )
+    {
+        return - 1;
+    }
+    
+    if ( $v1[2] > $v2[2] )
+    {
+        return 1;
+    }
+    
+    if ( $v1[2] < $v2[2] )
+    {
+        return - 1;
+    }
+    
+    return 0;
+}
+
 ?>

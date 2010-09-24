@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<table class="tab1">
+<table summary="{CAPTION}" class="tab1">
     <caption>
         {CAPTION}
     </caption>

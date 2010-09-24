@@ -60,7 +60,7 @@ if ( defined( 'NV_IS_SPADMIN' ) )
         $admin_mods['database'] = array( 'custom_title' => $lang_global['mod_database'] );
         $admin_mods['settings'] = array( 'custom_title' => $lang_global['mod_settings'] );
     }
-    $admin_mods['webtools'] = array( 'custom_title' => $lang_global['mod_webtools'] );
+    //$admin_mods['webtools'] = array( 'custom_title' => $lang_global['mod_webtools'] );
     $admin_mods['language'] = array( 'custom_title' => $lang_global['mod_language'] );
     $admin_mods['modules'] = array( 'custom_title' => $lang_global['mod_modules'] );
     $admin_mods['themes'] = array( 'custom_title' => $lang_global['mod_themes'] );

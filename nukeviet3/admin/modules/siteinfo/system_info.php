@@ -66,7 +66,7 @@ $info[] = array(  //
 'field' => array(  //
     array(  //
     'key' => $lang_module['version'], //
-'value' => $global_config['version'] 
+	'value' => $global_config['version'] 
 ), //
 //
 array(  //
@@ -132,7 +132,7 @@ if ( defined( 'NV_IS_GODADMIN' ) )
     );
 }
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( "system_info.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 foreach ( $info as $if )
 {
     $xtpl->assign( 'CAPTION', $if['caption'] );
