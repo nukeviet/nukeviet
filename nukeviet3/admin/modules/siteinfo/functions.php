@@ -15,17 +15,25 @@ global $global_config;
 $menu_top = array( 
     "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_siteinfo'] 
 );
-if ( function_exists( 'phpinfo' ) and ! in_array( 'phpinfo', $sys_info['disable_functions'] ) )
+if ( defined( 'NV_IS_SPADMIN' ) and function_exists( 'phpinfo' ) and ! in_array( 'phpinfo', $sys_info['disable_functions'] ) )
 {
-    $submenu['main'] = $lang_module['site_configs_info'];
+    $submenu['system_info'] = $lang_module['site_configs_info'];
     $submenu['php_info_configuration'] = $lang_module['configuration_php'];
     $submenu['php_info_modules'] = $lang_module['extensions'];
     $submenu['php_info_environment'] = $lang_module['environment_php'];
     $submenu['php_info_variables'] = $lang_module['variables_php'];
+    
+    $allow_func = array( 
+        'main', 'system_info', 'php_info_configuration', 'php_info_modules', 'php_info_environment', 'php_info_variables', 'checkchmod' 
+    );
+
 }
-$allow_func = array( 
-    'main', 'php_info_configuration', 'php_info_modules', 'php_info_environment', 'php_info_variables', 'checkchmod' 
-);
+else
+{
+    $allow_func = array( 
+        'main'
+    );
+}
 define( 'NV_IS_FILE_SITEINFO', true );
 
 ?>

@@ -55,4 +55,6 @@ $lang_global['login_error_security'] = "Erreur: Code de sécurité manquant ou i
 $lang_global['error_zlib_support'] = "Erreur: votre serveur ne supporte pas l'extension zlib, veuillez demander votre hébergeur de l'activer pour utiliser cette fonction.";
 $lang_global['error_zip_extension'] = "Erreur: votre serveur ne supporte pas l'extension ZIP, veuillez demander votre hébergeur de l'activer pour utiliser cette fonction.";
 
+$lang_global['mod_webtools'] = "Utilitaire Web";
+
 ?>

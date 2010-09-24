@@ -182,4 +182,12 @@ $lang_module['addtotopics'] = "Thêm vào nhóm tin liên quan";
 $lang_module['topic_update_success'] = "Cập nhật thành công !";
 $lang_module['topic_num_news'] = " bài viết";
 
+$lang_module['siteinfo_publtime'] = "Tổng số bài viết hiệu lực";
+$lang_module['siteinfo_users_send'] = "Số bài viết thành viên gửi tới";
+$lang_module['siteinfo_pending'] = "Số bài viết chờ đăng";
+$lang_module['siteinfo_expired'] = "Số bài viết đã hết hạn";
+$lang_module['siteinfo_exptime'] = "Số bài viết sắp hết hạn";
+$lang_module['siteinfo_comment'] = "Tổng số bình luận được đăng";
+$lang_module['siteinfo_comment_pending'] = "Số bình luận chờ duyệt"; 
+
 ?>

@@ -366,17 +366,9 @@ table.tab1 td {
 	position: absolute;
 	top: 20px;
 	left: 820px;
-	width: 280px;
 	text-align: right;
 }
 
-/*
- #header div.logout .logout_selector{
- float:left;
- display:inline;
- width:40% !important;
- text-align:center;
- }*/
 #middle_column_l {
 	color: #333;
 	display: inline;

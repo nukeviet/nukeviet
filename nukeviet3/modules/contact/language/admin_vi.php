@@ -63,4 +63,8 @@ $lang_module['admin_reply_title'] = "Được trả lời phản hồi";
 $lang_module['admin_send2mail_title'] = "Gửi liên hệ tới email";
 $lang_module['delall'] = "Xóa tất cả";
 
+$lang_module['siteinfo_new'] = "Liên hệ chưa đọc";
+
+
+
 ?>

@@ -102,6 +102,5 @@ $lang_module['admin_view'] = "Cette section est réservée uniquement aux admini
 $lang_module['group_view'] = "Cette section est réservée uniquement aux groupes de membres!";
 $lang_module['rating_error1'] = "Évaluation invalide";
 $lang_module['rating_error2'] = "Vous avez déjà évalué cet article";
-$lang_module['file_rating_note2'] = "Vous avez déjà évalué cet article";
 
 ?>

@@ -121,4 +121,6 @@ $lang_module['weblink_link_broken_bad'] = "<span style=\"color:red\">Nội dung 
 $lang_module['link_broken_out'] = "Gỡ bỏ thông báo được chọn";
 $lang_module['config_error_per_page'] = "Lỗi: Không xảy ra ở trường per_page";
 
+$lang_module['siteinfo_numberlink'] = "Tổng số link";
+$lang_module['siteinfo_error'] = "Số báo cáo link hỏng";
 ?>

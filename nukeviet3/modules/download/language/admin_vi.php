@@ -140,4 +140,11 @@ $lang_module['kb_sec'] = "KB/sec (0 = không hạn chế)";
 
 $lang_module['alias'] = "Liên kết tĩnh";
 
+$lang_module['siteinfo_publtime'] = "Số file hiệu lực";
+$lang_module['siteinfo_expired'] = "Số file hết hạn";
+$lang_module['siteinfo_users_send'] = "Số file chờ kiểm duyệt";
+$lang_module['siteinfo_eror'] = "Số báo cáo lỗi được gửi tới";
+$lang_module['siteinfo_comment'] = "Số bình luận được gửi tới";
+$lang_module['siteinfo_comment_pending'] = "Số bình luận chờ kiểm duyệt";
+
 ?>

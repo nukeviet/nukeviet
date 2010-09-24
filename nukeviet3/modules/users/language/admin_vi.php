@@ -165,5 +165,6 @@ $lang_module['group_info'] = "Thông tin về nhóm &ldquo;%s&rdquo;";
 $lang_module['add_user'] = "Thêm thành viên %1\$s vào nhóm %2\$s";
 $lang_module['exclude_user'] = "Loại thành viên %1\$s khỏi nhóm %2\$s";
 
-
+$lang_module['siteinfo_user'] = "Số thành viên";
+$lang_module['siteinfo_waiting'] = "Số thành viên đợi kích hoạt"; 
 ?>

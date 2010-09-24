@@ -72,4 +72,9 @@ $lang_module['dump_autobackup'] = "Activer le sauvegarde automatique de données
 $lang_module['dump_backup_ext'] = "Type de fichier de données";
 $lang_module['dump_backup_day'] = "Temps (jours) de sauvegarde de données";
 
+$lang_module['file_backup'] = "Data Backup";
+$lang_module['file_nb'] = "Ordre";
+$lang_module['file_name'] = "Nom du fichier";
+$lang_module['file_time'] = "Horaire";
+$lang_module['file_site'] = "Taille";
 ?>
