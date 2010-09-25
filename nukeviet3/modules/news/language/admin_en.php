@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 21, 2010, 02:43:51 PM
+* @Createdate Sep 25, 2010, 11:10:39 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -177,5 +177,12 @@ $lang_module['topic_nonews'] = "There are currently no news articles related to 
 $lang_module['addtotopics'] = "Add topic";
 $lang_module['topic_update_success'] = "Update successful";
 $lang_module['topic_num_news'] = "Topic";
+$lang_module['siteinfo_publtime'] = "Active posts";
+$lang_module['siteinfo_users_send'] = "Member posts";
+$lang_module['siteinfo_pending'] = "Pending posts";
+$lang_module['siteinfo_expired'] = "Expired posts";
+$lang_module['siteinfo_exptime'] = "Expire posts";
+$lang_module['siteinfo_comment'] = "Total comments";
+$lang_module['siteinfo_comment_pending'] = "Uncheck comments";
 
 ?>

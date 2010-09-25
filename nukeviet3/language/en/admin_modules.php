@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Sep 25, 2010, 11:10:38 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -46,6 +46,7 @@ $lang_module['funcs_custom_title'] = "Name";
 $lang_module['funcs_layout'] = "Using layouts";
 $lang_module['funcs_in_submenu'] = "Menu";
 $lang_module['funcs_subweight'] = "Index";
+$lang_module['activate_rss'] = "Activate RSS";
 $lang_module['module_sys'] = "System modules";
 $lang_module['vmodule'] = "Virtual modules";
 $lang_module['vmodule_add'] = "Add virtual module";

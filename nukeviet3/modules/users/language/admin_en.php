@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:02 PM
+* @Createdate Sep 25, 2010, 11:10:39 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -133,7 +133,6 @@ $lang_module['level1'] = "Super Administrator";
 $lang_module['level2'] = "General Administrator";
 $lang_module['level3'] = "Area Administrative";
 $lang_module['admin_add'] = "Set to admin";
-
 $lang_module['nv_admin_add'] = "Add group";
 $lang_module['nv_admin_edit'] = "Edit group";
 $lang_module['title_empty'] = "You do not declare group title";
@@ -162,5 +161,7 @@ $lang_module['group_pgtitle'] = "Detail";
 $lang_module['group_info'] = "Group information &ldquo;%s&rdquo;";
 $lang_module['add_user'] = "Member %1\$s group %2\$s";
 $lang_module['exclude_user'] = "Delete member %1\$s in group %2\$s";
+$lang_module['siteinfo_user'] = "Members";
+$lang_module['siteinfo_waiting'] = "Unactive members";
 
 ?>

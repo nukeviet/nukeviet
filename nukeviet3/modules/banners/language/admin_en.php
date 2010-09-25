@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Sep 25, 2010, 11:10:38 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -34,6 +34,7 @@ $lang_module['yim'] = "YIM";
 $lang_module['phone'] = "Phone";
 $lang_module['fax'] = "Fax";
 $lang_module['mobile'] = "Mobile";
+$lang_module['uploadtype'] = "Upload file type allowed";
 $lang_module['add_client_submit'] = "Create";
 $lang_module['edit_client_submit'] = "Submit";
 $lang_module['login_is_already_in_use'] = "Account &ldquo;<strong>%s</strong>&rdquo; already exist";

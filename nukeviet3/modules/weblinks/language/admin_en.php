@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:02 PM
+* @Createdate Sep 25, 2010, 11:10:39 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -120,5 +120,7 @@ $lang_module['weblink_link_broken_die'] = "<span style=\"color:red\">Fail</span>
 $lang_module['weblink_link_broken_bad'] = "<span style=\"color:red\">Bad content</span>";
 $lang_module['link_broken_out'] = "Remove broken link";
 $lang_module['config_error_per_page'] = "Error: Not on per_page field";
+$lang_module['siteinfo_numberlink'] = "Total links";
+$lang_module['siteinfo_error'] = "Bad link reports";
 
 ?>

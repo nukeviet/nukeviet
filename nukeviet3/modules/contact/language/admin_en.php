@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Sep 25, 2010, 11:10:38 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -62,5 +62,6 @@ $lang_module['admin_view_title'] = "Enable to view";
 $lang_module['admin_reply_title'] = "Enable to reply";
 $lang_module['admin_send2mail_title'] = "Send to email user";
 $lang_module['delall'] = "Delete all";
+$lang_module['siteinfo_new'] = "Unread contact";
 
 ?>
