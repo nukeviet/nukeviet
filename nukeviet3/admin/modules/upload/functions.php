@@ -63,8 +63,8 @@ $types = array(
 function viewdir ( $dir )
 {
     global $imglibs, $array_hidefolders;
-    $handle = opendir( NV_ROOTDIR . '/' . $dir );
-    while ( $file = readdir( $handle ) )
+    $handle = scandir( NV_ROOTDIR . '/' . $dir );
+    foreach ( $handle as $file )
     {
         $full_d = NV_ROOTDIR . '/' . $dir . '/' . $file;
         if ( is_dir( $full_d ) && ! in_array( $file, $array_hidefolders ) )
@@ -73,15 +73,14 @@ function viewdir ( $dir )
             if ( ! is_numeric( $file ) ) viewdir( $dir . '/' . $file );
         }
     }
-    closedir( $handle );
     return $imglibs;
 }
 
 function viewdirtree ( $dir, $currentpath2 )
 {
     global $array_hidefolders;
-    $handle2 = opendir( NV_ROOTDIR . '/' . $dir );
-    while ( $file2 = readdir( $handle2 ) )
+    $handle2 = scandir( NV_ROOTDIR . '/' . $dir );
+    foreach ( $handle2 as $file2 )
     {
         $full_d2 = NV_ROOTDIR . '/' . $dir . '/' . $file2;
         if ( is_dir( $full_d2 ) && ! in_array( $file2, $array_hidefolders ) )
