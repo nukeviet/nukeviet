@@ -23,7 +23,7 @@ function nv_create_table_news ( $catid )
 $sql_create_table = array();
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`, `rss`) VALUES
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES
 (1, 'main', 'Main', 'about', 1, 0, 1, 'left-body-right', ''),
 (2, 'comment', 'Comment', 'news', 0, 0, 0, 'left-body-right', ''),
 (3, 'detail', 'Detail', 'news', 1, 0, 4, 'left-body-right', ''),
