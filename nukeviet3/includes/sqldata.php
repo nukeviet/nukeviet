@@ -624,18 +624,18 @@ function nv_create_table_sys ( $lang )
         ('country', 'ZZ', 0, 0),
         ('country', 'unkown', 0, 0)";
     
-    $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`) VALUES
-		('about', 'about', 'about', 'About', 1276333182, 1, '', '', '0', 1, 1, 1, 1, ''),
-		('news', 'news', 'news', 'News', 1270400000, 1, '', '', '0', 1, 2, 1, 1, ''),
-		('download', 'download', 'download', 'Download', 1276597148, 1, '', '', '0', 1, 3, 1, 1, ''),
-		('weblinks', 'weblinks', 'weblinks', 'Weblinks', 1276834052, 1, '', '', '0', 1, 4, 1, 1, ''),
-		('users', 'users', 'users', 'Users', 1274080277, 1, '', '', '0', 1, 5, 1, 1, ''),
-		('contact', 'contact', 'contact', 'Contact', 1275351337, 1, '', '', '0', 1, 6, 1, 1, ''),
-		('statistics', 'statistics', 'statistics', 'Statistics', 1276520928, 0, '', 'online, statistics', '0', 1, 7, 1, 1, ''),
-		('voting', 'voting', 'voting', 'Voting', 1275315261, 1, '', '', '0', 0, 8, 1, 1, ''),
-		('banners', 'banners', 'banners', 'Banners', 1270400000, 1, '', '', '0', 0, 9, 1, 1, ''),
-		('search', 'search', 'search', 'Search', 1273474173, 0, '', '', '0', 0, 10, 1, 1, ''),
-		('rss', 'rss', 'rss', 'Rss', 1279360267, 1, '', '', '0', 0, 11, 1, 1, '')";
+    $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
+		('about', 'about', 'about', 'About', 1276333182, 1, '', '', '0', 1, 1, 1, 1, '',0),
+		('news', 'news', 'news', 'News', 1270400000, 1, '', '', '0', 1, 2, 1, 1, '',1),
+		('download', 'download', 'download', 'Download', 1276597148, 1, '', '', '0', 1, 3, 1, 1, '',1),
+		('weblinks', 'weblinks', 'weblinks', 'Weblinks', 1276834052, 1, '', '', '0', 1, 4, 1, 1, '',1),
+		('users', 'users', 'users', 'Users', 1274080277, 1, '', '', '0', 1, 5, 1, 1, '',0),
+		('contact', 'contact', 'contact', 'Contact', 1275351337, 1, '', '', '0', 1, 6, 1, 1, '',0),
+		('statistics', 'statistics', 'statistics', 'Statistics', 1276520928, 0, '', 'online, statistics', '0', 1, 7, 1, 1, '',0),
+		('voting', 'voting', 'voting', 'Voting', 1275315261, 1, '', '', '0', 0, 8, 1, 1, '',0),
+		('banners', 'banners', 'banners', 'Banners', 1270400000, 1, '', '', '0', 0, 9, 1, 1, '',0),
+		('search', 'search', 'search', 'Search', 1273474173, 0, '', '', '0', 0, 10, 1, 1, '',0),
+		('rss', 'rss', 'rss', 'Rss', 1279360267, 1, '', '', '0', 0, 11, 1, 1, '',0)";
     
     $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
         ('" . $lang . "', 'global', 'site_name', 'NUKEVIET CMS 3.0'),
