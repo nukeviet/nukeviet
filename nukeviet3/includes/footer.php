@@ -54,9 +54,9 @@ if ( defined( 'NV_IS_GZIP' ) )
     }
 }
 
-$strlen = strlen( $page );
+/*$strlen = strlen( $page );
 @Header( 'Content-Length: ' . $strlen );
-@Header( 'Accept-Ranges: bytes' );
+@Header( 'Accept-Ranges: bytes' );*/
 
 echo $page;
 exit();
