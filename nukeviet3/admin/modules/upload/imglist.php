@@ -73,7 +73,7 @@ for($i = 0; $i < count ( $imglist ); $i ++) {
 echo '</table>';
 echo '
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.min.js"></script>
-<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/admin_default/css/admin.css" type="text/css" />	
+<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/'.$global_config['admin_theme'].'/css/admin.css" type="text/css" />	
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.all.css" rel="stylesheet" />
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery-ui-1.8.2.custom.js"></script>	
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/contextmenu/jquery.contextmenu.r2.js"></script>

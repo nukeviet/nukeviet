@@ -150,7 +150,7 @@ $contents .= '</tbody>
 </table>
 ';
 $contents .= '
-<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/admin_default/css/admin.css" type="text/css" />
+<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/'.$global_config['admin_theme'].'/css/admin.css" type="text/css" />
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.all.css" rel="stylesheet" />
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/jquery/jquery.treeview.css" rel="stylesheet" />
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.treeview.min.js"></script>
