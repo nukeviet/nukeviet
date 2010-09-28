@@ -202,6 +202,7 @@ function nv_rss_generate( $channel, $items )
         {
             $image['title'] = $channel['title'];
             $image['link'] = $channel['link'];
+            $image['src'] = NV_MY_DOMAIN . $image['src'];
 
             $xtpl->assign( 'IMAGE', $image );
             $xtpl->parse( 'main.image' );
