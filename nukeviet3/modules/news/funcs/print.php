@@ -6,7 +6,8 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3-6-2010 0:14
  */
-if ( ! defined( 'NV_IS_MOD_NEWS' ) ) {
+if ( ! defined( 'NV_IS_MOD_NEWS' ) )
+{
     die( 'Stop!!!' );
 }
 
@@ -36,29 +37,29 @@ if ( $id > 0 and $catid > 0 )
     $img = "";
     if ( $content['allowed_print'] == 1 )
     {
-        $link = $global_config['site_url'] . '/' . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id . "";
+        $link = $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id . "";
         $link = "<a href=\"" . $link . "\" title=\"" . $content['title'] . "\">" . $link . "</a>\n";
         
         if ( $content['imgposition'] == 1 )
         {
             $homeimg = explode( "|", $content['homeimgthumb'] );
-            if (!empty($homeimg[0]) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimg[0] ))
+            if ( ! empty( $homeimg[0] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimg[0] ) )
             {
-	            $size = @getimagesize( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimg[0] );
-	            if ( $size[0] > 0 )
-	            {
-	                $width = $size[0];
-	                $height = $size[1];
-	                $alt = $content['homeimgalt'] ? $content['homeimgalt'] : $content['title'];
-	                $note = $content['homeimgalt'];
-	                $src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimg[0];
-	                $img = array( 
-	                    "width" => $width, "height" => $height, "alt" => $alt, "note" => $note, "src" => $src, "position" => $content['imgposition'] 
-	                );
-	            }
+                $size = @getimagesize( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimg[0] );
+                if ( $size[0] > 0 )
+                {
+                    $width = $size[0];
+                    $height = $size[1];
+                    $alt = $content['homeimgalt'] ? $content['homeimgalt'] : $content['title'];
+                    $note = $content['homeimgalt'];
+                    $src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimg[0];
+                    $img = array( 
+                        "width" => $width, "height" => $height, "alt" => $alt, "note" => $note, "src" => $src, "position" => $content['imgposition'] 
+                    );
+                }
             }
         }
-        elseif ( $content['imgposition'] == 2 and !empty($content['homeimgfile']) and  file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ))
+        elseif ( $content['imgposition'] == 2 and ! empty( $content['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
         {
             $size = @getimagesize( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] );
             if ( $size[0] > 0 )
