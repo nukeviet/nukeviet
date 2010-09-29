@@ -74,7 +74,6 @@ $global_config['send_errors_list'] = NV_SEND_ERRORS_LIST;
 $global_config['error_log_path'] = NV_LOGS_DIR . '/error_logs';
 $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
-$global_config['sitekey'] = md5( $global_config['my_domains'] . NV_ROOTDIR . date( "m.Y" ) );
 
 //Ket noi voi class Error_handler
 require_once ( NV_ROOTDIR . '/includes/class/error.class.php' );
@@ -115,7 +114,7 @@ if ( $client_info['ip'] == "none" ) trigger_error( 'Error: Your IP address is no
 require_once ( NV_ROOTDIR . '/includes/class/request.class.php' );
 $nv_Request = new Request( $global_config, $client_info['ip'] );
 //Ngon ngu
-$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini',true);
+$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 
 require_once ( NV_ROOTDIR . '/includes/language.php' );
 require_once ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
@@ -136,6 +135,8 @@ $client_info['referer'] = $nv_Request->referer; //referer
 $client_info['is_myreferer'] = $nv_Request->referer_key; //0 = referer tu ben ngoai site, 1 = referer noi bo, 2 = khong co referer
 $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri; //trang dang xem
 $client_info['agent'] = $nv_Request->user_agent; //HTTP_USER_AGENT
+
+$global_config['sitekey'] = md5( $global_config['my_domains'] . NV_ROOTDIR . $client_info['session_id'] );
 
 
 define( 'NV_SERVER_NAME', $nv_Request->server_name ); //vd: mydomain1.com
@@ -165,4 +166,5 @@ $client_info['browser'] = array_combine( array(
 require_once ( NV_ROOTDIR . '/includes/class/crypt.class.php' );
 $crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
 if ( ! $crypt->_otk ) trigger_error( "sitekey not declared", 256 );
+
 ?>
