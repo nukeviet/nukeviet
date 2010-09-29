@@ -11,7 +11,7 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) )
 }
 
 $path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'request', NV_UPLOADS_DIR ) ), ENT_QUOTES );
-if ( ! in_array( NV_UPLOADS_DIR, explode( '/', $path ) ) )
+if ( ! nv_check_allow_upload_dir( $path ) )
 {
     $path = NV_UPLOADS_DIR;
 }
@@ -19,11 +19,11 @@ $currentpath = htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', '
 echo '<ul id="foldertree" class="filetree">';
 echo '<li class="open collapsable"><span ' . ( ( $path == $currentpath ) ? ' style="color:red"' : '' ) . ' class="folder" title="' . $path . '">&nbsp;' . $path . '</span>';
 echo '<ul>';
-$modfolder = array_keys( $site_mods );
 $arr_files = @scandir( NV_ROOTDIR . '/' . $path );
-foreach ($arr_files as $file) {
+foreach ( $arr_files as $file )
+{
     $full_d = NV_ROOTDIR . '/' . $path . '/' . $file;
-    if ( is_dir( $full_d ) && ! in_array( $file, $array_hidefolders ) && in_array( $file, $modfolder ) && ! defined( 'NV_IS_SPADMIN' ) )
+    if ( is_dir( $full_d ) && ! in_array( $file, $array_hidefolders ) && nv_check_allow_upload_dir( $path . '/' . $file ) )
     {
         if ( ( $path . '/' . $file == $currentpath ) )
         {
@@ -33,30 +33,9 @@ foreach ($arr_files as $file) {
         {
             echo '<li class="expandable"><span class="folder" title="' . ( $path . '/' . $file ) . '">&nbsp;' . $file . '</span>';
         }
-        if ( ! is_numeric( $file ) )
-        {
-            echo '<ul>';
-            viewdirtree( $path . '/' . $file, $currentpath );
-            echo '</ul>';
-        }
-        echo '</li>';
-    }
-    else if ( is_dir( $full_d ) && ! in_array( $file, $array_hidefolders ) && defined( 'NV_IS_SPADMIN' ) )
-    {
-        if ( ( $path . '/' . $file == $currentpath ) )
-        {
-            echo '<li class="open collapsable"><span style="color:red" class="folder" title="' . ( $path . '/' . $file ) . '">&nbsp;' . $file . '</span>';
-        }
-        else
-        {
-            echo '<li class="expandable"><span class="folder" title="' . ( $path . '/' . $file ) . '">&nbsp;' . $file . '</span>';
-        }
-        if ( ! is_numeric( $file ) )
-        {
-            echo '<ul>';
-            viewdirtree( $path . '/' . $file, $currentpath );
-            echo '</ul>';
-        }
+        echo '<ul>';
+        viewdirtree( $path . '/' . $file, $currentpath );
+        echo '</ul>';
         echo '</li>';
     }
 }

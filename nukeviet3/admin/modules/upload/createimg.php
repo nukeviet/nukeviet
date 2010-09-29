@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post' ) ), ENT_QUOTES );
-if ( $admin_info['allow_modify_files'] && in_array( NV_UPLOADS_DIR, explode( '/', $path ) ) )
+if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
 {
     $imagename = htmlspecialchars( trim( $nv_Request->get_string( 'img', 'post' ) ), ENT_QUOTES );
     $width = $nv_Request->get_int( 'width', 'post' );

@@ -19,7 +19,7 @@ if ( $uploadflag )
 {
     $imgurl = htmlspecialchars( trim( $nv_Request->get_string( 'imgurl', 'post' ) ), ENT_QUOTES );
     $imgfolder = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post' ) ), ENT_QUOTES );
-    if ( is_uploaded_file( $_FILES['fileupload']['tmp_name'] ) && in_array( NV_UPLOADS_DIR, explode( '/', $imgfolder ) ) )
+    if ( is_uploaded_file( $_FILES['fileupload']['tmp_name'] ) && nv_check_allow_upload_dir( $imgfolder ) )
     {
         require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
         $upload = new upload( $admin_info['allow_files_type'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
@@ -150,7 +150,7 @@ $contents .= '</tbody>
 </table>
 ';
 $contents .= '
-<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/'.$global_config['admin_theme'].'/css/admin.css" type="text/css" />
+<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/admin.css" type="text/css" />
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.all.css" rel="stylesheet" />
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/jquery/jquery.treeview.css" rel="stylesheet" />
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.treeview.min.js"></script>

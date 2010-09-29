@@ -8,7 +8,7 @@
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $imgfolder = htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', 'post,get' ) ), ENT_QUOTES );
-if ( is_uploaded_file( $_FILES['upload']['tmp_name'] ) && in_array( NV_UPLOADS_DIR, explode( '/', $imgfolder ) ) )
+if ( is_uploaded_file( $_FILES['upload']['tmp_name'] ) && nv_check_allow_upload_dir( $imgfolder ) )
 {
     $CKEditorFuncNum = $nv_Request->get_string( 'CKEditorFuncNum', 'post,get', 0 );
     $type = $nv_Request->get_string( 'type', 'post,get' );

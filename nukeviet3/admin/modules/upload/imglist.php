@@ -5,95 +5,118 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
-if (! defined ( 'NV_IS_FILE_ADMIN' ))
-	die ( 'Stop!!!' );
-$pathimg = htmlspecialchars ( trim ( $nv_Request->get_string ( 'path', 'get', NV_UPLOADS_DIR ) ), ENT_QUOTES );
-if (! in_array ( NV_UPLOADS_DIR, explode ( '/', $pathimg ) )) {
-	$pathimg = NV_UPLOADS_DIR;
-}
-$type = htmlspecialchars ( trim ( $nv_Request->get_string ( 'type', 'get', 'file' ) ), ENT_QUOTES );
-$selectfile = htmlspecialchars ( trim ( $nv_Request->get_string ( 'imgfile', 'get' ) ), ENT_QUOTES );
+if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+$pathimg = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) ), ENT_QUOTES );
+$type = htmlspecialchars( trim( $nv_Request->get_string( 'type', 'get', 'file' ) ), ENT_QUOTES );
+$selectfile = htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get' ) ), ENT_QUOTES );
 
-$imglist = array ();
-$files = @scandir ( NV_ROOTDIR . "/" . $pathimg );
-if (! empty ( $files )) {
-	if ($type == 'image') {
-		$filter = "\.(gif|jpg|jpeg|pjpeg|png)";
-	}
-	if ($type == 'flash') {
-		$filter = "\.(flv|swf|swc)";
-	}
-	foreach ( $files as $file ) {
-		$full_d = NV_ROOTDIR . '/' . $pathimg . '/' . $file;
-		if (! in_array ( $file, $array_hidefolders ) and ! is_dir ( $full_d )) {
-			if ($type != 'file') {
-				if (preg_match ( '/^[a-zA-Z0-9\-\_](.*)' . $filter . '$/', strtolower ( $file ) )) {
-					$imglist [] = $file;
-				}
-			} else {
-				$imglist [] = $file;
-			}
-		}
-	}
+$imglist = array();
+if ( ! nv_check_allow_upload_dir( $pathimg ) )
+{
+    $pathimg = NV_UPLOADS_DIR;
+}
+$files = @scandir( NV_ROOTDIR . "/" . $pathimg );
+if ( ! empty( $files ) )
+{
+    if ( $type == 'image' )
+    {
+        $filter = "\.(gif|jpg|jpeg|pjpeg|png)";
+    }
+    if ( $type == 'flash' )
+    {
+        $filter = "\.(flv|swf|swc)";
+    }
+    foreach ( $files as $file )
+    {
+        $full_d = NV_ROOTDIR . '/' . $pathimg . '/' . $file;
+        if ( ! in_array( $file, $array_hidefolders ) and ! is_dir( $full_d ) )
+        {
+            if ( $type != 'file' )
+            {
+                if ( preg_match( '/^[a-zA-Z0-9\-\_](.*)' . $filter . '$/', strtolower( $file ) ) )
+                {
+                    $imglist[] = $file;
+                }
+            }
+            else
+            {
+                $imglist[] = $file;
+            }
+        }
+    }
 }
 
 echo '<table style="width:450px">';
 echo '<tr>';
-for($i = 0; $i < count ( $imglist ); $i ++) {
-	if ($selectfile == $imglist [$i]) {
-		$sel = ';border:2px solid red';
-		$selid = 'id="imgselected"';
-	} else {
-		$sel = '';
-		$selid = '';
-	}
-	$ext = strtolower ( end ( explode ( '.', $imglist [$i] ) ) );
-	echo '<td style="width:170px; padding-bottom:10px; text-align:center;"><div style="width:150px" ' . $selid . '>';
-	
-	if (in_array ( $ext, $array_images )) {
-		echo '<img class="previewimg" title="' . $imglist [$i] . '" src="' . NV_BASE_SITEURL . $pathimg . '/' . $imglist [$i] . '" style="padding:5px' . $sel . '" width="100" height="100"/><br />';
-	} elseif (in_array ( $ext, $array_archives )) {
-		echo '<img class="previewimg" title="' . $imglist [$i] . '" src="' . NV_BASE_SITEURL . 'images/zip.gif" style="padding:5px' . $sel . '" width="32" height="32"/><br />';
-	} elseif (in_array ( $ext, $array_documents )) {
-		echo '<img class="previewimg" title="' . $imglist [$i] . '" src="' . NV_BASE_SITEURL . 'images/doc.gif" style="padding:5px' . $sel . '" width="32" height="32"/><br />';
-	} else {
-		echo '<img class="previewimg" title="' . $imglist [$i] . '" src="' . NV_BASE_SITEURL . 'images/file.gif" style="padding:5px' . $sel . '" width="32" height="32"/><br />';
-	}
-	$filesize = nv_convertfromBytes ( @filesize ( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist [$i] ) );
-	//$filetime = date( "d-m-Y H:i:s", filemtime( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] ) );
-	echo '</div><div style="width:150px;overflow:hidden;font-size:12px;font-family:tahoma;">' . $imglist [$i] . '<br/>';
-	//echo $filetime.'<br/>';
-	echo $filesize . '</div>';
-	echo '</td>';
-	if (($i + 1) % 4 == 0 && $i != 0) {
-		echo '</tr><tr>';
-	}
+for ( $i = 0; $i < count( $imglist ); $i ++ )
+{
+    if ( $selectfile == $imglist[$i] )
+    {
+        $sel = ';border:2px solid red';
+        $selid = 'id="imgselected"';
+    }
+    else
+    {
+        $sel = '';
+        $selid = '';
+    }
+    $arr_temp = explode( '.', $imglist[$i] );
+    $ext = strtolower( end( $arr_temp ) );
+    echo '<td style="width:170px; padding-bottom:10px; text-align:center;"><div style="width:150px" ' . $selid . '>';
+    
+    if ( in_array( $ext, $array_images ) )
+    {
+        echo '<img class="previewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . $pathimg . '/' . $imglist[$i] . '" style="padding:5px' . $sel . '" width="100" height="100"/><br />';
+    }
+    elseif ( in_array( $ext, $array_archives ) )
+    {
+        echo '<img class="previewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . 'images/zip.gif" style="padding:5px' . $sel . '" width="32" height="32"/><br />';
+    }
+    elseif ( in_array( $ext, $array_documents ) )
+    {
+        echo '<img class="previewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . 'images/doc.gif" style="padding:5px' . $sel . '" width="32" height="32"/><br />';
+    }
+    else
+    {
+        echo '<img class="previewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . 'images/file.gif" style="padding:5px' . $sel . '" width="32" height="32"/><br />';
+    }
+    $filesize = nv_convertfromBytes( @filesize( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] ) );
+    //$filetime = date( "d-m-Y H:i:s", filemtime( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] ) );
+    echo '</div><div style="width:150px;overflow:hidden;font-size:12px;font-family:tahoma;">' . $imglist[$i] . '<br/>';
+    //echo $filetime.'<br/>';
+    echo $filesize . '</div>';
+    echo '</td>';
+    if ( ( $i + 1 ) % 4 == 0 && $i != 0 )
+    {
+        echo '</tr><tr>';
+    }
 
 }
 echo '</table>';
 echo '
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.min.js"></script>
-<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/'.$global_config['admin_theme'].'/css/admin.css" type="text/css" />	
+<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/admin.css" type="text/css" />	
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.all.css" rel="stylesheet" />
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery-ui-1.8.2.custom.js"></script>	
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/contextmenu/jquery.contextmenu.r2.js"></script>
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.scrollTo.js"></script>
-<div id="imgpreview" style="overflow:auto" title="' . $lang_module ['preview'] . '"></div>
-<div id="createimg" style="text-align:center;display:none" title="' . $lang_module ['upload_size'] . '">' . $lang_module ['upload_width'] . ':<input name="width" style="width:60px" type="text"/>' . $lang_module ['upload_height'] . ':<input type="text" style="width:60px" name="height" disabled=disabled/></div>
-<div id="renameimg" style="display:none" title="' . $lang_module ['rename'] . '">
-' . $lang_module ['rename_newname'] . '<input type="text" name="imagename"/></div>
-<div id="movefolder" style="text-align:center;display:none" title="' . $lang_module ['movefolder'] . '">' . $lang_module ['select_folder'] . '
+<div id="imgpreview" style="overflow:auto" title="' . $lang_module['preview'] . '"></div>
+<div id="createimg" style="text-align:center;display:none" title="' . $lang_module['upload_size'] . '">' . $lang_module['upload_width'] . ':<input name="width" style="width:60px" type="text"/>' . $lang_module['upload_height'] . ':<input type="text" style="width:60px" name="height" disabled=disabled/></div>
+<div id="renameimg" style="display:none" title="' . $lang_module['rename'] . '">
+' . $lang_module['rename_newname'] . '<input type="text" name="imagename"/></div>
+<div id="movefolder" style="text-align:center;" title="' . $lang_module['movefolder'] . '">' . $lang_module['select_folder'] . '
 <select name="selectfolder" id="selectfolder">';
 //echo '<option value="' . $pathimg . '" ' . (($pathimg == $currentpath) ? ' selected' : '') . '>' . $pathimg . '</option>';
-$listdir = viewdir ( NV_UPLOADS_DIR );
+$listdir = viewdir( NV_UPLOADS_DIR );
 //$listdir = viewdir ( $pathimg );
-foreach ( $listdir as $folder ) {
-	$sel = ($folder == $currentpath) ? ' selected' : '';
-	echo '<option value="' . $folder . '" ' . $sel . '>' . $folder . '</option>';
+foreach ( $listdir as $folder )
+{
+    $sel = ( $folder == $pathimg ) ? ' selected' : '';
+    echo '<option value="' . $folder . '" ' . $sel . '>' . $folder . '</option>';
 }
 echo '	</select>';
 echo '</div>
-<div id="preview" style="display:none" title="' . $lang_module ['preview'] . '"></div>
+<div id="preview" style="display:none" title="' . $lang_module['preview'] . '"></div>
 
 <script type="text/javascript">
 $(function(){
@@ -146,7 +169,7 @@ $("div#renameimg").dialog({
 			var imgfile = $("#image",parent.document).attr("title");
 			var newname = $("input[name=imagename]").val();
 			if (newname==""){
-				alert("' . $lang_module ['rename_noname'] . '");
+				alert("' . $lang_module['rename_noname'] . '");
 				$("input[name=imagename]").focus();
 				return false;
 			}
@@ -202,22 +225,24 @@ $("div#movefolder").dialog({
 
 echo '<div style="display:none" id="vs-context-menu">
         <ul>
-            <li id="select"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/select.png"/>' . $lang_module ['select'] . '</li>
-            <li id="view"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/view.png"/>' . $lang_module ['preview'] . '</li>
-            <li id="download"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/download.png"/>' . $lang_module ['download'] . '</li>';
-if ($admin_info ['allow_modify_files']) {
-	echo '<li id="create"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/copy.png"/>' . $lang_module ['upload_createimage'] . '</li>
-	<li id="cut"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/cut.png"/>' . $lang_module ['move'] . '</li>
-            <li id="rename"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/rename.png"/>' . $lang_module ['rename'] . '</li>
-            <li id="delete"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/delete.png"/>' . $lang_module ['upload_delimage'] . '</li>';
+            <li id="select"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/select.png"/>' . $lang_module['select'] . '</li>
+            <li id="view"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/view.png"/>' . $lang_module['preview'] . '</li>
+            <li id="download"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/download.png"/>' . $lang_module['download'] . '</li>';
+if ( $admin_info['allow_modify_files'] )
+{
+    echo '<li id="create"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/copy.png"/>' . $lang_module['upload_createimage'] . '</li>
+	<li id="cut"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/cut.png"/>' . $lang_module['move'] . '</li>
+            <li id="rename"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/rename.png"/>' . $lang_module['rename'] . '</li>
+            <li id="delete"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/delete.png"/>' . $lang_module['upload_delimage'] . '</li>';
 }
 echo '
         </ul>
     </div>';
 echo '<script type="text/javascript">
 $(function(){';
-if (! empty ( $selectfile )) {
-	echo '$.scrollTo("#imgselected", 80)';
+if ( ! empty( $selectfile ) )
+{
+    echo '$.scrollTo("#imgselected", 80)';
 }
 echo '
 function createimage(){
@@ -226,7 +251,7 @@ function createimage(){
 function deleteimage(){
 	var folder = $("span#foldervalue",parent.document).attr("title");
 	var imgfile = $("#image",parent.document).attr("title");
-	if (confirm("' . $lang_module ['upload_delimg_confirm'] . '"+imgfile+"")){
+	if (confirm("' . $lang_module['upload_delimg_confirm'] . '"+imgfile+"")){
 		$.ajax({
 		   type: "POST",
 		   url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=delimg",
@@ -262,7 +287,7 @@ function previewimage(){
 		$("div#imgpreview").html("<img src=\'' . NV_BASE_SITEURL . '"+folder+"/"+imgfile+"\'/>");
 		$("div#imgpreview").dialog("open");
 	} else {
-		alert("' . $lang_module ['nopreview'] . '");
+		alert("' . $lang_module['nopreview'] . '");
 	}
 }
 function movefolder(){
@@ -334,10 +359,11 @@ function movefolder(){
 			$("li#create").remove();
 			$("li#info").remove();
 			$("li#view").remove();';
-if ($admin_info ['allow_modify_files']) {
-	echo '$("#vs-context-menu>ul").append("<li id=\"create\"><img src=\"' . NV_BASE_SITEURL . 'js/contextmenu/icons/copy.png\"/>' . $lang_module ['upload_createimage'] . '</li>");';
+if ( $admin_info['allow_modify_files'] )
+{
+    echo '$("#vs-context-menu>ul").append("<li id=\"create\"><img src=\"' . NV_BASE_SITEURL . 'js/contextmenu/icons/copy.png\"/>' . $lang_module['upload_createimage'] . '</li>");';
 }
-echo '$("#vs-context-menu>ul").append("<li id=\"view\"><img src=\"' . NV_BASE_SITEURL . 'js/contextmenu/icons/view.png\"/>' . $lang_module ['preview'] . '</li>");
+echo '$("#vs-context-menu>ul").append("<li id=\"view\"><img src=\"' . NV_BASE_SITEURL . 'js/contextmenu/icons/view.png\"/>' . $lang_module['preview'] . '</li>");
 		} else {
 			$("li#create").remove();
 			$("li#view").remove();

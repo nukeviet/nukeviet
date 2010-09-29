@@ -11,7 +11,7 @@ $array_hidefolders = array(
     ".svn", "CVS", ".", "..", "index.html", ".htaccess" 
 );
 $allow_func = array( 
-    'main', 'imglist', 'delimg', 'createimg', 'popup', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'quickupload' 
+    'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'quickupload' 
 );
 $allowed_extensions = array();
 $array_images = array( 
@@ -67,10 +67,10 @@ function viewdir ( $dir )
     foreach ( $handle as $file )
     {
         $full_d = NV_ROOTDIR . '/' . $dir . '/' . $file;
-        if ( is_dir( $full_d ) && ! in_array( $file, $array_hidefolders ) )
+        if ( is_dir( $full_d ) && ! in_array( $file, $array_hidefolders ) && nv_check_allow_upload_dir( $dir . '/' . $file ) )
         {
             $imglibs[] = $dir . '/' . $file;
-            if ( ! is_numeric( $file ) ) viewdir( $dir . '/' . $file );
+            viewdir( $dir . '/' . $file );
         }
     }
     return $imglibs;
@@ -83,7 +83,7 @@ function viewdirtree ( $dir, $currentpath2 )
     foreach ( $handle2 as $file2 )
     {
         $full_d2 = NV_ROOTDIR . '/' . $dir . '/' . $file2;
-        if ( is_dir( $full_d2 ) && ! in_array( $file2, $array_hidefolders ) )
+        if ( is_dir( $full_d2 ) && ! in_array( $file2, $array_hidefolders ) && nv_check_allow_upload_dir( $dir . '/' . $file2 ) )
         {
             if ( trim( $dir . '/' . $file2 ) == $currentpath2 )
             {
@@ -93,15 +93,31 @@ function viewdirtree ( $dir, $currentpath2 )
             {
                 echo '<li class="expandable"><span class="folder" title="' . ( $dir . '/' . $file2 ) . '">&nbsp;' . $file2 . '</span>';
             }
-            if ( ! is_numeric( $file2 ) )
-            {
-                echo '<ul>';
-                viewdirtree( $dir . '/' . $file2, $currentpath2 );
-                echo '</ul>';
-            }
+            echo '<ul>';
+            viewdirtree( $dir . '/' . $file2, $currentpath2 );
+            echo '</ul>';
             echo '</li>';
         }
     }
-    closedir( $handle2 );
 }
+
+function nv_check_allow_upload_dir ( $dir )
+{
+    global $site_mods;
+    $arr_dir = explode( "/", $dir );
+    if ( $arr_dir[0] == NV_UPLOADS_DIR )
+    {
+        if ( defined( 'NV_IS_SPADMIN' ) )
+        {
+            return true;
+        }
+        elseif ( isset( $arr_dir[1] ) and isset( $site_mods[$arr_dir[1]] ) )
+        {
+            return true;
+        }
+    
+    }
+    return false;
+}
+
 ?>
