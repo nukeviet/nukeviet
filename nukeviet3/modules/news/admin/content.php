@@ -178,7 +178,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
         
         // Xu ly anh minh ha
         $rowcontent['homeimgthumb'] = "";
-        if ( ! nv_is_url( $homeimg ) and file_exists( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
+        if ( ! nv_is_url( $rowcontent['homeimgfile'] ) and file_exists( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
         {
             $lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
             $rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
@@ -360,7 +360,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             }
             $db->sql_freeresult();
         }
-        nv_del_moduleCache($module_name);
+        nv_del_moduleCache( $module_name );
         if ( $error == "" )
         {
             if ( $rowcontent['publtime'] > NV_CURRENTTIME or $rowcontent['exptime'] > 0 )
