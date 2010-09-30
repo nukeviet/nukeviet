@@ -107,7 +107,7 @@ $lang_module['statistic'] = "Kích hoạt tiện ích thống kê";
 $lang_module['proxy_blocker'] = "Kiểm tra và chặn các máy tình dùng proxy";
 $lang_module['proxy_blocker_0'] = "Không kiểm tra";
 $lang_module['proxy_blocker_1'] = "Kiểm tra nhẹ";
-$lang_module['proxy_blocker_2'] = "Kểm tra vừa";
+$lang_module['proxy_blocker_2'] = "Kiểm tra vừa";
 $lang_module['proxy_blocker_3'] = "Kiểm tra tuyệt đối";
 
 $lang_module['str_referer_blocker'] = "Kích hoạt tiện ích kiểm tra và chuyển hướng các REFERER bên ngoài đến trang chủ";

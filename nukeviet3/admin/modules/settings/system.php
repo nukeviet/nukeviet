@@ -215,7 +215,7 @@ foreach ( $captcha_array as $gfx_chk_i => $gfx_chk_lang )
 foreach ( $proxy_blocker_array as $proxy_blocker_i => $proxy_blocker_v )
 {
     $xtpl->assign( 'PROXYSELECTED', ( $global_config['proxy_blocker'] == $proxy_blocker_i ) ? ' selected="selected"' : '' );
-    $xtpl->assign( 'PROXYOP', $gfx_chk_i );
+    $xtpl->assign( 'PROXYOP', $proxy_blocker_i );
     $xtpl->assign( 'PROXYVALUE', $proxy_blocker_v );
     $xtpl->parse( 'main.proxy_blocker' );
 }
