@@ -177,32 +177,33 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
     }
     else
     {
-        $sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` WHERE act = 1 AND `title`=" . $db->dbescape( $module_name );
+        $sql = "SELECT * FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE m.act = 1 AND f.in_module = m.title ORDER BY m.weight, f.subweight";
         $list = nv_db_cache( $sql, '', 'modules' );
-        $link_login = "";
-        if ( ! empty( $list ) )
+        foreach ( $list as $row )
         {
-            $groups_view = ( string )$list[0]['groups_view'];
-            if ( $groups_view == "2" )
+            if ( $row['title'] == $module_name )
             {
-                // login admin
-                $nv_Request->set_Session( 'admin_login_redirect', $client_info['selfurl'] );
-                $link_login = NV_BASE_SITEURL . NV_ADMINDIR;
-            }
-            elseif ( ! defined( 'NV_IS_USER' ) )
-            {
-                // login users
-                $link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
-            }
-            if ( ! empty( $link_login ) )
-            {
-                Header( "Location: " . $link_login );
-                die();
+                $groups_view = ( string )$row['groups_view'];
+                if ( ! defined( 'NV_IS_USER' ) and $groups_view == 1 )
+                {
+                    // login users
+                    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_base64_encode( $client_info['selfurl'] ) );
+                    die();
+                }
+                else if ( ! defined( 'NV_IS_ADMIN' ) and $groups_view == "2" )
+                {
+                    // login admin
+                    nv_info_die( $lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'] );
+                    //$nv_Request->set_Session( 'admin_login_redirect', $client_info['selfurl'] );
+                    //Header( "Location: " . NV_BASE_SITEURL . NV_ADMINDIR );
+                    die();
+                }
+                break;
             }
         }
-    
     }
 }
+
 nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
 
 ?>

@@ -60,6 +60,7 @@ $lang_global['relogin_error_info'] = "%1\$s. Hãy điền lại mật khẩu và
 $lang_global['admin_page'] = "Quản lý site";
 $lang_global['admin_module_sector'] = "Quản lý module";
 $lang_global['adminlogin'] = "Đăng nhập quản trị hệ thống";
+$lang_global['module_for_admin'] = "Khu vực chỉ dành cho <i>Người quản trị</i>";
 $lang_global['nickname'] = "Bí danh";
 $lang_global['password'] = "Mật khẩu";
 $lang_global['password2'] = "Lặp lại mật khẩu";

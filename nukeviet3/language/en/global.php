@@ -1,25 +1,26 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Aug 08, 2010, 11:22:01 PM
+ */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
+if ( ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_global";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_global";
 
 $lang_global['Content_Language'] = "en";
-$lang_global['LanguageName'] = "english";//khong dich
+$lang_global['LanguageName'] = "english"; //khong dich
 $lang_global['site_info'] = "Notifications from the system";
 $lang_global['welcome'] = "Welcome to visit website of %s";
 $lang_global['disable_site_title'] = "Website temporary not available";
@@ -62,6 +63,9 @@ $lang_global['password'] = "Password";
 $lang_global['password2'] = "Repeat password";
 $lang_global['captcharefresh'] = "Refresh";
 $lang_global['securitycode'] = "Anti-spam code";
+
+$lang_global['module_for_admin'] = "We are Sorry but this section of our site is for <i>Administrators Only.</i>";
+
 $lang_global['loginsubmit'] = "Login";
 $lang_global['register'] = "Register";
 $lang_global['lostpass'] = "Forgot password";
