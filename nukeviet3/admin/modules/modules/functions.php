@@ -12,23 +12,25 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 $menu_top = array( 
     "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_modules'] 
 );
-$submenu['setup'] = $lang_module['modules'];
-$submenu['vmodule'] = $lang_module['vmodule_add'];
-
-$allow_func = array( 
-    'main', 'list', 'setup', 'vmodule', 'edit', 'del', 'change_inmenu', 'change_submenu', 'change_weight', 'change_act', 'empty_mod', 'recreate_mod', 'show', 'change_func_weight', 'change_custom_name', 'change_func_submenu', 'change_block_weight' 
-);
-
-if ( defined( "NV_IS_GODADMIN" ) )
+if ( $module_name == "modules" )
 {
-    $submenu['autoinstall'] = $lang_module['autoinstall'];
-    $allow_func[] = "autoinstall";
-    $allow_func[] = "install_module";
-    $allow_func[] = "install_package";
-    $allow_func[] = "install_check";
-    $allow_func[] = "getfile";
+    $submenu['setup'] = $lang_module['modules'];
+    $submenu['vmodule'] = $lang_module['vmodule_add'];
+    
+    $allow_func = array( 
+        'main', 'list', 'setup', 'vmodule', 'edit', 'del', 'change_inmenu', 'change_submenu', 'change_weight', 'change_act', 'empty_mod', 'recreate_mod', 'show', 'change_func_weight', 'change_custom_name', 'change_func_submenu', 'change_block_weight' 
+    );
+    
+    if ( defined( "NV_IS_GODADMIN" ) )
+    {
+        $submenu['autoinstall'] = $lang_module['autoinstall'];
+        $allow_func[] = "autoinstall";
+        $allow_func[] = "install_module";
+        $allow_func[] = "install_package";
+        $allow_func[] = "install_check";
+        $allow_func[] = "getfile";
+    }
 }
-
 define( 'NV_IS_FILE_MODULES', true );
 
 function nv_parse_vers ( $ver )

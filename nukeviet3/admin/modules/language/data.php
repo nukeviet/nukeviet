@@ -62,19 +62,9 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
         {
             $db->sql_query( $query );
         }
-        
-        if ( ! $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_setup_language` (`lang`, `setup`) VALUES ('" . $keylang . "', '1')" ) )
-        {
-            $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_setup_language` SET `setup` = '1' WHERE `lang` = '" . $keylang . "'" );
-        }
+        $db->sql_query( "REPLACE INTO `" . $db_config['prefix'] . "_setup_language` (`lang`, `setup`) VALUES ('" . $keylang . "', '1')" );
         $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $keylang . "_modules` SET `act` = '0'" );
         
-        $nv_Request->set_Cookie( 'data_lang', $keylang, NV_LIVE_COOKIE_TIME );
-        $contents_setup = "<br><br><center><br><b>" . $lang_module['nv_data_setup_ok'] . "</b></center>";
-        $contents_setup .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&" . NV_OP_VARIABLE . "=main\">";
-        
-        include ( NV_ROOTDIR . "/includes/header.php" );
-        $contents_setup = nv_admin_theme( $contents_setup );
         if ( defined( 'NV_MODULE_SETUP_DEFAULT' ) )
         {
             $lang_module['modules'] = "";
@@ -135,6 +125,12 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
             }
             $db->sql_freeresult();
         }
+        $nv_Request->set_Cookie( 'data_lang', $keylang, NV_LIVE_COOKIE_TIME );
+        $contents_setup = "<br><br><center><br><b>" . $lang_module['nv_data_setup_ok'] . "</b></center>";
+        $contents_setup .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&" . NV_OP_VARIABLE . "=main\">";
+        
+        include ( NV_ROOTDIR . "/includes/header.php" );
+        nv_admin_theme( $contents_setup );
         include ( NV_ROOTDIR . "/includes/footer.php" );
         exit();
     }
@@ -174,10 +170,6 @@ elseif ( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) an
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
     exit();
 
-}
-elseif ( $keylang != "" )
-{
-    nv_change_log_admin( "ERROR Setup lang " . $keylang );
 }
 
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
