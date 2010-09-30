@@ -24,6 +24,10 @@ if ( ! nv_admin_checkfirewall() )
     }
     header( 'WWW-Authenticate: Basic realm="' . $server_message . '"' );
     header( NV_HEADERSTATUS . ' 401 Unauthorized' );
+    if ( php_sapi_name() !== 'cgi-fcgi' )
+    {
+        header( 'status: 401 Unauthorized' );
+    }
     nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />" );
 }
 
@@ -41,7 +45,7 @@ else
 {
     $global_config['gfx_chk'] = 0;
 }
-
+$admin_login_redirect = $nv_Request->get_string( 'admin_login_redirect', 'session', '' );
 if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 {
     $nv_username = filter_text_input( 'nv_login', 'post', '', '', 100 );
@@ -109,13 +113,11 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                 define( 'NV_IS_ADMIN', true );
                 
                 $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
-                if ( $nv_Request->isset_request( 'admin_login_redirect', 'session' ) )
+                if ( ! empty( $admin_login_redirect ) )
                 {
-                    $r = $nv_Request->get_string( 'admin_login_redirect', 'session', '' );
+                    $redirect = $admin_login_redirect;
                     $nv_Request->unset_request( 'admin_login_redirect', 'session' );
-                    if ( ! empty( $r ) ) $redirect = $r;
                 }
-                
                 $error = "";
                 nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . $redirect . "\" />" );
                 die();
@@ -125,7 +127,10 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 }
 else
 {
-    $nv_Request->set_Session( 'admin_login_redirect', $nv_Request->request_uri );
+    if ( empty( $admin_login_redirect ) )
+    {
+        $nv_Request->set_Session( 'admin_login_redirect', $nv_Request->request_uri );
+    }
     $nv_username = "";
 }
 

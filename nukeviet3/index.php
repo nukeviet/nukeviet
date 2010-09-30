@@ -175,6 +175,33 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
             nv_del_moduleCache( 'modules' );
         }
     }
+    else
+    {
+        $sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` WHERE act = 1 AND `title`=" . $db->dbescape( $module_name );
+        $list = nv_db_cache( $sql, '', 'modules' );
+        $link_login = "";
+        if ( ! empty( $list ) )
+        {
+            $groups_view = ( string )$list[0]['groups_view'];
+            if ( $groups_view == "2" )
+            {
+                // login admin
+                $nv_Request->set_Session( 'admin_login_redirect', $client_info['selfurl'] );
+                $link_login = NV_BASE_SITEURL . NV_ADMINDIR;
+            }
+            elseif ( ! defined( 'NV_IS_USER' ) )
+            {
+                // login users
+                $link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
+            }
+            if ( ! empty( $link_login ) )
+            {
+                Header( "Location: " . $link_login );
+                die();
+            }
+        }
+    
+    }
 }
 nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
 
