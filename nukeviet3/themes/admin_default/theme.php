@@ -186,7 +186,7 @@ function nv_admin_theme ( $contents )
         }
         $xtpl->parse( 'main.footer.nv_show_queries' );
     }
-    if ( NV_LANG_INTERFACE == 'vi' )
+    if ( NV_LANG_INTERFACE == 'vi' and NV_LANG_DATA == 'vi' )
     {
         $xtpl->parse( 'main.footer.nv_if_mudim' );
     }
