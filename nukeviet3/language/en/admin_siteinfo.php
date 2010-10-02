@@ -41,7 +41,9 @@ $lang_module['environment_php'] = "Environment";
 $lang_module['variable'] = "Variable name";
 $lang_module['value'] = "Value";
 $lang_module['variables_php'] = "Predefine variables";
-$lang_module['version'] = "NUKEVET version";
+$lang_module['version'] = "NukeViet version";
+$lang_module['version_user'] = "You are using NukeViet version";
+$lang_module['version_news'] = "Latest version";
 $lang_module['checkversion'] = "Check version NukeViet";
 $lang_module['server_api'] = "Server API";
 $lang_module['chmod'] = "Check folder permission";
@@ -51,6 +53,6 @@ $lang_module['checkchmod'] = "Set permission for all folder needed";
 $lang_module['checkchmod_error_account'] = "Your ftp account is incorrect";
 $lang_module['checkchmod_error_path'] = "Path folder is incorrect";
 $lang_module['checkchmod_error_unable_chmod'] = "Can't set permission";
-$lang_module['checkchmod_success'] = "All done !";
+$lang_module['checkchmod_success'] = "All done!";
 
 ?>
