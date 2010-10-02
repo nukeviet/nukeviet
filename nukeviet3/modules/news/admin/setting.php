@@ -36,8 +36,8 @@ if ( ! empty( $savesetting ) )
         $db->sql_query( $query );
     }
     $db->sql_freeresult();
-    nv_save_file_config_global();
-    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
+    nv_del_moduleCache( 'settings' );
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass() );
     die();
 }
 

@@ -395,6 +395,11 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 elseif ( $rowcontent['id'] > 0 )
 {
     $rowcontent = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `id`=" . $rowcontent['id'] . "" ) );
+    if ( empty( $rowcontent['id'] ) )
+    {
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
+        die();
+    }
     $page_title = $lang_module['content_edit'];
     $rowcontent['sourcetext'] = "";
     $rowcontent['topictext'] = "";
