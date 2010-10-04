@@ -77,6 +77,12 @@ $lang_module['block_type'] = "Chọn kiểu block";
 $lang_module['block_file'] = "File";
 $lang_module['block_html'] = "HTML";
 $lang_module['block_typehtml'] = "Dạng HTML";
+
+$lang_module['block_typerss'] = "Dạng Rss";
+$lang_module['block_rss_url'] = "Đường dẫn Rss";
+$lang_module['block_rss_url_error'] = "Đường dẫn Rss bạn đưa vào không đúng";
+$lang_module['block_rss_template_error'] = "Bạn cần chọn template cho block";
+
 $lang_module['edit_block'] = "Sửa block";
 $lang_module['blang_all'] = "Tất cả ngôn ngữ";
 $lang_module['block_banners_pl'] = "Hoặc từ khối quảng cáo";

@@ -17,12 +17,12 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 function nv_site_mods ( )
 {
     global $admin_info, $user_info, $global_config;
-
+    
     $sql = "SELECT * FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE m.act = 1 AND f.in_module = m.title ORDER BY m.weight, f.subweight";
     $list = nv_db_cache( $sql, '', 'modules' );
-
+    
     if ( empty( $list ) ) return array();
-
+    
     $site_mods = array();
     foreach ( $list as $row )
     {
@@ -208,6 +208,10 @@ function nv_blocks_content ( )
                     {
                         $content = $__values['file_path'];
                     }
+                    elseif ( $__values['type'] == "rss" )
+                    {
+                        $content = nv_get_rss( $__values['file_path'] );
+                    }
                     elseif ( preg_match( $global_config['check_block_global'], $__values['file_path'] ) and file_exists( NV_ROOTDIR . "/includes/blocks/" . $__values['file_path'] ) )
                     {
                         include ( NV_ROOTDIR . "/includes/blocks/" . $__values['file_path'] );
@@ -233,11 +237,23 @@ function nv_blocks_content ( )
                             $block_theme = "default";
                         }
                         
-                        if ( ! empty( $block_theme ) )
+                        if ( ! empty( $block_theme ) and $__values['type'] != "rss" )
                         {
                             $xtpl = new XTemplate( "block." . $__values['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/layout" );
                             $xtpl->assign( 'BLOCK_TITLE', $__values['title'] );
                             $xtpl->assign( 'BLOCK_CONTENT', $content );
+                            $xtpl->parse( 'mainblock' );
+                            $b_content = $xtpl->text( 'mainblock' );
+                        }
+                        elseif ( ! empty( $block_theme ) and $__values['type'] == "rss" )
+                        {
+                            $xtpl = new XTemplate( "block." . $__values['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/layout" );
+                            $xtpl->assign( 'BLOCK_TITLE', $__values['title'] );
+                            foreach ( $content as $item )
+                            {
+                                $xtpl->assign( 'DATA_RSS', $item );
+                                $xtpl->parse( 'mainblock.looprss' );
+                            }
                             $xtpl->parse( 'mainblock' );
                             $b_content = $xtpl->text( 'mainblock' );
                         }
@@ -357,6 +373,44 @@ function showBanners ( $id )
     return implode( "\n", $array_banners_content );
 }
 
+function nv_get_rss ( $url )
+{
+    global $global_config;
+    $array_data = array();
+    $cache_file = NV_LANG_DATA . "_rss_" . md5( $url ) . "_" . NV_CACHE_PREFIX . ".cache";
+    if ( file_exists( $cache_file ) and filemtime( $cache_file ) > NV_CURRENTTIME - 1200 )
+    {
+        if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
+        {
+            $array_data = unserialize( $cache );
+        }
+    }
+    if ( empty( $array_data ) )
+    {
+        include_once ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+        $getContent = new UrlGetContents( $global_config );
+        $xml_source = $getContent->get( $url );
+        
+        $allowed_html_tags = array_map( "trim", explode( ",", NV_ALLOWED_HTML_TAGS ) );
+        $allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
+        if ( $xml = simplexml_load_string( $xml_source ) )
+        {
+            $a = 0;
+            foreach ( $xml->channel->item as $item )
+            {
+                $array_data[$a]['title'] = strip_tags( $item->title );
+                $array_data[$a]['description'] = strip_tags( $item->description, $allowed_html_tags );
+                $array_data[$a]['link'] = strip_tags( $item->link );
+                $array_data[$a]['pubDate'] = nv_date( "l - d/m/Y  H:i", strtotime( $item->pubDate ) );
+                $a ++;
+            }
+        }
+        $cache = serialize( $array_data );
+        nv_set_cache( $cache_file, $cache );
+    }
+    return $array_data;
+}
+
 /**
  * nv_html_meta_tags()
  * 
@@ -365,22 +419,22 @@ function showBanners ( $id )
 function nv_html_meta_tags ( )
 {
     global $global_config, $lang_global, $key_words, $description, $module_info;
-
+    
     $return = "<meta http-equiv=\"Content-Language\" content=\"" . $lang_global['Content_Language'] . "\" />\n";
     $return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
-
+    
     if ( defined( 'NV_IS_ADMIN' ) )
     {
         $return .= "<meta http-equiv=\"refresh\" content=\"" . NV_ADMIN_CHECK_PASS_TIME . "\" />\n";
     }
-
+    
     $return .= "<meta name=\"language\" content=\"" . $lang_global['LanguageName'] . "\" />\n";
     $return .= "<meta name=\"author\" content=\"" . $global_config['site_name'] . "\" />\n";
     $return .= "<meta name=\"copyright\" content=\"" . $global_config['site_name'] . " [" . $global_config['site_email'] . "]\" />\n";
-
+    
     $ds = ( ! empty( $description ) ) ? $description : $global_config['site_description'];
     $return .= ( ! empty( $ds ) ) ? "<meta name=\"description\" content=\"" . strip_tags( $ds ) . "\" />\n" : "";
-
+    
     $kw = array();
     if ( ! empty( $key_words ) ) $kw[] = $key_words;
     if ( ! empty( $module_info['keywords'] ) ) $kw[] = $module_info['keywords'];
@@ -392,9 +446,9 @@ function nv_html_meta_tags ( )
         $key_words = nv_strtolower( strip_tags( $kw ) );
         $return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />\n";
     }
-
+    
     $return .= "<meta name=\"generator\" content=\"Nukeviet v3.0\" />\n";
-
+    
     return $return;
 }
 

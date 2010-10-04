@@ -6,6 +6,7 @@
  * @Createdate 2-2-2010 12:55
  */
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
+$submit = 0;
 $bid = $nv_Request->get_int( 'bid', 'get,post', 0 );
 $functionid = $nv_Request->get_int( 'func', 'get' );
 $select_options = array();
@@ -47,6 +48,8 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     $xmodule = filter_text_input( 'module', 'post', "", 1 );
     $xfile = filter_text_input( 'file', 'post', "", 1 );
     $xbanner = $nv_Request->get_int( 'banner', 'post' );
+    $xrss = filter_text_input( 'xrss', 'post', "", 0 );
+    
     $leavegroup = $nv_Request->get_int( 'leavegroup', 'post' );
     $xhtml = filter_text_textarea( 'htmlcontent', '', NV_ALLOWED_HTML_TAGS );
     $xhtml = defined( 'NV_EDITOR' ) ? nv_editor_nl2br( $xhtml ) : nv_nl2br( $xhtml, '<br />' );
@@ -58,6 +61,11 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     {
         $file_path = $xhtml;
     }
+    elseif ( $typeblock == "rss" )
+    {
+        $file_path = $xrss;
+        $template = filter_text_input( 'templaterss', 'post', "", 0 );
+    }
     else
     {
         $file_path = $xfile;
@@ -65,6 +73,10 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     if ( empty( $xfile ) && empty( $typeblock ) )
     {
         $error[] = $lang_module['error_empty_content'];
+    }
+    elseif ( $typeblock == "rss" and ! nv_is_url( $xrss ) )
+    {
+        $error[] = $lang_module['block_rss_url_error'];
     }
     $exp_time = filter_text_input( 'exp_time', 'post', "", 1 );
     if ( ! empty( $exp_time ) && preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_time ) )
@@ -89,7 +101,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         $contents_error .= "<blockquote class='error'><span id='message'>" . implode( "<br>", $error ) . "</span></blockquote>\n";
         $contents_error .= "</div>\n";
         $row = array( 
-            'bid' => $bid, 'title' => $title, 'link' => $link, 'xfile' => $xfile, 'xbanner' => $xbanner, 'xhtml' => $xhtml, 'template' => $template, 'type' => $typeblock, 'position' => $position, 'exp_time' => $exp_time, 'active' => $active, 'groups_view' => $who_view, 'all_func' => $all_func, 'func_id' => $array_funcid, 'module' => '' 
+            'bid' => $bid, 'title' => $title, 'link' => $link, 'xfile' => $xfile, 'xrss' => $xrss, 'xbanner' => $xbanner, 'xhtml' => $xhtml, 'template' => $template, 'type' => $typeblock, 'position' => $position, 'exp_time' => $exp_time, 'active' => $active, 'groups_view' => $who_view, 'all_func' => $all_func, 'func_id' => $array_funcid, 'module' => '' 
         );
         $submit = 1;
     }
@@ -187,7 +199,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         exit();
     }
 }
-if ( $bid > 0 )
+if ( $bid > 0 and $submit == 0 )
 {
     $result = $db->sql_query( "SELECT * FROM `" . NV_BLOCKS_TABLE . "` WHERE bid=" . $bid . "" );
     if ( $db->sql_numrows( $result ) > 0 )
@@ -196,13 +208,14 @@ if ( $bid > 0 )
         $row['xfile'] = ( $row['type'] == 'file' ) ? $row['file_path'] : "";
         $row['xbanner'] = ( $row['type'] == 'banner' ) ? $row['file_path'] : "";
         $row['xhtml'] = ( $row['type'] == 'html' ) ? $row['file_path'] : "";
+        $row['xrss'] = ( $row['type'] == 'rss' ) ? $row['file_path'] : "";
         $submit = 1;
     }
 }
 if ( empty( $submit ) )
 {
     $row = array( 
-        'bid' => 0, 'title' => "", 'groupbl' => '', 'link' => "", 'xfile' => "", 'xbanner' => "", 'xhtml' => "", 'template' => "", 'type' => "", 'file_path' => "", 'position' => "", 'exp_time' => "", 'active' => 1, 'who_view' => "", 'groups_view' => "", 'all_func' => 1, 'func_id' => '', 'module' => '' 
+        'bid' => 0, 'title' => "", 'groupbl' => '', 'link' => "", 'xfile' => "", 'xrss' => "", 'xbanner' => "", 'xhtml' => "", 'template' => "", 'type' => "", 'file_path' => "", 'position' => "", 'exp_time' => "", 'active' => 1, 'who_view' => "", 'groups_view' => "", 'all_func' => 1, 'func_id' => '', 'module' => '' 
     );
 }
 if ( $bid != 0 )
@@ -230,7 +243,7 @@ $contents .= "<col style=\"width: 160px; white-space: nowrap;\">";
 $contents .= "<col style=\"width: 600px; white-space: nowrap;\">";
 $contents .= "<tbody>\n";
 $array_typeblock = array( 
-    "file" => $lang_module['block_file'], "banner" => $lang_module['block_b_pl'], "html" => $lang_module['block_typehtml'] 
+    "file" => $lang_module['block_file'], "banner" => $lang_module['block_b_pl'], "html" => $lang_module['block_typehtml'], "rss" => $lang_module['block_typerss'] 
 );
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_type'] . ":</td>\n";
@@ -318,6 +331,15 @@ else
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
+
+$showstype = ( $row['type'] == 'rss' ) ? "" : " style='display:none' ";
+$contents .= "<tbody " . $showstype . " id='rss'>\n";
+$contents .= "<tr>\n";
+$contents .= "<td>" . $lang_module['block_rss_url'] . ":</td>\n";
+$contents .= "<td><input name=\"xrss\" type=\"text\" value=\"" . $row['xrss'] . "\" style=\"width:500px\"/></td>\n";
+$contents .= "</tr>\n";
+$contents .= "</tbody>\n";
+
 $contents .= "<tbody class=\"second\">\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_title'] . ":</td>\n";
@@ -333,7 +355,10 @@ $contents .= "</tbody>\n";
 $contents .= "<tbody class=\"second\">\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_tpl'] . ":</td>\n";
-$contents .= "<td><select name=\"template\">\n";
+$contents .= "<td>";
+
+$showstype = ( $row['type'] != 'rss' ) ? "" : " style='display:none' ";
+$contents .= "<select " . $showstype . " id=\"template\" name=\"template\">\n";
 $contents .= "<option value=\"\">" . $lang_module['block_default'] . "</option>\n";
 $templ_list = nv_scandir( NV_ROOTDIR . "/themes/" . $selectthemes . "/layout", "/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/" );
 $templ_list = preg_replace( "/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/", "\\1", $templ_list );
@@ -345,7 +370,22 @@ foreach ( $templ_list as $value )
         $contents .= "<option value=\"" . $value . "\" " . $sel . ">" . $value . "</option>\n";
     }
 }
-$contents .= "</select></td>\n";
+$contents .= "</select>";
+$showstype = ( $row['type'] == 'rss' ) ? "" : " style='display:none' ";
+$contents .= "<select " . $showstype . " id=\"templaterss\" name=\"templaterss\">\n";
+$templ_list = nv_scandir( NV_ROOTDIR . "/themes/" . $selectthemes . "/layout", "/^block\.rss\.([a-zA-Z0-9\-\_]+)\.tpl$/" );
+$templ_list = preg_replace( "/^block\.([a-zA-Z0-9\-\_\.]+)\.tpl$/", "\\1", $templ_list );
+foreach ( $templ_list as $value )
+{
+    if ( ! empty( $value ) and $value != "default" )
+    {
+        $sel = ( $row['template'] == $value ) ? ' selected' : '';
+        $contents .= "<option value=\"" . $value . "\" " . $sel . ">" . $value . "</option>\n";
+    }
+}
+$contents .= "</select>";
+
+$contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tbody class=\"second\">\n";
@@ -514,6 +554,7 @@ $(function(){
 	});
 	$("input[name=typeblock]").click(function(){
 		var type = $(this).val();
+		
     	if (type=="file"){
     		$("#file").show();
     		$("#banner").hide();
@@ -522,17 +563,33 @@ $(function(){
     		if (module!="global"){
     			$("#labelmoduletype1").css({"display":"none"});	
     		}
+    		$("#rss").hide();
+    		$("#template").show();
+    		$("#templaterss").hide();
     	} else if (type=="banner"){
     		$("#banner").show();
     		$("#file").hide();
     		$("#html").hide();
-			$("#labelmoduletype1").css({"display":""});		
-    		
+    		$("#labelmoduletype1").css({"display":""});		
+    		$("#rss").hide();
+    		$("#template").show();
+    		$("#templaterss").hide();
+	    } else if (type=="rss"){
+    		$("#banner").hide();
+    		$("#file").hide();
+    		$("#html").hide();
+    		$("#labelmoduletype1").css({"display":""});
+    		$("#rss").show();
+    		$("#template").hide();
+    		$("#templaterss").show();
     	} else {
     		$("#html").show();
     		$("#file").hide();
     		$("#banner").hide();
 			$("#labelmoduletype1").css({"display":""});		
+    		$("#rss").hide();
+			$("#template").show();
+    		$("#templaterss").hide();
     	}
 	});
 	
@@ -593,6 +650,13 @@ $(function(){
 		if (title==""){
 			alert("' . $lang_module['error_empty_title'] . '");
 			$("input[name=title]").focus();
+			return false;
+		}
+		var typeblock = $("input[name=typeblock]:checked").val();
+		var templaterss = $("select[name=templaterss]").val();
+			if (typeblock=="rss" && template==""){
+			alert("' . $lang_module['block_rss_template_error'] . '");
+			$("select[name=template]").focus();
 			return false;
 		}
 		var who_view = $("select[name=who_view]").val();

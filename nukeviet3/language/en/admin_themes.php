@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Aug 21, 2010, 02:43:51 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Aug 21, 2010, 02:43:51 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['blocks'] = "Setup block";
 $lang_module['change_func_name'] = "Change the name of the function &ldquo;%1\$s&rdquo; in module &ldquo;%2\$s&rdquo;";
@@ -76,6 +77,12 @@ $lang_module['block_type'] = "Block type";
 $lang_module['block_file'] = "File";
 $lang_module['block_html'] = "HTML";
 $lang_module['block_typehtml'] = "HTML type";
+
+$lang_module['block_typerss'] = "Rss type";
+$lang_module['block_rss_url'] = "Url rss";
+$lang_module['block_rss_url_error'] = "Rss path you put in wrong";
+$lang_module['block_rss_template_error'] = "You need to select a template for the block";
+
 $lang_module['edit_block'] = "Edit block";
 $lang_module['blang_all'] = "All language";
 $lang_module['block_banners_pl'] = "Or block advertising";
