@@ -405,7 +405,7 @@ elseif ( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
 }
 
 //Dinh chi hoat dong cua site
-if ( ! defined( "NV_IS_ADMIN" ) )
+if ( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
 {
     if ( $global_config['disable_site'] )
     {
