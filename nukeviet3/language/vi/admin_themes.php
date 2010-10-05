@@ -82,6 +82,11 @@ $lang_module['block_typerss'] = "Dạng Rss";
 $lang_module['block_rss_url'] = "Đường dẫn Rss";
 $lang_module['block_rss_url_error'] = "Đường dẫn Rss bạn đưa vào không đúng";
 $lang_module['block_rss_template_error'] = "Bạn cần chọn template cho block";
+$lang_module['block_rss_setting_number'] = "Số mục muốn hiển thị";
+$lang_module['block_rss_setting_description'] = "Hiện thị miêu tả";
+$lang_module['block_rss_setting_html'] = "Sử dụng HTML miêu tả";
+$lang_module['block_rss_setting_pubdate'] = "Hiện ngày gửi";
+$lang_module['block_rss_setting_target'] = "Mở link bằng cửa sổ mới";
 
 $lang_module['edit_block'] = "Sửa block";
 $lang_module['blang_all'] = "Tất cả ngôn ngữ";

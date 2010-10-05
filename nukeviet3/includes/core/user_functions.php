@@ -210,7 +210,8 @@ function nv_blocks_content ( )
                     }
                     elseif ( $__values['type'] == "rss" )
                     {
-                        $content = nv_get_rss( $__values['file_path'] );
+                        $array_rrs = explode( "#@#", $__values['file_path'] );
+                        $content = nv_get_rss( $array_rrs[0] );
                     }
                     elseif ( preg_match( $global_config['check_block_global'], $__values['file_path'] ) and file_exists( NV_ROOTDIR . "/includes/blocks/" . $__values['file_path'] ) )
                     {
@@ -247,12 +248,36 @@ function nv_blocks_content ( )
                         }
                         elseif ( ! empty( $block_theme ) and $__values['type'] == "rss" )
                         {
+                            $rss_setting_number = intval( $array_rrs[1] );
+                            $rss_setting_description = intval( $array_rrs[2] );
+                            $rss_setting_html = intval( $array_rrs[3] );
+                            $rss_setting_pubdate = intval( $array_rrs[4] );
+                            $rss_setting_target = intval( $array_rrs[5] );
                             $xtpl = new XTemplate( "block." . $__values['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/layout" );
                             $xtpl->assign( 'BLOCK_TITLE', $__values['title'] );
+                            $a = 1;
                             foreach ( $content as $item )
                             {
-                                $xtpl->assign( 'DATA_RSS', $item );
-                                $xtpl->parse( 'mainblock.looprss' );
+                                if ( $a <= $rss_setting_number )
+                                {
+                                    $item['description'] = ( $rss_setting_html ) ? $item['description'] : strip_tags( $item['description'] );
+                                    $item['target'] = ( $rss_setting_target ) ? " onclick=\"this.target='_blank'\" " : "";
+                                    $xtpl->assign( 'DATA_RSS', $item );
+                                    if ( $rss_setting_description )
+                                    {
+                                        $xtpl->parse( 'mainblock.looprss.description' );
+                                    }
+                                    if ( $rss_setting_pubdate )
+                                    {
+                                        $xtpl->parse( 'mainblock.looprss.pubDate' );
+                                    }
+                                    $xtpl->parse( 'mainblock.looprss' );
+                                    $a ++;
+                                }
+                                else
+                                {
+                                    break;
+                                }
                             }
                             $xtpl->parse( 'mainblock' );
                             $b_content = $xtpl->text( 'mainblock' );
@@ -378,7 +403,7 @@ function nv_get_rss ( $url )
     global $global_config;
     $array_data = array();
     $cache_file = NV_LANG_DATA . "_rss_" . md5( $url ) . "_" . NV_CACHE_PREFIX . ".cache";
-    if ( file_exists( $cache_file ) and filemtime( $cache_file ) > NV_CURRENTTIME - 1200 )
+    if ( file_exists( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) and filemtime( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) > NV_CURRENTTIME - 1200 )
     {
         if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
         {
@@ -390,7 +415,6 @@ function nv_get_rss ( $url )
         include_once ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
         $getContent = new UrlGetContents( $global_config );
         $xml_source = $getContent->get( $url );
-        
         $allowed_html_tags = array_map( "trim", explode( ",", NV_ALLOWED_HTML_TAGS ) );
         $allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
         if ( $xml = simplexml_load_string( $xml_source ) )

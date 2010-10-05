@@ -44,6 +44,12 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     $xbanner = $nv_Request->get_int( 'banner', 'post' );
     $xrss = filter_text_input( 'xrss', 'post', "", 0 );
     
+    $rss_setting_number = $nv_Request->get_int( 'rss_setting_number', 'post', 0 );
+    $rss_setting_description = $nv_Request->get_int( 'rss_setting_description', 'post', 0 );
+    $rss_setting_html = $nv_Request->get_int( 'rss_setting_html', 'post', 0 );
+    $rss_setting_pubdate = $nv_Request->get_int( 'rss_setting_pubdate', 'post', 0 );
+    $rss_setting_target = $nv_Request->get_int( 'rss_setting_target', 'post', 0 );
+    
     $leavegroup = $nv_Request->get_int( 'leavegroup', 'post' );
     $xhtml = filter_text_textarea( 'htmlcontent', '', NV_ALLOWED_HTML_TAGS );
     $xhtml = defined( 'NV_EDITOR' ) ? nv_editor_nl2br( $xhtml ) : nv_nl2br( $xhtml, '<br />' );
@@ -57,7 +63,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     }
     elseif ( $typeblock == "rss" )
     {
-        $file_path = $xrss;
+        $file_path = $xrss . "#@#" . $rss_setting_number . "#@#" . $rss_setting_description . "#@#" . $rss_setting_html . "#@#" . $rss_setting_pubdate . "#@#" . $rss_setting_target;
         $template = filter_text_input( 'templaterss', 'post', "", 0 );
     }
     else
@@ -95,8 +101,14 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         $contents_error .= "<blockquote class='error'><span id='message'>" . implode( "<br>", $error ) . "</span></blockquote>\n";
         $contents_error .= "</div>\n";
         $row = array( 
-            'bid' => $bid, 'title' => $title, 'link' => $link, 'xfile' => $xfile, 'xrss' => $xrss, 'xbanner' => $xbanner, 'xhtml' => $xhtml, 'template' => $template, 'type' => $typeblock, 'position' => $position, 'exp_time' => $exp_time, 'active' => $active, 'groups_view' => $who_view, 'all_func' => $all_func, 'func_id' => $array_funcid, 'module' => '' 
+            'bid' => $bid, 'title' => $title, 'link' => $link, 'xfile' => $xfile, 'xbanner' => $xbanner, 'xhtml' => $xhtml, 'template' => $template, 'type' => $typeblock, 'position' => $position, 'exp_time' => $exp_time, 'active' => $active, 'groups_view' => $who_view, 'all_func' => $all_func, 'func_id' => $array_funcid, 'module' => '' 
         );
+        $row['xrss'] = $xrss;
+        $row['rss_setting_number'] = $rss_setting_number;
+        $row['rss_setting_target'] = $rss_setting_target;
+        $row['rss_setting_pubdate'] = $rss_setting_pubdate;
+        $row['rss_setting_html'] = $rss_setting_html;
+        $row['rss_setting_description'] = $rss_setting_description;
         $submit = 1;
     }
     else
@@ -207,7 +219,25 @@ if ( $bid > 0 and $submit == 0 )
         $row['xfile'] = ( $row['type'] == 'file' ) ? $row['file_path'] : "";
         $row['xbanner'] = ( $row['type'] == 'banner' ) ? $row['file_path'] : "";
         $row['xhtml'] = ( $row['type'] == 'html' ) ? $row['file_path'] : "";
-        $row['xrss'] = ( $row['type'] == 'rss' ) ? $row['file_path'] : "";
+        if ( $row['type'] == 'rss' )
+        {
+            $array_rrs = explode( "#@#", $row['file_path'] );
+            $row['xrss'] = $array_rrs[0];
+            $row['rss_setting_number'] = intval( $array_rrs[1] );
+            $row['rss_setting_description'] = intval( $array_rrs[2] );
+            $row['rss_setting_html'] = intval( $array_rrs[3] );
+            $row['rss_setting_pubdate'] = intval( $array_rrs[4] );
+            $row['rss_setting_target'] = intval( $array_rrs[5] );
+        }
+        else
+        {
+            $row['xrss'] = "";
+            $row['rss_setting_number'] = 10;
+            $row['rss_setting_description'] = 1;
+            $row['rss_setting_html'] = 1;
+            $row['rss_setting_pubdate'] = 1;
+            $row['rss_setting_target'] = 1;
+        }
         $submit = 1;
     }
 }
@@ -216,6 +246,14 @@ if ( empty( $submit ) )
     $row = array( 
         'bid' => 0, 'title' => "", 'groupbl' => '', 'link' => "", 'xfile' => "", 'xbanner' => "", 'xhtml' => "", 'template' => "", 'type' => "", 'file_path' => "", 'position' => "", 'exp_time' => "", 'active' => 1, 'who_view' => "", 'groups_view' => "", 'all_func' => 1, 'func_id' => '', 'module' => '' 
     );
+    $row['xrss'] = "";
+    $row['rss_setting_number'] = 10;
+    $row['rss_setting_number'] = 10;
+    $row['rss_setting_description'] = 1;
+    $row['rss_setting_html'] = 1;
+    $row['rss_setting_pubdate'] = 1;
+    $row['rss_setting_target'] = 1;
+
 }
 
 $sql = "SELECT `func_id` , `func_custom_name` , `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC";
@@ -343,6 +381,37 @@ $contents .= "<tbody " . $showstype . " id='rss'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_rss_url'] . ":</td>\n";
 $contents .= "<td><input name=\"xrss\" type=\"text\" value=\"" . $row['xrss'] . "\" style=\"width:500px\"/></td>\n";
+$contents .= "</tr>\n";
+$contents .= "<tr>\n";
+$contents .= "<td>" . $lang_module['block_rss_setting_number'] . ":</td>\n";
+$contents .= "<td>";
+$contents .= "<select name=\"rss_setting_number\">\n";
+for ( $index = 1; $index <= 50; $index ++ )
+{
+    $sel = ( $index == $row['rss_setting_number'] ) ? ' selected' : '';
+    $contents .= "<option value=\"" . $index . "\" " . $sel . ">" . $index . "</option>\n";
+}
+$contents .= "</select></td>\n";
+$contents .= "</tr>\n";
+$contents .= "<tr>\n";
+$contents .= "<td>" . $lang_module['block_rss_setting_description'] . ":</td>\n";
+$sel = ( intval( $row['rss_setting_description'] ) == 1 ) ? "checked=\"checked\"" : "";
+$contents .= "<td><input type=\"checkbox\" name=\"rss_setting_description\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "</td>\n";
+$contents .= "</tr>\n";
+$contents .= "<tr>\n";
+$contents .= "<td>" . $lang_module['block_rss_setting_html'] . ":</td>\n";
+$sel = ( intval( $row['rss_setting_html'] ) == 1 ) ? "checked=\"checked\"" : "";
+$contents .= "<td><input type=\"checkbox\" name=\"rss_setting_html\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "</td>\n";
+$contents .= "</tr>\n";
+$contents .= "<tr>\n";
+$contents .= "<td>" . $lang_module['block_rss_setting_pubdate'] . ":</td>\n";
+$sel = ( intval( $row['rss_setting_pubdate'] ) == 1 ) ? "checked=\"checked\"" : "";
+$contents .= "<td><input type=\"checkbox\" name=\"rss_setting_pubdate\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "</td>\n";
+$contents .= "</tr>\n";
+$contents .= "<tr>\n";
+$contents .= "<td>" . $lang_module['block_rss_setting_target'] . ":</td>\n";
+$sel = ( intval( $row['rss_setting_target'] ) == 1 ) ? "checked=\"checked\"" : "";
+$contents .= "<td><input type=\"checkbox\" name=\"rss_setting_target\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 

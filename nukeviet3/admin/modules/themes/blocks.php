@@ -98,7 +98,8 @@ while ( $row = $db->sql_fetchrow( $result ) )
     }
     elseif ( $row['type'] == 'rss' )
     {
-        $contents .= "<strong>Rss:</strong> " . $row['file_path'];
+        $array_rrs = explode( "#@#", $row['file_path'] );
+        $contents .= "<strong>Rss:</strong> " . $array_rrs[0];
     }
     else
     {
