@@ -405,14 +405,19 @@ elseif ( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
 }
 
 //Dinh chi hoat dong cua site
-if ( ! defined( "NV_ADMIN" ) )
+if ( ! defined( "NV_IS_ADMIN" ) )
 {
-    if ( ! defined( "NV_IS_ADMIN" ) and $global_config['disable_site'] )
+    if ( $global_config['disable_site'] )
     {
         $disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
         nv_info_die( $global_config['site_description'], $global_config['disable_site_title'], $disable_site_content );
     }
-    elseif ( ! defined( "NV_IS_ADMIN" ) and ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
+    elseif ( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
+    {
+        Header( "Location: " . NV_BASE_SITEURL );
+        exit();
+    }
+    elseif ( empty( $global_config['lang_multi'] ) and NV_LANG_DATA != $global_config['site_lang'] )
     {
         Header( "Location: " . NV_BASE_SITEURL );
         exit();
