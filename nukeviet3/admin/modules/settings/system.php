@@ -121,12 +121,22 @@ if ( $submit )
     if ( $sys_info['supports_rewrite'] !== false )
     {
         $array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post' );
-        if ( $global_config['lang_multi'] == 0 )
+        if ( $array_config_global['lang_multi'] == 0 )
         {
             $array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post' );
         }
         else
         {
+            $array_config_global['rewrite_optional'] = 0;
+        }
+    }
+    if ( isset( $array_config_global['is_url_rewrite'] ) and $array_config_global['is_url_rewrite'] == 1 )
+    {
+        require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
+        $errormess = nv_rewrite_change( $array_config_global );
+        if ( ! empty( $errormess ) )
+        {
+            $array_config_global['is_url_rewrite'] = 0;
             $array_config_global['rewrite_optional'] = 0;
         }
     }
@@ -138,17 +148,6 @@ if ( $submit )
         WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
         AND `lang` = 'sys' AND `module`='global' 
         LIMIT 1" );
-    }
-    
-    if ( isset( $array_config_global['is_url_rewrite'] ) and $array_config_global['is_url_rewrite'] == 1 )
-    {
-        require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
-        $errormess = nv_rewrite_change( $array_config_global);
-        if ( ! empty( $errormess ) )
-        {
-            $array_config_global['is_url_rewrite'] = 0;
-            $array_config_global['rewrite_optional'] = 0;
-        }
     }
     nv_save_file_config_global();
     if ( empty( $errormess ) )

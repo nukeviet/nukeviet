@@ -1,7 +1,6 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
     <table class="tab1" summary="">
-        <caption>{LANG.page_title}</caption>
         <tr>
             <td>
                 <strong>{LANG.sitename}</strong>
