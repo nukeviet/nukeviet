@@ -8,11 +8,10 @@
  */
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 $bid = $nv_Request->get_int( 'bid', 'post' );
-list( $position, $func_id, $groupbl ) = $db->sql_fetchrow( $db->sql_query( "SELECT position,func_id, groupbl FROM `" . NV_BLOCKS_TABLE . "` WHERE bid=" . $bid . "" ) );
+list( $theme, $position, $func_id, $groupbl ) = $db->sql_fetchrow( $db->sql_query( "SELECT theme, position,func_id, groupbl FROM `" . NV_BLOCKS_TABLE . "` WHERE bid=" . $bid . "" ) );
 if ( intval( $groupbl ) > 0 )
 {
-    
-    $selectthemes = $global_config['site_theme'];
+    $selectthemes = ( empty( $theme ) ) ? $global_config['site_theme'] : $theme;
     
     $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE groupbl='" . $groupbl . "'  AND theme='" . $selectthemes . "'" );
     #reupdate
