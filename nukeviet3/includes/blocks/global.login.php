@@ -6,7 +6,7 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3/25/2010 18:6
  */
-if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' ); 
+if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $openid_servers;
 
@@ -16,7 +16,11 @@ $content = "";
 
 if ( $global_config['allowuserlogin'] and $module_name != "users" )
 {
-    if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.login.tpl" ) )
+    if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/blocks/global.login.tpl" ) )
+    {
+        $block_theme = $global_config['module_theme'];
+    }
+    elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.login.tpl" ) )
     {
         $block_theme = $global_config['site_theme'];
     }
@@ -24,14 +28,14 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
     {
         $block_theme = "default";
     }
-
+    
     $xtpl = new XTemplate( "global.login.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
-
+    
     if ( defined( 'NV_IS_USER' ) )
     {
         $avata = "";
         if ( file_exists( NV_ROOTDIR . "/" . $user_info['photo'] ) && ! empty( $user_info['photo'] ) ) $avata = NV_BASE_SITEURL . $user_info['photo'];
-        else  $avata = NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_image.gif";
+        else $avata = NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_image.gif";
         $xtpl->assign( 'AVATA', $avata );
         $xtpl->assign( 'LANG', $lang_global );
         $xtpl->assign( 'USER', $user_info );
@@ -54,8 +58,10 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
         $xtpl->assign( 'NICK_MAXLENGTH', NV_UNICKMAX );
         $xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
         $xtpl->assign( 'LANG', $lang_global );
-
-        if ( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) )
+        
+        if ( in_array( $global_config['gfx_chk'], array( 
+            2, 4, 5, 7 
+        ) ) )
         {
             $xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
             $xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
@@ -66,7 +72,7 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
             $xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
             $xtpl->parse( 'main.captcha' );
         }
-
+        
         if ( defined( 'NV_OPENID_ALLOWED' ) )
         {
             $xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/users/openid_small.gif" );
@@ -80,13 +86,13 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
                 $assigns['title'] = ucfirst( $server );
                 $assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/users/" . $server . ".gif";
                 $assigns['img_width'] = $assigns['img_height'] = 16;
-
+                
                 $xtpl->assign( 'OPENID', $assigns );
                 $xtpl->parse( 'main.openid.server' );
             }
             $xtpl->parse( 'main.openid' );
         }
-
+        
         $xtpl->parse( 'main' );
         $content = $xtpl->text( 'main' );
     }

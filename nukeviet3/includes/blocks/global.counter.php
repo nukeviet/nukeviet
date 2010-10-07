@@ -6,7 +6,7 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3/9/2010 23:25
  */
-if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' ); 
+if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 if ( ! function_exists( 'nv_block_counter' ) )
 {
@@ -15,7 +15,11 @@ if ( ! function_exists( 'nv_block_counter' ) )
     {
         global $global_config, $db, $lang_global;
         
-        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.counter.tpl" ) )
+        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/blocks/global.counter.tpl" ) )
+        {
+            $block_theme = $global_config['module_theme'];
+        }
+        elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.counter.tpl" ) )
         {
             $block_theme = $global_config['site_theme'];
         }

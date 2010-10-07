@@ -70,10 +70,9 @@ if ( file_exists( $content_file ) )
     $contents = file_get_contents( $content_file );
 }
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-$contents .= '<img  alt="" style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/' . $module_name . '/home.gif" /><b>' . $module_info['custom_title'] . '</b><br />';
+$contents .= '<img  alt="" style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/home.gif" /><b>' . $module_info['custom_title'] . '</b><br />';
 
 $contents .= nv_get_rss_link();
-
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );

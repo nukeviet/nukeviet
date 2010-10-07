@@ -10,10 +10,14 @@
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_RSS', true );
-$img_dir = $global_config['site_theme'];
-if ( ! file_exists( NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/' . $module_name ) )
+$img_dir = "default";
+if ( file_exists( NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/' . $module_name ) )
 {
-    $img_dir = "default";
+    $img_dir = $global_config['module_theme'];
+}
+elseif ( file_exists( NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/' . $module_name ) )
+{
+    $img_dir = $global_config['site_theme'];
 }
 
 $iconrss = '<img alt="" style="border-width: 0px; vertical-align: middle;" src="' . NV_BASE_SITEURL . 'themes/' . $img_dir . '/images/' . $module_name . '/rss.gif" />';

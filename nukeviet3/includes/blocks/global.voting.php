@@ -79,7 +79,11 @@ if ( ! function_exists( 'nv_block_voting' ) )
             
             include_once ( NV_ROOTDIR . "/modules/" . $site_mods['voting']['module_file'] . "/language/" . NV_LANG_INTERFACE . ".php" );
             
-            if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $site_mods['voting']['module_file'] . "/global.voting.tpl" ) )
+            if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $site_mods['voting']['module_file'] . "/global.voting.tpl" ) )
+            {
+                $block_theme = $global_config['module_theme'];
+            }
+            elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $site_mods['voting']['module_file'] . "/global.voting.tpl" ) )
             {
                 $block_theme = $global_config['site_theme'];
             }

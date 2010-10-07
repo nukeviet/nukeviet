@@ -17,26 +17,26 @@ if ( ! function_exists( 'nv_message_about' ) )
      * 
      * @return
      */
-    function nv_message_about()
+    function nv_message_about ( )
     {
         global $global_config, $site_mods, $db, $module_name;
-
+        
         if ( ! isset( $site_mods['about'] ) ) return "";
         
         if ( $module_name == 'about' ) return "";
-
+        
         $is_show = false;
-
+        
         $pattern = "/^" . NV_LANG_DATA . "\_about\_([0-9]+)\_" . NV_CACHE_PREFIX . "\.cache$/i";
-
+        
         $cache_files = nv_scandir( NV_ROOTDIR . "/" . NV_CACHEDIR, $pattern );
-
+        
         if ( ( $count = count( $cache_files ) ) >= 1 )
         {
             $num = rand( 1, $count );
-            $num--;
+            $num --;
             $cache_file = $cache_files[$num];
-
+            
             if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
             {
                 $cache = unserialize( $cache );
@@ -44,15 +44,15 @@ if ( ! function_exists( 'nv_message_about' ) )
                 $title = $cache['page_title'];
                 $bodytext = strip_tags( $cache['contents'] );
                 $bodytext = nv_clean60( $bodytext, 300 );
-
+                
                 $is_show = true;
             }
         }
-
+        
         if ( ! $is_show )
         {
             $sql = "SELECT `id`,`title`,`alias`,`bodytext`,`keywords`,`add_time`,`edit_time` FROM `" . NV_PREFIXLANG . "_" . $site_mods['about']['module_data'] . "` ORDER BY rand() DESC LIMIT 1";
-
+            
             if ( ( $query = $db->sql_query( $sql ) ) !== false )
             {
                 if ( ( $row = $db->sql_fetchrow( $query ) ) !== false )
@@ -61,16 +61,27 @@ if ( ! function_exists( 'nv_message_about' ) )
                     $title = $row['title'];
                     $bodytext = strip_tags( $row['bodytext'] );
                     $bodytext = nv_clean60( $bodytext, 300 );
-
+                    
                     $is_show = true;
                 }
             }
         }
-
+        
         if ( $is_show )
         {
-            $block_theme = ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.about.tpl" ) ) ? $global_config['site_theme'] : "default";
-
+            if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/blocks/global.about.tpl" ) )
+            {
+                $block_theme = $global_config['module_theme'];
+            }
+            elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.about.tpl" ) )
+            {
+                $block_theme = $global_config['site_theme'];
+            }
+            else
+            {
+                $block_theme = "default";
+            }
+            
             $xtpl = new XTemplate( "global.about.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
             $xtpl->assign( 'LINK', $link );
             $xtpl->assign( 'TITLE', $title );
@@ -78,7 +89,7 @@ if ( ! function_exists( 'nv_message_about' ) )
             $xtpl->parse( 'main' );
             return $xtpl->text( 'main' );
         }
-
+        
         return "";
     }
 }

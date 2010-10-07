@@ -147,7 +147,7 @@ function nv_blocks_content ( )
     if ( ! empty( $array_position ) )
     {
         #dev version theme control
-        $sql_bl = "SELECT * FROM `" . NV_BLOCKS_TABLE . "` WHERE func_id='" . $module_info['funcs'][$op]['func_id'] . "' AND `theme` ='" . $global_config['site_theme'] . "' AND `active`=1 AND (`exp_time`=0 OR `exp_time`>" . NV_CURRENTTIME . ") ORDER BY `weight` ASC";
+        $sql_bl = "SELECT * FROM `" . NV_BLOCKS_TABLE . "` WHERE func_id='" . $module_info['funcs'][$op]['func_id'] . "' AND `theme` ='" . $global_config['module_theme'] . "' AND `active`=1 AND (`exp_time`=0 OR `exp_time`>" . NV_CURRENTTIME . ") ORDER BY `weight` ASC";
         $result_bl = $db->sql_query( $sql_bl );
         while ( $row_bl = $db->sql_fetchrow( $result_bl ) )
         {
@@ -228,6 +228,10 @@ function nv_blocks_content ( )
                         if ( ! empty( $module_info['theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $module_info['theme'] . "/layout/block." . $__values['template'] . ".tpl" ) )
                         {
                             $block_theme = $module_info['theme'];
+                        }
+                        elseif ( ! empty( $global_config['module_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/block." . $__values['template'] . ".tpl" ) )
+                        {
+                            $block_theme = $global_config['module_theme'];
                         }
                         elseif ( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout/block." . $__values['template'] . ".tpl" ) )
                         {
@@ -711,7 +715,7 @@ function nv_show_queries_for_admin ( )
         {
             $class = ( $key % 2 ) ? " highlight" : " normal";
             $return .= "<div class=\"clearfix" . $class . "\"><p>\n";
-            $return .= "<span class=\"first\">" . ( $field[1] ? "<img alt=\"" . $lang_global['ok'] . "\" title=\"" . $lang_global['ok'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['site_theme'] . "/images/icons/good.png\" width=\"16\" height=\"16\" />" : "<img alt=\"" . $lang_global['fail'] . "\" title=\"" . $lang_global['fail'] . "\" src=\"" . NV_BASE_SITEURL . "themes/default/images/icons/bad.png\" width=\"16\" height=\"16\" />" ) . "</span>\n";
+            $return .= "<span class=\"first\">" . ( $field[1] ? "<img alt=\"" . $lang_global['ok'] . "\" title=\"" . $lang_global['ok'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/icons/good.png\" width=\"16\" height=\"16\" />" : "<img alt=\"" . $lang_global['fail'] . "\" title=\"" . $lang_global['fail'] . "\" src=\"" . NV_BASE_SITEURL . "themes/default/images/icons/bad.png\" width=\"16\" height=\"16\" />" ) . "</span>\n";
             $return .= "<span class=\"second\">" . nv_htmlspecialchars( $field[0] ) . "</span></p>\n";
             $return .= "</div>\n";
         }

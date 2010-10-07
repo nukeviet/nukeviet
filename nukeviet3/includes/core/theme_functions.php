@@ -126,6 +126,10 @@ function nv_info_die ( $page_title = "", $info_title, $info_content, $adminlink 
     {
         $tpl_path = NV_ROOTDIR . "/themes/admin_default/system";
     }
+    elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system/info_die.tpl" ) )
+    {
+        $tpl_path = NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system";
+    }
     elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/info_die.tpl" ) )
     {
         $tpl_path = NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system";
@@ -169,10 +173,10 @@ function nv_info_die ( $page_title = "", $info_title, $info_content, $adminlink 
  * @param mixed $items
  * @return void
  */
-function nv_rss_generate( $channel, $items )
+function nv_rss_generate ( $channel, $items )
 {
     global $db, $global_config;
-
+    
     if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout/rss.tpl" ) )
     {
         $path = NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout/";
@@ -181,34 +185,34 @@ function nv_rss_generate( $channel, $items )
     {
         $path = NV_ROOTDIR . "/themes/default/layout/";
     }
-
+    
     $xtpl = new XTemplate( "rss.tpl", $path );
-
+    
     $channel['title'] = htmlspecialchars( $channel['title'] );
     $channel['description'] = htmlspecialchars( $channel['description'] );
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = htmlspecialchars( $global_config['site_name'] );
     $channel['docs'] = NV_MY_DOMAIN . NV_BASE_SITEURL . '?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss';
     $channel['generator'] = htmlspecialchars( 'Nukeviet Version ' . $global_config['version'] );
-
+    
     $xtpl->assign( 'CHANNEL', $channel );
-
+    
     if ( file_exists( NV_ROOTDIR . '/images/' . $global_config['site_logo'] ) )
     {
         $image = NV_ROOTDIR . '/images/' . $global_config['site_logo'];
         $image = nv_ImageInfo( $image, 144, true, NV_UPLOADS_REAL_DIR );
-
+        
         if ( ! empty( $image ) )
         {
             $image['title'] = $channel['title'];
             $image['link'] = $channel['link'];
             $image['src'] = NV_MY_DOMAIN . $image['src'];
-
+            
             $xtpl->assign( 'IMAGE', $image );
             $xtpl->parse( 'main.image' );
         }
     }
-
+    
     if ( ! empty( $items ) )
     {
         foreach ( $items as $item )
@@ -217,24 +221,24 @@ function nv_rss_generate( $channel, $items )
             {
                 $item['title'] = htmlspecialchars( $item['title'], ENT_QUOTES );
             }
-
+            
             if ( ! empty( $item['description'] ) )
             {
                 $item['description'] = htmlspecialchars( $item['description'], ENT_QUOTES );
             }
-
+            
             $item['pubdate'] = gmdate( "D, j M Y H:m:s", $item['pubdate'] ) . ' GMT';
-
+            
             $xtpl->assign( 'ITEM', $item );
             $xtpl->parse( 'main.item' );
         }
     }
-
+    
     $xtpl->parse( 'main' );
     $content = $xtpl->text( 'main' );
     $content = $db->unfixdb( $content );
-	$content = nv_url_rewrite($content);
-	
+    $content = nv_url_rewrite( $content );
+    
     header( "Content-Type: text/xml" );
     header( "Content-Type: application/rss+xml" );
     header( "Content-Encoding: none" );

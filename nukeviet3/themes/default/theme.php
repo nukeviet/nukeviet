@@ -12,23 +12,23 @@ if ( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 function nv_site_theme ( $contents )
 {
     global $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op, $db, $mod_title, $my_head, $nv_array_block_contents, $client_info;
-    if ( ! file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout/layout." . $module_info['funcs'][$op]['layout'] . ".tpl" ) )
+    if ( ! file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/layout." . $module_info['funcs'][$op]['layout'] . ".tpl" ) )
     {
         nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
     }
     
     if ( defined( 'NV_IS_ADMIN' ) )
     {
-        $my_head .= "<link rel=\"stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['site_theme'] . "/css/admin.css\" type=\"text/css\" />";
+        $my_head .= "<link rel=\"stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/admin.css\" type=\"text/css\" />";
     }
     if ( defined( 'NV_DISPLAY_ERRORS_LIST' ) and NV_DISPLAY_ERRORS_LIST != 0 )
     {
-        $my_head .= "<link rel=\"stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['site_theme'] . "/css/tab_info.css\" type=\"text/css\" />";
+        $my_head .= "<link rel=\"stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/tab_info.css\" type=\"text/css\" />";
     }
     
-    $xtpl = new XTemplate( "layout." . $module_info['funcs'][$op]['layout'] . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout/" );
+    $xtpl = new XTemplate( "layout." . $module_info['funcs'][$op]['layout'] . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/" );
     $xtpl->assign( 'LANG', $lang_global );
-    $xtpl->assign( 'TEMPLATE', $global_config['site_theme'] );
+    $xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
     $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
     $xtpl->assign( 'THEME_META_TAGS', nv_html_meta_tags() );
     $xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
