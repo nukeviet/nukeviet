@@ -28,9 +28,21 @@ if ( $numrows != 1 )
 
 $row = $db->sql_fetchrow( $result );
 
-$theme_list = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme'] );
-$theme_list = array_flip( $theme_list );
-$theme_list = array_keys( $theme_list );
+$theme_list = array();
+$theme_array_file = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme'] );
+$theme_array_file = array_flip( $theme_array_file );
+$theme_array_file = array_keys( $theme_array_file );
+
+$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes`  WHERE `func_id`=0";
+$result = $db->sql_query( $sql );
+while ( list( $theme ) = $db->sql_fetchrow( $result ) )
+{
+    if ( in_array( $theme, $theme_array_file ) )
+    {
+        $theme_list[] = $theme;
+    }
+}
+
 $groups_list = nv_groups_list();
 
 if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
@@ -72,7 +84,11 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
     {
         $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape( $custom_title ) . ", `theme`=" . $db->dbescape( $theme ) . ", `keywords`=" . $db->dbescape( $keywords ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `act`='" . $act . "', `rss`='" . $rss . "'WHERE `title`=" . $db->dbescape( $mod );
         $db->sql_query( $sql );
-        nv_del_moduleCache( 'modules' );
+        if ( $theme != $site_mods[$mod]['theme'] )
+        {
+            nv_set_layout_site();
+        }
+        nv_delete_all_cache();
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
         exit();
     }

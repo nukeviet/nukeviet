@@ -424,7 +424,6 @@ function edit_theme ( $contents )
     $return .= "<col valign=\"top\" width=\"150px\" />\n";
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['theme'][0] . ":</td>\n";
-    $return .= "<td></td>\n";
     $return .= "<td><select name=\"theme\" id=\"theme\">\n";
     $return .= "<option value=\"\">" . $contents['theme'][1] . "</option>\n";
     foreach ( $contents['theme'][2] as $tm )
@@ -432,6 +431,7 @@ function edit_theme ( $contents )
         $return .= "<option value=\"" . $tm . "\"" . ( $tm == $contents['theme'][3] ? " selected=\"selected\"" : "" ) . ">" . $tm . "</option>\n";
     }
     $return .= "</select></td>\n";
+    $return .= "<td></td>\n";
     $return .= "</tr>\n";
     $return .= "</table>\n";
     
@@ -451,13 +451,13 @@ function edit_theme ( $contents )
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<tr>\n";
         $return .= "<td>" . $contents['who_view'][0] . ":</td>\n";
-        $return .= "<td></td>\n";
         $return .= "<td><select name=\"who_view\" id=\"who_view\" onchange=\"nv_sh('who_view','groups_list')\">\n";
         foreach ( $contents['who_view'][1] as $k => $w )
         {
             $return .= "<option value=\"" . $k . "\"" . ( $k == $contents['who_view'][2] ? " selected=\"selected\"" : "" ) . ">" . $w . "</option>\n";
         }
         $return .= "</select></td>\n";
+        $return .= "<td></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
         
