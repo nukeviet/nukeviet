@@ -188,8 +188,8 @@ function nv_rss_generate ( $channel, $items )
     
     $xtpl = new XTemplate( "rss.tpl", $path );
     
-    $channel['title'] = htmlspecialchars( $channel['title'] );
-    $channel['description'] = htmlspecialchars( $channel['description'] );
+    $channel['title'] = nv_unhtmlspecialchars( $channel['title'] );
+    $channel['description'] = nv_unhtmlspecialchars( $channel['description'] );
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = htmlspecialchars( $global_config['site_name'] );
     $channel['docs'] = NV_MY_DOMAIN . NV_BASE_SITEURL . '?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss';
@@ -219,7 +219,7 @@ function nv_rss_generate ( $channel, $items )
         {
             if ( ! empty( $item['title'] ) )
             {
-                $item['title'] = htmlspecialchars( $item['title'], ENT_QUOTES );
+                $item['title'] = nv_unhtmlspecialchars( $item['title'] );
             }
             
             if ( ! empty( $item['description'] ) )
