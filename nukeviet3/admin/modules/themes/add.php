@@ -121,7 +121,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     }
     else
     {
-        if ( $all_func )
+        if ( $all_func and empty( $xmodule ) )
         {
             $array_funcid = array();
             $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC" );
@@ -130,14 +130,26 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                 $array_funcid[] = $func_id_i;
             }
         }
-        elseif ( ! empty( $bid ) && empty( $array_funcid ) )
+        elseif ( ! empty( $xmodule ) and isset( $site_mods[$xmodule] ) )
         {
-            $array_funcid = array();
+            $array_funcid_module = array();
             $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' AND `in_module`='" . $xmodule . "' ORDER BY `in_module` ASC, `subweight` ASC" );
             while ( list( $func_id_i ) = $db->sql_fetchrow( $func_result ) )
             {
-                $array_funcid[] = $func_id_i;
+                $array_funcid_module[] = $func_id_i;
             }
+            if ( empty( $array_funcid ) )
+            {
+                $array_funcid = $array_funcid_module;
+            }
+            else
+            {
+                $array_funcid = array_intersect( $array_funcid, $array_funcid_module );
+            }
+        }
+        else
+        {
+            $array_funcid = array();
         }
         if ( is_array( $array_funcid ) )
         {
