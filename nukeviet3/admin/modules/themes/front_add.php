@@ -17,8 +17,8 @@ foreach ( $theme_array as $themes_i )
 {
     $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&selectthemes=" . $themes_i] = $themes_i;
 }
-$selectthemes = $global_config['site_theme'];
-$page_title = $lang_module['blocks'] . ':' . $selectthemes;
+$selectthemes = $nv_Request->get_string( 'selectthemes', 'get', $global_config['site_theme'] );
+
 if ( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
     $error = array();
@@ -281,7 +281,7 @@ if ( $bid != 0 )
     $contents .= "</div>\n";
 }
 $contents .= "" . $contents_error . "<div style='clear:both'></div>";
-$contents .= "<form method='post' action='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=themes&" . NV_OP_VARIABLE . "=front_add&blockredirect=" . $blockredirect . "'>";
+$contents .= "<form method='post' action='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=themes&" . NV_OP_VARIABLE . "=front_add&selectthemes=" . $selectthemes . "&blockredirect=" . $blockredirect . "'>";
 $contents .= "<table class=\"tab1\" style=\"WIDTH:100%\">\n";
 $contents .= "<col style=\"width: 160px; white-space: nowrap;\">";
 $contents .= "<col style=\"width: 600px; white-space: nowrap;\">";
