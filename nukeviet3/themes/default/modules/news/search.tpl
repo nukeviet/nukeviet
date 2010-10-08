@@ -14,7 +14,7 @@
                         {LANG.key_title} : 
                     </td>
                     <td>
-                        <input type="text" name="q" value="{KEY}" class="intxt" id="key"/><input type="submit" value="{LANG.search_title}"/>
+                        <input type="text" name="q" value="{KEY}" class="intxt" id="key"/>
                     </td>
                     <td align="right">
                     </td>
@@ -36,6 +36,20 @@
                 </tr>
                 <tr>
                     <td class="cltxt">
+                        {LANG.search_cat} : 
+                    </td>
+                    <td>
+                        <select name="catid" class ="sl-choose">
+						<!-- BEGIN: search_cat -->
+						     <option value="{SEARCH_CAT.catid}" {SEARCH_CAT.select}>{SEARCH_CAT.title}</option>
+						<!-- END: search_cat -->
+                        </select>
+                    </td>
+                    <td>
+                    </td>
+                </tr>                
+                <tr>
+                    <td class="cltxt">
                         {LANG.finter_title} : 
                     </td>
                     <td>
@@ -46,10 +60,22 @@
                         <img src="{NV_BASE_SITEURL}images/refresh.png" onclick="remove_text()" style="cursor:pointer"/>
                     </td>
                 </tr>
+                <tr>
+                    <td class="cltxt">
+                    </td>
+                    <td>
+                        <input type="submit" value="{LANG.search_title}"/>
+                    </td>
+                    <td align="right">
+                    </td>
+                </tr>
+                
             </table>
         </div>
     </div>
-</form><!-- END: main --><!-- BEGIN: results -->
+</form>
+<!-- END: main -->
+<!-- BEGIN: results -->
 <div class="result-frame">
     <div class="result-title">
         {LANG.search_on} {TITLE_MOD}

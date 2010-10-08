@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Vietnamese
+ * @Createdate May 31, 2010, 08:01:47 PM
+ */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
+if ( ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['nocatpage'] = "Lỗi không có chủ đề";
 $lang_module['other'] = "Các tin khác";
@@ -102,5 +103,7 @@ $lang_module['admin_view'] = "Chỉ người quản trị mới có quyền xem 
 $lang_module['group_view'] = "Chỉ có nhóm thành viên mới có quyền xem mục này!";
 $lang_module['rating_error1'] = 'Đánh giá không hợp lệ';
 $lang_module['rating_error2'] = 'Bạn đã đánh giá bài viết này rồi';
+$lang_module['search_cat'] = "Tìm kiếm trong chủ đề";
+$lang_module['search_all'] = " Tất cả các chủ đề";
 
 ?>

@@ -900,7 +900,7 @@ function news_print ( $result )
 }
 
 //// search.php
-function search_theme ( $key, $check_num, $date_array )
+function search_theme ( $key, $check_num, $date_array, $array_cat_search )
 {
     global $module_name, $module_info, $module_file, $global_config, $lang_module, $module_name;
     $xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
@@ -916,6 +916,11 @@ function search_theme ( $key, $check_num, $date_array )
     $xtpl->assign( 'KEY', $key );
     $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
     $xtpl->assign( 'OP_NAME', 'search' );
+    foreach ( $array_cat_search as $search_cat )
+    {
+        $xtpl->assign( 'SEARCH_CAT', $search_cat );
+        $xtpl->parse( 'main.search_cat' );
+    }
     for ( $i = 0; $i <= 3; $i ++ )
     {
         if ( $check_num == $i ) $xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
@@ -925,9 +930,9 @@ function search_theme ( $key, $check_num, $date_array )
     return $xtpl->text( 'main' );
 }
 
-function search_result_theme ( $key, $numRecord, $per_pages, $pages, $array_content, $url_link )
+function search_result_theme ( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
 {
-    global $module_file, $module_info, $global_config, $lang_global, $lang_module, $db, $module_name;
+    global $module_file, $module_info, $global_config, $lang_global, $lang_module, $db, $module_name, $global_array_cat;
     $xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     
     $xtpl->assign( 'LANG', $lang_module );
@@ -939,8 +944,9 @@ function search_result_theme ( $key, $numRecord, $per_pages, $pages, $array_cont
     {
         foreach ( $array_content as $value )
         {
-            $alias_cat = GetCatNews( $value['listcatid'], $module_name );
-            $url = $url_link . $alias_cat . '/' . $value['alias'] . "-" . $value['id'];
+            $catid_i = ( $catid > 0 ) ? $catid : end( explode( ",", $value['listcatid'] ) );
+            ;
+            $url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
             $xtpl->assign( 'LINK', $url );
             $xtpl->assign( 'TITLEROW', BoldKeywordInStr( $value['title'], $key ) );
             $xtpl->assign( 'CONTENT', BoldKeywordInStr( $value['hometext'], $key ) . "..." );
