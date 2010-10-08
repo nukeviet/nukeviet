@@ -38,35 +38,41 @@ if ( empty( $contents ) )
     {
         $st_links = 2 * $st_links;
         $order_by = ( $viewcat == "viewcat_page_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
-        $sql = "SELECT `id`, `publtime`, `title`, `alias`, `hometext`, `homeimgalt`, `homeimgthumb` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT " . $page . "," . $per_page . "";
+        $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT " . $page . "," . $per_page . "";
         $result = $db->sql_query( $sql );
         $end_publtime = 0;
-        while ( list( $id, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgthumb ) = $db->sql_fetchrow( $result ) )
+        while ( $item = $db->sql_fetchrow( $result ) )
         {
-            $end_publtime = $publtime;
-            $array_img = array( 
-                "", "" 
-            );
-            if ( ! empty( $homeimgthumb ) ) $array_img = explode( "|", $homeimgthumb );
-            $array_catpage[] = array( 
-                "id" => $id, "title" => $title, "publtime" => $publtime, "link" => $global_array_cat[$catid]['link'] . "/" . $alias . "-" . $id, "hometext" => $hometext, "imghome" => $array_img[0], "imgthumb" => $array_img[1], "homeimgalt" => $homeimgalt 
-            );
+            if ( ! empty( $item['homeimgthumb'] ) )
+            {
+                $array_img = explode( "|", $item['homeimgthumb'] );
+            }
+            else
+            {
+                $array_img = array( 
+                    "", "" 
+                );
+            }
+            $item['imghome'] = $array_img[0];
+            $item['imgthumb'] = $array_img[1];
+            $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+            $array_catpage[] = $item;
+            $end_publtime = $item['publtime'];
         }
         
         if ( $viewcat == "viewcat_page_new" )
         {
-            $sql = "SELECT `id`, `publtime`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . $end_publtime . " AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT 0," . $st_links . "";
+            $sql = "SELECT `id`, `listcatid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . $end_publtime . " AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT 0," . $st_links . "";
         }
         else
         {
-            $sql = "SELECT `id`, `publtime`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` > " . $end_publtime . " AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT 0," . $st_links . "";
+            $sql = "SELECT `id`, `listcatid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` > " . $end_publtime . " AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT 0," . $st_links . "";
         }
         $result = $db->sql_query( $sql );
-        while ( list( $id, $publtime, $title, $alias ) = $db->sql_fetchrow( $result ) )
+        while ( $item = $db->sql_fetchrow( $result ) )
         {
-            $array_cat_other[] = array( 
-                "id" => $id, "title" => $title, "publtime" => $publtime, "link" => $global_array_cat[$catid]['link'] . "/" . $alias . "-" . $id 
-            );
+            $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+            $array_cat_other[] = $item;
         }
         
         $contents = viewcat_page_new( $array_catpage, $array_cat_other );
@@ -76,19 +82,24 @@ if ( empty( $contents ) )
     {
         $array_catcontent = array();
         $array_subcatpage = array();
-        
-        $sql = "SELECT `id`, `publtime`, `title`, `alias`, `hometext`, `homeimgalt`, `homeimgthumb` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "";
+        $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "";
         $result = $db->sql_query( $sql );
-        while ( list( $id, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgthumb ) = $db->sql_fetchrow( $result ) )
+        while ( $item = $db->sql_fetchrow( $result ) )
         {
-            $array_img = array( 
-                "", "" 
-            );
-            if ( ! empty( $homeimgthumb ) ) $array_img = explode( "|", $homeimgthumb );
-            $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'];
-            $array_catcontent[] = array( 
-                "id" => $id, "publtime" => $publtime, "title" => $title, "link" => $link . "/" . $alias . "-" . $id, "hometext" => $hometext, "imghome" => $array_img[0], "imgthumb" => $array_img[1], "homeimgalt" => $homeimgalt 
-            );
+            if ( ! empty( $item['homeimgthumb'] ) )
+            {
+                $array_img = explode( "|", $item['homeimgthumb'] );
+            }
+            else
+            {
+                $array_img = array( 
+                    "", "" 
+                );
+            }
+            $item['imghome'] = $array_img[0];
+            $item['imgthumb'] = $array_img[1];
+            $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+            $array_catcontent[] = $item;
         }
         unset( $sql, $result );
         
@@ -100,17 +111,24 @@ if ( empty( $contents ) )
             foreach ( $array_catid as $catid_i )
             {
                 $array_cat_other[$key] = $global_array_cat[$catid_i];
-                $sql = "SELECT `id`, `publtime`, `title`, `alias`, `hometext`, `homeimgalt`, `homeimgthumb` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'] . "";
+                $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'] . "";
                 $result = $db->sql_query( $sql );
-                while ( list( $id, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgthumb ) = $db->sql_fetchrow( $result ) )
+                while ( $item = $db->sql_fetchrow( $result ) )
                 {
-                    $array_img = array( 
-                        "", "" 
-                    );
-                    if ( ! empty( $homeimgthumb ) ) $array_img = explode( "|", $homeimgthumb );
-                    $array_cat_other[$key]['content'][] = array( 
-                        "id" => $id, "publtime" => $publtime, "title" => $title, "link" => $global_array_cat[$catid_i]['link'] . "/" . $alias . "-" . $id, "hometext" => $hometext, "imghome" => $array_img[0], "imgthumb" => $array_img[1], "homeimgalt" => $homeimgalt 
-                    );
+                    if ( ! empty( $item['homeimgthumb'] ) )
+                    {
+                        $array_img = explode( "|", $item['homeimgthumb'] );
+                    }
+                    else
+                    {
+                        $array_img = array( 
+                            "", "" 
+                        );
+                    }
+                    $item['imghome'] = $array_img[0];
+                    $item['imgthumb'] = $array_img[1];
+                    $item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+                    $array_cat_other[$key]['content'][] = $item;
                 }
                 unset( $sql, $result );
                 $key ++;
@@ -125,18 +143,24 @@ if ( empty( $contents ) )
     {
         // Cac bai viet phan dau
         $array_catcontent = array();
-        $sql = "SELECT `id`, `publtime`, `title`, `alias`, `hometext`, `homeimgalt`, `homeimgthumb` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT " . $page . "," . $per_page . "";
+        $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT " . $page . "," . $per_page . "";
         $result = $db->sql_query( $sql );
-        while ( list( $id, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgthumb ) = $db->sql_fetchrow( $result ) )
+        while ( $item = $db->sql_fetchrow( $result ) )
         {
-            $array_img = array( 
-                "", "" 
-            );
-            if ( ! empty( $homeimgthumb ) ) $array_img = explode( "|", $homeimgthumb );
-            $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'];
-            $array_catcontent[] = array( 
-                "id" => $id, "publtime" => $publtime, "title" => $title, "link" => $link . "/" . $alias . "-" . $id, "hometext" => $hometext, "imghome" => $array_img[0], "imgthumb" => $array_img[1], "homeimgalt" => $homeimgalt 
-            );
+            if ( ! empty( $item['homeimgthumb'] ) )
+            {
+                $array_img = explode( "|", $item['homeimgthumb'] );
+            }
+            else
+            {
+                $array_img = array( 
+                    "", "" 
+                );
+            }
+            $item['imghome'] = $array_img[0];
+            $item['imgthumb'] = $array_img[1];
+            $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+            $array_catcontent[] = $item;
         }
         unset( $sql, $result );
         // Het cac bai viet phan dau
@@ -148,17 +172,24 @@ if ( empty( $contents ) )
         foreach ( $array_catid as $catid_i )
         {
             $array_cat_other[$key] = $global_array_cat[$catid_i];
-            $sql = "SELECT `id`, `publtime`, `title`, `alias`, `hometext`, `homeimgalt`, `homeimgthumb` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'] . "";
+            $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'] . "";
             $result = $db->sql_query( $sql );
-            while ( list( $id, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgthumb ) = $db->sql_fetchrow( $result ) )
+            while ( $item = $db->sql_fetchrow( $result ) )
             {
-                $array_img = array( 
-                    "", "" 
-                );
-                if ( ! empty( $homeimgthumb ) ) $array_img = explode( "|", $homeimgthumb );
-                $array_cat_other[$key]['content'][] = array( 
-                    "id" => $id, "publtime" => $publtime, "title" => $title, "link" => $global_array_cat[$catid_i]['link'] . "/" . $alias . "-" . $id, "hometext" => $hometext, "imghome" => $array_img[0], "imgthumb" => $array_img[1], "homeimgalt" => $homeimgalt 
-                );
+                if ( ! empty( $item['homeimgthumb'] ) )
+                {
+                    $array_img = explode( "|", $item['homeimgthumb'] );
+                }
+                else
+                {
+                    $array_img = array( 
+                        "", "" 
+                    );
+                }
+                $item['imghome'] = $array_img[0];
+                $item['imgthumb'] = $array_img[1];
+                $item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+                $array_cat_other[$key]['content'][] = $item;
             }
             $key ++;
         }
