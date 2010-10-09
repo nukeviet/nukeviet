@@ -9,7 +9,7 @@
 define( 'NV_ADMIN', true );
 require_once ( str_replace( '\\\\', '/', dirname( __file__ ) ) . '/mainfile.php' );
 require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
-$global_config['new_version'] = "3.0.11";
+$global_config['new_version'] = "3.0.12";
 
 if ( defined( "NV_IS_GODADMIN" ) )
 {
@@ -176,6 +176,22 @@ if ( defined( "NV_IS_GODADMIN" ) )
         {
             $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_modules` ADD `rss` TINYINT( 4 ) NOT NULL DEFAULT '1'" );
         }
+    }
+    if ( nv_version_compare( $global_config['version'], "3.0.12" ) < 0 )
+    {
+        // add userid to table comments module news
+        $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language`";
+        $result_lang = $db->sql_query( $sql );
+        while ( list( $lang_i ) = $db->sql_fetchrow( $result_lang ) )
+        {
+            $sql = "SELECT module_data FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modules` WHERE `module_file`='news'";
+            $result_mod = $db->sql_query( $sql );
+            while ( list( $module_data_i ) = $db->sql_fetchrow( $result_mod ) )
+            {
+                $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_" . $module_data_i . "_comments` ADD `userid` INT( 11 ) NOT NULL DEFAULT '0' AFTER `post_time`" );
+            }
+        }
+        $db->sql_freeresult();
     }
     $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
     nv_save_file_config_global();

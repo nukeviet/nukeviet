@@ -113,6 +113,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `content` mediumtext NOT NULL,
   `post_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `userid` int(11) NOT NULL DEFAULT '0',  
   `post_name` varchar(100) NOT NULL,
   `post_email` varchar(100) NOT NULL,
   `post_ip` varchar(15) NOT NULL,

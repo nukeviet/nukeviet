@@ -126,13 +126,13 @@
                 <label>
                     <strong>{LANG.comment_name}</strong>
                 </label>
-                <input type="text" id="commentname" value="{NAME}" />
+                <input {DISABLED} type="text" id="commentname" value="{NAME}" />
             </div>
             <div class="email">
                 <label>
                     <strong>{LANG.comment_email}</strong>
                 </label>
-                <input type="text" id="commentemail_iavim" value="{EMAIL}" />
+                <input {DISABLED} type="text" id="commentemail_iavim" value="{EMAIL}" />
             </div>
             <div class="content">
                 <label>

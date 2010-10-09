@@ -12,36 +12,13 @@ $contents .= "<table class=\"tab1\">\n";
 $contents .= "<thead>\n";
 $contents .= "<tr align=\"center\">\n";
 $contents .= "<td></td>\n";
-$contents .= "<td>" . $lang_module['comment_topic'] . "</td>\n";
-$contents .= "<td>" . $lang_module['comment_content'] . "</td>\n";
 $contents .= "<td>" . $lang_module['comment_email'] . "</td>\n";
+$contents .= "<td>" . $lang_module['comment_content'] . "</td>\n";
+$contents .= "<td>" . $lang_module['comment_topic'] . "</td>\n";
 $contents .= "<td>" . $lang_module['comment_status'] . "</td>\n";
 $contents .= "<td style=\"width:100px;\">" . $lang_module['comment_funcs'] . "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</thead>\n";
-$contents .= "<tfoot>\n";
-$contents .= "<tr>\n";
-$contents .= "<td colspan='7'>";
-$contents .= "
-		<span>
-		<a name=\"checkall\" id=\"checkall\" href=\"javascript:void(0);\">" . $lang_module['comment_checkall'] . "</a>
-		&nbsp;&nbsp;<a name=\"uncheckall\" id=\"uncheckall\" href=\"javascript:void(0);\">" . $lang_module['comment_uncheckall'] . "</a>&nbsp;&nbsp;
-		</span><span style='width:100px;display:inline-block'>&nbsp;</span>
-		<span class=\"edit_icon\">
-			<a class='disable' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active_comment\">" . $lang_module['comment_disable'] . "</a> 
-		</span>
-		 - 
-		<span class=\"add_icon\">
-			<a class='enable' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active_comment\">" . $lang_module['comment_enable'] . "</a> 
-		</span>
-		 - 
-		<span class=\"delete_icon\">
-			<a class='delete' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=del_comment\">" . $lang_module['comment_delete'] . "</a>
-		</span>";
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tfoot>\n";
-
 $global_array_cat = array();
 $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other";
 $global_array_cat[0] = array( 
@@ -57,24 +34,32 @@ while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i
         "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i, "viewcat" => $viewcat_i, "subcatid" => $subcatid_i, "numlinks" => $numlinks_i, "description" => $description_i, "keywords" => $keywords_i 
     );
 }
-
-$sql = "SELECT a.cid, a.content, a.post_email, a.status, b.id, b.title, b.listcatid, b.alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_rows` b ON a.id=b.id";
+$page = $nv_Request->get_int( 'page', 'get', 0 );
+$per_page = 2;
+$sql = "SELECT SQL_CALC_FOUND_ROWS a.cid, a.content, a.post_email, a.status, b.id, b.title, b.listcatid, b.alias, c.userid, c.email FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_rows` b ON (a.id=b.id) LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` as c ON (a.userid =c.userid)  LIMIT " . $page . "," . $per_page . "";
 $result = $db->sql_query( $sql );
-$num = $db->sql_numrows( $result );
+
+$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+list( $all_page ) = $db->sql_fetchrow( $result_all );
+$all_page = ( $all_page ) ? $all_page : 1;
 
 $a = 0;
-while ( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias ) = $db->sql_fetchrow( $result ) )
+while ( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $userid, $user_email ) = $db->sql_fetchrow( $result ) )
 {
     $a ++;
     $catid_i = end( explode( ",", $listcatid ) );
+    if ( $userid > 0 )
+    {
+        $email = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $userid . "\"> " . $user_email . "</a>";
+    }
     $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
     $class = ( $a % 2 ) ? " class=\"second\"" : "";
     $contents .= "<tbody" . $class . ">\n";
     $contents .= "<tr>\n";
     $contents .= "<td align=\"center\"><input name='commentid' type='checkbox' value='" . $cid . "'/></td>\n";
-    $contents .= "<td align=\"left\"><a target=\"_blank\" href=\"" . $link . "\">" . $title . "</a></td>\n";
-    $contents .= "<td>" . $content . "</td>\n";
     $contents .= "<td>" . $email . "</td>\n";
+    $contents .= "<td>" . $content . "</td>\n";
+    $contents .= "<td align=\"left\"><a target=\"_blank\" href=\"" . $link . "\">" . $title . "</a></td>\n";
     $status = ( $status == 1 ) ? $lang_module['comment_enable'] : $lang_module['comment_disable'];
     $contents .= "<td align=\"center\">$status</td>\n";
     $contents .= "<td align=\"center\">
@@ -88,6 +73,31 @@ while ( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias )
     $contents .= "</tr>\n";
     $contents .= "</tbody>\n";
 }
+$base_url = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op;
+$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+
+$contents .= "<tfoot>\n";
+$contents .= "<tr>\n";
+$contents .= "<td colspan='3'>";
+$contents .= "
+		<span>
+		<a name=\"checkall\" id=\"checkall\" href=\"javascript:void(0);\">" . $lang_module['comment_checkall'] . "</a>
+		&nbsp;&nbsp;<a name=\"uncheckall\" id=\"uncheckall\" href=\"javascript:void(0);\">" . $lang_module['comment_uncheckall'] . "</a>&nbsp;&nbsp;
+		</span><span style='width:100px;display:inline-block'>&nbsp;</span>
+		<span class=\"edit_icon\">
+			<a class='disable' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active_comment\">" . $lang_module['comment_disable'] . "</a> 
+		</span>
+		 - 
+		<span class=\"add_icon\">
+			<a class='enable' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active_comment\">" . $lang_module['comment_enable'] . "</a> 
+		</span>
+		 - 
+		<span class=\"delete_icon\">
+			<a class='delete' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=del_comment\">" . $lang_module['comment_delete'] . "</a>
+		</span></td>\n";
+$contents .= "<td colspan=\"3\" align=\"center\"> " . $generate_page . "</td>\n";
+$contents .= "</tr>\n";
+$contents .= "</tfoot>\n";
 $contents .= "</table>\n";
 $contents .= "
 <script type='text/javascript'>

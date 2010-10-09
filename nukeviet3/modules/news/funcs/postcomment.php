@@ -16,17 +16,20 @@ $checkss = filter_text_input( 'checkss', 'post' );
 $status = $module_config[$module_name]['auto_postcomm'];
 if ( defined( 'NV_IS_USER' ) )
 {
+    $userid = $user_info['userid'];
     $name = $user_info['username'];
     $email = $user_info['email'];
 }
 elseif ( defined( 'NV_IS_ADMIN' ) )
 {
+    $userid = $admin_info['userid'];
     $name = $admin_info['username'];
     $email = $admin_info['email'];
     $status = 1;
 }
 else
 {
+    $userid = 0;
     $name = filter_text_input( 'name', 'post', '', 1 );
     $email = filter_text_input( 'email', 'post', '' );
 }
@@ -47,7 +50,7 @@ if ( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5(
         if ( isset( $row['allowed_comm'] ) and ( $row['allowed_comm'] == 1 or ( $row['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
         {
             $array_catid = explode( ",", $row['listcatid'] );
-            $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_comments` (`cid`, `id`, `content`, `post_time`, `post_name`, `post_email`, `post_ip`, `status`) VALUES (NULL, " . $id . "," . $db->dbescape( $content ) . ", UNIX_TIMESTAMP(), " . $db->dbescape( $name ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ")";
+            $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_comments` (`cid`, `id`, `content`, `post_time`, `userid`, `post_name`, `post_email`, `post_ip`, `status`) VALUES (NULL, " . $id . "," . $db->dbescape( $content ) . ", UNIX_TIMESTAMP(), " . $userid . ",  " . $db->dbescape( $name ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ")";
             $result = $db->sql_query( $sql );
             if ( $result )
             {

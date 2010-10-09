@@ -659,16 +659,19 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
         {
             $xtpl->assign( 'NAME', $admin_info['full_name'] );
             $xtpl->assign( 'EMAIL', $admin_info['email'] );
+            $xtpl->assign( 'DISABLED', " disabled=\"disabled\"" );
         }
         elseif ( defined( 'NV_IS_USER' ) )
         {
             $xtpl->assign( 'NAME', $user_info['full_name'] );
             $xtpl->assign( 'EMAIL', $user_info['email'] );
+            $xtpl->assign( 'DISABLED', " disabled=\"disabled\"" );
         }
         else
         {
             $xtpl->assign( 'NAME', "" );
             $xtpl->assign( 'EMAIL', "" );
+            $xtpl->assign( 'DISABLED', "" );
         }
         $xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
         $xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
@@ -683,7 +686,7 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     elseif ( $commentenable == 2 )
     {
         global $client_info;
-        $link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
+        $link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] . "#formcomment" );
         $xtpl->assign( 'COMMENT_LOGIN', "<a title=\"" . $lang_global['loginsubmit'] . "\" href=\"" . $link_login . "\">" . $lang_module['comment_login'] . "</a>" );
         $xtpl->parse( 'main.comment.form_login' );
     }
@@ -791,15 +794,13 @@ function comment_theme ( $comment_array )
     $k = 0;
     foreach ( $comment_array['comment'] as $comment_array_i )
     {
-        $xtpl->assign( 'TIME', date( "d/m/Y H:i", $comment_array_i['post_time'] ) );
-        $xtpl->assign( 'NAME', $comment_array_i['post_name'] );
+        $comment_array_i['post_time'] = nv_date( "d/m/Y H:i", $comment_array_i['post_time'] );
+        $comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
+        $xtpl->assign( 'COMMENT', $comment_array_i );
         if ( $module_config[$module_name]['emailcomm'] and ! empty( $comment_array_i['post_email'] ) )
         {
-            $xtpl->assign( 'EMAIL', $comment_array_i['post_email'] );
             $xtpl->parse( 'main.detail.emailcomm' );
         }
-        $xtpl->assign( 'CONTENT', $comment_array_i['content'] );
-        $xtpl->assign( 'BG', ( $k % 2 ) ? " bg" : "" );
         $xtpl->parse( 'main.detail' );
         $k ++;
     }
