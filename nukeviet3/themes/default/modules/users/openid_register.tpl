@@ -107,6 +107,7 @@
                 </dd>
             </dl>
             <input type="hidden" name="checkss" value="{DATA.checkss}" />
+			<input name="nv_redirect" value="{DATA.nv_redirect}" type="hidden" />        
             <input id="submit" type="submit" class="submit" value="{LANG.register}" />
         </div>
     </form>

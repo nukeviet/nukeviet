@@ -35,6 +35,7 @@
             <input name="nv_seccode" id="seccode_iavim" class="required" maxlength="{GFX_MAXLENGTH}" />
         </div>
         <!-- END: captcha -->
+		<input name="nv_redirect" value="{DATA.nv_redirect}" type="hidden" />        
         <input type="submit" value="{LANG.login_submit}" class="submit" />
         <br />
         <br />

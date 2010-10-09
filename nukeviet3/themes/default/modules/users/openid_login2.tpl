@@ -8,15 +8,11 @@
         <strong>{LANG.openid_note2}:</strong>
     </div>
     <ol style="padding-top:10px">
+    	<!-- BEGIN: login_note -->
         <li>
-            <span>-</span> <a href="{USER_LOGIN1}">{LANG.openid_note3}</a>
+            <span>-</span> <a href="{USER_LOGIN.link}">{USER_LOGIN.title}</a>
         </li>
-        <li>
-            <span>-</span> <a href="{USER_LOGIN2}">{LANG.openid_note4}</a>
-        </li>
-        <li>
-            <span>-</span> <a href="{USER_LOGIN3}">{LANG.openid_note5}</a>
-        </li>
+    	<!-- END: login_note -->
     </ol>
     <div style="margin-top:30px;text-align:center">
         <!-- BEGIN: server -->

@@ -137,6 +137,7 @@ $lang_module['openid_note2'] = "Lần đầu tiên bạn đăng nhập bằng Op
 $lang_module['openid_note3'] = "Đăng ký một tài khoản mới và gán OpenID này vào tài khoản đó";
 $lang_module['openid_note4'] = "Đăng nhập tự động bằng một tài khoản do hệ thống tự tạo";
 $lang_module['openid_note5'] = "Đăng nhập bằng tài khoản mà bạn đăng ký trước đây";
+$lang_module['openid_note6'] = "Đăng ký một tài khoản mới trên diến đàn sau đó bạn cần đăng nhập lại OpenID 1 lần nữa";
 $lang_module['you_openid'] = "OpenID";
 $lang_module['openid_administrator'] = "Quản lý OpenID";
 $lang_module['no'] = "Không";

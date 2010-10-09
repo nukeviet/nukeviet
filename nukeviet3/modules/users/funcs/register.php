@@ -20,7 +20,7 @@ if ( defined( 'NV_IS_USER_FORUM' ) )
     require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/register.php' );
     exit();
 }
-
+$nv_redirect = filter_text_input( 'nv_redirect', 'post,get', '' );
 if ( ! $global_config['allowuserreg'] )
 {
     $page_title = $lang_module['register'];
@@ -44,7 +44,7 @@ function nv_check_username_reg ( $login )
     if ( $error != "" ) return $error;
     if ( $login != $db->fixdb( $login ) )
     {
-    	return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
+        return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
     }
     
     $sql = "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_name'";
@@ -54,10 +54,10 @@ function nv_check_username_reg ( $login )
     
     if ( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
     
-    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username`=" . $db->dbescape( md5($login) );
+    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username`=" . $db->dbescape( md5( $login ) );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], '<strong>' . $login . '</strong>' );
     
-    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `md5username`=" . $db->dbescape( md5($login) );
+    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `md5username`=" . $db->dbescape( md5( $login ) );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], '<strong>' . $login . '</strong>' );
     
     return "";
@@ -108,6 +108,7 @@ $gfx_chk = ( in_array( $global_config['gfx_chk'], array(
 
 $array_register = array();
 $array_register['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
+$array_register['nv_redirect'] = $nv_redirect;
 $checkss = filter_text_input( 'checkss', 'post', '' );
 
 $contents = $error = "";
@@ -126,7 +127,7 @@ if ( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', 
     {
         $nv_Request->unset_request( 'reg_attribs', 'session' );
         
-        Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=register" );
+        Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=register&nv_redirect=" . $nv_redirect );
         exit();
     }
     
@@ -134,15 +135,15 @@ if ( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', 
     {
         $nv_Request->unset_request( 'reg_attribs', 'session' );
         
-        Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=register" );
+        Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=register&nv_redirect=" . $nv_redirect );
         exit();
     }
     
     if ( $checkss == $array_register['checkss'] )
     {
         $array_register['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
-        $array_register['password'] = filter_text_input( 'password', 'post', '');
-        $array_register['re_password'] = filter_text_input( 're_password', 'post', '');
+        $array_register['password'] = filter_text_input( 'password', 'post', '' );
+        $array_register['re_password'] = filter_text_input( 're_password', 'post', '' );
         $array_register['question'] = $nv_Request->get_int( 'question', 'post', 0 );
         if ( ! isset( $data_questions[$array_register['question']] ) ) $array_register['question'] = 0;
         
@@ -214,7 +215,7 @@ if ( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', 
             if ( ! $userid )
             {
                 $contents = user_info_exit( $lang_module['err_no_save_account'] );
-                $contents .= "<meta http-equiv=\"refresh\" content=\"3;url=" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register\" />";
+                $contents .= "<meta http-equiv=\"refresh\" content=\"3;url=" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register&nv_redirect=" . $nv_redirect . "\" />";
                 
                 include ( NV_ROOTDIR . "/includes/header.php" );
                 echo nv_site_theme( $contents );
@@ -237,8 +238,9 @@ if ( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', 
             $db->sql_freeresult( $result );
             
             validUserLog( $row, 1, $reg_attribs['opid'] );
+            $nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
             
-            Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+            Header( "Location: " . $nv_redirect );
             exit();
         }
         
@@ -278,8 +280,8 @@ if ( $checkss == $array_register['checkss'] )
 {
     $array_register['full_name'] = filter_text_input( 'full_name', 'post', '', 1, 255 );
     $array_register['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
-    $array_register['password'] = filter_text_input( 'password', 'post', '');
-    $array_register['re_password'] = filter_text_input( 're_password', 'post', '');
+    $array_register['password'] = filter_text_input( 'password', 'post', '' );
+    $array_register['re_password'] = filter_text_input( 're_password', 'post', '' );
     $array_register['email'] = filter_text_input( 'email', 'post', '', 1, 100 );
     $array_register['question'] = $nv_Request->get_int( 'question', 'post', 0 );
     if ( ! isset( $data_questions[$array_register['question']] ) ) $array_register['question'] = 0;
@@ -338,7 +340,7 @@ if ( $checkss == $array_register['checkss'] )
             $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_reg` VALUES (
                 NULL, 
                 " . $db->dbescape( $array_register['username'] ) . ", 
-                " . $db->dbescape( md5($array_register['username']) ) . ", 
+                " . $db->dbescape( md5( $array_register['username'] ) ) . ", 
                 " . $db->dbescape( $password ) . ", 
                 " . $db->dbescape( $array_register['email'] ) . ", 
                 " . $db->dbescape( $array_register['full_name'] ) . ", 
