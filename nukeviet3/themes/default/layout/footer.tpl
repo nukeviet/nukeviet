@@ -1,5 +1,8 @@
 	<div class="clear"></div>
 	<div id="footer" class="clearfix">
+		<div class="fl">
+			{THEME_STAT_IMG} {THEME_NUKEVIET_IMG} 
+		</div>
 	    <div class="fl">
 	        <p class="footer">
 	            {THEME_SITE_NAME}
@@ -11,10 +14,13 @@
 	    <div class="fr">
 	        <ul class="bottom-toolbar">
 	            <li>
-	                Power by<a title="Nukeviet" href="http://nukeviet.vn"><img alt="Nukeviet" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/nukeviet.png" /></a>
+	                Powered by<a title="NukeViet" href="http://nukeviet.vn"><img alt="Nukeviet" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/nukeviet.png" /></a>
 	            </li>
 	            <li>
 	                Valid<a title="Validate html" href="http://validator.w3.org/check?uri=referer"><img alt="Validated HTML" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/xhtml.png" /></a><a title="Validate CSS" href="http://jigsaw.w3.org/css-validator/check/referer"><img alt="Validated CSS" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/css.png" /></a>
+	            </li>
+	            <li>
+	                <br/><a title="NukeViet" href="http://nukeviet.vn">NukeViet</a> is a registered trademark of <a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a>
 	            </li>
 	        </ul>
 	    </div>
