@@ -119,7 +119,7 @@ $lang_module['session_prefix'] = "Tiền tố session";
 $lang_module['is_user_forum'] = "Chuyển quản lý thành viên cho diễn đàn";
 
 #banip
-$lang_module['banip'] = "Quản lý Cấm Ip";
+$lang_module['banip'] = "Quản lý IP cấm";
 $lang_module['banip_ip'] = "Ip";
 $lang_module['banip_timeban'] = "Thời gian bắt đầu";
 $lang_module['banip_timeendban'] = "Thời gian kết thúc";

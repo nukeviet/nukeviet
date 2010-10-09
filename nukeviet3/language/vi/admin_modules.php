@@ -18,10 +18,10 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['modules'] = "Cài đặt module";
+$lang_module['modules'] = "Thiết lập module";
 $lang_module['blocks'] = "Cấu hình các block";
 $lang_module['language'] = "Cài đặt ngôn ngữ";
-$lang_module['setup'] = "Cài đặt";
+$lang_module['setup'] = "Thiết lập";
 $lang_module['main'] = "Danh sách modules";
 $lang_module['edit'] = "Sửa module &ldquo;%s&rdquo;";
 $lang_module['caption_actmod'] = "Danh sách các module đang hoạt động";
@@ -49,7 +49,7 @@ $lang_module['funcs_subweight'] = "Thứ tự";
 $lang_module['activate_rss'] = "Kích hoạt chức năng rss";
 
 $lang_module['module_sys'] = "Các module hệ thống";
-$lang_module['vmodule'] = "Các module ảo hóa";
+$lang_module['vmodule'] = "Các module ảo";
 $lang_module['vmodule_add'] = "Thêm module ảo";
 $lang_module['vmodule_name'] = "Tên module mới";
 $lang_module['vmodule_file'] = "Module gốc";

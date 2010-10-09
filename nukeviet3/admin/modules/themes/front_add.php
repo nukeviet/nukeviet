@@ -327,7 +327,7 @@ while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
     if ( isset( $aray_mod_func[$m_title] ) and count( $aray_mod_func[$m_title] ) > 0 )
     {
         $sel = ( $m_title == trim( $row['module'] ) ) ? ' selected' : '';
-        $contents .= "<option value=\"" . $m_title . "\" " . $sel . "> " . $m_custom_title . "</option>";
+        $contents .= "<option value=\"" . $m_title . "\" " . $sel . ">+ " . $m_custom_title . "</option>";
     }
 }
 $contents .= "</select>";
