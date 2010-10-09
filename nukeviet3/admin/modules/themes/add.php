@@ -121,7 +121,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     }
     else
     {
-        if ( $all_func and empty( $xmodule ) )
+        if ( $all_func and $xmodule == "global" )
         {
             $array_funcid = array();
             $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC" );
