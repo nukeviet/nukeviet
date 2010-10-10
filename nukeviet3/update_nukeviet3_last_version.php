@@ -192,6 +192,8 @@ if ( defined( "NV_IS_GODADMIN" ) )
             }
         }
         $db->sql_freeresult();
+        
+        // config module authors
         $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'authors_detail_main', '0')" );
         $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'spadmin_add_admin', '1')" );
     }

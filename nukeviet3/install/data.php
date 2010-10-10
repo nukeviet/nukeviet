@@ -357,6 +357,8 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'gzip_method', '" . $global_config['gzip_method'] . "'),
 ('sys', 'global', 'is_user_forum', '0'),
 ('sys', 'global', 'openid_mode', '1'),
+('sys', 'global', 'authors_detail_main', '0'),
+('sys', 'global', 'spadmin_add_admin', '1'),
 ('sys', 'global', 'openid_servers', 'yahoo,google,myopenid'),
 ('sys', 'global', 'version', '" . $global_config['version'] . "')";
 
