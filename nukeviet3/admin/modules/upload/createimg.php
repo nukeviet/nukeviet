@@ -26,7 +26,7 @@ if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
         $new_imagename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $width . '_' . $height . '_' . $i . '\2', $imagename );
         $i ++;
     }
-    $image->save( NV_ROOTDIR . '/' . $path, $new_imagename );
+    $image->save( NV_ROOTDIR . '/' . $path, $new_imagename, 75 );
     //$image_info = $image->create_Image_info;
     $image->close();
     echo $new_imagename;
