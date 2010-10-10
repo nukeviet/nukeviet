@@ -55,7 +55,7 @@ if ( empty( $old_suspend ) )
 }
 else
 {
-    $allow_change = ( defined( "NV_IS_GODADMIN" ) ) ? true : ( ( defined( "NV_IS_SPADMIN" ) and $last_reason['start_admin'] == $admin_info['login'] ) ? true : false );
+    $allow_change = ( defined( "NV_IS_GODADMIN" ) ) ? true : ( ( defined( "NV_IS_SPADMIN" ) and $last_reason['start_admin'] == $admin_info['login'] and $global_config['spadmin_add_admin'] == 1 ) ? true : false );
 }
 $contents = array();
 $contents['change_suspend'] = array();

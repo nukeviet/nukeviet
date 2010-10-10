@@ -124,14 +124,14 @@
             <td>
             </td>
             <td colspan="2">
+				<!-- BEGIN: show_lev_2 -->	            
                 <input name="lev" id="lev" type="radio" value="2" onclick="nv_show_hidden('modslist',0);"{LEV2_CHECKED} />
-&nbsp;
+				&nbsp;
                 {LEV2}&nbsp;&nbsp;&nbsp;
-
+				<!-- END: show_lev_2 -->                
                 <input name="lev" id="lev" type="radio" value="3" onclick="nv_show_hidden('modslist',1);"{LEV3_CHECKED} />
-&nbsp;
+				&nbsp;
                 {LEV3}
-
                 <br/>
                 <div id="modslist" style="margin-top:10px;{STYLE_MODS}">
                     {MODS0}:
@@ -139,7 +139,7 @@
                     <!-- BEGIN: lev_loop -->
                     <p>
                         <input name="modules[]" type="checkbox" value="{MOD_VALUE}" {LEV_CHECKED} />
-&nbsp;
+						&nbsp;
                         {CUSTOM_TITLE}
 
                     </p>

@@ -14,19 +14,22 @@ $menu_top = array(
     "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_authors'] 
 );
 
-if ( defined( "NV_IS_GODADMIN" ) )
+$allow_func = array( 
+    'main', 'edit' 
+);
+
+if ( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) )
 {
     $submenu['add'] = $lang_module['menuadd'];
-    $submenu['config'] = $lang_module['config'];
-    $allow_func = array( 
-        'main', 'add', 'edit', 'del', 'suspend', 'config' 
-    );
+    $allow_func[] = "add";
+    $allow_func[] = "suspend";
 }
-else
+
+if ( defined( "NV_IS_GODADMIN" ) )
 {
-    $allow_func = array( 
-        'main', 'edit' 
-    );
+    $submenu['config'] = $lang_module['config'];
+    $allow_func[] = "del";
+    $allow_func[] = "config";
 }
 
 define( 'NV_IS_FILE_AUTHORS', true );

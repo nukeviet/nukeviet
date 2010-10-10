@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_GODADMIN' ) )
+if ( ! ( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) ) )
 {
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
     die();
@@ -59,7 +59,7 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
     }
     else
     {
-        $lev = ( $lev != 2 ) ? 3 : 2;
+        $lev = ( $lev != 2 or ! defined( "NV_IS_GODADMIN" ) ) ? 3 : 2;
         $mds = array();
         if ( $lev == 3 and ! empty( $modules ) )
         {
@@ -234,6 +234,12 @@ $xtpl->assign( 'LEV2_CHECKED', $contents['lev'][1] == 2 ? " checked=\"checked\""
 $xtpl->assign( 'LEV3_CHECKED', $contents['lev'][1] == 3 ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'MODS0', $contents['mods'][0] );
 $xtpl->assign( 'STYLE_MODS', $contents['lev'][1] == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" );
+
+if ( defined( "NV_IS_GODADMIN" ) )
+{
+    $xtpl->parse( 'add.show_lev_2' );
+}
+
 foreach ( $contents['mods'][1] as $mod => $value )
 {
     $xtpl->assign( 'MOD_VALUE', $mod );

@@ -84,13 +84,14 @@ if ( $nv_Request->isset_request( 'savesetting', 'post' ) )
     $array_config_global = array();
     $array_config_global['admfirewall'] = $nv_Request->get_int( 'admfirewall', 'post' );
     $array_config_global['block_admin_ip'] = $nv_Request->get_int( 'block_admin_ip', 'post' );
+    
+    $array_config_global['spadmin_add_admin'] = $nv_Request->get_int( 'spadmin_add_admin', 'post' );
+    $array_config_global['authors_detail_main'] = $nv_Request->get_int( 'authors_detail_main', 'post' );
+    
     foreach ( $array_config_global as $config_name => $config_value )
     {
-        $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET 
-        `config_value`=" . $db->dbescape_string( $config_value ) . " 
-        WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
-        AND `lang` = 'sys' AND `module`='global' 
-        LIMIT 1" );
+        $query = "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('sys', 'global', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")";
+        $db->sql_query( $query );
     }
     nv_save_file_config_global();
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
@@ -235,25 +236,40 @@ $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\"
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<table  class=\"tab1\">";
-$contents .= "<col span=\"2\" width=\"50%\" valign=\"top\">";
+$contents .= "<col span=\"2\" width=\"65%\" valign=\"top\">";
 $contents .= "<thead>
             <tr>
                 <td colspan=\"2\">" . $lang_module['config'] . "</td>
             </tr>
         </thead>";
-$contents .= "<tbody>
+$contents .= "<tbody class=\"second\">
 <tr>
     <td>" . $lang_module['admfirewall'] . "</td>
     <td><input type=\"checkbox\" value=\"1\" name=\"admfirewall\" " . ( ( $global_config['admfirewall'] ) ? "checked=\"checked\"" : "" ) . "></td>
 </tr>
 </tbody>";
 
-$contents .= "<tbody class=\"second\">
+$contents .= "<tbody>
 <tr>
     <td>" . $lang_module['block_admin_ip'] . "</td>
     <td><input type=\"checkbox\" value=\"1\" name=\"block_admin_ip\" " . ( ( $global_config['block_admin_ip'] ) ? "checked=\"checked\"" : "" ) . "></td>
 </tr>
 </tbody>";
+
+$contents .= "<tbody class=\"second\">
+<tr>
+    <td>" . $lang_module['authors_detail_main'] . "</td>
+    <td><input type=\"checkbox\" value=\"1\" name=\"authors_detail_main\" " . ( ( $global_config['authors_detail_main'] ) ? "checked=\"checked\"" : "" ) . "></td>
+</tr>
+</tbody>";
+
+$contents .= "<tbody>
+<tr>
+    <td>" . $lang_module['spadmin_add_admin'] . "</td>
+    <td><input type=\"checkbox\" value=\"1\" name=\"spadmin_add_admin\" " . ( ( $global_config['spadmin_add_admin'] ) ? "checked=\"checked\"" : "" ) . "></td>
+</tr>
+</tbody>";
+
 $contents .= "<tr>
     <td colspan=\"2\">
         <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\">
@@ -482,17 +498,17 @@ $contents .= "
 		}			
 		if (password!=$('input[name=password2]').val()){
 			$('input[name=password2]').focus();
-			alert('" . addslashes($lang_module['passwordsincorrect']) . "');
+			alert('" . addslashes( $lang_module['passwordsincorrect'] ) . "');
 			return false;
 		}
 		else if (password!='' && !nv_rule.test(password)){
 			$('input[name=password]').focus();
-			alert('" . addslashes($lang_module['rule_pass']) . "');
+			alert('" . addslashes( $lang_module['rule_pass'] ) . "');
 			return false;
 		}		
 	});
 	$('a.deleteone').click(function(){
-        if (confirm('" . addslashes($lang_module['adminip_delete_confirm']) . "')){
+        if (confirm('" . addslashes( $lang_module['adminip_delete_confirm'] ) . "')){
         	var url = $(this).attr('href');	
 	        $.ajax({        
 		        type: 'POST',
@@ -507,14 +523,14 @@ $contents .= "
 		return false;
 	});
 	$('a.deleteuser').click(function(){
-        if (confirm('" . addslashes($lang_module['nicknam_delete_confirm']) . "')){
+        if (confirm('" . addslashes( $lang_module['nicknam_delete_confirm'] ) . "')){
         	var url = $(this).attr('href');	
 	        $.ajax({        
 		        type: 'POST',
 		        url: url,
 		        data:'',
 		        success: function(data){  
-		            alert('" . addslashes($lang_module['adminip_del_success']) . "');
+		            alert('" . addslashes( $lang_module['adminip_del_success'] ) . "');
 		            window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "';
 		        }
 	        });  

@@ -136,6 +136,7 @@ $lang_module['adminip_error_validip'] = "Lỗi: Bạn cần nhập IP đúng chu
 $lang_module['adminip_note'] = "Chú ý: nếu chọn chế độ Kiểm tra IP, bạn cần nắm được cấu trúc sau: Mỗi số IP được xác định bằng 4 đại lượng A.B.C.D. Nếu số IP của bạn có cả 4 đại lượng A, B, C, D bất biến, hãy chọn giá trị của dòng 'Mask IP' là 255.255.255.255. Nếu chỉ có A, B, C cố định - chọn 255.255.255.xxx v.v...";
 
 $lang_module['title_nickname'] = "Quản lý tài khoản tường lửa khu vực admin";
+
 $lang_module['admfirewall'] = "Kiểm tra tường lửa cho khu vực admin";
 $lang_module['block_admin_ip'] = "Kiểm tra IP khi truy cập khu vực admin";
 $lang_module['nickname_add'] = "Thêm tài khoản";
@@ -145,5 +146,8 @@ $lang_module['passwordsincorrect'] = "Mật khẩu bạn nhập hai lần không
 $lang_module['nochangepass'] = "Nếu không thay đổi mật khẩu bạn không nhập hai trường mật khẩu";
 $lang_module['rule_user'] = "Tài khoản chỉ dùng các ký tự a-zA-Z0-9_-";
 $lang_module['rule_pass'] = "Mật khẩu chỉ dùng các ký tự a-zA-Z0-9_-";
+
+$lang_module['spadmin_add_admin'] = "Cho phép người điều hành chung tạo và thay đổi quyền hạn người điều hành modules";
+$lang_module['authors_detail_main'] = "Hiển thị chi tiết các thông tin tài khoản của người quản trị";
 
 ?>
