@@ -113,16 +113,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     }
     else
     {
-        if ( $all_func and $xmodule == "global" )
-        {
-            $array_funcid = array();
-            $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC" );
-            while ( list( $func_id_i ) = $db->sql_fetchrow( $func_result ) )
-            {
-                $array_funcid[] = $func_id_i;
-            }
-        }
-        elseif ( ! empty( $xmodule ) and isset( $site_mods[$xmodule] ) )
+        if ( ! empty( $xmodule ) and isset( $site_mods[$xmodule] ) )
         {
             $array_funcid_module = array();
             $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' AND `in_module`='" . $xmodule . "' ORDER BY `in_module` ASC, `subweight` ASC" );
@@ -139,9 +130,14 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                 $array_funcid = array_intersect( $array_funcid, $array_funcid_module );
             }
         }
-        else
+        elseif ( $all_func )
         {
             $array_funcid = array();
+            $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC" );
+            while ( list( $func_id_i ) = $db->sql_fetchrow( $func_result ) )
+            {
+                $array_funcid[] = $func_id_i;
+            }
         }
         
         if ( is_array( $array_funcid ) )
@@ -327,7 +323,7 @@ while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
     if ( isset( $aray_mod_func[$m_title] ) and count( $aray_mod_func[$m_title] ) > 0 )
     {
         $sel = ( $m_title == trim( $row['module'] ) ) ? ' selected' : '';
-        $contents .= "<option value=\"" . $m_title . "\" " . $sel . ">+ " . $m_custom_title . "</option>";
+        $contents .= "<option value=\"" . $m_title . "\" " . $sel . "> " . $m_custom_title . "</option>";
     }
 }
 $contents .= "</select>";
