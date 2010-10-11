@@ -55,4 +55,18 @@ $lang_module['checkchmod_error_path'] = "Các thư mục đường dẫn không 
 $lang_module['checkchmod_error_unable_chmod'] = "Không thể chmod thư mục:";
 $lang_module['checkchmod_success'] = "Đã hoàn tất quá trình chmod";
 
+$lang_module['logs_title'] = "Nhật ký hệ thống";
+$lang_module['log_module_name'] = "Tên Module";
+$lang_module['log_name_key'] = "Tên sự kiện";
+$lang_module['log_username'] = "Người thực hiện";
+$lang_module['log_time'] = "Thời gian";
+$lang_module['log_feature'] = "Thao tác";
+$lang_module['log_lang'] = "Ngôn ngữ";
+$lang_module['log_del_error'] = "Có lỗi không xóa được";
+$lang_module['log_del_ok'] = "Đã xóa xong";
+$lang_module['log_del_confirm'] = "Bạn chắc chắn có muốn xóa?";
+$lang_module['log_View'] = "Xem";
+$lang_module['log_del_no_items'] = "Bạn chưa chọn";
+$lang_module['log_note'] = "Ghi chú";
+
 ?>

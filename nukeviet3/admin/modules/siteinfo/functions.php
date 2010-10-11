@@ -26,14 +26,21 @@ if ( defined( 'NV_IS_SPADMIN' ) and function_exists( 'phpinfo' ) and ! in_array(
     $allow_func = array( 
         'main', 'system_info', 'php_info_configuration', 'php_info_modules', 'php_info_environment', 'php_info_variables', 'checkchmod' 
     );
-
 }
 else
 {
     $allow_func = array( 
-        'main'
+        'main' 
     );
 }
+
+if ( defined( 'NV_IS_GODADMIN' ) )
+{
+    $allow_func[] = 'logs';
+    $allow_func[] = 'logs_del';
+    $submenu['logs'] = $lang_module['logs_title'];
+}
+
 define( 'NV_IS_FILE_SITEINFO', true );
 
 ?>
