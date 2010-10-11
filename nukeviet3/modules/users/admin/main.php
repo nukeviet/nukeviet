@@ -11,21 +11,31 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $table_caption = $lang_module['list_module_title'];
 
 $asel = $nv_Request->get_int( 'asel', 'get', 0 );
-$asel = ( defined( 'NV_IS_GODADMIN' ) and ! empty( $asel ) ) ? "&amp;asel=1" : "";
+$asel = ( ( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) ) and ! empty( $asel ) ) ? "&amp;asel=1" : "";
 
 $sql = "FROM `" . NV_USERS_GLOBALTABLE . "`";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel;
 
-$methods = array( //
-    'userid' => array( 'key' => 'userid', 'value' => $lang_module['search_id'], 'selected' => '' ), //
-    'username' => array( 'key' => 'username', 'value' => $lang_module['search_account'], 'selected' => '' ), //
-    'full_name' => array( 'key' => 'full_name', 'value' => $lang_module['search_name'], 'selected' => '' ), //
-    'email' => array( 'key' => 'email', 'value' => $lang_module['search_mail'], 'selected' => '' ) //
-    );
+$methods = array(  //
+    'userid' => array( 
+    'key' => 'userid', 'value' => $lang_module['search_id'], 'selected' => '' 
+), //
+'username' => array( 
+    'key' => 'username', 'value' => $lang_module['search_account'], 'selected' => '' 
+), //
+'full_name' => array( 
+    'key' => 'full_name', 'value' => $lang_module['search_name'], 'selected' => '' 
+), //
+'email' => array( 
+    'key' => 'email', 'value' => $lang_module['search_mail'], 'selected' => '' 
+)  //
+);
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
 $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ( $nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '' );
 
-$orders = array( 'userid', 'username', 'full_name', 'email', 'regdate' );
+$orders = array( 
+    'userid', 'username', 'full_name', 'email', 'regdate' 
+);
 $orderby = $nv_Request->get_string( 'sortby', 'get', '' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', '' );
 if ( $ordertype != "ASC" ) $ordertype = "DESC";
@@ -58,19 +68,19 @@ $users_list = array();
 $admin_in = array();
 while ( $row = $db->sql_fetchrow( $query2 ) )
 {
-    $users_list[$row['userid']] = array( //
+    $users_list[$row['userid']] = array(  //
         'userid' => ( int )$row['userid'], //
-        'username' => ( string )$row['username'], //
-        'full_name' => ( string )$row['full_name'], //
-        'email' => ( string )$row['email'], //
-        'regdate' => date( "d/m/Y H:i", $row['regdate'] ), //
-        'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "", //
-        'disabled' => " onclick=\"nv_chang_status(" . $row['userid'] . ");\"", //
-        'is_edit' => true, //
-        'is_delete' => true, //
-        'level' => $lang_module['level0'], //
-        'is_admin' => false //
-        );
+'username' => ( string )$row['username'], //
+'full_name' => ( string )$row['full_name'], //
+'email' => ( string )$row['email'], //
+'regdate' => date( "d/m/Y H:i", $row['regdate'] ), //
+'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "", //
+'disabled' => " onclick=\"nv_chang_status(" . $row['userid'] . ");\"", //
+'is_edit' => true, //
+'is_delete' => true, //
+'level' => $lang_module['level0'], //
+'is_admin' => false  //
+    );
     $admin_in[] = $row['userid'];
 }
 
@@ -83,7 +93,7 @@ if ( $admin_in )
     {
         $is_my = ( $admin_info['admin_id'] == $row['admin_id'] ) ? true : false;
         $superadmin = ( $row['lev'] == 1 or $row['lev'] == 2 ) ? true : false;
-
+        
         $users_list[$row['admin_id']]['checked'] = " checked=\"checked\"";
         $users_list[$row['admin_id']]['disabled'] = " disabled=\"disabled\"";
         $users_list[$row['admin_id']]['is_edit'] = false;
@@ -92,7 +102,8 @@ if ( $admin_in )
         {
             $users_list[$row['admin_id']]['level'] = $lang_module['level1'];
             $users_list[$row['admin_id']]['img'] = 'admin1';
-        } elseif ( $row['lev'] == 2 )
+        }
+        elseif ( $row['lev'] == 2 )
         {
             $users_list[$row['admin_id']]['level'] = $lang_module['level2'];
             $users_list[$row['admin_id']]['img'] = 'admin2';
@@ -102,16 +113,18 @@ if ( $admin_in )
             $users_list[$row['admin_id']]['level'] = $lang_module['level3'];
             $users_list[$row['admin_id']]['img'] = 'admin3';
         }
-
+        
         $users_list[$row['admin_id']]['is_admin'] = true;
-
+        
         if ( defined( 'NV_IS_GODADMIN' ) )
         {
             $users_list[$row['admin_id']]['is_edit'] = true;
-        } elseif ( defined( 'NV_IS_SPADMIN' ) and ( $is_my or ! $superadmin ) )
+        }
+        elseif ( defined( 'NV_IS_SPADMIN' ) and ( $is_my or ! $superadmin ) )
         {
             $users_list[$row['admin_id']]['is_edit'] = true;
-        } elseif ( $is_my )
+        }
+        elseif ( $is_my )
         {
             $users_list[$row['admin_id']]['is_edit'] = true;
         }
@@ -138,7 +151,8 @@ foreach ( $orders as $order )
     {
         $head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel . "&amp;sortby=" . $order . "&amp;sorttype=DESC";
         $head_tds[$order]['title'] .= " &darr;";
-    } elseif ( $orderby == $order and $ordertype == 'DESC' )
+    }
+    elseif ( $orderby == $order and $ordertype == 'DESC' )
     {
         $head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel . "&amp;sortby=" . $order . "&amp;sorttype=ASC";
         $head_tds[$order]['title'] .= " &uarr;";
@@ -198,7 +212,7 @@ foreach ( $users_list as $u )
             $xtpl->parse( 'main.xusers.del' );
         }
     }
-
+    
     $xtpl->parse( 'main.xusers' );
 }
 
