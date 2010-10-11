@@ -313,6 +313,18 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banip` (
   UNIQUE KEY `ip` (`ip`)
 ) ENGINE=MyISAM";
 
+$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_logs` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`lang` varchar(10) NOT NULL,
+	`module_name` varchar(150) NOT NULL,
+	`name_key` varchar(255) NOT NULL,
+	`note_action` text NOT NULL,
+	`link_acess` varchar(255) NOT NULL,
+	`userid` int(11) NOT NULL,
+	`log_time` int(11) NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=MyISAM";
+
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
         ('registertype', '1', 1274757036),
         ('deny_email', 'yoursite.com|mysite.com|localhost|xxx', 1274757036),

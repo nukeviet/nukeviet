@@ -200,6 +200,18 @@ if ( defined( "NV_IS_GODADMIN" ) )
         // config module authors
         $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'authors_detail_main', '0')" );
         $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'spadmin_add_admin', '1')" );
+        
+        $db->sql_query( "CREATE TABLE `" . $db_config['prefix'] . "_logs` (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+			`lang` varchar(10) NOT NULL,
+			`module_name` varchar(150) NOT NULL,
+			`name_key` varchar(255) NOT NULL,
+			`note_action` text NOT NULL,
+			`link_acess` varchar(255) NOT NULL,
+			`userid` int(11) NOT NULL,
+			`log_time` int(11) NOT NULL,
+			PRIMARY KEY (`id`)
+		) ENGINE=MyISAM");
     }
     $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
     nv_save_file_config_global();
