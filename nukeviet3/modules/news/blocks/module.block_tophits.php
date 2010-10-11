@@ -10,7 +10,8 @@ if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 $number_day = 2;
 $publtime = NV_CURRENTTIME - $number_day * 86400;
-global $global_config, $module_name, $module_data, $global_array_cat;
+global $global_config, $module_name, $module_data, $module_file, $global_array_cat, $module_config, $module_info;
+
 $array_block_news = array();
 $sql = "SELECT id, listcatid, publtime, exptime, title, alias, homeimgthumb FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 AND `publtime` BETWEEN  " . $publtime . " AND " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `hitstotal` DESC LIMIT 0 , 20";
 $result = $db->sql_query( $sql );
@@ -36,5 +37,28 @@ while ( list( $id, $listcatid, $publtime, $exptime, $title, $alias, $homeimgthum
     );
 
 }
-$content = block_news( $array_block_news );
+
+$blockwidth = $module_config[$module_name]['blockwidth'];
+
+$xtpl = new XTemplate( "block_news.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+$a = 1;
+foreach ( $array_block_news as $array_news )
+{
+    if ( $array_news['width'] > $blockwidth )
+    {
+        $array_news['height'] = round( ( $blockwidth / $array_news['width'] ) * $array_news['height'] );
+        $array_news['width'] = $blockwidth;
+    }
+    $xtpl->assign( 'blocknews', $array_news );
+    if ( $array_news['width'] > 0 )
+    {
+        $xtpl->parse( 'main.newloop.imgblock' );
+    }
+    $xtpl->parse( 'main.newloop' );
+    $xtpl->assign( 'BACKGROUND', ( $a % 2 ) ? 'bg ' : '' );
+    $a ++;
+}
+$xtpl->parse( 'main' );
+$content = $xtpl->text( 'main' );
+
 ?>

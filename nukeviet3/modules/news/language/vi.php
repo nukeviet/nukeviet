@@ -1,27 +1,28 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Vietnamese
+* @Createdate May 31, 2010, 08:01:47 PM
+*/
 
-if ( ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (!defined( 'NV_MAINFILE' )) {
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['nocatpage'] = "Lỗi không có chủ đề";
 $lang_module['other'] = "Các tin khác";
+$lang_module['detail'] = "Chi tiết tin";
 $lang_module['more'] = "Xem tiếp...";
+$lang_module['comment'] = "Ý kiến bạn đọc";
 $lang_module['comment_login'] = "Bạn cần đăng nhập thành viên để sử dụng chức năng này";
 $lang_module['comment_success'] = "Bình luận thành công";
 $lang_module['comment_unsuccess'] = "Lỗi trình quá trình xử lý dữ liệu hoặc dữ liệu không đầy đủ";
@@ -34,7 +35,7 @@ $lang_module['comment_content'] = "Nội dung";
 $lang_module['comment_seccode'] = "Mã an toàn";
 $lang_module['comment_submit'] = "Gửi bình luận";
 $lang_module['comment_timeout'] = "Bạn đã bình chọn vui lòng đợi %s phút sau để có gửi bình luận.";
-$lang_module['sendmail'] = "Gửi bài viết qua email cho bạn bè";
+$lang_module['sendmail'] = "Gửi bài viết qua email";
 $lang_module['sendmail_subject'] = "Bạn nhận được một tin nhắn từ: ";
 $lang_module['sendmail_name'] = "Tên của bạn";
 $lang_module['sendmail_youremail'] = "E-mail của bạn";
@@ -60,8 +61,9 @@ $lang_module['topic'] = "Theo dòng sự kiện";
 $lang_module['related_new'] = "Những tin mới hơn";
 $lang_module['related'] = "Những tin cũ hơn";
 $lang_module['savefile'] = "Lưu bài viết này";
+$lang_module['rating'] = "Đánh giá bài viết";
 $lang_module['stringrating'] = "Tổng số điểm của bài viết là: %1\$s trong %2\$s đánh giá";
-$lang_module['star_note'] = "Bạn click vào hình sao để cho điểm bài viết";
+$lang_module['star_note'] = "Click để đánh giá bài viết";
 $lang_module['star_verypoor'] = "bài viết rất kém";
 $lang_module['star_poor'] = "bài viết kém";
 $lang_module['star_ok'] = "bài viết đạt";
@@ -103,7 +105,15 @@ $lang_module['admin_view'] = "Chỉ người quản trị mới có quyền xem 
 $lang_module['group_view'] = "Chỉ có nhóm thành viên mới có quyền xem mục này!";
 $lang_module['rating_error1'] = 'Đánh giá không hợp lệ';
 $lang_module['rating_error2'] = 'Bạn đã đánh giá bài viết này rồi';
+
+//
+$lang_module['pubtime'] = "Đăng lúc";
+$lang_module['hotnews'] = "Tiêu điểm";
+$lang_module['lastest_comment'] = "Bình luận mới";
+$lang_module['category'] = "Chuyên mục";
+$lang_module['view'] = "Đã xem";
+$lang_module['counter'] = "Lượt";
+$lang_module['total_comment'] = "Phản hồi";
 $lang_module['search_cat'] = "Tìm kiếm trong chủ đề";
 $lang_module['search_all'] = " Tất cả các chủ đề";
-
 ?>

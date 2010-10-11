@@ -37,6 +37,7 @@ if ( ! empty( $savesetting ) )
     }
     $db->sql_freeresult();
     nv_del_moduleCache( 'settings' );
+    nv_del_moduleCache($module_name);
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass() );
     die();
 }

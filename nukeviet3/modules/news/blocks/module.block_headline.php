@@ -7,7 +7,7 @@
  */
 
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
-global $global_config, $module_name, $module_data, $global_array_cat;
+global $global_config, $module_name, $module_file, $module_data, $global_array_cat, $module_config, $module_info, $lang_module, $my_head;
 
 $array_bid_content = array();
 
@@ -18,7 +18,7 @@ if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
 }
 else
 {
-	$id = 0;
+    $id = 0;
     $sql = "SELECT bid, title, number FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC LIMIT 0 , 2";
     $result = $db->sql_query( $sql );
     while ( list( $bid, $titlebid, $numberbid ) = $db->sql_fetchrow( $result ) )
@@ -48,5 +48,64 @@ else
     nv_set_cache( $cache_file, $cache );
 }
 
-$content = nv_headline( $array_bid_content );
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/contentslider.js\"></script>\n";
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.js\"></script>\n";
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.widget.js\"></script>\n";
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.tabs.js\"></script>\n";
+$my_head .= "<script type=\"text/javascript\">\n";
+$my_head .= "jQuery(document).ready(function(){\n";
+$my_head .= "	$(\"#tabs\").tabs({\n";
+$my_head .= "		ajaxOptions: {\n";
+$my_head .= "			error: function(xhr, status, index, anchor){\n";
+$my_head .= "			$(anchor.hash).html(\"Couldn't load this tab.\");\n";
+$my_head .= "			}\n";
+$my_head .= "		}\n";
+$my_head .= "	});\n";
+$my_head .= "});\n";
+$my_head .= "</script>\n";
+$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/contentslider.css\" />\n";
+$my_head .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/jquery.ui.tabs.css\" media=\"all\" />\n";
+$xtpl = new XTemplate( "block_headline.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+
+if ( ! empty( $array_bid_content[1]['content'] ) )
+{
+    $hot_news = $array_bid_content[1]['content'];
+    foreach ( $hot_news as $hot_news_i )
+    {
+        if ( ! empty( $hot_news_i['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $hot_news_i['homeimgfile'] ) )
+        {
+            $hot_news_i['image_url'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $hot_news_i['homeimgfile'];
+            $size = @getimagesize( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $hot_news_i['homeimgfile'] );
+            $row['image_width'] = $size[0];
+            $row['image_height'] = $size[1];
+            $row['image_alt'] = ! empty( $hot_news_i['homeimgalt'] ) ? $hot_news_i['homeimgalt'] : $hot_news_i['title'];
+            $xtpl->assign( 'HOTSNEWS', $hot_news_i );
+            $xtpl->parse( 'main.hots_news_img.loop' );
+        }
+    }
+    $xtpl->parse( 'main.hots_news_img' );
+}
+
+foreach ( $array_bid_content as $i => $array_bid )
+{
+    $xtpl->assign( 'TAB_TITLE', $array_bid );
+    $xtpl->parse( 'main.loop_tabs_title' );
+    
+    $content_bid = $array_bid['content'];
+    if ( ! empty( $content_bid ) )
+    {
+        foreach ( $content_bid as $lastest )
+        {
+            $xtpl->assign( 'LASTEST', $lastest );
+            $xtpl->parse( 'main.loop_tabs_content.content.loop' );
+        }
+        $xtpl->parse( 'main.loop_tabs_content.content' );
+    }
+    
+    $xtpl->parse( 'main.loop_tabs_content' );
+}
+
+$xtpl->parse( 'main' );
+$content = $xtpl->text( 'main' );
+
 ?>

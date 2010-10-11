@@ -10,7 +10,7 @@ if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 $blocknewsid = 2;
 
-global $global_config, $module_name, $module_data, $global_array_cat;
+global $global_config, $module_name, $module_data, $module_file, $global_array_cat, $module_config, $module_info;
 $array_block_news = array();
 
 $cache_file = NV_LANG_DATA . "_" . $module_name . "_block_news_" . NV_CACHE_PREFIX . ".cache";
@@ -46,5 +46,28 @@ else
     $cache = serialize( $array_block_news );
     nv_set_cache( $cache_file, $cache );
 }
-$content = block_news( $array_block_news );
+
+$blockwidth = $module_config[$module_name]['blockwidth'];
+
+$xtpl = new XTemplate( "block_news.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+$a = 1;
+foreach ( $array_block_news as $array_news )
+{
+    if ( $array_news['width'] > $blockwidth )
+    {
+        $array_news['height'] = round( ( $blockwidth / $array_news['width'] ) * $array_news['height'] );
+        $array_news['width'] = $blockwidth;
+    }
+    $xtpl->assign( 'blocknews', $array_news );
+    if ( $array_news['width'] > 0 )
+    {
+        $xtpl->parse( 'main.newloop.imgblock' );
+    }
+    $xtpl->parse( 'main.newloop' );
+    $xtpl->assign( 'BACKGROUND', ( $a % 2 ) ? 'bg ' : '' );
+    $a ++;
+}
+$xtpl->parse( 'main' );
+$content = $xtpl->text( 'main' );
+
 ?>
