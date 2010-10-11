@@ -980,6 +980,7 @@ function search_result_theme ( $key, $numRecord, $per_pages, $pages, $array_cont
         $xtpl->assign( 'VIEW_PAGES', $generate_page );
         $xtpl->parse( 'results.pages_result' );
     }
+    $xtpl->assign( 'MY_DOMAIN', NV_MY_DOMAIN );
     $xtpl->assign( 'NUMRECORD', $numRecord );
     $xtpl->parse( 'results' );
     return $xtpl->text( 'results' );

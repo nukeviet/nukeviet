@@ -124,7 +124,7 @@
     <div>
         <center>
             <form method="get" action="http://www.google.com.vn/custom" target="_top">
-                <input type="hidden" name="domains" value="http://nukeviet.vn" />
+                <input type="hidden" name="domains" value="{MY_DOMAIN}" />
                 <table width="100%">
                     <tr>
                         <td align="center" width="100px">
@@ -144,7 +144,7 @@
                         <input type="radio" name="sitesearch" value="" checked id="ss0" />
                         {LANG.search_on_internet}
 
-                        <input type="radio" name="sitesearch" value="http://nukeviet.vn"/>{LANG.search_on_nuke}
+                        <input type="radio" name="sitesearch" value="{MY_DOMAIN}" />{LANG.search_on_nuke}
                     </tr>
                 </table>
                 </center>

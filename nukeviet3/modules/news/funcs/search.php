@@ -63,25 +63,24 @@ $tbl_src = "";
 if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 {
     $dbkey = $db->dblikeescape( $key );
-    if ( $check_num == 0 )
-    {
-        $tbl_src = " , `" . NV_PREFIXLANG . "_" . $module_data . "_sources` as tb2";
-        $where = " AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb1.bodytext LIKE '%" . $dbkey . "%' OR tb1.keywords LIKE '%" . $dbkey . "%' ";
-        $where .= " OR tb1.author LIKE '%" . $dbkey . "%' OR tb2.title LIKE '%" . $dbkey . "%' )";
-        $where .= " AND ( tb1.sourceid =  tb2.sourceid ) ";
-    }
     if ( $check_num == 1 )
     {
         $where = "AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb1.bodytext LIKE '%" . $dbkey . "%' OR tb1.keywords LIKE '%" . $dbkey . "%' ) ";
     }
-    if ( $check_num == 2 )
+    elseif ( $check_num == 2 )
     {
         $where = "AND ( tb1.author LIKE '%" . $dbkey . "%' ) ";
     }
-    if ( $check_num == 3 )
+    elseif ( $check_num == 3 )
     {
-        $tbl_src = " , `" . NV_PREFIXLANG . "_" . $module_data . "_sources` as tb2";
-        $where = "AND ( tb1.sourceid =  tb2.sourceid ) AND (tb2.title LIKE '%" . $dbkey . "%')";
+        $tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_sources` as tb2 ON ( tb1.sourceid =  tb2.sourceid ) ";
+        $where = "AND (tb2.title LIKE '%" . $dbkey . "%')";
+    }
+    else
+    {
+        $tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_sources` as tb2 ON ( tb1.sourceid =  tb2.sourceid )";
+        $where = " AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb1.bodytext LIKE '%" . $dbkey . "%' OR tb1.keywords LIKE '%" . $dbkey . "%' ";
+        $where .= " OR tb1.author LIKE '%" . $dbkey . "%' OR tb2.title LIKE '%" . $dbkey . "%' )";
     }
     if ( $to_date != "" )
     {
@@ -100,9 +99,9 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
         $table_search = NV_PREFIXLANG . "_" . $module_data . "_rows";
     }
     
-    $sql = " SELECT SQL_CALC_FOUND_ROWS tb1.id,tb1.title,tb1.alias,tb1.listcatid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile,tb1.sourceid
+    $sql = " SELECT SQL_CALC_FOUND_ROWS tb1.id,tb1.title,tb1.alias,tb1.listcatid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgthumb,tb1.sourceid
 	FROM `" . $table_search . "` as tb1 " . $tbl_src . " 
-	WHERE (`status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ) " . $where . " ORDER BY ID DESC LIMIT " . $pages . "," . $per_pages;
+	WHERE (tb1.status=1 AND tb1.publtime < " . NV_CURRENTTIME . " AND (tb1.exptime=0 OR tb1.exptime>" . NV_CURRENTTIME . ") ) " . $where . " ORDER BY tb1.id DESC LIMIT " . $pages . "," . $per_pages;
     
     $result = $db->sql_query( $sql );
     $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -110,10 +109,20 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
     
     $array_content = array();
     $url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
-    while ( list( $id, $title, $alias, $listcatid, $hometext, $author, $publtime, $homeimgfile, $sourceid ) = $db->sql_fetchrow( $result ) )
+    while ( list( $id, $title, $alias, $listcatid, $hometext, $author, $publtime, $homeimgthumb, $sourceid ) = $db->sql_fetchrow( $result ) )
     {
+        if ( ! empty( $homeimgthumb ) )
+        {
+            $array_img = explode( "|", $homeimgthumb );
+        }
+        else
+        {
+            $array_img = array( 
+                "", "" 
+            );
+        }
         $array_content[] = array( 
-            "id" => $id, "title" => $title, "alias" => $alias, "listcatid" => $listcatid, "hometext" => $hometext, "author" => $author, "publtime" => $publtime, "homeimgfile" => $homeimgfile, "sourceid" => $sourceid 
+            "id" => $id, "title" => $title, "alias" => $alias, "listcatid" => $listcatid, "hometext" => $hometext, "author" => $author, "publtime" => $publtime, "homeimgfile" => $array_img[0], "sourceid" => $sourceid 
         );
     }
     $contents .= call_user_func( "search_result_theme", $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );
