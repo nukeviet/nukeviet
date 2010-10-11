@@ -167,4 +167,10 @@ $lang_module['xcopyblock_no_position'] = "Please select at least on position to 
 $lang_module['xcopyblock_notice'] = "This process will drop all exist blocks in target theme, please wait until all process successful";
 $lang_module['xcopyblock_success'] = "All process has been done !";
 
+$lang_module['block_rss_setting_number'] = "Number of items to display";
+$lang_module['block_rss_setting_description'] = "Display description";
+$lang_module['block_rss_setting_html'] = "Description Using HTML";
+$lang_module['block_rss_setting_pubdate'] = "Display the date sent";
+$lang_module['block_rss_setting_target'] = "Open link in new window";
+
 ?>

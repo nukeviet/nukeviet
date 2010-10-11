@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:02 PM
+* @Createdate Oct 11, 2010, 08:38:54 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -85,11 +85,11 @@ $lang_module['account_deny_name'] = "Sorry, Account %s banned.";
 $lang_module['email_deny_name'] = "Sorry, email %s banned";
 $lang_module['email_registered_name'] = "Email %s was registered. Using lost password function to reset password";
 $lang_module['account_register'] = "Your account was created";
-$lang_module['account_register_info'] = "Hi %1\$s,<br><br>Your account at website %2\$s activated. Your login information:<br><br>URL: %3\$s<br><br>Account: %4\$s<br><br>Password: %5\$s<br><br>This is email automatic sending from website %2\$s.<br><br>Site administrator";
+$lang_module['account_register_info'] = "Hi %1\$s,<br /><br />Your account at website %2\$s activated. Your login information:<br /><br />URL: %3\$s<br /><br />Account: %4\$s<br /><br />Password: %5\$s<br /><br />This is email automatic sending from website %2\$s.<br /><br />Site administrator";
 $lang_module['account_register_to_admin'] = "Your account was created. We'll check your register information and notify you soon.";
 $lang_module['account_active'] = "Activate information";
-$lang_module['account_active_info'] = "Hi %1\$s,<br><br>Your account at website %2\$s waitting to activate. To activate, please click link follow:<br><br>URL: %3\$s<br><br>Account information:<br><br>Account: %4\$s<br>Email: %5\$s<br>Password: %6\$s<br><br>Activate expired on %7\$s<br><br>This is email automatic sending from website %2\$s.<br><br>Site administrator";
-$lang_module['account_active_mess'] = "Your account was created. We sent information to your e-mail,<br><br> please follow instructions to activate account";
+$lang_module['account_active_info'] = "Hi %1\$s,<br /><br />Your account at website %2\$s waitting to activate. To activate, please click link follow:<br /><br />URL: %3\$s<br /><br />Account information:<br /><br />Account: %4\$s<br />Email: %5\$s<br />Password: %6\$s<br /><br />Activate expired on %7\$s<br /><br />This is email automatic sending from website %2\$s.<br /><br />Site administrator";
+$lang_module['account_active_mess'] = "Your account was created. We sent information to your e-mail,<br /><br /> please follow instructions to activate account";
 $lang_module['account_active_mess_error_mail'] = "Lỗi: Your account was created, System not send email to activate account, please contact administrator.";
 $lang_module['account_active_ok'] = "Account activated";
 $lang_module['account_active_error'] = "Error: Fail to activate your account. Please check activate link or expired time";
@@ -104,7 +104,7 @@ $lang_module['lostactive_info1'] = "Complete this form to get brand new activate
 $lang_module['lostactive_info2'] = "If you doesn't remember those requirements, please contact administrator.";
 $lang_module['lostactive_noinfo'] = "Your infor doesn't match";
 $lang_module['lostactive_error_link'] = "Invalid link";
-$lang_module['lostactive_active_info'] = "Hi %1\$s,<br><br>Your account at website %2\$s waitting to activate. To activate, please click link follow:<br><br>URL: %3\$s<br><br>Account information:<br><br>Account: %4\$s<br>Email: %5\$s<br>Password: %6\$s<br><br>Activate expired on %7\$s<br><br>This is email automatic sending from website %2\$s.<br><br>Site administrator";
+$lang_module['lostactive_active_info'] = "Hi %1\$s,<br /><br />Your account at website %2\$s waitting to activate. To activate, please click link follow:<br /><br />URL: %3\$s<br /><br />Account information:<br /><br />Account: %4\$s<br />Email: %5\$s<br />Password: %6\$s<br /><br />Activate expired on %7\$s<br /><br />This is email automatic sending from website %2\$s.<br /><br />Site administrator";
 $lang_module['change_pass'] = "Change password";
 $lang_module['change_info'] = "Complete this form to change password";
 $lang_module['pass_old'] = "Old password";
@@ -112,32 +112,10 @@ $lang_module['pass_new'] = "New password";
 $lang_module['pass_new_re'] = "Repeat password";
 $lang_module['change_pass_ok'] = "Password changed";
 $lang_module['lostpass_subject_email'] = "Guide to restore passwords";
-$lang_module['lostpass_active_info'] = "Hello% 1 \$ s,
-
-You propose to change my login password at the website %2\$s. To change your password, you need to access the link below:
-
-URL:%3\$s
-
-The information required to declare:
-
-Account Name: %4\$s
-Email: %5\$s
-This letter is automatically sent to your email inbox from site %2\$s. If you do not know anything about the contents of this letter, just delete it.
-
-Administration site";
-$lang_module['lostpass_content_mess'] = "An email sent to %1\$s, <br><br> please follow istruction to activate";
+$lang_module['lostpass_active_info'] = "Hello% 1 \$ s,<br /><br />You propose to change my login password at the website %2\$s. To change your password, you need to access the link below:<br /><br />URL:%3\$s<br /><br />The information required to declare:<br /><br />Account Name: %4\$s<br />Email: %5\$s<br />This letter is automatically sent to your email inbox from site %2\$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administration site";
+$lang_module['lostpass_content_mess'] = "An email sent to %1\$s, <br /><br /> please follow istruction to activate";
 $lang_module['lostpass_send_subject_ok'] = "Your password has been changed";
-$lang_module['lostpass_send_account_ok'] = "Hello %1\$s,
-
-Your password on the website %2\$s has been changed. We send you new information to access the profiles of your account:
-
-URL: %3\$s
-Login: %4\$s
-Password: %5\$s
-
-This is an automatic message sent to your email. If you do not understand what was written above, just delete this message.
-
-Administrator";
+$lang_module['lostpass_send_account_ok'] = "Hello %1\$s,<br /><br />Your password on the website %2\$s has been changed. We send you new information to access the profiles of your account:<br /><br />URL: %3\$s<br />Login: %4\$s<br />Password: %5\$s<br /><br />This is an automatic message sent to your email. If you do not understand what was written above, just delete this message.<br /><br />Administrator";
 $lang_module['lostpass_send_pass'] = "Your password has been changed and send to emal";
 $lang_module['lostpass_active_error_link'] = "error link lostpass";
 $lang_module['changepass_title'] = "Change password";
@@ -157,7 +135,7 @@ $lang_module['openid_note5'] = "Login with your exists account";
 $lang_module['you_openid'] = "OpenID";
 $lang_module['openid_administrator'] = "Manage OpenID";
 $lang_module['no'] = "No";
-$lang_module['what_is_openid'] = "If you had Google or Yahoo's account, <br  />you can click this picture below to login";
+$lang_module['what_is_openid'] = "If you had Google or Yahoo's account, <br />you can click this picture below to login";
 $lang_module['google_openid_login'] = "Google's account";
 $lang_module['yahoo_openid_login'] = "Yahoo's account";
 $lang_module['myopenid_openid_login'] = "MyOpenID's account";
@@ -165,9 +143,9 @@ $lang_module['canceled_authentication'] = "You canceled access by OpenID";
 $lang_module['not_logged_in'] = "You still not login by OpenID";
 $lang_module['logged_in_failed'] = "OpenID server doesn't provide some required information to login to our website";
 $lang_module['openid_confirm_failed'] = "You provided wrong infomation";
-$lang_module['openid_confirm_info'] = "Your OpenID can be use on this site,<br  />but email \$s exists.<br  />If you are owner of account using this email,<br  />please provide password.<br  />";
-$lang_module['openid_active_info'] = "Welcom %1\$s,<br  /><br  />Your account at website %2\$s wait to activate. To activate it, click link below:<br  /><br  />URL: %3\$s<br  /><br  />Information:<br  /><br  />Account:%4\$s<br  />Email: %5\$s<br  />Password: %6\$s<br  />OpenID: %7\$s<br  /><br  />Activate link will be expired at %8\$s<br  /><br  />This is automatic sent email from website %2\$s. If you doesn't know about it's content, please delete it.<br  /><br  /><br  /><br  />Site admin";
-$lang_module['openid_register_info'] = "Welcome %1\$s,<br  /><br  />Your account at website %2\$s activated. You can logging in by OpenID or your account. Your account information:<br  /><br  />URL: %3\$s<br  /><br  />Account: %4\$s<br  /><br  /> Password: %5\$s<br  /><br  />OpenID: %6\$s<br  /><br  />This is an email automatic sent from website %2\$s. If you doesn't know about it's content, please delete it. <br  /><br  />Site admin";
+$lang_module['openid_confirm_info'] = "Your OpenID can be use on this site,<br />but email \$s exists.<br />If you are owner of account using this email,<br />please provide password.<br />";
+$lang_module['openid_active_info'] = "Welcom %1\$s,<br /><br />Your account at website %2\$s wait to activate. To activate it, click link below:<br /><br />URL: %3\$s<br /><br />Information:<br /><br />Account:%4\$s<br />Email: %5\$s<br />Password: %6\$s<br />OpenID: %7\$s<br /><br />Activate link will be expired at %8\$s<br /><br />This is automatic sent email from website %2\$s. If you doesn't know about it's content, please delete it.<br /><br /><br /><br />Site admin";
+$lang_module['openid_register_info'] = "Welcome %1\$s,<br /><br />Your account at website %2\$s activated. You can logging in by OpenID or your account. Your account information:<br /><br />URL: %3\$s<br /><br />Account: %4\$s<br /><br /> Password: %5\$s<br /><br />OpenID: %6\$s<br /><br />This is an email automatic sent from website %2\$s. If you doesn't know about it's content, please delete it. <br /><br />Site admin";
 $lang_module['openid_register'] = "Register through OpenID";
 $lang_module['openid_lostpass_info'] = "Your account only login though OpenID. We can't provide new password for you. Please contact site admin for more information.";
 $lang_module['lostpass_no_info1'] = "Empty user name or email";
@@ -207,11 +185,12 @@ $lang_module['pass_empty_note'] = "Warnning: You can't using regular login becau
 $lang_module['question_empty_note'] = "Warnning: You can't using lost password feature because you doesn't specific secret question. Please click <a href=\"%s\">here</a> to specific";
 $lang_module['change_name_info'] = "Warnning: You can change your username only one. This feature will disable on next login. Please click <a href=\"%s\">here</a> to change";
 $lang_module['openid_del'] = "Delete";
-$lang_module['openid_active_confirm_info'] = "Your OpenID can be use on this website,<br  />but email %s was used by another account.<br  />If you are owner of this account,<br  />please provide your password.<br  />If your password match,<br  />your account will activate on next login<br  />";
+$lang_module['openid_active_confirm_info'] = "Your OpenID can be use on this website,<br />but email %s was used by another account.<br />If you are owner of this account,<br />please provide your password.<br />If your password match,<br />your account will activate on next login<br />";
 $lang_module['openid_activate_account'] = "Activate account by OpenID";
-$lang_module['openid_is_exists'] = "This OpenID was used.<br  />Please choose another OpenID";
+$lang_module['openid_is_exists'] = "This OpenID was used.<br />Please choose another OpenID";
 $lang_module['openid_add_new'] = "Add another OpenID to your account";
-$lang_module['email_is_exists'] = "Your OpenID's email was used.<br  />Please choose another OpenID";
+$lang_module['email_is_exists'] = "Your OpenID's email was used.<br />Please choose another OpenID";
 $lang_module['error_update_users_info'] = "Error: System cannot update your user infomation, please contact site admin.";
+$lang_module['openid_note6'] = "Register a new account on the forum then you need an OpenID login back again";
 
 ?>

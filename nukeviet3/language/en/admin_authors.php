@@ -134,4 +134,7 @@ $lang_module['nochangepass'] = "Leave password fields blank if you don't want to
 $lang_module['rule_user'] = "Account only accept letters, numbers and underscore";
 $lang_module['rule_pass'] = "Password only accept letters, numbers and underscore";
 
+$lang_module['spadmin_add_admin'] = "Allowing operators to create and change the general powers of administration modules";
+$lang_module['authors_detail_main'] = "Displays detailed information of the administrator account";
+
 ?>

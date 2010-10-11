@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 21, 2010, 02:43:51 PM
+* @Createdate Oct 11, 2010, 08:38:54 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -99,7 +99,19 @@ $lang_module['keywords'] = "Key";
 $lang_module['member_view'] = "Only member can view!";
 $lang_module['admin_view'] = "Only admin can view!";
 $lang_module['group_view'] = "Only group member can view!";
-$lang_module['rating_error1'] = 'Error: Can\'t rate';
-$lang_module['rating_error2'] = 'You was rated';
+$lang_module['rating_error1'] = "Error: Can't rate";
+$lang_module['rating_error2'] = "You was rated";
+$lang_module['detail'] = "Detailed information";
+$lang_module['comment'] = "Reader Comments";
+$lang_module['rating'] = "Article reviews";
+$lang_module['pubtime'] = "Posted at";
+$lang_module['hotnews'] = "Spotlight";
+$lang_module['lastest_comment'] = "New comment";
+$lang_module['category'] = "Category";
+$lang_module['view'] = "Viewed";
+$lang_module['counter'] = "counter";
+$lang_module['total_comment'] = "Feedback";
+$lang_module['search_cat'] = "Search in topics";
+$lang_module['search_all'] = "Search all topics";
 
 ?>

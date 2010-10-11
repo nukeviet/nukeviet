@@ -55,4 +55,17 @@ $lang_module['checkchmod_error_path'] = "Path folder is incorrect";
 $lang_module['checkchmod_error_unable_chmod'] = "Can't set permission";
 $lang_module['checkchmod_success'] = "All done!";
 
+$lang_module['logs_title'] = "Diary system";
+$lang_module['log_module_name'] = "Module Name";
+$lang_module['log_name_key'] = "Event Name";
+$lang_module['log_username'] = "Doer";
+$lang_module['log_time'] = "Time";
+$lang_module['log_feature'] = "Actions";
+$lang_module['log_lang'] = "Language";
+$lang_module['log_del_error'] = "An error does not erase";
+$lang_module['log_del_ok'] = "Well done";
+$lang_module['log_del_confirm'] = "Are you sure you want to delete?";
+$lang_module['log_View'] = "View";
+$lang_module['log_del_no_items'] = "You may choose";
+$lang_module['log_note'] = "Notes";
 ?>
