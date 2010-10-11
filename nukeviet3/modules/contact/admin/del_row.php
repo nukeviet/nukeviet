@@ -21,6 +21,9 @@ if ( $numrows != 1 ) die( 'NO' );
 $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_send` WHERE `cid` = " . $id;
 $db->sql_query( $query );
 $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` = " . $id;
+
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_row', "rowid ".$id, $admin_info['userid'] );
+
 $db->sql_query( $query );
 if ( $db->sql_affectedrows() > 0 )
 {

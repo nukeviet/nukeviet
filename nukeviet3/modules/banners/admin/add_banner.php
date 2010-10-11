@@ -135,7 +135,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             " . $width . ", " . $height . ", " . $db->dbescape( $file_alt ) . ", " . $db->dbescape( $click_url ) . ", '', '', '', " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ", 
             0, 1)";
 			$id = $db->sql_query_insert_id( $sql );
-            
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_banner', "bannerid ".$id, $admin_info['userid'] );
             nv_CreateXML_bannerPlan();
 
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=info_banner&id=" . $id );

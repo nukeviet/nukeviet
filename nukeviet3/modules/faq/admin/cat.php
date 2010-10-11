@@ -149,7 +149,8 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
             }
             else
             {
-                Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
+                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_cat', "cat ".$catid, $admin_info['userid'] );
+            	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
                 exit();
             }
         }

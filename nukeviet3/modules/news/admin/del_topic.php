@@ -16,7 +16,8 @@ $contents = "NO_" . $topicid;
 list( $topicid ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid`=" . intval( $topicid ) . "" ) );
 if ( $topicid > 0 )
 {
-    $check_del_topicid = false;
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_topic', "topicid ".$topicid , $admin_info['userid'] );
+	$check_del_topicid = false;
     $query = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `topicid` = '" . $topicid . "'" );
     $check_rows = intval( $db->sql_numrows( $query ) );
     if ( $check_rows > 0 and $checkss == md5( $topicid . session_id() . $global_config['sitekey'] ) )

@@ -13,7 +13,8 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if ( ! empty( $id ) )
 {
-    $query = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND (`is_sys`=0 OR `act`=0)";
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_atc', "id  " . $id, $admin_info['userid'] );
+	$query = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND (`is_sys`=0 OR `act`=0)";
     $result = $db->sql_query( $query );
     if ( $db->sql_numrows( $result ) == 1 )
     {

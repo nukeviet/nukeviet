@@ -17,7 +17,8 @@ $contents = "";
 
 if ( $vid > 0 and $checkss == md5( $vid . session_id() ) )
 {
-    $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `vid`=" . $vid . "";
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_vote', "votingid ".$vid, $admin_info['userid'] );
+	$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `vid`=" . $vid . "";
     if ( $db->sql_query( $query ) )
     {
         $db->sql_freeresult();

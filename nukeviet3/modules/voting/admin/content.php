@@ -94,6 +94,7 @@ if ( ! empty( $submit ) )
 
             $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` (`vid`, `question`, `acceptcm`, `admin_id`, `who_view`, `groups_view`, `publ_time`, `exp_time`, `act`) VALUES (NULL, " . $db->dbescape( $question ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
             $vid = $db->sql_query_insert_id( $query );
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_vote', "votingid ".$vid, $admin_info['userid'] );
         }
         if ( $vid > 0 )
         {
@@ -133,7 +134,8 @@ if ( ! empty( $submit ) )
             $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `question`=" . $db->dbescape( $question ) . ", `acceptcm` =  " . $maxoption . ", `admin_id` =  " . $admin_info['admin_id'] . ", `who_view`=" . $who_view . ", `groups_view` = " . $db->dbescape( $groups_view ) . ", `publ_time`=" . $begindate . ", `exp_time`=" . $enddate . " WHERE `vid` =" . $vid . "";
             if ( $db->sql_query( $query ) )
             {
-                nv_del_moduleCache( $module_name );
+				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_vote', "votingid ".$vid, $admin_info['userid'] );
+            	nv_del_moduleCache( $module_name );
                 $error = "";
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
                 die();

@@ -31,7 +31,8 @@ $row = $db->sql_fetchrow( $result );
 $error = "";
 if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-    $cron_name = filter_text_input( 'cron_name', 'post', '', 1 );
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_edit', "id  " . $id, $admin_info['userid'] );
+	$cron_name = filter_text_input( 'cron_name', 'post', '', 1 );
     $run_file = filter_text_input( 'run_file', 'post', '' );
     $run_func = filter_text_input( 'run_func_iavim', 'post', '' );
     $params = filter_text_input( 'params_iavim', 'post', '' );

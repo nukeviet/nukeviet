@@ -10,7 +10,7 @@
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $t = $nv_Request->get_int( 't', 'get', 0 );
-
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del', "id ".$t, $admin_info['userid'] );
 if ( $t == 3 )
 {
     $sql = $sql = "TRUNCATE TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_send`";

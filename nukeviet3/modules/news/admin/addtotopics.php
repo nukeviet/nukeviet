@@ -13,6 +13,7 @@ $id_array = array ();
 $listid = $nv_Request->get_string ( 'listid', 'get,post', '' );
 if ($nv_Request->isset_request ( 'topicsid', 'post' ))
 {
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', "listid ".$listid, $admin_info['userid'] );
 	$topicsid = $nv_Request->get_int('topicsid','post');
 	$listid = explode ( ',', $listid );
 	foreach ( $listid as $value )

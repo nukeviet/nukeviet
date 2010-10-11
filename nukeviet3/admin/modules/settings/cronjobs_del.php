@@ -14,6 +14,7 @@ $res = false;
 
 if ( ! empty( $id ) )
 {
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_del', "id  " . $id, $admin_info['userid'] );
 	$query = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND `is_sys`=0";
 	$result = $db->sql_query( $query );
 	if ( $db->sql_numrows( $result ) == 1 )

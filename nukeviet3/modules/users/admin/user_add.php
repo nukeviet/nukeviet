@@ -148,7 +148,8 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         
         if ( $userid )
         {
-            if ( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_user', "userid ".$userid, $admin_info['userid'] );
+        	if ( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
             {
                 @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
                 

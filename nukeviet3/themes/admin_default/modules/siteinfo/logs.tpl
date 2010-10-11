@@ -9,6 +9,9 @@
                 {LANG.log_lang}
             </td>
             <td>
+                {LANG.log_module_name}
+            </td>
+            <td>
                 {LANG.log_name_key}
             </td>
 			<td>
@@ -35,6 +38,9 @@
                 {DATA.lang}
             </td>
             <td>
+                {DATA.module_name}
+            </td>
+            <td>
                 {DATA.name_key}
             </td>
 			<td>
@@ -59,7 +65,7 @@
         <td colspan="2">
         	<input type="button" value="{GLANG.delete}" id="delall">
         </td> 
-        <td colspan="5">
+        <td colspan="6">
             <!-- BEGIN: generate_page -->
 			{GENERATE_PAGE}
 			<!-- END: generate_page -->

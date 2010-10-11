@@ -14,6 +14,7 @@ if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 if ( empty( $id ) ) die( 'Stop!!!' );
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_plan', "planid ".$id, $admin_info['userid'] );
 
 $query = "SELECT `act` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . $id;
 $result = $db->sql_query( $query );

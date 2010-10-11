@@ -12,6 +12,7 @@ $sql = "DELETE FROM " . NV_BANNERS_ROWS_GLOBALTABLE . " WHERE id='$id'";
 $result1 = $db->sql_query ( $sql );
 $sql = "DELETE FROM " . NV_BANNERS_CLICK_GLOBALTABLE . " WHERE bid='$id'";
 $result = $db->sql_query ( $sql );
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_banner', "bannerid ".$id, $admin_info['userid'] );
 if ($result1 && $result)
 	echo $lang_module['delfile_success'];
 else

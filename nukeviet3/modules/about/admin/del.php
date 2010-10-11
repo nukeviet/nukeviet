@@ -17,7 +17,7 @@ $query = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE
 $result = $db->sql_query( $query );
 $numrows = $db->sql_numrows( $result );
 if ( $numrows != 1 ) die( 'NO_' . $id );
-
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', "aboutid  " . $id, $admin_info['userid'] );
 $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id` = " . $id;
 $db->sql_query( $query );
 if ( $db->sql_affectedrows() > 0 )

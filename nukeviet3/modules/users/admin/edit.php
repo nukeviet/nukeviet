@@ -61,7 +61,8 @@ $error = "";
 
 if ( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
-    $_user['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', "userid ".$userid, $admin_info['userid'] );
+	$_user['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
     $_user['email'] = filter_text_input( 'email', 'post', '', 1, 100 );
     $_user['password1'] = filter_text_input( 'password1', 'post', '', 0, NV_UPASSMAX );
     $_user['password2'] = filter_text_input( 'password2', 'post', '', 0, NV_UPASSMAX );

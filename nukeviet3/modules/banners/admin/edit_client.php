@@ -83,7 +83,7 @@ if ($nv_Request->get_int ( 'save', 'post' ) == '1') {
         `email`=" . $db->dbescape ( $email ) . ", `website`=" . $db->dbescape ( $website ) . ", `location`=" . $db->dbescape ( $location ) . ", `yim`=" . $db->dbescape ( $yim ) . ", 
         `phone`=" . $db->dbescape ( $phone ) . ", `fax`=" . $db->dbescape ( $fax ) . ", `mobile`=" . $db->dbescape ( $mobile ) . ", `uploadtype`=" . $db->dbescape ( $uploadtype ) . " WHERE `id`=" . $id;
 		$db->sql_query ( $sql );
-		
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_client', "clientid ".$id, $admin_info['userid'] );
 		Header ( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=info_client&id=" . $id );
 		die ();
 	}

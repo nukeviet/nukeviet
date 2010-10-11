@@ -47,7 +47,8 @@ $groups_list = nv_groups_list();
 
 if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-    $custom_title = filter_text_input( 'custom_title', 'post', 1 );
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_modul', "module  " . $mod, $admin_info['userid'] );
+	$custom_title = filter_text_input( 'custom_title', 'post', 1 );
     $theme = filter_text_input( 'theme', 'post', '', 1 );
     $keywords = filter_text_input( 'keywords', 'post', '', 1 );
     $act = $nv_Request->get_int( 'act', 'post', 0 );

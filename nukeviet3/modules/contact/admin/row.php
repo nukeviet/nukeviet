@@ -134,12 +134,14 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             `full_name`=" . $db->dbescape( $full_name ) . ", `phone` =  " . $db->dbescape( $phone ) . ", 
             `fax`=" . $db->dbescape( $fax ) . ", `email`=" . $db->dbescape( $email ) . ", 
             `note`=" . $db->dbescape( $note ) . ", `admins`=" . $db->dbescape( $admins_list ) . " WHERE `id` =" . $id;
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_row', "rowid ".$id, $admin_info['userid'] );
         }
         else
         {
             $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
             NULL, " . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", 
             " . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_row', " ", $admin_info['userid'] );
         }
 
         $db->sql_query( $query );

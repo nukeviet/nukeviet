@@ -14,7 +14,8 @@ $contents = "NO_" . $catid;
 list( $catid, $parentid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT `catid`, `parentid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid`=" . intval( $catid ) . "" ) );
 if ( $catid > 0 )
 {
-    $delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_cat', "catid ".$catid, $admin_info['userid'] );
+	$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
     list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid` = '" . $catid . "'" ) );
     if ( intval( $check_parentid ) > 0 )
     {

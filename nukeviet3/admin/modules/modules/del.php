@@ -13,6 +13,7 @@ if (! defined ( 'NV_IS_FILE_MODULES' ))
 $module_name = filter_text_input ( 'mod', 'post' );
 $contents = 'NO_' . $module_name;
 if (! empty ( $module_name ) and preg_match ( $global_config ['check_module'], $module_name )) {
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_modul', "module_name: " . $module_name, $admin_info['userid'] );
 	list ( $is_sysmod, $module_file, $module_data ) = $db->sql_fetchrow ( $db->sql_query ( "SELECT is_sysmod, module_file, module_data FROM `" . $db_config ['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape ( $module_name ) . "" ) );
 	if (intval ( $is_sysmod ) != 1) {
 		$contents = 'OK_' . $module_name;

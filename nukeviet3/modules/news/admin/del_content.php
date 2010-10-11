@@ -15,7 +15,8 @@ $listid = $nv_Request->get_string( 'listid', 'post', '' );
 $contents = "NO_" . $id;
 if ( $listid != "" and md5( $global_config['sitekey'] . session_id() ) == $checkss )
 {
-    $del_array = array_map( "intval", explode( ",", $listid ) );
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_content', "listid ".$listid , $admin_info['userid'] );
+	$del_array = array_map( "intval", explode( ",", $listid ) );
     foreach ( $del_array as $id )
     {
         if ( $id > 0 )
@@ -28,6 +29,7 @@ if ( $listid != "" and md5( $global_config['sitekey'] . session_id() ) == $check
 elseif ( md5( $id . session_id() ) == $checkss )
 {
     $contents = nv_del_content_module( $id );
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_content', "id ".$id , $admin_info['userid'] );
 }
 nv_del_moduleCache( $module_name );
 include ( NV_ROOTDIR . "/includes/header.php" );

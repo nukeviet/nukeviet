@@ -82,6 +82,7 @@ if ( $nv_Request->get_int( 'ok', 'post', 0 ) )
             }
         }
         $query = "DELETE FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id` = " . $admin_id;
+        nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_admin', "admin_id " . $admin_id, $admin_info['userid'] );
         $db->sql_query( $query );
         $db->sql_query( "LOCK TABLE " . NV_AUTHORS_GLOBALTABLE . " WRITE" );
         $db->sql_query( "REPAIR TABLE " . NV_AUTHORS_GLOBALTABLE );

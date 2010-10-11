@@ -162,7 +162,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             `width`=" . $width . ", `height`=" . $height . ", `file_alt`=" . $db->dbescape( $file_alt ) . ", `click_url`=" . $db->dbescape( $click_url ) . ", 
             `publ_time`=" . $publtime . ", `exp_time`=" . $exptime . " WHERE `id`=" . $id;
 			$db->sql_query( $sql );
-            
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_banner', "bannerid ".$id, $admin_info['userid'] );
             nv_CreateXML_bannerPlan();
 
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=info_banner&id=" . $id );

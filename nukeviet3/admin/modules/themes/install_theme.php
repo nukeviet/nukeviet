@@ -22,7 +22,8 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
             $status = $zip->properties();
             if ( $status['status'] == 'ok' )
             {
-                $filefolder = '';
+                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_intall_theme', "theme  " . $theme, $admin_info['userid'] );
+            	$filefolder = '';
                 $filelist = '';
                 $validfolder = array();
                 $filesize = nv_convertfromBytes( $_FILES['themefile']['size'] );

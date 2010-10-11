@@ -88,7 +88,8 @@ $error = "";
 
 if ( $nv_Request->get_int( 'save', 'post', 0 ) )
 {
-    $editor = filter_text_input( 'editor', 'post', '' );
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_admin', "admin_id " . $admin_id, $admin_info['userid'] );
+	$editor = filter_text_input( 'editor', 'post', '' );
     if ( defined( 'NV_IS_SPADMIN' ) )
     {
         $allow_files_type = $nv_Request->get_array( 'allow_files_type', 'post', array() );

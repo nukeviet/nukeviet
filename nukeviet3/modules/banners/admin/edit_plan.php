@@ -54,6 +54,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		$sql = "UPDATE `" . NV_BANNERS_PLANS_GLOBALTABLE . "` SET `blang`=" . $db->dbescape( $blang ) . ", `title`=" . $db->dbescape( $title ) . ", 
         `description`=" . $db->dbescape( $description ) . ", `form`=" . $db->dbescape( $form ) . ", `width`=" . $width . ", `height`=" . $height . " WHERE `id`=" . $id;
 		$db->sql_query( $sql );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_plan', "planid ".$id, $admin_info['userid'] );
         nv_CreateXML_bannerPlan();
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=info_plan&id=" . $id );
 		die();

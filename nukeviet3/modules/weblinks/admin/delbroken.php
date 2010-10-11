@@ -8,7 +8,7 @@
 if (! defined ( 'NV_IS_FILE_ADMIN' ))
 	die ( 'Stop!!!' );
 $id = $nv_Request->get_array ( 'idcheck', 'post' );
-
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_broken', "id ".$id, $admin_info['userid'] );
 foreach ( $id as $value ) {
 	$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE id=" . $value . "";
 	$db->sql_query ( $query );

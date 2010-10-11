@@ -36,7 +36,8 @@ if ( ! empty( $savecat ) )
         $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_cat` (`catid`, `parentid`, `title`, `catimage`, `alias`, `description`, `weight`, `inhome`, `numlinks`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $parentid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $catimage ) . " , " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $weight ) . ", '1', '3', " . $db->dbescape( $keywords ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
         if ( $db->sql_query_insert_id( $query ) )
         {
-            $db->sql_freeresult();
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_cat', " ", $admin_info['userid'] );
+        	$db->sql_freeresult();
             nv_del_moduleCache( $module_name );
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
             die();
@@ -73,6 +74,7 @@ if ( ! empty( $savecat ) )
                     $db->sql_query( $sql );
                     nv_fix_cat( $parentid );
                     nv_fix_cat( $parentid_old );
+                    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_cat', "catid ".$catid, $admin_info['userid'] );
                 }
                 nv_del_moduleCache( $module_name );
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );

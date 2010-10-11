@@ -58,7 +58,8 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
         if ( defined( 'IS_EDIT' ) )
         {
-            $query = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET 
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_about', "aboutid ".$id, $admin_info['userid'] );
+        	$query = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET 
             `title`=" . $db->dbescape( $title ) . ", `alias` =  " . $db->dbescape( $alias ) . ", 
             `bodytext`=" . $db->dbescape( $bodytext ) . ", `keywords`='', `edit_time`=" . NV_CURRENTTIME . " WHERE `id` =" . $id;
         }
@@ -70,6 +71,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
             NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $bodytext ) . ", '', 
             " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_about', " ", $admin_info['userid'] );
         }
         $db->sql_query( $query );
         nv_del_moduleCache( $module_name );

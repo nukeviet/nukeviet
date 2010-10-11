@@ -10,7 +10,8 @@ $page_title = $lang_module['comment_edit_title'];
 $cid = $nv_Request->get_int( 'cid', 'get' );
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-    $sql = "SELECT a.id, a.title, a.listcatid, a.alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_comments` b ON a.id=b.id WHERE b.cid='" . $cid . "'";
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_comment', "id ".$cid , $admin_info['userid'] );
+	$sql = "SELECT a.id, a.title, a.listcatid, a.alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_comments` b ON a.id=b.id WHERE b.cid='" . $cid . "'";
     
     list( $id, $title, $listcatid, $alias ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
     if ( $id > 0 )

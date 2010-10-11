@@ -10,7 +10,8 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $listcid = $nv_Request->get_string( 'list', 'post,get' );
 if ( ! empty( $listcid ) )
 {
-    $cid_array = explode( ',', $listcid );
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_comment', "listcid ".$listcid, $admin_info['userid'] );
+	$cid_array = explode( ',', $listcid );
     $cid_array = array_map( "intval", $cid_array );
     foreach ( $cid_array as $cid )
     {

@@ -113,7 +113,8 @@ $error = "";
 //them chu de
 if ( $nv_Request->isset_request( 'add', 'get' ) )
 {
-    $page_title = $lang_module['addcat_titlebox'];
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_cat', " ", $admin_info['userid'] );
+	$page_title = $lang_module['addcat_titlebox'];
     
     $is_error = false;
     

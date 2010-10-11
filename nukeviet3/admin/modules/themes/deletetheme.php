@@ -9,7 +9,8 @@ if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 $theme = filter_text_input( 'theme', 'post', "", 1 );
 if ( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) ) && $global_config['site_theme'] != trim( $theme ) && trim( $theme ) != "default" )
 {
-    $check_exit_mod = false;
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_theme', "theme  " . $theme, $admin_info['userid'] );
+	$check_exit_mod = false;
     $lang_module_array = array();
     $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where setup='1'";
     $result = $db->sql_query( $sql );

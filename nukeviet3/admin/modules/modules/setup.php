@@ -14,7 +14,8 @@ if ( ! empty( $setmodule ) )
 {
     if ( filter_text_input( 'checkss', 'get' ) == md5( $setmodule . session_id() . $global_config['sitekey'] ) )
     {
-        $query = "SELECT `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $setmodule );
+        nv_insert_logs( NV_LANG_DATA, $module_name, 'log_setup_modul', "setmodule  " . $setmodule, $admin_info['userid'] );
+    	$query = "SELECT `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $setmodule );
         $result = $db->sql_query( $query );
         $numrows = $db->sql_numrows( $result );
         if ( $numrows == 1 )

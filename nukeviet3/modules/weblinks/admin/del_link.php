@@ -8,6 +8,7 @@
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['weblink_del_link_title'];
 $id = ( $nv_Request->get_int( 'id', 'get' ) > 0 ) ? $nv_Request->get_int( 'id', 'post,get' ) : 0;
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_link', "id ".$id, $admin_info['userid'] );
 if ( empty( $id ) )
 {
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );

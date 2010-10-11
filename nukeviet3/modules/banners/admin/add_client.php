@@ -88,7 +88,8 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
         $id = $db->sql_query_insert_id( $sql );
         if ( $id )
         {
-            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=client_list" );
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_client', "bannerid ".$id, $admin_info['userid'] );
+        	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=client_list" );
             die();
         }
     }

@@ -12,6 +12,7 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_client', "clientid ".$id, $admin_info['userid'] );
 
 if ( empty( $id ) ) die( 'Stop!!!' );
 

@@ -39,7 +39,8 @@ if ( ! empty( $savecat ) )
         $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_sources` (`sourceid`, `title`, `link`, `logo`, `weight`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP( ), UNIX_TIMESTAMP( ))";
         if ( $db->sql_query_insert_id( $query ) )
         {
-            $db->sql_freeresult();
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " " , $admin_info['userid'] );
+        	$db->sql_freeresult();
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
             die();
         }
@@ -54,7 +55,8 @@ if ( ! empty( $savecat ) )
         $db->sql_query( $query );
         if ( $db->sql_affectedrows() > 0 )
         {
-            $error = $lang_module['saveok'];
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_source', "sourceid ".$sourceid , $admin_info['userid'] );
+        	$error = $lang_module['saveok'];
             $db->sql_freeresult();
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
             die();

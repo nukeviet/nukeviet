@@ -29,7 +29,8 @@ if ( $selectthemes_old != $selectthemes )
 $page_title = $lang_module['blocks'] . ':' . $selectthemes;
 if ( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
-    $error = array();
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_theme', "theme  " . $selectthemes, $admin_info['userid'] );
+	$error = array();
     
     $title = filter_text_input( 'title', 'post', '', 1 );
     $groupbl = filter_text_input( 'groupbl', 'post', '', 1 );

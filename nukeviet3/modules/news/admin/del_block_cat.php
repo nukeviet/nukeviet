@@ -15,7 +15,8 @@ $contents = "NO_" . $bid;
 list( $bid ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` WHERE `bid`=" . intval( $bid ) . "" ) );
 if ( $bid > 0 )
 {
-    $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` WHERE `bid`=" .$bid . "";
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_blockcat', "block_catid ".$bid, $admin_info['userid'] );
+	$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` WHERE `bid`=" .$bid . "";
     if ( $db->sql_query( $query ) )
     {
         $db->sql_freeresult();

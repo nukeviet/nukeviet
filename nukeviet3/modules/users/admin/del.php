@@ -48,6 +48,7 @@ if ( ! $result )
 
 $sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`=" . $userid;
 $result = $db->sql_query( $sql );
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_user', "userid ".$userid, $admin_info['userid'] );
 
 if ( ! empty( $photo ) and is_file( NV_ROOTDIR . '/' . $photo ) )
 {

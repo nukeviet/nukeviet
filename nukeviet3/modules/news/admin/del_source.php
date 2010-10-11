@@ -15,6 +15,7 @@ $contents = "NO_" . $sourceid;
 list( $sourceid ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`=" . intval( $sourceid ) . "" ) );
 if ( $sourceid > 0 )
 {
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_source', "sourceid ".$sourceid , $admin_info['userid'] );
 	list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `sourceid` = '" . $sourceid . "'" ) );
 	if ( intval( $check_rows ) > 0 )
 	{
