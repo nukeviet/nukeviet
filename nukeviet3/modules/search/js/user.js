@@ -48,17 +48,9 @@ function GoUrl ( qmin, qmax )
 {
    var nv_timer = nv_settimeout_disable( 'search_submit', 1000 );
    var mod = document.getElementById( 'search_query_mod' ).options[document.getElementById( 'search_query_mod' ).selectedIndex].value;
-
-   // if( mod == 'all' || mod == '' )
-   // {
-   //   alert( "please chose module name!" );
-   //   document.getElementById( 'search_query_mod' ).focus();
-   //   return false;
-   // }
-
-   if( mod != 'news' )
+   if( mod == 'all' )
    {
-      alert( "Please choose the module NEWS!" );
+      alert( "Please choose the module!" );
       document.getElementById( 'search_query_mod' ).focus();
       return false;
    }
