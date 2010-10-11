@@ -154,7 +154,6 @@ if ( $op == "main" )
     $nv_vertical_menu = array();
     
     $list_cats = nv_list_cats( true );
-    
     if ( ! empty( $list_cats ) )
     {
         if ( ! empty( $array_op ) )
@@ -172,15 +171,10 @@ if ( $op == "main" )
                 break;
             }
         }
-        //Xem chi tiet
-        if ( $catid > 0 and ! empty( $filealias ) )
-        {
-            $op = "viewfile";
-        }
         //Het Xac dinh ID cua chu de
         
-        //Xac dinh menu
-        //Xac dinh RSS
+
+        //Xac dinh menu, RSS
         $rss[] = array(  //
             'title' => $module_info['custom_title'], 'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss"  //
         );
@@ -214,8 +208,17 @@ if ( $op == "main" )
                 'title' => $module_info['custom_title'] . ' - ' . $c['title'], 'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $c['alias']  //
             );
         }
-        //Het Xac dinh menu
-    //Het Xac dinh RSS
+        //het Xac dinh menu, RSS
+        //Xem chi tiet
+        if ( $catid > 0 and ! empty( $filealias ) )
+        {
+            $op = "viewfile";
+        }
+        elseif ( $catid > 0 )
+        {
+            $op = "viewcat";
+        }
+    
     }
 }
 

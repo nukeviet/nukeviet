@@ -23,7 +23,6 @@ if ( ! preg_match( "/^([a-z0-9\-\_\.]+)$/i", $filealias ) )
 }
 
 $query = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $filealias ) . " AND `catid`=" . $catid . " AND `status`=1";
-$result = $db->sql_query( $query );
 if ( ( $result = $db->sql_query( $query ) ) === false )
 {
     Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );

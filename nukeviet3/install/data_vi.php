@@ -94,7 +94,10 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_modfuncs` (`
 (61, 'clinfo', 'Clinfo', 'banners', 0, 0, 0, '', ''),
 (62, 'logininfo', 'Logininfo', 'banners', 0, 0, 0, '', ''),
 (63, 'stats', 'Stats', 'banners', 1, 0, 3, 'left-body-right', ''),
-(64, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '', '')";
+(64, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '', ''),
+(65, 'search', 'Search', 'download', 1, 0, 1, 'left-body-right', ''),
+(66, 'viewcat', 'Viewcat', 'download', 1, 0, 2, 'left-body-right', ''),
+(67, 'viewfile', 'Viewfile', 'download', 1, 0, 3, 'left-body-right', '')";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_vi_blocks`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_blocks` (`bid`, `groupbl`, `title`, `link`, `type`, `file_path`, `theme`, `template`, `position`, `exp_time`, `active`, `groups_view`, `module`, `all_func`, `func_id`, `weight`) VALUES
@@ -301,7 +304,15 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_blocks` (`bi
 (216, 4, 'Giới thiệu', '', 'file', 'global.about.php', 'default', 'orange', '[RIGHT]', 0, '1', '0', 'global', 1, 51, 1),
 (218, 5, 'Thăm dò ý kiến', '', 'file', 'global.voting.php', 'default', '', '[RIGHT]', 0, '1', '0', 'global', 1, 51, 2),
 (220, 7, 'Quảng cáo giữa trang', '', 'banner', '1', 'default', 'no_title', '[TOP]', 0, '1', '0', '', 1, 51, 1),
-(222, 8, 'Đăng nhập thành viên', '', 'file', 'global.login.php', 'default', 'orange', '[RIGHT]', 0, '1', '0', 'global', 1, 51, 3)
+(222, 8, 'Đăng nhập thành viên', '', 'file', 'global.login.php', 'default', 'orange', '[RIGHT]', 0, '1', '0', 'global', 1, 51, 3),
+
+(NULL, 2, 'Thống kê truy cập', '', 'file', 'global.counter.php', 'default', '', '[LEFT]', 0, '1', '0', 'global', 1, 54, 1),
+(NULL, 3, 'Quảng cáo trái', '', 'banner', '2', 'default', '', '[LEFT]', 0, '1', '0', 'global', 1, 54, 2),
+(NULL, 4, 'Giới thiệu', '', 'file', 'global.about.php', 'default', 'orange', '[RIGHT]', 0, '1', '0', 'global', 1, 54, 1),
+(NULL, 5, 'Thăm dò ý kiến', '', 'file', 'global.voting.php', 'default', '', '[RIGHT]', 0, '1', '0', 'global', 1, 54, 2),
+(NULL, 7, 'Quảng cáo giữa trang', '', 'banner', '1', 'default', 'no_title', '[TOP]', 0, '1', '0', '', 1, 54, 1),
+(NULL, 8, 'Đăng nhập thành viên', '', 'file', 'global.login.php', 'default', 'orange', '[RIGHT]', 0, '1', '0', 'global', 1, 54, 3)
+
 ";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_vi_news_cat` VALUES

@@ -190,6 +190,10 @@ if ( defined( "NV_IS_GODADMIN" ) )
             {
                 $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_" . $module_data_i . "_comments` ADD `userid` INT( 11 ) NOT NULL DEFAULT '0' AFTER `post_time`" );
             }
+            $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_i . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES
+	            (NULL, 'search', 'Search', 'download', 1, 0, 1, 'left-body-right', ''),
+				(NULL, 'viewcat', 'Viewcat', 'download', 1, 0, 2, 'left-body-right', ''),
+				(NULL, 'viewfile', 'Viewfile', 'download', 1, 0, 3, 'left-body-right', '')" );
         }
         $db->sql_freeresult();
         

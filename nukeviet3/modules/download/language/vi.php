@@ -25,6 +25,7 @@ $lang_module['author_email'] = 'Email tác giả';
 $lang_module['author_url'] = 'Website hỗ trợ';
 $lang_module['uploadtime'] = 'Gửi lên';
 $lang_module['updatetime'] = 'Cập nhật';
+$lang_module['readmore'] = 'Xem tiếp';
 $lang_module['bycat'] = 'Thuộc';
 $lang_module['bycat2'] = 'Thuộc chủ đề';
 $lang_module['detail_or_download'] = 'Xem chi tiết / tải về';
@@ -110,5 +111,14 @@ $lang_module['upload_linkdirect_info'] = "Nếu nguồn có nhiều phần nhỏ
 $lang_module['file_upload_captcha'] = "Mã an toàn";
 $lang_module['file_upload_captcha2'] = "Chép lại Mã an toàn";
 $lang_module['file_upload_ok'] = "File gửi lên của bạn đã được tiếp nhận. Xin cảm ơn!";
+
+$lang_module['categories'] = "Danh mục";
+$lang_module['viewcat_download_hits'] = "lượt down";
+$lang_module['viewcat_view_hits'] = "lượt xem";
+$lang_module['categories_viewall'] = "Xem tất cả";
+$lang_module['search'] = "Tìm kiếm dữ liệu";
+$lang_module['search_option'] = "Hãy chọn chủ đề";
+$lang_module['search_result'] = "Kết quả tìm kiếm";
+$lang_module['search_noresult'] = "Không có dữ liệu phù hợp với yêu cầu của bạn !";
 
 ?>

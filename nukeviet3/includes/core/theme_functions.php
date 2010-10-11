@@ -118,7 +118,7 @@ function nv_info_die ( $page_title = "", $info_title, $info_content, $adminlink 
 {
     global $lang_global, $global_config;
     if ( empty( $page_title ) ) $page_title = $global_config['site_description'];
-    if ( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/info_die.tpl" ) )
+    if ( defined( 'NV_ADMIN' ) and isset( $global_config['admin_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/info_die.tpl" ) )
     {
         $tpl_path = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
     }
@@ -126,11 +126,11 @@ function nv_info_die ( $page_title = "", $info_title, $info_content, $adminlink 
     {
         $tpl_path = NV_ROOTDIR . "/themes/admin_default/system";
     }
-    elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system/info_die.tpl" ) )
+    elseif ( isset( $global_config['module_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system/info_die.tpl" ) )
     {
         $tpl_path = NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system";
     }
-    elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/info_die.tpl" ) )
+    elseif ( isset( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/info_die.tpl" ) )
     {
         $tpl_path = NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system";
     }
