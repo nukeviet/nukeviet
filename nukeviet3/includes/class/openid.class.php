@@ -63,16 +63,16 @@ class LightOpenID
 
     protected static $ax_to_sreg = array(  //
         'namePerson/friendly' => 'nickname', //
-'contact/email' => 'email', //
-'namePerson' => 'fullname', //
-'birthDate' => 'dob', //
-'person/gender' => 'gender', //
-'contact/postalCode/home' => 'postcode', //
-'contact/country/home' => 'country', //
-'pref/language' => 'language', //
-'pref/timezone' => 'timezone', //
-'namePerson/first' => 'firstname', //google - NV
-'namePerson/last' => 'lastname'  //google - NV
+		'contact/email' => 'email', //
+		'namePerson' => 'fullname', //
+		'birthDate' => 'dob', //
+		'person/gender' => 'gender', //
+		'contact/postalCode/home' => 'postcode', //
+		'contact/country/home' => 'country', //
+		'pref/language' => 'language', //
+		'pref/timezone' => 'timezone', //
+		'namePerson/first' => 'firstname', //google - NV
+		'namePerson/last' => 'lastname'  //google - NV
     );
 
     function __construct ( )
@@ -134,7 +134,12 @@ class LightOpenID
     {
         $params = http_build_query( $params );
         $curl = curl_init( $url . ( $method == 'GET' && $params ? '?' . $params : '' ) );
-        curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
+        $safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
+        $open_basedir = ( ini_get( 'open_basedir' ) == '1' || strtolower( ini_get( 'open_basedir' ) ) == 'on' ) ? 1 : 0;
+        if ( ! $safe_mode and $open_basedir )
+        {
+            curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
+        }
         curl_setopt( $curl, CURLOPT_HEADER, false );
         curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
         curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
@@ -152,6 +157,7 @@ class LightOpenID
         {
             curl_setopt( $curl, CURLOPT_HTTPGET, true );
         }
+        curl_setopt( $curl, CURLOPT_TIMEOUT, 30 );
         $response = curl_exec( $curl );
         
         if ( curl_errno( $curl ) )

@@ -953,3 +953,12 @@ html[xmlns] .clearfix {
 * html .clearfix {
     height: 1%;
 }
+
+.tab2 td, .tab2 tr,.tab2 tbody{
+	margin:0;
+	padding:0;
+}
+
+.message_head{
+	margin:0;
+}
