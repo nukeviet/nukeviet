@@ -1,0 +1,38 @@
+/*--t news--*/
+.t-news h4 {
+    font-size: 1.3em;
+    font-weight: 700;
+    margin-bottom: 0.5em;
+}
+
+.t-news .other-news {
+    border-top: 1px solid #d8d8d8;
+    padding: 8px 10px 0;
+}
+
+/*--List news --*/
+.listz-news h4 {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.listz-news p {
+    margin: 0;
+    padding: 0;
+}
+
+.listz-news .info {
+    border-top: 1px solid #d8d8d8;
+    padding: 8px 10px;
+    font-size: 1em;
+    color: #8c8c8c;
+}
+.news-search  .rows{
+	margin-bottom:10px;
+}
+.news-search label{
+	display:block;
+	float:left;
+	width:30%;
+}

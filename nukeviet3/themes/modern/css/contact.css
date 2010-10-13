@@ -1,0 +1,30 @@
+@CHARSET "UTF-8";
+
+.contact-form {
+    background: url(../images/hot-news-g.png) 0 bottom repeat-x;
+}
+
+.contact-form .rows {
+    margin-bottom: 0.5em;
+}
+
+.contact-form .input {
+    width: 300px;
+}
+
+.contact-form .input:focus, .contact-form textarea {
+    border: 1px solid #c0c0c0;
+}
+
+.contact-form .capcha {
+    width: 100px;
+}
+
+.contact-form img {
+    vertical-align: middle;
+    margin: 0 10px 0 0;
+}
+
+.contact-form textarea {
+    width: 100%;
+}
