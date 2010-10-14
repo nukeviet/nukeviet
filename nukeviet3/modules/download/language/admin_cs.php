@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Sep 05, 2010, 06:35:25 PM
+* @Createdate Oct 02, 2010, 07:29:58 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -136,4 +136,6 @@ $lang_module['is_resume'] = "Podpora obnovení při dowload režimu";
 $lang_module['max_speed'] = "Neomezená rychlost  stahnuti soubor";
 $lang_module['kb_sec'] = "KB/sec (0 = neomezeny)";
 $lang_module['alias'] = "Statické Link";
+$lang_module['siteinfo_expired'] = "Celkem soubory vypršela";
+
 ?>
