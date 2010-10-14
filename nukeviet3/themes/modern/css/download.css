@@ -1,4 +1,7 @@
 /*Download*/
+.highlight a,.highlight a:hover {
+	color:#C32B00;
+}
 .count-comments, .count-down {
 	padding:0 4px 0 22px;
 }
