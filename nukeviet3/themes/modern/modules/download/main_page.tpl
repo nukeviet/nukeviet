@@ -18,7 +18,7 @@
                 <div class="m-bottom">
                     <h4><a title="{itemcat.title}" href="{itemcat.more_link}">{itemcat.title}</a></h4>
                     <p class="small">
-                        {LANG.author_name}: {itemcat.author_name} - {LANG.view_hits}: {itemcat.view_hits} - {LANG.download_hits}: {itemcat.download_hits}
+                        {LANG.author_name}: {itemcat.author_name} - <span class="count-comments">{LANG.view_hits}: {itemcat.view_hits}</span> - <span class="count-down">{LANG.download_hits}: {itemcat.download_hits}</span>
                     </p>
                 </div>
                 <!-- BEGIN: image -->

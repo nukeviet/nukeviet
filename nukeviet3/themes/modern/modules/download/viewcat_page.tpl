@@ -42,13 +42,15 @@
 <!-- BEGIN: listpostcat -->
 <div class="box-border m-bottom down-o">
     <div class="clearfix content-box">
+		<!-- BEGIN: is_admin -->
+				<div class="fr">
+				(<a href="{listpostcat.edit_link}" class="r_down">{GLANG.edit}</a>)
+				</div>
+		<!-- END: is_admin -->
     	<!-- BEGIN: image -->
         <img src="{listpostcat.fileimage.orig_src}" alt="{listpostcat.title}" class="s-border left fl" style="width:60px;height:54px"/>
     	<!-- END: image -->
 		<h4><a title="{listpostcat.title}" href="{listpostcat.more_link}">{listpostcat.title}</a>                 
-			<!-- BEGIN: is_admin -->
-			(<a href="{listpostcat.edit_link}" class="r_down">{GLANG.edit}</a>)
-	        <!-- END: is_admin -->
 		</h4>
         <p>
             {listpostcat.introtext} 

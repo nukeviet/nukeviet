@@ -1,9 +1,8 @@
 <!-- BEGIN: main -->
-<div class="sliver2">
-<ul class="l-down">
+<ul class="list-down">
 	<!-- BEGIN: loop -->
 	<li><a href="{loop.link}">{loop.title}</a> <br />
-	<span class="small_txt">{loop.updatetime}</span></li>
+	<span class="small">{loop.updatetime}</span></li>
 	<!-- END: loop -->
-</div>
+</ul>	
 <!-- END: main -->

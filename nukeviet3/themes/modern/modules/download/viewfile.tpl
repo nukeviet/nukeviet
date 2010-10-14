@@ -11,7 +11,7 @@ var comment_subject_defaul = '{ROW.comment_subject}';
 <div class="header-details">
     <div class="title">
         <h1>{ROW.title}</h1>
-        <span class="small">Đăng lúc 10:10 10-10-2010 bởi <a href="#" class="highlight">Adminstrator</a></span>
+        <span class="small"><strong>{LANG.uploadtime}:</strong> {ROW.uploadtime}, <strong>{LANG.user_name}:</strong> <span class="highlight">{ROW.user_name}</span>, <strong>{LANG.view_hits}:</strong> {ROW.view_hits}</span>
     </div>
     <div class="clear">
     </div>
@@ -31,61 +31,63 @@ var comment_subject_defaul = '{ROW.comment_subject}';
 		<!-- END: introtext -->
         <div class="clear">
         </div>
-        <div class="note">
+        <div class="note clearfix">
+			<div class="fr"><!-- BEGIN: report -->
+            <a class="block_link" href="javascript:void(0);" onclick="nv_link_report({ROW.id});">{LANG.report}</a>
+        <!-- END: report --></div>
             <h4 class="download-hh">{LANG.download_detail}</h4>
 	    <!-- BEGIN: download_allow -->
 	        <div style="display:none">
 	            <iframe name="idown"></iframe>
 	        </div>
 	        <!-- BEGIN: fileupload -->
-	        <div class="info clearfix green">
-	            <dt class="fl"><strong>{LANG.download_fileupload} {SITE_NAME}:</strong></dt>
-	        </div>
-	        <div class="info clearfix">
-	            <dt class="fl">
-	                <!-- BEGIN: row -->
-	                <div class="download_row">
-	                    <a id="myfile{FILEUPLOAD.key}" href="{FILEUPLOAD.link}" onclick="nv_download_file('idown','{FILEUPLOAD.title}');return false;">{FILEUPLOAD.title}</a>
-	                </div>
-	                <!-- END: row -->
-	            </dt>
-	        </div>
+	            <p><strong>{LANG.download_fileupload} {SITE_NAME}:</strong>
+				<br />
+				<span class="small">( {LANG.filesize}: {ROW.filesize} )</span></p>
+				<ul class="links_down">
+					<!-- BEGIN: row -->
+						<li><a id="myfile{FILEUPLOAD.key}" href="{FILEUPLOAD.link}" onclick="nv_download_file('idown','{FILEUPLOAD.title}');return false;">{FILEUPLOAD.title}</a>				
+						</li>
+					<!-- END: row -->
+				</ul>
 	        <!-- END: fileupload -->
 	        <!-- BEGIN: linkdirect -->
-	        <dl class="info clearfix green">
-	            <dt class="fl"><strong>{LANG.download_linkdirect} {HOST}:</strong></dt>
-	        </dl>
-	        <dl class="info clearfix">
-	            <dt class="fl">
+	            <p><strong>{LANG.download_linkdirect} {HOST}:</strong></p>
+			<ul class="links_down">
 	                <!-- BEGIN: row -->
-	                <div class="url_row">
-	                    <a href="{LINKDIRECT.link}" onclick="nv_linkdirect('{LINKDIRECT.code}');return false;">{LINKDIRECT.name}</a>
-	                </div>
+	                <li>
+	                    <a href="{LINKDIRECT.link}" onclick="nv_linkdirect('{LINKDIRECT.code}');return false;">{LINKDIRECT.name}</a> 
+	                </li>
 	                <!-- END: row -->
-	            </dt>
-	        </dl>
+			<ul>		
 	        <!-- END: linkdirect -->
 	    <!-- END: download_allow -->
-
 		    <!-- BEGIN: download_not_allow -->
 		    <div class="download not_allow">
 		        {ROW.download_info}
 		    </div>
 		    <!-- END: download_not_allow -->
-            <script type="text/javascript">
-                $(document).ready(function(){
-                    $(".links_down li").hover(function(){
-                        $(this).find("a.block_link").css({
-                            'visibility': 'visible'
-                        });
-                    }, function(){
-                        $(this).find("a.block_link").css({
-                            'visibility': 'hidden'
-                        });
-                    });
-                });
-            </script>
         </div>
+		<script type="text/javascript">
+                                    $(document).ready(function(){
+                                        $(".note").hover(function(){
+                                            $(this).find("a.block_link").css({
+                                                'visibility': 'visible'
+                                            });
+                                        }, function(){
+                                            $(this).find("a.block_link").css({
+                                                'visibility': 'hidden'
+                                            });
+                                        });
+                                    });
+                                </script>
+		<!-- BEGIN: is_admin -->
+        <div class="aright content-box clearfix">
+			{LANG.file_admin}:
+            <a href="{ROW.edit_link}">{GLANG.edit}</a> &divide; 
+            <a href="{ROW.del_link}" onclick="nv_del_row(this,{ROW.id});return false;">{GLANG.delete}</a>
+        </div>
+     <!-- END: is_admin -->
     </div>
     <div class="gg2 fr">
         <ul class="spec">
@@ -99,25 +101,10 @@ var comment_subject_defaul = '{ROW.comment_subject}';
                 <strong>{LANG.author_url}</strong>: {ROW.author_url}
             </li>
             <li>
-                <strong>{LANG.uploadtime}</strong>: {ROW.uploadtime}
-            </li>
-            <li>
                 <strong>{LANG.updatetime}</strong>: {ROW.updatetime}
             </li>
             <li>
-                <strong>{LANG.user_name}</strong>: {ROW.user_name}
-            </li>
-            <li>
                 <strong>{LANG.copyright}</strong>: {ROW.copyright}
-            </li>
-            <li>
-                <strong>{LANG.bycat2}</strong>: {ROW.catname}
-            </li>
-            <li>
-                <strong>{LANG.filesize}</strong>: {ROW.filesize}
-            </li>
-            <li>
-                <strong>{LANG.view_hits}</strong>: {ROW.view_hits}
             </li>
             <li>
                 <strong>{LANG.download_hits}</strong>:             
@@ -138,13 +125,14 @@ var comment_subject_defaul = '{ROW.comment_subject}';
             <div class="content-box box-border">
 		        <div class="rating clearfix">
 		            <div id="stringrating">{LANG.rating_question}</div>
-		            <div style="padding: 5px;">
+		            <div class="clearfix">
 		                <input class="hover-star" type="radio" value="1" title="{LANG.file_rating1}" style="vertical-align: middle" />
 		                <input class="hover-star" type="radio" value="2" title="{LANG.file_rating2}" style="vertical-align: middle" />
 		                <input class="hover-star" type="radio" value="3" title="{LANG.file_rating3}" style="vertical-align: middle" />
 		                <input class="hover-star" type="radio" value="4" title="{LANG.file_rating4}" style="vertical-align: middle" />
 		                <input class="hover-star" type="radio" value="5" title="{LANG.file_rating5}" style="vertical-align: middle" />
-		                <span id="hover-test" style="margin-left:20px">{LANG.file_rating_note}</span>
+						<br />
+		                <span id="hover-test" class="small">{LANG.file_rating_note}</span>
 		            </div>
 		        </div>
             </div>
@@ -190,7 +178,7 @@ var comment_subject_defaul = '{ROW.comment_subject}';
 </div>
 <!-- BEGIN: comment_allow2 -->
 <a name="lcm"></a>
-<div id="comment">
+<div id="idcomment">
     <div class="header-comment">
         <div class="fr right small">
 			<a href="javascript:void(0);" id="show-comments" name="show-comments">+ Xem phản hồi</a>&nbsp;
@@ -201,15 +189,15 @@ var comment_subject_defaul = '{ROW.comment_subject}';
         </div>
     </div>
     <div id="list_comments" class="list-comments">
-
     </div>
 <input type="hidden" name="comment_fid" id="comment_fid" value="{ROW.id}" />
 <!-- BEGIN: is_comment_allow -->
     <div id="form_comment" class="comment-form" style="display:none">
         <div class="box-border content-box">
+			<p><input id="comment_subject" name="comment_subject" type="text" class="input input-c" value="{LANG.file_comment_subject}" /></p>
+			<div class="clear"></div>
             <div class="box clearfix">
-				<input id="comment_subject" name="comment_subject" type="text" class="input input-c fl" value="{LANG.file_comment_subject}" style="width:200px"/>
-				<input id="comment_uname" name="comment_uname" type="text" class="input input-c fr" value="{ROW.comment_uemail}" style="width:200px" maxlength="100"{ROW.disabled}/>
+				<input id="comment_uname" name="comment_uname" type="text" class="input input-c fl" value="{ROW.comment_uemail}" maxlength="100"{ROW.disabled}/>
                 <input id="comment_uemail" name="comment_uemail" type="text" class="input input-c fr" value="{ROW.comment_uname}" maxlength="100"{ROW.disabled}/> &nbsp;
             </div>
             <p>
