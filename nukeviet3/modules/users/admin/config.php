@@ -13,6 +13,20 @@ $page_title = $lang_module['config'];
 
 $array_config = array();
 
+function valid_name_config ( $array_name )
+{
+    $array_retutn = array();
+    foreach ( $array_name as $v )
+    {
+        $v = trim( $v );
+        if ( ! empty( $v ) and preg_match( "/^[a-z0-9\-\.\_]+$/", $v ) )
+        {
+            $array_retutn[] = $v;
+        }
+    }
+    return $array_retutn;
+}
+
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
     $array_config['allowmailchange'] = $nv_Request->get_int( 'allowmailchange', 'post', 0 );
@@ -32,7 +46,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $array_config['deny_email'] = filter_text_input( 'deny_email', 'post', '', 1 );
     if ( ! empty( $array_config['deny_email'] ) )
     {
-        $array_config['deny_email'] = array_map( "trim", explode( ",", $array_config['deny_email'] ) );
+        $array_config['deny_email'] = valid_name_config( explode( ",", $array_config['deny_email'] ) );
         $array_config['deny_email'] = implode( "|", $array_config['deny_email'] );
     }
     
@@ -42,7 +56,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $array_config['deny_name'] = filter_text_input( 'deny_name', 'post', '', 1 );
     if ( ! empty( $array_config['deny_name'] ) )
     {
-        $array_config['deny_name'] = array_map( "trim", explode( ",", $array_config['deny_name'] ) );
+        $array_config['deny_name'] = valid_name_config( explode( ",", $array_config['deny_name'] ) );
         $array_config['deny_name'] = implode( "|", $array_config['deny_name'] );
     }
     
