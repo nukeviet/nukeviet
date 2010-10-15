@@ -99,7 +99,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $module_array[] = $row;
 }
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name . "" );
+$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 foreach ( $value_setting as $value_setting_i )
 {

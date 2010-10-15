@@ -30,7 +30,7 @@ if (defined ( 'NV_IS_BANNER_CLIENT' )) {
 		include (NV_ROOTDIR . "/includes/footer.php");
 		exit ();
 	}
-	$xtpl = new XTemplate ( "addads.tpl", NV_ROOTDIR . "/themes/" . $module_info ['template'] . "/modules/" . $module_name );
+	$xtpl = new XTemplate ( "addads.tpl", NV_ROOTDIR . "/themes/" . $module_info ['template'] . "/modules/" . $module_file );
 	$xtpl->assign ( 'LANG', $lang_module );
 	$xtpl->assign ( 'NV_BASE_URLSITE', NV_BASE_SITEURL );
 	$xtpl->assign ( 'clientinfo_link', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=clientinfo" );

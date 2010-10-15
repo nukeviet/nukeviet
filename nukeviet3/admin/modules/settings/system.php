@@ -192,7 +192,7 @@ $array_config_global['lang_multi'] = ( $global_config['lang_multi'] ) ? " checke
 $array_config_global['str_referer_blocker'] = ( $global_config['str_referer_blocker'] ) ? " checked" : "";
 $array_config_global['my_domains'] = implode( ",", $global_config['my_domains'] );
 
-$xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name . "" );
+$xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config_global );
 

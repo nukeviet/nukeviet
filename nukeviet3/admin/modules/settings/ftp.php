@@ -69,7 +69,7 @@ if ( $nv_Request->isset_request( 'ftp_server', 'post' ) )
     }    
 }
 
-$xtpl = new XTemplate( "ftp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name . "" );
+$xtpl = new XTemplate( "ftp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 if ( ! empty( $error ) )
 {
     $errorcontent = "<div class=\"quote\" style=\"width:780px;\">\n";

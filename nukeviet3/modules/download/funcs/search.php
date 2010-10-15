@@ -8,9 +8,9 @@
  */
 if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-global $global_config, $lang_module, $lang_global, $module_info, $module_name, $nv_Request;
+global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $nv_Request;
 $page_title = $lang_module['search'];
-$xtpl = new XTemplate( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_name . "/" );
+$xtpl = new XTemplate( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'SEARCHTITLE', $lang_module['search_result'] );
 $page = $nv_Request->get_int( 'page', 'get', 0 );

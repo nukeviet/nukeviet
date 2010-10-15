@@ -72,7 +72,7 @@ $array_config['mailer_mode_sendmail'] = ( $array_config['mailer_mode'] == "sendm
 $array_config['mailer_mode_phpmail'] = ( $array_config['mailer_mode'] == "" ) ? "checked" : "";
 $array_config['mailer_mode_smtpt_show'] = ( $array_config['mailer_mode'] == "smtp" ) ? "" : " style=\"display: none\" ";
 
-$xtpl = new XTemplate( "smtp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name . "" );
+$xtpl = new XTemplate( "smtp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
 foreach ( $smtp_encrypted_array as $id => $value )

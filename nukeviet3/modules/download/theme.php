@@ -85,8 +85,8 @@ function x_generate_page($base_url, $num_items, $per_page, $start_item, $add_pre
  * @return
  */
 function theme_main_download($array_cats, $list_cats, $download_config) {
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $my_head, $page_title;
-	$xtpl = new XTemplate ( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info ['template'] . "/modules/" . $module_name . "/" );
+	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $page_title;
+	$xtpl = new XTemplate ( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info ['template'] . "/modules/" . $module_file . "/" );
 	$xtpl->assign ( 'LANG', $lang_module );
 	$xtpl->assign ( 'GLANG', $lang_global );
 	$xtpl->assign ( 'PAGE_TITLE', $page_title );
@@ -129,9 +129,9 @@ function theme_main_download($array_cats, $list_cats, $download_config) {
 }
 
 function theme_viewcat_download($array, $download_config, $subs, $page_title, $generate_page) {
-	global $global_config, $lang_module, $lang_global, $module_info, $module_name;
+	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file;
 	
-	$xtpl = new XTemplate ( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info ['template'] . "/modules/" . $module_name . "/" );
+	$xtpl = new XTemplate ( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info ['template'] . "/modules/" . $module_file . "/" );
 	$xtpl->assign ( 'LANG', $lang_module );
 	$xtpl->assign ( 'GLANG', $lang_global );
 	$xtpl->assign ( 'PAGE_TITLE', $page_title );

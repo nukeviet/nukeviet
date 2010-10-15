@@ -46,7 +46,7 @@ if ( empty( $bots ) and file_exists( NV_ROOTDIR . "/includes/bots.php" ) )
 }
 $a = 0;
 
-$xtpl = new XTemplate( "bots.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_name . "" );
+$xtpl = new XTemplate( "bots.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 foreach ( $bots as $name => $values )
 {

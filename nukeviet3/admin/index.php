@@ -101,8 +101,8 @@ if ( ! empty( $module_name ) )
     {
         $module_info = $admin_mods[$module_name];
         $module_file = $module_name;
-        $include_functions = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_name . "/functions.php";
-        $include_file = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_name . "/" . $op . ".php";
+        $include_functions = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_file . "/functions.php";
+        $include_file = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_file . "/" . $op . ".php";
         
         //ket noi voi file ngon ngu cua module
         if ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $module_file . ".php" ) )
