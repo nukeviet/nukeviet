@@ -36,8 +36,8 @@ $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_
 $orders = array( 
     'userid', 'username', 'full_name', 'email', 'regdate' 
 );
-$orderby = $nv_Request->get_string( 'sortby', 'get', '' );
-$ordertype = $nv_Request->get_string( 'sorttype', 'get', '' );
+$orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );
+$ordertype = $nv_Request->get_string( 'sorttype', 'get', 'DESC' );
 if ( $ordertype != "ASC" ) $ordertype = "DESC";
 
 if ( ! empty( $method ) and isset( $methods[$method] ) and ! empty( $methodvalue ) )
@@ -54,15 +54,14 @@ if ( ! empty( $orderby ) and in_array( $orderby, $orders ) )
     $base_url .= "&amp;sortby=" . $orderby . "&amp;sorttype=" . $ordertype;
 }
 
-$sql1 = "SELECT COUNT(*) " . $sql;
-$query1 = $db->sql_query( $sql1 );
-list( $all_page ) = $db->sql_fetchrow( $query1 );
-
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 30;
 
-$sql2 = "SELECT * " . $sql . " LIMIT " . $page . ", " . $per_page;
+$sql2 = "SELECT SQL_CALC_FOUND_ROWS * " . $sql . " LIMIT " . $page . ", " . $per_page;
 $query2 = $db->sql_query( $sql2 );
+
+$result = $db->sql_query( "SELECT FOUND_ROWS()" );
+list( $all_page ) = $db->sql_fetchrow( $result );
 
 $users_list = array();
 $admin_in = array();

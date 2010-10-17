@@ -111,7 +111,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
             $_user['birthday'] = 0;
         }
         
-        $_user['in_groups'] = ( ! empty( $_user['in_groups'] ) ) ? implode( ',', $_user['in_groups'] ) : '';
+        $data_in_groups = ( ! empty( $_user['in_groups'] ) ) ? implode( ',', $_user['in_groups'] ) : '';
         
         $password = $crypt->hash( $_user['password1'] );
         
@@ -141,15 +141,15 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
 		'', 
         " . $_user['view_mail'] . ", 
         1, 
-        " . $db->dbescape( $_user['in_groups'] ) . ", 
+        " . $db->dbescape_string( $data_in_groups ) . ", 
         1, '', 0, '', '', '')";
         
         $userid = $db->sql_query_insert_id( $sql );
         
         if ( $userid )
         {
-            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_user', "userid ".$userid, $admin_info['userid'] );
-        	if ( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
+            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_user', "userid " . $userid, $admin_info['userid'] );
+            if ( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
             {
                 @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
                 
@@ -169,6 +169,32 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                     $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape( $file_name ) . " WHERE `userid`=" . $userid;
                     $db->sql_query( $sql );
                 }
+            }
+            if ( ! empty( $_user['in_groups'] ) )
+            {
+                foreach ( $_user['in_groups'] as $group_id_i )
+                {
+                    $query = "SELECT `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id`=" . $group_id_i;
+                    $result = $db->sql_query( $query );
+                    $numrows = $db->sql_numrows( $result );
+                    if ( $numrows )
+                    {
+                        $row_users = $db->sql_fetchrow( $result );
+                        $users = trim( $row_users['users'] );
+                        $users = ! empty( $users ) ? explode( ",", $users ) : array();
+                        $users = array_merge( $users, array( 
+                            $userid 
+                        ) );
+                        $users = array_unique( $users );
+                        sort( $users );
+                        $users = array_values( $users );
+                        $users = ! empty( $users ) ? implode( ",", $users ) : "";
+                        
+                        $sql = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `users`=" . $db->dbescape_string( $users ) . " WHERE `group_id`=" . $group_id_i;
+                        $db->sql_query( $sql );
+                    }
+                }
+            
             }
             
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );

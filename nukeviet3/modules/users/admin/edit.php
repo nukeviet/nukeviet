@@ -28,6 +28,7 @@ if ( $numrows != 1 )
     die();
 }
 $row = $db->sql_fetchrow( $result );
+$array_old_groups = ( ! empty( $row['in_groups'] ) ) ? explode( ',', $row['in_groups'] ) : array();
 
 $allow = false;
 
@@ -61,8 +62,8 @@ $error = "";
 
 if ( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', "userid ".$userid, $admin_info['userid'] );
-	$_user['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', "userid " . $userid, $admin_info['userid'] );
+    $_user['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
     $_user['email'] = filter_text_input( 'email', 'post', '', 1, 100 );
     $_user['password1'] = filter_text_input( 'password1', 'post', '', 0, NV_UPASSMAX );
     $_user['password2'] = filter_text_input( 'password2', 'post', '', 0, NV_UPASSMAX );
@@ -155,7 +156,45 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         {
             $_user['birthday'] = 0;
         }
+        $array_in_groups = array_values( $_user['in_groups'] );
+        $array_all_groups = array_merge( $array_old_groups, $array_in_groups );
         
+        $_user['in_groups'] = array();
+        if ( ! empty( $array_all_groups ) )
+        {
+            foreach ( $array_all_groups as $group_id_i )
+            {
+                $query = "SELECT `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id`=" . $group_id_i;
+                $result = $db->sql_query( $query );
+                $numrows = $db->sql_numrows( $result );
+                if ( $numrows )
+                {
+                    $row_users = $db->sql_fetchrow( $result );
+                    $users = trim( $row_users['users'] );
+                    $users = ! empty( $users ) ? explode( ",", $users ) : array();
+                    if ( in_array( $group_id_i, $array_in_groups ) )
+                    {
+                        $users = array_merge( $users, array( 
+                            $userid 
+                        ) );
+                        $_user['in_groups'][] = $group_id_i;
+                    }
+                    else
+                    {
+                        $users = array_diff( $users, array( 
+                            $userid 
+                        ) );
+                    }
+                    $users = array_unique( $users );
+                    sort( $users );
+                    $users = array_values( $users );
+                    $users = ! empty( $users ) ? implode( ",", $users ) : "";
+                    
+                    $sql = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `users`=" . $db->dbescape_string( $users ) . " WHERE `group_id`=" . $group_id_i;
+                    $db->sql_query( $sql );
+                }
+            }
+        }
         $_user['in_groups'] = ( ! empty( $_user['in_groups'] ) ) ? implode( ',', $_user['in_groups'] ) : '';
         
         $password = ! empty( $_user['password1'] ) ? $crypt->hash( $_user['password1'] ) : $row['password'];
@@ -172,7 +211,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
             }
         }
         
-        $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET 
+        $db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET 
         `username`=" . $db->dbescape( $_user['username'] ) . ", 
         `md5username`=" . $db->dbescape( md5( $_user['username'] ) ) . ", 
         `password`=" . $db->dbescape( $password ) . ", 
@@ -191,43 +230,38 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         `question`=" . $db->dbescape( $_user['question'] ) . ", 
         `answer`=" . $db->dbescape( $_user['answer'] ) . ", 
         `view_mail`=" . $_user['view_mail'] . ", 
-        `in_groups`=" . $db->dbescape( $_user['in_groups'] ) . " 
-        WHERE `userid`=" . $userid;
+        `in_groups`=" . $db->dbescape_string( $_user['in_groups'] ) . " 
+        WHERE `userid`=" . $userid );
         
-        if ( $db->sql_query( $sql ) )
+        if ( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
         {
-            if ( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
-            {
-                @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
-                
-                $upload = new upload( array( 
-                    'images' 
-                ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-                $upload_info = $upload->save_file( $_FILES['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
-                
-                @unlink( $_FILES['photo']['tmp_name'] );
-                
-                if ( empty( $upload_info['error'] ) )
-                {
-                    @chmod( $upload_info['name'], 0644 );
-                    
-                    if ( ! empty( $photo ) and is_file( NV_ROOTDIR . '/' . $photo ) )
-                    {
-                        @nv_deletefile( NV_ROOTDIR . '/' . $photo );
-                    }
-                    
-                    $file_name = str_replace( NV_ROOTDIR . "/", "", $upload_info['name'] );
-                    
-                    $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape( $file_name ) . " WHERE `userid`=" . $userid;
-                    $db->sql_query( $sql );
-                }
-            }
+            @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
             
-            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-            exit();
+            $upload = new upload( array( 
+                'images' 
+            ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
+            $upload_info = $upload->save_file( $_FILES['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
+            
+            @unlink( $_FILES['photo']['tmp_name'] );
+            
+            if ( empty( $upload_info['error'] ) )
+            {
+                @chmod( $upload_info['name'], 0644 );
+                
+                if ( ! empty( $photo ) and is_file( NV_ROOTDIR . '/' . $photo ) )
+                {
+                    @nv_deletefile( NV_ROOTDIR . '/' . $photo );
+                }
+                
+                $file_name = str_replace( NV_ROOTDIR . "/", "", $upload_info['name'] );
+                
+                $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape( $file_name ) . " WHERE `userid`=" . $userid;
+                $db->sql_query( $sql );
+            }
         }
         
-        $error = $lang_module['edit_add_error'];
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+        exit();
     }
 }
 else
