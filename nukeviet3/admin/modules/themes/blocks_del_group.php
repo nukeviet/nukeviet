@@ -21,6 +21,7 @@ if ( in_array( $selectthemes, $theme_array ) )
             $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE groupbl='" . $group . "' AND theme='" . $selectthemes . "'" );
         }
     }
+    nv_del_moduleCache( 'themes' );
 }
 echo $lang_module['block_delete_success'];
 ?>

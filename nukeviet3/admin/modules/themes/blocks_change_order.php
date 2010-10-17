@@ -41,5 +41,6 @@ if ( $order > 0 and $bid > 0 )
         $db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "` SET weight=" . $order . " WHERE bid=" . $row['bid'] . "" );
         $order ++;
     }
+    nv_del_moduleCache( 'themes' );
 }
 ?>

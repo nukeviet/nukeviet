@@ -24,7 +24,7 @@ foreach ( $array_bid as $bid )
     if ( $bid > 0 )
     {
         nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_block', "blockid  " . $bid, $admin_info['userid'] );
-    	list( $position, $func_id ) = $db->sql_fetchrow( $db->sql_query( "SELECT position,func_id FROM `" . NV_BLOCKS_TABLE . "` WHERE bid=" . $bid . "" ) );
+        list( $position, $func_id ) = $db->sql_fetchrow( $db->sql_query( "SELECT position,func_id FROM `" . NV_BLOCKS_TABLE . "` WHERE bid=" . $bid . "" ) );
         $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE bid='" . $bid . "'" );
         #reupdate
         $result = $db->sql_query( "SELECT bid FROM `" . NV_BLOCKS_TABLE . "` WHERE position='$position' AND func_id='$func_id'  AND theme='" . $selectthemes . "' ORDER BY weight ASC" );
@@ -38,6 +38,7 @@ foreach ( $array_bid as $bid )
         $db->sql_query( "REPAIR TABLE " . NV_BLOCKS_TABLE );
         $db->sql_query( "OPTIMIZE TABLE " . NV_BLOCKS_TABLE );
         $db->sql_query( "UNLOCK TABLE " . NV_BLOCKS_TABLE );
+        nv_del_moduleCache( 'themes' );
     }
 }
 echo $lang_module['block_delete_success'];

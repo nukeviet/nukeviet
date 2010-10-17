@@ -26,6 +26,7 @@ if ( intval( $groupbl ) > 0 )
     $db->sql_query( "REPAIR TABLE `" . NV_BLOCKS_TABLE . "`" );
     $db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "`" );
     $db->sql_query( "UNLOCK TABLE `" . NV_BLOCKS_TABLE . "`" );
+    nv_del_moduleCache( 'themes' );
     echo $lang_module['block_delete_success'];
 }
 else

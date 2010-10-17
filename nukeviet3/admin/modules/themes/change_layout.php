@@ -31,4 +31,5 @@ else
 {
     echo $lang_module['setup_error_layout'];
 }
+nv_del_moduleCache( 'themes' );
 ?>

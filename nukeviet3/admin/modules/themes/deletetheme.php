@@ -10,7 +10,7 @@ $theme = filter_text_input( 'theme', 'post', "", 1 );
 if ( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) ) && $global_config['site_theme'] != trim( $theme ) && trim( $theme ) != "default" )
 {
     nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_theme', "theme  " . $theme, $admin_info['userid'] );
-	$check_exit_mod = false;
+    $check_exit_mod = false;
     $lang_module_array = array();
     $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where setup='1'";
     $result = $db->sql_query( $sql );
@@ -44,7 +44,8 @@ if ( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme )
             $db->sql_query( "REPAIR TABLE `" . NV_PREFIXLANG . "_modthemes`" );
             $db->sql_query( "OPTIMIZE TABLE `" . NV_PREFIXLANG . "_modthemes`" );
             $db->sql_query( "UNLOCK TABLE `" . NV_PREFIXLANG . "_modthemes`" );
-            
+
+            nv_del_moduleCache( 'themes' );
             echo $lang_module['theme_created_delete_theme_success'];
         }
         else

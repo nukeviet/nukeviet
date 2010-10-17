@@ -20,7 +20,7 @@ $submenu['blocks'] = $lang_module['blocks'];
 $submenu['xcopyblock'] = $lang_module['xcopyblock'];
 $submenu['add'] = $lang_module['block_add'];
 $allow_func = array( 
-    'main', 'blocks', 'setuplayout', 'activatetheme', 'deletetheme', 'change_layout', 'front_add', 'front_del', 'front_outgroup', 'add', 'loadblocks', 'blocks_change_pos', 'blocks_change_pos2', 'blocks_change_func', 'blocks_change_order', 'blocks_del', 'blocks_del_group', 'blocks_list', 'sort_order', 'xcopyblock', 'loadposition', 'xcopyprocess' 
+    'main', 'blocks', 'setuplayout', 'activatetheme', 'deletetheme', 'change_layout', 'front_add', 'front_del', 'front_outgroup', 'add', 'loadblocks', 'blocks_change_pos', 'blocks_change_pos2', 'blocks_change_order', 'blocks_del', 'blocks_del_group', 'blocks_list', 'sort_order', 'xcopyblock', 'loadposition', 'xcopyprocess' 
 );
 
 if ( defined( "NV_IS_GODADMIN" ) )

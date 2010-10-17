@@ -91,9 +91,22 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     }
     $position = filter_text_input( 'position', 'post', "", 0 );
     $active = $nv_Request->get_int( 'active', 'post', 0 );
-    $who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
     $all_func = ( $nv_Request->get_int( 'all_func', 'post' ) == 1 ) ? 1 : 0;
     $array_funcid = $nv_Request->get_array( 'func_id', 'post' );
+    
+    $who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
+    if ( $who_view < 0 or $who_view > 3 ) $who_view = 0;
+    $groups_view = "";
+    if ( $who_view == 3 )
+    {
+        $groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
+        $groups_view = ! empty( $groups_view ) ? implode( ",", array_map( "intval", $groups_view ) ) : "";
+    }
+    else
+    {
+        $groups_view = ( string )$who_view;
+    }
+    
     if ( ! empty( $error ) )
     {
         $contents_error .= "<div id='edit'></div>\n";
@@ -101,7 +114,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         $contents_error .= "<blockquote class='error'><span id='message'>" . implode( "<br>", $error ) . "</span></blockquote>\n";
         $contents_error .= "</div>\n";
         $row = array( 
-            'bid' => $bid, 'title' => $title, 'link' => $link, 'xfile' => $xfile, 'xbanner' => $xbanner, 'xhtml' => $xhtml, 'template' => $template, 'type' => $typeblock, 'position' => $position, 'exp_time' => $exp_time, 'active' => $active, 'groups_view' => $who_view, 'all_func' => $all_func, 'func_id' => $array_funcid, 'module' => '' 
+            'bid' => $bid, 'title' => $title, 'link' => $link, 'xfile' => $xfile, 'xbanner' => $xbanner, 'xhtml' => $xhtml, 'template' => $template, 'type' => $typeblock, 'position' => $position, 'exp_time' => $exp_time, 'active' => $active, 'groups_view' => $groups_view, 'all_func' => $all_func, 'func_id' => $array_funcid, 'module' => '' 
         );
         $row['xrss'] = $xrss;
         $row['rss_setting_number'] = $rss_setting_number;
@@ -167,7 +180,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                         $result = $db->sql_query( "SELECT bid FROM `" . NV_BLOCKS_TABLE . "` WHERE groupbl=" . intval( $groupbl ) . " AND func_id=" . $func_id . " AND theme='" . $selectthemes . "'" );
                         while ( list( $bids ) = $db->sql_fetchrow( $result ) )
                         {
-                            $sql = "UPDATE `" . NV_BLOCKS_TABLE . "` SET groupbl='" . $newgroupbl . "', title=" . $db->dbescape( $title ) . ", link =" . $db->dbescape( $link ) . ", type=" . $db->dbescape_string( $typeblock ) . ", file_path=" . $db->dbescape_string( $file_path ) . ", template=" . $db->dbescape( $template ) . ", exp_time=" . $db->dbescape( $exp_time ) . ",position=" . $db->dbescape( $position ) . ", active=" . $active . ", groups_view=" . $db->dbescape( $who_view ) . ", module=" . $db->dbescape( $xmodule ) . " WHERE bid=" . $bids . "";
+                            $sql = "UPDATE `" . NV_BLOCKS_TABLE . "` SET groupbl='" . $newgroupbl . "', title=" . $db->dbescape( $title ) . ", link =" . $db->dbescape( $link ) . ", type=" . $db->dbescape_string( $typeblock ) . ", file_path=" . $db->dbescape_string( $file_path ) . ", template=" . $db->dbescape( $template ) . ", exp_time=" . $db->dbescape( $exp_time ) . ",position=" . $db->dbescape( $position ) . ", active=" . $active . ", groups_view=" . $db->dbescape_string( $groups_view ) . ", module=" . $db->dbescape( $xmodule ) . " WHERE bid=" . $bids . "";
                             $db->sql_query( $sql );
                         }
                     }
@@ -175,7 +188,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                     {
                         #insert if not exist in list
                         list( $maxweight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM `" . NV_BLOCKS_TABLE . "` WHERE groupbl='" . $groupbl . "' AND func_id='" . $func . "'" ) );
-                        $sql = "INSERT INTO `" . NV_BLOCKS_TABLE . "` (`bid`, `groupbl`, `title` ,`link` ,`type` ,`file_path` ,`theme`, `template` ,`position` ,`exp_time` ,`active` , `groups_view`,`module`, `all_func`, `func_id` ,`weight`) VALUES (NULL, " . $db->dbescape( $newgroupbl ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $typeblock ) . ", " . $db->dbescape_string( $file_path ) . ", " . $db->dbescape( $selectthemes ) . ", " . $db->dbescape( $template ) . "," . $db->dbescape( $position ) . ", " . $db->dbescape( $exp_time ) . "," . $active . ", " . $db->dbescape( $who_view ) . ", " . $db->dbescape( $xmodule ) . ", '0', " . $db->dbescape( $func_id ) . "," . $newgroupbl . ")";
+                        $sql = "INSERT INTO `" . NV_BLOCKS_TABLE . "` (`bid`, `groupbl`, `title` ,`link` ,`type` ,`file_path` ,`theme`, `template` ,`position` ,`exp_time` ,`active` , `groups_view`,`module`, `all_func`, `func_id` ,`weight`) VALUES (NULL, " . $db->dbescape( $newgroupbl ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $typeblock ) . ", " . $db->dbescape_string( $file_path ) . ", " . $db->dbescape( $selectthemes ) . ", " . $db->dbescape( $template ) . "," . $db->dbescape( $position ) . ", " . $db->dbescape( $exp_time ) . "," . $active . ", " . $db->dbescape_string( $groups_view ) . ", " . $db->dbescape( $xmodule ) . ", '0', " . $db->dbescape( $func_id ) . "," . $newgroupbl . ")";
                         $db->sql_query( $sql );
                     }
                 }
@@ -189,7 +202,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                     {
                         $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE groupbl='" . $groupbl . "' AND func_id='" . $func_id . "' AND theme='" . $selectthemes . "'" );
                     }
-                    $sql = "UPDATE `" . NV_BLOCKS_TABLE . "` SET `title`=" . $db->dbescape( $title ) . ", `link` =" . $db->dbescape( $link ) . ", `type`=" . $db->dbescape_string( $typeblock ) . ", `file_path`=" . $db->dbescape_string( $file_path ) . ", `template`=" . $db->dbescape( $template ) . ", `exp_time`=" . $db->dbescape( $exp_time ) . ",`position`=" . $db->dbescape( $position ) . ", `active`=" . $active . ", `groups_view`=" . $db->dbescape( $who_view ) . ", `module`=" . $db->dbescape( $xmodule ) . ", `all_func`=" . $all_func . " WHERE `groupbl`=" . $groupbl . " AND theme='" . $selectthemes . "'";
+                    $sql = "UPDATE `" . NV_BLOCKS_TABLE . "` SET `title`=" . $db->dbescape( $title ) . ", `link` =" . $db->dbescape( $link ) . ", `type`=" . $db->dbescape_string( $typeblock ) . ", `file_path`=" . $db->dbescape_string( $file_path ) . ", `template`=" . $db->dbescape( $template ) . ", `exp_time`=" . $db->dbescape( $exp_time ) . ",`position`=" . $db->dbescape( $position ) . ", `active`=" . $active . ", `groups_view`=" . $db->dbescape_string( $groups_view ) . ", `module`=" . $db->dbescape( $xmodule ) . ", `all_func`=" . $all_func . " WHERE `groupbl`=" . $groupbl . " AND theme='" . $selectthemes . "'";
                     $db->sql_query( $sql );
                 }
                 else
@@ -202,12 +215,13 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                     {
                         #insert if not exist in list
                         list( $maxweight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM `" . NV_BLOCKS_TABLE . "` WHERE position='" . $position . "' AND func_id='" . $func_id . "'" ) );
-                        $sql = "INSERT INTO `" . NV_BLOCKS_TABLE . "` (`bid`, `groupbl`, `title` ,`link` ,`type` ,`file_path` ,`theme`, `template` ,`position` ,`exp_time` ,`active` , `groups_view`,`module`,`all_func`, `func_id` ,`weight`) VALUES (NULL, " . $db->dbescape( $groupbl ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $typeblock ) . ", " . $db->dbescape_string( $file_path ) . ", " . $db->dbescape( $selectthemes ) . ", " . $db->dbescape( $template ) . "," . $db->dbescape( $position ) . ", " . $db->dbescape( $exp_time ) . "," . $active . ", " . $db->dbescape( $who_view ) . ", " . $db->dbescape( $xmodule ) . ", " . $all_func . ", " . $db->dbescape( $func_id ) . "," . ( $maxweight + 1 ) . ")";
+                        $sql = "INSERT INTO `" . NV_BLOCKS_TABLE . "` (`bid`, `groupbl`, `title` ,`link` ,`type` ,`file_path` ,`theme`, `template` ,`position` ,`exp_time` ,`active` , `groups_view`,`module`,`all_func`, `func_id` ,`weight`) VALUES (NULL, " . $db->dbescape( $groupbl ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $typeblock ) . ", " . $db->dbescape_string( $file_path ) . ", " . $db->dbescape( $selectthemes ) . ", " . $db->dbescape( $template ) . "," . $db->dbescape( $position ) . ", " . $db->dbescape( $exp_time ) . "," . $active . ", " . $db->dbescape_string( $groups_view ) . ", " . $db->dbescape( $xmodule ) . ", " . $all_func . ", " . $db->dbescape( $func_id ) . "," . ( $maxweight + 1 ) . ")";
                         $db->sql_query( $sql );
                     }
                 }
             }
         }
+        nv_del_moduleCache( 'themes' );
         if ( empty( $blockredirect ) )
         {
             $blockredirect = 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks';
@@ -261,7 +275,17 @@ if ( empty( $submit ) )
     $row['rss_setting_html'] = 1;
     $row['rss_setting_pubdate'] = 1;
     $row['rss_setting_target'] = 1;
+}
 
+$who_view = 3;
+$groups_view = array();
+if ( empty( $row['groups_view'] ) or $row['groups_view'] == "1" or $row['groups_view'] == "2" )
+{
+    $who_view = intval( $row['groups_view'] );
+}
+else
+{
+    $groups_view = array_map( "intval", explode( ",", $row['groups_view'] ) );
 }
 
 $sql = "SELECT `func_id` , `func_custom_name` , `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC";
@@ -276,6 +300,8 @@ while ( list( $id_i, $func_custom_name_i, $in_module_i ) = $db->sql_fetchrow( $f
 
 $contents .= "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/css/admin.css\" type=\"text/css\" />";
 $contents .= "<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.all.css' rel='stylesheet' />\n";
+$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/global.js\"></script>\n";
+$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/admin.js\"></script>\n";
 $contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n";
 $contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery-ui-1.8.2.custom.js\"></script>\n";
 $contents .= "<script type=\"text/javascript\">\n";
@@ -516,14 +542,28 @@ $contents .= "<td>";
 $array_who_view = array( 
     $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] 
 );
-$groups_list = nv_groups_list();
-$contents .= "<select name=\"who_view\" style=\"width: 250px;\">\n";
+$contents .= "<select name=\"who_view\" style=\"width: 250px;\" id=\"who_view\" onchange=\"nv_sh('who_view','groups_list')\">\n";
 $row['groups_view'] = intval( $row['groups_view'] );
 foreach ( $array_who_view as $k => $w )
 {
     $contents .= "<option value=\"" . $k . "\" " . ( ( $k == $row['groups_view'] ) ? ' selected' : '' ) . ">" . $w . "</option>\n";
 }
 $contents .= "</select>\n";
+$contents .= "</td>\n";
+$contents .= "</tr>\n";
+$contents .= "</tbody>\n";
+
+$contents .= "<tbody class=\"second\" id=\"groups_list\" style=\"" . ( $who_view == 3 ? "visibility: visible; display: table-row-group;" : "visibility: hidden; display: none;" ) . "\">\n";
+$contents .= "<tr>\n";
+$contents .= "<td>" . $lang_global['groups_view'] . ":</td>\n";
+$contents .= "<td>\n";
+$groups_list = nv_groups_list();
+foreach ( $groups_list as $group_id => $grtl )
+{
+    $contents .= "<p><input name=\"groups_view[]\" type=\"checkbox\" value=\"" . $group_id . "\"";
+    if ( in_array( $group_id, $groups_view ) ) $contents .= " checked=\"checked\"";
+    $contents .= " />&nbsp;" . $grtl . "</p>\n";
+}
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";

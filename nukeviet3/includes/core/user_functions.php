@@ -147,12 +147,12 @@ function nv_blocks_content ( )
     if ( ! empty( $array_position ) )
     {
         #dev version theme control
-        $sql_bl = "SELECT * FROM `" . NV_BLOCKS_TABLE . "` WHERE func_id='" . $module_info['funcs'][$op]['func_id'] . "' AND `theme` ='" . $global_config['module_theme'] . "' AND `active`=1 AND (`exp_time`=0 OR `exp_time`>" . NV_CURRENTTIME . ") ORDER BY `weight` ASC";
-        $result_bl = $db->sql_query( $sql_bl );
-        while ( $row_bl = $db->sql_fetchrow( $result_bl ) )
+        $sql_bl = "SELECT * FROM `" . NV_BLOCKS_TABLE . "` WHERE func_id='" . $module_info['funcs'][$op]['func_id'] . "' AND `theme` ='" . $global_config['module_theme'] . "' AND `active`=1 ORDER BY `weight` ASC";
+        $list = nv_db_cache( $sql_bl, '', 'themes' );
+        foreach ( $list as $row_bl )
         {
             $__pos = $row_bl['position'];
-            if ( isset( $__blocks_return[$__pos] ) )
+            if ( isset( $__blocks_return[$__pos] ) and ( $__pos['exp_time'] == 0 or $__pos['exp_time'] > " . NV_CURRENTTIME . " ) )
             {
                 $groups_view = ( string )$row_bl['groups_view'];
                 $allowed = false;
@@ -192,7 +192,6 @@ function nv_blocks_content ( )
             }
         }
         
-        $db->sql_freeresult( $result_bl );
         foreach ( array_keys( $__blocks ) as $__pos )
         {
             if ( ! empty( $__blocks[$__pos] ) )

@@ -29,6 +29,7 @@ if ( $numbl > 1 )
     {
         echo $lang_module['block_front_outgroup_error_update'];
     }
+    nv_del_moduleCache( 'themes' );
 }
 else
 {

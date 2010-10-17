@@ -28,6 +28,7 @@ if ( in_array( $selectthemes, $theme_array ) and ! empty( $pos ) and $bid > 0 )
         $db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "` SET weight='" . ( $i ) . "' WHERE `bid`='$bid'" );
         $i ++;
     }
+    nv_del_moduleCache( 'themes' );
 }
 echo $lang_module['block_update_success'];
 ?>

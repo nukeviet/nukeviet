@@ -17,6 +17,7 @@ if ( in_array( $selectthemes, $theme_array ) and ! empty( $pos ) and $group > 0 
     {
         $db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "` SET position=" . $db->dbescape( $pos ) . " WHERE `bid`='$bids'" );
     }
+    nv_del_moduleCache( 'themes' );
 }
 
 ?>

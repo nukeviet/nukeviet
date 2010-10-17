@@ -29,47 +29,32 @@ $selectedmodule = '';
 $selectedfunction = '';
 $whereclause = '';
 $selectedmodule = filter_text_input( 'module', 'get', '', 1 );
-if ( empty( $selectedmodule ) )
+$selectedfunction = $nv_Request->get_int( 'func', 'get', 0 );
+if ( $selectedfunction > 0 )
 {
-    $func_id_main = 0;
+    list( $selectedmodule ) = $db->sql_fetchrow( $db->sql_query( "SELECT `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE func_id='" . $selectedfunction . "'" ) );
+}
+elseif ( ! empty( $selectedmodule ) )
+{
+    list( $selectedfunction ) = $db->sql_fetchrow( $db->sql_query( "SELECT func_id FROM `" . NV_MODFUNCS_TABLE . "` WHERE func_name='main' AND `in_module`=" . $db->dbescape( $selectedmodule ) . "" ) );
+}
+
+if ( $selectedfunction > 0 and ! empty( $selectedmodule ) )
+{
+    $whereclause = "WHERE func_id = " . $selectedfunction . " AND theme='" . $selectthemes . "'";
 }
 else
 {
-    list( $func_id_main ) = $db->sql_fetchrow( $db->sql_query( "SELECT func_id FROM `" . NV_MODFUNCS_TABLE . "` WHERE func_name='main' AND `in_module`=" . $db->dbescape( $selectedmodule ) . "" ) );
-}
-$selectedfunction = $nv_Request->get_int( 'func', 'get', $func_id_main );
-$functionid = $selectedfunction;
-if ( ! empty( $selectedmodule ) )
-{
-    $functionlist = array();
-    $sql = "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $selectedmodule ) . " ORDER BY func_id";
-    $result = $db->sql_query( $sql );
-    while ( list( $funcid ) = $db->sql_fetchrow( $result ) )
-    {
-        $functionlist[] = $funcid;
-    }
-    $functionlist = implode( ',', $functionlist );
-    if ( empty( $selectedfunction ) )
-    {
-        $whereclause = 'WHERE func_id IN (' . $functionlist . ') AND theme="' . $selectthemes . '"';
-    }
-    else
-    {
-        $whereclause = 'WHERE func_id =' . $selectedfunction . ' AND theme="' . $selectthemes . '"';
-    }
-}
-else
-{
-    $whereclause = 'WHERE func_id = ' . $selectedfunction . ' AND theme="' . $selectthemes . '"';
+    Header( 'Location: index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks' );
+    exit();
 }
 
 $page_title = $lang_module['blocks_by_funcs'] . ':' . $selectthemes;
 $contents .= "<table class=\"tab1\">\n";
 $contents .= "<thead>\n";
 $contents .= "<tr>\n";
-$contents .= "<td></td>\n";
-$contents .= "<td>" . $lang_module['block_select_module'] . ":</td>\n";
-$contents .= "<td colspan='7'>";
+$contents .= "<td colspan='2'>" . $lang_module['block_select_module'] . ":</td>\n";
+$contents .= "<td colspan='5'>";
 $contents .= "<select name='module'>";
 $contents .= "<option value=''>" . $lang_module['block_select_module'] . "</option>";
 $sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
@@ -80,7 +65,7 @@ while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
     $contents .= "<option value='" . $m_title . "' " . $sel . ">" . $m_custom_title . "</option>";
 }
 $contents .= "</select>\n";
-$contents .= "<select name='function'>";
+$contents .= "" . $lang_module['block_func'] . " <select name='function'>";
 $contents .= "<option value=''>" . $lang_module['block_select_function'] . "</option>";
 $array_func_id = array();
 $sql = "SELECT func_id, func_custom_name FROM `" . NV_MODFUNCS_TABLE . "` WHERE in_module='" . $selectedmodule . "' AND show_func=1 ORDER BY `subweight` ASC";
@@ -98,7 +83,6 @@ $contents .= "<tr>\n";
 $contents .= "<td>ID</td>\n";
 $contents .= "<td>" . $lang_module['block_sort'] . "</td>\n";
 $contents .= "<td>" . $lang_module['block_pos'] . "</td>\n";
-$contents .= "<td>" . $lang_module['block_func'] . "</td>\n";
 $contents .= "<td>" . $lang_module['block_title'] . "</td>\n";
 $contents .= "<td>" . $lang_module['block_file'] . "</td>\n";
 $contents .= "<td>" . $lang_module['block_active'] . "</td>\n";
@@ -146,18 +130,6 @@ while ( $row = $db->sql_fetchrow( $result ) )
     }
     $contents .= "</select>";
     $contents .= "</td>\n";
-    list( $func_area, $in_module ) = $db->sql_fetchrow( $db->sql_query( "SELECT `func_custom_name` , `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE func_id='" . $row['func_id'] . "'" ) );
-    
-    $contents .= "<td>";
-    $contents .= "<select name='func_change' class='" . $row['position'] . "' id='" . $row['bid'] . "'>";
-    $funcresult = $db->sql_query( "SELECT `func_id`,`func_custom_name` FROM `" . NV_MODFUNCS_TABLE . "` WHERE in_module='" . $in_module . "' AND show_func='1'" );
-    while ( list( $func_id, $func_custom_name ) = $db->sql_fetchrow( $funcresult ) )
-    {
-        $sel = ( $func_id == $row['func_id'] ) ? ' selected' : '';
-        $contents .= '<option value="' . $func_id . '" ' . $sel . '>' . $func_custom_name . '</option>';
-    }
-    $contents .= "</select>\n";
-    $contents .= "</td>\n";
     $contents .= "<td>" . $row['title'] . "</td>\n";
     $contents .= "<td>";
     if ( $row['type'] == 'html' )
@@ -175,13 +147,13 @@ while ( $row = $db->sql_fetchrow( $result ) )
     }
     $contents .= "</td>\n";
     $contents .= "<td>" . ( $row['active'] ? $lang_global['yes'] : $lang_global['no'] ) . "</td>\n";
-    $contents .= "<td align=\"center\" width='50px'><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&amp;bid=" . $row['bid'] . "#edit\">" . $lang_global['edit'] . "</a></span>\n";
+    $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&amp;bid=" . $row['bid'] . "#edit\">" . $lang_global['edit'] . "</a></span>\n";
     $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a class='delete' rel='" . $row['bid'] . "' href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span></td>\n";
     $contents .= "</tr>\n";
     $contents .= "</tbody>\n";
     $a ++;
 }
-$contents .= "<tfoot><tr><td colspan='9'>
+$contents .= "<tfoot><tr><td colspan='7'>
 <span>
 <a name=\"checkall\" id=\"checkall\" href=\"javascript:void(0);\">" . $lang_module['block_checkall'] . "</a>
 &nbsp;&nbsp;<a name=\"uncheckall\" id=\"uncheckall\" href=\"javascript:void(0);\">" . $lang_module['block_uncheckall'] . "</a>&nbsp;&nbsp;
@@ -212,7 +184,7 @@ $(function(){
 			url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_order",
 			data: "order="+order+"&bid="+id,
 			success: function(data){				
-				window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_list&func=' . $functionid . '&module=' . $selectedmodule . '";
+				window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_list&func=' . $selectedfunction . '&module=' . $selectedmodule . '";
 			}
 		});
 	});
@@ -237,7 +209,7 @@ $(function(){
 		        data:"list="+list,
 		        success: function(data){  
 		            alert(data);
-		            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_list&func=' . $functionid . '";
+		            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_list&func=' . $selectedfunction . '";
 		        }
 	        });  
         }
@@ -266,23 +238,10 @@ $(function(){
 		        data:"pos="+pos+"&bid="+id+"&func_id="+func_id+"&group="+group,
 		        success: function(data){
 		        	alert(data);  
-		            //window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_list&func=' . $functionid . '";
+		            //window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_list&func=' . $selectedfunction . '";
 		        }
 	        });
         } 
-	});
-	$("select[name=func_change]").change(function(){
-		var newfunc = $(this).val();
-		var blockid = $(this).attr("id");
-		var position = $(this).attr("class");
-        $.ajax({        
-	        type: "POST",
-	        url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_func",
-	        data:"newfunc="+newfunc+"&blockid="+blockid+"&position="+position,
-	        success: function(data){  
-	            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_list&func=' . $functionid . '";
-	        }
-        }); 
 	});
 });
 </script>
