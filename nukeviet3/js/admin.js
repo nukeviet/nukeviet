@@ -43,3 +43,14 @@ function nv_open_browse_file(theURL,winName,w,h,features) {
 	window.open(theURL,winName,settings);
 	window.blur();
 }
+
+//---------------------------------------
+
+function nv_sh(sl_id, div_id){
+    var new_opt = document.getElementById(sl_id).options[document.getElementById(sl_id).selectedIndex].value;
+    if (new_opt == 3) 
+        nv_show_hidden(div_id, 1);
+    else 
+        nv_show_hidden(div_id, 0);
+    return false;
+}

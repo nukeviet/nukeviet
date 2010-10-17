@@ -5,18 +5,6 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-function nv_sh( sl_id, div_id )
-{
-   var new_opt = document.getElementById( sl_id ).options[document.getElementById( sl_id ).selectedIndex].value;
-   if ( new_opt == 3 )
-   nv_show_hidden( div_id, 1 );
-   else
-   nv_show_hidden( div_id, 0 );
-   return false;
-}
-
-//  ---------------------------------------
-
 function nv_chang_weight( catid )
 {
    var nv_timer = nv_settimeout_disable( 'weight' + catid, 5000 );

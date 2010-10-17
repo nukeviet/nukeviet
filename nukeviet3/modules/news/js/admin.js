@@ -377,17 +377,6 @@ function res_keywords(res) {
 
 // ---------------------------------------
 
-function nv_sh(sl_id, div_id) {
-	var new_opt = document.getElementById(sl_id).options[document.getElementById(sl_id).selectedIndex].value;
-	if (new_opt == 3)
-		nv_show_hidden(div_id, 1);
-	else
-		nv_show_hidden(div_id, 0);
-	return false;
-}
-
-// ---------------------------------------
-
 // autocomplete function
 
 function findValue(li) {

@@ -157,17 +157,6 @@ function nv_mod_del_result(res){
 
 //  ---------------------------------------
 
-function nv_sh(sl_id, div_id){
-    var new_opt = document.getElementById(sl_id).options[document.getElementById(sl_id).selectedIndex].value;
-    if (new_opt == 3) 
-        nv_show_hidden(div_id, 1);
-    else 
-        nv_show_hidden(div_id, 0);
-    return false;
-}
-
-//  ---------------------------------------
-
 function nv_show_funcs(show_id){
     if (document.getElementById(show_id)) {
         nv_ajax("get", strHref, 'aj=show_funcs&num=' + nv_randomPassword(8), show_id);
