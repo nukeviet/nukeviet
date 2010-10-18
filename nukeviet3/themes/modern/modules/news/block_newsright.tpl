@@ -12,26 +12,30 @@
 		<div class="clear"></div>
 		<div class="box-border" id="topviews">
 			<div class="content-box">
-				<ul class="list-number">
 				<!-- BEGIN: topviews -->
+				<ul class="list-number">
+					<!-- BEGIN: loop -->
 					<li>
 						<span class="small">{topviews.catname}</span>
 						<br/>
 						<a href="{topviews.link}">{topviews.title}</a>
 					</li>
-				<!-- END: topviews -->
+					<!-- END: loop -->
 				</ul>
+				<!-- END: topviews -->
 			</div>
 		</div>
 		<div class="box-border" id="topcomment">
 			<div class="content-box">
+			<!-- BEGIN: topcomment -->
 				<ul class="list-number">
-				<!-- BEGIN: topcomment -->
+				<!-- BEGIN: loop -->
 					<li>
 						<a title="{topcomment.content}" href="{topcomment.link}">{topcomment.content}</a>
 					</li>
-				<!-- END: topcomment -->
+				<!-- END: loop -->
 				</ul>
+			<!-- END: topcomment -->
 			</div>
 		</div>		
 	</div>

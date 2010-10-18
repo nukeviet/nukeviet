@@ -18,8 +18,6 @@
         </script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/superfish.js">
         </script>
-        <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/stayontop.js">
-        </script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/styleswitch.js">
         </script>
         <script type="text/javascript">
@@ -29,34 +27,13 @@
                     autoArrows: false,
                     speed: 'fast'
                 });
-                $("#go").mouseover(function(){
-                    $("#block_on").removeClass('sideoff').addClass('slideon');
-                    $("#block_on").animate({
-                        width: "200px",
-                        marginLeft: "10px"
-                    }, 1500);
-                });
-				$("#go").mouseout(function(){
-					$(this).removeClass('sideoff').addClass('sideon');
-					$("#block_on").removeClass('slideon').addClass('sideoff');
-				});
             });
-        </script>
-        <script type="text/javascript">
-            alwaysOnTop.init({
-                targetid: 'floatleft',
-                orientation: 3,
-                position: [0, 300],
-                fadeduration: [1000, 1000],
-                frequency: 0.95,
-                hideafter: 10000000
-            })
         </script>
         <!--[if IE 6]>
             <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/ie.css" />
             <script src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
             <script>
-            DD_belatedPNG.fix('#');
+				DD_belatedPNG.fix('#');
             </script>
         <![endif]-->
     </head>

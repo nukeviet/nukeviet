@@ -3,8 +3,6 @@
 	padding: 4px 0;
 }
 
-
-
 #users .line {
 	border-bottom: 1px solid #ccc;
 }
@@ -17,7 +15,6 @@
 	list-style: disc;
 	color: #999;
 }
-
 
 .register input {
 	display:block;

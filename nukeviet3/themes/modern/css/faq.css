@@ -1,5 +1,4 @@
 #faq .faq-header h4 {font-size:1.3em;margin-bottom:.8em;font-weight:bold;border-bottom:1px solid #d8d8d8;line-height:2;}
-
 #faq  .block_faq .title{background:url(../images/faq/faq.gif) no-repeat left -96px;padding-left:27px;}
 #faq  .block_faq .title a{text-decoration:underline;}
 #faq  .block_faq,.show_detail,.show_detail .detail_faq .answer {}
