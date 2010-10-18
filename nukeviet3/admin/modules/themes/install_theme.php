@@ -7,29 +7,41 @@
  */
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 $title = $note = $module_file = "";
+$page_title = $lang_module['autoinstall'];
 $xauto = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme' . md5( session_id() ) . '.list';
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme' . md5( session_id() ) . '.zip';
 $xfolder = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'themefolder' . md5( session_id() ) . '.list';
 if ( $nv_Request->isset_request( 'op', 'post' ) )
 {
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-    
     if ( is_uploaded_file( $_FILES['themefile']['tmp_name'] ) )
     {
         if ( move_uploaded_file( $_FILES['themefile']['tmp_name'], $filename ) )
         {
             $zip = new PclZip( $filename );
             $status = $zip->properties();
+            $check_number = 0;
             if ( $status['status'] == 'ok' )
             {
+                $list = $zip->listContent();
+                $theme = $list[0]['filename'];
+                foreach ( $list as $file_i )
+                {
+                    if ( $file_i['filename'] == $theme . "theme.php" or $file_i['filename'] == $theme . "config.ini" )
+                    {
+                        $check_number ++;
+                    }
+                }
+            }
+            if ( $check_number == 2 )
+            {
                 nv_insert_logs( NV_LANG_DATA, $module_name, 'log_intall_theme', "theme  " . $theme, $admin_info['userid'] );
-            	$filefolder = '';
+                $filefolder = '';
                 $filelist = '';
                 $validfolder = array();
                 $filesize = nv_convertfromBytes( $_FILES['themefile']['size'] );
                 $contents .= $lang_module['autoinstall_theme_uploadedfile'] . '<span style="color:red;font-weight:bold">' . $_FILES['themefile']['name'] . '</span> - ' . $lang_module['autoinstall_theme_uploadedfilesize'] . '<span style="color:red;font-weight:bold">' . $filesize . '</span><br />';
                 #show file and folder
-                $list = $zip->listContent();
                 $contents .= "<br /><b>" . $lang_module['autoinstall_theme_uploaded_filenum'] . $status['nb'] . "</b><br />";
                 for ( $i = 0, $j = 1; $i < sizeof( $list ); $i ++, $j ++ )
                 {
@@ -92,7 +104,9 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
             }
         }
         else
+        {
             $contents .= "<span style='color:red'>" . $lang_module['autoinstall_theme_error_uploadfile'] . "</span><br />";
+        }
     }
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
