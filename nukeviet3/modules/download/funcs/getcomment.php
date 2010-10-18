@@ -132,6 +132,7 @@ if ( $nv_Request->isset_request( 'ajax', 'post' ) )
 }
 
 //list_comment
+$generate_page = "";
 if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
 {
     if ( ! empty( $list_cats ) )
@@ -150,9 +151,11 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
             $per_page = 15;
             
             $query = "SELECT SQL_CALC_FOUND_ROWS a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email, 
-            a.post_ip AS post_ip, a.post_time AS post_time, a.comment AS comment, a.admin_reply AS admin_reply, a.admin_id AS admin_id 
+            a.post_ip AS post_ip, a.post_time AS post_time, a.comment AS comment, a.admin_reply AS admin_reply, a.admin_id AS admin_id, 
+            c.email as email, c.full_name as full_name, c.photo as photo, c.view_mail as view_mail  
             FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` AS a 
             INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "` AS b ON a.fid = b.id 
+			LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` as c ON a.post_id =c.userid	            
             WHERE a.fid=" . $id . " AND a.status=1 AND b.catid IN (" . $in . ") AND b.status=1 AND b.comment_allow=1 
             ORDER BY a.post_time DESC LIMIT " . $page . "," . $per_page;
             
@@ -173,9 +176,12 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
                     if ( ! $row['post_id'] )
                     {
                         $post_name .= " (" . nv_EncodeEmail( $row['post_email'] ) . ", " . $row['post_ip'] . ")";
+                        $row['photo'] = "";
                     }
                     else
                     {
+                        $row['post_email'] = ( $row['view_mail'] ) ? $row['email'] : "";
+                        $row['post_name'] = $row['full_name'];
                         if ( defined( 'NV_IS_MODADMIN' ) )
                         {
                             if ( isset( $users[$row['post_id']] ) )
@@ -233,6 +239,7 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
                         'id' => ( int )$row['id'], //
 						'post_name' => $post_name, //
 						'post_email' => $row['post_email'], //
+						'photo' => $row['photo'], //
 						'post_ip' => $row['post_ip'], //
 						'post_time' => $post_time, //
 						'subject' => $row['subject'], //
@@ -241,8 +248,6 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
 						'edit_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;edit=1&amp;id=" . $row['id'], //
 						'del_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment" 
                     ); //
-                
-
                 }
                 
                 if ( ! empty( $users ) )
@@ -294,10 +299,8 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
                         }
                     }
                 }
-                
                 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page, true, true, 'nv_urldecode_ajax', 'list_comments' );
             }
-            
             $contents = show_comment( $array, $generate_page );
             die( $contents );
         }
