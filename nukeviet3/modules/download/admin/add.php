@@ -12,7 +12,9 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['file_addfile'];
 
 $groups_list = nv_groups_list();
-$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
+$array_who = array( 
+    $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] 
+);
 if ( ! empty( $groups_list ) )
 {
     $array_who[] = $lang_global['who_view3'];
@@ -34,14 +36,13 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $array['fileupload'] = $nv_Request->get_typed_array( 'fileupload', 'post', 'string' );
     $array['linkdirect'] = $nv_Request->get_typed_array( 'linkdirect', 'post', 'string' );
     $array['version'] = filter_text_input( 'version', 'post', '', 1 );
-    $array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
     $array['fileimage'] = filter_text_input( 'fileimage', 'post', '' );
     $array['copyright'] = filter_text_input( 'copyright', 'post', '', 1 );
     $array['comment_allow'] = $nv_Request->get_int( 'comment_allow', 'post', 0 );
     $array['who_comment'] = $nv_Request->get_int( 'who_comment', 'post', 0 );
     $array['groups_comment'] = $nv_Request->get_typed_array( 'groups_comment', 'post', 'int' );
     $array['is_del_report'] = $nv_Request->get_int( 'is_del_report', 'post', 0 );
-
+    
     if ( ! empty( $array['author_url'] ) )
     {
         if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['author_url'] ) )
@@ -49,7 +50,8 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
             $array['author_url'] = "http://" . $array['author_url'];
         }
     }
-
+    
+    $array['filesize'] = 0;
     if ( ! empty( $array['fileupload'] ) )
     {
         $fileupload = $array['fileupload'];
@@ -72,7 +74,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     {
         $array['fileupload'] = array();
     }
-
+    
     if ( ! empty( $array['linkdirect'] ) )
     {
         $linkdirect = $array['linkdirect'];
@@ -86,7 +88,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
                 $links = explode( "<br />", $links );
                 $links = array_map( "trim", $links );
                 $links = array_unique( $links );
-
+                
                 foreach ( $links as $link )
                 {
                     if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $link ) )
@@ -99,7 +101,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
                     }
                 }
             }
-
+            
             if ( ! empty( $linkdirect2 ) )
             {
                 $array['linkdirect'][] = implode( "\n", $linkdirect2 );
@@ -114,37 +116,46 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     {
         $array['linkdirect'] = array_unique( $array['linkdirect'] );
     }
-
+    
+    if ( ! empty( $array['linkdirect'] ) and empty( $array['fileupload'] ) )
+    {
+        $array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
+    }
+    
     $alias = change_alias( $array['title'] );
-
+    
     $sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $alias );
     $result = $db->sql_query( $sql );
     list( $is_exists ) = $db->sql_fetchrow( $result );
-
+    
     if ( ! $is_exists )
     {
         $sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `title`=" . $db->dbescape( $array['title'] );
         $result = $db->sql_query( $sql );
         list( $is_exists ) = $db->sql_fetchrow( $result );
     }
-
+    
     if ( empty( $array['title'] ) )
     {
         $is_error = true;
         $error = $lang_module['file_error_title'];
-    } elseif ( $is_exists )
+    }
+    elseif ( $is_exists )
     {
         $is_error = true;
         $error = $lang_module['file_title_exists'];
-    } elseif ( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
+    }
+    elseif ( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
     {
         $is_error = true;
         $error = $check_valid_email;
-    } elseif ( ! empty( $array['author_url'] ) and ! nv_is_url( $array['author_url'] ) )
+    }
+    elseif ( ! empty( $array['author_url'] ) and ! nv_is_url( $array['author_url'] ) )
     {
         $is_error = true;
         $error = $lang_module['file_error_author_url'];
-    } elseif ( empty( $array['fileupload'] ) and empty( $array['linkdirect'] ) )
+    }
+    elseif ( empty( $array['fileupload'] ) and empty( $array['linkdirect'] ) )
     {
         $is_error = true;
         $error = $lang_module['file_error_fileupload'];
@@ -163,14 +174,14 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         {
             $array['linkdirect'] = "";
         }
-
+        
         if ( ! in_array( $array['who_comment'], array_keys( $array_who ) ) )
         {
             $array['who_comment'] = 0;
         }
-
+        
         $array['groups_comment'] = ( ! empty( $array['groups_comment'] ) ) ? implode( ',', $array['groups_comment'] ) : '';
-
+        
         $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
                 NULL, 
                 " . $array['catid'] . ", 
@@ -197,7 +208,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
                 " . $array['who_comment'] . ", 
                 " . $db->dbescape( $array['groups_comment'] ) . ", 
                 0, '')";
-
+        
         if ( ! $db->sql_query_insert_id( $sql ) )
         {
             $is_error = true;
@@ -206,7 +217,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         else
         {
             nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add', " ", $admin_info['userid'] );
-        	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
             exit();
         }
     }
@@ -244,11 +255,11 @@ $who_comment = $array['who_comment'];
 $array['who_comment'] = array();
 foreach ( $array_who as $key => $who )
 {
-    $array['who_comment'][] = array( //
+    $array['who_comment'][] = array(  //
         'key' => $key, //
-        'title' => $who, //
-        'selected' => $key == $who_comment ? " selected=\"selected\"" : "" //
-        );
+'title' => $who, //
+'selected' => $key == $who_comment ? " selected=\"selected\"" : ""  //
+    );
 }
 
 $groups_comment = $array['groups_comment'];
@@ -257,11 +268,11 @@ if ( ! empty( $groups_list ) )
 {
     foreach ( $groups_list as $key => $title )
     {
-        $array['groups_comment'][] = array( //
+        $array['groups_comment'][] = array(  //
             'key' => $key, //
-            'title' => $title, //
-            'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : "" //
-            );
+'title' => $title, //
+'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : ""  //
+        );
     }
 }
 
@@ -311,17 +322,21 @@ foreach ( $listcats as $cat )
 $a = 0;
 foreach ( $array['fileupload'] as $file )
 {
-    $xtpl->assign( 'FILEUPLOAD', array( 'value' => $file, 'key' => $a ) );
+    $xtpl->assign( 'FILEUPLOAD', array( 
+        'value' => $file, 'key' => $a 
+    ) );
     $xtpl->parse( 'main.fileupload' );
-    $a++;
+    $a ++;
 }
 
 $a = 0;
 foreach ( $array['linkdirect'] as $link )
 {
-    $xtpl->assign( 'LINKDIRECT', array( 'value' => $link, 'key' => $a ) );
+    $xtpl->assign( 'LINKDIRECT', array( 
+        'value' => $link, 'key' => $a 
+    ) );
     $xtpl->parse( 'main.linkdirect' );
-    $a++;
+    $a ++;
 }
 
 foreach ( $array['who_comment'] as $who )
