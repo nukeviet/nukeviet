@@ -89,7 +89,7 @@ function clientinfo_theme( $contents )
 
 function clinfo_theme( $contents,$manament )
 {
-	global $global_config, $module_name, $module_info, $lang_module;
+	global $global_config, $module_name, $module_file, $module_info, $lang_module;
 	$xtpl = new XTemplate( "clinfo.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	if (defined ( 'NV_IS_BANNER_CLIENT' )){
 		$xtpl->assign( 'LANG', $lang_module );

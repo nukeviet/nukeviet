@@ -301,7 +301,7 @@ function nv_show_banners_list( containerid, clid, pid, act )
    {
       request_query += '&act=' + act;
    }
-   nv_ajax( "get", script_name + '?' + nv_name_variable + '=banners', request_query + '&num=' + nv_randomPassword( 8 ), containerid );
+	$('#'+containerid).load(script_name + '?' + nv_name_variable + '=banners&'+request_query + '&num=' + nv_randomPassword( 8 )+'&nocache=' + new Date().getTime());
    return false;
 }
 
