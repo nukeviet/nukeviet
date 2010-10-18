@@ -231,15 +231,15 @@ if ( $nv_Request->isset_request( 'list_comment', 'get' ) )
                     
                     $array[$row['id']] = array(  //
                         'id' => ( int )$row['id'], //
-'post_name' => $post_name, //
-'post_email' => $row['post_email'], //
-'post_ip' => $row['post_ip'], //
-'post_time' => $post_time, //
-'subject' => $row['subject'], //
-'comment' => $row['comment'], //
-'admin_reply' => $admin_reply, //
-'edit_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;edit=1&amp;id=" . $row['id'], //
-'del_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment" 
+						'post_name' => $post_name, //
+						'post_email' => $row['post_email'], //
+						'post_ip' => $row['post_ip'], //
+						'post_time' => $post_time, //
+						'subject' => $row['subject'], //
+						'comment' => $row['comment'], //
+						'admin_reply' => $admin_reply, //
+						'edit_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;edit=1&amp;id=" . $row['id'], //
+						'del_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment" 
                     ); //
                 
 
