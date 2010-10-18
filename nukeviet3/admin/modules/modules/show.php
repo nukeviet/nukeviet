@@ -165,6 +165,7 @@ function nv_show_funcs ( )
     if ( $is_delCache )
     {
         nv_del_moduleCache( 'modules' );
+        nv_del_moduleCache( 'themes' );
     }
     
     $contents = array();

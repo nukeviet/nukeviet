@@ -15,7 +15,7 @@ if ( ! empty( $setmodule ) )
     if ( filter_text_input( 'checkss', 'get' ) == md5( $setmodule . session_id() . $global_config['sitekey'] ) )
     {
         nv_insert_logs( NV_LANG_DATA, $module_name, 'log_setup_modul', "setmodule  " . $setmodule, $admin_info['userid'] );
-    	$query = "SELECT `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $setmodule );
+        $query = "SELECT `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $setmodule );
         $result = $db->sql_query( $query );
         $numrows = $db->sql_numrows( $result );
         if ( $numrows == 1 )
@@ -38,6 +38,7 @@ if ( ! empty( $setmodule ) )
             if ( $return == "OK_" . $setmodule )
             {
                 nv_setup_block_module( $setmodule );
+                nv_del_moduleCache( 'themes' );
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=edit&mod=" . $setmodule );
                 die();
             }

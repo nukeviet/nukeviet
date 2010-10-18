@@ -25,6 +25,7 @@ if ( ! empty( $theme1 ) and ! empty( $theme2 ) and $theme1 != $theme2 and file_e
             $db->sql_query( "INSERT INTO `" . NV_BLOCKS_TABLE . "` VALUES (NULL, " . $row['groupbl'] . "," . $db->dbescape( $row['title'] ) . "," . $db->dbescape( $row['link'] ) . "," . $db->dbescape( $row['type'] ) . "," . $db->dbescape( $row['file_path'] ) . "," . $db->dbescape( $theme2 ) . "," . $db->dbescape( $row['template'] ) . "," . $db->dbescape( $row['position'] ) . "," . $row['exp_time'] . "," . $row['active'] . "," . $db->dbescape( $row['groups_view'] ) . "," . $db->dbescape( $row['module'] ) . "," . $row['all_func'] . "," . $row['func_id'] . "," . $row['weight'] . ")" );
         }
     }
+    nv_del_moduleCache( 'themes' );
     echo $lang_module['xcopyblock_success'];
 }
 else
