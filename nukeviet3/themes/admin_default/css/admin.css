@@ -630,7 +630,7 @@ table.tab1 td {
 }
 
 #topmenu {
-    background: url(../images/top_menu_bg.jpg) repeat-x;
+    background:#0D43B0 url(../images/top_menu_bg.jpg) repeat-x;
     color: #E0E0E0;
 }
 
@@ -752,7 +752,7 @@ table.tab1 td {
 }
 
 #top_message {
-    background: #fff url('../images/top_message_bg.jpg') repeat-x left top;
+    background: #d7d7d7 url('../images/top_message_bg.jpg') repeat-x left top;
     height: 30px;
     position: relative
 }

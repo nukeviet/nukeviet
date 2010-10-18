@@ -21,7 +21,7 @@ a:hover {
 }
 
 #header {
-	background: url(../images/header.jpg) no-repeat;
+	background:#A2D8FA url(../images/header.jpg) no-repeat;
 	height: 91px;
 	position: relative;
 }
@@ -44,7 +44,7 @@ a:hover {
 
 div.nav {
 	position: relative;
-	background: url(../images/nav_bg.jpg) repeat-x;
+	background:#0B41A5 url(../images/nav_bg.jpg) repeat-x;
 	height: 27px;
 	line-height: 27px;
 	z-index:990;
@@ -186,7 +186,7 @@ div.nav div.rss a {
 #message {
 	height: 30px;
 	line-height: 25px;
-	background: url(../images/message_bg.jpg) repeat-x;
+	background:#d7d7d7 url(../images/message_bg.jpg) repeat-x;
 	padding: 0 0 0 10px;
 }
 
@@ -479,7 +479,7 @@ div.box h3.header {
 	line-height: 28px;
 	color: #fff;
 	text-indent: 10px;
-	background: url(../images/h3.header.jpg) repeat-x;
+	background:#0B41A5 url(../images/h3.header.jpg) repeat-x;
 }
 
 div.box h3.header a {
