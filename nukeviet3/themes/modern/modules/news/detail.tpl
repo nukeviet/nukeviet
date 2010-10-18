@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="breakcoup">
-    {LANG_GLOBAL.breakcrum}: <span class="spector">&nbsp;</span>
+    <a title={LANG_GLOBAL.Home} href="{NV_BASE_SITEURL}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/icons/home.png" alt="{LANG_GLOBAL.Home}" /></a> <span class="spector">&nbsp;</span>
     <!-- BEGIN: breakcolumn --><a class="highlight" href="{SUB_CAT.link}" title="{SUB_CAT.title}">{SUB_CAT.title}</a>
     <!-- BEGIN: arrow --><span class="spector">&nbsp;</span>
     <!-- END: arrow --><!-- END: breakcolumn --><span class="spector">&nbsp;</span>

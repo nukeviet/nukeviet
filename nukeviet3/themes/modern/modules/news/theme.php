@@ -407,6 +407,8 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     
     $xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG_GLOBAL', $lang_global );
+    $xtpl->assign( 'NV_BASE_SITEURL',NV_BASE_SITEURL );
+    $xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
     $xtpl->assign( 'LANG', $lang_module );
     $news_contents['addtime'] = nv_date( "d-m-Y h:i:s", $news_contents['addtime'] );
     $xtpl->assign( 'NEWSID', $news_contents['id'] );
