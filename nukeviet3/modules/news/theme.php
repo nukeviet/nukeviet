@@ -786,7 +786,6 @@ function search_result_theme ( $key, $numRecord, $per_pages, $pages, $array_cont
         foreach ( $array_content as $value )
         {
             $catid_i = ( $catid > 0 ) ? $catid : end( explode( ",", $value['listcatid'] ) );
-            ;
             $url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
             $xtpl->assign( 'LINK', $url );
             $xtpl->assign( 'TITLEROW', BoldKeywordInStr( $value['title'], $key ) );
