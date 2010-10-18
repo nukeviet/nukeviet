@@ -499,7 +499,7 @@ function user_welcome ( )
     }
     else
     {
-        $xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
+        $xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_avatar.jpg" );
     }
     
     $user_info['gender'] = ( $user_info['gender'] == "M" ) ? $lang_module['male'] : ( $user_info['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
