@@ -2,7 +2,7 @@
 <!-- BEGIN: detail -->
 <div class="box-border content-box{COMMENT.bg}">
     <div class="ava">
-        <a href="#"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/users/no_avatar.jpg" alt="Avata" class="s-border" /></a>
+        <a href="#"><img src="{COMMENT.photo}" alt="Avata" class="s-border" /></a>
     </div>
     <div class="comment-content">
         <strong>{COMMENT.post_name}</strong>

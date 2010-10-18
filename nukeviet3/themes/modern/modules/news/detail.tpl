@@ -17,7 +17,7 @@
     </div>
     <div class="title">
         <h1>{DETAIL.title}</h1>
-        <span class="small">{LANG.pubtime}: {DETAIL.publtime} - {LANG.author}: <a href="#" class="highlight">Adminstrator</a></span>
+        <span class="small">{LANG.pubtime}: {DETAIL.publtime} - {LANG.author}: <a href="#" class="highlight">{DETAIL.author_name}</a></span>
     </div>
     <div class="clear">
     </div>
