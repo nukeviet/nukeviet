@@ -143,3 +143,35 @@ ul.spec li {
 	padding:4px 10px 4px;
 	border-bottom:1px solid #9B2200;
 }
+.download-header h4 {
+	font-size:1.3em;
+	font-weight:bold;
+	margin-bottom:0;
+}
+.upload-form  {
+	background:#fff;
+}
+.upload-form  dl dt {
+	width:36%;
+}
+.upload-form  dl dd {
+	margin-left:1.5em;
+}
+.upload-form .input {
+	width:300px;
+}
+.bgray {
+	background:#f8f8f8;
+}
+a.link_upload {
+	display:block;
+	padding:10px 10px 10px 40px;
+	background:url(../images/download/upload.png) 6px 50% no-repeat;
+	font-size:1.6em;
+	line-height:1;
+	color:#0073a8;
+	border-bottom:1px solid #d8d8d8;
+}
+a.link_upload:hover {
+	color:#0073a8;
+}

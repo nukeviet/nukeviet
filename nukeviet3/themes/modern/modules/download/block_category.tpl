@@ -1,10 +1,8 @@
 <!-- BEGIN: main -->
-    <!-- BEGIN: is_addfile_allow --><a href="{UPLOAD}" class="link_upload">{LANG.upload}</a>
+    <!-- BEGIN: is_addfile_allow --><a href="{UPLOAD}" class="link_upload m-bottom">{LANG.upload}</a>
     <!-- END: is_addfile_allow -->
-    <div class="sliver2">
-        <h3 class="header">{LANG.categories}</h3>
-        <div class="clearfix">
-            <ul id="navmenu-v">
+        <strong>{LANG.categories}</strong>
+            <ul id="navmenu-v" class="clearfix">
                 <!-- BEGIN: catparent -->
                 <li>
                     <a href="{catparent.link}">{catparent.title}</a>
@@ -20,6 +18,4 @@
                 </li>
                 <!-- END: catparent -->
             </ul>
-        </div>
-    </div>
 <!-- END: main -->

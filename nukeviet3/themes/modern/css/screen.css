@@ -170,12 +170,12 @@ a.rss {
 
 .logo h1 {
     line-height: 70px;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: normal;
     color: #414f5b;
 }
 .logo img {
-	vertical-align:baseline;
+	vertical-align:middle;
 }
 .topadv {
     position: absolute;
