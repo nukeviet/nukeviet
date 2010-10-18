@@ -227,4 +227,6 @@ $lang_global['openid_login'] = "Đăng nhập bằng OpenID";
 $lang_global['google_openid_login'] = "Google";
 $lang_global['yahoo_openid_login'] = "Yahoo";
 
+//Breakcrump
+$lang_global['breakcrum'] = "Bạn đang ở";
 ?>

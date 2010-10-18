@@ -217,5 +217,6 @@ $lang_global['browse_image'] = "Browse";
 $lang_global['openid_login'] = "Login with OpenID";
 $lang_global['google_openid_login'] = "Google";
 $lang_global['yahoo_openid_login'] = "Yahoo";
-
+//Breakcrump
+$lang_global['breakcrum'] = "You're current";
 ?>
