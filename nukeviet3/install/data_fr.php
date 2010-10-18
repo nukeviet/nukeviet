@@ -9,20 +9,20 @@
 
 function nv_create_table_news ( $catid )
 {
-    global $db, $db_config;
+    global $db, $db_config, $lang_data;
     $db->sql_query( "SET SQL_QUOTE_SHOW_CREATE = 1" );
     $result = $db->sql_query( "SHOW CREATE TABLE `" . $db_config['prefix'] . "_fr_news_rows`" );
     $show = $db->sql_fetchrow( $result );
     $db->sql_freeresult( $result );
     $show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show[1] );
     $sql = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
-    $sql = str_replace( $db_config['prefix'] . "_fr_news_rows", $db_config['prefix'] . "_fr_news_" . $catid, $sql );
+    $sql = str_replace( $db_config['prefix'] . "_" . $lang_data . "_news_rows", $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid, $sql );
     $db->sql_query( $sql );
 }
 
 $sql_create_table = array();
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_fr_modules`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modules` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
+$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modules`";
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
 ('about', 'about', 'about', 'À propos', 1276333182, 1, '', '', '0', 1, 1, 1, 1, '', 0), 
 ('news', 'news', 'news', 'News', 1270400000, 1, '', '', '0', 1, 2, 1, 1, '', 1), 
 ('users', 'users', 'users', 'Compte d&#039;utilisateur', 1274080277, 1, '', '', '0', 1, 7, 1, 1, '', 0), 
@@ -35,8 +35,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modules` (`t
 ('rss', 'rss', 'rss', 'Rss', 1280638250, 1, '', '', '0', 0, 11, 1, 1, '', 0), 
 ('voting', 'voting', 'voting', 'Sondage', 1280638417, 1, '', '', '0', 0, 6, 0, 1, '', 0)";
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_fr_modfuncs`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES
+$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs`";
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES
 (1, 'main', 'Main', 'about', 1, 0, 1, 'left-body-right', ''), 
 (2, 'comment', 'Comment', 'news', 0, 0, 0, 'left-body-right', ''), 
 (3, 'detail', 'Detail', 'news', 1, 0, 4, 'left-body-right', ''), 
@@ -96,8 +96,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_modfuncs` (`
 (63, 'stats', 'Stats', 'banners', 1, 0, 3, 'left-body-right', ''),
 (64, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '', '')";
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_fr_blocks`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_blocks` (`bid`, `groupbl`, `title`, `link`, `type`, `file_path`, `theme`, `template`, `position`, `exp_time`, `active`, `groups_view`, `module`, `all_func`, `func_id`, `weight`) VALUES
+$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks`";
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks` (`bid`, `groupbl`, `title`, `link`, `type`, `file_path`, `theme`, `template`, `position`, `exp_time`, `active`, `groups_view`, `module`, `all_func`, `func_id`, `weight`) VALUES
 (1, 1, 'Menu', '', 'file', 'module.block_category.php', 'default', '', '[LEFT]', 0, '1', '0', 'news', 0, 4, 1), 
 (2, 1, 'Menu', '', 'file', 'module.block_category.php', 'default', '', '[LEFT]', 0, '1', '0', 'news', 0, 12, 1), 
 (3, 1, 'Menu', '', 'file', 'module.block_category.php', 'default', '', '[LEFT]', 0, '1', '0', 'news', 0, 11, 1), 
@@ -306,7 +306,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_blocks` (`bi
 (224, 7, 'Publicité du centre', '', 'banner', '1', 'default', 'no_title', '[TOP]', 0, '1', '0', '', 1, 54, 1), 
 (225, 3, 'Publicité à côté', '', 'banner', '2', 'default', '', '[LEFT]', 0, '1', '0', 'global', 1, 54, 1)";
 
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_news_cat` VALUES
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` VALUES
 (1, 0, 'News', 'News', '', '', '', 1, 1, 0, 'viewcat_page_new', 3, '5,6,7', 1, 3, '', '', 1280644983, 1280927178, 1306644983, 0, ''), 
 (2, 0, 'Produits', 'Produits', '', '', '', 2, 5, 0, 'viewcat_page_new', 0, '', 1, 3, '', '', 1280644996, 1280644996, 1306644996, 0, ''), 
 (3, 0, 'Partenaires', 'Partenaires', '', '', '', 3, 6, 0, 'viewcat_page_new', 0, '', 1, 3, '', '', 1280645023, 1280645023, 1306645023, 0, ''), 
@@ -315,30 +315,30 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_news_cat` VA
 (6, 1, 'Nouvelles Technologies', 'Nouvelles-Technologies', '', '', '', 2, 3, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1280927364, 1280927364, 1306927364, 0, ''), 
 (7, 1, 'Espace presse', 'Espace-presse', '', '', '', 3, 4, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1280928740, 1280928740, 1306928740, 0, '')";
 
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_news_rows` VALUES
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` VALUES
 (1, '1,2', 0, 1, '', 0, 1280645699, 1280751776, 1, 1280645640, 0, 2, 'Nukeviet 3.0', 'Nukeviet-3-0', 'NukeViet 3 est une nouvelle génération de Système de Gestion de Contenu développée par les Vietnamiens. Pour la première fois au Vietnam, un noyau de Open Source ouverte est investi professionnelement en financement, en ressources humaines et en temps. Le résultat est que 100% de ligne de code de NukeViet est écrit entièrement neuf. Nukeviet 3.0 utilise XHTML, CSS et jQuery avec Xtemplate permettant une application souple de Ajax, même au niveau de noyau.', '2010_05/nukeviet3.jpg', '', 'thumb/nukeviet3.jpg|block/nukeviet3.jpg', 1, '<p> Profiter les fruits de Open Source, mais chaque ligne de code de NukeViet est écrit manuellement. NukeViet 3 n&#039;utilise aucune plateforme. Cela signifie que Nukeviet 3 est complètement indépendant dans son développemnt. Il est très facile à lire, à comprendre le code de NukeViet pour programmer tout seul si vous avez les connaissances de base sur PHP et MySQL. NukeViet 3.0 est complètement ouvert et facile à apprendre pour tous ceux qui veulent étudier le code de NukeViet.</p><p> Hériter la simplicité de Nukeviet mais NukeViet 3 n&#039;oublie pas de se renouveller. Le système de Nukeviet 3 supporte le multi-noyau du module. Nous appelons cela la technologie de virtualisation de module. Cette technologie permet aux utilisateurs de créer automatiquement de milliers de modules sans toucher une seule ligne de code. Le module né de cette technologie est appelé module virtuel. Il est cloné à partir de n&#039;importe quel module du système de NukeViet si ce module-ci permet la création des modules virtuels.</p><p> NukeViet 3 prend en charge l&#039;installation automatique de modules, de blocks, de thèmes dans la section d&#039;administration, les utilisateurs peuvent installer le module sans faire de tâches complexes. NukeViet 3.0 permet également le paquetage des modules pour partager aux autres utilisateus.</p><p> Le multi-langage de NukeViet 3 est parfait avec le multi-langage de l&#039;interface et celui de données. NukeViet 3.0 supporte aux administrateurs de créer facilement de nouvelles langues pour le site. Le paquetage des fichiers de langue est également supporté pour faciliter la contribution du travai à la communauté.</p>', 0, 1, 2, 1, '0|0', 1, 1, 1, 2, 0, 0, 'de, est'), 
 (2, '2', 0, 1, '', 0, 1280645876, 1280751372, 1, 1280645820, 0, 2, 'NukeViet', 'NukeViet', 'NukeViet est un système de gestion de contenu open source. Les utilisateurs l’appellent habituellement Portail parce qu&#039;il est capable d&#039;intégrer plusieurs applications sur le Web. Nguyễn Anh Tú, un ex-étudiant vietnamien en Russie, avec la communauté a développé NukeViet en une application purement vietnamienne en basant sur PHP-Nuke.', '2010_05/1243187502.jpg', '', 'thumb/1243187502.jpg|block/1243187502.jpg', 1, '<p> Similaire à PHP-Nuke, NukeViet est écrit en langage PHP et utilise la base de données MySQL, permet aux utilisateurs de publier, de gérer facilement leur contenu sur Internet ou Intranet.</p><p> <strong>* Fonctionnalités de base de NukeViet: </strong></p><p> - News: Gestion d’articles: créer les articles multi-niveau, générer la page d’impression, permettre le téléchargement, les commentaires.</p><p> -&nbsp; Download: Gestion de téléchargement des fichier</p><p> - Vote: sondage</p><p> - Contact</p><p> -&nbsp; Search: Rechercher</p><p> -&nbsp; RSS</p><p> <strong>* Caractéristiques: </strong></p><p> - Supporter le multi-langage</p><p> - Permettre le changement de l’interface (theme)</p><p> - Monter le pare-feu pour limiter DDOS ...</p><p> Nukeviet est utilisé dans de nombreux sites Web, de sites personnels aux sites professionnels. Il offre de nombreux services et applications grâce à la capacité d&#039;accroître la fonctionnalité en installant des modules, blocks additionnels ... Cependant, Nukeviet est utilisé principalement pour les sites d’actualités vietnamiens par ce que son module News conforme bien aux exigences et habitudes des Vietnamiens. Il est très facile d’installer, de gérer Nukeviet, même avec les débutants, il est donc un système favorable des amateurs.</p><p> NukeViet est open source, et totalement gratuit pour tout de monde de tous les pays. Toutefois, les Vietnamiens sont les utilisateurs principales en raison des caractéristiques de la code source (provenant de PHP-Nuke) et de la politique des développeurs &quot;Système de Portail Pour les Vietnamiens&quot;.</p>', 0, 1, 2, 1, '0|0', 1, 1, 1, 3, 0, 0, 'de, en'), 
 (3, '3', 0, 1, '', 0, 1280646202, 1280751407, 1, 1280646180, 0, 2, 'VINADES', 'VINADES', 'Pour professionaliser la publication de NukeViet,  l&#039;administration de NukeViet a décidé de créer une société spécialisant la  gestion de NukeViet avec la raison sociale en vietnamien “Công ty cổ phần Phát triển Nguồn mở Việt Nam”, en anglais &quot;VIET NAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY&quot; et en abrégé VINADES.,JSC.', '2010_05/nangly.jpg', '', 'thumb/nangly.jpg|block/nangly.jpg', 1, '<p> Cette société est ouverte officiellement au&nbsp; 25-2-2010 avec le bureau à&nbsp; 67B/35 Khương Hạ, Khương Đình, Thanh Xuân, Hà Nội. Son but est de développer et de diffuser NukeViet au Vietnam.<br  /> <br  /> D&#039;après M. Nguyễn Anh Tú, président de VINADES, cette société développera le source de NukeViet sous forme open source, professionnel, et totalement gratuit selon l&#039;esprit mondial de open source.<br  /> <br  /> NukeViet est un système de gestion de contenu open source (Open Source Content Management System) purement vietnamien développé à la base de PHP-Nuke et base de données MySQL. Les utilisateurs l&#039;appellent habituellement Portail par ce qu&#039;ils puissent intégrer de multiples applications permettant la publication et la gestion facile de contenu sur l&#039;internet ou sur l&#039;intranet.</p><p> NukeViet peut fournir plusieurs services et appliations grace aux modules, blocks... L&#039;installation, la gestion de NukeViet 3 est très facile,&nbsp; même avec les débutants.</p><p> Depuis quelques années, NukeViet est devenu une application Open Source tres familière de la communauté informatique du Vietnam. Nukeviet est utilisé dans presque toutes les domaines, de l&#039;actualité, de la commerce électronique, de site personnel aux site professionel.</p><p> Pour avoir les details plus amples sur NukeViet, veuillez consulter le site http://nukeviet.vn.</p>', 0, 1, 2, 1, '0|0', 1, 1, 1, 3, 0, 0, 'de nukeviet, de'), 
 (4, '4', 0, 1, '', 0, 1280650419, 1280751748, 1, 1280650380, 0, 2, 'Recrutement et la formation des enseignants', 'Recrutement-et-la-formation-des-enseignants', 'A l’issue d’une série de consultations avec les organisations représentatives des personnels de l’éducation nationale et de l’enseignement supérieur sur la réforme du recrutement et de la formation des enseignants, le ministre de l’Éducation nationale et la ministre de l’Enseignement supérieur et de la Recherche apportent plusieurs éléments d’information complémentaires.', '2010_05/hoptac.jpg', '', 'thumb/hoptac.jpg|block/hoptac.jpg', 1, '<p> Ils précisent, notamment, les modalités concrètes de concertation qui conduiront à la mise en place de la réforme définitive au cours de l’année 2010/2011. Le processus de concertation avec les organisations représentatives reposera notamment sur trois groupes de travail ch@rgés d’étudier :<br  /> <br  /> &nbsp;&nbsp;&nbsp; * Les concours de recrutement<br  /> &nbsp;&nbsp;&nbsp; * Le cadrage des masters et leur articulation avec les concours<br  /> &nbsp;&nbsp;&nbsp; * L’organisation et le contenu de la période de formation continuée pendant l’année de fonctionnaire stagiaire à l’issue du concours<br  /> <br  /> Une commission de concertation sur la réforme du recrutement et de la formation sera également mise en place avec des acteurs universitaires. Le recteur Marois et le président Filatre en assureront la coprésidence. Ils feront très rapidement des propositions aux ministres sur la composition et le fonctionnement de cette commission qui consultera régulièrement les organisations représentatives.<br  /> <br  /> Les ministres ont également détaillé les conditions de mise en oeuvre du processus de mastérisation de la formation des enseignants et des conseillers principaux d’éducation (C.P.E.), qui sera engagé dès l’année prochaine.<br  /> <br  /> Ils confirment que, pour la session 2010, les contenus des concours resteront en l’état. Par ailleurs, pour s’inscrire aux concours de la session 2010, les étudiants devront :<br  /> <br  /> &nbsp;&nbsp;&nbsp; * Soit déjà être titulaires d’un master ou inscrits en M2 à la rentrée universitaire 2009 ;<br  /> &nbsp;&nbsp;&nbsp; * Soit, à titre exceptionnel et dérogatoire, pour la seule session 2010 des concours :<br  /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - avoir été présents aux épreuves d’admissibilité de la session 2009<br  /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ou bien, être inscrits en M1 dans une composante universitaire à la rentrée 2009.<br  /> <br  /> Pour l’année transitoire 2009 - 2010 l’inscription en I.U.F.M. vaudra également inscription en M1 par convention avec les universités afin de favoriser le processus de mastérisation. En cas de réussite à un concours de la session 2010, le bénéfice du concours sera garanti pendant un an à ces candidats inscrits en M1. Ils seront recrutés comme enseignant stagiaire pour la rentrée scolaire 2011 sous réserve de l’obtention de leur M2 à l’issue de l’année universitaire 2010-2011.<br  /> <br  /> Dès septembre 2009, des stages de pratique accompagnée ou en responsabilité rémunérés seront mis en place afin d’engager le processus de préprofessionnalisation lié à la mastérisation.<br  /> <br  /> Dès la prochaine rentrée universitaire, les étudiants se destinant au métier d’enseignant pourront également bénéficier d’un dispositif d’aides complémentaires mis en oeuvre par le ministère de l’Éducation Nationale.<br  /> <br  /> A la rentrée 2010, un tiers de l’obligation de service des nouveaux enseignants, recrutés lors de la session 2010 des concours, sera consacré à une formation continue renforcée, prenant la forme d’un tutorat et d’une formation universitaire à visée disciplinaire ou professionnelle.<br  /> <br  /> Enfin, la discussion sur la revalorisation du salaire des nouveaux enseignants sera conduite en parallèle pour être applicable aux lauréats des concours de la session 2010.</p>', 0, 1, 2, 1, '0|0', 1, 1, 1, 4, 0, 0, 'et de, de, la, et')";
 
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_news_block_cat` (`bid`, `adddefault`, `number`, `title`, `alias`, `image`, `thumbnail`, `description`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_block_cat` (`bid`, `adddefault`, `number`, `title`, `alias`, `image`, `thumbnail`, `description`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES
 (1, 0, 4, 'Populairs', 'Populairs', '', '', 'Block Populairs', 1, '', 1279945710, 1279956943),
 (2, 1, 4, 'Récents', 'Recents', '', '', 'Block Récents', 2, '', 1279945725, 1279956445)";
 
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_news_block` (`bid`, `id`, `weight`) VALUES
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_block` (`bid`, `id`, `weight`) VALUES
 (1, 2, 2),
 (1, 1, 1)";
 
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_voting` VALUES
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting` VALUES
 (1, 'Qu&#039;est ce que NukeViet 3.0?', 1, 1, 0, '0', 1275318563, 0, 1)";
 
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_voting_rows` VALUES
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting_rows` VALUES
 (1, 1, 'Une code source de web tout neuve', 0), 
 (2, 1, 'Open source, libre et gratuit', 0), 
 (3, 1, 'Utilise xHTML, CSS et supporte Ajax', 0), 
 (4, 1, 'Toutes ces réponses', 1)";
 
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_fr_about` (`id`, `title`, `alias`, `bodytext`, `keywords`, `weight`, `admin_id`, `add_time`, `edit_time`, `status`) VALUES
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_about` (`id`, `title`, `alias`, `bodytext`, `keywords`, `weight`, `admin_id`, `add_time`, `edit_time`, `status`) VALUES
 (1, 'Qu’est ce que Nukeviet?', 'Qu-est-ce-que-Nukeviet', '<p> NukeViet est un système de gestion de contenu open source. Les utilisateurs l’appellent habituellement Portail parce qu&#039;il est capable d&#039;intégrer plusieurs applications sur le Web. Nguyễn Anh Tú, un ex-étudiant vietnamien en Russie, avec la communauté a développé NukeViet en une application purement vietnamienne en basant sur PHP-Nuke. Similaire à PHP-Nuke, NukeViet est écrit en langage PHP et utilise la base de données MySQL, permet aux utilisateurs de publier, de gérer facilement leur contenu sur Internet ou Intranet.<br  />  </p><p> <strong>* Fonctionnalités de base de NukeViet: </strong></p><p> - News: Gestion d’articles: créer les articles multi-niveau, générer la page d’impression, permettre le téléchargement, les commentaires.</p><p> -&nbsp; Download: Gestion de téléchargement des fichier</p><p> - Vote: sondage</p><p> - Contact</p><p> -&nbsp; Search: Rechercher</p><p> -&nbsp; RSS</p><p> <strong>* Caractéristiques: </strong></p><p> - Supporter le multi-langage</p><p> - Permettre le changement de l’interface (theme)</p><p> - Monter le pare-feu pour limiter DDOS ...</p><p> Nukeviet est utilisé dans de nombreux sites Web, de sites personnels aux sites professionnels. Il offre de nombreux services et applications grâce à la capacité d&#039;accroître la fonctionnalité en installant des modules, blocks additionnels ... Cependant, Nukeviet est utilisé principalement pour les sites d’actualités vietnamiens par ce que son module News conforme bien aux exigences et habitudes des Vietnamiens. Il est très facile d’installer, de gérer Nukeviet, même avec les débutants, il est donc un système favorable des amateurs.</p><p> NukeViet est open source, et totalement gratuit pour tout de monde de tous les pays. Toutefois, les Vietnamiens sont les utilisateurs principales en raison des caractéristiques de la code source (provenant de PHP-Nuke) et de la politique des développeurs &quot;Système de Portail Pour les Vietnamiens&quot;.</p>', '', 1, 1, 1280634933, 1280634933, 1), 
 (2, 'Introduction de NukeViet 3', 'Introduction-de-NukeViet-3', '<p> NukeViet 3 est une nouvelle génération de Système de Gestion de Contenu développée par les Vietnamiens. Pour la première fois au Vietnam, un noyau de Open Source ouverte est investi professionnelement en financement, en ressources humaines et en temps. Le résultat est que 100% de ligne de code de NukeViet est écrit entièrement neuf. Nukeviet 3.0 utilise XHTML, CSS et jQuery avec Xtemplate permettant une application souple de Ajax, même au niveau de noyau.</p><p> Profiter les fruits de Open Source, mais chaque ligne de code de NukeViet est écrit manuellement. NukeViet 3 n&#039;utilise aucune plateforme. Cela signifie que Nukeviet 3 est complètement indépendant dans son développemnt. Il est très facile à lire, à comprendre le code de NukeViet pour programmer tout seul si vous avez les connaissances de base sur PHP et MySQL. NukeViet 3.0 est complètement ouvert et facile à apprendre pour tous ceux qui veulent étudier le code de NukeViet.</p><p> Hériter la simplicité de Nukeviet mais NukeViet 3 n&#039;oublie pas de se renouveller. Le système de Nukeviet 3 supporte le multi-noyau du module. Nous appelons cela la technologie de virtualisation de module. Cette technologie permet aux utilisateurs de créer automatiquement de milliers de modules sans toucher une seule ligne de code. Le module né de cette technologie est appelé module virtuel. Il est cloné à partir de n&#039;importe quel module du système de NukeViet si ce module-ci permet la création des modules virtuels.</p><p> NukeViet 3 prend en charge l&#039;installation automatique de modules, de blocks, de thèmes dans la section d&#039;administration, les utilisateurs peuvent installer le module sans faire de tâches complexes. NukeViet 3.0 permet également le paquetage des modules pour partager aux autres utilisateus.</p><p> Le multi-langage de NukeViet 3 est parfait avec le multi-langage de l&#039;interface et celui de données. NukeViet 3.0 supporte aux administrateurs de créer facilement de nouvelles langues pour le site. Le paquetage des fichiers de langue est également supporté pour faciliter la contribution du travai à la communauté.</p><p> L&#039;histoire de NukeViet sera encore très longue&nbsp; par ce qu’une variété de fonctionnalités avancées sont encore en cours d&#039;élaboration.</p><p> Utilisez et diffusez NukeViet 3 pour jouir les récents fruits de la technologies de web open source.</p><p> Enfin, NukeViet 3 est un cadeau que VINADES voudrait envoyer à la communauté pour remercier son soutient. NukeViet retourne maintenant à la communauté dans l’espoir à son développement continu.</p><p> Si vous intéressez à NukeViet, n’hésitez pas à nous joindre au Forum de NukeViet.Vn.</p>', '', 3, 1, 1280637520, 1280637520, 1), 
 (3, 'Ouverture de VINADES', 'Ouverture-de-VINADES', '<p> Depuis quelques années, NukeViet est devenu une application Open Source tres familière de la communauté informatique du Vietnam. Étant donnée qu&#039;il n&#039;y a pas encore les activités officielles, Nukeviet est utilisé dans presque toutes les domaines, de l&#039;actualité, de la commerce électronique, de site personnel aux site professionle.<br  />  </p><p> Pour professionaliser la publication de NukeViet,&nbsp; l&#039;administration de NukeViet a décidé de créer une société spécialisant la&nbsp; gestion de NukeViet avec la raison sociale en vietnamien “Công ty cổ phần Phát triển Nguồn mở Việt Nam”, en anglais &quot;VIET NAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY&quot; et en abrégé VINADES.,JSC. Cette société est ouverte officiellement au&nbsp; 25-2-2010 avec le bureau à&nbsp; 67B/35 Khương Hạ, Khương Đình, Thanh Xuân, Hà Nội. Son but est de développer et de diffuser NukeViet au Vietnam.<br  /> <br  /> D&#039;après M. Nguyễn Anh Tú, président de VINADES, cette société développera le source de NukeViet sous forme open source, professionnel, et totalement gratuit selon l&#039;esprit mondial de open source.<br  /> <br  /> NukeViet est un système de gestion de contenu open source (Open Source Content Management System) purement vietnamien développé à la base de PHP-Nuke et base de données MySQL. Les utilisateurs l&#039;appellent habituellement Portail par ce qu&#039;ils puissent intégrer de multiples applications permettant la publication et la gestion facile de contenu sur l&#039;internet ou sur l&#039;intranet.</p><p> <br  /> NukeViet peut fournir plusieurs services et appliations grace aux modules, blocks... L&#039;installation, la gestion de NukeViet 3 est très facile,&nbsp; même avec les débutants.</p><p> Pour avoir les details plus amples sur NukeViet, veuillez consulter le site http://nukeviet.vn.</p>', '', 2, 1, 1280637944, 1280637944, 1)";
@@ -380,11 +380,47 @@ while ( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
 }
 $db->sql_freeresult();
 
-$sql = "SELECT `theme` FROM `" . $db_config['prefix'] . "_vi_modthemes`  WHERE `func_id`=0 AND `theme`='modern'";
-$result = $db->sql_query( $sql );
-if ( $db->sql_numrows( $result ) == 0 )
-{
-    $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
+$sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
+		(0, 'left-body-right', 'default'),
+		(1, 'left-body-right', 'default'),
+		(3, 'left-body-right', 'default'),
+		(4, 'left-body-right', 'default'),
+		(9, 'left-body-right', 'default'),
+		(11, 'left-body-right', 'default'),
+		(12, 'left-body-right', 'default'),
+		(13, 'left-body-right', 'default'),
+		(15, 'left-body-right', 'default'),
+		(16, 'left-body-right', 'default'),
+		(17, 'left-body-right', 'default'),
+		(20, 'left-body-right', 'default'),
+		(22, 'left-body-right', 'default'),
+		(24, 'left-body-right', 'default'),
+		(26, 'left-body-right', 'default'),
+		(27, 'left-body-right', 'default'),
+		(28, 'left-body-right', 'default'),
+		(29, 'left-body-right', 'default'),
+		(30, 'left-body-right', 'default'),
+		(31, 'left-body-right', 'default'),
+		(32, 'left-body-right', 'default'),
+		(33, 'left-body-right', 'default'),
+		(34, 'left-body-right', 'default'),
+		(35, 'left-body-right', 'default'),
+		(36, 'left-body', 'default'),
+		(37, 'left-body', 'default'),
+		(38, 'left-body', 'default'),
+		(39, 'left-body', 'default'),
+		(40, 'left-body', 'default'),
+		(41, 'left-body', 'default'),
+		(42, 'left-body', 'default'),
+		(46, 'left-body-right', 'default'),
+		(48, 'left-body-right', 'default'),
+		(51, 'left-body-right', 'default'),
+		(54, 'left-body-right', 'default'),
+		(58, 'left-body-right', 'default'),
+		(60, 'left-body-right', 'default'),
+		(63, 'left-body-right', 'default')";
+
+$sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
 		(0, 'body-right', 'modern'),
 		(1, 'body', 'modern'),
 		(3, 'body-right', 'modern'),
@@ -426,7 +462,6 @@ if ( $db->sql_numrows( $result ) == 0 )
 		(65, 'body-right', 'modern'),
 		(66, 'body-right', 'modern'),
 		(67, 'body-right', 'modern')";
-}
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks` (`bid`, `groupbl`, `title`, `link`, `type`, `file_path`, `theme`, `template`, `position`, `exp_time`, `active`, `groups_view`, `module`, `all_func`, `func_id`, `weight`) 
 VALUES

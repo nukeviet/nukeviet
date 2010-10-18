@@ -362,11 +362,47 @@ while ( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
 }
 $db->sql_freeresult();
 
-$sql = "SELECT `theme` FROM `" . $db_config['prefix'] . "_vi_modthemes`  WHERE `func_id`=0 AND `theme`='modern'";
-$result = $db->sql_query( $sql );
-if ( $db->sql_numrows( $result ) == 0 )
-{
-    $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
+$sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
+		(0, 'left-body-right', 'default'),
+		(1, 'left-body-right', 'default'),
+		(3, 'left-body-right', 'default'),
+		(4, 'left-body-right', 'default'),
+		(9, 'left-body-right', 'default'),
+		(11, 'left-body-right', 'default'),
+		(12, 'left-body-right', 'default'),
+		(13, 'left-body-right', 'default'),
+		(15, 'left-body-right', 'default'),
+		(16, 'left-body-right', 'default'),
+		(17, 'left-body-right', 'default'),
+		(20, 'left-body-right', 'default'),
+		(22, 'left-body-right', 'default'),
+		(24, 'left-body-right', 'default'),
+		(26, 'left-body-right', 'default'),
+		(27, 'left-body-right', 'default'),
+		(28, 'left-body-right', 'default'),
+		(29, 'left-body-right', 'default'),
+		(30, 'left-body-right', 'default'),
+		(31, 'left-body-right', 'default'),
+		(32, 'left-body-right', 'default'),
+		(33, 'left-body-right', 'default'),
+		(34, 'left-body-right', 'default'),
+		(35, 'left-body-right', 'default'),
+		(36, 'left-body', 'default'),
+		(37, 'left-body', 'default'),
+		(38, 'left-body', 'default'),
+		(39, 'left-body', 'default'),
+		(40, 'left-body', 'default'),
+		(41, 'left-body', 'default'),
+		(42, 'left-body', 'default'),
+		(46, 'left-body-right', 'default'),
+		(48, 'left-body-right', 'default'),
+		(51, 'left-body-right', 'default'),
+		(54, 'left-body-right', 'default'),
+		(58, 'left-body-right', 'default'),
+		(60, 'left-body-right', 'default'),
+		(63, 'left-body-right', 'default')";
+
+$sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
 		(0, 'body-right', 'modern'),
 		(1, 'body', 'modern'),
 		(3, 'body-right', 'modern'),
@@ -408,7 +444,6 @@ if ( $db->sql_numrows( $result ) == 0 )
 		(65, 'body-right', 'modern'),
 		(66, 'body-right', 'modern'),
 		(67, 'body-right', 'modern')";
-}
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks` (`bid`, `groupbl`, `title`, `link`, `type`, `file_path`, `theme`, `template`, `position`, `exp_time`, `active`, `groups_view`, `module`, `all_func`, `func_id`, `weight`) 
 VALUES
