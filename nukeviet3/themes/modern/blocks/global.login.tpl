@@ -9,8 +9,6 @@
         </div><!-- END: captcha -->
         <div class="f-action">
             <input name="nv_redirect" value="{REDIRECT}" type="hidden" /><input type="submit" class="button" value="{LANG.loginsubmit}" /><a title="{LANG.lostpass}" href="{USER_LOSTPASS}">&nbsp; {LANG.lostpass}</a>
-            <br/>
-            <input type="checkbox" /><span class="right">{LANG.remember_pass}</span>
         </div>
         <!-- BEGIN: openid -->
         <div class="box openid clearfix">
