@@ -60,11 +60,13 @@ function nv_site_theme ( $contents )
             $langname = $language_array[$lang_i]['name'];
             $xtpl->assign( 'LANGSITENAME', $langname );
             $xtpl->assign( 'LANGSITEURL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_i );
-            if ( NV_LANG_DATA != $lang_i ) $xtpl->parse( 'main.language.langitem' );
-            else $xtpl->parse( 'main.language.langcuritem' );
+			$xtpl->assign( 'SELECTED',(NV_LANG_DATA == $lang_i) ? ' selected' : '' );
+            $xtpl->parse( 'main.language.langitem' );
         }
         $xtpl->parse( 'main.language' );
-    }
+    }else{
+		$xtpl->parse( 'main.color_select' );
+	}
     $arr_home['index'] = array( 
         "custom_title" => $lang_global['Home'], "in_menu" => 1 
     );

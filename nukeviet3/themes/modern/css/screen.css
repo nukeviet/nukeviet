@@ -1074,3 +1074,9 @@ a.highlight, a.highlight:hover {
 	border:1px solid #d8d8d8;
 	padding:1px;
 }
+form.select_lang{
+	margin:0;
+	padding:0;
+	float:right;
+	margin-left:10px;
+}

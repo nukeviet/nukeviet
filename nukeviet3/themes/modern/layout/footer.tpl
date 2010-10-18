@@ -1,13 +1,26 @@
 ﻿<div id="choose-color-lang" class="clearfix">
 	<div class="fr cl">
-			<div style="margin-top:5px;margin-right:10px;" class="fl">
+			<!-- BEGIN: color_select -->
+			<div class="fl">
 				<a href="#" rel="styles1" class="styleswitch red">&nbsp;</a>
 				<a href="#" rel="styles2" class="styleswitch blue">&nbsp;</a>
 			</div>
-			<select class="fl">
-			<option>Vietnamese</option>
-			<option>English</option>
-		</select>
+			<!-- END: color_select -->
+			<!-- BEGIN: language -->
+			<div class="fl" style="margin-top:3px;">
+				<a href="#" rel="styles1" class="styleswitch red">&nbsp;</a>
+				<a href="#" rel="styles2" class="styleswitch blue">&nbsp;</a>
+			</div>
+			<form class="select_lang" name="select_language" action="" method="get">
+				<p>
+					<select class="fl" name="language" onchange="location.href=select_language.language.options[selectedIndex].value">
+						<!-- BEGIN: langitem -->
+						<option value="{LANGSITEURL}"{SELECTED}>{LANGSITENAME}</option>
+						<!-- END: langitem -->
+					</select>
+				</p>
+			</form>
+			<!-- END: language -->
 	</div>
 </div>
 <div class="main">
