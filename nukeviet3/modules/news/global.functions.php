@@ -14,20 +14,20 @@ function nv_comment_module ( $id, $page )
     global $db, $module_name, $module_data, $global_config, $module_config, $per_page_comment;
     $comment_array = array();
     $per_page = $per_page_comment;
-    $sql = "SELECT SQL_CALC_FOUND_ROWS a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` as a LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` as b ON a.userid =b.userid  WHERE a.id= '" . $id . "' AND a.status=1 ORDER BY a.id ASC LIMIT " . $page . "," . $per_page . "";
+    $sql = "SELECT SQL_CALC_FOUND_ROWS a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo, b.view_mail FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` as a LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` as b ON a.userid =b.userid  WHERE a.id= '" . $id . "' AND a.status=1 ORDER BY a.id ASC LIMIT " . $page . "," . $per_page . "";
     $comment = $db->sql_query( $sql );
     $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
     list( $all_page ) = $db->sql_fetchrow( $result_all );
     $all_page = ( $all_page ) ? $all_page : 1;
     
-    while ( list( $content, $post_time, $post_name, $post_email, $userid, $user_email, $user_full_name, $photo ) = $db->sql_fetchrow( $comment ) )
+    while ( list( $content, $post_time, $post_name, $post_email, $userid, $user_email, $user_full_name, $photo, $view_mail ) = $db->sql_fetchrow( $comment ) )
     {
         if ( $userid > 0 )
         {
             $post_email = $user_email;
             $post_name = $user_full_name;
         }
-        $post_email = ( $module_config[$module_name]['emailcomm'] ) ? $post_email : "";
+        $post_email = ( $module_config[$module_name]['emailcomm'] and $view_mail ) ? $post_email : "";
         $comment_array[] = array( 
             "content" => $content, "post_time" => $post_time, "userid" => $userid, "post_name" => $post_name, "post_email" => $post_email, "photo" => $photo 
         );
