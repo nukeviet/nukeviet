@@ -1,8 +1,13 @@
-﻿<div id="choose-color" class="clearfix">
+﻿<div id="choose-color-lang" class="clearfix">
 	<div class="fr cl">
-		<span class="fl">Select color: &nbsp;</span> 
-		<a href="#" rel="styles1" class="styleswitch red">&nbsp;</a>
-		<a href="#" rel="styles2" class="styleswitch blue">&nbsp;</a>
+			<div style="margin-top:5px;margin-right:10px;" class="fl">
+				<a href="#" rel="styles1" class="styleswitch red">&nbsp;</a>
+				<a href="#" rel="styles2" class="styleswitch blue">&nbsp;</a>
+			</div>
+			<select class="fl">
+			<option>Vietnamese</option>
+			<option>English</option>
+		</select>
 	</div>
 </div>
 <div class="main">

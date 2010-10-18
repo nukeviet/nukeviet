@@ -170,12 +170,13 @@ a.rss {
 
 .logo h1 {
     line-height: 70px;
-    font-size: 22px;
+    font-size: 32px;
     font-weight: normal;
     color: #414f5b;
-    text-transform: uppercase;
 }
-
+.logo img {
+	vertical-align:baseline;
+}
 .topadv {
     position: absolute;
     width: 470px;
@@ -1048,24 +1049,28 @@ a.highlight, a.highlight:hover {
 }
 
 /*Choose color*/
-#choose-color {
+#choose-color-lang {
 	position:relative;
 	padding:0 10px;
 }
-#choose-color a.red,#choose-color a.blue {
+#choose-color-lang a.red,#choose-color-lang a.blue {
 	width:15px;
 	height:15px;
 	text-indent:-9999em;
 	display:block;
 	float:left;
 }
-#choose-color a.red {
+#choose-color-lang a.red {
 	background:#d83300;
 }
-#choose-color a.blue {
+#choose-color-lang a.blue {
 	background:#098de1;
 }
-#choose-color .cl {
+#choose-color-lang .cl {
 	border:1px solid #d8d8d8;
 	padding:5px 10px;
+}
+#choose-color-lang  select {
+	border:1px solid #d8d8d8;
+	padding:1px;
 }
