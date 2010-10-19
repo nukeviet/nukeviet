@@ -173,6 +173,7 @@ a.rss {
     font-size: 28px;
     font-weight: normal;
     color: #414f5b;
+	white-space: nowrap;
 }
 .logo img {
 	vertical-align:middle;
@@ -182,7 +183,6 @@ a.rss {
     width: 470px;
     height: 70px;
     overflow: hidden;
-    background: #ebebeb;
     right: 40px;
     top: 15px;
 }
