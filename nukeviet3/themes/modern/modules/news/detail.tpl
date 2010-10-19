@@ -179,9 +179,15 @@
                 <textarea id="commentcontent" class="input typer box2" cols="1" rows="1" onblur="if(this.value=='')this.value='{LANG.comment_content}';" onclick="if(this.value=='{LANG.comment_content}')this.value='';" value="{LANG.comment_content}"></textarea>
             </p>
             <p>
-                {LANG.comment_seccode}: &nbsp; <img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','commentseccode_iavim');"/>&nbsp; <input id="commentseccode_iavim" type="text" class="input capcha">&nbsp; <input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{NEWSID}', '{NEWSCHECKSS}', '{GFX_NUM}');" class="button">&nbsp; <input type="reset" value="RESET" class="button-2">
+                {LANG.comment_seccode}: &nbsp; <img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','commentseccode_iavim');"/>&nbsp; <input id="commentseccode_iavim" type="text" class="input capcha" />&nbsp; <input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{NEWSID}', '{NEWSCHECKSS}', '{GFX_NUM}');" class="button">&nbsp; <input id="reset-cm" type="reset" value="RESET" class="button-2">
             </p>
-        </div><!-- END: form -->
+        </div>
+		<script type="text/javascript">
+		$("#reset-cm").click(function(){
+			$("#commentcontent,#commentseccode_iavim").val("");
+		});
+		</script>
+		<!-- END: form -->
         <!-- BEGIN: form_login-->
         {COMMENT_LOGIN}<!-- END: form_login -->
     </div>
