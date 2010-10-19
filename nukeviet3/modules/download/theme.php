@@ -95,17 +95,15 @@ function x_generate_page ( $base_url, $num_items, $per_page, $start_item, $add_p
  * @param mixed $array
  * @param mixed $download_config
  * @param mixed $subs
- * @param mixed $page_title
  * @param mixed $generate_page
  * @return
  */
 function theme_main_download ( $array_cats, $list_cats, $download_config )
 {
-    global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head, $page_title;
+    global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head;
     $xtpl = new XTemplate( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'GLANG', $lang_global );
-    $xtpl->assign( 'PAGE_TITLE', $page_title );
     $xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/download/" );
     $xtpl->assign( 'MODULELINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
     foreach ( $array_cats as $cat )
@@ -152,14 +150,13 @@ function theme_main_download ( $array_cats, $list_cats, $download_config )
     return $xtpl->text( 'main' );
 }
 
-function theme_viewcat_download ( $array, $download_config, $subs, $page_title, $generate_page )
+function theme_viewcat_download ( $array, $download_config, $subs, $generate_page )
 {
     global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file;
     
     $xtpl = new XTemplate( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'GLANG', $lang_global );
-    $xtpl->assign( 'PAGE_TITLE', $page_title );
     $xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/download/" );
     $xtpl->assign( 'MODULELINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
     
@@ -245,10 +242,9 @@ function theme_viewcat_download ( $array, $download_config, $subs, $page_title, 
  * 
  * @param mixed $row
  * @param mixed $download_config
- * @param mixed $page_title
  * @return
  */
-function view_file ( $row, $download_config, $page_title )
+function view_file ( $row, $download_config )
 {
     global $global_config, $lang_global, $lang_module, $module_name, $module_file, $module_info, $my_head;
     
@@ -304,7 +300,6 @@ function view_file ( $row, $download_config, $page_title )
     $xtpl = new XTemplate( "viewfile.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'GLANG', $lang_global );
-    $xtpl->assign( 'PAGE_TITLE', $page_title );
     $xtpl->assign( 'ROW', $row );
     
     if ( $download_config['is_addfile_allow'] )

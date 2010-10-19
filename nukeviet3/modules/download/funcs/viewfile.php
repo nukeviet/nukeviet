@@ -267,17 +267,18 @@ if ( defined( 'NV_IS_USER' ) )
     $row['disabled'] = " disabled=\"disabled\"";
     $row['comment_uname'] = ! empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'];
     $row['comment_uemail'] = $user_info['email'];
-}else{
-	$row['comment_uname'] = $lang_module['file_comment_username'];
-	$row['comment_uemail'] = $lang_module['file_comment_useremail'];
+}
+else
+{
+    $row['comment_uname'] = $lang_module['file_comment_username'];
+    $row['comment_uemail'] = $lang_module['file_comment_useremail'];
 }
 
 $page_title = $row['title'];
 $key_words = $module_info['keywords'];
-$mod_title = $list_cats[$row['catid']]['name'];
 $description = $list_cats[$row['catid']]['description'];
 
-$contents = view_file( $row, $download_config, $mod_title );
+$contents = view_file( $row, $download_config );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );

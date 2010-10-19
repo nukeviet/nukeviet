@@ -210,15 +210,25 @@ if ( $op == "main" )
         }
         //het Xac dinh menu, RSS
         //Xem chi tiet
-        if ( $catid > 0 and ! empty( $filealias ) )
-        {
-            $op = "viewfile";
-        }
-        elseif ( $catid > 0 )
+        if ( $catid > 0 )
         {
             $op = "viewcat";
+            if ( ! empty( $filealias ) )
+            {
+                $op = "viewfile";
+            }
+            
+            $parentid = $catid;
+            while ( $parentid > 0 )
+            {
+                $c = $list_cats[$parentid];
+                $array_mod_title[] = array( 
+                    'catid' => $parentid, 'title' => $c['title'], 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $c['alias'] 
+                );
+                $parentid = $c['parentid'];
+            }
+            sort( $array_mod_title, SORT_NUMERIC );
         }
-    
     }
 }
 

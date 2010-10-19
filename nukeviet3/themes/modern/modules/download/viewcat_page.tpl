@@ -1,5 +1,4 @@
 <!-- BEGIN: main -->
-<div class="breakcoup m-bottom">{PAGE_TITLE}</div>
 <!-- BEGIN: listsubcat -->
 <div class="box-border-shadow m-bottom">
     <div class="cat-nav">

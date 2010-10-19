@@ -5,9 +5,6 @@ var comment_thanks_mess = '{LANG.comment_thanks}';
 var comment_please_wait = '{LANG.comment_thanks2}';
 var comment_subject_defaul = '{ROW.comment_subject}';
 </script>
-<div class="breakcoup">
-{PAGE_TITLE}
-</div>
 <div class="header-details">
     <div class="title">
         <h1>{ROW.title}</h1>

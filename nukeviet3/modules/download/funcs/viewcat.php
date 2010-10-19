@@ -41,7 +41,6 @@ $per_page = 15;
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 $c = $list_cats[$catid];
 $page_title = $c['title'];
-$mod_title = $c['name'];
 $description = $c['description'];
 $subcats = $c['subcats'];
 
@@ -150,10 +149,7 @@ if ( ! empty( $subcats ) )
     }
 }
 
-/*print_r($subs);
-die;*/
-
-$contents = theme_viewcat_download( $array, $download_config, $subs, $mod_title, $generate_page );
+$contents = theme_viewcat_download( $array, $download_config, $subs, $generate_page );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );

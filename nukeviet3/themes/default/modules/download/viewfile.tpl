@@ -5,14 +5,6 @@ var comment_thanks_mess = '{LANG.comment_thanks}';
 var comment_please_wait = '{LANG.comment_thanks2}';
 var comment_subject_defaul = '{ROW.comment_subject}';
 </script>
-<div class="breakcoup m-bottom clearfix">
-    <!-- BEGIN: is_addfile_allow -->
-    <div class="fr">
-        <a href="{UPLOAD}">{LANG.upload}</a>
-    </div>
-    <!-- END: is_addfile_allow -->
-    {PAGE_TITLE}
-</div>
 <div class="block_download">
     <div class="title_bar">
         {ROW.title}
