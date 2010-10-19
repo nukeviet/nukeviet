@@ -37,9 +37,13 @@ else
         $contents .= $lang_module['version_note'] . ": <br />";
         $contents .= "<p style=\"font-style:italic\">" . $new_version->message . "</p>";
     }
-    else
+    elseif ( nv_version_compare( $global_config['version'], $new_version->version ) == 0 )
     {
         $contents = "<p style=\"margin:50px;\">" . $lang_module['version_latest'] . " <br>" . $newinfo . "</p>";
+    }
+    else
+    {
+        $contents = "<p style=\"margin:50px;\">" . $lang_module['version_latest'] . "</p>";
     }
 }
 
