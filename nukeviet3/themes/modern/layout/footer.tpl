@@ -29,15 +29,15 @@
 </div>
 <div id="footer" class="clearfix">
     <div class="fl div2">
-        Power by <a title="Nukeviet Cms" href="http://nukeviet.vn/">Nukeviet Cms</a>. Design by <a title="Vinades Jsc" href="http://vinades.vn/">Vinades Jsc</a><br />
-		{THEME_CONTACT_EMAIL}
+		{THEME_SITE_NAME}<br />
+        Powered by <a title="NukeViet Cms" href="http://nukeviet.vn/">NukeViet Cms</a>. Design by <a title="VINADES.,JSC" href="http://vinades.vn/">VINADES.,JSC</a>
     </div>
     <div class="fr div2 aright">
         <!-- BEGIN: bottom_menu --><a title="{TOP_MENU.title}" href="{TOP_MENU.link}">{TOP_MENU.title}</a>
         <!-- BEGIN: spector --><span class="spector">&nbsp;</span>
         <!-- END: spector --><!-- END: bottom_menu -->
 		<br />
-		<a href="http://nukeviet.vn">NukeViet</a> is registered trademark of <a href="http://vinades.vn">VINADES., JSC</a>
+		<a href="http://nukeviet.vn">NukeViet</a> is registered trademark of <a href="http://vinades.vn">VINADES.,JSC</a>
     </div>
 	<div class="clear"></div>
 	<!-- BEGIN: for_admin -->

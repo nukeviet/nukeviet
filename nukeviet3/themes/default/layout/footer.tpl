@@ -14,7 +14,7 @@
 	    <div class="fr">
 	        <ul class="bottom-toolbar">
 	            <li>
-	                Powered by<a title="NukeViet" href="http://nukeviet.vn"><img alt="Nukeviet" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/nukeviet.png" /></a>
+	                Powered by<a title="NukeViet" href="http://nukeviet.vn"><img alt="NukeViet" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/nukeviet.png" /></a>
 	            </li>
 	            <li>
 	                Valid<a title="Validate html" href="http://validator.w3.org/check?uri=referer"><img alt="Validated HTML" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/xhtml.png" /></a><a title="Validate CSS" href="http://jigsaw.w3.org/css-validator/check/referer"><img alt="Validated CSS" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/css.png" /></a>
