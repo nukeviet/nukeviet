@@ -2,6 +2,9 @@
 <!-- BEGIN: if_not_empty -->
 <!-- BEGIN: detail -->
         <div class="box-border content-box clearfix">
+			<div class="ava">
+				<a href="#"><img src="{ROW.photo}" alt="Avata" class="s-border" /></a>
+			</div>
             <div class="comment-content">
                 <strong>{ROW.subject}</strong>
                 - <span class="small">{ROW.post_time}</span>

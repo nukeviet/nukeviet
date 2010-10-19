@@ -408,7 +408,7 @@ function view_file ( $row, $download_config, $page_title )
  */
 function show_comment ( $array, $generate_page )
 {
-    global $module_info, $module_name, $module_file, $lang_module, $lang_global;
+    global $module_info, $module_name, $module_file, $lang_module, $lang_global, $global_config;
     if ( ! empty( $array ) )
     {
         $xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
@@ -416,6 +416,11 @@ function show_comment ( $array, $generate_page )
         $xtpl->assign( 'GLANG', $lang_global );
         foreach ( $array as $row )
         {
+			if(!empty($row['photo'])&& file_exists(NV_ROOTDIR . "/" . $row['photo'])){
+				$row['photo'] = $row['photo'];
+			}else{
+				$row['photo'] = NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_avatar.jpg";
+			}
             $xtpl->assign( 'ROW', $row );
             
             if ( defined( 'NV_IS_MODADMIN' ) )

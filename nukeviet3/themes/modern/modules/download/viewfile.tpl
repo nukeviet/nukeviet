@@ -194,14 +194,14 @@ var comment_subject_defaul = '{ROW.comment_subject}';
 <!-- BEGIN: is_comment_allow -->
     <div id="form_comment" class="comment-form" style="display:none">
         <div class="box-border content-box">
-			<p><input id="comment_subject" name="comment_subject" type="text" class="input input-c" value="{LANG.file_comment_subject}" /></p>
+			<p><input id="comment_subject" name="comment_subject" type="text" class="input input-c" onblur="if(this.value=='')this.value='{LANG.file_comment_subject}';" onclick="if(this.value=='{LANG.file_comment_subject}')this.value='';" value="{LANG.file_comment_subject}" /></p>
 			<div class="clear"></div>
             <div class="box clearfix">
-				<input id="comment_uname" name="comment_uname" type="text" class="input input-c fl" value="{ROW.comment_uemail}" maxlength="100"{ROW.disabled}/>
-                <input id="comment_uemail" name="comment_uemail" type="text" class="input input-c fr" value="{ROW.comment_uname}" maxlength="100"{ROW.disabled}/> &nbsp;
+				<input id="comment_uname" name="comment_uname" type="text" class="input input-c fl" onblur="if(this.value=='')this.value='{ROW.comment_uemail}';" onclick="if(this.value=='{ROW.comment_uemail}')this.value='';" value="{ROW.comment_uemail}" maxlength="100"{ROW.disabled}/>
+                <input id="comment_uemail" name="comment_uemail" type="text" class="input input-c fr" onblur="if(this.value=='')this.value='{ROW.comment_uname}';" onclick="if(this.value=='{ROW.comment_uname}')this.value='';" value="{ROW.comment_uname}" maxlength="100"{ROW.disabled}/> &nbsp;
             </div>
             <p>
-                <textarea rows="1" cols="1" name="comment_content" id="comment_content" class="input typer box2">{LANG.file_comment_content}</textarea>
+                <textarea rows="1" cols="1" name="comment_content" id="comment_content" class="input typer box2"  onblur="if(this.value=='')this.value='{LANG.file_comment_content}';" onclick="if(this.value=='{LANG.file_comment_content}')this.value='';" value="{LANG.file_comment_content}"></textarea>
             </p>
             <p>
                 {LANG.file_comment_captcha}: &nbsp; <img  style="vertical-align: middle" height="22" id="vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" title="{GLANG.captcha}" alt="{GLANG.captcha}" />
@@ -241,10 +241,10 @@ var comment_subject_defaul = '{ROW.comment_subject}';
 				$("#form_comment").slideUp();
 			}
 		});
-	})
+	})/*
 	$("#comment_subject,#comment_uemail,#comment_uname,#comment_content").click(function(){
 		$(this).val("");
-	});
+	});*/
 	$("#showform").toggle(function(){
 		$("#list_comments").slideUp();
 		$("#form_comment").slideDown();
