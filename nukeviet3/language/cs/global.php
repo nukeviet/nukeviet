@@ -956,9 +956,9 @@ $lang_global['langdata'] = "Zpracovat data dle nastavení jazyka";
 	 english:	  Data processing to follow language
 */
 
-$lang_global['langsite'] = "Výběr jazyka";
+$lang_global['langsite'] = "Select language"; //no translate
 /*
-	 vietnam:	  Lựa chọn ngôn ngữ
+	 vietnam:	  Select language
 	 english:	  Select language
 */
 
