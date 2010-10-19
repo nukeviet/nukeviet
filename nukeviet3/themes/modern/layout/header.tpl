@@ -99,9 +99,6 @@
                 <div class="clear">
                 </div>
             </div>
-            <div class="main">
-                [BELOW_NAV]
-            </div>
 			<!-- BEGIN: mod_title -->
 			<div class="main">
 				<div class="breakcoup">
@@ -113,4 +110,7 @@
 				</div>
 			</div>
 			<!-- END: mod_title -->
+            <div class="main">
+                [BELOW_NAV]
+            </div>
             {THEME_ERROR_INFO}
