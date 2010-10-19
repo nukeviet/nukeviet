@@ -349,20 +349,12 @@ div.box form.voting {
 /*Breakcolumn*/
 h3.breakcolumn {
 	line-height: 27px;
-	text-transform: uppercase;
 	border-bottom: 1px solid #ccc;
-}
-
-h3.breakcolumn a {
-	color: #333;
-}
-
-h3.breakcolumn a:hover {
-	color: #999;
+	font-weight:normal;
 }
 
 h3.breakcolumn span.breakcolumn {
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 700;
 	padding: 0 4px;
 }
