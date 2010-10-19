@@ -78,21 +78,11 @@ function main_theme ( $array_cat, $array_cat_content )
 
 function viewcat ( $array_subcat, $array_cat, $items )
 {
-    global $module_info, $global_array_cat, $global_config, $module_name, $module_file, $lang_module, $numsubcat, $showcatimage, $numinsub, $arr_cat_title;
+    global $module_info, $global_array_cat, $global_config, $module_name, $module_file, $lang_module, $numsubcat, $showcatimage, $numinsub;
     $xtpl = new XTemplate( "viewcat.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
     $width = round( 100 / $numsubcat, 0 );
     $xtpl->assign( "W", $width );
-    //$path = "uploads/$module_name";
-    if ( ! empty( $arr_cat_title ) )
-    {
-        foreach ( $arr_cat_title as $arr_cat_title_i )
-        {
-            $xtpl->assign( 'CAT', $arr_cat_title_i );
-            $xtpl->parse( 'main.top.loop' );
-        }
-        $xtpl->parse( 'main.top' );
-    }
     foreach ( $array_cat as $array_cat_i )
     {
         $xtpl->assign( 'CAT', $array_cat_i );
@@ -162,18 +152,9 @@ function viewcat ( $array_subcat, $array_cat, $items )
 
 function detail ( $row )
 {
-    global $module_info, $global_config, $module_name, $module_file, $global_array_cat, $lang_module, $arr_cat_title;
+    global $module_info, $global_config, $module_name, $module_file, $global_array_cat, $lang_module;
     
     $xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-    if ( ! empty( $arr_cat_title ) )
-    {
-        foreach ( $arr_cat_title as $arr_cat_title_i )
-        {
-            $xtpl->assign( 'CAT', $arr_cat_title_i );
-            $xtpl->parse( 'main.cat.loop' );
-        }
-        $xtpl->parse( 'main.cat' );
-    }
     $row['add_time'] = nv_date( "H:i l - d/m/Y", $row['add_time'] );
     $row['edit_time'] = nv_date( "H:i l - d/m/Y", $row['edit_time'] );
     if ( $row['urlimg'] != "" )

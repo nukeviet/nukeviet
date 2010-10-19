@@ -26,7 +26,7 @@ $catid = 0;
 $parentid = 0;
 $set_viewcat = "";
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
-$arr_cat_title = array();
+$array_mod_title = array();
 $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, del_cache_time, description, inhome, keywords, who_view, groups_view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
 $result = $db->sql_query( $sql );
 while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i, $numlinks_i, $del_cache_time_i, $description_i, $inhome_i, $keywords_i, $who_view_i, $groups_view_i ) = $db->sql_fetchrow( $result ) )
@@ -153,12 +153,12 @@ if ( ! empty( $array_op ) and $op == "main" )
         while ( $parentid > 0 )
         {
             $array_cat_i = $global_array_cat[$parentid];
-            $arr_cat_title[] = array( 
+            $array_mod_title[] = array( 
                 'catid' => $parentid, 'title' => $array_cat_i['title'], 'link' => $array_cat_i['link'] 
             );
             $parentid = $array_cat_i['parentid'];
         }
-        sort( $arr_cat_title, SORT_NUMERIC );
+        sort( $array_mod_title, SORT_NUMERIC );
     }
 }
 

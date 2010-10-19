@@ -32,14 +32,17 @@ if ( empty( $contents ) )
     $array_cat_other = array();
     $viewcat = $global_array_cat[$catid]['viewcat'];
     $base_url = $global_array_cat[$catid]['link'];
-    list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " ) );
-    $all_page = ( $numf ) ? $numf : 1;
     if ( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old" or $set_viewcat == "viewcat_page_new" )
     {
         $st_links = 2 * $st_links;
         $order_by = ( $viewcat == "viewcat_page_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
-        $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT " . $page . "," . $per_page . "";
+        $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT " . $page . "," . $per_page . "";
         $result = $db->sql_query( $sql );
+        
+        $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+        list( $numf ) = $db->sql_fetchrow( $result_all );
+        $all_page = ( $numf ) ? $numf : 1;
+        
         $end_publtime = 0;
         while ( $item = $db->sql_fetchrow( $result ) )
         {
@@ -82,8 +85,13 @@ if ( empty( $contents ) )
     {
         $array_catcontent = array();
         $array_subcatpage = array();
-        $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "";
+        $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "";
         $result = $db->sql_query( $sql );
+        
+        $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+        list( $numf ) = $db->sql_fetchrow( $result_all );
+        $all_page = ( $numf ) ? $numf : 1;
+        
         while ( $item = $db->sql_fetchrow( $result ) )
         {
             if ( ! empty( $item['homeimgthumb'] ) )

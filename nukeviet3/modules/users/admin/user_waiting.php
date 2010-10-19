@@ -13,15 +13,15 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if ( $nv_Request->isset_request( 'del', 'post' ) )
 {
     $userid = $nv_Request->get_int( 'userid', 'post', 0 );
-
+    
     $sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $userid;
     $result = $db->sql_query( $sql );
-
+    
     if ( ! $result )
     {
         die( "NO" );
     }
-
+    
     die( "OK" );
 }
 
@@ -29,13 +29,13 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
 if ( $nv_Request->isset_request( 'act', 'get' ) )
 {
     $userid = $nv_Request->get_int( 'userid', 'get', 0 );
-
+    
     if ( ! $userid )
     {
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
         die();
     }
-
+    
     $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $userid;
     $result = $db->sql_query( $sql );
     $numrows = $db->sql_numrows( $result );
@@ -45,7 +45,7 @@ if ( $nv_Request->isset_request( 'act', 'get' ) )
         die();
     }
     $row = $db->sql_fetchrow( $result );
-
+    
     $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
     `userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
     `regdate`, `website`, `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, 
@@ -54,7 +54,7 @@ if ( $nv_Request->isset_request( 'act', 'get' ) )
     ) VALUES (
     NULL, 
     " . $db->dbescape( $row['username'] ) . ", 
-    " . $db->dbescape( md5($row['username']) ) . ", 
+    " . $db->dbescape( md5( $row['username'] ) ) . ", 
     " . $db->dbescape( $row['password'] ) . ", 
     " . $db->dbescape( $row['email'] ) . ", 
     " . $db->dbescape( $row['full_name'] ) . ", 
@@ -62,13 +62,13 @@ if ( $nv_Request->isset_request( 'act', 'get' ) )
     " . $db->dbescape( $row['question'] ) . ", 
     " . $db->dbescape( $row['answer'] ) . ", 
     '', 0, 0, '', 1, '', 0, '', '', '')";
-
+    
     $userid = $db->sql_query_insert_id( $sql );
-
+    
     if ( $userid )
     {
         $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $row['userid'] );
-
+        
         $full_name = ( ! empty( $row['full_name'] ) ) ? $row['full_name'] : $row['username'];
         $subject = $lang_module['adduser_register'];
         $message = sprintf( $lang_module['adduser_register_info'], $full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, $row['username'] );
@@ -76,7 +76,7 @@ if ( $nv_Request->isset_request( 'act', 'get' ) )
         $message .= nv_EncString( $message );
         @nv_sendmail( $global_config['site_email'], $row['email'], $subject, $message );
     }
-
+    
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=user_waiting" );
     die();
 }
@@ -86,16 +86,26 @@ $page_title = $table_caption = $lang_module['member_wating'];
 $sql = "FROM `" . NV_USERS_GLOBALTABLE . "_reg`";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=user_waiting";
 
-$methods = array( //
-    'userid' => array( 'key' => 'userid', 'value' => $lang_module['search_id'], 'selected' => '' ), //
-    'username' => array( 'key' => 'username', 'value' => $lang_module['search_account'], 'selected' => '' ), //
-    'full_name' => array( 'key' => 'full_name', 'value' => $lang_module['search_name'], 'selected' => '' ), //
-    'email' => array( 'key' => 'email', 'value' => $lang_module['search_mail'], 'selected' => '' ) //
-    );
+$methods = array(  //
+    'userid' => array( 
+    'key' => 'userid', 'value' => $lang_module['search_id'], 'selected' => '' 
+), //
+'username' => array( 
+    'key' => 'username', 'value' => $lang_module['search_account'], 'selected' => '' 
+), //
+'full_name' => array( 
+    'key' => 'full_name', 'value' => $lang_module['search_name'], 'selected' => '' 
+), //
+'email' => array( 
+    'key' => 'email', 'value' => $lang_module['search_mail'], 'selected' => '' 
+)  //
+);
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
 $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ( $nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '' );
 
-$orders = array( 'userid', 'username', 'full_name', 'email', 'regdate' );
+$orders = array( 
+    'userid', 'username', 'full_name', 'email', 'regdate' 
+);
 $orderby = $nv_Request->get_string( 'sortby', 'get', '' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', '' );
 if ( $ordertype != "ASC" ) $ordertype = "DESC";
@@ -114,26 +124,26 @@ if ( ! empty( $orderby ) and in_array( $orderby, $orders ) )
     $base_url .= "&amp;sortby=" . $orderby . "&amp;sorttype=" . $ordertype;
 }
 
-$sql1 = "SELECT COUNT(*) " . $sql;
-$query1 = $db->sql_query( $sql1 );
-list( $all_page ) = $db->sql_fetchrow( $query1 );
-
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 30;
 
-$sql2 = "SELECT * " . $sql . " LIMIT " . $page . ", " . $per_page;
+$sql2 = "SELECT SQL_CALC_FOUND_ROWS * " . $sql . " LIMIT " . $page . ", " . $per_page;
 $query2 = $db->sql_query( $sql2 );
+
+$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+list( $numf ) = $db->sql_fetchrow( $result_all );
+$all_page = ( $numf ) ? $numf : 1;
 
 $users_list = array();
 while ( $row = $db->sql_fetchrow( $query2 ) )
 {
-    $users_list[$row['userid']] = array( //
+    $users_list[$row['userid']] = array(  //
         'userid' => ( int )$row['userid'], //
-        'username' => ( string )$row['username'], //
-        'full_name' => ( string )$row['full_name'], //
-        'email' => ( string )$row['email'], //
-        'regdate' => date( "d/m/Y H:i", $row['regdate'] ) //
-        );
+'username' => ( string )$row['username'], //
+'full_name' => ( string )$row['full_name'], //
+'email' => ( string )$row['email'], //
+'regdate' => date( "d/m/Y H:i", $row['regdate'] )  //
+    );
 }
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
@@ -156,7 +166,8 @@ foreach ( $orders as $order )
     {
         $head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=user_waiting&amp;sortby=" . $order . "&amp;sorttype=DESC";
         $head_tds[$order]['title'] .= " &darr;";
-    } elseif ( $orderby == $order and $ordertype == 'DESC' )
+    }
+    elseif ( $orderby == $order and $ordertype == 'DESC' )
     {
         $head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=user_waiting&amp;sortby=" . $order . "&amp;sorttype=ASC";
         $head_tds[$order]['title'] .= " &uarr;";

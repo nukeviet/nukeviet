@@ -93,8 +93,6 @@ if ( $checkss == md5( session_id() ) )
     }
 }
 
-list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . $from ) );
-
 $sql = "SELECT userid, username  FROM " . NV_USERS_GLOBALTABLE . " where userid in (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ")";
 $result = $db->sql_query( $sql );
 $array_admin = array();
@@ -196,8 +194,13 @@ $contents .= "</thead>";
 
 $base_url = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&per_page=" . $per_page . "&catid=" . $catid . "&stype=" . $stype . "&q=" . $q . "&checkss=" . $checkss . "&ordername=" . $ordername . "&order=" . $order;
 $ord_sql = "ORDER BY `" . $ordername . "` " . $order . "";
-$sql = "SELECT id, listcatid, admin_id, title, alias, status , publtime, exptime  FROM " . $from . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
+$sql = "SELECT SQL_CALC_FOUND_ROWS id, listcatid, admin_id, title, alias, status , publtime, exptime  FROM " . $from . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
 $result = $db->sql_query( $sql );
+
+$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+list( $numf ) = $db->sql_fetchrow( $result_all );
+$all_page = ( $numf ) ? $numf : 1;
+
 while ( list( $id, $listcatid, $admin_id, $title, $alias, $status, $publtime, $exptime ) = $db->sql_fetchrow( $result ) )
 {
     if ( $status == 0 )

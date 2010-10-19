@@ -18,24 +18,19 @@ if ( ! empty( $contact_allowed['view'] ) )
 {
     $in = implode( ",", array_keys( $contact_allowed['view'] ) );
     $sql = "`" . NV_PREFIXLANG . "_" . $module_data . "_send` WHERE `cid` IN (" . $in . ")";
-
-    $query = "SELECT COUNT(*) FROM " . $sql;
+    
+    $page = $nv_Request->get_int( 'page', 'get', 0 );
+    $per_page = 30;
+    $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+    $query = "SELECT SQL_CALC_FOUND_ROWS * FROM " . $sql . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page;
     $result = $db->sql_query( $query );
-    list( $all_page ) = $db->sql_fetchrow( $result );
+    
+    $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+    list( $numf ) = $db->sql_fetchrow( $result_all );
+    $all_page = ( $numf ) ? $numf : 1;
+    
     if ( $all_page )
     {
-        $page = $nv_Request->get_int( 'page', 'get', 0 );
-        $per_page = 30;
-        $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
-        $query = "SELECT * FROM " . $sql . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page;
-        $result = $db->sql_query( $query );
-        $numrows = $db->sql_numrows( $result );
-        if ( $page and empty( $numrows ) )
-        {
-            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-            die();
-        }
-
         $contents .= "<form name=\"myform\" id=\"myform\" method=\"post\" action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del&amp;t=2\">\n";
         $contents .= "<table summary=\"\" class=\"tab1\">\n";
         $contents .= "<col valign=\"middle\" width=\"10px\" />\n";
@@ -52,7 +47,7 @@ if ( ! empty( $contact_allowed['view'] ) )
         $contents .= "<td></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</thead>\n";
-
+        
         $contents .= "<tfoot>\n";
         $contents .= "<tr>\n";
         $contents .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);\" /></td>\n";
@@ -61,25 +56,31 @@ if ( ! empty( $contact_allowed['view'] ) )
         $contents .= "<a href=\"javascript:void(0)\" onclick=\"nv_delall_submit();\">" . $lang_module['delall'] . "</a></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</tfoot>\n";
-
+        
         $a = 0;
-
+        
         $currday = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
-
+        
         while ( $row = $db->sql_fetchrow( $result ) )
         {
-            $image = array( NV_BASE_SITEURL . 'images/mail_new.gif', 12, 9 );
+            $image = array( 
+                NV_BASE_SITEURL . 'images/mail_new.gif', 12, 9 
+            );
             $status = "New";
             $style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
             if ( $row['is_read'] == 1 )
             {
-                $image = array( NV_BASE_SITEURL . 'images/mail_old.gif', 12, 11 );
+                $image = array( 
+                    NV_BASE_SITEURL . 'images/mail_old.gif', 12, 11 
+                );
                 $status = $lang_module['tt1_row_title'];
                 $style = " style=\"cursor:pointer;white-space:nowrap;\"";
             }
             if ( $row['is_reply'] )
             {
-                $image = array( NV_BASE_SITEURL . 'images/mail_reply.gif', 13, 14 );
+                $image = array( 
+                    NV_BASE_SITEURL . 'images/mail_reply.gif', 13, 14 
+                );
                 $status = $lang_module['tt2_row_title'];
                 $style = " style=\"cursor:pointer;white-space:nowrap;\"";
             }
@@ -95,12 +96,12 @@ if ( ! empty( $contact_allowed['view'] ) )
             $contents .= "<td" . $style . " " . $onclick . " style=\"text-align:right\">" . ( $row['send_time'] >= $currday ? nv_date( "H:i", $row['send_time'] ) : nv_date( "d/m", $row['send_time'] ) ) . "</td>\n";
             $contents .= "</tr>\n";
             $contents .= "</tbody>\n";
-            $a++;
+            $a ++;
         }
-
+        
         $contents .= "</table>\n";
         $contents .= "</form>\n";
-
+        
         $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
         if ( ! empty( $generate_page ) )
         {

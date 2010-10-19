@@ -15,7 +15,7 @@ $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : 
 
 //$fileid = $nv_Request->get_int ( 'id', 'get' );
 
-global $global_array_cat, $arr_cat_title;
+global $global_array_cat;
 
 $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` = '".$id."'";
 $result = $db->sql_query($sql);

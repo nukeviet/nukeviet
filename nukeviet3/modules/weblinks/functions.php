@@ -25,7 +25,7 @@ $catid = 0;
 $parentid = 0;
 $set_viewcat = "";
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
-$arr_cat_title = array();
+$array_mod_title = array();
 $global_array_cat = array();
 
 //Xac dinh RSS
@@ -108,12 +108,12 @@ if ( ! empty( $array_op ) )
         while ( $parentid > 0 )
         {
             $array_cat_i = $global_array_cat[$parentid];
-            $arr_cat_title[] = array( 
+            $array_mod_title[] = array( 
                 'catid' => $parentid, 'title' => $array_cat_i['title'], 'link' => $array_cat_i['link'] 
             );
             $parentid = $array_cat_i['parentid'];
         }
-        sort( $arr_cat_title, SORT_NUMERIC );
+        sort( $array_mod_title, SORT_NUMERIC );
     }
 }
 ?>

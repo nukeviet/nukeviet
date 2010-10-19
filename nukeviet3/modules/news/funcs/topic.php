@@ -14,10 +14,16 @@ $page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-" ) ? 
 list( $topicid, $topictitle ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `alias`=" . $db->dbescape( $topicalias ) . "" ) );
 if ( $topicid > 0 )
 {
-    list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_name . "_rows` WHERE `publtime` <  UNIX_TIMESTAMP( ) AND `topicid` = '" . $topicid . "'" ) );
+    
+    $array_mod_title[] = array( 
+        'catid' => 0, 'title' => $topictitle, 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias 
+    );
+    
+    $query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_name . "_rows` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") AND `topicid` = '" . $topicid . "' ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "" );
+    $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+    list( $numf ) = $db->sql_fetchrow( $result_all );
     $all_page = ( $numf ) ? $numf : 1;
     
-    $query = $db->sql_query( "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_name . "_rows` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") AND `topicid` = '" . $topicid . "' ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "" );
     $topic_array = array();
     $end_id = 0;
     while ( $item = $db->sql_fetchrow( $query ) )
