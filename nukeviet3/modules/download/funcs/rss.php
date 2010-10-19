@@ -13,7 +13,6 @@ $channel = array();
 $items = array();
 
 $channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_info['custom_title'];
-;
 $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 $channel['atomlink'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
 $channel['description'] = $global_config['site_description'];
@@ -64,10 +63,10 @@ if ( ! empty( $list_cats ) )
                 $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . NV_MY_DOMAIN . $homeimgfile . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
                 $items[] = array(  //
                     'title' => $title, //
-					'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias, //
-					'guid' => $module_name . '_' . $id, //
-					'description' => $rimages . $hometext, //
-					'pubdate' => $publtime  //
+'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias, //
+'guid' => $module_name . '_' . $id, //
+'description' => $rimages . $hometext, //
+'pubdate' => $publtime  //
                 );
             }
         }

@@ -13,7 +13,6 @@ $channel = array();
 $items = array();
 
 $channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_info['custom_title'];
-;
 $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 $channel['atomlink'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss";
 $channel['description'] = $global_config['site_description'];
@@ -52,10 +51,10 @@ if ( $module_info['rss'] )
         $catalias = $global_array_cat[$catid_i]['alias'];
         $items[] = array(  //
             'title' => $title, //
-			'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id, //
-			'guid' => $module_name . '_' . $id, //
-			'description' => $rimages . $hometext, //
-			'pubdate' => $publtime  //
+'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id, //
+'guid' => $module_name . '_' . $id, //
+'description' => $rimages . $hometext, //
+'pubdate' => $publtime  //
         );
     }
 }
