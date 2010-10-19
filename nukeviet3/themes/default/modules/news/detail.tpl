@@ -1,6 +1,5 @@
 <!-- BEGIN: main -->
 <div class="news_column" style="padding:0 !important;margin:0 !important;">
-    <h3 class="breakcolumn"><!-- BEGIN: breakcolumn --><a href="{SUB_CAT.link}" title="{SUB_CAT.title}">{SUB_CAT.title}</a><!-- BEGIN: arrow --><span class="breakcolumn">&raquo;</span><!-- END: arrow --><!-- END: breakcolumn --></h3>
     <div id="news_detail">
         <h1>{DETAIL.title}</h1>
         <span class="time">{DETAIL.publtime}</span>

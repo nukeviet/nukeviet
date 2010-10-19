@@ -30,6 +30,7 @@ $lang_global = array();
 $lang_ = array();
 $rss = array();
 $nv_vertical_menu = array();
+$array_mod_title = array();
 $content_type = array();
 $blocks = array();
 $contents = "";

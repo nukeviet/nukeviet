@@ -1,4 +1,4 @@
-<!-- BEGIN: main --><h3 class="breakcolumn"><a href="{TOPIC_TOP_LINK}" title="{TOPIC_TOP_TITLE}">{TOPIC_TOP_TITLE}</a><span class="breakcolumn">&raquo;</span></h3>
+<!-- BEGIN: main -->
 <!-- BEGIN: topic -->
 <div class="news_column">
     <div class="items clearfix">

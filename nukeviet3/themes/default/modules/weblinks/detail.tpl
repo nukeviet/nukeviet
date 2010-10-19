@@ -1,12 +1,6 @@
 <!-- BEGIN: main -->
 <div id="weblink">
-    <!-- BEGIN: cat -->
-    <h2><!-- BEGIN: loop --><span> &raquo; <a title="{CAT.title}" href="{CAT.link}">{CAT.title}</a></span><!-- END: loop --></h2>
-    <!-- END: cat -->
-    
-    
     <h1>{DETAIL.title}</h1>
-   
     <div class="thumb_imgweb">
     <p>
         <!-- BEGIN: img -->

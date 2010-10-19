@@ -1,12 +1,5 @@
 <!-- BEGIN: main -->
 <div id="weblinks">
-    <!-- BEGIN: top -->
-        <h2>
-        <!-- BEGIN: loop -->
-            <span><a title="{CAT.title}" href="{CAT.link}">{CAT.title}</a> : </span>
-        <!-- END: loop -->
-        </h2>
-    <!-- END: top -->
     <!-- BEGIN: cat -->
         <!-- BEGIN: showdes -->
         <div class="description">

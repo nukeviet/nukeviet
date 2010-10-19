@@ -1,5 +1,4 @@
-<!-- BEGIN: main --><!-- BEGIN: breakcolumn --><h3 class="breakcolumn"><!-- BEGIN: loop --><a href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}">{BREAKCOLUMN.title}</a><!-- BEGIN: arrow --><span class="breakcolumn">&raquo;</span><!-- END: arrow --><!-- END: loop --></h3>
-<!-- END: breakcolumn -->
+<!-- BEGIN: main -->
 <div class="news_column">
     <div class="news-content bordersilver white clearfix">
         <!-- BEGIN: catcontent -->

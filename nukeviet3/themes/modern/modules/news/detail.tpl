@@ -1,11 +1,4 @@
 <!-- BEGIN: main -->
-<div class="breakcoup">
-    <a title={LANG_GLOBAL.Home} href="{NV_BASE_SITEURL}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/icons/home.png" alt="{LANG_GLOBAL.Home}" /></a> <span class="spector">&nbsp;</span>
-    <!-- BEGIN: breakcolumn --><a class="highlight" href="{SUB_CAT.link}" title="{SUB_CAT.title}">{SUB_CAT.title}</a>
-    <!-- BEGIN: arrow --><span class="spector">&nbsp;</span>
-    <!-- END: arrow --><!-- END: breakcolumn --><span class="spector">&nbsp;</span>
-    <span class="highlight">{LANG.detail}</span>
-</div>
 <div class="header-details">
     <div class="action fr right">
         <!-- BEGIN: allowed_send --><a title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','500','400','no');return false" class="email">{LANG.sendmail}</a>

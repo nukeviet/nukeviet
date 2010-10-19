@@ -1,4 +1,5 @@
-<!-- BEGIN: main --><!-- BEGIN: listcat -->
+<!-- BEGIN: main -->
+<!-- BEGIN: listcat -->
 <div class="news_column">
     <div class="news-content bordersilver white clearfix">
         <div class="header clearfix">

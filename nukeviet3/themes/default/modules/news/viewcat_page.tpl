@@ -1,4 +1,4 @@
-<!-- BEGIN: main --><h3 class="breakcolumn"><!-- BEGIN: breakcolumn --><a href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}">{BREAKCOLUMN.title}</a><!-- BEGIN: arrow --><span class="breakcolumn">&raquo;</span><!-- END: arrow --><!-- END: breakcolumn --></h3>
+<!-- BEGIN: main -->
 <!-- BEGIN: viewcatloop -->
 <div class="news_column">
     <div class="items clearfix">

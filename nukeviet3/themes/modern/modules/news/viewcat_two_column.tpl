@@ -1,5 +1,5 @@
-<!-- BEGIN: main --><!-- BEGIN: breakcolumn --><h3><!-- BEGIN: loop --><a title="{SUBCAT.title}" href="SUBCAT.link}">{SUBCAT.title}</a><!-- BEGIN: arrow --><span>&raquo;</span><!-- END: arrow --><!-- END: loop --></h3>
-<!-- END: breakcolumn --><!-- BEGIN: catcontent -->
+<!-- BEGIN: main -->
+<!-- BEGIN: catcontent -->
 <div class="box-border-shadow m-bottom t-news">
     <!-- BEGIN: content -->
     <div class="content-box clearfix">

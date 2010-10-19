@@ -1,4 +1,4 @@
-<!-- BEGIN: main --><h3><!-- BEGIN: breakcolumn --><a href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}">{BREAKCOLUMN.title}</a><!-- BEGIN: arrow --><span>&nbsp;&raquo;&nbsp;</span><!-- END: arrow --><!-- END: breakcolumn --></h3>
+<!-- BEGIN: main -->
 <!-- BEGIN: viewcatloop -->
 <div class="box-border-shadow m-bottom listz-news">
     <div class="content-box">

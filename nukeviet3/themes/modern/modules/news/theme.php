@@ -9,21 +9,9 @@ if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 function viewcat_page_new ( $array_catpage, $array_cat_other )
 {
-    global $global_config, $global_array_cat, $module_name, $module_file, $lang_module, $arr_cat_title, $module_config, $module_info;
+    global $global_config, $global_array_cat, $module_name, $module_file, $lang_module, $module_config, $module_info;
     $xtpl = new XTemplate( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-    $count = count( $arr_cat_title );
-    foreach ( $arr_cat_title as $key => $arr_cat_title_i )
-    {
-        $xtpl->clear_autoreset();
-        $xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
-        $xtpl->set_autoreset();
-        if ( $key + 1 < $count )
-        {
-            $xtpl->parse( 'main.breakcolumn.arrow' );
-        }
-        $xtpl->parse( 'main.breakcolumn' );
-    }
     $a = 0;
     foreach ( $array_catpage as $array_row_i )
     {
@@ -87,30 +75,9 @@ function viewcat_page_new ( $array_catpage, $array_cat_other )
 
 function viewcat_top ( $array_catcontent )
 {
-    global $global_config, $module_name, $module_file, $global_array_cat, $lang_module, $arr_cat_title, $module_config, $module_info;
+    global $global_config, $module_name, $module_file, $global_array_cat, $lang_module, $module_config, $module_info;
     $xtpl = new XTemplate( "viewcat_top.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-    //Breakcolumn
-    if ( ! empty( $arr_cat_title ) )
-    {
-        $count = count( $arr_cat_title );
-        $a = 1;
-        foreach ( $arr_cat_title as $arr_cat_title_i )
-        {
-            $xtpl->clear_autoreset();
-            $xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
-            if ( $a < $count )
-            {
-                $xtpl->parse( 'main.breakcolumn.loop.arrow' );
-            }
-            $xtpl->set_autoreset();
-            $xtpl->parse( 'main.breakcolumn.loop' );
-            $a ++;
-        }
-        $xtpl->parse( 'main.breakcolumn' );
-    }
-    //Breakcolumn
-    
 
     // Cac bai viet phan dau
     if ( ! empty( $array_catcontent ) )
@@ -160,7 +127,7 @@ function viewcat_top ( $array_catcontent )
 
 function viewsubcat_main ( $viewcat, $array_cat )
 {
-    global $global_config, $module_name, $module_file, $global_array_cat, $lang_module, $arr_cat_title, $module_config, $module_info;
+    global $global_config, $module_name, $module_file, $global_array_cat, $lang_module, $module_config, $module_info;
     $xtpl = new XTemplate( $viewcat . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
     // Hien thi cac chu de con
@@ -274,23 +241,10 @@ function viewsubcat_main ( $viewcat, $array_cat )
 
 function viewcat_two_column ( $array_content, $array_catpage )
 {
-    global $global_config, $module_name, $module_file, $arr_cat_title, $module_config, $module_info, $home, $lang_module;
+    global $global_config, $module_name, $module_file, $module_config, $module_info, $home, $lang_module;
     $xtpl = new XTemplate( "viewcat_two_column.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-    //Breakcolumn
-    if ( ! empty( $arr_cat_title ) )
-    {
-        foreach ( $arr_cat_title as $arr_cat_title_i )
-        {
-            $xtpl->assign( 'SUBCAT', $arr_cat_title_i );
-            if ( $home != 1 )
-            {
-                $xtpl->parse( 'main.breakcolumn.loop' );
-            }
-        }
-        $xtpl->parse( 'main.breakcolumn' );
-    }
-    //End Breakcolumn
+
     //Bai viet o phan dau
     if ( ! empty( $array_content ) )
     {
@@ -399,7 +353,7 @@ function viewcat_two_column ( $array_content, $array_catpage )
 
 function detail_theme ( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable )
 {
-    global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $global_array_cat, $arr_cat_title, $my_head, $lang_global, $user_info, $admin_info, $catid;
+    global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $global_array_cat, $my_head, $lang_global, $user_info, $admin_info, $catid;
     
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
     $my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";
@@ -414,20 +368,7 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     $xtpl->assign( 'NEWSID', $news_contents['id'] );
     $xtpl->assign( 'NEWSCHECKSS', $news_contents['newscheckss'] );
     $xtpl->assign( 'DETAIL', $news_contents );
-    $a = 1;
-    $count = count( $arr_cat_title );
-    foreach ( $arr_cat_title as $key => $arr_cat_title_i )
-    {
-        $xtpl->clear_autoreset();
-        $xtpl->assign( 'SUB_CAT', $arr_cat_title_i );
-        if ( $a < $count )
-        {
-            $xtpl->parse( 'main.breakcolumn.arrow' );
-        }
-        $xtpl->set_autoreset();
-        $xtpl->parse( 'main.breakcolumn' );
-        $a ++;
-    }
+
     if ( $news_contents['allowed_send'] == 1 )
     {
         $xtpl->assign( 'URL_SENDMAIL', $news_contents['url_sendmail'] );
@@ -617,8 +558,6 @@ function topic_theme ( $topic_array, $topic_other_array )
     global $global_config, $lang_module, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config;
     $xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-    $xtpl->assign( 'TOPIC_TOP_TITLE', $topictitle );
-    $xtpl->assign( 'TOPIC_TOP_LINK', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias . "" );
     if ( ! empty( $topic_array ) )
     {
         foreach ( $topic_array as $topic_array_i )

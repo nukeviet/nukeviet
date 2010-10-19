@@ -1,8 +1,4 @@
-<!-- BEGIN: main --><!-- BEGIN: breakcolumn -->
-<div class="breakcolumn">
-    <h3><!-- BEGIN: loop --><a href="{SUBCAT.link}" title="{SUBCAT.title}">{SUBCAT.title}</a><!-- END: loop --></h3>
-</div>
-<!-- END: breakcolumn -->
+<!-- BEGIN: main -->
 <div class="news_column">
     <!-- BEGIN: catcontent --><!-- BEGIN: content -->
     <div class="news-content bordersilver white clearfix">

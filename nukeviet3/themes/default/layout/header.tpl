@@ -29,23 +29,27 @@
             <div id="header">
                 <div id="logo">
                     <a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/logo.gif" alt="{THEME_LOGO_TITLE}" /></a>
-                </div><!-- BEGIN: language -->
-                <div class="language">
-                	Language:
-                    <select name="lang">
-                        <!-- BEGIN: langitem --><option value="{LANGSITEURL}" title="{SELECTLANGSITE}">{LANGSITENAME}</option>
-                        <!-- END: langitem --><!-- BEGIN: langcuritem --><option value="{LANGSITEURL}" title="{SELECTLANGSITE}" selected="selected">{LANGSITENAME}</option>
-                        <!-- END: langcuritem -->
-                    </select>
-                    <script type="text/javascript">
-                        $(function(){
-                            $("select[name=lang]").change(function(){
-                                var reurl = $("select[name=lang]").val();
-                                document.location = reurl;
-                            });
-                        });
-                    </script>
                 </div>
+                <!-- BEGIN: language -->
+	                <div class="language">
+	                	Language:
+	                    <select name="lang">
+	                        <!-- BEGIN: langitem -->
+	                        	<option value="{LANGSITEURL}" title="{SELECTLANGSITE}">{LANGSITENAME}</option>
+	                        <!-- END: langitem -->
+	                        <!-- BEGIN: langcuritem -->
+	                        	<option value="{LANGSITEURL}" title="{SELECTLANGSITE}" selected="selected">{LANGSITENAME}</option>
+	                        <!-- END: langcuritem -->
+	                    </select>
+	                    <script type="text/javascript">
+	                        $(function(){
+	                            $("select[name=lang]").change(function(){
+	                                var reurl = $("select[name=lang]").val();
+	                                document.location = reurl;
+	                            });
+	                        });
+	                    </script>
+	                </div>
                 <!-- END: language -->
             </div>
             <div class="nav">
@@ -54,18 +58,18 @@
                         <a title="{LANG.Home}" href="{THEME_SITE_HREF}"><span>{LANG.Home}</span></a>
                     </li>
                     <!-- BEGIN: top_menu -->
-                    <li {TOP_MENU.current}>
-                        <a title="{TOP_MENU.title}" href="{TOP_MENU.link}"><span><strong>&bull;</strong>{TOP_MENU.title} </span></a>
-                        <!-- BEGIN: sub -->
-                        <ul class="subnav">
-                            <!-- BEGIN: item -->
-                            <li>
-                                <a title="{SUB.title}" href="{SUB.link}">&raquo; {SUB.title}</a>
-                            </li>
-                            <!-- END: item -->
-                        </ul>
-                        <!-- END: sub -->
-                    </li>
+	                    <li {TOP_MENU.current}>
+	                        <a title="{TOP_MENU.title}" href="{TOP_MENU.link}"><span><strong>&bull;</strong>{TOP_MENU.title} </span></a>
+	                        <!-- BEGIN: sub -->
+		                        <ul class="subnav">
+		                            <!-- BEGIN: item -->
+		                            <li>
+		                                <a title="{SUB.title}" href="{SUB.link}">&raquo; {SUB.title}</a>
+		                            </li>
+		                            <!-- END: item -->
+		                        </ul>
+	                        <!-- END: sub -->
+	                    </li>
                     <!-- END: top_menu -->
                 </ul>
                 <div class="rss fr">

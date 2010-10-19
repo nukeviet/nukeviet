@@ -11,7 +11,8 @@ if ( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_site_theme ( $contents )
 {
-    global $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op, $db, $mod_title, $my_head, $nv_array_block_contents, $client_info;
+    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op, $db, $mod_title, $my_head, $nv_array_block_contents, $client_info;
+
     if ( ! file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/layout." . $module_info['funcs'][$op]['layout'] . ".tpl" ) )
     {
         nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
@@ -150,6 +151,25 @@ function nv_site_theme ( $contents )
             $xtpl->parse( 'main.top_menu' );
         }
     }
+
+    //Breakcolumn
+    if ( $home != 1 )
+    {
+        $arr_cat_title_i = array( 
+            'catid' => 0, 'title' => $module_info['custom_title'], 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name 
+        );
+        $xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
+        $xtpl->parse( 'main.mod_title.breakcolumn' );
+        
+        foreach ( $array_mod_title as $arr_cat_title_i )
+        {
+            $xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
+            $xtpl->parse( 'main.mod_title.breakcolumn' );
+        }
+        $xtpl->parse( 'main.mod_title' );
+    }
+    //Breakcolumn
+       
     
     $theme_stat_img = "";
     if ( $global_config['statistic'] and isset( $site_mods['statistics'] ) )
