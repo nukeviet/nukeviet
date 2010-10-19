@@ -148,7 +148,7 @@ function nv_site_theme ( $contents )
             }
         }
     }
-    elseif ( $module_file == "news" or $module_file == "weblinks" )
+    elseif ( $module_file == "news" )
     {
         $sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
         $result = $db->sql_query( $sql );
@@ -160,9 +160,21 @@ function nv_site_theme ( $contents )
             );
         }
     }
+    elseif ( $module_file == "weblinks" )
+    {
+        $sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `parentid` ASC, `weight` ASC";
+        $result = $db->sql_query( $sql );
+        while ( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+        {
+            $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
+            $global_array_cat[$catid_i] = array( 
+                "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i 
+            );
+        }
+    }
     elseif ( $module_file == "download" )
     {
-        $sql = "SELECT id, parentid, title, alias FROM `" . NV_PREFIXLANG . "_download_categories` ORDER BY `weight` ASC";
+        $sql = "SELECT id, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` ORDER BY `weight` ASC";
         $result = $db->sql_query( $sql );
         while ( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
         {
@@ -251,6 +263,7 @@ function nv_site_theme ( $contents )
         $xtpl->parse( 'main.mod_title' );
     }
     //Breakcolumn
+    
 
     # end process cat module
     $theme_stat_img = "";
