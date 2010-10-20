@@ -648,7 +648,7 @@ function nv_html_site_js ( )
 									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&position="+target+"&func="+func_id, function(theResponse){
 									if(theResponse=="OK_"+func_id){
 				    					$("div#toolbar>ul.info>li").hide();
-				    					$("div#toolbar>ul.info>li").html("<span style=\'color:red;padding-left:150px;font-weight:bold\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
+				    					$("div#toolbar>ul.info>li").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
 									}
 									else{
 										alert("' . $lang_global['blocks_saved_error'] . '");
@@ -660,7 +660,7 @@ function nv_html_site_js ( )
 								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order, function(theResponse){
 									if(theResponse=="OK_0"){
 				    					$("div#toolbar>ul.info>li").hide();
-				    					$("div#toolbar>ul.info>li").html("<span style=\'color:red;padding-left:150px;font-weight:bold\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
+				    					$("div#toolbar>ul.info>li").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
 									}
 									else{
 										alert("' . $lang_global['blocks_saved_error'] . '");
