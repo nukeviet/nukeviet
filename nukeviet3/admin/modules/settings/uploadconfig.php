@@ -35,7 +35,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     die();
 }
 
-$ini = parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
+$ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 $types = array_keys( $ini );
 $extmime = array_values( $ini );
 $mimes = $exts = array();
