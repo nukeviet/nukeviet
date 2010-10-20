@@ -11,6 +11,8 @@ $page_title = $lang_module['upload_manager'];
 
 # config
 $path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) ), ENT_QUOTES );
+$currentpath = $nv_Request->isset_request( 'path', 'post' ) ? htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post', $path ) ), ENT_QUOTES ) : htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', 'get', $path ) ), ENT_QUOTES );
+
 $area = "";
 $popup = $nv_Request->get_int( 'popup', 'get', 0 );
 $selectedfile = '';
@@ -18,12 +20,11 @@ $uploadflag = $nv_Request->isset_request( 'confirm', 'post' );
 if ( $uploadflag )
 {
     $imgurl = htmlspecialchars( trim( $nv_Request->get_string( 'imgurl', 'post' ) ), ENT_QUOTES );
-    $imgfolder = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post' ) ), ENT_QUOTES );
-    if ( is_uploaded_file( $_FILES['fileupload']['tmp_name'] ) && nv_check_allow_upload_dir( $imgfolder ) )
+    if ( is_uploaded_file( $_FILES['fileupload']['tmp_name'] ) && nv_check_allow_upload_dir( $currentpath ) )
     {
         require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
         $upload = new upload( $admin_info['allow_files_type'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-        $upload_info = $upload->save_file( $_FILES['fileupload'], NV_ROOTDIR . '/' . $imgfolder, false );
+        $upload_info = $upload->save_file( $_FILES['fileupload'], NV_ROOTDIR . '/' . $currentpath, false );
         if ( ! empty( $upload_info['error'] ) )
         {
             $errors[] = $upload_info['error'];
@@ -47,14 +48,14 @@ if ( $uploadflag )
                 $getContent = new UrlGetContents( $global_config );
                 $content = '';
                 $content = $getContent->get( $imgurl );
-                $handle2 = @fopen( NV_ROOTDIR . '/' . $imgfolder . '/' . basename( $imgname ), 'wb' );
+                $handle2 = @fopen( NV_ROOTDIR . '/' . $currentpath . '/' . basename( $imgname ), 'wb' );
                 if ( $handle2 && ! empty( $content ) )
                 {
                     @fwrite( $handle2, $content );
                     @fclose( $handle2 );
                     $datakod = time();
                     $img_name = $datakod . $imgname;
-                    @rename( NV_ROOTDIR . '/' . $imgfolder . '/' . $imgname, NV_ROOTDIR . '/' . $imgfolder . '/' . $img_name );
+                    @rename( NV_ROOTDIR . '/' . $currentpath . '/' . $imgname, NV_ROOTDIR . '/' . $currentpath . '/' . $img_name );
                 }
                 else
                 {
@@ -92,7 +93,6 @@ $contents .= '
 			<td valign="top">
 				<div name="imgfolder" id="imgfolder" size="25" style="width:200px;height:340px;overflow:auto;cursor:pointer">';
 $type = htmlspecialchars( trim( $nv_Request->get_string( 'type', 'get', 'file' ) ), ENT_QUOTES );
-$currentpath = $nv_Request->isset_request( 'path', 'post' ) ? htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post', $path ) ), ENT_QUOTES ) : htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', 'get', $path ) ), ENT_QUOTES );
 $contents .= '	</div>';
 $contents .= '
 <script type="text/javascript">
@@ -116,7 +116,7 @@ $(function(){
 				<option value="flash" ' . ( ( $type == 'flash' ) ? ' selected' : '' ) . '>' . $lang_module['type_flash'] . '</option>
 				</select><input type="button" id="uploadfile" value="Upload" style="margin-left:10px;"/>
 				<form enctype="multipart/form-data" action="" name="uploadimg" id="uploadimg" style="display:none" method="POST">
-					<input type="hidden" name="path" value="' . ( ! empty( $imgfolder ) ? $imgfolder : $path ) . '"/>
+					<input type="hidden" name="path" value="' . $currentpath . '"/>
 					' . $lang_module['upload_file'] . ' <input type="file" name="fileupload"/> ' . $lang_module['upload_otherurl'] . ' <input type="text" name="imgurl"/> <input type="submit" value="GO" name="confirm"/>
 				</form>
 				<br />
@@ -226,7 +226,7 @@ $("div#renamefolder").dialog({
 	}
 });
 </script>
-	<span style="display:none" id="foldervalue" title="' . ( ! empty( $imgfolder ) ? $imgfolder : $path ) . '"></span>
+	<span style="display:none" id="foldervalue" title="' . $currentpath . '"></span>
     <div style="display:none" id="folder-menu">
         <ul>';
 if ( $admin_info['allow_create_subdirectories'] )
