@@ -1,4 +1,4 @@
-<!-- BEGIN: main --><h3><a href="{TOPIC_TOP_LINK}" title="{TOPIC_TOP_TITLE}">{TOPIC_TOP_TITLE}</a></h3>
+<!-- BEGIN: main -->
 <!-- BEGIN: topic -->
 <div class="box-border-shadow m-bottom listz-news">
     <div class="content-box">
