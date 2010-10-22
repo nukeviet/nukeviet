@@ -152,7 +152,7 @@ function nv_blocks_content ( )
         foreach ( $list as $row_bl )
         {
             $__pos = $row_bl['position'];
-            if ( isset( $__blocks_return[$__pos] ) and ( $__pos['exp_time'] == 0 or $__pos['exp_time'] > " . NV_CURRENTTIME . " ) )
+            if ( isset( $__blocks_return[$__pos] ) and ( $row_bl['exp_time'] == 0 or $row_bl['exp_time'] > NV_CURRENTTIME ) )
             {
                 $groups_view = ( string )$row_bl['groups_view'];
                 $allowed = false;
