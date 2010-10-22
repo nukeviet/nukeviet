@@ -7,7 +7,7 @@
  */
 
 if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
-global $module_name, $lang_module, $module_data, $nv_Request;
+global $module_name, $lang_module, $module_data, $nv_Request, $list_cats;
 
 $xtpl = new XTemplate( "block_lastestdownload.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
