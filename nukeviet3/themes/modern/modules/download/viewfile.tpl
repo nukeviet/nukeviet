@@ -15,13 +15,13 @@ var comment_subject_defaul = '{ROW.comment_subject}';
 </div>
 <div class="details-content clearfix">
     <div class="gg fl">
-        <div class="acenter m-bottom">
-        	<!-- BEGIN: is_image -->
-            <a href="{FILEIMAGE.orig_src}" rel="shadowbox;height={FILEIMAGE.orig_height};width={FILEIMAGE.orig_width}"><img src="{FILEIMAGE.orig_src}" alt="{ROW.title}" style="width:257px;height:161px" class="s-border"/></a>
-			<!-- END: is_image -->
-            <br/>
-            <span class="small">{ROW.title}</span>
-        </div>
+        <!-- BEGIN: is_image -->
+			<div class="acenter m-bottom">
+				<a href="{FILEIMAGE.orig_src}" rel="shadowbox;height={FILEIMAGE.orig_height};width={FILEIMAGE.orig_width}"><img src="{FILEIMAGE.orig_src}" alt="{ROW.title}" style="width:257px;height:161px" class="s-border"/></a>
+				<br/>
+				<span class="small">{ROW.title}</span>
+			</div>
+		<!-- END: is_image -->
 		<!-- BEGIN: introtext -->
 			{ROW.introtext}
 			{ROW.description}

@@ -144,7 +144,7 @@
                         <input type="radio" name="sitesearch" value="" checked id="ss0" />
                         {LANG.search_on_internet}
 
-                        <input type="radio" name="sitesearch" value="{MY_DOMAIN}" />{LANG.search_on_nuke}
+                        <input type="radio" name="sitesearch" value="{MY_DOMAIN}" />{LANG.search_on_nuke} {MY_DOMAIN}
                     </tr>
                 </table>
                 </center>
