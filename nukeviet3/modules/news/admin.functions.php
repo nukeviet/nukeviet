@@ -149,7 +149,7 @@ function nv_news_fix_block ( $bid, $repairtable = true )
         while ( $row = $db->sql_fetchrow( $result ) )
         {
             $weight ++;
-            if ( $weight <= 500 )
+            if ( $weight <= 100 )
             {
                 $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $weight . " WHERE `bid`='" . $bid . "' AND `id`=" . intval( $row['id'] );
             }
