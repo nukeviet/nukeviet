@@ -77,7 +77,7 @@ if ( ! function_exists( 'nv_block_voting' ) )
             
             if ( empty( $list ) ) return "";
             
-            include_once ( NV_ROOTDIR . "/modules/" . $site_mods['voting']['module_file'] . "/language/" . NV_LANG_INTERFACE . ".php" );
+            include ( NV_ROOTDIR . "/modules/" . $site_mods['voting']['module_file'] . "/language/" . NV_LANG_INTERFACE . ".php" );
             
             if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $site_mods['voting']['module_file'] . "/global.voting.tpl" ) )
             {
