@@ -42,7 +42,27 @@ if ( $nv_Request->isset_request( 'ftp_server', 'post' ) )
         }
         elseif ( ftp_chdir( $conn_id, $ftp_path ) )
         {
-            $array_config['ftp_check_login'] = 1;
+            $check_files = array( 
+                NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR 
+            );
+            $list_files = ftp_nlist( $conn_id, "." );
+            $a = 0;
+            foreach ( $list_files as $filename )
+            {
+                if ( in_array( $filename, $check_files ) )
+                {
+                    $a ++;
+                }
+            }
+            if ( $a == count( $check_files ) )
+            {
+                $array_config['ftp_check_login'] = 1;
+            }
+            else
+            {
+                $array_config['ftp_check_login'] = 2;
+                $error = $lang_global['ftp_error_path'];
+            }
         }
         else
         {
@@ -66,7 +86,7 @@ if ( $nv_Request->isset_request( 'ftp_server', 'post' ) )
     {
         Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
         exit();
-    }    
+    }
 }
 
 $xtpl = new XTemplate( "ftp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );

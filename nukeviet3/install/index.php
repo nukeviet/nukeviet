@@ -167,11 +167,31 @@ elseif ( $step == 4 )
             }
             elseif ( ftp_chdir( $conn_id, $global_config['ftp_path'] ) )
             {
-                $ftp_check_login = 1;
-                nv_chmod_dir( $conn_id, NV_DATADIR, true );
-                nv_chmod_dir( $conn_id, NV_TEMP_DIR, true );
-                nv_save_file_config();
-                nv_chmod_dir( $conn_id, NV_TEMP_DIR, true );
+                $check_files = array( 
+                    NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR 
+                );
+                $list_files = ftp_nlist( $conn_id, "." );
+                $a = 0;
+                foreach ( $list_files as $filename )
+                {
+                    if ( in_array( $filename, $check_files ) )
+                    {
+                        $a ++;
+                    }
+                }
+                if ( $a == count( $check_files ) )
+                {
+                    $ftp_check_login = 1;
+                    nv_chmod_dir( $conn_id, NV_DATADIR, true );
+                    nv_chmod_dir( $conn_id, NV_TEMP_DIR, true );
+                    nv_save_file_config();
+                    nv_chmod_dir( $conn_id, NV_TEMP_DIR, true );
+                }
+                else
+                {
+                    $ftp_check_login = 2;
+                    $array_ftp_data['error'] = $lang_module['ftp_error_path'];
+                }
             }
             else
             {
@@ -423,7 +443,7 @@ elseif ( $step == 6 )
     $error = $site_name = $login = $email = $password = $re_password = "";
     if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
     {
-        $site_name = filter_text_input( 'site_name', 'post', '',1);
+        $site_name = filter_text_input( 'site_name', 'post', '', 1 );
         $login = filter_text_input( 'nv_login', 'post', '' );
         $email = filter_text_input( 'nv_email', 'post', '' );
         $password = filter_text_input( 'nv_password', 'post', '' );
@@ -434,7 +454,7 @@ elseif ( $step == 6 )
         
         $question = filter_text_input( 'question', 'post', '', 1 );
         $answer_question = filter_text_input( 'answer_question', 'post', '', 1 );
-       
+        
         $array_data['site_name'] = $site_name;
         $array_data['nv_login'] = $login;
         $array_data['nv_email'] = $email;
@@ -477,11 +497,13 @@ elseif ( $step == 6 )
         }
         elseif ( empty( $question ) )
         {
-            $error = $lang_module['your_question_empty'];;
+            $error = $lang_module['your_question_empty'];
+            ;
         }
         elseif ( empty( $answer_question ) )
         {
-            $error = $lang_module['answer_empty'];;
+            $error = $lang_module['answer_empty'];
+            ;
         }
         else
         {
