@@ -511,27 +511,32 @@ class Request
      */
     private function get_session_save_path ( $path )
     {
-        if ( ! empty( $path ) and preg_match( "/^[a-zA-Z]{1}[a-zA-Z0-9_]*$/", $path ) )
+        $save_path = "";
+        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        if ( function_exists( 'session_save_path' ) and ! in_array( 'session_save_path', $disable_functions ) )
         {
-            $save_path = NV_ROOTDIR . '/' . $path;
-            if ( ! is_dir( $save_path ) )
+            if ( ! empty( $path ) and preg_match( "/^[a-zA-Z]{1}[a-zA-Z0-9_]*$/", $path ) )
             {
-                $oldumask = umask( 0 );
-                $res = @mkdir( $save_path, 0755 );
-                umask( $oldumask );
+                $save_path = NV_ROOTDIR . '/' . $path;
+                if ( ! is_dir( $save_path ) )
+                {
+                    $oldumask = umask( 0 );
+                    $res = @mkdir( $save_path, 0755 );
+                    umask( $oldumask );
+                }
+                if ( ! @is_writable( $save_path ) )
+                {
+                    if ( ! @chmod( $save_path ) ) $save_path = '';
+                }
+                clearstatcache();
+                if ( ! empty( $save_path ) ) session_save_path( $save_path . '/' );
+                if ( empty( $save_path ) or ! @is_writable( $save_path ) )
+                {
+                    trigger_error( Request::SESSION_SAVE_PATH_NOT_SET, 256 );
+                }
             }
-            if ( ! @is_writable( $save_path ) )
-            {
-                if ( ! @chmod( $save_path ) ) $save_path = '';
-            }
-            clearstatcache();
-            if ( ! empty( $save_path ) ) session_save_path( $save_path . '/' );
-            if ( empty( $save_path ) or ! @is_writable( $save_path ) )
-            {
-                trigger_error( Request::SESSION_SAVE_PATH_NOT_SET, 256 );
-            }
+            $save_path = session_save_path();
         }
-        $save_path = session_save_path();
         $this->session_save_path = $save_path;
     }
 
