@@ -292,8 +292,8 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             $rowcontent['id'] = $db->sql_query_insert_id( $query );
             if ( $rowcontent['id'] > 0 )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_content', "id ".$rowcontent['id'], $admin_info['userid'] );
-            	foreach ( $catids as $catid )
+                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_content', "id " . $rowcontent['id'], $admin_info['userid'] );
+                foreach ( $catids as $catid )
                 {
                     $db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $rowcontent['id'] . "" );
                 }
@@ -344,8 +344,8 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             
             if ( $db->sql_affectedrows() > 0 )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_content', "id ".$rowcontent['id'], $admin_info['userid'] );
-            	$array_cat_old = explode( ",", $rowcontent_old['listcatid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_content', "id " . $rowcontent['id'], $admin_info['userid'] );
+                $array_cat_old = explode( ",", $rowcontent_old['listcatid'] );
                 foreach ( $array_cat_old as $catid )
                 {
                     $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `id` = " . $rowcontent['id'] . "" );
@@ -479,15 +479,13 @@ $contents .= "<table summary=\"\" class=\"tab2\">\n";
 $contents .= "<tr>";
 $contents .= "<td valign=\"top\">";
 $contents .= "     <div class=\"news\"><label><strong>" . $lang_module['name'] . "</strong></label>\n";
-$contents .= "     		<input type=\"text\" maxlength=\"255\" value=\"" . $rowcontent['title'] . "\" name=\"title\" />";
+$contents .= "     		<input type=\"text\" maxlength=\"255\" value=\"" . $rowcontent['title'] . "\" name=\"title\" id=\"idtitle\"/>";
 $contents .= "     </div>\n";
 
-if ( $rowcontent['alias'] != "" )
-{
-    $contents .= "<div class=\"news\"><label><strong><strong>" . $lang_module['alias'] . ": </strong></label>\n";
-    $contents .= "		<input style=\"width: 380px\" name=\"alias\" type=\"text\" value=\"" . $rowcontent['alias'] . "\" maxlength=\"255\" />";
-    $contents .= "</div>\n";
-}
+$contents .= "<div class=\"news\"><label><strong><strong>" . $lang_module['alias'] . ": </strong></label>\n";
+$contents .= "		<input style=\"width: 350px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $rowcontent['alias'] . "\" maxlength=\"255\" />&nbsp;&nbsp;";
+$contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" widht=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\">\n";
+$contents .= "</div>\n";
 
 $contents .= "<div class=\"news\"><label><strong>" . $lang_module['content_cat'] . "</strong></label>\n";
 $contents .= "	<div style=\"height: 130px; width: 380px; overflow: auto; text-align:left;\">";
@@ -701,6 +699,13 @@ $contents .= "</center>\n";
 $contents .= "</form>\n";
 
 $contents .= "<script type=\"text/javascript\">\n";
+if ( empty( $rowcontent['alias'] ) )
+{
+    $contents .= '$("#idtitle").change(function () {
+    get_alias();
+});';
+}
+
 $contents .= '$("input[name=selectimg]").click(function(){
 						var area = "homeimg";
 						var path= "' . NV_UPLOADS_DIR . '/' . $module_name . '";						
@@ -709,6 +714,7 @@ $contents .= '$("input[name=selectimg]").click(function(){
 						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 						return false;
 					});';
+
 $contents .= "$(document).ready(function() {\n";
 $contents .= "	$(\"#AjaxSourceText\").autocomplete(\n";
 $contents .= "		\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=sourceajax\",\n";

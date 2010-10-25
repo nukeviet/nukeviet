@@ -375,7 +375,23 @@ function res_keywords(res) {
 	return false;
 }
 
-// ---------------------------------------
+//---------------------------------------
+function get_alias() {
+	var title = strip_tags(document.getElementById('idtitle').value);
+	if (title != '') {
+		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&title=' + encodeURIComponent(title), '', 'res_get_alias');
+	}
+	return false;
+}
+
+function res_get_alias(res) {
+	if (res != "") {
+		document.getElementById('idalias').value = res;
+	} else {
+		document.getElementById('idalias').value = '';
+	}
+	return false;
+}
 
 // autocomplete function
 
