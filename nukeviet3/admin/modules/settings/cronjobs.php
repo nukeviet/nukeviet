@@ -24,7 +24,7 @@ $contents = array();
 
 while ( $row = $db->sql_fetchrow( $result ) )
 {
-    $contents[$row['id']]['caption'] = $row[NV_LANG_INTERFACE . '_cron_name'];
+    $contents[$row['id']]['caption'] = isset( $row[NV_LANG_INTERFACE . '_cron_name'] ) ? $row[NV_LANG_INTERFACE . '_cron_name'] : ( isset( $row[NV_LANG_DATA . '_cron_name'] ) ? $row[NV_LANG_DATA . '_cron_name'] : $row['run_func'] );
     $contents[$row['id']]['edit'] = array( 
         ( empty( $row['is_sys'] ) ? 1 : 0 ), $lang_global['edit'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_edit&amp;id=" . $row['id'] 
     );
