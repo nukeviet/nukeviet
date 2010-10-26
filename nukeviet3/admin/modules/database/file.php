@@ -21,7 +21,7 @@ $contents .= "<td>" . $lang_module['file_time'] . "</td>\n";
 $contents .= "<td></td>\n";
 $contents .= "</tr>";
 $contents .= "</thead>";
-$a = 1;
+$array_content = $array_time = array();
 $files = scandir( $log_dir );
 foreach ( $files as $file )
 {
@@ -29,25 +29,42 @@ foreach ( $files as $file )
     $global_config['check_op_layout'] = "/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/";
     if ( preg_match( "/^([a-zA-Z0-9]+)\_([a-zA-Z0-9\-\_]+)\.(sql|sql\.gz)+$/", $file, $mc ) )
     {
-        $link_getfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file . "&amp;checkss=" . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
-        $link_delete = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delfile&amp;filename=" . $file . "&amp;checkss=" . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
         $filesize = filesize( $log_dir . '/' . $file );
-        
-        $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
-        $contents .= "<tbody" . $class . ">";
-        $contents .= "<tr>\n";
-        $contents .= "<td align=\"center\">" . $a ++ . "</td>\n";
-        $contents .= "<td>" . $mc[2] . "." . $mc[3] . "</td>\n";
-        $contents .= "<td align=\"right\">" . nv_convertfromBytes( $filesize ) . "</td>\n";
-        $contents .= "<td>" . nv_date( "l d-m-Y h:i:s A", filemtime( $log_dir . '/' . $file ) ) . "</td>\n";
-        $contents .= "<td align=\"center\">
+        $filetime = intval( filemtime( $log_dir . '/' . $file ) );
+        $array_time[] = $filetime;
+        $array_content[$filetime] = array( 
+            "file" => $file, 'mc' => $mc, "filesize" => $filesize 
+        );
+    
+    }
+}
+sort( $array_time );
+
+$a = 1;
+for ( $index = count( $array_time ) - 1; $index >= 0; $index -- )
+{
+    $filetime = $array_time[$index];
+    $value = $array_content[$filetime];
+    $file = $value['file'];
+    $mc = $value['mc'];
+    
+    $link_getfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file . "&amp;checkss=" . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
+    $link_delete = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delfile&amp;filename=" . $file . "&amp;checkss=" . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
+    
+    $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
+    $contents .= "<tbody" . $class . ">";
+    $contents .= "<tr>\n";
+    $contents .= "<td align=\"center\">" . $a ++ . "</td>\n";
+    $contents .= "<td>" . $mc[2] . "." . $mc[3] . "</td>\n";
+    $contents .= "<td align=\"right\">" . nv_convertfromBytes( $value['filesize'] ) . "</td>\n";
+    $contents .= "<td align=\"right\">" . nv_date( "l d-m-Y h:i:s A", $filetime ) . "</td>\n";
+    $contents .= "<td align=\"center\">
         				<span class=\"default_icon\"><a href=\"" . $link_getfile . "\">" . $lang_module['download'] . "</a></span>
         				 - 
         				<span class=\"delete_icon\"><a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $link_delete . "\">" . $lang_global['delete'] . "</a></span>
         				</td>\n";
-        $contents .= "</tr>";
-        $contents .= "</tbody>";
-    }
+    $contents .= "</tr>";
+    $contents .= "</tbody>";
 }
 
 $contents .= "</table>\n";
