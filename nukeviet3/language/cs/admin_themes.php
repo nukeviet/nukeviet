@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Sep 04, 2010, 12:29:51 PM
+* @Createdate Oct 26, 2010, 03:56:16 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -159,5 +159,14 @@ $lang_module['xcopyblock_process'] = "Kopírovat";
 $lang_module['xcopyblock_no_position'] = "vyberte alespoň 1 pole pro kopírování";
 $lang_module['xcopyblock_notice'] = "Během system bude smazat blok , ktery byval v kopirovaný téma , čekejte, prosím až system uspesně dokončen";
 $lang_module['xcopyblock_success'] = "Kopirovat úpěšně";
+$lang_module['block_typerss'] = "Citováno Rss";
+$lang_module['block_rss_url'] = "Cesta Rss";
+$lang_module['block_rss_url_error'] = "RSS cestu kterou  špatně";
+$lang_module['block_rss_template_error'] = "Musíte vybrat šablonu pro blok";
+$lang_module['block_rss_setting_number'] = "Počet položek pro zobrazení";
+$lang_module['block_rss_setting_description'] = "Zobrazit popisek";
+$lang_module['block_rss_setting_html'] = "Použití HTML popisek";
+$lang_module['block_rss_setting_pubdate'] = "zjevit se datum poslano";
+$lang_module['block_rss_setting_target'] = "Otevřít odkaz v novém okně";
 
 ?>

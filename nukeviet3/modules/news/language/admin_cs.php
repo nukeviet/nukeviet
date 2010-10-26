@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Sep 04, 2010, 12:29:51 PM
+* @Createdate Oct 26, 2010, 03:56:16 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -177,5 +177,12 @@ $lang_module['topic_nonews'] = "Momentálně zde nejsou žádné novinky článk
 $lang_module['addtotopics'] = "Přidat téma";
 $lang_module['topic_update_success'] = "Nahrát úspěšně";
 $lang_module['topic_num_news'] = "Téma";
+$lang_module['siteinfo_publtime'] = "Celkem příspěvků účinek";
+$lang_module['siteinfo_users_send'] = "Celkem příspěvků zaslán členům";
+$lang_module['siteinfo_pending'] = "Celkem příspěvků na  počkaní";
+$lang_module['siteinfo_expired'] = "Počet příspěvků vypršela";
+$lang_module['siteinfo_exptime'] = "Počet příspěvků bude vypršela";
+$lang_module['siteinfo_comment'] = "Celkem komentáře vyslán";
+$lang_module['siteinfo_comment_pending'] = "Počet komentářů na moderování";
 
 ?>

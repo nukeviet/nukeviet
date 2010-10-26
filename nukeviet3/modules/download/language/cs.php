@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 02, 2010, 07:29:58 PM
+* @Createdate Oct 26, 2010, 03:56:16 AM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -109,5 +109,14 @@ $lang_module['upload_linkdirect_info'] = "Jestliže zdroj obsahuje malé časti,
 $lang_module['file_upload_captcha'] = "Antispam code";
 $lang_module['file_upload_captcha2'] = "Kopy antispam code";
 $lang_module['file_upload_ok'] = "přimul soubor,Děkujeme";
+$lang_module['readmore'] = "Přečtěte si více";
+$lang_module['categories'] = "Navigace";
+$lang_module['viewcat_download_hits'] = "Celkem stažení";
+$lang_module['viewcat_view_hits'] = "Hits";
+$lang_module['categories_viewall'] = "Zobrazit všechny";
+$lang_module['search'] = "Vyhledávání data";
+$lang_module['search_option'] = "Vyberte téma";
+$lang_module['search_result'] = "Výsledky vyhledávání";
+$lang_module['search_noresult'] = "Žádné údaje vhodné pro vaše požadavky!";
 
 ?>

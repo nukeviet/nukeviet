@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Sep 04, 2010, 12:29:51 PM
+* @Createdate Oct 26, 2010, 03:56:16 AM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -79,7 +79,7 @@ $lang_module['result_title'] = "Výsledek";
 $lang_module['info_adv'] = "Pokud se tyto výsledky jsou neočekávané. Zkuste o použití vyhledávače Google níže";
 $lang_module['search_on_internet'] = "Vyhledávání na Internetu";
 $lang_module['search_adv_internet'] = "Pokročilé vyhledávání na internetu";
-$lang_module['search_on_nuke'] = "Vyhledávání na webu";
+$lang_module['search_on_nuke'] = "NukeViet CMS vyhledávání";
 $lang_module['search_none'] = "Žádný výsledek zápasu";
 $lang_module['search_in_module'] = "Hledat v modulu";
 $lang_module['view_all_title'] = "Zobrazit všechny výsledky";
@@ -101,5 +101,17 @@ $lang_module['admin_view'] = "Pouze admin může zobrazit!";
 $lang_module['group_view'] = "Pouze člen skupiny mohou zobrazit!";
 $lang_module['rating_error1'] = "Danh gia khong hop le";
 $lang_module['rating_error2'] = "Ban da danh gia bai viet nay roi";
+$lang_module['detail'] = "Podrobnosti";
+$lang_module['comment'] = "Komentář";
+$lang_module['rating'] = "Hodnocení";
+$lang_module['pubtime'] = "Publikováno v";
+$lang_module['hotnews'] = "Ohnisko";
+$lang_module['lastest_comment'] = "Nový komentář";
+$lang_module['category'] = "Kategorie";
+$lang_module['view'] = "Zobrazeno";
+$lang_module['counter'] = "Celkem";
+$lang_module['total_comment'] = "Celkem komentář";
+$lang_module['search_cat'] = "Hledat v titulcích";
+$lang_module['search_all'] = "Všechna témata";
 
 ?>

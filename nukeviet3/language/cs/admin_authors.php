@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Sep 04, 2010, 12:29:51 PM
+* @Createdate Oct 26, 2010, 03:56:16 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -58,9 +58,9 @@ $lang_module['admin_account_info'] = "Informace účtu administratora%s";
 $lang_module['nv_admin_add_download'] = "Stáhnout";
 $lang_module['nv_admin_add_sendmail'] = "Odeslat e-mail";
 $lang_module['nv_admin_login_address'] = "URL management stránky";
-$lang_module['nv_admin_edit_info'] = "Upravit informace účtu \"<strong>%s </ strong>\"";
+$lang_module['nv_admin_edit_info'] = "Upravit informace účtu \"<strong />%s \"";
 $lang_module['show_mail'] = "Ukázat email";
-$lang_module['sig_info'] = "Podpis se vkládá na konci každé odpovědi, email ... poslal z účtu Administratora \"<strong>%s </ strong>\". Přijmout pouze jednoduchý text";
+$lang_module['sig_info'] = "Podpis se vkládá na konci každé odpovědi, email ... poslal z účtu Administratora \"<strong />%s \". Přijmout pouze jednoduchý text";
 $lang_module['not_use'] = "Není používán";
 $lang_module['nv_admin_edit_result'] = "Úpravy webové informace administratora:%s";
 $lang_module['nv_admin_edit_result_title'] = "Změny správce účtu:%s";
@@ -72,11 +72,11 @@ $lang_module['new_value'] = "Nový";
 $lang_module['chg_is_suspend0'] = "Stav: pozastavit. Chcete-li být aktivní účet správce, prosím, abyste prohlásili v poli";
 $lang_module['chg_is_suspend1'] = "Stav: aktivovat. Chcete-li pozastavit tento účet správce, prosím,abyste prohlásili v poli";
 $lang_module['chg_is_suspend2'] = "Obnovit/Přerušit";
-$lang_module['nv_admin_chg_suspend'] = "Změnit stav účtu správce\"<strong>%s </ strong>\"";
+$lang_module['nv_admin_chg_suspend'] = "Změnit stav účtu správce\"<strong />%s \"";
 $lang_module['position_info'] = "Pozice se používá pro vnější činnosti, jako je výměna mailu, písemné připomínky ...";
-$lang_module['susp_reason_empty'] = "Nemáte prohlášení důvodu pro pozastavení účtu Administratora \"<strong>%s </ strong>\"";
-$lang_module['suspend_info_empty'] = "Administrator účet \"<strong>%s </ strong>\"Nikdy nesmí být pozastaven";
-$lang_module['suspend_info_yes'] = "Seznam doby pozastavení správce účtu \"<strong>%s </ strong>\"";
+$lang_module['susp_reason_empty'] = "Nemáte prohlášení důvodu pro pozastavení účtu Administratora \"<strong />%s \"";
+$lang_module['suspend_info_empty'] = "Administrator účet \"<strong />%s \"Nikdy nesmí být pozastaven";
+$lang_module['suspend_info_yes'] = "Seznam doby pozastavení správce účtu \"<strong />%s \"";
 $lang_module['suspend_start'] = "Začátek";
 $lang_module['suspend_end'] = "Hotovo";
 $lang_module['suspend_reason'] = "Důvod pozastavení";
@@ -91,14 +91,14 @@ $lang_module['suspend_sendmail_title'] = "Oznámení webové stránky%s";
 $lang_module['delete_sendmail_mess0'] = "Administrator%1\$s oznámí:<br />Váš účet správce v%1\$s stránkách vypouští%2\$s.<br />Pokud máte nějaké otázky ...Pošlete na  Email%3\$s";
 $lang_module['delete_sendmail_mess1'] = "Administrator%1\$s internetových stránkách informuje:<br />Váš účet správce v%1\$s stránkách vypouští%2\$s Důvod:%3\$s.<br />Pokud máte nějaké otázky ... Email%4\$s";
 $lang_module['delete_sendmail_title'] = "Informace z%s webové stránky";
-$lang_module['delete_sendmail_info'] = "Opravdu chcete smazat účet správce \"<strong>%s </ strong>\"? Prosím, vyplňte v poli k potvrzení";
+$lang_module['delete_sendmail_info'] = "Opravdu chcete smazat účet správce \"<strong />%s \"? Prosím, vyplňte v poli k potvrzení";
 $lang_module['admin_del_sendmail'] = "Poslat oznámení";
 $lang_module['admin_del_reason'] = "Důvod smazání";
 $lang_module['allow_files_type'] = "Typy souborů jsou nakládany";
 $lang_module['allow_modify_files'] = "Je povolen se upravit, smazat";
 $lang_module['allow_create_subdirectories'] = "Je povolen se vytvořit adresář";
 $lang_module['allow_modify_subdirectories'] = "Je povolen se změnit názvu, odstranit složky";
-$lang_module['admin_login_incorrect'] = "Účet \"<strong>%s </ strong>\", které již existují. Prosím, použijte jiný účet";
+$lang_module['admin_login_incorrect'] = "Účet \"<strong />%s \", které již existují. Prosím, použijte jiný účet";
 $lang_module['config'] = "konfigurace";
 $lang_module['adminip'] = "Správce ip";
 $lang_module['adminip_ip'] = "IP";
@@ -126,12 +126,14 @@ $lang_module['adminip_note'] = "Pozor:Kdybyste si zvolili kontrolu ip,tak musite
 $lang_module['title_nickname'] = "Zachovat učet firewall z adminu";
 $lang_module['admfirewall'] = "Kontrolovat firewall pro admina";
 $lang_module['block_admin_ip'] = "Kontrolovat IP v oblasti admina";
-$lang_module['nickname_add'] = "Přida učet";
+$lang_module['nickname_add'] = "Přidat  učet";
 $lang_module['nickname_edit'] = "Upravit učet";
 $lang_module['nicknam_delete_confirm'] = "Chcete-li smazat tento učet z této seznamu?";
 $lang_module['passwordsincorrect'] = "Zadali jste heslo nestejné";
 $lang_module['nochangepass'] = "Pokud jste nezměnili heslo";
 $lang_module['rule_user'] = "Učet je používán jen a-zA-Z0-9_-";
 $lang_module['rule_pass'] = "Heslo je požíván jen a-zA-Z0-9_-";
+$lang_module['spadmin_add_admin'] = "Umožňuje operátorům vytvářet a měnit obecnou působnost správy modulů";
+$lang_module['authors_detail_main'] = "Zobrazí podrobné informace o účtu správce";
 
 ?>
