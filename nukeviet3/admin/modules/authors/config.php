@@ -335,12 +335,12 @@ $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_global['password'] . " (<span style='color:red'>*</span>)</td>\n";
-$contents .= "<td><input type='password' name='password' value='" . $password . "' style='width:200px'/></td>\n";
+$contents .= "<td><input type='password' name='password' value='" . $password . "' autocomplete='off' style='width:200px'/></td>\n";
 $contents .= "</tr>\n";
 
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_global['password2'] . " (<span style='color:red'>*</span>)</td>\n";
-$contents .= "<td><input type='password' name='password2' value='" . $password2 . "' style='width:200px'/></td>\n";
+$contents .= "<td><input type='password' name='password2' value='" . $password2 . "' autocomplete='off' style='width:200px'/></td>\n";
 $contents .= "</tr>\n";
 
 $contents .= "<tbody class='second'>\n";

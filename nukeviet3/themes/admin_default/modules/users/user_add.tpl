@@ -43,7 +43,7 @@
                     (<span style="color:#FF0000">*</span>)
                 </td>
                 <td>
-                    <input class="txt" value="{DATA.email}" name="email" id="email_iavim" style="width:300px" />
+                    <input class="txt" value="{DATA.email}" name="email" id="email_iavim" autocomplete="off" style="width:300px" />
                 </td>
             </tr>
         </tbody>
@@ -56,7 +56,7 @@
                     (<span style="color:#FF0000">*</span>)
                 </td>
                 <td>
-                    <input class="txt" type="password" style="width: 150px" name="password1" value="{DATA.password1}" style="width:300px" />
+                    <input class="txt" type="password" style="width: 150px" name="password1" autocomplete="off" value="{DATA.password1}" style="width:300px" />
                 </td>
             </tr>
         </tbody>

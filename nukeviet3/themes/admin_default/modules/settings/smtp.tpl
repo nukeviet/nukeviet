@@ -38,14 +38,12 @@
 	<caption>{LANG.smtp_username}</caption>
 	<tr>
 		<td>{LANG.smtp_login}</td>
-		<td><input type="text" name="smtp_username"
-			value="{DATA.smtp_username}" style="width: 250px;" /></td>
+		<td><input type="text" name="smtp_username" value="{DATA.smtp_username}" autocomplete="off" style="width: 250px;" /></td>
 	</tr>
 	<tbody class="second">
 		<tr>
 			<td>{LANG.smtp_pass}</td>
-			<td><input type="password" name="smtp_password"
-				value="{DATA.smtp_password}" style="width: 250px;" /></td>
+			<td><input type="password" name="smtp_password" value="{DATA.smtp_password}" autocomplete="off" style="width: 250px;" /></td>
 		</tr>
 	</tbody>
 </table>

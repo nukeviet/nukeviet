@@ -44,7 +44,7 @@
                     </label>
                 </dt>
                 <dd class="fr">
-                    <input class="input required password" name="password" value="{DATA.password}" id="nv_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" />
+                    <input class="input required password" name="password" value="{DATA.password}" id="nv_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
                 </dd>
             </dl>
             <dl class="clearfix ">
@@ -54,7 +54,7 @@
                     </label>
                 </dt>
                 <dd class="fr">
-                    <input class="input required password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" />
+                    <input class="input required password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
                 </dd>
             </dl>
             <dl class="clearfix">

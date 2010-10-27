@@ -235,7 +235,7 @@
                     {LANG.password}
                 </td>
                 <td>
-                    <input class="txt" type="password" style="width: 150px" name="password1" value="{DATA.password1}" style="width:300px" />
+                    <input class="txt" type="password" style="width: 150px" name="password1" autocomplete="off" value="{DATA.password1}" style="width:300px" />
                 </td>
             </tr>
         </tbody>
@@ -245,7 +245,7 @@
                     {LANG.repassword}
                 </td>
                 <td>
-                    <input class="txt" type="password" style="width: 150px" name="password2" value="{DATA.password2}" style="width:300px" />
+                    <input class="txt" type="password" style="width: 150px" name="password2" autocomplete="off" value="{DATA.password2}" style="width:300px" />
                 </td>
             </tr>
         </tbody>

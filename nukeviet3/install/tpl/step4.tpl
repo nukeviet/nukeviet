@@ -47,7 +47,7 @@
 	</tr>
 	<tr>
 		<th scope="col" abbr="{LANG.ftp_pass}" class="spec">{LANG.ftp_pass}</th>
-		<td><input type="password" name="ftp_user_pass"
+		<td><input type="password" name="ftp_user_pass" autocomplete="off"
 			value="{FTPDATA.ftp_user_pass}" /></td>
 		<td><span class="highlight_green">{LANG.ftp_pass_note}</span></td>
 	</tr>

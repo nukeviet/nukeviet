@@ -44,7 +44,7 @@
                 </sup>
             </td>
             <td>
-                <input name="adminpass_iavim" id="adminpass_iavim" type="password" value="{ADMIN_PASSWORD1}" style="width:300px" maxlength="{ADMIN_PASSWORD2}" />
+                <input name="adminpass_iavim" id="adminpass_iavim" type="password" autocomplete="off" value="{ADMIN_PASSWORD1}" style="width:300px" maxlength="{ADMIN_PASSWORD2}" />
             </td>
         </tr>
     </table>

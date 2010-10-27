@@ -130,7 +130,7 @@ function nv_add_client_theme ( $contents )
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['pass'][0] . ":</td>\n";
     $return .= "<td><sup class=\"required\">&lowast;</sup></td>\n";
-    $return .= "<td><input name=\"" . $contents['pass'][1] . "\" id=\"" . $contents['pass'][1] . "\" type=\"password\" value=\"" . $contents['pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['pass'][3] . "\" /></td>\n";
+    $return .= "<td><input name=\"" . $contents['pass'][1] . "\" id=\"" . $contents['pass'][1] . "\" type=\"password\" autocomplete=\"off\" value=\"" . $contents['pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['pass'][3] . "\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
@@ -138,7 +138,7 @@ function nv_add_client_theme ( $contents )
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['re_pass'][0] . ":</td>\n";
     $return .= "<td><sup class=\"required\">&lowast;</sup></td>\n";
-    $return .= "<td><input name=\"" . $contents['re_pass'][1] . "\" id=\"" . $contents['re_pass'][1] . "\" type=\"password\" value=\"" . $contents['re_pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['re_pass'][3] . "\" /></td>\n";
+    $return .= "<td><input name=\"" . $contents['re_pass'][1] . "\" id=\"" . $contents['re_pass'][1] . "\" type=\"password\" autocomplete=\"off\" value=\"" . $contents['re_pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['re_pass'][3] . "\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
@@ -332,7 +332,7 @@ function nv_edit_client_theme ( $contents )
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['pass'][0] . ":</td>\n";
     $return .= "<td></td>\n";
-    $return .= "<td><input name=\"" . $contents['pass'][1] . "\" id=\"" . $contents['pass'][1] . "\" type=\"password\" value=\"" . $contents['pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['pass'][3] . "\" /></td>\n";
+    $return .= "<td><input name=\"" . $contents['pass'][1] . "\" id=\"" . $contents['pass'][1] . "\" type=\"password\" autocomplete=\"off\" value=\"" . $contents['pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['pass'][3] . "\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
@@ -340,7 +340,7 @@ function nv_edit_client_theme ( $contents )
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['re_pass'][0] . ":</td>\n";
     $return .= "<td></td>\n";
-    $return .= "<td><input name=\"" . $contents['re_pass'][1] . "\" id=\"" . $contents['re_pass'][1] . "\" type=\"password\" value=\"" . $contents['re_pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['re_pass'][3] . "\" /></td>\n";
+    $return .= "<td><input name=\"" . $contents['re_pass'][1] . "\" id=\"" . $contents['re_pass'][1] . "\" type=\"password\" autocomplete=\"off\" value=\"" . $contents['re_pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['re_pass'][3] . "\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     $return .= "</table>\n";

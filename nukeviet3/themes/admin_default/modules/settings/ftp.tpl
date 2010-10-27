@@ -1,4 +1,5 @@
-<!-- BEGIN: ftp--><!-- BEGIN: error-->{ERRORCONTENT}<!-- END: error -->
+<!-- BEGIN: ftp-->
+<!-- BEGIN: error-->{ERRORCONTENT}<!-- END: error -->
 <form action="" method="post">
     <table class="tab1" summary="">
         <tr>
@@ -16,7 +17,7 @@
                     <strong>{LANG.username}</strong>
                 </td>
                 <td>
-                    <input type="text" name="ftp_user_name" id="ftp_user_name_iavim" value="{VALUE.ftp_user_name}" style="width: 250px;"/>
+                    <input type="text" name="ftp_user_name" id="ftp_user_name_iavim" autocomplete="off" value="{VALUE.ftp_user_name}" style="width: 250px;"/>
                 </td>
             </tr>
         </tbody>
@@ -25,7 +26,7 @@
                 <strong>{LANG.password}</strong>
             </td>
             <td>
-                <input type="password" name="ftp_user_pass" id="ftp_user_pass_iavim" value="{VALUE.ftp_user_pass}" style="width: 250px"/>
+                <input type="password" name="ftp_user_pass" id="ftp_user_pass_iavim" autocomplete="off" value="{VALUE.ftp_user_pass}" style="width: 250px"/>
             </td>
         </tr>
         <tbody class="second">
@@ -43,4 +44,5 @@
                 <input type="submit" value="{LANG.submit}" style="padding: 2px 10px;"/>
             </td>
         </tr>
-    </table><!-- END: ftp -->
+    </table>
+<!-- END: ftp -->

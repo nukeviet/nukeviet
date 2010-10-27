@@ -59,7 +59,7 @@
                 {LANG.admin_pass} <span class="highlight_red">*</span>
             </th>
             <td class="alt">
-                <input type="password" value="{DATA.nv_password}" id="nv_password" name="nv_password" class="required" />
+                <input type="password" value="{DATA.nv_password}" id="nv_password" name="nv_password" autocomplete="off" class="required" />
             </td>
             <td class="alt">{LANG.admin_pass_note}</td>
         </tr>
@@ -68,7 +68,7 @@
                 {LANG.admin_repass} <span class="highlight_red">*</span>
             </th>
             <td>
-                <input type="password" value="{DATA.re_password}" id="re_password" name="re_password" class="required" />
+                <input type="password" value="{DATA.re_password}" id="re_password" name="re_password" autocomplete="off" class="required" />
             </td>
             <td>{LANG.admin_repass_note}</td>
         </tr>
