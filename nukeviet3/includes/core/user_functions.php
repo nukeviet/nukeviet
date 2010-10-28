@@ -342,25 +342,27 @@ function showBanners ( $id )
     }
     $return = "";
     
-    $width_banners = $xml->width;
-    $height_banners = $xml->height;
+    $width_banners = intval($xml->width);
+    $height_banners = intval($xml->height);
     $pid = $xml->id;
     $array_banners = $xml->banners->banners_item;
     $array_banners_content = array();
     foreach ( $array_banners as $banners )
     {
         $banners = ( array )$banners;
-        if ( $banners['file_height'] >= $height_banners )
+
+        $maxX = ( $banners['file_width'] > $width_banners ) ? $width_banners : $banners['file_width'];
+        $maxY = ( $banners['file_height'] > $height_banners ) ? $height_banners : $banners['file_height'];
+        if ( $maxX > $maxY )
         {
-            $banners['file_width'] = round( $banners['file_width'] * $height_banners / $banners['file_height'] );
-            $banners['file_height'] = $height_banners;
+            $banners['file_height'] = round( $banners['file_height'] * $maxX / $banners['file_width'] );
+            $banners['file_width'] = $maxX;
         }
         else
         {
-            $banners['file_height'] = round( $banners['file_height'] * $width_banners / $banners['file_width'] );
-            $banners['file_width'] = $width_banners;
+            $banners['file_width'] = round( $banners['file_width'] * $maxY / $banners['file_height'] );
+            $banners['file_height'] = $maxY;
         }
-        
         $banners['file_alt'] = ( ! empty( $banners['file_alt'] ) ) ? $banners['file_alt'] : $banners['title'];
         
         $return = "<div style=\"margin-top: 2px;\">\n";
