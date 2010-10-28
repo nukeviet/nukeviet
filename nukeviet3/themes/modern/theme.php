@@ -267,18 +267,19 @@ function nv_site_theme ( $contents )
 
     # end process cat module
     $theme_stat_img = "";
-    $theme_footer_js = "";
     if ( $global_config['statistic'] and isset( $site_mods['statistics'] ) )
     {
         $theme_stat_img .= "<a title=\"" . $lang_global['viewstats'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=statistics\"><img alt=\"" . $lang_global['viewstats'] . "\" title=\"" . $lang_global['viewstats'] . "\" src=\"" . NV_BASE_SITEURL . "index.php?second=statimg&amp;p=" . nv_genpass() . "\" width=\"88\" height=\"31\" /></a><br />\n";
     }
+    
+    $theme_footer_js = "<script type=\"text/javascript\">\n";
+    $theme_footer_js .= "nv_DigitalClock('digclock');\n";
+    $theme_footer_js .= "</script>\n";
+    
     if ( NV_LANG_INTERFACE == 'vi' )
     {
         $theme_footer_js .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
     }
-    $theme_footer_js = "<script type=\"text/javascript\">\n";
-    $theme_footer_js .= "nv_DigitalClock('digclock');\n";
-    $theme_footer_js .= "</script>\n";
     
     $xtpl->assign( 'THEME_STAT_IMG', $theme_stat_img );
     $xtpl->assign( 'THEME_IMG_CRONJOBS', NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() );
