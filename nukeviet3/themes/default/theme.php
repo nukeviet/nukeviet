@@ -12,7 +12,7 @@ if ( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 function nv_site_theme ( $contents )
 {
     global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op, $db, $mod_title, $my_head, $nv_array_block_contents, $client_info;
-
+    
     if ( ! file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/layout." . $module_info['funcs'][$op]['layout'] . ".tpl" ) )
     {
         nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
@@ -53,6 +53,8 @@ function nv_site_theme ( $contents )
     //    $xtpl->assign( 'THEME_CONTACT_PHONE', $lang_global['phonenumber'] . ": " . $global_config['site_phone'] );
     $xtpl->assign( 'THEME_CONTACT_EMAIL', $lang_global['email'] . ": " . nv_EncodeEmail( $global_config['site_email'] ) );
     
+    $xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+    
     if ( $global_config['lang_multi'] and count( $global_config['allow_sitelangs'] ) > 1 )
     {
         $xtpl->assign( 'SELECTLANGSITE', $lang_global['langsite'] );
@@ -83,7 +85,7 @@ function nv_site_theme ( $contents )
                 {
                     $result2 = "SELECT `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat` WHERE `parentid`='0' AND `inhome`='1' ORDER BY `weight` ASC LIMIT 0,10";
                     $list = nv_db_cache( $result2, '', $modname );
-                    foreach($list as $l)
+                    foreach ( $list as $l )
                     {
                         $sub_nav_item[] = array( 
                             'title' => $l['title'], 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'] 
@@ -94,7 +96,7 @@ function nv_site_theme ( $contents )
                 {
                     $result2 = "SELECT `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_categories` WHERE `parentid`='0' AND `status`='1'ORDER BY `weight` ASC LIMIT 0,10";
                     $list = nv_db_cache( $result2, '', $modname );
-                    foreach($list as $l)
+                    foreach ( $list as $l )
                     {
                         $sub_nav_item[] = array( 
                             'title' => $l['title'], 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'] 
@@ -151,7 +153,7 @@ function nv_site_theme ( $contents )
             $xtpl->parse( 'main.top_menu' );
         }
     }
-
+    
     //Breakcolumn
     if ( $home != 1 )
     {
@@ -169,8 +171,8 @@ function nv_site_theme ( $contents )
         $xtpl->parse( 'main.mod_title' );
     }
     //Breakcolumn
-       
     
+
     $theme_stat_img = "";
     if ( $global_config['statistic'] and isset( $site_mods['statistics'] ) )
     {

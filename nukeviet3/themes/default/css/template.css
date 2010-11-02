@@ -21,7 +21,7 @@ a:hover {
 }
 
 #header {
-	background:#A2D8FA url(../images/header.jpg) no-repeat;
+	background: #A2D8FA url(../images/header.jpg) no-repeat;
 	height: 91px;
 	position: relative;
 }
@@ -36,6 +36,15 @@ a:hover {
 	vertical-align: middle;
 }
 
+#header .sitename {
+	color: #0842ae;
+	font-size: 22px;
+	font-weight: bold;
+	padding-top: 30px;
+	margin-left: 30px;
+	float: left;
+}
+
 #header .language {
 	position: absolute;
 	top: 10px;
@@ -44,10 +53,10 @@ a:hover {
 
 div.nav {
 	position: relative;
-	background:#0B41A5 url(../images/nav_bg.jpg) repeat-x;
+	background: #0B41A5 url(../images/nav_bg.jpg) repeat-x;
 	height: 27px;
 	line-height: 27px;
-	z-index:990;
+	z-index: 990;
 }
 
 ul.nav li {
@@ -186,7 +195,7 @@ div.nav div.rss a {
 #message {
 	height: 30px;
 	line-height: 25px;
-	background:#d7d7d7 url(../images/message_bg.jpg) repeat-x;
+	background: #d7d7d7 url(../images/message_bg.jpg) repeat-x;
 	padding: 0 0 0 10px;
 }
 
@@ -350,7 +359,7 @@ div.box form.voting {
 h3.breakcolumn {
 	line-height: 27px;
 	border-bottom: 1px solid #ccc;
-	font-weight:normal;
+	font-weight: normal;
 }
 
 h3.breakcolumn span.breakcolumn {
@@ -471,7 +480,7 @@ div.box h3.header {
 	line-height: 28px;
 	color: #fff;
 	text-indent: 10px;
-	background:#0B41A5 url(../images/h3.header.jpg) repeat-x;
+	background: #0B41A5 url(../images/h3.header.jpg) repeat-x;
 }
 
 div.box h3.header a {
