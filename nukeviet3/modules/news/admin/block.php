@@ -54,6 +54,7 @@ if ( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->ge
         $db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid . "', '" . $id . "', '0')" );
     }
     nv_news_fix_block( $bid );
+    nv_del_moduleCache( $module_name );
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&bid=" . $bid . "" );
     die();
 }
