@@ -482,7 +482,7 @@ $contents .= "     <div class=\"news\"><label><strong>" . $lang_module['name'] .
 $contents .= "     		<input type=\"text\" maxlength=\"255\" value=\"" . $rowcontent['title'] . "\" name=\"title\" id=\"idtitle\"/>";
 $contents .= "     </div>\n";
 
-$contents .= "<div class=\"news\"><label><strong><strong>" . $lang_module['alias'] . ": </strong></label>\n";
+$contents .= "<div class=\"news\"><label><strong>" . $lang_module['alias'] . ": </strong></label>\n";
 $contents .= "		<input style=\"width: 350px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $rowcontent['alias'] . "\" maxlength=\"255\" />&nbsp;&nbsp;";
 $contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" widht=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\">\n";
 $contents .= "</div>\n";
