@@ -199,7 +199,7 @@
                 <div id="hometext">
                     <!-- BEGIN: image -->
                     <div id="imghome" class="fl">
-                        <img alt="{CONTENT.image.alt}" src="{CONTENT.image.src}" width="{CONTENT.width}" height="{CONTENT.height}" /><!-- BEGIN: note -->
+                        <img alt="{CONTENT.image.alt}" src="{CONTENT.image.src}" width="{CONTENT.image.width}" /><!-- BEGIN: note -->
                         <p>
                             <em>{CONTENT.image.note}</em>
                         </p>
@@ -209,7 +209,7 @@
                 </div>
                 <!-- BEGIN: imagefull -->
                 <div id="imghome">
-                    <img alt="{CONTENT.image.alt}" src="{CONTENT.image.src}" width="{CONTENT.width}" height="{CONTENT.height}" /><!-- BEGIN: note -->
+                    <img alt="{CONTENT.image.alt}" src="{CONTENT.image.src}" width="{CONTENT.image.width}" /><!-- BEGIN: note -->
                     <p>
                         <em>{CONTENT.image.note}</em>
                     </p>

@@ -2,7 +2,7 @@
 <!-- BEGIN: viewcatloop -->
 <div class="news_column">
     <div class="items clearfix">
-        <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" height="{IMGHEIGHT1}"/></a><!-- END: image --><h2><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h2>
+        <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" /></a><!-- END: image --><h2><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h2>
         <p>
             {CONTENT.hometext}
         </p>

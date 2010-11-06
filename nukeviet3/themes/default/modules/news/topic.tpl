@@ -2,7 +2,7 @@
 <!-- BEGIN: topic -->
 <div class="news_column">
     <div class="items clearfix">
-        <!-- BEGIN: homethumb --><a href="{TOPIC.link}" title="{TOPIC.title}"><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" height="{TOPIC.height}"/></a><!-- END: homethumb --><h2><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h2>
+        <!-- BEGIN: homethumb --><a href="{TOPIC.link}" title="{TOPIC.title}"><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" /></a><!-- END: homethumb --><h2><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h2>
         <p>
             <span class="time">{TIME}</span>
             | <span class="date">{DATE}</span>

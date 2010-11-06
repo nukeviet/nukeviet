@@ -32,7 +32,7 @@
         </div>
         <div class="items{BORDER}">
             <!-- BEGIN: content --><h3><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h3>
-            <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" height="{IMGHEIGHT01}"/></a><!-- END: image -->
+            <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" /></a><!-- END: image -->
             <p>
                 {CONTENT.hometext}
             </p>

@@ -6,7 +6,7 @@
             <div id="slider1" class="sliderwrapper">
                 <!-- BEGIN: loop -->
                 <div class="contentdiv clearfix">
-                    <a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}"><img src="{HOTSNEWS.image_url}" alt="{HOTSNEWS.image_alt}" width="{HOTSNEWS.image_width}" height="{HOTSNEWS.image_height}" /></a><h3><a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}">{HOTSNEWS.title}</a></h3>
+                    <a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}"><img src="{HOTSNEWS.image_url}" alt="{HOTSNEWS.image_alt}" /></a><h3><a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}">{HOTSNEWS.title}</a></h3>
                 </div>
                 <!-- END: loop -->
             </div>

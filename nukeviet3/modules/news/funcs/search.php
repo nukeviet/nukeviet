@@ -32,7 +32,7 @@ function BoldKeywordInStr ( $str, $keyword )
         $str = str_replace( $tp, "<span class=\"keyword\">" . $tp . "</span>", $str );
         $tp = strtoupper( $k );
         $str = str_replace( $tp, "<span class=\"keyword\">" . $tp . "</span>", $str );
-        $k[0] = strtoupper( $k[0] );
+        $k [0] = strtoupper( $k [0] );
         $str = str_replace( $k, "<span class=\"keyword\">" . $k . "</span>", $str );
     }
     return $str;
@@ -44,18 +44,18 @@ $to_date = filter_text_input( 'to_date', 'get', '', 1, 100 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $check_num = filter_text_input( 'choose', 'get', 1, 1, 1 );
 $pages = filter_text_input( 'page', 'get', 0, 1, 1000 );
-$date_array['from_date'] = $from_date;
-$date_array['to_date'] = $to_date;
+$date_array ['from_date'] = $from_date;
+$date_array ['to_date'] = $to_date;
 $per_pages = 20;
-if ( $key == '' ) $key = isset( $_SESSION["keyword"] ) ? $_SESSION["keyword"] : '';
+if ( $key == '' ) $key = isset( $_SESSION ["keyword"] ) ? $_SESSION ["keyword"] : '';
 $array_cat_search = array();
 foreach ( $global_array_cat as $arr_cat_i )
 {
-    $array_cat_search[$arr_cat_i['catid']] = array( 
-        'catid' => $arr_cat_i['catid'], 'title' => $arr_cat_i['title'], 'select' => ( $arr_cat_i['catid'] == $catid ) ? "selected" : "" 
+    $array_cat_search [$arr_cat_i ['catid']] = array( 
+        'catid' => $arr_cat_i ['catid'], 'title' => $arr_cat_i ['title'], 'select' => ( $arr_cat_i ['catid'] == $catid ) ? "selected" : "" 
     );
 }
-$array_cat_search[0]['title'] = $lang_module['search_all'];
+$array_cat_search [0] ['title'] = $lang_module ['search_all'];
 
 $contents = call_user_func( "search_theme", $key, $check_num, $date_array, $array_cat_search );
 $where = "";
@@ -85,9 +85,9 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
     if ( $to_date != "" )
     {
         preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $to_date, $m );
-        $tdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+        $tdate = mktime( 0, 0, 0, $m [2], $m [1], $m [3] );
         preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $from_date, $m );
-        $fdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+        $fdate = mktime( 0, 0, 0, $m [2], $m [1], $m [3] );
         $where .= " AND ( `publtime` < $fdate AND `publtime` >= $tdate  ) ";
     }
     if ( $catid > 0 )
@@ -99,7 +99,7 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
         $table_search = NV_PREFIXLANG . "_" . $module_data . "_rows";
     }
     
-    $sql = " SELECT SQL_CALC_FOUND_ROWS tb1.id,tb1.title,tb1.alias,tb1.listcatid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgthumb,tb1.sourceid
+    $sql = " SELECT SQL_CALC_FOUND_ROWS tb1.id,tb1.title,tb1.alias,tb1.listcatid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid
 	FROM `" . $table_search . "` as tb1 " . $tbl_src . " 
 	WHERE (tb1.status=1 AND tb1.publtime < " . NV_CURRENTTIME . " AND (tb1.exptime=0 OR tb1.exptime>" . NV_CURRENTTIME . ") ) " . $where . " ORDER BY tb1.id DESC LIMIT " . $pages . "," . $per_pages;
     
@@ -109,7 +109,7 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
     
     $array_content = array();
     $url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
-    while ( list( $id, $title, $alias, $listcatid, $hometext, $author, $publtime, $homeimgthumb, $sourceid ) = $db->sql_fetchrow( $result ) )
+    while ( list( $id, $title, $alias, $listcatid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $db->sql_fetchrow( $result ) )
     {
         if ( ! empty( $homeimgthumb ) )
         {
@@ -121,8 +121,23 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
                 "", "" 
             );
         }
-        $array_content[] = array( 
-            "id" => $id, "title" => $title, "alias" => $alias, "listcatid" => $listcatid, "hometext" => $hometext, "author" => $author, "publtime" => $publtime, "homeimgfile" => $array_img[0], "sourceid" => $sourceid 
+        
+        $img_src = "";
+        if ( $array_img [0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img [0] ) )
+        {
+            $img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img [0];
+        }
+        elseif ( $homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile ) )
+        {
+            $img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+        }
+        elseif ( nv_is_url( $homeimgfile ) )
+        {
+            $img_src = $homeimgfile;
+        }
+        
+        $array_content [] = array( 
+            "id" => $id, "title" => $title, "alias" => $alias, "listcatid" => $listcatid, "hometext" => $hometext, "author" => $author, "publtime" => $publtime, "homeimgfile" => $img_src, "sourceid" => $sourceid 
         );
     }
     $contents .= call_user_func( "search_result_theme", $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );

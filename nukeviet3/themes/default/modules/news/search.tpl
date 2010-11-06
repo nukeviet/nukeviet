@@ -93,7 +93,7 @@
         <div class="result-content">
         <p>
                <!-- BEGIN: result_img -->
-               <img src="{IMG_SRC}" border="0" width="100px" style="float:left; margin-right:5px;" />
+               <img src="{IMG_SRC}" border="0" width="{IMG_WIDTH}px" style="float:left; margin-right:5px;" />
                <!-- END: result_img -->
                {CONTENT}
         </p>

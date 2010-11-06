@@ -12,7 +12,7 @@
         </div>
         <div class="{WCT}{BORDER}items clearfix">
             <h3><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a></h3>
-            <!-- BEGIN: image --><a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}" height="{IMGHEIGHT}" /></a><!-- END: image -->
+            <!-- BEGIN: image --><a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}" /></a><!-- END: image -->
             <p>
                 {CONTENT.hometext}
             </p>

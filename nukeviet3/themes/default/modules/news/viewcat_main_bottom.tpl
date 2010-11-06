@@ -8,7 +8,7 @@
             <!-- END: subcatloop -->
         </div>
         <div class="items {BORDER}clearfix">
-            <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT}" src="{HOMEIMG}" width="{IMGWIDTH}" height="{IMGHEIGHT}" /></a><!-- END: image --><h2><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h2>
+            <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT}" src="{HOMEIMG}" width="{IMGWIDTH}" /></a><!-- END: image --><h2><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h2>
             <p>
                 {CONTENT.hometext}
             </p>
