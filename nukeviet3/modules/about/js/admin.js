@@ -70,3 +70,21 @@ function nv_module_del_result(res)
    }
    return false;
 }
+
+//---------------------------------------
+function get_alias(id) {
+	var title = strip_tags(document.getElementById('idtitle').value);
+	if (title != '') {
+		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&title=' + encodeURIComponent(title)+'&id=' + id, '', 'res_get_alias');
+	}
+	return false;
+}
+
+function res_get_alias(res) {
+	if (res != "") {
+		document.getElementById('idalias').value = res;
+	} else {
+		document.getElementById('idalias').value = '';
+	}
+	return false;
+}

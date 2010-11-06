@@ -22,12 +22,12 @@ if ( $id )
     }
     $row = $db->sql_fetchrow( $result );
     define( 'IS_EDIT', true );
-    $page_title = $lang_module['aabout12'];
+    $page_title = $lang_module ['aabout12'];
     $action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id;
 }
 else
 {
-    $page_title = $lang_module['aabout1'];
+    $page_title = $lang_module ['aabout1'];
     $action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 }
 
@@ -43,23 +43,23 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
     $title = filter_text_input( 'title', 'post', '', 1 );
     $alias = filter_text_input( 'alias', 'post', '', 1 );
     $bodytext = nv_editor_filter_textarea( 'bodytext', '', NV_ALLOWED_HTML_TAGS );
-
+    
     if ( empty( $title ) )
     {
-        $error = $lang_module['aabout9'];
-    } elseif ( strip_tags( $bodytext ) == "" )
+        $error = $lang_module ['aabout9'];
+    }
+    elseif ( strip_tags( $bodytext ) == "" )
     {
-        $error = $lang_module['aabout10'];
+        $error = $lang_module ['aabout10'];
     }
     else
     {
         $bodytext = nv_editor_nl2br( $bodytext );
         $alias = empty( $alias ) ? change_alias( $title ) : change_alias( $alias );
-
+        
         if ( defined( 'IS_EDIT' ) )
         {
-            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_about', "aboutid ".$id, $admin_info['userid'] );
-        	$query = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET 
+            $query = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET 
             `title`=" . $db->dbescape( $title ) . ", `alias` =  " . $db->dbescape( $alias ) . ", 
             `bodytext`=" . $db->dbescape( $bodytext ) . ", `keywords`='', `edit_time`=" . NV_CURRENTTIME . " WHERE `id` =" . $id;
         }
@@ -67,25 +67,39 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
         {
             list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "`" ) );
             $weight = intval( $weight ) + 1;
-
+            
             $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
             NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $bodytext ) . ", '', 
-            " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
-            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_about', " ", $admin_info['userid'] );
+            " . $weight . ", " . $admin_info ['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
         }
         $db->sql_query( $query );
         nv_del_moduleCache( $module_name );
-        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
-        die();
+        if ( $db->sql_affectedrows() > 0 )
+        {
+            if ( defined( 'IS_EDIT' ) )
+            {
+                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_about', "aboutid " . $id, $admin_info ['userid'] );
+            }
+            else
+            {
+                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_about', " ", $admin_info ['userid'] );
+            }
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
+            die();
+        }
+        else
+        {
+            $error = $lang_module ['errorsave'];
+        }
     }
 }
 else
 {
     if ( defined( 'IS_EDIT' ) )
     {
-        $title = $row['title'];
-        $alias = $row['alias'];
-        $bodytext = nv_editor_br2nl( $row['bodytext'] );
+        $title = $row ['title'];
+        $alias = $row ['alias'];
+        $bodytext = nv_editor_br2nl( $row ['bodytext'] );
     }
     else
     {
@@ -108,15 +122,17 @@ $contents .= "<input name=\"save\" type=\"hidden\" value=\"1\" />\n";
 $contents .= "<table summary=\"\" style=\"margin-top:8px;margin-bottom:8px;\">\n";
 $contents .= "<col valign=\"top\" width=\"150px\" />\n";
 $contents .= "<tr>\n";
-$contents .= "<td>" . $lang_module['aabout2'] . ":</td>\n";
-$contents .= "<td><input style=\"width:400px\" name=\"title\" id=\"title\" type=\"text\" value=\"" . $title . "\" maxlength=\"255\" /></td>\n";
+$contents .= "<td>" . $lang_module ['aabout2'] . ":</td>\n";
+$contents .= "<td><input style=\"width:400px\" name=\"title\" id=\"idtitle\" type=\"text\" value=\"" . $title . "\" maxlength=\"255\" /></td>\n";
 $contents .= "</tr>\n";
 $contents .= "<tr>\n";
-$contents .= "<td>" . $lang_module['alias'] . ":</td>\n";
-$contents .= "<td><input style=\"width:400px\" name=\"alias\" id=\"alias\" type=\"text\" value=\"" . $alias . "\" maxlength=\"255\" /></td>\n";
+$contents .= "<td>" . $lang_module ['alias'] . ":</td>\n";
+$contents .= "<td><input style=\"width:380px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $alias . "\" maxlength=\"255\" />&nbsp;&nbsp;";
+$contents .= "	  <img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" widht=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias(" . $id . ");\" alt=\"\" height=\"16\">\n";
+$contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "<tr>\n";
-$contents .= "<td colspan=\"2\">" . $lang_module['aabout11'] . ":</td>\n";
+$contents .= "<td colspan=\"2\">" . $lang_module ['aabout11'] . ":</td>\n";
 $contents .= "</tr>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan=\"2\">\n";
@@ -133,8 +149,17 @@ $contents .= "</tr>\n";
 $contents .= "</table>\n";
 
 $contents .= "<br>\n";
-$contents .= "<div style=\"text-align:center\"><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></div>\n";
+$contents .= "<div style=\"text-align:center\"><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module ['save'] . "\" /></div>\n";
 $contents .= "</form>\n";
+
+$contents .= "<script type=\"text/javascript\">\n";
+if ( empty( $alias ) )
+{
+    $contents .= '$("#idtitle").change(function () {
+    get_alias(' . $id . ');
+});';
+}
+$contents .= "</script>";
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
