@@ -144,7 +144,7 @@ elseif ( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
 }
 
 $info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
-$size = @getimagesize( NV_ROOTDIR . '/images/' . $global_config['site_logo'] );
+$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
 $dir_template = "";
 if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/login.tpl" ) )
@@ -177,7 +177,7 @@ $xtpl->assign( 'LOGIN_ERROR_SECURITY', addslashes( sprintf( $lang_global['login_
 
 $xtpl->assign( 'V_LOGIN', $nv_username );
 $xtpl->assign( 'LANGINTERFACE', $lang_global['langinterface'] );
-$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . "images/" . $global_config['site_logo'] );
+$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
 $xtpl->assign( 'LOGO_WIDTH', $size[0] );
 $xtpl->assign( 'LOGO_HEIGHT', $size[1] );
 

@@ -89,7 +89,7 @@ if ( defined( "NV_IS_ADMIN" ) )
             }
             
             $info = ( ! empty( $error ) ) ? '<div class="error">' . sprintf( $lang_global['relogin_error_info'], $error, ( NV_ADMINRELOGIN_MAX - $check_hits + 1 ) ) . '</div>' : '<div class="normal">' . sprintf( $lang_global['relogin_info'], NV_ADMINRELOGIN_MAX - $check_hits + 1 ) . '</div>';
-            $size = @getimagesize( NV_ROOTDIR . '/images/' . $global_config['site_logo'] );
+            $size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
             
             $dir_template = "";
             if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/relogin.tpl" ) )
@@ -109,7 +109,7 @@ if ( defined( "NV_IS_ADMIN" ) )
             $xtpl->assign( 'CSS', NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/css/login.css" );
             $xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
             $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-            $xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . "images/" . $global_config['site_logo'] );
+            $xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
             $xtpl->assign( 'LOGO_WIDTH', $size[0] );
             $xtpl->assign( 'LOGO_HEIGHT', $size[1] );
             $xtpl->assign( 'LOGIN_TITLE', $lang_global['adminlogin'] );

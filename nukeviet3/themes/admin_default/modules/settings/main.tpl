@@ -25,7 +25,8 @@
                     <strong>{LANG.site_logo}</strong>
                 </td>
                 <td>
-                    <input type="text" name="site_logo" value="{VALUE.site_logo}" style="width: 450px"/>
+                    <input type="text" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="width: 350px"/>
+					<input style="width:100px" type="button" value="{LANG.browse_image}" name="selectimg"/>
                 </td>
             </tr>
         </tbody>
@@ -76,8 +77,19 @@
                 </td>
             </tr>
         </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>{LANG.footer_content}</strong>
+                </td>
+                <td>
+                    <textarea name="footer_content" cols="60" rows="5">{VALUE.footer_content}</textarea>
+                </td>
+            </tr>
+        </tbody>
     </table>
     <div style="width: 200px; margin: 10px auto; text-align: center;">
         <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/>
     </div>
-</form><!-- END: main -->
+</form>
+<!-- END: main -->

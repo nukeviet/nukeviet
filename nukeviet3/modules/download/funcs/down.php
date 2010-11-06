@@ -129,9 +129,9 @@ if ( $is_zip )
 
         $zip->add( $file_src, PCLZIP_OPT_REMOVE_PATH, $upload_dir );
 
-        if ( isset( $global_config['site_logo'] ) and ! empty( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/images/' . $global_config['site_logo'] ) )
+        if ( isset( $global_config['site_logo'] ) and ! empty( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
         {
-            $zip->add( NV_ROOTDIR . '/images/' . $global_config['site_logo'], PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/images' );
+            $zip->add( NV_ROOTDIR . '/' . $global_config['site_logo'], PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/images' );
         }
 
         if ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt' ) )

@@ -139,14 +139,14 @@ function nv_info_die ( $page_title = "", $info_title, $info_content, $adminlink 
         $tpl_path = NV_ROOTDIR . "/themes/default/system";
     }
     
-    $size = @getimagesize( NV_ROOTDIR . '/images/' . $global_config['site_logo'] );
+    $size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
     
     $xtpl = new XTemplate( "info_die.tpl", $tpl_path );
     
     $xtpl->assign( 'SITE_CHERSET', $global_config['site_charset'] );
     $xtpl->assign( 'PAGE_TITLE', $page_title );
     $xtpl->assign( 'HOME_LINK', $global_config['site_url'] );
-    $xtpl->assign( 'LOGO', NV_BASE_SITEURL . "images/" . $global_config['site_logo'] );
+    $xtpl->assign( 'LOGO', NV_BASE_SITEURL . $global_config['site_logo'] );
     $xtpl->assign( 'WIDTH', $size[0] );
     $xtpl->assign( 'HEIGHT', $size[1] );
     $xtpl->assign( 'INFO_TITLE', $info_title );
@@ -197,9 +197,9 @@ function nv_rss_generate ( $channel, $items )
     
     $xtpl->assign( 'CHANNEL', $channel );
     
-    if ( file_exists( NV_ROOTDIR . '/images/' . $global_config['site_logo'] ) )
+    if ( file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
     {
-        $image = NV_ROOTDIR . '/images/' . $global_config['site_logo'];
+        $image = NV_ROOTDIR . '/' . $global_config['site_logo'];
         $image = nv_ImageInfo( $image, 144, true, NV_UPLOADS_REAL_DIR );
         
         if ( ! empty( $image ) )
