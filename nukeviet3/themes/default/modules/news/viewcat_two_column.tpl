@@ -3,7 +3,7 @@
     <!-- BEGIN: catcontent --><!-- BEGIN: content -->
     <div class="news-content bordersilver white clearfix">
         <div class="items">
-            <!-- BEGIN: image --><a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" height="{IMGHEIGHT0}"/></a><!-- END: image --><h2><a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a></h2>
+            <!-- BEGIN: image --><a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}"/></a><!-- END: image --><h2><a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a></h2>
             <p>
                 {NEWSTOP.hometext}
             </p>

@@ -2,7 +2,7 @@
 <!-- BEGIN: topic -->
 <div class="box-border-shadow m-bottom listz-news">
     <div class="content-box">
-        <!-- BEGIN: homethumb --><a href="{TOPIC.link}" title="{TOPIC.title}"><img class="s-border fl left" alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" height="{TOPIC.height}"/></a><!-- END: homethumb --><h4><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h4>
+        <!-- BEGIN: homethumb --><a href="{TOPIC.link}" title="{TOPIC.title}"><img class="s-border fl left" alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}"/></a><!-- END: homethumb --><h4><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h4>
         <p>
             <span class="time">{TIME}</span>
             | <span class="date">{DATE}</span>

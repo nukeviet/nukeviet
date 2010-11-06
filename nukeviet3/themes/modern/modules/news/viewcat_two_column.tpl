@@ -4,7 +4,7 @@
     <!-- BEGIN: content -->
     <div class="content-box clearfix">
         <h4><a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a></h4>
-        <!-- BEGIN: image --><a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img class="s-border fl left" alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" height="{IMGHEIGHT0}"/></a><!-- END: image -->
+        <!-- BEGIN: image --><a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img class="s-border fl left" alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}"/></a><!-- END: image -->
         <p>
             {NEWSTOP.hometext}
         </p>
@@ -44,7 +44,7 @@
                     {LANG.pubtime}: {CONTENT.publtime} - {LANG.view}: {CONTENT.hitstotal} - {LANG.total_comment}: {CONTENT.hitscm}
                 </p>
             </div>
-            <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img class="s-border fl left" alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" height="{IMGHEIGHT01}"/></a><!-- END: image -->
+            <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img class="s-border fl left" alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}"/></a><!-- END: image -->
             <p>
                 {CONTENT.hometext}
             </p>

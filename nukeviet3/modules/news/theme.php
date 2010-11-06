@@ -194,8 +194,9 @@ function viewsubcat_main ( $viewcat, $array_cat )
 
 function viewcat_two_column ( $array_content, $array_catpage )
 {
-    global $global_config, $module_name, $module_file, $module_config, $module_info, $home;
+    global $global_config, $module_name, $module_file, $module_config, $module_info, $home, $lang_module;
     $xtpl = new XTemplate( "viewcat_two_column.tpl", NV_ROOTDIR . "/themes/" . $module_info ['template'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
     //Bai viet o phan dau
     if ( ! empty( $array_content ) )
     {

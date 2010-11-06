@@ -1,0 +1,72 @@
+.sliderwrapper {
+	position: relative; /*leave as is*/
+	overflow: hidden; /*leave as is*/
+	height: 200px;
+}
+
+.sliderwrapper .contentdiv {
+	visibility: hidden; /*leave as is*/
+	position: absolute; /*leave as is*/
+	left: 0; /*leave as is*/
+	top: 0; /*leave as is*/
+	background: #fff;
+	padding: 5px;
+	width: 300px;
+	/*width of content DIVs within slider. Total width should equal slider's inner width (390+5+5=400) */
+	height: 190px;
+}
+
+.sliderwrapper .contentdiv img {
+	width: 293px;
+	height: 188px;
+	padding: 2px;
+	border: 1px solid #dbe3e9;
+}
+
+.sliderwrapper .contentdiv h3 {
+	position: absolute;
+	bottom: 4px;
+	left: 8px;
+	background: url(../images/transparent.png) repeat-x;
+	width: 293px;
+	padding: 5px 0;
+	text-indent: 10px;
+}
+
+.sliderwrapper .contentdiv h3 a {
+	color: #fff;
+}
+
+.sliderwrapper .contentdiv h3 a:hover {
+	color: #911E03;
+}
+
+.pagination {
+	width: 100%;
+	/*Width of pagination DIV. Total width should equal slider's outer width (400+10+10=420)*/
+	text-align: right;
+	padding: 2px 0;
+	background: #fff;
+}
+
+.pagination a {
+	padding: 0 5px;
+	font-size: 11px;
+	color: #999;
+	font-weight: normal;
+}
+
+.pagination a:hover,.pagination a.selected {
+	color: #333;
+	background-color: #ccc;
+}
+
+.pagination a.prev {
+	background: url(../images/prev.png) no-repeat 4px 4px;
+	width: 6px;
+}
+
+.pagination a.next {
+	background: url(../images/next.png) no-repeat 4px 4px;
+	width: 6px;
+}

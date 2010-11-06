@@ -19,14 +19,14 @@
 <div id="hometext" class="short-desc clearfix">
     <!-- BEGIN: imgthumb -->
     <div id="imghome" class="fl left" style="width:{DETAIL.image.width}px;margin-right:20px;">
-        <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" height="{DETAIL.image.height}" />
+        <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}"/>
         <p>
             <em>{DETAIL.image.note}</em>
         </p>
     </div>
     <!-- END: imgthumb -->{DETAIL.hometext}<!-- BEGIN: imgfull -->
     <div style="width:{DETAIL.image.width}px;margin:10px auto;">
-        <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" height="{DETAIL.image.height}" />
+        <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}"/>
         <p style="text-align: center;">
             <em>{DETAIL.image.note}</em>
         </p>

@@ -2,7 +2,7 @@
 <!-- BEGIN: viewcatloop -->
 <div class="box-border-shadow m-bottom listz-news">
     <div class="content-box">
-        <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img class="s-border fl left" alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" height="{IMGHEIGHT1}"/></a><!-- END: image --><h4><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h4>
+        <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img class="s-border fl left" alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}"/></a><!-- END: image --><h4><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h4>
         <p>
             {CONTENT.hometext}
         </p>

@@ -50,7 +50,7 @@
 		<div class="box-border-shadow m-bottom listz-newsbox-border-shadow m-bottom listz-news">
 			<div class="content-box clearfix">
 				<!-- BEGIN: result_img -->
-               <a title="{TITLEROW}" href="{LINK}"><img src="{IMG_SRC}" class="s-border fl left" width="100" alt="{TITLEROW}" /></a>
+               <a title="{TITLEROW}" href="{LINK}"><img src="{IMG_SRC}" class="s-border fl left" width="{IMG_WIDTH}" alt="{TITLEROW}" /></a>
                <!-- END: result_img -->
             <h4><a title="{TITLEROW}" href="{LINK}">{TITLEROW}</a></h4>
 			<p>

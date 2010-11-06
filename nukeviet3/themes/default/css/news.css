@@ -20,7 +20,8 @@
 
 #topnews ul.lastest-news a {
 	font-weight: normal;
-	background: transparent url(../images/squared-blue.png) no-repeat 5px 9px;
+	background: transparent url(../images/squared-blue.png) no-repeat 5px
+		9px;
 	color: #383838;
 	display: block;
 	border-bottom: 1px dotted #bbdbf6;
@@ -168,9 +169,10 @@ div.news_column ul.related a:hover {
 }
 
 /*Detail*/
-#hometext{
-	font-weight:700;
+#hometext {
+	font-weight: 700;
 }
+
 div.news_column #hometext,div.news_column div.bodytext,#news_detail h1 {
 	text-align: justify;
 }
@@ -542,14 +544,17 @@ div.news_column p.copyright {
 #no_permission p {
 	margin: 20px 0;
 }
+
 /*LIST NEWS*/
-ul.listnews{
-    padding:0 2px 10px;
+ul.listnews {
+	padding: 0 2px 10px;
 }
-ul.listnews li{
-    padding:8px 10px;
-    border-bottom:1px solid #ccc;
+
+ul.listnews li {
+	padding: 8px 10px;
+	border-bottom: 1px solid #ccc;
 }
-ul.listnews li.bg{
-    background:#fff;
+
+ul.listnews li.bg {
+	background: #fff;
 }

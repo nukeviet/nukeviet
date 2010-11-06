@@ -10,7 +10,7 @@
 if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $func_id = $nv_Request->get_int( 'id', 'post', 0 );
-$content = 'ERR_' . $$func_id;
+$content = 'ERR_' . $func_id;
 if ( $func_id > 0 )
 {
     $query = "SELECT `in_submenu` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `func_id`=" . $func_id;

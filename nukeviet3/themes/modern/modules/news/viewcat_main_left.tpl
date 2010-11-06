@@ -29,7 +29,7 @@
                         {LANG.pubtime}: {CONTENT.publtime} - {LANG.view}: {CONTENT.hitstotal} - {LANG.total_comment}: {CONTENT.hitscm}
                     </p>
                 </div>
-                <!-- BEGIN: image --><a title="{CONTENT.title}" href="{CONTENT.link}"><img class="s-border fl left" src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}" height="{IMGHEIGHT}" /></a><!-- END: image -->
+                <!-- BEGIN: image --><a title="{CONTENT.title}" href="{CONTENT.link}"><img class="s-border fl left" src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}"/></a><!-- END: image -->
                 <p>
                     {CONTENT.hometext}
                 </p>

@@ -47,9 +47,9 @@ else
         {
             $imgurl = $homeimgfile;
         }
-        elseif ( $$homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $$homeimgfile ) )
+        elseif ( $homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile ) )
         {
-            $imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $$homeimgfile;
+            $imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
         }
         else
         {
