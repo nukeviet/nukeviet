@@ -149,7 +149,7 @@ $("div#createimg").dialog({
 				   url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=createimg",
 				   data: "path="+folder+"&img="+imgfile+"&width="+newwidth+"&height="+newheight,
 				   success: function(data){
-						$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+data+"&path="+folder+"\' style=\"width:620px;height:360px;border:none\"></iframe>");
+						$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+data+"&path="+folder+"\' style=\"width:590px;height:360px;border:none\"></iframe>");
 				   }
 				 });
 			 }
@@ -178,7 +178,7 @@ $("div#renameimg").dialog({
 			   url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=renameimg",
 			   data: "path="+folder+"&img="+imgfile+"&name="+newname,
 			   success: function(data){
-					$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+data+"&path="+folder+"\' style=\"width:620px;height:360px;border:none\"></iframe>");
+					$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+data+"&path="+folder+"\' style=\"width:590px;height:360px;border:none\"></iframe>");
 					$("div#renameimg").dialog("close");
 			   }
 			 });
@@ -211,7 +211,7 @@ $("div#movefolder").dialog({
 				   url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=moveimg",
 				   data: "path="+folder+"&img="+imgfile+"&folder="+newfolder,
 				   success: function(data){
-						$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+imgfile+"&path="+folder+"\' style=\"width:620px;height:360px;border:none\"></iframe>");
+						$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+imgfile+"&path="+folder+"\' style=\"width:590px;height:360px;border:none\"></iframe>");
 				   }
 				 });
 			}
@@ -258,7 +258,7 @@ function deleteimage(){
 		   data: "path="+folder+"&img="+imgfile,
 		   success: function(data){
 		   		//alert(data);
-				$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path="+folder+"\' style=\"width:620px;height:360px;border:none\"></iframe>");
+				$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path="+folder+"\' style=\"width:590px;height:360px;border:none\"></iframe>");
 		   }
 		});		
 	}
