@@ -316,7 +316,8 @@ function nv_blocks_content ( )
             $__blocks_return[$__pos] .= '	<span><a class="addblock" id="' . $__pos . '" href="javascript:void(0)"><img src="' . NV_BASE_SITEURL . 'images/add.png" style="border:none"/> ' . $lang_global['add_block'] . '</a></span>';
             $__blocks_return[$__pos] .= '</div>';
         }
-        #end dev version theme control
+    
+     #end dev version theme control
     }
     return $__blocks_return;
 }
@@ -416,13 +417,29 @@ function nv_get_rss ( $url )
         if ( $xml = simplexml_load_string( $xml_source ) )
         {
             $a = 0;
-            foreach ( $xml->channel->item as $item )
+            if ( isset( $xml->channel ) )
             {
-                $array_data[$a]['title'] = strip_tags( $item->title );
-                $array_data[$a]['description'] = strip_tags( $item->description, $allowed_html_tags );
-                $array_data[$a]['link'] = strip_tags( $item->link );
-                $array_data[$a]['pubDate'] = nv_date( "l - d/m/Y  H:i", strtotime( $item->pubDate ) );
-                $a ++;
+                foreach ( $xml->channel->item as $item )
+                {
+                    $array_data[$a]['title'] = strip_tags( $item->title );
+                    $array_data[$a]['description'] = strip_tags( $item->description, $allowed_html_tags );
+                    $array_data[$a]['link'] = strip_tags( $item->link );
+                    $array_data[$a]['pubDate'] = nv_date( "l - d/m/Y  H:i", strtotime( $item->pubDate ) );
+                    $a ++;
+                }
+            }
+            elseif ( isset( $xml->entry ) )
+            {
+                foreach ( $xml->entry as $item )
+                {
+                    $urlAtt = $item->link->attributes();
+                    $url = $urlAtt['href'];
+                    $array_data[$a]['title'] = strip_tags( $item->title );
+                    $array_data[$a]['description'] = strip_tags( $item->content, $allowed_html_tags );
+                    $array_data[$a]['link'] = strip_tags( $urlAtt['href'] );
+                    $array_data[$a]['pubDate'] = nv_date( "l - d/m/Y  H:i", strtotime( $item->updated ) );
+                    $a ++;
+                }
             }
         }
         $cache = serialize( $array_data );
