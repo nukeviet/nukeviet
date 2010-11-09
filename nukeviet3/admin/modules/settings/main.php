@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module ['lang_site_config'];
+$page_title = $lang_module['lang_site_config'];
 
 if ( defined( 'NV_EDITOR' ) ) require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 
@@ -18,38 +18,38 @@ $errormess = "";
 if ( $submit )
 {
     $array_config = array();
-    $array_config ['site_theme'] = filter_text_input( 'site_theme', 'post', '', 1, 255 );
-    $array_config ['site_name'] = filter_text_input( 'site_name', 'post', '', 1, 255 );
+    $array_config['site_theme'] = filter_text_input( 'site_theme', 'post', '', 1, 255 );
+    $array_config['site_name'] = filter_text_input( 'site_name', 'post', '', 1, 255 );
     $site_logo = filter_text_input( 'site_logo', 'post' );
     
     if ( ! nv_is_url( $site_logo ) and file_exists( NV_DOCUMENT_ROOT . $site_logo ) )
     {
         $lu = strlen( NV_BASE_SITEURL );
-        $array_config ['site_logo'] = substr( $site_logo, $lu );
+        $array_config['site_logo'] = substr( $site_logo, $lu );
     }
     elseif ( ! nv_is_url( $site_logo ) )
     {
-        $array_config ['site_logo'] = "images/logo.png";
+        $array_config['site_logo'] = "images/logo.png";
     }
     
-    $array_config ['site_home_module'] = filter_text_input( 'site_home_module', 'post', '', 1, 255 );
-    $array_config ['site_description'] = filter_text_input( 'site_description', 'post', '', 1, 255 );
-    $array_config ['disable_site'] = $nv_Request->get_int( 'disable_site', 'post' );
-    $array_config ['disable_site_content'] = filter_text_textarea( 'disable_site_content', '', NV_ALLOWED_HTML_TAGS );
-    $array_config ['footer_content'] = filter_text_textarea( 'footer_content', '', NV_ALLOWED_HTML_TAGS );
+    $array_config['site_home_module'] = filter_text_input( 'site_home_module', 'post', '', 1, 255 );
+    $array_config['site_description'] = filter_text_input( 'site_description', 'post', '', 1, 255 );
+    $array_config['disable_site'] = $nv_Request->get_int( 'disable_site', 'post' );
+    $array_config['disable_site_content'] = filter_text_textarea( 'disable_site_content', '', NV_ALLOWED_HTML_TAGS );
+    $array_config['footer_content'] = filter_text_textarea( 'footer_content', '', NV_ALLOWED_HTML_TAGS );
     
-    if ( empty( $array_config ['disable_site_content'] ) )
+    if ( empty( $array_config['disable_site_content'] ) )
     {
-        $array_config ['disable_site_content'] = $lang_global ['disable_site_content'];
+        $array_config['disable_site_content'] = $lang_global['disable_site_content'];
     }
-    $array_config ['disable_site_content'] = nv_nl2br( $array_config ['disable_site_content'], '<br />' ); // dung de save vao csdl
+    $array_config['disable_site_content'] = nv_nl2br( $array_config['disable_site_content'], '<br />' ); // dung de save vao csdl
     foreach ( $array_config as $config_name => $config_value )
     {
         $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', 'global', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
     }
-    if ( $array_config ['site_theme'] != $global_config ['site_theme'] )
+    if ( $array_config['site_theme'] != $global_config['site_theme'] )
     {
-        $global_config ['site_theme'] = $array_config ['site_theme'];
+        $global_config['site_theme'] = $array_config['site_theme'];
         nv_set_layout_site();
     }
     nv_save_file_config_global();
@@ -65,32 +65,32 @@ if ( $submit )
         $result = $db->sql_query( $sql );
         while ( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
         {
-            if ( $c_module == "global" ) $global_config [$c_config_name] = $c_config_value;
-            else $module_config [$c_module] [$c_config_name] = $c_config_value;
+            if ( $c_module == "global" ) $global_config[$c_config_name] = $c_config_value;
+            else $module_config[$c_module][$c_config_name] = $c_config_value;
         }
     }
 }
 $theme_array = array();
-$theme_array_file = nv_scandir( NV_ROOTDIR . "/themes", $global_config ['check_theme'] );
+$theme_array_file = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme'] );
 $sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes`  WHERE `func_id`=0";
 $result = $db->sql_query( $sql );
 while ( list( $theme ) = $db->sql_fetchrow( $result ) )
 {
     if ( in_array( $theme, $theme_array_file ) )
     {
-        $theme_array [] = $theme;
+        $theme_array[] = $theme;
     }
 }
 
-$global_config ['disable_site_content'] = nv_br2nl( $global_config ['disable_site_content'] ); // dung de lay data tu CSDL
-$global_config ['disable_site_content'] = nv_htmlspecialchars( $global_config ['disable_site_content'] );
+$global_config['disable_site_content'] = nv_br2nl( $global_config['disable_site_content'] ); // dung de lay data tu CSDL
+$global_config['disable_site_content'] = nv_htmlspecialchars( $global_config['disable_site_content'] );
 
 $value_setting = array(  //
-    "sitename" => $global_config ['site_name'], //
-"site_logo" => NV_BASE_SITEURL . $global_config ['site_logo'], //
-"description" => $global_config ['site_description'], //
-"disable_content" => $global_config ['disable_site_content'], //
-"footer_content" => isset( $global_config ['footer_content'] ) ? $global_config ['footer_content'] : ""  //
+    "sitename" => $global_config['site_name'], //
+    "site_logo" => ( nv_is_url( $global_config['site_logo'] ) ) ? NV_BASE_SITEURL . $global_config['site_logo'] : $global_config['site_logo'], //
+    "description" => $global_config['site_description'], //
+    "disable_content" => $global_config['disable_site_content'], //
+    "footer_content" => isset( $global_config['footer_content'] ) ? $global_config['footer_content'] : ""  //
 );
 
 $module_array = array();
@@ -99,30 +99,30 @@ $sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` WHERE `act`=1
 $result = $db->sql_query( $sql );
 while ( $row = $db->sql_fetchrow( $result ) )
 {
-    $module_array [] = $row;
+    $module_array[] = $row;
 }
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config ['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 
-$lang_module ['browse_image'] = $lang_global ['browse_image'];
+$lang_module['browse_image'] = $lang_global['browse_image'];
 
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'VALUE', $value_setting );
 
 foreach ( $theme_array as $folder )
 {
-    $xtpl->assign( 'SELECTED', ( $global_config ['site_theme'] == $folder ) ? ' selected="selected"' : '' );
+    $xtpl->assign( 'SELECTED', ( $global_config['site_theme'] == $folder ) ? ' selected="selected"' : '' );
     $xtpl->assign( 'SITE_THEME', $folder );
     $xtpl->parse( 'main.site_theme' );
 }
 foreach ( $module_array as $mod )
 {
-    $xtpl->assign( 'SELECTED', ( $global_config ['site_home_module'] == $mod ['title'] ) ? ' selected="selected"' : '' );
+    $xtpl->assign( 'SELECTED', ( $global_config['site_home_module'] == $mod['title'] ) ? ' selected="selected"' : '' );
     $xtpl->assign( 'MODULE', $mod );
     $xtpl->parse( 'main.module' );
 }
 
-$xtpl->assign( 'CHECKED3', ( $global_config ['disable_site'] == 1 ) ? ' checked' : '' );
+$xtpl->assign( 'CHECKED3', ( $global_config['disable_site'] == 1 ) ? ' checked' : '' );
 
 $xtpl->parse( 'main' );
 $content = "";

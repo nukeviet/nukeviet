@@ -30,6 +30,7 @@ $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $la
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block`";
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows`";
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_log`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post`";
 
 $sql_create_module = $sql_drop_module;
 
@@ -106,7 +107,6 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   UNIQUE KEY `title` (`title`),
   UNIQUE KEY `alias` (`alias`)
 ) ENGINE=MyISAM";
-
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments` (
   `cid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -220,6 +220,16 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   KEY `publtime` (`publtime`),
   KEY `exptime` (`exptime`),
   KEY `listcatid` (`listcatid`)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post` (
+  `pid` mediumint(9) NOT NULL,
+  `member` tinyint(4) NOT NULL,
+  `group_id` mediumint(9) NOT NULL,
+  `addcontent` tinyint(4) NOT NULL,
+  `postcontent` tinyint(4) NOT NULL,
+  PRIMARY KEY  (`pid`),
+  UNIQUE KEY `member` (`member`,`group_id`)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";

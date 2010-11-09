@@ -171,6 +171,7 @@ $lang_module['comment_update_success'] = "Cập nhật thành công !";
 $lang_module['block'] = "Các block tin";
 $lang_module['adddefaultblock'] = "Chọn mặc định khi tạo bài viết";
 
+$lang_module['module_logo'] = "Logo tại module khi giao diện hỗ trợ thay thế logo";
 $lang_module['source_logo'] = "Logo nguồn tin";
 $lang_module['topic_page'] = "Tin tức thuộc nhóm tin liên quan";
 $lang_module['topic_del'] = "Xóa khỏi nhóm tin liên quan";
@@ -189,5 +190,9 @@ $lang_module['siteinfo_expired'] = "Số bài viết đã hết hạn";
 $lang_module['siteinfo_exptime'] = "Số bài viết sắp hết hạn";
 $lang_module['siteinfo_comment'] = "Tổng số bình luận được đăng";
 $lang_module['siteinfo_comment_pending'] = "Số bình luận chờ duyệt"; 
+
+$lang_module['group_content'] = "Cấu hình đăng bài viết của thành viên";
+$lang_module['group_addcontent'] = "Được đăng bài viêt";
+$lang_module['group_postcontent'] = "Đăng bài viêt không cần kiểm duyệt";
 
 ?>
