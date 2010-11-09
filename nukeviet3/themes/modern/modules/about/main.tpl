@@ -10,15 +10,17 @@
         <div class="content-page">
             {CONTENT.bodytext}
         </div>
-        <div class="other-news">
-            <ul style="margin:10px;">
-                <!-- BEGIN: loop -->
-                <li>
-                    <a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a>
-                </li>
-                <!-- END: loop -->
-            </ul>
-        </div>
+        <!-- BEGIN: other -->
+            <div class="other-news" style="border-top: 1px solid #d8d8d8;">
+                <ul style="margin:10px;">
+                    <!-- BEGIN: loop -->
+                    <li>
+                        <a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a>
+                    </li>
+                    <!-- END: loop -->
+                </ul>
+            </div>
+        <!-- END: other -->
     </div>
 </div>
 <!-- END: main -->

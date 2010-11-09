@@ -20,8 +20,9 @@ function nv_about_main ( $row, $ab_links )
         foreach ( $ab_links as $row )
         {
             $xtpl->assign( 'OTHER', $row );
-            $xtpl->parse( 'main.loop' );
+            $xtpl->parse( 'main.other.loop' );
         }
+        $xtpl->parse( 'main.other' );
     }
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );
