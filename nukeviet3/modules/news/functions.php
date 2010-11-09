@@ -8,7 +8,7 @@
  */
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 if ( ! in_array( $op, array( 
-    'viewcat', 'detail'
+    'viewcat', 'detail' 
 ) ) )
 {
     define( 'NV_IS_MOD_NEWS', true );
@@ -54,7 +54,7 @@ while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i
             {
                 nv_archive_content_module( $id, $listcatid );
             }
-            nv_del_moduleCache($module_name);
+            nv_del_moduleCache( $module_name );
         }
         list( $minpubltime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(publtime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `publtime` > UNIX_TIMESTAMP()" ) );
         $minpubltime = ( empty( $minpubltime ) ) ? NV_CURRENTTIME + 26000000 : intval( $minpubltime );
@@ -101,13 +101,13 @@ foreach ( $global_array_cat as $catid_i => $array_cat_i )
     //Xac dinh RSS
     if ( $catid_i )
     {
-        $rss[] = array( //
+        $rss[] = array(  //
             'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'], //
-            'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_cat_i['alias'] //
-            );
+'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_cat_i['alias']  //
+        );
     }
 }
-unset( $result, $alias_cat_url, $catid_i, $parentid_i, $title_i, $alias_i );
+unset( $result, $catid_i, $parentid_i, $title_i, $alias_i );
 
 $module_info['submenu'] = 0;
 
@@ -118,10 +118,16 @@ $st_links = $module_config[$module_name]['st_links'];
 $count_op = count( $array_op );
 if ( ! empty( $array_op ) and $op == "main" )
 {
-    if ( $catid == 0 )
+    if ( ! empty( $alias_cat_url ) and $catid == 0 )
+    {
+        $redirect = "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
+        nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
+    }
+    elseif ( $catid == 0 )
     {
         $contents = $lang_module['nocatpage'] . $array_op[0];
-        if ( substr( $array_op[1], 0, 5 ) == "page-" )
+        if ( isset( $array_op[1] ) and substr( $array_op[1], 0, 5 ) == "page-" )
+        
         {
             $page = intval( substr( $array_op[1], 5 ) );
         }
