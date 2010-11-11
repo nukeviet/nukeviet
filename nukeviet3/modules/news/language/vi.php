@@ -56,6 +56,8 @@ $lang_module['print_page'] = "In bài viết này";
 $lang_module['print_close'] = "Đóng cửa sổ này";
 $lang_module['print_link'] = "URL của bản tin này";
 $lang_module['author'] = "Tác giả bài viết";
+$lang_module['post_name'] = "Người đăng bài viết";
+
 $lang_module['source'] = "Nguồn tin";
 $lang_module['topic'] = "Theo dòng sự kiện";
 $lang_module['related_new'] = "Những tin mới hơn";

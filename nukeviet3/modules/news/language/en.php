@@ -54,6 +54,7 @@ $lang_module['print_page'] = "Print this article";
 $lang_module['print_close'] = "Close page";
 $lang_module['print_link'] = "URL of this newsletter";
 $lang_module['author'] = "Author";
+$lang_module['post_name'] = "post name";
 $lang_module['source'] = "Source";
 $lang_module['topic'] = "Event stream";
 $lang_module['related_new'] = "The latest news";

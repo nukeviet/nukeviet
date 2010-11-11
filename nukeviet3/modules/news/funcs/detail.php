@@ -196,17 +196,9 @@ if ( $allowed )
     $page_title = $news_contents['title'];
     $key_words = $news_contents['keywords'];
     $description = $news_contents['hometext'];
-    $news_contents['author_name'] = $news_contents['author'];
-    if ( empty( $news_contents['author'] ) )
-    {
-        $sql = $db->sql_query( " SELECT `username`, `full_name` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = '" . $news_contents['admin_id'] . "' LIMIT 0,1 " );
-        $chk_u = $db->sql_numrows( $sql );
-        if ( $chk_u )
-        {
-            list( $row ) = $db->sql_fetchrowset( $sql );
-            $news_contents['author_name'] = empty( $row['full_name'] ) ? $row['username'] : $row['full_name'];
-        }
-    }
+    
+    list( $post_username, $post_full_name ) = $db->sql_fetchrow( $db->sql_query( "SELECT `username`, `full_name` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = '" . $news_contents['admin_id'] . "' LIMIT 0,1 " ) );
+    $news_contents['post_name'] = empty( $post_full_name ) ? $post_username : $post_full_name;
     
     $contents = detail_theme( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable );
 }
