@@ -122,7 +122,7 @@ var popCalendar = {
     this.monthNow = this.today.getMonth();
     this.yearNow  = this.today.getFullYear();
 
-    document.write('<div onclick="popCalendar.bShow=true" id="pcIDcalendar" style="visibility:none"><table style="width:' + (this.showWeekNumber ? 250 : 220) + 'px;"><tr><td><div id="pcIDcaption" unselectable="on"></div></td></tr><tr><td><div id="pcIDcontent">.</div></td></tr>');
+    document.write('<div onclick="popCalendar.bShow=true" id="pcIDcalendar" style="visibility:none"><table style="width:' + (this.showWeekNumber ? 250 : 230) + 'px;"><tr><td><div id="pcIDcaption" unselectable="on"></div></td></tr><tr><td><div id="pcIDcontent">.</div></td></tr>');
     if (this.showToday) document.write ('<tr><td><div id="pcIDfooter"></div></td></tr>');
     document.write('</table></div><div id="pcIDselectMonth"></div><div id="pcIDselectYear"></div>');
 
