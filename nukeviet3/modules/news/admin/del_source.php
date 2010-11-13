@@ -1,4 +1,4 @@
-<?php
+nv_del_moduleCache( $module_name );<?php
 
 /**
  * @Project NUKEVIET 3.0
@@ -8,6 +8,7 @@
  */
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $sourceid = $nv_Request->get_int( 'sourceid', 'post', 0 );
 
@@ -15,22 +16,22 @@ $contents = "NO_" . $sourceid;
 list( $sourceid ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`=" . intval( $sourceid ) . "" ) );
 if ( $sourceid > 0 )
 {
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_source', "sourceid ".$sourceid , $admin_info['userid'] );
-	list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `sourceid` = '" . $sourceid . "'" ) );
-	if ( intval( $check_rows ) > 0 )
-	{
-		$contents = "ERR_" . sprintf( $lang_module['delcat_msg_rows'], $check_rows );
-	}
-	else
-	{
-		$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`=" . $sourceid . "";
-		if ( $db->sql_query( $query ) )
-		{
-			$db->sql_freeresult();
-			nv_fix_source();
-			$contents = "OK_" . $sourceid;
-		}
-	}
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_source', "sourceid " . $sourceid, $admin_info['userid'] );
+    $query = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `sourceid` = '" . $sourceid . "'" );
+    while ( $row = $db->sql_fetchrow( $query ) )
+    {
+        $arr_catid = explode( ",", $row['listcatid'] );
+        foreach ( $arr_catid as $catid_i )
+        {
+            $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `sourceid` = '0' WHERE `id` =" . $row['id'] );
+        }
+        $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `sourceid` = '0' WHERE `id` =" . $row['id'] );
+    }
+    $db->sql_freeresult();
+    $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`=" . $sourceid . "" );
+    nv_fix_source();
+    nv_del_moduleCache( $module_name );
+    $contents = "OK_" . $sourceid;
 }
 
 include ( NV_ROOTDIR . "/includes/header.php" );
