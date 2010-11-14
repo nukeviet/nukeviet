@@ -33,6 +33,8 @@ if ( ! empty( $savesetting ) )
     $array_pid = $nv_Request->get_typed_array( 'array_pid', 'post' );
     $array_addcontent = $nv_Request->get_typed_array( 'array_addcontent', 'post' );
     $array_postcontent = $nv_Request->get_typed_array( 'array_postcontent', 'post' );
+    $array_editcontent = $nv_Request->get_typed_array( 'array_editcontent', 'post' );
+    $array_delcontent = $nv_Request->get_typed_array( 'array_delcontent', 'post' );
     
     if ( ! nv_is_url( $array_config['module_logo'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['module_logo'] ) )
     {
@@ -54,8 +56,10 @@ if ( ! empty( $savesetting ) )
     {
         $addcontent = ( isset( $array_addcontent[$pid] ) and intval( $array_addcontent[$pid] ) == 1 ) ? 1 : 0;
         $postcontent = ( isset( $array_postcontent[$pid] ) and intval( $array_postcontent[$pid] ) == 1 ) ? 1 : 0;
+        $editcontent = ( isset( $array_editcontent[$pid] ) and intval( $array_editcontent[$pid] ) == 1 ) ? 1 : 0;
+        $delcontent = ( isset( $array_delcontent[$pid] ) and intval( $array_delcontent[$pid] ) == 1 ) ? 1 : 0;
         $addcontent = ( $postcontent == 1 ) ? 1 : $addcontent;
-        $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` SET `addcontent` = '" . $addcontent . "', `postcontent` = '" . $postcontent . "' WHERE `pid` =" . $pid . " LIMIT 1" );
+        $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` SET `addcontent` = '" . $addcontent . "', `postcontent` = '" . $postcontent . "', `editcontent` = '" . $editcontent . "', `delcontent` = '" . $delcontent . "' WHERE `pid` =" . $pid . " LIMIT 1" );
     }
     
     nv_del_moduleCache( 'settings' );
@@ -203,15 +207,15 @@ foreach ( $groups_list as $group_id => $grtl )
 $array_post_member = array();
 $array_post_data = array();
 
-$sql = "SELECT pid, member, group_id, addcontent, postcontent FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` ORDER BY `pid` ASC";
+$sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` ORDER BY `pid` ASC";
 $result = $db->sql_query( $sql );
-while ( list( $pid, $member, $group_id, $addcontent, $postcontent ) = $db->sql_fetchrow( $result ) )
+while ( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $db->sql_fetchrow( $result ) )
 {
     if ( isset( $array_post_title[$member][$group_id] ) )
     {
         $array_post_member[$member][$group_id] = $pid;
         $array_post_data[$pid] = array( 
-            "pid" => $pid, "member" => $member, "group_id" => $group_id, "addcontent" => $addcontent, "postcontent" => $postcontent 
+            "pid" => $pid, "member" => $member, "group_id" => $group_id, "addcontent" => $addcontent, "postcontent" => $postcontent, "editcontent" => $editcontent, "delcontent" => $delcontent 
         );
     }
     else
@@ -227,7 +231,9 @@ $contents .= "<table class=\"tab1\">
     <td>" . $lang_global['who_view3'] . "</td>
     <td>" . $lang_module['group_addcontent'] . "</td>
     <td>" . $lang_module['group_postcontent'] . "</td>
-</tr>";
+    <td>" . $lang_module['group_editcontent'] . "</td>
+    <td>" . $lang_module['group_delcontent'] . "</td>
+    </tr>";
 
 foreach ( $array_post_title as $member => $array_post_1 )
 {
@@ -240,20 +246,24 @@ foreach ( $array_post_title as $member => $array_post_1 )
         {
             $addcontent = $array_post_data[$pid]['addcontent'];
             $postcontent = $array_post_data[$pid]['postcontent'];
+            $editcontent = $array_post_data[$pid]['editcontent'];
+            $delcontent = $array_post_data[$pid]['delcontent'];
         }
         else
         {
-            $addcontent = $postcontent = 0;
+            $addcontent = $postcontent = $editcontent = $delcontent = 0;
             $pid = $db->sql_query_insert_id( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` 
-            (`pid`,`member`, `group_id`,`addcontent`,`postcontent`) VALUES 
-            (NULL , '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "' )" );
+            (`pid`,`member`, `group_id`,`addcontent`,`postcontent`,`editcontent`,`delcontent`) VALUES 
+            (NULL , '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "'  )" );
         }
         $contents .= "<tbody" . $class . ">
         <tr>
             <td><strong>" . $array_post_2 . "</strong><input type=\"hidden\" value=\"" . $pid . "\" name=\"array_pid[]\"></td>
             <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_addcontent[$pid]\" " . ( ( $addcontent ) ? "checked=\"checked\"" : "" ) . "></td>
             <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_postcontent[$pid]\" " . ( ( $postcontent ) ? "checked=\"checked\"" : "" ) . "></td>
-         </tr>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_editcontent[$pid]\" " . ( ( $editcontent ) ? "checked=\"checked\"" : "" ) . "></td>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_delcontent[$pid]\" " . ( ( $delcontent ) ? "checked=\"checked\"" : "" ) . "></td>
+            </tr>
         </tbody>";
     }
 }

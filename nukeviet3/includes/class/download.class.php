@@ -103,17 +103,17 @@ class download
         }
         
         $path = $this->real_path( $path, $directory );
-        
+        $extension = strtolower( strrchr( $path, '.' ) );
         $this->properties = array(  //
             "path" => $path, //
-"name" => ( $name == "" ) ? substr( strrchr( "/" . $path, "/" ), 1 ) : $name, //
-"extension" => strtolower( array_pop( explode( '.', $path ) ) ), //
-"type" => $this->my_mime_content_type( $path ), //
-"size" => intval( sprintf( "%u", filesize( $path ) ) ), //
-"mtime" => ( $mtime = filemtime( $path ) ) > 0 ? $mtime : time(), //
-"resume" => $resume, //
-"max_speed" => $max_speed, //
-"directory" => $directory  //
+            "name" => ( $name == "" ) ? substr( strrchr( "/" . $path, "/" ), 1 ) : $name, //
+            "extension" => $extension, //
+            "type" => $this->my_mime_content_type( $path ), //
+            "size" => intval( sprintf( "%u", filesize( $path ) ) ), //
+            "mtime" => ( $mtime = filemtime( $path ) ) > 0 ? $mtime : time(), //
+            "resume" => $resume, //
+            "max_speed" => $max_speed, //
+            "directory" => $directory  //
         );
     }
 
@@ -301,7 +301,10 @@ class download
             }
         }
         
-        @ob_end_clean();
+        if ( @ob_get_length() )
+        {
+            @ob_end_clean();
+        }
         $old_status = ignore_user_abort( true );
         if ( defined( 'ALLOWED_SET_TIME_LIMIT' ) )
         {

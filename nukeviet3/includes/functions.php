@@ -535,7 +535,7 @@ function nv_user_groups ( $in_groups )
     
     $groups = array();
     
-    $sql = "SELECT `group_id` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id` IN ('" . $in_groups . "') AND `act`=1 AND (`exp_time`=0 OR `exp_time` >= " . NV_CURRENTTIME . ")";
+    $sql = "SELECT `group_id` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id` IN (" . $in_groups . ") AND `act`=1 AND (`exp_time`=0 OR `exp_time` >= " . NV_CURRENTTIME . ")";
     $result = $db->sql_query( $sql );
     while ( $row = $db->sql_fetchrow( $result ) )
     {
@@ -1266,18 +1266,23 @@ function nv_ParseIP ( $ip )
 function nv_getCountry ( $ip )
 {
     $result = nv_ParseIP( $ip );
-    if ( empty( $result ) or $result == "localhost" ) return array( 
-        "unkown", "", "" 
-    );
+    if ( empty( $result ) or $result == "localhost" )
+    {
+        return array( 
+            "unkown", "", "" 
+        );
+    }
     unset( $arr );
     if ( preg_match( '/^\x20*country\x20*:\x20*([A-Z]{2})/im', $result, $arr ) )
     {
         include ( NV_ROOTDIR . "/includes/ip_files/countries.php" );
-        $three_letter_country_code = $countries[$arr[1]][0];
-        $country_name = $countries[$arr[1]][1];
-        return array( 
-            $arr[1], $three_letter_country_code, $country_name 
-        );
+        $code = strtoupper( $arr[1] );
+        if ( isset( $countries[$code] ) )
+        {
+            return array( 
+                $arr[1], $countries[$code][0], $countries[$code][1] 
+            );
+        }
     }
     return array( 
         "unkown", "", "" 

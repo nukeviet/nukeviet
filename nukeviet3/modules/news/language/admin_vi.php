@@ -194,5 +194,7 @@ $lang_module['siteinfo_comment_pending'] = "Số bình luận chờ duyệt";
 $lang_module['group_content'] = "Cấu hình đăng bài viết của thành viên";
 $lang_module['group_addcontent'] = "Được đăng bài viêt";
 $lang_module['group_postcontent'] = "Đăng bài viêt không cần kiểm duyệt";
+$lang_module['group_editcontent'] = "Được sửa bài viêt đã đăng";
+$lang_module['group_delcontent'] = "Đăng xóa bài viêt đã đăng";
 
 ?>

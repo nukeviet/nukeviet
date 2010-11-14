@@ -9,7 +9,7 @@
 define( 'NV_ADMIN', true );
 require_once ( str_replace( '\\\\', '/', dirname( __file__ ) ) . '/mainfile.php' );
 require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
-$global_config['new_version'] = "3.0.12";
+$global_config['new_version'] = "3.0.13";
 
 if ( defined( "NV_IS_GODADMIN" ) )
 {
@@ -215,12 +215,14 @@ if ( defined( "NV_IS_GODADMIN" ) )
     }
     if ( nv_version_compare( $global_config['version'], "3.0.13" ) < 0 )
     {
-        //update logo site
         $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language`";
         $result_lang = $db->sql_query( $sql );
         while ( list( $lang_data_i ) = $db->sql_fetchrow( $result_lang ) )
         {
+            //update logo site
             $db->sql_query( "REPLACE INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang_data_i . "', 'global', 'site_logo', 'images/logo.png')" );
+            
+            //update alias module about
             $sql = "SELECT module_data FROM `" . $db_config['prefix'] . "_" . $lang_data_i . "_modules` WHERE `module_file`='about'";
             $result_mod = $db->sql_query( $sql );
             while ( list( $module_data_i ) = $db->sql_fetchrow( $result_mod ) )
@@ -228,19 +230,23 @@ if ( defined( "NV_IS_GODADMIN" ) )
                 $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_data_i . "_" . $module_data_i . "` DROP INDEX `title`" );
                 $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_data_i . "_" . $module_data_i . "` ADD UNIQUE (`alias`)" );
             }
+            
+            //update config module news            
             $sql = "SELECT module_data FROM `" . $db_config['prefix'] . "_" . $lang_data_i . "_modules` WHERE `module_file`='news'";
             $result_mod = $db->sql_query( $sql );
             while ( list( $module_data_i ) = $db->sql_fetchrow( $result_mod ) )
             {
-                $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang_data_i . "_" . $module_data_i . "_config_post` (
-                                          `pid` mediumint(9) NOT NULL,
+                $db->sql_query( "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang_data_i . "_" . $module_data_i . "_config_post` (
+  										  `pid` mediumint(9) NOT NULL auto_increment,
                                           `member` tinyint(4) NOT NULL,
                                           `group_id` mediumint(9) NOT NULL,
                                           `addcontent` tinyint(4) NOT NULL,
                                           `postcontent` tinyint(4) NOT NULL,
+                                          `editcontent` tinyint(4) NOT NULL,
+                                          `delcontent` tinyint(4) NOT NULL,
                                           PRIMARY KEY  (`pid`),
                                           UNIQUE KEY `member` (`member`,`group_id`)
-                                        ) ENGINE=MyISAM";
+                                        ) ENGINE=MyISAM" );
             }
         }
     }

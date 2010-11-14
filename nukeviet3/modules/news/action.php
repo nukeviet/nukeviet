@@ -228,6 +228,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `group_id` mediumint(9) NOT NULL,
   `addcontent` tinyint(4) NOT NULL,
   `postcontent` tinyint(4) NOT NULL,
+  `editcontent` tinyint(4) NOT NULL,
+  `delcontent` tinyint(4) NOT NULL,
   PRIMARY KEY  (`pid`),
   UNIQUE KEY `member` (`member`,`group_id`)
 ) ENGINE=MyISAM";
