@@ -73,8 +73,8 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
     $publ_date = filter_text_input( 'publ_date', 'post', '' );
     $exp_date = filter_text_input( 'exp_date', 'post', '' );
     
-    if ( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date ) ) $publ_date = "";
-    if ( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date ) ) $exp_date = "";
+    if ( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = "";
+    if ( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = "";
     if ( empty( $publ_date ) )
     {
         $rowcontent['publtime'] = NV_CURRENTTIME;
@@ -84,7 +84,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
         $phour = $nv_Request->get_int( 'phour', 'post', 0 );
         $pmin = $nv_Request->get_int( 'pmin', 'post', 0 );
         unset( $m );
-        preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date, $m );
+        preg_match( "/^([0-9]{1,2})\\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m );
         $rowcontent['publtime'] = mktime( $phour, $pmin, 0, $m[2], $m[1], $m[3] );
     }
     
@@ -97,7 +97,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
         $ehour = $nv_Request->get_int( 'ehour', 'post', 0 );
         $emin = $nv_Request->get_int( 'emin', 'post', 0 );
         unset( $m );
-        preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date, $m );
+        preg_match( "/^([0-9]{1,2})\\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date, $m );
         $rowcontent['exptime'] = mktime( $ehour, $emin, 0, $m[2], $m[1], $m[3] );
     }
     
@@ -443,7 +443,7 @@ while ( list( $sourceid_i, $title_i ) = $db->sql_fetchrow( $result ) )
 }
 
 $tdate = date( "H|i", $rowcontent['publtime'] );
-$publ_date = date( "d.m.Y", $rowcontent['publtime'] );
+$publ_date = date( "d/m/Y", $rowcontent['publtime'] );
 list( $phour, $pmin ) = explode( "|", $tdate );
 if ( $rowcontent['exptime'] == 0 )
 {
@@ -452,7 +452,7 @@ if ( $rowcontent['exptime'] == 0 )
 }
 else
 {
-    $exp_date = date( "d.m.Y", $rowcontent['exptime'] );
+    $exp_date = date( "d/m/Y", $rowcontent['exptime'] );
     $tdate = date( "H|i", $rowcontent['exptime'] );
     list( $ehour, $emin ) = explode( "|", $tdate );
 }
@@ -488,7 +488,7 @@ $contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" widht=\"1
 $contents .= "</div>\n";
 
 $contents .= "<div class=\"news\"><label><strong>" . $lang_module['content_cat'] . "</strong></label>\n";
-$contents .= "	<div style=\"height: 130px; width: 380px; overflow: auto; text-align:left;\">";
+$contents .= "	<div style=\"height: 130px; width: 380px; overflow: auto; text-align:left; float: right;\">";
 $contents .= "		<table>\n";
 
 $sql = "SELECT catid, title, lev FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
@@ -556,12 +556,13 @@ while ( list( $id_imgposition, $title_imgposition ) = each( $array_imgposition )
 
 $contents .= "</select></div><br>\n";
 
-$contents .= "<div style=\"margin-bottom: 1em;\"><label><strong>" . $lang_module['content_hometext'] . "</strong> " . $lang_module['content_notehome'] . "</label><br>\n";
+$contents .= "<label><strong>" . $lang_module['content_hometext'] . "</strong> " . $lang_module['content_notehome'] . "</label><br>\n";
+$contents .= "<div class=\"news\">\n";
 $contents .= "<textarea class=\"textareas\" rows=\"6\" cols=\"20\" name=\"hometext\" style=\"width: 530px;\">" . $rowcontent['hometext'] . "</textarea></div>\n";
 $contents .= "</td>";
 $contents .= "<td style=\"width:20px;\" >";
 $contents .= "</td>";
-$contents .= "<td valign=\"top\">";
+$contents .= "<td valign=\"top\" style=\"width:200px;\">";
 // BEGIN
 $contents .= "<ol class=\"message_list\">\n";
 if ( count( $array_block_cat_module ) > 0 )
@@ -593,7 +594,7 @@ $contents .= "<li>\n";
 $contents .= "<p class=\"message_head\"><cite>" . $lang_module['content_publ_date'] . "</cite> <span class=\"timestamp\">" . $lang_module['content_notetime'] . "</span></p>\n";
 $contents .= "<div class=\"message_body\"><center>\n";
 $contents .= "<input name=\"publ_date\" id=\"publ_date\" value=\"" . $publ_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'publ_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'publ_date', 'dd/mm/yyyy', false);\" alt=\"\" height=\"17\">\n";
 $contents .= "<select name=\"phour\">\n";
 for ( $i = 0; $i < 24; $i ++ )
 {
@@ -612,7 +613,7 @@ $contents .= "<li>\n";
 $contents .= "<p class=\"message_head\"><cite>" . $lang_module['content_exp_date'] . ":</cite> <span class=\"timestamp\">" . $lang_module['content_notetime'] . "</span></p>\n";
 $contents .= "<div class=\"message_body\"><center> \n";
 $contents .= "<input name=\"exp_date\" id=\"exp_date\" value=\"" . $exp_date . "\" style=\"width: 90px;\" maxlength=\"10\" type=\"text\">\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_date', 'dd/mm/yyyy', false);\" alt=\"\" height=\"17\">\n";
 $contents .= "<select name=\"ehour\">\n";
 for ( $i = 0; $i < 24; $i ++ )
 {

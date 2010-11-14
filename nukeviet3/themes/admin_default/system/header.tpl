@@ -9,7 +9,7 @@
         <title>{NV_SITE_TITLE}</title>
         <link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/admin.css" type="text/css" />
         <!-- BEGIN: css_module -->
-        <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/{MODULE_FILE}.css" />
+        <link rel="stylesheet" href="{NV_CSS_MODULE_THEME}" />
         <!-- END: css_module -->
         <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/{NV_LANG_INTERFACE}.js">
         </script>

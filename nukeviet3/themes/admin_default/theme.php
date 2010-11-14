@@ -20,7 +20,7 @@ function nv_admin_theme ( $contents )
     else
     {
         $dir_template = NV_ROOTDIR . "/themes/admin_default/system";
-        $global_config['admin_theme'] = "default";
+        $global_config['admin_theme'] = "admin_default";
     }
     $global_config['site_name'] = empty( $global_config['site_name'] ) ? NV_SERVER_NAME : $global_config['site_name'];
     $xtpl = new XTemplate( "main.tpl", $dir_template );
@@ -34,10 +34,18 @@ function nv_admin_theme ( $contents )
     $xtpl->assign( 'MODULE_NAME', $module_name );
     $xtpl->assign( 'MODULE_FILE', $module_file );
     $xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
+    
     if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/css/" . $module_file . ".css" ) )
     {
+        $xtpl->assign( 'NV_CSS_MODULE_THEME', NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/css/" . $module_file . ".css" );
         $xtpl->parse( 'main.header.css_module' );
     }
+    elseif ( file_exists( NV_ROOTDIR . "/themes/admin_default/css/" . $module_file . ".css" ) )
+    {
+        $xtpl->assign( 'NV_CSS_MODULE_THEME', NV_BASE_SITEURL . "themes/admin_default/css/" . $module_file . ".css" );
+        $xtpl->parse( 'main.header.css_module' );
+    }
+    
     $xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
     $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
     $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );

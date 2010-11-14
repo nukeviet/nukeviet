@@ -48,13 +48,13 @@
 	</tbody>
 </table>
 </div>
-</table>
 <table align="center" width="100%">
 	<tr>
 		<td><input type="submit" value="{LANG.submit}"
 			style="padding: 0 10px;" /></td>
 	</tr>
 </table>
+</form>
 <script type="text/javascript">
     $(function(){
         $("input[name=mailer_mode]").click(function(){
@@ -66,4 +66,5 @@
         }
         });
     });
-</script> <!-- END: smtp -->
+</script>
+<!-- END: smtp -->
