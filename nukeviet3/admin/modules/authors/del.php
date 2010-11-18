@@ -110,7 +110,7 @@ if ( $nv_Request->get_int( 'ok', 'post', 0 ) )
 
             $mess = nv_nl2br( $mess, "<br />" );
 
-            $xtpl = new XTemplate( "message.tpl", NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system" );
+            $xtpl = new XTemplate( "message.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system" );
 
             $xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
             $xtpl->assign( 'SITE_SLOGAN', $global_config['site_description'] );

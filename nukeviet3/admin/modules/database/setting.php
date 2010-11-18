@@ -40,7 +40,7 @@ if ( $submit )
 }
 $array_config_global['dump_autobackup'] = ( $global_config['dump_autobackup'] ) ? " checked" : "";
 
-$xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/modules/database" );
+$xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/database" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config_global );
 foreach ( $array_sql_ext as $ext_i )
