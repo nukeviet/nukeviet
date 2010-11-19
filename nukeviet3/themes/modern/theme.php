@@ -13,7 +13,7 @@ $overallnews = 0;
 
 function nv_site_theme ( $contents )
 {
-    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_file, $module_data, $module_info, $op, $db, $mod_title, $my_head, $nv_array_block_contents, $client_info, $catid, $overallnews;
+    global $home, $array_mod_title, $db_config, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_file, $module_data, $module_info, $op, $db, $mod_title, $my_head, $nv_array_block_contents, $client_info, $catid, $overallnews;
     if ( ! file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/layout." . $module_info['funcs'][$op]['layout'] . ".tpl" ) )
     {
         nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
@@ -151,6 +151,18 @@ function nv_site_theme ( $contents )
     elseif ( $module_file == "news" )
     {
         $sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
+        $result = $db->sql_query( $sql );
+        while ( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+        {
+            $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
+            $global_array_cat[$catid_i] = array( 
+                "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i 
+            );
+        }
+    }
+    elseif ( $module_file == "shops" )
+    {
+        $sql = "SELECT catid, parentid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
         $result = $db->sql_query( $sql );
         while ( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
         {
