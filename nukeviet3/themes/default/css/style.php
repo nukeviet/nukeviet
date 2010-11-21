@@ -9,7 +9,7 @@
 
 define( "NV_CSSFILE", true );
 
-$cssdir = str_replace( '\\\\', '/', dirname( __file__ ) );
+$cssdir = dirname( __file__ );
 $cssFiles = array( 'reset.css', 'template.css', 'icons.css' );
 
 require_once ( $cssdir . '/../../../includes/core/style.php' );
