@@ -148,6 +148,10 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
                 {
                     $module_info['template'] = "default";
                 }
+                else
+                {
+                    trigger_error( "Error!  Does not exist themes default", 256 );
+                }
             }
             
             if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php" ) )
