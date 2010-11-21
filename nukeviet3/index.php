@@ -124,7 +124,7 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
                 require_once ( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/theme.php" );
                 $global_config['module_theme'] = $global_config['site_theme'];
             }
-            elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/theme.php" ) )
+            elseif ( file_exists( NV_ROOTDIR . "/themes/default/theme.php" ) )
             {
                 require_once ( NV_ROOTDIR . "/themes/default/theme.php" );
                 $global_config['module_theme'] = "default";
