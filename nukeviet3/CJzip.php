@@ -7,78 +7,122 @@
  * @Createdate 22/11/2010, 6:25
  */
 
-$maxAge = 3600 * 24 * 1;//Thoi gian luu trong Bo nho dem la 1 ngay
+$maxAge = 3600 * 24;
+$cacheDir = str_replace( '\\', '/', realpath( dirname( __file__ ) . '/cache' ) );
 
-if ( isset( $_REQUEST['file'] ) )
+if ( ! isset( $_GET['file'] ) )
 {
-    $file = $_REQUEST['file'];
+    header( "HTTP/1.1 404 Not Found" );
+    exit;
+}
 
-    $ext = end( explode( ".", $file ) );
-    switch ( $ext )
-    {
-        case 'css':
-            $contenttype = 'css';
-            break;
+$file = $_GET['file'];
 
-        case 'js':
-            $contenttype = 'javascript';
-            break;
+$ext = end( explode( ".", $file ) );
+switch ( $ext )
+{
+    case 'css':
+        $contenttype = 'css';
+        break;
 
-        default:
-            header( "HTTP/1.0 403 Forbidden" );
-            exit;
-    }
-    
-    if ( ! is_file( $file ) )
-    {
-        header( "HTTP/1.0 404 Not Found" );
+    case 'js':
+        $contenttype = 'javascript';
+        break;
+
+    default:
+        header( "HTTP/1.1 403 Forbidden" );
         exit;
+}
+
+if ( ! is_file( $file ) )
+{
+    header( "HTTP/1.1 404 Not Found" );
+    exit;
+}
+
+$lastmod = filemtime( $file );
+$md5file = md5( $file );
+
+if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) )
+{
+    $modsince = strtotime( $_SERVER['HTTP_IF_MODIFIED_SINCE'] );
+    if ( $modsince != -1 && $modsince == $lastmod )
+    {
+        header( "HTTP/1.1 304 Not Modified" );
+        header( 'Content-Length: 0' );
+        exit();
+    }
+}
+else
+{
+    $hash = $lastmod . '-' . $md5file;
+
+    if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) == '"' . $hash . '"' )
+    {
+        header( "HTTP/1.1 304 Not Modified" );
+        header( 'Content-Length: 0' );
+        exit();
     }
 
-    $lastmod = filemtime( $file );
+    header( "Etag: \"" . $hash . "\"" );
+}
 
-    if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) )
+if ( file_exists( $cacheDir . '/' . $contenttype . '_' . $md5file . '_' . $lastmod . '.cache' ) )
+{
+    $data = file_get_contents( $cacheDir . '/' . $contenttype . '_' . $md5file . '_' . $lastmod . '.cache' );
+    outputContent( $data, $lastmod );
+    exit();
+}
+else
+{
+    $fs = glob( $cacheDir . '/' . $contenttype . '_' . $md5file . '_*.cache' );
+    if ( ! empty( $fs ) )
     {
-        $modsince = strtotime( $_SERVER['HTTP_IF_MODIFIED_SINCE'] );
-        if ( $modsince != -1 && $modsince == $lastmod )
+        foreach ( $fs as $f )
         {
-            header( "HTTP/1.0 304 Not Modified" );
-            header( 'Content-Length: 0' );
-            exit();
+            if ( preg_match( "/" . $contenttype . "\_" . $md5file . "\_([\d]+)\.cache$/", $f ) )
+            {
+                @unlink( $f );
+            }
         }
     }
-    else
-    {
-        $hash = $lastmod . '-' . md5( $file );
+}
 
-        if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) == '"' . $hash . '"' )
-        {
-            header( "HTTP/1.0 304 Not Modified" );
-            header( 'Content-Length: 0' );
-            exit();
-        }
-        
-        header( "Etag: \"" . $hash . "\"" );
-    }
+$data = file_get_contents( $file );
+$data = call_user_func( "compress_" . $contenttype, $data );
+file_put_contents( $cacheDir . '/' . $contenttype . '_' . $md5file . '_' . $lastmod . '.cache', $data );
+outputContent( $data, $lastmod );
+exit();
 
-    $data = file_get_contents( $file );
-    $data = call_user_func( "compress_" . $contenttype, $data );
+/**
+ * outputContent()
+ * 
+ * @param mixed $cssContent
+ * @param mixed $lastmod
+ * @return void
+ */
+function outputContent( $content, $lastmod )
+{
+    global $maxAge;
 
     $currenttime = time();
 
     ob_start( "ob_gzhandler" );
+    @header( "Content-Type: text/css; charset=utf-8" );
+    @header( 'Cache-Control: public; max-age=' . $maxAge );
+    @header( 'Last-Modified: ' . gmdate( "D, d M Y H:i:s", $lastmod ) . " GMT" );
+    @header( "expires: " . gmdate( "D, d M Y H:i:s", $currenttime + $maxAge ) . " GMT" );
 
-    header( 'Expires: ' . gmdate( "D, d M Y H:i:s", $currenttime + $maxAge ) . " GMT" );
-    header( 'Cache-Control: public; max-age=' . $maxAge );
-    header( 'Last-Modified: ' . gmdate( "D, d M Y H:i:s", $lastmod ) . " GMT" );
-    header( 'Content-type: text/' . $contenttype . '; charset: UTF-8' );
-    echo $data;
-    exit;
+    echo $content;
+    exit();
 }
 
-header( "HTTP/1.0 404 Not Found" );
-exit;
-
+/**
+ * compress_css()
+ * 
+ * @param mixed $cssContent
+ * @return
+ */
 function compress_css( $cssContent )
 {
     $cssContent = preg_replace( "/url[\s]*\([\s]*[\'|\"](.*)?[\'|\"][\s]*\)/", "url($1)", $cssContent ); //xoa cac dau ngoac don
@@ -90,6 +134,12 @@ function compress_css( $cssContent )
     return $cssContent;
 }
 
+/**
+ * compress_javascript()
+ * 
+ * @param mixed $jsContent
+ * @return
+ */
 function compress_javascript( $jsContent )
 {
     //Phat trien sau
