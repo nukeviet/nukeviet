@@ -19,3 +19,8 @@
   </FilesMatch>
 
 </IfModule>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^((?!http(s?)|ftp\:\/\/).*)\.(css|js)$ CJzip.php?file=$1.$3 [L]
+</IfModule>

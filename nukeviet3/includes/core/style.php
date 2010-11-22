@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @Project No project loaded
+ * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Createdate 20/11/2010, 12:10
+ * @Createdate 22/11/2010, 6:25
  */
 
 if ( ! defined( "NV_CSSFILE" ) ) die();
