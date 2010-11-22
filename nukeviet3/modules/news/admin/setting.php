@@ -275,14 +275,22 @@ $contents .= "</div>";
 
 $contents .= "</form>";
 $contents .= "<script type=\"text/javascript\">\n";
-$contents .= '$("input[name=selectimg]").click(function(){
-						var area = "module_logo";
-						var path= "";						
-						var currentpath= "images";						
-						var type= "image";
-						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-						return false;
-					});';
+$contents .= '$("input[name=selectimg]").click(function(){';
+$contents .= 'var area = "module_logo";';
+$contents .= 'var type= "image";';
+if ( defined( "NV_IS_SPADMIN" ) )
+{
+    $contents .= 'var path= "";';
+    $contents .= 'var currentpath= "images";';
+}
+else
+{
+    $contents .= 'var path= "' . NV_UPLOADS_DIR . '/' . $module_name . '";';
+    $contents .= 'var currentpath= "' . NV_UPLOADS_DIR . '/' . $module_name . '";';
+}
+$contents .= 'nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");';
+$contents .= 'return false;';
+$contents .= '});';
 $contents .= "</script>\n";
 
 include ( NV_ROOTDIR . "/includes/header.php" );
