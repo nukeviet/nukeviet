@@ -207,7 +207,7 @@ $cssContent = preg_replace( "/\/\*(.*)?\*\//Usi", "", $cssContent ); //xoa chu t
 $cssContent = str_replace( array( "\n ", "\n", "\t" ), " ", $cssContent ); //xoa xuong dong, dau cach TAB
 $cssContent = preg_replace( "/[\s]+/", " ", $cssContent ); //Xoa khoang trang
 $cssContent = preg_replace( "/[\#]+/", "#", $cssContent ); //Neu co tren 1 dau #
-$cssContent = preg_replace( array( "/[\s]*[\;]+[\s]*\}/", "/[\s]*[\;]+[\s]*/", "/[\s]*[\}]+[\s]*/", "/[\s]*[\{]+[\s]*/", "/[\s]*[\:]+[\s]*/", "/[\s]*[\,]+[\s]*/" ), array( "}", ";", "}", "{", ":", "," ), $cssContent );
+$cssContent = preg_replace( array( "/[\s]*[\;]+[\s]*\}/", "/[\s]*[\;]+[\s]*/", "/[\s]*\}[\s]*/", "/[\s]*\{[\s]*/", "/[\s]*\:[\s]*/", "/[\s]*[\,]+[\s]*/" ), array( "}", ";", "}", "{", ":", "," ), $cssContent );
 $cssContent = preg_replace( "/[^\}]+\{[\s|\;]*\}[\s]*/", "", $cssContent ); //Xoa nhung css khong co noi dung
 
 $md5file = md5( $files );
