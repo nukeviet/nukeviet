@@ -9,217 +9,330 @@
 
 if ( ! defined( "NV_CSSFILE" ) ) die();
 
-$expire = 60 * 60 * 24; //file CSS duoc luu trong bo nho dem 1 ngay
-
-$module = ( isset( $_GET['mod'] ) and preg_match( "/^[a-z0-9\-]+$/", $_GET['mod'] ) ) ? $_GET['mod'] : "";
-
-$cacheDir = str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../cache' ) );
-
 /**
- * checkLastMod()
+ * Czip
  * 
- * @param mixed $lastmod
- * @param mixed $files
- * @return void
+ * @package NUKEVIET 3.0
+ * @author VINADES.,JSC
+ * @copyright 2010
+ * @version $Id$
+ * @access public
  */
-function checkLastMod( $lastmod, $files )
+class Czip
 {
-    global $cacheDir;
+    private $cssFiles = array();
+    private $cssdir;
+    private $expire = 2592000; //30 ngay
+    private $module;
+    private $template;
+    private $cacheDir;
+    private $modCssDir;
+    private $cssModFile = "";
+    private $realPathCssModDir;
+    private $cssModContent = "";
+    private $lastmod = 0;
+    private $files = "";
+    private $encoding = "none";
+    private $cachefile;
+    private $currenttime;
+    private $md5files;
 
-    $md5file = md5( $files );
-    $hash = $lastmod . '-' . $md5file;
-
-    if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) )
+    /**
+     * Czip::__construct()
+     * 
+     * @param mixed $cssFiles
+     * @param mixed $cssdir
+     * @return
+     */
+    public function __construct( $cssFiles, $cssdir )
     {
-        $modsince = strtotime( $_SERVER['HTTP_IF_MODIFIED_SINCE'] );
-        if ( $modsince != -1 && $modsince == $lastmod )
+        $this->cssdir = $cssdir;
+        $cssFiles = ( array )$cssFiles;
+        $this->cssFiles = $cssFiles;
+        foreach ( $cssFiles as $file )
         {
-            header( "HTTP/1.1 304 Not Modified" );
-            header( 'Content-Length: 0' );
-            exit();
-        }
-    }
-    else
-    {
-        if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) == '"' . $hash . '"' )
-        {
-            header( "HTTP/1.1 304 Not Modified" );
-            header( 'Content-Length: 0' );
-            exit();
-        }
-
-        header( "Etag: \"" . $hash . "\"" );
-    }
-
-    if ( file_exists( $cacheDir . '/css_' . $md5file . '_' . $lastmod . '.cache' ) )
-    {
-        $cssContent = file_get_contents( $cacheDir . '/css_' . $md5file . '_' . $lastmod . '.cache' );
-        outputContent( $cssContent, $lastmod );
-        exit();
-    }
-    else
-    {
-        $fs = glob( $cacheDir . '/css_' . $md5file . '_*.cache' );
-        if ( ! empty( $fs ) )
-        {
-            foreach ( $fs as $file )
+            $filemtime = @filemtime( $this->cssdir . "/" . $file );
+            if ( $filemtime )
             {
-                if ( preg_match( "/css\_" . $md5file . "\_([\d]+)\.cache$/", $file ) )
-                {
-                    @unlink( $file );
-                }
+                $this->cssFiles[] = $this->cssdir . "/" . $file;
+                $this->lastmod = max( $this->lastmod, $filemtime );
+                $this->files .= $this->cssdir . "/" . $file;
+            }
+        }
+
+        if ( empty( $this->cssFiles ) )
+        {
+            $this->browseInfo( 404 );
+        }
+
+        $this->module = ( isset( $_GET['mod'] ) and preg_match( "/^[a-z0-9\-]+$/", $_GET['mod'] ) ) ? $_GET['mod'] : "";
+        $this->cacheDir = str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../cache' ) ) . '/';
+        $this->currenttime = time();
+
+        if ( ! empty( $this->module ) )
+        {
+            $this->template = ( isset( $_GET['templ'] ) and preg_match( "/^[a-z0-9\-]+$/", $_GET['templ'] ) ) ? $_GET['templ'] : "";
+            $this->modCssDir = ! empty( $this->template ) ? "../../" . $this->template . "/css" : "";
+            $this->realPathCssModDir = ! empty( $this->modCssDir ) ? realpath( $this->cssdir . "/" . $this->modCssDir ) : $this->cssdir;
+
+            if ( file_exists( $this->realPathCssModDir . '/' . $this->module . '.css' ) )
+            {
+                $this->cssModFile = $this->realPathCssModDir . '/' . $this->module . '.css';
+            } elseif ( file_exists( $this->realPathCssModDir . '/' . $this->module . '.css.php' ) )
+            {
+                $this->cssModFile = $this->realPathCssModDir . '/' . $this->module . '.css.php';
+            }
+
+            if ( ! empty( $this->cssModFile ) )
+            {
+                $filemtime = @filemtime( $this->cssModFile );
+                $this->lastmod = max( $this->lastmod, $filemtime );
+                $this->files .= $this->cssModFile;
             }
         }
     }
-}
 
-/**
- * callback()
- * 
- * @param mixed $matches
- * @return
- */
-function callback( $matches )
-{
-    global $cssdir, $realPathCssModDir;
-
-    $m2 = str_replace( '\\', '/', realpath( $realPathCssModDir . "/" . $matches[2] ) );
-    $dir = str_replace( '\\', '/', $cssdir );
-    $m2 = explode( "/", $m2 );
-    $dir = explode( "/", $dir );
-    $relative = array();
-    foreach ( $dir as $index => $part )
+    /**
+     * Czip::browseInfo()
+     * 
+     * @param mixed $num
+     * @return
+     */
+    public function browseInfo( $num )
     {
-        if ( isset( $m2[$index] ) && $m2[$index] == $part )
+        switch ( $num )
         {
-            continue;
+            case 304:
+                $info = "HTTP/1.1 304 Not Modified";
+                break;
+
+            case 403:
+                $info = "HTTP/1.1 403 Forbidden";
+                break;
+
+            default:
+                $info = "HTTP/1.1 404 Not Found";
+
+        }
+        header( $info );
+        header( 'Content-Length: 0' );
+        exit();
+    }
+
+    /**
+     * Czip::is_notModified()
+     * 
+     * @param mixed $hash
+     * @return
+     */
+    private function is_notModified( $hash )
+    {
+        return ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) == '"' . $hash . '"' );
+    }
+
+    /**
+     * Czip::check_encode()
+     * 
+     * @return
+     */
+    private function check_encode()
+    {
+        $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
+
+        if ( $encoding != 'none' )
+        {
+            unset( $matches );
+            if ( ! strstr( $_SERVER['HTTP_USER_AGENT'], 'Opera' ) && preg_match( '/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches ) )
+            {
+                $version = floatval( $matches[1] );
+                if ( $version < 6 || ( $version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' ) ) ) $encoding = 'none';
+            }
         }
 
-        $relative[] = '..';
+        return $encoding;
     }
 
-    foreach ( $m2 as $index => $part )
+    /**
+     * Czip::outputContent()
+     * 
+     * @return
+     */
+    private function outputContent()
     {
-        if ( isset( $dir[$index] ) && $dir[$index] == $part )
+        header( "Content-Type: text/css; charset=utf-8" );
+        header( 'Cache-Control: public; max-age=' . $this->expire );
+        header( 'Last-Modified: ' . gmdate( "D, d M Y H:i:s", $this->lastmod ) . " GMT" );
+        header( "expires: " . gmdate( "D, d M Y H:i:s", $this->currenttime + $this->expire ) . " GMT" );
+    }
+
+    /**
+     * Czip::loadCacheData()
+     * 
+     * @return
+     */
+    private function loadCacheData()
+    {
+        $data = false;
+        if ( file_exists( $this->cacheDir . $this->cachefile ) )
         {
-            continue;
+            if ( $fp = fopen( $this->cacheDir . $this->cachefile, 'rb' ) )
+            {
+                if ( $this->encoding != 'none' )
+                {
+                    header( "Content-Encoding: " . $this->encoding );
+                }
+                $this->outputContent();
+                $data = fpassthru( $fp );
+                fclose( $fp );
+                exit();
+            }
         }
 
-        $relative[] = $part;
+        if ( ! $data )
+        {
+            $fs = glob( $this->cacheDir . 'css_' . $this->md5files . '.*.' . $this->encoding . '.cache' );
+            if ( ! empty( $fs ) )
+            {
+                foreach ( $fs as $f )
+                {
+                    if ( preg_match( "/css\_" . $this->md5files . "\.([\d]+)\." . $this->encoding . ".cache$/", $f ) )
+                    {
+                        @unlink( $f );
+                    }
+                }
+            }
+            return false;
+        }
     }
 
-    $relative = implode( "/", $relative );
-
-    return $matches[1] . $relative . $matches[4];
-}
-
-/**
- * outputContent()
- * 
- * @param mixed $cssContent
- * @param mixed $lastmod
- * @return void
- */
-function outputContent( $cssContent, $lastmod )
-{
-    global $expire;
-
-    $currenttime = time();
-
-    ob_start( "ob_gzhandler" );
-    @header( "Content-Type: text/css; charset=utf-8" );
-    @header( 'Cache-Control: public; max-age=' . $expire );
-    @header( 'Last-Modified: ' . gmdate( "D, d M Y H:i:s", $lastmod ) . " GMT" );
-    @header( "expires: " . gmdate( "D, d M Y H:i:s", $currenttime + $expire ) . " GMT" );
-
-    echo $cssContent;
-    exit();
-}
-
-$cssModContent = "";
-
-$lastmod = 0;
-$files = "";
-
-foreach ( $cssFiles as $file )
-{
-    $files .= $cssdir . "/" . $file;
-    $filemtime = filemtime( $cssdir . "/" . $file );
-    $lastmod = max( $lastmod, $filemtime );
-}
-
-$is_checkLastmod = false;
-
-if ( ! empty( $module ) )
-{
-    $template = ( isset( $_GET['templ'] ) and preg_match( "/^[a-z0-9\-]+$/", $_GET['templ'] ) ) ? $_GET['templ'] : "";
-    $modCssDir = ! empty( $template ) ? "../../" . $template . "/css" : "";
-    $realPathCssModDir = ! empty( $modCssDir ) ? realpath( $cssdir . "/" . $modCssDir ) : $cssdir;
-
-    $cssModFile = "";
-    if ( file_exists( $realPathCssModDir . '/' . $module . '.css' ) )
+    /**
+     * Czip::callback()
+     * 
+     * @param mixed $matches
+     * @return
+     */
+    private function callback( $matches )
     {
-        $cssModFile = $realPathCssModDir . '/' . $module . '.css';
-    } elseif ( file_exists( $realPathCssModDir . '/' . $module . '.css.php' ) )
-    {
-        $cssModFile = $realPathCssModDir . '/' . $module . '.css.php';
+        $m2 = str_replace( '\\', '/', realpath( $this->realPathCssModDir . "/" . $matches[2] ) );
+        $dir = str_replace( '\\', '/', $this->cssdir );
+        $m2 = explode( "/", $m2 );
+        $dir = explode( "/", $dir );
+        $relative = array();
+        foreach ( $dir as $index => $part )
+        {
+            if ( isset( $m2[$index] ) && $m2[$index] == $part )
+            {
+                continue;
+            }
+
+            $relative[] = '..';
+        }
+
+        foreach ( $m2 as $index => $part )
+        {
+            if ( isset( $dir[$index] ) && $dir[$index] == $part )
+            {
+                continue;
+            }
+
+            $relative[] = $part;
+        }
+
+        $relative = implode( "/", $relative );
+
+        return $matches[1] . $relative . $matches[4];
     }
 
-    if ( ! empty( $cssModFile ) )
+    /**
+     * Czip::compress_css()
+     * 
+     * @param mixed $cssContent
+     * @return
+     */
+    private function compress_css( $cssContent )
     {
-        $files .= $cssModFile;
-        $filemtime = filemtime( $cssModFile );
-        $lastmod = max( $lastmod, $filemtime );
-        checkLastMod( $lastmod, $files );
-        $is_checkLastmod = true;
+        $cssContent = preg_replace( '/(\/\*.*?\*\/|^ | $)/is', '', $cssContent );
+        $cssContent = preg_replace( '/[\s\t\r\n]+/', ' ', $cssContent );
+        $cssContent = preg_replace( '/[\s]*(\:|\,|\;|\{|\})[\s]*/', "$1", $cssContent );
+        $cssContent = preg_replace( "/[\#]+/", "#", $cssContent );
+        $cssContent = str_replace( array( ' 0px', ':0px', ';}', ':0 0 0 0', ':0.', ' 0.' ), array( ' 0', ':0', '}', ':0', ':.', ' .' ), $cssContent );
+        $cssContent = preg_replace( "/[^\}]+\{[\s|\;]*\}[\s]*/", "", $cssContent );
+        $cssContent = preg_replace( "/[\s]+/", " ", $cssContent );
+        return $cssContent;
+    }
+
+    /**
+     * Czip::loadData()
+     * 
+     * @return
+     */
+    private function loadData()
+    {
+        ob_start();
+        foreach ( $this->cssFiles as $file )
+        {
+            include ( $file );
+        }
+        $data = ob_get_contents();
+        ob_end_clean();
+        $data = preg_replace( "/url[\s]*\([\s]*\'(.*)?\'[\s]*\)/", "url($1)", $data );
 
         ob_start();
-        include ( $cssModFile );
-        $cssModContent = ob_get_contents();
+        include ( $this->cssModFile );
+        $data2 = ob_get_contents();
         ob_end_clean();
 
-        $cssModContent = preg_replace( "/url[\s]*\([\s]*\'(.*)?\'[\s]*\)/", "url($1)", $cssModContent ); //xoa cac dau ngoac don
+        $data2 = preg_replace( "/url[\s]*\([\s]*\'(.*)?\'[\s]*\)/", "url($1)", $data2 ); //xoa cac dau ngoac don
 
-        if ( $realPathCssModDir != $cssdir )
+        if ( $this->realPathCssModDir != $this->cssdir )
         {
-            $cssModContent = preg_replace_callback( "/(url\()((?!http(s?)|ftp\:\/\/)[^\)]+)(\))/", "callback", $cssModContent );
+            $data2 = preg_replace_callback( "/(url\()((?!http(s?)|ftp\:\/\/)[^\)]+)(\))/", "Czip::callback", $data2 );
+        }
+
+        $data .= $data2;
+
+        $data = $this->compress_css( $data );
+
+        if ( $this->encoding != 'none' )
+        {
+            $data = gzencode( $data, 6, $this->encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE );
+            header( "Content-Encoding: " . $this->encoding );
+        }
+
+        if ( $fp = fopen( $this->cacheDir . $this->cachefile, 'wb' ) )
+        {
+            fwrite( $fp, $data );
+            fclose( $fp );
+        }
+
+        $this->outputContent();
+        echo $data;
+        exit();
+    }
+
+    /**
+     * Czip::loadFile()
+     * 
+     * @return
+     */
+    public function loadFile()
+    {
+        $this->md5files = md5( $this->files );
+        $hash = $this->lastmod . '-' . $this->md5files;
+        header( "Etag: \"" . $hash . "\"" );
+
+        if ( $this->is_notModified( $hash ) ) $this->browseInfo( 304 );
+
+        $this->encoding = $this->check_encode();
+        $this->cachefile = 'css_' . $this->md5files . '.' . $this->lastmod . '.' . $this->encoding . '.cache';
+        if ( ! $this->loadCacheData() )
+        {
+            $this->loadData();
         }
     }
 }
 
-if ( ! $is_checkLastmod )
-{
-    checkLastMod( $lastmod, $files );
-}
-
-ob_start();
-foreach ( $cssFiles as $file )
-{
-    include ( $cssdir . "/" . $file );
-}
-$cssContent = ob_get_contents();
-ob_end_clean();
-
-$cssContent = preg_replace( "/url[\s]*\([\s]*\'(.*)?\'[\s]*\)/", "url($1)", $cssContent ); //xoa cac dau ngoac don
-$cssContent .= $cssModContent;
-
-/* Xoa chu thich */
-$cssContent = preg_replace( '/(\/\*.*?\*\/|^ | $)/is', '', $cssContent );
-/* Xoa xuong dong, dau cach TAB */
-$cssContent = preg_replace( '/[\s\t\r\n]+/', ' ', $cssContent );
-/* Xoa cac dau cach truoc va sau }, {, ;, ,: */
-$cssContent = preg_replace( '/[\s]*(\:|\,|\;|\{|\})[\s]*/',"$1",$cssContent);
-/* Xoa loi 2 dau # */
-$cssContent = preg_replace( "/[\#]+/", "#", $cssContent ); //Neu co ten 1 dau #
-/* 0px -> 0 */
-$cssContent = str_replace( array( ' 0px', ':0px', ';}', ':0 0 0 0', ':0.', ' 0.' ), array( ' 0', ':0', '}', ':0', ':.', ' .' ), $cssContent );
-/* Xoa CSS khong co noi dung */
-$cssContent = preg_replace( "/[^\}]+\{[\s|\;]*\}[\s]*/", "", $cssContent );
-/* Xoa khoang trang */
-$cssContent = preg_replace( "/[\s]+/", " ", $cssContent );
-
-$md5file = md5( $files );
-file_put_contents( $cacheDir . '/css_' . $md5file . '_' . $lastmod . '.cache', $cssContent );
-outputContent( $cssContent, $lastmod );
+$Czip = new Czip( $cssFiles, $cssdir );
+$Czip->loadFile();
 
 ?>
