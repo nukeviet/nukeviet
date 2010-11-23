@@ -203,12 +203,20 @@ ob_end_clean();
 $cssContent = preg_replace( "/url[\s]*\([\s]*\'(.*)?\'[\s]*\)/", "url($1)", $cssContent ); //xoa cac dau ngoac don
 $cssContent .= $cssModContent;
 
-$cssContent = preg_replace( "/\/\*(.*)?\*\//Usi", "", $cssContent ); //xoa chu thich
-$cssContent = str_replace( array( "\n ", "\n", "\t" ), " ", $cssContent ); //xoa xuong dong, dau cach TAB
-$cssContent = preg_replace( "/[\s]+/", " ", $cssContent ); //Xoa khoang trang
-$cssContent = preg_replace( "/[\#]+/", "#", $cssContent ); //Neu co tren 1 dau #
-$cssContent = preg_replace( array( "/[\s]*[\;]+[\s]*\}/", "/[\s]*[\;]+[\s]*/", "/[\s]*\}[\s]*/", "/[\s]*\{[\s]*/", "/[\s]*\:[\s]*/", "/[\s]*[\,]+[\s]*/" ), array( "}", ";", "}", "{", ":", "," ), $cssContent );
-$cssContent = preg_replace( "/[^\}]+\{[\s|\;]*\}[\s]*/", "", $cssContent ); //Xoa nhung css khong co noi dung
+/* Xoa chu thich */
+$cssContent = preg_replace( '/(\/\*.*?\*\/|^ | $)/is', '', $cssContent );
+/* Xoa xuong dong, dau cach TAB */
+$cssContent = preg_replace( '/[\s\t\r\n]+/', ' ', $cssContent );
+/* Xoa cac dau cach truoc va sau }, {, ;, ,: */
+$cssContent = preg_replace( '/[\s]*(\:|\,|\;|\{|\})[\s]*/',"$1",$cssContent);
+/* Xoa loi 2 dau # */
+$cssContent = preg_replace( "/[\#]+/", "#", $cssContent ); //Neu co ten 1 dau #
+/* 0px -> 0 */
+$cssContent = str_replace( array( ' 0px', ':0px', ';}', ':0 0 0 0', ':0.', ' 0.' ), array( ' 0', ':0', '}', ':0', ':.', ' .' ), $cssContent );
+/* Xoa CSS khong co noi dung */
+$cssContent = preg_replace( "/[^\}]+\{[\s|\;]*\}[\s]*/", "", $cssContent );
+/* Xoa khoang trang */
+$cssContent = preg_replace( "/[\s]+/", " ", $cssContent );
 
 $md5file = md5( $files );
 file_put_contents( $cacheDir . '/css_' . $md5file . '_' . $lastmod . '.cache', $cssContent );
