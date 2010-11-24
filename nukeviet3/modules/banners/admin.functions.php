@@ -73,15 +73,15 @@ function nv_CreateXML_bannerPlan ( )
         {
             $plan['banners'][] = array( 
                 'id' => $row2['id'], //
-'title' => $row2['title'], //
-'clid' => $row2['clid'], //
-'file_name' => $row2['file_name'], //
-'file_ext' => $row2['file_ext'], //
-'file_mime' => $row2['file_mime'], //
-'file_width' => $row2['width'], //
-'file_height' => $row2['height'], //
-'file_alt' => $row2['file_alt'], //
-'file_click' => $row2['click_url']  //
+                'title' => $row2['title'], //
+                'clid' => $row2['clid'], //
+                'file_name' => $row2['file_name'], //
+                'file_ext' => $row2['file_ext'], //
+                'file_mime' => $row2['file_mime'], //
+                'file_width' => $row2['width'], //
+                'file_height' => $row2['height'], //
+                'file_alt' => $row2['file_alt'], //
+                'file_click' => $row2['click_url']  //
             );
         }
         

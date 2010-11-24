@@ -11,7 +11,7 @@
       <id>1</id>
       <title>mofa.gov.vn</title>
       <clid>0</clid>
-      <file_name>uploads/banners/bongoaigiao.jpg</file_name>
+      <file_name>bongoaigiao.jpg</file_name>
       <file_ext>jpg</file_ext>
       <file_mime>image/jpeg</file_mime>
       <file_width>160</file_width>
@@ -23,7 +23,7 @@
       <id>2</id>
       <title>vinades</title>
       <clid>0</clid>
-      <file_name>uploads/banners/vinades.jpg</file_name>
+      <file_name>vinades.jpg</file_name>
       <file_ext>jpg</file_ext>
       <file_mime>image/jpeg</file_mime>
       <file_width>190</file_width>

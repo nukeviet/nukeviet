@@ -52,7 +52,7 @@ $contents['rows'][] = array( 'id', $row['id'] );
 $contents['rows'][] = array( $lang_module['title'], $row['title'] );
 $contents['rows'][] = array( $lang_module['in_plan'], $ptitle );
 $contents['rows'][] = array( $lang_module['of_client'], $cl_full_name );
-$contents['rows'][] = array( $lang_module['file_name'], "<a href=\"" . NV_BASE_SITEURL . $row['file_name'] . "\" rel=\"shadowbox;height=" . $row['height'] . ";width=" . $row['width'] . "\">" . $lang_module['click_show_img'] . "</a>" );
+$contents['rows'][] = array( $lang_module['file_name'], "<a href=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'] . "\" rel=\"shadowbox;height=" . $row['height'] . ";width=" . $row['width'] . "\">" . $lang_module['click_show_img'] . "</a>" );
 $contents['rows'][] = array( $lang_module['img_info1'], $img_info );
 $contents['rows'][] = array( $lang_module['file_alt'], $row['file_alt'] );
 $contents['rows'][] = array( $lang_module['click_url'], $click_url );

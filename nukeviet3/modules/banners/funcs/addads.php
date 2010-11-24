@@ -74,7 +74,7 @@ if ( defined( 'NV_IS_BANNER_CLIENT' ) )
         {
             @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
             $upload = new upload( $file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-            $upload_info = $upload->save_file( $_FILES['image'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
+            $upload_info = $upload->save_file( $_FILES['image'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
             @unlink( $_FILES['image']['tmp_name'] );
             if ( ! empty( $upload_info['error'] ) )
             {
@@ -88,7 +88,7 @@ if ( defined( 'NV_IS_BANNER_CLIENT' ) )
         }
         else
         {
-            $file_name = str_replace( NV_ROOTDIR . "/", "", $upload_info['name'] );
+            $file_name = $upload_info['basename'];
             $file_ext = $upload_info['ext'];
             $file_mime = $upload_info['mime'];
             $width = $upload_info['img_info'][0];

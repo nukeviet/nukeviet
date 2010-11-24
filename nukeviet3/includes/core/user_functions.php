@@ -358,15 +358,15 @@ function showBanners ( $id )
         $banners['file_alt'] = ( ! empty( $banners['file_alt'] ) ) ? $banners['file_alt'] : $banners['title'];
         
         $return = "<div style=\"margin-top: 2px;\">\n";
-        if ( $banners['file_ext'] == "swf" )
+        if ( $banners['file_ext'] == "swf")
         {
             $return .= "    <!--[if !IE]> -->\n";
-            $return .= "    <object type=\"application/x-shockwave-flash\" data=\"" . NV_BASE_SITEURL . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\">\n";
+            $return .= "    <object type=\"application/x-shockwave-flash\" data=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\">\n";
             $return .= "    <!-- <![endif]-->\n";
             $return .= "    <!--[if IE]>\n";
             $return .= "    <object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\"\n";
             $return .= "        codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\">\n";
-            $return .= "        <param name=\"movie\" value=\"" . NV_BASE_SITEURL . $banners['file_name'] . "\" />\n";
+            $return .= "        <param name=\"movie\" value=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'] . "\" />\n";
             $return .= "    <!--><!--dgx-->\n";
             $return .= "        <param name=\"loop\" value=\"true\" />\n";
             $return .= "        <param name=\"wmode\" value=\"transparent\" />\n";
@@ -376,13 +376,13 @@ function showBanners ( $id )
         }
         elseif ( empty( $banners['file_click'] ) )
         {
-            $return .= "<img alt=\"" . $banners['file_alt'] . "\" border=\"0\" src=\"" . NV_BASE_SITEURL . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\"/>";
+            $return .= "<img alt=\"" . $banners['file_alt'] . "\" border=\"0\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\"/>";
         }
         else
         {
             $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=banners&amp;" . NV_OP_VARIABLE . "=click&amp;id=" . $banners['id'];
             $return .= "<a href=\"" . $link_i . "\" onclick=\"this.target='_blank'\" title=\"" . $banners['file_alt'] . "\">
-            				<img alt=\"" . $banners['file_alt'] . "\" style=\"border-width:0px\" src=\"" . NV_BASE_SITEURL . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\" />
+            				<img alt=\"" . $banners['file_alt'] . "\" style=\"border-width:0px\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\" />
             			</a>";
         }
         $return .= "</div>\n";

@@ -16,8 +16,6 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 define( "NV_CONFIG_FILENAME", "config.php" );
 
 //Ten thu muc admin
-
-
 define( "NV_ADMINDIR", "admin" );
 
 //Ten thu muc editors
@@ -28,6 +26,9 @@ define( "DIR_FORUM", "forum" );
 
 //Thu muc uploads
 define( "NV_UPLOADS_DIR", "uploads" );
+
+//Thu muc uploads banner
+define( "NV_BANNER_DIR", "banners" );
 
 //Thu muc chua cac file logs
 define( "NV_LOGS_DIR", "logs" );

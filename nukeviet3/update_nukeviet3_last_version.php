@@ -144,13 +144,13 @@ if ( defined( "NV_IS_GODADMIN" ) )
             $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $lang_i . "_modules` SET `admin_file` = '1' WHERE `title` = 'rss'" );
             
             $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_i . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES
-		(NULL, 'addads', 'Addads', 'banners', 1, 0, 1, 'left-body-right', ''),
-		(NULL, 'cledit', 'Cledit', 'banners', 0, 0, 0, '', ''),
-		(NULL, 'clientinfo', 'Clientinfo', 'banners', 1, 0, 2, 'left-body-right', ''),
-		(NULL, 'clinfo', 'Clinfo', 'banners', 0, 0, 0, '', ''),
-		(NULL, 'logininfo', 'Logininfo', 'banners', 0, 0, 0, '', ''),
-		(NULL, 'stats', 'Stats', 'banners', 1, 0, 3, 'left-body-right', ''),
-		(NULL, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '', '')" );
+        		(NULL, 'addads', 'Addads', 'banners', 1, 0, 1, 'left-body-right', ''),
+        		(NULL, 'cledit', 'Cledit', 'banners', 0, 0, 0, '', ''),
+        		(NULL, 'clientinfo', 'Clientinfo', 'banners', 1, 0, 2, 'left-body-right', ''),
+        		(NULL, 'clinfo', 'Clinfo', 'banners', 0, 0, 0, '', ''),
+        		(NULL, 'logininfo', 'Logininfo', 'banners', 0, 0, 0, '', ''),
+        		(NULL, 'stats', 'Stats', 'banners', 1, 0, 3, 'left-body-right', ''),
+        		(NULL, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '', '')" );
         }
         $db->sql_freeresult();
         //end add keywords module about
@@ -248,6 +248,14 @@ if ( defined( "NV_IS_GODADMIN" ) )
                                           UNIQUE KEY `member` (`member`,`group_id`)
                                         ) ENGINE=MyISAM" );
             }
+        }
+        
+        $sql = "SELECT id, file_name FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "`";
+        $result_lang = $db->sql_query( $sql );
+        while ( list( $id, $file_name ) = $db->sql_fetchrow( $result_lang ) )
+        {
+            $file_name = str_replace( "uploads/banners/", "", $file_name );
+            $db->sql_query( "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `file_name`=" . $db->dbescape_string( $file_name ) . " WHERE `id` = '" . $id . "'" );
         }
     }
     
