@@ -185,13 +185,6 @@ div.nav div.rss a {
 	display: block;
 }
 
-div.nav div.rss a {
-	background: url(../images/rss_button.jpg) no-repeat top right;
-	height: 27px;
-	width: 66px;
-	display: block;
-}
-
 #message {
 	height: 30px;
 	line-height: 25px;
@@ -538,7 +531,7 @@ a:hover.forgot {
 		top;
 	color: #333;
 	display: block;
-	font: bold 11px/ 24px tahoma, arial, sans-serif;
+	font: bold 11px/24px tahoma, arial, sans-serif;
 	height: 25px;
 	text-decoration: none;
 }
