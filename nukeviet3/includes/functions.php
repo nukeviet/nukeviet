@@ -1440,7 +1440,7 @@ function nv_change_buffer ( $buffer )
         'word-2000' => true, //Xoa tat ca nhung ma cua word khong phu hop voi chuan html
         'enclose-block-text' => true, // Tat ca cac block-text duoc dong bang tag p
         'enclose-text' => true, // Tat ca cac text nam trong khu vuc body nhung khong nam trong bat ky mot tag nao khac se duoc cho vao <p>text</p>
-        'hide-comments' => true, // Xoa cac chu thich
+        'hide-comments' => false, // Xoa cac chu thich
         'hide-endtags' => true, // Xoa tat ca ve^' dong khong cua nhung tag khong doi hoi phai dong
         'indent' => false, // Thut dau dong
         'indent-spaces' => 4, //1 don vi indent = 4 dau cach
