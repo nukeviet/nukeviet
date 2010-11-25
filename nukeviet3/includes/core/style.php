@@ -351,19 +351,22 @@ class Czip
         ob_end_clean();
         $data = preg_replace( "/url[\s]*\([\s]*\'(.*)?\'[\s]*\)/", "url($1)", $data );
 
-        ob_start();
-        include ( $this->cssModFile );
-        $data2 = ob_get_contents();
-        ob_end_clean();
-
-        $data2 = preg_replace( "/url[\s]*\([\s]*\'(.*)?\'[\s]*\)/", "url($1)", $data2 ); //xoa cac dau ngoac don
-
-        if ( $this->realPathCssModDir != $this->cssdir )
+        if ( ! empty( $this->cssModFile ) )
         {
-            $data2 = preg_replace_callback( "/(url\()((?!http(s?)|ftp\:\/\/)[^\)]+)(\))/", array( $this, 'callback' ), $data2 );
-        }
+            ob_start();
+            include ( $this->cssModFile );
+            $data2 = ob_get_contents();
+            ob_end_clean();
 
-        $data .= $data2;
+            $data2 = preg_replace( "/url[\s]*\([\s]*\'(.*)?\'[\s]*\)/", "url($1)", $data2 ); //xoa cac dau ngoac don
+
+            if ( $this->realPathCssModDir != $this->cssdir )
+            {
+                $data2 = preg_replace_callback( "/(url\()((?!http(s?)|ftp\:\/\/)[^\)]+)(\))/", array( $this, 'callback' ), $data2 );
+            }
+
+            $data .= $data2;
+        }
 
         $data = $this->compress_css( $data );
 
