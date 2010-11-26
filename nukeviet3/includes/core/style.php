@@ -137,6 +137,8 @@ class Czip
      */
     private function check_encode()
     {
+        if ( ! function_exists( 'gzencode' ) ) return 'none';
+        
         $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
 
         if ( $encoding != 'none' )
