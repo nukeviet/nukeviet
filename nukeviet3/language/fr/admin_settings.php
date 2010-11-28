@@ -19,6 +19,8 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. Tous droits r
 $lang_translator['info'] = "Langue française pour NukeViet 3";
 $lang_translator['langtype'] = "lang_module";
 
+$lang_module['clearcache'] = "Vider le cache";
+$lang_module['clearcacheDetail'] = "Supprimé avec succès les fichiers suivants";
 $lang_module['global_config'] = "Config. générale";
 $lang_module['lang_site_config'] = "Config. selon langue";
 $lang_module['bots_config'] = "Moteurs de recherche";

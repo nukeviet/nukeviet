@@ -18,6 +18,8 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC.. All rights re
 $lang_translator['info'] ="YM: datvietinfo2010 ";
 $lang_translator['langtype'] ="lang_module";
 
+$lang_module['clearcache'] = "vymazání vyrovnávací paměti";
+$lang_module['clearcacheDetail'] = "Úspěšně vypouští následující soubory";
 $lang_module['global_config'] = "Systém Configurace";
 $lang_module['lang_site_config'] = "Jazyk configurace";
 $lang_module['bots_config'] = "Server vyhledávání";
