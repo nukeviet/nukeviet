@@ -17,6 +17,12 @@
   <FilesMatch "\.(doc|pdf|swf)$">
     Header set X-Robots-Tag "noarchive, nosnippet"
   </FilesMatch>
+  
+  <FilesMatch "\.(jpe?g|JPE?G|png|PNG|gif|GIF|swf|SWF|ico|ICO)$">
+	Header append Cache-Control "public"
+	Header add "Expires" "Tue, 31 Dec 2019 23:59:59 GMT"
+	Header add "Cache-Control" "max-age=2592000"
+  </FilesMatch>
 
 </IfModule>
 

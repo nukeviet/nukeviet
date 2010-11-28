@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div id="topnews">
+<div id="topnews" style="display:none">
     <div class="indent clearfix">
         <!-- BEGIN: hots_news_img -->
         <div class="headline last fl" style="width:310px;">

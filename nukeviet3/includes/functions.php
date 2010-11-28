@@ -1427,6 +1427,12 @@ function nv_change_buffer ( $buffer )
     global $db;
     
     $buffer = $db->unfixdb( $buffer );
+    if(!defined('NV_ADMIN'))
+    {
+        include ( NV_ROOTDIR . '/includes/class/optimizer.class.php' );
+        $optimezer = new optimezer($buffer);
+        $buffer = $optimezer->process();
+    }
     
     $buffer = nv_url_rewrite( $buffer );
     //http://tidy.sourceforge.net/docs/quickref.html

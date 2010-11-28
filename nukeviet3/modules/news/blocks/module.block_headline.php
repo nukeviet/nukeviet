@@ -61,6 +61,7 @@ $my_head .= "			$(anchor.hash).html(\"Couldn't load this tab.\");\n";
 $my_head .= "			}\n";
 $my_head .= "		}\n";
 $my_head .= "	});\n";
+$my_head .= "	$(\"#topnews\").show();\n";
 $my_head .= "});\n";
 $my_head .= "</script>\n";
 $my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info ['template'] . "/css/contentslider.css\" />\n";

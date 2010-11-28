@@ -529,11 +529,14 @@ function nv_html_page_title ( )
  * 
  * @return
  */
-
-function nv_html_css( )
+function nv_html_css ( )
 {
-    global $global_config, $module_info, $module_file;
-    $return = "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/style.php?mod=" . $module_file . "&amp;templ=" . $module_info['template'] . "\" type=\"text/css\" />\n";
+    global $module_info, $module_file;
+    $return = "";
+    if ( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/css/" . $module_file . ".css" ) )
+    {
+        $return .= "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />\n";
+    }
     return $return;
 }
 

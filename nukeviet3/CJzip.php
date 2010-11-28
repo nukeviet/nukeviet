@@ -10,22 +10,25 @@
 /**
  * CJzip
  * 
- * @package NUKEVIET 3.0
- * @author VINADES.,JSC
- * @copyright 2010
- * @version $Id$
+ * @package   
+ * @author NUKEVIET 3.0
+ * @copyright VINADES.,JSC
+ * @version 2010
  * @access public
  */
 class CJzip
 {
     private $getName = "file";
     private $file = array();
-    private $maxAge = 2592000; //30 ngay
+    private $maxAge = 2592000;
 
     private $cacheDir;
     private $encoding = 'none';
     private $currenttime;
     private $cachefile;
+    private $siteRoot;
+    private $base_siteurl;
+    private $isOptimized = false;
 
     /**
      * CJzip::__construct()
@@ -39,26 +42,40 @@ class CJzip
             $this->browseInfo( 404 );
         }
 
-        $this->file['path'] = realpath( $_GET[$this->getName] );
-        $this->file['ext'] = end( explode( ".", $this->file['path'] ) );
-        $this->file['lastmod'] = @filemtime( $this->file['path'] );
+        $this->siteRoot = str_replace( '\\', '/', realpath( dirname( __file__ ) ) );
+        $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
+        if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
+        if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
+        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
+        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
+        $this->base_siteurl = $base_siteurl . '/';
+        $this->cacheDir = $this->siteRoot . '/cache/';
 
+        $filename = $_GET[$this->getName];
+        if ( preg_match( "/^\//", $filename ) ) $filename = preg_replace( "#^" . $this->base_siteurl . "#", "", $filename );
+
+        $this->file['path'] = $this->siteRoot . '/' . $filename;
+        $this->file['lastmod'] = @filemtime( $this->file['path'] );
         if ( ! $this->file['lastmod'] )
         {
             $this->browseInfo( 404 );
         }
 
-        if ( $this->file['ext'] == "css" ) $this->file['contenttype'] = "css";
-        elseif ( $this->file['ext'] == "js" ) $this->file['contenttype'] = "javascript";
-
-        if ( $this->file['contenttype'] != "css" && $this->file['contenttype'] != "javascript" )
+        unset( $matches );
+        preg_match( "/(.*?)\.(css|js)$/", $this->file['path'], $matches );
+        if ( ! $matches )
         {
             $this->browseInfo( 403 );
         }
 
-        $this->file['md5file'] = md5( $this->file['path'] );
+        $this->file['ext'] = $matches[2];
+        $this->file['contenttype'] = ( $this->file['ext'] == "css" ) ? "css" : "javascript";
+        if ( preg_match( "/\.opt$/", $matches[1] ) )
+        {
+            $this->isOptimized = true;
+        }
 
-        $this->cacheDir = str_replace( '\\', '/', realpath( dirname( __file__ ) . '/cache' ) ) . '/';
+        $this->file['md5file'] = md5( $this->file['path'] );
         $this->currenttime = time();
     }
 
@@ -108,7 +125,7 @@ class CJzip
     private function check_encode()
     {
         if ( ! function_exists( 'gzencode' ) ) return 'none';
-        
+
         $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
 
         if ( $encoding != 'none' )
@@ -186,12 +203,10 @@ class CJzip
     private function loadData()
     {
         $data = file_get_contents( $this->file['path'] );
-        if ( $this->file['contenttype'] == 'css' )
+
+        if ( ! $this->isOptimized )
         {
-            $data = $this->compress_css( $data );
-        } elseif ( $this->file['contenttype'] == 'javascript' )
-        {
-            $data = $this->compress_javascript( $data );
+            $data = ( $this->file['contenttype'] == 'css' ) ? $this->compress_css( $data ) : $this->compress_javascript( $data );
         }
 
         if ( $this->encoding != 'none' )
@@ -282,7 +297,6 @@ class CJzip
     {
         $cssContent = preg_replace( "/url[\s]*\([\s]*[\'|\"](.*)?[\'|\"][\s]*\)/", "url($1)", $cssContent );
 
-        //http://code.google.com/p/minify/
         $cssContent = preg_replace( '@>/\\*\\s*\\*/@', '>/*keep*/', $cssContent );
         $cssContent = preg_replace( '@/\\*\\s*\\*/\\s*:@', '/*keep*/:', $cssContent );
         $cssContent = preg_replace( '@:\\s*/\\*\\s*\\*/@', ':/*keep*/', $cssContent );
@@ -318,7 +332,7 @@ class CJzip
     }
 
     /**
-     * CJzip::loadfile()
+     * CJzip::loadFile()
      * 
      * @return
      */
