@@ -75,7 +75,7 @@ class optimezer
 
         }
         
-        $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+\jquery.min.js)[\"|'][^>]*>/is","",$this->_content);
+        $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+\jquery.min.js)[\"|'][^>]*><\/script>/is","",$this->_content);
         $jsRegex = "/<script[^>]*>[^\<]*<\/script>/is";
         preg_match_all( $jsRegex, $this->_content, $jsMatches );
         if($jsMatches)

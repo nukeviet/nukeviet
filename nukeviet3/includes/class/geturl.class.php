@@ -34,6 +34,8 @@ class UrlGetContents
     private $ref = '';
 
     private $user_agent = '';
+    
+    private $redirectCount = 0;
 
     /**
      * UrlGetContents::__construct()
@@ -230,7 +232,7 @@ class UrlGetContents
         
         if ( $this->url_info['port'] != 80 )
         {
-            $request .= ":" . $info['port'];
+            $request .= ":" . $this->url_info['port'];
         }
         $request .= "\r\n";
         
@@ -294,13 +296,27 @@ class UrlGetContents
         @fclose( $fp );
         
         list( $header, $result ) = preg_split( "/\r?\n\r?\n/", $response, 2 );
+
+        unset( $matches );
+        if ( preg_match( '/^Location: (.+?)$/m', $header, $matches ) and $this->redirectCount <= 5 )
+        {
+            $this->redirectCount++;
+
+            if ( substr( $matches[1], 0, 1 ) == "/" )
+            {
+                $newurl = $url_parts['scheme'] . "://" . $url_parts['host'] . trim( $matches[1] );
+            }
+            else
+            {
+                $newurl = trim( $matches[1] );
+            }
+            return $this->fsockopen_Get( $newurl );
+        }
+
         unset( $matches );
         preg_match( "/^HTTP\/[0-9\.]+\s+(\d+)\s+/", $header, $matches );
-        if ( $matches == array() || $matches[1] != 200 )
-        {
-            return false;
-        }
-        
+        if ( $matches == array() ) return false;
+        if ( $matches[1] != 200 ) return false;
         return $result;
     }
 
@@ -312,7 +328,14 @@ class UrlGetContents
      */
     private function fopen_Get ( )
     {
-        if ( ( $fd = @fopen( $this->url_info['uri'], "rb" ) ) === false )
+        $ctx = stream_context_create( array( 'http' => array( //
+        'method' => 'GET', //
+        'max_redirects' => '2', //
+        'ignore_errors' => '0', //
+        'timeout' => 3 //
+        ) ) );
+        
+        if ( ( $fd = @fopen( $this->url_info['uri'], "rb", 0, $ctx ) ) === false )
         {
             return false;
         }
@@ -335,7 +358,14 @@ class UrlGetContents
      */
     private function file_get_contents_Get ( )
     {
-        return file_get_contents( $this->url_info['uri'] );
+        $ctx = stream_context_create( array( 'http' => array( //
+        'method' => 'GET', //
+        'max_redirects' => '5', //
+        'ignore_errors' => '0', //
+        'timeout' => 30 //
+        ) ) );
+        
+        return file_get_contents( $this->url_info['uri'], 0, $ctx );
     }
 
     /**
@@ -346,7 +376,14 @@ class UrlGetContents
      */
     private function file_Get ( )
     {
-        $result = file( $this->url_info['uri'] );
+        $ctx = stream_context_create( array( 'http' => array( //
+        'method' => 'GET', //
+        'max_redirects' => '5', //
+        'ignore_errors' => '0', //
+        'timeout' => 30 //
+        ) ) );
+        
+        $result = file( $this->url_info['uri'], 0, $ctx );
         
         if ( $result ) return implode( $result );
         return '';

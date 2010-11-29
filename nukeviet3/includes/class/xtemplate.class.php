@@ -1,6 +1,6 @@
 <?php
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+//if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 // When developing uncomment the line below, re-comment before making public
 //error_reporting(E_ALL);
