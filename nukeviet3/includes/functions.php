@@ -1424,7 +1424,7 @@ function nv_valid_html ( $html, $config, $encoding = 'utf8' )
  */
 function nv_change_buffer ( $buffer )
 {
-    global $db;
+    global $db, $sys_info;
     
     $buffer = $db->unfixdb( $buffer );
     if(!defined('NV_ADMIN'))
@@ -1432,6 +1432,11 @@ function nv_change_buffer ( $buffer )
         include ( NV_ROOTDIR . '/includes/class/optimizer.class.php' );
         $optimezer = new optimezer($buffer);
         $buffer = $optimezer->process();
+        
+        if ( ! $sys_info['supports_rewrite'] )
+        {
+            $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"][\/]*((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"CJzip.php?file=\\4&amp;r=1\"\\7>", $buffer );
+        }
     }
     
     $buffer = nv_url_rewrite( $buffer );

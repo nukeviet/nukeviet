@@ -29,6 +29,8 @@ class CJzip
     private $siteRoot;
     private $base_siteurl;
     private $isOptimized = false;
+    private $root = false;
+    private $cssImgNewPath = "";
 
     /**
      * CJzip::__construct()
@@ -75,8 +77,18 @@ class CJzip
             $this->isOptimized = true;
         }
 
-        $this->file['md5file'] = md5( $this->file['path'] );
         $this->currenttime = time();
+        if ( isset( $_GET['r'] ) and $_GET['r'] == 1 )
+        {
+            $this->root = true;
+            $this->file['md5file'] = md5( $this->file['path'] . "_root" );
+        }
+        else
+        {
+            $this->file['md5file'] = md5( $this->file['path'] );
+        }
+
+        $this->cssImgNewPath = str_replace( '\\', '/', dirname( $filename ) ) . "/";
     }
 
     /**
@@ -209,6 +221,11 @@ class CJzip
             $data = ( $this->file['contenttype'] == 'css' ) ? $this->compress_css( $data ) : $this->compress_javascript( $data );
         }
 
+        if ( $this->file['contenttype'] == 'css' and $this->root == true )
+        {
+            $data = preg_replace_callback( "/url\(([^\)]+)\)/", array( $this, 'changeCssURL' ), $data );
+        }
+
         if ( $this->encoding != 'none' )
         {
             $data = gzencode( $data, 6, $this->encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE );
@@ -285,6 +302,22 @@ class CJzip
     {
         $m[1] = preg_replace( '/\\s*("[^"]+"|\'[^\']+\'|[\\w\\-]+)\\s*/x', '$1', $m[1] );
         return 'font-family:' . $m[1] . $m[2];
+    }
+
+    /**
+     * CJzip::changeCssURL()
+     * 
+     * @param mixed $matches
+     * @return
+     */
+    private function changeCssURL( $matches )
+    {
+        $url = $this->cssImgNewPath . $matches[1];
+        while ( preg_match( "/([^\/(\.\.)]+)\/\.\.\//", $url ) )
+        {
+            $url = preg_replace( "/([^\/(\.\.)]+)\/\.\.\//", "", $url );
+        }
+        return "url(" . $url . ")";
     }
 
     /**
