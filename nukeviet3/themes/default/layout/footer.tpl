@@ -40,6 +40,7 @@
 	</div>
 </div>
 {THEME_ADMIN_MENU}
+{THEME_MY_FOOTER}
 {THEME_FOOTER_JS}
 </body>
 </html>

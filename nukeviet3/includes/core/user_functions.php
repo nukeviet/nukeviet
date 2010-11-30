@@ -566,7 +566,7 @@ function nv_html_site_rss ( )
  */
 function nv_html_site_js ( )
 {
-    global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $my_head, $client_info;
+    global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info;
     $return = "";
     $return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>\n";
     $return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n";
@@ -595,10 +595,7 @@ function nv_html_site_js ( )
     {
         $return .= nv_add_editor_js();
     }
-    if ( ! empty( $my_head ) )
-    {
-        $return .= $my_head;
-    }
+
     if ( defined( 'NV_IS_DRAG_BLOCK' ) )
     {
         $return .= "<div style='display:none' title='" . $lang_global['add_block'] . "' id='addblock'></div>\n";

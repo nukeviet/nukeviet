@@ -51,6 +51,9 @@
     <div id="run_cronjobs" style="visibility: hidden; display: none;">
         <img alt="Cronjob" src="{THEME_IMG_CRONJOBS}" width="1" height="1" />
     </div>
-</div>{THEME_ADMIN_MENU}{THEME_FOOTER_JS}
+</div>
+{THEME_ADMIN_MENU}
+{THEME_MY_FOOTER}
+{THEME_FOOTER_JS}
 </body>
 </html>

@@ -11,7 +11,7 @@ if ( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_site_theme ( $contents )
 {
-    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op, $db, $mod_title, $my_head, $nv_array_block_contents, $client_info, $db_config;
+    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op, $db, $mod_title, $my_head, $my_footer, $nv_array_block_contents, $client_info, $db_config;
     
     if ( ! file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/layout." . $module_info['funcs'][$op]['layout'] . ".tpl" ) )
     {
@@ -34,6 +34,7 @@ function nv_site_theme ( $contents )
     $xtpl->assign( 'THEME_META_TAGS', nv_html_meta_tags() );
     $xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
     $xtpl->assign( 'THEME_CSS', nv_html_css() );
+    if ( $my_head ) $xtpl->assign( 'THEME_MY_HEAD', $my_head );
     $xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title() );
     $xtpl->assign( 'NV_TOP_MENU_HOME', $lang_global['Home'] );
     $xtpl->assign( 'MODULE_CONTENT', $contents . "&nbsp;" );
@@ -199,6 +200,7 @@ function nv_site_theme ( $contents )
     $xtpl->assign( 'THEME_STAT_IMG', $theme_stat_img );
     $xtpl->assign( 'THEME_IMG_CRONJOBS', NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() );
     $xtpl->assign( 'THEME_FOOTER_JS', $theme_footer_js );
+    if ( $my_footer ) $xtpl->assign( 'THEME_MY_FOOTER', $my_footer );
     
     if ( defined( 'NV_IS_ADMIN' ) )
     {
