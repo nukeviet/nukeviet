@@ -147,4 +147,7 @@ if ( $sys_info['zlib_support'] )
     }
 }
 
+//Xac dinh tidy
+$sys_info['supports_tidy'] = ( class_exists( 'tidy' ) ) ? "class" : ( function_exists( 'tidy_parse_string' ) ? "func" : false );
+
 ?>

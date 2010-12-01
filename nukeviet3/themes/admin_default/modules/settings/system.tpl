@@ -180,6 +180,16 @@
         <tbody>
             <tr>
                 <td>
+                    <strong>{LANG.optActive}</strong>
+                </td>
+                <td>
+                    <input type="checkbox" value="1" name="optActive" {DATA.optActive} />
+                </td>
+            </tr>
+        </tbody>
+        <tbody class="second">
+            <tr>
+                <td>
                     <strong>{LANG.proxy_blocker}</strong>
                 </td>
                 <td>
@@ -191,7 +201,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.str_referer_blocker}</strong>
@@ -201,7 +211,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.my_domains}</strong>
@@ -211,7 +221,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.cookie_prefix}</strong>
@@ -221,7 +231,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.session_prefix}</strong>

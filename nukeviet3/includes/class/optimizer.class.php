@@ -40,6 +40,7 @@ class optimezer
     private $jsDir = "files/js";
     private $eol = "\r\n";
     private $cssImgNewPath;
+    private $_tidySupport = false;
 
     /**
      * optimezer::__construct()
@@ -47,7 +48,7 @@ class optimezer
      * @param mixed $content
      * @return
      */
-    public function __construct( $content )
+    public function __construct( $content, $tidySupport )
     {
         $this->_content = $content;
         $this->siteRoot = preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) );
@@ -57,6 +58,7 @@ class optimezer
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
         $this->base_siteurl = $base_siteurl . '/';
+        $this->_tidySupport = $tidySupport;
     }
 
     /**
@@ -74,11 +76,11 @@ class optimezer
             $this->_content = preg_replace_callback( $conditionRegex, array( $this, 'conditionCallback' ), $this->_content );
 
         }
-        
-        $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+\jquery.min.js)[\"|'][^>]*><\/script>/is","",$this->_content);
+
+        $this->_content = preg_replace( "/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content );
         $jsRegex = "/<script[^>]*>[^\<]*<\/script>/is";
         preg_match_all( $jsRegex, $this->_content, $jsMatches );
-        if($jsMatches)
+        if ( $jsMatches )
         {
             $this->_jsMatches = $jsMatches[0];
             $this->_content = preg_replace_callback( $jsRegex, array( $this, 'jsCallback' ), $this->_content );
@@ -123,10 +125,10 @@ class optimezer
                 }
                 /*elseif ( preg_match( "/^<script[^>]+src\s*=\s*[\"|']((?!http(s?)|ftp\:\/\/)[^\"']+\.js)[\"|'][^>]*>/is", $tag, $matches2 ) )
                 {
-                    $this->_jsLinks[] = $matches2[1];
+                $this->_jsLinks[] = $matches2[1];
                 } elseif ( preg_match( "/<script[^>]*>([^\<]*)<\/script>/is", $tag, $matches2 ) )
                 {
-                    $this->_jsInline[] = $matches2[1];
+                $this->_jsInline[] = $matches2[1];
                 }*/
             }
 
@@ -140,17 +142,20 @@ class optimezer
                 $this->_content = preg_replace( "/\{\|condition\_" . $key . "\|\}/", $value, $this->_content );
             }
         }
-        
-        if(!empty($this->_jsMatches))
+
+        if ( ! empty( $this->_jsMatches ) )
         {
-            foreach($this->_jsMatches as $key => $value)
+            foreach ( $this->_jsMatches as $key => $value )
             {
-                $value = $this->minifyJsInline($value);
+                if ( ! preg_match( "/<script[^>]+src\s*=([^>]+)>[\s\r\n\t]*<\/script>/is", $value ) and preg_match( "/<script([^>]*)>([^\<]+)<\/script>/is", $value, $matches2 ) )
+                {
+                    $value = $this->minifyJsInline( $matches2 );
+                }
                 $this->_content = preg_replace( "/\{\|js\_" . $key . "\|\}/", $value, $this->_content );
             }
         }
 
-        $this->_content = $this->minifyHTML( $this->_content );
+        if ( ! $this->_tidySupport ) $this->_content = $this->minifyHTML( $this->_content );
 
         $head = "<head>" . $this->eol . $this->_title . $this->eol;
         if ( ! empty( $this->_meta ) ) $head .= implode( $this->eol, $this->_meta ) . $this->eol;
@@ -158,8 +163,8 @@ class optimezer
         if ( ! empty( $this->_cssLinks ) ) $head .= "<link rel=\"Stylesheet\" href=\"" . $this->newCssLink() . "\" type=\"text/css\" />" . $this->eol;
         if ( ! empty( $this->_cssIgnoreLinks ) ) $head .= implode( $this->eol, $this->_cssIgnoreLinks ) . $this->eol;
         if ( ! empty( $this->_style ) ) $head .= "<style type=\"text/css\">" . $this->minifyCss( implode( $this->eol, $this->_style ) ) . "</style>" . $this->eol;
-        $head .= "<script type=\"text/javascript\" src=\"".$this->base_siteurl."js/jquery/jquery.min.js\"></script>" . $this->eol;
-        $head = $this->minifyHTML( $head );
+        $head .= "<script type=\"text/javascript\" src=\"" . $this->base_siteurl . "js/jquery/jquery.min.js\"></script>" . $this->eol;
+        if ( ! $this->_tidySupport ) $head = $this->minifyHTML( $head );
         $this->_content = preg_replace( '/<head>/i', $head, $this->_content, 1 );
 
         /*$body = "";
@@ -183,7 +188,7 @@ class optimezer
         $this->_condCount++;
         return "{|condition_" . $num . "|}";
     }
-    
+
     /**
      * optimezer::jsCallback()
      * 
@@ -270,11 +275,16 @@ class optimezer
      * @param mixed $jsInline
      * @return
      */
-    private function minifyJsInline( $jsInline )
+    private function minifyJsInline( $matches )
     {
-        $jsInline = preg_replace( '/(?:^\\s*<!--\\s*|\\s*(?:\\/\\/)?\\s*-->\\s*$)/', '', $jsInline );
+        $jsInline = preg_replace( '/(?:^\\s*<!--\\s*|\\s*(?:\\/\\/)?\\s*-->\\s*$)/', '', $matches[2] );
         $jsInline = $this->minifyJs( $jsInline );
         $jsInline = preg_replace( '/^\s+|\s+$/m', '', $jsInline );
+        if ( ! $this->_tidySupport and ! preg_match( "/^\/\/<\!\[CDATA\[/", $jsInline ) )
+        {
+            $jsInline = "//<![CDATA[" . $this->eol . $jsInline . $this->eol . "//]]>";
+        }
+        $jsInline = "<script" . $matches[1] . ">" . $this->eol . $jsInline . $this->eol . "</script>";
         return $jsInline;
     }
 
@@ -301,7 +311,7 @@ class optimezer
     private function changeCssURL( $matches )
     {
         $url = $this->cssImgNewPath . $matches[1];
-        while(preg_match("/([^\/(\.\.)]+)\/\.\.\//",$url))
+        while ( preg_match( "/([^\/(\.\.)]+)\/\.\.\//", $url ) )
         {
             $url = preg_replace( "/([^\/(\.\.)]+)\/\.\.\//", "", $url );
         }
@@ -399,6 +409,21 @@ class optimezer
     }
 
     /**
+     * optimezer::checkImg()
+     * 
+     * @param mixed $m
+     * @return
+     */
+    private function checkImg( $m )
+    {
+        if ( ! preg_match( '/alt=[\'|"](.*?)[\'|"]/i', $m[1] ) )
+        {
+            return ( "<img alt=\"\"" . $m[1] . "/>" );
+        }
+        return $m[0];
+    }
+
+    /**
      * optimezer::minifyHTML()
      * 
      * @param mixed $content
@@ -410,6 +435,7 @@ class optimezer
         $content = preg_replace( '/<([^\>]+)\s+\/\s+\>/', '<$1 />', $content );
         $content = preg_replace( '#<(br|hr|input|img|meta)([^>]+)>#', "<\\1 \\2 />", $content );
         $content = preg_replace( '#\s*\/\s*\/>#', " />", $content );
+        $content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
         $content = preg_replace( '/^\s+|\s+$/m', '', $content );
 
         return $content;

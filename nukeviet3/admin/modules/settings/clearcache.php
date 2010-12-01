@@ -15,7 +15,7 @@ function nv_clearCache( $dir, $base )
     $files = scandir( $dir );
     foreach ( $files as $file )
     {
-        if ( $file != "." and $file != ".." and $file != ".htaccess" and $file != "index.html" )
+        if ( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and $file != "index.html" )
         {
             @unlink( $dir . '/' . $file );
             $dels[] = $base . '/' . $file;
@@ -33,19 +33,19 @@ $contents = "<br /><strong>" . $lang_module['clearcacheDetail'] . "</strong>:<br
 
 $cacheDir = NV_ROOTDIR . '/cache';
 $files = nv_clearCache( $cacheDir, 'cache' );
-foreach($files as $file)
+foreach ( $files as $file )
 {
     $contents .= "<li>" . $file . "</li>\r\n";
 }
 $cssDir = NV_ROOTDIR . '/files/css';
 $files = nv_clearCache( $cssDir, 'files/css' );
-foreach($files as $file)
+foreach ( $files as $file )
 {
     $contents .= "<li>" . $file . "</li>\r\n";
 }
 $jsDir = NV_ROOTDIR . '/files/js';
 $files = nv_clearCache( $jsDir, 'files/js' );
-foreach($files as $file)
+foreach ( $files as $file )
 {
     $contents .= "<li>" . $file . "</li>\r\n";
 }

@@ -23,6 +23,7 @@ $lang_module['global_config'] = "Cấu hình chung";
 $lang_module['lang_site_config'] = "Theo ngôn ngữ";
 $lang_module['bots_config'] = "Máy chủ tìm kiếm";
 
+$lang_module['optActive'] = "Kích hoạt chức năng tối ưu site<br />(Chỉ tắt với admin)";
 $lang_module['clearcache'] = "Làm sạch cache";
 $lang_module['clearcacheDetail'] = "Đã xóa thành công các file sau đây";
 $lang_module['checkupdate'] = "Kiểm tra phiên bản";

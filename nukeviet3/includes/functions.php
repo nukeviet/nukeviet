@@ -1395,25 +1395,23 @@ function nv_url_rewrite ( $buffer )
  */
 function nv_valid_html ( $html, $config, $encoding = 'utf8' )
 {
-    if ( ! class_exists( 'tidy' ) )
-    {
-        if ( function_exists( 'tidy_parse_string' ) )
-        {
-            $tidy = tidy_parse_string( $html, $config, $encoding );
-            tidy_clean_repair();
-            return $tidy;
-        }
-        else
-            return $html;
-    }
-    else
+    global $sys_info;
+
+    if ( $sys_info['supports_tidy'] == "class" )
     {
         //PHP 5
         $tidy = new tidy();
         $tidy->parseString( $html, $config, $encoding );
         $tidy->cleanRepair();
         return $tidy;
+    } elseif ( $sys_info['supports_tidy'] == "func" )
+    {
+        $tidy = tidy_parse_string( $html, $config, $encoding );
+        tidy_clean_repair();
+        return $tidy;
     }
+    
+    return $html;
 }
 
 /**
@@ -1422,24 +1420,27 @@ function nv_valid_html ( $html, $config, $encoding = 'utf8' )
  * @param mixed $buffer
  * @return
  */
-function nv_change_buffer ( $buffer )
+function nv_change_buffer( $buffer )
 {
-    global $db, $sys_info;
-    
+    global $db, $sys_info, $global_config;
+
     $buffer = $db->unfixdb( $buffer );
-    if(!defined('NV_ADMIN'))
+    $buffer = nv_url_rewrite( $buffer );
+
+    if ( defined( 'NV_IS_ADMIN' ) and ! $global_config['optActive'] ) return $buffer;
+
+    if ( ! defined( 'NV_ADMIN' ) )
     {
         include ( NV_ROOTDIR . '/includes/class/optimizer.class.php' );
-        $optimezer = new optimezer($buffer);
+        $optimezer = new optimezer( $buffer, $sys_info['supports_tidy'] );
         $buffer = $optimezer->process();
-        
+
         if ( ! $sys_info['supports_rewrite'] )
         {
             $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"CJzip.php?file=\\4&amp;r=1\"\\7>", $buffer );
         }
     }
-    
-    $buffer = nv_url_rewrite( $buffer );
+
     //http://tidy.sourceforge.net/docs/quickref.html
     $config = array( //
         'doctype' => 'transitional', // Chuan HTML: omit, auto, strict, transitional, user
@@ -1466,7 +1467,6 @@ function nv_change_buffer ( $buffer )
         'wrap' => 0, // Moi dong khong qua 150 ky tu
         'alt-text' => true //Bat buoc phai co alt trong IMG
         );
-    
 
     $buffer = nv_valid_html( $buffer, $config );
     return $buffer;
