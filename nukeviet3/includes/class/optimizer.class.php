@@ -145,12 +145,26 @@ class optimezer
 
         if ( ! empty( $this->_jsMatches ) )
         {
+            $_jsSrc = array();
+
             foreach ( $this->_jsMatches as $key => $value )
             {
-                if ( ! preg_match( "/<script[^>]+src\s*=([^>]+)>[\s\r\n\t]*<\/script>/is", $value ) and preg_match( "/<script([^>]*)>([^\<]+)<\/script>/is", $value, $matches2 ) )
+                unset( $matches2 );
+                
+                //Chi cho phep ket noi 1 lan doi voi 1 file JS
+                if ( preg_match( "/^<script[^>]+src\s*=\s*[\"|']([^\"']+)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", $value, $matches2 ) )
                 {
-                    $value = $this->minifyJsInline( $matches2 );
+                    $value = ( ! empty( $matches2[1] ) and ! in_array( $matches2[1], $_jsSrc ) ) ? $value : "";
+                    if ( ! empty( $matches2[1] ) ) $_jsSrc[] = $matches2[1];
+                } elseif ( ! preg_match( "/<script[^>]+src\s*=([^>]+)>[\s\r\n\t]*<\/script>/is", $value ) and preg_match( "/<script([^>]*)>([^\<]+)<\/script>/is", $value, $matches2 ) )
+                {
+                    $value = ! preg_match( "/^([^\W]*)$/is", $matches2[1] ) ? $this->minifyJsInline( $matches2 ) : "";
                 }
+                else
+                {
+                    $value = "";
+                }
+
                 $this->_content = preg_replace( "/\{\|js\_" . $key . "\|\}/", $value, $this->_content );
             }
         }
