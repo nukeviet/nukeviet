@@ -106,6 +106,11 @@ if ( $submit )
     
     $array_config_global['cookie_prefix'] = filter_text_input( 'cookie_prefix', 'post', '', 1, 255 );
     $array_config_global['session_prefix'] = filter_text_input( 'session_prefix', 'post', '', 1, 255 );
+    $array_config_global['googleAnalyticsID'] = filter_text_input( 'googleAnalyticsID', 'post', '', 1, 20 );
+    if ( ! preg_match( '/^UA-\d{4,}-\d+$/', $array_config_global['googleAnalyticsID'] ) )
+    {
+        $array_config_global['googleAnalyticsID'] = "";
+    }
     
     $array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
     $array_config_global['online_upd'] = $nv_Request->get_int( 'online_upd', 'post' );

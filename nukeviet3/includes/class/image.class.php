@@ -565,6 +565,7 @@ class image
                         default:
                             $Y = $this->create_Image_info['height'] - ( $string_height + 10 );
                     }
+
                     $grey = imagecolorallocate( $this->createImage, 128, 128, 128 );
                     imagealphablending( $this->createImage, true );
                     imagettftext( $this->createImage, $fsize, 0, $X, $Y, $grey, $font, $string );

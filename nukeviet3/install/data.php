@@ -373,6 +373,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'spadmin_add_admin', '1'),
 ('sys', 'global', 'openid_servers', 'yahoo,google,myopenid'),
 ('sys', 'global', 'optActive', '1'),
+('sys', 'global', 'googleAnalyticsID', ''),
 ('sys', 'global', 'version', '" . $global_config['version'] . "')";
 
 $sql_create_table[] = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`) VALUES

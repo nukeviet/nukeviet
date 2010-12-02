@@ -19,6 +19,7 @@ $lang_translator ['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights r
 $lang_translator ['info'] = "";
 $lang_translator ['langtype'] = "lang_module";
 
+$lang_module['googleAnalyticsID'] = "Google Analytics ID<br />(UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">Detail</a>)";
 $lang_module['optActive'] = "Enable Site Optimization function";
 $lang_module['clearcache'] = "Clear Cache";
 $lang_module['clearcacheDetail'] = "Successfully deleted the following files";

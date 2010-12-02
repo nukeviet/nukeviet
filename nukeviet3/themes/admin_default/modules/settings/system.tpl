@@ -241,6 +241,16 @@
                 </td>
             </tr>
         </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>{LANG.googleAnalyticsID}</strong>
+                </td>
+                <td>
+                    <input type="text" name="googleAnalyticsID" value="{DATA.googleAnalyticsID}" style="width: 450px" maxlength="20" />
+                </td>
+            </tr>
+        </tbody>
     </table>
     <div style="width: 200px; margin: 10px auto; text-align: center;">
         <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/>

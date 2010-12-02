@@ -19,6 +19,7 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
+$lang_module['googleAnalyticsID'] = "ID tài khoản Google Analytics<br />(Có dạng UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">xem chi tiết</a>)";
 $lang_module['global_config'] = "Cấu hình chung";
 $lang_module['lang_site_config'] = "Theo ngôn ngữ";
 $lang_module['bots_config'] = "Máy chủ tìm kiếm";

@@ -18,6 +18,7 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC.. All rights re
 $lang_translator['info'] ="YM: datvietinfo2010 ";
 $lang_translator['langtype'] ="lang_module";
 
+$lang_module['googleAnalyticsID'] = "Google Analytics ID<br />(UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">Detail</a>)";
 $lang_module['optActive'] = "Povolit stránek Optimalizace funkce";
 $lang_module['clearcache'] = "vymazání vyrovnávací paměti";
 $lang_module['clearcacheDetail'] = "Úspěšně vypouští následující soubory";
