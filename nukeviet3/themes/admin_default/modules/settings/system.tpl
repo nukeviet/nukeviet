@@ -251,6 +251,20 @@
                 </td>
             </tr>
         </tbody>
+        <tbody class="second">
+            <tr>
+                <td>
+                    <strong>{LANG.googleAnalyticsSetDomainName_title}</strong>
+                </td>
+                <td>
+                    <select name="googleAnalyticsSetDomainName">
+                        <!-- BEGIN: googleAnalyticsSetDomainName -->
+						<option value="{GOOGLEANALYTICSSETDOMAINNAME_VALUE}"{GOOGLEANALYTICSSETDOMAINNAME_SELECTED}>{GOOGLEANALYTICSSETDOMAINNAME_TITLE}</option>
+                        <!-- END: googleAnalyticsSetDomainName -->
+                    </select>
+                </td>
+            </tr>
+        </tbody>
     </table>
     <div style="width: 200px; margin: 10px auto; text-align: center;">
         <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/>

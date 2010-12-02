@@ -19,6 +19,10 @@ $lang_translator ['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights r
 $lang_translator ['info'] = "";
 $lang_translator ['langtype'] = "lang_module";
 
+$lang_module['googleAnalyticsSetDomainName_title'] = "Domain properties when declared with Google Analytics";
+$lang_module['googleAnalyticsSetDomainName_0'] = "A single domain";
+$lang_module['googleAnalyticsSetDomainName_1'] = "One domain with multiple subdomains";
+$lang_module['googleAnalyticsSetDomainName_2'] = "Multiple top-level domains";
 $lang_module['googleAnalyticsID'] = "Google Analytics ID<br />(UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">Detail</a>)";
 $lang_module['optActive'] = "Enable Site Optimization function";
 $lang_module['clearcache'] = "Clear Cache";

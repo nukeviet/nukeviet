@@ -111,6 +111,7 @@ if ( $submit )
     {
         $array_config_global['googleAnalyticsID'] = "";
     }
+    $array_config_global['googleAnalyticsSetDomainName'] = $nv_Request->get_int( 'googleAnalyticsSetDomainName', 'post' );
     
     $array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
     $array_config_global['online_upd'] = $nv_Request->get_int( 'online_upd', 'post' );
@@ -254,6 +255,14 @@ foreach ( $timezone_array as $site_timezone_i )
     $xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $global_config['site_timezone'] ) ? "selected='selected'" : "" );
     $xtpl->assign( 'TIMEZONELANGVALUE', $site_timezone_i );
     $xtpl->parse( 'main.opsite_timezone' );
+}
+
+for($i=0;$i < 3;$i++)
+{
+    $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_SELECTED', ( $global_config['googleAnalyticsSetDomainName'] == $i ) ? ' selected="selected"' : '' );
+    $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_VALUE', $i );
+    $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_TITLE', $lang_module['googleAnalyticsSetDomainName_' . $i] );
+    $xtpl->parse( 'main.googleAnalyticsSetDomainName' );
 }
 
 $xtpl->parse( 'main' );
