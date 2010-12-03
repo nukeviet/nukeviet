@@ -482,13 +482,13 @@ $contents .= "     <div class=\"news\"><label><strong>" . $lang_module['name'] .
 $contents .= "     		<input type=\"text\" maxlength=\"255\" value=\"" . $rowcontent['title'] . "\" name=\"title\" id=\"idtitle\"/>";
 $contents .= "     </div>\n";
 
-$contents .= "<div class=\"news\"><label><strong>" . $lang_module['alias'] . ": </strong></label>\n";
-$contents .= "		<input style=\"width: 350px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $rowcontent['alias'] . "\" maxlength=\"255\" />&nbsp;&nbsp;";
+$contents .= "<div class=\"news\"><label>" . $lang_module['alias'] . ": </label>\n";
+$contents .= "		<input style=\"width: 355px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $rowcontent['alias'] . "\" maxlength=\"255\" />&nbsp;&nbsp;";
 $contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" widht=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\">\n";
 $contents .= "</div>\n";
 
 $contents .= "<div class=\"news\"><label><strong>" . $lang_module['content_cat'] . "</strong></label>\n";
-$contents .= "	<div style=\"height: 130px; width: 380px; overflow: auto; text-align:left; float: right;\">";
+$contents .= "	<div style=\"height: 130px; width: 380px; overflow: auto; text-align:left; float: right; border: 1px solid #CCCCCC;\">";
 $contents .= "		<table>\n";
 
 $sql = "SELECT catid, title, lev FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
@@ -519,8 +519,8 @@ while ( list( $catid_i, $title_i, $lev_i ) = $db->sql_fetchrow( $result_cat ) )
 $contents .= "		</table>\n";
 $contents .= "	</div>\n";
 $contents .= "</div>\n";
-$contents .= "<div class=\"news\"><label><strong>" . $lang_module['content_topic'] . "</strong></label>\n";
-$contents .= "<select name=\"topicid\" style=\"width: 370px;\">\n";
+$contents .= "<div class=\"news\"><label>" . $lang_module['content_topic'] . "</label>\n";
+$contents .= "<select name=\"topicid\" style=\"width: 382px;\">\n";
 while ( list( $topicid_i, $title_i ) = each( $array_topic_module ) )
 {
     $sl = "";
@@ -532,17 +532,17 @@ while ( list( $topicid_i, $title_i ) = each( $array_topic_module ) )
 }
 
 $contents .= "</select>";
-$contents .= "<br><input type=\"text\" maxlength=\"255\" id=\"AjaxTopicText\" value=\"" . $rowcontent['topictext'] . "\" name=\"topictext\" style=\"width: 370px;\">";
+$contents .= "<br><input type=\"text\" maxlength=\"255\" id=\"AjaxTopicText\" value=\"" . $rowcontent['topictext'] . "\" name=\"topictext\" style=\"width: 380px;\">";
 $contents .= "</div>\n";
 $contents .= "<div class=\"news\"><label><strong>" . $lang_module['content_homeimg'] . "</strong></label>\n";
-$contents .= '<input style="width:260px" type="text" name="homeimg" id="homeimg" value="' . $rowcontent['homeimgfile'] . '"/> ';
+$contents .= '<input style="width:277px" type="text" name="homeimg" id="homeimg" value="' . $rowcontent['homeimgfile'] . '"/> ';
 $contents .= '<input style="width:100px" type="button" value="' . $lang_global['browse_image'] . '" name="selectimg"/>';
 
 $contents .= "</div>\n";
-$contents .= "<div class=\"news\"><label><strong>" . $lang_module['content_homeimgalt'] . "</strong></label>\n";
+$contents .= "<div class=\"news\"><label>" . $lang_module['content_homeimgalt'] . "</label>\n";
 $contents .= "<input type=\"text\" maxlength=\"255\" value=\"" . $rowcontent['homeimgalt'] . "\" name=\"homeimgalt\" /></div>\n";
 $contents .= "<div style=\"clear:both;\"></div>\n";
-$contents .= "<div class=\"news\"><label><strong>" . $lang_module['imgposition'] . "</strong></label>\n";
+$contents .= "<div class=\"news\"><label>" . $lang_module['imgposition'] . "</label>\n";
 $contents .= "	<select name=\"imgposition\">\n";
 while ( list( $id_imgposition, $title_imgposition ) = each( $array_imgposition ) )
 {
@@ -672,7 +672,7 @@ $contents .= "</div>\n";
 $contents .= "<div style=\"margin-bottom: 1em;\"><label><strong>" . $lang_module['content_author'] . "</strong></label><br>\n";
 $contents .= "<input type=\"text\" maxlength=\"255\" value=\"" . $rowcontent['author'] . "\" name=\"author\" style=\"width: 530px;\"></div>\n";
 $contents .= "<div style=\"margin-bottom: 1em;\"><label><strong>" . $lang_module['content_sourceid'] . "</strong></label><br>\n";
-$contents .= "<select name=\"sourceid\" style=\"width: 530px;\">\n";
+$contents .= "<select name=\"sourceid\" style=\"width: 536px;\">\n";
 while ( list( $sourceid_i, $title_i ) = each( $array_source_module ) )
 {
     $sl = "";
