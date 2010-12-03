@@ -453,25 +453,11 @@ function nv_get_rss ( $url )
  * 
  * @return
  */
-function nv_html_meta_tags ( )
+function nv_html_meta_tags()
 {
     global $global_config, $lang_global, $key_words, $description, $module_info;
-    
-    $return = "<meta http-equiv=\"Content-Language\" content=\"" . $lang_global['Content_Language'] . "\" />\n";
-    $return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
-    
-    if ( defined( 'NV_IS_ADMIN' ) )
-    {
-        $return .= "<meta http-equiv=\"refresh\" content=\"" . NV_ADMIN_CHECK_PASS_TIME . "\" />\n";
-    }
-    
-    $return .= "<meta name=\"language\" content=\"" . $lang_global['LanguageName'] . "\" />\n";
-    $return .= "<meta name=\"author\" content=\"" . $global_config['site_name'] . "\" />\n";
-    $return .= "<meta name=\"copyright\" content=\"" . $global_config['site_name'] . " [" . $global_config['site_email'] . "]\" />\n";
-    
-    $ds = ( ! empty( $description ) ) ? $description : $global_config['site_description'];
-    $return .= ( ! empty( $ds ) ) ? "<meta name=\"description\" content=\"" . strip_tags( $ds ) . "\" />\n" : "";
-    
+
+    $return = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
     $kw = array();
     if ( ! empty( $key_words ) ) $kw[] = $key_words;
     if ( ! empty( $module_info['keywords'] ) ) $kw[] = $module_info['keywords'];
@@ -483,9 +469,44 @@ function nv_html_meta_tags ( )
         $key_words = nv_strtolower( strip_tags( $kw ) );
         $return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />\n";
     }
-    
+
+    $ds = ( ! empty( $description ) ) ? $description : $global_config['site_description'];
+    $return .= ( ! empty( $ds ) ) ? "<meta name=\"description\" content=\"" . strip_tags( $ds ) . "\" />\n" : "";
+
+    $file_metatags = NV_ROOTDIR . "/" . NV_DATADIR . "/metatags.xml";
+    if ( file_exists( $file_metatags ) )
+    {
+        $mt = file_get_contents( $file_metatags );
+        $patters = array();
+        $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
+        $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
+        $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
+        $patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
+        $mt = preg_replace( array_keys( $patters ), array_values( $patters ), $mt );
+        $mt = preg_replace( "/\{(.*)\}/", "", $mt );
+        $mt = simplexml_load_string( $mt );
+        $mt = nv_object2array( $mt );
+        if ( $mt['meta_item'] )
+        {
+            if ( isset( $mt['meta_item'][0] ) ) $metatags = $mt['meta_item'];
+            else  $metatags[] = $mt['meta_item'];
+
+            foreach ( $metatags as $meta )
+            {
+                if ( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) //
+                    and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) //
+                    and preg_match( "/^([^\'\"]+)$/", $meta['content'] ) )
+                {
+                    $return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\" />\n";
+                }
+            }
+        }
+    }
     $return .= "<meta name=\"generator\" content=\"Nukeviet v3.0\" />\n";
-    
+    if ( defined( 'NV_IS_ADMIN' ) )
+    {
+        $return .= "<meta http-equiv=\"refresh\" content=\"" . NV_ADMIN_CHECK_PASS_TIME . "\" />\n";
+    }
     return $return;
 }
 

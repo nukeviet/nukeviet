@@ -19,6 +19,12 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. Tous droits r
 $lang_translator['info'] = "Langue française pour NukeViet 3";
 $lang_translator['langtype'] = "lang_module";
 
+$lang_module['metaTagsConfig'] = "Meta-Tags Config";
+$lang_module['metaTagsGroupName'] = "Group type";
+$lang_module['metaTagsGroupValue'] = "Group Name";
+$lang_module['metaTagsNote'] = "The Meta-Tags: \"%s\" is determined automatically";
+$lang_module['metaTagsVar'] = "Accept the following variables";
+$lang_module['metaTagsContent'] = "Content";
 $lang_module['googleAnalyticsSetDomainName_title'] = "Domain properties when declared with Google Analytics";
 $lang_module['googleAnalyticsSetDomainName_0'] = "A single domain";
 $lang_module['googleAnalyticsSetDomainName_1'] = "One domain with multiple subdomains";

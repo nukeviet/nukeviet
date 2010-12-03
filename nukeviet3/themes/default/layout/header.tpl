@@ -2,9 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         {THEME_PAGE_TITLE} {THEME_META_TAGS}
-        <meta name="robots" content="index, archive, follow, noodp" />
-        <meta name="googlebot" content="index,archive,follow,noodp" />
-        <meta name="msnbot" content="all,index,follow" />
         <link rel="icon" href="{NV_BASE_SITEURL}favicon.ico" type="image/vnd.microsoft.icon" />
         <link rel="shortcut icon" href="{NV_BASE_SITEURL}favicon.ico" type="image/vnd.microsoft.icon" />
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/reset.css" />

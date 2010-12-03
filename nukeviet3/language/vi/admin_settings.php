@@ -19,6 +19,12 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
+$lang_module['metaTagsConfig'] = "Cấu hình Meta-Tags";
+$lang_module['metaTagsGroupName'] = "Kiểu Nhóm";
+$lang_module['metaTagsGroupValue'] = "Tên Nhóm";
+$lang_module['metaTagsNote'] = "Các Meta-Tags: \"%s\" được xác định tự động";
+$lang_module['metaTagsVar'] = "Chấp nhận các biến";
+$lang_module['metaTagsContent'] = "Nội dung";
 $lang_module['googleAnalyticsSetDomainName_title'] = "Đặc tính Domain khi khai báo với Google Analytics";
 $lang_module['googleAnalyticsSetDomainName_0'] = "Domain duy nhất";
 $lang_module['googleAnalyticsSetDomainName_1'] = "Domain cấp cao + subdomains chạy song song";
