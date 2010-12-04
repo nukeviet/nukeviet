@@ -12,6 +12,13 @@ define( 'NV_SYSTEM', true );
 require_once ( str_replace( '\\\\', '/', dirname( __file__ ) ) . '/mainfile.php' );
 require_once ( NV_ROOTDIR . "/includes/core/user_functions.php" );
 
+//Google Sitemap
+if ( $nv_Request->isset_request( NV_NAME_VARIABLE, 'get' ) and $nv_Request->get_string( NV_NAME_VARIABLE, 'get' ) == "SitemapIndex" )
+{
+    nv_xmlSitemapIndex_generate();
+    die();
+}
+
 //Check user
 if ( defined( 'NV_IS_USER' ) ) die( "Hacking attempt" );
 require_once ( NV_ROOTDIR . "/includes/core/is_user.php" );

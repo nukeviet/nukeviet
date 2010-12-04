@@ -246,4 +246,164 @@ function nv_rss_generate ( $channel, $items )
     die();
 }
 
+/**
+ * nv_xmlSitemap_generate()
+ * 
+ * @param mixed $url
+ * @return void
+ */
+function nv_xmlSitemap_generate( $url )
+{
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="themes/default/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+    $xml = new SimpleXMLElement( $sitemapHeader );
+
+    $lastModified = time() - 86400;
+    if ( ! empty( $url ) )
+    {
+        foreach ( $url as $key => $values )
+        {
+            $publdate = date( 'c', $values['publtime'] );
+
+            $row = $xml->addChild( 'url' );
+            $row->addChild( 'loc', "'" . $values['link'] . "'" );
+            $row->addChild( 'lastmod', $publdate );
+            $row->addChild( 'changefreq', 'daily' );
+            $row->addChild( 'priority', '0.8' );
+
+            if ( $key == 0 ) $lastModified = $values['publtime'];
+        }
+    }
+
+    $contents = $xml->asXML();
+    $contents = nv_url_rewrite( $contents );
+    $contents = preg_replace( "/(<loc>)\'(.*?)\'(<\/loc>)/", "\\1" . NV_MY_DOMAIN . "\\2\\3", $contents );
+
+    @Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
+    @Header( "Expires: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
+    @Header( "Content-Type: text/xml; charset=utf-8" );
+
+    if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) and strstr( $_SERVER['SERVER_SOFTWARE'], 'Apache/2' ) )
+    {
+        @Header( "Cache-Control: no-cache, pre-check=0, post-check=0" );
+    }
+    else
+    {
+        @Header( "Cache-Control: private, pre-check=0, post-check=0, max-age=0" );
+    }
+
+    @Header( "Pragma: no-cache" );
+
+    $encoding = "none";
+    if ( function_exists( 'gzencode' ) )
+    {
+        $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
+
+        if ( $encoding != 'none' )
+        {
+            unset( $matches );
+            if ( ! strstr( $_SERVER['HTTP_USER_AGENT'], 'Opera' ) && preg_match( '/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches ) )
+            {
+                $version = floatval( $matches[1] );
+                if ( $version < 6 || ( $version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' ) ) ) $encoding = 'none';
+            }
+        }
+    }
+
+    if ( $encoding != "none" )
+    {
+        $contents = gzencode( $contents, 6, $encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE );
+        header( "Content-Encoding: " . $encoding );
+        header( 'Vary: Accept-Encoding' );
+    }
+
+    print_r( $contents );
+    die();
+}
+
+/**
+ * nv_xmlSitemapIndex_generate()
+ * 
+ * @return void
+ */
+function nv_xmlSitemapIndex_generate()
+{
+    global $db_config, $global_config, $nv_Request;
+
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="themes/default/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    $xml = new SimpleXMLElement( $sitemapHeader );
+
+    $lastModified = NV_CURRENTTIME - 86400;
+
+    if ( $global_config['lang_multi'] and ! $nv_Request->isset_request( NV_LANG_VARIABLE, 'get' ) )
+    {
+        foreach ( $global_config['allow_sitelangs'] as $lang )
+        {
+            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang . "&amp;" . NV_NAME_VARIABLE . "=SitemapIndex";
+            $row = $xml->addChild( 'sitemap' );
+            $row->addChild( 'loc', $link );
+        }
+    }
+    else
+    {
+        $site_mods = nv_site_mods();
+        foreach ( $site_mods as $modname => $values )
+        {
+            if ( isset( $values['funcs'] ) and isset( $values['funcs']['Sitemap'] ) )
+            {
+                $link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=Sitemap";
+                $row = $xml->addChild( 'sitemap' );
+                $row->addChild( 'loc', $link );
+            }
+        }
+    }
+
+    $contents = $xml->asXML();
+    if ( isset( $global_config['is_url_rewrite'] ) and $global_config['is_url_rewrite'] )
+    {
+        $contents = preg_replace( "/index\.php\?language\=([a-z]{2})\&[amp\;]*nv\=SitemapIndex/", "Sitemap-\\1.xml", $contents );
+        $contents = preg_replace( "/index\.php\?language\=([a-z]{2})\&[amp\;]*nv\=([a-zA-Z0-9]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "Sitemap-\\1.\\2.xml", $contents );
+    }
+
+    @Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
+    @Header( "Expires: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
+    @Header( "Content-Type: text/xml; charset=utf-8" );
+
+    if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) and strstr( $_SERVER['SERVER_SOFTWARE'], 'Apache/2' ) )
+    {
+        @Header( "Cache-Control: no-cache, pre-check=0, post-check=0" );
+    }
+    else
+    {
+        @Header( "Cache-Control: private, pre-check=0, post-check=0, max-age=0" );
+    }
+
+    @Header( "Pragma: no-cache" );
+
+    $encoding = "none";
+    if ( function_exists( 'gzencode' ) )
+    {
+        $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
+
+        if ( $encoding != 'none' )
+        {
+            unset( $matches );
+            if ( ! strstr( $_SERVER['HTTP_USER_AGENT'], 'Opera' ) && preg_match( '/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches ) )
+            {
+                $version = floatval( $matches[1] );
+                if ( $version < 6 || ( $version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' ) ) ) $encoding = 'none';
+            }
+        }
+    }
+
+    if ( $encoding != "none" )
+    {
+        $contents = gzencode( $contents, 6, $encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE );
+        header( "Content-Encoding: " . $encoding );
+        header( 'Vary: Accept-Encoding' );
+    }
+
+    print_r( $contents );
+    die();
+}
+
 ?>

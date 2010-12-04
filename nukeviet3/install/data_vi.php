@@ -97,7 +97,11 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (64, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '', ''),
 (65, 'search', 'Search', 'download', 1, 0, 1, 'left-body-right', ''),
 (66, 'viewcat', 'Viewcat', 'download', 1, 0, 2, 'left-body-right', ''),
-(67, 'viewfile', 'Viewfile', 'download', 1, 0, 3, 'left-body-right', '')";
+(67, 'viewfile', 'Viewfile', 'download', 1, 0, 3, 'left-body-right', ''),
+(68, 'Sitemap', 'Sitemap', 'news', 0, 0, 0, '', ''),
+(69, 'Sitemap', 'Sitemap', 'about', 0, 0, 0, '', ''),
+(70, 'Sitemap', 'Sitemap', 'download', 0, 0, 0, '', ''),
+(71, 'Sitemap', 'Sitemap', 'weblinks', 0, 0, 0, '', '')";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks` (`bid`, `groupbl`, `title`, `link`, `type`, `file_path`, `theme`, `template`, `position`, `exp_time`, `active`, `groups_view`, `module`, `all_func`, `func_id`, `weight`) VALUES

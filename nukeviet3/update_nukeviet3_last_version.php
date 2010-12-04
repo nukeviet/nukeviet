@@ -248,6 +248,12 @@ if ( defined( "NV_IS_GODADMIN" ) )
                                           UNIQUE KEY `member` (`member`,`group_id`)
                                         ) ENGINE=MyISAM" );
             }
+            
+            $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data_i . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES 
+            (NULL, 'Sitemap', 'Sitemap', 'news', 0, 0, 0, '', ''),
+            (NULL, 'Sitemap', 'Sitemap', 'about', 0, 0, 0, '', ''),
+            (NULL, 'Sitemap', 'Sitemap', 'download', 0, 0, 0, '', ''),
+            (NULL, 'Sitemap', 'Sitemap', 'weblinks', 0, 0, 0, '', '')";
         }
         
         $sql = "SELECT id, file_name FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "`";

@@ -9,3 +9,4 @@ Disallow: /logs/
 Disallow: /modules/
 Disallow: /sess/
 Disallow: /tmp/
+Sitemap: http://yousite.com/?nv=SitemapIndex
