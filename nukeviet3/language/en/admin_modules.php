@@ -18,7 +18,7 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['modules'] = "Setup module";
+$lang_module['modules'] = "Setup new module";
 $lang_module['blocks'] = "Setup block";
 $lang_module['language'] = "Setup language";
 $lang_module['setup'] = "Setup";

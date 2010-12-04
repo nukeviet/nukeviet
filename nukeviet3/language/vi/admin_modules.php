@@ -18,7 +18,7 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['modules'] = "Thiết lập module";
+$lang_module['modules'] = "Thiết lập module mới";
 $lang_module['blocks'] = "Cấu hình các block";
 $lang_module['language'] = "Cài đặt ngôn ngữ";
 $lang_module['setup'] = "Thiết lập";
