@@ -327,7 +327,7 @@ function nv_xmlSitemap_generate( $url )
  */
 function nv_xmlSitemapIndex_generate()
 {
-    global $db_config, $global_config, $nv_Request;
+    global $db_config, $global_config, $nv_Request, $sys_info;
 
     $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="themes/default/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement( $sitemapHeader );
@@ -358,7 +358,7 @@ function nv_xmlSitemapIndex_generate()
     }
 
     $contents = $xml->asXML();
-    if ( isset( $global_config['is_url_rewrite'] ) and $global_config['is_url_rewrite'] )
+    if ( $sys_info['supports_rewrite'] )
     {
         $contents = preg_replace( "/index\.php\?language\=([a-z]{2})\&[amp\;]*nv\=SitemapIndex/", "Sitemap-\\1.xml", $contents );
         $contents = preg_replace( "/index\.php\?language\=([a-z]{2})\&[amp\;]*nv\=([a-zA-Z0-9]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "Sitemap-\\1.\\2.xml", $contents );
