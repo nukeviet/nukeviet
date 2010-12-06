@@ -242,10 +242,11 @@ function nv_check_timezone()
    if( rawurldecode(cookie_timezone) != new_value)
    {
       nv_setCookie( nv_cookie_prefix + '_cltz', rawurlencode(new_value), 365 );
-      cookie_timezone = nv_getCookie( nv_cookie_prefix + '_cltz' );
-      if( rawurldecode(cookie_timezone) == new_value){
+      //Khong biet bac nao viet them vao cho nay ma vo ly qua. Xin loi xoa nhe!
+      //cookie_timezone = nv_getCookie( nv_cookie_prefix + '_cltz' );
+      /*if( rawurldecode(cookie_timezone) == new_value){
     	  window.location.href = strHref;
-      }
+      }*/
    }
 }
 
