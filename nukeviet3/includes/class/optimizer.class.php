@@ -86,6 +86,8 @@ class optimezer
             $this->_content = preg_replace_callback( $jsRegex, array( $this, 'jsCallback' ), $this->_content );
         }
 
+        $this->_meta['http-equiv'] = $this->_meta['name'] = array();
+
         //$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>|<script[^>]*>[^\<]*</script>!is";
         $regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
         preg_match_all( $regex, $this->_content, $matches );
@@ -95,7 +97,18 @@ class optimezer
             {
                 if ( preg_match( "/^<meta/", $tag ) )
                 {
-                    $this->_meta[] = $tag;
+                    preg_match_all( "/([a-zA-Z\-\_]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2 );
+                    if ( ! empty( $matches2 ) )
+                    {
+                        $combine = array_combine( $matches2[1], $matches2[2] );
+                        if ( array_key_exists( 'http-equiv', $combine ) )
+                        {
+                            $this->_meta['http-equiv'][strtolower( $combine['http-equiv'] )] = $combine['content'];
+                        } elseif ( array_key_exists( 'name', $combine ) )
+                        {
+                            $this->_meta['name'][strtolower( $combine['name'] )] = $combine['content'];
+                        }
+                    }
                 } elseif ( preg_match( "/^<title>[^<]+<\/title>/is", $tag ) )
                 {
                     $this->_title = $tag;
@@ -143,6 +156,23 @@ class optimezer
             }
         }
 
+        $meta = array();
+        if ( ! empty( $this->_meta['http-equiv'] ) )
+        {
+            foreach ( $this->_meta['http-equiv'] as $value => $content )
+            {
+                $meta[] = "<meta http-equiv=\"" . $value . "\" content=\"" . $content . "\" />";
+            }
+        }
+        
+        if ( ! empty( $this->_meta['name'] ) )
+        {
+            foreach ( $this->_meta['name'] as $value => $content )
+            {
+                $meta[] = "<meta name=\"" . $value . "\" content=\"" . $content . "\" />";
+            }
+        }
+
         if ( ! empty( $this->_jsMatches ) )
         {
             $_jsSrc = array();
@@ -172,7 +202,7 @@ class optimezer
         if ( ! $this->_tidySupport ) $this->_content = $this->minifyHTML( $this->_content );
 
         $head = "<head>" . $this->eol . $this->_title . $this->eol;
-        if ( ! empty( $this->_meta ) ) $head .= implode( $this->eol, $this->_meta ) . $this->eol;
+        if ( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
         if ( ! empty( $this->_links ) ) $head .= implode( $this->eol, $this->_links ) . $this->eol;
         if ( ! empty( $this->_cssLinks ) ) $head .= "<link rel=\"Stylesheet\" href=\"" . $this->newCssLink() . "\" type=\"text/css\" />" . $this->eol;
         if ( ! empty( $this->_cssIgnoreLinks ) ) $head .= implode( $this->eol, $this->_cssIgnoreLinks ) . $this->eol;
