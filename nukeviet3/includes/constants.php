@@ -224,6 +224,9 @@ define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, cap
 //Phan dau cua trang
 define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 3.0\n * @Author VINADES.,JSC (contact@vinades.vn)\n * @Copyright (C) 2010 VINADES.,JSC. All rights reserved\n * @Createdate " . gmdate( "D, d M Y H:i:s" ) . " GMT\n */" );
 
+//Chong IFRAME
+define( "NV_ANTI_IFRAME", 1 );
+
 $global_config['site_charset'] = "utf-8";
 $global_config['check_module'] = "/^[a-z0-9\-]+$/";
 $global_config['check_op'] = "/^[a-zA-Z0-9\-]+$/";

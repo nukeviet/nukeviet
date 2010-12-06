@@ -1426,7 +1426,12 @@ function nv_change_buffer( $buffer )
 
     $buffer = $db->unfixdb( $buffer );
     $buffer = nv_url_rewrite( $buffer );
-    
+
+    if ( defined( "NV_ANTI_IFRAME" ) and NV_ANTI_IFRAME )
+    {
+        $buffer = preg_replace( "/(<body[^>]*>)/", "$1\r\n<script type=\"text/javascript\">if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1 );
+    }
+
     if ( ! empty( $global_config['googleAnalyticsID'] ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
     {
         $dp = "";
