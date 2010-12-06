@@ -225,7 +225,7 @@ define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, cap
 define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 3.0\n * @Author VINADES.,JSC (contact@vinades.vn)\n * @Copyright (C) 2010 VINADES.,JSC. All rights reserved\n * @Createdate " . gmdate( "D, d M Y H:i:s" ) . " GMT\n */" );
 
 //Chong IFRAME
-define( "NV_ANTI_IFRAME", 1 );
+define( "NV_ANTI_IFRAME", 0 );
 
 $global_config['site_charset'] = "utf-8";
 $global_config['check_module'] = "/^[a-z0-9\-]+$/";
@@ -239,4 +239,5 @@ $global_config['check_theme_admin'] = "/^(admin)\_[a-zA-Z0-9-]+$/";
 $global_config['check_email'] = '/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/';
 $global_config['check_cron'] = "/^(cron)\_[a-zA-Z0-9\_]+$/";
 $global_config['check_op_layout'] = "/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/";
+
 ?>
