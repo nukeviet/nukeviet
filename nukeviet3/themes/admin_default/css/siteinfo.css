@@ -1,0 +1,31 @@
+.idinfo {
+	vertical-align: top;
+	width: 50px;
+}
+
+.ninfo {
+	cursor: pointer;
+}
+
+.tooltip {
+	font: 11px Tahoma, Arial, Verdana, sans-serif;
+	cursor: pointer;
+	display: none;
+}
+
+.tooltiptitle {
+	font: 800 12px Tahoma, Arial, Verdana, sans-serif;
+	margin-bottom: 10px;
+}
+
+.author {
+	vertical-align: top;
+	width: 100px
+}
+
+.updated {
+	vertical-align: top;
+	text-align: right;
+	white-space: nowrap;
+	width: 100px;
+}

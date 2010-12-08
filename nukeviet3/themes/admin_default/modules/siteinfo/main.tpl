@@ -103,19 +103,20 @@ $("#NukeVietGoogleCode").load('index.php?nv=siteinfo&gcode=1&num=' + nv_randomPa
 	<!-- BEGIN: loop -->
     <tbody{CLASS}>
         <tr>
-            <td style="vertical-align:top;width:50px">
+            <td class="idinfo">
                 <a href="{ENTRY.link}" target="_blank" title="">r{ENTRY.id}</a>
             </td>
             <td style="vertical-align:top">
-                <div class="ninfo" style="cursor:pointer;">{ENTRY.title}</div>
-                <div class="tooltip" style="font: 11px Tahoma, Arial, Verdana, sans-serif;cursor:pointer;display:none">
-                <div style="font: 800 12px Tahoma, Arial, Verdana, sans-serif;margin-bottom:10px">{ENTRY.title}</div>
-                {ENTRY.tooltip}</div>
+                <div class="ninfo">{ENTRY.title}</div>
+                <div class="tooltip">
+                	<div class="tooltiptitle">{ENTRY.title}</div>
+                	{ENTRY.tooltip}
+                </div>
             </td>
-            <td style="vertical-align:top;width:100px">
+            <td class="author">
                 {ENTRY.author}
             </td>
-            <td style="vertical-align:top;text-align:right;white-space:nowrap;width:100px">
+            <td class="updated">
                 {ENTRY.updated}
             </td>
         </tr>
