@@ -169,5 +169,7 @@ $lang_module['moduleInfo'] = "Thông tin từ các module";
 $lang_module['moduleName'] = "Module";
 $lang_module['moduleContent'] = "Nội dung";
 $lang_module['moduleValue'] = "Giá trị";
+$lang_module['newVersion_detail'] = "Số phiên bản: %s, cập nhật vào: %s";
+$lang_module['newVersion_info'] = "NukeViet CMS mà bạn đang sử dụng cần được nâng cấp lên phiên bản mới. Hãy click <a href=\"%s\">vào đây</a> để biết thêm chi tiết";
 
 ?>

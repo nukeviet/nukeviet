@@ -201,16 +201,18 @@ if ( ! empty( $info ) )
         $field = array();
         $field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] );
         $new_version = get_version( 28800 ); //kem tra lai sau 8 tieng
-        if ( $new_version != false )
+        $info = "";
+        if ( ! empty( $new_version ) )
         {
-            //if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
-            //{
             $field[] = array( //
                 'key' => $lang_module['version_news'], //
-                'value' => ( string )$new_version->version );
-            //}
+                'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( "d-m-Y H:i", strtotime( $new_version->date ) ) ) );
+
+            if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
+            {
+                $info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&amp;" . NV_OP_VARIABLE . "=checkupdate" );
+            }
         }
-        $caption = $lang_module['version'] . " (<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&amp;" . NV_OP_VARIABLE . "=checkupdate\">" . $lang_module['checkversion'] . "</a>)";
 
         $xtpl->assign( 'CAPTION', $lang_module['version'] );
         $xtpl->assign( 'ULINK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&amp;" . NV_OP_VARIABLE . "=checkupdate" );
@@ -223,6 +225,13 @@ if ( ! empty( $info ) )
             $xtpl->assign( 'VALUE', $value['value'] );
             $xtpl->parse( 'main.main2.loop' );
         }
+
+        if ( ! empty( $info ) )
+        {
+            $xtpl->assign( 'INFO', $info );
+            $xtpl->parse( 'main.main2.inf' );
+        }
+
         $xtpl->parse( 'main.main2' );
     }
 

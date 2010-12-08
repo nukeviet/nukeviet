@@ -69,5 +69,7 @@ $lang_module['moduleInfo'] = "Modules Information";
 $lang_module['moduleName'] = "Module";
 $lang_module['moduleContent'] = "Content";
 $lang_module['moduleValue'] = "Value";
+$lang_module['newVersion_detail'] = "Version Number %s, updated on %s";
+$lang_module['newVersion_info'] = "Nukeviet CMS needs to be upgraded to newer versions. <a href=\"%s\">Click here</a> for more details";
 
 ?>

@@ -42,8 +42,6 @@
     <caption>
         {CAPTION} <span style="font-weight:400">(<a href="{ULINK}">{CHECKVERSION}</a>)</span>
     </caption>
-    <col valign="top" />
-    <col valign="top" width="20%" />
     <thead>
         <tr>
             <td>
@@ -67,6 +65,9 @@
     </tbody>
     <!-- END: loop -->
 </table>
+<!-- BEGIN: inf -->
+<div class="newVesionInfo">{INFO}</div>
+<!-- END: inf -->
 <!-- END: main2 -->
 <!-- BEGIN: main3 -->
 <div id="NukeVietGoogleCode"></div>

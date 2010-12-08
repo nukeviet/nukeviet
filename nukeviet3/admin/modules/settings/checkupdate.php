@@ -12,7 +12,7 @@ if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['checkupdate'];
 
 $new_version = get_version();
-if ( $new_version == false )
+if ( $new_version === false )
 {
     $contents = $lang_module['update_error'];
 }

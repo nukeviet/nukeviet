@@ -29,3 +29,14 @@
 	white-space: nowrap;
 	width: 100px;
 }
+
+.newVesionInfo {
+    background: #EF3805;
+    font: 800 12px/30px Tahoma, Arial, Verdana, sans-serif;
+	color:#fff;
+    text-align: center;
+}
+
+.newVesionInfo a{
+    color:#fff;
+}
