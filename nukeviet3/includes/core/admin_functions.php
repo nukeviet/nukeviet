@@ -136,15 +136,23 @@ function nv_save_file_config_global ( )
     return file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", $content_config, LOCK_EX );
 }
 
-function get_version ( $updatetime = 3600 )
+/**
+ * get_version()
+ * 
+ * @param integer $updatetime
+ * @return
+ */
+function get_version( $updatetime = 3600 )
 {
     global $global_config;
-    
-    $my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.xml';
-    
+
+    $my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml';
+
     $xmlcontent = false;
-    
-    if ( file_exists( $my_file ) and filemtime( $my_file ) > NV_CURRENTTIME - $updatetime )
+
+    $p = NV_CURRENTTIME - $updatetime;
+
+    if ( file_exists( $my_file ) and @filemtime( $my_file ) > $p )
     {
         $xmlcontent = simplexml_load_file( $my_file );
     }
@@ -152,18 +160,18 @@ function get_version ( $updatetime = 3600 )
     {
         include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
         $getContent = new UrlGetContents( $global_config );
-        $content = $getContent->get( 'http://update.nukeviet.vn/nukeviet.version.xml' );
-        
-        if ( $content )
+        $content = $getContent->get( 'http://update.nukeviet.vn/nukeviet.version.xml?lang=' . NV_LANG_INTERFACE );
+
+        if ( ! empty( $content ) )
         {
             $xmlcontent = simplexml_load_string( $content );
-            if ( $xmlcontent != false )
+            if ( $xmlcontent !== false )
             {
                 file_put_contents( $my_file, $content );
             }
         }
     }
-    
+
     return $xmlcontent;
 }
 
