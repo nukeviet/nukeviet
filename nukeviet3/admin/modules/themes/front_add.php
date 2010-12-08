@@ -733,12 +733,12 @@ $(function(){
 	});	
 		
 	$("input[name=checkmod]").toggle(function(){
-		$("input[name=func_id[]]:checkbox").each(function(){
-			$("input[name=func_id[]]:visible").attr("checked","checked");			
+		$("input[name=\'func_id[]\']:checkbox").each(function(){
+			$("input[name=\'func_id[]\']:visible").attr("checked","checked");			
 		});
 	},function(){
-		$("input[name=func_id[]]:checkbox").each(function(){
-			$("input[name=func_id[]]:visible").removeAttr("checked");
+		$("input[name=\'func_id[]\']:checkbox").each(function(){
+			$("input[name=\'func_id[]\']:visible").removeAttr("checked");
 		});
 		}
 	);
@@ -756,7 +756,7 @@ $(function(){
 		var all_func = $("input[name=\'all_func\']:checked").val();
 		if(all_func==0){
     		var funcid = [];
-    		$("input[name=func_id[]]:checked").each(function(){
+    		$("input[name=\'func_id[]\']:checked").each(function(){
     			funcid.push($(this).val());
     		});
     		if (funcid.length<1){
@@ -780,7 +780,7 @@ $(function(){
 		var who_view = $("select[name=who_view]").val();
 		if (who_view==3){
 	        var grouplist = [];
-	        $("input[name=groups_view[]]:checked").each(function(){
+	        $("input[name=\'groups_view[]\']:checked").each(function(){
 	        	grouplist.push($(this).val());
 	        });
 	        if (grouplist.length<1){

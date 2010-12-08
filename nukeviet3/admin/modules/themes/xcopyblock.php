@@ -88,7 +88,7 @@ $("input[name=continue]").click(function(){
 	var theme1 = $("select[name=theme1]").val();
 	var theme2 = $("select[name=theme2]").val();
     var positionlist = [];
-	$("input[name=position[]]:checked").each(function(){
+	$("input[name=\'position[]\']:checked").each(function(){
 	    positionlist.push($(this).val());
     });
     if (positionlist.length<1){
