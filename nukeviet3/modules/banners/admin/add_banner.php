@@ -133,11 +133,12 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             
             if ( $exptime != 0 and $exptime <= $publtime ) $exptime = $publtime;
             
-            $sql = "INSERT INTO `" . NV_BANNERS_ROWS_GLOBALTABLE . "` VALUES 
+            $sql = "INSERT INTO `" . NV_BANNERS_ROWS_GLOBALTABLE . "` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `click_url`, `file_name_tmp`, `file_alt_tmp`, `click_url_tmp`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES 
             (NULL, " . $db->dbescape( $title ) . ", " . $pid . ", " . $clid . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ", 
             " . $width . ", " . $height . ", " . $db->dbescape( $file_alt ) . ", " . $db->dbescape( $click_url ) . ", '', '', '', " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ", 
-            0, 1)";
+            0, 1,0)";
             $id = $db->sql_query_insert_id( $sql );
+            nv_fix_banner_weight ( $pid );
             nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_banner', "bannerid " . $id, $admin_info['userid'] );
             nv_CreateXML_bannerPlan();
             

@@ -132,4 +132,6 @@ $lang_module['file_del_confirm'] = "Do you want delete?";
 $lang_module['delfile_success'] = "Delete ok!";
 $lang_module['delfile_error'] = "Delete error";
 
+$lang_module['weight'] = "Position";
+
 ?>

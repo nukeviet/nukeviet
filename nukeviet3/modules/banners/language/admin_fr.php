@@ -696,5 +696,6 @@ $lang_module['uploadtype'] = "Type de fichiers autorisés de transfert";
 	 english:	  
 */
 
+$lang_module['weight'] = "Position";
 
 ?>

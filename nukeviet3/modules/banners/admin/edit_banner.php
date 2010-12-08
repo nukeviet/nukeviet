@@ -158,12 +158,18 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             }
             
             if ( $exptime != 0 and $exptime <= $publtime ) $exptime = $publtime;
+            list( $pid_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT `pid` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . intval( $id ) . "" ) );
             
             $sql = "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `title`=" . $db->dbescape( $title ) . ", `pid`=" . $pid . ", `clid`=" . $clid . ", 
             `file_name`=" . $db->dbescape( $file_name ) . ", `file_ext`=" . $db->dbescape( $file_ext ) . ", `file_mime`=" . $db->dbescape( $file_mime ) . ", 
             `width`=" . $width . ", `height`=" . $height . ", `file_alt`=" . $db->dbescape( $file_alt ) . ", `click_url`=" . $db->dbescape( $click_url ) . ", 
             `publ_time`=" . $publtime . ", `exp_time`=" . $exptime . " WHERE `id`=" . $id;
             $db->sql_query( $sql );
+            if ( $pid_old != $pid )
+            {
+                nv_fix_banner_weight( $pid );
+                nv_fix_banner_weight( $pid_old );
+            }
             nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_banner', "bannerid " . $id, $admin_info['userid'] );
             nv_CreateXML_bannerPlan();
             

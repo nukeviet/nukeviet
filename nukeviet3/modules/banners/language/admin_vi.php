@@ -131,4 +131,7 @@ $lang_module['form'] = "Kiểu thể hiện";
 $lang_module['file_del_confirm'] = "Bạn có muốn xóa?";
 $lang_module['delfile_success'] = "Đã xóa xong";
 $lang_module['delfile_error'] = "Xóa lỗi";
+
+$lang_module['weight'] = "vị trí";
+
 ?>

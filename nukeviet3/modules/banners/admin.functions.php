@@ -62,6 +62,10 @@ function nv_CreateXML_bannerPlan ( )
         `exp_time` = 0) 
         AND 
         `act` = 1";
+        if ( $row['form'] == "sequential" )
+        {
+            $query2 .= " ORDER BY `weight` ASC";
+        }
         $result2 = $db->sql_query( $query2 );
         $numrows2 = $db->sql_numrows( $result2 );
         if ( empty( $numrows2 ) )
@@ -73,20 +77,43 @@ function nv_CreateXML_bannerPlan ( )
         {
             $plan['banners'][] = array( 
                 'id' => $row2['id'], //
-                'title' => $row2['title'], //
-                'clid' => $row2['clid'], //
-                'file_name' => $row2['file_name'], //
-                'file_ext' => $row2['file_ext'], //
-                'file_mime' => $row2['file_mime'], //
-                'file_width' => $row2['width'], //
-                'file_height' => $row2['height'], //
-                'file_alt' => $row2['file_alt'], //
-                'file_click' => $row2['click_url']  //
+'title' => $row2['title'], //
+'clid' => $row2['clid'], //
+'file_name' => $row2['file_name'], //
+'file_ext' => $row2['file_ext'], //
+'file_mime' => $row2['file_mime'], //
+'file_width' => $row2['width'], //
+'file_height' => $row2['height'], //
+'file_alt' => $row2['file_alt'], //
+'file_click' => $row2['click_url']  //
             );
         }
         
         $array2XML = new Array2XML();
         $array2XML->saveXML( $plan, 'plan', $xmlfile, $encoding = $global_config['site_charset'] );
+    }
+}
+
+function nv_fix_banner_weight ( $pid )
+{
+    global $db, $global_config;
+    list( $pid, $form ) = $db->sql_fetchrow( $db->sql_query( "SELECT `id`, `form` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . intval( $pid ) . "" ) );
+    if ( $pid > 0 and $form == "sequential" )
+    {
+        $query_weight = "SELECT `id` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE  `pid`=" . $pid . " ORDER BY `weight` ASC, `id` DESC";
+        $result = $db->sql_query( $query_weight );
+        $weight = 0;
+        while ( $row = $db->sql_fetchrow( $result ) )
+        {
+            $weight ++;
+            $sql = "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
+            $db->sql_query( $sql );
+        }
+    }
+    elseif ( $pid > 0 and $form == "random" )
+    {
+        $sql = "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `weight`='0' WHERE `pid`=" . $pid;
+        $db->sql_query( $sql );
     }
 }
 
@@ -98,7 +125,7 @@ $submenu['banners_list'] = $lang_module['banners_list'];
 $submenu['add_banner'] = $lang_module['add_banner'];
 
 $allow_func = array( 
-    'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat','del_banner' 
+    'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat', 'del_banner' 
 );
 
 define( 'NV_IS_FILE_ADMIN', true );
@@ -317,7 +344,7 @@ function nv_edit_client_theme ( $contents )
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['uploadtype'][0] . ":</td>\n";
     $return .= "<td></td>\n";
-	$return .= "<td><label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"images\" ".$contents['uploadtype'][2]."/>images</label>&nbsp;<label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"flash\" ".$contents['uploadtype'][3]."/>flash</label></td>\n";
+    $return .= "<td><label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"images\" " . $contents['uploadtype'][2] . "/>images</label>&nbsp;<label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"flash\" " . $contents['uploadtype'][3] . "/>flash</label></td>\n";
     $return .= "</tr>\n";
     
     $return .= "</table>\n";
@@ -1008,9 +1035,10 @@ function nv_banners_list_theme ( $contents )
 
 function nv_b_list_theme ( $contents )
 {
-    global $lang_module,$module_name;
-	$return = "<table summary=\"" . $contents['caption'] . "\" class=\"tab1\">\n";
+    global $lang_module, $module_name;
+    $return = "<table summary=\"" . $contents['caption'] . "\" class=\"tab1\">\n";
     $return .= "<caption>" . $contents['caption'] . "</caption>\n";
+    if ( defined( 'NV_BANNER_WEIGHT' ) ) $return .= "<col style=\"white-space:nowrap\" />\n";
     $return .= "<col span=\"5\" style=\"white-space:nowrap\" />\n";
     $return .= "<col style=\"width:50px;white-space:nowrap\" />\n";
     $return .= "<col style=\"width:200px;white-space:nowrap\" />\n";
@@ -1031,6 +1059,10 @@ function nv_b_list_theme ( $contents )
             $class = ( $a % 2 ) ? " class=\"second\"" : "";
             $return .= "<tbody" . $class . ">\n";
             $return .= "<tr>\n";
+            if ( defined( 'NV_BANNER_WEIGHT' ) )
+            {
+                $return .= "<td>" . $values['weight'] . "</td>\n";
+            }
             $return .= "<td>" . $values['title'] . "</td>\n";
             $return .= "<td><a href=\"" . $values['pid'][0] . "\">" . $values['pid'][1] . "</a></td>\n";
             if ( ! empty( $values['clid'] ) )
@@ -1059,7 +1091,7 @@ function nv_b_list_theme ( $contents )
 				$(function(){
 					$('a[class=delfile]').click(function(event){
 						event.preventDefault();
-						if (confirm('".$lang_module['file_del_confirm']."'))
+						if (confirm('" . $lang_module['file_del_confirm'] . "'))
 						{
 							var href= $(this).attr('href');
 							$.ajax({	
@@ -1068,7 +1100,7 @@ function nv_b_list_theme ( $contents )
 								data:'',
 								success: function(data){				
 									alert(data);
-									window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name."&".NV_OP_VARIABLE."=banners_list';
+									window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=banners_list';
 								}
 							});
 						}
@@ -1081,8 +1113,8 @@ function nv_b_list_theme ( $contents )
 
 function nv_info_b_theme ( $contents )
 {
-    global $lang_module,$module_name;
-	$return = "<div style=\"HEIGHT:27px;MARGIN-TOP:3px;POSITION:absolute;RIGHT:10px;TEXT-ALIGN:right;\">\n";
+    global $lang_module, $module_name;
+    $return = "<div style=\"HEIGHT:27px;MARGIN-TOP:3px;POSITION:absolute;RIGHT:10px;TEXT-ALIGN:right;\">\n";
     $return .= "<a class=\"button2\" href=\"" . $contents['edit'][0] . "\"><span><span>" . $contents['edit'][1] . "</span></span></a>\n";
     if ( isset( $contents['act'] ) ) $return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"" . $contents['act'][0] . "\"><span><span>" . $contents['act'][1] . "</span></span></a>\n";
     $return .= " </div>\n";
@@ -1134,7 +1166,7 @@ function nv_info_b_theme ( $contents )
 			$(function(){
 				$('a[class=delfile]').click(function(event){
 					event.preventDefault();
-					if (confirm('".$lang_module['file_del_confirm']."'))
+					if (confirm('" . $lang_module['file_del_confirm'] . "'))
 					{
 						var href= $(this).attr('href');
 						$.ajax({	
@@ -1143,7 +1175,7 @@ function nv_info_b_theme ( $contents )
 							data:'',
 							success: function(data){				
 								alert(data);
-								window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name."&amp;".NV_OP_VARIABLE."=banner_list';
+								window.location='index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=banner_list';
 							}
 						});
 					}

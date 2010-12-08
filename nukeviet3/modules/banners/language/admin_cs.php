@@ -131,4 +131,6 @@ $lang_module['file_del_confirm'] = "Přejete si smazat?";
 $lang_module['delfile_success'] = "Smazat soubor úspěch";
 $lang_module['delfile_error'] = "odstranit chyby";
 
+$lang_module['weight'] = "Pozice";
+
 ?>

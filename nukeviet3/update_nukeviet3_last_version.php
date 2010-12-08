@@ -248,13 +248,17 @@ if ( defined( "NV_IS_GODADMIN" ) )
                                           UNIQUE KEY `member` (`member`,`group_id`)
                                         ) ENGINE=MyISAM" );
             }
-            
+            //config Sitemap  
             $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data_i . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES 
             (NULL, 'Sitemap', 'Sitemap', 'news', 0, 0, 0, '', ''),
             (NULL, 'Sitemap', 'Sitemap', 'about', 0, 0, 0, '', ''),
             (NULL, 'Sitemap', 'Sitemap', 'download', 0, 0, 0, '', ''),
             (NULL, 'Sitemap', 'Sitemap', 'weblinks', 0, 0, 0, '', '')";
+        
         }
+        
+        //update module banner         
+        $db->sql_query( "ALTER TABLE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` ADD `weight` INT( 11 ) NOT NULL DEFAULT '0'" );
         
         $sql = "SELECT id, file_name FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "`";
         $result_lang = $db->sql_query( $sql );
@@ -263,12 +267,12 @@ if ( defined( "NV_IS_GODADMIN" ) )
             $file_name = str_replace( "uploads/banners/", "", $file_name );
             $db->sql_query( "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `file_name`=" . $db->dbescape_string( $file_name ) . " WHERE `id` = '" . $id . "'" );
         }
+        
+        //Website Optimization
+        $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'optActive', '1')" );
+        $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'googleAnalyticsID', '')" );
+        $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'googleAnalyticsSetDomainName', '0')" );
     }
-    
-    //Website Optimization
-    $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'optActive', '1')" );
-    $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'googleAnalyticsID', '')" );
-    $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'googleAnalyticsSetDomainName', '0')" );
     
     $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
     nv_save_file_config_global();

@@ -119,10 +119,10 @@ if ( defined( 'NV_IS_BANNER_CLIENT' ) )
             
             if ( $endtime != 0 and $endtime <= $begintime ) $endtime = $begintime;
             
-            $sql = "INSERT INTO `" . NV_BANNERS_ROWS_GLOBALTABLE . "` VALUES 
+            $sql = "INSERT INTO `" . NV_BANNERS_ROWS_GLOBALTABLE . "` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `click_url`, `file_name_tmp`, `file_alt_tmp`, `click_url_tmp`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES 
             (NULL, " . $db->dbescape( $title ) . ", " . $blockid . ", " . $banner_client_info['id'] . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ", 
             " . $width . ", " . $height . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $url ) . ", '', '', '', " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 
-            0, 3)";
+            0, 3,0)";
             $id = $db->sql_query_insert_id( $sql );
             if ( $id )
             {
