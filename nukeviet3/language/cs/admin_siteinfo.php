@@ -130,4 +130,20 @@ $lang_module['log_del_vote'] = "Smazat hlasování";
 $lang_module['log_add_vote'] = "Přídat hlasování";
 $lang_module['log_edit_vote'] = "Editovat hlasování";
 
+$lang_module['nukevietChange_caption'] = "Subversion commits to project NukeViet on Google Code";
+$lang_module['nukevietChange_upd'] = "Last Update";
+$lang_module['nukevietChange_refresh'] = "Refresh";
+$lang_module['nukevietChange_go'] = "Visit";
+$lang_module['nukevietChange_content'] = "Content";
+$lang_module['nukevietChange_id'] = "ID";
+$lang_module['nukevietChange_author'] = "Author";
+$lang_module['nukevietChange_updated'] = "Updated";
+$lang_module['nukevietChange_modify'] = "Modify";
+$lang_module['nukevietChange_add'] = "Add";
+$lang_module['nukevietChange_delete'] = "Delete";
+$lang_module['moduleInfo'] = "Modules Information";
+$lang_module['moduleName'] = "Module";
+$lang_module['moduleContent'] = "Content";
+$lang_module['moduleValue'] = "Value";
+
 ?>
