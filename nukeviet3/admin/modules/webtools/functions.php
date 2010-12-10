@@ -17,9 +17,10 @@ $menu_top = array(
 
 $submenu['clearsystem'] = $lang_module['clearsystem'];
 $submenu['sitemapPing'] = $lang_module['sitemapPing'];
+$submenu['revision'] = $lang_module['revision'];
 
 $allow_func = array( 
-    'main', 'clearsystem','sitemapPing' 
+    'main', 'clearsystem', 'sitemapPing', 'revision' 
 );
 
 ?>
