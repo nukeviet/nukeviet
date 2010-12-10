@@ -18,6 +18,19 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
-$lang_module['sitemap'] = "Sitemap generator";
+$lang_module['sitemapPing'] = "Sitemap Ping";
+$lang_module['searchEngine'] = "search Engine";
+$lang_module['searchEngineConfig'] = "searchEngine Config";
+$lang_module['searchEngineName'] = "searchEngine Name";
+$lang_module['searchEngineValue'] = "Ping Service Links";
+$lang_module['searchEngineFailed'] = "Ping Service Links failed";
+$lang_module['PingNotSupported'] = "Ping not Supported";
+$lang_module['searchEngineActive'] = "Active";
+$lang_module['searchEngineSelect'] = "Please Select searchEngine";
+$lang_module['sitemapModule'] = "Please Select Module";
+$lang_module['sitemapView'] = "View";
+$lang_module['sitemapSend'] = "Ping";
+$lang_module['pleasePingAgain'] = "Please excuse the ping again";
+$lang_module['pingOK'] = "Sitemap file has been sent successfully";
 
 ?>

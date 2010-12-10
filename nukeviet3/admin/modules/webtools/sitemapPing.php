@@ -7,7 +7,7 @@
  * @Createdate 5/12/2010, 1:34
  */
 
-if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
 function nv_sitemapPing( $module, $link )
 {

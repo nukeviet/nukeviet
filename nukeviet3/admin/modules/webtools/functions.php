@@ -9,17 +9,17 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-define( 'NV_IS_FILE_ADMIN', true );
+define( 'NV_IS_FILE_WEBTOOLS', true );
 
 $menu_top = array( 
     "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_webtools'] 
 );
 
-$submenu['delalltemp'] = "delalltemp";
-$submenu['sitemap'] = $lang_module['sitemap'];
+$submenu['clearsystem'] = $lang_module['clearsystem'];
+$submenu['sitemapPing'] = $lang_module['sitemapPing'];
 
 $allow_func = array( 
-    'main', 'sitemap', 'delalltemp' 
+    'main', 'clearsystem','sitemapPing' 
 );
 
 ?>

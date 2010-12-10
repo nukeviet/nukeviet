@@ -7,7 +7,7 @@
  * @Createdate 9/9/2010, 6:38
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_global['mod_webtools'];
 
