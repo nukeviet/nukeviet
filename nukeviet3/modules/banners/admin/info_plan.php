@@ -39,7 +39,7 @@ $contents['aj'] = array(
 );
 
 $contents = call_user_func( "nv_info_plan_theme", $contents );
-
+$set_active_op = "plans_list";
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );

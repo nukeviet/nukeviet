@@ -296,6 +296,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_rows` 
   `exp_time` int(11) unsigned NOT NULL DEFAULT '0',
   `hits_total` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `weight` int(11) NOT NULL default '0',  
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`),
   KEY `clid` (`clid`)
@@ -404,8 +405,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_plans` 
 (2, '', 'Quang cao trai', '', 'sequential', 190, 500, 1)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_rows` VALUES
-(1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', 'http://www.mofa.gov.vn', '', '', '', 1275296773, 1275296773, 0, 1, 1), 
-(2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', 'http://vinades.vn', '', '', '', 1275321220, 1275321220, 0, 0, 1), 
-(3, 'Quang cao giua trang', 1, 0, 'vndads___05.jpg', 'jpg', 'image/jpeg', 470, 60, '', 'http://vinades.vn', '', '', '', 1275321716, 1275321716, 0, 0, 1)";
+(1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', 'http://www.mofa.gov.vn', '', '', '', 1275296773, 1275296773, 0, 1, 1,1), 
+(2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', 'http://vinades.vn', '', '', '', 1275321220, 1275321220, 0, 0, 1,2), 
+(3, 'Quang cao giua trang', 1, 0, 'vndads___05.jpg', 'jpg', 'image/jpeg', 470, 60, '', 'http://vinades.vn', '', '', '', 1275321716, 1275321716, 0, 0, 1,1)";
 
 ?>
