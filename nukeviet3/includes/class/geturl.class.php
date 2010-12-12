@@ -66,31 +66,9 @@ class UrlGetContents
             ini_set( 'user_agent', $this->user_agent );
         }
         
-        if ( extension_loaded( 'curl' ) )
+        if ( extension_loaded( 'curl' ) and ( empty( $disable_functions ) or ( ! empty( $disable_functions ) and ! preg_grep( '/^curl\_/', $disable_functions ) ) ) )
         {
-            $curl_functions = array( 
-                'curl_init', 'curl_setopt', 'curl_exec', 'curl_errno', 'curl_close', 'curl_getinfo' 
-            );
-            $is_enable = true;
-            foreach ( $curl_functions as $function )
-            {
-                if ( ! function_exists( $function ) )
-                {
-                    $is_enable = false;
-                    break;
-                }
-                
-                if ( ! empty( $disable_functions ) and in_array( $function, $disable_functions ) )
-                {
-                    $is_enable = false;
-                    break;
-                }
-            }
-            
-            if ( $is_enable )
-            {
-                $this->allow_methods[] = 'curl';
-            }
+            $this->allow_methods[] = 'curl';
         }
         
         if ( function_exists( "fsockopen" ) and ! in_array( 'fsockopen', $disable_functions ) )
@@ -125,14 +103,7 @@ class UrlGetContents
             $this->safe_mode = false;
         }
         
-        if ( ini_get( 'open_basedir' ) == '1' || strtolower( ini_get( 'open_basedir' ) ) == 'on' )
-        {
-            $this->open_basedir = true;
-        }
-        else
-        {
-            $this->open_basedir = false;
-        }
+        $this->open_basedir = ini_get( 'open_basedir' ) ? true : false;
     }
 
     /**
@@ -169,7 +140,7 @@ class UrlGetContents
             curl_setopt( $curlHandle, CURLOPT_REFERER, $this->url_info['uri'] );
         }
         
-        if ( ! $this->safe_mode and $this->open_basedir )
+        if ( ! $this->safe_mode and ! $this->open_basedir )
         {
             curl_setopt( $curlHandle, CURLOPT_FOLLOWLOCATION, 1 );
             curl_setopt( $curlHandle, CURLOPT_MAXREDIRS, 10 );

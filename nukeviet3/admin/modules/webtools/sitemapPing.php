@@ -34,14 +34,19 @@ function nv_sitemapPing( $module, $link )
     {
         $c = curl_init();
         curl_setopt( $c, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $c, CURLOPT_FOLLOWLOCATION, true );
-        curl_setopt( $c, CURLOPT_MAXREDIRS, 20 );
+        $open_basedir = @ini_get( 'open_basedir' ) ? true : false;
+        if ( ! $sys_info['safe_mode'] and ! $open_basedir )
+        {
+            curl_setopt( $c, CURLOPT_FOLLOWLOCATION, true );
+            curl_setopt( $c, CURLOPT_MAXREDIRS, 20 );
+        }
         curl_setopt( $c, CURLOPT_TIMEOUT, 30 );
         curl_setopt( $c, CURLOPT_URL, $link );
         curl_exec( $c );
         if ( ! curl_errno( $c ) )
         {
             $response = curl_getinfo( $c );
+
             if ( $response['http_code'] == 200 )
             {
                 $result = true;
