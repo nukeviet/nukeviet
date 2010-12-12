@@ -50,7 +50,7 @@ $sys_info['zlib_support'] = ( extension_loaded( 'zlib' ) ) ? 1 : 0;
 $sys_info['session_support'] = ( extension_loaded( 'session' ) ) ? 1 : 0;
 $sys_info['mb_support'] = ( extension_loaded( 'mbstring' ) ) ? 1 : 0;
 $sys_info['iconv_support'] = ( extension_loaded( 'iconv' ) ) ? 1 : 0;
-$sys_info['curl_support'] = ( extension_loaded( 'curl' ) and function_exists( "curl_init" ) and ! in_array( 'curl_init', $sys_info['disable_functions'] ) ) ? 1 : 0;
+$sys_info['curl_support'] = ( extension_loaded( 'curl' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! preg_grep( '/^curl\_/', $sys_info['disable_functions'] ) ) ) ) ? 1 : 0;
 $sys_info['allowed_set_time_limit'] = ( ! $sys_info['safe_mode'] and function_exists( "set_time_limit" ) and ! in_array( 'set_time_limit', $sys_info['disable_functions'] ) ) ? 1 : 0;
 $sys_info['os'] = strtoupper( ( function_exists( 'php_uname' ) and ! in_array( 'php_uname', $sys_info['disable_functions'] ) and strtoupper( php_uname( 's' ) ) != '' ) ? php_uname( 's' ) : PHP_OS );
 if ( $sys_info['os'] == "LINUX" )

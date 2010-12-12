@@ -17,7 +17,9 @@ function nv_clear_files ( $dir, $base )
     $files = scandir( $dir );
     foreach ( $files as $file )
     {
-        if ( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and $file != "index.html" and is_file( $dir . '/' . $file ) )
+        if ( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and //
+        $file != "index.html" and is_file( $dir . '/' . $file ) and //
+        $file != "sess_" . $client_info['session_id']) //
         {
             $d = nv_deletefile( $dir . '/' . $file, false );
             if ( $d[0] )
