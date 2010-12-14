@@ -48,22 +48,23 @@ if ( $checknum != $row['checknum'] )
     $info = $lang_module['account_active_error'] . "<br /><br />\n";
     $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
     $info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $lang_module['redirect_to_login'] . "</a>]";
-
+    
     $contents = user_info_exit( $info );
     $contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
-
+    
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_site_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
-    exit;
+    exit();
 }
 
 $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
-`userid`, `username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, `website`, 
+`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, `website`, 
 `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, 
 `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) VALUES (
 NULL, 
 " . $db->dbescape( $row['username'] ) . ", 
+" . $db->dbescape( md5($row['username']) ) . ", 
 " . $db->dbescape( $row['password'] ) . ", 
 " . $db->dbescape( $row['email'] ) . ", 
 " . $db->dbescape( $row['full_name'] ) . ", 
@@ -79,14 +80,14 @@ if ( ! $db->sql_query_insert_id( $sql ) )
     $info = $lang_module['account_active_error'] . "<br /><br />\n";
     $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
     $info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $lang_module['redirect_to_login'] . "</a>]";
-
+    
     $contents = user_info_exit( $info );
     $contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
-
+    
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_site_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
-    exit;
+    exit();
 }
 
 $sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $db->dbescape( $userid );

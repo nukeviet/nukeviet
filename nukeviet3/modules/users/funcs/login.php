@@ -289,11 +289,12 @@ function openidLogin_Res1 ( $attribs )
                         $reg_attribs = set_reg_attribs( $attribs );
                         
                         $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
-                        `userid`, `username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, `website`, 
+                        `userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, `website`, 
                         `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, 
                         `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) VALUES (
                         NULL, 
                         " . $db->dbescape( $row['username'] ) . ", 
+                        " . $db->dbescape( md5($row['username']) ) . ", 
                         " . $db->dbescape( $row['password'] ) . ", 
                         " . $db->dbescape( $row['email'] ) . ", 
                         " . $db->dbescape( ! empty( $row['full_name'] ) ? $row['full_name'] : $reg_attribs['full_name'] ) . ", 
@@ -481,12 +482,13 @@ function openidLogin_Res1 ( $attribs )
         if ( $option == 2 )
         {
             $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` 
-            (`userid`, `username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
+            (`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
             `regdate`, `website`, `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, `answer`, `passlostkey`, 
             `view_mail`, `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) VALUES 
             (
             NULL, 
             " . $db->dbescape( $reg_attribs['username'] ) . ", 
+            " . $db->dbescape( md5( $reg_attribs['username'] ) ) . ", 
             '', 
             " . $db->dbescape( $reg_attribs['email'] ) . ", 
             " . $db->dbescape( $reg_attribs['full_name'] ) . ", 
