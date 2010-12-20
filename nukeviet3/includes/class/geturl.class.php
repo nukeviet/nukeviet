@@ -392,7 +392,7 @@ class UrlGetContents
             'method' => 'GET', //
             'max_redirects' => '2', //
             'ignore_errors' => '0', //
-            'timeout' => 3 //
+            'timeout' => 30 //
             ) ) );
 
         if ( ( $fd = @fopen( $this->url_info['uri'], "rb", 0, $ctx ) ) === false )
