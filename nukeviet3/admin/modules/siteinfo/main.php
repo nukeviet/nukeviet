@@ -200,7 +200,7 @@ if ( ! empty( $info ) )
     {
         $field = array();
         $field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] );
-        $new_version = get_version( 28800 ); //kem tra lai sau 8 tieng
+        $new_version = nv_geVersion( 28800 ); //kem tra lai sau 8 tieng
         $info = "";
         if ( ! empty( $new_version ) )
         {
@@ -215,7 +215,7 @@ if ( ! empty( $info ) )
         }
 
         $xtpl->assign( 'CAPTION', $lang_module['version'] );
-        $xtpl->assign( 'ULINK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&amp;" . NV_OP_VARIABLE . "=checkupdate" );
+        $xtpl->assign( 'ULINK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate" );
         $xtpl->assign( 'CHECKVERSION', $lang_module['checkversion'] );
 
         foreach ( $field as $key => $value )

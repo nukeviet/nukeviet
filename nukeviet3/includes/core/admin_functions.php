@@ -137,12 +137,12 @@ function nv_save_file_config_global ( )
 }
 
 /**
- * get_version()
+ * nv_geVersion()
  * 
  * @param integer $updatetime
  * @return
  */
-function get_version( $updatetime = 3600 )
+function nv_geVersion( $updatetime = 3600 )
 {
     global $global_config;
 

@@ -35,7 +35,6 @@ $lang_module['lang_site_config'] = "Theo ngôn ngữ";
 $lang_module['bots_config'] = "Máy chủ tìm kiếm";
 
 $lang_module['optActive'] = "Kích hoạt chức năng tối ưu site<br />(Chỉ tắt với admin)";
-$lang_module['checkupdate'] = "Kiểm tra phiên bản";
 $lang_module['sitename'] = "Tên gọi của site";
 $lang_module['theme'] = "Giao diện mặc định";
 $lang_module['themeadmin'] = "Giao diện người quản trị";
@@ -79,22 +78,6 @@ $lang_module['outgoing_port'] = "Outgoing server(SMTP)";
 $lang_module['smtp_username'] = "Logon infomation";
 $lang_module['smtp_login'] = "User Name";
 $lang_module['smtp_pass'] = "Password";
-
-//check update
-
-
-$lang_module['update_error'] = "Lỗi: hệ thống không check được thông tin, Bạn vui lòng kiểm tra lại vào thời gian khác";
-$lang_module['version_latest'] = "Phiên bản hiện tại của bạn đang là mới nhất";
-$lang_module['version_no_latest'] = "Phiên bản của bạn chưa mới nhất";
-$lang_module['version_info'] = "Thông tin phiên bản mới nhất";
-$lang_module['version_name'] = "Tên hệ thống";
-$lang_module['version_number'] = "Số phiên bản";
-$lang_module['version_date'] = "Ngày phát hành";
-$lang_module['version_note'] = "Ghi chú về phiên bản mới";
-
-$lang_module['version_download'] = " bạn có thể download phiên bản mới";
-$lang_module['version_updatenew'] = "update phiên bản mới";
-
 $lang_module['smtp_pass'] = "Password";
 
 //bots

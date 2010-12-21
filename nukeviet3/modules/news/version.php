@@ -15,7 +15,7 @@ $module_version = array(
 "is_sysmod" => 0, // 1:0 => Co phai la module he thong hay khong
 "virtual" => 1, // 1:0 => Co cho phep ao hao module hay khong
 "version" => "3.0.01", // Phien ban cua modle
-"date" => "Fri, 7 May 2010 09:47:15 GMT", // Ngay phat hanh phien ban
+"date" => "Wed, 20 Oct 2010 00:00:00 GMT", // Ngay phat hanh phien ban
 "author" => "VINADES (contact@vinades.vn)", // Tac gia
 "note" => "", // Ghi chu
 "uploads_dir" => array( 

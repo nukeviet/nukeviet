@@ -24,10 +24,9 @@ $submenu['metatags'] = $lang_module['metaTagsConfig'];
 $submenu['bots'] = $lang_module['bots_config'];
 $submenu['banip'] = $lang_module['banip'];
 $submenu['uploadconfig'] = $lang_module['uploadconfig'];
-$submenu['checkupdate'] = $lang_module['checkupdate'];
 
 $allow_func = array( 
-    'main', 'system', 'bots', 'checkupdate', 'smtp', 'ftp', 'metatags', 'banip', 'uploadconfig', //
+    'main', 'system', 'bots', 'smtp', 'ftp', 'metatags', 'banip', 'uploadconfig', //
 	'cronjobs', 'cronjobs_add', 'cronjobs_edit', 'cronjobs_del', 'cronjobs_act'
 );
 
