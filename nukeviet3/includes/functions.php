@@ -1154,11 +1154,11 @@ function nv_is_url ( $url )
         {
             return false;
         }
-        elseif ( isset( $parts['path'] ) and ! preg_match( "/^[0-9A-Za-z\/\_\.\@\~\-]*$/", $parts['path'] ) )
+        elseif ( isset( $parts['path'] ) and ! preg_match( "/^[0-9A-Za-z\/\_\.\@\~\-\%\\s]*$/", $parts['path'] ) )
         {
             return false;
         }
-        elseif ( isset( $parts['query'] ) and ! preg_match( "/^[0-9a-z\-\_\/\?\&\=\#\.\,\;]*$/", $parts['query'] ) )
+        elseif ( isset( $parts['query'] ) and ! preg_match( "/^[0-9a-z\-\_\/\?\&\=\#\.\,\;\%\\s]*$/", $parts['query'] ) )
         {
             return false;
         }
