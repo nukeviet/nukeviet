@@ -10,7 +10,7 @@ $page_title = $lang_module['site_configs_info'];
 $info = array();
 if ( defined( 'NV_IS_GODADMIN' ) )
 {
-    $global_config['version'] .= "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&amp;" . NV_OP_VARIABLE . "=checkupdate\">" . $lang_module['checkversion'] . "</a>";
+    $global_config['version'] .= "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate\">" . $lang_module['checkversion'] . "</a>";
     $global_config['chmod'] = " <a id='checkchmod' href='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=siteinfo&amp;" . NV_OP_VARIABLE . "=checkchmod'>(" . $lang_module['checkchmod'] . ")</a>&nbsp;&nbsp;<span id='wait'></span>";
 }
 
