@@ -71,14 +71,13 @@ $lang_module['type_smtp'] = "SMTP";
 $lang_module['type_linux'] = "Linux Mail";
 $lang_module['type_phpmail'] = "PHPmail";
 
-$lang_module['smtp_server'] = "Server Infomation";
-$lang_module['incoming_ssl'] = "Use the following type of encrypted connection";
-$lang_module['outgoing'] = "Outgoing mail server (SMTP)";
-$lang_module['outgoing_port'] = "Outgoing server(SMTP)";
-$lang_module['smtp_username'] = "Logon infomation";
-$lang_module['smtp_login'] = "User Name";
-$lang_module['smtp_pass'] = "Password";
-$lang_module['smtp_pass'] = "Password";
+$lang_module['smtp_server'] = "Cấu hình máy chủ gửi mail";
+$lang_module['incoming_ssl'] = "Sử dụng Xác thực";
+$lang_module['outgoing'] = "Máy chủ (SMTP) Thư Gửi đi";
+$lang_module['outgoing_port'] = "Cổng gửi mail";
+$lang_module['smtp_username'] = "Tài khoản gửi mail";
+$lang_module['smtp_login'] = "Tên Tài khoản";
+$lang_module['smtp_pass'] = "Mật khẩu";
 
 //bots
 $lang_module['bot_name'] = "Tên máy chủ ";
