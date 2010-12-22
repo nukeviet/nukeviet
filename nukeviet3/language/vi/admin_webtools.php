@@ -61,7 +61,8 @@ $lang_module['moduleInfo'] = "Thông tin";
 $lang_module['moduleNote'] = "Ghi chú";
 $lang_module['moduleNote1'] = "Module chưa được kiểm tra";
 $lang_module['moduleNote1_detail'] = "Rất tiếc là module này chưa được kiểm tra và xác nhận tính hợp lệ từ NUKEVIET GROUP. Sử dụng nó, tức là bạn chấp nhận những rủi ro nằm ngoài tầm kiểm soát của hệ thống";
-$lang_module['moduleNote2'] = "<a title=\"Hãy Click để tải về\" href=\"%s\">Module chưa được cài đặt</a>";
+$lang_module['moduleNote2'] = "Module chưa được cài đặt. Hãy click để tải về";
+$lang_module['moduleNote2_link'] = "Danh sách các module mới";
 $lang_module['moduleNote3'] = "<a title=\"Hãy Click để tải mới\" href=\"%s\">Phiên bản không xác định</a>";
 $lang_module['moduleNote4'] = "<a title=\"Hãy Click để tải về\" href=\"%s\">Cần cập nhật phiên bản mới</a>";
 $lang_module['moduleNote5'] = "Đã cài phiên bản mới nhất";
@@ -72,5 +73,6 @@ $lang_module['moduleModeSys'] = "Cùng hệ thống";
 $lang_module['moduleModeOther'] = "Độc lập";
 $lang_module['moduleLink'] = "Link tải về";
 $lang_module['moduleSupport'] = "Website hỗ trợ";
+$lang_module['checkDate'] = "Cập nhật vào";
 
 ?>
