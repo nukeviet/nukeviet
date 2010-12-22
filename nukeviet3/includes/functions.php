@@ -51,6 +51,31 @@ if ( ! function_exists( 'array_intersect_key' ) )
     }
 }
 
+if ( ! function_exists( 'array_diff_key' ) )
+{
+    /**
+     * array_diff_key()
+     * 
+     * @return
+     */
+    function array_diff_key()
+    {
+        $arrs = func_get_args();
+        $result = array_shift( $arrs );
+        foreach ( $arrs as $array )
+        {
+            foreach ( $result as $key => $v )
+            {
+                if ( array_key_exists( $key, $array ) )
+                {
+                    unset( $result[$key] );
+                }
+            }
+        }
+        return $result;
+    }
+}
+
 /**
  * nv_object2array()
  * 
