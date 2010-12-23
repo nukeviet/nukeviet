@@ -285,7 +285,7 @@ class Diagnostic
         $content = $getContent->get( $url );
 
         unset( $match );
-        if ( preg_match( "/\<div\s+id\=resultStats\>[^\<]*\s+([0-9\,]+)/is", $content, $match ) )
+        if ( preg_match( "/\<div\s+id\=resultStats\>[^\<]*([0-9\,]+)[^\<]*\</is", $content, $match ) )
         {
             $bl = preg_replace( "/\,/", "", $match[1] );
             return ( int )$bl;
@@ -309,7 +309,7 @@ class Diagnostic
         $content = $getContent->get( $url );
 
         unset( $match );
-        if ( preg_match( "/\<div\s+id\=resultStats\>[^\<]*\s+([0-9\,]+)/is", $content, $match ) )
+        if ( preg_match( "/\<div\s+id\=resultStats\>[^\<]*([0-9\,]+)[^\<]*\</is", $content, $match ) )
         {
             $bl = preg_replace( "/\,/", "", $match[1] );
             return ( int )$bl;

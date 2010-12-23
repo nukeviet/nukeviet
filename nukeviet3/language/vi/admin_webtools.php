@@ -75,7 +75,7 @@ $lang_module['moduleLink'] = "Link tải về";
 $lang_module['moduleSupport'] = "Website hỗ trợ";
 $lang_module['checkDate'] = "Cập nhật vào";
 
-$lang_module['siteDiagnostic'] = "Thứ hạng site";
+$lang_module['siteDiagnostic'] = "Chẩn đoán site";
 $lang_module['EngineInfo'] = "Thông tin từ các máy chủ tìm kiếm";
 $lang_module['diagnosticDate'] = "Cập nhật";
 $lang_module['diagnosticGPR'] = "Google<br />PageRank";
