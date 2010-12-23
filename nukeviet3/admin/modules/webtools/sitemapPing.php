@@ -9,6 +9,13 @@
 
 if ( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
+/**
+ * nv_sitemapPing()
+ * 
+ * @param mixed $module
+ * @param mixed $link
+ * @return
+ */
 function nv_sitemapPing( $module, $link )
 {
     global $sys_info, $lang_module;
@@ -221,32 +228,6 @@ for ( $i = 0; $i < 3; $i++ )
 
 $xtpl->parse( 'searchEngineList' );
 $contents = $xtpl->text( 'searchEngineList' );
-
-/*$searchEngines = array();
-$searchEngines[1] = array( 'Google', 'http://www.google.com/webmasters/tools/ping?sitemap=' );
-$searchEngines[2] = array( 'Yahoo', 'http://search.yahooapis.com/SiteExplorerService/V1/ping?sitemap=' );
-$searchEngines[3] = array( 'Ask', 'http://submissions.ask.com/ping?sitemap=' );
-$searchEngines[4] = array( 'Bing', 'http://www.bing.com/webmaster/ping.aspx?siteMap=' );
-
-$sitemapFiles = array();
-
-$sql = "SELECT f.in_module as name, m.custom_title as title FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE m.act = 1 AND f.func_name='Sitemap' AND f.in_module = m.title";
-$result = $db->sql_query( $sql );
-while ( $row = $db->sql_fetchrow( $result ) )
-{
-$sitemapFiles[$row['name']] = $row['title'];
-}
-
-if ( $nv_Request->isset_request( 'submit', 'post' ) )
-{
-$searchEngine = $nv_Request->get_int( 'searchEngine', 'post', 0 );
-$module = filter_text_input( 'in_module', 'post', "", 1, 255 );
-
-if ( isset( $searchEngines[$searchEngine] ) and isset( $sitemapFiles[$module] ) )
-{
-
-}
-}*/
 
 $page_title = $lang_module['sitemapPing'];
 

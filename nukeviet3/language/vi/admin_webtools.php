@@ -75,4 +75,15 @@ $lang_module['moduleLink'] = "Link tải về";
 $lang_module['moduleSupport'] = "Website hỗ trợ";
 $lang_module['checkDate'] = "Cập nhật vào";
 
+$lang_module['siteDiagnostic'] = "Thứ hạng site";
+$lang_module['EngineInfo'] = "Thông tin từ các máy chủ tìm kiếm";
+$lang_module['diagnosticDate'] = "Cập nhật";
+$lang_module['diagnosticGPR'] = "Google<br />PageRank";
+$lang_module['diagnosticATR'] = "Alexa<br />Rank";
+$lang_module['diagnosticGBL'] = "Google<br />BackLink";
+$lang_module['diagnosticYBL'] = "Yahoo<br />BackLink";
+$lang_module['diagnosticABL'] = "Alexa<br />BackLink";
+$lang_module['diagnosticGID'] = "Google<br />Indexed";
+$lang_module['diagnosticYID'] = "Yahoo<br />Indexed";
+
 ?>

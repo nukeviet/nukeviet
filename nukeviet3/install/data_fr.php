@@ -375,6 +375,7 @@ $array_cron_name[4] = 'Supprimer les fichiers ip_logs expirés';
 $array_cron_name[5] = 'Supprimer les fichiers error_log expirés';
 $array_cron_name[6] = 'Envoyer à l\'administrateur l\'e-mail des notifications d\'erreurs';
 $array_cron_name[7] = 'Supprimer les referers expirés';
+$array_cron_name[8] = 'Mise à jour du site de diagnostic';
 
 $result = $db->sql_query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
 while ( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )

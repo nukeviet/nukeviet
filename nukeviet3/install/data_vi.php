@@ -387,6 +387,7 @@ $array_cron_name[4] = 'Xóa IP log files Xóa các file logo truy cập';
 $array_cron_name[5] = 'Xóa các file error_log quá hạn';
 $array_cron_name[6] = 'Gửi email các thông báo lỗi cho admin';
 $array_cron_name[7] = 'Xóa các referer quá hạn';
+$array_cron_name[8] = 'Cập nhật đánh giá site từ các máy chủ tìm kiếm';
 
 $result = $db->sql_query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
 while ( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )

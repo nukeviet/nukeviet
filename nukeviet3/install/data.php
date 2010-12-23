@@ -385,7 +385,8 @@ $sql_create_table[] = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `sta
 (4, 1269657620, 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 1276839725, 1),
 (5, 1271004840, 1440, 'error_log_destroy.php', 'cron_auto_del_error_log', '', 0, 1, 1, 1276793791, 1),
 (6, 1271004840, 360, 'error_log_sendmail.php', 'cron_auto_sendmail_error_log', '', 0, 1, 0, 1276177733, 0),
-(7, 1276281900, 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 1276839725, 1)";
+(7, 1276281900, 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 1276839725, 1),
+(8, 1276281900, 1440, 'siteDiagnostic_update.php', 'cron_siteDiagnostic_update', '', 0, 1, 1, 0, 0)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES
 ('about', 0, 1, 'about', 'about', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),

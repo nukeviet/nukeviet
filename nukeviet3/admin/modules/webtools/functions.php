@@ -16,12 +16,13 @@ $menu_top = array(
 );
 
 $submenu['clearsystem'] = $lang_module['clearsystem'];
+$submenu['siteDiagnostic'] = $lang_module['siteDiagnostic'];
 $submenu['sitemapPing'] = $lang_module['sitemapPing'];
 $submenu['checkupdate'] = $lang_module['checkupdate'];
 $submenu['revision'] = $lang_module['revision'];
 
 $allow_func = array( 
-    'main', 'clearsystem', 'sitemapPing', 'checkupdate', 'revision' 
+    'main', 'clearsystem', 'sitemapPing', 'checkupdate', 'revision', 'siteDiagnostic' 
 );
 
 ?>

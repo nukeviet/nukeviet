@@ -9,10 +9,14 @@
 
 if ( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_global['mod_webtools'];
+//Tam thoi chuyen den trang siteDiagnostic
+Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=siteDiagnostic" );
+exit();
+
+/*$page_title = $lang_global['mod_webtools'];
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . "/includes/footer.php" );*/
 
 ?>
