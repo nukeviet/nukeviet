@@ -30,7 +30,7 @@ function cron_siteDiagnostic_update()
 {
     global $Diagnostic;
 
-    $cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/diagnostic-' . NV_SERVER_NAME . '.xml';
+    $cacheFile = $Diagnostic->currentCache;
     $updtime = 0;
     if ( file_exists( $cacheFile ) )
     {

@@ -12,7 +12,7 @@ define( 'NV_CLASS_DIAGNOSTIC', true );
 
 if ( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
 if ( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
-if ( ! defined( 'NV_CACHEDIR' ) ) define( 'NV_CACHEDIR', "cache" );
+if ( ! defined( 'NV_DATADIR' ) ) define( 'NV_DATADIR', "data" );
 if ( ! defined( 'NV_SERVER_NAME' ) )
 {
     $_server_name = ( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
@@ -442,7 +442,7 @@ class Diagnostic
         $domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//e' ), '', $domain );
 
         $this->currentDomain = $domain;
-        $this->currentCache = NV_ROOTDIR . '/' . NV_CACHEDIR . '/diagnostic-' . $this->currentDomain . '.xml';
+        $this->currentCache = NV_ROOTDIR . '/' . NV_DATADIR . '/diagnostic-' . $this->currentDomain . '.xml';
 
         return $this->getInfo( $time );
     }
