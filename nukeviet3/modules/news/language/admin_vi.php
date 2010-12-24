@@ -180,7 +180,7 @@ $lang_module['topic_delete_confirm'] = "Bạn có chắc muốn xóa nhóm tin l
 $lang_module['topic_delete_success'] = "Loại bỏ thành công !";
 $lang_module['topic_nonews'] = "Hiện tại không có bài viết nào thuộc nhóm tin liên quan này !";
 $lang_module['addtotopics'] = "Thêm vào nhóm tin liên quan";
-$lang_module['topic_update_success'] = "Cập nhật thành công !";
+$lang_module['topic_update_success'] = "Cập nhật thành công!";
 $lang_module['topic_num_news'] = " bài viết";
 
 $lang_module['siteinfo_publtime'] = "Tổng số bài viết hiệu lực";
@@ -192,9 +192,9 @@ $lang_module['siteinfo_comment'] = "Tổng số bình luận được đăng";
 $lang_module['siteinfo_comment_pending'] = "Số bình luận chờ duyệt"; 
 
 $lang_module['group_content'] = "Cấu hình đăng bài viết của thành viên";
-$lang_module['group_addcontent'] = "Được đăng bài viêt";
-$lang_module['group_postcontent'] = "Đăng bài viêt không cần kiểm duyệt";
-$lang_module['group_editcontent'] = "Được sửa bài viêt đã đăng";
-$lang_module['group_delcontent'] = "Được xóa bài viêt đã đăng";
+$lang_module['group_addcontent'] = "Được đăng bài viết";
+$lang_module['group_postcontent'] = "Đăng bài viết không cần kiểm duyệt";
+$lang_module['group_editcontent'] = "Được sửa bài viết đã đăng";
+$lang_module['group_delcontent'] = "Được xóa bài viết đã đăng";
 
 ?>
