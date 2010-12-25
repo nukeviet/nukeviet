@@ -41,8 +41,8 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
         }
         else
         {
-            //$myDomain = NV_SERVER_NAME;
-            $myDomain = "nukeviet.vn";
+            $myDomain = NV_SERVER_NAME;
+            //$myDomain = "nukeviet.vn";
             $from = "google";
 
             $tempFile = md5( $keyword . $lang . $accuracy . $from . $myDomain );
