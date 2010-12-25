@@ -12,3 +12,10 @@
 .tooltip h3{font:800 12px/20px Tahoma,Arial,Verdana,sans-serif;}
 .down{background:url('../images/arrows/down.png') no-repeat left center;}
 .up{background:url('../images/arrows/up.png') no-repeat left center;}
+#rankForm {margin: 10px 0;}
+#rankForm h2{font:800 13px Arial,Tahoma,Verdana,sans-serif;}
+#rankForm input[type="text"]{width:200px}
+#rankForm dd,#rankForm dt {float:left;line-height:20px;height:20px;}
+#rankForm dt {width:80px;}
+.error{color:#EF3805;font:800 12px Tahoma,Arial,Verdana,sans-serif;}
+.myLink,.myLink span{color:#FF0000;text-decoration:none;}
