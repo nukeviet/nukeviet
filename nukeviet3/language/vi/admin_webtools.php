@@ -107,5 +107,6 @@ $lang_module['rankResult'] = "Hạng site của bạn trong Top 50";
 $lang_module['rank0'] = "Site của bạn không nằm trong Top 50";
 $lang_module['Top10'] = "Top 10 trang của bạn";
 $lang_module['Top50'] = "Top 50 trang có chứa từ khóa";
+$lang_module['isLocalhost'] = "Cộng cụ không hỗ trợ Localhost";
 
 ?>

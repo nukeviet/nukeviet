@@ -70,70 +70,79 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
                 @file_put_contents( $tempFile, $put_contents );
             }
 
-            $loop = array();
-            $loop[] = array( 'key' => $lang_module['currentDomain'], 'value' => $info['myDomain'] );
-            $loop[] = array( 'key' => $lang_module['keyword'], 'value' => $info['keyword'] );
-            $loop[] = array( 'key' => $lang_module['language'], 'value' => ! empty( $info['lang'] ) ? strtoupper( $info['lang'] ) : $lang_module['langAll'] );
-            $loop[] = array( 'key' => $lang_module['accuracy'], 'value' => $info['accuracy'] == "keyword" ? $lang_module['byKeyword'] : $lang_module['byPhrase'] );
-            $loop[] = array( 'key' => $lang_module['fromEngine'], 'value' => strtoupper( $info['fromEngine'] ) );
-            $loop[] = array( 'key' => $lang_module['updDate'], 'value' => nv_date( "d-m-Y H:i", $info['updtime'] ) );
-            foreach ( $loop as $a => $l )
+            if ( ! empty( $info ) )
             {
-                $xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
-                $xtpl->assign( 'LOOP', $l );
-                $xtpl->parse( 'process.result.loop' );
-            }
-
-            $xtpl->parse( 'process.result' );
-
-            if ( ! empty( $info['detail'] ) )
-            {
-                $mainResult = array();
-                if ( isset( $info['detail']['myPages'] ) ) $mainResult[] = array( 'key' => $lang_module['allPages'], 'value' => number_format( $info['detail']['allPages'] ) );
-                if ( isset( $info['detail']['myPages'] ) ) $mainResult[] = array( 'key' => $lang_module['myPages'], 'value' => number_format( $info['detail']['myPages'] ) );
-                if ( isset( $info['detail']['rank'] ) ) $mainResult[] = array( 'key' => $lang_module['rankResult'], 'value' => ( empty( $info['detail']['rank'] ) ? $lang_module['rank0'] : implode( " - ", $info['detail']['rank'] ) ) );
-
-                if ( ! empty( $mainResult ) )
+                $loop = array();
+                $loop[] = array( 'key' => $lang_module['currentDomain'], 'value' => $info['myDomain'] );
+                $loop[] = array( 'key' => $lang_module['keyword'], 'value' => $info['keyword'] );
+                $loop[] = array( 'key' => $lang_module['language'], 'value' => ! empty( $info['lang'] ) ? strtoupper( $info['lang'] ) : $lang_module['langAll'] );
+                $loop[] = array( 'key' => $lang_module['accuracy'], 'value' => $info['accuracy'] == "keyword" ? $lang_module['byKeyword'] : $lang_module['byPhrase'] );
+                $loop[] = array( 'key' => $lang_module['fromEngine'], 'value' => strtoupper( $info['fromEngine'] ) );
+                $loop[] = array( 'key' => $lang_module['updDate'], 'value' => nv_date( "d-m-Y H:i", $info['updtime'] ) );
+                foreach ( $loop as $a => $l )
                 {
-                    foreach ( $mainResult as $a => $r )
+                    $xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
+                    $xtpl->assign( 'LOOP', $l );
+                    $xtpl->parse( 'process.result.loop' );
+                }
+
+                $xtpl->parse( 'process.result' );
+
+                if ( ! empty( $info['detail'] ) )
+                {
+                    $mainResult = array();
+                    if ( isset( $info['detail']['myPages'] ) ) $mainResult[] = array( 'key' => $lang_module['allPages'], 'value' => number_format( $info['detail']['allPages'] ) );
+                    if ( isset( $info['detail']['myPages'] ) ) $mainResult[] = array( 'key' => $lang_module['myPages'], 'value' => number_format( $info['detail']['myPages'] ) );
+                    if ( isset( $info['detail']['rank'] ) ) $mainResult[] = array( 'key' => $lang_module['rankResult'], 'value' => ( empty( $info['detail']['rank'] ) ? $lang_module['rank0'] : implode( " - ", $info['detail']['rank'] ) ) );
+
+                    if ( ! empty( $mainResult ) )
                     {
-                        $xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
-                        $xtpl->assign( 'TR', $r );
-                        $xtpl->parse( 'process.MainResult.tr' );
+                        foreach ( $mainResult as $a => $r )
+                        {
+                            $xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
+                            $xtpl->assign( 'TR', $r );
+                            $xtpl->parse( 'process.MainResult.tr' );
+                        }
+                        $xtpl->parse( 'process.MainResult' );
                     }
-                    $xtpl->parse( 'process.MainResult' );
                 }
-            }
 
-            if ( ! empty( $info['detail']['top10MyPages'] ) )
-            {
-                $xtpl->assign( 'CAPTION', $lang_module['Top10'] );
-                foreach ( $info['detail']['top10MyPages'] as $key => $link )
+                if ( ! empty( $info['detail']['top10MyPages'] ) )
                 {
-                    $xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
-                    $xtpl->assign( 'ID', $key + 1 );
-                    $xtpl->assign( 'URL', $link );
-                    $xtpl->parse( 'process.TopPages.top' );
+                    $xtpl->assign( 'CAPTION', $lang_module['Top10'] );
+                    foreach ( $info['detail']['top10MyPages'] as $key => $link )
+                    {
+                        $xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
+                        $xtpl->assign( 'ID', $key + 1 );
+                        $xtpl->assign( 'URL', $link );
+                        $xtpl->parse( 'process.TopPages.top' );
 
+                    }
+                    $xtpl->parse( 'process.TopPages' );
                 }
-                $xtpl->parse( 'process.TopPages' );
-            }
 
-            if ( ! empty( $info['detail']['top50AllPages'] ) )
-            {
-                $xtpl->assign( 'CAPTION', $lang_module['Top50'] );
-                foreach ( $info['detail']['top50AllPages'] as $key => $link )
+                if ( ! empty( $info['detail']['top50AllPages'] ) )
                 {
-                    $a_class = isset( $info['detail']['rank'][$key] ) ? " class=\"myLink\"" : "";
-                    $xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
-                    $xtpl->assign( 'ID', $key + 1 );
-                    $xtpl->assign( 'A_CLASS', $a_class );
-                    $xtpl->assign( 'URL', $link );
-                    $xtpl->parse( 'process.TopPages.top' );
+                    $xtpl->assign( 'CAPTION', $lang_module['Top50'] );
+                    foreach ( $info['detail']['top50AllPages'] as $key => $link )
+                    {
+                        $a_class = isset( $info['detail']['rank'][$key] ) ? " class=\"myLink\"" : "";
+                        $xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
+                        $xtpl->assign( 'ID', $key + 1 );
+                        $xtpl->assign( 'A_CLASS', $a_class );
+                        $xtpl->assign( 'URL', $link );
+                        $xtpl->parse( 'process.TopPages.top' );
 
+                    }
+                    $xtpl->parse( 'process.TopPages' );
                 }
-                $xtpl->parse( 'process.TopPages' );
             }
+            else
+            {
+                $xtpl->assign( 'ERROR', $lang_module['isLocalhost'] );
+                $xtpl->parse( 'process.error' );
+            }
+
         }
 
         $xtpl->parse( 'process' );
