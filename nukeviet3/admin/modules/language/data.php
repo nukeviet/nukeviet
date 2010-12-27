@@ -87,43 +87,49 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
             $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $keylang . "_modules` WHERE `act` = '0'" );
             
             //cai dat du lieu mau
-            $filesavedata = $keylang;
+            $filesavedata = "";
             $lang_data = $keylang;
-            if ( ! file_exists( NV_ROOTDIR . "/install/data_" . $keylang . ".php" ) )
+            if ( file_exists( NV_ROOTDIR . "/install/data_" . $keylang . ".php" ) )
+            {
+                $filesavedata = $keylang;
+            }
+            elseif ( file_exists( NV_ROOTDIR . "/install/data_en.php" ) )
             {
                 $filesavedata = "en";
             }
-            include_once ( NV_ROOTDIR . "/install/data_" . $filesavedata . ".php" );
-            if ( ! file_exists( NV_ROOTDIR . "/install/data_" . $lang_data . ".php" ) )
+            if ( ! empty( $filesavedata ) )
             {
-                $filesavedata = "en";
-            }
-            include_once ( NV_ROOTDIR . "/install/data_" . $filesavedata . ".php" );
-            foreach ( $sql_create_table as $query )
-            {
-                if ( ! $db->sql_query( $query ) )
+                $sql_create_table = array();
+                include_once ( NV_ROOTDIR . "/install/data_" . $filesavedata . ".php" );
+                foreach ( $sql_create_table as $query )
                 {
-                    die( $query );
+                    if ( ! $db->sql_query( $query ) )
+                    {
+                        include ( NV_ROOTDIR . "/includes/header.php" );
+                        nv_admin_theme( "ERROR SETUP SQL: <br>" . $query );
+                        include ( NV_ROOTDIR . "/includes/footer.php" );
+                        exit();
+                    }
                 }
-            }
-            
-            $result = $db->sql_query( "SELECT catid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` ORDER BY `order` ASC" );
-            while ( list( $catid_i ) = $db->sql_fetchrow( $result ) )
-            {
-                nv_create_table_news( $catid_i );
-            }
-            $db->sql_freeresult();
-            
-            $result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
-            while ( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
-            {
-                $arr_catid = explode( ",", $listcatid );
-                foreach ( $arr_catid as $catid )
+                
+                $result = $db->sql_query( "SELECT catid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` ORDER BY `order` ASC" );
+                while ( list( $catid_i ) = $db->sql_fetchrow( $result ) )
                 {
-                    $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
+                    nv_create_table_news( $catid_i );
                 }
+                $db->sql_freeresult();
+                
+                $result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
+                while ( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
+                {
+                    $arr_catid = explode( ",", $listcatid );
+                    foreach ( $arr_catid as $catid )
+                    {
+                        $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
+                    }
+                }
+                $db->sql_freeresult();
             }
-            $db->sql_freeresult();
         }
         $nv_Request->set_Cookie( 'data_lang', $keylang, NV_LIVE_COOKIE_TIME );
         $contents_setup = "<br><br><center><br><b>" . $lang_module['nv_data_setup_ok'] . "</b></center>";
