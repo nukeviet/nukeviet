@@ -223,7 +223,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post` (
-  `pid` mediumint(9) NOT NULL,
+  `pid` mediumint(9) NOT NULL AUTO_INCREMENT,
   `member` tinyint(4) NOT NULL,
   `group_id` mediumint(9) NOT NULL,
   `addcontent` tinyint(4) NOT NULL,
