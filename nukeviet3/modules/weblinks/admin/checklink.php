@@ -8,7 +8,6 @@
 if (! defined ( 'NV_IS_FILE_ADMIN' ))
 	die ( 'Stop!!!' );
 $page_title = $lang_module ['weblink_checkalivelink'];
-//dùng fsock kô biết host free như nào
 $submit = $nv_Request->get_string ( 'submit', 'post' );
 if ($submit) {
 	//session_start();

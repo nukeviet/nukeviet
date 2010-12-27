@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+a
 <script type="text/javascript">
 var report_thanks_mess = '{LANG.report_thanks}';
 var comment_thanks_mess = '{LANG.comment_thanks}';
@@ -178,7 +179,7 @@ var comment_subject_defaul = '{ROW.comment_subject}';
 <div id="idcomment">
     <div class="header-comment">
         <div class="fr right small">
-			<a href="javascript:void(0);" id="show-comments" name="show-comments">+ Xem phản hồi</a>&nbsp;
+			<a href="javascript:void(0);" id="show-comments" name="show-comments">+ {LANG.view_comment_title}</a>&nbsp;
 			+ <a href="javascript:void(0);" id="showform">{LANG.file_your_comment}</a>
         </div>
         <h3>{LANG.file_comment_title}</h3>

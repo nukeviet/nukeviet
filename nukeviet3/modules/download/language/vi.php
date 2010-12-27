@@ -78,6 +78,7 @@ $lang_module['file_comment_send'] = 'Gửi thảo luận';
 $lang_module['file_comment_post_time'] = 'Gửi vào';
 $lang_module['file_comment_re'] = 'Thảo luận về file';
 $lang_module['file_your_comment'] = 'Tham gia thảo luận';
+$lang_module['view_comment_title'] = 'Xem phản hồi';
 $lang_module['comment_thanks'] = 'Chúng tôi ghi nhận thảo luận của bạn. Xin cảm ơn!';
 $lang_module['comment_thanks2'] = 'Thảo luận của bạn đang chờ kiểm duyệt. Xin cảm ơn!';
 $lang_module['comment_error1'] = 'Lỗi: Thảo luận không hợp lệ';
