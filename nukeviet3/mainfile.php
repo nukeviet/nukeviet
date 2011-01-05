@@ -153,7 +153,6 @@ require_once ( NV_ROOTDIR . '/includes/class/ips.class.php' );
 
 $ips = new ips();
 //define( 'NV_SERVER_IP', $ips->server_ip );
-define( 'NV_CLIENT_IP', $ips->client_ip );
 define( 'NV_FORWARD_IP', $ips->forward_ip );
 define( 'NV_REMOTE_ADDR', $ips->remote_addr );
 
@@ -207,6 +206,7 @@ $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_
 $client_info['agent'] = $nv_Request->user_agent; //HTTP_USER_AGENT
 
 
+define( 'NV_CLIENT_IP', $client_info['ip'] );
 define( 'NV_SERVER_NAME', $nv_Request->server_name ); //vd: mydomain1.com
 define( 'NV_SERVER_PROTOCOL', $nv_Request->server_protocol ); //vd: http
 define( 'NV_SERVER_PORT', $nv_Request->server_port ); //vd: 80

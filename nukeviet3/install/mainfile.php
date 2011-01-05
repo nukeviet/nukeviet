@@ -100,7 +100,6 @@ $global_config['session_save_path'] = "";
 require_once ( NV_ROOTDIR . '/includes/class/ips.class.php' );
 
 $ips = new ips();
-define( 'NV_CLIENT_IP', $ips->client_ip );
 define( 'NV_FORWARD_IP', $ips->forward_ip );
 define( 'NV_REMOTE_ADDR', $ips->remote_addr );
 
@@ -136,9 +135,10 @@ $client_info['is_myreferer'] = $nv_Request->referer_key; //0 = referer tu ben ng
 $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri; //trang dang xem
 $client_info['agent'] = $nv_Request->user_agent; //HTTP_USER_AGENT
 
+
 $global_config['sitekey'] = md5( $global_config['my_domains'] . NV_ROOTDIR . $client_info['session_id'] );
 
-
+define( 'NV_CLIENT_IP', $client_info['ip'] );
 define( 'NV_SERVER_NAME', $nv_Request->server_name ); //vd: mydomain1.com
 define( 'NV_SERVER_PROTOCOL', $nv_Request->server_protocol ); //vd: http
 define( 'NV_SERVER_PORT', $nv_Request->server_port ); //vd: 80
@@ -150,6 +150,7 @@ define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' ); //vd: /ten_thu_m
 define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root ); // D:/AppServ/www
 define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) ); //Ngat dong
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh duong dan thuc den thu muc upload
+
 
 //Chan truy cap neu HTTP_USER_AGENT == 'none'
 if ( NV_USER_AGENT == "none" )
