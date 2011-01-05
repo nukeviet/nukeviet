@@ -223,12 +223,6 @@ if ( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', 
                 exit();
             }
             
-            $subject = $lang_module['account_register'];
-            $message = sprintf( $lang_module['openid_register_info'], $reg_attribs['full_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, $array_register['username'], $array_register['password'], $reg_attribs['openid'] );
-            $message .= "<br /><br />------------------------------------------------<br /><br />";
-            $message .= nv_EncString( $message );
-            @nv_sendmail( $global_config['site_email'], $reg_attribs['email'], $subject, $message );
-            
             $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_openid` VALUES (" . $userid . ", " . $db->dbescape( $reg_attribs['openid'] ) . ", " . $db->dbescape( $reg_attribs['opid'] ) . ", " . $db->dbescape( $reg_attribs['email'] ) . ")";
             $db->sql_query( $sql );
             
@@ -238,6 +232,13 @@ if ( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', 
             $db->sql_freeresult( $result );
             
             validUserLog( $row, 1, $reg_attribs['opid'] );
+            
+            $subject = $lang_module['account_register'];
+            $message = sprintf( $lang_module['openid_register_info'], $reg_attribs['full_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, $array_register['username'], $array_register['password'], $reg_attribs['openid'] );
+            $message .= "<br /><br />------------------------------------------------<br /><br />";
+            $message .= nv_EncString( $message );
+            @nv_sendmail( $global_config['site_email'], $reg_attribs['email'], $subject, $message );
+            
             $nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
             
             Header( "Location: " . $nv_redirect );
