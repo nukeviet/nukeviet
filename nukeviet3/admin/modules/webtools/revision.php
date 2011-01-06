@@ -16,11 +16,54 @@ function del_path_svn ( $subject )
     return str_replace( '/trunk/nukeviet3/', '', $subject );
 }
 
-//Update Site From SVN
-//$db->sql_query( "REPLACE INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '555')" );
-//nv_save_file_config_global();
-
-
+if ( ! isset( $global_config['revision'] ) )
+{
+    //Update Site From SVN
+    if ( nv_version_compare( $global_config['version'], "3.0.05" ) < 0 )
+    {
+        $contents = $lang_module['revision_no_support'];
+        include ( NV_ROOTDIR . "/includes/header.php" );
+        echo nv_admin_theme( $contents );
+        include ( NV_ROOTDIR . "/includes/footer.php" );
+        exit();
+    }
+    elseif ( $global_config['version'] == "3.0.05" )
+    {
+        $global_config['revision'] = 2;
+    }
+    elseif ( $global_config['version'] == "3.0.06" )
+    {
+        $global_config['revision'] = 52;
+    }
+    elseif ( $global_config['version'] == "3.0.07" )
+    {
+        $global_config['revision'] = 75;
+    }
+    elseif ( $global_config['version'] == "3.0.08" )
+    {
+        $global_config['revision'] = 140;
+    }
+    elseif ( $global_config['version'] == "3.0.09" )
+    {
+        $global_config['revision'] = 211; //NUKEVIET 3 RC1
+    }
+    elseif ( $global_config['version'] == "3.0.10" )
+    {
+        $global_config['revision'] = 302; //NUKEVIET 3 RC2
+    }
+    elseif ( $global_config['version'] == "3.0.11" )
+    {
+        $global_config['revision'] = 348; //NUKEVIET 3 RC3
+    }
+    elseif ( $global_config['version'] == "3.0.12" )
+    {
+        $global_config['revision'] = 415;
+    }
+    $db->sql_query( "REPLACE INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '" . $global_config['revision'] . "')" );
+    nv_save_file_config_global();
+    Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+    exit();
+}
 $vini = $global_config['revision']; // Phien ban truoc
 $vend = $nv_Request->get_int( 'getVersion', 'session', - 1 );
 

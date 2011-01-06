@@ -42,6 +42,7 @@ $lang_module['searchEngineValue'] = "Đường dẫn để PING";
 $lang_module['searchEngineFailed'] = "Lỗi link để ping";
 $lang_module['pingOK'] = "Hệ thống đã gửi file Sitemap thành công. Việc này có thể được thực hiện lại sao 60 phút";
 
+$lang_module['revision_no_support'] = "Lỗi, chức năng này chỉ dùng cho phiên bản lớn hơn 3.0.12";
 $lang_module['revision'] = "Cập nhật theo Revision";
 $lang_module['revision_nochange'] = "Hiện tại chưa có bản cập nhật nào mới";
 $lang_module['revision_error'] = "Lỗi: Hệ thống không kết nối được với máy chủ SVN, Bạn có thể kiểm tra lại vào thời gian khác";
