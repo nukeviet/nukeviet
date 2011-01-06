@@ -2,7 +2,7 @@
 /*
  * http.php
  *
- * @(#) $Header: /home/mlemos/cvsroot/http/http.php,v 1.76 2008/03/18 07:59:05 mlemos Exp $
+ * @(#) $Header: /home/mlemos/cvsroot/http/http.php,v 1.79 2009/09/03 00:09:37 mlemos Exp $
  *
  */
 
@@ -18,7 +18,7 @@ class http_class
 
 	var $protocol="http";
 	var $request_method="GET";
-	var $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.76 $)';
+	var $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.79 $)';
 	var $authentication_mechanism="";
 	var $user;
 	var $password;
@@ -333,7 +333,7 @@ class http_class
 
 	Function Resolve($domain, &$ip, $server_type)
 	{
-		if(ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$',$domain))
+		if(preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/',$domain))
 			$ip=$domain;
 		else
 		{
@@ -533,11 +533,10 @@ class http_class
 
 	Function GetRequestArguments($url, &$arguments)
 	{
-		if(strlen($this->error))
-			return($this->error);
+		$this->error = '';
 		$arguments=array();
+		$url = str_replace(' ', '%20', $url);
 		$parameters=@parse_url($url);
-
 		if(!$parameters)
 			return($this->SetError("it was not specified a valid URL"));
 		if(!IsSet($parameters["scheme"]))
@@ -1187,7 +1186,7 @@ class http_class
 		}
 		if($this->use_curl)
 		{
-			$version=(GetType($v=curl_version())=="array" ? (IsSet($v["version"]) ? $v["version"] : "0.0.0") : (ereg("^libcurl/([0-9]+\\.[0-9]+\\.[0-9]+)",$v,$m) ? $m[1] : "0.0.0"));
+			$version=(GetType($v=curl_version())=="array" ? (IsSet($v["version"]) ? $v["version"] : "0.0.0") : (preg_match("/^libcurl\\/([0-9]+\\.[0-9]+\\.[0-9]+)/",$v,$m) ? $m[1] : "0.0.0"));
 			$curl_version=100000*intval($this->Tokenize($version,"."))+1000*intval($this->Tokenize("."))+intval($this->Tokenize(""));
 			$protocol_version=($curl_version<713002 ? "1.0" : $this->protocol_version);
 		}
@@ -1459,7 +1458,7 @@ class http_class
 				return($this->SetError("4 could not read request reply: ".$this->error));
 			if(strlen($this->response_status)==0)
 			{
-				if(!eregi($match="^http/[0-9]+\\.[0-9]+[ \t]+([0-9]+)[ \t]*(.*)\$",$line,$matches))
+				if(!preg_match($match="/^http\\/[0-9]+\\.[0-9]+[ \t]+([0-9]+)[ \t]*(.*)\$/i",$line,$matches))
 					return($this->SetError("3 it was received an unexpected HTTP response status"));
 				$this->response_status=$matches[1];
 				$this->response_message=$matches[2];
@@ -1522,7 +1521,7 @@ class http_class
 											$path=$value;
 											break;
 										case "expires":
-											if(ereg("^((Mon|Monday|Tue|Tuesday|Wed|Wednesday|Thu|Thursday|Fri|Friday|Sat|Saturday|Sun|Sunday), )?([0-9]{2})\\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\-([0-9]{2,4}) ([0-9]{2})\\:([0-9]{2})\\:([0-9]{2}) GMT\$",$value,$matches))
+											if(preg_match("/^((Mon|Monday|Tue|Tuesday|Wed|Wednesday|Thu|Thursday|Fri|Friday|Sat|Saturday|Sun|Sunday), )?([0-9]{2})\\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\-([0-9]{2,4}) ([0-9]{2})\\:([0-9]{2})\\:([0-9]{2}) GMT\$/",$value,$matches))
 											{
 												$year=intval($matches[5]);
 												if($year<1900)
@@ -1961,7 +1960,7 @@ class http_class
 						$value=$cookies[$secure][$domain_pattern][$path][$cookie_name]["value"];
 						if(GetType($expires)!="string"
 						|| (strlen($expires)
-						&& !ereg("^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\$", $expires)))
+						&& !preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\$/", $expires)))
 							return($this->SetError("invalid cookie expiry value type (".serialize($expires).")"));
 						$new_cookies[$secure][$domain_pattern][$path][$cookie_name]=array(
 							"name"=>$cookie_name,
