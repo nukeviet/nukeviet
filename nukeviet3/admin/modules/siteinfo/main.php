@@ -210,7 +210,7 @@ if ( ! empty( $info ) )
 
             if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
             {
-                $info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&amp;" . NV_OP_VARIABLE . "=checkupdate" );
+                $info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate" );
             }
         }
 
