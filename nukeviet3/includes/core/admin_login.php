@@ -72,6 +72,8 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
         {
             define( 'NV_IS_MOD_USER', true );
             require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
+            if ( empty( $nv_username ) ) $nv_username = filter_text_input( 'nv_login', 'post', '', '', 100 );
+            if ( empty( $nv_password ) ) $nv_password = filter_text_input( 'nv_password', 'post', '', '', 50 );
         }
         $userid = 0;
         $sql = "SELECT userid, username, password FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . md5( $nv_username ) . "'";
