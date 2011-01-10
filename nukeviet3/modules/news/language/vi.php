@@ -137,7 +137,7 @@ $lang_module['content_hometext'] = "Giới thiệu ngắn gọn";
 $lang_module['content_bodytext'] = "Nội dung chi tiết";
 $lang_module['search_author'] = "Tác giả bài viết";
 $lang_module['content_keywords'] = "Từ khóa dành cho máy chủ tìm kiếm";
-$lang_module['save_temp'] = "Gửi bài viết";
+$lang_module['save_temp'] = "Gửi bài viết đến quản trị site";
 $lang_module['save_content'] = "Đăng bài viết";
 $lang_module['captcha'] = "Mã chống spam";
 
@@ -147,8 +147,11 @@ $lang_module['error_bodytext'] = "Lỗi: Bài viết chưa có nội dung";
 $lang_module['error_captcha'] = "Lỗi: Mã chống spam chưa đúng";
 
 $lang_module['save_content_ok'] = "Đăng bài viết viết thành công. <br>Trình duyệt sẽ tự động chuyển về trang quản lý bài viết.";
+$lang_module['save_content_view_page'] = "Đăng bài viết viết thành công. <br>Trình duyệt sẽ tự động chuyển về bài viết bạn vừa đăng.";
 $lang_module['save_content_waite'] = "Bài viết bạn gửi đã được hệ thống ghi nhận, <br>ban quản trị site sẽ kiểm tra bài viết và đăng bài viết trong thời gian sớm nhất, <br>trình duyệt sẽ tự động chuyển về trang quản lý bài viết.";
+$lang_module['save_content_waite_home'] = "Bài viết bạn gửi đã được hệ thống ghi nhận, <br>ban quản trị site sẽ kiểm tra bài viết và đăng bài viết trong thời gian sớm nhất, <br>trình duyệt sẽ tự động chuyển về trang chủ.";
 
 $lang_module['error_addcontent'] = "Lỗi: Bạn chưa được cấp quyền để gửi bài viết";
+$lang_module['errorsave'] = "Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề bài viết có thể bị trùng";
 
 ?>

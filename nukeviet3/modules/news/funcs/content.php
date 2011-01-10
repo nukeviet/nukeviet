@@ -139,7 +139,7 @@ if ( $array_post_user['postcontent'] )
 //check user post content
 
 
-$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
+$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 if ( ! $array_post_user['addcontent'] )
 {
     if ( defined( 'NV_IS_USER' ) )
@@ -215,7 +215,7 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
     );
     
     $rowcontent = array( 
-        "id" => "", "listcatid" => "", "topicid" => "", "admin_id" => $user_info['userid'], "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "|", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "ratingdetail" => "0|0", "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "hitslm" => 0, "keywords" => "" 
+        "id" => "", "listcatid" => "", "topicid" => "", "admin_id" => ( defined( 'NV_IS_USER' ) ) ? $user_info['userid'] : 0, "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "|", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "ratingdetail" => "0|0", "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "hitslm" => 0, "keywords" => "" 
     );
     
     $array_catid_module = array();
@@ -399,21 +399,28 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
                 $array_temp = array();
                 if ( defined( 'NV_IS_USER' ) )
                 {
-                    $array_temp['urlrefresh'] = $base_url;
+                    $array_temp['urlrefresh'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op;
+                    if ( $rowcontent['status'] )
+                    {
+                        $array_temp['content'] = $lang_module['save_content_ok'];
+                        nv_del_moduleCache( $module_name );
+                    }
+                    else
+                    {
+                        $array_temp['content'] = $lang_module['save_content_waite'];
+                    }
                 }
-                else
+                elseif ( $rowcontent['status'] == 1 and count( $catids ) > 0 )
                 {
-                    $array_temp['urlrefresh'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA;
-                }
-                
-                if ( $rowcontent['status'] )
-                {
-                    $array_temp['content'] = $lang_module['save_content_ok'];
+                    $catid = $catids[0];
+                    $array_temp['urlrefresh'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $rowcontent['alias'] . "-" . $rowcontent['id'];
+                    $array_temp['content'] = $lang_module['save_content_view_page'];
                     nv_del_moduleCache( $module_name );
                 }
                 else
                 {
-                    $array_temp['content'] = $lang_module['save_content_waite'];
+                    $array_temp['urlrefresh'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA;
+                    $array_temp['content'] = $lang_module['save_content_waite_home'];
                 }
                 
                 $template = $module_info['template'];
@@ -611,7 +618,7 @@ elseif ( defined( 'NV_IS_USER' ) )
         }
         if ( $array_row_i['is_del_content'] )
         {
-            $array_link_content[] = "<span class=\"delete_icon\"><a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['delete'] . "</a></span>";
+            $array_link_content[] = "<span class=\"delete_icon\"><a  onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['delete'] . "</a></span>";
         }
         
         if ( ! empty( $array_link_content ) )
@@ -635,6 +642,11 @@ elseif ( defined( 'NV_IS_USER' ) )
     $contents .= "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5( "0" . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
     $contents .= $xtpl->text( 'main' );
     $contents .= nv_news_page( $base_url, $all_page, $per_page, $page );
+}
+elseif ( $array_post_user['addcontent'] )
+{
+    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&contentid=0&checkss=" . md5( "0" . $client_info['session_id'] . $global_config['sitekey'] ) . "" );
+    die();
 }
 
 include ( NV_ROOTDIR . "/includes/header.php" );
