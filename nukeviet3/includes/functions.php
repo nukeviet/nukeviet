@@ -1402,15 +1402,18 @@ function nv_check_rewrite_file ( )
 function nv_url_rewrite ( $buffer )
 {
     global $global_config, $module_name, $sys_info;
-    if ( ! isset( $global_config['is_url_rewrite'] ) or empty( $global_config['is_url_rewrite'] ) ) return $buffer;
-    if ( ! empty( $sys_info['supports_rewrite'] ) )
+    $rewrite = array();
+    if ( ! empty( $sys_info['supports_rewrite'] ) and $global_config['is_url_rewrite'] )
     {
-        $rewrite = array();
         include ( NV_ROOTDIR . "/includes/rewrite.php" );
-        if ( ! empty( $rewrite ) )
-        {
-            $buffer = preg_replace( array_keys( $rewrite ), array_values( $rewrite ), $buffer );
-        }
+    }
+    elseif ( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
+    {
+        include ( NV_ROOTDIR . "/includes/rewrite_language.php" );
+    }
+    if ( ! empty( $rewrite ) )
+    {
+        $buffer = preg_replace( array_keys( $rewrite ), array_values( $rewrite ), $buffer );
     }
     return $buffer;
 }

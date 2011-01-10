@@ -21,12 +21,13 @@ if ( ! defined( 'NV_IS_AJAX' ) )
 else
 {
     $page = $db->unfixdb( $page );
+    $page = nv_url_rewrite( $page );
 }
 
 //Nen trang
 if ( defined( 'NV_IS_GZIP' ) )
 {
-	$http_accept_encoding = $nv_Request->get_string( 'HTTP_ACCEPT_ENCODING', 'server', '' );
+    $http_accept_encoding = $nv_Request->get_string( 'HTTP_ACCEPT_ENCODING', 'server', '' );
     if ( ! empty( $http_accept_encoding ) )
     {
         $compress_list = array();
@@ -35,9 +36,9 @@ if ( defined( 'NV_IS_GZIP' ) )
         $compress_list['x-gzip'] = 'gzencode';
         $compress_list['compress'] = 'gzcompress';
         $compress_list['x-compress'] = 'gzcompress';
-
+        
         $http_accept_encoding = explode( ",", str_replace( ' ', '', $http_accept_encoding ) );
-
+        
         foreach ( $http_accept_encoding as $enc )
         {
             if ( ! empty( $enc ) and isset( $compress_list[$enc] ) )

@@ -125,36 +125,33 @@ if ( $submit )
     }
     $array_config_global['str_referer_blocker'] = $nv_Request->get_int( 'str_referer_blocker', 'post' );
     
+    $array_config_global['is_url_rewrite'] = 0;
     if ( $sys_info['supports_rewrite'] !== false )
     {
-        $array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post' );
-        if ( $array_config_global['lang_multi'] == 0 )
+        $array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post', 0 );
+        if ( $array_config_global['is_url_rewrite'] == 1 )
         {
-            $array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post' );
-        }
-        else
-        {
-            $array_config_global['rewrite_optional'] = 0;
+            require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
+            $errormess = nv_rewrite_change( $array_config_global );
+            if ( ! empty( $errormess ) )
+            {
+                $array_config_global['is_url_rewrite'] = 0;
+            }
         }
     }
-    if ( isset( $array_config_global['is_url_rewrite'] ) and $array_config_global['is_url_rewrite'] == 1 )
+    
+    if ( $array_config_global['lang_multi'] == 0 )
     {
-        require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
-        $errormess = nv_rewrite_change( $array_config_global );
-        if ( ! empty( $errormess ) )
-        {
-            $array_config_global['is_url_rewrite'] = 0;
-            $array_config_global['rewrite_optional'] = 0;
-        }
+        $array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post', 0 );
+    }
+    else
+    {
+        $array_config_global['rewrite_optional'] = 0;
     }
     
     foreach ( $array_config_global as $config_name => $config_value )
     {
-        $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET 
-        `config_value`=" . $db->dbescape_string( $config_value ) . " 
-        WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
-        AND `lang` = 'sys' AND `module`='global' 
-        LIMIT 1" );
+        $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
     }
     nv_save_file_config_global();
     if ( empty( $errormess ) )
@@ -233,7 +230,7 @@ if ( $sys_info['supports_rewrite'] !== false )
     $xtpl->parse( 'main.support_rewrite' );
 }
 
-if ( $sys_info['supports_rewrite'] !== false and $global_config['lang_multi'] == 0 )
+if ( $global_config['lang_multi'] == 0 )
 {
     $xtpl->assign( 'CHECKED2', ( $global_config['rewrite_optional'] == 1 ) ? ' checked ' : '' );
     $xtpl->parse( 'main.rewrite_optional' );
@@ -257,7 +254,7 @@ foreach ( $timezone_array as $site_timezone_i )
     $xtpl->parse( 'main.opsite_timezone' );
 }
 
-for($i=0;$i < 3;$i++)
+for ( $i = 0; $i < 3; $i ++ )
 {
     $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_SELECTED', ( $global_config['googleAnalyticsSetDomainName'] == $i ) ? ' selected="selected"' : '' );
     $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_VALUE', $i );
