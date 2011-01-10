@@ -92,4 +92,12 @@ $lang_module['autoinstall_package_select'] = "Select module to package";
 $lang_module['autoinstall_package_noselect'] = "No module selected";
 $lang_module['autoinstall_package_processing'] = "please wait to complete...";
 
+$lang_module['error_already_a_directory'] = "The file can not be extracted because a directory with the same name already exists";
+$lang_module['error_write_protected'] = "The file can not be extracted because a file write protected";
+$lang_module['error_newer_exist'] = "The file was not extracted because a newer file exists";
+$lang_module['error_path_creation_fail'] = "The file is not extracted because the folder does not exist and can not be created";
+$lang_module['error_write_error'] = "The file was not extracted because there was a  error while writing the file";
+$lang_module['error_read_error'] = "The file was not extracted because there was a error while reading the file";
+$lang_module['error_invalid_header'] = "The file was not extracted because of an archive format error (bad file header)";
+
 ?>

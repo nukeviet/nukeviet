@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Vietnamese
+ * @Createdate May 31, 2010, 08:01:47 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['modules'] = "Thiết lập module mới";
 $lang_module['blocks'] = "Cấu hình các block";
@@ -77,7 +78,8 @@ $lang_module['autoinstall_module_error_uploadfile'] = "Lỗi: không thể uploa
 $lang_module['autoinstall_module_error_createfile'] = "Lỗi: không thể lưu đệm danh sách file. Hãy kiểm tra lại hoặc chmod thư mục tmp";
 $lang_module['autoinstall_module_error_invalidfile'] = "Lỗi: File zip không hợp lệ";
 $lang_module['autoinstall_module_error_invalidfile_back'] = "Quay lại";
-$lang_module['autoinstall_module_error_warning_install'] = "Module không thể cài đặt !. Hãy xóa hoặc di chuyển theo thông tin bên dưới.";
+$lang_module['autoinstall_module_error_warning_overwrite'] = "Thông báo: Cấu trúc của module bạn cài đặt có các file và thư mục không đúng chuẩn, bạn có chắc chắn thực hiện tiếp quá trình cài đặt";
+$lang_module['autoinstall_module_overwrite'] = "Thực hiện";
 $lang_module['autoinstall_module_error_warning_fileexist'] = "Danh sách hiện có trên hệ thống:";
 $lang_module['autoinstall_module_error_warning_invalidfolder'] = "Cấu trúc thư mục không hợp lệ:";
 $lang_module['autoinstall_module_error_warning_permission_folder'] = "Host không thể tạo thư mục do safe mod on";
@@ -92,5 +94,13 @@ $lang_module['autoinstall_module_unzip_abort'] = "Việc cài đặt tự độn
 $lang_module['autoinstall_package_select'] = "Chọn module để đóng gói";
 $lang_module['autoinstall_package_noselect'] = "Hãy chọn 1 module để đóng gói";
 $lang_module['autoinstall_package_processing'] = " xin chờ quá trình thực hiện hoàn thành...";
+
+$lang_module['error_already_a_directory'] = "The file can not be extracted because a directory with the same name already exists";
+$lang_module['error_write_protected'] = "The file can not be extracted because a file write protected";
+$lang_module['error_newer_exist'] = "The file was not extracted because a newer file exists";
+$lang_module['error_path_creation_fail'] = "The file is not extracted because the folder does not exist and can not be created";
+$lang_module['error_write_error'] = "The file was not extracted because there was a  error while writing the file";
+$lang_module['error_read_error'] = "The file was not extracted because there was a error while reading the file";
+$lang_module['error_invalid_header'] = "The file was not extracted because of an archive format error (bad file header)";
 
 ?>

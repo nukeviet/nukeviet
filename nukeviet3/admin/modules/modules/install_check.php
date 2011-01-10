@@ -17,47 +17,55 @@ $file = file( $xauto );
 $errorfile = '';
 $errorfolder = '';
 $allowfolder = array( 
-    'themes', 'modules', 'uploads' 
+    'themes', 'modules', 'uploads', 'includes/blocks' 
 );
-
-foreach ( $file as $line )
+$overwrite = $nv_Request->get_string( 'overwrite', 'get', '' );
+if ( $overwrite != md5( $filename . $global_config['sitekey'] . session_id() ) )
 {
-    $folder = explode( '/', $line );
-    //check valid folder structure nukeviet (modules, themes, uploads)
-    if ( ! in_array( $folder[0], $allowfolder ) )
+    foreach ( $file as $line )
     {
-        $errorfolder .= '<span style="color:red">' . $line . '</span><br />';
-    }
-    //check exist file on system
-    if ( file_exists( NV_ROOTDIR . '/' . trim( $line ) ) && ! is_dir( NV_ROOTDIR . '/' . trim( $line ) ) )
-    {
-        $errorfile .= '<span style="color:red">' . $line . '</span><br />';
+        $folder = explode( '/', $line );
+        //check exist file on system
+        if ( file_exists( NV_ROOTDIR . '/' . trim( $line ) ) && ! is_dir( NV_ROOTDIR . '/' . trim( $line ) ) )
+        {
+            $errorfile .= '<span style="color:red">' . $line . '</span><br />';
+        }
+        
+        //check valid folder structure nukeviet (modules, themes, uploads)
+        if ( ! in_array( $folder[0], $allowfolder ) and ! in_array( $folder[0] . '/' . $folder[1], $allowfolder ) )
+        {
+            $errorfolder .= '<span style="color:red">' . $line . '</span><br />';
+        }
     }
 }
 if ( $errorfile || $errorfolder )
 {
-    echo '<div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>';
-    echo '<div id="install_content"><h4>' . $lang_module['autoinstall_module_error_warning_install'] . '</h4><input style="margin-top:10px;font-size:15px" type="button" name="checkfile" value="' . $lang_module['autoinstall_module_checkfile'] . '"/><br /><br />';
+    echo '<br /><div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>';
     if ( $errorfile )
     {
-        echo '<strong>' . $lang_module['autoinstall_module_error_warning_fileexist'] . '</strong><hr /><div style="overflow:auto;height:200px;width:700px">' . $errorfile . '</div>';
+        echo '<strong>' . $lang_module['autoinstall_module_error_warning_fileexist'] . '</strong><br />' . $errorfile . '';
     }
     if ( $errorfolder )
     {
-        echo '<strong>' . $lang_module['autoinstall_module_error_warning_invalidfolder'] . '</strong><hr /><div style="overflow:auto;height:200px;width:700px">' . $errorfolder . '</div>';
+        echo '<br /><strong>' . $lang_module['autoinstall_module_error_warning_invalidfolder'] . '</strong><br />' . $errorfolder . '';
     }
+    echo '</div>';
+    echo '<br><b>' . $lang_module['autoinstall_module_error_warning_overwrite'] . '</b><br><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoinstall_module_overwrite'] . '"/>';
     echo '</div><script type="text/javascript">
-		 $(function(){
-		 	$("input[name=checkfile]").click(function(){
-		 		$("#message").show();
-		 		$("#step1").html("");
-		 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check",function(){
-					$("#message").hide();
-				});
-			});
-		 });
-		</script>
-	';
+        		 $(function(){
+        		 	$("input[name=install_content_overwrite]").click(function(){
+        		 		if(confirm("' . $lang_module['autoinstall_module_error_warning_overwrite'] . '")){
+	        		 		$("#message").show();
+					 		$("#step1").html("");
+					 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check&overwrite=' . md5( $filename . $global_config['sitekey'] . session_id() ) . '",function(){
+								$("#message").hide();
+								});
+        					}
+					});
+        		 });
+        		</script>
+        	';
+    die();
 }
 else
 {
@@ -143,39 +151,43 @@ else
     }
     
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
+    $no_extract = array();
+    $file_extract = array();
+    
     $zip = new PclZip( $filename );
-    if ( $zip->extract( PCLZIP_OPT_PATH, NV_ROOTDIR ) == 0 )
+    $extract = $zip->extract( PCLZIP_OPT_PATH, NV_ROOTDIR );
+    foreach ( $extract as $extract_i )
     {
-        echo $lang_module['autoinstall_module_cantunzip'];
-        echo '<div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>';
-        echo '<input style="margin-top:10px;font-size:15px" type="button" name="checkfile" value="' . $lang_module['autoinstall_module_checkfile'] . '"/>';
-        echo '<script type="text/javascript">
-			 $(function(){
-			 	$("input[name=checkfile]").click(function(){
-			 		$("#message").show();
-			 		$("#step1").html("");
-			 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check",function(){
-						$("#message").hide();
-					});
-				});
-			 });
-			</script>
-		';
-    }
-    else
-    {
-        $list = $zip->listContent();
-        echo "<br /><b>" . $lang_module['autoinstall_module_unzip_filelist'] . "</b><br /><div style='overflow:auto;height:200px;width:700px'>";
-        for ( $i = 0; $i < sizeof( $list ); $i ++ )
+        $filename_i = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $extract_i['filename'] ) );
+        if ( $extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory' )
         {
-            if ( ! $list[$i]['folder'] ) $bytes = " - " . $list[$i]['size'] . " bytes";
-            else $bytes = "";
-            echo "" . $list[$i]['filename'] . "$bytes<br />";
+            $lang_status = "error_" . $extract_i['status'];
+            $no_extract[] = $filename_i . " ---> " . $lang_module[$lang_status];
         }
-        echo '</div><br /><br /><a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=setup">' . $lang_module['autoinstall_module_unzip_setuppage'] . '</a>';
+        elseif ( $extract_i['folder'] )
+        {
+            $file_extract[] = $filename_i;
+        }
+        else
+        {
+            $file_extract[] = $filename_i . " " . nv_convertfromBytes( $extract_i['size'] );
+        }
+    }
+    
+    if ( empty( $no_extract ) )
+    {
         unlink( $xfolder );
         unlink( $xauto );
         unlink( $filename );
+        $nv_redirect = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=setup';
+        echo "<br /><b>" . $lang_module['autoinstall_module_unzip_filelist'] . "</b><br />";
+        echo "<div style='overflow:auto;height:200px;width:700px'>" . implode( "<br>", $file_extract ) . "</div>";
+        echo "<br /><br /><a href=\"" . $nv_redirect . "\">" . $lang_module['autoinstall_module_unzip_setuppage'] . "</a>";
+    }
+    else
+    {
+        echo $lang_module['autoinstall_module_cantunzip'];
+        echo "<div>" . implode( "<br>", $no_extract ) . "</div>";
     }
 }
 
