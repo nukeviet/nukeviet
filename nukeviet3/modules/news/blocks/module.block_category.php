@@ -7,7 +7,7 @@
  */
 
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
-global $global_array_cat, $module_name, $module_info, $lang_module;
+global $global_array_cat, $module_name, $module_info, $lang_module, $module_file;
 $subcat = array();
 $cat = array();
 
