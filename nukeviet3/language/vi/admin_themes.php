@@ -30,7 +30,7 @@ $lang_module['block_title'] = "Tên block";
 $lang_module['block_link'] = "URL của tên block";
 $lang_module['block_file_path'] = "Lấy nội dung từ file";
 $lang_module['block_global_apply'] = "Áp dụng cho tất cả";
-$lang_module['block_type_global'] = "Block dùng chung (Global)";
+$lang_module['block_type_global'] = "Block của hệ thống";
 $lang_module['block_select_type'] = "-=Hãy chọn dạng=-";
 $lang_module['block_tpl'] = "Template";
 $lang_module['block_pos'] = "Vị trí";
@@ -52,16 +52,14 @@ $lang_module['block_group'] = "Ai có quyền xem";
 $lang_module['block_module'] = "Hiển thị ở module";
 $lang_module['block_all'] = "Tất cả các module";
 $lang_module['block_confirm'] = "Chấp nhận";
-$lang_module['block_filename'] = "Chọn khối quảng cáo";
 $lang_module['block_default'] = "Mặc định";
 $lang_module['block_exp_time'] = "Ngày hết hạn";
-$lang_module['block_content'] = "Nhập nội dung cho block";
 $lang_module['block_sort'] = "Sắp xếp";
 $lang_module['block_change_pos_warning'] = "Nếu thay đổi vị trí block này sẽ thay đổi toàn bộ vị trí của các block khác thuộc cùng nhóm ";
 $lang_module['block_change_pos_warning2'] = "Bạn có chắc muốn thay đổi vị trí?";
 $lang_module['block_error_nogroup'] = "Hãy chọn ít nhất 1 nhóm";
 $lang_module['block_error_noblock'] = "Hãy chọn ít nhất 1 block";
-$lang_module['block_delete_confirm'] = "Bạn có chắc muốn xóa tất cả block thuộc nhóm không. Nếu xóa việc này sẽ không thể phục hồi được?";
+$lang_module['block_delete_confirm'] = "Bạn có chắc muốn xóa tất cả block được chọn. Nếu xóa việc này sẽ không thể phục hồi được?";
 $lang_module['block_delete_per_confirm'] = "Bạn có chắc muốn xóa block này không?";
 $lang_module['block_add_success'] = "Thêm thành công!";
 $lang_module['block_update_success'] = "Cập nhật thành công!";
@@ -78,27 +76,15 @@ $lang_module['block_file'] = "File";
 $lang_module['block_html'] = "HTML";
 $lang_module['block_typehtml'] = "Dạng HTML";
 
-$lang_module['block_typerss'] = "Lấy từ Rss";
-$lang_module['block_rss_url'] = "Đường dẫn Rss";
-$lang_module['block_rss_url_error'] = "Đường dẫn Rss bạn đưa vào không đúng";
-$lang_module['block_rss_template_error'] = "Bạn cần chọn template cho block";
-$lang_module['block_rss_setting_number'] = "Số mục muốn hiển thị";
-$lang_module['block_rss_setting_description'] = "Hiện thị miêu tả";
-$lang_module['block_rss_setting_html'] = "Sử dụng HTML miêu tả";
-$lang_module['block_rss_setting_pubdate'] = "Hiện ngày gửi";
-$lang_module['block_rss_setting_target'] = "Mở liên kết bằng cửa sổ mới";
-
+$lang_module['functions'] = 'Chức năng';
 $lang_module['edit_block'] = "Sửa block";
-$lang_module['blang_all'] = "Tất cả ngôn ngữ";
-$lang_module['block_banners_pl'] = "Chọn khối quảng cáo";
-$lang_module['block_b_pl'] = "Khối quảng cáo";
-
 $lang_module['block_function'] = "Hãy chọn function";
 $lang_module['add_block_module'] = "Áp dụng cho module";
 $lang_module['add_block_all_module'] = "Tất cả các module";
 $lang_module['add_block_select_module'] = "Chọn module";
 $lang_module['block_layout'] = "Chọn layout";
 
+$lang_module['block_select'] = "Chọn block";
 $lang_module['block_checkall'] = "Chọn tất cả";
 $lang_module['block_check'] = "Check";
 $lang_module['block_uncheckall'] = "Bỏ chọn tất cả";
@@ -179,4 +165,10 @@ $lang_module['xcopyblock_process'] = 'Sao chép';
 $lang_module['xcopyblock_no_position'] = 'Hãy chọn ít nhất 1 vị trí để sao chép';
 $lang_module['xcopyblock_notice'] = 'Khi thực hiện, hệ thống sẽ xóa các block đã tồn tại ở theme đích, vui lòng chờ cho các tiến trình thực hiện thành công.';
 $lang_module['xcopyblock_success'] = 'Quá trình sao chép thành công !';
+
+$lang_module['block_weight'] = 'Thiết lập lại vị trí các block';
+$lang_module['block_weight_confirm'] = 'Bạn có chắc chắn thiết lập lại vị trí các block, khi đó các thiết lập theo các function sẽ bị thiết lập lại';
+
+
+
 ?>

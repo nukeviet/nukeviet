@@ -232,7 +232,7 @@ $global_config['check_module'] = "/^[a-z0-9\-]+$/";
 $global_config['check_op'] = "/^[a-zA-Z0-9\-]+$/";
 $global_config['check_op_file'] = "/^([a-zA-Z0-9\-\_]+)\.php$/";
 $global_config['check_block_global'] = "/^global\.([a-zA-Z0-9\-\_]+)\.php$/";
-$global_config['check_block_module'] = "/^module\.([a-zA-Z0-9\-\_]+)\.php$/";
+$global_config['check_block_module'] = "/^(global|module)\.([a-zA-Z0-9\-\_]+)\.php$/";
 $global_config['check_theme'] = "/^[a-zA-Z0-9-]+$/";
 $global_config['check_theme_admin'] = "/^(admin)\_[a-zA-Z0-9-]+$/";
 

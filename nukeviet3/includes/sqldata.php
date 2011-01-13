@@ -15,7 +15,8 @@ function nv_delete_table_sys ( $lang )
     global $db_config, $global_config;
     $sql_drop_table = array();
     $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modules`";
-    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_blocks`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_blocks_groups`";
+    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_blocks_weight`";
     $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modfuncs`";
     $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_counter`";
     $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_searchkeys`";
@@ -39,100 +40,104 @@ function nv_create_table_sys ( $lang )
     
     $sql_create_table = array();
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` (
-  `title` varchar(55) NOT NULL,
-  `module_file` varchar(55) NOT NULL DEFAULT '',
-  `module_data` varchar(55) NOT NULL DEFAULT '',
-  `custom_title` varchar(255) NOT NULL,
-  `set_time` int(11) unsigned NOT NULL DEFAULT '0',
-  `admin_file` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `theme` varchar(100) NOT NULL,
-  `keywords` mediumtext NOT NULL,
-  `groups_view` varchar(255) NOT NULL,
-  `in_menu` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `weight` tinyint(3) unsigned NOT NULL DEFAULT '1',
-  `submenu` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `admins` varchar(255) NOT NULL,
-  `rss` tinyint(4) NOT NULL default '1',  
-  PRIMARY KEY (`title`)
-) ENGINE=MyISAM";
+	  `title` varchar(55) NOT NULL,
+	  `module_file` varchar(55) NOT NULL DEFAULT '',
+	  `module_data` varchar(55) NOT NULL DEFAULT '',
+	  `custom_title` varchar(255) NOT NULL,
+	  `set_time` int(11) unsigned NOT NULL DEFAULT '0',
+	  `admin_file` tinyint(1) unsigned NOT NULL DEFAULT '0',
+	  `theme` varchar(100) NOT NULL,
+	  `keywords` mediumtext NOT NULL,
+	  `groups_view` varchar(255) NOT NULL,
+	  `in_menu` tinyint(1) unsigned NOT NULL DEFAULT '0',
+	  `weight` tinyint(3) unsigned NOT NULL DEFAULT '1',
+	  `submenu` tinyint(1) unsigned NOT NULL DEFAULT '0',
+	  `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
+	  `admins` varchar(255) NOT NULL,
+	  `rss` tinyint(4) NOT NULL default '1',  
+	  PRIMARY KEY (`title`)
+	) ENGINE=MyISAM";
     
-    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_blocks` (
-  bid int(11) unsigned NOT NULL AUTO_INCREMENT,
-  groupbl int(11) NOT NULL DEFAULT '0',
-  title varchar(255) DEFAULT NULL,
-  link varchar(255) DEFAULT NULL,
-  `type` varchar(20) NOT NULL DEFAULT 'file',
-  file_path text,
-  theme varchar(255) NOT NULL,
-  template varchar(255) DEFAULT NULL,
-  position varchar(20) DEFAULT NULL,
-  exp_time int(11) DEFAULT '0',
-  active varchar(1) DEFAULT NULL,
-  groups_view varchar(255) DEFAULT '',
-  module varchar(255) NOT NULL,
-  all_func tinyint(4) NOT NULL DEFAULT '0',
-  func_id int(11) NOT NULL,
-  weight int(11) NOT NULL,
-  PRIMARY KEY (bid),
-  KEY groupbl (groupbl),
-  KEY module (module),
-  KEY func_id (func_id),
-  KEY exp_time (exp_time),
-  KEY theme (theme)
-) ENGINE=MyISAM";
+    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_blocks_groups` (
+	  `bid` int(11) unsigned NOT NULL AUTO_INCREMENT,
+	  `theme` varchar(55) NOT NULL,
+	  `module` varchar(55) NOT NULL,
+	  `file_name` varchar(55) DEFAULT NULL,
+	  `title` varchar(255) DEFAULT NULL,
+	  `link` varchar(255) DEFAULT NULL,
+	  `template` varchar(55) DEFAULT NULL,
+	  `position` varchar(55) DEFAULT NULL,
+	  `exp_time` int(11) DEFAULT '0',
+	  `active` tinyint(4) DEFAULT '0',
+	  `groups_view` varchar(255) DEFAULT '',
+	  `all_func` tinyint(4) NOT NULL DEFAULT '0',
+	  `weight` int(11) NOT NULL DEFAULT '0',
+	  `config` text,
+	  PRIMARY KEY (`bid`),
+	  KEY `theme` (`theme`),
+	  KEY `module` (`module`),
+	  KEY `position` (`position`),
+	  KEY `exp_time` (`exp_time`)	 
+	) ENGINE=MyISAM";
+    
+    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_blocks_weight` (
+	  `bid` int(11) NOT NULL DEFAULT '0',
+	  `func_id` int(11) NOT NULL DEFAULT '0',
+	  `weight` int(11) NOT NULL DEFAULT '0',
+	  UNIQUE KEY `bid` (`bid`,`func_id`)	 
+	) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (
-  `func_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `func_name` varchar(55) NOT NULL,
-  `func_custom_name` varchar(255) NOT NULL,
-  `in_module` varchar(55) NOT NULL,
-  `show_func` tinyint(4) NOT NULL DEFAULT '0',
-  `in_submenu` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `subweight` smallint(2) unsigned NOT NULL DEFAULT '1',
-  `layout` varchar(50) NOT NULL DEFAULT 'leftbodyright',
-  `setting` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`func_id`),
-  UNIQUE KEY `func_name` (`func_name`,`in_module`)
-) ENGINE=MyISAM";
+	  `func_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	  `func_name` varchar(55) NOT NULL,
+	  `func_custom_name` varchar(255) NOT NULL,
+	  `in_module` varchar(55) NOT NULL,
+	  `show_func` tinyint(4) NOT NULL DEFAULT '0',
+	  `in_submenu` tinyint(1) unsigned NOT NULL DEFAULT '0',
+	  `subweight` smallint(2) unsigned NOT NULL DEFAULT '1',
+	  `layout` varchar(50) NOT NULL DEFAULT 'leftbodyright',
+	  `setting` varchar(255) NOT NULL DEFAULT '',
+	  PRIMARY KEY (`func_id`),
+	  UNIQUE KEY `func_name` (`func_name`,`in_module`)
+	) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_counter` (
-  `c_type` varchar(100) NOT NULL,
-  `c_val` varchar(100) NOT NULL,
-  `c_count` int(11) unsigned NOT NULL DEFAULT '0',
-  `last_update` int(11) NOT NULL DEFAULT '0',
-  UNIQUE KEY `c_type` (`c_type`,`c_val`)
-) ENGINE=MyISAM";
+	  `c_type` varchar(100) NOT NULL,
+	  `c_val` varchar(100) NOT NULL,
+	  `c_count` int(11) unsigned NOT NULL DEFAULT '0',
+	  `last_update` int(11) NOT NULL DEFAULT '0',
+	  UNIQUE KEY `c_type` (`c_type`,`c_val`)
+	) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_searchkeys` (
-  `id` varchar(32) NOT NULL DEFAULT '',
-  `keys` varchar(255) NOT NULL,
-  `total` int(11) NOT NULL DEFAULT '0',
-  `search_engine` varchar(50) NOT NULL,
-  KEY (`id`),
-  KEY `keys` (`keys`),
-  KEY `search_engine` (`search_engine`)
-) ENGINE=MyISAM";
+	  `id` varchar(32) NOT NULL DEFAULT '',
+	  `keys` varchar(255) NOT NULL,
+	  `total` int(11) NOT NULL DEFAULT '0',
+	  `search_engine` varchar(50) NOT NULL,
+	  KEY (`id`),
+	  KEY `keys` (`keys`),
+	  KEY `search_engine` (`search_engine`)
+	) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_referer_stats` (
-  `host` varchar(255) NOT NULL,
-  `total` int(11) NOT NULL DEFAULT '0',
-  `month01` int(11) NOT NULL DEFAULT '0',
-  `month02` int(11) NOT NULL DEFAULT '0',
-  `month03` int(11) NOT NULL DEFAULT '0',
-  `month04` int(11) NOT NULL DEFAULT '0',
-  `month05` int(11) NOT NULL DEFAULT '0',
-  `month06` int(11) NOT NULL DEFAULT '0',
-  `month07` int(11) NOT NULL DEFAULT '0',
-  `month08` int(11) NOT NULL DEFAULT '0',
-  `month09` int(11) NOT NULL DEFAULT '0',
-  `month10` int(11) NOT NULL DEFAULT '0',
-  `month11` int(11) NOT NULL DEFAULT '0',
-  `month12` int(11) NOT NULL DEFAULT '0',
-  `last_update` int(11) NOT NULL DEFAULT '0',
-  UNIQUE KEY `host` (`host`),
-  KEY `total` (`total`)
-) ENGINE=MyISAM";
+	  `host` varchar(255) NOT NULL,
+	  `total` int(11) NOT NULL DEFAULT '0',
+	  `month01` int(11) NOT NULL DEFAULT '0',
+	  `month02` int(11) NOT NULL DEFAULT '0',
+	  `month03` int(11) NOT NULL DEFAULT '0',
+	  `month04` int(11) NOT NULL DEFAULT '0',
+	  `month05` int(11) NOT NULL DEFAULT '0',
+	  `month06` int(11) NOT NULL DEFAULT '0',
+	  `month07` int(11) NOT NULL DEFAULT '0',
+	  `month08` int(11) NOT NULL DEFAULT '0',
+	  `month09` int(11) NOT NULL DEFAULT '0',
+	  `month10` int(11) NOT NULL DEFAULT '0',
+	  `month11` int(11) NOT NULL DEFAULT '0',
+	  `month12` int(11) NOT NULL DEFAULT '0',
+	  `last_update` int(11) NOT NULL DEFAULT '0',
+	  UNIQUE KEY `host` (`host`),
+	  KEY `total` (`total`)
+	) ENGINE=MyISAM";
     
     $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modthemes` (
       `func_id` int(11) DEFAULT NULL,

@@ -12,7 +12,7 @@ $theme_array = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme']
 
 foreach ( $theme_array as $themes_i )
 {
-    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=blocks&selectthemes=" . $themes_i] = $themes_i;
+    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=blocks_func&selectthemes=" . $themes_i] = $themes_i;
 }
 
 $selectthemes_old = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site_theme'] );
@@ -25,19 +25,49 @@ if ( $selectthemes_old != $selectthemes )
 {
     $nv_Request->set_Cookie( 'selectthemes', $selectthemes, NV_LIVE_COOKIE_TIME );
 }
+$selectedmodule = '';
+$selectedmodule = filter_text_input( 'module', 'get', '', 1 );
+$func_id = $nv_Request->get_int( 'func', 'get', 0 );
+if ( $func_id > 0 )
+{
+    list( $selectedmodule ) = $db->sql_fetchrow( $db->sql_query( "SELECT `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE func_id='" . $func_id . "'" ) );
+}
+elseif ( ! empty( $selectedmodule ) )
+{
+    list( $func_id ) = $db->sql_fetchrow( $db->sql_query( "SELECT func_id FROM `" . NV_MODFUNCS_TABLE . "` WHERE func_name='main' AND `in_module`=" . $db->dbescape( $selectedmodule ) . "" ) );
+}
 
-$page_title = $lang_module['blocks'] . ':' . $selectthemes;
+if ( empty( $func_id ) or empty( $selectedmodule ) )
+{
+    Header( 'Location: index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks' );
+    exit();
+}
+
+$page_title = $lang_module['blocks_by_funcs'] . ':' . $selectthemes;
 $contents .= "<table class=\"tab1\">\n";
 $contents .= "<thead>\n";
 $contents .= "<tr>\n";
-$contents .= "<td colspan='8'>";
-$contents .= $lang_module['block_select_module'] . " <select name='module'>";
+$contents .= "<td colspan='7'>";
+$contents .= $lang_module['block_select_module'] . ": <select name='module'>";
 $contents .= "<option value=''>" . $lang_module['block_select_module'] . "</option>";
 $sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
 while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 {
-    $contents .= "<option value='" . $m_title . "'>" . $m_custom_title . "</option>";
+    $sel = ( $selectedmodule == $m_title ) ? ' selected' : '';
+    $contents .= "<option value='" . $m_title . "' " . $sel . ">" . $m_custom_title . "</option>";
+}
+$contents .= "</select>\n";
+$contents .= "" . $lang_module['block_func'] . " <select name='function'>";
+$contents .= "<option value=''>" . $lang_module['block_select_function'] . "</option>";
+$array_func_id = array();
+$sql = "SELECT func_id, func_custom_name FROM `" . NV_MODFUNCS_TABLE . "` WHERE in_module='" . $selectedmodule . "' AND show_func=1 ORDER BY `subweight` ASC";
+$result = $db->sql_query( $sql );
+while ( list( $f_id, $f_custom_title ) = $db->sql_fetchrow( $result ) )
+{
+    $sel = ( $func_id == $f_id ) ? ' selected' : '';
+    $contents .= "<option value='" . $f_id . "' " . $sel . ">" . $f_custom_title . "</option>";
+    $array_func_id[$f_id] = $f_custom_title;
 }
 $contents .= "</select>\n";
 $contents .= "</td>\n";
@@ -48,12 +78,19 @@ $contents .= "<td>" . $lang_module['block_pos'] . "</td>\n";
 $contents .= "<td>" . $lang_module['block_title'] . "</td>\n";
 $contents .= "<td>" . $lang_module['block_file'] . "</td>\n";
 $contents .= "<td>" . $lang_module['block_active'] . "</td>\n";
-$contents .= "<td>" . $lang_module['block_func_list'] . "</td>\n";
 $contents .= "<td>" . $lang_module['functions'] . "</td>\n";
 $contents .= "<td></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</thead>\n";
 $a = 0;
+
+$blocks_positions = array();
+$sql_bl = "SELECT t1.position, count(*) FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 ON t1.bid = t2.bid WHERE t2.func_id='" . $func_id . "' AND t1.theme ='" . $selectthemes . "' GROUP BY t1.position";
+$result = $db->sql_query( $sql_bl );
+while ( list( $position, $numposition ) = $db->sql_fetchrow( $result ) )
+{
+    $blocks_positions[$position] = $numposition;
+}
 
 #load position file
 $xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' );
@@ -61,14 +98,8 @@ $content = $xml->xpath( 'positions' ); //array
 $positions = $content[0]->position; //object
 
 
-$blocks_positions = array();
-$result = $db->sql_query( "SELECT `position`, count(*) FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $selectthemes . "' GROUP BY `position`" );
-while ( list( $position, $numposition ) = $db->sql_fetchrow( $result ) )
-{
-    $blocks_positions[$position] = $numposition;
-}
-
-$result = $db->sql_query( "SELECT * FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $selectthemes . "' ORDER BY `position` ASC, `weight` ASC" );
+$sql_bl = "SELECT t1.*, t2.func_id, t2.weight as bweight FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 ON t1.bid = t2.bid WHERE t2.func_id='" . $func_id . "' AND t1.theme ='" . $selectthemes . "' ORDER BY t1.position ASC, t2.weight ASC";
+$result = $db->sql_query( $sql_bl );
 while ( $row = $db->sql_fetchrow( $result ) )
 {
     $class = ( $a % 2 ) ? " class=\"second\"" : "";
@@ -79,12 +110,11 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $numposition = $blocks_positions[$row['position']];
     for ( $i = 1; $i <= $numposition; $i ++ )
     {
-        $sel = ( $row['weight'] == $i ) ? ' selected' : '';
+        $sel = ( $row['bweight'] == $i ) ? ' selected' : '';
         $contents .= '<option value="' . $i . '" ' . $sel . '>' . $i . '</option>';
     }
     $contents .= '</select>';
     $contents .= "</td>\n";
-    
     $contents .= "<td>";
     $contents .= "<select name=\"listpos\" bid='" . $row['bid'] . "'>\n";
     for ( $i = 0; $i < count( $positions ); $i ++ )
@@ -97,36 +127,21 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $contents .= "<td>" . $row['title'] . "</td>\n";
     $contents .= "<td>" . $row['module'] . " " . $row['file_name'] . "</td>\n";
     $contents .= "<td>" . ( $row['active'] ? $lang_global['yes'] : $lang_global['no'] ) . "</td>\n";
-    $contents .= "<td>";
-    if ( $row['all_func'] == 1 )
-    {
-        $contents .= $lang_module['add_block_all_module'];
-    }
-    else
-    {
-        $result_func = $db->sql_query( "SELECT a.func_id, a.in_module, a.func_custom_name FROM `" . NV_MODFUNCS_TABLE . "` AS a INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS b ON a.func_id=b.func_id WHERE b.bid=" . $row['bid'] . "" );
-        while ( list( $funcid_inlist, $func_inmodule, $funcname_inlist ) = $db->sql_fetchrow( $result_func ) )
-        {
-            $contents .= '<a href="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&func=' . $funcid_inlist . '&module=' . $func_inmodule . '"><span style="font-weight:bold">' . $func_inmodule . '</span>: ' . $funcname_inlist . '</a><br />';
-        }
-    }
-    $contents .= "</td>\n";
     $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a class=\"block_content\" bid=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['edit'] . "</a></span>\n";
     $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a class=\"delete\" bid=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span></td>\n";
-    $contents .= "<td><input type='checkbox' name='idlist' value='" . $row['bid'] . "'/></td>\n";
+    $contents .= "<td><label><input type='checkbox' name='idlist' value='" . $row['bid'] . "'/></label></td>\n";
     $contents .= "</tr>\n";
     $contents .= "</tbody>\n";
     $a ++;
 }
-$contents .= "<tfoot><tr align=\"right\"><td colspan='8'>
-<span class=\"edit_icon\"><a class=\"block_weight\" href=\"javascript:void(0);\">" . $lang_module['block_weight'] . "</a></span>&nbsp;&nbsp;&nbsp;&nbsp;	
-<span class=\"add_icon\"><a class=\"block_content\" href=\"javascript:void(0);\">" . $lang_module['block_add'] . "</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
-<span class=\"delete_icon\"><a class=\"delete_group\" href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span>
-<span style='width:100px;display:inline-block'>&nbsp;</span>
-<span>
-<a name=\"checkall\" id=\"checkall\" href=\"javascript:void(0);\">" . $lang_module['block_checkall'] . "</a>&nbsp;&nbsp;
-<a name=\"uncheckall\" id=\"uncheckall\" href=\"javascript:void(0);\">" . $lang_module['block_uncheckall'] . "</a>
-</span>
+$contents .= "<tfoot><tr align=\"right\"><td colspan='7'>
+	<span class=\"add_icon\"><a class=\"block_content\" href=\"javascript:void(0);\">" . $lang_module['block_add'] . "</a></span>&nbsp;&nbsp;	
+	<span class=\"delete_icon\"><a class='delete_group' href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span>
+	<span style=\"width: 100px; display: inline-block;\">&nbsp;</span>
+	<span>
+	<a name=\"checkall\" id=\"checkall\" href=\"javascript:void(0);\">" . $lang_module['block_checkall'] . "</a>&nbsp;&nbsp;
+	<a name=\"uncheckall\" id=\"uncheckall\" href=\"javascript:void(0);\">" . $lang_module['block_uncheckall'] . "</a>
+	</span>
 </td></tr></tfoot>";
 
 $contents .= "</table>\n";
@@ -144,24 +159,28 @@ $(function(){
 	      }
 	      );
     });
-     
+    
+	$("select[name=module]").change(function(){
+		var module = $(this).val();
+		window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&module="+module;
+	});
+	$("select[name=function]").change(function(){
+		var module = $("select[name=module]").val();
+		var func = $(this).val();
+		window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&module="+module+"&func="+func;
+	});	
 	$("select.order").change(function(){
 		$("select.order").attr({"disabled":""});
 		var order = $(this).val();
 		var bid = $(this).attr("bid");
 		$.ajax({	
 			type: "POST",
-			url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_order_group",
-			data: "order="+order+"&bid="+bid,
-			success: function(data){
-				window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
+			url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_order",
+			data: "func_id=' . $func_id . '&order="+order+"&bid="+bid,
+			success: function(data){				
+				window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&func=' . $func_id . '&module=' . $selectedmodule . '";
 			}
 		});
-	});
-	
-	$("select[name=module]").change(function(){
-		var module = $(this).val();
-		window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&module="+module;
 	});
 	
 	$("a.delete").click(function(){
@@ -169,38 +188,28 @@ $(function(){
 		if (bid > 0 && confirm(" ' . $lang_module['block_delete_per_confirm'] . '")){
 			$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_del", "bid="+bid, function(theResponse){
 				alert(theResponse);
-		        window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
+		    	window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&func=' . $func_id . '";
 			});
 		}			
 	});
-
-	$("a.block_weight").click(function(){
-		if (confirm(" ' . $lang_module['block_weight_confirm'] . '")){
-			$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_reset_order", "checkss=' . md5( $selectthemes . $global_config['sitekey'] . session_id() ) . '", function(theResponse){
-				alert(theResponse);
-		        window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
-			});
-		}			
-	});
-	
-	
+		
 	$("a.delete_group").click(function(){
-			var list = [];
-	        $("input[name=idlist]:checked").each(function(){
-	        	list.push($(this).val());
-	        });
-	        if (list.length<1){
-		        alert(" ' . $lang_module['block_error_noblock'] . '");
-		        return false;
-	        }
-	        if (confirm(" ' . $lang_module['block_delete_confirm'] . '")){	
+        var list = [];
+        $("input[name=idlist]:checked").each(function(){
+        	list.push($(this).val());
+        });
+        if (list.length<1){
+	        alert(" ' . $lang_module['block_error_noblock'] . '");
+	        return false;
+        }
+		if (confirm(" ' . $lang_module['block_delete_confirm'] . '")){	
 	        $.ajax({        
 		        type: "POST",
 		        url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_del_group",
 		        data:"list="+list,
 		        success: function(data){  
 		            alert(data);
-		            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
+		            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&func=' . $func_id . '";
 		        }
 	        });  
         }
@@ -219,20 +228,22 @@ $(function(){
 	$("select[name=listpos]").change(function(){
 		var pos = $(this).val();
 		var bid = $(this).attr("bid");
-        $.ajax({        
-	        type: "POST",
-	        url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_pos",
-		    data:"bid="+bid+"&pos="+pos,
-	        success: function(data){
-	          	alert(data);  
-	            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
-	        }
-        }); 
+		if (confirm("' . $lang_module['block_change_pos_warning'] . '"+bid+". ' . $lang_module['block_change_pos_warning2'] . '"))
+		{
+	        $.ajax({        
+		        type: "POST",
+		        url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_pos",
+		        data:"bid="+bid+"&pos="+pos,
+		        success: function(data){
+		        	alert(data);  
+		            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&func=' . $func_id . '";
+		        }
+	        });
+        } 
 	});
 });
 </script>
 ';
-
 if ( ! defined( 'SHADOWBOX' ) )
 {
     $my_head = "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
@@ -241,6 +252,7 @@ if ( ! defined( 'SHADOWBOX' ) )
     define( 'SHADOWBOX', true );
 }
 
+$set_active_op = 'blocks';
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );

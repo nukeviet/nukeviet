@@ -52,16 +52,14 @@ $lang_module['block_group'] = "Who can view";
 $lang_module['block_module'] = "Display in module";
 $lang_module['block_all'] = "All modules";
 $lang_module['block_confirm'] = "Accept";
-$lang_module['block_filename'] = "Select file";
 $lang_module['block_default'] = "Default";
 $lang_module['block_exp_time'] = "Expired time";
-$lang_module['block_content'] = "Or content";
 $lang_module['block_sort'] = "Sort";
 $lang_module['block_change_pos_warning'] = "If you change the position of this block will change the positions all of the other blocks in the same group";
 $lang_module['block_change_pos_warning2'] = "Do you want to change position?";
 $lang_module['block_error_nogroup'] = "Please select at least 1 group";
 $lang_module['block_error_noblock'] = "Please select at least 1 block";
-$lang_module['block_delete_confirm'] = "Are you sure you want to delete all the groups do not block. If this will not be deleted to recover?";
+$lang_module['block_delete_confirm'] = "Are you sure you want to delete all the selected block. If this will not be deleted to recover?";
 $lang_module['block_delete_per_confirm'] = "Are you sure you want to remove this block?";
 $lang_module['block_add_success'] = "Add successful";
 $lang_module['block_update_success'] = "Update successful";
@@ -78,15 +76,7 @@ $lang_module['block_file'] = "File";
 $lang_module['block_html'] = "HTML";
 $lang_module['block_typehtml'] = "HTML type";
 
-$lang_module['block_typerss'] = "Rss type";
-$lang_module['block_rss_url'] = "Url rss";
-$lang_module['block_rss_url_error'] = "Rss path you put in wrong";
-$lang_module['block_rss_template_error'] = "You need to select a template for the block";
-
 $lang_module['edit_block'] = "Edit block";
-$lang_module['blang_all'] = "All language";
-$lang_module['block_banners_pl'] = "Or block advertising";
-$lang_module['block_b_pl'] = "Block advertising";
 $lang_module['block_function'] = "Select function";
 $lang_module['add_block_module'] = "Apply for modules";
 $lang_module['add_block_all_module'] = "all modules";
@@ -166,11 +156,5 @@ $lang_module['xcopyblock_process'] = "Copy";
 $lang_module['xcopyblock_no_position'] = "Please select at least on position to copy";
 $lang_module['xcopyblock_notice'] = "This process will drop all exist blocks in target theme, please wait until all process successful";
 $lang_module['xcopyblock_success'] = "All process has been done !";
-
-$lang_module['block_rss_setting_number'] = "Number of items to display";
-$lang_module['block_rss_setting_description'] = "Display description";
-$lang_module['block_rss_setting_html'] = "Description Using HTML";
-$lang_module['block_rss_setting_pubdate'] = "Display the date sent";
-$lang_module['block_rss_setting_target'] = "Open link in new window";
 
 ?>

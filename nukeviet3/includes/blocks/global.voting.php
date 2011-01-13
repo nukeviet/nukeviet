@@ -105,13 +105,13 @@ if ( ! function_exists( 'nv_block_voting' ) )
             
             $voting_array = array(  //
                 "checkss" => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ), //
-"accept" => ( int )$current_voting['acceptcm'], //
-"errsm" => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'], //
-"vid" => $current_voting['vid'], //
-"question" => $current_voting['question'], //
-"action" => $action, //
-"langresult" => $lang_module['voting_result'], //
-"langsubmit" => $lang_module['voting_hits']  //
+				"accept" => ( int )$current_voting['acceptcm'], //
+				"errsm" => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'], //
+				"vid" => $current_voting['vid'], //
+				"question" => $current_voting['question'], //
+				"action" => $action, //
+				"langresult" => $lang_module['voting_result'], //
+				"langsubmit" => $lang_module['voting_hits']  //
             );
             
             $xtpl = new XTemplate( "global.voting.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $site_mods['voting']['module_file'] );
@@ -135,7 +135,9 @@ if ( ! function_exists( 'nv_block_voting' ) )
         return $content;
     }
 }
-
-$content = nv_block_voting();
+if ( defined( 'NV_SYSTEM' ) )
+{
+    $content = nv_block_voting();
+}
 
 ?>

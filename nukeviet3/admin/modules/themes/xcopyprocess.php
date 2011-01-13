@@ -16,15 +16,25 @@ if ( ! empty( $theme1 ) and ! empty( $theme2 ) and $theme1 != $theme2 and file_e
     foreach ( $position as $pos )
     {
         #begin drop all exist blocks behavior with theme 2 and position relative
-        $db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "` WHERE `theme` = " . $db->dbescape( $theme2 ) . " AND `position`=" . $db->dbescape( $pos ) . "" );
+        $db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid` IN (SELECT `bid` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `theme` = " . $db->dbescape( $theme2 ) . " AND `position`=" . $db->dbescape( $pos ) . ")" );
+        $db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `theme` = " . $db->dbescape( $theme2 ) . " AND `position`=" . $db->dbescape( $pos ) . "" );
+        
         #get and insert block from theme 1
-        $sql = "SELECT * FROM `" . NV_BLOCKS_TABLE . "` WHERE `theme` = " . $db->dbescape( $theme1 ) . " AND `position`=" . $db->dbescape( $pos ) . "";
-        $result = $db->sql_query( $sql );
+        $result = $db->sql_query( "SELECT * FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `theme` = " . $db->dbescape( $theme1 ) . " AND `position`=" . $db->dbescape( $pos ) );
         while ( $row = $db->sql_fetchrow( $result ) )
         {
-            $db->sql_query( "INSERT INTO `" . NV_BLOCKS_TABLE . "` VALUES (NULL, " . $row['groupbl'] . "," . $db->dbescape( $row['title'] ) . "," . $db->dbescape( $row['link'] ) . "," . $db->dbescape( $row['type'] ) . "," . $db->dbescape( $row['file_path'] ) . "," . $db->dbescape( $theme2 ) . "," . $db->dbescape( $row['template'] ) . "," . $db->dbescape( $row['position'] ) . "," . $row['exp_time'] . "," . $row['active'] . "," . $db->dbescape( $row['groups_view'] ) . "," . $db->dbescape( $row['module'] ) . "," . $row['all_func'] . "," . $row['func_id'] . "," . $row['weight'] . ")" );
+            $bid = $db->sql_query_insert_id( "INSERT INTO `" . NV_BLOCKS_TABLE . "_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES ( NULL, " . $db->dbescape( $theme2 ) . ", " . $db->dbescape( $row['module'] ) . ", " . $db->dbescape( $row['file_name'] ) . ", " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['link'] ) . ", " . $db->dbescape( $row['template'] ) . ", " . $db->dbescape( $row['position'] ) . ", '" . $row['exp_time'] . "', '" . $row['active'] . "', " . $db->dbescape( $row['groups_view'] ) . ", '" . $row['all_func'] . "', '" . $row['weight'] . "', " . $db->dbescape( $row['config'] ) . " )" );
+            $result_weight = $db->sql_query( "SELECT func_id, weight FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid` = " . $row['bid'] );
+            while ( list( $func_id, $weight ) = $db->sql_fetchrow( $result_weight ) )
+            {
+                $db->sql_query( "INSERT INTO `" . NV_BLOCKS_TABLE . "_weight` (`bid`, `func_id`, `weight`) VALUES ('" . $bid . "', '" . $func_id . "', '" . $weight . "')" );
+            }
         }
     }
+    
+    $db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_groups`" );
+    $db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_weight`" );
+    
     nv_del_moduleCache( 'themes' );
     echo $lang_module['xcopyblock_success'];
 }

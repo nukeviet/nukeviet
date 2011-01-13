@@ -7,29 +7,37 @@
  * @Createdate 2-2-2010 12:55
  */
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
-$type = filter_text_input( 'type', 'get', '', 1 );
-$bid = $nv_Request->get_int( 'bid', 'get' );
-list( $file ) = $db->sql_fetchrow( $db->sql_query( "SELECT file_path FROM `" . NV_BLOCKS_TABLE . "` WHERE bid=" . $bid . "" ) );
-if ( $type == 'global' )
+$module = $nv_Request->get_string( 'module', 'get', '' );
+$bid = $nv_Request->get_int( 'bid', 'get,post', 0 );
+list( $file ) = $db->sql_fetchrow( $db->sql_query( "SELECT file_name FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE bid=" . $bid . "" ) );
+echo "<option value=\"\">" . $lang_module['block_select'] . "</option>\n";
+if ( $module == 'global' )
 {
-	$block_file_list = nv_scandir( NV_ROOTDIR . "/includes/blocks", $global_config['check_block_global'] );
-	foreach ( $block_file_list as $value )
-	{
-		$sel = ( $file == $value ) ? ' selected' : '';
-		echo "<option value=\"" . $value . "\" " . $sel . ">" . $value . "</option>\n";
-	}
-} elseif ( isset( $site_mods[$type] ) )
+    $block_file_list = nv_scandir( NV_ROOTDIR . "/includes/blocks", $global_config['check_block_global'] );
+    foreach ( $block_file_list as $file_name )
+    {
+        $sel = ( $file == $file_name ) ? ' selected' : '';
+        unset( $matches );
+        preg_match( $global_config['check_block_module'], $file_name, $matches );
+        $load_config = ( file_exists( NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) ) ? 1 : 0;
+        echo "<option value=\"" . $file_name . "|" . $load_config . "\" " . $sel . ">" . $matches[1] . " " . $matches[2] . " </option>\n";
+    }
+}
+elseif ( isset( $site_mods[$module] ) )
 {
-	$module_file = $site_mods[$type]['module_file'];
-	if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . '/blocks' ) )
-	{
-		$block_file_list = nv_scandir( NV_ROOTDIR . "/modules/" . $module_file . '/blocks', $global_config['check_block_module'] );
-		foreach ( $block_file_list as $value )
-		{
-			$sel = ( $file == $value ) ? ' selected' : '';
-			echo "<option value=\"" . $value . "\" " . $sel . ">" . $value . "</option>\n";
-		}
-	}
+    $module_file = $site_mods[$module]['module_file'];
+    if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . '/blocks' ) )
+    {
+        $block_file_list = nv_scandir( NV_ROOTDIR . "/modules/" . $module_file . '/blocks', $global_config['check_block_module'] );
+        foreach ( $block_file_list as $file_name )
+        {
+            $sel = ( $file == $file_name ) ? ' selected' : '';
+            unset( $matches );
+            preg_match( $global_config['check_block_module'], $file_name, $matches );
+            $load_config = ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) ) ? 1 : 0;
+            echo "<option value=\"" . $file_name . "|" . $load_config . "\" " . $sel . ">" . $matches[1] . " " . $matches[2] . " </option>\n";
+        }
+    }
 }
 
 ?>

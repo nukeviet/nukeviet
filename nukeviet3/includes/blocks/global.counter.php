@@ -6,7 +6,7 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3/9/2010 23:25
  */
-if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
+if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! function_exists( 'nv_block_counter' ) )
 {
@@ -105,10 +105,12 @@ if ( ! function_exists( 'nv_block_counter' ) )
         return $content;
     }
 }
-
-global $global_config;
-if ( $global_config['online_upd'] )
+if ( defined( 'NV_SYSTEM' ) )
 {
-    $content = nv_block_counter();
+    global $global_config;
+    if ( $global_config['online_upd'] )
+    {
+        $content = nv_block_counter();
+    }
 }
 ?>
