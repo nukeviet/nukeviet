@@ -76,7 +76,6 @@ $lang_module['autoinstall_module_error_uploadfile'] = "Fail to upload file. Plea
 $lang_module['autoinstall_module_error_createfile'] = "Fail to create file. Please check chmod of tmp folder";
 $lang_module['autoinstall_module_error_invalidfile'] = "Invalid zip file";
 $lang_module['autoinstall_module_error_invalidfile_back'] = "Back";
-$lang_module['autoinstall_module_error_warning_install'] = "Fail to delete! Please follow instructions below";
 $lang_module['autoinstall_module_error_warning_fileexist'] = "List files:";
 $lang_module['autoinstall_module_error_warning_invalidfolder'] = "Invalid folder struct!";
 $lang_module['autoinstall_module_error_warning_permission_folder'] = "Safe mode on. Fail to create folder.";

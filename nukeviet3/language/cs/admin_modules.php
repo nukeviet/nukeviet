@@ -76,7 +76,6 @@ $lang_module['autoinstall_module_error_uploadfile'] = "Chyba: Nepodaří nahráv
 $lang_module['autoinstall_module_error_createfile'] = "Chyba: Nepodaří vytvořit soubor. Zkontrolujte prosím, zda chmod z tmp složky";
 $lang_module['autoinstall_module_error_invalidfile'] = "Chyba: Neplatný zip soubor";
 $lang_module['autoinstall_module_error_invalidfile_back'] = "Zpět";
-$lang_module['autoinstall_module_error_warning_install'] = "Nepodaří odstranit! Prosím, postupujte podle instrukcí níže";
 $lang_module['autoinstall_module_error_warning_fileexist'] = "Seznam souborů:";
 $lang_module['autoinstall_module_error_warning_invalidfolder'] = "Neplatná složka struktování!";
 $lang_module['autoinstall_module_error_warning_permission_folder'] = "Safe mod je zapnutý. Nepodaří vytvořit složku.";

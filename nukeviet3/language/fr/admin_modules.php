@@ -360,12 +360,6 @@ $lang_module['autoinstall_module_error_invalidfile_back'] = "Précédant";
 	 english:	  Back
 */
 
-$lang_module['autoinstall_module_error_warning_install'] = "Il est impossible d'installer le module ! Supprimez ou déplacez selon l'instruction ci-dessous.";
-/*
-	 vietnam:	  Module không thể cài đặt !. Hãy xóa hoặc di chuyển theo thông tin bên dưới.
-	 english:	  Fail to delete! Please follow instructions below
-*/
-
 $lang_module['autoinstall_module_error_warning_fileexist'] = "Liste des fichiers existants sur le serveur:";
 /*
 	 vietnam:	  Danh sách hiện có trên hệ thống:
