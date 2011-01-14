@@ -1,18 +1,21 @@
 <!-- BEGIN: main -->
-<ul id="navmenu-v" class="clearfix">
-    <!-- BEGIN: item -->
-    <li>
-        <a title="{CAT.title}" href="{CAT.link}">{CAT.title}</a>
-        <!-- BEGIN: sub -->
-        <ul>
-            <!-- BEGIN: loop -->
-            <li>
-                <a title="{SUB.title}" href="{SUB.link}">{SUB.title}</a>
-            </li>
-            <!-- END: loop -->
-        </ul>
-        <!-- END: sub -->
-    </li>
-    <!-- END: item -->
-</ul>
+	<link rel="stylesheet" type="text/css"	href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/ddsmoothmenu.css" />
+	<script type="text/javascript">
+		var imageslist	= {down:['downarrowclass', '{NV_BASE_SITEURL}themes/{TEMPLATE}/images/ddsmoothmenu/down.gif', 23], right:['rightarrowclass', '{NV_BASE_SITEURL}themes/{TEMPLATE}/images/ddsmoothmenu/right.gif']};
+	</script>
+	<script type="text/javascript"	src="{NV_BASE_SITEURL}/js/ddsmoothmenu.js"></script>
+	<script type="text/javascript">
+		ddsmoothmenu.init({
+			mainmenuid: "smoothmenu_{BLOCK_ID}", //Menu DIV id
+			orientation: 'v', //Horizontal or vertical menu: Set to "h" or "v"
+			classname: 'ddsmoothmenu-v', //class added to menu's outer DIV
+			//customtheme: ["#804000", "#482400"],
+			contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
+		})
+	</script>
+	<div id="smoothmenu_{BLOCK_ID}" class="ddsmoothmenu-v">
+	  <ul>
+	      {HTML_CONTENT}
+	  </ul>
+	</div>
 <!-- END: main -->

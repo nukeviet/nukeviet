@@ -1,1 +1,0 @@
-var obj=null;function checkHover(){obj&&obj.find("ul").fadeOut("fast")}$(document).ready(function(){$("#category_news > li").hover(function(){if(obj){obj.find("ul").fadeOut("fast");obj=null}$(this).find("ul").fadeIn("fast")},function(){obj=$(this);setTimeout("checkHover()",400)})});
