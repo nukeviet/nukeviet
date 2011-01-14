@@ -2,7 +2,7 @@
 <div id="topnews" style="display:none">
     <div class="indent clearfix">
         <!-- BEGIN: hots_news_img -->
-        <div class="headline span-8 last fl">
+        <div class="headline last fl">
             <div id="slider1" class="sliderwrapper">
                 <!-- BEGIN: loop -->
                 <div class="contentdiv clearfix">
@@ -14,7 +14,7 @@
             </div>
         </div>
         <!-- END: hots_news_img -->
-        <div id="tabs" class="fr tabs" style="width:180px;">
+        <div id="tabs" class="fr tabs" style="width: 290px;">
             <ul>
                 <!-- BEGIN: loop_tabs_title -->
                 <li>

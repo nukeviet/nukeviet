@@ -1,3 +1,7 @@
+.headline {
+    width: 310px;
+	margin-right: 10px
+}
 .sliderwrapper {
 	position: relative; /*leave as is*/
 	overflow: hidden; /*leave as is*/
@@ -12,7 +16,6 @@
 	background: #fff;
 	padding: 5px;
 	width: 300px;
-	/*width of content DIVs within slider. Total width should equal slider's inner width (390+5+5=400) */
 	height: 190px;
 }
 
