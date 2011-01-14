@@ -219,7 +219,7 @@ function nv_rss_generate ( $channel, $items )
         {
             if ( ! empty( $item['title'] ) )
             {
-                $item['title'] = nv_unhtmlspecialchars( $item['title'] );
+                $item['title'] = htmlspecialchars(nv_unhtmlspecialchars( $item['title'] ), ENT_QUOTES );
             }
             
             if ( ! empty( $item['description'] ) )
