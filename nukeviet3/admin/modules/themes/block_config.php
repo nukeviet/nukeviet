@@ -55,34 +55,15 @@ if ( ! empty( $file_name ) and preg_match( $global_config['check_block_module'],
                         $array_config[$key] = trim( $value );
                     }
                     
-                    $data_block = array(); // Cau hinh cua block
+                    $data_block = $array_config; // Cau hinh cua block
                     $bid = $nv_Request->get_int( 'bid', 'get,post', 0 );
                     if ( $bid > 0 )
                     {
-                        $theme_array = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme'] );
-                        foreach ( $theme_array as $themes_i )
-                        {
-                            $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&selectthemes=" . $themes_i] = $themes_i;
-                        }
-                        $selectthemes_old = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site_theme'] );
-                        $selectthemes = $nv_Request->get_string( 'selectthemes', 'get', $selectthemes_old );
-                        if ( ! in_array( $selectthemes, $theme_array ) )
-                        {
-                            $selectthemes = $global_config['site_theme'];
-                        }
-                        if ( $selectthemes_old != $selectthemes )
-                        {
-                            $nv_Request->set_Cookie( 'selectthemes', $selectthemes, NV_LIVE_COOKIE_TIME );
-                        }
-                        $row_config = $db->sql_fetchrow( $db->sql_query( "SELECT `theme`, `module`, `file_name`, `config` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `bid`=" . $bid ) );
-                        if ( isset( $row_config['theme'] ) and $row_config['theme'] == $selectthemes and $row_config['module'] == $module and $row_config['file_name'] == $file_name )
+                        $row_config = $db->sql_fetchrow( $db->sql_query( "SELECT `module`, `file_name`, `config` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `bid`=" . $bid ) );
+                        if ( $row_config['file_name'] == $file_name and $row_config['module'] == $module )
                         {
                             $data_block = unserialize( $row_config['config'] );
                         }
-                    }
-                    else
-                    {
-                        $data_block = $array_config;
                     }
                     
                     $lang_block = array(); // Ngon ngu cua block

@@ -199,6 +199,8 @@ function nv_blocks_content ( )
                 {
                     $content = "";
                     $block_config = ( ! empty( $__values['config'] ) ) ? unserialize( $__values['config'] ) : array();
+                    $block_config['bid'] = $__values['bid'];
+                    $block_config['module'] = $__values['module'];
                     if ( $__values['module'] == "global" and file_exists( NV_ROOTDIR . "/includes/blocks/" . $__values['file_name'] ) )
                     {
                         include ( NV_ROOTDIR . "/includes/blocks/" . $__values['file_name'] );
