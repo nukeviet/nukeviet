@@ -1079,3 +1079,19 @@ form.select_lang{
 	float:right;
 	margin-left:10px;
 }
+
+ul.list_item {
+    margin: 0 0 8px;
+    padding: 0;
+    list-style: none;
+}
+
+ul.list_item li {
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+ul.list_item li.second {
+    background: #fcfcfc;
+}

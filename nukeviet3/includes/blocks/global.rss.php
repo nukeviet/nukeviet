@@ -147,7 +147,7 @@ if ( ! function_exists( 'nv_block_data_config_rss' ) )
                 $item['description'] = ( $block_config['ishtml'] ) ? $item['description'] : strip_tags( $item['description'] );
                 $item['target'] = ( $block_config['istarget'] ) ? " onclick=\"this.target='_blank'\" " : "";
                 $item['class'] = ( $a % 2 == 0 ) ? "second" : "";
-                $xtpl->assign( 'DATA_RSS', $item );
+                $xtpl->assign( 'DATA', $item );
                 if ( $block_config['isdescription'] )
                 {
                     $xtpl->parse( 'main.loop.description' );
