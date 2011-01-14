@@ -126,7 +126,7 @@ function nv_create_submenu ( )
 
 function nv_blocks_content ( )
 {
-    global $db, $module_info, $op, $global_config, $lang_global, $module_name, $module_file, $my_head, $user_info;
+    global $db, $module_info, $op, $global_config, $lang_global, $module_name, $site_mods, $my_head, $user_info;
     $__blocks = array();
     $__blocks_return = array();
     
@@ -147,8 +147,8 @@ function nv_blocks_content ( )
     if ( ! empty( $array_position ) )
     {
         #dev version theme control
-        $sql_bl = "SELECT * FROM `" . NV_BLOCKS_TABLE . "` WHERE func_id='" . $module_info['funcs'][$op]['func_id'] . "' AND `theme` ='" . $global_config['module_theme'] . "' AND `active`=1 ORDER BY `weight` ASC";
-        $list = nv_db_cache( $sql_bl, '', 'themes' );
+        $sql_bl = "SELECT * FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 ON t1.bid = t2.bid WHERE t2.func_id='" . $module_info['funcs'][$op]['func_id'] . "' AND t1.theme ='" . $global_config['module_theme'] . "' AND t1.active=1 ORDER BY t2.weight ASC";
+        $list = nv_db_cache( $sql_bl, 'bid', 'themes' );
         foreach ( $list as $row_bl )
         {
             $__pos = $row_bl['position'];
@@ -186,12 +186,11 @@ function nv_blocks_content ( )
                     }
                     # comment this line
                     $__blocks[$__pos][] = array( 
-                        'bid' => $row_bl['bid'], 'weight' => $row_bl['weight'], 'func_id' => $row_bl['func_id'], 'title' => $title, 'type' => $row_bl['type'], 'file_path' => $row_bl['file_path'], 'template' => $row_bl['template'] 
+                        'bid' => $row_bl['bid'], 'title' => $title, 'module' => $row_bl['module'], 'file_name' => $row_bl['file_name'], 'template' => $row_bl['template'], 'config' => $row_bl['config'] 
                     );
                 }
             }
         }
-        
         foreach ( array_keys( $__blocks ) as $__pos )
         {
             if ( ! empty( $__blocks[$__pos] ) )
@@ -199,27 +198,21 @@ function nv_blocks_content ( )
                 foreach ( $__blocks[$__pos] as $__values )
                 {
                     $content = "";
-                    if ( $__values['type'] == "banner" )
+                    $block_config = ( ! empty( $__values['config'] ) ) ? unserialize( $__values['config'] ) : array();
+                    if ( $__values['module'] == "global" and file_exists( NV_ROOTDIR . "/includes/blocks/" . $__values['file_name'] ) )
                     {
-                        $content = showBanners( $__values['file_path'] );
+                        include ( NV_ROOTDIR . "/includes/blocks/" . $__values['file_name'] );
                     }
-                    elseif ( $__values['type'] == "html" )
+                    elseif ( isset( $site_mods[$__values['module']] ) )
                     {
-                        $content = $__values['file_path'];
+                        $mfile = $site_mods[$__values['module']]['module_file'];
+                        if ( file_exists( NV_ROOTDIR . "/modules/" . $mfile . "/blocks/" . $__values['file_name'] ) )
+                        {
+                            include ( NV_ROOTDIR . "/modules/" . $mfile . "/blocks/" . $__values['file_name'] );
+                        }
                     }
-                    elseif ( $__values['type'] == "rss" )
-                    {
-                        $array_rrs = explode( "#@#", $__values['file_path'] );
-                        $content = nv_get_rss( $array_rrs[0] );
-                    }
-                    elseif ( preg_match( $global_config['check_block_global'], $__values['file_path'] ) and file_exists( NV_ROOTDIR . "/includes/blocks/" . $__values['file_path'] ) )
-                    {
-                        include ( NV_ROOTDIR . "/includes/blocks/" . $__values['file_path'] );
-                    }
-                    elseif ( preg_match( $global_config['check_block_module'], $__values['file_path'] ) and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/blocks/" . $__values['file_path'] ) )
-                    {
-                        include ( NV_ROOTDIR . "/modules/" . $module_file . "/blocks/" . $__values['file_path'] );
-                    }
+                    unset( $block_config, $__values['config'] );
+                    
                     if ( ! empty( $content ) or defined( 'NV_IS_DRAG_BLOCK' ) )
                     {
                         $block_theme = "";
@@ -240,48 +233,11 @@ function nv_blocks_content ( )
                         {
                             $block_theme = "default";
                         }
-                        
-                        if ( ! empty( $block_theme ) and $__values['type'] != "rss" )
+                        if ( ! empty( $block_theme ) )
                         {
                             $xtpl = new XTemplate( "block." . $__values['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/layout" );
                             $xtpl->assign( 'BLOCK_TITLE', $__values['title'] );
                             $xtpl->assign( 'BLOCK_CONTENT', $content );
-                            $xtpl->parse( 'mainblock' );
-                            $b_content = $xtpl->text( 'mainblock' );
-                        }
-                        elseif ( ! empty( $block_theme ) and $__values['type'] == "rss" )
-                        {
-                            $rss_setting_number = intval( $array_rrs[1] );
-                            $rss_setting_description = intval( $array_rrs[2] );
-                            $rss_setting_html = intval( $array_rrs[3] );
-                            $rss_setting_pubdate = intval( $array_rrs[4] );
-                            $rss_setting_target = intval( $array_rrs[5] );
-                            $xtpl = new XTemplate( "block." . $__values['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/layout" );
-                            $xtpl->assign( 'BLOCK_TITLE', $__values['title'] );
-                            $a = 1;
-                            foreach ( $content as $item )
-                            {
-                                if ( $a <= $rss_setting_number )
-                                {
-                                    $item['description'] = ( $rss_setting_html ) ? $item['description'] : strip_tags( $item['description'] );
-                                    $item['target'] = ( $rss_setting_target ) ? " onclick=\"this.target='_blank'\" " : "";
-                                    $xtpl->assign( 'DATA_RSS', $item );
-                                    if ( $rss_setting_description )
-                                    {
-                                        $xtpl->parse( 'mainblock.looprss.description' );
-                                    }
-                                    if ( $rss_setting_pubdate )
-                                    {
-                                        $xtpl->parse( 'mainblock.looprss.pubDate' );
-                                    }
-                                    $xtpl->parse( 'mainblock.looprss' );
-                                    $a ++;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
                             $xtpl->parse( 'mainblock' );
                             $b_content = $xtpl->text( 'mainblock' );
                         }
@@ -323,140 +279,14 @@ function nv_blocks_content ( )
 }
 
 /**
- * showBanners()
- * 
- * @param mixed $id
- * @return
- */
-function showBanners ( $id )
-{
-    global $global_config;
-    $xmlfile = NV_ROOTDIR . '/' . NV_DATADIR . '/bpl_' . $id . '.xml';
-    if ( ! file_exists( $xmlfile ) )
-    {
-        return '';
-    }
-    $xml = simplexml_load_file( $xmlfile );
-    if ( $xml === false )
-    {
-        return '';
-    }
-    $return = "";
-    
-    $width_banners = intval( $xml->width );
-    $height_banners = intval( $xml->height );
-    $pid = $xml->id;
-    $array_banners = $xml->banners->banners_item;
-    $array_banners_content = array();
-    foreach ( $array_banners as $banners )
-    {
-        $banners = ( array )$banners;
-        
-        $banners['file_height'] = round( $banners['file_height'] * $width_banners / $banners['file_width'] );
-        $banners['file_width'] = $width_banners;
-        
-        $banners['file_alt'] = ( ! empty( $banners['file_alt'] ) ) ? $banners['file_alt'] : $banners['title'];
-        
-        $return = "<div style=\"margin-top: 2px;\">\n";
-        if ( $banners['file_ext'] == "swf")
-        {
-            $return .= "    <!--[if !IE]> -->\n";
-            $return .= "    <object type=\"application/x-shockwave-flash\" data=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\">\n";
-            $return .= "    <!-- <![endif]-->\n";
-            $return .= "    <!--[if IE]>\n";
-            $return .= "    <object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\"\n";
-            $return .= "        codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\">\n";
-            $return .= "        <param name=\"movie\" value=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'] . "\" />\n";
-            $return .= "    <!--><!--dgx-->\n";
-            $return .= "        <param name=\"loop\" value=\"true\" />\n";
-            $return .= "        <param name=\"wmode\" value=\"transparent\" />\n";
-            $return .= "        <param name=\"menu\" value=\"false\" />\n";
-            $return .= "    </object>\n";
-            $return .= "    <!-- <![endif]-->\n";
-        }
-        elseif ( empty( $banners['file_click'] ) )
-        {
-            $return .= "<img alt=\"" . $banners['file_alt'] . "\" border=\"0\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\"/>";
-        }
-        else
-        {
-            $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=banners&amp;" . NV_OP_VARIABLE . "=click&amp;id=" . $banners['id'];
-            $return .= "<a href=\"" . $link_i . "\" onclick=\"this.target='_blank'\" title=\"" . $banners['file_alt'] . "\">
-            				<img alt=\"" . $banners['file_alt'] . "\" style=\"border-width:0px\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'] . "\" width=\"" . $banners['file_width'] . "\" height=\"" . $banners['file_height'] . "\" />
-            			</a>";
-        }
-        $return .= "</div>\n";
-        $array_banners_content[] = $return;
-    }
-    if ( $xml->form == "random" )
-    {
-        shuffle( $array_banners_content );
-    }
-    return implode( "\n", $array_banners_content );
-}
-
-function nv_get_rss ( $url )
-{
-    global $global_config;
-    $array_data = array();
-    $cache_file = NV_LANG_DATA . "_rss_" . md5( $url ) . "_" . NV_CACHE_PREFIX . ".cache";
-    if ( file_exists( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) and filemtime( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) > NV_CURRENTTIME - 1200 )
-    {
-        if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
-        {
-            $array_data = unserialize( $cache );
-        }
-    }
-    if ( empty( $array_data ) )
-    {
-        include_once ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
-        $getContent = new UrlGetContents( $global_config );
-        $xml_source = $getContent->get( $url );
-        $allowed_html_tags = array_map( "trim", explode( ",", NV_ALLOWED_HTML_TAGS ) );
-        $allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
-        if ( $xml = simplexml_load_string( $xml_source ) )
-        {
-            $a = 0;
-            if ( isset( $xml->channel ) )
-            {
-                foreach ( $xml->channel->item as $item )
-                {
-                    $array_data[$a]['title'] = strip_tags( $item->title );
-                    $array_data[$a]['description'] = strip_tags( $item->description, $allowed_html_tags );
-                    $array_data[$a]['link'] = strip_tags( $item->link );
-                    $array_data[$a]['pubDate'] = nv_date( "l - d/m/Y  H:i", strtotime( $item->pubDate ) );
-                    $a ++;
-                }
-            }
-            elseif ( isset( $xml->entry ) )
-            {
-                foreach ( $xml->entry as $item )
-                {
-                    $urlAtt = $item->link->attributes();
-                    $url = $urlAtt['href'];
-                    $array_data[$a]['title'] = strip_tags( $item->title );
-                    $array_data[$a]['description'] = strip_tags( $item->content, $allowed_html_tags );
-                    $array_data[$a]['link'] = strip_tags( $urlAtt['href'] );
-                    $array_data[$a]['pubDate'] = nv_date( "l - d/m/Y  H:i", strtotime( $item->updated ) );
-                    $a ++;
-                }
-            }
-        }
-        $cache = serialize( $array_data );
-        nv_set_cache( $cache_file, $cache );
-    }
-    return $array_data;
-}
-
-/**
  * nv_html_meta_tags()
  * 
  * @return
  */
-function nv_html_meta_tags()
+function nv_html_meta_tags ( )
 {
     global $global_config, $lang_global, $key_words, $description, $module_info;
-
+    
     $return = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
     $kw = array();
     if ( ! empty( $key_words ) ) $kw[] = $key_words;
@@ -469,10 +299,10 @@ function nv_html_meta_tags()
         $key_words = nv_strtolower( strip_tags( $kw ) );
         $return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />\n";
     }
-
+    
     $ds = ( ! empty( $description ) ) ? $description : $global_config['site_description'];
     $return .= ( ! empty( $ds ) ) ? "<meta name=\"description\" content=\"" . strip_tags( $ds ) . "\" />\n" : "";
-
+    
     $file_metatags = NV_ROOTDIR . "/" . NV_DATADIR . "/metatags.xml";
     if ( file_exists( $file_metatags ) )
     {
@@ -489,13 +319,11 @@ function nv_html_meta_tags()
         if ( $mt['meta_item'] )
         {
             if ( isset( $mt['meta_item'][0] ) ) $metatags = $mt['meta_item'];
-            else  $metatags[] = $mt['meta_item'];
-
+            else $metatags[] = $mt['meta_item'];
+            
             foreach ( $metatags as $meta )
             {
-                if ( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) //
-                    and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) //
-                    and preg_match( "/^([^\'\"]+)$/", $meta['content'] ) )
+                if ( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", $meta['content'] ) )
                 {
                     $return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\" />\n";
                 }
@@ -616,7 +444,7 @@ function nv_html_site_js ( )
     {
         $return .= nv_add_editor_js();
     }
-
+    
     if ( defined( 'NV_IS_DRAG_BLOCK' ) )
     {
         $return .= "<div style='display:none' title='" . $lang_global['add_block'] . "' id='addblock'></div>\n";
@@ -625,74 +453,78 @@ function nv_html_site_js ( )
         $return .= '<script type="text/javascript">
         			var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {				
-					$("a.delblock").click(function(){
-						var bid = $(this).attr("name");
-						if (confirm("' . $lang_global['block_delete_confirm'] . '")){
-							$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=front_del", "bid="+bid+"&blockredirect="+blockredirect, function(theResponse){
-								alert(theResponse);
-								window.location.href = "' . $client_info['selfurl'] . '";
-							});
-						}
-					});
-					
-					$("a.outgroupblock").click(function(){
-						var bid = $(this).attr("name");
-						if (confirm("' . $lang_global['block_outgroup_confirm'] . '")){
-							$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=front_outgroup", "bid="+bid+"&blockredirect="+blockredirect, function(theResponse){
-								alert(theResponse);
-							});
-						}
-					});
-										
-					$("a.editblock").click(function(){
-						var bid = $(this).attr("name");
-						$("div#addblock").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=front_add&selectthemes=' . $global_config['module_theme'] . '&bid="+bid+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:400px\'></iframe>");
-            			$("div#addblock").dialog("open");
-						return false;
-					});
-					$("div#addblock").dialog({
-						autoOpen: false,
-						width: 800,
-						modal: true,
-						position: "top"
-					});
-					
-					$("a.addblock").click(function(){
-						var tag = $(this).attr("id");
-						$("div#addblock").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=front_add&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:400px\'></iframe>");
-            			$("div#addblock").dialog("open");
-						return false;
-            		});
-					var position=new Array();
-					var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
+						$("a.delblock").click(function(){
+							var bid = $(this).attr("name");
+							if (confirm("' . $lang_global['block_delete_confirm'] . '")){
+								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_del", "bid="+bid, function(theResponse){
+									alert(theResponse);
+									window.location.href = "' . $client_info['selfurl'] . '";
+								});
+							}
+						});
+						
+						$("a.outgroupblock").click(function(){
+							var bid = $(this).attr("name");
+							if (confirm("' . $lang_global['block_outgroup_confirm'] . '")){
+								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=front_outgroup", "func_id=' . $module_info['funcs'][$op]['func_id'] . '&bid="+bid, function(theResponse){
+									alert(theResponse);
+								});
+							}
+						});
+											
+						$("a.editblock").click(function(){
+							var bid = $(this).attr("name");
+							$("div#addblock").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&bid="+bid+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:400px\'></iframe>");
+	            			$("div#addblock").dialog("open");
+							return false;
+						});
+						$("div#addblock").dialog({
+							autoOpen: false,
+							width: 800,
+							modal: true,
+							position: "top"
+						});
+						
+						$("a.addblock").click(function(){
+							var tag = $(this).attr("id");
+							$("div#addblock").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:400px\'></iframe>");
+	            			$("div#addblock").dialog("open");
+							return false;
+	            		});
+
+	            		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
+	            		var post_order = false;
 						$(".column").sortable({
 							connectWith: \'.column\',
 							opacity: 0.8, 
 							cursor: \'move\',
 							receive: function(){
-									var target = $(this).attr("id");
+									post_order = true;
+									var position = $(this).attr("id");
 									var order = $(this).sortable("serialize");
-									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&position="+target+"&func="+func_id, function(theResponse){
-									if(theResponse=="OK_"+func_id){
-				    					$("div#toolbar>ul.info>li").hide();
-				    					$("div#toolbar>ul.info>li").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
-									}
-									else{
-										alert("' . $lang_global['blocks_saved_error'] . '");
-									}
-									});	
+									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&position="+position+"&func_id="+func_id, function(theResponse){
+										if(theResponse=="OK_"+func_id){
+					    					$("div#toolbar>ul.info>li").hide();
+					    					$("div#toolbar>ul.info>li").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
+										}
+										else{
+											alert("' . $lang_global['blocks_saved_error'] . '");
+										}
+									});
 							},
 							stop: function() {
-								var order = $(this).sortable("serialize");
-								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order, function(theResponse){
-									if(theResponse=="OK_0"){
-				    					$("div#toolbar>ul.info>li").hide();
-				    					$("div#toolbar>ul.info>li").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
-									}
-									else{
-										alert("' . $lang_global['blocks_saved_error'] . '");
-									}
-								});
+								if(post_order == false){
+									var order = $(this).sortable("serialize");
+									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&func_id="+func_id, function(theResponse){
+										if(theResponse=="OK_"+func_id){
+					    					$("div#toolbar>ul.info>li").hide();
+					    					$("div#toolbar>ul.info>li").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
+										}
+										else{
+											alert("' . $lang_global['blocks_saved_error'] . '");
+										}
+									});
+								}
 							}
 						});	
 						$(".column").disableSelection();
