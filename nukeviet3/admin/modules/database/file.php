@@ -26,7 +26,6 @@ $files = scandir( $log_dir );
 foreach ( $files as $file )
 {
     unset( $mc );
-    $global_config['check_op_layout'] = "/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/";
     if ( preg_match( "/^([a-zA-Z0-9]+)\_([a-zA-Z0-9\-\_]+)\.(sql|sql\.gz)+$/", $file, $mc ) )
     {
         $filesize = filesize( $log_dir . '/' . $file );
