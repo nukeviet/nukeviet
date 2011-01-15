@@ -40,7 +40,7 @@ if ( $overwrite != md5( $filename . $global_config['sitekey'] . session_id() ) )
 }
 if ( $errorfile || $errorfolder )
 {
-    echo '<br /><div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>';
+    echo '<br><div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>';
     if ( $errorfile )
     {
         echo '<strong>' . $lang_module['autoinstall_module_error_warning_fileexist'] . '</strong><br />' . $errorfile . '';
@@ -49,9 +49,9 @@ if ( $errorfile || $errorfolder )
     {
         echo '<br /><strong>' . $lang_module['autoinstall_module_error_warning_invalidfolder'] . '</strong><br />' . $errorfolder . '';
     }
-    echo '</div>';
-    echo '<br><b>' . $lang_module['autoinstall_module_error_warning_overwrite'] . '</b><br><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoinstall_module_overwrite'] . '"/>';
-    echo '</div><script type="text/javascript">
+    echo '<br><b>' . $lang_module['autoinstall_module_error_warning_overwrite'] . '</b>';
+    echo '<br><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoinstall_module_overwrite'] . '"/>';
+    echo '<script type="text/javascript">
         		 $(function(){
         		 	$("input[name=install_content_overwrite]").click(function(){
         		 		if(confirm("' . $lang_module['autoinstall_module_error_warning_overwrite'] . '")){
@@ -129,19 +129,21 @@ else
         if ( ! is_writable( NV_ROOTDIR . '/' . trim( $dir ) ) )
         {
             echo NV_ROOTDIR . '/' . trim( $dir );
-            echo '<div id="install_content"><h4>' . $lang_module['autoinstall_module_unzip_abort'] . '</h4><input style="margin-top:10px;font-size:15px" type="button" name="checkfile" value="' . $lang_module['autoinstall_module_checkfile'] . '"/><br /><br />';
-            echo '</div><script type="text/javascript">
-        		 $(function(){
-        		 	$("input[name=checkfile]").click(function(){
-        		 		$("#message").show();
-        		 		$("#step1").html("");
-        		 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check",function(){
-        					$("#message").hide();
-        				});
-        			});
-        		 });
-        		</script>
-        	';
+            echo '<div id="install_content">
+            	<h4>' . $lang_module['autoinstall_module_unzip_abort'] . '</h4>
+            	<input style="margin-top:10px;font-size:15px" type="button" name="checkfile" value="' . $lang_module['autoinstall_module_checkfile'] . '"/>
+            </div>';
+            echo '<script type="text/javascript">
+	        		 $(function(){
+	        		 	$("input[name=checkfile]").click(function(){
+	        		 		$("#message").show();
+	        		 		$("#step1").html("");
+	        		 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check",function(){
+	        					$("#message").hide();
+	        				});
+	        			});
+	        		 });
+        		</script>';
             die();
         }
     }
