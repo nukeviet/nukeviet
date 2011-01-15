@@ -9,12 +9,8 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-unset( $page_title, $select_options );
-global $global_config;
+global $global_config, $sys_info;
 
-$menu_top = array( 
-    "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_siteinfo'] 
-);
 if ( defined( 'NV_IS_SPADMIN' ) and function_exists( 'phpinfo' ) and ! in_array( 'phpinfo', $sys_info['disable_functions'] ) )
 {
     $submenu['system_info'] = $lang_module['site_configs_info'];
@@ -41,6 +37,13 @@ if ( defined( 'NV_IS_GODADMIN' ) )
     $submenu['logs'] = $lang_module['logs_title'];
 }
 
-define( 'NV_IS_FILE_SITEINFO', true );
+if ( $module_name == "siteinfo" )
+{
+    $menu_top = array( 
+        "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_siteinfo'] 
+    );
+    
+    define( 'NV_IS_FILE_SITEINFO', true );
+}
 
 ?>

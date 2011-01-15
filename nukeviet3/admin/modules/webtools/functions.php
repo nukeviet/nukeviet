@@ -9,21 +9,23 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-define( 'NV_IS_FILE_WEBTOOLS', true );
-
-$menu_top = array( 
-    "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_webtools'] 
-);
-
 $submenu['clearsystem'] = $lang_module['clearsystem'];
 $submenu['siteDiagnostic'] = $lang_module['siteDiagnostic'];
 $submenu['keywordRank'] = $lang_module['keywordRank'];
 $submenu['sitemapPing'] = $lang_module['sitemapPing'];
 $submenu['checkupdate'] = $lang_module['checkupdate'];
+$submenu['autoupdate'] = "autoupdate";
 $submenu['revision'] = $lang_module['revision'];
 
-$allow_func = array( 
-    'main', 'clearsystem', 'sitemapPing', 'checkupdate', 'revision', 'siteDiagnostic', 'keywordRank' 
-);
+if ( $module_name == "webtools" )
+{
+    $allow_func = array( 
+        'main', 'clearsystem', 'sitemapPing', 'checkupdate', 'revision', 'siteDiagnostic', 'keywordRank', 'autoupdate' 
+    );
+    $menu_top = array( 
+        "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_webtools'] 
+    );
+    define( 'NV_IS_FILE_WEBTOOLS', true );
+}
 
 ?>

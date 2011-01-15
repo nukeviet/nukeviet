@@ -9,12 +9,6 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-unset( $page_title, $select_options );
-$select_options = array();
-
-$menu_top = array( 
-    "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_themes'] 
-);
 $submenu['setuplayout'] = $lang_module['setup_layout'];
 $submenu['blocks'] = $lang_module['blocks'];
 $submenu['xcopyblock'] = $lang_module['xcopyblock'];
@@ -33,6 +27,11 @@ if ( defined( "NV_IS_GODADMIN" ) )
     $allow_func[] = 'package_theme_module';
     $allow_func[] = "getfile";
 }
-
-define( 'NV_IS_FILE_THEMES', true );
+if ( $module_name == "themes" )
+{
+    $menu_top = array( 
+        "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_themes'] 
+    );
+    define( 'NV_IS_FILE_THEMES', true );
+}
 ?>
