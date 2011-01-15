@@ -58,13 +58,13 @@ function nv_show_funcs ( )
         $timestamp = NV_CURRENTTIME - date( 'Z', NV_CURRENTTIME );
         $module_version = array( 
             "name" => $mod, //
-			"modfuncs" => "main", //
-			"is_sysmod" => 0, //
-			"virtual" => 0, //
-			"version" => "3.0.01", //
-			"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
-			"author" => "", //
-			"note" => "" 
+"modfuncs" => "main", //
+"is_sysmod" => 0, //
+"virtual" => 0, //
+"version" => "3.0.01", //
+"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
+"author" => "", //
+"note" => "" 
         );
     }
     $module_version['submenu'] = isset( $module_version['submenu'] ) ? trim( $module_version['submenu'] ) : "";
@@ -107,14 +107,14 @@ function nv_show_funcs ( )
     {
         foreach ( $old_funcs as $func => $values )
         {
-            $query = "DELETE FROM `" . NV_BLOCKS_TABLE . "` WHERE `func_id` = " . $values['func_id'];
+            $query = "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `func_id` = " . $values['func_id'];
             $db->sql_query( $query );
             $query = "DELETE FROM `" . NV_MODFUNCS_TABLE . "` WHERE `func_id` = " . $values['func_id'];
             $db->sql_query( $query );
             $is_delCache = true;
         }
-        $db->sql_query( "OPTIMIZE TABLE " . NV_BLOCKS_TABLE );
-        $db->sql_query( "OPTIMIZE TABLE " . NV_MODFUNCS_TABLE );
+        $db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_weight`" );
+        $db->sql_query( "OPTIMIZE TABLE `" . NV_MODFUNCS_TABLE . "`" );
         $is_refresh = true;
     }
     
@@ -137,7 +137,7 @@ function nv_show_funcs ( )
             $show_func = in_array( $func, $modfuncs ) ? 1 : 0;
             $sql = "INSERT INTO `" . NV_MODFUNCS_TABLE . "` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES (NULL, " . $db->dbescape( $func ) . ", " . $db->dbescape( ucfirst( $func ) ) . ", " . $db->dbescape( $mod ) . ", " . $show_func . ", 0, 0, " . $db->dbescape( $layoutdefault ) . ", '')";
             $func_id = $db->sql_query_insert_id( $sql );
-            nv_setup_block_module($mod, $func_id);
+            nv_setup_block_module( $mod, $func_id );
         }
         $is_refresh = true;
         $is_delCache = true;

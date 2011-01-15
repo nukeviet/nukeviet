@@ -14,15 +14,22 @@ if ( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" )
     $title = filter_text_input( 'title', 'post', '', 1 );
     $module_file = filter_text_input( 'module_file', 'post', '', 1 );
     $note = filter_text_input( 'note', 'post', '', 1 );
-    $title = strtolower(change_alias( $title ));
+    $title = strtolower( change_alias( $title ) );
     if ( ! empty( $title ) and ! empty( $module_file ) and preg_match( $global_config['check_module'], $title ) and preg_match( $global_config['check_module'], $module_file ) )
     {
         $mod_version = "";
         $author = "";
         $note = nv_nl2br( $note, '<br />' );
         $module_data = preg_replace( '/(\W+)/i', '_', $title );
-        $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES (" . $db->dbescape( $title ) . ", '0', '0', " . $db->dbescape( $module_file ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $mod_version ) . ", '" . NV_CURRENTTIME . "', " . $db->dbescape( $author ) . ", " . $db->dbescape( $note ) . ")" );
-        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setup" );
+        $ok = $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES (" . $db->dbescape( $title ) . ", '0', '0', " . $db->dbescape( $module_file ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $mod_version ) . ", '" . NV_CURRENTTIME . "', " . $db->dbescape( $author ) . ", " . $db->dbescape( $note ) . ")" );
+        if ( $ok )
+        {
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setup&setmodule=" . $title . "&checkss=" . md5( $title . session_id() . $global_config['sitekey'] ) );
+        }
+        else
+        {
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setup" );
+        }
         die();
     }
 }
@@ -63,7 +70,7 @@ while ( list( $module_file_i ) = $db->sql_fetchrow( $result ) )
         {
             $sl = " selected=\"selected\"";
         }
-        $contents .= "<option value=\"" . $module_file_i . "\" ".$sl.">" . $module_file_i . "</option>\n";
+        $contents .= "<option value=\"" . $module_file_i . "\" " . $sl . ">" . $module_file_i . "</option>\n";
     }
 }
 $contents .= "</select>\n";

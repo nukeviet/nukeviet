@@ -74,7 +74,10 @@ function nv_setup_block_module ( $mod, $func_id = 0 )
     global $db, $db_config, $global_config;
     if ( empty( $func_id ) )
     {
-        $db->sql_query( "DELETE FROM " . NV_BLOCKS_TABLE . " WHERE func_id IN (SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . ")" );
+        //xoa du lieu tai bang blocks
+        $db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid` in (SELECT `bid` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `module`=" . $db->dbescape( $mod ) . ")" );
+        $db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `module`=" . $db->dbescape( $mod ) );
+        $db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `func_id` in (SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . ")" );
     }
     
     $array_funcid = array();
@@ -88,21 +91,24 @@ function nv_setup_block_module ( $mod, $func_id = 0 )
     }
     
     $weight = 0;
-    $old_position = "";
-    $sql = "SELECT `groupbl`, `title`, `link`, `type`, `file_path`, `theme`, `template`, `position`, `exp_time`, `active`, `groups_view` FROM `" . NV_BLOCKS_TABLE . "` WHERE `module`='global' AND `all_func`='1' GROUP BY `groupbl` ORDER BY `position` ASC, `groupbl` ASC";
+    $old_theme = $old_position = "";
+    $sql = "SELECT `bid`,`theme`, `position` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `all_func`='1' ORDER BY `theme` ASC, `position` ASC, `weight` ASC";
     $result = $db->sql_query( $sql );
     while ( $row = $db->sql_fetchrow( $result ) )
     {
-        if ( $old_position != $row['position'] )
+        if ( $old_theme == $row['theme'] and $old_position == $row['position'] )
         {
             $weight ++;
+        }
+        else
+        {
+            $weight = 1;
+            $old_theme = $row['theme'];
             $old_position = $row['position'];
         }
         foreach ( $array_funcid as $func_id )
         {
-            $sql = "INSERT INTO `" . NV_BLOCKS_TABLE . "` (`bid`, `groupbl`, `title` ,`link` ,`type` ,`file_path` ,`theme`, `template` ,`position` ,`exp_time` ,`active` , `groups_view`,`module`,`all_func`, `func_id` ,`weight`) 
-            VALUES (NULL, " . intval( $row['groupbl'] ) . ", " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['link'] ) . ", " . $db->dbescape( $row['type'] ) . ", " . $db->dbescape_string( $row['file_path'] ) . ", " . $db->dbescape( $row['theme'] ) . ", " . $db->dbescape( $row['template'] ) . "," . $db->dbescape( $row['position'] ) . ", " . $db->dbescape( $row['exp_time'] ) . "," . $db->dbescape( $row['active'] ) . ", " . $db->dbescape( $row['groups_view'] ) . ", 'global', '1', " . $func_id . "," . ( $weight ) . ")";
-            $db->sql_query( $sql );
+            $db->sql_query( "INSERT INTO `" . NV_BLOCKS_TABLE . "_weight` (`bid`, `func_id`, `weight`) VALUES ('" . $row['bid'] . "', '" . $func_id . "', '" . $weight . "')" );
         }
     }
 }
