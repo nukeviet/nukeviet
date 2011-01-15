@@ -21,7 +21,7 @@ foreach ( $theme_array as $themes_i )
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'post,get,cookie', $global_config['site_theme'] );
 
 $row = array( 
-    'bid' => 0, 'theme' => '', 'module' => 'global', 'file_name' => '', 'title' => '', 'link' => '', 'template' => '', 'position' => '', 'exp_time' => 0, 'active' => 1, 'groups_view' => '', 'all_func' => 1, 'weight' => 0, 'config' => '' 
+    'bid' => 0, 'theme' => '', 'module' => 'global', 'file_name' => '', 'title' => '', 'link' => '', 'template' => '', 'position' => $nv_Request->get_string( 'tag', 'get', '' ), 'exp_time' => 0, 'active' => 1, 'groups_view' => '', 'all_func' => 1, 'weight' => 0, 'config' => '' 
 );
 $row['bid'] = $nv_Request->get_int( 'bid', 'get,post', 0 );
 $submit = 0;
@@ -317,8 +317,8 @@ $contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/l
 $contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/global.js\"></script>\n";
 $contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/admin.js\"></script>\n";
 $contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n";
-$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery-ui-1.8.2.custom.js\"></script>\n";
-$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
+$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
+$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.dialog.min.js\"></script>\n";
 if ( $row['bid'] != 0 )
 {
     $contents .= "<div class=\"quote\" style=\"width:740px;\">\n";
@@ -326,6 +326,7 @@ if ( $row['bid'] != 0 )
     $contents .= "</div>\n";
 }
 $contents .= $contents_error;
+
 $contents .= "<div style='clear:both'></div>";
 $contents .= "<form method='post' action='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=themes&" . NV_OP_VARIABLE . "=" . $op . "&selectthemes=" . $selectthemes . "&blockredirect=" . $blockredirect . "'>";
 $contents .= "<table class=\"tab1\" style=\"WIDTH:100%\">\n";
@@ -397,10 +398,9 @@ $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_pos'] . ":</td>\n";
 $contents .= "<td>";
 $contents .= "<select name='position'>";
-$tag = $nv_Request->get_string( 'tag', 'get' );
 for ( $i = 0; $i < count( $positions ); $i ++ )
 {
-    $sel = ( $tag == $positions[$i]->tag || $row['position'] == $positions[$i]->tag ) ? ' selected' : '';
+    $sel = ( $row['position'] == $positions[$i]->tag ) ? ' selected' : '';
     $contents .= "<option value=\"" . $positions[$i]->tag . "\" " . $sel . "> " . $positions[$i]->name . '</option>';
 }
 

@@ -251,7 +251,7 @@ function nv_blocks_content ( )
                         {
                             $b_content = '<div class="portlet" id="bl_' . ( $__values['bid'] ) . '">
                             <p>
-                            <a href="javascript:void(0)" class="editblock" name="' . $__values['bid'] . '">
+                            <a href="javascript:void(0)" class="block_content" name="' . $__values['bid'] . '">
                                 <img src="' . NV_BASE_SITEURL . 'images/edit.png" style="border:none"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $__values['bid'] . '">
                                 <img src="' . NV_BASE_SITEURL . 'images/delete.png" style="border:none"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $__values['bid'] . '">
                                 <img src="' . NV_BASE_SITEURL . 'images/outgroup.png" style="border:none"/> ' . $lang_global['outgroup_block'] . '</a>
@@ -271,7 +271,7 @@ function nv_blocks_content ( )
         {
             $__blocks_return[$__pos] = '<div class="column" id="' . ( preg_replace( '#\[|\]#', '', $__pos ) ) . '">';
             $__blocks_return[$__pos] .= $b_content;
-            $__blocks_return[$__pos] .= '	<span><a class="addblock" id="' . $__pos . '" href="javascript:void(0)"><img src="' . NV_BASE_SITEURL . 'images/add.png" style="border:none"/> ' . $lang_global['add_block'] . '</a></span>';
+            $__blocks_return[$__pos] .= '	<span><a class="block_content" id="' . $__pos . '" href="javascript:void(0)"><img src="' . NV_BASE_SITEURL . 'images/add.png" style="border:none"/> ' . $lang_global['add_block'] . '</a></span>';
             $__blocks_return[$__pos] .= '</div>';
         }
     
@@ -449,9 +449,15 @@ function nv_html_site_js ( )
     
     if ( defined( 'NV_IS_DRAG_BLOCK' ) )
     {
-        $return .= "<div style='display:none' title='" . $lang_global['add_block'] . "' id='addblock'></div>\n";
-        $return .= "<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.all.css' rel='stylesheet' />\n";
-        $return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery-ui-1.8.2.custom.js\"></script>\n";
+        if ( ! defined( 'SHADOWBOX' ) )
+        {
+            $return .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+            $return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+            $return .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
+            define( 'SHADOWBOX', true );
+        }
+        $return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
+        $return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\"></script>\n";
         $return .= '<script type="text/javascript">
         			var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {				
@@ -474,24 +480,17 @@ function nv_html_site_js ( )
 							}
 						});
 											
-						$("a.editblock").click(function(){
+						$("a.block_content").click(function(){
 							var bid = $(this).attr("name");
-							$("div#addblock").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&bid="+bid+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:400px\'></iframe>");
-	            			$("div#addblock").dialog("open");
-							return false;
-						});
-						$("div#addblock").dialog({
-							autoOpen: false,
-							width: 800,
-							modal: true,
-							position: "top"
-						});
-						
-						$("a.addblock").click(function(){
 							var tag = $(this).attr("id");
-							$("div#addblock").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:400px\'></iframe>");
-	            			$("div#addblock").dialog("open");
-							return false;
+							Shadowbox.open(
+						      {
+						         content : "<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:450px\'></iframe>",
+						         player : "html",
+						         height : 450,
+						         width : 780
+						      }
+						      );							
 	            		});
 
 	            		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
