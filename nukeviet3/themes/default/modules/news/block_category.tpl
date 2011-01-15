@@ -3,7 +3,7 @@
 	<script type="text/javascript">
 		var imageslist	= {down:['downarrowclass', '{NV_BASE_SITEURL}themes/{TEMPLATE}/images/ddsmoothmenu/down.gif', 23], right:['rightarrowclass', '{NV_BASE_SITEURL}themes/{TEMPLATE}/images/ddsmoothmenu/right.gif']};
 	</script>
-	<script type="text/javascript"	src="{NV_BASE_SITEURL}/js/ddsmoothmenu.js"></script>
+	<script type="text/javascript"	src="{NV_BASE_SITEURL}js/ddsmoothmenu.js"></script>
 	<script type="text/javascript">
 		ddsmoothmenu.init({
 			mainmenuid: "smoothmenu_{BLOCK_ID}", //Menu DIV id
