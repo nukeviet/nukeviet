@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Oct 11, 2010, 08:38:54 PM
+* @Createdate Jan 15, 2011, 11:40:38 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -20,7 +20,9 @@ $lang_translator['langtype'] ="lang_module";
 
 $lang_module['nocatpage'] = "Error:No topic";
 $lang_module['other'] = "Other";
+$lang_module['detail'] = "Detailed information";
 $lang_module['more'] = "More";
+$lang_module['comment'] = "Reader Comments";
 $lang_module['comment_login'] = "You must login to use this feature";
 $lang_module['comment_success'] = "Successful comments";
 $lang_module['comment_unsuccess'] = "Error processing the data or incomplete data";
@@ -60,6 +62,7 @@ $lang_module['topic'] = "Event stream";
 $lang_module['related_new'] = "The latest news";
 $lang_module['related'] = "The older news";
 $lang_module['savefile'] = "Save";
+$lang_module['rating'] = "Article reviews";
 $lang_module['stringrating'] = "Total number of articles is: %1\$s in %2\$s rating";
 $lang_module['star_note'] = "You click on a star to rate article";
 $lang_module['star_verypoor'] = "Very poor article";
@@ -102,9 +105,6 @@ $lang_module['admin_view'] = "Only admin can view!";
 $lang_module['group_view'] = "Only group member can view!";
 $lang_module['rating_error1'] = "Error: Can't rate";
 $lang_module['rating_error2'] = "You was rated";
-$lang_module['detail'] = "Detailed information";
-$lang_module['comment'] = "Reader Comments";
-$lang_module['rating'] = "Article reviews";
 $lang_module['pubtime'] = "Posted at";
 $lang_module['hotnews'] = "Spotlight";
 $lang_module['lastest_comment'] = "New comment";
@@ -114,5 +114,34 @@ $lang_module['counter'] = "counter";
 $lang_module['total_comment'] = "Feedback";
 $lang_module['search_cat'] = "Search in topics";
 $lang_module['search_all'] = "Search all topics";
+$lang_module['add_content'] = "Add Articles";
+$lang_module['topic_sl'] = "Select the relevant group";
+$lang_module['imgposition'] = "Images shown in article";
+$lang_module['imgposition_0'] = "Not show";
+$lang_module['imgposition_1'] = "Follow module configurations";
+$lang_module['imgposition_2'] = "Show under the Home text";
+$lang_module['name'] = "Title";
+$lang_module['alias'] = "alias";
+$lang_module['content_cat'] = "Category";
+$lang_module['content_topic'] = "Relevant groups";
+$lang_module['content_homeimg'] = "Illustrations images";
+$lang_module['content_homeimgalt'] = "Captions for illustrations";
+$lang_module['content_hometext'] = "Home text";
+$lang_module['content_bodytext'] = "Body text";
+$lang_module['search_author'] = "Author";
+$lang_module['content_keywords'] = "Keywords";
+$lang_module['save_temp'] = "Submit";
+$lang_module['save_content'] = "Published";
+$lang_module['captcha'] = "Captcha";
+$lang_module['error_cat'] = "Error: Select Category for article, please.";
+$lang_module['error_title'] = "Error: Type title for article, please.";
+$lang_module['error_bodytext'] = "Error: Type content for this article in Body text";
+$lang_module['error_captcha'] = "Lỗi: Captcha Wrong, Try again.";
+$lang_module['save_content_ok'] = "Published article writing success. <br /> browser will automatically go back.";
+$lang_module['save_content_view_page'] = "Published article writing success. <br /> browser will automatically go back.";
+$lang_module['save_content_waite'] = "The article you sent was recording system, <br /> site administrator will check the posts and sign posts in the shortest time, <br /> browser will automatically go back.";
+$lang_module['save_content_waite_home'] = "The article you sent was recording system, <br /> site administrator will check the posts and sign posts in the shortest time, <br /> browser will automatically go back homepage.";
+$lang_module['error_addcontent'] = "Error: You have not been granted permission to submit article.";
+$lang_module['errorsave'] = "System errors do not update the content, you check the article title may be identical. Change it and try again.";
 
 ?>

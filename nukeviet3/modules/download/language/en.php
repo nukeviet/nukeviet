@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Oct 11, 2010, 08:38:54 PM
+* @Createdate Jan 15, 2011, 11:25:48 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -24,6 +24,7 @@ $lang_module['author_email'] = "Email";
 $lang_module['author_url'] = "Website";
 $lang_module['uploadtime'] = "Upload";
 $lang_module['updatetime'] = "Update";
+$lang_module['readmore'] = "Read more";
 $lang_module['bycat'] = "Category";
 $lang_module['bycat2'] = "Category";
 $lang_module['detail_or_download'] = "Detail / Download";
@@ -76,6 +77,7 @@ $lang_module['file_comment_send'] = "Send";
 $lang_module['file_comment_post_time'] = "Post at";
 $lang_module['file_comment_re'] = "Comments about";
 $lang_module['file_your_comment'] = "Post your comment";
+$lang_module['view_comment_title'] = "View comment";
 $lang_module['comment_thanks'] = "Your comment was sent!";
 $lang_module['comment_thanks2'] = "Your comment wait to process!";
 $lang_module['comment_error1'] = "Error: Invalid comment";
@@ -109,7 +111,6 @@ $lang_module['upload_linkdirect_info'] = "Only one link per line";
 $lang_module['file_upload_captcha'] = "Captcha";
 $lang_module['file_upload_captcha2'] = "Copy captcha code";
 $lang_module['file_upload_ok'] = "Upload successfully!";
-$lang_module['readmore'] = "Read more";
 $lang_module['categories'] = "Navigation";
 $lang_module['viewcat_download_hits'] = "down";
 $lang_module['viewcat_view_hits'] = "Views";

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Sep 25, 2010, 11:10:38 AM
+* @Createdate Jan 15, 2011, 10:47:35 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -76,6 +76,8 @@ $lang_module['autoinstall_module_error_uploadfile'] = "Fail to upload file. Plea
 $lang_module['autoinstall_module_error_createfile'] = "Fail to create file. Please check chmod of tmp folder";
 $lang_module['autoinstall_module_error_invalidfile'] = "Invalid zip file";
 $lang_module['autoinstall_module_error_invalidfile_back'] = "Back";
+$lang_module['autoinstall_module_error_warning_overwrite'] = "Announcement: structure of the module has the file and folder wrong standard, Do you want to continue installed?";
+$lang_module['autoinstall_module_overwrite'] = "Continue install";
 $lang_module['autoinstall_module_error_warning_fileexist'] = "List files:";
 $lang_module['autoinstall_module_error_warning_invalidfolder'] = "Invalid folder struct!";
 $lang_module['autoinstall_module_error_warning_permission_folder'] = "Safe mode on. Fail to create folder.";
@@ -90,7 +92,6 @@ $lang_module['autoinstall_module_unzip_abort'] = "Host doesn't support. Stop set
 $lang_module['autoinstall_package_select'] = "Select module to package";
 $lang_module['autoinstall_package_noselect'] = "No module selected";
 $lang_module['autoinstall_package_processing'] = "please wait to complete...";
-
 $lang_module['error_already_a_directory'] = "The file can not be extracted because a directory with the same name already exists";
 $lang_module['error_write_protected'] = "The file can not be extracted because a file write protected";
 $lang_module['error_newer_exist'] = "The file was not extracted because a newer file exists";

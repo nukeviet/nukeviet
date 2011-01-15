@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Aug 21, 2010, 02:43:51 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language English
+* @Createdate Jan 15, 2011, 10:51:32 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['blocks'] = "Setup block";
 $lang_module['change_func_name'] = "Change the name of the function &ldquo;%1\$s&rdquo; in module &ldquo;%2\$s&rdquo;";
@@ -75,13 +74,14 @@ $lang_module['block_type'] = "Block type";
 $lang_module['block_file'] = "File";
 $lang_module['block_html'] = "HTML";
 $lang_module['block_typehtml'] = "HTML type";
-
+$lang_module['functions'] = "Function";
 $lang_module['edit_block'] = "Edit block";
 $lang_module['block_function'] = "Select function";
 $lang_module['add_block_module'] = "Apply for modules";
 $lang_module['add_block_all_module'] = "all modules";
 $lang_module['add_block_select_module'] = "Select module";
 $lang_module['block_layout'] = "Select layout";
+$lang_module['block_select'] = "Select block";
 $lang_module['block_check'] = "Check";
 $lang_module['block_select_module'] = "Select module";
 $lang_module['block_select_function'] = "Select function";
@@ -156,5 +156,7 @@ $lang_module['xcopyblock_process'] = "Copy";
 $lang_module['xcopyblock_no_position'] = "Please select at least on position to copy";
 $lang_module['xcopyblock_notice'] = "This process will drop all exist blocks in target theme, please wait until all process successful";
 $lang_module['xcopyblock_success'] = "All process has been done !";
+$lang_module['block_weight'] = "Set the position of block";
+$lang_module['block_weight_confirm'] = "Do you want to set up the position of block? The settings in the function will be the settings.";
 
 ?>

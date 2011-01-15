@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Sep 25, 2010, 11:10:39 AM
+* @Createdate Jan 15, 2011, 11:51:48 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -35,6 +35,7 @@ $lang_module['status_2'] = "Still waitting";
 $lang_module['status_3'] = "Expired";
 $lang_module['errorsave'] = "Error:Update content fail, Please check your article title";
 $lang_module['saveok'] = "Update succesfully";
+$lang_module['clickgotomodule'] = "Click here to management posts.";
 $lang_module['alias'] = "Static Link";
 $lang_module['name'] = "Title";
 $lang_module['error_name'] = "Error: Please add title";
@@ -167,6 +168,7 @@ $lang_module['comment_nocheck'] = "Please select at least one comment to make";
 $lang_module['comment_update_success'] = "Update successful";
 $lang_module['block'] = "Blocks";
 $lang_module['adddefaultblock'] = "Select the default when creating article";
+$lang_module['module_logo'] = "Logo module";
 $lang_module['source_logo'] = "Source logo";
 $lang_module['topic_page'] = "Topic page";
 $lang_module['topic_del'] = "Topic del";
@@ -184,5 +186,27 @@ $lang_module['siteinfo_expired'] = "Expired posts";
 $lang_module['siteinfo_exptime'] = "Expire posts";
 $lang_module['siteinfo_comment'] = "Total comments";
 $lang_module['siteinfo_comment_pending'] = "Uncheck comments";
+$lang_module['group_content'] = "Configuration of the members post article";
+$lang_module['group_addcontent'] = "Add article";
+$lang_module['group_postcontent'] = "Add article without censoring";
+$lang_module['group_editcontent'] = "Allowed edit their own article";
+$lang_module['group_delcontent'] = "Allowed delete their own article";
+$lang_module['admin'] = "Decentralized management";
+$lang_module['admin_permissions'] = "Permissions";
+$lang_module['admin_edit'] = "Edit permissions";
+$lang_module['admin_edit_user'] = "Edit member's permissions";
+$lang_module['admin_module'] = "Admin's module";
+$lang_module['admin_cat'] = "Management's Category";
+$lang_module['admin_userid'] = "User ID";
+$lang_module['admin_username'] = "Username";
+$lang_module['admin_full_name'] = "Full name";
+$lang_module['admin_email'] = "Email";
+$lang_module['permissions_admin'] = "Management category";
+$lang_module['permissions_add_content'] = "Add article";
+$lang_module['permissions_pub_content'] = "Approved article";
+$lang_module['permissions_edit_content'] = "Edit article";
+$lang_module['permissions_del_content'] = "Delete article";
+$lang_module['permissions_pub_error'] = "Error: You can not post messages in category: %1\$s";
+$lang_module['error_no_del_content_id'] = "Error: The system does not delete the article id:";
 
 ?>
