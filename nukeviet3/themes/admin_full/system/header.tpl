@@ -44,7 +44,26 @@
         <!-- BEGIN: module_js -->
         <script type="text/javascript" src="{NV_JS_MODULE}">
         </script>
-        <!-- END: module_js --><!-- BEGIN: nv_add_editor_js -->{NV_ADD_EDITOR_JS}<!-- END: nv_add_editor_js --><!-- BEGIN: nv_add_my_head -->{NV_ADD_MY_HEAD}<!-- END: nv_add_my_head -->
+        <!-- END: module_js -->
+        <!-- BEGIN: nv_add_editor_js -->{NV_ADD_EDITOR_JS}<!-- END: nv_add_editor_js -->
+        <!-- BEGIN: nv_add_my_head -->{NV_ADD_MY_HEAD}<!-- END: nv_add_my_head -->
+        <script type="text/javascript">
+            var imageslist = {
+                down: ['downarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_down.png', 23],
+                right: ['rightarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_right.png']
+            }
+        </script>
+        <link href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/jqueryslidemenu.css" type="text/css" rel="stylesheet" />
+        <script src="{NV_BASE_SITEURL}js/ddsmoothmenu.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			ddsmoothmenu.init({
+				mainmenuid: "slidemenu", //Menu DIV id
+				orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+				classname: 'jqueryslidemenu', //class added to menu's outer DIV
+				//customtheme: ["#804000", "#482400"],
+				contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
+			})
+		</script>
     </head>
     <body>
         <div id="outer">
@@ -53,31 +72,38 @@
                     <a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php"><img alt="{NV_SITE_NAME}" title="{SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
                 </div>
                 <div class="logout">
-                    <a class="button1" href="{NV_GO_CLIENTSECTOR_URL}"><span><span>{NV_GO_CLIENTSECTOR}</span></span></a>
-                    <a class="button1" href="javascript:void(0);" onclick="nv_admin_logout();"><span><span>{NV_LOGOUT}</span></span></a>
+                    <a class="bthome" href="{NV_GO_CLIENTSECTOR_URL}"><span>{NV_GO_CLIENTSECTOR}</span></a>
+                    <a class="bthome" href="javascript:void(0);" onclick="nv_admin_logout();"><span class="iconexit">{NV_LOGOUT}</span></a>
                 </div>
                 <!-- BEGIN: langdata -->
                 <div class="lang">
                     <strong>{NV_LANGDATA}</strong>: 
                     <select id="lang" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
-                        <!-- BEGIN: option --><option value="{LANGOP}"{SELECTED}>{LANGVALUE} </option>
+                        <!-- BEGIN: option -->
+                        	<option value="{LANGOP}"{SELECTED}>{LANGVALUE} </option>
                         <!-- END: option -->
                     </select>
                 </div>
                 <!-- END: langdata -->
             </div>
             <!-- BEGIN: top_menu -->
-            <div id="topmenu">
-                <ul>
-                    <!-- BEGIN: top_menu_loop -->
-                    <li {TOP_MENU_CURRENT}>
-                        <a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_NAME_VARIABLE}={TOP_MENU_HREF}"><span>{TOP_MENU_NAME}</span></a>
-                    </li>
-                    <!-- END: top_menu_loop -->
-                </ul>
-                <div class="right">
-                </div>
-                <div class="clear">
+            <div>
+                <div class="jqueryslidemenu" id="slidemenu">
+                    <ul>
+                        <!-- BEGIN: top_menu_loop -->
+                        <li {TOP_MENU_CURRENT}>
+                            <a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_NAME_VARIABLE}={TOP_MENU_HREF}"><span>{TOP_MENU_NAME}</span></a>
+                        	<!-- BEGIN: submenu -->
+	                            <ul>
+	                            	<!-- BEGIN: submenu_loop -->
+	                            		<li><a href="{SUBMENULINK}">{SUBMENUTITLE}</a></li>
+	                            	<!-- END: submenu_loop -->
+	                            </ul>
+							<!-- END: submenu -->	                            
+                        </li>
+                        <!-- END: top_menu_loop -->
+                    </ul>
+                    <div class="clear"></div>
                 </div>
             </div>
             <!-- END: top_menu -->
