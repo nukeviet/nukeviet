@@ -132,7 +132,7 @@ if ( $row['is_download_allow'] )
                 {
                     $new_name = str_replace( "-", "_", $filealias ) . ( $count_file > 1 ? "_part" . str_pad( $a, 2, '0', STR_PAD_LEFT ) : "" ) . "." . nv_getextension( $file );
                     $row['fileupload'][] = array(  //
-                        'link' => NV_BASE_SITEURL . "files/" . $new_name, 'title' => $new_name 
+                        'link' => '#', 'title' => $new_name 
                     );
                     $session_files['fileupload'][$new_name] = array( 
                         'src' => NV_ROOTDIR . '/' . $file2, 'id' => $row['id'] 
