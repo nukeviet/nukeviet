@@ -15,22 +15,83 @@ $listid = $nv_Request->get_string( 'listid', 'post', '' );
 $contents = "NO_" . $id;
 if ( $listid != "" and md5( $global_config['sitekey'] . session_id() ) == $checkss )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_content', "listid ".$listid , $admin_info['userid'] );
-	$del_array = array_map( "intval", explode( ",", $listid ) );
-    foreach ( $del_array as $id )
-    {
-        if ( $id > 0 )
-        {
-            $contents = nv_del_content_module( $id );
-        }
-    }
-
+    $del_array = array_map( "intval", explode( ",", $listid ) );
 }
 elseif ( md5( $id . session_id() ) == $checkss )
 {
-    $contents = nv_del_content_module( $id );
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_content', "id ".$id , $admin_info['userid'] );
+    $del_array = array( 
+        $id 
+    );
 }
+if ( ! empty( $del_array ) )
+{
+    $sql = "SELECT id, listcatid, admin_id, title, alias, status , publtime, exptime FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` IN (" . implode( ",", $del_array ) . ")";
+    $result = $db->sql_query( $sql );
+    $del_array = $no_del_array = array();
+    while ( list( $id, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime ) = $db->sql_fetchrow( $result ) )
+    {
+        $check_permission = false;
+        if ( defined( 'NV_IS_ADMIN_MODULE' ) )
+        {
+            $check_permission = true;
+        }
+        else
+        {
+            $arr_catid = explode( ",", $listcatid );
+            $check_del = 0;
+            foreach ( $arr_catid as $catid_i )
+            {
+                if ( isset( $array_cat_admin[$admin_id][$catid_i] ) )
+                {
+                    if ( $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 )
+                    {
+                        $check_del ++;
+                    }
+                    else
+                    {
+                        if ( $array_cat_admin[$admin_id][$catid_i]['del_content'] == 1 )
+                        {
+                            $check_del ++;
+                        }
+                        elseif ( $status == 0 and $post_id == $admin_id )
+                        {
+                            $check_del ++;
+                        }
+                    }
+                }
+            }
+            if ( $check_edit == count( $arr_catid ) )
+            {
+                $check_permission_edit = true;
+            }
+            if ( $check_del == count( $arr_catid ) )
+            {
+                $check_permission = true;
+            }
+        }
+        
+        if ( $check_permission > 0 )
+        {
+            $contents = nv_del_content_module( $id );
+            $del_array[] = $id;
+        }
+        else
+        {
+            $no_del_array[] = $id;
+        }
+    }
+    $count = count( $del_array );
+    if ( $count > 0 )
+    {
+        nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_content', "listid: " . implode( ", ", $del_array ), $admin_info['userid'] );
+    }
+    if ( ! empty( $no_del_array ) )
+    {
+        $contents = "ERR_" . $lang_module['error_no_del_content_id'] . ": " . implode( ", ", $no_del_array );
+    }
+
+}
+
 nv_del_moduleCache( $module_name );
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;

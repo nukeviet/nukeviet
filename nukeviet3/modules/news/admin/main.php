@@ -26,6 +26,69 @@ $q = filter_text_input( 'q', 'get', '', 1 );
 $ordername = $nv_Request->get_string( 'ordername', 'get', 'publtime' );
 $order = $nv_Request->get_string( 'order', 'get' ) == "asc" ? 'asc' : 'desc';
 
+$sl = ( $catid == 0 ) ? " selected=\"selected\"" : "";
+$val_cat_content = "<option value=\"0\" " . $sl . ">" . $lang_module['search_cat_all'] . "</option>\n";
+$array_cat_view = array();
+foreach ( $global_array_cat as $catid_i => $array_value )
+{
+    $lev_i = $array_value['lev'];
+    $check_cat = false;
+    if ( defined( 'NV_IS_ADMIN_MODULE' ) )
+    {
+        $check_cat = true;
+    }
+    elseif ( isset( $array_cat_admin[$admin_id][$catid_i] ) )
+    {
+        if ( $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 )
+        {
+            $check_cat = true;
+        }
+        elseif ( $array_cat_admin[$admin_id][$catid_i]['add_content'] == 1 )
+        {
+            $check_cat = true;
+        }
+        elseif ( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 )
+        {
+            $check_cat = true;
+        }
+        elseif ( $array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1 )
+        {
+            $check_cat = true;
+        }
+        elseif ( $array_cat_admin[$admin_id][$catid_i]['del_content'] == 1 )
+        {
+            $check_cat = true;
+        }
+    }
+    if ( $check_cat )
+    {
+        $xtitle_i = "";
+        if ( $lev_i > 0 )
+        {
+            $xtitle_i .= "&nbsp;&nbsp;&nbsp;|";
+            for ( $i = 1; $i <= $lev_i; $i ++ )
+            {
+                $xtitle_i .= "---";
+            }
+            $xtitle_i .= ">&nbsp;";
+        }
+        $xtitle_i .= $array_value['title'];
+        
+        $sl = "";
+        if ( $catid_i == $catid )
+        {
+            $sl = " selected=\"selected\"";
+        }
+        $val_cat_content .= "<option value=\"" . $catid_i . "\" " . $sl . ">" . $xtitle_i . "</option>\n";
+        $array_cat_view[] = $catid_i;
+    }
+}
+if ( ! defined( 'NV_IS_ADMIN_MODULE' ) and $catid > 0 and ! in_array( $catid, $array_cat_view ) )
+{
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
+    die();
+}
+
 $array_search = array( 
     "-" => "---", "title" => $lang_module['search_title'], "bodytext" => $lang_module['search_bodytext'], "author" => $lang_module['search_author'], "admin_id" => $lang_module['search_admin'] 
 );
@@ -45,133 +108,86 @@ if ( ! in_array( $ordername, array_keys( $array_in_ordername ) ) )
 }
 if ( $catid == 0 )
 {
-    $from = "`" . NV_PREFIXLANG . "_" . $module_data . "_rows`";
+    $from = "`" . NV_PREFIXLANG . "_" . $module_data . "_rows` as r LEFT JOIN " . NV_USERS_GLOBALTABLE . " as u ON r.admin_id=u.userid";
 }
 else
 {
-    $from = "`" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "`";
+    $from = "`" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` as r LEFT JOIN " . NV_USERS_GLOBALTABLE . " as u ON r.admin_id=u.userid";
 }
-
+$where = "";
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 if ( $checkss == md5( session_id() ) )
 {
     if ( in_array( $stype, $array_in_rows ) and ! empty( $q ) )
     {
-        $from .= " WHERE `" . $stype . "` LIKE '%" . $db->dblikeescape( $q ) . "%' ";
+        $where = " WHERE (r." . $stype . " LIKE '%" . $db->dblikeescape( $q ) . "%')";
     }
     elseif ( $stype == "admin_id" and ! empty( $q ) )
     {
-        $sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " where userid in (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND `username` LIKE '%" . $db->dblikeescape( $q ) . "%' OR `full_name` LIKE '%" . $db->dblikeescape( $q ) . "%'";
-        $result = $db->sql_query( $sql );
-        $array_admin_id = array();
-        while ( list( $admin_id ) = $db->sql_fetchrow( $result ) )
-        {
-            $array_admin_id[] = $admin_id;
-        }
-        $from .= " WHERE `admin_id` IN (0," . implode( ",", $array_admin_id ) . ",0)";
+        $where = " WHERE (u.username LIKE '%" . $db->dblikeescape( $q ) . "%' OR  u.full_name LIKE '%" . $db->dblikeescape( $q ) . "%')";
     }
     elseif ( ! empty( $q ) )
     {
-        $sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " where userid in (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND `username` LIKE '%" . $db->dblikeescape( $q ) . "%' OR `full_name` LIKE '%" . $db->dblikeescape( $q ) . "%'";
-        $result = $db->sql_query( $sql );
-        $array_admin_id = array();
-        while ( list( $admin_id ) = $db->sql_fetchrow( $result ) )
-        {
-            $array_admin_id[] = $admin_id;
-        }
         $arr_from = array();
         foreach ( $array_in_rows as $key => $val )
         {
-            $arr_from[] = "(`" . $val . "` LIKE '%" . $db->dblikeescape( $q ) . "%')";
+            $arr_from[] = "(r." . $val . " LIKE '%" . $db->dblikeescape( $q ) . "%')";
         }
-        $from .= " WHERE " . implode( " OR ", $arr_from ) . "";
-        if ( ! empty( $array_admin_id ) )
-        {
-            $from .= " OR (`admin_id` IN (0," . implode( ",", $array_admin_id ) . ",0))";
-        }
+        $where = " WHERE (" . implode( " OR ", $arr_from ) . " OR u.username LIKE '%" . $db->dblikeescape( $q ) . "%' OR  u.full_name LIKE '%" . $db->dblikeescape( $q ) . "%')";
     }
 }
 
-$sql = "SELECT userid, username  FROM " . NV_USERS_GLOBALTABLE . " where userid in (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ")";
-$result = $db->sql_query( $sql );
-$array_admin = array();
-while ( list( $admin_id, $admin_login ) = $db->sql_fetchrow( $result ) )
+if ( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 {
-    $array_admin[$admin_id] = $admin_login;
+    $from_catid = array();
+    foreach ( $array_cat_view as $catid_i )
+    {
+        $from_catid[] = "r.listcatid = '" . $catid_i . "'";
+        $from_catid[] = "r.listcatid like '" . $catid_i . ",%'";
+        $from_catid[] = "r.listcatid like '%," . $catid_i . ",%'";
+        $from_catid[] = "r.listcatid like '%," . $catid_i . "'";
+    }
+    $where .= ( empty( $where ) ) ? " WHERE (" . implode( " OR ", $from_catid ) . ")" : " AND (" . implode( " OR ", $from_catid ) . ")";
 }
 
-$reval = "";
-$reval .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"GET\">";
-$reval .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-$reval .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-$reval .= "<label>" . $lang_module['search_cat'] . ": </label>\n";
-$reval .= "<select name=\"catid\">\n";
-$sl = "";
-if ( $catid == 0 )
-{
-    $sl = " selected=\"selected\"";
-}
-$reval .= "<option value=\"0\" " . $sl . ">" . $lang_module['search_cat_all'] . "</option>\n";
-
-$global_array_cat = array();
 $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other";
 $global_array_cat[0] = array( 
     "catid" => 0, "parentid" => 0, "title" => "Other", "alias" => "Other", "link" => $link_i, "viewcat" => "viewcat_page_new", "subcatid" => 0, "numlinks" => 3, "description" => "", "keywords" => "" 
 );
 
-$sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, del_cache_time, description, keywords, lev FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
-$result = $db->sql_query( $sql );
-while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i, $numlinks_i, $del_cache_time_i, $description_i, $keywords_i, $lev_i ) = $db->sql_fetchrow( $result ) )
-{
-    $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-    $global_array_cat[$catid_i] = array( 
-        "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i, "viewcat" => $viewcat_i, "subcatid" => $subcatid_i, "numlinks" => $numlinks_i, "description" => $description_i, "keywords" => $keywords_i 
-    );
-    $xtitle_i = "";
-    if ( $lev_i > 0 )
-    {
-        $xtitle_i .= "&nbsp;&nbsp;&nbsp;|";
-        for ( $i = 1; $i <= $lev_i; $i ++ )
-        {
-            $xtitle_i .= "---";
-        }
-        $xtitle_i .= ">&nbsp;";
-    }
-    $xtitle_i .= $title_i;
-    $sl = "";
-    if ( $catid_i == $catid )
-    {
-        $sl = " selected=\"selected\"";
-    }
-    $reval .= "<option value=\"" . $catid_i . "\" " . $sl . ">" . $xtitle_i . "</option>\n";
-}
-
-$reval .= "</select> \n";
-$reval .= " <label>" . $lang_module['search_type'] . ": </label>\n";
-$reval .= "<select name=\"stype\">\n";
+$contents = "";
+$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"GET\">";
+$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
+$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
+$contents .= "<label>" . $lang_module['search_cat'] . ": </label>\n";
+$contents .= "<select name=\"catid\">\n";
+$contents .= $val_cat_content;
+$contents .= "</select> \n";
+$contents .= " <label>" . $lang_module['search_type'] . ": </label>\n";
+$contents .= "<select name=\"stype\">\n";
 foreach ( $array_search as $key => $val )
 {
-    $reval .= "<option value=\"" . $key . "\"" . ( ( $key == $stype ) ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
+    $contents .= "<option value=\"" . $key . "\"" . ( ( $key == $stype ) ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
 }
-$reval .= "</select>";
+$contents .= "</select>";
 
 $i = 5;
-$reval .= " <label>" . $lang_module['search_per_page'] . ": </label>\n";
-$reval .= "<select name=\"per_page\">\n";
+$contents .= " <label>" . $lang_module['search_per_page'] . ": </label>\n";
+$contents .= "<select name=\"per_page\">\n";
 while ( $i <= 1000 )
 {
-    $reval .= "<option value=\"" . $i . "\"" . ( ( $i == $per_page ) ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+    $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $per_page ) ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
     $i = $i + 5;
 }
-$reval .= "</select>";
-$reval .= "<br>\n";
+$contents .= "</select>";
+$contents .= "<br>\n";
 
-$reval .= "" . $lang_module['search_key'] . ": <input type=\"text\" value=\"" . $q . "\" maxlength=\"64\" name=\"q\" style=\"width: 265px\">\n";
-$reval .= "<input type=\"submit\" value=\"" . $lang_module['search'] . "\"><br>\n";
-$reval .= "<input type=\"hidden\" name =\"checkss\"value=\"" . md5( session_id() ) . "\" />";
-$reval .= "<label><em>" . $lang_module['search_note'] . "</em></label>\n";
-$reval .= "</form>\n";
+$contents .= "" . $lang_module['search_key'] . ": <input type=\"text\" value=\"" . $q . "\" maxlength=\"64\" name=\"q\" style=\"width: 265px\">\n";
+$contents .= "<input type=\"submit\" value=\"" . $lang_module['search'] . "\"><br>\n";
+$contents .= "<input type=\"hidden\" name =\"checkss\"value=\"" . md5( session_id() ) . "\" />";
+$contents .= "<label><em>" . $lang_module['search_note'] . "</em></label>\n";
+$contents .= "</form>\n";
 
 $a = 0;
 $order2 = ( $order == "asc" ) ? "desc" : "asc";
@@ -180,7 +196,7 @@ $base_url_name = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" .
 $base_url_publtime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&per_page=" . $per_page . "&catid=" . $catid . "&stype=" . $stype . "&q=" . $q . "&checkss=" . $checkss . "&ordername=publtime&order=" . $order2 . "&page=" . $page;
 $base_url_exptime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&per_page=" . $per_page . "&catid=" . $catid . "&stype=" . $stype . "&q=" . $q . "&checkss=" . $checkss . "&ordername=exptime&order=" . $order2 . "&page=" . $page;
 
-$contents = "<form name=\"block_list\">";
+$contents .= "<form name=\"block_list\">";
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
 $contents .= "<thead>";
 $contents .= "<tr align=\"center\">\n";
@@ -193,31 +209,35 @@ $contents .= "<td></td>\n";
 $contents .= "</thead>";
 
 $base_url = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&per_page=" . $per_page . "&catid=" . $catid . "&stype=" . $stype . "&q=" . $q . "&checkss=" . $checkss . "&ordername=" . $ordername . "&order=" . $order;
-$ord_sql = "ORDER BY `" . $ordername . "` " . $order . "";
-$sql = "SELECT SQL_CALC_FOUND_ROWS id, listcatid, admin_id, title, alias, status , publtime, exptime  FROM " . $from . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
+$ord_sql = "ORDER BY r." . $ordername . " " . $order . "";
+$sql = "SELECT SQL_CALC_FOUND_ROWS r.id, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, u.username  FROM " . $from . " " . $where . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
 $result = $db->sql_query( $sql );
 
 $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $numf ) = $db->sql_fetchrow( $result_all );
 $all_page = ( $numf ) ? $numf : 1;
 
-while ( list( $id, $listcatid, $admin_id, $title, $alias, $status, $publtime, $exptime ) = $db->sql_fetchrow( $result ) )
+while ( list( $id, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $username ) = $db->sql_fetchrow( $result ) )
 {
     if ( $status == 0 )
     {
         $status = $lang_module['status_0'];
+        $edit_status = 0;
     }
     elseif ( $publtime < NV_CURRENTTIME and ( $exptime == 0 or $exptime > NV_CURRENTTIME ) )
     {
         $status = $lang_module['status_1'];
+        $edit_status = 1;
     }
     elseif ( $publtime > NV_CURRENTTIME )
     {
         $status = $lang_module['status_2'];
+        $edit_status = 2;
     }
     else
     {
         $status = $lang_module['status_3'];
+        $edit_status = 3;
     }
     $publtime = nv_date( "H:i d/m/y", $publtime );
     $title = nv_clean60( $title );
@@ -232,6 +252,62 @@ while ( list( $id, $listcatid, $admin_id, $title, $alias, $status, $publtime, $e
         $listcatid_arr = explode( ",", $listcatid );
         $catid_i = $listcatid_arr[0];
     }
+    $check_permission_edit = $check_permission_delete = false;
+    if ( defined( 'NV_IS_ADMIN_MODULE' ) )
+    {
+        $check_permission_edit = $check_permission_delete = true;
+    }
+    else
+    {
+        $array_temp = explode( ",", $listcatid );
+        $check_edit = $check_del = 0;
+        foreach ( $array_temp as $catid_i )
+        {
+            if ( isset( $array_cat_admin[$admin_id][$catid_i] ) )
+            {
+                if ( $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 )
+                {
+                    $check_edit ++;
+                    $check_del ++;
+                }
+                else
+                {
+                    if ( $array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1 )
+                    {
+                        $check_edit ++;
+                    }
+                    elseif ( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and $edit_status == 0 )
+                    {
+                        $check_edit ++;
+                    }
+                    elseif ( $edit_status == 0 and $post_id == $admin_id )
+                    {
+                        $check_edit ++;
+                    }
+                    
+                    if ( $array_cat_admin[$admin_id][$catid_i]['del_content'] == 1 )
+                    {
+                        $check_del ++;
+                    }
+                    elseif ( $edit_status == 0 and $post_id == $admin_id )
+                    {
+                        $check_del ++;
+                    }
+                }
+            }
+        }
+        if ( $check_edit == count( $array_temp ) )
+        {
+            $check_permission_edit = true;
+        }
+        if ( $check_del == count( $array_temp ) )
+        {
+            $check_permission_delete = true;
+        }
+    }
+    $admin_funcs = array();
+    if ( $check_permission_edit ) $admin_funcs[] = nv_link_edit_page( $id );
+    if ( $check_permission_delete ) $admin_funcs[] = nv_link_delete_page( $id );
     
     $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
     $contents .= "<tbody" . $class . ">";
@@ -240,23 +316,26 @@ while ( list( $id, $listcatid, $admin_id, $title, $alias, $status, $publtime, $e
     $contents .= "<td align=\"left\"><a target=\"_blank\" href=\"" . $link . "\">" . $title . "</a></td>\n";
     $contents .= "<td>" . $publtime . "</td>\n";
     $contents .= "<td>" . $status . "</td>\n";
-    $contents .= "<td>" . ( isset( $array_admin[$admin_id] ) ? $array_admin[$admin_id] : "" ) . "</td>\n";
+    $contents .= "<td>" . $username . "</td>\n";
     $contents .= "<td>";
-    $contents .= "     " . nv_link_edit_page( $id ) . "\n";
-    $contents .= "     &nbsp;-&nbsp;";
-    $contents .= "     " . nv_link_delete_page( $id ) . "\n";
-    $contents .= "     </td>\n";
+    $contents .= implode( "&nbsp;-&nbsp;", $admin_funcs );
+    $contents .= "</td>\n";
     $contents .= "</tbody>";
     $a ++;
 }
+
 $contents .= "<tfoot>\n";
 $contents .= "<tr align=\"left\">\n";
 $contents .= "<td colspan=\"7\">\n";
 $contents .= "<select name=\"action\" id=\"action\">\n";
 $array_list_action = array( 
-    'delete' => $lang_global['delete'], 'publtime' => $lang_module['publtime'], 'exptime' => $lang_module['exptime'], 'addtoblock' => $lang_module['addtoblock'], 'addtotopics' => $lang_module['addtotopics'] 
+    'delete' => $lang_global['delete'], 'publtime' => $lang_module['publtime'], 'exptime' => $lang_module['exptime'] 
 );
-
+if ( defined( 'NV_IS_ADMIN_MODULE' ) )
+{
+    $array_list_action['addtoblock'] = $lang_module['addtoblock'];
+    $array_list_action['addtotopics'] = $lang_module['addtotopics'];
+}
 while ( list( $catid_i, $title_i ) = each( $array_list_action ) )
 {
     $contents .= "<option value=\"" . $catid_i . "\">" . $title_i . "</option>\n";
@@ -266,6 +345,7 @@ $contents .= "<input type=\"button\" onclick=\"nv_main_action(this.form,'" . md5
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tfoot>\n";
+
 $contents .= "</table>\n";
 $contents .= "</form>\n";
 
@@ -273,7 +353,7 @@ $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 if ( $generate_page != "" ) $contents .= "<br><p align=\"center\">" . $generate_page . "</p>\n";
 
 include ( NV_ROOTDIR . "/includes/header.php" );
-echo nv_admin_theme( $reval . $contents );
+echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>

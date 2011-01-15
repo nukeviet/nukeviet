@@ -215,7 +215,7 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
     );
     
     $rowcontent = array( 
-        "id" => "", "listcatid" => "", "topicid" => "", "admin_id" => ( defined( 'NV_IS_USER' ) ) ? $user_info['userid'] : 0, "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "|", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "ratingdetail" => "0|0", "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "hitslm" => 0, "keywords" => "" 
+        "id" => "", "listcatid" => "", "topicid" => "", "admin_id" => ( defined( 'NV_IS_USER' ) ) ? $user_info['userid'] : 0, "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "|", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "total_rating" => 0, "click_rating" => 0, "keywords" => "" 
     );
     
     $array_catid_module = array();
@@ -295,7 +295,7 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
             $rowcontent['status'] = ( $array_post_user['postcontent'] and $nv_Request->isset_request( 'status1', 'post' ) ) ? 1 : 0;
             if ( $rowcontent['id'] == 0 )
             {
-                $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `bodytext`, `copyright`, `inhome`, `allowed_comm`, `allowed_rating`, `ratingdetail`, `allowed_send`, `allowed_print`, `allowed_save`, `hitstotal`, `hitscm`, `hitslm`, `keywords`) VALUES 
+                $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `bodytext`, `copyright`, `inhome`, `allowed_comm`, `allowed_rating`, `allowed_send`, `allowed_print`, `allowed_save`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords`) VALUES 
                 (NULL, " . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
                 " . intval( $rowcontent['topicid'] ) . ",
                 " . intval( $rowcontent['admin_id'] ) . ",
@@ -319,13 +319,13 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
                 " . intval( $rowcontent['inhome'] ) . ",  
                 " . intval( $rowcontent['allowed_comm'] ) . ",  
                 " . intval( $rowcontent['allowed_rating'] ) . ",  
-                " . $db->dbescape_string( $rowcontent['ratingdetail'] ) . ",  
                 " . intval( $rowcontent['allowed_send'] ) . ",  
                 " . intval( $rowcontent['allowed_print'] ) . ",  
                 " . intval( $rowcontent['allowed_save'] ) . ",  
                 " . intval( $rowcontent['hitstotal'] ) . ",  
                 " . intval( $rowcontent['hitscm'] ) . ",  
-                " . intval( $rowcontent['hitslm'] ) . ",  
+                " . intval( $rowcontent['total_rating'] ) . ",  
+                " . intval( $rowcontent['click_rating'] ) . ",  
                 " . $db->dbescape_string( $rowcontent['keywords'] ) . ")";
                 $rowcontent['id'] = $db->sql_query_insert_id( $query );
                 if ( $rowcontent['id'] > 0 )

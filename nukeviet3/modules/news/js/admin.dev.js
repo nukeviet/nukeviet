@@ -61,6 +61,7 @@ function nv_del_cat_result(res) {
 			var catid = r_split[2];
 			var delallcheckss = r_split[3];
 			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&catid=' + catid + '&delallcheckss=' + delallcheckss, 'edit', '');
+			parent.location='#edit';			
 		}
 	} else {
 		alert(nv_is_del_confirm[2]);

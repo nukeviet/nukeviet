@@ -21,26 +21,25 @@ $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA
 $global_array_cat[0] = array( 
     "catid" => 0, "parentid" => 0, "title" => "Other", "alias" => "Other", "link" => $link_i, "viewcat" => "viewcat_page_new", "subcatid" => 0, "numlinks" => 3, "description" => "", "inhome" => 0, "keywords" => "" 
 );
-
 $catid = 0;
 $parentid = 0;
 $set_viewcat = "";
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 $array_mod_title = array();
+
 $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, del_cache_time, description, inhome, keywords, who_view, groups_view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
-$result = $db->sql_query( $sql );
-while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i, $numlinks_i, $del_cache_time_i, $description_i, $inhome_i, $keywords_i, $who_view_i, $groups_view_i ) = $db->sql_fetchrow( $result ) )
+$list = nv_db_cache( $sql, 'catid', $module_name );
+foreach ( $list as $l )
 {
-    $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-    $global_array_cat[$catid_i] = array( 
-        "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i, "viewcat" => $viewcat_i, "subcatid" => $subcatid_i, "numlinks" => $numlinks_i, "description" => $description_i, "inhome" => $inhome_i, "keywords" => $keywords_i, "who_view" => $who_view_i, "groups_view" => $groups_view_i 
-    );
-    if ( $alias_cat_url == $alias_i )
+    $global_array_cat[$l['catid']] = $l;
+    $global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+    if ( $alias_cat_url == $l['alias'] )
     {
-        $catid = $catid_i;
-        $parentid = $parentid_i;
+        $catid = $l['catid'];
+        $parentid = $l['parentid'];
     }
-    if ( NV_CURRENTTIME > $del_cache_time_i )
+    
+    if ( NV_CURRENTTIME > $l['del_cache_time'] )
     {
         $sql = "SELECT `id`, `listcatid`, `exptime`, `archive` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `exptime` > 0 AND `exptime` <= UNIX_TIMESTAMP() AND `archive`!='2' ORDER BY `exptime` ASC LIMIT 0 , 1";
         list( $id, $listcatid, $minexptime, $archive ) = $db->sql_fetchrow( $db->sql_query( $sql ) );

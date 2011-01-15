@@ -19,7 +19,7 @@ if ( $topicid > 0 )
         'catid' => 0, 'title' => $topictitle, 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias 
     );
     
-    $query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `ratingdetail`, `hitstotal`, `hitscm` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_name . "_rows` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") AND `topicid` = '" . $topicid . "' ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "" );
+    $query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_name . "_rows` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") AND `topicid` = '" . $topicid . "' ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "" );
     $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
     list( $numf ) = $db->sql_fetchrow( $result_all );
     $all_page = ( $numf ) ? $numf : 1;

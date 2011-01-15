@@ -6,16 +6,91 @@
  * @createdate 12/31/2009 2:29
  */
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
-$submenu['content'] = $lang_module['content_add'];
-$submenu['cat'] = $lang_module['categories'];
-$submenu['topics'] = $lang_module['topics'];
-$submenu['blockcat'] = $lang_module['block'];
-$submenu['sources'] = $lang_module['sources'];
-$submenu['comment'] = $lang_module['comment'];
-$submenu['setting'] = $lang_module['setting'];
+
+$is_refresh = false;
+$array_cat_admin = nv_array_cat_admin();
+
+if ( ! empty( $module_info['admins'] ) )
+{
+    $module_admin = explode( ",", $module_info['admins'] );
+    foreach ( $module_admin as $userid_i )
+    {
+        if ( ! isset( $array_cat_admin[$userid_i] ) )
+        {
+            $db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_admins` (`userid`, `catid`, `admin`, `add_content`, `pub_content`, `edit_content`, `del_content`, `comment`) VALUES ('" . $userid_i . "', '0', '1', '1', '1', '1', '1', '1')" );
+            $is_refresh = true;
+        }
+    }
+}
+
+if ( $is_refresh )
+{
+    $array_cat_admin = nv_array_cat_admin();
+}
+
+$admin_id = $admin_info['admin_id'];
+if ( defined( 'NV_IS_SPADMIN' ) )
+{
+    define( 'NV_IS_ADMIN_MODULE', true );
+    define( 'NV_IS_ADMIN_FULL_MODULE', true );
+}
+else
+{
+    if ( isset( $array_cat_admin[$admin_id][0] ) )
+    {
+        define( 'NV_IS_ADMIN_MODULE', true );
+        if ( intval($array_cat_admin[$admin_id][0]['admin']) == 2 )
+        {
+            define( 'NV_IS_ADMIN_FULL_MODULE', true );
+        }
+    }
+}
+
 $allow_func = array( 
-    'main', 'exptime', 'publtime', 'setting', 'content', 'keywords', 'alias', 'del_content', 'cat', 'change_cat', 'list_cat', 'del_cat', 'topicsnews', 'topics', 'topicdelnews', 'addtotopics', 'change_topic', 'list_topic', 'del_topic', 'topicajax', 'sources', 'change_source', 'list_source', 'del_source', 'sourceajax', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'comment', 'del_comment', 'active_comment', 'edit_comment' 
+    'main', 'exptime', 'publtime', 'content', 'del_content', 'comment', 'edit_comment', 'active_comment', 'del_comment', 'keywords', 'alias', 'topicajax', 'sourceajax', 'cat', 'change_cat', 'list_cat', 'del_cat' 
 );
+
+$submenu['cat'] = $lang_module['categories'];
+$submenu['content'] = $lang_module['content_add'];
+$submenu['comment'] = $lang_module['comment'];
+
+if ( defined( 'NV_IS_ADMIN_MODULE' ) )
+{
+    $submenu['topics'] = $lang_module['topics'];
+    $submenu['blockcat'] = $lang_module['block'];
+    $submenu['sources'] = $lang_module['sources'];
+    $submenu['setting'] = $lang_module['setting'];
+    
+    $allow_func[] = 'topicsnews';
+    $allow_func[] = 'topics';
+    $allow_func[] = 'topicdelnews';
+    $allow_func[] = 'addtotopics';
+    $allow_func[] = 'change_topic';
+    $allow_func[] = 'list_topic';
+    $allow_func[] = 'del_topic';
+    
+    $allow_func[] = 'sources';
+    $allow_func[] = 'change_source';
+    $allow_func[] = 'list_source';
+    $allow_func[] = 'del_source';
+    
+    $allow_func[] = 'block';
+    $allow_func[] = 'blockcat';
+    $allow_func[] = 'del_block_cat';
+    $allow_func[] = 'list_block_cat';
+    $allow_func[] = 'chang_block_cat';
+    $allow_func[] = 'change_block';
+    $allow_func[] = 'list_block';
+    
+    $allow_func[] = 'setting';
+}
+
+if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/admins.php" ) )
+{
+    $submenu['admins'] = $lang_module['admin'];
+    $allow_func[] = 'admins';
+}
+
 $array_viewcat_full = array( 
     'viewcat_page_new' => $lang_module['viewcat_page_new'], 'viewcat_page_old' => $lang_module['viewcat_page_old'], 'viewcat_main_left' => $lang_module['viewcat_main_left'], 'viewcat_main_right' => $lang_module['viewcat_main_right'], 'viewcat_main_bottom' => $lang_module['viewcat_main_bottom'], 'viewcat_two_column' => $lang_module['viewcat_two_column'] 
 );
@@ -28,8 +103,20 @@ $array_who_view = array(
 $array_allowed_comm = array( 
     $lang_global['no'], $lang_global['who_view0'], $lang_global['who_view1'] 
 );
+
 define( 'NV_IS_FILE_ADMIN', true );
 require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/global.functions.php" );
+
+global $global_array_cat;
+$global_array_cat = array();
+$sql = "SELECT catid, parentid, title, alias, lev, viewcat,numsubcat, subcatid, numlinks, del_cache_time, description, inhome, keywords, who_view, groups_view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
+$result = $db->sql_query( $sql );
+while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $lev_i, $viewcat_i, $numsubcat_i, $subcatid_i, $numlinks_i, $del_cache_time_i, $description_i, $inhome_i, $keywords_i, $who_view_i, $groups_view_i ) = $db->sql_fetchrow( $result ) )
+{
+    $global_array_cat[$catid_i] = array( 
+        "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "numsubcat" => $numsubcat_i, "lev" => $lev_i, "viewcat" => $viewcat_i, "subcatid" => $subcatid_i, "numlinks" => $numlinks_i, "description" => $description_i, "inhome" => $inhome_i, "keywords" => $keywords_i, "who_view" => $who_view_i, "groups_view" => $groups_view_i 
+    );
+}
 
 function nv_fix_cat_order ( $parentid = 0, $order = 0, $lev = 0 )
 {
@@ -170,25 +257,51 @@ function nv_news_fix_block ( $bid, $repairtable = true )
 
 function nv_show_cat_list ( $parentid = 0 )
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_full, $array_viewcat_nosub;
+    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_full, $array_viewcat_nosub, $admin_info, $array_cat_admin, $global_array_cat, $admin_id;
+    
+    // Cac chu de co quyen han
+    $array_cat_check_content = array();
+    foreach ( $global_array_cat as $catid_i => $array_value )
+    {
+        if ( defined( 'NV_IS_ADMIN_MODULE' ) )
+        {
+            $array_cat_check_content[] = $catid_i;
+        }
+        elseif ( isset( $array_cat_admin[$admin_id][$catid_i] ) )
+        {
+            if ( $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 )
+            {
+                $array_cat_check_content[] = $catid_i;
+            }
+            elseif ( $array_cat_admin[$admin_id][$catid_i]['add_content'] == 1 )
+            {
+                $array_cat_check_content[] = $catid_i;
+            }
+            elseif ( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 )
+            {
+                $array_cat_check_content[] = $catid_i;
+            }
+            elseif ( $array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1 )
+            {
+                $array_cat_check_content[] = $catid_i;
+            }
+        }
+    }
+    // Cac chu de co quyen han    
     $contents = "";
     if ( $parentid > 0 )
     {
         $parentid_i = $parentid;
         $array_cat_title = array();
-        $a = 0;
         while ( $parentid_i > 0 )
         {
-            list( $catid_i, $parentid_i, $title_i ) = $db->sql_fetchrow( $db->sql_query( "SELECT `catid`, `parentid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid`=" . intval( $parentid_i ) . "" ) );
-            $array_cat_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid_i . "\"><strong>" . $title_i . "</strong></a>";
-            $a ++;
+            $array_cat_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $parentid_i . "\"><strong>" . $global_array_cat[$parentid_i]['title'] . "</strong></a>";
+            $parentid_i = $global_array_cat[$parentid_i]['parentid'];
         }
-        for ( $i = $a - 1; $i >= 0; $i -- )
-        {
-            $contents .= $array_cat_title[$i];
-            if ( $i > 0 ) $contents .= " -> ";
-        }
+        sort( $array_cat_title, SORT_NUMERIC );
+        $contents .= implode( " -> ", $array_cat_title );
     }
+    
     $sql = "SELECT catid, parentid, title, weight, viewcat, numsubcat, inhome, numlinks FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid` = '" . $parentid . "' ORDER BY `weight` ASC";
     $result = $db->sql_query( $sql );
     $num = $db->sql_numrows( $result );
@@ -205,57 +318,124 @@ function nv_show_cat_list ( $parentid = 0 )
         $contents .= "<td style=\"width:200px;\"></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</thead>\n";
-        $a = 0;
+        $a = 1;
         $array_inhome = array( 
             $lang_global['no'], $lang_global['yes'] 
         );
+        
         while ( list( $catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks ) = $db->sql_fetchrow( $result ) )
         {
-            $array_viewcat = ( $numsubcat > 0 ) ? $array_viewcat_full : $array_viewcat_nosub;
-            if ( ! array_key_exists( $viewcat, $array_viewcat ) )
+            if ( defined( 'NV_IS_ADMIN_MODULE' ) )
             {
-                $viewcat = "viewcat_page_new";
-                $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `viewcat`=" . $db->dbescape( $viewcat ) . " WHERE `catid`=" . intval( $catid );
-                $db->sql_query( $sql );
+                $check_show = 1;
             }
-            $class = ( $a % 2 ) ? " class=\"second\"" : "";
-            $contents .= "<tbody" . $class . ">\n";
-            $contents .= "<tr>\n";
-            $contents .= "<td align=\"center\"><select id=\"id_weight_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','weight');\">\n";
-            for ( $i = 1; $i <= $num; $i ++ )
+            else
             {
-                $contents .= "<option value=\"" . $i . "\"" . ( $i == $weight ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+                $array_cat = GetCatidInParent( $catid );
+                $check_show = array_intersect( $array_cat, $array_cat_check_content );
             }
-            $contents .= "</select></td>\n";
-            $contents .= "<td><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid . "\"><strong>" . $title . "</strong></a>";
-            if ( $numsubcat > 0 ) $contents .= "  <span style=\"color:#FF0101;\">(" . $numsubcat . ")</span>";
-            $contents .= "</td>\n";
-            $contents .= "<td align=\"center\"><select id=\"id_inhome_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','inhome');\">\n";
-            foreach ( $array_inhome as $key => $val )
+            if ( ! empty( $check_show ) )
             {
-                $contents .= "<option value=\"" . $key . "\"" . ( $key == $inhome ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
+                $array_viewcat = ( $numsubcat > 0 ) ? $array_viewcat_full : $array_viewcat_nosub;
+                if ( ! array_key_exists( $viewcat, $array_viewcat ) )
+                {
+                    $viewcat = "viewcat_page_new";
+                    $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `viewcat`=" . $db->dbescape( $viewcat ) . " WHERE `catid`=" . intval( $catid );
+                    $db->sql_query( $sql );
+                }
+                
+                $admin_funcs = array();
+                $weight_disabled = $func_cat_disabled = true;
+                if ( defined( 'NV_IS_ADMIN_MODULE' ) or ( isset( $array_cat_admin[$admin_id][$catid] ) and $array_cat_admin[$admin_id][$catid]['add_content'] == 1 ) )
+                {
+                    $func_cat_disabled = false;
+                    $admin_funcs[] = "<span class=\"add_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content&amp;catid=" . $catid . "&parentid=" . $parentid . "\">" . $lang_module['content_add'] . "</a></span>\n";
+                }
+                if ( defined( 'NV_IS_ADMIN_MODULE' ) or ( $parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
+                {
+                    $func_cat_disabled = false;
+                    $admin_funcs[] = "<span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;catid=" . $catid . "&parentid=" . $parentid . "#edit\">" . $lang_global['edit'] . "</a></span>\n";
+                }
+                if ( defined( 'NV_IS_ADMIN_MODULE' ) or ( $parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
+                {
+                    $weight_disabled = false;
+                    $admin_funcs[] = "<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\">" . $lang_global['delete'] . "</a></span>";
+                }
+                
+                $class = ( $a % 2 ) ? " class=\"second\"" : "";
+                $contents .= "<tbody" . $class . ">\n";
+                $contents .= "<tr>\n";
+                $contents .= "<td align=\"center\">";
+                if ( $weight_disabled )
+                {
+                    $contents .= $a;
+                }
+                else
+                {
+                    $contents .= "<select id=\"id_weight_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','weight');\">\n";
+                    for ( $i = 1; $i <= $num; $i ++ )
+                    {
+                        $contents .= "<option value=\"" . $i . "\"" . ( $i == $weight ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+                    }
+                    $contents .= "</select>";
+                }
+                $contents .= "</td>\n";
+                $contents .= "<td><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid . "\"><strong>" . $title . "</strong></a>";
+                if ( $numsubcat > 0 ) $contents .= "  <span style=\"color:#FF0101;\">(" . $numsubcat . ")</span>";
+                $contents .= "</td>\n";
+                $contents .= "<td align=\"center\">";
+                if ( $func_cat_disabled )
+                {
+                    $contents .= $array_inhome[$inhome];
+                }
+                else
+                {
+                    $contents .= "<select id=\"id_inhome_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','inhome');\">\n";
+                    foreach ( $array_inhome as $key => $val )
+                    {
+                        $contents .= "<option value=\"" . $key . "\"" . ( $key == $inhome ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
+                    }
+                    $contents .= "</select>";
+                }
+                $contents .= "</td>\n";
+                $contents .= "<td align=\"left\">";
+                if ( $func_cat_disabled )
+                {
+                    $contents .= $array_viewcat[$viewcat];
+                }
+                else
+                {
+                    $contents .= "<select id=\"id_viewcat_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','viewcat');\">\n";
+                    foreach ( $array_viewcat as $key => $val )
+                    {
+                        $contents .= "<option value=\"" . $key . "\"" . ( $key == $viewcat ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
+                    }
+                    $contents .= "</select>";
+                }
+                $contents .= "</td>\n";
+                $contents .= "<td align=\"center\">";
+                if ( $func_cat_disabled )
+                {
+                    $contents .= $numlinks;
+                
+                }
+                else
+                {
+                    $contents .= "<select id=\"id_numlinks_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','numlinks');\">\n";
+                    for ( $i = 0; $i <= 10; $i ++ )
+                    {
+                        $contents .= "<option value=\"" . $i . "\"" . ( $i == $numlinks ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+                    }
+                    $contents .= "</select>";
+                }
+                $contents .= "</td>\n";
+                $contents .= "<td align=\"center\">";
+                $contents .= implode( "&nbsp;-&nbsp;", $admin_funcs );
+                $contents .= "</td>\n";
+                $contents .= "</tr>\n";
+                $contents .= "</tbody>\n";
+                $a ++;
             }
-            $contents .= "</select></td>\n";
-            $contents .= "<td align=\"left\"><select id=\"id_viewcat_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','viewcat');\">\n";
-            foreach ( $array_viewcat as $key => $val )
-            {
-                $contents .= "<option value=\"" . $key . "\"" . ( $key == $viewcat ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
-            }
-            $contents .= "</select></td>\n";
-            $contents .= "<td align=\"center\"><select id=\"id_numlinks_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','numlinks');\">\n";
-            for ( $i = 0; $i <= 10; $i ++ )
-            {
-                $contents .= "<option value=\"" . $i . "\"" . ( $i == $numlinks ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
-            }
-            $contents .= "</select></td>\n";
-            $contents .= "<td align=\"center\">";
-            $contents .= "<span class=\"add_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content&amp;catid=" . $catid . "&parentid=" . $parentid . "\">" . $lang_module['content_add'] . "</a></span>&nbsp;-\n";
-            $contents .= "<span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;catid=" . $catid . "&parentid=" . $parentid . "#edit\">" . $lang_global['edit'] . "</a></span>&nbsp;-\n";
-            $contents .= "<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\">" . $lang_global['delete'] . "</a></span>";
-            $contents .= "</td>\n";
-            $contents .= "</tr>\n";
-            $contents .= "</tbody>\n";
-            $a ++;
         }
         $contents .= "</table>\n";
     }
@@ -557,4 +737,46 @@ function nv_show_block_list ( $bid )
     return $contents;
 }
 
+function GetCatidInParent ( $catid )
+{
+    global $global_array_cat;
+    $array_cat = array();
+    $array_cat[] = $catid;
+    $subcatid = explode( ",", $global_array_cat[$catid]['subcatid'] );
+    if ( ! empty( $subcatid ) )
+    {
+        foreach ( $subcatid as $id )
+        {
+            if ( $id > 0 )
+            {
+                if ( $global_array_cat[$id]['numsubcat'] == 0 )
+                {
+                    $array_cat[] = $id;
+                }
+                else
+                {
+                    $array_cat_temp = GetCatidInParent( $id );
+                    foreach ( $array_cat_temp as $catid_i )
+                    {
+                        $array_cat[] = $catid_i;
+                    }
+                }
+            }
+        }
+    }
+    return array_unique( $array_cat );
+}
+
+function nv_array_cat_admin ( )
+{
+    global $db, $module_data;
+    $array_cat_admin = array();
+    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_admins` ORDER BY `userid` ASC";
+    $result = $db->sql_query( $sql );
+    while ( $row = $db->sql_fetchrow( $result ) )
+    {
+        $array_cat_admin[$row['userid']][$row['catid']] = $row;
+    }
+    return $array_cat_admin;
+}
 ?>

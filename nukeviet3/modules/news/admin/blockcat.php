@@ -49,7 +49,6 @@ if ( ! empty( $savecat ) )
         if ( $db->sql_affectedrows() > 0 )
         {
             nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid'] );
-            $error = $lang_module['saveok'];
             $db->sql_freeresult();
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
             die();

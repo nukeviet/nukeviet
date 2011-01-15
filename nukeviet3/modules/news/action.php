@@ -155,13 +155,13 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `inhome` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `allowed_comm` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `allowed_rating` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `ratingdetail` varchar(255) NOT NULL DEFAULT '',
   `allowed_send` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `allowed_print` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `allowed_save` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `hitstotal` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `hitscm` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `hitslm` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `total_rating` int(11) NOT NULL DEFAULT '0',
+  `click_rating` int(11) NOT NULL DEFAULT '0',
   `keywords` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `topicid` (`topicid`),
@@ -175,7 +175,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_log` (
-   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `log_time` int(11) NOT NULL DEFAULT '0',
   `log_admin` int(11) NOT NULL DEFAULT '0',
   `id` int(11) NOT NULL DEFAULT '0',
@@ -202,13 +202,13 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `inhome` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `allowed_comm` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `allowed_rating` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `ratingdetail` varchar(255) NOT NULL DEFAULT '',
   `allowed_send` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `allowed_print` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `allowed_save` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `hitstotal` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `hitscm` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `hitslm` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `total_rating` int(11) NOT NULL DEFAULT '0',
+  `click_rating` int(11) NOT NULL DEFAULT '0',
   `keywords` text NOT NULL,
   PRIMARY KEY (`log_id`),
   KEY `id` (`id`),
@@ -232,6 +232,18 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `delcontent` tinyint(4) NOT NULL,
   PRIMARY KEY  (`pid`),
   UNIQUE KEY `member` (`member`,`group_id`)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins` (
+  `userid` int(11) NOT NULL default '0',
+  `catid` int(11) NOT NULL default '0',
+  `admin` tinyint(4) NOT NULL default '0',
+  `add_content` tinyint(4) NOT NULL default '0',
+  `pub_content` tinyint(4) NOT NULL default '0',
+  `edit_content` tinyint(4) NOT NULL default '0',
+  `del_content` tinyint(4) NOT NULL default '0',
+  `comment` tinyint(4) NOT NULL default '0',
+  UNIQUE KEY `userid` (`userid`,`catid`)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";

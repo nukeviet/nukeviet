@@ -7,10 +7,12 @@
  * @Createdate 2-9-2010 14:43
  */
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
 if ( defined( 'NV_EDITOR' ) )
 {
     require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 }
+
 $month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, date( "Y_m" ), true );
 $array_block_cat_module = array();
 $id_block_content = array();
@@ -32,16 +34,145 @@ $array_imgposition = array(
 );
 
 $rowcontent = array( 
-    "id" => "", "listcatid" => "" . $catid . "," . $parentid . "", "topicid" => "", "admin_id" => $admin_info['admin_id'], "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "ratingdetail" => "0|0", "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "hitslm" => 0, "keywords" => "" 
+    "id" => "", "listcatid" => "" . $catid . "," . $parentid . "", "topicid" => "", "admin_id" => $admin_id, "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "total_rating" => 0, "click_rating" => 0, "keywords" => "" 
 );
 
 $rowcontent['sourcetext'] = "";
 $rowcontent['topictext'] = "";
 $page_title = $lang_module['content_add'];
-$error = "";
+$error = array();
 $groups_list = nv_groups_list();
 
 $rowcontent['id'] = $nv_Request->get_int( 'id', 'get,post', 0 );
+if ( $rowcontent['id'] > 0 )
+{
+    $check_permission = false;
+    $rowcontent = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `id`=" . $rowcontent['id'] . "" ) );
+    if ( ! empty( $rowcontent['id'] ) )
+    {
+        $arr_catid = explode( ",", $rowcontent['listcatid'] );
+        if ( defined( 'NV_IS_ADMIN_MODULE' ) )
+        {
+            $check_permission = true;
+        }
+        else
+        {
+            $check_edit = 0;
+            
+            if ( $rowcontent['status'] == 0 )
+            {
+                $edit_status = 0;
+            }
+            elseif ( $rowcontent['publtime'] < NV_CURRENTTIME and ( $rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME ) )
+            {
+                $edit_status = 1;
+            }
+            elseif ( $rowcontent['publtime'] > NV_CURRENTTIME )
+            {
+                $edit_status = 2;
+            }
+            else
+            {
+                $edit_status = 3;
+            }
+            foreach ( $arr_catid as $catid_i )
+            {
+                if ( isset( $array_cat_admin[$admin_id][$catid_i] ) )
+                {
+                    if ( $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 )
+                    {
+                        $check_edit ++;
+                    }
+                    else
+                    {
+                        if ( $array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1 )
+                        {
+                            $check_edit ++;
+                        }
+                        elseif ( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ( $edit_status == 0 or $edit_status = 2 ) )
+                        {
+                            $check_edit ++;
+                        }
+                        elseif ( $status == 0 and $post_id == $admin_id )
+                        {
+                            $check_edit ++;
+                        }
+                    }
+                }
+            }
+            if ( $check_edit == count( $arr_catid ) )
+            {
+                $check_permission = true;
+            }
+        }
+    }
+    
+    if ( ! $check_permission )
+    {
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
+        die();
+    }
+    
+    $page_title = $lang_module['content_edit'];
+    $rowcontent['sourcetext'] = "";
+    $rowcontent['topictext'] = "";
+    
+    $id_block_content = array();
+    $sql = "SELECT bid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` where `id`='" . $rowcontent['id'] . "' ";
+    $result = $db->sql_query( $sql );
+    while ( list( $bid_i ) = $db->sql_fetchrow( $result ) )
+    {
+        $id_block_content[] = $bid_i;
+    }
+}
+
+$array_cat_add_content = $array_cat_pub_content = $array_cat_edit_content = array();
+foreach ( $global_array_cat as $catid_i => $array_value )
+{
+    $check_add_content = $check_pub_content = $check_edit_content = false;
+    if ( defined( 'NV_IS_ADMIN_MODULE' ) )
+    {
+        $check_add_content = $check_pub_content = $check_edit_content = true;
+    }
+    elseif ( isset( $array_cat_admin[$admin_id][$catid_i] ) )
+    {
+        if ( $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 )
+        {
+            $check_add_content = $check_pub_content = $check_edit_content = true;
+        }
+        else
+        {
+            if ( $array_cat_admin[$admin_id][$catid_i]['add_content'] == 1 )
+            {
+                $check_add_content = true;
+            }
+            
+            if ( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 )
+            {
+                $check_pub_content = true;
+            }
+            
+            if ( $array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1 )
+            {
+                $check_edit_content = true;
+            }
+        }
+    }
+    if ( $check_add_content )
+    {
+        $array_cat_add_content[] = $catid_i;
+    }
+    
+    if ( $check_pub_content )
+    {
+        $array_cat_pub_content[] = $catid_i;
+    }
+    
+    if ( $check_edit_content )
+    {
+        $array_cat_edit_content[] = $catid_i;
+    }
+}
 
 if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 {
@@ -49,6 +180,30 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
     $id_block_content = array_unique( $nv_Request->get_typed_array( 'bids', 'post', 'int', array() ) );
     
     $rowcontent['listcatid'] = implode( ",", $catids );
+    
+    $rowcontent['status'] = ( $nv_Request->isset_request( 'status1', 'post' ) ) ? 1 : 0;
+    
+    if ( $rowcontent['status'] and $rowcontent['publtime'] > NV_CURRENTTIME )
+    {
+        $array_cat_check_content = $array_cat_pub_content;
+    }
+    elseif ( $rowcontent['status'] )
+    {
+        $array_cat_check_content = $array_cat_edit_content;
+    }
+    else
+    {
+        $array_cat_check_content = $array_cat_add_content;
+    }
+    
+    foreach ( $catids as $catid_i )
+    {
+        if ( ! in_array( $catid_i, $array_cat_check_content ) )
+        {
+            $error[] = sprintf( $lang_module['permissions_pub_error'], $global_array_cat[$catid_i]['title'] );
+        }
+    }
+    
     $rowcontent['topicid'] = $nv_Request->get_int( 'topicid', 'post', 0 );
     if ( $rowcontent['topicid'] == 0 )
     {
@@ -136,17 +291,18 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
     $rowcontent['keywords'] = filter_text_input( 'keywords', 'post', '', 1 );
     if ( empty( $rowcontent['title'] ) )
     {
-        $error = $lang_module['error_title'];
+        $error[] = $lang_module['error_title'];
     }
     elseif ( empty( $rowcontent['listcatid'] ) )
     {
-        $error = $lang_module['error_cat'];
+        $error[] = $lang_module['error_cat'];
     }
     elseif ( trim( strip_tags( $rowcontent['bodytext'] ) ) == "" )
     {
-        $error = $lang_module['error_bodytext'];
+        $error[] = $lang_module['error_bodytext'];
     }
-    else
+    
+    if ( empty( $error ) )
     {
         if ( ! empty( $rowcontent['topictext'] ) )
         {
@@ -174,7 +330,6 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
                 $rowcontent['keywords'] = nv_content_keywords( $rowcontent['bodytext'] );
             }
         }
-        $rowcontent['status'] = ( $nv_Request->isset_request( 'status1', 'post' ) ) ? 1 : 0;
         
         // Xu ly anh minh ha
         $rowcontent['homeimgthumb'] = "";
@@ -257,7 +412,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
         if ( $rowcontent['id'] == 0 )
         {
             $rowcontent['publtime'] = ( $rowcontent['publtime'] > NV_CURRENTTIME ) ? $rowcontent['publtime'] : NV_CURRENTTIME;
-            $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `bodytext`, `copyright`, `inhome`, `allowed_comm`, `allowed_rating`, `ratingdetail`, `allowed_send`, `allowed_print`, `allowed_save`, `hitstotal`, `hitscm`, `hitslm`, `keywords`) VALUES 
+            $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `bodytext`, `copyright`, `inhome`, `allowed_comm`, `allowed_rating`, `allowed_send`, `allowed_print`, `allowed_save`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords`) VALUES 
                 (NULL, " . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
                 " . intval( $rowcontent['topicid'] ) . ",
                 " . intval( $rowcontent['admin_id'] ) . ",
@@ -281,13 +436,13 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
                 " . intval( $rowcontent['inhome'] ) . ",  
                 " . intval( $rowcontent['allowed_comm'] ) . ",  
                 " . intval( $rowcontent['allowed_rating'] ) . ",  
-                " . $db->dbescape_string( $rowcontent['ratingdetail'] ) . ",  
                 " . intval( $rowcontent['allowed_send'] ) . ",  
                 " . intval( $rowcontent['allowed_print'] ) . ",  
                 " . intval( $rowcontent['allowed_save'] ) . ",  
                 " . intval( $rowcontent['hitstotal'] ) . ",  
                 " . intval( $rowcontent['hitscm'] ) . ",  
-                " . intval( $rowcontent['hitslm'] ) . ",  
+                " . intval( $rowcontent['total_rating'] ) . ",  
+                " . intval( $rowcontent['click_rating'] ) . ",  
                 " . $db->dbescape_string( $rowcontent['keywords'] ) . ")";
             $rowcontent['id'] = $db->sql_query_insert_id( $query );
             if ( $rowcontent['id'] > 0 )
@@ -300,7 +455,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             }
             else
             {
-                $error = $lang_module['errorsave'];
+                $error[] = $lang_module['errorsave'];
             }
             $db->sql_freeresult();
         }
@@ -358,12 +513,12 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             }
             else
             {
-                $error = $lang_module['errorsave'];
+                $error[] = $lang_module['errorsave'];
             }
             $db->sql_freeresult();
         }
         nv_del_moduleCache( $module_name );
-        if ( $error == "" )
+        if ( empty( $error ) )
         {
             if ( $rowcontent['publtime'] > NV_CURRENTTIME or $rowcontent['exptime'] > 0 )
             {
@@ -388,30 +543,10 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             {
                 nv_news_fix_block( $bid_i, false );
             }
-            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
+            $redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+            nv_info_die( $global_config['site_description'], $lang_global['site_info'], "<br />" . $lang_module['saveok'] . "<br /><br /><a href=\"" . $redirect . "\">" . $lang_module['clickgotomodule'] . "</a><META HTTP-EQUIV=\"refresh\" content=\"2;URL=" . $redirect . "\" />" );
             die();
         }
-    }
-
-}
-elseif ( $rowcontent['id'] > 0 )
-{
-    $rowcontent = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `id`=" . $rowcontent['id'] . "" ) );
-    if ( empty( $rowcontent['id'] ) )
-    {
-        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
-        die();
-    }
-    $page_title = $lang_module['content_edit'];
-    $rowcontent['sourcetext'] = "";
-    $rowcontent['topictext'] = "";
-    
-    $id_block_content = array();
-    $sql = "SELECT bid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` where `id`='" . $rowcontent['id'] . "' ";
-    $result = $db->sql_query( $sql );
-    while ( list( $bid_i ) = $db->sql_fetchrow( $result ) )
-    {
-        $id_block_content[] = $bid_i;
     }
 }
 
@@ -457,11 +592,30 @@ else
     list( $ehour, $emin ) = explode( "|", $tdate );
 }
 
+if ( $rowcontent['status'] and $rowcontent['publtime'] > NV_CURRENTTIME )
+{
+    $array_cat_check_content = $array_cat_pub_content;
+}
+elseif ( $rowcontent['status'] )
+{
+    $array_cat_check_content = $array_cat_edit_content;
+}
+else
+{
+    $array_cat_check_content = $array_cat_add_content;
+}
+
+if ( empty( $array_cat_check_content ) )
+{
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
+    die();
+}
+
 $contents = "";
-if ( $error != "" )
+if ( ! empty( $error ) )
 {
     $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
-    $contents .= "<blockquote class=\"error\"><span>" . $error . "</span></blockquote>\n";
+    $contents .= "<blockquote class=\"error\"><span>" . implode( "<br>", $error ) . "</span></blockquote>\n";
     $contents .= "</div>\n";
     $contents .= "<div class=\"clear\"></div>\n";
 }
@@ -491,29 +645,40 @@ $contents .= "<div class=\"news\"><label><strong>" . $lang_module['content_cat']
 $contents .= "	<div style=\"height: 130px; width: 380px; overflow: auto; text-align:left; float: right; border: 1px solid #CCCCCC;\">";
 $contents .= "		<table>\n";
 
-$sql = "SELECT catid, title, lev FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
-$result_cat = $db->sql_query( $sql );
-if ( $db->sql_numrows( $result_cat ) == 0 )
+foreach ( $global_array_cat as $catid_i => $array_value )
 {
-    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
-    die();
-}
-while ( list( $catid_i, $title_i, $lev_i ) = $db->sql_fetchrow( $result_cat ) )
-{
-    $xtitle_i = "";
-    if ( $lev_i > 0 )
+    if ( defined( 'NV_IS_ADMIN_MODULE' ) )
     {
-        for ( $i = 1; $i <= $lev_i; $i ++ )
+        $check_show = 1;
+    }
+    else
+    {
+        $array_cat = GetCatidInParent( $catid_i );
+        $check_show = array_intersect( $array_cat, $array_cat_check_content );
+    }
+    if ( ! empty( $check_show ) )
+    {
+        $lev_i = $array_value['lev'];
+        $xtitle_i = "";
+        if ( $lev_i > 0 )
         {
-            $xtitle_i .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            for ( $i = 1; $i <= $lev_i; $i ++ )
+            {
+                $xtitle_i .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
         }
+        $ch = "";
+        if ( ! in_array( $catid_i, $array_cat_check_content ) )
+        {
+            $ch .= " disabled=\"disabled\"";
+        }
+        if ( in_array( $catid_i, $array_catid_in_row ) )
+        {
+            $ch .= " checked=\"checked\"";
+        }
+        
+        $contents .= "<tr><td>" . $xtitle_i . "<input class=\"news_checkbox\" type=\"checkbox\" name=\"catids[]\" value=\"" . $catid_i . "\"" . $ch . ">" . $array_value['title'] . "</td></tr>";
     }
-    $ch = "";
-    if ( in_array( $catid_i, $array_catid_in_row ) )
-    {
-        $ch = " checked=\"checked\"";
-    }
-    $contents .= "<tr><td>" . $xtitle_i . "<input class=\"news_checkbox\" type=\"checkbox\" name=\"catids[]\" value=\"" . $catid_i . "\"" . $ch . ">" . $title_i . "</td></tr>";
 }
 
 $contents .= "		</table>\n";
@@ -687,14 +852,17 @@ $contents .= "<input type=\"text\" maxlength=\"255\" id=\"AjaxSourceText\" value
 $contents .= "<div style=\"margin-bottom: 1em;\"><input type=\"checkbox\" value=\"1\" name=\"copyright\" " . ( ( $rowcontent['copyright'] ) ? "  checked=\"checked\"" : "" ) . "> <label>" . $lang_module['content_copyright'] . "</label></div>\n";
 
 $contents .= "<center>";
-if ( $rowcontent['status'] == 1 )
+if ( $rowcontent['status'] == 1 and $rowcontent['id'] > 0 )
 {
     $contents .= "<input name=\"statussave\" type=\"submit\" value=\"" . $lang_module['save'] . "\" />";
 }
 else
 {
     $contents .= "<input name=\"status0\" type=\"submit\" value=\"" . $lang_module['save_temp'] . "\" />";
-    $contents .= "<input name=\"status1\" type=\"submit\" value=\"" . $lang_module['publtime'] . "\" />";
+    if ( ! empty( $array_cat_pub_content ) )
+    {
+        $contents .= "<input name=\"status1\" type=\"submit\" value=\"" . $lang_module['publtime'] . "\" />";
+    }
 }
 $contents .= "</center>\n";
 $contents .= "</form>\n";

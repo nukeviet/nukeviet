@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Vietnamese
+ * @Createdate May 31, 2010, 08:01:47 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['categories'] = "Quản lý Chủ đề";
 $lang_module['topics'] = "Nhóm tin liên quan";
@@ -35,6 +36,7 @@ $lang_module['status_2'] = "Hẹn giờ đăng";
 $lang_module['status_3'] = "Hết hạn";
 $lang_module['errorsave'] = "Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề bài viết có thể bị trùng";
 $lang_module['saveok'] = "Cập nhật bài viết thành công";
+$lang_module['clickgotomodule'] = "Click vào đây để chuyển vào trang quản lý bài viết.";
 $lang_module['alias'] = "Liên kết tĩnh";
 $lang_module['name'] = "Tiêu đề";
 $lang_module['error_name'] = "Lỗi:Bạn cần nhập Tiêu đề";
@@ -189,7 +191,7 @@ $lang_module['siteinfo_pending'] = "Số bài viết chờ đăng";
 $lang_module['siteinfo_expired'] = "Số bài viết đã hết hạn";
 $lang_module['siteinfo_exptime'] = "Số bài viết sắp hết hạn";
 $lang_module['siteinfo_comment'] = "Tổng số bình luận được đăng";
-$lang_module['siteinfo_comment_pending'] = "Số bình luận chờ duyệt"; 
+$lang_module['siteinfo_comment_pending'] = "Số bình luận chờ duyệt";
 
 $lang_module['group_content'] = "Cấu hình đăng bài viết của thành viên";
 $lang_module['group_addcontent'] = "Được đăng bài viết";
@@ -197,4 +199,23 @@ $lang_module['group_postcontent'] = "Đăng bài viết không cần kiểm duy�
 $lang_module['group_editcontent'] = "Được sửa bài viết đã đăng";
 $lang_module['group_delcontent'] = "Được xóa bài viết đã đăng";
 
+$lang_module['admin'] = "Phân quyền quản lý";
+$lang_module['admin_permissions'] = "Quyền hạn";
+$lang_module['admin_edit'] = "Sửa quyền hạn";
+$lang_module['admin_edit_user'] = "Sửa quyền hạn thành viên";
+$lang_module['admin_module'] = "Quản lý module";
+$lang_module['admin_cat'] = "Quản lý chủ đề";
+
+$lang_module['admin_userid'] = "userid";
+$lang_module['admin_username'] = "Tài khoản";
+$lang_module['admin_full_name'] = "Họ tên";
+$lang_module['admin_email'] = "Email";
+
+$lang_module['permissions_admin'] = "Quản lý chủ đề";
+$lang_module['permissions_add_content'] = "Tạo bài viết";
+$lang_module['permissions_pub_content'] = "Duyệt bài viết";
+$lang_module['permissions_edit_content'] = "Sửa bài viết";
+$lang_module['permissions_del_content'] = "Xóa bài viêt";
+$lang_module['permissions_pub_error'] = "Lỗi: Bạn không được đăng bài viết tại chủ đề: %1\$s";
+$lang_module['error_no_del_content_id'] = "Lỗi: Hệ thống không xóa được các bài viết id:";
 ?>

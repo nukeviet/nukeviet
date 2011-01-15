@@ -30,11 +30,6 @@ if ( ! empty( $savesetting ) )
     $array_config['copyright'] = filter_text_input( 'copyright', 'post', '', 1 );
     $array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
     $array_config['module_logo'] = filter_text_input( 'module_logo', 'post', '', 0 );
-    $array_pid = $nv_Request->get_typed_array( 'array_pid', 'post' );
-    $array_addcontent = $nv_Request->get_typed_array( 'array_addcontent', 'post' );
-    $array_postcontent = $nv_Request->get_typed_array( 'array_postcontent', 'post' );
-    $array_editcontent = $nv_Request->get_typed_array( 'array_editcontent', 'post' );
-    $array_delcontent = $nv_Request->get_typed_array( 'array_delcontent', 'post' );
     
     if ( ! nv_is_url( $array_config['module_logo'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['module_logo'] ) )
     {
@@ -51,16 +46,6 @@ if ( ! empty( $savesetting ) )
         $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
     }
     $db->sql_freeresult();
-    
-    foreach ( $array_pid as $pid )
-    {
-        $addcontent = ( isset( $array_addcontent[$pid] ) and intval( $array_addcontent[$pid] ) == 1 ) ? 1 : 0;
-        $postcontent = ( isset( $array_postcontent[$pid] ) and intval( $array_postcontent[$pid] ) == 1 ) ? 1 : 0;
-        $editcontent = ( isset( $array_editcontent[$pid] ) and intval( $array_editcontent[$pid] ) == 1 ) ? 1 : 0;
-        $delcontent = ( isset( $array_delcontent[$pid] ) and intval( $array_delcontent[$pid] ) == 1 ) ? 1 : 0;
-        $addcontent = ( $postcontent == 1 ) ? 1 : $addcontent;
-        $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` SET `addcontent` = '" . $addcontent . "', `postcontent` = '" . $postcontent . "', `editcontent` = '" . $editcontent . "', `delcontent` = '" . $delcontent . "' WHERE `pid` =" . $pid . " LIMIT 1" );
-    }
     
     nv_del_moduleCache( 'settings' );
     nv_del_moduleCache( $module_name );
@@ -191,87 +176,12 @@ $contents .= "</select></td></tr>
     <td><textarea style=\"width: 450px\" name=\"copyright\" id=\"copyright\" cols=\"20\" rows=\"4\">" . $module_config[$module_name]['copyright'] . "</textarea></td>
     </tr>
 </tbody>
-</table>";
-
-$array_post_title = array();
-$array_post_title[0][0] = $lang_global['who_view0'];
-
-$array_post_title[1][0] = $lang_global['who_view1'];
-
-$groups_list = nv_groups_list();
-foreach ( $groups_list as $group_id => $grtl )
-{
-    $array_post_title[1][$group_id] = $grtl;
-}
-
-$array_post_member = array();
-$array_post_data = array();
-
-$sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` ORDER BY `pid` ASC";
-$result = $db->sql_query( $sql );
-while ( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $db->sql_fetchrow( $result ) )
-{
-    if ( isset( $array_post_title[$member][$group_id] ) )
-    {
-        $array_post_member[$member][$group_id] = $pid;
-        $array_post_data[$pid] = array( 
-            "pid" => $pid, "member" => $member, "group_id" => $group_id, "addcontent" => $addcontent, "postcontent" => $postcontent, "editcontent" => $editcontent, "delcontent" => $delcontent 
-        );
-    }
-    else
-    {
-        $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` WHERE `pid` = " . $pid . " LIMIT 1" );
-    }
-}
-
-$a = 0;
-$contents .= "<table class=\"tab1\">
-    <caption>" . $lang_module['group_content'] . "</caption>
-    <tr align=\"center\">
-    <td>" . $lang_global['who_view3'] . "</td>
-    <td>" . $lang_module['group_addcontent'] . "</td>
-    <td>" . $lang_module['group_postcontent'] . "</td>
-    <td>" . $lang_module['group_editcontent'] . "</td>
-    <td>" . $lang_module['group_delcontent'] . "</td>
-    </tr>";
-
-foreach ( $array_post_title as $member => $array_post_1 )
-{
-    foreach ( $array_post_1 as $group_id => $array_post_2 )
-    {
-        $a ++;
-        $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
-        $pid = ( isset( $array_post_member[$member][$group_id] ) ) ? $array_post_member[$member][$group_id] : 0;
-        if ( $pid > 0 )
-        {
-            $addcontent = $array_post_data[$pid]['addcontent'];
-            $postcontent = $array_post_data[$pid]['postcontent'];
-            $editcontent = $array_post_data[$pid]['editcontent'];
-            $delcontent = $array_post_data[$pid]['delcontent'];
-        }
-        else
-        {
-            $addcontent = $postcontent = $editcontent = $delcontent = 0;
-            $pid = $db->sql_query_insert_id( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` 
-            (`pid`,`member`, `group_id`,`addcontent`,`postcontent`,`editcontent`,`delcontent`) VALUES 
-            (NULL , '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "'  )" );
-        }
-        $contents .= "<tbody" . $class . ">
-        <tr>
-            <td><strong>" . $array_post_2 . "</strong><input type=\"hidden\" value=\"" . $pid . "\" name=\"array_pid[]\"></td>
-            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_addcontent[$pid]\" " . ( ( $addcontent ) ? "checked=\"checked\"" : "" ) . "></td>
-            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_postcontent[$pid]\" " . ( ( $postcontent ) ? "checked=\"checked\"" : "" ) . "></td>
-            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_editcontent[$pid]\" " . ( ( $editcontent ) ? "checked=\"checked\"" : "" ) . "></td>
-            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_delcontent[$pid]\" " . ( ( $delcontent ) ? "checked=\"checked\"" : "" ) . "></td>
-            </tr>
-        </tbody>";
-    }
-}
-$contents .= "</table>";
-$contents .= "<div style=\"text-align: center;\" colspan=\"2\">
+<tfoot>
+<tr><td style=\"text-align: center;\" colspan=\"2\">
         <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\">
-        <input type=\"hidden\" value=\"1\" name=\"savesetting\">";
-$contents .= "</div>";
+        <input type=\"hidden\" value=\"1\" name=\"savesetting\">
+</tfoot>
+</table>";
 
 $contents .= "</form>";
 $contents .= "<script type=\"text/javascript\">\n";
@@ -292,6 +202,118 @@ $contents .= 'nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME
 $contents .= 'return false;';
 $contents .= '});';
 $contents .= "</script>\n";
+
+if ( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) )
+{
+    $savepost = $nv_Request->get_int( 'savepost', 'post', 0 );
+    if ( ! empty( $savepost ) )
+    {
+        $array_config = array();
+        $array_pid = $nv_Request->get_typed_array( 'array_pid', 'post' );
+        $array_addcontent = $nv_Request->get_typed_array( 'array_addcontent', 'post' );
+        $array_postcontent = $nv_Request->get_typed_array( 'array_postcontent', 'post' );
+        $array_editcontent = $nv_Request->get_typed_array( 'array_editcontent', 'post' );
+        $array_delcontent = $nv_Request->get_typed_array( 'array_delcontent', 'post' );
+        
+        foreach ( $array_pid as $pid )
+        {
+            $addcontent = ( isset( $array_addcontent[$pid] ) and intval( $array_addcontent[$pid] ) == 1 ) ? 1 : 0;
+            $postcontent = ( isset( $array_postcontent[$pid] ) and intval( $array_postcontent[$pid] ) == 1 ) ? 1 : 0;
+            $editcontent = ( isset( $array_editcontent[$pid] ) and intval( $array_editcontent[$pid] ) == 1 ) ? 1 : 0;
+            $delcontent = ( isset( $array_delcontent[$pid] ) and intval( $array_delcontent[$pid] ) == 1 ) ? 1 : 0;
+            $addcontent = ( $postcontent == 1 ) ? 1 : $addcontent;
+            $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` SET `addcontent` = '" . $addcontent . "', `postcontent` = '" . $postcontent . "', `editcontent` = '" . $editcontent . "', `delcontent` = '" . $delcontent . "' WHERE `pid` =" . $pid . " LIMIT 1" );
+        }
+        
+        nv_del_moduleCache( 'settings' );
+        nv_del_moduleCache( $module_name );
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass() );
+        die();
+    }
+    
+    $array_post_title = array();
+    $array_post_title[0][0] = $lang_global['who_view0'];
+    
+    $array_post_title[1][0] = $lang_global['who_view1'];
+    
+    $groups_list = nv_groups_list();
+    foreach ( $groups_list as $group_id => $grtl )
+    {
+        $array_post_title[1][$group_id] = $grtl;
+    }
+    
+    $array_post_member = array();
+    $array_post_data = array();
+    
+    $sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` ORDER BY `pid` ASC";
+    $result = $db->sql_query( $sql );
+    while ( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $db->sql_fetchrow( $result ) )
+    {
+        if ( isset( $array_post_title[$member][$group_id] ) )
+        {
+            $array_post_member[$member][$group_id] = $pid;
+            $array_post_data[$pid] = array( 
+                "pid" => $pid, "member" => $member, "group_id" => $group_id, "addcontent" => $addcontent, "postcontent" => $postcontent, "editcontent" => $editcontent, "delcontent" => $delcontent 
+            );
+        }
+        else
+        {
+            $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` WHERE `pid` = " . $pid . " LIMIT 1" );
+        }
+    }
+    $a = 0;
+    $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "\" method=\"post\">";
+    $contents .= "<table class=\"tab1\">
+    <caption>" . $lang_module['group_content'] . "</caption>
+        <thead>
+            <tr align=\"center\">
+                <td>" . $lang_global['who_view3'] . "</td>
+                <td>" . $lang_module['group_addcontent'] . "</td>
+                <td>" . $lang_module['group_postcontent'] . "</td>
+                <td>" . $lang_module['group_editcontent'] . "</td>
+                <td>" . $lang_module['group_delcontent'] . "</td>
+            </tr>
+        </thead>";
+    
+    foreach ( $array_post_title as $member => $array_post_1 )
+    {
+        foreach ( $array_post_1 as $group_id => $array_post_2 )
+        {
+            $a ++;
+            $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
+            $pid = ( isset( $array_post_member[$member][$group_id] ) ) ? $array_post_member[$member][$group_id] : 0;
+            if ( $pid > 0 )
+            {
+                $addcontent = $array_post_data[$pid]['addcontent'];
+                $postcontent = $array_post_data[$pid]['postcontent'];
+                $editcontent = $array_post_data[$pid]['editcontent'];
+                $delcontent = $array_post_data[$pid]['delcontent'];
+            }
+            else
+            {
+                $addcontent = $postcontent = $editcontent = $delcontent = 0;
+                $pid = $db->sql_query_insert_id( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` 
+            (`pid`,`member`, `group_id`,`addcontent`,`postcontent`,`editcontent`,`delcontent`) VALUES 
+            (NULL , '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "'  )" );
+            }
+            $contents .= "<tbody" . $class . ">
+        <tr>
+            <td><strong>" . $array_post_2 . "</strong><input type=\"hidden\" value=\"" . $pid . "\" name=\"array_pid[]\"></td>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_addcontent[$pid]\" " . ( ( $addcontent ) ? "checked=\"checked\"" : "" ) . "></td>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_postcontent[$pid]\" " . ( ( $postcontent ) ? "checked=\"checked\"" : "" ) . "></td>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_editcontent[$pid]\" " . ( ( $editcontent ) ? "checked=\"checked\"" : "" ) . "></td>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_delcontent[$pid]\" " . ( ( $delcontent ) ? "checked=\"checked\"" : "" ) . "></td>
+            </tr>
+        </tbody>";
+        }
+    }
+    $contents .= "<tfoot><tr><td style=\"text-align: center;\" colspan=\"5\">
+        <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\">
+        <input type=\"hidden\" value=\"1\" name=\"savepost\">";
+    $contents .= "</td></tr><tfoot>";
+    $contents .= "</table>";
+    $contents .= "</form>";
+}
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
