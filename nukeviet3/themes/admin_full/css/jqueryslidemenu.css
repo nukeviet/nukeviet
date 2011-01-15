@@ -4,7 +4,7 @@
 	font: bold 11px Arial;
 	width: 100%;
 	background:url(../images/bghead.png) repeat-x center;
-	padding:2px 4px;
+	padding:2px 0px;
 	border-top:1px solid #666666;
 	position:relative;
 	z-index:1000;
