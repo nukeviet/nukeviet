@@ -29,6 +29,7 @@ $lang_module['upload_file_created'] = "Đã tạo thành công file ";
 $lang_module['upload_file_maxsize'] = "File quá giới hạn cho phép";
 $lang_module['upload_file_error_movefile'] = "Lỗi không có quyền tạo file, hãy kiểm tra lại chmod thư mục";
 $lang_module['upload_file_error_invalidurl'] = "Đường dẫn file không hợp lệ";
+$lang_module['upload_error_browser_ie6'] = "Lỗi: Hệ thống không hỗ trợ chức năng này trên trình duyệt Internet Explorer 6, Bạn cần nâng cấp trình duyệt lên phiên bản mới hơn hoặc chuyển sang sử dụng các trình duyệt khác như: Mozilla Firefox, Safari, Opera, Chrome ... ";
 
 $lang_module['upload_size'] = "Kích thước";
 $lang_module['upload_width'] = "Rộng";

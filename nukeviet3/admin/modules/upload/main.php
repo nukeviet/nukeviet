@@ -9,6 +9,11 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 //age_title = $lang_module['upload_manager'];
 
 
+if ( strpos( $client_info['browser']['name'], 'Internet Explorer v6' ) !== false )
+{
+    nv_info_die( $global_config['site_description'], $lang_global['site_info'], "<br />" . $lang_module['upload_error_browser_ie6'] );
+}
+
 # config
 $path = ( defined( 'NV_IS_SPADMIN' ) ) ? "" : NV_UPLOADS_DIR;
 $path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get', $path ) ), ENT_QUOTES );
@@ -21,18 +26,18 @@ $uploadflag = $nv_Request->isset_request( 'confirm', 'post' );
 if ( $uploadflag )
 {
     $imgurl = htmlspecialchars( trim( $nv_Request->get_string( 'imgurl', 'post' ) ), ENT_QUOTES );
-    if ( is_uploaded_file( $_FILES ['fileupload'] ['tmp_name'] ) && nv_check_allow_upload_dir( $currentpath ) )
+    if ( is_uploaded_file( $_FILES['fileupload']['tmp_name'] ) && nv_check_allow_upload_dir( $currentpath ) )
     {
         require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
-        $upload = new upload( $admin_info ['allow_files_type'], $global_config ['forbid_extensions'], $global_config ['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-        $upload_info = $upload->save_file( $_FILES ['fileupload'], NV_ROOTDIR . '/' . $currentpath, false );
-        if ( ! empty( $upload_info ['error'] ) )
+        $upload = new upload( $admin_info['allow_files_type'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
+        $upload_info = $upload->save_file( $_FILES['fileupload'], NV_ROOTDIR . '/' . $currentpath, false );
+        if ( ! empty( $upload_info['error'] ) )
         {
-            $errors [] = $upload_info ['error'];
+            $errors[] = $upload_info['error'];
         }
         else
         {
-            $selectedfile = $upload_info ['basename'];
+            $selectedfile = $upload_info['basename'];
         }
     }
     elseif ( ! empty( $imgurl ) )
@@ -42,7 +47,7 @@ if ( $uploadflag )
         {
             $imgname = end( explode( "/", $imgurl ) );
             $imgname = str_replace( '%', '_', $imgname );
-            $file_type = strtolower( $types [$prover [2]] );
+            $file_type = strtolower( $types[$prover[2]] );
             if ( in_array( $file_type, $allowed_extensions ) )
             {
                 include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
@@ -60,22 +65,22 @@ if ( $uploadflag )
                 }
                 else
                 {
-                    $errors [] = $lang_module ['upload_file_error_movefile'];
+                    $errors[] = $lang_module['upload_file_error_movefile'];
                 }
             }
             else
             {
-                $errors [] = $lang_module ['upload_file_error_movefile'];
+                $errors[] = $lang_module['upload_file_error_movefile'];
             }
         }
         else
         {
-            $errors [] = $lang_module ['upload_create_invalid_filetype'];
+            $errors[] = $lang_module['upload_create_invalid_filetype'];
         }
     }
     else
     {
-        $errors [] = $lang_module ['upload_file_error_invalidurl'];
+        $errors[] = $lang_module['upload_file_error_invalidurl'];
     }
 }
 if ( ! empty( $errors ) )
@@ -112,13 +117,13 @@ $(function(){
 			</td>
 			<td valign="top">
 				<select name="imgtype" id="imgtype" style="margin-left:10px;margin-right:10px;float:right">
-				<option value="file" ' . ( ( $type == 'file' ) ? ' selected' : '' ) . '>' . $lang_module ['type_file'] . '</option>
-				<option value="image" ' . ( ( $type == 'image' ) ? ' selected' : '' ) . '>' . $lang_module ['type_image'] . '</option>
-				<option value="flash" ' . ( ( $type == 'flash' ) ? ' selected' : '' ) . '>' . $lang_module ['type_flash'] . '</option>
+				<option value="file" ' . ( ( $type == 'file' ) ? ' selected' : '' ) . '>' . $lang_module['type_file'] . '</option>
+				<option value="image" ' . ( ( $type == 'image' ) ? ' selected' : '' ) . '>' . $lang_module['type_image'] . '</option>
+				<option value="flash" ' . ( ( $type == 'flash' ) ? ' selected' : '' ) . '>' . $lang_module['type_flash'] . '</option>
 				</select><input type="button" id="uploadfile" value="Upload" style="margin-left:10px;"/>
 				<form enctype="multipart/form-data" action="" name="uploadimg" id="uploadimg" style="display:none" method="POST">
 					<input type="hidden" name="path" value="' . $currentpath . '"/>
-					' . $lang_module ['upload_file'] . ' <input type="file" name="fileupload"/> ' . $lang_module ['upload_otherurl'] . ' <input type="text" name="imgurl"/> <input type="submit" value="GO" name="confirm"/>
+					' . $lang_module['upload_file'] . ' <input type="file" name="fileupload"/> ' . $lang_module['upload_otherurl'] . ' <input type="text" name="imgurl"/> <input type="submit" value="GO" name="confirm"/>
 				</form>
 				<br />
 				<div id="imglist" name="imglist" style="height:360px;width:590px;vertical-align:top;padding:10px"></div>
@@ -151,14 +156,14 @@ $contents .= '</tbody>
 </table>
 ';
 $contents .= '
-<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $global_config ['admin_theme'] . '/css/admin.css" type="text/css" />
+<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/admin.css" type="text/css" />
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.all.css" rel="stylesheet" />
 <link type="text/css" href="' . NV_BASE_SITEURL . 'js/jquery/jquery.treeview.css" rel="stylesheet" />
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.treeview.min.js"></script>
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery-ui-1.8.2.custom.js"></script>
 <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/contextmenu/jquery.contextmenu.r2.js"></script>
-<div id="renamefolder" title="' . $lang_module ['renamefolder'] . '">' . $lang_module ['rename_newname'] . '<input type="text" name="foldername"/></div>
-<div id="createfolder" title="' . $lang_module ['createfolder'] . '">' . $lang_module ['rename_newname'] . '<input type="text" name="createfoldername"/></div>
+<div id="renamefolder" title="' . $lang_module['renamefolder'] . '">' . $lang_module['rename_newname'] . '<input type="text" name="foldername"/></div>
+<div id="createfolder" title="' . $lang_module['createfolder'] . '">' . $lang_module['rename_newname'] . '<input type="text" name="createfoldername"/></div>
 <script type="text/javascript">
 function insertvaluetofield(){
 	var value = $("#posthidden").val();
@@ -181,7 +186,7 @@ $("div#createfolder").dialog({
 			var foldervalue = $("span#foldervalue").attr("title");
 			var newname = $("input[name=createfoldername]").val();
 			if (newname==""){
-				alert("' . $lang_module ['rename_nonamefolder'] . '");
+				alert("' . $lang_module['rename_nonamefolder'] . '");
 				$("input[name=foldername]").focus();
 				return false;
 			}
@@ -209,7 +214,7 @@ $("div#renamefolder").dialog({
 			var foldervalue = $("span#foldervalue").attr("title");
 			var newname = $("input[name=foldername]").val();
 			if (newname=="" || newname==foldervalue){
-				alert("' . $lang_module ['rename_nonamefolder'] . '");
+				alert("' . $lang_module['rename_nonamefolder'] . '");
 				$("input[name=foldername]").focus();
 				return false;
 			}
@@ -230,14 +235,14 @@ $("div#renamefolder").dialog({
 	<span style="display:none" id="foldervalue" title="' . $currentpath . '"></span>
     <div style="display:none" id="folder-menu">
         <ul>';
-if ( $admin_info ['allow_create_subdirectories'] )
+if ( $admin_info['allow_create_subdirectories'] )
 {
-    $contents .= '<li id="createfolder"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/copy.png"/>' . $lang_module ['createfolder'] . '</li>';
+    $contents .= '<li id="createfolder"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/copy.png"/>' . $lang_module['createfolder'] . '</li>';
 }
-if ( $admin_info ['allow_modify_subdirectories'] )
+if ( $admin_info['allow_modify_subdirectories'] )
 {
-    $contents .= '<li id="renamefolder"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/rename.png"/>' . $lang_module ['renamefolder'] . '</li>
-            <li id="deletefolder"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/delete.png"/>' . $lang_module ['deletefolder'] . '</li>';
+    $contents .= '<li id="renamefolder"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/rename.png"/>' . $lang_module['renamefolder'] . '</li>
+            <li id="deletefolder"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/delete.png"/>' . $lang_module['deletefolder'] . '</li>';
 }
 $contents .= '
         </ul>
