@@ -40,7 +40,7 @@ $lang_module['PingNotSupported'] = "PING không được hỗ trợ";
 $lang_module['pleasePingAgain'] = "Bạn vừa mới gửi đi rồi. Hãy đợi một thời gian nữa";
 $lang_module['searchEngineValue'] = "Đường dẫn để PING";
 $lang_module['searchEngineFailed'] = "Lỗi link để ping";
-$lang_module['pingOK'] = "Hệ thống đã gửi file Sitemap thành công. Việc này có thể được thực hiện lại sao 60 phút";
+$lang_module['pingOK'] = "Hệ thống đã gửi file Sitemap thành công. Việc này có thể được thực hiện lại sau 60 phút";
 
 $lang_module['revision_no_support'] = "Lỗi, chức năng này chỉ dùng cho phiên bản lớn hơn 3.0.12";
 $lang_module['revision'] = "Cập nhật theo Revision";
