@@ -333,13 +333,13 @@ elseif ( $step == 5 )
                 if ( empty( $db_config['error'] ) )
                 {
                     define( 'NV_IS_MODADMIN', true );
-                    $module_name = "";
+                    $module_name = "modules";
                     $lang_module['modules'] = "";
                     $lang_module['vmodule_add'] = "";
-                    $lang_module['blocks'] = "";
                     $lang_module['autoinstall'] = "";
                     $lang_global['mod_modules'] = "";
                     require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/modules/functions.php" );
+                    $module_name = "";
                     require_once ( NV_ROOTDIR . '/includes/sqldata.php' );
                     
                     //cai dat du lieu cho  ngon ngu
@@ -516,7 +516,7 @@ elseif ( $step == 6 )
             $userid = $db->sql_query_insert_id( $sql );
             
             $db->sql_query( "TRUNCATE TABLE `" . $db_config['prefix'] . "_authors`" );
-            $sql = "INSERT INTO `" . $db_config['prefix'] . "_authors` (`admin_id`, `editor`, `lev`, `files_level`, `position`, `addtime`, `edittime`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) VALUES(" . $userid . ", 'ckeditor', 1, 'images,flash,documents,archives|1|1|1', 'Administrator', 0, 0, 0, '', '', 0, '', '')";
+            $sql = "INSERT INTO `" . $db_config['prefix'] . "_authors` (`admin_id`, `editor`, `lev`, `files_level`, `position`, `addtime`, `edittime`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) VALUES(" . $userid . ", 'ckeditor', 1, 'adobe,application,archives,audio,documents,flash,images,real,video|1|1|1', 'Administrator', 0, 0, 0, '', '', 0, '', '')";
             if ( $userid > 0 and $db->sql_query( $sql ) )
             {
                 $sql = array();

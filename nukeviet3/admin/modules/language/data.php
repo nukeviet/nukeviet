@@ -72,9 +72,9 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
             $lang_module['blocks'] = "";
             $lang_module['autoinstall'] = "";
             $lang_global['mod_modules'] = "";
-            
+            $module_name = "modules";
             require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/modules/functions.php" );
-            
+            $module_name = "";
             $array_module_setup = explode( ",", NV_MODULE_SETUP_DEFAULT );
             foreach ( $array_module_setup as $setmodule )
             {

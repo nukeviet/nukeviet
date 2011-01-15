@@ -346,7 +346,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'dump_backup_ext', 'gz'),
 ('sys', 'global', 'dump_backup_day', '30'),
 ('sys', 'global', 'gfx_chk', '" . $global_config['gfx_chk'] . "'),
-('sys', 'global', 'file_allowed_ext', 'images,flash,documents,archives'),
+('sys', 'global', 'file_allowed_ext', 'adobe,application,archives,audio,documents,flash,images,real,video'),
 ('sys', 'global', 'forbid_extensions', 'php'),
 ('sys', 'global', 'forbid_mimes', ''),
 ('sys', 'global', 'nv_max_size', '" . min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) ) . "'),
