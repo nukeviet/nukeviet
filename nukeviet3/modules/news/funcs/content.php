@@ -531,7 +531,7 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
     {
         $xtpl->parse( 'main.save_temp' );
     }
-    if ( $array_post_user['postcontent'] )
+    if ( $array_post_user['postcontent'] or ( $rowcontent['status'] and $rowcontent['id'] and $array_post_user['editcontent'] ) )
     {
         $xtpl->parse( 'main.postcontent' );
     }
