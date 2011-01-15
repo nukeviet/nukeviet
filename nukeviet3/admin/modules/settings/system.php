@@ -126,6 +126,14 @@ if ( $submit )
     $array_config_global['str_referer_blocker'] = $nv_Request->get_int( 'str_referer_blocker', 'post' );
     
     $array_config_global['is_url_rewrite'] = 0;
+    if ( $array_config_global['lang_multi'] == 0 )
+    {
+        $array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post', 0 );
+    }
+    else
+    {
+        $array_config_global['rewrite_optional'] = 0;
+    }    
     if ( $sys_info['supports_rewrite'] !== false )
     {
         $array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post', 0 );
@@ -139,16 +147,7 @@ if ( $submit )
             }
         }
     }
-    
-    if ( $array_config_global['lang_multi'] == 0 )
-    {
-        $array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post', 0 );
-    }
-    else
-    {
-        $array_config_global['rewrite_optional'] = 0;
-    }
-    
+
     foreach ( $array_config_global as $config_name => $config_value )
     {
         $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
