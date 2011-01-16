@@ -234,7 +234,7 @@ if ( $admin_info['allow_modify_files'] )
     echo '<li id="create"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/copy.png"/>' . $lang_module['upload_createimage'] . '</li>
 	<li id="cut"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/cut.png"/>' . $lang_module['move'] . '</li>
             <li id="rename"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/rename.png"/>' . $lang_module['rename'] . '</li>
-            <li id="delete"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/delete.png"/>' . $lang_module['upload_delimage'] . '</li>';
+            <li id="delete"><img src="' . NV_BASE_SITEURL . 'js/contextmenu/icons/delete.png"/>' . $lang_module['upload_delfile'] . '</li>';
 }
 echo '
         </ul>

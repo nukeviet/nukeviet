@@ -36,7 +36,7 @@ $lang_module['upload_width'] = "Rộng";
 $lang_module['upload_height'] = "Cao";
 $lang_module['upload_file'] = "Upload file";
 $lang_module['upload_otherurl'] = "hoặc URL";
-$lang_module['upload_delimage'] = "Xóa hình";
+$lang_module['upload_delfile'] = "Xóa file";
 $lang_module['upload_createimage'] = "Tạo hình mới";
 
 $lang_module['type_file'] = " Tất cả";
