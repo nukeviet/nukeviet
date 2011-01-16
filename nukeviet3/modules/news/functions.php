@@ -41,7 +41,7 @@ foreach ( $list as $l )
     
     if ( NV_CURRENTTIME > $l['del_cache_time'] )
     {
-        $sql = "SELECT `id`, `listcatid`, `exptime`, `archive` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `exptime` > 0 AND `exptime` <= UNIX_TIMESTAMP() AND `archive`!='2' ORDER BY `exptime` ASC LIMIT 0 , 1";
+        $sql = "SELECT `id`, `listcatid`, `exptime`, `archive` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $l['catid'] . "` WHERE `exptime` > 0 AND `exptime` <= UNIX_TIMESTAMP() AND `archive`!='2' ORDER BY `exptime` ASC LIMIT 0 , 1";
         list( $id, $listcatid, $minexptime, $archive ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
         if ( intval( $id ) > 0 )
         {
@@ -55,13 +55,13 @@ foreach ( $list as $l )
             }
             nv_del_moduleCache( $module_name );
         }
-        list( $minpubltime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(publtime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `publtime` > UNIX_TIMESTAMP()" ) );
+        list( $minpubltime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(publtime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $l['catid'] . "` WHERE `publtime` > UNIX_TIMESTAMP()" ) );
         $minpubltime = ( empty( $minpubltime ) ) ? NV_CURRENTTIME + 26000000 : intval( $minpubltime );
         
         list( $id, $listcatid, $minexptime, $archive ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
         $minexptime = ( empty( $minexptime ) ) ? NV_CURRENTTIME + 26000000 : intval( $minexptime );
         $del_cache_time = min( $minpubltime, $minexptime );
-        $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `del_cache_time`=" . $db->dbescape( $del_cache_time ) . " WHERE `catid`=" . $catid_i . "" );
+        $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `del_cache_time`=" . $db->dbescape( $del_cache_time ) . " WHERE `catid`=" . $l['catid'] . "" );
     }
 }
 
