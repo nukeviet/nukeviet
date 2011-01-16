@@ -13,6 +13,7 @@ $allow_func = array(
     'main', 'edit' 
 );
 
+global $global_config;
 if ( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) )
 {
     $submenu['add'] = $lang_module['menuadd'];
