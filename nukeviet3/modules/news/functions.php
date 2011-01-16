@@ -53,7 +53,6 @@ foreach ( $list as $l )
             {
                 nv_archive_content_module( $id, $listcatid );
             }
-            nv_del_moduleCache( $module_name );
         }
         list( $minpubltime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(publtime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $l['catid'] . "` WHERE `publtime` > UNIX_TIMESTAMP()" ) );
         $minpubltime = ( empty( $minpubltime ) ) ? NV_CURRENTTIME + 26000000 : intval( $minpubltime );
@@ -62,6 +61,7 @@ foreach ( $list as $l )
         $minexptime = ( empty( $minexptime ) ) ? NV_CURRENTTIME + 26000000 : intval( $minexptime );
         $del_cache_time = min( $minpubltime, $minexptime );
         $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `del_cache_time`=" . $db->dbescape( $del_cache_time ) . " WHERE `catid`=" . $l['catid'] . "" );
+        nv_del_moduleCache( $module_name );
     }
 }
 
