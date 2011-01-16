@@ -8,22 +8,22 @@
  */
 
 /**********************************************************************
- **
- ** A class to download files
- ** Version 1.0
- ** Features : 
- **      - hide the real path to the file
- **      - allow / disallow download resuming
- **      - partial download (useful for download managers)
- **      - rename the file on the fly
- **      - limit download speed
- **
- ** Author: Mourad Boufarguine / EPT <mourad.boufarguine@gmail.com>
- **
- ** License: Public Domain
- ** Warranty: None
- **
- ***********************************************************************/
+**
+** A class to download files
+** Version 1.0
+** Features : 
+**      - hide the real path to the file
+**      - allow / disallow download resuming
+**      - partial download (useful for download managers)
+**      - rename the file on the fly
+**      - limit download speed
+**
+** Author: Mourad Boufarguine / EPT <mourad.boufarguine@gmail.com>
+**
+** License: Public Domain
+** Warranty: None
+**
+***********************************************************************/
 
 /**
  * include("download.class.php");       // load the class file
@@ -73,17 +73,19 @@ if ( ! defined( 'ALLOWED_SET_TIME_LIMIT' ) )
 class download
 {
 
-    private $properties = array(  //
+    private $properties = array( //
         "path" => "", //
-"name" => "", //
-"extension" => "", //
-"type" => "", //
-"size" => "", //
-"mtime" => 0, //
-"resume" => "", //
-"max_speed" => "", //
-"directory" => ""  //
-    );
+        "name" => "", //
+        "extension" => "", //
+        "type" => "", //
+        "size" => "", //
+        "mtime" => 0, //
+        "resume" => "", //
+        "max_speed" => "", //
+        "directory" => "" //
+        );
+
+    private $disable_functions = array();
 
     /**
      * download::__construct()
@@ -94,17 +96,17 @@ class download
      * @param integer $max_speed
      * @return
      */
-    public function __construct ( $path, $directory, $name = '', $resume = false, $max_speed = 0 )
+    public function __construct( $path, $directory, $name = '', $resume = false, $max_speed = 0 )
     {
         $directory = $this->real_dir( $directory );
         if ( empty( $directory ) or ! is_dir( $directory ) )
         {
             $directory = NV_UPLOADS_REAL_DIR;
         }
-        
+
         $path = $this->real_path( $path, $directory );
         $extension = strtolower( strrchr( $path, '.' ) );
-        $this->properties = array(  //
+        $this->properties = array( //
             "path" => $path, //
             "name" => ( $name == "" ) ? substr( strrchr( "/" . $path, "/" ), 1 ) : $name, //
             "extension" => $extension, //
@@ -113,8 +115,9 @@ class download
             "mtime" => ( $mtime = filemtime( $path ) ) > 0 ? $mtime : time(), //
             "resume" => $resume, //
             "max_speed" => $max_speed, //
-            "directory" => $directory  //
-        );
+            "directory" => $directory //
+            );
+        $this->disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
     }
 
     /**
@@ -123,7 +126,7 @@ class download
      * @param mixed $dir
      * @return
      */
-    function real_dir ( $dir )
+    function real_dir( $dir )
     {
         if ( empty( $dir ) ) return false;
         $dir = realpath( $dir );
@@ -132,7 +135,7 @@ class download
         $dir = rtrim( $dir, "\\/" );
         if ( ! preg_match( "/^(" . nv_preg_quote( NV_ROOTDIR ) . ")(\/[\S]+)/", $dir ) ) return false;
         return $dir;
-    
+
     }
 
     /**
@@ -141,28 +144,28 @@ class download
      * @param mixed $path
      * @return
      */
-    function real_path ( $path, $dir )
+    function real_path( $path, $dir )
     {
         if ( empty( $path ) or ! is_readable( $path ) or ! is_file( $path ) )
         {
             return false;
         }
-        
+
         $realpath = realpath( $path );
-        
+
         if ( empty( $realpath ) )
         {
             return false;
         }
-        
+
         $realpath = str_replace( '\\', '/', $realpath );
         $realpath = rtrim( $realpath, "\\/" );
-        
+
         if ( ! preg_match( "/^(" . nv_preg_quote( $dir ) . ")(\/[\S]+)/", $realpath ) )
         {
             return false;
         }
-        
+
         return $realpath;
     }
 
@@ -172,29 +175,39 @@ class download
      * @param mixed $path
      * @return
      */
-    private function my_mime_content_type ( $path )
+    private function my_mime_content_type( $path )
     {
-        if ( function_exists( 'mime_content_type' ) )
+        if ( function_exists( 'mime_content_type' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
         {
             return mime_content_type( $path );
         }
-        
-        if ( function_exists( 'finfo_open' ) )
+
+        if ( function_exists( 'finfo_open' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'finfo_open', $this->disable_functions ) ) ) )
         {
             $finfo = finfo_open( FILEINFO_MIME );
             $mimetype = finfo_file( $finfo, $path );
             finfo_close( $finfo );
-            return $mimetype;
+            $mimetype = explode( ";", $mimetype );
+            return trim( $mimetype[0] );
         }
-        
+
+        if ( function_exists( 'system' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
+        {
+            ob_start();
+            system( "file -i -b " . $path );
+            $mimetype = ob_get_clean();
+            $mimetype = explode( ";", $mimetype );
+            return trim( $mimetype[0] );
+        }
+
         $mime_types = nv_parse_ini_file( NV_MIME_INI_FILE );
-        
+
         if ( array_key_exists( $this->properties['extension'], $mime_types ) )
         {
             if ( is_string( $mime_types[$ext] ) ) return $mime_types[$ext];
-            else return $mime_types[$ext][0];
+            else  return $mime_types[$ext][0];
         }
-        
+
         return 'application/force-download';
     }
 
@@ -204,21 +217,18 @@ class download
      * @param mixed $key
      * @return
      */
-    private function nv_getenv ( $key )
+    private function nv_getenv( $key )
     {
         if ( isset( $_SERVER[$key] ) )
         {
             return $_SERVER[$key];
-        }
-        elseif ( isset( $_ENV[$key] ) )
+        } elseif ( isset( $_ENV[$key] ) )
         {
             return $_ENV[$key];
-        }
-        elseif ( @getenv( $key ) )
+        } elseif ( @getenv( $key ) )
         {
             return @getenv( $key );
-        }
-        elseif ( function_exists( 'apache_getenv' ) && apache_getenv( $key, true ) )
+        } elseif ( function_exists( 'apache_getenv' ) && apache_getenv( $key, true ) )
         {
             return apache_getenv( $key, true );
         }
@@ -231,12 +241,12 @@ class download
      * @param mixed $property
      * @return
      */
-    public function get_property ( $property )
+    public function get_property( $property )
     {
         if ( array_key_exists( $property, $this->properties ) ) return $this->properties[$property];
-        
-        else return null;
-    
+
+        else  return null;
+
     }
 
     /**
@@ -246,17 +256,16 @@ class download
      * @param mixed $value
      * @return
      */
-    public function set_property ( $property, $value )
+    public function set_property( $property, $value )
     {
         if ( array_key_exists( $property, $this->properties ) )
         {
-            
+
             $this->properties[$property] = $value;
-            
+
             return true;
         }
-        else
-            return false;
+        else  return false;
     }
 
     /**
@@ -264,33 +273,33 @@ class download
      * 
      * @return
      */
-    public function download_file ( )
+    public function download_file()
     {
         if ( ! $this->properties['path'] )
         {
             die( "Nothing to download!" );
         }
-        
+
         $seek_start = 0;
-        $seek_end = - 1;
+        $seek_end = -1;
         $data_section = false;
-        
+
         if ( ( $http_range = nv_getenv( 'HTTP_RANGE' ) ) != "" )
         {
             $seek_range = substr( $http_range, strlen( 'bytes=' ) );
-            
+
             $range = explode( '-', $seek_range );
-            
+
             if ( ! empty( $range[0] ) )
             {
                 $seek_start = intval( $range[0] );
             }
-            
+
             if ( isset( $range[1] ) and ! empty( $range[1] ) )
             {
                 $seek_end = intval( $range[1] );
             }
-            
+
             if ( ! $this->properties['resume'] )
             {
                 $seek_start = 0;
@@ -300,7 +309,7 @@ class download
                 $data_section = true;
             }
         }
-        
+
         if ( @ob_get_length() )
         {
             @ob_end_clean();
@@ -310,25 +319,25 @@ class download
         {
             set_time_limit( 0 );
         }
-        
+
         if ( $seek_start > ( $this->properties['size'] - 1 ) )
         {
             $seek_start = 0;
         }
-        
+
         $res = fopen( $this->properties['path'], 'rb' );
-        
+
         if ( ! $res )
         {
             die( 'File error' );
         }
-        
+
         if ( $seek_start ) fseek( $res, $seek_start );
         if ( $seek_end < $seek_start )
         {
             $seek_end = $this->properties['size'] - 1;
         }
-        
+
         header( "Pragma: public" );
         header( "Expires: 0" );
         header( "Cache-Control:" );
@@ -344,7 +353,7 @@ class download
             header( 'Content-Disposition: attachment; filename="' . $this->properties['name'] . '";' );
         }
         header( 'Last-Modified: ' . date( 'D, d M Y H:i:s \G\M\T', $this->properties['mtime'] ) );
-        
+
         if ( $data_section and $this->properties['resume'] )
         {
             header( "HTTP/1.1 206 Partial Content" );
@@ -357,10 +366,8 @@ class download
         {
             header( "Content-Length: " . $this->properties['size'] );
         }
-        
-        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
-        
-        if ( function_exists( 'usleep' ) and ! in_array( 'usleep', $disable_functions ) and ( $speed = $this->properties['max_speed'] ) > 0 )
+
+        if ( function_exists( 'usleep' ) and ! in_array( 'usleep', $this->disable_functions ) and ( $speed = $this->properties['max_speed'] ) > 0 )
         {
             $sleep_time = ( 8 / $speed ) * 1e6;
         }
@@ -368,10 +375,10 @@ class download
         {
             $sleep_time = 0;
         }
-        
+
         while ( ! ( connection_aborted() or connection_status() == 1 ) and ! feof( $res ) )
         {
-            print ( fread( $res, 1024 * 8 ) ) ;
+            print ( fread( $res, 1024 * 8 ) );
             flush();
             if ( $sleep_time > 0 )
             {
@@ -379,7 +386,7 @@ class download
             }
         }
         fclose( $res );
-        
+
         ignore_user_abort( $old_status );
         if ( defined( 'ALLOWED_SET_TIME_LIMIT' ) )
         {

@@ -53,11 +53,11 @@ class upload
 
     var $allowmimes = array();
 
-    var $forbid_extensions = array( 
-        'php' 
-    );
+    var $forbid_extensions = array( 'php' );
 
     var $forbid_mimes = array();
+
+    var $disable_functions = array();
 
     /**
      * upload::upload()
@@ -70,20 +70,15 @@ class upload
      * @param integer $maxheight
      * @return
      */
-    function upload ( $allowed_filetypes = array('any'), $forbid_extensions = array("php"), $forbid_mimes = array(), $maxsize = 0, $maxwidth = 0, $maxheight = 0 )
+    function upload( $allowed_filetypes = array( 'any' ), $forbid_extensions = array( "php" ), $forbid_mimes = array(), $maxsize = 0, $maxwidth = 0, $maxheight = 0 )
     {
         $this->maxsize = intval( $maxsize );
         $this->maxwidth = intval( $maxwidth );
         $this->maxheight = intval( $maxheight );
-        $this->forbid_extensions = is_array( $forbid_extensions ) ? $forbid_extensions : array( 
-            $forbid_extensions 
-        );
-        $this->forbid_mimes = is_array( $forbid_mimes ) ? $forbid_mimes : array( 
-            $forbid_mimes 
-        );
-        $this->allowmimes = $this->get_allow_ext_mimes( is_array( $allowed_filetypes ) ? $allowed_filetypes : array( 
-            $allowed_filetypes 
-        ) );
+        $this->forbid_extensions = is_array( $forbid_extensions ) ? $forbid_extensions : array( $forbid_extensions );
+        $this->forbid_mimes = is_array( $forbid_mimes ) ? $forbid_mimes : array( $forbid_mimes );
+        $this->allowmimes = $this->get_allow_ext_mimes( is_array( $allowed_filetypes ) ? $allowed_filetypes : array( $allowed_filetypes ) );
+        $this->disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
     }
 
     /**
@@ -92,7 +87,7 @@ class upload
      * @param mixed $word
      * @return
      */
-    function string_to_filename ( $word )
+    function string_to_filename( $word )
     {
         $word = nv_EncString( $word );
         $word = preg_replace( '/[^a-z0-9\.\-\_ ]/i', '', $word );
@@ -108,19 +103,17 @@ class upload
      * @param bool $process_sections
      * @return
      */
-    function get_ini_file ( $filename, $process_sections = false )
+    function get_ini_file( $filename, $process_sections = false )
     {
         $process_sections = ( bool )$process_sections;
-        
+
         if ( ! file_exists( $filename ) || ! is_readable( $filename ) ) return false;
-        
-        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
-        
-        if ( function_exists( 'parse_ini_file' ) and ! in_array( 'parse_ini_file', $disable_functions ) )
+
+        if ( function_exists( 'parse_ini_file' ) and ! in_array( 'parse_ini_file', $this->disable_functions ) )
         {
             return parse_ini_file( $filename, $process_sections );
         }
-        
+
         $data = file( $filename );
         $ini = array();
         $section = '';
@@ -138,12 +131,8 @@ class upload
             list( $key, $value ) = explode( "=", $line );
             $key = trim( $key );
             $value = trim( $value );
-            $value = str_replace( array( 
-                '"', "'" 
-            ), array( 
-                "", "" 
-            ), $value );
-            
+            $value = str_replace( array( '"', "'" ), array( "", "" ), $value );
+
             if ( $process_sections && ! empty( $section ) )
             {
                 unset( $match );
@@ -173,20 +162,55 @@ class upload
     }
 
     /**
+     * upload::get_mime_type()
+     * 
+     * @param mixed $filename
+     * @return void
+     */
+    function get_mime_type( $userfile )
+    {
+        if ( function_exists( 'finfo_open' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'finfo_open', $this->disable_functions ) ) ) )
+        {
+            $finfo = finfo_open( FILEINFO_MIME );
+            $mimetype = finfo_file( $finfo, $userfile['tmp_name'] );
+            finfo_close( $finfo );
+            $mimetype = explode( ";", $mimetype );
+            return trim( $mimetype[0] );
+        } elseif ( function_exists( 'system' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
+        {
+            ob_start();
+            system( "file -i -b " . $userfile['tmp_name'] );
+            $mimetype = ob_get_clean();
+            $mimetype = explode( ";", $mimetype );
+            return trim( $mimetype[0] );
+        } elseif ( function_exists( 'mime_content_type' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
+        {
+            return mime_content_type( $userfile['tmp_name'] );
+        } elseif ( isset( $userfile['type'] ) )
+        {
+            return $userfile['type'];
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    /**
      * upload::get_allow_ext_mimes()
      * 
      * @param mixed $allowed_filetypes
      * @return
      */
-    function get_allow_ext_mimes ( $allowed_filetypes )
+    function get_allow_ext_mimes( $allowed_filetypes )
     {
         if ( $allowed_filetypes == "any" or ( ! empty( $allowed_filetypes ) and is_array( $allowed_filetypes ) and in_array( "any", $allowed_filetypes ) ) )
         {
             return "*";
         }
-        
+
         $ini = $this->get_ini_file( NV_MIME_INI_FILE, true );
-        
+
         $allowmimes = array();
         if ( ! empty( $allowed_filetypes ) )
         {
@@ -223,13 +247,14 @@ class upload
      * @param mixed $file
      * @return
      */
-    function verify_image ( $file )
+    function verify_image( $file )
     {
         $file = preg_replace( '/\0/uis', '', $file );
         $txt = file_get_contents( $file );
         if ( $txt === false ) return false;
         //if ( preg_match( '#&(quot|lt|gt|nbsp|amp);#i', $txt ) ) return false;
         //else
+
         if ( preg_match( "#&\#x([0-9a-f]+);#i", $txt ) ) return false;
         elseif ( preg_match( '#&\#([0-9]+);#i', $txt ) ) return false;
         elseif ( preg_match( "#([a-z]*)=([\`\'\"]*)script:#iU", $txt ) ) return false;
@@ -238,6 +263,7 @@ class upload
         elseif ( preg_match( "#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $txt ) ) return false;
         elseif ( preg_match( "#(<[^>]+)style=([\`\'\"]*).*behaviour\([^>]*>#iU", $txt ) ) return false;
         elseif ( preg_match( "#</*(applet|link|style|script|iframe|frame|frameset)[^>]*>#i", $txt ) ) return false;
+        elseif ( preg_match( "#<\?(.*)\?>#ms", $txt ) ) return false;
         return true;
     }
 
@@ -247,18 +273,17 @@ class upload
      * @param mixed $userfile
      * @return
      */
-    function check_tmpfile ( $userfile )
+    function check_tmpfile( $userfile )
     {
         if ( empty( $userfile ) ) return _ERROR_UPLOAD_FAILED;
-        
-        $variables = array( 
-            'name', 'tmp_name', 'type', 'size' 
-        );
+
+        $variables = array( 'name', 'tmp_name', 'type', 'size' );
+        $userfile['type'] = $this->get_mime_type( $userfile );
         foreach ( $variables as $val )
         {
             if ( ! isset( $userfile[$val] ) or empty( $userfile[$val] ) ) return _ERROR_UPLOAD_FAILED;
         }
-        
+
         if ( ! isset( $userfile['error'] ) or $userfile['error'] != UPLOAD_ERR_OK )
         {
             switch ( $userfile['error'] )
@@ -302,10 +327,14 @@ class upload
         {
             return _ERROR_UPLOAD_TYPE_NOT_ALLOWED;
         }
-        
+
         if ( $this->allowmimes != "*" )
         {
             if ( ! isset( $this->allowmimes[$userfile['type']] ) )
+            {
+                return _ERROR_UPLOAD_TYPE_NOT_ALLOWED;
+            }
+            if ( $extension != $this->allowmimes[$userfile['type']] )
             {
                 return _ERROR_UPLOAD_TYPE_NOT_ALLOWED;
             }
@@ -314,18 +343,18 @@ class upload
                 return sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->maxsize );
             }
         }
-        
+
         if ( preg_match( '#image\/[x\-]*([a-z]+)#', $userfile['type'] ) or preg_match( "#application\/[x\-]*(shockwave\-flash)#", $userfile['type'] ) )
         {
             $this->is_img = true;
             $this->img_info = @getimagesize( $userfile['tmp_name'] );
-            
+
             if ( empty( $this->img_info ) or ! isset( $this->img_info[0] ) or empty( $this->img_info[0] ) or ! isset( $this->img_info[1] ) or empty( $this->img_info[1] ) ) return _ERROR_UPLOAD_NOT_IMAGE;
-            
+
             if ( ! $this->verify_image( $userfile['tmp_name'] ) ) return _ERROR_UPLOAD_NOT_IMAGE;
-            
+
             if ( ! empty( $this->maxwidth ) and $this->img_info[0] > $this->maxwidth ) return sprintf( _ERROR_UPLOAD_IMAGE_WIDTH, $this->maxwidth );
-            
+
             if ( ! empty( $this->maxheight ) and $this->img_info[1] > $this->maxheight ) return sprintf( _ERROR_UPLOAD_IMAGE_HEIGHT, $this->maxheight );
         }
         return "";
@@ -337,10 +366,10 @@ class upload
      * @param mixed $savepath
      * @return
      */
-    function check_save_path ( $savepath )
+    function check_save_path( $savepath )
     {
         if ( empty( $savepath ) or ! is_dir( $savepath ) ) return _ERROR_UPLOAD_FORBIDDEN;
-        
+
         if ( ! is_writable( $savepath ) )
         {
             @chmod( $savepath, 0755 );
@@ -360,11 +389,11 @@ class upload
      * @param bool $replace_if_exists
      * @return
      */
-    function save_file ( $userfile, $savepath, $replace_if_exists = true )
+    function save_file( $userfile, $savepath, $replace_if_exists = true )
     {
         $this->is_img = false;
         $this->img_info = array();
-        
+
         $return = array();
         $return['error'] = $this->check_tmpfile( $userfile );
         if ( empty( $return['error'] ) )
@@ -375,7 +404,7 @@ class upload
         {
             return $return;
         }
-        
+
         if ( $this->allowmimes == "*" )
         {
             $extension = strtolower( strrchr( $userfile['name'], '.' ) );
@@ -392,7 +421,7 @@ class upload
             {
                 $fn = $userfile['name'];
             }
-            
+
             $fn = $this->string_to_filename( $fn );
             $fileext = $this->allowmimes[$userfile['type']];
             $path_info = pathinfo( $userfile['name'] );
@@ -406,7 +435,7 @@ class upload
             while ( file_exists( $savepath . $filename2 ) )
             {
                 $filename2 = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $filename );
-                $i ++;
+                $i++;
             }
             $filename = $filename2;
         }
@@ -414,7 +443,7 @@ class upload
         {
             @move_uploaded_file( $userfile['tmp_name'], $savepath . $filename );
         }
-        
+
         if ( ! file_exists( $savepath . $filename ) )
         {
             $return['error'] = _ERROR_UPLOAD_FAILED;
@@ -436,4 +465,5 @@ class upload
         return $return;
     }
 }
+
 ?>
