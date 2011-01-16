@@ -1489,7 +1489,7 @@ function nv_change_buffer ( $buffer )
     
     if ( ! defined( 'NV_ADMIN' ) )
     {
-        include ( NV_ROOTDIR . '/includes/class/optimizer.class.php' );
+        include_once ( NV_ROOTDIR . '/includes/class/optimizer.class.php' );
         $optimezer = new optimezer( $buffer, $sys_info['supports_tidy'] );
         $buffer = $optimezer->process();
         
