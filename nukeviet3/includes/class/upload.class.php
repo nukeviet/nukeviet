@@ -263,7 +263,7 @@ class upload
         elseif ( preg_match( "#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $txt ) ) return false;
         elseif ( preg_match( "#(<[^>]+)style=([\`\'\"]*).*behaviour\([^>]*>#iU", $txt ) ) return false;
         elseif ( preg_match( "#</*(applet|link|style|script|iframe|frame|frameset)[^>]*>#i", $txt ) ) return false;
-        elseif ( preg_match( "#<\?(.*)\?>#ms", $txt ) ) return false;
+        elseif ( preg_match( "#<\?php(.*)\?>#ms", $txt ) ) return false;
         return true;
     }
 
@@ -334,7 +334,7 @@ class upload
             {
                 return _ERROR_UPLOAD_TYPE_NOT_ALLOWED;
             }
-            if ( $extension != $this->allowmimes[$userfile['type']] )
+            if ( $extension != "." . $this->allowmimes[$userfile['type']] )
             {
                 return _ERROR_UPLOAD_TYPE_NOT_ALLOWED;
             }
