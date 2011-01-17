@@ -1,0 +1,170 @@
+.smoothmenu {
+    font: bold 12px Verdana;
+    background: #414141; /*background of menu bar (default state)*/
+    width: 100%;
+    z-index: 500;
+	position:relative;
+}
+
+.smoothmenu ul {
+    z-index: 100;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+/*Top level list items*/
+.smoothmenu ul li {
+    position: relative;
+    display: inline;
+    float: left;
+}
+
+/*Top level menu link items style*/
+.smoothmenu ul li a {
+    display: block;
+    background: #414141; /*background of menu items (default state)*/
+    color: white;
+    padding: 8px 10px;
+    border-right: 1px solid #778;
+    color: #2d2b2b;
+    text-decoration: none;
+}
+
+.smoothmenu ul li.home a, .smoothmenu ul li.home a:hover {
+    color: #fff;
+    background: url(../images/nav_home_r.jpg) no-repeat top right;
+}
+
+* html .smoothmenu ul li a { /*IE6 hack to get sub menu links to behave correctly*/
+    display: inline-block;
+}
+
+.smoothmenu ul li a:link, .smoothmenu ul li a:visited {
+    color: white;
+}
+
+.smoothmenu ul li a.selected { /*CSS class that's dynamically added to the currently active menu items' LI A element*/
+    background: black;
+    color: white;
+}
+
+.smoothmenu ul li a:hover {
+    background: black; /*background of menu items during onmouseover (hover state)*/
+    color: white;
+}
+
+/*1st sub level menu*/
+.smoothmenu ul li ul {
+    position: absolute;
+    left: 0;
+    display: none; /*collapse all sub menus to begin with*/
+    visibility: hidden;
+}
+
+/*Sub level menu list items (undo style from Top level List Items)*/
+.smoothmenu ul li ul li {
+    display: list-item;
+    float: none;
+}
+
+/*All subsequent sub menu levels vertical offset after 1st level sub menu */
+.smoothmenu ul li ul li ul {
+    top: 0;
+}
+
+/* Sub level menu links style */
+.smoothmenu ul li ul li a {
+    font: normal 13px Verdana;
+    width: 200px; /*width of sub menus*/
+    padding: 5px;
+    margin: 0;
+    border-top-width: 0;
+    border-bottom: 1px solid gray;
+}
+
+/* Holly Hack for IE \*/ * html .smoothmenu {
+    height: 1%;
+}
+ /*Holly Hack for IE7 and below*/
+/* ######### CSS classes applied to down and right arrow images  ######### */
+.downarrowclass {
+    position: absolute;
+    top: 12px;
+    right: 7px;
+}
+
+.rightarrowclass {
+    position: absolute;
+    top: 6px;
+    right: 5px;
+}
+
+/* ######### CSS for shadow added to sub menus  ######### */
+.ddshadow { /*shadow for NON CSS3 capable browsers*/
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+}
+
+.toplevelshadow { /*shadow opacity for NON CSS3 capable browsers. Doesn't work in IE*/
+}
+
+.smoothmenu-v ul {
+    margin: 0;
+    padding: 0;
+    width: 170px; /* Main Menu Item widths */
+    list-style-type: none;
+    font: bold 12px Verdana;
+}
+
+.smoothmenu-v ul li {
+    position: relative;
+}
+
+/* Top level menu links style */
+.smoothmenu-v ul li a {
+    display: block;
+    overflow: auto; /*force hasLayout in IE7 */
+    color: white;
+    text-decoration: none;
+    padding: 6px;
+    border-bottom: 1px solid #778;
+    border-right: 1px solid #778;
+}
+
+.smoothmenu-v ul li a:link, .smoothmenu-v ul li a:visited, .smoothmenu-v ul li a:active {
+    background: #414141; /*background of menu items (default state)*/
+    color: white;
+}
+
+.smoothmenu-v ul li a.selected { /*CSS class that's dynamically added to the currently active menu items' LI A element*/
+    background: black;
+    color: white;
+}
+
+.smoothmenu-v ul li a:hover {
+    background: black; /*background of menu items during onmouseover (hover state)*/
+    color: white;
+}
+
+/*Sub level menu items */
+.smoothmenu-v ul li ul {
+    position: absolute;
+    width: 170px; /*Sub Menu Items width */
+    top: 0;
+    font-weight: normal;
+    visibility: hidden;
+}
+
+/* Holly Hack for IE \*/ * html .smoothmenu-v ul li {
+    float: left;
+    height: 1%;
+}
+* html .smoothmenu-v ul li a {
+    height: 1%;
+}
+
+/* End */

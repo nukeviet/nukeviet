@@ -9,16 +9,10 @@
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/screen.css" media="screen"/>
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/red.css" media="screen" title="styles1"/>
         <link rel="alternate stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/blue.css" media="screen" title="styles2"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/superfish.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/superfish-navbar.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/icons.css" />
         {THEME_CSS}
         {THEME_SITE_RSS}
         {THEME_SITE_JS}
-        <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/hoverIntent.js">
-        </script>
-        <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/superfish.js">
-        </script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/styleswitch.js">
         </script>
         <script type="text/javascript">
@@ -70,33 +64,8 @@
                 <div class="clear">
                 </div>
             </div>
-            <div class="nav">
-                <!-- BEGIN: news_cat -->
-                <ul class="sf-menu sf-navbar">
-                    <!-- BEGIN: mainloop -->
-                    <li {mainloop.current}>
-                        <a title="{mainloop.title}" href="{mainloop.link}">{mainloop.title}</a>
-                        <!-- BEGIN: sub -->
-                        <ul>
-                            <!-- BEGIN: loop -->
-                            <li {loop.current}>
-                                <a title="{loop.title}" href="{loop.link}">{loop.title}</a>
-                            </li>
-                            <!-- END: loop --><!-- BEGIN: null -->
-                            <li>
-                                &nbsp;
-                            </li>
-                            <!-- END: null -->
-                        </ul>
-                        <!-- END: sub -->
-                    </li>
-                    <!-- END: mainloop -->
-                </ul>
-                <!-- END: news_cat --><span id="digclock" class="small update fr">{THEME_DIGCLOCK_TEXT} </span>
-                <div class="clear">
-                </div>
-            </div>
-			<!-- BEGIN: mod_title -->
+            [MENU_SITE]
+ 			<!-- BEGIN: mod_title -->
 			<div class="main">
 				<div class="breakcoup">
 					<a title="{LANG_GLOBAL.Home}" href="{NV_BASE_SITEURL}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/icons/home.png" alt="{LANG_GLOBAL.Home}" /></a>

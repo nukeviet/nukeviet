@@ -10,8 +10,6 @@
         {THEME_CSS}
         {THEME_SITE_RSS}
         {THEME_SITE_JS}
-        <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/jquery.dropdownPlain.js">
-        </script>
         <!--[if IE 6]>
             <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/ie6.css" />
             <script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
@@ -52,31 +50,8 @@
 	                </div>
                 <!-- END: language -->
             </div>
-            <div class="nav">
-                <ul class="nav fl">
-                    <li class="home">
-                        <a title="{LANG.Home}" href="{THEME_SITE_HREF}"><span>{LANG.Home}</span></a>
-                    </li>
-                    <!-- BEGIN: top_menu -->
-	                    <li {TOP_MENU.current}>
-	                        <a title="{TOP_MENU.title}" href="{TOP_MENU.link}"><span><strong>&bull;</strong>{TOP_MENU.title} </span></a>
-	                        <!-- BEGIN: sub -->
-		                        <ul class="subnav">
-		                            <!-- BEGIN: item -->
-		                            <li>
-		                                <a title="{SUB.title}" href="{SUB.link}">&raquo; {SUB.title}</a>
-		                            </li>
-		                            <!-- END: item -->
-		                        </ul>
-	                        <!-- END: sub -->
-	                    </li>
-                    <!-- END: top_menu -->
-                </ul>
-                <div class="rss fr">
-                    <a title="RSS" href="{THEME_RSS_INDEX_HREF}">&nbsp;</a>
-                </div>
-            </div>
-            <div id="message">
+			[MENU_SITE]
+			<div id="message">
                 <div class="clock fl">
                     <span id="digclock" style="font-weight: 700;">{THEME_DIGCLOCK_TEXT}</span>
                 </div>

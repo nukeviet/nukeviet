@@ -401,6 +401,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` 
 ('weblinks', 0, 1, 'weblinks', 'weblinks', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('statistics', 1, 0, 'statistics', 'statistics', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('faq', 0, 1, 'faq', 'faq', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
+('menu', 0, 1, 'menu', 'menu', '3.1.00 1273225635', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('rss', 0, 0, 'rss', 'rss', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_plans` VALUES

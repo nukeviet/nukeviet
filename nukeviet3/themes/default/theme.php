@@ -44,7 +44,6 @@ function nv_site_theme ( $contents )
     $xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA );
     $xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
     $xtpl->assign( 'THEME_DIGCLOCK_TEXT', nv_date( "H:i T l, d/m/Y", NV_CURRENTTIME ) );
-    $xtpl->assign( 'THEME_RSS_INDEX_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=rss" );
     
     $xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
     $xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_checkss', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
@@ -69,103 +68,7 @@ function nv_site_theme ( $contents )
         }
         $xtpl->parse( 'main.language' );
     }
-    
-    foreach ( $site_mods as $modname => $modvalues )
-    {
-        if ( ! empty( $modvalues['in_menu'] ) )
-        {
-            $module_current = ( $modname == $module_name ) ? ' class="current"' : '';
-            $aryay_menu = array( 
-                "title" => $modvalues['custom_title'], "class" => $modname, "current" => $module_current, "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname 
-            );
-            if ( ! empty( $modvalues['funcs'] ) )
-            {
-                $sub_nav_item = array();
-                
-                if ( $modvalues['module_file'] == "news" or $modvalues['module_file'] == "weblinks" )
-                {
-                    $result2 = "SELECT `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat` WHERE `parentid`='0' AND `inhome`='1' ORDER BY `weight` ASC LIMIT 0,10";
-                    $list = nv_db_cache( $result2, '', $modname );
-                    foreach ( $list as $l )
-                    {
-                        $sub_nav_item[] = array( 
-                            'title' => $l['title'], 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'] 
-                        );
-                    }
-                }
-                if ( $modvalues['module_file'] == "shops" )
-                {
-                    $result2 = "SELECT " . NV_LANG_DATA . "_title as title, " . NV_LANG_DATA . "_alias as alias FROM `" . $db_config['prefix'] . "_" . $modvalues['module_data'] . "_catalogs` WHERE `parentid`='0' AND `inhome`='1' ORDER BY `weight` ASC LIMIT 0,10";
-                    $list = nv_db_cache( $result2, '', $modname );
-                    foreach ( $list as $l )
-                    {
-                        $sub_nav_item[] = array( 
-                            'title' => $l['title'], 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'] 
-                        );
-                    }
-                }
-                elseif ( $modvalues['module_file'] == "download" )
-                {
-                    $result2 = "SELECT `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_categories` WHERE `parentid`='0' AND `status`='1'ORDER BY `weight` ASC LIMIT 0,10";
-                    $list = nv_db_cache( $result2, '', $modname );
-                    foreach ( $list as $l )
-                    {
-                        $sub_nav_item[] = array( 
-                            'title' => $l['title'], 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'] 
-                        );
-                    }
-                }
-                elseif ( $modname == "users" )
-                {
-                    if ( defined( 'NV_IS_USER' ) )
-                    {
-                        $in_submenu_users = array( 
-                            "changepass", "openid", "logout" 
-                        );
-                    }
-                    else
-                    {
-                        $in_submenu_users = array( 
-                            "login", "register", "lostpass" 
-                        );
-                    }
-                    foreach ( $modvalues['funcs'] as $key => $sub_item )
-                    {
-                        if ( $sub_item['in_submenu'] == 1 and in_array( $key, $in_submenu_users ) )
-                        {
-                            $sub_nav_item[] = array( 
-                                "title" => $sub_item['func_custom_name'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $key 
-                            );
-                        }
-                    }
-                }
-                else
-                {
-                    foreach ( $modvalues['funcs'] as $key => $sub_item )
-                    {
-                        if ( $sub_item['in_submenu'] == 1 )
-                        {
-                            $sub_nav_item[] = array( 
-                                "title" => $sub_item['func_custom_name'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $key 
-                            );
-                        }
-                    }
-                }
-                if ( ! empty( $sub_nav_item ) )
-                {
-                    foreach ( $sub_nav_item as $sub_nav )
-                    {
-                        $xtpl->assign( 'SUB', $sub_nav );
-                        $xtpl->parse( 'main.top_menu.sub.item' );
-                    }
-                    $xtpl->parse( 'main.top_menu.sub' );
-                }
-            }
-            $xtpl->assign( 'TOP_MENU', $aryay_menu );
-            $xtpl->parse( 'main.top_menu' );
-        }
-    }
-    
+
     //Breakcolumn
     if ( $home != 1 )
     {

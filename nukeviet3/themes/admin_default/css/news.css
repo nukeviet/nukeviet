@@ -100,3 +100,33 @@
 	background: url(../images/collapse-all.gif) no-repeat right center;
 	padding-right: 12px;
 }
+
+.divbor { 
+	border:1px solid #DADADA;
+	padding:8px;
+}
+.divbor td{ 
+	padding:8px;
+}
+.gray {
+	background:#F0F0F0;
+	border:1px solid #DADADA;
+	padding:0px 4px;
+	padding-bottom:4px;
+	margin-bottom:2px;
+}
+ul li { list-style:none}
+.tab1 { margin:0;}
+select, input {
+	font-size:13px;
+	font-family:Arial;
+}
+.newserror { 
+	background:#F8F8F8;
+	font-size:12px; font-weight:bold; 
+	display:block;
+	padding:10px;
+	color:#FF0000;
+	margin-bottom:2px;
+	border:1px solid #F2F2F2
+}

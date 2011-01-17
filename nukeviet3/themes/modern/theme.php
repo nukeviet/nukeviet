@@ -9,11 +9,9 @@
 
 if ( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$overallnews = 0;
-
 function nv_site_theme ( $contents )
 {
-    global $home, $array_mod_title, $db_config, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_file, $module_data, $module_info, $op, $db, $mod_title, $my_head, $my_footer, $nv_array_block_contents, $client_info, $catid, $overallnews;
+    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_file, $module_data, $module_info, $op, $db, $mod_title, $my_head, $my_footer, $nv_array_block_contents, $client_info;
     if ( ! file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/layout." . $module_info['funcs'][$op]['layout'] . ".tpl" ) )
     {
         nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
@@ -115,149 +113,6 @@ function nv_site_theme ( $contents )
         }
         $a ++;
     }
-    
-    unset( $global_array_cat );
-    $catid = empty( $catid ) ? 1 : $catid;
-    $global_array_cat = array();
-    if ( $module_name == 'users' )
-    {
-        if ( defined( 'NV_IS_USER' ) )
-        {
-            $in_submenu_users = array( 
-                "changepass", "openid", "logout" 
-            );
-        }
-        else
-        {
-            $in_submenu_users = array( 
-                "login", "register", "lostpass" 
-            );
-        }
-        $modvalues = $site_mods['users'];
-        
-        $global_array_cat[] = array( 
-            "catid" => 1, "parentid" => 0, "title" => $modvalues['custom_title'], "alias" => '', "link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users" 
-        );
-        
-        foreach ( $modvalues['funcs'] as $key => $sub_item )
-        {
-            if ( $sub_item['in_submenu'] == 1 and in_array( $key, $in_submenu_users ) )
-            {
-                $global_array_cat[] = array( 
-                    "catid" => 1, "parentid" => 1, "title" => $sub_item['func_custom_name'], "alias" => '', "link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=" . $key 
-                );
-            }
-        }
-    }
-    elseif ( $module_file == "news" )
-    {
-        $sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
-        $result = $db->sql_query( $sql );
-        while ( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
-        {
-            $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-            $global_array_cat[$catid_i] = array( 
-                "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i 
-            );
-        }
-    }
-    elseif ( $module_file == "shops" )
-    {
-        $sql = "SELECT catid, parentid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
-        $result = $db->sql_query( $sql );
-        while ( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
-        {
-            $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-            $global_array_cat[$catid_i] = array( 
-                "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i 
-            );
-        }
-    }
-    elseif ( $module_file == "weblinks" )
-    {
-        $sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `parentid` ASC, `weight` ASC";
-        $result = $db->sql_query( $sql );
-        while ( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
-        {
-            $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-            $global_array_cat[$catid_i] = array( 
-                "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i 
-            );
-        }
-    }
-    elseif ( $module_file == "download" )
-    {
-        $sql = "SELECT id, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` ORDER BY `weight` ASC";
-        $result = $db->sql_query( $sql );
-        while ( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
-        {
-            $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-            $global_array_cat[$catid_i] = array( 
-                "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i 
-            );
-        }
-    }
-    else
-    {
-        foreach ( $module_info['funcs'] as $key => $sub_item )
-        {
-            if ( $sub_item['in_submenu'] == 1 )
-            {
-                $global_array_cat[] = array( 
-                    "catid" => ( $op == $key ) ? 1 : 0, "parentid" => 1, "title" => $sub_item['func_custom_name'], "alias" => '', "link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $key 
-                );
-            }
-        }
-        if ( ! empty( $global_array_cat ) )
-        {
-            $global_array_cat[] = array( 
-                "catid" => 1, "parentid" => 0, "title" => $module_info['custom_title'], "alias" => '', "link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name 
-            );
-        }
-    }
-    if ( $module_name != "news" and empty( $global_array_cat ) )
-    {
-        $sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_news_cat` ORDER BY `order` ASC";
-        $result = $db->sql_query( $sql );
-        while ( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
-        {
-            $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-            $global_array_cat[$catid_i] = array( 
-                "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i 
-            );
-        }
-    }
-    
-    # process cat module
-    $i = 1;
-    foreach ( $global_array_cat as $catvalue )
-    {
-        if ( ! empty( $catvalue['catid'] ) && empty( $catvalue['parentid'] ) )
-        {
-            if ( ( $catvalue['catid'] == $catid ) || ( $global_array_cat[$catid]['parentid'] == $catvalue['catid'] ) || ( empty( $catid ) && $i == 1 ) )
-            {
-                $catvalue['current'] = ( $i == 1 ) ? 'class="current first"' : 'class="current"';
-                $i = 0;
-            }
-            $xtpl->assign( 'mainloop', $catvalue );
-            foreach ( $global_array_cat as $subcatvalue )
-            {
-                if ( $subcatvalue['parentid'] == $catvalue['catid'] )
-                {
-                    $subcatvalue['current'] = ( $subcatvalue['catid'] == $catid ) ? 'class="current"' : '';
-                    $xtpl->assign( 'loop', $subcatvalue );
-                    $xtpl->parse( 'main.news_cat.mainloop.sub.loop' );
-                }
-                else
-                {
-                    $xtpl->parse( 'main.news_cat.mainloop.sub.null' );
-                }
-            }
-            $xtpl->parse( 'main.news_cat.mainloop.sub' );
-            $xtpl->parse( 'main.news_cat.mainloop' );
-        }
-    }
-    $xtpl->parse( 'main.news_cat' );
     
     //Breakcolumn
     if ( $home != 1 )

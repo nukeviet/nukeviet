@@ -32,7 +32,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 ('voting', 'voting', 'voting', 'Voting', 1275315261, 1, '', '', '0', 0, 6, 1, 1, '', 1),
 ('banners', 'banners', 'banners', 'Banners', 1270400000, 1, '', '', '0', 0, 7, 1, 1, '', 0),
 ('search', 'search', 'search', 'Search', 1273474173, 0, '', '', '0', 0, 8, 1, 1, '', 0),
-('rss', 'rss', 'rss', 'Rss', 1279366705, 1, '', '', '0', 0, 9, 1, 1, '', 0)";
+('menu', 'menu', 'menu', 'Menu Site', 1295287334, 1, '', '', '0', 0, 9, 1, 1, '', 0),
+('rss', 'rss', 'rss', 'Rss', 1279366705, 1, '', '', '0', 0, 10, 1, 1, '', 0)";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES
@@ -82,7 +83,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (44, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, 'body-right', ''),
 (45, 'adv', 'Adv', 'search', 0, 0, 0, 'body-right', ''),
 (46, 'main', 'Main', 'search', 1, 0, 1, 'left-body-right', ''),
-(47, 'main', 'Main', 'rss', 1, 0, 1, 'left-body-right', '')";
+(47, 'main', 'Main', 'rss', 1, 0, 1, 'left-body-right', ''),
+(48, 'main', 'Main', 'menu', 1, 0, 1, 'left-body-right', '')";
 
 $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
 (0, 'body-right', 'modern'),
@@ -166,7 +168,9 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (12, 'modern', 'global', 'global.voting.php', 'Voting', '', '', '[RIGHT]', 0, 1, '0', 1, 3, ''),
 (13, 'modern', 'global', 'global.counter.php', 'Counter', '', '', '[RIGHT]', 0, 1, '0', 1, 4, ''),
 (14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '0', 0, 5, ''),
-(15, 'modern', 'global', 'global.banners.php', 'Top banner', '', 'no_title', '[TOPADV]', 0, 1, '0', 1, 1, 'a:1:{s:12:\"idplanbanner\";i:1;}')";
+(15, 'modern', 'global', 'global.banners.php', 'Top banner', '', 'no_title', '[TOPADV]', 0, 1, '0', 1, 1, 'a:1:{s:12:\"idplanbanner\";i:1;}'),
+(16, 'modern', 'menu', 'global.menu_theme_modern.php', 'global menu theme modern', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, ''),
+(17, 'default', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '')";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES
@@ -524,7 +528,69 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (15, 20, 1),
 (15, 19, 1),
 (15, 18, 1),
-(15, 26, 1)";
+(15, 26, 1),
+(16, 2, 1),
+(16, 36, 1),
+(16, 39, 1),
+(16, 42, 1),
+(16, 43, 1),
+(16, 27, 1),
+(16, 5, 1),
+(16, 6, 1),
+(16, 7, 1),
+(16, 13, 1),
+(16, 15, 1),
+(16, 16, 1),
+(16, 47, 1),
+(16, 46, 1),
+(16, 33, 1),
+(16, 32, 1),
+(16, 30, 1),
+(16, 29, 1),
+(16, 31, 1),
+(16, 28, 1),
+(16, 34, 1),
+(16, 24, 1),
+(16, 20, 1),
+(16, 21, 1),
+(16, 26, 1),
+(16, 23, 1),
+(16, 18, 1),
+(16, 25, 1),
+(16, 17, 1),
+(16, 22, 1),
+(16, 19, 1),
+(17, 2, 1),
+(17, 36, 1),
+(17, 39, 1),
+(17, 42, 1),
+(17, 43, 1),
+(17, 27, 1),
+(17, 5, 1),
+(17, 6, 1),
+(17, 7, 1),
+(17, 13, 1),
+(17, 15, 1),
+(17, 16, 1),
+(17, 47, 1),
+(17, 46, 1),
+(17, 33, 1),
+(17, 32, 1),
+(17, 30, 1),
+(17, 29, 1),
+(17, 31, 1),
+(17, 28, 1),
+(17, 34, 1),
+(17, 24, 1),
+(17, 20, 1),
+(17, 21, 1),
+(17, 26, 1),
+(17, 23, 1),
+(17, 18, 1),
+(17, 25, 1),
+(17, 17, 1),
+(17, 22, 1),
+(17, 19, 1)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` VALUES
 (1, 0, 'Co-operate', 'Co-operate', '', '', '', 2, 5, 0, 'viewcat_page_new', 2, '2,3', 1, 3, '', '', 1277689708, 1277689708, 1303689708, 0, ''), 
