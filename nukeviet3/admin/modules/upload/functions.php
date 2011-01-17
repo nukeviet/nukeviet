@@ -99,6 +99,10 @@ if ( $module_name == "upload" )
                 {
                     echo '<li class="open collapsable"><span style="color:red" class="folder" title="' . ( $dir . '/' . $file2 ) . '">&nbsp;' . $file2 . '</span>';
                 }
+                elseif ( strpos( $currentpath2, $dir . '/' . $file2 . '/' ) !== false )
+                {
+                    echo '<li class="open collapsable"><span class="folder" title="' . ( $dir . '/' . $file2 ) . '">&nbsp;' . $file2 . '</span>';
+                }
                 else
                 {
                     echo '<li class="expandable"><span class="folder" title="' . ( $dir . '/' . $file2 ) . '">&nbsp;' . $file2 . '</span>';

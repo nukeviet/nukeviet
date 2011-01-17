@@ -37,6 +37,10 @@ foreach ( $arr_files as $file )
         {
             echo '<li class="open collapsable"><span style="color:red" class="folder" title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
         }
+        elseif ( strpos( $currentpath, $path_file . '/' ) !== false )
+        {
+            echo '<li class="open collapsable"><span class="folder" title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
+        }
         else
         {
             echo '<li class="expandable"><span class="folder" title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
@@ -88,7 +92,7 @@ echo '
         },
         "deletefolder": function(t) {
           	var foldervalue = $("span#foldervalue").attr("title");
-			if (confirm("' . $lang_module ['delete_folder'] . '")){
+			if (confirm("' . $lang_module['delete_folder'] . '")){
 				$.ajax({
 				   type: "POST",
 				   url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=delfolder",
