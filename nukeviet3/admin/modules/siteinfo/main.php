@@ -43,7 +43,8 @@ function nv_get_lang_module( $mod )
  */
 function NukevietChange_getContents( $refresh = false )
 {
-    $url = "http://code.google.com/feeds/p/nuke-viet/svnchanges/basic";
+    global $global_config;
+	$url = "http://code.google.com/feeds/p/nuke-viet/svnchanges/basic";
     $xmlfile = "nukevietGoogleCode.cache";
     $load = false;
     $p = NV_CURRENTTIME - 18000;
