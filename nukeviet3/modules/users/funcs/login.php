@@ -380,7 +380,7 @@ function openidLogin_Res1 ( $attribs )
         $error = "";
         if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
         {
-            $nv_username = filter_text_input( 'nv_login', 'post', '' );
+            $nv_username = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
             $nv_password = filter_text_input( 'nv_password', 'post', '' );
             $nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
             
@@ -642,8 +642,8 @@ $contents = "";
 $error = "";
 if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
 {
-    $nv_username = filter_text_input( 'nv_login', 'post', '', '', 100 );
-    $nv_password = filter_text_input( 'nv_password', 'post', '', '', 50 );
+    $nv_username = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
+    $nv_password = filter_text_input( 'nv_password', 'post', '');
     $nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
     //$check_login = nv_check_valid_login( $nv_username, NV_UNICKMAX, NV_UNICKMIN );
     // $check_pass = nv_check_valid_pass( $nv_password, NV_UPASSMAX, NV_UPASSMIN );

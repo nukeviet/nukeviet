@@ -444,7 +444,7 @@ elseif ( $step == 6 )
     if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
     {
         $site_name = filter_text_input( 'site_name', 'post', '', 1 );
-        $login = filter_text_input( 'nv_login', 'post', '' );
+        $login = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
         $email = filter_text_input( 'nv_email', 'post', '' );
         $password = filter_text_input( 'nv_password', 'post', '' );
         $re_password = filter_text_input( 're_password', 'post', '' );
