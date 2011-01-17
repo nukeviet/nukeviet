@@ -53,13 +53,14 @@
                 right: ['rightarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_right.png']
             }
         </script>
-        <link href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/jqueryslidemenu.css" type="text/css" rel="stylesheet" />
+        <link href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu.css" type="text/css" rel="stylesheet" />
+        <link href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu-v.css" type="text/css" rel="stylesheet" />
         <script src="{NV_BASE_SITEURL}js/ddsmoothmenu.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			ddsmoothmenu.init({
 				mainmenuid: "slidemenu", //Menu DIV id
 				orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
-				classname: 'jqueryslidemenu', //class added to menu's outer DIV
+				classname: 'ddsmoothmenu', //class added to menu's outer DIV
 				//customtheme: ["#804000", "#482400"],
 				contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
 			})
