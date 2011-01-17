@@ -547,28 +547,29 @@ if ( $module_name == "modules" )
         }
         $return .= "</tr>\n";
         $return .= "</thead>\n";
-        
-        $a = 0;
-        foreach ( $contents['rows'] as $id => $values )
+        if ( isset( $contents['rows'] ) )
         {
-            $class = ( $a % 2 ) ? " class=\"second\"" : "";
-            $return .= "<tbody" . $class . ">\n";
-            $return .= "<tr>\n";
-            $return .= "<td><select name=\"change_weight_" . $id . "\" id=\"change_weight_" . $id . "\" onchange=\"" . $values['weight'][1] . "\">\n";
-            foreach ( $contents['weight_list'] as $new_weight )
+            $a = 0;
+            foreach ( $contents['rows'] as $id => $values )
             {
-                $return .= "<option value=\"" . $new_weight . "\"" . ( $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) . ">" . $new_weight . "</option>\n";
+                $class = ( $a % 2 ) ? " class=\"second\"" : "";
+                $return .= "<tbody" . $class . ">\n";
+                $return .= "<tr>\n";
+                $return .= "<td><select name=\"change_weight_" . $id . "\" id=\"change_weight_" . $id . "\" onchange=\"" . $values['weight'][1] . "\">\n";
+                foreach ( $contents['weight_list'] as $new_weight )
+                {
+                    $return .= "<option value=\"" . $new_weight . "\"" . ( $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) . ">" . $new_weight . "</option>\n";
+                }
+                $return .= "</select></td>\n";
+                $return .= "<td><input name=\"chang_func_in_submenu_" . $id . "\" id=\"chang_func_in_submenu_" . $id . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['in_submenu'][1] . "\"" . ( $values['in_submenu'][0] ? " checked=\"checked\"" : "" ) . "  " . $values['disabled'] . " /></td>\n";
+                $return .= "<td>" . $values['name'][0] . "</td>\n";
+                $return .= "<td><a href=\"#action\" onclick=\"" . $values['name'][2] . "\">" . $values['name'][1] . "</a></td>\n";
+                $return .= "<td>" . $values['layout'][0] . "</td>\n";
+                $return .= "</tr>\n";
+                $return .= "</tbody>\n";
+                $a ++;
             }
-            $return .= "</select></td>\n";
-            $return .= "<td><input name=\"chang_func_in_submenu_" . $id . "\" id=\"chang_func_in_submenu_" . $id . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['in_submenu'][1] . "\"" . ( $values['in_submenu'][0] ? " checked=\"checked\"" : "" ) . "  " . $values['disabled'] . " /></td>\n";
-            $return .= "<td>" . $values['name'][0] . "</td>\n";
-            $return .= "<td><a href=\"#action\" onclick=\"" . $values['name'][2] . "\">" . $values['name'][1] . "</a></td>\n";
-            $return .= "<td>" . $values['layout'][0] . "</td>\n";
-            $return .= "</tr>\n";
-            $return .= "</tbody>\n";
-            $a ++;
         }
-        
         $return .= "</table>\n";
         return $return;
     }
