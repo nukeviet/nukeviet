@@ -8,8 +8,8 @@
  */
 
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
-$page_title = $module_info ['custom_title'];
-$key_words = $module_info ['keywords'];
+$page_title = $module_info['custom_title'];
+$key_words = $module_info['keywords'];
 
 $contents = "";
 $cache_file = "";
@@ -24,7 +24,7 @@ if ( ! defined( 'NV_IS_MODADMIN' ) )
 
 if ( empty( $contents ) )
 {
-    $viewcat = $module_config [$module_name] ['indexfile'];
+    $viewcat = $module_config[$module_name]['indexfile'];
     $array_catpage = array();
     $array_cat_other = array();
     $st_links = $st_links;
@@ -42,10 +42,10 @@ if ( empty( $contents ) )
         $end_publtime = 0;
         while ( $item = $db->sql_fetchrow( $result ) )
         {
-            $catid = end( explode( ",", $item ['listcatid'] ) );
-            if ( ! empty( $item ['homeimgthumb'] ) )
+            $catid = end( explode( ",", $item['listcatid'] ) );
+            if ( ! empty( $item['homeimgthumb'] ) )
             {
-                $array_img = explode( "|", $item ['homeimgthumb'] );
+                $array_img = explode( "|", $item['homeimgthumb'] );
             }
             else
             {
@@ -54,26 +54,26 @@ if ( empty( $contents ) )
                 );
             }
             
-            if ( $array_img [0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img [0] ) )
+            if ( $array_img[0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img[0] ) )
             {
-                $item ['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img [0];
+                $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img[0];
             }
-            elseif ( nv_is_url( $item ['homeimgfile'] ) )
+            elseif ( nv_is_url( $item['homeimgfile'] ) )
             {
-                $item ['imghome'] = $item ['homeimgfile'];
+                $item['imghome'] = $item['homeimgfile'];
             }
-            elseif ( $item ['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item ['homeimgfile'] ) )
+            elseif ( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
             {
-                $item ['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item ['homeimgfile'];
+                $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
             }
             else
             {
-                $item ['imghome'] = "";
+                $item['imghome'] = "";
             }
             
-            $item ['link'] = $global_array_cat [$catid] ['link'] . "/" . $item ['alias'] . "-" . $item ['id'];
-            $array_catpage [] = $item;
-            $end_publtime = $item ['publtime'];
+            $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+            $array_catpage[] = $item;
+            $end_publtime = $item['publtime'];
         }
         
         if ( $viewcat == "viewcat_page_new" )
@@ -87,9 +87,9 @@ if ( empty( $contents ) )
         $result = $db->sql_query( $sql );
         while ( $item = $db->sql_fetchrow( $result ) )
         {
-            $catid = end( explode( ",", $item ['listcatid'] ) );
-            $item ['link'] = $global_array_cat [$catid] ['link'] . "/" . $item ['alias'] . "-" . $item ['id'];
-            $array_cat_other [] = $item;
+            $catid = end( explode( ",", $item['listcatid'] ) );
+            $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+            $array_cat_other[] = $item;
         }
         $viewcat = "viewcat_page_new";
         $contents = call_user_func( $viewcat, $array_catpage, $array_cat_other );
@@ -101,16 +101,16 @@ if ( empty( $contents ) )
         $key = 0;
         foreach ( $global_array_cat as $key => $array_cat_i )
         {
-            if ( $array_cat_i ['parentid'] == 0 and $array_cat_i ['inhome'] == 1 )
+            if ( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
             {
-                $array_cat [$key] = $array_cat_i;
-                $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $array_cat_i ['catid'] . "` WHERE `status`= 1 AND `inhome`='1' AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 0 , " . $array_cat_i ['numlinks'] . "";
+                $array_cat[$key] = $array_cat_i;
+                $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $array_cat_i['catid'] . "` WHERE `status`= 1 AND `inhome`='1' AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 0 , " . $array_cat_i['numlinks'] . "";
                 $result = $db->sql_query( $sql );
                 while ( $item = $db->sql_fetchrow( $result ) )
                 {
-                    if ( ! empty( $item ['homeimgthumb'] ) )
+                    if ( ! empty( $item['homeimgthumb'] ) )
                     {
-                        $array_img = explode( "|", $item ['homeimgthumb'] );
+                        $array_img = explode( "|", $item['homeimgthumb'] );
                     }
                     else
                     {
@@ -119,25 +119,25 @@ if ( empty( $contents ) )
                         );
                     }
                     
-                    if ( $array_img [0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img [0] ) )
+                    if ( $array_img[0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img[0] ) )
                     {
-                        $item ['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img [0];
+                        $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img[0];
                     }
-                    elseif ( nv_is_url( $item ['homeimgfile'] ) )
+                    elseif ( nv_is_url( $item['homeimgfile'] ) )
                     {
-                        $item ['imghome'] = $item ['homeimgfile'];
+                        $item['imghome'] = $item['homeimgfile'];
                     }
-                    elseif ( $item ['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item ['homeimgfile'] ) )
+                    elseif ( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
                     {
-                        $item ['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item ['homeimgfile'];
+                        $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
                     }
                     else
                     {
-                        $item ['imghome'] = "";
+                        $item['imghome'] = "";
                     }
                     
-                    $item ['link'] = $array_cat_i ['link'] . "/" . $item ['alias'] . "-" . $item ['id'];
-                    $array_cat [$key] ['content'] [] = $item;
+                    $item['link'] = $array_cat_i['link'] . "/" . $item['alias'] . "-" . $item['id'];
+                    $array_cat[$key]['content'][] = $item;
                 }
                 $key ++;
             }
@@ -152,17 +152,17 @@ if ( empty( $contents ) )
         $key = 0;
         foreach ( $global_array_cat as $key => $array_cat_i )
         {
-            if ( $array_cat_i ['parentid'] == 0 and $array_cat_i ['inhome'] == 1 )
+            if ( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
             {
-                $catid = $array_cat_i ['catid'];
-                $array_catpage [$key] = $global_array_cat [$catid];
-                $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`= 1 AND `inhome`='1' AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat [$catid] ['numlinks'] . "";
+                $catid = $array_cat_i['catid'];
+                $array_catpage[$key] = $global_array_cat[$catid];
+                $sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`= 1 AND `inhome`='1' AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid]['numlinks'] . "";
                 $result = $db->sql_query( $sql );
                 while ( $item = $db->sql_fetchrow( $result ) )
                 {
-                    if ( ! empty( $item ['homeimgthumb'] ) )
+                    if ( ! empty( $item['homeimgthumb'] ) )
                     {
-                        $array_img = explode( "|", $item ['homeimgthumb'] );
+                        $array_img = explode( "|", $item['homeimgthumb'] );
                     }
                     else
                     {
@@ -171,25 +171,25 @@ if ( empty( $contents ) )
                         );
                     }
                     
-                    if ( $array_img [0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img [0] ) )
+                    if ( $array_img[0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img[0] ) )
                     {
-                        $item ['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img [0];
+                        $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img[0];
                     }
-                    elseif ( nv_is_url( $item ['homeimgfile'] ) )
+                    elseif ( nv_is_url( $item['homeimgfile'] ) )
                     {
-                        $item ['imghome'] = $item ['homeimgfile'];
+                        $item['imghome'] = $item['homeimgfile'];
                     }
-                    elseif ( $item ['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item ['homeimgfile'] ) )
+                    elseif ( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
                     {
-                        $item ['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item ['homeimgfile'];
+                        $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
                     }
                     else
                     {
-                        $item ['imghome'] = "";
+                        $item['imghome'] = "";
                     }
                     
-                    $item ['link'] = $global_array_cat [$catid] ['link'] . "/" . $item ['alias'] . "-" . $item ['id'];
-                    $array_catpage [$key] ['content'] [] = $item;
+                    $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+                    $array_catpage[$key]['content'][] = $item;
                 }
             }
             $key ++;
