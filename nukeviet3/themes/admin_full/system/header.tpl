@@ -47,17 +47,12 @@
         <!-- END: module_js -->
         <!-- BEGIN: nv_add_editor_js -->{NV_ADD_EDITOR_JS}<!-- END: nv_add_editor_js -->
         <!-- BEGIN: nv_add_my_head -->{NV_ADD_MY_HEAD}<!-- END: nv_add_my_head -->
-        <script type="text/javascript">
-            var imageslist = {
-                down: ['downarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_down.png', 23],
-                right: ['rightarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_right.png']
-            }
-        </script>
         <link href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu.css" type="text/css" rel="stylesheet" />
         <link href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu-v.css" type="text/css" rel="stylesheet" />
         <script src="{NV_BASE_SITEURL}js/ddsmoothmenu.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			ddsmoothmenu.init({
+				arrowimages: {down: ['downarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_down.png', 23], right: ['rightarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_right.png']},
 				mainmenuid: "slidemenu", //Menu DIV id
 				orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
 				classname: 'ddsmoothmenu', //class added to menu's outer DIV
