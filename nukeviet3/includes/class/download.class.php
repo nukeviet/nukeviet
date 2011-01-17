@@ -179,7 +179,12 @@ class download
     {
         if ( function_exists( 'mime_content_type' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
         {
-            return mime_content_type( $path );
+            $mimetype = mime_content_type( $path );
+            $mimetype = explode( ";", $mimetype );
+            if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+            {
+                return trim( $mimetype[0] );
+            }
         }
 
         if ( function_exists( 'finfo_open' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'finfo_open', $this->disable_functions ) ) ) )
@@ -188,7 +193,10 @@ class download
             $mimetype = finfo_file( $finfo, $path );
             finfo_close( $finfo );
             $mimetype = explode( ";", $mimetype );
-            return trim( $mimetype[0] );
+            if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+            {
+                return trim( $mimetype[0] );
+            }
         }
 
         if ( function_exists( 'system' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
@@ -197,7 +205,10 @@ class download
             system( "file -i -b " . $path );
             $mimetype = ob_get_clean();
             $mimetype = explode( ";", $mimetype );
-            return trim( $mimetype[0] );
+            if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+            {
+                return trim( $mimetype[0] );
+            }
         }
 
         $mime_types = nv_parse_ini_file( NV_MIME_INI_FILE );
@@ -205,7 +216,7 @@ class download
         if ( array_key_exists( $this->properties['extension'], $mime_types ) )
         {
             if ( is_string( $mime_types[$ext] ) ) return $mime_types[$ext];
-            else  return $mime_types[$ext][0];
+            return $mime_types[$ext][0];
         }
 
         return 'application/force-download';

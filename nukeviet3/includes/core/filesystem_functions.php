@@ -132,7 +132,10 @@ function nv_get_mime_type( $filename )
         $mimetype = finfo_file( $finfo, $filename );
         finfo_close( $finfo );
         $mimetype = explode( ";", $mimetype );
-        return trim( $mimetype[0] );
+        if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+        {
+            return trim( $mimetype[0] );
+        }
     }
 
     if ( function_exists( 'system' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! in_array( 'system', $sys_info['disable_functions'] ) ) ) )
@@ -141,12 +144,20 @@ function nv_get_mime_type( $filename )
         system( "file -i -b " . $filename );
         $mimetype = ob_get_clean();
         $mimetype = explode( ";", $mimetype );
-        return $mimetype[0];
+        if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+        {
+            return trim( $mimetype[0] );
+        }
     }
 
     if ( function_exists( 'mime_content_type' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! in_array( 'system', $sys_info['disable_functions'] ) ) ) )
     {
-        return mime_content_type( $filename );
+        $mimetype = mime_content_type( $filename );
+        $mimetype = explode( ";", $mimetype );
+        if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+        {
+            return trim( $mimetype[0] );
+        }
     }
 
     $mime_types = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini' );
@@ -157,6 +168,7 @@ function nv_get_mime_type( $filename )
 
         return $mime_types[$ext][0];
     }
+
     return 'application/octet-stream';
 }
 

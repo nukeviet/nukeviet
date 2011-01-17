@@ -175,25 +175,40 @@ class upload
             $mimetype = finfo_file( $finfo, $userfile['tmp_name'] );
             finfo_close( $finfo );
             $mimetype = explode( ";", $mimetype );
-            return trim( $mimetype[0] );
-        } elseif ( function_exists( 'system' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
+            if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+            {
+                return trim( $mimetype[0] );
+            }
+        }
+
+        if ( function_exists( 'system' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
         {
             ob_start();
             system( "file -i -b " . $userfile['tmp_name'] );
             $mimetype = ob_get_clean();
             $mimetype = explode( ";", $mimetype );
-            return trim( $mimetype[0] );
-        } elseif ( function_exists( 'mime_content_type' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
+            if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+            {
+                return trim( $mimetype[0] );
+            }
+        }
+
+        if ( function_exists( 'mime_content_type' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
         {
-            return mime_content_type( $userfile['tmp_name'] );
-        } elseif ( isset( $userfile['type'] ) )
+            $mimetype = mime_content_type( $userfile['tmp_name'] );
+            $mimetype = explode( ";", $mimetype );
+            if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+            {
+                return trim( $mimetype[0] );
+            }
+        }
+
+        if ( isset( $userfile['type'] ) )
         {
             return $userfile['type'];
         }
-        else
-        {
-            return "";
-        }
+
+        return "";
     }
 
     /**
