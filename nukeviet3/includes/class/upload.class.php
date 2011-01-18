@@ -25,6 +25,7 @@ if ( ! defined( '_ERROR_UPLOAD_CANT_WRITE' ) ) define( '_ERROR_UPLOAD_CANT_WRITE
 if ( ! defined( '_ERROR_UPLOAD_EXTENSION' ) ) define( '_ERROR_UPLOAD_EXTENSION', 'File upload stopped by extension' );
 if ( ! defined( '_ERROR_UPLOAD_UNKNOWN' ) ) define( '_ERROR_UPLOAD_UNKNOWN', 'Unknown upload error' );
 if ( ! defined( '_ERROR_UPLOAD_TYPE_NOT_ALLOWED' ) ) define( '_ERROR_UPLOAD_TYPE_NOT_ALLOWED', 'Files of this type are not allowed' );
+if ( ! defined( '_ERROR_UPLOAD_MIME_NOT_RECOGNIZE' ) ) define( '_ERROR_UPLOAD_MIME_NOT_RECOGNIZE', 'system does not recognize the mime type of uploaded file' );
 if ( ! defined( '_ERROR_UPLOAD_MAX_USER_SIZE' ) ) define( '_ERROR_UPLOAD_MAX_USER_SIZE', "The file exceeds the maximum size allowed. Maximum size is %d byte" );
 if ( ! defined( '_ERROR_UPLOAD_NOT_IMAGE' ) ) define( '_ERROR_UPLOAD_NOT_IMAGE', 'The file is not a known image format' );
 if ( ! defined( '_ERROR_UPLOAD_IMAGE_WIDTH' ) ) define( '_ERROR_UPLOAD_IMAGE_WIDTH', "The image is not allowed because the width is greater than the maximum of %d pixels" );
@@ -435,7 +436,7 @@ class upload
         $this->file_mime = $this->get_mime_type( $userfile );
         if ( empty( $this->file_mime ) )
         {
-            return _ERROR_UPLOAD_FAILED . " (userfile mimetype are not allowed)";
+            return _ERROR_UPLOAD_MIME_NOT_RECOGNIZE;
         }
 
         if ( preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) or preg_match( "#application\/[x\-]*(shockwave\-flash)#", $this->file_mime ) )
@@ -534,7 +535,7 @@ class upload
             $i = 1;
             while ( file_exists( $savepath . $filename2 ) )
             {
-                $filename2 = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $filename );
+                $filename2 = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $filename );
                 $i++;
             }
             $filename = $filename2;

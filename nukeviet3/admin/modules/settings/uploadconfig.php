@@ -74,42 +74,8 @@ $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan='2'><strong>" . $lang_module['uploadconfig'] . "</strong></td>\n";
 $contents .= "</tr>\n";
-$contents .= "</tbody>\n";
-$contents .= "<tr>\n";
-$contents .= "<td style='width:200px'><strong>" . $lang_module['uploadconfig_types'] . "</strong></td>\n";
-$contents .= "<td>";
-foreach ( $types as $type )
-{
-    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='type[]' value='" . $type . "' " . ( in_array( $type, $global_config['file_allowed_ext'] ) ? 'checked=checked' : '' ) . "/> " . $type . "&nbsp;&nbsp;</label>";
-}
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "<tbody class='second'>\n";
-$contents .= "<tr>\n";
-$contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_ext'] . "</strong></td>\n";
-$contents .= "<td>";
-foreach ( $exts as $ext )
-{
-    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='ext[]' value='" . $ext . "' " . ( in_array( $ext, $global_config['forbid_extensions'] ) ? 'checked=checked' : '' ) . "/> " . $ext . "&nbsp;&nbsp;</label>";
-}
-$contents .= "</td>\n";
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tbody>\n";
 
-$contents .= "<tbody>\n";
-$contents .= "<tr>\n";
-$contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_mime'] . "</strong></td>\n";
-$contents .= "<td>";
-foreach ( $mimes as $mime )
-{
-    $contents .= "<label style='display:inline-block;width:320px'><input type='checkbox' name='mime[]' value='" . $mime . "' " . ( in_array( $mime, $global_config['forbid_mimes'] ) ? 'checked=checked' : '' ) . "/> " . $mime . "&nbsp;&nbsp;</label>";
-}
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tbody>\n";
-
-$contents .= "<tbody class='second'>";
+$contents .= "<tbody>";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['nv_max_size'] . ": </strong></td>\n";
 $contents .= "<td>";
@@ -132,7 +98,7 @@ $contents .= "</td>";
 $contents .= "</tr>";
 $contents .= "</tbody>";
 
-$contents .= "<tbody>";
+$contents .= "<tbody class='second'>";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['upload_checking_mode'] . ": </strong></td>\n";
 $contents .= "<td>";
@@ -175,6 +141,41 @@ if ( ! $strong )
 $contents .= "</td>";
 $contents .= "</tr>";
 $contents .= "</tbody>";
+
+$contents .= "</tbody>\n";
+$contents .= "<tr>\n";
+$contents .= "<td style='width:200px'><strong>" . $lang_module['uploadconfig_types'] . "</strong></td>\n";
+$contents .= "<td>";
+foreach ( $types as $type )
+{
+    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='type[]' value='" . $type . "' " . ( in_array( $type, $global_config['file_allowed_ext'] ) ? 'checked=checked' : '' ) . "/> " . $type . "&nbsp;&nbsp;</label>";
+}
+$contents .= "</td>\n";
+$contents .= "</tr>\n";
+$contents .= "<tbody class='second'>\n";
+$contents .= "<tr>\n";
+$contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_ext'] . "</strong></td>\n";
+$contents .= "<td>";
+foreach ( $exts as $ext )
+{
+    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='ext[]' value='" . $ext . "' " . ( in_array( $ext, $global_config['forbid_extensions'] ) ? 'checked=checked' : '' ) . "/> " . $ext . "&nbsp;&nbsp;</label>";
+}
+$contents .= "</td>\n";
+$contents .= "</td>\n";
+$contents .= "</tr>\n";
+$contents .= "</tbody>\n";
+
+$contents .= "<tbody>\n";
+$contents .= "<tr>\n";
+$contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_mime'] . "</strong></td>\n";
+$contents .= "<td>";
+foreach ( $mimes as $mime )
+{
+    $contents .= "<label style='display:inline-block;width:320px'><input type='checkbox' name='mime[]' value='" . $mime . "' " . ( in_array( $mime, $global_config['forbid_mimes'] ) ? 'checked=checked' : '' ) . "/> " . $mime . "&nbsp;&nbsp;</label>";
+}
+$contents .= "</td>\n";
+$contents .= "</tr>\n";
+$contents .= "</tbody>\n";
 
 $contents .= "<tbody class=\"second\">\n";
 $contents .= "<tr>\n";
