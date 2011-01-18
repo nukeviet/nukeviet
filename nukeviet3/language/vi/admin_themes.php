@@ -118,6 +118,9 @@ $lang_module['autoinstall_theme_error_invalidfile_back'] = "Quay lại";
 $lang_module['autoinstall_package_processing'] = " xin chờ quá trình thực hiện hoàn thành...";
 $lang_module['autoinstall_theme_error_uploadfile'] = "Lỗi: không thể upload file lên hệ thống. Hãy kiểm tra lại hoặc chmod thư mục tmp";
 $lang_module['autoinstall_theme_unzip_abort'] = "Việc cài đặt tự động không thể tiếp tục do host không hỗ trợ.";
+$lang_module['autoinstall_theme_permission_folder'] = "Việc cài đặt tự động không thể tiếp tục hệ thống không tạo được các thu mục";
+$lang_module['autoinstall_theme_unzip_success'] = "Quá trình cài đặt thành công. Hệ thống sẽ tự động chuyển bạn sang trang thiết lập layout cho giao diện.";
+$lang_module['autoinstall_theme_error_movefile'] = "Việc cài đặt tự động không thể tiếp tục do host không hỗ trợ di chuyển các file sau khi giải nén";
 $lang_module['autoinstall_theme_cantunzip'] = "Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.";
 $lang_module['autoinstall_theme_unzip_filelist'] = "Danh sách file đã giải nén";
 $lang_module['autoinstall_theme_unzip_setuppage'] = "Đến trang quản lý theme.";
@@ -151,12 +154,11 @@ $lang_module['theme_created_delete_theme_unsuccess'] = "Có lỗi trong quá tr�
 $lang_module['theme_created_delete_current_theme'] = "Bạn không thể xóa theme hiện tại hệ thống đang sử dụng !";
 $lang_module['theme_created_delete_module_theme'] = "Bạn không thể xóa theme vì đang sử dụng cho module: %s, bạn cần cấu hình lại các module đó.";
 
-$lang_module['block_front_calendar_format'] = "Định dạng dd.mm.yyy";
 $lang_module['block_front_delete_error'] = "Lỗi: không thể xóa block, hãy kiểm tra lại quyền của bạn";
 $lang_module['block_front_outgroup_success'] = "Block đã được bỏ ra khỏi nhóm thành công và nằm trong nhóm ";
 $lang_module['block_front_outgroup_cancel'] = "Hiện tại chỉ có duy nhất 1 block nằm trong nhóm này do đó không cần bỏ ra khỏi nhóm";
 $lang_module['block_front_outgroup_error_update'] = "Có lỗi trong quá trình cập nhật dữ liệu";
-#xcopyblock
+
 $lang_module['xcopyblock'] = 'Sao chép block';
 $lang_module['xcopyblock_to'] = ' sang theme ';
 $lang_module['xcopyblock_from'] = ' từ theme ';
@@ -168,7 +170,7 @@ $lang_module['xcopyblock_success'] = 'Quá trình sao chép thành công !';
 
 $lang_module['block_weight'] = 'Thiết lập lại vị trí các block';
 $lang_module['block_weight_confirm'] = 'Bạn có chắc chắn thiết lập lại vị trí các block, khi đó các thiết lập theo các function sẽ bị thiết lập lại';
-
-
+$lang_module['autoinstall_theme_error_warning_overwrite'] = "Thông báo: Gói giao diện bạn cài đặt đã tồn tại các file, bạn có chắc chắn thực hiện tiếp quá trình cài đặt để ghi đè các file này";
+$lang_module['autoinstall_theme_overwrite'] = "Thực hiện";
 
 ?>

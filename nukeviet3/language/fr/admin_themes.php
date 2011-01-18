@@ -143,7 +143,6 @@ $lang_module['theme_created_delete_theme_success'] = "Le Thème a été supprim�
 $lang_module['theme_created_delete_theme_unsuccess'] = "Erreur de la suppression de fichiers!";
 $lang_module['theme_created_delete_current_theme'] = "Erreur: Impossible de supprimer le Thème actuel!";
 $lang_module['theme_created_delete_module_theme'] = "Erreur: Suppression échouée par ce que ce thème est en utilisation pour les modules: %s, merci de reconfigurer ces modules.";
-$lang_module['block_front_calendar_format'] = "Format jj.mm.aaa";
 $lang_module['block_front_delete_error'] = "Erreur: Impossible de supprimer le block, merci de vérifier vos attributions";
 $lang_module['block_front_outgroup_success'] = "Le Block a été retiré et ajouté au groupe";
 $lang_module['block_front_outgroup_cancel'] = "Il n'est  pas nécessaire de retirer le block du groupe par ce qu'il y a un seul block dans ce groupe";

@@ -143,7 +143,6 @@ $lang_module['theme_created_delete_theme_success'] = "Successfully deleted the t
 $lang_module['theme_created_delete_theme_unsuccess'] = "There are errors in the process of deleting files !";
 $lang_module['theme_created_delete_current_theme'] = "You can not delete the current theme when the systme is using it!";
 $lang_module['theme_created_delete_module_theme'] = "You can not delete themes because this theme are using for module:% s, you need to reconfigure modules.";
-$lang_module['block_front_calendar_format'] = "Format dd.mm.yyy";
 $lang_module['block_front_delete_error'] = "Error: Unable to delete the block, check your permission";
 $lang_module['block_front_outgroup_success'] = "Block was successfully removed from the group and add to group";
 $lang_module['block_front_outgroup_cancel'] = "Currently there is only one block in this group should therefore not removed from group";

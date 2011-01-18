@@ -35,7 +35,7 @@ if ( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme )
     else
     {
         $result = nv_deletefile( NV_ROOTDIR . '/themes/' . trim( $theme ), true );
-        if ( $result )
+        if ( ! empty( $result[0] ) )
         {
             $sql = "DELETE FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `theme` = " . $db->dbescape_string( $theme ) . "";
             $result = $db->sql_query( $sql );
@@ -44,7 +44,7 @@ if ( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme )
             $db->sql_query( "REPAIR TABLE `" . NV_PREFIXLANG . "_modthemes`" );
             $db->sql_query( "OPTIMIZE TABLE `" . NV_PREFIXLANG . "_modthemes`" );
             $db->sql_query( "UNLOCK TABLE `" . NV_PREFIXLANG . "_modthemes`" );
-
+            
             nv_del_moduleCache( 'themes' );
             echo $lang_module['theme_created_delete_theme_success'];
         }

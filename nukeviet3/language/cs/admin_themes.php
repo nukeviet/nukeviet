@@ -142,7 +142,6 @@ $lang_module['theme_created_delete_theme_success'] = "Úspěšně smazána téma
 $lang_module['theme_created_delete_theme_unsuccess'] = "Tam jsou chyby v procesu mazání souborů!";
 $lang_module['theme_created_delete_current_theme'] = "Nemůžete smazat současné téma, kdy systém je používány!";
 $lang_module['theme_created_delete_module_theme'] = "Nemůžete mazat témata, protože toto téma je používán pro modul:%s, je potřeba nastavit moduly.";
-$lang_module['block_front_calendar_format'] = "Formát dd.mm.yyy";
 $lang_module['block_front_delete_error'] = "Chyba: Nelze smazat blok, zkontrolujte oprávnění";
 $lang_module['block_front_outgroup_success'] = "Blok byl úspěšně odstraněn ze skupiny a přidat do skupiny";
 $lang_module['block_front_outgroup_cancel'] = "V současné době existuje pouze jeden blok v této skupině proto není odstraněn ze skupiny";
