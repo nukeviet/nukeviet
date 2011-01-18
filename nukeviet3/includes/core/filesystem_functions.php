@@ -347,81 +347,132 @@ function nv_deletefile( $file, $delsub = false )
     $preg_match = preg_match( "/^(" . nv_preg_quote( NV_ROOTDIR ) . ")(\/[\S]+)/", $realpath, $path );
     if ( empty( $preg_match ) ) return array( 0, sprintf( $lang_global['error_delete_forbidden'], $file ) );
 
-    if ( is_dir( $realpath ) )
+	$ftp_check_login = 0;
+    if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) == 1 )
     {
-        $files = scandir( $realpath );
-        $files2 = array_diff( $files, array( ".", "..", ".htaccess", "index.html" ) );
-        if ( count( $files2 ) and ! $delsub )
+        $ftp_server = nv_unhtmlspecialchars( $global_config['ftp_server'] );
+        $ftp_port = intval( $global_config['ftp_port'] );
+        $ftp_user_name = nv_unhtmlspecialchars( $global_config['ftp_user_name'] );
+        $ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
+        $ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
+        // set up basic connection
+        $conn_id = ftp_connect( $ftp_server, $ftp_port );
+        // login with username and password
+        $login_result = ftp_login( $conn_id, $ftp_user_name, $ftp_user_pass );
+        if ( ( ! $conn_id ) || ( ! $login_result ) )
         {
-            return array( 0, sprintf( $lang_global['error_delete_subdirectories_not_empty'], $path[2] ) );
+            $ftp_check_login = 3;
+        }
+        elseif ( ftp_chdir( $conn_id, $ftp_path ) )
+        {
+            $ftp_check_login = 1;
         }
         else
         {
-            $files = array_diff( $files, array( ".", ".." ) );
+            $ftp_check_login = 2;
+        }
+    }
+    
+    if ( $ftp_check_login == 1 )
+    {
+        $filename = str_replace( NV_ROOTDIR . "/", "", str_replace( '\\', '/', $realpath ) );
+        if ( is_dir( $realpath ) )
+        {
+            nv_ftp_del_dir( $conn_id, $filename );
+        }
+        elseif ( ! ftp_delete( $conn_id, $filename ) )
+        {
+            @unlink( $realpath );
+        }
+        ftp_close( $conn_id );
+    }
+    elseif ( is_dir( $realpath ) )
+    {
+        $files = scandir( $realpath );
+        $files2 = array_diff( $files, array( 
+            ".", "..", ".htaccess", "index.html" 
+        ) );
+        if ( count( $files2 ) and ! $delsub )
+        {
+            return array( 
+                0, sprintf( $lang_global['error_delete_subdirectories_not_empty'], $path[2] ) 
+            );
+        }
+        else
+        {
+            $files = array_diff( $files, array( 
+                ".", ".." 
+            ) );
             if ( count( $files ) )
             {
                 foreach ( $files as $f )
                 {
                     $unlink = nv_deletefile( $realpath . '/' . $f, true );
-                    if ( empty( $unlink[0] ) ) {
-                    	$filename = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $realpath . '/' . $f ) );
-                    	return array( 0, sprintf( $lang_global['error_delete_failed'], $filename ) );
+                    if ( empty( $unlink[0] ) )
+                    {
+                        $filename = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $realpath . '/' . $f ) );
+                        return array( 
+                            0, sprintf( $lang_global['error_delete_failed'], $filename ) 
+                        );
                     }
                 }
             }
-            if ( ! @rmdir( $realpath ) ) return array( 0, sprintf( $lang_global['error_delete_subdirectories_failed'], $path[2] ) );
-            else  return array( 1, sprintf( $lang_global['directory_deleted'], $path[2] ) );
+            if ( ! @rmdir( $realpath ) ) return array( 
+                0, sprintf( $lang_global['error_delete_subdirectories_failed'], $path[2] ) 
+            );
+            else return array( 
+                1, sprintf( $lang_global['directory_deleted'], $path[2] ) 
+            );
         }
     }
     else
     {
-        $filename = str_replace( NV_ROOTDIR . "/", "", str_replace( '\\', '/', $realpath ) );
+        @unlink( $realpath );
+    }
+    
+    if ( file_exists( $realpath ) )
+    {
+        return array( 
+            0, sprintf( $lang_global['error_delete_failed'], $filename ) 
+        );
+    }
+    else
+    {
+        return array( 
+            1, sprintf( $lang_global['file_deleted'], $filename ) 
+        );
+    }
+}
 
-        $ftp_check_login = 0;
-        if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) == 1 )
-        {
-            $ftp_server = nv_unhtmlspecialchars( $global_config['ftp_server'] );
-            $ftp_port = intval( $global_config['ftp_port'] );
-            $ftp_user_name = nv_unhtmlspecialchars( $global_config['ftp_user_name'] );
-            $ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
-            $ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
-            // set up basic connection
-            $conn_id = ftp_connect( $ftp_server, $ftp_port );
-            // login with username and password
-            $login_result = ftp_login( $conn_id, $ftp_user_name, $ftp_user_pass );
-            if ( ( ! $conn_id ) || ( ! $login_result ) )
-            {
-                $ftp_check_login = 3;
-            } elseif ( ftp_chdir( $conn_id, $ftp_path ) )
-            {
-                $ftp_check_login = 1;
+/**
+ * nv_ftp_del_dir()
+ * 
+ * @param mixed $conn_id
+ * @param mixed $dst_dir
+ * @return
+ */
+
+function nv_ftp_del_dir ( $conn_id, $dst_dir )
+{
+    $dst_dir = preg_replace( "/\\/\$/", "", $dst_dir ); // remove trailing slash
+    $ar_files = ftp_nlist( $conn_id, $dst_dir );
+    if ( is_array( $ar_files ) )
+    { // makes sure there are files
+        for ( $i = 0; $i < sizeof( $ar_files ); $i ++ )
+        { // for each file
+            $st_file = basename( $ar_files[$i] );
+            if ( $st_file == '.' || $st_file == '..' ) continue;
+            if ( ftp_size( $conn_id, $dst_dir . '/' . $st_file ) == - 1 )
+            { // check if it is a directory
+                nv_ftp_del_dir( $conn_id, $dst_dir . '/' . $st_file );
             }
             else
             {
-                $ftp_check_login = 2;
+                ftp_delete( $conn_id, $dst_dir . '/' . $st_file );
             }
-        }
-        if ( $ftp_check_login == 1 )
-        {
-            if ( ! ftp_delete( $conn_id, $filename ) )
-            {
-                @unlink( $realpath );
-            }
-            ftp_close( $conn_id );
-        }
-        else
-        {
-            @unlink( $realpath );
-        }
-        if ( file_exists( $realpath ) )
-        {
-            return array( 0, sprintf( $lang_global['error_delete_failed'], $filename ) );
-        }
-        else
-        {
-            return array( 1, sprintf( $lang_global['file_deleted'], $filename ) );
         }
     }
+    return ftp_rmdir( $conn_id, $dst_dir ); // delete empty directories
 }
 
 /**
