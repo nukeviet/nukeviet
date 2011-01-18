@@ -1204,13 +1204,14 @@ function nv_is_url ( $url )
  * @param bool $is_200
  * @return
  */
-function nv_check_url ( $url, $is_200 = false )
+function nv_check_url ( $url, $is_200 = 0 )
 {
     if ( empty( $url ) ) return false;
+    $url = str_replace( " ", "%20", $url );
     $res = get_headers( $url );
     if ( ! $res ) return false;
     if ( preg_match( "/(200)/", $res[0] ) ) return true;
-    if ( $is_200 ) return false;
+    if ( $is_200 > 3 ) return false;
     if ( preg_match( "/(301)|(302)|(303)/", $res[0] ) )
     {
         foreach ( $res as $k => $v )
@@ -1218,8 +1219,9 @@ function nv_check_url ( $url, $is_200 = false )
             unset( $matches );
             if ( preg_match( "/location:\s(.*?)$/is", $v, $matches ) )
             {
+                $is_200 ++;
                 $location = trim( $matches[1] );
-                return nv_check_url( $location, true );
+                return nv_check_url( $location, $is_200 );
             }
         }
     }
