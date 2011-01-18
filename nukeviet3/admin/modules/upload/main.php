@@ -18,7 +18,10 @@ if ( strpos( $client_info['browser']['name'], 'Internet Explorer v6' ) !== false
 $path = ( defined( 'NV_IS_SPADMIN' ) ) ? "" : NV_UPLOADS_DIR;
 $path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get', $path ) ), ENT_QUOTES );
 $currentpath = $nv_Request->isset_request( 'path', 'post' ) ? htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post', $path ) ), ENT_QUOTES ) : htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', 'get', $path ) ), ENT_QUOTES );
-
+if ( empty( $currentpath ) )
+{
+    $currentpath = NV_UPLOADS_DIR;
+}
 $area = "";
 $popup = $nv_Request->get_int( 'popup', 'get', 0 );
 $selectedfile = '';
