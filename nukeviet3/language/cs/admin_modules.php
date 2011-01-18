@@ -86,7 +86,6 @@ $lang_module['autoinstall_module_cantunzip'] = "Chyba: Nedaří rozbalit. Prosí
 $lang_module['autoinstall_module_unzip_success'] = "Úspěšná. Automatické přesměrování na stránku aktivujte.";
 $lang_module['autoinstall_module_unzip_setuppage'] = "Přejít na řížení moduly stránku";
 $lang_module['autoinstall_module_unzip_filelist'] = "Seznam dekomprimovat soubory";
-$lang_module['autoinstall_module_unzip_abort'] = "Instalace nemůže pokračovat,Server nepodporuje.";
 $lang_module['autoinstall_package_select'] = "Zvolte modul do balíčku";
 $lang_module['autoinstall_package_noselect'] = "Prosím, vyberte modul do balíčku";
 $lang_module['autoinstall_package_processing'] = "Prosím, vyčkejte na dokončení ...";

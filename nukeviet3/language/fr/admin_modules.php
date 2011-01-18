@@ -420,12 +420,6 @@ $lang_module['autoinstall_module_unzip_filelist'] = "Liste des fichiers décompr
 	 english:	  List unzip files
 */
 
-$lang_module['autoinstall_module_unzip_abort'] = "Installation automatique ne peut pas être procédée à cause de la manque de support du serveur.";
-/*
-	 vietnam:	  Việc cài đặt tự động không thể tiếp tục do host không hỗ trợ.
-	 english:	  Host doesn't support. Stop setting up.
-*/
-
 $lang_module['autoinstall_package_select'] = "Choisir le module à paqueter";
 /*
 	 vietnam:	  Chọn module để đóng gói

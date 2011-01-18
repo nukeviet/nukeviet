@@ -8,9 +8,9 @@
 if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $title = $note = $module_file = "";
 $page_title = $lang_module['autoinstall_module_install'];
-$xauto = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( session_id() ) . '.list';
-$filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( session_id() ) . '.zip';
-$xfolder = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'folder_' . md5( session_id() ) . '.list';
+
+$filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
+
 if ( $nv_Request->isset_request( 'op', 'post' ) )
 {
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
@@ -49,24 +49,6 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
                     $filelist .= '[' . $j . "] " . $list[$i]['filename'] . " $bytes<br />";
                 }
                 $contents .= '<div style="overflow:auto;height:200px;width:700px">' . $filelist . '</div>';
-                #write filefolder to file 
-                $fh = @fopen( $xauto, 'w' ) or die( "" . $lang_module['autoinstall_module_error_createfile'] . "" );
-                flock( $fh, LOCK_EX );
-                fwrite( $fh, $filefolder );
-                flock( $fh, LOCK_UN );
-                fclose( $fh );
-                #write folder to file 
-                sort( $validfolder );
-                $folderlist = '';
-                foreach ( $validfolder as $value )
-                {
-                    $folderlist .= $value . "\n";
-                }
-                $fh = @fopen( $xfolder, 'w' ) or die( "" . $lang_module['autoinstall_module_error_createfile'] . "" );
-                flock( $fh, LOCK_EX );
-                fwrite( $fh, $folderlist );
-                flock( $fh, LOCK_UN );
-                fclose( $fh );
                 #check to continue
                 $contents .= '
 				<div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>

@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Jan 15, 2011, 10:47:35 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Jan 15, 2011, 10:47:35 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['modules'] = "Setup new module";
 $lang_module['blocks'] = "Setup block";
@@ -88,16 +89,8 @@ $lang_module['autoinstall_module_cantunzip'] = "Fail to unzip. Please check fold
 $lang_module['autoinstall_module_unzip_success'] = "Successful. Automatic redirect to activate page.";
 $lang_module['autoinstall_module_unzip_setuppage'] = "Go to modules page";
 $lang_module['autoinstall_module_unzip_filelist'] = "List unzip files";
-$lang_module['autoinstall_module_unzip_abort'] = "Host doesn't support. Stop setting up.";
 $lang_module['autoinstall_package_select'] = "Select module to package";
 $lang_module['autoinstall_package_noselect'] = "No module selected";
 $lang_module['autoinstall_package_processing'] = "please wait to complete...";
-$lang_module['error_already_a_directory'] = "The file can not be extracted because a directory with the same name already exists";
-$lang_module['error_write_protected'] = "The file can not be extracted because a file write protected";
-$lang_module['error_newer_exist'] = "The file was not extracted because a newer file exists";
-$lang_module['error_path_creation_fail'] = "The file is not extracted because the folder does not exist and can not be created";
-$lang_module['error_write_error'] = "The file was not extracted because there was a  error while writing the file";
-$lang_module['error_read_error'] = "The file was not extracted because there was a error while reading the file";
-$lang_module['error_invalid_header'] = "The file was not extracted because of an archive format error (bad file header)";
 
 ?>

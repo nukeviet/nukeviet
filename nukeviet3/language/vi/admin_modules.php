@@ -87,20 +87,12 @@ $lang_module['autoinstall_module_checkfile_notice'] = "Để tiếp tục quá t
 $lang_module['autoinstall_module_checkfile'] = "KIỂM TRA !";
 $lang_module['autoinstall_module_installdone'] = "TIẾN HÀNH CÀI ĐẶT...";
 $lang_module['autoinstall_module_cantunzip'] = "Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.";
-$lang_module['autoinstall_module_unzip_success'] = "Qúa trình cài đặt thành công. Hệ thống sẽ tự động chuyển bạn sang trang kích hoạt cài đặt ngay bây giờ.";
+$lang_module['autoinstall_module_unzip_success'] = "Quá trình cài đặt thành công. Hệ thống sẽ tự động chuyển bạn sang trang kích hoạt cài đặt ngay bây giờ.";
 $lang_module['autoinstall_module_unzip_setuppage'] = "Đến trang quản lý module.";
 $lang_module['autoinstall_module_unzip_filelist'] = "Danh sách file đã giải nén";
-$lang_module['autoinstall_module_unzip_abort'] = "Việc cài đặt tự động không thể tiếp tục do host không hỗ trợ.";
+$lang_module['autoinstall_module_error_movefile'] = "Việc cài đặt tự động không thể tiếp tục do host không hỗ trợ di chuyển các file sau khi giải nén.";
 $lang_module['autoinstall_package_select'] = "Chọn module để đóng gói";
 $lang_module['autoinstall_package_noselect'] = "Hãy chọn 1 module để đóng gói";
 $lang_module['autoinstall_package_processing'] = " xin chờ quá trình thực hiện hoàn thành...";
-
-$lang_module['error_already_a_directory'] = "The file can not be extracted because a directory with the same name already exists";
-$lang_module['error_write_protected'] = "The file can not be extracted because a file write protected";
-$lang_module['error_newer_exist'] = "The file was not extracted because a newer file exists";
-$lang_module['error_path_creation_fail'] = "The file is not extracted because the folder does not exist and can not be created";
-$lang_module['error_write_error'] = "The file was not extracted because there was a  error while writing the file";
-$lang_module['error_read_error'] = "The file was not extracted because there was a error while reading the file";
-$lang_module['error_invalid_header'] = "The file was not extracted because of an archive format error (bad file header)";
 
 ?>
