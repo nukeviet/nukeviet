@@ -363,7 +363,10 @@ function nv_deletefile( $file, $delsub = false )
                 foreach ( $files as $f )
                 {
                     $unlink = nv_deletefile( $realpath . '/' . $f, true );
-                    if ( empty( $unlink[0] ) ) return $unlink[1];
+                    if ( empty( $unlink[0] ) ) {
+                    	$filename = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $realpath . '/' . $f ) );
+                    	return array( 0, sprintf( $lang_global['error_delete_failed'], $filename ) );
+                    }
                 }
             }
             if ( ! @rmdir( $realpath ) ) return array( 0, sprintf( $lang_global['error_delete_subdirectories_failed'], $path[2] ) );
