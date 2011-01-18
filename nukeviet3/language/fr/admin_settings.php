@@ -135,6 +135,13 @@ $lang_module['uploadconfig_ban_mime'] = "Types de Mime interdits";
 $lang_module['uploadconfig_types'] = "Types de fichier autorisés";
 $lang_module['sys_max_size'] = "Taille maximum du fichier transféré autorisé par votre serveur";
 $lang_module['nv_max_size'] = "Taille maximum du fichier transféré";
+//Chua dich
+$lang_module['upload_checking_mode'] = "Upload Checking Mode";
+$lang_module['strong_mode'] = "Strong";
+$lang_module['mild_mode'] = "Mild";
+$lang_module['lite_mode'] = "Lite";
+$lang_module['upload_checking_note'] = "";
+//
 
 $lang_module['nv_admin_add'] = "Ajouter une tâche";
 $lang_module['nv_admin_edit'] = "Modifier la tâche";

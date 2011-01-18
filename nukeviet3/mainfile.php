@@ -330,6 +330,12 @@ foreach ( $list as $row )
     }
 }
 
+if ( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array( "mild", "lite" ) ) )
+{
+    $global_config['upload_checking_mode'] = "strong";
+}
+define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
+
 if ( $global_config['is_url_rewrite'] )
 {
     $check_rewrite_file = nv_check_rewrite_file();

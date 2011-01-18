@@ -152,6 +152,11 @@ $lang_module['uploadconfig_ban_mime'] = "Loại mime bị cấm";
 $lang_module['uploadconfig_types'] = "Loại files cho phép";
 $lang_module['sys_max_size'] = "Server của bạn chỉ cho phép tải file có dung lượng tối đa";
 $lang_module['nv_max_size'] = "Dung lượng tối đa của file tải lên";
+$lang_module['upload_checking_mode'] = "Kiểu kiểm tra file tải lên";
+$lang_module['strong_mode'] = "Mạnh";
+$lang_module['mild_mode'] = "Vừa phải";
+$lang_module['lite_mode'] = "Yếu";
+$lang_module['upload_checking_note'] = "Máy chủ của bạn không hỗ trợ một số hàm xác định loại file. Nếu chọn \"Mạnh\", bạn sẽ không thể upload file lên host";
 
 #cronjobs
 $lang_module['nv_admin_add'] = "Thêm công việc";

@@ -140,7 +140,7 @@ function nv_admin_checkfirewall ( )
  */
 function nv_admin_checkdata ( $adm_session_value )
 {
-    global $db;
+    global $db, $global_config;
     
     $admin_info = array();
     $strlen = ( NV_CRYPT_SHA1 == 1 ) ? 40 : 32;
@@ -172,6 +172,15 @@ isset( $array_admin['current_login'] ) and ! empty( $array_admin['current_login'
             {
                 list( $allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories ) = explode( "|", $row['files_level'] );
                 $allow_files_type = ! empty( $allow_files_type ) ? explode( ",", $allow_files_type ) : array();
+                $allow_files_type2 = array_values( array_intersect( $allow_files_type, $global_config['file_allowed_ext'] ) );
+                if ( $allow_files_type != $allow_files_type2 )
+                {
+                    $update = implode( ",", $allow_files_type2 );
+                    $update = $update . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
+                    $sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `files_level` = " . $db->dbescape( $update ) . " WHERE `admin_id`=" . $array_admin['admin_id'];
+                    $db->sql_query( $sql );
+                }
+                $allow_files_type = $allow_files_type2;
             }
             
             $admin_info['admin_id'] = intval( $row['admin_id'] );

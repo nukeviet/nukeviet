@@ -353,6 +353,9 @@ if ( defined( "NV_IS_GODADMIN" ) )
         $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'googleAnalyticsID', '')" );
         $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'googleAnalyticsSetDomainName', '0')" );
         
+        //upload_checking_mode
+        $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'upload_checking_mode', 'strong')" );
+        
         //Them tu dong cap nhat Thu hang site
         $id = $db->sql_query_insert_id( "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`) VALUES (NULL, " . ( NV_CURRENTTIME - 86400 ) . ", 1440, 'siteDiagnostic_update.php', 'cron_siteDiagnostic_update', '', 0, 1, 1, 0, 0)" );
         $columns = array();
@@ -362,7 +365,7 @@ if ( defined( "NV_IS_GODADMIN" ) )
             unset( $matches );
             if ( preg_match( "/^(.*?)\_cron\_name$/", $row['Field'], $matches ) )
             {
-                $columns[] = ( $matches[1] == "vi" ) ? "`" . $row['Field'] . "`=" . $db->dbescape( "Cáº­p nháº­t Ä‘Ã¡nh giÃ¡ site tá»« cÃ¡c mÃ¡y chá»§ tÃ¬m kiáº¿m" ) : "`" . $row['Field'] . "`=" . $db->dbescape( "Update site diagnostic" );
+                $columns[] = ( $matches[1] == "vi" ) ? "`" . $row['Field'] . "`=" . $db->dbescape( "Cập nhật thứ hạng site theo máy chủ tìm kiếm" ) : "`" . $row['Field'] . "`=" . $db->dbescape( "Update site diagnostic" );
             }
         }
         $db->sql_freeresult( $result );

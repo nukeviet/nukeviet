@@ -137,6 +137,11 @@ $lang_module ['uploadconfig_ban_mime'] = "Forbid Mimies";
 $lang_module ['uploadconfig_types'] = "File types allowed";
 $lang_module ['nv_max_size'] = "upload max site";
 $lang_module ['sys_max_size'] = "Your server only allows upload maximum";
+$lang_module['upload_checking_mode'] = "Upload Checking Mode";
+$lang_module['strong_mode'] = "Strong";
+$lang_module['mild_mode'] = "Mild";
+$lang_module['lite_mode'] = "Lite";
+$lang_module['upload_checking_note'] = "";
 
 $lang_module ['nv_admin_add'] = "Add job";
 $lang_module ['nv_admin_edit'] = "Edit job";

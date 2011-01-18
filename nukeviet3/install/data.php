@@ -350,6 +350,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'forbid_extensions', 'php'),
 ('sys', 'global', 'forbid_mimes', ''),
 ('sys', 'global', 'nv_max_size', '" . min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) ) . "'),
+('sys', 'global', 'upload_checking_mode', 'strong'),
 ('sys', 'global', 'str_referer_blocker', '0'),
 ('sys', 'global', 'mailer_mode', ''),
 ('sys', 'global', 'smtp_host', 'smtp.gmail.com'),

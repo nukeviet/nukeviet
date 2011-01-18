@@ -151,6 +151,7 @@ if ( $numrows )
         {
             list( $allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories ) = explode( "|", $row['files_level'] );
             $allow_files_type = ! empty( $allow_files_type ) ? explode( ",", $allow_files_type ) : array();
+            $allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
         }
         
         $admins[$row['admin_id']] = array();
