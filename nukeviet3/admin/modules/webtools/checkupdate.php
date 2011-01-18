@@ -33,7 +33,14 @@ function nv_getModVersion( $updatetime = 3600 )
     {
         include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
         $getContent = new UrlGetContents( $global_config );
-        $content = $getContent->get( 'http://update.nukeviet.vn/nukeviet.version.xml?module=all&lang=' . NV_LANG_INTERFACE );
+
+        $nv_sites = array( //
+            'update.nukeviet.vn', //
+            'update2.nukeviet.vn', //
+            'update.nukeviet.info', //
+            'update2.nukeviet.info' );
+
+        $content = nv_rand_getVersion( $nv_sites, $getContent, true );
 
         if ( ! empty( $content ) )
         {

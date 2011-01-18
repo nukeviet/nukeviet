@@ -137,6 +137,39 @@ function nv_save_file_config_global ( )
 }
 
 /**
+ * nv_rand_getVersion()
+ * 
+ * @param mixed $nv_sites
+ * @param mixed $getContent
+ * @param bool $is_modules
+ * @return
+ */
+function nv_rand_getVersion( $nv_sites, $getContent, $is_modules = false )
+{
+    srand( ( float )microtime() * 10000000 );
+    $rand = array_rand( $nv_sites );
+    $nv_site = $nv_sites[$rand];
+
+    if ( $is_modules )
+    {
+        $content = $getContent->get( "http://" . $nv_site . "/nukeviet.version.xml?module=all&lang=" . NV_LANG_INTERFACE );
+    }
+    else
+    {
+        $content = $getContent->get( "http://" . $nv_site . "/nukeviet.version.xml?lang=" . NV_LANG_INTERFACE );
+    }
+
+    unset( $nv_sites[$rand] );
+    if ( empty( $content ) and ! empty( $nv_sites ) )
+    {
+        $nv_sites = array_values( $nv_sites );
+        $content = nv_rand_getVersion( $nv_sites, $getContent, $is_modules );
+    }
+
+    return $content;
+}
+
+/**
  * nv_geVersion()
  * 
  * @param integer $updatetime
@@ -160,7 +193,14 @@ function nv_geVersion( $updatetime = 3600 )
     {
         include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
         $getContent = new UrlGetContents( $global_config );
-        $content = $getContent->get( 'http://update.nukeviet.vn/nukeviet.version.xml?lang=' . NV_LANG_INTERFACE );
+
+        $nv_sites = array( //
+            'update.nukeviet.vn', //
+            'update2.nukeviet.vn', //
+            'update.nukeviet.info', //
+            'update2.nukeviet.info' );
+
+        $content = nv_rand_getVersion( $nv_sites, $getContent, false );
 
         if ( ! empty( $content ) )
         {
