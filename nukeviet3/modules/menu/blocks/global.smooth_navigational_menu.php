@@ -66,18 +66,13 @@ if ( ! function_exists( 'nv_menu_theme_modern' ) )
         return "";
     }
 
-    function nv_get_sub_menu_mod_download ( $modname )
-    {
-    
-    }
-
     function nv_menu_theme_modern ( $block_config )
     {
-        global $db, $db_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid;
+        global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid;
         
-        if ( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/menu/smooth_navigational_menu.tpl" ) )
+        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/smooth_navigational_menu.tpl" ) )
         {
-            $block_theme = $module_info['template'];
+            $block_theme = $global_config['site_theme'];
         }
         else
         {
