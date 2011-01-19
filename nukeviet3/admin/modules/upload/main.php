@@ -1,13 +1,14 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 //age_title = $lang_module['upload_manager'];
-
 
 if ( strpos( $client_info['browser']['name'], 'Internet Explorer v6' ) !== false )
 {
@@ -26,13 +27,14 @@ $area = "";
 $popup = $nv_Request->get_int( 'popup', 'get', 0 );
 $selectedfile = '';
 $uploadflag = $nv_Request->isset_request( 'confirm', 'post' );
+
 if ( $uploadflag )
 {
-    $imgurl = htmlspecialchars( trim( $nv_Request->get_string( 'imgurl', 'post' ) ), ENT_QUOTES );
+    require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
+    $upload = new upload( $admin_info['allow_files_type'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
+
     if ( is_uploaded_file( $_FILES['fileupload']['tmp_name'] ) && nv_check_allow_upload_dir( $currentpath ) )
     {
-        require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
-        $upload = new upload( $admin_info['allow_files_type'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
         $upload_info = $upload->save_file( $_FILES['fileupload'], NV_ROOTDIR . '/' . $currentpath, false );
         if ( ! empty( $upload_info['error'] ) )
         {
@@ -42,43 +44,17 @@ if ( $uploadflag )
         {
             $selectedfile = $upload_info['basename'];
         }
-    }
-    elseif ( ! empty( $imgurl ) )
+    } elseif ( $nv_Request->isset_request( 'imgurl', 'post' ) and nv_is_url( $nv_Request->get_string( 'imgurl', 'post' ) ) )
     {
-        $prover = @getimagesize( $imgurl );
-        if ( $prover )
+        $urlfile = trim( $nv_Request->get_string( 'imgurl', 'post' ) );
+        $upload_info = $upload->save_urlfile( $urlfile, NV_ROOTDIR . '/' . $currentpath, false );
+        if ( ! empty( $upload_info['error'] ) )
         {
-            $imgname = end( explode( "/", $imgurl ) );
-            $imgname = str_replace( '%', '_', $imgname );
-            $file_type = strtolower( $types[$prover[2]] );
-            if ( in_array( $file_type, $allowed_extensions ) )
-            {
-                include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
-                $getContent = new UrlGetContents( $global_config );
-                $content = '';
-                $content = $getContent->get( $imgurl );
-                $handle2 = @fopen( NV_ROOTDIR . '/' . $currentpath . '/' . basename( $imgname ), 'wb' );
-                if ( $handle2 && ! empty( $content ) )
-                {
-                    @fwrite( $handle2, $content );
-                    @fclose( $handle2 );
-                    $datakod = time();
-                    $img_name = $datakod . $imgname;
-                    @rename( NV_ROOTDIR . '/' . $currentpath . '/' . $imgname, NV_ROOTDIR . '/' . $currentpath . '/' . $img_name );
-                }
-                else
-                {
-                    $errors[] = $lang_module['upload_file_error_movefile'];
-                }
-            }
-            else
-            {
-                $errors[] = $lang_module['upload_file_error_movefile'];
-            }
+            $errors[] = $upload_info['error'];
         }
         else
         {
-            $errors[] = $lang_module['upload_create_invalid_filetype'];
+            $selectedfile = $upload_info['basename'];
         }
     }
     else
@@ -86,6 +62,7 @@ if ( $uploadflag )
         $errors[] = $lang_module['upload_file_error_invalidurl'];
     }
 }
+
 if ( ! empty( $errors ) )
 {
     $contents .= "<div id='edit'></div>\n";
@@ -262,4 +239,5 @@ else
     echo nv_admin_theme( $contents );
 }
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

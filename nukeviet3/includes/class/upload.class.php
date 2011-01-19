@@ -12,6 +12,9 @@ define( 'NV_CLASS_UPLOAD_PHP', true );
 
 define( "NV_MIME_INI_FILE", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/.." ) . '/ini/mime.ini' ) );
 define( "NV_LOOKUP_FILE", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/.." ) . '/utf8/lookup.php' ) );
+if ( ! defined( 'NV_TEMP_DIR' ) ) define( 'NV_TEMP_DIR', 'tmp' );
+define( "NV_TEMP_REAL_DIR", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/../.." ) . '/' . NV_TEMP_DIR ) );
+if ( ! defined( 'NV_TEMPNAM_PREFIX' ) ) define( 'NV_TEMPNAM_PREFIX', 'nv_' );
 
 if ( ! defined( 'UPLOAD_CHECKING_MODE' ) ) define( 'UPLOAD_CHECKING_MODE', 'strong' );
 
@@ -32,6 +35,8 @@ if ( ! defined( '_ERROR_UPLOAD_IMAGE_WIDTH' ) ) define( '_ERROR_UPLOAD_IMAGE_WID
 if ( ! defined( '_ERROR_UPLOAD_IMAGE_HEIGHT' ) ) define( '_ERROR_UPLOAD_IMAGE_HEIGHT', "The image is not allowed because the height is greater than the maximum of %d pixels" );
 if ( ! defined( '_ERROR_UPLOAD_FORBIDDEN' ) ) define( '_ERROR_UPLOAD_FORBIDDEN', "Upload forbidden" );
 if ( ! defined( '_ERROR_UPLOAD_WRITABLE' ) ) define( '_ERROR_UPLOAD_WRITABLE', "Directory %s is not writable" );
+if ( ! defined( '_ERROR_UPLOAD_URLFILE' ) ) define( '_ERROR_UPLOAD_URLFILE', "The URL is not valid and cannot be loaded" );
+if ( ! defined( '_ERROR_UPLOAD_URL_NOTFOUND' ) ) define( '_ERROR_UPLOAD_URL_NOTFOUND', "This url was not found" );
 
 /**
  * upload
@@ -54,9 +59,17 @@ class upload
         );
 
     private $file_extension = '';
+    private $urlfile_extension = '';
     private $file_mime = '';
+    private $urlfile_mime = '';
+    private $temp_file = '';
+    private $url_info = array();
     private $is_img = false;
     private $img_info = array();
+    private $disable_functions = array();
+    private $disable_classes = array();
+    private $safe_mode;
+    private $user_agent;
 
     /**
      * upload::__construct()
@@ -83,6 +96,38 @@ class upload
         $this->config['maxheight'] = intval( $maxheight );
         $this->config['upload_checking_mode'] = UPLOAD_CHECKING_MODE;
         $this->config['magic_path'] = $magic_path;
+
+        $this->disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        $this->disable_classes = ( ini_get( "disable_classes" ) != "" and ini_get( "disable_classes" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_classes" ) ) ) : array();
+        $this->safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
+
+        $userAgents = array( //
+            'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0', //
+            'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', //
+            'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)', //
+            'Mozilla/4.8 [en] (Windows NT 6.0; U)', //
+            'Opera/9.25 (Windows NT 6.0; U; en)' //
+            );
+        srand( ( float )microtime() * 10000000 );
+        $rand = array_rand( $nv_sites );
+        $this->user_agent = $userAgents[$rand];
+
+        if ( ! $this->safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $this->disable_functions ) )
+        {
+            set_time_limit( 120 );
+        }
+
+        if ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $this->disable_functions ) )
+        {
+            ini_set( 'allow_url_fopen', 1 );
+            ini_set( 'default_socket_timeout', 120 );
+            $memoryLimitMB = ( integer )ini_get( 'memory_limit' );
+            if ( $memoryLimitMB < 64 )
+            {
+                ini_set( "memory_limit", "64M" );
+            }
+            ini_set( 'user_agent', $this->user_agent );
+        }
     }
 
     /**
@@ -93,8 +138,7 @@ class upload
      */
     private function func_exists( $funcName )
     {
-        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
-        return ( function_exists( $funcName ) and ! in_array( $funcName, $disable_functions ) );
+        return ( function_exists( $funcName ) and ! in_array( $funcName, $this->disable_functions ) );
     }
 
     /**
@@ -105,8 +149,7 @@ class upload
      */
     private function cl_exists( $clName )
     {
-        $disable_classes = ( ini_get( "disable_classes" ) != "" and ini_get( "disable_classes" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_classes" ) ) ) : array();
-        return ( class_exists( $clName ) and ! in_array( $clName, $disable_classes ) );
+        return ( class_exists( $clName ) and ! in_array( $clName, $this->disable_classes ) );
     }
 
     /**
@@ -572,6 +615,478 @@ class upload
         return $return;
     }
 
+    /**
+     * upload::url_get_info()
+     * 
+     * @param mixed $url
+     * @return
+     */
+    private function url_get_info( $url )
+    {
+        //URL: http://username:password@www.example.com:80/dir/page.php?foo=bar&foo2=bar2#bookmark
+        $url_info = @parse_url( $url );
+
+        //[host] => www.example.com
+        if ( ! isset( $url_info['host'] ) )
+        {
+            return false;
+        }
+
+        //[port] => :80
+        $url_info['port'] = isset( $url_info['port'] ) ? $url_info['port'] : 80;
+
+        //[login] => username:password@
+        $url_info['login'] = '';
+        if ( isset( $url_info['user'] ) )
+        {
+            $url_info['login'] = $url_info['user'];
+            if ( isset( $url_info['pass'] ) )
+            {
+                $url_info['login'] .= ':' . $url_info['pass'];
+            }
+            $url_info['login'] .= '@';
+        }
+
+        //[path] => /dir/page.php
+        if ( isset( $url_info['path'] ) )
+        {
+            if ( substr( $url_info['path'], 0, 1 ) != '/' )
+            {
+                $url_info['path'] = '/' . $url_info['path'];
+            }
+        }
+        else
+        {
+            $url_info['path'] = '/';
+        }
+
+        //[query] => ?foo=bar&foo2=bar2
+        $url_info['query'] = ( isset( $url_info['query'] ) and ! empty( $url_info['query'] ) ) ? '?' . $url_info['query'] : '';
+
+        //[fragment] => bookmark
+        $url_info['fragment'] = isset( $url_info['fragment'] ) ? $url_info['fragment'] : '';
+
+        //[file] => page.php
+        $url_info['file'] = explode( '/', $url_info['path'] );
+        $url_info['file'] = array_pop( $url_info['file'] );
+
+        //[dir] => /dir
+        $url_info['dir'] = substr( $url_info['path'], 0, strrpos( $url_info['path'], '/' ) );
+
+        //[base] => http://www.example.com/dir
+        $url_info['base'] = $url_info['scheme'] . '://' . $url_info['host'] . $url_info['dir'];
+
+        //[uri] => http://username:password@www.example.com:80/dir/page.php?#bookmark
+        $url_info['uri'] = $url_info['scheme'] . '://' . $url_info['login'] . $url_info['host'];
+        if ( $url_info['port'] != 80 )
+        {
+            $url_info['uri'] .= ':' . $url_info['port'];
+        }
+        $url_info['uri'] .= $url_info['path'] . $url_info['query'];
+
+        if ( $url_info['fragment'] != '' )
+        {
+            $url_info['uri'] .= '#' . $url_info['fragment'];
+        }
+
+        return $url_info;
+    }
+
+    /**
+     * upload::check_url()
+     * 
+     * @param integer $is_200
+     * @return
+     */
+    private function check_url( $is_200 = 0 )
+    {
+        $res = get_headers( $this->url_info['uri'] );
+        if ( ! $res ) return false;
+        if ( preg_match( "/(200)/", $res[0] ) )
+        {
+            foreach ( $res as $line )
+            {
+                unset( $matches );
+                if ( preg_match( "/^content\-type\:[\s]*(.+)$/is", $line, $matches ) )
+                {
+                    $this->urlfile_mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $matches[1] ) );
+                    break;
+                }
+            }
+            return true;
+        }
+        if ( $is_200 > 3 ) return false;
+        if ( preg_match( "/(301)|(302)|(303)/", $res[0] ) )
+        {
+            foreach ( $res as $k => $v )
+            {
+                unset( $matches );
+                if ( preg_match( "/location:\s(.*?)$/is", $v, $matches ) )
+                {
+                    $is_200++;
+                    $location = trim( $matches[1] );
+                    $this->url_info = $this->url_get_info( $location );
+                    if ( empty( $this->url_info ) or ! isset( $this->url_info['scheme'] ) )
+                    {
+                        return false;
+                    }
+                    return nv_check_url( $is_200 );
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * upload::check_allow_methods()
+     * 
+     * @return
+     */
+    private function check_allow_methods()
+    {
+        $allow_methods = array();
+        if ( extension_loaded( 'curl' ) and ! preg_grep( '/^curl\_/', $this->disable_functions ) )
+        {
+            $allow_methods[] = 'curl';
+        }
+
+        if ( ini_get( 'allow_url_fopen' ) == '1' or strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' )
+        {
+            if ( $this->func_exists( "fopen" ) )
+            {
+                $allow_methods[] = 'fopen';
+            }
+
+            if ( $this->func_exists( "file_get_contents" ) )
+            {
+                $allow_methods[] = 'file_get_contents';
+            }
+
+            if ( $this->func_exists( "file" ) )
+            {
+                $allow_methods[] = 'file';
+            }
+        }
+
+        return $allow_methods;
+    }
+
+    /**
+     * upload::check_mime()
+     * 
+     * @param mixed $mime
+     * @return
+     */
+    private function check_mime( $mime )
+    {
+        $return = false;
+
+        foreach ( $this->config['allowed_files'] as $ext => $mimes )
+        {
+            if ( in_array( $mime, $mimes ) )
+            {
+                $this->urlfile_extension = $ext;
+                $return = true;
+                break;
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * upload::curl_Download()
+     * 
+     * @return
+     */
+    private function curl_Download()
+    {
+        $options = array( //
+            CURLOPT_USERAGENT => $this->user_agent, //
+            CURLOPT_AUTOREFERER => true, //
+            CURLOPT_COOKIEFILE => '', //
+            CURLOPT_FOLLOWLOCATION => true //
+            );
+
+        $curlHandle = curl_init();
+        curl_setopt( $curlHandle, CURLOPT_URL, $this->url_info['uri'] );
+        curl_setopt_array( $curlHandle, $options );
+        if ( ( $fp = fopen( $this->temp_file, "wb" ) ) === false )
+        {
+            curl_close( $curlHandle );
+            return false;
+        }
+
+        curl_setopt( $curlHandle, CURLOPT_FILE, $fp );
+        curl_setopt( $curlHandle, CURLOPT_BINARYTRANSFER, true );
+
+        if ( curl_exec( $curlHandle ) === false )
+        {
+            fclose( $fp );
+            curl_close( $curlHandle );
+            return false;
+        }
+        fclose( $fp );
+        curl_close( $curlHandle );
+        return true;
+    }
+
+    /**
+     * upload::fopen_Download()
+     * 
+     * @return
+     */
+    private function fopen_Download()
+    {
+        if ( ( $fp = fopen( $this->url_info['uri'], "rb" ) ) === false ) return false;
+        if ( ( $fp2 = fopen( $this->temp_file, "wb" ) ) === false )
+        {
+            fclose( $fp );
+            return false;
+        }
+
+        while ( ! feof( $fp ) )
+        {
+            if ( fwrite( $fp2, fread( $fp, 1024 ) ) === false )
+            {
+                fclose( $fp2 );
+                fclose( $fp );
+                return false;
+            }
+        }
+
+        fclose( $fp2 );
+        fclose( $fp );
+        return true;
+    }
+
+    /**
+     * upload::file_get_contents_Download()
+     * 
+     * @return
+     */
+    private function file_get_contents_Download()
+    {
+        $content = file_get_contents( $this->url_info['uri'] );
+        if ( $content === false ) return false;
+        return @file_put_contents( $this->temp_file, $content );
+    }
+
+    /**
+     * upload::file_Download()
+     * 
+     * @return
+     */
+    private function file_Download()
+    {
+        $lines = @file( $this->url_info['uri'] );
+        if ( $lines === false ) return false;
+        if ( ( $fp = fopen( $this->temp_file, "wb" ) ) === false )
+        {
+            return false;
+        }
+
+        foreach ( $lines as $line )
+        {
+            if ( fwrite( $fp, $line ) === false )
+            {
+                fclose( $fp );
+                return false;
+            }
+        }
+
+        fclose( $fp );
+        return true;
+    }
+
+    /**
+     * upload::save_urlfile()
+     * 
+     * @param mixed $urlfile
+     * @param mixed $savepath
+     * @param bool $replace_if_exists
+     * @return
+     */
+    public function save_urlfile( $urlfile, $savepath, $replace_if_exists = true )
+    {
+        $this->file_extension = '';
+        $this->file_mime = '';
+        $this->urlfile_mime = '';
+        $this->urlfile_extension = '';
+        $this->is_img = false;
+        $this->img_info = array();
+
+        $return = array();
+        $return['error'] = "";
+
+        $this->url_info = $this->url_get_info( $urlfile );
+        if ( empty( $this->url_info ) or ! isset( $this->url_info['scheme'] ) )
+        {
+            $return['error'] = _ERROR_UPLOAD_URLFILE;
+            return $return;
+        }
+
+        if ( $this->check_url() === false )
+        {
+            $return['error'] = _ERROR_UPLOAD_URL_NOTFOUND;
+            return $return;
+        }
+
+        if ( empty( $this->urlfile_mime ) )
+        {
+            $return['error'] = _ERROR_UPLOAD_MIME_NOT_RECOGNIZE;
+            return $return;
+        }
+
+        if ( ! $this->check_mime( $this->urlfile_mime ) )
+        {
+            $return['error'] = _ERROR_UPLOAD_TYPE_NOT_ALLOWED . " (" . $this->urlfile_mime . ")";
+            return $return;
+        }
+
+        if ( isset( $this->url_info['file'] ) )
+        {
+            $urlfile_extension = $this->getextension( $this->url_info['file'] );
+            if ( ! empty( $urlfile_extension ) and in_array( $this->urlfile_mime, $this->config['allowed_files'][$urlfile_extension] ) )
+            {
+                $this->urlfile_extension = $urlfile_extension;
+            }
+        }
+
+        $allow_methods = $this->check_allow_methods();
+        if ( ! $this->func_exists( "fopen" ) ) $allow_methods = array( 'file_get_contents' );
+
+        $this->temp_file = str_replace( "\\", "/", tempnam( NV_TEMP_REAL_DIR, NV_TEMPNAM_PREFIX ) );
+
+        $result = false;
+        foreach ( $allow_methods as $method )
+        {
+            $result = call_user_func( array( &$this, $method . '_Download' ) );
+            if ( $result === true ) break;
+        }
+
+        if ( $result === false )
+        {
+            @unlink( $this->temp_file );
+            $return['error'] = _ERROR_UPLOAD_FAILED . " (urlfile is empty)";
+            return $return;
+        }
+
+        $return['size'] = filesize( $this->temp_file );
+        if ( $return['size'] > $this->config['maxsize'] )
+        {
+            @unlink( $this->temp_file );
+            $return['error'] = sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->config['maxsize'] );
+            return $return;
+        }
+
+        $this->file_extension = $this->urlfile_extension;
+        $this->file_mime = $this->get_mime_type( array( 'type' => $this->urlfile_mime, 'tmp_name' => $this->temp_file ) );
+        if ( empty( $this->file_mime ) )
+        {
+            @unlink( $this->temp_file );
+            $return['error'] = _ERROR_UPLOAD_MIME_NOT_RECOGNIZE;
+            return $return;
+        }
+
+        if ( preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) or preg_match( "#application\/[x\-]*(shockwave\-flash)#", $this->file_mime ) )
+        {
+            $this->is_img = true;
+            if ( empty( $this->img_info ) ) $this->img_info = @getimagesize( $this->temp_file );
+
+            if ( empty( $this->img_info ) or ! isset( $this->img_info[0] ) or empty( $this->img_info[0] ) or ! isset( $this->img_info[1] ) or empty( $this->img_info[1] ) )
+            {
+                @unlink( $this->temp_file );
+                $return['error'] = _ERROR_UPLOAD_NOT_IMAGE . " (imgInfo is empty)";
+                return $return;
+            }
+
+            if ( ! $this->verify_image( $this->temp_file ) )
+            {
+                @unlink( $this->temp_file );
+                $return['error'] = _ERROR_UPLOAD_NOT_IMAGE . " (imgContent is failed)";
+                return $return;
+            }
+
+            if ( ! empty( $this->config['maxwidth'] ) and $this->img_info[0] > $this->config['maxwidth'] )
+            {
+                @unlink( $this->temp_file );
+                $return['error'] = sprintf( _ERROR_UPLOAD_IMAGE_WIDTH, $this->config['maxwidth'] );
+                return $return;
+            }
+
+            if ( ! empty( $this->config['maxheight'] ) and $this->img_info[1] > $this->config['maxheight'] )
+            {
+                @unlink( $this->temp_file );
+                $return['error'] = sprintf( _ERROR_UPLOAD_IMAGE_HEIGHT, $this->config['maxheight'] );
+                return $return;
+            }
+        }
+
+        $savepath = str_replace( "\\", "/", realpath( $savepath ) );
+        $return['error'] = $this->check_save_path( $savepath );
+        if ( ! empty( $return['error'] ) )
+        {
+            @unlink( $this->temp_file );
+            return $return;
+        }
+
+        unset( $f );
+        if ( isset( $this->url_info['file'] ) and preg_match( "/^(.*)\.[a-zA-Z0-9]+$/", $this->url_info['file'], $f ) )
+        {
+            $fn = $this->string_to_filename( $f[1] );
+            $filename = $fn . "." . $this->file_extension;
+        }
+        else
+        {
+            $filename = time() . "." . $this->file_extension;
+        }
+
+        if ( ! preg_match( '/\/$/', $savepath ) ) $savepath = $savepath . "/";
+        if ( empty( $replace_if_exists ) )
+        {
+            $filename2 = $filename;
+            $i = 1;
+            while ( file_exists( $savepath . $filename2 ) )
+            {
+                $filename2 = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $filename );
+                $i++;
+            }
+            $filename = $filename2;
+        }
+
+        if ( ! @copy( $this->temp_file, $savepath . $filename ) )
+        {
+            @move_uploaded_file( $this->temp_file, $savepath . $filename );
+        }
+
+        if ( ! file_exists( $savepath . $filename ) )
+        {
+            @unlink( $this->temp_file );
+            $return['error'] = _ERROR_UPLOAD_FAILED;
+            return $return;
+        }
+
+        @unlink( $this->temp_file );
+
+        if ( substr( PHP_OS, 0, 3 ) != 'WIN' )
+        {
+            $oldumask = umask( 0 );
+            chmod( $savepath . $filename, 0777 );
+            umask( $oldumask );
+        }
+
+        $return['name'] = $savepath . $filename;
+        $return['basename'] = $filename;
+        $return['ext'] = $this->file_extension;
+        $return['mime'] = $this->file_mime;
+        $return['is_img'] = $this->is_img;
+        if ( $this->is_img )
+        {
+            $return['img_info'] = $this->img_info;
+        }
+        return $return;
+    }
 }
 
 ?>
