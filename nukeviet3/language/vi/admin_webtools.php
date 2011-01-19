@@ -111,7 +111,7 @@ $lang_module['Top50'] = "Top 50 trang có chứa từ khóa";
 $lang_module['isLocalhost'] = "Công cụ không hỗ trợ Localhost";
 
 $lang_module['autoupdate_system'] = "Nâng cấp site tự động";
-$lang_module['autoupdate_get_error'] = "Lỗi: Hệ thống không kiểm tra được thông tin cập nhật phiên bản NukeViet";
+$lang_module['autoupdate_get_error'] = "Thông báo: Hệ thống không kiểm tra được thông tin cập nhật phiên bản NukeViet";
 $lang_module['autoupdate_download'] = "Download gói cập nhật NukeViet";
 $lang_module['autoupdate_download_complete'] = "Quá trình download file thành công, hãy click vào kiểm tra bản cập nhật để tiếp tục quá trình.";
 $lang_module['autoupdate_form_upload'] = "Hệ thống phát hiện có phiên bản nâng cấp hệ thống, hãy click vào kiểm tra bản cập nhật để tiếp tục quá trình.";
