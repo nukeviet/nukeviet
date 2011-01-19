@@ -371,6 +371,9 @@ if ( defined( "NV_IS_GODADMIN" ) )
         $db->sql_freeresult( $result );
         $columns = implode( ", ", $columns );
         $db->sql_query( "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET " . $columns . " WHERE `id`=" . $id );
+        
+        //TABLE config: config_value varchar(255) => MEDIUMTEXT
+        $db->sql_query( "ALTERTABLE `" . $db_config['prefix'] . "_config` CHANGE `config_value` `config_value` MEDIUMTEXT NOT NULL DEFAULT ''" );
     }
     $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
     nv_save_file_config_global();

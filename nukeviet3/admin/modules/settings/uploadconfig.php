@@ -9,14 +9,48 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module['uploadconfig'];
+$ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
+
+$myini = array( //
+    'types' => array( '' ), //
+    'exts' => array( '' ), //
+    'mimes' => array( '' ) //
+    );
+
+foreach ( $ini as $type => $extmime )
+{
+    $myini['types'][] = $type;
+    $myini['exts'] = array_merge( $myini['exts'], array_keys( $extmime ) );
+    $m = array_values( $extmime );
+    if ( is_string( $m ) ) $myini['mimes'] = array_merge( $myini['mimes'], $m );
+    else
+    {
+        foreach ( $m as $m2 )
+        {
+            if ( ! is_array( $m2 ) ) $m2 = array( $m2 );
+            $myini['mimes'] = array_merge( $myini['mimes'], $m2 );
+        }
+    }
+}
+
+sort( $myini['types'] );
+unset( $myini['types'][0] );
+sort( $myini['exts'] );
+unset( $myini['exts'][0] );
+$myini['mimes'] = array_unique( $myini['mimes'] );
+sort( $myini['mimes'] );
+unset( $myini['mimes'][0] );
 
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-    $type = $nv_Request->get_array( 'type', 'post' );
+    $type = $nv_Request->get_typed_array( 'type', 'post', 'int' );
+    $type = array_flip( $type );
+    $type = array_intersect_key( $myini['types'], $type );
     $type = implode( ',', $type );
 
-    $ext = $nv_Request->get_array( 'ext', 'post' );
+    $ext = $nv_Request->get_typed_array( 'ext', 'post', 'int' );
+    $ext = array_flip( $ext );
+    $ext = array_intersect_key( $myini['exts'], $ext );
     $ext[] = "php";
     $ext[] = "php3";
     $ext[] = "php4";
@@ -26,7 +60,9 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $ext = array_unique( $ext );
     $ext = implode( ',', $ext );
 
-    $mime = $nv_Request->get_array( 'mime', 'post' );
+    $mime = $nv_Request->get_typed_array( 'mime', 'post', 'int' );
+    $mime = array_flip( $mime );
+    $mime = array_intersect_key( $myini['mimes'], $mime );
     $mime = implode( ',', $mime );
 
     $upload_checking_mode = $nv_Request->get_string( 'upload_checking_mode', 'post', '' );
@@ -35,10 +71,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $nv_max_size = $nv_Request->get_int( 'nv_max_size', 'post', $global_config['nv_max_size'] );
     $nv_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $nv_max_size );
 
-    $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`=" . $db->dbescape_string( $type ) . " WHERE `config_name` = 'file_allowed_ext' AND `lang` = 'sys' AND `module`='global' LIMIT 1" );
-    $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`=" . $db->dbescape_string( $ext ) . " WHERE `config_name` = 'forbid_extensions' AND `lang` = 'sys' AND `module`='global' LIMIT 1" );
-    $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`=" . $db->dbescape_string( $mime ) . " WHERE `config_name` = 'forbid_mimes' AND `lang` = 'sys' AND `module`='global' LIMIT 1" );
-    $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`=" . $db->dbescape_string( $nv_max_size ) . " WHERE `config_name` = 'nv_max_size' AND `lang` = 'sys' AND `module`='global' LIMIT 1" );
+    $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'file_allowed_ext', " . $db->dbescape_string( $type ) . ")" );
+    $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'forbid_extensions', " . $db->dbescape_string( $ext ) . ")" );
+    $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'forbid_mimes', " . $db->dbescape_string( $mime ) . ")" );
+    $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'nv_max_size', " . $db->dbescape_string( $nv_max_size ) . ")" );
     $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'upload_checking_mode', " . $db->dbescape_string( $upload_checking_mode ) . ")" );
 
     nv_save_file_config_global();
@@ -47,26 +83,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     die();
 }
 
-$ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
-$types = array_keys( $ini );
-$extmime = array_values( $ini );
-$mimes = $exts = array();
-for ( $i = 0; $i < count( $extmime ); $i++ )
-{
-    $exts = array_merge( $exts, array_keys( $extmime[$i] ) );
-    for ( $j = 0; $j < count( $exts ); $j++ )
-    {
-        if ( isset( $extmime[$i][$exts[$j]] ) )
-        {
-            $mimes = array_merge( ( array )$mimes, ( array )array_values( ( array )$extmime[$i][$exts[$j]] ) );
-        }
-    }
-}
-$mimes = array_unique( $mimes );
-
-sort( $types );
-sort( $exts );
-sort( $mimes );
+$page_title = $lang_module['uploadconfig'];
 
 $contents = "<form action='' method='post'>\n";
 $contents .= "<table class=\"tab1\" style='auto'>\n";
@@ -77,7 +94,7 @@ $contents .= "</tr>\n";
 
 $contents .= "<tbody>";
 $contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['nv_max_size'] . ": </strong></td>\n";
+$contents .= "<td align=\"right\"><strong>" . $lang_module['nv_max_size'] . ":</strong> </td>\n";
 $contents .= "<td>";
 $contents .= "<select name=\"nv_max_size\">\n";
 $sys_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) );
@@ -85,11 +102,7 @@ $p_size = $sys_max_size / 100;
 for ( $index = 100; $index > 0; $index-- )
 {
     $size = floor( $index * $p_size );
-    $sl = "";
-    if ( $size == $global_config['nv_max_size'] )
-    {
-        $sl = " selected=\"selected\"";
-    }
+    $sl = ( $size == $global_config['nv_max_size'] ) ? " selected=\"selected\"" : "";
     $contents .= "<option value=\"" . $size . "\"" . $sl . ">" . nv_convertfromBytes( $size ) . "</option>\n";
 }
 $contents .= "</select> \n";
@@ -100,7 +113,7 @@ $contents .= "</tbody>";
 
 $contents .= "<tbody class='second'>";
 $contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['upload_checking_mode'] . ": </strong></td>\n";
+$contents .= "<td align=\"right\"><strong>" . $lang_module['upload_checking_mode'] . ":</strong> </td>\n";
 $contents .= "<td>";
 $contents .= "<select name=\"upload_checking_mode\">\n";
 $_upload_checking_mode = array( 'strong' => $lang_module['strong_mode'], 'mild' => $lang_module['mild_mode'], 'lite' => $lang_module['lite_mode'] );
@@ -146,9 +159,9 @@ $contents .= "</tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td style='width:200px'><strong>" . $lang_module['uploadconfig_types'] . "</strong></td>\n";
 $contents .= "<td>";
-foreach ( $types as $type )
+foreach ( $myini['types'] as $key => $name )
 {
-    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='type[]' value='" . $type . "' " . ( in_array( $type, $global_config['file_allowed_ext'] ) ? 'checked=checked' : '' ) . "/> " . $type . "&nbsp;&nbsp;</label>";
+    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='type[]' value='" . $key . "'" . ( in_array( $name, $global_config['file_allowed_ext'] ) ? ' checked=checked' : '' ) . "/> " . $name . "&nbsp;&nbsp;</label>";
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
@@ -156,9 +169,9 @@ $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_ext'] . "</strong></td>\n";
 $contents .= "<td>";
-foreach ( $exts as $ext )
+foreach ( $myini['exts'] as $key => $name )
 {
-    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='ext[]' value='" . $ext . "' " . ( in_array( $ext, $global_config['forbid_extensions'] ) ? 'checked=checked' : '' ) . "/> " . $ext . "&nbsp;&nbsp;</label>";
+    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='ext[]' value='" . $key . "'" . ( in_array( $name, $global_config['forbid_extensions'] ) ? ' checked=checked' : '' ) . "/> " . $name . "&nbsp;&nbsp;</label>";
 }
 $contents .= "</td>\n";
 $contents .= "</td>\n";
@@ -169,9 +182,9 @@ $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_mime'] . "</strong></td>\n";
 $contents .= "<td>";
-foreach ( $mimes as $mime )
+foreach ( $myini['mimes'] as $key => $name )
 {
-    $contents .= "<label style='display:inline-block;width:320px'><input type='checkbox' name='mime[]' value='" . $mime . "' " . ( in_array( $mime, $global_config['forbid_mimes'] ) ? 'checked=checked' : '' ) . "/> " . $mime . "&nbsp;&nbsp;</label>";
+    $contents .= "<label style='display:inline-block;width:320px'><input type='checkbox' name='mime[]' value='" . $key . "'" . ( in_array( $name, $global_config['forbid_mimes'] ) ? ' checked=checked' : '' ) . "/> " . $name . "&nbsp;&nbsp;</label>";
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
