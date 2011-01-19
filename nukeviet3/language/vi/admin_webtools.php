@@ -110,4 +110,23 @@ $lang_module['Top10'] = "Top 10 trang của bạn";
 $lang_module['Top50'] = "Top 50 trang có chứa từ khóa";
 $lang_module['isLocalhost'] = "Cộng cụ không hỗ trợ Localhost";
 
+$lang_module['autoupdate_system'] = "Nâng cấp site tự động";
+$lang_module['autoupdate_get_error'] = "Lỗi: Hệ thống kiểm tra được thông tin  cập nhật phiên bản NukeViet";
+$lang_module['autoupdate_download'] = "Download gói Update NukeViet";
+$lang_module['autoupdate_download_complete'] = "Quá trình download file thành cồng, hãy click vào kiểm tra bản cập nhật để tiếp tục quá trình.";
+$lang_module['autoupdate_form_upload'] = "Hệ thống phát hiện có phiên bản nâng cấp hệ thống, hãy click vào kiểm tra bản cập nhật để tiếp tục quá trình.";
+$lang_module['autoupdate_check_file'] = "Kiểm tra bản cập nhật";
+$lang_module['autoupdate_change'] = "Hệ thống kiểm tra thấy bạn đã thay đổi các file sau đây so với bản gốc";
+$lang_module['autoupdate_overwrite'] = "Nếu bạn muốn ghi đè các file này, Hãy click vào nút tiến hành nâng cấp";
+$lang_module['autoupdate_click_update'] = "Hãy click vào nút tiến hành nâng cấp";
+$lang_module['autoupdate_backupfile'] = "Nếu bạn tiếp tục quá trình nâng cấp hệ thống sẽ backup dự phòng các file thay đổi tại file";
+$lang_module['autoupdate_backupfile_error'] = "Quá trình nâng cấp bị lỗi: Hệ thống không tạo file backup bạn kiểm tra lại việc chmode thư mục";
+$lang_module['autoupdate'] = "Nâng cấp hệ thống";
+$lang_module['autoupdate_confirm'] = "Bạn có chắc chắn nâng cấp hệ thống";
+$lang_module['autoupdate_error_create_folder'] = "Quá trình nâng cấp bị lỗi: Hệ thống không tạo được các thư mục sau";
+$lang_module['autoupdate_error_move_file'] = "Quá trình nâng cấp bị lỗi: Hệ thống không di chuyển được các file sau";
+$lang_module['autoupdate_complete_file'] = "Thông báo: Hệ thống đã thực hiện quá trình di chuyển file thành công";
+$lang_module['autoupdate_complete'] = "Thực hiện quá trình nâng cấp thành công.";
+$lang_module['autoupdate_error_data'] = "Và gặp các lỗi về việc cập nhật CSDL";
+
 ?>
