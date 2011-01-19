@@ -8,7 +8,7 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$submenu['config'] = $lang_module['config'];
+//$submenu['config'] = $lang_module['config'];
 
 $allow_func = array( 
     'main' 
