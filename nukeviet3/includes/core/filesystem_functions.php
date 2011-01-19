@@ -373,9 +373,9 @@ function nv_deletefile( $file, $delsub = false )
         }
     }
     
+    $filename = str_replace( NV_ROOTDIR . "/", "", str_replace( '\\', '/', $realpath ) );
     if ( $ftp_check_login == 1 )
     {
-        $filename = str_replace( NV_ROOTDIR . "/", "", str_replace( '\\', '/', $realpath ) );
         if ( is_dir( $realpath ) )
         {
             nv_ftp_del_dir( $conn_id, $filename );
