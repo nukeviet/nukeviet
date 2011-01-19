@@ -17,6 +17,8 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 function nv_error_info ( )
 {
     global $lang_global, $global_config, $error_info;
+    
+    if ( ! defined( 'NV_IS_ADMIN' ) ) return;
     if ( empty( $error_info ) ) return;
     
     $errortype = array( 
