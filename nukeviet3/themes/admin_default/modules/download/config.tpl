@@ -4,7 +4,7 @@
         <table class="tab1">
             <tbody>
                 <tr>
-                    <td>{LANG.config_is_addfile}</td>
+                    <td width="260">{LANG.config_is_addfile}</td>
                     <td>
                         <input name="is_addfile" value="1" type="checkbox"{DATA.is_addfile} />
                     </td>
@@ -58,7 +58,7 @@
             </tbody>
             <tbody>
                 <tr>
-                    <td>{LANG.config_allowfiletype}</td>
+                    <td valign="top">{LANG.config_allowfiletype}</td>
                     <td>
                         <!-- BEGIN: upload_filetype -->
                         <input name="upload_filetype[]" value="{UPLOAD_FILETYPE.ext}" type="checkbox"{UPLOAD_FILETYPE.checked} /> {UPLOAD_FILETYPE.title}<br />
