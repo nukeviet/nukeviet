@@ -48,7 +48,7 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
     $CKEditor = new CKEditor();
     // Do not print the code directly to the browser, return it instead
     $CKEditor->returnOutput = true;
-    $CKEditor->config['skin'] = 'office2003';
+    $CKEditor->config['skin'] = 'v2';
     $CKEditor->config['entities'] = false;
     //$CKEditor->config['enterMode'] = 2;
     $CKEditor->config['language'] = NV_LANG_INTERFACE;
