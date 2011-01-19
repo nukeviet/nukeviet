@@ -39,7 +39,7 @@ else
     if ( isset( $array_cat_admin[$admin_id][0] ) )
     {
         define( 'NV_IS_ADMIN_MODULE', true );
-        if ( intval($array_cat_admin[$admin_id][0]['admin']) == 2 )
+        if ( intval( $array_cat_admin[$admin_id][0]['admin'] ) == 2 )
         {
             define( 'NV_IS_ADMIN_FULL_MODULE', true );
         }
@@ -309,12 +309,12 @@ function nv_show_cat_list ( $parentid = 0 )
     {
         $contents .= "<table class=\"tab1\">\n";
         $contents .= "<thead>\n";
-        $contents .= "<tr align=\"center\">\n";
-        $contents .= "<td style=\"width:40px;\">" . $lang_module['weight'] . "</td>\n";
+        $contents .= "<tr>\n";
+        $contents .= "<td align=\"center\" style=\"width:40px;\">" . $lang_module['weight'] . "</td>\n";
         $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-        $contents .= "<td style=\"width:90px;\">" . $lang_module['inhome'] . "</td>\n";
-        $contents .= "<td style=\"width:60px;\">" . $lang_module['viewcat_page'] . "</td>\n";
-        $contents .= "<td style=\"width:60px;\">" . $lang_module['numlinks'] . "</td>\n";
+        $contents .= "<td align=\"center\" style=\"width:150px;\">" . $lang_module['inhome'] . "</td>\n";
+        $contents .= "<td>" . $lang_module['viewcat_page'] . "</td>\n";
+        $contents .= "<td align=\"center\" style=\"width:90px;\">" . $lang_module['numlinks'] . "</td>\n";
         $contents .= "<td style=\"width:200px;\"></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</thead>\n";
@@ -455,11 +455,11 @@ function nv_show_topics_list ( )
     {
         $contents .= "<table class=\"tab1\">\n";
         $contents .= "<thead>\n";
-        $contents .= "<tr align=\"center\">\n";
+        $contents .= "<tr>\n";
         $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
         $contents .= "<td>" . $lang_module['name'] . "</td>\n";
         $contents .= "<td>" . $lang_module['description'] . "</td>\n";
-        $contents .= "<td style=\"width:120px;\"></td>\n";
+        $contents .= "<td align=\"center\" style=\"width:120px;\"></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</thead>\n";
         $a = 0;
@@ -503,12 +503,12 @@ function nv_show_block_cat_list ( )
     {
         $contents .= "<table class=\"tab1\">\n";
         $contents .= "<thead>\n";
-        $contents .= "<tr align=\"center\">\n";
+        $contents .= "<tr>\n";
         $contents .= "<td style=\"width:50px;\">" . $lang_module['weight'] . "</td>\n";
-        $contents .= "<td style=\"width:40px;\">ID</td>\n";
+        $contents .= "<td align=\"center\" style=\"width:40px;\">ID</td>\n";
         $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-        $contents .= "<td>" . $lang_module['adddefaultblock'] . "</td>\n";
-        $contents .= "<td style=\"width:60px;\">" . $lang_module['numlinks'] . "</td>\n";
+        $contents .= "<td align=\"center\">" . $lang_module['adddefaultblock'] . "</td>\n";
+        $contents .= "<td align=\"center\" style=\"width:90px;\">" . $lang_module['numlinks'] . "</td>\n";
         $contents .= "<td style=\"width:100px;\"></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</thead>\n";
@@ -575,7 +575,7 @@ function nv_show_sources_list ( )
     {
         $contents .= "<table class=\"tab1\">\n";
         $contents .= "<thead>\n";
-        $contents .= "<tr align=\"center\">\n";
+        $contents .= "<tr>\n";
         $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
         $contents .= "<td>" . $lang_module['name'] . "</td>\n";
         $contents .= "<td>" . $lang_module['link'] . "</td>\n";
@@ -691,8 +691,8 @@ function nv_show_block_list ( $bid )
     $contents = "<form name=\"block_list\">";
     $contents .= "<table class=\"tab1\">\n";
     $contents .= "<thead>\n";
-    $contents .= "<tr align=\"center\">\n";
-    $contents .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
+    $contents .= "<tr>\n";
+    $contents .= "<td align=\"center\"><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
     $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
     $contents .= "<td>" . $lang_module['name'] . "</td>\n";
     $contents .= "<td style=\"width:200px;\"></td>\n";
@@ -778,5 +778,27 @@ function nv_array_cat_admin ( )
         $array_cat_admin[$row['userid']][$row['catid']] = $row;
     }
     return $array_cat_admin;
+}
+
+function redriect ( $msg1="", $msg2="", $nv_redirect )
+{
+    if ( empty( $nv_redirect ) )
+    {
+        $nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+    }
+    //////////////////////////////////////////////////////////////////////
+    $contents = "<table><tr><td>";
+    $contents .= "<div align=\"center\">";
+    $contents .= "<strong>" . $msg1 . "</strong><br /><br />\n";
+    $contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+    $contents .= "<strong><a href=\"" . $nv_redirect . "\">" . $msg2 . "</a></strong>";
+    $contents .= "</div>";
+    $contents .= "</td></tr></table>";
+    $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
+    
+    include ( NV_ROOTDIR . "/includes/header.php" );
+    echo nv_admin_theme( $contents );
+    include ( NV_ROOTDIR . "/includes/footer.php" );
+    exit();
 }
 ?>

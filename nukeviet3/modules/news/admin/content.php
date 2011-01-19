@@ -543,9 +543,10 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             {
                 nv_news_fix_block( $bid_i, false );
             }
-            $redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
-            nv_info_die( $global_config['site_description'], $lang_global['site_info'], "<br />" . $lang_module['saveok'] . "<br /><br /><a href=\"" . $redirect . "\">" . $lang_module['clickgotomodule'] . "</a><META HTTP-EQUIV=\"refresh\" content=\"2;URL=" . $redirect . "\" />" );
-            die();
+            $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+            $msg1 = $lang_module['content_saveok'];
+            $msg2 = $lang_module['content_main']." " .$module_info['custom_title'];
+            redriect ( $msg1, $msg2, $url );
         }
     }
 }
@@ -612,39 +613,18 @@ if ( empty( $array_cat_check_content ) )
 }
 
 $contents = "";
-if ( ! empty( $error ) )
-{
-    $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
-    $contents .= "<blockquote class=\"error\"><span>" . implode( "<br>", $error ) . "</span></blockquote>\n";
-    $contents .= "</div>\n";
-    $contents .= "<div class=\"clear\"></div>\n";
-}
-
 $my_head = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.css\" />\n";
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.js\"></script>\n";
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-
-$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $rowcontent['id'] . "\" enctype=\"multipart/form-data\" method=\"post\">";
-$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-$contents .= "<input type=\"hidden\" value=\"1\" name=\"save\">\n";
-$contents .= "<input type=\"hidden\" value=\"" . $rowcontent['id'] . "\" name=\"id\">\n";
-$contents .= "<table summary=\"\" class=\"tab2\">\n";
-$contents .= "<tr>";
-$contents .= "<td valign=\"top\">";
-$contents .= "     <div class=\"news\"><label><strong>" . $lang_module['name'] . "</strong></label>\n";
-$contents .= "     		<input type=\"text\" maxlength=\"255\" value=\"" . $rowcontent['title'] . "\" name=\"title\" id=\"idtitle\"/>";
-$contents .= "     </div>\n";
-
-$contents .= "<div class=\"news\"><label>" . $lang_module['alias'] . ": </label>\n";
-$contents .= "		<input style=\"width: 355px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $rowcontent['alias'] . "\" maxlength=\"255\" />&nbsp;&nbsp;";
-$contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" widht=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\">\n";
-$contents .= "</div>\n";
-
-$contents .= "<div class=\"news\"><label><strong>" . $lang_module['content_cat'] . "</strong></label>\n";
-$contents .= "	<div style=\"height: 130px; width: 380px; overflow: auto; text-align:left; float: right; border: 1px solid #CCCCCC;\">";
-$contents .= "		<table>\n";
-
+/////////////////////////////////////////////////////////////////////////////////////////////////
+$xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'rowcontent', $rowcontent );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'module_name', $module_name );
+$temp = "";
 foreach ( $global_array_cat as $catid_i => $array_value )
 {
     if ( defined( 'NV_IS_ADMIN_MODULE' ) )
@@ -677,247 +657,134 @@ foreach ( $global_array_cat as $catid_i => $array_value )
             $ch .= " checked=\"checked\"";
         }
         
-        $contents .= "<tr><td>" . $xtitle_i . "<input class=\"news_checkbox\" type=\"checkbox\" name=\"catids[]\" value=\"" . $catid_i . "\"" . $ch . ">" . $array_value['title'] . "</td></tr>";
+        $temp .= "<li>" . $xtitle_i . "<input class=\"news_checkbox\" type=\"checkbox\" name=\"catids[]\" value=\"" . $catid_i . "\"" . $ch . ">" . $array_value['title'] . "</li>";
     }
 }
+$xtpl->assign( 'listcatid', $temp );
 
-$contents .= "		</table>\n";
-$contents .= "	</div>\n";
-$contents .= "</div>\n";
-$contents .= "<div class=\"news\"><label>" . $lang_module['content_topic'] . "</label>\n";
-$contents .= "<select name=\"topicid\" style=\"width: 382px;\">\n";
+/// topic
 while ( list( $topicid_i, $title_i ) = each( $array_topic_module ) )
 {
-    $sl = "";
-    if ( $topicid_i == $rowcontent['topicid'] )
-    {
-        $sl = " selected=\"selected\"";
-    }
-    $contents .= "<option value=\"" . $topicid_i . "\" " . $sl . ">" . $title_i . "</option>\n";
+    $sl = ( $topicid_i == $rowcontent['topicid'] ) ? " selected=\"selected\"" : "";
+    $xtpl->assign( 'topicid', $topicid_i );
+    $xtpl->assign( 'topic_title', $title_i );
+    $xtpl->assign( 'sl', $sl );
+    $xtpl->parse( 'main.rowstopic' );
 }
-
-$contents .= "</select>";
-$contents .= "<br><input type=\"text\" maxlength=\"255\" id=\"AjaxTopicText\" value=\"" . $rowcontent['topictext'] . "\" name=\"topictext\" style=\"width: 380px;\">";
-$contents .= "</div>\n";
-$contents .= "<div class=\"news\"><label><strong>" . $lang_module['content_homeimg'] . "</strong></label>\n";
-$contents .= '<input style="width:277px" type="text" name="homeimg" id="homeimg" value="' . $rowcontent['homeimgfile'] . '"/> ';
-$contents .= '<input style="width:100px" type="button" value="' . $lang_global['browse_image'] . '" name="selectimg"/>';
-
-$contents .= "</div>\n";
-$contents .= "<div class=\"news\"><label>" . $lang_module['content_homeimgalt'] . "</label>\n";
-$contents .= "<input type=\"text\" maxlength=\"255\" value=\"" . $rowcontent['homeimgalt'] . "\" name=\"homeimgalt\" /></div>\n";
-$contents .= "<div style=\"clear:both;\"></div>\n";
-$contents .= "<div class=\"news\"><label>" . $lang_module['imgposition'] . "</label>\n";
-$contents .= "	<select name=\"imgposition\">\n";
+// position images
 while ( list( $id_imgposition, $title_imgposition ) = each( $array_imgposition ) )
 {
-    $sl = "";
-    if ( $id_imgposition == $rowcontent['imgposition'] )
-    {
-        $sl = " selected=\"selected\"";
-    }
-    $contents .= "<option value=\"" . $id_imgposition . "\" " . $sl . ">" . $title_imgposition . "</option>\n";
+    $sl = ( $id_imgposition == $rowcontent['imgposition'] ) ? " selected=\"selected\"" : "";
+	$xtpl->assign( 'id_imgposition', $id_imgposition );
+    $xtpl->assign( 'title_imgposition', $title_imgposition );
+    $xtpl->assign( 'posl', $sl );
+    $xtpl->parse( 'main.looppos' );
 }
 
-$contents .= "</select></div><br>\n";
+///////////time update////////////
+$xtpl->assign( 'publ_date', $publ_date );
+$select = "";
+for ( $i = 0; $i <= 23; $i ++ )
+{
+    $select .= "<option value=\"" . $i . "\"" . ( ( $i == $phour ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+}
+$xtpl->assign( 'phour', $select );
+$select = "";
+for ( $i = 0; $i < 60; $i ++ )
+{
+    $select .= "<option value=\"" . $i . "\"" . ( ( $i == $pmin ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+}
+$xtpl->assign( 'pmin', $select );
+/////////// time exp //////////////////////////////////////////
+$xtpl->assign( 'publ_date', $publ_date );
+$select = "";
+for ( $i = 0; $i <= 23; $i ++ )
+{
+    $select .= "<option value=\"" . $i . "\"" . ( ( $i == $ehour ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+}
+$xtpl->assign( 'ehour', $select );
+$select = "";
+for ( $i = 0; $i < 60; $i ++ )
+{
+    $select .= "<option value=\"" . $i . "\"" . ( ( $i == $emin ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+}
+$xtpl->assign( 'emin', $select );
+//////// allowed ////////////////
+$select = "";
+while ( list( $commid_i, $commid_title_i ) = each( $array_allowed_comm ) )
+{
+    $comm_sl = ( $commid_i == $rowcontent['allowed_comm'] ) ? " selected=\"selected\"" : "";
+    $select .= "<option value=\"" . $commid_i . "\" " . $comm_sl . ">" . $commid_title_i . "</option>\n";
+}
+$xtpl->assign( 'allowed_comm', $select );
 
-$contents .= "<label><strong>" . $lang_module['content_hometext'] . "</strong> " . $lang_module['content_notehome'] . "</label><br>\n";
-$contents .= "<div class=\"news\">\n";
-$contents .= "<textarea class=\"textareas\" rows=\"6\" cols=\"20\" name=\"hometext\" style=\"width: 530px;\">" . $rowcontent['hometext'] . "</textarea></div>\n";
-$contents .= "</td>";
-$contents .= "<td style=\"width:20px;\" >";
-$contents .= "</td>";
-$contents .= "<td valign=\"top\" style=\"width:200px;\">";
-// BEGIN
-$contents .= "<ol class=\"message_list\">\n";
+/////////// source //////////////////////////
+$select = "";
+while ( list( $sourceid_i, $source_title_i ) = each( $array_source_module ) )
+{
+    $source_sl = ( $sourceid_i == $rowcontent['sourceid'] ) ? " selected=\"selected\"" : "";
+    $select .= "<option value=\"" . $sourceid_i . "\" " . $source_sl . ">" . $source_title_i . "</option>\n";
+}
+$xtpl->assign( 'sourceid', $select );
+////////////////////////////////////////////////////////////////////////////////////
+if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+{
+    $edits = nv_aleditor( 'bodytext', '100%', '300px', $rowcontent['bodytext'] );
+}
+else
+{
+    $edits = "<textarea style=\"width: 100%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"15\">" . $rowcontent['bodytext'] . "</textarea>";
+}
+///////////////////////////////////////////////////////////////////////////////////////////
+$shtm = "";
 if ( count( $array_block_cat_module ) > 0 )
 {
-    $contents .= "	<li>\n";
-    $contents .= "		<p class=\"message_head\"><cite>" . $lang_module['content_block'] . ":</cite> <span class=\"timestamp\"></span></p>\n";
-    $contents .= "			<div class=\"message_body\">\n";
-    $contents .= "				<div style=\"width: 260px; overflow: auto; text-align:left;\">";
-    $contents .= "					<table>\n";
     foreach ( $array_block_cat_module as $bid_i => $bid_title )
     {
         $ch = in_array( $bid_i, $id_block_content ) ? " checked=\"checked\"" : "";
-        $contents .= "					<tr><td><input class=\"news_checkbox\" type=\"checkbox\" name=\"bids[]\" value=\"" . $bid_i . "\"" . $ch . ">" . $bid_title . "</td></tr>";
+        $shtm .= "<tr><td><input class=\"news_checkbox\" type=\"checkbox\" name=\"bids[]\" value=\"" . $bid_i . "\"" . $ch . ">" . $bid_title . "</td></tr>\n";
     }
-    $contents .= "					</table>\n";
-    $contents .= "				</div>\n";
-    $contents .= "			</div>\n";
-    $contents .= "	</li>\n";
+    $xtpl->assign( 'row_block', $shtm );
+    $xtpl->parse( 'main.block_cat' );
 }
-$contents .= "	<li>\n";
-$contents .= "		<p class=\"message_head\"><cite>" . $lang_module['content_keywords'] . ":</cite> <span class=\"timestamp\"></span></p>\n";
-$contents .= "			<div class=\"message_body\">\n";
-$contents .= "				<p>" . $lang_module['content_keywords_note'] . " <a onclick=\"create_keywords();\" href=\"javascript:void(0);\">" . $lang_module['content_clickhere'] . "</a></p>\n";
-$contents .= "				<textarea rows=\"3\" cols=\"20\" id=\"keywords\" name=\"keywords\" style=\"width: 250px;\">" . $rowcontent['keywords'] . "</textarea>\n";
-$contents .= "			</div>\n";
-$contents .= "	</li>\n";
-
-$contents .= "<li>\n";
-$contents .= "<p class=\"message_head\"><cite>" . $lang_module['content_publ_date'] . "</cite> <span class=\"timestamp\">" . $lang_module['content_notetime'] . "</span></p>\n";
-$contents .= "<div class=\"message_body\"><center>\n";
-$contents .= "<input name=\"publ_date\" id=\"publ_date\" value=\"" . $publ_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'publ_date', 'dd/mm/yyyy', false);\" alt=\"\" height=\"17\">\n";
-$contents .= "<select name=\"phour\">\n";
-for ( $i = 0; $i < 24; $i ++ )
+//////////////////////////////////////////////////////////////////
+$archive_checked = ( $rowcontent['archive'] ) ? "  checked=\"checked\"" : "";
+$xtpl->assign( 'archive_checked', $archive_checked );
+$inhome_checked = ( $rowcontent['inhome'] ) ? "  checked=\"checked\"" : "";
+$xtpl->assign( 'inhome_checked', $inhome_checked );
+$allowed_rating_checked = ( $rowcontent['allowed_rating'] ) ? "  checked=\"checked\"" : "";
+$xtpl->assign( 'allowed_rating_checked', $allowed_rating_checked );
+$allowed_send_checked = ( $rowcontent['allowed_send'] ) ? "  checked=\"checked\"" : "";
+$xtpl->assign( 'allowed_send_checked', $allowed_send_checked );
+$allowed_print_checked = ( $rowcontent['allowed_print'] ) ? "  checked=\"checked\"" : "";
+$xtpl->assign( 'allowed_print_checked', $allowed_print_checked );
+$allowed_save_checked = ( $rowcontent['allowed_save'] ) ? "  checked=\"checked\"" : "";
+$xtpl->assign( 'allowed_save_checked', $allowed_save_checked );
+////////////////////////////////////////////////////////////////////////////////
+$xtpl->assign( 'edit_bodytext', $edits );
+///////////////////////////////////////////////////////////////////////////////////
+if ( $error != "" )
 {
-    $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $phour ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+    $xtpl->assign( 'error',  implode( "<br>", $error ) );
+    $xtpl->parse( 'main.error' );
 }
-$contents .= "</select>:<select name=\"pmin\">\n";
-for ( $i = 0; $i < 60; $i ++ )
+if ( $rowcontent['status'] == 1 )
 {
-    $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $pmin ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
-}
-$contents .= "</select>\n";
-$contents .= "</center></div>\n";
-$contents .= "</li>\n";
-
-$contents .= "<li>\n";
-$contents .= "<p class=\"message_head\"><cite>" . $lang_module['content_exp_date'] . ":</cite> <span class=\"timestamp\">" . $lang_module['content_notetime'] . "</span></p>\n";
-$contents .= "<div class=\"message_body\"><center> \n";
-$contents .= "<input name=\"exp_date\" id=\"exp_date\" value=\"" . $exp_date . "\" style=\"width: 90px;\" maxlength=\"10\" type=\"text\">\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_date', 'dd/mm/yyyy', false);\" alt=\"\" height=\"17\">\n";
-$contents .= "<select name=\"ehour\">\n";
-for ( $i = 0; $i < 24; $i ++ )
-{
-    $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $ehour ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
-}
-$contents .= "</select>:<select name=\"emin\">\n";
-for ( $i = 0; $i < 60; $i ++ )
-{
-    $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $emin ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
-}
-$contents .= "</select>\n";
-$contents .= "</center>";
-$contents .= "<div style=\"margin-top: 10px;\"><input type=\"checkbox\" value=\"1\" name=\"archive\" " . ( ( $rowcontent['archive'] ) ? "  checked=\"checked\"" : "" ) . "> <label>" . $lang_module['content_archive'] . "</label></div>\n";
-$contents .= "</div>\n";
-$contents .= "</li>\n";
-
-$contents .= "<li>\n";
-$contents .= "<p class=\"message_head\"><cite>" . $lang_module['content_extra'] . ":</cite></p>\n";
-$contents .= "<div class=\"message_body\">\n";
-
-$contents .= "<div style=\"margin-bottom: 2px;\"><input type=\"checkbox\" value=\"1\" name=\"inhome\" " . ( ( $rowcontent['inhome'] ) ? "  checked=\"checked\"" : "" ) . "><label>" . $lang_module['content_inhome'] . "</label></div>\n";
-$contents .= "<div style=\"margin-bottom: 2px;\"><label>" . $lang_module['content_allowed_comm'] . "</label> \n";
-$contents .= "<select name=\"allowed_comm\">\n";
-while ( list( $comm_i, $title_i ) = each( $array_allowed_comm ) )
-{
-    $sl = "";
-    if ( $comm_i == $rowcontent['allowed_comm'] )
-    {
-        $sl = " selected=\"selected\"";
-    }
-    $contents .= "<option value=\"" . $comm_i . "\" " . $sl . ">" . $title_i . "</option>\n";
-
-}
-$contents .= "</select></div>\n";
-$contents .= "<div style=\"margin-bottom: 2px;\"><input type=\"checkbox\" value=\"1\" name=\"allowed_rating\" " . ( ( $rowcontent['allowed_rating'] ) ? "  checked=\"checked\"" : "" ) . "><label>" . $lang_module['content_allowed_rating'] . "</label></div>\n";
-$contents .= "<div style=\"margin-bottom: 2px;\"><input type=\"checkbox\" value=\"1\" name=\"allowed_send\" " . ( ( $rowcontent['allowed_send'] ) ? "  checked=\"checked\"" : "" ) . "><label>" . $lang_module['content_allowed_send'] . "</label></div>\n";
-$contents .= "<div style=\"margin-bottom: 2px;\"><input type=\"checkbox\" value=\"1\" name=\"allowed_print\" " . ( ( $rowcontent['allowed_print'] ) ? "  checked=\"checked\"" : "" ) . "><label>" . $lang_module['content_allowed_print'] . "</label></div>\n";
-$contents .= "<div style=\"margin-bottom: 2px;\"><input type=\"checkbox\" value=\"1\" name=\"allowed_save\" " . ( ( $rowcontent['allowed_save'] ) ? "  checked=\"checked\"" : "" ) . "><label>" . $lang_module['content_allowed_save'] . "</label></div>\n";
-$contents .= "</div>\n";
-$contents .= "</ol>\n";
-$contents .= "<p class=\"collapse_buttons\"><a href=\"#\" class=\"collpase_all_message\">" . $lang_module['content_allcollapse'] . "</a><a href=\"#\" class=\"show_all_message\">" . $lang_module['content_allshow'] . "</a></p>\n";
-//end
-$contents .= "</td>";
-$contents .= "</tr>";
-$contents .= "</table>";
-$contents .= "<div style=\"margin-bottom: 1em;\"><label><strong>" . $lang_module['content_bodytext'] . "</strong>" . $lang_module['content_bodytext_note'] . "</label><br>\n";
-if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
-{
-    $contents .= nv_aleditor( 'bodytext', '810px', '300px', $rowcontent['bodytext'] );
+    $xtpl->parse( 'main.status' );
 }
 else
 {
-    $contents .= "<textarea style=\"width: 810px\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"15\">" . $rowcontent['bodytext'] . "</textarea>";
+    $xtpl->parse( 'main.status0' );
 }
-$contents .= "</div>\n";
-$contents .= "<div style=\"margin-bottom: 1em;\"><label><strong>" . $lang_module['content_author'] . "</strong></label><br>\n";
-$contents .= "<input type=\"text\" maxlength=\"255\" value=\"" . $rowcontent['author'] . "\" name=\"author\" style=\"width: 530px;\"></div>\n";
-$contents .= "<div style=\"margin-bottom: 1em;\"><label><strong>" . $lang_module['content_sourceid'] . "</strong></label><br>\n";
-$contents .= "<select name=\"sourceid\" style=\"width: 536px;\">\n";
-while ( list( $sourceid_i, $title_i ) = each( $array_source_module ) )
-{
-    $sl = "";
-    if ( $sourceid_i == $rowcontent['sourceid'] )
-    {
-        $sl = " selected=\"selected\"";
-    }
-    $contents .= "<option value=\"" . $sourceid_i . "\" " . $sl . ">" . $title_i . "</option>\n";
-}
-$contents .= "</select><br>\n";
-$contents .= "<input type=\"text\" maxlength=\"255\" id=\"AjaxSourceText\" value=\"" . $rowcontent['sourcetext'] . "\" name=\"sourcetext\" style=\"width: 530px;\"></div>\n";
-$contents .= "<div style=\"margin-bottom: 1em;\"><input type=\"checkbox\" value=\"1\" name=\"copyright\" " . ( ( $rowcontent['copyright'] ) ? "  checked=\"checked\"" : "" ) . "> <label>" . $lang_module['content_copyright'] . "</label></div>\n";
 
-$contents .= "<center>";
-if ( $rowcontent['status'] == 1 and $rowcontent['id'] > 0 )
-{
-    $contents .= "<input name=\"statussave\" type=\"submit\" value=\"" . $lang_module['save'] . "\" />";
-}
-else
-{
-    $contents .= "<input name=\"status0\" type=\"submit\" value=\"" . $lang_module['save_temp'] . "\" />";
-    if ( ! empty( $array_cat_pub_content ) )
-    {
-        $contents .= "<input name=\"status1\" type=\"submit\" value=\"" . $lang_module['publtime'] . "\" />";
-    }
-}
-$contents .= "</center>\n";
-$contents .= "</form>\n";
-
-$contents .= "<script type=\"text/javascript\">\n";
 if ( empty( $rowcontent['alias'] ) )
 {
-    $contents .= '$("#idtitle").change(function () {
-    get_alias();
-});';
+    $xtpl->parse( 'main.getalias' );
 }
+$xtpl->assign( 'CURRENT',  NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" ) );
 
-$contents .= '$("input[name=selectimg]").click(function(){
-						var area = "homeimg";
-						var path= "' . NV_UPLOADS_DIR . '/' . $module_name . '";						
-						var currentpath= "' . NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" ) . '";						
-						var type= "image";
-						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-						return false;
-					});';
-
-$contents .= "$(document).ready(function() {\n";
-$contents .= "	$(\"#AjaxSourceText\").autocomplete(\n";
-$contents .= "		\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=sourceajax\",\n";
-$contents .= "		{\n";
-$contents .= "			delay:10,\n";
-$contents .= "			minChars:2,\n";
-$contents .= "			matchSubset:1,\n";
-$contents .= "			matchContains:1,\n";
-$contents .= "			cacheLength:10,\n";
-$contents .= "			onItemSelect:selectItem,\n";
-$contents .= "			onFindValue:findValue,\n";
-$contents .= "			formatItem:formatItem,\n";
-$contents .= "			autoFill:true\n";
-$contents .= "		}\n";
-$contents .= "	);\n";
-$contents .= "\n";
-
-$contents .= "	$(\"#AjaxTopicText\").autocomplete(\n";
-$contents .= "		\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=topicajax\",\n";
-$contents .= "		{\n";
-$contents .= "			delay:10,\n";
-$contents .= "			minChars:2,\n";
-$contents .= "			matchSubset:1,\n";
-$contents .= "			matchContains:1,\n";
-$contents .= "			cacheLength:10,\n";
-$contents .= "			onItemSelect:selectItem,\n";
-$contents .= "			onFindValue:findValue,\n";
-$contents .= "			autoFill:true\n";
-$contents .= "		}\n";
-$contents .= "	);\n";
-$contents .= "\n";
-
-$contents .= "});\n";
-$contents .= "</script>\n";
+$xtpl->parse( 'main' );
+$contents .= $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

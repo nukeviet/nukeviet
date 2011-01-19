@@ -199,11 +199,11 @@ $base_url_exptime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=
 $contents .= "<form name=\"block_list\">";
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
 $contents .= "<thead>";
-$contents .= "<tr align=\"center\">\n";
+$contents .= "<tr>\n";
 $contents .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
 $contents .= "<td><a href=\"" . $base_url_name . "\">" . $lang_module['name'] . "</a></td>\n";
-$contents .= "<td><a href=\"" . $base_url_publtime . "\">" . $lang_module['content_publ_date'] . "</a></td>\n";
-$contents .= "<td>" . $lang_module['status'] . "</td>\n";
+$contents .= "<td align=\"center\"><a href=\"" . $base_url_publtime . "\">" . $lang_module['content_publ_date'] . "</a></td>\n";
+$contents .= "<td align=\"center\">" . $lang_module['status'] . "</td>\n";
 $contents .= "<td>" . $lang_module['content_admin'] . "</td>\n";
 $contents .= "<td></td>\n";
 $contents .= "</thead>";

@@ -90,8 +90,8 @@ if ( $db->sql_numrows( $result ) )
     $contents .= "<table class=\"tab1\">\n";
     $contents .= " <caption>" . $lang_module['addtoblock'] . "</caption>\n";
     $contents .= "<thead>\n";
-    $contents .= "<tr align=\"center\">\n";
-    $contents .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
+    $contents .= "<tr>\n";
+    $contents .= "<td align=\"center\" width=\"60\"><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
     $contents .= "<td>" . $lang_module['name'] . "</td>\n";
     $contents .= "</tr>\n";
     $contents .= "</thead>\n";

@@ -516,29 +516,24 @@ table.tab1 td {
 }
 
 #footer {
-    clear: both;
     border-top: 3px solid #FF6600;
     margin: 2px 0px 2px 0px
 }
 
 #footer div.copyright {
     color: #4b4b4b;
-    float: left;
     font: normal 11px / 15px Arial, Verdana, sans-serif;
     margin: 7px 10px 7px 10px;
     padding: 0;
-    position: relative;
-    width: 850px;
-    clear: both;
+	float:left;
 }
 
 #footer div.imgstat {
-    float: right;
     margin: 13px 10px 5px 0px;
     padding: 0;
-    position: relative;
     text-align: right;
-    width: 100px
+    width: 100px;
+	float:right
 }
 
 #header {
