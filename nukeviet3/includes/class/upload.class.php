@@ -109,7 +109,7 @@ class upload
             'Opera/9.25 (Windows NT 6.0; U; en)' //
             );
         srand( ( float )microtime() * 10000000 );
-        $rand = array_rand( $nv_sites );
+        $rand = array_rand( $userAgents );
         $this->user_agent = $userAgents[$rand];
 
         if ( ! $this->safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $this->disable_functions ) )
