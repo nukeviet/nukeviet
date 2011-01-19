@@ -131,7 +131,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_CONFIG_GLOBALTABLE . "` (
   `lang` varchar(3) NOT NULL DEFAULT 'sys',
   `module` varchar(25) NOT NULL DEFAULT 'global',
   `config_name` varchar(30) NOT NULL DEFAULT '',
-  `config_value` MEDIUMTEXT NOT NULL DEFAULT '',
+  `config_value` mediumtext NOT NULL,
   UNIQUE KEY `lang` (`lang`,`module`,`config_name`)
 ) ENGINE=MyISAM";
 
