@@ -700,38 +700,44 @@ class upload
      */
     private function check_url( $is_200 = 0 )
     {
-        $res = get_headers( $this->url_info['uri'] );
+        $res = get_headers( $this->url_info['uri'], 1 );
         if ( ! $res ) return false;
         if ( preg_match( "/(200)/", $res[0] ) )
         {
-            foreach ( $res as $line )
+            if ( isset( $res['Content-Type'] ) and ! empty( $res['Content-Type'] ) )
             {
-                unset( $matches );
-                if ( preg_match( "/^content\-type\:[\s]*(.+)$/is", $line, $matches ) )
+                if ( is_array( $res['Content-Type'] ) ) $res['Content-Type'] = array( $res['Content-Type'] );
+                foreach ( $res['Content-Type'] as $Ctype )
                 {
-                    $this->urlfile_mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $matches[1] ) );
-                    break;
+                    $Ctype = trim( $Ctype );
+                    if ( ! empty( $Ctype ) )
+                    {
+                        $this->urlfile_mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $Ctype );
+                        break;
+                    }
                 }
             }
             return true;
         }
-        if ( $is_200 > 3 ) return false;
+        if ( $is_200 > 5 ) return false;
         if ( preg_match( "/(301)|(302)|(303)/", $res[0] ) )
         {
-            foreach ( $res as $k => $v )
+            if ( isset( $res['Location'] ) and ! empty( $res['Location'] ) )
             {
-                unset( $matches );
-                if ( preg_match( "/location:\s(.*?)$/is", $v, $matches ) )
+                if ( is_array( $res['Location'] ) ) $res['Location'] = $res['Location'][0];
+
+                $is_200++;
+                $location = trim( $res['Location'] );
+                if ( substr( $location, 0, 1 ) == "/" )
                 {
-                    $is_200++;
-                    $location = trim( $matches[1] );
-                    $this->url_info = $this->url_get_info( $location );
-                    if ( empty( $this->url_info ) or ! isset( $this->url_info['scheme'] ) )
-                    {
-                        return false;
-                    }
-                    return nv_check_url( $is_200 );
+                    $location = $this->url_info['scheme'] . "://" . $this->url_info['host'] . $location;
                 }
+                $this->url_info = $this->url_get_info( $location );
+                if ( empty( $this->url_info ) or ! isset( $this->url_info['scheme'] ) )
+                {
+                    return false;
+                }
+                return $this->check_url( $is_200 );
             }
         }
         return false;

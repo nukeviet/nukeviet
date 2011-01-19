@@ -37,6 +37,8 @@ class UrlGetContents
 
     private $redirectCount = 0;
 
+    public $time_limit = 60;
+
     /**
      * UrlGetContents::__construct()
      * 
@@ -51,13 +53,13 @@ class UrlGetContents
 
         if ( ! $safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $disable_functions ) )
         {
-            set_time_limit( 0 );
+            set_time_limit( $this->time_limit );
         }
 
         if ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) )
         {
             ini_set( 'allow_url_fopen', 1 );
-            ini_set( 'default_socket_timeout', 120 );
+            ini_set( 'default_socket_timeout', $this->time_limit );
             $memoryLimitMB = ( integer )ini_get( 'memory_limit' );
             if ( $memoryLimitMB < 64 )
             {
@@ -107,12 +109,48 @@ class UrlGetContents
     }
 
     /**
+     * UrlGetContents::check_url()
+     * 
+     * @param integer $is_200
+     * @return
+     */
+    private function check_url( $is_200 = 0 )
+    {
+        $res = get_headers( $this->url_info['uri'], 1 );
+        if ( ! $res ) return false;
+        if ( preg_match( "/(200)/", $res[0] ) ) return true;
+        if ( $is_200 > 5 ) return false;
+        if ( preg_match( "/(301)|(302)|(303)/", $res[0] ) )
+        {
+            if ( isset( $res['Location'] ) and ! empty( $res['Location'] ) )
+            {
+                if ( is_array( $res['Location'] ) ) $res['Location'] = $res['Location'][0];
+
+                $is_200++;
+                $location = trim( $res['Location'] );
+                if ( substr( $location, 0, 1 ) == "/" )
+                {
+                    $location = $this->url_info['scheme'] . "://" . $this->url_info['host'] . $location;
+                }
+                $this->url_info = $this->url_get_info( $location );
+                if ( ! $this->url_info or ! isset( $this->url_info['scheme'] ) )
+                {
+                    return false;
+                }
+                return $this->check_url( $is_200 );
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * UrlGetContents::generate_newUrl()
      * 
      * @param mixed $url
      * @return
      */
-    function generate_newUrl( $url )
+    private function generate_newUrl( $url )
     {
         $m = trim( $url );
 
@@ -538,10 +576,9 @@ class UrlGetContents
     {
         $this->url_info = $this->url_get_info( $url );
 
-        if ( ! $this->url_info or ! isset( $this->url_info['scheme'] ) )
-        {
-            return false;
-        }
+        if ( ! $this->url_info or ! isset( $this->url_info['scheme'] ) ) return false;
+
+        if ( $this->check_url() === false ) return false;
 
         $this->login = ( string )$login;
         $this->password = ( string )$password;
