@@ -201,7 +201,7 @@ if ( ! empty( $info ) )
     {
         $field = array();
         $field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] );
-        $new_version = nv_geVersion( 28800 ); //kem tra lai sau 8 tieng
+        $new_version = nv_geVersion( 86400 ); //kem tra lai sau 24 tieng
         $info = "";
         if ( ! empty( $new_version ) )
         {

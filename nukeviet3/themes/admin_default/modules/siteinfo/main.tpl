@@ -70,15 +70,13 @@
 <!-- END: inf -->
 <!-- END: main2 -->
 <!-- BEGIN: main3 -->
-<div id="NukeVietGoogleCode"></div>
+<div id="NukeVietGoogleCode"><a class="button1" href="#"><span><span>{LANG.nukevietChange_caption}</span></span></a></div>
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){
-$("#NukeVietGoogleCode").load('index.php?nv=siteinfo&gcode=1&num=' + nv_randomPassword(10));
-});
+$(document).ready(function(){$("#NukeVietGoogleCode a").click(function(){$("#NukeVietGoogleCode").text("").load("index.php?nv=siteinfo&gcode=1&num="+nv_randomPassword(10));return false})});
 //]]>
 </script>
-<!-- END: main2 -->
+<!-- END: main3 -->
 <!-- END: main -->
 <!-- BEGIN: NukevietChange -->
 <table class="tab1">
