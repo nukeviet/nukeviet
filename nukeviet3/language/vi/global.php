@@ -229,4 +229,9 @@ $lang_global['yahoo_openid_login'] = "Yahoo";
 
 //Breakcrump
 $lang_global['breakcrum'] = "Bạn đang ở";
+
+//ADMIN_LOGIN_MODE
+$lang_global['admin_access_denied1'] = "Rất tiếc là hiện nay hệ thống không có phép các Admin đăng nhập";
+$lang_global['admin_access_denied2'] = "Rất tiếc là hiện nay hệ thống không có phép các Quản trị module đăng nhập";
+
 ?>

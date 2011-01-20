@@ -75,6 +75,23 @@ if ( ! empty( $admin_cookie ) )
         define( 'NV_IS_GODADMIN', true );
     }
     
+    if ( ! defined( 'ADMIN_LOGIN_MODE' ) ) define( 'ADMIN_LOGIN_MODE', 3 );
+    if ( ADMIN_LOGIN_MODE == 2 and ! defined( 'NV_IS_SPADMIN' ) )
+    {
+        $nv_Request->unset_request( 'admin,online', 'session' );
+        $info = "Note: Access denied in Admin Panel!<br />Only God-Admin and Super-Admin has access in Admin Panel!";
+        $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
+        die( $info );
+    }
+
+    if ( ADMIN_LOGIN_MODE == 1 and ! defined( 'NV_IS_GODADMIN' ) )
+    {
+        $nv_Request->unset_request( 'admin,online', 'session' );
+        $info = "Note: Access denied in Admin Panel!<br />Only God-Admin has access in Admin Panel!";
+        $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
+        die( $info );
+    }
+    
     if ( ! empty( $admin_info['editor'] ) )
     {
         if ( file_exists( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $admin_info['editor'] . '/nv.php' ) )

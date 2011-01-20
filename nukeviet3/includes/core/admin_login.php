@@ -34,9 +34,7 @@ if ( ! nv_admin_checkfirewall() )
 $error = "";
 $login = "";
 
-$array_gfx_chk = array( 
-    1, 5, 6, 7 
-);
+$array_gfx_chk = array( 1, 5, 6, 7 );
 if ( in_array( $global_config['gfx_chk'], $array_gfx_chk ) )
 {
     $global_config['gfx_chk'] = 1;
@@ -57,12 +55,10 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
     if ( empty( $nv_username ) )
     {
         $error = $lang_global['nickname_empty'];
-    }
-    elseif ( empty( $nv_password ) )
+    } elseif ( empty( $nv_password ) )
     {
         $error = $lang_global['password_empty'];
-    }
-    elseif ( $global_config['gfx_chk'] == 1 and ! nv_capcha_txt( $nv_seccode ) )
+    } elseif ( $global_config['gfx_chk'] == 1 and ! nv_capcha_txt( $nv_seccode ) )
     {
         $error = $lang_global['securitycodeincorrect'];
     }
@@ -75,8 +71,9 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
             if ( empty( $nv_username ) ) $nv_username = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
             if ( empty( $nv_password ) ) $nv_password = filter_text_input( 'nv_password', 'post', '' );
         }
+
         $userid = 0;
-        $sql = "SELECT userid, username, password FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . md5( $nv_username ) . "'";
+        $sql = "SELECT `userid`, `username`, `password` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` ='" . md5( $nv_username ) . "'";
         $result = $db->sql_query( $sql );
         if ( $db->sql_numrows( $result ) == 1 )
         {
@@ -86,43 +83,55 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                 $userid = $row['userid'];
             }
         }
-        
+
         $error = $lang_global['loginincorrect'];
         if ( $userid > 0 )
         {
             $query = "SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE t1.admin_id = " . $userid . " AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1";
-            $result = $db->sql_query( $query );
-            $numrows = $db->sql_numrows( $result );
-            if ( $numrows == 1 )
+            if ( ( $result = $db->sql_query( $query ) ) !== false )
             {
-                $row = $db->sql_fetchrow( $result );
-                $db->sql_freeresult( $result );
-                
-                $current_login = NV_CURRENTTIME;
-                $admin_id = intval( $row['admin_id'] );
-                $admin_lev = intval( $row['admin_lev'] );
-                $agent = substr( NV_USER_AGENT, 0, 254 );
-                $checknum = nv_genpass( 10 );
-                $checknum = $crypt->hash( $checknum );
-                $array_admin = array( 
-                    'admin_id' => $admin_id, 'checknum' => $checknum, 'current_agent' => $agent, 'last_agent' => $row['admin_last_agent'], 'current_ip' => $client_info['ip'], 'last_ip' => $row['admin_last_ip'], 'current_login' => $current_login, 'last_login' => intval( $row['admin_last_login'] ) 
-                );
-                $admin_serialize = serialize( $array_admin );
-                $query = $db->constructQuery( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `check_num` = [s], `last_login` = [d], `last_ip` = [s], `last_agent` = [s] WHERE `admin_id`=[d]", $checknum, $current_login, $client_info['ip'], $agent, $admin_id );
-                $db->sql_query( $query );
-                $nv_Request->set_Session( 'admin', $admin_serialize );
-                $nv_Request->set_Session( 'online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0' );
-                define( 'NV_IS_ADMIN', true );
-                
-                $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
-                if ( ! empty( $admin_login_redirect ) )
+                $numrows = $db->sql_numrows( $result );
+                if ( $numrows == 1 )
                 {
-                    $redirect = $admin_login_redirect;
-                    $nv_Request->unset_request( 'admin_login_redirect', 'session' );
+                    $row = $db->sql_fetchrow( $result );
+                    $db->sql_freeresult( $result );
+
+                    $admin_lev = intval( $row['admin_lev'] );
+
+                    if ( ! defined( 'ADMIN_LOGIN_MODE' ) ) define( 'ADMIN_LOGIN_MODE', 3 );
+                    if ( ADMIN_LOGIN_MODE == 2 and ! in_array( $admin_lev, array( 1, 2 ) ) )
+                    {
+                        $error = $lang_global['admin_access_denied2'];
+                    } elseif ( ADMIN_LOGIN_MODE == 1 and $admin_lev != 1 )
+                    {
+                        $error = $lang_global['admin_access_denied1'];
+                    }
+                    else
+                    {
+                        $current_login = NV_CURRENTTIME;
+                        $admin_id = intval( $row['admin_id'] );
+                        $agent = substr( NV_USER_AGENT, 0, 254 );
+                        $checknum = nv_genpass( 10 );
+                        $checknum = $crypt->hash( $checknum );
+                        $array_admin = array( 'admin_id' => $admin_id, 'checknum' => $checknum, 'current_agent' => $agent, 'last_agent' => $row['admin_last_agent'], 'current_ip' => $client_info['ip'], 'last_ip' => $row['admin_last_ip'], 'current_login' => $current_login, 'last_login' => intval( $row['admin_last_login'] ) );
+                        $admin_serialize = serialize( $array_admin );
+                        $query = $db->constructQuery( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `check_num` = [s], `last_login` = [d], `last_ip` = [s], `last_agent` = [s] WHERE `admin_id`=[d]", $checknum, $current_login, $client_info['ip'], $agent, $admin_id );
+                        $db->sql_query( $query );
+                        $nv_Request->set_Session( 'admin', $admin_serialize );
+                        $nv_Request->set_Session( 'online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0' );
+                        define( 'NV_IS_ADMIN', true );
+
+                        $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
+                        if ( ! empty( $admin_login_redirect ) )
+                        {
+                            $redirect = $admin_login_redirect;
+                            $nv_Request->unset_request( 'admin_login_redirect', 'session' );
+                        }
+                        $error = "";
+                        nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . $redirect . "\" />" );
+                        die();
+                    }
                 }
-                $error = "";
-                nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . $redirect . "\" />" );
-                die();
             }
         }
     }
@@ -139,8 +148,7 @@ else
 if ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_global.php" ) )
 {
     require_once ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_global.php" );
-}
-elseif ( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
+} elseif ( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
 {
     require_once ( NV_ROOTDIR . "/language/en/admin_global.php" );
 }

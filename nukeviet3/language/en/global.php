@@ -219,4 +219,9 @@ $lang_global['google_openid_login'] = "Google";
 $lang_global['yahoo_openid_login'] = "Yahoo";
 //Breakcrump
 $lang_global['breakcrum'] = "You're current";
+
+//ADMIN_LOGIN_MODE
+$lang_global['admin_access_denied1'] = "Access denied in Admin Panel. Only God-Admin has access in Admin Panel!";
+$lang_global['admin_access_denied2'] = "Access denied in Admin Panel. Only God-Admin and Super-Admin has access in Admin Panel!";
+
 ?>
