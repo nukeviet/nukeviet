@@ -22,19 +22,21 @@ if ( empty( $currentpath ) )
 {
     $currentpath = NV_UPLOADS_DIR;
 }
+
 $area = "";
 $popup = $nv_Request->get_int( 'popup', 'get', 0 );
 $selectedfile = '';
 $uploadflag = $nv_Request->isset_request( 'confirm', 'post' );
+
 ////////////////////////////////////////////////////////////////////////////////////////
 $errors = array();
-if ( $uploadflag )
+if ( !empty($uploadflag) )
 {
     require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
     $upload = new upload( $admin_info['allow_files_type'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
     if ( is_uploaded_file( $_FILES['fileupload']['tmp_name'] ) && nv_check_allow_upload_dir( $currentpath ) )
     {
-        $upload_info = $upload->save_file( $_FILES['fileupload'], NV_ROOTDIR . '/' . $currentpath, false );
+    	$upload_info = $upload->save_file( $_FILES['fileupload'], NV_ROOTDIR . '/' . $currentpath, false );
         if ( ! empty( $upload_info['error'] ) )
         {
             $errors[] = $upload_info['error'];
@@ -108,6 +110,13 @@ if ( $admin_info['allow_modify_subdirectories'] )
 {
     $xtpl->parse( 'main.allow_modify_subdirectories' );
 }
+$sfile = ( $type == 'file' ) ? '  selected="selected"' : '';
+$simage = ( $type == 'image' ) ? '  selected="selected"' : '';
+$sflash = ( $type == 'flash' ) ? '  selected="selected"' : '';
+
+$xtpl->assign("sflash",$sflash);
+$xtpl->assign("simage",$simage);
+$xtpl->assign("sfile",$sfile);
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 if ( $popup )
