@@ -626,28 +626,27 @@ function nv_gz_put_contents( $filename, $content )
 function nv_is_image( $img )
 {
     $typeflag = array();
-    $typeflag[1] = array( 'type' => 'IMAGETYPE_GIF', 'ext' => 'gif' );
-    $typeflag[2] = array( 'type' => 'IMAGETYPE_JPEG', 'ext' => 'jpg' );
-    $typeflag[3] = array( 'type' => 'IMAGETYPE_PNG', 'ext' => 'png' );
-    $typeflag[4] = array( 'type' => 'IMAGETYPE_SWF', 'ext' => 'swf' );
-    $typeflag[5] = array( 'type' => 'IMAGETYPE_PSD', 'ext' => 'psd' );
-    $typeflag[6] = array( 'type' => 'IMAGETYPE_BMP', 'ext' => 'bmp' );
-    $typeflag[7] = array( 'type' => 'IMAGETYPE_TIFF_II', 'ext' => 'tiff' );
-    $typeflag[8] = array( 'type' => 'IMAGETYPE_TIFF_MM', 'ext' => 'tiff' );
-    $typeflag[9] = array( 'type' => 'IMAGETYPE_JPC', 'ext' => 'jpc' );
-    $typeflag[10] = array( 'type' => 'IMAGETYPE_JP2', 'ext' => 'jp2' );
-    $typeflag[11] = array( 'type' => 'IMAGETYPE_JPX', 'ext' => 'jpf' );
-    $typeflag[12] = array( 'type' => 'IMAGETYPE_JB2', 'ext' => 'jb2' );
-    $typeflag[13] = array( 'type' => 'IMAGETYPE_SWC', 'ext' => 'swc' );
-    $typeflag[14] = array( 'type' => 'IMAGETYPE_IFF', 'ext' => 'aiff' );
-    $typeflag[15] = array( 'type' => 'IMAGETYPE_WBMP', 'ext' => 'wbmp' );
-    $typeflag[16] = array( 'type' => 'IMAGETYPE_XBM', 'ext' => 'xbm' );
+    $typeflag[1] = array( 'type' => IMAGETYPE_GIF, 'ext' => 'gif' );
+    $typeflag[2] = array( 'type' => IMAGETYPE_JPEG, 'ext' => 'jpg' );
+    $typeflag[3] = array( 'type' => IMAGETYPE_PNG, 'ext' => 'png' );
+    $typeflag[4] = array( 'type' => IMAGETYPE_SWF, 'ext' => 'swf' );
+    $typeflag[5] = array( 'type' => IMAGETYPE_PSD, 'ext' => 'psd' );
+    $typeflag[6] = array( 'type' => IMAGETYPE_BMP, 'ext' => 'bmp' );
+    $typeflag[7] = array( 'type' => IMAGETYPE_TIFF_II, 'ext' => 'tiff' );
+    $typeflag[8] = array( 'type' => IMAGETYPE_TIFF_MM, 'ext' => 'tiff' );
+    $typeflag[9] = array( 'type' => IMAGETYPE_JPC, 'ext' => 'jpc' );
+    $typeflag[10] = array( 'type' => IMAGETYPE_JP2, 'ext' => 'jp2' );
+    $typeflag[11] = array( 'type' => IMAGETYPE_JPX, 'ext' => 'jpf' );
+    $typeflag[12] = array( 'type' => IMAGETYPE_JB2, 'ext' => 'jb2' );
+    $typeflag[13] = array( 'type' => IMAGETYPE_SWC, 'ext' => 'swc' );
+    $typeflag[14] = array( 'type' => IMAGETYPE_IFF, 'ext' => 'aiff' );
+    $typeflag[15] = array( 'type' => IMAGETYPE_WBMP, 'ext' => 'wbmp' );
+    $typeflag[16] = array( 'type' => IMAGETYPE_XBM, 'ext' => 'xbm' );
 
     $imageinfo = array();
     $file = @getimagesize( $img );
     if ( $file )
     {
-        $channels = isset( $file['channels'] ) ? intval( $file['channels'] ) : 0;
         $imageinfo['src'] = $img;
         $imageinfo['width'] = $file[0];
         $imageinfo['height'] = $file[1];

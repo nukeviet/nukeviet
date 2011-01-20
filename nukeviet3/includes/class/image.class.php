@@ -109,28 +109,27 @@ class image
     function is_image( $img )
     {
         $typeflag = array();
-        $typeflag[1] = array( 'type' => 'IMAGETYPE_GIF', 'ext' => 'gif' );
-        $typeflag[2] = array( 'type' => 'IMAGETYPE_JPEG', 'ext' => 'jpg' );
-        $typeflag[3] = array( 'type' => 'IMAGETYPE_PNG', 'ext' => 'png' );
-        $typeflag[4] = array( 'type' => 'IMAGETYPE_SWF', 'ext' => 'swf' );
-        $typeflag[5] = array( 'type' => 'IMAGETYPE_PSD', 'ext' => 'psd' );
-        $typeflag[6] = array( 'type' => 'IMAGETYPE_BMP', 'ext' => 'bmp' );
-        $typeflag[7] = array( 'type' => 'IMAGETYPE_TIFF_II', 'ext' => 'tiff' );
-        $typeflag[8] = array( 'type' => 'IMAGETYPE_TIFF_MM', 'ext' => 'tiff' );
-        $typeflag[9] = array( 'type' => 'IMAGETYPE_JPC', 'ext' => 'jpc' );
-        $typeflag[10] = array( 'type' => 'IMAGETYPE_JP2', 'ext' => 'jp2' );
-        $typeflag[11] = array( 'type' => 'IMAGETYPE_JPX', 'ext' => 'jpf' );
-        $typeflag[12] = array( 'type' => 'IMAGETYPE_JB2', 'ext' => 'jb2' );
-        $typeflag[13] = array( 'type' => 'IMAGETYPE_SWC', 'ext' => 'swc' );
-        $typeflag[14] = array( 'type' => 'IMAGETYPE_IFF', 'ext' => 'aiff' );
-        $typeflag[15] = array( 'type' => 'IMAGETYPE_WBMP', 'ext' => 'wbmp' );
-        $typeflag[16] = array( 'type' => 'IMAGETYPE_XBM', 'ext' => 'xbm' );
+        $typeflag[1] = array( 'type' => IMAGETYPE_GIF, 'ext' => 'gif' );
+        $typeflag[2] = array( 'type' => IMAGETYPE_JPEG, 'ext' => 'jpg' );
+        $typeflag[3] = array( 'type' => IMAGETYPE_PNG, 'ext' => 'png' );
+        $typeflag[4] = array( 'type' => IMAGETYPE_SWF, 'ext' => 'swf' );
+        $typeflag[5] = array( 'type' => IMAGETYPE_PSD, 'ext' => 'psd' );
+        $typeflag[6] = array( 'type' => IMAGETYPE_BMP, 'ext' => 'bmp' );
+        $typeflag[7] = array( 'type' => IMAGETYPE_TIFF_II, 'ext' => 'tiff' );
+        $typeflag[8] = array( 'type' => IMAGETYPE_TIFF_MM, 'ext' => 'tiff' );
+        $typeflag[9] = array( 'type' => IMAGETYPE_JPC, 'ext' => 'jpc' );
+        $typeflag[10] = array( 'type' => IMAGETYPE_JP2, 'ext' => 'jp2' );
+        $typeflag[11] = array( 'type' => IMAGETYPE_JPX, 'ext' => 'jpf' );
+        $typeflag[12] = array( 'type' => IMAGETYPE_JB2, 'ext' => 'jb2' );
+        $typeflag[13] = array( 'type' => IMAGETYPE_SWC, 'ext' => 'swc' );
+        $typeflag[14] = array( 'type' => IMAGETYPE_IFF, 'ext' => 'aiff' );
+        $typeflag[15] = array( 'type' => IMAGETYPE_WBMP, 'ext' => 'wbmp' );
+        $typeflag[16] = array( 'type' => IMAGETYPE_XBM, 'ext' => 'xbm' );
 
         $imageinfo = array();
         $file = @getimagesize( $img );
         if ( $file )
         {
-            $channels = isset( $file['channels'] ) ? intval( $file['channels'] ) : 0;
             $imageinfo['src'] = $img;
             $imageinfo['width'] = $file[0];
             $imageinfo['height'] = $file[1];
@@ -181,13 +180,13 @@ class image
     {
         switch ( $this->fileinfo['type'] )
         {
-            case 'IMAGETYPE_GIF':
+            case IMAGETYPE_GIF:
                 $this->createImage = ImageCreateFromGif( $this->filename );
                 break;
-            case 'IMAGETYPE_JPEG':
+            case IMAGETYPE_JPEG:
                 $this->createImage = ImageCreateFromJpeg( $this->filename );
                 break;
-            case 'IMAGETYPE_PNG':
+            case IMAGETYPE_PNG:
                 $this->createImage = ImageCreateFromPng( $this->filename );
                 break;
         }
@@ -233,7 +232,7 @@ class image
         if ( $this->fileinfo == array() ) return ERROR_IMAGE1;
         if ( ! is_readable( $this->filename ) ) return ERROR_IMAGE2;
         if ( $this->fileinfo['src'] == '' || $this->fileinfo['width'] == 0 || $this->fileinfo['height'] == 0 || $this->fileinfo['mime'] == '' ) return ERROR_IMAGE3;
-        if ( ! preg_match( "#imagetype\_(gif|jpeg|png)$#is", $this->fileinfo['type'] ) ) return ERROR_IMAGE4;
+        if ( ! in_array( $this->fileinfo['type'], array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG ) ) ) return ERROR_IMAGE4;
         if ( ! preg_match( "#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png)#is", $this->fileinfo['mime'] ) ) return ERROR_IMAGE5;
         return '';
     }
@@ -288,7 +287,7 @@ class image
                         }
                     }
 
-                    if ( $this->fileinfo['type'] = 'IMAGETYPE_PNG' )
+                    if ( $this->fileinfo['type'] == IMAGETYPE_PNG )
                     {
                         if ( imagealphablending( $workingImage, false ) )
                         {
@@ -360,7 +359,7 @@ class image
                         }
                     }
 
-                    if ( $this->fileinfo['type'] = 'IMAGETYPE_PNG' )
+                    if ( $this->fileinfo['type'] == IMAGETYPE_PNG )
                     {
                         if ( imagealphablending( $workingImage, false ) )
                         {
@@ -428,7 +427,7 @@ class image
                         }
                     }
 
-                    if ( $this->fileinfo['type'] = 'IMAGETYPE_PNG' )
+                    if ( $this->fileinfo['type'] == IMAGETYPE_PNG )
                     {
                         if ( imagealphablending( $workingImage, false ) )
                         {
@@ -492,7 +491,7 @@ class image
                         }
                     }
 
-                    if ( $this->fileinfo['type'] = 'IMAGETYPE_PNG' )
+                    if ( $this->fileinfo['type'] == IMAGETYPE_PNG )
                     {
                         if ( imagealphablending( $workingImage, false ) )
                         {
@@ -597,13 +596,13 @@ class image
                 $this->set_memory_limit();
                 switch ( $logo_info['type'] )
                 {
-                    case 'IMAGETYPE_GIF':
+                    case IMAGETYPE_GIF:
                         $this->logoimg = ImageCreateFromGif( $logo );
                         break;
-                    case 'IMAGETYPE_JPEG':
+                    case IMAGETYPE_JPEG:
                         $this->logoimg = ImageCreateFromJpeg( $logo );
                         break;
-                    case 'IMAGETYPE_PNG':
+                    case IMAGETYPE_PNG:
                         $this->logoimg = ImageCreateFromPng( $logo );
                         break;
                 }
@@ -631,7 +630,7 @@ class image
                         $Y = $this->create_Image_info['height'] - ( $logo_info['height'] + 10 );
                 }
 
-                if ( $this->fileinfo['type'] = 'IMAGETYPE_PNG' and ! $this->is_createWorkingImage )
+                if ( $this->fileinfo['type'] == IMAGETYPE_PNG and ! $this->is_createWorkingImage )
                 {
                     if ( imagealphablending( $this->createImage, false ) )
                     {
@@ -738,15 +737,15 @@ class image
             header( "Content-type: " . $this->create_Image_info['mime'] );
             switch ( $this->create_Image_info['type'] )
             {
-                case 'IMAGETYPE_GIF':
+                case IMAGETYPE_GIF:
                     ImageGif( $this->createImage );
                     break;
 
-                case 'IMAGETYPE_JPEG':
+                case IMAGETYPE_JPEG:
                     ImageJpeg( $this->createImage, '', $quality );
                     break;
 
-                case 'IMAGETYPE_PNG':
+                case IMAGETYPE_PNG:
                     $quality = round( ( $quality / 100 ) * 10 );
                     if ( $quality < 1 ) $quality = 1;
                     elseif ( $quality > 10 ) $quality = 10;
@@ -801,15 +800,15 @@ class image
 
                 switch ( $this->create_Image_info['type'] )
                 {
-                    case 'IMAGETYPE_GIF':
+                    case IMAGETYPE_GIF:
                         ImageGif( $this->createImage, $newname );
                         break;
 
-                    case 'IMAGETYPE_JPEG':
+                    case IMAGETYPE_JPEG:
                         ImageJpeg( $this->createImage, $newname, $quality );
                         break;
 
-                    case 'IMAGETYPE_PNG':
+                    case IMAGETYPE_PNG:
                         ImagePng( $this->createImage, $newname );
                 }
 
