@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Aug 21, 2010, 02:43:51 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language English
+* @Createdate Jan 21, 2011, 02:14:32 AM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['metaTagsConfig'] = "Meta-Tags Config";
 $lang_module['metaTagsGroupName'] = "Group type";
@@ -30,10 +29,10 @@ $lang_module['googleAnalyticsSetDomainName_0'] = "A single domain";
 $lang_module['googleAnalyticsSetDomainName_1'] = "One domain with multiple subdomains";
 $lang_module['googleAnalyticsSetDomainName_2'] = "Multiple top-level domains";
 $lang_module['googleAnalyticsID'] = "Google Analytics ID<br />(UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">Detail</a>)";
-$lang_module['optActive'] = "Enable Site Optimization function";
 $lang_module['global_config'] = "System Config";
 $lang_module['lang_site_config'] = "Site language config";
 $lang_module['bots_config'] = "Server search";
+$lang_module['optActive'] = "Enable Site Optimization function";
 $lang_module['sitename'] = "Site name";
 $lang_module['theme'] = "Default theme";
 $lang_module['themeadmin'] = "Administrator theme";
@@ -44,7 +43,6 @@ $lang_module['rewrite_optional'] = "Remove language characters on URL";
 $lang_module['site_disable'] = "Site is disable";
 $lang_module['disable_content'] = "Message content disable site";
 $lang_module['footer_content'] = "Footer Content";
-
 $lang_module['submit'] = "Submit";
 $lang_module['err_writable'] = "Error system can't write file %s. Please chmod or check server config!";
 $lang_module['err_supports_rewrite'] = "Error, server doesn't support rewrite.";
@@ -135,14 +133,13 @@ $lang_module['uploadconfig'] = "Upload Config";
 $lang_module['uploadconfig_ban_ext'] = "Forbid Extensions";
 $lang_module['uploadconfig_ban_mime'] = "Forbid Mimies";
 $lang_module['uploadconfig_types'] = "File types allowed";
-$lang_module['nv_max_size'] = "upload max site";
 $lang_module['sys_max_size'] = "Your server only allows upload maximum";
+$lang_module['nv_max_size'] = "upload max site";
 $lang_module['upload_checking_mode'] = "Upload Checking Mode";
 $lang_module['strong_mode'] = "Strong";
 $lang_module['mild_mode'] = "Mild";
 $lang_module['lite_mode'] = "Lite";
-$lang_module['upload_checking_note'] = "";
-
+$lang_module['upload_checking_note'] = "Your server does not support some functions defined file types. If you chose \"Strong\", you will not be able to upload files to your host";
 $lang_module['nv_admin_add'] = "Add job";
 $lang_module['nv_admin_edit'] = "Edit job";
 $lang_module['nv_admin_del'] = "Delete job";
@@ -183,8 +180,6 @@ $lang_module['last_result'] = "Last result";
 $lang_module['last_result_empty'] = "n/a";
 $lang_module['last_result0'] = "Bad";
 $lang_module['last_result1'] = "Finished";
-
-//adminPage Settings
 $lang_module['adminpage_settings'] = "AdminPage Configuration";
 $lang_module['loginMode'] = "AdminPage Login Mode";
 $lang_module['loginMode1'] = "GodAdmin";

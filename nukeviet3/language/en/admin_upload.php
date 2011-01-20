@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 15, 2011, 10:56:11 PM
+* @Createdate Jan 21, 2011, 02:19:29 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -29,6 +29,7 @@ $lang_module['upload_file_maxsize'] = "File exceed the allowed limit";
 $lang_module['upload_file_error_movefile'] = "Error can not create a file, check directory chmod";
 $lang_module['upload_file_error_invalidurl'] = "Invalid path file";
 $lang_module['upload_error_browser_ie6'] = "Error: The system does not support this function on Internet Explorer 6, You need update to new version or switch to: Mozilla Firefox, Safari, Opera, Chrome.";
+$lang_module['upload_empty_path'] = "Notice: You need select the folder to browse files";
 $lang_module['upload_size'] = "Size";
 $lang_module['upload_width'] = "Width";
 $lang_module['upload_height'] = "Height";

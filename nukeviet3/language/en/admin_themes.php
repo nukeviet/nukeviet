@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 15, 2011, 10:51:32 PM
+* @Createdate Jan 21, 2011, 02:18:37 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -112,6 +112,9 @@ $lang_module['autoinstall_theme_error_invalidfile_back'] = "Back";
 $lang_module['autoinstall_package_processing'] = "please wait to complete...";
 $lang_module['autoinstall_theme_error_uploadfile'] = "Error: Unable to upload files. Please check directory permission or chmod directory";
 $lang_module['autoinstall_theme_unzip_abort'] = "The installation can not continue automatically by the host does not support.";
+$lang_module['autoinstall_theme_permission_folder'] = "The installation can not continue automatically, because the system can not create folders.";
+$lang_module['autoinstall_theme_unzip_success'] = "The installation process successfully. The system will automatically switch you to a page layout settings for the interface.";
+$lang_module['autoinstall_theme_error_movefile'] = "The installation can not continue automatically because the host does not support moving files after unpacking";
 $lang_module['autoinstall_theme_cantunzip'] = "Error can not unpack. Please check the chmod of directory.";
 $lang_module['autoinstall_theme_unzip_filelist'] = "Extract files list";
 $lang_module['autoinstall_theme_unzip_setuppage'] = "Go to the management page theme.";
@@ -157,5 +160,7 @@ $lang_module['xcopyblock_notice'] = "This process will drop all exist blocks in 
 $lang_module['xcopyblock_success'] = "All process has been done !";
 $lang_module['block_weight'] = "Set the position of block";
 $lang_module['block_weight_confirm'] = "Do you want to set up the position of block? The settings in the function will be the settings.";
+$lang_module['autoinstall_theme_error_warning_overwrite'] = "Info: Package interfaces you install the file already exists, you have to make sure the installation to overwrite this file";
+$lang_module['autoinstall_theme_overwrite'] = "Overwrite";
 
 ?>

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 15, 2011, 11:51:48 PM
+* @Createdate Jan 21, 2011, 02:33:22 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -130,6 +130,9 @@ $lang_module['content_admin'] = "Admin";
 $lang_module['content_author'] = "Author";
 $lang_module['content_sourceid'] = "Source";
 $lang_module['content_copyright'] = "Copyright";
+$lang_module['content_saveok'] = "Successfully recorded data";
+$lang_module['content_main'] = "Back to management";
+$lang_module['redircet_title'] = "Successful implementation of action";
 $lang_module['content_archive'] = "Save after expire date";
 $lang_module['showhometext'] = "Show hometext on view content";
 $lang_module['imgposition'] = "Article image";

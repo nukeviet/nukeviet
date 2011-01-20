@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 15, 2011, 11:24:50 PM
+* @Createdate Jan 21, 2011, 02:27:31 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -104,5 +104,23 @@ $lang_module['rank0'] = "Your site is not in the Top 50";
 $lang_module['Top10'] = "Top 10 pages your site";
 $lang_module['Top50'] = "Top 50 sites have keyword";
 $lang_module['isLocalhost'] = "This tool can not check for Localhost";
+$lang_module['autoupdate_system'] = "Automatic upgrade site";
+$lang_module['autoupdate_get_error'] = "Notice: System does not check the version upgrade Nukeviet";
+$lang_module['autoupdate_download'] = "Download Nukeviet update packages";
+$lang_module['autoupdate_download_complete'] = "Successful process of downloading files, please click on check for updates to continue the process.";
+$lang_module['autoupdate_form_upload'] = "The system has detected a version upgrade, please click on check for updates to continue the process.";
+$lang_module['autoupdate_check_file'] = "Check for updates";
+$lang_module['autoupdate_change'] = "The system has checked that you've changed the following files from the original";
+$lang_module['autoupdate_overwrite'] = "If you want to overwrite this file, please click on the button to upgrade";
+$lang_module['autoupdate_click_update'] = "Please click on upgrade button";
+$lang_module['autoupdate_backupfile'] = "If you continue the upgrade process, will create a file system backup of the file changes";
+$lang_module['autoupdate_backupfile_error'] = "Upgrade process error: The system does not create backup file, please check the directory chmode";
+$lang_module['autoupdate'] = "System upgrade";
+$lang_module['autoupdate_confirm'] = "Are you sure you upgrade your system";
+$lang_module['autoupdate_error_create_folder'] = "Upgrade process error: The system can not create the following folders";
+$lang_module['autoupdate_error_move_file'] = "Upgrade process error: The system does not move the following files";
+$lang_module['autoupdate_complete_file'] = "Notice: The system has made the process of moving files successfully";
+$lang_module['autoupdate_complete'] = "Complete the upgrade process";
+$lang_module['autoupdate_error_data'] = "And see the error on database update";
 
 ?>
