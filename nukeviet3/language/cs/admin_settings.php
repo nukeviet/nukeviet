@@ -135,22 +135,6 @@ $lang_module['uploadconfig_ban_mime'] = "Zakazáno mime";
 $lang_module['uploadconfig_types'] = "Typ soubor je povolen";
 $lang_module['sys_max_size'] = "Vaše server je povolen stáhnout soubor, který je obsazen maximal";
 $lang_module['nv_max_size'] = "Obsah souboru , který byl nahravan";
-//Chua dich
-$lang_module['upload_checking_mode'] = "Upload Checking Mode";
-$lang_module['strong_mode'] = "Strong";
-$lang_module['mild_mode'] = "Mild";
-$lang_module['lite_mode'] = "Lite";
-$lang_module['upload_checking_note'] = "";
-//
-
-//adminPage Settings
-//Chua dich
-$lang_module['adminpage_settings'] = "AdminPage Configuration";
-$lang_module['loginMode'] = "AdminPage Login Mode";
-$lang_module['loginMode1'] = "GodAdmin";
-$lang_module['loginMode2'] = "SuperAdmins";
-$lang_module['loginMode3'] = "All Admins";
-//
 
 $lang_module['nv_admin_add'] = "Přidat zaměstnání";
 /*

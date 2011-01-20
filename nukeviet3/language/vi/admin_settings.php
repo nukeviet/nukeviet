@@ -200,4 +200,11 @@ $lang_module['last_result_empty'] = "n/a";
 $lang_module['last_result0'] = "Tồi";
 $lang_module['last_result1'] = "Đã hoàn thành";
 
+//adminPage Settings
+$lang_module['adminpage_settings'] = "Cấu hình trang Quản trị";
+$lang_module['loginMode'] = "Đối tượng được đăng nhập trang quản trị";
+$lang_module['loginMode1'] = "Quản trị tối cao";
+$lang_module['loginMode2'] = "Người điều hành chung";
+$lang_module['loginMode3'] = "Tất cả admin";
+
 ?>
