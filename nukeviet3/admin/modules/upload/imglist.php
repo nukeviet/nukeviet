@@ -115,7 +115,7 @@ if ( ! empty( $pathimg ) )
         }
         $filesize = nv_convertfromBytes( @filesize( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] ) );
         $row = array( 
-            "name" => $imglist[$i], "name0" => nv_clean60( $imglist[$i], 10 ), "src" => $src, "filesize" => $filesize 
+            "name" => $imglist[$i], "name0" => nv_clean60( $imglist[$i], 10 ), "src" => $src, "filesize" => $filesize , "sel" => $sel
         );
         $xtpl->assign( "imglist", $row );
         $xtpl->parse( 'main.loopimg' );
