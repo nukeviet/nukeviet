@@ -18,15 +18,20 @@ if ( $sys_info['ini_set_support'] )
 {
     ini_set( 'magic_quotes_runtime', 'Off' );
     ini_set( 'magic_quotes_sybase', 'Off' );
-    ini_set( 'session.save_handler', 'files' );
-    ini_set( 'session.use_trans_sid', 0 );
-    ini_set( 'session.auto_start', 0 );
-    ini_set( 'session.use_cookies', 1 );
-    ini_set( 'session.use_only_cookies', 1 );
-    ini_set( 'session.cookie_httponly', 1 );
-    ini_set( 'session.gc_probability', 1 ); //Kha nang chay Garbage Collection - trinh xoa session da het han truoc khi bat dau session_start();
-    ini_set( 'session.gc_divisor', 1000 ); //gc_probability / gc_divisor = phan tram (phan nghin) kha nang chay Garbage Collection
-    ini_set( 'session.gc_maxlifetime', 3600 ); //thoi gian sau khi het han phien lam viec de Garbage Collection tien hanh xoa, 60 phut
+
+    if ( ! isset( $_SESSION ) )
+    {
+        ini_set( 'session.save_handler', 'files' );
+        ini_set( 'session.use_trans_sid', 0 );
+        ini_set( 'session.auto_start', 0 );
+        ini_set( 'session.use_cookies', 1 );
+        ini_set( 'session.use_only_cookies', 1 );
+        ini_set( 'session.cookie_httponly', 1 );
+        ini_set( 'session.gc_probability', 1 ); //Kha nang chay Garbage Collection - trinh xoa session da het han truoc khi bat dau session_start();
+        ini_set( 'session.gc_divisor', 1000 ); //gc_probability / gc_divisor = phan tram (phan nghin) kha nang chay Garbage Collection
+        ini_set( 'session.gc_maxlifetime', 3600 ); //thoi gian sau khi het han phien lam viec de Garbage Collection tien hanh xoa, 60 phut
+    }
+
     ini_set( 'allow_url_fopen', 1 );
     ini_set( "user_agent", 'NV3' );
     ini_set( "default_charset", $global_config['site_charset'] );
