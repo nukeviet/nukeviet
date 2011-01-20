@@ -65,41 +65,31 @@
                 </td>
             </tr>
         </tbody>
+        <!-- BEGIN: support_rewrite -->
         <tbody class="second">
             <tr>
                 <td>
-                    <strong>{LANG.themeadmin}</strong>
+                    <strong>{LANG.rewrite}</strong>
                 </td>
                 <td>
-                    <select name="admin_theme">
-                        <!-- BEGIN: admin_theme -->
-						<option value="{SITE_THEME_ADMIN}"{SELECTED}>{SITE_THEME_ADMIN}  </option>
-                        <!-- END: site_theme -->
-                    </select>
+                    <input type="checkbox" value="1" name="is_url_rewrite" {CHECKED1} />
                 </td>
             </tr>
         </tbody>
-        <!-- BEGIN: support_rewrite -->
-        <tr>
-            <td>
-                <strong>{LANG.rewrite}</strong>
-            </td>
-            <td>
-                <input type="checkbox" value="1" name="is_url_rewrite" {CHECKED1} />
-            </td>
-        </tr>
 		<!-- END: support_rewrite -->
 		<!-- BEGIN: rewrite_optional -->
-        <tr>
-            <td>
-                <strong>{LANG.rewrite_optional}</strong>
-            </td>
-            <td>
-                <input type="checkbox" value="1" name="rewrite_optional" {CHECKED2} />
-            </td>
-        </tr>
-		<!-- END: rewrite_optional -->
         <tbody class="second">
+            <tr>
+                <td>
+                    <strong>{LANG.rewrite_optional}</strong>
+                </td>
+                <td>
+                    <input type="checkbox" value="1" name="rewrite_optional" {CHECKED2} />
+                </td>
+            </tr>
+        </tbody>
+		<!-- END: rewrite_optional -->
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.captcha}</strong>
@@ -113,7 +103,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.site_timezone}</strong>
@@ -127,7 +117,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.date_pattern}</strong>
@@ -137,7 +127,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.time_pattern}</strong>
@@ -147,7 +137,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.gzip_method}</strong>
@@ -157,7 +147,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.online_upd}</strong>
@@ -167,7 +157,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.statistic}</strong>
@@ -177,7 +167,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.optActive}</strong>
@@ -187,7 +177,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.proxy_blocker}</strong>
@@ -201,7 +191,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.str_referer_blocker}</strong>
@@ -211,7 +201,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.my_domains}</strong>
@@ -221,7 +211,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.cookie_prefix}</strong>
@@ -231,7 +221,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.session_prefix}</strong>
@@ -241,7 +231,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.googleAnalyticsID}</strong>
@@ -251,7 +241,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.googleAnalyticsSetDomainName_title}</strong>

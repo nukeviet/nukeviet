@@ -11,6 +11,7 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 
 $submenu['main'] = $lang_module['lang_site_config'];
 $submenu['system'] = $lang_module['global_config'];
+$submenu['adminpage'] = $lang_module['adminpage_settings'];
 $submenu['cronjobs'] = $lang_global['mod_cronjobs'];
 $submenu['smtp'] = $lang_module['smtp_config'];
 $submenu['ftp'] = $lang_module['ftp_config'];
@@ -21,18 +22,14 @@ $submenu['uploadconfig'] = $lang_module['uploadconfig'];
 
 if ( $module_name == "settings" )
 {
-    $allow_func = array( 
-        'main', 'system', 'bots', 'smtp', 'ftp', 'metatags', 'banip', 'uploadconfig', 'cronjobs', 'cronjobs_add', 'cronjobs_edit', 'cronjobs_del', 'cronjobs_act' 
-    );
-    
-    $menu_top = array( 
-        "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_settings'] 
-    );
+    $allow_func = array( 'main', 'system', 'adminpage', 'bots', 'smtp', 'ftp', 'metatags', 'banip', 'uploadconfig', 'cronjobs', 'cronjobs_add', 'cronjobs_edit', 'cronjobs_del', 'cronjobs_act' );
+
+    $menu_top = array( "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_settings'] );
     unset( $page_title, $select_options );
-    
+
     define( 'NV_IS_FILE_SETTINGS', true );
 
-    function nv_admin_add_theme ( $contents )
+    function nv_admin_add_theme( $contents )
     {
         $return = "";
         $class = $contents['is_error'] ? " class=\"error\"" : "";
@@ -40,7 +37,7 @@ if ( $module_name == "settings" )
         $return .= "<blockquote" . $class . "><span>" . $contents['title'] . "</span></blockquote>\n";
         $return .= "</div>\n";
         $return .= "<div class=\"clear\"></div>\n";
-        
+
         $return .= "<form method=\"post\" action=\"" . $contents['action'] . "\">\n";
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
@@ -54,7 +51,7 @@ if ( $module_name == "settings" )
         $return .= "<td></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -73,7 +70,7 @@ if ( $module_name == "settings" )
         $return .= "<td><span class=\"row\">&lArr;</span> " . $contents['run_file'][4] . "</td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -86,7 +83,7 @@ if ( $module_name == "settings" )
         $return .= "<td><span class=\"row\">&lArr;</span> " . $contents['run_func'][3] . "</td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -99,7 +96,7 @@ if ( $module_name == "settings" )
         $return .= "<td><span class=\"row\">&lArr;</span> " . $contents['params'][3] . "</td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -109,17 +106,17 @@ if ( $module_name == "settings" )
         $return .= "<td>" . $contents['start_time'] . ":</td>\n";
         $return .= "<td></td>\n";
         $return .= "<td>" . $contents['year'][0] . ": <select name=\"year\">\n";
-        for ( $i = 2010; $i < 2030; $i ++ )
+        for ( $i = 2010; $i < 2030; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['year'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
         $return .= "</select> " . $contents['month'][0] . ": <select name=\"month\">\n";
-        for ( $i = 1; $i < 13; $i ++ )
+        for ( $i = 1; $i < 13; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['month'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
         $return .= "</select> " . $contents['day'][0] . ": <select name=\"day\">\n";
-        for ( $i = 1; $i < 31; $i ++ )
+        for ( $i = 1; $i < 31; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['day'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
@@ -130,12 +127,12 @@ if ( $module_name == "settings" )
         $return .= "<td></td>\n";
         $return .= "<td></td>\n";
         $return .= "<td>" . $contents['hour'][0] . ": <select name=\"hour\">\n";
-        for ( $i = 0; $i < 24; $i ++ )
+        for ( $i = 0; $i < 24; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['hour'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
         $return .= "</select> " . $contents['min'][0] . ": <select name=\"min\">\n";
-        for ( $i = 0; $i < 60; $i ++ )
+        for ( $i = 0; $i < 60; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['min'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
@@ -143,7 +140,7 @@ if ( $module_name == "settings" )
         $return .= "<td></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -156,7 +153,7 @@ if ( $module_name == "settings" )
         $return .= "<td><span class=\"row\">&lArr;</span> " . $contents['interval'][4] . "</td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -169,7 +166,7 @@ if ( $module_name == "settings" )
         $return .= "<td></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"160px\" />\n";
         $return .= "<tr>\n";
@@ -177,12 +174,12 @@ if ( $module_name == "settings" )
         $return .= "<td><input name=\"go_add\" type=\"submit\" value=\"" . $contents['submit'] . "\" /></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "</form>\n";
         return $return;
     }
 
-    function nv_admin_edit_theme ( $contents )
+    function nv_admin_edit_theme( $contents )
     {
         $return = "";
         $class = $contents['is_error'] ? " class=\"error\"" : "";
@@ -190,7 +187,7 @@ if ( $module_name == "settings" )
         $return .= "<blockquote" . $class . "><span>" . $contents['title'] . "</span></blockquote>\n";
         $return .= "</div>\n";
         $return .= "<div class=\"clear\"></div>\n";
-        
+
         $return .= "<form method=\"post\" action=\"" . $contents['action'] . "\">\n";
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
@@ -204,7 +201,7 @@ if ( $module_name == "settings" )
         $return .= "<td></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -223,7 +220,7 @@ if ( $module_name == "settings" )
         $return .= "<td><span class=\"row\">&lArr;</span> " . $contents['run_file'][4] . "</td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -236,7 +233,7 @@ if ( $module_name == "settings" )
         $return .= "<td><span class=\"row\">&lArr;</span> " . $contents['run_func'][3] . "</td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -249,7 +246,7 @@ if ( $module_name == "settings" )
         $return .= "<td><span class=\"row\">&lArr;</span> " . $contents['params'][3] . "</td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -259,17 +256,17 @@ if ( $module_name == "settings" )
         $return .= "<td>" . $contents['start_time'] . ":</td>\n";
         $return .= "<td></td>\n";
         $return .= "<td>" . $contents['year'][0] . ": <select name=\"year\">\n";
-        for ( $i = 2010; $i < 2030; $i ++ )
+        for ( $i = 2010; $i < 2030; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['year'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
         $return .= "</select> " . $contents['month'][0] . ": <select name=\"month\">\n";
-        for ( $i = 1; $i < 13; $i ++ )
+        for ( $i = 1; $i < 13; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['month'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
         $return .= "</select> " . $contents['day'][0] . ": <select name=\"day\">\n";
-        for ( $i = 1; $i < 31; $i ++ )
+        for ( $i = 1; $i < 31; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['day'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
@@ -280,12 +277,12 @@ if ( $module_name == "settings" )
         $return .= "<td></td>\n";
         $return .= "<td></td>\n";
         $return .= "<td>" . $contents['hour'][0] . ": <select name=\"hour\">\n";
-        for ( $i = 0; $i < 24; $i ++ )
+        for ( $i = 0; $i < 24; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['hour'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
         $return .= "</select> " . $contents['min'][0] . ": <select name=\"min\">\n";
-        for ( $i = 0; $i < 60; $i ++ )
+        for ( $i = 0; $i < 60; $i++ )
         {
             $return .= "<option value=\"" . $i . "\"" . ( $i == $contents['min'][1] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
         }
@@ -293,7 +290,7 @@ if ( $module_name == "settings" )
         $return .= "<td></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -306,7 +303,7 @@ if ( $module_name == "settings" )
         $return .= "<td><span class=\"row\">&lArr;</span> " . $contents['interval'][4] . "</td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<col valign=\"top\" width=\"10px\" />\n";
@@ -319,7 +316,7 @@ if ( $module_name == "settings" )
         $return .= "<td></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"160px\" />\n";
         $return .= "<tr>\n";
@@ -327,12 +324,12 @@ if ( $module_name == "settings" )
         $return .= "<td><input name=\"go_add\" type=\"submit\" value=\"" . $contents['submit'] . "\" /></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
-        
+
         $return .= "</form>\n";
         return $return;
     }
 
-    function main_theme ( $contents )
+    function main_theme( $contents )
     {
         $return = "";
         if ( ! empty( $contents ) )
@@ -371,12 +368,12 @@ if ( $module_name == "settings" )
                     $return .= "<td>" . $value . "</td>\n";
                     $return .= "</tr>\n";
                     $return .= "</tbody>\n";
-                    $a ++;
+                    $a++;
                 }
                 $return .= "</table>\n";
             }
         }
-        
+
         return $return;
     }
 }

@@ -143,6 +143,15 @@ $lang_module['lite_mode'] = "Lite";
 $lang_module['upload_checking_note'] = "";
 //
 
+//adminPage Settings
+//Chua dich
+$lang_module['adminpage_settings'] = "AdminPage Configuration";
+$lang_module['loginMode'] = "AdminPage Login Mode";
+$lang_module['loginMode1'] = "GodAdmin";
+$lang_module['loginMode2'] = "SuperAdmins";
+$lang_module['loginMode3'] = "All Admins";
+//
+
 $lang_module['nv_admin_add'] = "Ajouter une tâche";
 $lang_module['nv_admin_edit'] = "Modifier la tâche";
 $lang_module['nv_admin_del'] = "Supprimer la tâche";

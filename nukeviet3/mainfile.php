@@ -330,6 +330,12 @@ foreach ( $list as $row )
     }
 }
 
+if ( ! isset( $global_config['admin_login_mode'] ) or ! in_array( $global_config['admin_login_mode'], array( 1, 2, 3 ) ) )
+{
+    $global_config['admin_login_mode'] = 3;
+}
+define( 'ADMIN_LOGIN_MODE', $global_config['admin_login_mode'] );
+
 if ( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array( "mild", "lite" ) ) )
 {
     $global_config['upload_checking_mode'] = "strong";
