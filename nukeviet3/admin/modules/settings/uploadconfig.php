@@ -184,7 +184,7 @@ $contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadcon
 $contents .= "<td>";
 foreach ( $myini['mimes'] as $key => $name )
 {
-    $contents .= "<label style='display:inline-block;width:320px'><input type='checkbox' name='mime[]' value='" . $key . "'" . ( in_array( $name, $global_config['forbid_mimes'] ) ? ' checked=checked' : '' ) . "/> " . $name . "&nbsp;&nbsp;</label>";
+    $contents .= "<label style='display:inline-block;width:300px'><input type='checkbox' name='mime[]' value='" . $key . "'" . ( in_array( $name, $global_config['forbid_mimes'] ) ? ' checked=checked' : '' ) . "/> " . $name . "&nbsp;&nbsp;</label>";
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
