@@ -51,7 +51,7 @@ if ( file_exists( $filename ) )
     }
     else
     {
-        $temp_extract_dir = NV_SESSION_SAVE_PATH . '/' . md5( $filename . $global_config['sitekey'] . session_id() );
+        $temp_extract_dir = NV_TEMP_DIR . '/' . md5( $filename . $global_config['sitekey'] . session_id() );
         if ( NV_ROOTDIR . '/' . $temp_extract_dir )
         {
             nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
