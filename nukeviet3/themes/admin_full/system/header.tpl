@@ -84,7 +84,7 @@
             </div>
             <!-- BEGIN: top_menu -->
             <div>
-                <div class="jqueryslidemenu" id="slidemenu">
+                <div class="ddsmoothmenu" id="slidemenu">
                     <ul>
                         <!-- BEGIN: top_menu_loop -->
                         <li {TOP_MENU_CURRENT}>

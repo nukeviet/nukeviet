@@ -19,7 +19,8 @@ $submenu['revision'] = $lang_module['revision'];
 $new_version = nv_geVersion( 86400 ); //kem tra lai sau 24 tieng
 if ( ! empty( $new_version ) )
 {
-    if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
+    global $global_config;
+	if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
     {
         $submenu['autoupdate'] = $lang_module['autoupdate_system'];
     }
