@@ -953,9 +953,12 @@ class upload
         if ( isset( $this->url_info['file'] ) )
         {
             $urlfile_extension = $this->getextension( $this->url_info['file'] );
-            if ( ! empty( $urlfile_extension ) and in_array( $this->urlfile_mime, $this->config['allowed_files'][$urlfile_extension] ) )
+            if ( ! empty( $urlfile_extension ) and isset( $this->config['allowed_files'][$urlfile_extension] ) )
             {
-                $this->urlfile_extension = $urlfile_extension;
+                if ( in_array( $this->urlfile_mime, $this->config['allowed_files'][$urlfile_extension] ) )
+                {
+                    $this->urlfile_extension = $urlfile_extension;
+                }
             }
         }
 
