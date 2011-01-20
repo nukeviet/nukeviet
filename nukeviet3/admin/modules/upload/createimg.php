@@ -8,28 +8,38 @@
  */
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
 $path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post' ) ), ENT_QUOTES );
+
 if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
 {
     $imagename = htmlspecialchars( trim( $nv_Request->get_string( 'img', 'post' ) ), ENT_QUOTES );
+    $imagename = basename( $imagename );
+
     $width = $nv_Request->get_int( 'width', 'post' );
     $height = $nv_Request->get_int( 'height', 'post' );
-    require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
-    $image = new image( NV_ROOTDIR . '/' . $path . '/' . $imagename, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-    $image->resizeXY( $width, $height );
-    
-    $new_imagename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $width . '_' . $height . '\2', $imagename );
-    
-    $i = 1;
-    while ( file_exists( NV_ROOTDIR . '/' . $path . '/' . $new_imagename ) )
+
+    if ( ! empty( $imagename ) and file_exists( NV_ROOTDIR . '/' . $path . '/' . $imagename ) //
+        and $width >= 10 and $height >= 10 )
     {
-        $new_imagename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $width . '_' . $height . '_' . $i . '\2', $imagename );
-        $i ++;
+        require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+
+        $image = new image( NV_ROOTDIR . '/' . $path . '/' . $imagename, NV_MAX_WIDTH, NV_MAX_HEIGHT );
+        $image->resizeXY( $width, $height );
+
+        $new_imagename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $width . '_' . $height . '\2', $imagename );
+
+        $i = 1;
+        while ( file_exists( NV_ROOTDIR . '/' . $path . '/' . $new_imagename ) )
+        {
+            $new_imagename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $width . '_' . $height . '_' . $i . '\2', $imagename );
+            $i++;
+        }
+        $image->save( NV_ROOTDIR . '/' . $path, $new_imagename, 75 );
+        //$image_info = $image->create_Image_info;
+        $image->close();
+        echo $new_imagename;
     }
-    $image->save( NV_ROOTDIR . '/' . $path, $new_imagename, 75 );
-    //$image_info = $image->create_Image_info;
-    $image->close();
-    echo $new_imagename;
 }
 
 ?>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -58,7 +59,7 @@ if ( ! empty( $pathimg ) )
             }
         }
     }
-    for ( $i = 0; $i < count( $imglist ); $i ++ )
+    for ( $i = 0; $i < count( $imglist ); $i++ )
     {
         if ( $selectfile == $imglist[$i] )
         {
@@ -70,10 +71,12 @@ if ( ! empty( $pathimg ) )
             $sel = '';
             $selid = '';
         }
-        $arr_temp = explode( '.', $imglist[$i] );
-        $ext = strtolower( end( $arr_temp ) );
+
+        $ext = nv_getextension( $imglist[$i] );
+        clearstatcache();
         $fsize = @filesize( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] );
         $src = "";
+
         if ( in_array( $ext, $array_images ) )
         {
             if ( $fsize > 15000 )
@@ -87,25 +90,25 @@ if ( ! empty( $pathimg ) )
                 }
                 else
                 {
-                    $image = new image( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i], NV_MAX_WIDTH, NV_MAX_HEIGHT );
+                    $image = new image( NV_ROOTDIR . '/' . $path_view_image, NV_MAX_WIDTH, NV_MAX_HEIGHT );
                     $image->resizeXY( 80, 80 );
                     $image->save( NV_ROOTDIR . '/files/images', $md5_view_image, 75 );
-                    $image_info = $image->create_Image_info;
+                    if ( empty( $image->error ) )
+                    {
+                        $path_view_image = 'files/images/' . $md5_view_image . '.' . $ext;
+                    }
                     $image->close();
-                    $path_view_image = str_replace( NV_ROOTDIR . '/', '', $image_info['src'] );
                 }
                 $src = NV_BASE_SITEURL . $path_view_image;
             }
             else
             {
-                $src = NV_BASE_SITEURL . $pathimg . '/' . $imglist[$i] . '';
+                $src = NV_BASE_SITEURL . $pathimg . '/' . $imglist[$i];
             }
-        }
-        elseif ( in_array( $ext, $array_archives ) )
+        } elseif ( in_array( $ext, $array_archives ) )
         {
             $src = NV_BASE_SITEURL . 'images/zip.gif';
-        }
-        elseif ( in_array( $ext, $array_documents ) )
+        } elseif ( in_array( $ext, $array_documents ) )
         {
             $src = NV_BASE_SITEURL . 'images/doc.gif';
         }
@@ -113,31 +116,33 @@ if ( ! empty( $pathimg ) )
         {
             $src = NV_BASE_SITEURL . 'images/file.gif';
         }
-        $filesize = nv_convertfromBytes( @filesize( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] ) );
-        $row = array( 
-            "name" => $imglist[$i], "name0" => nv_clean60( $imglist[$i], 10 ), "src" => $src, "filesize" => $filesize , "sel" => $sel, "selid" => $selid
-        );
+
+        $filesize = nv_convertfromBytes( $fsize );
+        $row = array( "name" => $imglist[$i], "name0" => nv_clean60( $imglist[$i], 10 ), "src" => $src, "filesize" => $filesize, "sel" => $sel, "selid" => $selid );
         $xtpl->assign( "imglist", $row );
         $xtpl->parse( 'main.loopimg' );
     }
+
     $listdir = viewdir( NV_UPLOADS_DIR );
     foreach ( $listdir as $folder )
     {
-        $sel = ( $folder == $pathimg ) ? ' selected' : '';
-        $row = array( 
-            "name" => $folder, "select" => $sel 
-        );
+        $sel = ( $folder == $pathimg ) ? " selected=\"selected\"" : "";
+        $row = array( "name" => $folder, "select" => $sel );
         $xtpl->assign( "fol", $row );
         $xtpl->parse( 'main.floop' );
     }
 }
+
 if ( $admin_info['allow_modify_files'] )
 {
     $xtpl->parse( 'main.allow_modify_files' );
 }
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 //////////////////////////////////////////
 echo $contents;
 ////////////////////////////////////////
+
+
 ?>
