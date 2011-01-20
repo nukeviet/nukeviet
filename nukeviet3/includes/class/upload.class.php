@@ -706,7 +706,7 @@ class upload
         {
             if ( isset( $res['Content-Type'] ) and ! empty( $res['Content-Type'] ) )
             {
-                if ( is_array( $res['Content-Type'] ) ) $res['Content-Type'] = array( $res['Content-Type'] );
+                if ( ! is_array( $res['Content-Type'] ) ) $res['Content-Type'] = array( $res['Content-Type'] );
                 foreach ( $res['Content-Type'] as $Ctype )
                 {
                     $Ctype = trim( $Ctype );
