@@ -9,8 +9,7 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 	<html>
 	<head>
-		<title></title>
-		<link type="text/css" rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/admin.css"/>	
+		<title></title>	
 		<link type="text/css" rel="stylesheet" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.all.css" />
 	    <script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.min.js"></script>
 		<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.core.min.js"></script>
@@ -18,6 +17,27 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 		<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/contextmenu/jquery.contextmenu.r2.js"></script>
 		<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/jquery/jquery.scrollTo.js"></script>
 	</head>
+	<style type="text/css">
+    body{
+        	font-family:Arial;
+        	font-size:12px; 
+        	background:#FFFFFF;
+	    }
+	    .viewimg { max-width:100px; max-height:60px; border:2px solid #F0F0F0;background:#FFFFFF; }
+	    .imgcontent { 
+			float:left; 
+			margin-right:5px; 
+			text-align:center;
+			margin-bottom:2px;
+			padding:5px;
+			background:#F5F5F5;
+			cursor:pointer;
+			font-size:11px;
+			line-height:16px;
+			height:100px;
+			width:100px;
+		}
+	</style>
 	<body>';
 $pathimg = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) ), ENT_QUOTES );
 if ( ! empty( $pathimg ) )
@@ -60,9 +80,6 @@ if ( ! empty( $pathimg ) )
             }
         }
     }
-    
-    echo '<table style="width:450px">';
-    echo '<tr>';
     for ( $i = 0; $i < count( $imglist ); $i ++ )
     {
         if ( $selectfile == $imglist[$i] )
@@ -77,47 +94,55 @@ if ( ! empty( $pathimg ) )
         }
         $arr_temp = explode( '.', $imglist[$i] );
         $ext = strtolower( end( $arr_temp ) );
-        echo '<td style="width:170px; padding-bottom:10px; text-align:center;"><div style="width:150px" ' . $selid . '>';
-        
+        echo '<div class="imgcontent" ' . $selid . '>';
+        $fsize = @filesize( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] ) ;
         if ( in_array( $ext, $array_images ) )
         {
-            echo '<img class="previewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . $pathimg . '/' . $imglist[$i] . '" style="padding:5px' . $sel . '" width="100" height="100"/><br />';
+            if ($fsize > 10000)
+            {
+        		//tao thumb cho anh qua 10kb
+        		$thumb = $imglist[$i]; // ten thumb
+        		$paththumb = $pathimg; // duong dan thumb
+        		if (file_exists(NV_ROOTDIR . '/' . $pathimg . '/thumb/' . $imglist[$i]))
+        		{
+        			//kem tra theme
+        			$paththumb =  $pathimg . '/thumb';
+        		}
+        		else {
+        			//tao thumb 80x80
+        		}
+        		/////////////////////////////////////
+            	echo '<img class="previewimg viewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . $paththumb . '/' . $thumb . '" style="padding:2px' . $sel . '"/>';
+            }
+            else 
+            {
+            	echo '<img class="previewimg viewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . $pathimg . '/' . $imglist[$i] . '" style="padding:2px' . $sel . '"/>';
+            }
         }
         elseif ( in_array( $ext, $array_archives ) )
         {
-            echo '<img class="previewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . 'images/zip.gif" style="padding:5px' . $sel . '" width="32" height="32"/><br />';
+            echo '<img class="previewimg viewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . 'images/zip.gif" style="padding:2px' . $sel . '" width="32" height="32"/>';
         }
         elseif ( in_array( $ext, $array_documents ) )
         {
-            echo '<img class="previewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . 'images/doc.gif" style="padding:5px' . $sel . '" width="32" height="32"/><br />';
+            echo '<img class="previewimg viewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . 'images/doc.gif" style="padding:2px' . $sel . '" width="32" height="32"/>';
         }
         else
         {
-            echo '<img class="previewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . 'images/file.gif" style="padding:5px' . $sel . '" width="32" height="32"/><br />';
+            echo '<img class="previewimg viewimg" title="' . $imglist[$i] . '" src="' . NV_BASE_SITEURL . 'images/file.gif" style="padding:5px' . $sel . '" width="32" height="32"/>';
         }
         $filesize = nv_convertfromBytes( @filesize( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] ) );
-        //$filetime = date( "d-m-Y H:i:s", filemtime( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] ) );
-        echo '</div><div style="width:150px;overflow:hidden;font-size:12px;font-family:tahoma;">' . $imglist[$i] . '<br/>';
-        //echo $filetime.'<br/>';
-        echo $filesize . '</div>';
-        echo '</td>';
-        if ( ( $i + 1 ) % 4 == 0 && $i != 0 )
-        {
-            echo '</tr><tr>';
-        }
-    
+        echo '<div>'.$imglist[$i] .'<br />'. $filesize. '</div>';
+        echo '</div>';
     }
-    echo '</table>';
     echo '
 	<div id="imgpreview" style="overflow:auto" title="' . $lang_module['preview'] . '"></div>
 	<div id="createimg" style="text-align:center;display:none" title="' . $lang_module['upload_size'] . '">' . $lang_module['upload_width'] . ':<input name="width" style="width:60px" type="text"/>' . $lang_module['upload_height'] . ':<input type="text" style="width:60px" name="height" disabled=disabled/></div>
 	<div id="renameimg" style="display:none" title="' . $lang_module['rename'] . '">
 	' . $lang_module['rename_newname'] . '<input type="text" name="imagename"/></div>
-	<div id="movefolder" style="text-align:center;" title="' . $lang_module['movefolder'] . '">' . $lang_module['select_folder'] . '
+	<div id="movefolder" style="text-align:center;display:none" title="' . $lang_module['movefolder'] . '">' . $lang_module['select_folder'] . '
 	<select name="selectfolder" id="selectfolder">';
-    //echo '<option value="' . $pathimg . '" ' . (($pathimg == $currentpath) ? ' selected' : '') . '>' . $pathimg . '</option>';
     $listdir = viewdir( NV_UPLOADS_DIR );
-    //$listdir = viewdir ( $pathimg );
     foreach ( $listdir as $folder )
     {
         $sel = ( $folder == $pathimg ) ? ' selected' : '';
@@ -158,7 +183,7 @@ if ( ! empty( $pathimg ) )
 						   url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=createimg",
 						   data: "path="+folder+"&img="+imgfile+"&width="+newwidth+"&height="+newheight,
 						   success: function(data){
-								$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+data+"&path="+folder+"\' style=\"width:590px;height:360px;border:none\"></iframe>");
+								$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+data+"&path="+folder+"\' style=\"width:100%;height:360px;border:none\"></iframe>");
 						   }
 						 });
 					 }
@@ -187,7 +212,7 @@ if ( ! empty( $pathimg ) )
 					   url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=renameimg",
 					   data: "path="+folder+"&img="+imgfile+"&name="+newname,
 					   success: function(data){
-							$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+data+"&path="+folder+"\' style=\"width:590px;height:360px;border:none\"></iframe>");
+							$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+data+"&path="+folder+"\' style=\"width:100%;height:360px;border:none\"></iframe>");
 							$("div#renameimg").dialog("close");
 					   }
 					 });
@@ -220,7 +245,7 @@ if ( ! empty( $pathimg ) )
 						   url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=moveimg",
 						   data: "path="+folder+"&img="+imgfile+"&folder="+newfolder,
 						   success: function(data){
-								$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+imgfile+"&path="+folder+"\' style=\"width:590px;height:360px;border:none\"></iframe>");
+								$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&imgfile="+imgfile+"&path="+folder+"\' style=\"width:100%;height:360px;border:none\"></iframe>");
 						   }
 						 });
 					}
@@ -267,7 +292,7 @@ if ( ! empty( $pathimg ) )
 				   data: "path="+folder+"&img="+imgfile,
 				   success: function(data){
 				   		//alert(data);
-						$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path="+folder+"\' style=\"width:590px;height:360px;border:none\"></iframe>");
+						$("div#imglist",parent.document).html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path="+folder+"\' style=\"width:100%;height:360px;border:none\"></iframe>");
 				   }
 				});		
 			}
@@ -359,7 +384,7 @@ if ( ! empty( $pathimg ) )
 				var imgtitle = $(this).attr("title");		
 				$("#image",parent.document).attr("src",imgsrc);
 				$("#image",parent.document).attr("title",imgtitle);
-				$("img.previewimg").attr("style","padding:5px");
+				$("img.previewimg").attr("style","padding:2px");
 				$(this).css("border","2px solid red");
 				$("input[name=width]").val($("#image",parent.document).width());
 				$("input[name=height]").val($("#image",parent.document).height());

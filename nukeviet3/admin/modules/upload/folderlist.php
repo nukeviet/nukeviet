@@ -99,7 +99,7 @@ echo '
 				   data: "path="+foldervalue,
 				   success: function(data){
 						$("#imgfolder").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=folderlist&path=' . $path . '");
-						$("div#imglist").html("<iframe src=\"' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path=' . $path . '\" style=\"width:590px;height:360px;border:none\"></iframe>");
+						$("div#imglist").html("<iframe src=\"' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path=' . $path . '\" style=\"width:100%;height:360px;border:none\"></iframe>");
 				   }
 				});		
 			}
@@ -113,7 +113,7 @@ echo '
 		$("span.folder").css("color","");
 		$(this).css("color","red");
 		var type = $("select[name=imgtype]").val();
-		$("div#imglist").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path="+folder+"&type="+type+"\' style=\"width:590px;height:360px;border:none\"></iframe>");
+		$("div#imglist").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path="+folder+"&type="+type+"\' style=\"width:100%;height:360px;border:none\"></iframe>");
 	});
 	$("span.folder").mouseup(function(){
 		var foldervalue = $(this).attr("title");
