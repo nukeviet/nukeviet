@@ -264,11 +264,23 @@ class image
                 {
                     $newwidth = $maxX;
                     $newheight = ceil( $maxX * $this->create_Image_info['height'] / $this->create_Image_info['width'] );
+
+                    if ( $newheight > $maxY )
+                    {
+                        $newwidth = ceil( $newwidth / $newheight * $maxY );
+                        $newheight = $maxY;
+                    }
                 }
                 else
                 {
                     $newwidth = ceil( $this->create_Image_info['width'] / $this->create_Image_info['height'] * $maxY );
                     $newheight = $maxY;
+
+                    if ( $newwidth > $maxX )
+                    {
+                        $newheight = ceil( $maxX * $newheight / $newwidth );
+                        $newwidth = $maxX;
+                    }
                 }
                 $this->set_memory_limit();
                 $workingImage = function_exists( "ImageCreateTrueColor" ) ? ImageCreateTrueColor( $newwidth, $newheight ) : ImageCreate( $newwidth, $newheight );
@@ -336,11 +348,23 @@ class image
                 {
                     $newwidth = $X;
                     $newheight = ceil( $X * $this->create_Image_info['height'] / $this->create_Image_info['width'] );
+
+                    if ( $newheight > $Y )
+                    {
+                        $newwidth = ceil( $newwidth / $newheight * $Y );
+                        $newheight = $Y;
+                    }
                 }
                 else
                 {
                     $newwidth = ceil( $this->create_Image_info['width'] / $this->create_Image_info['height'] * $Y );
                     $newheight = $Y;
+
+                    if ( $newwidth > $X )
+                    {
+                        $newheight = ceil( $X * $newheight / $newwidth );
+                        $newwidth = $X;
+                    }
                 }
                 $this->set_memory_limit();
                 $workingImage = function_exists( "ImageCreateTrueColor" ) ? ImageCreateTrueColor( $newwidth, $newheight ) : ImageCreate( $newwidth, $newheight );
