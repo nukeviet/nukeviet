@@ -20,7 +20,7 @@ $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
 $lang_module['upload_manager'] = 'Quản lý upload';
-$lang_module['upload_delimg_confirm'] = 'Bạn có chắc muốn xóa file ';
+$lang_module['upload_delimg_confirm'] = 'Bạn có chắc muốn xóa file ảnh ';
 $lang_module['upload_delimg_success'] = 'Xóa file thành công !';
 $lang_module['upload_delimg_unsuccess'] = 'Lỗi không thể xóa file!';
 $lang_module['upload_create_too_bigimg'] = "Kích thước của hình quá lớn";
@@ -57,4 +57,9 @@ $lang_module['delete_folder'] = "Bạn có chắc muốn xóa thư mục này kh
 $lang_module['download'] = "Tải về";
 $lang_module['select'] = "Chọn";
 $lang_module['move'] = "Di chuyển";
+$lang_module['errorNewSize'] = "Bạn chỉ được tạo hình mới có chiều rộng trong khoảng từ 10 đến %d px, chiều cao từ 10 đến %dpx";
+$lang_module['origSize'] = "Kích thước gốc";
+$lang_module['maxSizeSize'] = "Kích thước tối đa: %dx%dpx";
+$lang_module['sizenotchanged'] = "Hình mà bạn muốn tạo mới có kích thước giống hình gốc";
+
 ?>

@@ -265,7 +265,7 @@ class image
                     $newwidth = $maxX;
                     $newheight = ceil( $maxX * $this->create_Image_info['height'] / $this->create_Image_info['width'] );
 
-                    if ( $newheight > $maxY )
+                    if ( $maxY != 0 and $newheight > $maxY )
                     {
                         $newwidth = ceil( $newwidth / $newheight * $maxY );
                         $newheight = $maxY;
@@ -276,7 +276,7 @@ class image
                     $newwidth = ceil( $this->create_Image_info['width'] / $this->create_Image_info['height'] * $maxY );
                     $newheight = $maxY;
 
-                    if ( $newwidth > $maxX )
+                    if ( $maxX != 0 and $newwidth > $maxX )
                     {
                         $newheight = ceil( $maxX * $newheight / $newwidth );
                         $newwidth = $maxX;
@@ -349,7 +349,7 @@ class image
                     $newwidth = $X;
                     $newheight = ceil( $X * $this->create_Image_info['height'] / $this->create_Image_info['width'] );
 
-                    if ( $newheight > $Y )
+                    if ( $Y != 0 and $newheight > $Y )
                     {
                         $newwidth = ceil( $newwidth / $newheight * $Y );
                         $newheight = $Y;
@@ -360,7 +360,7 @@ class image
                     $newwidth = ceil( $this->create_Image_info['width'] / $this->create_Image_info['height'] * $Y );
                     $newheight = $Y;
 
-                    if ( $newwidth > $X )
+                    if ( $X != 0 and $newwidth > $X )
                     {
                         $newheight = ceil( $X * $newheight / $newwidth );
                         $newwidth = $X;

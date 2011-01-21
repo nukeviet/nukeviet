@@ -15,6 +15,10 @@ $xtpl->assign( "NV_OP_VARIABLE", NV_OP_VARIABLE );
 $xtpl->assign( "NV_NAME_VARIABLE", NV_NAME_VARIABLE );
 $xtpl->assign( "module_name", $module_name );
 $xtpl->assign( "LANG", $lang_module );
+$xtpl->assign( "NV_MAX_WIDTH", NV_MAX_WIDTH );
+$xtpl->assign( "NV_MAX_HEIGHT", NV_MAX_HEIGHT );
+$xtpl->assign( "ERRORNEWSIZE", sprintf( $lang_module['errorNewSize'], NV_MAX_WIDTH, NV_MAX_HEIGHT ) );
+$xtpl->assign( "MAXSIZESIZE", sprintf( $lang_module['maxSizeSize'], NV_MAX_WIDTH, NV_MAX_HEIGHT ) );
 
 $pathimg = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) );
 if ( ! empty( $pathimg ) )
@@ -55,6 +59,7 @@ if ( ! empty( $pathimg ) )
         {
             foreach ( $files as $file )
             {
+                clearstatcache();
                 unset( $matches );
                 if ( $file != "index.html" and preg_match( "/([a-zA-Z0-9\.\-\_]+)\.([a-zA-Z0-9]+)$/", $file, $matches ) )
                 {
@@ -68,6 +73,7 @@ if ( ! empty( $pathimg ) )
                     $filesize = @filesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
                     $type2 = "file";
                     $src = NV_BASE_SITEURL . 'images/file.gif';
+                    $name = "";
 
                     if ( in_array( $matches[2], array( "gif", "jpg", "jpeg", "pjpeg", "png" ) ) )
                     {
@@ -100,6 +106,9 @@ if ( ! empty( $pathimg ) )
                                 $image->close();
                             }
                         }
+
+                        $name = @getimagesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
+                        $name = $name[0] . "|" . $name[1];
                     } elseif ( in_array( $matches[2], $array_archives ) )
                     {
                         $src = NV_BASE_SITEURL . 'images/zip.gif';
@@ -108,7 +117,7 @@ if ( ! empty( $pathimg ) )
                         $src = NV_BASE_SITEURL . 'images/doc.gif';
                     }
 
-                    $results[] = array( $file, $name0, $matches[2], $type2, $filesize, $src );
+                    $results[] = array( $file, $name0, $matches[2], $type2, nv_convertfromBytes( $filesize ), $src, $name );
                 }
             }
         }
@@ -126,9 +135,10 @@ if ( ! empty( $pathimg ) )
         {
             if ( $type == "file" or ( $type != "file" and $file[3] == $type ) )
             {
-                $file = array_combine( array( 'name', 'name0', 'ext', 'type', 'size', 'src' ), $file );
-                $file['sel'] = ( $selectfile == $file['name'] ) ? ";border:2px solid red" : "";
-                $file['selid'] = ( $selectfile == $file['name'] ) ? "id=\"imgselected\"" : "";
+                $file = array_combine( array( 'title', 'name0', 'ext', 'type', 'filesize', 'src', 'name' ), $file );
+                $file['name'] .= "|" . $file['filesize'];
+                $file['sel'] = ( $selectfile == $file['title'] ) ? ";border:2px solid red" : "";
+                $file['selid'] = ( $selectfile == $file['title'] ) ? "id=\"imgselected\"" : "";
                 $xtpl->assign( "imglist", $file );
                 $xtpl->parse( 'main.loopimg' );
             }
