@@ -1,8 +1,9 @@
 <!-- BEGIN: main -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>	
+    <title></title>
+    <meta http-equiv="X-UA-Compatible"content="IE=EmulateIE8" />
     <link type="text/css" rel="stylesheet" href="{NV_BASE_SITEURL}js/ui/jquery.ui.all.css" />
     <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
@@ -52,10 +53,10 @@
     <div id="createimg" style="text-align:center; display:none" title="{LANG.upload_size}">
         {LANG.upload_width}: <input name="width" style="width:60px" type="text"/>
         {LANG.upload_height}: <input type="text" style="width:60px" name="height"/>
-        <input type="button" id="idcreate" value="OK">
+        <input type="button" id="idcreate" value="OK" />
     </div>
     <div id="renameimg" style="display:none" title="{LANG.rename}">
-        {LANG.rename_newname}<input type="text" name="imagename"/><input type="button" id="idrename" value="OK">
+        {LANG.rename_newname}<input type="text" name="imagename"/><input type="button" id="idrename" value="OK" />
     </div>
     <div id="movefolder" style="text-align:center;display:none" title="{LANG.movefolder}">
         {LANG.select_folder} 
@@ -64,7 +65,7 @@
             <option value="{fol.name}" {fol.select}>{fol.name}</option>
             <!-- END: floop -->
         </select>
-        <input type="button" id="idmove" value="OK">
+        <input type="button" id="idmove" value="OK" />
     </div>
     <input type="hidden" id="idcurent" value="" />
     <div id="preview" style="display:none" title="{LANG.preview}"></div>
@@ -128,12 +129,15 @@
           }
         });
     	$("img.previewimg").dblclick(function(){
+
             var folder = "{folder}";
             var imgfile =  $(this).attr("title");
             var area = $("#image",parent.document).attr("name");
             $("#posthidden",parent.document).val("{NV_BASE_SITEURL}"+folder+"/"+imgfile);
-            window.parent.insertvaluetofield(); 
-            top.window.close();
+            if(window.parent.insertvaluetofield())
+            {
+                top.window.close();
+            }
         });
 		$("img.previewimg").mouseup(function(){
             var imgsrc = $(this).attr("src");

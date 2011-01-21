@@ -12,7 +12,7 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 /*//age_title = $lang_module['upload_manager'];
 if ( strpos( $client_info['browser']['name'], 'Internet Explorer v6' ) !== false )
 {
-    nv_info_die( $global_config['site_description'], $lang_global['site_info'], "<br />" . $lang_module['upload_error_browser_ie6'] );
+nv_info_die( $global_config['site_description'], $lang_global['site_info'], "<br />" . $lang_module['upload_error_browser_ie6'] );
 }*/
 /** get config file **/
 $path = ( defined( 'NV_IS_SPADMIN' ) ) ? "" : NV_UPLOADS_DIR;
@@ -46,8 +46,7 @@ if ( ! empty( $uploadflag ) )
             nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $currentpath . "/" . $upload_info['basename'], $admin_info['userid'] );
             $selectedfile = $upload_info['basename'];
         }
-    }
-    elseif ( $nv_Request->isset_request( 'imgurl', 'post' ) and nv_is_url( $nv_Request->get_string( 'imgurl', 'post' ) ) and nv_check_allow_upload_dir( $currentpath ) )
+    } elseif ( $nv_Request->isset_request( 'imgurl', 'post' ) and nv_is_url( $nv_Request->get_string( 'imgurl', 'post' ) ) and nv_check_allow_upload_dir( $currentpath ) )
     {
         $urlfile = trim( $nv_Request->get_string( 'imgurl', 'post' ) );
         $upload_info = $upload->save_urlfile( $urlfile, NV_ROOTDIR . '/' . $currentpath, false );
@@ -67,11 +66,12 @@ if ( ! empty( $uploadflag ) )
     }
 }
 $type = htmlspecialchars( trim( $nv_Request->get_string( 'type', 'get', 'file' ) ), ENT_QUOTES );
+
+$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 if ( $popup )
 {
     $area = htmlspecialchars( trim( $nv_Request->get_string( 'area', 'get' ) ), ENT_QUOTES );
     /////////////////////////////////////////////////////////////////////////////////////////////
-    $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
     $xtpl->assign( "NV_BASE_SITEURL", NV_BASE_SITEURL );
     $xtpl->assign( "ADMIN_THEME", $global_config['module_theme'] );
     $xtpl->assign( "NV_OP_VARIABLE", NV_OP_VARIABLE );
@@ -90,7 +90,7 @@ if ( $popup )
         $xtpl->assign( "error", implode( "<br>", $errors ) );
         $xtpl->parse( 'main.error' );
     }
-    
+
     if ( $admin_info['allow_create_subdirectories'] )
     {
         $xtpl->parse( 'main.allow_create_subdirectories' );
@@ -102,25 +102,32 @@ if ( $popup )
     $sfile = ( $type == 'file' ) ? '  selected="selected"' : '';
     $simage = ( $type == 'image' ) ? '  selected="selected"' : '';
     $sflash = ( $type == 'flash' ) ? '  selected="selected"' : '';
-    
+
     $xtpl->assign( "sflash", $sflash );
     $xtpl->assign( "simage", $simage );
     $xtpl->assign( "sfile", $sfile );
 }
-include ( NV_ROOTDIR . "/includes/header.php" );
+
 if ( $popup )
 {
-    $xtpl->parse( 'main.header' );
-    $xtpl->parse( 'main.footer' );
+    if ( $popup != 2 )
+    {
+        $xtpl->parse( 'main.header' );
+        $xtpl->parse( 'main.footer' );
+    }
     $xtpl->parse( 'main' );
     $contents = $xtpl->text( 'main' );
-    echo $contents;
 }
 else
 {
-    $contents = "<iframe src='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=1' width='100%' height='400px' frameborder='0'></iframe>";
-    echo nv_admin_theme( $contents );
+    $xtpl->assign( "UPLOADPAGE_LINK", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=2" );
+    $xtpl->parse( 'uploadPage' );
+    $contents = $xtpl->text( 'uploadPage' );
+    //$contents = "<iframe src='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=1' width='100%' height='450px' frameborder='0'></iframe>";
+    $contents = nv_admin_theme( $contents );
 }
+include ( NV_ROOTDIR . "/includes/header.php" );
+echo $contents;
 include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>

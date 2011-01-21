@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible"content="IE=EmulateIE8" />
 <title>Management Upload File</title>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
 </head>
@@ -50,7 +51,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/contextmenu/jquery.contextmenu.r2.js"></script>
 <div class="content">
-    <table height="100%" width="100%" cellpadding="0" cellspacing="0">
+    <table width="100%" cellpadding="0" cellspacing="0">
         <tbody>
                 <tr>
                     <td valign="top" width="200" bgcolor="#EAEAEA">
@@ -61,7 +62,7 @@
                                 <option value="flash" {sflash}>{LANG.type_flash}</option>
                             </select>
                         </div>
-                    	<div name="imgfolder" id="imgfolder" size="25" class="imgfolder">&nbsp;</div>
+                    	<div id="imgfolder" class="imgfolder"></div>
                     </td>
                     <td valign="top" bgcolor="#EAEAEA">
                         <div id="imglist">
@@ -108,10 +109,17 @@ $(function(){
 		var funcNum = '{funnum}';
 		if (funcNum > 0){
 			window.opener.CKEDITOR.tools.callFunction(funcNum, value,"");
+            return true;
 		}
 		else{
+		  if(typeof( opener ) != 'undefined')
+          {
 			$("#{area}",opener.document).val(value);
-		} 
+            return true;
+          }
+		  
+		}
+        return false;
 	}
 	$("div#createfolder").dialog({
 		autoOpen: false,
@@ -188,3 +196,13 @@ $(function(){
 </html>
 <!-- END: footer -->
 <!--  END: main  -->
+<!-- BEGIN: uploadPage -->
+<div id="uploadCont"></div>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+  $("#uploadCont").load('{UPLOADPAGE_LINK}&num=' + nv_randomPassword(10))
+});
+//]]>
+</script>
+<!-- END: uploadPage -->
