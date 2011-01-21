@@ -15,15 +15,6 @@
         {THEME_SITE_JS}
         <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/styleswitch.js">
         </script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $("ul.sf-menu").superfish({
-                    pathClass: 'current',
-                    autoArrows: false,
-                    speed: 'fast'
-                });
-            });
-        </script>
         <!--[if IE 6]>
             <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/ie.css" />
             <script src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>

@@ -3,6 +3,15 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/superfish-navbar.css" />
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/hoverIntent.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/superfish.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("ul.sf-menu").superfish({
+                    pathClass: 'current',
+                    autoArrows: false,
+                    speed: 'fast'
+                });
+            });
+        </script>
 <div class="nav">
     <!-- BEGIN: news_cat -->
     <ul class="sf-menu sf-navbar">
