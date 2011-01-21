@@ -20,7 +20,7 @@ $lang_translator['info'] = "Langue française pour NukeViet 3";
 $lang_translator['langtype'] = "lang_module";
 
 $lang_module['upload_manager'] = "Gestion de transfert";
-$lang_module['upload_delimg_confirm'] = "Êtes-vous sûr de réellement vouloir supprimer l'image?";
+$lang_module['upload_delimg_confirm'] = "Êtes-vous sûr de réellement vouloir supprimer?";
 $lang_module['upload_delimg_success'] = "Suppression réussie!";
 $lang_module['upload_delimg_unsuccess'] = "Erreur: Suppression impossible!";
 $lang_module['upload_create_too_bigimg'] = "La taille de l'image est trop grande";

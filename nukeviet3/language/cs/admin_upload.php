@@ -25,10 +25,10 @@ $lang_module['upload_manager'] = "Upload Správce";
 	 english:	  Upload Manager
 */
 
-$lang_module['upload_delimg_confirm'] = "Jste si jisti, že chcete odstranit soubor s obrázkem";
+$lang_module['upload_delimg_confirm'] = "Jste si jisti, že chcete odstranit soubor";
 /*
-	 vietnam:	  Bạn có chắc muốn xóa file ảnh
-	 english:	  Are you sure you want to delete the image file
+	 vietnam:	  Bạn có chắc muốn xóa file
+	 english:	  Are you sure you want to delete the file
 */
 
 $lang_module['upload_delimg_success'] = "Odstranit soubory úspěšně!";

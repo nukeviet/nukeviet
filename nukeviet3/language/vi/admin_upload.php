@@ -20,7 +20,7 @@ $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
 $lang_module['upload_manager'] = 'Quản lý upload';
-$lang_module['upload_delimg_confirm'] = 'Bạn có chắc muốn xóa file ảnh ';
+$lang_module['upload_delimg_confirm'] = 'Bạn có chắc muốn xóa file ';
 $lang_module['upload_delimg_success'] = 'Xóa file thành công !';
 $lang_module['upload_delimg_unsuccess'] = 'Lỗi không thể xóa file!';
 $lang_module['upload_create_too_bigimg'] = "Kích thước của hình quá lớn";

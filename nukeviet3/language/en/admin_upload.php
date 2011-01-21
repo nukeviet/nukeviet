@@ -19,7 +19,7 @@ $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['upload_manager'] = "Upload Manager";
-$lang_module['upload_delimg_confirm'] = "Are you sure you want to delete the image file";
+$lang_module['upload_delimg_confirm'] = "Are you sure you want to delete the file";
 $lang_module['upload_delimg_success'] = "Delete files successfully !";
 $lang_module['upload_delimg_unsuccess'] = "Error: Can not delete file!";
 $lang_module['upload_create_too_bigimg'] = "The size of the image is too large";
