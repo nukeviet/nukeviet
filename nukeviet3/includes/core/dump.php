@@ -285,7 +285,7 @@ function nv_dump_restore ( $file )
     if ( ! file_exists( $file ) ) return false;
     
     //bat doc doc file
-    $arr_file = explode( "/", $file )
+    $arr_file = explode( "/", $file );
     $ext = nv_getextension( end( $arr_file ) );
     $str = ( $ext == "gz" ) ? @gzfile( $file ) : @file( $file );
     
