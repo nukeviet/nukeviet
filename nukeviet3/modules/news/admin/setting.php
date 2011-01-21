@@ -30,6 +30,7 @@ if ( ! empty( $savesetting ) )
     $array_config['copyright'] = filter_text_input( 'copyright', 'post', '', 1 );
     $array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
     $array_config['module_logo'] = filter_text_input( 'module_logo', 'post', '', 0 );
+    $array_config['structure_upload'] = filter_text_input( 'structure_upload', 'post', '', 0 );
     
     if ( ! nv_is_url( $array_config['module_logo'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['module_logo'] ) )
     {
@@ -160,7 +161,39 @@ $contents .= "</select></td></tr>
 <tr>
     <td><strong>" . $lang_module['emailcomm'] . "</strong></td>
     <td><input type=\"checkbox\" value=\"1\" name=\"emailcomm\" " . ( ( $module_config[$module_name]['emailcomm'] ) ? "checked=\"checked\"" : "" ) . "></td>
-</tr>
+</tr>";
+$array_structure_image = array();
+$array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_name;
+$array_structure_image['Y'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y' );
+$array_structure_image['Ym'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y_m' );
+$array_structure_image['Y_m'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y/m' );
+$array_structure_image['Ym_d'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y_m/d' );
+$array_structure_image['Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y/m/d' );
+$array_structure_image['username'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin';
+
+$array_structure_image['username_Y'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y' );
+$array_structure_image['username_Ym'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y_m' );
+$array_structure_image['username_Y_m'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y/m' );
+$array_structure_image['username_Ym_d'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y_m/d' );
+$array_structure_image['username_Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y/m/d' );
+
+$structure_image_upload = isset( $module_config[$module_name]['structure_upload'] ) ? $module_config[$module_name]['structure_upload'] : "Ym";
+$contents .= "<tbody class=\"second\">
+<tr>
+    <td><strong>" . $lang_module['structure_image_upload'] . "</strong></td>
+    <td><select name=\"structure_upload\">\n";
+foreach ( $array_structure_image as $type => $dir )
+{
+    $sl = "";
+    if ( $type == $structure_image_upload )
+    {
+        $sl = " selected=\"selected\"";
+    }
+    $contents .= "<option value=\"" . $type . "\" " . $sl . ">" . $dir . "</option>\n";
+}
+$contents .= "</select></td></tr>
+</tbody>
+
 <tbody>
 <tr class=\"second\">
     <td><strong>" . $lang_module['module_logo'] . "</strong></td>

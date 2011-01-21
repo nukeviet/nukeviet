@@ -227,4 +227,7 @@ $lang_module['permissions_edit_content'] = "Sửa bài viết";
 $lang_module['permissions_del_content'] = "Xóa bài viêt";
 $lang_module['permissions_pub_error'] = "Lỗi: Bạn không được đăng bài viết tại Chuyên mục: %1\$s";
 $lang_module['error_no_del_content_id'] = "Lỗi: Hệ thống không xóa được các bài viết có id:";
+
+$lang_module['structure_image_upload'] = "Ảnh upload của module được lưu trữ mặc định theo cấu trúc thư mục";
+
 ?>

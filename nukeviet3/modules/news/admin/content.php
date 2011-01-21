@@ -13,7 +13,59 @@ if ( defined( 'NV_EDITOR' ) )
     require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 }
 
-$month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, date( "Y_m" ), true );
+$username_alias = change_alias( $admin_info['username'] );
+$array_structure_image = array();
+$array_structure_image[''] = $module_name;
+$array_structure_image['Y'] = $module_name . '/' . date( 'Y' );
+$array_structure_image['Ym'] = $module_name . '/' . date( 'Y_m' );
+$array_structure_image['Y_m'] = $module_name . '/' . date( 'Y/m' );
+$array_structure_image['Ym_d'] = $module_name . '/' . date( 'Y_m/d' );
+$array_structure_image['Y_m_d'] = $module_name . '/' . date( 'Y/m/d' );
+$array_structure_image['username'] = $module_name . '/' . $username_alias;
+
+$array_structure_image['username_Y'] = $module_name . '/' . $username_alias . '/' . date( 'Y' );
+$array_structure_image['username_Ym'] = $module_name . '/' . $username_alias . '/' . date( 'Y_m' );
+$array_structure_image['username_Y_m'] = $module_name . '/' . $username_alias . '/' . date( 'Y/m' );
+$array_structure_image['username_Ym_d'] = $module_name . '/' . $username_alias . '/' . date( 'Y_m/d' );
+$array_structure_image['username_Y_m_d'] = $module_name . '/' . $username_alias . '/' . date( 'Y/m/d' );
+
+$structure_upload = isset( $module_config[$module_name]['structure_upload'] ) ? $module_config[$module_name]['structure_upload'] : "Ym";
+$currentpath = isset( $array_structure_image[$structure_upload] ) ? $array_structure_image[$structure_upload] : '';
+
+$upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_name;
+$e = explode( "/", $currentpath );
+if ( ! empty( $e ) )
+{
+    $cp = "";
+    foreach ( $e as $p )
+    {
+        if ( ! empty( $p ) and ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $cp . $p ) )
+        {
+            $mk = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $cp, $p );
+            if ( $mk[0] > 0 )
+            {
+                $upload_real_dir_page = $mk[2];
+            }
+        }
+        elseif ( ! empty( $p ) )
+        {
+            $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $cp . $p;
+        }
+        $cp .= $p . '/';
+    }
+}
+
+$currentpath = str_replace( NV_ROOTDIR . "/", "", $upload_real_dir_page );
+$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_name;
+if ( ! defined( 'NV_IS_ADMIN_MODULE' ) and strpos( $structure_upload, 'username' ) !== false )
+{
+    $array_currentpath = explode( '/', $currentpath );
+    if ( $array_currentpath[2] == $username_alias )
+    {
+        $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_name . '/' . $username_alias;
+    }
+}
+
 $array_block_cat_module = array();
 $id_block_content = array();
 $sql = "SELECT bid, adddefault, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
@@ -545,8 +597,8 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             }
             $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
             $msg1 = $lang_module['content_saveok'];
-            $msg2 = $lang_module['content_main']." " .$module_info['custom_title'];
-            redriect ( $msg1, $msg2, $url );
+            $msg2 = $lang_module['content_main'] . " " . $module_info['custom_title'];
+            redriect( $msg1, $msg2, $url );
         }
     }
 }
@@ -657,7 +709,7 @@ foreach ( $global_array_cat as $catid_i => $array_value )
             $ch .= " checked=\"checked\"";
         }
         
-        $temp .= "<li>" . $xtitle_i . "<input class=\"news_checkbox\" type=\"checkbox\" name=\"catids[]\" value=\"" . $catid_i . "\"" . $ch . ">" . $array_value['title'] . "</li>";
+        $temp .= "<li>" . $xtitle_i . "<input class=\"news_checkbox\" type=\"checkbox\" name=\"catids[]\" value=\"" . $catid_i . "\"" . $ch . " />" . $array_value['title'] . "</li>";
     }
 }
 $xtpl->assign( 'listcatid', $temp );
@@ -675,7 +727,7 @@ while ( list( $topicid_i, $title_i ) = each( $array_topic_module ) )
 while ( list( $id_imgposition, $title_imgposition ) = each( $array_imgposition ) )
 {
     $sl = ( $id_imgposition == $rowcontent['imgposition'] ) ? " selected=\"selected\"" : "";
-	$xtpl->assign( 'id_imgposition', $id_imgposition );
+    $xtpl->assign( 'id_imgposition', $id_imgposition );
     $xtpl->assign( 'title_imgposition', $title_imgposition );
     $xtpl->assign( 'posl', $sl );
     $xtpl->parse( 'main.looppos' );
@@ -742,7 +794,7 @@ if ( count( $array_block_cat_module ) > 0 )
     foreach ( $array_block_cat_module as $bid_i => $bid_title )
     {
         $ch = in_array( $bid_i, $id_block_content ) ? " checked=\"checked\"" : "";
-        $shtm .= "<tr><td><input class=\"news_checkbox\" type=\"checkbox\" name=\"bids[]\" value=\"" . $bid_i . "\"" . $ch . ">" . $bid_title . "</td></tr>\n";
+        $shtm .= "<tr><td><input class=\"news_checkbox\" type=\"checkbox\" name=\"bids[]\" value=\"" . $bid_i . "\"" . $ch . " />" . $bid_title . "</td></tr>\n";
     }
     $xtpl->assign( 'row_block', $shtm );
     $xtpl->parse( 'main.block_cat' );
@@ -765,7 +817,7 @@ $xtpl->assign( 'edit_bodytext', $edits );
 ///////////////////////////////////////////////////////////////////////////////////
 if ( $error != "" )
 {
-    $xtpl->assign( 'error',  implode( "<br>", $error ) );
+    $xtpl->assign( 'error', implode( "<br>", $error ) );
     $xtpl->parse( 'main.error' );
 }
 if ( $rowcontent['status'] == 1 )
@@ -781,7 +833,8 @@ if ( empty( $rowcontent['alias'] ) )
 {
     $xtpl->parse( 'main.getalias' );
 }
-$xtpl->assign( 'CURRENT',  NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" ) );
+$xtpl->assign( 'UPLOADS_DIR_USER', $uploads_dir_user );
+$xtpl->assign( 'UPLOAD_CURRENT', $currentpath );
 
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );

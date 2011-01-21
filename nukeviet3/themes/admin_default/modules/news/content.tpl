@@ -5,8 +5,8 @@
     </div>
 	<!-- END: error -->
     <form action="" enctype="multipart/form-data" method="post">
-    <input type="hidden" value="1" name="save">
-    <input type="hidden" value="{rowcontent.id}" name="id">
+    <input type="hidden" value="1" name="save" />
+    <input type="hidden" value="{rowcontent.id}" name="id" />
     <div class="gray">
     	<table width="100%" style="margin-bottom:0">
         	<tr>
@@ -63,8 +63,9 @@
                                 </td>
                             </tr>
                         </tbody>
-                     </table>
-                     <table summary="" class="tab1">
+                        </table>
+                        
+                        <table summary="" class="tab1">
                         <tbody>
                             <tr>
                                 <td><strong>{LANG.content_homeimg}</strong></td>
@@ -73,12 +74,13 @@
                         <tbody class="second">
                             <tr>
                                 <td>
-                                    <input style="width:400px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/>
+                                    <input style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/>
                                     <input type="button" value="Browse server" name="selectimg"/>
                                 </td>
                             </tr>
                         </tbody>
                      </table>
+                     
                    	 <table summary="" class="tab1">
                         <tbody>
                             <tr>
@@ -109,11 +111,12 @@
                         </tbody>
                         <tbody class="second">
                             <tr>
-                                <td><textarea name="hometext" style="font-size:12px; width: 98%; height:100px">{rowcontent.hometext}</textarea></td>
+                                <td><textarea name="hometext" rows="5" cols="75" style="font-size:12px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
                             </tr>
                         </tbody>
                      </table>
                 </td>
+                
                 <td valign="top" style="width: 250px">
                     <ul style="padding:4px; margin:0">
                     <!-- BEGIN:block_cat -->
@@ -138,8 +141,7 @@
                         <div class="message_body">
                           <center>
                             <input name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
-                            <img src="{NV_BASE_SITEURL}images/calendar.jpg" widht="18" style="cursor: pointer; vertical-align: middle;" 
-                                onclick="popCalendar.show(this, 'publ_date', 'dd/mm/yyyy', false);" alt="" height="17">
+                            <img src="{NV_BASE_SITEURL}images/calendar.jpg" style="widht:18px; cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'publ_date', 'dd/mm/yyyy', false);" alt="" height="17" />
                             <select name="phour">
                                 {phour}
                             </select>:
@@ -154,8 +156,7 @@
                         <p class="message_head"><cite>{LANG.content_exp_date}:</cite> <span class="timestamp">{LANG.content_notetime}</span></p>
                         <div class="message_body"><center> 
                           <input name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
-                          <img src="{NV_BASE_SITEURL}images/calendar.jpg" widht="18" style="cursor: pointer; vertical-align: middle;" 
-                          onclick="popCalendar.show(this, 'exp_date', 'dd/mm/yyyy', false);" alt="" height="17">
+                          <img src="{NV_BASE_SITEURL}images/calendar.jpg" style="widht:18px; cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'exp_date', 'dd/mm/yyyy', false);" alt="" height="17" />
                           <select name="ehour">
                             {ehour}
                           </select>:
@@ -226,7 +227,7 @@
         	<tr>
                 <td width="150px"><strong>{LANG.content_author}</strong></td>
                 <td>
-                    <input type="text" maxlength="255" value="{rowcontent.author}" name="author" style="width:225px;">
+                    <input type="text" maxlength="255" value="{rowcontent.author}" name="author" style="width:225px;" />
                 </td>
             </tr>
             <tr>
@@ -235,13 +236,13 @@
                     <select name="sourceid" style="width: 300px;">
                         {sourceid}
                     </select>
-                    <input type="text" maxlength="255" id="AjaxSourceText" value="{rowcontent.sourcetext}" name="sourcetext" style="width: 255px;">
+                    <input type="text" maxlength="255" id="AjaxSourceText" value="{rowcontent.sourcetext}" name="sourcetext" style="width: 255px;" />
                 </td>
             </tr>
             <tr>
             	<td><strong>{LANG.content_copyright}</strong></td>
                 <td>
-					<input type="checkbox" value="1" name="copyright" {checkcop}>
+					<input type="checkbox" value="1" name="copyright" {checkcop} />
                 </td>
             </tr>
         </table>
@@ -261,15 +262,15 @@
 <script type="text/javascript">
 	$("input[name=selectimg]").click(function(){
 		var area = "homeimg";
-		var path= "{NV_UPLOADS_DIR}/{module_name}";	
-		var currentpath= "{CURRENT}";						
+		var path= "{UPLOADS_DIR_USER}";	
+		var currentpath= "{UPLOAD_CURRENT}";						
 		var type= "image";
-		nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$(document).ready(function() {
 		$("#AjaxSourceText").autocomplete(
-			"{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={module_name}&{NV_OP_VARIABLE}=sourceajax",
+			script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=sourceajax",
 			{
 				delay:10,
 				minChars:2,
@@ -284,7 +285,7 @@
 		);
 	 
 		$("#AjaxTopicText").autocomplete(
-			"{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={module_name}&{NV_OP_VARIABLE}=topicajax",
+			script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=topicajax",
 			{
 				delay:10,
 				minChars:2,
