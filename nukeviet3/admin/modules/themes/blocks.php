@@ -12,7 +12,7 @@ $theme_array = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme']
 
 foreach ( $theme_array as $themes_i )
 {
-    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=blocks&selectthemes=" . $themes_i] = $themes_i;
+    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=blocks&amp;selectthemes=" . $themes_i] = $themes_i;
 }
 
 $selectthemes_old = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site_theme'] );
@@ -107,7 +107,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
         $result_func = $db->sql_query( "SELECT a.func_id, a.in_module, a.func_custom_name FROM `" . NV_MODFUNCS_TABLE . "` AS a INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS b ON a.func_id=b.func_id WHERE b.bid=" . $row['bid'] . "" );
         while ( list( $funcid_inlist, $func_inmodule, $funcname_inlist ) = $db->sql_fetchrow( $result_func ) )
         {
-            $contents .= '<a href="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&func=' . $funcid_inlist . '&module=' . $func_inmodule . '"><span style="font-weight:bold">' . $func_inmodule . '</span>: ' . $funcname_inlist . '</a><br />';
+            $contents .= '<a href="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks_func&amp;func=' . $funcid_inlist . '&amp;module=' . $func_inmodule . '"><span style="font-weight:bold">' . $func_inmodule . '</span>: ' . $funcname_inlist . '</a><br />';
         }
     }
     $contents .= "</td>\n";
@@ -118,7 +118,8 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $contents .= "</tbody>\n";
     $a ++;
 }
-$contents .= "<tfoot><tr align=\"right\"><td colspan='8'>
+$contents .= "<tbody>\n";
+$contents .= "<tr align=\"right\" class=\"tfoot_box\"><td colspan='8'>
 <span class=\"edit_icon\"><a class=\"block_weight\" href=\"javascript:void(0);\">" . $lang_module['block_weight'] . "</a></span>&nbsp;&nbsp;&nbsp;&nbsp;	
 <span class=\"add_icon\"><a class=\"block_content\" href=\"javascript:void(0);\">" . $lang_module['block_add'] . "</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
 <span class=\"delete_icon\"><a class=\"delete_group\" href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span>
@@ -127,8 +128,8 @@ $contents .= "<tfoot><tr align=\"right\"><td colspan='8'>
 <a name=\"checkall\" id=\"checkall\" href=\"javascript:void(0);\">" . $lang_module['block_checkall'] . "</a>&nbsp;&nbsp;
 <a name=\"uncheckall\" id=\"uncheckall\" href=\"javascript:void(0);\">" . $lang_module['block_uncheckall'] . "</a>
 </span>
-</td></tr></tfoot>";
-
+</td></tr>";
+$contents .= "</tbody>\n";
 $contents .= "</table>\n";
 $contents .= '
 <script type="text/javascript">

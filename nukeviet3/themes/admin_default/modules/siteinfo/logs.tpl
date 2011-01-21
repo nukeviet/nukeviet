@@ -2,13 +2,13 @@
 <table class="tab1">
     <thead>
         <tr>
-            <td width="25" align="center">
+            <td width="30" align="center">
                 <input type="checkbox" name="all" id="check_all"/>
             </td>
-            <td width="40" align="center">
+            <td width="30" align="center">
                 {LANG.log_lang}
             </td>
-            <td width="100" align="center">
+            <td>
                 {LANG.log_module_name}
             </td>
             <td>
@@ -17,13 +17,13 @@
 			<td>
                 {LANG.log_note}
             </td>
-			<td width="80" align="center">
+			<td>
                 {LANG.log_username}
             </td>
-            <td width="140">
+            <td>
                 {LANG.log_time}
             </td>
-            <td width="55" align="center">
+            <td align="center">
                 {LANG.log_feature}
             </td>
         </tr>
@@ -34,10 +34,10 @@
             <td align="center">
                 <input type="checkbox" name="all" class="list" value="{DATA.id}"/>
             </td>
-			<td align="center">
+			<td width="30" align="center">
                 {DATA.lang}
             </td>
-            <td align="center">
+            <td>
                 {DATA.module_name}
             </td>
             <td>
@@ -46,13 +46,13 @@
 			<td>
                 {DATA.note_action}
             </td>
-			<td align="center">
+			<td>
                 {DATA.username}
             </td>
             <td>
                 {DATA.time}
             </td>
-            <td align="center">
+            <td width="100" align="center">
 				<span class="delete_icon">
 					<a href="{DEL_URL}" class = "delete">{GLANG.delete}</a>
 				</span>
@@ -60,10 +60,9 @@
         </tr>
     </tbody>
     <!-- END: row -->
-    <tfoot>
-   	 <tr>
+   	 <tr class="tfoot_box">
         <td colspan="2">
-        	<input type="button" value="{GLANG.delete}" id="delall">
+        	<input type="button" value="{GLANG.delete}" id="delall" />
         </td> 
         <td colspan="6">
             <!-- BEGIN: generate_page -->
@@ -71,7 +70,6 @@
 			<!-- END: generate_page -->
 		   </td> 
         </tr>   
-    </tfoot>
     </table>
 <script type='text/javascript'>
 	$(function(){

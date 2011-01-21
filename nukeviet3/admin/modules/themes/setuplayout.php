@@ -14,7 +14,7 @@ foreach ( $theme_array as $themes_i )
 {
     if ( file_exists( NV_ROOTDIR . '/themes/' . $themes_i . '/config.ini' ) )
     {
-        $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setuplayout&selectthemes=" . $themes_i] = $themes_i;
+        $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setuplayout&amp;selectthemes=" . $themes_i] = $themes_i;
     }
 }
 
@@ -145,7 +145,7 @@ while ( list( $mod_name, $mod_name_title ) = $db->sql_fetchrow( $result ) )
         foreach ( $array_layout_func_mod as $func_name => $func_arr_val )
         {
             $contents .= '<span style="display:inline-block;width:150px">' . $func_arr_val[1] . "</span>";
-            $contents .= "<select name='func[" . $func_arr_val[0] . "]' id='" . $func_id . "' class='function'>";
+            $contents .= "<select name='func[" . $func_arr_val[0] . "]' class='function'>";
             foreach ( $layout_array as $value )
             {
                 $sel = ( $func_arr_val[2] == $value ) ? ' selected' : '';

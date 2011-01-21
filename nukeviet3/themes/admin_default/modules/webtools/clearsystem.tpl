@@ -33,11 +33,11 @@
 			<td><input type="checkbox" value="clearerrorlogs" name="deltype[]" /></td>
 		</tr>
 	</tbody>
-	<tfoot>
+	<tbody class="tfoot_box">
 		<tr>
 			<td colspan="2" align="center"><input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;" /></td>
 		</tr>
-	</tfoot>
+	</tbody>
 </table>
 </form>
 

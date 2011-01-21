@@ -91,7 +91,7 @@ $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan='2'><strong>" . $lang_module['uploadconfig'] . "</strong></td>\n";
 $contents .= "</tr>\n";
-
+$contents .= "</tbody>";
 $contents .= "<tbody>";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['nv_max_size'] . ":</strong> </td>\n";
@@ -155,7 +155,7 @@ $contents .= "</td>";
 $contents .= "</tr>";
 $contents .= "</tbody>";
 
-$contents .= "</tbody>\n";
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td style='width:200px'><strong>" . $lang_module['uploadconfig_types'] . "</strong></td>\n";
 $contents .= "<td>";
@@ -165,6 +165,7 @@ foreach ( $myini['types'] as $key => $name )
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
+$contents .= "</tbody>\n";
 $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_ext'] . "</strong></td>\n";

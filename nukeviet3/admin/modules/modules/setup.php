@@ -152,7 +152,7 @@ foreach ( $modules_data as $row )
         $mod['setup'] = "";
         if ( array_key_exists( $row['title'], $news_modules_for_lang ) )
         {
-            $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;setmodule=" . $row['title'] . "&checkss=" . md5( $row['title'] . session_id() . $global_config['sitekey'] );
+            $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;setmodule=" . $row['title'] . "&amp;checkss=" . md5( $row['title'] . session_id() . $global_config['sitekey'] );
             $mod['setup'] = "<span class=\"default_icon\"><a href=\"" . $url . "\">" . $lang_module['setup'] . "</a></span>";
         }
         if ( $mod['module_file'] == $mod['title'] )

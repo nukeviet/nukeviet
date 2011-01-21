@@ -270,26 +270,29 @@ $contents .= "<tbody>
 </tr>
 </tbody>";
 
-$contents .= "<tr>
+$contents .= "
+<tbody>
+<tr>
     <td colspan=\"2\">
         <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\">
         <input type=\"hidden\" value=\"1\" name=\"savesetting\">
     </td>
 </tr>
+</tbody>
 </table>
 </form>";
 
 $contents .= "<br />\n";
 $contents .= "<table id=\"iduser\"  class=\"tab1\">\n";
 $contents .= "<caption>" . $lang_module['title_nickname'] . "</caption>";
-$contents .= "<thead>\n";
-$contents .= "<tr align=\"center\">\n";
+
+$contents .= "<tr align=\"center\" class=\"thead_box\">\n";
 $contents .= "<td>" . $lang_global['nickname'] . "</td>\n";
 $contents .= "<td>" . $lang_module['adminip_timeban'] . "</td>\n";
 $contents .= "<td>" . $lang_module['adminip_timeendban'] . "</td>\n";
 $contents .= "<td>" . $lang_module['adminip_funcs'] . "</td>\n";
 $contents .= "</tr>\n";
-$contents .= "</thead>\n";
+
 $sql = "SELECT id, keyname, begintime, endtime FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` = '-1' ORDER BY keyname DESC";
 $result = $db->sql_query( $sql );
 while ( list( $dbid, $keyname, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
@@ -333,16 +336,18 @@ $contents .= "<td style=\"width:150px\">" . $lang_global['nickname'] . " (<span 
 $contents .= "<td><input type='text' name='nickname' value='" . $nickname . "' style='width:200px'/></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_global['password'] . " (<span style='color:red'>*</span>)</td>\n";
 $contents .= "<td><input type='password' name='password' value='" . $password . "' autocomplete='off' style='width:200px'/></td>\n";
 $contents .= "</tr>\n";
-
+$contents .= "</tbody>\n";
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_global['password2'] . " (<span style='color:red'>*</span>)</td>\n";
 $contents .= "<td><input type='password' name='password2' value='" . $password2 . "' autocomplete='off' style='width:200px'/></td>\n";
 $contents .= "</tr>\n";
-
+$contents .= "</tbody>\n";
 $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['adminip_begintime'] . "</td>\n";
@@ -351,17 +356,21 @@ $contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['adminip_endtime'] . "</td>\n";
 $contents .= "<td><input type='text' name='endtime1' id='endtime1' value='" . ( ! empty( $endtime1 ) ? date( 'd.m.Y', $endtime1 ) : '' ) . "' style='width:150px'/>\n";
 $contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'endtime1', 'dd.mm.yyyy', true);\" alt=\"\" height=\"17\">\n";
 $contents .= "</tr>\n";
+$contents .= "</tbody>\n";
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan='2'>";
 $contents .= "<input type='submit' value='" . $lang_module['save'] . "' name='submituser'/><br><br>\n";
 if ( ! empty( $uid ) ) $contents .= $lang_module['nochangepass'];
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
+$contents .= "</tbody>\n";
 $contents .= "</table>\n";
 $contents .= "</form>\n";
 
@@ -374,15 +383,15 @@ $mask_text_array[1] = "255.xxx.xxx.xxx";
 $contents .= "<br />\n";
 $contents .= "<table id=\"idip\"  class=\"tab1\">\n";
 $contents .= "<caption>" . $lang_module['adminip'] . "</caption>";
-$contents .= "<thead>\n";
-$contents .= "<tr align=\"center\">\n";
+
+$contents .= "<tr align=\"center\" class=\"thead_box\">\n";
 $contents .= "<td>" . $lang_module['adminip_ip'] . "</td>\n";
 $contents .= "<td>" . $lang_module['adminip_mask'] . "</td>\n";
 $contents .= "<td>" . $lang_module['adminip_timeban'] . "</td>\n";
 $contents .= "<td>" . $lang_module['adminip_timeendban'] . "</td>\n";
 $contents .= "<td>" . $lang_module['adminip_funcs'] . "</td>\n";
 $contents .= "</tr>\n";
-$contents .= "</thead>\n";
+
 $sql = "SELECT id, keyname, mask, begintime, endtime FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` != '-1' ORDER BY keyname DESC";
 $result = $db->sql_query( $sql );
 while ( list( $dbid, $keyname, $dbmask, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
@@ -421,10 +430,12 @@ $contents .= "<tr>\n";
 $contents .= "<td colspan='2'><strong>" . $lang_module['adminip_add'] . "</strong></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td style=\"width:150px\">" . $lang_module['adminip_address'] . " (<span style='color:red'>*</span>)</td>\n";
 $contents .= "<td><input type='text' name='keyname' value='" . $keyname . "' style='width:200px'/> (xxx.xxx.xxx.xxx)</td>\n";
 $contents .= "</tr>\n";
+$contents .= "</tbody>\n";
 $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['adminip_mask'] . "</td>\n";
@@ -446,25 +457,29 @@ $contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['adminip_endtime'] . "</td>\n";
 $contents .= "<td><input type='text' name='endtime' id='endtime' value='" . ( ! empty( $endtime ) ? date( 'd.m.Y', $endtime ) : '' ) . "' style='width:150px'/>\n";
 $contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'endtime', 'dd.mm.yyyy', true);\" alt=\"\" height=\"17\">\n";
 $contents .= "</tr>\n";
+$contents .= "</tbody>\n";
 $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['adminip_notice'] . "</td>\n";
 $contents .= "<td>";
-$contents .= "<textarea name='notice' style='width:400px;height:50px'>" . $notice . "</textarea>\n";
+$contents .= "<textarea rows=\"4\" cols=\"\" name='notice' style='width:400px;height:50px'>" . $notice . "</textarea>\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan='2'>";
 $contents .= "<input type='submit' value='" . $lang_module['save'] . "' name='submitip'/><br><br>\n";
 $contents .= $lang_module['adminip_note'];
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
+$contents .= "</tbody>\n";
 $contents .= "</table>\n";
 $contents .= "</form>\n";
 $contents .= "

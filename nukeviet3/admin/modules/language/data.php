@@ -196,7 +196,7 @@ foreach ( $global_config['allow_adminlangs'] as $keylang )
     {
         if ( ! in_array( $keylang, $global_config['allow_sitelangs'] ) )
         {
-            $setup = "<span class=\"delete_icon\"><a onclick=\"return confirm(nv_is_del_confirm[0])\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&deletekeylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() . "deletekeylang" ) . "\">" . $lang_module['nv_setup_delete'] . "</a></span>";
+            $setup = "<span class=\"delete_icon\"><a onclick=\"return confirm(nv_is_del_confirm[0])\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;deletekeylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() . "deletekeylang" ) . "\">" . $lang_module['nv_setup_delete'] . "</a></span>";
         }
         else
         {
@@ -226,7 +226,7 @@ foreach ( $global_config['allow_adminlangs'] as $keylang )
     }
     else
     {
-        $setup = "<span class=\"default_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&keylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() ) . "\">" . $lang_module['nv_setup_new'] . "</a></span>";
+        $setup = "<span class=\"default_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() ) . "\">" . $lang_module['nv_setup_new'] . "</a></span>";
     }
     $class = ( $a % 2 ) ? " class=\"second\"" : "";
     $contents .= "<tbody" . $class . ">\n";

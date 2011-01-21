@@ -9,14 +9,14 @@
 
 if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
-$select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cronjobs_add"] = $lang_module['nv_admin_add'];
+$select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_add"] = $lang_module['nv_admin_add'];
 
 $query = "SELECT * FROM `" . NV_CRONJOBS_GLOBALTABLE . "` ORDER BY `is_sys` DESC";
 $result = $db->sql_query( $query );
 $numrows = $db->sql_numrows( $result );
 if ( empty( $numrows ) )
 {
-    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add" );
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add" );
     die();
 }
 

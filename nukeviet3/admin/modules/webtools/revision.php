@@ -155,7 +155,7 @@ if ( $step == 1 )
             $list_del_files = implode( "<br>", $del_files );
             $list_mod_files = implode( "<br>", $mod_files );
             $list_add_files = implode( "<br>", $add_files );
-            $contents = "<a target=\"_blank\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&step=2\">Update r" . $vini . " -> r" . $vend . "</a>";
+            $contents = "<a target=\"_blank\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;step=2\">Update r" . $vini . " -> r" . $vend . "</a>";
             $contents .= "<br><br><b>Add files:</b><br>" . $list_add_files . "<br><br><b>Edit files:</b><br>" . $list_mod_files . "<br><br><b>Del files:</b><br>" . $list_del_files;
         }
         else
@@ -227,14 +227,14 @@ elseif ( $step == 2 and $vend > 0 )
         $n ++;
         if ( $n < count( $mod_files ) )
         {
-            $nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&step=" . $step . "&n=" . $n;
+            $nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;step=" . $step . "&amp;n=" . $n;
             $contents = "<meta http-equiv=\"refresh\" content=\"0;url=" . $nv_redirect . "\" />";
             $contents .= "Chuan bi thuc hien file: " . $mod_files[$n];
             die( $contents );
         }
         else
         {
-            $contents .= "<br><br><br><a  href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&step=3\"> Step 3 </a>";
+            $contents .= "<br><br><br><a  href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;step=3\"> Step 3 </a>";
         }
     }
 }

@@ -2,6 +2,7 @@
 <!-- BEGIN: error-->{ERRORCONTENT}<!-- END: error -->
 <form action="" method="post">
     <table class="tab1" summary="">
+    	<tbody>
         <tr>
             <td>
                 <strong>{LANG.server}</strong>
@@ -11,6 +12,7 @@
                 <input type="text" value="{VALUE.ftp_port}" name="ftp_port" style="width: 30px;"/>
             </td>
         </tr>
+        </tbody>
         <tbody class="second">
             <tr>
                 <td>
@@ -21,6 +23,7 @@
                 </td>
             </tr>
         </tbody>
+        <tbody>
         <tr>
             <td>
                 <strong>{LANG.password}</strong>
@@ -29,6 +32,7 @@
                 <input type="password" name="ftp_user_pass" id="ftp_user_pass_iavim" autocomplete="off" value="{VALUE.ftp_user_pass}" style="width: 250px"/>
             </td>
         </tr>
+        </tbody>
         <tbody class="second">
             <tr>
                 <td>
@@ -39,10 +43,12 @@
                 </td>
             </tr>
         </tbody>
+        <tbody>
         <tr>
             <td colspan="2" style="text-align: center;">
                 <input type="submit" value="{LANG.submit}" style="padding: 2px 10px;"/>
             </td>
         </tr>
+        </tbody>
     </table>
 <!-- END: ftp -->

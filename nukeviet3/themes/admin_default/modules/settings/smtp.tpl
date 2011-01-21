@@ -19,6 +19,7 @@
 				style="width: 250px;" /></td>
 		</tr>
 	</tbody>
+    <tbody>
 	<tr>
 		<td>{LANG.outgoing_port}</td>
 		<td><input type="text" name="smtp_port" value="{DATA.smtp_port}"
@@ -33,13 +34,16 @@
               <!-- END: encrypted_connection -->
            </select>
 	</tr>
+    </tbody>
 </table>
 <table class="tab1">
 	<caption>{LANG.smtp_username}</caption>
+    <tbody>
 	<tr>
 		<td>{LANG.smtp_login}</td>
 		<td><input type="text" name="smtp_username" value="{DATA.smtp_username}" autocomplete="off" style="width: 250px;" /></td>
 	</tr>
+    </tbody>
 	<tbody class="second">
 		<tr>
 			<td>{LANG.smtp_pass}</td>

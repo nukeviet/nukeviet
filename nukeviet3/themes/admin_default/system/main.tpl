@@ -25,7 +25,7 @@
 	            <!-- END: select_option --><!-- BEGIN: site_mods -->
 	            <div class="go">
 	                <span>&bull;</span>
-	                <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a>
+	                <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a>
 	            </div>
 	            <!-- END: site_mods --><!-- BEGIN: empty_page_title -->&raquo; <span>{PAGE_TITLE} </span>
 	            <!-- END: empty_page_title -->

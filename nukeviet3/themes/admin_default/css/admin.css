@@ -483,7 +483,7 @@ table.tab1 td, table.tab1 th {
     padding: 7px 5px 7px 5px
 }
 
-table.tab1 tfoot {
+table.tab1 tfoot, table.tab1 .tfoot_box{
     background: #CCC;
     font: bold 11px Tahoma, Verdana, sans-serif
 }
@@ -494,7 +494,7 @@ table.tab1 th {
     text-align: left
 }
 
-table.tab1 thead {
+table.tab1 thead, table.tab1 .thead_box{
     background: #8AB0FF;
     font: bold 11px / 18px Tahoma, Verdana, sans-serif;
     white-space: nowrap

@@ -21,7 +21,7 @@ while ( $row = $db->sql_fetch_assoc( $result ) )
 $select_options = array();
 foreach ( $array_lang_exit as $langkey )
 {
-    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&dirlang=" . $langkey] = $language_array[$langkey]['name'];
+    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;dirlang=" . $langkey] = $language_array[$langkey]['name'];
 }
 
 $dirlang_old = $nv_Request->get_string( 'dirlang', 'cookie', NV_LANG_DATA );
@@ -39,7 +39,7 @@ $result = $db->sql_query( $query );
 if ( $db->sql_numrows( $result ) == 0 )
 {
     $contents = "<center><br><b>" . $lang_module['nv_lang_error_exit'] . "</b></center>";
-    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\">";
+    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\">";
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -86,7 +86,7 @@ while ( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sq
     $contents .= " <td>" . $langsitename . "</td>";
     $contents .= " <td align=\"center\">" . $array_translator['author'] . "</td>";
     $contents .= " <td align=\"center\">" . $array_translator['createdate'] . "</td>";
-    $contents .= " <td align=\"center\"><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id() ) . "\">" . $lang_module['nv_admin_edit'] . "</a></span>";
+    $contents .= " <td align=\"center\"><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id() ) . "\">" . $lang_module['nv_admin_edit'] . "</a></span>";
     $contents .= "     - <span class=\"default_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id() ) . "\">" . $lang_module['nv_admin_write'] . "</a></span>";
     $contents .= " </td>";
     $contents .= "</tr>";

@@ -22,7 +22,7 @@ while ( $row = $db->sql_fetch_assoc( $result ) )
 if ( empty( $array_lang_exit ) )
 {
     $contents = "<center><br><b>" . $lang_module['nv_lang_error_exit'] . "</b></center>";
-    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\">";
+    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\">";
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );

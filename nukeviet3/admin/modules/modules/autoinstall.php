@@ -27,11 +27,13 @@ else
     $contents .= "</td>";
     $contents .= "</tr>";
     $contents .= "</tbody>";
+	$contents .= "<tbody>";
     $contents .= "<tr>";
     $contents .= "<td colspan='2' align='center'>";
     $contents .= "<input name=\"method\" type=\"button\" value=\"" . $lang_module['autoinstall_continue'] . "\" />\n";
     $contents .= "</td>";
     $contents .= "</tr>";
+	$contents .= "</tbody>";
     $contents .= "</table></div>";
     $contents .= "<div id='content'></div>";
     $contents .= '

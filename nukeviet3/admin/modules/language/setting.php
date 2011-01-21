@@ -77,7 +77,7 @@ if ( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "
     $result = $db->sql_query( $query );
     nv_save_file_config_global();
     $contents = "<br><br><br><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
-    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"2;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\">";
+    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"2;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\">";
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -106,14 +106,12 @@ while ( $row = $db->sql_fetchrow( $result ) )
 $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
 $contents .= "  <caption>" . $lang_module['nv_lang_show'] . "</caption>";
-$contents .= "  <thead>\n";
-$contents .= "  <tr>";
+$contents .= "  <tr class=\"thead_box\">";
 $contents .= "      <td style=\"width: 50px\">" . $lang_module['nv_lang_key'] . "</td>";
 $contents .= "      <td style=\"width: 180px\">" . $lang_module['nv_lang_name'] . "</td>";
 $contents .= "      <td style=\"width: 120px\">" . $lang_module['nv_lang_slsite'] . "</td>";
 $contents .= "      <td style=\"width: 120px\">" . $lang_module['nv_lang_sladm'] . "</td>";
 $contents .= "      <td></td>";
-$contents .= "  </thead>";
 $contents .= "  </tr>";
 $contents .= "  </table>";
 
@@ -127,12 +125,12 @@ while ( list( $key, $value ) = each( $language_array ) )
     if ( file_exists( NV_ROOTDIR . "/language/" . $key . "/global.php" ) )
     {
         $check_lang_exit = true;
-        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&dirlang=" . $key . "&amp;checksess=" . md5( "readallfile" . session_id() ) . "\">" . $lang_module['nv_admin_read_all'] . "</a>";
+        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&amp;dirlang=" . $key . "&amp;checksess=" . md5( "readallfile" . session_id() ) . "\">" . $lang_module['nv_admin_read_all'] . "</a>";
     }
     if ( in_array( $key, $lang_array_data_exit ) )
     {
-        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&dirlang=" . $key . "&amp;checksess=" . md5( "writeallfile" . session_id() ) . "\">" . $lang_module['nv_admin_write'] . "</a>";
-        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=download&dirlang=" . $key . "&amp;checksess=" . md5( "downloadallfile" . session_id() ) . "\">" . $lang_module['nv_admin_download'] . "</a>";
+        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $key . "&amp;checksess=" . md5( "writeallfile" . session_id() ) . "\">" . $lang_module['nv_admin_write'] . "</a>";
+        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=download&amp;dirlang=" . $key . "&amp;checksess=" . md5( "downloadallfile" . session_id() ) . "\">" . $lang_module['nv_admin_download'] . "</a>";
     }
     $class = ( $a % 2 ) ? " class=\"second\"" : "";
     $contents .= "<tbody" . $class . ">\n";
@@ -158,7 +156,7 @@ while ( list( $key, $value ) = each( $language_array ) )
     }
     if ( ! empty( $arr_lang_func ) and ! in_array( $key, $global_config['allow_adminlangs'] ) )
     {
-        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delete&dirlang=" . $key . "&amp;checksess=" . md5( "deleteallfile" . session_id() ) . "\">" . $lang_module['nv_admin_delete'] . "</a>";
+        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delete&amp;dirlang=" . $key . "&amp;checksess=" . md5( "deleteallfile" . session_id() ) . "\">" . $lang_module['nv_admin_delete'] . "</a>";
     }
     $contents .= "<td style=\"text-align: center\">" . implode( " - ", $arr_lang_func ) . "</td>";
     $contents .= "</tr>";

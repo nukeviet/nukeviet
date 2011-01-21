@@ -154,11 +154,12 @@ if ( defined( 'NV_IS_GODADMIN' ) )
 {
     $contents .= '
 <script type="text/javascript">
+//<![CDATA[
 $("#checkchmod").click(function(event){
 	event.preventDefault();
 	var url = $(this).attr("href");
 	$("#checkchmod").hide();
-	$("#wait").html("<img src=\'../images/load.gif\'/>");
+	$("#wait").html("<img src=\'../images/load.gif\' alt=\'\' />");
 	$.ajax({
 	   type: "POST",
 	   url: url,
@@ -170,6 +171,7 @@ $("#checkchmod").click(function(event){
 	   }
 	 });
 })
+//]]>
 </script>
 ';
 }
