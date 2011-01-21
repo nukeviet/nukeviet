@@ -26,20 +26,21 @@
 	.content{
 			font-family:Arial;
 			font-size:12px; 
-			position:relative;
 			background:#FFFFFF;
-			height:100%;
-			width:100%;
 	}
 	.error {
 		font-size:12px;
 		color:#FF0000;
 		font-weight:bold;
-		padding:2px;
+		padding:5px;
+		float:left;
 	}
 	.filetype {
 		background:#EAEAEA;
-		padding:2px;
+		padding:5px;
+	}
+	.imgfolder {
+		width:200px;height:330px;overflow:auto;cursor:pointer; background:#FFFFFF; margin:1px
 	}
 </style>
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.all.css" rel="stylesheet" />
@@ -60,30 +61,31 @@
                                 <option value="flash" {sflash}>{LANG.type_flash}</option>
                             </select>
                         </div>
-                    	<div name="imgfolder" id="imgfolder" size="25" style="width:200px;height:320px;overflow:auto;cursor:pointer; background:#FFFFFF; margin:1px">&nbsp;</div>
-                        <!-- BEGIN: error -->
-                        <div class="error">
-                            {error}
-                        </div>
-                        <!-- END: error -->
+                    	<div name="imgfolder" id="imgfolder" size="25" class="imgfolder">&nbsp;</div>
                     </td>
                     <td valign="top" bgcolor="#EAEAEA">
                         <div id="imglist">
-                        &nbsp;
-                        </div>
-                        <div class="filetype">	
-                            <form enctype="multipart/form-data" action="" name="uploadimg" id="uploadimg" method="post">
-                                <input type="hidden" name="path" value="{currentpath}"/>
-                                File : 
-                                <input type="file" name="fileupload"/> {LANG.upload_otherurl}
-                                <input type="text" name="imgurl"/> 
-                                <input type="submit" value="Upload" name="confirm"/>
-                            </form>
+                        	<p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...</p>
                         </div>
                     </td>
                 </tr>
         </tbody>
     </table>
+    <div class="filetype">
+    	<!-- BEGIN: error -->
+        <div class="error">
+            {error}
+        </div>
+        <!-- END: error -->
+        <form enctype="multipart/form-data" action="" name="uploadimg" id="uploadimg" method="post" style="float:right;">
+            <input type="hidden" name="path" value="{currentpath}"/>
+            File : 
+            <input type="file" name="fileupload"/> {LANG.upload_otherurl}
+            <input type="text" name="imgurl"/> 
+            <input type="submit" value="Upload" name="confirm"/>
+        </form>
+        <div style="clear:both"></div>
+    </div>
 </div>
 <script type="text/javascript">
 $(function(){
