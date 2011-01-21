@@ -8,8 +8,6 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module['main'];
-
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 //$xtpl->assign( 'LANG', $lang_module );
 
