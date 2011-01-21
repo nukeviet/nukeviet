@@ -1,4 +1,4 @@
-nv_del_moduleCache( $module_name );<?php
+<?php
 
 /**
  * @Project NUKEVIET 3.0
@@ -13,10 +13,10 @@ if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 $sourceid = $nv_Request->get_int( 'sourceid', 'post', 0 );
 
 $contents = "NO_" . $sourceid;
-list( $sourceid ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`=" . intval( $sourceid ) . "" ) );
+list( $sourceid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`=" . intval( $sourceid ) . "" ) );
 if ( $sourceid > 0 )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_source', "sourceid " . $sourceid, $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_source', $title, $admin_info['userid'] );
     $query = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `sourceid` = '" . $sourceid . "'" );
     while ( $row = $db->sql_fetchrow( $query ) )
     {
