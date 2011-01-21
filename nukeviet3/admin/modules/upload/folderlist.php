@@ -12,7 +12,7 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) )
     die( 'Stop!!!' );
 }
 
-$path = nv_check_path_upload( $nv_Request->get_string( 'path', 'request', NV_UPLOADS_DIR ) );
+$path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get,post', NV_UPLOADS_DIR ) );
 
 if ( empty( $path ) and defined( 'NV_IS_SPADMIN' ) )
 {
@@ -24,8 +24,11 @@ elseif ( ! nv_check_allow_upload_dir( $path ) )
 }
 $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'request', NV_UPLOADS_DIR ) );
 $titlepath = empty( $path ) ? NV_BASE_SITEURL : $path;
+
+$class_folder = ( ! in_array( $path, $allow_upload_dir ) and ! empty( $path ) ) ? 'class="folder"' : '';
+
 echo '<ul id="foldertree" class="filetree">';
-echo '<li class="open collapsable"><span ' . ( ( $path == $currentpath ) ? ' style="color:red"' : '' ) . ' class="folder" title="' . $path . '">&nbsp;' . $titlepath . '</span>';
+echo '<li class="open collapsable"><span ' . ( ( $path == $currentpath ) ? ' style="color:red"' : '' ) . ' ' . $class_folder . ' title="' . $path . '">&nbsp;' . $titlepath . '</span>';
 echo '<ul>';
 $arr_files = @scandir( NV_ROOTDIR . '/' . $path );
 foreach ( $arr_files as $file )
@@ -33,18 +36,19 @@ foreach ( $arr_files as $file )
     $path_file = empty( $path ) ? $file : $path . '/' . $file;
     if ( is_dir( NV_ROOTDIR . '/' . $path_file ) && ! in_array( $file, $array_hidefolders ) && nv_check_allow_upload_dir( $path_file ) )
     {
-        if ( ( $path_file == $currentpath ) )
+        $class_li = 'expandable';
+        $style_color = '';
+        $class_folder = ( ! in_array( $path_file, $allow_upload_dir ) ) ? 'class="folder"' : '';
+        if ( $path_file == $currentpath )
         {
-            echo '<li class="open collapsable"><span style="color:red" class="folder" title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
+            $class_li = "open collapsable";
+            $style_color = 'style="color:red"';
         }
         elseif ( strpos( $currentpath, $path_file . '/' ) !== false )
         {
-            echo '<li class="open collapsable"><span class="folder" title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
+            $class_li = "open collapsable";
         }
-        else
-        {
-            echo '<li class="expandable"><span class="folder" title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
-        }
+        echo '<li class="' . $class_li . '"><span ' . $style_color . ' ' . $class_folder . ' title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
         echo '<ul>';
         viewdirtree( $path_file, $currentpath );
         echo '</ul>';

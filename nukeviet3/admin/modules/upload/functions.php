@@ -136,7 +136,15 @@ if ( $module_name == "upload" )
         $dir = NV_ROOTDIR . "/" . $path;
         $dir = realpath( $dir );
         $dir = str_replace( "\\", "/", $dir );
-        return str_replace( NV_ROOTDIR . "/", "", $dir );
+        if ( $dir == NV_ROOTDIR )
+        {
+            $path = "";
+        }
+        else
+        {
+            $path = str_replace( NV_ROOTDIR . "/", "", $dir );
+        }
+        return $path;
     }
 
     function nv_delete_cache_upload ( $realpath )
