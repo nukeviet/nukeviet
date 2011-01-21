@@ -124,7 +124,7 @@ $(function(){
 				var foldervalue = $("span#foldervalue").attr("title");
 				var newname = $("input[name=createfoldername]").val();
 				if (newname==""){
-					alert("LANG.rename_nonamefolder}");
+					alert("{LANG.rename_nonamefolder}");
 					$("input[name=foldername]").focus();
 					return false;
 				}
@@ -152,7 +152,7 @@ $(function(){
 				var foldervalue = $("span#foldervalue").attr("title");
 				var newname = $("input[name=foldername]").val();
 				if (newname=="" || newname==foldervalue){
-					alert("' . $lang_module['rename_nonamefolder'] . '");
+					alert("{LANG.rename_nonamefolder}");
 					$("input[name=foldername]").focus();
 					return false;
 				}

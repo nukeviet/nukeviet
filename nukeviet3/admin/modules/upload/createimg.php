@@ -19,8 +19,7 @@ if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
     $width = $nv_Request->get_int( 'width', 'post' );
     $height = $nv_Request->get_int( 'height', 'post' );
     
-    if ( ! empty( $imagename ) and file_exists( NV_ROOTDIR . '/' . $path . '/' . $imagename ) and //
-$width >= 10 and $height >= 10 )
+    if ( ! empty( $imagename ) and file_exists( NV_ROOTDIR . '/' . $path . '/' . $imagename ) and $width >= 10 and $height >= 10 )
     {
         require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
         

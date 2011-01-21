@@ -138,5 +138,35 @@ if ( $module_name == "upload" )
         $dir = str_replace( "\\", "/", $dir );
         return str_replace( NV_ROOTDIR . "/", "", $dir );
     }
+
+    function nv_delete_cache_upload ( $realpath )
+    {
+        $files = scandir( $realpath );
+        $files = array_diff( $files, array( 
+            ".", ".." 
+        ) );
+        if ( count( $files ) )
+        {
+            $path = str_replace( "\\", "/", $realpath );
+            $path = str_replace( NV_ROOTDIR . "/", "", $path );
+            foreach ( $files as $f )
+            {
+                if ( is_dir( $realpath . '/' . $f ) )
+                {
+                    nv_delete_cache_upload( $realpath . '/' . $f );
+                }
+                else
+                {
+                    $image = basename( $f );
+                    $md5_view_image = NV_ROOTDIR . "/files/images/" . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
+                    if ( file_exists( $md5_view_image ) )
+                    {
+                        @nv_deletefile( $md5_view_image );
+                    }
+                }
+            }
+        }
+    
+    }
 }
 ?>

@@ -12,9 +12,9 @@ $newname = change_alias( htmlspecialchars( trim( $nv_Request->get_string( 'newna
 if ( ! empty( $newname ) && ! file_exists( NV_ROOTDIR . '/' . $path . '/' . $newname ) && $admin_info['allow_create_subdirectories'] && nv_check_allow_upload_dir( $path ) )
 {
     $n_dir = nv_mkdir( NV_ROOTDIR . '/' . $path, $newname );
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['createfolder'], $path . '/' . $newname, $admin_info['userid'] );
     if ( ! empty( $n_dir[0] ) )
     {
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['createfolder'], $path . '/' . $newname, $admin_info['userid'] );
         echo $path . '/' . $newname;
     }
 }
