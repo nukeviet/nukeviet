@@ -36,6 +36,7 @@ if ( defined( "NV_IS_ADMIN" ) )
                     {
                         $nv_username = $admin_info['username'];
                         define( 'NV_IS_MOD_USER', true );
+                        nv_insert_logs( NV_LANG_DATA, "login", "[" .$nv_username . "] " . strtolower( $lang_global['loginsubmit'] )," Client IP:" . NV_CLIENT_IP, 0 );
                         require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
                     }
                     

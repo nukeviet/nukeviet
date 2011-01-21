@@ -34,7 +34,9 @@ if ( ! nv_admin_checkfirewall() )
 $error = "";
 $login = "";
 
-$array_gfx_chk = array( 1, 5, 6, 7 );
+$array_gfx_chk = array( 
+    1, 5, 6, 7 
+);
 if ( in_array( $global_config['gfx_chk'], $array_gfx_chk ) )
 {
     $global_config['gfx_chk'] = 1;
@@ -55,10 +57,12 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
     if ( empty( $nv_username ) )
     {
         $error = $lang_global['nickname_empty'];
-    } elseif ( empty( $nv_password ) )
+    }
+    elseif ( empty( $nv_password ) )
     {
         $error = $lang_global['password_empty'];
-    } elseif ( $global_config['gfx_chk'] == 1 and ! nv_capcha_txt( $nv_seccode ) )
+    }
+    elseif ( $global_config['gfx_chk'] == 1 and ! nv_capcha_txt( $nv_seccode ) )
     {
         $error = $lang_global['securitycodeincorrect'];
     }
@@ -71,7 +75,7 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
             if ( empty( $nv_username ) ) $nv_username = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
             if ( empty( $nv_password ) ) $nv_password = filter_text_input( 'nv_password', 'post', '' );
         }
-
+        
         $userid = 0;
         $sql = "SELECT `userid`, `username`, `password` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` ='" . md5( $nv_username ) . "'";
         $result = $db->sql_query( $sql );
@@ -83,7 +87,10 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                 $userid = $row['userid'];
             }
         }
-
+        else
+        {
+            nv_insert_logs( NV_LANG_DATA, "login", "[" . $nv_username . "] " . strtolower( $lang_global['loginsubmit'] . " " . $lang_global['fail'] ), " Client IP:" . NV_CLIENT_IP, 0 );
+        }
         $error = $lang_global['loginincorrect'];
         if ( $userid > 0 )
         {
@@ -95,32 +102,38 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                 {
                     $row = $db->sql_fetchrow( $result );
                     $db->sql_freeresult( $result );
-
+                    
                     $admin_lev = intval( $row['admin_lev'] );
-
+                    
                     if ( ! defined( 'ADMIN_LOGIN_MODE' ) ) define( 'ADMIN_LOGIN_MODE', 3 );
-                    if ( ADMIN_LOGIN_MODE == 2 and ! in_array( $admin_lev, array( 1, 2 ) ) )
+                    if ( ADMIN_LOGIN_MODE == 2 and ! in_array( $admin_lev, array( 
+                        1, 2 
+                    ) ) )
                     {
                         $error = $lang_global['admin_access_denied2'];
-                    } elseif ( ADMIN_LOGIN_MODE == 1 and $admin_lev != 1 )
+                    }
+                    elseif ( ADMIN_LOGIN_MODE == 1 and $admin_lev != 1 )
                     {
                         $error = $lang_global['admin_access_denied1'];
                     }
                     else
                     {
                         $current_login = NV_CURRENTTIME;
+                        nv_insert_logs( NV_LANG_DATA, "login", "[" .$nv_username . "] " . strtolower( $lang_global['loginsubmit'] )," Client IP:" . NV_CLIENT_IP, 0 );
                         $admin_id = intval( $row['admin_id'] );
                         $agent = substr( NV_USER_AGENT, 0, 254 );
                         $checknum = nv_genpass( 10 );
                         $checknum = $crypt->hash( $checknum );
-                        $array_admin = array( 'admin_id' => $admin_id, 'checknum' => $checknum, 'current_agent' => $agent, 'last_agent' => $row['admin_last_agent'], 'current_ip' => $client_info['ip'], 'last_ip' => $row['admin_last_ip'], 'current_login' => $current_login, 'last_login' => intval( $row['admin_last_login'] ) );
+                        $array_admin = array( 
+                            'admin_id' => $admin_id, 'checknum' => $checknum, 'current_agent' => $agent, 'last_agent' => $row['admin_last_agent'], 'current_ip' => $client_info['ip'], 'last_ip' => $row['admin_last_ip'], 'current_login' => $current_login, 'last_login' => intval( $row['admin_last_login'] ) 
+                        );
                         $admin_serialize = serialize( $array_admin );
                         $query = $db->constructQuery( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `check_num` = [s], `last_login` = [d], `last_ip` = [s], `last_agent` = [s] WHERE `admin_id`=[d]", $checknum, $current_login, $client_info['ip'], $agent, $admin_id );
                         $db->sql_query( $query );
                         $nv_Request->set_Session( 'admin', $admin_serialize );
                         $nv_Request->set_Session( 'online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0' );
                         define( 'NV_IS_ADMIN', true );
-
+                        
                         $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
                         if ( ! empty( $admin_login_redirect ) )
                         {
@@ -132,6 +145,10 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                         die();
                     }
                 }
+            }
+            else
+            {
+                nv_insert_logs( NV_LANG_DATA, "login", "[ " .$nv_username . " ] " . strtolower( $lang_global['loginsubmit'] . " " . $lang_global['fail'] ), " Client IP:" . NV_CLIENT_IP, 0 );
             }
         }
     }
@@ -148,7 +165,8 @@ else
 if ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_global.php" ) )
 {
     require_once ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_global.php" );
-} elseif ( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
+}
+elseif ( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
 {
     require_once ( NV_ROOTDIR . "/language/en/admin_global.php" );
 }
