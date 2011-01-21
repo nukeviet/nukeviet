@@ -201,7 +201,7 @@ function nv_admin_theme ( $contents )
     $xtpl->assign( 'NV_GENPASS', nv_genpass() );
     $xtpl->parse( 'main.footer' );
     $xtpl->parse( 'main' );
-    $xtpl->out( 'main' );
+    return $xtpl->text( 'main' );
 }
 
 ?>

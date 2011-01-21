@@ -176,7 +176,7 @@ function nv_site_theme ( $contents )
     {
         $sitecontent = str_replace( $position, $blcontent, $sitecontent );
     }
-    echo $sitecontent;
+    return $sitecontent;
 }
 
 ?>
