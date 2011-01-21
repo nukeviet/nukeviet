@@ -69,11 +69,11 @@ if ( ! function_exists( 'nv_message_about' ) )
         
         if ( $is_show )
         {
-            if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/blocks/global.about.tpl" ) )
+            if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/about/block.about.tpl" ) )
             {
                 $block_theme = $global_config['module_theme'];
             }
-            elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.about.tpl" ) )
+            elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/about/block.about.tpl" ) )
             {
                 $block_theme = $global_config['site_theme'];
             }
@@ -82,7 +82,7 @@ if ( ! function_exists( 'nv_message_about' ) )
                 $block_theme = "default";
             }
             
-            $xtpl = new XTemplate( "global.about.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
+            $xtpl = new XTemplate( "block.about.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/about" );
             $xtpl->assign( 'LINK', $link );
             $xtpl->assign( 'TITLE', $title );
             $xtpl->assign( 'BODYTEXT', $bodytext );

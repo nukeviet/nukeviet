@@ -154,20 +154,20 @@ $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES
 (1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '0', 0, 1, 'a:1:{s:12:\"title_length\";i:25;}'),
-(2, 'default', 'global', 'global.counter.php', 'Thống kê truy cập', '', '', '[LEFT]', 0, 1, '0', 1, 2, ''),
-(3, 'default', 'global', 'global.banners.php', 'Quảng cáo trái', '', '', '[LEFT]', 0, 1, '0', 1, 3, 'a:1:{s:12:\"idplanbanner\";i:2;}'),
+(2, 'default', 'statistics', 'global.counter.php', 'Thống kê truy cập', '', '', '[LEFT]', 0, 1, '0', 1, 2, ''),
+(3, 'default', 'banners', 'global.banners.php', 'Quảng cáo trái', '', '', '[LEFT]', 0, 1, '0', 1, 3, 'a:1:{s:12:\"idplanbanner\";i:2;}'),
 (4, 'default', 'about', 'global.about.php', 'Giới thiệu', '', 'orange', '[RIGHT]', 0, 1, '0', 1, 1, ''),
 (5, 'default', 'users', 'global.login.php', 'Đăng nhập thành viên', '', '', '[RIGHT]', 0, 1, '0', 1, 2, ''),
-(6, 'default', 'global', 'global.voting.php', 'Thăm dò ý kiến', '', '', '[RIGHT]', 0, 1, '0', 1, 3, ''),
+(6, 'default', 'voting', 'global.voting_random.php', 'Thăm dò ý kiến', '', '', '[RIGHT]', 0, 1, '0', 1, 3, ''),
 (7, 'default', 'news', 'module.block_headline.php', 'Tin nổi bật', '', 'no_title', '[TOP]', 0, 1, '0', 0, 1, ''),
-(8, 'default', 'global', 'global.banners.php', 'Quảng cáo giữa trang', '', 'no_title', '[TOP]', 0, 1, '0', 1, 2, 'a:1:{s:12:\"idplanbanner\";i:1;}'),
+(8, 'default', 'banners', 'global.banners.php', 'Quảng cáo giữa trang', '', 'no_title', '[TOP]', 0, 1, '0', 1, 2, 'a:1:{s:12:\"idplanbanner\";i:1;}'),
 (9, 'modern', 'news', 'module.block_newscenter.php', 'Tin mới', '', 'no_title', '[HEADER]', 0, 1, '0', 0, 1, ''),
 (10, 'modern', 'about', 'global.about.php', 'Giới thiệu', '', 'no_title_html', '[RIGHT]', 0, 1, '0', 1, 1, ''),
 (11, 'modern', 'users', 'global.login.php', 'Đăng nhập', '', '', '[RIGHT]', 0, 1, '0', 1, 2, ''),
-(12, 'modern', 'global', 'global.voting.php', 'Thăm dò ý kiến', '', '', '[RIGHT]', 0, 1, '0', 1, 3, ''),
-(13, 'modern', 'global', 'global.counter.php', 'Bộ đếm', '', '', '[RIGHT]', 0, 1, '0', 1, 4, ''),
+(12, 'modern', 'voting', 'global.voting_random.php', 'Thăm dò ý kiến', '', '', '[RIGHT]', 0, 1, '0', 1, 3, ''),
+(13, 'modern', 'statistics', 'global.counter.php', 'Bộ đếm', '', '', '[RIGHT]', 0, 1, '0', 1, 4, ''),
 (14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '0', 0, 5, ''),
-(15, 'modern', 'global', 'global.banners.php', 'Quảng cáo top banner', '', 'no_title', '[TOPADV]', 0, 1, '0', 1, 1, 'a:1:{s:12:\"idplanbanner\";i:1;}'),
+(15, 'modern', 'banners', 'global.banners.php', 'Quảng cáo top banner', '', 'no_title', '[TOPADV]', 0, 1, '0', 1, 1, 'a:1:{s:12:\"idplanbanner\";i:1;}'),
 (16, 'modern', 'menu', 'global.menu_theme_modern.php', 'global menu theme modern', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, ''),
 (17, 'default', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '')";
 

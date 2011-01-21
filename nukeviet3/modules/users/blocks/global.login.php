@@ -16,11 +16,11 @@ $content = "";
 
 if ( $global_config['allowuserlogin'] and $module_name != "users" )
 {
-    if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/blocks/global.login.tpl" ) )
+    if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/users/block.login.tpl" ) )
     {
         $block_theme = $global_config['module_theme'];
     }
-    elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.login.tpl" ) )
+    elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/users/block.login.tpl" ) )
     {
         $block_theme = $global_config['site_theme'];
     }
@@ -29,7 +29,7 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
         $block_theme = "default";
     }
     
-    $xtpl = new XTemplate( "global.login.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
+    $xtpl = new XTemplate( "block.login.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/users" );
     
     if ( defined( 'NV_IS_USER' ) )
     {
