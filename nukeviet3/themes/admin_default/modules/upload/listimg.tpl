@@ -16,6 +16,8 @@
         font-family:Arial;
         font-size:12px; 
         background:#FFFFFF;
+		margin:0;
+		padding:0;
     }
     img.previewimg { 
 		max-width:100px; 
@@ -27,7 +29,7 @@
 	}
     .imgcontent { 
         float:left; 
-        margin-right:5px; 
+        margin-right:2px; 
         text-align:center;
         margin-bottom:2px;
         padding:5px;
@@ -42,7 +44,7 @@
 	</style>
 	<!-- BEGIN: loopimg -->
     <div class="imgcontent" {imglist.selid}>
-        <a href="#" class="clickimg"><img class="previewimg" title="{imglist.name}" src="{imglist.src}" style="padding:2px {imglist.sel}" /></a>
+        <a href="javascript:;" class="clickimg"><img class="previewimg" title="{imglist.name}" src="{imglist.src}" style="padding:2px {imglist.sel}" /></a>
         <div>{imglist.name0} <br />{imglist.filesize}</div>
     </div>
     <!-- END: loopimg -->
@@ -71,13 +73,18 @@
             <li id="select"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/select.png"/>{LANG.select}</li>
             <li id="view"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/view.png"/>{LANG.preview}</li>
             <li id="download"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/download.png"/>{LANG.download}</li>
+            <!-- BEGIN: allow_modify_files -->
 			<li id="create"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/copy.png"/>{LANG.upload_createimage}</li>
     		<li id="cut"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/cut.png"/>{LANG.move}</li>
             <li id="rename"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/rename.png"/>{LANG.rename}</li>
             <li id="delete"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/delete.png"/>{LANG.upload_delfile}</li>
+            <!-- END: allow_modify_files -->
         </ul>
     </div>
     <script type="text/javascript">
+		<!-- BEGIN: slectfile -->
+		$.scrollTo("#imgselected", 80);
+		<!-- END: slectfile -->
 		$("img.previewimg").contextMenu("vs-context-menu", {
           menuStyle: {
             border: "2px solid #000",
@@ -137,9 +144,9 @@
                 $("li#create").remove();
                 $("li#info").remove();
                 $("li#view").remove();
-				<!-- BEGIN: allow_modify_files -->
+				<!-- BEGIN: allow_modify_files1 -->
 				$("#vs-context-menu>ul").append("<li id=\"create\"><img src=\"{NV_BASE_SITEURL}js/contextmenu/icons/copy.png\"/>{LANG.upload_createimage}</li>");
-				<!-- END: allow_modify_files -->
+				<!-- END: allow_modify_files1 -->
 				$("#vs-context-menu>ul").append("<li id=\"view\"><img src=\"{NV_BASE_SITEURL}js/contextmenu/icons/view.png\"/>{LANG.preview}</li>");
             } else {
                 $("li#create").remove();
@@ -234,7 +241,7 @@
 		$("#idmove").click(function(){
 			var folder = '{folder}';
 			var imgfile = $("#idcurent").val();
-			var newfolder = $("select[name=selectfolder]").val();
+			var newfolder = $("select[name=selectfolder]").val(); 
 			if (folder!=newfolder){
 				$.ajax({
 				   type: "POST",

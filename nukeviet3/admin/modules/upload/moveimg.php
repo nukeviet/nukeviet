@@ -15,26 +15,24 @@ if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
 {
     $image = htmlspecialchars( trim( $nv_Request->get_string( 'img', 'post' ) ), ENT_QUOTES );
     $image = basename( $image );
-
+    
     $newfolder = htmlspecialchars( trim( $nv_Request->get_string( 'folder', 'post' ) ), ENT_QUOTES );
-    $newfolder = basename( $newfolder );
-
     if ( ! empty( $image ) and file_exists( NV_ROOTDIR . '/' . $path . '/' . $image ) and ! empty( $newfolder ) and $newfolder != $path )
     {
         if ( is_dir( NV_ROOTDIR . '/' . $newfolder ) )
         {
-            $path2 = NV_ROOTDIR . '/' . $newfolder . '/';
-            $image2 = $image;
-            $i = 1;
-            while ( file_exists( $path2 . $image2 ) )
+            if ( nv_check_allow_upload_dir( $newfolder ) )
             {
-                $image2 = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $image );
-                $i++;
+                $image2 = $image;
+	            $i = 1;
+	            while ( file_exists( NV_ROOTDIR . '/' . $newfolder . '/' . $image2 ) )
+	            {
+	                $image2 = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $image );
+	                $i++;
+	            }
+	            $image2;
+            	@rename( NV_ROOTDIR . '/' . $path . '/' . $image, NV_ROOTDIR . '/' . $newfolder . '/' . $image2 );
             }
-            $image2;
-
-            @rename( NV_ROOTDIR . '/' . $path . '/' . $image, $path2 . $image2 );
-
             $md5_view_image = NV_ROOTDIR . '/files/images/' . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
             if ( file_exists( $md5_view_image ) )
             {

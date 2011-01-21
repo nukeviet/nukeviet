@@ -110,6 +110,7 @@
 	    		<div id="middle_column_r">
                     {THEME_ERROR_INFO}
                     {MODULE_CONTENT}
+                    <div style="clear:both"></div>
 	    		</div>
         	</td>
         </tr>

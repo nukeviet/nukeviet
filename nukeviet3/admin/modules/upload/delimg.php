@@ -15,7 +15,6 @@ if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
 {
     $image = htmlspecialchars( trim( $nv_Request->get_string( 'img', 'post' ) ), ENT_QUOTES );
     $image = basename( $image );
-
     if ( ! empty( $image ) and file_exists( NV_ROOTDIR . '/' . $path . '/' . $image ) )
     {
         @nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $image );

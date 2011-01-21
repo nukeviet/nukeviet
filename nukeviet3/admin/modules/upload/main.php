@@ -9,11 +9,11 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-//age_title = $lang_module['upload_manager'];
+/*//age_title = $lang_module['upload_manager'];
 if ( strpos( $client_info['browser']['name'], 'Internet Explorer v6' ) !== false )
 {
     nv_info_die( $global_config['site_description'], $lang_global['site_info'], "<br />" . $lang_module['upload_error_browser_ie6'] );
-}
+}*/
 /** get config file **/
 $path = ( defined( 'NV_IS_SPADMIN' ) ) ? "" : NV_UPLOADS_DIR;
 $path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get', $path ) ), ENT_QUOTES );

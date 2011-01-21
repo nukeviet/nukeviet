@@ -71,6 +71,7 @@
 <!-- END: main2 -->
 <!-- BEGIN: main3 -->
 <div id="NukeVietGoogleCode"><a class="button1" href="#"><span><span>{LANG.nukevietChange_caption}</span></span></a></div>
+<div style="clear:both;"></div>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){$("#NukeVietGoogleCode a").click(function(){$("#NukeVietGoogleCode").text("").load("index.php?nv=siteinfo&gcode=1&num="+nv_randomPassword(10));return false})});

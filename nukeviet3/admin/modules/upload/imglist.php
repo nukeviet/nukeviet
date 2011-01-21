@@ -21,7 +21,11 @@ $pathimg = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get', NV_UP
 if ( ! empty( $pathimg ) )
 {
     $type = htmlspecialchars( trim( $nv_Request->get_string( 'type', 'get', 'file' ) ), ENT_QUOTES );
-    $selectfile = htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get' ) ), ENT_QUOTES );
+    $selectfile = htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get','' ) ), ENT_QUOTES );
+    if ($selectfile != '')
+    {
+    	$xtpl->parse( 'main.slectfile' );
+    }
     require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
     $imglist = array();
     if ( ! nv_check_allow_upload_dir( $pathimg ) )
@@ -136,6 +140,7 @@ if ( ! empty( $pathimg ) )
 if ( $admin_info['allow_modify_files'] )
 {
     $xtpl->parse( 'main.allow_modify_files' );
+    $xtpl->parse( 'main.allow_modify_files1' );
 }
 
 $xtpl->parse( 'main' );

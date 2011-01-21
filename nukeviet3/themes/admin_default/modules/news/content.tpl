@@ -108,7 +108,7 @@
                         </tbody>
                         <tbody class="second">
                             <tr>
-                                <td><textarea class="textareas" name="hometext" style="width: 98%; height:100px">{rowcontent.hometext}</textarea></td>
+                                <td><textarea name="hometext" style="font-size:12px; width: 98%; height:100px">{rowcontent.hometext}</textarea></td>
                             </tr>
                         </tbody>
                      </table>

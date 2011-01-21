@@ -49,7 +49,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/contextmenu/jquery.contextmenu.r2.js"></script>
 <div class="content">
-    <table height="100%" width="100%">
+    <table height="100%" width="100%" cellpadding="0" cellspacing="0">
         <tbody>
                 <tr>
                     <td valign="top" width="200" bgcolor="#EAEAEA">
