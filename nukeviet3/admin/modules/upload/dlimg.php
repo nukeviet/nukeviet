@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get' ) ), ENT_QUOTES );
+$path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get' ) );
 
 $image = htmlspecialchars( trim( $nv_Request->get_string( 'img', 'get' ) ), ENT_QUOTES );
 $image = basename( $image );

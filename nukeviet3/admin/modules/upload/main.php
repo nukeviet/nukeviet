@@ -16,8 +16,8 @@ if ( strpos( $client_info['browser']['name'], 'Internet Explorer v6' ) !== false
 }*/
 /** get config file **/
 $path = ( defined( 'NV_IS_SPADMIN' ) ) ? "" : NV_UPLOADS_DIR;
-$path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get', $path ) ), ENT_QUOTES );
-$currentpath = $nv_Request->isset_request( 'path', 'post' ) ? htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post', $path ) ), ENT_QUOTES ) : htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', 'get', $path ) ), ENT_QUOTES );
+$path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', $path ) );
+$currentpath = $nv_Request->isset_request( 'path', 'post' ) ? nv_check_path_upload( $nv_Request->get_string( 'path', 'post', $path ) ) : nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'get', $path ) );
 if ( empty( $currentpath ) )
 {
     $currentpath = NV_UPLOADS_DIR;
@@ -43,8 +43,8 @@ if ( ! empty( $uploadflag ) )
         }
         else
         {
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $currentpath."/".$upload_info['basename'], $admin_info['userid'] );
-        	$selectedfile = $upload_info['basename'];
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $currentpath . "/" . $upload_info['basename'], $admin_info['userid'] );
+            $selectedfile = $upload_info['basename'];
         }
     }
     elseif ( $nv_Request->isset_request( 'imgurl', 'post' ) and nv_is_url( $nv_Request->get_string( 'imgurl', 'post' ) ) and nv_check_allow_upload_dir( $currentpath ) )
@@ -58,7 +58,7 @@ if ( ! empty( $uploadflag ) )
         else
         {
             $selectedfile = $upload_info['basename'];
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $currentpath."/".$upload_info['basename'], $admin_info['userid'] );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $currentpath . "/" . $upload_info['basename'], $admin_info['userid'] );
         }
     }
     else
@@ -118,7 +118,7 @@ if ( $popup )
 }
 else
 {
-    $contents = "<iframe src='".NV_BASE_ADMINURL."index.php?".NV_NAME_VARIABLE."=".$module_name."&popup=1' width='100%' height='400px' frameborder='0'></iframe>";
+    $contents = "<iframe src='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=1' width='100%' height='400px' frameborder='0'></iframe>";
     echo nv_admin_theme( $contents );
 }
 include ( NV_ROOTDIR . "/includes/footer.php" );

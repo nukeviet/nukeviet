@@ -12,7 +12,7 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) )
     die( 'Stop!!!' );
 }
 
-$path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'request', NV_UPLOADS_DIR ) ), ENT_QUOTES );
+$path = nv_check_path_upload( $nv_Request->get_string( 'path', 'request', NV_UPLOADS_DIR ) );
 
 if ( empty( $path ) and defined( 'NV_IS_SPADMIN' ) )
 {
@@ -22,7 +22,7 @@ elseif ( ! nv_check_allow_upload_dir( $path ) )
 {
     $path = NV_UPLOADS_DIR;
 }
-$currentpath = htmlspecialchars( trim( $nv_Request->get_string( 'currentpath', 'request', NV_UPLOADS_DIR ) ), ENT_QUOTES );
+$currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'request', NV_UPLOADS_DIR ) );
 $titlepath = empty( $path ) ? NV_BASE_SITEURL : $path;
 echo '<ul id="foldertree" class="filetree">';
 echo '<li class="open collapsable"><span ' . ( ( $path == $currentpath ) ? ' style="color:red"' : '' ) . ' class="folder" title="' . $path . '">&nbsp;' . $titlepath . '</span>';

@@ -17,14 +17,14 @@ $xtpl->assign( "NV_NAME_VARIABLE", NV_NAME_VARIABLE );
 $xtpl->assign( "module_name", $module_name );
 $xtpl->assign( "LANG", $lang_module );
 
-$pathimg = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) ), ENT_QUOTES );
+$pathimg = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) );
 if ( ! empty( $pathimg ) )
 {
     $type = htmlspecialchars( trim( $nv_Request->get_string( 'type', 'get', 'file' ) ), ENT_QUOTES );
-    $selectfile = htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get','' ) ), ENT_QUOTES );
-    if ($selectfile != '')
+    $selectfile = htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get', '' ) ), ENT_QUOTES );
+    if ( $selectfile != '' )
     {
-    	$xtpl->parse( 'main.slectfile' );
+        $xtpl->parse( 'main.slectfile' );
     }
     require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
     $imglist = array();
@@ -63,7 +63,7 @@ if ( ! empty( $pathimg ) )
             }
         }
     }
-    for ( $i = 0; $i < count( $imglist ); $i++ )
+    for ( $i = 0; $i < count( $imglist ); $i ++ )
     {
         if ( $selectfile == $imglist[$i] )
         {
@@ -75,12 +75,12 @@ if ( ! empty( $pathimg ) )
             $sel = '';
             $selid = '';
         }
-
+        
         $ext = nv_getextension( $imglist[$i] );
         clearstatcache();
         $fsize = @filesize( NV_ROOTDIR . '/' . $pathimg . '/' . $imglist[$i] );
         $src = "";
-
+        
         if ( in_array( $ext, $array_images ) )
         {
             if ( $fsize > 15000 )
@@ -109,10 +109,12 @@ if ( ! empty( $pathimg ) )
             {
                 $src = NV_BASE_SITEURL . $pathimg . '/' . $imglist[$i];
             }
-        } elseif ( in_array( $ext, $array_archives ) )
+        }
+        elseif ( in_array( $ext, $array_archives ) )
         {
             $src = NV_BASE_SITEURL . 'images/zip.gif';
-        } elseif ( in_array( $ext, $array_documents ) )
+        }
+        elseif ( in_array( $ext, $array_documents ) )
         {
             $src = NV_BASE_SITEURL . 'images/doc.gif';
         }
@@ -120,21 +122,27 @@ if ( ! empty( $pathimg ) )
         {
             $src = NV_BASE_SITEURL . 'images/file.gif';
         }
-
+        
         $filesize = nv_convertfromBytes( $fsize );
-        $row = array( "name" => $imglist[$i], "name0" => nv_clean60( $imglist[$i], 10 ), "src" => $src, "filesize" => $filesize, "sel" => $sel, "selid" => $selid );
+        $row = array( 
+            "name" => $imglist[$i], "name0" => nv_clean60( $imglist[$i], 10 ), "src" => $src, "filesize" => $filesize, "sel" => $sel, "selid" => $selid 
+        );
         $xtpl->assign( "imglist", $row );
         $xtpl->parse( 'main.loopimg' );
     }
-
+    
     $listdir = viewdir( NV_UPLOADS_DIR );
-    $row = array( "name" => NV_UPLOADS_DIR, "select" => NV_UPLOADS_DIR );
+    $row = array( 
+        "name" => NV_UPLOADS_DIR, "select" => NV_UPLOADS_DIR 
+    );
     $xtpl->assign( "fol", $row );
     $xtpl->parse( 'main.floop' );
     foreach ( $listdir as $folder )
     {
         $sel = ( $folder == $pathimg ) ? " selected=\"selected\"" : "";
-        $row = array( "name" => $folder, "select" => $sel );
+        $row = array( 
+            "name" => $folder, "select" => $sel 
+        );
         $xtpl->assign( "fol", $row );
         $xtpl->parse( 'main.floop' );
     }

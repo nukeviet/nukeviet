@@ -129,5 +129,14 @@ if ( $module_name == "upload" )
         }
         return false;
     }
+
+    function nv_check_path_upload ( $path )
+    {
+        $path = htmlspecialchars( trim( $path ), ENT_QUOTES );
+        $dir = NV_ROOTDIR . "/" . $path;
+        $dir = realpath( $dir );
+        $dir = str_replace( "\\", "/", $dir );
+        return str_replace( NV_ROOTDIR . "/", "", $dir );
+    }
 }
 ?>

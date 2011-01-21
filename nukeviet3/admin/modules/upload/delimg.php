@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post' ) ), ENT_QUOTES );
+$path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post' ) );
 
 if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
 {
@@ -18,7 +18,7 @@ if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
     if ( ! empty( $image ) and file_exists( NV_ROOTDIR . '/' . $path . '/' . $image ) )
     {
         @nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $image );
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $image, $admin_info['userid'] );
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $image, $admin_info['userid'] );
         $md5_view_image = NV_ROOTDIR . "/files/images/" . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
         if ( file_exists( $md5_view_image ) )
         {
