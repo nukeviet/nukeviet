@@ -146,7 +146,7 @@ if ( empty( $contents ) )
         }
         $contents = viewsubcat_main( $viewcat, $array_cat );
     }
-    elseif ( $viewcat = "viewcat_two_column" )
+    elseif ( $viewcat == "viewcat_two_column" )
     {
         // Cac bai viet phan dau
         $array_content = $array_catpage = array();
@@ -199,6 +199,82 @@ if ( empty( $contents ) )
         unset( $sql, $result );
         //Het cac bai viet cua cac chu de con
         $contents = viewcat_two_column( $array_content, $array_catpage );
+    }
+    elseif ( $viewcat == "viewcat_grid_new" or $viewcat == "viewcat_grid_old" )
+    {
+        $order_by = ( $viewcat == "viewcat_grid_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
+        $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 AND `inhome`='1' AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT  " . $page . "," . $per_page . "";
+        $result = $db->sql_query( $sql );
+        
+        $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+        list( $numf ) = $db->sql_fetchrow( $result_all );
+        $all_page = ( $numf ) ? $numf : 1;
+        
+        $end_publtime = 0;
+        while ( $item = $db->sql_fetchrow( $result ) )
+        {
+            $arr_listcatid = explode( ",", $item['listcatid'] );
+            $catid = end( $arr_listcatid );
+            if ( ! empty( $item['homeimgthumb'] ) )
+            {
+                $array_img = explode( "|", $item['homeimgthumb'] );
+            }
+            else
+            {
+                $array_img = array( 
+                    "", "" 
+                );
+            }
+            
+            if ( $array_img[0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+            {
+                $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img[0];
+            }
+            elseif ( nv_is_url( $item['homeimgfile'] ) )
+            {
+                $item['imghome'] = $item['homeimgfile'];
+            }
+            elseif ( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+            {
+                $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+            }
+            else
+            {
+                $item['imghome'] = "";
+            }
+            
+            $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+            $array_catpage[] = $item;
+            $end_publtime = $item['publtime'];
+        }
+        $viewcat = "viewcat_grid_new";
+        $contents = call_user_func( $viewcat, $array_catpage, 0 );
+        $contents .= nv_news_page( $base_url, $all_page, $per_page, $page );
+    }
+    elseif ( $viewcat == "viewcat_list_new" or $viewcat == "viewcat_list_old" )
+    {
+        $order_by = ( $viewcat == "viewcat_list_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
+        $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 AND `inhome`='1' AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT  " . $page . "," . $per_page . "";
+        $result = $db->sql_query( $sql );
+        
+        $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+        list( $numf ) = $db->sql_fetchrow( $result_all );
+        $all_page = ( $numf ) ? $numf : 1;
+        
+        $end_publtime = 0;
+        while ( $item = $db->sql_fetchrow( $result ) )
+        {
+            $arr_listcatid = explode( ",", $item['listcatid'] );
+            $catid = end( $arr_listcatid );
+            $item['imghome'] = "";
+            
+            $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+            $array_catpage[] = $item;
+            $end_publtime = $item['publtime'];
+        }
+        $viewcat = "viewcat_list_new";
+        $contents = call_user_func( $viewcat, $array_catpage, 0 );
+        $contents .= nv_news_page( $base_url, $all_page, $per_page, $page );
     }
     if ( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )
     {

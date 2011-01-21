@@ -117,18 +117,17 @@ $st_links = $module_config[$module_name]['st_links'];
 $count_op = count( $array_op );
 if ( ! empty( $array_op ) and $op == "main" )
 {
-    if ( ! empty( $alias_cat_url ) and $catid == 0 )
-    {
-        $redirect = "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
-        nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
-    }
-    elseif ( $catid == 0 )
+    if ( $catid == 0 )
     {
         $contents = $lang_module['nocatpage'] . $array_op[0];
         if ( isset( $array_op[1] ) and substr( $array_op[1], 0, 5 ) == "page-" )
-        
         {
             $page = intval( substr( $array_op[1], 5 ) );
+        }
+        elseif ( ! empty( $alias_cat_url ) )
+        {
+            $redirect = "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
+            nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
         }
     }
     else

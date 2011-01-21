@@ -87,6 +87,12 @@ $lang_module['viewcat_main_left'] = "chuyên mục, tin khác nằm bên trái";
 $lang_module['viewcat_main_right'] = "chuyên mục,tin khác nằm bên phải";
 $lang_module['viewcat_main_bottom'] = "chuyên mục,tin khác nằm bên dưới";
 $lang_module['viewcat_two_column'] = "chuyên mục thành 2 cột";
+
+$lang_module['viewcat_list_new'] = "theo tiêu đề, mới lên trên";
+$lang_module['viewcat_list_old'] = "theo tiêu đề, cũ lên trên";
+$lang_module['viewcat_grid_new'] = "theo lưới, mới lên trên";
+$lang_module['viewcat_grid_old'] = "theo lưới, cũ lên trên";
+
 $lang_module['search'] = "Tìm kiếm";
 $lang_module['search_type'] = "Tìm kiếm theo";
 $lang_module['search_id'] = "ID";

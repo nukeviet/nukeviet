@@ -92,10 +92,10 @@ if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/admins.php" 
 }
 
 $array_viewcat_full = array( 
-    'viewcat_page_new' => $lang_module['viewcat_page_new'], 'viewcat_page_old' => $lang_module['viewcat_page_old'], 'viewcat_main_left' => $lang_module['viewcat_main_left'], 'viewcat_main_right' => $lang_module['viewcat_main_right'], 'viewcat_main_bottom' => $lang_module['viewcat_main_bottom'], 'viewcat_two_column' => $lang_module['viewcat_two_column'] 
+    'viewcat_page_new' => $lang_module['viewcat_page_new'], 'viewcat_page_old' => $lang_module['viewcat_page_old'], 'viewcat_list_new' => $lang_module['viewcat_list_new'], 'viewcat_list_old' => $lang_module['viewcat_list_old'], 'viewcat_grid_new' => $lang_module['viewcat_grid_new'], 'viewcat_grid_old' => $lang_module['viewcat_grid_old'], 'viewcat_main_left' => $lang_module['viewcat_main_left'], 'viewcat_main_right' => $lang_module['viewcat_main_right'], 'viewcat_main_bottom' => $lang_module['viewcat_main_bottom'], 'viewcat_two_column' => $lang_module['viewcat_two_column'] 
 );
 $array_viewcat_nosub = array( 
-    'viewcat_page_new' => $lang_module['viewcat_page_new'], 'viewcat_page_old' => $lang_module['viewcat_page_old'] 
+    'viewcat_page_new' => $lang_module['viewcat_page_new'], 'viewcat_page_old' => $lang_module['viewcat_page_old'], 'viewcat_list_new' => $lang_module['viewcat_list_new'], 'viewcat_list_old' => $lang_module['viewcat_list_old'], 'viewcat_grid_new' => $lang_module['viewcat_grid_new'], 'viewcat_grid_old' => $lang_module['viewcat_grid_old'] 
 );
 $array_who_view = array( 
     $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] 
