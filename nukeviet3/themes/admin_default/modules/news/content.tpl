@@ -14,10 +14,10 @@
                     <table summary="" class="tab1">
                         <tbody>
                             <tr>
-                                <td width="120px"><strong>{LANG.name}</strong></td>
+                                <td width="150px"><strong>{LANG.name}</strong></td>
                                 <td>
                                 	<input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" style="width:90%" />
-                                    <input type="button" value="SET" onclick="get_alias();" style="border:1px solid #CCCCCC; font-size:11px"  /> 
+                                    <input type="button" value="SET" onclick="get_alias();" style="font-size:11px"  /> 
                                 </td>
                             </tr>
                         </tbody>
@@ -26,7 +26,7 @@
                                 <td><strong>{LANG.alias}: </strong></td>
                                 <td>
                                 	<input style="width:90%" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>
-                                    <input type="button" value="GET" onclick="get_alias();" style="border:1px solid #CCCCCC;font-size:11px"  /> 
+                                    <input type="button" value="GET" onclick="get_alias();" style="font-size:11px"  /> 
                                 </td>
                             </tr>
                         </tbody>
