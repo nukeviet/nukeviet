@@ -7,7 +7,8 @@
  */
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post' ) ), ENT_QUOTES );
-$realfolder = end( explode( '/', $path ) );
+$arr_path = explode( '/', $path );
+$realfolder = end( $arr_path );
 $remainpath = substr( $path, 0, - strlen( $realfolder ) );
 $newname = htmlspecialchars( trim( $nv_Request->get_string( 'newname', 'post' ) ), ENT_QUOTES );
 if ( ! empty( $newname ) && $newname != $path && $newname != NV_UPLOADS_DIR && $admin_info['allow_modify_subdirectories'] && nv_check_allow_upload_dir( $path ) )

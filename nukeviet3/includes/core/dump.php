@@ -113,8 +113,9 @@ function nv_dump_save ( $params )
 {
     global $db, $sys_info, $global_config;
     
-    if ( $sys_info['allowed_set_time_limit'] ) {
-    	set_time_limit( 1200 );
+    if ( $sys_info['allowed_set_time_limit'] )
+    {
+        set_time_limit( 1200 );
     }
     
     if ( ! isset( $params['tables'] ) or ! is_array( $params['tables'] ) or $params['tables'] == array() )
@@ -284,7 +285,8 @@ function nv_dump_restore ( $file )
     if ( ! file_exists( $file ) ) return false;
     
     //bat doc doc file
-    $ext = nv_getextension( end( explode( "/", $file ) ) );
+    $arr_file = explode( "/", $file )
+    $ext = nv_getextension( end( $arr_file ) );
     $str = ( $ext == "gz" ) ? @gzfile( $file ) : @file( $file );
     
     $sql = $insert = "";

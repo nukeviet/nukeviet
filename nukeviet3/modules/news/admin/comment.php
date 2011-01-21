@@ -47,7 +47,8 @@ $a = 0;
 while ( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $userid, $user_email ) = $db->sql_fetchrow( $result ) )
 {
     $a ++;
-    $catid_i = end( explode( ",", $listcatid ) );
+    $arr_listcatid = explode( ",", $listcatid );
+    $catid_i = end( $arr_listcatid );
     if ( $userid > 0 )
     {
         $email = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $userid . "\"> " . $user_email . "</a>";

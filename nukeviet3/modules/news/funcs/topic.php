@@ -9,13 +9,13 @@
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 $page = 0;
-$topicalias = trim( $array_op [1] );
-$page = ( isset( $array_op [2] ) and substr( $array_op [2], 0, 5 ) == "page-" ) ? intval( substr( $array_op [2], 5 ) ) : 0;
+$topicalias = trim( $array_op[1] );
+$page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-" ) ? intval( substr( $array_op[2], 5 ) ) : 0;
 list( $topicid, $topictitle ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `alias`=" . $db->dbescape( $topicalias ) . "" ) );
 if ( $topicid > 0 )
 {
     
-    $array_mod_title [] = array( 
+    $array_mod_title[] = array( 
         'catid' => 0, 'title' => $topictitle, 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias 
     );
     
@@ -28,9 +28,9 @@ if ( $topicid > 0 )
     $end_id = 0;
     while ( $item = $db->sql_fetchrow( $query ) )
     {
-        if ( ! empty( $item ['homeimgthumb'] ) )
+        if ( ! empty( $item['homeimgthumb'] ) )
         {
-            $array_img = explode( "|", $item ['homeimgthumb'] );
+            $array_img = explode( "|", $item['homeimgthumb'] );
         }
         else
         {
@@ -39,30 +39,31 @@ if ( $topicid > 0 )
             );
         }
         
-        if ( $array_img [0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img [0] ) )
+        if ( $array_img[0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img[0] ) )
         {
-            $item ['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img [0];
+            $item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img[0];
         }
-        elseif ( nv_is_url( $item ['homeimgfile'] ) )
+        elseif ( nv_is_url( $item['homeimgfile'] ) )
         {
-            $item ['src'] = $item ['homeimgfile'];
+            $item['src'] = $item['homeimgfile'];
         }
-        elseif ( $item ['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item ['homeimgfile'] ) )
+        elseif ( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
         {
-            $item ['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item ['homeimgfile'];
+            $item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
         }
         else
         {
-            $item ['src'] = "";
+            $item['src'] = "";
         }
-        $item ['alt'] = ! empty( $item ['homeimgalt'] ) ? $item ['homeimgalt'] : $item ['title'];
-        $item ['width'] = $module_config [$module_name] ['homewidth'];
+        $item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
+        $item['width'] = $module_config[$module_name]['homewidth'];
         
-        $end_id = $item ['id'];
-        $catid = end( explode( ",", $item ['listcatid'] ) );
+        $end_id = $item['id'];
+        $arr_listcatid = explode( ",", $item['listcatid'] );
+        $catid = end( $arr_listcatid );
         
-        $item ['link'] = $global_array_cat [$catid] ['link'] . "/" . $item ['alias'] . "-" . $item ['id'];
-        $topic_array [] = $item;
+        $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+        $topic_array[] = $item;
     }
     $db->sql_freeresult( $query );
     unset( $query, $row );
@@ -71,11 +72,12 @@ if ( $topicid > 0 )
     $query = $db->sql_query( "SELECT `id`, `listcatid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `" . NV_PREFIXLANG . "_" . $module_name . "_rows` WHERE `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") AND `topicid` = " . $topicid . " AND `id` < " . $end_id . " ORDER BY `id` DESC LIMIT 0," . $st_links . "" );
     while ( $item = $db->sql_fetchrow( $query ) )
     {
-        $catid = end( explode( ",", $item ['listcatid'] ) );
-        $item ['link'] = $global_array_cat [$catid] ['link'] . "/" . $item ['alias'] . "-" . $item ['id'];
-        $topic_other_array [] = $item;
+        $arr_listcatid = explode( ",", $item['listcatid'] );
+        $catid = end( $arr_listcatid );
+        $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+        $topic_other_array[] = $item;
     }
-    unset( $query, $row );
+    unset( $query, $row, $arr_listcatid );
     $base_url = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;op=topic/" . $topicalias . "";
     $contents = topic_theme( $topic_array, $topic_other_array );
     $contents .= nv_news_page( $base_url, $all_page, $per_page, $page );

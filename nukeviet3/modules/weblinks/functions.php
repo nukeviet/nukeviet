@@ -29,10 +29,10 @@ $array_mod_title = array();
 $global_array_cat = array();
 
 //Xac dinh RSS
-$rss[] = array( //
+$rss[] = array(  //
     'title' => $module_info['custom_title'], //
-    'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss" //
-    );
+'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss"  //
+);
 
 $sql = "SELECT name, value FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
 $result = $db->sql_query( $sql );
@@ -60,10 +60,10 @@ while ( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $ali
     }
     
     //Xac dinh RSS
-    $rss[] = array( //
+    $rss[] = array(  //
         'title' => $module_info['custom_title'] . ' - ' . $title_i, //
-        'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $alias_i //
-        );
+'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $alias_i  //
+    );
 }
 unset( $sql, $result );
 
@@ -81,7 +81,8 @@ if ( ! empty( $array_op ) )
         {
             $op = "reportlink";
         }
-        $id = intval( end( explode( '-', $array_op[0] ) ) );
+        $temp = explode( '-', $array_op[0] );
+        $id = intval( end( $temp ) );
     }
     else
     {

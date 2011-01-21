@@ -42,7 +42,8 @@ if ( $num > 0 )
     );
     while ( $row = $db->sql_fetchrow( $result ) )
     {
-        $catid_i = end( explode( ",", $row['listcatid'] ) );
+        $arr_listcatid = explode( ",", $row['listcatid'] );
+        $catid_i = end( $arr_listcatid );
         $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
         
         $class = ( $a % 2 ) ? " class=\"second\"" : "";

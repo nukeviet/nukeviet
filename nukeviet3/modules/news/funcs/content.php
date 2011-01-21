@@ -595,7 +595,8 @@ elseif ( defined( 'NV_IS_USER' ) )
         $item['is_edit_content'] = ( empty( $item['status'] ) or $array_post_user['editcontent'] ) ? 1 : 0;
         $item['is_del_content'] = ( empty( $item['status'] ) or $array_post_user['delcontent'] ) ? 1 : 0;
         
-        $catid = end( explode( ",", $item['listcatid'] ) );
+        $arr_listcatid = explode( ",", $item['listcatid'] );
+        $catid = end( $arr_listcatid );
         $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
         $array_catpage[] = $item;
     }

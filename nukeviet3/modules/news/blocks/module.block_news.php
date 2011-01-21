@@ -12,7 +12,7 @@ $blocknewsid = 2;
 
 global $global_config, $module_name, $module_data, $module_file, $global_array_cat, $module_config, $module_info;
 
-$blockwidth = $module_config [$module_name] ['blockwidth'];
+$blockwidth = $module_config[$module_name]['blockwidth'];
 $array_block_news = array();
 
 $cache_file = NV_LANG_DATA . "_" . $module_name . "_block_news_" . NV_CACHE_PREFIX . ".cache";
@@ -26,8 +26,9 @@ else
     $result = $db->sql_query( $sql );
     while ( list( $id, $listcatid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
     {
-        $catid = end( explode( ",", $listcatid ) );
-        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat [$catid] ['alias'] . "/" . $alias . "-" . $id;
+        $arr_listcatid = explode( ",", $listcatid );
+        $catid = end( $arr_listcatid );
+        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;
         
         if ( ! empty( $homeimgthumb ) )
         {
@@ -39,9 +40,9 @@ else
                 "", "" 
             );
         }
-        if ( $array_img [0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img [0] ) )
+        if ( $array_img[0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img[0] ) )
         {
-            $imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img [0];
+            $imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img[0];
         }
         elseif ( nv_is_url( $homeimgfile ) )
         {
@@ -56,7 +57,7 @@ else
             $imgurl = "";
         }
         
-        $array_block_news [] = array( 
+        $array_block_news[] = array( 
             'id' => $id, 'listcatid' => $listcatid, 'title' => $title, 'link' => $link, 'imgurl' => $imgurl, 'width' => $blockwidth 
         );
     }
@@ -64,12 +65,12 @@ else
     nv_set_cache( $cache_file, $cache );
 }
 
-$xtpl = new XTemplate( "block_news.tpl", NV_ROOTDIR . "/themes/" . $module_info ['template'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( "block_news.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 $a = 1;
 foreach ( $array_block_news as $array_news )
 {
     $xtpl->assign( 'blocknews', $array_news );
-    if ( ! empty( $array_news ['imgurl'] ) )
+    if ( ! empty( $array_news['imgurl'] ) )
     {
         $xtpl->parse( 'main.newloop.imgblock' );
     }

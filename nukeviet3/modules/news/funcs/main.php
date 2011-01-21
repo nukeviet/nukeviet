@@ -42,7 +42,8 @@ if ( empty( $contents ) )
         $end_publtime = 0;
         while ( $item = $db->sql_fetchrow( $result ) )
         {
-            $catid = end( explode( ",", $item['listcatid'] ) );
+            $arr_listcatid = explode( ",", $item['listcatid'] );
+            $catid = end( $arr_listcatid );
             if ( ! empty( $item['homeimgthumb'] ) )
             {
                 $array_img = explode( "|", $item['homeimgthumb'] );
@@ -87,7 +88,8 @@ if ( empty( $contents ) )
         $result = $db->sql_query( $sql );
         while ( $item = $db->sql_fetchrow( $result ) )
         {
-            $catid = end( explode( ",", $item['listcatid'] ) );
+            $arr_listcatid = explode( ",", $item['listcatid'] );
+            $catid = end( $arr_listcatid );
             $item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
             $array_cat_other[] = $item;
         }
