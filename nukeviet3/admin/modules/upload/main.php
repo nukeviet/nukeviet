@@ -116,7 +116,7 @@ if ( $popup )
 }
 else
 {
-    $contents = "<iframe src='".NV_BASE_ADMINURL."index.php?".NV_NAME_VARIABLE."=".$module_name."&popup=1' width='100%' height='400px' frameborder='0'></iframe>";
+    $contents = "<iframe src='".NV_BASE_ADMINURL."index.php?".NV_NAME_VARIABLE."=".$module_name."&popup=1' width='100%' height='390px' frameborder='0'></iframe>";
     echo nv_admin_theme( $contents );
 }
 include ( NV_ROOTDIR . "/includes/footer.php" );

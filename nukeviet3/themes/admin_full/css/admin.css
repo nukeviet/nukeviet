@@ -606,17 +606,21 @@ div.info_tab {
     font: bold 11px / 22px Arial, Verdana, sans-serif;
     height: 30px;
     line-height: 30px;
-    padding: 5px 10px;
+    padding-right: 10px;
 }
 
-div.info_tab div.cell_right {
+div.info_tab .cell_right {
     float: right;
+	display:inline-block;
+	line-height:30px;
 }
 
 div.info_tab .cell_left {
     font-size: 14px;
     color: #993300;
+	display:inline-block;
     font-weight: bold;
+	line-height:30px;
 }
 
 #middle_outer {
@@ -786,7 +790,7 @@ div.info_tab .cell_left {
 }
 
 #top_message div.clock label {
-    display: block;
+    display: inline-block;
     font: bold 11px / 27px Arial, Verdana, sans-serif;
     height: 30px;
     line-height: 27px;
@@ -794,7 +798,7 @@ div.info_tab .cell_left {
 }
 
 #top_message div.clock label span {
-    display: block;
+    display: inline-block;
     font: bold 11px / 27px Arial, Verdana, sans-serif;
     height: 30px;
     line-height: 27px;
@@ -1027,14 +1031,14 @@ html[xmlns] .clearfix {
 
 .iconhome {
     background: url(../images/home.png) no-repeat center left;
-    display: block;
+    display:inline-block;
     height: 100%;
     padding-left: 20px;
 }
 
 .iconexit {
     background: url(../images/exit.png) no-repeat center left;
-    display: block;
+    display:inline-block;
     height: 100%;
     padding-left: 20px;
 }

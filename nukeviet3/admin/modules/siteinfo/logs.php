@@ -68,14 +68,6 @@ foreach ( $data as $data_i )
     {
         $data_i['username'] = "unknown";
     }
-    if ( ! empty( $lang_module[$data_i['name_key']] ) )
-    {
-        $data_i['name_key'] = $lang_module[$data_i['name_key']];
-    }
-    else
-    {
-        $data_i['name_key'] = "unknown";
-    }
     $xtpl->assign( 'DATA', $data_i );
     $xtpl->assign( 'CLASS', $a % 2 == 1 ? " class=\"second\"" : "" );
     $xtpl->assign( 'DEL_URL', $base_url . "&" . NV_OP_VARIABLE . "=logs_del&id=" . $data_i['id'] );

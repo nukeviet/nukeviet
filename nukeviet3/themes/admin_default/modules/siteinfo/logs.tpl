@@ -2,13 +2,13 @@
 <table class="tab1">
     <thead>
         <tr>
-            <td width="30" align="center">
+            <td width="25" align="center">
                 <input type="checkbox" name="all" id="check_all"/>
             </td>
-            <td width="30" align="center">
+            <td width="40" align="center">
                 {LANG.log_lang}
             </td>
-            <td>
+            <td width="100" align="center">
                 {LANG.log_module_name}
             </td>
             <td>
@@ -17,13 +17,13 @@
 			<td>
                 {LANG.log_note}
             </td>
-			<td>
+			<td width="80" align="center">
                 {LANG.log_username}
             </td>
-            <td>
+            <td width="140">
                 {LANG.log_time}
             </td>
-            <td align="center">
+            <td width="55" align="center">
                 {LANG.log_feature}
             </td>
         </tr>
@@ -34,10 +34,10 @@
             <td align="center">
                 <input type="checkbox" name="all" class="list" value="{DATA.id}"/>
             </td>
-			<td width="30" align="center">
+			<td align="center">
                 {DATA.lang}
             </td>
-            <td>
+            <td align="center">
                 {DATA.module_name}
             </td>
             <td>
@@ -46,13 +46,13 @@
 			<td>
                 {DATA.note_action}
             </td>
-			<td>
+			<td align="center">
                 {DATA.username}
             </td>
             <td>
                 {DATA.time}
             </td>
-            <td width="100" align="center">
+            <td align="center">
 				<span class="delete_icon">
 					<a href="{DEL_URL}" class = "delete">{GLANG.delete}</a>
 				</span>

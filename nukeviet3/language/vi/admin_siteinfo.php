@@ -59,10 +59,10 @@ $lang_module['checkchmod_success'] = "Đã hoàn tất quá trình chmod";
 $lang_module['logs_title'] = "Nhật ký hệ thống";
 $lang_module['log_module_name'] = "Tên Module";
 $lang_module['log_name_key'] = "Tên sự kiện";
-$lang_module['log_username'] = "Người thực hiện";
+$lang_module['log_username'] = "N.Thực hiện";
 $lang_module['log_time'] = "Thời gian";
 $lang_module['log_feature'] = "Thao tác";
-$lang_module['log_lang'] = "Ngôn ngữ";
+$lang_module['log_lang'] = "N.Ngữ";
 $lang_module['log_del_error'] = "Có lỗi không xóa được";
 $lang_module['log_del_ok'] = "Đã xóa xong";
 $lang_module['log_del_confirm'] = "Bạn chắc chắn có muốn xóa?";
@@ -70,6 +70,7 @@ $lang_module['log_View'] = "Xem";
 $lang_module['log_del_no_items'] = "Bạn chưa chọn";
 $lang_module['log_note'] = "Ghi chú";
 
+/*
 $lang_module['log_del'] = "thao tác xóa";
 $lang_module['log_edit'] = "thao tác sửa";
 $lang_module['log_add'] = "thao tác thêm mới";
@@ -154,6 +155,7 @@ $lang_module['log_edit_user'] = "thao tác sửa user";
 $lang_module['log_del_vote'] = "thao tác xóa vote";
 $lang_module['log_add_vote'] = "thao tác thêm vote";
 $lang_module['log_edit_vote'] = "thao tác sửa vote";
+*/
 
 $lang_module['nukevietChange_caption'] = "Thông tin nâng cấp từ dự án NukeViet trên Google Code";
 $lang_module['nukevietChange_upd'] = "Nâng cấp mới nhất được công bố vào";

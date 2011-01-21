@@ -91,19 +91,19 @@
                     <!-- END: empty_page_title -->
                     
                     <!-- BEGIN: select_option -->
-                    <div class="cell_right">
+                    <span class="cell_right">
                         <select name="select_options" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
                             <option value="">{PLEASE_SELECT}</option>
                             <!-- BEGIN: select_option_loop -->
                             <option value="{SELECT_VALUE}">{SELECT_NAME}</option>
                             <!-- END: select_option_loop -->
                         </select>
-                    </div>
+                    </span>
                     <!-- END: select_option -->
                     <!-- BEGIN: site_mods -->
-                    <div class="cell_right">
+                    <span class="cell_right">
                         <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a>
-                    </div>
+                    </span>
                     <!-- END: site_mods -->
                     <div style="clear:both"></div>
                 </div>

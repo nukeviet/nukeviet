@@ -67,7 +67,7 @@
                         </div>
                         <!-- END: error -->
                     </td>
-                    <td valign="top" bgcolor="#FFFFFF">
+                    <td valign="top" bgcolor="#EAEAEA">
                         <div id="imglist">
                         &nbsp;
                         </div>
