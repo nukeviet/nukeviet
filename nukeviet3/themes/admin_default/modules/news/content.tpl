@@ -63,6 +63,8 @@
                                 </td>
                             </tr>
                         </tbody>
+                     </table>
+                     <table summary="" class="tab1">
                         <tbody>
                             <tr>
                                 <td><strong>{LANG.content_homeimg}</strong></td>
@@ -80,7 +82,7 @@
                    	 <table summary="" class="tab1">
                         <tbody>
                             <tr>
-                                <td width="180px"><strong>{LANG.content_homeimgalt}</strong></td>
+                                <td width="180px">{LANG.content_homeimgalt}</td>
                                 <td>
                                 	<input type="text" maxlength="255" value="{rowcontent.homeimgalt}" name="homeimgalt" style="width:98%" />
                                 </td>
@@ -88,7 +90,7 @@
                         </tbody>
                         <tbody class="second">
                             <tr>
-                                <td><strong>{LANG.imgposition}</strong></td>
+                                <td>{LANG.imgposition}</td>
                                 <td>
                                 	<select name="imgposition">
                                     <!-- BEGIN: looppos -->
@@ -128,7 +130,7 @@
                       <p class="message_head"><cite>{LANG.content_keywords}:</cite> <span class="timestamp"></span></p>
                       <div class="message_body">
                         <p>{LANG.content_keywords_note} <a onclick="create_keywords();" href="javascript:void(0);">{LANG.content_clickhere}</a></p>
-                        <textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 250px;">{rowcontent.keywords}</textarea>
+                        <textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 240px;">{rowcontent.keywords}</textarea>
                       </div>
                     </li>
                     <li>
