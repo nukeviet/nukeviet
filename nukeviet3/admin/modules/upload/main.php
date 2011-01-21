@@ -43,7 +43,8 @@ if ( ! empty( $uploadflag ) )
         }
         else
         {
-            $selectedfile = $upload_info['basename'];
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $currentpath."/".$upload_info['basename'], $admin_info['userid'] );
+        	$selectedfile = $upload_info['basename'];
         }
     }
     elseif ( $nv_Request->isset_request( 'imgurl', 'post' ) and nv_is_url( $nv_Request->get_string( 'imgurl', 'post' ) ) and nv_check_allow_upload_dir( $currentpath ) )
@@ -57,6 +58,7 @@ if ( ! empty( $uploadflag ) )
         else
         {
             $selectedfile = $upload_info['basename'];
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $currentpath."/".$upload_info['basename'], $admin_info['userid'] );
         }
     }
     else

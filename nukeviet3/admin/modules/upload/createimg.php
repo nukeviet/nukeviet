@@ -37,6 +37,7 @@ if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
         }
         $image->save( NV_ROOTDIR . '/' . $path, $new_imagename, 75 );
         //$image_info = $image->create_Image_info;
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_createimage'], $path."/".$new_imagename , $admin_info['userid'] );
         $image->close();
         echo $new_imagename;
     }

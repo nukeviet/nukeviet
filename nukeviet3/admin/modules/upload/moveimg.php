@@ -32,6 +32,7 @@ if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
 	            }
 	            $image2;
             	@rename( NV_ROOTDIR . '/' . $path . '/' . $image, NV_ROOTDIR . '/' . $newfolder . '/' . $image2 );
+            	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['move'], $path . '/' . $image ." -> " . $newfolder . '/' . $image2, $admin_info['userid'] );
             }
             $md5_view_image = NV_ROOTDIR . '/files/images/' . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
             if ( file_exists( $md5_view_image ) )

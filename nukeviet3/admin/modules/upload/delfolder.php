@@ -9,6 +9,7 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $path = htmlspecialchars( trim( $nv_Request->get_string( 'path', 'post' ) ), ENT_QUOTES );
 if ( trim( $path ) != NV_UPLOADS_DIR && ! empty( $path ) && $admin_info['allow_modify_subdirectories'] && nv_check_allow_upload_dir( $path ) )
 {
-    nv_deletefile( NV_ROOTDIR . '/' . trim( $path ), true );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['deletefolder'], $path , $admin_info['userid'] );
+	nv_deletefile( NV_ROOTDIR . '/' . trim( $path ), true );
 }
 ?>

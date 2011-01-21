@@ -37,7 +37,7 @@ if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
         if ( $image != $newname )
         {
             @rename( $path2 . $image, $path2 . $newname );
-
+			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['rename'], $path . $image ." -> " . $path . $newname, $admin_info['userid'] );
             $md5_view_image = NV_ROOTDIR . '/files/images/' . md5( $path . '/' . $image ) . "." . $ext;
             if ( file_exists( $md5_view_image ) )
             {

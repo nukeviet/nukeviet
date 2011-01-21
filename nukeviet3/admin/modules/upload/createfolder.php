@@ -12,6 +12,7 @@ $newname = htmlspecialchars( trim( $nv_Request->get_string( 'newname', 'post' ) 
 if ( ! empty( $newname ) && ! file_exists( NV_ROOTDIR . '/' . $path . '/' . change_alias( $newname ) ) && $admin_info['allow_create_subdirectories'] && nv_check_allow_upload_dir( $path ) )
 {
     $n_dir = nv_mkdir( NV_ROOTDIR . '/' . $path, change_alias( $newname ) );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['createfolder'], $path . '/' . change_alias( $newname ), $admin_info['userid'] );
     if ( ! empty( $n_dir[0] ) )
     {
         echo $path . '/' . change_alias( $newname );

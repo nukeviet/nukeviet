@@ -128,6 +128,9 @@ if ( ! empty( $pathimg ) )
     }
 
     $listdir = viewdir( NV_UPLOADS_DIR );
+    $row = array( "name" => NV_UPLOADS_DIR, "select" => NV_UPLOADS_DIR );
+    $xtpl->assign( "fol", $row );
+    $xtpl->parse( 'main.floop' );
     foreach ( $listdir as $folder )
     {
         $sel = ( $folder == $pathimg ) ? " selected=\"selected\"" : "";

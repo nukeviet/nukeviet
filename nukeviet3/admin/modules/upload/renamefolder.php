@@ -14,6 +14,7 @@ $newname = htmlspecialchars( trim( $nv_Request->get_string( 'newname', 'post' ) 
 if ( ! empty( $newname ) && $newname != $path && $newname != NV_UPLOADS_DIR && $admin_info['allow_modify_subdirectories'] && nv_check_allow_upload_dir( $path ) )
 {
     @rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $remainpath . change_alias( $newname ) );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['renamefolder'], $path ." -> " . $remainpath . change_alias( $newname ), $admin_info['userid'] );
 }
 echo $remainpath . change_alias( $newname );
 ?>

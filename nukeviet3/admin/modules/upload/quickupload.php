@@ -34,6 +34,7 @@ if ( is_uploaded_file( $_FILES['upload']['tmp_name'] ) && nv_check_allow_upload_
     else
     {
         echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $imgfolder . "/" . $upload_info['basename'] . "', '');</script>";
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $imgfolder . "/" . $upload_info['basename'], $admin_info['userid'] );
     }
 }
 ?>
