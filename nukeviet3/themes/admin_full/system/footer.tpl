@@ -33,7 +33,7 @@
     <!-- END: nv_show_queries -->
 </div>
 <div id="run_cronjobs" style="visibility:hidden;display:none;">
-<img alt="" title="" src="{NV_BASE_ADMINURL}index.php?second=cronjobs&amp;p={NV_GENPASS}" width="1" height="1" /></a>
+<img alt="" title="" src="{NV_BASE_ADMINURL}index.php?second=cronjobs&amp;p={NV_GENPASS}" width="1" height="1" />
 </div>
 </div>
 <script type="text/javascript">
