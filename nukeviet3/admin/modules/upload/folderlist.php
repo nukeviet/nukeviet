@@ -17,18 +17,17 @@ $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get,post', NV_UP
 if ( empty( $path ) and defined( 'NV_IS_SPADMIN' ) )
 {
     $path = "";
-}
-elseif ( ! nv_check_allow_upload_dir( $path ) )
+} elseif ( ! nv_check_allow_upload_dir( $path ) )
 {
     $path = NV_UPLOADS_DIR;
 }
 $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'request', NV_UPLOADS_DIR ) );
 $titlepath = empty( $path ) ? NV_BASE_SITEURL : $path;
 
-$class_folder = ( ! in_array( $path, $allow_upload_dir ) and ! empty( $path ) ) ? 'class="folder"' : '';
+//$class_folder = ( ! in_array( $path, $allow_upload_dir ) and ! empty( $path ) ) ? 'class="folder"' : '';
 
 echo '<ul id="foldertree" class="filetree">';
-echo '<li class="open collapsable"><span ' . ( ( $path == $currentpath ) ? ' style="color:red"' : '' ) . ' ' . $class_folder . ' title="' . $path . '">&nbsp;' . $titlepath . '</span>';
+echo '<li class="open collapsable"><span ' . ( ( $path == $currentpath ) ? ' style="color:red"' : '' ) . ' class="folder" title="' . $path . '">&nbsp;' . $titlepath . '</span>';
 echo '<ul>';
 $arr_files = @scandir( NV_ROOTDIR . '/' . $path );
 foreach ( $arr_files as $file )
@@ -38,17 +37,17 @@ foreach ( $arr_files as $file )
     {
         $class_li = 'expandable';
         $style_color = '';
-        $class_folder = ( ! in_array( $path_file, $allow_upload_dir ) ) ? 'class="folder"' : '';
+        $class_folder = ( ! in_array( $path_file, $allow_upload_dir ) ) ? ' menu' : '';
+        $class_folder2 = ( nv_check_allow_upload_dir( $path_file ) ) ? ' allow' : '';
         if ( $path_file == $currentpath )
         {
             $class_li = "open collapsable";
             $style_color = 'style="color:red"';
-        }
-        elseif ( strpos( $currentpath, $path_file . '/' ) !== false )
+        } elseif ( strpos( $currentpath, $path_file . '/' ) !== false )
         {
             $class_li = "open collapsable";
         }
-        echo '<li class="' . $class_li . '"><span ' . $style_color . ' ' . $class_folder . ' title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
+        echo '<li class="' . $class_li . '"><span ' . $style_color . ' class="folder' . $class_folder . $class_folder2 . '" title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
         echo '<ul>';
         viewdirtree( $path_file, $currentpath );
         echo '</ul>';
@@ -65,7 +64,7 @@ echo '
 		unique: true,
 		persist: "location"
 	});
-    $("span.folder").contextMenu("folder-menu", {
+    $("span.menu").contextMenu("folder-menu", {
       menuStyle: {
         border: "2px solid #000",
         width: "150px"
@@ -118,6 +117,17 @@ echo '
 		$(this).css("color","red");
 		var type = $("select[name=imgtype]").val();
 		$("div#imglist").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path="+folder+"&type="+type+"\' style=\"width:100%;height:360px;border:none\"></iframe>");
+        if($(this).is(".allow")) {
+            $("input[name=fileupload]").removeAttr("disabled");
+            $("input[name=imgurl]").removeAttr("disabled");
+            $("input[name=confirm]").removeAttr("disabled");
+        }
+        else
+        {
+            $("input[name=fileupload]").attr("disabled","disabled");
+            $("input[name=imgurl]").attr("disabled","disabled");
+            $("input[name=confirm]").attr("disabled","disabled");
+        }
 	});
 	$("span.folder").mouseup(function(){
 		var foldervalue = $(this).attr("title");
@@ -126,4 +136,5 @@ echo '
 	});	
 </script>
 ';
+
 ?>

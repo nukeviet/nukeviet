@@ -87,7 +87,7 @@ if ( $popup )
     $xtpl->assign( "funnum", $nv_Request->get_int( 'CKEditorFuncNum', 'get', 0 ) );
     $xtpl->assign( "selectedfile", $selectedfile );
     $xtpl->assign( "FORM_ACTION", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;popup=" . $popup . "&amp;area=" . $area . "&amp;path=" . $path . "&amp;type=" . $type );
-
+    $xtpl->assign( "DISABLED", ( ! nv_check_allow_upload_dir( $currentpath ) ) ? " disabled=\"disabled\"" : "" );
     //////////////////////////////////////////////////////
     if ( ! empty( $errors ) )
     {
@@ -110,10 +110,7 @@ if ( $popup )
     $xtpl->assign( "sflash", $sflash );
     $xtpl->assign( "simage", $simage );
     $xtpl->assign( "sfile", $sfile );
-}
 
-if ( $popup )
-{
     $xtpl->parse( 'main.header' );
     $xtpl->parse( 'main.footer' );
     $xtpl->parse( 'main' );

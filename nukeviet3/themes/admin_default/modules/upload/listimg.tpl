@@ -194,15 +194,17 @@ $("img.previewimg").mouseup(function() {
   }
   a = a.slice(-3);
   if(a == "jpg" || a == "png" || a == "gif" || a == "bmp") {
-    $("li#create").remove();
-    $("li#info").remove();
-    $("li#view").remove();
-    $("#vs-context-menu>ul").append('<li id="create"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/copy.png"/>{LANG.upload_createimage}</li>');
-    $("#vs-context-menu>ul").append('<li id="view"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/view.png"/>{LANG.preview}</li>')
+    if($("#vs-context-menu").is('li#create')) {
+        $("li#create").remove();
+        $("#vs-context-menu>ul").append('<li id="create"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/copy.png"/>{LANG.upload_createimage}</li>');
+    }
+    if($("#vs-context-menu").is('li#view')) {
+        $("li#view").remove();
+        $("#vs-context-menu>ul").append('<li id="view"><img src="{NV_BASE_SITEURL}js/contextmenu/icons/view.png"/>{LANG.preview}</li>')
+    }
   }else {
     $("li#create").remove();
-    $("li#view").remove();
-    $("li#info").remove()
+    $("li#view").remove()
   }
 });
 

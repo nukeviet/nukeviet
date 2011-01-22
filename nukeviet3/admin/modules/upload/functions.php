@@ -12,48 +12,32 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 if ( $module_name == "upload" )
 {
     define( 'NV_IS_FILE_ADMIN', true );
-    
-    $allow_upload_dir = array( 
-        'images', NV_UPLOADS_DIR 
-    );
-    
-    $array_hidefolders = array( 
-        ".svn", "CVS", ".", "..", "index.html", ".htaccess" 
-    );
-    $allow_func = array( 
-        'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'quickupload' 
-    );
+
+    $allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
+
+    $array_hidefolders = array( ".svn", "CVS", ".", "..", "index.html", ".htaccess" );
+    $allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'quickupload' );
     $allowed_extensions = array();
-    $array_images = array( 
-        "gif", "jpg", "jpeg", "pjpeg", "png" 
-    );
+    $array_images = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
     if ( in_array( 'images', $admin_info['allow_files_type'] ) )
     {
-        $allowed_extensions = array( 
-            "gif", "jpg", "jpeg", "pjpeg", "png" 
-        );
+        $allowed_extensions = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
     }
-    $array_flash = array( 
-        'swf', 'swc', 'flv' 
-    );
+    $array_flash = array( 'swf', 'swc', 'flv' );
     if ( in_array( 'flash', $admin_info['allow_files_type'] ) )
     {
         $allowed_extensions[] = 'swf';
         $allowed_extensions[] = 'swc';
         $allowed_extensions[] = 'flv';
     }
-    $array_archives = array( 
-        'rar', 'zip', 'tar' 
-    );
+    $array_archives = array( 'rar', 'zip', 'tar' );
     if ( in_array( 'archives', $admin_info['allow_files_type'] ) )
     {
         $allowed_extensions[] = 'rar';
         $allowed_extensions[] = 'zip';
         $allowed_extensions[] = 'tar';
     }
-    $array_documents = array( 
-        'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' 
-    );
+    $array_documents = array( 'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' );
     if ( in_array( 'documents', $admin_info['allow_files_type'] ) )
     {
         $allowed_extensions[] = 'doc';
@@ -63,14 +47,16 @@ if ( $module_name == "upload" )
         $allowed_extensions[] = 'docx';
         $allowed_extensions[] = 'xlsx';
     }
-    $allowed_mime = array( 
-        "image/gif", "image/pjpeg", "image/jpeg", "image/png", "image/x-png" 
-    );
-    $types = array( 
-        1 => 'gif', 2 => 'jpg', 3 => 'png', 4 => 'swf', 5 => 'psd', 6 => 'bmp', 7 => 'tiff(intel byte order)', 8 => 'tiff(motorola byte order)', 9 => 'jpc', 10 => 'jp2', 11 => 'jpx', 12 => 'jb2', 13 => 'swc', 14 => 'iff', 15 => 'wbmp', 16 => 'xbm' 
-    );
+    $allowed_mime = array( "image/gif", "image/pjpeg", "image/jpeg", "image/png", "image/x-png" );
+    $types = array( 1 => 'gif', 2 => 'jpg', 3 => 'png', 4 => 'swf', 5 => 'psd', 6 => 'bmp', 7 => 'tiff(intel byte order)', 8 => 'tiff(motorola byte order)', 9 => 'jpc', 10 => 'jp2', 11 => 'jpx', 12 => 'jb2', 13 => 'swc', 14 => 'iff', 15 => 'wbmp', 16 => 'xbm' );
 
-    function viewdir ( $dir )
+    /**
+     * viewdir()
+     * 
+     * @param mixed $dir
+     * @return
+     */
+    function viewdir( $dir )
     {
         global $imglibs, $array_hidefolders;
         $handle = scandir( NV_ROOTDIR . '/' . $dir );
@@ -86,7 +72,14 @@ if ( $module_name == "upload" )
         return $imglibs;
     }
 
-    function viewdirtree ( $dir, $currentpath2 )
+    /**
+     * viewdirtree()
+     * 
+     * @param mixed $dir
+     * @param mixed $currentpath2
+     * @return
+     */
+    function viewdirtree( $dir, $currentpath2 )
     {
         global $array_hidefolders;
         $handle2 = scandir( NV_ROOTDIR . '/' . $dir );
@@ -95,42 +88,54 @@ if ( $module_name == "upload" )
             $full_d2 = NV_ROOTDIR . '/' . $dir . '/' . $file2;
             if ( is_dir( $full_d2 ) && ! in_array( $file2, $array_hidefolders ) && nv_check_allow_upload_dir( $dir . '/' . $file2 ) )
             {
-                if ( trim( $dir . '/' . $file2 ) == $currentpath2 )
+                $path_file = trim( $dir . '/' . $file2 );
+                $class_folder2 = ( nv_check_allow_upload_dir( $path_file ) ) ? ' allow' : '';
+                if ( trim( $path_file ) == $currentpath2 )
                 {
-                    echo '<li class="open collapsable"><span style="color:red" class="folder" title="' . ( $dir . '/' . $file2 ) . '">&nbsp;' . $file2 . '</span>';
-                }
-                elseif ( strpos( $currentpath2, $dir . '/' . $file2 . '/' ) !== false )
+                    echo '<li class="open collapsable"><span style="color:red" class="folder menu' . $class_folder2 . '" title="' . ( $path_file ) . '">&nbsp;' . $file2 . '</span>';
+                } elseif ( strpos( $currentpath2, $path_file . '/' ) !== false )
                 {
-                    echo '<li class="open collapsable"><span class="folder" title="' . ( $dir . '/' . $file2 ) . '">&nbsp;' . $file2 . '</span>';
+                    echo '<li class="open collapsable"><span class="folder menu' . $class_folder2 . '" title="' . ( $path_file ) . '">&nbsp;' . $file2 . '</span>';
                 }
                 else
                 {
-                    echo '<li class="expandable"><span class="folder" title="' . ( $dir . '/' . $file2 ) . '">&nbsp;' . $file2 . '</span>';
+                    echo '<li class="expandable"><span class="folder menu' . $class_folder2 . '" title="' . ( $path_file ) . '">&nbsp;' . $file2 . '</span>';
                 }
                 echo '<ul>';
-                viewdirtree( $dir . '/' . $file2, $currentpath2 );
+                viewdirtree( $path_file, $currentpath2 );
                 echo '</ul>';
                 echo '</li>';
             }
         }
     }
 
-    function nv_check_allow_upload_dir ( $dir )
+    /**
+     * nv_check_allow_upload_dir()
+     * 
+     * @param mixed $dir
+     * @return
+     */
+    function nv_check_allow_upload_dir( $dir )
     {
-        global $site_mods, $allow_upload_dir;
+        global $site_mods, $allow_upload_dir, $admin_info;
         $arr_dir = explode( "/", $dir );
         if ( defined( 'NV_IS_SPADMIN' ) and in_array( $arr_dir[0], $allow_upload_dir ) )
         {
             return true;
-        }
-        elseif ( $arr_dir[0] == NV_UPLOADS_DIR and isset( $arr_dir[1] ) and isset( $site_mods[$arr_dir[1]] ) )
+        } elseif ( $arr_dir[0] == NV_UPLOADS_DIR and isset( $arr_dir[1] ) and isset( $site_mods[$arr_dir[1]] ) and ! empty( $admin_info['allow_files_type'] ) )
         {
             return true;
         }
         return false;
     }
 
-    function nv_check_path_upload ( $path )
+    /**
+     * nv_check_path_upload()
+     * 
+     * @param mixed $path
+     * @return
+     */
+    function nv_check_path_upload( $path )
     {
         $path = htmlspecialchars( trim( $path ), ENT_QUOTES );
         $dir = NV_ROOTDIR . "/" . $path;
@@ -147,12 +152,16 @@ if ( $module_name == "upload" )
         return $path;
     }
 
-    function nv_delete_cache_upload ( $realpath )
+    /**
+     * nv_delete_cache_upload()
+     * 
+     * @param mixed $realpath
+     * @return
+     */
+    function nv_delete_cache_upload( $realpath )
     {
         $files = scandir( $realpath );
-        $files = array_diff( $files, array( 
-            ".", ".." 
-        ) );
+        $files = array_diff( $files, array( ".", ".." ) );
         if ( count( $files ) )
         {
             $path = str_replace( "\\", "/", $realpath );
@@ -174,7 +183,8 @@ if ( $module_name == "upload" )
                 }
             }
         }
-    
+
     }
 }
+
 ?>

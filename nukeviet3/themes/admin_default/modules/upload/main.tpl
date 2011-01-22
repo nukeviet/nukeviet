@@ -82,9 +82,9 @@
             <input type="hidden" name="path" value="{currentpath}"/>
             <input type="hidden" name="type" value="{type}"/>
             File : 
-            <input type="file" name="fileupload"/> {LANG.upload_otherurl}
-            <input type="text" name="imgurl"/> 
-            <input type="submit" value="Upload" name="confirm"/>
+            <input type="file" name="fileupload"{DISABLED}/> {LANG.upload_otherurl}
+            <input type="text" name="imgurl"{DISABLED}/> 
+            <input type="submit" value="Upload" name="confirm"{DISABLED}/>
         </form>
         <div style="clear:both"></div>
     </div>
