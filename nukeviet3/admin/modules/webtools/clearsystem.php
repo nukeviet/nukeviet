@@ -19,11 +19,7 @@ function nv_clear_files ( $dir, $base )
     $files = scandir( $dir );
     foreach ( $files as $file )
     {
-        if ( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and //
-$file != "index.html" and is_file( $dir . '/' . $file ) and //
-$file != "sess_" . $client_info['session_id'] ) //
-        
-
+        if ( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and $file != "index.html" and is_file( $dir . '/' . $file ) and $file != "sess_" . $client_info['session_id'] )
         {
             $d = nv_deletefile( $dir . '/' . $file, false );
             if ( $d[0] )
@@ -69,6 +65,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reque
             $xtpl->parse( 'main.delfile.loop' );
         }
         nv_delete_all_cache();
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['clearsystem'] , '' , $admin_info['userid'] );
     }
     
     if ( in_array( 'clearsession', $deltype ) )
