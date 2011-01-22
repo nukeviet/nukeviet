@@ -42,7 +42,8 @@ include ( NV_ROOTDIR . "/includes/core/dump.php" );
 $result = nv_dump_save( $contents );
 if ( ! empty( $result ) )
 {
-    $content['mime'] = ( $contents['savetype'] == "gz" ) ? 'application/x-gzip' : 'text/x-sql';
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download'] , "File name: " .basename($contents['filename']), $admin_info['userid'] );
+	$content['mime'] = ( $contents['savetype'] == "gz" ) ? 'application/x-gzip' : 'text/x-sql';
     $contents['fname'] = $db->dbname . '.sql';
     if ( $contents['savetype'] == "gz" )
     {

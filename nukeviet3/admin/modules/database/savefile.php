@@ -47,7 +47,9 @@ if ( empty( $result ) )
 }
 else
 {
-    $content = $lang_module['save_ok'];
+    $temp = explode("_", $file_name) ;
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['savefile'] , "File name: " .end($temp), $admin_info['userid'] );
+	$content = $lang_module['save_ok'];
     $linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file_name . "&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] );
     $content .= "<br><br><a href=\"" . $linkgetfile . "\">" . $lang_module['save_download'] . "</a>";
 }

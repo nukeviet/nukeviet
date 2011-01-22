@@ -20,6 +20,8 @@ else
 	$tables = explode( ",", $tables );
 }
 
+nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['optimize'] , "" , $admin_info['userid'] );
+
 $totalfree = 0;
 $tabs = array();
 $result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
