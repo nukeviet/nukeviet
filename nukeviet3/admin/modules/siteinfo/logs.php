@@ -21,7 +21,7 @@ $array_userid = array();
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . $db_config['prefix'] . "_logs` ORDER BY `id` DESC LIMIT " . $page . "," . $per_page;
 
-$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=logs";
+$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=logs";
 $result_query = $db->sql_query( $sql );
 $result = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $all_page ) = $db->sql_fetchrow( $result );
