@@ -548,7 +548,7 @@ function nv_admin_menu ( )
     {
         $new_drag_block = ( defined( 'NV_IS_DRAG_BLOCK' ) ) ? 0 : 1;
         $lang_drag_block = ( $new_drag_block ) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
-        $return .= "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&drag_block=" . $new_drag_block . "\"><span class=\"icons icon-drag\">" . $lang_drag_block . "</span></a>\n";
+        $return .= "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;drag_block=" . $new_drag_block . "\"><span class=\"icons icon-drag\">" . $lang_drag_block . "</span></a>\n";
     }
     if ( defined( 'NV_IS_MODADMIN' ) and ! empty( $module_info['admin_file'] ) )
     {
