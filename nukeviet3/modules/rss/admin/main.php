@@ -45,11 +45,11 @@ if ( $is_edit )
     $contents .= "<div style=\"margin-top:8px;margin-bottom:8px;\">\n";
     if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
     {
-        $contents .= nv_aleditor( "bodytext", '720px', '300px', $bodytext );
+        $contents .= nv_aleditor( "bodytext", '100%', '300px', $bodytext );
     }
     else
     {
-        $contents .= "<textarea style=\"width: 720px\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"8\">" . $bodytext . "</textarea>";
+        $contents .= "<textarea style=\"width: 100%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"8\">" . $bodytext . "</textarea>";
     }
     $contents .= "</div>";
     $contents .= "<br />\n";

@@ -119,7 +119,7 @@ if ( ! empty( $error ) )
 
 $contents .= "<form action=\"" . $action . "\" method=\"post\">\n";
 $contents .= "<input name=\"save\" type=\"hidden\" value=\"1\" />\n";
-$contents .= "<table summary=\"\" style=\"margin-top:8px;margin-bottom:8px;\">\n";
+$contents .= "<table summary=\"\" class=\"tab1\" style=\"margin-top:8px;margin-bottom:8px;\">\n";
 $contents .= "<col valign=\"top\" width=\"150px\" />\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module ['aabout2'] . ":</td>\n";
@@ -138,11 +138,11 @@ $contents .= "<tr>\n";
 $contents .= "<td colspan=\"2\">\n";
 if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 {
-    $contents .= nv_aleditor( "bodytext", '750px', '300px', $bodytext );
+    $contents .= nv_aleditor( "bodytext", '100%', '300px', $bodytext );
 }
 else
 {
-    $contents .= "<textarea style=\"width:750px;height:300px\" name=\"bodytext\" id=\"bodytext\">" . $bodytext . "</textarea>";
+    $contents .= "<textarea style=\"width:100%;height:300px\" name=\"bodytext\" id=\"bodytext\">" . $bodytext . "</textarea>";
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
