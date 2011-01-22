@@ -117,11 +117,11 @@ $contents .= "</form>\n";
 
 if ( empty( $alias ) )
 {
-    $contents .= "<script type=\"text/javascript\">\n//<![CDATA\n";
+    $contents .= "<script type=\"text/javascript\">\n";
     $contents .= '$("#idtitle").change(function () {
                     get_alias();
                 });';
-    $contents .= "//]]>\n</script>\n";
+    $contents .= "\n</script>\n";
 }
 
 include ( NV_ROOTDIR . "/includes/header.php" );

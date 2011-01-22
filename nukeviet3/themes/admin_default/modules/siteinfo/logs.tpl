@@ -72,6 +72,7 @@
         </tr>   
     </table>
 <script type='text/javascript'>
+//<![CDATA[
 	$(function(){
 	$("#check_all").click(function(){
         if ($("#check_all").attr("checked")) {
@@ -122,5 +123,6 @@
 	}
 	});
 	});
+//]]>
 </script>
 <!-- END: main -->

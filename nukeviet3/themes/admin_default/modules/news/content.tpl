@@ -14,7 +14,7 @@
                     <table summary="" class="tab1">
                         <tbody>
                             <tr>
-                                <td width="150px"><strong>{LANG.name}</strong></td>
+                                <td width="150"><strong>{LANG.name}</strong></td>
                                 <td>
                                 	<input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" style="width:98%" />
                                 </td>
@@ -84,7 +84,7 @@
                    	 <table summary="" class="tab1">
                         <tbody>
                             <tr>
-                                <td width="180px">{LANG.content_homeimgalt}</td>
+                                <td width="180">{LANG.content_homeimgalt}</td>
                                 <td>
                                 	<input type="text" maxlength="255" value="{rowcontent.homeimgalt}" name="homeimgalt" style="width:98%" />
                                 </td>
@@ -130,7 +130,7 @@
                     </li>
                     <!-- END:block_cat -->
                     <li>
-                      <p class="message_head"><cite>{LANG.content_keywords}:</cite> <span class="timestamp"></span></p>
+                      <p class="message_head"><cite>{LANG.content_keywords}:</cite></p>
                       <div class="message_body">
                         <p>{LANG.content_keywords_note} <a onclick="create_keywords();" href="javascript:void(0);">{LANG.content_clickhere}</a></p>
                         <textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 240px;">{rowcontent.keywords}</textarea>
@@ -225,7 +225,7 @@
         </table>
         <table summary="" class="tab1">
         	<tr>
-                <td width="150px"><strong>{LANG.content_author}</strong></td>
+                <td width="150"><strong>{LANG.content_author}</strong></td>
                 <td>
                     <input type="text" maxlength="255" value="{rowcontent.author}" name="author" style="width:225px;" />
                 </td>
