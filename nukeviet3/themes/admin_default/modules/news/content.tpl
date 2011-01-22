@@ -266,7 +266,7 @@
 		var path= "{UPLOADS_DIR_USER}";	
 		var currentpath= "{UPLOAD_CURRENT}";						
 		var type= "image";
-		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "420","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$(document).ready(function() {
