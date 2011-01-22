@@ -252,11 +252,11 @@
         </tbody>
     </table>
 </form>
-$contents .= "<script type=\"text/javascript\">
-		//<![CDATA[
-		var f = document.getElementById('form_add_user');
-		var u = f.elements[0];
-		f.setAttribute(\"autocomplete\", \"off\");
-		//]]>
-	</script>";
+<script type="text/javascript">
+//<![CDATA[
+var f = document.getElementById('form_add_user');
+var u = f.elements[0];
+f.setAttribute("autocomplete", "off");
+//]]>
+</script>
 <!-- END: main -->
