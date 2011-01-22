@@ -60,6 +60,7 @@ else
             $cp .= $p . '/';
         }
     }
+    $upload_real_dir_page = str_replace( "\\", "/", $upload_real_dir_page );
 }
 
 $currentpath = str_replace( NV_ROOTDIR . "/", "", $upload_real_dir_page );
