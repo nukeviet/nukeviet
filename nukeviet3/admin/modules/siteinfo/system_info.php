@@ -66,7 +66,7 @@ $info[] = array(  //
 'field' => array(  //
     array(  //
     'key' => $lang_module['version'], //
-	'value' => $global_config['version'] 
+'value' => $global_config['version'] 
 ), //
 //
 array(  //
@@ -128,10 +128,10 @@ if ( defined( 'NV_IS_GODADMIN' ) )
     ), array( 
         'key' => NV_LOGS_DIR . "/voting_logs", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/voting_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) 
     ), array( 
-        'key' => "files/css", 'value' => ( is_writable( NV_ROOTDIR . '/files/css' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) 
+        'key' => NV_FILES_DIR . "/css", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/css' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) 
     ), array( 
-        'key' => "files/js", 'value' => ( is_writable( NV_ROOTDIR . '/files/js' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) 
-    )  
+        'key' => NV_FILES_DIR . "/js", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/js' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) 
+    ) 
     ) 
     );
 }

@@ -27,6 +27,9 @@ define( "DIR_FORUM", "forum" );
 //Thu muc uploads
 define( "NV_UPLOADS_DIR", "uploads" );
 
+//Thu muc files
+define( "NV_FILES_DIR", "files" );
+
 //Thu muc uploads banner
 define( "NV_BANNER_DIR", "banners" );
 

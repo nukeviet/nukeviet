@@ -19,7 +19,7 @@ if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
     {
         @nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $image );
         nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $image, $admin_info['userid'] );
-        $md5_view_image = NV_ROOTDIR . "/files/images/" . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
+        $md5_view_image = NV_ROOTDIR . "/'.NV_FILES_DIR.'/images/" . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
         if ( file_exists( $md5_view_image ) )
         {
             @nv_deletefile( $md5_view_image );

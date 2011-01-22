@@ -166,7 +166,7 @@ if ( $module_name == "upload" )
                 else
                 {
                     $image = basename( $f );
-                    $md5_view_image = NV_ROOTDIR . "/files/images/" . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
+                    $md5_view_image = NV_ROOTDIR . "/" . NV_FILES_DIR . "/images/" . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
                     if ( file_exists( $md5_view_image ) )
                     {
                         @nv_deletefile( $md5_view_image );
