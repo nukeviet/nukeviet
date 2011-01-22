@@ -37,6 +37,9 @@ $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=" . $act . " WHERE `title`="
 $db->sql_query( $sql );
 nv_del_moduleCache( 'modules' );
 
+$temp = ($act == 1)? $lang_global['yes'] : $lang_global['no'];
+nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['activate'] . ' module "'.$mod.'"' , $temp, $admin_info['userid'] );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK_' . $mod;
 include ( NV_ROOTDIR . "/includes/footer.php" );

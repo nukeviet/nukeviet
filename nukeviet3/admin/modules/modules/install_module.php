@@ -26,7 +26,8 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
             $status = $zip->properties();
             if ( $status['status'] == 'ok' )
             {
-                $filefolder = '';
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], basename($_FILES['modulefile']['name']) , $admin_info['userid'] );
+            	$filefolder = '';
                 $validfolder = array();
                 $filelist = '';
                 $filesize = nv_convertfromBytes( $_FILES['modulefile']['size'] );

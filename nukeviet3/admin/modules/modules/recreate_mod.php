@@ -10,11 +10,11 @@
 if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $contents = 'NO_' . $module_name;
-$module_name = filter_text_input( 'mod', 'post');
-if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $module_name ) )
+$modname = filter_text_input( 'mod', 'post');
+if ( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname ) )
 {
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_resetup_modul', "module_name  " . $module_name, $admin_info['userid'] );
-	$contents = nv_setup_data_module( NV_LANG_DATA, $module_name );
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['recreate'] .' module "' . $modname.'"', '', $admin_info['userid'] );
+	$contents = nv_setup_data_module( NV_LANG_DATA, $modname );
 }
 
 include ( NV_ROOTDIR . "/includes/header.php" );

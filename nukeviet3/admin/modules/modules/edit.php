@@ -47,7 +47,6 @@ $groups_list = nv_groups_list();
 
 if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_modul', "module  " . $mod, $admin_info['userid'] );
 	$custom_title = filter_text_input( 'custom_title', 'post', 1 );
     $theme = filter_text_input( 'theme', 'post', '', 1 );
     $keywords = filter_text_input( 'keywords', 'post', '', 1 );
@@ -90,6 +89,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             nv_set_layout_site();
         }
         nv_delete_all_cache();
+        nv_insert_logs( NV_LANG_DATA, $module_name, sprintf( $lang_module['edit'],$mod) , '', $admin_info['userid'] );
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
         exit();
     }

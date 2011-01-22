@@ -35,6 +35,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `weight`=" . $new_weight . " WHERE `title`=" . $db->dbescape( $mod );
 $db->sql_query( $sql );
 nv_del_moduleCache( 'modules' );
+nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weight'] . ' module "'.$mod.'"' , $weight. " -> " .$new_weight, $admin_info['userid'] );	
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK_' . $mod;

@@ -69,6 +69,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
     $zip->add( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR );
     $filesize = @filesize( $file_src );
     $file_name = basename( $file_src );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], "packet ".basename($modulename) , $admin_info['userid'] );
     $linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;mod=nv3_module_" . $modulename . ".zip&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . "&amp;filename=" . $file_name;
     echo '<a href="' . $linkgetfile . '"><span style="font-size:16px;color:red">nv3_module_' . $modulename . '' . ' - ' . nv_convertfromBytes( $filesize ) . '</span></a>';
 }
