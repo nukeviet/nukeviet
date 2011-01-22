@@ -22,6 +22,7 @@ else
 {
     $sql = "INSERT INTO `" . NV_PREFIXLANG . "_modthemes` VALUES('$func_id'," . $db->dbescape( $layout ) . ", " . $db->dbescape( $selectthemes ) . ")";
 }
+
 $result = $db->sql_query( $sql );
 if ( $result )
 {

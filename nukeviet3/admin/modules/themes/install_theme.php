@@ -33,7 +33,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
             }
             if ( $check_number == 2 )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_intall_theme', "theme  " . $theme, $admin_info['userid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_install'] , 'file name : ' . basename($_FILES['themefile']['name']) , $admin_info['userid'] );
                 $filefolder = '';
                 $filelist = '';
                 $validfolder = array();

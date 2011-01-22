@@ -16,6 +16,7 @@ if ( $db->sql_numrows( $result ) > 0 )
     $global_config['site_theme'] = $theme;
     nv_set_layout_site();
     nv_save_file_config_global();
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_active'] . ' theme: "'.$theme.'"', '', $admin_info['userid'] );
     echo "OK_" . $theme;
 }
 else

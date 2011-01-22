@@ -64,7 +64,7 @@ $page_title = $lang_module['setup_layout'] . ':' . $selectthemes;
 
 if ( $nv_Request->isset_request( 'save', 'post' ) and $nv_Request->isset_request( 'func', 'post' ) )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_setlayout_theme', "theme  " . $selectthemes, $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['setup_layout'] . ' theme: "'.$selectthemes.'"', '', $admin_info['userid'] );
 	$func_arr_save = $nv_Request->get_array( 'func', 'post' );
     foreach ( $func_arr_save as $func_id => $layout_name )
     {

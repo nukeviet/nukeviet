@@ -43,7 +43,7 @@ if ( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] .
     
     $db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_groups`" );
     $db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_weight`" );
-    
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_weight'], 'reset position all block', $admin_info['userid'] );
     nv_del_moduleCache( 'themes' );
     echo $lang_module['block_update_success'];
 }
