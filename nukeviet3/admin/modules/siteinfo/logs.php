@@ -19,7 +19,7 @@ $per_page = 30;
 $data = array();
 $array_userid = array();
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . $db_config['prefix'] . "_logs` WHERE lang='".NV_LANG_DATA."' ORDER BY `id` DESC LIMIT " . $page . "," . $per_page;
+$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . $db_config['prefix'] . "_logs` ORDER BY `id` DESC LIMIT " . $page . "," . $per_page;
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=logs";
 $result_query = $db->sql_query( $sql );

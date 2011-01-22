@@ -57,7 +57,7 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . ses
         {
             $contents = "<br><br><p align=\"center\"><strong>" . $lang_module['nv_lang_delete_error'] . "</strong></p>";
         }
-        
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['nv_admin_delete'] , "", $admin_info['userid'] );
         $contents .= implode( "<br>", $array_filename );
         $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\">";
         include ( NV_ROOTDIR . "/includes/header.php" );

@@ -26,6 +26,8 @@ if ( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->ge
     $author = var_export( $lang_translator_save, true );
     
     $db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $dirlang . "`='" . $author . "' WHERE `idfile`=" . $idfile . "" );
+    list( $module ) = $db->sql_fetchrow( $db->sql_query( "SELECT `module` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` WHERE `idfile` ='" . $idfile . "'" ) );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'] . ' -> ' . $language_array[$dirlang]['name'] , $module." : idfile = " .$idfile , $admin_info['userid'] );
     
     $pozlang = $nv_Request->get_array( 'pozlang', 'post', array() );
     if ( ! empty( $pozlang ) )
@@ -53,7 +55,6 @@ if ( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->ge
             $db->sql_query_insert_id( $sql );
         }
     }
-    
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main&dirlang=" . $dirlang . "" );
     die();
 

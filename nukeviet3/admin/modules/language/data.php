@@ -37,8 +37,10 @@ if ( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( "a
     $allow_sitelangs = array_unique( $allow_sitelangs );
     $query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( implode( ",", $allow_sitelangs ) ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'allow_sitelangs'";
     $result = $db->sql_query( $query );
-    
+    $temp = ($activelang == 1) ? $lang_global['yes'] : $lang_global['no'];
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'] , " langkey : " .$keylang . " [ " .$temp ." ]", $admin_info['userid'] );
     nv_save_file_config_global();
+       
     $contents = "<br><br><br><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
     $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"1;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "\">";
     include ( NV_ROOTDIR . "/includes/header.php" );
@@ -54,7 +56,8 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
     }
     else
     {
-        list( $site_theme ) = $db->sql_fetchrow( $db->sql_query( "SELECT `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` where `lang`='" . $global_config['site_lang'] . "' AND `module`='global' AND `config_name`='site_theme'" ) );
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_new'] ." " .$lang_module['nv_lang_data'] , " langkey : " .$keylang , $admin_info['userid'] );
+    	list( $site_theme ) = $db->sql_fetchrow( $db->sql_query( "SELECT `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` where `lang`='" . $global_config['site_lang'] . "' AND `module`='global' AND `config_name`='site_theme'" ) );
         $global_config['site_theme'] = $site_theme;
         require_once ( NV_ROOTDIR . '/includes/sqldata.php' );
         $sql_create_table = nv_create_table_sys( $keylang );
@@ -136,7 +139,7 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
         $contents_setup .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&" . NV_OP_VARIABLE . "=main\">";
         
         include ( NV_ROOTDIR . "/includes/header.php" );
-        nv_admin_theme( $contents_setup );
+        echo nv_admin_theme( $contents_setup );
         include ( NV_ROOTDIR . "/includes/footer.php" );
         exit();
     }
@@ -173,6 +176,7 @@ elseif ( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) an
     $db->sql_query( "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang` = '" . $deletekeylang . "'" );
     $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_setup_language` WHERE `lang` = '" . $deletekeylang . "'" );
     nv_save_file_config_global();
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_delete'] , " langkey : " .$deletekeylang , $admin_info['userid'] );
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
     exit();
 
