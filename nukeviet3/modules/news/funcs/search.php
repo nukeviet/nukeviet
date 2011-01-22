@@ -123,9 +123,9 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
         }
         
         $img_src = "";
-        if ( $array_img [0] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_img [0] ) )
+        if ( $array_img [0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img [0] ) )
         {
-            $img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $array_img [0];
+            $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img [0];
         }
         elseif ( $homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile ) )
         {

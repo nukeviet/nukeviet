@@ -254,6 +254,26 @@ if ( $module_name == "modules" )
                     }
                 }
             }
+            
+            if ( isset( $module_version['files_dir'] ) and ! empty( $module_version['files_dir'] ) )
+            {
+                foreach ( $module_version['files_dir'] as $path )
+                {
+                    $cp = '';
+                    $arr_p = explode( "/", $path );
+                    foreach ( $arr_p as $p )
+                    {
+                        if ( trim( $p ) != "" )
+                        {
+                            if ( ! is_dir( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp . $p ) )
+                            {
+                                nv_mkdir( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp, $p );
+                            }
+                            $cp .= $p . '/';
+                        }
+                    }
+                }
+            }
             $return = 'OK_' . $module_name;
             nv_save_file_config_global();
         }

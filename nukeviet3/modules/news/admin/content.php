@@ -32,26 +32,33 @@ $array_structure_image['username_Y_m_d'] = $module_name . '/' . $username_alias 
 $structure_upload = isset( $module_config[$module_name]['structure_upload'] ) ? $module_config[$module_name]['structure_upload'] : "Ym";
 $currentpath = isset( $array_structure_image[$structure_upload] ) ? $array_structure_image[$structure_upload] : '';
 
-$upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_name;
-$e = explode( "/", $currentpath );
-if ( ! empty( $e ) )
+if ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $currentpath ) )
 {
-    $cp = "";
-    foreach ( $e as $p )
+    $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $currentpath;
+}
+else
+{
+    $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_name;
+    $e = explode( "/", $currentpath );
+    if ( ! empty( $e ) )
     {
-        if ( ! empty( $p ) and ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $cp . $p ) )
+        $cp = "";
+        foreach ( $e as $p )
         {
-            $mk = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $cp, $p );
-            if ( $mk[0] > 0 )
+            if ( ! empty( $p ) and ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $cp . $p ) )
             {
-                $upload_real_dir_page = $mk[2];
+                $mk = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $cp, $p );
+                if ( $mk[0] > 0 )
+                {
+                    $upload_real_dir_page = $mk[2];
+                }
             }
+            elseif ( ! empty( $p ) )
+            {
+                $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $cp . $p;
+            }
+            $cp .= $p . '/';
         }
-        elseif ( ! empty( $p ) )
-        {
-            $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $cp . $p;
-        }
-        $cp .= $p . '/';
     }
 }
 
@@ -407,9 +414,9 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
                     $homeimgthumb_arr = explode( "|", $homeimgthumb );
                     foreach ( $homeimgthumb_arr as $homeimgthumb_i )
                     {
-                        if ( file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $homeimgthumb_i ) )
+                        if ( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgthumb_i ) )
                         {
-                            nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $homeimgthumb_i );
+                            nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgthumb_i );
                         }
                     }
                 
@@ -434,28 +441,28 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             
             $thumb_basename = $basename;
             $i = 1;
-            while ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb/' . $thumb_basename ) )
+            while ( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/thumb/' . $thumb_basename ) )
             {
                 $thumb_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
                 $i ++;
             }
             
             $image->resizeXY( $module_config[$module_name]['homewidth'], $module_config[$module_name]['homeheight'] );
-            $image->save( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb', $thumb_basename );
+            $image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/thumb', $thumb_basename );
             $image_info = $image->create_Image_info;
-            $thumb_name = str_replace( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/', '', $image_info['src'] );
+            $thumb_name = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/', '', $image_info['src'] );
             
             $block_basename = $basename;
             $i = 1;
-            while ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/block/' . $block_basename ) )
+            while ( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/block/' . $block_basename ) )
             {
                 $block_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
                 $i ++;
             }
             $image->resizeXY( $module_config[$module_name]['blockwidth'], $module_config[$module_name]['blockheight'] );
-            $image->save( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/block', $block_basename );
+            $image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/block', $block_basename );
             $image_info = $image->create_Image_info;
-            $block_name = str_replace( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/', '', $image_info['src'] );
+            $block_name = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/', '', $image_info['src'] );
             
             $image->close();
             $rowcontent['homeimgthumb'] = $thumb_name . "|" . $block_name;
@@ -820,7 +827,7 @@ if ( $error != "" )
     $xtpl->assign( 'error', implode( "<br>", $error ) );
     $xtpl->parse( 'main.error' );
 }
-if ( $rowcontent['status'] == 1 )
+if ( $rowcontent['status'] == 1 and $rowcontent['id'] > 0 )
 {
     $xtpl->parse( 'main.status' );
 }
