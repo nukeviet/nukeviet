@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="box-border m-bottom">
-	<div class="box-inside" id="tabs">
+	<div class="box-inside" id="tabs_top">
 		<ul class="list-tab clearfix">
 			<li>
 				<a href="#topviews" class="current">{LANG.hotnews}</a>
