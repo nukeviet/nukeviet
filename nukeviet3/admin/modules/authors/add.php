@@ -102,7 +102,7 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
             $result = array( 
                 'admin_id' => $userid, 'editor' => $editor, 'lev' => $lev, 'allow_files_type' => $allow_files_type, 'allow_modify_files' => $allow_modify_files, 'allow_create_subdirectories' => $allow_create_subdirectories, 'allow_modify_subdirectories' => $allow_modify_subdirectories, 'position' => $position, 'modules' => ( ! empty( $mds ) ) ? implode( ", ", $mds ) : "" 
             );
-            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_admin', "userid: " . $userid, $admin_info['userid'] );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['menuadd'], "Username: " .$row['username'], $admin_info['userid'] );
             nv_admin_add_result( $result );
         }
         exit();

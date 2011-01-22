@@ -62,7 +62,6 @@ function nv_save_file_admin_config ( )
     $content_config .= $content_config_user . "\n\n";
     $content_config .= "\n";
     $content_config .= "?>";
-    
     return file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/admin_config.php", $content_config, LOCK_EX );
 
 }
@@ -70,8 +69,10 @@ function nv_save_file_admin_config ( )
 $delid = $nv_Request->get_int( 'delid', 'get' );
 if ( ! empty( $delid ) )
 {
-    $db->sql_query( "DELETE FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE id=$delid" );
+    list( $keyname ) = $db->sql_fetchrow( $db->sql_query( "SELECT keyname FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE id=".$delid ) );
+	$db->sql_query( "DELETE FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE id=$delid" );
     nv_save_file_admin_config();
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip_delete'] ." " .$lang_module['config'] , " keyname : " .$keyname, $admin_info['userid'] );
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
     die();
 }
@@ -94,6 +95,7 @@ if ( $nv_Request->isset_request( 'savesetting', 'post' ) )
         $db->sql_query( $query );
     }
     nv_save_file_config_global();
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['save']. " " .$lang_module['config'] , "config", $admin_info['userid'] );
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
     exit();
 }
@@ -154,14 +156,17 @@ if ( $nv_Request->isset_request( 'submituser', 'post' ) )
         if ( $uid > 0 and $password != "" )
         {
             $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $nickname ) . ", `mask`='-1',`begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . ", `notice`=" . $db->dbescape( md5( $password ) ) . " WHERE `id`=" . $uid . "" );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'] , $lang_module['nickname_edit'] ." nickname: " .$nickname, $admin_info['userid'] );
         }
         elseif ( $uid > 0 )
         {
             $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $nickname ) . ", `mask`='-1',`begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . " WHERE `id`=" . $uid . "" );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'] , $lang_module['nickname_edit'] ." nickname: " .$nickname, $admin_info['userid'] );
         }
         else
         {
             $db->sql_query( "REPLACE INTO `" . NV_AUTHORS_GLOBALTABLE . "_config` VALUES (NULL, " . $db->dbescape( $nickname ) . ",'-1',$begintime1, $endtime1," . $db->dbescape( md5( $password ) ) . " )" );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'] , $lang_module['nickname_add'] ." nickname: " .$nickname, $admin_info['userid'] );
         }
         nv_save_file_admin_config();
         Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
@@ -207,10 +212,12 @@ if ( $nv_Request->isset_request( 'submitip', 'post' ) )
         if ( $cid > 0 )
         {
             $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $keyname ) . ", `mask`=" . $db->dbescape( $mask ) . ",`begintime`=" . $begintime . ", `endtime`=" . $endtime . ", `notice`=" . $db->dbescape( $notice ) . " WHERE `id`=" . $cid . "" );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip'] , $lang_module['adminip_edit'] . " ID ".$cid ." -> " . $keyname, $admin_info['userid'] );
         }
         else
         {
             $db->sql_query( "REPLACE INTO `" . NV_AUTHORS_GLOBALTABLE . "_config` VALUES (NULL, " . $db->dbescape( $keyname ) . "," . $db->dbescape( $mask ) . ",$begintime, $endtime," . $db->dbescape( $notice ) . " )" );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip'] , $lang_module['adminip_add'] ." ". $keyname, $admin_info['userid'] );
         }
         nv_save_file_admin_config();
         Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );

@@ -88,7 +88,7 @@ $error = "";
 
 if ( $nv_Request->get_int( 'save', 'post', 0 ) )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_admin', "admin_id " . $admin_id, $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'] , "Username: " . $row_user['username'], $admin_info['userid'] );
 	$editor = filter_text_input( 'editor', 'post', '' );
     if ( defined( 'NV_IS_SPADMIN' ) )
     {

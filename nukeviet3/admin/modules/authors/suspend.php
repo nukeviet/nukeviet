@@ -108,7 +108,8 @@ if ( $allow_change )
             $sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `edittime`=" . NV_CURRENTTIME . ",  `is_suspend`=" . $new_suspend . ", `susp_reason`=" . $db->dbescape( serialize( $susp_reason ) ) . " WHERE `admin_id`=" . $admin_id;
             if ( $db->sql_query( $sql ) )
             {
-                if ( ! empty( $sendmail ) )
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['suspend'.$new_suspend] ." " , " Username : " .$row_user['username'], $admin_info['userid'] );
+            	if ( ! empty( $sendmail ) )
                 {
                     $title = sprintf( $lang_module['suspend_sendmail_title'], $global_config['site_name'] );
                     $my_sig = ( ! empty( $admin_info['sig'] ) ) ? $admin_info['sig'] : "All the best";
