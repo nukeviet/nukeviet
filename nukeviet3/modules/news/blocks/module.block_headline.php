@@ -59,7 +59,10 @@ function nv_block_headline ( )
     }
     
     $xtpl = new XTemplate( "block_headline.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+    
     $xtpl->assign( 'PIX_IMG', NV_BASE_SITEURL . 'images/pix.gif' );
+    $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+    $xtpl->assign( 'TEMPLATE', $module_info['template'] );
     
     $images = array();
     if ( ! empty( $array_bid_content[1]['content'] ) )
@@ -115,7 +118,6 @@ function nv_block_headline ( )
     $my_footer .= '$(document).ready(function(){var b=["' . implode( '","', $images ) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
     $my_footer .= "</script>\n";
     $my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/contentslider.css\" />\n";
-    $my_footer .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/jquery.ui.tabs.css\" media=\"all\" />\n";
     
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );

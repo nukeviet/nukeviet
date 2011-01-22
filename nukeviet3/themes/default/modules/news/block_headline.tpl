@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<link type="text/css" rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/jquery.ui.tabs.css" media="all" />
 <div id="topnews" style="display:none">
     <div class="indent clearfix">
         <!-- BEGIN: hots_news_img -->
