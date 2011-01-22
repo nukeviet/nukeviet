@@ -21,21 +21,23 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  * @return
  */
 
-function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val = '' )
+function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val = '', $path = '', $currentpath = '' )
 {
     global $module_name, $admin_info;
-    $currentpath = NV_UPLOADS_DIR;
-    $path = NV_UPLOADS_DIR;
-    if ( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . date( "Y_m" ) ) )
+    if ( empty( $path ) and empty( $currentpath ) )
     {
-        $currentpath = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" );
-        $path = NV_UPLOADS_DIR . '/' . $module_name;
+        $path = NV_UPLOADS_DIR;
+        $currentpath = NV_UPLOADS_DIR;
+        if ( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . date( "Y_m" ) ) )
+        {
+            $currentpath = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" );
+            $path = NV_UPLOADS_DIR . '/' . $module_name;
+        }
+        elseif ( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name ) )
+        {
+            $currentpath = NV_UPLOADS_DIR . '/' . $module_name;
+        }
     }
-    elseif ( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name ) )
-    {
-        $currentpath = NV_UPLOADS_DIR . '/' . $module_name;
-    }
-    
     // Create class instance.
     $editortoolbar = array( 
         array( 

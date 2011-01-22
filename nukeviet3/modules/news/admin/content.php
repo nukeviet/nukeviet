@@ -57,7 +57,7 @@ if ( ! empty( $e ) )
 
 $currentpath = str_replace( NV_ROOTDIR . "/", "", $upload_real_dir_page );
 $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_name;
-if ( ! defined( 'NV_IS_ADMIN_MODULE' ) and strpos( $structure_upload, 'username' ) !== false )
+if ( ! defined( 'NV_IS_SPADMIN' ) and strpos( $structure_upload, 'username' ) !== false )
 {
     $array_currentpath = explode( '/', $currentpath );
     if ( $array_currentpath[2] == $username_alias )
@@ -781,7 +781,7 @@ $xtpl->assign( 'sourceid', $select );
 ////////////////////////////////////////////////////////////////////////////////////
 if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 {
-    $edits = nv_aleditor( 'bodytext', '100%', '300px', $rowcontent['bodytext'] );
+    $edits = nv_aleditor( 'bodytext', '100%', '300px', $rowcontent['bodytext'], $uploads_dir_user, $currentpath );
 }
 else
 {
