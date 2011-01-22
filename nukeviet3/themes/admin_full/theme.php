@@ -18,15 +18,15 @@ function nv_get_submenu ( $mod )
         //ket noi voi file ngon ngu cua module
         if ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $mod . ".php" ) )
         {
-            require_once ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $mod . ".php" );
+            include ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $mod . ".php" );
         }
         elseif ( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $mod . ".php" ) )
         {
-            require_once ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $mod . ".php" );
+            include ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $mod . ".php" );
         }
         elseif ( file_exists( NV_ROOTDIR . "/language/en/admin_" . $mod . ".php" ) )
         {
-            require_once ( NV_ROOTDIR . "/language/en/admin_" . $mod . ".php" );
+            include ( NV_ROOTDIR . "/language/en/admin_" . $mod . ".php" );
         }
         include ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $mod . "/functions.php" );
         unset( $lang_module );
