@@ -3,51 +3,24 @@
 	{FILE "header.tpl"}
 	<!-- END: header -->
     <script type="text/javascript">
-		// set Cookie
-		function Set_Cookie( name, value, expires, path, domain, secure )
-		{
-			var today = new Date();
-			today.setTime( today.getTime() );
-			if ( expires ){
-				expires = expires * 1000 * 60 * 60 * 24;
-			}
-			var expires_date = new Date( today.getTime() + (expires) );
-			document.cookie = name + "=" +escape( value ) +
-			( ( expires ) ? ";expires=" + expires_date.toGMTString() : "" ) +
-			( ( path ) ? ";path=" + path : "" ) +
-			( ( domain ) ? ";domain=" + domain : "" ) +
-			( ( secure ) ? ";secure" : "" );
-		}
-		// get cookie
-		function Get_Cookie( name ) {
-			var start = document.cookie.indexOf( name + "=" );
-			var len = start + name.length + 1;
-			if ( ( !start ) && ( name != document.cookie.substring( 0, name.length ) ) ){
-				return null;
-			}
-			if ( start == -1 ) return null;
-			var end = document.cookie.indexOf( ";", len );
-			if ( end == -1 ) end = document.cookie.length;
-			return unescape( document.cookie.substring( len, end ) );
-		}
 		// click hide menu
 		function clickHide(type){
 			if (type == 1){
 				$('td.colum_left_lage').hide({ direction: "horizontal" }, 500);
 				$('td.colum_left_small').show({ direction: "horizontal" }, 500);
-				Set_Cookie( 'colum_left_lage', '0', 2, '/', '', '' );
+				nv_setCookie( 'colum_left_lage', '0', 86400000);
 			}
 			else {
 				if (type == 2){
 					$('td.colum_left_small').hide(0);
 					$('td.colum_left_lage').show({ direction: "horizontal" }, 500);
-					Set_Cookie( 'colum_left_lage', '1', 2, '/', '', '' );
+						nv_setCookie( 'colum_left_lage', '1', 86400000);
 				}
 			}
 		}
 		// show or hide menu 
 		function show_menu(){
-			var showmenu = ( Get_Cookie( 'colum_left_lage' ) ) ? ( Get_Cookie('colum_left_lage')) : '1';
+			var showmenu = ( nv_getCookie( 'colum_left_lage' ) ) ? ( nv_getCookie('colum_left_lage')) : '1';
 			if (showmenu == '1') {
 				$('td.colum_left_small').hide();
 				$('td.colum_left_lage').show();
@@ -82,8 +55,9 @@
                         <!-- END: vertical_menu -->
                     </div>
                 </div>
+            	<script type="text/javascript">show_menu();</script>
         	</td>
-            <script type="text/javascript">show_menu();</script>
+
             <td valign="top" bgcolor="#F2F2F2">
             	<div class="info_tab">
                     <!-- BEGIN: empty_page_title -->
@@ -102,7 +76,7 @@
                     <!-- END: select_option -->
                     <!-- BEGIN: site_mods -->
                     <span class="cell_right">
-                        <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a>
+                        <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a>
                     </span>
                     <!-- END: site_mods -->
                     <div style="clear:both"></div>
