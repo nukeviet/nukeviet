@@ -23,19 +23,24 @@ if ( $module == 'global' )
         echo "<option value=\"" . $file_name . "|" . $load_config . "\" " . $sel . ">" . $matches[1] . " " . $matches[2] . " </option>\n";
     }
 }
-elseif ( isset( $site_mods[$module] ) )
+elseif ( preg_match( $global_config['check_module'], $module ) )
 {
-    $module_file = $site_mods[$module]['module_file'];
-    if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . '/blocks' ) )
+    $query = "SELECT `module_file` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $module );
+    $result = $db->sql_query( $query );
+    if ( $db->sql_numrows( $result ) )
     {
-        $block_file_list = nv_scandir( NV_ROOTDIR . "/modules/" . $module_file . '/blocks', $global_config['check_block_module'] );
-        foreach ( $block_file_list as $file_name )
+        list( $module_file ) = $db->sql_fetchrow( $result );
+        if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . '/blocks' ) )
         {
-            $sel = ( $file == $file_name ) ? ' selected' : '';
-            unset( $matches );
-            preg_match( $global_config['check_block_module'], $file_name, $matches );
-            $load_config = ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) ) ? 1 : 0;
-            echo "<option value=\"" . $file_name . "|" . $load_config . "\" " . $sel . ">" . $matches[1] . " " . $matches[2] . " </option>\n";
+            $block_file_list = nv_scandir( NV_ROOTDIR . "/modules/" . $module_file . '/blocks', $global_config['check_block_module'] );
+            foreach ( $block_file_list as $file_name )
+            {
+                $sel = ( $file == $file_name ) ? ' selected' : '';
+                unset( $matches );
+                preg_match( $global_config['check_block_module'], $file_name, $matches );
+                $load_config = ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) ) ? 1 : 0;
+                echo "<option value=\"" . $file_name . "|" . $load_config . "\" " . $sel . ">" . $matches[1] . " " . $matches[2] . " </option>\n";
+            }
         }
     }
 }
