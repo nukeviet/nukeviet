@@ -16,7 +16,7 @@
 	background: #fff;
 	padding: 5px;
 	width: 300px;
-	height: 190px;
+	height: 210px;
 }
 
 .sliderwrapper .contentdiv img {
@@ -28,12 +28,12 @@
 
 .sliderwrapper .contentdiv h3 {
 	position: absolute;
-	bottom: 4px;
-	left: 8px;
+	bottom: 8px;
+	left: 4px;
 	background: url(../images/transparent.png) repeat-x;
 	width: 293px;
-	padding: 5px 0;
-	text-indent: 10px;
+	padding: 5px;
+	font-size:14px;
 }
 
 .sliderwrapper .contentdiv h3 a {

@@ -12,7 +12,7 @@ $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.tabs.min.js\"></script>\n";
 $my_head .= "	<script type=\"text/javascript\">\n";
 $my_head .= "	$(function() {\n";
-$my_head .= "		$(\"#tabs\").tabs();\n";
+$my_head .= "		$(\"#tabs_top\").tabs();\n";
 $my_head .= "	});\n";
 $my_head .= "	</script>\n";
 

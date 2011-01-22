@@ -1095,3 +1095,7 @@ ul.list_item li {
 ul.list_item li.second {
     background: #fcfcfc;
 }
+
+.tabs_view {
+	padding:5px 0;
+}
