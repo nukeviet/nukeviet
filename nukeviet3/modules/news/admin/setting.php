@@ -229,8 +229,8 @@ $contents .= "</select></td></tr>
 </table>";
 
 $contents .= "</form>";
-$contents .= "<script type=\"text/javascript\">\n//<![CDATA\n";
-$contents .= '[$("input[name=selectimg]").click(function(){';
+$contents .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
+$contents .= '$("input[name=selectimg]").click(function(){';
 $contents .= 'var area = "module_logo";';
 $contents .= 'var type= "image";';
 if ( defined( "NV_IS_SPADMIN" ) )
@@ -246,7 +246,7 @@ else
 $contents .= 'nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "420","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");';
 $contents .= 'return false;';
 $contents .= '});';
-$contents .= "//]]>\n</script>\n";
+$contents .= "\n//]]>\n</script>\n";
 
 if ( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) )
 {
