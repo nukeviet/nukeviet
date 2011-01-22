@@ -1,14 +1,16 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
     <table class="tab1" summary="">
-        <tr>
-            <td>
-                <strong>{LANG.sitename}</strong>
-            </td>
-            <td>
-                <input type="text" name="site_name" value="{VALUE.sitename}" style="width: 450px"/>
-            </td>
-        </tr>
+        <tbody>
+			<tr>
+	            <td>
+	                <strong>{LANG.sitename}</strong>
+	            </td>
+	            <td>
+	                <input type="text" name="site_name" value="{VALUE.sitename}" style="width: 450px"/>
+	            </td>
+	        </tr>
+		<tbody>
         <tbody class="second">
             <tr>
                 <td>

@@ -76,8 +76,8 @@ function nv_groups_add_theme ( $contents )
         $exp_time = mktime( 0, 0, 0, $contents['exp_time'][2], $contents['exp_time'][1], $contents['exp_time'][3] );
         $exp_time = date( "d.m.Y", $exp_time );
     }
-    $return .= "<input name=\"exp_time\" id=\"exp_time\" value=\"" . $exp_time . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
-    $return .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_time', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
+    $return .= "<input name=\"exp_time\" id=\"exp_time\" value=\"" . $exp_time . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\" />\n";
+    $return .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" width=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_time', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\" />\n";
     $return .= " " . $contents['exp_time'][9] . ": <select name=\"hour\">\n";
     for ( $i = 0; $i <= 23; $i ++ )
     {
@@ -108,8 +108,7 @@ function nv_groups_add_theme ( $contents )
     $return .= "<col valign=\"top\" width=\"10px\" />\n";
     $return .= "<col valign=\"top\" />\n";
     $return .= "<tr>\n";
-    $return .= "<td colspan=\"3\">" . $contents['content'][0] . ":</td>\n";
-    $return .= "<td>\n";
+    $return .= "<td colspan=\"3\">" . $contents['content'][0] . ":</td>\n"; 
     $return .= "</tr>\n";
     $return .= "<tr>\n";
     $return .= "<td colspan=\"3\">\n";
@@ -131,6 +130,7 @@ function nv_groups_add_theme ( $contents )
     $return .= "<input type=\"submit\" value=\"" . $contents['submit'] . "\" name=\"submit1\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</table>\n";
+    $return .= "</form>\n";	
     
     return $return;
 }
@@ -182,8 +182,8 @@ function nv_admin_edit_theme ( $contents )
         $exp_time = mktime( 0, 0, 0, $contents['exp_time'][2], $contents['exp_time'][1], $contents['exp_time'][3] );
         $exp_time = date( "d.m.Y", $exp_time );
     }
-    $return .= "<input name=\"exp_time\" id=\"exp_time\" value=\"" . $exp_time . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
-    $return .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_time', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
+    $return .= "<input name=\"exp_time\" id=\"exp_time\" value=\"" . $exp_time . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\" />\n";
+    $return .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" width=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_time', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
     $return .= $contents['exp_time'][9] . ": <select name=\"hour\">\n";
     for ( $i = 0; $i <= 23; $i ++ )
     {

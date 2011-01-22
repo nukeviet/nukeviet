@@ -260,6 +260,7 @@
      </div>
 	</form>
 <script type="text/javascript">
+//<![CDATA[
 	$("input[name=selectimg]").click(function(){
 		var area = "homeimg";
 		var path= "{UPLOADS_DIR_USER}";	
@@ -304,5 +305,6 @@
     	get_alias();
 	});
 	<!-- END: getalias -->
+//]]>
 </script>
 <!-- END:main -->

@@ -19,7 +19,7 @@
 </div>
 <div class="clear"></div>
 <!-- END: error -->
-<form action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
+<form id="form_add_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
     <table class="tab1">
         <tbody>
             <tr>
@@ -43,7 +43,7 @@
                     (<span style="color:#FF0000">*</span>)
                 </td>
                 <td>
-                    <input class="txt" value="{DATA.email}" name="email" id="email_iavim" autocomplete="off" style="width:300px" />
+                    <input class="txt" value="{DATA.email}" name="email" id="email_iavim" style="width:300px" />
                 </td>
             </tr>
         </tbody>
@@ -56,7 +56,7 @@
                     (<span style="color:#FF0000">*</span>)
                 </td>
                 <td>
-                    <input class="txt" type="password" style="width: 150px" name="password1" autocomplete="off" value="{DATA.password1}" style="width:300px" />
+                    <input class="txt" type="password" style="width: 150px" id="pass_iavim" name="password1" value="{DATA.password1}" />
                 </td>
             </tr>
         </tbody>
@@ -69,7 +69,7 @@
                     (<span style="color:#FF0000">*</span>)
                 </td>
                 <td>
-                    <input class="txt" type="password" style="width: 150px" name="password2" value="{DATA.password2}" style="width:300px" />
+                    <input class="txt" type="password" style="width: 150px" name="password2" value="{DATA.password2}" />
                 </td>
             </tr>
         </tbody>
@@ -252,4 +252,11 @@
         </tbody>
     </table>
 </form>
+$contents .= "<script type=\"text/javascript\">
+		//<![CDATA[
+		var f = document.getElementById('form_add_user');
+		var u = f.elements[0];
+		f.setAttribute(\"autocomplete\", \"off\");
+		//]]>
+	</script>";
 <!-- END: main -->

@@ -56,7 +56,7 @@ function nv_show_list ( )
             }
             $contents .= "</select></td>\n";
             
-            $contents .= "<td><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content&amp;id=" . $row ['id'] . "\">" . $lang_global ['edit'] . "</a></span>\n";
+            $contents .= "<td><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $row ['id'] . "\">" . $lang_global ['edit'] . "</a></span>\n";
             $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_module_del(" . $row ['id'] . ")\">" . $lang_global ['delete'] . "</a></span></td>\n";
             $contents .= "</tr>\n";
             $contents .= "</tbody>\n";

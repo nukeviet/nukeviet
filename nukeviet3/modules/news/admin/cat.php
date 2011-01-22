@@ -106,7 +106,7 @@ $parentid = $nv_Request->get_int( 'parentid', 'get,post', 0 );
 
 $contents = "<div id=\"module_show_list\">";
 $contents .= nv_show_cat_list( $parentid );
-$contents .= "</div><br>\n";
+$contents .= "</div><br />\n";
 
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 if ( $catid > 0 and isset( $global_array_cat[$catid] ) )
@@ -196,9 +196,9 @@ if ( ! empty( $array_cat_list ) )
     $a ++;
     $contents .= "<tbody" . $class . ">";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"  width=\"100px\"><strong>" . $lang_module['alias'] . ": </strong></td>\n";
+    $contents .= "<td valign=\"top\" align=\"right\"  width=\"100\"><strong>" . $lang_module['alias'] . ": </strong></td>\n";
     $contents .= "<td><input style=\"width: 550px\" name=\"alias\" type=\"text\" value=\"" . $alias . "\" maxlength=\"255\" id=\"idalias\"/>";
-    $contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" widht=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\">\n";
+    $contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" width=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\" />\n";
     $contents .= "</td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>";
@@ -240,7 +240,7 @@ if ( ! empty( $array_cat_list ) )
     $contents .= "<tbody" . $class . ">";
     
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"  width=\"100px\"><br><strong>" . $lang_module['description'] . " </strong></td>\n";
+    $contents .= "<td valign=\"top\" align=\"right\"  width=\"100\"><br /><strong>" . $lang_module['description'] . " </strong></td>\n";
     $contents .= "<td>";
     $contents .= "<textarea style=\"width: 600px\" name=\"description\" cols=\"100\" rows=\"5\">" . $description . "</textarea>";
     $contents .= "</td>";
@@ -252,7 +252,7 @@ if ( ! empty( $array_cat_list ) )
     $contents .= "<tbody" . $class . ">";
     
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"><br><strong>" . $lang_global['who_view'] . " </strong></td>\n";
+    $contents .= "<td valign=\"top\" align=\"right\"><br /><strong>" . $lang_global['who_view'] . " </strong></td>\n";
     $contents .= "<td>";
     $contents .= "			<div class=\"message_body\">\n";
     $contents .= "				<select name=\"who_view\" id=\"who_view\" onchange=\"nv_sh('who_view','groups_list')\" style=\"width: 250px;\">\n";
@@ -262,7 +262,7 @@ if ( ! empty( $array_cat_list ) )
         if ( $who_view == $k ) $sl = " selected=\"selected\"";
         $contents .= "				<option value=\"" . $k . "\" " . $sl . ">" . $w . "</option>\n";
     }
-    $contents .= "				</select><br>\n";
+    $contents .= "				</select><br />\n";
     
     $contents .= "				<div id=\"groups_list\" style=\"" . ( $who_view == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" ) . "\">\n";
     $contents .= "					" . $lang_global['groups_view'] . ":\n";
@@ -286,7 +286,7 @@ if ( ! empty( $array_cat_list ) )
     $contents .= "</tbody>";
     
     $contents .= "</table>";
-    $contents .= "<br><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
+    $contents .= "<br /><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
     $contents .= "</form>\n";
     $contents .= "</div>";
     if ( empty( $alias ) )

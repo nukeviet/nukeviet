@@ -62,6 +62,13 @@ $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\"
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<table summary=\"\" class=\"tab1\">
+<tfoot>
+<tr><td style=\"text-align: center;\" colspan=\"2\">
+        <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\" />
+        <input type=\"hidden\" value=\"1\" name=\"savesetting\" /></td>
+</tr>        
+</tfoot>
+<tbody>
 <tr>
     <td><strong>" . $lang_module['setting_indexfile'] . "</strong></td>
     <td><select name=\"indexfile\">";
@@ -71,31 +78,34 @@ foreach ( $array_viewcat_full as $key => $val )
 }
 $contents .= "</select></td>
 </tr>
+</tbody>
 <tbody class=\"second\">
 <tr>
     <td><strong>" . $lang_module['setting_homesite'] . "</strong></td>
     <td>
-        <input type=\"text\" value=\"" . $module_config[$module_name]['homewidth'] . "\" style=\"width: 40px;\" name=\"homewidth\"> x 
-        <input type=\"text\" value=\"" . $module_config[$module_name]['homeheight'] . "\" style=\"width: 40px;\" name=\"homeheight\">
+        <input type=\"text\" value=\"" . $module_config[$module_name]['homewidth'] . "\" style=\"width: 40px;\" name=\"homewidth\" /> x 
+        <input type=\"text\" value=\"" . $module_config[$module_name]['homeheight'] . "\" style=\"width: 40px;\" name=\"homeheight\" />
     </td>
 </tr>
 </tbody>
-
+<tbody>
 <tr>
     <td><strong>" . $lang_module['setting_thumbblock'] . "</strong></td>
     <td>
-        <input type=\"text\" value=\"" . $module_config[$module_name]['blockwidth'] . "\" style=\"width: 40px;\" name=\"blockwidth\"> x 
-        <input type=\"text\" value=\"" . $module_config[$module_name]['blockheight'] . "\" style=\"width: 40px;\" name=\"blockheight\">
+        <input type=\"text\" value=\"" . $module_config[$module_name]['blockwidth'] . "\" style=\"width: 40px;\" name=\"blockwidth\" /> x 
+        <input type=\"text\" value=\"" . $module_config[$module_name]['blockheight'] . "\" style=\"width: 40px;\" name=\"blockheight\" />
     </td>
 </tr>
+</tbody>
 <tbody class=\"second\">
 <tr>
     <td><strong>" . $lang_module['setting_imagefull'] . "</strong></td>
     <td>
-        <input type=\"text\" value=\"" . $module_config[$module_name]['imagefull'] . "\" style=\"width: 50px;\" name=\"imagefull\"> 
+        <input type=\"text\" value=\"" . $module_config[$module_name]['imagefull'] . "\" style=\"width: 50px;\" name=\"imagefull\" /> 
     </td>
 </tr>
 </tbody>
+<tbody>
 <tr>
     <td><strong>" . $lang_module['setting_per_page'] . "</strong></td>
     <td><select name=\"per_page\">";
@@ -111,6 +121,7 @@ for ( $i = 5; $i <= 30; $i ++ )
 }
 $contents .= "</select></td>
 </tr>
+</tbody>
 <tbody class=\"second\">
 <tr>
     <td><strong>" . $lang_module['setting_st_links'] . "</strong></td>
@@ -128,20 +139,24 @@ for ( $i = 0; $i <= 20; $i ++ )
 $contents .= "</select></td>
 </tr>
 </tbody>
+<tbody>
 <tr>
     <td><strong>" . $lang_module['showhometext'] . "</strong></td>
-    <td><input type=\"checkbox\" value=\"1\" name=\"showhometext\" " . ( ( $module_config[$module_name]['showhometext'] ) ? "checked=\"checked\"" : "" ) . "></td>
+    <td><input type=\"checkbox\" value=\"1\" name=\"showhometext\" " . ( ( $module_config[$module_name]['showhometext'] ) ? "checked=\"checked\"" : "" ) . " /></td>
 </tr>
+</tbody>
 <tbody class=\"second\">
 <tr>
     <td><strong>" . $lang_module['activecomm'] . "</strong></td>
-    <td><input type=\"checkbox\" value=\"1\" name=\"activecomm\" " . ( ( $module_config[$module_name]['activecomm'] ) ? "checked=\"checked\"" : "" ) . "></td>
+    <td><input type=\"checkbox\" value=\"1\" name=\"activecomm\" " . ( ( $module_config[$module_name]['activecomm'] ) ? "checked=\"checked\"" : "" ) . " /></td>
 </tr>
 </tbody>
+<tbody>
 <tr>
     <td><strong>" . $lang_module['setting_auto_postcomm'] . "</strong></td>
-    <td><input type=\"checkbox\" value=\"1\" name=\"auto_postcomm\" " . ( ( $module_config[$module_name]['auto_postcomm'] ) ? "checked=\"checked\"" : "" ) . "></td>
+    <td><input type=\"checkbox\" value=\"1\" name=\"auto_postcomm\" " . ( ( $module_config[$module_name]['auto_postcomm'] ) ? "checked=\"checked\"" : "" ) . " /></td>
 </tr>
+</tbody>
 <tbody class=\"second\">
 <tr>
     <td><strong>" . $lang_module['setting_setcomm'] . "</strong></td>
@@ -158,10 +173,12 @@ while ( list( $comm_i, $title_i ) = each( $array_allowed_comm ) )
 }
 $contents .= "</select></td></tr>
 </tbody>
+<tbody>
 <tr>
     <td><strong>" . $lang_module['emailcomm'] . "</strong></td>
-    <td><input type=\"checkbox\" value=\"1\" name=\"emailcomm\" " . ( ( $module_config[$module_name]['emailcomm'] ) ? "checked=\"checked\"" : "" ) . "></td>
-</tr>";
+    <td><input type=\"checkbox\" value=\"1\" name=\"emailcomm\" " . ( ( $module_config[$module_name]['emailcomm'] ) ? "checked=\"checked\"" : "" ) . " /></td>
+</tr>
+</tbody>";
 $array_structure_image = array();
 $array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_name;
 $array_structure_image['Y'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y' );
@@ -198,8 +215,8 @@ $contents .= "</select></td></tr>
 <tr class=\"second\">
     <td><strong>" . $lang_module['module_logo'] . "</strong></td>
     <td>
-        <input name=\"module_logo\" id=\"module_logo\" value=\"" . $module_logo . "\" style=\"width: 340px;\" type=\"text\">
-		<input style=\"width: 100px;\" value=\"" . $lang_global['browse_image'] . "\" name=\"selectimg\" type=\"button\">
+        <input name=\"module_logo\" id=\"module_logo\" value=\"" . $module_logo . "\" style=\"width: 340px;\" type=\"text\" />
+		<input style=\"width: 100px;\" value=\"" . $lang_global['browse_image'] . "\" name=\"selectimg\" type=\"button\" />
     </td>
 </tr>
 </tbody>
@@ -209,16 +226,11 @@ $contents .= "</select></td></tr>
     <td><textarea style=\"width: 450px\" name=\"copyright\" id=\"copyright\" cols=\"20\" rows=\"4\">" . $module_config[$module_name]['copyright'] . "</textarea></td>
     </tr>
 </tbody>
-<tfoot>
-<tr><td style=\"text-align: center;\" colspan=\"2\">
-        <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\">
-        <input type=\"hidden\" value=\"1\" name=\"savesetting\">
-</tfoot>
 </table>";
 
 $contents .= "</form>";
-$contents .= "<script type=\"text/javascript\">\n";
-$contents .= '$("input[name=selectimg]").click(function(){';
+$contents .= "<script type=\"text/javascript\">\n//<![CDATA\n";
+$contents .= '[$("input[name=selectimg]").click(function(){';
 $contents .= 'var area = "module_logo";';
 $contents .= 'var type= "image";';
 if ( defined( "NV_IS_SPADMIN" ) )
@@ -234,7 +246,7 @@ else
 $contents .= 'nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "400","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");';
 $contents .= 'return false;';
 $contents .= '});';
-$contents .= "</script>\n";
+$contents .= "//]]>\n</script>\n";
 
 if ( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) )
 {
@@ -307,6 +319,10 @@ if ( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func )
                 <td>" . $lang_module['group_delcontent'] . "</td>
             </tr>
         </thead>";
+    $contents .= "<tfoot><tr><td style=\"text-align: center;\" colspan=\"5\">
+        <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\" />
+        <input type=\"hidden\" value=\"1\" name=\"savepost\" />";
+    $contents .= "</td></tr></tfoot>";
     
     foreach ( $array_post_title as $member => $array_post_1 )
     {
@@ -331,19 +347,16 @@ if ( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func )
             }
             $contents .= "<tbody" . $class . ">
         <tr>
-            <td><strong>" . $array_post_2 . "</strong><input type=\"hidden\" value=\"" . $pid . "\" name=\"array_pid[]\"></td>
-            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_addcontent[$pid]\" " . ( ( $addcontent ) ? "checked=\"checked\"" : "" ) . "></td>
-            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_postcontent[$pid]\" " . ( ( $postcontent ) ? "checked=\"checked\"" : "" ) . "></td>
-            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_editcontent[$pid]\" " . ( ( $editcontent ) ? "checked=\"checked\"" : "" ) . "></td>
-            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_delcontent[$pid]\" " . ( ( $delcontent ) ? "checked=\"checked\"" : "" ) . "></td>
+            <td><strong>" . $array_post_2 . "</strong><input type=\"hidden\" value=\"" . $pid . "\" name=\"array_pid[]\" /></td>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_addcontent[$pid]\" " . ( ( $addcontent ) ? "checked=\"checked\"" : "" ) . " /></td>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_postcontent[$pid]\" " . ( ( $postcontent ) ? "checked=\"checked\"" : "" ) . " /></td>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_editcontent[$pid]\" " . ( ( $editcontent ) ? "checked=\"checked\"" : "" ) . " /></td>
+            <td align=\"center\"><input type=\"checkbox\" value=\"1\" name=\"array_delcontent[$pid]\" " . ( ( $delcontent ) ? "checked=\"checked\"" : "" ) . " /></td>
             </tr>
         </tbody>";
         }
     }
-    $contents .= "<tfoot><tr><td style=\"text-align: center;\" colspan=\"5\">
-        <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\">
-        <input type=\"hidden\" value=\"1\" name=\"savepost\">";
-    $contents .= "</td></tr><tfoot>";
+    
     $contents .= "</table>";
     $contents .= "</form>";
 }

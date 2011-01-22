@@ -138,7 +138,7 @@ function nv_add_client_theme ( $contents )
     $return .= "<blockquote" . $class . "><span>" . $contents['info'] . "</span></blockquote>\n";
     $return .= "</div>\n";
     
-    $return .= "<form method=\"post\" style=\"FLOAT:left;width:100%;margin-bottom:20px\" action=\"" . $contents['action'] . "\">\n";
+    $return .= "<form method=\"post\" id=\"form_add_client\" style=\"FLOAT:left;width:100%;margin-bottom:20px\" action=\"" . $contents['action'] . "\">\n";
     $return .= "<div style=\"WIDTH:100%\">\n";
     $return .= "<input type=\"hidden\" value=\"1\" name=\"save\" id=\"save\" />\n";
     $return .= "<table summary=\"" . $contents['info'] . "\" class=\"tab1\">\n";
@@ -152,12 +152,12 @@ function nv_add_client_theme ( $contents )
     $return .= "<td><input name=\"" . $contents['login'][1] . "\" id=\"" . $contents['login'][1] . "\" type=\"text\" value=\"" . $contents['login'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['login'][3] . "\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
-    
+    	
     $return .= "<tbody>\n";
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['pass'][0] . ":</td>\n";
     $return .= "<td><sup class=\"required\">&lowast;</sup></td>\n";
-    $return .= "<td><input name=\"" . $contents['pass'][1] . "\" id=\"" . $contents['pass'][1] . "\" type=\"password\" autocomplete=\"off\" value=\"" . $contents['pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['pass'][3] . "\" /></td>\n";
+    $return .= "<td><input name=\"" . $contents['pass'][1] . "\" id=\"" . $contents['pass'][1] . "\" type=\"password\" value=\"" . $contents['pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['pass'][3] . "\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
@@ -165,7 +165,7 @@ function nv_add_client_theme ( $contents )
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['re_pass'][0] . ":</td>\n";
     $return .= "<td><sup class=\"required\">&lowast;</sup></td>\n";
-    $return .= "<td><input name=\"" . $contents['re_pass'][1] . "\" id=\"" . $contents['re_pass'][1] . "\" type=\"password\" autocomplete=\"off\" value=\"" . $contents['re_pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['re_pass'][3] . "\" /></td>\n";
+    $return .= "<td><input name=\"" . $contents['re_pass'][1] . "\" id=\"" . $contents['re_pass'][1] . "\" type=\"password\" value=\"" . $contents['re_pass'][2] . "\" style=\"width:300px\" maxlength=\"" . $contents['re_pass'][3] . "\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
@@ -233,11 +233,13 @@ function nv_add_client_theme ( $contents )
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
-    $return .= "<tr>\n";
+    $return .= "<tbody>\n";    
+	$return .= "<tr>\n";
     $return .= "<td>" . $contents['uploadtype'][0] . ":</td>\n";
     $return .= "<td></td>\n";
-    $return .= "<td><label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"images\"/>images</label>&nbsp;<label><input name=\"" . $contents['uploadtype'][1] . "[]\" id=\"" . $contents['uploadtype'][1] . "\" type=\"checkbox\" value=\"flash\"/>flash</label></td>\n";
+    $return .= "<td><label><input name=\"" . $contents['uploadtype'][1] . "[]\" type=\"checkbox\" value=\"images\"/>images</label>&nbsp;<label><input name=\"" . $contents['uploadtype'][1] . "[]\" type=\"checkbox\" value=\"flash\"/>flash</label></td>\n";
     $return .= "</tr>\n";
+    $return .= "</tbody>\n";	
     
     $return .= "<tbody>\n";
     $return .= "<tr>\n";
@@ -539,7 +541,7 @@ function nv_add_plan_theme ( $contents )
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['blang'][0] . ":</td>\n";
     $return .= "<td></td>\n";
-    $return .= "<td><select name=\"" . $contents['blang'][1] . "\" id=\"" . $contents['blang'][1] . "\">un";
+    $return .= "<td><select name=\"" . $contents['blang'][1] . "\" id=\"" . $contents['blang'][1] . "\">\n";
     $return .= "<option value=\"\">" . $contents['blang'][2] . "</option>\n";
     foreach ( $contents['blang'][3] as $key => $blang )
     {
@@ -553,7 +555,7 @@ function nv_add_plan_theme ( $contents )
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['form'][0] . ":</td>\n";
     $return .= "<td></td>\n";
-    $return .= "<td><select name=\"" . $contents['form'][1] . "\" id=\"" . $contents['form'][1] . "\">un";
+    $return .= "<td><select name=\"" . $contents['form'][1] . "\" id=\"" . $contents['form'][1] . "\">\n";
     foreach ( $contents['form'][2] as $form )
     {
         $return .= "<option value=\"" . $form . "\"" . ( $form == $contents['form'][3] ? " selected=\"selected\"" : "" ) . ">" . $form . "</option>\n";
@@ -875,7 +877,7 @@ function nv_add_banner_theme ( $contents )
     $return .= "<td>" . $contents['publ_date'][0] . ":</td>\n";
     $return .= "<td></td>\n";
     $return .= "<td><input name=\"" . $contents['publ_date'][1] . "\" id=\"" . $contents['publ_date'][1] . "\" type=\"text\" value=\"" . $contents['publ_date'][2] . "\" style=\"width:278px\" maxlength=\"" . $contents['publ_date'][3] . "\" readonly=\"readonly\" />\n";
-    $return .= "<img src=\"" . $contents['publ_date'][4] . "\" widht=\"" . $contents['publ_date'][5] . "\" height=\"" . $contents['publ_date'][6] . "\" style=\"cursor:pointer;vertical-align: middle;\" onclick=\"" . $contents['publ_date'][7] . "\" alt=\"\" /></td>\n";
+    $return .= "<img src=\"" . $contents['publ_date'][4] . "\" width=\"" . $contents['publ_date'][5] . "\" height=\"" . $contents['publ_date'][6] . "\" style=\"cursor:pointer;vertical-align: middle;\" onclick=\"" . $contents['publ_date'][7] . "\" alt=\"\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
@@ -884,7 +886,7 @@ function nv_add_banner_theme ( $contents )
     $return .= "<td>" . $contents['exp_date'][0] . ":</td>\n";
     $return .= "<td></td>\n";
     $return .= "<td><input name=\"" . $contents['exp_date'][1] . "\" id=\"" . $contents['exp_date'][1] . "\" type=\"text\" value=\"" . $contents['exp_date'][2] . "\" style=\"width:278px\" maxlength=\"" . $contents['exp_date'][3] . "\" readonly=\"readonly\" />\n";
-    $return .= "<img src=\"" . $contents['exp_date'][4] . "\" widht=\"" . $contents['exp_date'][5] . "\" height=\"" . $contents['exp_date'][6] . "\" style=\"cursor:pointer;vertical-align: middle;\" onclick=\"" . $contents['exp_date'][7] . "\" alt=\"\" /></td>\n";
+    $return .= "<img src=\"" . $contents['exp_date'][4] . "\" width=\"" . $contents['exp_date'][5] . "\" height=\"" . $contents['exp_date'][6] . "\" style=\"cursor:pointer;vertical-align: middle;\" onclick=\"" . $contents['exp_date'][7] . "\" alt=\"\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
@@ -999,7 +1001,7 @@ function nv_edit_banner_theme ( $contents )
     $return .= "<td>" . $contents['publ_date'][0] . ":</td>\n";
     $return .= "<td></td>\n";
     $return .= "<td><input name=\"" . $contents['publ_date'][1] . "\" id=\"" . $contents['publ_date'][1] . "\" type=\"text\" value=\"" . $contents['publ_date'][2] . "\" style=\"width:278px\" maxlength=\"" . $contents['publ_date'][3] . "\" readonly=\"readonly\" />\n";
-    $return .= "<img src=\"" . $contents['publ_date'][4] . "\" widht=\"" . $contents['publ_date'][5] . "\" height=\"" . $contents['publ_date'][6] . "\" style=\"cursor:pointer;vertical-align: middle;\" onclick=\"" . $contents['publ_date'][7] . "\" alt=\"\" /></td>\n";
+    $return .= "<img src=\"" . $contents['publ_date'][4] . "\" width=\"" . $contents['publ_date'][5] . "\" height=\"" . $contents['publ_date'][6] . "\" style=\"cursor:pointer;vertical-align: middle;\" onclick=\"" . $contents['publ_date'][7] . "\" alt=\"\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
@@ -1008,7 +1010,7 @@ function nv_edit_banner_theme ( $contents )
     $return .= "<td>" . $contents['exp_date'][0] . ":</td>\n";
     $return .= "<td></td>\n";
     $return .= "<td><input name=\"" . $contents['exp_date'][1] . "\" id=\"" . $contents['exp_date'][1] . "\" type=\"text\" value=\"" . $contents['exp_date'][2] . "\" style=\"width:278px\" maxlength=\"" . $contents['exp_date'][3] . "\" readonly=\"readonly\" />\n";
-    $return .= "<img src=\"" . $contents['exp_date'][4] . "\" widht=\"" . $contents['exp_date'][5] . "\" height=\"" . $contents['exp_date'][6] . "\" style=\"cursor:pointer;vertical-align: middle;\" onclick=\"" . $contents['exp_date'][7] . "\" alt=\"\" /></td>\n";
+    $return .= "<img src=\"" . $contents['exp_date'][4] . "\" width=\"" . $contents['exp_date'][5] . "\" height=\"" . $contents['exp_date'][6] . "\" style=\"cursor:pointer;vertical-align: middle;\" onclick=\"" . $contents['exp_date'][7] . "\" alt=\"\" /></td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
     
@@ -1078,7 +1080,7 @@ function nv_b_list_theme ( $contents )
             $return .= "<td><input name=\"" . $values['act'][0] . "\" id=\"" . $values['act'][0] . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['act'][2] . "\"" . ( $values['act'][1] == '1' ? " checked=\"checked\"" : "" ) . " /></td>\n";
             $return .= "<td><span class=\"search_icon\"><a href=\"" . $values['view'] . "\">" . $contents['view'] . "</a></span> | \n";
             $return .= "<span class=\"edit_icon\"><a href=\"" . $values['edit'] . "\">" . $contents['edit'] . "</a></span> | \n";
-            $return .= "<span class=\"delete_icon\"><a class='delfile' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=del_banner&amp;id=" . $b_id . "\">" . $contents['del'] . "</a></span></td>\n";
+            $return .= "<span class=\"delete_icon\"><a class='delfile' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_banner&amp;id=" . $b_id . "\">" . $contents['del'] . "</a></span></td>\n";
             $return .= "</tr>\n";
             $return .= "</tbody>\n";
             $a ++;
@@ -1088,6 +1090,7 @@ function nv_b_list_theme ( $contents )
     $return .= "</table>\n";
     $return .= "
 				<script type='text/javascript'>
+				<![CDATA[
 				$(function(){
 					$('a[class=delfile]').click(function(event){
 						event.preventDefault();
@@ -1106,6 +1109,7 @@ function nv_b_list_theme ( $contents )
 						}
 					});
 				});
+				]]>
 				</script>
 				";
     return $return;

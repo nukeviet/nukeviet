@@ -69,7 +69,7 @@ if ( ! empty( $savecat ) )
 }
 $contents = "<div id=\"module_show_list\">";
 $contents .= nv_show_sources_list();
-$contents .= "</div><br>\n";
+$contents .= "</div><br />\n";
 $sourceid = $nv_Request->get_int( 'sourceid', 'get', 0 );
 if ( $sourceid > 0 )
 {
@@ -91,16 +91,19 @@ $contents .= "<input type=\"hidden\" name =\"sourceid\" value=\"" . $sourceid . 
 $contents .= "<input name=\"savecat\" type=\"hidden\" value=\"1\" />\n";
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
 $contents .= "<caption>" . $lang_module['add_sources'] . "</caption>\n";
+$contents .= "<tbody>";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['name'] . ": </strong></td>\n";
 $contents .= "<td><input style=\"width: 650px\" name=\"title\" type=\"text\" value=\"" . $title . "\" maxlength=\"255\" /></td>\n";
 $contents .= "</tr>";
+$contents .= "</tbody>";
 $contents .= "<tbody class=\"second\">";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['link'] . ": </strong></td>\n";
 $contents .= "<td><input style=\"width: 650px\" name=\"link\" type=\"text\" value=\"" . $link . "\" maxlength=\"255\" /></td>\n";
 $contents .= "</tr>";
 $contents .= "</tbody>";
+$contents .= "<tbody>";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['source_logo'] . ": </strong></td>\n";
 $contents .= "<td>";
@@ -115,12 +118,14 @@ if ( ! empty( $logo ) )
 {
     $contents .= "<br /><img src=\"" . $logo . "\"/></td>\n";
 }
+$contents .= "</td>";
 $contents .= "</tr>";
+$contents .= "</tbody>";
 $contents .= "</table>";
-$contents .= "<br><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
+$contents .= "<br /><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
 $contents .= "</form>\n";
 
-$contents .= "<script type=\"text/javascript\">\n";
+$contents .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
 $contents .= '$("input[name=selectimg]").click(function(){
 						var area = "logo";
 						var path= "' . NV_UPLOADS_DIR . '/' . $module_name . '/source";						
@@ -128,7 +133,8 @@ $contents .= '$("input[name=selectimg]").click(function(){
 						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type, "NVImg", "850", "500","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 						return false;
 					});';
-$contents .= "</script>\n";
+
+$contents .= "\//n]]>\n</script>\n";
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

@@ -128,7 +128,7 @@ $contents .= "</tr>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module ['alias'] . ":</td>\n";
 $contents .= "<td><input style=\"width:380px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $alias . "\" maxlength=\"255\" />&nbsp;&nbsp;";
-$contents .= "	  <img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" widht=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias(" . $id . ");\" alt=\"\" height=\"16\">\n";
+$contents .= "	  <img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" width=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias(" . $id . ");\" alt=\"\" height=\"16\" />\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "<tr>\n";
@@ -148,7 +148,7 @@ $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</table>\n";
 
-$contents .= "<br>\n";
+$contents .= "<br />\n";
 $contents .= "<div style=\"text-align:center\"><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module ['save'] . "\" /></div>\n";
 $contents .= "</form>\n";
 

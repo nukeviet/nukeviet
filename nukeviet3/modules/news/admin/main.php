@@ -157,7 +157,7 @@ $global_array_cat[0] = array(
 );
 
 $contents = "";
-$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"GET\">";
+$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"get\">";
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<label>" . $lang_module['search_cat'] . ": </label>\n";
@@ -181,22 +181,22 @@ while ( $i <= 1000 )
     $i = $i + 5;
 }
 $contents .= "</select>";
-$contents .= "<br>\n";
+$contents .= "<br />\n";
 
-$contents .= "" . $lang_module['search_key'] . ": <input type=\"text\" value=\"" . $q . "\" maxlength=\"64\" name=\"q\" style=\"width: 265px\">\n";
-$contents .= "<input type=\"submit\" value=\"" . $lang_module['search'] . "\"><br>\n";
+$contents .= "" . $lang_module['search_key'] . ": <input type=\"text\" value=\"" . $q . "\" maxlength=\"64\" name=\"q\" style=\"width: 265px\" />\n";
+$contents .= "<input type=\"submit\" value=\"" . $lang_module['search'] . "\" /><br />\n";
 $contents .= "<input type=\"hidden\" name =\"checkss\"value=\"" . md5( session_id() ) . "\" />";
 $contents .= "<label><em>" . $lang_module['search_note'] . "</em></label>\n";
 $contents .= "</form>\n";
 
 $a = 0;
 $order2 = ( $order == "asc" ) ? "desc" : "asc";
-$base_url_id = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&per_page=" . $per_page . "&catid=" . $catid . "&stype=" . $stype . "&q=" . $q . "&checkss=" . $checkss . "&ordername=id&order=" . $order2 . "&page=" . $page;
-$base_url_name = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&per_page=" . $per_page . "&catid=" . $catid . "&stype=" . $stype . "&q=" . $q . "&checkss=" . $checkss . "&ordername=title&order=" . $order2 . "&page=" . $page;
-$base_url_publtime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&per_page=" . $per_page . "&catid=" . $catid . "&stype=" . $stype . "&q=" . $q . "&checkss=" . $checkss . "&ordername=publtime&order=" . $order2 . "&page=" . $page;
-$base_url_exptime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&per_page=" . $per_page . "&catid=" . $catid . "&stype=" . $stype . "&q=" . $q . "&checkss=" . $checkss . "&ordername=exptime&order=" . $order2 . "&page=" . $page;
+$base_url_id = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=id&amp;order=" . $order2 . "&amp;page=" . $page;
+$base_url_name = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=title&amp;order=" . $order2 . "&amp;page=" . $page;
+$base_url_publtime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=publtime&amp;order=" . $order2 . "&amp;page=" . $page;
+$base_url_exptime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=exptime&amp;order=" . $order2 . "&amp;page=" . $page;
 
-$contents .= "<form name=\"block_list\">";
+$contents .= "<form name=\"block_list\" action=\"\">";
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
 $contents .= "<thead>";
 $contents .= "<tr>\n";
@@ -206,9 +206,10 @@ $contents .= "<td align=\"center\"><a href=\"" . $base_url_publtime . "\">" . $l
 $contents .= "<td align=\"center\">" . $lang_module['status'] . "</td>\n";
 $contents .= "<td>" . $lang_module['content_admin'] . "</td>\n";
 $contents .= "<td></td>\n";
+$contents .= "</tr>\n";
 $contents .= "</thead>";
 
-$base_url = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&per_page=" . $per_page . "&catid=" . $catid . "&stype=" . $stype . "&q=" . $q . "&checkss=" . $checkss . "&ordername=" . $ordername . "&order=" . $order;
+$base_url = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=" . $ordername . "&amp;order=" . $order;
 $ord_sql = "ORDER BY r." . $ordername . " " . $order . "";
 $sql = "SELECT SQL_CALC_FOUND_ROWS r.id, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, u.username  FROM " . $from . " " . $where . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
 $result = $db->sql_query( $sql );
@@ -312,7 +313,7 @@ while ( list( $id, $listcatid, $post_id, $title, $alias, $status, $publtime, $ex
     $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
     $contents .= "<tbody" . $class . ">";
     $contents .= "<tr align=\"center\">\n";
-    $contents .= "<td align=\"center\"><input type=\"checkbox\" onclick=\"nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);\" value=\"" . $id . "\" name=\"idcheck[]\"></td>\n";
+    $contents .= "<td align=\"center\"><input type=\"checkbox\" onclick=\"nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);\" value=\"" . $id . "\" name=\"idcheck[]\" /></td>\n";
     $contents .= "<td align=\"left\"><a target=\"_blank\" href=\"" . $link . "\">" . $title . "</a></td>\n";
     $contents .= "<td>" . $publtime . "</td>\n";
     $contents .= "<td>" . $status . "</td>\n";
@@ -320,12 +321,13 @@ while ( list( $id, $listcatid, $post_id, $title, $alias, $status, $publtime, $ex
     $contents .= "<td>";
     $contents .= implode( "&nbsp;-&nbsp;", $admin_funcs );
     $contents .= "</td>\n";
+	$contents .= "</tr>\n";
     $contents .= "</tbody>";
     $a ++;
 }
 
-$contents .= "<tfoot>\n";
-$contents .= "<tr align=\"left\">\n";
+$contents .= "<tbody>\n";
+$contents .= "<tr align=\"left\" class=\"tfoot_box\">\n";
 $contents .= "<td colspan=\"7\">\n";
 $contents .= "<select name=\"action\" id=\"action\">\n";
 $array_list_action = array( 
@@ -341,16 +343,16 @@ while ( list( $catid_i, $title_i ) = each( $array_list_action ) )
     $contents .= "<option value=\"" . $catid_i . "\">" . $title_i . "</option>\n";
 }
 $contents .= "</select>\n";
-$contents .= "<input type=\"button\" onclick=\"nv_main_action(this.form,'" . md5( $global_config['sitekey'] . session_id() ) . "','" . $lang_module['msgnocheck'] . "')\" value=\"" . $lang_module['action'] . "\">\n";
+$contents .= "<input type=\"button\" onclick=\"nv_main_action(this.form,'" . md5( $global_config['sitekey'] . session_id() ) . "','" . $lang_module['msgnocheck'] . "')\" value=\"" . $lang_module['action'] . "\" />\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
-$contents .= "</tfoot>\n";
+$contents .= "</tbody>\n";
 
 $contents .= "</table>\n";
 $contents .= "</form>\n";
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
-if ( $generate_page != "" ) $contents .= "<br><p align=\"center\">" . $generate_page . "</p>\n";
+if ( $generate_page != "" ) $contents .= "<br /><p align=\"center\">" . $generate_page . "</p>\n";
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

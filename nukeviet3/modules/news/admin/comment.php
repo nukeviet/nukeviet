@@ -51,7 +51,7 @@ while ( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, 
     $catid_i = end( $arr_listcatid );
     if ( $userid > 0 )
     {
-        $email = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $userid . "\"> " . $user_email . "</a>";
+        $email = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $userid . "\"> " . $user_email . "</a>";
     }
     $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
     $class = ( $a % 2 ) ? " class=\"second\"" : "";
@@ -65,20 +65,20 @@ while ( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, 
     $contents .= "<td align=\"center\">$status</td>\n";
     $contents .= "<td align=\"center\">
 		<span class=\"edit_icon\">
-			<a class='edit' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=edit_comment&cid=" . $cid . "\">" . $lang_module['comment_edit'] . "</a>
+			<a class='edit' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_comment&cid=" . $cid . "\">" . $lang_module['comment_edit'] . "</a>
 		</span>
 		 - 	
 		<span class=\"delete_icon\">
-			<a class='deleteone' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=del_comment&list=" . $cid . "\">" . $lang_module['comment_delete'] . "</a>
+			<a class='deleteone' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_comment&list=" . $cid . "\">" . $lang_module['comment_delete'] . "</a>
 		</span></td>\n";
     $contents .= "</tr>\n";
     $contents .= "</tbody>\n";
 }
-$base_url = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op;
+$base_url = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
-$contents .= "<tfoot>\n";
-$contents .= "<tr>\n";
+$contents .= "<tbody>\n";
+$contents .= "<tr class=\"tfoot_box\">\n";
 $contents .= "<td colspan='3'>";
 $contents .= "
 		<span>
@@ -86,22 +86,23 @@ $contents .= "
 		&nbsp;&nbsp;<a name=\"uncheckall\" id=\"uncheckall\" href=\"javascript:void(0);\">" . $lang_module['comment_uncheckall'] . "</a>&nbsp;&nbsp;
 		</span><span style='width:100px;display:inline-block'>&nbsp;</span>
 		<span class=\"edit_icon\">
-			<a class='disable' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active_comment\">" . $lang_module['comment_disable'] . "</a> 
+			<a class='disable' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=active_comment\">" . $lang_module['comment_disable'] . "</a> 
 		</span>
 		 - 
 		<span class=\"add_icon\">
-			<a class='enable' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active_comment\">" . $lang_module['comment_enable'] . "</a> 
+			<a class='enable' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=active_comment\">" . $lang_module['comment_enable'] . "</a> 
 		</span>
 		 - 
 		<span class=\"delete_icon\">
-			<a class='delete' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=del_comment\">" . $lang_module['comment_delete'] . "</a>
+			<a class='delete' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_comment\">" . $lang_module['comment_delete'] . "</a>
 		</span></td>\n";
 $contents .= "<td colspan=\"3\" align=\"center\"> " . $generate_page . "</td>\n";
 $contents .= "</tr>\n";
-$contents .= "</tfoot>\n";
+$contents .= "</tbody>\n";
 $contents .= "</table>\n";
 $contents .= "
 <script type='text/javascript'>
+//<![CDATA[
 	$('#checkall').click(function(){
 		$('input:checkbox').each(function(){
 			$(this).attr('checked','checked');
@@ -189,6 +190,7 @@ $contents .= "
         }
 		return false;
 	});
+//]]>
 </script>
 ";
 include ( NV_ROOTDIR . "/includes/header.php" );

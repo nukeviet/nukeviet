@@ -197,7 +197,7 @@ if ( $error != "" )
 }
 
 $j = 0;
-$contents .= "<form id=\"votingcontent\" method=\"post\" action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&vid=" . $vid . "\">";
+$contents .= "<form id=\"votingcontent\" method=\"post\" action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;vid=" . $vid . "\">";
 $contents .= "<table class=\"tab1\" id=\"items\">\n";
 $j++;
 $class = ( $j % 2 == 0 ) ? " class=\"second\"" : "";
@@ -219,10 +219,10 @@ $contents .= "<select name=\"who_view\" id=\"who_view\" onchange=\"nv_sh('who_vi
 $who_view = $rowvote['who_view'];
 foreach ( $array_who_view as $k => $w )
 {
-    $sel = ( $who_view == $k ) ? 'selected' : '';
+    $sel = ( $who_view == $k ) ? 'selected="selected"' : '';
     $contents .= "<option value=\"" . $k . "\" " . $sel . ">" . $w . "</option>\n";
 }
-$contents .= "</select><br>\n";
+$contents .= "</select><br />\n";
 $contents .= "<div id=\"groups_list\" style=\"" . ( $who_view == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" ) . "\">\n";
 $contents .= "" . $lang_global['groups_view'] . ":\n";
 $contents .= "<table style=\"margin-bottom:8px;width:250px;\">\n";
@@ -233,7 +233,7 @@ $groups_view = explode( ',', $rowvote['groups_view'] );
 foreach ( $groups_list as $group_id => $grtl )
 {
     $sel = ( in_array( $group_id, $groups_view ) ) ? ' checked="yes"' : '';
-    $contents .= "<p><input name=\"groups_view[]\" type=\"checkbox\" " . $sel . " value=\"" . $group_id . "\">" . $grtl . "</p>\n";
+    $contents .= "<p><input name=\"groups_view[]\" type=\"checkbox\" " . $sel . " value=\"" . $group_id . "\" />" . $grtl . "</p>\n";
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
@@ -255,8 +255,8 @@ $publ_date = date( "d.m.Y", $rowvote['publ_time'] );
 list( $phour, $pmin ) = explode( "|", $tdate );
 
 // Begin: thoi gian dang
-$contents .= "<input name=\"publ_date\" id=\"publ_date\" value=\"" . $publ_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'publ_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
+$contents .= "<input name=\"publ_date\" id=\"publ_date\" value=\"" . $publ_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\" />\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" width=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'publ_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\" />\n";
 $contents .= "<select name=\"phour\">\n";
 for ( $i = 0; $i < 23; $i++ )
 {
@@ -292,8 +292,8 @@ else
     $emin = $ehour = 0;
     $exp_date = "";
 }
-$contents .= "<input name=\"exp_date\" id=\"exp_date\" value=\"" . $exp_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\">\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\">\n";
+$contents .= "<input name=\"exp_date\" id=\"exp_date\" value=\"" . $exp_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\" />\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" width=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\" />\n";
 $contents .= "<select name=\"ehour\">\n";
 for ( $i = 0; $i < 23; $i++ )
 {
@@ -323,12 +323,12 @@ for ( $i = 1; $i <= $maxoption; $i++ )
 $contents .= "</select></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
-
+$contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['voting_question'] . "</td>\n";
-$contents .= "<td><input type=\"text\" name=\"question\" size=\"60\" value=\"" . $rowvote['question'] . "\" class=\"txt required\"></td>\n";
+$contents .= "<td><input type=\"text\" name=\"question\" size=\"60\" value=\"" . $rowvote['question'] . "\" class=\"txt required\" /></td>\n";
 $contents .= "</tr>\n";
-
+$contents .= "</tbody>\n";
 $items = 0;
 foreach ( $array_answervote as $id => $title )
 {
@@ -337,7 +337,7 @@ foreach ( $array_answervote as $id => $title )
     $contents .= "<tbody" . $class . ">\n";
     $contents .= "<tr>\n";
     $contents .= "<td style=\"text-align:right\">" . $lang_module['voting_question_num'] . ( ++$items ) . "</td>\n";
-    $contents .= "<td><input type=\"text\" value=\"" . $title . "\" name=\"answervote[$id]\" size=\"60\"></td>\n";
+    $contents .= "<td><input type=\"text\" value=\"" . $title . "\" name=\"answervote[$id]\" size=\"60\" /></td>\n";
     $contents .= "</tr>\n";
     $contents .= "</tbody>\n";
 }
@@ -347,11 +347,11 @@ $class = ( $j % 2 == 0 ) ? " class=\"second additem\"" : " class=\"additem\"";
 $contents .= "<tbody " . $class . ">\n";
 $contents .= "<tr>\n";
 $contents .= "	<td style=\"text-align:right\">" . $lang_module['voting_question_num'] . ( ++$items ) . "</td>\n";
-$contents .= "	<td><input type=\"text\" value=\"\" name=\"answervotenews[]\" size=\"60\"></td>\n";
+$contents .= "	<td><input type=\"text\" value=\"\" name=\"answervotenews[]\" size=\"60\" /></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "</table>\n";
-$contents .= "<br><div style=\"text-align:center\"><input type=\"button\" value=\"" . $lang_module['add_answervote'] . "\" onclick=\"nv_vote_additem('" . $lang_module['voting_question_num'] . "');\"><input type=\"submit\" name=\"submit\" value=\"" . $lang_module['voting_confirm'] . "\"></div>\n";
+$contents .= "<br /><div style=\"text-align:center\"><input type=\"button\" value=\"" . $lang_module['add_answervote'] . "\" onclick=\"nv_vote_additem('" . $lang_module['voting_question_num'] . "');\" /><input type=\"submit\" name=\"submit\" value=\"" . $lang_module['voting_confirm'] . "\" /></div>\n";
 $contents .= "</form>\n";
 $contents .= "<script type=\"text/javascript\">
 					var items=" . $items . ";

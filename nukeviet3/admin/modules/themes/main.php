@@ -40,7 +40,7 @@ foreach ( $theme_list as $value )
         $contents .= "<td style='padding-left:50px;width:50%'>";
     }
     $contents .= "<p><b>" . $info[0]->name . "</b> " . $lang_module['theme_created_by'] . " <a href='" . $info[0]->website . "' title='" . $lang_module['theme_created_website'] . "' style='color:#3B5998' target='_blank'><b>" . $info[0]->author . "</b></a></p>";
-    $contents .= "<p><img src='" . NV_BASE_SITEURL . "themes/" . $value . "/" . $info[0]->thumbnail . "' style='max-width:300px;max-height:200px'/></p>";
+    $contents .= "<p><img alt = '".$info[0]->name."' src='" . NV_BASE_SITEURL . "themes/" . $value . "/" . $info[0]->thumbnail . "' style='max-width:300px;max-height:200px'/></p>";
     $contents .= "<p style='font-size:13px;margin-top:10px;font-weight:bold'><a href='javascript:void(0);' class='activate' id='" . $value . "' style='color:#3B5998'>" . $lang_module['theme_created_activate'] . "</a> | <a href='javascript:void(0);' class='delete' id='" . $value . "' style='color:#3B5998'>" . $lang_module['theme_created_delete'] . "</a></p>";
     $contents .= "<p style='font-size:13px'>" . $info[0]->description . "</p>";
     $contents .= "<p style='font-size:13px;margin-top:10px'>" . $lang_module['theme_created_folder'] . " <span style='background-color:#E5F4FD'>/themes/" . $value . "/</span></p>";

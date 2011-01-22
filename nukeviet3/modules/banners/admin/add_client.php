@@ -149,7 +149,13 @@ $ini = parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 $contents['types'] = array_keys( $ini );
 
 $contents = call_user_func( "nv_add_client_theme", $contents );
-
+$contents .= "<script type=\"text/javascript\">
+		//<![CDATA[
+		var f = document.getElementById('form_add_client');
+		var u = f.elements[0];
+		f.setAttribute(\"autocomplete\", \"off\");
+		//]]>
+	</script>";
 $page_title = $lang_module['add_client'];
 
 include ( NV_ROOTDIR . "/includes/header.php" );

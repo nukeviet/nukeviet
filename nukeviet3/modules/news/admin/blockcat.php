@@ -62,7 +62,7 @@ if ( ! empty( $savecat ) )
 }
 $contents = "<div id=\"module_show_list\">";
 $contents .= nv_show_block_cat_list();
-$contents .= "</div><br>\n";
+$contents .= "</div><br />\n";
 $bid = $nv_Request->get_int( 'bid', 'get', 0 );
 if ( $bid > 0 )
 {
@@ -85,34 +85,35 @@ $contents .= "<input type=\"hidden\" name =\"bid\" value=\"" . $bid . "\" />";
 $contents .= "<input name=\"savecat\" type=\"hidden\" value=\"1\" />\n";
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
 $contents .= "<caption>" . $lang_module['add_block_cat'] . "</caption>\n";
+$contents .= "<tbody>";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['name'] . ": </strong></td>\n";
 $contents .= "<td><input style=\"width: 650px\" name=\"title\" id=\"idtitle\" type=\"text\" value=\"" . $title . "\" maxlength=\"255\" /></td>\n";
 $contents .= "</tr>";
 
 $contents .= "<tr>";
-$contents .= "<td valign=\"top\" align=\"right\"  width=\"100px\"><strong>" . $lang_module['alias'] . ": </strong></td>\n";
+$contents .= "<td valign=\"top\" align=\"right\"  width=\"100\"><strong>" . $lang_module['alias'] . ": </strong></td>\n";
 $contents .= "<td><input style=\"width: 600px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $alias . "\" maxlength=\"255\" />\n";
-$contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" widht=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\">\n";
+$contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" width=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\" />\n";
 $contents .= "</td>\n";
 $contents .= "</tr>";
-
+$contents .= "</tbody>";
 $contents .= "<tbody class=\"second\">";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['keywords'] . ": </strong></td>\n";
 $contents .= "<td><input style=\"width: 650px\" name=\"keywords\" type=\"text\" value=\"" . $keywords . "\" maxlength=\"255\" /></td>\n";
 $contents .= "</tr>";
 $contents .= "</tbody>";
-
+$contents .= "<tbody>";
 $contents .= "<tr>";
-$contents .= "<td valign=\"top\" align=\"right\"  width=\"100px\"><br><strong>" . $lang_module['description'] . "</strong></td>\n";
+$contents .= "<td valign=\"top\" align=\"right\"  width=\"100\"><br /><strong>" . $lang_module['description'] . "</strong></td>\n";
 $contents .= "<td>";
 $contents .= "<textarea style=\"width: 650px\" name=\"description\" cols=\"100\" rows=\"5\">" . $description . "</textarea>";
 $contents .= "</td>";
 $contents .= "</tr>";
-
+$contents .= "</tbody>";
 $contents .= "</table>";
-$contents .= "<br><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
+$contents .= "<br /><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
 $contents .= "</form>\n";
 if ( empty( $alias ) )
 {

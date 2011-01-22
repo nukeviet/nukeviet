@@ -26,8 +26,7 @@ if ( ! empty( $contact_allowed['view'] ) )
     $result = $db->sql_query( $query );
     
     $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-    list( $numf ) = $db->sql_fetchrow( $result_all );
-    $all_page = ( $numf ) ? $numf : 1;
+    list( $all_page ) = $db->sql_fetchrow( $result_all );
     
     if ( $all_page )
     {
