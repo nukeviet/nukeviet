@@ -1088,9 +1088,8 @@ function nv_b_list_theme ( $contents )
     }
     
     $return .= "</table>\n";
-    $return .= "
-				<script type='text/javascript'>
-				<![CDATA[
+    $return .= "<script type='text/javascript'>
+				//<![CDATA[
 				$(function(){
 					$('a[class=delfile]').click(function(event){
 						event.preventDefault();
@@ -1109,9 +1108,8 @@ function nv_b_list_theme ( $contents )
 						}
 					});
 				});
-				]]>
-				</script>
-				";
+				//]]>
+				</script>";
     return $return;
 }
 
