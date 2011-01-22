@@ -47,7 +47,7 @@
 		}
 		// show or hide menu 
 		function show_menu(){
-			var showmenu = ( Get_Cookie( 'colum_left_lage' ) ) ? ( Get_Cookie('colum_left_lage')) : '0';
+			var showmenu = ( Get_Cookie( 'colum_left_lage' ) ) ? ( Get_Cookie('colum_left_lage')) : '1';
 			if (showmenu == '1') {
 				$('td.colum_left_small').hide();
 				$('td.colum_left_lage').show();
