@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 21, 2011, 02:27:31 AM
+* @Createdate Jan 22, 2011, 09:41:38 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -107,9 +107,13 @@ $lang_module['isLocalhost'] = "This tool can not check for Localhost";
 $lang_module['autoupdate_system'] = "Automatic upgrade site";
 $lang_module['autoupdate_get_error'] = "Notice: System does not check the version upgrade Nukeviet";
 $lang_module['autoupdate_download'] = "Download Nukeviet update packages";
+$lang_module['autoupdate_download_waiting'] = "Please wait the system download complete. <br /> <br />If the download or extract then fails, you download files <br /> <br /> <a title=\"Please click to download\" href=\"%1\$s\" />%\$s <br /><br /> unzip and upload to the folder install/update/ to proceed";
+$lang_module['autoupdate_download_error'] = "Download or unzip then fail, you download files <br /><br /><a title=\"Click here to download\" href=\"%1\$s\">%2\$s</a> <br /> <br /> unzip and upload to the folder install/update/ to proceed";
+$lang_module['autoupdate_invalidfile'] = "Error: The zip file is invalid";
 $lang_module['autoupdate_download_complete'] = "Successful process of downloading files, please click on check for updates to continue the process.";
 $lang_module['autoupdate_form_upload'] = "The system has detected a version upgrade, please click on check for updates to continue the process.";
 $lang_module['autoupdate_check_file'] = "Check for updates";
+$lang_module['autoupdate_error_dir_update'] = "Error: the update package is not properly, please check folder: install/update";
 $lang_module['autoupdate_change'] = "The system has checked that you've changed the following files from the original";
 $lang_module['autoupdate_overwrite'] = "If you want to overwrite this file, please click on the button to upgrade";
 $lang_module['autoupdate_click_update'] = "Please click on upgrade button";

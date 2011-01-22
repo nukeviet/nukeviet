@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 21, 2011, 02:19:29 AM
+* @Createdate Jan 22, 2011, 09:41:38 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -55,5 +55,9 @@ $lang_module['delete_folder'] = "Do you realy want to delete folder? It also del
 $lang_module['download'] = "Download";
 $lang_module['select'] = "Select";
 $lang_module['move'] = "Move";
+$lang_module['errorNewSize'] = "You only create new image width: 10 to %d px, height: 10 to %d px";
+$lang_module['origSize'] = "Original size";
+$lang_module['maxSizeSize'] = "Maximum size: %dx%dpx";
+$lang_module['sizenotchanged'] = "Image you want to create new varieties  as original size";
 
 ?>

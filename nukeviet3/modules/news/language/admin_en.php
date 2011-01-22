@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 21, 2011, 02:33:22 AM
+* @Createdate Jan 22, 2011, 09:41:38 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -84,6 +84,10 @@ $lang_module['viewcat_main_left'] = "Categories,News other on left";
 $lang_module['viewcat_main_right'] = "Categories,News other on right";
 $lang_module['viewcat_main_bottom'] = "Categories,News other on bottom";
 $lang_module['viewcat_two_column'] = "Categories are shown in two column";
+$lang_module['viewcat_list_new'] = "title, new front";
+$lang_module['viewcat_list_old'] = "title, old front";
+$lang_module['viewcat_grid_new'] = "grid, new front";
+$lang_module['viewcat_grid_old'] = "grid, old front";
 $lang_module['search'] = "Search";
 $lang_module['search_type'] = "Search by";
 $lang_module['search_id'] = "ID";
@@ -211,5 +215,6 @@ $lang_module['permissions_edit_content'] = "Edit article";
 $lang_module['permissions_del_content'] = "Delete article";
 $lang_module['permissions_pub_error'] = "Error: You can not post messages in category: %1\$s";
 $lang_module['error_no_del_content_id'] = "Error: The system does not delete the article id:";
+$lang_module['structure_image_upload'] = "The module's upload images are archived in the default into directory structure";
 
 ?>

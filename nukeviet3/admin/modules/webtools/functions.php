@@ -15,7 +15,8 @@ $submenu['keywordRank'] = $lang_module['keywordRank'];
 $submenu['sitemapPing'] = $lang_module['sitemapPing'];
 $submenu['checkupdate'] = $lang_module['checkupdate'];
 
-$submenu['revision'] = $lang_module['revision'];
+//$submenu['revision'] = $lang_module['revision'];
+
 $new_version = nv_geVersion( 86400 ); //kem tra lai sau 24 tieng
 if ( ! empty( $new_version ) )
 {
