@@ -65,7 +65,9 @@ if ( ! empty( $uploadflag ) )
         $errors[] = $lang_module['upload_file_error_invalidurl'];
     }
 }
-$type = htmlspecialchars( trim( $nv_Request->get_string( 'type', 'get', 'file' ) ), ENT_QUOTES );
+
+$type = $nv_Request->isset_request( 'type', 'post' ) ? $nv_Request->get_string( 'type', 'post' ) : $nv_Request->get_string( 'type', 'get' );
+if ( $type != "image" and $type != "flash" ) $type = "file";
 
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 if ( $popup )
@@ -84,6 +86,8 @@ if ( $popup )
     $xtpl->assign( "type", $type );
     $xtpl->assign( "funnum", $nv_Request->get_int( 'CKEditorFuncNum', 'get', 0 ) );
     $xtpl->assign( "selectedfile", $selectedfile );
+    $xtpl->assign( "FORM_ACTION", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;popup=" . $popup . "&amp;area=" . $area . "&amp;path=" . $path . "&amp;type=" . $type );
+
     //////////////////////////////////////////////////////
     if ( ! empty( $errors ) )
     {
@@ -110,22 +114,19 @@ if ( $popup )
 
 if ( $popup )
 {
-    if ( $popup != 2 )
-    {
-        $xtpl->parse( 'main.header' );
-        $xtpl->parse( 'main.footer' );
-    }
+    $xtpl->parse( 'main.header' );
+    $xtpl->parse( 'main.footer' );
     $xtpl->parse( 'main' );
     $contents = $xtpl->text( 'main' );
 }
 else
 {
-    $xtpl->assign( "UPLOADPAGE_LINK", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=2" );
+    $xtpl->assign( "IFRAME_SRC", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=1" );
     $xtpl->parse( 'uploadPage' );
     $contents = $xtpl->text( 'uploadPage' );
-    //$contents = "<iframe src='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=1' width='100%' height='450px' frameborder='0'></iframe>";
     $contents = nv_admin_theme( $contents );
 }
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
 include ( NV_ROOTDIR . "/includes/footer.php" );

@@ -57,9 +57,9 @@
                     <td valign="top" width="200" bgcolor="#EAEAEA">
                     	<div class="filetype">
                             <select name="imgtype" id="imgtype">
-                                <option value="file" {sfile}>{LANG.type_file}</option>
-                                <option value="image" {simage}>{LANG.type_image}</option>
-                                <option value="flash" {sflash}>{LANG.type_flash}</option>
+                                <option value="file"{sfile}>{LANG.type_file}</option>
+                                <option value="image"{simage}>{LANG.type_image}</option>
+                                <option value="flash"{sflash}>{LANG.type_flash}</option>
                             </select>
                         </div>
                     	<div id="imgfolder" class="imgfolder"></div>
@@ -78,8 +78,9 @@
             {error}
         </div>
         <!-- END: error -->
-        <form enctype="multipart/form-data" action="" name="uploadimg" id="uploadimg" method="post" style="float:right;">
+        <form enctype="multipart/form-data" action="{FORM_ACTION}" name="uploadimg" id="uploadimg" method="post" style="float:right;">
             <input type="hidden" name="path" value="{currentpath}"/>
+            <input type="hidden" name="type" value="{type}"/>
             File : 
             <input type="file" name="fileupload"/> {LANG.upload_otherurl}
             <input type="text" name="imgurl"/> 
@@ -96,6 +97,7 @@ $(function(){
 		var folder = $("span#foldervalue").attr("title");
 		var type = $(this).val();
 		$("input[name=path]").val(folder);
+        $("input[name=type]").val(type);
 		$("#imglist").html("<iframe src='{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={module_name}&{NV_OP_VARIABLE}=imglist&path="+folder+"&type="+type+"' width='100%' height='355px'></iframe>");		
 	});
 });
@@ -197,12 +199,5 @@ $(function(){
 <!-- END: footer -->
 <!--  END: main  -->
 <!-- BEGIN: uploadPage -->
-<div id="uploadCont"></div>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-  $("#uploadCont").load('{UPLOADPAGE_LINK}&num=' + nv_randomPassword(10))
-});
-//]]>
-</script>
+<iframe src="{IFRAME_SRC}" width="100%" height="450px" frameborder="0"></iframe>
 <!-- END: uploadPage -->

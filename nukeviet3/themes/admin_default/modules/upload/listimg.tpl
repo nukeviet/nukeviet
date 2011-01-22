@@ -151,10 +151,8 @@ function createimage() {
 
 function selectimage() {
   var a = $("#currentId").val();
-  $("#image", parent.document).attr("name");
   $("#posthidden", parent.document).val("{NV_BASE_SITEURL}{folder}/" + a);
-  window.parent.insertvaluetofield();
-  top.window.close()
+  window.parent.insertvaluetofield() && top.window.close()
 }
 
 $("img.previewimg").contextMenu("vs-context-menu", {menuStyle:{border:"2px solid #000", width:"150px"}, itemStyle:{fontFamily:"verdana", backgroundColor:"#666", color:"white", border:"none", padding:"1px", fontSize:"12px"}, itemHoverStyle:{color:"#fff", backgroundColor:"#0f0", border:"none"}, bindings:{cut:function() {
