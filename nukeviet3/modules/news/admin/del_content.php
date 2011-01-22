@@ -28,6 +28,7 @@ if ( ! empty( $del_array ) )
     $sql = "SELECT id, listcatid, admin_id, title, alias, status , publtime, exptime FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` IN (" . implode( ",", $del_array ) . ")";
     $result = $db->sql_query( $sql );
     $del_array = $no_del_array = array();
+    $artitle = array();
     while ( list( $id, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime ) = $db->sql_fetchrow( $result ) )
     {
         $check_permission = false;
@@ -73,6 +74,7 @@ if ( ! empty( $del_array ) )
         if ( $check_permission > 0 )
         {
             $contents = nv_del_content_module( $id );
+            $artitle [] = $title;
             $del_array[] = $id;
         }
         else
@@ -83,7 +85,7 @@ if ( ! empty( $del_array ) )
     $count = count( $del_array );
     if ( $count > 0 )
     {
-        nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_content', "listid: " . implode( ", ", $del_array ), $admin_info['userid'] );
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['comment_delete'] .' ' .$lang_module['comment_topic'], " " . implode( ", ", $artitle ), $admin_info['userid'] );
     }
     if ( ! empty( $no_del_array ) )
     {

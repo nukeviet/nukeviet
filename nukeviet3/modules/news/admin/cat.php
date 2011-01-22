@@ -63,6 +63,7 @@ if ( ! empty( $savecat ) )
                 $db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_admins` (`userid`, `catid`, `admin`, `add_content`, `pub_content`, `edit_content`, `del_content`, `comment`) VALUES ('" . $admin_id . "', '" . $newcatid . "', '1', '1', '1', '1', '1', '1')" );
             }
             nv_del_moduleCache( $module_name );
+            nv_insert_logs( NV_LANG_DATA, $module_name,$lang_module['add_cat'], $title, $admin_info['userid'] );
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid . "" );
             die();
         }
@@ -85,6 +86,7 @@ if ( ! empty( $savecat ) )
                 $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `weight`=" . $weight . " WHERE `catid`=" . intval( $catid );
                 $db->sql_query( $sql );
                 nv_fix_cat_order();
+                nv_insert_logs( NV_LANG_DATA, $module_name,$lang_module['edit_cat'], $title, $admin_info['userid'] );
             }
             nv_del_moduleCache( $module_name );
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid . "" );

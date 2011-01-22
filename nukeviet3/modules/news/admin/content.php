@@ -506,7 +506,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             $rowcontent['id'] = $db->sql_query_insert_id( $query );
             if ( $rowcontent['id'] > 0 )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_content', "id " . $rowcontent['id'], $admin_info['userid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_add'], $rowcontent['title'], $admin_info['userid'] );
                 foreach ( $catids as $catid )
                 {
                     $db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $rowcontent['id'] . "" );
@@ -558,7 +558,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             
             if ( $db->sql_affectedrows() > 0 )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_content', "id " . $rowcontent['id'], $admin_info['userid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid'] );
                 $array_cat_old = explode( ",", $rowcontent_old['listcatid'] );
                 foreach ( $array_cat_old as $catid )
                 {

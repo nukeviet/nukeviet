@@ -16,7 +16,6 @@ if ( $catid > 0 )
 {
     if ( ( defined( 'NV_IS_ADMIN_MODULE' ) or ( $parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) ) )
     {
-        nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_cat', "catid " . $catid, $admin_info['userid'] );
         $delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
         list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid` = '" . $catid . "'" ) );
         if ( intval( $check_parentid ) > 0 )
@@ -28,7 +27,8 @@ if ( $catid > 0 )
             list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "`" ) );
             if ( intval( $check_rows ) > 0 )
             {
-                if ( $delallcheckss == md5( $catid . session_id() . $global_config['sitekey'] ) )
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['delcatandrows'], $title, $admin_info['userid'] );
+            	if ( $delallcheckss == md5( $catid . session_id() . $global_config['sitekey'] ) )
                 {
                     $delcatandrows = $nv_Request->get_string( 'delcatandrows', 'post', "" );
                     $movecat = $nv_Request->get_string( 'movecat', 'post', "" );
@@ -152,7 +152,8 @@ if ( $catid > 0 )
                 $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE catid=" . $catid . "";
                 if ( $db->sql_query( $query ) )
                 {
-                    $db->sql_freeresult();
+					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['delcatandrows'], $title, $admin_info['userid'] );
+                	$db->sql_freeresult();
                     nv_fix_cat_order();
                     $db->sql_query( "DROP TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "`" );
                     $contents = "OK_" . $parentid;
