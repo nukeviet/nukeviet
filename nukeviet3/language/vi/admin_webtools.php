@@ -133,7 +133,7 @@ $lang_module['autoupdate_complete_file'] = "Thông báo: Hệ thống đã thự
 $lang_module['autoupdate_complete'] = "Thực hiện quá trình nâng cấp thành công.";
 $lang_module['autoupdate_error_data'] = "Và gặp các lỗi về việc cập nhật CSDL";
 
-$lang_module['revision_nosuport'] = "Lỗi: hệ thống cậu nhật theo revision chỉ hỗ trợ từ bản NukeViet 3.1";
+$lang_module['revision_nosuport'] = "Lỗi: hệ thống cập nhật theo revision chỉ hỗ trợ từ bản NukeViet 3.1";
 $lang_module['revision_error_cache_file'] = "Lỗi hệ thống không tìm thấy file ghi thông tin cập nhật";
 $lang_module['revision_list_file'] = "Hệ thống cập nhật được thông tin các file thay đổi như sau";
 $lang_module['revision_add_files'] = "File mới";

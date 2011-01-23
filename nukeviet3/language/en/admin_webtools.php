@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 22, 2011, 09:41:38 PM
+* @Createdate Jan 23, 2011, 01:15:14 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -53,7 +53,7 @@ $lang_module['userVersion'] = "Current Version";
 $lang_module['onlineVersion'] = "Latest version";
 $lang_module['newVersion_detail'] = "Number Version: %s; Name version: %s; Update: %s";
 $lang_module['newVersion_info'] = "Nukeviet CMS to be upgraded to new version. Click <a href=\"%s\">here</a> to download";
-$lang_module['reCheck'] = "Chack again";
+$lang_module['reCheck'] = "Check again";
 $lang_module['moduleName'] = "Module Name";
 $lang_module['moduleInfo'] = "Infomation";
 $lang_module['moduleNote'] = "Note";
@@ -126,5 +126,14 @@ $lang_module['autoupdate_error_move_file'] = "Upgrade process error: The system 
 $lang_module['autoupdate_complete_file'] = "Notice: The system has made the process of moving files successfully";
 $lang_module['autoupdate_complete'] = "Complete the upgrade process";
 $lang_module['autoupdate_error_data'] = "And see the error on database update";
+$lang_module['revision_nosuport'] = "Error: The updated system will only support revision from the 3.1 Nukeviet";
+$lang_module['revision_error_cache_file'] = "Error: System not found log updates file";
+$lang_module['revision_list_file'] = "The system has detected update information files changed as follows";
+$lang_module['revision_add_files'] = "New files";
+$lang_module['revision_mod_files'] = "Changed files";
+$lang_module['revision_del_files'] = "Deleted files";
+$lang_module['revision_msg_download'] = "To make updates you need to click on \"Proceed to download files\" for the system to download the necessary files, the download process faster or slower depending on the number of files and your network, please wait until has announced the next step";
+$lang_module['revision_download_files'] = "Proceed to download files";
+$lang_module['revision_download_error'] = "The process of downloading files with errors";
 
 ?>
