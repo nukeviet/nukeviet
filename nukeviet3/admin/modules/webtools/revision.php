@@ -138,7 +138,7 @@ else
             $contents .= $lang_module['revision_msg_download'];
             
             $contents .= '<br /><br /><center><input style="margin-top:10px;font-size:15px" type="button" name="download_file" value="' . $lang_module['revision_download_files'] . '"/></center>';
-            $contents .= '<br /><br /><div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif" alt=""/></div>';
+            $contents .= '<br /><br /><div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" /></div>';
             $contents .= '<script type="text/javascript">
             	function nv_download_result(res)
 				{

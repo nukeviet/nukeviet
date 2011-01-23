@@ -43,7 +43,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
     
     $filesize = @filesize( $file_src );
     $file_name = basename( $file_src );
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_packet_module'] , 'file name : ' . $themename . '_' . $modulename .".zip" , $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_packet_module'], 'file name : ' . $themename . '_' . $modulename . ".zip", $admin_info['userid'] );
     $linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;mod=nv3_theme_" . $themename . "_" . $modulename . ".zip&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . "&amp;filename=" . $file_name;
     echo '<a href="' . $linkgetfile . '"><span style="font-size:16px;color:red">nv3_theme_' . $themename . '_' . $modulename . '   - ' . nv_convertfromBytes( $filesize ) . '</span></a>';
 }
@@ -86,58 +86,47 @@ else
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>";
     $contents .= "<td colspan='2' align='center'>";
-    $contents .= "<p id='message' style='color:
-    red;display:none'></p>";
+    $contents .= "<p id='message' style='color: red;display:none'></p>";
     $contents .= "</td>";
     $contents .= "</tr>";
     $contents .= "</tbody>";
     $contents .= "</table>";
     $contents .= "</form>";
-    $contents .= '
-<script type="text/javascript">
- $(function(){
- 	$("input[name=continue]").click(function(){
- 		var themename = $
-    ( "select[name=themename]" ) . val();
- 		var modulename = $
-    ( "select[name=modulename]" ) . val();
-    if ( themename != 0 && modulename != 0 )
-    {
- 			$("#message").html("<img src=\'../images/load_bar.gif\'/>' . $lang_module['autoinstall_package_processing'] . '");
- 			$
-        ( "#message" ) . fadeIn();
- 			$
-        ( "input[name=continue]" ) . attr( "disabled", "disabled" );
- 			$
-        ( "input[name=back]" ) . attr( "disabled", "disabled" );
- 			$
-        ( "#step1" ) . slideUp();
-			$.ajax({	
-				type: "POST",
-				url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '",
-				data: "themename="+ themename+"&modulename="+modulename+"&' . NV_OP_VARIABLE . '=' . $op . '",
-				success: function(data){				
-					$
-        ( "input[name=back]" ) . removeAttr( "disabled" );
-					$
-        ( "input[name=continue]" ) . removeAttr( "disabled" );
-					$
-        ( "#message" ) . html( data );
-    }
-});
- 		} else {
- 			alert("' . $lang_module['autoinstall_package_noselect_module_theme'] . '");
- 			return false;
- 		}
- 	});
- 	$("input[name=back]").click(function(){
- 		$("#content").slideUp();
-		$("#step1").slideDown();
- 	});
-
- });
-</script>
-';
+    $contents .= '<script type="text/javascript">
+	    //<![CDATA[
+		 $(function(){
+		 	$("input[name=continue]").click(function(){
+		 		var themename = $("select[name=themename]").val();
+		 		var modulename = $("select[name=modulename]").val();
+			    if ( themename != 0 && modulename != 0 )
+			    {
+			 			$("#message").html("<img src=\'' . NV_BASE_SITEURL . 'images/load_bar.gif\' alt=\'\' />' . $lang_module['autoinstall_package_processing'] . '");
+			 			$("#message").fadeIn();
+			 			$("input[name=continue]").attr("disabled", "disabled");
+			 			$("input[name=back]").attr("disabled", "disabled");
+			 			$("#step1").slideUp();
+						$.ajax({	
+							type: "POST",
+							url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '",
+							data: "themename="+ themename+"&modulename="+modulename+"&' . NV_OP_VARIABLE . '=' . $op . '",
+							success: function(data){				
+								$("input[name=back]").removeAttr( "disabled");
+								$("input[name=continue]").removeAttr( "disabled");
+								$("#message").html( data );
+			    			}
+						});
+		 		} else {
+		 			alert("' . $lang_module['autoinstall_package_noselect_module_theme'] . '");
+		 			return false;
+		 		}
+		 	});
+		 	$("input[name=back]").click(function(){
+		 		$("#content").slideUp();
+				$("#step1").slideDown();
+		 	});
+		 });
+		 //]]>
+		</script>';
     echo $contents;
 }
 

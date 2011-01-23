@@ -82,14 +82,14 @@ $contents .= "</tr>";
 $contents .= "</tbody>";
 $contents .= "<tbody>";
 $contents .= "<tr>";
-$contents .= "<td valign=\"top\" align=\"right\"><br><strong>" . $lang_module['vmodule_note'] . ":</strong></td>\n";
+$contents .= "<td valign=\"top\" align=\"right\"><br /><strong>" . $lang_module['vmodule_note'] . ":</strong></td>\n";
 $contents .= "<td>";
 $contents .= "<textarea style=\"width: 450px\" name=\"note\" cols=\"80\" rows=\"5\">" . $note . "</textarea>";
 $contents .= "</td>";
 $contents .= "</tr>";
 $contents .= "</tbody>";
 $contents .= "</table>";
-$contents .= "<br><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_global['submit'] . "\" /></center>\n";
+$contents .= "<br /><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_global['submit'] . "\" /></center>\n";
 $contents .= "</form>\n";
 
 include ( NV_ROOTDIR . "/includes/header.php" );

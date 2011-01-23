@@ -1,6 +1,13 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
     <table class="tab1" summary="">
+        <tfoot>
+           <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/>
+                </td>
+            </tr>
+        </tfoot>    
         <tbody>
 			<tr>
 	            <td>
@@ -10,7 +17,7 @@
 	                <input type="text" name="site_name" value="{VALUE.sitename}" style="width: 450px"/>
 	            </td>
 	        </tr>
-		<tbody>
+		</tbody>
         <tbody class="second">
             <tr>
                 <td>
@@ -90,8 +97,5 @@
             </tr>
         </tbody>
     </table>
-    <div style="width: 200px; margin: 10px auto; text-align: center;">
-        <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/>
-    </div>
 </form>
 <!-- END: main -->

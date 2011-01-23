@@ -142,7 +142,7 @@ if ( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->ge
             $contents .= "</tbody>";
         }
         $contents .= "</table>";
-        $contents .= "<br>";
+        $contents .= "<br />";
         $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
         $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
         $contents .= "<input type=\"hidden\" name =\"idfile\"value=\"" . $idfile . "\" />";
@@ -150,7 +150,7 @@ if ( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->ge
         $contents .= "<input type=\"hidden\" name =\"savedata\" value=\"" . md5( session_id() ) . "\" />";
         $contents .= "<center><input type=\"submit\" value=\"" . $lang_module['nv_admin_edit_save'] . "\" /></center>";
         $contents .= "</form>";
-        $contents .= "<br>";
+        $contents .= "<br />";
     }
 }
 include ( NV_ROOTDIR . "/includes/header.php" );

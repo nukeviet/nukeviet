@@ -75,21 +75,21 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $contents .= "<tbody" . $class . ">\n";
     $contents .= "<tr>\n";
     $contents .= "<td>";
-    $contents .= '<select class="order" bid="' . $row['bid'] . '">';
+    $contents .= '<select class="order" title="' . $row['bid'] . '">';
     $numposition = $blocks_positions[$row['position']];
     for ( $i = 1; $i <= $numposition; $i ++ )
     {
-        $sel = ( $row['weight'] == $i ) ? ' selected' : '';
+        $sel = ( $row['weight'] == $i ) ? ' selected="selected"' : '';
         $contents .= '<option value="' . $i . '" ' . $sel . '>' . $i . '</option>';
     }
     $contents .= '</select>';
     $contents .= "</td>\n";
     
     $contents .= "<td>";
-    $contents .= "<select name=\"listpos\" bid='" . $row['bid'] . "'>\n";
+    $contents .= "<select name=\"listpos\" title='" . $row['bid'] . "'>\n";
     for ( $i = 0; $i < count( $positions ); $i ++ )
     {
-        $sel = ( $row['position'] == $positions[$i]->tag ) ? ' selected' : '';
+        $sel = ( $row['position'] == $positions[$i]->tag ) ? ' selected="selected"' : '';
         $contents .= "<option value=\"" . $positions[$i]->tag . "\" " . $sel . "> " . $positions[$i]->name . '</option>';
     }
     $contents .= "</select>";
@@ -111,8 +111,8 @@ while ( $row = $db->sql_fetchrow( $result ) )
         }
     }
     $contents .= "</td>\n";
-    $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a class=\"block_content\" bid=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['edit'] . "</a></span>\n";
-    $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a class=\"delete\" bid=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span></td>\n";
+    $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a class=\"block_content\" title=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['edit'] . "</a></span>\n";
+    $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a class=\"delete\" title=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span></td>\n";
     $contents .= "<td><input type='checkbox' name='idlist' value='" . $row['bid'] . "'/></td>\n";
     $contents .= "</tr>\n";
     $contents .= "</tbody>\n";
@@ -131,112 +131,112 @@ $contents .= "<tr align=\"right\" class=\"tfoot_box\"><td colspan='8'>
 </td></tr>";
 $contents .= "</tbody>\n";
 $contents .= "</table>\n";
-$contents .= '
-<script type="text/javascript">
-$(function(){
-	$("a.block_content").click(function(){
-		var bid = parseInt($(this).attr("bid"));
-		Shadowbox.open(
-	      {
-	         content : "<iframe src=\"' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&bid="+bid+"&blockredirect=' . nv_base64_encode( $client_info['selfurl'] ) . '\" border=\"1\" frameborder=\"0\" style=\"width:780px;height:450px\"></iframe>",
-	         player : "html",
-	         height : 450,
-	         width : 780
-	      }
-	      );
-    });
-     
-	$("select.order").change(function(){
-		$("select.order").attr({"disabled":""});
-		var order = $(this).val();
-		var bid = $(this).attr("bid");
-		$.ajax({	
-			type: "POST",
-			url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_order_group",
-			data: "order="+order+"&bid="+bid,
-			success: function(data){
-				window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
-			}
-		});
-	});
-	
-	$("select[name=module]").change(function(){
-		var module = $(this).val();
-		window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&module="+module;
-	});
-	
-	$("a.delete").click(function(){
-		var bid = parseInt($(this).attr("bid"));
-		if (bid > 0 && confirm(" ' . $lang_module['block_delete_per_confirm'] . '")){
-			$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_del", "bid="+bid, function(theResponse){
-				alert(theResponse);
-		        window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
-			});
-		}			
-	});
-
-	$("a.block_weight").click(function(){
-		if (confirm(" ' . $lang_module['block_weight_confirm'] . '")){
-			$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_reset_order", "checkss=' . md5( $selectthemes . $global_config['sitekey'] . session_id() ) . '", function(theResponse){
-				alert(theResponse);
-		        window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
-			});
-		}			
-	});
-	
-	
-	$("a.delete_group").click(function(){
-			var list = [];
-	        $("input[name=idlist]:checked").each(function(){
-	        	list.push($(this).val());
-	        });
-	        if (list.length<1){
-		        alert(" ' . $lang_module['block_error_noblock'] . '");
-		        return false;
-	        }
-	        if (confirm(" ' . $lang_module['block_delete_confirm'] . '")){	
-	        $.ajax({        
-		        type: "POST",
-		        url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_del_group",
-		        data:"list="+list,
-		        success: function(data){  
-		            alert(data);
-		            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
-		        }
-	        });  
-        }
-		return false;
-	});
-	$("#checkall").click(function(){
-		$("input[name=idlist]:checkbox").each(function(){
-			$(this).attr("checked","checked");
-		});
-	});
-	$("#uncheckall").click(function(){
-		$("input[name=idlist]:checkbox").each(function(){
-			$(this).removeAttr("checked");
-		});
-	});
-	$("select[name=listpos]").change(function(){
-		var pos = $(this).val();
-		var bid = $(this).attr("bid");
-        $.ajax({        
-	        type: "POST",
-	        url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_pos",
-		    data:"bid="+bid+"&pos="+pos,
-	        success: function(data){
-	          	alert(data);  
-	            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
-	        }
-        }); 
-	});
-});
-</script>
-';
+$contents .= '<script type="text/javascript">
+				//<![CDATA[
+				$(function(){
+					$("a.block_content").click(function(){
+						var bid = parseInt($(this).attr("title"));
+						Shadowbox.open(
+					      {
+					         content : "<iframe src=\"' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&bid="+bid+"&blockredirect=' . nv_base64_encode( $client_info['selfurl'] ) . '\" border=\"1\" frameborder=\"0\" style=\"width:780px;height:450px\"></iframe>",
+					         player : "html",
+					         height : 450,
+					         width : 780
+					      }
+					      );
+				    });
+				     
+					$("select.order").change(function(){
+						$("select.order").attr({"disabled":""});
+						var order = $(this).val();
+						var bid = $(this).attr("title");
+						$.ajax({	
+							type: "POST",
+							url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_order_group",
+							data: "order="+order+"&bid="+bid,
+							success: function(data){
+								window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
+							}
+						});
+					});
+					
+					$("select[name=module]").change(function(){
+						var module = $(this).val();
+						window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_func&module="+module;
+					});
+					
+					$("a.delete").click(function(){
+						var bid = parseInt($(this).attr("title"));
+						if (bid > 0 && confirm(" ' . $lang_module['block_delete_per_confirm'] . '")){
+							$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_del", "bid="+bid, function(theResponse){
+								alert(theResponse);
+						        window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
+							});
+						}			
+					});
+				
+					$("a.block_weight").click(function(){
+						if (confirm(" ' . $lang_module['block_weight_confirm'] . '")){
+							$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_reset_order", "checkss=' . md5( $selectthemes . $global_config['sitekey'] . session_id() ) . '", function(theResponse){
+								alert(theResponse);
+						        window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
+							});
+						}			
+					});
+					
+					
+					$("a.delete_group").click(function(){
+							var list = [];
+					        $("input[name=idlist]:checked").each(function(){
+					        	list.push($(this).val());
+					        });
+					        if (list.length<1){
+						        alert(" ' . $lang_module['block_error_noblock'] . '");
+						        return false;
+					        }
+					        if (confirm(" ' . $lang_module['block_delete_confirm'] . '")){	
+					        $.ajax({        
+						        type: "POST",
+						        url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_del_group",
+						        data:"list="+list,
+						        success: function(data){  
+						            alert(data);
+						            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
+						        }
+					        });  
+				        }
+						return false;
+					});
+					$("#checkall").click(function(){
+						$("input[name=idlist]:checkbox").each(function(){
+							$(this).attr("checked","checked");
+						});
+					});
+					$("#uncheckall").click(function(){
+						$("input[name=idlist]:checkbox").each(function(){
+							$(this).removeAttr("checked");
+						});
+					});
+					$("select[name=listpos]").change(function(){
+						var pos = $(this).val();
+						var bid = $(this).attr("title");
+				        $.ajax({        
+					        type: "POST",
+					        url: "index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks_change_pos",
+						    data:"bid="+bid+"&pos="+pos,
+					        success: function(data){
+					          	alert(data);  
+					            window.location="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks";
+					        }
+				        }); 
+					});
+				});
+				//]]>
+				</script>';
 
 if ( ! defined( 'SHADOWBOX' ) )
 {
-    $my_head = "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+    $my_head = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
     $my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
     define( 'SHADOWBOX', true );

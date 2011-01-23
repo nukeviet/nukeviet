@@ -42,17 +42,15 @@
 </form>
 
 <!-- BEGIN: delfile -->
-<br>
-<br>
+<br />
+<br />
 <strong>{LANG.deletedetail}</strong>:
-<br>
-<br>
-<ul>
-	<ol>
-		<!-- BEGIN: loop -->
-			<li>{DELFILE}</li>
-		<!-- END: loop -->
-	</ol>
+<br />
+<br />
+<ul style="list-style: none;">
+	<!-- BEGIN: loop -->
+		<li>{DELFILE}</li>
+	<!-- END: loop -->
 </ul>
 <!-- END: delfile -->
 <!-- END: main -->

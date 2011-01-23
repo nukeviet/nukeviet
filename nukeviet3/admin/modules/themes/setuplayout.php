@@ -64,8 +64,8 @@ $page_title = $lang_module['setup_layout'] . ':' . $selectthemes;
 
 if ( $nv_Request->isset_request( 'save', 'post' ) and $nv_Request->isset_request( 'func', 'post' ) )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['setup_layout'] . ' theme: "'.$selectthemes.'"', '', $admin_info['userid'] );
-	$func_arr_save = $nv_Request->get_array( 'func', 'post' );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['setup_layout'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid'] );
+    $func_arr_save = $nv_Request->get_array( 'func', 'post' );
     foreach ( $func_arr_save as $func_id => $layout_name )
     {
         if ( in_array( $layout_name, $layout_array ) )
@@ -131,11 +131,13 @@ if ( $set_layout_site )
     nv_set_layout_site();
 }
 
-$contents .= "<form method='post' action='' name='setuplayout'><table class=\"tab1\">\n";
+$contents .= "<form method='post' action='' name='setuplayout'>";
+$contents .= "<table class=\"tab1\">\n";
 $contents .= "<tr>\n";
 $sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
-$i = 0;
+$number_func = $db->sql_numrows( $result );
+$i = 1;
 while ( list( $mod_name, $mod_name_title ) = $db->sql_fetchrow( $result ) )
 {
     if ( isset( $array_layout_func[$mod_name] ) )
@@ -144,28 +146,36 @@ while ( list( $mod_name, $mod_name_title ) = $db->sql_fetchrow( $result ) )
         $array_layout_func_mod = $array_layout_func[$mod_name];
         foreach ( $array_layout_func_mod as $func_name => $func_arr_val )
         {
-            $contents .= '<span style="display:inline-block;width:150px">' . $func_arr_val[1] . "</span>";
-            $contents .= "<select name='func[" . $func_arr_val[0] . "]' class='function'>";
+            $contents .= '<span style="display:inline-block;width:150px">' . $func_arr_val[1] . "</span>\n";
+            $contents .= "	<select name='func[" . $func_arr_val[0] . "]' class='function'>\n";
             foreach ( $layout_array as $value )
             {
-                $sel = ( $func_arr_val[2] == $value ) ? ' selected' : '';
-                $contents .= "<option value='" . $value . "' " . $sel . ">" . $value . "</option>";
+                $sel = ( $func_arr_val[2] == $value ) ? ' selected="selected"' : '';
+                $contents .= "		<option value='" . $value . "' " . $sel . ">" . $value . "</option>\n";
             }
-            $contents .= "</select><br/>";
+            $contents .= "	</select><br/>";
         }
-        if ( $i < 3 )
+        if ( $i % 3 == 0 and $i < $number_func )
+        {
+            $contents .= "</td></tr>\n<tr>\n";
+        }
+        else
         {
             $contents .= "</td>\n";
-            $i ++;
         }
-        if ( $i == 3 )
-        {
-            $contents .= "</tr><tr>\n";
-            $i = 0;
-        }
+        $i ++;
     }
 }
-$contents .= "</td></tr>\n";
+$i --;
+if ( $i % 3 != 0 )
+{
+    $i = $i % 3;
+    for ( $j = $i; $j < 3; $j ++ )
+    {
+        $contents .= "<td>&nbsp;</td>\n";
+    }
+}
+$contents .= "</tr>\n";
 $contents .= "<tr><td colspan='3' style='text-align:center'><input name='save' type='submit' value='" . $lang_module['setup_save_layout'] . "'/></td></tr>\n";
 $contents .= "</table>\n";
 $contents .= "</form>\n";

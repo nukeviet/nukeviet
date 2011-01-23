@@ -254,9 +254,7 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-var f = document.getElementById('form_add_user');
-var u = f.elements[0];
-f.setAttribute("autocomplete", "off");
+document.getElementById('form_add_user').setAttribute("autocomplete", "off");
 //]]>
 </script>
 <!-- END: main -->

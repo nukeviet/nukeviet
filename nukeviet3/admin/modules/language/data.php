@@ -41,8 +41,8 @@ if ( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( "a
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'] , " langkey : " .$keylang . " [ " .$temp ." ]", $admin_info['userid'] );
     nv_save_file_config_global();
        
-    $contents = "<br><br><br><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
-    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"1;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "\">";
+    $contents = "<br /><br /><br /><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
+    $contents .= "<meta http-equiv=\"Refresh\" content=\"1;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "\" />";
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -109,7 +109,7 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
                     if ( ! $db->sql_query( $query ) )
                     {
                         include ( NV_ROOTDIR . "/includes/header.php" );
-                        nv_admin_theme( "ERROR SETUP SQL: <br>" . $query );
+                        nv_admin_theme( "ERROR SETUP SQL: <br />" . $query );
                         include ( NV_ROOTDIR . "/includes/footer.php" );
                         exit();
                     }
@@ -135,8 +135,8 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
             }
         }
         $nv_Request->set_Cookie( 'data_lang', $keylang, NV_LIVE_COOKIE_TIME );
-        $contents_setup = "<br><br><center><br><b>" . $lang_module['nv_data_setup_ok'] . "</b></center>";
-        $contents_setup .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&" . NV_OP_VARIABLE . "=main\">";
+        $contents_setup = "<br /><br /><center><br /><b>" . $lang_module['nv_data_setup_ok'] . "</b></center>";
+        $contents_setup .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&" . NV_OP_VARIABLE . "=main\" />";
         
         include ( NV_ROOTDIR . "/includes/header.php" );
         echo nv_admin_theme( $contents_setup );
@@ -189,8 +189,9 @@ $contents .= "      <td>" . $lang_module['nv_lang_key'] . "</td>";
 $contents .= "      <td>" . $lang_module['nv_lang_name'] . "</td>";
 $contents .= "      <td style=\"width: 120px\">" . $lang_module['nv_lang_slsite'] . "</td>";
 $contents .= "      <td></td>";
-$contents .= "  </thead>\n";
 $contents .= "  </tr>";
+$contents .= "  </thead>\n";
+
 $a = 0;
 foreach ( $global_config['allow_adminlangs'] as $keylang )
 {

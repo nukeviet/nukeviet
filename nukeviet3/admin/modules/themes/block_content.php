@@ -170,7 +170,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     {
         $contents_error .= "<div id='edit'></div>\n";
         $contents_error .= "<div class=\"quote\" style=\"width:780px;\">\n";
-        $contents_error .= "<blockquote class='error'><span id='message'>" . implode( "<br>", $error ) . "</span></blockquote>\n";
+        $contents_error .= "<blockquote class='error'><span id='message'>" . implode( "<br />", $error ) . "</span></blockquote>\n";
         $contents_error .= "</div>\n";
     }
     else
@@ -494,7 +494,7 @@ $contents .= "</tbody>\n";
 $shows_all_func = ( intval( $row['all_func'] ) ) ? " style='display:none' " : "";
 $contents .= "<tbody " . $shows_all_func . " id='shows_all_func'>\n";
 $contents .= "<tr>\n";
-$contents .= "<td style='vertical-align:top'>" . $lang_module['block_function'] . ":<br><br><label><input type='button' name='checkmod' value='" . $lang_module['block_check'] . "'style='margin-bottom:5px;'/></label></td>\n";
+$contents .= "<td style='vertical-align:top'>" . $lang_module['block_function'] . ":<br /><br /><label><input type='button' name='checkmod' value='" . $lang_module['block_check'] . "'style='margin-bottom:5px;'/></label></td>\n";
 $contents .= "<td>\n";
 $contents .= "<div style=\"width: 600px; overflow: auto;\"><table border=\"0\" cellpadding=\"3\" cellspacing=\"3\">";
 $func_list = array();
@@ -534,7 +534,7 @@ $contents .= "<input type='hidden' name='bid' value='" . $row['bid'] . "'/>";
 $contents .= "<input type=\"submit\" name='confirm' value=\"" . $lang_module['block_confirm'] . "\" />\n";
 $contents .= "</div>\n";
 $contents .= "</form>\n";
-$contents .= "<br>\n";
+$contents .= "<br />\n";
 
 $load_block_config = false;
 

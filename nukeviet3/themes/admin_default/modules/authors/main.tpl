@@ -1,7 +1,6 @@
 <!-- BEGIN: main -->
 	<!-- BEGIN: loop -->
-	<a name="{ID}"></a>
-	<table summary="{CAPTION}" class="tab1">
+	<table id="aid{ID}" summary="{CAPTION}" class="tab1">
 	    <col span="2" valign="top" width="50%" />
 	        <thead>
 	            <tr>

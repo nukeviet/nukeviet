@@ -70,7 +70,7 @@ foreach ( $data as $data_i )
     }
     $xtpl->assign( 'DATA', $data_i );
     $xtpl->assign( 'CLASS', $a % 2 == 1 ? " class=\"second\"" : "" );
-    $xtpl->assign( 'DEL_URL', $base_url . "&" . NV_OP_VARIABLE . "=logs_del&id=" . $data_i['id'] );
+    $xtpl->assign( 'DEL_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=log&amp;" . NV_OP_VARIABLE . "=logs_del&amp;id=" . $data_i['id'] );
     $xtpl->assign( 'BACK_URL', $base_url );
     $xtpl->parse( 'main.row' );
     $a ++;

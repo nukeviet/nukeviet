@@ -33,7 +33,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
             }
             if ( $check_number == 2 )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_install'] , 'file name : ' . basename($_FILES['themefile']['name']) , $admin_info['userid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_install'], 'file name : ' . basename( $_FILES['themefile']['name'] ), $admin_info['userid'] );
                 $filefolder = '';
                 $filelist = '';
                 $validfolder = array();
@@ -58,7 +58,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
                 $contents .= '<div style="overflow:auto;height:200px;width:700px">' . $filelist . '</div>';
                 #check to continue
                 $contents .= '
-				<div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>
+				<div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" />' . $lang_module['autoinstall_package_processing'] . '</div>
 				<div style="margin-top:20px" id="step1">
 				<h4>' . $lang_module['autoinstall_theme_checkfile_notice'] . '</h4>
 				<p style="padding-left:250px">
@@ -67,6 +67,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
 				</div>
 				<script type="text/javascript">
 				 $(function(){
+					 //<![CDATA[
 				 	$("input[name=checkfile]").click(function(){
 				 		$("#message").show();
 				 		$("#step1").html("");
@@ -75,8 +76,8 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
 						});
 				 	});
 				 });
-				</script>
-				';
+				 //]]>
+				</script>';
             }
             else
             {
@@ -114,36 +115,35 @@ else
     $contents .= "</tr>";
     $contents .= "</table>";
     $contents .= "</form>";
-    $contents .= '
-<script type="text/javascript">
-function checkext(myArray,myValue) {
-	var type = eval(myArray).join().indexOf(myValue)>=0;
-	return type;
-}
- $(function(){
- 	$("input[name=continue]").click(function(){
-		var themefile = $("input[name=themefile]").val();
-		if (themefile==""){
-			alert("' . $lang_module['autoinstall_theme_error_nofile'] . '");
-			return false;
-		}
-		var filezip = themefile.slice(-3);
-		var filegzip = themefile.slice(-2);
-		var allowext = new Array("zip","gz");
-		if (!checkext(allowext,filezip) || !checkext(allowext,filegzip)){
-			alert("' . $lang_module['autoinstall_theme_error_filetype'] . '");
-		    return false;
-		}
-		$("form[name=install_theme]").submit();
- 	});
- 	$("input[name=back]").click(function(){
- 		$("#content").slideUp();
-		$("#step1").slideDown();
- 	});
-
- });
-</script>
-';
+    $contents .= '<script type="text/javascript">
+			//<![CDATA[
+			function checkext(myArray,myValue) {
+				var type = eval(myArray).join().indexOf(myValue)>=0;
+				return type;
+			}
+			 $(function(){
+			 	$("input[name=continue]").click(function(){
+					var themefile = $("input[name=themefile]").val();
+					if (themefile==""){
+						alert("' . $lang_module['autoinstall_theme_error_nofile'] . '");
+						return false;
+					}
+					var filezip = themefile.slice(-3);
+					var filegzip = themefile.slice(-2);
+					var allowext = new Array("zip","gz");
+					if (!checkext(allowext,filezip) || !checkext(allowext,filegzip)){
+						alert("' . $lang_module['autoinstall_theme_error_filetype'] . '");
+					    return false;
+					}
+					$("form[name=install_theme]").submit();
+			 	});
+			 	$("input[name=back]").click(function(){
+			 		$("#content").slideUp();
+					$("#step1").slideDown();
+			 	});
+			 });
+			 //]]>
+			</script>';
     echo $contents;
 }
 ?>

@@ -63,53 +63,53 @@ $contents .= "</tr>";
 $contents .= "</tbody>";
 $contents .= "</table>";
 $contents .= "</form>";
-$contents .= '
-<script type="text/javascript">
-$("select[name=theme1]").change(function(){
-	var theme1 = $(this).val();
-	var theme2 = $("select[name=theme2]").val();
-	if (theme2!=0 && theme1!=0 && theme1!=theme2){
-		$("#loadposition").html("<img src=\'../images/load_bar.gif\'/>' . $lang_module['autoinstall_package_processing'] . '");
-		$("#loadposition").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=loadposition&theme2="+theme2+"&theme1="+theme1);
-	} else {
-		$("#loadposition").html("");
-	}
-});
-$("select[name=theme2]").change(function(){
-	var theme2 = $(this).val();
-	var theme1 = $("select[name=theme1]").val();
-	if (theme2!=0 && theme1!=0 && theme1!=theme2){
-		$("#loadposition").html("<img src=\'../images/load_bar.gif\'/>' . $lang_module['autoinstall_package_processing'] . '");
-		$("#loadposition").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=loadposition&theme2="+theme2+"&theme1="+theme1);
-	} else {
-		$("#loadposition").html("");
-	}
-});
-
-$("input[name=continue]").click(function(){
-	var theme1 = $("select[name=theme1]").val();
-	var theme2 = $("select[name=theme2]").val();
-    var positionlist = [];
-	$("input[name=\'position[]\']:checked").each(function(){
-	    positionlist.push($(this).val());
-    });
-    if (positionlist.length<1){
-    	alert("' . $lang_module['xcopyblock_no_position'] . '");
-    	return false;
-    } else {
-	    $("#loadposition").html("<img src=\'../images/load_bar.gif\'/>' . $lang_module['autoinstall_package_processing'] . '");
-		$.ajax({	
-			type: "POST",
-			url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=xcopyprocess",
-			data: "position="+ positionlist+"&theme1="+theme1+"&theme2="+theme2,
-			success: function(data){				
-				$("#loadposition").html(data);
-			}
-		});
-	}
-});
-</script>
-';
+$contents .= '<script type="text/javascript">
+			//<![CDATA[
+			$("select[name=theme1]").change(function(){
+				var theme1 = $(this).val();
+				var theme2 = $("select[name=theme2]").val();
+				if (theme2!=0 && theme1!=0 && theme1!=theme2){
+					$("#loadposition").html("<img src=\'' . NV_BASE_SITEURL . 'images/load_bar.gif\' alt=\'\' />' . $lang_module['autoinstall_package_processing'] . '");
+					$("#loadposition").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=loadposition&theme2="+theme2+"&theme1="+theme1);
+				} else {
+					$("#loadposition").html("");
+				}
+			});
+			$("select[name=theme2]").change(function(){
+				var theme2 = $(this).val();
+				var theme1 = $("select[name=theme1]").val();
+				if (theme2!=0 && theme1!=0 && theme1!=theme2){
+					$("#loadposition").html("<img src=\'' . NV_BASE_SITEURL . 'images/load_bar.gif\' alt=\'\' />' . $lang_module['autoinstall_package_processing'] . '");
+					$("#loadposition").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=loadposition&theme2="+theme2+"&theme1="+theme1);
+				} else {
+					$("#loadposition").html("");
+				}
+			});
+			
+			$("input[name=continue]").click(function(){
+				var theme1 = $("select[name=theme1]").val();
+				var theme2 = $("select[name=theme2]").val();
+			    var positionlist = [];
+				$("input[name=\'position[]\']:checked").each(function(){
+				    positionlist.push($(this).val());
+			    });
+			    if (positionlist.length<1){
+			    	alert("' . $lang_module['xcopyblock_no_position'] . '");
+			    	return false;
+			    } else {
+				    $("#loadposition").html("<img src=\''.NV_BASE_SITEURL.'images/load_bar.gif\' alt=\'\' />' . $lang_module['autoinstall_package_processing'] . '");
+					$.ajax({	
+						type: "POST",
+						url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=xcopyprocess",
+						data: "position="+ positionlist+"&theme1="+theme1+"&theme2="+theme2,
+						success: function(data){				
+							$("#loadposition").html(data);
+						}
+					});
+				}
+			});
+		//]]>
+		</script>';
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

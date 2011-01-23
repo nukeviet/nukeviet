@@ -151,7 +151,7 @@ $contents['title'] = ( ! empty( $error ) ) ? $error : sprintf( $lang_module['del
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del&amp;admin_id=" . $admin_id;
 $contents['sendmail'] = array( $lang_module['admin_del_sendmail'], $sendmail );
 $contents['reason'] = array( $lang_module['admin_del_reason'], $reason, 255 );
-$contents['admin_password'] = array( $lang_global['admin_password'], $adminpass, NV_APASSMAX );
+$contents['admin_password'] = array( $lang_global['admin_password'], $adminpass, NV_UPASSMAX );
 $contents['submit'] = $lang_module['nv_admin_del'];
 
 //parse content

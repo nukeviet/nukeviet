@@ -1,6 +1,6 @@
 <!-- BEGIN: ftp-->
 <!-- BEGIN: error-->{ERRORCONTENT}<!-- END: error -->
-<form action="" method="post">
+<form action="" method="post" id="form_edit_ftp">
     <table class="tab1" summary="">
     	<tbody>
         <tr>
@@ -19,7 +19,7 @@
                     <strong>{LANG.username}</strong>
                 </td>
                 <td>
-                    <input type="text" name="ftp_user_name" id="ftp_user_name_iavim" autocomplete="off" value="{VALUE.ftp_user_name}" style="width: 250px;"/>
+                    <input type="text" name="ftp_user_name" id="ftp_user_name_iavim" value="{VALUE.ftp_user_name}" style="width: 250px;"/>
                 </td>
             </tr>
         </tbody>
@@ -29,7 +29,7 @@
                 <strong>{LANG.password}</strong>
             </td>
             <td>
-                <input type="password" name="ftp_user_pass" id="ftp_user_pass_iavim" autocomplete="off" value="{VALUE.ftp_user_pass}" style="width: 250px"/>
+                <input type="password" name="ftp_user_pass" id="ftp_user_pass_iavim" value="{VALUE.ftp_user_pass}" style="width: 250px"/>
             </td>
         </tr>
         </tbody>
@@ -51,4 +51,10 @@
         </tr>
         </tbody>
     </table>
+</form>
+<script type="text/javascript">
+	//<![CDATA[
+		document.getElementById('form_edit_ftp').setAttribute("autocomplete", "off");
+	//]]>
+</script>
 <!-- END: ftp -->

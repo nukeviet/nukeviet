@@ -65,11 +65,11 @@ if ( $errormess != "" )
     $contents .= "<div class=\"clear\"></div>\n";
 }
 
-$array_config['smtp_ssl_checked'] = ( $array_config['smtp_ssl'] == 1 ) ? "checked" : "";
+$array_config['smtp_ssl_checked'] = ( $array_config['smtp_ssl'] == 1 ) ? ' checked="checked"' : '';
 
-$array_config['mailer_mode_smtpt'] = ( $array_config['mailer_mode'] == "smtp" ) ? "checked" : "";
-$array_config['mailer_mode_sendmail'] = ( $array_config['mailer_mode'] == "sendmail" ) ? "checked" : "";
-$array_config['mailer_mode_phpmail'] = ( $array_config['mailer_mode'] == "" ) ? "checked" : "";
+$array_config['mailer_mode_smtpt'] = ( $array_config['mailer_mode'] == "smtp" ) ? ' checked="checked"' : '';
+$array_config['mailer_mode_sendmail'] = ( $array_config['mailer_mode'] == "sendmail" ) ? ' checked="checked"' : '';
+$array_config['mailer_mode_phpmail'] = ( $array_config['mailer_mode'] == "" ) ? ' checked="checked"' : '';
 $array_config['mailer_mode_smtpt_show'] = ( $array_config['mailer_mode'] == "smtp" ) ? "" : " style=\"display: none\" ";
 
 $xtpl = new XTemplate( "smtp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );

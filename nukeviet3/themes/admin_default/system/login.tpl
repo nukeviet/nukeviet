@@ -31,10 +31,8 @@
             <div id="login-header">
                 <div id="login-header-left"></div>
                 <div id="login-header-center">
-                    <h3>
-                    <strong>{LOGIN_TITLE}</h3>
-                </strong>
-            </div>
+                    <h3><strong>{LOGIN_TITLE}</strong></h3>
+            	</div>
             <div id="login-header-right"></div>
         </div>
         <div id="login-content">
@@ -71,7 +69,7 @@
                             <input class="submitform" type="submit" value="{N_SUBMIT}" />
                         </div>
                     </form>
-                    <p align="right" style="padding:10px;">
+                    <p style="text-align:right; padding:10px;">
                         <a class="lostpass" title="{LANGLOSTPASS}" href="{LINKLOSTPASS}">{LANGLOSTPASS}?</a>
                     </p>
                 </div>

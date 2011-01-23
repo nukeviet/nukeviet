@@ -1,5 +1,5 @@
 <!-- BEGIN: smtp -->
-<form action="" method="post">
+<form action="" method="post" id="form_edit_smtp">
 <table class="tab1" summary="">
 	<col style="width: 150px; white-space: nowrap" />
 	<tr>
@@ -33,6 +33,7 @@
               <option value="{EMCRYPTED.id}" {EMCRYPTED.sl}>{EMCRYPTED.value}</option>
               <!-- END: encrypted_connection -->
            </select>
+        </td>
 	</tr>
     </tbody>
 </table>
@@ -41,13 +42,13 @@
     <tbody>
 	<tr>
 		<td>{LANG.smtp_login}</td>
-		<td><input type="text" name="smtp_username" value="{DATA.smtp_username}" autocomplete="off" style="width: 250px;" /></td>
+		<td><input type="text" name="smtp_username" value="{DATA.smtp_username}" style="width: 250px;" /></td>
 	</tr>
     </tbody>
 	<tbody class="second">
 		<tr>
 			<td>{LANG.smtp_pass}</td>
-			<td><input type="password" name="smtp_password" value="{DATA.smtp_password}" autocomplete="off" style="width: 250px;" /></td>
+			<td><input type="password" name="smtp_password" value="{DATA.smtp_password}" style="width: 250px;" /></td>
 		</tr>
 	</tbody>
 </table>
@@ -59,7 +60,10 @@
 	</tr>
 </table>
 </form>
+
 <script type="text/javascript">
+//<![CDATA[
+	document.getElementById('form_edit_smtp').setAttribute("autocomplete", "off");
     $(function(){
         $("input[name=mailer_mode]").click(function(){
         var type = $(this).val();
@@ -70,5 +74,6 @@
         }
         });
     });
+//]]>
 </script>
 <!-- END: smtp -->

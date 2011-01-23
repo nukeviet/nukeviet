@@ -26,8 +26,8 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
             $status = $zip->properties();
             if ( $status['status'] == 'ok' )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], basename($_FILES['modulefile']['name']) , $admin_info['userid'] );
-            	$filefolder = '';
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], basename( $_FILES['modulefile']['name'] ), $admin_info['userid'] );
+                $filefolder = '';
                 $validfolder = array();
                 $filelist = '';
                 $filesize = nv_convertfromBytes( $_FILES['modulefile']['size'] );
@@ -52,7 +52,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
                 $contents .= '<div style="overflow:auto;height:200px;width:700px">' . $filelist . '</div>';
                 #check to continue
                 $contents .= '
-				<div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>
+				<div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" />' . $lang_module['autoinstall_package_processing'] . '</div>
 				<div style="margin-top:20px" id="step1">
 				<h4>' . $lang_module['autoinstall_module_checkfile_notice'] . '</h4>
 				<p style="padding-left:250px">
@@ -60,6 +60,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
 				</p>
 				</div>
 				<script type="text/javascript">
+				//<![CDATA[
 				 $(function(){
 				 	$("input[name=checkfile]").click(function(){
 				 		$("#message").show();
@@ -69,6 +70,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
 						});
 				 	});
 				 });
+				 //]]>
 				</script>
 				';
             }
@@ -108,6 +110,7 @@ else
     $contents .= "</form>";
     $contents .= '
 				<script type="text/javascript">
+				//<![CDATA[
 				function checkext(myArray,myValue) {
 					var type = eval(myArray).join().indexOf(myValue)>=0;
 					return type;
@@ -134,8 +137,8 @@ else
 				 	});
 				
 				 });
-				</script>
-				';
+				 //]]>
+				</script>';
     echo $contents;
 }
 ?>

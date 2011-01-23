@@ -13,7 +13,7 @@ $title = $note = $module_file = "";
 $page_title = $lang_module['autoinstall'];
 if ( ! $sys_info['zlib_support'] )
 {
-    $contents = "<br><br><br>" . $lang_global['error_zlib_support'];
+    $contents = "<br /><br /><br />" . $lang_global['error_zlib_support'];
 }
 else
 {
@@ -42,6 +42,7 @@ else
     $contents .= "<div id='content'></div>";
     $contents .= '
 	<script type="text/javascript">
+	//<![CDATA[
 	 $(function(){
 	 	$("input[name=method]").click(function(){
 	 		var method = $("select[name=installtype]").val();
@@ -55,8 +56,8 @@ else
 	 		}
 	 	});
 	 });
-	</script>
-';
+	 //]]>
+	</script>';
 }
 
 include ( NV_ROOTDIR . "/includes/header.php" );

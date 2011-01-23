@@ -91,7 +91,7 @@ if ( $popup )
     //////////////////////////////////////////////////////
     if ( ! empty( $errors ) )
     {
-        $xtpl->assign( "error", implode( "<br>", $errors ) );
+        $xtpl->assign( "error", implode( "<br />", $errors ) );
         $xtpl->parse( 'main.error' );
     }
 

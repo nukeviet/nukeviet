@@ -69,10 +69,10 @@ function nv_save_file_admin_config ( )
 $delid = $nv_Request->get_int( 'delid', 'get' );
 if ( ! empty( $delid ) )
 {
-    list( $keyname ) = $db->sql_fetchrow( $db->sql_query( "SELECT keyname FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE id=".$delid ) );
-	$db->sql_query( "DELETE FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE id=$delid" );
+    list( $keyname ) = $db->sql_fetchrow( $db->sql_query( "SELECT keyname FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE id=" . $delid ) );
+    $db->sql_query( "DELETE FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE id=$delid" );
     nv_save_file_admin_config();
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip_delete'] ." " .$lang_module['config'] , " keyname : " .$keyname, $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip_delete'] . " " . $lang_module['config'], " keyname : " . $keyname, $admin_info['userid'] );
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
     die();
 }
@@ -95,7 +95,7 @@ if ( $nv_Request->isset_request( 'savesetting', 'post' ) )
         $db->sql_query( $query );
     }
     nv_save_file_config_global();
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['save']. " " .$lang_module['config'] , "config", $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['save'] . " " . $lang_module['config'], "config", $admin_info['userid'] );
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
     exit();
 }
@@ -156,17 +156,17 @@ if ( $nv_Request->isset_request( 'submituser', 'post' ) )
         if ( $uid > 0 and $password != "" )
         {
             $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $nickname ) . ", `mask`='-1',`begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . ", `notice`=" . $db->dbescape( md5( $password ) ) . " WHERE `id`=" . $uid . "" );
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'] , $lang_module['nickname_edit'] ." nickname: " .$nickname, $admin_info['userid'] );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'], $lang_module['nickname_edit'] . " nickname: " . $nickname, $admin_info['userid'] );
         }
         elseif ( $uid > 0 )
         {
             $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $nickname ) . ", `mask`='-1',`begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . " WHERE `id`=" . $uid . "" );
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'] , $lang_module['nickname_edit'] ." nickname: " .$nickname, $admin_info['userid'] );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'], $lang_module['nickname_edit'] . " nickname: " . $nickname, $admin_info['userid'] );
         }
         else
         {
             $db->sql_query( "REPLACE INTO `" . NV_AUTHORS_GLOBALTABLE . "_config` VALUES (NULL, " . $db->dbescape( $nickname ) . ",'-1',$begintime1, $endtime1," . $db->dbescape( md5( $password ) ) . " )" );
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'] , $lang_module['nickname_add'] ." nickname: " .$nickname, $admin_info['userid'] );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'], $lang_module['nickname_add'] . " nickname: " . $nickname, $admin_info['userid'] );
         }
         nv_save_file_admin_config();
         Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
@@ -212,12 +212,12 @@ if ( $nv_Request->isset_request( 'submitip', 'post' ) )
         if ( $cid > 0 )
         {
             $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $keyname ) . ", `mask`=" . $db->dbescape( $mask ) . ",`begintime`=" . $begintime . ", `endtime`=" . $endtime . ", `notice`=" . $db->dbescape( $notice ) . " WHERE `id`=" . $cid . "" );
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip'] , $lang_module['adminip_edit'] . " ID ".$cid ." -> " . $keyname, $admin_info['userid'] );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_edit'] . " ID " . $cid . " -> " . $keyname, $admin_info['userid'] );
         }
         else
         {
             $db->sql_query( "REPLACE INTO `" . NV_AUTHORS_GLOBALTABLE . "_config` VALUES (NULL, " . $db->dbescape( $keyname ) . "," . $db->dbescape( $mask ) . ",$begintime, $endtime," . $db->dbescape( $notice ) . " )" );
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip'] , $lang_module['adminip_add'] ." ". $keyname, $admin_info['userid'] );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_add'] . " " . $keyname, $admin_info['userid'] );
         }
         nv_save_file_admin_config();
         Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
@@ -243,37 +243,38 @@ $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\"
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<table  class=\"tab1\">";
-$contents .= "<col span=\"2\" width=\"65%\" valign=\"top\">";
+$contents .= "<col width=\"65%\" />";
+$contents .= "<col width=\"45%\" />";
 $contents .= "<thead>
             <tr>
-                <td colspan=\"2\">" . $lang_module['config'] . "</td>
+                <td colspan=\"2\">aaa" . $lang_module['config'] . "</td>
             </tr>
         </thead>";
 $contents .= "<tbody class=\"second\">
 <tr>
     <td>" . $lang_module['admfirewall'] . "</td>
-    <td><input type=\"checkbox\" value=\"1\" name=\"admfirewall\" " . ( ( $global_config['admfirewall'] ) ? "checked=\"checked\"" : "" ) . "></td>
+    <td><input type=\"checkbox\" value=\"1\" name=\"admfirewall\" " . ( ( $global_config['admfirewall'] ) ? "checked=\"checked\"" : "" ) . " /></td>
 </tr>
 </tbody>";
 
 $contents .= "<tbody>
 <tr>
     <td>" . $lang_module['block_admin_ip'] . "</td>
-    <td><input type=\"checkbox\" value=\"1\" name=\"block_admin_ip\" " . ( ( $global_config['block_admin_ip'] ) ? "checked=\"checked\"" : "" ) . "></td>
+    <td><input type=\"checkbox\" value=\"1\" name=\"block_admin_ip\" " . ( ( $global_config['block_admin_ip'] ) ? "checked=\"checked\"" : "" ) . " /></td>
 </tr>
 </tbody>";
 
 $contents .= "<tbody class=\"second\">
 <tr>
     <td>" . $lang_module['authors_detail_main'] . "</td>
-    <td><input type=\"checkbox\" value=\"1\" name=\"authors_detail_main\" " . ( ( $global_config['authors_detail_main'] ) ? "checked=\"checked\"" : "" ) . "></td>
+    <td><input type=\"checkbox\" value=\"1\" name=\"authors_detail_main\" " . ( ( $global_config['authors_detail_main'] ) ? "checked=\"checked\"" : "" ) . " /></td>
 </tr>
 </tbody>";
 
 $contents .= "<tbody>
 <tr>
     <td>" . $lang_module['spadmin_add_admin'] . "</td>
-    <td><input type=\"checkbox\" value=\"1\" name=\"spadmin_add_admin\" " . ( ( $global_config['spadmin_add_admin'] ) ? "checked=\"checked\"" : "" ) . "></td>
+    <td><input type=\"checkbox\" value=\"1\" name=\"spadmin_add_admin\" " . ( ( $global_config['spadmin_add_admin'] ) ? "checked=\"checked\"" : "" ) . " /></td>
 </tr>
 </tbody>";
 
@@ -281,45 +282,48 @@ $contents .= "
 <tbody>
 <tr>
     <td colspan=\"2\">
-        <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\">
-        <input type=\"hidden\" value=\"1\" name=\"savesetting\">
+        <input type=\"submit\" value=\" " . $lang_module['save'] . " \" name=\"Submit1\" />
+        <input type=\"hidden\" value=\"1\" name=\"savesetting\" />
     </td>
 </tr>
 </tbody>
 </table>
 </form>";
 
-$contents .= "<br />\n";
-$contents .= "<table id=\"iduser\"  class=\"tab1\">\n";
-$contents .= "<caption>" . $lang_module['title_nickname'] . "</caption>";
-
-$contents .= "<tr align=\"center\" class=\"thead_box\">\n";
-$contents .= "<td>" . $lang_global['nickname'] . "</td>\n";
-$contents .= "<td>" . $lang_module['adminip_timeban'] . "</td>\n";
-$contents .= "<td>" . $lang_module['adminip_timeendban'] . "</td>\n";
-$contents .= "<td>" . $lang_module['adminip_funcs'] . "</td>\n";
-$contents .= "</tr>\n";
-
 $sql = "SELECT id, keyname, begintime, endtime FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` = '-1' ORDER BY keyname DESC";
 $result = $db->sql_query( $sql );
-while ( list( $dbid, $keyname, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
+if ( $db->sql_numrows( $result ) )
 {
-    $contents .= "<tbody>\n";
-    $contents .= "<tr>\n";
-    $contents .= "<td align=\"left\">" . $keyname . "</td>\n";
-    $contents .= "<td align=\"center\">" . ( ! empty( $dbbegintime ) ? date( 'd.m.Y', $dbbegintime ) : '' ) . "</td>\n";
-    $contents .= "<td align=\"center\">" . ( ! empty( $dbendtime ) ? date( 'd.m.Y', $dbendtime ) : $lang_module['adminip_nolimit'] ) . "</td>\n";
-    $contents .= "<td align=\"center\">
+    $contents .= "<br />\n";
+    $contents .= "<table id=\"iduser\" class=\"tab1\">\n";
+    $contents .= "<caption>" . $lang_module['title_nickname'] . "</caption>\n";
+    $contents .= "<thead>\n";
+    $contents .= "<tr align=\"center\">\n";
+    $contents .= "<td>" . $lang_global['nickname'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['adminip_timeban'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['adminip_timeendban'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['adminip_funcs'] . "</td>\n";
+    $contents .= "</tr>\n";
+    $contents .= "</thead>\n";
+    while ( list( $dbid, $keyname, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
+    {
+        $contents .= "<tbody>\n";
+        $contents .= "<tr>\n";
+        $contents .= "<td align=\"left\">" . $keyname . "</td>\n";
+        $contents .= "<td align=\"center\">" . ( ! empty( $dbbegintime ) ? date( 'd.m.Y', $dbbegintime ) : '' ) . "</td>\n";
+        $contents .= "<td align=\"center\">" . ( ! empty( $dbendtime ) ? date( 'd.m.Y', $dbendtime ) : $lang_module['adminip_nolimit'] ) . "</td>\n";
+        $contents .= "<td align=\"center\">
 		<span class=\"edit_icon\">
-			<a class='edit' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&uid=" . $dbid . "#iduser\">" . $lang_global['edit'] . "</a>
+			<a class='edit' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;uid=" . $dbid . "#iduser\">" . $lang_global['edit'] . "</a>
 		</span>	- 
 		<span class=\"delete_icon\">
-			<a class='deleteuser' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&delid=" . $dbid . "\">" . $lang_global['delete'] . "</a>
+			<a class='deleteuser' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delid=" . $dbid . "\">" . $lang_global['delete'] . "</a>
 		</span></td>\n";
-    $contents .= "</tr>\n";
-    $contents .= "</tbody>\n";
+        $contents .= "</tr>\n";
+        $contents .= "</tbody>\n";
+    }
+    $contents .= "</table>\n";
 }
-$contents .= "</table>\n";
 
 if ( ! empty( $uid ) )
 {
@@ -327,7 +331,7 @@ if ( ! empty( $uid ) )
     $lang_module['nickname_add'] = $lang_module['nickname_edit'];
     $password2 = $password = "";
 }
-$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
+$contents .= "<form id = \"form_add_user\" action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<input type=\"hidden\" name =\"uid\" value=\"" . $uid . "\" />";
@@ -346,20 +350,20 @@ $contents .= "</tbody>\n";
 $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_global['password'] . " (<span style='color:red'>*</span>)</td>\n";
-$contents .= "<td><input type='password' name='password' value='" . $password . "' autocomplete='off' style='width:200px'/></td>\n";
+$contents .= "<td><input type='password' name='password' value='" . $password . "'  style='width:200px'/></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_global['password2'] . " (<span style='color:red'>*</span>)</td>\n";
-$contents .= "<td><input type='password' name='password2' value='" . $password2 . "' autocomplete='off' style='width:200px'/></td>\n";
+$contents .= "<td><input type='password' name='password2' value='" . $password2 . "' style='width:200px'/></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['adminip_begintime'] . "</td>\n";
 $contents .= "<td><input type='text' name='begintime1' id='begintime1' value='" . ( ! empty( $begintime1 ) ? date( 'd.m.Y', $begintime1 ) : '' ) . "' style='width:150px'/>\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'begintime1', 'dd.mm.yyyy', true);\" alt=\"\" height=\"17\">\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" style=\"widht:18px; height:17px; cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'begintime1', 'dd.mm.yyyy', true);\" alt=\"\" />\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
@@ -367,13 +371,14 @@ $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['adminip_endtime'] . "</td>\n";
 $contents .= "<td><input type='text' name='endtime1' id='endtime1' value='" . ( ! empty( $endtime1 ) ? date( 'd.m.Y', $endtime1 ) : '' ) . "' style='width:150px'/>\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'endtime1', 'dd.mm.yyyy', true);\" alt=\"\" height=\"17\">\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" style=\"widht:18px; height:17px; cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'endtime1', 'dd.mm.yyyy', true);\" alt=\"\" />\n";
+$contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan='2'>";
-$contents .= "<input type='submit' value='" . $lang_module['save'] . "' name='submituser'/><br><br>\n";
+$contents .= "<input type='submit' value='" . $lang_module['save'] . "' name='submituser'/><br /><br />\n";
 if ( ! empty( $uid ) ) $contents .= $lang_module['nochangepass'];
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
@@ -381,45 +386,56 @@ $contents .= "</tbody>\n";
 $contents .= "</table>\n";
 $contents .= "</form>\n";
 
+$contents .= "<script type=\"text/javascript\">
+//<![CDATA[
+document.getElementById('form_add_user').setAttribute(\"autocomplete\", \"off\");
+//]]>
+</script>";
+
 $mask_text_array = array();
 $mask_text_array[0] = "255.255.255.255";
 $mask_text_array[3] = "255.255.255.xxx";
 $mask_text_array[2] = "255.255.xxx.xxx";
 $mask_text_array[1] = "255.xxx.xxx.xxx";
 
-$contents .= "<br />\n";
-$contents .= "<table id=\"idip\"  class=\"tab1\">\n";
-$contents .= "<caption>" . $lang_module['adminip'] . "</caption>";
-
-$contents .= "<tr align=\"center\" class=\"thead_box\">\n";
-$contents .= "<td>" . $lang_module['adminip_ip'] . "</td>\n";
-$contents .= "<td>" . $lang_module['adminip_mask'] . "</td>\n";
-$contents .= "<td>" . $lang_module['adminip_timeban'] . "</td>\n";
-$contents .= "<td>" . $lang_module['adminip_timeendban'] . "</td>\n";
-$contents .= "<td>" . $lang_module['adminip_funcs'] . "</td>\n";
-$contents .= "</tr>\n";
-
 $sql = "SELECT id, keyname, mask, begintime, endtime FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` != '-1' ORDER BY keyname DESC";
 $result = $db->sql_query( $sql );
-while ( list( $dbid, $keyname, $dbmask, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
+if ( $db->sql_numrows( $result ) )
 {
-    $contents .= "<tbody>\n";
-    $contents .= "<tr>\n";
-    $contents .= "<td align=\"center\">" . $keyname . "</td>\n";
-    $contents .= "<td align=\"center\">" . $mask_text_array[$dbmask] . "</td>\n";
-    $contents .= "<td align=\"center\">" . ( ! empty( $dbbegintime ) ? date( 'd.m.Y', $dbbegintime ) : '' ) . "</td>\n";
-    $contents .= "<td align=\"center\">" . ( ! empty( $dbendtime ) ? date( 'd.m.Y', $dbendtime ) : $lang_module['adminip_nolimit'] ) . "</td>\n";
-    $contents .= "<td align=\"center\">
+    $contents .= "<br />\n";
+    $contents .= "<table id=\"idip\"  class=\"tab1\">\n";
+    $contents .= "<caption>" . $lang_module['adminip'] . "</caption>";
+    $contents .= "<thead>\n";
+    
+    $contents .= "<tr align=\"center\">\n";
+    $contents .= "<td>" . $lang_module['adminip_ip'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['adminip_mask'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['adminip_timeban'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['adminip_timeendban'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['adminip_funcs'] . "</td>\n";
+    $contents .= "</tr>\n";
+    $contents .= "</thead>\n";
+    
+    while ( list( $dbid, $keyname, $dbmask, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
+    {
+        $contents .= "<tbody>\n";
+        $contents .= "<tr>\n";
+        $contents .= "<td align=\"center\">" . $keyname . "</td>\n";
+        $contents .= "<td align=\"center\">" . $mask_text_array[$dbmask] . "</td>\n";
+        $contents .= "<td align=\"center\">" . ( ! empty( $dbbegintime ) ? date( 'd.m.Y', $dbbegintime ) : '' ) . "</td>\n";
+        $contents .= "<td align=\"center\">" . ( ! empty( $dbendtime ) ? date( 'd.m.Y', $dbendtime ) : $lang_module['adminip_nolimit'] ) . "</td>\n";
+        $contents .= "<td align=\"center\">
 		<span class=\"edit_icon\">
-			<a class='edit' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $dbid . "#idip\">" . $lang_global['edit'] . "</a>
+			<a class='edit' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $dbid . "#idip\">" . $lang_global['edit'] . "</a>
 		</span>	- 
 		<span class=\"delete_icon\">
-			<a class='deleteone' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&delid=" . $dbid . "\">" . $lang_global['delete'] . "</a>
+			<a class='deleteone' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delid=" . $dbid . "\">" . $lang_global['delete'] . "</a>
 		</span></td>\n";
-    $contents .= "</tr>\n";
-    $contents .= "</tbody>\n";
+        $contents .= "</tr>\n";
+        $contents .= "</tbody>\n";
+    }
+    $contents .= "</table>\n";
 }
-$contents .= "</table>\n";
 if ( ! empty( $cid ) )
 {
     list( $id, $keyname, $mask, $begintime, $endtime, $notice ) = $db->sql_fetchrow( $db->sql_query( "SELECT id, keyname, mask, begintime, endtime, notice FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` != '-1' AND id=$cid" ) );
@@ -460,7 +476,7 @@ $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['adminip_begintime'] . "</td>\n";
 $contents .= "<td><input type='text' name='begintime' id='begintime' value='" . ( ! empty( $begintime ) ? date( 'd.m.Y', $begintime ) : '' ) . "' style='width:150px'/>\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'begintime', 'dd.mm.yyyy', true);\" alt=\"\" height=\"17\">\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" style=\"widht:18px; height:17px; cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'begintime', 'dd.mm.yyyy', true);\" alt=\"\" />\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
@@ -468,7 +484,8 @@ $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['adminip_endtime'] . "</td>\n";
 $contents .= "<td><input type='text' name='endtime' id='endtime' value='" . ( ! empty( $endtime ) ? date( 'd.m.Y', $endtime ) : '' ) . "' style='width:150px'/>\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'endtime', 'dd.mm.yyyy', true);\" alt=\"\" height=\"17\">\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" style=\"widht:18px; height:17px;  cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'endtime', 'dd.mm.yyyy', true);\" alt=\"\" />\n";
+$contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tbody class='second'>\n";
@@ -482,7 +499,7 @@ $contents .= "</tbody>\n";
 $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan='2'>";
-$contents .= "<input type='submit' value='" . $lang_module['save'] . "' name='submitip'/><br><br>\n";
+$contents .= "<input type='submit' value='" . $lang_module['save'] . "' name='submitip'/><br /><br />\n";
 $contents .= $lang_module['adminip_note'];
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
@@ -491,6 +508,7 @@ $contents .= "</table>\n";
 $contents .= "</form>\n";
 $contents .= "
 <script type='text/javascript'>
+	//<![CDATA[
 	$('input[name=submitip]').click(function(){
 		var ip = $('input[name=keyname]').val();
 		$('input[name=keyname]').focus();
@@ -559,8 +577,8 @@ $contents .= "
         }
 		return false;
 	});
-	</script>
-";
+	//]]>
+</script>";
 
 $page_title = $lang_module['config'];
 

@@ -509,7 +509,7 @@ if ( $module_name == "modules" )
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<tr>\n";
         $return .= "<td>" . $contents['act'][0] . ":</td>\n";
-        $return .= "<td><input name=\"act\" id=\"act\" type=\"checkbox\" value=\"1\" " . ( ( $contents['act'][1] == 1 ) ? "checked" : "" ) . " /></td>\n";
+        $return .= "<td><input name=\"act\" id=\"act\" type=\"checkbox\" value=\"1\" " . ( ( $contents['act'][1] == 1 ) ? ' checked="checked"' : '' ) . " /></td>\n";
         $return .= "</tr>\n";
         $return .= "</table>\n";
         
@@ -519,7 +519,7 @@ if ( $module_name == "modules" )
             $return .= "<col valign=\"top\" width=\"150px\" />\n";
             $return .= "<tr>\n";
             $return .= "<td>" . $contents['rss'][0] . ":</td>\n";
-            $return .= "<td><input name=\"rss\" id=\"rss\" type=\"checkbox\" value=\"1\" " . ( ( $contents['rss'][1] == 1 ) ? "checked" : "" ) . " /></td>\n";
+            $return .= "<td><input name=\"rss\" id=\"rss\" type=\"checkbox\" value=\"1\" " . ( ( $contents['rss'][1] == 1 ) ? ' checked="checked"' : '' ) . " /></td>\n";
             $return .= "</tr>\n";
             $return .= "</table>\n";
         }

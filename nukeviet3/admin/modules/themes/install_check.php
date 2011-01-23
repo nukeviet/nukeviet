@@ -29,14 +29,15 @@ if ( file_exists( $filename ) )
     }
     if ( ! empty( $errorfile ) )
     {
-        echo '<div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>';
+        echo '<div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" />' . $lang_module['autoinstall_package_processing'] . '</div>';
         echo '<strong>' . $lang_module['autoinstall_theme_error_warning_fileexist'] . '</strong>';
         echo '<hr /><div style="overflow:auto;height:200px;width:700px">' . $errorfile . '</div>';
-        echo '<br><b>' . $lang_module['autoinstall_theme_error_warning_overwrite'] . '</b>';
-        echo '<br><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoinstall_theme_overwrite'] . '"/>';
+        echo '<br /><b>' . $lang_module['autoinstall_theme_error_warning_overwrite'] . '</b>';
+        echo '<br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoinstall_theme_overwrite'] . '"/>';
         
         echo '<script type="text/javascript">
-        		 $(function(){
+	        //<![CDATA[		 
+	        $(function(){
         		 	$("input[name=install_content_overwrite]").click(function(){
         		 		if(confirm("' . $lang_module['autoinstall_theme_error_warning_overwrite'] . '")){
 	        		 		$("#message").show();
@@ -47,6 +48,7 @@ if ( file_exists( $filename ) )
         					}
 					});
         		 });
+        		 //]]>
 			</script>';
     }
     else
@@ -145,7 +147,7 @@ if ( file_exists( $filename ) )
             if ( ! empty( $error_create_folder ) )
             {
                 asort( $error_create_folder );
-                echo "<b>" . $lang_module['autoinstall_theme_permission_folder'] . "</b>:<br> " . implode( "<br>", $error_create_folder );
+                echo "<b>" . $lang_module['autoinstall_theme_permission_folder'] . "</b>:<br /> " . implode( "<br />", $error_create_folder );
             }
             else
             {
@@ -180,28 +182,31 @@ if ( file_exists( $filename ) )
                     echo "<br /><b>" . $lang_module['autoinstall_theme_unzip_success'] . "</b><br />";
                     echo "<br /><br /><center><a href=\"" . $nv_redirect . "\">" . $lang_module['autoinstall_module_unzip_setuppage'] . "</a></center>";
                     echo '<script type="text/javascript">
+	                    //<![CDATA[
 							setTimeout("redirect_page()",5000);
 							function redirect_page()
 							{
 								parent.location="' . $nv_redirect . '";
 							}
+						//]]>
 						</script>';
                 }
                 else
                 {
                     asort( $error_move_folder );
-                    echo "<b>" . $lang_module['autoinstall_theme_error_movefile'] . ":</b> <BR>" . implode( "<br>", $error_move_folder );
+                    echo "<b>" . $lang_module['autoinstall_theme_error_movefile'] . ":</b> <br />" . implode( "<br />", $error_move_folder );
                 }
             }
         }
         else
         {
             echo $lang_module['autoinstall_theme_cantunzip'];
-            echo '<div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>';
+            echo '<div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" />' . $lang_module['autoinstall_package_processing'] . '</div>';
             echo '<input style="margin-top:10px;font-size:15px" type="button" name="checkfile" value="' . $lang_module['autoinstall_theme_checkfile'] . '"/>';
             echo '<script type="text/javascript">
 			 $(function(){
-			 	$("input[name=checkfile]").click(function(){
+				 //<![CDATA[	
+				 $("input[name=checkfile]").click(function(){
 			 		$("#message").show();
 			 		$("#step1").html("");
 			 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check",function(){
@@ -209,6 +214,7 @@ if ( file_exists( $filename ) )
 					});
 				});
 			 });
+			 //]]>
 			</script>';
         }
     

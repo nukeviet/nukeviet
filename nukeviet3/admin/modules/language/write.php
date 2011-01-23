@@ -227,7 +227,7 @@ if ( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->ge
     {
         $include_lang = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
         $contents = $lang_module['nv_lang_wite_ok'] . ": " . $include_lang;
-        $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main\">";
+        $contents .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main\" />";
     }
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
@@ -259,12 +259,12 @@ elseif ( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_s
         
         if ( empty( $contents ) )
         {
-            $contents = "<br><br><p align=\"center\"><strong>" . $lang_module['nv_lang_wite_ok'] . "</strong></p>";
-            $contents .= implode( "<br>", $array_filename );
+            $contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_wite_ok'] . "</strong></p>";
+            $contents .= implode( "<br />", $array_filename );
             $array_lang_no_check = array_unique( $array_lang_no_check );
-            //$contents .= "<br><br><b>file lang no check</b><br>";
-            //$contents .= implode ( "<br>", $array_lang_no_check );
-            $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"10000;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\">";
+            //$contents .= "<br /><br /><b>file lang no check</b><br />";
+            //$contents .= implode ( "<br />", $array_lang_no_check );
+            $contents .= "<meta http-equiv=\"Refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\" />";
         }
     }
     else

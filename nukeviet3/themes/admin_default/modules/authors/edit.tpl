@@ -129,14 +129,15 @@
             </td>
             <td colspan="2">
                 <!-- BEGIN: if -->
-                <input name="lev" id="lev" type="radio" value="2" onclick="nv_show_hidden('modslist',0);"{CHECKED2} />
-&nbsp;
-                {LEV4}&nbsp;&nbsp;&nbsp;
-
-                <input name="lev" id="lev" type="radio" value="3" onclick="nv_show_hidden('modslist',1);"{CHECKED3} />
-&nbsp;
-                {LEV5}
-
+                <label>
+	                <input name="lev" type="radio" value="2" onclick="nv_show_hidden('modslist',0);"{CHECKED2} />
+					&nbsp;{LEV4}
+                </label>
+                &nbsp;&nbsp;&nbsp;
+				 <label>
+	                <input name="lev" type="radio" value="3" onclick="nv_show_hidden('modslist',1);"{CHECKED3} />
+					&nbsp; {LEV5}
+				</label>
                 <br/>
                 <div id="modslist" style="margin-top:10px;{STYLE}">
                 {LEV1}:

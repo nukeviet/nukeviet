@@ -28,6 +28,18 @@
             </td>
         </tr>
     </thead>
+   	 <tfoot>
+   	 	<tr>
+	        <td colspan="2">
+	        	<input type="button" value="{GLANG.delete}" id="delall" />
+	        </td> 
+	        <td colspan="6">
+	            <!-- BEGIN: generate_page -->
+				{GENERATE_PAGE}
+				<!-- END: generate_page -->
+			</td> 
+		</tr>
+     </tfoot>     
     <!-- BEGIN: row -->
     <tbody {CLASS}>
         <tr>
@@ -60,17 +72,7 @@
         </tr>
     </tbody>
     <!-- END: row -->
-   	 <tr class="tfoot_box">
-        <td colspan="2">
-        	<input type="button" value="{GLANG.delete}" id="delall" />
-        </td> 
-        <td colspan="6">
-            <!-- BEGIN: generate_page -->
-			{GENERATE_PAGE}
-			<!-- END: generate_page -->
-		   </td> 
-        </tr>   
-    </table>
+</table>
 <script type='text/javascript'>
 //<![CDATA[
 	$(function(){

@@ -125,13 +125,18 @@
             </td>
             <td colspan="2">
 				<!-- BEGIN: show_lev_2 -->	            
-                <input name="lev" id="lev" type="radio" value="2" onclick="nv_show_hidden('modslist',0);"{LEV2_CHECKED} />
-				&nbsp;
-                {LEV2}&nbsp;&nbsp;&nbsp;
-				<!-- END: show_lev_2 -->                
-                <input name="lev" id="lev" type="radio" value="3" onclick="nv_show_hidden('modslist',1);"{LEV3_CHECKED} />
+	                <label>
+	                <input name="lev" type="radio" value="2" onclick="nv_show_hidden('modslist',0);"{LEV2_CHECKED} />
+					&nbsp;
+	                {LEV2}&nbsp;&nbsp;&nbsp;
+	                </label>
+				<!-- END: show_lev_2 --> 
+				
+				<label>               
+                <input name="lev" type="radio" value="3" onclick="nv_show_hidden('modslist',1);"{LEV3_CHECKED} />
 				&nbsp;
                 {LEV3}
+                </label>
                 <br/>
                 <div id="modslist" style="margin-top:10px;{STYLE_MODS}">
                     {MODS0}:

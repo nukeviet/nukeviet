@@ -43,7 +43,7 @@ if ( file_exists( $filename ) )
     
     if ( $errorfile || $errorfolder )
     {
-        echo '<br><div id="message" style="display:none;text-align:center;color:red"><img src="../images/load_bar.gif"/>' . $lang_module['autoinstall_package_processing'] . '</div>';
+        echo '<br /><div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" />' . $lang_module['autoinstall_package_processing'] . '</div>';
         if ( $errorfile )
         {
             echo '<strong>' . $lang_module['autoinstall_module_error_warning_fileexist'] . '</strong><br />' . $errorfile . '';
@@ -52,9 +52,10 @@ if ( file_exists( $filename ) )
         {
             echo '<br /><strong>' . $lang_module['autoinstall_module_error_warning_invalidfolder'] . '</strong><br />' . $errorfolder . '';
         }
-        echo '<br><b>' . $lang_module['autoinstall_module_error_warning_overwrite'] . '</b>';
-        echo '<br><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoinstall_module_overwrite'] . '"/>';
+        echo '<br /><b>' . $lang_module['autoinstall_module_error_warning_overwrite'] . '</b>';
+        echo '<br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoinstall_module_overwrite'] . '"/>';
         echo '<script type="text/javascript">
+	        //<![CDATA[
         		 $(function(){
         		 	$("input[name=install_content_overwrite]").click(function(){
         		 		if(confirm("' . $lang_module['autoinstall_module_error_warning_overwrite'] . '")){
@@ -66,6 +67,7 @@ if ( file_exists( $filename ) )
         					}
 					});
         		 });
+        		 //]]>
         		</script>
         	';
         die();
@@ -168,7 +170,7 @@ if ( file_exists( $filename ) )
             if ( ! empty( $error_create_folder ) )
             {
                 asort( $error_create_folder );
-                echo $lang_module['autoinstall_module_error_warning_permission_folder'] . "<br>: " . implode( "<br>", $error_create_folder );
+                echo $lang_module['autoinstall_module_error_warning_permission_folder'] . "<br />: " . implode( "<br />", $error_create_folder );
             }
             else
             {
@@ -203,17 +205,19 @@ if ( file_exists( $filename ) )
                     echo "<br /><b>" . $lang_module['autoinstall_module_unzip_success'] . "</b><br />";
                     echo "<br /><br /><center><a href=\"" . $nv_redirect . "\">" . $lang_module['autoinstall_module_unzip_setuppage'] . "</a></center>";
                     echo '<script type="text/javascript">
+	                    //<![CDATA[
 							setTimeout("redirect_page()",5000);
 							function redirect_page()
 							{
 								parent.location="' . $nv_redirect . '";
 							}
+						//]]>
 						</script>';
                 }
                 else
                 {
                     asort( $error_move_folder );
-                    echo "<b>" . $lang_module['autoinstall_module_error_movefile'] . ":</b> <BR>" . implode( "<br>", $error_move_folder );
+                    echo "<b>" . $lang_module['autoinstall_module_error_movefile'] . ":</b> <br />" . implode( "<br />", $error_move_folder );
                 }
             }
             if ( $ftp_check_login > 0 )
@@ -224,7 +228,7 @@ if ( file_exists( $filename ) )
         else
         {
             echo $lang_module['autoinstall_module_cantunzip'];
-            echo "<div>" . implode( "<br>", $no_extract ) . "</div>";
+            echo "<div>" . implode( "<br />", $no_extract ) . "</div>";
         }
     }
 }

@@ -144,39 +144,43 @@ $banip_area_array[1] = $lang_module['banip_area_front'];
 $banip_area_array[2] = $lang_module['banip_area_admin'];
 $banip_area_array[3] = $lang_module['banip_area_both'];
 
-$contents .= "<table class=\"tab1\">\n";
-$contents .= "<tbody>\n";
-$contents .= "<tr align=\"center\" class=\"thead_box\">\n";
-$contents .= "<td>" . $lang_module['banip_ip'] . "</td>\n";
-$contents .= "<td>" . $lang_module['banip_mask'] . "</td>\n";
-$contents .= "<td>" . $lang_module['banip_area'] . "</td>\n";
-$contents .= "<td>" . $lang_module['banip_timeban'] . "</td>\n";
-$contents .= "<td>" . $lang_module['banip_timeendban'] . "</td>\n";
-$contents .= "<td>" . $lang_module['banip_funcs'] . "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tbody>\n";
 $sql = "SELECT id, ip, mask, area, begintime, endtime FROM `" . $db_config['prefix'] . "_banip` ORDER BY ip DESC";
 $result = $db->sql_query( $sql );
-while ( list( $dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
+if ( $db->sql_numrows( $result ) )
 {
-    $contents .= "<tbody>\n";
-    $contents .= "<tr>\n";
-    $contents .= "<td align=\"center\">" . $dbip . "</td>\n";
-    $contents .= "<td align=\"center\">" . $mask_text_array[$dbmask] . "</td>\n";
-    $contents .= "<td align=\"center\">" . $banip_area_array[$dbarea] . "</td>\n";
-    $contents .= "<td align=\"center\">" . ( ! empty( $dbbegintime ) ? date( 'd.m.Y', $dbbegintime ) : '' ) . "</td>\n";
-    $contents .= "<td align=\"center\">" . ( ! empty( $dbendtime ) ? date( 'd.m.Y', $dbendtime ) : $lang_module['banip_nolimit'] ) . "</td>\n";
-    $contents .= "<td align=\"center\">
+    $contents .= "<table class=\"tab1\">\n";
+    $contents .= "<thead>\n";
+    $contents .= "<tr align=\"center\">\n";
+    $contents .= "<td>" . $lang_module['banip_ip'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['banip_mask'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['banip_area'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['banip_timeban'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['banip_timeendban'] . "</td>\n";
+    $contents .= "<td>" . $lang_module['banip_funcs'] . "</td>\n";
+    $contents .= "</tr>\n";
+    $contents .= "</thead>\n";
+    
+    while ( list( $dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
+    {
+        $contents .= "<tbody>\n";
+        $contents .= "<tr>\n";
+        $contents .= "<td align=\"center\">" . $dbip . "</td>\n";
+        $contents .= "<td align=\"center\">" . $mask_text_array[$dbmask] . "</td>\n";
+        $contents .= "<td align=\"center\">" . $banip_area_array[$dbarea] . "</td>\n";
+        $contents .= "<td align=\"center\">" . ( ! empty( $dbbegintime ) ? date( 'd.m.Y', $dbbegintime ) : '' ) . "</td>\n";
+        $contents .= "<td align=\"center\">" . ( ! empty( $dbendtime ) ? date( 'd.m.Y', $dbendtime ) : $lang_module['banip_nolimit'] ) . "</td>\n";
+        $contents .= "<td align=\"center\">
 		<span class=\"edit_icon\">
 			<a class='edit' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=banip&id=" . $dbid . "\">" . $lang_module['banip_edit'] . "</a>
 		</span>	- 
 		<span class=\"delete_icon\">
 			<a class='deleteone' href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=banip&del=1&id=" . $dbid . "\">" . $lang_module['banip_delete'] . "</a>
 		</span></td>\n";
-    $contents .= "</tr>\n";
-    $contents .= "</tbody>\n";
+        $contents .= "</tr>\n";
+        $contents .= "</tbody>\n";
+    }
+    $contents .= "</table>\n";
 }
-$contents .= "</table>\n";
 if ( ! empty( $cid ) )
 {
     list( $id, $ip, $mask, $area, $begintime, $endtime, $notice ) = $db->sql_fetchrow( $db->sql_query( "SELECT id, ip, mask, area, begintime, endtime, notice FROM `" . $db_config['prefix'] . "_banip` WHERE id=$cid" ) );
@@ -229,7 +233,7 @@ $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['banip_begintime'] . "</td>\n";
 $contents .= "<td><input type='text' name='begintime' id='begintime' value='" . ( ! empty( $begintime ) ? date( 'd.m.Y', $begintime ) : '' ) . "' style='width:150px'/>\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'begintime', 'dd.mm.yyyy', true);\" alt=\"\" height=\"17\">\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" style=\"width:18px; height:17px; cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'begintime', 'dd.mm.yyyy', true);\" alt=\"\"  />\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
@@ -237,7 +241,8 @@ $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['banip_endtime'] . "</td>\n";
 $contents .= "<td><input type='text' name='endtime' id='endtime' value='" . ( ! empty( $endtime ) ? date( 'd.m.Y', $endtime ) : '' ) . "' style='width:150px'/>\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'endtime', 'dd.mm.yyyy', true);\" alt=\"\" height=\"17\">\n";
+$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" style=\"width:18px; height:17px; cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'endtime', 'dd.mm.yyyy', true);\" alt=\"\" />\n";
+$contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tbody class='second'>\n";
@@ -259,6 +264,7 @@ $contents .= "</table>\n";
 $contents .= "</form>\n";
 $contents .= "
 <script type='text/javascript'>
+	//<![CDATA[	
 	$('input[name=submit]').click(function(){
 		var ip = $('input[name=ip]').val();
 		$('input[name=ip]').focus();
@@ -288,8 +294,8 @@ $contents .= "
         }
 		return false;
 	});
-</script>
-";
+	//]]>
+</script>";
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );

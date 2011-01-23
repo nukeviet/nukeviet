@@ -38,7 +38,7 @@ if ( $submit )
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
     exit();
 }
-$array_config_global['dump_autobackup'] = ( $global_config['dump_autobackup'] ) ? " checked" : "";
+$array_config_global['dump_autobackup'] = ( $global_config['dump_autobackup'] ) ? ' checked="checked"' : '';
 
 $xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/database" );
 $xtpl->assign( 'LANG', $lang_module );

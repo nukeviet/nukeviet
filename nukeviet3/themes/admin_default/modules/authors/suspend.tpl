@@ -38,6 +38,14 @@
     <col valign="top" width="150px" />
     <col valign="top" width="10px" />
     <col valign="top" />
+
+    <tfoot>
+        <tr>
+            <td colspan="2"><input name="save" id="save" type="hidden" value="1" /></td>
+            <td><input name="go_change" type="submit" value="{SUBMIT}" /></td>
+        </tr>
+    </tfoot>
+        
     <!-- BEGIN: new_reason -->
         <tr>
         <td>{NEW_REASON0}:</td>
@@ -59,13 +67,6 @@
         <td><input name="clean_history" id="clean_history" type="checkbox" value="1"{CHECKED1} /></td>
         </tr>
     <!-- END: clean_history -->
-
-    <table style="margin-bottom:8px;width:800px;">
-        <col valign="top" width="160px" />
-        <tr>
-            <td colspan="2"><input name="save" id="save" type="hidden" value="1" /></td>
-            <td><input name="go_change" type="submit" value="{SUBMIT}" /></td>
-        </tr>
     </table>
 
     </form>

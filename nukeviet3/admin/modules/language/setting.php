@@ -21,8 +21,8 @@ if ( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() .
     $query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  '" . $read_type . "' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'read_type'";
     $result = $db->sql_query( $query );
     nv_save_file_config_global();
-    $contents = "<br><br><br><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
-    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"2;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\">";
+    $contents = "<br /><br /><br /><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
+    $contents .= "<meta http-equiv=\"Refresh\" content=\"2;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\">";
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -78,8 +78,8 @@ if ( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "
     
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setting_save'] , " allow sitelangs : " .$allow_sitelangs . ", allow adminlangs :" .$allow_adminlangs , $admin_info['userid'] );
     nv_save_file_config_global();
-    $contents = "<br><br><br><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
-    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"2;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\">";
+    $contents = "<br /><br /><br /><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
+    $contents .= "<meta http-equiv=\"Refresh\" content=\"2;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\" />\n";
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -141,20 +141,20 @@ while ( list( $key, $value ) = each( $language_array ) )
     $contents .= "      <td style=\"width: 180px\">" . $value['name'] . "</td>";
     if ( $check_lang_exit and in_array( $key, $array_lang_setup ) )
     {
-        $contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_sitelangs[]\" value=\"" . $key . "\" type=\"checkbox\" " . ( in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "" ) . "></td>";
+        $contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_sitelangs[]\" value=\"" . $key . "\" type=\"checkbox\" " . ( in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "" ) . " /></td>";
     }
     else
     {
-        $contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_sitelangs[]\" value=\"" . $key . "\" type=\"checkbox\" disabled></td>";
+        $contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_sitelangs[]\" value=\"" . $key . "\" type=\"checkbox\" disabled=\"disabled\" /></td>";
     }
     
     if ( $check_lang_exit )
     {
-        $contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_adminlangs[]\" value=\"" . $key . "\" type=\"checkbox\" " . ( in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "" ) . "></td>";
+        $contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_adminlangs[]\" value=\"" . $key . "\" type=\"checkbox\" " . ( in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "" ) . " /></td>";
     }
     else
     {
-        $contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_adminlangs[]\" value=\"" . $key . "\" type=\"checkbox\" disabled></td>";
+        $contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_adminlangs[]\" value=\"" . $key . "\" type=\"checkbox\" disabled=\"disabled\" /></td>";
     }
     if ( ! empty( $arr_lang_func ) and ! in_array( $key, $global_config['allow_adminlangs'] ) )
     {
@@ -171,7 +171,7 @@ $contents .= "</div>";
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\" value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\" value=\"" . $op . "\" />";
 $contents .= "<input type=\"hidden\" name =\"checksessshow\" value=\"" . md5( session_id() . "show" ) . "\" />";
-$contents .= "<center><input type=\"submit\" value=\"" . $lang_module['nv_admin_edit_save'] . "\" /><center>";
+$contents .= "<center><input type=\"submit\" value=\"" . $lang_module['nv_admin_edit_save'] . "\" /></center>";
 $contents .= "</form>";
 
 $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
@@ -181,15 +181,15 @@ foreach ( $array_type as $key => $value )
 {
     $contents .= "  <tr>";
     $contents .= "      <td></td>";
-    $contents .= "      <td><input name=\"read_type\" value=\"" . $key . "\" type=\"radio\" " . ( $global_config['read_type'] == $key ? " checked=\"checked\"" : "" ) . "> " . $value . "</td>";
+    $contents .= "      <td><input name=\"read_type\" value=\"" . $key . "\" type=\"radio\" " . ( $global_config['read_type'] == $key ? " checked=\"checked\"" : "" ) . " /> " . $value . "</td>";
     $contents .= "  </tr>";
 }
 $contents .= "</table>";
-$contents .= "<br>";
+$contents .= "<br />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\" value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\" value=\"" . $op . "\" />";
 $contents .= "<input type=\"hidden\" name =\"checksessseting\" value=\"" . md5( session_id() . "seting" ) . "\" />";
-$contents .= "<center><input type=\"submit\" value=\"" . $lang_module['nv_admin_edit_save'] . "\" /><center>";
+$contents .= "<center><input type=\"submit\" value=\"" . $lang_module['nv_admin_edit_save'] . "\" /></center>\n";
 $contents .= "</form>";
 
 include ( NV_ROOTDIR . "/includes/header.php" );

@@ -117,7 +117,7 @@ function nv_admin_read_lang ( $dirlang, $module, $admin_file = 1 )
             $lang_key = trim( $lang_key );
             $lang_value = nv_nl2br( $lang_value );
             $lang_value = str_replace( '<br  />', '<br />', $lang_value );
-            $lang_value = str_replace( '<br>', '<br />', $lang_value );
+            $lang_value = str_replace( '<br />', '<br />', $lang_value );
             if ( $read_type == 0 or $read_type == 1 )
             {
                 $sql = "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`id`, `idfile`, `lang_key`, `lang_" . $dirlang . "`, `update_" . $dirlang . "` " . $string_lang_key . ") VALUES (NULL, '" . $idfile . "', '" . mysql_real_escape_string( $lang_key ) . "', '" . mysql_real_escape_string( $lang_value ) . "',  UNIX_TIMESTAMP( ) " . $string_lang_value . ")";
@@ -171,9 +171,9 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessi
             $array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
         }
         $nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
-        $contents = "<br><br><p align=\"center\"><strong>" . $lang_module['nv_lang_readok'] . "</strong></p>";
-        $contents .= implode( "<br>", $array_filename );
-        $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main\">";
+        $contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_readok'] . "</strong></p>";
+        $contents .= implode( "<br />", $array_filename );
+        $contents .= "<meta http-equiv=\"Refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main\" />";
         include ( NV_ROOTDIR . "/includes/header.php" );
         echo nv_admin_theme( $contents );
         include ( NV_ROOTDIR . "/includes/footer.php" );

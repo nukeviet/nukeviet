@@ -16,6 +16,7 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . ses
     {
         $dirs = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
         $err = 0;
+        $array_filename = array();
         foreach ( $dirs as $module )
         {
             if ( file_exists( NV_ROOTDIR . "/modules/" . $module . "/language/admin_" . $dirlang . ".php" ) )
@@ -51,15 +52,15 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . ses
             $db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` DROP `author_" . $dirlang . "`" );
             $db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `lang_" . $dirlang . "`" );
             $db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `update_" . $dirlang . "`" );
-            $contents = "<br><br><p align=\"center\"><strong>" . $lang_module['nv_lang_deleteok'] . "</strong></p>";
+            $contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_deleteok'] . "</strong></p>";
         }
         else
         {
-            $contents = "<br><br><p align=\"center\"><strong>" . $lang_module['nv_lang_delete_error'] . "</strong></p>";
+            $contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_delete_error'] . "</strong></p>";
         }
-        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['nv_admin_delete'] , "", $admin_info['userid'] );
-        $contents .= implode( "<br>", $array_filename );
-        $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\">";
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang.' --> '.$language_array[$dirlang]['name'], $admin_info['userid'] );
+        $contents .= implode( "<br />", $array_filename );
+        $contents .= "<meta http-equiv=\"Refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\" />";
         include ( NV_ROOTDIR . "/includes/header.php" );
         echo nv_admin_theme( $contents );
         include ( NV_ROOTDIR . "/includes/footer.php" );

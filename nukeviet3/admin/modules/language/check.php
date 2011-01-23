@@ -21,8 +21,8 @@ while ( $row = $db->sql_fetch_assoc( $result ) )
 }
 if ( empty( $array_lang_exit ) )
 {
-    $contents = "<center><br><b>" . $lang_module['nv_lang_error_exit'] . "</b></center>";
-    $contents .= "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\">";
+    $contents = "<center><br /><b>" . $lang_module['nv_lang_error_exit'] . "</b></center>";
+    $contents .= "<meta http-equiv=\"Refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\" />";
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -66,7 +66,7 @@ if ( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->ge
     die();
 }
 
-$contents .= "<br><form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"get\"><center>";
+$contents .= "<br /><form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"get\"><center>";
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<table class=\"tab1\">";
@@ -76,7 +76,7 @@ foreach ( $language_array as $key => $value )
 {
     if ( in_array( $key, $array_lang_exit ) )
     {
-        $sl = ( $key == $typelang ) ? " selected" : "";
+        $sl = ( $key == $typelang ) ? ' selected="selected"': '';
         $contents .= "<option value=\"" . $key . "\" " . $sl . ">" . $value['name'] . "</option>\n";
     }
 }
@@ -88,7 +88,7 @@ foreach ( $language_array_source as $key )
 {
     if ( in_array( $key, $array_lang_exit ) )
     {
-        $sl = ( $key == $sourcelang ) ? " selected" : "";
+        $sl = ( $key == $sourcelang ) ? ' selected="selected"': '';
         $contents .= "<option value=\"" . $key . "\" " . $sl . ">" . $language_array[$key]['name'] . "</option>\n";
     }
 }
@@ -101,7 +101,7 @@ $result = $db->sql_query( $query );
 while ( list( $idfile_i, $module, $admin_file, ) = $db->sql_fetchrow( $result ) )
 {
     $langsitename = ( $admin_file == 1 ) ? $lang_module['nv_lang_admin'] : $lang_module['nv_lang_site'];
-    $sl = ( $idfile_i == $idfile ) ? " selected" : "";
+    $sl = ( $idfile_i == $idfile ) ? ' selected="selected"': '';
     $contents .= " <option value=\"" . $idfile_i . "\" " . $sl . ">" . $module . " " . $langsitename . "</option>\n";
 }
 
@@ -110,7 +110,7 @@ $contents .= "</table>";
 $contents .= "<input type=\"hidden\" name =\"submit\" value=\"1\" />";
 $contents .= "<input type=\"submit\" value=\"" . $lang_module['nv_admin_submit'] . "\" /></center>";
 $contents .= "</form>";
-$contents .= "<br>";
+$contents .= "<br />";
 
 $submit = $nv_Request->get_int( 'submit', 'get', 0 );
 if ( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typelang, $array_lang_exit ) )
@@ -125,9 +125,8 @@ if ( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $ty
     $contents .= "<input type=\"hidden\" name =\"savedata\" value=\"" . md5( session_id() ) . "\" />";
     
     $contents .= "<table summary=\"\" class=\"tab1\">\n";
-    $contents .= "<colgroup width=\"40\">";
-    $contents .= "<colgroup width=\"200\">";
-    
+    $contents .= "<col width=\"40\" />";
+    $contents .= "<col width=\"200\" />";
     $contents .= "<thead>";
     $contents .= "<tr>";
     $contents .= "<td>" . $lang_module['nv_lang_nb'] . "</td>";
@@ -152,7 +151,7 @@ if ( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $ty
         $contents .= "<tr>";
         $contents .= "<td align=\"center\">" . $i . "</td>";
         $contents .= "<td align=\"right\">" . $lang_key . "</td>";
-        $contents .= "<td align=\"left\"><input type=\"text\" value=\"\" name=\"pozlang[" . $id . "]\" size=\"90\" /><br>" . nv_htmlspecialchars( $lang_value ) . "</td>";
+        $contents .= "<td align=\"left\"><input type=\"text\" value=\"\" name=\"pozlang[" . $id . "]\" size=\"90\" /><br />" . nv_htmlspecialchars( $lang_value ) . "</td>";
         $contents .= "</tr>";
         $contents .= "</tbody>";
     }

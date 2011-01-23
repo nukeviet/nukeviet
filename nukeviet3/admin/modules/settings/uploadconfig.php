@@ -85,11 +85,11 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 
 $page_title = $lang_module['uploadconfig'];
 
-$contents = "<form action='' method='post'>\n";
-$contents .= "<table class=\"tab1\" style='auto'>\n";
-$contents .= "<tbody class='second'>\n";
+$contents = "<form action=\"\" method=\"post\">\n";
+$contents .= "<table class=\"tab1\" style=\"auto\">\n";
+$contents .= "<tbody class=\"second\">\n";
 $contents .= "<tr>\n";
-$contents .= "<td colspan='2'><strong>" . $lang_module['uploadconfig'] . "</strong></td>\n";
+$contents .= "<td colspan=\"2\"><strong>" . $lang_module['uploadconfig'] . "</strong></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>";
 $contents .= "<tbody>";
@@ -111,7 +111,7 @@ $contents .= "</td>";
 $contents .= "</tr>";
 $contents .= "</tbody>";
 
-$contents .= "<tbody class='second'>";
+$contents .= "<tbody class=\"second\">";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['upload_checking_mode'] . ":</strong> </td>\n";
 $contents .= "<td>";
@@ -157,35 +157,34 @@ $contents .= "</tbody>";
 
 $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
-$contents .= "<td style='width:200px'><strong>" . $lang_module['uploadconfig_types'] . "</strong></td>\n";
+$contents .= "<td style=\"width:200px\"><strong>" . $lang_module['uploadconfig_types'] . "</strong></td>\n";
 $contents .= "<td>";
 foreach ( $myini['types'] as $key => $name )
 {
-    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='type[]' value='" . $key . "'" . ( in_array( $name, $global_config['file_allowed_ext'] ) ? ' checked=checked' : '' ) . "/> " . $name . "&nbsp;&nbsp;</label>";
+    $contents .= "<label style=\"display:inline-block;width:100px\"><input type=\"checkbox\" name=\"type[]\" value=\"" . $key . "\"" . ( in_array( $name, $global_config['file_allowed_ext'] ) ? ' checked="checked"' : '' ) . " /> " . $name . "&nbsp;&nbsp;</label>\n";
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
-$contents .= "<tbody class='second'>\n";
+$contents .= "<tbody class=\"second\">\n";
 $contents .= "<tr>\n";
-$contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_ext'] . "</strong></td>\n";
+$contents .= "<td style=\"vertical-align:top\"><strong>" . $lang_module['uploadconfig_ban_ext'] . "</strong></td>\n";
 $contents .= "<td>";
 foreach ( $myini['exts'] as $key => $name )
 {
-    $contents .= "<label style='display:inline-block;width:100px'><input type='checkbox' name='ext[]' value='" . $key . "'" . ( in_array( $name, $global_config['forbid_extensions'] ) ? ' checked=checked' : '' ) . "/> " . $name . "&nbsp;&nbsp;</label>";
+    $contents .= "<label style=\"display:inline-block;width:100px\"><input type=\"checkbox\" name=\"ext[]\" value=\"" . $key . "\"" . ( in_array( $name, $global_config['forbid_extensions'] ) ? ' checked="checked"' : '' ) . " /> " . $name . "&nbsp;&nbsp;</label>\n";
 }
-$contents .= "</td>\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 
 $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
-$contents .= "<td style='vertical-align:top'><strong>" . $lang_module['uploadconfig_ban_mime'] . "</strong></td>\n";
+$contents .= "<td style=\"vertical-align:top\"><strong>" . $lang_module['uploadconfig_ban_mime'] . "</strong></td>\n";
 $contents .= "<td>";
 foreach ( $myini['mimes'] as $key => $name )
 {
-    $contents .= "<label style='display:inline-block;width:300px'><input type='checkbox' name='mime[]' value='" . $key . "'" . ( in_array( $name, $global_config['forbid_mimes'] ) ? ' checked=checked' : '' ) . "/> " . $name . "&nbsp;&nbsp;</label>";
+    $contents .= "<label style=\"display:inline-block;width:300px\"><input type=\"checkbox\" name=\"mime[]\" value=\"" . $key . "\"" . ( in_array( $name, $global_config['forbid_mimes'] ) ? ' checked="checked"' : '' ) . " /> " . $name . "&nbsp;&nbsp;</label>\n";
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
@@ -193,8 +192,8 @@ $contents .= "</tbody>\n";
 
 $contents .= "<tbody class=\"second\">\n";
 $contents .= "<tr>\n";
-$contents .= "<td colspan='2' style='text-align:center'>";
-$contents .= "<input type='submit' value='" . $lang_module['banip_confirm'] . "' name='submit'/>\n";
+$contents .= "<td colspan=\"2\" style=\"text-align:center\">";
+$contents .= "<input type=\"submit\" value=\"" . $lang_module['banip_confirm'] . "\" name=\"submit\"/>\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";

@@ -76,7 +76,7 @@ if ( $step == 1 )
     $rand = array_rand( $nv_sites_update );
     $nv_site = $nv_sites_update[$rand];
     
-    $contents = '<center><br><br><br><b>' . $lang_module['autoupdate_get_error'] . '</b><br></center>';
+    $contents = '<center><br /><br /><br /><b>' . $lang_module['autoupdate_get_error'] . '</b><br /></center>';
     
     require_once NV_ROOTDIR . '/includes/class/geturl.class.php';
     $getContent = new UrlGetContents( $global_config );
@@ -96,8 +96,8 @@ if ( $step == 1 )
                 
                 $lang_waiting = sprintf( $lang_module['autoupdate_download_waiting'], $filedownload, $filedownload );
                 
-                $contents .= '<div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif"/><br><br>' . $lang_waiting . '</div>';
-                $contents .= '<div id="step1" ><center><br><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate_download'] . '"/><center></div>';
+                $contents .= '<div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif"/><br /><br />' . $lang_waiting . '</div>';
+                $contents .= '<div id="step1" ><center><br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate_download'] . '"/><center></div>';
                 $contents .= '<script type="text/javascript">
 				        		 $(function(){
 				        		 	$("input[name=install_content_overwrite]").click(function(){
@@ -192,10 +192,10 @@ elseif ( $step == 2 and md5( $step . $global_config['sitekey'] . session_id() ) 
                 }
                 if ( empty( $no_extract ) )
                 {
-                    $contents = '<br>';
+                    $contents = '<br />';
                     $contents .= '<div id="message_31" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif"/></div>';
                     $contents .= '<div id="step_31" >' . $lang_module['autoupdate_download_complete'];
-                    $contents .= '<center><br><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate_check_file'] . ' "/><center></div>';
+                    $contents .= '<center><br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate_check_file'] . ' "/><center></div>';
                     $contents .= '<script type="text/javascript">
 				        		 $(function(){
 				        		 	$("input[name=install_content_overwrite]").click(function(){
@@ -210,12 +210,12 @@ elseif ( $step == 2 and md5( $step . $global_config['sitekey'] . session_id() ) 
                 }
                 else
                 {
-                    $contents = '<div id="message" style="text-align:center;color:red"><br><br>' . sprintf( $lang_module['autoupdate_download_error'], $filedownload, $filedownload ) . '</div>';
+                    $contents = '<div id="message" style="text-align:center;color:red"><br /><br />' . sprintf( $lang_module['autoupdate_download_error'], $filedownload, $filedownload ) . '</div>';
                 }
             }
             else
             {
-                $contents = '<div id="message" style="text-align:center;color:red"><br><br>' . $lang_module['autoupdate_invalidfile'] . '</div>';
+                $contents = '<div id="message" style="text-align:center;color:red"><br /><br />' . $lang_module['autoupdate_invalidfile'] . '</div>';
             }
         }
     }
@@ -246,10 +246,10 @@ elseif ( $step == 3 and file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/up
     require_once ( NV_ROOTDIR . '/' . $temp_extract_dir . '/update.php' );
     if ( $checkss != md5( $step . $global_config['sitekey'] . session_id() ) )
     {
-        $contents = '<br>';
+        $contents = '<br />';
         $contents .= '<div id="message_31" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif"/></div>';
         $contents .= '<div id="step_31" >' . $lang_module['autoupdate_form_upload'];
-        $contents .= '<center><br><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate_check_file'] . '"/><center></div>';
+        $contents .= '<center><br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate_check_file'] . '"/><center></div>';
         $contents .= '<script type="text/javascript">
         		 $(function(){
         		 	$("input[name=install_content_overwrite]").click(function(){
@@ -284,18 +284,18 @@ elseif ( $step == 3 and file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/up
         }
         if ( ! empty( $user_edit_file ) )
         {
-            $contents .= '<br><br><b>' . $lang_module['autoupdate_change'] . ':</b>';
-            $contents .= '<br> ' . implode( "<br>", $user_edit_file );
-            $contents .= '<br><br>' . $lang_module['autoupdate_overwrite'];
+            $contents .= '<br /><br /><b>' . $lang_module['autoupdate_change'] . ':</b>';
+            $contents .= '<br /> ' . implode( "<br />", $user_edit_file );
+            $contents .= '<br /><br />' . $lang_module['autoupdate_overwrite'];
         }
         else
         {
-            $contents .= '<br>' . $lang_module['autoupdate_click_update'];
+            $contents .= '<br />' . $lang_module['autoupdate_click_update'];
         }
-        $contents .= '<br><br>' . $lang_module['autoupdate_backupfile'] . ': <b>' . NV_LOGS_DIR . '/data_logs/backup_update_' . date( Y_m_d ) . '.zip</b>';
-        $contents .= '<br><br>';
+        $contents .= '<br /><br />' . $lang_module['autoupdate_backupfile'] . ': <b>' . NV_LOGS_DIR . '/data_logs/backup_update_' . date( Y_m_d ) . '.zip</b>';
+        $contents .= '<br /><br />';
         $contents .= '<div id="message_32" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif"/></div>';
-        $contents .= '<br><div id="step_32" ><center><br><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate'] . '"/><center></div>';
+        $contents .= '<br /><div id="step_32" ><center><br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate'] . '"/><center></div>';
         $contents .= '<script type="text/javascript">
         		 $(function(){
         		 	$("input[name=install_content_overwrite]").click(function(){
@@ -351,7 +351,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
     }
     if ( $error_backup )
     {
-        $contents .= '<br><br><b>' . $lang_module['autoupdate_backupfile_error'] . ':' . NV_LOGS_DIR . '/data_logs</b>';
+        $contents .= '<br /><br /><b>' . $lang_module['autoupdate_backupfile_error'] . ':' . NV_LOGS_DIR . '/data_logs</b>';
     }
     else
     {
@@ -382,8 +382,8 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
             }
             if ( ! empty( $error_create_folder ) )
             {
-                $contents .= '<br><br><b>' . $lang_module['autoupdate_error_create_folder'] . ':</b>';
-                $contents .= '<br> ' . implode( "<br>", $error_create_folder );
+                $contents .= '<br /><br /><b>' . $lang_module['autoupdate_error_create_folder'] . ':</b>';
+                $contents .= '<br /> ' . implode( "<br />", $error_create_folder );
             }
             else
             {
@@ -412,8 +412,8 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
                 }
                 if ( ! empty( $error_move_folder ) )
                 {
-                    $contents .= '<br><br><b>' . $lang_module['autoupdate_error_move_file'] . ':</b>';
-                    $contents .= '<br> ' . implode( "<br>", $error_move_folder );
+                    $contents .= '<br /><br /><b>' . $lang_module['autoupdate_error_move_file'] . ':</b>';
+                    $contents .= '<br /> ' . implode( "<br />", $error_move_folder );
                 }
                 else
                 {
@@ -428,12 +428,12 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
                     if ( $update_data )
                     {
                         nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
-                        $contents .= '<br><br><b>' . $lang_module['autoupdate_complete'] . '</b>';
+                        $contents .= '<br /><br /><b>' . $lang_module['autoupdate_complete'] . '</b>';
                     }
                     else
                     {
-                        $contents .= '<br><br><b>' . $lang_module['autoupdate_complete_file'] . '.</b>';
-                        $contents .= '<br><br><b>' . $lang_module['autoupdate_error_data'] . ':</b><br>' . implode( "<br>", $error_contents );
+                        $contents .= '<br /><br /><b>' . $lang_module['autoupdate_complete_file'] . '.</b>';
+                        $contents .= '<br /><br /><b>' . $lang_module['autoupdate_error_data'] . ':</b><br />' . implode( "<br />", $error_contents );
                     }
                 }
             }

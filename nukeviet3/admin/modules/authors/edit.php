@@ -88,8 +88,8 @@ $error = "";
 
 if ( $nv_Request->get_int( 'save', 'post', 0 ) )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'] , "Username: " . $row_user['username'], $admin_info['userid'] );
-	$editor = filter_text_input( 'editor', 'post', '' );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'], "Username: " . $row_user['username'], $admin_info['userid'] );
+    $editor = filter_text_input( 'editor', 'post', '' );
     if ( defined( 'NV_IS_SPADMIN' ) )
     {
         $allow_files_type = $nv_Request->get_array( 'allow_files_type', 'post', array() );
@@ -261,7 +261,7 @@ if ( $nv_Request->get_int( 'save', 'post', 0 ) )
         
         if ( empty( $result['change'] ) )
         {
-            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "#aid" . $admin_id );
             exit();
         }
         nv_admin_edit_result( $result );
