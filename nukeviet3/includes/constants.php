@@ -94,23 +94,11 @@ define( 'NV_UPASSMAX', 20 );
 //so ky tu toi thieu cua password doi voi user
 define( 'NV_UPASSMIN', 5 );
 
-//so ky tu toi da cua password doi voi admin
-define( 'NV_APASSMAX', 20 );
-
-//so ky tu toi thieu cua password doi voi admin
-define( 'NV_APASSMIN', 5 );
-
 //so ky tu toi da cua ten tai khoan doi voi user
 define( 'NV_UNICKMAX', 20 );
 
 //so ky tu toi thieu cua ten tai khoan doi voi user
 define( 'NV_UNICKMIN', 4 );
-
-//so ky tu toi da cua ten tai khoan doi voi admin
-define( 'NV_ANICKMAX', 20 );
-
-//so ky tu toi thieu cua ten tai khoan doi voi admin
-define( 'NV_ANICKMIN', 4 );
 
 //so ky tu cua Ma kiem tra
 define( 'NV_GFX_NUM', 6 );

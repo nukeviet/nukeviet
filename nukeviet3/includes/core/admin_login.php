@@ -11,7 +11,7 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! nv_admin_checkip() )
 {
-    nv_info_die( $global_config['site_description'], $lang_global['site_info'], sprintf( $lang_global['admin_ipincorrect'], $client_info['ip'] ) . "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />" );
+    nv_info_die( $global_config['site_description'], $lang_global['site_info'], sprintf( $lang_global['admin_ipincorrect'], $client_info['ip'] ) . "<meta http-equiv=\"Refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />" );
 }
 
 if ( ! nv_admin_checkfirewall() )
@@ -28,7 +28,7 @@ if ( ! nv_admin_checkfirewall() )
     {
         header( 'status: 401 Unauthorized' );
     }
-    nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />" );
+    nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . "<meta http-equiv=\"Refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />" );
 }
 
 $error = "";
@@ -119,7 +119,7 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                     else
                     {
                         $current_login = NV_CURRENTTIME;
-                        nv_insert_logs( NV_LANG_DATA, "login", "[" .$nv_username . "] " . strtolower( $lang_global['loginsubmit'] )," Client IP:" . NV_CLIENT_IP, 0 );
+                        nv_insert_logs( NV_LANG_DATA, "login", "[" . $nv_username . "] " . strtolower( $lang_global['loginsubmit'] ), " Client IP:" . NV_CLIENT_IP, 0 );
                         $admin_id = intval( $row['admin_id'] );
                         $agent = substr( NV_USER_AGENT, 0, 254 );
                         $checknum = nv_genpass( 10 );
@@ -141,14 +141,14 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                             $nv_Request->unset_request( 'admin_login_redirect', 'session' );
                         }
                         $error = "";
-                        nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . $redirect . "\" />" );
+                        nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />" );
                         die();
                     }
                 }
             }
             else
             {
-                nv_insert_logs( NV_LANG_DATA, "login", "[ " .$nv_username . " ] " . strtolower( $lang_global['loginsubmit'] . " " . $lang_global['fail'] ), " Client IP:" . NV_CLIENT_IP, 0 );
+                nv_insert_logs( NV_LANG_DATA, "login", "[ " . $nv_username . " ] " . strtolower( $lang_global['loginsubmit'] . " " . $lang_global['fail'] ), " Client IP:" . NV_CLIENT_IP, 0 );
             }
         }
     }
@@ -200,6 +200,9 @@ $xtpl->assign( 'N_LOGIN', $lang_global['nickname'] );
 $xtpl->assign( 'N_PASSWORD', $lang_global['password'] );
 $xtpl->assign( 'SITEURL', $global_config['site_url'] );
 $xtpl->assign( 'N_SUBMIT', $lang_global['loginsubmit'] );
+
+$xtpl->assign( 'NICKMAX', NV_UNICKMAX );
+$xtpl->assign( 'PASSMAX', NV_UPASSMAX );
 
 $xtpl->assign( 'LOGIN_ERROR_SECURITY', addslashes( sprintf( $lang_global['login_error_security'], NV_GFX_NUM ) ) );
 

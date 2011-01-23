@@ -449,8 +449,8 @@ elseif ( $step == 6 )
         $email = filter_text_input( 'nv_email', 'post', '' );
         $password = filter_text_input( 'nv_password', 'post', '' );
         $re_password = filter_text_input( 're_password', 'post', '' );
-        $check_login = nv_check_valid_login( $login, NV_ANICKMAX, NV_ANICKMIN );
-        $check_pass = nv_check_valid_pass( $password, NV_APASSMAX, NV_APASSMIN );
+        $check_login = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
+        $check_pass = nv_check_valid_pass( $password, NV_UPASSMAX, NV_UPASSMIN );
         $check_email = nv_check_valid_email( $email );
         
         $question = filter_text_input( 'question', 'post', '', 1 );
