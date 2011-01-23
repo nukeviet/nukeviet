@@ -1,8 +1,8 @@
 <!-- BEGIN: mainrefresh -->
-<div class="title" style="text-align: center;"><br>
-<br>
-{DATA.content} <br>
-<br>
+<div class="title" style="text-align: center;"><br />
+<br />
+{DATA.content} <br />
+<br />
 </div>
 <meta http-equiv="refresh" content="5;URL={DATA.urlrefresh}" />
 <!-- END: mainrefresh -->
@@ -83,8 +83,8 @@
 	<!-- END: imgposition -->
 </select></div>
 
-<br>
-<strong>{LANG.content_hometext}</strong></label> <br>
+<br />
+<strong>{LANG.content_hometext}</strong></label> <br />
 <textarea class="textareaform" rows="6" cols="60" name="hometext"> {DATA.hometext}</textarea> <br />
 
 <br />

@@ -126,7 +126,7 @@ if ( ! empty( $array_op ) and $op == "main" )
         }
         elseif ( ! empty( $alias_cat_url ) )
         {
-            $redirect = "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=" . $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
+            $redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
             nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
         }
     }

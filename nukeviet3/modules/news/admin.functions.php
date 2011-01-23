@@ -558,6 +558,10 @@ function nv_show_block_cat_list ( )
         }
         $contents .= "</table>\n";
     }
+    else
+    {
+        $contents .= "&nbsp;";
+    }
     $db->sql_freeresult();
     return $contents;
 }
@@ -605,6 +609,10 @@ function nv_show_sources_list ( )
         }
         $contents .= "</table>\n";
         $contents .= nv_generate_page( $base_url, $all_page, $per_page, $page );
+    }
+    else
+    {
+        $contents .= "&nbsp;";
     }
     $db->sql_freeresult();
     return $contents;
@@ -672,6 +680,7 @@ function nv_content_keywords ( $content )
 function nv_show_block_list ( $bid )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
+    $contents = "";
     
     $global_array_cat = array();
     $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other";
@@ -688,54 +697,58 @@ function nv_show_block_list ( $bid )
             "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i, "viewcat" => $viewcat_i, "subcatid" => $subcatid_i, "numlinks" => $numlinks_i, "description" => $description_i, "keywords" => $keywords_i 
         );
     }
-    $contents = "<form name=\"block_list\">";
-    $contents .= "<table class=\"tab1\">\n";
-    $contents .= "<thead>\n";
-    $contents .= "<tr>\n";
-    $contents .= "<td align=\"center\"><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
-    $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
-    $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-    $contents .= "<td style=\"width:200px;\"></td>\n";
-    $contents .= "</tr>\n";
-    $contents .= "</thead>\n";
+    
     $sql = "SELECT t1.id, t1.listcatid, t1.title, t1.alias, t2.weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.inhome='1' ORDER BY t2.weight ASC";
     $result = $db->sql_query( $sql );
     $num = $db->sql_numrows( $result );
-    $a = 0;
-    while ( list( $id, $listcatid, $title, $alias, $weight ) = $db->sql_fetchrow( $result ) )
+    if ( $num > 0 )
     {
-        $arr_listcatid = explode( ",", $listcatid );
-        $catid_i = end( $arr_listcatid );
-        
-        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
-        $class = ( $a % 2 ) ? " class=\"second\"" : "";
-        $contents .= "<tbody" . $class . ">\n";
+        $contents = "<form name=\"block_list\" action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $bid . "\" method=\"get\">";
+        $contents .= "<table class=\"tab1\">\n";
+        $contents .= "<thead>\n";
         $contents .= "<tr>\n";
-        $contents .= "<td align=\"center\"><input type=\"checkbox\" onclick=\"nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);\" value=\"" . $id . "\" name=\"idcheck[]\"></td>\n";
-        $contents .= "<td align=\"center\"><select id=\"id_weight_" . $id . "\" onchange=\"nv_chang_block(" . $bid . ", " . $id . ",'weight');\">\n";
-        for ( $i = 1; $i <= $num; $i ++ )
-        {
-            $contents .= "<option value=\"" . $i . "\"" . ( $i == $weight ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
-        }
-        $contents .= "</select></td>\n";
-        $contents .= "<td align=\"left\"><a target=\"_blank\" href=\"" . $link . "\">" . $title . "</a></td>\n";
-        $contents .= "<td align=\"center\">\n";
-        $contents .= "<span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a></span>\n";
-        $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_chang_block(" . $bid . ", " . $id . ",'delete')\">" . $lang_module['delete_from_block'] . "</a></span>\n";
+        $contents .= "<td align=\"center\"><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
+        $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
+        $contents .= "<td>" . $lang_module['name'] . "</td>\n";
+        $contents .= "<td style=\"width:200px;\"></td>\n";
+        $contents .= "</tr>\n";
+        $contents .= "</thead>\n";
+        $contents .= "<tfoot>\n";
+        $contents .= "<tr align=\"left\">\n";
+        $contents .= "<td colspan=\"5\"><input type=\"button\" onclick=\"nv_del_block_list(this.form, " . $bid . ")\" value=\"" . $lang_module['delete_from_block'] . "\">\n";
         $contents .= "</td>\n";
         $contents .= "</tr>\n";
-        $contents .= "</tbody>\n";
-        $a ++;
+        $contents .= "</tfoot>\n";
+        $a = 0;
+        while ( list( $id, $listcatid, $title, $alias, $weight ) = $db->sql_fetchrow( $result ) )
+        {
+            $arr_listcatid = explode( ",", $listcatid );
+            $catid_i = end( $arr_listcatid );
+            
+            $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
+            $class = ( $a % 2 ) ? " class=\"second\"" : "";
+            $contents .= "<tbody" . $class . ">\n";
+            $contents .= "<tr>\n";
+            $contents .= "<td align=\"center\"><input type=\"checkbox\" onclick=\"nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);\" value=\"" . $id . "\" name=\"idcheck[]\" /></td>\n";
+            $contents .= "<td align=\"center\"><select id=\"id_weight_" . $id . "\" onchange=\"nv_chang_block(" . $bid . ", " . $id . ",'weight');\">\n";
+            for ( $i = 1; $i <= $num; $i ++ )
+            {
+                $contents .= "<option value=\"" . $i . "\"" . ( $i == $weight ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+            }
+            $contents .= "</select></td>\n";
+            $contents .= "<td align=\"left\"><a target=\"_blank\" href=\"" . $link . "\">" . $title . "</a></td>\n";
+            $contents .= "<td align=\"center\">\n";
+            $contents .= "<span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a></span>\n";
+            $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_chang_block(" . $bid . ", " . $id . ",'delete')\">" . $lang_module['delete_from_block'] . "</a></span>\n";
+            $contents .= "</td>\n";
+            $contents .= "</tr>\n";
+            $contents .= "</tbody>\n";
+            $a ++;
+        }
+        $contents .= "</table>\n";
+        $contents .= "</form>\n";
+        $db->sql_freeresult();
     }
-    $contents .= "<tfoot>\n";
-    $contents .= "<tr align=\"left\">\n";
-    $contents .= "<td colspan=\"5\"><input type=\"button\" onclick=\"nv_del_block_list(this.form, " . $bid . ")\" value=\"" . $lang_module['delete_from_block'] . "\">\n";
-    $contents .= "</td>\n";
-    $contents .= "</tr>\n";
-    $contents .= "</tfoot>\n";
-    $contents .= "</table>\n";
-    $contents .= "</form>\n";
-    $db->sql_freeresult();
     return $contents;
 }
 

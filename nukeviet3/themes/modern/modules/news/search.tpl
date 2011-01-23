@@ -69,7 +69,7 @@
         <!-- END: pages_viewpages -->
     <div class="cl-info">
         <i>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title} 
-            <br>
+            <br />
             {LANG.info_adv}
         </i>
     </div>

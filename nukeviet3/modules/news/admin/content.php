@@ -825,7 +825,7 @@ $xtpl->assign( 'edit_bodytext', $edits );
 ///////////////////////////////////////////////////////////////////////////////////
 if ( $error != "" )
 {
-    $xtpl->assign( 'error', implode( "<br>", $error ) );
+    $xtpl->assign( 'error', implode( "<br />", $error ) );
     $xtpl->parse( 'main.error' );
 }
 if ( $rowcontent['status'] == 1 and $rowcontent['id'] > 0 )

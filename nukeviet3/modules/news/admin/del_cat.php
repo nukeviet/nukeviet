@@ -61,8 +61,8 @@ if ( $catid > 0 )
                         $contents .= "<input type=\"hidden\" name =\"delallcheckss\" value=\"" . $delallcheckss . "\" />";
                         $contents .= "<center>";
                         $contents .= "<b>" . sprintf( $lang_module['delcat_msg_rows_select'], $title, $check_rows ) . "</b>";
-                        $contents .= "<br><br><input name=\"delcatandrows\" type=\"submit\" value=\"" . $lang_module['delcatandrows'] . "\" />";
-                        $contents .= "<br><br><b>" . $lang_module['delcat_msg_rows_move'] . "</b>: <select name=\"catidnews\">\n";
+                        $contents .= "<br /><br /><input name=\"delcatandrows\" type=\"submit\" value=\"" . $lang_module['delcatandrows'] . "\" />";
+                        $contents .= "<br /><br /><b>" . $lang_module['delcat_msg_rows_move'] . "</b>: <select name=\"catidnews\">\n";
                         while ( list( $catid_i, $title_i ) = each( $array_cat_list ) )
                         {
                             $contents .= "<option value=\"" . $catid_i . "\">" . $title_i . "</option>\n";

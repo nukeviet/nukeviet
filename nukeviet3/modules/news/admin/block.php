@@ -62,11 +62,11 @@ if ( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->ge
 $select_options = array();
 foreach ( $array_block as $xbid => $blockname )
 {
-    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&bid=" . $xbid] = $blockname;
+    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $xbid] = $blockname;
 }
 $contents = "<div id=\"module_show_list\">";
 $contents .= nv_show_block_list( $bid );
-$contents .= "</div><br>\n";
+$contents .= "</div><br />\n";
 
 $contents .= "<div id=\"add\">";
 $id_array = array();
