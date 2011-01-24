@@ -5,9 +5,9 @@
 		ddsmoothmenu.init({
 			arrowimages: {down:['downarrowclass', '{NV_BASE_SITEURL}themes/{TEMPLATE}/images/ddsmoothmenu/down.gif', 23], right:['rightarrowclass', '{NV_BASE_SITEURL}themes/{TEMPLATE}/images/ddsmoothmenu/right.gif']},
 			mainmenuid: "smoothmenu_{BLOCK_ID}", //Menu DIV id
+			zIndex: 200,
 			orientation: 'v', //Horizontal or vertical menu: Set to "h" or "v"
 			classname: 'ddsmoothmenu-v', //class added to menu's outer DIV
-			//customtheme: ["#804000", "#482400"],
 			contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
 		})
 	</script>
