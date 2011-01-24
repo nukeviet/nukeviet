@@ -11,15 +11,8 @@ if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $functionid = $nv_Request->get_int( 'func', 'get' );
 $blockredirect = $nv_Request->get_string( 'blockredirect', 'get' );
-$select_options = array();
 $contents_error = '';
-$theme_array = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme'] );
-foreach ( $theme_array as $themes_i )
-{
-    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&selectthemes=" . $themes_i] = $themes_i;
-}
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'post,get,cookie', $global_config['site_theme'] );
-
 $row = array( 
     'bid' => 0, 'theme' => '', 'module' => 'global', 'file_name' => '', 'title' => '', 'link' => '', 'template' => '', 'position' => $nv_Request->get_string( 'tag', 'get', '' ), 'exp_time' => 0, 'active' => 1, 'groups_view' => '', 'all_func' => 1, 'weight' => 0, 'config' => '' 
 );
@@ -210,7 +203,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                 list( $maxweight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme =" . $db->dbescape( $selectthemes ) . " AND `position`=" . $db->dbescape( $row['position'] ) ) );
                 $row['weight'] = intval( $maxweight ) + 1;
                 $row['bid'] = $db->sql_query_insert_id( "INSERT INTO `" . NV_BLOCKS_TABLE . "_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES ( NULL, " . $db->dbescape( $selectthemes ) . ", " . $db->dbescape( $row['module'] ) . ", " . $db->dbescape( $row['file_name'] ) . ", " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['link'] ) . ", " . $db->dbescape( $row['template'] ) . ", " . $db->dbescape( $row['position'] ) . ", '" . $row['exp_time'] . "', '" . $row['active'] . "', " . $db->dbescape( $row['groups_view'] ) . ", '" . $row['all_func'] . "', '" . $row['weight'] . "', " . $db->dbescape( $row['config'] ) . " )" );
-                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_add'] , 'Name : ' . $row['title'] , $admin_info['userid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_add'], 'Name : ' . $row['title'], $admin_info['userid'] );
             }
             else
             {
@@ -227,7 +220,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                 `all_func`=" . $row['all_func'] . ", 
                 `config`=" . $db->dbescape( $row['config'] ) . "
                 WHERE `bid` =" . $row['bid'] );
-                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_edit'] , 'Name : ' . $row['title'] , $admin_info['userid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_edit'], 'Name : ' . $row['title'], $admin_info['userid'] );
             }
             if ( ! empty( $row['bid'] ) )
             {
@@ -309,18 +302,6 @@ $xmlpositions = $xml->xpath( 'positions' ); //array
 $positions = $xmlpositions[0]->position; //object
 
 
-$contents = "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/css/admin.css\" type=\"text/css\" />";
-$contents .= "<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.all.css' rel='stylesheet' />\n";
-$contents .= "<script type=\"text/javascript\">\n";
-$contents .= "	var nv_siteroot = '" . NV_BASE_SITEURL . "'\n";
-$contents .= "	var htmlload = '<tr><td align=\"center\" colspan=\"2\"<img src=\"" . NV_BASE_SITEURL . "/images/load_bar.gif\"/></td></tr>';\n";
-$contents .= "</script>\n";
-$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>\n";
-$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/global.js\"></script>\n";
-$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/admin.js\"></script>\n";
-$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n";
-$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
-$contents .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.dialog.min.js\"></script>\n";
 if ( $row['bid'] != 0 )
 {
     $contents .= "<div class=\"quote\" style=\"width:740px;\">\n";
@@ -330,10 +311,10 @@ if ( $row['bid'] != 0 )
 $contents .= $contents_error;
 
 $contents .= "<div style='clear:both'></div>";
-$contents .= "<form method='post' action='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=themes&" . NV_OP_VARIABLE . "=" . $op . "&selectthemes=" . $selectthemes . "&blockredirect=" . $blockredirect . "'>";
+$contents .= "<form method='post' action='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=themes&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;selectthemes=" . $selectthemes . "&amp;blockredirect=" . $blockredirect . "'>";
 $contents .= "<table class=\"tab1\" style=\"WIDTH:100%\">\n";
-$contents .= "<col style=\"width: 160px; white-space: nowrap;\">";
-$contents .= "<col style=\"width: 600px; white-space: nowrap;\">";
+$contents .= "<col style=\"width: 160px; white-space: nowrap;\" />";
+$contents .= "<col style=\"width: 600px; white-space: nowrap;\" />";
 
 $contents .= "<tbody class=\"second\">\n";
 $contents .= "<tr>\n";
@@ -341,12 +322,12 @@ $contents .= "<td>" . $lang_module['block_type'] . ":</td>\n";
 $contents .= "<td>";
 $contents .= "<select name='module'>";
 $contents .= "<option value=\"\"> " . $lang_module['block_select_type'] . "</option>";
-$contents .= "<option value=\"global\" " . ( ( $row['module'] == 'global' ) ? ' selected' : '' ) . "> " . $lang_module['block_type_global'] . "</option>";
+$contents .= "<option value=\"global\" " . ( ( $row['module'] == 'global' ) ? ' selected="selected"' : '' ) . "> " . $lang_module['block_type_global'] . "</option>";
 $sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
 while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 {
-    $sel = ( $m_title == trim( $row['module'] ) ) ? ' selected' : '';
+    $sel = ( $m_title == trim( $row['module'] ) ) ? ' selected="selected"' : '';
     $contents .= "<option value=\"" . $m_title . "\" " . $sel . "> " . $m_custom_title . "</option>";
 }
 $contents .= "</select>";
@@ -355,8 +336,12 @@ $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 
-$contents .= "<tbody id='block_config'>\n";
-$contents .= "</tbody>\n";
+$contents .= "<tbody id=\"block_config\">
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+</tbody>\n";
 $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_title'] . ":</td>\n";
@@ -383,7 +368,7 @@ foreach ( $templ_list as $value )
 {
     if ( ! empty( $value ) and $value != "default" )
     {
-        $sel = ( $row['template'] == $value ) ? ' selected' : '';
+        $sel = ( $row['template'] == $value ) ? ' selected="selected"' : '';
         $contents .= "<option value=\"" . $value . "\" " . $sel . ">" . $value . "</option>\n";
     }
 }
@@ -399,7 +384,7 @@ $contents .= "<td>";
 $contents .= "<select name='position'>";
 for ( $i = 0; $i < count( $positions ); $i ++ )
 {
-    $sel = ( $row['position'] == $positions[$i]->tag ) ? ' selected' : '';
+    $sel = ( $row['position'] == $positions[$i]->tag ) ? ' selected="selected"' : '';
     $contents .= "<option value=\"" . $positions[$i]->tag . "\" " . $sel . "> " . $positions[$i]->name . '</option>';
 }
 
@@ -411,9 +396,9 @@ $contents .= "</tbody>\n";
 $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_exp_time'] . ":</td>\n";
-$contents .= "<td>";
-$contents .= "<input name=\"exp_time\" id=\"exp_time\" value=\"" . ( ( $row['exp_time'] > 0 ) ? date( 'd.m.Y', $row['exp_time'] ) : '' ) . "\" style=\"width: 90px;\" maxlength=\"10\" type=\"text\">\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" widht=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_time', 'dd/mm/yyyy', false);\" alt=\"\" height=\"17\"> (dd/mm/yyyy)\n";
+$contents .= "<td class=\"exp_time\">";
+$contents .= "<input name=\"exp_time\" id=\"exp_time\" value=\"" . ( ( $row['exp_time'] > 0 ) ? date( 'd.m.Y', $row['exp_time'] ) : '' ) . "\" style=\"width: 90px;\" maxlength=\"10\" type=\"text\" />\n";
+$contents .= "(dd/mm/yyyy)\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
@@ -437,7 +422,7 @@ $contents .= "<select name=\"who_view\" style=\"width: 250px;\" id=\"who_view\" 
 $row['groups_view'] = intval( $row['groups_view'] );
 foreach ( $array_who_view as $k => $w )
 {
-    $contents .= "<option value=\"" . $k . "\" " . ( ( $k == $row['groups_view'] ) ? ' selected' : '' ) . ">" . $w . "</option>\n";
+    $contents .= "<option value=\"" . $k . "\" " . ( ( $k == $row['groups_view'] ) ? ' selected="selected"' : '' ) . ">" . $w . "</option>\n";
 }
 $contents .= "</select>\n";
 $contents .= "</td>\n";
@@ -517,7 +502,7 @@ while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
         foreach ( $aray_mod_func[$m_title] as $aray_mod_func_i )
         {
             $sel = ( in_array( $aray_mod_func_i['id'], $func_list ) || $functionid == $aray_mod_func_i['id'] ) ? ' checked=checked' : '';
-            $contents .= "<td nowrap=\"nowrap\"><label><input style type=\"checkbox\" " . $sel . " name=\"func_id[]\" value=\"" . $aray_mod_func_i['id'] . "\"> " . $aray_mod_func_i['func_custom_name'] . "</label></td>";
+            $contents .= "<td nowrap=\"nowrap\"><label><input type=\"checkbox\" " . $sel . " name=\"func_id[]\" value=\"" . $aray_mod_func_i['id'] . "\" /> " . $aray_mod_func_i['func_custom_name'] . "</label></td>";
         }
         $contents .= "</tr>";
         $contents .= "</tbody>\n";
@@ -530,7 +515,7 @@ $contents .= "</tbody>\n";
 
 $contents .= "</table>\n";
 $contents .= "<div style=\"PADDING:10px;text-align:center\">\n";
-$contents .= "<input type='hidden' name='bid' value='" . $row['bid'] . "'/>";
+$contents .= "<input type='hidden' name='bid' value='" . $row['bid'] . "' />";
 $contents .= "<input type=\"submit\" name='confirm' value=\"" . $lang_module['block_confirm'] . "\" />\n";
 $contents .= "</div>\n";
 $contents .= "</form>\n";
@@ -559,10 +544,13 @@ if ( preg_match( $global_config['check_block_module'], $row['file_name'], $match
     }
 }
 
+$contents .= "<script type=\"text/javascript\">
+	//<![CDATA[\n";
+
 if ( $load_block_config )
 {
-    $contents .= '<script type="text/javascript">
-	    			$("#block_config").show();
+    $contents .= '
+    			$("#block_config").show();
 				$("#block_config").html(htmlload);
 				$.get("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=block_config&bid=' . $row['bid'] . '&module=' . $row['module'] . '&file_name=' . $row['file_name'] . '", function(theResponse){
 					if (theResponse.length>10){	
@@ -571,12 +559,27 @@ if ( $load_block_config )
 					else{
 						$("#block_config").hide();
 					}
-				});
-    </script>';
+				});';
+}
+else
+{
+	$contents .= "$(\"#block_config\").hide();\n";
 }
 
-$contents .= '<script type="text/javascript">
-	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadblocks&module=' . $row['module'] . '&bid=' . $row['bid'] . '");
+$contents .= '	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadblocks&module=' . $row['module'] . '&bid=' . $row['bid'] . '");
+	$(function() {
+		$("#exp_time").datepicker({
+			showOn: "button",
+			dateFormat: "dd/mm/yy",
+			changeMonth: true,
+			changeYear: true,
+			showOtherMonths: true,
+			buttonImage: "' . NV_BASE_SITEURL . 'images/calendar.gif",
+			buttonImageOnly: true
+		});
+		$("#exp_time").datepicker( $.datepicker.regional[ "vi" ] );
+	});	
+
 	$(function(){
 		$("select[name=module]").change(function(){
 			var type = $("select[name=module]").val();
@@ -693,10 +696,53 @@ $contents .= '<script type="text/javascript">
 	        }
 		});
 	});
+	//]]>
 </script>';
 
 include ( NV_ROOTDIR . "/includes/header.php" );
-echo $contents;
+
+echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+    <head>
+        <meta http-equiv=\"Content-Language\" content=\"vi\" />
+        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
+		<title>Insert title here</title>
+		
+		<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/css/admin.css\" type=\"text/css\" />
+		<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.all.css' rel='stylesheet' />
+		<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css' rel='stylesheet' />
+		<style type=\"text/css\">
+			.exp_time {
+			    line-height: 20px;
+			}
+			
+			.exp_time input {
+			    float: left;
+			}
+			
+			.exp_time img {
+			    float: left;
+			    margin: 2px;
+			}
+		</style>
+		<script type=\"text/javascript\">
+			//<![CDATA[
+			var nv_siteroot = '" . NV_BASE_SITEURL . "';
+			var htmlload = '<tr><td align=\"center\" colspan=\"2\"<img src=\"" . NV_BASE_SITEURL . "/images/load_bar.gif\"/></td></tr>';
+			//]]>
+		</script>
+		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>
+		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/global.js\"></script>
+		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/admin.js\"></script>
+		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>
+		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>
+		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>
+		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>
+		</head>
+	<body>
+	" . $contents . "
+	</body>
+	</html>";
 include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>
