@@ -32,7 +32,6 @@ $lang_module['googleAnalyticsSetDomainName_2'] = "Multiple top-level domains";
 $lang_module['googleAnalyticsID'] = "Google Analytics ID<br />(UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">Detail</a>)";
 $lang_module['optActive'] = "Povolit stránek Optimalizace funkce";
 $lang_module['global_config'] = "Systém Configurace";
-$lang_module['lang_site_config'] = "Jazyk configurace";
 $lang_module['bots_config'] = "Server vyhledávání";
 $lang_module['sitename'] = "Název webu";
 $lang_module['theme'] = "Výchozí téma";

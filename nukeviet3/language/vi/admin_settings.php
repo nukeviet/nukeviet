@@ -31,7 +31,8 @@ $lang_module['googleAnalyticsSetDomainName_1'] = "Domain cấp cao + subdomains 
 $lang_module['googleAnalyticsSetDomainName_2'] = "Nhiều Domain cấp cao chạy song song";
 $lang_module['googleAnalyticsID'] = "ID tài khoản Google Analytics<br />(Có dạng UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">xem chi tiết</a>)";
 $lang_module['global_config'] = "Cấu hình chung";
-$lang_module['lang_site_config'] = "Theo ngôn ngữ";
+$lang_module['site_config'] = "Cấu hình site";
+$lang_module['lang_site_config'] = "Cấu hình site Theo ngôn ngữ: %s";
 $lang_module['bots_config'] = "Máy chủ tìm kiếm";
 
 $lang_module['optActive'] = "Kích hoạt chức năng tối ưu site<br />(Chỉ tắt với admin)";

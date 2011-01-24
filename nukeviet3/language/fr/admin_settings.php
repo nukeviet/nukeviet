@@ -32,7 +32,6 @@ $lang_module['googleAnalyticsSetDomainName_2'] = "Multiple top-level domains";
 $lang_module['googleAnalyticsID'] = "Google Analytics ID<br />(UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">Detail</a>)";
 $lang_module['optActive'] = "Activer la fonction Optimisation du site";
 $lang_module['global_config'] = "Config. générale";
-$lang_module['lang_site_config'] = "Config. selon langue";
 $lang_module['bots_config'] = "Moteurs de recherche";
 $lang_module['sitename'] = "Nom du site";
 $lang_module['theme'] = "Thème par défaut";

@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module['lang_site_config'];
+$page_title = sprintf( $lang_module['lang_site_config'], $language_array[NV_LANG_DATA]['name'] );
 
 if ( defined( 'NV_EDITOR' ) ) require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 
@@ -87,10 +87,10 @@ $global_config['disable_site_content'] = nv_htmlspecialchars( $global_config['di
 
 $value_setting = array(  //
     "sitename" => $global_config['site_name'], //
-    "site_logo" => ( nv_is_url( $global_config['site_logo'] ) ) ? NV_BASE_SITEURL . $global_config['site_logo'] : $global_config['site_logo'], //
-    "description" => $global_config['site_description'], //
-    "disable_content" => $global_config['disable_site_content'], //
-    "footer_content" => isset( $global_config['footer_content'] ) ? $global_config['footer_content'] : ""  //
+"site_logo" => ( nv_is_url( $global_config['site_logo'] ) ) ? NV_BASE_SITEURL . $global_config['site_logo'] : $global_config['site_logo'], //
+"description" => $global_config['site_description'], //
+"disable_content" => $global_config['disable_site_content'], //
+"footer_content" => isset( $global_config['footer_content'] ) ? $global_config['footer_content'] : ""  //
 );
 
 $module_array = array();

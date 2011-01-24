@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$submenu['main'] = $lang_module['lang_site_config'];
+$submenu['main'] = $lang_module['site_config'];
 $submenu['system'] = $lang_module['global_config'];
 $submenu['adminpage'] = $lang_module['adminpage_settings'];
 $submenu['cronjobs'] = $lang_global['mod_cronjobs'];

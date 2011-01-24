@@ -30,7 +30,8 @@ $lang_module['googleAnalyticsSetDomainName_1'] = "One domain with multiple subdo
 $lang_module['googleAnalyticsSetDomainName_2'] = "Multiple top-level domains";
 $lang_module['googleAnalyticsID'] = "Google Analytics ID<br />(UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">Detail</a>)";
 $lang_module['global_config'] = "System Config";
-$lang_module['lang_site_config'] = "Site language config";
+$lang_module['site_config'] = "Configure site";
+$lang_module['lang_site_config'] = "Configuration site in %s language:";
 $lang_module['bots_config'] = "Server search";
 $lang_module['optActive'] = "Enable Site Optimization function";
 $lang_module['sitename'] = "Site name";
