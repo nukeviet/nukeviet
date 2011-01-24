@@ -555,7 +555,7 @@ elseif ( defined( 'NV_IS_USER' ) )
         $page = intval( substr( $array_op[1], 5 ) );
     }
     $array_catpage = array();
-    $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `addtime`, `edittime`, `status`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `hitstotal` , `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "";
+    $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "";
     $result = $db->sql_query( $sql );
     
     $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -609,7 +609,6 @@ elseif ( defined( 'NV_IS_USER' ) )
     foreach ( $array_catpage as $array_row_i )
     {
         $array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
-        $xtpl->clear_autoreset();
         $xtpl->assign( 'CONTENT', $array_row_i );
         $id = $array_row_i['id'];
         $array_link_content = array();
@@ -634,7 +633,27 @@ elseif ( defined( 'NV_IS_USER' ) )
             $xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
             $xtpl->parse( 'main.viewcatloop.image' );
         }
-        $xtpl->set_autoreset();
+        
+        // parse list catid
+        $n = 1;
+        $array_catid = explode( ',', $array_row_i['listcatid'] );
+        $num_cat = count( $array_catid );
+        foreach ( $array_catid as $catid_i )
+        {
+            if ( isset( $global_array_cat[$catid_i] ) )
+            {
+                $listcat = array( 
+                    'title' => $global_array_cat[$catid_i]['title'], "link" => $global_array_cat[$catid_i]['link'] 
+                );
+                $xtpl->assign( 'CAT', $listcat );
+                if ( $n < $num_cat )
+                {
+                    $xtpl->parse( 'main.viewcatloop.cat.comma' );
+                }
+                $xtpl->parse( 'main.viewcatloop.cat' );
+            }
+            $n ++;
+        }
         $xtpl->parse( 'main.viewcatloop' );
         $a ++;
     }
