@@ -17,7 +17,7 @@
 	onchange="return nv_checklang(this.options[this.selectedIndex].value)">
 	<option value="none">{LANG.choose_lang}</option>
 	<!-- BEGIN: languagelist -->
-	<option value="index.php?{LANG_VARIABLE}={LANGTYPE}&step=1"{SELECTED}>{LANGNAME}</option>
+	<option value="index.php?{LANG_VARIABLE}={LANGTYPE}&amp;step=1"{SELECTED}>{LANGNAME}</option>
 	<!-- END: languagelist -->
 </select></p>
 <ul class="control_t fr">

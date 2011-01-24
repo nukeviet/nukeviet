@@ -37,8 +37,7 @@
 	</tr>
 	<tr>
 		<th scope="row" class="specalt">{LANG.db_pass}</th>
-		<td class="alt"><input type="password" value="{DATADASE.dbpass}" autocomplete="off"
-			name="dbpass" /></td>
+		<td class="alt"><input type="password" value="{DATADASE.dbpass}" name="dbpass" /></td>
 		<td class="alt">{LANG.db_pass_note}</td>
 	</tr>
 	<tr>
@@ -77,4 +76,9 @@
 	</li>
 	<!-- END: nextstep -->
 </ul>
+<script type="text/javascript">
+//<![CDATA[
+document.getElementById('check_database').setAttribute("autocomplete", "off");
+//]]>
+</script>
 <!-- END: step -->

@@ -44,13 +44,12 @@
             <div id="language" class="fr">
                 <div>
                     <strong>Language: </strong>
-                    <span class="language_head"><img src="images/navigate.png" /> {LANGNAMESL} </span>
-                    </p>
+                    <span class="language_head"><img alt="" src="images/navigate.png" /> {LANGNAMESL} </span>
                 </div>
                 <ul class="language_body">
                     <!-- BEGIN: looplang -->
                     <li>
-                        <a href="index.php?{LANG_VARIABLE}={LANGTYPE}&step={MAIN_STEP}">{LANGNAME} </a>
+                        <a href="index.php?{LANG_VARIABLE}={LANGTYPE}&amp;step={MAIN_STEP}">{LANGNAME} </a>
                     </li>
 					<!-- END: looplang -->
                 </ul>

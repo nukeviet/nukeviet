@@ -59,7 +59,7 @@
                 {LANG.admin_pass} <span class="highlight_red">*</span>
             </th>
             <td class="alt">
-                <input type="password" value="{DATA.nv_password}" id="nv_password" name="nv_password" autocomplete="off" class="required" />
+                <input type="password" value="{DATA.nv_password}" id="nv_password" name="nv_password" class="required" />
             </td>
             <td class="alt">{LANG.admin_pass_note}</td>
         </tr>
@@ -68,7 +68,7 @@
                 {LANG.admin_repass} <span class="highlight_red">*</span>
             </th>
             <td>
-                <input type="password" value="{DATA.re_password}" id="re_password" name="re_password" autocomplete="off" class="required" />
+                <input type="password" value="{DATA.re_password}" id="re_password" name="re_password" class="required" />
             </td>
             <td>{LANG.admin_repass_note}</td>
         </tr>
@@ -77,7 +77,7 @@
                 {LANG.question} <span class="highlight_red">*</span>
             </th>
             <td class="alt">
-                <input type=""text"" value="{DATA.question}" id="question" name="question" class="required" />
+                <input type="text" value="{DATA.question}" id="question" name="question" class="required" />
             </td>
             <td class="alt">{LANG.question_note}</td>
         </tr>
@@ -86,7 +86,7 @@
                 {LANG.answer_question} <span class="highlight_red">*</span>
             </th>
             <td>
-                <input type="text"" value="{DATA.answer_question}"  id="answer_question" name="answer_question" class="required" />
+                <input type="text" value="{DATA.answer_question}"  id="answer_question" name="answer_question" class="required" />
             </td>
             <td>{LANG.answer_question}</td>
         </tr>
@@ -109,4 +109,9 @@
     </li>
     <!-- END: nextstep -->
 </ul>
+<script type="text/javascript">
+//<![CDATA[
+document.getElementById('site_config').setAttribute("autocomplete", "off");
+//]]>
+</script>
 <!-- END: step -->

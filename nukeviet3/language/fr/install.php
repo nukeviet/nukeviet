@@ -113,7 +113,7 @@ $lang_module['admin_repass'] = "Confirmer le mot de passe";
 $lang_module['admin_repass_note'] = "Confirmez le mot de passe.";
 $lang_module['success'] = "Installation réussie!";
 $lang_module['congratulations'] = "Félicitation!!! Vous avez réussi d'installer le système de NukeViet. Entrer à l'Administration pour commencer à configurer votre site.";
-$lang_module['notesupport'] = "Pour tout support nécessaire, consultez <a href=http://nukeviet.vn target=_blank><b>le forum de NukeViet.VN</b></a>.";
+$lang_module['notesupport'] = "Pour tout support nécessaire, consultez <a href=\"http://nukeviet.vn\" target=\"_blank\"><b>le forum de NukeViet.VN</b></a>.";
 $lang_module['noteuploads'] = "<b>Remarques:</b> Veuillez <b>corriger les permissions (CHMOD 777) du répertoire uploads</b> et tous les sous-répertoires. Sinon, il sera impossible de transférer les fichiers vers le serveur.";
 $lang_module['thanks'] = "Merci et bonne réussisse!";
 $lang_module['gohome'] = "Accueil";
