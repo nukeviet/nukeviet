@@ -439,6 +439,10 @@ function nv_show_cat_list ( $parentid = 0 )
         }
         $contents .= "</table>\n";
     }
+    else
+    {
+        $contents .= "&nbsp;";
+    }
     $db->sql_freeresult();
     unset( $sql, $result );
     return $contents;
@@ -447,13 +451,12 @@ function nv_show_cat_list ( $parentid = 0 )
 function nv_show_topics_list ( )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
-    $contents = "";
     $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` ORDER BY `weight` ASC";
     $result = $db->sql_query( $sql );
     $num = $db->sql_numrows( $result );
     if ( $num > 0 )
     {
-        $contents .= "<table class=\"tab1\">\n";
+        $contents = "<table class=\"tab1\">\n";
         $contents .= "<thead>\n";
         $contents .= "<tr>\n";
         $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
@@ -488,6 +491,10 @@ function nv_show_topics_list ( )
         }
         $contents .= "</table>\n";
     }
+    else
+    {
+        $contents = "&nbsp;";
+    }
     $db->sql_freeresult();
     return $contents;
 }
@@ -495,13 +502,12 @@ function nv_show_topics_list ( )
 function nv_show_block_cat_list ( )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
-    $contents = "";
     $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
     $result = $db->sql_query( $sql );
     $num = $db->sql_numrows( $result );
     if ( $num > 0 )
     {
-        $contents .= "<table class=\"tab1\">\n";
+        $contents = "<table class=\"tab1\">\n";
         $contents .= "<thead>\n";
         $contents .= "<tr>\n";
         $contents .= "<td style=\"width:50px;\">" . $lang_module['weight'] . "</td>\n";
@@ -560,7 +566,7 @@ function nv_show_block_cat_list ( )
     }
     else
     {
-        $contents .= "&nbsp;";
+        $contents = "&nbsp;";
     }
     $db->sql_freeresult();
     return $contents;
@@ -569,7 +575,6 @@ function nv_show_block_cat_list ( )
 function nv_show_sources_list ( )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $nv_Request;
-    $contents = "";
     $num = $db->sql_numrows( $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` ORDER BY `weight` ASC" ) );
     $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_data . "&amp;" . NV_OP_VARIABLE . "=sources";
     $all_page = ( $num > 1 ) ? $num : 1;
@@ -577,7 +582,7 @@ function nv_show_sources_list ( )
     $page = $nv_Request->get_int( 'page', 'get', 0 );
     if ( $num > 0 )
     {
-        $contents .= "<table class=\"tab1\">\n";
+        $contents = "<table class=\"tab1\">\n";
         $contents .= "<thead>\n";
         $contents .= "<tr>\n";
         $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
@@ -612,7 +617,7 @@ function nv_show_sources_list ( )
     }
     else
     {
-        $contents .= "&nbsp;";
+        $contents = "&nbsp;";
     }
     $db->sql_freeresult();
     return $contents;
