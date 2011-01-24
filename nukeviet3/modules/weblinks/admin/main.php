@@ -64,7 +64,7 @@ $contents .= "<input type=\"submit\" value=\"" . $lang_module['weblink_method_de
 $contents .= "</table></form>\n";
 $contents .= "</div>\n";
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
-if ( $generate_page != "" ) $contents .= "<br><p align=\"center\">" . $generate_page . "</p>\n";
+if ( $generate_page != "" ) $contents .= "<br /><p align=\"center\">" . $generate_page . "</p>\n";
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );

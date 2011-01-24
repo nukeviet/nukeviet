@@ -24,7 +24,7 @@ if ( $ok )
     nv_insert_logs( NV_LANG_DATA, "login", "[" .$admin_info['username'] . "] " . strtolower( $lang_global['admin_logout_title'] )," Client IP:" . NV_CLIENT_IP, 0 );
 	$nv_Request->unset_request( 'admin,online', 'session' );
     $info = $lang_global['admin_logout_ok'];
-    $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />";
+    $info .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />";
 }
 else
 {

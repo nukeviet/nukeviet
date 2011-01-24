@@ -247,10 +247,10 @@ $lang_module['nv_lang_slsite'] = "Zobrazit mimo místě";
 	 english:	  Show out site
 */
 
-$lang_module['nv_lang_error_exit'] = "Chyba: nyní je žádný čtený jazyk v databázi, <br> systém se automaticky přepne do nastavení, které potřebujete číst data v jiném jazyce, než jiné činnosti,";
+$lang_module['nv_lang_error_exit'] = "Chyba: nyní je žádný čtený jazyk v databázi, <br /> systém se automaticky přepne do nastavení, které potřebujete číst data v jiném jazyce, než jiné činnosti,";
 /*
-	 vietnam:	  Lỗi: hiện tại chưa có ngôn ngữ nào được đọc vào Cơ sở dữ liệu, <br> <br>Hệ thống sẽ tự động chuyển sang phần cấu hình bạn cần đọc dữ liệu một ngôn ngữ trước khi tiến hành các thao tác khác
-	 english:	  Error: The current language does not have to be read into the database, <br> <br> system will automatically switch to the configuration you need to read data in a language before other operations
+	 vietnam:	  Lỗi: hiện tại chưa có ngôn ngữ nào được đọc vào Cơ sở dữ liệu, <br /> <br />Hệ thống sẽ tự động chuyển sang phần cấu hình bạn cần đọc dữ liệu một ngôn ngữ trước khi tiến hành các thao tác khác
+	 english:	  Error: The current language does not have to be read into the database, <br /> <br /> system will automatically switch to the configuration you need to read data in a language before other operations
 */
 
 $lang_module['nv_data_note'] = "Chcete-li přidat nový jazyk data, nejprve je potřeba vytvořit jazyk rozhraní, výstupní soubor a nastavení pro zobrazení v admin";
@@ -283,7 +283,7 @@ $lang_module['nv_data_setup'] = "Data z tohoto jazyku byl nainstalován";
 	 english:	  Data of this language has been installed
 */
 
-$lang_module['nv_data_setup_ok'] = "Instalace je úšpěšný , bude systém přejít k instalaci modulu, <br> musíte nainstalovat potřebné moduly a povolit tento modul";
+$lang_module['nv_data_setup_ok'] = "Instalace je úšpěšný , bude systém přejít k instalaci modulu, <br /> musíte nainstalovat potřebné moduly a povolit tento modul";
 /*
 	 vietnam:	  Cài đặt thành công, Hệ thống sẽ chuyển tới phần cấu hình site
 	 english:	  Successful installation, the system will move to site configuration

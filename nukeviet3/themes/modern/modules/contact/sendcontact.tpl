@@ -1,11 +1,11 @@
 <!-- BEGIN: main -->
 <div class="contact">
     <div class="title">
-        <br>
-        <br>
+        <br />
+        <br />
         {LANG.sendcontactok}
-        <br>
-        <br>
+        <br />
+        <br />
     </div>
 </div>
 <meta http-equiv="refresh" content="5;URL={LANG.urlrefresh}" />

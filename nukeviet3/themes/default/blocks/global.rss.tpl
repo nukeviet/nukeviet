@@ -3,10 +3,10 @@
 	    <!-- BEGIN: loop -->
 		    <li class="{DATA.class}">
 		        <a {DATA.target} title="{DATA.title}" href="{DATA.link}"><b>{DATA.title}</b></a>
-		        <br>
+		        <br />
 		        <!-- BEGIN: pubDate -->
 			        <i>{DATA.pubDate}</i>
-			        <br>
+			        <br />
 		        <!-- END: pubDate -->
 		        <!-- BEGIN: description -->
 		        	{DATA.description}

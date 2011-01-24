@@ -268,7 +268,7 @@ else
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</table>\n";
-$contents .= "<br>\n";
+$contents .= "<br />\n";
 $contents .= "<div style=\"margin-top:8px;margin-bottom:8px;\">" . $lang_module['list_admin_row_title'] . "</div>\n";
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
 $contents .= "<thead>\n";
@@ -302,7 +302,7 @@ foreach ( $adms as $admid => $values )
 }
 
 $contents .= "</table>\n";
-$contents .= "<br>\n";
+$contents .= "<br />\n";
 $contents .= "<div style=\"text-align:center\"><input name=\"submit1\" type=\"submit\" value=\"" . $lang_global['submit'] . "\" /></div>\n";
 $contents .= "</form>\n";
 

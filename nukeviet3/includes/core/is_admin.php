@@ -18,7 +18,7 @@ if ( ! empty( $admin_cookie ) )
     {
         $nv_Request->unset_request( 'admin,online', 'session' );
         $info = "Hacking attempt";
-        $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
+        $info .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
         die( $info );
     }
     
@@ -26,7 +26,7 @@ if ( ! empty( $admin_cookie ) )
     {
         $nv_Request->unset_request( 'admin,online', 'session' );
         $info = "Note: You are not signed in as admin!<br />Your IP address is incorrect!";
-        $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
+        $info .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
         die( $info );
     }
     if ( defined( 'NV_ADMIN' ) )
@@ -35,7 +35,7 @@ if ( ! empty( $admin_cookie ) )
         {
             $nv_Request->unset_request( 'admin,online', 'session' );
             $info = "Note: You are not signed in as admin!<br />This Firewall system does not accept your login information!";
-            $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
+            $info .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
             die( $info );
         }
     }
@@ -45,7 +45,7 @@ if ( ! empty( $admin_cookie ) )
     {
         $nv_Request->unset_request( 'admin,online', 'session' );
         $info = "Note: You are not signed in as admin!<br />Session Expired! Please Re-Login!";
-        $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
+        $info .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
         die( $info );
     }
     
@@ -80,7 +80,7 @@ if ( ! empty( $admin_cookie ) )
     {
         $nv_Request->unset_request( 'admin,online', 'session' );
         $info = "Note: Access denied in Admin Panel!<br />Only God-Admin and Super-Admin has access in Admin Panel!";
-        $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
+        $info .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
         die( $info );
     }
 
@@ -88,7 +88,7 @@ if ( ! empty( $admin_cookie ) )
     {
         $nv_Request->unset_request( 'admin,online', 'session' );
         $info = "Note: Access denied in Admin Panel!<br />Only God-Admin has access in Admin Panel!";
-        $info .= "<META HTTP-EQUIV=\"refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
+        $info .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
         die( $info );
     }
     

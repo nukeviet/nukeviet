@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('ok','cookie')) {
 	}
 	$generate_page = nv_generate_page ( $base_url, $all_page, $per_page, $page );
 	if ($generate_page != "")
-		$contents .= "<br><p align=\"center\">" . $generate_page . "</p>\n";
+		$contents .= "<br /><p align=\"center\">" . $generate_page . "</p>\n";
 } else {
 	$contents .= $lang_module ['weblink_check_notice'] . '
 <form name="confirm" action="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=checklink" method="post">

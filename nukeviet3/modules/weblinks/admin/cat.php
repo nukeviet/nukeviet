@@ -92,7 +92,7 @@ if ( ! empty( $savecat ) )
 global $array_cat, $numcat;
 $contents = "<div id=\"module_show_list\">";
 $contents .= nv_show_cat_list( $array_cat, $numcat );
-$contents .= "</div><br>\n";
+$contents .= "</div><br />\n";
 $catid = ( isset( $_GET['catid'] ) ) ? intval( $_GET['catid'] ) : 0;
 if ( $catid > 0 )
 {
@@ -185,13 +185,13 @@ $contents .= "<td align=\"right\"><strong>" . $lang_module['keywords'] . ": </st
 $contents .= "<td><input style=\"width: 650px\" name=\"keywords\" type=\"text\" value=\"" . $keywords . "\" maxlength=\"255\" /></td>\n";
 $contents .= "</tr>";
 $contents .= "<tr>";
-$contents .= "<td valign=\"top\" align=\"right\"  width=\"100px\"><br><strong>" . $lang_module['description'] . " </strong></td>\n";
+$contents .= "<td valign=\"top\" align=\"right\"  width=\"100px\"><br /><strong>" . $lang_module['description'] . " </strong></td>\n";
 $contents .= "<td>";
 $contents .= "<textarea style=\"width: 650px\" name=\"description\" cols=\"100\" rows=\"5\">" . $description . "</textarea>";
 $contents .= "</td>";
 $contents .= "</tr>";
 $contents .= "</table>";
-$contents .= "<br><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
+$contents .= "<br /><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
 $contents .= "</form>\n";
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

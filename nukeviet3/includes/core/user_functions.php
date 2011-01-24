@@ -245,7 +245,7 @@ function nv_blocks_content ( )
                         }
                         else
                         {
-                            $b_content = $__values['title'] . "<br>" . $content . "<br>";
+                            $b_content = $__values['title'] . "<br />" . $content . "<br />";
                         }
                         if ( defined( 'NV_IS_DRAG_BLOCK' ) )
                         {

@@ -63,7 +63,7 @@ if ( ! empty( $submit ) )
     $redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op;
     $contents .= "<div style=\"padding-top:30px; text-align:center;font-weight:bold;\">";
     $contents .= ( $error == 1 ) ? $lang_module['weblink_config_unsuccess'] : $lang_module['weblink_config_success'];
-    $contents .= "</div><META HTTP-EQUIV=\"refresh\" content=\"1;URL=" . $redirect . "\">";
+    $contents .= "</div><meta http-equiv=\"Refresh\" content=\"1;URL=" . $redirect . "\">";
 }
 else
 {
