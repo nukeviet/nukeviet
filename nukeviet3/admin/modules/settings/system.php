@@ -11,7 +11,17 @@ if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['global_config'];
 
-if ( defined( 'NV_EDITOR' ) ) require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+$adminThemes = array( 
+    '' 
+);
+$adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] ) );
+unset( $adminThemes[0] );
+
+$closed_site_Modes = array( 
+    '0' => $lang_module['closed_site_0'], '1' => $lang_module['closed_site_1'], '2' => $lang_module['closed_site_2'], '3' => $lang_module['closed_site_3'] 
+);
+
+$admin_theme = ( isset( $global_config['admin_theme'] ) and ! empty( $global_config['admin_theme'] ) and in_array( $global_config['admin_theme'], $adminThemes ) ) ? $global_config['admin_theme'] : "admin_default";
 
 $submit = $nv_Request->get_string( 'submit', 'post' );
 
@@ -26,36 +36,31 @@ foreach ( $global_config['allow_sitelangs'] as $lang_i )
     }
 }
 
-$proxy_blocker_array = array( //
+$proxy_blocker_array = array(  //
     0 => $lang_module['proxy_blocker_0'], //
-    1 => $lang_module['proxy_blocker_1'], //
-    2 => $lang_module['proxy_blocker_2'], //
-    3 => $lang_module['proxy_blocker_3'] //
-    );
+1 => $lang_module['proxy_blocker_1'], //
+2 => $lang_module['proxy_blocker_2'], //
+3 => $lang_module['proxy_blocker_3']  //
+);
 
 if ( $submit )
 {
     $array_config_global = array();
-    $array_config_global['gfx_chk'] = $nv_Request->get_int( 'gfx_chk', 'post' );
-
-    $array_config_global['site_keywords'] = filter_text_input( 'site_keywords', 'post', '', 1, 255 );
-    if ( ! empty( $array_config_global['site_keywords'] ) )
+    
+    $admin_theme = $nv_Request->get_string( 'admin_theme', 'post' );
+    if ( $admin_theme and in_array( $admin_theme, $adminThemes ) )
     {
-        $site_keywords = array_map( "trim", explode( ",", $array_config_global['site_keywords'] ) );
-        $array_config_global['site_keywords'] = array();
-        if ( ! empty( $site_keywords ) )
-        {
-            foreach ( $site_keywords as $keywords )
-            {
-                if ( ! empty( $keywords ) and ! is_numeric( $keywords ) )
-                {
-                    $array_config_global['site_keywords'][] = $keywords;
-                }
-            }
-        }
-        $array_config_global['site_keywords'] = ( ! empty( $array_config_global['site_keywords'] ) ) ? implode( ", ", $array_config_global['site_keywords'] ) : "";
+        $array_config_global['admin_theme'] = $admin_theme;
     }
-
+    
+    $closed_site = $nv_Request->get_int( 'closed_site', 'post' );
+    if ( isset( $closed_site_Modes[$closed_site] ) )
+    {
+        $array_config_global['closed_site'] = $closed_site;
+    }
+    
+    $array_config_global['gfx_chk'] = $nv_Request->get_int( 'gfx_chk', 'post' );
+    
     $array_config_global['site_email'] = filter_text_input( 'site_email', 'post', '', 1, 255 );
     if ( nv_check_valid_email( $array_config_global['site_email'] ) != '' )
     {
@@ -66,20 +71,22 @@ if ( $submit )
     {
         $array_config_global['error_send_email'] = $global_config['error_send_email'];
     }
-
+    
     $array_config_global['site_phone'] = filter_text_input( 'site_phone', 'post', '', 1, 255 );
     $array_config_global['site_lang'] = filter_text_input( 'site_lang', 'post', '', 1, 255 );
     if ( ! in_array( $array_config_global['site_lang'], $allow_sitelangs ) )
     {
         $array_config_global['site_lang'] = 'vi';
     }
-
+    
     $array_config_global['site_timezone'] = filter_text_input( 'site_timezone', 'post', '', 1, 255 );
     $array_config_global['date_pattern'] = filter_text_input( 'date_pattern', 'post', '', 1, 255 );
     $array_config_global['time_pattern'] = filter_text_input( 'time_pattern', 'post', '', 1, 255 );
     $array_config_global['my_domains'] = filter_text_input( 'my_domains', 'post', '', 1, 255 );
-
-    $my_domains = array( NV_SERVER_NAME );
+    
+    $my_domains = array( 
+        NV_SERVER_NAME 
+    );
     if ( ! empty( $array_config_global['my_domains'] ) )
     {
         $array_config_global['my_domains'] = array_map( "trim", explode( ",", $array_config_global['my_domains'] ) );
@@ -97,7 +104,7 @@ if ( $submit )
     }
     $my_domains = array_unique( $my_domains );
     $array_config_global['my_domains'] = implode( ",", $my_domains );
-
+    
     $array_config_global['cookie_prefix'] = filter_text_input( 'cookie_prefix', 'post', '', 1, 255 );
     $array_config_global['session_prefix'] = filter_text_input( 'session_prefix', 'post', '', 1, 255 );
     $array_config_global['googleAnalyticsID'] = filter_text_input( 'googleAnalyticsID', 'post', '', 1, 20 );
@@ -106,7 +113,7 @@ if ( $submit )
         $array_config_global['googleAnalyticsID'] = "";
     }
     $array_config_global['googleAnalyticsSetDomainName'] = $nv_Request->get_int( 'googleAnalyticsSetDomainName', 'post' );
-
+    
     $array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
     $array_config_global['online_upd'] = $nv_Request->get_int( 'online_upd', 'post' );
     $array_config_global['statistic'] = $nv_Request->get_int( 'statistic', 'post' );
@@ -118,7 +125,7 @@ if ( $submit )
         $array_config_global['proxy_blocker'] = 0;
     }
     $array_config_global['str_referer_blocker'] = $nv_Request->get_int( 'str_referer_blocker', 'post' );
-
+    
     $array_config_global['is_url_rewrite'] = 0;
     if ( $array_config_global['lang_multi'] == 0 )
     {
@@ -141,7 +148,7 @@ if ( $submit )
             }
         }
     }
-
+    
     foreach ( $array_config_global as $config_name => $config_value )
     {
         $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
@@ -171,16 +178,16 @@ if ( $submit )
     }
 }
 
-$captcha_array = array( //
+$captcha_array = array(  //
     0 => $lang_module['captcha_0'], //
-    1 => $lang_module['captcha_1'], //
-    2 => $lang_module['captcha_2'], //
-    3 => $lang_module['captcha_3'], //
-    4 => $lang_module['captcha_4'], //
-    5 => $lang_module['captcha_5'], //
-    6 => $lang_module['captcha_6'], //
-    7 => $lang_module['captcha_7'] //
-    );
+1 => $lang_module['captcha_1'], //
+2 => $lang_module['captcha_2'], //
+3 => $lang_module['captcha_3'], //
+4 => $lang_module['captcha_4'], //
+5 => $lang_module['captcha_5'], //
+6 => $lang_module['captcha_6'], //
+7 => $lang_module['captcha_7']  //
+);
 
 $array_config_global['gzip_method'] = ( $global_config['gzip_method'] ) ? ' checked="checked"' : '';
 $array_config_global['online_upd'] = ( $global_config['online_upd'] ) ? ' checked="checked"' : '';
@@ -193,6 +200,21 @@ $array_config_global['my_domains'] = implode( ",", $global_config['my_domains'] 
 $xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config_global );
+
+foreach ( $adminThemes as $name )
+{
+    $xtpl->assign( 'THEME_NAME', $name );
+    $xtpl->assign( 'THEME_SELECTED', ( $name == $admin_theme ? " selected=\"selected\"" : "" ) );
+    $xtpl->parse( 'main.admin_theme' );
+}
+
+foreach ( $closed_site_Modes as $value => $name )
+{
+    $xtpl->assign( 'MODE_VALUE', $value );
+    $xtpl->assign( 'MODE_NAME', $name );
+    $xtpl->assign( 'MODE_SELECTED', ( $value == $global_config['closed_site'] ? " selected=\"selected\"" : "" ) );
+    $xtpl->parse( 'main.closed_site_mode' );
+}
 
 foreach ( $captcha_array as $gfx_chk_i => $gfx_chk_lang )
 {
@@ -240,7 +262,7 @@ foreach ( $timezone_array as $site_timezone_i )
     $xtpl->parse( 'main.opsite_timezone' );
 }
 
-for ( $i = 0; $i < 3; $i++ )
+for ( $i = 0; $i < 3; $i ++ )
 {
     $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_SELECTED', ( $global_config['googleAnalyticsSetDomainName'] == $i ) ? ' selected="selected"' : '' );
     $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_VALUE', $i );

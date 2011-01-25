@@ -330,13 +330,9 @@ foreach ( $list as $row )
     }
 }
 
-if ( ! isset( $global_config['admin_login_mode'] ) or ! in_array( $global_config['admin_login_mode'], array( 1, 2, 3 ) ) )
-{
-    $global_config['admin_login_mode'] = 3;
-}
-define( 'ADMIN_LOGIN_MODE', $global_config['admin_login_mode'] );
-
-if ( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array( "mild", "lite" ) ) )
+if ( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array( 
+    "mild", "lite" 
+) ) )
 {
     $global_config['upload_checking_mode'] = "strong";
 }
@@ -393,6 +389,9 @@ if ( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )
 {
     trigger_error( "Hacking attempt", 256 );
 }
+
+define( 'ADMIN_LOGIN_MODE', ( empty( $global_config['closed_site'] ) ) ? 3 : $global_config['closed_site'] );
+
 $admin_cookie = $nv_Request->get_bool( 'admin', 'session', false );
 if ( ! empty( $admin_cookie ) )
 {
@@ -414,13 +413,13 @@ if ( defined( "NV_IS_ADMIN" ) )
 }
 elseif ( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
 {
-    $global_config['disable_site'] = 1;
+    $global_config['closed_site'] = 1;
 }
 
 //Dinh chi hoat dong cua site
 if ( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
 {
-    if ( $global_config['disable_site'] )
+    if ( ! empty( $global_config['closed_site'] ) )
     {
         $disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
         nv_info_die( $global_config['site_description'], $global_config['disable_site_title'], $disable_site_content );

@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
     <table class="tab1" summary="">
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.lang_multi}</strong>
@@ -11,7 +11,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.site_lang}</strong>
@@ -25,16 +25,34 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
-                    <strong>{LANG.site_keywords}</strong>
-                </td>
-                <td>
-                    <input type="text" name="site_keywords" value="{DATA.site_keywords}" style="width: 450px"/>
-                </td>
-            </tr>
-        </tbody>
+	    <tbody>
+	        <tr>
+	            <td>
+	                <strong>{LANG.themeadmin}</strong>
+	            </td>
+	            <td>
+	                <select name="admin_theme">
+	                    <!-- BEGIN: admin_theme -->
+	                    <option value="{THEME_NAME}"{THEME_SELECTED}>{THEME_NAME}</option>
+	                    <!-- END: admin_theme -->
+	                </select>
+	            </td>
+	        </tr>
+	    </tbody>
+	    <tbody class="second">
+	        <tr>
+	            <td>
+	                <strong>{LANG.closed_site}</strong>
+	            </td>
+	            <td>
+	                <select name="closed_site">
+	                    <!-- BEGIN: closed_site_mode -->
+	                    <option value="{MODE_VALUE}"{MODE_SELECTED}>{MODE_NAME}</option>
+	                    <!-- END: closed_site_mode -->
+	                </select>
+	            </td>
+	        </tr>
+	    </tbody>        
         <tbody>
             <tr>
                 <td>

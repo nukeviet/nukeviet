@@ -1487,7 +1487,7 @@ function nv_change_buffer ( $buffer )
         $buffer = preg_replace( '/(<\/head>)/i', $googleAnalytics . "\\1", $buffer, 1 );
     }
     
-    if ( defined( 'NV_IS_ADMIN' ) and ! $global_config['optActive'] ) return $buffer;
+    if ( ! $global_config['optActive'] ) return $buffer;
     
     if ( ! defined( 'NV_ADMIN' ) )
     {

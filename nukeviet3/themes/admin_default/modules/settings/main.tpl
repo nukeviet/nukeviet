@@ -31,6 +31,16 @@
         <tbody>
             <tr>
                 <td>
+                    <strong>{LANG.site_keywords}</strong>
+                </td>
+                <td>
+                    <input type="text" name="site_keywords" value="{VALUE.site_keywords}" style="width: 450px"/>
+                </td>
+            </tr>
+        </tbody>        
+        <tbody class="second">
+            <tr>
+                <td>
                     <strong>{LANG.site_logo}</strong>
                 </td>
                 <td>
@@ -39,7 +49,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.theme}</strong>
@@ -52,7 +62,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.default_module}</strong>
@@ -63,16 +73,6 @@
 						<option value="{MODULE.title}"{SELECTED}>{MODULE.custom_title}  </option>
                         <!-- END: module -->
                     </select>
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
-                    <strong>{LANG.site_disable}</strong>
-                </td>
-                <td>
-                    <input type="checkbox" name="disable_site" value="1" {CHECKED3} />
                 </td>
             </tr>
         </tbody>

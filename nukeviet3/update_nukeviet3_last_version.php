@@ -56,16 +56,16 @@ if ( defined( "NV_IS_GODADMIN" ) )
     if ( nv_version_compare( $global_config['version'], "3.0.08" ) < 0 )
     {
         $db->sql_query( "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_banip` (
-	  `id` int(11) NOT NULL AUTO_INCREMENT,
-	  `ip` varchar(32) DEFAULT NULL,
-	  `mask` tinyint(4) NOT NULL DEFAULT '0',  
-	  `area` tinyint(3) NOT NULL,
-	  `begintime` int(11) DEFAULT NULL,
-	  `endtime` int(11) DEFAULT NULL,
-	  `notice` varchar(255) NOT NULL,
-	  PRIMARY KEY (`id`),
-	  UNIQUE KEY `ip` (`ip`)
-	) ENGINE=MyISAM" );
+							  `id` int(11) NOT NULL AUTO_INCREMENT,
+							  `ip` varchar(32) DEFAULT NULL,
+							  `mask` tinyint(4) NOT NULL DEFAULT '0',  
+							  `area` tinyint(3) NOT NULL,
+							  `begintime` int(11) DEFAULT NULL,
+							  `endtime` int(11) DEFAULT NULL,
+							  `notice` varchar(255) NOT NULL,
+							  PRIMARY KEY (`id`),
+							  UNIQUE KEY `ip` (`ip`)
+							) ENGINE=MyISAM" );
         $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) ) . "',  `config_name` = 'nv_max_size' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'security_tags'" );
     }
     
@@ -335,6 +335,9 @@ if ( defined( "NV_IS_GODADMIN" ) )
             {
                 //update block ................
             }
+            
+            //Insert site_keywords lang
+            $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang_data_i . "', 'global', 'site_keywords', " . $db->dbescape_string( $global_config['site_keywords'] ) . ")" );
         }
         
         //update module banner
@@ -374,6 +377,13 @@ if ( defined( "NV_IS_GODADMIN" ) )
         
         //TABLE config: config_value varchar(255) => MEDIUMTEXT
         $db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_config` CHANGE `config_value` `config_value` MEDIUMTEXT NOT NULL" );
+        
+        //Closed site
+        $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'closed_site', '0')" );
+        $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_config` WHERE `module` = 'global' AND `config_name` = 'disable_site'" );
+        
+        //delete site_keywords system
+        $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_config` WHERE `lang`='sys' AND module` = 'global' AND `config_name` = 'site_keywords'" );
     }
     $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . $global_config['new_version'] . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
     nv_save_file_config_global();

@@ -40,7 +40,6 @@ $lang_module['default_module'] = "Výchozí modul";
 $lang_module['description'] = "Popis stránek";
 $lang_module['rewrite'] = "Přepište konfigurace";
 $lang_module['rewrite_optional'] = "Odstranit jazykové znaky na URL";
-$lang_module['site_disable'] = "Stránka je zakázaný";
 $lang_module['disable_content'] = "Obsah";
 $lang_module['submit'] = "Předložit";
 $lang_module['err_writable'] = "Chyba systému nelze zapisovat do souboru%s. Prosím, chmod nebo šekem server configur!";

@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Jan 21, 2011, 02:14:32 AM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Jan 21, 2011, 02:14:32 AM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['metaTagsConfig'] = "Meta-Tags Config";
 $lang_module['metaTagsGroupName'] = "Group type";
@@ -41,7 +42,6 @@ $lang_module['default_module'] = "Default module";
 $lang_module['description'] = "Site's description";
 $lang_module['rewrite'] = "Rewrite Configuration";
 $lang_module['rewrite_optional'] = "Remove language characters on URL";
-$lang_module['site_disable'] = "Site is disable";
 $lang_module['disable_content'] = "Message content disable site";
 $lang_module['footer_content'] = "Footer Content";
 $lang_module['submit'] = "Submit";
@@ -181,10 +181,5 @@ $lang_module['last_result'] = "Last result";
 $lang_module['last_result_empty'] = "n/a";
 $lang_module['last_result0'] = "Bad";
 $lang_module['last_result1'] = "Finished";
-$lang_module['adminpage_settings'] = "AdminPage Configuration";
-$lang_module['loginMode'] = "AdminPage Login Mode";
-$lang_module['loginMode1'] = "GodAdmin";
-$lang_module['loginMode2'] = "SuperAdmins";
-$lang_module['loginMode3'] = "All Admins";
 
 ?>

@@ -40,7 +40,6 @@ $lang_module['default_module'] = "Module par défaut à l'Accueil";
 $lang_module['description'] = "Description du site";
 $lang_module['rewrite'] = "Activer rewrite";
 $lang_module['rewrite_optional'] = "Filtrer les accents sur url";
-$lang_module['site_disable'] = "Site en maintenance";
 $lang_module['disable_content'] = "Notification";
 $lang_module['submit'] = "Sauver";
 $lang_module['err_writable'] = "Erreur: impossible d'entregister le fichier: %s merci de vérifier les permissions (chmod) de ce fichier.";

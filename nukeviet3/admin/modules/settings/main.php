@@ -22,6 +22,24 @@ if ( $submit )
     $array_config['site_name'] = filter_text_input( 'site_name', 'post', '', 1, 255 );
     $site_logo = filter_text_input( 'site_logo', 'post' );
     
+    $array_config['site_keywords'] = filter_text_input( 'site_keywords', 'post', '', 1, 255 );
+    if ( ! empty( $array_config['site_keywords'] ) )
+    {
+        $site_keywords = array_map( "trim", explode( ",", $array_config['site_keywords'] ) );
+        $array_config['site_keywords'] = array();
+        if ( ! empty( $site_keywords ) )
+        {
+            foreach ( $site_keywords as $keywords )
+            {
+                if ( ! empty( $keywords ) and ! is_numeric( $keywords ) )
+                {
+                    $array_config['site_keywords'][] = $keywords;
+                }
+            }
+        }
+        $array_config['site_keywords'] = ( ! empty( $array_config['site_keywords'] ) ) ? implode( ", ", $array_config['site_keywords'] ) : "";
+    }
+    
     if ( ! nv_is_url( $site_logo ) and file_exists( NV_DOCUMENT_ROOT . $site_logo ) )
     {
         $lu = strlen( NV_BASE_SITEURL );
@@ -34,7 +52,6 @@ if ( $submit )
     
     $array_config['site_home_module'] = filter_text_input( 'site_home_module', 'post', '', 1, 255 );
     $array_config['site_description'] = filter_text_input( 'site_description', 'post', '', 1, 255 );
-    $array_config['disable_site'] = $nv_Request->get_int( 'disable_site', 'post' );
     $array_config['disable_site_content'] = filter_text_textarea( 'disable_site_content', '', NV_ALLOWED_HTML_TAGS );
     $array_config['footer_content'] = filter_text_textarea( 'footer_content', '', NV_ALLOWED_HTML_TAGS );
     
@@ -88,6 +105,7 @@ $global_config['disable_site_content'] = nv_htmlspecialchars( $global_config['di
 $value_setting = array(  //
     "sitename" => $global_config['site_name'], //
 "site_logo" => ( nv_is_url( $global_config['site_logo'] ) ) ? NV_BASE_SITEURL . $global_config['site_logo'] : $global_config['site_logo'], //
+"site_keywords" => $global_config['site_keywords'], //
 "description" => $global_config['site_description'], //
 "disable_content" => $global_config['disable_site_content'], //
 "footer_content" => isset( $global_config['footer_content'] ) ? $global_config['footer_content'] : ""  //
@@ -122,8 +140,6 @@ foreach ( $module_array as $mod )
     $xtpl->parse( 'main.module' );
 }
 
-$xtpl->assign( 'CHECKED3', ( $global_config['disable_site'] == 1 ) ? ' checked' : '' );
-
 $xtpl->parse( 'main' );
 $content = "";
 if ( $errormess != "" )
@@ -144,8 +160,8 @@ $content .= '$("input[name=selectimg]").click(function(){
 						var type= "image";
 						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "420","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 						return false;
-					});\n';
-$content .= "//]]>\n";
+					});';
+$content .= "\n//]]>\n";
 $content .= "</script>\n";
 
 include ( NV_ROOTDIR . "/includes/header.php" );

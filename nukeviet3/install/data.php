@@ -332,6 +332,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`confi
         ('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', 1274757036)";
 
 $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
+('sys', 'global', 'closed_site', '0'),
 ('sys', 'global', 'site_keywords', 'Nukeviet, portal, mysql, php'),
 ('sys', 'global', 'site_phone', ''),
 ('sys', 'global', 'site_lang', '" . NV_LANG_DATA . "'),

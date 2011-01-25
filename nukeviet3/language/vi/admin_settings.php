@@ -43,7 +43,6 @@ $lang_module['default_module'] = "Module mặc định trên trang chủ";
 $lang_module['description'] = "Mô tả của site";
 $lang_module['rewrite'] = "Bật chức năng rewrite";
 $lang_module['rewrite_optional'] = "Loại bỏ kí tự ngôn ngữ trên url";
-$lang_module['site_disable'] = "Site ngưng hoạt động";
 $lang_module['disable_content'] = "Nội dung thông báo site ngưng hoạt động";
 $lang_module['footer_content'] = "Nội dung cuối site";
 
@@ -201,11 +200,10 @@ $lang_module['last_result_empty'] = "n/a";
 $lang_module['last_result0'] = "Tồi";
 $lang_module['last_result1'] = "Đã hoàn thành";
 
-//adminPage Settings
-$lang_module['adminpage_settings'] = "Cấu hình trang Quản trị";
-$lang_module['loginMode'] = "Đối tượng được đăng nhập trang quản trị";
-$lang_module['loginMode1'] = "Quản trị tối cao";
-$lang_module['loginMode2'] = "Người điều hành chung";
-$lang_module['loginMode3'] = "Tất cả admin";
+$lang_module['closed_site'] = "Chế độ đóng cửa site";
+$lang_module['closed_site_0'] = "Site hoạt động bình thường";
+$lang_module['closed_site_1'] = "Đóng của site chỉ có Quản trị tối cao truy cập";
+$lang_module['closed_site_2'] = "Đóng của site Người điều hành chung truy cập";
+$lang_module['closed_site_3'] = "Đóng của site Tất cả admin truy cập";
 
 ?>
