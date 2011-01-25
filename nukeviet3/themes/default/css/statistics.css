@@ -45,7 +45,7 @@ table.statistics th {
 	text-align: left;
 }
 
-table.statistics thead {
+table.statistics thead, table.statistics .thead_box{
 	background: #8ab0ff;
 	font: bold 11px/ 18px tahoma, verdana, sans-serif;
 	white-space: nowrap;

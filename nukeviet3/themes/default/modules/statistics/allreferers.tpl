@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <table class="statistics" summary="">
-	<thead>
+	<tbody class="thead_box">
 		<tr>
 			<td>{CTS.thead.0}</td>
 			<td style="text-align: right;">{CTS.thead.1}</td>
@@ -8,7 +8,7 @@
 			<td>{CTS.thead.2}</td>
 			<td></td>
 		</tr>
-	</thead>
+	</tbody>
 	<!-- BEGIN: loop -->
 	<tbody {CLASS}>
 		<tr>

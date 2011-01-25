@@ -37,8 +37,10 @@
             </label>
             <input type="password" id="re_password_iavim" name="re_password" value="{DATA.re_password}" class="required password" maxlength="{PASS_MAXLENGTH}" />
         </div>
+        <div>
         <input type="hidden" name="checkss" value="{DATA.checkss}" />
         <input type="submit" value="{LANG.change_pass}" class="submit" />
+        </div>
     </form>
 </div>
 <!-- END: main -->

@@ -13,17 +13,17 @@
         </div>
     <div class="clear"></div>
     </div>
-    <div class="uinfo">
-    	<p>
-        	<div class="uimg" align="center">
-            	<img src="{SRC_IMG}" alt="" /><br />
-                <span style="font-size:11px; color:#999">{LANG.img_size_title}</span>
-            </div>
-           {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})<br />
-           {USER.current_mode}<br />
-           {LANG.current_login}: {USER.current_login}<br />
-           {LANG.ip}: {USER.current_ip}
-        </p>
+    <div class="uinfo"> 
+       	
+        <div class="uimg">
+            <img src="{SRC_IMG}" alt="" /><br />
+            <span style="font-size:11px; color:#999">{LANG.img_size_title}</span>
+        </div>
+       {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})<br />
+       {USER.current_mode}<br />
+       {LANG.current_login}: {USER.current_login}<br />
+       {LANG.ip}: {USER.current_ip} 
+             
         <div class="clear"></div>
         <!-- BEGIN: change_login_note -->
         <div id="info" style="padding-top:10px;padding-bottom:5px">
@@ -39,8 +39,7 @@
         <div id="info" style="padding-top:10px;padding-bottom:5px">
             <strong>&raquo; {USER.question_empty_note}</strong>
         </div>
-        <!-- END: question_empty_note -->
-        <p class="con">
+        <!-- END: question_empty_note -->        
         <div class="content">
             <dl class="clearfix gray">
         	   <dt class="fl" style="width:48%;">{LANG.name}:</dt>
@@ -94,8 +93,7 @@
         	   <dt class="fl" style="width:48%;">{LANG.last_login}:</dt>
                <dd class="fl">{USER.last_login}</dd>
             </dl>
-        </div>
-        </p>
+        </div>      
     </div>
 </div>
 <!-- END: main -->

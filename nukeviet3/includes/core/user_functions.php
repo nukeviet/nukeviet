@@ -459,7 +459,8 @@ function nv_html_site_js ( )
         $return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
         $return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\"></script>\n";
         $return .= '<script type="text/javascript">
-        			var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
+        			//<![CDATA[
+					var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {				
 						$("a.delblock").click(function(){
 							var bid = $(this).attr("name");
@@ -530,6 +531,7 @@ function nv_html_site_js ( )
 						});	
 						$(".column").disableSelection();
 					});
+					//]]>
 					</script>';
     }
     return $return;

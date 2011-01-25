@@ -110,7 +110,7 @@ function allbots()
 {
 	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $bot_list, $cts;
 
-	$xtpl = new XTemplate("allbrowsers.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file);
+	$xtpl = new XTemplate("allbots.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file);
 
 	if($all_page)
 	{
@@ -156,7 +156,7 @@ function allos()
 {
 	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $os_list, $cts;
 
-	$xtpl = new XTemplate("allbrowsers.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file);
+	$xtpl = new XTemplate("allos.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file);
 
 	if($all_page)
 	{
