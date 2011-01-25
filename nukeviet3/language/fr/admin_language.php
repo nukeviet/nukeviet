@@ -58,7 +58,6 @@ $lang_module['nv_lang_name'] = "Nom de Langue";
 $lang_module['nv_lang_sl'] = "Sélection possible";
 $lang_module['nv_lang_sladm'] = "Afficher à l'administration";
 $lang_module['nv_lang_slsite'] = "Afficher au site";
-$lang_module['nv_lang_error_exit'] = "Erreur: aucune langue n'a été enregistrée à la base de données, <br /> <br />Le système vous emmènera automatiquement à la section de configuration, il faut lire les fichiers d'une langue avant d'exécuter les autres opérations";
 $lang_module['nv_data_note'] = "Pour ajouter une nouvelle langue de données, vous devez créer une langue de l'interface, exporter vers fichiers, et autoriser l'affichage à l'administration";
 $lang_module['nv_setup'] = "Déjà installé";
 $lang_module['nv_setup_new'] = "Installer";

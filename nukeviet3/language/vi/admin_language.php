@@ -58,7 +58,7 @@ $lang_module['nv_lang_name'] = "Tên ngôn ngữ";
 $lang_module['nv_lang_sl'] = " Có thể chọn";
 $lang_module['nv_lang_sladm'] = "Hiển thị trong admin";
 $lang_module['nv_lang_slsite'] = "Hiển thị ngoài site";
-$lang_module['nv_lang_error_exit'] = "Thông báo: hiện tại chưa có ngôn ngữ nào được đọc vào Cơ sở dữ liệu, <br /> <br />Hệ thống sẽ tự động chuyển sang phần cấu hình, bạn cần đọc dữ liệu một ngôn ngữ trước khi tiến hành các thao tác khác";
+$lang_module['nv_lang_error_exit'] = "Thông báo: hiện tại chưa có ngôn ngữ nào được đọc vào Cơ sở dữ liệu, <br /> <br />Hệ thống sẽ tự động chuyển sang phần đọc dữ liệu ngôn ngữ.";
 $lang_module['nv_data_note'] = "Để thêm mới ngôn ngữ dữ liệu, bạn cần tạo trước ngôn ngữ giao diện, xuất ra file và cấu hình cho phép hiển thị trong admin";
 $lang_module['nv_setup'] = "Đã được cài đặt";
 $lang_module['nv_setup_new'] = "Cài đặt mới";
@@ -76,8 +76,13 @@ $lang_module['nv_error_write_module'] = "Lỗi xác định được file của 
 $lang_module['nv_error_exit_module'] = "Lỗi không tồn tại ngôn ngữ của module";
 
 $lang_module['nv_lang_check'] = "Kiểm tra ngôn ngữ";
-$lang_module['nv_lang_check_title'] = "Kiểm tra ngôn ngữ chưa được dịch";
 $lang_module['nv_lang_data_source'] = "Hiển thị cùng ngôn ngữ";
 $lang_module['nv_lang_checkallarea'] = "Tất cả các khu vực";
+$lang_module['nv_lang_check_no_data'] = "Không có kết quả nào được tìm thấy theo yêu cầu của bạn";
+
+$lang_module['nv_check_type'] = "Điều kiện kiểm tra ";
+$lang_module['nv_check_type_0'] = "Kiểm tra ngôn ngữ chưa được dịch";
+$lang_module['nv_check_type_1'] = "Kiểm tra ngôn ngữ giống nhau";
+$lang_module['nv_check_type_2'] = "Kiểm tra tất cả";
 
 ?>

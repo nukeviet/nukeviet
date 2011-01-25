@@ -57,10 +57,9 @@ function nv_admin_read_lang ( $dirlang, $module, $admin_file = 1 )
         list( $idfile, $langtype ) = $db->sql_fetchrow( $db->sql_query( "SELECT idfile, langtype FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` WHERE `module` =" . $db->dbescape( $module ) . " AND `admin_file`='" . $admin_file . "'" ) );
         if ( intval( $idfile ) == 0 )
         {
-            $copyright_lang = $global_config['site_name'];
-            $copyright_lang = "Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-            $lang_translator_save = array();
             $langtype = isset( $lang_translator['langtype'] ) ? strip_tags( $lang_translator['langtype'] ) : "lang_module";
+            
+            $lang_translator_save = array();
             $lang_translator_save['author'] = isset( $lang_translator['author'] ) ? strip_tags( $lang_translator['author'] ) : "VINADES.,JSC (contact@vinades.vn)";
             $lang_translator_save['createdate'] = isset( $lang_translator['createdate'] ) ? strip_tags( $lang_translator['createdate'] ) : date( "d/m/Y, H:i" );
             $lang_translator_save['copyright'] = isset( $lang_translator['copyright'] ) ? strip_tags( $lang_translator['copyright'] ) : "Copyright (C) 2010 VINADES.,JSC. All rights reserved";
@@ -173,7 +172,7 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessi
         $nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
         $contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_readok'] . "</strong></p>";
         $contents .= implode( "<br />", $array_filename );
-        $contents .= "<meta http-equiv=\"Refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main\" />";
+        $contents .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=interface\" />";
         include ( NV_ROOTDIR . "/includes/header.php" );
         echo nv_admin_theme( $contents );
         include ( NV_ROOTDIR . "/includes/footer.php" );
