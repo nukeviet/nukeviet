@@ -11,23 +11,30 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 
 global $global_config, $sys_info;
 
-if ( defined( 'NV_IS_SPADMIN' ) and function_exists( 'phpinfo' ) and ! in_array( 'phpinfo', $sys_info['disable_functions'] ) )
+$allow_func = array( 
+    'main' 
+);
+
+if ( defined( 'NV_IS_SPADMIN' ) )
 {
-    $submenu['system_info'] = $lang_module['site_configs_info'];
-    $submenu['php_info_configuration'] = $lang_module['configuration_php'];
-    $submenu['php_info_modules'] = $lang_module['extensions'];
-    $submenu['php_info_environment'] = $lang_module['environment_php'];
-    $submenu['php_info_variables'] = $lang_module['variables_php'];
-    
-    $allow_func = array( 
-        'main', 'system_info', 'php_info_configuration', 'php_info_modules', 'php_info_environment', 'php_info_variables', 'checkchmod' 
-    );
-}
-else
-{
-    $allow_func = array( 
-        'main' 
-    );
+    if ( function_exists( 'phpinfo' ) and ! in_array( 'phpinfo', $sys_info['disable_functions'] ) )
+    {
+        if ( ini_get( 'expose_php' ) == '1' || strtolower( ini_get( 'expose_php' ) ) == 'on' )
+        {
+            $submenu['system_info'] = $lang_module['site_configs_info'];
+            $submenu['php_info_configuration'] = $lang_module['configuration_php'];
+            $submenu['php_info_modules'] = $lang_module['extensions'];
+            $submenu['php_info_environment'] = $lang_module['environment_php'];
+            $submenu['php_info_variables'] = $lang_module['variables_php'];
+            
+            $allow_func[] = 'system_info';
+            $allow_func[] = 'php_info_configuration';
+            $allow_func[] = 'php_info_modules';
+            $allow_func[] = 'php_info_environment';
+            $allow_func[] = 'php_info_variables';
+        }
+    }
+    $allow_func[] = 'checkchmod';
 }
 
 if ( defined( 'NV_IS_GODADMIN' ) )
