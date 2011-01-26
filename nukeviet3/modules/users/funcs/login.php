@@ -137,7 +137,7 @@ function set_reg_attribs ( $attribs )
  */
 function openidLogin_Res1 ( $attribs )
 {
-    global $page_title, $key_words, $mod_title, $db, $crypt, $nv_Request, $lang_module, $lang_global, $module_name, $module_info, $global_config, $gfx_chk, $nv_redirect;
+    global $page_title, $key_words, $mod_title, $db, $crypt, $nv_Request, $lang_module, $lang_global, $module_name, $module_info, $global_config, $gfx_chk, $nv_redirect, $op;
     $email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "" ) ? $attribs['contact/email'] : "";
     if ( empty( $email ) )
     {
@@ -174,10 +174,29 @@ function openidLogin_Res1 ( $attribs )
         
         $query = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $db->dbescape( $user_id );
         $result = $db->sql_query( $query );
-        $row = $db->sql_fetchrow( $result );
-        
-        validUserLog( $row, 1, $opid );
-        $nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
+        if ( defined( 'NV_IS_USER_FORUM' ) and file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php' ) )
+        {
+            require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php' );
+            
+            if ( defined( 'NV_IS_USER_LOGIN_FORUM_OK' ) )
+            {
+                $nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
+            }
+            else
+            {
+                $nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
+            }
+        }
+        elseif ( $db->sql_numrows( $result ) )
+        {
+            $row = $db->sql_fetchrow( $result );
+            validUserLog( $row, 1, $opid );
+            $nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
+        }
+        else
+        {
+            $nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
+        }
         Header( "Location: " . $nv_redirect );
         die();
     }
@@ -200,6 +219,10 @@ function openidLogin_Res1 ( $attribs )
         
         if ( $nv_Request->isset_request( 'openid_account_confirm', 'post' ) )
         {
+            $password = $nv_Request->get_string( 'password', 'post', '' );
+            $nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
+            $nv_seccode = ! $gfx_chk ? 1 : ( nv_capcha_txt( $nv_seccode ) ? 1 : 0 );
+            
             $nv_Request->unset_request( 'openid_attribs', 'session' );
             if ( defined( 'NV_IS_USER_FORUM' ) and file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' ) )
             {
@@ -218,9 +241,6 @@ function openidLogin_Res1 ( $attribs )
             }
             else
             {
-                $password = $nv_Request->get_string( 'password', 'post', '' );
-                $nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
-                $nv_seccode = ! $gfx_chk ? 1 : ( nv_capcha_txt( $nv_seccode ) ? 1 : 0 );
                 
                 if ( $crypt->validate( $password, $nv_row['password'] ) and $nv_seccode )
                 {
@@ -294,7 +314,7 @@ function openidLogin_Res1 ( $attribs )
                         `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) VALUES (
                         NULL, 
                         " . $db->dbescape( $row['username'] ) . ", 
-                        " . $db->dbescape( md5($row['username']) ) . ", 
+                        " . $db->dbescape( md5( $row['username'] ) ) . ", 
                         " . $db->dbescape( $row['password'] ) . ", 
                         " . $db->dbescape( $row['email'] ) . ", 
                         " . $db->dbescape( ! empty( $row['full_name'] ) ? $row['full_name'] : $reg_attribs['full_name'] ) . ", 
@@ -402,34 +422,39 @@ function openidLogin_Res1 ( $attribs )
             }
             else
             {
-                $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `username`=" . $db->dbescape( $nv_username );
-                $result = $db->sql_query( $sql );
-                $numrows = $db->sql_numrows( $result );
-                
-                if ( $numrows != 1 )
+                $error = "";
+                if ( defined( 'NV_IS_USER_FORUM' ) )
                 {
-                    $error = $lang_global['loginincorrect'];
+                    require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
                 }
                 else
                 {
-                    $row = $db->sql_fetchrow( $result );
+                    $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `username`=" . $db->dbescape( $nv_username );
+                    $result = $db->sql_query( $sql );
+                    $numrows = $db->sql_numrows( $result );
                     
-                    if ( empty( $row['password'] ) or ! $crypt->validate( $nv_password, $row['password'] ) )
+                    if ( $numrows != 1 )
                     {
                         $error = $lang_global['loginincorrect'];
                     }
                     else
                     {
-                        if ( ! $row['active'] )
+                        $user_info = $db->sql_fetchrow( $result );
+                        
+                        if ( empty( $user_info['password'] ) or ! $crypt->validate( $nv_password, $user_info['password'] ) )
                         {
-                            $error = $lang_module['login_no_active'];
+                            $error = $lang_global['loginincorrect'];
                         }
                         else
                         {
-                            $nv_Request->unset_request( 'openid_attribs', 'session' );
-                            $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_openid` VALUES (" . intval( $row['userid'] ) . ", " . $db->dbescape( $attribs['id'] ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
-                            $db->sql_query( $sql );
-                            validUserLog( $row, 1, $opid );
+                            if ( ! $row['active'] )
+                            {
+                                $error = $lang_module['login_no_active'];
+                            }
+                            else
+                            {
+                                validUserLog( $user_info, 1, $opid );
+                            }
                         }
                     }
                 }
@@ -437,6 +462,10 @@ function openidLogin_Res1 ( $attribs )
             
             if ( empty( $error ) )
             {
+                $nv_Request->unset_request( 'openid_attribs', 'session' );
+                $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_openid` VALUES (" . intval( $user_info['userid'] ) . ", " . $db->dbescape( $attribs['id'] ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
+                $db->sql_query( $sql );
+                
                 $nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
                 $info = $lang_module['login_ok'] . "<br /><br />\n";
                 $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
@@ -561,7 +590,6 @@ $nv_redirect = filter_text_input( 'nv_redirect', 'post,get', '' );
 if ( defined( 'NV_OPENID_ALLOWED' ) )
 {
     $server = $nv_Request->get_string( 'server', 'get', '' );
-    
     if ( ! empty( $server ) and isset( $openid_servers[$server] ) )
     {
         include_once ( NV_ROOTDIR . "/includes/class/openid.class.php" );
@@ -643,7 +671,7 @@ $error = "";
 if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
 {
     $nv_username = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
-    $nv_password = filter_text_input( 'nv_password', 'post', '');
+    $nv_password = filter_text_input( 'nv_password', 'post', '' );
     $nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
     //$check_login = nv_check_valid_login( $nv_username, NV_UNICKMAX, NV_UNICKMIN );
     // $check_pass = nv_check_valid_pass( $nv_password, NV_UPASSMAX, NV_UPASSMIN );

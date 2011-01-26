@@ -9,12 +9,11 @@
 
 if ( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_USER' ) or defined( 'NV_IS_USER_FORUM' ) or ! $global_config['allowuserlogin'] or ! defined( 'NV_OPENID_ALLOWED' ) )
+if ( ! defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] or ! defined( 'NV_OPENID_ALLOWED' ) )
 {
     Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
     die();
 }
-
 $page_title = $mod_title = $lang_module['openid_administrator'];
 $key_words = $module_info['keywords'];
 
@@ -42,18 +41,19 @@ if ( $nv_Request->isset_request( 'server', 'get' ) )
     if ( ! empty( $server ) and isset( $openid_servers[$server] ) )
     {
         include_once ( NV_ROOTDIR . "/includes/class/openid.class.php" );
-        $openid_class = new LightOpenID;
-
+        $openid_class = new LightOpenID();
+        
         if ( $nv_Request->isset_request( 'openid_mode', 'get' ) )
         {
             $openid_mode = $nv_Request->get_string( 'openid_mode', 'get', '' );
-
+            
             if ( $openid_mode == "cancel" )
             {
                 $nv_Request->set_Session( 'openid_error', 1 );
                 header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid" );
                 die();
-            } elseif ( ! $openid_class->validate() )
+            }
+            elseif ( ! $openid_class->validate() )
             {
                 $nv_Request->set_Session( 'openid_error', 2 );
                 header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid" );
@@ -70,31 +70,31 @@ if ( $nv_Request->isset_request( 'server', 'get' ) )
                     header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid" );
                     die();
                 }
-
+                
                 $opid = $crypt->hash( $openid );
-
+                
                 $query = "SELECT COUNT(*) AS `count` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `opid`=" . $db->dbescape( $opid );
                 $result = $db->sql_query( $query );
                 list( $count ) = $db->sql_fetchrow( $result );
-
+                
                 if ( $count )
                 {
                     $nv_Request->set_Session( 'openid_error', 4 );
                     header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid" );
                     die();
                 }
-
+                
                 $query = "SELECT COUNT(*) AS `count` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $user_info['userid'] . " AND `email`=" . $db->dbescape( $email );
                 $result = $db->sql_query( $query );
                 list( $count ) = $db->sql_fetchrow( $result );
-
+                
                 if ( $count )
                 {
                     $nv_Request->set_Session( 'openid_error', 5 );
                     header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid" );
                     die();
                 }
-
+                
                 if ( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
                 {
                     $query = "SELECT COUNT(*) AS `count` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $email );
@@ -104,7 +104,7 @@ if ( $nv_Request->isset_request( 'server', 'get' ) )
                     }
                     $result = $db->sql_query( $query );
                     list( $count ) = $db->sql_fetchrow( $result );
-
+                    
                     if ( $count )
                     {
                         $nv_Request->set_Session( 'openid_error', 6 );
@@ -112,7 +112,7 @@ if ( $nv_Request->isset_request( 'server', 'get' ) )
                         die();
                     }
                 }
-
+                
                 $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_openid` VALUES (" . $user_info['userid'] . ", " . $db->dbescape( $openid ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
                 $db->sql_query( $sql );
                 header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid" );
@@ -136,14 +136,14 @@ $query = $db->sql_query( $sql );
 while ( $row = $db->sql_fetchrow( $query ) )
 {
     $server = parse_url( $row['openid'] );
-
-    $data['openid_list'][] = array( //
+    
+    $data['openid_list'][] = array(  //
         'opid' => $row['opid'], //
-        'openid' => $row['openid'], //
-        'server' => $server['host'], //
-        'email' => $row['email'], //
-        'disabled' => ( ( ! empty( $user_info['current_openid'] ) and $user_info['current_openid'] == $row['opid'] ) ? " disabled=\"disabled\"" : "" ), //
-        );
+'openid' => $row['openid'], //
+'server' => $server['host'], //
+'email' => $row['email'], //
+'disabled' => ( ( ! empty( $user_info['current_openid'] ) and $user_info['current_openid'] == $row['opid'] ) ? " disabled=\"disabled\"" : "" )  //
+    );
 }
 
 $error = $nv_Request->get_int( 'openid_error', 'session', 0 );
@@ -154,24 +154,24 @@ switch ( $error )
     case 1:
         $data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['canceled_authentication'] . "</div>";
         break;
-
+    
     case 2:
         $data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['not_logged_in'] . "</div>";
         break;
-
+    
     case 3:
         $data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['logged_in_failed'] . "</div>";
         break;
-
+    
     case 4:
         $data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['openid_is_exists'] . "</div>";
         break;
-
+    
     case 5:
     case 6:
         $data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['email_is_exists'] . "</div>";
         break;
-
+    
     default:
         $data['info'] = $lang_module['openid_add_new'];
 }

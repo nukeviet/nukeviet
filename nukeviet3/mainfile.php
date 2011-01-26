@@ -82,7 +82,6 @@ if ( $global_config['is_user_forum'] )
     if ( ! empty( $forum_files ) and in_array( 'is_user.php', $forum_files ) and in_array( 'changepass.php', $forum_files ) and in_array( 'editinfo.php', $forum_files ) and in_array( 'login.php', $forum_files ) and in_array( 'logout.php', $forum_files ) and in_array( 'lostpass.php', $forum_files ) and in_array( 'register.php', $forum_files ) )
     {
         define( 'NV_IS_USER_FORUM', true );
-        $global_config['openid_mode'] = 0;
     }
     else
     {
