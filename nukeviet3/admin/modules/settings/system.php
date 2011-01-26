@@ -21,6 +21,10 @@ $closed_site_Modes = array(
     '0' => $lang_module['closed_site_0'], '1' => $lang_module['closed_site_1'], '2' => $lang_module['closed_site_2'], '3' => $lang_module['closed_site_3'] 
 );
 
+$optActive_Modes = array( 
+    '0' => $lang_module['optActive_no'], '1' => $lang_module['optActive_all'], '2' => $lang_module['optActive_site'], '3' => $lang_module['optActive_admin'] 
+);
+
 $admin_theme = ( isset( $global_config['admin_theme'] ) and ! empty( $global_config['admin_theme'] ) and in_array( $global_config['admin_theme'], $adminThemes ) ) ? $global_config['admin_theme'] : "admin_default";
 
 $submit = $nv_Request->get_string( 'submit', 'post' );
@@ -38,9 +42,9 @@ foreach ( $global_config['allow_sitelangs'] as $lang_i )
 
 $proxy_blocker_array = array(  //
     0 => $lang_module['proxy_blocker_0'], //
-1 => $lang_module['proxy_blocker_1'], //
-2 => $lang_module['proxy_blocker_2'], //
-3 => $lang_module['proxy_blocker_3']  //
+	1 => $lang_module['proxy_blocker_1'], //
+	2 => $lang_module['proxy_blocker_2'], //
+	3 => $lang_module['proxy_blocker_3']  //
 );
 
 if ( $submit )
@@ -194,7 +198,6 @@ $array_config_global['online_upd'] = ( $global_config['online_upd'] ) ? ' checke
 $array_config_global['statistic'] = ( $global_config['statistic'] ) ? ' checked="checked"' : '';
 $array_config_global['lang_multi'] = ( $global_config['lang_multi'] ) ? ' checked="checked"' : '';
 $array_config_global['str_referer_blocker'] = ( $global_config['str_referer_blocker'] ) ? ' checked="checked"' : '';
-$array_config_global['optActive'] = ( $global_config['optActive'] ) ? ' checked="checked"' : '';
 $array_config_global['my_domains'] = implode( ",", $global_config['my_domains'] );
 
 $xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
@@ -250,6 +253,13 @@ foreach ( $allow_sitelangs as $lang_i )
     $xtpl->assign( 'SELECTED', ( $lang_i == $global_config['site_lang'] ) ? "selected='selected'" : "" );
     $xtpl->assign( 'LANGVALUE', $language_array[$lang_i]['name'] );
     $xtpl->parse( 'main.site_lang_option' );
+}
+foreach ( $optActive_Modes as $key => $value )
+{
+    $xtpl->assign( 'OPTACTIVE_OP', $key );
+    $xtpl->assign( 'OPTACTIVE_SELECTED', ( $key == $global_config['optActive'] ) ? "selected='selected'" : "" );
+    $xtpl->assign( 'OPTACTIVE_TEXT', $value );
+    $xtpl->parse( 'main.optActive' );
 }
 
 $timezone_array = array_keys( nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/timezone.ini', true ) );

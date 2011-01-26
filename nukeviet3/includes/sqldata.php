@@ -642,6 +642,7 @@ function nv_create_table_sys ( $lang )
         ('" . $lang . "', 'global', 'site_name', 'NUKEVIET CMS 3.0'),
     	('" . $lang . "', 'global', 'site_logo', 'images/logo.png'),
     	('" . $lang . "', 'global', 'site_description', 'NUKEVIET CMS 3.0 Developed by Vinades.,Jsc'),
+    	('" . $lang . "', 'global', 'site_keywords', ''),
         ('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
         ('" . $lang . "', 'global', 'site_home_module', 'news'),
         ('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!')";

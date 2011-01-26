@@ -191,7 +191,11 @@
                     <strong>{LANG.optActive}</strong>
                 </td>
                 <td>
-                    <input type="checkbox" value="1" name="optActive" {DATA.optActive} />
+	                <select name="optActive">
+	                    <!-- BEGIN: optActive -->
+	                    	<option value="{OPTACTIVE_OP}"{OPTACTIVE_SELECTED}>{OPTACTIVE_TEXT}</option>
+	                    <!-- END: optActive -->
+	                </select>
                 </td>
             </tr>
         </tbody>

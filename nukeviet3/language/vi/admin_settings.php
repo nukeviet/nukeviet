@@ -35,7 +35,12 @@ $lang_module['site_config'] = "Cấu hình site";
 $lang_module['lang_site_config'] = "Cấu hình site Theo ngôn ngữ: %s";
 $lang_module['bots_config'] = "Máy chủ tìm kiếm";
 
-$lang_module['optActive'] = "Kích hoạt chức năng tối ưu site<br />(Chỉ tắt với admin)";
+$lang_module['optActive'] = "Kích hoạt chức năng tối ưu site";
+$lang_module['optActive_no'] = "Không kích hoạt";
+$lang_module['optActive_all'] = "Kích hoạt toàn site";
+$lang_module['optActive_site'] = "Kích hoạt khu vực ngoài site";
+$lang_module['optActive_admin'] = "Kích hoạt khu vực admin";
+
 $lang_module['sitename'] = "Tên gọi của site";
 $lang_module['theme'] = "Giao diện mặc định";
 $lang_module['themeadmin'] = "Giao diện người quản trị";
