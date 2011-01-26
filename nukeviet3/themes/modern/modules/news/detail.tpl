@@ -23,7 +23,7 @@
         <div id="hometext" class="short-desc clearfix">
             <!-- BEGIN: imgthumb -->
             <div id="imghome" class="fl left" style="width:{DETAIL.image.width}px;margin-right:20px;">
-                <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}"/>
+                <a href="{DETAIL.homeimgfile}" title="{TITLE}" rel="shadowbox"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}"/></a>
                 <p>
                     <em>{DETAIL.image.note}</em>
                 </p>

@@ -74,7 +74,10 @@ if ( $allowed )
                     $width = ( $news_contents['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
                 }
                 $alt = ( empty( $news_contents['homeimgalt'] ) ) ? $news_contents['title'] : $news_contents['homeimgalt'];
-                
+                if ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] ) )
+                {
+                    $news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
+                }
                 $news_contents['image'] = array( 
                     "src" => $src, "width" => $width, "alt" => $alt, "note" => $news_contents['homeimgalt'], "position" => $news_contents['imgposition'] 
                 );

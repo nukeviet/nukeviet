@@ -25,7 +25,7 @@
         <div id="hometext">
             <!-- BEGIN: imgthumb -->
             <div id="imghome" class="fl" style="width:{DETAIL.image.width}px;margin-right:8px;">
-                <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}"/>
+                <a href="{DETAIL.homeimgfile}" title="{TITLE}" rel="shadowbox"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}"/></a>
                 <p>
                     <em>{DETAIL.image.note}</em>
                 </p>

@@ -359,6 +359,14 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     $my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";
     $my_head .= "<link href='" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css' type=\"text/css\" rel=\"stylesheet\"/>\n";
     
+    if ( ! defined( 'SHADOWBOX' ) )
+    {
+        $my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+        $my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
+        define( 'SHADOWBOX', true );
+    }
+    
     $xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
     $news_contents['addtime'] = nv_date( "d-m-Y h:i:s", $news_contents['addtime'] );
