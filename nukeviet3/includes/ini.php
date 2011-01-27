@@ -18,7 +18,7 @@ if ( $sys_info['ini_set_support'] )
 {
     ini_set( 'magic_quotes_runtime', 'Off' );
     ini_set( 'magic_quotes_sybase', 'Off' );
-
+    
     if ( ! isset( $_SESSION ) )
     {
         ini_set( 'session.save_handler', 'files' );
@@ -31,7 +31,7 @@ if ( $sys_info['ini_set_support'] )
         ini_set( 'session.gc_divisor', 1000 ); //gc_probability / gc_divisor = phan tram (phan nghin) kha nang chay Garbage Collection
         ini_set( 'session.gc_maxlifetime', 3600 ); //thoi gian sau khi het han phien lam viec de Garbage Collection tien hanh xoa, 60 phut
     }
-
+    
     ini_set( 'allow_url_fopen', 1 );
     ini_set( "user_agent", 'NV3' );
     ini_set( "default_charset", $global_config['site_charset'] );
@@ -48,16 +48,20 @@ if ( $sys_info['ini_set_support'] )
 $sys_info['safe_mode'] = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
 $sys_info['php_support'] = ( function_exists( 'version_compare' ) and version_compare( phpversion(), '5.0.0', '>=' ) ) ? 1 : 0;
 $sys_info['mysql_support'] = ( extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' ) ) ? 1 : 0;
-$sys_info['opendir_support'] = ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) ? 1 : 0;
+
 $sys_info['gd_support'] = ( extension_loaded( 'gd' ) ) ? 1 : 0;
-$sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' ) ) ? 1 : 0;
 $sys_info['zlib_support'] = ( extension_loaded( 'zlib' ) ) ? 1 : 0;
 $sys_info['session_support'] = ( extension_loaded( 'session' ) ) ? 1 : 0;
 $sys_info['mb_support'] = ( extension_loaded( 'mbstring' ) ) ? 1 : 0;
 $sys_info['iconv_support'] = ( extension_loaded( 'iconv' ) ) ? 1 : 0;
-$sys_info['curl_support'] = ( extension_loaded( 'curl' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! preg_grep( '/^curl\_/', $sys_info['disable_functions'] ) ) ) ) ? 1 : 0;
 $sys_info['allowed_set_time_limit'] = ( ! $sys_info['safe_mode'] and function_exists( "set_time_limit" ) and ! in_array( 'set_time_limit', $sys_info['disable_functions'] ) ) ? 1 : 0;
 $sys_info['os'] = strtoupper( ( function_exists( 'php_uname' ) and ! in_array( 'php_uname', $sys_info['disable_functions'] ) and strtoupper( php_uname( 's' ) ) != '' ) ? php_uname( 's' ) : PHP_OS );
+
+$sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' ) ) ? 1 : 0;
+$sys_info['curl_support'] = ( extension_loaded( 'curl' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! preg_grep( '/^curl\_/', $sys_info['disable_functions'] ) ) ) ) ? 1 : 0;
+$sys_info['opendir_support'] = ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) ? 1 : 0;
+$sys_info['allow_url_fopen'] = ( ini_get( 'allow_url_fopen' ) == '1' || strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' ) ? 1 : 0;
+
 if ( $sys_info['os'] == "LINUX" )
 {
     $sys_info['ftp_support'] = ( function_exists( "ftp_connect" ) and ! in_array( 'ftp_connect', $sys_info['disable_functions'] ) and function_exists( "ftp_chmod" ) and ! in_array( 'ftp_chmod', $sys_info['disable_functions'] ) and function_exists( "ftp_mkdir" ) and ! in_array( 'ftp_mkdir', $sys_info['disable_functions'] ) and function_exists( "ftp_chdir" ) and ! in_array( 'ftp_chdir', $sys_info['disable_functions'] ) and function_exists( "ftp_nlist" ) and ! in_array( 'ftp_nlist', $sys_info['disable_functions'] ) ) ? 1 : 0;
