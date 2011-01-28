@@ -329,11 +329,96 @@ if ( defined( "NV_IS_GODADMIN" ) )
 				  UNIQUE KEY `bid` (`bid`,`func_id`)	 
 				) ENGINE=MyISAM" );
             
-            // update block   
+            // update block
+            $array_funcid = array();
+            $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC" );
+            while ( list( $func_id_i ) = $db->sql_fetchrow( $func_result ) )
+            {
+                $array_funcid[] = $func_id_i;
+            }
+            
             $block_result = $db->sql_query( "SELECT * FROM `" . NV_BLOCKS_TABLE . "` GROUP BY `groupbl` ORDER BY `bid` ASC" );
             while ( $brow = $db->sql_fetchrow( $block_result ) )
             {
-                //update block ................
+                list( $maxweight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme =" . $db->dbescape( $brow['theme'] ) . " AND `position`=" . $db->dbescape( $brow['position'] ) ) );
+                $brow['weight'] = intval( $maxweight ) + 1;
+                
+                $brow['file_name'] = $brow['file_path'];
+                $brow['config'] = "";
+                if ( $brow['type'] == "banner" )
+                {
+                    $brow['config'] = "a:1:{s:12:\"idplanbanner\";i:" . $brow['file_path'] . ";}";
+                    $brow['file_name'] = "global.banners.php";
+                    $brow['module'] = "banners";
+                }
+                elseif ( $brow['type'] == "html" )
+                {
+                    $block_config = array();
+                    $block_config['htmlcontent'] = $brow['file_path'];
+                    
+                    $brow['config'] = serialize( $block_config );
+                    $brow['file_name'] = "global.html.php";
+                    $brow['module'] = "global";
+                }
+                elseif ( $brow['type'] == "rss" )
+                {
+                    $array_rrs = explode( "#@#", $brow['file_path'] );
+                    $block_config = array();
+                    $block_config['url'] = $array_rrs[0];
+                    $block_config['number'] = $array_rrs[1];
+                    $block_config['isdescription'] = $array_rrs[2];
+                    $block_config['ishtml'] = $array_rrs[3];
+                    $block_config['ispubdate'] = $array_rrs[4];
+                    $block_config['istarget'] = $array_rrs[5];
+                    
+                    $brow['config'] = serialize( $block_config );
+                    $brow['file_name'] = "global.rss.php";
+                    $brow['module'] = "rss";
+                }
+                elseif ( $brow['module'] == "global" )
+                {
+                    if ( $brow['file_name'] == "global.counter.php" )
+                    {
+                        $brow['module'] = "statistics";
+                    }
+                    elseif ( $brow['file_name'] == "global.about.php" )
+                    {
+                        $brow['module'] = "about";
+                    }
+                    elseif ( $brow['file_name'] == "global.voting.php" )
+                    {
+                        $brow['module'] = "voting";
+                        $brow['file_name'] = "global.voting_random.php";
+                    }
+                    elseif ( $brow['file_name'] == "global.login.php" )
+                    {
+                        $brow['module'] = "users";
+                    }
+                }
+                
+                $brow['bid'] = $db->sql_query_insert_id( "INSERT INTO `" . NV_BLOCKS_TABLE . "_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES ( NULL, " . $db->dbescape( $brow['theme'] ) . ", " . $db->dbescape( $brow['module'] ) . ", " . $db->dbescape( $brow['file_name'] ) . ", " . $db->dbescape( $brow['title'] ) . ", " . $db->dbescape( $brow['link'] ) . ", " . $db->dbescape( $brow['template'] ) . ", " . $db->dbescape( $brow['position'] ) . ", '" . $brow['exp_time'] . "', '" . $brow['active'] . "', " . $db->dbescape( $brow['groups_view'] ) . ", '" . $brow['all_func'] . "', '" . $brow['weight'] . "', " . $db->dbescape( $brow['config'] ) . " )" );
+                
+                if ( $brow['all_func'] )
+                {
+                    $func_list = $array_funcid;
+                }
+                else
+                {
+                    $func_list = array();
+                    $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_BLOCKS_TABLE . "` WHERE `groupbl` = '" . $brow['groupbl'] . "'" );
+                    while ( list( $func_id_i ) = $db->sql_fetchrow( $func_result ) )
+                    {
+                        $func_list[] = $func_id_i;
+                    }
+                }
+                foreach ( $func_list as $func_id )
+                {
+                    $sql = "SELECT MAX(t1.weight) FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t1.func_id=" . $func_id . " AND t2.theme=" . $db->dbescape( $brow['theme'] ) . " AND t2.position=" . $db->dbescape( $brow['position'] ) . "";
+                    list( $weight ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
+                    $weight = intval( $weight ) + 1;
+                    
+                    $db->sql_query( "INSERT INTO `" . NV_BLOCKS_TABLE . "_weight` (`bid`, `func_id`, `weight`) VALUES ('" . $brow['bid'] . "', '" . $func_id . "', '" . $weight . "')" );
+                }
             }
             
             //Insert site_keywords lang
