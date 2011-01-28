@@ -7,8 +7,8 @@
   </searchEngine_item>
   <searchEngine_item>
     <name>Yahoo</name>
-    <value>http://search.yahooapis.com/SiteExplorerService/V1/ping?sitemap=</value>
-    <active>0</active>
+    <value>http://search.yahooapis.com/SiteExplorerService/V1/updateNotification?appid=YahooDemo&amp;url=</value>
+    <active>1</active>
   </searchEngine_item>
   <searchEngine_item>
     <name>Ask</name>
