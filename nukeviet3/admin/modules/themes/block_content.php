@@ -709,7 +709,8 @@ echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://
 		<title>Insert title here</title>
 		
 		<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/css/admin.css\" type=\"text/css\" />
-		<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.all.css' rel='stylesheet' />
+		<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css' rel='stylesheet' />
+		<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css' rel='stylesheet' />
 		<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css' rel='stylesheet' />
 		<style type=\"text/css\">
 			.exp_time {

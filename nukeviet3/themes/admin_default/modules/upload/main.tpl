@@ -41,7 +41,11 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
 .upload:hover{background:url('{NV_BASE_SITEURL}images/upload.gif') no-repeat 0px -26px;}
 .red{color:red}
 </style>
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.all.css" rel="stylesheet" />
+
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.css" rel="stylesheet" />
+
 <link type="text/css" href="{NV_BASE_SITEURL}js/jquery/jquery.treeview.css" rel="stylesheet" />
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
