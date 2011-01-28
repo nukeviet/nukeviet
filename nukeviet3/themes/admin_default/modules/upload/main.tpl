@@ -209,7 +209,7 @@ ICON.filedelete = nv_base_siteurl + 'js/contextmenu/icons/delete.png';
 $(function() {
   $.getScript(nv_base_siteurl + 'js/upload.js', function() {
    $("#imgfolder").load(nv_module_url + "folderlist&path={PATH}&currentpath={CURRENTPATH}&random=" + nv_randomNum(10));
-  $("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&random=" + nv_randomNum(10))
+   $("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10))
   });
 });
 //]]>

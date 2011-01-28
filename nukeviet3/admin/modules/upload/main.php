@@ -37,6 +37,7 @@ if ( $popup )
     $xtpl->assign( "NV_MIN_HEIGHT", 10 );
     $xtpl->assign( "CURRENTPATH", $currentpath );
     $xtpl->assign( "PATH", $path );
+    $xtpl->assign( "TYPE", $type );
     $xtpl->assign( "AREA", $area );
     $xtpl->assign( "FUNNUM", $nv_Request->get_int( 'CKEditorFuncNum', 'get', 0 ) );
 
