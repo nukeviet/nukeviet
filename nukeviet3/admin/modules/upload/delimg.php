@@ -10,21 +10,35 @@
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post' ) );
+$check_allow_upload_dir = nv_check_allow_upload_dir( $path );
+if ( ! isset( $check_allow_upload_dir['delete_file'] ) ) die( "ERROR_" . $lang_module['notlevel'] );
 
-if ( $admin_info['allow_modify_files'] && nv_check_allow_upload_dir( $path ) )
+$file = htmlspecialchars( trim( $nv_Request->get_string( 'file', 'post' ) ), ENT_QUOTES );
+$file = basename( $file );
+if ( empty( $file ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $file ) ) die( "ERROR_" . $lang_module['errorNotSelectFile'] );
+
+@nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $file );
+
+$md5_view_image = NV_ROOTDIR . "/" . NV_FILES_DIR . "/images/" . md5( $path . '/' . $file ) . "." . nv_getextension( $file );
+if ( file_exists( $md5_view_image ) )
 {
-    $image = htmlspecialchars( trim( $nv_Request->get_string( 'img', 'post' ) ), ENT_QUOTES );
-    $image = basename( $image );
-    if ( ! empty( $image ) and file_exists( NV_ROOTDIR . '/' . $path . '/' . $image ) )
-    {
-        @nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $image );
-        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $image, $admin_info['userid'] );
-        $md5_view_image = NV_ROOTDIR . "/'.NV_FILES_DIR.'/images/" . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
-        if ( file_exists( $md5_view_image ) )
-        {
-            @nv_deletefile( $md5_view_image );
-        }
-    }
+    @nv_deletefile( $md5_view_image );
 }
+
+$results = array();
+$md5 = md5( $path );
+$tempFile = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . $md5;
+if ( file_exists( $tempFile ) )
+{
+    $results = file_get_contents( $tempFile );
+    $results = unserialize( $results );
+}
+
+unset( $results[$file] );
+file_put_contents( $tempFile, serialize( $results ) );
+
+nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $file, $admin_info['userid'] );
+
+echo "OK";
 
 ?>

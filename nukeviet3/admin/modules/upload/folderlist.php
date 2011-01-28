@@ -12,129 +12,131 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) )
     die( 'Stop!!!' );
 }
 
-$path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get,post', NV_UPLOADS_DIR ) );
+/**
+ * nv_set_dir_class()
+ * 
+ * @param mixed $array
+ * @return void
+ */
+function nv_set_dir_class( $array )
+{  
+    $class = array( "folder" );
+    if ( ! empty( $array ) )
+    {
+        $menu = false;
+        foreach ( $array as $key => $item )
+        {
+            if ( $item ) $class[] = $key;
+            if($key == 'create_dir' AND $item) $menu = true;
+            if($key == 'rename_dir' AND $item) $menu = true;
+            if($key == 'delete_dir' AND $item) $menu = true;
+        }
+    }
 
-if ( empty( $path ) and defined( 'NV_IS_SPADMIN' ) )
+    $class = implode( " ", $class );
+    if($menu) $class .= " menu";
+    return $class;
+}
+
+/**
+ * viewdirtree()
+ * 
+ * @param mixed $dir
+ * @param mixed $currentpath2
+ * @return
+ */
+function viewdirtree( $dir, $currentpath )
 {
-    $path = "";
-} elseif ( ! nv_check_allow_upload_dir( $path ) )
+    global $global_config, $module_file, $array_hidefolders;
+
+    $handle = @scandir( NV_ROOTDIR . '/' . $dir );
+
+    $content = "";
+    foreach ( $handle as $file )
+    {
+        $path_file = empty( $dir ) ? $file : $dir . '/' . $file;
+        $check_allow_upload_dir = nv_check_allow_upload_dir( $path_file );
+
+        if ( is_dir( NV_ROOTDIR . '/' . $path_file ) && ! in_array( $file, $array_hidefolders ) && $check_allow_upload_dir )
+        {
+            $class_li = 'expandable';
+            $style_color = '';
+            if ( $path_file == $currentpath )
+            {
+                $class_li = "open collapsable";
+                $style_color = ' style="color:red"';
+            } elseif ( strpos( $currentpath, $path_file . '/' ) !== false )
+            {
+                $class_li = "open collapsable";
+            }
+            
+            $tree = array();
+            $tree['class1'] = $class_li;
+            $tree['class2'] = nv_set_dir_class( $check_allow_upload_dir ) . " pos" . nv_string_to_filename($dir);
+            $tree['style'] = $style_color;
+            $tree['title'] = $path_file;
+            $tree['titlepath'] = $file;
+
+            $content2 = viewdirtree( $path_file, $currentpath );
+
+            $xtpl = new XTemplate( "foldlist.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+            $xtpl->assign( "DIRTREE", $tree );
+            if ( ! empty( $content2 ) )
+            {
+                $xtpl->assign( "TREE_CONTENT", $content2 );
+                $xtpl->parse( 'tree.tree_content' );
+            }
+            $xtpl->parse( 'tree' );
+            $content .= $xtpl->text( 'tree' );
+        }
+    }
+
+    return $content;
+}
+
+$path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get,post', NV_UPLOADS_DIR ) );
+if ( empty( $path ) and ! defined( 'NV_IS_SPADMIN' ) )
 {
     $path = NV_UPLOADS_DIR;
 }
+
 $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'request', NV_UPLOADS_DIR ) );
-$titlepath = empty( $path ) ? NV_BASE_SITEURL : $path;
 
-//$class_folder = ( ! in_array( $path, $allow_upload_dir ) and ! empty( $path ) ) ? 'class="folder"' : '';
+$check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
-echo '<ul id="foldertree" class="filetree">';
-echo '<li class="open collapsable"><span ' . ( ( $path == $currentpath ) ? ' style="color:red"' : '' ) . ' class="folder" title="' . $path . '">&nbsp;' . $titlepath . '</span>';
-echo '<ul>';
-$arr_files = @scandir( NV_ROOTDIR . '/' . $path );
-foreach ( $arr_files as $file )
+$data = array();
+$data['style'] = $path == $currentpath ? " style=\"color:red\"" : "";
+$data['class'] = nv_set_dir_class( $check_allow_upload_dir ) . " pos" . nv_string_to_filename($path);
+$data['title'] = $path;
+$data['titlepath'] = empty( $path ) ? NV_BASE_SITEURL : $path;
+
+$content = viewdirtree( $path, $currentpath );
+
+$xtpl = new XTemplate( "foldlist.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( "DATA", $data );
+$xtpl->assign( "PATH", $path );
+$xtpl->assign( "CURRENTPATH", $currentpath );
+
+$check_allow_upload_dir = nv_check_allow_upload_dir( $currentpath );
+$xtpl->assign( "VIEW_DIR", (isset($check_allow_upload_dir['view_dir']) AND $check_allow_upload_dir['view_dir'] === true) ? 1 : 0 );
+$xtpl->assign( "CREATE_DIR", (isset($check_allow_upload_dir['create_dir']) AND $check_allow_upload_dir['create_dir'] === true) ? 1 : 0 );
+$xtpl->assign( "RENAME_DIR", (isset($check_allow_upload_dir['rename_dir']) AND $check_allow_upload_dir['rename_dir'] === true) ? 1 : 0 );
+$xtpl->assign( "DELETE_DIR", (isset($check_allow_upload_dir['delete_dir']) AND $check_allow_upload_dir['delete_dir'] === true) ? 1 : 0 );
+$xtpl->assign( "UPLOAD_FILE", (isset($check_allow_upload_dir['upload_file']) AND $check_allow_upload_dir['upload_file'] === true) ? 1 : 0 );
+$xtpl->assign( "CREATE_FILE", (isset($check_allow_upload_dir['create_file']) AND $check_allow_upload_dir['create_file'] === true) ? 1 : 0 );
+$xtpl->assign( "RENAME_FILE", (isset($check_allow_upload_dir['rename_file']) AND $check_allow_upload_dir['rename_file'] === true) ? 1 : 0 );
+$xtpl->assign( "DELETE_FILE", (isset($check_allow_upload_dir['delete_file']) AND $check_allow_upload_dir['delete_file'] === true) ? 1 : 0 );
+$xtpl->assign( "MOVE_FILE", (isset($check_allow_upload_dir['move_file']) AND $check_allow_upload_dir['move_file'] === true) ? 1 : 0 );
+
+if ( ! empty( $content ) )
 {
-    $path_file = empty( $path ) ? $file : $path . '/' . $file;
-    if ( is_dir( NV_ROOTDIR . '/' . $path_file ) && ! in_array( $file, $array_hidefolders ) && nv_check_allow_upload_dir( $path_file ) )
-    {
-        $class_li = 'expandable';
-        $style_color = '';
-        $class_folder = ( ! in_array( $path_file, $allow_upload_dir ) ) ? ' menu' : '';
-        $class_folder2 = ( nv_check_allow_upload_dir( $path_file ) ) ? ' allow' : '';
-        if ( $path_file == $currentpath )
-        {
-            $class_li = "open collapsable";
-            $style_color = 'style="color:red"';
-        } elseif ( strpos( $currentpath, $path_file . '/' ) !== false )
-        {
-            $class_li = "open collapsable";
-        }
-        echo '<li class="' . $class_li . '"><span ' . $style_color . ' class="folder' . $class_folder . $class_folder2 . '" title="' . ( $path_file ) . '">&nbsp;' . $file . '</span>';
-        echo '<ul>';
-        viewdirtree( $path_file, $currentpath );
-        echo '</ul>';
-        echo '</li>';
-    }
+    $xtpl->assign( "CONTENT", $content );
+    $xtpl->parse( 'main.main_content' );
 }
-echo '</ul>';
-echo '</li>';
-echo '</ul>';
-echo '
-<script type="text/javascript">
-	$("#foldertree").treeview({
-		collapsed: true,
-		unique: true,
-		persist: "location"
-	});
-    $("span.menu").contextMenu("folder-menu", {
-      menuStyle: {
-        border: "2px solid #000",
-        width: "150px"
-      },
-      itemStyle: {
-        fontFamily : "verdana",
-        backgroundColor : "#666",
-        color: "white",
-        border: "none",
-        padding: "1px",
-        fontSize: "12px"
-      },
-      itemHoverStyle: {
-        color: "#fff",
-        backgroundColor: "#0f0",
-        border: "none"
-      },
-      bindings: {    
-        "renamefolder": function(t) {
-        	var foldervalue = $("span#foldervalue").attr("title");
-        	var lastindex = foldervalue.lastIndexOf("/");
-        	var foldername = foldervalue.substr(lastindex+1);
-        	$("input[name=foldername]").val(foldername);
-			$("div#renamefolder").dialog("open");
-        },      
-        "createfolder": function(t) {
-			$("div#createfolder").dialog("open");
-        },
-        "deletefolder": function(t) {
-          	var foldervalue = $("span#foldervalue").attr("title");
-			if (confirm("' . $lang_module['delete_folder'] . '")){
-				$.ajax({
-				   type: "POST",
-				   url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=delfolder",
-				   data: "path="+foldervalue,
-				   success: function(data){
-						$("#imgfolder").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=folderlist&path=' . $path . '");
-						$("div#imglist").html("<iframe src=\"' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path=' . $path . '\" style=\"width:100%;height:360px;border:none\"></iframe>");
-				   }
-				});		
-			}
-        }
-      }
-    });
-	$("span.folder").click(function(){
-		var folder = $(this).attr("title");
-		$("span#foldervalue").attr("title",folder);
-		$("input[name=path]").val(folder);		
-		$("span.folder").css("color","");
-		$(this).css("color","red");
-		var type = $("select[name=imgtype]").val();
-		$("div#imglist").html("<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=imglist&path="+folder+"&type="+type+"\' style=\"width:100%;height:360px;border:none\"></iframe>");
-        if($(this).is(".allow")) {
-            $("input[name=fileupload]").removeAttr("disabled");
-            $("input[name=imgurl]").removeAttr("disabled");
-            $("input[name=confirm]").removeAttr("disabled");
-        }
-        else
-        {
-            $("input[name=fileupload]").attr("disabled","disabled");
-            $("input[name=imgurl]").attr("disabled","disabled");
-            $("input[name=confirm]").attr("disabled","disabled");
-        }
-	});
-	$("span.folder").mouseup(function(){
-		var foldervalue = $(this).attr("title");
-		$("span#foldervalue").attr("title",foldervalue);
-		$("input[name=path]").val(foldervalue);
-	});	
-</script>
-';
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
+echo $contents;
+exit;
 
 ?>

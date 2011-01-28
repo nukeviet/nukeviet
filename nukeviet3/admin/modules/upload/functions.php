@@ -14,9 +14,14 @@ if ( $module_name == "upload" )
     define( 'NV_IS_FILE_ADMIN', true );
 
     $allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
+    $notchange_dirs = array( //
+        'news' => array( 'source', 'temp_pic' ), //
+        'download' => array( 'files', 'images', 'temp', 'thumb' ) //
+        );
+    $imgNotChangeDirs = array( 'rank' );
 
-    $array_hidefolders = array( ".svn", "CVS", ".", "..", "index.html", ".htaccess" );
-    $allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'quickupload' );
+    $array_hidefolders = array( ".svn", "CVS", ".", "..", "index.html", ".htaccess", ".tmp" );
+    $allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'quickupload', 'upload' );
     $allowed_extensions = array();
     $array_images = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
     if ( in_array( 'images', $admin_info['allow_files_type'] ) )
@@ -73,43 +78,6 @@ if ( $module_name == "upload" )
     }
 
     /**
-     * viewdirtree()
-     * 
-     * @param mixed $dir
-     * @param mixed $currentpath2
-     * @return
-     */
-    function viewdirtree( $dir, $currentpath2 )
-    {
-        global $array_hidefolders;
-        $handle2 = scandir( NV_ROOTDIR . '/' . $dir );
-        foreach ( $handle2 as $file2 )
-        {
-            $full_d2 = NV_ROOTDIR . '/' . $dir . '/' . $file2;
-            if ( is_dir( $full_d2 ) && ! in_array( $file2, $array_hidefolders ) && nv_check_allow_upload_dir( $dir . '/' . $file2 ) )
-            {
-                $path_file = trim( $dir . '/' . $file2 );
-                $class_folder2 = ( nv_check_allow_upload_dir( $path_file ) ) ? ' allow' : '';
-                if ( trim( $path_file ) == $currentpath2 )
-                {
-                    echo '<li class="open collapsable"><span style="color:red" class="folder menu' . $class_folder2 . '" title="' . ( $path_file ) . '">&nbsp;' . $file2 . '</span>';
-                } elseif ( strpos( $currentpath2, $path_file . '/' ) !== false )
-                {
-                    echo '<li class="open collapsable"><span class="folder menu' . $class_folder2 . '" title="' . ( $path_file ) . '">&nbsp;' . $file2 . '</span>';
-                }
-                else
-                {
-                    echo '<li class="expandable"><span class="folder menu' . $class_folder2 . '" title="' . ( $path_file ) . '">&nbsp;' . $file2 . '</span>';
-                }
-                echo '<ul>';
-                viewdirtree( $path_file, $currentpath2 );
-                echo '</ul>';
-                echo '</li>';
-            }
-        }
-    }
-
-    /**
      * nv_check_allow_upload_dir()
      * 
      * @param mixed $dir
@@ -117,16 +85,105 @@ if ( $module_name == "upload" )
      */
     function nv_check_allow_upload_dir( $dir )
     {
-        global $site_mods, $allow_upload_dir, $admin_info;
+        global $site_mods, $allow_upload_dir, $admin_info, $notchange_dirs, $imgNotChangeDirs;
+
+        $dir = trim( $dir );
+        if ( empty( $dir ) ) return array();
+
+        $dir = str_replace( "\\", "/", $dir );
+        $dir = rtrim( $dir, "/" );
         $arr_dir = explode( "/", $dir );
-        if ( defined( 'NV_IS_SPADMIN' ) and in_array( $arr_dir[0], $allow_upload_dir ) )
+        $level = array();
+
+        if ( in_array( $arr_dir[0], $allow_upload_dir ) )
         {
-            return true;
-        } elseif ( $arr_dir[0] == NV_UPLOADS_DIR and isset( $arr_dir[1] ) and isset( $site_mods[$arr_dir[1]] ) and ! empty( $admin_info['allow_files_type'] ) )
-        {
-            return true;
+
+            if ( defined( 'NV_IS_SPADMIN' ) )
+            {
+                $level['view_dir'] = true;
+
+                if ( $admin_info['allow_create_subdirectories'] )
+                {
+                    $level['create_dir'] = true;
+                }
+                if ( $admin_info['allow_modify_subdirectories'] and ! in_array( $dir, $allow_upload_dir ) )
+                {
+                    $level['rename_dir'] = true;
+                    $level['delete_dir'] = true;
+
+                    if ( isset( $arr_dir[1] ) and ! empty( $arr_dir[1] ) and isset( $site_mods[$arr_dir[1]] ) and ! isset( $arr_dir[2] ) )
+                    {
+                        unset( $level['rename_dir'], $level['delete_dir'] );
+                    }
+                }
+                if ( ! empty( $admin_info['allow_files_type'] ) )
+                {
+                    $level['upload_file'] = true;
+                }
+                if ( $admin_info['allow_modify_files'] )
+                {
+                    $level['create_file'] = true;
+                    $level['rename_file'] = true;
+                    $level['delete_file'] = true;
+                    $level['move_file'] = true;
+                }
+            } elseif ( isset( $arr_dir[1] ) and ! empty( $arr_dir[1] ) and isset( $site_mods[$arr_dir[1]] ) )
+            {
+                $level['view_dir'] = true;
+
+                if ( $admin_info['allow_create_subdirectories'] )
+                {
+                    $level['create_dir'] = true;
+                }
+                if ( isset( $arr_dir[2] ) and ! empty( $arr_dir[2] ) and $admin_info['allow_modify_subdirectories'] )
+                {
+                    $level['rename_dir'] = true;
+                    $level['delete_dir'] = true;
+                }
+                if ( ! empty( $admin_info['allow_files_type'] ) )
+                {
+                    $level['upload_file'] = true;
+                }
+                if ( $admin_info['allow_modify_files'] )
+                {
+                    $level['create_file'] = true;
+                    $level['rename_file'] = true;
+                    $level['delete_file'] = true;
+                    $level['move_file'] = true;
+                }
+            }
+
+            if ( preg_match( "/^([\d]{4})\_([\d]{1,2})$/", $arr_dir[count( $arr_dir ) - 1] ) )
+            {
+                unset( $level['rename_dir'], $level['delete_dir'] );
+            }
+
+            if ( isset( $arr_dir[2] ) and ! isset( $arr_dir[3] ) )
+            {
+                if ( ! empty( $notchange_dirs ) )
+                {
+                    foreach ( $notchange_dirs as $mod => $dirs )
+                    {
+                        if ( $arr_dir[1] == $mod and in_array( $arr_dir[2], $dirs ) )
+                        {
+                            unset( $level['rename_dir'], $level['delete_dir'] );
+                            break;
+                        }
+                    }
+                }
+            }
+
+            foreach ( $imgNotChangeDirs as $imgdir )
+            {
+                if ( $dir == 'images/' . $imgdir )
+                {
+                    $level = array( 'view_dir' => true );
+                    break;
+                }
+            }
         }
-        return false;
+
+        return $level;
     }
 
     /**
@@ -138,18 +195,16 @@ if ( $module_name == "upload" )
     function nv_check_path_upload( $path )
     {
         $path = htmlspecialchars( trim( $path ), ENT_QUOTES );
+        if ( empty( $path ) ) return "";
+
         $dir = NV_ROOTDIR . "/" . $path;
-        $dir = realpath( $dir );
+        if ( ( $dir = realpath( $dir ) ) === false ) return "";
+
         $dir = str_replace( "\\", "/", $dir );
-        if ( $dir == NV_ROOTDIR )
-        {
-            $path = "";
-        }
-        else
-        {
-            $path = str_replace( NV_ROOTDIR . "/", "", $dir );
-        }
-        return $path;
+        $dir = rtrim( $dir, "/" );
+
+        if ( $dir == NV_ROOTDIR ) return "";
+        return str_replace( NV_ROOTDIR . "/", "", $dir );
     }
 
     /**
@@ -183,7 +238,42 @@ if ( $module_name == "upload" )
                 }
             }
         }
+    }
 
+    /**
+     * nv_get_viewImage()
+     * 
+     * @param mixed $fileName
+     * @param integer $w
+     * @param integer $h
+     * @return
+     */
+    function nv_get_viewImage( $fileName, $w = 80, $h = 80 )
+    {
+        $ext = nv_getextension( $fileName );
+        $md5_view_image = md5( $fileName );
+        $viewDir = NV_FILES_DIR . '/images';
+        $viewFile = $viewDir . '/' . $md5_view_image . '.' . $ext;
+
+        if ( file_exists( NV_ROOTDIR . '/' . $viewFile ) )
+        {
+            $size = @getimagesize( NV_ROOTDIR . '/' . $viewFile );
+            return array( $viewFile, $size[0], $size[1] );
+        }
+
+        include_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+        $image = new image( NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT );
+        $image->resizeXY( $w, $h );
+        $image->save( NV_ROOTDIR . '/' . $viewDir, $md5_view_image, 75 );
+        $create_Image_info = $image->create_Image_info;
+        $error = $image->error;
+        $image->close();
+        if ( empty( $error ) )
+        {
+            return array( $viewFile, $create_Image_info['width'], $create_Image_info['height'] );
+        }
+
+        return false;
     }
 }
 

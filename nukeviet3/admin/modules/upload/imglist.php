@@ -6,161 +6,162 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $xtpl = new XTemplate( "listimg.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( "NV_BASE_SITEURL", NV_BASE_SITEURL );
-$xtpl->assign( "ADMIN_THEME", $global_config['module_theme'] );
-$xtpl->assign( "NV_OP_VARIABLE", NV_OP_VARIABLE );
-$xtpl->assign( "NV_NAME_VARIABLE", NV_NAME_VARIABLE );
-$xtpl->assign( "module_name", $module_name );
-$xtpl->assign( "LANG", $lang_module );
-$xtpl->assign( "NV_MAX_WIDTH", NV_MAX_WIDTH );
-$xtpl->assign( "NV_MAX_HEIGHT", NV_MAX_HEIGHT );
-$xtpl->assign( "ERRORNEWSIZE", sprintf( $lang_module['errorNewSize'], NV_MAX_WIDTH, NV_MAX_HEIGHT ) );
-$xtpl->assign( "MAXSIZESIZE", sprintf( $lang_module['maxSizeSize'], NV_MAX_WIDTH, NV_MAX_HEIGHT ) );
 
 $pathimg = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) );
-if ( ! empty( $pathimg ) )
+$check_allow_upload_dir = nv_check_allow_upload_dir( $pathimg );
+
+if ( isset( $check_allow_upload_dir['view_dir'] ) )
 {
-    $type = htmlspecialchars( trim( $nv_Request->get_string( 'type', 'get', 'file' ) ), ENT_QUOTES );
+    $type = $nv_Request->get_string( 'type', 'get', 'file' );
+    if ( $type != "image" and $type != "flash" ) $type = "file";
+
     $selectfile = htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get', '' ) ), ENT_QUOTES );
-    if ( $selectfile != '' )
-    {
-        $xtpl->parse( 'main.slectfile' );
-    }
-    require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
-    $imglist = array();
-    if ( ! nv_check_allow_upload_dir( $pathimg ) )
-    {
-        $pathimg = NV_UPLOADS_DIR;
-    }
-    $xtpl->assign( "folder", $pathimg );
+    $selectfile = basename( $selectfile );
+    
+    $author = $nv_Request->isset_request( 'author', 'get' ) ? true : false;
+    $refresh = $nv_Request->isset_request( 'refresh', 'get' ) ? true : false;
 
-    $foldchangefile = md5( NV_ROOTDIR . "/" . $pathimg );
-    $filemtime = filemtime( NV_ROOTDIR . "/" . $pathimg );
-    $listfile = glob( NV_ROOTDIR . "/" . NV_CACHEDIR . "/all-upload_" . $foldchangefile . "-*.cache" );
-    $cachefile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/all-upload_" . $foldchangefile . "-" . $filemtime . ".cache";
-
+    $md5 = md5( $pathimg );
+    $tempFile = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . $md5;
+    $file_exists = file_exists( $tempFile );
     $results = array();
-    if ( ! in_array( $cachefile, $listfile ) )
-    {
-        if ( ! empty( $listfile ) )
-        {
-            foreach ( $listfile as $file )
-            {
-                nv_deletefile( $file );
-            }
-        }
 
+    if ( $file_exists )
+    {
+        $results = file_get_contents( $tempFile );
+        $results = unserialize( $results );
+    }
+
+    if ( $refresh or ! $file_exists )
+    {
         $files = @scandir( NV_ROOTDIR . "/" . $pathimg );
 
         if ( ! empty( $files ) )
         {
             foreach ( $files as $file )
             {
+                if ( in_array( $file, $array_hidefolders ) ) continue;
+
                 clearstatcache();
                 unset( $matches );
-                if ( $file != "index.html" and preg_match( "/([a-zA-Z0-9\.\-\_]+)\.([a-zA-Z0-9]+)$/", $file, $matches ) )
+                if ( preg_match( "/([a-zA-Z0-9\.\-\_]+)\.([a-zA-Z0-9]+)$/", $file, $matches ) )
                 {
-                    $name0 = $file;
+                    if ( ! isset( $results[$file] ) ) $results[$file] = array();
+                    $results[$file][0] = $file;
                     $max = 16;
-                    if ( strlen( $name0 ) > $max )
+                    if ( strlen( $file ) > $max )
                     {
-                        $name0 = substr( $matches[1], 0, ( $max - 2 - strlen( $matches[2] ) ) ) . ".." . $matches[2];
+                        $results[$file][0] = substr( $matches[1], 0, ( $max - 3 - strlen( $matches[2] ) ) ) . "..." . $matches[2];
                     }
 
-                    $filesize = @filesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
-                    $type2 = "file";
-                    $src = NV_BASE_SITEURL . 'images/file.gif';
-                    $name = "";
+                    $results[$file][1] = $matches[2];
+                    $results[$file][2] = "file";
 
-                    if ( in_array( $matches[2], array( "gif", "jpg", "jpeg", "pjpeg", "png" ) ) )
-                    {
-                        $type2 = "image";
-                    } elseif ( in_array( $matches[2], array( "flv", "swf", "swc" ) ) )
-                    {
-                        $type2 = "flash";
-                    }
+                    $stat = @stat( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
+                    $results[$file][3] = $stat['size'];
+
+                    $results[$file][4] = NV_BASE_SITEURL . 'images/file.gif';
+                    $results[$file][5] = 32;
+                    $results[$file][6] = 32;
+                    $results[$file][7] = "|";
 
                     if ( in_array( $matches[2], $array_images ) )
                     {
-                        $src = NV_BASE_SITEURL . $pathimg . '/' . $file;
+                        $size = @getimagesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
+                        $results[$file][2] = "image";
+                        $results[$file][4] = NV_BASE_SITEURL . $pathimg . '/' . $file;
+                        $results[$file][5] = $size[0];
+                        $results[$file][6] = $size[1];
+                        $results[$file][7] = $size[0] . "|" . $size[1];
 
-                        if ( $filesize > 15000 )
+                        if ( $size[0] > 80 or $size[1] > 80 )
                         {
-                            $md5_view_image = md5( $pathimg . '/' . $file );
-                            if ( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/images/' . $md5_view_image . '.' . $matches[2] ) )
+                            if ( ( $_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 ) ) !== false )
                             {
-                                $src = NV_BASE_SITEURL . NV_FILES_DIR . '/images/' . $md5_view_image . '.' . $matches[2];
+                                $results[$file][4] = NV_BASE_SITEURL . $_src[0];
+                                $results[$file][5] = $_src[1];
+                                $results[$file][6] = $_src[2];
                             }
                             else
                             {
-                                $image = new image( NV_ROOTDIR . '/' . $pathimg . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-                                $image->resizeXY( 80, 80 );
-                                $image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/images', $md5_view_image, 75 );
-                                if ( empty( $image->error ) )
+                                if ( $results[$file][5] > 80 )
                                 {
-                                    $src = NV_BASE_SITEURL . NV_FILES_DIR . '/images/' . $md5_view_image . '.' . $matches[2];
+                                    $results[$file][6] = round( 80 / $results[$file][5] * $results[$file][6] );
+                                    $results[$file][5] = 80;
                                 }
-                                $image->close();
+
+                                if ( $results[$file][6] > 80 )
+                                {
+                                    $results[$file][5] = round( 80 / $results[$file][6] * $results[$file][5] );
+                                    $results[$file][6] = 80;
+                                }
                             }
                         }
+                    } elseif ( in_array( $matches[2], $array_flash ) )
+                    {
+                        $results[$file][2] = "flash";
+                        $results[$file][4] = NV_BASE_SITEURL . 'images/flash.gif';
 
-                        $name = @getimagesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
-                        $name = $name[0] . "|" . $name[1];
+                        if ( $matches[2] == "swf" )
+                        {
+                            $size = @getimagesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
+                            if ( isset( $size, $size[0], $size[1] ) )
+                            {
+                                $results[$file][7] = $size[0] . "|" . $size[1];
+                            }
+                        }
                     } elseif ( in_array( $matches[2], $array_archives ) )
                     {
-                        $src = NV_BASE_SITEURL . 'images/zip.gif';
+                        $results[$file][4] = NV_BASE_SITEURL . 'images/zip.gif';
                     } elseif ( in_array( $matches[2], $array_documents ) )
                     {
-                        $src = NV_BASE_SITEURL . 'images/doc.gif';
+                        $results[$file][4] = NV_BASE_SITEURL . 'images/doc.gif';
                     }
 
-                    $results[] = array( $file, $name0, $matches[2], $type2, nv_convertfromBytes( $filesize ), $src, $name );
+                    if ( ! isset( $results[$file][8] ) ) $results[$file][8] = 0;
+                    $results[$file][9] = $stat['mtime'];
                 }
             }
         }
-        file_put_contents( $cachefile, serialize( $results ) );
-    }
-    else
-    {
-        $results = file_get_contents( $cachefile );
-        $results = unserialize( $results );
+
+        $files = array_flip( $files );
+        $results = array_intersect_key( $results, $files );
+        ksort( $results );
+        file_put_contents( $tempFile, serialize( $results ) );
     }
 
     if ( ! empty( $results ) )
     {
-        foreach ( $results as $file )
+        $author = ( $author === true ) ? $admin_info['userid'] : 0;
+
+        foreach ( $results as $title => $file )
         {
-            if ( $type == "file" or ( $type != "file" and $file[3] == $type ) )
+            if ( $type == "file" or ( $type != "file" and $file[2] == $type ) )
             {
-                $file = array_combine( array( 'title', 'name0', 'ext', 'type', 'filesize', 'src', 'name' ), $file );
-                $file['name'] .= "|" . $file['filesize'];
-                $file['sel'] = ( $selectfile == $file['title'] ) ? ";border:2px solid red" : "";
-                $file['selid'] = ( $selectfile == $file['title'] ) ? "id=\"imgselected\"" : "";
-                $xtpl->assign( "imglist", $file );
-                $xtpl->parse( 'main.loopimg' );
+                if ( ! $author or $author == $file[8] )
+                {
+                    $file = array_combine( array( 'name0', 'ext', 'type', 'filesize', 'src', 'srcWidth', 'srcHeight', 'name', 'author', 'mtime' ), $file );
+                    $file['title'] = $title;
+                    if ( $file['type'] == "image" or $file['ext'] == "swf" )
+                    {
+                        $file['size'] = str_replace( "|", " x ", $file['name'] ) . " pixels";
+                    }
+                    else
+                    {
+                        $file['size'] = $file['filesize'];
+                    }
+
+                    $file['name'] .= "|" . $file['ext'] . "|" . $file['type'] . "|" . nv_convertfromBytes( $file['filesize'] ) . "|" . $file['author'] . "|" . nv_date( "l, d F Y, H:i:s P", $file['mtime'] );
+                    $file['sel'] = ( $selectfile == $title ) ? " imgsel" : "";
+                    $xtpl->assign( "IMG", $file );
+                    $xtpl->parse( 'main.loopimg' );
+                }
             }
         }
-    }
-
-    $row = array( "name" => NV_UPLOADS_DIR, "select" => NV_UPLOADS_DIR );
-    $xtpl->assign( "fol", $row );
-    $xtpl->parse( 'main.floop' );
-
-    $listdir = viewdir( NV_UPLOADS_DIR );
-    foreach ( $listdir as $folder )
-    {
-        $row = array( "name" => $folder, "select" => ( $folder == $pathimg ) ? " selected=\"selected\"" : "" );
-        $xtpl->assign( "fol", $row );
-        $xtpl->parse( 'main.floop' );
-    }
-
-    if ( ( defined( 'NV_IS_SPADMIN' ) or ( ! defined( 'NV_IS_SPADMIN' ) and ! in_array( $pathimg, $allow_upload_dir ) ) ) and $admin_info['allow_modify_files'] )
-    {
-        $xtpl->parse( 'main.allow_modify_files' );
-        $xtpl->parse( 'main.allow_modify_files1' );
     }
 }
 
