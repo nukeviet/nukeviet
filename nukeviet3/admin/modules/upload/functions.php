@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-if ( $module_name == "upload" ) return;
+if ( $module_name != "upload" ) return;
 
 define( 'NV_IS_FILE_ADMIN', true );
 
