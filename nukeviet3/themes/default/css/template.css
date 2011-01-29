@@ -329,7 +329,6 @@ div.orange {
 div.bordersilver {
     border: 1px solid #d9d9d9;
 }
-
 div.box h3.header {
     border: 1px solid #0f69e2;
     border-bottom: 2px solid #fff;;
@@ -348,7 +347,36 @@ div.box h3.header strong {
     padding-right: 4px;
     color: #00ff00;
 }
-
+.box_silver {
+	background: #f2f2f2;
+	border:1px solid #EBEBEB;
+}
+.box_silver .header{
+	background:url(../images/cat-header-bg.png) repeat-x center;
+    height: 28px;
+    line-height: 28px;
+    color:#000000;
+    text-indent: 10px;
+}
+.box_silver strong {
+    padding-right: 4px;
+    color: #00ff00;
+}
+.box_orange {
+	background:#FFCC33;
+	border:1px solid #EBEBEB;
+}
+.box_orange .header{
+	background:#FFCC33;
+    height: 28px;
+    line-height: 28px;
+    color:#000000;
+    text-indent: 10px;
+}
+.box_orange strong {
+    padding-right: 4px;
+    color: #00ff00;
+}
 /*Button*/
 form div.submit {
     background: url(../images/button01_r.png) top right no-repeat;
