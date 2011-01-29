@@ -63,7 +63,7 @@ if ( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv
         }
         $nv_Request->set_Cookie( 'dirlang', $newslang, NV_LIVE_COOKIE_TIME );
         $contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_copyok'] . "</strong></p>";
-        $contents .= "<meta http-equiv=\"Refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main\" />";
+        $contents .= "<meta http-equiv=\"Refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=interface\" />";
         include ( NV_ROOTDIR . "/includes/header.php" );
         echo nv_admin_theme( $contents );
         include ( NV_ROOTDIR . "/includes/footer.php" );

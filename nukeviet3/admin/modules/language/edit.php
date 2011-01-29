@@ -55,7 +55,7 @@ if ( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->ge
             $db->sql_query_insert_id( $sql );
         }
     }
-    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main&dirlang=" . $dirlang . "" );
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=interface&dirlang=" . $dirlang . "" );
     die();
 
 }
