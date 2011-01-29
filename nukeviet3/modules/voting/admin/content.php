@@ -27,10 +27,10 @@ if ( ! empty( $submit ) )
 
     $array_answervote = $nv_Request->get_array( 'answervote', 'post' );
     $answervotenews = $nv_Request->get_array( 'answervotenews', 'post' );
-
+	if ( $maxoption > count ($answervotenews) + count($array_answervote) ||  $maxoption <= 0 ) $maxoption = count ($answervotenews) + count($array_answervote);
     if ( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date ) ) $publ_date = "";
     if ( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date ) ) $exp_date = "";
-
+	
     if ( empty( $publ_date ) )
     {
         $begindate = NV_CURRENTTIME;
@@ -94,7 +94,7 @@ if ( ! empty( $submit ) )
 
             $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` (`vid`, `question`, `acceptcm`, `admin_id`, `who_view`, `groups_view`, `publ_time`, `exp_time`, `act`) VALUES (NULL, " . $db->dbescape( $question ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
             $vid = $db->sql_query_insert_id( $query );
-            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_vote', "votingid ".$vid, $admin_info['userid'] );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid'] );
         }
         if ( $vid > 0 )
         {
@@ -134,7 +134,7 @@ if ( ! empty( $submit ) )
             $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `question`=" . $db->dbescape( $question ) . ", `acceptcm` =  " . $maxoption . ", `admin_id` =  " . $admin_info['admin_id'] . ", `who_view`=" . $who_view . ", `groups_view` = " . $db->dbescape( $groups_view ) . ", `publ_time`=" . $begindate . ", `exp_time`=" . $enddate . " WHERE `vid` =" . $vid . "";
             if ( $db->sql_query( $query ) )
             {
-				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_vote', "votingid ".$vid, $admin_info['userid'] );
+				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question , $admin_info['userid'] );
             	nv_del_moduleCache( $module_name );
                 $error = "";
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
@@ -309,18 +309,12 @@ $contents .= "</select>\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
-
 $j++;
 $class = ( $j % 2 == 0 ) ? " class=\"second\"" : "";
 $contents .= "<tbody" . $class . ">\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['voting_maxoption'] . "</td>\n";
-$contents .= "<td><select name=\"maxoption\">\n";
-for ( $i = 1; $i <= $maxoption; $i++ )
-{
-    $contents .= "<option value=\"" . $i . "\"" . ( ( $i == $rowvote['acceptcm'] ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
-}
-$contents .= "</select></td>\n";
+$contents .= "<td><input type=\"text\" name=\"maxoption\" size=\"5\" value=\"" . $rowvote['acceptcm'] . "\" class=\"txt required\" /></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tbody>\n";
