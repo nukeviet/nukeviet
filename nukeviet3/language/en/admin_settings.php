@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Jan 21, 2011, 02:14:32 AM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language English
+* @Createdate Jan 29, 2011, 10:22:07 AM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['metaTagsConfig'] = "Meta-Tags Config";
 $lang_module['metaTagsGroupName'] = "Group type";
@@ -35,6 +34,10 @@ $lang_module['site_config'] = "Configure site";
 $lang_module['lang_site_config'] = "Configuration site in %s language:";
 $lang_module['bots_config'] = "Server search";
 $lang_module['optActive'] = "Enable Site Optimization function";
+$lang_module['optActive_no'] = "No activation";
+$lang_module['optActive_all'] = "Activate full site";
+$lang_module['optActive_site'] = "Activated areas outside the site";
+$lang_module['optActive_admin'] = "Activate the admin area";
 $lang_module['sitename'] = "Site name";
 $lang_module['theme'] = "Default theme";
 $lang_module['themeadmin'] = "Administrator theme";
@@ -181,5 +184,10 @@ $lang_module['last_result'] = "Last result";
 $lang_module['last_result_empty'] = "n/a";
 $lang_module['last_result0'] = "Bad";
 $lang_module['last_result1'] = "Finished";
+$lang_module['closed_site'] = "Closed mode site";
+$lang_module['closed_site_0'] = "Sites ordinary activities";
+$lang_module['closed_site_1'] = "Closing of the site only has access to the Supreme Administrative";
+$lang_module['closed_site_2'] = "Moderator's closing general site access";
+$lang_module['closed_site_3'] = "Close all of the site admin access";
 
 ?>

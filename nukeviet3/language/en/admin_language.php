@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Jan 29, 2011, 10:22:07 AM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -68,13 +68,19 @@ $lang_module['nv_lang_readok'] = "Done reading the language interface, the syste
 $lang_module['nv_lang_copyok'] = "Done creating the language interface, the system will automatically switch to the file list.";
 $lang_module['nv_lang_deleteok'] = "Delete interface language successful";
 $lang_module['nv_lang_wite_ok'] = "Create interface language successful";
+$lang_module['nv_lang_delete'] = "Delete interface language";
 $lang_module['nv_lang_delete_error'] = "Error: Fail to delete interface languge, you must check files which doesn't delete";
 $lang_module['nv_error_write_file'] = "Fail to write file";
 $lang_module['nv_error_write_module'] = "Errors identified by the file module";
 $lang_module['nv_error_exit_module'] = "The module language  isn't exists";
 $lang_module['nv_lang_check'] = "Language testing";
-$lang_module['nv_lang_check_title'] = "Check the language has not been translate";
 $lang_module['nv_lang_data_source'] = "Display the with language";
 $lang_module['nv_lang_checkallarea'] = "All area";
+$lang_module['nv_lang_check_no_data'] = "No results were found according to your requirements";
+$lang_module['nv_check_type'] = "Test conditions";
+$lang_module['nv_check_type_0'] = "Language testing has not been translated";
+$lang_module['nv_check_type_1'] = "Check the same language";
+$lang_module['nv_check_type_2'] = "Check all";
+$lang_module['nv_lang_check_title'] = "Check the language has not been translate";
 
 ?>
