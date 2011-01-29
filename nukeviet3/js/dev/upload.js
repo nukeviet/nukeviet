@@ -474,7 +474,8 @@ $( "select[name=author]" ).change( function()
  );
 $( ".refresh a" ).click( function()
 {
-    var a = $( "span#foldervalue" ).attr( "title" ), b = $( "select[name=imgtype]" ).val(), d = $( "input[name=selFile]" ).val(), e = $( "select[name=author]" ).val() == 1 ? "&author" : "";
+    var a = $( "span#foldervalue" ).attr( "title" ), b = $( "select[name=imgtype]" ).val(), d = $( "input[name=selFile]" ).val(), e = $( "select[name=author]" ).val() == 1 ? "&author" : "", g = $( "span#path" ).attr( "title" );
+    $( "#imgfolder" ).load( nv_module_url + "folderlist&path=" + g + "&currentpath=" + a + "&dirListRefresh&random=" + nv_randomNum( 10 ) );
     $( "#imglist" ).load( nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&random=" + nv_randomNum( 10 ) );
     return false
 }

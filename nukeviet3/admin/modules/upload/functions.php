@@ -12,69 +12,58 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 if ( $module_name != "upload" ) return;
 
 define( 'NV_IS_FILE_ADMIN', true );
-
-$allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
-$notchange_dirs = array( //
-    'news' => array( 'source', 'temp_pic' ), //
-    'download' => array( 'files', 'images', 'temp', 'thumb' ) //
-    );
-$imgNotChangeDirs = array( 'rank' );
-
-$array_hidefolders = array( ".svn", "CVS", ".", "..", "index.html", ".htaccess", ".tmp" );
 $allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'quickupload', 'upload' );
-$allowed_extensions = array();
-$array_images = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
-if ( in_array( 'images', $admin_info['allow_files_type'] ) )
-{
-    $allowed_extensions = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
-}
-$array_flash = array( 'swf', 'swc', 'flv' );
-if ( in_array( 'flash', $admin_info['allow_files_type'] ) )
-{
-    $allowed_extensions[] = 'swf';
-    $allowed_extensions[] = 'swc';
-    $allowed_extensions[] = 'flv';
-}
-$array_archives = array( 'rar', 'zip', 'tar' );
-if ( in_array( 'archives', $admin_info['allow_files_type'] ) )
-{
-    $allowed_extensions[] = 'rar';
-    $allowed_extensions[] = 'zip';
-    $allowed_extensions[] = 'tar';
-}
-$array_documents = array( 'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' );
-if ( in_array( 'documents', $admin_info['allow_files_type'] ) )
-{
-    $allowed_extensions[] = 'doc';
-    $allowed_extensions[] = 'xls';
-    $allowed_extensions[] = 'chm';
-    $allowed_extensions[] = 'pdf';
-    $allowed_extensions[] = 'docx';
-    $allowed_extensions[] = 'xlsx';
-}
-$allowed_mime = array( "image/gif", "image/pjpeg", "image/jpeg", "image/png", "image/x-png" );
-$types = array( 1 => 'gif', 2 => 'jpg', 3 => 'png', 4 => 'swf', 5 => 'psd', 6 => 'bmp', 7 => 'tiff(intel byte order)', 8 => 'tiff(motorola byte order)', 9 => 'jpc', 10 => 'jp2', 11 => 'jpx', 12 => 'jb2', 13 => 'swc', 14 => 'iff', 15 => 'wbmp', 16 => 'xbm' );
+
+#################################################################################
 
 /**
- * viewdir()
+ * nv_listDir()
  * 
  * @param mixed $dir
+ * @param mixed $real_dirlist
  * @return
  */
-function viewdir( $dir )
+function nv_listDir( $dir, $real_dirlist )
 {
-    global $imglibs, $array_hidefolders;
-    $handle = scandir( NV_ROOTDIR . '/' . $dir );
-    foreach ( $handle as $file )
+    $real_dirlist[] = $dir;
+
+    if ( ( $dh = @opendir( NV_ROOTDIR . '/' . $dir ) ) !== false )
     {
-        $full_d = NV_ROOTDIR . '/' . $dir . '/' . $file;
-        if ( is_dir( $full_d ) && ! in_array( $file, $array_hidefolders ) && nv_check_allow_upload_dir( $dir . '/' . $file ) )
+        while ( false !== ( $subdir = readdir( $dh ) ) )
         {
-            $imglibs[] = $dir . '/' . $file;
-            viewdir( $dir . '/' . $file );
+            if ( preg_match( "/^[a-zA-Z0-9\-\_]+$/", $subdir ) )
+            {
+                if ( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) )
+                {
+                    $real_dirlist = nv_listDir( $dir . '/' . $subdir, $real_dirlist );
+                }
+            }
         }
+        closedir( $dh );
     }
-    return $imglibs;
+
+    return $real_dirlist;
+}
+
+/**
+ * nv_loadDirList()
+ * 
+ * @return void
+ */
+function nv_loadDirList( $return = true )
+{
+    global $allow_upload_dir, $dirlistCache;
+
+    $real_dirlist = array();
+    foreach ( $allow_upload_dir as $dir )
+    {
+        $real_dirlist = nv_listDir( $dir, $real_dirlist );
+    }
+
+    ksort( $real_dirlist );
+    file_put_contents( $dirlistCache, serialize( $real_dirlist ) );
+
+    if ( $return ) return $real_dirlist;
 }
 
 /**
@@ -288,6 +277,30 @@ function nv_get_viewImage( $fileName, $w = 80, $h = 80 )
     }
 
     return false;
+}
+
+$allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
+$notchange_dirs = array( //
+    'news' => array( 'source', 'temp_pic' ), //
+    'download' => array( 'files', 'images', 'temp', 'thumb' ) //
+    );
+$imgNotChangeDirs = array( 'rank' );
+$array_hidefolders = array( ".svn", "CVS", ".", "..", "index.html", ".htaccess", ".tmp" );
+
+$array_images = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
+$array_flash = array( 'swf', 'swc', 'flv' );
+$array_archives = array( 'rar', 'zip', 'tar' );
+$array_documents = array( 'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' );
+
+$dirlistCache = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/dirlist-" . md5( implode( $allow_upload_dir ) );
+if ( ! file_exists( $dirlistCache ) or ( $nv_Request->isset_request( 'dirListRefresh', 'get' ) and filemtime( $dirlistCache ) < ( NV_CURRENTTIME - 30 ) ) )
+{
+    $dirlist = nv_loadDirList();
+}
+else
+{
+    $dirlist = file_get_contents( $dirlistCache );
+    $dirlist = unserialize( $dirlist );
 }
 
 ?>
