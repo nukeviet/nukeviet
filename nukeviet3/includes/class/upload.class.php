@@ -351,20 +351,19 @@ class upload
             $img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
             if ( in_array( $this->file_extension, $img_exts ) )
             {
-                $img_info = @getimagesize( $userfile['tmp_name'] );
                 if ( ( $img_info = @getimagesize( $userfile['tmp_name'] ) ) !== false )
                 {
                     $this->img_info = $img_info;
-                    if ( is_array( $this->img_info ) && array_key_exists( 'mime', $this->img_info ) )
+
+                    if ( array_key_exists( 'mime', $this->img_info ) and ! empty( $this->img_info['mime'] ) )
                     {
                         $mime = trim( $this->img_info['mime'] );
-                        if ( ! empty( $mime ) )
-                        {
-                            $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $mime );
-                        } elseif ( array_key_exists( 2, $this->img_info ) )
-                        {
-                            $mime = image_type_to_mime_type( $this->img_info[2] );
-                        }
+                        $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $mime );
+                    }
+
+                    if ( empty( $mime ) and isset($this->img_info[2]) )
+                    {
+                        $mime = image_type_to_mime_type( $this->img_info[2] );
                     }
                 }
             }
@@ -389,7 +388,7 @@ class upload
             }
         }
 
-        if( preg_match( "/^application\/(?:x-)?zip(?:-compressed)?$/is", $mime ) )
+        if ( preg_match( "/^application\/(?:x-)?zip(?:-compressed)?$/is", $mime ) )
         {
             if ( $this->file_extension == "docx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
             elseif ( $this->file_extension == "dotx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";

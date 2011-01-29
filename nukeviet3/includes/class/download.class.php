@@ -86,6 +86,7 @@ class download
         );
 
     private $disable_functions = array();
+    private $magic_path;
 
     /**
      * download::__construct()
@@ -96,7 +97,7 @@ class download
      * @param integer $max_speed
      * @return
      */
-    public function __construct( $path, $directory, $name = '', $resume = false, $max_speed = 0 )
+    public function __construct( $path, $directory, $name = '', $resume = false, $max_speed = 0, $magic_path = '' )
     {
         $directory = $this->real_dir( $directory );
         if ( empty( $directory ) or ! is_dir( $directory ) )
@@ -105,7 +106,7 @@ class download
         }
 
         $path = $this->real_path( $path, $directory );
-        $extension = strtolower( strrchr( $path, '.' ) );
+        $extension = $this->getextension( $path );
         $this->properties = array( //
             "path" => $path, //
             "name" => ( $name == "" ) ? substr( strrchr( "/" . $path, "/" ), 1 ) : $name, //
@@ -118,6 +119,7 @@ class download
             "directory" => $directory //
             );
         $this->disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        $this->magic_path = $magic_path;
     }
 
     /**
@@ -170,6 +172,42 @@ class download
     }
 
     /**
+     * download::func_exists()
+     * 
+     * @param mixed $funcName
+     * @return
+     */
+    private function func_exists( $funcName )
+    {
+        return ( function_exists( $funcName ) and ! in_array( $funcName, $this->disable_functions ) );
+    }
+
+    /**
+     * download::cl_exists()
+     * 
+     * @param mixed $clName
+     * @return
+     */
+    private function cl_exists( $clName )
+    {
+        return ( class_exists( $clName ) and ! in_array( $clName, $this->disable_classes ) );
+    }
+
+    /**
+     * download::getextension()
+     * 
+     * @param mixed $filename
+     * @return
+     */
+    private function getextension( $filename )
+    {
+        if ( strpos( $filename, '.' ) === false ) return '';
+        $filename = basename( strtolower( $filename ) );
+        $filename = explode( '.', $filename );
+        return array_pop( $filename );
+    }
+
+    /**
      * download::my_mime_content_type()
      * 
      * @param mixed $path
@@ -177,49 +215,147 @@ class download
      */
     private function my_mime_content_type( $path )
     {
-        if ( function_exists( 'mime_content_type' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
+        $mime = '';
+
+        if ( $this->func_exists( 'finfo_open' ) )
         {
-            $mimetype = mime_content_type( $path );
-            $mimetype = explode( ";", $mimetype );
-            if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+            if ( empty( $this->magic_path ) )
             {
-                return trim( $mimetype[0] );
+                $finfo = finfo_open( FILEINFO_MIME );
+            } elseif ( $this->magic_path != "auto" )
+            {
+                $finfo = finfo_open( FILEINFO_MIME, $this->magic_path );
+            }
+            else
+            {
+                if ( ( $magic = getenv( 'MAGIC' ) ) !== false )
+                {
+                    $finfo = finfo_open( FILEINFO_MIME, $magic );
+                }
+                else
+                {
+                    if ( substr( PHP_OS, 0, 3 ) == 'WIN' )
+                    {
+                        $path = realpath( ini_get( 'extension_dir' ) . '/../' ) . 'extras/magic';
+                        $finfo = finfo_open( FILEINFO_MIME, $path );
+                    }
+                    else
+                    {
+                        $finfo = finfo_open( FILEINFO_MIME, '/usr/share/file/magic' );
+                    }
+                }
+            }
+
+            if ( is_resource( $finfo ) )
+            {
+                $mime = finfo_file( $finfo, realpath( $path ) );
+                finfo_close( $finfo );
+                $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
             }
         }
 
-        if ( function_exists( 'finfo_open' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'finfo_open', $this->disable_functions ) ) ) )
+        if ( empty( $mime ) or $mime == "application/octet-stream" )
         {
-            $finfo = finfo_open( FILEINFO_MIME );
-            $mimetype = finfo_file( $finfo, $path );
-            finfo_close( $finfo );
-            $mimetype = explode( ";", $mimetype );
-            if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+            if ( $this->cl_exists( "finfo" ) )
             {
-                return trim( $mimetype[0] );
+                $finfo = new finfo( FILEINFO_MIME );
+                if ( $finfo )
+                {
+                    $mime = $finfo->file( realpath( $path ) );
+                    $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+                }
             }
         }
 
-        if ( function_exists( 'system' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! in_array( 'system', $this->disable_functions ) ) ) )
+        if ( empty( $mime ) or $mime == "application/octet-stream" )
         {
-            ob_start();
-            system( "file -i -b " . $path );
-            $mimetype = ob_get_clean();
-            $mimetype = explode( ";", $mimetype );
-            if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+            if ( substr( PHP_OS, 0, 3 ) != 'WIN' )
             {
-                return trim( $mimetype[0] );
+                if ( $this->func_exists( 'system' ) )
+                {
+                    ob_start();
+                    system( "file -i -b " . escapeshellarg( $path ) );
+                    $m = ob_get_clean();
+                    $m = trim( $m );
+                    if ( ! empty( $m ) )
+                    {
+                        $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
+                    }
+                } elseif ( $this->func_exists( 'exec' ) )
+                {
+                    $m = @exec( "file -bi " . escapeshellarg( $path ) );
+                    $m = trim( $m );
+                    if ( ! empty( $m ) )
+                    {
+                        $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
+                    }
+                }
             }
         }
 
-        $mime_types = nv_parse_ini_file( NV_MIME_INI_FILE );
-
-        if ( array_key_exists( $this->properties['extension'], $mime_types ) )
+        if ( empty( $mime ) or $mime == "application/octet-stream" )
         {
-            if ( is_string( $mime_types[$ext] ) ) return $mime_types[$ext];
-            return $mime_types[$ext][0];
+            if ( $this->func_exists( 'mime_content_type' ) )
+            {
+                $mime = mime_content_type( $path );
+                $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+            }
         }
 
-        return 'application/force-download';
+        if ( empty( $mime ) or $mime == "application/octet-stream" )
+        {
+            $img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
+            if ( in_array( $this->properties['extension'], $img_exts ) )
+            {
+                if ( ( $img_info = @getimagesize( $path ) ) !== false )
+                {
+                    if ( array_key_exists( 'mime', $img_info ) and ! empty( $img_info['mime'] ) )
+                    {
+                        $mime = trim( $img_info['mime'] );
+                        $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $mime );
+                    }
+
+                    if ( empty( $mime ) and isset( $img_info[2] ) )
+                    {
+                        $mime = image_type_to_mime_type( $img_info[2] );
+                    }
+                }
+            }
+        }
+
+        if ( empty( $mime ) or $mime == "application/octet-stream" )
+        {
+            $mime_types = nv_parse_ini_file( NV_MIME_INI_FILE );
+
+            if ( array_key_exists( $this->properties['extension'], $mime_types ) )
+            {
+                if ( is_string( $mime_types[$this->properties['extension']] ) ) return $mime_types[$this->properties['extension']];
+                $mime = $mime_types[$this->properties['extension']][0];
+            }
+        }
+
+        if ( preg_match( "/^application\/(?:x-)?zip(?:-compressed)?$/is", $mime ) )
+        {
+            if ( $this->properties['extension'] == "docx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            elseif ( $this->properties['extension'] == "dotx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
+            elseif ( $this->properties['extension'] == "potx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.template";
+            elseif ( $this->properties['extension'] == "ppsx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+            elseif ( $this->properties['extension'] == "pptx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            elseif ( $this->properties['extension'] == "xlsx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            elseif ( $this->properties['extension'] == "xltx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
+            elseif ( $this->properties['extension'] == "docm" ) $mime = "application/vnd.ms-word.document.macroEnabled.12";
+            elseif ( $this->properties['extension'] == "dotm" ) $mime = "application/vnd.ms-word.template.macroEnabled.12";
+            elseif ( $this->properties['extension'] == "potm" ) $mime = "application/vnd.ms-powerpoint.template.macroEnabled.12";
+            elseif ( $this->properties['extension'] == "ppam" ) $mime = "application/vnd.ms-powerpoint.addin.macroEnabled.12";
+            elseif ( $this->properties['extension'] == "ppsm" ) $mime = "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
+            elseif ( $this->properties['extension'] == "pptm" ) $mime = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+            elseif ( $this->properties['extension'] == "xlam" ) $mime = "application/vnd.ms-excel.addin.macroEnabled.12";
+            elseif ( $this->properties['extension'] == "xlsb" ) $mime = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+            elseif ( $this->properties['extension'] == "xlsm" ) $mime = "application/vnd.ms-excel.sheet.macroEnabled.12";
+            elseif ( $this->properties['extension'] == "xltm" ) $mime = "application/vnd.ms-excel.template.macroEnabled.12";
+        }
+
+        return ! empty( $mime ) ? $mime : 'application/force-download';
     }
 
     /**
