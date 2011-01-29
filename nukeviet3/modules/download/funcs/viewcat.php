@@ -85,7 +85,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
     }
     
     $img = substr( $row['fileimage'], strlen( NV_BASE_SITEURL ) );
-    $imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 400, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
+    $imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
     
     $array[$row['id']] = array(  //
         'id' => ( int )$row['id'], //
@@ -123,7 +123,7 @@ if ( ! empty( $subcats ) )
         {
             $uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );
             $img = substr( $row['fileimage'], strlen( NV_BASE_SITEURL ) );
-            $imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 400, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
+            $imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
             $array_item[] = array(  //
                 'id' => ( int )$row['id'], //
 'title' => $row['title'], //

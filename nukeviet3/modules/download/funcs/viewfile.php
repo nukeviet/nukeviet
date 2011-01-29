@@ -217,7 +217,7 @@ $nv_Request->set_Session( 'session_files', $session_files );
 $row['filesize'] = ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : $lang_module['unknown'];
 
 $img = substr( $row['fileimage'], strlen( NV_BASE_SITEURL ) );
-$row['fileimage'] = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 400, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
+$row['fileimage'] = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
 
 $dfile = $nv_Request->get_string( 'dfile', 'session', '' );
 
