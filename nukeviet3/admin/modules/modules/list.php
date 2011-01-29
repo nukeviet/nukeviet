@@ -22,13 +22,13 @@ while ( list( $m, $module_file, $is_sysmod, $mod_version ) = $db->sql_fetchrow( 
     $new_modules[$m] = array( 
         "module_file" => $module_file, "is_sysmod" => $is_sysmod, "mod_version" => $mod_version 
     );
-    if ( ! in_array( $m, $modules_exit ) )
+    if ( ! isset( $modules_exit[$m] ) )
     {
         $db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=2 WHERE `module_file`=" . $db->dbescape( $m ) );
         $is_delCache = true;
     }
 }
-if( $is_delCache )
+if ( $is_delCache )
 {
     nv_del_moduleCache( 'modules' );
 }
@@ -113,7 +113,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 
 }
 $db->sql_freeresult();
-if( $is_delCache )
+if ( $is_delCache )
 {
     nv_del_moduleCache( 'modules' );
 }
