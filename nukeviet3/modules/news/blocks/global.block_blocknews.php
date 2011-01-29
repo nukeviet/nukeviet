@@ -56,7 +56,7 @@ if ( ! function_exists( 'nv_news_blocks' ) )
         if ( ! empty( $list ) )
         {
             $xtpl = new XTemplate( "block_blocknews.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/news" );
-        	foreach ( $list as $l )
+            foreach ( $list as $l )
             {
                 $arr_catid = explode( ',', $l['listcatid'] );
                 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$arr_catid[0]]['alias'] . "/" . $l['alias'] . "-" . $l['id'];
@@ -88,19 +88,18 @@ if ( ! function_exists( 'nv_news_blocks' ) )
 
 if ( defined( 'NV_SYSTEM' ) )
 {
-    global $module_name, $global_array_cat, $module_array_cat;
+    global $site_mods, $module_name, $global_array_cat, $module_array_cat;
     $module = $block_config['module'];
-    if ( $module == $module_name )
+    if ( isset( $site_mods[$module] ) )
     {
-        $module_array_cat = $global_array_cat;
-        unset( $module_array_cat[0] );
-    }
-    else
-    {
-        $module_array_cat = array();
-        global $site_mods;
-        if ( isset( $site_mods[$module] ) )
+        if ( $module == $module_name )
         {
+            $module_array_cat = $global_array_cat;
+            unset( $module_array_cat[0] );
+        }
+        else
+        {
+            $module_array_cat = array();
             $module_data = $site_mods[$module]['module_data'];
             $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, del_cache_time, description, inhome, keywords, who_view, groups_view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
             $list = nv_db_cache( $sql, 'catid', $module );
@@ -110,8 +109,8 @@ if ( defined( 'NV_SYSTEM' ) )
                 $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
             }
         }
+        $content = nv_news_blocks( $block_config );
     }
-    $content = nv_news_blocks( $block_config );
 }
 
 ?>
