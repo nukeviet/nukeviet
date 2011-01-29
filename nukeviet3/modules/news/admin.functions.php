@@ -715,7 +715,7 @@ function nv_show_block_list ( $bid )
         $contents .= "<td align=\"center\"><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
         $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
         $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-        $contents .= "<td style=\"width:200px;\"></td>\n";
+        $contents .= "<td></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</thead>\n";
         $contents .= "<tfoot>\n";
@@ -753,6 +753,10 @@ function nv_show_block_list ( $bid )
         $contents .= "</table>\n";
         $contents .= "</form>\n";
         $db->sql_freeresult();
+    }
+    else
+    {
+        $contents = "&nbsp;";
     }
     return $contents;
 }
