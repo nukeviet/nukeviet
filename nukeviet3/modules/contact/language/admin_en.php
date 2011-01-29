@@ -63,5 +63,6 @@ $lang_module['admin_reply_title'] = "Enable to reply";
 $lang_module['admin_send2mail_title'] = "Send to email user";
 $lang_module['delall'] = "Delete all";
 $lang_module['siteinfo_new'] = "Unread contact";
+$lang_module['no_row_contact'] = "No Contact";
 
 ?>

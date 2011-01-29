@@ -109,6 +109,14 @@ if ( ! empty( $contact_allowed['view'] ) )
         }
     }
 }
+if ( empty( $contents ) )
+{
+    $contents .= "<br />\n";
+	$contents .= "<br /><center><b>\n";
+    $contents .= $lang_module['no_row_contact'];
+    $contents .= "</b></center><br />\n";
+    $contents .= "<br />\n";
+}
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
