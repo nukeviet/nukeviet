@@ -389,6 +389,27 @@ class upload
             }
         }
 
+        if ( $mime == "application/zip" )
+        {
+            if ( $this->file_extension == "docx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            elseif ( $this->file_extension == "dotx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
+            elseif ( $this->file_extension == "potx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.template";
+            elseif ( $this->file_extension == "ppsx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+            elseif ( $this->file_extension == "pptx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            elseif ( $this->file_extension == "xlsx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            elseif ( $this->file_extension == "xltx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
+            elseif ( $this->file_extension == "docm" ) $mime = "application/vnd.ms-word.document.macroEnabled.12";
+            elseif ( $this->file_extension == "dotm" ) $mime = "application/vnd.ms-word.template.macroEnabled.12";
+            elseif ( $this->file_extension == "potm" ) $mime = "application/vnd.ms-powerpoint.template.macroEnabled.12";
+            elseif ( $this->file_extension == "ppam" ) $mime = "application/vnd.ms-powerpoint.addin.macroEnabled.12";
+            elseif ( $this->file_extension == "ppsm" ) $mime = "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
+            elseif ( $this->file_extension == "pptm" ) $mime = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+            elseif ( $this->file_extension == "xlam" ) $mime = "application/vnd.ms-excel.addin.macroEnabled.12";
+            elseif ( $this->file_extension == "xlsb" ) $mime = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+            elseif ( $this->file_extension == "xlsm" ) $mime = "application/vnd.ms-excel.sheet.macroEnabled.12";
+            elseif ( $this->file_extension == "xltm" ) $mime = "application/vnd.ms-excel.template.macroEnabled.12";
+        }
+
         if ( ! empty( $mime ) and ! in_array( $mime, $this->config['allowed_files'][$this->file_extension] ) )
         {
             $mime = "";
