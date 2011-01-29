@@ -730,7 +730,7 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 
         if ( ! empty( $thumb_path ) and ! preg_match( "/\/$/", $thumb_path ) ) $thumb_path = $thumb_path . '/';
 
-        $new_src = $thumb_path . $matches[3] . '_' . $width . $matches[4];
+        $new_src = $thumb_path . $matches[3] . '_' . md5($original_name.$width) . $matches[4];
 
         $is_create = true;
 
@@ -753,7 +753,7 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 
             $image = new image( $original_name, NV_MAX_WIDTH, NV_MAX_HEIGHT );
             $image->resizeXY( $width );
-            $image->save( NV_ROOTDIR . '/' . $thumb_path, $matches[3] . '_' . $width . $matches[4] );
+            $image->save( NV_ROOTDIR . '/' . $thumb_path, $matches[3] . '_' . md5($original_name.$width) . $matches[4] );
             $image_info = $image->create_Image_info;
 
             if ( file_exists( NV_ROOTDIR . '/' . $new_src ) )
