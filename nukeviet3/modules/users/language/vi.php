@@ -126,6 +126,11 @@ $lang_module['logout_title'] = "Thoát";
 $lang_module['edit_info_title'] = "Sửa";
 $lang_module['img_size_title'] = "Ảnh hiển thị 80x80";
 
+$lang_module['email_active'] = "Thông tin kích hoạt thay đổi email";
+$lang_module['email_active_info'] = "Xin chào %1\$s,<br /><br />Bạn đã thay đổi địa chỉ email của tài khoản %2\$s, do đó bạn cần  kích hoạt lại tài khoản. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: %3\$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %4\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %5\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site";
+$lang_module['email_active_mes'] = "Tài khoản của bạn vừa được cập nhật. Tuy nhiên, hệ thống yêu cầu bạn phải kích hoạt lại tài khoản của mình do bạn thay đổi địa chỉ email. Một khóa kích hoạt vừa được gửi đến địa chỉ email mới mà bạn đã cung cấp. Hãy vui lòng kiểm tra email của bạn để biết thêm thông tin.";
+$lang_module['email_active_error_mail'] = "Lỗi: Tài khoản của bạn vừa được cập nhật, Nhưng hệ thống không gửi email để kích hoạt tài khoản. Vui lòng liên hệ với Quản trị Website để được hỗ trợ.";
+
 //OpenID
 $lang_module['st_login'] = "Đăng nhập theo kiểu thông thường";
 $lang_module['st_login2'] = "Khả năng đăng nhập thông thường";
