@@ -59,7 +59,7 @@ if ( ! empty( $submit ) )
     
     $status = ( $nv_Request->get_int( 'status', 'post' ) == 1 ) ? 1 : 0;
     //check url
-    if ( empty( $url ) || ! nv_is_url( $url ) || ! check_url( $id, $url ) )
+    if ( empty( $url ) || !nv_is_url( $url ) || !check_url( $id, $url ) || !nv_check_url( $url ) )
     {
         $error = $lang_module['error_url'];
     }
@@ -156,7 +156,7 @@ $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\"
 $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<input type=\"hidden\" name =\"id\" value=\"" . $id . "\" />";
-$contents .= "<table class=\"tab2\" cellspacing=\"5\" cellpadding=\"5\">\n";
+$contents .= "<table class=\"tab1\" cellspacing=\"5\" cellpadding=\"5\">\n";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\" style=\"width: 150px;\">" . $lang_module['weblink_add_title'] . ": </td>\n";
 $contents .= "<td><input type=\"text\" name=\"title\" id=\"webtitle\" style=\"width:550px\" value=\"" . $rowcat['title'] . "\"/></td>\n";

@@ -44,7 +44,7 @@ function main_theme ( $array_cat, $array_cat_content )
                     {
                         if ( ! nv_is_url( $content['urlimg'] ) )
                         {
-                            $content['urlimg'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $content['urlimg'];
+                            $content['urlimg'] = $content['urlimg'];
                         }
                         $xtpl->assign( 'SRC_IMG', $content['urlimg'] );
                         $xtpl->parse( 'main.loop_tab_cate.have_data.img' );
@@ -128,7 +128,7 @@ function viewcat ( $array_subcat, $array_cat, $items )
             {
                 if ( ! nv_is_url( $items_i['urlimg'] ) )
                 {
-                    $items_i['urlimg'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $items_i['urlimg'];
+                    $items_i['urlimg'] = $items_i['urlimg'];
                 }
                 $xtpl->assign( 'IMG', $items_i['urlimg'] );
             }
@@ -161,7 +161,7 @@ function detail ( $row )
     {
         if ( ! nv_is_url( $row['urlimg'] ) )
         {
-            $row['urlimg'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $row['urlimg'];
+            $row['urlimg'] = $row['urlimg'];
         }
         $xtpl->assign( 'IMG', $row['urlimg'] );
         $xtpl->parse( 'main.img' );
