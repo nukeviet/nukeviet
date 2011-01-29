@@ -1508,7 +1508,7 @@ function nv_change_buffer ( $buffer )
         
         if ( ! $sys_info['supports_rewrite'] )
         {
-            $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"CJzip.php?file=\\4&amp;r=1\"\\7>", $buffer );
+            $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . NV_BASE_SITEURL . "CJzip.php?file=\\4&amp;r=1\"\\7>", $buffer );
         }
 
         //http://tidy.sourceforge.net/docs/quickref.html
