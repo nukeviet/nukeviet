@@ -438,6 +438,10 @@ if ( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
 $month_upload_dir = nv_mkdir( NV_UPLOADS_REAL_DIR, date( "Y_m" ) ); //Thu muc uploads theo thang
 if ( ! empty( $month_upload_dir[0] ) )
 {
+    if($month_upload_dir[0] == 1)
+    {
+        nv_loadUploadDirList( false );
+    }
     define( "NV_MONTH_UPLOADS_DIR", date( "Y_m" ) );
     define( "NV_MONTH_UPLOADS_REAL_DIR", NV_UPLOADS_REAL_DIR . '/' . NV_MONTH_UPLOADS_DIR );
 }

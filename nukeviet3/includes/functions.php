@@ -1561,4 +1561,55 @@ function nv_insert_logs ( $lang = "", $module_name = "", $name_key = "", $note_a
     return $db->sql_query_insert_id( $sql );
 }
 
+/**
+ * nv_listDir()
+ * 
+ * @param mixed $dir
+ * @param mixed $real_dirlist
+ * @return
+ */
+function nv_listUploadDir( $dir, $real_dirlist )
+{
+    $real_dirlist[] = $dir;
+
+    if ( ( $dh = @opendir( NV_ROOTDIR . '/' . $dir ) ) !== false )
+    {
+        while ( false !== ( $subdir = readdir( $dh ) ) )
+        {
+            if ( preg_match( "/^[a-zA-Z0-9\-\_]+$/", $subdir ) )
+            {
+                if ( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) )
+                {
+                    $real_dirlist = nv_listUploadDir( $dir . '/' . $subdir, $real_dirlist );
+                }
+            }
+        }
+        closedir( $dh );
+    }
+
+    return $real_dirlist;
+}
+
+/**
+ * nv_loadDirList()
+ * 
+ * @return void
+ */
+function nv_loadUploadDirList( $return = true )
+{
+    $allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
+    $dirlistCache = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/dirlist-" . md5( implode( $allow_upload_dir ) );
+
+    $real_dirlist = array();
+    foreach ( $allow_upload_dir as $dir )
+    {
+        $real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
+    }
+
+    ksort( $real_dirlist );
+    file_put_contents( $dirlistCache, serialize( $real_dirlist ) );
+
+    if ( $return ) return $real_dirlist;
+}
+
 ?>

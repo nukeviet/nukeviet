@@ -32,7 +32,7 @@ $newMd5 = md5( $newpath );
 @rename( NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . $oldMd5, NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . $newMd5 );
 @rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath );
 nv_delete_cache_upload( NV_ROOTDIR . '/' . $path );
-nv_loadDirList( false );
+nv_loadUploadDirList( false );
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['renamefolder'], $path . " -> " . $newpath, $admin_info['userid'] );
 echo $newpath;
 

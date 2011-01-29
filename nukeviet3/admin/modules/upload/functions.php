@@ -17,56 +17,6 @@ $allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renamei
 #################################################################################
 
 /**
- * nv_listDir()
- * 
- * @param mixed $dir
- * @param mixed $real_dirlist
- * @return
- */
-function nv_listDir( $dir, $real_dirlist )
-{
-    $real_dirlist[] = $dir;
-
-    if ( ( $dh = @opendir( NV_ROOTDIR . '/' . $dir ) ) !== false )
-    {
-        while ( false !== ( $subdir = readdir( $dh ) ) )
-        {
-            if ( preg_match( "/^[a-zA-Z0-9\-\_]+$/", $subdir ) )
-            {
-                if ( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) )
-                {
-                    $real_dirlist = nv_listDir( $dir . '/' . $subdir, $real_dirlist );
-                }
-            }
-        }
-        closedir( $dh );
-    }
-
-    return $real_dirlist;
-}
-
-/**
- * nv_loadDirList()
- * 
- * @return void
- */
-function nv_loadDirList( $return = true )
-{
-    global $allow_upload_dir, $dirlistCache;
-
-    $real_dirlist = array();
-    foreach ( $allow_upload_dir as $dir )
-    {
-        $real_dirlist = nv_listDir( $dir, $real_dirlist );
-    }
-
-    ksort( $real_dirlist );
-    file_put_contents( $dirlistCache, serialize( $real_dirlist ) );
-
-    if ( $return ) return $real_dirlist;
-}
-
-/**
  * nv_check_allow_upload_dir()
  * 
  * @param mixed $dir
@@ -74,7 +24,7 @@ function nv_loadDirList( $return = true )
  */
 function nv_check_allow_upload_dir( $dir )
 {
-    global $site_mods, $allow_upload_dir, $admin_info, $notchange_dirs, $imgNotChangeDirs;
+    global $site_mods, $allow_upload_dir, $admin_info;
 
     $dir = trim( $dir );
     if ( empty( $dir ) ) return array();
@@ -145,30 +95,6 @@ function nv_check_allow_upload_dir( $dir )
         if ( preg_match( "/^([\d]{4})\_([\d]{1,2})$/", $arr_dir[count( $arr_dir ) - 1] ) )
         {
             unset( $level['rename_dir'], $level['delete_dir'] );
-        }
-
-        if ( isset( $arr_dir[2] ) and ! isset( $arr_dir[3] ) )
-        {
-            if ( ! empty( $notchange_dirs ) )
-            {
-                foreach ( $notchange_dirs as $mod => $dirs )
-                {
-                    if ( $arr_dir[1] == $mod and in_array( $arr_dir[2], $dirs ) )
-                    {
-                        unset( $level['rename_dir'], $level['delete_dir'] );
-                        break;
-                    }
-                }
-            }
-        }
-
-        foreach ( $imgNotChangeDirs as $imgdir )
-        {
-            if ( $dir == 'images/' . $imgdir )
-            {
-                $level = array( 'view_dir' => true );
-                break;
-            }
         }
     }
 
@@ -280,11 +206,6 @@ function nv_get_viewImage( $fileName, $w = 80, $h = 80 )
 }
 
 $allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
-$notchange_dirs = array( //
-    'news' => array( 'source', 'temp_pic' ), //
-    'download' => array( 'files', 'images', 'temp', 'thumb' ) //
-    );
-$imgNotChangeDirs = array( 'rank' );
 $array_hidefolders = array( ".svn", "CVS", ".", "..", "index.html", ".htaccess", ".tmp" );
 
 $array_images = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
@@ -295,7 +216,7 @@ $array_documents = array( 'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' );
 $dirlistCache = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/dirlist-" . md5( implode( $allow_upload_dir ) );
 if ( ! file_exists( $dirlistCache ) or ( $nv_Request->isset_request( 'dirListRefresh', 'get' ) and filemtime( $dirlistCache ) < ( NV_CURRENTTIME - 30 ) ) )
 {
-    $dirlist = nv_loadDirList();
+    $dirlist = nv_loadUploadDirList();
 }
 else
 {
