@@ -389,7 +389,7 @@ class upload
             }
         }
 
-        if ( $mime == "application/zip" )
+        if( preg_match( "/^application\/(?:x-)?zip(?:-compressed)?$/is", $mime ) )
         {
             if ( $this->file_extension == "docx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
             elseif ( $this->file_extension == "dotx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
