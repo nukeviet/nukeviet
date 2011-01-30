@@ -8,7 +8,8 @@
  */
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-if ( ! function_exists( 'nv_rewrite_change' ) )
+
+if ( ! nv_function_exists( 'nv_rewrite_change' ) )
 {
     /**
      * nv_rewrite_change()

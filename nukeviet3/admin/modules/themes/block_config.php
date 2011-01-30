@@ -44,7 +44,7 @@ if ( ! empty( $file_name ) and preg_match( $global_config['check_block_module'],
             {
                 // neu ton tai function de xay dung cau truc cau hinh block
                 include_once ( $path_file_php );
-                if ( function_exists( $function_name ) )
+                if ( nv_function_exists( $function_name ) )
                 {
                     //load cau hinh mac dinh cua block
                     $xmlconfig = $xml->xpath( 'config' );

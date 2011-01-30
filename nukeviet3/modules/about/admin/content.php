@@ -136,7 +136,7 @@ $contents .= "<td colspan=\"2\">" . $lang_module ['aabout11'] . ":</td>\n";
 $contents .= "</tr>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan=\"2\">\n";
-if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
     $contents .= nv_aleditor( "bodytext", '100%', '300px', $bodytext );
 }

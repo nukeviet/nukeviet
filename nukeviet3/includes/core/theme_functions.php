@@ -296,7 +296,7 @@ function nv_xmlSitemap_generate( $url )
     @Header( "Pragma: no-cache" );
 
     $encoding = "none";
-    if ( function_exists( 'gzencode' ) )
+    if ( nv_function_exists( 'gzencode' ) )
     {
         $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
 
@@ -382,7 +382,7 @@ function nv_xmlSitemapIndex_generate()
     @Header( "Pragma: no-cache" );
 
     $encoding = "none";
-    if ( function_exists( 'gzencode' ) )
+    if ( nv_function_exists( 'gzencode' ) )
     {
         $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
 

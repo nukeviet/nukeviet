@@ -787,7 +787,7 @@ while ( list( $sourceid_i, $source_title_i ) = each( $array_source_module ) )
 }
 $xtpl->assign( 'sourceid', $select );
 ////////////////////////////////////////////////////////////////////////////////////
-if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
     $edits = nv_aleditor( 'bodytext', '100%', '300px', $rowcontent['bodytext'], $uploads_dir_user, $currentpath );
 }

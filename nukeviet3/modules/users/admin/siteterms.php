@@ -87,7 +87,7 @@ if ( ! empty( $error ) )
 
 $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "\" method=\"post\">";
 $contents .= "<input type=\"hidden\" name =\"save\"value=\"1\" />";
-if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
     $contents .= nv_aleditor( "content", '780px', '300px', $content );
 }

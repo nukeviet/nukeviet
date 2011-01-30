@@ -112,7 +112,7 @@ function nv_groups_add_theme ( $contents )
     $return .= "</tr>\n";
     $return .= "<tr>\n";
     $return .= "<td colspan=\"3\">\n";
-    if ( $contents['content'][4] and function_exists( 'nv_aleditor' ) )
+    if ( $contents['content'][4] and nv_function_exists( 'nv_aleditor' ) )
     {
         $return .= nv_aleditor( "content", $contents['content'][2], $contents['content'][3], $contents['content'][1] );
     }
@@ -219,7 +219,7 @@ function nv_admin_edit_theme ( $contents )
     $return .= "</tr>\n";
     $return .= "<tr>\n";
     $return .= "<td colspan=\"3\">\n";
-    if ( $contents['content'][4] and function_exists( 'nv_aleditor' ) )
+    if ( $contents['content'][4] and nv_function_exists( 'nv_aleditor' ) )
     {
         $return .= nv_aleditor( "content", $contents['content'][2], $contents['content'][3], $contents['content'][1] );
     }

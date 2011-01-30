@@ -44,7 +44,7 @@ if ( ! empty( $cron_numrows ) )
 			{
 				require_once ( NV_ROOTDIR . '/includes/cronjobs/' . $cron_row['run_file'] );
 			}
-			if ( ! function_exists( $cron_row['run_func'] ) )
+			if ( ! nv_function_exists( $cron_row['run_func'] ) )
 			{
 				$sql = "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `act`=0, `last_time`=" . NV_CURRENTTIME . ", `last_result`=0 WHERE `id`=" . $cron_row['id'];
 				$db->sql_query( $sql );

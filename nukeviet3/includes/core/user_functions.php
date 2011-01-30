@@ -442,7 +442,7 @@ function nv_html_site_js ( )
     {
         $return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $module_file . "/js/user.js\"></script>\n";
     }
-    if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_add_editor_js' ) )
+    if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
     {
         $return .= nv_add_editor_js();
     }

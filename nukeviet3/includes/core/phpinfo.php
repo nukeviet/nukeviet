@@ -29,7 +29,7 @@ function phpinfo_array ( $option = 1, $return = false )
     global $sys_info;
     
     $pi = array();
-    if ( function_exists( 'phpinfo' ) and ! in_array( 'phpinfo', $sys_info['disable_functions'] ) )
+    if ( nv_function_exists( 'phpinfo' ) )
     {
         if ( ini_get( 'expose_php' ) == '1' || strtolower( ini_get( 'expose_php' ) ) == 'on' )
         {

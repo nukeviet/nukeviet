@@ -64,7 +64,7 @@ function nv_admin_theme ( $contents )
         $xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . "modules/" . $module_file . "/js/admin.js" );
         $xtpl->parse( 'main.header.module_js' );
     }
-    if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_add_editor_js' ) )
+    if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
     {
         $xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js() );
         $xtpl->parse( 'main.header.nv_add_editor_js' );

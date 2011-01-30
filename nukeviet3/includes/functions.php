@@ -411,6 +411,32 @@ function nv_base64_decode ( $input )
 }
 
 /**
+ * nv_function_exists()
+ * 
+ * @param mixed $funcName
+ * @return
+ */
+function nv_function_exists( $funcName )
+{
+    global $sys_info;
+
+    return ( function_exists( $funcName ) and ! in_array( $funcName, $sys_info['disable_functions'] ) );
+}
+
+/**
+ * nv_class_exists()
+ * 
+ * @param mixed $clName
+ * @return
+ */
+function nv_class_exists( $clName )
+{
+    global $sys_info;
+
+    return ( class_exists( $clName ) and ! in_array( $clName, $sys_info['disable_functions'] ) );
+}
+
+/**
  * nv_check_valid_login()
  * 
  * @param mixed $login

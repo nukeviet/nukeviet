@@ -8,7 +8,7 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if ( ! function_exists( 'nv_news_blocks' ) )
+if ( ! nv_function_exists( 'nv_news_blocks' ) )
 {
 
     function nv_block_config_news_blocks ( $module, $data_block, $lang_block )

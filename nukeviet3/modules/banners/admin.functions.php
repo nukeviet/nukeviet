@@ -573,7 +573,7 @@ function nv_add_plan_theme ( $contents )
     $return .= "</table>\n";
     
     $return .= "<div>\n";
-    if ( $contents['description'][5] and function_exists( 'nv_aleditor' ) )
+    if ( $contents['description'][5] and nv_function_exists( 'nv_aleditor' ) )
     {
         $return .= nv_aleditor( $contents['description'][1], $contents['description'][3], $contents['description'][4], $contents['description'][2] );
     }
@@ -661,7 +661,7 @@ function nv_edit_plan_theme ( $contents )
     $return .= "</table>\n";
     
     $return .= "<div>\n";
-    if ( $contents['description'][5] and function_exists( 'nv_aleditor' ) )
+    if ( $contents['description'][5] and nv_function_exists( 'nv_aleditor' ) )
     {
         $return .= nv_aleditor( $contents['description'][1], $contents['description'][3], $contents['description'][4], $contents['description'][2] );
     }

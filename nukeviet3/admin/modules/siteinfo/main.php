@@ -64,7 +64,7 @@ function NukevietChange_getContents( $refresh = false )
         $content = $UrlGetContents->get( $url );
         if ( ! empty( $content ) )
         {
-            if ( function_exists( 'mb_convert_encoding' ) ) $content = mb_convert_encoding( $content, "utf-8" );
+            if ( nv_function_exists( 'mb_convert_encoding' ) ) $content = mb_convert_encoding( $content, "utf-8" );
             $content = simplexml_load_string( $content );
             $content = nv_object2array( $content );
             if ( ! empty( $content ) )

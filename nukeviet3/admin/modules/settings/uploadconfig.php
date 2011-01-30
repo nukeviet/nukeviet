@@ -125,25 +125,13 @@ foreach ( $_upload_checking_mode as $m => $n )
 $contents .= "</select>\n";
 
 $strong = false;
-if ( function_exists( 'finfo_open' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! in_array( 'finfo_open', $sys_info['disable_functions'] ) ) ) )
+if ( nv_function_exists( 'finfo_open' ) //
+    or nv_class_exists( "finfo" ) //
+    or nv_function_exists( 'mime_content_type' ) //
+    or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) //
+    )
 {
     $strong = true;
-}
-if ( function_exists( 'mime_content_type' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! in_array( 'mime_content_type', $sys_info['disable_functions'] ) ) ) )
-{
-    $strong = true;
-}
-if ( substr( $sys_info['os'], 0, 3 ) != 'WIN' )
-{
-    if ( function_exists( 'system' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! in_array( 'system', $sys_info['disable_functions'] ) ) ) )
-    {
-        $strong = true;
-    }
-
-    if ( function_exists( 'exec' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! in_array( 'exec', $sys_info['disable_functions'] ) ) ) )
-    {
-        $strong = true;
-    }
 }
 
 if ( ! $strong )

@@ -421,7 +421,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
                     $error_contents = array();
                     
                     $update_data = true;
-                    if ( function_exists( 'nv_func_update_data' ) )
+                    if ( nv_function_exists( 'nv_func_update_data' ) )
                     {
                         $update_data = nv_func_update_data();
                     }

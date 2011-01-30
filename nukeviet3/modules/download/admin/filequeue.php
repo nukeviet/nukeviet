@@ -434,7 +434,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
     }
 
-    if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+    if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
     {
         $array['description'] = nv_aleditor( 'description', '100%', '300px', $array['description'] );
     }

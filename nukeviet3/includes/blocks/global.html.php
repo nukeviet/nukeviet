@@ -8,7 +8,7 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if ( ! function_exists( 'nv_block_data_config_html' ) )
+if ( ! nv_function_exists( 'nv_block_data_config_html' ) )
 {
 
     function nv_block_data_config_html ( $module, $data_block, $lang_block )
@@ -22,7 +22,7 @@ if ( ! function_exists( 'nv_block_data_config_html' ) )
         
         $htmlcontent = ( defined( 'NV_EDITOR' ) ) ? nv_editor_br2nl( $data_block['htmlcontent'] ) : nv_br2nl( $data_block['htmlcontent'] );
         $htmlcontent = nv_htmlspecialchars( $htmlcontent );
-        if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+        if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
         {
             $html = nv_aleditor( "htmlcontent", '660px', '150px', $htmlcontent );
         }

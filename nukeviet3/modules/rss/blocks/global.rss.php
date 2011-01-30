@@ -8,7 +8,7 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if ( ! function_exists( 'nv_block_data_config_rss' ) )
+if ( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 {
 
     function nv_block_data_config_rss ( $module, $data_block, $lang_block )

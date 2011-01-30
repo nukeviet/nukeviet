@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-if ( ! function_exists( 'nv_block_voting' ) )
+if ( ! nv_function_exists( 'nv_block_voting' ) )
 {
 
     /**

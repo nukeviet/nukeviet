@@ -15,7 +15,7 @@ if ( defined( 'NV_EDITOR' ) )
 {
     require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 }
-else if ( ! function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' ) )
+else if ( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' ) )
 {
     define( 'NV_EDITOR', TRUE );
     define( 'NV_IS_CKEDITOR', TRUE );
@@ -530,7 +530,7 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
         $rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $rowcontent['homeimgfile'];
     }
     
-    if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+    if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
     {
         $htmlbodytext = nv_aleditor( 'bodytext', '510px', '300px', $rowcontent['bodytext'] );
     }

@@ -8,7 +8,7 @@
  */
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if ( ! function_exists( 'nv_block_counter' ) )
+if ( ! nv_function_exists( 'nv_block_counter' ) )
 {
 
     function nv_block_counter ( )

@@ -210,7 +210,7 @@ $contents .= "</tr>";
 $contents .= "<tr>";
 $contents .= "<td align=\"right\">" . $lang_module['weblink_description'] . ": </td>\n";
 $contents .= "<td>";
-if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
     $contents .= nv_aleditor( "description", '700px', '300px', $rowcat['description'] );
 }

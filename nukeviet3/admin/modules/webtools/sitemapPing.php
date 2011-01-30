@@ -62,7 +62,7 @@ function nv_sitemapPing( $module, $link )
         curl_close( $c );
     }
 
-    if ( ! $result and ( function_exists( 'fsockopen' ) and ! in_array( 'fsockopen', $sys_info['disable_functions'] ) ) )
+    if ( ! $result and nv_function_exists( 'fsockopen' ) )
     {
         $url_parts = @parse_url( $link );
         if ( ! $url_parts ) return $lang_module['searchEngineFailed'];

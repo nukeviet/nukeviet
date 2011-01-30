@@ -118,7 +118,7 @@ function nv_scandir( $directory, $pattern, $sorting_order = 0 )
  * @param mixed $filename
  * @return
  */
-function nv_get_mime_type( $filename )
+function nv_get_mime_type( $filename, $magic_path = '' )
 {
     global $sys_info;
 
@@ -126,50 +126,148 @@ function nv_get_mime_type( $filename )
     $ext = strtolower( array_pop( explode( '.', $filename ) ) );
     if ( empty( $ext ) ) return false;
 
-    if ( function_exists( 'finfo_open' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! in_array( 'finfo_open', $sys_info['disable_functions'] ) ) ) )
+    $mime = 'application/octet-stream';
+
+    if ( nv_function_exists( "finfo_open" ) )
     {
-        $finfo = finfo_open( FILEINFO_MIME );
-        $mimetype = finfo_file( $finfo, $filename );
-        finfo_close( $finfo );
-        $mimetype = explode( ";", $mimetype );
-        if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+        if ( empty( $magic_path ) )
         {
-            return trim( $mimetype[0] );
+            $finfo = finfo_open( FILEINFO_MIME );
+        } elseif ( $magic_path != "auto" )
+        {
+            $finfo = finfo_open( FILEINFO_MIME, $magic_path );
+        }
+        else
+        {
+            if ( ( $magic = getenv( 'MAGIC' ) ) !== false )
+            {
+                $finfo = finfo_open( FILEINFO_MIME, $magic );
+            }
+            else
+            {
+                if ( substr( $sys_info['os'], 0, 3 ) == 'WIN' )
+                {
+                    $path = realpath( ini_get( 'extension_dir' ) . '/../' ) . 'extras/magic';
+                    $finfo = finfo_open( FILEINFO_MIME, $path );
+                }
+                else
+                {
+                    $finfo = finfo_open( FILEINFO_MIME, '/usr/share/file/magic' );
+                }
+            }
+        }
+
+        if ( is_resource( $finfo ) )
+        {
+            $mime = finfo_file( $finfo, realpath( $filename ) );
+            finfo_close( $finfo );
+            $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
         }
     }
 
-    if ( function_exists( 'system' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! in_array( 'system', $sys_info['disable_functions'] ) ) ) )
+    if ( empty( $mime ) or $mime == "application/octet-stream" )
     {
-        ob_start();
-        system( "file -i -b " . $filename );
-        $mimetype = ob_get_clean();
-        $mimetype = explode( ";", $mimetype );
-        if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+        if ( nv_class_exists( "finfo" ) )
         {
-            return trim( $mimetype[0] );
+            $finfo = new finfo( FILEINFO_MIME );
+            if ( $finfo )
+            {
+                $mime = $finfo->file( realpath( $filename ) );
+                $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+            }
         }
     }
 
-    if ( function_exists( 'mime_content_type' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! in_array( 'system', $sys_info['disable_functions'] ) ) ) )
+    if ( empty( $mime ) or $mime == "application/octet-stream" )
     {
-        $mimetype = mime_content_type( $filename );
-        $mimetype = explode( ";", $mimetype );
-        if ( isset( $mimetype[0] ) and ! empty( $mimetype[0] ) )
+        if ( substr( $sys_info['os'], 0, 3 ) != 'WIN' )
         {
-            return trim( $mimetype[0] );
+            if ( nv_function_exists( 'system' ) )
+            {
+                ob_start();
+                system( "file -i -b " . escapeshellarg( $filename ) );
+                $m = ob_get_clean();
+                $m = trim( $m );
+                if ( ! empty( $m ) )
+                {
+                    $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
+                }
+            } elseif ( nv_function_exists( 'exec' ) )
+            {
+                $m = @exec( "file -bi " . escapeshellarg( $filename ) );
+                $m = trim( $m );
+                if ( ! empty( $m ) )
+                {
+                    $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
+                }
+            }
         }
     }
 
-    $mime_types = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini' );
-
-    if ( array_key_exists( $ext, $mime_types ) )
+    if ( empty( $mime ) or $mime == "application/octet-stream" )
     {
-        if ( is_string( $mime_types[$ext] ) ) return $mime_types[$ext];
-
-        return $mime_types[$ext][0];
+        if ( nv_function_exists( 'mime_content_type' ) )
+        {
+            $mime = mime_content_type( $filename );
+            $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+        }
     }
 
-    return 'application/octet-stream';
+    if ( empty( $mime ) or $mime == "application/octet-stream" )
+    {
+        $img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
+        if ( in_array( $ext, $img_exts ) )
+        {
+            if ( ( $img_info = @getimagesize( $filename ) ) !== false )
+            {
+                if ( isset( $img_info['mime'] ) and ! empty( $img_info['mime'] ) )
+                {
+                    $mime = trim( $img_info['mime'] );
+                    $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $mime );
+                }
+
+                if ( empty( $mime ) and isset( $img_info[2] ) )
+                {
+                    $mime = image_type_to_mime_type( $img_info[2] );
+                }
+            }
+        }
+    }
+
+    if ( empty( $mime ) or $mime == "application/octet-stream" )
+    {
+        $mime_types = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini' );
+
+        if ( array_key_exists( $ext, $mime_types ) )
+        {
+            if ( is_string( $mime_types[$ext] ) ) return $mime_types[$ext];
+
+            return $mime_types[$ext][0];
+        }
+    }
+
+    if ( preg_match( "/^application\/(?:x-)?zip(?:-compressed)?$/is", $mime ) )
+    {
+        if ( $this->file_extension == "docx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        elseif ( $this->file_extension == "dotx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
+        elseif ( $this->file_extension == "potx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.template";
+        elseif ( $this->file_extension == "ppsx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+        elseif ( $this->file_extension == "pptx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        elseif ( $this->file_extension == "xlsx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        elseif ( $this->file_extension == "xltx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
+        elseif ( $this->file_extension == "docm" ) $mime = "application/vnd.ms-word.document.macroEnabled.12";
+        elseif ( $this->file_extension == "dotm" ) $mime = "application/vnd.ms-word.template.macroEnabled.12";
+        elseif ( $this->file_extension == "potm" ) $mime = "application/vnd.ms-powerpoint.template.macroEnabled.12";
+        elseif ( $this->file_extension == "ppam" ) $mime = "application/vnd.ms-powerpoint.addin.macroEnabled.12";
+        elseif ( $this->file_extension == "ppsm" ) $mime = "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
+        elseif ( $this->file_extension == "pptm" ) $mime = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+        elseif ( $this->file_extension == "xlam" ) $mime = "application/vnd.ms-excel.addin.macroEnabled.12";
+        elseif ( $this->file_extension == "xlsb" ) $mime = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+        elseif ( $this->file_extension == "xlsm" ) $mime = "application/vnd.ms-excel.sheet.macroEnabled.12";
+        elseif ( $this->file_extension == "xltm" ) $mime = "application/vnd.ms-excel.template.macroEnabled.12";
+    }
+
+    return $mime;
 }
 
 /**

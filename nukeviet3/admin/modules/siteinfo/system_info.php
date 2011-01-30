@@ -76,7 +76,7 @@ array(  //
 //
 array(  //
     'key' => $lang_module['server_api'], //
-'value' => ( function_exists( 'apache_get_version' ) ? apache_get_version() . ', ' : ( nv_getenv( 'SERVER_SOFTWARE' ) != '' ? nv_getenv( 'SERVER_SOFTWARE' ) . ', ' : '' ) ) . ( PHP_SAPI != '' ? PHP_SAPI : php_sapi_name() ) 
+'value' => ( nv_function_exists( 'apache_get_version' ) ? apache_get_version() . ', ' : ( nv_getenv( 'SERVER_SOFTWARE' ) != '' ? nv_getenv( 'SERVER_SOFTWARE' ) . ', ' : '' ) ) . ( PHP_SAPI != '' ? PHP_SAPI : php_sapi_name() ) 
 ), //
 //
 array(  //

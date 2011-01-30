@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-if ( ! function_exists( 'nv_message_about' ) )
+if ( ! nv_function_exists( 'nv_message_about' ) )
 {
 
     /**

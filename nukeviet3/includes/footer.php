@@ -43,7 +43,7 @@ if ( defined( 'NV_IS_GZIP' ) )
         {
             if ( ! empty( $enc ) and isset( $compress_list[$enc] ) )
             {
-                if ( function_exists( $compress_list[$enc] ) and ! in_array( $compress_list[$enc], $sys_info['disable_functions'] ) )
+                if ( nv_function_exists( $compress_list[$enc] ) )
                 {
                     $page = call_user_func( $compress_list[$enc], $page, ZLIB_OUTPUT_COMPRESSION_LEVEL );
                     @Header( 'Content-Encoding: ' . $enc );

@@ -8,7 +8,7 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if ( ! function_exists( 'nv_menu_theme_modern' ) )
+if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 {
 
     function nv_html_sub_menu_mod_users ( $modvalues )

@@ -226,7 +226,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
     }
 
-    if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+    if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
     {
         $array['answer'] = nv_aleditor( 'answer', '100%', '300px', $array['answer'] );
     }

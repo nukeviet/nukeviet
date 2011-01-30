@@ -17,7 +17,7 @@ $allow_func = array(
 
 if ( defined( 'NV_IS_SPADMIN' ) )
 {
-    if ( function_exists( 'phpinfo' ) and ! in_array( 'phpinfo', $sys_info['disable_functions'] ) )
+    if ( nv_function_exists( 'phpinfo' ) )
     {
         if ( ini_get( 'expose_php' ) == '1' || strtolower( ini_get( 'expose_php' ) ) == 'on' )
         {

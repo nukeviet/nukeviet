@@ -116,7 +116,7 @@ $mess_content = nv_htmlspecialchars( $mess_content );
 $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id . "\" method=\"post\">";
 $contents .= "<input name=\"save\" type=\"hidden\" value=\"1\" />\n";
 $contents .= "<div style=\"margin-top:8px;margin-bottom:8px;\">\n";
-if ( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
     $contents .= nv_aleditor( "mess_content", '720px', '300px', $mess_content );
 }

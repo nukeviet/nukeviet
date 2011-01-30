@@ -120,7 +120,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
             {
                 // neu ton tai function de xay dung cau truc cau hinh block
                 include_once ( $path_file_php );
-                if ( function_exists( $submit_function ) )
+                if ( nv_function_exists( $submit_function ) )
                 {
                     $lang_block = array(); // Ngon ngu cua block
                     $xmllanguage = $xml->xpath( 'language' );

@@ -48,7 +48,7 @@ $text_color = ImageColorAllocate( $image, $r, $g, $b );
 
 $ff = mt_rand( 1, 15 );
 $font = NV_ROOTDIR . "/includes/fonts/captcha/font" . $ff . ".ttf";
-if ( file_exists( $font ) and function_exists( 'imagettftext' ) )
+if ( file_exists( $font ) and nv_function_exists( 'imagettftext' ) )
 {
     imagettftext( $image, 15, 0, 5, NV_GFX_HEIGHT - 3, $text_color, $font, $code );
 }
