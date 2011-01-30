@@ -19,20 +19,17 @@ if ( defined( 'NV_IS_SPADMIN' ) )
 {
     if ( nv_function_exists( 'phpinfo' ) )
     {
-        if ( ini_get( 'expose_php' ) == '1' || strtolower( ini_get( 'expose_php' ) ) == 'on' )
-        {
-            $submenu['system_info'] = $lang_module['site_configs_info'];
-            $submenu['php_info_configuration'] = $lang_module['configuration_php'];
-            $submenu['php_info_modules'] = $lang_module['extensions'];
-            $submenu['php_info_environment'] = $lang_module['environment_php'];
-            $submenu['php_info_variables'] = $lang_module['variables_php'];
-            
-            $allow_func[] = 'system_info';
-            $allow_func[] = 'php_info_configuration';
-            $allow_func[] = 'php_info_modules';
-            $allow_func[] = 'php_info_environment';
-            $allow_func[] = 'php_info_variables';
-        }
+        $submenu['system_info'] = $lang_module['site_configs_info'];
+        $submenu['php_info_configuration'] = $lang_module['configuration_php'];
+        $submenu['php_info_modules'] = $lang_module['extensions'];
+        $submenu['php_info_environment'] = $lang_module['environment_php'];
+        $submenu['php_info_variables'] = $lang_module['variables_php'];
+        
+        $allow_func[] = 'system_info';
+        $allow_func[] = 'php_info_configuration';
+        $allow_func[] = 'php_info_modules';
+        $allow_func[] = 'php_info_environment';
+        $allow_func[] = 'php_info_variables';
     }
     $allow_func[] = 'checkchmod';
 }
