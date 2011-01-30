@@ -80,6 +80,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         if ( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_config['upload_dir'] ) )
         {
             $mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, $array_config['upload_dir'] );
+            nv_loadUploadDirList( false );
             if ( $mkdir[0] == 0 )
             {
                 $array_config['upload_dir'] = "files";
@@ -96,6 +97,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         if ( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_config['temp_dir'] ) )
         {
             $mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, $array_config['temp_dir'] );
+            nv_loadUploadDirList( false );
             if ( $mkdir[0] == 0 )
             {
                 $array_config['temp_dir'] = "temp";

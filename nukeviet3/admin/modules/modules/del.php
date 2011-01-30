@@ -91,6 +91,7 @@ if ( ! empty( $modname ) and preg_match( $global_config['check_module'], $modnam
                 $db->sql_query( $sql );
             }
             nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . $modname, true );
+            nv_loadUploadDirList( false );
         }
         nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete']  .' module "' . $modname.'"', '', $admin_info['userid'] );
         nv_save_file_config_global();

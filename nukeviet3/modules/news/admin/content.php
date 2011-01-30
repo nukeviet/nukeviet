@@ -48,6 +48,7 @@ else
             if ( ! empty( $p ) and ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $cp . $p ) )
             {
                 $mk = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $cp, $p );
+                nv_loadUploadDirList( false );
                 if ( $mk[0] > 0 )
                 {
                     $upload_real_dir_page = $mk[2];

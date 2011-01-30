@@ -248,6 +248,7 @@ if ( $module_name == "modules" )
                             if ( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $cp . $p ) )
                             {
                                 nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $cp, $p );
+                                nv_loadUploadDirList( false );
                             }
                             $cp .= $p . '/';
                         }
