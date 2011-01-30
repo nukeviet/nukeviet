@@ -20,7 +20,7 @@ if ( $nv_Request->isset_request( NV_NAME_VARIABLE, 'get' ) and $nv_Request->get_
 }
 
 //Check user
-if ( defined( 'NV_IS_USER' ) ) die( "Hacking attempt" );
+if ( defined( 'NV_IS_USER' ) ) trigger_error( 'Hacking attempt', 256 );
 require_once ( NV_ROOTDIR . "/includes/core/is_user.php" );
 
 //Cap nhat trang thai online

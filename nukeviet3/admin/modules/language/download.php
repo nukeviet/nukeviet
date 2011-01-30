@@ -76,7 +76,7 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "downloadallfile" . s
 }
 else
 {
-    die( "error checksess" );
+    trigger_error( "error checksess", 256 );
 }
 
 ?>

@@ -53,16 +53,19 @@ if ( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) )
 }
 else
 {
-    $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
-    if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
-    if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
-    if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
-    if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
-    if ( defined( 'NV_ADMIN' ) )
+    if ( file_exists( NV_ROOTDIR . '/install/index.php' ) )
     {
-        $base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
+        $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
+        if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
+        if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
+        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
+        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
+        if ( defined( 'NV_ADMIN' ) )
+        {
+            $base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
+        }
+        Header( "Location: " . $base_siteurl . "/install/index.php" );
     }
-    Header( "Location: " . $base_siteurl . "/install/index.php" );
     die();
 }
 

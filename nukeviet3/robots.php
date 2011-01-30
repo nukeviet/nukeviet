@@ -24,6 +24,7 @@ if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_
 }
 
 $allowedDirs = array( 'files', 'images', 'js', 'themes', 'uploads' );
+$allowedFiles = array( 'favicon.ico', 'index.php', 'robots.txt', 'CJzip.php', 'config.php' );
 
 $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
@@ -39,9 +40,10 @@ $contents[] = "User-agent: *";
 
 foreach ( $dirs as $dir )
 {
-    if ( ! preg_match( "/\.+/", $dir ) and is_dir( $rootDir . '/' . $dir ) and ! in_array( $dir, $allowedDirs ) )
+    if ( ! preg_match( "/^\.(.*)$/", $dir ) and ! in_array( $dir, $allowedDirs ) and ! in_array( $dir, $allowedFiles ) )
     {
-        $contents[] = "Disallow: /" . $dir . "/";
+        if ( is_dir( $rootDir . '/' . $dir ) ) $contents[] = "Disallow: /" . $dir . "/";
+        else $contents[] = "Disallow: /" . $dir;
     }
 }
 

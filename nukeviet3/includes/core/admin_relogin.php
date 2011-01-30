@@ -24,7 +24,7 @@ if ( defined( "NV_IS_ADMIN" ) )
             $password = "";
             if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             {
-                if ( $client_info['is_myreferer'] != 1 ) die( 'Wrong URL' );
+                if ( $client_info['is_myreferer'] != 1 ) trigger_error( "Wrong URL", 256 );
                 $nv_password = filter_text_input( 'nv_password', 'post', '', '', 50 );
                 if ( empty( $nv_password ) )
                 {

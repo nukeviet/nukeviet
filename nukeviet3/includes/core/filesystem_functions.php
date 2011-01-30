@@ -80,34 +80,36 @@ function nv_parse_ini_file( $filename, $process_sections = false )
 function nv_scandir( $directory, $pattern, $sorting_order = 0 )
 {
     $return = array();
+
     if ( is_dir( $directory ) )
     {
-        $files = @scandir( $directory, $sorting_order );
-        if ( ! empty( $files ) )
+        if ( $dh = opendir( $directory ) )
         {
-            foreach ( $files as $file )
+            while ( ( $file = readdir( $dh ) ) !== false )
             {
-                if ( $file != "." and $file != ".." and $file != ".htaccess" and $file != "index.html" )
+                if ( preg_match( "/^\.(.*)$/", $file ) or $file == "index.html" ) continue;
+
+                if ( ! is_array( $pattern ) )
                 {
-                    if ( ! is_array( $pattern ) )
+                    if ( preg_match( $pattern, $file ) ) $return[] = $file;
+                }
+                else
+                {
+                    foreach ( $pattern as $p )
                     {
-                        if ( preg_match( $pattern, $file ) ) $return[] = $file;
-                    }
-                    else
-                    {
-                        foreach ( $pattern as $p )
+                        if ( preg_match( $p, $file ) )
                         {
-                            if ( preg_match( $p, $file ) )
-                            {
-                                $return[] = $file;
-                                break;
-                            }
+                            $return[] = $file;
+                            break;
                         }
                     }
                 }
             }
+            closedir( $dh );
         }
     }
+
+    if ( ! empty( $return ) and $sorting_order ) rsort( $return );
 
     return $return;
 }

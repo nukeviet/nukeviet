@@ -1,5 +1,26 @@
 #nukeviet
 
+Options All -Indexes
+
+<Files ~ "\.(htm|html|css|js|php)$">
+  AddDefaultCharset UTF-8
+</Files>
+
+<Files .htaccess>
+  order allow,deny
+  deny from all
+</Files>
+
+<Files config.php>
+  order allow,deny
+  deny from all
+</Files>
+
+<Files mainfile.php>
+  order allow,deny
+  deny from all
+</Files>
+
 <IfModule mod_deflate.c>
 
   <FilesMatch "\.(css|js|xml)$">
