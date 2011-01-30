@@ -634,7 +634,7 @@ elseif ( defined( 'NV_IS_USER' ) )
         $page = intval( substr( $array_op[1], 5 ) );
     }
     $array_catpage = array();
-    $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "";
+    $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page . "";
     $result = $db->sql_query( $sql );
     
     $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
