@@ -224,8 +224,8 @@ $global_config['check_op'] = "/^[a-zA-Z0-9\-]+$/";
 $global_config['check_op_file'] = "/^([a-zA-Z0-9\-\_]+)\.php$/";
 $global_config['check_block_global'] = "/^global\.([a-zA-Z0-9\-\_]+)\.php$/";
 $global_config['check_block_module'] = "/^(global|module)\.([a-zA-Z0-9\-\_]+)\.php$/";
-$global_config['check_theme'] = "/^[a-zA-Z0-9-]+$/";
-$global_config['check_theme_admin'] = "/^(admin)\_[a-zA-Z0-9-]+$/";
+$global_config['check_theme'] = "/^(?!admin\_)([a-zA-Z0-9\-\_]+)$/";
+$global_config['check_theme_admin'] = "/^(admin)\_[a-zA-Z0-9\-\_]+$/";
 
 $global_config['check_email'] = '/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/';
 $global_config['check_cron'] = "/^(cron)\_[a-zA-Z0-9\_]+$/";
