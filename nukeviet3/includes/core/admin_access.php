@@ -209,7 +209,7 @@ isset( $array_admin['current_login'] ) and ! empty( $array_admin['current_login'
             $admin_info['userid'] = $row['userid'];
             $admin_info['username'] = $row['username'];
             $admin_info['email'] = $row['email'];
-            $admin_info['full_name'] = $row['full_name'];
+            $admin_info['full_name'] = ( empty( $row['full_name'] ) ) ? $row['username'] : $row['full_name'];
             $admin_info['view_mail'] = intval( $row['view_mail'] );
             
             $admin_info['regdate'] = intval( $row['regdate'] );

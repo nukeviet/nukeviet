@@ -31,7 +31,7 @@ elseif ( defined( 'NV_IS_USER_FORUM' ) )
             $user_info['userid'] = intval( $row['userid'] );
             $user_info['username'] = $row['username'];
             $user_info['email'] = $row['email'];
-            $user_info['full_name'] = $row['full_name'];
+            $user_info['full_name'] = ( empty( $row['full_name'] ) ) ? $row['username'] : $row['full_name'];
             $user_info['gender'] = $row['gender'];
             $user_info['photo'] = $row['photo'];
             $user_info['birthday'] = intval( $row['birthday'] );
@@ -86,17 +86,15 @@ else
                         $row = $db->sql_fetchrow( $result );
                         $db->sql_freeresult( $result );
                         
-                        if ( strcasecmp( $user['checknum'], $row['checknum'] ) == 0 and //checknum
-isset( $user['current_agent'] ) and ! empty( $user['current_agent'] ) and strcasecmp( $user['current_agent'], $row['last_agent'] ) == 0 and //user_agent
-isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $row['last_ip'] ) == 0 and //current IP
-isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $row['last_login'] ) ) == 0 ) //current login
-                        
-
+                        if ( strcasecmp( $user['checknum'], $row['checknum'] ) == 0and //checknum
+						isset( $user['current_agent'] ) and ! empty( $user['current_agent'] ) and strcasecmp( $user['current_agent'], $row['last_agent'] ) == 0 and //user_agent
+						isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $row['last_ip'] ) == 0 and //current IP
+						isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $row['last_login'] ) ) == 0 ) //current login
                         {
                             $user_info['userid'] = intval( $row['userid'] );
                             $user_info['username'] = $row['username'];
                             $user_info['email'] = $row['email'];
-                            $user_info['full_name'] = $row['full_name'];
+                            $user_info['full_name'] = ( empty( $row['full_name'] ) ) ? $row['username'] : $row['full_name'];
                             $user_info['gender'] = $row['gender'];
                             $user_info['photo'] = $row['photo'];
                             $user_info['birthday'] = intval( $row['birthday'] );
