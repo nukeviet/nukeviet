@@ -25,18 +25,7 @@ if ( file_exists( $md5_view_image ) )
     @nv_deletefile( $md5_view_image );
 }
 
-$results = array();
-$md5 = md5( $path );
-$tempFile = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . $md5;
-if ( file_exists( $tempFile ) )
-{
-    $results = file_get_contents( $tempFile );
-    $results = unserialize( $results );
-}
-
-unset( $results[$file] );
-file_put_contents( $tempFile, serialize( $results ) );
-
+nv_filesList( $path, false, '', $file );
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $file, $admin_info['userid'] );
 
 echo "OK";

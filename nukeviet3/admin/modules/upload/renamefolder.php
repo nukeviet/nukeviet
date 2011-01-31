@@ -27,11 +27,8 @@ if ( ! isset( $matches ) or empty( $matches ) ) die( "ERROR_" . $lang_module['no
 $newpath = $matches[1] . '/' . $newname;
 if ( is_dir( NV_ROOTDIR . '/' . $newpath ) ) die( "ERROR_" . $lang_module['folder_exists'] );
 
-$oldMd5 = md5( $path );
-$newMd5 = md5( $newpath );
-@rename( NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . $oldMd5, NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . $newMd5 );
+nv_delete_cache_upload( $path );
 @rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath );
-nv_delete_cache_upload( NV_ROOTDIR . '/' . $path );
 nv_loadUploadDirList( false );
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['renamefolder'], $path . " -> " . $newpath, $admin_info['userid'] );
 echo $newpath;

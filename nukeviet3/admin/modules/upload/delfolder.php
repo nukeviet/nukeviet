@@ -17,8 +17,7 @@ if ( ! isset( $check_allow_upload_dir['delete_dir'] ) or $check_allow_upload_dir
 
 if ( empty( $path ) or $path == NV_UPLOADS_DIR ) die( "ERROR_" . $lang_module['notlevel'] );
 
-nv_delete_cache_upload( NV_ROOTDIR . '/' . $path );
-nv_deletefile( NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . md5($path), true );
+nv_delete_cache_upload( $path );
 nv_deletefile( NV_ROOTDIR . '/' . $path, true );
 nv_loadUploadDirList( false );
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['deletefolder'], $path, $admin_info['userid'] );

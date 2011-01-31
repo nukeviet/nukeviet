@@ -247,7 +247,7 @@ $contents .= "<col width=\"65%\" />";
 $contents .= "<col width=\"45%\" />";
 $contents .= "<thead>
             <tr>
-                <td colspan=\"2\">aaa" . $lang_module['config'] . "</td>
+                <td colspan=\"2\">" . $lang_module['config'] . "</td>
             </tr>
         </thead>";
 $contents .= "<tbody class=\"second\">
