@@ -313,16 +313,20 @@ function nv_getOs ( $agent, $osinifile )
  */
 function nv_convertfromBytes ( $size )
 {
+    if($size <= 0 ) return '0 bytes';
+    if($size == 1) return '1 bytes';
+    if($size < 1024 ) return $size . ' bytes';
+    
     $i = 0;
     $iec = array( 
-        "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" 
+        "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" 
     );
     while ( ( $size / 1024 ) > 1 )
     {
         $size = $size / 1024;
         $i ++;
     }
-    return substr( $size, 0, strpos( $size, '.' ) + 4 ) . $iec[$i];
+    return number_format( $size, 2 ) . ' ' . $iec[$i];
 }
 
 /**
