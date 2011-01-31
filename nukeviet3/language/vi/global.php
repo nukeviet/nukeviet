@@ -234,4 +234,27 @@ $lang_global['breakcrum'] = "Bạn đang ở";
 $lang_global['admin_access_denied1'] = "Rất tiếc là hiện nay hệ thống không có phép các Admin đăng nhập";
 $lang_global['admin_access_denied2'] = "Rất tiếc là hiện nay hệ thống không có phép các Quản trị module đăng nhập";
 
+//UPLOAD
+$lang_global['error_uploadNameEmpty'] = "Lỗi: Tên file tải lên không xác định";
+$lang_global['error_uploadSizeEmpty'] = "Lỗi: Dung lượng file tải lên không xác định";
+$lang_global['error_upload_ini_size'] = "Lỗi: Dung lượng file tải lên lớn hơn mức cho phép được xác định trong php.ini";
+$lang_global['error_upload_form_size'] = "Lỗi: Dung lượng file tải lên lớn hơn mức cho phép được xác định qua biến MAX_FILE_SIZE trong mã HTML";
+$lang_global['error_upload_partial'] = "Lỗi: Chỉ một phần của file được tải lên";
+$lang_global['error_upload_no_file'] = "Lỗi: Chưa có file tải lên";
+$lang_global['error_upload_no_tmp_dir'] = "Lỗi: Thư mục tạm thời chứa file tải lên không được xác định";
+$lang_global['error_upload_cant_write'] = "Lỗi: Không thể ghi file tải lên";
+$lang_global['error_upload_extension'] = "Lỗi: File tải lên bị chặn vì thành phần mở rộng không hợp lệ";
+$lang_global['error_upload_unknown'] = "Đã xảy ra lỗi không xác định khi tải lên";
+$lang_global['error_upload_type_not_allowed'] = "Lỗi: loại file không được phép tải lên";
+$lang_global['error_upload_mime_not_recognize'] = "Lỗi: Hệ thống không thể xác định được định dạng của file tải lên";
+$lang_global['error_upload_max_user_size'] = "Lỗi: Dung lượng file tải lên lớn hơn mức cho phép. Dung lượng lớn nhất được tải lên là %d bytes";
+$lang_global['error_upload_not_image'] = "Lỗi: Hệ thống không thể xác định được định dạng hình tải lên";
+$lang_global['error_upload_image_failed'] = "Lỗi: Hình tải lên không hợp lệ";
+$lang_global['error_upload_image_width'] = "Lỗi: Hình tải lên có chiều rộng lớn hơn mức cho phép. Chiều rộng lớn nhất cho phép là %d pixels";
+$lang_global['error_upload_image_height'] = "Lỗi: Hình tải lên có chiều cao lớn hơn mức cho phép. Chiều cao lớn nhất cho phép lag %d pixels";
+$lang_global['error_upload_forbidden'] = "Lỗi: Thư mục chứa file tải lên không được xác định";
+$lang_global['error_upload_writable'] = "Lỗi: Thư mục %s không cho phép chứa file tải lên. Có thể bạn cần CHMOD lại thư mục này ở dạng 0777";
+$lang_global['error_upload_urlfile'] = "Lỗi: URL mà bạn đưa ra không đúng";
+$lang_global['error_upload_url_notfound'] = "Lỗi: Không thể tải file từ URL mà bạn đưa ra";
+
 ?>

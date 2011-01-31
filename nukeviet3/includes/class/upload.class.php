@@ -18,25 +18,27 @@ if ( ! defined( 'NV_TEMPNAM_PREFIX' ) ) define( 'NV_TEMPNAM_PREFIX', 'nv_' );
 
 if ( ! defined( 'UPLOAD_CHECKING_MODE' ) ) define( 'UPLOAD_CHECKING_MODE', 'strong' );
 
-if ( ! defined( '_ERROR_UPLOAD_FAILED' ) ) define( '_ERROR_UPLOAD_FAILED', 'Upload failed' );
-if ( ! defined( '_ERROR_UPLOAD_INI_SIZE' ) ) define( '_ERROR_UPLOAD_INI_SIZE', 'The uploaded file exceeds the upload_max_filesize directive in php.ini' );
-if ( ! defined( '_ERROR_UPLOAD_FORM_SIZE' ) ) define( '_ERROR_UPLOAD_FORM_SIZE', 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form' );
-if ( ! defined( '_ERROR_UPLOAD_PARTIAL' ) ) define( '_ERROR_UPLOAD_PARTIAL', 'The uploaded file was only partially uploaded' );
-if ( ! defined( '_ERROR_UPLOAD_NO_FILE' ) ) define( '_ERROR_UPLOAD_NO_FILE', 'No file was uploaded' );
-if ( ! defined( '_ERROR_UPLOAD_NO_TMP_DIR' ) ) define( '_ERROR_UPLOAD_NO_TMP_DIR', 'Missing a temporary folder' );
-if ( ! defined( '_ERROR_UPLOAD_CANT_WRITE' ) ) define( '_ERROR_UPLOAD_CANT_WRITE', 'Failed to write file to disk' );
-if ( ! defined( '_ERROR_UPLOAD_EXTENSION' ) ) define( '_ERROR_UPLOAD_EXTENSION', 'File upload stopped by extension' );
-if ( ! defined( '_ERROR_UPLOAD_UNKNOWN' ) ) define( '_ERROR_UPLOAD_UNKNOWN', 'Unknown upload error' );
-if ( ! defined( '_ERROR_UPLOAD_TYPE_NOT_ALLOWED' ) ) define( '_ERROR_UPLOAD_TYPE_NOT_ALLOWED', 'Files of this type are not allowed' );
-if ( ! defined( '_ERROR_UPLOAD_MIME_NOT_RECOGNIZE' ) ) define( '_ERROR_UPLOAD_MIME_NOT_RECOGNIZE', 'system does not recognize the mime type of uploaded file' );
-if ( ! defined( '_ERROR_UPLOAD_MAX_USER_SIZE' ) ) define( '_ERROR_UPLOAD_MAX_USER_SIZE', "The file exceeds the maximum size allowed. Maximum size is %d byte" );
-if ( ! defined( '_ERROR_UPLOAD_NOT_IMAGE' ) ) define( '_ERROR_UPLOAD_NOT_IMAGE', 'The file is not a known image format' );
-if ( ! defined( '_ERROR_UPLOAD_IMAGE_WIDTH' ) ) define( '_ERROR_UPLOAD_IMAGE_WIDTH', "The image is not allowed because the width is greater than the maximum of %d pixels" );
-if ( ! defined( '_ERROR_UPLOAD_IMAGE_HEIGHT' ) ) define( '_ERROR_UPLOAD_IMAGE_HEIGHT', "The image is not allowed because the height is greater than the maximum of %d pixels" );
-if ( ! defined( '_ERROR_UPLOAD_FORBIDDEN' ) ) define( '_ERROR_UPLOAD_FORBIDDEN', "Upload forbidden" );
-if ( ! defined( '_ERROR_UPLOAD_WRITABLE' ) ) define( '_ERROR_UPLOAD_WRITABLE', "Directory %s is not writable" );
-if ( ! defined( '_ERROR_UPLOAD_URLFILE' ) ) define( '_ERROR_UPLOAD_URLFILE', "The URL is not valid and cannot be loaded" );
-if ( ! defined( '_ERROR_UPLOAD_URL_NOTFOUND' ) ) define( '_ERROR_UPLOAD_URL_NOTFOUND', "This url was not found" );
+define( '_ERROR_UPLOAD_NAMEEMPTY', isset( $lang_global['error_uploadNameEmpty'] ) ? $lang_global['error_uploadNameEmpty'] : "Upload failed: UserFile Name is empty" );
+define( '_ERROR_UPLOAD_SIZEEMPTY', isset( $lang_global['error_uploadSizeEmpty'] ) ? $lang_global['error_uploadSizeEmpty'] : "Upload failed: UserFile Size is empty" );
+define( '_ERROR_UPLOAD_INI_SIZE', isset( $lang_global['error_upload_ini_size'] ) ? $lang_global['error_upload_ini_size'] : 'The uploaded file exceeds the upload_max_filesize directive in php.ini' );
+define( '_ERROR_UPLOAD_FORM_SIZE', isset( $lang_global['error_upload_form_size'] ) ? $lang_global['error_upload_form_size'] : 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form' );
+define( '_ERROR_UPLOAD_PARTIAL', isset( $lang_global['error_upload_partial'] ) ? $lang_global['error_upload_partial'] : 'The uploaded file was only partially uploaded' );
+define( '_ERROR_UPLOAD_NO_FILE', isset( $lang_global['error_upload_no_file'] ) ? $lang_global['error_upload_no_file'] : 'No file was uploaded' );
+define( '_ERROR_UPLOAD_NO_TMP_DIR', isset( $lang_global['error_upload_no_tmp_dir'] ) ? $lang_global['error_upload_no_tmp_dir'] : 'Missing a temporary folder' );
+define( '_ERROR_UPLOAD_CANT_WRITE', isset( $lang_global['error_upload_cant_write'] ) ? $lang_global['error_upload_cant_write'] : 'Failed to write file to disk' );
+define( '_ERROR_UPLOAD_EXTENSION', isset( $lang_global['error_upload_extension'] ) ? $lang_global['error_upload_extension'] : 'File upload stopped by extension' );
+define( '_ERROR_UPLOAD_UNKNOWN', isset( $lang_global['error_upload_unknown'] ) ? $lang_global['error_upload_unknown'] : 'Unknown upload error' );
+define( '_ERROR_UPLOAD_TYPE_NOT_ALLOWED', isset( $lang_global['error_upload_type_not_allowed'] ) ? $lang_global['error_upload_type_not_allowed'] : 'Files of this type are not allowed' );
+define( '_ERROR_UPLOAD_MIME_NOT_RECOGNIZE', isset( $lang_global['error_upload_mime_not_recognize'] ) ? $lang_global['error_upload_mime_not_recognize'] : 'System does not recognize the mime type of uploaded file' );
+define( '_ERROR_UPLOAD_MAX_USER_SIZE', isset( $lang_global['error_upload_max_user_size'] ) ? $lang_global['error_upload_max_user_size'] : "The file exceeds the maximum size allowed. Maximum size is %d bytes" );
+define( '_ERROR_UPLOAD_NOT_IMAGE', isset( $lang_global['error_upload_not_image'] ) ? $lang_global['error_upload_not_image'] : 'The file is not a known image format' );
+define( '_ERROR_UPLOAD_IMAGE_FAILED', isset( $lang_global['error_upload_image_failed'] ) ? $lang_global['error_upload_image_failed'] : "Image Content is failed" );
+define( '_ERROR_UPLOAD_IMAGE_WIDTH', isset( $lang_global['error_upload_image_width'] ) ? $lang_global['error_upload_image_width'] : "The image is not allowed because the width is greater than the maximum of %d pixels" );
+define( '_ERROR_UPLOAD_IMAGE_HEIGHT', isset( $lang_global['error_upload_image_height'] ) ? $lang_global['error_upload_image_height'] : "The image is not allowed because the height is greater than the maximum of %d pixels" );
+define( '_ERROR_UPLOAD_FORBIDDEN', isset( $lang_global['error_upload_forbidden'] ) ? $lang_global['error_upload_forbidden'] : "Upload forbidden" );
+define( '_ERROR_UPLOAD_WRITABLE', isset( $lang_global['error_upload_writable'] ) ? $lang_global['error_upload_writable'] : "Directory %s is not writable" );
+define( '_ERROR_UPLOAD_URLFILE', isset( $lang_global['error_upload_urlfile'] ) ? $lang_global['error_upload_urlfile'] : "The URL is not valid and cannot be loaded" );
+define( '_ERROR_UPLOAD_URL_NOTFOUND', isset( $lang_global['error_upload_url_notfound'] ) ? $lang_global['error_upload_url_notfound'] : "The url was not found" );
 
 /**
  * upload
@@ -361,7 +363,7 @@ class upload
                         $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $mime );
                     }
 
-                    if ( empty( $mime ) and isset($this->img_info[2]) )
+                    if ( empty( $mime ) and isset( $this->img_info[2] ) )
                     {
                         $mime = image_type_to_mime_type( $this->img_info[2] );
                     }
@@ -449,15 +451,15 @@ class upload
      */
     private function check_tmpfile( $userfile )
     {
-        if ( empty( $userfile ) ) return _ERROR_UPLOAD_FAILED . " (userfile is empty)";
+        if ( empty( $userfile ) ) return _ERROR_UPLOAD_NO_FILE;
 
-        if ( ! isset( $userfile['name'] ) or empty( $userfile['name'] ) ) return _ERROR_UPLOAD_FAILED . " (userfile name is empty)";
-        if ( ! isset( $userfile['size'] ) or empty( $userfile['size'] ) ) return _ERROR_UPLOAD_FAILED . " (userfile size is empty)";
+        if ( ! isset( $userfile['name'] ) or empty( $userfile['name'] ) ) return _ERROR_UPLOAD_NAMEEMPTY;
+        if ( ! isset( $userfile['size'] ) or empty( $userfile['size'] ) ) return _ERROR_UPLOAD_SIZEEMPTY;
         if ( ! empty( $this->config['maxsize'] ) and $userfile['size'] > $this->config['maxsize'] )
         {
             return sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->config['maxsize'] );
         }
-        if ( ! isset( $userfile['tmp_name'] ) or empty( $userfile['tmp_name'] ) or ! file_exists( $userfile['tmp_name'] ) ) return _ERROR_UPLOAD_FAILED . " (userfile size is empty)";
+        if ( ! isset( $userfile['tmp_name'] ) or empty( $userfile['tmp_name'] ) or ! file_exists( $userfile['tmp_name'] ) ) return _ERROR_UPLOAD_SIZEEMPTY;
         if ( ! isset( $userfile['error'] ) or $userfile['error'] != UPLOAD_ERR_OK )
         {
             switch ( $userfile['error'] )
@@ -507,9 +509,9 @@ class upload
             $this->is_img = true;
             if ( empty( $this->img_info ) ) $this->img_info = @getimagesize( $userfile['tmp_name'] );
 
-            if ( empty( $this->img_info ) or ! isset( $this->img_info[0] ) or empty( $this->img_info[0] ) or ! isset( $this->img_info[1] ) or empty( $this->img_info[1] ) ) return _ERROR_UPLOAD_NOT_IMAGE . " (imgInfo is empty)";
+            if ( empty( $this->img_info ) or ! isset( $this->img_info[0] ) or empty( $this->img_info[0] ) or ! isset( $this->img_info[1] ) or empty( $this->img_info[1] ) ) return _ERROR_UPLOAD_NOT_IMAGE;
 
-            if ( ! $this->verify_image( $userfile['tmp_name'] ) ) return _ERROR_UPLOAD_NOT_IMAGE . " (imgContent is failed)";
+            if ( ! $this->verify_image( $userfile['tmp_name'] ) ) return _ERROR_UPLOAD_IMAGE_FAILED;
 
             if ( ! empty( $this->config['maxwidth'] ) and $this->img_info[0] > $this->config['maxwidth'] ) return sprintf( _ERROR_UPLOAD_IMAGE_WIDTH, $this->config['maxwidth'] );
 
@@ -611,7 +613,7 @@ class upload
 
         if ( ! file_exists( $savepath . $filename ) )
         {
-            $return['error'] = _ERROR_UPLOAD_FAILED;
+            $return['error'] = _ERROR_UPLOAD_CANT_WRITE;
             return $return;
         }
 
@@ -997,7 +999,7 @@ class upload
         if ( $result === false )
         {
             @unlink( $this->temp_file );
-            $return['error'] = _ERROR_UPLOAD_FAILED . " (urlfile is empty)";
+            $return['error'] = _ERROR_UPLOAD_NO_FILE;
             return $return;
         }
 
@@ -1026,14 +1028,14 @@ class upload
             if ( empty( $this->img_info ) or ! isset( $this->img_info[0] ) or empty( $this->img_info[0] ) or ! isset( $this->img_info[1] ) or empty( $this->img_info[1] ) )
             {
                 @unlink( $this->temp_file );
-                $return['error'] = _ERROR_UPLOAD_NOT_IMAGE . " (imgInfo is empty)";
+                $return['error'] = _ERROR_UPLOAD_NOT_IMAGE;
                 return $return;
             }
 
             if ( ! $this->verify_image( $this->temp_file ) )
             {
                 @unlink( $this->temp_file );
-                $return['error'] = _ERROR_UPLOAD_NOT_IMAGE . " (imgContent is failed)";
+                $return['error'] = _ERROR_UPLOAD_IMAGE_FAILED;
                 return $return;
             }
 
@@ -1092,7 +1094,7 @@ class upload
         if ( ! file_exists( $savepath . $filename ) )
         {
             @unlink( $this->temp_file );
-            $return['error'] = _ERROR_UPLOAD_FAILED;
+            $return['error'] = _ERROR_UPLOAD_CANT_WRITE;
             return $return;
         }
 

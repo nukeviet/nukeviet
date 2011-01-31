@@ -54,4 +54,27 @@ $lang_global['login_error_security'] = "Error: Security Code not valid ! (Only L
 $lang_global['error_zlib_support'] = "Error: Your server does not support zlib extension, You need contact your hosting provider to enable the zlib extension.";
 $lang_global['error_zip_extension'] = "Error: Your server does not support ZIP extension, You need contact your hosting provider to enable the ZIP extension.";
 
+//UPLOAD
+$lang_global['error_uploadNameEmpty'] = "UserFile Name is empty";
+$lang_global['error_uploadSizeEmpty'] = "UserFile Size is empty";
+$lang_global['error_upload_ini_size'] = "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+$lang_global['error_upload_form_size'] = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+$lang_global['error_upload_partial'] = "The uploaded file was only partially uploaded";
+$lang_global['error_upload_no_file'] = "No file was uploaded";
+$lang_global['error_upload_no_tmp_dir'] = "Missing a temporary folder";
+$lang_global['error_upload_cant_write'] = "Failed to write file to disk";
+$lang_global['error_upload_extension'] = "File upload stopped by extension";
+$lang_global['error_upload_unknown'] = "Unknown upload error";
+$lang_global['error_upload_type_not_allowed'] = "Files of this type are not allowed";
+$lang_global['error_upload_mime_not_recognize'] = "System does not recognize the mime type of uploaded file";
+$lang_global['error_upload_max_user_size'] = "The file exceeds the maximum size allowed. Maximum size is %d bytes";
+$lang_global['error_upload_not_image'] = "The file is not a known image format";
+$lang_global['error_upload_image_failed'] = "Image Content is failed";
+$lang_global['error_upload_image_width'] = "The image is not allowed because the width is greater than the maximum of %d pixels";
+$lang_global['error_upload_image_height'] = "The image is not allowed because the height is greater than the maximum of %d pixels";
+$lang_global['error_upload_forbidden'] = "Upload forbidden";
+$lang_global['error_upload_writable'] = "Directory %s is not writable";
+$lang_global['error_upload_urlfile'] = "The URL is not valid and cannot be loaded";
+$lang_global['error_upload_url_notfound'] = "The url was not found";
+
 ?>
