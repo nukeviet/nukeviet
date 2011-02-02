@@ -483,7 +483,7 @@ table.tab1 td, table.tab1 th {
     padding: 7px 5px 7px 5px
 }
 
-table.tab1 tfoot, table.tab1 .tfoot_box{
+table.tab1 tfoot, table.tab1 .tfoot_box {
     background: #CCC;
     font: bold 11px Tahoma, Verdana, sans-serif
 }
@@ -494,7 +494,7 @@ table.tab1 th {
     text-align: left
 }
 
-table.tab1 thead, table.tab1 .thead_box{
+table.tab1 thead, table.tab1 .thead_box {
     background: #8AB0FF;
     font: bold 11px / 18px Tahoma, Verdana, sans-serif;
     white-space: nowrap
@@ -620,17 +620,8 @@ table.tab1 td {
     width: 1000px;
 }
 
-#top_menu {
-    background: url('../images/top_menu_bg.jpg') repeat-x left top;
-    color: #E0E0E0;
-    display: block;
-    font: bold 11px / 27px Arial, Verdana, sans-serif;
-    height: 27px;
-    position: relative
-}
-
 #topmenu {
-    background:#0D43B0 url(../images/top_menu_bg.jpg) repeat-x;
+    background: #0D43B0 url(../images/top_menu_bg.jpg) repeat-x;
     color: #E0E0E0;
 }
 
@@ -688,67 +679,6 @@ table.tab1 td {
 
 #topmenu ul li.current a span strong {
     color: #ff0000;
-}
-
-#top_menu div.right {
-    float: right;
-    font: bold 11px / 27px Arial, Verdana, sans-serif;
-    height: 27px;
-    position: absolute;
-    right: 10px;
-    text-align: right;
-}
-
-#top_menu ul {
-    float: left;
-    height: 27px;
-    list-style: none;
-    margin: 0 10px;
-}
-
-#top_menu ul li {
-    float: left;
-}
-
-#top_menu ul li a {
-    color: #e9f6fe;
-    cursor: pointer;
-    display: block;
-    font: bold 11px / 27px Arial, Verdana, sans-serif;
-    height: 27px;
-    line-height: 27px;
-    padding: 0px 0px 0 8px;
-    text-align: center;
-    text-decoration: none;
-    float: left;
-}
-
-#top_menu ul li a span {
-    color: #0F0;
-    float: left;
-}
-
-#top_menu ul li a strong {
-    color: #e9f6fe;
-    cursor: pointer;
-    float: left;
-    display: block;
-    font: bold 11px / 27px Arial, Verdana, sans-serif;
-    height: 27px;
-    line-height: 27px;
-    padding: 0px 10px 0 8px;
-    text-align: center;
-    text-decoration: none
-}
-
-#top_menu ul li.current a {
-    background: url('../images/top_menu_bg.jpg') no-repeat left -54px;
-    color: #fff
-}
-
-#top_menu ul li.current a strong {
-    background: url('../images/top_menu_bg.jpg') no-repeat right -54px;
-    color: #fff
 }
 
 #top_message {
@@ -836,7 +766,7 @@ div.quote blockquote.error, #middle_column_r div.info span {
     color: #cb0000
 }
 
-span.row, sup.required, #top_menu ul li.current a span {
+span.row, sup.required {
     color: #F00
 }
 
@@ -848,30 +778,6 @@ span.row, sup.required, #top_menu ul li.current a span {
 #middle_column_r div.info div.go a, #middle_column_r div.info a:hover {
     color: #333;
     text-decoration: none
-}
-
-#top_menu ul li a:hover {
-    background: url('../images/top_menu_bg.jpg') no-repeat left -27px;
-    color: #fff
-}
-
-#top_menu ul li a:hover span {
-    color: #fff
-}
-
-#top_menu ul li a:hover strong {
-    background: url('../images/top_menu_bg.jpg') no-repeat right -27px;
-    color: #fff
-}
-
-#top_menu ul li.current a:hover {
-    background: #000 url('../images/top_menu_bg.jpg') no-repeat left -27px;
-    color: #e9f6fe
-}
-
-#top_menu ul li.current a:hover strong {
-    background: url('../images/top_menu_bg.jpg') no-repeat right -27px;
-    color: #e9f6fe
 }
 
 #ver_menu a.current:hover {
@@ -954,11 +860,11 @@ html[xmlns] .clearfix {
     height: 1%;
 }
 
-.tab2 td, .tab2 tr,.tab2 tbody{
-	margin:0;
-	padding:0;
+.tab2 td, .tab2 tr, .tab2 tbody {
+    margin: 0;
+    padding: 0;
 }
 
-.message_head{
-	margin:0;
+.message_head {
+    margin: 0;
 }
