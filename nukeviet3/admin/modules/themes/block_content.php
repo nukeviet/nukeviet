@@ -537,10 +537,13 @@ if ( preg_match( $global_config['check_block_module'], $row['file_name'], $match
         {
             $load_block_config = true;
         }
-        $contents .= '<script type="text/javascript">
+        if ( ! preg_match( $global_config['check_block_global'], $row['file_name'] ) )
+        {
+            $contents .= '<script type="text/javascript">
 					$("tbody.funclist").css({"display":"none"});
 					$("tbody#idmodule_' . $row['module'] . '").css({"display":"block"});
    				 </script>';
+        }
     }
 }
 
@@ -563,7 +566,7 @@ if ( $load_block_config )
 }
 else
 {
-	$contents .= "$(\"#block_config\").hide();\n";
+    $contents .= "$(\"#block_config\").hide();\n";
 }
 
 $contents .= '	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadblocks&module=' . $row['module'] . '&bid=' . $row['bid'] . '");
