@@ -41,7 +41,7 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
     // Create class instance.
     $editortoolbar = array( 
         array( 
-        'Cut', 'Copy', 'Paste', 'PasteText', 'PasteWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'Table', 'Font', 'FontSize', 'RemoveFormat', 'Templates', 'Maximize' 
+        'Cut', 'Copy', 'Paste', 'PasteText', 'PasteWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'jwplayer', 'Table', 'Font', 'FontSize', 'RemoveFormat', 'Templates', 'Maximize' 
     ), array( 
         'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'Smiley', 'PageBreak', 'Source', 'About' 
     ) 
@@ -50,6 +50,7 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
     $CKEditor = new CKEditor();
     // Do not print the code directly to the browser, return it instead
     $CKEditor->returnOutput = true;
+    $CKEditor->config['extraPlugins'] = 'jwplayer';
     $CKEditor->config['skin'] = 'v2';
     $CKEditor->config['entities'] = false;
     //$CKEditor->config['enterMode'] = 2;
