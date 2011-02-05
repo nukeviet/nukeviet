@@ -1347,17 +1347,22 @@ class XTemplate
 
 		if ( $this->_error != '' )
 		{
-
-			switch ( $this->output_type )
+			if ( defined( 'NV_MAINFILE') )
 			{
-				case 'HTML':
-				case 'html':
-					$retval = '<b>[XTemplate]</b><ul>' . nl2br( str_replace( '* ', '<li>', str_replace( " *\n", "</li>\n", $this->_error ) ) ) . '</ul>';
-					break;
-
-				default:
-					$retval = '[XTemplate] ' . str_replace( ' *\n', "\n", $this->_error );
-					break;
+				trigger_error(str_replace(" *\n", "<br />", $this->_error ), E_USER_WARNING );
+			}
+			else{
+				switch ( $this->output_type )
+				{
+					case 'HTML':
+					case 'html':
+						$retval = '<b>[XTemplate]</b><ul>' . nl2br( str_replace( '* ', '<li>', str_replace( " *\n", "</li>\n", $this->_error ) ) ) . '</ul>';
+						break;
+	
+					default:
+						$retval = '[XTemplate] ' . str_replace( ' *\n', "\n", $this->_error );
+						break;
+				}
 			}
 		}
 
@@ -1641,6 +1646,13 @@ class XTemplate
 				$file = $this->tpldir . DIRECTORY_SEPARATOR . $file;
 			}
 		}
+		
+		// NukeViet fix error path file
+		$path_file = $file;
+		if ( defined( 'NV_ROOTDIR' ) ){
+			$path_file = str_replace( "\\", "/", $path_file );
+			$path_file = str_replace( NV_ROOTDIR . "/", "", $path_file );
+		}		
 
 		$file_text = '';
 
@@ -1651,7 +1663,7 @@ class XTemplate
 
 			if ( $this->debug && $this->output_type == 'HTML' )
 			{
-				$file_text = '<!-- XTemplate debug CACHED: ' . realpath( $file ) . ' -->' . "\n" . $file_text;
+				$file_text = '<!-- XTemplate debug CACHED: ' . $path_file . ' -->' . "\n" . $file_text;
 			}
 
 		}
@@ -1667,7 +1679,7 @@ class XTemplate
 					if ( ! ( $fh = fopen( $file, 'r' ) ) )
 					{
 
-						$this->_set_error( 'Cannot open file: ' . realpath( $file ) );
+						$this->_set_error( 'Cannot open file: ' . $path_file );
 						return '';
 					}
 
@@ -1678,41 +1690,41 @@ class XTemplate
 
 				if ( $this->debug && $this->output_type == 'HTML' )
 				{
-					$file_text = '<!-- XTemplate debug: ' . realpath( $file ) . ' -->' . "\n" . $file_text;
+					$file_text = '<!-- XTemplate debug: ' . $path_file . ' -->' . "\n" . $file_text;
 				}
 
-			} elseif ( str_replace( '.', '', phpversion() ) >= '430' && $file_text = @file_get_contents( $file, true ) )
+			} elseif ( is_file( $file ) && $file_text = @file_get_contents( $file, true ) )
 			{
 				// Enable use of include path by using file_get_contents
 				// Implemented at suggestion of SF Feature Request ID #1529478 michaelgroh
 				if ( $file_text === false )
 				{
-					$this->_set_error( "[" . realpath( $file ) . "] ($file) does not exist" );
+					$this->_set_error( "[" . $path_file . "] does not exist" );
 					if ( $this->output_type == 'HTML' )
 					{
-						$file_text = "<b>__XTemplate fatal error: file [$file] does not exist in the include path__</b>";
+						$file_text = "<b>__XTemplate fatal error: file [$path_file] does not exist in the include path__</b>";
 					}
 				} elseif ( $this->debug && $this->output_type == 'HTML' )
 				{
-					$file_text = '<!-- XTemplate debug (via include path): ' . realpath( $file ) . ' -->' . "\n" . $file_text;
+					$file_text = '<!-- XTemplate debug (via include path): ' . $path_file . ' -->' . "\n" . $file_text;
 				}
 			} elseif ( ! is_file( $file ) )
 			{
 
 				// NW 17 Oct 2002 : Added realpath around the file name to identify where the code is searching.
-				$this->_set_error( "[" . realpath( $file ) . "] ($file) does not exist" );
+				$this->_set_error( "[" . $path_file . "] does not exist" );
 				if ( $this->output_type == 'HTML' )
 				{
-					$file_text .= "<b>__XTemplate fatal error: file [$file] does not exist__</b>";
+					$file_text .= "<b>__XTemplate fatal error: file [$path_file] does not exist__</b>";
 				}
 
 			} elseif ( ! is_readable( $file ) )
 			{
 
-				$this->_set_error( "[" . realpath( $file ) . "] ($file) is not readable" );
+				$this->_set_error( "[" . $path_file . "] is not readable" );
 				if ( $this->output_type == 'HTML' )
 				{
-					$file_text .= "<b>__XTemplate fatal error: file [$file] is not readable__</b>";
+					$file_text .= "<b>__XTemplate fatal error: file [$path_file] is not readable__</b>";
 				}
 			}
 
