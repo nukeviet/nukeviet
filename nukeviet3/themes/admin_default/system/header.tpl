@@ -6,7 +6,7 @@
         <meta http-equiv="refresh" content="{NV_ADMIN_CHECK_PASS_TIME}" />
         <meta name="copyright" content="{NV_SITE_COPYRIGHT}" />
         <meta name="generator" content="{NV_SITE_NAME}" />
-        <meta http-equiv="X-UA-Compatible"content="IE=EmulateIE8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=8" />
         <title>{NV_SITE_TITLE}</title>
         <link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/admin.css" type="text/css" />
         <!-- BEGIN: css_module -->
