@@ -93,7 +93,7 @@ $contents .= "</tr>";
 $contents .= "<tr>";
 $contents .= "<td valign=\"top\" align=\"right\"  width=\"100\"><strong>" . $lang_module['alias'] . ": </strong></td>\n";
 $contents .= "<td><input style=\"width: 600px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $alias . "\" maxlength=\"255\" />\n";
-$contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" width=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\" />\n";
+$contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" width=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias('topics'," . $topicid . ");\" alt=\"\" height=\"16\" />\n";
 $contents .= "</td>\n";
 $contents .= "</tr>";
 $contents .= "</tbody>";
@@ -119,7 +119,7 @@ if ( empty( $alias ) )
 {
     $contents .= "<script type=\"text/javascript\">\n";
     $contents .= '$("#idtitle").change(function () {
-                    get_alias();
+                    get_alias("topics",'.$topicid.');
                 });';
     $contents .= "\n</script>\n";
 }

@@ -198,9 +198,9 @@ if ( ! empty( $array_cat_list ) )
     $a ++;
     $contents .= "<tbody" . $class . ">";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"  width=\"100\"><strong>" . $lang_module['alias'] . ": </strong></td>\n";
+    $contents .= "<td valign=\"top\" align=\"right\"><strong>" . $lang_module['alias'] . ": </strong></td>\n";
     $contents .= "<td><input style=\"width: 550px\" name=\"alias\" type=\"text\" value=\"" . $alias . "\" maxlength=\"255\" id=\"idalias\"/>";
-    $contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" width=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias();\" alt=\"\" height=\"16\" />\n";
+    $contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" width=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias('cat',".$catid.");\" alt=\"\" height=\"16\" />\n";
     $contents .= "</td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>";
@@ -242,7 +242,7 @@ if ( ! empty( $array_cat_list ) )
     $contents .= "<tbody" . $class . ">";
     
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"  width=\"100\"><br /><strong>" . $lang_module['description'] . " </strong></td>\n";
+    $contents .= "<td valign=\"top\" align=\"right\"><br /><strong>" . $lang_module['description'] . " </strong></td>\n";
     $contents .= "<td>";
     $contents .= "<textarea style=\"width: 600px\" name=\"description\" cols=\"100\" rows=\"5\">" . $description . "</textarea>";
     $contents .= "</td>";
@@ -295,7 +295,7 @@ if ( ! empty( $array_cat_list ) )
     {
         $contents .= "<script type=\"text/javascript\">\n";
         $contents .= '$("#idtitle").change(function () {
-                    get_alias();
+                    get_alias("cat",0);
                 });';
         $contents .= "</script>\n";
     }

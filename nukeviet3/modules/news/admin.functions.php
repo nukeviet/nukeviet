@@ -308,14 +308,21 @@ function nv_show_cat_list ( $parentid = 0 )
     if ( $num > 0 )
     {
         $contents .= "<table class=\"tab1\">\n";
+        $contents .= "<col style=\"white-space: nowrap;\" />";
+        $contents .= "<col style=\"white-space: nowrap;\" />";
+        $contents .= "<col style=\"white-space: nowrap;\" />";
+        $contents .= "<col style=\"white-space: nowrap;\" />";
+        $contents .= "<col style=\"white-space: nowrap;\" />";
+        $contents .= "<col style=\"white-space: nowrap;\" />";
+        
         $contents .= "<thead>\n";
         $contents .= "<tr>\n";
-        $contents .= "<td align=\"center\" style=\"width:40px;\">" . $lang_module['weight'] . "</td>\n";
+        $contents .= "<td align=\"center\">" . $lang_module['weight'] . "</td>\n";
         $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-        $contents .= "<td align=\"center\" style=\"width:150px;\">" . $lang_module['inhome'] . "</td>\n";
+        $contents .= "<td align=\"center\">" . $lang_module['inhome'] . "</td>\n";
         $contents .= "<td>" . $lang_module['viewcat_page'] . "</td>\n";
-        $contents .= "<td align=\"center\" style=\"width:90px;\">" . $lang_module['numlinks'] . "</td>\n";
-        $contents .= "<td style=\"width:200px;\"></td>\n";
+        $contents .= "<td align=\"center\">" . $lang_module['numlinks'] . "</td>\n";
+        $contents .= "<td></td>\n";
         $contents .= "</tr>\n";
         $contents .= "</thead>\n";
         $a = 1;
@@ -380,7 +387,7 @@ function nv_show_cat_list ( $parentid = 0 )
                     $contents .= "</select>";
                 }
                 $contents .= "</td>\n";
-                $contents .= "<td><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid . "\"><strong>" . $title . "</strong></a>";
+                $contents .= "<td nowrap=\"nowrap\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid . "\"><strong>" . $title . "</strong></a>";
                 if ( $numsubcat > 0 ) $contents .= "  <span style=\"color:#FF0101;\">(" . $numsubcat . ")</span>";
                 $contents .= "</td>\n";
                 $contents .= "<td align=\"center\">";
@@ -429,7 +436,7 @@ function nv_show_cat_list ( $parentid = 0 )
                     $contents .= "</select>";
                 }
                 $contents .= "</td>\n";
-                $contents .= "<td align=\"center\">";
+                $contents .= "<td nowrap=\"nowrap\" align=\"center\">";
                 $contents .= implode( "&nbsp;-&nbsp;", $admin_funcs );
                 $contents .= "</td>\n";
                 $contents .= "</tr>\n";

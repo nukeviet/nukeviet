@@ -377,10 +377,10 @@ function res_keywords(res) {
 }
 
 //---------------------------------------
-function get_alias() {
+function get_alias(mod,id) {
 	var title = strip_tags(document.getElementById('idtitle').value);
 	if (title != '') {
-		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&title=' + encodeURIComponent(title), '', 'res_get_alias');
+		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&title=' + encodeURIComponent(title)+'&mod='+mod+'&id='+id, '', 'res_get_alias');
 	}
 	return false;
 }
