@@ -33,7 +33,7 @@
         <!-- END: mainloop -->
     </ul>
     <!-- END: news_cat -->
-	<span id="digclock" class="small update fr">{THEME_DIGCLOCK_TEXT} </span>
+	<span id="digclock" class="fr" style="position: relative; bottom: 24px;right: 10px;">{THEME_DIGCLOCK_TEXT} </span>
     <div class="clear"></div>
 </div>
 <!-- END: main -->
