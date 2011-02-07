@@ -168,7 +168,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     }
     else
     {
-        if ( $all_func )
+        if ( $all_func and preg_match( $global_config['check_block_global'], $row['file_name'] ) )
         {
             $array_funcid = array();
             $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC" );
@@ -177,7 +177,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                 $array_funcid[] = $func_id_i;
             }
         }
-        else if ( ! empty( $row['module'] ) and isset( $site_mods[$row['module']] ) )
+        else if ( ! empty( $row['module'] ) and isset( $site_mods[$row['module']] ) and ! preg_match( $global_config['check_block_global'], $row['file_name'] ) )
         {
             $array_funcid_module = array();
             $func_result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' AND `in_module`='" . $row['module'] . "' ORDER BY `in_module` ASC, `subweight` ASC" );
