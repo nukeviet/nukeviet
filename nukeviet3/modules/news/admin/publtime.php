@@ -15,7 +15,7 @@ if ( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string(
 
     $publ_array = array();
     
-    $sql = "SELECT `id`, `listcatid`, `status`, `publtime`, `exptime`  FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE `id` in (" . implode( ",", $id_array ) . ")";
+    $sql = "SELECT `id`, `listcatid`, `status`, `publtime`, `exptime`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` in (" . implode( ",", $id_array ) . ")";
     $result = $db->sql_query( $sql );
     while ( list( $id, $listcatid, $status, $publtime, $exptime ) = $db->sql_fetchrow( $result ) )
     {

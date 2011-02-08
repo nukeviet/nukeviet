@@ -161,7 +161,7 @@ else
     $array_answervote = array();
     if ( $vid > 0 )
     {
-        $queryvote = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE vid=" . $vid . "";
+        $queryvote = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE vid=" . $vid . "";
         $rowvote = $db->sql_fetchrow( $db->sql_query( $queryvote ) );
 
         $sql = "SELECT `id`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`='" . $vid . "' ORDER BY `id` ASC";

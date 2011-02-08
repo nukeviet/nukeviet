@@ -14,7 +14,7 @@ while ( $row = $db->sql_fetchrow ( $result ) ) {
 	$$row ['name'] = $row ['value'];
 }
 $link = $nv_Request->get_int ( 'id', 'get' );
-$subsql = "SELECT id, title, url, urlimg, add_time, description,hits_total FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status='1' AND id='" . $link . "'";
+$subsql = "SELECT id, title, url, urlimg, add_time, description,hits_total FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE status='1' AND id='" . $link . "'";
 $subresult = $db->sql_query ( $subsql );
 $contents .= '<tr><td valign="top">';
 $subrow = $db->sql_fetchrow ( $subresult );

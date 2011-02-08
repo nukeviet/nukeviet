@@ -18,7 +18,7 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if ( $id > 0 )
 {
-    list( $id, $click_url ) = $db->sql_fetchrow( $db->sql_query( "SELECT id, click_url FROM " . NV_BANNERS_ROWS_GLOBALTABLE . " WHERE id='$id' AND act='1'" ) );
+    list( $id, $click_url ) = $db->sql_fetchrow( $db->sql_query( "SELECT id, click_url FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE id='$id' AND act='1'" ) );
     if ( $id > 0 and ! empty( $click_url ) )
     {
         $links = $click_url;

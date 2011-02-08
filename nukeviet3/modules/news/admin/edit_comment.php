@@ -10,8 +10,8 @@ $page_title = $lang_module['comment_edit_title'];
 $cid = $nv_Request->get_int( 'cid', 'get' );
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_comment', "id ".$cid , $admin_info['userid'] );
-	$sql = "SELECT a.id, a.title, a.listcatid, a.alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_comments` b ON a.id=b.id WHERE b.cid='" . $cid . "'";
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_comment', "id " . $cid, $admin_info['userid'] );
+    $sql = "SELECT a.id, a.title, a.listcatid, a.alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_comments` b ON a.id=b.id WHERE b.cid='" . $cid . "'";
     
     list( $id, $title, $listcatid, $alias ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
     if ( $id > 0 )
@@ -19,14 +19,14 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         $delete = $nv_Request->get_int( 'delete', 'post', 0 );
         if ( $delete )
         {
-            $db->sql_query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE cid=' . $cid . '' );
+            $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `cid`=" . $cid );
         }
         else
         {
-            $content = nv_nl2br(filter_text_textarea( 'content', '', NV_ALLOWED_HTML_TAGS ));
+            $content = nv_nl2br( filter_text_textarea( 'content', '', NV_ALLOWED_HTML_TAGS ) );
             $active = $nv_Request->get_int( 'active', 'post', 0 );
             $status = ( $status == 1 ) ? 1 : 0;
-            $db->sql_query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET content=' . $db->dbescape( $content ) . ', status=' . $active . ' WHERE cid=' . $cid . '' );
+            $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_comments` SET `content`=" . $db->dbescape( $content ) . ", `status`=" . $active . " WHERE `cid`=" . $cid );
         }
         
         // Cap nhat lai so luong comment duoc kich hoat
@@ -39,7 +39,8 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
             $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
             $db->sql_query( $query );
         }
-        // Het Cap nhat lai so luong comment duoc kich hoat
+    
+    // Het Cap nhat lai so luong comment duoc kich hoat
     }
     header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment' );
     die();

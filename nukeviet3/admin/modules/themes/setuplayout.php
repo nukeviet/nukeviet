@@ -100,7 +100,7 @@ elseif ( $array_layout_func_data[0] != $layoutdefault )
 }
 
 $array_layout_func = array();
-$fnsql = "SELECT func_id, func_name, func_custom_name, in_module FROM " . NV_MODFUNCS_TABLE . " WHERE show_func='1' ORDER BY `subweight` ASC";
+$fnsql = "SELECT func_id, func_name, func_custom_name, in_module FROM `" . NV_MODFUNCS_TABLE . "` WHERE show_func='1' ORDER BY `subweight` ASC";
 $fnresult = $db->sql_query( $fnsql );
 while ( list( $func_id, $func_name, $func_custom_name, $in_module ) = $db->sql_fetchrow( $fnresult ) )
 {

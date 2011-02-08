@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
 $rssarray = array();
-$result2 = $db->sql_query( "SELECT catid, parentid, title, alias, numsubcat, subcatid FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat ORDER BY weight,`order`" );
+$result2 = $db->sql_query( "SELECT catid, parentid, title, alias, numsubcat, subcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY weight,`order`" );
 while ( list( $catid, $parentid, $title, $alias, $numsubcat, $subcatid ) = $db->sql_fetchrow( $result2 ) )
 {
     $rssarray[$catid] = array( 

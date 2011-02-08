@@ -17,9 +17,9 @@ if ( $db->sql_numrows( $result ) )
     {
         nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'], false );
     }
-    $sql = "DELETE FROM " . NV_BANNERS_ROWS_GLOBALTABLE . " WHERE id='$id'";
+    $sql = "DELETE FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE id='$id'";
     $result1 = $db->sql_query( $sql );
-    $sql = "DELETE FROM " . NV_BANNERS_CLICK_GLOBALTABLE . " WHERE bid='$id'";
+    $sql = "DELETE FROM `" . NV_BANNERS_CLICK_GLOBALTABLE . "` WHERE bid='$id'";
     $result = $db->sql_query( $sql );
     
     nv_CreateXML_bannerPlan();
