@@ -281,6 +281,7 @@ elseif ( $step == 5 )
     $db_config['db_detete'] = $nv_Request->get_int( 'db_detete', 'post', '0' );
     $db_config['num_table'] = 0;
     $db_config['create_db'] = 1;
+    $db_config['prefix'] = preg_replace( '/(\W+)/i', '_', $db_config['prefix'] );
     if ( ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
     {
         $db = new sql_db( $db_config );
@@ -428,8 +429,7 @@ elseif ( $step == 5 )
                     Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
                     exit();
                 }
-            
-    //Het cai dat du lieu cho cac module
+			    //Het cai dat du lieu cho cac module
             }
         }
     }
@@ -499,12 +499,10 @@ elseif ( $step == 6 )
         elseif ( empty( $question ) )
         {
             $error = $lang_module['your_question_empty'];
-            ;
         }
         elseif ( empty( $answer_question ) )
         {
             $error = $lang_module['answer_empty'];
-            ;
         }
         else
         {
