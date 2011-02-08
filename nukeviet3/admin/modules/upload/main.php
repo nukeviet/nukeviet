@@ -60,6 +60,8 @@ else
     $xtpl->parse( 'uploadPage' );
     $contents = $xtpl->text( 'uploadPage' );
     $contents = nv_admin_theme( $contents );
+    $my_meta = "\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=8\" />";
+    $contents = preg_replace( '/(<head>)/i', "\\1" . $my_meta, $contents, 1 );
 }
 
 include ( NV_ROOTDIR . "/includes/header.php" );
