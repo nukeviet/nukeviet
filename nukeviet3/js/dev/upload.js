@@ -122,7 +122,7 @@ function checkNewSize()
     if( typeof d[0] != "undefined" )
     {
         $( "div[title=createInfo]" ).prepend( '<div class="red">' + d[0] + "</div>" );
-        $( "input[name=" + d[1] + "]" ).select();
+        $( "input[name='" + d[1] + "']" ).select();
         return false
     }
     a = calSize( a, b, 360, 230 );
@@ -177,7 +177,7 @@ function preview()
 {
     $( "div.dynamic" ).text( "" );
     $( "input.dynamic" ).val( "" );
-    var a = $( "input[name=selFile]" ).val(), b = $( "span#foldervalue" ).attr( "title" ), d = $( "img[title=" + a + "]" ).attr( "name" ), e = LANG.upload_size + ": ";
+    var a = $( "input[name=selFile]" ).val(), b = $( "span#foldervalue" ).attr( "title" ), d = $( "img[title='" + a + "']" ).attr( "name" ), e = LANG.upload_size + ": ";
     d = d.split( "|" );
     if( d[3] == "image" || d[2] == "swf" )
     {
@@ -196,7 +196,7 @@ function preview()
     else
     {
         e += d[4] + "<br />";
-        b = $( "div[title=" + a + "] div" ).html();
+        b = $( "div[title='" + a + "'] div" ).html();
         $( "div#fileView" ).html( b )
     }
     e += LANG.pubdate + ": " + d[6];
@@ -219,7 +219,7 @@ function create()
 {
     $( "div.dynamic" ).text( "" );
     $( "input.dynamic" ).val( "" );
-    var a = $( "input[name=selFile]" ).val(), b = $( "span#foldervalue" ).attr( "title" ), d = $( "img[title=" + a + "]" ).attr( "name" );
+    var a = $( "input[name=selFile]" ).val(), b = $( "span#foldervalue" ).attr( "title" ), d = $( "img[title='" + a + "']" ).attr( "name" );
     d = d.split( "|" );
     if( d[3] == "image" )
     {
@@ -681,7 +681,7 @@ $( "div#createfolder" ).dialog(
  );
 $( "input[name=newWidth], input[name=newHeight]" ).keyup( function()
 {
-    var a = $( this ).attr( "name" ), b = $( "input[name=" + a + "]" ).val(), d = $( "input[name=origWidth]" ).val(), e = $( "input[name=origHeight]" ).val(), g = calSizeMax( d, e, nv_max_width, nv_max_height );
+    var a = $( this ).attr( "name" ), b = $( "input[name='" + a + "']" ).val(), d = $( "input[name=origWidth]" ).val(), e = $( "input[name=origHeight]" ).val(), g = calSizeMax( d, e, nv_max_width, nv_max_height );
     g = a == "newWidth" ? g[0] : g[1];
     if( !is_numeric( b ) || b > g || b < 0 )
     {
