@@ -1,5 +1,4 @@
 <!-- BEGIN: main -->
-a
 <script type="text/javascript">
 var report_thanks_mess = '{LANG.report_thanks}';
 var comment_thanks_mess = '{LANG.comment_thanks}';
