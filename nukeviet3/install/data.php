@@ -19,7 +19,7 @@ define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
 define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );
 
 $sql_create_table[] = "CREATE TABLE `" . NV_AUTHORS_GLOBALTABLE . "` (
-  `admin_id` int(11) unsigned NOT NULL,
+  `admin_id` mediumint(8) unsigned NOT NULL,
   `editor` varchar(100) NOT NULL,
   `lev` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `files_level` varchar(255) NOT NULL,
@@ -36,7 +36,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_AUTHORS_GLOBALTABLE . "` (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_AUTHORS_GLOBALTABLE . "_config` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `keyname` varchar(32) DEFAULT NULL,
   `mask` tinyint(4) NOT NULL DEFAULT '0',
   `begintime` int(11) DEFAULT NULL,
@@ -47,31 +47,31 @@ $sql_create_table[] = "CREATE TABLE `" . NV_AUTHORS_GLOBALTABLE . "_config` (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_config` (
-  `config` varchar(50) NOT NULL,
+  `config` varchar(100) NOT NULL,
   `content` mediumtext NOT NULL,
-  `edit_time` int(11) NOT NULL DEFAULT '0',
+  `edit_time` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`config`)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_question` (
   `qid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '',
-  `lang` varchar(2) NOT NULL DEFAULT '',
+  `lang` char(2) NOT NULL DEFAULT '',
   `weight` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `add_time` int(11) unsigned NOT NULL,
-  `edit_time` int(11) unsigned NOT NULL,
+  `add_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `edit_time` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`qid`),
   UNIQUE KEY `title` (`title`,`lang`)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
-  `userid` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) NOT NULL DEFAULT '',
   `md5username` char(32) NOT NULL DEFAULT '',
   `password` varchar(50) NOT NULL DEFAULT '',
   `email` varchar(100) NOT NULL DEFAULT '',
   `full_name` varchar(255) NOT NULL DEFAULT '',
-  `gender` varchar(1) NOT NULL,
+  `gender` char(1) NOT NULL,
   `photo` varchar(255) NOT NULL DEFAULT '',
   `birthday` int(11) unsigned NOT NULL,
   `sig` text,
@@ -101,7 +101,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
-  `userid` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `username` varchar(100) NOT NULL DEFAULT '',
   `md5username` char(32) NOT NULL DEFAULT '',
   `password` varchar(50) NOT NULL DEFAULT '',
@@ -128,7 +128,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_openid` (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_CONFIG_GLOBALTABLE . "` (
-  `lang` varchar(3) NOT NULL DEFAULT 'sys',
+  `lang` char(3) NOT NULL DEFAULT 'sys',
   `module` varchar(25) NOT NULL DEFAULT 'global',
   `config_name` varchar(30) NOT NULL DEFAULT '',
   `config_value` mediumtext NOT NULL,
@@ -327,9 +327,9 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_logs` (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
-        ('registertype', '1', 1274757036),
-        ('deny_email', 'yoursite.com|mysite.com|localhost|xxx', 1274757036),
-        ('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', 1274757036)";
+        ('registertype', '1', " . NV_CURRENTTIME . "),
+        ('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . "),
+        ('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', " . NV_CURRENTTIME . ")";
 
 $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
 ('sys', 'global', 'closed_site', '0'),
@@ -382,14 +382,14 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'version', '" . $global_config['version'] . "')";
 
 $sql_create_table[] = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`) VALUES
-(1, 1262293200, 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 1276839725, 1),
-(2, 1262293200, 1440, 'dump_autobackup.php', 'cron_dump_autobackup', '', 0, 1, 1, 1276826911, 1),
-(3, 1262296800, 60, 'temp_download_destroy.php', 'cron_auto_del_temp_download', '', 0, 1, 1, 1276839725, 1),
-(4, 1269657620, 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 1276839725, 1),
-(5, 1271004840, 1440, 'error_log_destroy.php', 'cron_auto_del_error_log', '', 0, 1, 1, 1276793791, 1),
-(6, 1271004840, 360, 'error_log_sendmail.php', 'cron_auto_sendmail_error_log', '', 0, 1, 0, 1276177733, 0),
-(7, 1276281900, 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 1276839725, 1),
-(8, 1276281900, 1440, 'siteDiagnostic_update.php', 'cron_siteDiagnostic_update', '', 0, 1, 1, 0, 0)";
+(NULL, " . NV_CURRENTTIME . ", 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 0, 0),
+(NULL, " . NV_CURRENTTIME . ", 1440, 'dump_autobackup.php', 'cron_dump_autobackup', '', 0, 1, 1, 0, 0),
+(NULL, " . NV_CURRENTTIME . ", 60, 'temp_download_destroy.php', 'cron_auto_del_temp_download', '', 0, 1, 1, 0, 0),
+(NULL, " . NV_CURRENTTIME . ", 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 0, 0),
+(NULL, " . NV_CURRENTTIME . ", 1440, 'error_log_destroy.php', 'cron_auto_del_error_log', '', 0, 1, 1, 0, 0),
+(NULL, " . NV_CURRENTTIME . ", 360, 'error_log_sendmail.php', 'cron_auto_sendmail_error_log', '', 0, 1, 0, 0, 0),
+(NULL, " . NV_CURRENTTIME . ", 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 0, 0),
+(NULL, " . NV_CURRENTTIME . ", 1440, 'siteDiagnostic_update.php', 'cron_siteDiagnostic_update', '', 0, 1, 1, 0, 0)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES
 ('about', 0, 1, 'about', 'about', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
@@ -412,8 +412,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_plans` 
 (2, '', 'Quang cao trai', '', 'sequential', 190, 500, 1)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_rows` VALUES
-(1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', 'http://www.mofa.gov.vn', '', '', '', 1275296773, 1275296773, 0, 1, 1,1), 
-(2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', 'http://vinades.vn', '', '', '', 1275321220, 1275321220, 0, 0, 1,2), 
-(3, 'Quang cao giua trang', 1, 0, 'vndads___05.jpg', 'jpg', 'image/jpeg', 470, 60, '', 'http://vinades.vn', '', '', '', 1275321716, 1275321716, 0, 0, 1,1)";
+(1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', 'http://www.mofa.gov.vn', '', '', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 1, 1,1), 
+(2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', 'http://vinades.vn', '', '', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,2), 
+(3, 'Quang cao giua trang', 1, 0, 'vndads___05.jpg', 'jpg', 'image/jpeg', 470, 60, '', 'http://vinades.vn', '', '', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
 
 ?>

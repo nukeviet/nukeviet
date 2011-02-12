@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -7,7 +8,8 @@
  */
 
 if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
-global $module_name, $lang_module, $module_data, $list_cats;
+
+global $db, $module_name, $module_data, $module_info, $module_file, $lang_module, $list_cats;
 
 $xtpl = new XTemplate( "block_topdownload.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -21,9 +23,10 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $row['order'] = $i;
     $xtpl->assign( 'loop', $row );
     $xtpl->parse( 'main.loop' );
-    $i ++;
+    $i++;
 }
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
+
 ?>
