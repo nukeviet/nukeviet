@@ -33,7 +33,13 @@ if ( defined( 'NV_SYSTEM' ) )
         $key = filter_text_input( 'q', 'post', '', 1, NV_MAX_SEARCH_LENGTH );
         $cat = $nv_Request->get_int( 'cat', 'post' );
         
-        $xtpl = new XTemplate( "block_search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $site_mods[$module]['module_file'] );
+    	$path = NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $site_mods[$module]['module_file'];
+        if ( ! file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $site_mods[$module]['module_file'] . '/block_search.tpl' ) )
+        {
+            $path = NV_ROOTDIR . "/themes/default/modules/" . $site_mods[$module]['module_file'];
+        }
+        
+        $xtpl = new XTemplate( "block_search.tpl", $path );
         $xtpl->assign( 'LANG', $lang_block_module );
         $xtpl->assign( 'keyvalue', $key );
         $xtpl->assign( 'FORMACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=search' );

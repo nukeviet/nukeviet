@@ -11,7 +11,13 @@ if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 global $db, $module_name, $module_data, $module_info, $module_file, $lang_module, $list_cats;
 
-$xtpl = new XTemplate( "block_topdownload.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+$path = NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file ;
+if ( ! file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file  . '/block_topdownload.tpl' ) )
+{
+    $path = NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file ;
+}
+
+$xtpl = new XTemplate( "block_topdownload.tpl", $path);
 $xtpl->assign( 'LANG', $lang_module );
 $query = "SELECT catid, title, alias, download_hits FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY download_hits DESC LIMIT 5";
 $result = $db->sql_query( $query );
@@ -23,7 +29,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $row['order'] = $i;
     $xtpl->assign( 'loop', $row );
     $xtpl->parse( 'main.loop' );
-    $i++;
+    $i ++;
 }
 
 $xtpl->parse( 'main' );
