@@ -350,7 +350,6 @@ elseif ( $step == 5 )
                         if ( ! $db->sql_query( $query ) )
                         {
                             $nv_Request->set_Session( 'maxstep', 1 );
-                            die( $query );
                             $db_config['error'] = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
                             break;
                         }
@@ -360,17 +359,24 @@ elseif ( $step == 5 )
                     while ( $row = $db->sql_fetchrow( $result ) )
                     {
                         $setmodule = $row['title'];
-                        $sm = nv_setup_data_module( NV_LANG_DATA, $setmodule );
-                        if ( $sm != "OK_" . $setmodule )
+                        if ( is_dir( NV_ROOTDIR . "/modules/" . $row['module_file'] ) )
                         {
-                            die( "error set module: " . $setmodule );
+                            $sm = nv_setup_data_module( NV_LANG_DATA, $setmodule );
+                            if ( $sm != "OK_" . $setmodule )
+                            {
+                                die( "error set module: " . $setmodule );
+                            }
+                        }
+                        else
+                        {
+                            $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` WHERE `title`=" . $db->dbescape( $setmodule );
+                            $db->sql_query( $sql );
                         }
                     }
                     
                     //cai dat du lieu mau
                     $filesavedata = NV_LANG_DATA;
                     $lang_data = NV_LANG_DATA;
-                    
                     if ( ! file_exists( NV_ROOTDIR . "/install/data_" . $lang_data . ".php" ) )
                     {
                         $filesavedata = "en";
@@ -387,41 +393,28 @@ elseif ( $step == 5 )
                         }
                     }
                     
-                    $result = $db->sql_query( "SELECT catid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` ORDER BY `order` ASC" );
-                    while ( list( $catid_i ) = $db->sql_fetchrow( $result ) )
+                    $sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` WHERE `title`='news'";
+                    $result = $db->sql_query( $sql );
+                    if ( $db->sql_numrows( $result ) )
                     {
-                        nv_create_table_news( $catid_i );
-                    }
-                    $db->sql_freeresult();
-                    
-                    $result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
-                    while ( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
-                    {
-                        $arr_catid = explode( ",", $listcatid );
-                        foreach ( $arr_catid as $catid )
+                        $result = $db->sql_query( "SELECT catid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` ORDER BY `order` ASC" );
+                        while ( list( $catid_i ) = $db->sql_fetchrow( $result ) )
                         {
-                            $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
+                            nv_create_table_news( $catid_i );
                         }
+                        $db->sql_freeresult();
+                        
+                        $result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
+                        while ( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
+                        {
+                            $arr_catid = explode( ",", $listcatid );
+                            foreach ( $arr_catid as $catid )
+                            {
+                                $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
+                            }
+                        }
+                        $db->sql_freeresult();
                     }
-                    $db->sql_freeresult();
-                    
-                    /*$return = "<table summary=\"" . $lang_global['show_queries'] . "\" class=\"tab1\">\n";
-					$return .= "<col width=\"16\" />\n";
-					foreach ( $db->query_strs as $key => $field )
-					{
-					if ( empty( $field[1] ) )
-					{
-					$class = ( $key % 2 ) ? " class=\"second\"" : "";
-					$return .= "<tbody" . $class . ">\n";
-					$return .= "<tr>\n";
-					$return .= "<td>" . ( $field[1] ? "<img alt=\"" . $lang_global['ok'] . "\" title=\"" . $lang_global['ok'] . "\" src=\"http://127.0.0.3/themes/" . $global_config['site_theme'] . "/images/icons/good.png\" width=\"16\" height=\"16\" />" : "<img alt=\"" . $lang_global['fail'] . "\" title=\"" . $lang_global['fail'] . "\" src=\"http://127.0.0.3/themes/default/images/icons/bad.png\" width=\"16\" height=\"16\" />" ) . "</td>\n";
-					$return .= "<td>" . nv_htmlspecialchars( $field[0] ) . "</td>\n";
-					$return .= "</tr>\n";
-					$return .= "</tbody>\n";
-					}
-					}
-					$return .= "</table>\n";
-					die( $return );*/
                     
                     $step ++;
                     $nv_Request->set_Session( 'maxstep', $step );
@@ -429,7 +422,8 @@ elseif ( $step == 5 )
                     Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
                     exit();
                 }
-			    //Het cai dat du lieu cho cac module
+            
+    //Het cai dat du lieu cho cac module
             }
         }
     }

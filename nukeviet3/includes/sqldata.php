@@ -628,8 +628,6 @@ function nv_create_table_sys ( $lang )
     $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
 		('about', 'about', 'about', 'About', 1276333182, 1, '', '', '0', 1, 1, 1, 1, '',0),
 		('news', 'news', 'news', 'News', 1270400000, 1, '', '', '0', 1, 2, 1, 1, '',1),
-		('download', 'download', 'download', 'Download', 1276597148, 1, '', '', '0', 1, 3, 1, 1, '',1),
-		('weblinks', 'weblinks', 'weblinks', 'Weblinks', 1276834052, 1, '', '', '0', 1, 4, 1, 1, '',1),
 		('users', 'users', 'users', 'Users', 1274080277, 1, '', '', '0', 1, 5, 1, 1, '',0),
 		('contact', 'contact', 'contact', 'Contact', 1275351337, 1, '', '', '0', 1, 6, 1, 1, '',0),
 		('statistics', 'statistics', 'statistics', 'Statistics', 1276520928, 0, '', 'online, statistics', '0', 1, 7, 1, 1, '',0),
