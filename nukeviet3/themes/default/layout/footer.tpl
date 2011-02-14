@@ -4,12 +4,7 @@
 			{THEME_STAT_IMG} {THEME_NUKEVIET_IMG} 
 		</div>
 	    <div class="fl">
-	        <p class="footer">
-	            {THEME_SITE_NAME}
-	        </p>
-	        <p class="footer">
-	            {THEME_CONTACT_EMAIL}
-	        </p>
+	        [FOOTER_SITE]
 	    </div>
 	    <div class="fr">
 	        <ul class="bottom-toolbar">

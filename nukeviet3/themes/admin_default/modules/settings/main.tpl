@@ -1,23 +1,24 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
     <table class="tab1" summary="">
+        <col width="150" />
         <tfoot>
-           <tr>
+            <tr>
                 <td colspan="2" align="center">
                     <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/>
                 </td>
             </tr>
-        </tfoot>    
+        </tfoot>
         <tbody>
-			<tr>
-	            <td>
-	                <strong>{LANG.sitename}</strong>
-	            </td>
-	            <td>
-	                <input type="text" name="site_name" value="{VALUE.sitename}" style="width: 450px"/>
-	            </td>
-	        </tr>
-		</tbody>
+            <tr>
+                <td>
+                    <strong>{LANG.sitename}</strong>
+                </td>
+                <td>
+                    <input type="text" name="site_name" value="{VALUE.sitename}" style="width: 450px"/>
+                </td>
+            </tr>
+        </tbody>
         <tbody class="second">
             <tr>
                 <td>
@@ -37,15 +38,14 @@
                     <input type="text" name="site_keywords" value="{VALUE.site_keywords}" style="width: 450px"/>
                 </td>
             </tr>
-        </tbody>        
+        </tbody>
         <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.site_logo}</strong>
                 </td>
                 <td>
-                    <input type="text" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="width: 350px"/>
-					<input style="width:100px" type="button" value="{LANG.browse_image}" name="selectimg"/>
+                    <input type="text" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="width: 350px"/><input style="width:100px" type="button" value="{LANG.browse_image}" name="selectimg"/>
                 </td>
             </tr>
         </tbody>
@@ -69,8 +69,7 @@
                 </td>
                 <td>
                     <select name="site_home_module">
-                        <!-- BEGIN: module -->
-						<option value="{MODULE.title}"{SELECTED}>{MODULE.custom_title}  </option>
+                        <!-- BEGIN: module --><option value="{MODULE.title}"{SELECTED}>{MODULE.custom_title}  </option>
                         <!-- END: module -->
                     </select>
                 </td>
@@ -82,17 +81,7 @@
                     <strong>{LANG.disable_content}</strong>
                 </td>
                 <td>
-                    <textarea name="disable_site_content" cols="60" rows="5">{VALUE.disable_content}</textarea>
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
-                    <strong>{LANG.footer_content}</strong>
-                </td>
-                <td>
-                    <textarea name="footer_content" cols="60" rows="5">{VALUE.footer_content}</textarea>
+                    {DISABLE_SITE_CONTENT}
                 </td>
             </tr>
         </tbody>

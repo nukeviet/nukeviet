@@ -11,8 +11,6 @@ if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $page_title = sprintf( $lang_module['lang_site_config'], $language_array[NV_LANG_DATA]['name'] );
 
-if ( defined( 'NV_EDITOR' ) ) require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
-
 $submit = $nv_Request->get_string( 'submit', 'post' );
 $errormess = "";
 if ( $submit )
@@ -52,14 +50,14 @@ if ( $submit )
     
     $array_config['site_home_module'] = filter_text_input( 'site_home_module', 'post', '', 1, 255 );
     $array_config['site_description'] = filter_text_input( 'site_description', 'post', '', 1, 255 );
-    $array_config['disable_site_content'] = filter_text_textarea( 'disable_site_content', '', NV_ALLOWED_HTML_TAGS );
-    $array_config['footer_content'] = filter_text_textarea( 'footer_content', '', NV_ALLOWED_HTML_TAGS );
+    $array_config['disable_site_content'] = nv_editor_filter_textarea( 'disable_site_content', '', NV_ALLOWED_HTML_TAGS );
     
     if ( empty( $array_config['disable_site_content'] ) )
     {
         $array_config['disable_site_content'] = $lang_global['disable_site_content'];
     }
-    $array_config['disable_site_content'] = nv_nl2br( $array_config['disable_site_content'], '<br />' ); // dung de save vao csdl
+    $array_config['disable_site_content'] = nv_editor_nl2br( $array_config['disable_site_content'] );
+    
     foreach ( $array_config as $config_name => $config_value )
     {
         $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', 'global', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
@@ -104,11 +102,9 @@ $global_config['disable_site_content'] = nv_htmlspecialchars( $global_config['di
 
 $value_setting = array(  //
     "sitename" => $global_config['site_name'], //
-"site_logo" => ( nv_is_url( $global_config['site_logo'] ) ) ? NV_BASE_SITEURL . $global_config['site_logo'] : $global_config['site_logo'], //
-"site_keywords" => $global_config['site_keywords'], //
-"description" => $global_config['site_description'], //
-"disable_content" => $global_config['disable_site_content'], //
-"footer_content" => isset( $global_config['footer_content'] ) ? $global_config['footer_content'] : ""  //
+	"site_logo" => ( nv_is_url( $global_config['site_logo'] ) ) ? NV_BASE_SITEURL . $global_config['site_logo'] : $global_config['site_logo'], //
+	"site_keywords" => $global_config['site_keywords'], //
+	"description" => $global_config['site_description'] 
 );
 
 $module_array = array();
@@ -119,6 +115,8 @@ while ( $row = $db->sql_fetchrow( $result ) )
 {
     $module_array[] = $row;
 }
+
+if ( defined( 'NV_EDITOR' ) ) require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 
@@ -139,6 +137,20 @@ foreach ( $module_array as $mod )
     $xtpl->assign( 'MODULE', $mod );
     $xtpl->parse( 'main.module' );
 }
+
+$global_config['disable_site_content'] = nv_editor_br2nl( $global_config['disable_site_content'] );
+if ( ! empty( $global_config['disable_site_content'] ) ) $global_config['disable_site_content'] = nv_htmlspecialchars( $global_config['disable_site_content'] );
+
+if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
+{
+    $disable_site_content = nv_aleditor( "disable_site_content", '100%', '100px', $global_config['disable_site_content'] );
+}
+else
+{
+    $disable_site_content = "<textarea style=\"width:100%;height:100px\" name=\"disable_site_content\" id=\"disable_site_content\">" . $global_config['disable_site_content'] . "</textarea>";
+}
+
+$xtpl->assign( 'DISABLE_SITE_CONTENT', $disable_site_content );
 
 $xtpl->parse( 'main' );
 $content = "";

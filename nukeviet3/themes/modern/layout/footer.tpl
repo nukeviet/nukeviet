@@ -29,8 +29,7 @@
 </div>
 <div id="footer" class="clearfix">
     <div class="fl div2">
-		{THEME_SITE_NAME}<br />
-        Powered by <a title="NukeViet Cms" href="http://nukeviet.vn/">NukeViet CMS</a>. Design by <a title="VINADES.,JSC" href="http://vinades.vn/">VINADES.,JSC</a>
+    	[FOOTER_SITE]
     </div>
     <div class="fr div2 aright">
         <!-- BEGIN: bottom_menu --><a title="{TOP_MENU.title}" href="{TOP_MENU.link}">{TOP_MENU.title}</a>
