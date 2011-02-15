@@ -141,7 +141,6 @@
                         <div class="message_body">
                           <center>
                             <input name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
-                            <img src="{NV_BASE_SITEURL}images/calendar.jpg" style="widht:18px; cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'publ_date', 'dd/mm/yyyy', false);" alt="" height="17" />
                             <select name="phour">
                                 {phour}
                             </select>:
@@ -156,7 +155,6 @@
                         <p class="message_head"><cite>{LANG.content_exp_date}:</cite> <span class="timestamp">{LANG.content_notetime}</span></p>
                         <div class="message_body"><center> 
                           <input name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
-                          <img src="{NV_BASE_SITEURL}images/calendar.jpg" style="widht:18px; cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'exp_date', 'dd/mm/yyyy', false);" alt="" height="17" />
                           <select name="ehour">
                             {ehour}
                           </select>:
@@ -270,6 +268,26 @@
 		return false;
 	});
 	$(document).ready(function() {
+		$("#publ_date").datepicker({
+			showOn: "button",
+			dateFormat: "dd/mm/yy",
+			changeMonth: true,
+			changeYear: true,
+			showOtherMonths: true,
+			buttonImage: nv_siteroot+"images/calendar.gif",
+			buttonImageOnly: true
+		});
+
+		$("#exp_date").datepicker({
+			showOn: "button",
+			dateFormat: "dd/mm/yy",
+			changeMonth: true,
+			changeYear: true,
+			showOtherMonths: true,
+			buttonImage: nv_siteroot+"images/calendar.gif",
+			buttonImageOnly: true
+		});
+
 		$("#AjaxSourceText").autocomplete(
 			script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=sourceajax",
 			{
