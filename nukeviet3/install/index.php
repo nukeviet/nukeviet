@@ -343,6 +343,9 @@ elseif ( $step == 5 )
                     $module_name = "";
                     require_once ( NV_ROOTDIR . '/includes/sqldata.php' );
                     
+                    $modules_exit = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
+                    $modules_exit[] = 'global';
+                    
                     //cai dat du lieu cho  ngon ngu
                     $sql_create_table = nv_create_table_sys( NV_LANG_DATA );
                     foreach ( $sql_create_table as $query )
@@ -359,7 +362,7 @@ elseif ( $step == 5 )
                     while ( $row = $db->sql_fetchrow( $result ) )
                     {
                         $setmodule = $row['title'];
-                        if ( is_dir( NV_ROOTDIR . "/modules/" . $row['module_file'] ) )
+                        if ( in_array( $row['module_file'], $modules_exit ) )
                         {
                             $sm = nv_setup_data_module( NV_LANG_DATA, $setmodule );
                             if ( $sm != "OK_" . $setmodule )
@@ -393,6 +396,34 @@ elseif ( $step == 5 )
                         }
                     }
                     
+                    //xoa du lieu tai bang nv3_vi_blocks
+                    $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` WHERE `bid` in (SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN ('" . implode( "', '", $modules_exit ) . "'))";
+                    $db->sql_query( $sql );
+                    
+                    //xoa du lieu tai bang nv3_vi_blocks_groups
+                    $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                    $db->sql_query( $sql );
+                    
+                    //xoa du lieu tai bang nv3_vi_modthemes
+                    $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` WHERE `func_id` in (SELECT `func_id` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "'))";
+                    $db->sql_query( $sql );
+                    
+                    //xoa du lieu tai bang  nv3_vi_modfuncs
+                    $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                    $db->sql_query( $sql );
+                    
+                    //xoa du lieu tai bang  nv3_vi_modules
+                    $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                    $db->sql_query( $sql );
+                    
+                    //xoa du lieu tai bang  nv3_setup_modules
+                    $sql = "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                    $db->sql_query( $sql );
+                    
+                    ///xoa du lieu tai bang nv3_config
+                    $sql = "DELETE FROM `" . $db_config['prefix'] . "_config` WHERE `lang`=" . $db->dbescape( $lang_data ) . " AND `module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                    $db->sql_query( $sql );
+                    
                     $sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` WHERE `title`='news'";
                     $result = $db->sql_query( $sql );
                     if ( $db->sql_numrows( $result ) )
@@ -423,7 +454,7 @@ elseif ( $step == 5 )
                     exit();
                 }
             
-    //Het cai dat du lieu cho cac module
+    //	Het cai dat du lieu cho cac module
             }
         }
     }

@@ -395,17 +395,17 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` 
 ('about', 0, 1, 'about', 'about', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('banners', 1, 0, 'banners', 'banners', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('contact', 0, 1, 'contact', 'contact', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
-('news', 1, 1, 'news', 'news', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
+('news', 0, 1, 'news', 'news', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('voting', 0, 0, 'voting', 'voting', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('forum', 0, 0, 'forum', 'forum', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('search', 1, 0, 'search', 'search', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('users', 1, 0, 'users', 'users', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('download', 0, 1, 'download', 'download', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('weblinks', 0, 1, 'weblinks', 'weblinks', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
-('statistics', 1, 0, 'statistics', 'statistics', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
+('statistics', 0, 0, 'statistics', 'statistics', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('faq', 0, 1, 'faq', 'faq', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('menu', 0, 1, 'menu', 'menu', '3.1.00 1273225635', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
-('rss', 0, 0, 'rss', 'rss', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
+('rss', 1, 0, 'rss', 'rss', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_plans` VALUES
 (1, '', 'Quang cao giua trang', '', 'sequential', 510, 100, 1), 

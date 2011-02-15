@@ -63,6 +63,12 @@ while ( $row = $db->sql_fetchrow( $result ) )
         $row['mod_version'] = $new_modules[$row['module_file']]['mod_version'];
     }
     
+    if ( $row['title'] == $global_config['site_home_module'] )
+    {
+        $row['is_sysmod'] = 1;
+        $mod['act'][2] = 1;
+    }
+    
     $weight_list[] = $row['weight'];
     $mod['title'] = array( 
         NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=show&amp;mod=" . $row['title'], $row['title'] 
@@ -81,7 +87,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $mod['act'] = array( 
         $row['act'], "nv_chang_act('" . $row['title'] . "');" 
     );
-    if ( $row['title'] == ucfirst( strtolower( $global_config['site_home_module'] ) ) ) $mod['act'][] = 1;
+    
     $mod['edit'] = array( 
         NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;mod=" . $row['title'], $lang_global['edit'] 
     );

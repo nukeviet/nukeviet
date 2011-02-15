@@ -37,10 +37,10 @@ if ( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( "a
     $allow_sitelangs = array_unique( $allow_sitelangs );
     $query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( implode( ",", $allow_sitelangs ) ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'allow_sitelangs'";
     $result = $db->sql_query( $query );
-    $temp = ($activelang == 1) ? $lang_global['yes'] : $lang_global['no'];
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'] , " langkey : " .$keylang . " [ " .$temp ." ]", $admin_info['userid'] );
+    $temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], " langkey : " . $keylang . " [ " . $temp . " ]", $admin_info['userid'] );
     nv_save_file_config_global();
-       
+    
     $contents = "<br /><br /><br /><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
     $contents .= "<meta http-equiv=\"Refresh\" content=\"1;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "\" />";
     include ( NV_ROOTDIR . "/includes/header.php" );
@@ -56,8 +56,8 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
     }
     else
     {
-        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_new'] ." " .$lang_module['nv_lang_data'] , " langkey : " .$keylang , $admin_info['userid'] );
-    	list( $site_theme ) = $db->sql_fetchrow( $db->sql_query( "SELECT `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` where `lang`='" . $global_config['site_lang'] . "' AND `module`='global' AND `config_name`='site_theme'" ) );
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_new'] . " " . $lang_module['nv_lang_data'], " langkey : " . $keylang, $admin_info['userid'] );
+        list( $site_theme ) = $db->sql_fetchrow( $db->sql_query( "SELECT `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` where `lang`='" . $global_config['site_lang'] . "' AND `module`='global' AND `config_name`='site_theme'" ) );
         $global_config['site_theme'] = $site_theme;
         require_once ( NV_ROOTDIR . '/includes/sqldata.php' );
         $sql_create_table = nv_create_table_sys( $keylang );
@@ -79,12 +79,18 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
             require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/modules/functions.php" );
             $module_name = "";
             $array_module_setup = explode( ",", NV_MODULE_SETUP_DEFAULT );
+            
+            $modules_exit = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
+            $modules_exit[] = 'global';
             foreach ( $array_module_setup as $setmodule )
             {
-                $sm = nv_setup_data_module( $keylang, $setmodule );
-                if ( $sm == "OK_" . $setmodule )
+                if ( in_array( $setmodule, $modules_exit ) )
                 {
-                    $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $keylang . "_modules` SET `act` = '1'WHERE `title`='" . $setmodule . "'" );
+                    $sm = nv_setup_data_module( $keylang, $setmodule );
+                    if ( $sm == "OK_" . $setmodule )
+                    {
+                        $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $keylang . "_modules` SET `act` = '1'WHERE `title`='" . $setmodule . "'" );
+                    }
                 }
             }
             $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $keylang . "_modules` WHERE `act` = '0'" );
@@ -109,29 +115,62 @@ elseif ( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $g
                     if ( ! $db->sql_query( $query ) )
                     {
                         include ( NV_ROOTDIR . "/includes/header.php" );
-                        nv_admin_theme( "ERROR SETUP SQL: <br />" . $query );
+                        echo nv_admin_theme( "ERROR SETUP SQL: <br />" . $query );
                         include ( NV_ROOTDIR . "/includes/footer.php" );
                         exit();
                     }
                 }
                 
-                $result = $db->sql_query( "SELECT catid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` ORDER BY `order` ASC" );
-                while ( list( $catid_i ) = $db->sql_fetchrow( $result ) )
-                {
-                    nv_create_table_news( $catid_i );
-                }
-                $db->sql_freeresult();
+                //xoa du lieu tai bang nv3_vi_blocks
+                $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` WHERE `bid` in (SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN ('" . implode( "', '", $modules_exit ) . "'))";
+                $db->sql_query( $sql );
                 
-                $result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
-                while ( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
+                //xoa du lieu tai bang nv3_vi_blocks_groups
+                $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                $db->sql_query( $sql );
+                
+                //xoa du lieu tai bang nv3_vi_modthemes
+                $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` WHERE `func_id` in (SELECT `func_id` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "'))";
+                $db->sql_query( $sql );
+                
+                //xoa du lieu tai bang  nv3_vi_modfuncs
+                $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                $db->sql_query( $sql );
+                
+                //xoa du lieu tai bang  nv3_vi_modules
+                $sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                $db->sql_query( $sql );
+                
+                //xoa du lieu tai bang  nv3_setup_modules
+                $sql = "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                $db->sql_query( $sql );
+                
+                ///xoa du lieu tai bang nv3_config
+                $sql = "DELETE FROM `" . $db_config['prefix'] . "_config` WHERE `lang`=" . $db->dbescape( $lang_data ) . " AND `module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+                $db->sql_query( $sql );
+                
+                $sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` WHERE `title`='news'";
+                $result = $db->sql_query( $sql );
+                if ( $db->sql_numrows( $result ) )
                 {
-                    $arr_catid = explode( ",", $listcatid );
-                    foreach ( $arr_catid as $catid )
+                    $result = $db->sql_query( "SELECT catid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` ORDER BY `order` ASC" );
+                    while ( list( $catid_i ) = $db->sql_fetchrow( $result ) )
                     {
-                        $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
+                        nv_create_table_news( $catid_i );
                     }
+                    $db->sql_freeresult();
+                    
+                    $result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
+                    while ( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
+                    {
+                        $arr_catid = explode( ",", $listcatid );
+                        foreach ( $arr_catid as $catid )
+                        {
+                            $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
+                        }
+                    }
+                    $db->sql_freeresult();
                 }
-                $db->sql_freeresult();
             }
         }
         $nv_Request->set_Cookie( 'data_lang', $keylang, NV_LIVE_COOKIE_TIME );
@@ -176,7 +215,7 @@ elseif ( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) an
     $db->sql_query( "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang` = '" . $deletekeylang . "'" );
     $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_setup_language` WHERE `lang` = '" . $deletekeylang . "'" );
     nv_save_file_config_global();
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_delete'] , " langkey : " .$deletekeylang , $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_delete'], " langkey : " . $deletekeylang, $admin_info['userid'] );
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
     exit();
 
