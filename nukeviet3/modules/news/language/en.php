@@ -114,6 +114,8 @@ $lang_module['counter'] = "counter";
 $lang_module['total_comment'] = "Feedback";
 $lang_module['search_cat'] = "Search in topics";
 $lang_module['search_all'] = "Search all topics";
+
+$lang_module['content'] = "Management Articles";
 $lang_module['add_content'] = "Add Articles";
 $lang_module['topic_sl'] = "Select the relevant group";
 $lang_module['imgposition'] = "Images shown in article";

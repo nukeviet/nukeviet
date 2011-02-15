@@ -121,6 +121,7 @@ $lang_module['search_cat'] = "Tìm kiếm trong chủ đề";
 $lang_module['search_all'] = " Tất cả các chủ đề";
 
 //add content
+$lang_module['content'] = "Quản lý bài viết";
 $lang_module['add_content'] = "Đăng bài viết";
 $lang_module['topic_sl'] = "Chọn nhóm tin liên quan";
 $lang_module['imgposition'] = "Hình ảnh tại bài viết";
