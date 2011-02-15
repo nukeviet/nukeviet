@@ -16,13 +16,31 @@ function del_path_svn ( $subject )
     return str_replace( '/trunk/nukeviet3/', '', $subject );
 }
 
+function nv_mkdir_svn ( $dirname )
+{
+    $cp = "";
+    $e = explode( "/", $dirname );
+    foreach ( $e as $p )
+    {
+        if ( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/' . $cp . $p ) )
+        {
+            if ( ! @mkdir( NV_ROOTDIR . '/' . $cp . $p, 0777 ) )
+            {
+                $cp = '';
+                break;
+            }
+        }
+        $cp .= $p . '/';
+    }
+}
+
 if ( $sys_info['allowed_set_time_limit'] )
 {
     set_time_limit( 0 );
 }
 
 $vini = isset( $global_config['revision'] ) ? $global_config['revision'] : 0; // Phien ban truoc
-if ( $vini < 750 )
+if ( $vini < 893 )
 {
     $contents = $lang_module['revision_nosuport'];
 }
@@ -42,10 +60,11 @@ else
         if ( $vend > $vini )
         {
             $nv_Request->set_Session( 'getVersion', $vend );
+            $nv_Request->set_Session( 'getfile', 0 );
             $logs = $svn->getRepositoryLogs( $vini, $vend );
             if ( ! empty( $logs ) )
             {
-                $add_files = $del_files = $mod_files = array();
+                $add_files = $del_files = $edit_files = array();
                 foreach ( $logs as $key => $arr_log_i )
                 {
                     if ( isset( $arr_log_i['del_files'] ) )
@@ -59,7 +78,7 @@ else
                             {
                                 $array_remove_add[] = $str;
                             }
-                            elseif ( in_array( $str, $mod_files ) )
+                            elseif ( in_array( $str, $edit_files ) )
                             {
                                 $array_remove_edit[] = $str;
                             }
@@ -69,7 +88,7 @@ else
                             }
                         }
                         $add_files = array_diff( $add_files, $array_remove_add );
-                        $mod_files = array_diff( $mod_files, $array_remove_edit );
+                        $edit_files = array_diff( $edit_files, $array_remove_edit );
                     }
                     if ( isset( $arr_log_i['mod_files'] ) )
                     {
@@ -77,9 +96,9 @@ else
                         foreach ( $arr_temp as $str )
                         {
                             $str = trim( $str );
-                            if ( ! in_array( $str, $mod_files ) and ! in_array( $str, $add_files ) )
+                            if ( ! in_array( $str, $edit_files ) and ! in_array( $str, $add_files ) )
                             {
-                                $mod_files[] = $str;
+                                $edit_files[] = $str;
                             }
                         }
                     }
@@ -100,9 +119,14 @@ else
                         $del_files = array_diff( $del_files, $array_remove_del );
                     }
                 }
+                asort( $add_files );
+                asort( $del_files );
+                asort( $edit_files );
+                
                 $svn_data_files = array( 
-                    'add_files' => $add_files, 'del_files' => $del_files, 'mod_files' => $mod_files 
+                    'version' => $vend, 'add_files' => $add_files, 'del_files' => $del_files, 'edit_files' => $edit_files 
                 );
+                
                 file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log', serialize( $svn_data_files ), LOCK_EX );
                 
                 Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) );
@@ -129,10 +153,21 @@ else
             $cache = file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log' );
             $svn_data_files = unserialize( $cache );
             
+            if ( ! is_dir( NV_ROOTDIR . '/install/update' ) )
+            {
+                @mkdir( NV_ROOTDIR . '/install/update', 0777 );
+                @mkdir( NV_ROOTDIR . '/install/update/new', 0777 );
+                @mkdir( NV_ROOTDIR . '/install/update/old', 0777 );
+                
+                @file_put_contents( NV_ROOTDIR . "/install/update/index.html", "", FILE_APPEND );
+                @file_put_contents( NV_ROOTDIR . "/install/update/new/index.html", "", FILE_APPEND );
+                @file_put_contents( NV_ROOTDIR . "/install/update/old/index.html", "", FILE_APPEND );
+            }
+            
             $contents = '<div style="text-align:center;color:red;">' . $lang_module['revision_list_file'] . '</div>';
             $contents .= '<div style="overflow:auto;height:300px;width:100%">';
             if ( ! empty( $svn_data_files['add_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_add_files'] . '</b><br />' . implode( "<br />", $svn_data_files['add_files'] );
-            if ( ! empty( $svn_data_files['mod_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_mod_files'] . '</b><br />' . implode( "<br />", $svn_data_files['mod_files'] );
+            if ( ! empty( $svn_data_files['edit_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_mod_files'] . '</b><br />' . implode( "<br />", $svn_data_files['edit_files'] );
             if ( ! empty( $svn_data_files['del_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_del_files'] . '</b><br />' . implode( "<br />", $svn_data_files['del_files'] );
             $contents .= '</div><br /><br />';
             $contents .= $lang_module['revision_msg_download'];
@@ -151,7 +186,7 @@ else
 				 		nv_ajax("get", "' . NV_BASE_ADMINURL . 'index.php", "' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '", "", "nv_download_result");
         			}
 					else if (r_split[1] == "DOWNLOADCOMPLETE"){
-						alert(r_split[1]);
+						parent.location="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=autoupdate";
         			} 
         			else{
         				alert("' . $lang_module['revision_download_error'] . '");
@@ -172,183 +207,100 @@ else
             $contents = $lang_module['revision_error_cache_file'];
         }
     }
-    elseif ( $step == 3 and $checkss == md5( $step . $global_config['sitekey'] . session_id() ) )
+    //elseif ( $step == 3 and $checkss == md5( $step . $global_config['sitekey'] . session_id() ) )
+    elseif ( $step == 3 )
     {
-        die( "OK_DOWNLOADFILE" );
-        die( "OK_DOWNLOADCOMPLETE" );
-    }
-}
-include ( NV_ROOTDIR . "/includes/header.php" );
-echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
-
-if ( $step == 1 )
-{
-    if ( $vend > $vini )
-    {
-        $nv_Request->set_Session( 'getVersion', $vend );
-        $logs = $svn->getRepositoryLogs( $vini, $vend );
-        if ( ! empty( $logs ) )
+        $error_download = array();
+        $cache = file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log' );
+        $svn_data_files = unserialize( $cache );
+        $download_files = array_merge( $svn_data_files['edit_files'], $svn_data_files['add_files'] );
+        
+        $vend = $nv_Request->get_int( 'getVersion', 'session', 0 );
+        $getfile = $nv_Request->get_int( 'getfile', 'session', 0 );
+        
+        require ( NV_ROOTDIR . '/includes/phpsvnclient/phpsvnclient.php' );
+        $svn = new phpsvnclient();
+        $svn->setRepository( "http://nuke-viet.googlecode.com/svn" );
+        
+        if ( $getfile < count( $download_files ) )
         {
-            $add_files = $del_files = $mod_files = array();
-            foreach ( $logs as $key => $arr_log_i )
+            
+            $path = $download_files[$getfile];
+            
+            // download new file 
+            $fileInfo = $svn->getDirectoryTree( $path, $vend, false );
+            if ( $fileInfo["type"] == "directory" )
             {
-                if ( isset( $arr_log_i['del_files'] ) )
+                $dirname = str_replace( "/trunk/nukeviet3/", "install/update/new/", $path );
+            }
+            else
+            {
+                $contents_f = $svn->getFile( $path, $vend );
+                if ( $contents_f === false )
                 {
-                    $array_remove_add = $array_remove_edit = array();
-                    $arr_temp = $arr_log_i['del_files'];
-                    foreach ( $arr_temp as $str )
-                    {
-                        $str = trim( $str );
-                        if ( in_array( $str, $add_files ) )
-                        {
-                            $array_remove_add[] = $str;
-                        }
-                        elseif ( in_array( $str, $mod_files ) )
-                        {
-                            $array_remove_edit[] = $str;
-                        }
-                        else
-                        {
-                            $del_files[] = $str;
-                        }
-                    }
-                    $add_files = array_diff( $add_files, $array_remove_add );
-                    $mod_files = array_diff( $mod_files, $array_remove_edit );
+                    $error_download[] = "error getFile: " . $path . "--->" . $vend;
+                    $dirname = "";
                 }
-                if ( isset( $arr_log_i['mod_files'] ) )
+                else
                 {
-                    $arr_temp = $arr_log_i['mod_files'];
-                    foreach ( $arr_temp as $str )
-                    {
-                        $str = trim( $str );
-                        if ( ! in_array( $str, $mod_files ) and ! in_array( $str, $add_files ) )
-                        {
-                            $mod_files[] = $str;
-                        }
-                    }
-                }
-                
-                if ( isset( $arr_log_i['add_files'] ) )
-                {
-                    $array_remove_del = array();
-                    $arr_temp = $arr_log_i['add_files'];
-                    foreach ( $arr_temp as $str )
-                    {
-                        $str = trim( $str );
-                        if ( in_array( $str, $del_files ) )
-                        {
-                            $array_remove_del[] = $str;
-                        }
-                        $add_files[] = $str;
-                    }
-                    $del_files = array_diff( $del_files, $array_remove_del );
+                    $dirname = str_replace( "/trunk/nukeviet3/", "install/update/new/", dirname( $path ) );
+                    $filename = basename( $path );
                 }
             }
-            $dow_files = array_merge( $add_files, $mod_files );
-            file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_dow_files.log', serialize( $dow_files ), LOCK_EX );
-            file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_add_files.log', serialize( $add_files ), LOCK_EX );
-            file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_mod_files.log', serialize( $mod_files ), LOCK_EX );
-            file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_del_files.log', serialize( $del_files ), LOCK_EX );
             
-            $del_files = array_map( 'del_path_svn', $del_files );
-            $mod_files = array_map( 'del_path_svn', $mod_files );
-            $add_files = array_map( 'del_path_svn', $add_files );
-            
-            $list_del_files = implode( "<br />", $del_files );
-            $list_mod_files = implode( "<br />", $mod_files );
-            $list_add_files = implode( "<br />", $add_files );
-            $contents = "<a target=\"_blank\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;step=2\">Update r" . $vini . " -> r" . $vend . "</a>";
-            $contents .= "<br /><br /><b>Add files:</b><br />" . $list_add_files . "<br /><br /><b>Edit files:</b><br />" . $list_mod_files . "<br /><br /><b>Del files:</b><br />" . $list_del_files;
-        }
-        else
-        {
-            $contents = $lang_module['revision_nochange'];
-        }
-    }
-    elseif ( $vend == $vini )
-    {
-        $contents = $lang_module['revision_nochange'];
-    }
-    else
-    {
-        $contents = $lang_module['revision_error'];
-    }
-}
-elseif ( $step == 2 and $vend > 0 )
-{
-    $contents = $filename = "";
-    
-    $temp = file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_dow_files.log' );
-    $mod_files = unserialize( $temp );
-    $path = $mod_files[$n];
-    
-    $fileInfo = $svn->getDirectoryTree( $path, $vend, false );
-    if ( $fileInfo["type"] == "directory" )
-    {
-        $dirname = str_replace( "/trunk/nukeviet3/", "tmp/r" . $vini . "_" . $vend . "/", $path );
-    }
-    else
-    {
-        $contents_f = $svn->getFile( $path, $vend );
-        if ( $contents_f === false )
-        {
-            $contents = "error getFile: " . $path . "--->" . $vend;
-            $dirname = "";
-        }
-        else
-        {
-            $dirname = str_replace( "/trunk/nukeviet3/", NV_TEMP_DIR . "/r" . $vini . "_" . $vend . "/", dirname( $path ) );
-            $filename = basename( $path );
-        }
-    }
-    
-    if ( ! empty( $dirname ) and ! is_dir( NV_ROOTDIR . '/' . $dirname ) )
-    {
-        $cp = "";
-        $e = explode( "/", $dirname );
-        foreach ( $e as $p )
-        {
-            if ( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/' . $cp . $p ) )
+            if ( ! empty( $dirname ) and ! is_dir( NV_ROOTDIR . '/' . $dirname ) )
             {
-                if ( ! @mkdir( NV_ROOTDIR . '/' . $cp . $p, 0777 ) )
+                nv_mkdir_svn( $dirname );
+            }
+            if ( ! empty( $filename ) and ! empty( $dirname ) )
+            {
+                file_put_contents( NV_ROOTDIR . '/' . $dirname . "/" . $filename, $contents_f, FILE_APPEND );
+                // download old file
+                if ( in_array( $path, $svn_data_files['edit_files'] ) )
                 {
-                    $cp = '';
-                    break;
+                    $contents_f = $svn->getFile( $path, $vini );
+                    if ( $contents_f === false )
+                    {
+                        $error_download[] = "error getFile: " . $path . "--->" . $vini;
+                        $dirname = "";
+                    }
+                    else
+                    {
+                        $dirname = str_replace( "/trunk/nukeviet3/", "install/update/old/", dirname( $path ) );
+                        if ( ! empty( $dirname ) and ! is_dir( NV_ROOTDIR . '/' . $dirname ) )
+                        {
+                            nv_mkdir_svn( $dirname );
+                        }
+                        $filename = basename( $path );
+                        file_put_contents( NV_ROOTDIR . '/' . $dirname . "/" . $filename, $contents_f, FILE_APPEND );
+                    }
                 }
             }
-            $cp .= $p . '/';
-        }
-    }
-    if ( ! empty( $filename ) and ! empty( $dirname ) )
-    {
-        file_put_contents( NV_ROOTDIR . '/' . $dirname . "/" . $filename, $contents_f, FILE_APPEND );
-    }
-    
-    if ( empty( $contents ) )
-    {
-        $n ++;
-        if ( $n < count( $mod_files ) )
-        {
-            $nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;step=" . $step . "&amp;n=" . $n;
-            $contents = "<meta http-equiv=\"refresh\" content=\"0;url=" . $nv_redirect . "\" />";
-            $contents .= "Chuan bi thuc hien file: " . $mod_files[$n];
-            die( $contents );
+            if ( empty( $error_download ) )
+            {
+                $nv_Request->set_Session( 'getfile', $getfile + 1 );
+                die( "OK_DOWNLOADFILE" );
+            }
+            else
+            {
+                print_r( implode( "<br />", $error_download ) );
+            }
         }
         else
         {
-            $contents .= "<br /><br /><br /><a  href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;step=3\"> Step 3 </a>";
+            $path = "/trunk/nukeviet3/update_revision.php";
+            $contents_f = $svn->getFile( $path );
+            $contents_f = str_replace( "?>", "\n", $contents_f );
+            if ( ! empty( $svn_data_files['add_files'] ) ) $contents_f .= "\$add_files = array('" . implode( "',\n '", $svn_data_files['add_files'] ) . "');\n\n\n";
+            if ( ! empty( $svn_data_files['edit_files'] ) ) $contents_f .= "\$edit_files = array('" . implode( "',\n '", $svn_data_files['edit_files'] ) . "');\n\n\n";
+            if ( ! empty( $svn_data_files['del_files'] ) ) $contents_f .= "\$delete_files = array('" . implode( "',\n '", $svn_data_files['del_files'] ) . "');\n\n\n";
+            $contents_f .= "\n?>";
+            
+            file_put_contents( NV_ROOTDIR . "/install/update/update.php", $contents_f, FILE_APPEND );
+            die( "OK_DOWNLOADCOMPLETE" );
         }
     }
 }
-elseif ( $step == 3 and $vend > 0 )
-{
-    
-    $temp = file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_del_files.log' );
-    $del_files = unserialize( $temp );
-
-}
-
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );

@@ -14,8 +14,7 @@ $submenu['siteDiagnostic'] = $lang_module['siteDiagnostic'];
 $submenu['keywordRank'] = $lang_module['keywordRank'];
 $submenu['sitemapPing'] = $lang_module['sitemapPing'];
 $submenu['checkupdate'] = $lang_module['checkupdate'];
-//$submenu['revision'] = $lang_module['revision'];
-
+$submenu['revision'] = $lang_module['revision'];
 
 if ( $module_name == "webtools" )
 {
