@@ -71,7 +71,22 @@ if ( $allowed )
                 else if ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] ) )
                 {
                     $src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
-                    $width = ( $news_contents['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
+                    if ( $news_contents['imgposition'] == 1 )
+                    {
+                        $width = $module_config[$module_name]['homewidth'];
+                    }
+                    else
+                    {
+                        $imagesize = @getimagesize( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] );
+                        if ( $imagesize[0] > 0 and $imagesize[0] > $module_config[$module_name]['imagefull'] )
+                        {
+                            $width = $module_config[$module_name]['imagefull'];
+                        }
+                        else
+                        {
+                            $width = $imagesize[0];
+                        }
+                    }
                 }
                 $alt = ( empty( $news_contents['homeimgalt'] ) ) ? $news_contents['title'] : $news_contents['homeimgalt'];
                 if ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] ) )
