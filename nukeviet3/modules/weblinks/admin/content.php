@@ -79,7 +79,7 @@ if ( ! empty( $submit ) )
             $db->sql_query( $query );
             if ( $db->sql_affectedrows() > 0 )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_content', "id ".$id, $admin_info['userid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weblink_edit_link'], $title , $admin_info['userid'] );
             	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
                 die();
             }
@@ -96,7 +96,7 @@ if ( ! empty( $submit ) )
             
             if ( $db->sql_query_insert_id( $query ) )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_content', " ", $admin_info['userid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weblink_add_link'], $title , $admin_info['userid'] );
             	$db->sql_freeresult();
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
                 die();

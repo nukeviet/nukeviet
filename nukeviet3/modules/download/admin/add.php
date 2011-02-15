@@ -216,7 +216,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         }
         else
         {
-            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add', " ", $admin_info['userid'] );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid'] );
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
             exit();
         }

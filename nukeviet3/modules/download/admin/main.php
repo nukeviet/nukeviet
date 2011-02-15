@@ -242,7 +242,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE `fid`=" . $id;
                     $db->sql_query( $sql );
                 }
-                
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid'] );
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
                 exit();
             }
@@ -447,7 +447,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     
     if ( ! $id ) die( "NO" );
     
-    $query = "SELECT `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
+    $query = "SELECT `fileupload`, `fileimage`,`title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
     $result = $db->sql_query( $query );
     $numrows = $db->sql_numrows( $result );
     if ( $numrows != 1 ) die( "NO" );
@@ -484,7 +484,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     
     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
     $db->sql_query( $sql );
-    
+    nv_insert_logs( NV_LANG_DATA, $module_data, $lang_module['download_filequeue_del']  ,$row['title'], $admin_info['userid'] );
     die( "OK" );
 }
 
@@ -525,7 +525,7 @@ if ( ! $all_page )
 {
     if ( $catid )
     {
-        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+    	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
         exit();
     }
     else

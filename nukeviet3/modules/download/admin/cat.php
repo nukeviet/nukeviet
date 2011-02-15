@@ -39,9 +39,9 @@ function nv_del_cat ( $catid )
 {
     global $db, $module_data;
     
-    $sql = "SELECT `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
+    $sql = "SELECT `parentid`,`title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $result = $db->sql_query( $sql );
-    list( $p ) = $db->sql_fetchrow( $result );
+    list( $p,$ti ) = $db->sql_fetchrow( $result );
     
     $sql = "SELECT `id`, `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid;
     $result = $db->sql_query( $sql );
@@ -96,6 +96,7 @@ function nv_del_cat ( $catid )
     
     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $db->sql_query( $sql );
+    nv_insert_logs( NV_LANG_DATA, $module_data, "delete category" ,$ti, $admin_info['userid'] );
 }
 
 $groups_list = nv_groups_list();
@@ -113,11 +114,8 @@ $error = "";
 //them chu de
 if ( $nv_Request->isset_request( 'add', 'get' ) )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_cat', " ", $admin_info['userid'] );
 	$page_title = $lang_module['addcat_titlebox'];
-    
     $is_error = false;
-    
     if ( $nv_Request->isset_request( 'submit', 'post' ) )
     {
         $array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
@@ -207,6 +205,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
             }
             else
             {
+            	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addcat_titlebox'] ,$array['title'], $admin_info['userid'] );
                 nv_del_moduleCache( $module_name );
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
                 exit();
@@ -469,7 +468,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 }
                 
                 nv_del_moduleCache( $module_name );
-                
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['editcat_cat'] ,$array['title'], $admin_info['userid'] );
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
                 exit();
             }

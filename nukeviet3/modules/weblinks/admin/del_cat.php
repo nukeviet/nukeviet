@@ -10,9 +10,9 @@
 if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $catid = $nv_Request->get_int ( 'catid', 'post', 0 );
-nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_cat', "catid ".$catid, $admin_info['userid'] );
+
 $contents = "NO_" . $catid;
-list($catid, $parentid) = $db->sql_fetchrow($db->sql_query("SELECT `catid`, `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid`=" . intval($catid) . ""));
+list($catid, $parentid,$title) = $db->sql_fetchrow($db->sql_query("SELECT `catid`, `parentid`,`title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid`=" . intval($catid) . ""));
 if ($catid > 0){
     list($check_parentid) = $db->sql_fetchrow($db->sql_query("SELECT count(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid` = '" . $catid . "'"));
     if (intval($check_parentid) > 0) {
@@ -34,6 +34,7 @@ if ($catid > 0){
             $contents = "OK_" . $catid;
         }
     }
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weblink_del_title'],  $title, $admin_info['userid'] );
 }
 
 include (NV_ROOTDIR . "/includes/header.php");
