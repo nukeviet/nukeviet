@@ -46,7 +46,6 @@ $lang_module['description'] = "Site's description";
 $lang_module['rewrite'] = "Rewrite Configuration";
 $lang_module['rewrite_optional'] = "Remove language characters on URL";
 $lang_module['disable_content'] = "Message content disable site";
-$lang_module['footer_content'] = "Footer Content";
 $lang_module['submit'] = "Submit";
 $lang_module['err_writable'] = "Error system can't write file %s. Please chmod or check server config!";
 $lang_module['err_supports_rewrite'] = "Error, server doesn't support rewrite.";

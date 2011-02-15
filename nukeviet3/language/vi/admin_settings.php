@@ -49,7 +49,6 @@ $lang_module['description'] = "Mô tả của site";
 $lang_module['rewrite'] = "Bật chức năng rewrite";
 $lang_module['rewrite_optional'] = "Loại bỏ kí tự ngôn ngữ trên url";
 $lang_module['disable_content'] = "Nội dung thông báo site ngưng hoạt động";
-$lang_module['footer_content'] = "Nội dung cuối site";
 
 $lang_module['submit'] = "Lưu";
 $lang_module['err_writable'] = "Lỗi hệ thống không ghi được file: %s bạn cần cấu hình server cho phép ghi file này.";
