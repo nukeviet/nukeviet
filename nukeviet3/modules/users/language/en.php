@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Oct 11, 2010, 08:38:54 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Oct 11, 2010, 08:38:54 PM
+ */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
+if ( ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['notallowuserlogin'] = "Sorry, login temporary not available";
 $lang_module['required'] = "Require";
@@ -122,6 +123,12 @@ $lang_module['changepass_title'] = "Change password";
 $lang_module['logout_title'] = "Logout";
 $lang_module['edit_info_title'] = "Edit";
 $lang_module['img_size_title'] = "Image size";
+
+$lang_module['email_active'] = "Activation information for changing email";
+$lang_module['email_active_info'] = "Hi %1\$s, Your are changed email address of account %2\$s, so youd should reactive the account. To active, you click to link below: <br /><br />URL: %3\$s<br /><br />The activation the account only enabled to %4\$s. <br /><br />This is automatically message from website %5\$s to your email. If you do not understand the content of this message. Simple please delete it! <br /><br /><br /><br />website Administrator";
+$lang_module['email_active_mes'] = "Your account has been updated. However, the system requires you to reactivate your account because you change your email address. An activation key has been sent to the new email address that you are provided. Please check your email for more information.";
+$lang_module['email_active_error_mail'] = "Your account has been updated, but the system does not send the email to activate your account. Please contact the website administrator for assistance.";
+
 $lang_module['st_login'] = "Regular login";
 $lang_module['st_login2'] = "Regular login";
 $lang_module['admin_login'] = "Login by admin account";
