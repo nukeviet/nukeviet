@@ -262,17 +262,7 @@
 		return false;
 	});
 	$(document).ready(function() {
-		$("#publ_date").datepicker({
-			showOn: "button",
-			dateFormat: "dd/mm/yy",
-			changeMonth: true,
-			changeYear: true,
-			showOtherMonths: true,
-			buttonImage: nv_siteroot+"images/calendar.gif",
-			buttonImageOnly: true
-		});
-
-		$("#exp_date").datepicker({
+		$("#publ_date,#exp_date").datepicker({
 			showOn: "button",
 			dateFormat: "dd/mm/yy",
 			changeMonth: true,
