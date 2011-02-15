@@ -143,4 +143,16 @@ $lang_module['revision_msg_download'] = "Để tiến hành cập nhật bạn c
 $lang_module['revision_download_files'] = "Tiến hành download file";
 $lang_module['revision_download_error'] = "download file lỗi";
 
+$lang_module['nukevietChange_caption'] = "Thông tin nâng cấp từ dự án NukeViet trên Google Code";
+$lang_module['nukevietChange_upd'] = "Nâng cấp mới nhất được công bố vào";
+$lang_module['nukevietChange_refresh'] = "Cập nhật lại";
+$lang_module['nukevietChange_go'] = "Truy cập";
+$lang_module['nukevietChange_content'] = "Nội dung";
+$lang_module['nukevietChange_id'] = "ID";
+$lang_module['nukevietChange_author'] = "Tác giả";
+$lang_module['nukevietChange_updated'] = "Cập nhật";
+$lang_module['nukevietChange_modify'] = "Sửa";
+$lang_module['nukevietChange_add'] = "Thêm";
+$lang_module['nukevietChange_delete'] = "Xóa";
+
 ?>

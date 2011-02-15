@@ -70,17 +70,6 @@ $lang_module['log_View'] = "Xem";
 $lang_module['log_del_no_items'] = "Bạn chưa chọn";
 $lang_module['log_note'] = "Ghi chú";
 
-$lang_module['nukevietChange_caption'] = "Thông tin nâng cấp từ dự án NukeViet trên Google Code";
-$lang_module['nukevietChange_upd'] = "Nâng cấp mới nhất được công bố vào";
-$lang_module['nukevietChange_refresh'] = "Cập nhật lại";
-$lang_module['nukevietChange_go'] = "Truy cập";
-$lang_module['nukevietChange_content'] = "Nội dung";
-$lang_module['nukevietChange_id'] = "ID";
-$lang_module['nukevietChange_author'] = "Tác giả";
-$lang_module['nukevietChange_updated'] = "Cập nhật";
-$lang_module['nukevietChange_modify'] = "Sửa";
-$lang_module['nukevietChange_add'] = "Thêm";
-$lang_module['nukevietChange_delete'] = "Xóa";
 $lang_module['moduleInfo'] = "Thông tin từ các module";
 $lang_module['moduleName'] = "Module";
 $lang_module['moduleContent'] = "Nội dung";

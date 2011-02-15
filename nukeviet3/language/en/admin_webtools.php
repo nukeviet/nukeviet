@@ -1,27 +1,28 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Jan 23, 2011, 01:15:14 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Jan 23, 2011, 01:15:14 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['clearsystem'] = "System cleanup";
 $lang_module['clearcache'] = "Delete cache";
-$lang_module['clearsession'] = "Delete session filé";
-$lang_module['cleardumpbackup'] = "Delete backup filé";
+$lang_module['clearsession'] = "Delete session files";
+$lang_module['cleardumpbackup'] = "Delete backup files";
 $lang_module['clearfiletemp'] = "Delete temp files";
 $lang_module['clearerrorlogs'] = "Delete error logs";
 $lang_module['submit'] = "Submit";
@@ -135,5 +136,17 @@ $lang_module['revision_del_files'] = "Deleted files";
 $lang_module['revision_msg_download'] = "To make updates you need to click on \"Proceed to download files\" for the system to download the necessary files, the download process faster or slower depending on the number of files and your network, please wait until has announced the next step";
 $lang_module['revision_download_files'] = "Proceed to download files";
 $lang_module['revision_download_error'] = "The process of downloading files with errors";
+
+$lang_module['nukevietChange_caption'] = "Subversion commits to project NukeViet on Google Code";
+$lang_module['nukevietChange_upd'] = "Last Update";
+$lang_module['nukevietChange_refresh'] = "Refresh";
+$lang_module['nukevietChange_go'] = "Visit";
+$lang_module['nukevietChange_content'] = "Content";
+$lang_module['nukevietChange_id'] = "ID";
+$lang_module['nukevietChange_author'] = "Author";
+$lang_module['nukevietChange_updated'] = "Updated";
+$lang_module['nukevietChange_modify'] = "Modify";
+$lang_module['nukevietChange_add'] = "Add";
+$lang_module['nukevietChange_delete'] = "Delete";
 
 ?>

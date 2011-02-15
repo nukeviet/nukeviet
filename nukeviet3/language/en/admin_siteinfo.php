@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Oct 12, 2010, 01:55:02 AM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Oct 12, 2010, 01:55:02 AM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['site_configs_info'] = "Site configure";
 $lang_module['site_domain'] = "Site domain";
@@ -130,17 +131,6 @@ $lang_module['log_del_vote'] = "deleting vote";
 $lang_module['log_add_vote'] = "vote adding operations";
 $lang_module['log_edit_vote'] = "vote editing operations";
 
-$lang_module['nukevietChange_caption'] = "Subversion commits to project NukeViet on Google Code";
-$lang_module['nukevietChange_upd'] = "Last Update";
-$lang_module['nukevietChange_refresh'] = "Refresh";
-$lang_module['nukevietChange_go'] = "Visit";
-$lang_module['nukevietChange_content'] = "Content";
-$lang_module['nukevietChange_id'] = "ID";
-$lang_module['nukevietChange_author'] = "Author";
-$lang_module['nukevietChange_updated'] = "Updated";
-$lang_module['nukevietChange_modify'] = "Modify";
-$lang_module['nukevietChange_add'] = "Add";
-$lang_module['nukevietChange_delete'] = "Delete";
 $lang_module['moduleInfo'] = "Modules Information";
 $lang_module['moduleName'] = "Module";
 $lang_module['moduleContent'] = "Content";
