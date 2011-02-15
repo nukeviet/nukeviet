@@ -63,25 +63,18 @@
                                 </td>
                             </tr>
                         </tbody>
-                        </table>
+                     </table>
                         
-                        <table summary="" class="tab1">
-                        <tbody>
+                     <table summary="" class="tab1">
+                         <tbody class="second">
                             <tr>
                                 <td><strong>{LANG.content_homeimg}</strong></td>
-                            </tr>
-                        </tbody>
-                        <tbody class="second">
-                            <tr>
                                 <td>
                                     <input style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/>
                                     <input type="button" value="Browse server" name="selectimg"/>
                                 </td>
                             </tr>
                         </tbody>
-                     </table>
-                     
-                   	 <table summary="" class="tab1">
                         <tbody>
                             <tr>
                                 <td width="180">{LANG.content_homeimgalt}</td>
@@ -103,6 +96,7 @@
                             </tr>
                         </tbody>
                      </table>
+                     
                      <table summary="" class="tab1">
                     	<tbody>
                             <tr>
