@@ -580,7 +580,6 @@ $contents .= '	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.p
 			buttonImage: "' . NV_BASE_SITEURL . 'images/calendar.gif",
 			buttonImageOnly: true
 		});
-		$("#exp_time").datepicker( $.datepicker.regional[ "vi" ] );
 	});	
 
 	$(function(){
