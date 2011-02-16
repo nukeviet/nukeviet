@@ -41,10 +41,17 @@ $contents = "";
 $step = $nv_Request->get_int( 'step', 'post,get', 1 );
 
 $maxstep = $nv_Request->get_int( 'maxstep', 'session', 1 );
+
+if ( $step <= 0 OR $step > 7 )
+{
+    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=1" );
+    exit();
+}
+
 if ( $step > $maxstep )
 {
     $step = $maxstep;
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step . "" );
+    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
     exit();
 }
 

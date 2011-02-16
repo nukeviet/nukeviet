@@ -296,7 +296,7 @@ else
             if ( ! empty( $svn_data_files['del_files'] ) ) $contents_f .= "\$delete_files = array('" . implode( "',\n '", $svn_data_files['del_files'] ) . "');\n\n\n";
             $contents_f .= "\n?>";
             
-            file_put_contents( NV_ROOTDIR . "/install/update/update.php", $contents_f, FILE_APPEND );
+            file_put_contents( NV_ROOTDIR . "/install/update/update.php", $contents_f, LOCK_EX );
             die( "OK_DOWNLOADCOMPLETE" );
         }
     }
