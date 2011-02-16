@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_USER' ) )
+if ( ! defined( 'NV_IS_USER' ) or defined( 'NV_IS_ADMIN' ) )
 {
     Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
     die();
@@ -19,7 +19,8 @@ if ( defined( 'NV_IS_USER_FORUM' ) )
 {
     require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/logout.php' );
 }
-else{
+else
+{
     $nv_Request->unset_request( 'nvloginhash', 'cookie' );
 }
 

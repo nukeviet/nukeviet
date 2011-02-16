@@ -15,9 +15,16 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
     {
         if ( defined( 'NV_IS_USER' ) )
         {
-            $in_submenu_users = array( 
-                "changepass", "openid", "logout" 
-            );
+            $in_submenu_users = array();
+            $in_submenu_users[] = "changepass";
+            if ( defined( 'NV_OPENID_ALLOWED' ) )
+            {
+                $in_submenu_users[] = "openid";
+            }
+            if ( ! defined( 'NV_IS_ADMIN' ) )
+            {
+                $in_submenu_users[] = "logout";
+            }
         }
         else
         {
