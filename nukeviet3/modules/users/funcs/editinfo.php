@@ -273,11 +273,7 @@ if ( $checkss == $array_data['checkss'] )
     if ( $array_data['allowmailchange'] )
     {
         $email_new = filter_text_input( 'email', 'post', '', 1, 100 );
-        if ( nv_check_email_change( $email_new ) != "" )
-        {
-            $error[] = $lang_module['email'];
-        }
-        elseif ( $email_new != $row['email'] )
+        if ( $email_new != $row['email'] )
         {
             $checknum = nv_genpass( 10 );
             $checknum = md5( $checknum . $email_new );
@@ -285,8 +281,14 @@ if ( $checkss == $array_data['checkss'] )
             
             $sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `md5username`=" . $db->dbescape( $md5_username );
             $db->sql_query( $sql );
-            
-            $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_reg` VALUES (
+            $error_email_change = nv_check_email_change( $email_new );
+            if ( ! empty( $error_email_change ) )
+            {
+                $error[] = $error_email_change;
+            }
+            else
+            {
+                $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_reg` VALUES (
                 NULL, 
                 'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "', 
                 " . $db->dbescape( $md5_username ) . ", 
@@ -297,22 +299,23 @@ if ( $checkss == $array_data['checkss'] )
                 '', 
                 '', 
                 " . $db->dbescape( $checknum ) . ")";
-            $userid_check = $db->sql_query_insert_id( $sql );
-            
-            if ( $userid_check > 0 )
-            {
-                $subject = $lang_module['email_active'];
-                $message = sprintf( $lang_module['email_active_info'], $array_data['full_name'], $array_data['username'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active&userid=" . $userid_check . "&checknum=" . $checknum, nv_date( "H:i d/m/Y", NV_CURRENTTIME + 86400 ), $global_config['site_name'] );
-                $message .= "<br /><br />------------------------------------------------<br /><br />";
-                if ( NV_LANG_DATA == 'vi' ) $message .= nv_EncString( $message );
-                $send = nv_sendmail( $global_config['site_email'], $email_new, $subject, $message );
-                if ( $send )
+                $userid_check = $db->sql_query_insert_id( $sql );
+                
+                if ( $userid_check > 0 )
                 {
-                    $error[] = $lang_module['email_active_mes'];
-                }
-                else
-                {
-                    $error[] = $lang_module['email_active_error_mail'];
+                    $subject = $lang_module['email_active'];
+                    $message = sprintf( $lang_module['email_active_info'], $array_data['full_name'], $array_data['username'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active&userid=" . $userid_check . "&checknum=" . $checknum, nv_date( "H:i d/m/Y", NV_CURRENTTIME + 86400 ), $global_config['site_name'] );
+                    $message .= "<br /><br />------------------------------------------------<br /><br />";
+                    if ( NV_LANG_DATA == 'vi' ) $message .= nv_EncString( $message );
+                    $send = nv_sendmail( $global_config['site_email'], $email_new, $subject, $message );
+                    if ( $send )
+                    {
+                        $error[] = $lang_module['email_active_mes'];
+                    }
+                    else
+                    {
+                        $error[] = $lang_module['email_active_error_mail'];
+                    }
                 }
             }
         }
