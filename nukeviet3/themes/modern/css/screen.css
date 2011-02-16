@@ -173,11 +173,13 @@ a.rss {
     font-size: 28px;
     font-weight: normal;
     color: #414f5b;
-	white-space: nowrap;
+    white-space: nowrap;
 }
+
 .logo img {
-	vertical-align:middle;
+    vertical-align: middle;
 }
+
 .topadv {
     position: absolute;
     width: 470px;
@@ -549,6 +551,10 @@ ul.list-number li {
     padding-bottom: 6px;
     margin-bottom: 6px;
     border-bottom: 1px solid #e8e8e8;
+}
+
+ul.list-number li.bg {
+    background: #F3F3F3;
 }
 
 ul.list-tab {
@@ -1037,47 +1043,55 @@ a.highlight, a.highlight:hover {
 .sideon {
     display: block;
 }
-.keyword{
-	background:#FF3;
+
+.keyword {
+    background: #FF3;
 }
-.title-search{
-	font-size:18px;
-	color:#414F5B;
-	padding:0 0 8px 0;
-	border-bottom:1px solid #d7d7d7;
+
+.title-search {
+    font-size: 18px;
+    color: #414F5B;
+    padding: 0 0 8px 0;
+    border-bottom: 1px solid #d7d7d7;
 }
 
 /*Choose color*/
 #choose-color-lang {
-	position:relative;
-	padding:0 10px;
+    position: relative;
+    padding: 0 10px;
 }
-#choose-color-lang a.red,#choose-color-lang a.blue {
-	width:15px;
-	height:15px;
-	text-indent:-9999em;
-	display:block;
-	float:left;
+
+#choose-color-lang a.red, #choose-color-lang a.blue {
+    width: 15px;
+    height: 15px;
+    text-indent: -9999em;
+    display: block;
+    float: left;
 }
+
 #choose-color-lang a.red {
-	background:#d83300;
+    background: #d83300;
 }
+
 #choose-color-lang a.blue {
-	background:#098de1;
+    background: #098de1;
 }
+
 #choose-color-lang .cl {
-	border:1px solid #d8d8d8;
-	padding:5px 10px;
+    border: 1px solid #d8d8d8;
+    padding: 5px 10px;
 }
-#choose-color-lang  select {
-	border:1px solid #d8d8d8;
-	padding:1px;
+
+#choose-color-lang select {
+    border: 1px solid #d8d8d8;
+    padding: 1px;
 }
-form.select_lang{
-	margin:0;
-	padding:0;
-	float:right;
-	margin-left:10px;
+
+form.select_lang {
+    margin: 0;
+    padding: 0;
+    float: right;
+    margin-left: 10px;
 }
 
 ul.list_item {
@@ -1097,5 +1111,5 @@ ul.list_item li.second {
 }
 
 .tabs_view {
-	padding:5px 0;
+    padding: 5px 0;
 }
