@@ -302,6 +302,8 @@ else
             $contents_f .= "\n?>";
             
             file_put_contents( NV_ROOTDIR . "/install/update/update.php", $contents_f, LOCK_EX );
+            nv_deletefile( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log' );
+            
             die( "OK_DOWNLOADCOMPLETE" );
         }
     }
