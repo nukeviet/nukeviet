@@ -55,7 +55,15 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
         $i = 1;
         if ( ! empty( $list ) )
         {
-            $xtpl = new XTemplate( "block_blocknews.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/news" );
+            if ( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/news/block_blocknews.tpl" ) )
+            {
+                $block_theme = $module_info['template'];
+            }
+            else
+            {
+                $block_theme = "default";
+            }
+            $xtpl = new XTemplate( "block_blocknews.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/news" );
             foreach ( $list as $l )
             {
                 $arr_catid = explode( ',', $l['listcatid'] );
