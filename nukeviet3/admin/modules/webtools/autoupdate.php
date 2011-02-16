@@ -14,9 +14,9 @@ if ( $sys_info['allowed_set_time_limit'] )
 }
 $nv_sites_update = array(  //
     'update.nukeviet.vn', //
-	'update2.nukeviet.vn', //
-	'update.nukeviet.info', //
-	'update2.nukeviet.info' 
+'update2.nukeviet.vn', //
+'update.nukeviet.info', //
+'update2.nukeviet.info' 
 );
 
 $temp_extract_dir = 'install/update';
@@ -276,7 +276,11 @@ elseif ( $step == 3 and file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/up
             {
                 $cur_file = NV_ROOTDIR . '/' . $file;
                 $old_file = NV_ROOTDIR . '/' . $temp_extract_dir . '/old/' . $file;
-                if ( md5_file( $cur_file ) != md5_file( $old_file ) )
+                if ( ! file_exists( $cur_file ) or ! file_exists( $old_file ) )
+                {
+                    $user_edit_file[] = $file;
+                }
+                elseif ( md5_file( $cur_file ) != md5_file( $old_file ) )
                 {
                     $user_edit_file[] = $file;
                 }
@@ -292,7 +296,7 @@ elseif ( $step == 3 and file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/up
         {
             $contents .= '<br />' . $lang_module['autoupdate_click_update'];
         }
-        $contents .= '<br /><br />' . $lang_module['autoupdate_backupfile'] . ': <b>' . NV_LOGS_DIR . '/data_logs/backup_update_' . date( Y_m_d ) . '.zip</b>';
+        $contents .= '<br /><br />' . $lang_module['autoupdate_backupfile'] . ': <br /><br /><b>' . NV_LOGS_DIR . '/data_logs/backup_update_' . date( 'Y_m_d' ) . '_' . md5( $global_config['sitekey'] . session_id() ) . '.zip</b>';
         $contents .= '<br /><br />';
         $contents .= '<div id="message_32" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif"/></div>';
         $contents .= '<br /><div id="step_32" ><center><br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate'] . '"/><center></div>';
@@ -338,7 +342,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
         }
         if ( ! empty( $zip_file_backup ) )
         {
-            $file_src = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/backup_update_' . date( Y_m_d_H_i_s ) . '.zip';
+            $file_src = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/backup_update_' . date( 'Y_m_d' ) . '_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
             
             require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
             $zip = new PclZip( $file_src );
@@ -427,8 +431,26 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
                     }
                     if ( $update_data )
                     {
-                        nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
-                        $contents .= '<br /><br /><b>' . $lang_module['autoupdate_complete'] . '</b>';
+                        if ( isset( $update_info['version']['to'] ) )
+                        {
+                            $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->dbescape_string( $update_info['version']['to'] ) . " WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'version'" );
+                        }
+                        if ( isset( $update_info['revision']['to'] ) )
+                        {
+                            $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = '" . intval( $update_info['revision']['to'] ) . "' WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'revision'" );
+                        }
+                        nv_save_file_config_global();
+                        $del = nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
+                        
+                        if ( $del[0] == 1 )
+                        {
+                            $msg = $lang_module['autoupdate_complete'];
+                        }
+                        else
+                        {
+                            $msg = $lang_module['autoupdate_complete_error_del_file'];
+                        }
+                        $contents .= '<br /><br /><b>' . $msg . '</b>';
                     }
                     else
                     {

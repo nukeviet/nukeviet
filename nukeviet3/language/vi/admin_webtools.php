@@ -131,6 +131,7 @@ $lang_module['autoupdate_error_create_folder'] = "Quá trình nâng cấp bị l
 $lang_module['autoupdate_error_move_file'] = "Quá trình nâng cấp bị lỗi: Hệ thống không di chuyển được các file sau";
 $lang_module['autoupdate_complete_file'] = "Thông báo: Hệ thống đã thực hiện quá trình di chuyển file thành công";
 $lang_module['autoupdate_complete'] = "Thực hiện quá trình nâng cấp thành công.";
+$lang_module['autoupdate_complete_error_del_file'] = "Thực hiện quá trình nâng cấp thành công. Bạn cần tiến hành xóa thư mục install/update trên máy chủ";
 $lang_module['autoupdate_error_data'] = "Và gặp các lỗi về việc cập nhật CSDL";
 
 $lang_module['revision_nosuport'] = "Lỗi: hệ thống cập nhật theo revision chỉ hỗ trợ từ bản NukeViet 3.1";

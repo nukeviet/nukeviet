@@ -22,7 +22,7 @@ if ( $module_name == "webtools" )
     if ( ! empty( $new_version ) )
     {
         global $global_config;
-        if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
+        if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 or $op=="autoupdate")
         {
             $submenu['autoupdate'] = $lang_module['autoupdate_system'];
         }

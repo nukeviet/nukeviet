@@ -126,6 +126,7 @@ $lang_module['autoupdate_error_create_folder'] = "Upgrade process error: The sys
 $lang_module['autoupdate_error_move_file'] = "Upgrade process error: The system does not move the following files";
 $lang_module['autoupdate_complete_file'] = "Notice: The system has made the process of moving files successfully";
 $lang_module['autoupdate_complete'] = "Complete the upgrade process";
+$lang_module['autoupdate_complete'] = "Complete the upgrade process, You need to be taken to delete the folder install/update on the server";
 $lang_module['autoupdate_error_data'] = "And see the error on database update";
 $lang_module['revision_nosuport'] = "Error: The updated system will only support revision from the 3.1 Nukeviet";
 $lang_module['revision_error_cache_file'] = "Error: System not found log updates file";
