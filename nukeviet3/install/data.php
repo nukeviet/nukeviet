@@ -101,7 +101,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
-  `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `userid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) NOT NULL DEFAULT '',
   `md5username` char(32) NOT NULL DEFAULT '',
   `password` varchar(50) NOT NULL DEFAULT '',

@@ -13,18 +13,16 @@ function nv_func_update_data ( )
 {
     global $global_config, $db_config, $db, $error_contents;
     // Update data
-    if ( $global_config['revision'] < 900 )
+    if ( $global_config['revision'] < 902 )
     {
-        //$result = $db->sql_query( $sql );
-	    //if ( ! $result )
-	    // {
-	    //   $error_contents[] = 'error update sql';
-	    //}
+        $sql = "ALTER TABLE `" . NV_USERS_GLOBALTABLE . "_reg` CHANGE `userid` `userid` MEDIUMINT( 8 ) UNSIGNED NOT NULL AUTO_INCREMENT";
+        $result = $db->sql_query( $sql );
+        if ( ! $result )
+        {
+            $error_contents[] = 'error update sql revision: 902';
+        }
     }
-    
     // End date data
-    
-
     if ( empty( $error_contents ) )
     {
         return true;
