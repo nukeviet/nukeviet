@@ -27,7 +27,7 @@ $set_viewcat = "";
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 $array_mod_title = array();
 $global_array_cat = array();
-
+global $module_config;
 //Xac dinh RSS
 $rss[] = array(  //
     'title' => $module_info['custom_title'], //
@@ -36,9 +36,10 @@ $rss[] = array(  //
 
 $sql = "SELECT name, value FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
 $result = $db->sql_query( $sql );
-while ( $row = $db->sql_fetchrow( $result ) )
+$module_config = array();
+while ( $row = $db->sql_fetchrow( $result,2 ) )
 {
-    $$row['name'] = $row['value'];
+    $module_config[$row['name']] = $row['value'];
 }
 unset( $sql, $result );
 
@@ -117,4 +118,5 @@ if ( ! empty( $array_op ) )
         sort( $array_mod_title, SORT_NUMERIC );
     }
 }
+
 ?>

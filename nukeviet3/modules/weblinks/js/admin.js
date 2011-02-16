@@ -1,3 +1,38 @@
-function nv_chang_cat(a,b){nv_settimeout_disable("id_"+b+"_"+a,5E3);var c=document.getElementById("id_"+b+"_"+a).options[document.getElementById("id_"+b+"_"+a).selectedIndex].value;nv_ajax("post",script_name,nv_name_variable+"="+nv_module_name+"&"+nv_fc_variable+"=change_cat&catid="+a+"&mod="+b+"&new_vid="+c+"&num="+nv_randomPassword(8),"","nv_chang_cat_result")}function nv_chang_cat_result(a){a.split("_")[0]!="OK"&&alert(nv_is_change_act_confirm[2]);clearTimeout(nv_timer);nv_show_list_cat()}
-function nv_show_list_cat(){document.getElementById("module_show_list")&&nv_ajax("get",script_name,nv_name_variable+"="+nv_module_name+"&"+nv_fc_variable+"=list_cat&num="+nv_randomPassword(8),"module_show_list")}function nv_del_cat(a){confirm(nv_is_del_confirm[0])&&nv_ajax("post",script_name,nv_name_variable+"="+nv_module_name+"&"+nv_fc_variable+"=del_cat&catid="+a,"","nv_del_cat_result");return false}
-function nv_del_cat_result(a){a=a.split("_");if(a[0]=="OK")nv_show_list_cat();else a[0]=="ERR"?alert(a[1]):alert(nv_is_del_confirm[2]);return false};
+// Xu ly cat ---------------------------------------
+
+function nv_chang_cat(object, catid, mod )
+{
+	var new_vid = $(object).val();
+	nv_ajax( "post", script_name, nv_name_variable+'='+nv_module_name+'&'+nv_fc_variable + '=change_cat&catid=' + catid + '&mod='+mod+'&new_vid=' + new_vid + '&num=' + nv_randomPassword( 8 ), '', 'nv_chang_cat_result' );
+	return;
+}
+
+//  ---------------------------------------
+
+function nv_chang_cat_result( res )
+{
+	window.location = url_back;
+	return false;
+}
+
+function nv_del_cat(catid)
+{
+   if (confirm(nv_is_del_confirm[0]))
+   {
+      nv_ajax( 'post', script_name, nv_name_variable+'='+nv_module_name+'&'+nv_fc_variable + '=del_cat&catid=' + catid, '', 'nv_del_cat_result' );
+   }
+   return false;
+}
+
+function nv_del_cat_result(res)
+{
+	var r_split = res.split( "_" );
+	if (r_split[0] == 'OK') {
+		window.location = url_back;
+	} else if (r_split[0] == 'ERR') {
+		alert(r_split[1]);
+	} else {
+		alert(nv_is_del_confirm[2]);
+	}
+	return false;
+}

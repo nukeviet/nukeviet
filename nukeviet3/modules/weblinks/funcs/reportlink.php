@@ -25,6 +25,7 @@ $row['action'] = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . 
 $row['id'] = $id;
 if ( $id )
 {
+	$check = false;
     if ( $submit && $report_id )
     {
         $sql = "SELECT `type` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE id='" . $report_id . "'";

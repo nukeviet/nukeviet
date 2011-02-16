@@ -26,7 +26,7 @@ function check_title ( $title )
     return $msg;
 }
 
-$rowcat = array( 
+$data_content = array( 
     "id" => "", "catid" => "", "title" => "", "alias" => "", "url" => "", "urlimg" => "", "description" => "", "add_time" => "", "edit_time" => "", "hits_total" => "", "status" => 1 
 );
 
@@ -39,7 +39,6 @@ if ( ! empty( $submit ) )
     $catid = $nv_Request->get_int( 'catid', 'post', 0 );
     $title = filter_text_input( 'title', 'post', '', 1 );
     $alias = filter_text_input( 'alias', 'post', '', 1 );
-    $parentid = $nv_Request->get_int( 'parentid', 'post', 0 );
     $alias = ( $alias == "" ) ? change_alias( $title ) : change_alias( $alias );
     $url = filter_text_input( 'url', 'post', '' );
     $image = filter_text_input( 'image', 'post', '' );
@@ -59,7 +58,7 @@ if ( ! empty( $submit ) )
     
     $status = ( $nv_Request->get_int( 'status', 'post' ) == 1 ) ? 1 : 0;
     //check url
-    if ( empty( $url ) || !nv_is_url( $url ) || !check_url( $id, $url ) || !nv_check_url( $url ) )
+    if ( empty( $url ) || ! nv_is_url( $url ) || ! check_url( $id, $url ) || ! nv_check_url( $url ) )
     {
         $error = $lang_module['error_url'];
     }
@@ -79,8 +78,8 @@ if ( ! empty( $submit ) )
             $db->sql_query( $query );
             if ( $db->sql_affectedrows() > 0 )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weblink_edit_link'], $title , $admin_info['userid'] );
-            	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weblink_edit_link'], $title, $admin_info['userid'] );
+                Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
                 die();
             }
             else
@@ -93,11 +92,10 @@ if ( ! empty( $submit ) )
         {
             $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `catid`, `title`, `alias`, `url`, `urlimg`, `admin_phone`, `admin_email`, `note`, `description`, `add_time`, `edit_time`, `hits_total`, `status`) 
             VALUES (NULL, '" . $catid . "', " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $url ) . ", " . $db->dbescape( $image ) . ", '" . $admin_phone . "', '" . $admin_email . "', " . $db->dbescape( $note ) . ", " . $db->dbescape( $description ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), '0', " . $status . ")";
-            
             if ( $db->sql_query_insert_id( $query ) )
             {
-                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weblink_add_link'], $title , $admin_info['userid'] );
-            	$db->sql_freeresult();
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weblink_add_link'], $title, $admin_info['userid'] );
+                $db->sql_freeresult();
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
                 die();
             }
@@ -107,130 +105,87 @@ if ( ! empty( $submit ) )
             }
         }
     }
-    $rowcat['id'] = $id;
-    $rowcat['url'] = $url;
-    $rowcat['title'] = $title;
-    $rowcat['urlimg'] = $image;
-    $rowcat['description'] = $description;
+    $data_content['id'] = $id;
+    $data_content['url'] = $url;
+    $data_content['title'] = $title;
+    $data_content['urlimg'] = $image;
+    $data_content['description'] = $description;
 }
 elseif ( $id > 0 )
 {
     $query = $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $id . "" );
-    $rowcat = $db->sql_fetchrow( $query );
-    if ( $rowcat['id'] > 0 )
+    $data_content = $db->sql_fetchrow( $query );
+    if ( $data_content['id'] > 0 )
     {
         $page_title = $lang_module['weblink_edit_link'];
     }
 }
 
-if ( empty( $rowcat['id'] ) )
+if ( empty( $data_content['id'] ) )
 {
     $page_title = $lang_module['weblink_add_link'];
 }
 
-$rowcat['description'] = ( defined( 'NV_EDITOR' ) ) ? nv_editor_br2nl( $rowcat['description'] ) : nv_br2nl( $rowcat['description'] ); // dung de lay data tu CSDL
-$rowcat['description'] = nv_htmlspecialchars( $rowcat['description'] ); // dung de dua vao editor
+$data_content['description'] = ( defined( 'NV_EDITOR' ) ) ? nv_editor_br2nl( $data_content['description'] ) : nv_br2nl( $data_content['description'] ); // dung de lay data tu CSDL
+$data_content['description'] = nv_htmlspecialchars( $data_content['description'] ); // dung de dua vao editor
 
 
-if ( ! empty( $rowcat['urlimg'] ) and ! nv_is_url( $rowcat['urlimg'] ) )
+if ( ! empty( $data_content['urlimg'] ) and ! nv_is_url( $data_content['urlimg'] ) )
 {
-    $rowcat['urlimg'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $rowcat['urlimg'];
+    $data_content['urlimg'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $data_content['urlimg'];
 }
-
+//set editor
 if ( defined( 'NV_EDITOR' ) )
 {
     require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 }
-$contents = "";
-if ( $error != "" )
+if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
-    $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
-    $contents .= "<blockquote class=\"error\"><span>" . $error . "</span></blockquote>\n";
-    $contents .= "</div>\n";
-    $contents .= "<div class=\"clear\"></div>\n";
+    $edits = nv_aleditor( 'description', '100%', '300px', $data_content['description'] );
 }
-$contents .= "<div id=\"list_mods\">";
-
-$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-// post header parameter
-$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-$contents .= "<input type=\"hidden\" name =\"id\" value=\"" . $id . "\" />";
-$contents .= "<table class=\"tab1\" cellspacing=\"5\" cellpadding=\"5\">\n";
-$contents .= "<tr>";
-$contents .= "<td align=\"right\" style=\"width: 150px;\">" . $lang_module['weblink_add_title'] . ": </td>\n";
-$contents .= "<td><input type=\"text\" name=\"title\" id=\"webtitle\" style=\"width:550px\" value=\"" . $rowcat['title'] . "\"/></td>\n";
-$contents .= "</tr>";
-$contents .= "<tr>";
-$contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_add_url'] . ": </td>\n";
-$contents .= "<td><input style=\"width: 550px\" name=\"url\" id= \"url\" type=\"text\" value=\"" . $rowcat['url'] . "\" maxlength=\"255\" /></td>\n";
-$contents .= "</tr>";
-$contents .= "<tr>";
-$contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_add_parent'] . ": </td>\n";
-$contents .= "<td>\n";
-$contents .= "<select name=\"catid\">\n";
+else
+{
+    $edits = "<textarea style=\"width: 100%\" name=\"description\" id=\"bodytext\" cols=\"20\" rows=\"15\">" . $data_content['description'] . "</textarea>";
+}
+// get catid
 $querysubcat = $db->sql_query( "SELECT catid, parentid, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `parentid`, `weight` ASC" );
 $array_cat = array();
 while ( $row = $db->sql_fetchrow( $querysubcat ) )
 {
-    $selected = ( intval( $row['catid'] ) == intval( $rowcat["catid"] ) ) ? 'selected' : '';
-    $array_cat[$row['catid']] = $row['title'];
-    $title = $row["title"];
-    if ( intval( $row['parentid'] ) > 0 )
+    $array_cat[$row['catid']] = $row;
+}
+// get template
+$xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'DATA', $data_content );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'module_name', $module_name );
+$xtpl->assign( 'NV_EDITOR', $edits );
+// get catid
+if ( ! empty( $array_cat ) )
+{
+    foreach ( $array_cat as $cat )
     {
-        $title = $array_cat[$row['parentid']] . " ->" . $row["title"];
+        $xtitle = "";
+        if ( $cat['parentid'] != 0 ) $xtitle = getlevel( $cat['parentid'], $array_cat );
+        $cat['title'] = $xtitle . $cat['title'];
+        $cat['sl'] = ($cat['catid'] == $data_content['catid']) ? "selected=\"selected\"" : "";
+        $xtpl->assign( 'CAT', $cat );
+        $xtpl->parse( 'main.loopcat' );
     }
-    $contents .= "<option value=\"" . $row["catid"] . "\" " . $selected . ">" . $title . "</option>\n";
 }
-$contents .= "</select>\n";
-$contents .= "</td>\n";
-$contents .= "</tr>";
-if ( $id > 0 )
+$xtpl->assign( 'PATH', NV_UPLOADS_DIR . '/' . $module_name );
+$xtpl->assign( 'id', $data_content['id'] );
+$xtpl->assign( 'DATA', $data_content );
+if ( ! empty( $error ) )
 {
-    $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['alias'] . ": </td>\n";
-    $contents .= "<td><input style=\"width: 200px\" name=\"alias\" type=\"text\" value=\"" . $rowcat['alias'] . "\" maxlength=\"255\" /></td>\n";
-    $contents .= "</tr>";
+	$xtpl->assign( 'error', $error );	
+	$xtpl->parse( 'main.error' );
 }
-$contents .= "<tr>";
-$contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_add_image'] . ": </td>\n";
-$contents .= "<td>";
-$contents .= '<input style="width:400px" type="text" name="image" id="image" value="' . $rowcat['urlimg'] . '"/>';
-$contents .= '<input type="button" value="Browse Server" name="selectimg"/>
-				<script type="text/javascript">
-					$("input[name=selectimg]").click(function(){
-						var area = "image";
-						var path= "' . NV_UPLOADS_DIR . '/' . $module_name . '";						
-						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path, "NVImg", "850", "500","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-						return false;
-					});
-				</script>	';
-$contents .= "</td>";
-$contents .= "</tr>";
-$contents .= "<tr>";
-$contents .= "<td align=\"right\">" . $lang_module['weblink_description'] . ": </td>\n";
-$contents .= "<td>";
-if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
-{
-    $contents .= nv_aleditor( "description", '700px', '300px', $rowcat['description'] );
-}
-else
-{
-    $contents .= "<textarea style=\"width: 650px\" name=\"description\" id=\"description\" cols=\"20\" rows=\"8\">" . $rowcat['description'] . "</textarea>";
-}
-$contents .= "</td>\n";
-$contents .= "</tr>";
-$contents .= "<tr>";
-$contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_inhome'] . ": </td>\n";
-$checked = ( intval( $rowcat['status'] ) == 1 ) ? 'checked' : '';
-$contents .= "<td><label><input name=\"status\" type=\"checkbox\" value=\"1\" checked=\"" . $checked . "\" />" . $lang_module['weblink_yes'] . "</label></td>\n";
-$contents .= "</tr>";
-$contents .= "<tr>";
-$contents .= "<td align=\"left\" colspan=\"2\"><input name=\"submit\" style=\"width:80px;margin-left:110px\" type=\"submit\" value=\"" . $lang_module['weblink_submit'] . "\" /></td>\n";
-$contents .= "</tr>";
-$contents .= "</table>";
-$contents .= "</form>\n";
-$contents .= "</div>\n";
+$xtpl->parse( 'main' );
+$contents .= $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

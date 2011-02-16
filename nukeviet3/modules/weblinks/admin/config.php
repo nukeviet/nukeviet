@@ -36,7 +36,6 @@ if ( ! empty( $submit ) )
     $per_page = ( $nv_Request->get_int( 'per_page', 'post' ) >= 0 ) ? $nv_Request->get_int( 'per_page', 'post' ) : 10;
     
     $sql = array();
-    $sql[] = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config` SET value=" . $db->dbescape( $intro ) . " WHERE name='intro'";
     $sql[] = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config` SET value='" . $numcat . "' WHERE name='numcat'";
     $sql[] = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config` SET value='" . $showsub . "' WHERE name='showsub'";
     $sql[] = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config` SET value='" . $numsub . "' WHERE name='numsub'";
@@ -75,17 +74,10 @@ else
     }
     $contents .= "<div id=\"list_mods\">";
     $contents .= "<form action='' method='post'>";
-    $contents .= "<legend><strong>" . $lang_module['weblink_config_main'] . "</strong></legend>";
     $contents .= "<table class=\"tab1\" style=\"margin-bottom: 8px;\">\n";
-    $contents .= "<tbody class=\"second\">";
-    $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"  width=\"230px\">" . $lang_module['weblink_config_intro'] . "</td>\n";
-    $contents .= "<td><textarea name='intro' style='width:500px;height:50px'>" . htmlspecialchars_decode( $intro ) . "</textarea></td>\n";
-    $contents .= "</tr>";
-    $contents .= "</tbody>\n";
     $contents .= "<tbody>";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_col'] . "</td>\n";
+    $contents .= "<td width=\"230px\" align=\"right\">" . $lang_module['weblink_config_col'] . "</td>\n";
     $contents .= "<td>\n";
     $contents .= "<select name=\"numcat\">\n";
     for ( $i = 1; $i <= 4; $i ++ )
@@ -101,13 +93,13 @@ else
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>";
     $checked = ( $showsub == 1 ) ? ' checked' : '';
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_showsub'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['weblink_config_showsub'] . "</td>\n";
     $contents .= "<td><input type=\"checkbox\" value=\"1\" name='showsub' $checked> " . $lang_module['weblink_yes'] . "</td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>\n";
     $contents .= "<tbody>";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_showsublimit'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['weblink_config_showsublimit'] . "</td>\n";
     $contents .= "<td>\n";
     $contents .= "<select name=\"numsub\">\n";
     for ( $i = 1; $i <= 4; $i ++ )
@@ -123,21 +115,21 @@ else
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>";
     $checked = ( $numinsub == 1 ) ? ' checked' : '';
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_shownumsub'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['weblink_config_shownumsub'] . "</td>\n";
     $contents .= "<td><input type=\"checkbox\" value=\"1\" name=\"numinsub\" $checked> " . $lang_module['weblink_yes'] . "</td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>\n";
     $contents .= "<tbody>\n";
     $contents .= "<tr>";
     $checked = ( $showcatimage == 1 ) ? ' checked' : '';
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_showimage'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['weblink_config_showimage'] . "</td>\n";
     $contents .= "<td><input type=\"checkbox\" value=\"1\" name=\"showcatimage\" $checked> " . $lang_module['weblink_yes'] . "</td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>\n";
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>";
     $checked = ( $showdes == 1 ) ? ' checked' : '';
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_showdes'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['weblink_config_showdes'] . "</td>\n";
     $contents .= "<td><input type=\"checkbox\"  value=\"1\" name=\"showdes\" $checked> " . $lang_module['weblink_yes'] . "</td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>";
@@ -147,7 +139,7 @@ else
     $contents .= "<table class=\"tab1\" style=\"margin-bottom: 8px;\">\n";
     $contents .= "<tbody>";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"  width=\"230px\">" . $lang_module['weblink_config_col'] . "</td>\n";
+    $contents .= "<td  align=\"right\"  width=\"230px\">" . $lang_module['weblink_config_col'] . "</td>\n";
     $contents .= "<td>\n";
     $contents .= "<select name=\"numsubcat\">\n";
     for ( $i = 1; $i <= 8; $i ++ )
@@ -162,32 +154,32 @@ else
     $contents .= "</tbody>";
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"  width=\"230px\">" . $lang_module['weblink_config_timeout'] . "</td>\n";
+    $contents .= "<td  align=\"right\"  width=\"230px\">" . $lang_module['weblink_config_timeout'] . "</td>\n";
     $contents .= "<td><input type=\"text\" name=\"timeout\" value=\"" . $timeout . "\" style=\"width:50px\"></td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>";
     $contents .= "<tbody>";
     $contents .= "<tr>";
     $checked = ( $shownumsubcat == 1 ) ? ' checked' : '';
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_shownumsub'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['weblink_config_shownumsub'] . "</td>\n";
     $contents .= "<td><input type=\"checkbox\"  value=\"1\" valuename=\"shownumsubcat\" $checked> " . $lang_module['weblink_yes'] . "</td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>";
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"  width=\"230px\">" . $lang_module['weblink_config_imgwidth'] . "</td>\n";
+    $contents .= "<td  align=\"right\"  width=\"230px\">" . $lang_module['weblink_config_imgwidth'] . "</td>\n";
     $contents .= "<td><input type=\"text\" name=\"imgwidth\" value=\"" . $imgwidth . "\" style=\"width:50px\"></td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>";
     $contents .= "<tbody>";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"  width=\"230px\">" . $lang_module['weblink_config_imgheight'] . "</td>\n";
+    $contents .= "<td  align=\"right\"  width=\"230px\">" . $lang_module['weblink_config_imgheight'] . "</td>\n";
     $contents .= "<td><input type=\"text\" name=\"imgheight\" value=\"" . $imgheight . "\" style=\"width:50px\"></td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>";
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>\n";
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['config_per_page'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['config_per_page'] . "</td>\n";
     $contents .= "<td>\n";
     $contents .= "<select name=\"per_page\">\n";
     for ( $i = 5; $i <= 20; $i ++ )
@@ -201,7 +193,7 @@ else
     $contents .= "</tbody>";
     $contents .= "<tbody>";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_sort'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['weblink_config_sort'] . "</td>\n";
     $asc = $des = '';
     ( $sort == 'asc' ) ? $asc = ' checked' : $des = ' checked';
     $contents .= "<td><input type=\"radio\" name='sort' id='sapxep_0' $asc value='asc'> " . $lang_module['weblink_asc'] . "  <input type=\"radio\" name='sort' id='sapxep_1' $des value='des'> " . $lang_module['weblink_des'] . "</td>\n";
@@ -209,7 +201,7 @@ else
     $contents .= "</tbody>";
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_sortoption'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['weblink_config_sortoption'] . "</td>\n";
     $byid = ( $sortoption == 'byid' ) ? ' checked' : '';
     $byrand = ( $sortoption == 'byrand' ) ? ' checked' : '';
     $bytime = ( $sortoption == 'bytime' ) ? ' checked' : '';
@@ -224,13 +216,13 @@ else
     $contents .= "<tbody>";
     $contents .= "<tr>";
     $checked = ( $showlinkimage == 1 ) ? ' checked' : '';
-    $contents .= "<td valign=\"top\" align=\"right\">" . $lang_module['weblink_config_showimagelink'] . "</td>\n";
+    $contents .= "<td  align=\"right\">" . $lang_module['weblink_config_showimagelink'] . "</td>\n";
     $contents .= "<td><input type=\"checkbox\"  value=\"1\" name='showlinkimage' $checked> " . $lang_module['weblink_yes'] . "</td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>";
     $contents .= "<tbody class=\"second\">";
     $contents .= "<tr>";
-    $contents .= "<td colspan=\"2\" style=\"padding-left:200px;padding-top:20px\"><input type=\"submit\" name='submit' value='" . $lang_module['weblink_submit'] . "'></td>\n";
+    $contents .= "<td colspan=\"2\" align=\"center\"><input type=\"submit\" name='submit' value='" . $lang_module['weblink_submit'] . "'></td>\n";
     $contents .= "</tr>";
     $contents .= "</tbody>";
     $contents .= "</table>";

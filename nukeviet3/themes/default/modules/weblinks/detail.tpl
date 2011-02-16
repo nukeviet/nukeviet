@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div id="weblink">
-    <h1>{DETAIL.title}</h1>
+    <h2>{DETAIL.title}</h2>
     <div class="thumb_imgweb">
     <p>
         <!-- BEGIN: img -->

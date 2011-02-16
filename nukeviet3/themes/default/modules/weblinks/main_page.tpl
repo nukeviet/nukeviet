@@ -15,20 +15,16 @@
     </div>
     <!-- BEGIN: have_data -->
     <div class="content">
-        <h1><a href="{WEBLINK_VIEW}">{WEBLINK_TITLE}</a></h1>
-        <div>
-        	<p>
-            <!-- BEGIN: img -->
-         	<a href="{WEBLINK_VIEW}"><img src="{SRC_IMG}" alt="" border="0" /></a>
-          	<!-- END: img -->
-            {TEXT_HOME}<br />
-            <a href="{LINK_VISIT}" target="_blank" title="{WEBLINK_TITLE}">{LINK_URL}</a> 
-            <span style="color:#F90"> {VIEW_TILTE} {NUM_VIEW}</span>
-            <span style="color:#CCC"> {DATE_UP}</span>
-            </p>
-            {ADMIN_LINK}
-            <div style="clear:both"></div>
-        </div>
+        <!-- BEGIN: img -->
+        <a href="{WEBLINK_VIEW}"><img src="{SRC_IMG}" alt="" border="0" width="{SRC_IMG_WIDTH}" /></a>
+        <!-- END: img -->
+        <a href="{WEBLINK_VIEW}">{WEBLINK_TITLE}</a> <br />
+        {TEXT_HOME}<br />
+        <a href="{LINK_VISIT}" target="_blank" title="{WEBLINK_TITLE}">{LINK_URL}</a> <br /> 
+        <span style="color:#F90"> {VIEW_TILTE} {NUM_VIEW}</span>
+        <span style="color:#CCC"> {DATE_UP}</span>
+        {ADMIN_LINK}
+        <div style="clear:both"></div>
     </div>
     <div style="clear:both"></div>
     <!-- END: have_data -->

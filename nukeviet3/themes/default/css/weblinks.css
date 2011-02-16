@@ -106,7 +106,7 @@
 
 .item a.more,.item a.more:visited {
 	background: #fff url(../images/weblinks/icons.gif) no-repeat 0 -286px;
-	width: 50px;
+	width: 40px;
 	height: 20px;
 	line-height: 20px;
 	display: block;
@@ -205,17 +205,19 @@
 }
 
 #weblink .title_cate {
-	background: url(../images/weblinks/bg_link_mod.png) bottom repeat-x;
-	height: 25px;
-	line-height: 25px;
+	height: 30px;
+	line-height: 30px;
+	background:#F9F9F9;
 }
-
+#weblink .title_cate ul{
+	list-style:none
+}
 #weblink .title_cate .par_title {
 	float: left;
-	background: url(../images/weblinks/bg_linked_mod.png) repeat-x;
-	padding-left: 5px;
-	padding-right: 5px;
+	padding-left: 8px;
+	padding-right: 8px;
 	border-right: #e4e4e4 1px solid;
+	background:#F5F5F5
 }
 
 #weblink .title_cate .par_title a {
@@ -253,14 +255,12 @@
 #weblink .content {
 	margin-bottom: 5px;
 	height: auto;
-	padding-left: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
+	padding:5px;
+	border:1px solid #F4F4F4
 }
 
 #weblink .content img {
 	float: left;
-	width: 60px;
 	padding: 1px;
 	border: #CCC 1px solid;
 	margin-right: 5px;
@@ -273,8 +273,6 @@
 }
 
 #weblink .content span {
-	float: right;
-	margin-left: 5px;
 	font-size: 11px;
 	text-align: right
 }

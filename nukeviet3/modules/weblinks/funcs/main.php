@@ -12,16 +12,17 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 $array_cat = array();
-
-$sort = ($sort == 'des') ? 'desc' : 'asc';
-	if ($sortoption == 'byhit')
-		$orderby = 'hits_total ';
-	elseif ($sortoption == 'byid')
-		$orderby = 'id ';
-	elseif ($sortoption == 'bytime')
-		$orderby = 'add_time ';
-	else
-		$orderby = 'rand() ';
+/*print_r($module_config);
+die();*/
+$sort = ($module_config['sort'] == 'des') ? 'desc' : 'asc';
+if ($module_config['sortoption'] == 'byhit')
+	$orderby = 'hits_total ';
+elseif ($module_config['sortoption'] == 'byid')
+	$orderby = 'id ';
+elseif ($module_config['sortoption'] == 'bytime')
+	$orderby = 'add_time ';
+else
+	$orderby = 'rand() ';
 
 $array_cat_content = array();
 $urllink = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";

@@ -11,7 +11,7 @@ if ( ! defined( 'NV_IS_MOD_WEBLINKS' ) ) die( 'Stop!!!' );
 
 function main_theme ( $array_cat, $array_cat_content )
 {
-    global $module_info, $global_config, $module_name, $module_file, $lang_module, $global_array_cat, $showdes, $showsub, $numsub, $numcat, $intro, $showcatimage, $numinsub;
+    global $module_info, $global_config, $module_name, $module_file, $lang_module, $global_array_cat,$module_config;
     $xtpl = new XTemplate( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'BASE_URL', NV_BASE_SITEURL );
     foreach ( $array_cat as $catid => $array_cat_i )
@@ -47,6 +47,7 @@ function main_theme ( $array_cat, $array_cat_content )
                             $content['urlimg'] = $content['urlimg'];
                         }
                         $xtpl->assign( 'SRC_IMG', $content['urlimg'] );
+                        $xtpl->assign( 'SRC_IMG_WIDTH', $module_config['imgwidth'] );
                         $xtpl->parse( 'main.loop_tab_cate.have_data.img' );
                     }
                     else
@@ -78,10 +79,10 @@ function main_theme ( $array_cat, $array_cat_content )
 
 function viewcat ( $array_subcat, $array_cat, $items )
 {
-    global $module_info, $global_array_cat, $global_config, $module_name, $module_file, $lang_module, $numsubcat, $showcatimage, $numinsub;
+    global $module_info, $global_array_cat, $global_config, $module_name, $module_file, $lang_module,$module_config;
     $xtpl = new XTemplate( "viewcat.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-    $width = round( 100 / $numsubcat, 0 );
+    $width = round( 100 / $module_config['numsubcat'], 0 );
     $xtpl->assign( "W", $width );
     foreach ( $array_cat as $array_cat_i )
     {
@@ -98,7 +99,7 @@ function viewcat ( $array_subcat, $array_cat, $items )
         foreach ( $array_subcat as $array_subcat_i )
         {
             $xtpl->assign( 'SUB', $array_subcat_i );
-            if ( ( $showcatimage == 1 ) and ! empty( $array_subcat_i['catimage'] ) )
+            if ( ( $module_config['showcatimage'] == 1 ) and ! empty( $array_subcat_i['catimage'] ) )
             {
                 if ( file_exists( NV_UPLOADS_REAL_DIR . NV_UPLOADS_DIR . "/" . $array_subcat_i['catimage'] ) && $array_subcat_i['catimage'] != "" )
                 {
@@ -109,9 +110,9 @@ function viewcat ( $array_subcat, $array_cat, $items )
             {
                 $xtpl->assign( "IMG", "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
             }
-            ( $numinsub == 1 ) ? $xtpl->parse( 'main.sub.loop.count_link' ) : "";
-            $xtpl->assign( "FLOAT", ( $a % $numsubcat ) == false ? "fr" : "fl" );
-            ( $a % $numsubcat ) == false ? $xtpl->parse( 'main.sub.loop.clear' ) : "";
+            ( $module_config['numinsub'] == 1 ) ? $xtpl->parse( 'main.sub.loop.count_link' ) : "";
+            $xtpl->assign( "FLOAT", ( $a % $module_config['numsubcat'] ) == false ? "fr" : "fl" );
+            ( $a % $module_config['numsubcat'] ) == false ? $xtpl->parse( 'main.sub.loop.clear' ) : "";
             $xtpl->parse( 'main.sub.loop' );
             $a ++;
         }

@@ -50,6 +50,10 @@ if ( $numcat > 0 )
     $contents .= '<input type="submit" value="' . $lang_module['link_broken_out'] . '"></td></tr>';
     $contents .= "</table></form>\n";
 }
+else 
+{
+	$contents .= $lang_module['weblink_link_broken'];
+}
 $contents .= "</div>\n";
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 if ( $generate_page != "" ) $contents .= "<br /><p align=\"center\">" . $generate_page . "</p>\n";
