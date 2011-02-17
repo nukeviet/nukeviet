@@ -69,6 +69,7 @@ while ( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $ali
 unset( $sql, $result );
 
 $count_op = count( $array_op );
+$per_page = $module_config['per_page'];
 $page = 0;
 if ( ! empty( $array_op ) )
 {

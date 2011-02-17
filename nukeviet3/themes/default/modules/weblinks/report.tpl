@@ -14,91 +14,63 @@
                 font-family: Arial, Tahoma, Verdana;
                 font-size: 12px;
                 line-height: 1.2;
-                margin: 0;
-                padding: 0;
             }
-            
-            #wrapper {
-                width: 400px;
-                height: 400px;
-                margin: 10px auto;
-            }
-            
-            #report {
-                margin: 20px auto;
-                width: 300px;
-            }
-            
-            #success {
-                color: #ff0000;
-            }
-            
-            #success p {
-                padding: 10px 20px;
-            }
-            
-            #report .row {
-                height: 20px;
-                line-height: 20px;
-            }
-            
-            h1 {
-                font-size: 120%;
-                margin: 0;
-                padding: 0;
-            }
-            
-            form {
-                text-align: left;
-            }
-            
-            input {
-                float: left;
-            }
-            
-            label {
-                float: left;
-                padding: 0 10px;
-                text-align: left;
-                width: 200px;
-            }
+			.title{ color:#FF0000; font-size:13px; font-weight:bold}
+			.success { color:#FF0000 }
+			.tab1 { 
+				width:100%; border:1px solid #F0F0F0
+			}
+			.tab1 tr { background:#EEEEEE }
+			.tab1 tr td{ padding:5px;}
         </style>
+        <script src="{NV_BASE_SITEURL}js/jquery/jquery.min.js" type="text/javascript"></script>
     </head>
     <body onload="self.focus()">
-        <div id="wrapper">
-            <h1 style="color:#ff0000;text-align:center;">{LANG.report_notice}</h1>
-            <form method="post" action="{ROW.action}">
-                <div id="report">
-                    <div class="row">
-                        <input type="radio" name="report" value="1" id="report_0" checked="checked" />
-                        <label>{LANG.report_linkdie}</label>
-                    </div>
-                    <div style="clear: both;"></div>
-                    <div class="row">
-                        <input type="radio" name="report" value="2" id="report_1" />
-                        <label>{LANG.report_badlink}</label>
-                    </div>
-                    <div style="clear: both;"></div>
-                    <div>{LANG.report_note}</div>
-                    <div>
-                        <textarea rows="3" cols="30" name="report_note" id="report_3">{ROW.report_note}</textarea>
-                    </div>
-                    <div style="clear: both;"></div>
-                    <div class="row" style="text-align: center;">
-                        <input type="hidden" name="report_id" value="{ROW.id}" /><input type="hidden" name="link" value="{ROW.link}" /><input type="submit" name="submit" value="{LANG.report_confirm}" style="text-align: center;"/>
-                    </div>
-                </div>
-            </form><!-- BEGIN: success -->
-            <div id="success">
-                <p>{LANG.report_success}</p>
-            </div>
-            <!-- END: success -->
-            <!-- BEGIN: error -->
-            <div id="success">
-                <p>{ROW.error}</p>
-            </div>
-            <!-- END: error -->
-        </div>
+    	<span class="title">{LANG.report_notice}</span>
+        <form method="post" action="{ROW.action}">
+        <table class="tab1">
+        	<tr>
+            	<td>
+                	<input type="radio" name="report" value="1" id="report_0" checked="checked" />{LANG.report_linkdie}
+                    <input type="radio" name="report" value="2" id="report_1" />{LANG.report_badlink}
+                </td>
+            </tr>
+            <tr>
+            	<td>
+                	<input type="checkbox"  value="1" id="others"/><strong>{LANG.report_note}</strong>
+                </td>
+            </tr>
+            <tbody id="other_show" style="display:none">
+            <tr>
+            	<td>
+                	<textarea rows="3" style="width:98%; font-size:12px; font-family:Arial" name="report_note" id="report_3">{ROW.report_note}</textarea>
+                </td>
+            </tr>
+            </tbody>
+            <tr>
+            	<td>
+                	<input type="hidden" name="report_id" value="{ROW.id}" />
+                    <input type="hidden" name="link" value="{ROW.link}" />
+                    <input type="submit" name="submit" value="{LANG.report_confirm}" style="text-align: center;"/>
+                </td>
+            </tr>
+        </table>
+        </form>
+        <!-- BEGIN: success -->
+        <p class="success">{LANG.report_success}</p>
+        <!-- END: success -->
+        <!-- BEGIN: error -->
+        <p class="success">{ROW.error}</p>
+        <!-- END: error -->
+        <script type="text/javascript">
+        	$('#others').click(function(){
+				if ( $(this).attr('checked') ){
+					$('#other_show').show();
+				}else {
+					$('#other_show').hide();
+				}
+			});
+        </script>
         {SCRIPT_JS}
     </body>
 </html>

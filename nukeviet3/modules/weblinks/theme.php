@@ -11,7 +11,7 @@ if ( ! defined( 'NV_IS_MOD_WEBLINKS' ) ) die( 'Stop!!!' );
 
 function main_theme ( $array_cat, $array_cat_content )
 {
-    global $module_info, $global_config, $module_name, $module_file, $lang_module, $global_array_cat,$module_config;
+    global $module_info, $global_config, $module_name, $module_file, $lang_module, $global_array_cat, $module_config;
     $xtpl = new XTemplate( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'BASE_URL', NV_BASE_SITEURL );
     foreach ( $array_cat as $catid => $array_cat_i )
@@ -40,20 +40,23 @@ function main_theme ( $array_cat, $array_cat_content )
                 {
                     $xtpl->assign( 'WEBLINK_TITLE', $content['title'] );
                     $xtpl->assign( 'WEBLINK_VIEW', $content['link'] );
-                    if ( $content['urlimg'] != '' )
+                    if ( $module_config['showlinkimage'] == '1' )
                     {
-                        if ( ! nv_is_url( $content['urlimg'] ) )
+                        if ( $content['urlimg'] != '' )
                         {
-                            $content['urlimg'] = $content['urlimg'];
+                            if ( ! nv_is_url( $content['urlimg'] ) )
+                            {
+                                $content['urlimg'] = $content['urlimg'];
+                            }
+                            $xtpl->assign( 'SRC_IMG', $content['urlimg'] );
+                            $xtpl->assign( 'SRC_IMG_WIDTH', $module_config['imgwidth'] );
+                            $xtpl->parse( 'main.loop_tab_cate.have_data.img' );
                         }
-                        $xtpl->assign( 'SRC_IMG', $content['urlimg'] );
-                        $xtpl->assign( 'SRC_IMG_WIDTH', $module_config['imgwidth'] );
-                        $xtpl->parse( 'main.loop_tab_cate.have_data.img' );
-                    }
-                    else
-                    {
-                        $xtpl->assign( 'SRC_IMG', "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
-                        $xtpl->parse( 'main.loop_tab_cate.have_data.img' );
+                        else
+                        {
+                            $xtpl->assign( 'SRC_IMG', "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
+                            $xtpl->parse( 'main.loop_tab_cate.have_data.img' );
+                        }
                     }
                     $intro = strip_tags( $content['description'] );
                     $xtpl->assign( 'TEXT_HOME', nv_clean60( $intro, 200 ) . "..." );
@@ -79,11 +82,9 @@ function main_theme ( $array_cat, $array_cat_content )
 
 function viewcat ( $array_subcat, $array_cat, $items )
 {
-    global $module_info, $global_array_cat, $global_config, $module_name, $module_file, $lang_module,$module_config;
+    global $module_info, $global_array_cat, $global_config, $module_name, $module_file, $lang_module, $module_config;
     $xtpl = new XTemplate( "viewcat.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-    $width = round( 100 / $module_config['numsubcat'], 0 );
-    $xtpl->assign( "W", $width );
     foreach ( $array_cat as $array_cat_i )
     {
         $xtpl->assign( 'CAT', $array_cat_i );
@@ -110,9 +111,6 @@ function viewcat ( $array_subcat, $array_cat, $items )
             {
                 $xtpl->assign( "IMG", "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
             }
-            ( $module_config['numinsub'] == 1 ) ? $xtpl->parse( 'main.sub.loop.count_link' ) : "";
-            $xtpl->assign( "FLOAT", ( $a % $module_config['numsubcat'] ) == false ? "fr" : "fl" );
-            ( $a % $module_config['numsubcat'] ) == false ? $xtpl->parse( 'main.sub.loop.clear' ) : "";
             $xtpl->parse( 'main.sub.loop' );
             $a ++;
         }
@@ -143,6 +141,10 @@ function viewcat ( $array_subcat, $array_cat, $items )
             {
                 $xtpl->assign( 'ADMIN_LINK', adminlink( $items_i['id'] ) );
             }
+            if ( $module_config['showlinkimage'] == '1' )
+            {
+                $xtpl->parse( 'main.items.loop.img' );
+            }
             $xtpl->parse( 'main.items.loop' );
         }
         $xtpl->parse( 'main.items' );
@@ -153,23 +155,25 @@ function viewcat ( $array_subcat, $array_cat, $items )
 
 function detail ( $row )
 {
-    global $module_info, $global_config, $module_name, $module_file, $global_array_cat, $lang_module;
-    
+    global $module_info, $global_config, $module_name, $module_file, $global_array_cat, $lang_module, $module_config;
     $xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $row['add_time'] = nv_date( "H:i l - d/m/Y", $row['add_time'] );
     $row['edit_time'] = nv_date( "H:i l - d/m/Y", $row['edit_time'] );
-    if ( $row['urlimg'] != "" )
+    if ( $module_config['showlinkimage'] == '1' )
     {
-        if ( ! nv_is_url( $row['urlimg'] ) )
+        if ( $row['urlimg'] != "" )
         {
-            $row['urlimg'] = $row['urlimg'];
+            if ( ! nv_is_url( $row['urlimg'] ) )
+            {
+                $row['urlimg'] = $row['urlimg'];
+            }
+            $xtpl->assign( 'IMG', $row['urlimg'] );
         }
-        $xtpl->assign( 'IMG', $row['urlimg'] );
-        $xtpl->parse( 'main.img' );
-    }
-    else
-    {
-        $xtpl->assign( 'IMG', "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
+        else
+        {
+            $xtpl->assign( 'IMG', "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
+        
+        }
         $xtpl->parse( 'main.img' );
     }
     $xtpl->assign( 'LANG', $lang_module );
@@ -191,6 +195,7 @@ function report ( $row, $check )
     $script_js = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'ROW', $row );
+    $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
     $xtpl->assign( 'SCRIPT_JS', $script_js );
     if ( ! empty( $row['error'] ) )
     {

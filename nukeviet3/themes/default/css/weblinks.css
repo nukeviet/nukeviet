@@ -24,10 +24,12 @@
 
 #weblinks .cat h2 {
 	padding-left: 0;
+	border-bottom:1px solid #F8F8F8;
+	font-size:16px;
 }
 
 #weblinks .cat h2 a {
-	color: #333;
+	color:#990000;
 	font-weight: normal;
 }
 
@@ -72,10 +74,11 @@
 
 .item .item-first {
 	width: 10%;
+	margin-right:5px;
 }
 
 .item .item-content {
-	width: 75%;
+	width: 70%;
 }
 
 .item .item-thumb {
@@ -104,9 +107,9 @@
 	background: #fff url(../images/weblinks/icons.gif) no-repeat 0 -311px;
 }
 
-.item a.more,.item a.more:visited {
+.item a.readmore,.item a.readmore:visited {
 	background: #fff url(../images/weblinks/icons.gif) no-repeat 0 -286px;
-	width: 40px;
+	width: 50px;
 	height: 20px;
 	line-height: 20px;
 	display: block;
@@ -115,7 +118,7 @@
 	color: #999;
 }
 
-.item a.more:hover {
+.item a.readmore:hover {
 	color: #333;
 }
 

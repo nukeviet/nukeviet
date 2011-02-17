@@ -12,7 +12,6 @@ $page_title = $global_array_cat[$catid]['title'];
 $items = array();
 $array_subcat = array();
 $array_cat = array();
-$per_page = 10;
 foreach ( $global_array_cat as $array_cat_i )
 {
     if ( $array_cat_i['parentid'] == $catid )
@@ -26,11 +25,7 @@ foreach ( $global_array_cat as $array_cat_i )
 $array_cat[] = array( 
     "title" => $global_array_cat[$catid]['title'], "link" => $global_array_cat[$catid]['link'], "description" => $global_array_cat[$catid]['description'] 
 );
-/*$sort = ( $sort == 'des' ) ? 'desc' : 'asc';
-if ( $sortoption == 'byhit' ) $orderby = 'hits_total ';
-elseif ( $sortoption == 'byid' ) $orderby = 'id ';
-elseif ( $sortoption == 'bytime' ) $orderby = 'add_time ';
-else $orderby = 'rand() ';*/
+
 $sort = ($module_config['sort'] == 'des') ? 'desc' : 'asc';
 if ($module_config['sortoption'] == 'byhit')
 	$orderby = 'hits_total ';
