@@ -19,7 +19,7 @@ if ( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" )
     $modules_site = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
     $modules_admin = nv_scandir( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules", $global_config['check_module'] );
     
-    if ( ! empty( $title ) and ! empty( $modfile ) and in_array( $title, $modules_site ) and in_array( $title, $modules_admin ) and preg_match( $global_config['check_module'], $title ) and preg_match( $global_config['check_module'], $modfile ) )
+    if ( ! empty( $title ) and ! empty( $modfile ) and ! in_array( $title, $modules_site ) and ! in_array( $title, $modules_admin ) and preg_match( $global_config['check_module'], $title ) and preg_match( $global_config['check_module'], $modfile ) )
     {
         $mod_version = "";
         $author = "";
