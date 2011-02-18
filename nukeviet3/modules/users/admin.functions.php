@@ -51,24 +51,15 @@ function nv_groups_add_theme ( $contents )
     $return .= "<div class=\"clear\"></div>\n";
     
     $return .= "<form method=\"post\" action=\"" . $contents['action'] . "\">\n";
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-    $return .= "<col valign=\"top\" width=\"150px\" />\n";
-    $return .= "<col valign=\"top\" width=\"10px\" />\n";
-    $return .= "<col valign=\"top\" />\n";
+    $return .= "<table class=\"tab1\" style=\"margin-bottom:8px\">\n";
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['title'][0] . ": </td>\n";
-    $return .= "<td><sup class=\"required\">&lowast;</sup></td>\n";
-    $return .= "<td><input name=\"title\" id=\"title\" type=\"text\" value=\"" . $contents['title'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['title'][2] . "\" /></td>\n";
+    $return .= "<td>\n";
+    $return .= "<input name=\"title\" id=\"title\" type=\"text\" value=\"" . $contents['title'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['title'][2] . "\" /><sup class=\"required\">&lowast;</sup></td>\n";
     $return .= "</tr>\n";
-    $return .= "</table>\n";
-    
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-    $return .= "<col valign=\"top\" width=\"150px\" />\n";
-    $return .= "<col valign=\"top\" width=\"10px\" />\n";
-    $return .= "<col valign=\"top\" />\n";
+	$return .= "<tbody class=\"second\">\n";
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['exp_time'][0] . ": </td>\n";
-    $return .= "<td></td>\n";
     $return .= "<td>" . $contents['exp_time'][6] . ":";
     $exp_time = "";
     if ( ! empty( $contents['exp_time'][1] ) and ! empty( $contents['exp_time'][2] ) and ! empty( $contents['exp_time'][3] ) )
@@ -90,28 +81,21 @@ function nv_groups_add_theme ( $contents )
     }
     $return .= "</select></td>\n";
     $return .= "</tr>\n";
-    $return .= "</table>\n";
-    
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-    $return .= "<col valign=\"top\" width=\"150px\" />\n";
-    $return .= "<col valign=\"top\" width=\"10px\" />\n";
-    $return .= "<col valign=\"top\" />\n";
+	$return .= "</tbody>\n";
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['public'][0] . ": </td>\n";
-    $return .= "<td></td>\n";
     $return .= "<td><input type=\"checkbox\" value=\"1\" id=\"public\" name=\"public\"" . ( $contents['public'][1] ? " checked=\"checked\"" : "" ) . " /></td>\n";
     $return .= "</tr>\n";
     $return .= "</table>\n";
     
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-    $return .= "<col valign=\"top\" width=\"150px\" />\n";
-    $return .= "<col valign=\"top\" width=\"10px\" />\n";
-    $return .= "<col valign=\"top\" />\n";
+    $return .= "<table class=\"tab1\" style=\"margin-bottom:8px\">\n";
     $return .= "<tr>\n";
-    $return .= "<td colspan=\"3\">" . $contents['content'][0] . ":</td>\n"; 
+    $return .= "<td>" . $contents['content'][0] . ":</td>\n"; 
     $return .= "</tr>\n";
+	$return .= "<tbody class=\"second\">\n";
     $return .= "<tr>\n";
-    $return .= "<td colspan=\"3\">\n";
+    $return .= "<td>\n";
+	$return .= "<div style=\"background:#FFFFFF; padding:2px\">\n";
     if ( $contents['content'][4] and nv_function_exists( 'nv_aleditor' ) )
     {
         $return .= nv_aleditor( "content", $contents['content'][2], $contents['content'][3], $contents['content'][1] );
@@ -120,14 +104,13 @@ function nv_groups_add_theme ( $contents )
     {
         $return .= "<textarea name=\"content\" id=\"content\" style=\"width:" . $contents['content'][2] . ";height:" . $contents['content'][3] . "\">" . $contents['content'][1] . "</textarea>\n";
     }
+	$return .= "</div>\n";
     $return .= "</td>\n";
     $return .= "</tr>\n";
-    $return .= "</table>\n";
-    
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
+	$return .= "</tbody>\n";
     $return .= "<tr>\n";
-    $return .= "<td><input type=\"hidden\" value=\"1\" name=\"save\" id=\"save\" />\n";
-    $return .= "<input type=\"submit\" value=\"" . $contents['submit'] . "\" name=\"submit1\" /></td>\n";
+    $return .= "<td><center><input type=\"hidden\" value=\"1\" name=\"save\" id=\"save\" />\n";
+    $return .= "<input type=\"submit\" value=\"" . $contents['submit'] . "\" name=\"submit1\" /></center></td>\n";
     $return .= "</tr>\n";
     $return .= "</table>\n";
     $return .= "</form>\n";	
@@ -157,24 +140,14 @@ function nv_admin_edit_theme ( $contents )
     $return .= "<div class=\"clear\"></div>\n";
     
     $return .= "<form method=\"post\" action=\"" . $contents['action'] . "\">\n";
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-    $return .= "<col valign=\"top\" width=\"150px\" />\n";
-    $return .= "<col valign=\"top\" width=\"10px\" />\n";
-    $return .= "<col valign=\"top\" />\n";
+    $return .= "<table style=\"margin-bottom:8px;\" class=\"tab1\">\n";
     $return .= "<tr>\n";
-    $return .= "<td>" . $contents['title'][0] . ": </td>\n";
-    $return .= "<td><sup class=\"required\">&lowast;</sup></td>\n";
-    $return .= "<td><input name=\"title\" id=\"title\" type=\"text\" value=\"" . $contents['title'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['title'][2] . "\" /></td>\n";
+    $return .= "<td width=\"120\">" . $contents['title'][0] . ": </td>\n";
+    $return .= "<td><input name=\"title\" id=\"title\" type=\"text\" value=\"" . $contents['title'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['title'][2] . "\" /><sup class=\"required\">&lowast;</sup></td>\n";
     $return .= "</tr>\n";
-    $return .= "</table>\n";
-    
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-    $return .= "<col valign=\"top\" width=\"150px\" />\n";
-    $return .= "<col valign=\"top\" width=\"10px\" />\n";
-    $return .= "<col valign=\"top\" />\n";
+    $return .= "<tbody class=\"second\">\n";
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['exp_time'][0] . ": </td>\n";
-    $return .= "<td></td>\n";
     $return .= "<td>" . $contents['exp_time'][6] . ":";
     $exp_time = "";
     if ( ! empty( $contents['exp_time'][1] ) and ! empty( $contents['exp_time'][2] ) and ! empty( $contents['exp_time'][3] ) )
@@ -196,29 +169,20 @@ function nv_admin_edit_theme ( $contents )
     }
     $return .= "</select></td>\n";
     $return .= "</tr>\n";
-    $return .= "</table>\n";
-    
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-    $return .= "<col valign=\"top\" width=\"150px\" />\n";
-    $return .= "<col valign=\"top\" width=\"10px\" />\n";
-    $return .= "<col valign=\"top\" />\n";
+    $return .= "</tbody>\n";
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['public'][0] . ": </td>\n";
-    $return .= "<td></td>\n";
     $return .= "<td><input type=\"checkbox\" value=\"1\" id=\"public\" name=\"public\"" . ( $contents['public'][1] ? " checked=\"checked\"" : "" ) . " /></td>\n";
     $return .= "</tr>\n";
     $return .= "</table>\n";
     
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-    $return .= "<col valign=\"top\" width=\"150px\" />\n";
-    $return .= "<col valign=\"top\" width=\"10px\" />\n";
-    $return .= "<col valign=\"top\" />\n";
+    $return .= "<table style=\"margin-bottom:8px;\" class=\"tab1\">\n";
     $return .= "<tr>\n";
-    $return .= "<td colspan=\"3\">" . $contents['content'][0] . ":</td>\n";
-    $return .= "<td>\n";
+    $return .= "<td>" . $contents['content'][0] . ":</td>\n";
     $return .= "</tr>\n";
+    $return .= "<tbody class=\"second\">\n";
     $return .= "<tr>\n";
-    $return .= "<td colspan=\"3\">\n";
+    $return .= "<td>\n";
     if ( $contents['content'][4] and nv_function_exists( 'nv_aleditor' ) )
     {
         $return .= nv_aleditor( "content", $contents['content'][2], $contents['content'][3], $contents['content'][1] );
@@ -229,15 +193,14 @@ function nv_admin_edit_theme ( $contents )
     }
     $return .= "</td>\n";
     $return .= "</tr>\n";
-    $return .= "</table>\n";
-    
-    $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
+    $return .= "</tbody>\n";
+	$return .= "<tbody>\n";
     $return .= "<tr>\n";
-    $return .= "<td><input type=\"hidden\" value=\"1\" name=\"save\" id=\"save\" />\n";
+    $return .= "<td align=\"center\"><input type=\"hidden\" value=\"1\" name=\"save\" id=\"save\" />\n";
     $return .= "<input type=\"submit\" value=\"" . $contents['submit'] . "\" name=\"submit1\" /></td>\n";
     $return .= "</tr>\n";
+    $return .= "</tbody>\n";
     $return .= "</table>\n";
-    
     return $return;
 }
 
