@@ -89,11 +89,11 @@ $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIA
 $contents .= "<input type=\"hidden\" name =\"save\"value=\"1\" />";
 if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
-    $contents .= nv_aleditor( "content", '780px', '300px', $content );
+    $contents .= nv_aleditor( "content", '100%', '300px', $content );
 }
 else
 {
-    $contents .= "<textarea style=\"width: 780px\" name=\"content\" id=\"content\" cols=\"20\" rows=\"8\">" . $content . "</textarea>";
+    $contents .= "<textarea style=\"width: 100%\" name=\"content\" id=\"content\" cols=\"20\" rows=\"8\">" . $content . "</textarea>";
 }
 $contents .= "<div style=\"text-align:center;padding-top:15px\"><input name=\"submit1\" type=\"submit\" value=\"" . $lang_global['save'] . "\" /></div>\n";
 $contents .= "</form>\n";

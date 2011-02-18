@@ -65,7 +65,7 @@ $contents['title'] = array(
     $lang_module['title'], $title, 255 
 );
 $contents['content'] = array( 
-    $lang_module['content'], $content, '800px', '300px', defined( 'NV_EDITOR' ) ? true : false 
+    $lang_module['content'], $content, '100%', '300px', defined( 'NV_EDITOR' ) ? true : false 
 );
 $contents['exp_time'] = array( 
     $lang_module['exp_time'], $day, $month, $year, $hour, $min, $lang_global['day'], $lang_global['month'], $lang_global['year'], $lang_global['hour'], $lang_global['min'] 

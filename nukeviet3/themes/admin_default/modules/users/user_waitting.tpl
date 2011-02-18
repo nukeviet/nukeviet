@@ -39,8 +39,8 @@
     </div>
     <table class="tab1">
         <caption>{TABLE_CAPTION}</caption>
-        <tbody>
-            <tr class="header">
+        <thead>
+            <tr>
                 <!-- BEGIN: head_td -->
                 <td>
                     <a href="{HEAD_TD.href}">{HEAD_TD.title}</a>
@@ -50,7 +50,7 @@
                     <strong>{LANG.funcs}</strong>
                 </td>
             </tr>
-        </tbody>
+        </thead>
         <!-- BEGIN: xusers -->
         <tbody>
             <tr>
