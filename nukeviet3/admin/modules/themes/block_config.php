@@ -90,8 +90,6 @@ if ( ! empty( $file_name ) and preg_match( $global_config['check_block_module'],
     }
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
-echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+die( $contents );
 
 ?>
