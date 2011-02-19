@@ -510,9 +510,18 @@ function AJAX()
                   {
                      ths.result = ths.http_request.responseText;
                   }
+                  
+                  if(typeof( ths.result ) == 'undefined')
+                  {
+                    ths.result = "";
+                  }
+                  
                   if( ! ths.callback )
                   {
-                     if( ths.containerid ) document.getElementById( ths.containerid ).innerHTML = ths.result;
+                     if( ths.containerid )
+                     {
+                        document.getElementById( ths.containerid ).innerHTML = ths.result;
+                     }
                   }
                   else
                   {
