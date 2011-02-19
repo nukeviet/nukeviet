@@ -555,7 +555,7 @@ if ( $load_block_config )
     $contents .= '
     			$("#block_config").show();
 				$("#block_config").html(htmlload);
-				$.get("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=block_config&bid=' . $row['bid'] . '&module=' . $row['module'] . '&file_name=' . $row['file_name'] . '", function(theResponse){
+				$.get("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=block_config&bid=' . $row['bid'] . '&module=' . $row['module'] . '&file_name=' . $row['file_name'] . '&nocache="+new Date().getTime(), function(theResponse){
 					if (theResponse.length>10){	
 						$("#block_config").html(theResponse);
 					}
@@ -569,7 +569,7 @@ else
     $contents .= "$(\"#block_config\").hide();\n";
 }
 
-$contents .= '	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadblocks&module=' . $row['module'] . '&bid=' . $row['bid'] . '");
+$contents .= '	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadblocks&module=' . $row['module'] . '&bid=' . $row['bid'] . '&nocache="+new Date().getTime());
 	$(function() {
 		$("#exp_time").datepicker({
 			showOn: "button",
@@ -589,7 +589,7 @@ $contents .= '	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.p
 			if (type!=""){
 				$("#block_config").html("");
 				$("#block_config").hide();
-				$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadblocks&module="+type);
+				$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadblocks&module="+type+"&nocache="+new Date().getTime());
 			}
 		});
 		
@@ -618,7 +618,7 @@ $contents .= '	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.p
 			if(blok_file_name!=""){
 				$("#block_config").show();
 				$("#block_config").html(htmlload);
-				$.get("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=block_config&bid=' . $row['bid'] . '&module="+type+"&file_name="+blok_file_name, function(theResponse){
+				$.get("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=block_config&bid=' . $row['bid'] . '&module="+type+"&file_name="+blok_file_name+"&nocache="+new Date().getTime(), function(theResponse){
 					if (theResponse.length>10){	
 						$("#block_config").html(theResponse);
 					}
