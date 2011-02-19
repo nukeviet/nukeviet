@@ -90,6 +90,6 @@ if ( ! empty( $file_name ) and preg_match( $global_config['check_block_module'],
     }
 }
 
-die( $contents );
+exit( $contents );
 
 ?>
