@@ -50,6 +50,7 @@ if ( isset( $check_allow_upload_dir['view_dir'] ) )
 
                     $file['name'] .= "|" . $file['ext'] . "|" . $file['type'] . "|" . nv_convertfromBytes( $file['filesize'] ) . "|" . $file['author'] . "|" . nv_date( "l, d F Y, H:i:s P", $file['mtime'] );
                     $file['sel'] = ( $selectfile == $title ) ? " imgsel" : "";
+                    $file['src'] = NV_BASE_SITEURL . $file['src'];
                     $xtpl->assign( "IMG", $file );
                     $xtpl->parse( 'main.loopimg' );
                 }

@@ -238,7 +238,7 @@ function nv_getFileInfo( $pathimg, $file )
     $stat = @stat( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
     $info[3] = $stat['size'];
 
-    $info[4] = NV_BASE_SITEURL . 'images/file.gif';
+    $info[4] = 'images/file.gif';
     $info[5] = 32;
     $info[6] = 32;
     $info[7] = "|";
@@ -247,7 +247,7 @@ function nv_getFileInfo( $pathimg, $file )
     {
         $size = @getimagesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
         $info[2] = "image";
-        $info[4] = NV_BASE_SITEURL . $pathimg . '/' . $file;
+        $info[4] = $pathimg . '/' . $file;
         $info[5] = $size[0];
         $info[6] = $size[1];
         $info[7] = $size[0] . "|" . $size[1];
@@ -256,7 +256,7 @@ function nv_getFileInfo( $pathimg, $file )
         {
             if ( ( $_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 ) ) !== false )
             {
-                $info[4] = NV_BASE_SITEURL . $_src[0];
+                $info[4] = $_src[0];
                 $info[5] = $_src[1];
                 $info[6] = $_src[2];
             }
@@ -278,7 +278,7 @@ function nv_getFileInfo( $pathimg, $file )
     } elseif ( in_array( $matches[2], $array_flash ) )
     {
         $info[2] = "flash";
-        $info[4] = NV_BASE_SITEURL . 'images/flash.gif';
+        $info[4] = 'images/flash.gif';
 
         if ( $matches[2] == "swf" )
         {
@@ -290,10 +290,10 @@ function nv_getFileInfo( $pathimg, $file )
         }
     } elseif ( in_array( $matches[2], $array_archives ) )
     {
-        $info[4] = NV_BASE_SITEURL . 'images/zip.gif';
+        $info[4] = 'images/zip.gif';
     } elseif ( in_array( $matches[2], $array_documents ) )
     {
-        $info[4] = NV_BASE_SITEURL . 'images/doc.gif';
+        $info[4] = 'images/doc.gif';
     }
 
     $info[8] = 0;
