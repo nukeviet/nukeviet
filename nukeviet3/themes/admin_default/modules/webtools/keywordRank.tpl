@@ -99,7 +99,7 @@ $(document).ready(function() {
     $("#lr").attr('disabled', 'disabled');
     $("#accuracy").attr('disabled', 'disabled');
     $("#fsubmit").hide();
-    $("#load_img").html("<p style=\"text-align:center;\"><img alt=\"\" src=\"{NV_BASE_SITEURL}images/load.gif\" width=\"16\" height=\"16\" /></p>");
+    $("#load_img").html('<p style="text-align:center;"><img alt="" src="{NV_BASE_SITEURL}images/load.gif" width="16" height="16" /></p>');
     $("#keywordRankResult").text("").load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=keywordRank&i=process&k=" + keyword + "&l=" + lr + "&a=" + accuracy + "&num=" + nv_randomPassword(10));
     return false
   })
