@@ -29,6 +29,16 @@ if ( ! nv_function_exists( 'nv_block_data_config_rss' ) )
         $html .= "</select>\n";
         $return .= '<tr><td>' . $lang_block['number'] . '</td><td>' . $html . '</td></tr>';
         
+        $data_block['title_length'] = isset( $data_block['title_length'] ) ? intval( $data_block['title_length'] ) : 0;
+        $html = "<select name=\"config_title_length\">\n";
+        for ( $index = 0; $index <= 255; $index ++ )
+        {
+            $sel = ( $index == $data_block['title_length'] ) ? ' selected' : '';
+            $html .= "<option value=\"" . $index . "\" " . $sel . ">" . $index . "</option>\n";
+        }
+        $html .= "</select>\n";
+        $return .= '<tr><td>' . $lang_block['title_length'] . '</td><td>' . $html . '</td></tr>';
+        
         $sel = ( intval( $data_block['isdescription'] ) == 1 ) ? "checked=\"checked\"" : "";
         $html = "<input type=\"checkbox\" name=\"config_isdescription\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "</td>\n";
         $return .= '<tr><td>' . $lang_block['isdescription'] . '</td><td>' . $html . '</td></tr>';
@@ -61,6 +71,7 @@ if ( ! nv_function_exists( 'nv_block_data_config_rss' ) )
         $return['config']['ishtml'] = $nv_Request->get_int( 'config_ishtml', 'post', 0 );
         $return['config']['ispubdate'] = $nv_Request->get_int( 'config_ispubdate', 'post', 0 );
         $return['config']['istarget'] = $nv_Request->get_int( 'config_istarget', 'post', 0 );
+        $return['config']['title_length'] = $nv_Request->get_int( 'config_title_length', 'post', 0 );
         if ( ! nv_is_url( $return['config']['url'] ) )
         {
             $return['error'][] = $lang_block['error_url'];
@@ -140,6 +151,7 @@ if ( ! nv_function_exists( 'nv_block_data_config_rss' ) )
         $a = 1;
         $xtpl = new XTemplate( "global.rss.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
         $array_rrs = nv_get_rss( $block_config['url'] );
+        $title_length = isset( $block_config['title_length'] ) ? intval( $block_config['title_length'] ) : 0;
         foreach ( $array_rrs as $item )
         {
             if ( $a <= $block_config['number'] )
@@ -147,6 +159,14 @@ if ( ! nv_function_exists( 'nv_block_data_config_rss' ) )
                 $item['description'] = ( $block_config['ishtml'] ) ? $item['description'] : strip_tags( $item['description'] );
                 $item['target'] = ( $block_config['istarget'] ) ? " onclick=\"this.target='_blank'\" " : "";
                 $item['class'] = ( $a % 2 == 0 ) ? "second" : "";
+                if ( $title_length > 0 )
+                {
+                    $item['text'] = nv_clean60( $item['title'], $title_length );
+                }
+                else
+                {
+                    $item['text'] = $item['title'];
+                }
                 $xtpl->assign( 'DATA', $item );
                 if ( $block_config['isdescription'] )
                 {
