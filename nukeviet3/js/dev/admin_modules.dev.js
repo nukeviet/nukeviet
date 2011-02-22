@@ -220,7 +220,7 @@ function nv_change_custom_name(func_id, containerid){
 //  ---------------------------------------
 
 function nv_change_custom_name_submit(func_id, custom_name_id){
-    var new_custom_name = document.getElementById(custom_name_id).value;
+    var new_custom_name = rawurlencode(document.getElementById(custom_name_id).value);
     nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_custom_name&id=' + func_id + '&save=1&func_custom_name=' + new_custom_name + '&num=' + nv_randomPassword(8), '', 'nv_change_custom_name_res');
     return;
 }
