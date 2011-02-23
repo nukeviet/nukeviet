@@ -1107,21 +1107,32 @@ function nv_sendmail ( $from, $to, $subject, $message, $files = '' )
  * @param string $containerid
  * @return
  */
-function nv_generate_page ( $base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page' )
+function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page' )
 {
     global $lang_global;
-    
+
     $total_pages = ceil( $num_items / $per_page );
     if ( $total_pages == 1 ) return '';
     @$on_page = floor( $start_item / $per_page ) + 1;
-    $amp = preg_match( "/\?/", $base_url ) ? "&amp;" : "?";
+
+    if ( ! is_array( $base_url ) )
+    {
+        $amp = preg_match( "/\?/", $base_url ) ? "&amp;" : "?";
+        $amp .= "page=";
+    }
+    else
+    {
+        $amp = $base_url['amp'];
+        $base_url = $base_url['link'];
+    }
+
     $page_string = "";
     if ( $total_pages > 10 )
     {
         $init_page_max = ( $total_pages > 3 ) ? 3 : $total_pages;
-        for ( $i = 1; $i <= $init_page_max; $i ++ )
+        for ( $i = 1; $i <= $init_page_max; $i++ )
         {
-            $href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
+            $href = ! $onclick ? "href=\"" . $base_url . $amp . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
             $page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
             if ( $i < $init_page_max ) $page_string .= ", ";
         }
@@ -1132,9 +1143,9 @@ function nv_generate_page ( $base_url, $num_items, $per_page, $start_item, $add_
                 $page_string .= ( $on_page > 5 ) ? " ... " : ", ";
                 $init_page_min = ( $on_page > 4 ) ? $on_page : 5;
                 $init_page_max = ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4;
-                for ( $i = $init_page_min - 1; $i < $init_page_max + 2; $i ++ )
+                for ( $i = $init_page_min - 1; $i < $init_page_max + 2; $i++ )
                 {
-                    $href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
+                    $href = ! $onclick ? "href=\"" . $base_url . $amp . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
                     $page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
                     if ( $i < $init_page_max + 1 )
                     {
@@ -1147,10 +1158,10 @@ function nv_generate_page ( $base_url, $num_items, $per_page, $start_item, $add_
             {
                 $page_string .= " ... ";
             }
-            
-            for ( $i = $total_pages - 2; $i < $total_pages + 1; $i ++ )
+
+            for ( $i = $total_pages - 2; $i < $total_pages + 1; $i++ )
             {
-                $href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
+                $href = ! $onclick ? "href=\"" . $base_url . $amp . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
                 $page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
                 if ( $i < $total_pages )
                 {
@@ -1161,9 +1172,9 @@ function nv_generate_page ( $base_url, $num_items, $per_page, $start_item, $add_
     }
     else
     {
-        for ( $i = 1; $i < $total_pages + 1; $i ++ )
+        for ( $i = 1; $i < $total_pages + 1; $i++ )
         {
-            $href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
+            $href = ! $onclick ? "href=\"" . $base_url . $amp . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
             $page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
             if ( $i < $total_pages )
             {
@@ -1175,12 +1186,12 @@ function nv_generate_page ( $base_url, $num_items, $per_page, $start_item, $add_
     {
         if ( $on_page > 1 )
         {
-            $href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $on_page - 2 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $on_page - 2 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
+            $href = ! $onclick ? "href=\"" . $base_url . $amp . ( ( $on_page - 2 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . ( ( $on_page - 2 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
             $page_string = "&nbsp;&nbsp;<span><a " . $href . ">" . $lang_global['pageprev'] . "</a></span>&nbsp;&nbsp;" . $page_string;
         }
         if ( $on_page < $total_pages )
         {
-            $href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( $on_page * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( $on_page * $per_page ) ) ) . "','" . $containerid . "')\"";
+            $href = ! $onclick ? "href=\"" . $base_url . $amp . ( $on_page * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . ( $on_page * $per_page ) ) ) . "','" . $containerid . "')\"";
             $page_string .= "&nbsp;&nbsp;<span><a " . $href . ">" . $lang_global['pagenext'] . "</a></span>";
         }
     }
