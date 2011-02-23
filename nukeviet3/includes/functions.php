@@ -1053,6 +1053,10 @@ function nv_sendmail ( $from, $to, $subject, $message, $files = '' )
             return false;
         }
         $message = nv_change_buffer( $message );
+        
+        $message = nv_unhtmlspecialchars( $message );
+        $subject = nv_unhtmlspecialchars( $subject );
+        
         $mail->From = $sendmail_from;
         $mail->FromName = $global_config['site_name'];
         if ( is_array( $from ) )
