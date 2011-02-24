@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -24,6 +24,7 @@ $lang_module['author_email'] = "email autora";
 $lang_module['author_url'] = "podpora stránky";
 $lang_module['uploadtime'] = "upload";
 $lang_module['updatetime'] = "Aktualizovat";
+$lang_module['readmore'] = "Přečtěte si více";
 $lang_module['bycat'] = "patřit";
 $lang_module['bycat2'] = "patři kategorie";
 $lang_module['detail_or_download'] = "zobrazit  podrobnosti / stáhnout";
@@ -76,6 +77,7 @@ $lang_module['file_comment_send'] = "odeslat komentář";
 $lang_module['file_comment_post_time'] = "odeslat do";
 $lang_module['file_comment_re'] = "komentář o souboru";
 $lang_module['file_your_comment'] = "připojit k diskuzi";
+$lang_module['view_comment_title'] = "Zobrazit komentář";
 $lang_module['comment_thanks'] = "Děkujeme za vaší komentáři";
 $lang_module['comment_thanks2'] = "Počkejte na potvrzení pro komentáře.Děkuj";
 $lang_module['comment_error1'] = "chyba:neplatný komentář";
@@ -109,7 +111,6 @@ $lang_module['upload_linkdirect_info'] = "Jestliže zdroj obsahuje malé časti,
 $lang_module['file_upload_captcha'] = "Antispam code";
 $lang_module['file_upload_captcha2'] = "Kopy antispam code";
 $lang_module['file_upload_ok'] = "přimul soubor,Děkujeme";
-$lang_module['readmore'] = "Přečtěte si více";
 $lang_module['categories'] = "Navigace";
 $lang_module['viewcat_download_hits'] = "Celkem stažení";
 $lang_module['viewcat_view_hits'] = "Hits";

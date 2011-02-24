@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 08, 2010, 11:22:13 PM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -19,22 +19,7 @@ $lang_translator['info'] ="YM: datvietinfo2010 ";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['add_time'] = "Dodatek času";
-/*
-	 vietnam:	  Được thêm vào
-	 english:	  Addition time
-*/
-
 $lang_module['edit_time'] = "Poslední uprava";
-/*
-	 vietnam:	  Sửa chữa lần cuối
-	 english:	  Last addition
-*/
-
 $lang_module['not_found'] = "Litujeme!Kategorie neexistuje";
-/*
-	 vietnam:	  Thật tiếc!!! Chủ đề bạn cần tìm không tồn tại
-	 english:	  Sorry! Does not exist catagories
-*/
-
 
 ?>

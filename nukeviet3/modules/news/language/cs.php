@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -20,7 +20,9 @@ $lang_translator['langtype'] ="lang_module";
 
 $lang_module['nocatpage'] = "Chyba: Žádný téma";
 $lang_module['other'] = "Více zpráv";
+$lang_module['detail'] = "Podrobnosti";
 $lang_module['more'] = "Více";
+$lang_module['comment'] = "Komentář";
 $lang_module['comment_login'] = "Musíte se přihlásit člena k použití této funkce";
 $lang_module['comment_success'] = "Úspěšné komentáře";
 $lang_module['comment_unsuccess'] = "Chyba při zpracování údajů, nebo neúplných údajů";
@@ -54,11 +56,13 @@ $lang_module['print_page'] = "Vytisknout tento článek";
 $lang_module['print_close'] = "Zavřít stránku";
 $lang_module['print_link'] = "URL tohoto bulletinu";
 $lang_module['author'] = "Autor";
+$lang_module['post_name'] = "Příspěvky";
 $lang_module['source'] = "Zdroj";
 $lang_module['topic'] = "Událost stream";
 $lang_module['related_new'] = "Nejnovější zprávy";
 $lang_module['related'] = "Starší zprávy";
 $lang_module['savefile'] = "Uložit";
+$lang_module['rating'] = "Hodnocení";
 $lang_module['stringrating'] = "Celkový počet článků je:%1\$s na%2\$s hodnocení";
 $lang_module['star_note'] = "Kliknutím hvězdičku na hodnocení  článku";
 $lang_module['star_verypoor'] = "Velmi špatný článek";
@@ -101,9 +105,6 @@ $lang_module['admin_view'] = "Pouze admin může zobrazit!";
 $lang_module['group_view'] = "Pouze člen skupiny mohou zobrazit!";
 $lang_module['rating_error1'] = "Danh gia khong hop le";
 $lang_module['rating_error2'] = "Ban da danh gia bai viet nay roi";
-$lang_module['detail'] = "Podrobnosti";
-$lang_module['comment'] = "Komentář";
-$lang_module['rating'] = "Hodnocení";
 $lang_module['pubtime'] = "Publikováno v";
 $lang_module['hotnews'] = "Ohnisko";
 $lang_module['lastest_comment'] = "Nový komentář";
@@ -113,5 +114,35 @@ $lang_module['counter'] = "Celkem";
 $lang_module['total_comment'] = "Celkem komentář";
 $lang_module['search_cat'] = "Hledat v titulcích";
 $lang_module['search_all'] = "Všechna témata";
+$lang_module['content'] = "Management články";
+$lang_module['add_content'] = "Přídat članky";
+$lang_module['topic_sl'] = "Skupina Související zprávy";
+$lang_module['imgposition'] = "Obrázky v příspěvcích";
+$lang_module['imgposition_0'] = "Nezobrazovat";
+$lang_module['imgposition_1'] = "Chcete-li,aby bylo uvedeno modul kofigurace";
+$lang_module['imgposition_2'] = "Zobrazení pod úvodem.";
+$lang_module['name'] = "Titul";
+$lang_module['alias'] = "alias";
+$lang_module['content_cat'] = "Titul";
+$lang_module['content_topic'] = "Související zprávy skupiny";
+$lang_module['content_homeimg'] = "Ilustrace";
+$lang_module['content_homeimgalt'] = "Popis  obrazu";
+$lang_module['content_hometext'] = "úvod stručné";
+$lang_module['content_bodytext'] = "Detaily obsahu";
+$lang_module['search_author'] = "author";
+$lang_module['content_keywords'] = "Vyhledávání podle klíčových slov pro servery";
+$lang_module['save_temp'] = "Odeslat článek na správce webu";
+$lang_module['save_content'] = "Publikované články";
+$lang_module['captcha'] = "Anti-spam kód";
+$lang_module['error_cat'] = "Chyba: článek není předmětem";
+$lang_module['error_title'] = "Chyba: titul nesmi byt prázdný";
+$lang_module['error_bodytext'] = "Chyba: obsah nesmí byt prázdný";
+$lang_module['error_captcha'] = "Chyba: Špatně jste opsal/a kontrolní kód";
+$lang_module['save_content_ok'] = "Přidáno úspěšně. <br /> Prohlížeč vás převede  zpět na správce článků.";
+$lang_module['save_content_view_page'] = "Úspěšně aktualizováno. <br /> Prohlížeč vám zobrazí aktualizovanou stránku";
+$lang_module['save_content_waite'] = "Příjem článků potvrzen, <br /> schválíme váš článek a zveřejníme ho v nejbližší době, <br /> Prohlížeč vás převede  zpět na správce článků.";
+$lang_module['save_content_waite_home'] = "Příjem článků potvrzen, <br /> schválíme váš článek a zveřejníme ho v nejbližší době, <br /> Prohlížeč vás převede  zpět na hlavní stránku";
+$lang_module['error_addcontent'] = "Chyba: nemáte právo posílat články";
+$lang_module['errorsave'] = "Chyba : název článku již existuje.";
 
 ?>

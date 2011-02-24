@@ -76,7 +76,7 @@ if ( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "
     $query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( $allow_adminlangs ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'allow_adminlangs'";
     $result = $db->sql_query( $query );
     
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setting_save'] , " allow sitelangs : " .$allow_sitelangs . ", allow adminlangs :" .$allow_adminlangs , $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setting_save'], " allow sitelangs : " . $allow_sitelangs . ", allow adminlangs :" . $allow_adminlangs, $admin_info['userid'] );
     nv_save_file_config_global();
     $contents = "<br /><br /><br /><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
     $contents .= "<meta http-equiv=\"Refresh\" content=\"2;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\" />\n";
@@ -132,6 +132,9 @@ while ( list( $key, $value ) = each( $language_array ) )
     if ( in_array( $key, $lang_array_data_exit ) )
     {
         $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $key . "&amp;checksess=" . md5( "writeallfile" . session_id() ) . "\">" . $lang_module['nv_admin_write'] . "</a>";
+    }
+    if ( $check_lang_exit )
+    {
         $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=download&amp;dirlang=" . $key . "&amp;checksess=" . md5( "downloadallfile" . session_id() ) . "\">" . $lang_module['nv_admin_download'] . "</a>";
     }
     $class = ( $a % 2 ) ? " class=\"second\"" : "";

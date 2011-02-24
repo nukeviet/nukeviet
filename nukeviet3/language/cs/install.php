@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Sep 04, 2010, 12:29:51 PM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -19,14 +19,14 @@ $lang_translator['info'] ="YM: datvietinfo2010 ";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['titlesetup'] = "Nastavení Nukeviet";
-$lang_module['select_language'] = "Vybrat jazyky";
+$lang_module['select_language'] = "Vyberte jazyk";
 $lang_module['license'] = "Licence";
-$lang_module['check_server'] = "Zkontrolujte, zda server";
+$lang_module['check_server'] = "Předinstalační kontrola";
 $lang_module['check_chmod'] = "Zkontrolujte CHMOD";
-$lang_module['config_database'] = "Databáze připojení";
+$lang_module['config_database'] = "Databáze";
 $lang_module['website_info'] = "Webová stránka info";
 $lang_module['done'] = "Hotovo";
-$lang_module['select_lang_des'] = "Prosím, vyberte jazyk pro použití na této stránce";
+$lang_module['select_lang_des'] = "Zvolte jazyk používaný v průběhu Nukeviet! instalačních kroků:";
 $lang_module['choose_lang'] = "Prosím, vyberte jazyk!";
 $lang_module['next_step'] = "Další";
 $lang_module['previous'] = "Předchozí";
@@ -38,7 +38,7 @@ $lang_module['not_compatible'] = "není kompatibilní";
 $lang_module['compatible'] = "Kompatibilní";
 $lang_module['please_checkserver'] = "Prosím zkontrolujte server";
 $lang_module['components'] = "Komponenty";
-$lang_module['server_request'] = "Žádat server";
+$lang_module['server_request'] = "Předinstalační kontrola pro Nukeviet";
 $lang_module['note'] = "Poznámka";
 $lang_module['result'] = "Výsledek";
 $lang_module['php_support'] = "Podpora PHP";
@@ -49,9 +49,9 @@ $lang_module['safe_mode'] = "Nouzový režim";
 $lang_module['required_off'] = "Požadovat vypnout";
 $lang_module['required_on'] = "Požadovat, aby na";
 $lang_module['recommnet'] = "Doporučené";
-$lang_module['request_more'] = "žádost více";
-$lang_module['turnoff'] = "By měl být vypnout";
-$lang_module['turnon'] = "By mělo být zapnout";
+$lang_module['request_more'] = "Doporučená nastavení:";
+$lang_module['turnoff'] = "vypnout";
+$lang_module['turnon'] = "zapnout";
 $lang_module['is_support'] = "By měla být podporovat";
 $lang_module['supports_rewrite'] = "Podporuje přepsat";
 $lang_module['opendir_support'] = "Podpora PHP opendir";
@@ -85,15 +85,15 @@ $lang_module['database'] = "Databáze prohlásit";
 $lang_module['properties'] = "Vlastnosti";
 $lang_module['is_required'] = "Je nutné";
 $lang_module['database_config'] = "Konfiguraci databáze";
-$lang_module['database_type'] = "Typu databáze";
-$lang_module['database_default'] = "Výchozí databáze";
-$lang_module['host_name'] = "Jméno hostu";
-$lang_module['host_name_note'] = "Výchozí název hostitele na poskytovatele hostingu je";
+$lang_module['database_type'] = "Typ databáze";
+$lang_module['database_default'] = "Obvykle je to";
+$lang_module['host_name'] = "Jméno hostitele";
+$lang_module['host_name_note'] = "Obvykle zde vyplňujete";
 $lang_module['db_username'] = "Uživatelské jméno";
-$lang_module['db_username_note'] = "Databáze uživatelské jméno";
+$lang_module['db_username_note'] = "Zadejte něco jako \"root\" nebo uživatelské jméno požadované hostitelem";
 $lang_module['db_pass'] = "Heslo";
-$lang_module['db_pass_note'] = "Heslo databáze";
-$lang_module['db_name'] = "Název databáze";
+$lang_module['db_pass_note'] = "Pro stránky používající heslo pro mysql účet je pole povinné";
+$lang_module['db_name'] = "Jméno databáze";
 $lang_module['db_name_note'] = "Prefix pro název databáze";
 $lang_module['db_detete'] = "Odstranit stávající tabulky";
 $lang_module['prefix'] = "prefix";
@@ -112,12 +112,12 @@ $lang_module['admin_repass'] = "Zadejte heslo";
 $lang_module['admin_repass_note'] = "Zopakujte heslo. To se musí shodovat s heslem výše!";
 $lang_module['success'] = "Nastavení úspěšně!";
 $lang_module['congratulations'] = "Vítejte! Nukeviet nastavení úspěšně. Přihlášení na admin nebo na vaší stránce.";
-$lang_module['notesupport'] = "Veškerá technická podpora, prosím, kontaktujte <a href=\"http://nukeviet.vn\" target=\"_blank\"> <b> forum Nukeviet.VN </ b> </ a>.";
-$lang_module['noteuploads'] = "<b> Poznámka: </ b> Prosím <b> CHMOD obrázky a to je sub složky </ b> v webroot o 777, aby soubory mohou být nahrát na hostitele.";
+$lang_module['notesupport'] = "Veškerá technická podpora, prosím, kontaktujte <a href=\"http://nukeviet.vn\" target=\"_blank\" /> <b  /> forum Nukeviet.VN  .";
+$lang_module['noteuploads'] = "<b  /> Poznámka:  Prosím <b  /> CHMOD obrázky a to je sub složky  v webroot o 777, aby soubory mohou být nahrát na hostitele.";
 $lang_module['thanks'] = "Děkuj!";
 $lang_module['gohome'] = "Přejít na domovskou stránku";
 $lang_module['goadmin'] = "Přejít na admin stránku";
-$lang_module['finish'] = "Hotovo";
+$lang_module['finish'] = "Ukončení";
 $lang_module['checkfileconfig'] = "Prosím zkontrolovat";
 $lang_module['movefileconfig'] = "Musíte se přesunout config.php soubor tmp složky do složky root webu, klepněte na tlačítko Kontrola na re-check";
 $lang_module['copyright'] = "Poznámka:Uvedený článek je přetištěný na webové stránky nebo jiných mediálních zdrojů neuvádí zdroj http://nukeviet.vn je porušení autorských práv";

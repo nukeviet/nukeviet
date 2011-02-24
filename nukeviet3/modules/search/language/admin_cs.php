@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 08, 2010, 11:22:13 PM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -19,40 +19,10 @@ $lang_translator['info'] ="YM: datvietinfo2010 ";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['list_module_title'] = "Seznam vyhledávání modulů";
-/*
-	 vietnam:	  Danh sách các module cho phép tìm kiếm
-	 english:	  List of searchable modules
-*/
-
 $lang_module['mdule_name'] = "Jméno modulu";
-/*
-	 vietnam:	  Tên module
-	 english:	  Module name
-*/
-
 $lang_module['stt'] = "Č.";
-/*
-	 vietnam:	  STT
-	 english:	  NO
-*/
-
 $lang_module['module_title'] = "Titul";
-/*
-	 vietnam:	  Tiêu đề
-	 english:	  Title
-*/
-
 $lang_module['enable_title'] = "Zapnout";
-/*
-	 vietnam:	  Bật
-	 english:	  Enable
-*/
-
 $lang_module['disable_title'] = "Vypnout";
-/*
-	 vietnam:	  Tắt
-	 english:	  Desable
-*/
-
 
 ?>

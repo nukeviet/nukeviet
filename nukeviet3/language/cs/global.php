@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -215,5 +215,28 @@ $lang_global['openid_login'] = "Přihlásit se pomocí OpenID";
 $lang_global['google_openid_login'] = "Google";
 $lang_global['yahoo_openid_login'] = "Yahoo";
 $lang_global['breakcrum'] = "Jste v";
+$lang_global['admin_access_denied1'] = "Bohužel současný systém nedovolit admin přihlasit";
+$lang_global['admin_access_denied2'] = "Bohužel současný systém nedovolit modul řízení přihlásit";
+$lang_global['error_uploadNameEmpty'] = "Chyba: Název  souboru neznámý";
+$lang_global['error_uploadSizeEmpty'] = "Chyba: Velikost souboru není";
+$lang_global['error_upload_ini_size'] = "Chyba:velikost souboru je větší než povolené v php.ini";
+$lang_global['error_upload_form_size'] = "Chyba:velikost souboru je větší než povolené v MAX_FILE_SIZE na HTML";
+$lang_global['error_upload_partial'] = "Chyba: Pouze část nahraných souborů";
+$lang_global['error_upload_no_file'] = "Chyba: Nejsou žádné nahrané soubory";
+$lang_global['error_upload_no_tmp_dir'] = "Chyba: složky obsahující nahrané soubory nejsou";
+$lang_global['error_upload_cant_write'] = "Chyba: Nelze zapisovat soubor nahrát";
+$lang_global['error_upload_extension'] = "Chyba: souboru byl blokován proto rozšíření není platný";
+$lang_global['error_upload_unknown'] = "Došlo k chybě při nahrávání";
+$lang_global['error_upload_type_not_allowed'] = "Chyba: typ soubor není dovoleno nahrát";
+$lang_global['error_upload_mime_not_recognize'] = "Chyba: Systém nemůže určit formát nahraných souborů";
+$lang_global['error_upload_max_user_size'] = "Chyba:velikost souboru je větší než povolené.Maximal %d bytes";
+$lang_global['error_upload_not_image'] = "Chyba: Systém nemůže určit formát obrázek nahraných";
+$lang_global['error_upload_image_failed'] = "Chyba: Neplatný obrázek";
+$lang_global['error_upload_image_width'] = "Chyba: Obrázek nahrát šířce větší než povolen.Maximal %d pixels";
+$lang_global['error_upload_image_height'] = "Chyba: obrázek nahrát  výšoky větší než je povoleno.Maximal %d pixels";
+$lang_global['error_upload_forbidden'] = "Chyba: žádné adresář soubory";
+$lang_global['error_upload_writable'] = "Chyba: Adresář šlozka %s neumožňuje nahrávání souborů obsahujících.Možná musíte zapisovat na 0777";
+$lang_global['error_upload_urlfile'] = "Chyba: adresa URL vám poskytnou nesprávné";
+$lang_global['error_upload_url_notfound'] = "Chyba:Nelze stahovat soubory z tuto URL";
 
 ?>

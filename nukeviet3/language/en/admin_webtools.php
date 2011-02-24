@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Jan 23, 2011, 01:15:14 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language English
+* @Createdate Feb 24, 2011, 11:19:47 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['clearsystem'] = "System cleanup";
 $lang_module['clearcache'] = "Delete cache";
@@ -126,7 +125,7 @@ $lang_module['autoupdate_error_create_folder'] = "Upgrade process error: The sys
 $lang_module['autoupdate_error_move_file'] = "Upgrade process error: The system does not move the following files";
 $lang_module['autoupdate_complete_file'] = "Notice: The system has made the process of moving files successfully";
 $lang_module['autoupdate_complete'] = "Complete the upgrade process";
-$lang_module['autoupdate_complete'] = "Complete the upgrade process, You need to be taken to delete the folder install/update on the server";
+$lang_module['autoupdate_complete_error_del_file'] = "To perform the upgrade successfully. You need to delete the folder install/update on the server";
 $lang_module['autoupdate_error_data'] = "And see the error on database update";
 $lang_module['revision_nosuport'] = "Error: The updated system will only support revision from the 3.1 Nukeviet";
 $lang_module['revision_error_cache_file'] = "Error: System not found log updates file";
@@ -137,7 +136,6 @@ $lang_module['revision_del_files'] = "Deleted files";
 $lang_module['revision_msg_download'] = "To make updates you need to click on \"Proceed to download files\" for the system to download the necessary files, the download process faster or slower depending on the number of files and your network, please wait until has announced the next step";
 $lang_module['revision_download_files'] = "Proceed to download files";
 $lang_module['revision_download_error'] = "The process of downloading files with errors";
-
 $lang_module['nukevietChange_caption'] = "Subversion commits to project NukeViet on Google Code";
 $lang_module['nukevietChange_upd'] = "Last Update";
 $lang_module['nukevietChange_refresh'] = "Refresh";

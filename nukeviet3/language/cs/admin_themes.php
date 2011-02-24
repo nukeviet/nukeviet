@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -74,13 +74,14 @@ $lang_module['block_type'] = "Typ bloku";
 $lang_module['block_file'] = "Soubor";
 $lang_module['block_html'] = "HTML";
 $lang_module['block_typehtml'] = "HTML typ";
+$lang_module['functions'] = "Funkce";
 $lang_module['edit_block'] = "Upravit blok";
-
 $lang_module['block_function'] = "Zvolte funkci";
 $lang_module['add_block_module'] = "Použít pro moduly";
 $lang_module['add_block_all_module'] = "všechny moduly";
 $lang_module['add_block_select_module'] = "Zvolte modul";
 $lang_module['block_layout'] = "Vybrat rozvržení";
+$lang_module['block_select'] = "Vyberte blok";
 $lang_module['block_check'] = "Kontrolovat";
 $lang_module['block_select_module'] = "Zvolte modul";
 $lang_module['block_select_function'] = "Zvolte funkci";
@@ -111,6 +112,9 @@ $lang_module['autoinstall_theme_error_invalidfile_back'] = "Zpět";
 $lang_module['autoinstall_package_processing'] = "Prosím, vyčkejte na dokončení ...";
 $lang_module['autoinstall_theme_error_uploadfile'] = "Chyba: Nelze vkládat. Prosím zkontrolujte adresáře nebo chmod adresáře";
 $lang_module['autoinstall_theme_unzip_abort'] = "Instalace nemůže pokračovat automaticky nepodporuje hostitel.";
+$lang_module['autoinstall_theme_permission_folder'] = "Automatická instalace neproběhne.";
+$lang_module['autoinstall_theme_unzip_success'] = "Úspěšná instalace. Systém vás převede na nastavení šablon.";
+$lang_module['autoinstall_theme_error_movefile'] = "Instalace neproběhne.  systém nelze přesunout otevřené (unzip) soubory.";
 $lang_module['autoinstall_theme_cantunzip'] = "Chyba nelze rozbalit. Zkontrolujte prosím, zda chmod adresáře.";
 $lang_module['autoinstall_theme_unzip_filelist'] = "Seznam souborů k rozbalení";
 $lang_module['autoinstall_theme_unzip_setuppage'] = "Přejít na téma management stránku.";
@@ -154,5 +158,9 @@ $lang_module['xcopyblock_process'] = "Kopírovat";
 $lang_module['xcopyblock_no_position'] = "vyberte alespoň 1 pole pro kopírování";
 $lang_module['xcopyblock_notice'] = "Během system bude smazat blok , ktery byval v kopirovaný téma , čekejte, prosím až system uspesně dokončen";
 $lang_module['xcopyblock_success'] = "Kopirovat úpěšně";
+$lang_module['block_weight'] = "Nastavení umístění blocku.";
+$lang_module['block_weight_confirm'] = "Chcete opravdu nastavit umístění blocku ? Po nastavení budou funkce změněny podle nových umístění.";
+$lang_module['autoinstall_theme_error_warning_overwrite'] = "Pozor : Šablony již existují,chcete je přepsat a pokračovat ?";
+$lang_module['autoinstall_theme_overwrite'] = "Potvrdit";
 
 ?>

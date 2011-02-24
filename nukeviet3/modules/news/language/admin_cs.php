@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -35,6 +35,7 @@ $lang_module['status_2'] = "Plánované publikovat";
 $lang_module['status_3'] = "Uplynula";
 $lang_module['errorsave'] = "Chyba: Aktualizovat chyb obsah , zkontrolovat svůj článek tituly mohou být shodné";
 $lang_module['saveok'] = "aktualizovat úspěšně";
+$lang_module['clickgotomodule'] = "Klikněte zde pro zpět na správce článků.";
 $lang_module['alias'] = "Statické Link";
 $lang_module['name'] = "Titul";
 $lang_module['error_name'] = "Chyba: Prosím, přidejte název";
@@ -83,6 +84,10 @@ $lang_module['viewcat_main_left'] = "Kategorie, ostatní zprávy na levé";
 $lang_module['viewcat_main_right'] = "Kategorie, ostatní zprávy na právé";
 $lang_module['viewcat_main_bottom'] = "Kategorie, ostatní zprávy na dně";
 $lang_module['viewcat_two_column'] = "Kategorie jsou uvedeny ve dvou sloupců";
+$lang_module['viewcat_list_new'] = "nové kategorie nahoru";
+$lang_module['viewcat_list_old'] = "staré kategorie nahoru";
+$lang_module['viewcat_grid_new'] = "nové kolonky nahoru";
+$lang_module['viewcat_grid_old'] = "staré kolonky nahoru";
 $lang_module['search'] = "Hledání";
 $lang_module['search_type'] = "Vyhledávání podle";
 $lang_module['search_id'] = "ID";
@@ -129,6 +134,9 @@ $lang_module['content_admin'] = "Admin";
 $lang_module['content_author'] = "Autor";
 $lang_module['content_sourceid'] = "Zdroj";
 $lang_module['content_copyright'] = "Copyright";
+$lang_module['content_saveok'] = "Úspěšně uloženo";
+$lang_module['content_main'] = "Zpět na administraci.";
+$lang_module['redircet_title'] = "Akce úspěšně provedeny";
 $lang_module['content_archive'] = "Uložit skončí po dni";
 $lang_module['showhometext'] = "Zobrazit úvodní text na zobrazení obsahu";
 $lang_module['imgposition'] = "Článek obrázku";
@@ -167,6 +175,7 @@ $lang_module['comment_nocheck'] = "Vyberte prosím alespoň jeden komentář, ab
 $lang_module['comment_update_success'] = "Nahrát úspěšně";
 $lang_module['block'] = "Bloky";
 $lang_module['adddefaultblock'] = "Vyberte formát při vytvoření článku";
+$lang_module['module_logo'] = "Šablony podporují změny loga";
 $lang_module['source_logo'] = "Zdroj logo";
 $lang_module['topic_page'] = "Téma stránku";
 $lang_module['topic_del'] = "Vymazat téma";
@@ -184,5 +193,28 @@ $lang_module['siteinfo_expired'] = "Počet příspěvků vypršela";
 $lang_module['siteinfo_exptime'] = "Počet příspěvků bude vypršela";
 $lang_module['siteinfo_comment'] = "Celkem komentáře vyslán";
 $lang_module['siteinfo_comment_pending'] = "Počet komentářů na moderování";
+$lang_module['group_content'] = "Nastavení pro přidávání článků";
+$lang_module['group_addcontent'] = "právo příspěvky";
+$lang_module['group_postcontent'] = "příspěvky bez schválení";
+$lang_module['group_editcontent'] = "právo editovat";
+$lang_module['group_delcontent'] = "Právo smazat";
+$lang_module['admin'] = "Rozdělení práva na správu.";
+$lang_module['admin_permissions'] = "práva";
+$lang_module['admin_edit'] = "Editovat práva";
+$lang_module['admin_edit_user'] = "editovat práva členové";
+$lang_module['admin_module'] = "Správce module";
+$lang_module['admin_cat'] = "správce category";
+$lang_module['admin_userid'] = "ID";
+$lang_module['admin_username'] = "Uživatelské jméno";
+$lang_module['admin_full_name'] = "Přímení a jméno";
+$lang_module['admin_email'] = "Email";
+$lang_module['permissions_admin'] = "Management category";
+$lang_module['permissions_add_content'] = "Přídat članků";
+$lang_module['permissions_pub_content'] = "Schvalení članky";
+$lang_module['permissions_edit_content'] = "editovat članky";
+$lang_module['permissions_del_content'] = "smazat članky";
+$lang_module['permissions_pub_error'] = "Chyba : nemůžete přidat články do : %1\$s";
+$lang_module['error_no_del_content_id'] = "Chyba : systém nemůže smazat články s id:";
+$lang_module['structure_image_upload'] = "Obrázek v modulu bude uložen podle default.";
 
 ?>

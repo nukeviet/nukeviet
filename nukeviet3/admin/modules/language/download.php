@@ -42,6 +42,15 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "downloadallfile" . s
         {
             $allowfolder[] = NV_ROOTDIR . "/js/language/en.js";
         }
+        $pattern_lang_js = "/[a-zA-Z0-9\-\_\.]+\-" . $dirlang . "\.js$/";
+        $array_lang_js = nv_scandir( NV_ROOTDIR . "/js/language", $pattern_lang_js );
+        if ( ! empty( $array_lang_js ) )
+        {
+            foreach ( $array_lang_js as $fjs )
+            {
+                $allowfolder[] = NV_ROOTDIR . "/js/language/" . $fjs;
+            }
+        }
         
         //package samples data
         if ( file_exists( NV_ROOTDIR . "/install/data_" . $dirlang . ".php" ) )

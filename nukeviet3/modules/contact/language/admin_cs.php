@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -63,5 +63,6 @@ $lang_module['admin_reply_title'] = "Povolit odpovědět zpětnou odezvou(feedba
 $lang_module['admin_send2mail_title'] = "Odeslat kontakt na e-mail";
 $lang_module['delall'] = "Smazat všechny";
 $lang_module['siteinfo_new'] = "Informace o webu";
+$lang_module['no_row_contact'] = "žádná zprav";
 
 ?>

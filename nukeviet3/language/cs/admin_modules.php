@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -76,6 +76,8 @@ $lang_module['autoinstall_module_error_uploadfile'] = "Chyba: Nepodaří nahráv
 $lang_module['autoinstall_module_error_createfile'] = "Chyba: Nepodaří vytvořit soubor. Zkontrolujte prosím, zda chmod z tmp složky";
 $lang_module['autoinstall_module_error_invalidfile'] = "Chyba: Neplatný zip soubor";
 $lang_module['autoinstall_module_error_invalidfile_back'] = "Zpět";
+$lang_module['autoinstall_module_error_warning_overwrite'] = "modulů jste nainstalovali nesprávný souborů , Chcete-li pokračovat?";
+$lang_module['autoinstall_module_overwrite'] = "potvrdit";
 $lang_module['autoinstall_module_error_warning_fileexist'] = "Seznam souborů:";
 $lang_module['autoinstall_module_error_warning_invalidfolder'] = "Neplatná složka struktování!";
 $lang_module['autoinstall_module_error_warning_permission_folder'] = "Safe mod je zapnutý. Nepodaří vytvořit složku.";
@@ -86,6 +88,7 @@ $lang_module['autoinstall_module_cantunzip'] = "Chyba: Nedaří rozbalit. Prosí
 $lang_module['autoinstall_module_unzip_success'] = "Úspěšná. Automatické přesměrování na stránku aktivujte.";
 $lang_module['autoinstall_module_unzip_setuppage'] = "Přejít na řížení moduly stránku";
 $lang_module['autoinstall_module_unzip_filelist'] = "Seznam dekomprimovat soubory";
+$lang_module['autoinstall_module_error_movefile'] = "automaticky Instalace nemůže pokračovat,host nepodporuje přesouvání souborů po rozbalení.";
 $lang_module['autoinstall_package_select'] = "Zvolte modul do balíčku";
 $lang_module['autoinstall_package_noselect'] = "Prosím, vyberte modul do balíčku";
 $lang_module['autoinstall_package_processing'] = "Prosím, vyčkejte na dokončení ...";

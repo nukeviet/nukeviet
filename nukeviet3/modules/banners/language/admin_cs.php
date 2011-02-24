@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -34,6 +34,7 @@ $lang_module['yim'] = "YIM";
 $lang_module['phone'] = "Telefon";
 $lang_module['fax'] = "Fax";
 $lang_module['mobile'] = "Mobil";
+$lang_module['uploadtype'] = "typů souborů nahrát";
 $lang_module['add_client_submit'] = "Vytvořit";
 $lang_module['edit_client_submit'] = "Potvrdit";
 $lang_module['login_is_already_in_use'] = "Účet \"<strong>%s </ strong>\" již existuje";
@@ -130,7 +131,6 @@ $lang_module['form'] = "Typ";
 $lang_module['file_del_confirm'] = "Přejete si smazat?";
 $lang_module['delfile_success'] = "Smazat soubor úspěch";
 $lang_module['delfile_error'] = "odstranit chyby";
-
 $lang_module['weight'] = "Pozice";
 
 ?>

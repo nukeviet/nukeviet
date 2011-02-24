@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Feb 23, 2011, 09:37:22 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -122,6 +122,10 @@ $lang_module['changepass_title'] = "Změna hesla";
 $lang_module['logout_title'] = "Odhlásit";
 $lang_module['edit_info_title'] = "Upravit";
 $lang_module['img_size_title'] = "Velikost obrázku";
+$lang_module['email_active'] = "Upozornění na změnu v aktivaci emailu.";
+$lang_module['email_active_info'] = "Vážený pan/vážená paní %1\$s,<br /><br /> právě jste změnil/a emailovou adresu na účtu %2\$s. Aktivujte váš účet. Pro aktivaci klikněte na tento odkaz :<br /><br />URL: %3\$s<br /><br /> Platnost aktivace je do %4\$s<br /><br /> Toto je automatická zpráva od website %5\$s. Pro smazání klikněte sem <br /><br /><br /><br />. Administrátor site.";
+$lang_module['email_active_mes'] = "Váš účet byl právě aktualizován.  Systém požaduje aktivaci účtu.  Aktivační odkaz byl vám právě zaslán na vaši emailovou adresu.  Pro více informací zkontrolujte váš email.";
+$lang_module['email_active_error_mail'] = "Chyba : Váš účet byl právě aktualizován.  Nepodařilo se vám poslat na email aktivační odkaz.  Kontaktujte prosím administrátora.";
 $lang_module['st_login'] = "Normalní přihlášení";
 $lang_module['st_login2'] = "Možnost pro normalní přihlášení";
 $lang_module['admin_login'] = "Přihlásit se pomocí admin účtu";
@@ -132,6 +136,7 @@ $lang_module['openid_note2'] = "Je to poprvé, přihlášení s tímto OpenID. P
 $lang_module['openid_note3'] = "Registrovat nový účet a vložit odkaz na tuto OpenID";
 $lang_module['openid_note4'] = "Přihlásit se automatické pomocí účet vytvoření systému";
 $lang_module['openid_note5'] = "Přihlásit se váš bývalý účet";
+$lang_module['openid_note6'] = "Zaregistrovat nový účet na fórum a pak musíte znovu přihlášení OpenID";
 $lang_module['you_openid'] = "OpenID";
 $lang_module['openid_administrator'] = "Správa OpenID";
 $lang_module['no'] = "Ne";
@@ -191,6 +196,5 @@ $lang_module['openid_is_exists'] = "Tento OpenID byl použitý. <br /> Prosím, 
 $lang_module['openid_add_new'] = "Přidat další OpenID na svůj účet";
 $lang_module['email_is_exists'] = "Váš email OpenID byla použitá. <br /> Prosím, vyberte jiný OpenID";
 $lang_module['error_update_users_info'] = "Chyba: Systém nemůže aktualizovat informace  svého uživatele,kontaktujte  se prosím na webu admin.";
-$lang_module['openid_note6'] = "Zaregistrovat nový účet na fórum a pak musíte znovu přihlášení OpenID";
 
 ?>
