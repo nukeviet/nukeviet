@@ -40,7 +40,7 @@ $global_config['engine_allowed'] = array();
 $global_config['site_theme'] = "modern";
 $global_config['gfx_chk'] = 3;
 
-$global_config['version'] = "3.1.02"; //NUKEVIET 3.1
-$global_config['revision'] = 895;
+$global_config['version'] = "3.1.03"; //NUKEVIET 3.1
+$global_config['revision'] = 930;
 
 ?>
