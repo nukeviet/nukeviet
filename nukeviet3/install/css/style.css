@@ -42,9 +42,8 @@ hr {
 
 h1#install_title {
 	line-height: 73px;
-	background: transparent url(../images/LOGO-NUKE.png) left center
-		no-repeat;
-	padding-left: 40px;
+	background: transparent url(../images/logo.png) left center no-repeat;
+	padding-left: 177px;
 	font-size: 18px;
 	color: #fff;
 	text-transform: uppercase;
