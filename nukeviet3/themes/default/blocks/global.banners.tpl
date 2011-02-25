@@ -8,6 +8,7 @@
 			        width="{DATA.file_width}" height="{DATA.file_height}"
 			      >
 			        <param name="movie" value="{DATA.file_image}" />
+					<param name="wmode" value="transparent" />
 			        <param name="quality" value="high" />
 			        <param name="menu" value="false" />
 			        <param name="seamlesstabbing" value="false" />
@@ -20,6 +21,7 @@
 			            data="{DATA.file_image}"
 			          >
 			            <param name="pluginurl" value="http://www.adobe.com/go/getflashplayer" />
+						<param name="wmode" value="transparent" />
 			            <param name="loop" value="true" />
 			            <param name="quality" value="high" />
 			            <param name="menu" value="false" />
