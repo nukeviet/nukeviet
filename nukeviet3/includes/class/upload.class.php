@@ -255,12 +255,33 @@ class upload
     }
 
     /**
-     * upload::get_mime_type()
+     * upload::get_mime_from_iniFile()
+     * 
+     * @return
+     */
+    private function get_mime_from_iniFile()
+    {
+        return $this->config['allowed_files'][$this->file_extension][0];
+    }
+
+    /**
+     * upload::get_mime_from_userFile()
      * 
      * @param mixed $userfile
      * @return
      */
-    private function get_mime_type( $userfile )
+    private function get_mime_from_userFile( $userfile )
+    {
+        return preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $userfile['type'] ) );
+    }
+
+    /**
+     * upload::get_mime_finfo()
+     * 
+     * @param mixed $userfile
+     * @return
+     */
+    private function get_mime_finfo( $userfile )
     {
         $mime = "";
         if ( $this->func_exists( 'finfo_open' ) )
@@ -313,83 +334,120 @@ class upload
             }
         }
 
-        if ( empty( $mime ) or $mime == "application/octet-stream" )
+        return $mime;
+    }
+
+    /**
+     * upload::get_mime_exec()
+     * 
+     * @param mixed $userfile
+     * @return
+     */
+    private function get_mime_exec( $userfile )
+    {
+        $mime = "";
+
+        if ( substr( PHP_OS, 0, 3 ) != 'WIN' )
         {
-            if ( substr( PHP_OS, 0, 3 ) != 'WIN' )
+            if ( $this->func_exists( 'system' ) )
             {
-                if ( $this->func_exists( 'system' ) )
+                ob_start();
+                system( "file -i -b " . escapeshellarg( $userfile['tmp_name'] ) );
+                $m = ob_get_clean();
+                $m = trim( $m );
+                if ( ! empty( $m ) )
                 {
-                    ob_start();
-                    system( "file -i -b " . escapeshellarg( $userfile['tmp_name'] ) );
-                    $m = ob_get_clean();
-                    $m = trim( $m );
-                    if ( ! empty( $m ) )
-                    {
-                        $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
-                    }
-                } elseif ( $this->func_exists( 'exec' ) )
+                    $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
+                }
+            } elseif ( $this->func_exists( 'exec' ) )
+            {
+                $m = @exec( "file -bi " . escapeshellarg( $userfile['tmp_name'] ) );
+                $m = trim( $m );
+                if ( ! empty( $m ) )
                 {
-                    $m = @exec( "file -bi " . escapeshellarg( $userfile['tmp_name'] ) );
-                    $m = trim( $m );
-                    if ( ! empty( $m ) )
-                    {
-                        $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
-                    }
+                    $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
                 }
             }
         }
 
-        if ( empty( $mime ) or $mime == "application/octet-stream" )
+        return $mime;
+    }
+
+    /**
+     * upload::get_mime_content_type()
+     * 
+     * @param mixed $userfile
+     * @return
+     */
+    private function get_mime_content_type( $userfile )
+    {
+        $mime = "";
+
+        if ( $this->func_exists( 'mime_content_type' ) )
         {
-            if ( $this->func_exists( 'mime_content_type' ) )
-            {
-                $mime = mime_content_type( $userfile['tmp_name'] );
-                $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
-            }
+            $mime = mime_content_type( $userfile['tmp_name'] );
+            $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
         }
 
-        if ( empty( $mime ) or $mime == "application/octet-stream" )
+        return $mime;
+    }
+
+    /**
+     * upload::get_mime_image()
+     * 
+     * @param mixed $userfile
+     * @return
+     */
+    private function get_mime_image( $userfile )
+    {
+        $mime = "";
+
+        $img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
+        if ( in_array( $this->file_extension, $img_exts ) )
         {
-            $img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
-            if ( in_array( $this->file_extension, $img_exts ) )
+            if ( ( $img_info = @getimagesize( $userfile['tmp_name'] ) ) !== false )
             {
-                if ( ( $img_info = @getimagesize( $userfile['tmp_name'] ) ) !== false )
+                $this->img_info = $img_info;
+
+                if ( array_key_exists( 'mime', $this->img_info ) and ! empty( $this->img_info['mime'] ) )
                 {
-                    $this->img_info = $img_info;
+                    $mime = trim( $this->img_info['mime'] );
+                    $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $mime );
+                }
 
-                    if ( array_key_exists( 'mime', $this->img_info ) and ! empty( $this->img_info['mime'] ) )
-                    {
-                        $mime = trim( $this->img_info['mime'] );
-                        $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $mime );
-                    }
-
-                    if ( empty( $mime ) and isset( $this->img_info[2] ) )
-                    {
-                        $mime = image_type_to_mime_type( $this->img_info[2] );
-                    }
+                if ( empty( $mime ) and isset( $this->img_info[2] ) )
+                {
+                    $mime = image_type_to_mime_type( $this->img_info[2] );
                 }
             }
         }
 
-        if ( empty( $mime ) or $mime == "application/octet-stream" )
-        {
-            if ( $this->config['upload_checking_mode'] != "strong" )
-            {
-                if ( ! empty( $userfile['type'] ) )
-                {
-                    $mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $userfile['type'] ) );
-                }
-            }
-        }
+        return $mime;
+    }
 
-        if ( empty( $mime ) or $mime == "application/octet-stream" )
+    /**
+     * upload::check_mime_from_ext()
+     * 
+     * @param mixed $mime
+     * @return
+     */
+    private function check_mime_from_ext( $mime )
+    {
+        if ( ! empty( $mime ) and ! in_array( $mime, $this->config['allowed_files'][$this->file_extension] ) )
         {
-            if ( $this->config['upload_checking_mode'] != "strong" and $this->config['upload_checking_mode'] != "mild" )
-            {
-                $mime = $this->config['allowed_files'][$this->file_extension][0];
-            }
+            $mime = "";
         }
+        return $mime;
+    }
 
+    /**
+     * upload::mime_ign()
+     * 
+     * @param mixed $mime
+     * @return
+     */
+    private function mime_ign( $mime )
+    {
         if ( preg_match( "/^application\/(?:x-)?zip(?:-compressed)?$/is", $mime ) )
         {
             if ( $this->file_extension == "docx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -410,13 +468,53 @@ class upload
             elseif ( $this->file_extension == "xlsm" ) $mime = "application/vnd.ms-excel.sheet.macroEnabled.12";
             elseif ( $this->file_extension == "xltm" ) $mime = "application/vnd.ms-excel.template.macroEnabled.12";
         }
+        return $mime;
+    }
 
-        if ( ! empty( $mime ) and ! in_array( $mime, $this->config['allowed_files'][$this->file_extension] ) )
+    /**
+     * upload::get_mime_type()
+     * 
+     * @param mixed $userfile
+     * @return
+     */
+    private function get_mime_type( $userfile )
+    {
+        if ( $this->config['upload_checking_mode'] != "strong" and $this->config['upload_checking_mode'] != "mild" and $this->config['upload_checking_mode'] != "lite" )
         {
-            $mime = "";
+            if ( ( $mime = $this->get_mime_finfo( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( ( $mime = $this->get_mime_exec( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( ( $mime = $this->get_mime_content_type( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( ( $mime = $this->get_mime_image( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( ( $mime = $this->get_mime_from_userFile( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( ( $mime = $this->get_mime_from_iniFile() ) != "" ) return $this->mime_ign( $mime );
+            return "";
         }
 
-        return $mime;
+        if ( $this->config['upload_checking_mode'] != "strong" and $this->config['upload_checking_mode'] != "mild" )
+        {
+            if ( ( $mime = $this->get_mime_finfo( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( ( $mime = $this->get_mime_exec( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( ( $mime = $this->get_mime_content_type( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( ( $mime = $this->get_mime_image( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( ( $mime = $this->get_mime_from_userFile( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            return "";
+        }
+
+        if ( $this->config['upload_checking_mode'] != "strong" )
+        {
+            if ( $this->check_mime_from_ext( $mime = $this->get_mime_finfo( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( $this->check_mime_from_ext( $mime = $this->get_mime_exec( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( $this->check_mime_from_ext( $mime = $this->get_mime_content_type( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( $this->check_mime_from_ext( $mime = $this->get_mime_image( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            if ( $this->check_mime_from_ext( $mime = $this->get_mime_from_userFile( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+            return "";
+        }
+
+        if ( $this->check_mime_from_ext( $mime = $this->get_mime_finfo( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+        if ( $this->check_mime_from_ext( $mime = $this->get_mime_exec( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+        if ( $this->check_mime_from_ext( $mime = $this->get_mime_content_type( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+        if ( $this->check_mime_from_ext( $mime = $this->get_mime_image( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+        return "";
     }
 
     /**

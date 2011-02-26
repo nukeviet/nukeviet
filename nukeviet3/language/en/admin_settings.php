@@ -142,6 +142,7 @@ $lang_module['upload_checking_mode'] = "Upload Checking Mode";
 $lang_module['strong_mode'] = "Strong";
 $lang_module['mild_mode'] = "Mild";
 $lang_module['lite_mode'] = "Lite";
+$lang_module['none_mode'] = "None";
 $lang_module['upload_checking_note'] = "Your server does not support some functions defined file types. If you chose \"Strong\", you will not be able to upload files to your host";
 $lang_module['nv_admin_add'] = "Add job";
 $lang_module['nv_admin_edit'] = "Edit job";

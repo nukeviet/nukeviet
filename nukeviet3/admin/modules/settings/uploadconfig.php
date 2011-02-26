@@ -66,7 +66,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $mime = implode( ',', $mime );
 
     $upload_checking_mode = $nv_Request->get_string( 'upload_checking_mode', 'post', '' );
-    if ( $upload_checking_mode != "mild" and $upload_checking_mode != "lite" ) $upload_checking_mode = "strong";
+    if ( $upload_checking_mode != "mild" and $upload_checking_mode != "lite" and $upload_checking_mode != "strong" ) $upload_checking_mode = "none";
 
     $nv_max_size = $nv_Request->get_int( 'nv_max_size', 'post', $global_config['nv_max_size'] );
     $nv_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $nv_max_size );
@@ -116,7 +116,7 @@ $contents .= "<tr>";
 $contents .= "<td align=\"right\"><strong>" . $lang_module['upload_checking_mode'] . ":</strong> </td>\n";
 $contents .= "<td>";
 $contents .= "<select name=\"upload_checking_mode\">\n";
-$_upload_checking_mode = array( 'strong' => $lang_module['strong_mode'], 'mild' => $lang_module['mild_mode'], 'lite' => $lang_module['lite_mode'] );
+$_upload_checking_mode = array( 'strong' => $lang_module['strong_mode'], 'mild' => $lang_module['mild_mode'], 'lite' => $lang_module['lite_mode'], 'none' => $lang_module['none_mode'] );
 foreach ( $_upload_checking_mode as $m => $n )
 {
     $sl = ( $m == $global_config['upload_checking_mode'] ) ? " selected=\"selected\"" : "";

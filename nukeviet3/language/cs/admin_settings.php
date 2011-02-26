@@ -142,6 +142,7 @@ $lang_module['upload_checking_mode'] = "Zkontrolovat nahrávat soubory";
 $lang_module['strong_mode'] = "Silný";
 $lang_module['mild_mode'] = "normání";
 $lang_module['lite_mode'] = "Slabý";
+$lang_module['none_mode'] = "Nemá";
 $lang_module['upload_checking_note'] = "Server nepodporuje tento format.  Budete-li pokračovat, soubor nebude nahrán";
 $lang_module['nv_admin_add'] = "Přidat zaměstnání";
 $lang_module['nv_admin_edit'] = "Upravit zaměstnání";

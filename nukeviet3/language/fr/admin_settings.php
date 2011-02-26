@@ -138,6 +138,7 @@ $lang_module['upload_checking_mode'] = "Upload Checking Mode";
 $lang_module['strong_mode'] = "Strong";
 $lang_module['mild_mode'] = "Mild";
 $lang_module['lite_mode'] = "Lite";
+$lang_module['none_mode'] = "None";
 $lang_module['upload_checking_note'] = "";
 
 $lang_module['nv_admin_add'] = "Ajouter une tâche";

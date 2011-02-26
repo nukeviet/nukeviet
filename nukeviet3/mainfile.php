@@ -333,7 +333,7 @@ foreach ( $list as $row )
 }
 
 if ( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array( 
-    "mild", "lite" 
+    "mild", "lite", "none" 
 ) ) )
 {
     $global_config['upload_checking_mode'] = "strong";

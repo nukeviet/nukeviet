@@ -160,6 +160,7 @@ $lang_module['upload_checking_mode'] = "Kiểu kiểm tra file tải lên";
 $lang_module['strong_mode'] = "Mạnh";
 $lang_module['mild_mode'] = "Vừa phải";
 $lang_module['lite_mode'] = "Yếu";
+$lang_module['none_mode'] = "Không";
 $lang_module['upload_checking_note'] = "Máy chủ của bạn không hỗ trợ một số hàm xác định loại file. Nếu chọn \"Mạnh\", bạn sẽ không thể upload file lên host";
 
 #cronjobs
