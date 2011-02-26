@@ -22,7 +22,7 @@ if ( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile 
 }
 else
 {
-    $sql = "SELECT `alias`,`add_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "`";
+    $sql = "SELECT `alias`,`add_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `status`=1";
     $result = $db->sql_query( $sql );
 
     while ( list( $alias, $publtime ) = $db->sql_fetchrow( $result ) )
