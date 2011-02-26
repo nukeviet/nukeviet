@@ -43,7 +43,7 @@ $contents .= "
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tfoot>\n";
-$sql = "SELECT a.cid, a.content, a.post_email, a.status, b.title  FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` a INNER JOIN `" . $db_config['prefix'] . "_" . $module_data . "_rows` b ON a.id=b.id";
+$sql = "SELECT a.cid, a.content, a.post_email, a.status, b.". NV_LANG_DATA . "_title  FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` a INNER JOIN `" . $db_config['prefix'] . "_" . $module_data . "_rows` b ON a.id=b.id";
 $result = $db->sql_query( $sql );
 $num = $db->sql_numrows( $result );
 while ( list( $cid, $content, $email, $status, $title ) = $db->sql_fetchrow( $result ) )

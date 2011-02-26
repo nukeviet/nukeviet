@@ -370,9 +370,8 @@ function detail_product ( $data_content, $data_unit, $data_comment, $num_comment
             $xtpl->parse( 'main.hometext' );
         }
     }
-    if ( $pro_config['comment'] == "1" )
+	if ( $pro_config['comment'] == "1" )
     {
-        $xtpl->parse( 'main.comment' );
         if ( ! empty( $data_comment ) )
         {
             foreach ( $data_comment as $cdata )
@@ -381,9 +380,10 @@ function detail_product ( $data_content, $data_unit, $data_comment, $num_comment
                 $xtpl->assign( 'avata', $cdata['photo'] );
                 $xtpl->assign( 'content', $cdata['content'] );
                 $xtpl->assign( 'date_up', nv_date( 'd-m-Y h:i:s A', $cdata['post_time'] ) );
-                $xtpl->parse( 'main.list' );
+                $xtpl->parse( 'main.comment.list' );
             }
         }
+        $xtpl->parse( 'main.comment' );
     }
     $xtpl->assign( 'link_addcomment', $link2 . "addcomment" );
     $xtpl->assign( 'num_comment', $num_comment );
