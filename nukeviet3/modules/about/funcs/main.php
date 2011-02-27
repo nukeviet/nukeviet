@@ -33,6 +33,8 @@ if ( $id )
         $row['add_time'] = nv_date( "H:i T l, d/m/Y", $row['add_time'] );
         $row['edit_time'] = nv_date( "H:i T l, d/m/Y", $row['edit_time'] );
         $contents = $cache['contents'] = nv_about_main( $row, $ab_links );
+        $cache['bodytext'] = strip_tags( $row['bodytext'] );
+        $cache['bodytext'] = nv_clean60( $cache['bodytext'], 300 );
 
         $page_title = $mod_title = $cache['page_title'] = $row['title'];
 

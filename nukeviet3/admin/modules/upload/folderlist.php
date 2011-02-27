@@ -21,9 +21,9 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) )
 function nv_set_dir_class( $array )
 {
     $class = array( "folder" );
+    $menu = false;
     if ( ! empty( $array ) )
     {
-        $menu = false;
         foreach ( $array as $key => $item )
         {
             if ( $item ) $class[] = $key;

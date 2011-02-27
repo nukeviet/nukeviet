@@ -42,8 +42,7 @@ if ( ! nv_function_exists( 'nv_message_about' ) )
                 $cache = unserialize( $cache );
                 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=about&amp;" . NV_OP_VARIABLE . "=" . $cache['alias'];
                 $title = $cache['page_title'];
-                $bodytext = strip_tags( $cache['contents'] );
-                $bodytext = nv_clean60( $bodytext, 300 );
+                $bodytext = strip_tags( $cache['bodytext'] );
                 
                 $is_show = true;
             }
