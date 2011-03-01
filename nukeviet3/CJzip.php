@@ -18,14 +18,14 @@
  */
 class CJzip
 {
+    private $is_gzip = false;
+
     private $getName = "file";
     private $file = array();
     private $maxAge = 2592000;
 
-    private $cacheDir;
     private $encoding = 'none';
     private $currenttime;
-    private $cachefile;
     private $siteRoot;
     private $base_siteurl;
     private $isOptimized = false;
@@ -44,6 +44,23 @@ class CJzip
             $this->browseInfo( 404 );
         }
 
+        if ( extension_loaded( 'zlib' ) and ini_get( 'output_handler' ) == "" )
+        {
+            if ( strtolower( ini_get( 'zlib.output_compression' ) ) == "on" or ini_get( 'zlib.output_compression' ) == 1 )
+            {
+                $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+                $ini_set_support = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) ) ? true : false;
+                if ( $ini_set_support )
+                {
+                    ini_set( 'zlib.output_compression_level', 6 );
+                }
+            }
+            else
+            {
+                $this->is_gzip = true;
+            }
+        }
+
         $this->siteRoot = str_replace( '\\', '/', realpath( dirname( __file__ ) ) );
         $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
         if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
@@ -51,7 +68,6 @@ class CJzip
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
         $this->base_siteurl = $base_siteurl . '/';
-        $this->cacheDir = $this->siteRoot . '/cache/';
 
         $filename = $_GET[$this->getName];
         if ( preg_match( "/^\//", $filename ) ) $filename = preg_replace( "#^" . $this->base_siteurl . "#", "", $filename );
@@ -136,7 +152,9 @@ class CJzip
      */
     private function check_encode()
     {
-        if ( ! function_exists( 'gzencode' ) ) return 'none';
+        if ( ! $this->is_gzip ) return ( 'none' );
+
+        if ( ! function_exists( 'gzencode' ) ) return ( 'none' );
 
         $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
 
@@ -151,60 +169,6 @@ class CJzip
         }
 
         return $encoding;
-    }
-
-    /**
-     * CJzip::outputContent()
-     * 
-     * @return
-     */
-    private function outputContent()
-    {
-        header( "Content-Type: text/" . $this->file['contenttype'] . "; charset=utf-8" );
-        header( 'Cache-Control: public; max-age=' . $this->maxAge );
-        header( 'Last-Modified: ' . gmdate( "D, d M Y H:i:s", $this->file['lastmod'] ) . " GMT" );
-        header( "expires: " . gmdate( "D, d M Y H:i:s", $this->currenttime + $this->maxAge ) . " GMT" );
-    }
-
-    /**
-     * CJzip::loadCacheData()
-     * 
-     * @return
-     */
-    private function loadCacheData()
-    {
-        $data = false;
-        if ( file_exists( $this->cacheDir . $this->cachefile ) )
-        {
-            if ( $fp = fopen( $this->cacheDir . $this->cachefile, 'rb' ) )
-            {
-                if ( $this->encoding != 'none' )
-                {
-                    header( "Content-Encoding: " . $this->encoding );
-                    header( 'Vary: Accept-Encoding' );
-                }
-                $this->outputContent();
-                $data = fpassthru( $fp );
-                fclose( $fp );
-                exit();
-            }
-        }
-
-        if ( ! $data )
-        {
-            $fs = glob( $this->cacheDir . $this->file['contenttype'] . '_' . $this->file['md5file'] . '.*.' . $this->encoding . '.cache' );
-            if ( ! empty( $fs ) )
-            {
-                foreach ( $fs as $f )
-                {
-                    if ( preg_match( "/" . $this->file['contenttype'] . "\_" . $this->file['md5file'] . "\.([\d]+)\." . $this->encoding . ".cache$/", $f ) )
-                    {
-                        @unlink( $f );
-                    }
-                }
-            }
-            return false;
-        }
     }
 
     /**
@@ -233,13 +197,11 @@ class CJzip
             header( 'Vary: Accept-Encoding' );
         }
 
-        if ( $fp = fopen( $this->cacheDir . $this->cachefile, 'wb' ) )
-        {
-            fwrite( $fp, $data );
-            fclose( $fp );
-        }
+        header( "Content-Type: text/" . $this->file['contenttype'] . "; charset=utf-8" );
+        header( 'Cache-Control: public; max-age=' . $this->maxAge );
+        header( 'Last-Modified: ' . gmdate( "D, d M Y H:i:s", $this->file['lastmod'] ) . " GMT" );
+        header( "expires: " . gmdate( "D, d M Y H:i:s", $this->currenttime + $this->maxAge ) . " GMT" );
 
-        $this->outputContent();
         echo $data;
         exit();
     }
@@ -378,10 +340,7 @@ class CJzip
 
         $this->encoding = $this->check_encode();
         $this->cachefile = $this->file['contenttype'] . '_' . $this->file['md5file'] . '.' . $this->file['lastmod'] . '.' . $this->encoding . '.cache';
-        if ( ! $this->loadCacheData() )
-        {
-            $this->loadData();
-        }
+        $this->loadData();
     }
 }
 
