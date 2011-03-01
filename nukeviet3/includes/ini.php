@@ -60,7 +60,6 @@ $sys_info['os'] = strtoupper( ( function_exists( 'php_uname' ) and ! in_array( '
 $sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' ) ) ? 1 : 0;
 $sys_info['curl_support'] = ( extension_loaded( 'curl' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! preg_grep( '/^curl\_/', $sys_info['disable_functions'] ) ) ) ) ? 1 : 0;
 $sys_info['opendir_support'] = ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) ? 1 : 0;
-$sys_info['allow_url_fopen'] = ( ini_get( 'allow_url_fopen' ) == '1' || strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' ) ? 1 : 0;
 
 if ( $sys_info['os'] == "LINUX" )
 {

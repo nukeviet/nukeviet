@@ -1251,12 +1251,91 @@ function nv_is_url ( $url )
  */
 function nv_check_url ( $url, $is_200 = 0 )
 {
-    if ( empty( $url ) ) return false;
+	if ( empty( $url ) ) return false;
     $url = str_replace( " ", "%20", $url );
-    $res = get_headers( $url );
-    if ( ! $res ) return false;
+    $allow_url_fopen = ( ini_get( 'allow_url_fopen' ) == '1' || strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' ) ? 1 : 0;
+    if ( nv_function_exists( 'get_headers' ) and $allow_url_fopen == 1 )
+    {
+        $res = get_headers( $url );
+    }
+    elseif ( nv_function_exists( 'curl_init' ) and nv_function_exists( 'curl_exec' ) )
+    {
+        $url_info = @parse_url( $url );
+        $port = isset( $url_info['port'] ) ? intval( $url_info['port'] ) : 80;
+        
+        $userAgents = array(  //
+            'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0', //
+			'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', //
+			'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)', //
+			'Mozilla/4.8 [en] (Windows NT 6.0; U)', //
+			'Opera/9.25 (Windows NT 6.0; U; en)'  //
+        );
+        srand( ( float )microtime() * 10000000 );
+        $rand = array_rand( $userAgents );
+        $agent = $userAgents[$rand];
+        
+        $curl = curl_init( $url );
+        curl_setopt( $curl, CURLOPT_HEADER, true );
+        curl_setopt( $curl, CURLOPT_NOBODY, true );
+        
+        curl_setopt( $curl, CURLOPT_PORT, $port );
+        
+        curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
+        curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+        
+        curl_setopt( curl, CURLOPT_TIMEOUT, 15 );
+        curl_setopt( $curl, CURLOPT_USERAGENT, $agent );
+        
+        $response = curl_exec( $curl );
+        curl_close( $curl );
+        
+        if ( $response === false )
+        {
+            trigger_error( curl_error( $curl ), E_USER_WARNING );
+            return false;
+        }
+        else
+        {
+            $res = explode( "\n", $response );
+        }
+    }
+    elseif ( nv_function_exists( 'fsockopen' ) and nv_function_exists( 'fgets' ) )
+    {
+        $res = array();
+        $url_info = parse_url( $url );
+        $port = isset( $url_info['port'] ) ? intval( $url_info['port'] ) : 80;
+        $fp = fsockopen( $url_info['host'], $port, $errno, $errstr, 15 );
+        if ( $fp )
+        {
+            $path = ! empty( $url_info['path'] ) ? $url_info['path'] : '/';
+            $path .= ! empty( $url_info['query'] ) ? '?' . $url_info['query'] : '';
+            
+            fputs( $fp, "HEAD " . $path . " HTTP/1.0\r\n" );
+            fputs( $fp, "Host: " . $url_info['host'] . ":" . $port . "\r\n" );
+            fputs( $fp, "Connection: close\r\n\r\n" );
+            
+            while ( ! feof( $fp ) )
+            {
+                if ( $header = trim( fgets( $fp, 1024 ) ) )
+                {
+                    $res[] = $header;
+                }
+            }
+        }
+        else
+        {
+            trigger_error( $errstr, E_USER_WARNING );
+            return false;
+        }
+    }
+    else
+    {
+        trigger_error( 'error server no support check url', E_USER_WARNING );
+        return false;
+    }
+    if ( empty( $res ) ) return false;
     if ( preg_match( "/(200)/", $res[0] ) ) return true;
-    if ( $is_200 > 3 ) return false;
+    if ( $is_200 > 5 ) return false;
     if ( preg_match( "/(301)|(302)|(303)/", $res[0] ) )
     {
         foreach ( $res as $k => $v )
@@ -1270,7 +1349,7 @@ function nv_check_url ( $url, $is_200 = 0 )
             }
         }
     }
-    return false;
+    return false;    
 }
 
 // function IP

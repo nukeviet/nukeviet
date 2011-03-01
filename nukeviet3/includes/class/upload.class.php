@@ -820,14 +820,100 @@ class upload
      */
     private function check_url( $is_200 = 0 )
     {
-        $res = get_headers( $this->url_info['uri'], 1 );
+        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        $allow_url_fopen = ( ini_get( 'allow_url_fopen' ) == '1' || strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' ) ? 1 : 0;
+        if ( function_exists( "get_headers" ) and ! in_array( 'get_headers', $disable_functions ) and $allow_url_fopen == 1 )
+        {        
+        	$res = get_headers( $this->url_info['uri']);
+        }
+    	elseif ( function_exists( "curl_init" ) and ! in_array( 'curl_init', $disable_functions ) and function_exists( "curl_exec" ) and ! in_array( 'curl_exec', $disable_functions ) )
+        {
+            $url_info = @parse_url( $this->url_info['uri'] );
+            $port = isset( $url_info['port'] ) ? intval( $url_info['port'] ) : 80;
+            
+            $userAgents = array(  //
+                'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0', //
+				'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', //
+				'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)', //
+				'Mozilla/4.8 [en] (Windows NT 6.0; U)', //
+				'Opera/9.25 (Windows NT 6.0; U; en)'  //
+            );
+            srand( ( float )microtime() * 10000000 );
+            $rand = array_rand( $userAgents );
+            $agent = $userAgents[$rand];
+            
+            $curl = curl_init( $this->url_info['uri'] );
+            curl_setopt( $curl, CURLOPT_HEADER, true );
+            curl_setopt( $curl, CURLOPT_NOBODY, true );
+            
+            curl_setopt( $curl, CURLOPT_PORT, $port );
+            
+            curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
+            curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+            
+            curl_setopt( curl, CURLOPT_TIMEOUT, 15 );
+            curl_setopt( $curl, CURLOPT_USERAGENT, $agent );
+            
+            $response = curl_exec( $curl );
+            curl_close( $curl );
+            
+            if ( $response === false )
+            {
+                return false;
+            }
+            else
+            {
+                $res = explode( "\n", $response );
+            }
+        }
+        elseif ( function_exists( "fsockopen" ) and ! in_array( 'fsockopen', $disable_functions ) and function_exists( "fgets" ) and ! in_array( 'fgets', $disable_functions ) )
+        {
+            $res = array();
+            $url_info = parse_url( $this->url_info['uri'] );
+            $port = isset( $url_info['port'] ) ? intval( $url_info['port'] ) : 80;
+            $fp = fsockopen( $url_info['host'], $port, $errno, $errstr, 15 );
+            if ( $fp )
+            {
+                $path = ! empty( $url_info['path'] ) ? $url_info['path'] : '/';
+                $path .= ! empty( $url_info['query'] ) ? '?' . $url_info['query'] : '';
+                
+                fputs( $fp, "HEAD " . $path . " HTTP/1.0\r\n" );
+                fputs( $fp, "Host: " . $url_info['host'] . ":" . $port . "\r\n" );
+                fputs( $fp, "Connection: close\r\n\r\n" );
+                
+                while ( ! feof( $fp ) )
+                {
+                    if ( $header = trim( fgets( $fp, 1024 ) ) )
+                    {
+                        $res[] = $header;
+                    }
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }        
+        
         if ( ! $res ) return false;
         if ( preg_match( "/(200)/", $res[0] ) )
         {
-            if ( isset( $res['Content-Type'] ) and ! empty( $res['Content-Type'] ) )
+            $ContentType = "";
+        	foreach ( $res as $k => $v )
             {
-                if ( ! is_array( $res['Content-Type'] ) ) $res['Content-Type'] = array( $res['Content-Type'] );
-                foreach ( $res['Content-Type'] as $Ctype )
+                unset( $matches );
+                if ( preg_match( "/content-type:\s(.*?)$/is", $v, $matches ) ){
+                    $ContentType = trim( $matches[1] );
+                }
+            }
+        	if ( ! empty( $ContentType ) )
+            {
+                if ( ! is_array( $ContentType ) ) $ContentType = array( $ContentType );
+                foreach ( $ContentType as $Ctype )
                 {
                     $Ctype = trim( $Ctype );
                     if ( ! empty( $Ctype ) )
@@ -842,22 +928,23 @@ class upload
         if ( $is_200 > 5 ) return false;
         if ( preg_match( "/(301)|(302)|(303)/", $res[0] ) )
         {
-            if ( isset( $res['Location'] ) and ! empty( $res['Location'] ) )
+            foreach ( $res as $k => $v )
             {
-                if ( is_array( $res['Location'] ) ) $res['Location'] = $res['Location'][0];
-
-                $is_200++;
-                $location = trim( $res['Location'] );
-                if ( substr( $location, 0, 1 ) == "/" )
-                {
-                    $location = $this->url_info['scheme'] . "://" . $this->url_info['host'] . $location;
+                unset( $matches );
+                if ( preg_match( "/location:\s(.*?)$/is", $v, $matches ) ){
+                	$is_200 ++;
+                    $location = trim( $matches[1] );
+                    if ( substr( $location, 0, 1 ) == "/" )
+                    {
+                        $location = $this->url_info['scheme'] . "://" . $this->url_info['host'] . $location;
+                    }
+                    $this->url_info = $this->url_get_info( $location );
+	                if ( empty( $this->url_info ) or ! isset( $this->url_info['scheme'] ) )
+	                {
+	                    return false;
+	                }
+	                return $this->check_url( $is_200 );                    
                 }
-                $this->url_info = $this->url_get_info( $location );
-                if ( empty( $this->url_info ) or ! isset( $this->url_info['scheme'] ) )
-                {
-                    return false;
-                }
-                return $this->check_url( $is_200 );
             }
         }
         return false;
