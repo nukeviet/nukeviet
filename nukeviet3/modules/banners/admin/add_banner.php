@@ -85,7 +85,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
     {
         $error = $lang_module['click_url_invalid'];
     }
-    elseif ( ! isset( $_FILES["banner"] ) )
+    elseif ( ! is_uploaded_file( $_FILES["banner"]['tmp_name'] ) )
     {
         $error = $lang_module['file_upload_empty'];
     }
