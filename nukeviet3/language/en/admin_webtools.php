@@ -136,6 +136,7 @@ $lang_module['revision_del_files'] = "Deleted files";
 $lang_module['revision_msg_download'] = "To make updates you need to click on \"Proceed to download files\" for the system to download the necessary files, the download process faster or slower depending on the number of files and your network, please wait until has announced the next step";
 $lang_module['revision_download_files'] = "Proceed to download files";
 $lang_module['revision_download_error'] = "The process of downloading files with errors";
+$lang_module['revision_config_ftp'] = "You need to configure the FTP Config in the Configuration menu to configure, so the system can create and move files.";
 $lang_module['nukevietChange_caption'] = "Subversion commits to project NukeViet on Google Code";
 $lang_module['nukevietChange_upd'] = "Last Update";
 $lang_module['nukevietChange_refresh'] = "Refresh";

@@ -143,6 +143,7 @@ $lang_module['revision_del_files'] = "File xoá";
 $lang_module['revision_msg_download'] = "Để tiến hành cập nhật bạn cần click vào nút Tiến hành download file để hệ thống tiến hành download các file cần thiết, quá trình download nhanh hay chậm tuỳ thuộc vào số lượng file và mạng của bạn, vui lòng chờ đến khi có thông báo thực hiện bước kế tiếp";
 $lang_module['revision_download_files'] = "Tiến hành download file";
 $lang_module['revision_download_error'] = "download file lỗi";
+$lang_module['revision_config_ftp'] = "Bạn cần cấu hình chức năng Cấu hình FTP trong menu Cấu hình để hệ thống có thể tạo và di chuyển các file.";
 
 $lang_module['nukevietChange_caption'] = "Thông tin nâng cấp từ dự án NukeViet trên Google Code";
 $lang_module['nukevietChange_upd'] = "Nâng cấp mới nhất được công bố vào";

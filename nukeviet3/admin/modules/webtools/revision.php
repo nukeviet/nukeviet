@@ -18,20 +18,58 @@ function del_path_svn ( $subject )
 
 function nv_mkdir_svn ( $dirname )
 {
+    global $lang_global, $global_config, $sys_info;
+    $ftp_check_login = 0;
+    $return = true;
+    if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) == 1 )
+    {
+        $ftp_server = nv_unhtmlspecialchars( $global_config['ftp_server'] );
+        $ftp_port = intval( $global_config['ftp_port'] );
+        $ftp_user_name = nv_unhtmlspecialchars( $global_config['ftp_user_name'] );
+        $ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
+        $ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
+        // set up basic connection
+        $conn_id = ftp_connect( $ftp_server, $ftp_port );
+        // login with username and password
+        $login_result = ftp_login( $conn_id, $ftp_user_name, $ftp_user_pass );
+        if ( ( ! $conn_id ) || ( ! $login_result ) )
+        {
+            $ftp_check_login = 3;
+        }
+        elseif ( ftp_chdir( $conn_id, $ftp_path ) )
+        {
+            $ftp_check_login = 1;
+        }
+        else
+        {
+            $ftp_check_login = 2;
+        }
+    }
     $cp = "";
     $e = explode( "/", $dirname );
     foreach ( $e as $p )
     {
         if ( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/' . $cp . $p ) )
         {
-            if ( ! @mkdir( NV_ROOTDIR . '/' . $cp . $p, 0777 ) )
+            if ( $ftp_check_login == 1 )
+            {
+                $res = ftp_mkdir( $conn_id, $cp . $p );
+                ftp_chmod( $conn_id, 0777, $cp . $p );
+            }
+            elseif ( ! @mkdir( NV_ROOTDIR . '/' . $cp . $p, 0777 ) )
             {
                 $cp = '';
+                $return = false;
                 break;
             }
         }
         $cp .= $p . '/';
     }
+    if ( $ftp_check_login == 1 )
+    {
+        ftp_close( $conn_id );
+    }
+    return $return;
 }
 
 if ( $sys_info['allowed_set_time_limit'] )
@@ -54,7 +92,7 @@ else
     {
         require ( NV_ROOTDIR . '/includes/phpsvnclient/phpsvnclient.php' );
         $svn = new phpsvnclient();
-        $svn->setRepository( "http://nuke-viet.googlecode.com/svn" );
+        $svn->setRepository( "http://nuke-viet.googlecode.com/svn/trunk/nukeviet3/" );
         
         $vend = $svn->getVersion();
         if ( $vend > $vini )
@@ -152,62 +190,91 @@ else
         {
             $cache = file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log' );
             $svn_data_files = unserialize( $cache );
+            $check_del_dir_update = true;
+            if ( is_dir( NV_ROOTDIR . '/install/update' ) )
+            {
+                $del_error = nv_deletefile( NV_ROOTDIR . '/install/update', true );
+                if ( empty( $del_error[0] ) )
+                {
+                    $contents = $del_error[1];
+                    if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) != 1 )
+                    {
+                        $contents .= '<br /><br />' . $lang_module['revision_config_ftp'];
+                    }
+                    $check_del_dir_update = false;
+                }
+            }
             
-            nv_deletefile( NV_ROOTDIR . '/install/update', true );
-            
-            @mkdir( NV_ROOTDIR . '/install/update', 0777 );
-            @mkdir( NV_ROOTDIR . '/install/update/new', 0777 );
-            @mkdir( NV_ROOTDIR . '/install/update/old', 0777 );
-            
-            @file_put_contents( NV_ROOTDIR . "/install/update/.htaccess", "deny from all", LOCK_EX );
-            @file_put_contents( NV_ROOTDIR . "/install/update/index.html", "", LOCK_EX );
-            @file_put_contents( NV_ROOTDIR . "/install/update/new/index.html", "", LOCK_EX );
-            @file_put_contents( NV_ROOTDIR . "/install/update/old/index.html", "", LOCK_EX );
-            
-            $contents = '<div style="text-align:center;color:red;">' . $lang_module['revision_list_file'] . '</div>';
-            $contents .= '<div style="overflow:auto;height:300px;width:100%">';
-            if ( ! empty( $svn_data_files['add_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_add_files'] . '</b><br />' . implode( "<br />", $svn_data_files['add_files'] );
-            if ( ! empty( $svn_data_files['edit_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_mod_files'] . '</b><br />' . implode( "<br />", $svn_data_files['edit_files'] );
-            if ( ! empty( $svn_data_files['del_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_del_files'] . '</b><br />' . implode( "<br />", $svn_data_files['del_files'] );
-            $contents .= '</div><br /><br />';
-            $contents .= $lang_module['revision_msg_download'];
-            
-            $contents .= '<br /><br /><center><input style="margin-top:10px;font-size:15px" type="button" name="download_file" value="' . $lang_module['revision_download_files'] . '"/></center>';
-            $contents .= '<br /><br /><div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" /></div>';
-            $contents .= '<script type="text/javascript">
-            	function nv_download_result(res)
-				{
-					var r_split = res.split("_");	
-					if (r_split[0] != "OK") {
-						$("#message").hide();	
-						alert(r_split[1]);
-        			}
-					else if (r_split[1] == "DOWNLOADFILE") {
-				 		nv_ajax("get", "' . NV_BASE_ADMINURL . 'index.php", "' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '", "", "nv_download_result");
-        			}
-					else if (r_split[1] == "DOWNLOADCOMPLETE"){
-						parent.location="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=autoupdate";
-        			} 
-        			else{
-        				alert("' . $lang_module['revision_download_error'] . '");
-        			}       			
-				}
-            	nv_download_result
-        		 $(function(){
-        		 	$("input[name=download_file]").click(function(){
-        		 		$("#message").show();
-				 		$("#step1").html("");
-				 		nv_ajax("get", "' . NV_BASE_ADMINURL . 'index.php", "' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '", "", "nv_download_result");
-					});
-        		 });
-			</script><br /><br />';
+            if ( $check_del_dir_update )
+            {
+                if ( ! nv_mkdir_svn( 'install/update' ) )
+                {
+                    $contents = sprintf( $lang_global['error_create_directories_failed'], 'install/update' );
+                    if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) != 1 )
+                    {
+                        $contents .= '<br /><br />' . $lang_module['revision_config_ftp'];
+                    }
+                }
+                else
+                {
+                    nv_mkdir_svn( 'install/update/new' );
+                    nv_mkdir_svn( 'install/update/old' );
+                    
+                    @file_put_contents( NV_ROOTDIR . "/install/update/.htaccess", "deny from all", LOCK_EX );
+                    @file_put_contents( NV_ROOTDIR . "/install/update/index.html", "", LOCK_EX );
+                    @file_put_contents( NV_ROOTDIR . "/install/update/new/index.html", "", LOCK_EX );
+                    @file_put_contents( NV_ROOTDIR . "/install/update/old/index.html", "", LOCK_EX );
+                    
+                    $contents = '<div id="listfile">';
+                    $contents .= '<div style="text-align:center;color:red;">' . $lang_module['revision_list_file'] . '</div>';
+                    $contents .= '<div style="overflow:auto;height:300px;width:100%">';
+                    if ( ! empty( $svn_data_files['add_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_add_files'] . '</b><br />' . implode( "<br />", $svn_data_files['add_files'] );
+                    if ( ! empty( $svn_data_files['edit_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_mod_files'] . '</b><br />' . implode( "<br />", $svn_data_files['edit_files'] );
+                    if ( ! empty( $svn_data_files['del_files'] ) ) $contents .= '<br /><br /><b>' . $lang_module['revision_del_files'] . '</b><br />' . implode( "<br />", $svn_data_files['del_files'] );
+                    $contents .= '</div>';
+                    $contents .= '</div><br /><br />';
+                    $contents .= $lang_module['revision_msg_download'];
+                    
+                    $contents .= '<br /><br /><center><input style="margin-top:10px;font-size:15px" type="button" name="download_file" value="' . $lang_module['revision_download_files'] . '"/></center>';
+                    $contents .= '<br /><br /><div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" /></div>';
+                    $contents .= '<script type="text/javascript">
+		            	function nv_download_result(res)
+						{
+							var r_split = res.split("_");	
+							if (r_split[0] != "OK") {
+								$("#message").hide();	
+								alert(r_split[1]);
+		        			}
+							else if (r_split[1] == "DOWNLOADFILE") {
+						 		nv_ajax("get", "' . NV_BASE_ADMINURL . 'index.php", "' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '", "", "nv_download_result");
+		        			}
+							else if (r_split[1] == "DOWNLOADCOMPLETE"){
+								parent.location="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=autoupdate";
+		        			} 
+		        			else{
+		        				$("input[name=download_file]").removeAttr("disabled");
+		        				$("#message").hide();
+		        				alert("' . $lang_module['revision_download_error'] . '");
+		        			}       			
+						 }
+		        		 $(function(){
+		        		 	$("input[name=download_file]").click(function(){
+		        		 		$(this).attr("disabled","disabled");
+			        		 	$("#listfile").hide();
+			        		 	$("#message").show();
+						 		$("#step1").html("");
+						 		nv_ajax("get", "' . NV_BASE_ADMINURL . 'index.php", "' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '", "", "nv_download_result");
+							});
+		        		 });
+						</script><br /><br />';
+                }
+            }
         }
         else
         {
             $contents = $lang_module['revision_error_cache_file'];
         }
-    }
-    //elseif ( $step == 3 and $checkss == md5( $step . $global_config['sitekey'] . session_id() ) )
+    } //elseif ( $step == 3 and $checkss == md5( $step . $global_config['sitekey'] . session_id() ) )
     elseif ( $step == 3 )
     {
         $error_download = array();
@@ -220,7 +287,7 @@ else
         
         require ( NV_ROOTDIR . '/includes/phpsvnclient/phpsvnclient.php' );
         $svn = new phpsvnclient();
-        $svn->setRepository( "http://nuke-viet.googlecode.com/svn" );
+        $svn->setRepository( "http://nuke-viet.googlecode.com/svn/trunk/nukeviet3/" );
         
         if ( $getfile < count( $download_files ) )
         {
@@ -231,7 +298,7 @@ else
             $fileInfo = $svn->getDirectoryTree( $path, $vend, false );
             if ( $fileInfo["type"] == "directory" )
             {
-                $dirname = str_replace( "/trunk/nukeviet3/", "install/update/new/", $path );
+                $dirname = 'install/update/new/' . substr( $path, 17 );
             }
             else
             {
@@ -243,14 +310,22 @@ else
                 }
                 else
                 {
-                    $dirname = str_replace( "/trunk/nukeviet3/", "install/update/new/", dirname( $path ) );
                     $filename = basename( $path );
+                    $dirname = 'install/update/new/' . substr( $path, 17, - ( strlen( $filename ) + 1 ) );
                 }
             }
             
             if ( ! empty( $dirname ) and ! is_dir( NV_ROOTDIR . '/' . $dirname ) )
             {
-                nv_mkdir_svn( $dirname );
+                if ( ! nv_mkdir_svn( $dirname ) )
+                {
+                    $contents = sprintf( $lang_global['error_create_directories_failed'], $dirname );
+                    if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) != 1 )
+                    {
+                        $contents .= '<br /><br />' . $lang_module['revision_config_ftp'];
+                    }
+                    die( $contents );
+                }
             }
             if ( ! empty( $filename ) and ! empty( $dirname ) )
             {
@@ -266,12 +341,20 @@ else
                     }
                     else
                     {
-                        $dirname = str_replace( "/trunk/nukeviet3/", "install/update/old/", dirname( $path ) );
+                        $filename = basename( $path );
+                        $dirname = 'install/update/old/' . substr( $path, 17, - ( strlen( $filename ) + 1 ) );
                         if ( ! empty( $dirname ) and ! is_dir( NV_ROOTDIR . '/' . $dirname ) )
                         {
-                            nv_mkdir_svn( $dirname );
+                            if ( ! nv_mkdir_svn( $dirname ) )
+                            {
+                                $contents = sprintf( $lang_global['error_create_directories_failed'], $dirname );
+                                if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) != 1 )
+                                {
+                                    $contents .= '<br /><br />' . $lang_module['revision_config_ftp'];
+                                }
+                                die( $contents );
+                            }
                         }
-                        $filename = basename( $path );
                         file_put_contents( NV_ROOTDIR . '/' . $dirname . "/" . $filename, $contents_f, LOCK_EX );
                     }
                 }

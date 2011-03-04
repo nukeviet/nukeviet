@@ -388,6 +388,10 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
             {
                 $contents .= '<br /><br /><b>' . $lang_module['autoupdate_error_create_folder'] . ':</b>';
                 $contents .= '<br /> ' . implode( "<br />", $error_create_folder );
+                if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) != 1 )
+                {
+                    $contents .= '<br /><br />' . $lang_module['revision_config_ftp'];
+                }
             }
             else
             {
@@ -404,7 +408,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
                                 nv_deletefile( NV_ROOTDIR . '/' . $file_i );
                             }
                         }
-                        if ( ! ( $ftp_check_login == 1 and ftp_rename( $conn_id, $temp_extract_dir . '/new/' . $file_i, 'themes/' . $file_i ) ) )
+                        if ( ! ( $ftp_check_login == 1 and ftp_rename( $conn_id, $temp_extract_dir . '/new/' . $file_i, $file_i ) ) )
                         {
                             @rename( NV_ROOTDIR . '/' . $temp_extract_dir . '/new/' . $file_i, NV_ROOTDIR . '/' . $file_i );
                         }
@@ -418,6 +422,10 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
                 {
                     $contents .= '<br /><br /><b>' . $lang_module['autoupdate_error_move_file'] . ':</b>';
                     $contents .= '<br /> ' . implode( "<br />", $error_move_folder );
+                    if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) != 1 )
+                    {
+                        $contents .= '<br /><br />' . $lang_module['revision_config_ftp'];
+                    }
                 }
                 else
                 {
