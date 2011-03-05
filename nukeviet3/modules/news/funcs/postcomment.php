@@ -50,6 +50,7 @@ if ( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5(
         if ( isset( $row['allowed_comm'] ) and ( $row['allowed_comm'] == 1 or ( $row['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
         {
             $array_catid = explode( ",", $row['listcatid'] );
+			$content = nv_nl2br( $content, '<br />' );            
             $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_comments` (`cid`, `id`, `content`, `post_time`, `userid`, `post_name`, `post_email`, `post_ip`, `status`) VALUES (NULL, " . $id . "," . $db->dbescape( $content ) . ", UNIX_TIMESTAMP(), " . $userid . ",  " . $db->dbescape( $name ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ")";
             $result = $db->sql_query( $sql );
             if ( $result )

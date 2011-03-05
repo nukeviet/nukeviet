@@ -45,6 +45,16 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment' );
     die();
 }
+$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE cid=" . $cid . "";
+$result = $db->sql_query( $sql );
+if ( $db->sql_numrows( $result ) == 0 )
+{
+    header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment' );
+    die();
+}
+$row = $db->sql_fetchrow( $result );
+$row['content'] = nv_htmlspecialchars( nv_br2nl( $row['content'] ) );
+
 $contents = "<form action='' method='post'>";
 $contents .= "<table class=\"tab1\" style='width:400px'>\n";
 $contents .= "<thead>\n";
@@ -52,9 +62,6 @@ $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['comment_edit_title'] . "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</thead>\n";
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE cid=" . $cid . "";
-$result = $db->sql_query( $sql );
-$row = $db->sql_fetchrow( $result );
 $contents .= "<tr>\n";
 $contents .= "<td>\n";
 $contents .= "<textarea name='content' style='width:600px;height:100px'>" . $row['content'] . "</textarea>\n";
@@ -73,8 +80,6 @@ $contents .= "<label><input type='checkbox' name='delete' value='1'/> " . $lang_
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</table></form>\n";
-$contents .= "
-";
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
