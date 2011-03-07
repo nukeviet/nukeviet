@@ -632,14 +632,12 @@ function comment_theme ( $comment_array )
         $comment_array_i['post_time'] = nv_date( "d/m/Y H:i", $comment_array_i['post_time'] );
         if ( ! empty( $comment_array_i['photo'] ) && file_exists( NV_ROOTDIR . "/" . $comment_array_i['photo'] ) )
         {
-            $comment_array_i['photo'] = $comment_array_i['photo'];
+            $comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
         }
         else
         {
             $comment_array_i['photo'] = NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_avatar.jpg";
         }
-        //var_dump($comment_array_i);
-        //die();
         $comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
         $xtpl->assign( 'COMMENT', $comment_array_i );
         if ( $module_config[$module_name]['emailcomm'] and ! empty( $comment_array_i['post_email'] ) )
