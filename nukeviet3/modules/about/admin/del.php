@@ -22,7 +22,16 @@ $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id` = 
 $db->sql_query( $query );
 if ( $db->sql_affectedrows() > 0 )
 {
-    nv_del_moduleCache( $module_name );
+    $query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY `weight` ASC";
+    $result = $db->sql_query( $query );
+    $weight = 0;
+    while ( $row = $db->sql_fetchrow( $result ) )
+    {
+        $weight ++;
+        $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
+        $db->sql_query( $sql );
+    }
+	nv_del_moduleCache( $module_name );
 }
 else
 {
