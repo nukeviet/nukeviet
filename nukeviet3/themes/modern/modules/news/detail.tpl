@@ -186,8 +186,8 @@
             <!-- BEGIN: form -->
             <div class="box-border content-box">
                 <div class="box clearfix">
-                    <input id="commentname" type="text" value="{NAME}" {DISABLED} class="input input-c fl" />
-                    <input id="commentemail_iavim" type="text" value="{EMAIL}" {DISABLED} class="input input-c fr" />
+                    <input id="commentname" type="text" value="{NAME}" {DISABLED} class="input input-c fl" onblur="if(this.value=='')this.value='{LANG.comment_name}';" onclick="if(this.value=='{LANG.comment_name}')this.value='';"/>
+                    <input id="commentemail_iavim" type="text" value="{EMAIL}" {DISABLED} class="input input-c fr" onblur="if(this.value=='')this.value='{LANG.comment_email}';" onclick="if(this.value=='{LANG.comment_email}')this.value='';"/>
                 </div>
                 <p>
                     <textarea id="commentcontent" class="input typer box2" cols="1" rows="1" onblur="if(this.value=='')this.value='{LANG.comment_content}';" onclick="if(this.value=='{LANG.comment_content}')this.value='';">{LANG.comment_content}</textarea>
