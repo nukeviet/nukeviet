@@ -838,6 +838,9 @@ class upload
 				'Mozilla/4.8 [en] (Windows NT 6.0; U)', //
 				'Opera/9.25 (Windows NT 6.0; U; en)'  //
             );
+        	$safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
+            $open_basedir = ( ini_get( 'open_basedir' ) == '1' || strtolower( ini_get( 'open_basedir' ) ) == 'on' ) ? 1 : 0;
+            
             srand( ( float )microtime() * 10000000 );
             $rand = array_rand( $userAgents );
             $agent = $userAgents[$rand];
@@ -848,10 +851,15 @@ class upload
             
             curl_setopt( $curl, CURLOPT_PORT, $port );
             
+            if ( ! $safe_mode and $open_basedir )
+            {
+                curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
+            }            
+            
             curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
             curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
             
-            curl_setopt( curl, CURLOPT_TIMEOUT, 15 );
+            curl_setopt( $curl, CURLOPT_TIMEOUT, 15 );
             curl_setopt( $curl, CURLOPT_USERAGENT, $agent );
             
             $response = curl_exec( $curl );

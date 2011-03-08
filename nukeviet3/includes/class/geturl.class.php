@@ -144,11 +144,14 @@ class UrlGetContents
             curl_setopt( $curl, CURLOPT_NOBODY, true );
             
             curl_setopt( $curl, CURLOPT_PORT, $port );
+            if ( ! $this->safe_mode and ! $this->open_basedir )
+            {
+                curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
+            }            
             
-            curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
             curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
             
-            curl_setopt( curl, CURLOPT_TIMEOUT, 15 );
+            curl_setopt( $curl, CURLOPT_TIMEOUT, 15 );
             curl_setopt( $curl, CURLOPT_USERAGENT, $agent );
             
             $response = curl_exec( $curl );
