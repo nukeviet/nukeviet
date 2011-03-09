@@ -339,7 +339,6 @@ class CJzip
         if ( $this->is_notModified( $hash ) ) $this->browseInfo( 304 );
 
         $this->encoding = $this->check_encode();
-        $this->cachefile = $this->file['contenttype'] . '_' . $this->file['md5file'] . '.' . $this->file['lastmod'] . '.' . $this->encoding . '.cache';
         $this->loadData();
     }
 }
