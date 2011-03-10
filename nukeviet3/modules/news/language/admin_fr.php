@@ -25,6 +25,7 @@ $lang_module['categories'] = "Catégories";
 */
 
 $lang_module['topics'] = "Sujets";
+$lang_module['topics_error_title'] = "Erreur: Vous ne saisissez pas le titre de l'événement";
 /*
 	 vietnam:	  Nhóm tin liên quan
 	 english:	  Topics

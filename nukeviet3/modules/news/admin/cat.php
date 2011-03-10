@@ -6,7 +6,9 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+ 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
 $page_title = $lang_module['categories'];
 
 $error = $admins = "";
@@ -14,6 +16,7 @@ $savecat = 0;
 list( $catid, $parentid, $title, $alias, $description, $keywords, $who_view, $groups_view ) = array( 
     0, 0, "", "", "", "", 0, "" 
 );
+
 $groups_list = nv_groups_list();
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if ( ! empty( $savecat ) )
@@ -50,9 +53,12 @@ if ( ! empty( $savecat ) )
         $weight = intval( $weight ) + 1;
         $viewcat = "viewcat_page_new";
         $subcatid = "";
+		
         $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_cat` (`catid`, `parentid`, `title`, `alias`, `description`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `keywords`, `admins`, `add_time`, `edit_time`, `del_cache_time`, `who_view`, `groups_view`)
          VALUES (NULL, " . $db->dbescape( $parentid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", '', '', " . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewcat ) . ", '0', " . $db->dbescape( $subcatid ) . ", '1', '3', " . $db->dbescape( $keywords ) . ", " . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + 26000000, " . $db->dbescape( $who_view ) . "," . $db->dbescape( $groups_view ) . ")";
+		 
         $newcatid = intval( $db->sql_query_insert_id( $query ) );
+		
         if ( $newcatid > 0 )
         {
             $db->sql_freeresult();
@@ -105,10 +111,6 @@ if ( ! empty( $savecat ) )
 }
 
 $parentid = $nv_Request->get_int( 'parentid', 'get,post', 0 );
-
-$contents = "<div id=\"module_show_list\">";
-$contents .= nv_show_cat_list( $parentid );
-$contents .= "</div><br />\n";
 
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 if ( $catid > 0 and isset( $global_array_cat[$catid] ) )
@@ -165,141 +167,99 @@ foreach ( $global_array_cat as $catid_i => $array_value )
     }
 }
 
-$contents .= "<div id=\"edit\">";
-if ( $error != "" )
-{
-    $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
-    $contents .= "<blockquote class=\"error\"><span>" . $error . "</span></blockquote>\n";
-    $contents .= "</div>\n";
-    $contents .= "<div class=\"clear\"></div>\n";
-}
 if ( ! empty( $array_cat_list ) )
 {
-    $a = 0;
-    $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-    $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-    $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-    $contents .= "<input type=\"hidden\" name =\"catid\" value=\"" . $catid . "\" />";
-    $contents .= "<input type=\"hidden\" name =\"parentid_old\" value=\"" . $parentid . "\" />";
-    $contents .= "<input name=\"savecat\" type=\"hidden\" value=\"1\" />\n";
-    $contents .= "<table summary=\"\" class=\"tab1\">\n";
-    $contents .= "<caption>" . $caption . "</caption>\n";
-    
-    $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
-    $a ++;
-    $contents .= "<tbody" . $class . ">";
-    $contents .= "<tr>";
-    $contents .= "<td align=\"right\"><strong>" . $lang_module['name'] . ": </strong></td>\n";
-    $contents .= "<td><input style=\"width: 600px\" name=\"title\" type=\"text\" value=\"" . $title . "\" maxlength=\"255\" id=\"idtitle\"/></td>\n";
-    $contents .= "</tr>";
-    $contents .= "</tbody>";
-    
-    $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
-    $a ++;
-    $contents .= "<tbody" . $class . ">";
-    $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"><strong>" . $lang_module['alias'] . ": </strong></td>\n";
-    $contents .= "<td><input style=\"width: 550px\" name=\"alias\" type=\"text\" value=\"" . $alias . "\" maxlength=\"255\" id=\"idalias\"/>";
-    $contents .= "		<img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" width=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias('cat',".$catid.");\" alt=\"\" height=\"16\" />\n";
-    $contents .= "</td>\n";
-    $contents .= "</tr>";
-    $contents .= "</tbody>";
-    $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
-    $a ++;
-    $contents .= "<tbody" . $class . ">";
-    $contents .= "<tr>";
-    $contents .= "<td align=\"right\"><strong>" . $lang_module['cat_sub'] . ": </strong></td>\n";
-    $contents .= "<td>";
-    $contents .= "<select name=\"parentid\">\n";
+	$cat_listsub = array();
     while ( list( $catid_i, $title_i ) = each( $array_cat_list ) )
     {
         if ( ! in_array( $catid_i, $array_in_cat ) )
         {
-            $sl = "";
-            if ( $catid_i == $parentid )
-            {
-                $sl = " selected=\"selected\"";
-            }
-            $contents .= "<option value=\"" . $catid_i . "\" " . $sl . ">" . $title_i . "</option>\n";
+			$cat_listsub[] = array(
+				"value" => $catid_i,
+				"selected" => ( $catid_i == $parentid ) ? " selected=\"selected\"" : "",
+				"title" => $title_i
+			);
         }
     }
-    $contents .= "</select>\n";
-    $contents .= "</td>";
-    $contents .= "</tr>";
-    $contents .= "</tbody>";
-    
-    $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
-    $a ++;
-    $contents .= "<tbody" . $class . ">";
-    $contents .= "<tr>";
-    $contents .= "<td align=\"right\"><strong>" . $lang_module['keywords'] . ": </strong></td>\n";
-    $contents .= "<td><input style=\"width: 600px\" name=\"keywords\" type=\"text\" value=\"" . $keywords . "\" maxlength=\"255\" /></td>\n";
-    $contents .= "</tr>";
-    $contents .= "</tbody>";
-    
-    $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
-    $a ++;
-    $contents .= "<tbody" . $class . ">";
-    
-    $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"><br /><strong>" . $lang_module['description'] . " </strong></td>\n";
-    $contents .= "<td>";
-    $contents .= "<textarea style=\"width: 600px\" name=\"description\" cols=\"100\" rows=\"5\">" . $description . "</textarea>";
-    $contents .= "</td>";
-    $contents .= "</tr>";
-    $contents .= "</tbody>";
-    
-    $class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
-    $a ++;
-    $contents .= "<tbody" . $class . ">";
-    
-    $contents .= "<tr>";
-    $contents .= "<td valign=\"top\" align=\"right\"><br /><strong>" . $lang_global['who_view'] . " </strong></td>\n";
-    $contents .= "<td>";
-    $contents .= "			<div class=\"message_body\">\n";
-    $contents .= "				<select name=\"who_view\" id=\"who_view\" onchange=\"nv_sh('who_view','groups_list')\" style=\"width: 250px;\">\n";
+	
+	$who_views = array();
     foreach ( $array_who_view as $k => $w )
     {
-        $sl = "";
-        if ( $who_view == $k ) $sl = " selected=\"selected\"";
-        $contents .= "				<option value=\"" . $k . "\" " . $sl . ">" . $w . "</option>\n";
+		$who_views[] = array (
+			"value" => $k,
+			"selected" => ( $who_view == $k ) ? " selected=\"selected\"" : "",
+			"title" => $w
+		);
     }
-    $contents .= "				</select><br />\n";
-    
-    $contents .= "				<div id=\"groups_list\" style=\"" . ( $who_view == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" ) . "\">\n";
-    $contents .= "					" . $lang_global['groups_view'] . ":\n";
-    $contents .= "					<table style=\"margin-bottom:8px; width:250px;\">\n";
-    $contents .= "						<col valign=\"top\" width=\"150px\" />\n";
-    $contents .= "							<tr>\n";
-    $contents .= "								<td>\n";
+	
+	$groups_views = array();
     foreach ( $groups_list as $group_id => $grtl )
     {
-        $contents .= "<p><input name=\"groups_view[]\" type=\"checkbox\" value=\"" . $group_id . "\"";
-        if ( in_array( $group_id, $groups_view ) ) $contents .= " checked=\"checked\"";
-        $contents .= " />&nbsp;" . $grtl . "</p>\n";
+		$groups_views[] = array(
+			"value" => $group_id,
+			"checked" => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : "",
+			"title" => $grtl
+		);
     }
-    $contents .= "								</td>\n";
-    $contents .= "							</tr>\n";
-    $contents .= "					</table>\n";
-    $contents .= "				</div>\n";
-    $contents .= "			</div>\n";
-    $contents .= "</td>";
-    $contents .= "</tr>";
-    $contents .= "</tbody>";
-    
-    $contents .= "</table>";
-    $contents .= "<br /><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
-    $contents .= "</form>\n";
-    $contents .= "</div>";
-    if ( empty( $alias ) )
-    {
-        $contents .= "<script type=\"text/javascript\">\n";
-        $contents .= '$("#idtitle").change(function () {
-                    get_alias("cat",0);
-                });';
-        $contents .= "</script>\n";
-    }
+}	
+	
+$xtpl = new XTemplate( "cat.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
+
+$xtpl->assign( 'caption', $caption );
+$xtpl->assign( 'catid', $catid );
+$xtpl->assign( 'title', $title );
+$xtpl->assign( 'alias', $alias );
+$xtpl->assign( 'parentid', $parentid );
+$xtpl->assign( 'keywords', $keywords );
+$xtpl->assign( 'description', $description );
+
+$xtpl->assign( 'CAT_LIST', nv_show_cat_list( $parentid ) );
+
+if ( ! empty( $error ) )
+{
+	$xtpl->assign( 'ERROR', $error );
+	$xtpl->parse( 'main.error' );
 }
+
+if ( ! empty( $array_cat_list ) )
+{
+	if ( empty( $alias ) )
+	{
+		$xtpl->parse( 'main.content.getalias' );
+	}
+
+	foreach ( $cat_listsub as $data )
+	{
+		$xtpl->assign( 'cat_listsub', $data );
+		$xtpl->parse( 'main.content.cat_listsub' );
+	}
+	
+	foreach ( $who_views as $data )
+	{
+		$xtpl->assign( 'who_views', $data );
+		$xtpl->parse( 'main.content.who_views' );
+	}
+	
+	foreach ( $groups_views as $data )
+	{
+		$xtpl->assign( 'groups_views', $data );
+		$xtpl->parse( 'main.content.groups_views' );
+	}
+		
+	$xtpl->assign( 'hidediv', $who_view == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" );
+	
+	$xtpl->parse( 'main.content' );
+}
+
+$xtpl->parse( 'main' );
+$contents .= $xtpl->text( 'main' );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );

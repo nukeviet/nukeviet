@@ -20,7 +20,10 @@ $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
 $lang_module['categories'] = "Quản lý chuyên mục";
+
 $lang_module['topics'] = "Theo dòng sự kiện";
+$lang_module['topics_error_title'] = "Lỗi: Bạn không nhập vào tiêu đề sự kiện";
+
 $lang_module['sources'] = "Nguồn tin";
 $lang_module['comments'] = "comments";
 $lang_module['save'] = "Lưu thay đổi";

@@ -19,7 +19,10 @@ $lang_translator['info'] ="YM: datvietinfo2010 ";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['categories'] = "Kategorie";
+
 $lang_module['topics'] = "Související zprávy skupiny";
+$lang_module['topics_error_title'] = "Chyba: Nemáte zadejte název události";
+
 $lang_module['sources'] = "Zdroje";
 $lang_module['comments'] = "Komentáře";
 $lang_module['save'] = "Uložit";

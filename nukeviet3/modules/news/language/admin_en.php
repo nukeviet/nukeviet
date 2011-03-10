@@ -19,7 +19,10 @@ $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['categories'] = "Categories";
+
 $lang_module['topics'] = "Topics";
+$lang_module['topics_error_title'] = "Error: You do not enter the event title";
+
 $lang_module['sources'] = "Sources";
 $lang_module['comments'] = "Comments";
 $lang_module['save'] = "Save";
