@@ -20,7 +20,7 @@ while ( list( $catid, $parentid, $title, $alias ) = $db->sql_fetchrow( $result2 
     {
         $subcatid[] = $cid;
     }
-    $numsubcat = count( $numsubcat );
+    $numsubcat = count( $subcatid );
     $subcatid = implode( ',', $subcatid );
     
     $rssarray[$catid] = array( 
