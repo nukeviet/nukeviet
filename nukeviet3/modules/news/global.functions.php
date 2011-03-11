@@ -50,15 +50,14 @@ function nv_del_content_module ( $id )
     if ( $id > 0 )
     {
         nv_save_log_content( $id );
-        if ( $homeimgfile != "" or $homeimgthumb != "" )
+        if ( $homeimgthumb != "" and $homeimgthumb != "|" )
         {
-            $homeimgfile .= "|" . $homeimgthumb;
-            $homeimgfile_arr = explode( "|", $homeimgfile );
-            foreach ( $homeimgfile_arr as $homeimgfile_i )
+            $homeimgthumb_arr = explode( "|", $homeimgthumb );
+            foreach ( $homeimgthumb_arr as $file )
             {
-                if ( ! empty( $homeimgfile_i ) and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile_i ) )
+                if ( ! empty( $file ) and is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $file ) )
                 {
-                    @nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile_i );
+                    @nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $file );
                 }
             }
         }
