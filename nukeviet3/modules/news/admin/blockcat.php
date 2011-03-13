@@ -25,7 +25,12 @@ if ( ! empty( $savecat ) )
     $description = $nv_Request->get_string( 'description', 'post', '' );
     $description = nv_nl2br( nv_htmlspecialchars( strip_tags( $description ) ), '<br />' );
     $alias = ( $alias == "" ) ? change_alias( $title ) : change_alias( $alias );
-    if ( $bid == 0 )
+	
+	if ( empty ( $title ) )
+	{
+		$error = $lang_module['error_name'];
+	}
+    elseif ( $bid == 0 )
     {
         list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat`" ) );
         $weight = intval( $weight ) + 1;

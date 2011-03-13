@@ -1,23 +1,34 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+ 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
 $page_title = $lang_module['sources'];
+
 list( $sourceid, $title, $link, $logo, $error ) = array( 
     0, "", "http://", "", "" 
 );
+
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
-if ( ! empty( $savecat ) )
+
+if ( ! empty ( $savecat ) )
 {
     $sourceid = $nv_Request->get_int( 'sourceid', 'post', 0 );
     $title = filter_text_input( 'title', 'post', '', 1 );
     $link = strtolower( filter_text_input( 'link', 'post', '' ) );
     list( $logo_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT logo FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` =" . $sourceid . "" ) );
     
+	if ( $link = "http://" )
+	{	
+		$link = "";
+	}	
+	
     $logo = filter_text_input( 'logo', 'post', '' );
     if ( ! nv_is_url( $logo ) and file_exists( NV_DOCUMENT_ROOT . $logo ) )
     {
@@ -28,11 +39,15 @@ if ( ! empty( $savecat ) )
     {
         $logo = $logo_old;
     }
-    if ( $logo != $logo_old )
+    if ( ( $logo != $logo_old ) and ! empty ( $logo_old ) )
     {
         @unlink( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/source/" . $logo_old );
     }
-    if ( $sourceid == 0 )
+	if ( empty ( $title ) )
+	{
+		$error = $lang_module['error_name'];
+	}
+    elseif ( $sourceid == 0 )
     {
         list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources`" ) );
         $weight = intval( $weight ) + 1;
@@ -67,74 +82,48 @@ if ( ! empty( $savecat ) )
         $db->sql_freeresult();
     }
 }
-$contents = "<div id=\"module_show_list\">";
-$contents .= nv_show_sources_list();
-$contents .= "</div><br />\n";
+
 $sourceid = $nv_Request->get_int( 'sourceid', 'get', 0 );
 if ( $sourceid > 0 )
 {
-    list( $sourceid, $title, $link, $logo ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid`, `title`, `link`, `logo`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` where `sourceid`=" . $sourceid . "" ) );
-    $lang_module['add_sources'] = $lang_module['edit_sources'];
+    list( $sourceid, $title, $link, $logo ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid`, `title`, `link`, `logo`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` where `sourceid`=" . $sourceid ) );
+    $lang_module['add_topic'] = $lang_module['edit_topic'];
 }
-$contents .= "<a id=\"edit\"></a>";
-if ( $error != "" )
-{
-    $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
-    $contents .= "<blockquote class=\"error\"><span>" . $error . "</span></blockquote>\n";
-    $contents .= "</div>\n";
-    $contents .= "<div class=\"clear\"></div>\n";
-}
-$contents .= "<form enctype=\"multipart/form-data\" action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-$contents .= "<input type=\"hidden\" name =\"sourceid\" value=\"" . $sourceid . "\" />";
-$contents .= "<input name=\"savecat\" type=\"hidden\" value=\"1\" />\n";
-$contents .= "<table summary=\"\" class=\"tab1\">\n";
-$contents .= "<caption>" . $lang_module['add_sources'] . "</caption>\n";
-$contents .= "<tbody>";
-$contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['name'] . ": </strong></td>\n";
-$contents .= "<td><input style=\"width: 650px\" name=\"title\" type=\"text\" value=\"" . $title . "\" maxlength=\"255\" /></td>\n";
-$contents .= "</tr>";
-$contents .= "</tbody>";
-$contents .= "<tbody class=\"second\">";
-$contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['link'] . ": </strong></td>\n";
-$contents .= "<td><input style=\"width: 650px\" name=\"link\" type=\"text\" value=\"" . $link . "\" maxlength=\"255\" /></td>\n";
-$contents .= "</tr>";
-$contents .= "</tbody>";
-$contents .= "<tbody>";
-$contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['source_logo'] . ": </strong></td>\n";
-$contents .= "<td>";
+
 if ( ! empty( $logo ) )
 {
     $logo = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $logo;
 }
 
-$contents .= "<input style=\"width:500px\" type=\"text\" name=\"logo\" id=\"logo\" value=\"" . $logo . "\"/>";
-$contents .= '<input style="width:100px" type="button" value="' . $lang_global['browse_image'] . '" name="selectimg"/>';
+$xtpl = new XTemplate( "sources.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_UPLOADS_DIR', NV_UPLOADS_DIR );
+$xtpl->assign( 'OP', $op );
+
+$xtpl->assign( 'SOURCES_LIST', nv_show_sources_list() );
+
+$xtpl->assign( 'sourceid', $sourceid );
+$xtpl->assign( 'title', $title );
+$xtpl->assign( 'link', $link );
+$xtpl->assign( 'logo', $logo );
+
 if ( ! empty( $logo ) )
 {
-    $contents .= "<br /><img src=\"" . $logo . "\"/></td>\n";
+    $xtpl->parse( 'main.logo' );
 }
-$contents .= "</td>";
-$contents .= "</tr>";
-$contents .= "</tbody>";
-$contents .= "</table>";
-$contents .= "<br /><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></center>\n";
-$contents .= "</form>\n";
 
-$contents .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
-$contents .= '$("input[name=selectimg]").click(function(){
-						var area = "logo";
-						var path= "' . NV_UPLOADS_DIR . '/' . $module_name . '/source";						
-						var type= "image";
-						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type, "NVImg", "850", "500","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-						return false;
-					});';
+if ( ! empty( $error ) )
+{
+    $xtpl->assign( 'ERROR', $error );
+    $xtpl->parse( 'main.error' );
+}
 
-$contents .= "\n//]]></script>\n";
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
