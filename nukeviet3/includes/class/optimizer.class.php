@@ -484,7 +484,7 @@ class optimezer
         $content = preg_replace( '#<(br|hr|input|img|meta)([^>]+)>#', "<\\1 \\2 />", $content );
         $content = preg_replace( '#\s*\/\s*\/>#', " />", $content );
         $content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
-        $content = preg_replace( '/^\s+|\s+$/m', '', $content );
+        $content = preg_replace( '/^\s+/m', '', $content );
 
         return $content;
     }
