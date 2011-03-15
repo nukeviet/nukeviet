@@ -207,8 +207,8 @@ $lang_module['last_result1'] = "Đã hoàn thành";
 
 $lang_module['closed_site'] = "Chế độ đóng cửa site";
 $lang_module['closed_site_0'] = "Site hoạt động bình thường";
-$lang_module['closed_site_1'] = "Đóng của site chỉ có Quản trị tối cao truy cập";
-$lang_module['closed_site_2'] = "Đóng của site Người điều hành chung truy cập";
-$lang_module['closed_site_3'] = "Đóng của site Tất cả admin truy cập";
+$lang_module['closed_site_1'] = "Đóng cửa site chỉ có Quản trị tối cao truy cập";
+$lang_module['closed_site_2'] = "Đóng cửa site Người điều hành chung truy cập";
+$lang_module['closed_site_3'] = "Đóng cửa site Tất cả admin truy cập";
 
 ?>
