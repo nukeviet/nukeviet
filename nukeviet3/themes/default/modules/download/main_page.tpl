@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<div class="clear"></div>
 <!-- BEGIN: catbox -->
 <div class="box-border-shadow m-bottom">
     <div class="cat-box-header">
