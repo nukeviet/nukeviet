@@ -91,7 +91,6 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript">show_menu();</script>
 	<!-- BEGIN: footer -->
 	{FILE "footer.tpl"}
 	<!-- END: footer -->
