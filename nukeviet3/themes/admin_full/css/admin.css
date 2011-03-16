@@ -623,7 +623,7 @@ div.info_tab .cell_left {
 }
 
 #middle_outer {
-    margin: 0px 0px 0px 0px
+    margin: 0;
 }
 
 #outer {
@@ -830,17 +830,28 @@ html[xmlns] .clearfix {
     padding: 0;
     margin: 0;
 }
+.bg-1{
+	background:#F2F2F2 url(../images/bg_left.png) 0 0 repeat-y;
+}
+.bg-2{
+	background:#F2F2F2 url(../images/bg_left1.png) 0 0 repeat-y;
+}
 
-.colum_left_lage {
-    background: url(../images/bg_left.png) right repeat-y;
+#colum_left_lage, #colum_left_small{
+	padding:0 5px;
+	float:left;
+}
+#colum_left_lage {
+    width: 205px
+}
+
+#colum_left_small {
     width: 30px
 }
 
-.colum_left_small {
-    background: url(../images/bg_left.png) right repeat-y;
-    width: 30px;
+.margin-1{
+	margin-left:230px;
 }
-
 .divclose {
     background: url(../images/bgmenu.png) repeat-x center;
     line-height: 22px;
