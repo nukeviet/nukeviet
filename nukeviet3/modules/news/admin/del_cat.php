@@ -11,6 +11,7 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $catid = $nv_Request->get_int( 'catid', 'post', 0 );
 $contents = "NO_" . $catid;
+
 list( $catid, $parentid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT `catid`, `parentid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid`=" . intval( $catid ) . "" ) );
 if ( $catid > 0 )
 {
@@ -175,6 +176,7 @@ if ( $catid > 0 )
         $contents = "ERR_CAT_" . $lang_module['delcat_msg_cat_permissions'];
     }
 }
+
 if ( defined( 'NV_IS_AJAX' ) )
 {
     include ( NV_ROOTDIR . "/includes/header.php" );

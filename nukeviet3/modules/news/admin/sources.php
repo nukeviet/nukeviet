@@ -24,7 +24,7 @@ if ( ! empty ( $savecat ) )
     $link = strtolower( filter_text_input( 'link', 'post', '' ) );
     list( $logo_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT logo FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` =" . $sourceid . "" ) );
     
-	if ( $link = "http://" )
+	if ( $link == "http://" )
 	{	
 		$link = "";
 	}	

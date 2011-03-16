@@ -6,8 +6,10 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+ 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $listcid = $nv_Request->get_string( 'list', 'post,get' );
+
 if ( ! empty( $listcid ) )
 {
     nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_comment', "listcid ".$listcid, $admin_info['userid'] );
@@ -50,6 +52,8 @@ if ( ! empty( $listcid ) )
             $db->sql_query( $query );
         }
     }
+	
     echo $lang_module['comment_delete_success'];
 }
+
 ?>

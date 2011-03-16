@@ -1,13 +1,17 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+ 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
 $page_title = $lang_module['comment_edit_title'];
 $cid = $nv_Request->get_int( 'cid', 'get' );
+
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
     nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_comment', "id " . $cid, $admin_info['userid'] );
@@ -45,42 +49,33 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment' );
     die();
 }
+
 $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE cid=" . $cid . "";
 $result = $db->sql_query( $sql );
+
 if ( $db->sql_numrows( $result ) == 0 )
 {
     header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment' );
     die();
 }
+
 $row = $db->sql_fetchrow( $result );
 $row['content'] = nv_htmlspecialchars( nv_br2nl( $row['content'] ) );
 
-$contents = "<form action='' method='post'>";
-$contents .= "<table class=\"tab1\" style='width:400px'>\n";
-$contents .= "<thead>\n";
-$contents .= "<tr>\n";
-$contents .= "<td>" . $lang_module['comment_edit_title'] . "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</thead>\n";
-$contents .= "<tr>\n";
-$contents .= "<td>\n";
-$contents .= "<textarea name='content' style='width:600px;height:100px'>" . $row['content'] . "</textarea>\n";
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "<tbody class='second'>\n";
-$contents .= "<tr>\n";
-$contents .= "<td>\n";
-$contents .= "<label><input type='checkbox' name='active' value='1' " . ( ( $row['status'] ) ? 'checked=checked' : '' ) . "/> " . $lang_module['comment_edit_active'] . "</label>\n";
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tbody>\n";
-$contents .= "<tr>\n";
-$contents .= "<td>\n";
-$contents .= "<label><input type='checkbox' name='delete' value='1'/> " . $lang_module['comment_edit_delete'] . "</label>&nbsp;&nbsp;<input type='hidden' value='" . $cid . "' name='cid'/><input type='submit' name='submit' value='" . $lang_module['comment_delete_accept'] . "'/>\n";
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</table></form>\n";
+$row['status'] = ( $row['status'] ) ? "checked=\"checked\"" : "";
+
+$xtpl = new XTemplate( "comment_edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+
+$xtpl->assign( 'CID', $cid );
+$xtpl->assign( 'ROW', $row );
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

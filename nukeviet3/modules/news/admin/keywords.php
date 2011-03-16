@@ -9,8 +9,9 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$content = filter_text_input( 'content', 'post', '',1);
+$content = filter_text_input( 'content', 'post', '',1 );
 $keywords = nv_content_keywords( $content );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $keywords;
 include ( NV_ROOTDIR . "/includes/footer.php" );
