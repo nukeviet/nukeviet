@@ -163,7 +163,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_GROUPS_GLOBALTABLE . "` (
   PRIMARY KEY (`group_id`),
   UNIQUE KEY `title` (`title`),
   KEY `exp_time` (`exp_time`)
-) ENGINE=MyISAM AUTO_INCREMENT=10";
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

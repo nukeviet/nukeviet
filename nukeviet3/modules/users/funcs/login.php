@@ -403,49 +403,36 @@ function openidLogin_Res1 ( $attribs )
             $nv_username = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
             $nv_password = filter_text_input( 'nv_password', 'post', '' );
             $nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
-            
-            $check_login = nv_check_valid_login( $nv_username, NV_UNICKMAX, NV_UNICKMIN );
-            $check_pass = nv_check_valid_pass( $nv_password, NV_UPASSMAX, NV_UPASSMIN );
+            //$check_login = nv_check_valid_login( $nv_username, NV_UNICKMAX, NV_UNICKMIN );
+            // $check_pass = nv_check_valid_pass( $nv_password, NV_UPASSMAX, NV_UPASSMIN );
             $check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
-            
+
             if ( ! $check_seccode )
             {
                 $error = $lang_global['securitycodeincorrect'];
-            }
-            elseif ( ! empty( $check_login ) )
+            } elseif ( empty( $nv_username ) )
             {
-                $error = $check_login;
-            }
-            elseif ( ! empty( $check_pass ) )
+                $error = $lang_global['nickname_empty'];
+            } elseif ( empty( $nv_password ) )
             {
-                $error = $check_pass;
+                $error = $lang_global['password_empty'];
             }
             else
             {
-                $error = "";
                 if ( defined( 'NV_IS_USER_FORUM' ) )
                 {
                     require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
                 }
                 else
                 {
-                    $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `username`=" . $db->dbescape( $nv_username );
+                    $error = $lang_global['loginincorrect'];
+
+                    $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . md5( $nv_username ) . "'";
                     $result = $db->sql_query( $sql );
-                    $numrows = $db->sql_numrows( $result );
-                    
-                    if ( $numrows != 1 )
+                    if ( $db->sql_numrows( $result ) == 1 )
                     {
-                        $error = $lang_global['loginincorrect'];
-                    }
-                    else
-                    {
-                        $user_info = $db->sql_fetchrow( $result );
-                        
-                        if ( empty( $user_info['password'] ) or ! $crypt->validate( $nv_password, $user_info['password'] ) )
-                        {
-                            $error = $lang_global['loginincorrect'];
-                        }
-                        else
+                        $row = $db->sql_fetchrow( $result );
+                        if ( $row['username'] == $nv_username and $crypt->validate( $nv_password, $row['password'] ) )
                         {
                             if ( ! $row['active'] )
                             {
@@ -453,45 +440,42 @@ function openidLogin_Res1 ( $attribs )
                             }
                             else
                             {
-                                validUserLog( $user_info, 1, $opid );
+                                $error = "";
+                                $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_openid` VALUES (" . intval( $row['userid'] ) . ", " . $db->dbescape( $attribs['id'] ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
+                                $db->sql_query( $sql );
+                                validUserLog( $row, 1, $opid );
                             }
                         }
                     }
                 }
             }
-            
+
             if ( empty( $error ) )
             {
                 $nv_Request->unset_request( 'openid_attribs', 'session' );
-                $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_openid` VALUES (" . intval( $user_info['userid'] ) . ", " . $db->dbescape( $attribs['id'] ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
-                $db->sql_query( $sql );
-                
+
                 $nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
                 $info = $lang_module['login_ok'] . "<br /><br />\n";
                 $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
                 $info .= "[<a href=\"" . $nv_redirect . "\">" . $lang_module['redirect_to_back'] . "</a>]";
                 $contents .= user_info_exit( $info );
                 $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
-                
+
                 include ( NV_ROOTDIR . "/includes/header.php" );
                 echo nv_site_theme( $contents );
                 include ( NV_ROOTDIR . "/includes/footer.php" );
                 exit();
             }
-            
-            $array_login = array( 
-                "nv_login" => $nv_username, "nv_password" => $nv_password, "nv_redirect" => $nv_redirect, 'login_info' => "<span style=\"color:#fb490b;\">" . $error . "</span>" 
-            );
+
+            $array_login = array( "nv_login" => $nv_username, "nv_password" => $nv_password, "nv_redirect" => $nv_redirect, 'login_info' => "<span style=\"color:#fb490b;\">" . $error . "</span>" );
         }
         else
         {
-            $array_login = array( 
-                "nv_login" => '', "nv_password" => '', 'login_info' => $lang_module['openid_note1'], "nv_redirect" => $nv_redirect 
-            );
+            $array_login = array( "nv_login" => '', "nv_password" => '', 'login_info' => $lang_module['openid_note1'], "nv_redirect" => $nv_redirect );
         }
-        
+
         $contents .= user_openid_login( $gfx_chk, $array_login, $attribs );
-        
+
         include ( NV_ROOTDIR . "/includes/header.php" );
         echo nv_site_theme( $contents );
         include ( NV_ROOTDIR . "/includes/footer.php" );

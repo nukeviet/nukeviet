@@ -53,5 +53,5 @@
 <script type="text/javascript">
     nv_send_search( {NV_MIN_SEARCH_LENGTH}, {NV_MAX_SEARCH_LENGTH} );
 </script>
-<!-- AND: is_key -->
+<!-- END: is_key -->
 <!-- END: main -->
