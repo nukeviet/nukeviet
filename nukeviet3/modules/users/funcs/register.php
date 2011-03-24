@@ -41,7 +41,7 @@ function nv_check_username_reg ( $login )
     global $db, $lang_module;
     
     $error = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
-    if ( $error != "" ) return $error;
+    if ( $error != "" ) return preg_replace( "/\&(l|r)dquo\;/", "", strip_tags( $error ) );
     if ( $login != $db->fixdb( $login ) )
     {
         return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
@@ -63,29 +63,35 @@ function nv_check_username_reg ( $login )
     return "";
 }
 
-function nv_check_email_reg ( $email )
+function nv_check_email_reg( $email )
 {
     global $db, $lang_module;
-    
+
     $error = nv_check_valid_email( $email );
-    if ( $error != "" ) return $error;
-    
+    if ( $error != "" ) return preg_replace( "/\&(l|r)dquo\;/", "", strip_tags( $error ) );
+
     $sql = "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email'";
     $result = $db->sql_query( $sql );
     list( $deny_email ) = $db->sql_fetchrow( $result );
     $db->sql_freeresult();
-    
-    if ( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], '<strong>' . $email . '</strong>' );
-    
-    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `email`=" . $db->dbescape( $email );
-    if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], '<strong>' . $email . '</strong>' );
-    
-    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $email );
-    if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], '<strong>' . $email . '</strong>' );
-    
-    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `email`=" . $db->dbescape( $email );
-    if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], '<strong>' . $email . '</strong>' );
-    
+
+    if ( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], $email );
+
+    list( $left, $right ) = explode( "@", $email );
+    $left = preg_replace( "/[\.]+/", "", $left );
+    $pattern = str_split( $left );
+    $pattern = implode( ".?", $pattern );
+    $pattern = "^" . $pattern . "@" . $right . "$";
+
+    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `email` RLIKE " . $db->dbescape( $pattern );
+    if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
+
+    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`RLIKE " . $db->dbescape( $pattern );
+    if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
+
+    $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `email` RLIKE " . $db->dbescape( $pattern );
+    if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
+
     return "";
 }
 
