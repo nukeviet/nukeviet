@@ -248,7 +248,7 @@ class sql_db
      */
     public function sql_query_insert_id ( $query = "" )
     {
-        if ( empty( $query ) or ! preg_match( "/^INSERT INTO\s/is", $query ) )
+        if ( empty( $query ) or ! preg_match( "/^INSERT\s/is", $query ) )
         {
             return false;
         }
