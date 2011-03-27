@@ -74,6 +74,9 @@ if ( ! nv_function_exists( 'nv_rewrite_change' ) )
             $rewrite_rule .= "#Options +FollowSymLinks\n\n";
             $rewrite_rule .= "<IfModule mod_rewrite.c>\n";
             $rewrite_rule .= "RewriteEngine On\n";
+            
+            $rewrite_rule .= "RewriteBase " . NV_BASE_SITEURL . "\n";
+            
             $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]\n";
             $rewrite_rule .= "RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]\n";
             $rewrite_rule .= "RewriteRule ^(.*?)Sitemap\.xml$ index.php?" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
