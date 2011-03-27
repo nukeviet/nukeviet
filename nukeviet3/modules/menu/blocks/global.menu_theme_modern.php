@@ -13,7 +13,7 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 
     function nv_menu_theme_modern ( $block_config )
     {
-        global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $op, $lang_module, $catid;
+        global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $op, $lang_module, $catid, $lang_global;
         
         if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/menu_theme_modern.tpl" ) )
         {
@@ -92,6 +92,19 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
                 );
             }
         }
+		elseif ( $module_file == "message" )
+		{
+			if ( defined( 'NV_IS_USER' ) )
+			{
+				$array_cat_menu[1] = array( 
+					'catid' => 1, 
+					'parentid' => 0, 
+					'title' => $lang_global['your_account'], 
+					'alias' => "", 
+					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=config" 
+				);
+			}
+		}
         elseif ( $module_file == "weblinks" )
         {
             $sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `parentid` ASC, `weight` ASC";

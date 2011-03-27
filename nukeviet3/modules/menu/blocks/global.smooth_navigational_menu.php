@@ -103,7 +103,7 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
                 );
                 $mod_file = $modvalues['module_file'];
                 $array_m_html_item = array( 
-                    'news', 'shops', 'weblinks', 'download' 
+                    'news', 'shops', 'weblinks', 'download'
                 );
                 
                 if ( in_array( $mod_file, $array_m_html_item ) )
@@ -132,6 +132,21 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
                 elseif ( $mod_file == "users" )
                 {
                     $array_menu['submenu'] = nv_html_sub_menu_mod_users( $modvalues );
+                }
+                elseif ( $mod_file == "message" )
+                {
+					if ( defined( 'NV_IS_USER' ) )
+					{
+						$sub_mess = array();
+                        $sub_mess[0] = array( 
+							'catid' => 1, 
+							'parentid' => 0, 
+							'title' => $lang_global['your_account'], 
+							'alias' => "", 
+							'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=config" 
+                        );
+						$array_menu['submenu'] = nv_submenu_html_item( $sub_mess );
+					}
                 }
                 else
                 {

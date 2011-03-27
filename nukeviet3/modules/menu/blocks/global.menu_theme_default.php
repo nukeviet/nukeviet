@@ -65,6 +65,16 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
                             );
                         }
                     }
+                    elseif ( $modvalues['module_file'] == "message" )
+                    {
+						if ( defined( 'NV_IS_USER' ) )
+						{
+                            $sub_nav_item[] = array( 
+                                'title' => $lang_global['your_account'], 
+								'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=config" 
+                            );
+						}
+                    }
                     elseif ( $modvalues['module_file'] == "download" )
                     {
                         $result2 = "SELECT `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_categories` WHERE `parentid`='0' AND `status`='1'ORDER BY `weight` ASC LIMIT 0,10";
