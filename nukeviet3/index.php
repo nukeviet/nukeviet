@@ -44,19 +44,7 @@ if ( $client_info['is_myreferer'] === 0 and ! defined( 'NV_IS_MY_USER_AGENT' ) )
     require_once ( NV_ROOTDIR . "/includes/core/referer.php" );
 }
 
-if ( ! isset( $global_config['site_home_module'] ) or empty( $global_config['site_home_module'] ) ) $global_config['site_home_module'] = "news";
-
-if ( $nv_Request->isset_request( NV_NAME_VARIABLE, 'get' ) || $nv_Request->isset_request( NV_NAME_VARIABLE, 'post' ) )
-{
-    $home = 0;
-    $module_name = $nv_Request->get_string( NV_NAME_VARIABLE, 'post,get' );
-}
-else
-{
-    $home = 1;
-    $module_name = $global_config['site_home_module'];
-}
-if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $module_name ) )
+if ( preg_match( $global_config['check_module'], $module_name ) )
 {
     $site_mods = nv_site_mods();
     //IMG thong ke truy cap + online
@@ -73,7 +61,6 @@ if ( ! empty( $module_name ) and preg_match( $global_config['check_module'], $mo
         if ( file_exists( $include_file ) and filesize( $include_file ) != 0 )
         {
             $array_op = array();
-            $op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
             if ( ! isset( $module_info['funcs'][$op] ) )
             {
                 $list_op = $op;

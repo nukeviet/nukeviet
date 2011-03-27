@@ -53,80 +53,14 @@ if ( ! nv_function_exists( 'nv_rewrite_change' ) )
                 $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"CJzip.php?file={R:1}.{R:3}\" appendQueryString=\"false\" />\n";
                 $rewrite_rule .= "                </rule>\n";
             }
-            if ( $array_config_global['rewrite_optional'] )
-            {
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$\" ignoreCase=\"false\" />\n";
-                //$rewrite_rule .= "                       <conditions logicalGrouping=\"MatchAll\">\n";
-                //$rewrite_rule .= "                       	<add input=\"{REQUEST_FILENAME}\" matchType=\"IsFile\" ignoreCase=\"false\" negate=\"true\"/>\n";
-                //$rewrite_rule .= "                       	<add input=\"{REQUEST_FILENAME}\" matchType=\"IsDirectory\" ignoreCase=\"false\" negate=\"true\"/>\n";
-                //$rewrite_rule .= "                       </conditions>\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "={R:2}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z0-9-]+)/([a-zA-Z0-9-/]+)$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "={R:2}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"" . NV_ADMINDIR . "[/]*$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"" . NV_ADMINDIR . "/index.php\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                if ( defined( 'DIR_FORUM' ) and DIR_FORUM != "" and is_dir( NV_ROOTDIR . "/" . DIR_FORUM ) )
-                {
-                    $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                    $rewrite_rule .= "                    <match url=\"" . DIR_FORUM . "[/]*$\" ignoreCase=\"false\" />\n";
-                    $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"" . DIR_FORUM . "/index.php\" appendQueryString=\"false\" />\n";
-                    $rewrite_rule .= "                </rule>\n";
-                }
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z0-9-]+)/$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z0-9-]+)$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-            }
-            else
-            {
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z-]{2})/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "={R:3}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z-]{2})/([a-z0-9-]+)/([a-zA-Z0-9-/]+)$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "={R:3}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z-]{2})/([a-z0-9-]+)/$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z-]{2})/([a-z0-9-]+)$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"" . NV_ADMINDIR . "[/]*$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"" . NV_ADMINDIR . "/index.php\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                if ( defined( 'DIR_FORUM' ) and DIR_FORUM != "" and is_dir( NV_ROOTDIR . "/" . DIR_FORUM ) )
-                {
-                    $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                    $rewrite_rule .= "                    <match url=\"" . DIR_FORUM . "[/]*$\" ignoreCase=\"false\" />\n";
-                    $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"" . DIR_FORUM . "/index.php\" appendQueryString=\"false\" />\n";
-                    $rewrite_rule .= "                </rule>\n";
-                }
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z0-9-]{2})/$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-                $rewrite_rule .= "                <rule name=\"nv_rule_" . $rulename ++ . "\">\n";
-                $rewrite_rule .= "                    <match url=\"^([a-z0-9-]{2})$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= "                </rule>\n";
-            }
+            $rewrite_rule .= "                <rule name=\"nv_rule_rewrite\">\n";
+            $rewrite_rule .= "                	<match url=\"(.*)\" ignoreCase=\"false\" />\n";
+            $rewrite_rule .= "                	<conditions logicalGrouping=\"MatchAll\">\n";
+            $rewrite_rule .= "                		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsFile\" ignoreCase=\"false\" negate=\"true\" />\n";
+            $rewrite_rule .= "                 		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsDirectory\" ignoreCase=\"false\" negate=\"true\" />\n";
+            $rewrite_rule .= "                	</conditions>\n";
+            $rewrite_rule .= "                	<action type=\"Rewrite\" url=\"index.php\" />\n";
+            $rewrite_rule .= "                </rule>\n";
             $rewrite_rule = nv_rewrite_rule_iis7( $rewrite_rule );
         }
         elseif ( $sys_info['supports_rewrite'] == "rewrite_mode_apache" )
@@ -149,34 +83,9 @@ if ( ! nv_function_exists( 'nv_rewrite_change' ) )
             {
                 $rewrite_rule .= "RewriteRule ^((?!http(s?)|ftp\:\/\/).*)\.(css|js)$ CJzip.php?file=$1.$3 [L]\n";
             }
-            //$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
-            //$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
-            if ( $array_config_global['rewrite_optional'] )
-            {
-                $rewrite_rule .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2\n";
-                $rewrite_rule .= "RewriteRule ^([a-z0-9-]+)/([a-zA-Z0-9-/]+)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=$2\n";
-                $rewrite_rule .= "RewriteRule ^" . NV_ADMINDIR . "[/]*$ " . NV_ADMINDIR . "/index.php\n";
-                if ( defined( 'DIR_FORUM' ) and DIR_FORUM != "" and is_dir( NV_ROOTDIR . "/" . DIR_FORUM ) )
-                {
-                    $rewrite_rule .= "RewriteRule ^" . DIR_FORUM . "[/]*$ " . DIR_FORUM . "/index.php\n";
-                }
-                $rewrite_rule .= "RewriteRule ^([a-z0-9-]+)/$ index.php?" . NV_NAME_VARIABLE . "=$1\n";
-                $rewrite_rule .= "RewriteRule ^([a-z0-9-]+)$ index.php?" . NV_NAME_VARIABLE . "=$1\n";
-            }
-            else
-            {
-                $rewrite_rule .= "RewriteRule ^([a-z-]{2})/([a-z0-9-]+)/([a-zA-Z0-9-/]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3\n";
-                $rewrite_rule .= "RewriteRule ^([a-z-]{2})/([a-z0-9-]+)/([a-zA-Z0-9-/]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=$3\n";
-                $rewrite_rule .= "RewriteRule ^([a-z-]{2})/([a-z0-9-]+)/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2\n";
-                $rewrite_rule .= "RewriteRule ^([a-z-]{2})/([a-z0-9-]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2\n";
-                $rewrite_rule .= "RewriteRule ^" . NV_ADMINDIR . "[/]*$ " . NV_ADMINDIR . "/index.php\n";
-                if ( defined( 'DIR_FORUM' ) and DIR_FORUM != "" and is_dir( NV_ROOTDIR . "/" . DIR_FORUM ) )
-                {
-                    $rewrite_rule .= "RewriteRule ^" . DIR_FORUM . "[/]*$ " . DIR_FORUM . "/index.php\n";
-                }
-                $rewrite_rule .= "RewriteRule ^([a-z-]{2})/$ index.php?" . NV_LANG_VARIABLE . "=$1\n";
-                $rewrite_rule .= "RewriteRule ^([a-z-]{2})$ index.php?" . NV_LANG_VARIABLE . "=$1\n";
-            }
+            $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
+            $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
+            $rewrite_rule .= "RewriteRule (.*) index.php\n";
             $rewrite_rule .= "</IfModule>\n\n";
             $rewrite_rule .= "#nukeviet_rewrite_end\n";
             $rewrite_rule .= "##################################################################################\n\n";

@@ -60,7 +60,6 @@ if ( defined( 'NV_ADMIN' ) and $global_config['lang_multi'] )
 }
 else
 {
-    $site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post', $global_config['site_lang'] );
     if ( ( in_array( $site_lang, $global_config['allow_adminlangs'] ) ) and file_exists( NV_ROOTDIR . "/language/" . $site_lang . "/global.php" ) )
     {
         define( 'NV_LANG_INTERFACE', $site_lang );

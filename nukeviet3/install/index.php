@@ -42,7 +42,7 @@ $step = $nv_Request->get_int( 'step', 'post,get', 1 );
 
 $maxstep = $nv_Request->get_int( 'maxstep', 'session', 1 );
 
-if ( $step <= 0 OR $step > 7 )
+if ( $step <= 0 or $step > 7 )
 {
     Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=1" );
     exit();
@@ -95,9 +95,7 @@ elseif ( $step == 3 )
     $title = $lang_module['check_server'];
     
     $array_resquest = array();
-    $array_resquest_key = array( 
-        'php_support', 'mysql_support', 'opendir_support', 'gd_support', 'session_support', 'fileuploads_support' 
-    );
+    $array_resquest_key = array( 'php_support', 'mysql_support', 'opendir_support', 'gd_support', 'session_support', 'fileuploads_support' );
     
     foreach ( $array_resquest_key as $key )
     {
@@ -130,9 +128,7 @@ elseif ( $step == 3 )
 }
 elseif ( $step == 4 )
 {
-    $array_dir = array( 
-        NV_DATADIR, NV_SESSION_SAVE_PATH, NV_LOGS_DIR, NV_LOGS_DIR . "/data_logs", NV_LOGS_DIR . "/dump_backup", NV_LOGS_DIR . "/error_logs", NV_LOGS_DIR . "/error_logs/errors256", NV_LOGS_DIR . "/error_logs/old", NV_LOGS_DIR . "/error_logs/tmp", NV_LOGS_DIR . "/ip_logs", NV_LOGS_DIR . "/ref_logs", NV_LOGS_DIR . "/voting_logs", NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . "/css", NV_FILES_DIR . "/js" 
-    );
+    $array_dir = array( NV_DATADIR, NV_SESSION_SAVE_PATH, NV_LOGS_DIR, NV_LOGS_DIR . "/data_logs", NV_LOGS_DIR . "/dump_backup", NV_LOGS_DIR . "/error_logs", NV_LOGS_DIR . "/error_logs/errors256", NV_LOGS_DIR . "/error_logs/old", NV_LOGS_DIR . "/error_logs/tmp", NV_LOGS_DIR . "/ip_logs", NV_LOGS_DIR . "/ref_logs", NV_LOGS_DIR . "/voting_logs", NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . "/css", NV_FILES_DIR . "/js" );
     $array_dir[] = $file_config_temp;
     if ( ! empty( $sys_info['supports_rewrite'] ) )
     {
@@ -153,9 +149,7 @@ elseif ( $step == 4 )
     $global_config['ftp_user_pass'] = $nv_Request->get_string( 'ftp_user_pass', 'post', '' );
     $global_config['ftp_path'] = $nv_Request->get_string( 'ftp_path', 'post', '/' );
     
-    $array_ftp_data = array( 
-        'ftp_server' => $global_config['ftp_server'], 'ftp_port' => $global_config['ftp_port'], 'ftp_user_name' => $global_config['ftp_user_name'], 'ftp_user_pass' => $global_config['ftp_user_pass'], 'ftp_path' => $global_config['ftp_path'], 'error' => '' 
-    );
+    $array_ftp_data = array( 'ftp_server' => $global_config['ftp_server'], 'ftp_port' => $global_config['ftp_port'], 'ftp_user_name' => $global_config['ftp_user_name'], 'ftp_user_pass' => $global_config['ftp_user_pass'], 'ftp_path' => $global_config['ftp_path'], 'error' => '' );
     
     $modftp = $nv_Request->get_int( 'modftp', 'post', 0 );
     if ( $modftp )
@@ -174,9 +168,7 @@ elseif ( $step == 4 )
             }
             elseif ( ftp_chdir( $conn_id, $global_config['ftp_path'] ) )
             {
-                $check_files = array( 
-                    NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR 
-                );
+                $check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
                 $list_files = ftp_nlist( $conn_id, "." );
                 $a = 0;
                 foreach ( $list_files as $filename )
@@ -579,6 +571,10 @@ elseif ( $step == 6 )
                     $step ++;
                     $nv_Request->set_Session( 'maxstep', $step );
                     nv_save_file_config();
+                    
+                    require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
+                    nv_rewrite_change( $array_config_rewrite );
+                    
                     @rename( NV_ROOTDIR . "/" . $file_config_temp, NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME );
                     Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
                     exit();
@@ -600,9 +596,7 @@ elseif ( $step == 7 )
     if ( file_exists( NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME ) )
     {
         $ftp_check_login = 0;
-        $ftp_server_array = array( 
-            'ftp_check_login' => 0 
-        );
+        $ftp_server_array = array( 'ftp_check_login' => 0 );
         if ( $nv_Request->isset_request( 'ftp_server_array', 'session' ) )
         {
             $ftp_server_array = $nv_Request->get_string( 'ftp_server_array', 'session' );
@@ -696,9 +690,7 @@ function nv_save_file_config ( )
             $global_config['ftp_check_login'] = ( ! isset( $global_config['ftp_check_login'] ) ) ? 0 : $global_config['ftp_check_login'];
             if ( $global_config['ftp_check_login'] )
             {
-                $ftp_server_array = array( 
-                    "ftp_server" => $global_config['ftp_server'], "ftp_port" => $global_config['ftp_port'], "ftp_user_name" => $global_config['ftp_user_name'], "ftp_user_pass" => $global_config['ftp_user_pass'], "ftp_path" => $global_config['ftp_path'], "ftp_check_login" => $global_config['ftp_check_login'] 
-                );
+                $ftp_server_array = array( "ftp_server" => $global_config['ftp_server'], "ftp_port" => $global_config['ftp_port'], "ftp_user_name" => $global_config['ftp_user_name'], "ftp_user_pass" => $global_config['ftp_user_pass'], "ftp_path" => $global_config['ftp_path'], "ftp_check_login" => $global_config['ftp_check_login'] );
                 $nv_Request->set_Session( 'ftp_server_array', serialize( $ftp_server_array ) );
             }
             $content .= "\n";

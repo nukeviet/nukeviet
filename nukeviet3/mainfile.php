@@ -127,9 +127,7 @@ $global_config['error_log_fileext'] = NV_LOGS_EXT;
 //Ket noi voi class Error_handler
 require_once ( NV_ROOTDIR . '/includes/class/error.class.php' );
 $ErrorHandler = new Error( $global_config );
-set_error_handler( array( 
-    &$ErrorHandler, 'error_handler' 
-) );
+set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
 if ( empty( $global_config['allow_sitelangs'] ) or empty( $global_config['allow_adminlangs'] ) )
 {
@@ -184,9 +182,29 @@ if ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) )
 require_once ( NV_ROOTDIR . '/includes/class/request.class.php' );
 $nv_Request = new Request( $global_config, $client_info['ip'] );
 
+define( 'NV_CLIENT_IP', $client_info['ip'] );
+define( 'NV_SERVER_NAME', $nv_Request->server_name ); //vd: mydomain1.com
+define( 'NV_SERVER_PROTOCOL', $nv_Request->server_protocol ); //vd: http
+define( 'NV_SERVER_PORT', $nv_Request->server_port ); //vd: 80
+define( 'NV_MY_DOMAIN', $nv_Request->my_current_domain ); //vd: http://mydomain1.com:80
+define( 'NV_HEADERSTATUS', $nv_Request->headerstatus ); //vd: HTTP/1.0
+define( 'NV_USER_AGENT', $nv_Request->user_agent ); //HTTP_USER_AGENT
+define( "NV_BASE_SITEURL", $nv_Request->base_siteurl . '/' ); //vd: /ten_thu_muc_chua_site/
+define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' ); //vd: /ten_thu_muc_chua_site/admin/
+define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root ); // D:/AppServ/www
+define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) ); //Ngat dong
+define( 'NV_UPLOAD_MAX_FILESIZE', min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $global_config['nv_max_size'] ) );
+define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh duong dan thuc den thu muc upload
+define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) ); //Hau to cua file cache
+
+
+if ( ! defined( 'NV_ADMIN' ) )
+{
+    require_once ( NV_ROOTDIR . '/includes/request_uri.php' );
+}
+
 //Ngon ngu
 $language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
-//'name_'
 require_once ( NV_ROOTDIR . '/includes/language.php' );
 require_once ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
 
@@ -206,22 +224,6 @@ $client_info['referer'] = $nv_Request->referer; //referer
 $client_info['is_myreferer'] = $nv_Request->referer_key; //0 = referer tu ben ngoai site, 1 = referer noi bo, 2 = khong co referer
 $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri; //trang dang xem
 $client_info['agent'] = $nv_Request->user_agent; //HTTP_USER_AGENT
-
-
-define( 'NV_CLIENT_IP', $client_info['ip'] );
-define( 'NV_SERVER_NAME', $nv_Request->server_name ); //vd: mydomain1.com
-define( 'NV_SERVER_PROTOCOL', $nv_Request->server_protocol ); //vd: http
-define( 'NV_SERVER_PORT', $nv_Request->server_port ); //vd: 80
-define( 'NV_MY_DOMAIN', $nv_Request->my_current_domain ); //vd: http://mydomain1.com:80
-define( 'NV_HEADERSTATUS', $nv_Request->headerstatus ); //vd: HTTP/1.0
-define( 'NV_USER_AGENT', $nv_Request->user_agent ); //HTTP_USER_AGENT
-define( "NV_BASE_SITEURL", $nv_Request->base_siteurl . '/' ); //vd: /ten_thu_muc_chua_site/
-define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' ); //vd: /ten_thu_muc_chua_site/admin/
-define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root ); // D:/AppServ/www
-define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) ); //Ngat dong
-define( 'NV_UPLOAD_MAX_FILESIZE', min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $global_config['nv_max_size'] ) );
-define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh duong dan thuc den thu muc upload
-define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) ); //Hau to cua file cache
 
 
 if ( preg_match( "/^[0-9]{10,}$/", $nv_Request->get_string( 'nocache', 'get', '' ) ) and //Xac dinh co phai AJAX hay khong
@@ -261,18 +263,10 @@ if ( defined( 'NV_IS_FLOOD_BLOCKER' ) and NV_IS_FLOOD_BLOCKER == 1 and ! $nv_Req
 }
 
 //Xac dinh borwser cua client
-$client_info['browser'] = $client_info['is_bot'] ? array( 
-    'key' => "Unknown", 'name' => 'Unknown' 
-) : array_combine( array( 
-    'key', 'name' 
-), explode( "|", nv_getBrowser( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
+$client_info['browser'] = $client_info['is_bot'] ? array( 'key' => "Unknown", 'name' => 'Unknown' ) : array_combine( array( 'key', 'name' ), explode( "|", nv_getBrowser( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
 
 //Xac dinh OS cua client
-$client_info['client_os'] = $client_info['is_bot'] ? array( 
-    'key' => "Robot", 'name' => $client_info['bot_info']['name'] 
-) : array_combine( array( 
-    'key', 'name' 
-), explode( "|", nv_getOs( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/os.ini' ) ) );
+$client_info['client_os'] = $client_info['is_bot'] ? array( 'key' => "Robot", 'name' => $client_info['bot_info']['name'] ) : array_combine( array( 'key', 'name' ), explode( "|", nv_getOs( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/os.ini' ) ) );
 
 //Captcha
 if ( $nv_Request->isset_request( 'scaptcha', 'get' ) )
@@ -292,9 +286,8 @@ if ( ! empty( $db->error ) )
     trigger_error( $die, 256 );
 }
 unset( $db_config['dbpass'] );
+
 //Ten cac table cua CSDL dung chung cho he thong
-
-
 define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
 define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
 define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
@@ -332,9 +325,7 @@ foreach ( $list as $row )
     }
 }
 
-if ( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array( 
-    "mild", "lite", "none" 
-) ) )
+if ( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array( "mild", "lite", "none" ) ) )
 {
     $global_config['upload_checking_mode'] = "strong";
 }
