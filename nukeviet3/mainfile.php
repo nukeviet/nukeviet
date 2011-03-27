@@ -200,7 +200,24 @@ define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) );
 
 if ( ! defined( 'NV_ADMIN' ) )
 {
-    require_once ( NV_ROOTDIR . '/includes/request_uri.php' );
+    $lu = strlen( NV_BASE_SITEURL );
+    $request_uri = substr( $_SERVER['REQUEST_URI'], $lu );
+    if ( preg_match( "/^([a-z0-9\-\_\/])+$/i", $request_uri ) )
+    {
+        $array_request_uri = explode( "/", $request_uri );
+        if ( preg_match( "/^[a-z]{2}$/", $array_request_uri[0] ) and in_array( $array_request_uri[0], $global_config['allow_adminlangs'] ) )
+        {
+            $site_lang = $array_request_uri[0];
+        }
+        else
+        {
+            $site_lang = $global_config['site_lang'];
+        }
+    }
+    else
+    {
+        $site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post', $global_config['site_lang'] );
+    }
 }
 
 //Ngon ngu
