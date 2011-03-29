@@ -11,9 +11,12 @@ if ( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['revision'];
 
-function del_path_svn ( $subject )
+$repository_url = "http://nuke-viet.googlecode.com/svn/trunk/";
+define( 'NV3_DIRECTORY_SNV', '/trunk/nukeviet3/' );
+
+function del_path_svn ( $path )
 {
-    return str_replace( '/trunk/nukeviet3/', '', $subject );
+    return preg_replace( "/^" . preg_quote( NV3_DIRECTORY_SNV, "/" ) . "(.*)$/", "\\1", $path );
 }
 
 function nv_mkdir_svn ( $dirname )
@@ -92,14 +95,14 @@ else
     {
         require ( NV_ROOTDIR . '/includes/phpsvnclient/phpsvnclient.php' );
         $svn = new phpsvnclient();
-        $svn->setRepository( "http://nuke-viet.googlecode.com/svn/trunk/nukeviet3/" );
+        $svn->setRepository( $repository_url );
         
         $vend = $svn->getVersion();
         if ( $vend > $vini )
         {
             $nv_Request->set_Session( 'getVersion', $vend );
             $nv_Request->set_Session( 'getfile', 0 );
-            $logs = $svn->getRepositoryLogs( $vini, $vend );
+            $logs = $svn->getFileLogs( NV3_DIRECTORY_SNV, $vini, $vend );
             if ( ! empty( $logs ) )
             {
                 $add_files = $del_files = $edit_files = array();
@@ -161,9 +164,7 @@ else
                 asort( $del_files );
                 asort( $edit_files );
                 
-                $svn_data_files = array( 
-                    'version' => $vend, 'add_files' => $add_files, 'del_files' => $del_files, 'edit_files' => $edit_files 
-                );
+                $svn_data_files = array( 'version' => $vend, 'add_files' => $add_files, 'del_files' => $del_files, 'edit_files' => $edit_files );
                 
                 file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log', serialize( $svn_data_files ), LOCK_EX );
                 
@@ -287,12 +288,12 @@ else
         
         require ( NV_ROOTDIR . '/includes/phpsvnclient/phpsvnclient.php' );
         $svn = new phpsvnclient();
-        $svn->setRepository( "http://nuke-viet.googlecode.com/svn/trunk/nukeviet3/" );
+        $svn->setRepository( $repository_url );
         
         if ( $getfile < count( $download_files ) )
         {
             $file_name = $download_files[$getfile];
-            $path = '/trunk/nukeviet3/' . $file_name;
+            $path = NV3_DIRECTORY_SNV . $file_name;
             
             // download new file 
             $fileInfo = $svn->getDirectoryTree( $path, $vend, false );
@@ -371,7 +372,7 @@ else
         }
         else
         {
-            $path = "/trunk/nukeviet3/update_revision.php";
+            $path = NV3_DIRECTORY_SNV . "update_revision.php";
             $contents_f = $svn->getFile( $path, $vend );
             $contents_f = str_replace( "?>", "\n", $contents_f );
             $contents_f .= "\$update_info = array( 

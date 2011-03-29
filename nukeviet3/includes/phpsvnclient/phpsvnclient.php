@@ -447,6 +447,7 @@ class phpsvnclient
                 else
                 {
                     $enable = false;
+                    continue;
                 }
             }
             if ( is_array( $value ) && $value['Tag'] == 'D:href' ) $enable = true;
