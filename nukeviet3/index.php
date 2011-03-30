@@ -112,7 +112,6 @@ if ( preg_match( $global_config['check_module'], $module_name ) )
         $include_file = NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php";
         if ( file_exists( $include_file ) and filesize( $include_file ) != 0 )
         {
-            $op = preg_replace( "/[\/]+$/", '', $op );
             $array_op = array();
             if ( ! isset( $module_info['funcs'][$op] ) )
             {

@@ -20,8 +20,6 @@ if ( defined( 'NV_ADMIN' ) and $global_config['lang_multi'] )
     $cookie = $nv_Request->get_string( 'data_lang', 'cookie' );
     if ( empty( $cookie ) or ! preg_match( "/^[a-z]{2}$/", $cookie ) or ! file_exists( NV_ROOTDIR . "/language/" . $cookie . "/global.php" ) ) $cookie = '';
     
-    $site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post', '' );
-    
     if ( preg_match( "/^[a-z]{2}$/", $site_lang ) and file_exists( NV_ROOTDIR . "/language/" . $site_lang . "/global.php" ) )
     {
         if ( $site_lang != $cookie ) $nv_Request->set_Cookie( 'data_lang', $site_lang, NV_LIVE_COOKIE_TIME );
