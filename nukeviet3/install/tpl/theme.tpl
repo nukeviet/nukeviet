@@ -3,21 +3,21 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{LANG.titlesetup}</title>
-        <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}css/reset.css" />
-        <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}css/style.css" />
-        <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}css/table.css" />
+        <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/style.css" />
+        <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/table.css" />
         <!--[if IE 6]>
-            <script src="../js/fix-png-ie6.js"></script>
+            <script src="{BASE_SITEURL}js/fix-png-ie6.js"></script>
             <script>
             DD_belatedPNG.fix('#,img');
             </script>
             <style>
             </style>
         <![endif]-->
-        <script type="text/javascript" src="../js/global.js"></script>
-        <script type="text/javascript" src="../js/language/{LANG_DATA}.js"></script>
-        <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="../js/jquery/jquery.validate.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}js/global.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}js/language/{LANG_DATA}.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.validate.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
                 $('span.language_head').click(function(){
@@ -44,12 +44,12 @@
             <div id="language" class="fr">
                 <div>
                     <strong>Language: </strong>
-                    <span class="language_head"><img alt="" src="images/navigate.png" /> {LANGNAMESL} </span>
+                    <span class="language_head"><img alt="" src="{BASE_SITEURL}install/images/navigate.png" /> {LANGNAMESL} </span>
                 </div>
                 <ul class="language_body">
                     <!-- BEGIN: looplang -->
                     <li>
-                        <a href="index.php?{LANG_VARIABLE}={LANGTYPE}&amp;step={MAIN_STEP}">{LANGNAME} </a>
+                        <a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={LANGTYPE}&amp;step={MAIN_STEP}">{LANGNAME} </a>
                     </li>
 					<!-- END: looplang -->
                 </ul>

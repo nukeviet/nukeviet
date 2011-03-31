@@ -44,20 +44,20 @@ $maxstep = $nv_Request->get_int( 'maxstep', 'session', 1 );
 
 if ( $step <= 0 or $step > 7 )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=1" );
+    Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=1" );
     exit();
 }
 
 if ( $step > $maxstep )
 {
     $step = $maxstep;
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+    Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
     exit();
 }
 
 if ( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) and $step < 7 )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "../index.php" );
+    Header( "Location: " . NV_BASE_SITEURL . "index.php" );
     exit();
 }
 
@@ -449,7 +449,7 @@ elseif ( $step == 5 )
                     $step ++;
                     $nv_Request->set_Session( 'maxstep', $step );
                     
-                    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+                    Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
                     exit();
                 }
             
@@ -576,7 +576,7 @@ elseif ( $step == 6 )
                     nv_rewrite_change( $array_config_rewrite );
                     
                     @rename( NV_ROOTDIR . "/" . $file_config_temp, NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME );
-                    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+                    Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
                     exit();
                 }
             }

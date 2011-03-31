@@ -78,9 +78,7 @@ $global_config['error_log_fileext'] = NV_LOGS_EXT;
 //Ket noi voi class Error_handler
 require_once ( NV_ROOTDIR . '/includes/class/error.class.php' );
 $ErrorHandler = new Error( $global_config );
-set_error_handler( array( 
-    &$ErrorHandler, 'error_handler' 
-) );
+set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
 //Ket noi voi cac file cau hinh, function va template
 require_once ( NV_ROOTDIR . "/install/ini.php" );
@@ -114,6 +112,7 @@ require_once ( NV_ROOTDIR . '/includes/class/request.class.php' );
 $nv_Request = new Request( $global_config, $client_info['ip'] );
 //Ngon ngu
 $language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
+$site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post', $global_config['site_lang'] );
 
 require_once ( NV_ROOTDIR . '/includes/language.php' );
 require_once ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
@@ -145,7 +144,7 @@ define( 'NV_SERVER_PORT', $nv_Request->server_port ); //vd: 80
 define( 'NV_MY_DOMAIN', $nv_Request->my_current_domain ); //vd: http://mydomain1.com:80
 define( 'NV_HEADERSTATUS', $nv_Request->headerstatus ); //vd: HTTP/1.0
 define( 'NV_USER_AGENT', $nv_Request->user_agent ); //HTTP_USER_AGENT
-define( "NV_BASE_SITEURL", $nv_Request->base_siteurl . '/' ); //vd: /ten_thu_muc_chua_site/
+define( "NV_BASE_SITEURL", preg_replace( "/\/install$/", "/", $nv_Request->base_siteurl ) ); //vd: /ten_thu_muc_chua_site/
 define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' ); //vd: /ten_thu_muc_chua_site/admin/
 define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root ); // D:/AppServ/www
 define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) ); //Ngat dong
@@ -159,9 +158,7 @@ if ( NV_USER_AGENT == "none" )
 }
 
 //Xac dinh borwser cua client
-$client_info['browser'] = array_combine( array( 
-    'key', 'name' 
-), explode( "|", nv_getBrowser( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
+$client_info['browser'] = array_combine( array( 'key', 'name' ), explode( "|", nv_getBrowser( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
 
 //Class ma hoa du lieu $crypt->hash($data)
 require_once ( NV_ROOTDIR . '/includes/class/crypt.class.php' );

@@ -68,11 +68,11 @@
 <!-- END: errordata --></form>
 <ul class="control_t fr">
 	<li><span class="back_step"><a
-		href="{BASE_SITEURL}index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=4">{LANG.previous}</a></span>
+		href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=4">{LANG.previous}</a></span>
 	</li>
 	<!-- BEGIN: nextstep -->
 	<li><span class="next_step"><a
-		href="{BASE_SITEURL}index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=6">{LANG.next_step}</a></span>
+		href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=6">{LANG.next_step}</a></span>
 	</li>
 	<!-- END: nextstep -->
 </ul>
