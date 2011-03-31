@@ -80,7 +80,7 @@ if ( ! empty( $info ) )
     {
         $field = array();
         $field[] = array( 
-            'key' => $lang_module['version_user'], 'value' => $global_config['version'] 
+            'key' => $lang_module['version_user'], 'value' => $global_config['version'].'.r'.$global_config['revision']
         );
         $new_version = nv_geVersion( 86400 ); //kem tra lai sau 24 tieng
         $info = "";
@@ -88,7 +88,7 @@ if ( ! empty( $info ) )
         {
             $field[] = array(  //
                 'key' => $lang_module['version_news'], //
-'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( "d-m-Y H:i", strtotime( $new_version->date ) ) ) 
+				'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( "d-m-Y H:i", strtotime( $new_version->date ) ) ) 
             );
             
             if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
