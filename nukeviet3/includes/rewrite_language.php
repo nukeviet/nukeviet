@@ -17,5 +17,4 @@ $rewrite["#([\"|\']" . NV_BASE_SITEURL . "index.php)*\?" . NV_LANG_VARIABLE . "=
 
 $rewrite["#([\"|\'|\>]" . $global_config['site_url'] . "/" . "index.php*\?)" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*#"] = "\\1\\3";
 $rewrite["#([\"|\'|\>]" . $global_config['site_url'] . "/" . "index.php)*\?" . NV_LANG_VARIABLE . "=([a-z-]*)([\"|\'|\<])#"] = "\\1\\3";
-
 ?>

@@ -229,5 +229,4 @@ else
     $rewrite["#([\"|\'|\>]" . $global_config['site_url'] . "/" . ")index.php*\?" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)([\"|\'|\<])#"] = "\\1\\2/\\3/\\4\\5";
     $rewrite["#([\"|\'|\>]" . $global_config['site_url'] . "/" . ")index.php*\?" . NV_LANG_VARIABLE . "=([a-z-]*)([\"|\'|\<])#"] = "\\1\\2/\\3\\4";
 }
-
 ?>
