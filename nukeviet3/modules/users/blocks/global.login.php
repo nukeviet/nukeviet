@@ -59,9 +59,7 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
         $xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
         $xtpl->assign( 'LANG', $lang_global );
         
-        if ( in_array( $global_config['gfx_chk'], array( 
-            2, 4, 5, 7 
-        ) ) )
+        if ( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) )
         {
             $xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
             $xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
@@ -75,7 +73,7 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
         
         if ( defined( 'NV_OPENID_ALLOWED' ) )
         {
-            $xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/users/openid_small.gif" );
+            $xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/openid_small.gif" );
             $xtpl->assign( 'OPENID_IMG_WIDTH', 24 );
             $xtpl->assign( 'OPENID_IMG_HEIGHT', 24 );
             
@@ -84,7 +82,7 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
             {
                 $assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
                 $assigns['title'] = ucfirst( $server );
-                $assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/users/" . $server . ".gif";
+                $assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/" . $server . ".gif";
                 $assigns['img_width'] = $assigns['img_height'] = 16;
                 
                 $xtpl->assign( 'OPENID', $assigns );
