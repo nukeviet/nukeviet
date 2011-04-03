@@ -35,7 +35,7 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
     {
         $avata = "";
         if ( file_exists( NV_ROOTDIR . "/" . $user_info['photo'] ) && ! empty( $user_info['photo'] ) ) $avata = NV_BASE_SITEURL . $user_info['photo'];
-        else $avata = NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_avatar.jpg";
+        else $avata = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/no_avatar.jpg";
         $xtpl->assign( 'AVATA', $avata );
         $xtpl->assign( 'LANG', $lang_global );
         $xtpl->assign( 'USER', $user_info );
