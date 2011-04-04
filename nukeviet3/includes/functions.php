@@ -1492,23 +1492,31 @@ function nv_check_rewrite_file ( )
  * nv_url_rewrite()
  * 
  * @param mixed $buffer
+ * @param bool $is_url
  * @return
  */
-function nv_url_rewrite ( $buffer )
+function nv_url_rewrite( $buffer, $is_url = false )
 {
     global $global_config, $module_name, $sys_info;
     $rewrite = array();
     if ( ! empty( $sys_info['supports_rewrite'] ) and $global_config['is_url_rewrite'] )
     {
         include ( NV_ROOTDIR . "/includes/rewrite.php" );
-    }
-    elseif ( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
+    } elseif ( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
     {
         include ( NV_ROOTDIR . "/includes/rewrite_language.php" );
     }
     if ( ! empty( $rewrite ) )
     {
+        if ( $is_url ) $buffer = "\"" . $buffer . "\"";
+
         $buffer = preg_replace( array_keys( $rewrite ), array_values( $rewrite ), $buffer );
+
+        if ( $is_url )
+        {
+            $buffer = substr( $buffer, 0, -1 );
+            $buffer = substr( $buffer, 1 );
+        }
     }
     return $buffer;
 }
