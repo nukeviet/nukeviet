@@ -93,9 +93,7 @@ if ( $allowed )
                 {
                     $news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
                 }
-                $news_contents['image'] = array( 
-                    "src" => $src, "width" => $width, "alt" => $alt, "note" => $news_contents['homeimgalt'], "position" => $news_contents['imgposition'] 
-                );
+                $news_contents['image'] = array( "src" => $src, "width" => $width, "alt" => $alt, "note" => $news_contents['homeimgalt'], "position" => $news_contents['imgposition'] );
             }
             if ( $alias_url == $news_contents['alias'] )
             {
@@ -106,13 +104,13 @@ if ( $allowed )
     
     if ( $publtime == 0 )
     {
-        $redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
+        $redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
         nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
     }
     
-    $news_contents['url_sendmail'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . "";
-    $news_contents['url_print'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . "";
-    $news_contents['url_savefile'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=savefile/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . "";
+    $news_contents['url_sendmail'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'];
+    $news_contents['url_print'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'];
+    $news_contents['url_savefile'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=savefile/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'];
     
     $sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` = '" . $news_contents['sourceid'] . "'";
     $result = $db->sql_query( $sql );
@@ -129,9 +127,7 @@ if ( $allowed )
     while ( $row = $db->sql_fetchrow( $related_new ) )
     {
         $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
-        $related_new_array[] = array( 
-            "title" => $row['title'], "time" => nv_date( "d/m/Y", $row['publtime'] ), "link" => $link 
-        );
+        $related_new_array[] = array( "title" => $row['title'], "time" => nv_date( "d/m/Y", $row['publtime'] ), "link" => $link );
     }
     sort( $related_new_array, SORT_NUMERIC );
     
@@ -143,9 +139,7 @@ if ( $allowed )
     while ( $row = $db->sql_fetchrow( $related ) )
     {
         $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
-        $related_array[] = array( 
-            "title" => $row['title'], "time" => nv_date( "d/m/Y", $row['publtime'] ), "link" => $link 
-        );
+        $related_array[] = array( "title" => $row['title'], "time" => nv_date( "d/m/Y", $row['publtime'] ), "link" => $link );
     }
     $db->sql_freeresult( $related );
     unset( $related, $row );
@@ -161,9 +155,7 @@ if ( $allowed )
             $catid_arr = explode( ",", $row['listcatid'] );
             $topiclink = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topic_alias . "";
             $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_arr[0]]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . "";
-            $topic_array[] = array( 
-                "title" => $row['title'], "link" => $link, "time" => nv_date( "d/m/Y", $row['publtime'] ), "topiclink" => $topiclink, "topictitle" => $topic_title 
-            );
+            $topic_array[] = array( "title" => $row['title'], "link" => $link, "time" => nv_date( "d/m/Y", $row['publtime'] ), "topiclink" => $topiclink, "topictitle" => $topic_title );
         }
         $db->sql_freeresult( $topic );
         unset( $topic, $rows );
@@ -203,9 +195,7 @@ if ( $allowed )
         $news_contents['stringrating'] = sprintf( $lang_module['stringrating'], $news_contents['total_rating'], $news_contents['click_rating'] );
         $news_contents['click_rating'] = ( $news_contents['click_rating'] > 0 ) ? $news_contents['click_rating'] : 1;
         $news_contents['numberrating'] = round( $news_contents['total_rating'] / $news_contents['click_rating'] ) - 1;
-        $news_contents['langstar'] = array( 
-            "note" => $lang_module['star_note'], "verypoor" => $lang_module['star_verypoor'], "poor" => $lang_module['star_poor'], "ok" => $lang_module['star_ok'], "good" => $lang_module['star_good}'], "verygood" => $lang_module['star_verygood'] 
-        );
+        $news_contents['langstar'] = array( "note" => $lang_module['star_note'], "verypoor" => $lang_module['star_verypoor'], "poor" => $lang_module['star_poor'], "ok" => $lang_module['star_ok'], "good" => $lang_module['star_good}'], "verygood" => $lang_module['star_verygood'] );
     }
     
     $page_title = $news_contents['title'];

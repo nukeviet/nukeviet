@@ -15,7 +15,7 @@ $download_config = initial_config_data();
 
 if ( ! $download_config['is_addfile_allow'] )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     exit();
 }
 
@@ -23,7 +23,7 @@ $list_cats = nv_list_cats( false, false );
 
 if ( empty( $list_cats ) )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     exit();
 }
 
@@ -33,17 +33,17 @@ $error = "";
 if ( $nv_Request->isset_request( 'addfile', 'post' ) )
 {
     @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
-
+    
     $addfile = $nv_Request->get_string( 'addfile', 'post', '' );
-
+    
     if ( empty( $addfile ) or $addfile != md5( $client_info['session_id'] ) )
     {
-        Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+        Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
         exit();
     }
-
+    
     $array = array();
-
+    
     $array['catid'] = $nv_Request->get_int( 'upload_catid', 'post', 0 );
     $array['title'] = filter_text_input( 'upload_title', 'post', '', 1, 255 );
     $array['description'] = filter_text_textarea( 'upload_description', '', NV_ALLOWED_HTML_TAGS );
@@ -58,13 +58,13 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
     $array['user_name'] = filter_text_input( 'upload_user_name', 'post', '', 1, 100 );
     $array['user_id'] = 0;
     $seccode = filter_text_input( 'upload_seccode', 'post', '' );
-
+    
     if ( defined( 'NV_IS_USER' ) )
     {
         $array['user_name'] = $user_info['username'];
         $array['user_id'] = $user_info['userid'];
     }
-
+    
     if ( ! empty( $array['author_url'] ) )
     {
         if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['author_url'] ) )
@@ -72,7 +72,7 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
             $array['author_url'] = "http://" . $array['author_url'];
         }
     }
-
+    
     if ( ! empty( $array['linkdirect'] ) )
     {
         $linkdirect = $array['linkdirect'];
@@ -80,7 +80,7 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
         $linkdirect = explode( "<br />", $linkdirect );
         $linkdirect = array_map( "trim", $linkdirect );
         $linkdirect = array_unique( $linkdirect );
-
+        
         $array['linkdirect'] = array();
         foreach ( $linkdirect as $link )
         {
@@ -88,54 +88,60 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
             {
                 $link = "http://" . $link;
             }
-
+            
             if ( nv_is_url( $link ) )
             {
                 $array['linkdirect'][] = $link;
             }
         }
-
+        
         $array['linkdirect'] = ! empty( $array['linkdirect'] ) ? implode( "\n", $array['linkdirect'] ) : "";
     }
-
+    
     $alias = change_alias( $array['title'] );
-
+    
     $sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $alias );
     $result = $db->sql_query( $sql );
     list( $is_exists ) = $db->sql_fetchrow( $result );
-
+    
     if ( ! $is_exists )
     {
         $sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `title`=" . $db->dbescape( $array['title'] );
         $result = $db->sql_query( $sql );
         list( $is_exists ) = $db->sql_fetchrow( $result );
     }
-
+    
     if ( ! nv_capcha_txt( $seccode ) )
     {
         $is_error = true;
         $error = $lang_module['upload_error1'];
-    } elseif ( empty( $array['user_name'] ) )
+    }
+    elseif ( empty( $array['user_name'] ) )
     {
         $is_error = true;
         $error = $lang_module['upload_error2'];
-    } elseif ( empty( $array['title'] ) )
+    }
+    elseif ( empty( $array['title'] ) )
     {
         $is_error = true;
         $error = $lang_module['file_error_title'];
-    } elseif ( $is_exists )
+    }
+    elseif ( $is_exists )
     {
         $is_error = true;
         $error = $lang_module['file_title_exists'];
-    } elseif ( ! $array['catid'] or ! isset( $list_cats[$array['catid']] ) )
+    }
+    elseif ( ! $array['catid'] or ! isset( $list_cats[$array['catid']] ) )
     {
         $is_error = true;
         $error = $lang_module['file_catid_exists'];
-    } elseif ( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
+    }
+    elseif ( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
     {
         $is_error = true;
         $error = $check_valid_email;
-    } elseif ( ! empty( $array['author_url'] ) and ! nv_is_url( $array['author_url'] ) )
+    }
+    elseif ( ! empty( $array['author_url'] ) and ! nv_is_url( $array['author_url'] ) )
     {
         $is_error = true;
         $error = $lang_module['file_error_author_url'];
@@ -149,9 +155,9 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
             {
                 $upload = new upload( $global_config['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], $download_config['maxfilesize'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
                 $upload_info = $upload->save_file( $_FILES['upload_fileupload'], NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'], false );
-
+                
                 @unlink( $_FILES['upload_fileupload']['tmp_name'] );
-
+                
                 if ( empty( $upload_info['error'] ) )
                 {
                     if ( in_array( $upload_info['ext'], $download_config['upload_filetype'] ) )
@@ -162,9 +168,9 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                         $random_num = md5( $random_num );
                         $nv_pathinfo_filename = nv_pathinfo_filename( $upload_info['name'] );
                         $new_name = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
-
+                        
                         $rename = nv_renamefile( $upload_info['name'], $new_name );
-
+                        
                         if ( $rename[0] == 1 )
                         {
                             $fileupload = $new_name;
@@ -173,7 +179,7 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                         {
                             $fileupload = $upload_info['name'];
                         }
-
+                        
                         @chmod( $fileupload, 0644 );
                         $fileupload = str_replace( NV_ROOTDIR . '/', "", $fileupload );
                         $fileupload = NV_BASE_SITEURL . $fileupload;
@@ -191,11 +197,11 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                     $is_error = true;
                     $error = $upload_info['error'];
                 }
-
+                
                 unset( $upload, $upload_info );
             }
         }
-
+        
         if ( ! $is_error )
         {
             if ( empty( $fileupload ) and empty( $array['linkdirect'] ) )
@@ -210,9 +216,9 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                 {
                     $upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
                     $upload_info = $upload->save_file( $_FILES['upload_fileimage'], NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'], false );
-
+                    
                     @unlink( $_FILES['upload_fileimage']['tmp_name'] );
-
+                    
                     if ( empty( $upload_info['error'] ) )
                     {
                         mt_srand( ( double )microtime() * 1000000 );
@@ -221,9 +227,9 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                         $random_num = md5( $random_num );
                         $nv_pathinfo_filename = nv_pathinfo_filename( $upload_info['name'] );
                         $new_name = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
-
+                        
                         $rename = nv_renamefile( $upload_info['name'], $new_name );
-
+                        
                         if ( $rename[0] == 1 )
                         {
                             $fileimage = $new_name;
@@ -232,17 +238,17 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                         {
                             $fileimage = $upload_info['name'];
                         }
-
+                        
                         @chmod( $fileimage, 0644 );
                         $fileimage = str_replace( NV_ROOTDIR . "/", "", $fileimage );
                         $fileimage = NV_BASE_SITEURL . $fileimage;
                     }
                 }
-
+                
                 $array['description'] = nv_nl2br( $array['description'], "<br />" );
                 $array['introtext'] = nv_nl2br( $array['introtext'], "<br />" );
                 $array['linkdirect'] = nv_nl2br( $array['linkdirect'], "<br />" );
-
+                
                 $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` VALUES (
                 NULL, 
                 " . $array['catid'] . ", 
@@ -261,7 +267,7 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                 " . $array['filesize'] . ", 
                 " . $db->dbescape( $fileimage ) . ", 
                 " . $db->dbescape( $array['copyright'] ) . ")";
-
+                
                 if ( ! $db->sql_query_insert_id( $sql ) )
                 {
                     $is_error = true;
@@ -270,12 +276,12 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                 else
                 {
                     $contents = "<div class=\"info_exit\">" . $lang_module['file_upload_ok'] . "</div>";
-                    $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
-
+                    $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+                    
                     include ( NV_ROOTDIR . "/includes/header.php" );
                     echo nv_site_theme( $contents );
                     include ( NV_ROOTDIR . "/includes/footer.php" );
-                    exit;
+                    exit();
                 }
             }
         }

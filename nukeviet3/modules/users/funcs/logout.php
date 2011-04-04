@@ -11,7 +11,7 @@ if ( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 if ( ! defined( 'NV_IS_USER' ) or defined( 'NV_IS_ADMIN' ) )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     die();
 }
 
@@ -35,7 +35,7 @@ $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><
 $info .= "[<a href=\"" . $url . "\">" . $lang_module['redirect_to_back'] . "</a>]";
 
 $contents = user_info_exit( $info );
-$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $url . "\" />";
+$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( $url ) . "\" />";
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );

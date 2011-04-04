@@ -24,13 +24,7 @@ else if ( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/
     function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val = '' )
     {
         // Create class instance.
-        $editortoolbar = array( 
-            array( 
-            'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' 
-        ), array( 
-            'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' 
-        ) 
-        );
+        $editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
         $CKEditor = new CKEditor();
         // Do not print the code directly to the browser, return it instead
         $CKEditor->returnOutput = true;
@@ -53,9 +47,7 @@ else if ( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/
             $CKEditor->config['height'] = strpos( $height, '%' ) ? $height : intval( $height );
         }
         // Change default textarea attributes
-        $CKEditor->textareaAttributes = array( 
-            "cols" => 80, "rows" => 10 
-        );
+        $CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
         $val = nv_unhtmlspecialchars( $val );
         return $CKEditor->editor( $textareaname, $val );
     }
@@ -70,9 +62,7 @@ $sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delc
 $result = $db->sql_query( $sql );
 while ( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $db->sql_fetchrow( $result ) )
 {
-    $array_post_config[$member][$group_id] = array( 
-        "addcontent" => $addcontent, "postcontent" => $postcontent, "editcontent" => $editcontent, "delcontent" => $delcontent 
-    );
+    $array_post_config[$member][$group_id] = array( "addcontent" => $addcontent, "postcontent" => $postcontent, "editcontent" => $editcontent, "delcontent" => $delcontent );
 }
 
 if ( isset( $array_post_config[0][0] ) )
@@ -81,9 +71,7 @@ if ( isset( $array_post_config[0][0] ) )
 }
 else
 {
-    $array_post_user = array( 
-        "addcontent" => 0, "postcontent" => 0, "editcontent" => 0, "delcontent" => 0 
-    );
+    $array_post_user = array( "addcontent" => 0, "postcontent" => 0, "editcontent" => 0, "delcontent" => 0 );
 }
 
 if ( defined( 'NV_IS_USER' ) and isset( $array_post_config[1] ) )
@@ -158,6 +146,8 @@ if ( ! $array_post_user['addcontent'] )
         $template = "default";
     }
     
+    $array_temp['urlrefresh'] = nv_url_rewrite( $array_temp['urlrefresh'], true );
+    
     $xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $template . "/modules/" . $module_file );
     $xtpl->assign( 'DATA', $array_temp );
     $xtpl->parse( 'mainrefresh' );
@@ -189,43 +179,35 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
         $contentid = ( isset( $rowcontent_old['id'] ) ) ? intval( $rowcontent_old['id'] ) : 0;
         if ( empty( $contentid ) )
         {
-            Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+            Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op, true ) );
             die();
         }
         
         if ( $nv_Request->get_int( 'delcontent', 'get' ) and ( empty( $rowcontent_old['status'] ) or $array_post_user['delcontent'] ) )
         {
             nv_del_content_module( $contentid );
-            Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+            Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op, true ) );
             die();
         }
         elseif ( ! ( empty( $rowcontent_old['status'] ) or $array_post_user['editcontent'] ) )
         {
-            Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+            Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op, true ) );
             die();
         }
     }
     
-    $array_mod_title[] = array( 
-        'catid' => 0, 'title' => $lang_module['add_content'], 'link' => $base_url 
-    );
+    $array_mod_title[] = array( 'catid' => 0, 'title' => $lang_module['add_content'], 'link' => $base_url );
     
-    $array_imgposition = array( 
-        0 => $lang_module['imgposition_0'], 1 => $lang_module['imgposition_1'], 2 => $lang_module['imgposition_2'] 
-    );
+    $array_imgposition = array( 0 => $lang_module['imgposition_0'], 1 => $lang_module['imgposition_1'], 2 => $lang_module['imgposition_2'] );
     
-    $rowcontent = array( 
-        "id" => "", "listcatid" => "", "topicid" => "", "admin_id" => ( defined( 'NV_IS_USER' ) ) ? $user_info['userid'] : 0, "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "|", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "total_rating" => 0, "click_rating" => 0, "keywords" => "" 
-    );
+    $rowcontent = array( "id" => "", "listcatid" => "", "topicid" => "", "admin_id" => ( defined( 'NV_IS_USER' ) ) ? $user_info['userid'] : 0, "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "|", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "total_rating" => 0, "click_rating" => 0, "keywords" => "" );
     
     $array_catid_module = array();
     $sql = "SELECT catid, title, lev FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
     $result_cat = $db->sql_query( $sql );
     while ( list( $catid_i, $title_i, $lev_i ) = $db->sql_fetchrow( $result_cat ) )
     {
-        $array_catid_module[] = array( 
-            "catid" => $catid_i, "title" => $title_i, "lev" => $lev_i 
-        );
+        $array_catid_module[] = array( "catid" => $catid_i, "title" => $title_i, "lev" => $lev_i );
     }
     
     $sql = "SELECT topicid, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` ORDER BY `weight` ASC";
@@ -504,6 +486,8 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
                     $template = "default";
                 }
                 
+                $array_temp['urlrefresh'] = nv_url_rewrite( $array_temp['urlrefresh'], true );
+                
                 $xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $template . "/modules/" . $module_file );
                 $xtpl->assign( 'DATA', $array_temp );
                 $xtpl->parse( 'mainrefresh' );
@@ -521,7 +505,7 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
         $rowcontent = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `id`=" . $contentid . "" ) );
         if ( empty( $rowcontent['id'] ) )
         {
-            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
+            Header( "Location: " . nv_url_rewrite( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
             die();
         }
     }
@@ -649,9 +633,7 @@ elseif ( defined( 'NV_IS_USER' ) )
         }
         else
         {
-            $array_img = array( 
-                "", "" 
-            );
+            $array_img = array( "", "" );
         }
         
         if ( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
@@ -721,9 +703,7 @@ elseif ( defined( 'NV_IS_USER' ) )
         {
             if ( isset( $global_array_cat[$catid_i] ) )
             {
-                $listcat = array( 
-                    'title' => $global_array_cat[$catid_i]['title'], "link" => $global_array_cat[$catid_i]['link'] 
-                );
+                $listcat = array( 'title' => $global_array_cat[$catid_i]['title'], "link" => $global_array_cat[$catid_i]['link'] );
                 $xtpl->assign( 'CAT', $listcat );
                 if ( $n < $num_cat )
                 {
@@ -744,7 +724,7 @@ elseif ( defined( 'NV_IS_USER' ) )
 }
 elseif ( $array_post_user['addcontent'] )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&contentid=0&checkss=" . md5( "0" . $client_info['session_id'] . $global_config['sitekey'] ) . "" );
+    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&contentid=0&checkss=" . md5( "0" . $client_info['session_id'] . $global_config['sitekey'] ), true ) );
     die();
 }
 

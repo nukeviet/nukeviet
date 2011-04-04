@@ -7,9 +7,7 @@
  * @createdate 12/31/2009 0:51
  */
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
-if ( ! in_array( $op, array( 
-    'viewcat', 'detail' 
-) ) )
+if ( ! in_array( $op, array( 'viewcat', 'detail' ) ) )
 {
     define( 'NV_IS_MOD_NEWS', true );
 }
@@ -18,9 +16,7 @@ require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/global.functions.php"
 global $global_array_cat;
 $global_array_cat = array();
 $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other";
-$global_array_cat[0] = array( 
-    "catid" => 0, "parentid" => 0, "title" => "Other", "alias" => "Other", "link" => $link_i, "viewcat" => "viewcat_page_new", "subcatid" => 0, "numlinks" => 3, "description" => "", "inhome" => 0, "keywords" => "" 
-);
+$global_array_cat[0] = array( "catid" => 0, "parentid" => 0, "title" => "Other", "alias" => "Other", "link" => $link_i, "viewcat" => "viewcat_page_new", "subcatid" => 0, "numlinks" => 3, "description" => "", "inhome" => 0, "keywords" => "" );
 $catid = 0;
 $parentid = 0;
 $set_viewcat = "";
@@ -85,25 +81,21 @@ foreach ( $global_array_cat as $catid_i => $array_cat_i )
                     {
                         $sub_act = 1;
                     }
-                    $submenu[] = array( 
-                        $array_sub_cat_i['title'], $array_sub_cat_i['link'], $sub_act 
-                    );
+                    $submenu[] = array( $array_sub_cat_i['title'], $array_sub_cat_i['link'], $sub_act );
                 }
             }
         
         }
-        $nv_vertical_menu[] = array( 
-            $array_cat_i['title'], $array_cat_i['link'], $act, 'submenu' => $submenu 
-        );
+        $nv_vertical_menu[] = array( $array_cat_i['title'], $array_cat_i['link'], $act, 'submenu' => $submenu );
     }
     
     //Xac dinh RSS
     if ( $catid_i )
     {
-        $rss[] = array(  //
-            'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'], //
-'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_cat_i['alias']  //
-        );
+        $rss[] = array( //
+'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'], //
+'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_cat_i['alias'] );//
+
     }
 }
 unset( $result, $catid_i, $parentid_i, $title_i, $alias_i );
@@ -126,7 +118,7 @@ if ( ! empty( $array_op ) and $op == "main" )
         }
         elseif ( ! empty( $alias_cat_url ) )
         {
-            $redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
+            $redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
             nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
         }
     }
@@ -157,9 +149,7 @@ if ( ! empty( $array_op ) and $op == "main" )
         while ( $parentid > 0 )
         {
             $array_cat_i = $global_array_cat[$parentid];
-            $array_mod_title[] = array( 
-                'catid' => $parentid, 'title' => $array_cat_i['title'], 'link' => $array_cat_i['link'] 
-            );
+            $array_mod_title[] = array( 'catid' => $parentid, 'title' => $array_cat_i['title'], 'link' => $array_cat_i['link'] );
             $parentid = $array_cat_i['parentid'];
         }
         sort( $array_mod_title, SORT_NUMERIC );

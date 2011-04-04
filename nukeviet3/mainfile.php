@@ -37,7 +37,9 @@ $contents = "";
 $submenu = array();
 $select_options = array();
 $error_info = array();
-unset( $key_words, $page_title, $mod_title, $editor, $editor_password, $my_head, $my_footer, $description );
+$rewrite = array();
+
+unset( $key_words, $page_title, $mod_title, $editor, $editor_password, $my_head, $my_footer, $description, $rewrite );
 
 //Xac dinh thu muc goc cua site
 define( 'NV_ROOTDIR', pathinfo( str_replace( '\\', '/', __file__ ), PATHINFO_DIRNAME ) );
@@ -360,11 +362,19 @@ if ( $global_config['is_url_rewrite'] )
     {
         $global_config['is_url_rewrite'] = 0;
     }
-    if ( empty( $global_config['is_url_rewrite'] ) )
+    if ( $global_config['is_url_rewrite'] )
+    {
+        require ( NV_ROOTDIR . "/includes/rewrite.php" );
+    }
+    else
     {
         $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`= '0' WHERE `module`='global' AND `config_name` = 'is_url_rewrite'" );
         nv_delete_all_cache(); //xoa toan bo cache
     }
+}
+elseif ( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
+{
+    require ( NV_ROOTDIR . "/includes/rewrite_language.php" );
 }
 
 if ( defined( 'NV_ADMIN' ) )

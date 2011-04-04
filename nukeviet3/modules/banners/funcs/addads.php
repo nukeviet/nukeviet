@@ -126,7 +126,7 @@ if ( defined( 'NV_IS_BANNER_CLIENT' ) )
             $id = $db->sql_query_insert_id( $sql );
             if ( $id )
             {
-                $xtpl->assign( 'pagetitle', $lang_module['addads_success'] . '<meta http-equiv="refresh" content="2;url=' . NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . '">' );
+                $xtpl->assign( 'pagetitle', $lang_module['addads_success'] . '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name, true ) . '">' );
             }
         }
     }

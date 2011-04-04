@@ -18,19 +18,19 @@ $yesterday = $today - 86400;
 
 if ( ! preg_match( "/^([a-z0-9\-\_\.]+)$/i", $filealias ) )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     exit();
 }
 
 $query = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $filealias ) . " AND `catid`=" . $catid . " AND `status`=1";
 if ( ( $result = $db->sql_query( $query ) ) === false )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     exit();
 }
 if ( ( $row = $db->sql_fetch_assoc( $result ) ) === false )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     exit();
 }
 
@@ -131,12 +131,9 @@ if ( $row['is_download_allow'] )
                 if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
                 {
                     $new_name = str_replace( "-", "_", $filealias ) . ( $count_file > 1 ? "_part" . str_pad( $a, 2, '0', STR_PAD_LEFT ) : "" ) . "." . nv_getextension( $file );
-                    $row['fileupload'][] = array(  //
-                        'link' => '#', 'title' => $new_name 
-                    );
-                    $session_files['fileupload'][$new_name] = array( 
-                        'src' => NV_ROOTDIR . '/' . $file2, 'id' => $row['id'] 
-                    );
+                    $row['fileupload'][] = array( //
+'link' => '#', 'title' => $new_name );
+                    $session_files['fileupload'][$new_name] = array( 'src' => NV_ROOTDIR . '/' . $file2, 'id' => $row['id'] );
                     
                     $a ++;
                 }
@@ -177,12 +174,9 @@ if ( $row['is_download_allow'] )
                         }
                         
                         $code = md5( $link );
-                        $row['linkdirect'][$host][] = array( 
-                            'link' => $link, 'code' => $code, 'name' => strlen( $link ) > 70 ? $scheme . "://" . $host . "..." . substr( $link, - ( 70 - strlen( $scheme . "://" . $host ) ) ) : $link  //
-                        );
-                        $session_files['linkdirect'][$code] = array( 
-                            'link' => $link, 'id' => $row['id'] 
-                        );
+                        $row['linkdirect'][$host][] = array( 'link' => $link, 'code' => $code, 'name' => strlen( $link ) > 70 ? $scheme . "://" . $host . "..." . substr( $link, - ( 70 - strlen( $scheme . "://" . $host ) ) ) : $link )//
+;
+                        $session_files['linkdirect'][$code] = array( 'link' => $link, 'id' => $row['id'] );
                     }
                 }
             }

@@ -11,7 +11,7 @@ if ( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 if ( ! defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 {
-    Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     die();
 }
 
@@ -27,30 +27,30 @@ if ( defined( 'NV_IS_USER_FORUM' ) )
  * @param mixed $login
  * @return
  */
-function nv_check_username_change( $login )
+function nv_check_username_change ( $login )
 {
     global $db, $lang_module, $user_info;
-
+    
     $error = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
     if ( $error != "" ) return preg_replace( "/\&(l|r)dquo\;/", "", strip_tags( $error ) );
     if ( $login != $db->fixdb( $login ) )
     {
         return sprintf( $lang_module['account_deny_name'], $login );
     }
-
+    
     $sql = "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_name'";
     $result = $db->sql_query( $sql );
     list( $deny_name ) = $db->sql_fetchrow( $result );
     $db->sql_freeresult();
-
+    
     if ( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], $login );
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $user_info['userid'] . " AND `username`=" . $db->dbescape( $login );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], $login );
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`!=" . $user_info['userid'] . " AND `username`=" . $db->dbescape( $login );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], $login );
-
+    
     return "";
 }
 
@@ -60,18 +60,18 @@ function nv_check_username_change( $login )
  * @param mixed $email
  * @return
  */
-function nv_check_email_change( $email )
+function nv_check_email_change ( $email )
 {
     global $db, $lang_module, $user_info;
-
+    
     $error = nv_check_valid_email( $email );
     if ( $error != "" ) return preg_replace( "/\&(l|r)dquo\;/", "", strip_tags( $error ) );
-
+    
     $sql = "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email'";
     $result = $db->sql_query( $sql );
     list( $deny_email ) = $db->sql_fetchrow( $result );
     $db->sql_freeresult();
-
+    
     if ( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], $email );
     
     list( $left, $right ) = explode( "@", $email );
@@ -79,16 +79,16 @@ function nv_check_email_change( $email )
     $pattern = str_split( $left );
     $pattern = implode( ".?", $pattern );
     $pattern = "^" . $pattern . "@" . $right . "$";
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $user_info['userid'] . " AND `email` RLIKE " . $db->dbescape( $pattern );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email` RLIKE " . $db->dbescape( $pattern );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
-
+    
     $sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`!=" . $user_info['userid'] . " AND `email` RLIKE " . $db->dbescape( $pattern );
     if ( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
-
+    
     return "";
 }
 
@@ -167,7 +167,7 @@ if ( $nv_Request->isset_request( 'changequestion', 'get' ) )
                 $db->sql_query( $sql );
                 
                 $contents = user_info_exit( $lang_module['change_question_ok'] );
-                $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
+                $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
                 
                 include ( NV_ROOTDIR . "/includes/header.php" );
                 echo nv_site_theme( $contents );
@@ -353,9 +353,7 @@ if ( $checkss == $array_data['checkss'] )
     {
         @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
         
-        $upload = new upload( array( 
-            'images' 
-        ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, 80, 80 );
+        $upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, 80, 80 );
         $upload_info = $upload->save_file( $_FILES['avatar'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
         
         @unlink( $_FILES['avatar']['tmp_name'] );
@@ -390,7 +388,7 @@ if ( $checkss == $array_data['checkss'] )
     }
     
     $contents = user_info_exit( $info );
-    $contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
+    $contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
     
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_site_theme( $contents );
@@ -414,15 +412,9 @@ else
 $array_data['view_mail'] = $array_data['view_mail'] ? " selected=\"selected\"" : "";
 
 $array_data['gender_array'] = array();
-$array_data['gender_array']['N'] = array( 
-    'value' => 'N', 'title' => 'N/A', 'selected' => '' 
-);
-$array_data['gender_array']['M'] = array( 
-    'value' => 'M', 'title' => $lang_module['male'], 'selected' => ( $array_data['gender'] == 'M' ? " selected=\"selected\"" : "" ) 
-);
-$array_data['gender_array']['F'] = array( 
-    'value' => 'F', 'title' => $lang_module['female'], 'selected' => ( $array_data['gender'] == 'F' ? " selected=\"selected\"" : "" ) 
-);
+$array_data['gender_array']['N'] = array( 'value' => 'N', 'title' => 'N/A', 'selected' => '' );
+$array_data['gender_array']['M'] = array( 'value' => 'M', 'title' => $lang_module['male'], 'selected' => ( $array_data['gender'] == 'M' ? " selected=\"selected\"" : "" ) );
+$array_data['gender_array']['F'] = array( 'value' => 'F', 'title' => $lang_module['female'], 'selected' => ( $array_data['gender'] == 'F' ? " selected=\"selected\"" : "" ) );
 
 $contents = user_info( $array_data );
 

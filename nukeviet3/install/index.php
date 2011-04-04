@@ -571,8 +571,6 @@ elseif ( $step == 6 )
                     $step ++;
                     $nv_Request->set_Session( 'maxstep', $step );
                     nv_save_file_config();
-                    
-                    require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
                     nv_rewrite_change( $array_config_rewrite );
                     
                     @rename( NV_ROOTDIR . "/" . $file_config_temp, NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME );

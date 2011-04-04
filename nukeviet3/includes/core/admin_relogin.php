@@ -36,7 +36,7 @@ if ( defined( "NV_IS_ADMIN" ) )
                     {
                         $nv_username = $admin_info['username'];
                         define( 'NV_IS_MOD_USER', true );
-                        nv_insert_logs( NV_LANG_DATA, "login", "[" .$nv_username . "] " . strtolower( $lang_global['loginsubmit'] )," Client IP:" . NV_CLIENT_IP, 0 );
+                        nv_insert_logs( NV_LANG_DATA, "login", "[" . $nv_username . "] " . strtolower( $lang_global['loginsubmit'] ), " Client IP:" . NV_CLIENT_IP, 0 );
                         require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
                     }
                     
@@ -55,7 +55,7 @@ if ( defined( "NV_IS_ADMIN" ) )
                         
                         if ( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 )
                         {
-                            Header( "Location: " . $redirect );
+                            Header( "Location: " . nv_url_rewrite( $redirect, true ) );
                             exit();
                         }
                         else
@@ -74,11 +74,7 @@ if ( defined( "NV_IS_ADMIN" ) )
                 if ( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 )
                 {
                     $server_name = preg_replace( '/^www\./e', '', nv_getenv( "HTTP_HOST" ) );
-                    $nohttp_redirect = preg_replace( array( 
-                        '/^[a-zA-Z]+\:\/\//e', '/www\./e' 
-                    ), array( 
-                        '', '' 
-                    ), $redirect );
+                    $nohttp_redirect = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/www\./e' ), array( '', '' ), $redirect );
                     if ( ! preg_match( "/^" . preg_quote( $server_name ) . '\/' . preg_quote( NV_ADMINDIR ) . "/", $nohttp_redirect ) )
                     {
                         Header( "Location: " . $redirect );
