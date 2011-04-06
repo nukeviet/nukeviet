@@ -18,14 +18,14 @@ if ( empty( $global_config['site_lang'] ) or ! preg_match( "/^[a-z]{2}$/", $glob
 if ( defined( 'NV_ADMIN' ) and $global_config['lang_multi'] )
 {
     $cookie = $nv_Request->get_string( 'data_lang', 'cookie' );
-    if ( empty( $cookie ) or ! preg_match( "/^[a-z]{2}$/", $cookie ) or ! file_exists( NV_ROOTDIR . "/language/" . $cookie . "/global.php" ) ) $cookie = '';
+    $site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post' );
     
     if ( preg_match( "/^[a-z]{2}$/", $site_lang ) and file_exists( NV_ROOTDIR . "/language/" . $site_lang . "/global.php" ) )
     {
         if ( $site_lang != $cookie ) $nv_Request->set_Cookie( 'data_lang', $site_lang, NV_LIVE_COOKIE_TIME );
         define( 'NV_LANG_DATA', $site_lang );
     }
-    elseif ( ! empty( $cookie ) )
+    elseif ( preg_match( "/^[a-z]{2}$/", $cookie ) and file_exists( NV_ROOTDIR . "/language/" . $cookie . "/global.php" ) )
     {
         define( 'NV_LANG_DATA', $cookie );
     }
@@ -36,8 +36,6 @@ if ( defined( 'NV_ADMIN' ) and $global_config['lang_multi'] )
     }
     
     $cookie = $nv_Request->get_string( 'int_lang', 'cookie' );
-    if ( empty( $cookie ) or ! preg_match( "/^[a-z]{2}$/", $cookie ) or ! file_exists( NV_ROOTDIR . "/language/" . $cookie . "/global.php" ) ) $cookie = '';
-    
     $langinterface = $nv_Request->get_string( 'langinterface', 'get,post', '' );
     
     if ( preg_match( "/^[a-z]{2}$/", $langinterface ) and file_exists( NV_ROOTDIR . "/language/" . $langinterface . "/global.php" ) )
@@ -45,7 +43,7 @@ if ( defined( 'NV_ADMIN' ) and $global_config['lang_multi'] )
         if ( $langinterface != $cookie ) $nv_Request->set_Cookie( 'int_lang', $langinterface, NV_LIVE_COOKIE_TIME );
         define( 'NV_LANG_INTERFACE', $langinterface );
     }
-    elseif ( ! empty( $cookie ) )
+    elseif ( preg_match( "/^[a-z]{2}$/", $cookie ) and file_exists( NV_ROOTDIR . "/language/" . $cookie . "/global.php" ) )
     {
         define( 'NV_LANG_INTERFACE', $cookie );
     }
@@ -58,6 +56,7 @@ if ( defined( 'NV_ADMIN' ) and $global_config['lang_multi'] )
 }
 else
 {
+    $site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post', $global_config['site_lang'] );
     if ( ( in_array( $site_lang, $global_config['allow_adminlangs'] ) ) and file_exists( NV_ROOTDIR . "/language/" . $site_lang . "/global.php" ) )
     {
         define( 'NV_LANG_INTERFACE', $site_lang );
@@ -65,12 +64,7 @@ else
     }
     else
     {
-        define( 'NV_LANG_INTERFACE', $global_config['site_lang'] );
-        define( 'NV_LANG_DATA', $global_config['site_lang'] );
-        $my_server_port = ( $_SERVER['SERVER_PORT'] == "80" ) ? "" : ( ":" . $_SERVER['SERVER_PORT'] );
-        $my_server_protocol = strtolower( preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'] ) );
-        $my_server_protocol .= ( isset( $_SERVER['HTTPS'] ) and $_SERVER['HTTPS'] == "on" ) ? "s" : "";
-        Header( "Location: " . $my_server_protocol . '://' . $_SERVER['SERVER_NAME'] . $my_server_port );
+        Header( "Location: " . NV_MY_DOMAIN . NV_BASE_SITEURL );
         exit();
     }
 }

@@ -45,55 +45,16 @@ if ( $client_info['is_myreferer'] === 0 and ! defined( 'NV_IS_MY_USER_AGENT' ) )
 }
 
 if ( ! isset( $global_config['site_home_module'] ) or empty( $global_config['site_home_module'] ) ) $global_config['site_home_module'] = "news";
-$home = 0;
-$op = 'main';
-if ( preg_match( "/^([a-z0-9\-\_\/])+$/i", $request_uri ) )
+
+if ( $nv_Request->isset_request( NV_NAME_VARIABLE, 'get' ) || $nv_Request->isset_request( NV_NAME_VARIABLE, 'post' ) )
 {
-    if ( preg_match( "/^[a-z]{2}$/", $array_request_uri[0] ) and in_array( $array_request_uri[0], $global_config['allow_adminlangs'] ) )
-    {
-        if ( isset( $array_request_uri[1] ) and ! empty( $array_request_uri[1] ) )
-        {
-            $module_name = $array_request_uri[1];
-            $lop = strlen( $module_name ) + 4;
-            $op = substr( $request_uri, $lop );
-        }
-        else
-        {
-            $home = 1;
-            $module_name = $global_config['site_home_module'];
-        }
-    }
-    else
-    {
-        if ( isset( $array_request_uri[0] ) and ! empty( $array_request_uri[0] ) )
-        {
-            $module_name = $array_request_uri[0];
-            $lop = strlen( $module_name ) + 1;
-            $op = substr( $request_uri, $lop );
-        }
-        else
-        {
-            $home = 1;
-            $module_name = $global_config['site_home_module'];
-        }
-    }
-    if ( empty( $op ) )
-    {
-        $op = 'main';
-    }
+    $home = 0;
+    $module_name = $nv_Request->get_string( NV_NAME_VARIABLE, 'post,get' );
 }
 else
 {
-    if ( $nv_Request->isset_request( NV_NAME_VARIABLE, 'get' ) || $nv_Request->isset_request( NV_NAME_VARIABLE, 'post' ) )
-    {
-        $module_name = $nv_Request->get_string( NV_NAME_VARIABLE, 'post,get' );
-    }
-    else
-    {
-        $home = 1;
-        $module_name = $global_config['site_home_module'];
-    }
-    $op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', $op );
+    $home = 1;
+    $module_name = $global_config['site_home_module'];
 }
 
 if ( preg_match( $global_config['check_module'], $module_name ) )
@@ -112,6 +73,7 @@ if ( preg_match( $global_config['check_module'], $module_name ) )
         $include_file = NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php";
         if ( file_exists( $include_file ) and filesize( $include_file ) != 0 )
         {
+            $op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
             $array_op = array();
             if ( ! isset( $module_info['funcs'][$op] ) )
             {

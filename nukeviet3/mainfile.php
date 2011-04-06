@@ -180,6 +180,12 @@ if ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) )
     $global_config['engine_allowed'] = nv_object2array( simplexml_load_file( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) );
 }
 
+$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
+if ( defined( 'NV_SYSTEM' ) )
+{
+    require_once ( NV_ROOTDIR . '/includes/request_uri.php' );
+}
+
 //Ket noi voi class xu ly request
 require_once ( NV_ROOTDIR . '/includes/class/request.class.php' );
 $nv_Request = new Request( $global_config, $client_info['ip'] );
@@ -200,35 +206,7 @@ define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh d
 define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) ); //Hau to cua file cache
 
 
-if ( defined( 'NV_SYSTEM' ) )
-{
-    $lu = strlen( NV_BASE_SITEURL );
-    $request_uri = substr( $_SERVER['REQUEST_URI'], $lu );
-    if ( preg_match( "/^([a-z0-9\-\_\/])+$/i", $request_uri ) )
-    {
-        $request_uri = preg_replace( "/[\/]+$/", '', $request_uri );
-        $array_request_uri = explode( "/", $request_uri );
-        if ( preg_match( "/^[a-z]{2}$/", $array_request_uri[0] ) and in_array( $array_request_uri[0], $global_config['allow_adminlangs'] ) )
-        {
-            $site_lang = $array_request_uri[0];
-        }
-        else
-        {
-            $site_lang = $global_config['site_lang'];
-        }
-    }
-    else
-    {
-        $site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post', $global_config['site_lang'] );
-    }
-}
-else
-{
-    $site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post', $global_config['site_lang'] );
-}
-
 //Ngon ngu
-$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 require_once ( NV_ROOTDIR . '/includes/language.php' );
 require_once ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
 

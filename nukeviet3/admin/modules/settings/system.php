@@ -11,19 +11,13 @@ if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['global_config'];
 
-$adminThemes = array( 
-    '' 
-);
+$adminThemes = array( '' );
 $adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] ) );
 unset( $adminThemes[0] );
 
-$closed_site_Modes = array( 
-    '0' => $lang_module['closed_site_0'], '1' => $lang_module['closed_site_1'], '2' => $lang_module['closed_site_2'], '3' => $lang_module['closed_site_3'] 
-);
+$closed_site_Modes = array( '0' => $lang_module['closed_site_0'], '1' => $lang_module['closed_site_1'], '2' => $lang_module['closed_site_2'], '3' => $lang_module['closed_site_3'] );
 
-$optActive_Modes = array( 
-    '0' => $lang_module['optActive_no'], '1' => $lang_module['optActive_all'], '2' => $lang_module['optActive_site'], '3' => $lang_module['optActive_admin'] 
-);
+$optActive_Modes = array( '0' => $lang_module['optActive_no'], '1' => $lang_module['optActive_all'], '2' => $lang_module['optActive_site'], '3' => $lang_module['optActive_admin'] );
 
 $admin_theme = ( isset( $global_config['admin_theme'] ) and ! empty( $global_config['admin_theme'] ) and in_array( $global_config['admin_theme'], $adminThemes ) ) ? $global_config['admin_theme'] : "admin_default";
 
@@ -40,12 +34,12 @@ foreach ( $global_config['allow_sitelangs'] as $lang_i )
     }
 }
 
-$proxy_blocker_array = array(  //
-    0 => $lang_module['proxy_blocker_0'], //
-	1 => $lang_module['proxy_blocker_1'], //
-	2 => $lang_module['proxy_blocker_2'], //
-	3 => $lang_module['proxy_blocker_3']  //
-);
+$proxy_blocker_array = array( //
+0 => $lang_module['proxy_blocker_0'], //
+1 => $lang_module['proxy_blocker_1'], //
+2 => $lang_module['proxy_blocker_2'], //
+3 => $lang_module['proxy_blocker_3'] )//
+;
 
 if ( $submit )
 {
@@ -88,9 +82,7 @@ if ( $submit )
     $array_config_global['time_pattern'] = filter_text_input( 'time_pattern', 'post', '', 1, 255 );
     $array_config_global['my_domains'] = filter_text_input( 'my_domains', 'post', '', 1, 255 );
     
-    $my_domains = array( 
-        NV_SERVER_NAME 
-    );
+    $my_domains = array( NV_SERVER_NAME );
     if ( ! empty( $array_config_global['my_domains'] ) )
     {
         $array_config_global['my_domains'] = array_map( "trim", explode( ",", $array_config_global['my_domains'] ) );
@@ -142,21 +134,13 @@ if ( $submit )
     if ( $sys_info['supports_rewrite'] !== false )
     {
         $array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post', 0 );
-        if ( $array_config_global['is_url_rewrite'] == 1 )
-        {
-            require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
-            $errormess = nv_rewrite_change( $array_config_global );
-            if ( ! empty( $errormess ) )
-            {
-                $array_config_global['is_url_rewrite'] = 0;
-            }
-        }
     }
     
     foreach ( $array_config_global as $config_name => $config_value )
     {
         $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
     }
+    
     nv_save_file_config_global();
     if ( empty( $errormess ) )
     {
@@ -182,16 +166,16 @@ if ( $submit )
     }
 }
 
-$captcha_array = array(  //
-    0 => $lang_module['captcha_0'], //
+$captcha_array = array( //
+0 => $lang_module['captcha_0'], //
 1 => $lang_module['captcha_1'], //
 2 => $lang_module['captcha_2'], //
 3 => $lang_module['captcha_3'], //
 4 => $lang_module['captcha_4'], //
 5 => $lang_module['captcha_5'], //
 6 => $lang_module['captcha_6'], //
-7 => $lang_module['captcha_7']  //
-);
+7 => $lang_module['captcha_7'] )//
+;
 
 $array_config_global['gzip_method'] = ( $global_config['gzip_method'] ) ? ' checked="checked"' : '';
 $array_config_global['online_upd'] = ( $global_config['online_upd'] ) ? ' checked="checked"' : '';

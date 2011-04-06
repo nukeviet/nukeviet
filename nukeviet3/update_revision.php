@@ -22,6 +22,13 @@ function nv_func_update_data ( )
             $error_contents[] = 'error update sql revision: 902';
         }
     }
+    if ( $global_config['revision'] < 988 )
+    {
+        $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'rewrite_endurl', '/')" );
+        $array_config_rewrite = array( 'rewrite_optional' => $global_config['rewrite_optional'] );
+        nv_rewrite_change( $array_config_rewrite );
+    }
+    
     // End date data
     if ( empty( $error_contents ) )
     {
