@@ -14,9 +14,10 @@ if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
 if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
 if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
 if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
+if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
 $base_siteurl = $base_siteurl . "/";
 
-if ( preg_match( "/^" . preg_quote( $base_siteurl, "/" ) . "([a-z0-9\-\_\.\/]+)" . preg_quote( $global_config['rewrite_endurl'], "/" ) . "$/i", $_SERVER['REQUEST_URI'], $matches ) )
+if ( preg_match( "/^" . preg_quote( $base_siteurl, "/" ) . "[index\.php\/]*([a-z0-9\-\_\.\/]+)" . preg_quote( $global_config['rewrite_endurl'], "/" ) . "$/i", $_SERVER['REQUEST_URI'], $matches ) )
 {
     $request_uri_array = explode( "/", $matches[1], 3 );
     if ( in_array( $request_uri_array[0], array_keys( $language_array ) ) )

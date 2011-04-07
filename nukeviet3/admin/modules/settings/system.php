@@ -38,8 +38,8 @@ $proxy_blocker_array = array( //
 0 => $lang_module['proxy_blocker_0'], //
 1 => $lang_module['proxy_blocker_1'], //
 2 => $lang_module['proxy_blocker_2'], //
-3 => $lang_module['proxy_blocker_3'] )//
-;
+3 => $lang_module['proxy_blocker_3'] ); //
+
 
 if ( $submit )
 {
@@ -122,7 +122,7 @@ if ( $submit )
     }
     $array_config_global['str_referer_blocker'] = $nv_Request->get_int( 'str_referer_blocker', 'post' );
     
-    $array_config_global['is_url_rewrite'] = 0;
+    $array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post', 0 );
     if ( $array_config_global['lang_multi'] == 0 )
     {
         $array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post', 0 );
@@ -130,10 +130,6 @@ if ( $submit )
     else
     {
         $array_config_global['rewrite_optional'] = 0;
-    }
-    if ( $sys_info['supports_rewrite'] !== false )
-    {
-        $array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post', 0 );
     }
     
     foreach ( $array_config_global as $config_name => $config_value )
@@ -174,8 +170,8 @@ $captcha_array = array( //
 4 => $lang_module['captcha_4'], //
 5 => $lang_module['captcha_5'], //
 6 => $lang_module['captcha_6'], //
-7 => $lang_module['captcha_7'] )//
-;
+7 => $lang_module['captcha_7'] ); //
+
 
 $array_config_global['gzip_method'] = ( $global_config['gzip_method'] ) ? ' checked="checked"' : '';
 $array_config_global['online_upd'] = ( $global_config['online_upd'] ) ? ' checked="checked"' : '';
@@ -219,12 +215,7 @@ foreach ( $proxy_blocker_array as $proxy_blocker_i => $proxy_blocker_v )
     $xtpl->parse( 'main.proxy_blocker' );
 }
 
-if ( $sys_info['supports_rewrite'] !== false )
-{
-    $xtpl->assign( 'CHECKED1', ( $global_config['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
-    $xtpl->parse( 'main.support_rewrite' );
-}
-
+$xtpl->assign( 'CHECKED1', ( $global_config['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
 if ( $global_config['lang_multi'] == 0 )
 {
     $xtpl->assign( 'CHECKED2', ( $global_config['rewrite_optional'] == 1 ) ? ' checked ' : '' );

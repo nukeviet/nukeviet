@@ -83,7 +83,6 @@
                 </td>
             </tr>
         </tbody>
-        <!-- BEGIN: support_rewrite -->
         <tbody class="second">
             <tr>
                 <td>
@@ -94,7 +93,6 @@
                 </td>
             </tr>
         </tbody>
-		<!-- END: support_rewrite -->
 		<!-- BEGIN: rewrite_optional -->
         <tbody class="second">
             <tr>

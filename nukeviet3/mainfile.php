@@ -60,6 +60,7 @@ else
         $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
         if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
         if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
+        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
         if ( defined( 'NV_ADMIN' ) )
@@ -336,18 +337,13 @@ define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
 if ( $global_config['is_url_rewrite'] )
 {
     $check_rewrite_file = nv_check_rewrite_file();
-    if ( ! $check_rewrite_file )
-    {
-        $global_config['is_url_rewrite'] = 0;
-    }
-    if ( $global_config['is_url_rewrite'] )
+    if ( $check_rewrite_file )
     {
         require ( NV_ROOTDIR . "/includes/rewrite.php" );
     }
     else
     {
-        $db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`= '0' WHERE `module`='global' AND `config_name` = 'is_url_rewrite'" );
-        nv_delete_all_cache(); //xoa toan bo cache
+        require ( NV_ROOTDIR . "/includes/rewrite_index.php" );
     }
 }
 elseif ( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
