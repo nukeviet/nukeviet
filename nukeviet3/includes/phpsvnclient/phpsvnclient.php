@@ -384,16 +384,15 @@ class phpsvnclient
                 if ( $entry['name'] == 'D:CREATOR-DISPLAYNAME' ) $array['author'] = $entry['tagData'];
                 if ( $entry['name'] == 'S:DATE' ) $array['date'] = $entry['tagData'];
                 if ( $entry['name'] == 'D:COMMENT' ) $array['comment'] = $entry['tagData'];
-                
-                if ( ( $entry['name'] == 'S:ADDED-PATH' ) || ( $entry['name'] == 'S:MODIFIED-PATH' ) || ( $entry['name'] == 'S:DELETED-PATH' ) )
+                if ( ( $entry['name'] == 'S:ADDED-PATH' ) || ( $entry['name'] == 'S:MODIFIED-PATH' ) || ( $entry['name'] == 'S:DELETED-PATH' ) || ( $entry['name'] == 'S:REPLACED-PATH' ))
                 {
                     // For backward compatability
                     $array['files'][] = $entry['tagData'];
                     
                     if ( $entry['name'] == 'S:ADDED-PATH' ) $array['add_files'][] = $entry['tagData'];
-                    if ( $entry['name'] == 'S:MODIFIED-PATH' ) $array['mod_files'][] = $entry['tagData'];
+                    if ( $entry['name'] == 'S:MODIFIED-PATH' || $entry['name'] == 'S:REPLACED-PATH' ) $array['mod_files'][] = $entry['tagData'];
                     if ( $entry['name'] == 'S:DELETED-PATH' ) $array['del_files'][] = $entry['tagData'];
-                }
+                }                
             }
             array_push( $fileLogs, $array );
         }
