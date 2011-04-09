@@ -16,7 +16,7 @@ define( 'NV3_DIRECTORY_SNV', '/trunk/nukeviet3/' );
 
 function del_path_svn ( $path )
 {
-    return preg_replace( "/^" . preg_quote( NV3_DIRECTORY_SNV, "/" ) . "(.*)$/", "\\1", $path );
+    return preg_replace( "/^" . nv_preg_quote( NV3_DIRECTORY_SNV ) . "(.*)$/", "\\1", $path );
 }
 
 function nv_mkdir_svn ( $dirname )
@@ -96,7 +96,7 @@ else
         require ( NV_ROOTDIR . '/includes/phpsvnclient/phpsvnclient.php' );
         $svn = new phpsvnclient();
         $svn->setRepository( $repository_url );
-        
+
         $vend = $svn->getVersion();
         if ( $vend > $vini )
         {
@@ -143,7 +143,7 @@ else
                             }
                         }
                     }
-                    
+
                     if ( isset( $arr_log_i['add_files'] ) )
                     {
                         $array_remove_del = array();
@@ -163,11 +163,11 @@ else
                 asort( $add_files );
                 asort( $del_files );
                 asort( $edit_files );
-                
+
                 $svn_data_files = array( 'version' => $vend, 'add_files' => $add_files, 'del_files' => $del_files, 'edit_files' => $edit_files );
-                
+
                 file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log', serialize( $svn_data_files ), LOCK_EX );
-                
+
                 Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) );
                 exit();
             }
@@ -205,7 +205,7 @@ else
                     $check_del_dir_update = false;
                 }
             }
-            
+
             if ( $check_del_dir_update )
             {
                 if ( ! nv_mkdir_svn( 'install/update' ) )
@@ -220,12 +220,12 @@ else
                 {
                     nv_mkdir_svn( 'install/update/new' );
                     nv_mkdir_svn( 'install/update/old' );
-                    
+
                     @file_put_contents( NV_ROOTDIR . "/install/update/.htaccess", "deny from all", LOCK_EX );
                     @file_put_contents( NV_ROOTDIR . "/install/update/index.html", "", LOCK_EX );
                     @file_put_contents( NV_ROOTDIR . "/install/update/new/index.html", "", LOCK_EX );
                     @file_put_contents( NV_ROOTDIR . "/install/update/old/index.html", "", LOCK_EX );
-                    
+
                     $contents = '<div id="listfile">';
                     $contents .= '<div style="text-align:center;color:red;">' . $lang_module['revision_list_file'] . '</div>';
                     $contents .= '<div style="overflow:auto;height:300px;width:100%">';
@@ -235,7 +235,7 @@ else
                     $contents .= '</div>';
                     $contents .= '</div><br /><br />';
                     $contents .= $lang_module['revision_msg_download'];
-                    
+
                     $contents .= '<br /><br /><center><input style="margin-top:10px;font-size:15px" type="button" name="download_file" value="' . $lang_module['revision_download_files'] . '"/></center>';
                     $contents .= '<br /><br /><div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" /></div>';
                     $contents .= '<script type="text/javascript">
@@ -282,26 +282,23 @@ else
         $cache = file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log' );
         $svn_data_files = unserialize( $cache );
         $download_files = array_merge( $svn_data_files['edit_files'], $svn_data_files['add_files'] );
-        
+
         $vend = $nv_Request->get_int( 'getVersion', 'session', 0 );
         $getfile = $nv_Request->get_int( 'getfile', 'session', 0 );
-        
+
         require ( NV_ROOTDIR . '/includes/phpsvnclient/phpsvnclient.php' );
         $svn = new phpsvnclient();
         $svn->setRepository( $repository_url );
-        
+
         if ( $getfile < count( $download_files ) )
         {
             $file_name = $download_files[$getfile];
             $path = NV3_DIRECTORY_SNV . $file_name;
-            
-            // download new file 
+
+            // download new file
             $fileInfo = $svn->getDirectoryTree( $path, $vend, false );
-            if ( $fileInfo["type"] == "directory" )
-            {
-                $dirname = 'install/update/new/' . substr( $path, 17 );
-            }
-            else
+            $dirname = 'install/update/new/' . del_path_svn ( $path );
+            if ( $fileInfo["type"] != "directory" )
             {
                 $contents_f = $svn->getFile( $path, $vend );
                 if ( $contents_f === false )
@@ -312,10 +309,10 @@ else
                 else
                 {
                     $filename = basename( $path );
-                    $dirname = 'install/update/new/' . substr( $path, 17, - ( strlen( $filename ) + 1 ) );
+                    $dirname = substr( $dirname, 0, - ( strlen( $filename ) + 1 ) );
                 }
             }
-            
+
             if ( ! empty( $dirname ) and ! is_dir( NV_ROOTDIR . '/' . $dirname ) )
             {
                 if ( ! nv_mkdir_svn( $dirname ) )
@@ -343,7 +340,8 @@ else
                     else
                     {
                         $filename = basename( $path );
-                        $dirname = 'install/update/old/' . substr( $path, 17, - ( strlen( $filename ) + 1 ) );
+                        $dirname = 'install/update/old/' . del_path_svn ( $path );
+                        $dirname = substr( $dirname, 0, - ( strlen( $filename ) + 1 ) );
                         if ( ! empty( $dirname ) and ! is_dir( NV_ROOTDIR . '/' . $dirname ) )
                         {
                             if ( ! nv_mkdir_svn( $dirname ) )
@@ -375,7 +373,7 @@ else
             $path = NV3_DIRECTORY_SNV . "update_revision.php";
             $contents_f = $svn->getFile( $path, $vend );
             $contents_f = str_replace( "?>", "\n", $contents_f );
-            $contents_f .= "\$update_info = array( 
+            $contents_f .= "\$update_info = array(
 			    'revision' => array( 
 			    	'from' => '" . $vini . "', 'to' => '" . $vend . "' 
 				) 
@@ -384,10 +382,10 @@ else
             if ( ! empty( $svn_data_files['edit_files'] ) ) $contents_f .= "\$edit_files = array('" . implode( "',\n '", $svn_data_files['edit_files'] ) . "');\n\n\n";
             if ( ! empty( $svn_data_files['del_files'] ) ) $contents_f .= "\$delete_files = array('" . implode( "',\n '", $svn_data_files['del_files'] ) . "');\n\n\n";
             $contents_f .= "\n?>";
-            
+
             file_put_contents( NV_ROOTDIR . "/install/update/update.php", $contents_f, LOCK_EX );
             nv_deletefile( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log' );
-            
+
             die( "OK_DOWNLOADCOMPLETE" );
         }
     }
