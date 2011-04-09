@@ -78,7 +78,7 @@ $result = $db->sql_query( $query );
 $search_result = array();
 $search_result['caption'] = $lang_module['search_result_caption'];
 $search_result['thead'] = array( 
-    "UserId", $lang_global['nickname'], $lang_global['full_name'], $lang_global['email'], $lang_global['regdate'], $lang_global['last_login'] 
+    "UserId", $lang_global['username'], $lang_global['full_name'], $lang_global['email'], $lang_global['regdate'], $lang_global['last_login'] 
 );
 $search_result['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=";
 

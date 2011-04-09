@@ -27,7 +27,7 @@ if ( ! empty( $row['users'] ) )
     $users_in_group = array();
     $users_in_group['caption'] = sprintf( $lang_module['users_in_group_caption'], $group_title, $all_page );
     $users_in_group['thead'] = array( 
-        "UserId", $lang_global['nickname'], $lang_global['full_name'], $lang_global['email'], $lang_global['regdate'], $lang_global['last_login'] 
+        "UserId", $lang_global['username'], $lang_global['full_name'], $lang_global['email'], $lang_global['regdate'], $lang_global['last_login'] 
     );
     $users_in_group['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=";
     $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=groups_users&amp;group_id=" . $group_id;

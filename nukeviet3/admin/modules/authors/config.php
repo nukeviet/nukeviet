@@ -103,18 +103,18 @@ if ( $nv_Request->isset_request( 'savesetting', 'post' ) )
 if ( $nv_Request->isset_request( 'submituser', 'post' ) )
 {
     $uid = $nv_Request->get_int( 'uid', 'post', 0 );
-    $nickname = filter_text_input( 'nickname', 'post', '', 1 );
+    $username = filter_text_input( 'username', 'post', '', 1 );
     $password = filter_text_input( 'password', 'post', '', 1 );
     $password2 = filter_text_input( 'password2', 'post', '', 1 );
     $begintime1 = filter_text_input( 'begintime1', 'post', 0, 1 );
     $endtime1 = filter_text_input( 'endtime1', 'post', 0, 1 );
     
-    $errorlogin = nv_check_valid_login( $nickname, NV_UNICKMAX, NV_UNICKMIN );
+    $errorlogin = nv_check_valid_login( $username, NV_UNICKMAX, NV_UNICKMIN );
     if ( ! empty( $errorlogin ) )
     {
         $error[] = $errorlogin;
     }
-    elseif ( preg_match( "/[^a-zA-Z0-9_-]/", $nickname ) )
+    elseif ( preg_match( "/[^a-zA-Z0-9_-]/", $username ) )
     {
         $error[] = $lang_module['rule_user'];
     }
@@ -155,18 +155,18 @@ if ( $nv_Request->isset_request( 'submituser', 'post' ) )
     {
         if ( $uid > 0 and $password != "" )
         {
-            $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $nickname ) . ", `mask`='-1',`begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . ", `notice`=" . $db->dbescape( md5( $password ) ) . " WHERE `id`=" . $uid . "" );
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'], $lang_module['nickname_edit'] . " nickname: " . $nickname, $admin_info['userid'] );
+            $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $username ) . ", `mask`='-1',`begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . ", `notice`=" . $db->dbescape( md5( $password ) ) . " WHERE `id`=" . $uid . "" );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_edit'] . " username: " . $username, $admin_info['userid'] );
         }
         elseif ( $uid > 0 )
         {
-            $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $nickname ) . ", `mask`='-1',`begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . " WHERE `id`=" . $uid . "" );
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'], $lang_module['nickname_edit'] . " nickname: " . $nickname, $admin_info['userid'] );
+            $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $username ) . ", `mask`='-1',`begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . " WHERE `id`=" . $uid . "" );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_edit'] . " username: " . $username, $admin_info['userid'] );
         }
         else
         {
-            $db->sql_query( "REPLACE INTO `" . NV_AUTHORS_GLOBALTABLE . "_config` VALUES (NULL, " . $db->dbescape( $nickname ) . ",'-1',$begintime1, $endtime1," . $db->dbescape( md5( $password ) ) . " )" );
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_nickname'], $lang_module['nickname_add'] . " nickname: " . $nickname, $admin_info['userid'] );
+            $db->sql_query( "REPLACE INTO `" . NV_AUTHORS_GLOBALTABLE . "_config` VALUES (NULL, " . $db->dbescape( $username ) . ",'-1',$begintime1, $endtime1," . $db->dbescape( md5( $password ) ) . " )" );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_add'] . " username: " . $username, $admin_info['userid'] );
         }
         nv_save_file_admin_config();
         Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
@@ -175,7 +175,7 @@ if ( $nv_Request->isset_request( 'submituser', 'post' ) )
 }
 else
 {
-    $nickname = $password = $password2 = $begintime1 = $endtime1 = '';
+    $username = $password = $password2 = $begintime1 = $endtime1 = '';
 }
 
 if ( $nv_Request->isset_request( 'submitip', 'post' ) )
@@ -296,10 +296,10 @@ if ( $db->sql_numrows( $result ) )
 {
     $contents .= "<br />\n";
     $contents .= "<table id=\"iduser\" class=\"tab1\">\n";
-    $contents .= "<caption>" . $lang_module['title_nickname'] . "</caption>\n";
+    $contents .= "<caption>" . $lang_module['title_username'] . "</caption>\n";
     $contents .= "<thead>\n";
     $contents .= "<tr align=\"center\">\n";
-    $contents .= "<td>" . $lang_global['nickname'] . "</td>\n";
+    $contents .= "<td>" . $lang_global['username'] . "</td>\n";
     $contents .= "<td>" . $lang_module['adminip_timeban'] . "</td>\n";
     $contents .= "<td>" . $lang_module['adminip_timeendban'] . "</td>\n";
     $contents .= "<td>" . $lang_module['adminip_funcs'] . "</td>\n";
@@ -327,8 +327,8 @@ if ( $db->sql_numrows( $result ) )
 
 if ( ! empty( $uid ) )
 {
-    list( $nickname, $begintime1, $endtime1 ) = $db->sql_fetchrow( $db->sql_query( "SELECT keyname, begintime, endtime FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` = '-1' AND id=$uid" ) );
-    $lang_module['nickname_add'] = $lang_module['nickname_edit'];
+    list( $username, $begintime1, $endtime1 ) = $db->sql_fetchrow( $db->sql_query( "SELECT keyname, begintime, endtime FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` = '-1' AND id=$uid" ) );
+    $lang_module['username_add'] = $lang_module['username_edit'];
     $password2 = $password = "";
 }
 $contents .= "<form id = \"form_add_user\" action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
@@ -338,13 +338,13 @@ $contents .= "<input type=\"hidden\" name =\"uid\" value=\"" . $uid . "\" />";
 $contents .= "<table class=\"tab1\">\n";
 $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
-$contents .= "<td colspan='2'><strong>" . $lang_module['nickname_add'] . "</strong></td>\n";
+$contents .= "<td colspan='2'><strong>" . $lang_module['username_add'] . "</strong></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tbody class='second'>\n";
 $contents .= "<tr>\n";
-$contents .= "<td style=\"width:150px\">" . $lang_global['nickname'] . " (<span style='color:red'>*</span>)</td>\n";
-$contents .= "<td><input type='text' name='nickname' value='" . $nickname . "' style='width:200px'/></td>\n";
+$contents .= "<td style=\"width:150px\">" . $lang_global['username'] . " (<span style='color:red'>*</span>)</td>\n";
+$contents .= "<td><input type='text' name='username' value='" . $username . "' style='width:200px'/></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "<tbody>\n";
@@ -518,15 +518,15 @@ $contents .= "
 		}
 	});
 	$('input[name=submituser]').click(function(){
-		var nickname= $('input[name=nickname]').val();
+		var username= $('input[name=username]').val();
 		var nv_rule = /^([a-zA-Z0-9_-])+$/;
-		if (nickname==''){
-			$('input[name=nickname]').focus();
-			alert('" . addslashes( $lang_global['nickname_empty'] ) . "');
+		if (username==''){
+			$('input[name=username]').focus();
+			alert('" . addslashes( $lang_global['username_empty'] ) . "');
 			return false;
 		}
-		else if (!nv_rule.test(nickname)){
-			$('input[name=nickname]').focus();
+		else if (!nv_rule.test(username)){
+			$('input[name=username]').focus();
 			alert('" . addslashes( $lang_module['rule_user'] ) . "');
 			return false;
 		}

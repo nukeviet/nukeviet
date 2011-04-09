@@ -440,9 +440,9 @@ function nv_check_valid_login ( $login, $max, $min )
 {
     global $lang_global, $global_config;
     $login = strip_tags( trim( $login ) );
-    if ( empty( $login ) ) return $lang_global['nickname_empty'];
-    elseif ( strlen( $login ) > $max ) return sprintf( $lang_global['nicknamelong'], $login, $max );
-    elseif ( strlen( $login ) < $min ) return sprintf( $lang_global['nicknameadjective'], $login, $min );
+    if ( empty( $login ) ) return $lang_global['username_empty'];
+    elseif ( strlen( $login ) > $max ) return sprintf( $lang_global['usernamelong'], $login, $max );
+    elseif ( strlen( $login ) < $min ) return sprintf( $lang_global['usernameadjective'], $login, $min );
     else return "";
 }
 

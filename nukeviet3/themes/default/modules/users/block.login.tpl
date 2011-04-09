@@ -3,7 +3,7 @@
     <fieldset>
         <p>
             <label for="block_login_iavim">
-                {LANG.nickname} 
+                {LANG.username} 
             </label>
             <input id="block_login_iavim" name="nv_login" value="" type="text" class="txt" maxlength="{NICK_MAXLENGTH}" />
         </p>

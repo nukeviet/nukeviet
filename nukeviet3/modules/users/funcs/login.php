@@ -59,35 +59,35 @@ function set_reg_attribs ( $attribs )
     $reg_attribs['openid'] = $attribs['id'];
     $reg_attribs['opid'] = $crypt->hash( $attribs['id'] );
     
-    $nickname = explode( "@", $attribs['contact/email'] );
-    $nickname = array_shift( $nickname );
+    $username = explode( "@", $attribs['contact/email'] );
+    $username = array_shift( $username );
     
     if ( $attribs['server'] == 'yahoo' )
     {
-        $reg_attribs['yim'] = $nickname;
+        $reg_attribs['yim'] = $username;
     }
     
-    $nickname = str_pad( $nickname, NV_UNICKMIN, "0", STR_PAD_RIGHT );
-    $nickname = substr( $nickname, 0, ( NV_UNICKMAX - 2 ) );
-    $nickname2 = $nickname;
+    $username = str_pad( $username, NV_UNICKMIN, "0", STR_PAD_RIGHT );
+    $username = substr( $username, 0, ( NV_UNICKMAX - 2 ) );
+    $username2 = $username;
     for ( $i = 0; $i < 100; $i ++ )
     {
         if ( $i > 0 )
         {
-            $nickname2 = $nickname . str_pad( $i, 2, "0", STR_PAD_LEFT );
+            $username2 = $username . str_pad( $i, 2, "0", STR_PAD_LEFT );
         }
         
-        $query = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `username`=" . $db->dbescape( $nickname2 );
+        $query = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `username`=" . $db->dbescape( $username2 );
         $result = $db->sql_query( $query );
         $numrows = $db->sql_numrows( $result );
         if ( ! $numrows )
         {
-            $query = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `username`=" . $db->dbescape( $nickname2 );
+            $query = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `username`=" . $db->dbescape( $username2 );
             $result = $db->sql_query( $query );
             $numrows = $db->sql_numrows( $result );
             if ( ! $numrows )
             {
-                $reg_attribs['username'] = $nickname2;
+                $reg_attribs['username'] = $username2;
                 break;
             }
         }
@@ -411,7 +411,7 @@ function openidLogin_Res1 ( $attribs )
             }
             elseif ( empty( $nv_username ) )
             {
-                $error = $lang_global['nickname_empty'];
+                $error = $lang_global['username_empty'];
             }
             elseif ( empty( $nv_password ) )
             {
@@ -653,7 +653,7 @@ if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
     }
     elseif ( empty( $nv_username ) )
     {
-        $error = $lang_global['nickname_empty'];
+        $error = $lang_global['username_empty'];
     }
     elseif ( empty( $nv_password ) )
     {

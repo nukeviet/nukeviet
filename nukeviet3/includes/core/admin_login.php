@@ -56,7 +56,7 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
     }
     if ( empty( $nv_username ) )
     {
-        $error = $lang_global['nickname_empty'];
+        $error = $lang_global['username_empty'];
     }
     elseif ( empty( $nv_password ) )
     {
@@ -196,7 +196,7 @@ $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'CHECK_SC', ( $global_config['gfx_chk'] == 1 ) ? 1 : 0 );
 $xtpl->assign( 'LOGIN_TITLE', $lang_global['adminlogin'] );
 $xtpl->assign( 'LOGIN_INFO', $info );
-$xtpl->assign( 'N_LOGIN', $lang_global['nickname'] );
+$xtpl->assign( 'N_LOGIN', $lang_global['username'] );
 $xtpl->assign( 'N_PASSWORD', $lang_global['password'] );
 $xtpl->assign( 'SITEURL', $global_config['site_url'] );
 $xtpl->assign( 'N_SUBMIT', $lang_global['loginsubmit'] );

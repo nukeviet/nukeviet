@@ -2,7 +2,7 @@
 <form action="{USER_LOGIN}" method="post">
     <div class="block-login">
         <div class="box clearfix">
-            <input id="block_login_iavim" name="nv_login" type="text" class="input fl" maxlength="{NICK_MAXLENGTH}" onblur="if(this.value=='')this.value='{LANG.nickname} ';" onclick="if(this.value=='{LANG.nickname} ')this.value='';" value="{LANG.nickname} " /><input id="block_password_iavim" type="password" name="nv_password" value="" class="input fr" maxlength="{PASS_MAXLENGTH}" />
+            <input id="block_login_iavim" name="nv_login" type="text" class="input fl" maxlength="{NICK_MAXLENGTH}" onblur="if(this.value=='')this.value='{LANG.username} ';" onclick="if(this.value=='{LANG.username} ')this.value='';" value="{LANG.username} " /><input id="block_password_iavim" type="password" name="nv_password" value="" class="input fr" maxlength="{PASS_MAXLENGTH}" />
         </div>
         <!-- BEGIN: captcha -->
             <div class="box clearfix">

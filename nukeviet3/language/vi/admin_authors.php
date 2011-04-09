@@ -135,12 +135,12 @@ $lang_module['adminip_error_ip'] = "Hãy nhập Ip được truy cập khu vực
 $lang_module['adminip_error_validip'] = "Lỗi: Bạn cần nhập IP đúng chuẩn";
 $lang_module['adminip_note'] = "Chú ý: nếu chọn chế độ Kiểm tra IP, bạn cần nắm được cấu trúc sau: Mỗi số IP được xác định bằng 4 đại lượng A.B.C.D. Nếu số IP của bạn có cả 4 đại lượng A, B, C, D bất biến, hãy chọn giá trị của dòng 'Mask IP' là 255.255.255.255. Nếu chỉ có A, B, C cố định - chọn 255.255.255.xxx v.v...";
 
-$lang_module['title_nickname'] = "Quản lý tài khoản tường lửa khu vực admin";
+$lang_module['title_username'] = "Quản lý tài khoản tường lửa khu vực admin";
 
 $lang_module['admfirewall'] = "Kiểm tra tường lửa cho khu vực admin";
 $lang_module['block_admin_ip'] = "Kiểm tra IP khi truy cập khu vực admin";
-$lang_module['nickname_add'] = "Thêm tài khoản";
-$lang_module['nickname_edit'] = "Sửa tài khoản";
+$lang_module['username_add'] = "Thêm tài khoản";
+$lang_module['username_edit'] = "Sửa tài khoản";
 $lang_module['nicknam_delete_confirm'] = "Bạn có chắc muốn xóa tài khoản này ra khỏi danh sách?";
 $lang_module['passwordsincorrect'] = "Mật khẩu bạn nhập hai lần không giống nhau.";
 $lang_module['nochangepass'] = "Nếu không thay đổi mật khẩu bạn không nhập hai trường mật khẩu";
