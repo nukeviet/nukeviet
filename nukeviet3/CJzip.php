@@ -66,7 +66,10 @@ class CJzip
         if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
         if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
-        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
+        if ( ! empty( $base_siteurl ) ) {
+        	$base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
+        	$base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
+        }
         $this->base_siteurl = $base_siteurl . '/';
 
         $filename = $_GET[$this->getName];

@@ -30,7 +30,10 @@ $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
 if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
 if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
-if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
+if ( ! empty( $base_siteurl ) ) {
+	$base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
+    $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
+}
 $base_siteurl .= '/';
 $rootDir = str_replace( '\\', '/', realpath( dirname( __file__ ) ) );
 $dirs = scandir( $rootDir );

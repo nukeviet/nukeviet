@@ -60,7 +60,11 @@ class optimezer
         if ( defined( 'NV_ADMIN' ) )
         {
             $base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
-        }        
+        }
+        elseif ( ! empty( $base_siteurl ) )
+        {
+           $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
+        }
         $this->base_siteurl = $base_siteurl . '/';
         $this->_tidySupport = $tidySupport;
     }

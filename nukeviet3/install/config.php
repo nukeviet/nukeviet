@@ -29,7 +29,7 @@ $global_config['sitekey'] = "";
 
 $global_config['site_timezone'] = "Asia/Bangkok";
 $global_config['gzip_method'] = 1;
-$global_config['is_url_rewrite'] = 0;
+$global_config['is_url_rewrite'] = 1;
 
 $global_config['proxy_blocker'] = 0;
 $global_config['str_referer_blocker'] = 0;
@@ -43,6 +43,6 @@ $global_config['gfx_chk'] = 3;
 $array_config_rewrite = array( 'rewrite_optional' => 0 );
 
 $global_config['version'] = "3.1.03"; //NUKEVIET 3.1
-$global_config['revision'] = 980;
+$global_config['revision'] = 992;
 
 ?>

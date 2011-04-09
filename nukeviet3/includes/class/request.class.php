@@ -342,7 +342,6 @@ class Request
         if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
-        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
         if ( defined( 'NV_WYSIWYG' ) and ! defined( 'NV_ADMIN' ) )
         {
             $base_siteurl = preg_replace( "#/" . NV_EDITORSDIR . "(.*)$#", '', $base_siteurl );
@@ -350,6 +349,10 @@ class Request
         elseif ( defined( 'NV_ADMIN' ) )
         {
             $base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
+        }
+        elseif ( ! empty( $base_siteurl ) )
+        {
+            $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
         }
         if ( NV_ROOTDIR !== $doc_root . $base_siteurl )
         {
