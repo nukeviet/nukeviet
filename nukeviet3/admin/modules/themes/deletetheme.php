@@ -37,13 +37,25 @@ if ( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme )
         $result = nv_deletefile( NV_ROOTDIR . '/themes/' . trim( $theme ), true );
         if ( ! empty( $result[0] ) )
         {
-            $sql = "DELETE FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `theme` = " . $db->dbescape_string( $theme ) . "";
-            $result = $db->sql_query( $sql );
+            $db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `theme` = " . $db->dbescape_string( $theme ) );
+            
+            $db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid` IN (SELECT `bid` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `theme`=" . $db->dbescape_string( $theme ) . ")" );
+            $db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `theme` = " . $db->dbescape_string( $theme ) );
             
             $db->sql_query( "LOCK TABLE `" . NV_PREFIXLANG . "_modthemes` WRITE" );
             $db->sql_query( "REPAIR TABLE `" . NV_PREFIXLANG . "_modthemes`" );
             $db->sql_query( "OPTIMIZE TABLE `" . NV_PREFIXLANG . "_modthemes`" );
             $db->sql_query( "UNLOCK TABLE `" . NV_PREFIXLANG . "_modthemes`" );
+            
+            $db->sql_query( "LOCK TABLE `" . NV_BLOCKS_TABLE . "_weight` WRITE" );
+            $db->sql_query( "REPAIR TABLE `" . NV_BLOCKS_TABLE . "_weight`" );
+            $db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_weight`" );
+            $db->sql_query( "UNLOCK TABLE `" . NV_BLOCKS_TABLE . "_weight`" );
+            
+            $db->sql_query( "LOCK TABLE `" . NV_BLOCKS_TABLE . "_groups` WRITE" );
+            $db->sql_query( "REPAIR TABLE `" . NV_BLOCKS_TABLE . "_groups`" );
+            $db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_groups`" );
+            $db->sql_query( "UNLOCK TABLE `" . NV_BLOCKS_TABLE . "_modthemes`" );
             
             nv_del_moduleCache( 'themes' );
             echo $lang_module['theme_created_delete_theme_success'];
