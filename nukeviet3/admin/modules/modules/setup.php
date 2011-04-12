@@ -12,7 +12,7 @@ if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $setmodule = filter_text_input( 'setmodule', 'get', '', 1 );
 if ( ! empty( $setmodule ) )
 {
-    if ( filter_text_input( 'checkss', 'get' ) == md5( $setmodule . session_id() . $global_config['sitekey'] ) )
+    if ( filter_text_input( 'checkss', 'get' ) == md5( "setmodule" . $setmodule . session_id() . $global_config['sitekey'] ) )
     {
         $query = "SELECT `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $setmodule );
         $result = $db->sql_query( $query );
@@ -38,7 +38,7 @@ if ( ! empty( $setmodule ) )
             {
                 nv_setup_block_module( $setmodule );
                 nv_del_moduleCache( 'themes' );
-                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['modules'] . ' '.$setmodule.'"', '', $admin_info['userid'] );
+                nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['modules'] . ' ' . $setmodule . '"', '', $admin_info['userid'] );
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=edit&mod=" . $setmodule );
                 die();
             }
@@ -46,6 +46,51 @@ if ( ! empty( $setmodule ) )
     }
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
     die();
+}
+$delmodule = filter_text_input( 'delmodule', 'get', '', 1 );
+if ( ! empty( $delmodule ) )
+{
+    if ( filter_text_input( 'checkss', 'get' ) == md5( "delmodule" . $delmodule . session_id() . $global_config['sitekey'] ) )
+    {
+        $module_exit = array();
+        $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where setup='1'";
+        $result = $db->sql_query( $sql );
+        while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+        {
+            list( $nmd ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modules` WHERE `module_file`=" . $db->dbescape_string( $delmodule ) ) );
+            if ( $nmd > 0 )
+            {
+                $module_exit[] = $lang_i;
+            }
+        }
+        if ( empty( $lang_i ) )
+        {
+            $theme_list_site = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme'] );
+            $theme_list_admin = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme_admin'] );
+            $theme_list = array_merge( $theme_list_site, $theme_list_admin );
+            foreach ( $theme_list as $theme )
+            {
+                if ( file_exists( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $delmodule . '.css' ) )
+                {
+                    nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $delmodule . '.css' );
+                }
+                if ( is_dir( NV_ROOTDIR . '/themes/' . $theme . '/images/' . $delmodule ) )
+                {
+                    nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/images/' . $delmodule, true );
+                }
+                if ( is_dir( NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $delmodule ) )
+                {
+                    nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $delmodule, true );
+                }
+            }
+            if ( is_dir( NV_ROOTDIR . '/modules/' . $delmodule . '/' ) )
+            {
+                nv_deletefile( NV_ROOTDIR . '/modules/' . $delmodule . '/', true );
+            }
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+            die();
+        }
+    }
 }
 
 $page_title = $lang_module['modules'];
@@ -91,16 +136,14 @@ foreach ( $arr_module_news as $module_name_i => $arr )
         if ( empty( $module_version ) )
         {
             $timestamp = NV_CURRENTTIME - date( 'Z', NV_CURRENTTIME );
-            $module_version = array( 
-                "name" => $module_name_i, //
+            $module_version = array( "name" => $module_name_i, //
 "modfuncs" => "main", //
 "is_sysmod" => 0, //
 "virtual" => 0, //
 "version" => "3.0.01", //
 "date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
 "author" => "", //
-"note" => "" 
-            );
+"note" => "" );
         }
         $date_ver = intval( strtotime( $module_version['date'] ) );
         if ( $date_ver == 0 )
@@ -151,10 +194,13 @@ foreach ( $modules_data as $row )
         $mod['author'] = $row['author'];
         $mod['note'] = $row['note'];
         $mod['setup'] = "";
+        $mod['delete'] = "";
         if ( array_key_exists( $row['title'], $news_modules_for_lang ) )
         {
-            $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;setmodule=" . $row['title'] . "&amp;checkss=" . md5( $row['title'] . session_id() . $global_config['sitekey'] );
+            $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;setmodule=" . $row['title'] . "&amp;checkss=" . md5( "setmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
             $mod['setup'] = "<span class=\"default_icon\"><a href=\"" . $url . "\">" . $lang_module['setup'] . "</a></span>";
+            $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delmodule=" . $row['title'] . "&amp;checkss=" . md5( "delmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
+            $mod['delete'] = " - <span class=\"delete_icon\"><a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a></span>";
         }
         if ( $mod['module_file'] == $mod['title'] )
         {
@@ -170,20 +216,10 @@ foreach ( $modules_data as $row )
         }
     }
 }
-$contents['thead'] = array( 
-    $lang_module['weight'], $lang_module['module_name'], $lang_module['custom_title'], $lang_module['version'], $lang_module['in_menu'] . "(*)", $lang_module['submenu'] . "(**)", $lang_global['activate'], $lang_global['actions'] 
-);
+$contents['thead'] = array( $lang_module['weight'], $lang_module['module_name'], $lang_module['custom_title'], $lang_module['version'], $lang_module['in_menu'] . "(*)", $lang_module['submenu'] . "(**)", $lang_global['activate'], $lang_global['actions'] );
 
-$array_head = array( 
-    "caption" => $lang_module['module_sys'], "head" => array( 
-    $lang_module['weight'], $lang_module['module_name'], $lang_module['version'], $lang_module['settime'], $lang_module['author'], "" 
-) 
-);
-$array_virtual_head = array( 
-    "caption" => $lang_module['vmodule'], "head" => array( 
-    $lang_module['weight'], $lang_module['module_name'], $lang_module['vmodule_file'], $lang_module['settime'], $lang_module['vmodule_note'], "" 
-) 
-);
+$array_head = array( "caption" => $lang_module['module_sys'], "head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['version'], $lang_module['settime'], $lang_module['author'], "" ) );
+$array_virtual_head = array( "caption" => $lang_module['vmodule'], "head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['vmodule_file'], $lang_module['settime'], $lang_module['vmodule_note'], "" ) );
 $contents = call_user_func( "setup_modules", $array_head, $array_modules, $array_virtual_head, $array_virtual_modules );
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

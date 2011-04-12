@@ -647,7 +647,7 @@ if ( $module_name == "modules" )
             $return .= "<td>" . $values['version'] . "</td>\n";
             $return .= "<td>" . $values['addtime'] . "</td>\n";
             $return .= "<td>" . $values['author'] . "</td>\n";
-            $return .= "<td>" . $values['setup'] . "</td>\n";
+            $return .= "<td>" . $values['setup'] . "  ". $values['delete'] . "</td>\n";
             $return .= "</tr>\n";
             $return .= "</tbody>\n";
         }
