@@ -18,7 +18,7 @@ if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "#/index\.php(.*)$
 $base_siteurl = $base_siteurl . "/";
 
 $request_uri = preg_replace( "/(" . nv_preg_quote( $base_siteurl ) . ")index\.php\//", "\\1", $_SERVER['REQUEST_URI'] );
-if ( preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "[index\.php\/]*([a-z0-9\-\_\.\/]+)" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "$/i", $request_uri, $matches ) )
+if ( preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_\.\/]+)" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "$/i", $request_uri, $matches ) )
 {
     $request_uri_array = explode( "/", $matches[1], 3 );
     if ( in_array( $request_uri_array[0], array_keys( $language_array ) ) )
