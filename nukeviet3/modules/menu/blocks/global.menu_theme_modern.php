@@ -15,7 +15,11 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
     {
         global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $op, $lang_module, $catid, $lang_global;
         
-        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/menu_theme_modern.tpl" ) )
+        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/menu/menu_theme_modern.tpl" ) )
+        {
+            $block_theme = $global_config['module_theme'];
+        }
+        elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/menu_theme_modern.tpl" ) )
         {
             $block_theme = $global_config['site_theme'];
         }
