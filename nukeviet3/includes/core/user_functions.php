@@ -18,7 +18,8 @@ function nv_site_mods ( )
 {
     global $admin_info, $user_info, $global_config;
     
-    $sql = "SELECT * FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE m.act = 1 AND f.in_module = m.title ORDER BY m.weight, f.subweight";
+    $sql = "SELECT * FROM  `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight";
+    
     $list = nv_db_cache( $sql, '', 'modules' );
     
     if ( empty( $list ) ) return array();
@@ -68,7 +69,6 @@ function nv_site_mods ( )
         if ( $allowed )
         {
             $m_title = $row['title'];
-            $func_name = $row['func_name'];
             if ( ! isset( $site_mods[$m_title] ) )
             {
                 $site_mods[$m_title]['module_file'] = $row['module_file'];
@@ -83,12 +83,15 @@ function nv_site_mods ( )
                 $site_mods[$m_title]['is_modadmin'] = $is_modadmin;
                 $site_mods[$m_title]['rss'] = $row['rss'];
             }
-            
-            $site_mods[$m_title]['funcs'][$func_name]['func_id'] = $row['func_id'];
-            $site_mods[$m_title]['funcs'][$func_name]['show_func'] = $row['show_func'];
-            $site_mods[$m_title]['funcs'][$func_name]['func_custom_name'] = $row['func_custom_name'];
-            $site_mods[$m_title]['funcs'][$func_name]['in_submenu'] = $row['in_submenu'];
-            $site_mods[$m_title]['funcs'][$func_name]['layout'] = $row['layout'];
+            $func_name = $row['func_name'];
+            if ( ! empty( $func_name ) )
+            {
+                $site_mods[$m_title]['funcs'][$func_name]['func_id'] = $row['func_id'];
+                $site_mods[$m_title]['funcs'][$func_name]['show_func'] = $row['show_func'];
+                $site_mods[$m_title]['funcs'][$func_name]['func_custom_name'] = $row['func_custom_name'];
+                $site_mods[$m_title]['funcs'][$func_name]['in_submenu'] = $row['in_submenu'];
+                $site_mods[$m_title]['funcs'][$func_name]['layout'] = $row['layout'];
+            }
         }
     }
     unset( $row, $allowed, $m_title, $func_name );
@@ -111,9 +114,7 @@ function nv_create_submenu ( )
             $func_custom_name = trim( ! empty( $values['func_custom_name'] ) ? $values['func_custom_name'] : $key );
             $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . ( $key != "main" ? "&amp;" . NV_OP_VARIABLE . "=" . $key : "" );
             $act = $key == $op ? 1 : 0;
-            $nv_vertical_menu[] = array( 
-                $func_custom_name, $link, $act 
-            );
+            $nv_vertical_menu[] = array( $func_custom_name, $link, $act );
         }
     }
 }
@@ -185,9 +186,7 @@ function nv_blocks_content ( )
                         $title = "<a href=\"" . $row_bl['link'] . "\">" . $title . "</a>";
                     }
                     # comment this line
-                    $__blocks[$__pos][] = array( 
-                        'bid' => $row_bl['bid'], 'title' => $title, 'module' => $row_bl['module'], 'file_name' => $row_bl['file_name'], 'template' => $row_bl['template'], 'config' => $row_bl['config'] 
-                    );
+                    $__blocks[$__pos][] = array( 'bid' => $row_bl['bid'], 'title' => $title, 'module' => $row_bl['module'], 'file_name' => $row_bl['file_name'], 'template' => $row_bl['template'], 'config' => $row_bl['config'] );
                 }
             }
         }
@@ -252,9 +251,9 @@ function nv_blocks_content ( )
                             $b_content = '<div class="portlet" id="bl_' . ( $__values['bid'] ) . '">
                             <p>
                             <a href="javascript:void(0)" class="block_content" name="' . $__values['bid'] . '">
-                                <img src="' . NV_BASE_SITEURL . 'images/edit.png" style="border:none"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $__values['bid'] . '">
-                                <img src="' . NV_BASE_SITEURL . 'images/delete.png" style="border:none"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $__values['bid'] . '">
-                                <img src="' . NV_BASE_SITEURL . 'images/outgroup.png" style="border:none"/> ' . $lang_global['outgroup_block'] . '</a>
+                                <img style="border:none" src="' . NV_BASE_SITEURL . 'images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $__values['bid'] . '">
+                                <img style="border:none" src="' . NV_BASE_SITEURL . 'images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $__values['bid'] . '">
+                                <img style="border:none" src="' . NV_BASE_SITEURL . 'images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
                             </p>
                             ' . $b_content . '</div>';
                         }
@@ -271,7 +270,7 @@ function nv_blocks_content ( )
         {
             $__blocks_return[$__pos] = '<div class="column" id="' . ( preg_replace( '#\[|\]#', '', $__pos ) ) . '">';
             $__blocks_return[$__pos] .= $b_content;
-            $__blocks_return[$__pos] .= '	<span><a class="block_content" id="' . $__pos . '" href="javascript:void(0)"><img src="' . NV_BASE_SITEURL . 'images/add.png" style="border:none"/> ' . $lang_global['add_block'] . '</a></span>';
+            $__blocks_return[$__pos] .= '	<span><a class="block_content" id="' . $__pos . '" href="javascript:void(0)"><img style="border:none" src="' . NV_BASE_SITEURL . 'images/add.png" alt="' . $lang_global['add_block'] . '"/> ' . $lang_global['add_block'] . '</a></span>';
             $__blocks_return[$__pos] .= '</div>';
         }
     

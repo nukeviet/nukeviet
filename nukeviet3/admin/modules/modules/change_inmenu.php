@@ -20,11 +20,21 @@ if ( $numrows != 1 )
     die( 'NO_' . $mod );
 }
 
-$row = $db->sql_fetchrow( $result );
-$in_menu = $row['in_menu'] ? 0 : 1;
+$include_file = NV_ROOTDIR . "/modules/" . $mod . "/funcs/main.php";
+if ( file_exists( $include_file ) and filesize( $include_file ) != 0 )
+{
+    $row = $db->sql_fetchrow( $result );
+    $in_menu = $row['in_menu'] ? 0 : 1;
+}
+else
+{
+    $in_menu = 0;
+}
+
 $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `in_menu`=" . $in_menu . " WHERE `title`=" . $db->dbescape( $mod );
 $db->sql_query( $sql );
 nv_del_moduleCache( 'modules' );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK_' . $mod;
 include ( NV_ROOTDIR . "/includes/footer.php" );
