@@ -50,6 +50,15 @@ if ( ! empty( $submit ) )
             $image = substr( $image, $lu );
         }
     }
+	
+    if ( ! empty( $url ) )
+    {
+        if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $url ) )
+        {
+            $url = "http://" . $url;
+        }
+    }
+	
     $admin_phone = "";
     $admin_email = "";
     $note = "";
