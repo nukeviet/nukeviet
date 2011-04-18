@@ -29,6 +29,23 @@ function nv_func_update_data ( )
         nv_rewrite_change( $array_config_rewrite );
     }
     
+    if ( $global_config['revision'] < 1004 )
+    {
+        $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
+        $result = $db->sql_query( $sql );
+        while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+        {
+            $sql = "SELECT title FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modules` WHERE `module_file`='menu'";
+            $result_mod = $db->sql_query( $sql );
+            while ( list( $mod ) = $db->sql_fetchrow( $result_mod ) )
+            {
+                $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_i . "_blocks_weight` WHERE `func_id` in (SELECT `func_id` FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modfuncs` WHERE `in_module`='" . $mod . "')" );
+                $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modfuncs` WHERE `in_module`='" . $mod . "'" );
+            }
+        }
+        nv_delete_all_cache();
+    }    
+    
     // End date data
     if ( empty( $error_contents ) )
     {

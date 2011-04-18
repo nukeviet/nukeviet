@@ -82,8 +82,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (44, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, 'body-right', ''),
 (45, 'adv', 'Adv', 'search', 0, 0, 0, 'body-right', ''),
 (46, 'main', 'Main', 'search', 1, 0, 1, 'left-body-right', ''),
-(47, 'main', 'Main', 'rss', 1, 0, 1, 'left-body-right', ''),
-(48, 'main', 'Main', 'menu', 1, 0, 1, 'left-body-right', '')";
+(47, 'main', 'Main', 'rss', 1, 0, 1, 'left-body-right', '')";
 
 $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
 (0, 'body-right', 'modern'),
@@ -598,7 +597,6 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (18, 42, 1),
 (18, 43, 1),
 (18, 27, 1),
-(18, 48, 1),
 (18, 5, 1),
 (18, 6, 1),
 (18, 7, 1),
@@ -630,7 +628,6 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (19, 42, 1),
 (19, 43, 1),
 (19, 27, 1),
-(19, 48, 1),
 (19, 5, 1),
 (19, 6, 1),
 (19, 7, 1),

@@ -177,7 +177,7 @@ if ( preg_match( $global_config['check_module'], $module_name ) )
             require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/" . $op . ".php" );
             exit();
         }
-        else
+        elseif (isset( $module_info['funcs']['main'] )) 
         {
             $db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=2 WHERE `title`=" . $db->dbescape( $module_name ) );
             nv_del_moduleCache( 'modules' );
