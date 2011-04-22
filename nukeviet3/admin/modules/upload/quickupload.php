@@ -12,16 +12,27 @@ $CKEditorFuncNum = $nv_Request->get_string( 'CKEditorFuncNum', 'post,get', 0 );
 $imgfolder = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'post,get' ) );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $imgfolder );
 
+function SendUploadResults ( $errorNumber, $fileUrl = "", $fileName = "", $customMsg = "" )
+{
+    global $CKEditorFuncNum;
+    if ( $CKEditorFuncNum )
+    {
+        echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . $fileUrl . "', '" . $customMsg . "');</script>";
+    }
+    else
+    {
+        echo "<script type=\"text/javascript\">(function(){var d=document.domain;while (true){try{var A=window.parent.document.domain;break;}catch(e) {};d=d.replace(/.*?(?:\.|$)/,'');if (d.length==0) break;try{document.domain=d;}catch (e){break;}}})();window.parent.OnUploadCompleted($errorNumber,\"" . $fileUrl . "\",\"" . $fileName . "\", \"" . $customMsg . "\");</script>";
+    }
+    exit();
+}
 if ( ! isset( $check_allow_upload_dir['upload_file'] ) )
 {
-    echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $lang_module['notlevel'] . "');</script>";
-    exit();
+    SendUploadResults( 1, "", "", $lang_module['notlevel'] );
 }
 
 if ( ! isset( $_FILES, $_FILES['upload'], $_FILES['upload']['tmp_name'] ) )
 {
-    echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $lang_module['errorNotSelectFile'] . "');</script>";
-    exit();
+    SendUploadResults( 1, "", "", $lang_module['errorNotSelectFile'] );
 }
 
 $type = $nv_Request->get_string( 'type', 'post,get' );
@@ -41,8 +52,7 @@ elseif ( empty( $type ) )
 
 if ( empty( $allow_files_type ) )
 {
-    echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $lang_module['notlevel'] . "');</script>";
-    exit();
+    SendUploadResults( 1, "", "", $lang_module['notlevel'] );
 }
 
 require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
@@ -51,14 +61,12 @@ $upload_info = $upload->save_file( $_FILES['upload'], NV_ROOTDIR . '/' . $imgfol
 
 if ( ! empty( $upload_info['error'] ) )
 {
-    echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $upload_info['error'] . "');</script>";
-    exit();
+    SendUploadResults( 1, "", "", $upload_info['error'] );
 }
 
 nv_filesList( $imgfolder, false, $upload_info['basename'] );
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $imgfolder . "/" . $upload_info['basename'], $admin_info['userid'] );
 
-echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $imgfolder . "/" . $upload_info['basename'] . "', '');</script>";
-exit();
+SendUploadResults( 0, NV_BASE_SITEURL . $imgfolder . "/" . $upload_info['basename'], $upload_info['basename'], "" );
 
 ?>

@@ -19,6 +19,11 @@ $(".imgcontent").dblclick(function() {
   if($("input[name=CKEditorFuncNum]").val() > 0 || $("input[name=area]").val() != "") {
     insertvaluetofield()
   }
+  else if (window.top.opener!=null){
+      window.top.opener.SetUrl(nv_base_siteurl + $("span#foldervalue").attr("title") + "/" + $("input[name=selFile]").val());
+      window.top.close();
+      window.top.opener.focus();
+  }
 });
 
 $(".imgcontent").contextMenu("contextMenu", {menuStyle:{width:"120px"}, bindings:{select:function() {
