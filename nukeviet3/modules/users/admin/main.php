@@ -199,7 +199,7 @@ foreach ( $users_list as $u )
             $xtpl->parse( 'main.xusers.asel' );
         }
     }
-    else
+    elseif ( !defined( 'NV_IS_USER_FORUM' ) )
     {
         if ( $u['is_edit'] )
         {

@@ -20,7 +20,7 @@ $lang_translator['langtype'] ="lang_module";
 
 $lang_module['modforum'] = "La gestion de membres est gérée par le forum %1\$s.";
 /*
-	 vietnam:	  Chức năng quản lý thành viên hiện do diễn đàn quản lý. Các lệnh thực thi của bạn chỉ có tác dụng đối với các thành viên là Quản trị của website
+	 vietnam:	  Chức năng quản lý thành viên hiện do diễn đàn quản lý.
 	 english:	  Members management by forum %1\$s.
 */
 

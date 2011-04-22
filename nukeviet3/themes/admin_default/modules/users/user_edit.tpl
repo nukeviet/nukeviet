@@ -19,6 +19,7 @@
 </div>
 <div class="clear"></div>
 <!-- END: error -->
+<!-- BEGIN: edit_user -->
 <form action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
     <table class="tab1">
         <tbody>
@@ -254,4 +255,5 @@
         <input type="submit" name="confirm" value="{LANG.edit_title}" />
     </div>
 </form>
+<!-- END: edit_user -->
 <!-- END: main -->

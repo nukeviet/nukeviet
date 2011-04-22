@@ -19,6 +19,7 @@
 </div>
 <div class="clear"></div>
 <!-- END: error -->
+<!-- BEGIN: add_user -->
 <form id="form_add_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
     <table class="tab1">
         <tbody>
@@ -257,4 +258,5 @@
 document.getElementById('form_add_user').setAttribute("autocomplete", "off");
 //]]>
 </script>
+<!-- END: add_user -->
 <!-- END: main -->

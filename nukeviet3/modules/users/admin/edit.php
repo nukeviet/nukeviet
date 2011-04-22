@@ -174,16 +174,12 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                     $users = ! empty( $users ) ? explode( ",", $users ) : array();
                     if ( in_array( $group_id_i, $array_in_groups ) )
                     {
-                        $users = array_merge( $users, array( 
-                            $userid 
-                        ) );
+                        $users = array_merge( $users, array( $userid ) );
                         $_user['in_groups'][] = $group_id_i;
                     }
                     else
                     {
-                        $users = array_diff( $users, array( 
-                            $userid 
-                        ) );
+                        $users = array_diff( $users, array( $userid ) );
                     }
                     $users = array_unique( $users );
                     sort( $users );
@@ -237,9 +233,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         {
             @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
             
-            $upload = new upload( array( 
-                'images' 
-            ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
+            $upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
             $upload_info = $upload->save_file( $_FILES['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
             
             @unlink( $_FILES['photo']['tmp_name'] );
@@ -273,17 +267,11 @@ else
     if ( ! empty( $_user['sig'] ) ) $_user['sig'] = nv_br2nl( $_user['sig'] );
 }
 
-$genders = array(  //
-    'N' => array( 
-    'key' => 'N', 'title' => $lang_module['NA'], 'selected' => '' 
-), //
-'M' => array( 
-    'key' => 'M', 'title' => $lang_module['male'], 'selected' => $_user['gender'] == "M" ? " selected=\"selected\"" : "" 
-), //
-'F' => array( 
-    'key' => 'F', 'title' => $lang_module['female'], 'selected' => $_user['gender'] == "F" ? " selected=\"selected\"" : "" 
-)  //
-);
+$genders = array( //
+'N' => array( 'key' => 'N', 'title' => $lang_module['NA'], 'selected' => '' ), //
+'M' => array( 'key' => 'M', 'title' => $lang_module['male'], 'selected' => $_user['gender'] == "M" ? " selected=\"selected\"" : "" ), //
+'F' => array( 'key' => 'F', 'title' => $lang_module['female'], 'selected' => $_user['gender'] == "F" ? " selected=\"selected\"" : "" ) );//
+
 
 $_user['view_mail'] = $_user['view_mail'] ? " checked=\"checked\"" : "";
 
@@ -294,9 +282,7 @@ if ( ! empty( $groups_list ) )
 {
     foreach ( $groups_list as $group_id => $grtl )
     {
-        $groups[] = array( 
-            'id' => $group_id, 'title' => $grtl, 'checked' => ( ! empty( $_user['in_groups'] ) and in_array( $group_id, $_user['in_groups'] ) ) ? " checked=\"checked\"" : "" 
-        );
+        $groups[] = array( 'id' => $group_id, 'title' => $grtl, 'checked' => ( ! empty( $_user['in_groups'] ) and in_array( $group_id, $_user['in_groups'] ) ) ? " checked=\"checked\"" : "" );
     }
 }
 
@@ -306,45 +292,48 @@ $xtpl->assign( 'DATA', $_user );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $userid );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-if ( defined( 'NV_IS_USER_FORUM' ) )
-{
-    $xtpl->parse( 'main.is_forum' );
-}
-
 if ( ! empty( $error ) )
 {
     $xtpl->assign( 'ERROR', $error );
     $xtpl->parse( 'main.error' );
 }
 
-foreach ( $genders as $gender )
+if ( defined( 'NV_IS_USER_FORUM' ) )
 {
-    $xtpl->assign( 'GENDER', $gender );
-    $xtpl->parse( 'main.gender' );
+    $xtpl->parse( 'main.is_forum' );
 }
-
-if ( ! empty( $row['photo'] ) )
+else
 {
-    $size = @getimagesize( NV_ROOTDIR . '/' . $row['photo'] );
-    $img = array(  //
-        'href' => $row['photo'], //
-'height' => $size[1], //
-'width' => $size[0]  //
-    );
-    $xtpl->assign( 'IMG', $img );
-    $xtpl->parse( 'main.photo' );
-}
-
-if ( ! empty( $groups ) )
-{
-    foreach ( $groups as $group )
+    
+    foreach ( $genders as $gender )
     {
-        $xtpl->assign( 'GROUP', $group );
-        $xtpl->parse( 'main.group.list' );
+        $xtpl->assign( 'GENDER', $gender );
+        $xtpl->parse( 'main.edit_user.gender' );
     }
-    $xtpl->parse( 'main.group' );
-}
+    
+    if ( ! empty( $row['photo'] ) )
+    {
+        $size = @getimagesize( NV_ROOTDIR . '/' . $row['photo'] );
+        $img = array( //
+                'href' => $row['photo'], //
+                'height' => $size[1], //
+                'width' => $size[0] );//
 
+        $xtpl->assign( 'IMG', $img );
+        $xtpl->parse( 'main.edit_user.photo' );
+    }
+    
+    if ( ! empty( $groups ) )
+    {
+        foreach ( $groups as $group )
+        {
+            $xtpl->assign( 'GROUP', $group );
+            $xtpl->parse( 'main.edit_user.group.list' );
+        }
+        $xtpl->parse( 'main.edit_user.group' );
+    }
+    $xtpl->parse( 'main.edit_user' );
+}
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
