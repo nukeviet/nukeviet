@@ -39,13 +39,7 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
         }
     }
     // Create class instance.
-    $editortoolbar = array( 
-        array( 
-        'Cut', 'Copy', 'Paste', 'PasteText', 'PasteWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'jwplayer', 'Table', 'Font', 'FontSize', 'RemoveFormat', 'Templates', 'Maximize' 
-    ), array( 
-        'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'Smiley', 'PageBreak', 'Source', 'About' 
-    ) 
-    );
+    $editortoolbar = array( array( 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'jwplayer', 'Table', 'Font', 'FontSize', 'RemoveFormat', 'Templates', 'Maximize' ), array( 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'Smiley', 'PageBreak', 'Source', 'About' ) );
     
     $CKEditor = new CKEditor();
     // Do not print the code directly to the browser, return it instead
@@ -56,6 +50,7 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
     //$CKEditor->config['enterMode'] = 2;
     $CKEditor->config['language'] = NV_LANG_INTERFACE;
     $CKEditor->config['toolbar'] = $editortoolbar;
+    $CKEditor->config['pasteFromWordRemoveFontStyles'] = true;
     
     // Path to CKEditor directory, ideally instead of relative dir, use an absolute path:
     //   $CKEditor->basePath = '/ckeditor/'
@@ -73,9 +68,7 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
     }
     
     // Change default textarea attributes
-    $CKEditor->textareaAttributes = array( 
-        "cols" => 80, "rows" => 10 
-    );
+    $CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
     
     $CKEditor->config['filebrowserBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&path=" . $path . "&currentpath=" . $currentpath;
     $CKEditor->config['filebrowserImageBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&type=image&path=" . $path . "&currentpath=" . $currentpath;
