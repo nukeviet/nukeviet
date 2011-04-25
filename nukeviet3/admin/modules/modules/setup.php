@@ -124,7 +124,11 @@ foreach ( $arr_module_news as $module_name_i => $arr )
 {
     $check_file_main = NV_ROOTDIR . "/modules/" . $module_name_i . "/funcs/main.php";
     $check_file_functions = NV_ROOTDIR . "/modules/" . $module_name_i . "/functions.php";
-    if ( file_exists( $check_file_main ) and filesize( $check_file_main ) != 0 and file_exists( $check_file_functions ) and filesize( $check_file_functions ) != 0 )
+	
+    $check_admin_main = NV_ROOTDIR . "/modules/" . $module_name_i . "/admin/main.php";
+    $check_admin_functions = NV_ROOTDIR . "/modules/" . $module_name_i . "/admin.functions.php";
+
+    if ((file_exists( $check_file_main ) and filesize( $check_file_main ) != 0 and file_exists( $check_file_functions ) and filesize( $check_file_functions ) != 0)	OR (file_exists( $check_admin_main ) and filesize( $check_admin_main ) != 0 and file_exists( $check_admin_functions ) and filesize( $check_admin_functions ) != 0)	)
     {
         $check_addnews_modules = true;
         
@@ -137,14 +141,14 @@ foreach ( $arr_module_news as $module_name_i => $arr )
         if ( empty( $module_version ) )
         {
             $timestamp = NV_CURRENTTIME - date( 'Z', NV_CURRENTTIME );
-            $module_version = array( "name" => $module_name_i, //
-"modfuncs" => "main", //
-"is_sysmod" => 0, //
-"virtual" => 0, //
-"version" => "3.0.01", //
-"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
-"author" => "", //
-"note" => "" );
+            $module_version = array("name" => $module_name_i, //
+                                    "modfuncs" => "main", //
+                                    "is_sysmod" => 0, //
+                                    "virtual" => 0, //
+                                    "version" => "3.0.01", //
+                                    "date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
+                                    "author" => "", //
+                                    "note" => "" );
         }
         $date_ver = intval( strtotime( $module_version['date'] ) );
         if ( $date_ver == 0 )
