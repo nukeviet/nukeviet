@@ -21,7 +21,7 @@ while ( $row = $db->sql_fetch_assoc( $result ) )
 $select_options = array();
 foreach ( $array_lang_exit as $langkey )
 {
-    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;dirlang=" . $langkey] = $language_array[$langkey]['name'];
+    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;dirlang=" . $langkey] = $language_array[$langkey]['name'];
 }
 
 $dirlang_old = $nv_Request->get_string( 'dirlang', 'cookie', NV_LANG_DATA );
