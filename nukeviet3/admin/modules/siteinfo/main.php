@@ -82,7 +82,18 @@ if ( ! empty( $info ) )
         $field[] = array( 
             'key' => $lang_module['version_user'], 'value' => $global_config['version'].'.r'.$global_config['revision']
         );
-        $new_version = nv_geVersion( 86400 ); //kem tra lai sau 24 tieng
+        if ( $global_config['autocheckupdate'] )
+        {
+            $new_version = nv_geVersion( $global_config['autoupdatetime'] * 3600 );
+        }
+        elseif ( file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' ) )
+        {
+            $new_version = simplexml_load_file( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
+        }
+        else
+        {
+            $new_version = array();
+        }
         $info = "";
         if ( ! empty( $new_version ) )
         {

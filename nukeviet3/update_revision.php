@@ -44,7 +44,12 @@ function nv_func_update_data ( )
             }
         }
         nv_delete_all_cache();
-    }    
+    }
+    if ( $global_config['revision'] < 1042 )
+    {
+        $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autocheckupdate', '1')" );
+        $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autoupdatetime', '24')" );
+    }
     
     // End date data
     if ( empty( $error_contents ) )

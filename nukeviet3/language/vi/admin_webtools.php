@@ -157,4 +157,8 @@ $lang_module['nukevietChange_modify'] = "Sửa";
 $lang_module['nukevietChange_add'] = "Thêm";
 $lang_module['nukevietChange_delete'] = "Xóa";
 
+$lang_module['config'] = "Cấu hình";
+$lang_module['autocheckupdate'] = "Bật tính năng kiểm tra phiên bản tự động";
+$lang_module['updatetime'] = "Thời gian kiểm lại phiên bản sau";
+
 ?>
