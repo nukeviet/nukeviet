@@ -12,12 +12,11 @@ if ( $sys_info['allowed_set_time_limit'] )
 {
     set_time_limit( 0 );
 }
-$nv_sites_update = array(  //
-    'update.nukeviet.vn', //
+$nv_sites_update = array( //
+'update.nukeviet.vn', //
 'update2.nukeviet.vn', //
 'update.nukeviet.info', //
-'update2.nukeviet.info' 
-);
+'update2.nukeviet.info' );
 
 $temp_extract_dir = 'install/update';
 
@@ -49,43 +48,53 @@ if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) ==
 
 function nv_site_path_update ( $path )
 {
-    if ( preg_match( "/^uploads\/banners\/(.*)$/i", $path, $matches ) ){
+    if ( preg_match( "/^uploads\/banners\/(.*)$/i", $path, $matches ) )
+    {
         //Thu muc uploads banner
-        return NV_UPLOADS_DIR.'/'.NV_BANNER_DIR.'/'.$matches[1];
+        return NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $matches[1];
     }
-    elseif ( preg_match( "/^admin\/editors\/(.*)$/i", $path, $matches ) ){
+    elseif ( preg_match( "/^admin\/editors\/(.*)$/i", $path, $matches ) )
+    {
         //Ten thu muc editors
-        return NV_EDITORSDIR.'/'.$matches[1];
+        return NV_EDITORSDIR . '/' . $matches[1];
     }
-    elseif ( preg_match( "/^admin\/(.*)$/i", $path, $matches ) ){
-        return NV_ADMINDIR.'/'.$matches[1];
+    elseif ( preg_match( "/^admin\/(.*)$/i", $path, $matches ) )
+    {
+        return NV_ADMINDIR . '/' . $matches[1];
     }
-    elseif ( preg_match( "/^uploads\/(.*)$/i", $path, $matches ) ){
+    elseif ( preg_match( "/^uploads\/(.*)$/i", $path, $matches ) )
+    {
         //Thu muc uploads
-        return NV_UPLOADS_DIR.'/'.$matches[1];
+        return NV_UPLOADS_DIR . '/' . $matches[1];
     }
-    elseif ( preg_match( "/^files\/(.*)$/i", $path, $matches ) ){
+    elseif ( preg_match( "/^files\/(.*)$/i", $path, $matches ) )
+    {
         //Thu muc files
-        return NV_FILES_DIR.'/'.$matches[1];
+        return NV_FILES_DIR . '/' . $matches[1];
     }
-    elseif ( preg_match( "/^data\/(.*)$/i", $path, $matches ) ){
+    elseif ( preg_match( "/^data\/(.*)$/i", $path, $matches ) )
+    {
         //Ten thu muc luu data
-        return NV_DATADIR.'/'.$matches[1];
+        return NV_DATADIR . '/' . $matches[1];
     }
-    elseif ( preg_match( "/^files\/(.*)$/i", $path, $matches ) ){
-        return NV_FILES_DIR.'/'.$matches[1];
+    elseif ( preg_match( "/^files\/(.*)$/i", $path, $matches ) )
+    {
+        return NV_FILES_DIR . '/' . $matches[1];
     }
-    elseif ( preg_match( "/^sess\/(.*)$/i", $path, $matches ) ){
+    elseif ( preg_match( "/^sess\/(.*)$/i", $path, $matches ) )
+    {
         //Thu muc chua sessions
-        return NV_SESSION_SAVE_PATH.'/'.$matches[1];
+        return NV_SESSION_SAVE_PATH . '/' . $matches[1];
     }
-    elseif ( preg_match( "/^tmp\/(.*)$/i", $path, $matches ) ){
+    elseif ( preg_match( "/^tmp\/(.*)$/i", $path, $matches ) )
+    {
         //Thu muc chua cac file tam thoi
-        return NV_TEMP_DIR.'/'.$matches[1];
+        return NV_TEMP_DIR . '/' . $matches[1];
     }
-    elseif ( preg_match( "/^cache\/(.*)$/i", $path, $matches ) ){
+    elseif ( preg_match( "/^cache\/(.*)$/i", $path, $matches ) )
+    {
         //Ten thu muc cache
-        return NV_CACHEDIR.'/'.$matches[1];
+        return NV_CACHEDIR . '/' . $matches[1];
     }
     return $path;
 }
@@ -114,17 +123,17 @@ if ( $step == 1 )
 {
     $filedownload = "";
     $domain_update = $global_config['site_url'];
-
+    
     srand( ( float )microtime() * 10000000 );
     $rand = array_rand( $nv_sites_update );
     $nv_site = $nv_sites_update[$rand];
-
+    
     $contents = '<center><br /><br /><br /><b>' . $lang_module['autoupdate_get_error'] . '</b><br /></center>';
-
+    
     require_once NV_ROOTDIR . '/includes/class/geturl.class.php';
     $getContent = new UrlGetContents( $global_config );
     $xml = $getContent->get( "http://" . $nv_site . "/autoupdate.php?revision=" . $revision . "&version=" . $version . "&lang=" . NV_LANG_INTERFACE );
-
+    
     if ( ! empty( $xml ) )
     {
         $new_version = simplexml_load_string( $xml );
@@ -136,9 +145,9 @@ if ( $step == 1 )
             {
                 $filedownload = ( string )$new_version->filedownload;
                 $nv_Request->set_Session( 'autoupdate_filedownload', $filedownload );
-
+                
                 $lang_waiting = sprintf( $lang_module['autoupdate_download_waiting'], $filedownload, $filedownload );
-
+                
                 $contents .= '<div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif"/><br /><br />' . $lang_waiting . '</div>';
                 $contents .= '<div id="step1" ><center><br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate_download'] . '"/><center></div>';
                 $contents .= '<script type="text/javascript">
@@ -154,7 +163,7 @@ if ( $step == 1 )
 							</script>';
             }
         }
-
+    
     }
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
@@ -167,79 +176,77 @@ elseif ( $step == 2 and md5( $step . $global_config['sitekey'] . session_id() ) 
     {
         //downlod file
         require_once NV_ROOTDIR . '/includes/class/upload.class.php';
-        $allow_files_type = array(
-            'archives' 
-            );
-            $upload = new upload( $allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-            $upload_info = $upload->save_urlfile( $filedownload, NV_ROOTDIR . '/' . NV_TEMP_DIR, false );
-            if ( ! empty( $upload_info['error'] ) )
+        $allow_files_type = array( 'archives' );
+        $upload = new upload( $allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
+        $upload_info = $upload->save_urlfile( $filedownload, NV_ROOTDIR . '/' . NV_TEMP_DIR, false );
+        if ( ! empty( $upload_info['error'] ) )
+        {
+            $contents = 'error filedownload: ' . $filedownload;
+        }
+        else
+        {
+            //extract Zip file
+            require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
+            $zip = new PclZip( $upload_info['name'] );
+            $status = $zip->properties();
+            if ( $status['status'] == 'ok' )
             {
-                $contents = 'error filedownload: ' . $filedownload;
-            }
-            else
-            {
-                //extract Zip file
-                require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-                $zip = new PclZip( $upload_info['name'] );
-                $status = $zip->properties();
-                if ( $status['status'] == 'ok' )
+                $ziplistContent = $zip->listContent();
+                
+                if ( NV_ROOTDIR . '/' . $temp_extract_dir )
                 {
-                    $ziplistContent = $zip->listContent();
-
-                    if ( NV_ROOTDIR . '/' . $temp_extract_dir )
+                    nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
+                }
+                
+                if ( $ftp_check_login == 1 )
+                {
+                    ftp_mkdir( $conn_id, $temp_extract_dir );
+                    if ( substr( $sys_info['os'], 0, 3 ) != 'WIN' ) ftp_chmod( $conn_id, 0777, $temp_extract_dir );
+                    foreach ( $ziplistContent as $array_file )
                     {
-                        nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
-                    }
-
-                    if ( $ftp_check_login == 1 )
-                    {
-                        ftp_mkdir( $conn_id, $temp_extract_dir );
-                        ftp_chmod( $conn_id, 0777, $temp_extract_dir );
-                        foreach ( $ziplistContent as $array_file )
+                        if ( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
                         {
-                            if ( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
+                            $cp = "";
+                            $e = explode( "/", $array_file['filename'] );
+                            foreach ( $e as $p )
                             {
-                                $cp = "";
-                                $e = explode( "/", $array_file['filename'] );
-                                foreach ( $e as $p )
+                                if ( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $cp . $p ) )
                                 {
-                                    if ( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $cp . $p ) )
-                                    {
-                                        ftp_mkdir( $conn_id, $temp_extract_dir . '/' . $cp . $p );
-                                        ftp_chmod( $conn_id, 0777, $temp_extract_dir . '/' . $cp . $p );
-                                    }
-                                    $cp .= $p . '/';
+                                    ftp_mkdir( $conn_id, $temp_extract_dir . '/' . $cp . $p );
+                                    if ( substr( $sys_info['os'], 0, 3 ) != 'WIN' ) ftp_chmod( $conn_id, 0777, $temp_extract_dir . '/' . $cp . $p );
                                 }
+                                $cp .= $p . '/';
                             }
                         }
                     }
-
-                    $no_extract = array();
-                    $extract = $zip->extract( PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir );
-                    foreach ( $extract as $extract_i )
+                }
+                
+                $no_extract = array();
+                $extract = $zip->extract( PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir );
+                foreach ( $extract as $extract_i )
+                {
+                    $filename_i = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $extract_i['filename'] ) );
+                    if ( $extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory' )
                     {
-                        $filename_i = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $extract_i['filename'] ) );
-                        if ( $extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory' )
-                        {
-                            $no_extract[] = $filename_i;
-                        }
+                        $no_extract[] = $filename_i;
                     }
-                    nv_deletefile( $upload_info['name'] );
-                    if ( ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/index.html' ) )
-                    {
-                        nv_copyfile( NV_ROOTDIR . '/language/index.html', NV_ROOTDIR . '/' . $temp_extract_dir . '/index.html' );
-                    }
-                    if ( ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/.htaccess' ) )
-                    {
-                        nv_copyfile( NV_ROOTDIR . '/language/.htaccess', NV_ROOTDIR . '/' . $temp_extract_dir . '/.htaccess' );
-                    }
-                    if ( empty( $no_extract ) )
-                    {
-                        $contents = '<br />';
-                        $contents .= '<div id="message_31" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif"/></div>';
-                        $contents .= '<div id="step_31" >' . $lang_module['autoupdate_download_complete'];
-                        $contents .= '<center><br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate_check_file'] . ' "/><center></div>';
-                        $contents .= '<script type="text/javascript">
+                }
+                nv_deletefile( $upload_info['name'] );
+                if ( ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/index.html' ) )
+                {
+                    nv_copyfile( NV_ROOTDIR . '/language/index.html', NV_ROOTDIR . '/' . $temp_extract_dir . '/index.html' );
+                }
+                if ( ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/.htaccess' ) )
+                {
+                    nv_copyfile( NV_ROOTDIR . '/language/.htaccess', NV_ROOTDIR . '/' . $temp_extract_dir . '/.htaccess' );
+                }
+                if ( empty( $no_extract ) )
+                {
+                    $contents = '<br />';
+                    $contents .= '<div id="message_31" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif"/></div>';
+                    $contents .= '<div id="step_31" >' . $lang_module['autoupdate_download_complete'];
+                    $contents .= '<center><br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoupdate_check_file'] . ' "/><center></div>';
+                    $contents .= '<script type="text/javascript">
 				        		 $(function(){
 				        		 	$("input[name=install_content_overwrite]").click(function(){
 				        		 		$("#message_31").show();
@@ -250,17 +257,17 @@ elseif ( $step == 2 and md5( $step . $global_config['sitekey'] . session_id() ) 
 									});
 				        		 });
 							</script>';
-                    }
-                    else
-                    {
-                        $contents = '<div id="message" style="text-align:center;color:red"><br /><br />' . sprintf( $lang_module['autoupdate_download_error'], $filedownload, $filedownload ) . '</div>';
-                    }
                 }
                 else
                 {
-                    $contents = '<div id="message" style="text-align:center;color:red"><br /><br />' . $lang_module['autoupdate_invalidfile'] . '</div>';
+                    $contents = '<div id="message" style="text-align:center;color:red"><br /><br />' . sprintf( $lang_module['autoupdate_download_error'], $filedownload, $filedownload ) . '</div>';
                 }
             }
+            else
+            {
+                $contents = '<div id="message" style="text-align:center;color:red"><br /><br />' . $lang_module['autoupdate_invalidfile'] . '</div>';
+            }
+        }
     }
     else
     {
@@ -280,7 +287,7 @@ elseif ( $step == 3 and file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/up
     {
         nv_copyfile( NV_ROOTDIR . '/language/.htaccess', NV_ROOTDIR . '/' . $temp_extract_dir . '/.htaccess' );
     }
-
+    
     define( 'NV_AUTOUPDATE', true );
     $update_info = array();
     $add_files = array();
@@ -317,7 +324,7 @@ elseif ( $step == 3 and file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/up
             asort( $check_files );
             foreach ( $check_files as $file )
             {
-                $file_p = nv_site_path_update($file);
+                $file_p = nv_site_path_update( $file );
                 $cur_file = NV_ROOTDIR . '/' . $file_p;
                 $old_file = NV_ROOTDIR . '/' . $temp_extract_dir . '/old/' . $file;
                 if ( ! file_exists( $cur_file ) or ! file_exists( $old_file ) )
@@ -370,7 +377,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
     $edit_files = array();
     $delete_files = array();
     require_once ( NV_ROOTDIR . '/' . $temp_extract_dir . '/update.php' );
-
+    
     // backup file
     $error_backup = false;
     $backup_files = array_merge( $edit_files, $delete_files );
@@ -379,7 +386,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
         $zip_file_backup = array();
         foreach ( $backup_files as $file_i )
         {
-            $file_p = nv_site_path_update($file_i);
+            $file_p = nv_site_path_update( $file_i );
             if ( is_file( NV_ROOTDIR . '/' . $file_p ) )
             {
                 $zip_file_backup[] = NV_ROOTDIR . '/' . $file_p;
@@ -388,7 +395,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
         if ( ! empty( $zip_file_backup ) )
         {
             $file_src = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/backup_update_' . date( 'Y_m_d' ) . '_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
-
+            
             require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
             $zip = new PclZip( $file_src );
             $return = $zip->add( $zip_file_backup, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR );
@@ -411,7 +418,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
             $error_create_folder = array();
             foreach ( $move_files as $file_i )
             {
-                $file_p = nv_site_path_update($file_i);
+                $file_p = nv_site_path_update( $file_i );
                 $cp = "";
                 $e = explode( "/", $file_p );
                 foreach ( $e as $p )
@@ -447,7 +454,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
                 {
                     if ( is_file( NV_ROOTDIR . '/' . $temp_extract_dir . '/new/' . $file_i ) )
                     {
-                        $file_p = nv_site_path_update($file_i);
+                        $file_p = nv_site_path_update( $file_i );
                         if ( file_exists( NV_ROOTDIR . '/' . $file_p ) )
                         {
                             if ( ! ( $ftp_check_login == 1 and ftp_delete( $conn_id, $file_p ) ) )
@@ -478,7 +485,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
                 {
                     global $error_contents;
                     $error_contents = array();
-
+                    
                     $update_data = true;
                     if ( nv_function_exists( 'nv_func_update_data' ) )
                     {
@@ -496,16 +503,16 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
                         }
                         nv_save_file_config_global();
                         $del = nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
-
+                        
                         foreach ( $delete_files as $file_i )
                         {
-                            $file_p = nv_site_path_update($file_i);
+                            $file_p = nv_site_path_update( $file_i );
                             if ( file_exists( NV_ROOTDIR . '/' . $file_p ) )
                             {
                                 nv_deletefile( NV_ROOTDIR . '/' . $file_p );
                             }
                         }
-
+                        
                         if ( $del[0] == 1 )
                         {
                             $msg = $lang_module['autoupdate_complete'];
@@ -525,7 +532,7 @@ elseif ( $step == 4 and md5( $step . $global_config['sitekey'] . session_id() ) 
             }
         }
     }
-
+    
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo $contents;
     include ( NV_ROOTDIR . "/includes/footer.php" );

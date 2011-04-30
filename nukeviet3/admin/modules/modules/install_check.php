@@ -10,9 +10,7 @@ if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $title = $note = $module_file = "";
 $errorfile = '';
 $errorfolder = '';
-$allowfolder = array( 
-    'themes', 'modules', 'uploads', 'includes/blocks' 
-);
+$allowfolder = array( 'themes', 'modules', 'uploads', 'includes/blocks' );
 
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
 if ( file_exists( $filename ) )
@@ -109,7 +107,7 @@ if ( file_exists( $filename ) )
         if ( $ftp_check_login == 1 )
         {
             ftp_mkdir( $conn_id, $temp_extract_dir );
-            ftp_chmod( $conn_id, 0777, $temp_extract_dir );
+            if ( substr( $sys_info['os'], 0, 3 ) != 'WIN' ) ftp_chmod( $conn_id, 0777, $temp_extract_dir );
             foreach ( $ziplistContent as $array_file )
             {
                 if ( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
@@ -121,7 +119,7 @@ if ( file_exists( $filename ) )
                         if ( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $cp . $p ) )
                         {
                             ftp_mkdir( $conn_id, $temp_extract_dir . '/' . $cp . $p );
-                            ftp_chmod( $conn_id, 0777, $temp_extract_dir . '/' . $cp . $p );
+                            if ( substr( $sys_info['os'], 0, 3 ) != 'WIN' ) ftp_chmod( $conn_id, 0777, $temp_extract_dir . '/' . $cp . $p );
                         }
                         $cp .= $p . '/';
                     }

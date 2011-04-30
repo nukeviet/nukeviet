@@ -178,7 +178,7 @@ elseif ( $step == 4 )
                 $a = 0;
                 foreach ( $list_files as $filename )
                 {
-                    $filename = basename($filename);
+                    $filename = basename( $filename );
                     if ( in_array( $filename, $check_files ) )
                     {
                         $a ++;
@@ -220,7 +220,7 @@ elseif ( $step == 4 )
             
             if ( ! is_writable( NV_ROOTDIR . '/' . $dir ) )
             {
-                ftp_chmod( $conn_id, 0777, $dir );
+                if ( substr( $sys_info['os'], 0, 3 ) != 'WIN' ) ftp_chmod( $conn_id, 0777, $dir );
             }
         }
         if ( $dir == $file_config_temp and ! file_exists( NV_ROOTDIR . '/' . $file_config_temp ) and is_writable( NV_ROOTDIR . '/' . NV_TEMP_DIR ) )

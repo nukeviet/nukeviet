@@ -8,7 +8,7 @@
  */
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
-
+global $sys_info;
 $submenu['main'] = $lang_module['site_config'];
 $submenu['system'] = $lang_module['global_config'];
 $submenu['cronjobs'] = $lang_global['mod_cronjobs'];
