@@ -13,7 +13,10 @@ $submenu['main'] = $lang_module['site_config'];
 $submenu['system'] = $lang_module['global_config'];
 $submenu['cronjobs'] = $lang_global['mod_cronjobs'];
 $submenu['smtp'] = $lang_module['smtp_config'];
-$submenu['ftp'] = $lang_module['ftp_config'];
+if ( $sys_info['ftp_support'] )
+{
+    $submenu['ftp'] = $lang_module['ftp_config'];
+}
 $submenu['metatags'] = $lang_module['metaTagsConfig'];
 $submenu['bots'] = $lang_module['bots_config'];
 $submenu['banip'] = $lang_module['banip'];
@@ -21,13 +24,9 @@ $submenu['uploadconfig'] = $lang_module['uploadconfig'];
 
 if ( $module_name == "settings" )
 {
-    $allow_func = array( 
-        'main', 'system', 'bots', 'smtp', 'ftp', 'metatags', 'banip', 'uploadconfig', 'cronjobs', 'cronjobs_add', 'cronjobs_edit', 'cronjobs_del', 'cronjobs_act' 
-    );
+    $allow_func = array( 'main', 'system', 'bots', 'smtp', 'ftp', 'metatags', 'banip', 'uploadconfig', 'cronjobs', 'cronjobs_add', 'cronjobs_edit', 'cronjobs_del', 'cronjobs_act' );
     
-    $menu_top = array( 
-        "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_settings'] 
-    );
+    $menu_top = array( "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_settings'] );
     unset( $page_title, $select_options );
     
     define( 'NV_IS_FILE_SETTINGS', true );
