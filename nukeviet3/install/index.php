@@ -178,6 +178,7 @@ elseif ( $step == 4 )
                 $a = 0;
                 foreach ( $list_files as $filename )
                 {
+                    $filename = basename($filename);
                     if ( in_array( $filename, $check_files ) )
                     {
                         $a ++;

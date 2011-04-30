@@ -659,6 +659,7 @@ function nv_chmod_dir( $conn_id, $dir, $subdir = false )
             $list_files = ftp_nlist( $conn_id, $dir );
             foreach ( $list_files as $file_i )
             {
+                $file_i = basename( $file_i );
                 if ( ! in_array( $file_i, $no_file ) )
                 {
                     if ( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $file_i ) )
