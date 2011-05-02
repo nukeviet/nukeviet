@@ -104,7 +104,7 @@ $lang_module['online_upd'] = "Kích hoạt tiện ích đếm số người onli
 $lang_module['gzip_method'] = "Bật chế độ gzip";
 
 $lang_module['statistic'] = "Kích hoạt tiện ích thống kê";
-$lang_module['proxy_blocker'] = "Kiểm tra và chặn các máy tình dùng proxy";
+$lang_module['proxy_blocker'] = "Kiểm tra và chặn các máy tính dùng proxy";
 $lang_module['proxy_blocker_0'] = "Không kiểm tra";
 $lang_module['proxy_blocker_1'] = "Kiểm tra nhẹ";
 $lang_module['proxy_blocker_2'] = "Kiểm tra vừa";
@@ -112,7 +112,7 @@ $lang_module['proxy_blocker_3'] = "Kiểm tra tuyệt đối";
 
 $lang_module['str_referer_blocker'] = "Kích hoạt tiện ích kiểm tra và chuyển hướng các REFERER bên ngoài đến trang chủ";
 
-$lang_module['my_domains'] = "Các domain chạy site, cách nhau bỏi dấu phảy";
+$lang_module['my_domains'] = "Các domain chạy site, cách nhau bởi dấu phảy";
 $lang_module['cookie_prefix'] = "Tiến tố cookie";
 $lang_module['session_prefix'] = "Tiền tố session";
 
