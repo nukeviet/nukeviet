@@ -3,7 +3,10 @@
     <div class="news-content bordersilver white clearfix">
         <!-- BEGIN: catcontent -->
         <div class="items border_b clearfix">
-            <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" /></a><!-- END: image --><h2><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h2>
+            <!-- BEGIN: image -->
+            	<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" /></a>
+            <!-- END: image -->
+            <h3><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h3>
             <p>
                 {CONTENT.hometext}
             </p>

@@ -16,10 +16,10 @@
                     <td>
                         <a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
 						<!-- BEGIN: adminlink -->
-						<span style="padding-left: 10px;">
-							{ADMINLINK}
-						</span>
-					<!-- END: adminlink -->                        
+    						<span style="padding-left: 10px;">
+    							{ADMINLINK}
+    						</span>
+    					<!-- END: adminlink -->                        
                     </td>
                 </tr>
 		<!-- END: viewcatloop -->

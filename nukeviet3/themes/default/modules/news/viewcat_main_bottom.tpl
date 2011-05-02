@@ -4,11 +4,15 @@
     <div class="news-content bordersilver white clearfix">
         <div class="header clearfix">
             <a class="current" href="{CAT.link}" title="{CAT.title}"><span><span>{CAT.title}</span></span></a>
-            <!-- BEGIN: subcatloop --><a href="{SUBCAT.link}" title="{SUBCAT.title}">{SUBCAT.title}</a>
+            <!-- BEGIN: subcatloop -->
+            	<a href="{SUBCAT.link}" title="{SUBCAT.title}">{SUBCAT.title}</a>
             <!-- END: subcatloop -->
         </div>
         <div class="items {BORDER}clearfix">
-            <!-- BEGIN: image --><a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT}" src="{HOMEIMG}" width="{IMGWIDTH}" /></a><!-- END: image --><h2><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h2>
+            <!-- BEGIN: image -->
+            	<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT}" src="{HOMEIMG}" width="{IMGWIDTH}" /></a>
+            <!-- END: image -->
+            <h3><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h3>
             <p>
                 {CONTENT.hometext}
             </p>
