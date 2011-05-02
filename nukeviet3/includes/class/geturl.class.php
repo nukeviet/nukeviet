@@ -344,7 +344,7 @@ class UrlGetContents
         curl_close( $curlHandle );
 
         unset( $matches );
-        if ( preg_match( '/(<meta http-equiv=)(.*?)(refresh)(.*?)(url=)(.*?)[\'|"]\s*[\/]*>/is', $result, $matches ) and $this->redirectCount <= 5 )
+        if ( preg_match( '/(<meta http-equiv=)(.*?)(refresh)(.*?)(url=)([^\'\"]+)[\'|"]\s*[\/]*>/is', $result, $matches ) and $this->redirectCount <= 5 )
         {
             $this->redirectCount++;
 
@@ -482,7 +482,7 @@ class UrlGetContents
         if ( $matches[1] != 200 ) return false;
 
         unset( $matches );
-        if ( preg_match( '/(<meta http-equiv=)(.*?)(refresh)(.*?)(url=)(.*?)[\'|"]\s*[\/]*>/is', $result, $matches ) and $this->redirectCount <= 5 )
+        if ( preg_match( '/(<meta http-equiv=)(.*?)(refresh)(.*?)(url=)([^\'\"]+)[\'|"]\s*[\/]*>/is', $result, $matches ) and $this->redirectCount <= 5 )
         {
             $this->redirectCount++;
 
