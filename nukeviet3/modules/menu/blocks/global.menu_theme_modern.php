@@ -67,7 +67,7 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
                 if ( $sub_item['in_submenu'] == 1 and in_array( $key, $in_submenu_users ) )
                 {
                     $array_cat_menu[] = array( 
-                        "catid" => 1, "parentid" => 1, "title" => $sub_item['func_custom_name'], "alias" => '', "link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=" . $key 
+                        "catid" => ( $op == $key ) ? 1 : 0, "parentid" => 1, "title" => $sub_item['func_custom_name'], "alias" => '', "link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=" . $key 
                     );
                 }
             }
