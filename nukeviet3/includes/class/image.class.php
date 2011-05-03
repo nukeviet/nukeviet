@@ -37,6 +37,8 @@ if ( ! defined( 'ERROR_IMAGE4' ) ) define( 'ERROR_IMAGE4', 'Image type not suppo
 if ( ! defined( 'ERROR_IMAGE5' ) ) define( 'ERROR_IMAGE5', 'Image mime type not supported' );
 if ( ! defined( 'ERROR_IMAGE6' ) ) define( 'ERROR_IMAGE6', 'Error loading Image' );
 
+if ( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
+
 /**
  * image
  * 
@@ -210,7 +212,7 @@ class image
      */
     function set_tempnam( $filename )
     {
-        $tmpfname = tempnam( ROOTDIR . "/tmp", "tmp" );
+        $tmpfname = tempnam( NV_ROOTDIR . "/tmp", "tmp" );
         $input = fopen( $filename, "rb" );
         $output = fopen( $tmpfname, "wb" );
         while ( $data = fread( $input, 1024 ) )
