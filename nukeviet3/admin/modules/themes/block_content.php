@@ -220,6 +220,11 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                 `all_func`=" . $row['all_func'] . ", 
                 `config`='" . mysql_real_escape_string( $row['config'] ) . "'
                 WHERE `bid` =" . $row['bid'] );
+                
+                if ( isset( $site_mods[$module] ) )
+                {
+                    nv_del_moduleCache( $module );
+                }                
                 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_edit'], 'Name : ' . $row['title'], $admin_info['userid'] );
             }
             if ( ! empty( $row['bid'] ) )
