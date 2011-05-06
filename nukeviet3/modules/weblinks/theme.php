@@ -104,7 +104,7 @@ function viewcat ( $array_subcat, $array_cat, $items )
             {
                 if ( file_exists( NV_UPLOADS_REAL_DIR . NV_UPLOADS_DIR . "/" . $array_subcat_i['catimage'] ) && $array_subcat_i['catimage'] != "" )
                 {
-                    $xtpl->assign( "IMG", "" . NV_BASE_SITEURL . "/" . $array_subcat_i['catimage'] . "" );
+                    $xtpl->assign( "IMG", "" . NV_BASE_SITEURL . $array_subcat_i['catimage'] . "" );
                 }
             }
             else

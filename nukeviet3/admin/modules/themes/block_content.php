@@ -731,7 +731,7 @@ echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://
 		<script type=\"text/javascript\">
 			//<![CDATA[
 			var nv_siteroot = '" . NV_BASE_SITEURL . "';
-			var htmlload = '<tr><td align=\"center\" colspan=\"2\"<img src=\"" . NV_BASE_SITEURL . "/images/load_bar.gif\"/></td></tr>';
+			var htmlload = '<tr><td align=\"center\" colspan=\"2\"<img src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"/></td></tr>';
 			//]]>
 		</script>
 		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>
