@@ -125,7 +125,7 @@ function nv_send_comment_res( res )
 function nv_list_comments()
 {
    fid = document.getElementById( 'comment_fid' ).value;
-   nv_ajax( 'get', nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getcomment', '&list_comment=' + fid + '&&num=' + nv_randomPassword( 8 ), 'list_comments' );
+   nv_ajax( 'get', nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getcomment', '&list_comment=' + fid + '&num=' + nv_randomPassword( 8 ), 'list_comments' );
    return false;
 }
 
