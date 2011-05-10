@@ -411,11 +411,15 @@ function show_comment ( $array, $generate_page )
         $xtpl->assign( 'GLANG', $lang_global );
         foreach ( $array as $row )
         {
-			if(!empty($row['photo'])&& file_exists(NV_ROOTDIR . "/" . $row['photo'])){
-				$row['photo'] = $row['photo'];
-			}else{
+			if ( ! empty ( $row['photo'] ) && file_exists ( NV_ROOTDIR . "/" . $row['photo'] ) )
+			{
+				$row['photo'] = NV_BASE_SITEURL . $row['photo'];
+			}
+			else
+			{
 				$row['photo'] = NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_avatar.jpg";
 			}
+			
             $xtpl->assign( 'ROW', $row );
             
             if ( defined( 'NV_IS_MODADMIN' ) )
