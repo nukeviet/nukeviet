@@ -10,22 +10,15 @@
 if ( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
 
 $rssarray = array();
+//$rssarray[] = array( 'catid' => 0, 'parentid' => 0, 'title' => '', 'link' =>  '');
 
-$result2 = $db->sql_query( "SELECT id, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` ORDER BY weight" );
-while ( list( $catid, $parentid, $title, $alias ) = $db->sql_fetchrow( $result2 ) )
+
+$sql = "SELECT `id` AS `catid`, `parentid`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $mod_name . "_categories` ORDER BY `weight`";
+$list = nv_db_cache( $sql, '', $mod_name );
+foreach ( $list as $value )
 {
-    $resultsubcat = $db->sql_query( "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $catid );
-    $subcatid = array();
-    while ( list( $cid ) = $db->sql_fetchrow( $resultsubcat ) )
-    {
-        $subcatid[] = $cid;
-    }
-    $numsubcat = count( $subcatid );
-    $subcatid = implode( ',', $subcatid );
-    
-    $rssarray[$catid] = array( 
-        'catid' => $catid, 'parentid' => $parentid, 'title' => $title, 'alias' => $alias, 'numsubcat' => $numsubcat, 'subcatid' => $subcatid, 'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_title . "&amp;" . NV_OP_VARIABLE . "=rss/" . $alias 
-    );
+    $value['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $value['alias'];
+    $rssarray[] = $value;
 }
 
 ?>
