@@ -47,7 +47,7 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
     $CKEditor->config['extraPlugins'] = 'jwplayer';
     $CKEditor->config['skin'] = 'v2';
     $CKEditor->config['entities'] = false;
-    //$CKEditor->config['enterMode'] = 2;
+    $CKEditor->config['enterMode'] = 2;
     $CKEditor->config['language'] = NV_LANG_INTERFACE;
     $CKEditor->config['toolbar'] = $editortoolbar;
     $CKEditor->config['pasteFromWordRemoveFontStyles'] = true;
