@@ -97,9 +97,7 @@ function viewcat_page_new ( $array_catpage, $array_cat_other )
         $n = 1;
         foreach ( $array_row_i['listcatid'] as $listcatid )
         {
-            $listcat = array( 
-                'title' => $global_array_cat[$listcatid]['title'], "link" => $global_array_cat[$listcatid]['link'] 
-            );
+            $listcat = array( 'title' => $global_array_cat[$listcatid]['title'], "link" => $global_array_cat[$listcatid]['link'] );
             $xtpl->assign( 'CAT', $listcat );
             ( ( $n < $num_cat ) ? $xtpl->parse( 'main.viewcatloop.cat.comma' ) : '' );
             $xtpl->parse( 'main.viewcatloop.cat' );
@@ -188,7 +186,7 @@ function viewsubcat_main ( $viewcat, $array_cat )
     {
         if ( isset( $array_cat[$key]['content'] ) )
         {
-            $array_row_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=rss/" . $array_row_i['alias'] . "";
+            $array_row_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_row_i['alias'] . "";
             $xtpl->assign( 'CAT', $array_row_i );
             $catid = intval( $array_row_i['catid'] );
             if ( $array_row_i['subcatid'] != "" )
@@ -208,9 +206,7 @@ function viewsubcat_main ( $viewcat, $array_cat )
                         }
                         else
                         {
-                            $more = array( 
-                                'title' => $lang_module['more'], 'link' => $global_array_cat[$catid]['link'] 
-                            );
+                            $more = array( 'title' => $lang_module['more'], 'link' => $global_array_cat[$catid]['link'] );
                             $xtpl->assign( 'MORE', $more );
                             $xtpl->parse( 'main.listcat.subcatmore' );
                             $xtpl->set_autoreset();
@@ -328,7 +324,7 @@ function viewcat_two_column ( $array_content, $array_catpage )
         $number_content = isset( $array_catpage[$key]['content'] ) ? count( $array_catpage[$key]['content'] ) : 0;
         if ( $number_content > 0 )
         {
-            $array_catpage_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=rss/" . $array_catpage_i['alias'] . "";
+            $array_catpage_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_catpage_i['alias'] . "";
             $xtpl->assign( 'CAT', $array_catpage_i );
             $xtpl->assign( 'ID', ( $a + 1 ) );
             $k = 0;
@@ -373,7 +369,7 @@ function viewcat_two_column ( $array_content, $array_catpage )
 function detail_theme ( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable )
 {
     global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $global_array_cat, $my_head, $lang_global, $user_info, $admin_info, $catid;
-	if ( ! defined( 'SHADOWBOX' ) )
+    if ( ! defined( 'SHADOWBOX' ) )
     {
         $my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
         $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
