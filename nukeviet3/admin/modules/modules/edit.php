@@ -47,7 +47,7 @@ $groups_list = nv_groups_list();
 
 if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-	$custom_title = filter_text_input( 'custom_title', 'post', 1 );
+    $custom_title = filter_text_input( 'custom_title', 'post', 1 );
     $theme = filter_text_input( 'theme', 'post', '', 1 );
     $keywords = filter_text_input( 'keywords', 'post', '', 1 );
     $act = $nv_Request->get_int( 'act', 'post', 0 );
@@ -82,16 +82,49 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
     }
     if ( $groups_view != "" and $custom_title != "" )
     {
-        $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape( $custom_title ) . ", `theme`=" . $db->dbescape( $theme ) . ", `keywords`=" . $db->dbescape( $keywords ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `act`='" . $act . "', `rss`='" . $rss . "'WHERE `title`=" . $db->dbescape( $mod );
-        $db->sql_query( $sql );
-        if ( $theme != $site_mods[$mod]['theme'] )
+        $set_layout_site = false;
+        $selectthemes = ( empty( $theme ) ) ? $global_config['site_theme'] : $theme;
+        $xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' );
+        $layoutdefault = ( string )$xml->layoutdefault;
+        
+        if ( file_exists( NV_ROOTDIR . "/themes/" . $selectthemes . "/layout/layout." . $layoutdefault . ".tpl" ) )
         {
-            nv_set_layout_site();
+            $array_func_id = array();
+            $fnsql = "SELECT `func_id` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `theme`='" . $selectthemes . "'";
+            $fnresult = $db->sql_query( $fnsql );
+            while ( list( $func_id ) = $db->sql_fetchrow( $fnresult ) )
+            {
+                $array_func_id[] = $func_id;
+            }
+            
+            $fnsql = "SELECT func_id FROM `" . NV_MODFUNCS_TABLE . "` WHERE in_module=" . $db->dbescape( $mod ) . " AND show_func='1' ORDER BY `subweight` ASC";
+            $fnresult = $db->sql_query( $fnsql );
+            while ( list( $func_id ) = $db->sql_fetchrow( $fnresult ) )
+            {
+                if ( ! in_array( $func_id, $array_func_id ) )
+                {
+                    $db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_modthemes` (`func_id`, `layout`, `theme`) VALUES (" . $func_id . "," . $db->dbescape( $layoutdefault ) . ", " . $db->dbescape( $selectthemes ) . ")" );
+                    $set_layout_site = true;
+                }
+            }
+            
+            $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape( $custom_title ) . ", `theme`=" . $db->dbescape( $theme ) . ", `keywords`=" . $db->dbescape( $keywords ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `act`='" . $act . "', `rss`='" . $rss . "'WHERE `title`=" . $db->dbescape( $mod );
+            $db->sql_query( $sql );
+            
+            if ( $set_layout_site or $theme != $site_mods[$mod]['theme'] )
+            {
+                nv_set_layout_site();
+            
+            }
+            nv_delete_all_cache();
+            nv_insert_logs( NV_LANG_DATA, $module_name, sprintf( $lang_module['edit'], $mod ), '', $admin_info['userid'] );
+            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+            exit();
         }
-        nv_delete_all_cache();
-        nv_insert_logs( NV_LANG_DATA, $module_name, sprintf( $lang_module['edit'],$mod) , '', $admin_info['userid'] );
-        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-        exit();
+        else
+        {
+            nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], "File: themes/" . $selectthemes . "/layout/layout." . $layoutdefault . ".tpl not exist" );
+        }
     }
     elseif ( $groups_view != "" )
     {
@@ -124,35 +157,19 @@ $contents = array();
 
 if ( file_exists( NV_ROOTDIR . "/modules/" . $row['module_file'] . "/funcs/rss.php" ) )
 {
-    $contents['rss'] = array( 
-        $lang_module['activate_rss'], $rss 
-    );
+    $contents['rss'] = array( $lang_module['activate_rss'], $rss );
 }
 
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;mod=" . $mod;
-$contents['custom_title'] = array( 
-    $lang_module['custom_title'], $custom_title, 70 
-);
-$contents['theme'] = array( 
-    $lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme 
-);
-$contents['act'] = array( 
-    $lang_global['activate'], $act 
-);
+$contents['custom_title'] = array( $lang_module['custom_title'], $custom_title, 70 );
+$contents['theme'] = array( $lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme );
+$contents['act'] = array( $lang_global['activate'], $act );
 
-$contents['keywords'] = array( 
-    $lang_module['keywords'], $keywords, 255, $lang_module['keywords_info'] 
-);
+$contents['keywords'] = array( $lang_module['keywords'], $keywords, 255, $lang_module['keywords_info'] );
 if ( $mod != $global_config['site_home_module'] )
 {
-    $contents['who_view'] = array( 
-        $lang_global['who_view'], array( 
-        $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] 
-    ), $who_view 
-    );
-    $contents['groups_view'] = array( 
-        $lang_global['groups_view'], $groups_list, $groups_view 
-    );
+    $contents['who_view'] = array( $lang_global['who_view'], array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] ), $who_view );
+    $contents['groups_view'] = array( $lang_global['groups_view'], $groups_list, $groups_view );
 }
 $contents['submit'] = $lang_global['submit'];
 
