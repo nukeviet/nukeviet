@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-if ( defined( 'NV_IS_USER' ) or defined( 'NV_IS_USER_FORUM' ) )
+if ( defined( 'NV_IS_USER_FORUM' ) )
 {
     Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     die();
@@ -52,10 +52,11 @@ if ( $checknum == $row['checknum'] )
         $db->sql_query( $sql );
         if ( $db->sql_affectedrows() )
         {
+            $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $db->dbescape( $userid ) );
             $check_update_user = true;
         }
     }
-    elseif ( $global_config['allowuserreg'] == 2 )
+    elseif ( !defined( 'NV_IS_USER' ) AND $global_config['allowuserreg'] == 2 )
     {
         $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
 					`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, `website`, 
@@ -75,10 +76,10 @@ if ( $checknum == $row['checknum'] )
 					'', 1, 1, '', 1, '', 0, '', '', '')";
         if ( $db->sql_query_insert_id( $sql ) )
         {
+            $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $db->dbescape( $userid ) );
             $check_update_user = true;
         }
     }
-    $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $db->dbescape( $userid ) );
 }
 
 if ( $check_update_user )
