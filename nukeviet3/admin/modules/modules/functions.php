@@ -12,9 +12,7 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 $submenu['setup'] = $lang_module['modules'];
 $submenu['vmodule'] = $lang_module['vmodule_add'];
 
-$allow_func = array( 
-    'main', 'list', 'setup', 'vmodule', 'edit', 'del', 'change_inmenu', 'change_submenu', 'change_weight', 'change_act', 'empty_mod', 'recreate_mod', 'show', 'change_func_weight', 'change_custom_name', 'change_func_submenu', 'change_block_weight' 
-);
+$allow_func = array( 'main', 'list', 'setup', 'vmodule', 'edit', 'del', 'change_inmenu', 'change_submenu', 'change_weight', 'change_act', 'empty_mod', 'recreate_mod', 'show', 'change_func_weight', 'change_custom_name', 'change_func_submenu', 'change_block_weight' );
 
 if ( defined( "NV_IS_GODADMIN" ) )
 {
@@ -28,9 +26,7 @@ if ( defined( "NV_IS_GODADMIN" ) )
 
 if ( $module_name == "modules" )
 {
-    $menu_top = array( 
-        "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_modules'] 
-    );
+    $menu_top = array( "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_modules'] );
     
     define( 'NV_IS_FILE_MODULES', true );
 
@@ -118,12 +114,12 @@ if ( $module_name == "modules" )
     {
         global $db, $db_config, $global_config;
         $return = 'NO_' . $module_name;
-        $sql = "SELECT `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` WHERE `title`=" . $db->dbescape( $module_name );
+        $sql = "SELECT `module_file`, `module_data`, `theme` FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` WHERE `title`=" . $db->dbescape( $module_name );
         $result = $db->sql_query( $sql );
         $numrows = $db->sql_numrows( $result );
         if ( $numrows == 1 )
         {
-            list( $module_file, $module_data ) = $db->sql_fetchrow( $result );
+            list( $module_file, $module_data, $module_theme ) = $db->sql_fetchrow( $result );
             $module_version = array();
             $version_file = NV_ROOTDIR . "/modules/" . $module_file . "/version.php";
             if ( file_exists( $version_file ) )
@@ -162,11 +158,22 @@ if ( $module_name == "modules" )
                 {
                     $layout_array = preg_replace( $global_config['check_op_layout'], "\\1", $layout_array );
                 }
-                $array_layout_func_default = array();
-                $xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' );
+                
+                $selectthemes = "default";
+                if ( ! empty( $module_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $module_theme . '/config.ini' ) )
+                {
+                    $selectthemes = $module_theme;
+                }
+                else if ( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' ) )
+                {
+                    $selectthemes = $global_config['site_theme'];
+                }
+                
+                $xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' );
                 $layoutdefault = ( string )$xml->layoutdefault;
                 $layout = $xml->xpath( 'setlayout/layout' );
                 
+                $array_layout_func_default = array();
                 for ( $i = 0; $i < count( $layout ); $i ++ )
                 {
                     $layout_name = ( string )$layout[$i]->name;
@@ -647,7 +654,7 @@ if ( $module_name == "modules" )
             $return .= "<td>" . $values['version'] . "</td>\n";
             $return .= "<td>" . $values['addtime'] . "</td>\n";
             $return .= "<td>" . $values['author'] . "</td>\n";
-            $return .= "<td>" . $values['setup'] . "  ". $values['delete'] . "</td>\n";
+            $return .= "<td>" . $values['setup'] . "  " . $values['delete'] . "</td>\n";
             $return .= "</tr>\n";
             $return .= "</tbody>\n";
         }

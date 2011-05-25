@@ -1,10 +1,12 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $select_options = array();
@@ -56,7 +58,7 @@ $contents .= "</thead>\n";
 $a = 0;
 
 #load position file
-$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' );
+$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' );
 $content = $xml->xpath( 'positions' ); //array
 $positions = $content[0]->position; //object
 
@@ -245,4 +247,5 @@ if ( ! defined( 'SHADOWBOX' ) )
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>
