@@ -10,8 +10,9 @@
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $submenu['cat'] = $lang_module['faq_catmanager'];
+$submenu['config'] = $lang_module['config'];
 
-$allow_func = array( 'main', 'cat' );
+$allow_func = array( 'main', 'cat', 'config' );
 
 define( 'NV_IS_FILE_ADMIN', true );
 

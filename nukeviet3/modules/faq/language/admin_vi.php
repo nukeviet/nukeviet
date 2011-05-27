@@ -58,4 +58,11 @@ $lang_module['faq_pos'] = "Vị trí";
 $lang_module['faq_feature'] = 'Chức năng';
 $lang_module['faq_active'] = 'Hoạt động';
 
+$lang_module['nocat'] = 'Không thuộc chủ đề nào';
+$lang_module['config'] = 'Cấu hình module';
+$lang_module['config_type_main'] = "Cách thể hiện trên trang chủ";
+$lang_module['config_type_main_0'] = "Hiển thị các chủ đề";
+$lang_module['config_type_main_1'] = "Danh sách mới lên trên";
+$lang_module['config_type_main_2'] = "Danh sách cũ lên trên";
+
 ?>

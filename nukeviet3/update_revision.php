@@ -51,6 +51,22 @@ function nv_func_update_data ( )
         $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autoupdatetime', '24')" );
     }
     
+    if ( $global_config['revision'] < 1071 )
+    {
+        $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
+        $result = $db->sql_query( $sql );
+        while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+        {
+            $sql = "SELECT title, module_data FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modules` WHERE `module_file`='faq'";
+            $result_mod = $db->sql_query( $sql );
+            while ( list( $mod, $mod_data ) = $db->sql_fetchrow( $result_mod ) )
+            {
+                $db->sql_query( "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang_i . "_" . $mod_data . "_config` (`config_name` varchar(30) NOT NULL,  `config_value` varchar(255) NOT NULL,  UNIQUE KEY `config_name` (`config_name`))ENGINE=MyISAM" );
+                $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_i . "_" . $mod_data . "_config` VALUES ('type_main', '0')" );
+            }
+        }
+        nv_delete_all_cache();
+    }
     // End date data
     if ( empty( $error_contents ) )
     {

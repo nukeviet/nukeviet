@@ -106,6 +106,30 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
 }
 
 /**
+ * initial_config_data()
+ * 
+ * @return
+ */
+function initial_config_data ( )
+{
+    global $module_data;
+    
+    $sql = "SELECT `config_name`,`config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
+    
+    $list = nv_db_cache( $sql );
+    
+    $module_setting = array();
+    foreach ( $list as $values )
+    {
+        $module_setting[$values['config_name']] = $values['config_value'];
+    }
+                        
+    return $module_setting;
+}
+
+$module_setting = initial_config_data ( );
+
+/**
  * update_keywords()
  * 
  * @param mixed $catid

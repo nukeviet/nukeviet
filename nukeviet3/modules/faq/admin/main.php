@@ -214,7 +214,13 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     if ( ! empty( $array['answer'] ) ) $array['answer'] = nv_htmlspecialchars( $array['answer'] );
     if ( ! empty( $array['question'] ) ) $array['question'] = nv_htmlspecialchars( $array['question'] );
 
-    $listcats = nv_listcats( $array['catid'] );
+	$listcats = array();
+	$listcats[0] = array(
+        'id' => 0, //
+        'name' => $lang_module['nocat'], //
+        'selected' => $array['catid'] == 0 ? " selected=\"selected\"" : "" //
+	);
+    $listcats = $listcats + nv_listcats( $array['catid'] );
     if ( empty( $listcats ) )
     {
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&add=1" );
@@ -358,7 +364,14 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
 }
 
 //List faq
-$listcats = nv_listcats( 0 );
+$listcats = array();
+$listcats[0] = array(
+    'id' => 0, //
+    'name' => $lang_module['nocat'], //
+    'title' => $lang_module['nocat'], //
+    'selected' => 0 == 0 ? " selected=\"selected\"" : "" //
+);
+$listcats = $listcats + nv_listcats( 0 );
 if ( empty( $listcats ) )
 {
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&add=1" );
