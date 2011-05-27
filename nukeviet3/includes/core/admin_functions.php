@@ -18,9 +18,9 @@ function nv_site_mods ( )
 {
     global $db, $admin_info;
     $site_mods = array();
-    $sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` WHERE `admin_file`=1 ORDER BY `weight` ASC";
-    $result = $db->sql_query( $sql );
-    while ( $row = $db->sql_fetchrow( $result ) )
+    $sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
+    $list = nv_db_cache( $sql, '', 'modules' );
+    foreach ( $list as $row )
     {
         $allowed = false;
         if ( defined( 'NV_IS_SPADMIN' ) )
@@ -33,10 +33,9 @@ function nv_site_mods ( )
         }
         if ( $allowed )
         {
-            $site_mods[$row['title']] = array( 'module_file' => $row['module_file'], 'module_data' => $row['module_data'], 'custom_title' => $row['custom_title'], 'theme' => $row['theme'], 'keywords' => $row['keywords'], 'groups_view' => $row['groups_view'], 'in_menu' => intval( $row['in_menu'] ), 'submenu' => intval( $row['submenu'] ), 'act' => intval( $row['act'] ), 'admins' => $row['admins'], 'rss' => $row['rss'] );
+            $site_mods[$row['title']] = array( 'module_file' => $row['module_file'], 'module_data' => $row['module_data'], 'custom_title' => $row['custom_title'], 'admin_file'=> $row['admin_file'], 'theme' => $row['theme'], 'keywords' => $row['keywords'], 'groups_view' => $row['groups_view'], 'in_menu' => intval( $row['in_menu'] ), 'submenu' => intval( $row['submenu'] ), 'act' => intval( $row['act'] ), 'admins' => $row['admins'], 'rss' => $row['rss'] );
         }
     }
-    $db->sql_freeresult( $result );
     return $site_mods;
 }
 

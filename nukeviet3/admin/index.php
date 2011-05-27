@@ -202,7 +202,7 @@ if ( ! empty( $module_name ) )
             
             foreach ( $site_mods as $key => $value )
             {
-                $admin_menu_mods[$key] = $value['custom_title'];
+                if($value['admin_file']) $admin_menu_mods[$key] = $value['custom_title'];
             }
             
             require_once ( $include_file );
