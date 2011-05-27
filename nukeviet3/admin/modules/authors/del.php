@@ -143,7 +143,7 @@ if ( $nv_Request->get_int( 'ok', 'post', 0 ) )
             $content = $xtpl->text( 'main' );
 
             $from = array( $admin_info['username'], $my_mail );
-            $to = $row['email'];
+            $to = $row_user['email'];
             $send = nv_sendmail( $from, $to, nv_EncString( $title ), $content );
             if ( ! $send )
             {
