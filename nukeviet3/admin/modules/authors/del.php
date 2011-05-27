@@ -16,6 +16,11 @@ if ( ! defined( 'NV_IS_GODADMIN' ) )
 }
 
 $admin_id = $nv_Request->get_int( 'admin_id', 'get', 0 );
+if ( empty( $admin_id ) )
+{
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+    die();
+}
 
 $query = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id`=" . $admin_id;
 $result = $db->sql_query( $query );
@@ -34,6 +39,16 @@ if ( $row['lev'] == 1 )
     die();
 }
 
+function nv_checkAdmpass( $adminpass )
+{
+    global $db, $admin_info, $crypt;
+
+    $query = "SELECT `password` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_info['userid'];
+    $result = $db->sql_query( $query );
+    list( $pass ) = $db->sql_fetchrow( $result );
+    return $crypt->validate( $adminpass, $pass );
+}
+
 $query = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
 $result = $db->sql_query( $query );
 $row_user = $db->sql_fetchrow( $result );
@@ -48,7 +63,7 @@ if ( $nv_Request->get_int( 'ok', 'post', 0 ) )
     if ( empty( $adminpass ) )
     {
         $error = $lang_global['admin_password_empty'];
-    } elseif ( $crypt->validate( $adminpass, $row_user['password'] ) )
+    } elseif ( ! nv_checkAdmpass( $adminpass ) )
     {
         $error = sprintf( $lang_global['adminpassincorrect'], $adminpass );
         $adminpass = "";
