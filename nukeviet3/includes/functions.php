@@ -1479,7 +1479,7 @@ function nv_check_rewrite_file ( )
     {
         if ( ! file_exists( NV_ROOTDIR . '/web.config' ) ) return false;
         $web_config = @file_get_contents( NV_ROOTDIR . '/web.config' );
-        if ( ! preg_match( "/<rule name=\"nv_rule_rewrite\">(.*)</rule>/s", $web_config ) ) return false;
+        if ( ! preg_match( "/<rule name=\"nv_rule_rewrite\">(.*)<\/rule>/s", $web_config ) ) return false;
         return true;
     }
     else
