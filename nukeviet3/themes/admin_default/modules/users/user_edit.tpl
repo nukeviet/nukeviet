@@ -20,7 +20,7 @@
 <div class="clear"></div>
 <!-- END: error -->
 <!-- BEGIN: edit_user -->
-<form action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
+<form id="form_edit_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
     <table class="tab1">
         <tbody>
             <tr>
@@ -255,5 +255,10 @@
         <input type="submit" name="confirm" value="{LANG.edit_title}" />
     </div>
 </form>
+<script type="text/javascript">
+//<![CDATA[
+document.getElementById('form_edit_user').setAttribute("autocomplete", "off");
+//]]>
+</script>
 <!-- END: edit_user -->
 <!-- END: main -->
