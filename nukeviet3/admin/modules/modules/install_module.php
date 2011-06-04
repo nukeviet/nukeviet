@@ -11,7 +11,7 @@ $page_title = $lang_module['autoinstall_module_install'];
 
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
 
-if ( $nv_Request->isset_request( 'op', 'post' ) )
+if ( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 {
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
     
