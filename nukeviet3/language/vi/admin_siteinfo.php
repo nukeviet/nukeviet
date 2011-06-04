@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jun 04, 2011, 05:50:28 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['site_configs_info'] = "Cấu hình site";
 $lang_module['site_domain'] = "Domain của site";
@@ -55,7 +54,6 @@ $lang_module['checkchmod_error_account'] = "Tài khoản ftp của bạn không 
 $lang_module['checkchmod_error_path'] = "Các thư mục đường dẫn không chính xác";
 $lang_module['checkchmod_error_unable_chmod'] = "Không thể chmod thư mục:";
 $lang_module['checkchmod_success'] = "Đã hoàn tất quá trình chmod";
-
 $lang_module['logs_title'] = "Nhật ký hệ thống";
 $lang_module['log_module_name'] = "Tên Module";
 $lang_module['log_name_key'] = "Tên sự kiện";
@@ -69,12 +67,73 @@ $lang_module['log_del_confirm'] = "Bạn chắc chắn có muốn xóa?";
 $lang_module['log_View'] = "Xem";
 $lang_module['log_del_no_items'] = "Bạn chưa chọn";
 $lang_module['log_note'] = "Ghi chú";
-
 $lang_module['moduleInfo'] = "Thông tin từ các module";
 $lang_module['moduleName'] = "Module";
 $lang_module['moduleContent'] = "Nội dung";
 $lang_module['moduleValue'] = "Giá trị";
 $lang_module['newVersion_detail'] = "Số phiên bản: %s, cập nhật vào: %s";
 $lang_module['newVersion_info'] = "NukeViet CMS mà bạn đang sử dụng cần được nâng cấp lên phiên bản mới. Hãy click <a href=\"%s\">vào đây</a> để biết thêm chi tiết";
+$lang_module['log_del'] = "xóa";
+$lang_module['log_edit'] = "sửa";
+$lang_module['log_add'] = "thêm mới";
+$lang_module['log_del_about'] = "xóa giới thiệu";
+$lang_module['log_edit_about'] = "sửa giới thiệu";
+$lang_module['log_add_about'] = "thêm giới thiệu";
+$lang_module['log_del_banner'] = "xóa banner";
+$lang_module['log_edit_banner'] = "sửa banner";
+$lang_module['log_add_banner'] = "thêm banner";
+$lang_module['log_del_link'] = "xóa liên kết";
+$lang_module['log_del_cat'] = "xóa chuyên mục";
+$lang_module['log_edit_cat'] = "sửa chuyên mục";
+$lang_module['log_add_cat'] = "thêm chuyên mục";
+$lang_module['log_del_broken'] = "xóa báo lỗi";
+$lang_module['log_add_topics'] = "thêm chủ đề";
+$lang_module['log_add_block'] = "thêm block";
+$lang_module['log_add_blockcat'] = "thêm nhóm block";
+$lang_module['log_edit_blockcat'] = "sửa nhóm block";
+$lang_module['log_del_blockcat'] = "xóa nhóm block";
+$lang_module['log_del_comment'] = "xóa bình luận";
+$lang_module['log_edit_commnet'] = "sửa bình luận";
+$lang_module['log_del_content'] = "xóa bài viết";
+$lang_module['log_edit_content'] = "sửa bài viết";
+$lang_module['log_add_content'] = "thêm bài viết";
+$lang_module['log_del_source'] = "xóa nguồn tin";
+$lang_module['log_add_source'] = "thêm nguồn tin";
+$lang_module['log_edit_source'] = "sửa nguồn tin";
+$lang_module['log_del_topic'] = "xóa chủ đề";
+$lang_module['log_add_filequeue'] = "thêm filequeue";
+$lang_module['log_del_report'] = "xóa báo cáo";
+$lang_module['log_del_row'] = "xóa bộ phận";
+$lang_module['log_edit_row'] = "sửa bộ phận";
+$lang_module['log_add_row'] = "thêm bộ phận";
+$lang_module['log_add_client'] = "thêm khách hàng";
+$lang_module['log_del_client'] = "xóa khách hàng";
+$lang_module['log_edit_client'] = "sửa khách hàng";
+$lang_module['log_add_plan'] = "thêm khối quảng cáo";
+$lang_module['log_edit_plan'] = "sửa  khối quảng cáo";
+$lang_module['log_del_plan'] = "xóa  khối quảng cáo";
+$lang_module['log_add_admin'] = "thêm người quản trị";
+$lang_module['log_del_admin'] = "sửa người quản trị";
+$lang_module['log_edit_admin'] = "xóa người quản trị";
+$lang_module['log_setup_modul'] = "cài module";
+$lang_module['log_del_modul'] = "xóa module";
+$lang_module['log_edit_modul'] = "sửa module";
+$lang_module['log_resetup_modul'] = "cài lại module";
+$lang_module['log_cronjob_atc'] = "Thực thi tiến trình tự động";
+$lang_module['log_cronjob_add'] = "thêm tiến trình tự động";
+$lang_module['log_cronjob_del'] = "xóa tiến trình tự động";
+$lang_module['log_cronjob_edit'] = "sửa tiến trình tự động";
+$lang_module['log_add_theme'] = "thêm giao diện";
+$lang_module['log_del_theme'] = "xóa giao diện";
+$lang_module['log_edit_theme'] = "sửa giao diện";
+$lang_module['log_intall_theme'] = "cài giao diện";
+$lang_module['log_setlayout_theme'] = "thiết lập layout";
+$lang_module['log_del_block'] = "xóa block";
+$lang_module['log_del_user'] = "sửa thành viên";
+$lang_module['log_add_user'] = "thêm thành viên";
+$lang_module['log_edit_user'] = "sửa thành viên";
+$lang_module['log_del_vote'] = "xóa bình chọn";
+$lang_module['log_add_vote'] = "thêm bình chọn";
+$lang_module['log_edit_vote'] = "sửa bình chọn";
 
 ?>

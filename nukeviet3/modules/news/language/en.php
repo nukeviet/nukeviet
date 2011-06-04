@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 15, 2011, 11:40:38 PM
+* @Createdate Jun 04, 2011, 05:16:29 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -114,7 +114,6 @@ $lang_module['counter'] = "counter";
 $lang_module['total_comment'] = "Feedback";
 $lang_module['search_cat'] = "Search in topics";
 $lang_module['search_all'] = "Search all topics";
-
 $lang_module['content'] = "Management Articles";
 $lang_module['add_content'] = "Add Articles";
 $lang_module['topic_sl'] = "Select the relevant group";

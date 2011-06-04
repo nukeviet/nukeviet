@@ -219,7 +219,7 @@ $lang_module['admin_full_module'] = "Toàn quyền module";
 $lang_module['admin_module'] = "Quản lý module";
 $lang_module['admin_module_for_user'] = "Bạn có tất cả các quyền hạn của module, trừ chức năng phân quyền quản lý";
 $lang_module['admin_cat'] = "Quản lý Chuyên mục";
-$lang_module['admin_cat_for_user'] = "Quyển hạn của bạn tại các chuyên mục";
+$lang_module['admin_cat_for_user'] = "Quyền hạn của bạn tại các chuyên mục";
 $lang_module['admin_no_user'] = "Chức năng phân quyền cho module này chỉ áp dụng cho người điều hành module, bạn cần thêm người điều hành module trước khi tiến hành phân quyền.";
 
 $lang_module['admin_userid'] = "userid";

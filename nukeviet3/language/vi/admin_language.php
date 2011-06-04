@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jun 04, 2011, 05:28:17 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['nv_lang_data'] = "Ngôn ngữ data";
 $lang_module['site_lang'] = "Ngôn ngữ mặc định";
@@ -64,7 +63,7 @@ $lang_module['nv_setup'] = "Đã được cài đặt";
 $lang_module['nv_setup_new'] = "Cài đặt mới";
 $lang_module['nv_setup_delete'] = "Xóa ngôn ngữ data";
 $lang_module['nv_data_setup'] = "Data Ngôn ngữ này đã được cài đặt";
-$lang_module['nv_data_setup_ok'] = "Cài đặt thành công!<br /> Hệ thống sẽ chuyển tới phần cấu hình site để bạn bắt đầu thiết lập các cấu hình cho trang ngôn ngữ mới.<br /> Sau khi cấu hình cho ngôn ngữ mới xong bạn cần vào mục \"Ngôn ngữ\" - \"Cấu hình\" để cho phép các ngôn ngữ mới này hiển thị bên ngoài site.";
+$lang_module['nv_data_setup_ok'] = "Cài đặt thành công!<br /><br /> Hệ thống sẽ chuyển tới phần cấu hình site của ngôn ngữ mới để bạn bắt đầu thiết lập các cấu hình cho trang ngôn ngữ mới.";
 $lang_module['nv_lang_readok'] = "Thực hiện xong việc đọc ngôn ngữ giao diện, hệ thống sẽ tự động chuyển sang danh sách các file.";
 $lang_module['nv_lang_copyok'] = "Thực hiện xong việc tạo ngôn ngữ giao diện, hệ thống sẽ tự động chuyển sang danh sách các file.";
 $lang_module['nv_lang_deleteok'] = "Thực hiện xong việc xóa ngôn ngữ giao diện.";
@@ -74,15 +73,14 @@ $lang_module['nv_lang_delete_error'] = "Có lỗi trong quá trình xóa file ng
 $lang_module['nv_error_write_file'] = "Lỗi không ghi được file";
 $lang_module['nv_error_write_module'] = "Lỗi xác định được file của module";
 $lang_module['nv_error_exit_module'] = "Lỗi không tồn tại ngôn ngữ của module";
-
 $lang_module['nv_lang_check'] = "Kiểm tra ngôn ngữ";
 $lang_module['nv_lang_data_source'] = "Hiển thị cùng ngôn ngữ";
 $lang_module['nv_lang_checkallarea'] = "Tất cả các khu vực";
 $lang_module['nv_lang_check_no_data'] = "Không có kết quả nào được tìm thấy theo yêu cầu của bạn";
-
 $lang_module['nv_check_type'] = "Điều kiện kiểm tra ";
 $lang_module['nv_check_type_0'] = "Kiểm tra ngôn ngữ chưa được dịch";
 $lang_module['nv_check_type_1'] = "Kiểm tra ngôn ngữ giống nhau";
 $lang_module['nv_check_type_2'] = "Kiểm tra tất cả";
+$lang_module['nv_lang_check_title'] = "Kiểm tra các ngôn ngữ chưa được dịch";
 
 ?>

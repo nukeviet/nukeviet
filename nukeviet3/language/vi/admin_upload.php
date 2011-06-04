@@ -1,28 +1,27 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate 13/04/2010, 16:46
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jun 04, 2011, 05:32:12 PM
+*/
 
-if ( ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
-$lang_module['upload_manager'] = 'Quản lý Files';
-$lang_module['upload_delimg_confirm'] = 'Bạn có chắc muốn xóa file';
-$lang_module['upload_delimg_success'] = 'Xóa file thành công !';
-$lang_module['upload_delimg_unsuccess'] = 'Lỗi không thể xóa file!';
+$lang_module['upload_manager'] = "Quản lý Files";
+$lang_module['upload_delimg_confirm'] = "Bạn có chắc muốn xóa file";
+$lang_module['upload_delimg_success'] = "Xóa file thành công !";
+$lang_module['upload_delimg_unsuccess'] = "Lỗi không thể xóa file!";
 $lang_module['upload_create_too_bigimg'] = "Kích thước của hình quá lớn";
 $lang_module['upload_create_invalid_filetype'] = "Dạng File không hợp lệ";
 $lang_module['upload_file_created'] = "Đã tạo thành công file ";
@@ -38,7 +37,6 @@ $lang_module['upload_file'] = "Upload file";
 $lang_module['upload_otherurl'] = "hoặc URL";
 $lang_module['upload_delfile'] = "Xóa file";
 $lang_module['upload_createimage'] = "Công cụ ảnh";
-
 $lang_module['type_file'] = "Tất cả";
 $lang_module['type_image'] = "Hình ảnh";
 $lang_module['type_flash'] = "Flash";
@@ -85,5 +83,8 @@ $lang_module['mirrorFile'] = "Lưu bản sao ở thư mục cũ";
 $lang_module['errorNotSelectFile'] = "Lỗi: File chưa được chọn";
 $lang_module['errorNotCopyFile'] = "Lỗi: Vì một lý do nào đó hệ thống đã không thể chuyển file sang thư mục mới";
 $lang_module['errorNotRenameFile'] = "Lỗi: Vì một lý do nào đó hệ thống đã không thể thay tên mới cho file";
+$lang_module['nopreview'] = "Không hỗ trợ xem trước laoij tệp tin này.";
+$lang_module['errorNewSize'] = "Bạn chỉ có thể tạo ảnh mới với chiều rộng: 10 - %d px, chiều cao: 10 - %d px";
+$lang_module['maxSizeSize'] = "Kích cỡ tối đa: %dx%dpx";
 
 ?>

@@ -81,6 +81,6 @@ $lang_module['nv_check_type'] = "Test conditions";
 $lang_module['nv_check_type_0'] = "Language testing has not been translated";
 $lang_module['nv_check_type_1'] = "Check the same language";
 $lang_module['nv_check_type_2'] = "Check all";
-$lang_module['nv_lang_check_title'] = "Check the language has not been translate";
+$lang_module['nv_lang_check_title'] = "Check the language has not been translated";
 
 ?>

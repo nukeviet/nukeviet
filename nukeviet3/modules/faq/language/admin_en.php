@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Sep 25, 2010, 11:10:39 AM
+* @Createdate Jun 04, 2011, 05:23:22 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -56,5 +56,11 @@ $lang_module['faq_manager'] = "Manage FAQ";
 $lang_module['faq_pos'] = "Position";
 $lang_module['faq_feature'] = "Features";
 $lang_module['faq_active'] = "Active";
+$lang_module['nocat'] = "Not under any topic";
+$lang_module['config'] = "Module configuration";
+$lang_module['config_type_main'] = "Ways to show on the home page";
+$lang_module['config_type_main_0'] = "Displaying Topics";
+$lang_module['config_type_main_1'] = "List, newer first";
+$lang_module['config_type_main_2'] = "List, oldest First";
 
 ?>

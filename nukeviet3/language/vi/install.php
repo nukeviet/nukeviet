@@ -112,11 +112,11 @@ $lang_module['movefileconfig'] = "Bạn cần chuyển file config.php trong th�
 
 $lang_module['copyright'] = "Chú ý: Việc đăng lại bài viết trên ở website hoặc các phương tiện truyền thông khác mà không ghi rõ nguồn http://nukeviet.vn là vi phạm bản quyền";
 
-$lang_module['question'] = "Chọn câu hỏi dự phòng";
+$lang_module['question'] = "Điền câu hỏi bảo mật";
 $lang_module['answer_question'] = "Câu trả lời của bạn";
-$lang_module['your_question_empty'] = "Bạn chưa khai báo câu hỏi dự phòng";
-$lang_module['answer_empty'] = "Bạn chưa nhập câu Trả lời của câu hỏi";
+$lang_module['your_question_empty'] = "Bạn chưa khai báo câu hỏi bảo mật";
+$lang_module['answer_empty'] = "Bạn chưa nhập câu Trả lời cho câu hỏi bảo mật";
 
-$lang_module['question_note'] = "Bạn cần đến câu hỏi dự phòng và câu trả lời nếu quên mật khẩu";
+$lang_module['question_note'] = "Bạn cần đến câu hỏi bảo mật và câu trả lời trong trường hợp cần khôi phục mật khẩu khi bạn bị quên.";
 
 ?>
