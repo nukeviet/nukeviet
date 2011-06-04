@@ -40,7 +40,7 @@
     </head>
     <body>
         <div id="header">
-            <h1 id="install_title" class="fl">{LANG.titlesetup} <span class="version">v3.2</span></h1>
+            <h1 id="install_title" class="fl">{LANG.titlesetup} <span class="version">CMS</span></h1>
             <div id="language" class="fr">
                 <div>
                     <strong>Language: </strong>

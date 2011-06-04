@@ -117,6 +117,7 @@ $lang_module['answer_question'] = "Câu trả lời của bạn";
 $lang_module['your_question_empty'] = "Bạn chưa khai báo câu hỏi bảo mật";
 $lang_module['answer_empty'] = "Bạn chưa nhập câu Trả lời cho câu hỏi bảo mật";
 
-$lang_module['question_note'] = "Bạn cần đến câu hỏi bảo mật và câu trả lời trong trường hợp cần khôi phục mật khẩu khi bạn bị quên.";
+$lang_module['question_note'] = "Hệ thống sẽ hỏi bạn câu hỏi bảo mật trong trường hợp bạn cần khôi phục mật khẩu khi bạn bị quên. Vì vậy hãy chọn câu hỏi mà nó có thể giúp bạn nhớ chính xác câu trả lời.";
+$lang_module['answer_question_note'] = "Bạn hãy nhớ câu trả lời này để trả lời hệ thống.";
 
 ?>

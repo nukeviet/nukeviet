@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 22, 2011, 09:41:38 PM
+* @Createdate Jun 04, 2011, 06:27:28 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -19,10 +19,8 @@ $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['categories'] = "Categories";
-
 $lang_module['topics'] = "Topics";
 $lang_module['topics_error_title'] = "Error: You do not enter the event title";
-
 $lang_module['sources'] = "Sources";
 $lang_module['comments'] = "Comments";
 $lang_module['save'] = "Save";
@@ -205,8 +203,12 @@ $lang_module['admin'] = "Decentralized management";
 $lang_module['admin_permissions'] = "Permissions";
 $lang_module['admin_edit'] = "Edit permissions";
 $lang_module['admin_edit_user'] = "Edit member's permissions";
+$lang_module['admin_full_module'] = "Full administrator module";
 $lang_module['admin_module'] = "Admin's module";
+$lang_module['admin_module_for_user'] = "You have most of the powers of the module, eliminating the function of decentralized management.";
 $lang_module['admin_cat'] = "Management's Category";
+$lang_module['admin_cat_for_user'] = "Your administrative powers in the categories";
+$lang_module['admin_no_user'] = "Decentralized functions for this module only apply to the modules, you need to add the admin modules prior to the separation of powers.";
 $lang_module['admin_userid'] = "User ID";
 $lang_module['admin_username'] = "Username";
 $lang_module['admin_full_name'] = "Full name";

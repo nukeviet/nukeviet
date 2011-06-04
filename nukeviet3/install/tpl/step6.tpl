@@ -88,7 +88,7 @@
             <td>
                 <input type="text" value="{DATA.answer_question}"  id="answer_question" name="answer_question" class="required" />
             </td>
-            <td>{LANG.answer_question}</td>
+            <td>{LANG.answer_question_note}</td>
         </tr>
         <tr>
             <th class="spec"></th>

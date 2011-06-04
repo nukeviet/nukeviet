@@ -126,5 +126,6 @@ $lang_module['answer_question'] = "Your answer";
 $lang_module['your_question_empty'] = "Empty question";
 $lang_module['answer_empty'] = "Empty answer";
 $lang_module['question_note'] = "You should need security question and answer question if you have been lost your password";
+$lang_module['answer_question_note'] = "You must remember this answer in response to the system.";
 
 ?>
