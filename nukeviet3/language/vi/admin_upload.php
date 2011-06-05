@@ -83,7 +83,7 @@ $lang_module['mirrorFile'] = "Lưu bản sao ở thư mục cũ";
 $lang_module['errorNotSelectFile'] = "Lỗi: File chưa được chọn";
 $lang_module['errorNotCopyFile'] = "Lỗi: Vì một lý do nào đó hệ thống đã không thể chuyển file sang thư mục mới";
 $lang_module['errorNotRenameFile'] = "Lỗi: Vì một lý do nào đó hệ thống đã không thể thay tên mới cho file";
-$lang_module['nopreview'] = "Không hỗ trợ xem trước laoij tệp tin này.";
+$lang_module['nopreview'] = "Không hỗ trợ xem trước loại tệp tin này.";
 $lang_module['errorNewSize'] = "Bạn chỉ có thể tạo ảnh mới với chiều rộng: 10 - %d px, chiều cao: 10 - %d px";
 $lang_module['maxSizeSize'] = "Kích cỡ tối đa: %dx%dpx";
 
