@@ -231,8 +231,8 @@ $lang_global['yahoo_openid_login'] = "Yahoo";
 $lang_global['breakcrum'] = "Bạn đang ở";
 
 //ADMIN_LOGIN_MODE
-$lang_global['admin_access_denied1'] = "Rất tiếc là hiện nay hệ thống không có phép các Admin đăng nhập";
-$lang_global['admin_access_denied2'] = "Rất tiếc là hiện nay hệ thống không có phép các Quản trị module đăng nhập";
+$lang_global['admin_access_denied1'] = "Rất tiếc là hiện nay hệ thống không cho phép các Admin đăng nhập";
+$lang_global['admin_access_denied2'] = "Rất tiếc là hiện nay hệ thống không cho phép các Quản trị module đăng nhập";
 
 //UPLOAD
 $lang_global['error_uploadNameEmpty'] = "Lỗi: Tên file tải lên không xác định";
