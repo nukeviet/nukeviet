@@ -12,7 +12,7 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 $module_version = array( //
     "name" => "Users", //
     "modfuncs" => "main,login,logout,register,lostpass,changepass,active,editinfo,lostactivelink,openid", //
-    "submenu" => "main,login,logout,register,lostpass,changepass,active,openid", //
+    "submenu" => "main,login,logout,register,lostpass,changepass,active,openid,editinfo,lostactivelink", //
     "is_sysmod" => 1, //
     "virtual" => 0, //
     "version" => "3.0.01", //

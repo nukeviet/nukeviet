@@ -18,6 +18,23 @@ function nv_site_mods ( )
 {
     global $admin_info, $user_info, $global_config;
     
+    if ( defined( "NV_IS_USER" ) )
+    {
+        $user_ops = array( 'main', 'changepass', 'openid', 'editinfo' );
+        if ( ! defined( "NV_IS_ADMIN" ) )
+        {
+            $user_ops[] = 'logout';
+        }
+    }
+    else
+    {
+        $user_ops = array( 'main', 'login', 'register', 'lostpass' );
+        if ( $global_config['allowuserreg'] == 2 )
+        {
+            $user_ops[] = 'lostactivelink';
+        }
+    }
+    
     $sql = "SELECT * FROM  `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight";
     
     $list = nv_db_cache( $sql, '', 'modules' );
@@ -84,7 +101,7 @@ function nv_site_mods ( )
                 $site_mods[$m_title]['rss'] = $row['rss'];
             }
             $func_name = $row['func_name'];
-            if ( ! empty( $func_name ) )
+            if ( ! empty( $func_name ) and ( ( $m_title != "users" ) or ( $m_title == "users" and in_array( $func_name, $user_ops ) ) ) )
             {
                 $site_mods[$m_title]['funcs'][$func_name]['func_id'] = $row['func_id'];
                 $site_mods[$m_title]['funcs'][$func_name]['show_func'] = $row['show_func'];
