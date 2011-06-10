@@ -8,7 +8,7 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
+if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 {
 
     function nv_html_sub_menu_mod_users ( $modvalues )
@@ -73,15 +73,11 @@ if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
         return "";
     }
 
-    function nv_smooth_navigational_menu ( $block_config )
+    function nv_menu_theme_modern ( $block_config )
     {
         global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid;
         
-        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/menu/smooth_navigational_menu.tpl" ) )
-        {
-            $block_theme = $global_config['module_theme'];
-        }
-        elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/smooth_navigational_menu.tpl" ) )
+        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/smooth_navigational_menu.tpl" ) )
         {
             $block_theme = $global_config['site_theme'];
         }
@@ -187,7 +183,7 @@ if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
 
 if ( defined( 'NV_SYSTEM' ) )
 {
-    $content = nv_smooth_navigational_menu( $block_config );
+    $content = nv_menu_theme_modern( $block_config );
 }
 
 ?>

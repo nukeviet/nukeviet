@@ -15,11 +15,7 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
     {
         global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $op, $lang_module, $catid, $lang_global;
         
-        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/menu/menu_theme_modern.tpl" ) )
-        {
-            $block_theme = $global_config['module_theme'];
-        }
-        elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/menu_theme_modern.tpl" ) )
+        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/menu_theme_modern.tpl" ) )
         {
             $block_theme = $global_config['site_theme'];
         }
@@ -67,7 +63,7 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
                 if ( $sub_item['in_submenu'] == 1 and in_array( $key, $in_submenu_users ) )
                 {
                     $array_cat_menu[] = array( 
-                        "catid" => ( $op == $key ) ? 1 : 0, "parentid" => 1, "title" => $sub_item['func_custom_name'], "alias" => '', "link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=" . $key 
+                        "catid" => 1, "parentid" => 1, "title" => $sub_item['func_custom_name'], "alias" => '', "link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=" . $key 
                     );
                 }
             }
@@ -163,6 +159,7 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
                 );
             }
         }
+        
         
         # process cat module
         $i = 1;

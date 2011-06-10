@@ -25,7 +25,9 @@ function nv_func_update_data ( )
     if ( $global_config['revision'] < 988 )
     {
         $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'rewrite_endurl', '/')" );
-        $array_config_rewrite = array( 'rewrite_optional' => $global_config['rewrite_optional'] );
+        $array_config_rewrite = array( 
+            'rewrite_optional' => $global_config['rewrite_optional'] 
+        );
         nv_rewrite_change( $array_config_rewrite );
     }
     
@@ -66,6 +68,47 @@ function nv_func_update_data ( )
             }
         }
         nv_delete_all_cache();
+    }
+    if ( $global_config['revision'] < 1107 )
+    {
+        $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
+        $result = $db->sql_query( $sql );
+        while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+        {
+            $sql = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang_i . "_" . $module_data . "_rows` (
+			  `id` int(11) NOT NULL AUTO_INCREMENT,
+			  `parentid` int(11) unsigned NOT NULL,
+			  `mid` int(11) NOT NULL DEFAULT '0',  
+			  `title` varchar(255) NOT NULL,
+			  `link` text NOT NULL,
+			  `note` varchar(255) NOT NULL DEFAULT '',
+			  `weight` int(11) NOT NULL,
+			  `order` int(11) NOT NULL DEFAULT '0',
+			  `lev` int(11) NOT NULL DEFAULT '0',
+			  `subitem` mediumtext NOT NULL,
+			  `who_view` tinyint(2) NOT NULL DEFAULT '0',
+			  `groups_view` varchar(255) NOT NULL,  
+			  `module_name` varchar(255) NOT NULL DEFAULT '',
+			  `op` varchar(255) NOT NULL DEFAULT '', 
+			  `target` tinyint(4) NOT NULL DEFAULT '0',  
+			  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+			   PRIMARY KEY (`id`)
+			) ENGINE=MyISAM";
+            
+            $db->sql_query( $sql );
+            
+            $sql = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_" . $module_data . "_menu` (
+			  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			  `title` varchar(50) NOT NULL,
+			  `menu_item` mediumtext NOT NULL,
+			  `description` varchar(255) NOT NULL DEFAULT '',
+			   PRIMARY KEY (`id`),
+			  UNIQUE KEY `title` (`title`)
+			) ENGINE=MyISAM";
+            $db->sql_query( $sql );
+        }
+        nv_delete_all_cache();
+    
     }
     // End date data
     if ( empty( $error_contents ) )

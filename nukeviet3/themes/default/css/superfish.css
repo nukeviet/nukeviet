@@ -1,3 +1,4 @@
+
 /*** ESSENTIAL STYLES ***/
 .sf-menu, .sf-menu * {
 	margin:			0;
@@ -29,7 +30,7 @@
 .sf-menu li:hover ul,
 .sf-menu li.sfHover ul {
 	left:			0;
-	top:			36px; /* match top ul list item height */
+	top:			2.5em; /* match top ul list item height */
 	z-index:		99;
 }
 ul.sf-menu li:hover li ul,
@@ -54,18 +55,16 @@ ul.sf-menu li li li.sfHover ul {
 /*** DEMO SKIN ***/
 .sf-menu {
 	float:			left;
+	margin-bottom:	1em;
 }
 .sf-menu a {
 	border-left:	1px solid #fff;
 	border-top:		1px solid #CFDEFF;
-	padding: 		1em 0.5em;
+	padding: 		.75em 1em;
 	text-decoration:none;
 }
-.sf-menu li ul a {
-	padding:0.75em 1em;
-}
 .sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
-	color:			#414f5b;
+	color:			#13a;
 }
 .sf-menu li {
 	background:		#BDD2FF;
@@ -84,6 +83,7 @@ ul.sf-menu li li li.sfHover ul {
 
 /*** arrows **/
 .sf-menu a.sf-with-ul {
+	padding-right: 	2.25em;
 	min-width:		1px; /* trigger IE7 hasLayout so spans position accurately */
 }
 .sf-sub-indicator {
