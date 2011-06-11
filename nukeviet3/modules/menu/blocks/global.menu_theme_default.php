@@ -8,14 +8,17 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
+if ( ! nv_function_exists( 'nv_menu_theme_default' ) )
 {
 
-    function nv_menu_theme_modern ( $block_config )
+    function nv_menu_theme_default ( $block_config )
     {
         global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid;
-        
-        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/menu_theme_default.tpl" ) )
+        if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/menu/menu_theme_default.tpl" ) )
+        {
+            $block_theme = $global_config['module_theme'];
+        }
+        elseif ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/menu_theme_default.tpl" ) )
         {
             $block_theme = $global_config['site_theme'];
         }
@@ -152,7 +155,7 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 
 if ( defined( 'NV_SYSTEM' ) )
 {
-    $content = nv_menu_theme_modern( $block_config );
+    $content = nv_menu_theme_default( $block_config );
 }
 
 ?>
