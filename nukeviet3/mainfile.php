@@ -44,6 +44,9 @@ unset( $key_words, $page_title, $mod_title, $editor, $editor_password, $my_head,
 //Xac dinh thu muc goc cua site
 define( 'NV_ROOTDIR', pathinfo( str_replace( '\\', '/', __file__ ), PATHINFO_DIRNAME ) );
 
+//Kiem tra trang thai cua may chu, neu > 80 se thong bao "Server too busy. Please try again later"
+require_once ( NV_ROOTDIR . "/includes/getloadavg.php" );
+
 $sys_info['disable_functions'] = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 $sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] ) ) ? true : false;
 
