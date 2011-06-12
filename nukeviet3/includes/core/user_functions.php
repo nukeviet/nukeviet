@@ -32,6 +32,7 @@ function nv_site_mods ( )
         if ( $global_config['allowuserreg'] == 2 )
         {
             $user_ops[] = 'lostactivelink';
+            $user_ops[] = 'active';
         }
     }
     
