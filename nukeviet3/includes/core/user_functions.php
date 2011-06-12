@@ -556,28 +556,44 @@ function nv_html_site_js ( )
 
 function nv_admin_menu ( )
 {
-    global $lang_global, $admin_info, $module_info, $module_name;
-    $return = "<div id=\"toolbar\">\n";
-    $return .= "<ul class=\"info level" . $admin_info['level'] . " fl\">\n";
-    $return .= "<li>" . $lang_global['your_account'] . ": <strong>" . $admin_info['username'] . "</strong></li>";
-    $return .= "</ul>\n";
-    $return .= "<div class=\"action fr\">\n";
-    $return .= "<a href=\"" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php\"><span class=\"icons icon-sitemanager\">" . $lang_global['admin_page'] . "</span></a>\n";
+    global $lang_global, $admin_info, $module_info, $module_name, $global_config;
+	
+	if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/admin_toolbar.tpl" ) )
+	{
+		$block_theme = $global_config['site_theme'];
+	}
+	else
+	{
+		$block_theme = "default";
+	}
+
+	$xtpl = new XTemplate( "admin_toolbar.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/system" );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'ADMIN_INFO', $admin_info );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
+	$xtpl->assign( 'URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=authors&amp;id=" . $admin_info['admin_id'] );
+	
     if ( defined( 'NV_IS_SPADMIN' ) )
     {
         $new_drag_block = ( defined( 'NV_IS_DRAG_BLOCK' ) ) ? 0 : 1;
         $lang_drag_block = ( $new_drag_block ) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
-        $return .= "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;drag_block=" . $new_drag_block . "\"><span class=\"icons icon-drag\">" . $lang_drag_block . "</span></a>\n";
+				
+		$xtpl->assign( 'URL_DBLOCK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;drag_block=" . $new_drag_block );
+		$xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );
+		
+		$xtpl->parse( 'main.is_spadadmin' );
     }
+	
     if ( defined( 'NV_IS_MODADMIN' ) and ! empty( $module_info['admin_file'] ) )
     {
-        $return .= "<a href=\"" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\"><span class=\"icons icon-module\">" . $lang_global['admin_module_sector'] . "</span></a>\n";
+		$xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+		
+		$xtpl->parse( 'main.is_modadmin' );
     }
-    $return .= "<a href=\"" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=authors&amp;id=" . $admin_info['admin_id'] . "\"><span class=\"icons icon-users\">" . $lang_global['your_account'] . "</span></a>\n";
-    $return .= "<a href=\"javascript:void(0);\" onclick=\"nv_admin_logout();\"><span class=\"icons icon-logout\">" . $lang_global['logout'] . "</span></a>\n";
-    $return .= "</div>\n";
-    $return .= "</div>\n";
-    return $return;
+
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
 }
 
 function nv_show_queries_for_admin ( )
