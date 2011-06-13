@@ -14,27 +14,23 @@
  
 <script type="text/javascript">
 $(function() {
-$("#navigation").treeview({
-collapsed: true,
-unique: true,
-persist: "location"
-});
+	$("#navigation").treeview({
+		collapsed: true,
+		unique: true,
+		persist: "location"
+	});
 });
 </script>
-
 <ul id="navigation">
 	<!-- BEGIN: loopcat1 -->
-		<li{mainloop.current}><a href="{CAT1.link}">{CAT1.title}</a>	
-					
-			<!-- BEGIN: cat2 -->
-			<ul>			
-				{HTML_CONTENT}	
-			</ul>		
-			<!-- END: cat2 -->
-				
-		</li>
+	<li{mainloop.current}><a href="{CAT1.link}">{CAT1.title}</a>		
+		<!-- BEGIN: cat2 -->
+		<ul>			
+			{HTML_CONTENT}	
+		</ul>		
+		<!-- END: cat2 -->
+	</li>
 	<!-- END: loopcat1 -->
 </ul>
-
 <div class="clear"></div>
 <!-- END: main -->

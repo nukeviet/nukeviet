@@ -1,15 +1,15 @@
 <!-- BEGIN: tree -->
-   <li class="{MENUTREE.class1}" ><a href="{MENUTREE.link}" {cla}>{MENUTREE.title}</a>	
-       <!-- BEGIN: tree_content -->
-	     <ul>
-	       {TREE_CONTENT}
-	     </ul>
-       <!-- END: tree_content -->                
-   </li>
+	<li class="{MENUTREE.class1}" ><a href="{MENUTREE.link}" {cla}>{MENUTREE.title}</a>	
+		<!-- BEGIN: tree_content -->
+			<ul>
+			{TREE_CONTENT}
+			</ul>
+		<!-- END: tree_content -->                
+	</li>
 <!-- END: tree -->
 <!-- BEGIN: main -->
-<link rel="stylesheet" type="text/css" media="screen"	href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/pro_dropdown_2.css" />
-<script	type="text/javascript"	href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/stuHover.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/pro_dropdown_2.css" />
+<script	type="text/javascript" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/stuHover.js"></script>
 <ul id="nav">
 	<!-- BEGIN: loopcat1 -->
 		<li class="top"><a href="{CAT1.link}" class="top_link"><span>{CAT1.title}</span></a>

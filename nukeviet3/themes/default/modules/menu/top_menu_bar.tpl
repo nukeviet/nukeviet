@@ -28,17 +28,15 @@ ddlevelsmenu.setup("ddtopmenubar", "topbar")
 <!-- BEGIN: cat2 -->
 <ul id="ddsubmenu{nu}" class="ddsubmenustyle">
 	<!-- BEGIN: loopcat2 -->
-		<li>
-			<strong><a href="{CAT2.link}">{CAT2.title}</a></strong>
-			<!-- BEGIN: cat3 -->
-			<ul >				
-				{HTML_CONTENT}	
-			</ul>
-			<!-- END: cat3 -->
-		</li>
-		<!-- END: loopcat2 -->
-	
+	<li>
+		<strong><a href="{CAT2.link}">{CAT2.title}</a></strong>
+		<!-- BEGIN: cat3 -->
+		<ul >				
+			{HTML_CONTENT}	
+		</ul>
+		<!-- END: cat3 -->
+	</li>
+	<!-- END: loopcat2 -->
 </ul>
 <!-- END: cat2 -->
-
 <!-- END: main -->
