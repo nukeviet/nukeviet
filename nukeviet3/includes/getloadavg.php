@@ -36,38 +36,6 @@ function get_server_load()
             }
         }
 
-        if ( class_exists( 'COM' ) )
-        {
-            if ( substr( phpversion(), 0, 1 ) == '4' )
-            {
-                $wmi = new COM( 'WinMgmts:\\\\.' );
-                $cpus = $wmi->InstancesOf( 'Win32_Processor' );
-                $cpuload = 0;
-                $i = 0;
-                while ( $cpu = $cpus->Next() )
-                {
-                    $cpuload += $cpu->LoadPercentage;
-                    ++$i;
-                }
-
-                $cpuload = round( $cpuload / $i, 2 );
-                return $cpuload;
-            }
-
-            $wmi = new COM( 'WinMgmts:\\\\.' );
-            $cpus = $wmi->InstancesOf( 'Win32_Processor' );
-            $cpuload = 0;
-            $i = 0;
-            foreach ( $cpus as $cpu )
-            {
-                $cpuload += $cpu->LoadPercentage;
-                ++$i;
-            }
-
-            $cpuload = round( $cpuload / $i, 2 );
-            return $cpuload;
-        }
-
         return 'unknown';
     }
 
