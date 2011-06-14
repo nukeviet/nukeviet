@@ -23,8 +23,8 @@ if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_
     exit();
 }
 
-$allowedDirs = array( 'files', 'images', 'js', 'themes', 'uploads' );
-$allowedFiles = array( 'favicon.ico', 'index.php', 'robots.txt', 'CJzip.php', 'config.php' );
+$allowedDirs = array( 'files', 'images', 'js', 'themes', 'uploads', 'forum' );
+$allowedFiles = array( 'favicon.ico', 'index.php', 'robots.txt', 'CJzip.php', 'config.php', 'Sitemap.xml' );
 
 $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 if ( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
