@@ -69,13 +69,17 @@ function nv_func_update_data ( )
         }
         nv_delete_all_cache();
     }
-    if ( $global_config['revision'] < 1107 )
+    
+    if ( $global_config['revision'] < 1119 )
     {
         $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
         $result = $db->sql_query( $sql );
         while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
         {
-            $sql = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang_i . "_" . $module_data . "_rows` (
+            $db->sql_query( "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "__menu`" );
+            $db->sql_query( "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "__rows`" );
+            
+            $sql = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang_i . "_menu_rows` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `parentid` int(11) unsigned NOT NULL,
 			  `mid` int(11) NOT NULL DEFAULT '0',  
@@ -97,7 +101,7 @@ function nv_func_update_data ( )
             
             $db->sql_query( $sql );
             
-            $sql = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_" . $module_data . "_menu` (
+            $sql = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang_i . "_menu_menu` (
 			  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			  `title` varchar(50) NOT NULL,
 			  `menu_item` mediumtext NOT NULL,
