@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jun 04, 2011, 04:52:52 PM
+*/
 
-if ( ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (!defined( 'NV_MAINFILE' )) {
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['nocatpage'] = "Lỗi không có chủ đề";
 $lang_module['other'] = "Các tin khác";
@@ -58,7 +57,6 @@ $lang_module['print_close'] = "Đóng cửa sổ này";
 $lang_module['print_link'] = "URL của bản tin này";
 $lang_module['author'] = "Tác giả bài viết";
 $lang_module['post_name'] = "Người đăng bài viết";
-
 $lang_module['source'] = "Nguồn tin";
 $lang_module['topic'] = "Theo dòng sự kiện";
 $lang_module['related_new'] = "Những tin mới hơn";
@@ -72,7 +70,6 @@ $lang_module['star_poor'] = "bài viết kém";
 $lang_module['star_ok'] = "bài viết đạt";
 $lang_module['star_good}'] = "bài viết tốt";
 $lang_module['star_verygood'] = "bài viết rất tốt";
-
 $lang_module['main_title'] = "Tìm kiếm thông tin";
 $lang_module['info_title'] = "Tìm kiếm nâng cao mục Tin tức";
 $lang_module['key_title'] = "Từ tìm kiếm";
@@ -106,10 +103,8 @@ $lang_module['keywords'] = "Từ khóa";
 $lang_module['member_view'] = "Chỉ thành viên mới có quyền xem mục này!";
 $lang_module['admin_view'] = "Chỉ người quản trị mới có quyền xem mục này!";
 $lang_module['group_view'] = "Chỉ có nhóm thành viên mới có quyền xem mục này!";
-$lang_module['rating_error1'] = 'Đánh giá không hợp lệ';
-$lang_module['rating_error2'] = 'Bạn đã đánh giá bài viết này rồi';
-
-//
+$lang_module['rating_error1'] = "Đánh giá không hợp lệ";
+$lang_module['rating_error2'] = "Bạn đã đánh giá bài viết này rồi";
 $lang_module['pubtime'] = "Đăng lúc";
 $lang_module['hotnews'] = "Tiêu điểm";
 $lang_module['lastest_comment'] = "Bình luận mới";
@@ -119,8 +114,6 @@ $lang_module['counter'] = "Lượt";
 $lang_module['total_comment'] = "Phản hồi";
 $lang_module['search_cat'] = "Tìm kiếm trong chủ đề";
 $lang_module['search_all'] = " Tất cả các chủ đề";
-
-//add content
 $lang_module['content'] = "Quản lý bài viết";
 $lang_module['add_content'] = "Đăng bài viết";
 $lang_module['topic_sl'] = "Chọn nhóm tin liên quan";
@@ -140,18 +133,17 @@ $lang_module['search_author'] = "Tác giả bài viết";
 $lang_module['content_keywords'] = "Từ khóa dành cho máy chủ tìm kiếm";
 $lang_module['save_temp'] = "Gửi bài viết đến quản trị site";
 $lang_module['save_content'] = "Đăng bài viết";
+$lang_module['update_content'] = "Sửa bài viết";
+$lang_module['del_content'] = "Xóa bài viết";
 $lang_module['captcha'] = "Mã chống spam";
-
 $lang_module['error_cat'] = "Lỗi: Bài viết chưa có chủ đề";
 $lang_module['error_title'] = "Lỗi: Bài viết chưa có tiêu đề";
 $lang_module['error_bodytext'] = "Lỗi: Bài viết chưa có nội dung";
 $lang_module['error_captcha'] = "Lỗi: Mã chống spam chưa đúng";
-
 $lang_module['save_content_ok'] = "Đăng bài viết thành công. <br />Trình duyệt sẽ tự động chuyển về trang quản lý bài viết.";
 $lang_module['save_content_view_page'] = "Đăng bài viết thành công. <br />Trình duyệt sẽ tự động chuyển về bài viết bạn vừa đăng.";
 $lang_module['save_content_waite'] = "Bài viết bạn gửi đã được hệ thống ghi nhận, <br />ban quản trị site sẽ kiểm tra bài viết và đăng bài viết trong thời gian sớm nhất, <br />trình duyệt sẽ tự động chuyển về trang quản lý bài viết.";
 $lang_module['save_content_waite_home'] = "Bài viết bạn gửi đã được hệ thống ghi nhận, <br />ban quản trị site sẽ kiểm tra bài viết và đăng bài viết trong thời gian sớm nhất, <br />trình duyệt sẽ tự động chuyển về trang chủ.";
-
 $lang_module['error_addcontent'] = "Lỗi: Bạn chưa được cấp quyền để gửi bài viết";
 $lang_module['errorsave'] = "Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề bài viết có thể bị trùng";
 

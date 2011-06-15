@@ -78,6 +78,8 @@ if ( $checknum == $row['checknum'] )
         {
             $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $db->dbescape( $userid ) );
             $check_update_user = true;
+			
+			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['account_active_log'], $row['username'] . " | " .  $client_info['ip'], 0 );
         }
     }
 }

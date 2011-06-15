@@ -277,7 +277,10 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                 {
                     $contents = "<div class=\"info_exit\">" . $lang_module['file_upload_ok'] . "</div>";
                     $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
-                    
+					
+					$user_post = defined ( "NV_IS_USER" ) ? " | " . $user_info['username'] : "";
+					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_files_log'], $array['title'] . " | " .  $client_info['ip'] . $user_post, 0 );
+			
                     include ( NV_ROOTDIR . "/includes/header.php" );
                     echo nv_site_theme( $contents );
                     include ( NV_ROOTDIR . "/includes/footer.php" );

@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 12-11-2010 20:40
  */
+ 
 if ( ! defined( 'NV_IS_MOD_NEWS' ) )
 {
     die( 'Stop!!!' );
@@ -186,6 +187,10 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
         if ( $nv_Request->get_int( 'delcontent', 'get' ) and ( empty( $rowcontent_old['status'] ) or $array_post_user['delcontent'] ) )
         {
             nv_del_content_module( $contentid );
+			
+			$user_content = defined ( 'NV_IS_USER' ) ? " | " . $user_info['username'] : "";
+			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['del_content'], $contentid . " | " .  $client_info['ip'] . $user_content, 0 );
+			
             Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op, true ) );
             die();
         }
@@ -239,7 +244,7 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
         $rowcontent['homeimgalt'] = filter_text_input( 'homeimgalt', 'post', '', 1 );
         $rowcontent['imgposition'] = $nv_Request->get_int( 'imgposition', 'post', 0 );
         
-        // Xu ly anh minh ha
+        // Xu ly anh minh hoa
         $rowcontent['homeimgthumb'] = "";
         if ( ! nv_is_url( $rowcontent['homeimgfile'] ) and file_exists( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
         {
@@ -391,6 +396,9 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
                     {
                         $db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $rowcontent['id'] . "" );
                     }
+					
+					$user_content = defined ( 'NV_IS_USER' ) ? " | " . $user_info['username'] : "";
+					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['add_content'], $rowcontent['title'] . " | " .  $client_info['ip'] . $user_content, 0 );
                 }
                 else
                 {
@@ -445,6 +453,9 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
                     {
                         $db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $rowcontent['id'] . "" );
                     }
+					
+					$user_content = defined ( 'NV_IS_USER' ) ? " | " . $user_info['username'] : "";
+					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['update_content'], $rowcontent['title'] . " | " .  $client_info['ip'] . $user_content, 0 );
                 }
                 else
                 {
@@ -731,4 +742,5 @@ elseif ( $array_post_user['addcontent'] )
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

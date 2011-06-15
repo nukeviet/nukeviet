@@ -239,6 +239,8 @@ if ( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', 
             $message .= nv_EncString( $message );
             @nv_sendmail( $global_config['site_email'], $reg_attribs['email'], $subject, $message );
             
+			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . " | " .  $client_info['ip'] . " | OpenID", 0 );
+			
             $nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
             
             Header( "Location: " . $nv_redirect );
@@ -390,6 +392,8 @@ if ( $checkss == $array_register['checkss'] )
             $contents = user_info_exit( $info );
             $contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
             
+			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . " | " .  $client_info['ip'] . " | Simple", 0 );
+
             include ( NV_ROOTDIR . "/includes/header.php" );
             echo nv_site_theme( $contents );
             include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -438,6 +442,8 @@ if ( $checkss == $array_register['checkss'] )
             $contents = user_info_exit( $info );
             $contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
             
+			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . " | " .  $client_info['ip'] . " | Simple", 0 );
+
             include ( NV_ROOTDIR . "/includes/header.php" );
             echo nv_site_theme( $contents );
             include ( NV_ROOTDIR . "/includes/footer.php" );

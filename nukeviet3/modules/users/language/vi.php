@@ -92,6 +92,7 @@ $lang_module['account_active'] = "Thông tin kích hoạt tài khoản";
 $lang_module['account_active_info'] = "Xin chào %1\$s,<br /><br />Tài khoản của bạn tại website %2\$s đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: %3\$s<br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: %4\$s<br />Email: %5\$s<br />Mật khẩu: %6\$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %7\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site";
 $lang_module['account_active_mess'] = "Tài khoản của bạn đã được tạo.<br />Chúng tôi đã gửi đến e-mail của bạn các thông tin cần thiết.<br />Hãy hàm theo hướng dẫn để kích hoạt tài khoản";
 $lang_module['account_active_mess_error_mail'] = "Tài khoản của bạn đang ở trạng thái chờ kích hoạt. Rất tiếc là đã có lỗi xảy ra trong quá trình gửi thông tin kích hoạt đến địa chỉ e-mail mà bạn vừa cung cấp. Vui lòng liên hệ đến Quản trị Website để được hỗ trợ.";
+$lang_module['account_active_log'] = "Kích hoạt tài khoản";
 $lang_module['account_active_ok'] = "Kích hoạt tài khoản thành công";
 $lang_module['account_active_error'] = "Lỗi: Kích hoạt tài khoản không thành công, bạn vui lòng kiểm tra lại đường dẫn hoặc thời gian hiệu lực của link kích hoạt";
 $lang_module['editinfo_pagetitle'] = "Sửa thông tin thành viên";
@@ -201,6 +202,7 @@ $lang_module['openid_active_confirm_info'] = "OpenID của bạn chưa được 
 $lang_module['openid_activate_account'] = "Kích hoạt tài khoản bằng OpenID";
 $lang_module['openid_is_exists'] = "Rất tiếc là OpenID này đã được sử dụng.<br />Hãy thử chọn một nhà cung cấp khác";
 $lang_module['openid_add_new'] = "Thêm OpenID mới vào tài khoản của bạn";
+$lang_module['openid_add'] = "Thêm OpenID mới";
 $lang_module['email_is_exists'] = "Rất tiếc là email của OpenID này đã được sử dụng.<br />Hãy thử chọn một nhà cung cấp khác";
 $lang_module['error_update_users_info'] = "Xin lỗi:hệ thống không cập nhật được thông tin thành viên của bạn, xin liên hệ với quản trị site để được hướng dẫn.";
 

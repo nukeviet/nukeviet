@@ -100,6 +100,7 @@ $lang_module['upload_error2'] = 'Lỗi: Họ và tên chưa được khai báo h
 $lang_module['upload_error3'] = 'Vì một lý do nào đó, hệ thống không thể ghi nhận file tải lên của Bạn. Chúng tôi thành thật xin lỗi và sẽ khắc phục lỗi kỹ thuật này trong thời gian sớm nhất';
 $lang_module['upload_error4'] = 'Lỗi: file tải lên không hợp lệ';
 $lang_module['upload_files'] = 'File tải lên';
+$lang_module['upload_files_log'] = "Đăng file mới";
 $lang_module['file_selectfile'] = 'Chọn file';
 $lang_module['file_linkdirect'] = 'Nguồn bên ngoài';
 $lang_module['add_file_items'] = 'Thêm file tải lên';

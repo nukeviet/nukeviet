@@ -115,6 +115,9 @@ if ( $nv_Request->isset_request( 'server', 'get' ) )
                 
                 $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_openid` VALUES (" . $user_info['userid'] . ", " . $db->dbescape( $openid ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
                 $db->sql_query( $sql );
+				
+				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . " | " .  $client_info['ip'] . " | " . $opid, 0 );
+				
                 header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
                 die();
             }
