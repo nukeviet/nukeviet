@@ -1,4 +1,4 @@
-.idinfo {
+﻿.idinfo {
 	vertical-align: top;
 	width: 50px;
 }
@@ -39,4 +39,29 @@
 
 .newVesionInfo a{
     color:#fff;
+}
+
+.orderasc {
+	height: 16px;
+	padding-left: 16px;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url('../images/arrows/tall-up-arrow.gif');
+}
+.orderdesc {
+	height: 16px;
+	padding-left: 16px;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url('../images/arrows/tall-down-arrow.gif');
+}
+.orderno {
+	height: 16px;
+	padding-left: 16px;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url('../images/collapse-all.gif');
+}
+.pointer {
+	cursor: pointer;
 }

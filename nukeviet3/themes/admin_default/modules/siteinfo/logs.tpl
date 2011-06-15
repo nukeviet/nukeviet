@@ -1,15 +1,81 @@
 <!-- BEGIN: main -->
 <table class="tab1">
+	<tbody>
+		<tr>
+			<td>
+				<form id="filter-form" method="get" action="">
+					<input style="width:130px" type="text" name="q" value="{DATA_SEARCH.q}" onfocus="if(this.value == '{LANG.filter_enterkey}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{LANG.filter_enterkey}';}"/>
+					{LANG.filter_from}
+					<input class="text" value="{DATA_SEARCH.from}" type="text" id="from" name="from" readonly="readonly" style="width:80px" />
+					<img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'from', 'dd.mm.yyyy', true);" alt="" height="17" />
+					{LANG.filter_to}
+					<input class="text" value="{DATA_SEARCH.to}" type="text" id="to" name="to" readonly="readonly" style="width:80px" />
+					<img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'to', 'dd.mm.yyyy', true);" alt="" height="17" />
+					<select class="text" name="lang">
+						<!-- BEGIN: lang -->
+						<option value="{lang.key}"{lang.selected}>{lang.title}</option>
+						<!-- END: lang -->
+					</select>
+					<select class="text" name="user">
+						<!-- BEGIN: user -->
+						<option value="{user.key}"{user.selected}>{user.title}</option>
+						<!-- END: user -->
+					</select>
+					<select class="text" name="module">
+						<!-- BEGIN: module -->
+						<option value="{module.key}"{module.selected}>{module.title}</option>
+						<!-- END: module -->
+					</select>
+					<div style="text-align:center">
+						<br />
+						<input type="button" name="action" value="{LANG.filter_action}"/>
+						<input type="button" name="cancel" value="{LANG.filter_cancel}" onclick="window.location='{URL_CANCEL}';"{DISABLE}/>
+						<input type="button" name="clear" value="{LANG.filter_clear}"/>
+					</div>
+				</form>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<script type="text/javascript">
+$(document).ready(function(){
+	//
+	$('input[name=clear]').click(function(){
+		$('#filter-form .text').val('');
+		$('input[name=q]').val('{LANG.filter_enterkey}');
+	});
+	//
+	$('input[name=action]').click(function(){
+		var f_q = $('input[name=q]').val();
+		var f_from = $('input[name=from]').val();
+		var f_to = $('input[name=to]').val();
+		var f_lang = $('select[name=lang]').val();
+		var f_module = $('select[name=module]').val();
+		var f_user = $('select[name=user]').val();
+		//
+		if ( ( f_q != '{LANG.filter_enterkey}' && f_q != '' ) || f_from != '' || f_to != '' || f_lang != '' || f_user != '' || f_module != '' )
+		{
+			$('#filter-form input, #filter-form select').attr('disabled', 'disabled');
+			window.location = '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}&filter=1&checksess={checksess}&q=' + f_q + '&from=' + f_from + '&to=' + f_to + '&lang=' + f_lang + '&module=' + f_module + '&user=' + f_user;	
+		}
+		else
+		{
+			alert ('{LANG.filter_err_submit}');
+		}
+	});
+});
+</script>
+<table class="tab1">
     <thead>
         <tr>
             <td width="30" align="center">
                 <input type="checkbox" name="all" id="check_all"/>
             </td>
             <td width="30" align="center">
-                {LANG.log_lang}
+                <a href="{DATA_ORDER.lang.data.url}" title="{DATA_ORDER.lang.data.title}" class="{DATA_ORDER.lang.data.class}">{LANG.log_lang}</a>
             </td>
             <td>
-                {LANG.log_module_name}
+                <a href="{DATA_ORDER.module.data.url}" title="{DATA_ORDER.module.data.title}" class="{DATA_ORDER.module.data.class}">{LANG.log_module_name}</a>
             </td>
             <td>
                 {LANG.log_name_key}
@@ -21,7 +87,7 @@
                 {LANG.log_username}
             </td>
             <td>
-                {LANG.log_time}
+                <a href="{DATA_ORDER.time.data.url}" title="{DATA_ORDER.user.data.title}" class="{DATA_ORDER.time.data.class}">{LANG.log_time}</a>
             </td>
             <td align="center">
                 {LANG.log_feature}

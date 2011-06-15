@@ -136,4 +136,20 @@ $lang_module['log_del_vote'] = "xóa bình chọn";
 $lang_module['log_add_vote'] = "thêm bình chọn";
 $lang_module['log_edit_vote'] = "sửa bình chọn";
 
+$lang_module['filter_lang'] = "-- Lọc theo ngôn ngữ --";
+$lang_module['filter_user'] = "-- Lọc theo người thực hiện --";
+$lang_module['filter_module'] = "-- Lọc theo module --";
+$lang_module['filter_system'] = "Hệ thống";
+$lang_module['filter_from'] = "Từ";
+$lang_module['filter_to'] = "đến";
+$lang_module['filter_clear'] = "Xóa trắng";
+$lang_module['filter_action'] = "Lọc dữ liệu";
+$lang_module['filter_cancel'] = "Hủy bỏ";
+$lang_module['filter_enterkey'] = "Nhập từ khóa";
+$lang_module['filter_err_submit'] = "Bạn cần chọn ít nhất một điều kiện";
+$lang_module['filter_check_log'] = "Truy cập khu vực %s thất bại";
+$lang_module['filter_lang_asc'] = "tăng dần";
+$lang_module['filter_lang_desc'] = "giảm dần";
+$lang_module['filter_order_by'] = "Sắp xếp theo %s thứ tự";
+
 ?>
