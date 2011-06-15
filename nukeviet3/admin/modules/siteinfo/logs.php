@@ -157,6 +157,10 @@ elseif  ( $order['time']['order'] != "NO" )
 {
 	$sql .= " ORDER BY `log_time` " . $order['time']['order'];
 }
+else
+{
+	$sql .= " ORDER BY `id` DESC";
+}
 
 $sql .= " LIMIT " . $page . "," . $per_page;
 
