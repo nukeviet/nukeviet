@@ -224,6 +224,16 @@
         <tbody>
             <tr>
                 <td>
+                    <strong>{LANG.getloadavg}</strong>
+                </td>
+                <td>
+                    <input type="checkbox" value="1" name="getloadavg" {DATA.getloadavg} />
+                </td>
+            </tr>
+        </tbody class="second">
+        <tbody>
+            <tr>
+                <td>
                     <strong>{LANG.my_domains}</strong>
                 </td>
                 <td>
@@ -231,7 +241,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.cookie_prefix}</strong>
@@ -241,7 +251,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.session_prefix}</strong>
@@ -251,7 +261,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.googleAnalyticsID}</strong>
@@ -261,7 +271,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.googleAnalyticsSetDomainName_title}</strong>

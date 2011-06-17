@@ -112,8 +112,13 @@ function nv_func_update_data ( )
             $db->sql_query( $sql );
         }
         nv_delete_all_cache();
-    
     }
+    
+    if ( $global_config['revision'] < 1123 )
+    {
+        $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'getloadavg', '0')" );
+    }
+
     // End date data
     if ( empty( $error_contents ) )
     {

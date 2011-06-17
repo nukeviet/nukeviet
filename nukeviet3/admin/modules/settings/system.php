@@ -116,6 +116,8 @@ if ( $submit )
     $array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
     $array_config_global['optActive'] = $nv_Request->get_int( 'optActive', 'post' );
     $array_config_global['proxy_blocker'] = $nv_Request->get_int( 'proxy_blocker', 'post' );
+    $array_config_global['getloadavg'] = $nv_Request->get_int( 'getloadavg', 'post' );
+    
     if ( ! isset( $proxy_blocker_array[$array_config_global['proxy_blocker']] ) )
     {
         $array_config_global['proxy_blocker'] = 0;
@@ -178,6 +180,7 @@ $array_config_global['online_upd'] = ( $global_config['online_upd'] ) ? ' checke
 $array_config_global['statistic'] = ( $global_config['statistic'] ) ? ' checked="checked"' : '';
 $array_config_global['lang_multi'] = ( $global_config['lang_multi'] ) ? ' checked="checked"' : '';
 $array_config_global['str_referer_blocker'] = ( $global_config['str_referer_blocker'] ) ? ' checked="checked"' : '';
+$array_config_global['getloadavg'] = ( $global_config['getloadavg'] ) ? ' checked="checked"' : '';
 $array_config_global['my_domains'] = implode( ",", $global_config['my_domains'] );
 
 $xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
