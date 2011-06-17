@@ -13,9 +13,10 @@ $key_words = $module_info['keywords'];
 
 $contents = "";
 $cache_file = "";
-if ( ! defined( 'NV_IS_MODADMIN' ) )
+
+if ( ! defined( 'NV_IS_MODADMIN' ) and $page < 100 )
 {
-    $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . NV_CACHE_PREFIX . ".cache";
+    $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_".$page."_" . NV_CACHE_PREFIX . ".cache";
     if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
     {
         $contents = $cache;
