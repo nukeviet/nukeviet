@@ -27,6 +27,7 @@ $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, del_c
 $list = nv_db_cache( $sql, 'catid', $module_name );
 foreach ( $list as $l )
 {
+	$l['alias'] = $db->unfixdb($l['alias']);
     $global_array_cat[$l['catid']] = $l;
     $global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
     if ( $alias_cat_url == $l['alias'] )

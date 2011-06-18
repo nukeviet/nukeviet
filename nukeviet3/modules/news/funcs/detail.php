@@ -95,7 +95,7 @@ if ( $allowed )
                 }
                 $news_contents['image'] = array( "src" => $src, "width" => $width, "alt" => $alt, "note" => $news_contents['homeimgalt'], "position" => $news_contents['imgposition'] );
             }
-            if ( $alias_url == $news_contents['alias'] )
+            if ( $alias_url == $db->unfixdb($news_contents['alias']))
             {
                 $publtime = intval( $news_contents['publtime'] );
             }
