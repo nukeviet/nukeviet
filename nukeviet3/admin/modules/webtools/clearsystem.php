@@ -135,6 +135,17 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reque
             $xtpl->parse( 'main.delfile.loop' );
         }
     }
+    
+    if ( in_array( 'clearip_logs', $deltype ) )
+    {
+        $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
+        $files = nv_clear_files( $dir, NV_LOGS_DIR . '/ip_logs' );
+        foreach ( $files as $file )
+        {
+            $xtpl->assign( 'DELFILE', $file );
+            $xtpl->parse( 'main.delfile.loop' );
+        }
+    }    
     $xtpl->parse( 'main.delfile' );
 }
 $xtpl->parse( 'main' );

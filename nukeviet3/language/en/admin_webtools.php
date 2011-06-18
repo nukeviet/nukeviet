@@ -24,6 +24,7 @@ $lang_module['clearsession'] = "Delete session files";
 $lang_module['cleardumpbackup'] = "Delete backup files";
 $lang_module['clearfiletemp'] = "Delete temp files";
 $lang_module['clearerrorlogs'] = "Delete error logs";
+$lang_module['clearip_logs'] = "Delete ip logs";
 $lang_module['submit'] = "Submit";
 $lang_module['deletedetail'] = "Successfully removed the following file";
 $lang_module['sitemapPing'] = "Sitemap Ping";

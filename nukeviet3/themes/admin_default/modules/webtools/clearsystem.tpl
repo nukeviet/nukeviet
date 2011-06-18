@@ -39,6 +39,12 @@
 			<td><input type="checkbox" value="clearerrorlogs" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
 		</tr>
 	</tbody>
+	<tbody>
+		<tr>
+			<td><strong>{LANG.clearip_logs}</strong></td>
+			<td><input type="checkbox" value="clearip_logs" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
+		</tr>
+	</tbody>	
 	<tbody class="tfoot_box">
 		<tr>
 			<td colspan="2" align="center"><input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;" /></td>
