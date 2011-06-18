@@ -634,6 +634,7 @@ function nv_create_table_sys ( $lang )
 		('voting', 'voting', 'voting', 'Voting', 1275315261, 1, '', '', '0', 0, 8, 1, 1, '',0),
 		('banners', 'banners', 'banners', 'Banners', 1270400000, 1, '', '', '0', 0, 9, 1, 1, '',0),
 		('search', 'search', 'search', 'Search', 1273474173, 0, '', '', '0', 0, 10, 1, 1, '',0),
+		('menu', 'menu', 'menu', 'Menu Site', 1295287334, 1, '', '', '0', 0, 9, 1, 1, '', 0),
 		('rss', 'rss', 'rss', 'Rss', 1279360267, 1, '', '', '0', 0, 11, 1, 1, '',0)";
     
     $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES

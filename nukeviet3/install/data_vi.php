@@ -31,7 +31,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 ('voting', 'voting', 'voting', 'Thăm dò ý kiến', 1275315261, 1, '', '', '0', 0, 6, 1, 1, '', 1),
 ('banners', 'banners', 'banners', 'Quảng cáo', 1270400000, 1, '', '', '0', 0, 7, 1, 1, '', 0),
 ('search', 'search', 'search', 'Tìm kiếm', 1273474173, 0, '', '', '0', 0, 8, 1, 1, '', 0),
-('menu', 'menu', 'menu', 'Menu Site', 1295287334, 0, '', '', '0', 0, 9, 1, 1, '', 0),
+('menu', 'menu', 'menu', 'Menu Site', 1295287334, 1, '', '', '0', 0, 9, 1, 1, '', 0),
 ('rss', 'rss', 'rss', 'Rss', 1279366705, 1, '', '', '0', 0, 9, 10, 1, '', 0)";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs`";
