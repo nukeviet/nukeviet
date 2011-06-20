@@ -13,12 +13,12 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
 
     function nv_block_config_news_blocks ( $module, $data_block, $lang_block )
     {
-        global $db, $language_array;
+        global $db, $language_array, $site_mods;
         $html = "";
         $html .= "<tr>";
         $html .= "	<td>" . $lang_block['blockid'] . "</td>";
         $html .= "	<td><select name=\"config_blockid\">\n";
-        $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module . "_block_cat` ORDER BY `weight` ASC";
+        $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block_cat` ORDER BY `weight` ASC";
         $list = nv_db_cache( $sql, 'catid', $module );
         foreach ( $list as $l )
         {
@@ -47,9 +47,9 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
 
     function nv_news_blocks ( $block_config )
     {
-        global $module_array_cat, $module_info, $lang_module;
+        global $module_array_cat, $module_info, $lang_module, $site_mods;
         $module = $block_config['module'];
-        $sql = "SELECT t1.id, t1.listcatid, t1.title, t1.alias, t1.homeimgthumb, t1.homeimgalt FROM `" . NV_PREFIXLANG . "_" . $module . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $module . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 AND t1.inhome='1' and  t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime >" . NV_CURRENTTIME . ") ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
+        $sql = "SELECT t1.id, t1.listcatid, t1.title, t1.alias, t1.homeimgthumb, t1.homeimgalt FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 AND t1.inhome='1' and  t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime >" . NV_CURRENTTIME . ") ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
         $list = nv_db_cache( $sql, 'catid', $module );
         $html = "";
         $i = 1;
