@@ -120,6 +120,10 @@ if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
                     {
                         $sql = "SELECT `id` as catid, `parentid`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_categories` ORDER BY `parentid` ASC, `weight` ASC";
                     }
+                    elseif ( $mod_file == "weblinks" )
+                    {
+                        $sql = "SELECT `catid`, `parentid`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat` ORDER BY `parentid` ASC, `weight` ASC";
+                    }
                     else
                     {
                         $sql = "SELECT `catid`, `parentid`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat` ORDER BY `order` ASC";
