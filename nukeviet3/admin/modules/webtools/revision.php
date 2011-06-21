@@ -111,15 +111,9 @@ else
 				if ( $global_config['update_revision_lang_mode'] != 1 )
 				{
 					$is_check_lang = true;
-					$rule = "vi";
-					if ( $global_config['update_revision_lang_mode'] == 2 )
-					{
-						$rule = implode ( "|", $global_config['allow_adminlangs'] );
-					}
-					elseif ( $global_config['update_revision_lang_mode'] == 3 )
-					{
-						$rule = implode ( "|", $global_config['allow_sitelangs'] );
-					}
+					
+					$rule = implode ( "|", array_keys( $language_array ) );
+					$check_rule = ( $global_config['update_revision_lang_mode'] == 2 )? $global_config['allow_adminlangs'] : $global_config['allow_sitelangs'];
 					
 					// Check is lang file rule
 					define ( "NV_WCHECK_LADMIN_GLOBAL_ADMIN", "/^language\/(" . $rule . ")\\/admin_global.php$/" );
@@ -140,13 +134,72 @@ else
 					 */
 					function nv_check_is_lang_file ( $file_path )
 					{
-						if ( preg_match( NV_WCHECK_LADMIN_GLOBAL_ADMIN, $file_path ) or preg_match( NV_WCHECK_LADMIN_GLOBAL_SITE, $file_path ) or preg_match( NV_WCHECK_LADMIN_INSTALL, $file_path ) or preg_match( NV_WCHECK_LADMIN_MODULES, $file_path ) or preg_match( NV_WCHECK_LMODULES_SITE, $file_path ) or preg_match( NV_WCHECK_LMODULES_ADMIN, $file_path ) or preg_match( NV_WCHECK_LJS_JQUERYUI, $file_path ) or preg_match( NV_WCHECK_LJS_CKEDITOR, $file_path ) or preg_match( NV_WCHECK_LJS_GLOBAL, $file_path ) )
+						if ( preg_match( NV_WCHECK_LADMIN_GLOBAL_ADMIN, $file_path, $match ) )
 						{
-							return false;
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LADMIN_GLOBAL_SITE, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LADMIN_INSTALL, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LADMIN_MODULES, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LMODULES_SITE, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LMODULES_ADMIN, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LJS_GLOBAL, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LJS_JQUERYUI, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LJS_CKEDITOR, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
 						}
 						else
 						{
-							return true;
+							return false;
 						}
 					}
 				}
