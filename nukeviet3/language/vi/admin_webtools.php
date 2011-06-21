@@ -162,4 +162,9 @@ $lang_module['config'] = "Cấu hình";
 $lang_module['autocheckupdate'] = "Bật tính năng kiểm tra phiên bản tự động";
 $lang_module['updatetime'] = "Thời gian kiểm lại phiên bản sau";
 
+$lang_module['update_revision_lang_mode'] = "Kiểu cập nhật các gói ngôn ngữ theo revision";
+$lang_module['update_revision_lang_mode_all'] = "Cập nhật tất cả";
+$lang_module['update_revision_lang_mode_admin'] = "Cập nhật các ngôn ngữ cho phép";
+$lang_module['update_revision_lang_mode_site'] = "Cập nhật các ngôn ngữ hiển thị ngoài site";
+
 ?>

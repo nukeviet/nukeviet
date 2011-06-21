@@ -33,6 +33,21 @@
                 </select> ({LANG.hour})
             </td>
         </tr>
+		</tbody>
+        <tbody>
+        <tr>
+            <td>
+                <strong>{LANG.update_revision_lang_mode}</strong>
+            </td>
+            <td>
+                <select name="update_revision_lang_mode">
+                    <!-- BEGIN: update_revision_lang_mode -->
+						<option value="{update_revision_lang_mode.key}"{update_revision_lang_mode.selected}>{update_revision_lang_mode.title}</option>
+                    <!-- END: update_revision_lang_mode -->
+                </select>
+            </td>
+        </tr>
+		</tbody>
     </table>
 </form>
 <!-- END: main -->

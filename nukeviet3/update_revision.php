@@ -119,6 +119,11 @@ function nv_func_update_data ( )
         $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'getloadavg', '0')" );
     }
 
+    if ( $global_config['revision'] < 1135 )
+    {
+        $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'update_revision_lang_mode', '1')" );
+    }
+
     // End date data
     if ( empty( $error_contents ) )
     {
