@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -20,6 +20,5 @@ $lang_translator['langtype'] ="lang_module";
 
 $lang_module['content'] = "Content";
 $lang_module['save'] = "Save";
-
 
 ?>

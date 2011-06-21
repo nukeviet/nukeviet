@@ -1,25 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Oct 12, 2010, 01:55:02 AM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language English
+* @Createdate Jun 21, 2011, 08:31:05 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
-$lang_module['site_configs_info'] = "Site configure";
+$lang_module['site_configs_info'] = "Site informations";
 $lang_module['site_domain'] = "Site domain";
 $lang_module['site_url'] = "Site path";
 $lang_module['site_root'] = "Absolute site path";
@@ -28,11 +27,11 @@ $lang_module['site_cookie_domain'] = "Domain store cookies";
 $lang_module['site_cookie_path'] = "Folder store cookies";
 $lang_module['site_session_path'] = "Absolute path to the folder store the session";
 $lang_module['site_timezone'] = "Time zone";
-$lang_module['server_configs_info'] = "Server configuration";
+$lang_module['server_configs_info'] = "Server informations";
 $lang_module['server_phpversion'] = "PHP version";
 $lang_module['server_phpos'] = "OS server";
 $lang_module['server_mysqlversion'] = "MySQL Version";
-$lang_module['configuration_php'] = "PHP configuration";
+$lang_module['configuration_php'] = "PHP informations";
 $lang_module['directive'] = "Directive";
 $lang_module['local_value'] = "Value";
 $lang_module['master_value'] = "Default value";
@@ -43,9 +42,9 @@ $lang_module['variable'] = "Variable name";
 $lang_module['value'] = "Value";
 $lang_module['variables_php'] = "Predefine variables";
 $lang_module['version'] = "NukeViet version";
-$lang_module['version_user'] = "You are using NukeViet version";
+$lang_module['version_user'] = "Your actual version";
 $lang_module['version_news'] = "Latest version";
-$lang_module['checkversion'] = "Check version NukeViet";
+$lang_module['checkversion'] = "Check NukeViet version";
 $lang_module['server_api'] = "Server API";
 $lang_module['chmod'] = "Check folder permission";
 $lang_module['chmod_need'] = "Need to set permission";
@@ -68,6 +67,12 @@ $lang_module['log_del_confirm'] = "Are you sure you want to delete?";
 $lang_module['log_View'] = "View";
 $lang_module['log_del_no_items'] = "You may choose";
 $lang_module['log_note'] = "Notes";
+$lang_module['moduleInfo'] = "Modules Information";
+$lang_module['moduleName'] = "Module";
+$lang_module['moduleContent'] = "Content";
+$lang_module['moduleValue'] = "Value";
+$lang_module['newVersion_detail'] = "Version Number %s, updated on %s";
+$lang_module['newVersion_info'] = "Nukeviet CMS needs to be upgraded to newer versions. <a href=\"%s\">Click here</a> for more details";
 $lang_module['log_del'] = "deleting";
 $lang_module['log_edit'] = "repair operations";
 $lang_module['log_add'] = "adding new operations";
@@ -124,18 +129,26 @@ $lang_module['log_edit_theme'] = "theme editing operations";
 $lang_module['log_intall_theme'] = "theme setup operations";
 $lang_module['log_setlayout_theme'] = "theme resetup operations";
 $lang_module['log_del_block'] = "block deleting operations";
-$lang_module['log_del_user'] = "deleting user";
+$lang_module['log_del_user'] = "modify member";
 $lang_module['log_add_user'] = "user adding operations";
 $lang_module['log_edit_user'] = "user editing operations";
 $lang_module['log_del_vote'] = "deleting vote";
 $lang_module['log_add_vote'] = "vote adding operations";
 $lang_module['log_edit_vote'] = "vote editing operations";
-
-$lang_module['moduleInfo'] = "Modules Information";
-$lang_module['moduleName'] = "Module";
-$lang_module['moduleContent'] = "Content";
-$lang_module['moduleValue'] = "Value";
-$lang_module['newVersion_detail'] = "Version Number %s, updated on %s";
-$lang_module['newVersion_info'] = "Nukeviet CMS needs to be upgraded to newer versions. <a href=\"%s\">Click here</a> for more details";
+$lang_module['filter_lang'] = "-- Filter by language --";
+$lang_module['filter_user'] = "-- Refine the implementation --";
+$lang_module['filter_module'] = "-- Filtering module --";
+$lang_module['filter_system'] = "System";
+$lang_module['filter_from'] = "From";
+$lang_module['filter_to'] = "to";
+$lang_module['filter_clear'] = "Clear";
+$lang_module['filter_action'] = "Filtering data";
+$lang_module['filter_cancel'] = "Cancel";
+$lang_module['filter_enterkey'] = "Enter keywords";
+$lang_module['filter_err_submit'] = "You must select at least one condition";
+$lang_module['filter_check_log'] = "Access region %s failed";
+$lang_module['filter_lang_asc'] = "ascending";
+$lang_module['filter_lang_desc'] = "descending";
+$lang_module['filter_order_by'] = "Sort by %s order";
 
 ?>

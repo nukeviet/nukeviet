@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Oct 11, 2010, 08:38:54 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language English
+* @Createdate Jun 21, 2011, 08:31:05 PM
+*/
 
-if ( ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (!defined( 'NV_MAINFILE' )) {
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['notallowuserlogin'] = "Sorry, login temporary not available";
 $lang_module['required'] = "Require";
@@ -117,18 +116,16 @@ $lang_module['lostpass_active_info'] = "Hello% 1 \$ s,<br /><br />You propose to
 $lang_module['lostpass_content_mess'] = "An email sent to %1\$s, <br /><br /> please follow istruction to activate";
 $lang_module['lostpass_send_subject_ok'] = "Your password has been changed";
 $lang_module['lostpass_send_account_ok'] = "Hello %1\$s,<br /><br />Your password on the website %2\$s has been changed. We send you new information to access the profiles of your account:<br /><br />URL: %3\$s<br />Login: %4\$s<br />Password: %5\$s<br /><br />This is an automatic message sent to your email. If you do not understand what was written above, just delete this message.<br /><br />Administrator";
-$lang_module['lostpass_send_pass'] = "Your password has been changed and send to emal";
+$lang_module['lostpass_send_pass'] = "Your password has been changed and send to emal %s";
 $lang_module['lostpass_active_error_link'] = "error link lostpass";
 $lang_module['changepass_title'] = "Change password";
 $lang_module['logout_title'] = "Logout";
 $lang_module['edit_info_title'] = "Edit";
 $lang_module['img_size_title'] = "Image size";
-
 $lang_module['email_active'] = "Activation information for changing email";
 $lang_module['email_active_info'] = "Hi %1\$s, Your are changed email address of account %2\$s, so youd should reactive the account. To active, you click to link below: <br /><br />URL: %3\$s<br /><br />The activation the account only enabled to %4\$s. <br /><br />This is automatically message from website %5\$s to your email. If you do not understand the content of this message. Simple please delete it! <br /><br /><br /><br />website Administrator";
 $lang_module['email_active_mes'] = "Your account has been updated. However, the system requires you to reactivate your account because you change your email address. An activation key has been sent to the new email address that you are provided. Please check your email for more information.";
 $lang_module['email_active_error_mail'] = "Your account has been updated, but the system does not send the email to activate your account. Please contact the website administrator for assistance.";
-
 $lang_module['st_login'] = "Regular login";
 $lang_module['st_login2'] = "Regular login";
 $lang_module['admin_login'] = "Login by admin account";
@@ -139,6 +136,7 @@ $lang_module['openid_note2'] = "It's the first time you login with this OpenID. 
 $lang_module['openid_note3'] = "Register a new account and link this OpenID";
 $lang_module['openid_note4'] = "Login with account create automatic by system";
 $lang_module['openid_note5'] = "Login with your exists account";
+$lang_module['openid_note6'] = "Register a new account on the forum then you need an OpenID login back again";
 $lang_module['you_openid'] = "OpenID";
 $lang_module['openid_administrator'] = "Manage OpenID";
 $lang_module['no'] = "No";
@@ -198,6 +196,7 @@ $lang_module['openid_is_exists'] = "This OpenID was used.<br />Please choose ano
 $lang_module['openid_add_new'] = "Add another OpenID to your account";
 $lang_module['email_is_exists'] = "Your OpenID's email was used.<br />Please choose another OpenID";
 $lang_module['error_update_users_info'] = "Error: System cannot update your user infomation, please contact site admin.";
-$lang_module['openid_note6'] = "Register a new account on the forum then you need an OpenID login back again";
+$lang_module['account_active_log'] = "Activate account";
+$lang_module['openid_add'] = "Add a new OpenID";
 
 ?>

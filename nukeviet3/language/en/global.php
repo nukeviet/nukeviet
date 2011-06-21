@@ -1,26 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Aug 08, 2010, 11:22:01 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language English
+* @Createdate Jun 21, 2011, 08:31:05 PM
+*/
 
-if ( ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (!defined( 'NV_MAINFILE' )) {
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_global";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_global";
 
 $lang_global['Content_Language'] = "en";
-$lang_global['LanguageName'] = "english"; //khong dich
+$lang_global['LanguageName'] = "english";
 $lang_global['site_info'] = "Notifications from the system";
 $lang_global['welcome'] = "Welcome to visit website of %s";
 $lang_global['disable_site_title'] = "Website temporary not available";
@@ -55,21 +54,19 @@ $lang_global['admin_loginsuccessfully'] = "Login successfully. Automatic redirec
 $lang_global['incorrect_password'] = "Password is invalid";
 $lang_global['relogin_info'] = "You were not online for a long time. Please declare your password again. Please enter your password in the box below. You only enter password maximum %1\$d times. If the %1\$d times that you did not verify the password, the system will forfeit the right to access your Administration";
 $lang_global['relogin_error_info'] = "%1\$s. Please enter your password in the box below. You only enter password maximum %2\$d times. You only enter password maximum %2\$d times. If the %1\$d times that you did not verify the password, the system will forfeit the right to access your Administration";
-$lang_global['admin_page'] = "Site Management";
+$lang_global['admin_page'] = "Administration";
 $lang_global['admin_module_sector'] = "Module Management";
 $lang_global['adminlogin'] = "Administrator Login";
+$lang_global['module_for_admin'] = "We are Sorry but this section of our site is for <i>Administrators Only.</i>";
 $lang_global['username'] = "Username";
 $lang_global['password'] = "Password";
 $lang_global['password2'] = "Repeat password";
 $lang_global['captcharefresh'] = "Refresh";
 $lang_global['securitycode'] = "Anti-spam code";
-
-$lang_global['module_for_admin'] = "We are Sorry but this section of our site is for <i>Administrators Only.</i>";
-
 $lang_global['loginsubmit'] = "Login";
 $lang_global['register'] = "Register";
 $lang_global['lostpass'] = "Forgot password";
-$lang_global['logininfo'] = "To log in, you need to declare fully in the spaces below. The system will check the validity of the data declaration.";
+$lang_global['logininfo'] = "Please use a valide username and password to login to the Control Panel";
 $lang_global['site_rss'] = "RSS - NEWS";
 $lang_global['copyright'] = "&copy; Copyright %s. All right reserved";
 $lang_global['phonenumber'] = "Phone";
@@ -177,7 +174,7 @@ $lang_global['actions'] = "Action";
 $lang_global['never'] = "Never";
 $lang_global['pageprev'] = "Previous page";
 $lang_global['pagenext'] = "Next page";
-$lang_global['langinterface'] = "Interface language";
+$lang_global['langinterface'] = "Language";
 $lang_global['langdata'] = "Data processing to follow language";
 $lang_global['langsite'] = "Select language";
 $lang_global['detail'] = "Detail";
@@ -198,7 +195,7 @@ $lang_global['drag_block'] = "Enable drag and drop block";
 $lang_global['no_drag_block'] = "Disable drag and drop block";
 $lang_global['blocks_saved'] = "Configuration has been saved !";
 $lang_global['blocks_saved_error'] = "Error: The system does not save the settings";
-$lang_global['users'] = "Online members";
+$lang_global['users'] = "Members";
 $lang_global['bots'] = "Host search";
 $lang_global['guests'] = "Guest";
 $lang_global['total'] = "Total";
@@ -217,14 +214,9 @@ $lang_global['browse_image'] = "Browse";
 $lang_global['openid_login'] = "Login with OpenID";
 $lang_global['google_openid_login'] = "Google";
 $lang_global['yahoo_openid_login'] = "Yahoo";
-//Breakcrump
 $lang_global['breakcrum'] = "You're current";
-
-//ADMIN_LOGIN_MODE
 $lang_global['admin_access_denied1'] = "Access denied in Admin Panel. Only God-Admin has access in Admin Panel!";
 $lang_global['admin_access_denied2'] = "Access denied in Admin Panel. Only God-Admin and Super-Admin has access in Admin Panel!";
-
-//UPLOAD
 $lang_global['error_uploadNameEmpty'] = "UserFile Name is empty";
 $lang_global['error_uploadSizeEmpty'] = "UserFile Size is empty";
 $lang_global['error_upload_ini_size'] = "The uploaded file exceeds the upload_max_filesize directive in php.ini";

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -18,7 +18,7 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_global";
 
-$lang_global['mod_authors'] = "Administration";
+$lang_global['mod_authors'] = "Administrators";
 $lang_global['mod_groups'] = "Group";
 $lang_global['mod_database'] = "Database";
 $lang_global['mod_settings'] = "Configuration";
@@ -39,7 +39,7 @@ $lang_global['admin_no_allow_func'] = "You can't access this function";
 $lang_global['who_view'] = "View right";
 $lang_global['who_view0'] = "View all";
 $lang_global['who_view1'] = "Member";
-$lang_global['who_view2'] = "Administration";
+$lang_global['who_view2'] = "Administrators";
 $lang_global['who_view3'] = "Group Member";
 $lang_global['groups_view'] = "Group viewed";
 $lang_global['block_modules'] = "Block in modules";
@@ -53,8 +53,6 @@ $lang_global['login_error_password'] = "Error: Password has not announced or dec
 $lang_global['login_error_security'] = "Error: Security Code not valid ! (Only Latin alphabet. Must have %1\$s characters)";
 $lang_global['error_zlib_support'] = "Error: Your server does not support zlib extension, You need contact your hosting provider to enable the zlib extension.";
 $lang_global['error_zip_extension'] = "Error: Your server does not support ZIP extension, You need contact your hosting provider to enable the ZIP extension.";
-
-//UPLOAD
 $lang_global['error_uploadNameEmpty'] = "UserFile Name is empty";
 $lang_global['error_uploadSizeEmpty'] = "UserFile Size is empty";
 $lang_global['error_upload_ini_size'] = "The uploaded file exceeds the upload_max_filesize directive in php.ini";

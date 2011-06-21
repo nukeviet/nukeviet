@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 15, 2011, 11:25:48 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -119,5 +119,6 @@ $lang_module['search'] = "Search data";
 $lang_module['search_option'] = "Please select a topic";
 $lang_module['search_result'] = "Search Results";
 $lang_module['search_noresult'] = "No data suitable to your requirements!";
+$lang_module['upload_files_log'] = "Post new file";
 
 ?>

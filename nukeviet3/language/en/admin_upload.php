@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 29, 2011, 10:22:07 AM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -45,10 +45,10 @@ $lang_module['renamefolder'] = "Rename";
 $lang_module['deletefolder'] = "Delete";
 $lang_module['createfolder'] = "Create";
 $lang_module['rename_newname'] = "New name:";
-$lang_module['rename_noname'] = "Do you set new file's name?";
-$lang_module['rename_nonamefolder'] = "Do you set new folder's name?";
+$lang_module['rename_noname'] = "You not enter a new file name";
+$lang_module['rename_nonamefolder'] = "You not enter new name for the folder or directory names incorrect standard";
 $lang_module['preview'] = "Preview";
-$lang_module['movefolder'] = "Move";
+$lang_module['movefolder'] = "Move to";
 $lang_module['select_folder'] = "Select";
 $lang_module['delete_folder'] = "Do you realy want to delete folder? It also delete all folder's content.";
 $lang_module['download'] = "Download";
@@ -56,7 +56,7 @@ $lang_module['select'] = "Select";
 $lang_module['move'] = "Move";
 $lang_module['origSize'] = "Original size";
 $lang_module['sizenotchanged'] = "Image you want to create new varieties  as original size";
-$lang_module['name_folder_error'] = "You may name the folder name is incorrect or regulation";
+$lang_module['name_folder_error'] = "You not enter name of the folder or name is incorrect standard";
 $lang_module['foldername'] = "Folder name";
 $lang_module['folder_exists'] = "Error! Same name already exists directory";
 $lang_module['notlevel'] = "You are not granted the right to perform this operation";
@@ -66,7 +66,7 @@ $lang_module['selectfiletype'] = "Display file type";
 $lang_module['refresh'] = "refresh";
 $lang_module['author0'] = "of all";
 $lang_module['author1'] = "my";
-$lang_module['uploadError1'] = "You need to select a file on a PC or copy the file path to the URL box";
+$lang_module['uploadError1'] = "You need to select a file on a PC or paste the file path to the URL box";
 $lang_module['uploadError2'] = "Error: URL not in accordance with standard";
 $lang_module['pubdate'] = "Updated";
 $lang_module['newSize'] = "Create a new image";
@@ -77,7 +77,7 @@ $lang_module['errorMinY'] = "Error: height less than the permitted level";
 $lang_module['errorMaxY'] = "Error: height greater than allowed";
 $lang_module['errorEmptyX'] = "Error: unknown width";
 $lang_module['errorEmptyY'] = "Error: unknown height";
-$lang_module['clickSize'] = "To get double the original size";
+$lang_module['clickSize'] = "Double click to get the the original size";
 $lang_module['goNewPath'] = "Access to the new folder";
 $lang_module['mirrorFile'] = "Save a copy in the old directory";
 $lang_module['errorNotSelectFile'] = "Error: File not selected";

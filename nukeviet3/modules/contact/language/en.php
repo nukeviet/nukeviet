@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -18,7 +18,7 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['note'] = "To contact us, please complete this form.";
+$lang_module['note'] = "You can send us a message by completing the form below. Please give all necessary information, we will try to reply you as soon as possible.";
 $lang_module['fullname'] = "Full name";
 $lang_module['email'] = "Email";
 $lang_module['captcha'] = "Anti spam code";

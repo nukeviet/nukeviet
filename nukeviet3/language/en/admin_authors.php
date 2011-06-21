@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 27, 2010, 02:26:03 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -40,7 +40,7 @@ $lang_module['os'] = "Operate system";
 $lang_module['admin_info_title1'] = "Account information: %s";
 $lang_module['admin_info_title2'] = "Account information: %s (you)";
 $lang_module['menulist'] = "List Administrator";
-$lang_module['menuadd'] = "Add Administrator";
+$lang_module['menuadd'] = "Add an Administrator";
 $lang_module['main'] = "Website adminsistrators list";
 $lang_module['nv_admin_edit'] = "Edit website administrator's information";
 $lang_module['nv_admin_add'] = "Add website administrator's information";
@@ -99,7 +99,7 @@ $lang_module['allow_modify_files'] = "Allow to edit,delete";
 $lang_module['allow_create_subdirectories'] = "Allow to create directory";
 $lang_module['allow_modify_subdirectories'] = "Allow to change name, delete folder";
 $lang_module['admin_login_incorrect'] = "Account &ldquo;<strong>%s</strong>&rdquo; already exist. Please use other account";
-$lang_module['config'] = "Config";
+$lang_module['config'] = "Configuration";
 $lang_module['adminip'] = "Admin IP";
 $lang_module['adminip_ip'] = "IP";
 $lang_module['adminip_timeban'] = "Start";
@@ -133,7 +133,6 @@ $lang_module['passwordsincorrect'] = "Password does not match";
 $lang_module['nochangepass'] = "Leave password fields blank if you don't want to change password";
 $lang_module['rule_user'] = "Account only accept letters, numbers and underscore";
 $lang_module['rule_pass'] = "Password only accept letters, numbers and underscore";
-
 $lang_module['spadmin_add_admin'] = "Allowing operators to create and change the general powers of administration modules";
 $lang_module['authors_detail_main'] = "Displays detailed information of the administrator account";
 

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 04, 2011, 05:16:29 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -144,5 +144,7 @@ $lang_module['save_content_waite'] = "The article you sent was recording system,
 $lang_module['save_content_waite_home'] = "The article you sent was recording system, <br /> site administrator will check the posts and sign posts in the shortest time, <br /> browser will automatically go back homepage.";
 $lang_module['error_addcontent'] = "Error: You have not been granted permission to submit article.";
 $lang_module['errorsave'] = "System errors do not update the content, you check the article title may be identical. Change it and try again.";
+$lang_module['update_content'] = "Edit Post";
+$lang_module['del_content'] = "Delete Post";
 
 ?>

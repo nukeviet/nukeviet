@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jan 29, 2011, 10:22:07 AM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -189,5 +189,6 @@ $lang_module['closed_site_0'] = "Sites ordinary activities";
 $lang_module['closed_site_1'] = "Closing of the site only has access to the Supreme Administrative";
 $lang_module['closed_site_2'] = "Moderator's closing general site access";
 $lang_module['closed_site_3'] = "Close all of the site admin access";
+$lang_module['getloadavg'] = "Checking server status, if server exceeds 80% processing power, the system will notify \"Server too busy. Please try again later\".";
 
 ?>

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 21, 2010, 02:43:51 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -18,7 +18,7 @@ $lang_translator['copyright'] ="Copyright (C) 2010 VINADES.,JSC. All rights rese
 $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['titlesetup'] = "Setup Nukeviet";
+$lang_module['titlesetup'] = "NukeViet Setup";
 $lang_module['select_language'] = "Select languages";
 $lang_module['license'] = "License";
 $lang_module['check_server'] = "Check server";

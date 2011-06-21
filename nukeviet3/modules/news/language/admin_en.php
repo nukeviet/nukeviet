@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 04, 2011, 06:27:28 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -67,7 +67,7 @@ $lang_module['delcat_msg_rows_move'] = "Select category to move";
 $lang_module['delcatandrows'] = "Delete topics and articles";
 $lang_module['delcat_msg_rows_noselect'] = "You should choose the topic to move to article";
 $lang_module['deltopic_msg_rows'] = "relevant news group %s article, have you sure deleted, then group related information is deleted from the article?";
-$lang_module['setting'] = "Module Config";
+$lang_module['setting'] = "Module Configuration";
 $lang_module['setting_indexfile'] = "Home page plan";
 $lang_module['setting_homesite'] = "The size of the image at home";
 $lang_module['setting_thumbblock'] = "The size of the image in the block";

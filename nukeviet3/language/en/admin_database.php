@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Aug 08, 2010, 11:22:01 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -70,7 +70,6 @@ $lang_module['save_download'] = "Click here to download the file.";
 $lang_module['dump_autobackup'] = "Activate auto backup";
 $lang_module['dump_backup_ext'] = "File extension";
 $lang_module['dump_backup_day'] = "File numbers";
-
 $lang_module['file_backup'] = "Data backup";
 $lang_module['file_nb'] = "Number";
 $lang_module['file_name'] = "File name";

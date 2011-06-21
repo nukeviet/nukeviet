@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 04, 2011, 05:18:13 PM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -24,7 +24,6 @@ $lang_module['clearsession'] = "Delete session files";
 $lang_module['cleardumpbackup'] = "Delete backup files";
 $lang_module['clearfiletemp'] = "Delete temp files";
 $lang_module['clearerrorlogs'] = "Delete error logs";
-$lang_module['clearip_logs'] = "Delete ip logs";
 $lang_module['submit'] = "Submit";
 $lang_module['deletedetail'] = "Successfully removed the following file";
 $lang_module['sitemapPing'] = "Sitemap Ping";
@@ -152,5 +151,6 @@ $lang_module['nukevietChange_delete'] = "Delete";
 $lang_module['config'] = "Configuration";
 $lang_module['autocheckupdate'] = "Enable automatic version checking";
 $lang_module['updatetime'] = "Time to check new version";
+$lang_module['clearip_logs'] = "Delete ip logs";
 
 ?>

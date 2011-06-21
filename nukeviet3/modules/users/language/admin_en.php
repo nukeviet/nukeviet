@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Sep 25, 2010, 11:10:39 AM
+* @Createdate Jun 21, 2011, 08:31:05 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -71,7 +71,7 @@ $lang_module['save'] = "Save";
 $lang_module['siteterms'] = "Site rules";
 $lang_module['error_content'] = "Error: Empty site rules";
 $lang_module['saveok'] = "Update successful";
-$lang_module['config'] = "Module config";
+$lang_module['config'] = "Module configuration";
 $lang_module['allow_reg'] = "Allow register";
 $lang_module['allow_login'] = "Allow login";
 $lang_module['allow_change_email'] = "Allow change email";
