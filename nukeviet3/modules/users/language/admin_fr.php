@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Sep 25, 2010, 06:50:13 PM
+* @Createdate Jun 21, 2011, 08:33:35 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -164,7 +164,7 @@ $lang_module['repassword'] = "Confirmer le mot de passe";
 
 $lang_module['question'] = "Question secrète";
 /*
-	 vietnam:	  Câu hỏi bí mật
+	 vietnam:	  Câu hỏi bảo mật
 	 english:	  Secret question
 */
 
@@ -284,19 +284,19 @@ $lang_module['in_group'] = "est membre du groupe";
 
 $lang_module['addquestion'] = "Ajouter une question secrète";
 /*
-	 vietnam:	  Thêm câu hỏi bí mật
+	 vietnam:	  Thêm câu hỏi bảo mật
 	 english:	  Add secret question
 */
 
 $lang_module['savequestion'] = "Sauver la question secrète";
 /*
-	 vietnam:	  Lưu câu hỏi bí mật
+	 vietnam:	  Lưu câu hỏi bảo mật
 	 english:	  Save secret question
 */
 
 $lang_module['errornotitle'] = "Vous n'avez pas donné une question secrète";
 /*
-	 vietnam:	  Lỗi bạn chưa nhập câu hỏi bí mật
+	 vietnam:	  Lỗi bạn chưa nhập câu hỏi bảo mật
 	 english:	  Error: Empty secret question
 */
 
@@ -339,7 +339,7 @@ $lang_module['saveok'] = "Mise à jour réussie";
 $lang_module['config'] = "Configuration";
 /*
 	 vietnam:	  Cấu hình module
-	 english:	  Module config
+	 english:	  Module configuration
 */
 
 $lang_module['allow_reg'] = "Autoriser l'inscription";
@@ -615,7 +615,7 @@ $lang_module['delconfirm_email_title'] = "Notification de suppression du compte"
 $lang_module['delconfirm_email_content'] = "Bonjour %1\$s,<br /><br />Nous sommes désolé de vous informer la suppression de votre compte sur le site %2\$s.";
 /*
 	 vietnam:	  Xin chào %1\$s,<br /><br />Chúng tôi rất lấy làm tiếc thông báo về việc tài khoản của bạn đã bị xóa khỏi website %2\$s.
-	 english:	  Hi %1\$s,<br /><br />We are so sorry to delete your account at website %2\$s.
+	 english:	  Hi %1\$s,<br />We are so sorry to delete your account at website %2\$s.
 */
 
 $lang_module['adduser_email'] = "Envoyer la notification:";
@@ -639,7 +639,7 @@ $lang_module['adduser_register'] = "Votre compte a été créé";
 $lang_module['adduser_register_info'] = "Bonjour %1\$s,<br /><br />Votre compte d'utilisateur sur le site %2\$s a été activé. Ci-dessous les informations:<br /><br />URL: %3\$s<br />Identifiant: %4\$s<br /><br />Ce message est envoyé automatiquement à votre boite depuis le site %2\$s. Merci de le supprimer si vous ne comprenez pas.<br /><br />Administrateur du site";
 /*
 	 vietnam:	  Xin chào %1\$s,<br /><br />Tài khoản của bạn tại website %2\$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: %3\$s<br />Tên tài khoản: %4\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site
-	 english:	  Hi %1\$s,<br /><br />Your account at website %2\$s activated. Your login information:<br /><br />URL: %3\$s<br />Account: %4\$s<br />Password: %5\$s<br /><br />This is email automatic sending from website %2\$s.<br /><br />Site administrator
+	 english:	  Hi %1\$s,<br />Your account at website %2\$s activated. Your login information:<br />URL: %3\$s<br />Account: %4\$s<br />Password: %5\$s<br />This is email automatic sending from website %2\$s.<br />Site administrator
 */
 
 $lang_module['allow_openid'] = "Autoriser l'inscription, l'identification par OpenID";
@@ -711,181 +711,181 @@ $lang_module['admin_add'] = "Ajouter un Administrateur";
 $lang_module['nv_admin_add'] = "Ajouter un groupe";
 /*
 	 vietnam:	  Thêm nhóm
-	 english:	  
+	 english:	  Add group
 */
 
 $lang_module['nv_admin_edit'] = "Modifier le groupe";
 /*
 	 vietnam:	  Sửa nhóm
-	 english:	  
+	 english:	  Edit group
 */
 
 $lang_module['title_empty'] = "Manque de titre du groupe";
 /*
 	 vietnam:	  Bạn chưa khai báo tiêu đề nhóm
-	 english:	  
+	 english:	  You do not declare group title
 */
 
 $lang_module['nv_admin_add_caption'] = "Pour créer un nouveau groupe, remplissez les champs ci-dessous";
 /*
 	 vietnam:	  Để tạo nhóm mới, bạn cần khai báo đầy đủ vào các ô trống dưới đây
-	 english:	  
+	 english:	  To create a new group, you need to declare fully in the box below
 */
 
 $lang_module['nv_admin_edit_caption'] = "Pour modifier le groupe &ldquo;%s&rdquo;, remplissez les informations aux champs ci-dessous";
 /*
 	 vietnam:	  Để thay đổi nội dung của nhóm &ldquo;%s&rdquo;, bạn cần khai báo đầy đủ vào các ô trống dưới đây
-	 english:	  
+	 english:	  To change content of the group &ldquo;%s&rdquo;, you need to declare fully in the box below
 */
 
 $lang_module['title'] = "Nom du groupe";
 /*
 	 vietnam:	  Tên nhóm
-	 english:	  
+	 english:	  Group name
 */
 
 $lang_module['content'] = "Description";
 /*
 	 vietnam:	  Nội dung
-	 english:	  
+	 english:	  Content
 */
 
 $lang_module['add_time'] = "Créer";
 /*
 	 vietnam:	  Bắt đầu vào
-	 english:	  
+	 english:	  Start date
 */
 
 $lang_module['exp_time'] = "Expirer";
 /*
 	 vietnam:	  Hiệu lực đến
-	 english:	  
+	 english:	  Expire date
 */
 
 $lang_module['public'] = "Publique";
 /*
 	 vietnam:	  Công cộng
-	 english:	  
+	 english:	  Public
 */
 
 $lang_module['users'] = "Membres";
 /*
 	 vietnam:	  Thành viên
-	 english:	  
+	 english:	  User
 */
 
 $lang_module['error_title_exists'] = "Ce nom du groupe &ldquo;%s&rdquo; a été utilisé";
 /*
 	 vietnam:	  Tên nhóm &ldquo;%s&rdquo; đã tồn tại
-	 english:	  
+	 english:	  Group name &ldquo;%s&rdquo; already exist
 */
 
 $lang_module['users_in_group_caption'] = "Liste des membres du groupe &ldquo;%s&rdquo; (%d membres)";
 /*
 	 vietnam:	  Danh sách thành viên của nhóm &ldquo;%s&rdquo; (%d thành viên)
-	 english:	  
+	 english:	  Member list in group &ldquo;%s&rdquo; (%d group)
 */
 
 $lang_module['error_group_not_found'] = "Erreur: Groupe introuvable";
 /*
 	 vietnam:	  Lỗi: Không tìm thấy nhóm
-	 english:	  
+	 english:	  Error: Can't find group
 */
 
 $lang_module['error_users_not_found'] = "Ce groupe n'a pas encore de membres";
 /*
 	 vietnam:	  Hiện nhóm này chưa có thành viên
-	 english:	  
+	 english:	  Group has not member
 */
 
 $lang_module['error_not_groups'] = "Aucun groupe a été créé. Cliquez <a href=\"%s\">ici</a> pour créer des groupes";
 /*
 	 vietnam:	  Hiện chưa có nhóm nào được thành lập. Hãy click <a href=\"%s\">vào đây</a> để bắt đầu tạo nhóm
-	 english:	  
+	 english:	  There are no groups to be established. Click here <a href=\"%s\">vào đây</a> to create a group
 */
 
 $lang_module['add_users'] = "Ajouter les membres au groupe &ldquo;%s&rdquo;";
 /*
 	 vietnam:	  Thêm thành viên vào nhóm &ldquo;%s&rdquo;
-	 english:	  
+	 english:	  Member  &ldquo;%s&rdquo;
 */
 
 $lang_module['form_search_label0'] = "Rechercher les membres";
 /*
 	 vietnam:	  Tìm kiếm thành viên theo tiêu chí
-	 english:	  
+	 english:	  Search members by
 */
 
 $lang_module['form_search_label1'] = "Entrez le mot clé (laisser vide = tout)";
 /*
 	 vietnam:	  Hãy nhập Từ khóa (Để trống = tất cả)
-	 english:	  
+	 english:	  Keyword (Null = all member)
 */
 
 $lang_module['form_search_select0'] = "Nom";
 /*
 	 vietnam:	  Họ tên
-	 english:	  
+	 english:	  Name
 */
 
 $lang_module['form_search_select1'] = "E-mail";
 /*
 	 vietnam:	  Email
-	 english:	  
+	 english:	  Email
 */
 
 $lang_module['form_search_select2'] = "ID";
 /*
 	 vietnam:	  ID
-	 english:	  
+	 english:	  ID
 */
 
 $lang_module['search_not_result'] = "Aucun résultat";
 /*
 	 vietnam:	  Tìm kiếm không kết quả
-	 english:	  
+	 english:	  Not found any results
 */
 
 $lang_module['search_result_caption'] = "Résultats de la recherche";
 /*
 	 vietnam:	  Kết quả tìm kiếm
-	 english:	  
+	 english:	  Result
 */
 
 $lang_module['group_pgtitle'] = "Infos détailées";
 /*
 	 vietnam:	  Thông tin chi tiết
-	 english:	  
+	 english:	  Detail
 */
 
 $lang_module['group_info'] = "Infos du groupe &ldquo;%s&rdquo;";
 /*
 	 vietnam:	  Thông tin về nhóm &ldquo;%s&rdquo;
-	 english:	  
+	 english:	  Group information &ldquo;%s&rdquo;
 */
 
 $lang_module['add_user'] = "Ajouter le membre %1\$s au groupe %2\$s";
 /*
 	 vietnam:	  Thêm thành viên %1\$s vào nhóm %2\$s
-	 english:	  
+	 english:	  Member %1\$s group %2\$s
 */
 
 $lang_module['exclude_user'] = "Éliminer le membre %1\$s du groupe %2\$s";
 /*
 	 vietnam:	  Loại thành viên %1\$s khỏi nhóm %2\$s
-	 english:	  
+	 english:	  Delete member %1\$s in group %2\$s
 */
 
 $lang_module['siteinfo_user'] = "Membres";
 /*
 	 vietnam:	  Số thành viên
-	 english:	  
+	 english:	  Members
 */
 
 $lang_module['siteinfo_waiting'] = "Membres suspens";
 /*
 	 vietnam:	  Số thành viên đợi kích hoạt
-	 english:	  
+	 english:	  Unactive members
 */
 
 

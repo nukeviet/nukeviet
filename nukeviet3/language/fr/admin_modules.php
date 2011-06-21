@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Sep 25, 2010, 06:50:12 PM
+* @Createdate Jun 21, 2011, 08:33:35 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -20,8 +20,8 @@ $lang_translator['langtype'] ="lang_module";
 
 $lang_module['modules'] = "Installation";
 /*
-	 vietnam:	  Cài đặt module
-	 english:	  Setup module
+	 vietnam:	  Thiết lập module mới
+	 english:	  Setup new module
 */
 
 $lang_module['blocks'] = "Configuration des blocks";
@@ -38,7 +38,7 @@ $lang_module['language'] = "Installation de langues";
 
 $lang_module['setup'] = "Installer";
 /*
-	 vietnam:	  Cài đặt
+	 vietnam:	  Thiết lập
 	 english:	  Setup
 */
 
@@ -186,6 +186,12 @@ $lang_module['funcs_subweight'] = "Ordre";
 	 english:	  Index
 */
 
+$lang_module['activate_rss'] = "Activer la fonction RSS";
+/*
+	 vietnam:	  Kích hoạt chức năng rss
+	 english:	  Activate RSS
+*/
+
 $lang_module['module_sys'] = "Les Modules du système";
 /*
 	 vietnam:	  Các module hệ thống
@@ -194,7 +200,7 @@ $lang_module['module_sys'] = "Les Modules du système";
 
 $lang_module['vmodule'] = "Modules virtuels";
 /*
-	 vietnam:	  Các module ảo hóa
+	 vietnam:	  Các module ảo
 	 english:	  Virtual modules
 */
 
@@ -236,7 +242,7 @@ $lang_module['vmodule_blockquote'] = "Note: Nom du nouveau module se combine de 
 
 $lang_module['autoinstall'] = "Auto-Installation";
 /*
-	 vietnam:	  Cài đặt tự động
+	 vietnam:	  Cài đặt và đóng gói tự động
 	 english:	  Automatic setup
 */
 
@@ -360,6 +366,18 @@ $lang_module['autoinstall_module_error_invalidfile_back'] = "Précédant";
 	 english:	  Back
 */
 
+$lang_module['autoinstall_module_error_warning_overwrite'] = "Notification: structure de ce module n'est pas conforme, êtes-vous sur de vouloir continuer?";
+/*
+	 vietnam:	  Thông báo: Cấu trúc của module bạn cài đặt có các file và thư mục không đúng chuẩn, bạn có chắc chắn thực hiện tiếp quá trình cài đặt
+	 english:	  Announcement: structure of the module has the file and folder wrong standard, Do you want to continue installed?
+*/
+
+$lang_module['autoinstall_module_overwrite'] = "Continuer";
+/*
+	 vietnam:	  Thực hiện
+	 english:	  Continue install
+*/
+
 $lang_module['autoinstall_module_error_warning_fileexist'] = "Liste des fichiers existants sur le serveur:";
 /*
 	 vietnam:	  Danh sách hiện có trên hệ thống:
@@ -404,7 +422,7 @@ $lang_module['autoinstall_module_cantunzip'] = "Impossible de décompresser. Vé
 
 $lang_module['autoinstall_module_unzip_success'] = "Installation est terminée avec succès. Vous serez amené à la page d'activation.";
 /*
-	 vietnam:	  Qúa trình cài đặt thành công. Hệ thống sẽ tự động chuyển bạn sang trang kích hoạt cài đặt ngay bây giờ.
+	 vietnam:	  Quá trình cài đặt thành công. Hệ thống sẽ tự động chuyển bạn sang trang kích hoạt cài đặt ngay bây giờ.
 	 english:	  Successful. Automatic redirect to activate page.
 */
 
@@ -418,6 +436,12 @@ $lang_module['autoinstall_module_unzip_filelist'] = "Liste des fichiers décompr
 /*
 	 vietnam:	  Danh sách file đã giải nén
 	 english:	  List unzip files
+*/
+
+$lang_module['autoinstall_module_error_movefile'] = "Installation automatique impossible. Votre hôte ne supporte pas le déplacement des fichiers après décompresser";
+/*
+	 vietnam:	  Việc cài đặt tự động không thể tiếp tục do host không hỗ trợ di chuyển các file sau khi giải nén.
+	 english:	  The installation can not continue automatically because the host does not support moving files after unpacking.
 */
 
 $lang_module['autoinstall_package_select'] = "Choisir le module à paqueter";
@@ -436,12 +460,6 @@ $lang_module['autoinstall_package_processing'] = "Veuillez patienter quelques in
 /*
 	 vietnam:	   xin chờ quá trình thực hiện hoàn thành...
 	 english:	  please wait to complete...
-*/
-
-$lang_module['activate_rss'] = "Activer la fonction RSS";
-/*
-	 vietnam:	  Kích hoạt chức năng rss
-	 english:	  
 */
 
 

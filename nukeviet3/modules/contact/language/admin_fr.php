@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Sep 25, 2010, 06:50:12 PM
+* @Createdate Jun 21, 2011, 08:33:37 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -285,7 +285,13 @@ $lang_module['delall'] = "Supprimer Tout";
 $lang_module['siteinfo_new'] = "Messages pas encore lus";
 /*
 	 vietnam:	  Liên hệ chưa đọc
-	 english:	  
+	 english:	  Unread contact
+*/
+
+$lang_module['no_row_contact'] = "Aucun contact";
+/*
+	 vietnam:	  Không có liên hệ nào gửi đến bạn
+	 english:	  No Contact
 */
 
 

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Sep 25, 2010, 06:50:13 PM
+* @Createdate Jun 21, 2011, 08:33:38 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -164,7 +164,7 @@ $lang_module['weblink_title'] = "Titre";
 
 $lang_module['weblink_description'] = "Description";
 /*
-	 vietnam:	  Mô tả
+	 vietnam:	  Mô tả liên kết
 	 english:	  Description
 */
 
@@ -294,7 +294,7 @@ $lang_module['link_list'] = "Gestion de liens";
 	 english:	  Links management
 */
 
-$lang_module['weblink_add_link'] = "Ajout d'un lien";
+$lang_module['weblink_add_link'] = "Ajouter un lien";
 /*
 	 vietnam:	  Thêm liên kết mới
 	 english:	  Add link
@@ -630,16 +630,16 @@ $lang_module['config_error_per_page'] = "Erreur: par_page";
 	 english:	  Error: Not on per_page field
 */
 
-$lang_module['siteinfo_numberlink'] = "Liens";
+$lang_module['siteinfo_numberlink'] = "Totaux Liens";
 /*
 	 vietnam:	  Tổng số link
-	 english:	  
+	 english:	  Total links
 */
 
 $lang_module['siteinfo_error'] = "Rapports de liens cassés";
 /*
 	 vietnam:	  Số báo cáo link hỏng
-	 english:	  
+	 english:	  Bad link reports
 */
 
 

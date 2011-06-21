@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Sep 25, 2010, 06:50:12 PM
+* @Createdate Jun 21, 2011, 08:33:37 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -20,15 +20,20 @@ $lang_translator['langtype'] ="lang_module";
 
 $lang_module['categories'] = "Catégories";
 /*
-	 vietnam:	  Quản lý Chủ đề
+	 vietnam:	  Quản lý chuyên mục
 	 english:	  Categories
 */
 
 $lang_module['topics'] = "Sujets";
+/*
+	 vietnam:	  Theo dòng sự kiện
+	 english:	  Topics
+*/
+
 $lang_module['topics_error_title'] = "Erreur: Vous ne saisissez pas le titre de l'événement";
 /*
-	 vietnam:	  Nhóm tin liên quan
-	 english:	  Topics
+	 vietnam:	  Lỗi: Bạn không nhập vào tiêu đề sự kiện
+	 english:	  Error: You do not enter the event title
 */
 
 $lang_module['sources'] = "Sources";
@@ -121,6 +126,12 @@ $lang_module['saveok'] = "Mise à jour réussie";
 	 english:	  Update succesfully
 */
 
+$lang_module['clickgotomodule'] = "Cliquez ici pour aller à la gestion des articles";
+/*
+	 vietnam:	  Click vào đây để chuyển vào trang quản lý bài viết.
+	 english:	  Click here to management posts.
+*/
+
 $lang_module['alias'] = "Alias";
 /*
 	 vietnam:	  Liên kết tĩnh
@@ -147,7 +158,7 @@ $lang_module['weight'] = "Position";
 
 $lang_module['numsubcat'] = "Nombre de sous-catégories";
 /*
-	 vietnam:	  Số chủ đề con
+	 vietnam:	  Số chuyên mục con
 	 english:	  Number of sub-categories
 */
 
@@ -189,13 +200,13 @@ $lang_module['content_add'] = "Ajout d'un article";
 
 $lang_module['add_cat'] = "Ajouter une catégorie";
 /*
-	 vietnam:	  Thêm chủ đề
+	 vietnam:	  Thêm chuyên mục
 	 english:	  Add categories
 */
 
 $lang_module['add_topic'] = "Ajouter un sujet";
 /*
-	 vietnam:	  Thêm nhóm tin liên quan
+	 vietnam:	  Thêm dòng sự kiện
 	 english:	  Add topic
 */
 
@@ -207,13 +218,13 @@ $lang_module['add_sources'] = "Ajouter une source";
 
 $lang_module['edit_cat'] = "Éditer la catégorie";
 /*
-	 vietnam:	  Sửa chủ đề
+	 vietnam:	  Sửa chuyên mục
 	 english:	  Edit categories
 */
 
 $lang_module['edit_topic'] = "Éditer le sujet";
 /*
-	 vietnam:	  Sửa nhóm tin liên quan
+	 vietnam:	  Sửa dòng sự kiện
 	 english:	  Edit topic
 */
 
@@ -225,13 +236,13 @@ $lang_module['edit_sources'] = "Éditer la source";
 
 $lang_module['add_block_cat'] = "Ajouter un groupe de blocks";
 /*
-	 vietnam:	  Thêm nhóm block
+	 vietnam:	  Thêm nhóm tin
 	 english:	  Add block group
 */
 
 $lang_module['edit_block_cat'] = "Éditer le groupe de blocks";
 /*
-	 vietnam:	  Sửa nhóm block
+	 vietnam:	  Sửa nhóm tin
 	 english:	  Edit block groups
 */
 
@@ -243,13 +254,13 @@ $lang_module['link'] = "Lien de la source";
 
 $lang_module['cat_sub'] = "Catégorie";
 /*
-	 vietnam:	  Thuộc chủ đề
+	 vietnam:	  Thuộc chuyên mục
 	 english:	  Categories
 */
 
 $lang_module['cat_sub_sl'] = "Catégorie principale";
 /*
-	 vietnam:	  Là chủ đề chính
+	 vietnam:	  Là chuyên mục chính
 	 english:	  Main categories
 */
 
@@ -261,37 +272,37 @@ $lang_module['topic_sl'] = "Sélectionnez ou tapez le sujet";
 
 $lang_module['delcat_msg_cat'] = "Cette catégorie a  %s sous-catégories, il faut les supprimer ou les déplacer tout d'abord";
 /*
-	 vietnam:	  Chủ đề này có %s chủ đề thành phần, bạn cần xóa hoặc di chuyển các chủ đề thành phần trước
+	 vietnam:	  Chuyên mục này có %s Chuyên mục thành phần, bạn cần xóa hoặc di chuyển các Chuyên mục thành phần trước
 	 english:	  Error:Categories has %s sub-categories
 */
 
 $lang_module['delcat_msg_rows'] = "Cette catégorie a %s articles, êtes-vous sûr de vouloir les supprimer ou déplacer vers une autre catégorie";
 /*
-	 vietnam:	  Chủ đề có %s bài viết, bạn có chắc chắn xóa hoặc di chuyển sang chủ đề khác
+	 vietnam:	  Chuyên mục có %s bài viết, bạn có chắc chắn xóa hoặc di chuyển sang Chuyên mục khác
 	 english:	  Error:Delete categories fail because categories %s article.
 */
 
 $lang_module['delcat_msg_rows_select'] = "Attention: La catégorie %1\$s a %2\$s articles. <br />Si vous la supprimez, tous les articles de cette catégories seront supprimés également.";
 /*
-	 vietnam:	  Chú ý: chủ đề %1\$s có %2\$s bài viết. <br />Bạn xóa chủ đề này tức là xóa tất cả bài viết bên trong nó.
+	 vietnam:	  Chú ý: Chuyên mục %1\$s có %2\$s bài viết. <br />Bạn xóa Chuyên mục này tức là xóa tất cả bài viết bên trong nó.
 	 english:	  Note: Remove category %1\$s and all %2\$s topics.
 */
 
 $lang_module['delcat_msg_rows_move'] = "Ou sélectionnez une catégorie pour les déplacer";
 /*
-	 vietnam:	  Hoặc chọn chủ đề để di chuyển bài viết tới
+	 vietnam:	  Hoặc chọn Chuyên mục để di chuyển bài viết tới
 	 english:	  Select category to move
 */
 
 $lang_module['delcatandrows'] = "Supprimer la catégorie et les articles";
 /*
-	 vietnam:	  Xóa chủ đề và các bài viết
+	 vietnam:	  Xóa Chuyên mục và các bài viết
 	 english:	  Delete topics and articles
 */
 
 $lang_module['delcat_msg_rows_noselect'] = "Sélectionnez une catégorie pour déplacer les articles";
 /*
-	 vietnam:	  Bạn cần chọn chủ đề để di chuyển bài viết tới
+	 vietnam:	  Bạn cần chọn Chuyên mục để di chuyển bài viết tới
 	 english:	  You should choose the topic to move to article
 */
 
@@ -304,7 +315,7 @@ $lang_module['deltopic_msg_rows'] = "Ce sujet a %s articles, êtes-vous sûr de 
 $lang_module['setting'] = "Configuration";
 /*
 	 vietnam:	  Cấu hình module
-	 english:	  Module Config
+	 english:	  Module Configuration
 */
 
 $lang_module['setting_indexfile'] = "Affichage à l'Accueil";
@@ -369,7 +380,7 @@ $lang_module['setting_copyright'] = "Texte de droit d'auteur";
 
 $lang_module['viewcat_page'] = "Méthode d'affichage";
 /*
-	 vietnam:	  Cách thể hiện chủ đề
+	 vietnam:	  Cách thể hiện Chuyên mục
 	 english:	  Way are shown categories
 */
 
@@ -387,26 +398,50 @@ $lang_module['viewcat_page_old'] = "liste, ancien en haut";
 
 $lang_module['viewcat_main_left'] = "par catégorie, autres articles à gauche";
 /*
-	 vietnam:	  chủ đề, tin khác nằm bên trái
+	 vietnam:	  chuyên mục, tin khác nằm bên trái
 	 english:	  Categories,News other on left
 */
 
 $lang_module['viewcat_main_right'] = "par catégorie, autres articles à droite";
 /*
-	 vietnam:	  chủ đề,tin khác nằm bên phải
+	 vietnam:	  chuyên mục,tin khác nằm bên phải
 	 english:	  Categories,News other on right
 */
 
 $lang_module['viewcat_main_bottom'] = "par catégorie, autres articles en bas";
 /*
-	 vietnam:	  chủ đề,tin khác nằm bên dưới
+	 vietnam:	  chuyên mục,tin khác nằm bên dưới
 	 english:	  Categories,News other on bottom
 */
 
 $lang_module['viewcat_two_column'] = "par catégorie en 2 colonnes";
 /*
-	 vietnam:	  chủ đề thành 2 cột
+	 vietnam:	  chuyên mục thành 2 cột
 	 english:	  Categories are shown in two column
+*/
+
+$lang_module['viewcat_list_new'] = "par titre, le plus récent en haut";
+/*
+	 vietnam:	  theo tiêu đề, mới lên trên
+	 english:	  title, new front
+*/
+
+$lang_module['viewcat_list_old'] = "par titre, ancien en haut";
+/*
+	 vietnam:	  theo tiêu đề, cũ lên trên
+	 english:	  title, old front
+*/
+
+$lang_module['viewcat_grid_new'] = "par grille, nouveau en haut";
+/*
+	 vietnam:	  theo lưới, mới lên trên
+	 english:	  grid, new front
+*/
+
+$lang_module['viewcat_grid_old'] = "par grille, ancien en haut";
+/*
+	 vietnam:	  theo lưới, cũ lên trên
+	 english:	  grid, old front
 */
 
 $lang_module['search'] = "Rechercher";
@@ -435,13 +470,13 @@ $lang_module['search_key'] = "Mot clé";
 
 $lang_module['search_cat'] = "Catégorie";
 /*
-	 vietnam:	  Chủ đề bài viết
+	 vietnam:	  Chuyên mục bài viết
 	 english:	  Categories
 */
 
 $lang_module['search_cat_all'] = "Toutes les catégories";
 /*
-	 vietnam:	  Tất cả các chủ đề
+	 vietnam:	  Tất cả các chuyên mục
 	 english:	  All Categories
 */
 
@@ -501,7 +536,7 @@ $lang_module['error_bodytext'] = "Erreur: Manque de contenu";
 
 $lang_module['error_cat'] = "Erreur: Il faut sélectionner la catégorie";
 /*
-	 vietnam:	  Lỗi: Bài viết chưa có chủ đề
+	 vietnam:	  Lỗi: Bài viết chưa có chuyên mục
 	 english:	  Error: Article has no categories
 */
 
@@ -513,31 +548,31 @@ $lang_module['sources_sl'] = "Sélectionnez ou tapez";
 
 $lang_module['content_cat'] = "Catégorie";
 /*
-	 vietnam:	  Chủ đề của bài viết
+	 vietnam:	  Chuyên mục của bài viết
 	 english:	  Categories
 */
 
 $lang_module['content_block'] = "Articles liés aux blocks";
 /*
-	 vietnam:	  Bài viết thuộc các block
+	 vietnam:	  Bài viết thuộc các nhóm tin
 	 english:	  is block content
 */
 
 $lang_module['content_topic'] = "Sujet";
 /*
-	 vietnam:	  Là thành phần của nhóm tin liên quan
+	 vietnam:	  Thuộc dòng sự kiện
 	 english:	  is topic content
 */
 
 $lang_module['content_homeimg'] = "Image";
 /*
-	 vietnam:	  Hình Minh họa cho phần giới thiệu
+	 vietnam:	  Hình minh họa
 	 english:	  Illustrate image for Introduction
 */
 
 $lang_module['content_homeimgalt'] = "Anoter l'image";
 /*
-	 vietnam:	  Chú thích cho hình minh họa
+	 vietnam:	  Chú thích cho hình
 	 english:	  A comment about this image
 */
 
@@ -685,6 +720,24 @@ $lang_module['content_copyright'] = "Garder le droit d'auteur";
 	 english:	  Copyright
 */
 
+$lang_module['content_saveok'] = "Enregistrement de données avec succès";
+/*
+	 vietnam:	  Đã ghi dữ liệu thành công
+	 english:	  Successfully recorded data
+*/
+
+$lang_module['content_main'] = "Retour à la gestion";
+/*
+	 vietnam:	  Quay lại trang quản lý
+	 english:	  Back to management
+*/
+
+$lang_module['redircet_title'] = "Action réussie";
+/*
+	 vietnam:	  Thực hiện thành công thao tác
+	 english:	  Successful implementation of action
+*/
+
 $lang_module['content_archive'] = "Archiver à l'expiration";
 /*
 	 vietnam:	  Lưu trữ sau thời gian hết hạn
@@ -699,7 +752,7 @@ $lang_module['showhometext'] = "Afficher l'introduction lors de la lecture d'art
 
 $lang_module['imgposition'] = "Position de l'image";
 /*
-	 vietnam:	  Hình ảnh tại bài viết
+	 vietnam:	  Trình bày hình trong bài viết
 	 english:	  Article image
 */
 
@@ -723,13 +776,13 @@ $lang_module['imgposition_2'] = "Sous l'introduction";
 
 $lang_module['addtoblock'] = "Ajouter au block";
 /*
-	 vietnam:	  Thêm bài viết vào block
+	 vietnam:	  Thêm bài viết vào nhóm tin
 	 english:	  Add content to block
 */
 
 $lang_module['delete_from_block'] = "Supprimer du block";
 /*
-	 vietnam:	  Xóa bài viết khỏi block
+	 vietnam:	  Xóa bài viết khỏi nhóm tin
 	 english:	  Delete block's article
 */
 
@@ -903,7 +956,7 @@ $lang_module['comment_update_success'] = "Mise à jour réussie !";
 
 $lang_module['block'] = "Blocks";
 /*
-	 vietnam:	  Các block tin
+	 vietnam:	  Các nhóm tin
 	 english:	  Blocks
 */
 
@@ -911,6 +964,12 @@ $lang_module['adddefaultblock'] = "Par défaut lors d'ajout d'article";
 /*
 	 vietnam:	  Chọn mặc định khi tạo bài viết
 	 english:	  Select the default when creating article
+*/
+
+$lang_module['module_logo'] = "Logo de module";
+/*
+	 vietnam:	  Logo tại module khi giao diện hỗ trợ thay thế logo
+	 english:	  Logo module
 */
 
 $lang_module['source_logo'] = "Logo de la source";
@@ -927,7 +986,7 @@ $lang_module['topic_page'] = "Articles du même sujet";
 
 $lang_module['topic_del'] = "Supprimer du sujet";
 /*
-	 vietnam:	  Xóa khỏi nhóm tin liên quan
+	 vietnam:	  Xóa khỏi dòng sự kiện
 	 english:	  Topic del
 */
 
@@ -963,7 +1022,7 @@ $lang_module['addtotopics'] = "Ajout au sujet";
 
 $lang_module['topic_update_success'] = "Mise à jour réussie !";
 /*
-	 vietnam:	  Cập nhật thành công !
+	 vietnam:	  Cập nhật thành công!
 	 english:	  Update successful
 */
 
@@ -976,43 +1035,205 @@ $lang_module['topic_num_news'] = "articles";
 $lang_module['siteinfo_publtime'] = "Articles actifs";
 /*
 	 vietnam:	  Tổng số bài viết hiệu lực
-	 english:	  
+	 english:	  Active posts
 */
 
 $lang_module['siteinfo_users_send'] = "Articles envoyés par les membres";
 /*
 	 vietnam:	  Số bài viết thành viên gửi tới
-	 english:	  
+	 english:	  Member posts
 */
 
 $lang_module['siteinfo_pending'] = "Articles suspens";
 /*
 	 vietnam:	  Số bài viết chờ đăng
-	 english:	  
+	 english:	  Pending posts
 */
 
 $lang_module['siteinfo_expired'] = "Articles expirés";
 /*
 	 vietnam:	  Số bài viết đã hết hạn
-	 english:	  
+	 english:	  Expired posts
 */
 
 $lang_module['siteinfo_exptime'] = "Articles à peine expirés";
 /*
 	 vietnam:	  Số bài viết sắp hết hạn
-	 english:	  
+	 english:	  Expire posts
 */
 
 $lang_module['siteinfo_comment'] = "Commentaires publiés";
 /*
 	 vietnam:	  Tổng số bình luận được đăng
-	 english:	  
+	 english:	  Total comments
 */
 
 $lang_module['siteinfo_comment_pending'] = "Commentaires suspens";
 /*
 	 vietnam:	  Số bình luận chờ duyệt
-	 english:	  
+	 english:	  Uncheck comments
+*/
+
+$lang_module['group_content'] = "Configuration d’envoi des membres";
+/*
+	 vietnam:	  Cấu hình đăng bài viết của thành viên
+	 english:	  Configuration of the members post article
+*/
+
+$lang_module['group_addcontent'] = "Envoi autorisé";
+/*
+	 vietnam:	  Được đăng bài viết
+	 english:	  Add article
+*/
+
+$lang_module['group_postcontent'] = "Publier sans censurer";
+/*
+	 vietnam:	  Đăng bài viết không cần kiểm duyệt
+	 english:	  Add article without censoring
+*/
+
+$lang_module['group_editcontent'] = "Édition des articles publiés autorisée";
+/*
+	 vietnam:	  Được sửa bài viết đã đăng
+	 english:	  Allowed edit their own article
+*/
+
+$lang_module['group_delcontent'] = "Suppression autorisée";
+/*
+	 vietnam:	  Được xóa bài viết đã đăng
+	 english:	  Allowed delete their own article
+*/
+
+$lang_module['admin'] = "Décentralisation de la gestion";
+/*
+	 vietnam:	  Phân quyền quản lý
+	 english:	  Decentralized management
+*/
+
+$lang_module['admin_permissions'] = "Pouvoirs";
+/*
+	 vietnam:	  Quyền hạn
+	 english:	  Permissions
+*/
+
+$lang_module['admin_edit'] = "Modifier le pouvoir";
+/*
+	 vietnam:	  Sửa quyền hạn
+	 english:	  Edit permissions
+*/
+
+$lang_module['admin_edit_user'] = "Changer les droits de membre";
+/*
+	 vietnam:	  Sửa quyền hạn thành viên
+	 english:	  Edit member's permissions
+*/
+
+$lang_module['admin_full_module'] = "Administrateur du module";
+/*
+	 vietnam:	  Toàn quyền module
+	 english:	  Full administrator module
+*/
+
+$lang_module['admin_module'] = "Administrateur de module";
+/*
+	 vietnam:	  Quản lý module
+	 english:	  Admin's module
+*/
+
+$lang_module['admin_module_for_user'] = "Vous avez tous les pouvoirs du module, hors de la gestion décentralisée";
+/*
+	 vietnam:	  Bạn có tất cả các quyền hạn của module, trừ chức năng phân quyền quản lý
+	 english:	  You have most of the powers of the module, eliminating the function of decentralized management.
+*/
+
+$lang_module['admin_cat'] = "Administrateur de Catégorie";
+/*
+	 vietnam:	  Quản lý Chuyên mục
+	 english:	  Management's Category
+*/
+
+$lang_module['admin_cat_for_user'] = "Vos pouvoirs aux catégories";
+/*
+	 vietnam:	  Quyền hạn của bạn tại các chuyên mục
+	 english:	  Your administrative powers in the categories
+*/
+
+$lang_module['admin_no_user'] = "Fonctions de décentralisation de ce module ne s'appliquent qu'aux administrateurx de modules, vous devez aes jouter d'abord";
+/*
+	 vietnam:	  Chức năng phân quyền cho module này chỉ áp dụng cho người điều hành module, bạn cần thêm người điều hành module trước khi tiến hành phân quyền.
+	 english:	  Decentralized functions for this module only apply to the modules, you need to add the admin modules prior to the separation of powers.
+*/
+
+$lang_module['admin_userid'] = "Identifiant";
+/*
+	 vietnam:	  userid
+	 english:	  User ID
+*/
+
+$lang_module['admin_username'] = "Nom d'utilisateur";
+/*
+	 vietnam:	  Tài khoản
+	 english:	  Username
+*/
+
+$lang_module['admin_full_name'] = "Nom complet";
+/*
+	 vietnam:	  Họ tên
+	 english:	  Full name
+*/
+
+$lang_module['admin_email'] = "Email";
+/*
+	 vietnam:	  Email
+	 english:	  Email
+*/
+
+$lang_module['permissions_admin'] = "Gestion de Catégories";
+/*
+	 vietnam:	  Quản lý Chuyên mục
+	 english:	  Management category
+*/
+
+$lang_module['permissions_add_content'] = "Créer l'article";
+/*
+	 vietnam:	  Tạo bài viết
+	 english:	  Add article
+*/
+
+$lang_module['permissions_pub_content'] = "Approuver les articles";
+/*
+	 vietnam:	  Duyệt bài viết
+	 english:	  Approved article
+*/
+
+$lang_module['permissions_edit_content'] = "Éditer les articles";
+/*
+	 vietnam:	  Sửa bài viết
+	 english:	  Edit article
+*/
+
+$lang_module['permissions_del_content'] = "Supprimer l'article";
+/*
+	 vietnam:	  Xóa bài viêt
+	 english:	  Delete article
+*/
+
+$lang_module['permissions_pub_error'] = "Erreur: Vous ne pouvez pas poster les articles dans la catégorie: %1\$s";
+/*
+	 vietnam:	  Lỗi: Bạn không được đăng bài viết tại Chuyên mục: %1\$s
+	 english:	  Error: You can not post messages in category: %1\$s
+*/
+
+$lang_module['error_no_del_content_id'] = "Erreur: impossible de supprimer l'article ayant ID:";
+/*
+	 vietnam:	  Lỗi: Hệ thống không xóa được các bài viết có id:
+	 english:	  Error: The system does not delete the article id:
+*/
+
+$lang_module['structure_image_upload'] = "Les images envoyées du module est stockés selon la structure de dossier";
+/*
+	 vietnam:	  Ảnh upload của module được lưu trữ mặc định theo cấu trúc thư mục
+	 english:	  The module's upload images are archived in the default into directory structure
 */
 
 

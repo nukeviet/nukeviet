@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Sep 25, 2010, 06:50:12 PM
+* @Createdate Jun 21, 2011, 08:33:36 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -54,7 +54,7 @@ $lang_module['add_client_info'] = "Remplissez tous les champs ci-dessous pour cr
 	 english:	  Add new client, Please inter fully box below
 */
 
-$lang_module['edit_client_info'] = "Les champs avec * sont obligatoires";
+$lang_module['edit_client_info'] = "Les champs avec * sont obligatoirement déclarés";
 /*
 	 vietnam:	  Những ô có đánh dấu hoa thị bắt buộc phải khai báo
 	 english:	  Box marked with an asterisk to be required to declare
@@ -112,6 +112,12 @@ $lang_module['mobile'] = "Portable";
 /*
 	 vietnam:	  Mobile
 	 english:	  Mobile
+*/
+
+$lang_module['uploadtype'] = "Types de fichiers autorisés";
+/*
+	 vietnam:	  Kiểu file được upload
+	 english:	  Upload file type allowed
 */
 
 $lang_module['add_client_submit'] = "Sauver";
@@ -282,7 +288,7 @@ $lang_module['add_plan_info'] = "Remplissez les informations aux champs ci-desso
 	 english:	  To create new blokc, you must enter fully box below
 */
 
-$lang_module['edit_plan_info'] = "Les chamnps avec * sont obligatoires";
+$lang_module['edit_plan_info'] = "Les champs avec * sont obligatoirement déclarés";
 /*
 	 vietnam:	  Những ô có đánh dấu hoa thị bắt buộc phải khai báo
 	 english:	  Box marked with an asterisk to be required to declare
@@ -690,12 +696,11 @@ $lang_module['delfile_error'] = "Suppression échouée";
 	 english:	  Delete error
 */
 
-$lang_module['uploadtype'] = "Type de fichiers autorisés de transfert";
+$lang_module['weight'] = "Position";
 /*
-	 vietnam:	  Kiểu file được upload
-	 english:	  
+	 vietnam:	  vị trí
+	 english:	  Position
 */
 
-$lang_module['weight'] = "Position";
 
 ?>

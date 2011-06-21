@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Sep 25, 2010, 06:50:12 PM
+* @Createdate Jun 21, 2011, 08:33:36 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -288,7 +288,7 @@ $lang_module['file_linkdirect_note'] = "S'il y a plusieurs liens, listez-les un 
 	 english:	  Only one link per line
 */
 
-$lang_module['file_version'] = "Version";
+$lang_module['file_version'] = "Informations sur la version";
 /*
 	 vietnam:	  Thông tin phiên bản
 	 english:	  Version
@@ -723,43 +723,43 @@ $lang_module['kb_sec'] = "KB/sec (0 = sans limite)";
 $lang_module['alias'] = "Alias";
 /*
 	 vietnam:	  Liên kết tĩnh
-	 english:	  
+	 english:	  Static Link
 */
 
 $lang_module['siteinfo_publtime'] = "Fichiers actifs";
 /*
 	 vietnam:	  Số file hiệu lực
-	 english:	  
+	 english:	  Active files
 */
 
 $lang_module['siteinfo_expired'] = "Fichiers expirés";
 /*
 	 vietnam:	  Số file hết hạn
-	 english:	  
+	 english:	  Expired files
 */
 
 $lang_module['siteinfo_users_send'] = "Fichiers suspens";
 /*
 	 vietnam:	  Số file chờ kiểm duyệt
-	 english:	  
+	 english:	  Uncheck files
 */
 
 $lang_module['siteinfo_eror'] = "Rapports d'erreurs";
 /*
 	 vietnam:	  Số báo cáo lỗi được gửi tới
-	 english:	  
+	 english:	  Errors report
 */
 
 $lang_module['siteinfo_comment'] = "Commentaires";
 /*
 	 vietnam:	  Số bình luận được gửi tới
-	 english:	  
+	 english:	  Comments
 */
 
 $lang_module['siteinfo_comment_pending'] = "Commentaires suspens";
 /*
 	 vietnam:	  Số bình luận chờ kiểm duyệt
-	 english:	  
+	 english:	  Uncheck comments
 */
 
 

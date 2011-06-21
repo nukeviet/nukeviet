@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Sep 24, 2010, 05:47:06 PM
+* @Createdate Jun 21, 2011, 08:33:36 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -57,7 +57,7 @@ $lang_module['form'] = "Type d'affichage";
 $lang_module['description'] = "Description";
 /*
 	 vietnam:	  Mô tả
-	 english:	  
+	 english:	  Description
 */
 
 $lang_module['blang_all'] = "Tous";
@@ -171,181 +171,181 @@ $lang_module['new_pass'] = "Changer le mot de passe (laisser vide si vous ne vou
 $lang_module['tool_management'] = "Gestionnaire";
 /*
 	 vietnam:	  Công cụ quản lý
-	 english:	  
+	 english:	  Management tool
 */
 
-$lang_module['client_addads'] = "Ajout d'une publicité";
+$lang_module['client_addads'] = "Ajouter une publicité";
 /*
 	 vietnam:	  Thêm quảng cáo
-	 english:	  
+	 english:	  Add
 */
 
 $lang_module['client_stats'] = "Consulter les statistiques";
 /*
 	 vietnam:	  Xem thống kê
-	 english:	  
+	 english:	  Statistic
 */
 
 $lang_module['addads_pagetitle'] = "Ajouter une nouvelle publicité";
 /*
 	 vietnam:	  Thêm quảng cáo mới
-	 english:	  
+	 english:	  Add new
 */
 
 $lang_module['addads_title'] = "Titre";
 /*
 	 vietnam:	  Tiêu đề
-	 english:	  
+	 english:	  Title
 */
 
 $lang_module['addads_block'] = "Block";
 /*
 	 vietnam:	  Thuộc khối
-	 english:	  
+	 english:	  In
 */
 
 $lang_module['addads_client'] = "Client";
 /*
 	 vietnam:	  Khách hàng
-	 english:	  
+	 english:	  Customer
 */
 
 $lang_module['addads_adsdata'] = "Fichier image (image, flash)";
 /*
 	 vietnam:	  File hình (images, flash)
-	 english:	  
+	 english:	  Graphics
 */
 
 $lang_module['addads_description'] = "Description";
 /*
 	 vietnam:	  Chú thích cho hình
-	 english:	  
+	 english:	  Description
 */
 
 $lang_module['addads_url'] = "Lien";
 /*
 	 vietnam:	  Url khi click vào hình
-	 english:	  
+	 english:	  URL
 */
 
 $lang_module['addads_timebegin'] = "Début";
 /*
 	 vietnam:	  Thời gian bắt đầu
-	 english:	  
+	 english:	  Start time
 */
 
 $lang_module['addads_timeend'] = "Fin";
 /*
 	 vietnam:	  Thời gian kết thúc
-	 english:	  
+	 english:	  Finish time
 */
 
 $lang_module['addads_confirm'] = "Confirmer";
 /*
 	 vietnam:	  Xác nhận
-	 english:	  
+	 english:	  Confirm
 */
 
 $lang_module['addads_block_lang_all'] = "Toutes les langues";
 /*
 	 vietnam:	  Tất cả ngôn ngữ
-	 english:	  
+	 english:	  All
 */
 
 $lang_module['addads_block_lang_vi'] = "Vietnamien";
 /*
 	 vietnam:	  Tiếng Việt
-	 english:	  
+	 english:	  Vietnamese
 */
 
 $lang_module['addads_block_lang_en'] = "Englais";
 /*
 	 vietnam:	  Tiếng Anh
-	 english:	  
+	 english:	  English
 */
 
 $lang_module['addads_block_lang_ru'] = "Russe";
 /*
 	 vietnam:	  Tiếng Nga
-	 english:	  
+	 english:	  Russian
 */
 
 $lang_module['addads_block_lang_zz'] = "Autre langue";
 /*
 	 vietnam:	  Khác
-	 english:	  
+	 english:	  Other
 */
 
 $lang_module['title_empty'] = "Erreur: manque de titre";
 /*
 	 vietnam:	  Tiêu đề chưa được khai báo
-	 english:	  
+	 english:	  Empty title
 */
 
 $lang_module['plan_not_selected'] = "Veuillez sélectionner le block pour cette publicité";
 /*
 	 vietnam:	  Bạn chưa chọn Khối cho quảng cáo
-	 english:	  
+	 english:	  You must select plan
 */
 
 $lang_module['click_url_invalid'] = "Lien invalide";
 /*
 	 vietnam:	  URL khi click vào quảng cáo không hợp lệ
-	 english:	  
+	 english:	  Invalid URL
 */
 
 $lang_module['file_upload_empty'] = "Erreur: manque d'image";
 /*
 	 vietnam:	  Hình quảng cáo chưa được xác định
-	 english:	  
+	 english:	  Empty image
 */
 
 $lang_module['upload_blocked'] = "Le transfert de fichier flash est interdit par le système, donc vous ne pouvez pas ajouter les publicités. Vérifiez la configuration du site ou l'autorisation des fichiers transférés.";
 /*
 	 vietnam:	  Việc tải lên các file hình ảnh và flash đã bị cấm bởi hệ thống, vì vậy bạn không thể thêm quảng cáo. Hãy kiểm tra lại cấu hình của site hoặc việc cấp phép các kiểu file được tải lên trong tài khoản quản trị của bạn
-	 english:	  
+	 english:	  Upload image and flash fail. Please check site configuration or allow file types to upload.
 */
 
 $lang_module['addads_require_login'] = "Cette fonctinonalité est réservée uniquement aux membres";
 /*
 	 vietnam:	  Chức năng này chỉ dành cho khách hàng đã đăng ký
-	 english:	  
+	 english:	  Only registed member can use this feature
 */
 
 $lang_module['addads_success'] = "Ajout de la publicité avec succès. Nous allons étudier votre demande et vous contacter au plus tôt";
 /*
 	 vietnam:	  Thêm quảng cáo thành công ! Chúng tôi sẽ kiểm tra yêu cầu của bạn và liên hệ với bạn trong thời gian sớm nhất
-	 english:	  
+	 english:	  Successful! We will check your requires and contact you as soon as possible
 */
 
 $lang_module['stats_views'] = "Statistiques";
 /*
 	 vietnam:	  Thống kê quảng cáo
-	 english:	  
+	 english:	  Statistic
 */
 
 $lang_module['stats_views_country'] = "Pays";
 /*
 	 vietnam:	  Theo quốc gia
-	 english:	  
+	 english:	  Country
 */
 
 $lang_module['stats_views_month'] = "Mois";
 /*
 	 vietnam:	  Tháng
-	 english:	  
+	 english:	  Month
 */
 
 $lang_module['stats_views_select'] = "Sélectionnez";
 /*
 	 vietnam:	  Hãy chọn
-	 english:	  
+	 english:	  Please select
 */
 
 $lang_module['stats_views_ads'] = "Publicité";
 /*
 	 vietnam:	  Quảng cáo
-	 english:	  
+	 english:	  Advertise
 */
 
 
