@@ -125,6 +125,8 @@ else
 					define ( "NV_WCHECK_LJS_GLOBAL", "/^js\/language\/(" . $rule . ")\.js$/" );
 					define ( "NV_WCHECK_LJS_JQUERYUI", "/^js\/language\/jquery\.ui\.datepicker\-(" . $rule . ")\.js$/" );
 					define ( "NV_WCHECK_LJS_CKEDITOR", "/^admin\/editors\/ckeditor\/lang\/(" . $rule . ")\.php$/" );
+					define ( "NV_WCHECK_LBLOCK_MODULE", "/^modules\/([a-z0-9\-]+)\\/language\/block.(module|global)\.([a-zA-Z0-9\-\_]+)\_(" . $rule . ")\.php$/" );
+					define ( "NV_WCHECK_LBLOCK_INCLUDES", "/^language\/(" . $rule . ")\\/block\.global\.([a-zA-Z0-9\-\_]+)\.php$/" );
 					
 					/**
 					 * nv_check_is_lang_file()
@@ -164,14 +166,14 @@ else
 						}
 						elseif ( preg_match( NV_WCHECK_LMODULES_SITE, $file_path, $match ) )
 						{
-							if ( ! in_array ( $match[1], $check_rule ) )
+							if ( ! in_array ( $match[2], $check_rule ) )
 							{
 								return true;
 							}
 						}
 						elseif ( preg_match( NV_WCHECK_LMODULES_ADMIN, $file_path, $match ) )
 						{
-							if ( ! in_array ( $match[1], $check_rule ) )
+							if ( ! in_array ( $match[2], $check_rule ) )
 							{
 								return true;
 							}
@@ -191,6 +193,20 @@ else
 							}
 						}
 						elseif ( preg_match( NV_WCHECK_LJS_CKEDITOR, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[1], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LBLOCK_MODULE, $file_path, $match ) )
+						{
+							if ( ! in_array ( $match[4], $check_rule ) )
+							{
+								return true;
+							}
+						}
+						elseif ( preg_match( NV_WCHECK_LBLOCK_INCLUDES, $file_path, $match ) )
 						{
 							if ( ! in_array ( $match[1], $check_rule ) )
 							{
