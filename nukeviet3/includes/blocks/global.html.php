@@ -24,13 +24,13 @@ if ( ! nv_function_exists( 'nv_block_data_config_html' ) )
         $htmlcontent = nv_htmlspecialchars( $htmlcontent );
         if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
         {
-            $html = nv_aleditor( "htmlcontent", '660px', '150px', $htmlcontent );
+            $html = nv_aleditor( "htmlcontent", '100%', '150px', $htmlcontent );
         }
         else
         {
-            $html = "<textarea style=\"width: 660px\" name=\"htmlcontent\" id=\"htmlcontent\" cols=\"20\" rows=\"8\">" . $htmlcontent . "</textarea>";
+            $html = "<textarea style=\"width: 100%\" name=\"htmlcontent\" id=\"htmlcontent\" cols=\"20\" rows=\"8\">" . $htmlcontent . "</textarea>";
         }
-        return '<tr><td>' . $lang_block['htmlcontent'] . '</td><td>' . $html . '</td></tr>';
+        return '<tr><td colspan="2">' . $lang_block['htmlcontent'] . '<br>' . $html . '</td></tr>';
     }
 
     function nv_block_data_config_html_submit ( $module, $lang_block )
