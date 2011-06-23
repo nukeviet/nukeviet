@@ -730,6 +730,10 @@ foreach ( $global_array_cat as $catid_i => $array_value )
 }
 $xtpl->assign( 'listcatid', $temp );
 
+// Copyright
+$checkcop = ( $rowcontent['copyright'] ) ? " checked=\"checked\"" : "";
+$xtpl->assign( 'checkcop', $checkcop );
+
 /// topic
 while ( list( $topicid_i, $title_i ) = each( $array_topic_module ) )
 {

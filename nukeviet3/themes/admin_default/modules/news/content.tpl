@@ -234,7 +234,7 @@
             <tr>
             	<td><strong>{LANG.content_copyright}</strong></td>
                 <td>
-					<input type="checkbox" value="1" name="copyright" {checkcop} />
+					<input type="checkbox" value="1" name="copyright"{checkcop}/>
                 </td>
             </tr>
         </table>
