@@ -117,7 +117,7 @@ function nv_listcats( $parentid, $m = 0 )
             'who_download' => ( int )$row['who_download'], //
             'groups_download' => ! empty( $row['groups_download'] ) ? explode( ",", $row['groups_download'] ) : array(), //
             'weight' => ( int )$row['weight'], //
-            'status' => $row['weight'], //
+            'status' => $row['status'], //
             'name' => $row['title'], //
             'selected' => $parentid == $row['id'] ? " selected=\"selected\"" : "" //
             );
