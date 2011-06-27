@@ -113,13 +113,13 @@ class sql_db
             }
             else
             {
-                $dbselect = @mysql_select_db( $this->dbname );
+                $dbselect = @mysql_select_db( $this->dbname, $this->db_connect_id );
                 if ( ! $dbselect )
                 {
                     if ( $this->create_db )
                     {
                         @mysql_query( "CREATE DATABASE " . $this->dbname . "", $this->db_connect_id );
-                        $dbselect = @mysql_select_db( $this->dbname );
+                        $dbselect = @mysql_select_db( $this->dbname, $this->db_connect_id );
                     }
                     if ( ! $dbselect )
                     {
