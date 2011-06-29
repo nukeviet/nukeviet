@@ -21,53 +21,21 @@ function nv_error_info ( )
     if ( ! defined( 'NV_IS_ADMIN' ) ) return;
     if ( empty( $error_info ) ) return;
     
-    $errortype = array( 
-        E_ERROR => array( 
-        $lang_global['error_error'], "bad.png" 
-    ), //
-E_WARNING => array( 
-        $lang_global['error_warning'], "warning.png" 
-    ), //
-E_PARSE => array( 
-        $lang_global['error_error'], "bad.png" 
-    ), //
-E_NOTICE => array( 
-        $lang_global['error_notice'], "comment.png" 
-    ), //
-E_CORE_ERROR => array( 
-        $lang_global['error_error'], "bad.png" 
-    ), //
-E_CORE_WARNING => array( 
-        $lang_global['error_warning'], "warning.png" 
-    ), //
-E_COMPILE_ERROR => array( 
-        $lang_global['error_error'], "bad.png" 
-    ), //
-E_COMPILE_WARNING => array( 
-        $lang_global['error_warning'], "warning.png" 
-    ), //
-E_USER_ERROR => array( 
-        $lang_global['error_error'], "bad.png" 
-    ), //
-E_USER_WARNING => array( 
-        $lang_global['error_warning'], "warning.png" 
-    ), //
-E_USER_NOTICE => array( 
-        $lang_global['error_notice'], "comment.png" 
-    ), //
-E_STRICT => array( 
-        $lang_global['error_notice'], "comment.png" 
-    ), //
-E_RECOVERABLE_ERROR => array( 
-        $lang_global['error_error'], "bad.png" 
-    ), //
-E_DEPRECATED => array( 
-        $lang_global['error_notice'], "comment.png" 
-    ), //
-E_USER_DEPRECATED => array( 
-        $lang_global['error_warning'], "warning.png" 
-    ) 
-    );
+    $errortype = array( E_ERROR => array( $lang_global['error_error'], "bad.png" ), //
+E_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
+E_PARSE => array( $lang_global['error_error'], "bad.png" ), //
+E_NOTICE => array( $lang_global['error_notice'], "comment.png" ), //
+E_CORE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
+E_CORE_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
+E_COMPILE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
+E_COMPILE_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
+E_USER_ERROR => array( $lang_global['error_error'], "bad.png" ), //
+E_USER_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
+E_USER_NOTICE => array( $lang_global['error_notice'], "comment.png" ), //
+E_STRICT => array( $lang_global['error_notice'], "comment.png" ), //
+E_RECOVERABLE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
+E_DEPRECATED => array( $lang_global['error_notice'], "comment.png" ), //
+E_USER_DEPRECATED => array( $lang_global['error_warning'], "warning.png" ) );
     
     if ( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/error_info.tpl" ) )
     {
@@ -221,7 +189,7 @@ function nv_rss_generate ( $channel, $items )
         {
             if ( ! empty( $item['title'] ) )
             {
-                $item['title'] = htmlspecialchars(nv_unhtmlspecialchars( $item['title'] ), ENT_QUOTES );
+                $item['title'] = htmlspecialchars( nv_unhtmlspecialchars( $item['title'] ), ENT_QUOTES );
             }
             
             if ( ! empty( $item['description'] ) )
@@ -254,36 +222,36 @@ function nv_rss_generate ( $channel, $items )
  * @param mixed $url
  * @return void
  */
-function nv_xmlSitemap_generate( $url )
+function nv_xmlSitemap_generate ( $url )
 {
     $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="themes/default/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
     $xml = new SimpleXMLElement( $sitemapHeader );
-
+    
     $lastModified = time() - 86400;
     if ( ! empty( $url ) )
     {
         foreach ( $url as $key => $values )
         {
             $publdate = date( 'c', $values['publtime'] );
-
+            
             $row = $xml->addChild( 'url' );
             $row->addChild( 'loc', "'" . $values['link'] . "'" );
             $row->addChild( 'lastmod', $publdate );
             $row->addChild( 'changefreq', 'daily' );
             $row->addChild( 'priority', '0.8' );
-
+            
             if ( $key == 0 ) $lastModified = $values['publtime'];
         }
     }
-
+    
     $contents = $xml->asXML();
     $contents = nv_url_rewrite( $contents );
     $contents = preg_replace( "/(<loc>)\'(.*?)\'(<\/loc>)/", "\\1" . NV_MY_DOMAIN . "\\2\\3", $contents );
-
+    
     @Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
     @Header( "Expires: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
     @Header( "Content-Type: text/xml; charset=utf-8" );
-
+    
     if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) and strstr( $_SERVER['SERVER_SOFTWARE'], 'Apache/2' ) )
     {
         @Header( "Cache-Control: no-cache, pre-check=0, post-check=0" );
@@ -292,14 +260,14 @@ function nv_xmlSitemap_generate( $url )
     {
         @Header( "Cache-Control: private, pre-check=0, post-check=0, max-age=0" );
     }
-
+    
     @Header( "Pragma: no-cache" );
-
+    
     $encoding = "none";
     if ( nv_function_exists( 'gzencode' ) )
     {
         $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
-
+        
         if ( $encoding != 'none' )
         {
             unset( $matches );
@@ -310,14 +278,14 @@ function nv_xmlSitemap_generate( $url )
             }
         }
     }
-
+    
     if ( $encoding != "none" )
     {
         $contents = gzencode( $contents, 6, $encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE );
         header( "Content-Encoding: " . $encoding );
         header( 'Vary: Accept-Encoding' );
     }
-
+    
     print_r( $contents );
     die();
 }
@@ -327,22 +295,27 @@ function nv_xmlSitemap_generate( $url )
  * 
  * @return void
  */
-function nv_xmlSitemapIndex_generate()
+function nv_xmlSitemapIndex_generate ( )
 {
-    global $db_config, $global_config, $nv_Request, $sys_info;
-
+    global $db_config, $db, $global_config, $nv_Request, $sys_info;
+    
     $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="themes/default/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement( $sitemapHeader );
-
+    
     $lastModified = NV_CURRENTTIME - 86400;
-
-    if ( $global_config['lang_multi'] and ! $nv_Request->isset_request( NV_LANG_VARIABLE, 'get' ) )
+    
+    if ( $global_config['lang_multi'] )
     {
         foreach ( $global_config['allow_sitelangs'] as $lang )
         {
-            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang . "&amp;" . NV_NAME_VARIABLE . "=SitemapIndex";
-            $row = $xml->addChild( 'sitemap' );
-            $row->addChild( 'loc', $link );
+            $sql = "SELECT m.title FROM  `" . $db_config['prefix'] . '_' . $lang . "_modules` AS m LEFT JOIN `" . $db_config['prefix'] . '_' . $lang . "_modfuncs` AS f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='0' AND f.func_name = 'Sitemap' ORDER BY m.weight, f.subweight";
+            $result = $db->sql_query( $sql );
+            while ( list( $modname ) = $db->sql_fetchrow( $result, 1 ) )
+            {
+                $link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=Sitemap";
+                $row = $xml->addChild( 'sitemap' );
+                $row->addChild( 'loc', $link );
+            }
         }
     }
     else
@@ -358,18 +331,19 @@ function nv_xmlSitemapIndex_generate()
             }
         }
     }
-
+    $db->sql_close();
+    
     $contents = $xml->asXML();
     if ( $sys_info['supports_rewrite'] )
     {
         $contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "Sitemap-\\1.xml", $contents );
         $contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "Sitemap-\\1.\\2.xml", $contents );
     }
-
+    
     @Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
     @Header( "Expires: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
     @Header( "Content-Type: text/xml; charset=utf-8" );
-
+    
     if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) and strstr( $_SERVER['SERVER_SOFTWARE'], 'Apache/2' ) )
     {
         @Header( "Cache-Control: no-cache, pre-check=0, post-check=0" );
@@ -378,14 +352,14 @@ function nv_xmlSitemapIndex_generate()
     {
         @Header( "Cache-Control: private, pre-check=0, post-check=0, max-age=0" );
     }
-
+    
     @Header( "Pragma: no-cache" );
-
+    
     $encoding = "none";
     if ( nv_function_exists( 'gzencode' ) )
     {
         $encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
-
+        
         if ( $encoding != 'none' )
         {
             unset( $matches );
@@ -396,14 +370,14 @@ function nv_xmlSitemapIndex_generate()
             }
         }
     }
-
+    
     if ( $encoding != "none" )
     {
         $contents = gzencode( $contents, 6, $encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE );
         header( "Content-Encoding: " . $encoding );
         header( 'Vary: Accept-Encoding' );
     }
-
+    
     print_r( $contents );
     die();
 }
