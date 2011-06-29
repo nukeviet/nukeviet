@@ -91,7 +91,7 @@ if ( $submit )
             if ( ! empty( $dm ) )
             {
                 $dm2 = ( ! preg_match( "/^(http|https|ftp|gopher)\:\/\//", $dm ) ) ? "http://" . $dm : $dm;
-                if ( nv_is_url( $dm2 ) )
+                if ( nv_is_url( $dm2 ) or $dm == "localhost")
                 {
                     $my_domains[] = $dm;
                 }
