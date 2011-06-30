@@ -218,6 +218,11 @@ function nv_blocks_content ( )
                     $block_config = ( ! empty( $__values['config'] ) ) ? unserialize( $__values['config'] ) : array();
                     $block_config['bid'] = $__values['bid'];
                     $block_config['module'] = $__values['module'];
+					
+					unset( $matches );
+					preg_match( $global_config['check_block_module'], $__values['file_name'], $matches );
+                    $block_config['block_name'] = $matches[1] . "." . $matches[2];
+					
                     if ( $__values['module'] == "global" and file_exists( NV_ROOTDIR . "/includes/blocks/" . $__values['file_name'] ) )
                     {
                         include ( NV_ROOTDIR . "/includes/blocks/" . $__values['file_name'] );
