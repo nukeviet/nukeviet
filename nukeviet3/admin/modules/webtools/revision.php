@@ -113,8 +113,7 @@ else
 					$is_check_lang = true;
 					
 					$rule = implode ( "|", array_keys( $language_array ) );
-					$check_rule = ( $global_config['update_revision_lang_mode'] == 2 )? $global_config['allow_adminlangs'] : $global_config['allow_sitelangs'];
-					
+
 					// Check is lang file rule
 					define ( "NV_WCHECK_LADMIN_GLOBAL_ADMIN", "/^language\/(" . $rule . ")\\/admin_global.php$/" );
 					define ( "NV_WCHECK_LADMIN_GLOBAL_SITE", "/^language\/(" . $rule . ")\\/global.php$/" );
@@ -136,6 +135,9 @@ else
 					 */
 					function nv_check_is_lang_file ( $file_path )
 					{
+						global $global_config;
+						$check_rule = ( $global_config['update_revision_lang_mode'] == 2 )? $global_config['allow_adminlangs'] : $global_config['allow_sitelangs'];
+						
 						if ( preg_match( NV_WCHECK_LADMIN_GLOBAL_ADMIN, $file_path, $match ) )
 						{
 							if ( ! in_array ( $match[1], $check_rule ) )
