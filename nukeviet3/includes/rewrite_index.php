@@ -29,5 +29,7 @@ else
     $rewrite["#([\"|\'|\>]" . $global_config['site_url'] . "/" . ")index.php*\?" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)([\"|\'|\<])#"] = "\\1index.php/\\2/\\3" . $global_config['rewrite_endurl'] . "\\4\\5";
     $rewrite["#([\"|\'|\>]" . $global_config['site_url'] . "/" . ")index.php*\?" . NV_LANG_VARIABLE . "=([a-z-]*)([\"|\'|\<])#"] = "\\1index.php/\\2" . $global_config['rewrite_endurl'] . "\\3\\4";
 }
+$rewrite["#([\"|\']" . NV_BASE_SITEURL . ")index.php*\?" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]*)([\"|\'])#"] = "\\1index.php/\\2/\\3" . $global_config['rewrite_endurl'] . "\\4";
+$rewrite["#([\"|\']" . NV_BASE_SITEURL . ")index.php*\?" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]*)([\"|\'])#"] = "\\1index.php/\\2" . $global_config['rewrite_endurl'] . "\\3";
 
 ?>

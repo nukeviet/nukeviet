@@ -75,7 +75,7 @@ else
 require_once ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
 
 //Kiem tra trang thai cua may chu, neu > 80 se thong bao "Server too busy. Please try again later"
-if($global_config['getloadavg']) require_once ( NV_ROOTDIR . "/includes/getloadavg.php" );
+if ( $global_config['getloadavg'] ) require_once ( NV_ROOTDIR . "/includes/getloadavg.php" );
 
 $global_config['file_allowed_ext'] = ! empty( $global_config['file_allowed_ext'] ) ? explode( ",", $global_config['file_allowed_ext'] ) : array();
 $global_config['forbid_extensions'] = ! empty( $global_config['forbid_extensions'] ) ? explode( ",", $global_config['forbid_extensions'] ) : array();
@@ -348,10 +348,41 @@ if ( $global_config['is_url_rewrite'] )
     {
         require ( NV_ROOTDIR . "/includes/rewrite_index.php" );
     }
+    if ( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" ) . "/i", $_SERVER['REQUEST_URI'] ) )
+    {
+        $url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
+        if ( $url_rewrite != $_SERVER['REQUEST_URI'] )
+        {
+            Header( "Location: " . $url_rewrite );
+            die();
+        }
+    }
+    elseif ( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI']) )
+    {
+        $url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
+        Header( "Location: " . $url_rewrite );
+        die();
+    }
+    elseif ( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI']) )
+    {
+        $url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
+        Header( "Location: " . $url_rewrite );
+        die();
+    }
 }
 elseif ( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
 {
     require ( NV_ROOTDIR . "/includes/rewrite_language.php" );
+    
+    if ( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA ) . "/i", $_SERVER['REQUEST_URI'] ) )
+    {
+        $url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
+        if ( $url_rewrite != $_SERVER['REQUEST_URI'] )
+        {
+            Header( "Location: " . $url_rewrite );
+            die();
+        }
+    }
 }
 
 if ( defined( 'NV_ADMIN' ) )

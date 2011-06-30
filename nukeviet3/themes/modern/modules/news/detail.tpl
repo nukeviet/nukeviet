@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
     <div class="header-details">
         <div class="action fr right">
-            <!-- BEGIN: allowed_send --><a title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','500','400','no');return false" class="email">{LANG.sendmail}</a>
+            <!-- BEGIN: allowed_send --><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','500','400','no');return false" class="email">{LANG.sendmail}</a>
             <br/>
             <!-- END: allowed_send --><!-- BEGIN: allowed_print --><a title="{LANG.print}" href="javascript: void(0)" onclick="NewWindow('{URL_PRINT}','{TITLE}','840','768','yes');return false" class="print">{LANG.print}</a>
             <br/>

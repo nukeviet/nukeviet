@@ -43,12 +43,13 @@ if ( $id > 0 and $catid > 0 )
         $img = "";
         if ( $content['allowed_print'] == 1 )
         {
-            $link = $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id . "";
-            $link = "<a href=\"" . $link . "\" title=\"" . $content['title'] . "\">" . $link . "</a>\n";
+            $url_page = $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id . "";
+            $link = "<a href=\"" . $url_page . "\" title=\"" . $content['title'] . "\">" . $url_page . "</a>\n";
             
-            $result = array( 
-                "url" => $global_config['site_url'], "meta_tags" => nv_html_meta_tags(), "sitename" => $global_config['site_name'], "title" => $content['title'], "alias" => $content['alias'], "image" => $img, "position" => $content['imgposition'], "time" => nv_date( "l - d/m/Y  H:i", $content['publtime'] ), "hometext" => $content['hometext'], "bodytext" => $content['bodytext'], "copyright" => $content['copyright'], "copyvalue" => $module_config[$module_name]['copyright'], "link" => $link, "contact" => $global_config['site_email'], "author" => $content['author'], "source" => $sourcetext 
-            );
+            $meta_tags = nv_html_meta_tags();
+            $meta_tags .= "<link rel=\"canonical\" href=\"" . $url_page . "\" />\n";
+            
+            $result = array( "url" => $global_config['site_url'], "meta_tags" => $meta_tags, "sitename" => $global_config['site_name'], "title" => $content['title'], "alias" => $content['alias'], "image" => $img, "position" => $content['imgposition'], "time" => nv_date( "l - d/m/Y  H:i", $content['publtime'] ), "hometext" => $content['hometext'], "bodytext" => $content['bodytext'], "copyright" => $content['copyright'], "copyvalue" => $module_config[$module_name]['copyright'], "link" => $link, "contact" => $global_config['site_email'], "author" => $content['author'], "source" => $sourcetext );
             
             if ( ! empty( $content['homeimgfile'] ) and $content['imgposition'] > 0 )
             {
@@ -72,9 +73,7 @@ if ( $id > 0 and $catid > 0 )
                 }
                 $alt = ( empty( $content['homeimgalt'] ) ) ? $content['title'] : $content['homeimgalt'];
                 
-                $result['image'] = array( 
-                    "src" => $src, "width" => $width, "alt" => $alt, "note" => $content['homeimgalt'], "position" => $content['imgposition'] 
-                );
+                $result['image'] = array( "src" => $src, "width" => $width, "alt" => $alt, "note" => $content['homeimgalt'], "position" => $content['imgposition'] );
             }
             $contents = call_user_func( "news_print", $result );
             header( "Content-Type: text/x-delimtext; name=\"" . $result['alias'] . ".html\"" );

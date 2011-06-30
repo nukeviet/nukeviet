@@ -7,7 +7,7 @@
             <ul>
                 <!-- BEGIN: allowed_send -->
                 <li>
-                    <a class="sendmail" title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','500','400','no');return false"></a>
+                    <a rel="nofollow" class="sendmail" title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','500','400','no');return false"></a>
                 </li>
                 <!-- END: allowed_send --><!-- BEGIN: allowed_print -->
                 <li>
