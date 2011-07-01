@@ -70,14 +70,14 @@ function nv_func_update_data ( )
         nv_delete_all_cache();
     }
     
-    if ( $global_config['revision'] < 1119 )
+    if ( $global_config['revision'] < 1150 )
     {
         $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
         $result = $db->sql_query( $sql );
         while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
         {
-            $db->sql_query( "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "__menu`" );
-            $db->sql_query( "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "__rows`" );
+            $db->sql_query( "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang_i . "__menu`" );
+            $db->sql_query( "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang_i . "__rows`" );
             
             $sql = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang_i . "_menu_rows` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
