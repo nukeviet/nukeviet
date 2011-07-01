@@ -21,7 +21,8 @@ function nv_error_info ( )
     if ( ! defined( 'NV_IS_ADMIN' ) ) return;
     if ( empty( $error_info ) ) return;
     
-    $errortype = array( E_ERROR => array( $lang_global['error_error'], "bad.png" ), //
+    $errortype = array( //
+E_ERROR => array( $lang_global['error_error'], "bad.png" ), //
 E_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
 E_PARSE => array( $lang_global['error_error'], "bad.png" ), //
 E_NOTICE => array( $lang_global['error_notice'], "comment.png" ), //
@@ -224,7 +225,18 @@ function nv_rss_generate ( $channel, $items )
  */
 function nv_xmlSitemap_generate ( $url )
 {
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="themes/default/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+    global $global_config;
+    
+    if ( file_exists( NV_ROOTDIR . 'themes/' . $global_config['site_theme'] . '/css/sitemap.xsl' ) )
+    {
+        $path_css_sitemap = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/css/sitemap.xsl';
+    }
+    else
+    {
+        $path_css_sitemap = NV_BASE_SITEURL . 'themes/default/css/sitemap.xsl';
+    }
+    
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $path_css_sitemap . '"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
     $xml = new SimpleXMLElement( $sitemapHeader );
     
     $lastModified = time() - 86400;
@@ -297,9 +309,18 @@ function nv_xmlSitemap_generate ( $url )
  */
 function nv_xmlSitemapIndex_generate ( )
 {
-    global $db_config, $db, $global_config, $nv_Request, $sys_info;
+    global $db_config, $db, $global_config, $nv_Request, $sys_info, $check_rewrite_file;
     
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="themes/default/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    if ( file_exists( NV_ROOTDIR . 'themes/' . $global_config['site_theme'] . '/css/sitemapindex.xsl' ) )
+    {
+        $path_css_sitemap = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/css/sitemapindex.xsl';
+    }
+    else
+    {
+        $path_css_sitemap = NV_BASE_SITEURL . 'themes/default/css/sitemapindex.xsl';
+    }
+    
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $path_css_sitemap . '"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement( $sitemapHeader );
     
     $lastModified = NV_CURRENTTIME - 86400;
@@ -334,10 +355,25 @@ function nv_xmlSitemapIndex_generate ( )
     $db->sql_close();
     
     $contents = $xml->asXML();
-    if ( $sys_info['supports_rewrite'] )
+    if ( $sys_info['supports_rewrite'] and $global_config['is_url_rewrite'] )
     {
-        $contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "Sitemap-\\1.xml", $contents );
-        $contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "Sitemap-\\1.\\2.xml", $contents );
+        if ( $check_rewrite_file )
+        {
+            $contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "Sitemap-\\1.xml", $contents );
+            $contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "Sitemap-\\1.\\2.xml", $contents );
+        }
+        elseif ( $global_config['rewrite_optional'] )
+        {
+            $contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "index.php/\\2/Sitemap" . $global_config['rewrite_endurl'], $contents );
+        }
+        else
+        {
+            $contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "index.php/\\1/\\2/Sitemap" . $global_config['rewrite_endurl'], $contents );
+        }
+    }
+    elseif ( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
+    {
+        $contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "index.php?" . NV_NAME_VARIABLE . "=\\2&amp;" . NV_OP_VARIABLE . "=Sitemap", $contents );
     }
     
     @Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
