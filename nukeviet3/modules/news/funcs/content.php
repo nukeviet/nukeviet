@@ -190,7 +190,10 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
 			
 			$user_content = defined ( 'NV_IS_USER' ) ? " | " . $user_info['username'] : "";
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['del_content'], $contentid . " | " .  $client_info['ip'] . $user_content, 0 );
-			
+            if ( $rowcontent_old['status'] == 1 )
+            {
+                nv_del_moduleCache( $module_name );
+            }
             Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op, true ) );
             die();
         }
@@ -272,7 +275,6 @@ if ( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $che
                             nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgthumb_i );
                         }
                     }
-                
                 }
             }
             else
