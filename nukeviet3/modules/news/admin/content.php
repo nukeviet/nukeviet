@@ -528,7 +528,10 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             {
                 $rowcontent['status'] = 1;
             }
-            
+            if ( intval( $rowcontent['publtime'] ) < intval( $rowcontent_old['addtime'] ) )
+            {
+                $rowcontent['publtime'] = $rowcontent_old['addtime'];
+            }
             $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET 
                            `listcatid`=" . $db->dbescape_string( $rowcontent['listcatid'] ) . ", 
                            `topicid`=" . intval( $rowcontent['topicid'] ) . ", 
