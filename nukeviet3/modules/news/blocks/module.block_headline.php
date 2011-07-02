@@ -34,9 +34,7 @@ function nv_block_headline ( )
         while ( list( $bid, $titlebid, $numberbid ) = $db->sql_fetchrow( $result ) )
         {
             $id ++;
-            $array_bid_content[$id] = array( 
-                "id" => $id, "bid" => $bid, "title" => $titlebid, "number" => $numberbid 
-            );
+            $array_bid_content[$id] = array( "id" => $id, "bid" => $bid, "title" => $titlebid, "number" => $numberbid );
         }
         
         foreach ( $array_bid_content as $i => $array_bid )
@@ -48,9 +46,7 @@ function nv_block_headline ( )
             {
                 $arr_catid = explode( ',', $listcatid );
                 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$arr_catid[0]]['alias'] . "/" . $alias . "-" . $id;
-                $array_content[] = array( 
-                    'title' => $title, 'link' => $link, 'homeimgfile' => $homeimgfile, 'homeimgalt' => $homeimgalt 
-                );
+                $array_content[] = array( 'title' => $title, 'link' => $link, 'homeimgfile' => $homeimgfile, 'homeimgalt' => $homeimgalt );
             }
             $array_bid_content[$i]['content'] = $array_content;
         }
@@ -71,21 +67,24 @@ function nv_block_headline ( )
         $a = 0;
         foreach ( $hot_news as $hot_news_i )
         {
-            $row['image_alt'] = ! empty( $hot_news_i['homeimgalt'] ) ? $hot_news_i['homeimgalt'] : $hot_news_i['title'];
-            $hot_news_i['imgID'] = $a;
             if ( ! empty( $hot_news_i['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $hot_news_i['homeimgfile'] ) )
             {
-                $images[] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $hot_news_i['homeimgfile'];
-                $xtpl->assign( 'HOTSNEWS', $hot_news_i );
-                $xtpl->parse( 'main.hots_news_img.loop' );
+                $images_url = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $hot_news_i['homeimgfile'];
             }
             elseif ( nv_is_url( $hot_news_i['homeimgfile'] ) )
             {
-                $images[] = $hot_news_i['homeimgfile'];
+                $images_url = $hot_news_i['homeimgfile'];
+            }
+            if ( ! empty( $images_url ) )
+            {
+                $hot_news_i['image_alt'] = ! empty( $hot_news_i['homeimgalt'] ) ? $hot_news_i['homeimgalt'] : $hot_news_i['title'];
+                $hot_news_i['imgID'] = $a;
+                $images[] = $images_url;
+                
                 $xtpl->assign( 'HOTSNEWS', $hot_news_i );
                 $xtpl->parse( 'main.hots_news_img.loop' );
+                $a ++;
             }
-            $a ++;
         }
         $xtpl->parse( 'main.hots_news_img' );
     }
@@ -116,8 +115,7 @@ function nv_block_headline ( )
     $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.tabs.min.js\"></script>\n";
     $my_footer .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
     $my_footer .= '$(document).ready(function(){var b=["' . implode( '","', $images ) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
-    $my_footer .= "\n//]]>
-\n</script>\n";
+    $my_footer .= "\n//]]>\n</script>\n";
     $my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/contentslider.css\" />\n";
     
     $xtpl->parse( 'main' );
