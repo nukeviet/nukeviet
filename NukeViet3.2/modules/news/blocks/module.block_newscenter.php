@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -7,11 +8,15 @@
  */
 
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
+
 global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module;
+
 $xtpl = new XTemplate( "block_newscenter.tpl", NV_ROOTDIR . "/themes/" . $module_info ['template'] . "/modules/" . $module_file );
 $xtpl->assign( 'lang', $lang_module );
+
 $sql = "SELECT id, listcatid, publtime, exptime, title, alias, hometext, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 0 , 4";
 $result = $db->sql_query( $sql );
+
 $i = 1;
 while ( $row = $db->sql_fetchrow( $result ) )
 {
@@ -57,6 +62,8 @@ while ( $row = $db->sql_fetchrow( $result ) )
         $xtpl->parse( 'main.othernews' );
     }
 }
+
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
+
 ?>

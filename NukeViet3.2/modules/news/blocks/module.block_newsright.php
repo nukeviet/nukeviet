@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -7,7 +8,9 @@
  */
 
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
+
 global $module_data, $module_name, $module_file, $global_array_cat, $lang_module, $my_head;
+
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.tabs.min.js\"></script>\n";
 $my_head .= "	<script type=\"text/javascript\">\n";
@@ -17,12 +20,13 @@ $my_head .= "	});\n";
 $my_head .= "	</script>\n";
 
 $xtpl = new XTemplate( "block_newsright.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-
 $xtpl->assign( 'BASESITE', NV_BASE_SITEURL );
 $xtpl->assign( 'LANG', $lang_module );
+
 $sql = "SELECT id, listcatid, publtime, exptime, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `hitstotal` DESC LIMIT 0 , 5";
 $result = $db->sql_query( $sql );
 $chk_topview = $db->sql_numrows( $result );
+
 if ( $chk_topview )
 {
     $i = 1;
@@ -36,9 +40,11 @@ if ( $chk_topview )
     }
     $xtpl->parse( 'main.topviews' );
 }
+
 $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `status`= 1 ORDER BY `cid` DESC LIMIT 0 , 5";
 $result = $db->sql_query( $sql );
 $chk_cm = $db->sql_numrows( $result );
+
 if ( $chk_cm )
 {
     $i = 1;
@@ -54,6 +60,8 @@ if ( $chk_cm )
     }
     $xtpl->parse( 'main.topcomment' );
 }
+
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
+
 ?>

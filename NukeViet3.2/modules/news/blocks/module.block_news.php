@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -78,6 +79,7 @@ foreach ( $array_block_news as $array_news )
     $xtpl->assign( 'BACKGROUND', ( $a % 2 ) ? 'bg ' : '' );
     $a ++;
 }
+
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 

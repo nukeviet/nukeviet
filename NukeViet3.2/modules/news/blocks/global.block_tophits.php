@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -7,6 +8,7 @@
  */
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+
 if ( ! nv_function_exists( 'nv_news_block_tophits' ) )
 {
 
@@ -21,7 +23,7 @@ if ( ! nv_function_exists( 'nv_news_block_tophits' ) )
         $html .= "<tr>";
         $html .= "	<td>" . $lang_block['numrow'] . "</td>";
         $html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
-        $html .= "<td>";
+        $html .= "</tr>";
         return $html;
     }
 
