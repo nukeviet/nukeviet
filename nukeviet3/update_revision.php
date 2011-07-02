@@ -124,7 +124,7 @@ function nv_func_update_data ( )
         $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'update_revision_lang_mode', '1')" );
     }
 	
-	if ( $global_config['revision'] < 1153 )
+	if ( $global_config['revision'] < 1157 )
     {
         $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'allowquestion', '0')" );
         $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'allowuserpublic', '1')" );
