@@ -631,7 +631,7 @@ function nv_show_queries_for_admin ( )
 function nv_groups_list_pub ( )
 {
     global $db;
-    $query = "SELECT `group_id`, `title` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `public`=1 AND `act`=1 AND (`exp_time` =0 OR `exp_time` >". NV_CURRENTTIME.") ORDER BY `group_id`";
+    $query = "SELECT `group_id`, `title` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `public`=1 AND `act`=1 AND (`exp_time` =0 OR `exp_time` >". NV_CURRENTTIME.") ORDER BY `weight`";
     $result = $db->sql_query( $query );
     $groups = array();
     while ( $row = $db->sql_fetchrow( $result ) )

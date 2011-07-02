@@ -347,7 +347,7 @@ if ( $checkss == $array_register['checkss'] )
                 " . $db->dbescape( $array_register['full_name'] ) . ", 
                 " . NV_CURRENTTIME . ", 
                 " . $db->dbescape( $your_question ) . ", 
-                " . $db->dbescape( $array_register['answer'] ) . ", '',              
+                " . $db->dbescape( $array_register['answer'] ) . ",               
                 " . $db->dbescape( $checknum ) . ")";
             
             $userid = $db->sql_query_insert_id( $sql );

@@ -42,11 +42,11 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
         list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `". NV_GROUPS_GLOBALTABLE ."` " ) );
 
-		$weight = intval( $weight ) + 1;
+		$weight =  $weight  + 1;
         
         $sql = "INSERT INTO `" . NV_GROUPS_GLOBALTABLE . "` ( `group_id` ,`title` ,`content` ,`add_time` ,`exp_time` ,`users` ,`public`,`weight` ,`act` ) VALUES (
 			NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $content ) . ", " . NV_CURRENTTIME . ", " . $exp_time . ", 
-			'', " . $public . ",". intval($weight) .", 1)";	
+			'', " . $public . ",". $weight .", 1)";	
         if ( $db->sql_query_insert_id( $sql ) )
         {
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=groups" );

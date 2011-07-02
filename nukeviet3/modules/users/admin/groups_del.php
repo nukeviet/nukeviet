@@ -37,9 +37,9 @@ if ( ! empty( $users ) )
         }
     }
 }
-
+$weight = 0;
 $db->sql_query( "DELETE FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id` = " . $group_id );
-$sql = "SELECT `group_id`,`weight` FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
+$sql = "SELECT `group_id` FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
 $result = $db->sql_query( $sql );
 while ( $row = $db->sql_fetchrow( $result ) )
 {

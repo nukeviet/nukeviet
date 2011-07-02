@@ -117,12 +117,12 @@ if ( $nv_Request->get_string( 'save', 'post' ) != "" )
 }
 if ( $global_config['allowuserpublic'] == 0 )
 {
-    $contents = user_info_exit( 'Chức năng này hiện tại chưa được kích hoạt' );
+    $contents = user_info_exit( $lang_module['no_act'] );
     $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 }
 elseif ( empty( $groups_list ) )
 {
-    $contents = user_info_exit( 'Hiện tại chưa thiết lập nhóm công cộng' );
+    $contents = user_info_exit( $lang_module['no_set'] );
     $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 }
 else
@@ -158,7 +158,7 @@ else
 }
 if ( $b == true )
 {
-    $contents = user_info_exit( 'Đăng ký hoặc bỏ nhóm thành công' );
+    $contents = user_info_exit( $lang_module['re_remove'] );
     $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 }
 
