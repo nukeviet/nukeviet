@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.1
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -8,8 +9,7 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-
-$allow_func = array( 'main', 'add_menu','change_weight_row','del_row' );
+$allow_func = array( 'main', 'add_menu', 'change_weight_row', 'del_row' );
 
 global $global_arr_menu;
 global $arr_menu_item;
@@ -38,14 +38,15 @@ $type_target[1] = $lang_module['type_target1'];
 $type_target[2] = $lang_module['type_target2'];
 $type_target[3] = $lang_module['type_target3'];
 
-
 $arr_menu_item=array();
-$sql= "SELECT `title`,`id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` ORDER BY `id` ASC";
-$result= $db->sql_query($sql);
-while ($row = $db->sql_fetchrow($result))
+$sql = "SELECT `title`,`id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` ORDER BY `id` ASC";
+$result = $db->sql_query( $sql );
+
+while ( $row = $db->sql_fetchrow( $result ) )
 {
-	$arr_menu_item[$row['id']]= $row['title'];
+	$arr_menu_item[$row['id']] = $row['title'];
 }
+
 /**
  * nv_list_menu()
  *
@@ -58,14 +59,14 @@ function nv_list_menu()
 
 	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_menu` ORDER BY `id` ASC";
 	$result = $db->sql_query( $sql );
+	
 	$list = array();
 	while ( $row = $db->sql_fetchrow( $result ) )
 	{
-		$list[$row['id']] = array( //
-		'id' => ( int )$row['id'], //
-		'title' => $row['title'], //
-		'description' => $row['description'], //
-		//'selected' => $id == $row['id'] ? " selected=\"selected\"" : "" //
+		$list[$row['id']] = array(
+			'id' => ( int )$row['id'], //
+			'title' => $row['title'], //
+			'description' => $row['description'] //
 		);
 	}
 
@@ -73,13 +74,22 @@ function nv_list_menu()
 
 }
 
-
-function nv_fix_cat_order ($mid, $parentid = 0, $order = 0, $lev = 0 )
+/**
+ * nv_fix_cat_order()
+ *
+ * @param mixed $mid
+ * @param integer $parentid
+ * @param integer $order
+ * @param integer $lev
+ * @return
+ */
+function nv_fix_cat_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
-    $array=array();
-    $query = "SELECT `id`, `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `parentid`=" . $parentid . " AND `mid`= ".$mid." ORDER BY `weight` ASC";
-    $result = $db->sql_query( $query );
+	
+    $array = array();
+    $sql = "SELECT `id`, `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `parentid`=" . $parentid . " AND `mid`= " . $mid . " ORDER BY `weight` ASC";
+    $result = $db->sql_query( $sql );
     
     $array_cat_order = array();
     while ( $row = $db->sql_fetchrow( $result ) )
@@ -105,15 +115,11 @@ function nv_fix_cat_order ($mid, $parentid = 0, $order = 0, $lev = 0 )
         $weight ++;        
         $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `weight`=" . $weight . ", `order`=" . $order . ", `lev`='" . $lev . "' WHERE `id`=" . intval( $catid_i );
         $db->sql_query( $sql );         
-        $order = nv_fix_cat_order( $mid,$catid_i, $order, $lev );
-        
+        $order = nv_fix_cat_order( $mid, $catid_i, $order, $lev );
     }
         
     return $order;
 }
-
-
-
 
 define( 'NV_IS_FILE_ADMIN', true );
 

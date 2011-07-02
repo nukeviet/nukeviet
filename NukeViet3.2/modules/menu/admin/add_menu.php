@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.1
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -8,67 +9,68 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$error="";$post['id']= $post['parentid'] = 0;
-$post['type_menu']= $post['target']=$post['who_view']= $post['module_name']= "";
-$post['groups_view']=array();
+// Default variable
+$error = "";
+$post['id'] = $post['parentid'] = 0;
+$post['type_menu'] = $post['target'] = $post['who_view'] = $post['module_name']= "";
+$post['groups_view'] = array();
 $arr_item = array();
+$sp = '&nbsp;&nbsp;&nbsp;';
+$sp_title = "";
+
+//
 $post['mid'] = $nv_Request->get_int( 'mid', 'get', 0 );
 $post['id'] = $nv_Request->get_int( 'id', 'get', 0 );
 $post['parentid'] = $nv_Request->get_int( 'parentid', 'get', 0 );
-$sp='&nbsp;&nbsp;&nbsp;';
-$sp_title="";
-// Lay thong tin cac nhom thanh vien
+
+// System groups user
 $groups_list = nv_groups_list();
-$array_who = array(
-$lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2']
-);
+$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 if ( ! empty( $groups_list ) )
 {
 	$array_who[] = $lang_global['who_view3'];
 }
 
-if($post['id']!=0)
+if( $post['id'] != 0 )
 {
-	$sql="SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid` = ".$post['mid']." AND `id`=".$post['id']." ORDER BY `id`" ;
-	$result=$db->sql_query($sql);
-	$post= $db->sql_fetchrow($result);
-	//$post['groups_view'] = array();
-	$post['groups_view']=explode(",",$post['groups_view']);
-
+	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid` = " . $post['mid'] . " AND `id`=" . $post['id'] . " ORDER BY `id`";
+	$result = $db->sql_query( $sql );
+	$post= $db->sql_fetchrow( $result );
+	
+	$post['groups_view'] = explode( ",", $post['groups_view'] );
 }
 
-if($post['mid']!=0)
+if( $post['mid'] != 0 )
 {
-	$sql="SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid` = ".$post['mid']." ORDER BY `order`" ;
-	$result=$db->sql_query($sql);
+	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid` = " . $post['mid'] . " ORDER BY `order`";
+	$result = $db->sql_query( $sql );
+	
 	$arr_item[0] = array(
-		'key' => 0,//
-		'title' =>$lang_module['cat0'] ,//
-		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "", //
+		'key' => 0,  //
+		'title' =>$lang_module['cat0'],  //
+		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "" //
 	);
-	while($row=$db -> sql_fetchrow($result))
+	
+	while( $row = $db->sql_fetchrow( $result ) )
 	{
-
-		$sp_title="";
-		if($row['parentid']>0)
+		$sp_title = "";
+		if( $row['parentid'] > 0 )
 		{
-			$sp_title .='&nbsp;&nbsp;&nbsp;';
-			for($i=1;$i<=$row['parentid'];$i++)
+			$sp_title .= '&nbsp;&nbsp;&nbsp;';
+			for( $i=1; $i <= $row['parentid']; $i++ )
 			{
 				$sp_title .= '&nbsp;';
 			}
 		}
+		
 		$arr_item[$row['id']] = array(
-		'key' => $row['id'],//
-		'title' => $sp_title.$row['title'],//
-		"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : "",
+			'key' => $row['id'],  //
+			'title' => $sp_title.$row['title'],  //
+			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : ""  //
 		);
-
 	}
-
 }
 
-$result=$db->sql_query($sql);
 $list = $list_module;
 $list_module = array();
 foreach ( $list as $key => $title )
@@ -94,10 +96,10 @@ $who_view = $post['who_view'];
 $array['who_view'] = array();
 foreach ( $array_who as $key => $who )
 {
-	$array['who_view'][] = array(  //
-            'key' => $key, //
-			'title' => $who, //
-			'selected' => $key == $who_view ? " selected=\"selected\"" : ""  //
+	$array['who_view'][] = array(
+		'key' => $key, //
+		'title' => $who, //
+		'selected' => $key == $who_view ? " selected=\"selected\"" : ""  //
 	);
 }
 
@@ -107,9 +109,9 @@ if ( ! empty( $groups_list ) )
 {
 	foreach ( $groups_list as $key => $title )
 	{
-		if(!empty($groups_view))
+		if( ! empty($groups_view) )
 		{
-			$array['groups_view'][] = array(  //
+			$array['groups_view'][] = array(
                 'key' => $key, //
 				'title' => $title, //
 				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""  //
@@ -117,7 +119,7 @@ if ( ! empty( $groups_list ) )
 		}
 		else
 		{
-			$array['groups_view'][] = array(  //
+			$array['groups_view'][] = array(
                 'key' => $key, //
 				'title' => $title, //
 				'checked' => ""  //
@@ -126,33 +128,35 @@ if ( ! empty( $groups_list ) )
 	}
 }
 
-$arr_menu=nv_list_menu();
+$arr_menu = nv_list_menu();
 
 if ( $nv_Request->isset_request( 'submit1', 'post' ) )
 {
-	$post=array();
-	$gr=array();
+	$post = array();
+	$gr = array();
+	
+	$gr = $nv_Request->get_typed_array( 'groups_view', 'post', '' );
+	$post['groups_view'] = implode( ",", $gr );
+	
 	$post['id']= $nv_Request->get_int( 'id', 'post', 0 );
 	$post['parentid']= $nv_Request->get_int( 'parentid', 'post', 0 );
 	$post['mid']= $nv_Request->get_int( 'item_menu', 'post', 0 );
-	$mid_old = $nv_Request->get_int( 'mid', 'post', 0 );
-	$pa_old = $nv_Request->get_int( 'pa', 'post', 0 );
 	$post['title'] = filter_text_input( 'title', 'post', '', '', '' );
 	$post['link'] = filter_text_input( 'link', 'post', '', '', '' );
 	$post['note'] = filter_text_input( 'note', 'post', '', '', '' );
 	$post['module_name'] = filter_text_input( 'module_name', 'post', '', '', '' );
 	$post['op']= filter_text_input( 'op', 'post', '', '', '' );
 	$post['who_view']= $nv_Request->get_int( 'who_view', 'post', 0 );
-	$gr=$nv_Request->get_typed_array( 'groups_view', 'post', '' );
-	$post['groups_view']= implode(",",$gr);
 	$post['target']= $nv_Request->get_int( 'target', 'post', 0 );
 
+	$mid_old = $nv_Request->get_int( 'mid', 'post', 0 );
+	$pa_old = $nv_Request->get_int( 'pa', 'post', 0 );
 
 	if ( empty( $post['title'] ) )
 	{
 		$error = $lang_module['error_menu_name'];
 	}
-	elseif( empty($post['link']))
+	elseif( empty( $post['link'] ) )
 	{
 		$error = $lang_module['error_menu_link'];
 	}
@@ -164,48 +168,63 @@ if ( $nv_Request->isset_request( 'submit1', 'post' ) )
 		}
 		else
 		{
-			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . intval( $post['mid'] ). " AND `parentid`=". intval( $post['parentid']." AND `mid`=".$post['mid']."" )) );
+			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . intval( $post['mid'] ) . " AND `parentid`=" . intval( $post['parentid'] . " AND `mid`=" . $post['mid'] ) ) );
 			$weight = intval( $weight ) + 1;
 
-			$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `parentid`, `mid`, `title`,`link`, `note`,`weight`, `order`,
-		`lev`,`subitem`,`who_view`, `groups_view`,`module_name`, `op`,`target`, `status`) VALUES (NULL, 
-		".intval($post['parentid']).",".intval($post['mid'])."," . $db->dbescape( $post['title'] ) .
-		"," . $db->dbescape( $post['link'] ).",".$db->dbescape( $post['note'] ).",".intval($weight).",0,0,'',".intval($post['who_view']).",".$db->dbescape( $post['groups_view']).",
-		". $db->dbescape( $post['module_name'] ).",".$db->dbescape( $post['op'] ).",".intval( $post['target'] ).",1)";
-			$newcatid = intval( $db->sql_query_insert_id( $query ) );
-
+			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `parentid`, `mid`, `title`,`link`, `note`,`weight`, `order`, `lev`,`subitem`,`who_view`, `groups_view`,`module_name`, `op`,`target`, `status`) VALUES (
+				NULL, 
+				" . intval( $post['parentid'] ) . ", 
+				" . intval($post['mid'] ) . ", 
+				" . $db->dbescape( $post['title'] ) . ", 
+				" . $db->dbescape( $post['link'] ) . ", 
+				" . $db->dbescape( $post['note'] ) . ", 
+				" . intval( $weight ) . ", 
+				0, 0, '', 
+				" . intval( $post['who_view'] ) . ", 
+				" . $db->dbescape( $post['groups_view'] ) . ", 
+				" . $db->dbescape( $post['module_name'] ) . ", 
+				" . $db->dbescape( $post['op'] ) . ", 
+				" . intval( $post['target'] ) . ", 
+				1 
+			)";
+			
+			$newcatid = intval( $db->sql_query_insert_id( $sql ) );
 			if ( $newcatid > 0 )
 			{
 				$db->sql_freeresult();
-				nv_fix_cat_order($post['mid']);
-				$arr_block=array();
-				$sql= "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`= ".$post['mid'];
-				$result=$db->sql_query($sql);
-				while($row=$db->sql_fetchrow($result))
+				
+				nv_fix_cat_order( $post['mid'] );
+				
+				$arr_block = array();
+				
+				$sql= "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . $post['mid'];
+				$result = $db->sql_query( $sql );
+				while ( $row = $db->sql_fetchrow( $result ) )
 				{
-					$arr_block[]=$row['id'];
+					$arr_block[] = $row['id'];
 				}
 
-				$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`= '" . implode(",", $arr_block) . "' WHERE `id`=". $post['mid'];
-				$db->sql_query($sql);
+				$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`='" . implode( ",", $arr_block ) . "' WHERE `id`=" . $post['mid'];
+				$db->sql_query( $sql );
 
-				if($post['parentid']!=0){
-					$arr_item_menu=array();
-					$sql= "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`= ".$post['mid']. " AND `parentid`=".$post['parentid'];
-					$result=$db->sql_query($sql);
-					while($row=$db->sql_fetchrow($result))
+				if( $post['parentid'] != 0 )
+				{
+					$arr_item_menu = array();
+					$sql= "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . $post['mid'] . " AND `parentid`=" . $post['parentid'];
+					$result = $db->sql_query( $sql );
+					
+					while( $row = $db->sql_fetchrow( $result ) )
 					{
-						$arr_item_menu[]=$row['id'];
+						$arr_item_menu[] = $row['id'];
 					}
 
-					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`= '" . implode(",", $arr_item_menu) . "' WHERE `mid`= ".$post['mid']. " AND `id`=".$post['parentid'];
-					$db->sql_query($sql);
+					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`= '" . implode( ",", $arr_item_menu ) . "' WHERE `mid`= ".$post['mid']. " AND `id`=".$post['parentid'];
+					$db->sql_query( $sql );
 				}
 
-				//die(sadf);
 				nv_del_moduleCache( $module_name );
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&mid=".$post['mid']."&parentid=".$post['parentid']);
-				die();
+				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&mid=".$post['mid']."&parentid=" . $post['parentid'] );
+				exit();
 			}
 			else
 			{
@@ -215,92 +234,97 @@ if ( $nv_Request->isset_request( 'submit1', 'post' ) )
 	}
 	else
 	{
-
-		if ( $db->sql_numrows( $db->sql_query( "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `title`=" . $db->dbescape( $post['title'] )." AND `parentid`=".$post['parentid']. " AND `id` NOT IN (".$post['id'].")") ) != 0 )
+		if ( $db->sql_numrows( $db->sql_query( "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `title`=" . $db->dbescape( $post['title'] ) . " AND `parentid`=" . $post['parentid'] . " AND `id` NOT IN (" . $post['id'] . ")" ) ) != 0 )
 		{
 			$error = $lang_module['title_exit_cat'];
 		}
 		else
 		{
-
-			$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
-			`parentid`=" . intval($post['parentid']).",
-			`mid` =  " . intval($post['mid']) . ",
-			`title` = " . $db->dbescape( $post['title'] ) .",
-			`link` = " .$db->dbescape( $post['link'] ) .",
-			`note` = ". $db->dbescape( $post['note'] ).",
-			`who_view` = ". intval($post['who_view'])." ,
-			`groups_view` = ".$db->dbescape( $post['groups_view']).",
-			`module_name` = ". $db->dbescape( $post['module_name'] ).",	
-			`op` = ".$db->dbescape( $post['op'] ).",
-			`target` = ".intval( $post['target'] )." 
-			 WHERE `id` =" . intval($post['id']);
-			$db->sql_query( $query );
+			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
+				`parentid`=" . intval( $post['parentid'] ) . ", 
+				`mid`=" . intval( $post['mid'] ) . ",
+				`title`=" . $db->dbescape( $post['title'] ) . ",
+				`link`=" . $db->dbescape( $post['link'] ) . ",
+				`note`=" . $db->dbescape( $post['note'] ). ",
+				`who_view`=" . intval( $post['who_view'] ) . " ,
+				`groups_view`=" . $db->dbescape( $post['groups_view'] ) . ",
+				`module_name`=" . $db->dbescape( $post['module_name'] ) . ",	
+				`op`=" . $db->dbescape( $post['op'] ).",
+				`target`=" . intval( $post['target'] )." 
+				 WHERE `id`=" . intval( $post['id'] );
+				
+			$db->sql_query( $sql );
 			if ( $db->sql_affectedrows() > 0 )
 			{
-				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . intval( $post['mid'] ). " AND `parentid`=". intval( $post['parentid']." " )) );
-				$weight = intval( $weight ) + 1;
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `weight`=" . intval($weight) . " WHERE `id`=" . intval( $post['id'] );
-				$db->sql_query( $sql );
-				nv_fix_cat_order($post['mid']);
-
-				if($post['mid'] != $mid_old)
+				if ( $pa_old != $post['parentid'] )
 				{
-					$arr_block=array();
-					$sql= "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`= ".$post['mid'];
-					$result=$db->sql_query($sql);
-					while($row=$db->sql_fetchrow($result))
+					list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . intval( $post['mid'] ). " AND `parentid`=" . intval( $post['parentid']." " ) ) );
+					$weight = intval( $weight ) + 1;
+					
+					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `weight`=" . intval( $weight ) . " WHERE `id`=" . intval( $post['id'] );
+					$db->sql_query( $sql );				
+				}
+				
+				nv_fix_cat_order( $post['mid'] );
+				
+				if( $post['mid'] != $mid_old )
+				{
+					nv_fix_cat_order( $mid_old );
+					
+					$arr_block = array();
+					$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . $post['mid'];
+					$result = $db->sql_query( $sql );
+					while( $row = $db->sql_fetchrow( $result ) )
 					{
 						$arr_block[]=$row['id'];
 					}
 
-					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`= '" . implode(",", $arr_block) . "' WHERE `id`=". $post['mid'];
-					$db->sql_query($sql);
+					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`= '" . implode( ",", $arr_block ) . "' WHERE `id`=" . $post['mid'];
+					$db->sql_query( $sql );
 
-					$arr_block=array();
-					$sql= "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`= ".$mid_old;
-					$result=$db->sql_query($sql);
-					while($row=$db->sql_fetchrow($result))
+					$arr_block = array();
+					$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`= " . $mid_old;
+					$result = $db->sql_query( $sql );
+					while( $row = $db->sql_fetchrow( $result ) )
 					{
-						$arr_block[]=$row['id'];
+						$arr_block[] = $row['id'];
 					}
 
-					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`= '" . implode(",", $arr_block) . "' WHERE `id`=". $mid_old;
-					$db->sql_query($sql);
+					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`='" . implode( ",", $arr_block ) . "' WHERE `id`=" . $mid_old;
+					$db->sql_query( $sql );
 				}
 
-				if($post['parentid'] !=0)
+				if( $post['parentid'] != 0 )
 				{
 					$arr_item_menu=array();
-					$sql= "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`= ".$post['mid']. " AND `parentid`=".$post['parentid'];
-					$result=$db->sql_query($sql);
-					while($row=$db->sql_fetchrow($result))
+					$sql= "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`= " . $post['mid'] . " AND `parentid`=" . $post['parentid'];
+					$result = $db->sql_query( $sql );
+					while( $row = $db->sql_fetchrow( $result ) )
 					{
-						$arr_item_menu[]=$row['id'];
+						$arr_item_menu[] = $row['id'];
 					}
 
-					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`= '" . implode(",", $arr_item_menu) . "' WHERE `mid`= ".$post['mid']. " AND `id`=".$post['parentid'];
-					$db->sql_query($sql);
+					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`='" . implode( ",", $arr_item_menu ) . "' WHERE `mid`=" .$post['mid'] . " AND `id`=" . $post['parentid'];
+					$db->sql_query( $sql );
 				}
 
-				if($pa_old!=0)
+				if( $pa_old != 0 )
 				{
-					$arr_item_menu=array();
-					$sql= "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`= ".$mid_old. " AND `parentid`=".$pa_old;
-					$result=$db->sql_query($sql);
-					while($row=$db->sql_fetchrow($result))
+					$arr_item_menu = array();
+					$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`= " . $mid_old . " AND `parentid`=" . $pa_old;
+					$result = $db->sql_query( $sql );
+					while( $row = $db->sql_fetchrow( $result ) )
 					{
-						$arr_item_menu[]=$row['id'];
+						$arr_item_menu[] = $row['id'];
 					}
 
-					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`= '" . implode(",", $arr_item_menu) . "' WHERE `mid`= ".$mid_old. " AND `id`=".$pa_old;
-					$db->sql_query($sql);
-
+					$sql= "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`= '" . implode( ",", $arr_item_menu ) . "' WHERE `mid`=" .$mid_old . " AND `id`=" . $pa_old;
+					$db->sql_query( $sql );
 				}
 
 				nv_del_moduleCache( $module_name );
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&mid=".$post['mid']."&parentid=".$post['parentid']);
-				die();
+				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&mid=" .$post['mid'] . "&parentid=" . $post['parentid'] );
+				exit();
 			}
 			else
 			{
@@ -309,48 +333,52 @@ if ( $nv_Request->isset_request( 'submit1', 'post' ) )
 		}
 	}
 }
-$sql="SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid` = ".$post['mid']." AND `parentid`=".$post['parentid']." ORDER BY `weight`" ;
-$result= $db->sql_query($sql);
-$num = $db->sql_numrows($result);
-$arr_table=array();
-$i=0;
 
-while($row=$db->sql_fetchrow($result))
+$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid` = " . $post['mid'] . " AND `parentid`=" . $post['parentid'] . " ORDER BY `weight`";
+$result= $db->sql_query( $sql );
+$num = $db->sql_numrows( $result );
+
+$arr_table = array();
+$i = 0;
+
+while( $row = $db->sql_fetchrow( $result ) )
 {
 	$nu = 0;
-	$sql1="SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `parentid`=".$row['id'] ;
-	$result1= $db->sql_query($sql1);
-	$nu = $db->sql_numrows($result1);
+	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `parentid`=" . $row['id'];
+	$result1 = $db->sql_query( $sql );
+	$nu = $db->sql_numrows( $result1 );
+	
 	$arr_table[$row['id']]= array(
-	'id' =>  $row['id'],//
-	'mid' => $row['mid'],//
-	'nu' => $nu,//
-	'parentid' => $row['parentid'],//
-	'link' => $row['link'],//
-	'weight' => $row['weight'],//
-	'title' => $row['title'],//
-	'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid']."&amp;parentid=".$row['id'],//
-	'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid']."&amp;id=".$row['id'],//
-	'name_blog' => $arr_menu[$row['mid']]['title'],//
+		'id' =>  $row['id'],  //
+		'mid' => $row['mid'],  //
+		'nu' => $nu,  //
+		'parentid' => $row['parentid'],  //
+		'link' => $row['link'],  //
+		'weight' => $row['weight'],  //
+		'title' => $row['title'],  //
+		'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid']."&amp;parentid=" . $row['id'],  //
+		'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id'],  //
+		'name_blog' => $arr_menu[$row['mid']]['title']  //
 	);
 
 }
-$link_title="";
-if($post['parentid']!=0)
+
+$link_title = "";
+if( $post['parentid'] != 0 )
 {
-	$sql= "SELECT `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=".$post['parentid'] ;
-	$result= $db->sql_query($sql);
-	list($parentid)= $db->sql_fetchrow($result);
-	$link_title=NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid']."&amp;parentid=0";
+	$sql = "SELECT `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $post['parentid'];
+	$result = $db->sql_query( $sql );
+	list( $parentid )= $db->sql_fetchrow( $result );
+	$link_title = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=0";
 }
 
 $xtpl = new XTemplate( "add_menu.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&mid=".$post['mid'] )."&parentid=".$post['parentid'];
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&mid=" . $post['mid'] ) . "&parentid=" . $post['parentid'];
 
-if( ! empty( $arr_table ))
+if( ! empty( $arr_table ) )
 {
-	foreach ($arr_table as $rows)
+	foreach ( $arr_table as $rows )
 	{
 		$xtpl->assign( 'ROW', $rows );
 
@@ -377,28 +405,30 @@ if( ! empty( $arr_table ))
 if ( $nv_Request->isset_request( 'item', 'post' ) )
 {
 	$post['mid'] = $nv_Request->get_int( 'mid', 'post', 0 );
-	$sql="SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid` = ".$post['mid']." ORDER BY `order`" ;
-	$result=$db->sql_query($sql);
+	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . $post['mid'] . " ORDER BY `order`";
+	$result = $db->sql_query( $sql );
+	
 	$arr_item[0] = array(
-		'key' => 0,//
-		'title' =>$lang_module['cat0'] ,//
-		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "", //
+		'key' => 0,  //
+		'title' => $lang_module['cat0'],  //
+		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : ""  //
 	);
-	while($row=$db -> sql_fetchrow($result))
+	
+	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$sp_title="";
-		if($row['parentid']>0)
+		$sp_title = "";
+		if ( $row['parentid'] > 0 )
 		{
-			$sp_title .='&nbsp;&nbsp;&nbsp;';
-			for($i=1;$i<=$row['parentid'];$i++)
+			$sp_title .= '&nbsp;&nbsp;&nbsp;';
+			for( $i = 1; $i <= $row['parentid']; $i++ )
 			{
 				$sp_title .= '&nbsp;';
 			}
 		}
 		$arr_item[$row['id']] = array(
-		'key' => $row['id'],//
-		'title' => $sp_title.$row['title'],//
-		"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : "",
+			'key' => $row['id'],  //
+			'title' => $sp_title . $row['title'],  //
+			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : ""  //
 		);
 	}
 
@@ -407,24 +437,28 @@ if ( $nv_Request->isset_request( 'item', 'post' ) )
 		$xtpl->assign( 'cat', $arr_items );
 		$xtpl->parse( 'main.cat' );
 	}
+	
 	$contents = $xtpl->text( 'main.cat');
-	include (NV_ROOTDIR . "/includes/header.php");
+	
+	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo $contents;
 	include (NV_ROOTDIR . "/includes/footer.php");
 	exit();
-
 }
 
 if ( $nv_Request->isset_request( 'action', 'post' ) )
 {
 	$module = $nv_Request->get_string( 'module', 'post', '' ); 
-	$sql = "SELECT `module_file` FROM `" . NV_MODULES_TABLE . "` WHERE `module_data`= '".$module."'";
+	
+	$sql = "SELECT `module_file` FROM `" . NV_MODULES_TABLE . "` WHERE `module_data`= '" . $module . "'";
 	$result=$db->sql_query($sql);
 	list($module_f)=$db->sql_fetchrow($result);
-	if(file_exists(NV_ROOTDIR.'/modules/'.$module_f.'/menu.php')){		
-		$arr_cat=array();
-		include (NV_ROOTDIR.'/modules/'.$module_f.'/menu.php');
-		if(!empty($arr_cat))
+	
+	if( file_exists( NV_ROOTDIR . '/modules/' . $module_f . '/menu.php' ) )
+	{		
+		$arr_cat = array();
+		include ( NV_ROOTDIR . '/modules/' . $module_f . '/menu.php' );
+		if( ! empty ( $arr_cat ) )
 		{
 			foreach ( $arr_cat as $item )
 			{
@@ -433,38 +467,40 @@ if ( $nv_Request->isset_request( 'action', 'post' ) )
 			}
 		}
 
-		$link=NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&". NV_NAME_VARIABLE . "=" . $module;
-		$xtpl->assign( 'link', $link);
+		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module;
+		$xtpl->assign( 'link', $link );
 		$xtpl->parse( 'main.link');
 		$contents = $xtpl->text( 'main.link');
 	}
-	include (NV_ROOTDIR . "/includes/header.php");
+	
+	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo $contents;
-	include (NV_ROOTDIR . "/includes/footer.php");
+	include ( NV_ROOTDIR . "/includes/footer.php" );
 	exit();
 }
 
-if($post['id']!=0)
+if( $post['id'] != 0 )
 {
-	if($post['op']!="")
+	if( $post['op'] != "" )
 	{
-		$arr_cat=array();
-		$sql="SELECT * FROM `" . NV_PREFIXLANG . "_" . $post['module_name'] . "_cat` ORDER BY `catid` ASC";
-		if(($result=$db->sql_query($sql))==FALSE)
+		$arr_cat = array();
+		
+		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $post['module_name'] . "_cat` ORDER BY `catid` ASC";
+		if( ( $result = $db->sql_query( $sql ) ) == FALSE )
 		{
 			$sql="SELECT * FROM `" . NV_PREFIXLANG . "_" . $post['module_name'] . "_categories` ORDER BY `catid` ASC";
-			if($result=$db->sql_query($sql)==TRUE)
+			if( $result = $db->sql_query( $sql ) == TRUE )
 			{
-				$result=$db->sql_query($sql);
-				While($row=$db->sql_fetchrow($result))
+				$result = $db->sql_query( $sql );
+				While( $row = $db->sql_fetchrow( $result ) )
 				{
-					$arr_cat[$row['id']]=array(//
-					'module' => $post['module_name'],//
-					'id' => $row['id'],//
-					'title' => $row['title'],//
-					'alias' => $row['alias'],//
-					'module' => $post['module_name'],//
-					"selected" => ( $row['alias'] == $post['op']) ? " selected=\"selected\"" : "",
+					$arr_cat[$row['id']] = array(
+						'module' => $post['module_name'],  //
+						'id' => $row['id'],  //
+						'title' => $row['title'],  //
+						'alias' => $row['alias'],  //
+						'module' => $post['module_name'],  //
+						"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : ""  //
 					);
 				}
 			}
@@ -472,20 +508,20 @@ if($post['id']!=0)
 
 		else
 		{
-			$result=$db->sql_query($sql);
-			While($row=$db->sql_fetchrow($result))
+			$result = $db->sql_query( $sql );
+			While( $row = $db->sql_fetchrow( $result ) )
 			{
-				$arr_cat[$row['catid']]=array(//
-				'module' => $post['module_name'],//
-				'key' => $row['catid'],//
-				'title' => $row['title'],//
-				'alias' => $row['alias'],//				
-				"selected" => ( $row['alias'] == $post['op']) ? " selected=\"selected\"" : "",
+				$arr_cat[$row['catid']] = array(
+					'module' => $post['module_name'],  //
+					'key' => $row['catid'],  //
+					'title' => $row['title'],  //
+					'alias' => $row['alias'],  //				
+					"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : ""  //
 				);
 			}
 		}
 
-		if(!empty($arr_cat))
+		if( ! empty( $arr_cat ) )
 		{
 			foreach ( $arr_cat as $item )
 			{
@@ -493,18 +529,18 @@ if($post['id']!=0)
 				$xtpl->parse( 'main.link.item' );
 			}
 		}
-		$xtpl->parse( 'main.link');
+		$xtpl->parse( 'main.link' );
 	}
 }
 
-$arr_menu=nv_list_menu();
+$arr_menu = nv_list_menu();
 
-foreach ($arr_menu as $arr)
+foreach ( $arr_menu as $arr )
 {
 	$xtpl->assign( 'key', $arr['id'] );
 	$xtpl->assign( 'val', $arr['title'] );
 
-	if($arr['id']==$post['mid'])
+	if( $arr['id'] == $post['mid'] )
 	{
 		$xtpl->assign( 'select', 'selected="selected"' );
 	}
@@ -520,7 +556,7 @@ foreach ( $arr_item as $arr_items )
 {
 	$xtpl->assign( 'cat', $arr_items );
 
-	if ($post['parentid']== $arr_items['key'])
+	if ( $post['parentid']== $arr_items['key'] )
 	{
 		$xtpl->assign( 'selected', 'selected="selected"' );
 	}
@@ -528,7 +564,6 @@ foreach ( $arr_item as $arr_items )
 	{
 		$xtpl->assign( 'selected', '' );
 	}
-
 
 	$xtpl->parse( 'main.cat' );
 }
@@ -561,15 +596,13 @@ if ( ! empty( $array['groups_view'] ) )
 	$xtpl->parse( 'main.group_view_empty' );
 }
 
-
-
 if ( ! empty( $error ) )
 {
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.error' );
 }
 
-if($link_title!="")
+if( $link_title != "" )
 {
 	$xtpl->assign( 'link_title', $link_title );
 	$xtpl->parse( 'main.title' );
