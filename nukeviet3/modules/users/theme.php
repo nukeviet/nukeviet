@@ -333,6 +333,8 @@ function user_changepass ( $array_data = array() )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
     
+    $groups_list = nv_groups_list_pub();
+    
     $xtpl = new XTemplate( "changepass.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
@@ -358,6 +360,10 @@ function user_changepass ( $array_data = array() )
     {
         $xtpl->parse( 'main.logout' );
     }
+    if ( ! empty( $groups_list )&& $global_config['allowuserpublic']==1 )
+    {
+        $xtpl->parse( 'main.regroups' );
+    }
     
     if ( ! $array_data['pass_empty'] )
     {
@@ -371,6 +377,8 @@ function user_changepass ( $array_data = array() )
 function user_changequestion ( $array_data )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
+    
+    $groups_list = nv_groups_list_pub();
     
     $xtpl = new XTemplate( "changequestion.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     
@@ -389,7 +397,10 @@ function user_changequestion ( $array_data )
     {
         $xtpl->parse( 'main.allowopenid' );
     }
-    
+    if ( ! empty( $groups_list )&& $global_config['allowuserpublic']==1 )
+    {
+        $xtpl->parse( 'main.regroups' );
+    }
     if ( ! defined( 'NV_IS_ADMIN' ) )
     {
         $xtpl->parse( 'main.logout' );
@@ -423,6 +434,8 @@ function user_info ( $data )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
     
+    $groups_list = nv_groups_list_pub();
+    
     $xtpl = new XTemplate( "info.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
@@ -437,7 +450,10 @@ function user_info ( $data )
     {
         $xtpl->parse( 'main.allowopenid' );
     }
-    
+    if (  ! empty( $groups_list )&& $global_config['allowuserpublic']==1 )
+    {
+        $xtpl->parse( 'main.regroups' );
+    }
     if ( ! defined( 'NV_IS_ADMIN' ) )
     {
         $xtpl->parse( 'main.logout' );
@@ -483,14 +499,20 @@ function user_welcome ( )
     
     $xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
     
+    $groups_list = nv_groups_list_pub();
+    
     if ( defined( 'NV_OPENID_ALLOWED' ) )
     {
         $xtpl->parse( 'main.allowopenid' );
     }
-    
+   
     if ( ! defined( 'NV_IS_ADMIN' ) )
     {
         $xtpl->parse( 'main.logout' );
+    }
+   if (  (! empty( $groups_list )) && ($global_config['allowuserpublic']==1) )
+    {
+        $xtpl->parse( 'main.regroups' );
     }
     
     if ( ! empty( $user_info['photo'] ) and file_exists( NV_ROOTDIR . "/" . $user_info['photo'] ) )
@@ -661,6 +683,8 @@ function user_openid_administrator ( $data )
 {
     global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $global_config, $openid_servers;
     
+    $groups_list = nv_groups_list_pub();
+    
     $xtpl = new XTemplate( "openid_administrator.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/openid.gif" );
@@ -673,7 +697,10 @@ function user_openid_administrator ( $data )
     {
         $xtpl->parse( 'main.allowopenid' );
     }
-    
+    if ( ! empty( $groups_list )&& $global_config['allowuserpublic']==1 )
+    {
+        $xtpl->parse( 'main.regroups' );
+    }
     if ( ! defined( 'NV_IS_ADMIN' ) )
     {
         $xtpl->parse( 'main.logout' );

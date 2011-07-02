@@ -39,6 +39,15 @@ if ( ! empty( $users ) )
 }
 
 $db->sql_query( "DELETE FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id` = " . $group_id );
+$sql = "SELECT `group_id`,`weight` FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
+$result = $db->sql_query( $sql );
+while ( $row = $db->sql_fetchrow( $result ) )
+{
+    $weight ++;
+    $sql1 = "UPDATE `" . NV_GROUPS_GLOBALTABLE. "` SET `weight`=" . $weight . " WHERE `group_id`=" . intval( $row['group_id'] );
+    $db->sql_query( $sql1 );
+
+}
 $db->sql_query( "LOCK TABLE " . NV_GROUPS_GLOBALTABLE . " WRITE" );
 $db->sql_query( "REPAIR TABLE " . NV_GROUPS_GLOBALTABLE );
 $db->sql_query( "OPTIMIZE TABLE " . NV_GROUPS_GLOBALTABLE );

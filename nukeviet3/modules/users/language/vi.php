@@ -206,4 +206,8 @@ $lang_module['openid_add'] = "Thêm OpenID mới";
 $lang_module['email_is_exists'] = "Rất tiếc là email của OpenID này đã được sử dụng.<br />Hãy thử chọn một nhà cung cấp khác";
 $lang_module['error_update_users_info'] = "Xin lỗi:hệ thống không cập nhật được thông tin thành viên của bạn, xin liên hệ với quản trị site để được hướng dẫn.";
 
+$lang_module['in_group'] = "Đăng ký nhóm";
+$lang_module['no_in_group'] = "Bạn chưa đăng ký nhóm nào";
+
+
 ?>

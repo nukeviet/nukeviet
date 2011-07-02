@@ -30,6 +30,7 @@
     <a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.full_name}" class="s-border fl" /></a><!-- BEGIN: admin --><a title="{LANG.logout}" href="{LOGOUT_ADMIN}">{LANG.logout}</a>
     <!-- END: admin --><a title="{LANG.changpass}" href="{CHANGE_PASS}">{LANG.changpass}</a>
     <a title="{LANG.edituser}" href="{CHANGE_INFO}">{LANG.edituser}</a>
+    {in_group}    
     <div class="clear">
     </div>
 </div>

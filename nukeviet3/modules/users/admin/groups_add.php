@@ -39,10 +39,14 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
             $content = defined( 'NV_EDITOR' ) ? nv_nl2br( $content, '' ) : nv_nl2br( nv_htmlspecialchars( $content ), '<br />' );
         }
         $exp_time = ( ! $day or ! $month or ! $year ) ? 0 : mktime( $hour, $min, 0, $month, $day, $year );
+
+        list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `". NV_GROUPS_GLOBALTABLE ."` " ) );
+
+		$weight = intval( $weight ) + 1;
         
-        $sql = "INSERT INTO `" . NV_GROUPS_GLOBALTABLE . "` ( `group_id` ,`title` ,`content` ,`add_time` ,`exp_time` ,`users` ,`public` ,`act` ) VALUES (
+        $sql = "INSERT INTO `" . NV_GROUPS_GLOBALTABLE . "` ( `group_id` ,`title` ,`content` ,`add_time` ,`exp_time` ,`users` ,`public`,`weight` ,`act` ) VALUES (
 			NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $content ) . ", " . NV_CURRENTTIME . ", " . $exp_time . ", 
-			'', " . $public . ", 1)";
+			'', " . $public . ",". intval($weight) .", 1)";	
         if ( $db->sql_query_insert_id( $sql ) )
         {
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=groups" );

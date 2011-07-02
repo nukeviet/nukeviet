@@ -98,6 +98,11 @@ if ( $checkss == $data['checkss'] )
                         include ( NV_ROOTDIR . "/includes/footer.php" );
                         exit();
                     }
+                    if ( $global_config['allowquestion'] == 0 )
+                    {
+                        $data['send'] = 1;
+                        $data['answer'] = $row['answer'];
+                    }
                     
                     if ( $data['send'] )
                     {

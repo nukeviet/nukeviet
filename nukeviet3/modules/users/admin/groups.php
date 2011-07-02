@@ -11,6 +11,37 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_global['mod_groups'];
 $group_id = $nv_Request->get_int( 'group_id', 'get', 0 );
+
+// Thay doi thu tu
+if ( $nv_Request->isset_request( 'change_weight', 'post' ) )
+{
+	if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+
+	$id = $nv_Request->get_int( 'id', 'post', 0 );
+	$new_weight = $nv_Request->get_int( 'new_weight', 'post', 0 );
+	
+	if ( empty( $id ) ) die( "NO_" . $id );
+
+	$query = "SELECT `weight` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id`=" . $id;
+	$result = $db->sql_query( $query );
+
+	list( $weight_old ) = $db->sql_fetchrow( $result );
+
+	$query = "SELECT `group_id` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `weight`=" . $new_weight;
+	$result = $db->sql_query( $query );
+
+	list( $id_swap ) = $db->sql_fetchrow( $result );
+
+	$sql = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `weight`=" . $new_weight . " WHERE `group_id`=" . $id;
+	$db->sql_query( $sql );
+	$sql = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `weight`=" . $weight_old . " WHERE `group_id`=" . $id_swap;
+	$db->sql_query( $sql );
+
+	nv_del_moduleCache( $module_name );
+
+	die( 'OK_' . $id );
+}
+
 if ( $group_id > 0 )
 {
     $query = "SELECT * FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id`=" . $group_id;
@@ -24,9 +55,10 @@ if ( $group_id > 0 )
 }
 else
 {
-    $query = "SELECT * FROM `" . NV_GROUPS_GLOBALTABLE . "`";
+    $query = "SELECT * FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
     $result = $db->sql_query( $query );
     $numrows = $db->sql_numrows( $result );
+    
     if ( empty( $numrows ) )
     {
         Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=groups_add" );
@@ -37,7 +69,7 @@ else
 $contents = array();
 $contents['caption'] = $lang_global['mod_groups'];
 $contents['thead'] = array( 
-    $lang_module['title'], $lang_module['add_time'], $lang_module['exp_time'], $lang_module['public'], $lang_module['users'], $lang_global['active'], $lang_global['actions'] 
+    $lang_module['weight'],$lang_module['title'], $lang_module['add_time'], $lang_module['exp_time'], $lang_module['public'], $lang_module['users'], $lang_global['active'], $lang_global['actions'] 
 );
 while ( $row = $db->sql_fetchrow( $result ) )
 {
@@ -48,7 +80,8 @@ while ( $row = $db->sql_fetchrow( $result ) )
     $contents['row'][$row['group_id']]['exp_time'] = ! empty( $row['exp_time'] ) ? nv_date( "l, d/m/Y H:i", $row['exp_time'] ) : $lang_global['unlimited'];
     $contents['row'][$row['group_id']]['public'] = $row['public'] == 1 ? $lang_global['yes'] : $lang_global['no'];
     $contents['row'][$row['group_id']]['users'] = ! empty( $row['users'] ) ? count( explode( ",", $row['users'] ) ) : 0;
-    $contents['row'][$row['group_id']]['act'] = $row['act'];
+    $contents['row'][$row['group_id']]['weight'] = $row['weight'];
+    $contents['row'][$row['group_id']]['act'] = $row['act'];    
     $contents['row'][$row['group_id']]['actions'] = array( 
         $lang_global['edit'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=groups_edit&amp;group_id=" . $row['group_id'], $lang_global['delete'] 
     );
@@ -64,7 +97,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
         $contents['add_user']['form_search']['label1'] = $lang_module['form_search_label1'];
         $contents['add_user']['form_search']['select']['name'] = "search_option";
         $contents['add_user']['form_search']['select']['options'] = array( 
-            $lang_module['form_search_select0'], $lang_module['form_search_select1'], $lang_module['form_search_select2'] 
+        $lang_module['form_search_select0'], $lang_module['form_search_select1'], $lang_module['form_search_select2'] 
         );
         $contents['add_user']['form_search']['input_txt']['name'] = "search_query";
         $contents['add_user']['form_search']['input_submit']['name'] = "search_click";

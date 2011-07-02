@@ -30,6 +30,8 @@ function valid_name_config ( $array_name )
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
     $array_config['allowmailchange'] = $nv_Request->get_int( 'allowmailchange', 'post', 0 );
+    $array_config['allowuserpublic'] = $nv_Request->get_int( 'allowuserpublic', 'post', 0 );
+    $array_config['allowquestion'] = $nv_Request->get_int( 'allowquestion', 'post', 0 );
     $array_config['allowloginchange'] = $nv_Request->get_int( 'allowloginchange', 'post', 0 );
     $array_config['allowuserlogin'] = $nv_Request->get_int( 'allowuserlogin', 'post', 0 );
     $array_config['allowuserreg'] = $nv_Request->get_int( 'allowuserreg', 'post', 0 );
@@ -72,7 +74,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 $array_config = array();
 
 $sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND `module`='global' AND 
-`config_name` IN ('allowmailchange','allowuserreg','allowloginchange','allowuserlogin','openid_mode','is_user_forum','openid_servers')";
+`config_name` IN ('allowmailchange','allowuserpublic','allowquestion','allowuserreg','allowloginchange','allowuserlogin','openid_mode','is_user_forum','openid_servers')";
 $result = $db->sql_query( $sql );
 while ( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 {
@@ -80,6 +82,8 @@ while ( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 }
 
 $array_config['allowmailchange'] = ! empty( $array_config['allowmailchange'] ) ? " checked=\"checked\"" : "";
+$array_config['allowuserpublic'] = ! empty( $array_config['allowuserpublic'] ) ? " checked=\"checked\"" : "";
+$array_config['allowquestion'] = ! empty( $array_config['allowquestion'] ) ? " checked=\"checked\"" : "";
 $array_config['allowloginchange'] = ! empty( $array_config['allowloginchange'] ) ? " checked=\"checked\"" : "";
 $array_config['allowuserlogin'] = ! empty( $array_config['allowuserlogin'] ) ? " checked=\"checked\"" : "";
 $array_config['openid_mode'] = ! empty( $array_config['openid_mode'] ) ? " checked=\"checked\"" : "";

@@ -15,3 +15,13 @@ function nv_group_add_user_res(a){a=a.split("_");if(a[0]!="OK")return a=document
 "search_users_result"));a=script_name+"?"+nv_name_variable+"="+nv_module_name+"&"+nv_fc_variable+"=groups_users&group_id="+a[1];a=rawurlencode(a);nv_urldecode_ajax(a,"list_users")}}function nv_group_exclude_user(a,b){var c=document.getElementById("exclude_user_"+b);confirm(nv_is_exclude_user_confirm[0])?(c.disabled=!0,nv_ajax("post",script_name,nv_name_variable+"="+nv_module_name+"&"+nv_fc_variable+"=groups_exclude_user&group_id="+a+"&userid="+b,"","nv_group_exclude_user_res")):c.checked=!1}
 function nv_group_exclude_user_res(a){a=a.split("_");if(a[0]!="OK")return a=document.getElementById("exclude_user_"+userid),a.disabled=!1,a.checked=!1,alert(nv_is_exclude_user_confirm[2]),!1;else{var b=document.getElementById("count_users_"+a[1]).innerHTML;b=intval(b)-1;document.getElementById("count_users_"+a[1]).innerHTML=b;document.getElementById("is_search").value!=0&&(b=script_name+"?"+nv_name_variable+"="+nv_module_name+"&"+nv_fc_variable+"=groups_search_users&id="+a[1],b=rawurlencode(b),nv_group_search_users(b,
 "search_users_result"));a=script_name+"?"+nv_name_variable+"="+nv_module_name+"&"+nv_fc_variable+"=groups_users&group_id="+a[1];a=rawurlencode(a);nv_urldecode_ajax(a,"list_users")}};
+
+function nv_chang_group(vid) {	
+	var nv_timer = nv_settimeout_disable('change_weight_' + vid, 5000);
+	var new_weight = document.getElementById('change_weight_' + vid).options[document.getElementById('change_weight_' + vid).selectedIndex].value;
+	
+	nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&'+ nv_fc_variable + '=groups&change_weight=1&id=' + vid
+			+ '&new_weight=' + new_weight + '&num=' + nv_randomPassword(8), '',
+			'nv_group_del_result');
+	return;
+}

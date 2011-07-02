@@ -11,12 +11,12 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 
 $allow_func = array( 
     'main', 'del', 'delconfirm', 'setactive', 'user_add', 'edit', 'user_waiting', 'delawaitinglist', 'question', 'siteterms', 'config', //
-	'groups', 'groups_add', 'groups_edit', 'groups_del', 'groups_act', 'groups_users', 'groups_search_users', 'groups_add_user', 'groups_exclude_user' 
+'groups', 'groups_add', 'groups_edit', 'groups_del', 'groups_act', 'groups_users', 'groups_search_users', 'groups_add_user', 'groups_exclude_user' 
 );
 define( 'NV_IS_FILE_ADMIN', true );
 $submenu['user_add'] = $lang_module['user_add'];
 $submenu['user_waiting'] = $lang_module['member_wating'];
-$submenu['groups'] =$lang_global['mod_groups'];
+$submenu['groups'] = $lang_global['mod_groups'];
 $submenu['groups_add'] = $lang_module['nv_admin_add'];
 $submenu['question'] = $lang_module['question'];
 $submenu['siteterms'] = $lang_module['siteterms'];
@@ -57,7 +57,7 @@ function nv_groups_add_theme ( $contents )
     $return .= "<td>\n";
     $return .= "<input name=\"title\" id=\"title\" type=\"text\" value=\"" . $contents['title'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['title'][2] . "\" /><sup class=\"required\">&lowast;</sup></td>\n";
     $return .= "</tr>\n";
-	$return .= "<tbody class=\"second\">\n";
+    $return .= "<tbody class=\"second\">\n";
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['exp_time'][0] . ": </td>\n";
     $return .= "<td>" . $contents['exp_time'][6] . ":";
@@ -81,7 +81,7 @@ function nv_groups_add_theme ( $contents )
     }
     $return .= "</select></td>\n";
     $return .= "</tr>\n";
-	$return .= "</tbody>\n";
+    $return .= "</tbody>\n";
     $return .= "<tr>\n";
     $return .= "<td>" . $contents['public'][0] . ": </td>\n";
     $return .= "<td><input type=\"checkbox\" value=\"1\" id=\"public\" name=\"public\"" . ( $contents['public'][1] ? " checked=\"checked\"" : "" ) . " /></td>\n";
@@ -90,12 +90,12 @@ function nv_groups_add_theme ( $contents )
     
     $return .= "<table class=\"tab1\" style=\"margin-bottom:8px\">\n";
     $return .= "<tr>\n";
-    $return .= "<td>" . $contents['content'][0] . ":</td>\n"; 
+    $return .= "<td>" . $contents['content'][0] . ":</td>\n";
     $return .= "</tr>\n";
-	$return .= "<tbody class=\"second\">\n";
+    $return .= "<tbody class=\"second\">\n";
     $return .= "<tr>\n";
     $return .= "<td>\n";
-	$return .= "<div style=\"background:#FFFFFF; padding:2px\">\n";
+    $return .= "<div style=\"background:#FFFFFF; padding:2px\">\n";
     if ( $contents['content'][4] and nv_function_exists( 'nv_aleditor' ) )
     {
         $return .= nv_aleditor( "content", $contents['content'][2], $contents['content'][3], $contents['content'][1] );
@@ -104,16 +104,16 @@ function nv_groups_add_theme ( $contents )
     {
         $return .= "<textarea name=\"content\" id=\"content\" style=\"width:" . $contents['content'][2] . ";height:" . $contents['content'][3] . "\">" . $contents['content'][1] . "</textarea>\n";
     }
-	$return .= "</div>\n";
+    $return .= "</div>\n";
     $return .= "</td>\n";
     $return .= "</tr>\n";
-	$return .= "</tbody>\n";
+    $return .= "</tbody>\n";
     $return .= "<tr>\n";
     $return .= "<td><center><input type=\"hidden\" value=\"1\" name=\"save\" id=\"save\" />\n";
     $return .= "<input type=\"submit\" value=\"" . $contents['submit'] . "\" name=\"submit1\" /></center></td>\n";
     $return .= "</tr>\n";
     $return .= "</table>\n";
-    $return .= "</form>\n";	
+    $return .= "</form>\n";
     
     return $return;
 }
@@ -194,7 +194,7 @@ function nv_admin_edit_theme ( $contents )
     $return .= "</td>\n";
     $return .= "</tr>\n";
     $return .= "</tbody>\n";
-	$return .= "<tbody>\n";
+    $return .= "<tbody>\n";
     $return .= "<tr>\n";
     $return .= "<td align=\"center\"><input type=\"hidden\" value=\"1\" name=\"save\" id=\"save\" />\n";
     $return .= "<input type=\"submit\" value=\"" . $contents['submit'] . "\" name=\"submit1\" /></td>\n";
@@ -220,11 +220,20 @@ function main_theme ( $contents )
     $return .= "</tr>\n";
     $return .= "</thead>\n";
     $a = 0;
+    $num = count($contents['row']);
     foreach ( $contents['row'] as $id => $values )
     {
         $class = ( $a % 2 ) ? " class=\"second\"" : "";
         $return .= "<tbody" . $class . ">\n";
         $return .= "<tr>\n";
+        $return .= "<td>\n";
+        $return .= "<select id=\"change_weight_" . $id . "\" onchange=\"nv_chang_group('" . $id . "','weight');\">\n";
+        for ( $i = 1; $i <= $num; $i ++ )
+        {
+            $return .= "<option value=\"" . $i . "\"" . ( $i == $values['weight'] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+        }
+        $return .= "<\td>\n";
+        $return .= "</select>";
         $return .= "<td><span class=\"search_icon\"><a href=\"" . $values['title'][1] . "\">" . $values['title'][0] . "</a></span></td>\n";
         $return .= "<td>" . $values['add_time'] . "</td>\n";
         $return .= "<td>" . $values['exp_time'] . "</td>\n";

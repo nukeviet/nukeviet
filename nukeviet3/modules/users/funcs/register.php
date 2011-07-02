@@ -284,20 +284,18 @@ if ( $checkss == $array_register['checkss'] )
     $array_register['full_name'] = filter_text_input( 'full_name', 'post', '', 1, 255 );
     $array_register['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
     $array_register['password'] = filter_text_input( 'password', 'post', '' );
-    $array_register['re_password'] = filter_text_input( 're_password', 'post', '' );
+    $array_register['re_password'] = filter_text_input( 're_password', 'post', '' );    
     $array_register['email'] = filter_text_input( 'email', 'post', '', 1, 100 );
     $array_register['question'] = $nv_Request->get_int( 'question', 'post', 0 );
-    if ( ! isset( $data_questions[$array_register['question']] ) ) $array_register['question'] = 0;
-    
+    if ( ! isset( $data_questions[$array_register['question']] ) ) $array_register['question'] = 0;    
     $data_questions[$array_register['question']]['selected'] = " selected=\"selected\"";
-    
     $array_register['your_question'] = filter_text_input( 'your_question', 'post', '', 1 );
     $array_register['answer'] = filter_text_input( 'answer', 'post', '', 1, 255 );
     $array_register['agreecheck'] = $nv_Request->get_int( 'agreecheck', 'post', 0 );
     $nv_seccode = filter_text_input( 'nv_seccode', 'post', '', 1, NV_GFX_NUM );
     
     $check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
-    
+   
     if ( ! $check_seccode )
     {
         $error = $lang_global['securitycodeincorrect'];
@@ -349,7 +347,7 @@ if ( $checkss == $array_register['checkss'] )
                 " . $db->dbescape( $array_register['full_name'] ) . ", 
                 " . NV_CURRENTTIME . ", 
                 " . $db->dbescape( $your_question ) . ", 
-                " . $db->dbescape( $array_register['answer'] ) . ", 
+                " . $db->dbescape( $array_register['answer'] ) . ", '',              
                 " . $db->dbescape( $checknum ) . ")";
             
             $userid = $db->sql_query_insert_id( $sql );
@@ -415,7 +413,7 @@ if ( $checkss == $array_register['checkss'] )
                 " . $db->dbescape( $your_question ) . ", 
                 " . $db->dbescape( $array_register['answer'] ) . ", 
                 '', 0, 1, '', 1, '', 0, '', '', '')";
-            
+          
             $userid = $db->sql_query_insert_id( $sql );
             
             if ( ! $userid )

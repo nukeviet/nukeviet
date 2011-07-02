@@ -8,11 +8,13 @@
  */
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $openid_servers;
+global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $openid_servers, $lang_module;
 
 if ( $module_name == 'users' ) return "";
 
 $content = "";
+
+$groups_list = nv_groups_list_pub();
 
 if ( $global_config['allowuserlogin'] and $module_name != "users" )
 {
@@ -46,6 +48,15 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
         }
         $xtpl->assign( 'CHANGE_PASS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=changepass" );
         $xtpl->assign( 'CHANGE_INFO', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users" );
+        $xtpl->assign( 'RE_GROUPS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=regroups" );
+        
+		if ( ! empty( $groups_list )&& $global_config['allowuserpublic']==1 )
+		{
+		   
+			$in_group = "<a title='".$lang_global['in_groups']."' href='" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=regroups'>".$lang_global['in_groups']."</a>";
+		    $xtpl->assign( 'in_group', $in_group );
+		}
+        
         $xtpl->parse( 'signed' );
         $content = $xtpl->text( 'signed' );
     }
@@ -59,7 +70,9 @@ if ( $global_config['allowuserlogin'] and $module_name != "users" )
         $xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
         $xtpl->assign( 'LANG', $lang_global );
         
-        if ( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) )
+        if ( in_array( $global_config['gfx_chk'], array( 
+            2, 4, 5, 7 
+        ) ) )
         {
             $xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
             $xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );

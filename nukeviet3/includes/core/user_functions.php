@@ -20,7 +20,7 @@ function nv_site_mods ( )
     
     if ( defined( "NV_IS_USER" ) )
     {
-        $user_ops = array( 'main', 'changepass', 'openid', 'editinfo' );
+        $user_ops = array( 'main', 'changepass', 'openid', 'editinfo','regroups' );
         if ( ! defined( "NV_IS_ADMIN" ) )
         {
             $user_ops[] = 'logout';
@@ -621,5 +621,24 @@ function nv_show_queries_for_admin ( )
         $return .= "</div>\n";
     }
     return $return;
+}
+
+/**
+ * nv_groups_list_pub()
+ * 
+ * @return
+ */
+function nv_groups_list_pub ( )
+{
+    global $db;
+    $query = "SELECT `group_id`, `title` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `public`=1 AND `act`=1 AND (`exp_time` =0 OR `exp_time` >". NV_CURRENTTIME.") ORDER BY `group_id`";
+    $result = $db->sql_query( $query );
+    $groups = array();
+    while ( $row = $db->sql_fetchrow( $result ) )
+    {
+        $groups[$row['group_id']] = $row['title'];
+    }   
+    return $groups;
+    
 }
 ?>

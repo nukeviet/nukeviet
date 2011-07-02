@@ -34,13 +34,29 @@
             </tbody>
             <tbody class="second">
                 <tr>
+                    <td>{LANG.allow_public}</td>
+                    <td>
+                        <input name="allowuserpublic" value="1" type="checkbox"{DATA.allowuserpublic} />
+                    </td>
+                </tr>
+            </tbody>
+            <tbody >
+                <tr>
+                    <td>{LANG.allow_question}</td>
+                    <td>
+                        <input name="allowquestion" value="1" type="checkbox"{DATA.allowquestion} />
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="second" >
+                <tr>
                     <td>{LANG.allow_change_login}</td>
                     <td>
                         <input name="allowloginchange" value="1" type="checkbox"{DATA.allowloginchange} />
                     </td>
                 </tr>
             </tbody>
-            <tbody>
+            <tbody >
                 <tr>
                     <td>{LANG.allow_change_email}</td>
                     <td>
@@ -56,7 +72,7 @@
                     </td>
                 </tr>
             </tbody>
-            <tbody>
+            <tbody >
                 <tr>
                     <td>{LANG.openid_servers}</td>
                     <td>
@@ -74,7 +90,7 @@
                     </td>
                 </tr>
             </tbody>
-            <tbody>
+            <tbody >
                 <tr>
                     <td>{LANG.deny_name}</td>
                     <td>

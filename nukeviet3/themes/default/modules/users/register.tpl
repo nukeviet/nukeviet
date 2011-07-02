@@ -70,6 +70,21 @@
                     </select>
                 </dd>
             </dl>
+            <!-- BEGIN: groups -->
+             <dl class="clearfix gray">
+                <dt class="fl">
+                    <label>
+                        {LANG.in_group}
+                    </label>
+                </dt>
+                <dd class="fr">
+                <!-- BEGIN: list -->                      
+                      <input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} />
+                       <span>{GROUP.title}</span>
+                <!-- END: list -->
+                </dd>
+            </dl>
+            <!-- END: groups -->
             <dl class="clearfix gray">
                 <dt class="fl">
                     <label>

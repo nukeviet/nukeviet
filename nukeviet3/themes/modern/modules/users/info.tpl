@@ -8,6 +8,7 @@
 				<li><a href="{URL_HREF}changepass">{LANG.changepass_title}</a></li>
 				<li><a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a></li>
 				<li><!-- BEGIN: allowopenid --><a href="{URL_HREF}openid">{LANG.openid_administrator}</a><!-- END: allowopenid --></li>
+				<li><!-- BEGIN: regroups --><a href="{URL_HREF}regroups">{LANG.in_group}</a><!-- END: regroups --></li>
 				<li><!-- BEGIN: logout --><a href="{URL_HREF}logout">{LANG.logout_title}</a><!-- END: logout --></li>
 			</ul>
 	<form action="{EDITINFO_FORM}" method="post" class="box-border content-box clearfix bgray" enctype="multipart/form-data">

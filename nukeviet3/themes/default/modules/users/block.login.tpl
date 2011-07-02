@@ -53,5 +53,6 @@
     <!-- END: admin -->
     <a title="{LANG.changpass}" href="{CHANGE_PASS}">{LANG.changpass}</a>
     <a title="{LANG.edituser}" href="{CHANGE_INFO}">{LANG.edituser}</a>
+    {in_group} 
 </div>
 <!-- END: signed -->

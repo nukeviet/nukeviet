@@ -123,7 +123,14 @@ function nv_func_update_data ( )
     {
         $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'update_revision_lang_mode', '1')" );
     }
-
+	
+	if ( $global_config['revision'] < 1153 )
+    {
+        $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'allowquestion', '0')" );
+        $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'allowuserpublic', '1')" );
+        $db->sql_query( "ALTER TABLE `" . NV_GROUPS_GLOBALTABLE."` ADD `weight` smallint(4) unsigned NOT NULL DEFAULT '0' AFTER `public`" );
+    }
+    
     // End date data
     if ( empty( $error_contents ) )
     {
