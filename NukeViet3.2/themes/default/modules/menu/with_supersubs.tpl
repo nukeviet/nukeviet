@@ -42,7 +42,7 @@
 <div class="navs">
 	<ul class="sf-menu" id="style1">
 		<!-- BEGIN: loopcat1 -->
-		<li{mainloop.current}>
+		<li{CAT1.current}>
 			<a href="{CAT1.link}" class="sf-with-ul">{CAT1.title}</a>
 			<!-- BEGIN: cat2 -->
 			<ul>			

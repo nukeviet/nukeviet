@@ -23,7 +23,7 @@ ddsmoothmenu.init({
 <div class="ddsmoothmenu-v" id="smoothmenu_2">
 	<ul>
 		<!-- BEGIN: loopcat1 -->
-		<li{mainloop.current}><a href="{CAT1.link}">{CAT1.title}</a>				
+		<li{CAT1.current}><a href="{CAT1.link}">{CAT1.title}</a>				
 			<!-- BEGIN: cat2 -->
 			<ul>			
 				{HTML_CONTENT}	

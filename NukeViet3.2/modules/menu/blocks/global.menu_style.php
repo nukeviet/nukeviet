@@ -174,13 +174,21 @@ if ( ! nv_function_exists( 'nv_menu_site' ) )
 
     function nv_menu_site ( $block_config )
     {
-        global $db;
-        
+        global $db, $module_name;
+        		
         $list_cats = array();
         $sql = "SELECT `id`, `parentid`, `title`, `link`, `note`, `subitem`, `who_view`, `groups_view` FROM `" . NV_PREFIXLANG . "_menu_rows` WHERE `status`=1 AND `mid` = " . $block_config['menuid'] . " ORDER BY `weight` ASC";
         $result = $db->sql_query( $sql );
         while ( $row = $db->sql_fetchrow( $result ) )
         {
+			$current_menu = "";
+			$base_url_replace = str_replace( "/", "\/", NV_BASE_SITEURL );
+				
+			if ( ( preg_match( "/^" . $base_url_replace . "index\.php\?" . NV_LANG_VARIABLE . "\=" . NV_LANG_DATA . "\&" . NV_NAME_VARIABLE . "\=" . $module_name . "$/", $row['link'] ) or preg_match( "/^" . $base_url_replace . "index\.php\?" . NV_LANG_VARIABLE . "\=" . NV_LANG_DATA . "\&" . NV_NAME_VARIABLE . "\=" . $module_name . "\&/", $row['link'] ) ) and ( $row['parentid'] == 0 ) )
+			{
+				$current_menu = " class=\"current\"";
+			}
+
             if ( nv_set_allow( $row['who_view'], $row['groups_view'] ) )
             {
                 $list_cats[$row['id']] = array( 
@@ -189,11 +197,12 @@ if ( ! nv_function_exists( 'nv_menu_site' ) )
 					'subcats' => $row['subitem'],  //
 					'title' => $row['title'],  // 
 					'link' => $row['link'],  //
-					'note' => $row['note']  //
+					'note' => $row['note'],  //
+					'current' => $current_menu  //
                 );
             }
         }
-        
+        		
         if ( $block_config['type'] == 1 )
         {
             $style = 'with_supersubs';
@@ -311,7 +320,6 @@ if ( ! nv_function_exists( 'nv_menu_site' ) )
         
         $xtpl->parse( 'main' );
         return ( $xtpl->text( 'main' ) );
-    
     }
 
     function nv_sub_menu ( $style, $list_cats, $list_sub )

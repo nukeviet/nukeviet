@@ -33,7 +33,7 @@
 <div class="style_nav">
 <ul id="sample-menu-4" class="sf-menu sf-navbar sf-js-enabled sf-shadow">
 	<!-- BEGIN: loopcat1 -->
-		<li{mainloop.current}><a  class="sf-with-ul" href="{CAT1.link}"><strong>{CAT1.title}</strong></a>		
+		<li{CAT1.current}><a  class="sf-with-ul" href="{CAT1.link}"><strong>{CAT1.title}</strong></a>		
 			<!-- BEGIN: cat2 -->
 			<ul>			
 				{HTML_CONTENT}	

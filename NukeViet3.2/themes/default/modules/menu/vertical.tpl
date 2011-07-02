@@ -24,7 +24,7 @@ $(document).ready(function(){
 </script>
 <ul class="sf-menu sf-vertical sf-js-enabled sf-shadow">
 	<!-- BEGIN: loopcat1 -->
-	<li{mainloop.current}><a href="{CAT1.link}" class="sf-with-ul"><strong>{CAT1.title}</strong></a>						
+	<li{CAT1.current}><a href="{CAT1.link}" class="sf-with-ul"><strong>{CAT1.title}</strong></a>						
 		<!-- BEGIN: cat2 -->
 		<ul>			
 			{HTML_CONTENT}	
