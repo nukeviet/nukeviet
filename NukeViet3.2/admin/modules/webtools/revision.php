@@ -12,7 +12,12 @@ if ( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['revision'];
 
 $repository_url = "http://nuke-viet.googlecode.com/svn/trunk/";
-define( 'NV3_DIRECTORY_SNV', '/trunk/nukeviet3/' );
+define( 'NV3_DIRECTORY_SNV', '/trunk/NukeViet3.2/' );
+
+$file_no_update = array();
+$file_no_update[] = NV_DATADIR . "/config_global.php";
+$file_no_update[] = "includes/constants.php";
+$file_no_update[] = "config.php";
 
 function del_path_svn ( $path )
 {
@@ -106,122 +111,122 @@ else
             if ( ! empty( $logs ) )
             {
                 $add_files = $del_files = $edit_files = array();
-				
-				$is_check_lang = false;
-				if ( $global_config['update_revision_lang_mode'] != 1 )
-				{
-					$is_check_lang = true;
-					
-					$rule = implode ( "|", array_keys( $language_array ) );
+                
+                $is_check_lang = false;
+                if ( $global_config['update_revision_lang_mode'] != 1 )
+                {
+                    $is_check_lang = true;
+                    
+                    $rule = implode( "|", array_keys( $language_array ) );
+                    
+                    // Check is lang file rule
+                    define( "NV_WCHECK_LADMIN_GLOBAL_ADMIN", "/^language\/(" . $rule . ")\\/admin_global.php$/" );
+                    define( "NV_WCHECK_LADMIN_GLOBAL_SITE", "/^language\/(" . $rule . ")\\/global.php$/" );
+                    define( "NV_WCHECK_LADMIN_INSTALL", "/^language\/(" . $rule . ")\\/install.php$/" );
+                    define( "NV_WCHECK_LADMIN_MODULES", "/^language\/(" . $rule . ")\\/admin_([a-zA-Z0-9\-\_]+)\.php$/" );
+                    define( "NV_WCHECK_LMODULES_SITE", "/^modules\/([a-z0-9\-]+)\\/language\/(" . $rule . ")\.php$/" );
+                    define( "NV_WCHECK_LMODULES_ADMIN", "/^modules\/([a-z0-9\-]+)\\/language\/admin_(" . $rule . ")\.php$/" );
+                    define( "NV_WCHECK_LJS_GLOBAL", "/^js\/language\/(" . $rule . ")\.js$/" );
+                    define( "NV_WCHECK_LJS_JQUERYUI", "/^js\/language\/jquery\.ui\.datepicker\-(" . $rule . ")\.js$/" );
+                    define( "NV_WCHECK_LJS_CKEDITOR", "/^admin\/editors\/ckeditor\/lang\/(" . $rule . ")\.php$/" );
+                    define( "NV_WCHECK_LBLOCK_MODULE", "/^modules\/([a-z0-9\-]+)\\/language\/block.(module|global)\.([a-zA-Z0-9\-\_]+)\_(" . $rule . ")\.php$/" );
+                    define( "NV_WCHECK_LBLOCK_INCLUDES", "/^language\/(" . $rule . ")\\/block\.global\.([a-zA-Z0-9\-\_]+)\.php$/" );
 
-					// Check is lang file rule
-					define ( "NV_WCHECK_LADMIN_GLOBAL_ADMIN", "/^language\/(" . $rule . ")\\/admin_global.php$/" );
-					define ( "NV_WCHECK_LADMIN_GLOBAL_SITE", "/^language\/(" . $rule . ")\\/global.php$/" );
-					define ( "NV_WCHECK_LADMIN_INSTALL", "/^language\/(" . $rule . ")\\/install.php$/" );
-					define ( "NV_WCHECK_LADMIN_MODULES", "/^language\/(" . $rule . ")\\/admin_([a-zA-Z0-9\-\_]+)\.php$/" );
-					define ( "NV_WCHECK_LMODULES_SITE", "/^modules\/([a-z0-9\-]+)\\/language\/(" . $rule . ")\.php$/" );
-					define ( "NV_WCHECK_LMODULES_ADMIN", "/^modules\/([a-z0-9\-]+)\\/language\/admin_(" . $rule . ")\.php$/" );
-					define ( "NV_WCHECK_LJS_GLOBAL", "/^js\/language\/(" . $rule . ")\.js$/" );
-					define ( "NV_WCHECK_LJS_JQUERYUI", "/^js\/language\/jquery\.ui\.datepicker\-(" . $rule . ")\.js$/" );
-					define ( "NV_WCHECK_LJS_CKEDITOR", "/^admin\/editors\/ckeditor\/lang\/(" . $rule . ")\.php$/" );
-					define ( "NV_WCHECK_LBLOCK_MODULE", "/^modules\/([a-z0-9\-]+)\\/language\/block.(module|global)\.([a-zA-Z0-9\-\_]+)\_(" . $rule . ")\.php$/" );
-					define ( "NV_WCHECK_LBLOCK_INCLUDES", "/^language\/(" . $rule . ")\\/block\.global\.([a-zA-Z0-9\-\_]+)\.php$/" );
-					
-					/**
-					 * nv_check_is_lang_file()
-					 * 
-					 * @param mixed $file_path
-					 * @return
-					 */
-					function nv_check_is_lang_file ( $file_path )
-					{
-						global $global_config;
-						$check_rule = ( $global_config['update_revision_lang_mode'] == 2 )? $global_config['allow_adminlangs'] : $global_config['allow_sitelangs'];
-						
-						if ( preg_match( NV_WCHECK_LADMIN_GLOBAL_ADMIN, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[1], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LADMIN_GLOBAL_SITE, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[1], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LADMIN_INSTALL, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[1], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LADMIN_MODULES, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[1], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LMODULES_SITE, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[2], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LMODULES_ADMIN, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[2], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LJS_GLOBAL, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[1], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LJS_JQUERYUI, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[1], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LJS_CKEDITOR, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[1], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LBLOCK_MODULE, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[4], $check_rule ) )
-							{
-								return true;
-							}
-						}
-						elseif ( preg_match( NV_WCHECK_LBLOCK_INCLUDES, $file_path, $match ) )
-						{
-							if ( ! in_array ( $match[1], $check_rule ) )
-							{
-								return true;
-							}
-						}
-
-						return false;
-					}
-				}
-
+                    /**
+                     * nv_check_is_lang_file()
+                     * 
+                     * @param mixed $file_path
+                     * @return
+                     */
+                    function nv_check_is_lang_file ( $file_path )
+                    {
+                        global $global_config;
+                        $check_rule = ( $global_config['update_revision_lang_mode'] == 2 ) ? $global_config['allow_adminlangs'] : $global_config['allow_sitelangs'];
+                        
+                        if ( preg_match( NV_WCHECK_LADMIN_GLOBAL_ADMIN, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[1], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LADMIN_GLOBAL_SITE, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[1], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LADMIN_INSTALL, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[1], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LADMIN_MODULES, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[1], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LMODULES_SITE, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[2], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LMODULES_ADMIN, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[2], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LJS_GLOBAL, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[1], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LJS_JQUERYUI, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[1], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LJS_CKEDITOR, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[1], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LBLOCK_MODULE, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[4], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        elseif ( preg_match( NV_WCHECK_LBLOCK_INCLUDES, $file_path, $match ) )
+                        {
+                            if ( ! in_array( $match[1], $check_rule ) )
+                            {
+                                return true;
+                            }
+                        }
+                        
+                        return false;
+                    }
+                }
+                
                 foreach ( $logs as $key => $arr_log_i )
-                {					
+                {
                     if ( isset( $arr_log_i['del_files'] ) )
                     {
                         $array_remove_add = $array_remove_edit = array();
@@ -229,31 +234,33 @@ else
                         foreach ( $arr_temp as $str )
                         {
                             $str = del_path_svn( trim( $str ) );
-							
-							if ( $is_check_lang )
-							{
-								$check_ok = nv_check_is_lang_file ( $str );
-								if ( $check_ok )
-								{
-									continue;
-								}
-							}
-
-                            if ( in_array( $str, $add_files ) )
+                            if ( ! in_array( $str, $file_no_update ) )
                             {
-                                $array_remove_add[] = $str;
+                                if ( $is_check_lang )
+                                {
+                                    $check_ok = nv_check_is_lang_file( $str );
+                                    if ( $check_ok )
+                                    {
+                                        continue;
+                                    }
+                                }
+                                
+                                if ( in_array( $str, $add_files ) )
+                                {
+                                    $array_remove_add[] = $str;
+                                }
+                                elseif ( in_array( $str, $edit_files ) )
+                                {
+                                    $array_remove_edit[] = $str;
+                                }
+                                else
+                                {
+                                    $del_files[] = $str;
+                                }
                             }
-                            elseif ( in_array( $str, $edit_files ) )
-                            {
-                                $array_remove_edit[] = $str;
-                            }
-                            else
-                            {
-                                $del_files[] = $str;
-                            }
+                            $add_files = array_diff( $add_files, $array_remove_add );
+                            $edit_files = array_diff( $edit_files, $array_remove_edit );
                         }
-                        $add_files = array_diff( $add_files, $array_remove_add );
-                        $edit_files = array_diff( $edit_files, $array_remove_edit );
                     }
                     if ( isset( $arr_log_i['mod_files'] ) )
                     {
@@ -261,19 +268,21 @@ else
                         foreach ( $arr_temp as $str )
                         {
                             $str = del_path_svn( trim( $str ) );
-							
-							if ( $is_check_lang )
-							{
-								$check_ok = nv_check_is_lang_file ( $str );
-								if ( $check_ok )
-								{
-									continue;
-								}
-							}
-
-                            if ( ! in_array( $str, $edit_files ) and ! in_array( $str, $add_files ) )
+                            if ( ! in_array( $str, $file_no_update ) )
                             {
-                                $edit_files[] = $str;
+                                if ( $is_check_lang )
+                                {
+                                    $check_ok = nv_check_is_lang_file( $str );
+                                    if ( $check_ok )
+                                    {
+                                        continue;
+                                    }
+                                }
+                                
+                                if ( ! in_array( $str, $edit_files ) and ! in_array( $str, $add_files ) )
+                                {
+                                    $edit_files[] = $str;
+                                }
                             }
                         }
                     }
@@ -285,43 +294,45 @@ else
                         foreach ( $arr_temp as $str )
                         {
                             $str = del_path_svn( trim( $str ) );
-							
-							if ( $is_check_lang )
-							{
-								$check_ok = nv_check_is_lang_file ( $str );
-								if ( $check_ok )
-								{
-									continue;
-								}
-							}
-
-                            if ( in_array( $str, $del_files ) )
+                            if ( ! in_array( $str, $file_no_update ) )
                             {
-                                $array_remove_del[] = $str;
+                                if ( $is_check_lang )
+                                {
+                                    $check_ok = nv_check_is_lang_file( $str );
+                                    if ( $check_ok )
+                                    {
+                                        continue;
+                                    }
+                                }
+                                
+                                if ( in_array( $str, $del_files ) )
+                                {
+                                    $array_remove_del[] = $str;
+                                }
+                                $add_files[] = $str;
                             }
-                            $add_files[] = $str;
                         }
                         $del_files = array_diff( $del_files, $array_remove_del );
                     }
                 }
-				
-				if ( empty ( $add_files ) and empty ( $del_files ) and empty ( $edit_files ) )
-				{
-					$contents = $lang_module['revision_nochange'];
-				}
-				else
-				{
-					asort( $add_files );
-					asort( $del_files );
-					asort( $edit_files );
-					
-					$svn_data_files = array( 'version' => $vend, 'add_files' => $add_files, 'del_files' => $del_files, 'edit_files' => $edit_files );
-					
-					file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log', serialize( $svn_data_files ), LOCK_EX );
-					
-					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) );
-					exit();				
-				}
+                
+                if ( empty( $add_files ) and empty( $del_files ) and empty( $edit_files ) )
+                {
+                    $contents = $lang_module['revision_nochange'];
+                }
+                else
+                {
+                    asort( $add_files );
+                    asort( $del_files );
+                    asort( $edit_files );
+                    
+                    $svn_data_files = array( 'version' => $vend, 'add_files' => $add_files, 'del_files' => $del_files, 'edit_files' => $edit_files );
+                    
+                    file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/svn_data_files_' . md5( $global_config['revision'] . $global_config['sitekey'] ) . '.log', serialize( $svn_data_files ), LOCK_EX );
+                    
+                    Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) );
+                    exit();
+                }
             }
             else
             {
