@@ -22,10 +22,10 @@ $lang_module['menu_description'] = "Mô tả";
 $lang_module['error_menu_name'] = "Lỗi: Bạn chưa nhập tên menu";
 $lang_module['menu_number'] = "Số phần tử";
 
-$lang_module['save'] = "Lưu bài viết";
+$lang_module['save'] = "Lưu";
 $lang_module['edit'] = "Sửa";
 $lang_module['delete'] = "Xóa";
-$lang_module['errorsave'] = "Lỗi: Hệ thống không cập nhật được dữ liệu";
+$lang_module['errorsave'] = "Lỗi: Hệ thống không ghi được dữ liệu. Có thể tên menu bị trùng. Vui lòng thử tên khác.";
 
 $lang_module['number'] = "Số TT";
 
@@ -38,7 +38,7 @@ $lang_module['m_list']="Danh sách menu";
 $lang_module['add_type_menu'] = "Chọn loại Menu";
 $lang_module['module_name'] = "Chọn module";
 $lang_module['cho_module'] = "Chọn module";
-$lang_module['name_blog'] = "Menu";
+$lang_module['name_block'] = "Khối menu";
 $lang_module['error_menu_blog']="Lỗi: Chưa nhập khối menu";
 $lang_module['action'] = "Hoạt động";
 $lang_module['data_no'] = "Hệ thống chưa có dữ liệu";
@@ -47,15 +47,15 @@ $lang_module['block2'] = " Menu, bạn hãy xoá menu trước khi xoá menu nà
 $lang_module['back'] = "Trở về mục trước ";
 $lang_module['title_exit_cat'] = "Tên này đã tồn tại";
 
-$lang_module['add_menu'] = "Thêm Menu";
-$lang_module['add_item'] = "Thêm Item";
-$lang_module['title'] = "Tên Item";
-$lang_module['item_menu'] = "Chọn loại item menu";
+$lang_module['add_menu'] = "Thêm khối menu";
+$lang_module['add_item'] = "Thêm mục cho menu";
+$lang_module['title'] = "Tên mục";
+$lang_module['item_menu'] = "Các mục thuộc module";
 $lang_module['menu'] = "Menu";
-$lang_module['chomodule'] = "Chọn Module";
+$lang_module['chomodule'] = "Liên kết đến module";
 $lang_module['select'] = "Chọn";
 $lang_module['note'] = "Ghi chú";
-$lang_module['link'] = "Đường link";
+$lang_module['link'] = "Đường dẫn liên kết";
 $lang_module['module'] = "Module";
 $lang_module['op'] = "op";
 $lang_module['path'] = "path";
@@ -65,9 +65,9 @@ $lang_module['type_target1'] = "Trang hiện tại";
 $lang_module['type_target2'] = "Mở tab mới";
 $lang_module['type_target3'] = "Mở cửa sổ mới";
 $lang_module['cat'] = "Thuộc mục";
-$lang_module['cat0'] = "Là item chính";
+$lang_module['cat0'] = "Là mục chính";
 $lang_module['cho_item'] = "Chọn loại của module";
-$lang_module['cats'] = "Thuộc Item menu ";
+$lang_module['cats'] = "Thuộc mục";
 $lang_module['cat'] = "Menu này có ";
 $lang_module['caton'] = " menu con nếu muốn xóa hãy xóa hoặc di chuyển các menu con trước";
 

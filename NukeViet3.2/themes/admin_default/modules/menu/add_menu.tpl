@@ -16,7 +16,7 @@
                 <strong>{LANG.link}</strong>
             </td>
             <td>
-                <strong>{LANG.name_blog}</strong>
+                <strong>{LANG.name_block}</strong>
             </td>                   
                         
             <td>
@@ -41,7 +41,7 @@
                 {ROW.link}                
             </td>
             <td>
-                {ROW.name_blog}                
+                {ROW.name_block}                
             </td>        
             <td align="center">
                 <span class="edit_icon"><a href="{ROW.edit_url}">{LANG.edit}</a></span>&nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_link_del({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a></span>
@@ -71,7 +71,7 @@
 <table summary="" class="tab1">
 	<tbody>
 		<tr>
-			<td><strong>{LANG.name_blog}</strong></td>
+			<td><strong>{LANG.name_block}</strong></td>
 			<td>
                     <select name="item_menu" id="item_menu_{key}" onchange="nv_link2('{key}');">
                     <!-- BEGIN: loop -->

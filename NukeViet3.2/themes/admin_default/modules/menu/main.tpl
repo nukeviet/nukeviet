@@ -8,7 +8,7 @@
                 <strong>{LANG.number}</strong>
             </td>
             <td>
-                <strong>{LANG.name_blog}</strong>
+                <strong>{LANG.name_block}</strong>
             </td>
             <td>
                 <strong>{LANG.menu}</strong>
@@ -79,7 +79,7 @@
         <tbody>
             <tr>
                 <td align="right">
-                    <strong>{LANG.name_blog}: </strong>
+                    <strong>{LANG.name_block}: </strong>
                 </td>
                 <td>
                     <input style="width: 650px" name="title" type="text" value="{DATAFORM.title}" maxlength="255" />

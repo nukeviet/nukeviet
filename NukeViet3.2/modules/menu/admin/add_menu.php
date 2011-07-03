@@ -358,7 +358,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 		'title' => $row['title'],  //
 		'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid']."&amp;parentid=" . $row['id'],  //
 		'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id'],  //
-		'name_blog' => $arr_menu[$row['mid']]['title']  //
+		'name_block' => $arr_menu[$row['mid']]['title']  //
 	);
 
 }
