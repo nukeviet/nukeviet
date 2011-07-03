@@ -39,13 +39,9 @@ foreach ( $lang_array_file_temp as $value )
     }
 }
 
-$language_array_source = array( 
-    "vi", "en" 
-);
+$language_array_source = array( "vi", "en" );
 
-$language_check_type = array( 
-    0 => $lang_module['nv_check_type_0'], 1 => $lang_module['nv_check_type_1'], 2 => $lang_module['nv_check_type_2'] 
-);
+$language_check_type = array( 0 => $lang_module['nv_check_type_0'], 1 => $lang_module['nv_check_type_1'], 2 => $lang_module['nv_check_type_2'] );
 
 $typelang = filter_text_input( 'typelang', 'post,get', '' );
 $sourcelang = filter_text_input( 'sourcelang', 'post,get', '' );
@@ -104,7 +100,18 @@ $query = "SELECT `idfile`, `module`, `admin_file` FROM `" . NV_LANGUAGE_GLOBALTA
 $result = $db->sql_query( $query );
 while ( list( $idfile_i, $module, $admin_file, ) = $db->sql_fetchrow( $result ) )
 {
-    $langsitename = ( $admin_file == 1 ) ? $lang_module['nv_lang_admin'] : $lang_module['nv_lang_site'];
+    switch ( $admin_file )
+    {
+        case '1':
+            $langsitename = $lang_module['nv_lang_admin'];
+            break;
+        case '0':
+            $langsitename = $lang_module['nv_lang_site'];
+            break;
+        default:
+            $langsitename = $admin_file;
+            break;
+    }
     $sl = ( $idfile_i == $idfile ) ? ' selected="selected"' : '';
     $contents .= " <option value=\"" . $idfile_i . "\" " . $sl . ">" . $module . " " . $langsitename . "</option>\n";
     $array_files[$idfile_i] = $module . " " . $langsitename;
@@ -158,9 +165,7 @@ if ( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $ty
     
     while ( list( $id, $idfile_i, $lang_key, $datalang, $datasourcelang ) = $db->sql_fetchrow( $result ) )
     {
-        $array_lang_data[$idfile_i][$id] = array( 
-            'lang_key' => $lang_key, 'datalang' => $datalang, 'sourcelang' => $datasourcelang 
-        );
+        $array_lang_data[$idfile_i][$id] = array( 'lang_key' => $lang_key, 'datalang' => $datalang, 'sourcelang' => $datasourcelang );
     }
     if ( ! empty( $array_lang_data ) )
     {

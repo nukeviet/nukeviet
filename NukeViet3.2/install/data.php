@@ -177,7 +177,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` (
 $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` (
   `idfile` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(50) NOT NULL,
-  `admin_file` tinyint(1) NOT NULL DEFAULT '0',
+  `admin_file` varchar(255) NOT NULL DEFAULT '0',  
   `langtype` varchar(50) NOT NULL,
   PRIMARY KEY (`idfile`),
   UNIQUE KEY `module` (`module`,`admin_file`)

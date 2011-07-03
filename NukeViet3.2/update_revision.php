@@ -25,9 +25,7 @@ function nv_func_update_data ( )
     if ( $global_config['revision'] < 988 )
     {
         $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'rewrite_endurl', '/')" );
-        $array_config_rewrite = array( 
-            'rewrite_optional' => $global_config['rewrite_optional'] 
-        );
+        $array_config_rewrite = array( 'rewrite_optional' => $global_config['rewrite_optional'] );
         nv_rewrite_change( $array_config_rewrite );
     }
     
@@ -130,21 +128,20 @@ function nv_func_update_data ( )
         $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'allowuserpublic', '1')" );
         $db->sql_query( "ALTER TABLE `" . NV_GROUPS_GLOBALTABLE . "` ADD `weight` smallint(4) unsigned NOT NULL DEFAULT '0' AFTER `public`" );
     }
-    if ( $global_config['revision'] < 1159 )
+    if ( $global_config['revision'] < 1172 )
     {
         $db->sql_query( "ALTER TABLE `" . NV_GROUPS_GLOBALTABLE . "` ADD `weight` int(11) unsigned NOT NULL DEFAULT '0' AFTER `public`" );
+        
         $sql = "SELECT `group_id` FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `group_id`";
         $result = $db->sql_query( $sql );
-        $num = $db->sql_numrows( $result );
-        $i = 0;
-        if ( $num > 0 )
+        $weight = 0;
+        while ( $row = $db->sql_fetchrow( $result ) )
         {
-            while ( $row = $db->sql_fetchrow( $result ) )
-            {
-                $i = $i + 0;
-        		$db->sql_query( "UPDATA `" . NV_GROUPS_GLOBALTABLE."` SET `weight` =".$i." WHERE `group_id`= ". $row['group_id']);
-            }
+            $weight ++;
+            $db->sql_query( "UPDATA `" . NV_GROUPS_GLOBALTABLE . "` SET `weight` =" . $weight . " WHERE `group_id`= " . $row['group_id'] );
         }
+        
+        $db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` CHANGE `admin_file` `admin_file` VARCHAR( 255 ) NOT NULL DEFAULT '0'" );
     }
     
     // End date data

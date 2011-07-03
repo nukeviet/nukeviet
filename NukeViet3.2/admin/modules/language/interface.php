@@ -38,7 +38,7 @@ $query = "SELECT `idfile`, `module`, `admin_file`, `langtype`, `author_" . $dirl
 $result = $db->sql_query( $query );
 if ( $db->sql_numrows( $result ) == 0 )
 {
-	$contents = "<center><br /><b>" . $lang_module['nv_lang_error_exit'] . "</b></center>";
+    $contents = "<center><br /><b>" . $lang_module['nv_lang_error_exit'] . "</b></center>";
     $contents .= "<meta http-equiv=\"Refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&dirlang=" . $dirlang . "&checksess=" . md5( "readallfile" . session_id() ) . "\" />";
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
@@ -63,7 +63,19 @@ $a = 0;
 while ( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql_fetchrow( $result ) )
 {
     //$array_translator = unserialize( base64_decode( $author_lang ) );
-    $langsitename = ( $admin_file == 1 ) ? $lang_module['nv_lang_admin'] : $lang_module['nv_lang_site'];
+    switch ( $admin_file )
+    {
+        case '1':
+            $langsitename = $lang_module['nv_lang_admin'];
+            break;
+        case '0':
+            $langsitename = $lang_module['nv_lang_site'];
+            break;
+        default:
+            $langsitename = $admin_file;
+            break;
+    }
+    
     if ( empty( $author_lang ) )
     {
         $array_translator = array();

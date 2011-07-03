@@ -42,18 +42,25 @@ function nv_admin_write_lang ( $dirlang, $idfile )
             $array_translator['createdate'] = "";
             $array_translator['copyright'] = "";
             $array_translator['info'] = "";
-            $array_translator['langtype'] = "lang_module";
+            $array_translator['langtype'] = $langtype;
         }
         else
         {
             eval( '$array_translator = ' . $author_lang . ';' );
         }
         
-        $admin_file = ( intval( $admin_file ) == 1 ) ? 1 : 0;
         $include_lang = "";
+       
         $modules_exit = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
-        
-        if ( in_array( $module, $modules_exit ) and $admin_file == 1 )
+        if ( $module == "global" and preg_match( "/^block\.global\.([a-zA-Z0-9\-\_]+)$/", $admin_file ) )
+        {
+            $include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/" . $admin_file . ".php";
+        }
+        elseif ( in_array( $module, $modules_exit ) and preg_match( "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)$/", $admin_file ) )
+        {
+            $include_lang = NV_ROOTDIR . "/modules/" . $module . "/language/" . $admin_file . "_" . $dirlang . ".php";
+        }
+        elseif ( in_array( $module, $modules_exit ) and $admin_file == 1 )
         {
             $include_lang = NV_ROOTDIR . "/modules/" . $module . "/language/admin_" . $dirlang . ".php";
         }
@@ -82,7 +89,6 @@ function nv_admin_write_lang ( $dirlang, $idfile )
         if ( $include_lang == "" )
         {
             return $lang_module['nv_error_write_module'] . " : " . $module;
-        
         }
         else
         {
@@ -107,11 +113,11 @@ function nv_admin_write_lang ( $dirlang, $idfile )
             
             if ( $admin_file )
             {
-                $content_lang .= "\n if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){\n";
+                $content_lang .= "\nif (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){\n";
             }
             else
             {
-                $content_lang .= "\n if (!defined( 'NV_MAINFILE' )) {\n";
+                $content_lang .= "\nif (!defined( 'NV_MAINFILE' )) {\n";
             }
             
             $content_lang .= " die('Stop!!!');\n";
@@ -120,11 +126,7 @@ function nv_admin_write_lang ( $dirlang, $idfile )
             
             $array_translator['info'] = ( isset( $array_translator['info'] ) ) ? $array_translator['info'] : "";
             
-            if ( $dirlang != "vi" and $dirlang != "en" and $array_translator['info'] == "" )
-            {
-                $array_translator['info'] = "Language translated by http://translate.google.com";
-            }
-            
+          
             $content_lang .= "\$lang_translator['author'] =\"$array_translator[author]\";\n";
             $content_lang .= "\$lang_translator['createdate'] =\"$array_translator[createdate]\";\n";
             $content_lang .= "\$lang_translator['copyright'] =\"$array_translator[copyright]\";\n";
@@ -149,7 +151,7 @@ function nv_admin_write_lang ( $dirlang, $idfile )
                         
                         $content_temp = "\$" . $langtype . "['" . $lang_key . "'] = \"$lang_value\";\n";
                         $content_temp .= "/*\n";
-                        if ( $dirlang != "vi" )
+                        if ( $dirlang != "vi" and ! empty( $lang_value_vi ) )
                         {
                             $lang_value_vi = nv_unhtmlspecialchars( $lang_value_vi );
                             $lang_value_vi = str_replace( '$', '\$', $lang_value_vi );
@@ -159,7 +161,7 @@ function nv_admin_write_lang ( $dirlang, $idfile )
                             $content_temp .= "\t vietnam:\t  " . $lang_value_vi . "\n";
                         }
                         
-                        if ( $dirlang != "en" )
+                        if ( $dirlang != "en" and ! empty( $lang_value_en ) )
                         {
                             $lang_value_en = nv_unhtmlspecialchars( $lang_value_en );
                             $lang_value_en = str_replace( '$', '\$', $lang_value_en );
@@ -227,7 +229,7 @@ if ( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->ge
     {
         $include_lang = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
         $contents = $lang_module['nv_lang_wite_ok'] . ": " . $include_lang;
-        $contents .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main\" />";
+        $contents .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=interface\" />";
     }
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );

@@ -37,6 +37,17 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . ses
                 }
                 $array_filename[] = $arrcrt[1];
             }
+            
+            $blocks = nv_scandir( NV_ROOTDIR . "/modules/" . $module . "/language/", "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
+            foreach ( $blocks as $file_i )
+            {
+                $arrcrt = nv_deletefile( NV_ROOTDIR . "/modules/" . $module . "/language/" . $file_i );
+                if ( $arrcrt[0] == 0 )
+                {
+                    $err = 1;
+                }
+                $array_filename[] = $arrcrt[1];
+            }
         }
         if ( is_dir( NV_ROOTDIR . "/language/" . $dirlang ) )
         {
@@ -58,7 +69,7 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . ses
         {
             $contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_delete_error'] . "</strong></p>";
         }
-        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang.' --> '.$language_array[$dirlang]['name'], $admin_info['userid'] );
+        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid'] );
         $contents .= implode( "<br />", $array_filename );
         $contents .= "<meta http-equiv=\"Refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\" />";
         include ( NV_ROOTDIR . "/includes/header.php" );

@@ -18,10 +18,19 @@ if ( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 function nv_admin_read_lang ( $dirlang, $module, $admin_file = 1 )
 {
     global $module_name, $db, $global_config, $module_config, $include_lang, $lang_module;
-    $admin_file = ( intval( $admin_file ) == 1 ) ? 1 : 0;
     $include_lang = "";
     $modules_exit = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
-    if ( $module == "global" and $admin_file == 1 )
+    if ( $module == "global" and preg_match( "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/", $admin_file, $m ) )
+    {
+        $include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/" . $admin_file;
+        $admin_file = 'block.global.' . $m[1];
+    }
+    elseif ( preg_match( "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/", $admin_file, $m ) )
+    {
+        $include_lang = NV_ROOTDIR . "/modules/" . $module . "/language/" . $admin_file;
+        $admin_file = 'block.' . $m[1] . '.' . $m[2];
+    }
+    elseif ( $module == "global" and $admin_file == 1 )
     {
         $include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/admin_" . $module . ".php";
     }
@@ -52,13 +61,13 @@ function nv_admin_read_lang ( $dirlang, $module, $admin_file = 1 )
         $lang_module_temp = $lang_module;
         $lang_module = array();
         $lang_global = array();
+        $lang_block = array();
         $lang_translator = array();
         include ( $include_lang );
-        list( $idfile, $langtype ) = $db->sql_fetchrow( $db->sql_query( "SELECT idfile, langtype FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` WHERE `module` =" . $db->dbescape( $module ) . " AND `admin_file`='" . $admin_file . "'" ) );
+        list( $idfile, $langtype ) = $db->sql_fetchrow( $db->sql_query( "SELECT idfile, langtype FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` WHERE `module` =" . $db->dbescape( $module ) . " AND `admin_file`=" . $db->dbescape( $admin_file ) ) );
         if ( intval( $idfile ) == 0 )
         {
             $langtype = isset( $lang_translator['langtype'] ) ? strip_tags( $lang_translator['langtype'] ) : "lang_module";
-            
             $lang_translator_save = array();
             $lang_translator_save['author'] = isset( $lang_translator['author'] ) ? strip_tags( $lang_translator['author'] ) : "VINADES.,JSC (contact@vinades.vn)";
             $lang_translator_save['createdate'] = isset( $lang_translator['createdate'] ) ? strip_tags( $lang_translator['createdate'] ) : date( "d/m/Y, H:i" );
@@ -67,7 +76,7 @@ function nv_admin_read_lang ( $dirlang, $module, $admin_file = 1 )
             $lang_translator_save['langtype'] = $langtype;
             //$author = base64_encode( serialize( $lang_translator_save ) );
             $author = var_export( $lang_translator_save, true );
-            $idfile = $db->sql_query_insert_id( "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "_file` (`idfile`, `module`, `admin_file`, `langtype`, `author_" . $dirlang . "`) VALUES (NULL, " . $db->dbescape( $module ) . ", " . intval( $admin_file ) . ", " . $db->dbescape( $langtype ) . ", '" . mysql_real_escape_string( $author ) . "')" );
+            $idfile = $db->sql_query_insert_id( "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "_file` (`idfile`, `module`, `admin_file`, `langtype`, `author_" . $dirlang . "`) VALUES (NULL, " . $db->dbescape( $module ) . ", " . $db->dbescape( $admin_file ) . ", " . $db->dbescape( $langtype ) . ", '" . mysql_real_escape_string( $author ) . "')" );
             if ( ! $idfile )
             {
                 nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], "Error insert file: " . $filelang );
@@ -87,7 +96,19 @@ function nv_admin_read_lang ( $dirlang, $module, $admin_file = 1 )
             $sql = "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $dirlang . "` = '" . mysql_real_escape_string( $author ) . "' WHERE `idfile` = '" . $idfile . "'";
             $db->sql_query( $sql );
         }
-        $temp_lang = ( $langtype == "lang_global" ) ? $lang_global : $lang_module;
+        $temp_lang = array();
+        switch ( $langtype )
+        {
+            case 'lang_global':
+                $temp_lang = $lang_global;
+                break;
+            case 'lang_module':
+                $temp_lang = $lang_module;
+                break;
+            case 'lang_block':
+                $temp_lang = $lang_block;
+                break;
+        }
         
         $result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
         $add_field = true;
@@ -140,7 +161,6 @@ function nv_admin_read_lang ( $dirlang, $module, $admin_file = 1 )
         return $lang_module['nv_error_exit_module'] . " : " . $module;
     }
 }
-
 $dirlang = filter_text_input( 'dirlang', 'get', '' );
 $page_title = $language_array[$dirlang]['name'] . " -> " . $lang_module['nv_admin_read'];
 if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . session_id() ) )
@@ -161,6 +181,12 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessi
             $array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
         }
         
+        $dirs = nv_scandir( NV_ROOTDIR . "/language/" . $dirlang, "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/" );
+        foreach ( $dirs as $file_i )
+        {
+            nv_admin_read_lang( $dirlang, 'global', $file_i );
+        }
+        
         $dirs = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
         foreach ( $dirs as $module )
         {
@@ -168,6 +194,12 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessi
             $array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
             nv_admin_read_lang( $dirlang, $module, 1 );
             $array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
+            
+            $blocks = nv_scandir( NV_ROOTDIR . "/modules/" . $module . "/language/", "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
+            foreach ( $blocks as $file_i )
+            {
+                nv_admin_read_lang( $dirlang, $module, $file_i );
+            }
         }
         $nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
         $contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_readok'] . "</strong></p>";

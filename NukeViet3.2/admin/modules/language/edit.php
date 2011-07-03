@@ -27,7 +27,7 @@ if ( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->ge
     
     $db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $dirlang . "`='" . $author . "' WHERE `idfile`=" . $idfile . "" );
     list( $module ) = $db->sql_fetchrow( $db->sql_query( "SELECT `module` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` WHERE `idfile` ='" . $idfile . "'" ) );
-    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'] . ' -> ' . $language_array[$dirlang]['name'] , $module." : idfile = " .$idfile , $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'] . ' -> ' . $language_array[$dirlang]['name'], $module . " : idfile = " . $idfile, $admin_info['userid'] );
     
     $pozlang = $nv_Request->get_array( 'pozlang', 'post', array() );
     if ( ! empty( $pozlang ) )
@@ -43,7 +43,7 @@ if ( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->ge
     $pozlangkey = $nv_Request->get_array( 'pozlangkey', 'post', array() );
     $pozlangval = $nv_Request->get_array( 'pozlangval', 'post', array() );
     
-    for ( $i = 0; $i < sizeof( $pozlangkey ); ++ $i )
+    for ( $i = 1; $i <= sizeof( $pozlangkey ); ++ $i )
     {
         $lang_key = strip_tags( $pozlangkey[$i] );
         $lang_value = strip_tags( $pozlangval[$i], NV_ALLOWED_HTML_LANG );
@@ -57,7 +57,6 @@ if ( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->ge
     }
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=interface&dirlang=" . $dirlang . "" );
     die();
-
 }
 
 $dirlang = filter_text_input( 'dirlang', 'get', '' );
@@ -135,11 +134,12 @@ if ( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->ge
             $class = ( $i % 2 ) ? " class=\"second\"" : "";
             $contents .= "<tbody" . $class . ">\n";
             $contents .= "<tr>";
-            $contents .= "<td align=\"center\">" . $i . "</td>";
+            $contents .= "<td align=\"center\">" . $a . "</td>";
             $contents .= "<td align=\"right\">" . $lang_key . "</td>";
             $contents .= "<td align=\"left\"><input type=\"text\" value=\"" . nv_htmlspecialchars( $lang_value ) . "\" name=\"pozlang[" . $id . "]\" size=\"90\" /></td>";
             $contents .= "</tr>";
             $contents .= "</tbody>";
+            $a ++;
         }
         $contents .= "</table>";
         $contents .= "<br />";
