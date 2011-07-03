@@ -6,10 +6,14 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+ 
 if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
-$title = $note = $module_file = "";
-$errorfile = '';
-$errorfolder = '';
+
+$error = "";
+$info_error = array();
+$info_error['errorfile'] = array();
+$info_error['errorfolder'] = array();
+
 $allowfolder = array( 'themes', 'modules', 'uploads', 'includes/blocks' );
 
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
@@ -24,56 +28,29 @@ if ( file_exists( $filename ) )
     {
         foreach ( $ziplistContent as $array_file )
         {
-            //check exist file on system
+            //Check exist file on system
             if ( empty( $array_file['folder'] ) and file_exists( NV_ROOTDIR . '/' . trim( $array_file['filename'] ) ) )
             {
-                $errorfile .= '<span style="color:red">' . $array_file['filename'] . '</span><br />';
+                $info_error['errorfile'][] = $array_file['filename'];
             }
             
-            //check valid folder structure nukeviet (modules, themes, uploads)
+            //Check valid folder structure nukeviet (modules, themes, uploads)
             $folder = explode( '/', $array_file['filename'] );
             if ( ! in_array( $folder[0], $allowfolder ) and ! in_array( $folder[0] . '/' . $folder[1], $allowfolder ) )
             {
-                $errorfolder .= '<span style="color:red">' . $array_file['filename'] . '</span><br />';
+                $info_error['errorfolder'][] = $array_file['filename'];
             }
         }
     }
-    
-    if ( $errorfile || $errorfolder )
-    {
-        echo '<br /><div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" />' . $lang_module['autoinstall_package_processing'] . '</div>';
-        if ( $errorfile )
-        {
-            echo '<strong>' . $lang_module['autoinstall_module_error_warning_fileexist'] . '</strong><br />' . $errorfile . '';
-        }
-        if ( $errorfolder )
-        {
-            echo '<br /><strong>' . $lang_module['autoinstall_module_error_warning_invalidfolder'] . '</strong><br />' . $errorfolder . '';
-        }
-        echo '<br /><b>' . $lang_module['autoinstall_module_error_warning_overwrite'] . '</b>';
-        echo '<br /><input style="margin-top:10px;font-size:15px" type="button" name="install_content_overwrite" value="' . $lang_module['autoinstall_module_overwrite'] . '"/>';
-        echo '<script type="text/javascript">
-	        //<![CDATA[
-        		 $(function(){
-        		 	$("input[name=install_content_overwrite]").click(function(){
-        		 		if(confirm("' . $lang_module['autoinstall_module_error_warning_overwrite'] . '")){
-	        		 		$("#message").show();
-					 		$("#step1").html("");
-					 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check&overwrite=' . md5( $filename . $global_config['sitekey'] . session_id() ) . '",function(){
-								$("#message").hide();
-								});
-        					}
-					});
-        		 });
-        		 //]]>
-        		</script>
-        	';
-        die();
-    }
-    else
+
+    if ( ! $info_error['errorfile'] and ! $info_error['errorfolder'] )
     {
         $temp_extract_dir = NV_TEMP_DIR . '/' . md5( $filename . $global_config['sitekey'] . session_id() );
+		
         $no_extract = array();
+		$error_create_folder = array();
+		$error_move_folder = array();
+		
         if ( NV_ROOTDIR . '/' . $temp_extract_dir )
         {
             nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
@@ -104,6 +81,7 @@ if ( file_exists( $filename ) )
                 $ftp_check_login = 2;
             }
         }
+		
         if ( $ftp_check_login == 1 )
         {
             ftp_mkdir( $conn_id, $temp_extract_dir );
@@ -139,7 +117,6 @@ if ( file_exists( $filename ) )
         
         if ( empty( $no_extract ) )
         {
-            $error_create_folder = array();
             foreach ( $ziplistContent as $array_file )
             {
                 if ( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $array_file['filename'] ) )
@@ -164,15 +141,11 @@ if ( file_exists( $filename ) )
                     }
                 }
             }
+			
             $error_create_folder = array_unique( $error_create_folder );
-            if ( ! empty( $error_create_folder ) )
+						
+            if ( empty( $error_create_folder ) )
             {
-                asort( $error_create_folder );
-                echo $lang_module['autoinstall_module_error_warning_permission_folder'] . "<br />: " . implode( "<br />", $error_create_folder );
-            }
-            else
-            {
-                $error_move_folder = array();
                 foreach ( $ziplistContent as $array_file )
                 {
                     if ( empty( $array_file['folder'] ) )
@@ -194,28 +167,11 @@ if ( file_exists( $filename ) )
                         }
                     }
                 }
+				
                 if ( empty( $error_move_folder ) )
                 {
                     nv_deletefile( $filename );
                     nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
-                    
-                    $nv_redirect = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=setup';
-                    echo "<br /><b>" . $lang_module['autoinstall_module_unzip_success'] . "</b><br />";
-                    echo "<br /><br /><center><a href=\"" . $nv_redirect . "\">" . $lang_module['autoinstall_module_unzip_setuppage'] . "</a></center>";
-                    echo '<script type="text/javascript">
-	                    //<![CDATA[
-							setTimeout("redirect_page()",5000);
-							function redirect_page()
-							{
-								parent.location="' . $nv_redirect . '";
-							}
-						//]]>
-						</script>';
-                }
-                else
-                {
-                    asort( $error_move_folder );
-                    echo "<b>" . $lang_module['autoinstall_module_error_movefile'] . ":</b> <br />" . implode( "<br />", $error_move_folder );
                 }
             }
             if ( $ftp_check_login > 0 )
@@ -223,16 +179,127 @@ if ( file_exists( $filename ) )
                 ftp_close( $conn_id );
             }
         }
-        else
-        {
-            echo $lang_module['autoinstall_module_cantunzip'];
-            echo "<div>" . implode( "<br />", $no_extract ) . "</div>";
-        }
+		
+		$xtpl = new XTemplate( "install_check.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl->assign( 'LANG', $lang_module );
+		$xtpl->assign( 'GLANG', $lang_global );
+		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+		$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+		$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+		$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+		$xtpl->assign( 'MODULE_NAME', $module_name );
+		$xtpl->assign( 'CHECKSESS', md5( $filename . $global_config['sitekey'] . session_id() ) );
+		
+		if( ! empty( $no_extract ) )
+		{
+			$i = 0;
+			foreach( $no_extract as $tmp )
+			{
+				$xtpl->assign( 'FILENAME', $tmp );
+				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+				$xtpl->parse( 'complete.no_extract.loop' );
+				$i ++;
+			}
+			$xtpl->parse( 'complete.no_extract' );
+		}
+		elseif( ! empty( $error_create_folder ) )
+		{
+			$i = 0;
+			asort( $error_create_folder );
+			foreach( $error_create_folder as $tmp )
+			{
+				$xtpl->assign( 'FILENAME', $tmp );
+				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+				$xtpl->parse( 'complete.error_create_folder.loop' );
+				$i ++;
+			}
+			$xtpl->parse( 'complete.error_create_folder' );
+		}
+		elseif( ! empty( $error_move_folder ) )
+		{
+			$i = 0;
+			asort( $error_move_folder );
+			foreach( $error_move_folder as $tmp )
+			{
+				$xtpl->assign( 'FILENAME', $tmp );
+				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+				$xtpl->parse( 'complete.error_move_folder.loop' );
+				$i ++;
+			}
+			$xtpl->parse( 'complete.error_move_folder' );
+		}
+		else
+		{
+			$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setup" );
+			$xtpl->parse( 'complete.ok' );
+		}
+		
+		$xtpl->parse( 'complete' );
+		$contents = $xtpl->text( 'complete' );
+
+		include ( NV_ROOTDIR . "/includes/header.php" );
+		echo ( $contents );
+		include ( NV_ROOTDIR . "/includes/footer.php" );
+		exit();
     }
 }
 else
 {
-    echo $lang_module['autoinstall_module_error_uploadfile'];
+    $error = $lang_module['autoinstall_module_error_uploadfile'];
 }
+
+$xtpl = new XTemplate( "install_check.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'CHECKSESS', md5( $filename . $global_config['sitekey'] . session_id() ) );
+
+if( ! empty( $error ) )
+{
+	$xtpl->assign( 'ERROR', $error );
+	$xtpl->parse( 'main.error' );
+}
+
+if( ! empty( $info_error['errorfile'] ) or ! empty( $info_error['errorfolder'] ) )
+{
+	$xtpl->parse( 'main.infoerror' );
+}
+
+if( ! empty( $info_error['errorfile'] ) )
+{
+	$i = 0;
+	foreach( $info_error['errorfile'] as $tmp )
+	{
+		$xtpl->assign( 'FILENAME', $tmp );
+		$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+		$xtpl->parse( 'main.errorfile.loop' );
+		$i ++;
+	}
+	$xtpl->parse( 'main.errorfile' );
+}
+
+if( ! empty( $info_error['errorfolder'] ) )
+{
+	$i = 0;
+	foreach( $info_error['errorfolder'] as $tmp )
+	{
+		$xtpl->assign( 'FILENAME', $tmp );
+		$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+		$xtpl->parse( 'main.errorfolder.loop' );
+		$i ++;
+	}
+	$xtpl->parse( 'main.errorfolder' );
+}
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
+
+include ( NV_ROOTDIR . "/includes/header.php" );
+echo ( $contents );
+include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>

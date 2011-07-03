@@ -130,7 +130,9 @@ $contents['caption'] = array(
 $contents['thead'] = array( 
     $lang_module['weight'], $lang_module['module_name'], $lang_module['custom_title'], $lang_module['version'], $lang_module['in_menu'] . "(*)", $lang_module['submenu'] . "(**)", $lang_global['activate'], $lang_global['actions'] 
 );
+
 $contents = list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $weight_list );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
 include ( NV_ROOTDIR . "/includes/footer.php" );

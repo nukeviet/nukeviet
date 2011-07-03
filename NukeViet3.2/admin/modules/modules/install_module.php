@@ -1,12 +1,14 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+
 if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
-$title = $note = $module_file = "";
+
 $page_title = $lang_module['autoinstall_module_install'];
 
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
@@ -18,6 +20,10 @@ if ( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
     $allowfolder = array( 
         'modules', 'themes', 'uploads' 
     );
+	
+	$error = "";
+	$info = array();
+	
     if ( is_uploaded_file( $_FILES['modulefile']['tmp_name'] ) )
     {
         if ( move_uploaded_file( $_FILES['modulefile']['tmp_name'], $filename ) )
@@ -27,14 +33,16 @@ if ( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
             if ( $status['status'] == 'ok' )
             {
                 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], basename( $_FILES['modulefile']['name'] ), $admin_info['userid'] );
-                $filefolder = '';
+				
                 $validfolder = array();
-                $filelist = '';
-                $filesize = nv_convertfromBytes( $_FILES['modulefile']['size'] );
-                $contents .= $lang_module['autoinstall_module_uploadedfile'] . '<span style="color:red;font-weight:bold">' . $_FILES['modulefile']['name'] . '</span> - ' . $lang_module['autoinstall_module_uploadedfilesize'] . '<span style="color:red;font-weight:bold">' . $filesize . '</span><br />';
-                #show file and folder
+                $info['filesize'] = nv_convertfromBytes( $_FILES['modulefile']['size'] );
+                $info['filename'] = $_FILES['modulefile']['name'];
+                $info['filenum'] = $status['nb'];
+                $info['filefolder'] = array();
+                $info['filelist'] = array();
+
+                // Show file and folder
                 $list = $zip->listContent();
-                $contents .= "<br /><b>" . $lang_module['autoinstall_module_uploaded_filenum'] . $status['nb'] . "</b><br />";
                 for ( $i = 0, $j = 1; $i < sizeof( $list ); $i ++, $j ++ )
                 {
                     if ( ! $list[$i]['folder'] )
@@ -46,99 +54,81 @@ if ( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
                         $bytes = "";
                         $validfolder[] = $list[$i]['filename'];
                     }
-                    $filefolder .= $list[$i]['filename'] . "\n";
-                    $filelist .= '[' . $j . "] " . $list[$i]['filename'] . " $bytes<br />";
+                    $info['filefolder'][] = $list[$i]['filename'];
+                    $info['filelist'][] = '[' . $j . "] " . $list[$i]['filename'] . " " . $bytes;
                 }
-                $contents .= '<div style="overflow:auto;height:200px;width:700px">' . $filelist . '</div>';
-                #check to continue
-                $contents .= '
-				<div id="message" style="display:none;text-align:center;color:red"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="" />' . $lang_module['autoinstall_package_processing'] . '</div>
-				<div style="margin-top:20px" id="step1">
-				<h4>' . $lang_module['autoinstall_module_checkfile_notice'] . '</h4>
-				<p style="padding-left:250px">
-				<input style="margin-top:10px;font-size:15px" type="button" name="checkfile" value="' . $lang_module['autoinstall_module_checkfile'] . '"/>
-				</p>
-				</div>
-				<script type="text/javascript">
-				//<![CDATA[
-				 $(function(){
-				 	$("input[name=checkfile]").click(function(){
-				 		$("#message").show();
-				 		$("#step1").html("");
-				 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check",function(){
-							$("#message").hide();
-						});
-				 	});
-				 });
-				 //]]>
-				</script>
-				';
             }
             else
             {
-                $contents .= $lang_module['autoinstall_module_error_invalidfile'] . '  <a href="javascript:history.go(-1)">' . $lang_module['autoinstall_module_error_invalidfile_back'] . '</a>';
+				$error = $lang_module['autoinstall_module_error_invalidfile'] . '  <a href="javascript:history.go(-1)">' . $lang_module['autoinstall_module_error_invalidfile_back'] . '</a>';
             }
         }
         else
-            $contents .= "<span style='color:red'>" . $lang_module['autoinstall_module_error_uploadfile'] . "</span><br />";
+		{
+			$error = $lang_module['autoinstall_module_error_uploadfile'];
+		}
     }
+	
+	$xtpl = new XTemplate( "install_module.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
+	$xtpl->assign( 'OP', $op );
+	
+	if( ! empty( $error ) )
+	{
+		$xtpl->assign( 'ERROR', $error );
+		$xtpl->parse( 'info.error' );
+	}
+	
+	if( ! empty( $info ) )
+	{
+		$xtpl->assign( 'INFO', $info );
+		
+		if( ! empty( $info['filelist'] ) )
+		{	
+			$i = 0;
+			foreach( $info['filelist'] as $file )
+			{
+				$xtpl->assign( 'FILE', $file );
+				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+				$xtpl->parse( 'info.fileinfo.file.loop' );
+				$i ++;
+			}
+			
+			$xtpl->parse( 'info.fileinfo.file' );
+		}
+		$xtpl->parse( 'info.fileinfo' );
+	}
+	
+	$xtpl->parse( 'info' );
+	$contents = $xtpl->text( 'info' );
+
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
 }
 else
-{
-    $op = $nv_Request->get_string( 'op', 'get' );
-    $contents .= "<form name='install_module' enctype='multipart/form-data' action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" method=\"post\">";
-    $contents .= "<table summary=\"\" class=\"tab1\">\n";
-    $contents .= "<tbody class=\"second\">";
-    $contents .= "<tr>";
-    $contents .= "<td align=\"right\"><strong>" . $lang_module['autoinstall_module_select_file'] . ": </strong></td>\n";
-    $contents .= "<td>";
-    $contents .= "<input type='hidden' name='" . NV_OP_VARIABLE . "' value='" . $op . "'/>";
-    $contents .= "<input type='file' name='modulefile'/>";
-    $contents .= "</td>";
-    $contents .= "</tr>";
-    $contents .= "</tbody>";
-    $contents .= "<tr>";
-    $contents .= "<td colspan='2' align='center'>";
-    $contents .= "<input name=\"continue\" type=\"button\" value=\"" . $lang_module['autoinstall_continue'] . "\" />\n";
-    $contents .= "<input name=\"back\" type=\"button\" value=\"" . $lang_module['autoinstall_back'] . "\" />\n";
-    $contents .= "</td>";
-    $contents .= "</tr>";
-    $contents .= "</table>";
-    $contents .= "</form>";
-    $contents .= '
-				<script type="text/javascript">
-				//<![CDATA[
-				function checkext(myArray,myValue) {
-					var type = eval(myArray).join().indexOf(myValue)>=0;
-					return type;
-				}
-				 $(function(){
-				 	$("input[name=continue]").click(function(){
-						var modulefile = $("input[name=modulefile]").val();
-						if (modulefile==""){
-							alert("' . $lang_module['autoinstall_module_error_nofile'] . '");
-							return false;
-						}
-						var filezip = modulefile.slice(-3);
-						var filegzip = modulefile.slice(-2);
-						var allowext = new Array("zip","gz");
-						if (!checkext(allowext,filezip) || !checkext(allowext,filegzip)){
-							alert("' . $lang_module['autoinstall_module_error_filetype'] . '");
-						    return false;
-						}
-						$("form[name=install_module]").submit();
-				 	});
-				 	$("input[name=back]").click(function(){
-				 		$("#content").slideUp();
-						$("#step1").slideDown();
-				 	});
-				
-				 });
-				 //]]>
-				</script>';
-    echo $contents;
+{	
+	$xtpl = new XTemplate( "install_module.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
+	$xtpl->assign( 'OP', $op );
+	
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
+
+	include ( NV_ROOTDIR . "/includes/header.php" );
+	echo ( $contents );
+	include ( NV_ROOTDIR . "/includes/footer.php" );
 }
+
 ?>

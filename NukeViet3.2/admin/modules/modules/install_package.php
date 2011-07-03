@@ -6,9 +6,13 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+ 
 if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+
 $title = $note = $module_file = "";
+
 $page_title = $lang_module['autoinstall_method_packet'];
+
 if ( $nv_Request->isset_request( 'op', 'post' ) )
 {
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';

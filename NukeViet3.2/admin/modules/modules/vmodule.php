@@ -8,7 +8,9 @@
  */
 
 if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+
 $title = $note = $modfile = "";
+
 if ( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) )
 {
     $title = filter_text_input( 'title', 'post', '', 1 );
