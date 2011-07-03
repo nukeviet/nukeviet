@@ -35,7 +35,7 @@ $global_config['proxy_blocker'] = 0;
 $global_config['str_referer_blocker'] = 0;
 
 $global_config['lang_multi'] = 1;
-$global_config['site_lang'] = "vi";
+$global_config['site_lang'] = "en";
 $global_config['engine_allowed'] = array();
 $global_config['site_theme'] = "modern";
 $global_config['gfx_chk'] = 3;
@@ -43,6 +43,6 @@ $global_config['gfx_chk'] = 3;
 $array_config_rewrite = array( 'rewrite_optional' => 0 );
 
 $global_config['version'] = "3.2.00"; //NUKEVIET 3.2 DEV
-$global_config['revision'] = 1167;
+$global_config['revision'] = 1173;
 
 ?>
