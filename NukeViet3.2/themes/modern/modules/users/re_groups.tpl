@@ -8,7 +8,7 @@
 				<li><a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a></li>
 				<li><!-- BEGIN: allowopenid --><a href="{URL_HREF}openid">{LANG.openid_administrator}</a><!-- END: allowopenid --></li>
 				<li class="ui-tabs-selected"><a href="{URL_HREF}regroups">{LANG.in_group}</a></li>
-				<li><!-- BEGIN: logout --><a href="{URL_HREF}logout">{LANG.logout_title}</a><!-- END: logout --></li>
+				<!-- BEGIN: logout --><li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li><!-- END: logout -->
 </ul>
 <!-- BEGIN: error -->
 <hr /><br />

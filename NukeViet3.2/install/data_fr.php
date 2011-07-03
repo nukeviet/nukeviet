@@ -83,7 +83,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (44, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, 'body-right', ''),
 (45, 'adv', 'Adv', 'search', 0, 0, 0, 'body-right', ''),
 (46, 'main', 'Main', 'search', 1, 0, 1, 'body-right', ''),
-(47, 'main', 'Main', 'rss', 1, 0, 1, 'body-right', '')";
+(47, 'main', 'Main', 'rss', 1, 0, 1, 'body-right', ''),
+(48, 'regroups', 'Regroups', 'users', 1, 0, 1, 'left-body-right', '')";
 
 $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
 (0, 'body-right', 'modern'),
@@ -149,7 +150,9 @@ $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data
 (46, 'body-right', 'modern'),
 (46, 'left-body-right', 'default'),
 (47, 'body', 'modern'),
-(47, 'left-body-right', 'default')";
+(47, 'left-body-right', 'default'),
+(48, 'body', 'modern'),
+(48, 'left-body-right', 'default')";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES
@@ -653,8 +656,22 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (19, 25, 1),
 (19, 17, 1),
 (19, 22, 1),
-(19, 19, 1)";
-
+(19, 19, 1),
+(19, 48, 1),
+(2, 48, 1),
+(3, 48, 2),
+(17, 48, 1),
+(4, 48, 1),
+(5, 48, 2),
+(6, 48, 3),
+(8, 48, 1),
+(18, 48, 1),
+(16, 48, 1),
+(10, 48, 1),
+(11, 48, 2),
+(12, 48, 3),
+(13, 48, 4),
+(15, 48, 1)";
 $disable_site_content = "Notre site est fermé temporairement pour la maintenance. Veuillez revenir plus tard. Merci!";
 $copyright = "Veuillez citer le lien vers l&#039;article original si vous le reproduisez sur un autre site. Merci.";
 $site_description = "NUKEVIET CMS 3.0 Developé par Vinades.,Jsc";

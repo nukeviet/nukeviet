@@ -124,11 +124,11 @@ function nv_func_update_data ( )
     
     if ( $global_config['revision'] < 1157 )
     {
-        $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'allowquestion', '0')" );
-        $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'allowuserpublic', '1')" );
+        $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'allowquestion', '1')" );
+        $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'allowuserpublic', '0')" );
         $db->sql_query( "ALTER TABLE `" . NV_GROUPS_GLOBALTABLE . "` ADD `weight` smallint(4) unsigned NOT NULL DEFAULT '0' AFTER `public`" );
     }
-    if ( $global_config['revision'] < 1172 )
+    if ( $global_config['revision'] < 1174 )
     {
         $db->sql_query( "ALTER TABLE `" . NV_GROUPS_GLOBALTABLE . "` ADD `weight` int(11) unsigned NOT NULL DEFAULT '0' AFTER `public`" );
         
@@ -139,6 +139,21 @@ function nv_func_update_data ( )
         {
             $weight ++;
             $db->sql_query( "UPDATA `" . NV_GROUPS_GLOBALTABLE . "` SET `weight` =" . $weight . " WHERE `group_id`= " . $row['group_id'] );
+        }
+        
+        $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
+        $result = $db->sql_query( $sql );
+        while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+        {
+            $regroups_func_id = $db->sql_query_insert_id( "INSERT INTO `" . $db_config['prefix'] . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES(NULL, 'regroups', 'Regroups', 'users', 1, 0, 1, 'left-body-right', '')" );
+            
+            list( $user_main_func_id ) = $db->sql_fetchrow( $db->sql_query( "SELECT `func_id` FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modfuncs` WHERE `in_module`='users' AND `func_name`='main'" ) );
+            
+            $result_blocks_weight = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_i . "_blocks_weight` WHERE `func_id`= " . $user_main_func_id );
+            while ( $row = $db->sql_fetchrow( $result_blocks_weight ) )
+            {
+                $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_i . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES ('" . $row['bid'] . "', '" . $regroups_func_id . "', '" . $row['weight'] . "')" );
+            }
         }
         
         $db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` CHANGE `admin_file` `admin_file` VARCHAR( 255 ) NOT NULL DEFAULT '0'" );
