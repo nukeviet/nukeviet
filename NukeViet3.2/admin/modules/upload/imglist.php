@@ -18,19 +18,19 @@ if ( isset( $check_allow_upload_dir['view_dir'] ) )
 {
     $type = $nv_Request->get_string( 'type', 'get', 'file' );
     if ( $type != "image" and $type != "flash" ) $type = "file";
-
+    
     $selectfile = htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get', '' ) ), ENT_QUOTES );
     $selectfile = basename( $selectfile );
-
+    
     $author = $nv_Request->isset_request( 'author', 'get' ) ? true : false;
     $refresh = $nv_Request->isset_request( 'refresh', 'get' ) ? true : false;
-
+    
     $results = nv_filesList( $pathimg, $refresh );
-
+    
     if ( ! empty( $results ) )
     {
         $author = ( $author === true ) ? $admin_info['userid'] : 0;
-
+        
         foreach ( $results as $title => $file )
         {
             if ( $type == "file" or ( $type != "file" and $file[2] == $type ) )
@@ -47,7 +47,7 @@ if ( isset( $check_allow_upload_dir['view_dir'] ) )
                     {
                         $file['size'] = nv_convertfromBytes( $file['filesize'] );
                     }
-
+                    
                     $file['name'] .= "|" . $file['ext'] . "|" . $file['type'] . "|" . nv_convertfromBytes( $file['filesize'] ) . "|" . $file['author'] . "|" . nv_date( "l, d F Y, H:i:s P", $file['mtime'] );
                     $file['sel'] = ( $selectfile == $title ) ? " imgsel" : "";
                     $file['src'] = NV_BASE_SITEURL . $file['src'];
@@ -56,11 +56,17 @@ if ( isset( $check_allow_upload_dir['view_dir'] ) )
                 }
             }
         }
+        if ( ! empty( $selectfile ) )
+        {
+            $xtpl->assign( "NV_CURRENTTIME", NV_CURRENTTIME );
+            $xtpl->parse( 'main.imgsel' );
+        }
     }
 }
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 echo $contents;
+exit();
 
 ?>

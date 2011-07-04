@@ -41,6 +41,11 @@ $(".imgcontent").contextMenu("contextMenu", {menuStyle:{width:"120px"}, bindings
 }, filedelete:function() {
   filedelete()
 }}});
+
+<!-- BEGIN: imgsel -->
+    $(".imgcontent.imgsel").attr('id', 'nv_imgsel_{NV_CURRENTTIME}');
+    window.location.href="#nv_imgsel_{NV_CURRENTTIME}";
+<!-- END: imgsel -->
 //]]>
 </script>
 <!-- END: main -->

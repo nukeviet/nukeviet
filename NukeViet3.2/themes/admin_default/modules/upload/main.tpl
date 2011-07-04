@@ -28,7 +28,7 @@ td{border:1px solid #CCC;}
 .imgcontent{background:#fff;border:2px solid #EAEAEA;color:#666;cursor:pointer;float:left;height:124px;line-height:16px;margin-bottom:2px;margin-right:2px;padding:5px;text-align:center;width:100px;}
 .imgfolder{background:#FFF;cursor:pointer;height:360px;margin:1px;overflow:auto;width:200px;}
 .imgInfo{font:400 10px/12px tahoma,arial,sans-serif;height:30px;}
-.imgsel{background:#F2F9FC;border:2px solid #BAD3F5;color:#333;}
+.imgsel{background:#fd8;border:2px solid #fb0;color:#333}
 .notupload{color:#F00;float:right;font-size:10px;font-weight:bold;padding:5px;}
 .refresh{float:left;margin-left:15px;margin-top:3px;position:relative;}
 .refresh img{border:none;}
