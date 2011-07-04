@@ -64,7 +64,16 @@ if ( ! empty( $delmodule ) )
                 $module_exit[] = $lang_i;
             }
         }
-        if ( empty( $lang_i ) )
+        if ( empty( $module_exit ) )
+        {
+            list( $nmd ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `module_file`=" . $db->dbescape_string( $delmodule ) . " AND `virtual`=0" ) );
+            if ( $nmd > 0 )
+            {
+                $module_exit = 1;
+            }
+        }
+        
+        if ( empty( $module_exit ) )
         {
             $theme_list_site = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme'] );
             $theme_list_admin = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme_admin'] );
@@ -100,11 +109,16 @@ $modules_data = array();
 $sql_data = "SELECT * FROM `" . $db_config['prefix'] . "_setup_modules` ORDER BY `addtime` ASC";
 $result = $db->sql_query( $sql_data );
 $is_delCache = false;
+$module_virtual_setup = array();
 while ( $row = $db->sql_fetchrow( $result ) )
 {
     if ( array_key_exists( $row['module_file'], $modules_exit ) )
     {
         $modules_data[$row['title']] = $row;
+        if ( $row['title'] != $row['module_file'] )
+        {
+            $module_virtual_setup[] = $row['module_file'];
+        }
     }
     else
     {
@@ -124,11 +138,11 @@ foreach ( $arr_module_news as $module_name_i => $arr )
 {
     $check_file_main = NV_ROOTDIR . "/modules/" . $module_name_i . "/funcs/main.php";
     $check_file_functions = NV_ROOTDIR . "/modules/" . $module_name_i . "/functions.php";
-	
+    
     $check_admin_main = NV_ROOTDIR . "/modules/" . $module_name_i . "/admin/main.php";
     $check_admin_functions = NV_ROOTDIR . "/modules/" . $module_name_i . "/admin.functions.php";
-
-    if ((file_exists( $check_file_main ) and filesize( $check_file_main ) != 0 and file_exists( $check_file_functions ) and filesize( $check_file_functions ) != 0)	OR (file_exists( $check_admin_main ) and filesize( $check_admin_main ) != 0 and file_exists( $check_admin_functions ) and filesize( $check_admin_functions ) != 0)	)
+    
+    if ( ( file_exists( $check_file_main ) and filesize( $check_file_main ) != 0 and file_exists( $check_file_functions ) and filesize( $check_file_functions ) != 0 ) or ( file_exists( $check_admin_main ) and filesize( $check_admin_main ) != 0 and file_exists( $check_admin_functions ) and filesize( $check_admin_functions ) != 0 ) )
     {
         $check_addnews_modules = true;
         
@@ -141,14 +155,14 @@ foreach ( $arr_module_news as $module_name_i => $arr )
         if ( empty( $module_version ) )
         {
             $timestamp = NV_CURRENTTIME - date( 'Z', NV_CURRENTTIME );
-            $module_version = array("name" => $module_name_i, //
-                                    "modfuncs" => "main", //
-                                    "is_sysmod" => 0, //
-                                    "virtual" => 0, //
-                                    "version" => "3.0.01", //
-                                    "date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
-                                    "author" => "", //
-                                    "note" => "" );
+            $module_version = array( "name" => $module_name_i, //
+                "modfuncs" => "main", //
+                "is_sysmod" => 0, //
+                "virtual" => 0, //
+                "version" => "3.0.01", //
+                "date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
+                "author" => "", //
+                "note" => "" );
         }
         $date_ver = intval( strtotime( $module_version['date'] ) );
         if ( $date_ver == 0 )
@@ -204,8 +218,11 @@ foreach ( $modules_data as $row )
         {
             $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;setmodule=" . $row['title'] . "&amp;checkss=" . md5( "setmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
             $mod['setup'] = "<span class=\"default_icon\"><a href=\"" . $url . "\">" . $lang_module['setup'] . "</a></span>";
-            $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delmodule=" . $row['title'] . "&amp;checkss=" . md5( "delmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
-            $mod['delete'] = " - <span class=\"delete_icon\"><a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a></span>";
+            if ( ! in_array( $row['module_file'], $module_virtual_setup ) )
+            {
+                $url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delmodule=" . $row['title'] . "&amp;checkss=" . md5( "delmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
+                $mod['delete'] = " - <span class=\"delete_icon\"><a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a></span>";
+            }
         }
         if ( $mod['module_file'] == $mod['title'] )
         {
