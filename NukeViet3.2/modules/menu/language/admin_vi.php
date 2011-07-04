@@ -15,8 +15,7 @@ $lang_translator['langtype'] = "lang_module";
 
 $lang_module['menu_manager'] = "Quản lý menu";
 $lang_module['type_menu_manager'] = "Quản lý loại menu";
-$lang_module['add_menu'] = "Thêm menu";
-$lang_module['edit_menu'] = "Thêm menu";
+$lang_module['edit_menu'] = "Sửa menu";
 $lang_module['menu_name'] = "Tên menu";
 $lang_module['menu_description'] = "Mô tả";
 $lang_module['error_menu_name'] = "Lỗi: Bạn chưa nhập tên menu";

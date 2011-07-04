@@ -1,6 +1,10 @@
 <!-- BEGIN: first -->
-	<a class="button1" href="{ADD_NEW}"><span><span>{LANG.add_menu}</span></span></a>
+<a class="button1" href="{ADD_NEW}"><span><span>{LANG.add_menu}</span></span></a>
 <!-- BEGIN: table -->
+<script type="text/javascript">
+	var block = '{LANG.block}';
+	var block2 = '{LANG.block2}';
+</script>
 <table summary="" class="tab1">
     <thead>
         <tr align="center">
@@ -39,22 +43,19 @@
             </td>        
             
              <td align="center">
-                <span class="edit_icon"><a href="{ROW.edit_url}">{LANG.edit}</a></span>&nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_link_del({ROW.id},{ROW.num});">{LANG.delete}</a></span>
-                <script type="text/javascript">
-	            	var block= '{LANG.block}';
-	            	var block2= '{LANG.block2}';
-            	</script>
+                <span class="edit_icon"><a href="{ROW.edit_url}">{LANG.edit}</a></span>&nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_menu_delete({ROW.id},{ROW.num});">{LANG.delete}</a></span>
             </td>
            </tr>
     </tbody>
-     <!-- END: loop1 -->
-	
+    <!-- END: loop1 -->
     <!-- BEGIN: generate_page -->
-    <tr class="footer">
-        <td colspan="8">
-            {GENERATE_PAGE}
-        </td>
-    </tr>
+	<tfoot>
+		<tr>
+			<td colspan="5">
+				{GENERATE_PAGE}
+			</td>
+		</tr>
+	</tfoot>
     <!-- END: generate_page -->
 </table>
 <!-- END: table -->
@@ -71,11 +72,9 @@
 </div>
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post">
-    <input type="hidden" name ="id" value="{DATAFORM.id}" /><input name="save" type="hidden" value="1" />
+    <input type="hidden" name ="id" value="{DATAFORM.id}" />
+	<input name="save" type="hidden" value="1" />
     <table summary="" class="tab1">
-        <caption>
-            {LANG.add_menu}
-        </caption>
         <tbody>
             <tr>
                 <td align="right">
@@ -96,12 +95,13 @@
                 </td>
             </tr>
         </tbody>
-                    
+		<tfoot>
+			<tr>
+				<td align="center" colspan="2">
+					<input name="submit1" type="submit" value="{LANG.save}" />
+				</td>
+			</tr>
+		</tfoot>
     </table>
-    <br/>
-    <center>
-        <input name="submit1" type="submit" value="{LANG.save}" />
-    </center>
 </form>
-
 <!-- END: main -->

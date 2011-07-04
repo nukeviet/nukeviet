@@ -44,7 +44,7 @@
                 {ROW.name_block}                
             </td>        
             <td align="center">
-                <span class="edit_icon"><a href="{ROW.edit_url}">{LANG.edit}</a></span>&nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_link_del({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a></span>
+                <span class="edit_icon"><a href="{ROW.edit_url}">{LANG.edit}</a></span>&nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a></span>
             </td>
             <script type="text/javascript">
             	var cat= '{LANG.cat}';
