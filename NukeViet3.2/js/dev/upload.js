@@ -163,6 +163,21 @@ function insertvaluetofield()
     }
 }
 
+function nv_selFile(d)
+{
+    var a = $( "input[name=CKEditorFuncNum]" ).val(), b = $( "input[name=area]" ).val();
+    if( a > 0 )
+    {
+        window.opener.CKEDITOR.tools.callFunction( a, d, "" );
+        window.close()
+    }
+    if( b != "" )
+    {
+        $( "#" + b, opener.document ).val( d );
+        window.close()
+    }
+}
+
 //  ---------------------------------------
 
 function download()
@@ -522,7 +537,15 @@ $( "#confirm" ).click( function()
             {
                 $( "input[name=fileupload]" ).parent().css( "display", "block" ).next().css( "display", "none" ).next().css( "display", "block" );
                 $( "input[name=selFile]" ).val( k );
-                $( "#imglist" ).load( nv_module_url + "imglist&path=" + b + "&type=" + g + h + "&imgfile=" + k )
+                var ckf = $( "input[name=CKEditorFuncNum]" ).val(), area = $( "input[name=area]" ).val();
+                if( ckf > 0 || area != "" )
+                {
+                    $( "#cfile" ).html('<a href="javascript:void(0);" onclick="nv_selFile(\''+nv_base_siteurl+b+'/'+k+'\')">'+k+'</a>');
+                }
+                else{
+                    $( "#cfile" ).html(k);
+                }
+                $( "#imglist" ).load( nv_module_url + "imglist&path=" + b + "&type=" + g + h + "&imgfile=" + k );
             }
         }
         , "html" )
