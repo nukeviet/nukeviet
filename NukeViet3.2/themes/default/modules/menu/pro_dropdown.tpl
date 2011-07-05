@@ -12,7 +12,7 @@
 <script	type="text/javascript" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/stuHover.js"></script>
 <ul id="nav">
 	<!-- BEGIN: loopcat1 -->
-		<li class="top"><a href="{CAT1.link}" class="top_link"><span>{CAT1.title}</span></a>
+		<li class="top"><a href="{CAT1.link}" class="top_link"><span {down}>{CAT1.title}</span></a>
 			<!-- BEGIN: cat2 -->
 				<ul class="sub">
 					<!-- BEGIN: loopcat2 -->

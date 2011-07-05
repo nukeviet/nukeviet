@@ -90,7 +90,7 @@ function nv_chang_weight_item(id, mid, parentid)
 {
 	var nv_timer = nv_settimeout_disable('change_weight_' + id, 3000);
 	var new_weight = document.getElementById('change_weight_' + id).options[document	.getElementById('change_weight_' + id).selectedIndex].value;
-	nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&'+ nv_fc_variable + '=change_weight_row&id=' + id + '&mid=' + mid + '&parentid=' + parentid + '&new_weight=' + new_weight + '&num=' + nv_randomPassword(8), '', 'nv_chang_rows_res');
+	nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&'+ nv_fc_variable + '=change_weight_row&id=' + id + '&mid=' + mid + '&parentid=' + parentid + '&new_weight=' + new_weight + '&num=' + nv_randomPassword(8), '', 'nv_menu_item_delete_result');
 	
 	return;
 }
@@ -130,3 +130,4 @@ function nv_menu_item_delete_result(res)
 	}
 	return false;
 }
+//-------------------------------------------

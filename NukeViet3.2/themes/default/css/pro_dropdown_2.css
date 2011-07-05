@@ -27,24 +27,24 @@ way to fit your requirements.
 #nav li:hover {position:relative; z-index:200;}
 
 #nav li:hover ul.sub
-{left:1px; top:38px; background: #bbd37e; padding:3px; border:1px solid #5c731e; white-space:nowrap; width:90px; height:auto; z-index:300;}
+{left:1px; top:38px; background: #bbd37e; padding:3px; border:1px solid #5c731e; white-space:nowrap; width:120px; height:auto; z-index:300;}
 #nav li:hover ul.sub li
 {display:block; height:20px; position:relative; float:left; width:90px; font-weight:normal;}
 #nav li:hover ul.sub li a
-{display:block; font-size:11px; height:18px; width:88px; line-height:18px; text-indent:5px; color:#000; text-decoration:none;border:1px solid #bbd37e;}
+{display:block; font-size:11px; height:18px; width:120px; line-height:18px; text-indent:5px; color:#000; text-decoration:none;border:1px solid #bbd37e;}
 #nav li ul.sub li a.fly
-{background:#bbd37e url(../images/menu/arrow.gif) 80px 6px no-repeat;}
+{background:#bbd37e url(../images/menu/arrow.gif) 110px 6px no-repeat;}
 #nav li:hover ul.sub li a:hover 
 {background:#6a812c; color:#fff; border-color:#fff;}
 #nav li:hover ul.sub li a.fly:hover
-{background:#6a812c url(../images/menu/arrow_over.gif) 80px 6px no-repeat; color:#fff;}
+{background:#6a812c url(../images/menu/arrow_over.gif) 120px 6px no-repeat; color:#fff;}
 
 
 #nav li:hover li:hover ul,
 #nav li:hover li:hover li:hover ul,
 #nav li:hover li:hover li:hover li:hover ul,
 #nav li:hover li:hover li:hover li:hover li:hover ul
-{left:90px; top:-4px; background: #bbd37e; padding:3px; border:1px solid #5c731e; white-space:nowrap; width:90px; z-index:400; height:auto;}
+{left:123px; top:-4px; background: #bbd37e; padding:3px; border:1px solid #5c731e; white-space:nowrap; width:120px; z-index:400; height:auto;}
 
 #nav ul, 
 #nav li:hover ul ul,
@@ -57,9 +57,9 @@ way to fit your requirements.
 #nav li:hover li:hover li:hover a.fly,
 #nav li:hover li:hover li:hover li:hover a.fly,
 #nav li:hover li:hover li:hover li:hover li:hover a.fly
-{background:#6a812c url(../images/menu/arrow_over.gif) 80px 6px no-repeat; color:#fff; border-color:#fff;} 
+{background:#6a812c url(../images/menu/arrow_over.gif) 120px 6px no-repeat; color:#fff; border-color:#fff;} 
 
 #nav li:hover li:hover li a.fly,
 #nav li:hover li:hover li:hover li a.fly,
 #nav li:hover li:hover li:hover li:hover li a.fly
-{background:#bbd37e url(../images/menu/arrow.gif) 80px 6px no-repeat; color:#000; border-color:#bbd37e;} 
+{background:#bbd37e url(../images/menu/arrow.gif) 120px 6px no-repeat; color:#000; border-color:#bbd37e;} 

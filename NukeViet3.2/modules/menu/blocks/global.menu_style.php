@@ -51,6 +51,8 @@ if ( ! nv_function_exists( 'nv_menu_site' ) )
         $html .= "<option value=\"6\" " . $sel . ">" . $lang_block['m_type6'] . "</option>\n";
         $sel = ( $data_block['type'] == 7 ) ? ' selected' : '';
         $html .= "<option value=\"7\" " . $sel . ">" . $lang_block['m_type7'] . "</option>\n";
+        $sel = ( $data_block['type'] == 8 ) ? ' selected' : '';
+        $html .= "<option value=\"8\" " . $sel . ">" . $lang_block['m_type8'] . "</option>\n";
         $html .= "	</select></td>\n";
         $html .= "</tr>";
         $html .= "<tr>";
@@ -137,7 +139,8 @@ if ( ! nv_function_exists( 'nv_menu_site' ) )
                 $xtpl->assign( 'CAT1', $cat );
                 if ( ! empty( $cat['subcats'] ) )
                 {
-                    foreach ( $list_cats as $subcat )
+                   $xtpl->assign( 'down', 'class="down"' );
+                	foreach ( $list_cats as $subcat )
                     {
                         if ( $subcat['parentid'] == $cat['id'] )
                         {
@@ -158,11 +161,16 @@ if ( ! nv_function_exists( 'nv_menu_site' ) )
                     }
                     $xtpl->parse( 'main.loopcat1.cat2' );
                 }
+           		 else 
+                    {
+                    	$xtpl->assign( 'down', 'class=""' );
+                 }
 				
 				if ( $block_config['is_viewdes'] and ! empty ( $cat['note'] ) )
 				{
 					$xtpl->parse( 'main.loopcat1.note' );
 				}
+				
 
                 $xtpl->parse( 'main.loopcat1' );
             }
@@ -231,11 +239,66 @@ if ( ! nv_function_exists( 'nv_menu_site' ) )
         {
             return nv_style_type3( $list_cats, $block_config );
         }
+   		elseif ( $block_config['type'] == 8 )
+        {
+            return nv_style_type4( $list_cats, $block_config );
+        }
+        
         else
         {
             $style = 'side_menu_bar';
             return nv_style_type( $style, $list_cats, $block_config );
         }
+    }
+    
+function nv_style_type4 ( $list_cats, $block_config )
+    {
+        global $module_info;
+        
+        if ( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/menu/ver_2_level.tpl" ) )
+        {
+            $block_theme = $module_info['template'];
+        }
+        else
+        {
+            $block_theme = "default";
+        }
+        
+        $xtpl = new XTemplate( "ver_2_level.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/menu" );
+        $xtpl->assign( 'BLOCK_THEME', $block_theme );
+        $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+        
+        $arr = array();
+        foreach ( $list_cats as $cat )
+        {
+            if ( empty( $cat['parentid'] ) )
+            {
+                $xtpl->assign( 'CAT1', $cat );
+                if ( ! empty( $cat['subcats'] ) )
+                {
+                    $xtpl->assign( 'menuheaders', 'class="menuheaders"' );
+                    foreach ( $list_cats as $subcat )
+                    {
+                        if ( $subcat['parentid'] == $cat['id'] )
+                        {
+                            $xtpl->assign( 'CAT2', $subcat );
+                                                       
+                            $xtpl->parse( 'main.loopcat1.cat2.loop2' );
+                        }
+                    }
+                    $xtpl->parse( 'main.loopcat1.cat2' );
+                }
+                else
+                {
+                    $xtpl->assign( 'menuheaders', '' );
+                }
+                             
+                $xtpl->parse( 'main.loopcat1' );
+            }
+        }
+        
+        $xtpl->parse( 'main' );
+        return $xtpl->text( 'main' );
     }
 
     function nv_style_type2 ( $list_cats, $block_config )

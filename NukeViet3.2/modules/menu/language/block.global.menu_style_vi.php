@@ -30,5 +30,7 @@ $lang_block['m_type4'] = "Treeview";
 $lang_block['m_type5'] = "Top Menu Bar";
 $lang_block['m_type6'] = "Side Menu Bar";
 $lang_block['m_type7'] = "Pro_dropdown";
+$lang_block['m_type8'] = "Vertical 2 level";
+
 
 ?>
