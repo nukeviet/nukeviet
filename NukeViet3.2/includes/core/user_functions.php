@@ -354,7 +354,7 @@ function nv_html_meta_tags ( )
             }
         }
     }
-    $return .= "<meta name=\"generator\" content=\"Nukeviet v3.0\" />\n";
+    $return .= "<meta name=\"generator\" content=\"Nukeviet v" . $global_config['version'] . "\" />\n";
     if ( defined( 'NV_IS_ADMIN' ) )
     {
         $return .= "<meta http-equiv=\"refresh\" content=\"" . NV_ADMIN_CHECK_PASS_TIME . "\" />\n";
