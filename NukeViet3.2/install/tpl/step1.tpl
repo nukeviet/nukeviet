@@ -6,6 +6,10 @@
 				alert('{LANG.select_language}')
 				return false;
 			}
+			else if (url=='other')
+			{
+				top.location.href='http://translate.nukeviet.vn/en/translate/download/';
+			}
 			else{
 				top.location.href=url;
 			}
@@ -19,6 +23,7 @@
 	<!-- BEGIN: languagelist -->
 	<option value="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={LANGTYPE}&amp;step=1"{SELECTED}>{LANGNAME}</option>
 	<!-- END: languagelist -->
+	<option value="other">Other Language</option>
 </select></p>
 <ul class="control_t fr">
 	<li><span class="next_step"><a
