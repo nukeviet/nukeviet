@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Tiếng Việt
-* @Createdate Jun 04, 2011, 04:52:52 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -133,8 +133,6 @@ $lang_module['search_author'] = "Tác giả bài viết";
 $lang_module['content_keywords'] = "Từ khóa dành cho máy chủ tìm kiếm";
 $lang_module['save_temp'] = "Gửi bài viết đến quản trị site";
 $lang_module['save_content'] = "Đăng bài viết";
-$lang_module['update_content'] = "Sửa bài viết";
-$lang_module['del_content'] = "Xóa bài viết";
 $lang_module['captcha'] = "Mã chống spam";
 $lang_module['error_cat'] = "Lỗi: Bài viết chưa có chủ đề";
 $lang_module['error_title'] = "Lỗi: Bài viết chưa có tiêu đề";
@@ -146,5 +144,7 @@ $lang_module['save_content_waite'] = "Bài viết bạn gửi đã được hệ
 $lang_module['save_content_waite_home'] = "Bài viết bạn gửi đã được hệ thống ghi nhận, <br />ban quản trị site sẽ kiểm tra bài viết và đăng bài viết trong thời gian sớm nhất, <br />trình duyệt sẽ tự động chuyển về trang chủ.";
 $lang_module['error_addcontent'] = "Lỗi: Bạn chưa được cấp quyền để gửi bài viết";
 $lang_module['errorsave'] = "Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề bài viết có thể bị trùng";
+$lang_module['update_content'] = "Sửa bài viết";
+$lang_module['del_content'] = "Xóa bài viết";
 
 ?>

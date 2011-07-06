@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -23,7 +23,7 @@ $lang_module['categories'] = "Categories";
 $lang_module['save'] = "Save";
 $lang_module['errorsave'] = "Error:Update data fail";
 $lang_module['saveok'] = "Update succesfully";
-$lang_module['alias'] = "Static Link";
+$lang_module['alias'] = "Alias";
 $lang_module['name'] = "Title";
 $lang_module['weight'] = "Position";
 $lang_module['inhome'] = "Home";
@@ -81,7 +81,7 @@ $lang_module['weblink_del_link_title'] = "Delete link";
 $lang_module['weblink_del_link_confirm'] = "Confirm to delete ?";
 $lang_module['weblink_config'] = "Weblink Config";
 $lang_module['weblink_config_intro'] = "Introduction:";
-$lang_module['weblink_config_main'] = "Exit home page";
+$lang_module['weblink_config_main'] = "Main page";
 $lang_module['weblink_config_col'] = "Number of collum to display categories";
 $lang_module['weblink_config_showsub'] = "Show sub-categories";
 $lang_module['weblink_config_showsublimit'] = "Limited sub-categories are shown";
@@ -101,7 +101,7 @@ $lang_module['weblink_config_showimagelink'] = "Show weblink image";
 $lang_module['weblink_config_success'] = "Update successfully !";
 $lang_module['weblink_config_unsuccess'] = "Error:Update data fail";
 $lang_module['weblink_config_imgwidth'] = "Image width";
-$lang_module['weblink_config_imgheight'] = "Imagheight";
+$lang_module['weblink_config_imgheight'] = "Image height";
 $lang_module['weblink_config_timeout'] = "Time out(Minute)";
 $lang_module['weblink_config_error_numcat'] = "Please input number of collum to show on menu<br/>";
 $lang_module['weblink_config_error_numsub'] = "You must input number of sub-Catagores to display them";
@@ -111,7 +111,7 @@ $lang_module['weblink_config_error_imgheight'] = "You must input width weblink i
 $lang_module['weblink_config_error_timeout'] = "you must input time between period click and next click";
 $lang_module['weblink_checkalivelink'] = "Check link tool";
 $lang_module['weblink_check_error'] = "<span style=\"color:red\">Deactive</span><br />";
-$lang_module['weblink_check_active'] = "Active";
+$lang_module['weblink_check_active'] = "Active <br />";
 $lang_module['weblink_check_confirm'] = "Continue";
 $lang_module['weblink_check_notice'] = "To check, Please click Continue button<br />Wait for some time to finish<br /><br />";
 $lang_module['weblink_link_broken'] = "Link notify";

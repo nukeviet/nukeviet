@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate 13/04/2010, 16:46
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['faq_catmanager'] = "Quản lý chủ đề";
 $lang_module['faq_addcat_titlebox'] = "Thêm chủ đề";
@@ -35,10 +34,10 @@ $lang_module['faq_cat_save'] = "Thực hiện";
 $lang_module['faq_editcat_cat'] = "Sửa chủ đề";
 $lang_module['faq_table_caption1'] = "Danh sách các chủ đề là chủ đề chính";
 $lang_module['faq_table_caption2'] = "Danh sách các chủ đề con của chủ đề &ldquo;<strong>%s</strong>&rdquo;";
-$lang_module['faq_category_cat_sort'] = 'Vị trí';
+$lang_module['faq_category_cat_sort'] = "Vị trí";
 $lang_module['faq_category_cat_active'] = "Hoạt động";
-$lang_module['faq_category_cat_feature'] = 'Chức năng';
-$lang_module['faq_category_cat_sub'] = 'chủ đề con';
+$lang_module['faq_category_cat_feature'] = "Chức năng";
+$lang_module['faq_category_cat_sub'] = "chủ đề con";
 $lang_module['faq_addfaq'] = "Thêm Hỏi đáp";
 $lang_module['faq_editfaq'] = "Sửa Hỏi đáp";
 $lang_module['faq_error_title'] = "Lỗi: Tiêu đề Hỏi đáp chưa được khai báo";
@@ -55,11 +54,10 @@ $lang_module['faq_save'] = "Thực hiện";
 $lang_module['faq_list_by_cat'] = "Danh sách Hỏi đáp thuộc chủ đề &ldquo;<strong>%s</strong>&rdquo;";
 $lang_module['faq_manager'] = "Quản lý Hỏi đáp";
 $lang_module['faq_pos'] = "Vị trí";
-$lang_module['faq_feature'] = 'Chức năng';
-$lang_module['faq_active'] = 'Hoạt động';
-
-$lang_module['nocat'] = 'Không thuộc chủ đề nào';
-$lang_module['config'] = 'Cấu hình module';
+$lang_module['faq_feature'] = "Chức năng";
+$lang_module['faq_active'] = "Hoạt động";
+$lang_module['nocat'] = "Không thuộc chủ đề nào";
+$lang_module['config'] = "Cấu hình module";
 $lang_module['config_type_main'] = "Cách thể hiện trên trang chủ";
 $lang_module['config_type_main_0'] = "Hiển thị các chủ đề";
 $lang_module['config_type_main_1'] = "Danh sách mới lên trên";

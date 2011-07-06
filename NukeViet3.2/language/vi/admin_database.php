@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['main'] = "Thông tin chung";
 $lang_module['database_info'] = "Thông tin chung về CSDL &ldquo;<strong>%s</strong>&rdquo;";
@@ -64,16 +63,13 @@ $lang_module['field_default'] = "Mặc định";
 $lang_module['field_extra'] = "Bổ sung";
 $lang_module['php_code'] = "Mã PHP";
 $lang_module['sql_code'] = "Mã SQL";
-
 $lang_module['save_data'] = "Lưu cơ sở dữ liệu";
 $lang_module['save_error'] = "Lỗi: Hệ thống không ghi được file<br /><br />Bạn cần kiểm tra lại thư mục: %1\$s và cấp quyền được ghi đối với thư mục đó.";
 $lang_module['save_ok'] = "Lưu dữ liệu thành công.";
 $lang_module['save_download'] = "Click vào đây để download file.";
-
 $lang_module['dump_autobackup'] = "Kích hoạt tiện ích lưu CSDL";
 $lang_module['dump_backup_ext'] = "Định dạng lưu CSDL";
 $lang_module['dump_backup_day'] = "Số lượng file lưu CSDL.";
-
 $lang_module['file_backup'] = "Data backup";
 $lang_module['file_nb'] = "STT";
 $lang_module['file_name'] = "Tên file";

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2011, 08:33:36 PM
+* @Createdate Jul 06, 2011, 04:38:02 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -19,22 +19,7 @@ $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['add_time'] = "Date de création";
-/*
-	 vietnam:	  Được thêm vào
-	 english:	  Addition time
-*/
-
 $lang_module['edit_time'] = "Dernière édition";
-/*
-	 vietnam:	  Sửa chữa lần cuối
-	 english:	  Last addition
-*/
-
 $lang_module['not_found'] = "Désolé!!! L'article que vous recherchez n'existe pas";
-/*
-	 vietnam:	  Thật tiếc!!! Chủ đề bạn cần tìm không tồn tại
-	 english:	  Sorry! Does not exist catagories
-*/
-
 
 ?>

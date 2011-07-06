@@ -4,8 +4,8 @@
 * @Project NUKEVIET 3.0
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -131,7 +131,6 @@ $lang_module['form'] = "Kiểu thể hiện";
 $lang_module['file_del_confirm'] = "Bạn có muốn xóa?";
 $lang_module['delfile_success'] = "Đã xóa xong";
 $lang_module['delfile_error'] = "Xóa lỗi";
-
 $lang_module['weight'] = "vị trí";
 
 ?>

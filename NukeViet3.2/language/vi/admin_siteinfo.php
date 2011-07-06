@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Tiếng Việt
-* @Createdate Jun 04, 2011, 05:50:28 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -135,7 +135,6 @@ $lang_module['log_edit_user'] = "sửa thành viên";
 $lang_module['log_del_vote'] = "xóa bình chọn";
 $lang_module['log_add_vote'] = "thêm bình chọn";
 $lang_module['log_edit_vote'] = "sửa bình chọn";
-
 $lang_module['filter_lang'] = "-- Lọc theo ngôn ngữ --";
 $lang_module['filter_user'] = "-- Lọc theo người thực hiện --";
 $lang_module['filter_module'] = "-- Lọc theo module --";

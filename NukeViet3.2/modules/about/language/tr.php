@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Jun 21, 2011, 08:34:06 PM
+* @Createdate Jul 06, 2011, 04:38:03 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -19,22 +19,7 @@ $lang_translator['info'] ="Dil Sevimsiz tarafından tercüme edildi";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['add_time'] = "Oluşturma";
-/*
-	 vietnam:	  Được thêm vào
-	 english:	  Addition time
-*/
-
 $lang_module['edit_time'] = "Son ek";
-/*
-	 vietnam:	  Sửa chữa lần cuối
-	 english:	  Last addition
-*/
-
 $lang_module['not_found'] = "Üzgünüz! Kategoriler yok";
-/*
-	 vietnam:	  Thật tiếc!!! Chủ đề bạn cần tìm không tồn tại
-	 english:	  Sorry! Does not exist catagories
-*/
-
 
 ?>

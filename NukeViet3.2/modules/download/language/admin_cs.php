@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 26, 2010, 03:56:16 AM
+* @Createdate Jul 06, 2011, 04:38:02 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){

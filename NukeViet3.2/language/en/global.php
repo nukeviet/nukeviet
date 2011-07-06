@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -28,7 +28,7 @@ $lang_global['Home'] = "Home";
 $lang_global['go_homepage'] = "Back to home page";
 $lang_global['error_404_title'] = "Error 404";
 $lang_global['error_404_content'] = "Error 404: Web page you tried to access does not exist on the server.";
-$lang_global['error_layout_title'] = "Error processing interface";
+$lang_global['error_layout_title'] = "Interface processing Error";
 $lang_global['error_layout_content'] = "Error, not found interface in the system, you should contact the site administrator to change";
 $lang_global['logout'] = "Logout";
 $lang_global['admin_logout_title'] = "Administration logout";
@@ -51,12 +51,12 @@ $lang_global['re_password_empty'] = "You do not write your password into the sec
 $lang_global['securitycodeincorrect'] = "Spam code is invalid";
 $lang_global['loginincorrect'] = "The system can not find  information correctly with your declaration. Username or password do not match";
 $lang_global['admin_loginsuccessfully'] = "Login successfully. Automatic redirect to adminitrator site";
-$lang_global['incorrect_password'] = "Password is invalid";
+$lang_global['incorrect_password'] = "Password is incorrect";
 $lang_global['relogin_info'] = "You were not online for a long time. Please declare your password again. Please enter your password in the box below. You only enter password maximum %1\$d times. If the %1\$d times that you did not verify the password, the system will forfeit the right to access your Administration";
 $lang_global['relogin_error_info'] = "%1\$s. Please enter your password in the box below. You only enter password maximum %2\$d times. You only enter password maximum %2\$d times. If the %1\$d times that you did not verify the password, the system will forfeit the right to access your Administration";
 $lang_global['admin_page'] = "Administration";
 $lang_global['admin_module_sector'] = "Module Management";
-$lang_global['adminlogin'] = "Administrator Login";
+$lang_global['adminlogin'] = "Login to Administration";
 $lang_global['module_for_admin'] = "We are Sorry but this section of our site is for <i>Administrators Only.</i>";
 $lang_global['username'] = "Username";
 $lang_global['password'] = "Password";
@@ -78,18 +78,18 @@ $lang_global['regdate'] = "Register date";
 $lang_global['online'] = "Online";
 $lang_global['hits'] = "Hits";
 $lang_global['viewstats'] = "View counter statistics";
-$lang_global['db_num_queries'] = "Number queries connected Database";
+$lang_global['db_num_queries'] = "Connections to database";
 $lang_global['last_login'] = "Last login";
-$lang_global['current_login'] = "Current Login";
+$lang_global['current_login'] = "This session";
 $lang_global['your_account'] = "Account";
 $lang_global['sec'] = "second";
 $lang_global['min'] = "Minute";
 $lang_global['hour'] = "Hour";
-$lang_global['day'] = "Date";
+$lang_global['day'] = "Days";
 $lang_global['month'] = "Month";
 $lang_global['year'] = "Year";
 $lang_global['today'] = "Today";
-$lang_global['current_month'] = "Current month";
+$lang_global['current_month'] = "This month";
 $lang_global['nojs'] = "Your browser has disabled JavaScript .<br />Website only work when it enable.<br />To enable JAVASCRIPT, Please<a href=\"http://www.google.com/support/bin/answer.py?hl=en&answer=23852\">click here</a>!";
 $lang_global['sun'] = "SUN";
 $lang_global['mon'] = "MON";
@@ -134,12 +134,12 @@ $lang_global['lang_en'] = "English";
 $lang_global['option'] = "Option";
 $lang_global['value'] = "value";
 $lang_global['reviews'] = "Reviews";
-$lang_global['show_queries'] = "List queries";
+$lang_global['show_queries'] = "List of queries";
 $lang_global['add'] = "Add";
 $lang_global['edit'] = "Edit";
 $lang_global['delete'] = "Delete";
 $lang_global['disable'] = "Disable";
-$lang_global['activate'] = "Active";
+$lang_global['activate'] = "Activate";
 $lang_global['check'] = "Check";
 $lang_global['active'] = "Active";
 $lang_global['save'] = "Save";
@@ -175,9 +175,9 @@ $lang_global['never'] = "Never";
 $lang_global['pageprev'] = "Previous page";
 $lang_global['pagenext'] = "Next page";
 $lang_global['langinterface'] = "Language";
-$lang_global['langdata'] = "Data processing to follow language";
+$lang_global['langdata'] = "Data language";
 $lang_global['langsite'] = "Select language";
-$lang_global['detail'] = "Detail";
+$lang_global['detail'] = "Details";
 $lang_global['show_picture'] = "View picture";
 $lang_global['flood_page_title'] = "please wait...";
 $lang_global['flood_info1'] = "Access denied";
@@ -196,7 +196,7 @@ $lang_global['no_drag_block'] = "Disable drag and drop block";
 $lang_global['blocks_saved'] = "Configuration has been saved !";
 $lang_global['blocks_saved_error'] = "Error: The system does not save the settings";
 $lang_global['users'] = "Members";
-$lang_global['bots'] = "Host search";
+$lang_global['bots'] = "Search engine";
 $lang_global['guests'] = "Guest";
 $lang_global['total'] = "Total";
 $lang_global['type_email'] = "Enter your email address...";
@@ -207,7 +207,7 @@ $lang_global['outgroup_block'] = "Remove from group";
 $lang_global['block_delete_confirm'] = "Note: When you remove this block in the system will delete all, you are definitely doing?";
 $lang_global['block_outgroup_confirm'] = "This will remove this block from a group and create a new group that contains this block if this block is located in a block group having 2 or more. Are you sure you want to remove this block from the group?";
 $lang_global['wellcome'] = "Wellcome";
-$lang_global['changpass'] = "Change pass";
+$lang_global['changpass'] = "Change password";
 $lang_global['edituser'] = "Account";
 $lang_global['browse_file'] = "Browse";
 $lang_global['browse_image'] = "Browse";

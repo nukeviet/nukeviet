@@ -1,26 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (!defined( 'NV_MAINFILE' )) {
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_global";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_global";
 
 $lang_global['Content_Language'] = "vi";
-$lang_global['LanguageName'] = "vietnamese";//khong dich
+$lang_global['LanguageName'] = "vietnamese";
 $lang_global['site_info'] = "Thông báo từ hệ thống";
 $lang_global['welcome'] = "Thân ái chào mừng bạn trên website của %s";
 $lang_global['disable_site_title'] = "Website tạm ngưng hoạt động";
@@ -29,17 +28,15 @@ $lang_global['Home'] = "Trang nhất";
 $lang_global['go_homepage'] = "Về trang chủ";
 $lang_global['error_404_title'] = "Lỗi truy cập 404";
 $lang_global['error_404_content'] = "Lỗi 404: Trang web mà bạn đã cố gắng truy cập không tồn tại trên máy chủ của website.";
-
 $lang_global['error_layout_title'] = "Lỗi xử lý giao diện";
 $lang_global['error_layout_content'] = "Lỗi, hệ thống không tồn tại giao diện, bạn cần liên hệ với quản trị site để sửa lại";
-
 $lang_global['logout'] = "Thoát";
 $lang_global['admin_logout_title'] = "Thoát khỏi tài khoản Quản trị";
 $lang_global['admin_logout_ok'] = "Toàn bộ thông tin đăng nhập Quản trị đã được xóa. Bạn đã thoát khỏi tài khoản Quản trị";
 $lang_global['admin_logout_question'] = "Bạn thực sự muốn thoát khỏi tài khoản Quản trị";
 $lang_global['admin_ipincorrect'] = "Bạn đang truy cập bằng IP: %s. Rất tiếc IP này không được cấp phép truy cập vào khu vực quản lý site!";
 $lang_global['ok'] = "OK";
-$lang_global['cancel'] = "Cancel";
+$lang_global['cancel'] = "Hủy bỏ";
 $lang_global['fail'] = "Thất bại";
 $lang_global['firewallsystem'] = "Administrators Section";
 $lang_global['firewallincorrect'] = "Hệ thống tường lửa đã chặn việc truy cập với tư cách Admin của bạn!";
@@ -62,7 +59,6 @@ $lang_global['admin_module_sector'] = "Quản lý module";
 $lang_global['adminlogin'] = "Đăng nhập quản trị hệ thống";
 $lang_global['module_for_admin'] = "Khu vực chỉ dành cho <i>Người quản trị</i>";
 $lang_global['username'] = "Tài khoản";
-$lang_global['in_groups'] = "Đăng ký nhóm";
 $lang_global['password'] = "Mật khẩu";
 $lang_global['password2'] = "Lặp lại mật khẩu";
 $lang_global['captcharefresh'] = "Thay mới";
@@ -94,7 +90,6 @@ $lang_global['month'] = "tháng";
 $lang_global['year'] = "năm";
 $lang_global['today'] = "Hôm nay";
 $lang_global['current_month'] = "Tháng hiện tại";
-
 $lang_global['nojs'] = "Trình duyệt của bạn đã tắt chức năng hỗ trợ JAVASCRIPT.<br />Website chỉ làm việc khi bạn bật nó trở lại.<br />Để tham khảo cách bật JAVASCRIPT, hãy click chuột <a href=\"http://www.google.com/support/bin/answer.py?hl=en&answer=23852\">vào đây</a>!";
 $lang_global['sun'] = "CN";
 $lang_global['mon'] = "T2";
@@ -181,7 +176,7 @@ $lang_global['pageprev'] = "Trang trước";
 $lang_global['pagenext'] = "Trang sau";
 $lang_global['langinterface'] = "Ngôn ngữ giao diện";
 $lang_global['langdata'] = "Xử lý dữ liệu theo ngôn ngữ";
-$lang_global['langsite'] = "Select language"; //khong dich
+$lang_global['langsite'] = "Select language";
 $lang_global['detail'] = "Chi tiết";
 $lang_global['show_picture'] = "Xem hình";
 $lang_global['flood_page_title'] = "Hãy đợi...";
@@ -196,18 +191,14 @@ $lang_global['error_sendmail_admin'] = "Lỗi: Hệ thống không gửi đượ
 $lang_global['error_sendmail_subject'] = "Thông báo lỗi từ website %s";
 $lang_global['error_sendmail_content'] = "Hệ thống đã nhận được một số thông báo lỗi. Bạn hãy mở file đính kèm để xem chi tiết";
 $lang_global['search'] = "Tìm kiếm";
-
 $lang_global['drag_block'] = "Bật kéo thả block";
 $lang_global['no_drag_block'] = "Tắt kéo thả block";
 $lang_global['blocks_saved'] = "Cấu hình đã được lưu lại !";
 $lang_global['blocks_saved_error'] = "Lỗi: Hệ thống không lưu được thiết lập bạn vừa thực hiện ";
-
 $lang_global['users'] = "Thành viên online";
 $lang_global['bots'] = "Máy chủ tìm kiếm";
 $lang_global['guests'] = "Khách viếng thăm";
 $lang_global['total'] = "Tổng cộng";
-$lang_global['drag_block'] = "Bật kéo thả block";
-
 $lang_global['type_email'] = "Nhập địa chỉ email của bạn...";
 $lang_global['add_block'] = "Thêm block vào khu vực này";
 $lang_global['edit_block'] = "Sửa";
@@ -215,27 +206,17 @@ $lang_global['delete_block'] = "Xóa";
 $lang_global['outgroup_block'] = "Bỏ ra khỏi nhóm";
 $lang_global['block_delete_confirm'] = "Chú ý: Khi xóa block này hệ thống sẽ xóa cả nhóm block tại tất cả các vị trí khác, bạn có chắc chắn thực hiện? Nếu chỉ muốn xóa một mình nó, bạn nên tách nhóm block trước khi xóa.";
 $lang_global['block_outgroup_confirm'] = "Việc này sẽ loại bỏ block này ra khỏi 1 nhóm và tạo nhóm mới chứa block này nếu block này đang nằm trong một nhóm có từ 2 block trở lên. Bạn có chắc muốn bỏ block này ra khỏi nhóm?";
-
 $lang_global['wellcome'] = "Xin chào";
 $lang_global['changpass'] = "Đổi mật khẩu";
 $lang_global['edituser'] = "Tài khoản";
-
 $lang_global['browse_file'] = "Chọn file";
 $lang_global['browse_image'] = "Chọn hình ảnh";
-
-//OpenID
 $lang_global['openid_login'] = "Đăng nhập bằng OpenID";
 $lang_global['google_openid_login'] = "Google";
 $lang_global['yahoo_openid_login'] = "Yahoo";
-
-//Breakcrump
 $lang_global['breakcrum'] = "Bạn đang ở";
-
-//ADMIN_LOGIN_MODE
 $lang_global['admin_access_denied1'] = "Rất tiếc là hiện nay hệ thống không cho phép các Admin đăng nhập";
 $lang_global['admin_access_denied2'] = "Rất tiếc là hiện nay hệ thống không cho phép các Quản trị module đăng nhập";
-
-//UPLOAD
 $lang_global['error_uploadNameEmpty'] = "Lỗi: Tên file tải lên không xác định";
 $lang_global['error_uploadSizeEmpty'] = "Lỗi: Dung lượng file tải lên không xác định";
 $lang_global['error_upload_ini_size'] = "Lỗi: Dung lượng file tải lên lớn hơn mức cho phép được xác định trong php.ini";

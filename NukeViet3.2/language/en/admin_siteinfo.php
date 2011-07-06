@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -42,8 +42,8 @@ $lang_module['variable'] = "Variable name";
 $lang_module['value'] = "Value";
 $lang_module['variables_php'] = "Predefine variables";
 $lang_module['version'] = "NukeViet version";
-$lang_module['version_user'] = "Your actual version";
-$lang_module['version_news'] = "Latest version";
+$lang_module['version_user'] = "Your version";
+$lang_module['version_news'] = "Latest official version";
 $lang_module['checkversion'] = "Check NukeViet version";
 $lang_module['server_api'] = "Server API";
 $lang_module['chmod'] = "Check folder permission";
@@ -54,10 +54,10 @@ $lang_module['checkchmod_error_account'] = "Your ftp account is incorrect";
 $lang_module['checkchmod_error_path'] = "Path folder is incorrect";
 $lang_module['checkchmod_error_unable_chmod'] = "Can't set permission";
 $lang_module['checkchmod_success'] = "All done!";
-$lang_module['logs_title'] = "Diary system";
+$lang_module['logs_title'] = "System logs";
 $lang_module['log_module_name'] = "Module Name";
-$lang_module['log_name_key'] = "Event Name";
-$lang_module['log_username'] = "Doer";
+$lang_module['log_name_key'] = "Event";
+$lang_module['log_username'] = "Executor";
 $lang_module['log_time'] = "Time";
 $lang_module['log_feature'] = "Actions";
 $lang_module['log_lang'] = "Language";
@@ -136,13 +136,13 @@ $lang_module['log_del_vote'] = "deleting vote";
 $lang_module['log_add_vote'] = "vote adding operations";
 $lang_module['log_edit_vote'] = "vote editing operations";
 $lang_module['filter_lang'] = "-- Filter by language --";
-$lang_module['filter_user'] = "-- Refine the implementation --";
-$lang_module['filter_module'] = "-- Filtering module --";
+$lang_module['filter_user'] = "- Filter by executor -";
+$lang_module['filter_module'] = "-- Filter by module --";
 $lang_module['filter_system'] = "System";
 $lang_module['filter_from'] = "From";
 $lang_module['filter_to'] = "to";
 $lang_module['filter_clear'] = "Clear";
-$lang_module['filter_action'] = "Filtering data";
+$lang_module['filter_action'] = "Filter";
 $lang_module['filter_cancel'] = "Cancel";
 $lang_module['filter_enterkey'] = "Enter keywords";
 $lang_module['filter_err_submit'] = "You must select at least one condition";

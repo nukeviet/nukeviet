@@ -1,29 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['categories'] = "Quản lý chuyên mục";
-
 $lang_module['topics'] = "Theo dòng sự kiện";
 $lang_module['topics_error_title'] = "Lỗi: Bạn không nhập vào tiêu đề sự kiện";
-
 $lang_module['sources'] = "Nguồn tin";
 $lang_module['comments'] = "comments";
 $lang_module['save'] = "Lưu thay đổi";
@@ -57,10 +54,8 @@ $lang_module['add_sources'] = "Thêm nguồn tin";
 $lang_module['edit_cat'] = "Sửa chuyên mục";
 $lang_module['edit_topic'] = "Sửa dòng sự kiện";
 $lang_module['edit_sources'] = "Sửa nguồn tin";
-
 $lang_module['add_block_cat'] = "Thêm nhóm tin";
 $lang_module['edit_block_cat'] = "Sửa nhóm tin";
-
 $lang_module['link'] = "url ngồn tin";
 $lang_module['cat_sub'] = "Thuộc chuyên mục";
 $lang_module['cat_sub_sl'] = "Là chuyên mục chính";
@@ -90,12 +85,10 @@ $lang_module['viewcat_main_left'] = "chuyên mục, tin khác nằm bên trái";
 $lang_module['viewcat_main_right'] = "chuyên mục,tin khác nằm bên phải";
 $lang_module['viewcat_main_bottom'] = "chuyên mục,tin khác nằm bên dưới";
 $lang_module['viewcat_two_column'] = "chuyên mục thành 2 cột";
-
 $lang_module['viewcat_list_new'] = "theo tiêu đề, mới lên trên";
 $lang_module['viewcat_list_old'] = "theo tiêu đề, cũ lên trên";
 $lang_module['viewcat_grid_new'] = "theo lưới, mới lên trên";
 $lang_module['viewcat_grid_old'] = "theo lưới, cũ lên trên";
-
 $lang_module['search'] = "Tìm kiếm";
 $lang_module['search_type'] = "Tìm kiếm theo";
 $lang_module['search_id'] = "ID";
@@ -181,10 +174,8 @@ $lang_module['comment_checkall'] = "Chọn tất cả";
 $lang_module['comment_uncheckall'] = "Bỏ chọn tất cả";
 $lang_module['comment_nocheck'] = "Hãy chọn ít nhất 1 bình luận để có thể thực hiện";
 $lang_module['comment_update_success'] = "Cập nhật thành công !";
-
 $lang_module['block'] = "Các nhóm tin";
 $lang_module['adddefaultblock'] = "Chọn mặc định khi tạo bài viết";
-
 $lang_module['module_logo'] = "Logo tại module khi giao diện hỗ trợ thay thế logo";
 $lang_module['source_logo'] = "Logo nguồn tin";
 $lang_module['topic_page'] = "Tin tức thuộc nhóm tin liên quan";
@@ -196,7 +187,6 @@ $lang_module['topic_nonews'] = "Hiện tại không có bài viết nào thuộc
 $lang_module['addtotopics'] = "Thêm vào nhóm tin liên quan";
 $lang_module['topic_update_success'] = "Cập nhật thành công!";
 $lang_module['topic_num_news'] = " bài viết";
-
 $lang_module['siteinfo_publtime'] = "Tổng số bài viết hiệu lực";
 $lang_module['siteinfo_users_send'] = "Số bài viết thành viên gửi tới";
 $lang_module['siteinfo_pending'] = "Số bài viết chờ đăng";
@@ -204,13 +194,11 @@ $lang_module['siteinfo_expired'] = "Số bài viết đã hết hạn";
 $lang_module['siteinfo_exptime'] = "Số bài viết sắp hết hạn";
 $lang_module['siteinfo_comment'] = "Tổng số bình luận được đăng";
 $lang_module['siteinfo_comment_pending'] = "Số bình luận chờ duyệt";
-
 $lang_module['group_content'] = "Cấu hình đăng bài viết của thành viên";
 $lang_module['group_addcontent'] = "Được đăng bài viết";
 $lang_module['group_postcontent'] = "Đăng bài viết không cần kiểm duyệt";
 $lang_module['group_editcontent'] = "Được sửa bài viết đã đăng";
 $lang_module['group_delcontent'] = "Được xóa bài viết đã đăng";
-
 $lang_module['admin'] = "Phân quyền quản lý";
 $lang_module['admin_permissions'] = "Quyền hạn";
 $lang_module['admin_edit'] = "Sửa quyền hạn";
@@ -221,12 +209,10 @@ $lang_module['admin_module_for_user'] = "Bạn có tất cả các quyền hạn
 $lang_module['admin_cat'] = "Quản lý Chuyên mục";
 $lang_module['admin_cat_for_user'] = "Quyền hạn của bạn tại các chuyên mục";
 $lang_module['admin_no_user'] = "Chức năng phân quyền cho module này chỉ áp dụng cho người điều hành module, bạn cần thêm người điều hành module trước khi tiến hành phân quyền.";
-
 $lang_module['admin_userid'] = "userid";
 $lang_module['admin_username'] = "Tài khoản";
 $lang_module['admin_full_name'] = "Họ tên";
 $lang_module['admin_email'] = "Email";
-
 $lang_module['permissions_admin'] = "Quản lý Chuyên mục";
 $lang_module['permissions_add_content'] = "Tạo bài viết";
 $lang_module['permissions_pub_content'] = "Duyệt bài viết";
@@ -234,7 +220,6 @@ $lang_module['permissions_edit_content'] = "Sửa bài viết";
 $lang_module['permissions_del_content'] = "Xóa bài viêt";
 $lang_module['permissions_pub_error'] = "Lỗi: Bạn không được đăng bài viết tại Chuyên mục: %1\$s";
 $lang_module['error_no_del_content_id'] = "Lỗi: Hệ thống không xóa được các bài viết có id:";
-
 $lang_module['structure_image_upload'] = "Ảnh upload của module được lưu trữ mặc định theo cấu trúc thư mục";
 
 ?>

@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (!defined( 'NV_MAINFILE' )) {
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['notallowuserlogin'] = "Xin lỗi, hiện tại chức năng đăng nhập thành viên đang dừng hoạt động";
 $lang_module['required'] = "Bắt buộc";
@@ -92,7 +91,6 @@ $lang_module['account_active'] = "Thông tin kích hoạt tài khoản";
 $lang_module['account_active_info'] = "Xin chào %1\$s,<br /><br />Tài khoản của bạn tại website %2\$s đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: %3\$s<br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: %4\$s<br />Email: %5\$s<br />Mật khẩu: %6\$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %7\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site";
 $lang_module['account_active_mess'] = "Tài khoản của bạn đã được tạo.<br />Chúng tôi đã gửi đến e-mail của bạn các thông tin cần thiết.<br />Hãy hàm theo hướng dẫn để kích hoạt tài khoản";
 $lang_module['account_active_mess_error_mail'] = "Tài khoản của bạn đang ở trạng thái chờ kích hoạt. Rất tiếc là đã có lỗi xảy ra trong quá trình gửi thông tin kích hoạt đến địa chỉ e-mail mà bạn vừa cung cấp. Vui lòng liên hệ đến Quản trị Website để được hỗ trợ.";
-$lang_module['account_active_log'] = "Kích hoạt tài khoản";
 $lang_module['account_active_ok'] = "Kích hoạt tài khoản thành công";
 $lang_module['account_active_error'] = "Lỗi: Kích hoạt tài khoản không thành công, bạn vui lòng kiểm tra lại đường dẫn hoặc thời gian hiệu lực của link kích hoạt";
 $lang_module['editinfo_pagetitle'] = "Sửa thông tin thành viên";
@@ -113,11 +111,9 @@ $lang_module['pass_old'] = "Mật khẩu cũ";
 $lang_module['pass_new'] = "Mật khẩu mới";
 $lang_module['pass_new_re'] = "Nhập lại mật khẩu mới";
 $lang_module['change_pass_ok'] = "Thay đổi mật khẩu thành công";
-
 $lang_module['lostpass_subject_email'] = "Hướng dẫn khôi phục mật khẩu";
-$lang_module['lostpass_active_info'] = "Xin chào %1\$s,\n\nBạn vừa gửi đề nghị thay đổi mật khẩu đăng nhập của mình tại website %2\$s. Để thay đổi mật khẩu, bạn cần truy cập theo link dưới đây:\n\nURL: %3\$s\n\nCác thông tin cần khai báo:\n\nTên tài khoản: %4\$s\nEmail: %5\$s\nĐây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.\n\nQuản trị site";
+$lang_module['lostpass_active_info'] = "Xin chào %1\$s,<br /><br />Bạn vừa gửi đề nghị thay đổi mật khẩu đăng nhập của mình tại website %2\$s. Để thay đổi mật khẩu, bạn cần truy cập theo link dưới đây:<br /><br />URL: %3\$s<br /><br />Các thông tin cần khai báo:<br /><br />Tên tài khoản: %4\$s<br />Email: %5\$s<br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site";
 $lang_module['lostpass_content_mess'] = "Chúng tôi đã gửi đến e-mail %1\$s thông tin,<br /><br /> bạn hãy hàm theo hướng dẫn để kích hoạt tài khoản";
-
 $lang_module['lostpass_send_subject_ok'] = "Mật khẩu của bạn đã được thay đổi";
 $lang_module['lostpass_send_account_ok'] = "Xin chào %1\$s,<br /><br />Mật khẩu truy cập của bạn tại website %2\$s đã được thay đổi. Dưới đây là thông tin đăng nhập mới:<br /><br />URL: %3\$s<br />Tên tài khoản: %4\$s<br />Mật khẩu: %5\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site";
 $lang_module['lostpass_send_pass'] = "Mật khẩu của bạn đã được thay đổi và được gửi qua email %s";
@@ -126,13 +122,10 @@ $lang_module['changepass_title'] = "Đổi mật khẩu";
 $lang_module['logout_title'] = "Thoát";
 $lang_module['edit_info_title'] = "Sửa";
 $lang_module['img_size_title'] = "Ảnh hiển thị 80x80";
-
 $lang_module['email_active'] = "Thông tin kích hoạt thay đổi email";
 $lang_module['email_active_info'] = "Xin chào %1\$s,<br /><br />Bạn đã thay đổi địa chỉ email của tài khoản %2\$s, do đó bạn cần  kích hoạt lại tài khoản. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: %3\$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %4\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %5\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site";
 $lang_module['email_active_mes'] = "Tài khoản của bạn vừa được cập nhật. Tuy nhiên, hệ thống yêu cầu bạn phải kích hoạt lại tài khoản của mình do bạn thay đổi địa chỉ email. Một khóa kích hoạt vừa được gửi đến địa chỉ email mới mà bạn đã cung cấp. Hãy vui lòng kiểm tra email của bạn để biết thêm thông tin.";
 $lang_module['email_active_error_mail'] = "Lỗi: Tài khoản của bạn vừa được cập nhật, Nhưng hệ thống không gửi email để kích hoạt tài khoản. Vui lòng liên hệ với Quản trị Website để được hỗ trợ.";
-
-//OpenID
 $lang_module['st_login'] = "Đăng nhập theo kiểu thông thường";
 $lang_module['st_login2'] = "Khả năng đăng nhập thông thường";
 $lang_module['admin_login'] = "Đăng nhập nhờ tài khoản Admin";
@@ -188,7 +181,6 @@ $lang_module['changequestion_submit2'] = "Đề nghị thay đổi";
 $lang_module['editinfo_error'] = "ngoại trừ %s vì không hợp lệ";
 $lang_module['editinfo_ok'] = "Các thay đổi đã được lưu";
 $lang_module['question2'] = "Câu hỏi bảo mật";
-$lang_module['user_info'] = "Thông tin thành viên";
 $lang_module['current_mode'] = "Đăng nhập lần này";
 $lang_module['current_login'] = "Vào";
 $lang_module['or_activate_account'] = "hoặc kích hoạt tài khoản mà bạn đã đăng ký";
@@ -202,15 +194,9 @@ $lang_module['openid_active_confirm_info'] = "OpenID của bạn chưa được 
 $lang_module['openid_activate_account'] = "Kích hoạt tài khoản bằng OpenID";
 $lang_module['openid_is_exists'] = "Rất tiếc là OpenID này đã được sử dụng.<br />Hãy thử chọn một nhà cung cấp khác";
 $lang_module['openid_add_new'] = "Thêm OpenID mới vào tài khoản của bạn";
-$lang_module['openid_add'] = "Thêm OpenID mới";
 $lang_module['email_is_exists'] = "Rất tiếc là email của OpenID này đã được sử dụng.<br />Hãy thử chọn một nhà cung cấp khác";
 $lang_module['error_update_users_info'] = "Xin lỗi:hệ thống không cập nhật được thông tin thành viên của bạn, xin liên hệ với quản trị site để được hướng dẫn.";
-
-$lang_module['in_group'] = "Đăng ký nhóm";
-$lang_module['no_in_group'] = "Bạn chưa đăng ký nhóm nào";
-$lang_module['no_act'] = "Chức năng này hiện tại chưa được kích hoạt";
-$lang_module['no_set'] = "Hiện tại chưa thiết lập nhóm công cộng";
-$lang_module['re_remove'] = "Đăng ký hoặc bỏ nhóm thành công";
-
+$lang_module['account_active_log'] = "Kích hoạt tài khoản";
+$lang_module['openid_add'] = "Thêm OpenID mới";
 
 ?>

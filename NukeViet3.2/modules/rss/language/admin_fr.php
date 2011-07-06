@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2011, 08:33:36 PM
+* @Createdate Jul 06, 2011, 04:38:02 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -19,16 +19,6 @@ $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_module";
 
 $lang_module['content'] = "Informations";
-/*
-	 vietnam:	  Nội dung thông báo
-	 english:	  Content
-*/
-
 $lang_module['save'] = "Sauver";
-/*
-	 vietnam:	  Lưu bài viết
-	 english:	  Save
-*/
-
 
 ?>

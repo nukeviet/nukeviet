@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -55,7 +55,7 @@ $lang_module['file_error_fileupload'] = "Upload file or paste direct URL!";
 $lang_module['file_error_author_url'] = "Error: Invalid URL!";
 $lang_module['file_error1'] = "Error: Can't update!";
 $lang_module['file_error2'] = "Error: Can't save file!";
-$lang_module['file_title'] = "Name";
+$lang_module['file_title'] = "File name";
 $lang_module['file_author_name'] = "Author";
 $lang_module['file_author_email'] = "Email";
 $lang_module['file_author_homepage'] = "Author site";
@@ -115,7 +115,7 @@ $lang_module['comment_post_name'] = "Name";
 $lang_module['comment_edit'] = "Edit comment";
 $lang_module['comment_edit_error1'] = "Error: Empty title";
 $lang_module['comment_edit_error2'] = "Error: Empty content";
-$lang_module['comment_subject'] = "Title";
+$lang_module['comment_subject'] = "Subject";
 $lang_module['comment_content'] = "Content";
 $lang_module['comment_admin_reply'] = "Admin note";
 $lang_module['file_who_autocomment'] = "Auto comment";

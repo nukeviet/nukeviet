@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['blocks'] = "Quản lý block";
 $lang_module['change_func_name'] = "Thay đổi tên gọi của function &ldquo;%1\$s&rdquo; thuộc module &ldquo;%2\$s&rdquo;";
@@ -75,29 +74,24 @@ $lang_module['block_type'] = "Chọn kiểu block";
 $lang_module['block_file'] = "File";
 $lang_module['block_html'] = "HTML";
 $lang_module['block_typehtml'] = "Dạng HTML";
-
-$lang_module['functions'] = 'Chức năng';
+$lang_module['functions'] = "Chức năng";
 $lang_module['edit_block'] = "Sửa block";
 $lang_module['block_function'] = "Hãy chọn function";
 $lang_module['add_block_module'] = "Áp dụng cho module";
 $lang_module['add_block_all_module'] = "Tất cả các module";
 $lang_module['add_block_select_module'] = "Chọn module";
 $lang_module['block_layout'] = "Chọn layout";
-
 $lang_module['block_select'] = "Chọn block";
-$lang_module['block_checkall'] = "Chọn tất cả";
 $lang_module['block_check'] = "Check";
-$lang_module['block_uncheckall'] = "Bỏ chọn tất cả";
 $lang_module['block_select_module'] = "Chọn module";
 $lang_module['block_select_function'] = "Chọn function";
 $lang_module['block_error_fileconfig_title'] = "Lỗi file cấu hình giao diện";
 $lang_module['block_error_fileconfig_content'] = "File cấu hình của giao diện không đúng hoặc không tồn tại. Hãy kiểm tra lại trong thư mục theme của bạn";
-#auto install
 $lang_module['autoinstall'] = "Cài đặt theme";
 $lang_module['autoinstall_theme_install'] = "Cài đặt theme";
 $lang_module['autoinstall_method_none'] = "Hãy lựa chọn: ";
 $lang_module['autoinstall_method_install'] = "Cài đặt theme lên hệ thống";
-$lang_module['autoinstall_method_packet'] = "Đóng gói theo theme";
+$lang_module['autoinstall_method_packet'] = "Đóng gói theo tên theme";
 $lang_module['autoinstall_method_packet_module'] = "Đóng gói theme theo module";
 $lang_module['autoinstall_continue'] = "Tiếp tục";
 $lang_module['autoinstall_back'] = "Quay lại";
@@ -124,7 +118,6 @@ $lang_module['autoinstall_theme_error_movefile'] = "Việc cài đặt tự đ�
 $lang_module['autoinstall_theme_cantunzip'] = "Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.";
 $lang_module['autoinstall_theme_unzip_filelist'] = "Danh sách file đã giải nén";
 $lang_module['autoinstall_theme_unzip_setuppage'] = "Đến trang quản lý theme.";
-$lang_module['autoinstall_method_packet'] = "Đóng gói theo tên theme";
 $lang_module['autoinstall_package_select'] = "Chọn theme để đóng gói";
 $lang_module['autoinstall_package_noselect'] = "Hãy chọn 1 theme để đóng gói";
 $lang_module['autoinstall_package_module_select'] = "Chọn module để đóng gói";
@@ -153,23 +146,20 @@ $lang_module['theme_created_delete_theme_success'] = "Đã xóa thành công the
 $lang_module['theme_created_delete_theme_unsuccess'] = "Có lỗi trong quá trình xóa file !";
 $lang_module['theme_created_delete_current_theme'] = "Bạn không thể xóa theme hiện tại hệ thống đang sử dụng !";
 $lang_module['theme_created_delete_module_theme'] = "Bạn không thể xóa theme vì đang sử dụng cho module: %s, bạn cần cấu hình lại các module đó.";
-
 $lang_module['block_front_delete_error'] = "Lỗi: không thể xóa block, hãy kiểm tra lại quyền của bạn";
 $lang_module['block_front_outgroup_success'] = "Block đã được bỏ ra khỏi nhóm thành công và nằm trong nhóm ";
 $lang_module['block_front_outgroup_cancel'] = "Hiện tại chỉ có duy nhất 1 block nằm trong nhóm này do đó không cần bỏ ra khỏi nhóm";
 $lang_module['block_front_outgroup_error_update'] = "Có lỗi trong quá trình cập nhật dữ liệu";
-
-$lang_module['xcopyblock'] = 'Sao chép block';
-$lang_module['xcopyblock_to'] = ' sang theme ';
-$lang_module['xcopyblock_from'] = ' từ theme ';
-$lang_module['xcopyblock_position'] = 'Chọn vị trí';
-$lang_module['xcopyblock_process'] = 'Sao chép';
-$lang_module['xcopyblock_no_position'] = 'Hãy chọn ít nhất 1 vị trí để sao chép';
-$lang_module['xcopyblock_notice'] = 'Khi thực hiện, hệ thống sẽ xóa các block đã tồn tại ở theme đích, vui lòng chờ cho các tiến trình thực hiện thành công.';
-$lang_module['xcopyblock_success'] = 'Quá trình sao chép thành công !';
-
-$lang_module['block_weight'] = 'Thiết lập lại vị trí các block';
-$lang_module['block_weight_confirm'] = 'Bạn có chắc chắn thiết lập lại vị trí các block, khi đó các thiết lập theo các function sẽ bị thiết lập lại';
+$lang_module['xcopyblock'] = "Sao chép block";
+$lang_module['xcopyblock_to'] = " sang theme ";
+$lang_module['xcopyblock_from'] = " từ theme ";
+$lang_module['xcopyblock_position'] = "Chọn vị trí";
+$lang_module['xcopyblock_process'] = "Sao chép";
+$lang_module['xcopyblock_no_position'] = "Hãy chọn ít nhất 1 vị trí để sao chép";
+$lang_module['xcopyblock_notice'] = "Khi thực hiện, hệ thống sẽ xóa các block đã tồn tại ở theme đích, vui lòng chờ cho các tiến trình thực hiện thành công.";
+$lang_module['xcopyblock_success'] = "Quá trình sao chép thành công !";
+$lang_module['block_weight'] = "Thiết lập lại vị trí các block";
+$lang_module['block_weight_confirm'] = "Bạn có chắc chắn thiết lập lại vị trí các block, khi đó các thiết lập theo các function sẽ bị thiết lập lại";
 $lang_module['autoinstall_theme_error_warning_overwrite'] = "Thông báo: Gói giao diện bạn cài đặt đã tồn tại các file, bạn có chắc chắn thực hiện tiếp quá trình cài đặt để ghi đè các file này";
 $lang_module['autoinstall_theme_overwrite'] = "Thực hiện";
 

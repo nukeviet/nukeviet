@@ -4,8 +4,8 @@
 * @Project NUKEVIET 3.0
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -26,7 +26,7 @@ $lang_module['size'] = "Kích thước";
 $lang_module['form'] = "Kiểu thể hiện";
 $lang_module['description'] = "Mô tả";
 $lang_module['blang_all'] = "Tất cả";
-$lang_module['client_info'] = "Nếu chưa có tài khoản khách hàng, bạn hãy <a href=\"%s\">Liên hệ ngay</a> với chúng tôi. Nếu đã có tài khoản, hãy đăng nhập";
+$lang_module['client_info'] = "Thông tin khách hàng";
 $lang_module['login'] = "Tài khoản";
 $lang_module['password'] = "Mật khẩu";
 $lang_module['reg_time'] = "Thời gian đăng ký";
@@ -43,14 +43,9 @@ $lang_module['website_incorrect'] = "Website không đúng";
 $lang_module['yim_incorrect'] = "YIM không đúng";
 $lang_module['email_is_already_in_use'] = "Địa chỉ %s đã có người sử dụng";
 $lang_module['new_pass'] = "Thay mới mật khẩu (bỏ trống nếu không cần)";
-
-#tool management
 $lang_module['tool_management'] = "Công cụ quản lý";
-$lang_module['client_info'] = "Thông tin khách hàng";
 $lang_module['client_addads'] = "Thêm quảng cáo";
 $lang_module['client_stats'] = "Xem thống kê";
-
-#addads
 $lang_module['addads_pagetitle'] = "Thêm quảng cáo mới";
 $lang_module['addads_title'] = "Tiêu đề";
 $lang_module['addads_block'] = "Thuộc khối";
@@ -73,12 +68,10 @@ $lang_module['file_upload_empty'] = "Hình quảng cáo chưa được xác đ�
 $lang_module['upload_blocked'] = "Việc tải lên các file hình ảnh và flash đã bị cấm bởi hệ thống, vì vậy bạn không thể thêm quảng cáo. Hãy kiểm tra lại cấu hình của site hoặc việc cấp phép các kiểu file được tải lên trong tài khoản quản trị của bạn";
 $lang_module['addads_require_login'] = "Chức năng này chỉ dành cho khách hàng đã đăng ký";
 $lang_module['addads_success'] = "Thêm quảng cáo thành công ! Chúng tôi sẽ kiểm tra yêu cầu của bạn và liên hệ với bạn trong thời gian sớm nhất";
-#stats
 $lang_module['stats_views'] = "Thống kê quảng cáo";
 $lang_module['stats_views_country'] = "Theo quốc gia";
 $lang_module['stats_views_month'] = "Tháng";
 $lang_module['stats_views_select'] = "Hãy chọn";
 $lang_module['stats_views_ads'] = "Quảng cáo";
-
 
 ?>

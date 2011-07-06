@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Language Tiếng Việt
- * @Createdate Jul 02, 2011, 11:30:27 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (!defined( 'NV_MAINFILE' )) {
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "02/07/2011, 23:30";
-$lang_translator['copyright'] = "@Copyright (C) 2011 VINADES.,JSC. All rights reserved"; 
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_block";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="02/07/2011, 23:30";
+$lang_translator['copyright'] ="@Copyright (C) 2011 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_block";
 
 $lang_block['menu'] = "Chọn bộ menu";
 $lang_block['is_viewdes'] = "Hiển thị phần giới thiệu vào menu";
@@ -31,6 +30,5 @@ $lang_block['m_type5'] = "Top Menu Bar";
 $lang_block['m_type6'] = "Side Menu Bar";
 $lang_block['m_type7'] = "Pro_dropdown";
 $lang_block['m_type8'] = "Vertical 2 level";
-
 
 ?>

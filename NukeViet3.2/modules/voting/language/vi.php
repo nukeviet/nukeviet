@@ -4,8 +4,8 @@
 * @Project NUKEVIET 3.0
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate 13/04/2010, 16:46
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {

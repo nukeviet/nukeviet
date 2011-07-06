@@ -4,8 +4,8 @@
 * @Project NUKEVIET 3.0
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -52,7 +52,6 @@ $lang_module['voting_delete_confirm'] = "Bạn có chắc muốn xóa thăm dò 
 $lang_module['voting_delete_success'] = "Đã xóa thành công !";
 $lang_module['voting_delete_unsuccess'] = "Có lỗi trình quá trình xóa dữ liệu !";
 $lang_module['warning'] = "Lưu ý: số cho phép chọn phải nhỏ hơn hoặc bằng số lựa chọn";
-
 $lang_module['voting_error_content'] = "Lưu ý: bạn cần nhập Nội dung thăm dò và các câu trả lời";
 
 ?>

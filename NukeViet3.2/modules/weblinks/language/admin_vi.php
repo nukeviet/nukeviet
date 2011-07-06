@@ -4,8 +4,8 @@
 * @Project NUKEVIET 3.0
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -120,7 +120,7 @@ $lang_module['weblink_link_broken_die'] = "<span style=\"color:red\">Hỏng</spa
 $lang_module['weblink_link_broken_bad'] = "<span style=\"color:red\">Nội dung xấu</span>";
 $lang_module['link_broken_out'] = "Gỡ bỏ thông báo được chọn";
 $lang_module['config_error_per_page'] = "Lỗi: Không xảy ra ở trường per_page";
-
 $lang_module['siteinfo_numberlink'] = "Tổng số link";
 $lang_module['siteinfo_error'] = "Số báo cáo link hỏng";
+
 ?>

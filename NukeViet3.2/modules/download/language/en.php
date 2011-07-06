@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -70,14 +70,14 @@ $lang_module['file_comment_title'] = "Comment";
 $lang_module['file_comment_username'] = "Your name";
 $lang_module['file_comment_post_name'] = "Sender";
 $lang_module['file_comment_useremail'] = "Email";
-$lang_module['file_comment_subject'] = "Title";
+$lang_module['file_comment_subject'] = "Subject";
 $lang_module['file_comment_content'] = "Content";
 $lang_module['file_comment_captcha'] = "Captcha";
-$lang_module['file_comment_send'] = "Send";
+$lang_module['file_comment_send'] = "Send your comments";
 $lang_module['file_comment_post_time'] = "Post at";
 $lang_module['file_comment_re'] = "Comments about";
 $lang_module['file_your_comment'] = "Post your comment";
-$lang_module['view_comment_title'] = "View comment";
+$lang_module['view_comment_title'] = "View comments";
 $lang_module['comment_thanks'] = "Your comment was sent!";
 $lang_module['comment_thanks2'] = "Your comment wait to process!";
 $lang_module['comment_error1'] = "Error: Invalid comment";
@@ -89,7 +89,7 @@ $lang_module['comment_error6'] = "System can't update your comment.Please contac
 $lang_module['comment_error7'] = "Error: Can't find comment";
 $lang_module['comment_admin_note'] = "Admin's note";
 $lang_module['comment_form_hidden'] = "Hide";
-$lang_module['file_error_title'] = "Empty title!";
+$lang_module['file_error_title'] = "Subject missing!";
 $lang_module['file_title_exists'] = "Error: File's name was used.";
 $lang_module['file_error_author_url'] = "Error: Invalid URL!";
 $lang_module['file_error_fileupload'] = "Upload file or paste link to file!";

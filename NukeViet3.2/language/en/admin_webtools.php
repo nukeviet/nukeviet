@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -41,8 +41,8 @@ $lang_module['searchEngineValue'] = "Ping Service Links";
 $lang_module['searchEngineFailed'] = "Ping Service Links failed";
 $lang_module['pingOK'] = "Sitemap file has been sent successfully";
 $lang_module['revision_no_support'] = "Error, function only use this for greater than the NukeViet version 3.0.12";
-$lang_module['revision'] = "Update Revision";
-$lang_module['revision_nochange'] = "No new update";
+$lang_module['revision'] = "Update by Revision";
+$lang_module['revision_nochange'] = "Any new update";
 $lang_module['revision_error'] = "Error: The system is not connected with SVN Server,please check again later";
 $lang_module['checkupdate'] = "Check version";
 $lang_module['checkSystem'] = "System";
@@ -51,7 +51,7 @@ $lang_module['checkContent'] = "Content";
 $lang_module['checkValue'] = "Value";
 $lang_module['userVersion'] = "Current Version";
 $lang_module['onlineVersion'] = "Latest version";
-$lang_module['newVersion_detail'] = "Number Version: %s; Name version: %s; Update: %s";
+$lang_module['newVersion_detail'] = "Version Number: %s; Version name: %s; Update: %s";
 $lang_module['newVersion_info'] = "Nukeviet CMS to be upgraded to new version. Click <a href=\"%s\">here</a> to download";
 $lang_module['reCheck'] = "Check again";
 $lang_module['moduleName'] = "Module Name";
@@ -152,5 +152,9 @@ $lang_module['config'] = "Configuration";
 $lang_module['autocheckupdate'] = "Enable automatic version checking";
 $lang_module['updatetime'] = "Time to check new version";
 $lang_module['clearip_logs'] = "Delete ip logs";
+$lang_module['update_revision_lang_mode'] = "Update type of language packs by revision";
+$lang_module['update_revision_lang_mode_all'] = "All languages";
+$lang_module['update_revision_lang_mode_admin'] = "Languages allowed";
+$lang_module['update_revision_lang_mode_site'] = "Language using on site";
 
 ?>

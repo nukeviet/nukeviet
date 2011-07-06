@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -23,7 +23,7 @@ $lang_module['select_language'] = "Select languages";
 $lang_module['license'] = "License";
 $lang_module['check_server'] = "Check server";
 $lang_module['check_chmod'] = "Check CHMOD";
-$lang_module['config_database'] = "Database connect";
+$lang_module['config_database'] = "Database configuration";
 $lang_module['website_info'] = "Website info";
 $lang_module['done'] = "Done";
 $lang_module['select_lang_des'] = "Please select the language to use on this site";
@@ -35,7 +35,7 @@ $lang_module['publish'] = "Publishing under open source license";
 $lang_module['checkserver_detail'] = "Check server compatibility";
 $lang_module['if_server'] = "If exists server's component";
 $lang_module['not_compatible'] = "not compatible";
-$lang_module['compatible'] = "Compatable";
+$lang_module['compatible'] = "Compatible";
 $lang_module['please_checkserver'] = "Please check server";
 $lang_module['components'] = "Components";
 $lang_module['server_request'] = "Request server";
@@ -48,7 +48,7 @@ $lang_module['request'] = "Require";
 $lang_module['safe_mode'] = "Safe mode";
 $lang_module['required_off'] = "Require off";
 $lang_module['required_on'] = "Require on";
-$lang_module['recommnet'] = "Recomment";
+$lang_module['recommnet'] = "Recommend";
 $lang_module['request_more'] = "request more";
 $lang_module['turnoff'] = "Should be turn off";
 $lang_module['turnon'] = "Should be turn on";
@@ -105,26 +105,26 @@ $lang_module['sitename_note'] = "Website's name. It can be your name, company's 
 $lang_module['admin_account'] = "Admin account";
 $lang_module['admin_account_note'] = "Account must be at least 5 characters, avoid using admin or administrator.";
 $lang_module['admin_email'] = "Email";
-$lang_module['admin_email_note'] = "Email information";
+$lang_module['admin_email_note'] = "Please enter Email";
 $lang_module['admin_pass'] = "Password";
 $lang_module['admin_pass_note'] = "Password must be at least 6 characters, include letters and numerals.";
 $lang_module['admin_repass'] = "Re-enter password";
 $lang_module['admin_repass_note'] = "Repeat password. It must match the password above!";
 $lang_module['success'] = "Setup successful!";
-$lang_module['congratulations'] = "Welcome! Nukeviet setup successfuly. Login to admin  site to config your site.";
+$lang_module['congratulations'] = "Congratulation! Nukeviet installation is successful. Please Login to administration to configure your site.";
 $lang_module['notesupport'] = "All technical support, please contact <a href=\"http://nukeviet.vn\" target=\"_blank\"><b>forum Nukeviet.VN</b></a>.";
 $lang_module['noteuploads'] = "<b>Note:</b> Please <b>CHMOD uploads and it's sub folders</b> in webroot by 777 to enable files can be upload to host.";
 $lang_module['thanks'] = "Thanks!";
 $lang_module['gohome'] = "Go to home page";
 $lang_module['goadmin'] = "Go to admin page";
 $lang_module['finish'] = "Finish";
-$lang_module['checkfileconfig'] = "Please re-check";
+$lang_module['checkfileconfig'] = "Please verify";
 $lang_module['movefileconfig'] = "You need to move config.php file from tmp folder to site root folder, then click to check button to re-check";
 $lang_module['copyright'] = "Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement";
 $lang_module['question'] = "Select question";
 $lang_module['answer_question'] = "Your answer";
 $lang_module['your_question_empty'] = "Empty question";
-$lang_module['answer_empty'] = "Empty answer";
+$lang_module['answer_empty'] = "Please give an answer";
 $lang_module['question_note'] = "You should need security question and answer question if you have been lost your password";
 $lang_module['answer_question_note'] = "You must remember this answer in response to the system.";
 

@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['metaTagsConfig'] = "Cấu hình Meta-Tags";
 $lang_module['metaTagsGroupName'] = "Kiểu Nhóm";
@@ -34,13 +33,11 @@ $lang_module['global_config'] = "Cấu hình chung";
 $lang_module['site_config'] = "Cấu hình site";
 $lang_module['lang_site_config'] = "Cấu hình site Theo ngôn ngữ: %s";
 $lang_module['bots_config'] = "Máy chủ tìm kiếm";
-
 $lang_module['optActive'] = "Kích hoạt chức năng tối ưu site";
 $lang_module['optActive_no'] = "Không kích hoạt";
 $lang_module['optActive_all'] = "Kích hoạt toàn site";
 $lang_module['optActive_site'] = "Kích hoạt khu vực ngoài site";
 $lang_module['optActive_admin'] = "Kích hoạt khu vực admin";
-
 $lang_module['sitename'] = "Tên gọi của site";
 $lang_module['theme'] = "Giao diện mặc định";
 $lang_module['themeadmin'] = "Giao diện người quản trị";
@@ -49,7 +46,6 @@ $lang_module['description'] = "Mô tả của site";
 $lang_module['rewrite'] = "Bật chức năng rewrite";
 $lang_module['rewrite_optional'] = "Loại bỏ kí tự ngôn ngữ trên url";
 $lang_module['disable_content'] = "Nội dung thông báo site ngưng hoạt động";
-
 $lang_module['submit'] = "Lưu";
 $lang_module['err_writable'] = "Lỗi hệ thống không ghi được file: %s bạn cần cấu hình server cho phép ghi file này.";
 $lang_module['err_supports_rewrite'] = "Lỗi, Máy chủ của bạn không hỗ trợ module rewrite";
@@ -62,7 +58,6 @@ $lang_module['captcha_4'] = "Khi thành viên đăng nhập hoặc khách đăng
 $lang_module['captcha_5'] = "Khi admin hoặc thành viên đăng nhập";
 $lang_module['captcha_6'] = "Khi admin đăng nhập hoặc khách đăng ký";
 $lang_module['captcha_7'] = "Hiển thị trong mọi trường hợp";
-
 $lang_module['ftp_config'] = "Cấu hình FTP";
 $lang_module['smtp_config'] = "Cấu hình SMTP";
 $lang_module['server'] = "Server or Url";
@@ -74,7 +69,6 @@ $lang_module['mail_config'] = "Lựa chọn cấu hình";
 $lang_module['type_smtp'] = "SMTP";
 $lang_module['type_linux'] = "Linux Mail";
 $lang_module['type_phpmail'] = "PHPmail";
-
 $lang_module['smtp_server'] = "Cấu hình máy chủ gửi mail";
 $lang_module['incoming_ssl'] = "Sử dụng Xác thực";
 $lang_module['outgoing'] = "Máy chủ (SMTP) Thư Gửi đi";
@@ -82,19 +76,15 @@ $lang_module['outgoing_port'] = "Cổng gửi mail";
 $lang_module['smtp_username'] = "Tài khoản gửi mail";
 $lang_module['smtp_login'] = "Tên Tài khoản";
 $lang_module['smtp_pass'] = "Mật khẩu";
-
-//bots
 $lang_module['bot_name'] = "Tên máy chủ ";
 $lang_module['bot_agent'] = "UserAgent của máy chủ";
 $lang_module['bot_ips'] = "IP của máy chủ";
 $lang_module['bot_allowed'] = "Quyền xem";
-
 $lang_module['site_keywords'] = "Từ khóa cho máy chủ tìm kiếm";
 $lang_module['site_logo'] = "Tên file logo của site";
 $lang_module['site_email'] = "Email của site";
 $lang_module['error_send_email'] = "Email nhận thông báo lỗi";
 $lang_module['site_phone'] = "Điện thoại liên hệ site";
-
 $lang_module['lang_multi'] = "Kích hoạt đa ngôn ngữ";
 $lang_module['site_lang'] = "Ngôn ngữ mặc định";
 $lang_module['site_timezone'] = "Múi giờ của site";
@@ -102,23 +92,17 @@ $lang_module['date_pattern'] = "Kiểu hiển thị ngày tháng năm";
 $lang_module['time_pattern'] = "Kiểu hiển thị giờ phút";
 $lang_module['online_upd'] = "Kích hoạt tiện ích đếm số người online";
 $lang_module['gzip_method'] = "Bật chế độ gzip";
-
 $lang_module['statistic'] = "Kích hoạt tiện ích thống kê";
 $lang_module['proxy_blocker'] = "Kiểm tra và chặn các máy tính dùng proxy";
 $lang_module['proxy_blocker_0'] = "Không kiểm tra";
 $lang_module['proxy_blocker_1'] = "Kiểm tra nhẹ";
 $lang_module['proxy_blocker_2'] = "Kiểm tra vừa";
 $lang_module['proxy_blocker_3'] = "Kiểm tra tuyệt đối";
-
 $lang_module['str_referer_blocker'] = "Kích hoạt tiện ích kiểm tra và chuyển hướng các REFERER bên ngoài đến trang chủ";
-
 $lang_module['my_domains'] = "Các domain chạy site, cách nhau bởi dấu phảy";
 $lang_module['cookie_prefix'] = "Tiến tố cookie";
 $lang_module['session_prefix'] = "Tiền tố session";
-
 $lang_module['is_user_forum'] = "Chuyển quản lý thành viên cho diễn đàn";
-
-#banip
 $lang_module['banip'] = "Quản lý IP cấm";
 $lang_module['banip_ip'] = "Ip";
 $lang_module['banip_timeban'] = "Thời gian bắt đầu";
@@ -148,8 +132,6 @@ $lang_module['banip_delete'] = "Xóa";
 $lang_module['banip_error_ip'] = "Hãy nhập Ip cần ban";
 $lang_module['banip_error_area'] = "Bạn cần chọn khu vực";
 $lang_module['banip_error_validip'] = "Lỗi: Bạn cần nhập IP đúng chuẩn";
-
-#uploadconfig
 $lang_module['uploadconfig'] = "Cấu hình upload";
 $lang_module['uploadconfig_ban_ext'] = "Phần mở rộng bị cấm";
 $lang_module['uploadconfig_ban_mime'] = "Loại mime bị cấm";
@@ -162,8 +144,6 @@ $lang_module['mild_mode'] = "Vừa phải";
 $lang_module['lite_mode'] = "Yếu";
 $lang_module['none_mode'] = "Không";
 $lang_module['upload_checking_note'] = "Máy chủ của bạn không hỗ trợ một số hàm xác định loại file. Nếu chọn \"Mạnh\", bạn sẽ không thể upload file lên host";
-
-#cronjobs
 $lang_module['nv_admin_add'] = "Thêm công việc";
 $lang_module['nv_admin_edit'] = "Sửa công việc";
 $lang_module['nv_admin_del'] = "Xóa công việc";
@@ -204,13 +184,11 @@ $lang_module['last_result'] = "Kết quả của lần thực hiện gần đây
 $lang_module['last_result_empty'] = "n/a";
 $lang_module['last_result0'] = "Tồi";
 $lang_module['last_result1'] = "Đã hoàn thành";
-
 $lang_module['closed_site'] = "Chế độ đóng cửa site";
 $lang_module['closed_site_0'] = "Site hoạt động bình thường";
 $lang_module['closed_site_1'] = "Đóng cửa site chỉ có Quản trị tối cao truy cập";
 $lang_module['closed_site_2'] = "Đóng cửa site Người điều hành chung truy cập";
 $lang_module['closed_site_3'] = "Đóng cửa site Tất cả admin truy cập";
-
 $lang_module['getloadavg'] = "Kiểm tra trạng thái máy chủ, nếu > 80% sẽ thông báo \"Server too busy. Please try again later\"";
 
 ?>

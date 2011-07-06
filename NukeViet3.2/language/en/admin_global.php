@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -30,7 +30,7 @@ $lang_global['mod_language'] = "Language";
 $lang_global['mod_upload'] = "Upload";
 $lang_global['mod_webtools'] = "Webtools";
 $lang_global['go_clientsector'] = "Home page";
-$lang_global['go_clientmod'] = "See out website";
+$lang_global['go_clientmod'] = "Preview";
 $lang_global['please_select'] = "Please select";
 $lang_global['admin_password_empty'] = "Administrator password has not been declared";
 $lang_global['adminpassincorrect'] = "Administrator password &ldquo;<strong>%s</strong>&rdquo; is inaccurate. Try again";
@@ -44,7 +44,7 @@ $lang_global['who_view3'] = "Group Member";
 $lang_global['groups_view'] = "Group viewed";
 $lang_global['block_modules'] = "Block in modules";
 $lang_global['hello_admin1'] = "Wellcome %1\$s ! Last login to administration at: %2\$s";
-$lang_global['hello_admin2'] = "Account: %1\$s ! You are logged in administration, %2\$s";
+$lang_global['hello_admin2'] = "Account: %1\$s ! You are logged in administration %2\$s ago";
 $lang_global['hello_admin3'] = "Wellcome %1\$s. This is the first time to login administration";
 $lang_global['ftp_error_account'] = "Error: Can't connect to FTP server, please check FTP configuration";
 $lang_global['ftp_error_path'] = "Error: Wrong configuration in Remote path";

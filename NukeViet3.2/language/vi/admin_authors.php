@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "04/03/2010, 15:22";
-$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="04/03/2010, 15:22";
+$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['level1'] = "Tối cao";
 $lang_module['level2'] = "Điều hành chung";
@@ -86,19 +85,11 @@ $lang_module['suspend0'] = "Khôi phục hoạt động";
 $lang_module['suspend1'] = "Đình chỉ hoạt động";
 $lang_module['clean_history'] = "Xóa lịch sử";
 $lang_module['suspend_sendmail'] = "Gửi thông báo";
-$lang_module['suspend_sendmail_mess1'] = "Ban quản trị website %1\$s xin thông báo:
-Tài khoản quản trị của bạn tại website %1\$s đã bị đình chỉ hoạt động vào %2\$s vì lý do: %3\$s.
-Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ %4\$s";
-$lang_module['suspend_sendmail_mess0'] = "Ban quản trị website %1\$s xin thông báo:
-Tài khoản quản trị của bạn tại website %1\$s đã hoạt động trở lại vào %2\$s.
-Trước đó tài khoản này đã bị đình chỉ hoạt động vì lý do: %3\$s";
+$lang_module['suspend_sendmail_mess1'] = "Ban quản trị website %1\$s xin thông báo:<br />Tài khoản quản trị của bạn tại website %1\$s đã bị đình chỉ hoạt động vào %2\$s vì lý do: %3\$s.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ %4\$s";
+$lang_module['suspend_sendmail_mess0'] = "Ban quản trị website %1\$s xin thông báo:<br />Tài khoản quản trị của bạn tại website %1\$s đã hoạt động trở lại vào %2\$s.<br />Trước đó tài khoản này đã bị đình chỉ hoạt động vì lý do: %3\$s";
 $lang_module['suspend_sendmail_title'] = "Thông báo từ website %s";
-$lang_module['delete_sendmail_mess0'] = "Ban quản trị website %1\$s xin thông báo:
-Tài khoản quản trị của bạn tại website %1\$s đã bị xóa vào %2\$s.
-Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ %3\$s";
-$lang_module['delete_sendmail_mess1'] = "Ban quản trị website %1\$s xin thông báo:
-Tài khoản quản trị của bạn tại website %1\$s đã bị xóa vào %2\$s vì lý do: %3\$s.
-Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ %4\$s";
+$lang_module['delete_sendmail_mess0'] = "Ban quản trị website %1\$s xin thông báo:<br />Tài khoản quản trị của bạn tại website %1\$s đã bị xóa vào %2\$s.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ %3\$s";
+$lang_module['delete_sendmail_mess1'] = "Ban quản trị website %1\$s xin thông báo:<br />Tài khoản quản trị của bạn tại website %1\$s đã bị xóa vào %2\$s vì lý do: %3\$s.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ %4\$s";
 $lang_module['delete_sendmail_title'] = "Thông báo từ website %s";
 $lang_module['delete_sendmail_info'] = "Bạn thực sự muốn xóa tài khoản quản trị &ldquo;<strong>%s</strong>&rdquo;? Hãy điền các thông tin vào các ô trống dưới đây để khẳng định thao tác này";
 $lang_module['admin_del_sendmail'] = "Gửi thông báo";
@@ -107,9 +98,7 @@ $lang_module['allow_files_type'] = "Các kiểu file được phép tải lên";
 $lang_module['allow_modify_files'] = "Được phép sửa, xóa files";
 $lang_module['allow_create_subdirectories'] = "Được phép tạo thư mục";
 $lang_module['allow_modify_subdirectories'] = "Được phép đổi tên, xóa thư mục";
-
 $lang_module['admin_login_incorrect'] = "Tài khoản &ldquo;<strong>%s</strong>&rdquo; đã có trong danh sách quản trị. Hãy sử dụng một tài khoản khác";
-
 $lang_module['config'] = "Cấu hình";
 $lang_module['adminip'] = "Quản lý IP truy cập khu vực quản trị";
 $lang_module['adminip_ip'] = "Ip";
@@ -134,9 +123,7 @@ $lang_module['adminip_delete'] = "Xóa";
 $lang_module['adminip_error_ip'] = "Hãy nhập Ip được truy cập khu vực quản trị ";
 $lang_module['adminip_error_validip'] = "Lỗi: Bạn cần nhập IP đúng chuẩn";
 $lang_module['adminip_note'] = "Chú ý: nếu chọn chế độ Kiểm tra IP, bạn cần nắm được cấu trúc sau: Mỗi số IP được xác định bằng 4 đại lượng A.B.C.D. Nếu số IP của bạn có cả 4 đại lượng A, B, C, D bất biến, hãy chọn giá trị của dòng 'Mask IP' là 255.255.255.255. Nếu chỉ có A, B, C cố định - chọn 255.255.255.xxx v.v...";
-
 $lang_module['title_username'] = "Quản lý tài khoản tường lửa khu vực admin";
-
 $lang_module['admfirewall'] = "Kiểm tra tường lửa cho khu vực admin";
 $lang_module['block_admin_ip'] = "Kiểm tra IP khi truy cập khu vực admin";
 $lang_module['username_add'] = "Thêm tài khoản";
@@ -146,7 +133,6 @@ $lang_module['passwordsincorrect'] = "Mật khẩu bạn nhập hai lần không
 $lang_module['nochangepass'] = "Nếu không thay đổi mật khẩu bạn không nhập hai trường mật khẩu";
 $lang_module['rule_user'] = "Tài khoản chỉ dùng các ký tự a-zA-Z0-9_-";
 $lang_module['rule_pass'] = "Mật khẩu chỉ dùng các ký tự a-zA-Z0-9_-";
-
 $lang_module['spadmin_add_admin'] = "Cho phép người điều hành chung tạo và thay đổi quyền hạn người điều hành modules";
 $lang_module['authors_detail_main'] = "Hiển thị chi tiết các thông tin tài khoản của người quản trị";
 

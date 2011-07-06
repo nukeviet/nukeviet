@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -18,17 +18,17 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] ="";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['edit_title'] = "Preview content";
-$lang_module['add_row_title'] = "Add";
-$lang_module['list_row_title'] = "List";
+$lang_module['edit_title'] = "Preview";
+$lang_module['add_row_title'] = "Add department";
+$lang_module['list_row_title'] = "List of departments";
 $lang_module['err_row_title'] = "Not exists";
-$lang_module['part_row_title'] = "Part name";
+$lang_module['part_row_title'] = "Department name";
 $lang_module['email_row_title'] = "Email";
 $lang_module['note_row_title'] = "Note";
 $lang_module['bt_save_row_title'] = "Save";
 $lang_module['bt_reset_row_title'] = "Clear";
-$lang_module['err_part_row_title'] = "Part's name not exists";
-$lang_module['err_email_row_title'] = "Email incorrected";
+$lang_module['err_part_row_title'] = "Department name missing";
+$lang_module['err_email_row_title'] = "Invalid email";
 $lang_module['page_row_title'] = "Page";
 $lang_module['bt_del_row_title'] = "Delete";
 $lang_module['bt_edit_row_title'] = "Edit";
@@ -36,7 +36,7 @@ $lang_module['bt_view_row_title'] = "View";
 $lang_module['tt1_row_title'] = "Not reply";
 $lang_module['tt2_row_title'] = "Replied";
 $lang_module['quesion_row_title'] = "Do you want to delete";
-$lang_module['send_suc_send_title'] = "Sent successful";
+$lang_module['send_suc_send_title'] = "Your message have been sent successfully";
 $lang_module['send_err_send_title'] = "failed to send mail";
 $lang_module['send_title'] = "send feedback";
 $lang_module['back_title'] = "Back";
@@ -44,7 +44,7 @@ $lang_module['infor_user_send_title'] = "Sender information";
 $lang_module['reply_user_send_title'] = "Reply to";
 $lang_module['reply_user_title'] = "Subject";
 $lang_module['name_user_send_title'] = "Sender name";
-$lang_module['title_send_title'] = "Title";
+$lang_module['title_send_title'] = "Subject";
 $lang_module['status_send_title'] = "Status";
 $lang_module['content'] = "Content";
 $lang_module['content_title'] = "Content title";
@@ -60,9 +60,9 @@ $lang_module['bt_send_row_title'] = "Send";
 $lang_module['no_content_send_title'] = "Error: Content empty";
 $lang_module['admin_view_title'] = "Enable to view";
 $lang_module['admin_reply_title'] = "Enable to reply";
-$lang_module['admin_send2mail_title'] = "Send to email user";
+$lang_module['admin_send2mail_title'] = "Send to email";
 $lang_module['delall'] = "Delete all";
 $lang_module['siteinfo_new'] = "Unread contact";
-$lang_module['no_row_contact'] = "No Contact";
+$lang_module['no_row_contact'] = "Any Contact";
 
 ?>

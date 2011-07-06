@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -26,9 +26,9 @@ $lang_module['comment'] = "Reader Comments";
 $lang_module['comment_login'] = "You must login to use this feature";
 $lang_module['comment_success'] = "Successful comments";
 $lang_module['comment_unsuccess'] = "Error processing the data or incomplete data";
-$lang_module['comment_title'] = "Send your comments";
-$lang_module['comment_view'] = "View comment";
-$lang_module['comment_send'] = "Send";
+$lang_module['comment_title'] = "Your comments";
+$lang_module['comment_view'] = "View comments";
+$lang_module['comment_send'] = "Send a comment";
 $lang_module['comment_name'] = "Your name:";
 $lang_module['comment_email'] = "Email";
 $lang_module['comment_content'] = "Content";
@@ -60,11 +60,11 @@ $lang_module['post_name'] = "post name";
 $lang_module['source'] = "Source";
 $lang_module['topic'] = "Event stream";
 $lang_module['related_new'] = "The latest news";
-$lang_module['related'] = "The older news";
+$lang_module['related'] = "Older articles";
 $lang_module['savefile'] = "Save";
 $lang_module['rating'] = "Article reviews";
-$lang_module['stringrating'] = "Total number of articles is: %1\$s in %2\$s rating";
-$lang_module['star_note'] = "You click on a star to rate article";
+$lang_module['stringrating'] = "Total notes of this article: %1\$s in %2\$s rating";
+$lang_module['star_note'] = "Click on stars to rate this article";
 $lang_module['star_verypoor'] = "Very poor article";
 $lang_module['star_poor'] = "Poor article";
 $lang_module['star_ok'] = "Normal article";

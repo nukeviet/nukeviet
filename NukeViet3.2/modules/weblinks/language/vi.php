@@ -4,8 +4,8 @@
 * @Project NUKEVIET 3.0
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Vietnamese
-* @Createdate May 31, 2010, 08:01:47 PM
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -46,4 +46,5 @@ $lang_module['error'] = "Bạn phải lựa chọn 1 trong những yêu cầu b�
 $lang_module['error_word_min'] = "Chuỗi ký tự bạn nhập vào phải lớn hơn 10";
 $lang_module['view_title'] = "Lượt xem";
 $lang_module['next_title'] = "Xem tiếp";
+
 ?>

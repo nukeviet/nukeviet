@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -95,7 +95,7 @@ $lang_module['search_id'] = "ID";
 $lang_module['search_key'] = "Key word";
 $lang_module['search_cat'] = "Categories";
 $lang_module['search_cat_all'] = "All Categories";
-$lang_module['search_title'] = "title";
+$lang_module['search_title'] = "Title";
 $lang_module['search_bodytext'] = "Content";
 $lang_module['search_author'] = "Author";
 $lang_module['search_admin'] = "Typer";
@@ -137,7 +137,7 @@ $lang_module['content_sourceid'] = "Source";
 $lang_module['content_copyright'] = "Copyright";
 $lang_module['content_saveok'] = "Successfully recorded data";
 $lang_module['content_main'] = "Back to management";
-$lang_module['redircet_title'] = "Successful implementation of action";
+$lang_module['redircet_title'] = "Action well done";
 $lang_module['content_archive'] = "Save after expire date";
 $lang_module['showhometext'] = "Show hometext on view content";
 $lang_module['imgposition'] = "Article image";

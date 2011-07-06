@@ -1,23 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
- * @Language Vietnamese
- * @Createdate May 31, 2010, 08:01:47 PM
- */
+* @Project NUKEVIET 3.0
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @Createdate Jul 06, 2011, 04:38:01 PM
+*/
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-{
-    die( 'Stop!!!' );
+ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+ die('Stop!!!');
 }
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] = "30/05/2010, 23:57";
-$lang_translator['copyright'] = "Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] = "";
-$lang_translator['langtype'] = "lang_module";
+$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] ="30/05/2010, 23:57";
+$lang_translator['copyright'] ="Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] ="";
+$lang_translator['langtype'] ="lang_module";
 
 $lang_module['modforum'] = "Chức năng quản lý thành viên hiện do diễn đàn quản lý.";
 $lang_module['list_module_title'] = "Danh sách thành viên";
@@ -62,7 +61,6 @@ $lang_module['fax'] = "Fax";
 $lang_module['mobile'] = "Di động";
 $lang_module['show_email'] = "Hiển thị email";
 $lang_module['sig'] = "Chữ ký";
-
 $lang_module['in_group'] = "Là thành viên của nhóm";
 $lang_module['addquestion'] = "Thêm câu hỏi bảo mật";
 $lang_module['savequestion'] = "Lưu câu hỏi bảo mật";
@@ -79,8 +77,6 @@ $lang_module['allow_login'] = "Cho phép thành viên đăng nhập";
 $lang_module['allow_change_email'] = "Cho phép thành viên thay đổi email";
 $lang_module['type_reg'] = "Hình thức đăng ký thành viên";
 $lang_module['active_not_allow'] = "Không cho phép đăng ký";
-$lang_module['allow_public'] = "Cho phép thành viên đăng ký nhóm công cộng";
-$lang_module['allow_question'] = "Hỏi trả lời câu hỏi bí mật khi quên mật khẩu";
 $lang_module['active_admin_check'] = "Người quản trị kích hoạt";
 $lang_module['active_all'] = "Không cần kích hoạt";
 $lang_module['active_email'] = "Kích hoạt qua email";
@@ -137,7 +133,6 @@ $lang_module['level1'] = "Quản trị tối cao";
 $lang_module['level2'] = "Quản trị chung";
 $lang_module['level3'] = "Quản trị bộ phận";
 $lang_module['admin_add'] = "Chọn làm Quản trị";
-
 $lang_module['nv_admin_add'] = "Thêm nhóm";
 $lang_module['nv_admin_edit'] = "Sửa nhóm";
 $lang_module['title_empty'] = "Bạn chưa khai báo tiêu đề nhóm";
@@ -166,7 +161,7 @@ $lang_module['group_pgtitle'] = "Thông tin chi tiết";
 $lang_module['group_info'] = "Thông tin về nhóm &ldquo;%s&rdquo;";
 $lang_module['add_user'] = "Thêm thành viên %1\$s vào nhóm %2\$s";
 $lang_module['exclude_user'] = "Loại thành viên %1\$s khỏi nhóm %2\$s";
-
 $lang_module['siteinfo_user'] = "Số thành viên";
-$lang_module['siteinfo_waiting'] = "Số thành viên đợi kích hoạt"; 
+$lang_module['siteinfo_waiting'] = "Số thành viên đợi kích hoạt";
+
 ?>

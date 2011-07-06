@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jun 21, 2011, 08:31:05 PM
+* @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -42,8 +42,8 @@ $lang_module['select_question'] = "Please select question";
 $lang_module['your_question'] = "Or your question";
 $lang_module['answer_question'] = "Your answer";
 $lang_module['answer_your_question'] = "Answer";
-$lang_module['captcha'] = "Anti spam code";
-$lang_module['retype_captcha'] = "Re type anti spam code";
+$lang_module['captcha'] = "Security code";
+$lang_module['retype_captcha'] = "Enter the Security code";
 $lang_module['usage_terms'] = "Terms to register";
 $lang_module['accept'] = "I agree!";
 $lang_module['avata'] = "Avatar";
