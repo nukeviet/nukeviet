@@ -74,7 +74,7 @@
         </div>
         <div id="footer">
             <p>
-                &copy; 2010 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
+                &copy; 2010 - 2011 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
             </p>
             <p>
                 {LANG.publish} <strong>GNU/GPL v2.0</strong>
