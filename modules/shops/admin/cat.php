@@ -29,6 +29,7 @@ if ( ! empty( $savecat ) )
     $data['keywords'] = filter_text_input( 'keywords', 'post', '', 1 );
     $data['alias'] = filter_text_input( 'alias', 'post', '' );
     $data['description'] = $nv_Request->get_string( 'description', 'post', '' );
+	$data['description'] = nv_substr( $data['description'], 0, 255 );
     $data['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $data['description'] ) ), '<br />' );
     $data['alias'] = ( $data['alias'] == "" ) ? change_alias( $data['title'] ) : change_alias( $data['alias'] );
     

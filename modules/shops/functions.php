@@ -40,7 +40,7 @@ $sql = "SELECT groupid, parentid, lev," . NV_LANG_DATA . "_title, " . NV_LANG_DA
 $result = $db->sql_query( $sql );
 while ( list( $groupid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewgroup_i, $numsubgroup_i, $subgroupid_i, $numlinks_i, $del_cache_time_i, $description_i, $inhome_i, $keywords_i, $who_view_i, $groups_view_i ) = $db->sql_fetchrow( $result ) )
 {
-    $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group/" . $alias_i . "-".$groupid_i;
+    $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group/" . $alias_i . "-" . $groupid_i;
     $global_array_group[$groupid_i] = array( 
         "group" => $groupid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i, "viewgroup" => $viewgroup_i, "numsubgroup" => $numsubgroup_i, "subgroupid" => $subgroupid_i, "numlinks" => $numlinks_i, "description" => $description_i, "inhome" => $inhome_i, "keywords" => $keywords_i, "who_view" => $who_view_i, "groups_view" => $groups_view_i, 'lev' => $lev_i 
     );
