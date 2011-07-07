@@ -1,10 +1,12 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+ 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $active = $nv_Request->get_int( 'active', 'post' );
 $list = $nv_Request->get_string( 'list', 'post' );
