@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 //Edit - accept file
@@ -58,16 +59,56 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         $array['author_email'] = filter_text_input( 'author_email', 'post', '' );
         $array['author_url'] = filter_text_input( 'author_url', 'post', '' );
         $array['fileupload'] = ! empty( $row['fileupload'] ) ? explode( "[NV]", $row['fileupload'] ) : array();
+		
+		if( ! empty( $array['fileupload'] ) )
+		{
+			$fileupload = $array['fileupload'];
+			$array['fileupload'] = array();
+			foreach( $fileupload as $file )
+			{
+				if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+				{
+					$file = NV_BASE_SITEURL . NV_UPLOADS_DIR . $file;
+				}
+				$array['fileupload'][] = $file;
+			}
+		}
+		
         $array['fileupload2'] = $nv_Request->get_typed_array( 'fileupload2', 'post', 'string' );
         $array['linkdirect'] = $nv_Request->get_typed_array( 'linkdirect', 'post', 'string' );
         $array['version'] = filter_text_input( 'version', 'post', '', 1 );
         $array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
         $array['fileimage'] = $row['fileimage'];
+		
+		if( ! empty( $array['fileimage'] ) )
+		{
+			if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+			{
+				$array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage'];
+			}
+		}
+		
         $array['fileimage2'] = filter_text_input( 'fileimage2', 'post', '' );
         $array['copyright'] = filter_text_input( 'copyright', 'post', '', 1 );
         $array['comment_allow'] = $nv_Request->get_int( 'comment_allow', 'post', 0 );
         $array['who_comment'] = $nv_Request->get_int( 'who_comment', 'post', 0 );
         $array['groups_comment'] = $nv_Request->get_typed_array( 'groups_comment', 'post', 'int' );
+
+		// Sort image
+		if ( ! empty ( $array['fileimage'] ) )
+		{
+			if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+			{
+				$array['fileimage'] = substr ( $array['fileimage'], strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
+			}
+		}
+		if ( ! empty ( $array['fileimage2'] ) )
+		{
+			if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage2'] ) )
+			{
+				$array['fileimage2'] = substr ( $array['fileimage2'], strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
+			}
+		}
 
         if ( ! empty( $array['author_url'] ) )
         {
@@ -89,7 +130,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                     $file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
                     if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
                     {
-                        $array['fileupload2'][] = $file;
+                        $array['fileupload2'][] = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
                         $array['filesize'] += $filesize;
                     }
                 }
@@ -114,7 +155,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                         $file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
                         if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
                         {
-                            $array['fileupload'][] = $file;
+                            $array['fileupload'][] = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
                             $array['filesize'] += $filesize;
                         }
                     }
@@ -176,19 +217,23 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         {
             $is_error = true;
             $error = $lang_module['file_error_title'];
-        } elseif ( $is_exists )
+        } 
+		elseif ( $is_exists )
         {
             $is_error = true;
             $error = $lang_module['file_title_exists'];
-        } elseif ( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
+        } 
+		elseif ( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
         {
             $is_error = true;
             $error = $check_valid_email;
-        } elseif ( ! empty( $array['author_url'] ) and ! nv_is_url( $array['author_url'] ) )
+        } 
+		elseif ( ! empty( $array['author_url'] ) and ! nv_is_url( $array['author_url'] ) )
         {
             $is_error = true;
             $error = $lang_module['file_error_author_url'];
-        } elseif ( empty( $array['fileupload'] ) and empty( $array['linkdirect'] ) and empty( $array['fileupload2'] ) )
+        } 
+		elseif ( empty( $array['fileupload'] ) and empty( $array['linkdirect'] ) and empty( $array['fileupload2'] ) )
         {
             $is_error = true;
             $error = $lang_module['file_error_fileupload'];
@@ -214,13 +259,14 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
             if ( ! empty( $array['fileupload2'] ) )
             {
                 $array['fileupload'] = $array['fileupload2'];
-            } elseif ( ! empty( $array['fileupload'] ) )
+            } 
+			elseif ( ! empty( $array['fileupload'] ) )
             {
                 $fileupload = $array['fileupload'];
                 $array['fileupload'] = array();
                 foreach ( $fileupload as $file )
                 {
-                    $file = substr( $file, strlen( NV_BASE_SITEURL ) );
+                    $file = NV_UPLOADS_DIR . $file;
                     $newfile = basename( $file );
                     
                     unset( $m );
@@ -239,7 +285,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
 
                     if ( @nv_copyfile( NV_ROOTDIR . '/' . $file, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $upload_dir . '/' . $newfile2 ) )
                     {
-                        $array['fileupload'][] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $upload_dir . '/' . $newfile2;
+                        $array['fileupload'][] = '/' . $module_name . '/' . $upload_dir . '/' . $newfile2;
                     }
                 }
             }
@@ -258,9 +304,10 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
             if ( ! empty( $array['fileimage2'] ) )
             {
                 $array['fileimage'] = $array['fileimage2'];
-            } elseif ( ! empty( $array['fileimage'] ) )
+            } 
+			elseif ( ! empty( $array['fileimage'] ) )
             {
-                $fileimage = substr( $array['fileimage'], strlen( NV_BASE_SITEURL ) );
+                $fileimage = NV_UPLOADS_DIR . $array['fileimage'];
                 $array['fileimage'] = "";
                 if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
                 {
@@ -282,7 +329,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
 
                     if ( @nv_copyfile( NV_ROOTDIR . '/' . $fileimage, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/images/' . $newfile2 ) )
                     {
-                        $array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/images/' . $newfile2;
+                        $array['fileimage'] = '/' . $module_name . '/images/' . $newfile2;
                     }
                 }
             }
@@ -327,7 +374,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
 
                     foreach ( $row['fileupload'] as $fileupload )
                     {
-                        $fileupload = substr( $fileupload, strlen( NV_BASE_SITEURL ) );
+                        $fileupload = NV_UPLOADS_DIR . $fileupload;
                         if ( file_exists( NV_ROOTDIR . '/' . $fileupload ) )
                         {
                             @nv_deletefile( NV_ROOTDIR . '/' . $fileupload );
@@ -335,7 +382,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                     }
                 }
 
-                $fileimage = substr( $row['fileimage'], strlen( NV_BASE_SITEURL ) );
+                $fileimage = NV_UPLOADS_DIR . $row['fileimage'];
                 if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
                 {
                     @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );
@@ -389,12 +436,57 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
     if ( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
     if ( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
 
+	//Rebuild fileupload
+	if( ! empty( $array['fileupload'] ) )
+	{
+		$fileupload = $array['fileupload'];
+		$array['fileupload'] = array();
+		foreach( $fileupload as $tmp )
+		{
+			if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $tmp ) )
+			{
+				$tmp = NV_BASE_SITEURL . NV_UPLOADS_DIR . $tmp;
+			}
+			$array['fileupload'][] = $tmp;
+		}
+	}
+	
+	if( ! empty( $array['fileupload2'] ) )
+	{
+		$fileupload2 = $array['fileupload2'];
+		$array['fileupload2'] = array();
+		foreach( $fileupload2 as $tmp )
+		{
+			if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $tmp ) )
+			{
+				$tmp = NV_BASE_SITEURL . NV_UPLOADS_DIR . $tmp;
+			}
+			$array['fileupload2'][] = $tmp;
+		}
+	}
+
     if ( ! count( $array['fileupload2'] ) ) array_push( $array['fileupload2'], "" );
     if ( ! count( $array['linkdirect'] ) ) array_push( $array['linkdirect'], "" );
 
     $array['fileupload2_num'] = count( $array['fileupload2'] );
     $array['linkdirect_num'] = count( $array['linkdirect'] );
-
+	
+	// Build fileimage
+	if ( ! empty ( $array['fileimage'] ) )
+	{
+		if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+		{
+			$array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage'];
+		}
+	}
+	if ( ! empty ( $array['fileimage2'] ) )
+	{
+		if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage2'] ) )
+		{
+			$array['fileimage2'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage2'];
+		}
+	}
+	
     $listcats = nv_listcats( $array['catid'] );
     if ( empty( $listcats ) )
     {
@@ -553,7 +645,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
         $fileupload = explode( "[NV]", $fileupload );
         foreach ( $fileupload as $file )
         {
-            $file = substr( $file, strlen( NV_BASE_SITEURL ) );
+            $file = NV_UPLOADS_DIR . $file;
             if ( file_exists( NV_ROOTDIR . '/' . $file ) )
             {
                 @nv_deletefile( NV_ROOTDIR . '/' . $file );
@@ -563,7 +655,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
 
     if ( ! empty( $fileimage ) )
     {
-        $fileimage = substr( $fileimage, strlen( NV_BASE_SITEURL ) );
+        $fileimage = NV_UPLOADS_DIR . $fileimage;
         if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
         {
             @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );
@@ -596,7 +688,7 @@ if ( $nv_Request->isset_request( 'alldel', 'post' ) )
             $fileupload = explode( "[NV]", $fileupload );
             foreach ( $fileupload as $file )
             {
-                $file = substr( $file, strlen( NV_BASE_SITEURL ) );
+                $file = NV_UPLOADS_DIR . $file;
                 if ( file_exists( NV_ROOTDIR . '/' . $file ) )
                 {
                     @nv_deletefile( NV_ROOTDIR . '/' . $file );
@@ -606,7 +698,7 @@ if ( $nv_Request->isset_request( 'alldel', 'post' ) )
 
         if ( ! empty( $fileimage ) )
         {
-            $fileimage = substr( $fileimage, strlen( NV_BASE_SITEURL ) );
+            $fileimage = NV_UPLOADS_DIR . $fileimage;
             if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
             {
                 @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );

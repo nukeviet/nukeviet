@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-//Check
+// Check file error
 if ( $nv_Request->isset_request( 'linkcheck', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
@@ -41,7 +41,7 @@ if ( $nv_Request->isset_request( 'linkcheck', 'post' ) )
         {
             if ( ! empty( $file ) )
             {
-                $links[] = NV_MY_DOMAIN . $file;
+                $links[] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . $file;
             }
         }
     }
@@ -124,9 +124,7 @@ if ( $nv_Request->isset_request( 'alldel', 'post' ) )
 //List
 $page_title = $lang_module['download_report'];
 
-$sql = "SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid 
-FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "` b 
-ON a.fid=b.id ORDER BY a.post_time DESC";
+$sql = "SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "` b ON a.fid=b.id ORDER BY a.post_time DESC";
 $result = $db->sql_query( $sql );
 $num = $db->sql_numrows( $result );
 if ( ! $num )

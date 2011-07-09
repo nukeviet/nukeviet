@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-//edit file
+// Edit file
 if ( $nv_Request->isset_request( 'edit', 'get' ) )
 {
     $report = $nv_Request->isset_request( 'report', 'get' );
@@ -39,9 +39,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
     }
     
     $groups_list = nv_groups_list();
-    $array_who = array( 
-        $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] 
-    );
+    $array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
     if ( ! empty( $groups_list ) )
     {
         $array_who[] = $lang_global['who_view3'];
@@ -90,7 +88,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                     $file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
                     if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
                     {
-                        $array['fileupload'][] = $file;
+                        $array['fileupload'][] = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
                         $array['filesize'] += $filesize;
                     }
                 }
@@ -101,7 +99,16 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
             $array['fileupload'] = array();
         }
         
-        if ( ! empty( $array['linkdirect'] ) )
+		// Sort image
+		if ( ! empty ( $array['fileimage'] ) )
+		{
+			if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+			{
+				$array['fileimage'] = substr ( $array['fileimage'], strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
+			}
+		}
+
+		if ( ! empty( $array['linkdirect'] ) )
         {
             $linkdirect = $array['linkdirect'];
             $array['linkdirect'] = array();
@@ -247,6 +254,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 exit();
             }
         }
+		
+		$array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? explode( "[NV]", $array['fileupload'] ) : array();
     }
     else
     {
@@ -284,11 +293,35 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
     if ( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
     if ( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
     
-    if ( ! count( $array['fileupload'] ) ) array_push( $array['fileupload'], "" );
-    if ( ! count( $array['linkdirect'] ) ) array_push( $array['linkdirect'], "" );
-    
     $array['fileupload_num'] = count( $array['fileupload'] );
     $array['linkdirect_num'] = count( $array['linkdirect'] );
+    
+	// Build fileimage
+	if ( ! empty ( $array['fileimage'] ) )
+	{
+		if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+		{
+			$array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage'];
+		}
+	}
+
+	//Rebuild fileupload
+	if( ! empty( $array['fileupload'] ) )
+	{
+		$fileupload = $array['fileupload'];
+		$array['fileupload'] = array();
+		foreach( $fileupload as $tmp )
+		{
+			if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $tmp ) )
+			{
+				$tmp = NV_BASE_SITEURL . NV_UPLOADS_DIR . $tmp;
+			}
+			$array['fileupload'][] = $tmp;
+		}
+	}
+
+    if ( ! count( $array['fileupload'] ) ) array_push( $array['fileupload'], "" );
+    if ( ! count( $array['linkdirect'] ) ) array_push( $array['linkdirect'], "" );
     
     $listcats = nv_listcats( $array['catid'] );
     if ( empty( $listcats ) )
@@ -306,8 +339,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
     {
         $array['who_comment'][] = array(  //
             'key' => $key, //
-'title' => $who, //
-'selected' => $key == $who_comment ? " selected=\"selected\"" : ""  //
+			'title' => $who, //
+			'selected' => $key == $who_comment ? " selected=\"selected\"" : ""  //
         );
     }
     
@@ -319,8 +352,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         {
             $array['groups_comment'][] = array(  //
                 'key' => $key, //
-'title' => $title, //
-'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : ""  //
+				'title' => $title, //
+				'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : ""  //
             );
         }
     }
@@ -416,7 +449,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
     exit();
 }
 
-//Kich hoat - dinh chi
+// Avtive - Deactive
 if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
@@ -438,7 +471,7 @@ if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
     die( "OK" );
 }
 
-//Delete file
+// Delete file
 if ( $nv_Request->isset_request( 'del', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
@@ -488,7 +521,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     die( "OK" );
 }
 
-//List file
+// List file
 $sql = "FROM `" . NV_PREFIXLANG . "_" . $module_data . "`";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
 
@@ -547,16 +580,16 @@ $array = array();
 
 while ( $row = $db->sql_fetchrow( $query2 ) )
 {
-    $array[$row['id']] = array(  //
+    $array[$row['id']] = array(
         'id' => ( int )$row['id'], //
-'title' => $row['title'], //
-'cattitle' => $listcats[$row['catid']]['title'], //
-'catlink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['catid'], //
-'uploadtime' => nv_date( "d/m/Y H:i", $row['uploadtime'] ), //
-'status' => $row['status'] ? " checked=\"checked\"" : "", //
-'view_hits' => ( int )$row['view_hits'], //
-'download_hits' => ( int )$row['download_hits'], //
-'comment_hits' => ( int )$row['comment_hits']  //
+		'title' => $row['title'], //
+		'cattitle' => $listcats[$row['catid']]['title'], //
+		'catlink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['catid'], //
+		'uploadtime' => nv_date( "d/m/Y H:i", $row['uploadtime'] ), //
+		'status' => $row['status'] ? " checked=\"checked\"" : "", //
+		'view_hits' => ( int )$row['view_hits'], //
+		'download_hits' => ( int )$row['download_hits'], //
+		'comment_hits' => ( int )$row['comment_hits']  //
     );
 }
 

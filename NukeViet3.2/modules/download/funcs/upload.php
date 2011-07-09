@@ -181,8 +181,7 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                         }
                         
                         @chmod( $fileupload, 0644 );
-                        $fileupload = str_replace( NV_ROOTDIR . '/', "", $fileupload );
-                        $fileupload = NV_BASE_SITEURL . $fileupload;
+                        $fileupload = str_replace( NV_ROOTDIR . "/" . NV_UPLOADS_DIR, "", $fileupload );
                         $array['filesize'] = $upload_info['size'];
                     }
                     else
@@ -240,8 +239,7 @@ if ( $nv_Request->isset_request( 'addfile', 'post' ) )
                         }
                         
                         @chmod( $fileimage, 0644 );
-                        $fileimage = str_replace( NV_ROOTDIR . "/", "", $fileimage );
-                        $fileimage = NV_BASE_SITEURL . $fileimage;
+                        $fileimage = str_replace( NV_ROOTDIR . "/" . NV_UPLOADS_DIR, "", $fileimage );
                     }
                 }
                 

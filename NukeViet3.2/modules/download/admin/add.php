@@ -12,9 +12,7 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['file_addfile'];
 
 $groups_list = nv_groups_list();
-$array_who = array( 
-    $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] 
-);
+$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 if ( ! empty( $groups_list ) )
 {
     $array_who[] = $lang_global['who_view3'];
@@ -64,7 +62,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
                 $file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
                 if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
                 {
-                    $array['fileupload'][] = $file;
+                    $array['fileupload'][] = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
                     $array['filesize'] += $filesize;
                 }
             }
@@ -75,6 +73,15 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         $array['fileupload'] = array();
     }
     
+	// Sort image
+	if ( ! empty ( $array['fileimage'] ) )
+	{
+		if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+		{
+			$array['fileimage'] = substr ( $array['fileimage'], strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
+		}
+	}
+	
     if ( ! empty( $array['linkdirect'] ) )
     {
         $linkdirect = $array['linkdirect'];
@@ -220,6 +227,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
             Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
             exit();
         }
+		$array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? explode( "[NV]", $array['fileupload'] ) : array();
     }
 }
 else
@@ -235,11 +243,35 @@ else
 if ( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
 if ( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
 
-if ( ! count( $array['fileupload'] ) ) array_push( $array['fileupload'], "" );
-if ( ! count( $array['linkdirect'] ) ) array_push( $array['linkdirect'], "" );
-
 $array['fileupload_num'] = count( $array['fileupload'] );
 $array['linkdirect_num'] = count( $array['linkdirect'] );
+
+// Build fileimage
+if ( ! empty ( $array['fileimage'] ) )
+{
+	if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+	{
+		$array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage'];
+	}
+}
+
+//Rebuild fileupload
+if( ! empty( $array['fileupload'] ) )
+{
+	$fileupload = $array['fileupload'];
+	$array['fileupload'] = array();
+	foreach( $fileupload as $tmp )
+	{
+		if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $tmp ) )
+		{
+			$tmp = NV_BASE_SITEURL . NV_UPLOADS_DIR . $tmp;
+		}
+		$array['fileupload'][] = $tmp;
+	}
+}
+
+if ( ! count( $array['linkdirect'] ) ) array_push( $array['linkdirect'], "" );
+if ( ! count( $array['fileupload'] ) ) array_push( $array['fileupload'], "" );
 
 $listcats = nv_listcats( $array['catid'] );
 if ( empty( $listcats ) )
@@ -257,8 +289,8 @@ foreach ( $array_who as $key => $who )
 {
     $array['who_comment'][] = array(  //
         'key' => $key, //
-'title' => $who, //
-'selected' => $key == $who_comment ? " selected=\"selected\"" : ""  //
+		'title' => $who, //
+		'selected' => $key == $who_comment ? " selected=\"selected\"" : ""  //
     );
 }
 
@@ -270,8 +302,8 @@ if ( ! empty( $groups_list ) )
     {
         $array['groups_comment'][] = array(  //
             'key' => $key, //
-'title' => $title, //
-'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : ""  //
+			'title' => $title, //
+			'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : ""  //
         );
     }
 }
@@ -322,9 +354,7 @@ foreach ( $listcats as $cat )
 $a = 0;
 foreach ( $array['fileupload'] as $file )
 {
-    $xtpl->assign( 'FILEUPLOAD', array( 
-        'value' => $file, 'key' => $a 
-    ) );
+    $xtpl->assign( 'FILEUPLOAD', array( 'value' => $file, 'key' => $a ) );
     $xtpl->parse( 'main.fileupload' );
     $a ++;
 }
@@ -332,9 +362,7 @@ foreach ( $array['fileupload'] as $file )
 $a = 0;
 foreach ( $array['linkdirect'] as $link )
 {
-    $xtpl->assign( 'LINKDIRECT', array( 
-        'value' => $link, 'key' => $a 
-    ) );
+    $xtpl->assign( 'LINKDIRECT', array( 'value' => $link, 'key' => $a ) );
     $xtpl->parse( 'main.linkdirect' );
     $a ++;
 }

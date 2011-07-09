@@ -127,12 +127,11 @@ if ( $row['is_download_allow'] )
         {
             if ( ! empty( $file ) )
             {
-                $file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
+                $file2 = NV_UPLOADS_DIR . $file;
                 if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
                 {
                     $new_name = str_replace( "-", "_", $filealias ) . ( $count_file > 1 ? "_part" . str_pad( $a, 2, '0', STR_PAD_LEFT ) : "" ) . "." . nv_getextension( $file );
-                    $row['fileupload'][] = array( //
-'link' => '#', 'title' => $new_name );
+                    $row['fileupload'][] = array( 'link' => '#', 'title' => $new_name );
                     $session_files['fileupload'][$new_name] = array( 'src' => NV_ROOTDIR . '/' . $file2, 'id' => $row['id'] );
                     
                     $a ++;
@@ -210,7 +209,7 @@ $nv_Request->set_Session( 'session_files', $session_files );
 
 $row['filesize'] = ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : $lang_module['unknown'];
 
-$img = substr( $row['fileimage'], strlen( NV_BASE_SITEURL ) );
+$img = NV_UPLOADS_DIR . $row['fileimage'];
 $row['fileimage'] = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
 
 $dfile = $nv_Request->get_string( 'dfile', 'session', '' );
@@ -277,4 +276,5 @@ $contents = view_file( $row, $download_config );
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

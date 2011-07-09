@@ -60,13 +60,13 @@ if ( ! empty( $list_cats ) )
         {
             while ( list( $id, $cid, $publtime, $title, $alias, $hometext, $homeimgfile ) = $db->sql_fetchrow( $result ) )
             {
-                $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . NV_MY_DOMAIN . $homeimgfile . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
+                $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . $homeimgfile . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
                 $items[] = array(  //
                     'title' => $title, //
-'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias, //
-'guid' => $module_name . '_' . $id, //
-'description' => $rimages . $hometext, //
-'pubdate' => $publtime  //
+					'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias, //
+					'guid' => $module_name . '_' . $id, //
+					'description' => $rimages . $hometext, //
+					'pubdate' => $publtime  //
                 );
             }
         }

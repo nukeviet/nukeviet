@@ -93,7 +93,8 @@ if ( $nv_Request->isset_request( 'rating', 'post' ) )
 
 $page_title = $mod_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
-// Trinh bay theo categories
+
+// View cat
 $new_page = 3;
 $array_cats = array();
 foreach ( $list_cats as $value )
@@ -126,7 +127,6 @@ foreach ( $list_cats as $value )
             $array_item = array();
             while ( $row = $db->sql_fetchrow( $result ) )
             {
-                
                 $uploadtime = ( int )$row['uploadtime'];
                 if ( $uploadtime >= $today )
                 {
@@ -141,24 +141,23 @@ foreach ( $list_cats as $value )
                     $uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );
                 }
                 
-                $img = substr( $row['fileimage'], strlen( NV_BASE_SITEURL ) );
+                $img = NV_UPLOADS_DIR . $row['fileimage'];
                 $imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
                 
-                $array_item[$row['id']] = array(  //
+                $array_item[$row['id']] = array(
                     'id' => ( int )$row['id'], //
-'title' => $row['title'], //
-'introtext' => $row['introtext'], //
-'uploadtime' => $uploadtime, //
-'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'], //
-'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
-'fileimage' => $imageinfo, //
-'view_hits' => ( int )$row['view_hits'], //
-'download_hits' => ( int )$row['download_hits'], //
-'more_link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "/" . $row['alias'], //
-'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'] : "", //
-'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name : "" 
-                ); //
-                
+					'title' => $row['title'], //
+					'introtext' => $row['introtext'], //
+					'uploadtime' => $uploadtime, //
+					'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'], //
+					'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
+					'fileimage' => $imageinfo, //
+					'view_hits' => ( int )$row['view_hits'], //
+					'download_hits' => ( int )$row['download_hits'], //
+					'more_link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "/" . $row['alias'], //
+					'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'] : "", //
+					'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name : "" 
+                );
 
                 if ( $row['comment_allow'] )
                 {
@@ -172,12 +171,12 @@ foreach ( $list_cats as $value )
             $array_cats[$catid_i]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $value['alias'];
             $array_cats[$catid_i]['description'] = $list_cats[$value['id']]['description'];
             $array_cats[$catid_i]['subcats'] = $list_cats[$value['id']]['subcats'];
-            //$array_cats[$catid_i]['image'] = $list_cats[$value['id']]['image'];
             $array_cats[$catid_i]['items'] = $array_item;
         }
     
     }
 }
+
 $contents = theme_main_download( $array_cats, $list_cats, $download_config );
 
 include ( NV_ROOTDIR . "/includes/header.php" );

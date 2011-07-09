@@ -26,9 +26,7 @@ else
     $in = array_keys( $list_cats );
     $in = implode( ",", $in );
 
-    $sql = "SELECT `catid`, `alias`, `uploadtime` 
-        FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") 
-        AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 1000";
+    $sql = "SELECT `catid`, `alias`, `uploadtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 1000";
     $result = $db->sql_query( $sql );
 
     while ( list( $cid, $alias, $publtime ) = $db->sql_fetchrow( $result ) )
@@ -36,10 +34,10 @@ else
         $url[] = array( //
             'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias, //
             'publtime' => $publtime //
-            );
+		);
     }
     
-    $cache = serialize($url);
+    $cache = serialize( $url );
     nv_set_cache( $cacheFile, $cache );
 }
 

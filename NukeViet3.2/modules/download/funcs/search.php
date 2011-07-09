@@ -6,9 +6,11 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3-6-2010 0:30
  */
+
 if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $nv_Request;
+
 $page_title = $lang_module['search'];
 
 $page = $nv_Request->get_int( 'page', 'get', 0 );
@@ -76,7 +78,7 @@ if ( ! empty( $all_page ) )
             $uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );
         }
         
-        $img = substr( $row['fileimage'], strlen( NV_BASE_SITEURL ) );
+        $img = NV_UPLOADS_DIR . $row['fileimage'];
         $imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
         
         $array[$row['id']] = array(  //

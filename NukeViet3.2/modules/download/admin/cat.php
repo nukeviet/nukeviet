@@ -111,7 +111,7 @@ if ( ! empty( $groups_list ) )
 $array = array();
 $error = "";
 
-//them chu de
+// Add cat
 if ( $nv_Request->isset_request( 'add', 'get' ) )
 {
 	$page_title = $lang_module['addcat_titlebox'];
@@ -120,7 +120,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
     {
         $array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
         $array['title'] = filter_text_input( 'title', 'post', '', 1 );
-        $array['description'] = filter_text_input( 'description', 'post', '' );
+        $array['description'] = filter_text_input( 'description', 'post', '', 1, 255 );
         $array['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
         $array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
         $array['who_download'] = $nv_Request->get_int( 'who_download', 'post', 0 );
@@ -237,8 +237,8 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
     {
         $array['who_view'][] = array(  //
             'key' => $key, //
-'title' => $who, //
-'selected' => $key == $who_view ? " selected=\"selected\"" : ""  //
+			'title' => $who, //
+			'selected' => $key == $who_view ? " selected=\"selected\"" : ""  //
         );
     }
     
@@ -250,8 +250,8 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
         {
             $array['groups_view'][] = array(  //
                 'key' => $key, //
-'title' => $title, //
-'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""  //
+				'title' => $title, //
+				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""  //
             );
         }
     }
@@ -262,8 +262,8 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
     {
         $array['who_download'][] = array(  //
             'key' => $key, //
-'title' => $who, //
-'selected' => $key == $who_download ? " selected=\"selected\"" : ""  //
+			'title' => $who, //
+			'selected' => $key == $who_download ? " selected=\"selected\"" : ""  //
         );
     }
     
@@ -275,8 +275,8 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
         {
             $array['groups_download'][] = array(  //
                 'key' => $key, //
-'title' => $title, //
-'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : ""  //
+				'title' => $title, //
+				'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : ""  //
             );
         }
     }
@@ -340,7 +340,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
     exit();
 }
 
-//Sua chu de
+// Edit cat
 if ( $nv_Request->isset_request( 'edit', 'get' ) )
 {
     $page_title = $lang_module['editcat_cat'];
@@ -499,8 +499,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
     {
         $array['who_view'][] = array(  //
             'key' => $key, //
-'title' => $who, //
-'selected' => $key == $who_view ? " selected=\"selected\"" : ""  //
+			'title' => $who, //
+			'selected' => $key == $who_view ? " selected=\"selected\"" : ""  //
         );
     }
     
@@ -512,8 +512,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         {
             $array['groups_view'][] = array(  //
                 'key' => $key, //
-'title' => $title, //
-'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""  //
+				'title' => $title, //
+				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""  //
             );
         }
     }
@@ -524,8 +524,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
     {
         $array['who_download'][] = array(  //
             'key' => $key, //
-'title' => $who, //
-'selected' => $key == $who_download ? " selected=\"selected\"" : ""  //
+			'title' => $who, //
+			'selected' => $key == $who_download ? " selected=\"selected\"" : ""  //
         );
     }
     
@@ -537,8 +537,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         {
             $array['groups_download'][] = array(  //
                 'key' => $key, //
-'title' => $title, //
-'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : ""  //
+				'title' => $title, //
+				'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : ""  //
             );
         }
     }
@@ -602,7 +602,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
     exit();
 }
 
-//Xoa chu de
+// Delete cat
 if ( $nv_Request->isset_request( 'del', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
@@ -630,7 +630,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     die( "OK" );
 }
 
-//Chinh thu tu chu de
+// Change weight cat
 if ( $nv_Request->isset_request( 'changeweight', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
@@ -664,7 +664,7 @@ if ( $nv_Request->isset_request( 'changeweight', 'post' ) )
     die( "OK" );
 }
 
-//Kich hoat - dinh chi
+// Active - Deactive
 if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
@@ -689,7 +689,7 @@ if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
     die( "OK" );
 }
 
-//Danh sach chu de
+// List cat
 $page_title = $lang_module['download_catmanager'];
 
 $pid = $nv_Request->get_int( 'pid', 'get', 0 );
@@ -752,13 +752,13 @@ while ( $row = $db->sql_fetchrow( $result ) )
     
     $list[$row['id']] = array(  //
         'id' => ( int )$row['id'], //
-'title' => $row['title'], //
-'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['id'], //
-'numsub' => $numsub, //
-'parentid' => $parentid, //
-'weight' => $weight, //
-'status' => $row['status'] ? " checked=\"checked\"" : "", //
-'class' => $class  //
+		'title' => $row['title'], //
+		'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['id'], //
+		'numsub' => $numsub, //
+		'parentid' => $parentid, //
+		'weight' => $weight, //
+		'status' => $row['status'] ? " checked=\"checked\"" : "", //
+		'class' => $class  //
     );
     
     $a ++;
