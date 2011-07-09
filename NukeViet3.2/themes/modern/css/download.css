@@ -155,10 +155,16 @@ ul.spec li {
 	width:36%;
 }
 .upload-form  dl dd {
+	width:60%;
 	margin-left:1.5em;
 }
 .upload-form .input {
 	width:300px;
+}
+.upload-form .error {
+	display: block;
+	font-size: 11px;
+	color: #FF0000;
 }
 .bgray {
 	background:#f8f8f8;
