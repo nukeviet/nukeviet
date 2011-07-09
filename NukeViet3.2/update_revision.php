@@ -158,7 +158,51 @@ function nv_func_update_data ( )
         
         $db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` CHANGE `admin_file` `admin_file` VARCHAR( 255 ) NOT NULL DEFAULT '0'" );
     }
-    
+	
+    if ( $global_config['revision'] < 1200 )
+    {
+        $sql = "SELECT `title` FROM `" . NV_MODULES_TABLE . "` WHERE `module_file`='download'";
+        $resultq = $db->sql_query( $sql );
+        while ( list( $module_update ) = $db->sql_fetchrow( $resultq ) )
+        {
+			$array_table = array( "", "_tmp" );
+			foreach( $array_table as $table )
+			{
+				$sql = "SELECT `id`, `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_update . $table . "`";
+				$result = $db->sql_query( $sql );
+				while ( list( $id, $fileupload, $fileimage ) = $db->sql_fetchrow( $result ) )
+				{
+					if( ! empty( $fileimage ) )
+					{
+						if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $fileimage ) )
+						{
+							$fileimage = substr ( $fileimage, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
+							
+							$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_update . $table . "` SET `fileimage`=" . $db->dbescape( $fileimage ) . " WHERE `id`=" . $id );
+						}
+					}
+					
+					if( ! empty( $fileupload ) )
+					{
+						$fileupload = explode( "[NV]", $fileupload );
+						$array_fileupload = array();
+						foreach( $fileupload as $file )
+						{
+							if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $file ) )
+							{
+								$file = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
+								$array_fileupload[] = $file;
+							}
+						}
+							
+						$fileupload = implode( "[NV]", $array_fileupload );
+						$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_update . $table . "` SET `fileupload`=" . $db->dbescape( $fileupload ) . " WHERE `id`=" . $id );
+					}
+				}
+			}
+        }
+	}
+   
     // End date data
     if ( empty( $error_contents ) )
     {
