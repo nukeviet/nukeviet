@@ -155,7 +155,7 @@ if ( $step == 1 )
 				        		 	$("input[name=install_content_overwrite]").click(function(){
 				        		 		$("#message").show();
 								 		$("#step1").html("");
-								 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '",function(){
+								 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '",function(){
 											$("#message").hide();
 											});
 									});
@@ -251,7 +251,7 @@ elseif ( $step == 2 and md5( $step . $global_config['sitekey'] . session_id() ) 
 				        		 	$("input[name=install_content_overwrite]").click(function(){
 				        		 		$("#message_31").show();
 								 		$("#step_31").html("");
-								 		$("#step_31").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '",function(){
+								 		$("#step_31").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '",function(){
 											$("#message_31").hide();
 											});
 									});
@@ -305,7 +305,7 @@ elseif ( $step == 3 and file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/up
         		 	$("input[name=install_content_overwrite]").click(function(){
         		 		$("#message_31").show();
 				 		$("#step_31").html("");
-				 		$("#step_31").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=' . $op . '&step=' . $step . '&checkss=' . md5( $step . $global_config['sitekey'] . session_id() ) . '",function(){
+				 		$("#step_31").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $step . '&checkss=' . md5( $step . $global_config['sitekey'] . session_id() ) . '",function(){
 							$("#message_31").hide();
 							});
 					});
@@ -357,7 +357,7 @@ elseif ( $step == 3 and file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/up
         		 		if(confirm("' . $lang_module['autoupdate_confirm'] . '")){
 	        		 		$("#message_32").show();
 					 		$("#step_32").html("");
-					 		$("#step_32").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '",function(){
+					 		$("#step_32").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&step=' . $nextstep . '&checkss=' . md5( $nextstep . $global_config['sitekey'] . session_id() ) . '",function(){
 								$("#message_32").hide();
 								});
         					}

@@ -356,8 +356,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 		'link' => $row['link'],  //
 		'weight' => $row['weight'],  //
 		'title' => $row['title'],  //
-		'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid']."&amp;parentid=" . $row['id'],  //
-		'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id'],  //
+		'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid']."&amp;parentid=" . $row['id'],  //
+		'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id'],  //
 		'name_block' => $arr_menu[$row['mid']]['title']  //
 	);
 
@@ -369,7 +369,7 @@ if( $post['parentid'] != 0 )
 	$sql = "SELECT `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $post['parentid'];
 	$result = $db->sql_query( $sql );
 	list( $parentid )= $db->sql_fetchrow( $result );
-	$link_title = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=0";
+	$link_title = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=0";
 }
 
 $xtpl = new XTemplate( "add_menu.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );

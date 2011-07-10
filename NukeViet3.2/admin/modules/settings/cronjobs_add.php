@@ -62,7 +62,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
                 $db->sql_query( $sql );
             
             }
-           Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=cronjobs" );
+           Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cronjobs" );
            die();
         }
     }

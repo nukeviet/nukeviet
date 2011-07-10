@@ -13,6 +13,6 @@ foreach ( $id as $value ) {
 	$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE id=" . $value . "";
 	$db->sql_query ( $query );
 }
-Header ( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=brokenlink" );
+Header ( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=brokenlink" );
 exit();
 ?>

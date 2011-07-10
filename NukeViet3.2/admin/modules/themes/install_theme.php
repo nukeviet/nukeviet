@@ -71,7 +71,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
 				 	$("input[name=checkfile]").click(function(){
 				 		$("#message").show();
 				 		$("#step1").html("");
-				 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check",function(){
+				 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=install_check",function(){
 							$("#message").hide();
 						});
 				 	});

@@ -42,7 +42,7 @@ if ( file_exists( $filename ) )
         		 		if(confirm("' . $lang_module['autoinstall_theme_error_warning_overwrite'] . '")){
 	        		 		$("#message").show();
 					 		$("#step1").html("");
-					 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=' . $op . '&overwrite=' . md5( $filename . $global_config['sitekey'] . session_id() ) . '",function(){
+					 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&overwrite=' . md5( $filename . $global_config['sitekey'] . session_id() ) . '",function(){
 								$("#message").hide();
 								});
         					}
@@ -178,7 +178,7 @@ if ( file_exists( $filename ) )
                     nv_deletefile( $filename );
                     nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
                     $theme = substr( $ziplistContent[0]['filename'], 0, - 1 );
-                    $nv_redirect = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=setuplayout&selectthemes=' . $theme;
+                    $nv_redirect = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setuplayout&selectthemes=' . $theme;
                     echo "<br /><b>" . $lang_module['autoinstall_theme_unzip_success'] . "</b><br />";
                     echo "<br /><br /><center><a href=\"" . $nv_redirect . "\">" . $lang_module['autoinstall_module_unzip_setuppage'] . "</a></center>";
                     echo '<script type="text/javascript">
@@ -209,7 +209,7 @@ if ( file_exists( $filename ) )
 				 $("input[name=checkfile]").click(function(){
 			 		$("#message").show();
 			 		$("#step1").html("");
-			 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=install_check",function(){
+			 		$("#step1").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=install_check",function(){
 						$("#message").hide();
 					});
 				});

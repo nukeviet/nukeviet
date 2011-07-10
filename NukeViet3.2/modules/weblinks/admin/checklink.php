@@ -22,7 +22,7 @@ if ($nv_Request->isset_request('ok','cookie')) {
 	$page_title = $lang_module ['weblink_checkalivelink'];
 	
 	$numcat = $db->sql_numrows ( $db->sql_query ( "SELECT id FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` " ) );
-	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=checklink";
+	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=checklink";
 	$all_page = ($numcat > 1) ? $numcat : 1;
 	$per_page = 5;
 	$page = $nv_Request->get_int ( 'page', 'get', 0 );
@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('ok','cookie')) {
 		$contents .= "<br /><p align=\"center\">" . $generate_page . "</p>\n";
 } else {
 	$contents .= $lang_module ['weblink_check_notice'] . '
-<form name="confirm" action="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&op=checklink" method="post">
+<form name="confirm" action="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=checklink" method="post">
 <input type="hidden" name="ok" value="1">
 <input type="submit" value="' . $lang_module ['weblink_check_confirm'] . '" name="submit">
 </form>

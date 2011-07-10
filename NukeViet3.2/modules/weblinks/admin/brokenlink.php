@@ -20,7 +20,7 @@ $sqlcat = "SELECT a.url,a.title,b.type,a.id FROM `" . NV_PREFIXLANG . "_" . $mod
 $resultcat = $db->sql_query( $sqlcat );
 if ( $numcat > 0 )
 {
-    $contents .= "<form name='delbroken' method='post' action='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=delbroken'><table class=\"tab1\">\n";
+    $contents .= "<form name='delbroken' method='post' action='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delbroken'><table class=\"tab1\">\n";
     $contents .= "<caption>" . $lang_module['weblink_link_recent'] . "</caption>\n";
     $contents .= "<thead>\n";
     $contents .= "<tr>\n";

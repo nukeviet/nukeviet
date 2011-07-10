@@ -13,7 +13,7 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if ( empty( $id ) )
 {
-    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=cronjobs" );
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cronjobs" );
     die();
 }
 
@@ -22,7 +22,7 @@ $result = $db->sql_query( $query );
 $numrows = $db->sql_numrows( $result );
 if ( empty( $numrows ) )
 {
-    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=cronjobs" );
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cronjobs" );
     die();
 }
 
@@ -71,7 +71,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
         $sql = "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `start_time`=" . $start_time . ", `interval`=" . $interval . ", 
 			`run_file`=" . $db->dbescape( $run_file ) . ", `run_func`=" . $db->dbescape( $run_func ) . ", `params`=" . $db->dbescape( $params ) . ", `del`=" . $del . ", `" . NV_LANG_INTERFACE . "_cron_name`=" . $db->dbescape( $cron_name ) . " WHERE `id`=" . $id;
         $db->sql_query( $sql );
-        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=cronjobs" );
+        Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cronjobs" );
         die();
     }
 }

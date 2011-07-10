@@ -21,14 +21,14 @@ if( typeof( nv_name_variable ) == 'undefined' )
 
 if( typeof( nv_fc_variable ) == 'undefined' )
 {
-   var nv_fc_variable = 'fc';
+   var nv_fc_variable = 'op';
 }
 
 // -----------------------
 
 if( typeof( nv_lang_variable ) == 'undefined' )
 {
-   var nv_lang_variable = 'lang';
+   var nv_lang_variable = 'language';
 }
 
 // -----------------------

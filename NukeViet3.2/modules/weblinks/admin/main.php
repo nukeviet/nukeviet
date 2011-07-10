@@ -22,7 +22,7 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $sqlcat = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` ORDER BY id DESC LIMIT $page,$per_page";
 $resultcat = $db->sql_query( $sqlcat );
 
-$contents .= "<form name=\"listlink\" method=\"post\" action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&op=multidel\"><table class=\"tab1\">\n";
+$contents .= "<form name=\"listlink\" method=\"post\" action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=multidel\"><table class=\"tab1\">\n";
 $contents .= "<caption>" . $lang_module['weblink_link_recent'] . "</caption>\n";
 $contents .= "<thead>\n";
 $contents .= "<tr>\n";

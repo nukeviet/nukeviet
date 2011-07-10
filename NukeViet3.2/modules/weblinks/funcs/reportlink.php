@@ -21,7 +21,7 @@ $result = $db->sql_query( $sql );
 $row = $db->sql_fetchrow( $result );
 unset( $sql, $result );
 $row['error'] = "";
-$row['action'] = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;op=reportlink-" . $row['alias'] . "-" . $id . "";
+$row['action'] = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=reportlink-" . $row['alias'] . "-" . $id . "";
 $row['id'] = $id;
 if ( $id )
 {

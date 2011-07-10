@@ -13,7 +13,7 @@ function nv_link1(alias, module)
 	{
 		$( 'input#module' ).val(module);
 		$( 'input#op' ).val(new_status);
-		$( 'input#link' ).val(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + module + "&op=" + new_status);
+		$( 'input#link' ).val(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + module + "&" . NV_OP_VARIABLE . "=" + new_status);
 	}
 		
 	return;
