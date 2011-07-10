@@ -11,7 +11,7 @@ if ( ! defined( 'NV_AUTOUPDATE' ) ) die( 'Stop!!!' );
 
 function nv_func_update_data ( )
 {
-    global $global_config, $db_config, $db, $error_contents;
+    global $global_config, $db_config, $db, $error_contents, $language_array;
     // Update data
     if ( $global_config['revision'] < 902 )
     {
@@ -159,50 +159,75 @@ function nv_func_update_data ( )
         $db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` CHANGE `admin_file` `admin_file` VARCHAR( 255 ) NOT NULL DEFAULT '0'" );
     }
 	
-    if ( $global_config['revision'] < 1200 )
+    if ( $global_config['revision'] < 1209 )
     {
-        $sql = "SELECT `title` FROM `" . NV_MODULES_TABLE . "` WHERE `module_file`='download'";
-        $resultq = $db->sql_query( $sql );
-        while ( list( $module_update ) = $db->sql_fetchrow( $resultq ) )
-        {
-			$array_table = array( "", "_tmp" );
-			foreach( $array_table as $table )
+		$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%\_modules'" );
+		$num_table = intval( $db->sql_numrows( $result ) );
+		
+		$array_update_lang = array();
+		
+		if ( $num_table > 0 )
+		{
+			while ( $item = $db->sql_fetch_assoc( $result ) )
 			{
-				$sql = "SELECT `id`, `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_update . $table . "`";
-				$result = $db->sql_query( $sql );
-				while ( list( $id, $fileupload, $fileimage ) = $db->sql_fetchrow( $result ) )
+				$item['Name'] = explode( "_", $item['Name'] );
+				
+				if( isset( $item['Name'][1] ) )
 				{
-					if( ! empty( $fileimage ) )
+					if( in_array( $item['Name'][1], array_keys( $language_array ) ) )
 					{
-						if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $fileimage ) )
-						{
-							$fileimage = substr ( $fileimage, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
-							
-							$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_update . $table . "` SET `fileimage`=" . $db->dbescape( $fileimage ) . " WHERE `id`=" . $id );
-						}
-					}
-					
-					if( ! empty( $fileupload ) )
-					{
-						$fileupload = explode( "[NV]", $fileupload );
-						$array_fileupload = array();
-						foreach( $fileupload as $file )
-						{
-							if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $file ) )
-							{
-								$file = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
-								$array_fileupload[] = $file;
-							}
-						}
-							
-						$fileupload = implode( "[NV]", $array_fileupload );
-						$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_update . $table . "` SET `fileupload`=" . $db->dbescape( $fileupload ) . " WHERE `id`=" . $id );
+						$array_update_lang[] = $item['Name'][1];
 					}
 				}
 			}
-        }
+		}
+		
+		foreach( $array_update_lang as $langupdate )
+		{
+			$sql = "SELECT `title` FROM `" . $db_config['prefix'] . "_" . $langupdate . "_modules` WHERE `module_file`='download'";
+			$resultq = $db->sql_query( $sql );
+			
+			while ( list( $module_update ) = $db->sql_fetchrow( $resultq ) )
+			{
+				$array_table = array( "", "_tmp" );
+				foreach( $array_table as $table )
+				{
+					$sql = "SELECT `id`, `fileupload`, `fileimage` FROM `" . $db_config['prefix'] . "_" . $langupdate . "_" . $module_update . $table . "`";
+					$result = $db->sql_query( $sql );
+					while ( list( $id, $fileupload, $fileimage ) = $db->sql_fetchrow( $result ) )
+					{
+						if( ! empty( $fileimage ) )
+						{
+							if ( preg_match( "/^" . str_replace( "/", "\/", NV_BASE_SITEURL . NV_UPLOADS_DIR ) . "\//", $fileimage ) )
+							{
+								$fileimage = substr ( $fileimage, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
+								
+								$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $langupdate . "_" . $module_update . $table . "` SET `fileimage`=" . $db->dbescape( $fileimage ) . " WHERE `id`=" . $id );
+							}
+						}
+						
+						if( ! empty( $fileupload ) )
+						{
+							$fileupload = explode( "[NV]", $fileupload );
+							$array_fileupload = array();
+							foreach( $fileupload as $file )
+							{
+								if ( preg_match( "/^" . str_replace( "/", "\/", NV_BASE_SITEURL . NV_UPLOADS_DIR ) . "\//", $file ) )
+								{
+									$file = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
+									$array_fileupload[] = $file;
+								}
+							}
+								
+							$fileupload = implode( "[NV]", $array_fileupload );
+							$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $langupdate . "_" . $module_update . $table . "` SET `fileupload`=" . $db->dbescape( $fileupload ) . " WHERE `id`=" . $id );
+						}
+					}
+				}
+			}
+		}
 	}
-   
+	
     // End date data
     if ( empty( $error_contents ) )
     {
