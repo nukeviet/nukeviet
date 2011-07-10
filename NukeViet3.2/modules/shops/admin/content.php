@@ -667,6 +667,11 @@ if ( count( $array_block_cat_module ) > 0 )
 /////// List pro_unit ////////
 $sql = "SELECT id," . NV_LANG_DATA . "_title FROM `" . $db_config['prefix'] . "_" . $module_data . "_units`";
 $result_unit = $db->sql_query( $sql );
+if ( $db->sql_numrows( $result_unit ) == 0 )
+{
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=prounit" );
+    die();
+}
 while ( list( $unitid_i, $title_i ) = $db->sql_fetchrow( $result_unit ) )
 {
     $xtpl->assign( 'utitle', $title_i );
