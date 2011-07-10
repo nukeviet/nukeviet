@@ -1,14 +1,18 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+ 
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
+
 $title = $note = $module_file = "";
 $page_title = $lang_module['autoinstall_method_packet'];
-if ( $nv_Request->isset_request( 'op', 'post' ) )
+
+if ( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 {
     $themename = $nv_Request->get_string( 'themename', 'post' );
     $themefolder = array();
@@ -24,6 +28,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
     
     $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . md5( nv_genpass( 10 ) . session_id() ) . '.zip';
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
+	
     $zip = new PclZip( $file_src );
     $zip->create( $themefolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
     $filesize = @filesize( $file_src );

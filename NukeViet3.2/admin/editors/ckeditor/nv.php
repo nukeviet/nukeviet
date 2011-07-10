@@ -70,20 +70,20 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
     // Change default textarea attributes
     $CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
     
-    $CKEditor->config['filebrowserBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&path=" . $path . "&currentpath=" . $currentpath;
-    $CKEditor->config['filebrowserImageBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&type=image&path=" . $path . "&currentpath=" . $currentpath;
-    $CKEditor->config['filebrowserFlashBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&popup=1&type=flash&path=" . $path . "&currentpath=" . $currentpath;
+    $CKEditor->config['filebrowserBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&path=" . $path . "&currentpath=" . $currentpath;
+    $CKEditor->config['filebrowserImageBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&type=image&path=" . $path . "&currentpath=" . $currentpath;
+    $CKEditor->config['filebrowserFlashBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&type=flash&path=" . $path . "&currentpath=" . $currentpath;
     if ( ! empty( $admin_info['allow_files_type'] ) )
     {
-        $CKEditor->config['filebrowserUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&currentpath=" . $currentpath;
+        $CKEditor->config['filebrowserUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=quickupload&currentpath=" . $currentpath;
     }
     if ( in_array( 'images', $admin_info['allow_files_type'] ) )
     {
-        $CKEditor->config['filebrowserImageUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&type=image&currentpath=" . $currentpath;
+        $CKEditor->config['filebrowserImageUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=quickupload&type=image&currentpath=" . $currentpath;
     }
     if ( in_array( 'flash', $admin_info['allow_files_type'] ) )
     {
-        $CKEditor->config['filebrowserFlashUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?nv=upload&" . NV_OP_VARIABLE . "=quickupload&type=flash&currentpath=" . $currentpath;
+        $CKEditor->config['filebrowserFlashUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=quickupload&type=flash&currentpath=" . $currentpath;
     }
     
     $val = nv_unhtmlspecialchars( $val );

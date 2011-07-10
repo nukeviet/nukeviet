@@ -6,7 +6,9 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-1-2010 22:5
  */
+ 
 if ( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
+
 $page_title = $lang_global['mod_siteinfo'];
 
 /**

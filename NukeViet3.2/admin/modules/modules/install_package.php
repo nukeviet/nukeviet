@@ -13,7 +13,7 @@ $title = $note = $module_file = "";
 
 $page_title = $lang_module['autoinstall_method_packet'];
 
-if ( $nv_Request->isset_request( 'op', 'post' ) )
+if ( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 {
     require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
     $modulename = $nv_Request->get_string( 'modulename', 'post' );
@@ -79,7 +79,7 @@ if ( $nv_Request->isset_request( 'op', 'post' ) )
 }
 else
 {
-    $op = $nv_Request->get_string( 'op', 'get' );
+    $op = $nv_Request->get_string( NV_OP_VARIABLE, 'get' );
     $contents .= "<form name='install_module' enctype='multipart/form-data' action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" method=\"post\">";
     $contents .= "<table summary=\"\" class=\"tab1\">\n";
     $contents .= "<tbody class=\"second\">";
