@@ -46,7 +46,7 @@ while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i
 
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 20;
-$sql = "SELECT SQL_CALC_FOUND_ROWS a.cid, a.content, a.post_email, a.status, b.id, b.title, b.listcatid, b.alias, c.userid, c.email FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_rows` b ON (a.id=b.id) LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` as c ON (a.userid =c.userid)  LIMIT " . $page . "," . $per_page . "";
+$sql = "SELECT SQL_CALC_FOUND_ROWS a.cid, a.content, a.post_email, a.status, b.id, b.title, b.listcatid, b.alias, c.userid, c.email FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_rows` b ON (a.id=b.id) LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` as c ON (a.userid =c.userid) ORDER BY a.cid DESC LIMIT " . $page . "," . $per_page . "";
 $result = $db->sql_query( $sql );
 
 $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
