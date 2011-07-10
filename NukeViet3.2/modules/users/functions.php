@@ -10,6 +10,7 @@
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_USER', true );
+$lang_module['in_groups'] = $lang_global['in_groups'];
 
 function validUserLog( $array_user, $remember, $opid )
 {

@@ -58,6 +58,7 @@ $lang_global['admin_page'] = "Quản lý site";
 $lang_global['admin_module_sector'] = "Quản lý module";
 $lang_global['adminlogin'] = "Đăng nhập quản trị hệ thống";
 $lang_global['module_for_admin'] = "Khu vực chỉ dành cho <i>Người quản trị</i>";
+$lang_global['in_groups'] = "Nhóm thành viên";
 $lang_global['username'] = "Tài khoản";
 $lang_global['password'] = "Mật khẩu";
 $lang_global['password2'] = "Lặp lại mật khẩu";

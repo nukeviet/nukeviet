@@ -199,4 +199,9 @@ $lang_module['error_update_users_info'] = "Xin lỗi:hệ thống không cập n
 $lang_module['account_active_log'] = "Kích hoạt tài khoản";
 $lang_module['openid_add'] = "Thêm OpenID mới";
 
+$lang_module['no_in_group'] = "Bạn chưa đăng ký nhóm nào";
+$lang_module['no_act'] = "Chức năng này hiện tại chưa được kích hoạt";
+$lang_module['no_set'] = "Hiện tại chưa thiết lập nhóm công cộng";
+$lang_module['re_remove'] = "Đăng ký hoặc bỏ nhóm thành công";
+
 ?>
