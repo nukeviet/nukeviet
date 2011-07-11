@@ -75,6 +75,8 @@ $lang_module['config'] = "Module configuration";
 $lang_module['allow_reg'] = "Allow register";
 $lang_module['allow_login'] = "Allow login";
 $lang_module['allow_change_email'] = "Allow change email";
+$lang_module['allow_public'] = "Allow registered public groups";
+$lang_module['allow_question'] = "Answering the question if you forget your  password  secret";
 $lang_module['type_reg'] = "Register type";
 $lang_module['active_not_allow'] = "Not grant to register";
 $lang_module['active_admin_check'] = "Admin active";
@@ -148,7 +150,7 @@ $lang_module['error_title_exists'] = "Group name &ldquo;%s&rdquo; already exist"
 $lang_module['users_in_group_caption'] = "Member list in group &ldquo;%s&rdquo; (%d group)";
 $lang_module['error_group_not_found'] = "Error: Can't find group";
 $lang_module['error_users_not_found'] = "Group has not member";
-$lang_module['error_not_groups'] = "There are no groups to be established. Click here <a href=\"%s\">vào đây</a> to create a group";
+$lang_module['error_not_groups'] = "There are no groups to be established. Click here <a href=\"%s\">enter</a> to create a group";
 $lang_module['add_users'] = "Member  &ldquo;%s&rdquo;";
 $lang_module['form_search_label0'] = "Search members by";
 $lang_module['form_search_label1'] = "Keyword (Null = all member)";

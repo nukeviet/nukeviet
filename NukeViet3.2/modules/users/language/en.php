@@ -199,4 +199,9 @@ $lang_module['error_update_users_info'] = "Error: System cannot update your user
 $lang_module['account_active_log'] = "Activate account";
 $lang_module['openid_add'] = "Add a new OpenID";
 
+$lang_module['in_group'] = "Register Group";
+$lang_module['no_in_group'] = "You have not registered groups";
+$lang_module['no_act'] = "This function is currently not  active";
+$lang_module['no_set'] = "There are currently no established  public  groups";
+$lang_module['re_remove'] = "Register or quit the group successfully";
 ?>
