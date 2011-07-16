@@ -166,4 +166,33 @@ $lang_module['exclude_user'] = "Loại thành viên %1\$s khỏi nhóm %2\$s";
 $lang_module['siteinfo_user'] = "Số thành viên";
 $lang_module['siteinfo_waiting'] = "Số thành viên đợi kích hoạt";
 
+$lang_module['pagetitle'] = "Lấy ID thành viên";
+$lang_module['pagetitle1'] = "Tìm kiếm ID thành viên";
+$lang_module['search'] = "Tìm thành viên";
+$lang_module['reset'] = "Làm lại";
+$lang_module['waiting'] = "Nhập thông tin sau đó ấn nút tìm thành viên để thực hiện";
+$lang_module['from'] = "Từ";
+$lang_module['to'] = "đến";
+$lang_module['select'] = "Chọn";
+$lang_module['noresult'] = "Không có kết quả nào phù hợp với yêu cầu của bạn";
+
+$lang_module['enter_key'] = "Hãy nhập thông tin để tìm một thành viên";
+
+$lang_module['username'] = "Tên đăng nhập";
+$lang_module['full_name'] = "Họ và tên";
+$lang_module['email'] = "Email";
+$lang_module['gender'] = "Giới tính";
+$lang_module['regdate'] = "Ngày đăng kí";
+$lang_module['yim'] = "Tài khoản yahoo";
+$lang_module['last_login'] = "Lần đăng nhập cuối";
+$lang_module['last_idlogin'] = "IP đăng nhập cuối";
+$lang_module['web'] = "Website";
+$lang_module['address'] = "Địa chỉ";
+$lang_module['phone'] = "Điện thoại";
+$lang_module['mobile'] = "Di động";
+
+$lang_module['select_gender'] = "Chọn giới tính";
+$lang_module['select_gender_male'] = "Nam";
+$lang_module['select_gender_female'] = "Nữ";
+
 ?>

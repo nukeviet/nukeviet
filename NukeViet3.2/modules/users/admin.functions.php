@@ -11,7 +11,7 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 
 $allow_func = array( 
     'main', 'del', 'delconfirm', 'setactive', 'user_add', 'edit', 'user_waiting', 'delawaitinglist', 'question', 'siteterms', 'config', //
-'groups', 'groups_add', 'groups_edit', 'groups_del', 'groups_act', 'groups_users', 'groups_search_users', 'groups_add_user', 'groups_exclude_user' 
+'groups', 'groups_add', 'groups_edit', 'groups_del', 'groups_act', 'groups_users', 'groups_search_users', 'groups_add_user', 'groups_exclude_user', 'getuserid' 
 );
 define( 'NV_IS_FILE_ADMIN', true );
 $submenu['user_add'] = $lang_module['user_add'];
