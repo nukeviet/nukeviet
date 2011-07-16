@@ -122,10 +122,19 @@ if ( file_exists( $filename ) )
             $error_create_folder = array();
             foreach ( $ziplistContent as $array_file )
             {
-                if ( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/themes/' . $array_file['filename'] ) )
+                $dir_name = "";
+                if ( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $array_file['filename'] ) )
+                {
+                    $dir_name = $array_file['filename'];
+                }
+                elseif ( ! file_exists( NV_ROOTDIR . '/' . dirname( $array_file['filename'] ) ) )
+                {
+                    $dir_name = dirname( $array_file['filename'] );
+                }                
+                if ( ! empty( $dir_name ) )
                 {
                     $cp = "";
-                    $e = explode( "/", $array_file['filename'] );
+                    $e = explode( "/", $dir_name );
                     foreach ( $e as $p )
                     {
                         if ( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/themes/' . $cp . $p ) )

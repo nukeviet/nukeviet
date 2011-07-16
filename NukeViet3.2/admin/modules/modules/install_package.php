@@ -26,13 +26,13 @@ if ( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
     
     //theme folder
     $theme_package = "";
-    if ( is_dir( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $modulename ) )
-    {
-        $theme_package = $global_config['site_theme'];
-    }
-    elseif ( is_dir( NV_ROOTDIR . '/themes/default/modules/' . $modulename ) )
+    if ( is_dir( NV_ROOTDIR . '/themes/default/modules/' . $modulename ) )
     {
         $theme_package = "default";
+    }
+    elseif ( is_dir( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $modulename ) )
+    {
+        $theme_package = $global_config['site_theme'];
     }
     
     if ( ! empty( $theme_package ) )
