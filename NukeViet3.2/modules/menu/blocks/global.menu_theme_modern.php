@@ -167,7 +167,8 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
         {
             if ( ! empty( $catvalue['catid'] ) && empty( $catvalue['parentid'] ) )
             {
-                if ( ( $catvalue['catid'] == $catid ) || ( $array_cat_menu[$catid]['parentid'] == $catvalue['catid'] ) || ( empty( $catid ) && $i == 1 ) )
+				$check_cat = isset( $array_cat_menu[$catid]['parentid'] ) ? $array_cat_menu[$catid]['parentid'] : 0;
+                if ( ( $catvalue['catid'] == $catid ) || ( $check_cat == $catvalue['catid'] ) || ( empty( $catid ) && $i == 1 ) )
                 {
                     $catvalue['current'] = ( $i == 1 ) ? 'class="current first"' : 'class="current"';
                     $i = 0;
