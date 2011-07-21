@@ -13,7 +13,7 @@ $rssarray = array();
 //$rssarray[] = array( 'catid' => 0, 'parentid' => 0, 'title' => '', 'link' =>  '');
 
 
-$sql = "SELECT `id` AS `catid`, `parentid`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $mod_name . "_categories` ORDER BY `weight`";
+$sql = "SELECT `id` AS `catid`, `parentid`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_categories` ORDER BY `weight`";
 $list = nv_db_cache( $sql, '', $mod_name );
 foreach ( $list as $value )
 {
