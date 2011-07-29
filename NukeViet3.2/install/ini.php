@@ -53,7 +53,7 @@ $sys_info['iconv_support'] = ( extension_loaded( 'iconv' ) ) ? 1 : 0;
 $sys_info['curl_support'] = ( extension_loaded( 'curl' ) and function_exists( "curl_init" ) and ! in_array( 'curl_init', $sys_info['disable_functions'] ) ) ? 1 : 0;
 $sys_info['allowed_set_time_limit'] = ( ! $sys_info['safe_mode'] and function_exists( "set_time_limit" ) and ! in_array( 'set_time_limit', $sys_info['disable_functions'] ) ) ? 1 : 0;
 
-$os = strtoupper( ( php_uname( 's' ) != '' ) ? php_uname( 's' ) : PHP_OS );
+$os = strtoupper( ( function_exists( "php_uname" ) and ! in_array( 'php_uname', $sys_info['disable_functions'] ) and php_uname( 's' ) != '' ) ? php_uname( 's' ) : PHP_OS );
 $sys_info['ftp_support'] = ( function_exists( "ftp_connect" ) and ! in_array( 'ftp_connect', $sys_info['disable_functions'] ) and function_exists( "ftp_chmod" ) and ! in_array( 'ftp_chmod', $sys_info['disable_functions'] ) and function_exists( "ftp_mkdir" ) and ! in_array( 'ftp_mkdir', $sys_info['disable_functions'] ) and function_exists( "ftp_chdir" ) and ! in_array( 'ftp_chdir', $sys_info['disable_functions'] ) and function_exists( "ftp_nlist" ) and ! in_array( 'ftp_nlist', $sys_info['disable_functions'] ) ) ? 1 : 0;
 
 //Xac dinh tien ich mo rong lam viec voi string

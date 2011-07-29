@@ -42,6 +42,10 @@ unset( $key_words, $page_title, $mod_title, $editor, $editor_password, $my_head 
 define( 'NV_ROOTDIR', str_replace( '\\', '/', realpath( pathinfo( __file__, PATHINFO_DIRNAME ) . '/../' ) ) );
 
 $sys_info['disable_functions'] = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+if ( extension_loaded( 'suhosin' ) )
+{
+    $sys_info['disable_functions'] = array_merge( $sys_info['disable_functions'], array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+}
 $sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] ) ) ? true : false;
 
 require_once ( realpath( NV_ROOTDIR . "/install/config.php" ) );
