@@ -137,6 +137,7 @@ $lang_module['content_sourceid'] = "Nguồn tin";
 $lang_module['content_copyright'] = "Giữ bản quyền bài viết";
 $lang_module['content_saveok'] = "Đã ghi dữ liệu thành công";
 $lang_module['content_main'] = "Quay lại trang quản lý";
+$lang_module['content_back'] = "Quay lại trang sửa bài viết";
 $lang_module['redircet_title'] = "Thực hiện thành công thao tác";
 $lang_module['content_archive'] = "Lưu trữ sau thời gian hết hạn";
 $lang_module['showhometext'] = "Hiển thị phần Giới thiệu ngắn gọn khi xem bài viết";

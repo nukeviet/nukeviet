@@ -90,13 +90,9 @@ while ( list( $bid_i, $adddefault_i, $title_i ) = $db->sql_fetchrow( $result ) )
 
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $parentid = $nv_Request->get_int( 'parentid', 'get', 0 );
-$array_imgposition = array( 
-    0 => $lang_module['imgposition_0'], 1 => $lang_module['imgposition_1'], 2 => $lang_module['imgposition_2'] 
-);
+$array_imgposition = array( 0 => $lang_module['imgposition_0'], 1 => $lang_module['imgposition_1'], 2 => $lang_module['imgposition_2'] );
 
-$rowcontent = array( 
-    "id" => "", "listcatid" => "" . $catid . "," . $parentid . "", "topicid" => "", "admin_id" => $admin_id, "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "total_rating" => 0, "click_rating" => 0, "keywords" => "" 
-);
+$rowcontent = array( "id" => "", "listcatid" => "" . $catid . "," . $parentid . "", "topicid" => "", "admin_id" => $admin_id, "author" => "", "sourceid" => 0, "addtime" => NV_CURRENTTIME, "edittime" => NV_CURRENTTIME, "status" => 0, "publtime" => NV_CURRENTTIME, "exptime" => 0, "archive" => 1, "title" => "", "alias" => "", "hometext" => "", "homeimgfile" => "", "homeimgalt" => "", "homeimgthumb" => "", "imgposition" => 1, "bodytext" => "", "copyright" => 0, "inhome" => 1, "allowed_comm" => $module_config[$module_name]['setcomm'], "allowed_rating" => 1, "allowed_send" => 1, "allowed_print" => 1, "allowed_save" => 1, "hitstotal" => 0, "hitscm" => 0, "total_rating" => 0, "click_rating" => 0, "keywords" => "" );
 
 $rowcontent['sourcetext'] = "";
 $rowcontent['topictext'] = "";
@@ -154,7 +150,7 @@ if ( $rowcontent['id'] > 0 )
                         {
                             $check_edit ++;
                         }
-                        elseif ( $status == 0 and $post_id == $admin_id )
+                        elseif ( $edit_status == 0 and $rowcontent['admin_id'] == $admin_id )
                         {
                             $check_edit ++;
                         }
@@ -612,6 +608,13 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
             $msg2 = $lang_module['content_main'] . " " . $module_info['custom_title'];
             redriect( $msg1, $msg2, $url );
         }
+    }
+    else
+    {
+        $url = "javascript: history.go(-1)";
+        $msg1 = implode( "<br />", $error );
+        $msg2 = $lang_module['content_back'];
+        redriect( $msg1, $msg2, $url );
     }
 }
 
