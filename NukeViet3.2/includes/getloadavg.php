@@ -17,6 +17,11 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 function get_server_load()
 {
     $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+    if ( extension_loaded( 'suhosin' ) )
+    {
+        $disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+    }
+     
     $os = strtoupper( ( function_exists( 'php_uname' ) and ! in_array( 'php_uname', $disable_functions ) and strtoupper( php_uname( 's' ) ) != '' ) ? php_uname( 's' ) : PHP_OS );
 
     if ( strtolower( substr( $os, 0, 3 ) ) === 'win' )

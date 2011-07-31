@@ -118,7 +118,12 @@ class download
             "max_speed" => $max_speed, //
             "directory" => $directory //
             );
-        $this->disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        if ( extension_loaded( 'suhosin' ) )
+        {
+            $disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+        }
+        $this->disable_functions =$disable_functions;
         $this->magic_path = $magic_path;
     }
 

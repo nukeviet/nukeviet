@@ -158,6 +158,10 @@ class image
         $memoryNeeded = round( ( $this->fileinfo['width'] * $this->fileinfo['height'] * $this->fileinfo['bits'] * $this->fileinfo['channels'] / 8 + $k64 ) * $tweakfactor );
 
         $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        if ( extension_loaded( 'suhosin' ) )
+        {
+            $disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+        }
 
         $memoryHave = ( ( function_exists( 'memory_limit' ) and ! in_array( 'memory_limit', $disable_functions ) ) ) ? @memory_get_usage() : 0;
 

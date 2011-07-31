@@ -99,7 +99,13 @@ class upload
         $this->config['upload_checking_mode'] = UPLOAD_CHECKING_MODE;
         $this->config['magic_path'] = $magic_path;
 
-        $this->disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        if ( extension_loaded( 'suhosin' ) )
+        {
+            $disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+        }
+        $this->disable_functions =$disable_functions;
+        
         $this->disable_classes = ( ini_get( "disable_classes" ) != "" and ini_get( "disable_classes" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_classes" ) ) ) : array();
         $this->safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
 
@@ -820,13 +826,12 @@ class upload
      */
     private function check_url( $is_200 = 0 )
     {
-        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
         $allow_url_fopen = ( ini_get( 'allow_url_fopen' ) == '1' || strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' ) ? 1 : 0;
-        if ( function_exists( "get_headers" ) and ! in_array( 'get_headers', $disable_functions ) and $allow_url_fopen == 1 )
+        if ( function_exists( "get_headers" ) and ! in_array( 'get_headers', $this->disable_functions ) and $allow_url_fopen == 1 )
         {        
         	$res = get_headers( $this->url_info['uri']);
         }
-    	elseif ( function_exists( "curl_init" ) and ! in_array( 'curl_init', $disable_functions ) and function_exists( "curl_exec" ) and ! in_array( 'curl_exec', $disable_functions ) )
+    	elseif ( function_exists( "curl_init" ) and ! in_array( 'curl_init', $this->disable_functions ) and function_exists( "curl_exec" ) and ! in_array( 'curl_exec', $this->disable_functions ) )
         {
             $url_info = @parse_url( $this->url_info['uri'] );
             $port = isset( $url_info['port'] ) ? intval( $url_info['port'] ) : 80;
@@ -874,7 +879,7 @@ class upload
                 $res = explode( "\n", $response );
             }
         }
-        elseif ( function_exists( "fsockopen" ) and ! in_array( 'fsockopen', $disable_functions ) and function_exists( "fgets" ) and ! in_array( 'fgets', $disable_functions ) )
+        elseif ( function_exists( "fsockopen" ) and ! in_array( 'fsockopen', $this->disable_functions ) and function_exists( "fgets" ) and ! in_array( 'fgets', $this->disable_functions ) )
         {
             $res = array();
             $url_info = parse_url( $this->url_info['uri'] );

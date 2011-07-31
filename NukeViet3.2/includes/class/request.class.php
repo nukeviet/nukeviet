@@ -517,6 +517,11 @@ class Request
     {
         $save_path = "";
         $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        if ( extension_loaded( 'suhosin' ) )
+        {
+            $disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+        }
+        
         if ( function_exists( 'session_save_path' ) and ! in_array( 'session_save_path', $disable_functions ) )
         {
             if ( ! empty( $path ) and preg_match( "/^[a-zA-Z]{1}[a-zA-Z0-9_]*$/", $path ) )

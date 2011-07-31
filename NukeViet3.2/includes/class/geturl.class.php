@@ -38,6 +38,8 @@ class UrlGetContents
     private $redirectCount = 0;
 
     public $time_limit = 60;
+    
+    private $disable_functions = array();
 
     /**
      * UrlGetContents::__construct()
@@ -49,14 +51,20 @@ class UrlGetContents
         $this->user_agent = 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] );
 
         $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        if ( extension_loaded( 'suhosin' ) )
+        {
+            $disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+        }
+        $this->disable_functions =$disable_functions;
+        
         $safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
 
-        if ( ! $safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $disable_functions ) )
+        if ( ! $safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $this->disable_functions ) )
         {
             set_time_limit( $this->time_limit );
         }
 
-        if ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) )
+        if ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $this->disable_functions ) )
         {
             ini_set( 'allow_url_fopen', 1 );
             ini_set( 'default_socket_timeout', $this->time_limit );
@@ -68,30 +76,30 @@ class UrlGetContents
             ini_set( 'user_agent', $this->user_agent );
         }
 
-        if ( extension_loaded( 'curl' ) and ( empty( $disable_functions ) or ( ! empty( $disable_functions ) and ! preg_grep( '/^curl\_/', $disable_functions ) ) ) )
+        if ( extension_loaded( 'curl' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! preg_grep( '/^curl\_/', $this->disable_functions ) ) ) )
         {
             $this->allow_methods[] = 'curl';
         }
 
-        if ( function_exists( "fsockopen" ) and ! in_array( 'fsockopen', $disable_functions ) )
+        if ( function_exists( "fsockopen" ) and ! in_array( 'fsockopen', $this->disable_functions ) )
         {
             $this->allow_methods[] = 'fsockopen';
         }
 
         if ( ini_get( 'allow_url_fopen' ) == '1' or strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' )
         {
-            if ( function_exists( "fopen" ) and ! in_array( 'fopen', $disable_functions ) )
+            if ( function_exists( "fopen" ) and ! in_array( 'fopen', $this->disable_functions ) )
             {
                 $this->allow_methods[] = 'fopen';
             }
 
-            if ( function_exists( "file_get_contents" ) and ! in_array( 'file_get_contents', $disable_functions ) )
+            if ( function_exists( "file_get_contents" ) and ! in_array( 'file_get_contents', $this->disable_functions ) )
             {
                 $this->allow_methods[] = 'file_get_contents';
             }
         }
 
-        if ( function_exists( "file" ) and ! in_array( 'file', $disable_functions ) )
+        if ( function_exists( "file" ) and ! in_array( 'file', $this->disable_functions ) )
         {
             $this->allow_methods[] = 'file';
         }
@@ -116,14 +124,13 @@ class UrlGetContents
      */
     private function check_url( $is_200 = 0 )
     {
-        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
         $allow_url_fopen = ( ini_get( 'allow_url_fopen' ) == '1' || strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' ) ? 1 : 0;
         
-        if ( function_exists( "get_headers" ) and ! in_array( 'get_headers', $disable_functions ) and $allow_url_fopen == 1 )
+        if ( function_exists( "get_headers" ) and ! in_array( 'get_headers', $this->disable_functions ) and $allow_url_fopen == 1 )
         {
             $res = get_headers( $this->url_info['uri'] );
         }
-        elseif ( function_exists( "curl_init" ) and ! in_array( 'curl_init', $disable_functions ) and function_exists( "curl_exec" ) and ! in_array( 'curl_exec', $disable_functions ) )
+        elseif ( function_exists( "curl_init" ) and ! in_array( 'curl_init', $this->disable_functions ) and function_exists( "curl_exec" ) and ! in_array( 'curl_exec', $this->disable_functions ) )
         {
             $url_info = @parse_url( $this->url_info['uri'] );
             $port = isset( $url_info['port'] ) ? intval( $url_info['port'] ) : 80;
@@ -166,7 +173,7 @@ class UrlGetContents
                 $res = explode( "\n", $response );
             }
         }
-        elseif ( function_exists( "fsockopen" ) and ! in_array( 'fsockopen', $disable_functions ) and function_exists( "fgets" ) and ! in_array( 'fgets', $disable_functions ) )
+        elseif ( function_exists( "fsockopen" ) and ! in_array( 'fsockopen', $this->disable_functions ) and function_exists( "fgets" ) and ! in_array( 'fgets', $this->disable_functions ) )
         {
             $res = array();
             $url_info = parse_url( $this->url_info['uri'] );

@@ -49,6 +49,11 @@ class CJzip
             if ( strtolower( ini_get( 'zlib.output_compression' ) ) == "on" or ini_get( 'zlib.output_compression' ) == 1 )
             {
                 $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+                if ( extension_loaded( 'suhosin' ) )
+                {
+                    $disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+                }
+                
                 $ini_set_support = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) ) ? true : false;
                 if ( $ini_set_support )
                 {
