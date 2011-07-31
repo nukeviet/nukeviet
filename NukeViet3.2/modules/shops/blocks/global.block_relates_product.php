@@ -66,7 +66,7 @@ if ( ! function_exists( 'nv_relates_product' ) )
             }
             if ( file_exists( NV_ROOTDIR . "/themes/" . $block_theme . "/css/" . $mod_file . ".css" ) )
             {
-                $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . '/themes/' . $block_theme . '/css/' . $mod_file . '.css' . '" type="text/css" />';
+                $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/css/' . $mod_file . '.css' . '" type="text/css" />';
             }
         }
         $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=";
