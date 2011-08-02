@@ -39,12 +39,25 @@ $orders = array(
 $orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', 'DESC' );
 if ( $ordertype != "ASC" ) $ordertype = "DESC";
+$method  = ( ! empty( $method ) and isset( $methods[$method] ) ) ? $method : '';
 
-if ( ! empty( $method ) and isset( $methods[$method] ) and ! empty( $methodvalue ) )
+if ( ! empty( $methodvalue ) )
 {
-    $sql .= " WHERE `" . $method . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
+    if ( empty( $method ) )
+    {
+        $key_methods = array_keys($methods);
+        $array_like = array();
+        foreach ($key_methods as $method_i) {
+            $array_like[] = "`" . $method_i . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
+        }
+        $sql .= " WHERE ".implode(" OR ", $array_like);        
+    }
+    else
+    {
+        $sql .= " WHERE `" . $method . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
+        $methods[$method]['selected'] = " selected=\"selected\"";
+    }
     $base_url .= "&amp;method=" . urlencode( $method ) . "&amp;value=" . urlencode( $methodvalue );
-    $methods[$method]['selected'] = " selected=\"selected\"";
     $table_caption = $lang_module['search_page_title'];
 }
 
