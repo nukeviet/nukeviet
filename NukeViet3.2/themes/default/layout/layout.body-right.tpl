@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 {FILE "header.tpl"}
-<div class="contentwarpper">
+<div class="contentwrapper">
 	[HEADER]
     <div class="span-19">
          <!-- BEGIN: mod_title -->
