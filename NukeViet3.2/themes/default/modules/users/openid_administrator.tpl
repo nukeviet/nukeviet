@@ -8,7 +8,7 @@
                 <strong>&middot;</strong> <a href="{URL_HREF}editinfo">{LANG.editinfo}</a> 
                 <strong>&middot;</strong> <a href="{URL_HREF}changepass">{LANG.changepass_title}</a>
                 <strong>&middot;</strong> <a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a>
-                <!-- BEGIN: regroups --><strong>&middot;</strong><a href="{URL_HREF}regroups">{LANG.in_group}<!-- END: regroups -->
+                <!-- BEGIN: regroups --><strong>&middot;</strong><a href="{URL_HREF}regroups">{LANG.in_group}</a><!-- END: regroups -->
                 <!-- BEGIN: logout --><strong>&middot;</strong> <a href="{URL_HREF}logout">{LANG.logout_title}</a><!-- END: logout -->
             </span>
         </div>
