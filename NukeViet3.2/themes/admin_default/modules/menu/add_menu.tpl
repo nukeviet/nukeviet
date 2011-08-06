@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
+<strong><a href="{link_menu}">{LANG.menu}</a></strong>
 <!-- BEGIN: title -->
-<strong><a href="{link_title}">{LANG.back}</strong></a>
+>> <strong><a href="{link_title}">{LANG.back}</strong></a>
 <!-- END: title -->
 <!-- BEGIN: table -->
 <table summary="" class="tab1">

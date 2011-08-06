@@ -12,8 +12,8 @@ var ddlevelsmenu={
 enableshim: true, //enable IFRAME shim to prevent drop down menus from being hidden below SELECT or FLASH elements? (tip: disable if not in use, for efficiency)
 
 arrowpointers:{
-	downarrow: [ nv_siteroot +'/themes/default/images/ddsmoothmenu/mtop_down.gif', 11,7], //[path_to_down_arrow, arrowwidth, arrowheight]
-	rightarrow: [nv_siteroot +'/themes/default/images/ddsmoothmenu/mtop_right.gif', 8,7], //[path_to_right_arrow, arrowwidth, arrowheight]
+	downarrow: [ nv_siteroot +'themes/default/images/ddsmoothmenu/mtop_down.gif', 11,7], //[path_to_down_arrow, arrowwidth, arrowheight]
+	rightarrow: [nv_siteroot +'themes/default/images/ddsmoothmenu/mtop_right.gif', 8,7], //[path_to_right_arrow, arrowwidth, arrowheight]
 	showarrow: {toplevel: true, sublevel: true} //Show arrow images on top level items and sub level items, respectively?
 },
 hideinterval: 200, //delay in milliseconds before entire menu disappears onmouseout.

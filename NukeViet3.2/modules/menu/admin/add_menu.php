@@ -36,8 +36,8 @@ if( $post['id'] != 0 )
 	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid` = " . $post['mid'] . " AND `id`=" . $post['id'] . " ORDER BY `id`";
 	$result = $db->sql_query( $sql );
 	$post= $db->sql_fetchrow( $result );
-	
 	$post['groups_view'] = explode( ",", $post['groups_view'] );
+	$post['link'] = nv_htmlspecialchars ($post['link']);
 }
 
 if( $post['mid'] != 0 )
@@ -607,6 +607,8 @@ if( $link_title != "" )
 	$xtpl->assign( 'link_title', $link_title );
 	$xtpl->parse( 'main.title' );
 }
+$link_menu = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name ;
+$xtpl->assign( 'link_menu', $link_menu );
 
 $xtpl->assign( 'DATA', $post );
 
