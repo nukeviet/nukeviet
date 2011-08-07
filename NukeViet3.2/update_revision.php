@@ -227,7 +227,22 @@ function nv_func_update_data ( )
 			}
 		}
 	}
-	
+
+    if ( $global_config['revision'] < 1231 )
+    {
+        $sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
+        $result = $db->sql_query( $sql );
+        while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+        {
+            $sql = "SELECT title, module_data FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modules` WHERE `module_file`='shops'";
+            $result_mod = $db->sql_query( $sql );
+            while ( list( $mod, $mod_data ) = $db->sql_fetchrow( $result_mod ) )
+            {
+                $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_i . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `layout`, `setting`) VALUES(NULL, 'Sitemap', 'Sitemap', '".$mod."', 0, 0, 0, '', '')" );
+            }
+        }
+        nv_delete_all_cache();
+    }
     // End date data
     if ( empty( $error_contents ) )
     {
