@@ -51,7 +51,7 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
         global $module_array_cat, $module_info, $lang_module, $site_mods;
         $module = $block_config['module'];
         $sql = "SELECT t1.id, t1.listcatid, t1.title, t1.alias, t1.homeimgthumb, t1.homeimgalt FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 AND t1.inhome='1' and  t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime >" . NV_CURRENTTIME . ") ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
-        $list = nv_db_cache( $sql, 'catid', $module );
+        $list = nv_db_cache( $sql, 'id', $module );
         $html = "";
         $i = 1;
         if ( ! empty( $list ) )
