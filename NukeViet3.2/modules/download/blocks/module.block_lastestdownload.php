@@ -12,7 +12,7 @@ global $module_name, $lang_module, $module_data, $nv_Request, $list_cats, $modul
 
 $xtpl = new XTemplate( "block_lastestdownload.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$query = "SELECT catid, title, alias, uploadtime FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY uploadtime DESC LIMIT 5";
+$query = "SELECT catid, title, alias, uploadtime FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `status`=1 ORDER BY uploadtime DESC LIMIT 5";
 $result = $db->sql_query( $query );
 while ( $row = $db->sql_fetchrow( $result ) )
 {

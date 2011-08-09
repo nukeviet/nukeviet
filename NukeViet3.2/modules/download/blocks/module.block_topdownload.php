@@ -19,7 +19,7 @@ if ( ! file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modul
 
 $xtpl = new XTemplate( "block_topdownload.tpl", $path);
 $xtpl->assign( 'LANG', $lang_module );
-$query = "SELECT catid, title, alias, download_hits FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY download_hits DESC LIMIT 5";
+$query = "SELECT catid, title, alias, download_hits FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `status`=1 ORDER BY download_hits DESC LIMIT 5";
 $result = $db->sql_query( $query );
 $i = 1;
 while ( $row = $db->sql_fetchrow( $result ) )
