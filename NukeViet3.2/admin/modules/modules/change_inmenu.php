@@ -20,7 +20,9 @@ if ( $numrows != 1 )
     die( 'NO_' . $mod );
 }
 
-$include_file = NV_ROOTDIR . "/modules/" . $mod . "/funcs/main.php";
+$modfile = $site_mods[$mod]['module_file'];
+
+$include_file = NV_ROOTDIR . "/modules/" . $modfile . "/funcs/main.php";
 if ( file_exists( $include_file ) and filesize( $include_file ) != 0 )
 {
     $row = $db->sql_fetchrow( $result );
