@@ -215,8 +215,8 @@ function nv_func_update_data ( )
 								if ( preg_match( "/^" . str_replace( "/", "\/", NV_BASE_SITEURL . NV_UPLOADS_DIR ) . "\//", $file ) )
 								{
 									$file = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
-									$array_fileupload[] = $file;
 								}
+								$array_fileupload[] = $file;
 							}
 								
 							$fileupload = implode( "[NV]", $array_fileupload );
