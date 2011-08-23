@@ -536,6 +536,10 @@ function theme_upload ( $array, $list_cats, $download_config, $error )
         $xtpl->assign( 'LISTCATS', $cat );
         $xtpl->parse( 'main.catid' );
     }
+	if ($download_config['is_upload_allow'])
+	{
+		$xtpl->parse('main.is_upload_allow');
+	}	
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );
 }

@@ -381,12 +381,15 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                         }
                     }
                 }
-
-                $fileimage = NV_UPLOADS_DIR . $row['fileimage'];
-                if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
-                {
-                    @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );
-                }
+				
+				if(empty( $row['fileimage'] ))
+				{
+	                $fileimage = NV_UPLOADS_DIR . $row['fileimage'];
+	                if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
+	                {
+	                    @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );
+	                }
+				}
 
                 $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `id`=" . $id;
                 $db->sql_query( $sql );

@@ -66,6 +66,7 @@
                 <input type="text" class="txt" name="upload_author_url" id="upload_author_url_iavim" value="{UPLOAD.author_url}" style="width:300px" maxlength="255" />
             </dt>
         </dl>
+        <!-- BEGIN: is_upload_allow -->
         <dl class="clearfix">
             <dd class="fl" style="vertical-align:top">
                 <label>
@@ -77,6 +78,7 @@
                 <input type="file" class="txt" name="upload_fileupload" id="upload_fileupload" />
             </dt>
         </dl>
+        <!-- END: is_upload_allow -->
         <dl class="clearfix">
             <dd class="fl">
                 <label>
