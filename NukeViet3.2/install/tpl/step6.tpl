@@ -17,7 +17,7 @@
         
     });
 </script>
-<form action="" id="site_config" method="post">
+<form action="{ACTIONFORM}" id="site_config" method="post">
     <table cellspacing="0" summary="{LANG.website_info}">
         <caption>
             {LANG.properties} <span class="highlight_red">*</span>{LANG.is_required}

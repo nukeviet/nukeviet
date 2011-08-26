@@ -116,12 +116,13 @@ function nv_step_3 ( $array_resquest, $array_support, $nextstep )
 
 function nv_step_4 ( $array_dir_check, $array_ftp_data, $nextstep )
 {
-    global $lang_module, $sys_info;
+    global $lang_module, $sys_info, $step;
     $xtpl = new XTemplate( "step4.tpl", NV_ROOTDIR . "/install/tpl/" );
     $xtpl->assign( 'BASE_SITEURL', NV_BASE_SITEURL );
     $xtpl->assign( 'LANG_VARIABLE', NV_LANG_VARIABLE );
     $xtpl->assign( 'CURRENTLANG', NV_LANG_DATA );
     $xtpl->assign( 'LANG', $lang_module );
+    $xtpl->assign( 'ACTIONFORM', NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
     
     $a = 0;
     foreach ( $array_dir_check as $dir => $check )
@@ -149,13 +150,15 @@ function nv_step_4 ( $array_dir_check, $array_ftp_data, $nextstep )
 
 function nv_step_5 ( $db_config, $nextstep )
 {
-    global $lang_module;
+    global $lang_module, $step;
     $xtpl = new XTemplate( "step5.tpl", NV_ROOTDIR . "/install/tpl/" );
     $xtpl->assign( 'BASE_SITEURL', NV_BASE_SITEURL );
     $xtpl->assign( 'LANG_VARIABLE', NV_LANG_VARIABLE );
     $xtpl->assign( 'CURRENTLANG', NV_LANG_DATA );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'DATADASE', $db_config );
+    $xtpl->assign( 'ACTIONFORM', NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+
     if ( $db_config['num_table'] > 0 )
     {
         $xtpl->parse( 'step.db_detete' );
@@ -176,13 +179,15 @@ function nv_step_5 ( $db_config, $nextstep )
 function nv_step_6 ( $array_data, $nextstep )
 
 {
-    global $lang_module;
+    global $lang_module, $step;
     $xtpl = new XTemplate( "step6.tpl", NV_ROOTDIR . "/install/tpl/" );
     $xtpl->assign( 'BASE_SITEURL', NV_BASE_SITEURL );
     $xtpl->assign( 'LANG_VARIABLE', NV_LANG_VARIABLE );
     $xtpl->assign( 'CURRENTLANG', NV_LANG_DATA );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'DATA', $array_data );
+    $xtpl->assign( 'ACTIONFORM', NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+	
     if ( ! empty( $array_data['error'] ) )
     {
         $xtpl->parse( 'step.errordata' );

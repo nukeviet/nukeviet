@@ -17,7 +17,7 @@
 </table>
 
 <!-- BEGIN: ftpconfig -->
-<form action="" method="post">
+<form action="{ACTIONFORM}" method="post">
 <table id="ftpconfig" cellspacing="0"
 	summary="{LANG.checkftpconfig_detail}" style="width: 100%;">
 	<caption>{LANG.ftpconfig_note}</caption>

@@ -4,7 +4,7 @@
         $("#check_database").validate();
     });
 </script>
-<form id="check_database" action="" method="post">
+<form id="check_database" action="{ACTIONFORM}" method="post">
 <table id="database_config" cellspacing="0" summary="{LANG.database}">
 	<caption>{LANG.properties} <span class="highlight_red">*</span>
 	{LANG.is_required}</caption>
