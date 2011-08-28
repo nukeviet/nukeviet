@@ -11,6 +11,6 @@ Disallow: /modules/
 Disallow: /robots.php
 Disallow: /sess/
 Disallow: /tmp/
-Disallow: /update_nukeviet3_last_version.php
+Disallow: /update_revision.php
 Disallow: /web.config
 Sitemap: http://yousite.com/?nv=SitemapIndex
