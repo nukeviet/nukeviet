@@ -18,7 +18,7 @@ if ( defined( 'NV_IS_GODADMIN' ) )
     $ftp_check_login = 0;
     if ( ! empty( $global_config['ftp_server'] ) and ! empty( $global_config['ftp_user_name'] ) and ! empty( $global_config['ftp_user_pass'] ) )
     {
-        $conn_id = ftp_connect( $global_config['ftp_server'], $global_config['ftp_port'] );
+        $conn_id = ftp_connect( $global_config['ftp_server'], $global_config['ftp_port'], 10 );
         $login_result = ftp_login( $conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass'] );
         if ( ( ! $conn_id ) || ( ! $login_result ) )
         {

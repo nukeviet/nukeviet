@@ -32,7 +32,7 @@ if ( $nv_Request->isset_request( 'ftp_server', 'post' ) )
         $ftp_path = nv_unhtmlspecialchars( $array_config['ftp_path'] );
         
         // set up basic connection        
-        $conn_id = ftp_connect( $ftp_server, $ftp_port );
+        $conn_id = ftp_connect( $ftp_server, $ftp_port, 10);
         // login with username and password
         $login_result = ftp_login( $conn_id, $ftp_user_name, $ftp_user_pass );
         if ( ( ! $conn_id ) || ( ! $login_result ) )

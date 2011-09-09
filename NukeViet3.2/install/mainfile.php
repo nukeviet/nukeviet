@@ -96,7 +96,7 @@ $global_config['XSS_replaceString'] = NV_XSS_REPLACESTRING != '' ? NV_XSS_REPLAC
 $global_config['cookie_key'] = $global_config['sitekey'];
 $global_config['cookie_secure'] = NV_COOKIE_SECURE;
 $global_config['cookie_httponly'] = NV_COOKIE_HTTPONLY;
-$global_config['session_save_path'] = "";
+$global_config['session_save_path'] = ( is_writable( NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH ) ) ? NV_SESSION_SAVE_PATH : "";
 
 //Ket noi voi file xac dinh IP
 require_once ( NV_ROOTDIR . '/includes/class/ips.class.php' );

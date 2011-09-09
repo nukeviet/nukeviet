@@ -129,8 +129,11 @@ function nv_save_file_config_global ( )
     }
     $content_config .= "\n";
     $content_config .= "?>";
+
+    $return = file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", $content_config, LOCK_EX );
     nv_delete_all_cache();
-    return file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", $content_config, LOCK_EX );
+	
+	return $return;
 }
 
 /**

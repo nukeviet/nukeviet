@@ -162,7 +162,7 @@ elseif ( $step == 4 )
         if ( ! empty( $global_config['ftp_server'] ) and ! empty( $global_config['ftp_user_name'] ) and ! empty( $global_config['ftp_user_pass'] ) )
         {
             // set up basic connection
-            $conn_id = ftp_connect( $global_config['ftp_server'], $global_config['ftp_port'] );
+            $conn_id = ftp_connect( $global_config['ftp_server'], $global_config['ftp_port'], 10 );
             
             // login with username and password
             $login_result = ftp_login( $conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass'] );
@@ -609,7 +609,7 @@ elseif ( $step == 7 )
         if ( isset( $ftp_server_array['ftp_check_login'] ) and intval( $ftp_server_array['ftp_check_login'] ) == 1 )
         {
             // set up basic connection
-            $conn_id = ftp_connect( $ftp_server_array['ftp_server'], $ftp_server_array['ftp_port'] );
+            $conn_id = ftp_connect( $ftp_server_array['ftp_server'], $ftp_server_array['ftp_port'], 10 );
             
             // login with username and password
             $login_result = ftp_login( $conn_id, $ftp_server_array['ftp_user_name'], $ftp_server_array['ftp_user_pass'] );

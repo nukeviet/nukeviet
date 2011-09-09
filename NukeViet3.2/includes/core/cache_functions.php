@@ -31,7 +31,7 @@ function nv_delete_cache( $pattern )
 			$ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
 			$ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
 			// set up basic connection
-			$conn_id = ftp_connect($ftp_server, $ftp_port);
+			$conn_id = ftp_connect($ftp_server, $ftp_port, 10);
 			// login with username and password
 			$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
 			if ((!$conn_id) || (!$login_result))
