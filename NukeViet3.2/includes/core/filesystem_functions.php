@@ -106,10 +106,19 @@ function nv_scandir ( $directory, $pattern, $sorting_order = 0 )
                 }
             }
             closedir( $dh );
+			if (!empty($return))
+			{
+				if ($sorting_order)
+				{
+					rsort($return);
+				}
+				else
+				{
+					sort($return);
+				}
+			}			
         }
     }
-    
-    if ( ! empty( $return ) and $sorting_order ) rsort( $return );
     
     return $return;
 }

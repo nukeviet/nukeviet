@@ -17,51 +17,17 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  */
 function nv_delete_cache( $pattern )
 {
-	global $lang_global, $sys_info, $global_config;    	
-    $files = nv_scandir( NV_ROOTDIR . "/" . NV_CACHEDIR, $pattern );
-
-    if ( ! empty( $files ) )
+	global $lang_global, $sys_info, $global_config;
+ 	if ( $dh = opendir( NV_ROOTDIR . "/" . NV_CACHEDIR ) )
     {
-		$ftp_check_login = 0;
-		if ($sys_info['ftp_support'] and intval($global_config['ftp_check_login']) == 1)
-		{
-			$ftp_server = nv_unhtmlspecialchars($global_config['ftp_server']);
-			$ftp_port = intval($global_config['ftp_port']);
-			$ftp_user_name = nv_unhtmlspecialchars($global_config['ftp_user_name']);
-			$ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
-			$ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
-			// set up basic connection
-			$conn_id = ftp_connect($ftp_server, $ftp_port, 10);
-			// login with username and password
-			$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
-			if ((!$conn_id) || (!$login_result))
-			{
-				$ftp_check_login = 3;
+        while ( ( $file = readdir( $dh ) ) !== false )
+        {
+        	if ( preg_match( $pattern, $file ) )
+        	{
+				unlink(NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file);        		
 			}
-			elseif (ftp_chdir($conn_id, $ftp_path))
-			{
-				$ftp_check_login = 1;
-			}
-			else
-			{
-				$ftp_check_login = 2;
-			}
-		}    	
-		if ($ftp_check_login == 1)
-		{
-			foreach ($files as $f)
-			{
-				ftp_delete($conn_id, NV_CACHEDIR . "/" . $f);
-			}
-			ftp_close($conn_id);
-		}
-		else
-		{
-			foreach ($files as $f)
-			{
-				unlink(NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $f);
-			}
-		}
+        }
+        closedir( $dh );			
     }
 }
 

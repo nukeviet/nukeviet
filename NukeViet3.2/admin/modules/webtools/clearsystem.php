@@ -16,17 +16,19 @@ function nv_clear_files ( $dir, $base )
     global $client_info;
     
     $dels = array();
-    $files = scandir( $dir );
-    foreach ( $files as $file )
+	if ( $dh = opendir( $dir ) )
     {
-        if ( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and $file != "index.html" and is_file( $dir . '/' . $file ) and $file != "sess_" . $client_info['session_id'] )
+        while ( ( $file = readdir( $dh ) ) !== false )
         {
-            $d = nv_deletefile( $dir . '/' . $file, false );
-            if ( $d[0] )
-            {
-                $dels[] = $base . '/' . $file;
-            }
+	        if ( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and $file != "index.html" and is_file( $dir . '/' . $file ) and $file != "sess_" . $client_info['session_id'] )
+	        {
+	            if (unlink( $dir . '/' . $file))
+	            {
+	            	$dels[] = $base . '/' . $file;
+	            }
+	        }        	
         }
+        closedir( $dh );
     }
     if ( ! file_exists( $dir . "/index.html" ) )
     {
@@ -41,6 +43,9 @@ $xtpl->assign( 'LANG', $lang_module );
 if ( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_request( 'deltype', 'post' ) )
 {
     $deltype = $nv_Request->get_typed_array( 'deltype', 'post', 'string', array() );
+    
+    nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['clearsystem'] , implode(", ", $deltype) , $admin_info['userid'] );
+	
     if ( in_array( 'clearcache', $deltype ) )
     {
         $cacheDir = NV_ROOTDIR . '/cache';
@@ -64,8 +69,6 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reque
             $xtpl->assign( 'DELFILE', $file );
             $xtpl->parse( 'main.delfile.loop' );
         }
-        nv_delete_all_cache();
-        nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['clearsystem'] , '' , $admin_info['userid'] );
     }
     
     if ( in_array( 'clearsession', $deltype ) )
