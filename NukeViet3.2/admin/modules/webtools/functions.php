@@ -19,14 +19,21 @@ $submenu['config'] = $lang_module['config'];
 
 if ( $module_name == "webtools" )
 {
-    $new_version = nv_geVersion( 86400 ); //kem tra lai sau 24 tieng
-    if ( ! empty( $new_version ) )
+	if ( $global_config['autocheckupdate'] )
     {
-        global $global_config;
-        if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 or $op=="autoupdate")
-        {
-            $submenu['autoupdate'] = $lang_module['autoupdate_system'];
-        }
+        $new_version = nv_geVersion( $global_config['autoupdatetime'] * 3600 );
+    }
+    elseif ( file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' ) )
+    {
+        $new_version = simplexml_load_file( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
+    }
+    else
+    {
+        $new_version = array();
+    }
+	if ( $op=="autoupdate" or (!empty($new_version) and nv_version_compare( $global_config['version'], $new_version->version ) < 0))
+    {
+        $submenu['autoupdate'] = $lang_module['autoupdate_system'];
     }
     
     $allow_func = array( 
