@@ -1,6 +1,14 @@
 <?php
-//536870912-553648127
-$ranges=Array(
-"536870912" => array("553648127","US"),
+
+/**
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Createdate Thu, 15 Sep 2011 13:30:44 GMT
+ */
+
+$ranges = array(
+	"536870912" => array("553648127","US")
 );
+
 ?>

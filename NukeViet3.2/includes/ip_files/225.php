@@ -1,6 +1,13 @@
 <?php
-//3774873600-3791650815
-$ranges=Array(
-"3774873600" => array("3791650815","ZZ"),
+
+/**
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Createdate Thu, 15 Sep 2011 13:30:44 GMT
+ */
+
+$ranges = array(
 );
+
 ?>
