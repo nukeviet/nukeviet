@@ -1368,6 +1368,7 @@ function nv_ParseIP ( $ip )
         if ( preg_match( "/" . preg_quote( "whois.registro.br" ) . "/", $response ) ) $nextServer = "whois.registro.br";
         elseif ( preg_match( "/" . preg_quote( "whois.apnic.net" ) . "/", $response ) ) $nextServer = "whois.apnic.net";
         elseif ( preg_match( "/" . preg_quote( "ripe.net" ) . "/", $response ) ) $nextServer = "whois.ripe.net";
+        elseif ( preg_match( "/" . preg_quote( "afrinic.net" ) . "/", $response ) ) $nextServer = "whois.afrinic.net";
     }
     
     if ( ! empty( $nextServer ) )
