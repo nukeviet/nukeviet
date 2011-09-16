@@ -23,7 +23,7 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val = '', $path = '', $currentpath = '' )
 {
-    global $module_name, $admin_info;
+    global $module_name, $admin_info, $client_info;
     if ( empty( $path ) and empty( $currentpath ) )
     {
         $path = NV_UPLOADS_DIR;
@@ -39,12 +39,26 @@ function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val =
         }
     }
     // Create class instance.
-    $editortoolbar = array( array( 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'jwplayer', 'Table', 'Font', 'FontSize', 'RemoveFormat', 'Templates', 'Maximize' ), array( 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'Smiley', 'PageBreak', 'Source', 'About' ) );
     
     $CKEditor = new CKEditor();
     // Do not print the code directly to the browser, return it instead
     $CKEditor->returnOutput = true;
-    $CKEditor->config['extraPlugins'] = 'jwplayer';
+	if(preg_match( "/^(Internet Explorer v([0-9])\.([0-9]))+$/", $client_info['browser']['name'], $m))
+	{
+		$jwplayer = ($m[2] < 8) ? false: true;
+	}
+	else{
+		$jwplayer = true;
+	}
+    if ($jwplayer)
+    {
+    	$CKEditor->config['extraPlugins'] = 'jwplayer';
+    	$editortoolbar = array( array( 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'jwplayer', 'Table', 'Font', 'FontSize', 'RemoveFormat', 'Templates', 'Maximize' ), array( 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'Smiley', 'PageBreak', 'Source', 'About' ) );
+	}
+	else
+	{
+    	$editortoolbar = array( array( 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'Table', 'Font', 'FontSize', 'RemoveFormat', 'Templates', 'Maximize' ), array( 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'Smiley', 'PageBreak', 'Source', 'About' ) );
+	}
     $CKEditor->config['skin'] = 'v2';
     $CKEditor->config['entities'] = false;
     $CKEditor->config['enterMode'] = 2;
