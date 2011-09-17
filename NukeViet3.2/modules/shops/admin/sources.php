@@ -114,7 +114,7 @@ $contents .= "<input name=\"savecat\" type=\"hidden\" value=\"1\" />\n";
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
 $contents .= "<caption>" . $lang_module['add_sources'] . "</caption>\n";
 $contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['name'] . ": </strong></td>\n";
+$contents .= "<td align=\"right\"><strong>" . $lang_module['sources'] . ": </strong></td>\n";
 $contents .= "<td><input style=\"width: 650px\" name=\"title\" type=\"text\" value=\"" . $rowcontent['title'] . "\" maxlength=\"255\" /></td>\n";
 $contents .= "</tr>";
 $contents .= "<tbody class=\"second\">";

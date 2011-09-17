@@ -71,7 +71,7 @@ $lang_module['content_main'] = "Thông tin module";
 $lang_module['document_payment'] = "Hướng dẫn thanh toán";
 $lang_module['document_payment_note'] = "Nội dung này hiển trong phần chi tiết mỗi sản phẩm hỗ trợ thanh toán";
 $lang_module['cat_title'] = "Danh sách loại sản phẩm";
-$lang_module['link'] = "url ngồn tin";
+$lang_module['link'] = "Website";
 $lang_module['cat_sub'] = "Thuộc chủ đề";
 $lang_module['cat_sub_sl'] = "Là chủ đề chính";
 $lang_module['topic_sl'] = "Chọn nhóm sản phẩm hoặc tự điền";
@@ -223,7 +223,7 @@ $lang_module['comment_update_success'] = "Cập nhật thành công !";
 $lang_module['block'] = "Block sản phẩm";
 $lang_module['adddefaultblock'] = "Chọn mặc định khi đăng sản phẩm";
 
-$lang_module['source_logo'] = "Logo nguồn tin";
+$lang_module['source_logo'] = "Logo";
 /*topics*/
 $lang_module['cat_no'] = "STT";
 $lang_module['topic_title'] = "Tên tiêu chí";
