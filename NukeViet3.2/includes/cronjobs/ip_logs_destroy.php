@@ -7,32 +7,31 @@
  * @Createdate 3/27/2010 5:16
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (!defined('NV_MAINFILE'))
+	die('Stop!!!');
 
-if ( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
+if (!defined('NV_IS_CRON'))
+	die('Stop!!!');
 
 function cron_del_ip_logs()
 {
-	$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
-	$files = nv_scandir( $dir, "/^([0-9]+)\." . NV_LOGS_EXT . "$/" );
 	$result = true;
-
-	if ( ! empty( $files ) )
+	$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
+	if ($dh = opendir($dir))
 	{
-		foreach ( $files as $file )
+		while (($file = readdir($dh)) !== false)
 		{
-			if ( ( filemtime( $dir . '/' . $file ) + 7200 ) < NV_CURRENTTIME )//2 gio
+			if (preg_match("/^([0-9\-]+)\.log$/", $file) and (filemtime($dir . '/' . $file) + 7200) < NV_CURRENTTIME)//2 gio
 			{
-				if ( ! @unlink( $dir . '/' . $file ) )
+				if (!@unlink($dir . '/' . $file))
 				{
 					$result = false;
 				}
 			}
-			clearstatcache();
 		}
+		closedir($dh);
+		clearstatcache();
 	}
-
 	return $result;
 }
-
 ?>
