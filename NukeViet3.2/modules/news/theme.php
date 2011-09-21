@@ -45,7 +45,7 @@ function viewcat_grid_new ( $array_catpage, $catid )
     return $xtpl->text( 'main' );
 }
 
-function viewcat_list_new ( $array_catpage, $catid )
+function viewcat_list_new ( $array_catpage, $catid, $page )
 {
     global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
     $xtpl = new XTemplate( "viewcat_list.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
@@ -57,7 +57,7 @@ function viewcat_list_new ( $array_catpage, $catid )
         $xtpl->parse( 'main.cattitle' );
     }
     
-    $a = 0;
+    $a = $page;
     foreach ( $array_catpage as $array_row_i )
     {
         $array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );

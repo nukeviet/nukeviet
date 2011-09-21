@@ -19,7 +19,6 @@ $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA
 $global_array_cat[0] = array( "catid" => 0, "parentid" => 0, "title" => "Other", "alias" => "Other", "link" => $link_i, "viewcat" => "viewcat_page_new", "subcatid" => 0, "numlinks" => 3, "description" => "", "inhome" => 0, "keywords" => "" );
 $catid = 0;
 $parentid = 0;
-$set_viewcat = "";
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 $array_mod_title = array();
 
@@ -131,7 +130,6 @@ if ( ! empty( $array_op ) and $op == "main" )
             $op = "viewcat";
             if ( $count_op > 1 )
             {
-                $set_viewcat = "viewcat_page_new";
                 $page = intval( substr( $array_op[1], 5 ) );
             }
         }

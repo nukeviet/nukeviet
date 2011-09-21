@@ -30,7 +30,7 @@ if ( empty( $contents ) )
     $array_cat_other = array();
     $st_links = $st_links;
     $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main";
-    if ( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old" or $set_viewcat == "viewcat_page_new" )
+    if ( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old")
     {
         $order_by = ( $viewcat == "viewcat_page_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
         $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `imgposition`, `inhome`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 AND `inhome`='1' AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") " . $order_by . " LIMIT  " . $page . "," . $per_page . "";
@@ -273,7 +273,7 @@ if ( empty( $contents ) )
             $end_publtime = $item['publtime'];
         }
         $viewcat = "viewcat_list_new";
-        $contents = call_user_func( $viewcat, $array_catpage, 0 );
+        $contents = call_user_func( $viewcat, $array_catpage, 0, $page );
         $contents .= nv_news_page( $base_url, $all_page, $per_page, $page );
     }
     if ( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )

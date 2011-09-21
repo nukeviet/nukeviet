@@ -10,15 +10,19 @@
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 $cache_file = "";
 $contents = "";
+$viewcat = $global_array_cat[$catid]['viewcat'];
+
+$set_view_page = ($page > 0 AND substr($viewcat, 0, 13)=="viewcat_main_") ? true : false;
+
 if ( ! defined( 'NV_IS_MODADMIN' ) and $page < 100 )
 {
-    if ( empty( $set_viewcat ) )
+    if ($set_view_page)
     {
-        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
+        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_page_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
     }
     else
     {
-        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_page_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
+        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
     }
     if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
     {
@@ -30,9 +34,8 @@ if ( empty( $contents ) )
 {
     $array_catpage = array();
     $array_cat_other = array();
-    $viewcat = $global_array_cat[$catid]['viewcat'];
     $base_url = $global_array_cat[$catid]['link'];
-    if ( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old" or $set_viewcat == "viewcat_page_new" )
+    if ( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old" or $set_view_page)
     {
         $st_links = 2 * $st_links;
         $order_by = ( $viewcat == "viewcat_page_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
@@ -351,7 +354,7 @@ if ( empty( $contents ) )
             $end_publtime = $item['publtime'];
         }
         $viewcat = "viewcat_list_new";
-        $contents = call_user_func( $viewcat, $array_catpage, $catid );
+        $contents = call_user_func( $viewcat, $array_catpage, $catid, $page );
         $contents .= nv_news_page( $base_url, $all_page, $per_page, $page );
     }
     if ( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )
