@@ -41,4 +41,13 @@ $openid_servers['myopenid'] = array( //
     ) //
     );
 
+$openid_servers['nukeviet'] = array( //
+    'identity' => 'https://nukeviet.vn/openid/index.php', //
+    'required' => array( //
+    'email' => 'contact/email', //
+    'nickname' => 'namePerson/friendly', //
+    'fullname' => 'namePerson', //
+    'gender' => 'person/gender', //
+    ) //
+    );
 ?>
