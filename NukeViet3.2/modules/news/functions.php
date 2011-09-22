@@ -61,6 +61,15 @@ foreach ( $list as $l )
     }
 }
 
+//Xac dinh RSS
+if ($module_info['rss'])
+{
+	$rss[] = array(//
+		'title' => $module_info['custom_title'], //
+		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss"//
+	);
+}
+	
 foreach ( $global_array_cat as $catid_i => $array_cat_i )
 {
     if ( $catid_i > 0 and $array_cat_i['parentid'] == 0 )
@@ -90,12 +99,12 @@ foreach ( $global_array_cat as $catid_i => $array_cat_i )
     }
     
     //Xac dinh RSS
-    if ( $catid_i )
+    if ( $catid_i and $module_info['rss'])
     {
         $rss[] = array( //
-'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'], //
-'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_cat_i['alias'] );//
-
+			'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'], //
+			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_cat_i['alias']//
+		);
     }
 }
 unset( $result, $catid_i, $parentid_i, $title_i, $alias_i );

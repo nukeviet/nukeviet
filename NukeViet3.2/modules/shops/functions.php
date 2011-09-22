@@ -17,6 +17,15 @@ $parentid = 0;
 $set_viewcat = "";
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 
+//Xac dinh RSS
+if ($module_info['rss'])
+{
+	$rss[] = array(//
+		'title' => $module_info['custom_title'], //
+		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss"//
+	);
+}
+
 $arr_cat_title = array();
 $sql = "SELECT catid, parentid, lev," . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, viewcat, numsubcat, subcatid, numlinks, del_cache_time, " . NV_LANG_DATA . "_description, inhome, " . NV_LANG_DATA . "_keywords, who_view, groups_view FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
 $result = $db->sql_query( $sql );
@@ -31,6 +40,14 @@ while ( list( $catid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewcat_i, $nu
         $catid = $catid_i;
         $parentid = $parentid_i;
     }
+    //Xac dinh RSS
+    if ( $module_info['rss'])
+    {
+        $rss[] = array( //
+			'title' => $module_info['custom_title'] . ' - ' . $title_i, //
+			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $alias_i//
+		);
+    }	
 }
 
 unset( $result, $alias_cat_url, $catid_i, $parentid_i, $title_i, $alias_i );

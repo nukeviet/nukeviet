@@ -421,7 +421,7 @@ function nv_html_css ( )
 function nv_html_site_rss ( )
 {
     global $rss, $lang_global, $global_config;
-    $return = "<link rel=\"alternate\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=rss\" title=\"" . $lang_global['site_rss'] . "\" type=\"application/rss+xml\" />\n";
+    $return = "";
     if ( ! empty( $rss ) )
     {
         foreach ( $rss as $rss_item )
