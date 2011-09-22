@@ -59,6 +59,7 @@ $lang_module['siteinfo_comment_pending'] = "Số chưa duyệt";
 $lang_module['siteinfo_comment'] = "Số bình luận đã đăng";
 $lang_module['siteinfo_order'] = "Tổng số đơn đặt hàng";
 $lang_module['siteinfo_order_noview'] = "Số đơn đặt hàng chưa xem";
+$lang_module['siteinfo_exptime'] = "Số sản phẩm sắp hết hạn";
 
 $lang_module['catalog_name'] = "Tên loại sản phẩm";
 $lang_module['topics_name'] = "Tên nhóm sản phẩm";
