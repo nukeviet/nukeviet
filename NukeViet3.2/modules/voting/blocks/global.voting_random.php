@@ -41,7 +41,7 @@ if ( ! nv_function_exists( 'nv_block_voting' ) )
         {
             if ( ( int )$row['exp_time'] < 0 or ( ( int )$row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME ) )
             {
-                $is_update = $row['vid'];
+                $is_update[] = $row['vid'];
             }
             else
             {
