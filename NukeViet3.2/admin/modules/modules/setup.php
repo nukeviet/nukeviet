@@ -66,7 +66,7 @@ if ( ! empty( $delmodule ) )
         }
         if ( empty( $module_exit ) )
         {
-            list( $nmd ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `module_file`=" . $db->dbescape_string( $delmodule ) . " AND `virtual`=0" ) );
+        	list( $nmd ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `module_file`=" . $db->dbescape_string( $delmodule ) . " AND `title`!=" . $db->dbescape_string( $delmodule ) ) );
             if ( $nmd > 0 )
             {
                 $module_exit = 1;
