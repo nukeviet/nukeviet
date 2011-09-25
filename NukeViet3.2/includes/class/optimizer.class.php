@@ -395,7 +395,7 @@ class optimezer
         $cssContent = preg_replace( '/@import\\s+url/', '@import url', $cssContent );
         $cssContent = preg_replace( '/:first-l(etter|ine)\\{/', ':first-l$1 {', $cssContent );
         $cssContent = preg_replace( "/[^\}]+\{[\s|\;]*\}[\s]*/", "", $cssContent );
-        $cssContent = preg_replace( "/[\s]+/", " ", $cssContent );
+        $cssContent = preg_replace( "/[ ]+/", " ", $cssContent );
         $cssContent = trim( $cssContent );
         return $cssContent;
     }

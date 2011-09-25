@@ -52,7 +52,7 @@ if ( $id )
                 $key_words = strip_punctuation( $key_words );
                 $key_words = trim( $key_words );
                 $key_words = nv_strtolower( $key_words );
-                $key_words = preg_replace( "/\s+/", ",", $key_words );
+				$key_words = preg_replace( "/[ ]+/", ",", $key_words );
             }
 
             $cache['key_words'] = $key_words;
