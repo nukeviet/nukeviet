@@ -50,6 +50,15 @@ if ( ! empty( $cron_numrows ) )
 				$db->sql_query( $sql );
 				continue;
 			}
+			
+			$check_run_cronjobs = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/cronjobs_' . md5($cron_row['run_file'] . $cron_row['run_func'] . $global_config['sitekey']) . '.txt';
+			$p = NV_CURRENTTIME - 300;
+			if (file_exists($check_run_cronjobs) and @filemtime($check_run_cronjobs) > $p)
+			{
+				continue;
+			}
+			file_put_contents($check_run_cronjobs, '');
+			
 			$params = ( ! empty( $cron_row['params'] ) ) ? array_map( "trim", explode( ",", $cron_row['params'] ) ) : array();
 			$result2 = call_user_func_array( $cron_row['run_func'], $params );
 			if ( ! $result2 )
@@ -74,6 +83,8 @@ if ( ! empty( $cron_numrows ) )
 					$db->sql_query( $sql );
 				}
 			}
+			unlink($check_run_cronjobs);
+			clearstatcache();
 		}
 	}
 }

@@ -21,7 +21,7 @@ function cron_ref_expired_del()
 	{
 		$log_start = mktime(0, 0, 0, date("n", NV_CURRENTTIME), 1, date("Y", NV_CURRENTTIME));
 
-		while (($file = readdir($dh)) !== false)
+		while (($logfile = readdir($dh)) !== false)
 		{
 			if (preg_match("/^([0-9]{10,12})\." . preg_quote(NV_LOGS_EXT) . "$/", $logfile, $matches))
 			{
@@ -34,7 +34,6 @@ function cron_ref_expired_del()
 					}
 				}
 			}
-
 		}
 		closedir($dh);
 		clearstatcache();
