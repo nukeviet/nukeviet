@@ -411,7 +411,7 @@ class Request
         }
         $this->my_domains = $domains;
         $this->site_url = $this->my_current_domain . $this->base_siteurl;
-        $this->referer = $this->get_Env( 'HTTP_REFERER' );
+		$this->referer = $this->get_Env( array('HTTP_REFERER', 'Referer') );
         if ( ! empty( $this->referer ) )
         {
             $ref = @parse_url( $this->referer );
