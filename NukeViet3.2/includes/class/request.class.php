@@ -814,7 +814,7 @@ class Request
      * @param mixed $value
      * @return
      */
-    private function security_post ( $value )
+    public function security_post ( $value )
     {
         if ( is_array( $value ) )
         {
