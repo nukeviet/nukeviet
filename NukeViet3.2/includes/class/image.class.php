@@ -822,7 +822,7 @@ class image
                     if ( ! empty( $basename ) ) $newname .= '_' . $basename;
                 }
                 $newname = preg_replace( '/^\W+|\W+$/', '', $newname );
-                $newname = preg_replace( '/\s+/', '_', $newname );
+                $newname = preg_replace( '/[ ]+/', '_', $newname );
                 $newname = strtolower( preg_replace( '/\W-/', '', $newname ) );
                 $newname = preg_replace( "/." . $this->create_Image_info['ext'] . "$/", '', $newname );
                 if ( ! preg_match( "/\/$/", $path ) ) $path = $path . "/";

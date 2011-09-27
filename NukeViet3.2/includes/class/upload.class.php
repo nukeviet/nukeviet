@@ -659,7 +659,7 @@ class upload
         $word = strtr( $word, $utf8_lookup['romanize'] );
         $word = preg_replace( '/[^a-z0-9\.\-\_ ]/i', '', $word );
         $word = preg_replace( '/^\W+|\W+$/', '', $word );
-        $word = preg_replace( '/\s+/', '-', $word );
+        $word = preg_replace( '/[ ]+/', '-', $word );
         return strtolower( preg_replace( '/\W-/', '', $word ) );
     }
 

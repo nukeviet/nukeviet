@@ -648,7 +648,7 @@ class Request
             if ( ! preg_match( "/[a-z]+/i", $attrSubSet[0] ) || in_array( $attrSubSet[0], $this->disabledattributes ) || preg_match( "/^on/i", $attrSubSet[0] ) ) continue;
             if ( ! empty( $attrSubSet[1] ) )
             {
-                $attrSubSet[1] = preg_replace( '/\s+/', ' ', $attrSubSet[1] );
+                $attrSubSet[1] = preg_replace( '/[ ]+/', ' ', $attrSubSet[1] );
                 $attrSubSet[1] = preg_replace( "/^\"(.*)\"$/", "\\1", $attrSubSet[1] );
                 $attrSubSet[1] = preg_replace( "/^\'(.*)\'$/", "\\1", $attrSubSet[1] );
                 $attrSubSet[1] = str_replace( array( 

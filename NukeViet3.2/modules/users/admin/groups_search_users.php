@@ -40,7 +40,7 @@ if ( ! empty( $search_query ) )
             break;
         
         default:
-            $search_query = preg_replace( '/\s+/', '_', nv_EncString( $search_query ) );
+            $search_query = preg_replace( '/[ ]+/', '_', nv_EncString( $search_query ) );
             $search_query = $db->dblikeescape( strtolower( $search_query ) );
             $query .= " WHERE (`username` LIKE '%" . $search_query . "%' OR `full_name` LIKE '%" . $search_query . "%')";
     }

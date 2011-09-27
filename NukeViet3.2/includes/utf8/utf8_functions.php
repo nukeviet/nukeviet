@@ -262,7 +262,7 @@ function change_alias( $alias )
 	$alias = str_replace ( $search, " ", $alias );
     
     $alias = preg_replace( "/([^a-z0-9-\s])/is", "", $alias );
-    $alias = preg_replace( "/[\s]+/", " ", $alias );
+    $alias = preg_replace( "/[ ]+/", " ", $alias );
     $alias = preg_replace( "/\s/", "-", $alias );
     $alias = preg_replace( '/(\-)$/', '', $alias );
     $alias = preg_replace( '/^(\-)/', '', $alias );

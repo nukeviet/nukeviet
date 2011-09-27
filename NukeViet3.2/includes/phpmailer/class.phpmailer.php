@@ -2513,7 +2513,7 @@ class PHPMailer
         {
             list( $heading, $value ) = explode( ":", $line, 2 );
             $heading = strtolower( $heading );
-            $value = preg_replace( "/\s+/", " ", $value ); // Compress useless spaces
+            $value = preg_replace( "/[ ]+/", " ", $value ); // Compress useless spaces
             $lines[$key] = $heading . ":" . trim( $value ); // Don't forget to remove WSP around the value
         }
         $s = implode( "\r\n", $lines );
