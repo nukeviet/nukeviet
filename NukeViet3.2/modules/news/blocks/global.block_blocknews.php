@@ -48,13 +48,13 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
 
     function nv_news_blocks ( $block_config )
     {
-        global $module_array_cat, $module_info, $lang_module, $site_mods;
+        global $db, $module_array_cat, $module_info, $lang_module, $site_mods;
         $module = $block_config['module'];
         $sql = "SELECT t1.id, t1.listcatid, t1.title, t1.alias, t1.homeimgthumb, t1.homeimgalt FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 AND t1.inhome='1' and  t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime >" . NV_CURRENTTIME . ") ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
-        $list = nv_db_cache( $sql, 'id', $module );
+        $result = $db->sql_query( $sql );
         $html = "";
         $i = 1;
-        if ( ! empty( $list ) )
+        if ( $db->sql_numrows( $result ) )
         {
             if ( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/news/block_blocknews.tpl" ) )
             {
@@ -65,7 +65,7 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
                 $block_theme = "default";
             }
             $xtpl = new XTemplate( "block_blocknews.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/news" );
-            foreach ( $list as $l )
+        	while ( $l = $db->sql_fetchrow( $result , 2) )
             {
                 $arr_catid = explode( ',', $l['listcatid'] );
                 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$arr_catid[0]]['alias'] . "/" . $l['alias'] . "-" . $l['id'];
