@@ -309,7 +309,7 @@ $positions = $xmlpositions[0]->position; //object
 
 if ( $row['bid'] != 0 )
 {
-    $contents .= "<div class=\"quote\" style=\"width:740px;\">\n";
+    $contents .= "<div class=\"quote\" style=\"width:730px;\">\n";
     $contents .= "<blockquote class='error'><span id='message'>" . $lang_module['block_group_notice'] . "</span></blockquote>\n";
     $contents .= "</div>\n";
 }
@@ -706,17 +706,7 @@ $contents .= '	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.p
 	//]]>
 </script>';
 
-include ( NV_ROOTDIR . "/includes/header.php" );
-
-echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\">
-    <head>
-        <meta http-equiv=\"Content-Language\" content=\"vi\" />
-        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
-		<title>Insert title here</title>
-		
-		<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/css/admin.css\" type=\"text/css\" />
-		<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css' rel='stylesheet' />
+$my_head = "<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css' rel='stylesheet' />
 		<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css' rel='stylesheet' />
 		<link type='text/css' href='" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css' rel='stylesheet' />
 		<style type=\"text/css\">
@@ -733,24 +723,19 @@ echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://
 			    margin: 2px;
 			}
 		</style>
-		<script type=\"text/javascript\">
-			//<![CDATA[
-			var nv_siteroot = '" . NV_BASE_SITEURL . "';
-			var htmlload = '<tr><td align=\"center\" colspan=\"2\"<img src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"/></td></tr>';
-			//]]>
-		</script>
-		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>
-		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/global.js\"></script>
-		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/admin.js\"></script>
-		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>
 		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>
 		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>
 		<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>
-		</head>
-	<body>
-	" . $contents . "
-	</body>
-	</html>";
+		<script type=\"text/javascript\">
+		//<![CDATA[
+			var htmlload = '<tr><td align=\"center\" colspan=\"2\"<img src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"/></td></tr>';
+		//]]>
+		</script>				
+		";
+$page_title = $lang_module['blocks'] . ':Theme ' . $selectthemes;
+
+include ( NV_ROOTDIR . "/includes/header.php" );
+echo nv_admin_theme( $contents, 0 );
 include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>

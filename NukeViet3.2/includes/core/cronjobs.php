@@ -9,17 +9,16 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if ( $sys_info['allowed_set_time_limit'] )
-{
-	set_time_limit( 0 );
-}
-
 $cron_query = "SELECT * FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `act`=1 AND `start_time` <= '" . NV_CURRENTTIME . "' ORDER BY `is_sys` DESC";
 $cron_result = $db->sql_query( $cron_query );
-$cron_numrows = $db->sql_numrows( $cron_result );
 
-if ( ! empty( $cron_numrows ) )
+if ($db->sql_numrows( $cron_result ))
 {
+	if ( $sys_info['allowed_set_time_limit'] )
+	{
+		set_time_limit( 0 );
+	}
+		
 	while ( $cron_row = $db->sql_fetchrow( $cron_result ) )
 	{
 		$cron_allowed = false;
@@ -39,9 +38,9 @@ if ( ! empty( $cron_numrows ) )
 
 		if ( $cron_allowed )
 		{
-            if ( ! defined( 'NV_IS_CRON' ) ) define( "NV_IS_CRON", true );
-			if ( ! empty( $cron_row['run_file'] ) and preg_match( "/^([a-zA-Z0-9\_\.]+)\.php$/", $cron_row['run_file'] ) and file_exists( NV_ROOTDIR . '/includes/cronjobs/' . $cron_row['run_file'] ) )
+			if ( ! empty( $cron_row['run_file'] ) and preg_match( "/^([a-zA-Z0-9\-\_\.]+)\.php$/", $cron_row['run_file'] ) and file_exists( NV_ROOTDIR . '/includes/cronjobs/' . $cron_row['run_file'] ) )
 			{
+            	if ( ! defined( 'NV_IS_CRON' ) ) define( "NV_IS_CRON", true );
 				require_once ( NV_ROOTDIR . '/includes/cronjobs/' . $cron_row['run_file'] );
 			}
 			if ( ! nv_function_exists( $cron_row['run_func'] ) )

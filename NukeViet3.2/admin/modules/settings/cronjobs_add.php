@@ -39,31 +39,44 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
     }
     else
     {
-        $start_time = mktime( $hour, $min, 0, $month, $day, $year );
-        
-        if ( ! empty( $params ) )
-        {
-            $params = explode( ",", $params );
-            $params = array_map( "trim", $params );
-            $params = implode( ",", $params );
-        }
-        $sql = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`, `" . NV_LANG_INTERFACE . "_cron_name`) VALUES (
-			NULL, " . $start_time . ", " . $interval . ", " . $db->dbescape( $run_file ) . ", 
-			" . $db->dbescape( $run_func ) . ", " . $db->dbescape( $params ) . ", " . $del . ", 0, 1, 0, 0, " . $db->dbescape( $cron_name ) . ")";
-        $id = $db->sql_query_insert_id( $sql );
-        if ( $id )
-        {
-            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_add', "id  " . $id, $admin_info['userid'] );
-        	$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where `lang`!='" . NV_LANG_INTERFACE . "'";
-            $result = $db->sql_query( $sql );
-            while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
-            {
-                $sql = "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `" . $lang_i . "_cron_name`=" . $db->dbescape( $run_func ) . " WHERE `id`=" . $id;
-                $db->sql_query( $sql );
-            
-            }
-           Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cronjobs" );
-           die();
+    	if ( ! empty( $run_file) and preg_match( "/^([a-zA-Z0-9\-\_\.]+)\.php$/", $run_file) and file_exists( NV_ROOTDIR . '/includes/cronjobs/' . $run_file ) )
+		{
+			if ( ! defined( 'NV_IS_CRON' ) ) define( "NV_IS_CRON", true );
+			require_once ( NV_ROOTDIR . '/includes/cronjobs/' . $run_file );
+		}
+		
+		if ( ! nv_function_exists( $run_func) )
+		{
+        	$error = $lang_module['func_name_not_exist'];
+		}
+		else
+		{
+	        $start_time = mktime( $hour, $min, 0, $month, $day, $year );
+	        
+	        if ( ! empty( $params ) )
+	        {
+	            $params = explode( ",", $params );
+	            $params = array_map( "trim", $params );
+	            $params = implode( ",", $params );
+	        }
+	        $sql = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`, `" . NV_LANG_INTERFACE . "_cron_name`) VALUES (
+				NULL, " . $start_time . ", " . $interval . ", " . $db->dbescape( $run_file ) . ", 
+				" . $db->dbescape( $run_func ) . ", " . $db->dbescape( $params ) . ", " . $del . ", 0, 1, 0, 0, " . $db->dbescape( $cron_name ) . ")";
+	        $id = $db->sql_query_insert_id( $sql );
+	        if ( $id )
+	        {
+	            nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_add', "id  " . $id, $admin_info['userid'] );
+	        	$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where `lang`!='" . NV_LANG_INTERFACE . "'";
+	            $result = $db->sql_query( $sql );
+	            while ( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+	            {
+	                $sql = "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `" . $lang_i . "_cron_name`=" . $db->dbescape( $run_func ) . " WHERE `id`=" . $id;
+	                $db->sql_query( $sql );
+	            
+	            }
+	           Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cronjobs" );
+	           die();
+	        }
         }
     }
 }

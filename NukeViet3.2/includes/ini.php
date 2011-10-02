@@ -92,18 +92,6 @@ if ( ! $sys_info['session_support'] )
     trigger_error( "Session object not supported", 256 );
 }
 
-if ( $sys_info['allowed_set_time_limit'] )
-{
-    if ( defined( 'NV_WYSIWYG' ) )
-    {
-        set_time_limit( 0 );
-    }
-    else
-    {
-        set_time_limit( 300 );
-    }
-}
-
 //Xac dinh tien ich mo rong lam viec voi string
 $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ( $sys_info['iconv_support'] ? 'iconv' : 'php' );
 

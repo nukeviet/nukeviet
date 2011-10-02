@@ -682,6 +682,22 @@ class Request
      */
     private function filterTags ( $source )
     {
+		$source = preg_replace( "/\<script([^\>]*)\>(.*)\<\/script\>/isU", "", $source );
+		if (preg_match_all("/<iframe[a-z0-9\s\=\"]*src\=\"http(s)?\:\/\/([w]{3})?\.youtube[^\/]+\/embed\/([^\?]+)(\?[^\"]+)?\"[^\>]*\><\/iframe>/isU", $source, $match))
+		{
+			foreach ($match[0] as $key => $_m)
+			{
+				$vid = $match[3][$key];
+				$width = intval(preg_replace("/^(.*)width\=\"([\d]+)\"(.*)$/isU", "\\2", $_m));
+				$height = intval(preg_replace("/^(.*)height\=\"([\d]+)\"(.*)$/isU", "\\2", $_m));
+
+				$width = ($width > 0) ? $width : 480;
+				$height = ($height > 0) ? $width : 360;
+
+				$ojwplayer = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" height="' . $height . '" width="' . $width . '"><param name="movie" value="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value="file=http://www.youtube.com/watch?v=' . $vid . '" /><embed allowfullscreen="true" allowscriptaccess="always" flashvars="file=http://www.youtube.com/watch?v=' . $vid . '" height="' . $height . '" width="' . $width . '" src="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf"></embed></object>';
+				$source = str_replace($_m, $ojwplayer, $source);
+			}
+		}			
         $preTag = null;
         $postTag = $source;
         $tagOpen_start = strpos( $source, '<' );

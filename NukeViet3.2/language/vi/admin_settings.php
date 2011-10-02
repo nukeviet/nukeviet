@@ -150,6 +150,7 @@ $lang_module['nv_admin_del'] = "Xóa công việc";
 $lang_module['cron_name_empty'] = "Bạn chưa khai báo tên của công việc";
 $lang_module['file_not_exist'] = "File mà bạn khai báo không tồn tại";
 $lang_module['func_name_invalid'] = "Bạn chưa khai báo tên hàm hoặc tên hàm không đúng quy định";
+$lang_module['func_name_not_exist'] = "Tên hàm bạn khai báo không tồn tại";
 $lang_module['nv_admin_add_title'] = "Để thêm công việc, bạn cần khai báo đầy đủ vào các ô trống dưới đây";
 $lang_module['nv_admin_edit_title'] = "Để sửa công việc, bạn cần khai báo đầy đủ vào các ô trống dưới đây";
 $lang_module['cron_name'] = "Tên công việc";

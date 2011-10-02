@@ -256,18 +256,9 @@ function nv_EncString( $string )
  */
 function change_alias( $alias )
 {
-    $alias = nv_EncString( $alias );
-
-    $search = array ('&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
-	$alias = str_replace ( $search, " ", $alias );
-    
-    $alias = preg_replace( "/([^a-z0-9-\s])/is", "", $alias );
-    $alias = preg_replace( "/[ ]+/", " ", $alias );
-    $alias = preg_replace( "/\s/", "-", $alias );
-    $alias = preg_replace( '/(\-)$/', '', $alias );
-    $alias = preg_replace( '/^(\-)/', '', $alias );
-    $alias = preg_replace( '/[\-]+/', '-', $alias );
-    return $alias;
+	$search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
+	$alias = preg_replace( array("/[^a-zA-Z0-9]/",'/[ ]+/', "/^[\-]+/", "/[\-]+$/"), array(" ", "-", "", ""), str_replace( $search, " ", nv_EncString( $alias ) ) );
+	return $alias;
 }
 
 /**
@@ -281,6 +272,8 @@ function nv_clean60( $string, $num = 60 )
 {
     global $global_config;
 
+    $string = nv_unhtmlspecialchars($string);
+	
     $len = nv_strlen( $string );
 
     if ( $num and $num < $len )
