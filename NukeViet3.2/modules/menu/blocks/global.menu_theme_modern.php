@@ -170,7 +170,7 @@ if ( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 				$check_cat = isset( $array_cat_menu[$catid]['parentid'] ) ? $array_cat_menu[$catid]['parentid'] : 0;
                 if ( ( $catvalue['catid'] == $catid ) || ( $check_cat == $catvalue['catid'] ) || ( empty( $catid ) && $i == 1 ) )
                 {
-                    $catvalue['current'] = ( $i == 1 ) ? 'class="current first"' : 'class="current"';
+                    $catvalue['current'] = ( $i == 1 ) ? 'class="current"' : 'class="current"';
                     $i = 0;
                 }
                 $xtpl->assign( 'mainloop', $catvalue );
