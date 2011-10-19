@@ -138,162 +138,168 @@ function nv_create_submenu ( )
 }
 
 /**
- * nv_setBlockAllowed()
- * 
- * @param mixed $groups_view
- * @return
- */
-function nv_setBlockAllowed( $groups_view )
-{
-    global $user_info;
-
-    if ( defined( 'NV_IS_SPADMIN' ) ) return true;
-
-    $groups_view = ( string )$groups_view;
-    if ( $groups_view == "0" or ( $groups_view == "1" and defined( 'NV_IS_USER' ) ) or ( $groups_view == "2" and defined( 'NV_IS_MODADMIN' ) ) ) return true;
-    if ( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) ) return true;
-
-    return false;
-}
-
-/**
  * nv_blocks_get_content()
  * 
  * @return
  */
 
-function nv_blocks_content( $sitecontent )
+function nv_blocks_content ( )
 {
-    global $db, $module_info, $op, $global_config, $lang_global, $site_mods, $user_info;
-
-    //Lay danh sach cac nhom block trong config.ini
+    global $db, $module_info, $op, $global_config, $lang_global, $module_name, $site_mods, $my_head, $user_info;
+    $__blocks = array();
+    $__blocks_return = array();
+    
+    #dev version theme control
     $xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini' );
-    $_content = $xml->xpath( 'positions' ); //array
-    $_position = $_content[0]->position; //object
-    $_posAllowed = array();
-    foreach ( $_position as $_pos )
+    $content = $xml->xpath( 'positions' ); //array
+    $position = $content[0]->position; //object
+    $array_position = array();
+    for ( $i = 0; $i < count( $position ); $i ++ )
     {
-        $_pos = trim( ( string )$_pos->tag );
-        unset( $matches );
-        if ( preg_match( "/^\[([^\]]+)\]$/is", $_pos, $matches ) )
+        $__pos = ( string )$position[$i]->tag;
+        if ( ! empty( $__pos ) )
         {
-            $_posAllowed[] = $matches[1];
+            $array_position[] = $__pos;
+            $__blocks_return[$__pos] = "";
         }
     }
-
-    if ( empty( $_posAllowed ) ) return $sitecontent;
-
-    //Tim trong noi dung trang cac doan ma phu hop voi cac nhom block tren
-    $_posAllowed = implode( "|", array_map( "nv_preg_quote", $_posAllowed ) );
-    preg_match_all( "/\[(" . $_posAllowed . ")(\d+)?\]()/", $sitecontent, $_posReal );
-
-    if ( empty( $_posReal[0] ) ) return $sitecontent;
-
-    $_posReal = array_combine( $_posReal[0], $_posReal[3] );
-
-    //Lay ra cac block thuoc cac nhom tren
-    $_in = implode( ",", array_map( array( $db, "dbescape_string" ), array_keys( $_posReal ) ) );
-    $_sql = "SELECT * FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1 
-    INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 
-    ON t1.bid = t2.bid 
-    WHERE t1.position IN (" . $_in . ") 
-    AND (t1.exp_time='0' OR t1.exp_time > " . NV_CURRENTTIME . ") 
-    AND t2.func_id='" . $module_info['funcs'][$op]['func_id'] . "' 
-    AND t1.theme ='" . $global_config['module_theme'] . "' 
-    AND t1.active=1 
-    ORDER BY t2.weight ASC";
-
-    if ( ( $_result = $db->sql_query( $_sql ) ) !== false )
+    if ( ! empty( $array_position ) )
     {
-        while ( $_row = $db->sql_fetch_assoc( $_result ) )
+        #dev version theme control
+        $sql_bl = "SELECT * FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 ON t1.bid = t2.bid WHERE t2.func_id='" . $module_info['funcs'][$op]['func_id'] . "' AND t1.theme ='" . $global_config['module_theme'] . "' AND t1.active=1 ORDER BY t2.weight ASC";
+        $list = nv_db_cache( $sql_bl, 'bid', 'themes' );
+        foreach ( $list as $row_bl )
         {
-            //Kiem tra quyen xem block
-            if ( nv_setBlockAllowed( $_row['groups_view'] ) )
+            $__pos = $row_bl['position'];
+            if ( isset( $__blocks_return[$__pos] ) and ( $row_bl['exp_time'] == 0 or $row_bl['exp_time'] > NV_CURRENTTIME ) )
             {
-                //tieu de block
-                $blockTitle = ( ! empty( $_row['title'] ) and ! empty( $_row['link'] ) ) ? "<a href=\"" . $_row['link'] . "\">" . $_row['title'] . "</a>" : $_row['title'];
-
-                //Noi dung block
-                $content = "";
-
-                //Cau hinh block
-                $block_config = ( ! empty( $_row['config'] ) ) ? unserialize( $_row['config'] ) : array();
-                $block_config['bid'] = $_row['bid'];
-                $block_config['module'] = $_row['module'];
-                $block_config['block_name'] = substr( $_row['file_name'], 0, -4 );
-
-                if ( $_row['module'] == "global" and file_exists( NV_ROOTDIR . "/includes/blocks/" . $_row['file_name'] ) )
+                $groups_view = ( string )$row_bl['groups_view'];
+                $allowed = false;
+                if ( $groups_view == "0" )
                 {
-                    include ( NV_ROOTDIR . "/includes/blocks/" . $_row['file_name'] );
-                } elseif ( isset( $site_mods[$_row['module']]['module_file'] ) //
-                and ! empty( $site_mods[$_row['module']]['module_file'] ) //
-                    and file_exists( NV_ROOTDIR . "/modules/" . $site_mods[$_row['module']]['module_file'] . "/blocks/" . $_row['file_name'] ) )
-                {
-                    include ( NV_ROOTDIR . "/modules/" . $site_mods[$_row['module']]['module_file'] . "/blocks/" . $_row['file_name'] );
+                    $allowed = true;
                 }
-                unset( $block_config, $_row['config'] );
-
-                if ( ! empty( $content ) or defined( 'NV_IS_DRAG_BLOCK' ) )
+                if ( $groups_view == "1" and defined( 'NV_IS_USER' ) )
                 {
-                    $xtpl = null;
-                    $_row['template'] = ( empty( $_row['template'] ) ) ? "default" : $_row['template'];
-                    if ( ! empty( $module_info['theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $module_info['theme'] . "/layout/block." . $_row['template'] . ".tpl" ) )
+                    $allowed = true;
+                }
+                elseif ( $groups_view == "2" and defined( 'NV_IS_MODADMIN' ) )
+                {
+                    $allowed = true;
+                }
+                elseif ( defined( 'NV_IS_SPADMIN' ) )
+                {
+                    $allowed = true;
+                }
+                elseif ( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) )
+                {
+                    $allowed = true;
+                }
+                
+                if ( $allowed )
+                {
+                    $title = $row_bl['title'];
+                    if ( ! empty( $title ) and ! empty( $row_bl['link'] ) )
                     {
-                        $xtpl = new XTemplate( "block." . $_row['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['theme'] . "/layout" );
-                    } elseif ( ! empty( $global_config['module_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/block." . $_row['template'] . ".tpl" ) )
-                    {
-                        $xtpl = new XTemplate( "block." . $_row['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout" );
-                    } elseif ( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout/block." . $_row['template'] . ".tpl" ) )
-                    {
-                        $xtpl = new XTemplate( "block." . $_row['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout" );
-                    } elseif ( file_exists( NV_ROOTDIR . "/themes/default/layout/block." . $_row['template'] . ".tpl" ) )
-                    {
-                        $xtpl = new XTemplate( "block." . $_row['template'] . ".tpl", NV_ROOTDIR . "/themes/default/layout" );
+                        $title = "<a href=\"" . $row_bl['link'] . "\">" . $title . "</a>";
                     }
-                    if ( ! empty( $xtpl ) )
-                    {
-                        $xtpl->assign( 'BLOCK_TITLE', $blockTitle );
-                        $xtpl->assign( 'BLOCK_CONTENT', $content );
-                        $xtpl->parse( 'mainblock' );
-                        $content = $xtpl->text( 'mainblock' );
-                    }
-                    else
-                    {
-                        $content = $blockTitle . "<br />" . $content . "<br />";
-                    }
-
-                    if ( defined( 'NV_IS_DRAG_BLOCK' ) )
-                    {
-                        $content = '<div class="portlet" id="bl_' . ( $_row['bid'] ) . '">
-                            <p>
-                            <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '">
-                                <img style="border:none" src="' . NV_BASE_SITEURL . 'images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '">
-                                <img style="border:none" src="' . NV_BASE_SITEURL . 'images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '">
-                                <img style="border:none" src="' . NV_BASE_SITEURL . 'images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
-                            </p>
-                            ' . $content . '</div>';
-                    }
-                    $_posReal[$_row['position']] .= $content;
+                    # comment this line
+                    $__blocks[$__pos][] = array( 'bid' => $row_bl['bid'], 'title' => $title, 'module' => $row_bl['module'], 'file_name' => $row_bl['file_name'], 'template' => $row_bl['template'], 'config' => $row_bl['config'] );
                 }
             }
         }
-
-        $db->sql_freeresult( $_result );
-    }
-
-    if ( defined( 'NV_IS_DRAG_BLOCK' ) )
-    {
-        foreach ( array_keys( $_posReal ) as $__pos )
+        foreach ( array_keys( $__blocks ) as $__pos )
         {
-            $_posReal[$__pos] = '<div class="column" id="' . ( preg_replace( '#\[|\]#', '', $__pos ) ) . '">' . $_posReal[$__pos];
-            $_posReal[$__pos] .= '	<span><a class="block_content" id="' . $__pos . '" href="javascript:void(0)"><img style="border:none" src="' . NV_BASE_SITEURL . 'images/add.png" alt="' . $lang_global['add_block'] . '"/> ' . $lang_global['add_block'] . '</a></span>';
-            $_posReal[$__pos] .= '</div>';
+            if ( ! empty( $__blocks[$__pos] ) )
+            {
+                foreach ( $__blocks[$__pos] as $__values )
+                {
+                    $content = "";
+                    $block_config = ( ! empty( $__values['config'] ) ) ? unserialize( $__values['config'] ) : array();
+                    $block_config['bid'] = $__values['bid'];
+                    $block_config['module'] = $__values['module'];
+					
+					unset( $matches );
+					preg_match( $global_config['check_block_module'], $__values['file_name'], $matches );
+                    $block_config['block_name'] = $matches[1] . "." . $matches[2];
+					
+                    if ( $__values['module'] == "global" and file_exists( NV_ROOTDIR . "/includes/blocks/" . $__values['file_name'] ) )
+                    {
+                        include ( NV_ROOTDIR . "/includes/blocks/" . $__values['file_name'] );
+                    }
+                    elseif ( isset( $site_mods[$__values['module']] ) )
+                    {
+                        $mfile = $site_mods[$__values['module']]['module_file'];
+                        if ( file_exists( NV_ROOTDIR . "/modules/" . $mfile . "/blocks/" . $__values['file_name'] ) )
+                        {
+                            include ( NV_ROOTDIR . "/modules/" . $mfile . "/blocks/" . $__values['file_name'] );
+                        }
+                    }
+                    unset( $block_config, $__values['config'] );
+                    
+                    if ( ! empty( $content ) or defined( 'NV_IS_DRAG_BLOCK' ) )
+                    {
+                        $block_theme = "";
+                        $__values['template'] = ( empty( $__values['template'] ) ) ? "default" : $__values['template'];
+                        if ( ! empty( $module_info['theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $module_info['theme'] . "/layout/block." . $__values['template'] . ".tpl" ) )
+                        {
+                            $block_theme = $module_info['theme'];
+                        }
+                        elseif ( ! empty( $global_config['module_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/block." . $__values['template'] . ".tpl" ) )
+                        {
+                            $block_theme = $global_config['module_theme'];
+                        }
+                        elseif ( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/layout/block." . $__values['template'] . ".tpl" ) )
+                        {
+                            $block_theme = $global_config['site_theme'];
+                        }
+                        elseif ( file_exists( NV_ROOTDIR . "/themes/default/layout/block." . $__values['template'] . ".tpl" ) )
+                        {
+                            $block_theme = "default";
+                        }
+                        if ( ! empty( $block_theme ) )
+                        {
+                            $xtpl = new XTemplate( "block." . $__values['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/layout" );
+                            $xtpl->assign( 'BLOCK_TITLE', $__values['title'] );
+                            $xtpl->assign( 'BLOCK_CONTENT', $content );
+                            $xtpl->parse( 'mainblock' );
+                            $b_content = $xtpl->text( 'mainblock' );
+                        }
+                        else
+                        {
+                            $b_content = $__values['title'] . "<br />" . $content . "<br />";
+                        }
+                        if ( defined( 'NV_IS_DRAG_BLOCK' ) )
+                        {
+                            $b_content = '<div class="portlet" id="bl_' . ( $__values['bid'] ) . '">
+                            <p>
+                            <a href="javascript:void(0)" class="block_content" name="' . $__values['bid'] . '">
+                                <img style="border:none" src="' . NV_BASE_SITEURL . 'images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $__values['bid'] . '">
+                                <img style="border:none" src="' . NV_BASE_SITEURL . 'images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $__values['bid'] . '">
+                                <img style="border:none" src="' . NV_BASE_SITEURL . 'images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
+                            </p>
+                            ' . $b_content . '</div>';
+                        }
+                        $__blocks_return[$__pos] .= $b_content;
+                    }
+                }
+            }
         }
     }
-
-    $sitecontent = str_replace( array_keys( $_posReal ), array_values( $_posReal ), $sitecontent );
-
-    return $sitecontent;
+    if ( defined( 'NV_IS_DRAG_BLOCK' ) )
+    {
+        #dev version theme control
+        foreach ( $__blocks_return as $__pos => $b_content )
+        {
+            $__blocks_return[$__pos] = '<div class="column" id="' . ( preg_replace( '#\[|\]#', '', $__pos ) ) . '">';
+            $__blocks_return[$__pos] .= $b_content;
+            $__blocks_return[$__pos] .= '	<span><a class="block_content" id="' . $__pos . '" href="javascript:void(0)"><img style="border:none" src="' . NV_BASE_SITEURL . 'images/add.png" alt="' . $lang_global['add_block'] . '"/> ' . $lang_global['add_block'] . '</a></span>';
+            $__blocks_return[$__pos] .= '</div>';
+        }
+    
+     #end dev version theme control
+    }
+    return $__blocks_return;
 }
 
 /**
@@ -522,7 +528,8 @@ function nv_html_site_js ( )
 									var order = $(this).sortable("serialize");
 									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&position="+position+"&func_id="+func_id, function(theResponse){
 										if(theResponse=="OK_"+func_id){
-					    					$("div#toolbar>ul.info").html("<li><span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span></li>").fadeIn(1000);
+					    					$("div#toolbar>ul.info>li").hide();
+					    					$("div#toolbar>ul.info>li").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
 										}
 										else{
 											alert("' . $lang_global['blocks_saved_error'] . '");
@@ -534,7 +541,8 @@ function nv_html_site_js ( )
 									var order = $(this).sortable("serialize");
 									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&func_id="+func_id, function(theResponse){
 										if(theResponse=="OK_"+func_id){
-					    					$("div#toolbar>ul.info").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
+					    					$("div#toolbar>ul.info>li").hide();
+					    					$("div#toolbar>ul.info>li").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
 										}
 										else{
 											alert("' . $lang_global['blocks_saved_error'] . '");
@@ -551,62 +559,68 @@ function nv_html_site_js ( )
     return $return;
 }
 
-function nv_admin_menu()
+function nv_admin_menu ( )
 {
-    global $lang_global, $admin_info, $module_info, $module_name, $global_config, $db, $my_head;
+    global $lang_global, $admin_info, $module_info, $module_name, $global_config;
+	
+	if ( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/admin_toolbar.tpl" ) )
+	{
+		$block_theme = $global_config['site_theme'];
+	}
+	else
+	{
+		$block_theme = "default";
+	}
 
-    $block_theme = "default";
-
-    $xtpl = new XTemplate( "admin_toolbar.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/system" );
-    $xtpl->assign( 'GLANG', $lang_global );
-    $xtpl->assign( 'ADMIN_INFO', $admin_info );
-    $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-    $xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
-    $xtpl->assign( 'URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=authors&amp;id=" . $admin_info['admin_id'] );
-
+	$xtpl = new XTemplate( "admin_toolbar.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/system" );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'ADMIN_INFO', $admin_info );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
+	$xtpl->assign( 'URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=authors&amp;id=" . $admin_info['admin_id'] );
+	
     if ( defined( 'NV_IS_SPADMIN' ) )
     {
-    	if ( ! defined( 'SHADOWBOX' ) )
-        {
-            $my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-            $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-            $my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-            define( 'SHADOWBOX', true );
-        }
         $new_drag_block = ( defined( 'NV_IS_DRAG_BLOCK' ) ) ? 0 : 1;
         $lang_drag_block = ( $new_drag_block ) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
-
-        $xtpl->assign( 'URL_DBLOCK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;drag_block=" . $new_drag_block );
-        $xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );
-
-        $total_time = substr( ( array_sum( explode( " ", microtime() ) ) - NV_START_TIME + $db->time ), 0, 5 );
-        $xtpl->assign( 'COUNT_SHOW_QUERIES', count( $db->query_strs ) . " / " . $total_time );
+				
+		$xtpl->assign( 'URL_DBLOCK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;drag_block=" . $new_drag_block );
+		$xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );
 		
-        foreach ( $db->query_strs as $key => $field )
-        {
-        	$data = array(
-        		"class"=>( $key % 2 ) ? " highlight" : " normal",
-        		"imgsrc"=> ($field[1]) ? NV_BASE_SITEURL . "themes/" . $block_theme . "/images/icons/good.png" : NV_BASE_SITEURL . "themes/" . $block_theme . "/images/icons/bad.png",
-        		"imgalt"=> ($field[1]) ? $lang_global['ok'] : $lang_global['fail'],
-        		"queries"=> nv_htmlspecialchars( $field[0] )
-			);
-    		$xtpl->assign( 'DATA', $data );
-    		$xtpl->parse( 'main.is_spadadmin3.queries' );
-        }	
-        $xtpl->parse( 'main.is_spadadmin' );
-        $xtpl->parse( 'main.is_spadadmin2' );
-        $xtpl->parse( 'main.is_spadadmin3' );
+		$xtpl->parse( 'main.is_spadadmin' );
     }
-
+	
     if ( defined( 'NV_IS_MODADMIN' ) and ! empty( $module_info['admin_file'] ) )
     {
-        $xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-
-        $xtpl->parse( 'main.is_modadmin' );
+		$xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+		
+		$xtpl->parse( 'main.is_modadmin' );
     }
 
-    $xtpl->parse( 'main' );
-    return $xtpl->text( 'main' );
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+function nv_show_queries_for_admin ( )
+{
+    global $db, $lang_global, $global_config;
+    $return = "";
+    if ( defined( 'NV_IS_SPADMIN' ) )
+    {
+        $return .= "<a name=\"queries\"></a>\n";
+        $return .= "<h3 class=\"queries\">" . $lang_global['show_queries'] . "</h3>\n";
+        $return .= "<div class=\"queries\">\n";
+        foreach ( $db->query_strs as $key => $field )
+        {
+            $class = ( $key % 2 ) ? " highlight" : " normal";
+            $return .= "<div class=\"clearfix" . $class . "\"><p>\n";
+            $return .= "<span class=\"first\">" . ( $field[1] ? "<img alt=\"" . $lang_global['ok'] . "\" title=\"" . $lang_global['ok'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/icons/good.png\" width=\"16\" height=\"16\" />" : "<img alt=\"" . $lang_global['fail'] . "\" title=\"" . $lang_global['fail'] . "\" src=\"" . NV_BASE_SITEURL . "themes/default/images/icons/bad.png\" width=\"16\" height=\"16\" />" ) . "</span>\n";
+            $return .= "<span class=\"second\">" . nv_htmlspecialchars( $field[0] ) . "</span></p>\n";
+            $return .= "</div>\n";
+        }
+        $return .= "</div>\n";
+    }
+    return $return;
 }
 
 /**
