@@ -774,7 +774,7 @@ for ( $i = 0; $i < 60; $i ++ )
 }
 $xtpl->assign( 'pmin', $select );
 /////////// time exp //////////////////////////////////////////
-$xtpl->assign( 'publ_date', $publ_date );
+$xtpl->assign( 'exp_date', $exp_date );
 $select = "";
 for ( $i = 0; $i <= 23; $i ++ )
 {
