@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<meta>
+  <meta_item>
+    <group>http-equiv</group>
+    <value>content-language</value>
+    <content>{CONTENT-LANGUAGE}</content>
+  </meta_item>
+  <meta_item>
+    <group>name</group>
+    <value>language</value>
+    <content>{LANGUAGE}</content>
+  </meta_item>
+  <meta_item>
+    <group>name</group>
+    <value>author</value>
+    <content>{SITE_NAME}</content>
+  </meta_item>
+  <meta_item>
+    <group>name</group>
+    <value>copyright</value>
+    <content>{SITE_NAME} [{SITE_EMAIL}]</content>
+  </meta_item>
+  <meta_item>
+    <group>name</group>
+    <value>robots</value>
+    <content>index, archive, follow, noodp</content>
+  </meta_item>
+  <meta_item>
+    <group>name</group>
+    <value>googlebot</value>
+    <content>index,archive,follow,noodp</content>
+  </meta_item>
+  <meta_item>
+    <group>name</group>
+    <value>msnbot</value>
+    <content>all,index,follow</content>
+  </meta_item>
+</meta>

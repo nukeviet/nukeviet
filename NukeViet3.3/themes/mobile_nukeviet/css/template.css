@@ -1,0 +1,88 @@
+body
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+}
+a:link, a:active, a:visited
+{
+    color: #097eaf;
+    text-decoration: none;
+}
+a:hover
+{
+    color: #4491b2;
+}
+#container
+{
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+}
+#header
+{
+    background: #A2D8FA url(../images/header.jpg) no-repeat;
+    height: 70px;
+    position: relative;
+}
+#header #logo
+{
+    float: left;
+}
+#header #logo img
+{
+    height: 60px;
+    padding: 5px 0 0 30px;
+    vertical-align: middle;
+}
+#header .language
+{
+    position: absolute;
+    top: 20px;
+    right: 5px;
+}
+#footer
+{
+    border-top: 8px solid #0f45a8;
+    padding: 5px 0;
+}
+#footer p.footer
+{
+    padding: 0 10px;
+    margin: 0;
+    font-size: 11px;
+    color: #9c9c9c;
+}
+div.contentwrapper
+{
+    padding: 0 5px;
+}
+/*Boxed*/
+div.box
+{
+    margin-bottom: 15px;
+    width: 100%;
+}
+div.silver
+{
+    background: #f2f2f2;
+}
+div.box h3.header
+{
+    border: 1px solid #0f69e2;
+    border-bottom: 2px solid #fff;
+    height: 28px;
+    line-height: 28px;
+    color: #fff;
+    text-indent: 10px;
+    background: #0B41A5 url(../images/h3.header.jpg) repeat-x;
+}
+div.box h3.header a
+{
+    color: #fff;
+}
+div.box h3.header strong
+{
+    padding-right: 4px;
+    color: #00ff00;
+}
