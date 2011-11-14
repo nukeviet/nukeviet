@@ -74,6 +74,8 @@ $contents .= "<img  alt=\"\" style=\"border-width: 0px; vertical-align: middle;\
 
 $contents .= nv_get_rss_link();
 
+$page_title = $module_info['custom_title'];
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
