@@ -85,8 +85,7 @@ a {
 }
 
 #login-header-left {
-	background: url(../images/login/login_tl.jpg) no-repeat top left
-		!important;
+	background: url(../images/login/login_tl.jpg) no-repeat top left !important;
 	width: 64px;
 }
 

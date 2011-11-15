@@ -46,7 +46,7 @@
 .upload_content dl{padding:4px}
 .upload_content textarea{height:100px;overflow:auto;width:300px}
 a.more{background:url(../images/download/arrow-blue.gif) right 5px no-repeat;color:#1b72d3;display:inline-block;padding-right:11px}
-.left{margin-right:.875em!important}
+.left{margin-right:.875em !important}
 .right{margin-left:.875em}
 .aright{text-align:right}
 .aleft{text-align:left}
@@ -94,7 +94,7 @@ hr.space{background:#fff;color:#fff}
 .other-news h4{border-bottom:1px solid #b93d00;color:#b93d00;margin-bottom:.5em}
 .other-news ul{list-style-type:none;margin:0 0 .5em}
 .other-news ul li{background:url(../images/download/bullet-orange.png) 3px 10px no-repeat;padding:3px 0 3px 12px}
-.ui-tabs .ui-tabs-hide{display:none!important}
+.ui-tabs .ui-tabs-hide{display:none !important}
 .small{color:#979797;font-size:.875em}
 .large{font-size:1.2em}
 .quiet{color:#666}
