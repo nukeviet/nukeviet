@@ -22,7 +22,7 @@ function nv_site_theme ( $contents )
     $js = nv_html_site_js();
     if ( $client_info['browser']['key'] != "explorer" )
     {
-        $css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/real.css\" />\n";
+        if ( ! $client_info['is_bot'] ) $css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/real.css\" />\n";
     }
     else
     {
