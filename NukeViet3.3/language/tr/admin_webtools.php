@@ -152,9 +152,5 @@ $lang_module['config'] = "Yapılandırma";
 $lang_module['autocheckupdate'] = "Otomatik versiyon denetimini etkinleştir";
 $lang_module['updatetime'] = "Zaman yeni sürümünü kontrol etmek";
 $lang_module['clearip_logs'] = "Ip kayıtları silme";
-$lang_module['update_revision_lang_mode'] = "Revizyon ile dil paketleri güncelleme tipi";
-$lang_module['update_revision_lang_mode_all'] = "Tüm diller";
-$lang_module['update_revision_lang_mode_admin'] = "Diller izin";
-$lang_module['update_revision_lang_mode_site'] = "Yerinde kullanarak Dil";
 
 ?>

@@ -152,9 +152,5 @@ $lang_module['config'] = "Configuration";
 $lang_module['autocheckupdate'] = "Activer la mise à jour automatique";
 $lang_module['updatetime'] = "Horaire de la prochaine vérification de mise à jour";
 $lang_module['clearip_logs'] = "Effacer ip logs";
-$lang_module['update_revision_lang_mode'] = "Méthode de mise à jour des langues par Révision";
-$lang_module['update_revision_lang_mode_all'] = "Toutes les langues";
-$lang_module['update_revision_lang_mode_admin'] = "Les langues autorisées";
-$lang_module['update_revision_lang_mode_site'] = "Les langues affichées au site";
 
 ?>
