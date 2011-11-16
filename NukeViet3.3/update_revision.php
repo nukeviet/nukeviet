@@ -506,7 +506,7 @@ function nv_func_update_data()
             $result_mod = $db->sql_query($sql);
             while (list($mod, $mod_data) = $db->sql_fetchrow($result_mod))
             {
-                $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $mod_data . "_money_vi` CHANGE `exchange` `exchange` DOUBLE NOT NULL DEFAULT '0'");
+                $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $mod_data . "_money_" . $lang_i . "` CHANGE `exchange` `exchange` DOUBLE NOT NULL DEFAULT '0'");
                 $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $mod_data . "_rows` ADD `product_code` VARCHAR( 32 ) NOT NULL DEFAULT '' AFTER `archive`");
                 $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $mod_data . "_rows` DROP `topic_id`");
                 $db->sql_query("DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $mod_data . "_topics`");
