@@ -10,6 +10,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=8" />
 <title>Management Upload File</title>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.upload.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.lazyload.js"></script>
 </head>
 <style type="text/css">
