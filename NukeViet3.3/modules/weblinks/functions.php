@@ -27,7 +27,7 @@ $set_viewcat = "";
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 $array_mod_title = array();
 $global_array_cat = array();
-global $module_config;
+global $weblinks_config;
 
 //Xac dinh RSS
 if ($module_info['rss'])
@@ -40,10 +40,10 @@ if ($module_info['rss'])
 
 $sql = "SELECT name, value FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
 $result = $db->sql_query( $sql );
-$module_config = array();
+$weblinks_config = array();
 while ( $row = $db->sql_fetchrow( $result,2 ) )
 {
-    $module_config[$row['name']] = $row['value'];
+    $weblinks_config[$row['name']] = $row['value'];
 }
 unset( $sql, $result );
 
@@ -75,7 +75,7 @@ while ( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $ali
 unset( $sql, $result );
 
 $count_op = sizeof( $array_op );
-$per_page = $module_config['per_page'];
+$per_page = $weblinks_config['per_page'];
 $page = 0;
 if ( ! empty( $array_op ) )
 {

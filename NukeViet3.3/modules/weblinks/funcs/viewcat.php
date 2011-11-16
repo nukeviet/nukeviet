@@ -26,12 +26,12 @@ $array_cat[] = array(
     "title" => $global_array_cat[$catid]['title'], "link" => $global_array_cat[$catid]['link'], "description" => $global_array_cat[$catid]['description'] 
 );
 
-$sort = ($module_config['sort'] == 'des') ? 'desc' : 'asc';
-if ($module_config['sortoption'] == 'byhit')
+$sort = ($weblinks_config['sort'] == 'des') ? 'desc' : 'asc';
+if ($weblinks_config['sortoption'] == 'byhit')
 	$orderby = 'hits_total ';
-elseif ($module_config['sortoption'] == 'byid')
+elseif ($weblinks_config['sortoption'] == 'byid')
 	$orderby = 'id ';
-elseif ($module_config['sortoption'] == 'bytime')
+elseif ($weblinks_config['sortoption'] == 'bytime')
 	$orderby = 'add_time ';
 else
 	$orderby = 'rand() ';
