@@ -75,17 +75,20 @@ if (preg_match($global_config['check_module'], $module_name))
         $include_file = NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php";
         if (file_exists($include_file) and filesize($include_file) != 0)
         {
-            $op = $nv_Request->get_string(NV_OP_VARIABLE, 'post,get', 'main');
             $array_op = array();
-            if (!isset($module_info['funcs'][$op]))
+            $op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
+            if ( empty( $op ) ) $op = "main";
+
+            if ( ! preg_match( "/^[a-z0-9\-\/]+$/i", $op ) )
             {
-                $list_op = $op;
-                $op = 'main';
-                if (preg_match("/^[a-z0-9\-\/]+$/i", $list_op))
-                {
-                    $array_op = explode("/", $list_op);
-                    $op = ( isset($module_info['funcs'][$array_op[0]])) ? $array_op[0] : 'main';
-                }
+                Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+                die();
+            }
+
+            if ( $op != "main" and ! isset( $module_info['funcs'][$op] ) )
+            {
+                $array_op = explode( "/", $op );
+                $op = ( isset( $module_info['funcs'][$array_op[0]] ) ) ? $array_op[0] : 'main';
             }
 
             //Xac dinh quyen dieu hanh module
