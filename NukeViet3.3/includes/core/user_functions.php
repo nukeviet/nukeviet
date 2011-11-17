@@ -386,6 +386,7 @@ function nv_html_meta_tags()
         $kw[] = $global_config['site_keywords'];
     if (!empty($kw))
     {
+        $kw = array_unique( $kw );
         $kw = implode(",", $kw);
         $kw = preg_replace(array("/[ ]*\,[ ]+/", "/[\,]+/"), array(",", ","), $kw);
         $key_words = nv_strtolower(strip_tags($kw));
