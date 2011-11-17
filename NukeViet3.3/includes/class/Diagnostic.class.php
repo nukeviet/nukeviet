@@ -53,7 +53,7 @@ class Diagnostic
         );
 
     private $pattern = array( //
-        'PageRank' => "http://%s/tbr?client=navclient-auto&ch=%s&features=Rank&q=info%s", //
+        'PageRank' => "http://%s/tbr?client=navclient-auto&ch=%s&features=Rank&q=info%s&num=100&filter=0", //
         'AlexaRank' => "http://data.alexa.com/data?cli=10&dat=nsa&url=%s", //
         'YahooBackLink' => "http://siteexplorer.search.yahoo.com/search?ei=UTF-8&p=%s&bwm=i&bwmf=s", //
         'YahooIndexed' => "http://siteexplorer.search.yahoo.com/search?p=%s&bwm=p&bwmf=s&bwmo=d", //
@@ -65,6 +65,7 @@ class Diagnostic
     public $currentDomain;
     public $currentCache;
     private $max = 1000;
+    private $disable_functions = array();
 
     /**
      * Diagnostic::__construct()
@@ -80,6 +81,12 @@ class Diagnostic
         if ( isset( $_pattern['YahooIndexed'] ) ) $this->$pattern['YahooIndexed'] = $_pattern['YahooIndexed'];
         if ( isset( $_pattern['GoogleBackLink'] ) ) $this->$pattern['GoogleBackLink'] = $_pattern['GoogleBackLink'];
         if ( isset( $_pattern['GoogleIndexed'] ) ) $this->$pattern['GoogleIndexed'] = $_pattern['GoogleIndexed'];
+        $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+        if ( extension_loaded( 'suhosin' ) )
+        {
+            $disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+        }
+        $this->disable_functions = $disable_functions;
         $this->myDomain = NV_SERVER_NAME;
         //$this->myDomain = "nukeviet.vn";
     }
@@ -183,15 +190,35 @@ class Diagnostic
     {
         global $getContent;
 
-        $ch = $this->checkHash( $this->hashURL( $this->currentDomain ) );
-        $host = $this->googleDomains[mt_rand( 0, sizeof( $this->googleDomains ) - 1 )];
-        $url = sprintf( $this->pattern['PageRank'], $host, $ch, urlencode( ":" . $this->currentDomain ) );
-        $content = $getContent->get( $url );
-        if ( preg_match( "/^Rank\_(\d+)\:(\d+)\:(\d+)$/", $content, $matches ) )
+        if ( extension_loaded( 'curl' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! preg_grep( '/^curl\_/', $this->disable_functions ) ) ) )
         {
-            return ( int )$matches[3];
+            $ch = $this->checkHash( $this->hashURL( $this->currentDomain ) );
+            $host = $this->googleDomains[mt_rand( 0, sizeof( $this->googleDomains ) - 1 )];
+            $url = sprintf( $this->pattern['PageRank'], $host, $ch, urlencode( ":" . $this->currentDomain ) );
+
+            $ch = curl_init();
+            curl_setopt( $ch, CURLOPT_HEADER, 0 );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+            curl_setopt( $ch, CURLOPT_URL, $url );
+            $content = curl_exec( $ch );
+            if ( ! curl_errno( $ch ) )
+            {
+                $info = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+                if ( $info == "200" )
+                {
+                    if ( preg_match( "/^Rank\_(\d+)\:(\d+)\:(\d+)$/", $content, $matches ) )
+                    {
+                        curl_close( $ch );
+                        return ( int )$matches[3];
+                    }
+                }
+            }
+            curl_close( $ch );
         }
-        return 0;
+
+        $url = "http://safelinks4.me/getpr.php?url=" . urlencode( $this->currentDomain );
+        $content = $getContent->get( $url );
+        return intval( $content );
     }
 
     /**
