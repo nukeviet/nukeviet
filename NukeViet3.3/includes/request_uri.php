@@ -43,6 +43,12 @@ if ( preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_\.\/]+)" .
         }
     }
 }
+elseif (preg_match("/<(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t(.*)>/i", urldecode($request_uri)))
+{
+    header('HTTP/1.1 301 Moved Permanently');
+    Header("Location: " . $base_siteurl);
+    die();
+}
 
 unset( $base_siteurl, $request_uri, $request_uri_array, $matches, $lop );
 
