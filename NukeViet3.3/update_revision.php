@@ -549,9 +549,14 @@ function nv_func_update_data()
         $global_config['rewrite_endurl'] = '/';
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'rewrite_endurl', " . $db->dbescape($global_config['rewrite_endurl']) . ")");
     }
+    if (!isset($global_config['rewrite_exturl']))
+    {
+        $global_config['rewrite_exturl'] = '/';
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'rewrite_exturl', " . $db->dbescape($global_config['rewrite_exturl']) . ")");
+    }
     if ($global_config['revision'] < 1412)
     {
-        $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional'], 'rewrite_endurl' => $global_config['rewrite_endurl']);
+        $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional'], 'rewrite_endurl' => $global_config['rewrite_endurl'], 'rewrite_exturl' => $global_config['rewrite_exturl']);
         nv_rewrite_change($array_config_rewrite);
     }
 

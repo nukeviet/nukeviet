@@ -596,6 +596,7 @@ elseif ($step == 6)
                     ++$step;
                     $nv_Request->set_Session('maxstep', $step);
                     nv_save_file_config();
+                    $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional'], 'rewrite_endurl' => $global_config['rewrite_endurl'], 'rewrite_exturl' => $global_config['rewrite_exturl']);
                     nv_rewrite_change($array_config_rewrite);
 
                     @rename(NV_ROOTDIR . "/" . $file_config_temp, NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME);
