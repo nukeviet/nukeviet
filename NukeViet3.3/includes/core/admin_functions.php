@@ -250,7 +250,7 @@ function nv_rewrite_change($array_config_global)
             $rewrite_rule .= "                </rule>\n";
         }
         $rewrite_rule .= "                <rule name=\"nv_rule_rewrite\">\n";
-        $rewrite_rule .= "                	<match url=\"(.*)\" ignoreCase=\"false\" />\n";
+        $rewrite_rule .= "                	<match url=\"(.*)" . nv_preg_quote($array_config_global['rewrite_endurl']) . "$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= "                	<conditions logicalGrouping=\"MatchAll\">\n";
         $rewrite_rule .= "                		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsFile\" ignoreCase=\"false\" negate=\"true\" />\n";
         $rewrite_rule .= "                 		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsDirectory\" ignoreCase=\"false\" negate=\"true\" />\n";
@@ -282,7 +282,7 @@ function nv_rewrite_change($array_config_global)
         }
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
-        $rewrite_rule .= "RewriteRule (.*) index.php\n";
+        $rewrite_rule .= "RewriteRule (.*)" . nv_preg_quote($array_config_global['rewrite_endurl']) . "\$ index.php\n";
         $rewrite_rule .= "</IfModule>\n\n";
         $rewrite_rule .= "#nukeviet_rewrite_end\n";
         $rewrite_rule .= "##################################################################################\n\n";

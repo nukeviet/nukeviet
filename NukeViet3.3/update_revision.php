@@ -26,8 +26,6 @@ function nv_func_update_data()
     if ($global_config['revision'] < 988)
     {
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'rewrite_endurl', '/')");
-        $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional']);
-        nv_rewrite_change($array_config_rewrite);
     }
 
     if ($global_config['revision'] < 1004)
@@ -476,12 +474,6 @@ function nv_func_update_data()
         }
     }
 
-    if ($global_config['revision'] < 1365)
-    {
-        $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional']);
-        nv_rewrite_change($array_config_rewrite);
-    }
-
     if ($global_config['revision'] < 1366)
     {
         $db->sql_query("CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_ipcountry` (
@@ -550,6 +542,17 @@ function nv_func_update_data()
                 $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang_i . "_" . $mod_data . "_cat`  ADD `titlesite` VARCHAR(255) NOT NULL DEFAULT '' AFTER `title`");
             }
         }
+    }
+
+    if (!isset($global_config['rewrite_endurl']))
+    {
+        $global_config['rewrite_endurl'] = '/';
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'rewrite_endurl', " . $db->dbescape($global_config['rewrite_endurl']) . ")");
+    }
+    if ($global_config['revision'] < 1412)
+    {
+        $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional'], 'rewrite_endurl' => $global_config['rewrite_endurl']);
+        nv_rewrite_change($array_config_rewrite);
     }
 
     nv_save_file_config_global();
