@@ -373,8 +373,20 @@ function nv_html_meta_tags()
     }
     else
     {
-        $ds = (!empty($description)) ? $description : $module_info['custom_title'] . ($op != "main" ? " - " . $module_info['funcs'][$op]['func_custom_name'] : "") . (!empty($page_title) ? " - " . $page_title : "") . " - " . $client_info['selfurl'];
-        $return .= "<meta name=\"description\" content=\"" . strip_tags($ds) . "\" />\n";
+        if ( ! empty( $description ) )
+        {
+            $return .= "<meta name=\"description\" content=\"" . strip_tags( $description ) . "\" />\n";
+        }
+        else
+        {
+            $ds = array();
+            if ( ! empty( $page_title ) ) $ds[] = $page_title;
+            if ( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
+            $ds[] = $module_info['custom_title'];
+            $ds[] = $client_info['selfurl'];
+            $return .= "<meta name=\"description\" content=\"" . strip_tags( implode( " - ", $ds ) ) . "\" />\n";
+
+        }
     }
 
     $kw = array();

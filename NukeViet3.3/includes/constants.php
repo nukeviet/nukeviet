@@ -134,7 +134,7 @@ define( 'NV_MAX_REQUESTS_60', 40 );
 define( 'NV_MAX_REQUESTS_300', 150 );
 
 //ky tu phan cach trong title
-define( "NV_TITLEBAR_DEFIS", " - " );
+define( "NV_TITLEBAR_DEFIS", "-" );
 
 //Cac thiet lap trong siteword
 define( 'NV_SITEWORDS_MIN_WORD_LENGTH', 4 );
