@@ -6,7 +6,7 @@
 			{GLANG.your_account}: <strong>{ADMIN_INFO.username}</strong>
 		</li>
 		<!-- BEGIN: is_spadadmin2 -->
-		<li style="margin-left:50px" id="id_queries_count">
+		<li style="margin-left:10px" id="id_queries_count">
 			{GLANG.db_num_queries}: {COUNT_SHOW_QUERIES}'. <a href="javascript:void(0);" onclick="nv_show_queries();">{GLANG.show_queries}</a>
 		</li>
 		<!-- END: is_spadadmin2 -->
