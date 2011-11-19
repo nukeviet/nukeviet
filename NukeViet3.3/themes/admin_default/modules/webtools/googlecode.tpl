@@ -43,7 +43,7 @@
 
 	<script type="text/javascript">
 	//<![CDATA[
-		$(document).ready(function(){$("#gcodeRefresh").click(function(){$("#NukeVietGoogleCode").html("<center><img src='{NV_BASE_SITEURL}images/load_bar.gif' alt='' /></center>").load("index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&gcode=2&num="+nv_randomPassword(10));return false});$(".ninfo").click(function(){$(".ninfo").each(function(){$(this).show()});$(".tooltip").each(function(){$(this).hide()});$(this).hide().next(".tooltip").show();return false});$(".tooltip").click(function(){$(this).hide().prev(".ninfo").show()})});
+		$(document).ready(function(){$("#gcodeRefresh").click(function(){$("#NukeVietGoogleCode").html("<center><img src='{NV_BASE_SITEURL}images/load_bar.gif' alt='' /></center>").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&gcode=2&num="+nv_randomPassword(10));return false});$(".ninfo").click(function(){$(".ninfo").each(function(){$(this).show()});$(".tooltip").each(function(){$(this).hide()});$(this).hide().next(".tooltip").show();return false});$(".tooltip").click(function(){$(this).hide().prev(".ninfo").show()})});
 	//]]>
 	</script>
 <!-- END: NukevietChange -->

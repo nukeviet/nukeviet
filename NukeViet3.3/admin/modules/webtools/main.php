@@ -116,6 +116,7 @@ if ($nv_Request->isset_request('gcode', 'get') and ($gcode = $nv_Request->get_in
 
         $xtpl->assign('LANG', $lang_module);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+        $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
         $xtpl->assign('MODULE_NAME', $module_name);
         $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 
