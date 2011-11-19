@@ -10,11 +10,8 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];
 
-$asel = $nv_Request->get_int( 'asel', 'get', 0 );
-$asel = ( ( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) ) and ! empty( $asel ) ) ? "&amp;asel=1" : "";
-
 $sql = "FROM `" . NV_USERS_GLOBALTABLE . "`";
-$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel;
+$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
 
 $methods = array(  //
     'userid' => array( 
@@ -147,34 +144,34 @@ $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
 $head_tds = array();
 $head_tds['userid']['title'] = $lang_module['userid'];
-$head_tds['userid']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel . "&amp;sortby=userid&amp;sorttype=ASC";
+$head_tds['userid']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=userid&amp;sorttype=ASC";
 $head_tds['username']['title'] = $lang_module['account'];
-$head_tds['username']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel . "&amp;sortby=username&amp;sorttype=ASC";
+$head_tds['username']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=username&amp;sorttype=ASC";
 $head_tds['full_name']['title'] = $lang_module['name'];
-$head_tds['full_name']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel . "&amp;sortby=full_name&amp;sorttype=ASC";
+$head_tds['full_name']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=full_name&amp;sorttype=ASC";
 $head_tds['email']['title'] = $lang_module['email'];
-$head_tds['email']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel . "&amp;sortby=email&amp;sorttype=ASC";
+$head_tds['email']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=email&amp;sorttype=ASC";
 $head_tds['regdate']['title'] = $lang_module['register_date'];
-$head_tds['regdate']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel . "&amp;sortby=regdate&amp;sorttype=ASC";
+$head_tds['regdate']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=regdate&amp;sorttype=ASC";
 
 foreach ( $orders as $order )
 {
     if ( $orderby == $order and $ordertype == 'ASC' )
     {
-        $head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel . "&amp;sortby=" . $order . "&amp;sorttype=DESC";
+        $head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=" . $order . "&amp;sorttype=DESC";
         $head_tds[$order]['title'] .= " &darr;";
     }
     elseif ( $orderby == $order and $ordertype == 'DESC' )
     {
-        $head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel . "&amp;sortby=" . $order . "&amp;sorttype=ASC";
+        $head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=" . $order . "&amp;sorttype=ASC";
         $head_tds[$order]['title'] .= " &uarr;";
     }
 }
 
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel );
-$xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . $asel );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+$xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 $xtpl->assign( 'SEARCH_VALUE', $methodvalue );
 $xtpl->assign( 'TABLE_CAPTION', $table_caption );
 
@@ -204,15 +201,8 @@ foreach ( $users_list as $u )
     {
         $xtpl->parse( 'main.xusers.is_admin' );
     }
-    if ( ! empty( $asel ) )
-    {
-        if ( ! $u['is_admin'] )
-        {
-            $xtpl->assign( 'ASEL_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=authors&amp;" . NV_OP_VARIABLE . "=add&amp;userid=" . $u['userid'] );
-            $xtpl->parse( 'main.xusers.asel' );
-        }
-    }
-    elseif ( !defined( 'NV_IS_USER_FORUM' ) )
+    
+	if ( ! defined( 'NV_IS_USER_FORUM' ) )
     {
         if ( $u['is_edit'] )
         {

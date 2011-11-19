@@ -1,14 +1,25 @@
 <!-- BEGIN: add -->
-<div class="quote" style="width:780px;">
-    <blockquote {ERROR}>
+<div class="quote" style="width:98%">
+    <blockquote>
         <span>{INFO}</span>
     </blockquote>
 </div>
-<div class="clear">
-</div>
-<form method="post" action="{ACTION}">
-    <table style="margin-bottom:8px;width:800px;">
-        <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
+<div class="clear"></div>
+<form method="post" action="{ACTION}" id="addadmin">
+    <table style="margin-bottom:8px;width:100%">
+        <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" width="400px"/><col valign="top"/>
+        <tr>
+            <td>{LANG.add_user}:</td>
+            <td><sup class="required">&lowast;</sup></td>
+            <td>
+				<input name="userid" id="userid" type="text" value="{USERID}" style="width:300px" maxlength="20" />
+				<input type="button" value="{LANG.add_select}" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?' + nv_name_variable + '=users&' + nv_fc_variable + '=getuserid&area=userid', 'NVImg', '850', '600', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' )" />
+			</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    <table style="margin-bottom:8px;width:100%">
+        <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" width="400px"/><col valign="top"/>
         <tr>
             <td>
                 {POSITION0}:
@@ -166,7 +177,28 @@
         </tr>
     </table>
 </form>
-<!-- END: add --><!-- BEGIN: add_result -->
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$("form#addadmin").submit(function(){
+		a = $(this).serialize();
+		var b = $(this).attr("action");
+		$("[type=submit]").attr("disabled", "disabled");  
+		$.ajax({type:"POST", url:b, data:a, success:function(c){
+			if(c == "OK") {
+				window.location = '{RESULT_URL}';
+			}else{
+				alert(c);
+			}
+			$("[type=submit]").removeAttr("disabled")
+		}});
+		return!1
+	});
+});
+//]]>
+</script>
+<!-- END: add -->
+<!-- BEGIN: add_result -->
 <table class="tab1">
     <caption>
         {TITLE}:

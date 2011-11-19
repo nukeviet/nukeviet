@@ -1,13 +1,11 @@
 <!-- BEGIN: main -->
 <script type="text/javascript">
-    function nv_check_form(OForm)
-    {
-        if(document.getElementById( 'f_value' ).value != '')
-        {
-            OForm.submit();
-        }
-        return false;
-    }
+function nv_check_form(OForm){
+	if(document.getElementById('f_value').value != ''){
+		OForm.submit();
+	}
+	return false;
+}
 </script>
 <div id="users">
     <!-- BEGIN: is_forum -->
@@ -82,9 +80,6 @@
                     <!-- BEGIN: del -->
                     &nbsp;&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a></span>
                     <!-- END: del -->
-                    <!-- BEGIN: asel -->
-                    <span class="edit_icon"><a href="{ASEL_URL}">{LANG.admin_add}</a></span>
-                    <!-- END: asel -->
                 </td>
             </tr>
         </tbody>
