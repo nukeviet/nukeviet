@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
     <table class="tab1" summary="">
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.lang_multi}</strong>
@@ -11,7 +11,8 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <!-- BEGIN: lang_multi -->
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.site_lang}</strong>
@@ -25,6 +26,17 @@
                 </td>
             </tr>
         </tbody>
+        <tbody class="second">
+            <tr>
+                <td>
+                    <strong>{LANG.lang_geo}</strong>
+                </td>
+                <td>
+                    <input type="checkbox" value="1" name="lang_geo" {CHECKED_LANG_GEO} /> ( <a href="{CONFIG_LANG_GEO}">{LANG.lang_geo_config}</a> )
+                </td>
+            </tr>
+        </tbody>        
+        <!-- END: lang_multi -->
 	    <tbody>
 	        <tr>
 	            <td>
@@ -230,8 +242,8 @@
                     <input type="checkbox" value="1" name="getloadavg" {DATA.getloadavg} />
                 </td>
             </tr>
-        </tbody class="second">
-        <tbody>
+        </tbody>
+        <tbody  class="second">
             <tr>
                 <td>
                     <strong>{LANG.my_domains}</strong>

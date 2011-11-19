@@ -560,6 +560,11 @@ function nv_func_update_data()
         nv_rewrite_change($array_config_rewrite);
     }
 
+    if (!isset($global_config['lang_geo']))
+    {
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'lang_geo', 0");
+    }
+
     nv_save_file_config_global();
     // End date data
     if (empty($error_contents))

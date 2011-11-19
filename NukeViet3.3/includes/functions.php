@@ -1615,18 +1615,20 @@ function nv_getCountry($ip)
             $ip_to = ($numbers[0] * 16777216) + ($numbers[1] * 65536) + ($numbers[2] * 256) + ($numbers[3]);
         }
     }
-
-    if ($db->sql_query("INSERT INTO `" . $db_config['prefix'] . "_ipcountry` (`ip_from`, `ip_to`, `country`, `ip_file`, `time`) VALUES (" . $ip_from . ", " . $ip_to . ", '" . $code . "', '" . $ip_file . "', '" . NV_CURRENTTIME . "')"))
-    {
-        $time_del = NV_CURRENTTIME - 604800;
-        $db->sql_query("DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $ip_file . "' AND `country`='ZZ' AND `time` < " . $time_del);
-        $result = $db->sql_query("SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $ip_file . "'");
-        $array_ip_file = array();
-        while ($row = $db->sql_fetch_assoc($result))
-        {
-            $array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
-        }
-        file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/ip_files/" . $ip_file . ".php", "<?php\n\n\$ranges = array(" . implode(', ', $array_ip_file) . ");\n\n?>", LOCK_EX);
+	if ( defined( 'NV_CLASS_SQL_DB_PHP' ) )
+	{
+	    if ($db->sql_query("INSERT INTO `" . $db_config['prefix'] . "_ipcountry` (`ip_from`, `ip_to`, `country`, `ip_file`, `time`) VALUES (" . $ip_from . ", " . $ip_to . ", '" . $code . "', '" . $ip_file . "', '" . NV_CURRENTTIME . "')"))
+	    {
+	        $time_del = NV_CURRENTTIME - 604800;
+	        $db->sql_query("DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $ip_file . "' AND `country`='ZZ' AND `time` < " . $time_del);
+	        $result = $db->sql_query("SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $ip_file . "'");
+	        $array_ip_file = array();
+	        while ($row = $db->sql_fetch_assoc($result))
+	        {
+	            $array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
+	        }
+	        file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/ip_files/" . $ip_file . ".php", "<?php\n\n\$ranges = array(" . implode(', ', $array_ip_file) . ");\n\n?>", LOCK_EX);
+	    }
     }
     return array($code, $countries[$code][0], $countries[$code][1]);
 }

@@ -8,8 +8,12 @@
  */
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
-
+global $global_config;
 $submenu['main'] = $lang_module['nv_lang_data'];
+if($global_config['lang_multi'] and sizeof($global_config['allow_sitelangs']) > 1)
+{
+	$submenu['countries'] = $lang_module['countries'];
+}
 $submenu['interface'] = $lang_module['nv_lang_interface'];
 $submenu['check'] = $lang_module['nv_lang_check'];
 $submenu['copy'] = $lang_module['nv_admin_copy'];
@@ -24,7 +28,7 @@ if ( $module_name == "language" )
         "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_language'] 
     );
     $allow_func = array( 
-        'main', 'read', 'write', 'copy', 'edit', 'delete', 'setting', 'download', 'interface', 'check' 
+        'main', 'read', 'write', 'copy', 'edit', 'delete', 'setting', 'download', 'interface', 'check', 'countries'
     );
     
     define( 'ALLOWED_HTML_LANG', 'a, b, blockquote, br, em, h1, h2, h3, h4, h5, h6, hr, p, span, strong' );
