@@ -59,9 +59,9 @@ function NukevietChange_getContents($refresh = false)
                 {
                     foreach ($content['entry'] as $entry)
                     {
-                        unset($matches);
+                        unset($matches);						
                         $cont = $entry['content'];
-                        preg_match_all("/(modify|add|delete)[^a-z0-9\/\.\-\_]+(\/trunk\/nukeviet3\/)([a-z0-9\/\.\-\_]+)/mi", $cont, $matches, PREG_SET_ORDER);
+                        preg_match_all("/(modify|add|delete)[^a-z0-9\/\.\-\_]+(\/trunk\/nukeviet3.3\/)([a-z0-9\/\.\-\_]+)/mi", $cont, $matches, PREG_SET_ORDER);
                         $cont = array();
                         if (!empty($matches))
                         {
@@ -97,16 +97,14 @@ function NukevietChange_getContents($refresh = false)
     if (!$content)
         return false;
     $content = unserialize($content);
+		
     return $content;
 }
 
 //Cap nhat thong tin tu du an NukeViet tren Google Code
 if ($nv_Request->isset_request('gcode', 'get') and ($gcode = $nv_Request->get_int('gcode', 'get', 0)))
 {
-    if (!defined('NV_IS_SPADMIN'))
-    {
-        die();
-    }
+    if (!defined('NV_IS_SPADMIN')) die();
 
     if ($gcode != 1)
         $changes = NukevietChange_getContents(true);

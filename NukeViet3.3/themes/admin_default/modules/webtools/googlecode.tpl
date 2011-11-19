@@ -2,16 +2,16 @@
 	<table class="tab1">
 	    <thead>
 	        <tr>
-	            <td>
+	            <td style="width:50px">
 	                {LANG.nukevietChange_id}
 	            </td>
 	            <td>
 	                {LANG.nukevietChange_content}
 	            </td>
-	            <td>
+	            <td style="width:150px">
 	                {LANG.nukevietChange_author}
 	            </td>
-	            <td style="text-align:right">
+	            <td style="text-align:right;width:100px">
 	                {LANG.nukevietChange_updated}
 	            </td>
 	        </tr>
