@@ -1,4 +1,4 @@
-/* Reset */
+﻿/* Reset */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend {
     margin: 0;
     padding: 0;
@@ -232,13 +232,12 @@ img {
     border: 0
 }
 
-input[ type =
-"radio"], input[ type = "checkbox"] {
+input[type=radio], input[type=checkbox] {
     vertical-align: middle
 }
 
 textarea {
-    font: normal normal 400 10pt / normal Arial, sans-serif
+    font: normal normal 400 10pt/normal Arial, sans-serif
 }
 
 .add_icon {
@@ -273,7 +272,7 @@ textarea {
 .stat1 div.center {
     background: url('../images/stat1.png') repeat-x left -14px;
     float: left;
-    font: normal 11px / 14px Tahoma;
+    font: normal 11px/14px Tahoma;
     height: 14px;
     line-height: 14px;
     position: relative
@@ -282,7 +281,7 @@ textarea {
 .stat1 div.left {
     background: url('../images/stat1.png') no-repeat left top;
     float: left;
-    font: normal 11px / 14px Tahoma;
+    font: normal 11px/14px Tahoma;
     height: 14px;
     line-height: 14px;
     position: relative;
@@ -292,7 +291,7 @@ textarea {
 .stat1 div.right {
     background: url('../images/stat1.png') no-repeat right -28px;
     float: left;
-    font: normal 11px / 14px Tahoma;
+    font: normal 11px/14px Tahoma;
     height: 14px;
     line-height: 14px;
     position: relative;
@@ -301,7 +300,7 @@ textarea {
 
 .stat1 div.text, .stat2 div.text {
     float: left;
-    font: normal 11px / 14px Tahoma;
+    font: normal 11px/14px Tahoma;
     height: 14px;
     line-height: 14px;
     padding-left: 5px;
@@ -311,7 +310,7 @@ textarea {
 .stat2 div.center {
     background: url('../images/stat2.png') repeat-x left -14px;
     float: left;
-    font: normal 11px / 14px Tahoma;
+    font: normal 11px/14px Tahoma;
     height: 14px;
     line-height: 14px;
     position: relative
@@ -320,7 +319,7 @@ textarea {
 .stat2 div.left {
     background: url('../images/stat2.png') no-repeat left top;
     float: left;
-    font: normal 11px / 14px Tahoma;
+    font: normal 11px/14px Tahoma;
     height: 14px;
     line-height: 14px;
     position: relative;
@@ -330,7 +329,7 @@ textarea {
 .stat2 div.right {
     background: url('../images/stat2.png') no-repeat right -28px;
     float: left;
-    font: normal 11px / 14px Tahoma;
+    font: normal 11px/14px Tahoma;
     height: 14px;
     line-height: 14px;
     position: relative;
@@ -343,7 +342,7 @@ a.button1 {
     cursor: pointer;
     display: block;
     float: left;
-    font: normal 11px / 20px Tahoma, Verdana, sans-serif;
+    font: normal 11px/20px Tahoma, Verdana, sans-serif;
     height: 20px;
     line-height: 20px;
     margin-left: 2px;
@@ -356,7 +355,7 @@ a.button1 span {
     background: url('../images/button_bg.gif') no-repeat left -20px;
     cursor: pointer;
     display: block;
-    font: normal 11px / 20px Tahoma, Verdana, sans-serif;
+    font: normal 11px/20px Tahoma, Verdana, sans-serif;
     height: 20px;
     line-height: 20px;
     padding-left: 10px;
@@ -368,7 +367,7 @@ a.button1 span span {
     background: url('../images/button_bg.gif') repeat-x left -40px;
     cursor: pointer;
     display: block;
-    font: normal 11px / 20px Tahoma, Verdana, sans-serif;
+    font: normal 11px/20px Tahoma, Verdana, sans-serif;
     height: 20px;
     line-height: 20px;
     padding-left: 0px;
@@ -382,7 +381,7 @@ a.button2 {
     cursor: pointer;
     display: block;
     float: left;
-    font: normal 11px / 20px Tahoma, Verdana, sans-serif;
+    font: normal 11px/20px Tahoma, Verdana, sans-serif;
     height: 20px;
     line-height: 20px;
     margin-left: 2px;
@@ -396,7 +395,7 @@ a.button2 span {
     background: url('../images/button_bg.gif') no-repeat left -140px;
     cursor: pointer;
     display: block;
-    font: normal 11px / 20px Tahoma, Verdana, sans-serif;
+    font: normal 11px/20px Tahoma, Verdana, sans-serif;
     height: 20px;
     line-height: 20px;
     padding-left: 10px;
@@ -408,7 +407,7 @@ a.button2 span span {
     background: url('../images/button_bg.gif') repeat-x left -160px;
     cursor: pointer;
     display: block;
-    font: normal 11px / 20px Tahoma, Verdana, sans-serif;
+    font: normal 11px/20px Tahoma, Verdana, sans-serif;
     height: 20px;
     line-height: 20px;
     padding-left: 0px;
@@ -462,7 +461,7 @@ table.tab1 {
 
 table.tab1 caption {
     background: url('../images/arrows/arrow4_red.gif') no-repeat left center;
-    font: bold 13px / 27px Tahoma, Verdana, sans-serif;
+    font: bold 13px/27px Tahoma, Verdana, sans-serif;
     text-align: left;
     text-indent: 12px
 }
@@ -496,7 +495,7 @@ table.tab1 th {
 
 table.tab1 thead {
     background: #999999;
-    font: bold 11px / 18px Tahoma, Verdana, sans-serif;
+    font: bold 11px/18px Tahoma, Verdana, sans-serif;
     white-space: nowrap
 }
 
@@ -522,7 +521,7 @@ table.tab1 td {
 
 #footer div.copyright {
     color: #4b4b4b;
-    font: normal 11px / 15px Arial, Verdana, sans-serif;
+    font: normal 11px/15px Arial, Verdana, sans-serif;
     margin: 7px 10px 7px 10px;
     padding: 0;
     float: left;
@@ -590,7 +589,7 @@ table.tab1 td {
     background: #FCFCFC;
     border-bottom: 1px gray solid;
     border-bottom-style: dotted;
-    font: bold 11px / 22px Arial, Verdana, sans-serif;
+    font: bold 11px/22px Arial, Verdana, sans-serif;
     height: 24px;
     line-height: 22px
 }
@@ -602,7 +601,7 @@ table.tab1 td {
 }
 
 div.info_tab {
-    font: bold 11px / 22px Arial, Verdana, sans-serif;
+    font: bold 11px/22px Arial, Verdana, sans-serif;
     height: 30px;
     line-height: 30px;
     padding-right: 10px;
@@ -644,7 +643,7 @@ div.info_tab .cell_left {
 
 #top_message div.clock label {
     display: inline-block;
-    font: bold 11px / 27px Arial, Verdana, sans-serif;
+    font: bold 11px/27px Arial, Verdana, sans-serif;
     height: 30px;
     line-height: 27px;
     padding: 0 0 0 10px;
@@ -652,7 +651,7 @@ div.info_tab .cell_left {
 
 #top_message div.clock label span {
     display: inline-block;
-    font: bold 11px / 27px Arial, Verdana, sans-serif;
+    font: bold 11px/27px Arial, Verdana, sans-serif;
     height: 30px;
     line-height: 27px;
     padding: 0 10px 0 0;
@@ -667,7 +666,7 @@ div.info_tab .cell_left {
 
 #top_message div.info {
     float: left;
-    font: normal 11px / 27px Tahoma, Verdana, sans-serif;
+    font: normal 11px/27px Tahoma, Verdana, sans-serif;
     height: 24px;
     line-height: 24px;
     margin-left: 5px;

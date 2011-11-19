@@ -1,134 +1,22 @@
-.listdata1 {
-	margin: auto;
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
-
-.listdata {
-	margin: auto;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	border: #E4E4E4 1px solid;
-}
-
-.listdata .tr1 {
-	background: #FFFFFF;
-}
-
-.listdata .tr2 {
-	background: #F5F5F5
-}
-
-.listdata .tr11 {
-	background: #FFFFFF;
-	font-weight: bold
-}
-
-.listdata .tr22 {
-	background: #F5F5F5;
-	font-weight: bold
-}
-
-.listdata tr td {
-	padding: 5px
-}
-
-.listdata .tr1:hover {
-	background: #F2F2F2;
-}
-
-.listdata .tr2:hover {
-	background: #F2F2F2;
-}
-
-.datatilte {
-	background: #8AB0FF;
-	color: #000000;
-	font-weight: bold;
-	text-decoration: underline;
-	font-size: 11px;
-}
-
-.edit_icon1 {
-	background: url('../images/icons/edit.png') no-repeat left center;
-	padding-left: 15px;
-	border: none;
-	cursor: pointer
-}
-
-.del_icon1 {
-	background: url('../images/icons/delete.png') no-repeat left center;
-	padding-left: 15px;
-	border: none;
-	cursor: pointer
-}
-
-.contact {
-	padding: 10px;
-}
-
-.contact .title {
-	font-weight: bold;
-}
-
-.contact .con {
-	width: 100%
-}
-
-.contact .con tr {
-	line-height: 22px
-}
-
-.contact .con tr td {
-	
-}
-
-.contact .con .bt1 {
-	border: #CCCCCC 1px solid;
-	background: #F5F5F5
-}
-
-.ar1 {
-	width: 100%;
-	font-family: Arial;
-	font-size: 12px
-}
-
-.err {
-	color: #FF0000;
-	font-weight: bold;
-	text-align: center
-}
-
-.listdata1 {
-	border-top: #F0F0F0 solid 1px;
-	padding-top: 5px;
-	padding-left: 5px;
-	padding-right: 5px;
-	font-weight: bold;
-	background: #F2F2F2;
-	height: 20px;
-	font-size: 11px
-}
-
-.listdata1 a,.breakpage a:link {
-	color: #000000;
-	line-height: normal;
-	text-decoration: none;
-}
-
-.listdata1 a:hover {
-	color: #FF0000;
-}
-
-.add {
-	padding: 10px;
-	width: 810px;
-}
-
-.div_contact_con {
-	padding: 10px;
-	border: #CCC 1px solid;
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
+.listdata1{background:#F2F2F2;border-top:#F0F0F0 solid 1px;font-size:11px;font-weight:700;height:20px;margin:5px auto;padding-left:5px;padding-right:5px;padding-top:5px}
+.listdata{border:#E4E4E4 1px solid;margin:5px auto}
+.listdata .tr1{background:#FFF}
+.listdata .tr2{background:#F5F5F5}
+.listdata .tr11{background:#FFF;font-weight:700}
+.listdata .tr22{background:#F5F5F5;font-weight:700}
+.listdata tr td{padding:5px}
+.datatilte{background:#8AB0FF;color:#000;font-size:11px;font-weight:700;text-decoration:underline}
+.edit_icon1{background:url(../images/icons/edit.png) no-repeat left center;border:none;cursor:pointer;padding-left:15px}
+.del_icon1{background:url(../images/icons/delete.png) no-repeat left center;border:none;cursor:pointer;padding-left:15px}
+.contact{padding:10px}
+.contact .title{font-weight:700}
+.contact .con{width:100%}
+.contact .con tr{line-height:22px}
+.contact .con .bt1{background:#F5F5F5;border:#CCC 1px solid}
+.ar1{font-family:Arial;font-size:12px;width:100%}
+.err{color:red;font-weight:700;text-align:center}
+.listdata1 a,.breakpage a:link{color:#000;line-height:normal;text-decoration:none}
+.listdata1 a:hover{color:red}
+.add{padding:10px;width:810px}
+.div_contact_con{border:#CCC 1px solid;margin-bottom:5px;margin-top:5px;padding:10px}
+.listdata .tr1:hover,.listdata .tr2:hover{background:#F2F2F2}
