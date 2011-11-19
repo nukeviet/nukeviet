@@ -19,6 +19,7 @@
         {MODULE_CONTENT}
 		[BOTTOM]
     </div>
+	<div class="clear"></div>
 	[FOOTER]
 </div>
 {FILE "footer.tpl"}<!-- END: main -->

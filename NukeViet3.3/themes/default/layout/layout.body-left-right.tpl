@@ -22,6 +22,7 @@
     <div class="span-6 last">
         [RIGHT]
     </div>
+	<div class="clear"></div>
 	[FOOTER]
 </div>{FILE "footer.tpl"} 
 <!-- END: main -->
