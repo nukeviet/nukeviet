@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<div class="nvshowquery"></div>
 <div id="toolbar">
 	<ul class="info level{ADMIN_INFO.level} fl">
 		<li>
@@ -39,14 +40,14 @@
 	</div>
 </div>
 <script type="text/javascript">
-	function nv_show_queries() {
-		Shadowbox.open({
-			content : $("div#div_queries").html(),
-			player : 'html',
-			height : 400,
-			width : 960
-		});
-	}
+function nv_show_queries(){
+	Shadowbox.open({
+		content : $("div#div_queries").html(),
+		player : 'html',
+		height : 400,
+		width : 960
+	});
+}
 </script>
 <!-- END: is_spadadmin3 -->
 <!-- END: main -->
