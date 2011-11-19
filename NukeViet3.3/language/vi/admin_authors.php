@@ -136,4 +136,11 @@ $lang_module['rule_pass'] = "Mật khẩu chỉ dùng các ký tự a-zA-Z0-9_-"
 $lang_module['spadmin_add_admin'] = "Cho phép người điều hành chung tạo và thay đổi quyền hạn người điều hành modules";
 $lang_module['authors_detail_main'] = "Hiển thị chi tiết các thông tin tài khoản của người quản trị";
 
+$lang_module['add_user'] = "Chỉ định thành viên";
+$lang_module['add_select'] = "Chọn";
+$lang_module['add_error_choose'] = "Lỗi: Bạn chưa chọn thành viên được chỉ định làm quản trị";
+$lang_module['add_error_exist'] = "Lỗi: Thành viên này đã là quản trị";
+$lang_module['add_error_notexist'] = "Lỗi: Thành viên này không tồn tại";
+$lang_module['add_error_diff'] = "Xảy ra lỗi không xác định";
+
 ?>
