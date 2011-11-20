@@ -362,11 +362,18 @@ class optimezer
      */
     private function changeCssURL( $matches )
     {
-        $url = $this->cssImgNewPath . $matches[1];
-        while ( preg_match( "/([^\/(\.\.)]+)\/\.\.\//", $url ) )
-        {
-            $url = preg_replace( "/([^\/(\.\.)]+)\/\.\.\//", "", $url );
+    	if (preg_match( "/^(http(s?)|ftp\:\/\/)/", $matches[1]))
+    	{
+    		$url = $matches[1];
         }
+		else
+		{
+	        $url = $this->cssImgNewPath . $matches[1];
+	        while ( preg_match( "/([^\/(\.\.)]+)\/\.\.\//", $url ) )
+	        {
+	            $url = preg_replace( "/([^\/(\.\.)]+)\/\.\.\//", "", $url );
+	        }
+		}
         return "url(" . $url . ")";
     }
 
