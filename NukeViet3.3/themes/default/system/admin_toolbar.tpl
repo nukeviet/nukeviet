@@ -26,7 +26,6 @@
 <!-- BEGIN: is_spadadmin3 -->
 <div id="div_queries" style="visibility: hidden; display: none;">
 	<div style="height: 400px; background: #ffffff; overflow: auto;padding: 5px;">
-		<h3 class="queries">{GLANG.show_queries}</h3>
 		<div class="queries">
 			<!-- BEGIN: queries -->
 			<div class="clearfix {DATA.class}">
