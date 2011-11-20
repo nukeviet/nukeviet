@@ -744,4 +744,28 @@ function user_openid_administrator ( $data )
     return $xtpl->text( 'main' );
 }
 
+function nv_regroup_theme( $groups )
+{
+	global $module_info, $module_file, $module_name, $lang_module;
+    $xtpl = new XTemplate( "re_groups.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+    $xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
+    $xtpl->assign( 'LANG', $lang_module );
+	
+    if ( defined( 'NV_OPENID_ALLOWED' ) )
+    {
+        $xtpl->parse( 'main.allowopenid' );
+    }
+
+	foreach ( $groups as $group )
+	{
+		$xtpl->assign( 'GROUP', $group );
+		$xtpl->parse( 'main.list' );
+	}
+
+    if ( ! defined( 'NV_IS_ADMIN' ) ) $xtpl->parse( 'main.logout' );
+	
+    $xtpl->parse( 'main' );
+    return $xtpl->text( 'main' );
+}
+
 ?>

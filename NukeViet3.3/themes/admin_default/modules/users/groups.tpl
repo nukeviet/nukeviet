@@ -94,7 +94,7 @@ $("form#addCat").submit(function() {
 </script>
 <!-- END: add -->
 <!-- BEGIN: list -->
-<table class="tab1" style="width:auto">
+<table class="tab1" style="width:100%">
     <col width="50" />
     <thead>
         <tr>
@@ -220,7 +220,7 @@ $("input[name=addNew]").click(function() {
 <!-- BEGIN: listUsers -->
 <h3 class="myh3">{PTITLE}</h3>
 <!-- BEGIN: ifExists -->
-<table class="tab1" style="width:auto">
+<table class="tab1" style="width:100%">
     <col width="50" />
     <thead>
         <tr>

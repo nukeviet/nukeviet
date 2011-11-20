@@ -10,6 +10,7 @@
 if ( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 $groups_list = nv_groups_list_pub();
+$recomplete = false;
 
 if ( $global_config['allowuserpublic'] == 0 )
 {
@@ -23,46 +24,27 @@ elseif ( empty( $groups_list ) )
 }
 else
 {
-    $error = "";
     $groups = $in_group = $in = $gl = array();
-    $b = false;
-    $query2 = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
-    $result2 = $db->sql_query( $query2 );
-    $numrows2 = $db->sql_numrows( $result2 );
-    list( $in_groups ) = $db->sql_fetchrow( $result2 );
+    $sql = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
+    $result = $db->sql_query( $sql );
+    list( $in_groups ) = $db->sql_fetchrow( $result );
+    if ( $in_groups != "" ) $in_group = explode( ',', $in_groups );
     
-    if ( $in_groups != "" )
-    {
-        $in_group = explode( ',', $in_groups );
-    }
-    
-    if ( ! empty( $groups_list ) )
-    {
-        foreach ( $groups_list as $group_id => $grtl )
-        {
-            $groups[] = array( 'id' => $group_id, 'title' => $grtl, 'checked' => ( ! empty( $in_groups ) and in_array( $group_id, $in_group ) ) ? " checked=\"checked\"" : "" );
-        }
-    }
+	foreach ( $groups_list as $group_id => $grtl )
+	{
+		$groups[] = array( 'id' => $group_id, 'title' => $grtl, 'checked' => ( ! empty( $in_groups ) and in_array( $group_id, $in_group ) ) ? " checked=\"checked\"" : "" );
+	}
     
     if ( $nv_Request->get_string( 'save', 'post' ) != "" )
     {
         $_user['in_groups'] = $nv_Request->get_typed_array( 'group', 'post', 'int' );
         $data_in_groups = ( ! empty( $_user['in_groups'] ) ) ? implode( ',', $_user['in_groups'] ) : '';
         
-        $groups_list = nv_groups_list_pub();
-        foreach ( $groups_list as $key => $val )
-        {
-            $gl[] = $key;
-        }
-        $query2 = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
-        $result2 = $db->sql_query( $query2 );
-        
-        list( $in_groups ) = $db->sql_fetchrow( $result2 );
-        
-        if ( $in_groups != "" )
-        {
-            $in_group = explode( ',', $in_groups );
-        }
+        foreach ( $groups_list as $key => $val ) $gl[] = $key;
+        $sql = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
+        $result = $db->sql_query( $sql );
+        list( $in_groups ) = $db->sql_fetchrow( $result );
+        if ( $in_groups != "" ) $in_group = explode( ',', $in_groups );
         
         if ( ! empty( $in_group ) )
         {
@@ -73,8 +55,8 @@ else
                     $in[] = $g;
                 }
                 
-                $query = "SELECT `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id`=" . $g . " AND `public`=1";
-                $result = $db->sql_query( $query );
+                $sql = "SELECT `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id`=" . $g . " AND `public`=1";
+                $result = $db->sql_query( $sql );
                 $numrows = $db->sql_numrows( $result );
                 if ( $numrows > 0 )
                 {
@@ -94,10 +76,10 @@ else
         
         foreach ( $_user['in_groups'] as $group_id_i )
         {
-            $query = "SELECT `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id`=" . $group_id_i;
-            $result = $db->sql_query( $query );
+            $sql = "SELECT `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id`=" . $group_id_i;
+            $result = $db->sql_query( $sql );
             $numrows = $db->sql_numrows( $result );
-            //die($numrows."");
+            
             if ( $numrows )
             {
                 $row_users = $db->sql_fetchrow( $result );
@@ -121,42 +103,12 @@ else
         $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `in_groups`=" . $db->dbescape( $da_us ) . " WHERE `userid`=" . $user_info['userid'];
         $db->sql_query( $sql );
         
-        $b = true;
+        $recomplete = true;
     }
-    $xtpl = new XTemplate( "re_groups.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/users" );
-    $xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
-    $xtpl->assign( 'LANG', $lang_module );
-    if ( defined( 'NV_OPENID_ALLOWED' ) )
-    {
-        $xtpl->parse( 'main.allowopenid' );
-    }
-    if ( ! empty( $groups_list ) )
-    {
-        
-        if ( ! empty( $groups ) )
-        {
-            foreach ( $groups as $group )
-            {
-                $xtpl->assign( 'GROUP', $group );
-                $xtpl->parse( 'main.list' );
-            }
-        
-        }
-    }
-    if ( ! empty( $error ) )
-    {
-        $xtpl->assign( 'ERROR', $error );
-        $xtpl->parse( 'main.eror' );
-    
-    }
-    if ( ! defined( 'NV_IS_ADMIN' ) )
-    {
-        $xtpl->parse( 'main.logout' );
-    }
-    $xtpl->parse( 'main' );
-    $contents = $xtpl->text( 'main' );
+	
+	$contents = nv_regroup_theme( $groups );
 }
-if ( $b == true )
+if ( $recomplete )
 {
     $contents = user_info_exit( $lang_module['re_remove'] );
     $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op, true ) . "\" />";
