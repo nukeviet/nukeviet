@@ -150,7 +150,7 @@ $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data
 (46, 'left-body-right', 'default'),
 (47, 'body', 'modern'),
 (47, 'left-body-right', 'default'),
-(48, 'body', 'modern'),
+(48, 'body-right', 'modern'),
 (48, 'left-body-right', 'default')";
 
 $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
