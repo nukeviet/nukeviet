@@ -28,6 +28,7 @@ $lang_module['nv_admin_read'] = "Đọc dữ liệu vào data";
 $lang_module['nv_admin_read_all'] = "Đọc dữ liệu";
 $lang_module['nv_admin_sl1'] = "Chọn ngôn ngữ mới";
 $lang_module['nv_admin_sl2'] = "Cách thực hiện";
+$lang_module['nv_admin_sl3'] = "Chọn một ngôn ngữ";
 $lang_module['nv_admin_submit'] = "Thực hiện";
 $lang_module['nv_lang_module'] = "Module";
 $lang_module['nv_admin_write'] = "Xuất ra file";

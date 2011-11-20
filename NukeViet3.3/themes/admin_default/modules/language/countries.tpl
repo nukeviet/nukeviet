@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
-	<table class="tab1" style="width: auto">
+	<table class="tab1" style="width:100%">
 		<thead>
 			<tr>
 				<td>{LANG.nv_lang_nb}</td>

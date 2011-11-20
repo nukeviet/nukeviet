@@ -11,9 +11,7 @@ if ( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $a = 1;
 $page_title = $lang_module['nv_lang_setting'];
-$array_type = array( 
-    $lang_module['nv_setting_type_0'], $lang_module['nv_setting_type_1'], $lang_module['nv_setting_type_2'] 
-);
+$array_type = array( $lang_module['nv_setting_type_0'], $lang_module['nv_setting_type_1'], $lang_module['nv_setting_type_2'] );
 
 if ( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . "seting" ) )
 {
@@ -106,7 +104,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 }
 
 $contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-$contents .= "<table summary=\"\" class=\"tab1\">\n";
+$contents .= "<table summary=\"\" class=\"tab1\" style=\"width:100%\">\n";
 $contents .= "  <caption>" . $lang_module['nv_lang_show'] . "</caption>";
 $contents .= "  <tr class=\"thead_box\">";
 $contents .= "      <td style=\"width: 50px\">" . $lang_module['nv_lang_key'] . "</td>";
@@ -118,8 +116,8 @@ $contents .= "  </tr>";
 $contents .= "  </table>";
 
 $a = 0;
-$contents .= "<div style=\"height: 350px; overflow: auto; margin-bottom: 5px;\">";
-$contents .= "<table summary=\"\" class=\"tab1\" style=\"width:810px;\">\n";
+$contents .= "<div style=\"margin-bottom:5px\">";
+$contents .= "<table summary=\"\" class=\"tab1\" style=\"width:100%\">\n";
 while ( list( $key, $value ) = each( $language_array ) )
 {
     $arr_lang_func = array();

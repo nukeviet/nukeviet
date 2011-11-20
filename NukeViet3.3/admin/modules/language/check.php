@@ -71,7 +71,7 @@ $contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\""
 $contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
 $contents .= "<table class=\"tab1\">";
 $contents .= "<tr><td align=\"right\">" . $lang_module['nv_lang_data'] . ":</td><td><select name=\"typelang\">\n";
-$contents .= " <option value=\"\">&nbsp;</option>\n";
+$contents .= " <option value=\"\">" . $lang_module['nv_admin_sl3'] . "</option>\n";
 foreach ( $language_array as $key => $value )
 {
     if ( in_array( $key, $array_lang_exit ) )
@@ -83,7 +83,7 @@ foreach ( $language_array as $key => $value )
 $contents .= "</select></td></tr>\n";
 
 $contents .= "<tr><td align=\"right\">" . $lang_module['nv_lang_data_source'] . ":</td><td><select name=\"sourcelang\">\n";
-$contents .= " <option value=\"\">&nbsp;</option>\n";
+$contents .= " <option value=\"\">" . $lang_module['nv_admin_sl3'] . "</option>\n";
 foreach ( $language_array_source as $key )
 {
     if ( in_array( $key, $array_lang_exit ) )
