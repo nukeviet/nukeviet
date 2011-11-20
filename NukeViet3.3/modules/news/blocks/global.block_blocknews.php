@@ -50,7 +50,7 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
     {
         global $db, $module_array_cat, $module_info, $lang_module, $site_mods;
         $module = $block_config['module'];
-        $sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgthumb, t1.homeimgalt FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 AND t1.inhome='1' ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
+        $sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb, t1.homeimgalt FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 AND t1.inhome='1' ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
         $list = nv_db_cache( $sql, 'id', $module );
         $html = "";
         $i = 1;
@@ -80,6 +80,11 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
                         $l['thumb'] = $imgurl;
                     }
                 }
+				elseif ( nv_is_url( $l['homeimgfile'] ) )
+				{
+					$l['thumb'] = $l['homeimgfile'];
+				}
+				
                 $xtpl->assign( 'ROW', $l );
                 if ( ! empty( $l['thumb'] ) ) $xtpl->parse( 'main.loop.img' );
                 $bg = ( $i % 2 == 0 ) ? "bg" : "";
