@@ -48,7 +48,7 @@ $result = $db->sql_query( $sql_data );
 
 $page_title = $lang_module['vmodule_add'];
 
-$contents .= "<div class=\"quote\" style=\"width:810px;\">\n";
+$contents .= "<div class=\"quote\" style=\"width:98%\">\n";
 $contents .= "<blockquote><span>" . $lang_module['vmodule_blockquote'] . "</span></blockquote>\n";
 $contents .= "</div>\n";
 $contents .= "<div class=\"clear\"></div>\n";

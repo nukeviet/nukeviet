@@ -93,5 +93,7 @@ $lang_module['autoinstall_module_error_movefile'] = "Việc cài đặt tự đ�
 $lang_module['autoinstall_package_select'] = "Chọn module để đóng gói";
 $lang_module['autoinstall_package_noselect'] = "Hãy chọn 1 module để đóng gói";
 $lang_module['autoinstall_package_processing'] = " xin chờ quá trình thực hiện hoàn thành...";
+$lang_module['delete_module_info1'] = "Module này hiện đang tồn tại trên ngôn ngữ <strong>%s</strong>, hãy xóa module trên các ngôn ngữ đó để có thể xóa module gốc";
+$lang_module['delete_module_info2'] = "Có %d module ảo được tạo ra từ module này, hãy xóa chúng trước khi xóa module gốc";
 
 ?>

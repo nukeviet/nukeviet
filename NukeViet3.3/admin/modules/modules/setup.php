@@ -7,8 +7,9 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (!defined('NV_IS_FILE_MODULES'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_MODULES')) die('Stop!!!');
+
+$contents = "";
 
 $setmodule = filter_text_input('setmodule', 'get', '', 1);
 if (!empty($setmodule))
@@ -101,6 +102,24 @@ if (!empty($delmodule))
             Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
             die();
         }
+		else
+		{
+			$xtpl = new XTemplate( "delmodule.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+			$xtpl->assign( 'LANG', $lang_module );
+			
+			if( is_array( $module_exit ) )
+			{
+				$info = sprintf( $lang_module['delete_module_info1'], implode( ", ", $module_exit ) );
+			}
+			else
+			{
+				$info = sprintf( $lang_module['delete_module_info2'], $module_exit );
+			}
+
+			$xtpl->assign( 'INFO', $info );
+			$xtpl->parse( 'main' );
+			$contents .= $xtpl->text( 'main' );
+		}
     }
 }
 
@@ -239,14 +258,15 @@ foreach ($modules_data as $row)
         }
     }
 }
-$contents['thead'] = array($lang_module['weight'], $lang_module['module_name'], $lang_module['custom_title'], $lang_module['version'], $lang_module['in_menu'] . "(*)", $lang_module['submenu'] . "(**)", $lang_global['activate'], $lang_global['actions']);
+//$contents['thead'] = array($lang_module['weight'], $lang_module['module_name'], $lang_module['custom_title'], $lang_module['version'], $lang_module['in_menu'] . "(*)", $lang_module['submenu'] . "(**)", $lang_global['activate'], $lang_global['actions']);
 
 $array_head = array("caption" => $lang_module['module_sys'], "head" => array($lang_module['weight'], $lang_module['module_name'], $lang_module['version'], $lang_module['settime'], $lang_module['author'], ""));
 $array_virtual_head = array("caption" => $lang_module['vmodule'], "head" => array($lang_module['weight'], $lang_module['module_name'], $lang_module['vmodule_file'], $lang_module['settime'], $lang_module['vmodule_note'], ""));
 
-$contents = call_user_func("setup_modules", $array_head, $array_modules, $array_virtual_head, $array_virtual_modules);
+$contents .= call_user_func("setup_modules", $array_head, $array_modules, $array_virtual_head, $array_virtual_modules);
 
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>
