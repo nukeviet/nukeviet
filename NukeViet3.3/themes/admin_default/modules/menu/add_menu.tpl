@@ -1,4 +1,8 @@
 <!-- BEGIN: main -->
+<script type="text/javascript">
+	var cat = '{LANG.cat}';
+	var caton = '{LANG.caton}';
+</script>
 <strong><a href="{link_menu}">{LANG.menu}</a></strong>
 <!-- BEGIN: title -->
 >> <strong><a href="{link_title}">{LANG.back}</strong></a>
@@ -7,117 +11,88 @@
 <table summary="" class="tab1">
     <thead>
         <tr align="center">
-            <td>
-                <strong>{LANG.number}</strong>
-            </td>
-            <td>
-                <strong>{LANG.title}</strong>
-            </td>
-            <td>
-                <strong>{LANG.link}</strong>
-            </td>
-            <td>
-                <strong>{LANG.name_block}</strong>
-            </td>                   
-                        
-            <td>
-                 <strong>{LANG.action}</strong>
-            </td>
+            <td><strong>{LANG.number}</strong></td>
+            <td><strong>{LANG.title}</strong></td>
+            <td><strong>{LANG.link}</strong></td>
+            <td><strong>{LANG.name_block}</strong></td>                   
+            <td><strong>{LANG.action}</strong></td>
         </tr>
     </thead>
     <!-- BEGIN: loop1 -->
-    <tbody {DATA.class}>
+    <tbody{ROW.class}>
         <tr>
             <td align="center">
             	<select id="change_weight_{ROW.id}" onchange="nv_chang_weight_item('{ROW.id}','{ROW.mid}','{ROW.parentid}','weight');">
-                <!-- BEGIN: weight -->
-						<option value="{stt}" {select}>{stt}</option>
-				<!-- END: weight -->
+					<!-- BEGIN: weight --><option value="{stt}" {select}>{stt}</option>
+					<!-- END: weight -->
 				</select>
             </td>
-            <td>
-            	<a href="{ROW.url_title}"><strong>{ROW.title} </strong></a>        
-            </td>
-           	<td>
-                {ROW.link}                
-            </td>
-            <td>
-                {ROW.name_block}                
-            </td>        
+            <td><a href="{ROW.url_title}"><strong>{ROW.title} </strong></a></td>
+           	<td>{ROW.link}</td>
+            <td>{ROW.name_block}</td>        
             <td align="center">
                 <span class="edit_icon"><a href="{ROW.edit_url}">{LANG.edit}</a></span>&nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a></span>
             </td>
-            <script type="text/javascript">
-            	var cat= '{LANG.cat}';
-            	var caton= '{LANG.caton}';
-            </script>
         </tr>
     </tbody>
     <!-- END: loop1 -->
-   
 </table>
 <!-- END: table -->
-
-
 <!-- BEGIN: error -->
-<div class="quote" style="width:780px;">
+<div class="quote" style="width:98%">
     <blockquote class="error">
         <span>{ERROR}</span>
     </blockquote>
 </div>
-<div class="clear">
-</div>
+<div class="clear"></div>
 <!-- END: error -->
 <form enctype="multipart/form-data" action="{FORM_ACTION}" method="post">
-<table summary="" class="tab1">
+<table class="tab1">
 	<tbody>
 		<tr>
 			<td><strong>{LANG.name_block}</strong></td>
 			<td>
-                    <select name="item_menu" id="item_menu_{key}" onchange="nv_link2('{key}');">
-                    <!-- BEGIN: loop -->
-						<option value="{key}" {select}>{val}</option>
+				<select name="item_menu" id="item_menu_{key}" onchange="nv_link2('{key}');">
+					<!-- BEGIN: loop --><option value="{key}" {select}>{val}</option>
 					<!-- END: loop -->
-                    </select>
+				</select>
             </td>
 		</tr>
 	</tbody>
-	
 	<tbody>
-	<tr>
-		<td><strong>{LANG.title}</strong></td>
-		<td><input type="text" name="title" style="width: 550px" value="{DATA.title}">
-		<input type="hidden" name="id" style="width: 550px" value="{DATA.id}">
-		<input type="hidden" name="mid" style="width: 550px" value="{DATA.mid}">
-		<input type="hidden" name="pa" style="width: 550px" value="{DATA.parentid}">
-		</td>
-	</tr>
+		<tr>
+			<td><strong>{LANG.title}</strong></td>
+			<td>
+				<input type="text" name="title" style="width: 550px" value="{DATA.title}">
+				<input type="hidden" name="id" style="width: 550px" value="{DATA.id}">
+				<input type="hidden" name="mid" style="width: 550px" value="{DATA.mid}">
+				<input type="hidden" name="pa" style="width: 550px" value="{DATA.parentid}">
+			</td>
+		</tr>
 	</tbody>
-	
 	<tbody>
-	<tr>
-		<td><strong>{LANG.cats}</strong></td>
-		<td>
-		<select name="parentid" id="parentid">
-                <!-- BEGIN: cat -->
-				<option value="{cat.key}"{selected}>{cat.title}</option>
-				<!-- END: cat -->				
-		</select></td>
-	</tr>
+		<tr>
+			<td><strong>{LANG.cats}</strong></td>
+			<td>
+				<select name="parentid" id="parentid">
+					<!-- BEGIN: cat -->
+					<option value="{cat.key}"{selected}>{cat.title}</option>
+					<!-- END: cat -->				
+				</select>
+			</td>
+		</tr>
 	</tbody>
-	
 	<tbody class="second">
-		<tr >
+		<tr>
 			<td><strong>{LANG.chomodule}</strong></td>
 			<td>
-                    <select name="module_name" id="module_name_{module.key}" onchange="nv_link('{module.key}');">
-                    	<option value="0">{LANG.cho_module}</option>
-						<!-- BEGIN: module -->
-						<option value="{module.key}"{module.selected}>{module.title}</option>
-						<!-- END: module -->
-					</select>
+				<select name="module_name" id="module_name_{module.key}" onchange="nv_link('{module.key}');">
+					<option value="0">{LANG.cho_module}</option>
+					<!-- BEGIN: module --><option value="{module.key}"{module.selected}>{module.title}</option>
+					<!-- END: module -->
+				</select>
 	<span id="thu">
-	<!-- BEGIN: link -->				
+		<!-- BEGIN: link -->				
 			<select name="op" id="item_name_{item.alias}" onchange="nv_link1('{item.alias}','{item.module}');">
                  	<option value="">{LANG.item_menu}</option>
 					 <!-- BEGIN: item -->
@@ -127,7 +102,7 @@
                 </td>
 		</tr>
 	</tbody>
-	<!-- END: link -->
+		<!-- END: link -->
 	</span>
 	<span id="link_end">
 	<tbody class="second">

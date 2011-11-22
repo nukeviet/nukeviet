@@ -98,10 +98,10 @@ if ( $nv_Request->get_int( 'save', 'post' ) )
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET 
 			`title`=" . $db->dbescape( $arr_menu['title'] ) . ", 
 			`description` =  " . $db->dbescape( $arr_menu['description'] ) . " 
-			WHERE `id` =" . $arr_menu['id'];
-		$db->sql_query( $sql );
+		WHERE `id` =" . $arr_menu['id'];
 		
-		if ( $db->sql_affectedrows() > 0 )
+		
+		if ( $db->sql_query( $sql ) )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );

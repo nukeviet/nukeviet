@@ -63,7 +63,7 @@
 
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:780px;">
+<div class="quote" style="width:98%">
     <blockquote class="error">
         <span>{ERROR}</span>
     </blockquote>

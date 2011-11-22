@@ -240,8 +240,8 @@ if ($nv_Request->isset_request('submit1', 'post'))
 				`target`=" . intval($post['target']) . " 
 				 WHERE `id`=" . intval($post['id']);
 
-            $db->sql_query($sql);
-            if ($db->sql_affectedrows() > 0)
+            
+            if ( $db->sql_query($sql) )
             {
                 if ($pa_old != $post['parentid'])
                 {
