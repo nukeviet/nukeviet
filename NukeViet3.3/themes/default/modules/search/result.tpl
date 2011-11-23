@@ -3,7 +3,7 @@
 <div class="result-mod">
     <!-- BEGIN: more -->
     <div class="cl-viewall">
-        <a href="javascript:void(0);" onclick="{MORE}">{LANG.view_all_title}</a>
+        <a href="{MORE}">{LANG.view_all_title}</a>
     </div>
     <!-- END: more -->
     {LANG.search_on} &quot;{MODULE_CUSTOM_TITLE}&quot;: {SEARCH_RESULT_NUM}

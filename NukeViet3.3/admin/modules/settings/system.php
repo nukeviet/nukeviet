@@ -110,6 +110,8 @@ if ($submit)
         $array_config_global['googleAnalyticsID'] = "";
     }
     $array_config_global['googleAnalyticsSetDomainName'] = $nv_Request->get_int('googleAnalyticsSetDomainName', 'post');
+    $array_config_global['searchEngineUniqueID'] = filter_text_input('searchEngineUniqueID', 'post', '');
+    if (preg_match("/[^a-zA-Z0-9\:\-\_\.]/",$array_config_global['searchEngineUniqueID'])) $array_config_global['searchEngineUniqueID'] = "";
 
     $array_config_global['gzip_method'] = $nv_Request->get_int('gzip_method', 'post');
     $array_config_global['online_upd'] = $nv_Request->get_int('online_upd', 'post');
@@ -186,6 +188,7 @@ $array_config_global['lang_multi'] = ($global_config['lang_multi']) ? ' checked=
 $array_config_global['str_referer_blocker'] = ($global_config['str_referer_blocker']) ? ' checked="checked"' : '';
 $array_config_global['getloadavg'] = ($global_config['getloadavg']) ? ' checked="checked"' : '';
 $array_config_global['my_domains'] = implode(",", $global_config['my_domains']);
+$array_config_global['searchEngineUniqueID'] = isset($global_config['searchEngineUniqueID']) ? $global_config['searchEngineUniqueID'] : "";
 
 $xtpl = new XTemplate("system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "");
 $xtpl->assign('LANG', $lang_module);

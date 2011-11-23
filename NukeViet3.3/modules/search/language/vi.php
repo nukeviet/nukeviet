@@ -37,5 +37,7 @@ $lang_module['view_all_title'] = "Xem tất cả";
 $lang_module['pages_title'] = "Trang";
 $lang_module['logic_and'] = "Cả cụm từ";
 $lang_module['logic_or'] = "Tối thiểu 1 từ";
+$lang_module['searchQueryError'] = "Bạn cần nhập từ khóa tìm kiếm có số ký tự tối thiểu là %s";
+$lang_module['chooseModule'] = "Hãy chọn Khu vực tìm kiếm";
 
 ?>

@@ -740,7 +740,7 @@ function nv_search_submit(search_query, topmenu_search_checkss, search_button, m
       var sbutton = document.getElementById(search_button);
       sbutton.disabled = true;
       var search_checkss = document.getElementById(topmenu_search_checkss).value;
-      window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable+'='+nv_sitelang+'&'+nv_name_variable + '=search&q=' + rawurlencode(format_query) + '&search_checkss=' + search_checkss;
+      window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable+'='+nv_sitelang+'&'+nv_name_variable + '=search&q=' + rawurlencode(format_query);
    }
    return false;
 }

@@ -297,6 +297,16 @@
                 </td>
             </tr>
         </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>{LANG.searchEngineUniqueID}</strong>
+                </td>
+                <td>
+                    <input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" style="width: 450px" maxlength="50" />
+                </td>
+            </tr>
+        </tbody>
     </table>
     <div style="width: 200px; margin: 10px auto; text-align: center;">
         <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/>

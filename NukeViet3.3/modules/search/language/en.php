@@ -37,5 +37,7 @@ $lang_module['view_all_title'] = "View all results";
 $lang_module['pages_title'] = "Page";
 $lang_module['logic_and'] = "All words";
 $lang_module['logic_or'] = "At least 1 word";
+$lang_module['searchQueryError'] = "Your search term must be at least three %s characters.";
+$lang_module['chooseModule'] = "Please choose the module";
 
 ?>

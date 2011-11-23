@@ -14,41 +14,82 @@ $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
 $array_modul = LoadModulesSearch();
+$is_search = false;
+$search = array( //
+    'key' => '', //
+    'len_key' => 0, //
+    'mod' => 'all', //
+    'logic' => 0, //OR
+    'page' => 0, //
+    'is_error' => false, //
+    'errorInfo' => '', //
+    'content' => '' //
+    );
 
-$key = filter_text_input( 'q', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
-$len_key = 0;
-
-$logic = filter_text_input( 'logic', 'get', 'AND' );
-if ( $logic != 'AND' ) $logic = 'OR';
-
-$checkss = filter_text_input( 'search_checkss', 'get', '', 1, 32 );
-$ss = md5( $client_info['session_id'] . $global_config['sitekey'] );
-
-if ( ! preg_match( "/^[a-z0-9]{32}$/", $checkss ) or $checkss != $ss )
+if ( $nv_Request->isset_request( 'q', 'get' ) )
 {
-    $key = "";
-}
+    $is_search = true;
 
-if ( ! empty( $key ) )
-{
-    $key = nv_unhtmlspecialchars( $key );
-    if ( $logic == 'OR' )
+    $search['key'] = filter_text_input( 'q', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
+    $search['logic'] = $nv_Request->get_int( 'l', 'get', 0 );
+    $search['mod'] = filter_text_input( 'm', 'get', 'all', 1 );
+    $search['page'] = $nv_Request->get_int( 'page', 'get', 0 );
+
+    if ( $search['logic'] != 1 ) $search['logic'] = 0;
+    if ( ! isset( $array_modul[$search['mod']] ) ) $search['mod'] = "all";
+
+    if ( ! empty( $search['key'] ) )
     {
-        $key = preg_replace( array( "/^([\S]{1})\s/uis", "/\s([\S]{1})\s/uis", "/\s([\S]{1})$/uis" ), " ", $key );
+        $search['key'] = nv_unhtmlspecialchars( $search['key'] );
+        if ( ! $search['logic'] ) $search['key'] = preg_replace( array( "/^([\S]{1})\s/uis", "/\s([\S]{1})\s/uis", "/\s([\S]{1})$/uis" ), " ", $search['key'] );
+        $search['key'] = strip_punctuation( $search['key'] );
+        $search['key'] = trim( $search['key'] );
+        $search['len_key'] = nv_strlen( $search['key'] );
+        $search['key'] = nv_htmlspecialchars( $search['key'] );
     }
-    $key = strip_punctuation( $key );
-    $key = trim( $key );
-    $len_key = nv_strlen( $key );
-    $key = nv_htmlspecialchars( $key );
+
+    if ( $search['len_key'] < NV_MIN_SEARCH_LENGTH )
+    {
+        $search['is_error'] = true;
+        $search['errorInfo'] = sprintf( $lang_module['searchQueryError'], NV_MIN_SEARCH_LENGTH );
+    }
+    else
+    {
+        if ( ! empty( $search['mod'] ) and isset( $array_modul[$search['mod']] ) )
+        {
+            $mods = array( $search['mod'] => $array_modul[$search['mod']] );
+            $limit = 10;
+            $is_generate_page = true;
+        }
+        else
+        {
+            $mods = $array_modul;
+            $limit = 3;
+            $is_generate_page = false;
+        }
+
+        foreach ( $mods as $m_name => $m_values )
+        {
+            $pages = $search['page'];
+            $all_page = 0;
+            $key = $search['key'];
+            $dbkeyword = $db->dblikeescape( $search['key'] );
+            $logic = $search['logic'] ? "AND" : "OR";
+
+            $result_array = array();
+            include ( NV_ROOTDIR . "/modules/" . $m_values['module_file'] . "/search.php" );
+
+            if ( ! empty( $all_page ) and ! empty( $result_array ) )
+            {
+                $search['content'] .= result_theme( $result_array, $m_name, $m_values['custom_title'], $search, $is_generate_page, $limit, $all_page );
+            }
+        }
+
+        if ( empty( $search['content'] ) ) $search['content'] = $lang_module['search_none'] . " &quot;" . $search['key'] . "&quot;";
+    }
 }
 
-$mod = filter_text_input( 'mod', 'get', 'all', 1 );
-if ( ! isset( $array_modul[$mod] ) )
-{
-    $mod = "all";
-}
-
-$contents = call_user_func( "main_theme", $key, $ss, $logic, $array_modul, $mod );
+$contents = call_user_func( "main_theme", $is_search, $search, $array_modul );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
