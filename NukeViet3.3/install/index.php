@@ -49,7 +49,7 @@ if ($step <= 0 or $step > 7)
     exit();
 }
 
-if ($step > $maxstep)
+if ($step > $maxstep and $step > 2)
 {
     $step = $maxstep;
     Header("Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step);
@@ -74,61 +74,6 @@ if ($step == 1)
 }
 elseif ($step == 2)
 {
-    if ($step < 3)
-    {
-        $nv_Request->set_Session('maxstep', 3);
-    }
-    $title = $lang_module['license'];
-
-    if (file_exists(NV_ROOTDIR . "/install/licenses_" . NV_LANG_DATA . ".html"))
-    {
-        $license = file_get_contents(NV_ROOTDIR . "/install/licenses_" . NV_LANG_DATA . ".html");
-    }
-    else
-    {
-        $license = file_get_contents(NV_ROOTDIR . "/install/licenses.html");
-    }
-    $contents = nv_step_2($license);
-}
-elseif ($step == 3)
-{
-    $nextstep = 1;
-    $title = $lang_module['check_server'];
-
-    $array_resquest = array();
-    $array_resquest_key = array('php_support', 'mysql_support', 'opendir_support', 'gd_support', 'session_support', 'fileuploads_support');
-
-    foreach ($array_resquest_key as $key)
-    {
-        $array_resquest[$key] = ($sys_info[$key]) ? $lang_module['compatible'] : $lang_module['not_compatible'];
-        if (!$sys_info[$key])
-        {
-            $nextstep = 0;
-        }
-    }
-    if ($step < 4 and $nextstep == 1)
-    {
-        $nv_Request->set_Session('maxstep', 4);
-    }
-
-    $array_suport = array();
-    $array_support['supports_rewrite'] = ( empty($sys_info['supports_rewrite'])) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-    $array_support['safe_mode'] = ($sys_info['safe_mode']) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-    $array_support['register_globals'] = (ini_get('register_globals') == '1' || strtolower(ini_get('register_globals')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
-    $array_support['magic_quotes_runtime'] = (ini_get('magic_quotes_runtime') == '1' || strtolower(ini_get('magic_quotes_runtime')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
-    $array_support['magic_quotes_gpc'] = (ini_get('magic_quotes_gpc') == '1' || strtolower(ini_get('magic_quotes_gpc')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
-    $array_support['magic_quotes_sybase'] = (ini_get('magic_quotes_sybase') == '1' || strtolower(ini_get('magic_quotes_sybase')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
-    $array_support['output_buffering'] = (ini_get('output_buffering') == '1' || strtolower(ini_get('output_buffering')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
-    $array_support['session_auto_start'] = (ini_get('session.auto_start') == '1' || strtolower(ini_get('session.auto_start')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
-    $array_support['display_errors'] = (ini_get('display_errors') == '1' || strtolower(ini_get('display_errors')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
-    $array_support['allowed_set_time_limit'] = ($sys_info['allowed_set_time_limit']) ? $lang_module['compatible'] : $lang_module['not_compatible'];
-    $array_support['zlib_support'] = ($sys_info['zlib_support']) ? $lang_module['compatible'] : $lang_module['not_compatible'];
-    $array_support['zip_support'] = ( extension_loaded('zip')) ? $lang_module['compatible'] : $lang_module['not_compatible'];
-
-    $contents = nv_step_3($array_resquest, $array_support, $nextstep);
-}
-elseif ($step == 4)
-{
     $array_dir = array(NV_SESSION_SAVE_PATH, NV_LOGS_DIR, NV_LOGS_DIR . "/data_logs", NV_LOGS_DIR . "/dump_backup", NV_LOGS_DIR . "/error_logs", NV_LOGS_DIR . "/error_logs/errors256", NV_LOGS_DIR . "/error_logs/old", NV_LOGS_DIR . "/error_logs/tmp", NV_LOGS_DIR . "/ip_logs", NV_LOGS_DIR . "/ref_logs", NV_LOGS_DIR . "/voting_logs", NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . "/css", NV_FILES_DIR . "/js", NV_DATADIR, NV_DATADIR . "/ip_files", );
     $array_file_data = nv_scandir(NV_ROOTDIR . "/" . NV_DATADIR, "/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/");
     foreach ($array_file_data as $file_i)
@@ -136,6 +81,7 @@ elseif ($step == 4)
         $array_dir[] = NV_DATADIR . "/" . $file_i;
     }
     $array_dir[] = $file_config_temp;
+		
     if (!empty($sys_info['supports_rewrite']))
     {
         if ($sys_info['supports_rewrite'] == "rewrite_mode_apache")
@@ -207,7 +153,7 @@ elseif ($step == 4)
             $global_config['ftp_check_login'] = $ftp_check_login;
         }
     }
-
+	
     $nextstep = 1;
     $array_dir_check = array();
     foreach ($array_dir as $dir)
@@ -283,12 +229,67 @@ elseif ($step == 4)
             $array_dir_check[NV_DATADIR . "/ip_files"] = sprintf($lang_module['dir_not_writable_ip_files'], NV_DATADIR . "/ip_files");
         }
     }
+    if ($step < 3 and $nextstep == 1)
+    {
+        $nv_Request->set_Session('maxstep', 3);
+    }
+    $title = $lang_module['check_chmod'];
+    $contents = nv_step_2($array_dir_check, $array_ftp_data, $nextstep);
+}
+elseif ($step == 3)
+{
+    if ($step < 4)
+    {
+        $nv_Request->set_Session('maxstep', 4);
+    }
+    $title = $lang_module['license'];
+
+    if (file_exists(NV_ROOTDIR . "/install/licenses_" . NV_LANG_DATA . ".html"))
+    {
+        $license = file_get_contents(NV_ROOTDIR . "/install/licenses_" . NV_LANG_DATA . ".html");
+    }
+    else
+    {
+        $license = file_get_contents(NV_ROOTDIR . "/install/licenses.html");
+    }
+    $contents = nv_step_3($license);
+}
+elseif ($step == 4)
+{
+    $nextstep = 1;
+    $title = $lang_module['check_server'];
+
+    $array_resquest = array();
+    $array_resquest_key = array('php_support', 'mysql_support', 'opendir_support', 'gd_support', 'session_support', 'fileuploads_support');
+
+    foreach ($array_resquest_key as $key)
+    {
+        $array_resquest[$key] = ($sys_info[$key]) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+        if (!$sys_info[$key])
+        {
+            $nextstep = 0;
+        }
+    }
     if ($step < 5 and $nextstep == 1)
     {
         $nv_Request->set_Session('maxstep', 5);
     }
-    $title = $lang_module['check_chmod'];
-    $contents = nv_step_4($array_dir_check, $array_ftp_data, $nextstep);
+
+    $array_suport = array();
+    $array_support['supports_rewrite'] = ( empty($sys_info['supports_rewrite'])) ? $lang_module['not_compatible'] : $lang_module['compatible'];
+    $array_support['safe_mode'] = ($sys_info['safe_mode']) ? $lang_module['not_compatible'] : $lang_module['compatible'];
+    $array_support['register_globals'] = (ini_get('register_globals') == '1' || strtolower(ini_get('register_globals')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
+    $array_support['magic_quotes_runtime'] = (ini_get('magic_quotes_runtime') == '1' || strtolower(ini_get('magic_quotes_runtime')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
+    $array_support['magic_quotes_gpc'] = (ini_get('magic_quotes_gpc') == '1' || strtolower(ini_get('magic_quotes_gpc')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
+    $array_support['magic_quotes_sybase'] = (ini_get('magic_quotes_sybase') == '1' || strtolower(ini_get('magic_quotes_sybase')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
+    $array_support['output_buffering'] = (ini_get('output_buffering') == '1' || strtolower(ini_get('output_buffering')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
+    $array_support['session_auto_start'] = (ini_get('session.auto_start') == '1' || strtolower(ini_get('session.auto_start')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
+    $array_support['display_errors'] = (ini_get('display_errors') == '1' || strtolower(ini_get('display_errors')) == 'on') ? $lang_module['not_compatible'] : $lang_module['compatible'];
+    $array_support['allowed_set_time_limit'] = ($sys_info['allowed_set_time_limit']) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+    $array_support['zlib_support'] = ($sys_info['zlib_support']) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+    $array_support['zip_support'] = ( extension_loaded('zip')) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+
+    $contents = nv_step_4($array_resquest, $array_support, $nextstep);
 }
 elseif ($step == 5)
 {

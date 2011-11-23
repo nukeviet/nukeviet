@@ -129,4 +129,11 @@ $lang_module['your_question_empty'] = "Bạn chưa khai báo câu hỏi bảo m�
 $lang_module['answer_empty'] = "Bạn chưa nhập câu Trả lời cho câu hỏi bảo mật";
 $lang_module['question_note'] = "Hệ thống sẽ hỏi bạn câu hỏi bảo mật trong trường hợp bạn cần khôi phục mật khẩu khi bạn bị quên. Vì vậy hãy chọn câu hỏi mà nó có thể giúp bạn nhớ chính xác câu trả lời.";
 $lang_module['answer_question_note'] = "Bạn hãy nhớ câu trả lời này để trả lời hệ thống.";
+$lang_module['s2_winhost_info'] = "Bạn đang sử dụng window hosting, chức năng CHMOD sẽ không hoạt động.";
+$lang_module['s2_winhost_info1'] = "Các kết quả kiểm tra là";
+$lang_module['s2_winhost_info2'] = "tuy nhiên bạn hãy chắc chắn các thư mục được liệt kê bên trên và thư mục con của nó được cấp quyền ghi file trước khi chuyển sang <strong>Bước kế tiếp</strong>, nếu không hệ thống có thể sẽ không hoạt động được";
+$lang_module['s2_winhost_info3'] = "Hãy truy cập vào khu vực quản trị hosting của bạn và cấp quyền ghi file cho tất cả các thư mục được liệt kê bên trên và các thư mục con của nó sau đó ấn vào";
+$lang_module['s2_winhost_info4'] = "đây";
+$lang_module['s2_winhost_info5'] = "để kiểm tra lại";
+
 ?>
