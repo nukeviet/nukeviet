@@ -22,14 +22,7 @@
 		<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-		
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/popcalendar/popcalendar.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/shadowbox/shadowbox.js"></script>
-		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}js/shadowbox/shadowbox.css" />
-		<script type="text/javascript">
-		Shadowbox.init();
-		</script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>		
 	</head>
 	<body>
 		<div id="getuidcontent">
@@ -118,11 +111,9 @@
 						</td>
 						<td>
 							{LANG.from}
-							<input class="txt" type="text" value="" name="regdatefrom" id="regdatefrom" style="width:70px" maxlength="100" readonly="readonly" />
-							<img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'regdatefrom', 'dd.mm.yyyy', true);" alt="" height="17" />
+							<input class="txt" type="text" value="" name="regdatefrom" id="regdatefrom" style="width:90px" maxlength="100" />
 							{LANG.to}
-							<input class="txt" type="text" value="" name="regdateto" id="regdateto" style="width:70px" maxlength="100" readonly="readonly" />
-							<img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'regdateto', 'dd.mm.yyyy', true);" alt="" height="17" />
+							<input class="txt" type="text" value="" name="regdateto" id="regdateto" style="width:90px" maxlength="100" />
 						</td>
 						<td>
 							{LANG.yim}
@@ -139,11 +130,9 @@
 						</td>
 						<td>
 							{LANG.from}
-							<input class="txt" type="text" value="" name="last_loginfrom" id="last_loginfrom" style="width:70px" maxlength="100" readonly="readonly" />
-							<img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'last_loginfrom', 'dd.mm.yyyy', true);" alt="" height="17" />
+							<input class="txt" type="text" value="" name="last_loginfrom" id="last_loginfrom" style="width:90px" maxlength="100" />
 							{LANG.to}
-							<input class="txt" type="text" value="" name="last_loginto" id="last_loginto" style="width:70px" maxlength="100" readonly="readonly" />
-							<img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'last_loginto', 'dd.mm.yyyy', true);" alt="" height="17" />
+							<input class="txt" type="text" value="" name="last_loginto" id="last_loginto" style="width:90px" maxlength="100" />
 						</td>
 						<td>
 							{LANG.last_idlogin}
@@ -169,22 +158,34 @@
 
 <script type="text/javascript">
 //<![CDATA[
-$("#formgetuid").submit(function() {
-  var a = $(this).attr("action");
-  b = $(this).serialize();
-  a = a + "&" + b + "&submit";
-  $("#formgetuid input, #formgetuid select").attr("disabled", "disabled");
-  $.ajax({type:"GET", url:a, success:function(c) {
-    $("#resultdata").html(c);
-    $("#formgetuid input, #formgetuid select").removeAttr("disabled")
-  }});
-  return!1
-});
-$(".reset").click(function() {
-  $("[type=text]").val('');
-  $("select[name=gender]").val('');
-  $("#resultdata").html('');
-  return!1
+$(document).ready(function(){
+	$("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
+		showOn: "button",
+		dateFormat: "dd.mm.yy",
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+		buttonText: '',
+		showButtonPanel: true,
+		showOn: 'focus'
+	});
+	$("#formgetuid").submit(function(){
+		var a = $(this).attr("action");
+		b = $(this).serialize();
+		a = a + "&" + b + "&submit";
+		$("#formgetuid input, #formgetuid select").attr("disabled", "disabled");
+		$.ajax({type:"GET", url:a, success:function(c) {
+			$("#resultdata").html(c);
+			$("#formgetuid input, #formgetuid select").removeAttr("disabled")
+		}});
+		return!1
+	});
+	$(".reset").click(function(){
+	  $("[type=text]").val('');
+	  $("select[name=gender]").val('');
+	  $("#resultdata").html('');
+	  return!1
+	});
 });
 //]]>
 </script>

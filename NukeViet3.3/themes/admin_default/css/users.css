@@ -16,3 +16,10 @@
 #pageContent label {font:400 12px/20px Tahoma,Arial,Verdana,sans-serif}
 #pageContent dd {width:150px}
 #pageContent dd,#pageContent dt {float: left}
+.center {text-align: center}
+.fixbg {background-color: #e4e4e4 !important}
+.fl {float:left}
+.fr {float:right}
+.fixwidthinput{width: 98%}
+.asc {padding-right: 10px;background-repeat: no-repeat;background-position: right center;background-image: url('../images/arrows/tall-up-arrow.gif')}
+.desc {padding-right: 10px;background-repeat: no-repeat;background-position: right center;background-image: url('../images/arrows/tall-down-arrow.gif')}
