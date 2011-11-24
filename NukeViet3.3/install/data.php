@@ -399,6 +399,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'optActive', '1'),
 ('sys', 'global', 'googleAnalyticsID', ''),
 ('sys', 'global', 'googleAnalyticsSetDomainName', '0'),
+('sys', 'global', 'searchEngineUniqueID', ''),
 ('sys', 'global', 'revision', '" . $global_config['revision'] . "'),
 ('sys', 'global', 'version', '" . $global_config['version'] . "')";
 

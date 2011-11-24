@@ -13,6 +13,9 @@ if (!defined('NV_AUTOUPDATE'))
 function nv_func_update_data()
 {
     global $global_config, $db_config, $db, $error_contents, $language_array;
+    
+    $delete_all_cache = false;
+    
     // Update data
     if ($global_config['revision'] < 902)
     {
@@ -42,7 +45,7 @@ function nv_func_update_data()
                 $db->sql_query("DELETE FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modfuncs` WHERE `in_module`='" . $mod . "'");
             }
         }
-        nv_delete_all_cache();
+        $delete_all_cache = true;
     }
     if ($global_config['revision'] < 1042)
     {
@@ -64,7 +67,7 @@ function nv_func_update_data()
                 $db->sql_query("INSERT INTO `" . $db_config['prefix'] . "_" . $lang_i . "_" . $mod_data . "_config` VALUES ('type_main', '0')");
             }
         }
-        nv_delete_all_cache();
+        $delete_all_cache = true;
     }
 
     if ($global_config['revision'] < 1150)
@@ -108,7 +111,7 @@ function nv_func_update_data()
 			) ENGINE=MyISAM";
             $db->sql_query($sql);
         }
-        nv_delete_all_cache();
+        $delete_all_cache = true;
     }
 
     if ($global_config['revision'] < 1123)
@@ -152,7 +155,7 @@ function nv_func_update_data()
 
         $db->sql_query("ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` CHANGE `admin_file` `admin_file` VARCHAR( 255 ) NOT NULL DEFAULT '0'");
 
-        nv_delete_all_cache();
+        $delete_all_cache = true;
     }
 
     if ($global_config['revision'] < 1209)
@@ -564,16 +567,23 @@ function nv_func_update_data()
     {
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'lang_geo', 0");
     }
+    
+    if (!isset($global_config['searchEngineUniqueID']))
+    {
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'searchEngineUniqueID', ''");
+    }
 
     nv_save_file_config_global();
+    
+    if($delete_all_cache)
+    {
+        nv_delete_all_cache();
+    }
     // End date data
     if (empty($error_contents))
     {
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 ?>

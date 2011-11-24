@@ -35,7 +35,7 @@ if ( extension_loaded( 'suhosin' ) )
 }
 $sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] ) ) ? true : false;
 
-//Ket noi voi cac file constants, config, timezone
+//Ket noi voi cac file constants, config
 require ( NV_ROOTDIR . "/includes/constants.php" );
 if ( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) )
 {
@@ -94,6 +94,17 @@ if ( $global_config['openid_mode'] )
     $openid_servers = array_intersect_key( $openid_servers, array_flip( $global_config['openid_servers'] ) );
 }
 
+//Xac dinh IP cua client
+require ( NV_ROOTDIR . '/includes/class/ips.class.php' );
+$ips = new ips();
+$client_info['ip'] = $ips->remote_ip;
+if ( $client_info['ip'] == "none" ) die( 'Error: Your IP address is not correct' ); //Neu khong co IP
+//define( 'NV_SERVER_IP', $ips->server_ip );
+define( 'NV_FORWARD_IP', $ips->forward_ip );
+define( 'NV_REMOTE_ADDR', $ips->remote_addr );
+define( 'NV_CLIENT_IP', $client_info['ip'] );
+
+//Mui gio
 require ( NV_ROOTDIR . '/includes/timezone.php' );
 define( 'NV_CURRENTTIME', isset( $_SERVER['REQUEST_TIME'] ) ? $_SERVER['REQUEST_TIME'] : time() );
 define( 'NV_CURRENTYEAR_FNUM', date( 'Y', NV_CURRENTTIME ) ); //2009
@@ -142,21 +153,11 @@ $global_config['cookie_secure'] = NV_COOKIE_SECURE;
 $global_config['cookie_httponly'] = NV_COOKIE_HTTPONLY;
 $global_config['session_save_path'] = NV_SESSION_SAVE_PATH;
 
-//Ket noi voi file xac dinh IP
-require ( NV_ROOTDIR . '/includes/class/ips.class.php' );
+//IP Ban
+if ( nv_is_banIp( $client_info['ip'] ) ) trigger_error( "Hi and Good-bye!!!", 256 );
 
-$ips = new ips();
-//define( 'NV_SERVER_IP', $ips->server_ip );
-define( 'NV_FORWARD_IP', $ips->forward_ip );
-define( 'NV_REMOTE_ADDR', $ips->remote_addr );
-
-//Xac dinh IP cua client
-$client_info['ip'] = $ips->remote_ip;
-if ( $client_info['ip'] == "none" ) trigger_error( 'Error: Your IP address is not correct', 256 ); //Neu khong co IP
-if ( nv_is_banIp( $client_info['ip'] ) ) trigger_error( "Hi and Good-bye!!!", 256 ); //IP Ban
-
-
-if ( $global_config['proxy_blocker'] != 0 ) //Chan proxy
+//Chan proxy
+if ( $global_config['proxy_blocker'] != 0 )
 {
     $client_info['is_proxy'] = $ips->nv_check_proxy();
     if ( nv_is_blocker_proxy( $client_info['is_proxy'], $global_config['proxy_blocker'] ) )
