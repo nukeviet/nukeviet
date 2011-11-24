@@ -148,7 +148,7 @@ class sql_db
             $this->sql_version = ( $m[1] . '.' . $m[2] . '.' . $m[3] );
             if ( version_compare( $this->sql_version, '4.1.0', '>=' ) )
             {
-                @mysql_query( "SET SESSION `time_zone`='" . NV_SITE_TIMEZONE_NAME . "'", $this->db_connect_id );
+                @mysql_query( "SET SESSION `time_zone`='" . NV_SITE_TIMEZONE_GMT_NAME . "'", $this->db_connect_id );
                 
                 $result = @mysql_query( 'SELECT @@session.time_zone AS `time_zone`, @@session.character_set_database AS `character_set_database`, 
                 @@session.collation_database AS `collation_database`, @@session.sql_mode AS `sql_mode`', $this->db_connect_id );

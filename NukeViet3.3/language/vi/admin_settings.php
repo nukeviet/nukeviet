@@ -206,4 +206,6 @@ $lang_module['robots_type_0'] = "Cấm truy cập";
 $lang_module['robots_type_1'] = "Không hiển thị trong file robots.txt";
 $lang_module['robots_error_writable'] = "Lỗi: Hệ thống không ghi được file robots.txt";
 $lang_module['searchEngineUniqueID'] = "Google search Engine ID<br />(Có dạng 000329275761967753447:sr7yxqgv294 , <a href=\"http://www.google.com/cse/\" target=\"_blank\">xem chi tiết</a>)";
+$lang_module['timezoneAuto'] = "Theo PC người dùng";
+
 ?>

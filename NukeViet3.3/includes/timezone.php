@@ -21,7 +21,7 @@ function nv_getTimezoneName_from_cookie ( $cookie )
             {
                 $last = trim( $ms[1] );
             }
-            elseif ( preg_match( '/(.+)[ ]*=[ ]*[\"|\'](.+)[\"|\']/', $i, $ms ) )
+            elseif ( preg_match( '/(.+)[ ]*\=[ ]*(\-?\d+)/', $i, $ms ) )
             {
                 $timezones[$last][trim( $ms[1] )] = trim( $ms[2] );
             }

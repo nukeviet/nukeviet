@@ -138,6 +138,7 @@
                 </td>
                 <td>
                     <select name="site_timezone">
+                        <option value="">{LANG.timezoneAuto}</option>
                         <!-- BEGIN: opsite_timezone -->
 							<option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE}  </option>
                         <!-- END: opsite_timezone -->
