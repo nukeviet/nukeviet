@@ -106,7 +106,7 @@ define( 'NV_CLIENT_IP', $client_info['ip'] );
 
 //Xac dinh Quoc gia
 require ( NV_ROOTDIR . '/includes/countries.php' );
-$client_info['country'] = nv_getCountry_from_file( $client_info['ip'] );
+$client_info['country'] = nv_getCountry_from_cookie( $client_info['ip'] );
 
 //Mui gio
 require ( NV_ROOTDIR . '/includes/timezone.php' );

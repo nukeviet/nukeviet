@@ -312,6 +312,7 @@ function nv_getCountry( $ip )
 
     $code = "ZZ";
     $numbers = preg_split( "/\./", $ip );
+    $_code = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + ( $numbers[2] * 256 ) + ( $numbers[3] );
     $ip_file = $numbers[0];
     $ip_from = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 );
     $ip_to = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + 65535;
@@ -332,7 +333,27 @@ function nv_getCountry( $ip )
         }
     }
 
-    $newCountry = array( 'ip_file' => $ip_file, 'ip_from' => $ip_from, 'ip_to' => $ip_to, 'code' => $code );
+    if ( defined( 'NV_CLASS_SQL_DB_PHP' ) and defined( "NV_CURRENTTIME" ) )
+    {
+        global $db, $db_config;
+
+        if ( $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_ipcountry` VALUES (" . $ip_from . ", " . $ip_to . ", '" . $code . "', '" . $ip_file . "', '" . NV_CURRENTTIME . "')" ) )
+        {
+            $time_del = NV_CURRENTTIME - 604800;
+            $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $ip_file . "' AND `country`='ZZ' AND `time` < " . $time_del );
+            $result = $db->sql_query( "SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $ip_file . "'" );
+            $array_ip_file = array();
+            while ( $row = $db->sql_fetch_assoc( $result ) )
+            {
+                $array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
+            }
+            file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/ip_files/" . $ip_file . ".php", "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
+        }
+    }
+    else
+    {
+        $newCountry = array( 'ip_file' => $ip_file, 'ip_from' => $ip_from, 'ip_to' => $ip_to, 'code' => $code );
+    }
 
     return $code;
 }
@@ -345,8 +366,11 @@ function nv_getCountry( $ip )
  */
 function nv_getCountry_from_file( $ip )
 {
+    global $countries;
+
     $numbers = preg_split( "/\./", $ip );
     $code = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + ( $numbers[2] * 256 ) + ( $numbers[3] );
+
     $ranges = array();
     include ( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $numbers[0] . '.php' );
 
@@ -359,6 +383,36 @@ function nv_getCountry_from_file( $ip )
     }
 
     return nv_getCountry( $ip );
+}
+
+/**
+ * nv_getCountry_from_cookie()
+ * 
+ * @param mixed $ip
+ * @return
+ */
+function nv_getCountry_from_cookie( $ip )
+{
+    global $global_config, $countries;
+
+    $numbers = preg_split( "/\./", $ip );
+    $code = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + ( $numbers[2] * 256 ) + ( $numbers[3] );
+
+    if ( isset( $_COOKIE[$global_config['cookie_prefix'] . '_ctr'] ) )
+    {
+        $country = base64_decode( $_COOKIE[$global_config['cookie_prefix'] . '_ctr'] );
+        if ( preg_match( "/^" . $code . "\.([A-Z]{2})$/", $country, $matches ) )
+        {
+            if ( isset( $countries[$matches[1]] ) ) return $matches[1];
+        }
+    }
+
+    $country = nv_getCountry_from_file( $ip );
+    $country = base64_encode( $code . '.' . $country );
+    $livecookietime = time() + 31536000;
+    setcookie( $global_config['cookie_prefix'] . '_ctr', $country, $livecookietime );
+
+    return $country;
 }
 
 ?>
