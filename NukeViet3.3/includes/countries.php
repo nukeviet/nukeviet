@@ -409,7 +409,37 @@ function nv_getCountry_from_cookie( $ip )
     $country = nv_getCountry_from_file( $ip );
     $country = base64_encode( $code . '.' . $country );
     $livecookietime = time() + 31536000;
-    setcookie( $global_config['cookie_prefix'] . '_ctr', $country, $livecookietime );
+
+    $cookie_path = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
+    if ( $cookie_path == DIRECTORY_SEPARATOR ) $cookie_path = '';
+    if ( ! empty( $cookie_path ) ) $cookie_path = str_replace( DIRECTORY_SEPARATOR, '/', $cookie_path );
+    if ( ! empty( $cookie_path ) ) $cookie_path = preg_replace( "/[\/]+$/", '', $cookie_path );
+    if ( ! empty( $cookie_path ) ) $cookie_path = preg_replace( "/^[\/]*(.*)$/", '/\\1', $cookie_path );
+    if ( defined( 'NV_WYSIWYG' ) and ! defined( 'NV_ADMIN' ) )
+    {
+        $cookie_path = preg_replace( "#/" . NV_EDITORSDIR . "(.*)$#", '', $cookie_path );
+    } elseif ( defined( 'NV_ADMIN' ) )
+    {
+        $cookie_path = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $cookie_path );
+    } elseif ( ! empty( $cookie_path ) )
+    {
+        $cookie_path = preg_replace( "#/index\.php(.*)$#", '', $cookie_path );
+    }
+
+    $cookie_path .= '/';
+
+    if ( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) $cookie_domain = $_SERVER['SERVER_NAME'];
+    else  $cookie_domain = $_SERVER['HTTP_HOST'];
+    $cookie_domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/^([w]{3})\./' ), array( '', '' ), $cookie_domain );
+    $cookie_domain = preg_match( "/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/", $cookie_domain ) ? '.' . $cookie_domain : '';
+    if ( PHP_VERSION >= 5.2 )
+    {
+        setcookie( $global_config['cookie_prefix'] . '_ctr', $country, $livecookietime, $cookie_path, $cookie_domain, ( bool )NV_COOKIE_SECURE, ( bool )NV_COOKIE_HTTPONLY );
+    }
+    else
+    {
+        setcookie( $global_config['cookie_prefix'] . '_ctr', $country, $livecookietime, $cookie_path, $cookie_domain, ( bool )NV_COOKIE_SECURE );
+    }
 
     return $country;
 }

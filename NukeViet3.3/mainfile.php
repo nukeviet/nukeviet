@@ -187,7 +187,6 @@ if ( defined( 'NV_SYSTEM' ) )
 require ( NV_ROOTDIR . '/includes/class/request.class.php' );
 $nv_Request = new Request( $global_config, $client_info['ip'] );
 
-define( 'NV_CLIENT_IP', $client_info['ip'] );
 define( 'NV_SERVER_NAME', $nv_Request->server_name ); //vd: mydomain1.com
 define( 'NV_SERVER_PROTOCOL', $nv_Request->server_protocol ); //vd: http
 define( 'NV_SERVER_PORT', $nv_Request->server_port ); //vd: 80
