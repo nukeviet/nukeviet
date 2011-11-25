@@ -150,5 +150,7 @@ $lang_module['filter_check_log'] = "Truy cập khu vực %s thất bại";
 $lang_module['filter_lang_asc'] = "tăng dần";
 $lang_module['filter_lang_desc'] = "giảm dần";
 $lang_module['filter_order_by'] = "Sắp xếp theo %s thứ tự";
+$lang_module['log_empty'] = "Xóa toàn bộ";
+$lang_module['log_empty_log'] = "Xóa toàn bộ nhật kí hệ thống";
 
 ?>

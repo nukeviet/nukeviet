@@ -15,9 +15,8 @@ require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
 $xtpl = new XTemplate( "environment_php.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $array = phpinfo_array( 16, 1 );
 $caption = $lang_module['environment_php'];
-$thead = array( 
-    $lang_module['variable'], $lang_module['value'] 
-);
+$thead = array( $lang_module['variable'], $lang_module['value'] );
+
 if ( ! empty( $array['Environment'] ) )
 {
     $xtpl->assign( 'CAPTION', $caption );
@@ -33,9 +32,11 @@ if ( ! empty( $array['Environment'] ) )
         ++$a;
     }
 }
-include ( NV_ROOTDIR . "/includes/header.php" );
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
+
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
 

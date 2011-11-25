@@ -7,12 +7,19 @@
  * @Createdate 11-10-2010 14:43
  */
 
-if (!defined('NV_IS_FILE_SITEINFO'))
-    die('Stop!!!');
+if ( !defined('NV_IS_FILE_SITEINFO') ) die('Stop!!!');
 
-/*
- * Eg: $id = nv_insert_logs('lang','module name','name key','note',1, 'link acess');
- */
+// Eg: $id = nv_insert_logs('lang','module name','name key','note',1, 'link acess');
+
+// Call jquery datepicker + shadowbox
+
+$my_head = "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css\" rel=\"stylesheet\" />\n";
+$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
+$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css\" rel=\"stylesheet\" />\n";
+
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>\n";
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
 $page_title = $lang_module['logs_title'];
 
@@ -243,15 +250,6 @@ foreach ($list_user as $user)
     );
 }
 
-// Call popcalendar
-$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_head .= "<script type=\"text/javascript\">\n";
-$my_head .= "Shadowbox.init({\n";
-$my_head .= "});\n";
-$my_head .= "</script>\n";
-
 $xtpl = new XTemplate("logs.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -318,4 +316,5 @@ $contents = $xtpl->text('main');
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>
