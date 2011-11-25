@@ -111,14 +111,14 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     
     if ( ! empty( $path_file_php ) and ! empty( $path_file_ini ) )
     {
-        //  load cac cau hinh cua block
+        // Load cac cau hinh cua block
         $xml = simplexml_load_file( $path_file_ini );
         if ( $xml !== false )
         {
             $submit_function = trim( $xml->submitfunction );
             if ( ! empty( $submit_function ) )
             {
-                // neu ton tai function de xay dung cau truc cau hinh block
+                // Neu ton tai function de xay dung cau truc cau hinh block
                 include_once ( $path_file_php );
                 if ( nv_function_exists( $submit_function ) )
                 {
@@ -161,9 +161,9 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     
     if ( ! empty( $error ) )
     {
-        $contents_error .= "<div id='edit'></div>\n";
-        $contents_error .= "<div class=\"quote\" style=\"width:780px;\">\n";
-        $contents_error .= "<blockquote class='error'><span id='message'>" . implode( "<br />", $error ) . "</span></blockquote>\n";
+        $contents_error .= "<div id=\"edit\"></div>\n";
+        $contents_error .= "<div class=\"quote\" style=\"width:98%\">\n";
+        $contents_error .= "<blockquote class=\"error\"><span id=\"message\">" . implode( "<br />", $error ) . "</span></blockquote>\n";
         $contents_error .= "</div>\n";
     }
     else
@@ -190,7 +190,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         
         if ( is_array( $array_funcid ) )
         {
-            //Tach va tao nhom moi
+            // Tach va tao nhom moi
             if ( ! empty( $row['leavegroup'] ) )
             {
                 $db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET all_func='0' WHERE `bid`=" . $row['bid'] );
@@ -300,38 +300,37 @@ while ( list( $id_i, $func_custom_name_i, $in_module_i ) = $db->sql_fetchrow( $f
         "id" => $id_i, "func_custom_name" => $func_custom_name_i 
     );
 }
-#load position file
+// Load position file
 $xml = @simplexml_load_file( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) or nv_info_die( $lang_global['error_404_title'], $lang_module['block_error_fileconfig_title'], $lang_module['block_error_fileconfig_content'] );
-$xmlpositions = $xml->xpath( 'positions' ); //array
-$positions = $xmlpositions[0]->position; //object
-
+$xmlpositions = $xml->xpath( 'positions' ); // array
+$positions = $xmlpositions[0]->position; // object
 
 if ( $row['bid'] != 0 )
 {
-    $contents .= "<div class=\"quote\" style=\"width:730px;\">\n";
-    $contents .= "<blockquote class='error'><span id='message'>" . $lang_module['block_group_notice'] . "</span></blockquote>\n";
+    $contents .= "<div class=\"quote\" style=\"width:98%\">\n";
+    $contents .= "<blockquote class=\"error\"><span id=\"message\">" . $lang_module['block_group_notice'] . "</span></blockquote>\n";
     $contents .= "</div>\n";
 }
 $contents .= $contents_error;
 
-$contents .= "<div style='clear:both'></div>";
-$contents .= "<form method='post' action='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=themes&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;selectthemes=" . $selectthemes . "&amp;blockredirect=" . $blockredirect . "'>";
-$contents .= "<table class=\"tab1\" style=\"WIDTH:100%\">\n";
-$contents .= "<col style=\"width: 160px; white-space: nowrap;\" />";
-$contents .= "<col style=\"width: 600px; white-space: nowrap;\" />";
+$contents .= "<div style=\"clear:both\"></div>";
+$contents .= "<form method=\"post\" action='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=themes&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;selectthemes=" . $selectthemes . "&amp;blockredirect=" . $blockredirect . "'>";
+$contents .= "<table class=\"tab1\" style=\"width:100%\">\n";
+$contents .= "<col style=\"width:160px;white-space:nowrap\" />";
+$contents .= "<col style=\"width:600px;white-space:nowrap\" />";
 
 $contents .= "<tbody class=\"second\">\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_type'] . ":</td>\n";
 $contents .= "<td>";
-$contents .= "<select name='module'>";
+$contents .= "<select name=\"module\">";
 $contents .= "<option value=\"\"> " . $lang_module['block_select_type'] . "</option>";
 $contents .= "<option value=\"global\" " . ( ( $row['module'] == 'global' ) ? ' selected="selected"' : '' ) . "> " . $lang_module['block_type_global'] . "</option>";
 $sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
 while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 {
-    $sel = ( $m_title == trim( $row['module'] ) ) ? ' selected="selected"' : '';
+    $sel = ( $m_title == trim( $row['module'] ) ) ? " selected=\"selected\"" : "";
     $contents .= "<option value=\"" . $m_title . "\" " . $sel . "> " . $m_custom_title . "</option>";
 }
 $contents .= "</select>";
@@ -372,7 +371,7 @@ foreach ( $templ_list as $value )
 {
     if ( ! empty( $value ) and $value != "default" )
     {
-        $sel = ( $row['template'] == $value ) ? ' selected="selected"' : '';
+        $sel = ( $row['template'] == $value ) ? " selected=\"selected\"" : "";
         $contents .= "<option value=\"" . $value . "\" " . $sel . ">" . $value . "</option>\n";
     }
 }
@@ -385,15 +384,15 @@ $contents .= "<tbody class=\"second\">\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_pos'] . ":</td>\n";
 $contents .= "<td>";
-$contents .= "<select name='position'>";
+$contents .= "<select name=\"position\">";
 
 for ( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
 {
-    $sel = ( $row['position'] == $positions[$i]->tag ) ? ' selected="selected"' : '';
-    $contents .= "<option value=\"" . $positions[$i]->tag . "\" " . $sel . "> " . $positions[$i]->name . '</option>';
+    $sel = ( $row['position'] == $positions[$i]->tag ) ? " selected=\"selected\"" : "";
+    $contents .= "<option value=\"" . $positions[$i]->tag . "\" " . $sel . "> " . $positions[$i]->name . "</option>\n";
 }
 
-$contents .= "</select>";
+$contents .= "</select>\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
@@ -402,7 +401,7 @@ $contents .= "<tbody>\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['block_exp_time'] . ":</td>\n";
 $contents .= "<td class=\"exp_time\">";
-$contents .= "<input name=\"exp_time\" id=\"exp_time\" value=\"" . ( ( $row['exp_time'] > 0 ) ? date( 'd.m.Y', $row['exp_time'] ) : '' ) . "\" style=\"width: 90px;\" maxlength=\"10\" type=\"text\" />\n";
+$contents .= "<input name=\"exp_time\" id=\"exp_time\" value=\"" . ( ( $row['exp_time'] > 0 ) ? date( 'd.m.Y', $row['exp_time'] ) : '' ) . "\" style=\"width: 90px\" maxlength=\"10\" type=\"text\" />\n";
 $contents .= "(dd/mm/yyyy)\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
@@ -423,7 +422,7 @@ $contents .= "<td>";
 $array_who_view = array( 
     $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] 
 );
-$contents .= "<select name=\"who_view\" style=\"width: 250px;\" id=\"who_view\" onchange=\"nv_sh('who_view','groups_list')\">\n";
+$contents .= "<select name=\"who_view\" style=\"width:250px\" id=\"who_view\" onchange=\"nv_sh('who_view','groups_list')\">\n";
 $row['groups_view'] = intval( $row['groups_view'] );
 foreach ( $array_who_view as $k => $w )
 {
@@ -434,7 +433,7 @@ $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 
-$contents .= "<tbody id=\"groups_list\" style=\"" . ( $who_view == 3 ? "visibility: visible; display: table-row-group;" : "visibility: hidden; display: none;" ) . "\">\n";
+$contents .= "<tbody id=\"groups_list\" style=\"" . ( $who_view == 3 ? "visibility:visible;display:table-row-group" : "visibility:hidden;display:none" ) . "\">\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_global['groups_view'] . ":</td>\n";
 $contents .= "<td>\n";
@@ -454,9 +453,9 @@ if ( $row['bid'] != 0 )
     $contents .= "<tbody>\n";
     $contents .= "<tr>\n";
     $contents .= "<td>" . $lang_module['block_groupbl'] . ":</td>\n";
-    $contents .= "<td><span style='color:red;font-weight:bold'>" . $row['bid'] . "</span>";
+    $contents .= "<td><span style=\"color:red;font-weight:bold\">" . $row['bid'] . "</span>";
     list( $blocks_num ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid`=" . $row['bid'] . "" ) );
-    $contents .= "&nbsp;&nbsp;&nbsp;<label><input type='checkbox' value='1' name='leavegroup'/>  " . $lang_module['block_leavegroup'] . ' (' . $blocks_num . ' ' . $lang_module['block_count'] . ')</label>';
+    $contents .= "&nbsp;&nbsp;&nbsp;<label><input type=\"checkbox\" value=\"1\" name=\"leavegroup\"/>  " . $lang_module['block_leavegroup'] . ' (' . $blocks_num . ' ' . $lang_module['block_count'] . ')</label>';
     $contents .= "</td>\n";
     $contents .= "</tr>\n";
     $contents .= "</tbody>\n";
@@ -473,20 +472,20 @@ foreach ( $add_block_module as $b_key => $b_value )
 {
     $ck = ( $row['all_func'] == $b_key ) ? " checked=\"checked\"" : "";
     
-    $showsdisplay = ( ! preg_match( $global_config['check_block_global'], $row['file_name'] ) and $b_key == 1 ) ? " style='display:none'" : "";
-    $contents .= "<label id='labelmoduletype" . $i . "' " . $showsdisplay . "><input type=\"radio\" name=\"all_func\" class='moduletype" . $i . "' value=\"" . $b_key . "\" " . $ck . " />  " . $b_value . "</label> ";
+    $showsdisplay = ( ! preg_match( $global_config['check_block_global'], $row['file_name'] ) and $b_key == 1 ) ? " style=\"display:none\"" : "";
+    $contents .= "<label id=\"labelmoduletype" . $i . "\" " . $showsdisplay . "><input type=\"radio\" name=\"all_func\" class=\"moduletype" . $i . "\" value=\"" . $b_key . "\" " . $ck . " />  " . $b_value . "</label> ";
     ++$i;
 }
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 
-$shows_all_func = ( intval( $row['all_func'] ) ) ? " style='display:none' " : "";
-$contents .= "<tbody " . $shows_all_func . " id='shows_all_func'>\n";
+$shows_all_func = ( intval( $row['all_func'] ) ) ? " style=\"display:none\" " : "";
+$contents .= "<tbody " . $shows_all_func . " id=\"shows_all_func\">\n";
 $contents .= "<tr>\n";
-$contents .= "<td style='vertical-align:top'>" . $lang_module['block_function'] . ":<br /><br /><label><input type='button' name='checkmod' value='" . $lang_module['block_check'] . "'style='margin-bottom:5px;'/></label></td>\n";
+$contents .= "<td style=\"vertical-align:top\">" . $lang_module['block_function'] . ":<br /><br /><label><input type=\"button\" name=\"checkmod\" value=\"" . $lang_module['block_check'] . "\" style=\"margin-bottom:5px\"/></label></td>\n";
 $contents .= "<td>\n";
-$contents .= "<div style=\"width: 600px; overflow: auto;\"><table border=\"0\" cellpadding=\"3\" cellspacing=\"3\">";
+$contents .= "<div style=\"width:600px;overflow:auto\"><table border=\"0\" cellpadding=\"3\" cellspacing=\"3\">";
 $func_list = array();
 if ( $row['bid'] )
 {
@@ -496,20 +495,30 @@ if ( $row['bid'] )
         $func_list[] = $func_inlist;
     }
 }
-$sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
+$sql = "SELECT `title`, `custom_title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
 while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 {
     if ( isset( $aray_mod_func[$m_title] ) and sizeof( $aray_mod_func[$m_title] ) > 0 )
     {
-        $contents .= "<tbody class=\"funclist\" id=\"idmodule_$m_title\">\n";
-        $contents .= "<tr><td style=\"font-weight:bold\" nowrap=\"nowrap\"> " . $m_custom_title . "</td>";
+		$i = 0;
+		$content = "";
         foreach ( $aray_mod_func[$m_title] as $aray_mod_func_i )
         {
-            $sel = ( in_array( $aray_mod_func_i['id'], $func_list ) || $functionid == $aray_mod_func_i['id'] ) ? ' checked=checked' : '';
-            $contents .= "<td nowrap=\"nowrap\"><label><input type=\"checkbox\" " . $sel . " name=\"func_id[]\" value=\"" . $aray_mod_func_i['id'] . "\" /> " . $aray_mod_func_i['func_custom_name'] . "</label></td>";
+			$sel = "";
+			if( in_array( $aray_mod_func_i['id'], $func_list ) || $functionid == $aray_mod_func_i['id'] )
+			{
+				++$i;
+				$sel = " checked=\"checked\"";
+			}
+			
+			$content .= "<td nowrap=\"nowrap\"><label><input type=\"checkbox\" " . $sel . " name=\"func_id[]\" value=\"" . $aray_mod_func_i['id'] . "\" /> " . $aray_mod_func_i['func_custom_name'] . "</label></td>\n";
         }
-        $contents .= "</tr>";
+		
+        $contents .= "<tbody class=\"funclist\" id=\"idmodule_$m_title\">\n";
+        $contents .= "<tr id=\"wrapmod$m_title\"><td style=\"font-weight:bold\" nowrap=\"nowrap\"><input" . ( ( sizeof( $aray_mod_func[$m_title] ) == $i ) ? " checked=\"checked\"" : "" ) . " type=\"checkbox\" value=\"$m_title\" class=\"checkmodule\"/>" . $m_custom_title . "</td>\n";
+        $contents .= $content;
+        $contents .= "</tr>\n";
         $contents .= "</tbody>\n";
     }
 }
@@ -519,9 +528,9 @@ $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 
 $contents .= "</table>\n";
-$contents .= "<div style=\"PADDING:10px;text-align:center\">\n";
-$contents .= "<input type='hidden' name='bid' value='" . $row['bid'] . "' />";
-$contents .= "<input type=\"submit\" name='confirm' value=\"" . $lang_module['block_confirm'] . "\" />\n";
+$contents .= "<div style=\"padding:10px;text-align:center\">\n";
+$contents .= "<input type=\"hidden\" name=\"bid\" value=\"" . $row['bid'] . "\" />";
+$contents .= "<input type=\"submit\" name=\"confirm\" value=\"" . $lang_module['block_confirm'] . "\" />\n";
 $contents .= "</div>\n";
 $contents .= "</form>\n";
 $contents .= "<br />\n";
@@ -656,17 +665,34 @@ $contents .= '	$("select[name=file_name]").load("' . NV_BASE_ADMINURL . 'index.p
 	        	$("#shows_all_func").show();
 			}
 		});		
-	
 		$("input[name=checkmod]").toggle(function(){
+			$("input.checkmodule").attr("checked","checked");
 			$("input[name=\'func_id[]\']:checkbox").each(function(){
 				$("input[name=\'func_id[]\']:visible").attr("checked","checked");			
 			});
 		},function(){
+			$("input.checkmodule").removeAttr("checked");
 			$("input[name=\'func_id[]\']:checkbox").each(function(){
 				$("input[name=\'func_id[]\']:visible").removeAttr("checked");
 			});
 			}
 		);
+		$("input[name=\'func_id[]\']:checkbox").change(function(){
+			var numfuc = $("#"+$(this).parent().parent().parent().attr("id")+" input[name=\'func_id[]\']:checkbox").length;
+			var fuccheck = $("#"+$(this).parent().parent().parent().attr("id")+" input[name=\'func_id[]\']:checkbox:checked").length;
+			if(fuccheck!=numfuc){
+				$("#"+$(this).parent().parent().parent().attr("id")+" .checkmodule").removeAttr("checked");
+			}else if(numfuc==fuccheck){
+				$("#"+$(this).parent().parent().parent().attr("id")+" .checkmodule").attr("checked","checked");
+			}
+		});
+		$("input.checkmodule").change(function(){  $(this).attr(\'value\')
+			if($(this).attr(\'checked\')){
+				$("#idmodule_"+$(this).attr(\'value\')+" input[name=\'func_id[]\']:checkbox").attr("checked","checked");
+			}else{
+				$("#idmodule_"+$(this).attr(\'value\')+" input[name=\'func_id[]\']:checkbox").removeAttr("checked");
+			}
+		});
 		$("select[name=who_view]").change(function(){
 			var groups = $("select[name=who_view]").val();
 			if (groups==3){
