@@ -312,7 +312,6 @@ function nv_getCountry( $ip )
 
     $code = "ZZ";
     $numbers = preg_split( "/\./", $ip );
-    $_code = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + ( $numbers[2] * 256 ) + ( $numbers[3] );
     $ip_file = $numbers[0];
     $ip_from = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 );
     $ip_to = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + 65535;
