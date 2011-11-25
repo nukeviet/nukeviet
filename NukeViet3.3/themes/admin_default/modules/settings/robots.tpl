@@ -1,4 +1,11 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: nowrite -->
+<div class="quote" style="width:98%">
+	<blockquote class="error">{TITLE}</blockquote>
+</div>
+<div style="clear:both"></div>
+<div class="codecontent">{CONTENT}</div>
+<!-- END: nowrite -->
 <form action="" method="post">
 	<center>
 		<table class="tab1" summary="" style="width:auto; text-align: left;">

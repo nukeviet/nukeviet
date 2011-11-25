@@ -1,13 +1,28 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-function nv_save_file_banip ( )
+function nv_show_banid_content( $file_data )
+{
+	global $lang_module;
+	
+	$content = "<div class=\"quote\" style=\"width:98%\">\n";
+	$content .= "<blockquote class=\"error\">" . sprintf( $lang_module['banip_error_write'], NV_DATADIR, NV_DATADIR ) . "</blockquote>\n";
+	$content .= "</div>\n";
+	$content .= "<div style=\"clear:both\"></div>\n";
+	$content .= "<div class=\"codecontent\">" . ( str_replace( array( "\n", "\t" ), array( "<br />", "&nbsp;&nbsp;&nbsp;&nbsp;" ), nv_htmlspecialchars($file_data) ) ) . "</div>";
+	
+	return $content;
+}
+
+function nv_save_file_banip()
 {
     global $db, $db_config;
     $content_config_site = "";
@@ -45,11 +60,17 @@ function nv_save_file_banip ( )
         }
     }
     
+	if( ! $content_config_site and ! $content_config_admin )
+	{
+		nv_deletefile( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.php" );
+		return true;
+	}
+	
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
     $content_config .= "{\n";
-    $content_config .= "    die( 'Stop!!!' );\n";
+    $content_config .= "	die( 'Stop!!!' );\n";
     $content_config .= "}\n\n";
     $content_config .= "\$array_banip_site = array();\n";
     $content_config .= $content_config_site;
@@ -59,9 +80,15 @@ function nv_save_file_banip ( )
     $content_config .= "\n";
     $content_config .= "?>";
     
-    return file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.php", $content_config, LOCK_EX );
-
+    $write =  file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.php", $content_config, LOCK_EX );
+	
+	if( $write === false ) return $content_config;
+	return true;
 }
+
+$error = array();
+$contents = "";
+
 $page_title = $lang_module['banip'];
 $cid = $nv_Request->get_int( 'id', 'get' );
 $del = $nv_Request->get_int( 'del', 'get' );
@@ -70,8 +97,6 @@ if ( ! empty( $del ) && ! empty( $cid ) )
     $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_banip` WHERE id=$cid" );
     nv_save_file_banip();
 }
-$error = array();
-$contents = "";
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
     $cid = $nv_Request->get_int( 'cid', 'post', 0 );
@@ -116,13 +141,21 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         {
             $db->sql_query( "REPLACE INTO `" . $db_config['prefix'] . "_banip` VALUES (NULL, " . $db->dbescape( $ip ) . "," . $db->dbescape( $mask ) . ",$area,$begintime, $endtime," . $db->dbescape( $notice ) . " )" );
         }
-        nv_save_file_banip();
-        Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
-        die();
+		
+        $save = nv_save_file_banip();
+		if( $save !== true )
+		{
+			$contents .= nv_show_banid_content( $save );
+		}
+		else
+		{
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+			die();
+		}
     }
     else
     {
-        $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
+        $contents .= "<div class=\"quote\" style=\"width:98%\">\n";
         $contents .= "<blockquote class='error'>" . implode( '<br/>', $error ) . "</blockquote>\n";
         $contents .= "</div>\n";
         $contents .= "<div style='clear:both'></div>\n";
@@ -296,7 +329,9 @@ $contents .= "
 	});
 	//]]>
 </script>";
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>
