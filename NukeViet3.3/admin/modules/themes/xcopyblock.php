@@ -6,22 +6,23 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 08-19-2010 12:55
  */
+
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['xcopyblock'];
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'cookie', '' );
 
-$contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
-$contents .= "<blockquote class='error'><span id='message'>" . $lang_module['xcopyblock_notice'] . "</span></blockquote>\n";
+$contents .= "<div class=\"quote\" style=\"width:98%\">\n";
+$contents .= "<blockquote class=\"error\"><span id=\"message\">" . $lang_module['xcopyblock_notice'] . "</span></blockquote>\n";
 $contents .= "</div>\n";
-$contents .= "<div style='clear:both'></div>\n";
+$contents .= "<div style=\"clear:both\"></div>\n";
 $op = $nv_Request->get_string( 'op', 'get' );
-$contents .= "<form name='copy_block' action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" method=\"post\">";
-$contents .= "<table summary=\"\" class=\"tab1\">\n";
+$contents .= "<form name=\"copy_block\" action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" method=\"post\">";
+$contents .= "<table class=\"tab1\">\n";
 $contents .= "<tbody class=\"second\">";
 $contents .= "<tr>";
-$contents .= "<td align=\"center\" colspan='2'><strong>" . $lang_module['xcopyblock'] . $lang_module['xcopyblock_from'] . ": </strong>\n";
-$contents .= "<input type='hidden' name='" . NV_OP_VARIABLE . "' value='" . $op . "'/>";
+$contents .= "<td align=\"center\" colspan=\"2\"><strong>" . $lang_module['xcopyblock'] . $lang_module['xcopyblock_from'] . ": </strong>\n";
+$contents .= "<input type=\"hidden\" name=\"" . NV_OP_VARIABLE . "\" value=\"" . $op . "\"/>";
 $contents .= "<select name=\"theme1\">\n";
 $contents .= "<option value=\"0\">" . $lang_module['autoinstall_method_theme_none'] . "</option>\n";
 $theme_list = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme'] );
@@ -50,13 +51,13 @@ $contents .= "</tr>";
 $contents .= "</tbody>";
 $contents .= "<tbody>";
 $contents .= "<tr>";
-$contents .= "<td colspan='2' align='center'>";
-$contents .= "<p id='loadposition' style='color:red;font-weight:bold'></p></td>";
+$contents .= "<td colspan=\"2\" style=\"text-align:center\">";
+$contents .= "<p id=\"loadposition\" style=\"color:red;font-weight:bold\"></p></td>";
 $contents .= "</tr>";
 $contents .= "</tbody>";
 $contents .= "<tbody class=\"second\">";
 $contents .= "<tr>";
-$contents .= "<td colspan='2' align='center'>";
+$contents .= "<td colspan=\"2\" align=\"center\">";
 $contents .= "<input name=\"continue\" type=\"button\" value=\"" . $lang_module['xcopyblock_process'] . "\" />\n";
 $contents .= "</td>";
 $contents .= "</tr>";
@@ -114,4 +115,5 @@ $contents .= '<script type="text/javascript">
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

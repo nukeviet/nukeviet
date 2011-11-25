@@ -1,11 +1,14 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+
 if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
+
 $set_layout_site = false;
 $select_options = array();
 $theme_array = nv_scandir( NV_ROOTDIR . "/themes", array($global_config['check_theme'], $global_config['check_theme_mobile']) );
@@ -76,10 +79,10 @@ if ( $nv_Request->isset_request( 'save', 'post' ) and $nv_Request->isset_request
         }
     }
     $set_layout_site = true;
-    $contents .= "<div id='edit'></div>\n";
-    $contents .= "<div class=\"quote\" style=\"width:810px;\">\n";
-    $contents .= "<blockquote class='error'><span id='message'>" . $lang_module['setup_updated_layout'] . "</span></blockquote>\n";
-    $contents .= "</div><div style='clear:both'></div>\n";
+    $contents .= "<div id=\"edit\"></div>\n";
+    $contents .= "<div class=\"quote\" style=\"width:98%\">\n";
+    $contents .= "<blockquote class=\"error\"><span id=\"message\">" . $lang_module['setup_updated_layout'] . "</span></blockquote>\n";
+    $contents .= "</div><div style=\"clear:both\"></div>\n";
 }
 
 $array_layout_func_data = array();
@@ -101,7 +104,7 @@ elseif ( $array_layout_func_data[0] != $layoutdefault )
 }
 
 $array_layout_func = array();
-$fnsql = "SELECT func_id, func_name, func_custom_name, in_module FROM `" . NV_MODFUNCS_TABLE . "` WHERE show_func='1' ORDER BY `subweight` ASC";
+$fnsql = "SELECT `func_id`, `func_name`, `func_custom_name`, `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE show_func='1' ORDER BY `subweight` ASC";
 $fnresult = $db->sql_query( $fnsql );
 while ( list( $func_id, $func_name, $func_custom_name, $in_module ) = $db->sql_fetchrow( $fnresult ) )
 {
@@ -133,10 +136,10 @@ if ( $set_layout_site )
 	nv_del_moduleCache( 'modules' );
 }
 
-$contents .= "<form method='post' action='' name='setuplayout'>";
+$contents .= "<form method=\"post\" action=\"\" name=\"setuplayout\">";
 $contents .= "<table class=\"tab1\">\n";
 $contents .= "<tr>\n";
-$sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
+$sql = "SELECT `title`, `custom_title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
 $number_func = $db->sql_numrows( $result );
 $i = 1;
@@ -144,16 +147,16 @@ while ( list( $mod_name, $mod_name_title ) = $db->sql_fetchrow( $result ) )
 {
     if ( isset( $array_layout_func[$mod_name] ) )
     {
-        $contents .= "<td style='vertical-align:top'><strong>" . $mod_name_title . "</strong><hr style='margin-bottom:10px'/>";
+        $contents .= "<td style=\"vertical-align:top\"><strong>" . $mod_name_title . "</strong><hr style=\"margin-bottom:10px\"/>";
         $array_layout_func_mod = $array_layout_func[$mod_name];
         foreach ( $array_layout_func_mod as $func_name => $func_arr_val )
         {
-            $contents .= '<span style="display:inline-block;width:150px">' . $func_arr_val[1] . "</span>\n";
-            $contents .= "	<select name='func[" . $func_arr_val[0] . "]' class='function'>\n";
+            $contents .= "<span style=\"display:inline-block;width:150px\">" . $func_arr_val[1] . "</span>\n";
+            $contents .= "	<select name=\"func[" . $func_arr_val[0] . "]\" class=\"function\">\n";
             foreach ( $layout_array as $value )
             {
-                $sel = ( $func_arr_val[2] == $value ) ? ' selected="selected"' : '';
-                $contents .= "		<option value='" . $value . "' " . $sel . ">" . $value . "</option>\n";
+                $sel = ( $func_arr_val[2] == $value ) ? " selected=\"selected\"" : "";
+                $contents .= "<option value=\"" . $value . "\" " . $sel . ">" . $value . "</option>\n";
             }
             $contents .= "	</select><br/>";
         }
@@ -178,10 +181,12 @@ if ( $i % 3 != 0 )
     }
 }
 $contents .= "</tr>\n";
-$contents .= "<tr><td colspan='3' style='text-align:center'><input name='save' type='submit' value='" . $lang_module['setup_save_layout'] . "'/></td></tr>\n";
+$contents .= "<tr><td colspan=\"3\" style=\"text-align:center\"><input name=\"save\" type=\"submit\" value=\"" . $lang_module['setup_save_layout'] . "\"/></td></tr>\n";
 $contents .= "</table>\n";
 $contents .= "</form>\n";
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>
