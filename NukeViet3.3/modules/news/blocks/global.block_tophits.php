@@ -19,7 +19,7 @@ if ( ! nv_function_exists( 'nv_news_block_tophits' ) )
         $html .= "<tr>";
         $html .= "	<td>" . $lang_block['number_day'] . "</td>";
         $html .= "	<td><input type=\"text\" name=\"config_number_day\" size=\"5\" value=\"" . $data_block['number_day'] . "\"/></td>";
-        $html .= "<td>";
+        $html .= "</tr>";
         $html .= "<tr>";
         $html .= "	<td>" . $lang_block['numrow'] . "</td>";
         $html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
