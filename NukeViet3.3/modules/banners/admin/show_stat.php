@@ -75,8 +75,6 @@ if ($ext == 'country') {
 	$result = $db->sql_query ( $query );
 	$unknown = 0;
 	if (! empty ( $result )) {
-		$countries = array ();
-		include (NV_ROOTDIR . "/includes/countries.php");
 		#begin edit
 		$result = $db->sql_query ( $query );
 		$bd = array ();

@@ -56,9 +56,6 @@ $caption = sprintf ( $lang_module ['show_list_stat1'], nv_monthname ( $data_mont
 
 $data_ext = $data_val = "";
 
-$countries = array ();
-include (NV_ROOTDIR . "/includes/countries.php");
-
 if (in_array ( $nv_Request->get_string ( 'ext', 'get', 'no' ), array ('day', 'country', 'browse', 'os' ) )) {
 	switch ($nv_Request->get_string ( 'ext', 'get' )) {
 		case 'day' :
@@ -79,7 +76,7 @@ if (in_array ( $nv_Request->get_string ( 'ext', 'get', 'no' ), array ('day', 'co
 				$data_val = $nv_Request->get_string ( 'val', 'get' );
 				$query .= " AND `click_country`=" . $db->dbescape ( $data_val );
 				$base_url .= "&amp;ext=" . $data_ext . "&amp;val=" . $data_val;
-				$caption = sprintf ( $lang_module ['show_list_stat3'], (isset ( $countries [$data_val] ) ? $countries [$data_val] [1] : $data_val), nv_monthname ( $data_month ), $current_year );
+				$caption = sprintf ( $lang_module ['show_list_stat3'], (isset ( $countries [$data_val] ) ? $countries [$data_val][1] : $data_val), nv_monthname ( $data_month ), $current_year );
 			}
 			break;
 		

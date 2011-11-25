@@ -22,7 +22,6 @@ while (list($lang_i) = $db->sql_fetchrow($result))
         $array_lang_setup[$lang_i] = array($lang_i, $language_array[$lang_i]['name']);
     }
 }
-include (NV_ROOTDIR . "/includes/countries.php");
 
 if ($nv_Request->isset_request('countries', 'post') == 1)
 {

@@ -206,6 +206,7 @@ $lang_module['robots_type_0'] = "Cấm truy cập";
 $lang_module['robots_type_1'] = "Không hiển thị trong file robots.txt";
 $lang_module['robots_error_writable'] = "Lỗi: Hệ thống không ghi được file robots.txt";
 $lang_module['searchEngineUniqueID'] = "Google search Engine ID<br />(Có dạng 000329275761967753447:sr7yxqgv294 , <a href=\"http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/\" target=\"_blank\">xem chi tiết</a>)";
-$lang_module['timezoneAuto'] = "Theo PC người dùng";
+$lang_module['timezoneAuto'] = "Theo máy tính của khách truy cập";
+$lang_module['timezoneByCountry'] = "Theo quốc gia của khách truy cập";
 
 ?>

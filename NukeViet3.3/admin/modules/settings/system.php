@@ -91,7 +91,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     }
 
     $site_timezone = filter_text_input( 'site_timezone', 'post', '', 1, 255 );
-    if ( empty( $site_timezone ) or ( ! empty( $site_timezone ) and in_array( $site_timezone, $timezone_array ) ) )
+    if ( empty( $site_timezone ) or ( ! empty( $site_timezone ) and ( in_array( $site_timezone, $timezone_array ) or $site_timezone == "byCountry" ) ) )
     {
         $array_config_global['site_timezone'] = $site_timezone;
     }
@@ -164,26 +164,9 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     exit();
 }
 
-/*$sql = $db->constructQuery( "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` 
-        WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `module` ASC", NV_LANG_DATA );
-$result = $db->sql_query( $sql );
-while ( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
-{
-    if ( $c_module == "global" )
-    {
-        $global_config[$c_config_name] = $c_config_value;
-    }
-    else
-    {
-        $module_config[$c_module][$c_config_name] = $c_config_value;
-    }
-}*/
-
 $page_title = $lang_module['global_config'];
 
 $optActive_Modes = array( '0' => $lang_module['optActive_no'], '1' => $lang_module['optActive_all'], '2' => $lang_module['optActive_site'], '3' => $lang_module['optActive_admin'] );
-
-//$admin_theme = ( isset( $global_config['admin_theme'] ) and ! empty( $global_config['admin_theme'] ) and in_array( $global_config['admin_theme'], $adminThemes ) ) ? $global_config['admin_theme'] : "admin_default";
 
 $sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND `module`='global'";
 $result = $db->sql_query( $sql );
@@ -263,6 +246,11 @@ foreach ( $optActive_Modes as $key => $value )
     $xtpl->assign( 'OPTACTIVE_TEXT', $value );
     $xtpl->parse( 'main.optActive' );
 }
+
+$xtpl->assign( 'TIMEZONEOP', "byCountry" );
+$xtpl->assign( 'TIMEZONESELECTED', ( $array_config_global['site_timezone'] == "byCountry" ) ? "selected='selected'" : "" );
+$xtpl->assign( 'TIMEZONELANGVALUE', $lang_module['timezoneByCountry'] );
+$xtpl->parse( 'main.opsite_timezone' );
 
 foreach ( $timezone_array as $site_timezone_i )
 {

@@ -35,7 +35,6 @@ function nv_stat_update ( )
     
     $bot_name = ( $client_info['is_bot'] and ! empty( $client_info['bot_info']['name'] ) ) ? $client_info['bot_info']['name'] : "Not_bot";
     $browser = ( $client_info['is_mobile'] ) ? "Mobile" : $client_info['browser']['key'];
-    $country = nv_getCountry_from_file( $client_info['ip'] );
     
     $query = "UPDATE `" . NV_COUNTER_TABLE . "` SET `c_count`= c_count + 1, `last_update`=" . NV_CURRENTTIME . " WHERE 
 	(`c_type`='total' AND `c_val`='hits') OR 
@@ -47,7 +46,7 @@ function nv_stat_update ( )
 	(`c_type`='bot' AND `c_val`=" . $db->dbescape( $bot_name ) . ") OR 
 	(`c_type`='browser' AND `c_val`=" . $db->dbescape( $browser ) . ") OR 
 	(`c_type`='os' AND `c_val`=" . $db->dbescape( $client_info['client_os']['key'] ) . ") OR 
-    (`c_type`='country' AND `c_val`=" . $db->dbescape( $country[0] ) . ")";
+    (`c_type`='country' AND `c_val`=" . $db->dbescape( $client_info['country'] ) . ")";
     $db->sql_query( $query );
     
     $query = "UPDATE `" . NV_COUNTER_TABLE . "` SET `c_count`= " . NV_CURRENTTIME . " WHERE `c_type`='c_time' AND `c_val`= 'last'";

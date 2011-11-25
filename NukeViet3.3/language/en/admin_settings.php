@@ -203,5 +203,6 @@ $lang_module['robots_type_1'] = "Not show in the robots.txt file";
 $lang_module['robots_error_writable'] = "Error: The system can not write the robots.txt file";
 $lang_module['searchEngineUniqueID'] = "Google search Engine ID<br />(example: 000329275761967753447:sr7yxqgv294. <a href=\"http://www.google.com/cse/\" target=\"_blank\">Detail</a>)";
 $lang_module['timezoneAuto'] = "As user's PC timezone";
+$lang_module['timezoneByCountry'] = "As the country's timezone of visitor";
 
 ?>

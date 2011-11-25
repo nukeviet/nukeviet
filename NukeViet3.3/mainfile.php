@@ -19,7 +19,7 @@ define( 'NV_MAINFILE', true );
 define( 'NV_START_TIME', array_sum( explode( " ", microtime() ) ) );
 
 //Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $blocks = $submenu = $select_options = $error_info = $rewrite = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $blocks = $submenu = $select_options = $error_info = $rewrite = $countries = $newCountry = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = "";
 $editor = $rewrite = false;
 
@@ -103,6 +103,10 @@ if ( $client_info['ip'] == "none" ) die( 'Error: Your IP address is not correct'
 define( 'NV_FORWARD_IP', $ips->forward_ip );
 define( 'NV_REMOTE_ADDR', $ips->remote_addr );
 define( 'NV_CLIENT_IP', $client_info['ip'] );
+
+//Xac dinh Quoc gia
+require ( NV_ROOTDIR . '/includes/countries.php' );
+$client_info['country'] = nv_getCountry_from_file( $client_info['ip'] );
 
 //Mui gio
 require ( NV_ROOTDIR . '/includes/timezone.php' );
@@ -331,6 +335,24 @@ if ( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_co
     $global_config['upload_checking_mode'] = "strong";
 }
 define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
+
+//Cap nhat Country moi
+if ( ! empty( $newCountry ) )
+{
+    if ( $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_ipcountry` VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
+    {
+        $time_del = NV_CURRENTTIME - 604800;
+        $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "' AND `country`='ZZ' AND `time` < " . $time_del );
+        $result = $db->sql_query( "SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "'" );
+        $array_ip_file = array();
+        while ( $row = $db->sql_fetch_assoc( $result ) )
+        {
+            $array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
+        }
+        file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/ip_files/" . $newCountry['ip_file'] . ".php", "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
+    }
+    unset( $newCountry, $time_del, $array_ip_file, $result, $row );
+}
 
 if ( $global_config['is_url_rewrite'] )
 {

@@ -28,8 +28,6 @@ if($all_page)
 	$result = $db->sql_query($sql);
 
 	$countries_list = array();
-	$countries = array();
-	include (NV_ROOTDIR . "/includes/countries.php");
 	while(list($country, $count, $last_visit) = $db->sql_fetchrow($result))
 	{
 		$fullname = isset($countries[$country]) ? $countries[$country][1] : $lang_module['unknown'];

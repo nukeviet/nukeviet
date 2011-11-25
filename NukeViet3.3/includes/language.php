@@ -79,12 +79,11 @@ else
         $site_lang = $global_config['site_lang'];
         if ($global_config['lang_geo'])
         {
-            $country = nv_getCountry_from_file(NV_CLIENT_IP);
             $config_geo = array();
             include (NV_ROOTDIR . "/" . NV_DATADIR . "/config_geo.php");
-            if (isset($config_geo[$country[0]]))
+            if (isset($config_geo[$client_info['country']]))
             {
-                $site_lang = $config_geo[$country[0]];
+                $site_lang = $config_geo[$client_info['country']];
             }
         }
         $nv_Request->set_Cookie('u_lang', $site_lang, NV_LIVE_COOKIE_TIME);
