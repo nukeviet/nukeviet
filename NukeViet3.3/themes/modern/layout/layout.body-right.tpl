@@ -1,4 +1,4 @@
-﻿<!-- BEGIN: main -->
+<!-- BEGIN: main -->
 {FILE "header.tpl"}
 <div class="main">
     <div class="col-a1">
@@ -16,4 +16,5 @@
     <div class="clear">
     </div>
 </div>
-{FILE "footer.tpl"}<!-- END: main -->
+{FILE "footer.tpl"}
+<!-- END: main -->

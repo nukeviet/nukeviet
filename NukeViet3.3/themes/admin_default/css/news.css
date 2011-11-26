@@ -1,4 +1,4 @@
-﻿.news{clear:both;margin:2px 0;text-align:right}
+.news{clear:both;margin:2px 0;text-align:right}
 .news label{border-bottom:1px dotted #ccc;display:inline;float:left;text-align:left;width:150px}
 .news input{width:380px}
 .news select{width:382px}
