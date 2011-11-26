@@ -24,7 +24,7 @@ class CKEditor
 	/**
 	 * A constant string unique for each release of %CKEditor.
 	 */
-	const timestamp = 'BA7L5MR';
+	const timestamp = 'BAP85NK';
 
 	/**
 	 * URL to the %CKEditor installation directory (absolute or relative to document root).
@@ -78,7 +78,7 @@ class CKEditor
 	 * A string indicating the creation date of %CKEditor.
 	 * Do not change it unless you want to force browsers to not use previously cached version of %CKEditor.
 	 */
-	public $timestamp = "BA7L5MR";
+	public $timestamp = "BAP85NK";
 	/**
 	 * An array that holds event listeners.
 	 */
