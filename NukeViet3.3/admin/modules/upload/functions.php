@@ -202,9 +202,8 @@ function nv_get_viewImage( $fileName, $w = 80, $h = 80 )
     $image->close();
     if ( empty( $error ) )
     {
-        return array( $viewFile, $create_Image_info['width'], $create_Image_info['height'] );
+		return array($viewDir . '/' . basename($create_Image_info['src']), $create_Image_info['width'], $create_Image_info['height']);
     }
-
     return false;
 }
 
