@@ -53,7 +53,7 @@ if (isset($check_allow_upload_dir['view_dir']))
 
                     $file['name'] .= "|" . $file['ext'] . "|" . $file['type'] . "|" . nv_convertfromBytes($file['filesize']) . "|" . $file['author'] . "|" . nv_date("l, d F Y, H:i:s P", $file['mtime']);
                     $file['sel'] = ($selectfile == $title) ? " imgsel" : "";
-                    $file['src'] = NV_BASE_SITEURL . $file['src'];
+                    $file['src'] = NV_BASE_SITEURL . $file['src'] . '?' . $file['mtime'];
                     $xtpl->assign("IMG", $file);
                     $xtpl->parse('main.loopimg');
                 }
@@ -66,9 +66,9 @@ if (isset($check_allow_upload_dir['view_dir']))
         }
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
-		include ( NV_ROOTDIR . "/includes/header.php" );
-		echo $contents;
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+        include (NV_ROOTDIR . "/includes/header.php");
+        echo $contents;
+        include (NV_ROOTDIR . "/includes/footer.php");
     }
 }
 exit();

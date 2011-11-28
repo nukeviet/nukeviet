@@ -577,6 +577,10 @@ function nv_func_update_data()
         nv_deletefile(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/plugins/a11yhelp/lang/he.js');
         nv_deletefile(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/plugins/uicolor/lang/he.js');
     }
+    if ($global_config['revision'] < 1465)
+    {
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'upload_logo', " . $db->dbescape_string( $global_config['site_logo'] ));
+    }
 
     nv_save_file_config_global();
 

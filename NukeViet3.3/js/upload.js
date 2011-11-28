@@ -228,6 +228,16 @@ function preview()
     )
 }
 
+
+function addlogo()
+{
+	var a = $( "input[name=selFile]" ).val(), b = $( "span#foldervalue" ).attr( "title" ), d = $( "img[title='" + a + "']" ).attr( "name" ), e = LANG.upload_size + ": ";
+	var win = null;
+	LeftPosition = (screen.width) ? (screen.width-850)/2 : 0;
+	TopPosition = (screen.height) ? (screen.height-420)/2 : 0;
+	settings = 'height=420,width=850,top='+TopPosition+',left='+LeftPosition+',scrollbars,resizable'
+	win = window.open(nv_module_url + 'addlogo&path=' + b + "&file=" + a,'addlogo',settings);
+}
 //  ---------------------------------------
 
 function create()
@@ -318,25 +328,26 @@ function fileMouseup( a )
     var b = $( "input[name=CKEditorFuncNum]" ).val(), d = $( "input[name=area]" ).val(), e = "<ul>";
     if( b > 0 || d != "" )
     {
-        e += '<li id="select"><img style="margin-right:5px" src="' + ICON.select + '"/>' + LANG.select + "</li>"
+        e += '<li id="select"><img style="margin-right:5px" src="' + ICON.select + '"/>' + LANG.select + '</li>'
     }
-    e += '<li id="download"><img style="margin-right:5px" src="' + ICON.download + '"/>' + LANG.download + "</li>";
-    e += '<li id="filepreview"><img style="margin-right:5px" src="' + ICON.preview + '"/>' + LANG.preview + "</li>";
+    e += '<li id="download"><img style="margin-right:5px" src="' + ICON.download + '"/>' + LANG.download + '</li>';
+    e += '<li id="filepreview"><img style="margin-right:5px" src="' + ICON.preview + '"/>' + LANG.preview + '</li>';
     if( $.inArray( a, array_images ) !== -1 && $( "span#create_file" ).attr( "title" ) == "1" )
     {
-        e += '<li id="create"><img style="margin-right:5px" src="' + ICON.create + '"/>' + LANG.upload_createimage + "</li>"
+    e += '<li id="fileaddlogo"><img style="margin-right:5px" src="' + ICON.preview + '"/>' + LANG.addlogo + '</li>';
+        e += '<li id="create"><img style="margin-right:5px" src="' + ICON.create + '"/>' + LANG.upload_createimage + '</li>'
     }
     if( $( "span#move_file" ).attr( "title" ) == "1" )
     {
-        e += '<li id="move"><img style="margin-right:5px" src="' + ICON.move + '"/>' + LANG.move + "</li>"
+        e += '<li id="move"><img style="margin-right:5px" src="' + ICON.move + '"/>' + LANG.move + '</li>'
     }
     if( $( "span#rename_file" ).attr( "title" ) == "1" )
     {
-        e += '<li id="rename"><img style="margin-right:5px" src="' + ICON.rename + '"/>' + LANG.rename + "</li>"
+        e += '<li id="rename"><img style="margin-right:5px" src="' + ICON.rename + '"/>' + LANG.rename + '</li>'
     }
     if( $( "span#delete_file" ).attr( "title" ) == "1" )
     {
-        e += '<li id="filedelete"><img style="margin-right:5px" src="' + ICON.filedelete + '"/>' + LANG.upload_delfile + "</li>"
+        e += '<li id="filedelete"><img style="margin-right:5px" src="' + ICON.filedelete + '"/>' + LANG.upload_delfile + '</li>'
     }
     e += "</ul>";
     $( "div#contextMenu" ).html( e )
@@ -393,15 +404,15 @@ function menuMouseup( a )
     var b = "";
     if( $( a ).is( ".create_dir" ) )
     {
-        b += '<li id="createfolder"><img style="margin-right:5px" src="' + ICON.create + '"/>' + LANG.createfolder + "</li>"
+        b += '<li id="createfolder"><img style="margin-right:5px" src="' + ICON.create + '"/>' + LANG.createfolder + '</li>'
     }
     if( $( a ).is( ".rename_dir" ) )
     {
-        b += '<li id="renamefolder"><img style="margin-right:5px" src="' + ICON.rename + '"/>' + LANG.renamefolder + "</li>"
+        b += '<li id="renamefolder"><img style="margin-right:5px" src="' + ICON.rename + '"/>' + LANG.renamefolder + '</li>'
     }
     if( $( a ).is( ".delete_dir" ) )
     {
-        b += '<li id="deletefolder"><img style="margin-right:5px" src="' + ICON.filedelete + '"/>' + LANG.deletefolder + "</li>"
+        b += '<li id="deletefolder"><img style="margin-right:5px" src="' + ICON.filedelete + '"/>' + LANG.deletefolder + '</li>'
     }
     if( b != "" )
     {

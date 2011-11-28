@@ -36,6 +36,8 @@ $(".imgcontent").contextMenu("contextMenu", {menuStyle:{width:"120px"}, bindings
   download()
 }, filepreview:function() {
   preview()
+}, fileaddlogo:function() {
+  addlogo()  
 }, create:function() {
   create()
 }, move:function() {

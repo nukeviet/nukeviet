@@ -640,7 +640,7 @@ class image
      * @param string $valign
      * @return
      */
-    function addlogo($logo, $align = 'right', $valign = 'bottom')
+    function addlogo($logo, $align = 'right', $valign = 'bottom', $config_logo = array())
     {
         if (empty($this->error))
         {
@@ -653,6 +653,7 @@ class image
             if ($logo_info != array() and $logo_info['width'] != 0 and $logo_info['width'] + 20 <= $this->create_Image_info['width'] and $logo_info['height'] != 0 and $logo_info['height'] + 20 <= $this->create_Image_info['height'] and in_array($logo_info['type'], array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG)) and preg_match("#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png)#is", $logo_info['mime']))
             {
                 $this->set_memory_limit();
+
                 switch ( $logo_info['type'] )
                 {
                     case IMAGETYPE_GIF :
@@ -666,27 +667,46 @@ class image
                         break;
                 }
 
-                switch ( $align )
+                if (isset($config_logo['w']) and isset($config_logo['h']))
                 {
-                    case 'left' :
-                        $X = 10;
-                        break;
-                    case 'center' :
-                        $X = ceil(($this->create_Image_info['width'] - $logo_info['width']) / 2);
-                        break;
-                    default :
-                        $X = $this->create_Image_info['width'] - ($logo_info['width'] + 10);
+                    $dst_w = $config_logo['w'];
+                    $dst_h = $config_logo['h'];
                 }
-                switch ( $valign )
+                else
                 {
-                    case 'top' :
-                        $Y = 10;
-                        break;
-                    case 'middle' :
-                        $Y = ceil(($this->create_Image_info['height'] - $logo_info['height']) / 2);
-                        break;
-                    default :
-                        $Y = $this->create_Image_info['height'] - ($logo_info['height'] + 10);
+                    $dst_w = $logo_info['width'];
+                    $dst_h = $logo_info['height'];
+                }
+
+                if (isset($config_logo['x']) and isset($config_logo['y']))
+                {
+                    $X = $config_logo['x'];
+                    $Y = $config_logo['y'];
+                }
+                else
+                {
+                    switch ( $align )
+                    {
+                        case 'left' :
+                            $X = 10;
+                            break;
+                        case 'center' :
+                            $X = ceil(($this->create_Image_info['width'] - $logo_info['width']) / 2);
+                            break;
+                        default :
+                            $X = $this->create_Image_info['width'] - ($logo_info['width'] + 10);
+                    }
+                    switch ( $valign )
+                    {
+                        case 'top' :
+                            $Y = 10;
+                            break;
+                        case 'middle' :
+                            $Y = ceil(($this->create_Image_info['height'] - $logo_info['height']) / 2);
+                            break;
+                        default :
+                            $Y = $this->create_Image_info['height'] - ($logo_info['height'] + 10);
+                    }
                 }
 
                 if ($this->fileinfo['type'] == IMAGETYPE_PNG and !$this->is_createWorkingImage)
@@ -702,8 +722,7 @@ class image
                 }
 
                 imagealphablending($this->createImage, true);
-                ImageCopyResampled($this->createImage, $this->logoimg, $X, $Y, 0, 0, $logo_info['width'], $logo_info['height'], $logo_info['width'], $logo_info['height']);
-                //imagecopy($this->createImage, $this->logoimg, $X, $Y, 0, 0, $logo_info['width'], $logo_info['height']);
+                ImageCopyResampled($this->createImage, $this->logoimg, $X, $Y, 0, 0, $dst_w, $dst_h, $logo_info['width'], $logo_info['height']);
             }
         }
     }

@@ -86,5 +86,8 @@ $lang_module['errorNotRenameFile'] = "Lỗi: Vì một lý do nào đó hệ th�
 $lang_module['nopreview'] = "Không hỗ trợ xem trước loại tệp tin này.";
 $lang_module['errorNewSize'] = "Bạn chỉ có thể tạo ảnh mới với chiều rộng: 10 - %d px, chiều cao: 10 - %d px";
 $lang_module['maxSizeSize'] = "Kích cỡ tối đa: %dx%dpx";
+$lang_module['addlogo'] = "Thêm Logo";
+$lang_module['addlogosave'] = "Lưu thay đổi";
+$lang_module['notlogo'] = "Lỗi: Hệ thống không tìm thấy file Logo";
 
 ?>
