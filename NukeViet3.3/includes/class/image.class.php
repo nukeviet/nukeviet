@@ -83,6 +83,7 @@ class image
      */
     function image( $filename, $gmaxX = 0, $gmaxY = 0 )
     {
+		$this->set_memory_limit();
         if ( preg_match( "/(http|ftp):\/\//i", $filename ) )
         {
             $this->is_url = true;
@@ -288,7 +289,6 @@ class image
                         $newwidth = $maxX;
                     }
                 }
-                $this->set_memory_limit();
                 $workingImage = function_exists( "ImageCreateTrueColor" ) ? ImageCreateTrueColor( $newwidth, $newheight ) : ImageCreate( $newwidth, $newheight );
                 if ( $workingImage != false )
                 {
@@ -372,7 +372,6 @@ class image
                         $newwidth = $X;
                     }
                 }
-                $this->set_memory_limit();
                 $workingImage = function_exists( "ImageCreateTrueColor" ) ? ImageCreateTrueColor( $newwidth, $newheight ) : ImageCreate( $newwidth, $newheight );
                 if ( $workingImage != false )
                 {
@@ -440,7 +439,6 @@ class image
             if ( $newheight <= 0 || ( $newheight + $leftY > $this->create_Image_info['height'] ) ) $newheight = $this->create_Image_info['height'] - $leftY;
             if ( $newwidth != $this->create_Image_info['width'] || $newheight != $this->create_Image_info['height'] )
             {
-                $this->set_memory_limit();
                 $workingImage = function_exists( "ImageCreateTrueColor" ) ? ImageCreateTrueColor( $newwidth, $newheight ) : ImageCreate( $newwidth, $newheight );
                 if ( $workingImage != false )
                 {
@@ -504,7 +502,6 @@ class image
             {
                 $leftX = ( $this->create_Image_info['width'] - $newwidth ) / 2;
                 $leftY = ( $this->create_Image_info['height'] - $newheight ) / 2;
-                $this->set_memory_limit();
                 $workingImage = function_exists( "ImageCreateTrueColor" ) ? ImageCreateTrueColor( $newwidth, $newheight ) : ImageCreate( $newwidth, $newheight );
                 if ( $workingImage != false )
                 {
@@ -565,7 +562,6 @@ class image
 
             if ( $string != "" )
             {
-                $this->set_memory_limit();
                 if ( $font == "" ) $font = NV_ROOTDIR . '/includes/fonts/Pixelation.ttf';
                 $bbox = imagettfbbox( $fsize, 0, $font, $string );
                 $string_width = $bbox[2] - $bbox[0];
@@ -620,10 +616,9 @@ class image
                 $this->get_createImage();
             }
 
-            $logo_info = nv_is_image( $logo );
-            if ( $logo_info != array() and $logo_info['width'] != 0 and $logo_info['width'] + 20 <= $this->create_Image_info['width'] and $logo_info['height'] != 0 and $logo_info['height'] + 20 <= $this->create_Image_info['height'] and preg_match( "#imagetype\_(gif|jpeg|png)$#is", $logo_info['type'] ) and preg_match( "#image\/[x\-]*(jpg|pjpeg|gif|png)#is", $logo_info['mime'] ) )
+ 			$logo_info = $this->is_image( $logo );
+            if ( $logo_info != array() and $logo_info['width'] != 0 and $logo_info['width'] + 20 <= $this->create_Image_info['width'] and $logo_info['height'] != 0 and $logo_info['height'] + 20 <= $this->create_Image_info['height'] and in_array($logo_info['type'], array(IMAGETYPE_GIF,IMAGETYPE_JPEG,IMAGETYPE_PNG)) and preg_match( "#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png)#is", $logo_info['mime'] ))
             {
-                $this->set_memory_limit();
                 switch ( $logo_info['type'] )
                 {
                     case IMAGETYPE_GIF:
@@ -698,7 +693,6 @@ class image
             $direction = 360 - $direction % 360;
             if ( $direction != 0 and $direction != 360 )
             {
-                $this->set_memory_limit();
                 $workingImage = imagerotate( $this->createImage, $direction, -1 );
                 imagealphablending( $workingImage, true );
                 imagesavealpha( $workingImage, true );
@@ -723,7 +717,6 @@ class image
                 $this->get_createImage();
             }
 
-            $this->set_memory_limit();
             $newheight = $this->create_Image_info['height'] + ( $this->create_Image_info['height'] / 2 );
             $newwidth = $this->create_Image_info['width'];
             $workingImage = function_exists( "ImageCreateTrueColor" ) ? ImageCreateTrueColor( $newwidth, $newheight ) : ImageCreate( $newwidth, $newheight );
