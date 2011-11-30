@@ -173,6 +173,7 @@ $lang_global['unlimited'] = "Không giới hạn";
 $lang_global['status'] = "Trạng thái";
 $lang_global['actions'] = "Thao tác";
 $lang_global['never'] = "Chưa bao giờ";
+$lang_global['page'] = "Trang";
 $lang_global['pageprev'] = "Trang trước";
 $lang_global['pagenext'] = "Trang sau";
 $lang_global['langinterface'] = "Ngôn ngữ giao diện";

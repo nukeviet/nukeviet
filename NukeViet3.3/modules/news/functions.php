@@ -87,7 +87,7 @@ unset( $result, $catid_i, $parentid_i, $title_i, $alias_i );
 
 $module_info['submenu'] = 0;
 
-$page = 0;
+$page = 1;
 $per_page_comment = 5;
 $per_page = $module_config[$module_name]['per_page'];
 $st_links = $module_config[$module_name]['st_links'];

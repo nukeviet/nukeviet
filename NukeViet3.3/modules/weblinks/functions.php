@@ -47,16 +47,16 @@ while ( $row = $db->sql_fetchrow( $result,2 ) )
 }
 unset( $sql, $result );
 
-$sql = "SELECT `catid`, `parentid`, `title`, `description`, `catimage`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `inhome`='1' ORDER BY parentid, weight";
+$sql = "SELECT `catid`, `parentid`, `title`, `description`, `catimage`, `alias`, `keywords`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `inhome`='1' ORDER BY parentid, weight";
 $result = $db->sql_query( $sql );
-while ( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+while ( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alias_i, $keywords_i ) = $db->sql_fetchrow( $result ) )
 {
     $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
     $sql1 = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `catid` = $catid_i";
     $result1 = $db->sql_query( $sql1 );
     list( $count_link ) = $db->sql_fetchrow( $result1 );
     $global_array_cat[$catid_i] = array( 
-        "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i, "description" => $description_i, "catimage" => $catimage_i, "count_link" => $count_link 
+        "catid" => $catid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i, "description" => $description_i, "keywords" => $keywords_i, "catimage" => $catimage_i, "count_link" => $count_link 
     );
     if ( $alias_cat_url == $alias_i )
     {
@@ -76,7 +76,7 @@ unset( $sql, $result );
 
 $count_op = sizeof( $array_op );
 $per_page = $weblinks_config['per_page'];
-$page = 0;
+$page = 1;
 if ( ! empty( $array_op ) )
 {
     if ( $catid == 0 )

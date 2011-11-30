@@ -11,17 +11,19 @@ if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $nv_Request;
 
-$page_title = $lang_module['search'];
 
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $per_page = 15;
+$key = filter_text_input( 'q', 'post', '', 1, NV_MAX_SEARCH_LENGTH );
+
+$page_title = $lang_module['search'].' '.$key;
+
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=search";
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`, 
 `author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits` 
 FROM `" . NV_PREFIXLANG . "_" . $module_data . "`";
 
-$key = filter_text_input( 'q', 'post', '', 1, NV_MAX_SEARCH_LENGTH );
 
 if ( $nv_Request->isset_request( 'submit', 'post' ) and ! empty( $key ) )
 {
@@ -43,7 +45,7 @@ else
 {
     $sql .= "WHERE `status`='1'";
 }
-$sql .= "ORDER BY `uploadtime` DESC LIMIT " . $page . ", " . $per_page;
+$sql .= "ORDER BY `uploadtime` DESC LIMIT " .  ($page - 1) * $per_page . ", " . $per_page;
 
 $result = $db->sql_query( $sql );
 
@@ -103,10 +105,13 @@ if ( ! empty( $all_page ) )
         }
     
     }
-    $generate_page = nv_news_page( $base_url, $all_page, $per_page, $page );
+    $generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page );
     
     $contents = theme_viewcat_download( $array, $download_config, "", $generate_page );
-
+    if ($page > 1)
+    {
+        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+    }
 }
 else
 {

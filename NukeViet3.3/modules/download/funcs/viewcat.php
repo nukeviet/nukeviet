@@ -36,7 +36,6 @@ $key_words = $module_info['keywords'];
 
 $array = array();
 $subcats = array();
-$page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 15;
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 $c = $list_cats[$catid];
@@ -47,19 +46,16 @@ $subcats = $c['subcats'];
 $in = "`catid`=" . $c['id'];
 $base_url .= "&amp;" . NV_OP_VARIABLE . "=" . $catalias;
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`, `author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE " . $in . " AND `status`=1 ORDER BY `uploadtime` DESC LIMIT " . $page . ", " . $per_page;
+$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`, `author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE " . $in . " AND `status`=1 ORDER BY `uploadtime` DESC LIMIT " . ($page - 1) * $per_page . ", " . $per_page;
 
 $result = $db->sql_query( $sql );
 $query = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $all_page ) = $db->sql_fetchrow( $query );
 
-if ( ! $all_page or $page >= $all_page )
+if ( ! $all_page)
 {
-    if ( $nv_Request->isset_request( 'page', 'get' ) )
-    {
-        Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-        exit();
-    }
+    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+    exit();
 }
 
 while ( $row = $db->sql_fetchrow( $result ) )
@@ -106,7 +102,11 @@ while ( $row = $db->sql_fetchrow( $result ) )
     }
 }
 
-$generate_page = nv_news_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page );
+if ($page > 1)
+{
+    $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+}
 $subs = array();
 if ( ! empty( $subcats ) )
 {
@@ -135,7 +135,7 @@ if ( ! empty( $subcats ) )
 				'download_hits' => ( int )$row['download_hits'], //
 				'more_link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "/" . $row['alias'], 'edit_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'], //
 				'del_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name 
-			); //		
+			);	
 		}
 						
 		$subs[] = array(

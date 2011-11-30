@@ -1260,7 +1260,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $start_item, $add_pr
         if ($on_page > 1)
         {
             $href = ($on_page - 2) * $per_page;
-            $href = $href ? $base_url . $amp . $href : $base_url;            
+            $href = $href ? $base_url . $amp . $href : $base_url;
             $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
             $page_string = "&nbsp;&nbsp;<span><a " . $href . ">" . $lang_global['pageprev'] . "</a></span>&nbsp;&nbsp;" . $page_string;
         }
@@ -1275,21 +1275,22 @@ function nv_generate_page($base_url, $num_items, $per_page, $start_item, $add_pr
     return $page_string;
 }
 
-function nv_news_page($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true)
+function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true)
 {
     global $lang_global;
     $total_pages = ceil($num_items / $per_page);
     if ($total_pages == 1)
+    {
         return '';
-    @$on_page = floor($start_item / $per_page) + 1;
-    $page_string = "";
+    }
+    $title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'];
+    $page_string = ($on_page == 1) ? "<strong>1</strong>, " : "<a title=\"" . $title . " 1\" href=\"" . $base_url . "\">1</a>, ";
     if ($total_pages > 10)
     {
         $init_page_max = ($total_pages > 3) ? 3 : $total_pages;
-        for ($i = 1; $i <= $init_page_max; ++$i)
+        for ($i = 2; $i <= $init_page_max; ++$i)
         {
-            $href = "href=\"" . $base_url . "/page-" . (($i - 1) * $per_page) . "\"";
-            $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
+            $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
             if ($i < $init_page_max)
                 $page_string .= ", ";
         }
@@ -1302,8 +1303,7 @@ function nv_news_page($base_url, $num_items, $per_page, $start_item, $add_prevne
                 $init_page_max = ($on_page < $total_pages - 4) ? $on_page : $total_pages - 4;
                 for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i)
                 {
-                    $href = "href=\"" . $base_url . "/page-" . (($i - 1) * $per_page) . "\"";
-                    $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
+                    $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
                     if ($i < $init_page_max + 1)
                     {
                         $page_string .= ", ";
@@ -1318,8 +1318,7 @@ function nv_news_page($base_url, $num_items, $per_page, $start_item, $add_prevne
 
             for ($i = $total_pages - 2; $i < $total_pages + 1; ++$i)
             {
-                $href = "href=\"" . $base_url . "/page-" . (($i - 1) * $per_page) . "\"";
-                $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
+                $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
                 if ($i < $total_pages)
                 {
                     $page_string .= ", ";
@@ -1329,10 +1328,9 @@ function nv_news_page($base_url, $num_items, $per_page, $start_item, $add_prevne
     }
     else
     {
-        for ($i = 1; $i < $total_pages + 1; ++$i)
+        for ($i = 2; $i < $total_pages + 1; ++$i)
         {
-            $href = "href=\"" . $base_url . "/page-" . (($i - 1) * $per_page) . "\"";
-            $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
+            $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
             if ($i < $total_pages)
             {
                 $page_string .= ", ";
@@ -1343,13 +1341,11 @@ function nv_news_page($base_url, $num_items, $per_page, $start_item, $add_prevne
     {
         if ($on_page > 1)
         {
-            $href = "href=\"" . $base_url . "/page-" . (($on_page - 2) * $per_page) . "\"";
-            $page_string = "&nbsp;&nbsp;<span><a " . $href . ">" . $lang_global['pageprev'] . "</a></span>&nbsp;&nbsp;" . $page_string;
+            $page_string = "&nbsp;&nbsp;<span><a title=\"" . $title . " " . ($on_page - 1) . "\" href=\"" . $base_url . "/page-" . ($on_page - 1) . "\">" . $lang_global['pageprev'] . "</a></span>&nbsp;&nbsp;" . $page_string;
         }
         if ($on_page < $total_pages)
         {
-            $href = "href=\"" . $base_url . "/page-" . ($on_page * $per_page) . "\"";
-            $page_string .= "&nbsp;&nbsp;<span><a " . $href . ">" . $lang_global['pagenext'] . "</a></span>";
+            $page_string .= "&nbsp;&nbsp;<span><a title=\"" . $title . " " . ($on_page + 1) . "\"  href=\"" . $base_url . "/page-" . ($on_page + 1) . "\">" . $lang_global['pagenext'] . "</a></span>";
         }
     }
     return $page_string;

@@ -60,7 +60,7 @@ while (list($groupid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewgroup_i, $
     $global_array_group[$groupid_i] = array("group" => $groupid_i, "parentid" => $parentid_i, "title" => $title_i, "alias" => $alias_i, "link" => $link_i, "viewgroup" => $viewgroup_i, "numsubgroup" => $numsubgroup_i, "subgroupid" => $subgroupid_i, "numlinks" => $numlinks_i, "description" => $description_i, "inhome" => $inhome_i, "keywords" => $keywords_i, "who_view" => $who_view_i, "groups_view" => $groups_view_i, 'lev' => $lev_i);
 }
 /*end group*/
-$page = 0;
+$page = 1;
 $per_page = $pro_config['per_page'];
 $count_op = sizeof($array_op);
 if (!empty($array_op) and $op == "main")
