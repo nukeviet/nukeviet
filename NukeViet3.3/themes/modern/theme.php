@@ -75,6 +75,8 @@ function nv_site_theme ( $contents )
     
     $xtpl->assign( 'THEME_SITE_NAME', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
     $xtpl->assign( 'THEME_CONTACT_EMAIL', $lang_global['email'] . ": " . nv_EncodeEmail( $global_config['site_email'] ) );
+	
+	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
     
     if ( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
     {

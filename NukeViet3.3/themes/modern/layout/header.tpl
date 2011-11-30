@@ -38,7 +38,7 @@
             </div>
             <div class="header">
                 <div class="logo">
-					<h1><a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/logo.png" alt="{THEME_LOGO_TITLE}" /> {THEME_LOGO_TITLE}</a></h1>
+					<h1><a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{THEME_LOGO_TITLE}" /> {THEME_LOGO_TITLE}</a></h1>
                 </div>
                 <div class="topadv">
                     [TOPADV]

@@ -15,7 +15,7 @@
         <div id="container">
             <div id="header">
                 <div id="logo">
-                    <a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/logo.gif" alt="{THEME_LOGO_TITLE}" /></a>
+                    <a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{THEME_LOGO_TITLE}" /></a>
                 </div>
                 <span class="sitename">
                 	{SITE_NAME}

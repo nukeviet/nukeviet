@@ -75,6 +75,8 @@ function nv_site_theme ( $contents )
     $xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_checkss', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
     
     $xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+	
+	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
     
     if ( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
     {
