@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:01 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -18,7 +18,7 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. Tous droits r�
 $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['metaTagsConfig'] = "Meta-Tags Config";
+$lang_module['metaTagsConfig'] = "Configuration de Meta-Tags";
 $lang_module['metaTagsGroupName'] = "Group type";
 $lang_module['metaTagsGroupValue'] = "Group Name";
 $lang_module['metaTagsNote'] = "The Meta-Tags: \"%s\" is determined automatically";
@@ -29,9 +29,9 @@ $lang_module['googleAnalyticsSetDomainName_0'] = "A single domain";
 $lang_module['googleAnalyticsSetDomainName_1'] = "One domain with multiple subdomains";
 $lang_module['googleAnalyticsSetDomainName_2'] = "Multiple top-level domains";
 $lang_module['googleAnalyticsID'] = "Google Analytics ID<br />(UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">Detail</a>)";
-$lang_module['global_config'] = "Config. générale";
+$lang_module['global_config'] = "Configuration générale";
 $lang_module['site_config'] = "Configuration du site";
-$lang_module['lang_site_config'] = "Configuration selon langue";
+$lang_module['lang_site_config'] = "Configuration selon langue: %s";
 $lang_module['bots_config'] = "Moteurs de recherche";
 $lang_module['optActive'] = "Activer la fonction Optimisation du site";
 $lang_module['optActive_no'] = "inactif";
@@ -45,7 +45,7 @@ $lang_module['default_module'] = "Module par défaut à l'Accueil";
 $lang_module['description'] = "Description du site";
 $lang_module['rewrite'] = "Activer rewrite";
 $lang_module['rewrite_optional'] = "Filtrer les accents sur url";
-$lang_module['disable_content'] = "Notification";
+$lang_module['disable_content'] = "Notification de fermeture du site";
 $lang_module['submit'] = "Sauver";
 $lang_module['err_writable'] = "Erreur: impossible d'entregister le fichier: %s merci de vérifier les permissions (chmod) de ce fichier.";
 $lang_module['err_supports_rewrite'] = "Erreur: le serveur ne supporte pas le module rewrite";
@@ -58,19 +58,19 @@ $lang_module['captcha_4'] = "Lors de l'identification de membre ou à l'inscript
 $lang_module['captcha_5'] = "Lors de l'identification de l'admin ou de membre";
 $lang_module['captcha_6'] = "Lors de l'identification de l'admin ou l'inscription du membre";
 $lang_module['captcha_7'] = "Toujours";
-$lang_module['ftp_config'] = "Config. de FTP";
-$lang_module['smtp_config'] = "Config. de SMTP";
+$lang_module['ftp_config'] = "Configuration de FTP";
+$lang_module['smtp_config'] = "Configuration de SMTP";
 $lang_module['server'] = "Serveur ou Lien";
 $lang_module['port'] = "Porte";
 $lang_module['username'] = "Identifiant";
 $lang_module['password'] = "Mot de passe";
 $lang_module['ftp_path'] = "Chemin d'accès";
-$lang_module['mail_config'] = "Choisir le méthode";
+$lang_module['mail_config'] = "Méthode d'envoie d'e-mail";
 $lang_module['type_smtp'] = "SMTP";
 $lang_module['type_linux'] = "Linux Mail";
 $lang_module['type_phpmail'] = "PHPmail";
 $lang_module['smtp_server'] = "Infos du serveur";
-$lang_module['incoming_ssl'] = "Ce serveur demande une connexion sécurisée";
+$lang_module['incoming_ssl'] = "Connexion sécurisée";
 $lang_module['outgoing'] = "Outgoing mail server (SMTP)";
 $lang_module['outgoing_port'] = "Outgoing port(SMTP)";
 $lang_module['smtp_username'] = "Infos du compte";
@@ -88,7 +88,7 @@ $lang_module['site_phone'] = "Téléphone du site";
 $lang_module['lang_multi'] = "Activer le multi-langage";
 $lang_module['site_lang'] = "Langue par défaut";
 $lang_module['site_timezone'] = "Fuseau horaire";
-$lang_module['date_pattern'] = "Type d'affichage: Date Mois An";
+$lang_module['date_pattern'] = "Format de la date";
 $lang_module['time_pattern'] = "Type d'affichage: Heure Minute";
 $lang_module['online_upd'] = "Activer le compteur de visiteurs en ligne";
 $lang_module['gzip_method'] = "Activer gzip";
@@ -132,16 +132,16 @@ $lang_module['banip_delete'] = "Supprimer";
 $lang_module['banip_error_ip'] = "Saisissez IP à interdire";
 $lang_module['banip_error_area'] = "Merci de sélectionner la zone";
 $lang_module['banip_error_validip'] = "Erreur: Adresse IP invalide";
-$lang_module['uploadconfig'] = "Config. du Transfert";
+$lang_module['uploadconfig'] = "Configuration du Transfert";
 $lang_module['uploadconfig_ban_ext'] = "Extensioins interdites";
 $lang_module['uploadconfig_ban_mime'] = "Types de Mime interdits";
 $lang_module['uploadconfig_types'] = "Types de fichier autorisés";
 $lang_module['sys_max_size'] = "Taille maximum du fichier transféré autorisé par votre serveur";
 $lang_module['nv_max_size'] = "Taille maximum du fichier transféré";
 $lang_module['upload_checking_mode'] = "Upload Checking Mode";
-$lang_module['strong_mode'] = "Strong";
-$lang_module['mild_mode'] = "Mild";
-$lang_module['lite_mode'] = "Lite";
+$lang_module['strong_mode'] = "Strict";
+$lang_module['mild_mode'] = "Moyen";
+$lang_module['lite_mode'] = "Faible";
 $lang_module['none_mode'] = "None";
 $lang_module['upload_checking_note'] = "Votre serveur ne supporte pas certaines fonctions déterminant le type de fichier. Si vous choisissez «renforcé», vous ne serez pas en mesure de télécharger des fichiers sur votre hôte";
 $lang_module['nv_admin_add'] = "Ajouter une tâche";
@@ -189,6 +189,24 @@ $lang_module['closed_site_0'] = "Mode normal";
 $lang_module['closed_site_1'] = "Fermeture du site, seulement l'administrateur suprême peut se connecter";
 $lang_module['closed_site_2'] = "Fermeture du site - les administrateurs générales peuvent se connecter";
 $lang_module['closed_site_3'] = "Fermeture du site - les administrateur peuvent se connecter";
-$lang_module['getloadavg'] = "Vérifier le status du serveur, au cas ou l'activite de CPU depasse 80%, le systeme donnera une notification: \"Server too busy. Please try again later\"";
+$lang_module['getloadavg'] = "Vérifier le status du serveur, au cas ou l'activite de CPU depasse 80%, le systeme donnera une notification: \"The server is temporarily busy, try again later!\"";
+$lang_module['pagetitle'] = "Configuration tag \"title\"";
+$lang_module['pagetitle2'] = "Méthode d'affichage de tag \"title\"";
+$lang_module['pagetitleNote'] = "<strong>Variables acceptés:</strong><br /><br />- <strong>pagetitle</strong>: Titre de page pour des cas définis,<br />- <strong>funcname</strong>: Nom de la function,<br />- <strong>modulename</strong>: Nom de module,<br />- <strong>sitename</strong>: Nom du site";
+$lang_module['func_name_not_exist'] = "Cette fonction n'existe pas";
+$lang_module['robots'] = "Configuration du fichier robots.txt";
+$lang_module['robots_number'] = "Ordre";
+$lang_module['robots_filename'] = "Nom du fichier";
+$lang_module['robots_type'] = "Mode";
+$lang_module['robots_type_0'] = "Accès interdit";
+$lang_module['robots_type_1'] = "Ne pas afficher dans le fichier robots.txt";
+$lang_module['robots_error_writable'] = "Erreur: impossible d'enregistrer le fichier robots.txt, veuillez créer un fichier robots.txt avec le contenu ci-dessous et mettre dans la répertoire parente du site";
+$lang_module['lang_geo'] = "Activer la définition de langue selon pays";
+$lang_module['lang_geo_config'] = "Configuration de la fonctionnalité de définir la langue selon pays";
+$lang_module['searchEngineUniqueID'] = "ID de moteur de recherche Google<br />(forma 000329275761967753447:sr7yxqgv294 , <a href=\"http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/\" target=\"_blank\">voir détails</a>)";
+$lang_module['timezoneAuto'] = "Selon l'ordinateur du visiteur";
+$lang_module['banip_error_write'] = "Erreur: Vous n'avez pas donné au système le droit de modifier les fichiers. Merci de CHMOD le dossier <strong>%s</strong> à 0777 ou \"Changer la permission\" pour que le système puisse modifier les fichiers, sinon, créer un fichier banip.php avec le contenu ci-dessous et mettre dans le dossier <strong>%s</strong>";
+$lang_module['timezoneByCountry'] = "Selon le pays du visiteur";
+$lang_module['uploadconfig_logo'] = "Le logo à ajouter aux images";
 
 ?>

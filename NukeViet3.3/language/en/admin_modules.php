@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 08, 2011, 05:58:05 PM
+* @Createdate Nov 30, 2011, 02:45:30 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -93,5 +93,7 @@ $lang_module['autoinstall_package_select'] = "Select module to package";
 $lang_module['autoinstall_package_noselect'] = "No module selected";
 $lang_module['autoinstall_package_processing'] = "please wait to complete...";
 $lang_module['mobile'] = "Mobile theme";
+$lang_module['delete_module_info1'] = "This module is used in language <strong>%s</strong>, please delete it in this language before";
+$lang_module['delete_module_info2'] = "There is %d virtual module created by this module, please delete it before";
 
 ?>

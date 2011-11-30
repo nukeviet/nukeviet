@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:01 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -29,8 +29,8 @@ $lang_module['db_proto_info'] = "Version de MySql";
 $lang_module['server'] = "Nom du serveur MySql";
 $lang_module['db_dbname'] = "Nom de Base de données";
 $lang_module['db_uname'] = "Nom d'utilisateur";
-$lang_module['db_charset'] = "Collation de base de données";
-$lang_module['db_collation'] = "Code de comparison de base de données";
+$lang_module['db_charset'] = "Charset";
+$lang_module['db_collation'] = "Collation";
 $lang_module['db_time_zone'] = "Fuseau horaire de base de données";
 $lang_module['table_name'] = "Table";
 $lang_module['table_size'] = "Taille";
@@ -69,8 +69,8 @@ $lang_module['save_ok'] = "Sauvegarder avec succès";
 $lang_module['save_download'] = "Cliquez ici pour télécharger le fichier.";
 $lang_module['dump_autobackup'] = "Activer le sauvegarde automatique de données";
 $lang_module['dump_backup_ext'] = "Type de fichier de données";
-$lang_module['dump_backup_day'] = "Nombre de sauvegarde de données";
-$lang_module['file_backup'] = "Sauvegarde des données";
+$lang_module['dump_backup_day'] = "Nombre de backups";
+$lang_module['file_backup'] = "Backups";
 $lang_module['file_nb'] = "Ordre";
 $lang_module['file_name'] = "Nom du fichier";
 $lang_module['file_time'] = "Horaire";

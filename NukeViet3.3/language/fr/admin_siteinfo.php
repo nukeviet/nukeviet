@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:01 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -42,9 +42,9 @@ $lang_module['variable'] = "Variable";
 $lang_module['value'] = "Valeur";
 $lang_module['variables_php'] = "Variables pré-destinés";
 $lang_module['version'] = "Version de NukeViet";
-$lang_module['version_user'] = "Votre version";
+$lang_module['version_user'] = "La version installée";
 $lang_module['version_news'] = "La dernière version officielle";
-$lang_module['checkversion'] = " Vérifier la version NukeViet";
+$lang_module['checkversion'] = "Vérifier la version de NukeViet";
 $lang_module['server_api'] = "Protocole entre serveur et PHP";
 $lang_module['chmod'] = "Vérification des permissions";
 $lang_module['chmod_need'] = "Il faut changer les permissions (chmod 777)";
@@ -67,11 +67,11 @@ $lang_module['log_del_confirm'] = "Êtes vous sur de vouloir supprimer?";
 $lang_module['log_View'] = "Voir";
 $lang_module['log_del_no_items'] = "Vous n'avez pas choisi";
 $lang_module['log_note'] = "Notes";
-$lang_module['moduleInfo'] = "Modules Information";
+$lang_module['moduleInfo'] = "Informations des modules";
 $lang_module['moduleName'] = "Module";
 $lang_module['moduleContent'] = "Contenu";
 $lang_module['moduleValue'] = "Valeur";
-$lang_module['newVersion_detail'] = "Version Number %s, updated on %s";
+$lang_module['newVersion_detail'] = "Numéro de Version %s, Mettre à jour: %s";
 $lang_module['newVersion_info'] = "Nukeviet CMS needs to be upgraded to newer versions. <a href=\"%s\">Click here</a> for more details";
 $lang_module['log_del'] = "supprimer";
 $lang_module['log_edit'] = "modifier";
@@ -150,5 +150,7 @@ $lang_module['filter_check_log'] = "Accès à la section %s échoué";
 $lang_module['filter_lang_asc'] = "ascendant";
 $lang_module['filter_lang_desc'] = "descendant";
 $lang_module['filter_order_by'] = "Arranger par ordre %s";
+$lang_module['log_empty'] = "Supprimer tout";
+$lang_module['log_empty_log'] = "Supprimer tous les historiques du système";
 
 ?>

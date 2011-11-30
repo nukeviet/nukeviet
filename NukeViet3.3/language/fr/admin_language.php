@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:01 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -42,7 +42,7 @@ $lang_module['nv_lang_area'] = "Section";
 $lang_module['nv_lang_site'] = "Site";
 $lang_module['nv_lang_admin'] = "Administration";
 $lang_module['nv_lang_func'] = "Opération";
-$lang_module['nv_lang_key'] = "Sigle";
+$lang_module['nv_lang_key'] = "Code";
 $lang_module['nv_lang_value'] = "Valeur";
 $lang_module['nv_lang_note_edit'] = "Remarque: les premières cases sont pour ajouter les variables, utilisez seulement les tags html";
 $lang_module['nv_lang_author'] = "Auteur";
@@ -78,9 +78,12 @@ $lang_module['nv_lang_data_source'] = "Langue de référence";
 $lang_module['nv_lang_checkallarea'] = "Toutes les sections";
 $lang_module['nv_lang_check_no_data'] = "Aucun résultat";
 $lang_module['nv_check_type'] = "Condition de vérification";
-$lang_module['nv_check_type_0'] = "Vérifier langue traduite";
+$lang_module['nv_check_type_0'] = "Vérifier langue non-traduite";
 $lang_module['nv_check_type_1'] = "Vérifier les mots pareils";
 $lang_module['nv_check_type_2'] = "Vérifier tout";
 $lang_module['nv_lang_check_title'] = "Vérifier les lignes pas encore traduites";
+$lang_module['countries'] = "Langue selon pays";
+$lang_module['countries_name'] = "Pays";
+$lang_module['nv_admin_sl3'] = "Sélectionner une langue";
 
 ?>

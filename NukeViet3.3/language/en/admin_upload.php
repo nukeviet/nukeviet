@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 08, 2011, 05:58:05 PM
+* @Createdate Nov 30, 2011, 02:45:30 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -86,5 +86,8 @@ $lang_module['errorNotRenameFile'] = "Error: For some reason the system could no
 $lang_module['nopreview'] = "File doesn't support preview.";
 $lang_module['errorNewSize'] = "You only create new image width: 10 to %d px, height: 10 to %d px";
 $lang_module['maxSizeSize'] = "Maximum size: %dx%dpx";
+$lang_module['addlogo'] = "Add logo";
+$lang_module['addlogosave'] = "Save";
+$lang_module['notlogo'] = "Error: the system do not find any logo";
 
 ?>

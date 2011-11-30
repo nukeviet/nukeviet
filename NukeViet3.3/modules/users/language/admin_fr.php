@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:02 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -96,7 +96,7 @@ $lang_module['active_success'] = "Activation réussie !";
 $lang_module['memberlist_edit'] = "Éditer";
 $lang_module['memberlist_deleteconfirm'] = "Êtes-vous sûr de vouloir supprimer ?";
 $lang_module['edit_title'] = "Modifier les coordonnées du membre";
-$lang_module['edit_password_note'] = "Laissez vide ces 2 champs si vous ne voulez pas changer le mot de passe";
+$lang_module['edit_password_note'] = "Changer le mot de passe (Laissez vide ces 2 champs si vous ne voulez pas changer le mot de passe)";
 $lang_module['edit_avatar_note'] = "Laissez vide si vous ne voulez pas changer avatar";
 $lang_module['edit_save'] = "Sauver";
 $lang_module['edit_error_username_exist'] = "Ce nom d'utilisateur a été utilisé, merci de choisir un autre";
@@ -144,12 +144,12 @@ $lang_module['add_time'] = "Créer";
 $lang_module['exp_time'] = "Expirer";
 $lang_module['public'] = "Publique";
 $lang_module['users'] = "Membres";
-$lang_module['error_title_exists'] = "Ce nom du groupe &ldquo;%s&rdquo; a été utilisé";
-$lang_module['users_in_group_caption'] = "Liste des membres du groupe &ldquo;%s&rdquo; (%d membres)";
+$lang_module['error_title_exists'] = "Ce nom du groupe \"%s\" a été utilisé";
+$lang_module['users_in_group_caption'] = "Liste des membres du groupe \"%s\" (%d membres)";
 $lang_module['error_group_not_found'] = "Erreur: Groupe introuvable";
 $lang_module['error_users_not_found'] = "Ce groupe n'a pas encore de membres";
 $lang_module['error_not_groups'] = "Aucun groupe a été créé. Cliquez <a href=\"%s\">ici</a> pour créer des groupes";
-$lang_module['add_users'] = "Ajouter les membres au groupe &ldquo;%s&rdquo;";
+$lang_module['add_users'] = "Ajouter les membres";
 $lang_module['form_search_label0'] = "Rechercher les membres";
 $lang_module['form_search_label1'] = "Entrez le mot clé (laisser vide = tout)";
 $lang_module['form_search_select0'] = "Nom";
@@ -163,5 +163,41 @@ $lang_module['add_user'] = "Ajouter le membre %1\$s au groupe %2\$s";
 $lang_module['exclude_user'] = "Éliminer le membre %1\$s du groupe %2\$s";
 $lang_module['siteinfo_user'] = "Membres";
 $lang_module['siteinfo_waiting'] = "Membres suspens";
+$lang_module['allow_public'] = "Autoriser les membres d'enregistrer aux groupes publics";
+$lang_module['allow_question'] = "Répondre à la question secrète pour fonction de Mot de passe oublié";
+$lang_module['pagetitle'] = "Obtenir ID de membre";
+$lang_module['pagetitle1'] = "Rechercher ID de membre";
+$lang_module['search'] = "Trouver Membres";
+$lang_module['reset'] = "Répéter";
+$lang_module['waiting'] = "Entrez les informations et appuyez sur le bouton de rechercher membre  pour effectuer";
+$lang_module['from'] = "De";
+$lang_module['to'] = "à";
+$lang_module['select'] = "Sélectionner";
+$lang_module['noresult'] = "Aucun résultat correspond à votre demande";
+$lang_module['enter_key'] = "Rentrez les informations pour trouver un membre";
+$lang_module['username'] = "Nom d'utilisateur";
+$lang_module['full_name'] = "Nom et prénom";
+$lang_module['regdate'] = "Date d'inscription";
+$lang_module['yim'] = "Compte Yahoo";
+$lang_module['last_login'] = "Dernière session";
+$lang_module['last_idlogin'] = "IP de la dernière session";
+$lang_module['web'] = "Site Web";
+$lang_module['select_gender'] = "Sélectionnez votre sexe";
+$lang_module['select_gender_male'] = "Masculin";
+$lang_module['select_gender_female'] = "Féminin";
+$lang_module['changeGroupWeight'] = "Changer l'ordre de groupes";
+$lang_module['ChangeGroupAct'] = "Changer le status du groupe";
+$lang_module['delGroup'] = "Supprimer le groupe";
+$lang_module['ChangeGroupPublic'] = "Changer le type du groupe";
+$lang_module['emptyIsUnlimited'] = "Laisser vide: indéfini";
+$lang_module['dateError'] = "Erreur de la date";
+$lang_module['delConfirm'] = "Êtes-vous sûr de vouloir supprimer";
+$lang_module['errorChangeWeight'] = "Erreur: impossible de changer l'ordre";
+$lang_module['choiceUserID'] = "Veuillez donner ID de membre";
+$lang_module['UserInGroup'] = "Ce membre existe déjà dans le groupe";
+$lang_module['UserNotInGroup'] = "Le membre choisi n'existe pas dans le groupe";
+$lang_module['addMemberToGroup'] = "Ajouter un membre au groupe";
+$lang_module['detail'] = "Détails";
+$lang_module['exclude_user2'] = "Retirer du groupe";
 
 ?>

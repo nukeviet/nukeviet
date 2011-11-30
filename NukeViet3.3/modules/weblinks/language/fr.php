@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:02 PM
+* @Createdate Nov 30, 2011, 02:45:43 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -39,12 +39,12 @@ $lang_module['visit'] = "Visites";
 $lang_module['regiter'] = "Date d'enregistrement";
 $lang_module['edit_time'] = "Dernière édition";
 $lang_module['description'] = "Détails";
-$lang_module['name'] = "Nom du site";
+$lang_module['name'] = "Site";
 $lang_module['taskbar'] = "Outil";
 $lang_module['report_note'] = "Autres";
 $lang_module['error'] = "Erreur: vous n'avez pas choisi le motif de votre rapport!";
 $lang_module['error_word_min'] = "Votre message doit être plus de 10 caractères";
-$lang_module['view_title'] = "Visites";
+$lang_module['view_title'] = "Vues";
 $lang_module['next_title'] = "Page suivante";
 
 ?>

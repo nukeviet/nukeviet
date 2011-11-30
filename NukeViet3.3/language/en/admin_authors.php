@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 08, 2011, 05:58:05 PM
+* @Createdate Nov 30, 2011, 02:45:30 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -135,5 +135,11 @@ $lang_module['rule_user'] = "Use only characters a-zA-Z0-9_- for account";
 $lang_module['rule_pass'] = "Use only characters a-zA-Z0-9_- for password";
 $lang_module['spadmin_add_admin'] = "Allows General Administrator to create and modify the rights of modules administrator";
 $lang_module['authors_detail_main'] = "Show detailed information of the administrator account";
+$lang_module['add_user'] = "Appoint a member";
+$lang_module['add_select'] = "Select";
+$lang_module['add_error_choose'] = "Error: You did not appoint a member to the administrator";
+$lang_module['add_error_exist'] = "Error: This user is an administrator";
+$lang_module['add_error_notexist'] = "Error: This member does not exist";
+$lang_module['add_error_diff'] = "An undefined error occurred";
 
 ?>

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:02 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -25,7 +25,7 @@ $lang_module['setup'] = "Installer";
 $lang_module['main'] = "Liste des modules";
 $lang_module['edit'] = "Éditer le module &ldquo;%s&rdquo;";
 $lang_module['caption_actmod'] = "Liste des modules actifs";
-$lang_module['caption_deactmod'] = "Liste des module inactifs";
+$lang_module['caption_deactmod'] = "Liste de modules inactifs";
 $lang_module['caption_badmod'] = "Liste des modules inactifs par erreurs";
 $lang_module['caption_newmod'] = "Liste des modules pas encore installés";
 $lang_module['module_name'] = "Module";
@@ -92,5 +92,8 @@ $lang_module['autoinstall_module_error_movefile'] = "Installation automatique im
 $lang_module['autoinstall_package_select'] = "Choisir le module à paqueter";
 $lang_module['autoinstall_package_noselect'] = "Il faut sé1ectionner un module pour paqueter";
 $lang_module['autoinstall_package_processing'] = "Veuillez patienter quelques instants...";
+$lang_module['mobile'] = "Theme mobile";
+$lang_module['delete_module_info1'] = "Ce module existe sur la langue <strong>%s</strong>, il faut tout d'abord supprimer ce module sur cette langue";
+$lang_module['delete_module_info2'] = "Il y a %d modules virtuels basés sur ce module, il faut les supprimer d'abord";
 
 ?>

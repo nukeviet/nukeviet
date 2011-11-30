@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:02 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -198,5 +198,10 @@ $lang_module['email_is_exists'] = "E-mail de cet OpenID a été utilisé.<br />E
 $lang_module['error_update_users_info'] = "Erreur: mise à jour impossible de voos coordonnées. Merci d'informer l'administrateur";
 $lang_module['account_active_log'] = "Activer le compte";
 $lang_module['openid_add'] = "Ajouter une nouvelle OpenID";
+$lang_module['no_in_group'] = "Vous n'avez pas enregistré à aucun groupe";
+$lang_module['no_act'] = "Cette fonction n'est actuellement pas active";
+$lang_module['no_set'] = "Il n'existe actuellement aucun groupe public établi";
+$lang_module['re_remove'] = "S'inscrire ou quitter le groupe avec succès";
+$lang_module['in_group'] = "S'enregistrer au Groupe";
 
 ?>

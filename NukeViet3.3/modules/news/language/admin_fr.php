@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:02 PM
+* @Createdate Nov 30, 2011, 02:45:43 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -34,7 +34,7 @@ $lang_module['status_0'] = "Suspens";
 $lang_module['status_1'] = "Publié";
 $lang_module['status_2'] = "Horaire";
 $lang_module['status_3'] = "Expiré";
-$lang_module['errorsave'] = "Erreur: il est impossible de mettre à jour les données, vérifiez si le titre a été utilisé";
+$lang_module['errorsave'] = "Erreur: il est impossible de mettre à jour, vérifiez si le titre ou l'alias a été utilisé";
 $lang_module['saveok'] = "Mise à jour réussie";
 $lang_module['clickgotomodule'] = "Cliquez ici pour aller à la gestion des articles";
 $lang_module['alias'] = "Alias";
@@ -90,7 +90,7 @@ $lang_module['viewcat_list_old'] = "par titre, ancien en haut";
 $lang_module['viewcat_grid_new'] = "par grille, nouveau en haut";
 $lang_module['viewcat_grid_old'] = "par grille, ancien en haut";
 $lang_module['search'] = "Rechercher";
-$lang_module['search_type'] = "Méthode de recherche";
+$lang_module['search_type'] = "Recherche par";
 $lang_module['search_id'] = "ID";
 $lang_module['search_key'] = "Mot clé";
 $lang_module['search_cat'] = "Catégorie";
@@ -131,7 +131,7 @@ $lang_module['content_allshow'] = "Afficher tout";
 $lang_module['content_allcollapse'] = "Masquer tout";
 $lang_module['content_bodytext'] = "Contenu détaillé";
 $lang_module['content_bodytext_note'] = "(Afficher uniquement aux personnes autorisées)";
-$lang_module['content_admin'] = "Déposé par";
+$lang_module['content_admin'] = "Créateur";
 $lang_module['content_author'] = "Auteur";
 $lang_module['content_sourceid'] = "Source";
 $lang_module['content_copyright'] = "Garder le droit d'auteur";
@@ -187,7 +187,7 @@ $lang_module['topic_nonews'] = "Aucun article dans ce sujet !";
 $lang_module['addtotopics'] = "Ajout au sujet";
 $lang_module['topic_update_success'] = "Mise à jour réussie !";
 $lang_module['topic_num_news'] = "articles";
-$lang_module['siteinfo_publtime'] = "Articles actifs";
+$lang_module['siteinfo_publtime'] = "Total des articles actifs";
 $lang_module['siteinfo_users_send'] = "Articles envoyés par les membres";
 $lang_module['siteinfo_pending'] = "Articles suspens";
 $lang_module['siteinfo_expired'] = "Articles expirés";
@@ -221,5 +221,8 @@ $lang_module['permissions_del_content'] = "Supprimer l'article";
 $lang_module['permissions_pub_error'] = "Erreur: Vous ne pouvez pas poster les articles dans la catégorie: %1\$s";
 $lang_module['error_no_del_content_id'] = "Erreur: impossible de supprimer l'article ayant ID:";
 $lang_module['structure_image_upload'] = "Les images envoyées du module est stockés selon la structure de dossier";
+$lang_module['content_back'] = "Retour à l'administration";
+$lang_module['content_checkcat'] = "Catégorie de l'article";
+$lang_module['content_checkcatmsg'] = "Veuillez choisir la catégorie pour l'article";
 
 ?>

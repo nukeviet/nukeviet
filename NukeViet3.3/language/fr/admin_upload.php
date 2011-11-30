@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:01 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -86,5 +86,8 @@ $lang_module['errorNotRenameFile'] = "Erreur: impossible de renommer";
 $lang_module['nopreview'] = "Il est impossible de prévisualiser ce type de fichier";
 $lang_module['errorNewSize'] = "Vous ne pouvez creer une nouvelle image avec largeur: 10 - %d px, hauteur: 10 - %d px";
 $lang_module['maxSizeSize'] = "Taille maximum: %dx%dpx";
+$lang_module['addlogo'] = "Ajouter le logo";
+$lang_module['addlogosave'] = "Sauver";
+$lang_module['notlogo'] = "Erreur: logo introuvable";
 
 ?>

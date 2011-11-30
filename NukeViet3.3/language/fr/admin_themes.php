@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:01 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -18,7 +18,7 @@ $lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. Tous droits r�
 $lang_translator['info'] ="Langue française pour NukeViet 3";
 $lang_translator['langtype'] ="lang_module";
 
-$lang_module['blocks'] = "Config. de blocks";
+$lang_module['blocks'] = "Gestion des blocks";
 $lang_module['change_func_name'] = "Renommer la fonction &ldquo;%1\$s&rdquo; du module &ldquo;%2\$s&rdquo;";
 $lang_module['bl_list_title'] = "Les blocks à &ldquo;%1\$s&rdquo; de la fonction &ldquo;%2\$s&rdquo;";
 $lang_module['add_block_title'] = "Ajouter le block à &ldquo;%1\$s&rdquo; de la fonction &ldquo;%2\$s&rdquo; du module &ldquo;%3\$s&rdquo;";
@@ -87,7 +87,7 @@ $lang_module['block_select_module'] = "Sélectionner le module";
 $lang_module['block_select_function'] = "Sélectionner la fonction";
 $lang_module['block_error_fileconfig_title'] = "Erreur du fichier de configuration de Thème";
 $lang_module['block_error_fileconfig_content'] = "Fichier de configuration de Thème incorrect ou inexistant. Vérifiez votre répertoire de Thème";
-$lang_module['autoinstall'] = "Auto-Installation";
+$lang_module['autoinstall'] = "Installation";
 $lang_module['autoinstall_theme_install'] = "Installation de Thèmes";
 $lang_module['autoinstall_method_none'] = "Sélectionnez:";
 $lang_module['autoinstall_method_install'] = "Installation de Thèmes sur le système";
@@ -118,17 +118,17 @@ $lang_module['autoinstall_theme_error_movefile'] = "Installation automatique imp
 $lang_module['autoinstall_theme_cantunzip'] = "Erreur: impossible de décompresser. Merci de vérifier les permissions (chmod) des répertoires.";
 $lang_module['autoinstall_theme_unzip_filelist'] = "Liste des fichiers décompressés";
 $lang_module['autoinstall_theme_unzip_setuppage'] = "Aller à la gestion de Thèmes.";
-$lang_module['autoinstall_package_select'] = "Sé1ectionner le Thème à paqueter";
-$lang_module['autoinstall_package_noselect'] = "Sé1ectionner un Thème pour paqueter";
+$lang_module['autoinstall_package_select'] = "Sélectionner le Thème à paqueter";
+$lang_module['autoinstall_package_noselect'] = "Sélectionner un Thème pour paqueter";
 $lang_module['autoinstall_package_module_select'] = "Sélectionner le module pour paqueter";
 $lang_module['autoinstall_package_noselect_module'] = "Choisissez 1 module pour paqueter le Thème";
 $lang_module['autoinstall_method_theme_none'] = "Sélectionez le Thème";
 $lang_module['autoinstall_method__module_none'] = "Sélectionnez le module";
 $lang_module['autoinstall_package_noselect_module_theme'] = "Il est obligatoire de choisir le thème et le module pour paqueter";
-$lang_module['setup_layout'] = "Config. de Layout";
+$lang_module['setup_layout'] = "Configuration de Layout";
 $lang_module['setup_module'] = "Module";
 $lang_module['setup_select_layout'] = "Sélectionner le Layout";
-$lang_module['setup_updated_layout'] = "Configuration réussie de Layout!";
+$lang_module['setup_updated_layout'] = "Configuration de Layout avec succès!";
 $lang_module['setup_error_layout'] = "Impossible de configurer le Layout";
 $lang_module['setup_save_layout'] = "Sauver";
 $lang_module['theme_manager'] = "Gestion de Thèmes";

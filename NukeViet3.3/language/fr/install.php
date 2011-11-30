@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:01 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -41,19 +41,19 @@ $lang_module['components'] = "Composants";
 $lang_module['server_request'] = "Paramètres recommandés";
 $lang_module['note'] = "Remarques";
 $lang_module['result'] = "Résultat";
-$lang_module['php_support'] = "Supporter PHP";
+$lang_module['php_support'] = "Suppor de PHP";
 $lang_module['php_version'] = "Version de PHP";
-$lang_module['mysql_support'] = "Supporter MySQL";
+$lang_module['mysql_support'] = "Support de MySQL";
 $lang_module['request'] = "Obligatoire";
 $lang_module['safe_mode'] = "Safe mode";
 $lang_module['required_off'] = "Inactif obligatoire";
-$lang_module['required_on'] = "Supporter obligatoirement";
+$lang_module['required_on'] = "Support obligatoire";
 $lang_module['recommnet'] = "Recommandé";
 $lang_module['request_more'] = "Exigences supplementaires";
 $lang_module['turnoff'] = "Inactif recommandé";
 $lang_module['turnon'] = "Actif recommandé";
-$lang_module['is_support'] = "Supporter recommandé";
-$lang_module['supports_rewrite'] = "Supporter la fonction de rewrite";
+$lang_module['is_support'] = "Support recommandé";
+$lang_module['supports_rewrite'] = "Support de rewrite";
 $lang_module['opendir_support'] = "PHP supporte opendir";
 $lang_module['gd_support'] = "PHP supporte GD";
 $lang_module['session_support'] = "PHP supporte session";
@@ -127,5 +127,12 @@ $lang_module['your_question_empty'] = "Merci de choisir une question secrète";
 $lang_module['answer_empty'] = "Merci de donner la réponse";
 $lang_module['question_note'] = "Vous aurez besoin de question secrète et la réponse au cas où vous oubliez la mot de passe.";
 $lang_module['answer_question_note'] = "Veuillez bien retenir cette réponse.";
+$lang_module['dir_not_writable_ip_files'] = "Impossible d'enregistrer les fichiers dans la répertoire %1\$s";
+$lang_module['s2_winhost_info'] = "Vous utilisez un serveur de Window, la fonction CHMOD ne marchera pas.";
+$lang_module['s2_winhost_info1'] = "Résultats de la vérification";
+$lang_module['s2_winhost_info2'] = "cependant, veuillez être sur que les dossiers listés ci-dessus et ses sous-dossiers soient modifiables avant de passer à <strong>l'étape suivante</strong>, sinon il est possible que le système ne fonctionnera pas";
+$lang_module['s2_winhost_info3'] = "Veuillez accéder au zone d'administration de votre hébergeur et changer la permission de changer les fichiers aux dossiers listes ci-dessus et tous les sous-dossiers et après, cliquez";
+$lang_module['s2_winhost_info4'] = "ici";
+$lang_module['s2_winhost_info5'] = "pour vérifier";
 
 ?>

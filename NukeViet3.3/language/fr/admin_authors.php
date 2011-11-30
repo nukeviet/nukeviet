@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:02 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -34,7 +34,7 @@ $lang_module['position'] = "Fonction";
 $lang_module['regtime'] = "Date de participation";
 $lang_module['is_suspend'] = "Status actuel";
 $lang_module['last_login'] = "Dernière session";
-$lang_module['last_ip'] = "IP";
+$lang_module['last_ip'] = "Par IP";
 $lang_module['browser'] = "Navigateur";
 $lang_module['os'] = "Système d'exploitation";
 $lang_module['admin_info_title1'] = "Infos du compte: %s";
@@ -50,7 +50,7 @@ $lang_module['full_name_incorrect'] = "Vous n'avez pas encore entré le nom de c
 $lang_module['position_incorrect'] = "Vous n'avez pas encore entré la fonction de cet administateur";
 $lang_module['nv_admin_add_info'] = "Pour créer un nouveau compte d'administration, remplissez tous les champs ci-dessous. Vous ne pouvez créer qu'un administrateur inférieur de votre privilège";
 $lang_module['if_level3_selected'] = "Cochez les modules à gérer";
-$lang_module['login_info'] = "de &ldquo;<strong>%1\$d</strong>&rdquo; à &ldquo;<strong>%2\$d</strong>&rdquo; caractères. Utilisez uniquement les lettres latines, chiffres et tiret";
+$lang_module['login_info'] = "Vous devez entrer le nom d'utilisateur, s'il n'y a pas de membre, vous devez créer un membre d'abord.";
 $lang_module['nv_admin_add_result'] = "Infos du nouveau administrateur";
 $lang_module['nv_admin_add_title'] = "Le système a été créé un nouveau compte d'administration avec les infos ci-dessous";
 $lang_module['nv_admin_modules'] = "Gestion de module";
@@ -65,13 +65,13 @@ $lang_module['not_use'] = "non utilisé";
 $lang_module['nv_admin_edit_result'] = "Changer les infos de l'administrateur: %s";
 $lang_module['nv_admin_edit_result_title'] = "Les changements effectués pour le compte de l'administrateur %s";
 $lang_module['show_mail0'] = "Masquer";
-$lang_module['show_mail1'] = "Afficher";
+$lang_module['show_mail1'] = "Montrer";
 $lang_module['field'] = "Domaine";
 $lang_module['old_value'] = "Ancien";
 $lang_module['new_value'] = "Nouveau";
 $lang_module['chg_is_suspend0'] = "Le status actuel: suspendu. Pour Rétablir l'activité de cet administrateur, Remplissez les champs ci-dessous";
 $lang_module['chg_is_suspend1'] = "Le status actuel: actif. Pour suspendre l'activité de cet administrateur, remplissez les champs ci-dessous";
-$lang_module['chg_is_suspend2'] = "Rétablir/Suspendre l'activité";
+$lang_module['chg_is_suspend2'] = "Activer/Suspendre";
 $lang_module['nv_admin_chg_suspend'] = "Changer le status d'activité de l'administrateur &ldquo;<strong>%s</strong>&rdquo;";
 $lang_module['position_info'] = "Le titre de Fonction est utilisé dans la communication des e-mails, des commentaires...";
 $lang_module['susp_reason_empty'] = "Vous n'avez pas donné la raison de la suspension de l'administrateur &ldquo;<strong>%s</strong>&rdquo;";
@@ -135,5 +135,11 @@ $lang_module['rule_user'] = "Utiliser uniquement les caractères a-zA-Z0-9_- pou
 $lang_module['rule_pass'] = "Utiliser uniquement les caractères a-zA-Z0-9_- pour le mot de passe";
 $lang_module['spadmin_add_admin'] = "Autoriser l'administrateur général de changer les droits des administrateurs de module";
 $lang_module['authors_detail_main'] = "Afficher les détails du compte de l'administrateur";
+$lang_module['add_user'] = "Désigner un membre";
+$lang_module['add_select'] = "Sélectionner";
+$lang_module['add_error_choose'] = "Erreur: Vous n'avez pas désigné un membre pour l'administrateur";
+$lang_module['add_error_exist'] = "Erreur: ce membre est un administrateur";
+$lang_module['add_error_notexist'] = "Erreur: ce membre n'existe pas";
+$lang_module['add_error_diff'] = "Une erreur indéfinie est survenue";
 
 ?>

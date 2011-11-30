@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 08, 2011, 05:58:05 PM
+* @Createdate Nov 30, 2011, 02:45:30 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -172,6 +172,7 @@ $lang_global['unlimited'] = "unlimited";
 $lang_global['status'] = "Status";
 $lang_global['actions'] = "Action";
 $lang_global['never'] = "Never";
+$lang_global['page'] = "Page";
 $lang_global['pageprev'] = "Previous page";
 $lang_global['pagenext'] = "Next page";
 $lang_global['langinterface'] = "Language";

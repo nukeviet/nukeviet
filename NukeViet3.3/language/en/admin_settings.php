@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 08, 2011, 05:58:05 PM
+* @Createdate Nov 30, 2011, 02:45:30 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -200,9 +200,13 @@ $lang_module['robots_filename'] = "File name";
 $lang_module['robots_type'] = "Mode";
 $lang_module['robots_type_0'] = "No Access";
 $lang_module['robots_type_1'] = "Not show in the robots.txt file";
-$lang_module['robots_error_writable'] = "Error: The system can not write the robots.txt file";
-$lang_module['searchEngineUniqueID'] = "Google search Engine ID<br />(example: 000329275761967753447:sr7yxqgv294. <a href=\"http://www.google.com/cse/\" target=\"_blank\">Detail</a>)";
-$lang_module['timezoneAuto'] = "As user's PC timezone";
-$lang_module['timezoneByCountry'] = "As the country's timezone of visitor";
+$lang_module['robots_error_writable'] = "Error: The system can not write the robots.txt file, please create a file robots.txt with below content and put into the site parent folder";
+$lang_module['lang_geo'] = "Enable the definition of language according to country";
+$lang_module['lang_geo_config'] = "Configure the function to define language by country";
+$lang_module['searchEngineUniqueID'] = "Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href=\"http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/\" target=\"_blank\">view details</a>)";
+$lang_module['timezoneAuto'] = "By computer of visitor";
+$lang_module['banip_error_write'] = "Error: The system can not write the file, please CHMOD folder <strong>%s</strong> to 0777 or \"Change permission\", you can also create file banip.php with below content in folder <strong>%s</strong>";
+$lang_module['timezoneByCountry'] = "By country of visitor";
+$lang_module['uploadconfig_logo'] = "The logo to be added to images";
 
 ?>

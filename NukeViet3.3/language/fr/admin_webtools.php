@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:02 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -31,7 +31,7 @@ $lang_module['searchEngine'] = "Moteur de recherche";
 $lang_module['searchEngineConfig'] = "Gérer les moteurs de recherches";
 $lang_module['searchEngineName'] = "Moteur de recherche";
 $lang_module['searchEngineActive'] = "Activer";
-$lang_module['searchEngineSelect'] = "Sélectionner les moteurs de recherche";
+$lang_module['searchEngineSelect'] = "Sélectionner la moteur de recherche";
 $lang_module['sitemapModule'] = "Sélectionner module";
 $lang_module['sitemapView'] = "Voir sitemap";
 $lang_module['sitemapSend'] = "Envoyer";
@@ -40,17 +40,13 @@ $lang_module['pleasePingAgain'] = "Vous venez d'envoyer. Attendez un moment";
 $lang_module['searchEngineValue'] = "lien";
 $lang_module['searchEngineFailed'] = "Erreur de lien";
 $lang_module['pingOK'] = "Sitemap est envoyé avec succès. Cette opération peut être refait dans 60 minutes";
-$lang_module['revision_no_support'] = "Erreur, cette fonctionnalité réserve a la version plus récente que 3.0.12";
-$lang_module['revision'] = "Mettre à jour d’après Revision";
-$lang_module['revision_nochange'] = "Aucune mise à jour";
-$lang_module['revision_error'] = "Erreur de connexion au serveur SVN. Réessayez plus tard";
 $lang_module['checkupdate'] = "Vérifier la version";
 $lang_module['checkSystem'] = "Système";
 $lang_module['checkModules'] = "Modules";
 $lang_module['checkContent'] = "Contenu";
 $lang_module['checkValue'] = "Valeur";
-$lang_module['userVersion'] = "Votre version";
-$lang_module['onlineVersion'] = "version la plus récente";
+$lang_module['userVersion'] = "La version installée";
+$lang_module['onlineVersion'] = "La dernière version officielle";
 $lang_module['newVersion_detail'] = "Numéro de Version: %s; Nom: %s; Mettre à jour: %s";
 $lang_module['newVersion_info'] = "Votre système de NukeViet doit être mis à jour a la plus recente version. Cliquez <a href=\"%s\">ici</a> pour télécharger";
 $lang_module['reCheck'] = "Mettre à jour";
@@ -69,9 +65,9 @@ $lang_module['moduleLicense'] = "Droit";
 $lang_module['moduleMode'] = "Circulation";
 $lang_module['moduleModeSys'] = "avec système";
 $lang_module['moduleModeOther'] = "indépendant";
-$lang_module['moduleLink'] = "lien de téléchargement";
+$lang_module['moduleLink'] = "Lien de téléchargement";
 $lang_module['moduleSupport'] = "Site de support";
-$lang_module['checkDate'] = "Mis à jour au";
+$lang_module['checkDate'] = "Mettre à jour au";
 $lang_module['siteDiagnostic'] = "Diagnostic";
 $lang_module['EngineInfo'] = "Infos des moteurs de recherches";
 $lang_module['diagnosticDate'] = "Mettre à jour";
@@ -95,7 +91,7 @@ $lang_module['languageSelect'] = "Toutes les langues";
 $lang_module['check'] = "Vérifier";
 $lang_module['currentDomain'] = "Domaine";
 $lang_module['fromEngine'] = "Moteur de recherche";
-$lang_module['updDate'] = "Mis à jour au";
+$lang_module['updDate'] = "Mettre à jour au";
 $lang_module['mainResult'] = "Résultat";
 $lang_module['myPages'] = "Pages";
 $lang_module['allPages'] = "Totale";
@@ -104,39 +100,6 @@ $lang_module['rank0'] = "Votre site n'est pas dans Top 50";
 $lang_module['Top10'] = "Votre Top 10 pages";
 $lang_module['Top50'] = "Top 50 pages contenant le mot clé";
 $lang_module['isLocalhost'] = "Cet outil ne supporte pas localhost";
-$lang_module['autoupdate_system'] = "Mettre à jour automatiquement";
-$lang_module['autoupdate_get_error'] = "Notification: impossible de vérifier les infos de mise à jour de NukeViet";
-$lang_module['autoupdate_download'] = "Télécharger la mise à jour de NukeViet";
-$lang_module['autoupdate_download_waiting'] = "Veuillez attendre le téléchargement. <br /><br />Si le téléchargement ou la décompression commettent l'erreur, veuillez télécharger le fichier <br /><br /><a title=\"Cliquez pour télécharger\" href=\"%1\$s\">%2\$s</a> <br /><br />décompresser et envoyer dans le dossier install/update/ pour continuer";
-$lang_module['autoupdate_download_error'] = "S'il y a l'erreur du téléchargement ou décompression, téléchargez le fichier <br /><br /><a title=\"Cliquez pour télécharger\" href=\"%1\$s\">%2\$s</a> <br /><br />decompresser et envoyer au dossier install/update/ pour continuer";
-$lang_module['autoupdate_invalidfile'] = "Erreur: fichier zip invalide";
-$lang_module['autoupdate_download_complete'] = "Téléchargement réussi, cliquez sur Vérifier la mise à jour pour continuer";
-$lang_module['autoupdate_form_upload'] = "Il y a la mise à jour. Cliquez sur Vérifier la mise à jour pour continuer";
-$lang_module['autoupdate_check_file'] = "Vérifier la mise à jour";
-$lang_module['autoupdate_error_dir_update'] = "Votre paquette de mise à jour n'est pas conforme, merci de vérifier le dossier install/update";
-$lang_module['autoupdate_change'] = "Vous avez modifie ces fichiers";
-$lang_module['autoupdate_overwrite'] = "Cliquez sur Mettre à jour pour remplacer ces fichiers";
-$lang_module['autoupdate_click_update'] = "Cliquez sur Mettre à jour";
-$lang_module['autoupdate_backupfile'] = "Si vous continuer la mise à jour, le système fait une copie des fichiers modifiés à";
-$lang_module['autoupdate_backupfile_error'] = "Erreur de mise à jour: impossible de faire une copie, merci de vérifier les permissions (chmod)";
-$lang_module['autoupdate'] = "Mettre à jour";
-$lang_module['autoupdate_confirm'] = "Êtes-vous sur de vouloir Mettre à jour";
-$lang_module['autoupdate_error_create_folder'] = "Erreur de mise à jour: impossible de créer les dossiers suivants";
-$lang_module['autoupdate_error_move_file'] = "Erreur de mise à jour: impossible de déplacer les dossiers suivants";
-$lang_module['autoupdate_complete_file'] = "Notifications: déplacement des fichiers réussi";
-$lang_module['autoupdate_complete'] = "Mise à jour reussie";
-$lang_module['autoupdate_complete_error_del_file'] = "Mise à jour réussie. Merci de supprimer le dossier install/update";
-$lang_module['autoupdate_error_data'] = "Erreurs de mise à jour de la base de donnée";
-$lang_module['revision_nosuport'] = "Erreur: la mise à jour selon révision n'est supportée que sur les versions plus recentes que NukeViet 3.1";
-$lang_module['revision_error_cache_file'] = "Erreur: fichier de mise à jour introuvable";
-$lang_module['revision_list_file'] = "Modifications des fichiers";
-$lang_module['revision_add_files'] = "Nouveaux fichiers";
-$lang_module['revision_mod_files'] = "Fichiers modifiés";
-$lang_module['revision_del_files'] = "Fichiers supprimés";
-$lang_module['revision_msg_download'] = "Pour mettre à jour, cliquez sur Télécharger. Veuillez attendre les notifications pour continuer les autres étapes";
-$lang_module['revision_download_files'] = "Télécharger";
-$lang_module['revision_download_error'] = "Erreur de téléchargement";
-$lang_module['revision_config_ftp'] = "Veuillez configurer FTP pour que le système puisse créer et déplacer les fichiers";
 $lang_module['nukevietChange_caption'] = "Infos de mise à jour depuis le projet de NukeViet sur Google Code";
 $lang_module['nukevietChange_upd'] = "Dernière mise à jour au";
 $lang_module['nukevietChange_refresh'] = "Rafraîchir";
@@ -150,7 +113,7 @@ $lang_module['nukevietChange_add'] = "Ajouter";
 $lang_module['nukevietChange_delete'] = "Supprimer";
 $lang_module['config'] = "Configuration";
 $lang_module['autocheckupdate'] = "Activer la mise à jour automatique";
-$lang_module['updatetime'] = "Horaire de la prochaine vérification de mise à jour";
+$lang_module['updatetime'] = "Échéance de vérification";
 $lang_module['clearip_logs'] = "Effacer ip logs";
 
 ?>

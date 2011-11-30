@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:01 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -50,12 +50,12 @@ $lang_global['passwordsincorrect'] = "Mot de passe &ldquo;<strong>%1\$s</strong>
 $lang_global['re_password_empty'] = "Vous n'avez pas entré le mot de passe dans le champs Confirmer le mot de passe";
 $lang_global['securitycodeincorrect'] = "Code de sécurité incorrect";
 $lang_global['loginincorrect'] = "L'identifiant et le mot de passe ne correspondent pas";
-$lang_global['admin_loginsuccessfully'] = "Vous avez réussi vous identifier. Le système vous transférera à l'Administration du site";
+$lang_global['admin_loginsuccessfully'] = "Vous avez réussi à vous identifier. Le système vous transférera à l'Administration du site";
 $lang_global['incorrect_password'] = "Mot de passe incorrect";
 $lang_global['relogin_info'] = "Vous n'êtes pas actif pour une longue durée. Le système vous demande de confirmer le mot de passe. Entrez le mot de passe dans le champs ci-dessous. Cette opération n'est faite que %1\$d fois. Après %1\$d fois, si vous ne pouvez pas donner un bon mot de passe, le système bloquera votre compte d'administration";
 $lang_global['relogin_error_info'] = "%1\$s. Ré-entrez le mot de passe dans la champs ci-dessous. Cette opération ne peut être faite encore %2\$d fois. Après %2\$d fois, si vous ne pouvez pas donner un bon mot de passe, le système bloquera votre compte d'administration";
 $lang_global['admin_page'] = "Administration";
-$lang_global['admin_module_sector'] = "Module";
+$lang_global['admin_module_sector'] = "Gestion de Module";
 $lang_global['adminlogin'] = "Connexion à l'Administration";
 $lang_global['module_for_admin'] = "Section réservé à l'administrateur";
 $lang_global['username'] = "Identifiant";
@@ -172,6 +172,7 @@ $lang_global['unlimited'] = "Illimité";
 $lang_global['status'] = "Status";
 $lang_global['actions'] = "Action";
 $lang_global['never'] = "Jamais";
+$lang_global['page'] = "Page";
 $lang_global['pageprev'] = "Page précédente";
 $lang_global['pagenext'] = "Page suivante";
 $lang_global['langinterface'] = "Langue";
@@ -216,7 +217,7 @@ $lang_global['google_openid_login'] = "Google";
 $lang_global['yahoo_openid_login'] = "Yahoo";
 $lang_global['breakcrum'] = "Vous êtes à";
 $lang_global['admin_access_denied1'] = "Désolé! Le système ne permet pas la connection des administrateur en ce moment";
-$lang_global['admin_access_denied2'] = "Désolé. La connection des administrateurs de module n'est pas permis en ce moment";
+$lang_global['admin_access_denied2'] = "Désolé. La connexion des administrateurs de module n'est pas permis en ce moment";
 $lang_global['error_uploadNameEmpty'] = "Erreur: nom du fichier invalide";
 $lang_global['error_uploadSizeEmpty'] = "Erreur: taille de fichier indéfinie";
 $lang_global['error_upload_ini_size'] = "Erreur: Taille de fichier dépasse le maximum défini dans php.ini";
@@ -233,10 +234,11 @@ $lang_global['error_upload_max_user_size'] = "Erreur: Taille du fichier dépasse
 $lang_global['error_upload_not_image'] = "Erreur: format de l'image indéfini";
 $lang_global['error_upload_image_failed'] = "Erreur: image invalide";
 $lang_global['error_upload_image_width'] = "Erreur: taille de l'image dépasse le maximum permis. Largeur maximum est de %d pixels";
-$lang_global['error_upload_image_height'] = "Erreur: Taille del'image dépasse le maximum. Hauteur maximale est de %d pixels";
-$lang_global['error_upload_forbidden'] = "Erreur: Dossier contenant les images nin-défini";
+$lang_global['error_upload_image_height'] = "Erreur: Taille de l'image dépasse le maximum. Hauteur maximale est de %d pixels";
+$lang_global['error_upload_forbidden'] = "Erreur: Dossier contenant les images non-défini";
 $lang_global['error_upload_writable'] = "Erreur: Dossier  %s ne permis pas l'ạout de fichier. Merci de revoir les permissions (chmod 777)";
 $lang_global['error_upload_urlfile'] = "Erreur: lien incorrect";
 $lang_global['error_upload_url_notfound'] = "Erreur: impossible de prendre le fichier depuis votre lien";
+$lang_global['in_groups'] = "Groupes  de membres";
 
 ?>

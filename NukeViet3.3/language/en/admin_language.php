@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 08, 2011, 05:58:05 PM
+* @Createdate Nov 30, 2011, 02:45:30 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -82,5 +82,8 @@ $lang_module['nv_check_type_0'] = "Check non-translated language";
 $lang_module['nv_check_type_1'] = "Check the same language";
 $lang_module['nv_check_type_2'] = "Check all";
 $lang_module['nv_lang_check_title'] = "Check the language has not been translated";
+$lang_module['countries'] = "Language by country";
+$lang_module['countries_name'] = "Country";
+$lang_module['nv_admin_sl3'] = "Select a language";
 
 ?>

@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:02 PM
+* @Createdate Nov 30, 2011, 02:45:43 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -97,7 +97,7 @@ $lang_module['find_resource'] = "Selon la source";
 $lang_module['find_all'] = "Tout";
 $lang_module['search_modul_title'] = "News";
 $lang_module['type_title'] = "Méthode de recherche";
-$lang_module['finter_title'] = "Horaire";
+$lang_module['finter_title'] = "Depuis:";
 $lang_module['source_title'] = "Source";
 $lang_module['keywords'] = "Mot clé";
 $lang_module['member_view'] = "Cette section est réservée uniquement aux membres!";

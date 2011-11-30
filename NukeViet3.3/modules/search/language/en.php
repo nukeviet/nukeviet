@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 08, 2011, 05:58:05 PM
+* @Createdate Nov 30, 2011, 02:45:30 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -37,7 +37,7 @@ $lang_module['view_all_title'] = "View all results";
 $lang_module['pages_title'] = "Page";
 $lang_module['logic_and'] = "All words";
 $lang_module['logic_or'] = "At least 1 word";
-$lang_module['searchQueryError'] = "Your search term must be at least three %s characters.";
-$lang_module['chooseModule'] = "Please choose the module";
+$lang_module['searchQueryError'] = "The keyword must content at least %s characters";
+$lang_module['chooseModule'] = "Select the search section";
 
 ?>

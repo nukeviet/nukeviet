@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 08, 2011, 05:58:05 PM
+* @Createdate Nov 30, 2011, 02:45:30 PM
 */
 
  if (!defined( 'NV_MAINFILE' )) {
@@ -128,5 +128,11 @@ $lang_module['answer_empty'] = "Please give an answer";
 $lang_module['question_note'] = "You should need security question and answer question if you have been lost your password";
 $lang_module['answer_question_note'] = "You must remember this answer in response to the system.";
 $lang_module['dir_not_writable_ip_files'] = "Can not write files in %1\$s folder";
+$lang_module['s2_winhost_info'] = "You are using window hosting, the function CHMOD will not be functional";
+$lang_module['s2_winhost_info1'] = "Verification results";
+$lang_module['s2_winhost_info2'] = "however, be sure all listed folders and sub-folders are writable before go to <strong>Next step</strong>, if not the system may be not functional";
+$lang_module['s2_winhost_info3'] = "Please access to hosting administration to CHMOD all listed folders and sub-folders then click";
+$lang_module['s2_winhost_info4'] = "here";
+$lang_module['s2_winhost_info5'] = "to verify";
 
 ?>

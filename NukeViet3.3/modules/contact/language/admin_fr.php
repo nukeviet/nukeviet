@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jul 06, 2011, 04:38:02 PM
+* @Createdate Nov 30, 2011, 02:45:42 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -22,7 +22,7 @@ $lang_module['edit_title'] = "Prévisualiser";
 $lang_module['add_row_title'] = "Ajouter un département";
 $lang_module['list_row_title'] = "Départements";
 $lang_module['err_row_title'] = "Inexistant";
-$lang_module['part_row_title'] = "Titre";
+$lang_module['part_row_title'] = "Département";
 $lang_module['email_row_title'] = "E-mail";
 $lang_module['note_row_title'] = "Note";
 $lang_module['bt_save_row_title'] = "Sauver";

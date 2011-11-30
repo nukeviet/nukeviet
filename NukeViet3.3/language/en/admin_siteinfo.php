@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 08, 2011, 05:58:05 PM
+* @Createdate Nov 30, 2011, 02:45:30 PM
 */
 
  if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
@@ -150,5 +150,7 @@ $lang_module['filter_check_log'] = "Access region %s failed";
 $lang_module['filter_lang_asc'] = "ascending";
 $lang_module['filter_lang_desc'] = "descending";
 $lang_module['filter_order_by'] = "Sort by %s order";
+$lang_module['log_empty'] = "Delete all";
+$lang_module['log_empty_log'] = "Delete all system logs";
 
 ?>
