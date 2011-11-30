@@ -171,19 +171,18 @@ if (!nv_function_exists('nv_menu_site'))
 
         $list_cats = array();
         $sql = "SELECT `id`, `parentid`, `title`, `link`, `note`, `subitem`, `who_view`, `groups_view` FROM `" . NV_PREFIXLANG . "_menu_rows` WHERE `status`=1 AND `mid` = " . $block_config['menuid'] . " ORDER BY `weight` ASC";
-        $result = $db->sql_query($sql);
-        while ($row = $db->sql_fetchrow($result))
+        $list = nv_db_cache($sql, '', 'menu');
+        foreach ($list as $row)
         {
-            $current_menu = "";
-            $base_url_replace = str_replace("/", "\/", NV_BASE_SITEURL);
-
-            if ((preg_match("/^" . $base_url_replace . "index\.php\?" . NV_LANG_VARIABLE . "\=" . NV_LANG_DATA . "\&" . NV_NAME_VARIABLE . "\=" . $module_name . "$/", $row['link']) or preg_match("/^" . $base_url_replace . "index\.php\?" . NV_LANG_VARIABLE . "\=" . NV_LANG_DATA . "\&" . NV_NAME_VARIABLE . "\=" . $module_name . "\&/", $row['link'])) and ($row['parentid'] == 0))
-            {
-                $current_menu = " class=\"current\"";
-            }
-
             if (nv_set_allow($row['who_view'], $row['groups_view']))
             {
+                $current_menu = "";
+                //$base_url_replace = str_replace("/", "\/", NV_BASE_SITEURL);
+
+                //if ((preg_match("/^" . $base_url_replace . "index\.php\?" . NV_LANG_VARIABLE . "\=" . NV_LANG_DATA . "\&" . NV_NAME_VARIABLE . "\=" . $module_name . "$/", $row['link']) or preg_match("/^" . $base_url_replace . "index\.php\?" . NV_LANG_VARIABLE . "\=" . NV_LANG_DATA . "\&" . NV_NAME_VARIABLE . "\=" . $module_name . "\&/", $row['link'])) and ($row['parentid'] == 0))
+                //{
+                //    $current_menu = " class=\"current\"";
+                //}
                 $list_cats[$row['id']] = array('id' => $row['id'], 'parentid' => $row['parentid'], //
                     'subcats' => $row['subitem'], //
                     'title' => $row['title'], //

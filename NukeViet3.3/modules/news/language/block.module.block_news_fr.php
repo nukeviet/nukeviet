@@ -16,7 +16,7 @@ $lang_translator['author'] ="";
 $lang_translator['createdate'] ="";
 $lang_translator['copyright'] ="";
 $lang_translator['info'] ="Language translated from http://translate.nukeviet.vn";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['langtype'] ="lang_block";
 
 $lang_block['numrow'] = "Nombre d'articles affichés";
 
