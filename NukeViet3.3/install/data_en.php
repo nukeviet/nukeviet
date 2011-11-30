@@ -170,7 +170,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (15, 'modern', 'banners', 'global.banners.php', 'Top banner', '', 'no_title', '[TOPADV]', 0, 1, '0', 1, 1, 'a:1:{s:12:\"idplanbanner\";i:1;}'),
 (16, 'modern', 'menu', 'global.menu_theme_modern.php', 'global menu theme modern', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, ''),
 (17, 'default', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, ''),
-(18, 'modern', 'global', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:\"htmlcontent\";s:216:\" © Copyright NukeViet 3. All right reserved.</br> Powered by <a href=\"http://nukeviet.vn/\" title=\"NukeViet CMS\">NukeViet CMS</a>. Design by <a href=\"http://vinades.vn/\" title=\"VINADES.,JSC\">VINADES.,JSC</a>\";}'),
+(18, 'modern', 'global', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:\"htmlcontent\";s:216:\" © Copyright NukeViet 3. All right reserved.<br  /> Powered by <a href=\"http://nukeviet.vn/\" title=\"NukeViet CMS\">NukeViet CMS</a>. Design by <a href=\"http://vinades.vn/\" title=\"VINADES.,JSC\">VINADES.,JSC</a>\";}'),
 (19, 'default', 'global', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:\"htmlcontent\";s:231:\"<p class=\"footer\"> © Copyright NukeViet 3. All right reserved.</p><p> Powered by <a href=\"http://nukeviet.vn/\" title=\"NukeViet CMS\">NukeViet CMS</a>. Design by <a href=\"http://vinades.vn/\" title=\"VINADES.,JSC\">VINADES.,JSC</a></p>\";}')";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight`";
