@@ -61,6 +61,11 @@ if ( $nv_Request->get_string( 'checksess', 'get' ) == md5( "downloadallfile" . s
         {
             $allowfolder[] = NV_ROOTDIR . "/js/install/data_en.php";
         }
+		
+        if ( file_exists( NV_ROOTDIR . "/includes/phpmailer/language/phpmailer.lang-" . $dirlang . ".php" ) )
+        {
+            $allowfolder[] = NV_ROOTDIR . "/includes/phpmailer/language/phpmailer.lang-" . $dirlang . ".php";
+        }
         
         $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $dirlang . '.zip';
         
