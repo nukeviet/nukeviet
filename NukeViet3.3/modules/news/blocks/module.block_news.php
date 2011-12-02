@@ -116,7 +116,7 @@ if (!nv_function_exists('nv_news_block_news'))
 
 if (defined('NV_SYSTEM'))
 {
-    global $site_mods, $module_name, $module_array_cat, $module_array_cat;
+    global $site_mods, $module_name, $global_array_cat, $module_array_cat;
     $module = $block_config['module'];
     if (isset($site_mods[$module]))
     {
