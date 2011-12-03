@@ -33,6 +33,7 @@ if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
             );
         }
         $html = "<ul>\n";
+		$modvalues['funcs'] = empty( $modvalues['funcs'] ) ? array() : $modvalues['funcs'];
         foreach ( $modvalues['funcs'] as $key => $sub_item )
         {
             if ( $sub_item['in_submenu'] == 1 and in_array( $key, $in_submenu_users ) )
@@ -105,7 +106,7 @@ if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
                 $array_menu = array( 
                     "title" => $modvalues['custom_title'], "class" => $modname, "current" => $module_current, "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname, "submenu" => "" 
                 );
-                $mod_file = $modvalues['module_file'];
+                $mod_file = empty( $modvalues['module_file'] ) ? "" : $modvalues['module_file'];
                 $array_m_html_item = array( 
                     'news', 'shops', 'weblinks', 'download'
                 );
@@ -159,6 +160,7 @@ if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
                 else
                 {
                     $sub_nav_item = array();
+					$modvalues['funcs'] = empty( $modvalues['funcs'] ) ? array() : $modvalues['funcs'];
                     foreach ( $modvalues['funcs'] as $key => $sub_item )
                     {
                         if ( $sub_item['in_submenu'] == 1 )
