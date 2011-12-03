@@ -12,7 +12,7 @@ if (!defined('NV_SYSTEM') or !defined('NV_MAINFILE'))
 
 function nv_site_theme($contents)
 {
-    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op, $db, $mod_title, $my_head, $my_footer, $client_info, $db_config;
+    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $module_name, $module_info, $op, $mod_title, $my_head, $my_footer;
 
     if (!file_exists(NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/layout." . $module_info['layout_funcs'][$op] . ".tpl"))
     {
