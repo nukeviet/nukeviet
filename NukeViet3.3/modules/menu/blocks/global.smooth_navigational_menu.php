@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES., JSC (contact@vinades.vn)
@@ -10,7 +11,6 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
 {
-
     function nv_html_sub_menu_mod_users ( $modvalues )
     {
         if ( defined( 'NV_IS_USER' ) )
@@ -33,7 +33,7 @@ if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
             );
         }
         $html = "<ul>\n";
-		$modvalues['funcs'] = empty( $modvalues['funcs'] ) ? array() : $modvalues['funcs'];
+		if( empty( $modvalues['funcs'] )) continue;
         foreach ( $modvalues['funcs'] as $key => $sub_item )
         {
             if ( $sub_item['in_submenu'] == 1 and in_array( $key, $in_submenu_users ) )
@@ -97,7 +97,7 @@ if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
         $xtpl->assign( 'BLOCK_THEME', $block_theme );
         $xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA );
         $xtpl->assign( 'THEME_RSS_INDEX_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=rss" );
-        
+        		
         foreach ( $site_mods as $modname => $modvalues )
         {
             if ( ! empty( $modvalues['in_menu'] ) )
@@ -160,7 +160,7 @@ if ( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
                 else
                 {
                     $sub_nav_item = array();
-					$modvalues['funcs'] = empty( $modvalues['funcs'] ) ? array() : $modvalues['funcs'];
+					if( empty( $modvalues['funcs'] )) continue;
                     foreach ( $modvalues['funcs'] as $key => $sub_item )
                     {
                         if ( $sub_item['in_submenu'] == 1 )
