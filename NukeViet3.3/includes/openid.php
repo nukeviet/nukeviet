@@ -42,7 +42,7 @@ $openid_servers['myopenid'] = array( //
     );
 
 $openid_servers['nukeviet'] = array( //
-    'identity' => 'https://nukeviet.vn/openid/index.php', //
+    'identity' => 'http://openid.nukeviet.vn/index.php', //
     'required' => array( //
     'email' => 'contact/email', //
     'nickname' => 'namePerson/friendly', //
