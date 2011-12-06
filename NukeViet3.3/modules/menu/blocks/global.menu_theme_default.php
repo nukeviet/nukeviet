@@ -10,7 +10,6 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! nv_function_exists( 'nv_menu_theme_default' ) )
 {
-
     function nv_menu_theme_default ( $block_config )
     {
         global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid;
@@ -36,7 +35,7 @@ if ( ! nv_function_exists( 'nv_menu_theme_default' ) )
         
         foreach ( $site_mods as $modname => $modvalues )
         {
-            if ( ! empty( $modvalues['in_menu'] ) )
+            if ( ! empty( $modvalues['in_menu'] ) and ! empty( $modvalues['funcs'] ) )
             {
                 $module_current = ( $modname == $module_name ) ? ' class="current"' : '';
                 $aryay_menu = array( 

@@ -15,7 +15,7 @@ $xtpl = new XTemplate( "block_newscenter.tpl", NV_ROOTDIR . "/themes/" . $module
 $xtpl->assign( 'lang', $lang_module );
 
 $sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 ORDER BY `publtime` DESC LIMIT 0 , 4";
-$list = nv_db_cache( $sql, 'id', $module_data );
+$list = nv_db_cache( $sql, 'id', $module_name );
 
 $i = 1;
 foreach ( $list as $row )
