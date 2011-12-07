@@ -371,7 +371,7 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $global_array_cat, $my_head, $lang_global, $user_info, $admin_info, $catid;
     if ( ! defined( 'SHADOWBOX' ) )
     {
-        $my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+        $my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
         $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
         $my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
         define( 'SHADOWBOX', true );

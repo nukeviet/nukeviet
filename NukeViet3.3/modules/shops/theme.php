@@ -326,7 +326,7 @@ function detail_product($data_content, $data_unit, $data_comment, $num_comment, 
     global $module_info, $lang_module, $module_file, $global_config, $module_name, $my_head, $pro_config, $module_data;
     if (!defined('SHADOWBOX'))
     {
-        $my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+        $my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
         $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
         $my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
         define('SHADOWBOX', true);
