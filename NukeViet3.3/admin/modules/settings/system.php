@@ -121,15 +121,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 
     $array_config_global['cookie_prefix'] = filter_text_input( 'cookie_prefix', 'post', '', 1, 255 );
     $array_config_global['session_prefix'] = filter_text_input( 'session_prefix', 'post', '', 1, 255 );
-    $array_config_global['googleAnalyticsID'] = filter_text_input( 'googleAnalyticsID', 'post', '', 1, 20 );
-    if ( ! preg_match( '/^UA-\d{4,}-\d+$/', $array_config_global['googleAnalyticsID'] ) ) $array_config_global['googleAnalyticsID'] = "";
-    $array_config_global['googleAnalyticsSetDomainName'] = $nv_Request->get_int( 'googleAnalyticsSetDomainName', 'post' );
     $array_config_global['searchEngineUniqueID'] = filter_text_input( 'searchEngineUniqueID', 'post', '' );
     if ( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_global['searchEngineUniqueID'] ) ) $array_config_global['searchEngineUniqueID'] = "";
 
     $array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
-    $array_config_global['online_upd'] = $nv_Request->get_int( 'online_upd', 'post' );
-    $array_config_global['statistic'] = $nv_Request->get_int( 'statistic', 'post' );
     $array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
     $array_config_global['optActive'] = $nv_Request->get_int( 'optActive', 'post' );
     $array_config_global['getloadavg'] = $nv_Request->get_int( 'getloadavg', 'post' );
@@ -177,8 +172,6 @@ while ( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 
 $lang_multi = $array_config_global['lang_multi'];
 $array_config_global['gzip_method'] = ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '';
-$array_config_global['online_upd'] = ( $array_config_global['online_upd'] ) ? ' checked="checked"' : '';
-$array_config_global['statistic'] = ( $array_config_global['statistic'] ) ? ' checked="checked"' : '';
 $array_config_global['lang_multi'] = ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '';
 $array_config_global['str_referer_blocker'] = ( $array_config_global['str_referer_blocker'] ) ? ' checked="checked"' : '';
 $array_config_global['getloadavg'] = ( $array_config_global['getloadavg'] ) ? ' checked="checked"' : '';
@@ -259,14 +252,6 @@ foreach ( $timezone_array as $site_timezone_i )
     $xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $array_config_global['site_timezone'] ) ? "selected='selected'" : "" );
     $xtpl->assign( 'TIMEZONELANGVALUE', $site_timezone_i );
     $xtpl->parse( 'main.opsite_timezone' );
-}
-
-for ( $i = 0; $i < 3; ++$i )
-{
-    $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_SELECTED', ( $array_config_global['googleAnalyticsSetDomainName'] == $i ) ? ' selected="selected"' : '' );
-    $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_VALUE', $i );
-    $xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_TITLE', $lang_module['googleAnalyticsSetDomainName_' . $i] );
-    $xtpl->parse( 'main.googleAnalyticsSetDomainName' );
 }
 
 $xtpl->parse( 'main' );

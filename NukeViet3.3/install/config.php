@@ -27,7 +27,7 @@ $global_config['cookie_prefix'] = "";
 $global_config['session_prefix'] = "";
 $global_config['sitekey'] = "";
 
-$global_config['site_timezone'] = "Asia/Saigon";
+$global_config['site_timezone'] = "byCountry";
 $global_config['gzip_method'] = 1;
 $global_config['is_url_rewrite'] = 1;
 $global_config['rewrite_endurl'] = "/";
@@ -45,5 +45,5 @@ $global_config['site_theme'] = "modern";
 $global_config['gfx_chk'] = 3;
 
 $global_config['version'] = "3.3.05"; //NUKEVIET 3.3 Official
-$global_config['revision'] = 1475;
+$global_config['revision'] = 1488;
 ?>

@@ -179,26 +179,6 @@
         <tbody class="second">
             <tr>
                 <td>
-                    <strong>{LANG.online_upd}</strong>
-                </td>
-                <td>
-                    <input type="checkbox" value="1" name="online_upd" {DATA.online_upd} />
-                </td>
-            </tr>
-        </tbody>
-        <tbody>
-            <tr>
-                <td>
-                    <strong>{LANG.statistic}</strong>
-                </td>
-                <td>
-                    <input type="checkbox" value="1" name="statistic" {DATA.statistic} />
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
                     <strong>{LANG.optActive}</strong>
                 </td>
                 <td>
@@ -271,30 +251,6 @@
                 </td>
                 <td>
                     <input type="text" name="session_prefix" value="{DATA.session_prefix}" style="width: 450px"/>
-                </td>
-            </tr>
-        </tbody>
-        <tbody>
-            <tr>
-                <td>
-                    <strong>{LANG.googleAnalyticsID}</strong>
-                </td>
-                <td>
-                    <input type="text" name="googleAnalyticsID" value="{DATA.googleAnalyticsID}" style="width: 450px" maxlength="20" />
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
-                    <strong>{LANG.googleAnalyticsSetDomainName_title}</strong>
-                </td>
-                <td>
-                    <select name="googleAnalyticsSetDomainName">
-                        <!-- BEGIN: googleAnalyticsSetDomainName -->
-						<option value="{GOOGLEANALYTICSSETDOMAINNAME_VALUE}"{GOOGLEANALYTICSSETDOMAINNAME_SELECTED}>{GOOGLEANALYTICSSETDOMAINNAME_TITLE}</option>
-                        <!-- END: googleAnalyticsSetDomainName -->
-                    </select>
                 </td>
             </tr>
         </tbody>

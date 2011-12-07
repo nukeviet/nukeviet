@@ -35,6 +35,7 @@ $lang_module['googleAnalyticsSetDomainName_2'] = "Nhiều Domain cấp cao chạ
 $lang_module['googleAnalyticsID'] = "ID tài khoản Google Analytics<br />(Có dạng UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">xem chi tiết</a>)";
 $lang_module['global_config'] = "Cấu hình chung";
 $lang_module['site_config'] = "Cấu hình site";
+$lang_module['global_statistics'] = "Cấu hình thống kê";
 $lang_module['lang_site_config'] = "Cấu hình site Theo ngôn ngữ: %s";
 $lang_module['bots_config'] = "Máy chủ tìm kiếm";
 $lang_module['optActive'] = "Kích hoạt chức năng tối ưu site";
@@ -94,6 +95,7 @@ $lang_module['lang_geo'] = "Kích hoạt chức năng xác định ngôn ngữ t
 $lang_module['lang_geo_config'] = "Cấu hình chức năng xác định ngôn ngữ theo quốc gia";
 $lang_module['site_lang'] = "Ngôn ngữ mặc định";
 $lang_module['site_timezone'] = "Múi giờ của site";
+$lang_module['statistics_timezone'] = "Múi giờ dùng khi thống kê truy cập";
 $lang_module['date_pattern'] = "Kiểu hiển thị ngày tháng năm";
 $lang_module['time_pattern'] = "Kiểu hiển thị giờ phút";
 $lang_module['online_upd'] = "Kích hoạt tiện ích đếm số người online";

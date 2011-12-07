@@ -81,7 +81,7 @@ elseif ($step == 2)
         $array_dir[] = NV_DATADIR . "/" . $file_i;
     }
     $array_dir[] = $file_config_temp;
-		
+
     if (!empty($sys_info['supports_rewrite']))
     {
         if ($sys_info['supports_rewrite'] == "rewrite_mode_apache")
@@ -153,7 +153,7 @@ elseif ($step == 2)
             $global_config['ftp_check_login'] = $ftp_check_login;
         }
     }
-	
+
     $nextstep = 1;
     $array_dir_check = array();
     foreach ($array_dir as $dir)
@@ -568,6 +568,7 @@ elseif ($step == 6)
             $sql = "INSERT INTO `" . $db_config['prefix'] . "_authors` (`admin_id`, `editor`, `lev`, `files_level`, `position`, `addtime`, `edittime`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) VALUES(" . $userid . ", 'ckeditor', 1, 'adobe,application,archives,audio,documents,flash,images,real,video|1|1|1', 'Administrator', 0, 0, 0, '', '', 0, '', '')";
             if ($userid > 0 and $db->sql_query($sql))
             {
+                $statistics_timezone = floor(NV_SITE_TIMEZONE_OFFSET / 3600);
                 $sql = array();
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'site_email', " . $db->dbescape_string($global_config['site_email']) . ")";
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'error_send_email', " . $db->dbescape_string($global_config['site_email']) . ")";
@@ -575,6 +576,7 @@ elseif ($step == 6)
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'cookie_prefix', " . $db->dbescape_string($global_config['cookie_prefix']) . ")";
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'session_prefix', " . $db->dbescape_string($global_config['session_prefix']) . ")";
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'site_timezone', " . $db->dbescape_string($global_config['site_timezone']) . ")";
+                $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'statistics_timezone', " . $db->dbescape_string($statistics_timezone) . ")";
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'proxy_blocker', " . $db->dbescape_string($global_config['proxy_blocker']) . ")";
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'str_referer_blocker', " . $db->dbescape_string($global_config['str_referer_blocker']) . ")";
                 $sql[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'lang_multi', " . $db->dbescape_string($global_config['lang_multi']) . ")";
