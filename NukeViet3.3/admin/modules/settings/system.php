@@ -90,7 +90,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         $array_config_global['site_lang'] = $site_lang;
     }
 
-    $site_timezone = filter_text_input( 'site_timezone', 'post', '', 1, 255 );
+    $site_timezone = filter_text_input( 'site_timezone', 'post', '', 0, 255 );
     if ( empty( $site_timezone ) or ( ! empty( $site_timezone ) and ( in_array( $site_timezone, $timezone_array ) or $site_timezone == "byCountry" ) ) )
     {
         $array_config_global['site_timezone'] = $site_timezone;
@@ -252,6 +252,7 @@ $xtpl->assign( 'TIMEZONESELECTED', ( $array_config_global['site_timezone'] == "b
 $xtpl->assign( 'TIMEZONELANGVALUE', $lang_module['timezoneByCountry'] );
 $xtpl->parse( 'main.opsite_timezone' );
 
+sort($timezone_array);
 foreach ( $timezone_array as $site_timezone_i )
 {
     $xtpl->assign( 'TIMEZONEOP', $site_timezone_i );
