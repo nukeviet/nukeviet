@@ -66,13 +66,10 @@ else
     {
         if ($site_lang != $cookie)
             $nv_Request->set_Cookie('u_lang', $site_lang, NV_LIVE_COOKIE_TIME);
-        define('NV_LANG_INTERFACE', $site_lang);
-        define('NV_LANG_DATA', $site_lang);
     }
     elseif (preg_match("/^[a-z]{2}$/", $cookie) and ( in_array($cookie, $global_config['allow_sitelangs'])) and file_exists(NV_ROOTDIR . "/language/" . $cookie . "/global.php"))
     {
-        define('NV_LANG_INTERFACE', $cookie);
-        define('NV_LANG_DATA', $cookie);
+    	$site_lang = $cookie;
     }
     else
     {
@@ -87,8 +84,9 @@ else
             }
         }
         $nv_Request->set_Cookie('u_lang', $site_lang, NV_LIVE_COOKIE_TIME);
-        Header("Location: " . NV_MY_DOMAIN . NV_BASE_SITEURL);
-        exit();
     }
+    define('NV_LANG_INTERFACE', $site_lang);
+    define('NV_LANG_DATA', $site_lang);
+    unset($cookie, $site_lang);
 }
 ?>
