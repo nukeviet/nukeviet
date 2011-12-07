@@ -57,20 +57,6 @@ require_once ( NV_ROOTDIR . "/includes/constants.php" );
 require_once ( NV_ROOTDIR . '/includes/timezone.php' );
 
 define( 'NV_CURRENTTIME', time() );
-define( 'NV_CURRENTYEAR_FNUM', date( 'Y', NV_CURRENTTIME ) ); //2009
-define( 'NV_CURRENTYEAR_2NUM', date( 'y', NV_CURRENTTIME ) ); //09
-define( 'NV_CURRENTMONTH_NUM', date( 'm', NV_CURRENTTIME ) ); //01-12
-define( 'NV_CURRENTMONTH_FTXT', date( 'F', NV_CURRENTTIME ) ); //January - December
-define( 'NV_CURRENTMONTH_STXT', date( 'M', NV_CURRENTTIME ) ); //Jan - Dec
-define( 'NV_CURRENTDAY_2NUM', date( 'd', NV_CURRENTTIME ) ); //01 - 31
-define( 'NV_CURRENTDAY_1NUM', date( 'j', NV_CURRENTTIME ) ); //1 - 31
-define( 'NV_CURRENT12HOUR_2NUM', date( 'h', NV_CURRENTTIME ) ); //00-12
-define( 'NV_CURRENT12HOUR_1NUM', date( 'g', NV_CURRENTTIME ) ); //0-12
-define( 'NV_CURRENT24HOUR_2NUM', date( 'H', NV_CURRENTTIME ) ); //00-23
-define( 'NV_CURRENT24HOUR_1NUM', date( 'G', NV_CURRENTTIME ) ); //0-23
-define( 'NV_CURRENTMIN_2NUM', date( 'i', NV_CURRENTTIME ) ); //00-59
-define( 'NV_DEL_ONLINE_TIME', ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME ) ); //Thoi gian xoa tinh trang online
-
 
 $global_config['log_errors_list'] = NV_LOG_ERRORS_LIST;
 $global_config['display_errors_list'] = NV_DISPLAY_ERRORS_LIST;

@@ -38,11 +38,11 @@ if ( ! nv_function_exists( 'nv_block_counter' ) )
         
         while ( list( $c_type, $c_val, $c_count ) = $db->sql_fetchrow( $query ) )
         {
-            if ( $c_type == 'day' and $c_val == NV_CURRENTDAY_2NUM )
+            if ( $c_type == 'day' and $c_val == date( 'd', NV_CURRENTTIME ) )
             {
                 $xtpl->assign( 'COUNT_DAY', $c_count );
             }
-            elseif ( $c_type == 'month' and $c_val == NV_CURRENTMONTH_STXT )
+            elseif ( $c_type == 'month' and $c_val == date( 'M', NV_CURRENTTIME ) )
             {
                 $xtpl->assign( 'COUNT_MONTH', $c_count );
             }
@@ -52,7 +52,7 @@ if ( ! nv_function_exists( 'nv_block_counter' ) )
             }
         }
         
-        $sql = "SELECT `uid`, `full_name` FROM `" . NV_SESSIONS_GLOBALTABLE . "` WHERE `onl_time` >= " . NV_DEL_ONLINE_TIME;
+        $sql = "SELECT `uid`, `full_name` FROM `" . NV_SESSIONS_GLOBALTABLE . "` WHERE `onl_time` >= " . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME);
         $query = $db->sql_query( $sql );
         
         $count_online = $users = $bots = $guests = 0;

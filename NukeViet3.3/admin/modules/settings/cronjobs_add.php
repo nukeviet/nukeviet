@@ -82,11 +82,11 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 }
 else
 {
-    $min = intval( NV_CURRENTMIN_2NUM );
-    $hour = NV_CURRENT24HOUR_1NUM;
-    $day = NV_CURRENTDAY_1NUM;
-    $month = intval( NV_CURRENTMONTH_NUM );
-    $year = NV_CURRENTYEAR_FNUM;
+    $min = date( 'i', NV_CURRENTTIME );
+    $hour = date( 'G', NV_CURRENTTIME );
+    $day = date( 'j', NV_CURRENTTIME );
+    $month = date( 'm', NV_CURRENTTIME );
+    $year = date( 'Y', NV_CURRENTTIME );
     $interval = 60;
     $cron_name = $run_file = $run_func = $params = "";
     $del = 0;
