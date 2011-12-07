@@ -79,7 +79,7 @@ if (preg_match($global_config['check_module'], $module_name))
             $op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
             if ( empty( $op ) ) $op = "main";
 
-            if ( ! preg_match( "/^[a-z0-9\-\/]+$/i", $op ) )
+            if ( ! preg_match( "/^[a-z0-9\-\_\/]+$/i", $op ) )
             {
                 Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
                 die();
