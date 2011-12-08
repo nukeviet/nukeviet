@@ -77,61 +77,27 @@ if (!defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cooki
 
 $site_timezone = ($global_config['site_timezone'] == "byCountry") ? $countries[$client_info['country']][2] : $global_config['site_timezone'];
 
-if ($site_timezone == '' and defined('NV_CLIENT_TIMEZONE_NAME'))
+if ($site_timezone == '')
 {
-    $site_timezone = NV_CLIENT_TIMEZONE_NAME;
+    $site_timezone = defined('NV_CLIENT_TIMEZONE_NAME') ? NV_CLIENT_TIMEZONE_NAME : $global_config['statistics_timezone'];
+    if ($site_timezone == '')
+    {
+        $site_timezone = 'Asia/Saigon';
+    }
 }
 
-if ($site_timezone != '')
+date_default_timezone_set($site_timezone);
+define('NV_SITE_TIMEZONE_GMT_NAME', preg_replace("/^([\+|\-]{1}\d{2})(\d{2})$/", "$1:$2", date("O")));
+if (strcasecmp(date_default_timezone_get(), $site_timezone) == 0)
 {
-    $ok = false;
-    if (!$ok and $sys_info['ini_set_support'] and !function_exists('date_default_timezone_set'))
-    {
-        ini_set('date.timezone', $site_timezone);
-        if (strcasecmp(ini_get('date.timezone'), $site_timezone) == 0)
-        {
-            define('NV_SITE_TIMEZONE_GMT_NAME', preg_replace("/^([\+|\-]{1}\d{2})(\d{2})$/", "$1:$2", date("O")));
-            define('NV_SITE_TIMEZONE_NAME', $site_timezone);
-            $ok = true;
-        }
-    }
-
-    if (!$ok and function_exists('date_default_timezone_set'))
-    {
-        date_default_timezone_set($site_timezone);
-        if (strcasecmp(date_default_timezone_get(), $site_timezone) == 0)
-        {
-            define('NV_SITE_TIMEZONE_GMT_NAME', preg_replace("/^([\+|\-]{1}\d{2})(\d{2})$/", "$1:$2", date("O")));
-            define('NV_SITE_TIMEZONE_NAME', $site_timezone);
-            $ok = true;
-        }
-    }
-
-    if (!$ok and function_exists('putenv') and !in_array('putenv', $sys_info['disable_functions']))
-    {
-        putenv("TZ=" . $site_timezone);
-        if (strcasecmp(getenv("TZ"), $site_timezone) == 0)
-        {
-            define('NV_SITE_TIMEZONE_GMT_NAME', preg_replace("/^([\+|\-]{1}\d{2})(\d{2})$/", "$1:$2", date("O")));
-            define('NV_SITE_TIMEZONE_NAME', $site_timezone);
-            $ok = true;
-        }
-    }
-
-    if (!$ok)
-    {
-        define('NV_SITE_TIMEZONE_GMT_NAME', preg_replace("/^([\+|\-]{1}\d{2})(\d{2})$/", "$1:$2", date("O")));
-        define('NV_SITE_TIMEZONE_NAME', NV_SITE_TIMEZONE_GMT_NAME);
-    }
+    define('NV_SITE_TIMEZONE_NAME', $site_timezone);
 }
 else
 {
-    $site_timezone = preg_replace("/^([\+|\-]{1}\d{2})(\d{2})$/", "$1:$2", date("O"));
-    define('NV_SITE_TIMEZONE_GMT_NAME', $site_timezone);
-    define('NV_SITE_TIMEZONE_NAME', $site_timezone);
+    define('NV_SITE_TIMEZONE_NAME', NV_SITE_TIMEZONE_GMT_NAME);
 }
-unset($ok, $site_timezone);
+
+unset($site_timezone);
 
 define('NV_SITE_TIMEZONE_OFFSET', date("Z"));
-//Mui gio, da tu dong them vao gio mua he doi voi nhung mui gio co che do nay
 ?>

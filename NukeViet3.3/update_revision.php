@@ -13,13 +13,12 @@ require_once (NV_ROOTDIR . "/includes/core/admin_functions.php");
 require_once (NV_ROOTDIR . "/includes/rewrite.php");
 if (defined("NV_IS_GODADMIN"))
 {
-    if ($global_config['revision'] < 1488)
+    if ($global_config['revision'] < 1491)
     {
-        $statistics_timezone = floor(NV_SITE_TIMEZONE_OFFSET / 3600);
-        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'statistics_timezone', '" . $statistics_timezone . "')");
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'statistics_timezone', '" . NV_SITE_TIMEZONE_NAME . "')");
     }
 
-    $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1488')");
+    $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1491')");
     nv_save_file_config_global();
     die("Update successfully, you should immediately delete this file.");
 }

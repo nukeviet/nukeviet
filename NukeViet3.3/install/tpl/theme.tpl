@@ -11,8 +11,6 @@
             <script>
             DD_belatedPNG.fix('#,img');
             </script>
-            <style>
-            </style>
         <![endif]-->
         <script type="text/javascript" src="{BASE_SITEURL}js/global.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/language/{LANG_DATA}.js"></script>

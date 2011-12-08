@@ -200,7 +200,7 @@ $xtpl->assign( 'N_LOGIN', $lang_global['username'] );
 $xtpl->assign( 'N_PASSWORD', $lang_global['password'] );
 $xtpl->assign( 'SITEURL', $global_config['site_url'] );
 $xtpl->assign( 'N_SUBMIT', $lang_global['loginsubmit'] );
-
+$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
 $xtpl->assign( 'NICKMAX', NV_UNICKMAX );
 $xtpl->assign( 'PASSMAX', NV_UPASSMAX );
 

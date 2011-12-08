@@ -15,6 +15,10 @@
             	var login_error_security = '{LOGIN_ERROR_SECURITY}';
             <!-- END: jscaptcha -->
         </script>
+        <script type="text/javascript">
+            var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
+        </script>        
+        <script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>        
         <script type="text/javascript" src="{NV_BASE_SITEURL}js/admin_login.js"></script>
         <!--[if IE 6]>
             <script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>

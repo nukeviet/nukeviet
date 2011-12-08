@@ -184,7 +184,7 @@ if ($module_name == "modules")
                     if (in_array($layout_name, $layout_array))
                     {
                         $layout_funcs = $layout[$i]->xpath('funcs');
-                        for ($j = 0, $count = sizeof($layout_funcs); $j < $count; ++$j)
+                        for ($j = 0, $count2 = sizeof($layout_funcs); $j < $count2; ++$j)
                         {
                             $mo_funcs = ( string )$layout_funcs[$j];
                             $mo_funcs = explode(":", $mo_funcs);

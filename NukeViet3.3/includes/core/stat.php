@@ -19,12 +19,24 @@ function nv_stat_update()
     $last_month = date("M", $last_update);
     $last_day = date("d", $last_update);
 
-    $time = NV_CURRENTTIME + $global_config['statistics_timezone'] * 3600;
-    $current_year = gmdate('Y', $time);
-    $current_month = gmdate('M', $time);
-    $current_day = gmdate('d', $time);
-    $current_hour = gmdate('H', $time);
-    $current_week = gmdate('l', $time);
+    if (NV_SITE_TIMEZONE_NAME == $global_config['statistics_timezone'])
+    {
+        $current_year = date('Y', NV_CURRENTTIME);
+        $current_month = date('M', NV_CURRENTTIME);
+        $current_day = date('d', NV_CURRENTTIME);
+        $current_hour = date('H', NV_CURRENTTIME);
+        $current_week = date('l', NV_CURRENTTIME);
+    }
+    else
+    {
+        date_default_timezone_set($global_config['statistics_timezone']);
+        $current_year = date('Y', NV_CURRENTTIME);
+        $current_month = date('M', NV_CURRENTTIME);
+        $current_day = date('d', NV_CURRENTTIME);
+        $current_hour = date('H', NV_CURRENTTIME);
+        $current_week = date('l', NV_CURRENTTIME);
+        date_default_timezone_set(NV_SITE_TIMEZONE_NAME);
+    }
 
     if ($last_year != $current_year)
     {
