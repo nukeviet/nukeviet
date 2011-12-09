@@ -399,15 +399,15 @@ function nv_getCountry_from_cookie( $ip )
 
     if ( isset( $_COOKIE[$global_config['cookie_prefix'] . '_ctr'] ) )
     {
-        $country = base64_decode( $_COOKIE[$global_config['cookie_prefix'] . '_ctr'] );
-        if ( preg_match( "/^" . $code . "\.([A-Z]{2})$/", $country, $matches ) )
+        $codecountry = base64_decode( $_COOKIE[$global_config['cookie_prefix'] . '_ctr'] );
+        if ( preg_match( "/^" . $code . "\.([A-Z]{2})$/", $codecountry, $matches ) )
         {
             if ( isset( $countries[$matches[1]] ) ) return $matches[1];
         }
     }
 
     $country = nv_getCountry_from_file( $ip );
-    $country = base64_encode( $code . '.' . $country );
+    $codecountry = base64_encode( $code . '.' . $country );
     $livecookietime = time() + 31536000;
 
     if ( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) $cookie_domain = $_SERVER['SERVER_NAME'];
@@ -416,11 +416,11 @@ function nv_getCountry_from_cookie( $ip )
     $cookie_domain = preg_match( "/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/", $cookie_domain ) ? '.' . $cookie_domain : '';
     if ( PHP_VERSION >= 5.2 )
     {
-        setcookie( $global_config['cookie_prefix'] . '_ctr', $country, $livecookietime, '/', $cookie_domain, ( bool )NV_COOKIE_SECURE, ( bool )NV_COOKIE_HTTPONLY );
+        setcookie( $global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, '/', $cookie_domain, ( bool )NV_COOKIE_SECURE, ( bool )NV_COOKIE_HTTPONLY );
     }
     else
     {
-        setcookie( $global_config['cookie_prefix'] . '_ctr', $country, $livecookietime, '/', $cookie_domain, ( bool )NV_COOKIE_SECURE );
+        setcookie( $global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, '/', $cookie_domain, ( bool )NV_COOKIE_SECURE );
     }
 
     return $country;
