@@ -28,6 +28,7 @@ $global_config['session_prefix'] = "";
 $global_config['sitekey'] = "";
 
 $global_config['site_timezone'] = "byCountry";
+$global_config['statistics_timezone'] = "";
 $global_config['gzip_method'] = 1;
 $global_config['is_url_rewrite'] = 1;
 $global_config['rewrite_endurl'] = "/";

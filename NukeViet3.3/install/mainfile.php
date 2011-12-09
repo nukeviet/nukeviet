@@ -67,7 +67,6 @@ $global_config['send_errors_list'] = NV_SEND_ERRORS_LIST;
 $global_config['error_log_path'] = NV_LOGS_DIR . '/error_logs';
 $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
-$global_config['sitekey'] = md5($global_config['my_domains'] . NV_ROOTDIR . $client_info['session_id']);
 
 //Ket noi voi class Error_handler
 require (NV_ROOTDIR . '/includes/class/error.class.php');
@@ -149,6 +148,8 @@ $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_
 //trang dang xem
 $client_info['agent'] = $nv_Request->user_agent;
 //HTTP_USER_AGENT
+$client_info['session_id'] = $nv_Request->session_id; //ten cua session
+$global_config['sitekey'] = md5($global_config['my_domains'] . NV_ROOTDIR . $client_info['session_id']);
 
 //Xac dinh co phai AJAX hay khong
 if (preg_match("/^[0-9]{10,}$/", $nv_Request->get_string('nocache', 'get', '')) and $client_info['is_myreferer'] === 1)

@@ -1,0 +1,5 @@
+<?php
+
+$ranges = array();
+
+?>
