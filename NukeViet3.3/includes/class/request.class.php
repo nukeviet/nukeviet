@@ -184,7 +184,7 @@ class Request
         {
             if ( get_magic_quotes_gpc() ) $this->is_magic_quotes_gpc = true;
         }
-        if ( PHP_VERSION >= 5.2 && extension_loaded( 'filter' ) && filter_id( ini_get( 'filter.default' ) ) !== FILTER_UNSAFE_RAW ) $this->is_filter = true;
+        if ( extension_loaded( 'filter' ) && filter_id( ini_get( 'filter.default' ) ) !== FILTER_UNSAFE_RAW ) $this->is_filter = true;
         $this->Initialize( $config['my_domains'] );
         $this->get_cookie_save_path();
         $this->get_session_save_path( $config['session_save_path'] );
@@ -560,14 +560,9 @@ class Request
         {
             trigger_error( Request::IS_HEADERS_SENT, 256 );
         }
-        if ( PHP_VERSION >= 5.2 )
-        {
-            session_set_cookie_params( NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, 0, 1 );
-        }
-        else
-        {
-            session_set_cookie_params( NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, 0 );
-        }
+        
+        session_set_cookie_params( NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, 0, 1 );
+        
         session_name( $this->cookie_prefix . '_sess' );
         $session_id = isset( $_COOKIE[$this->cookie_prefix . '_sess'] ) ? $_COOKIE[$this->cookie_prefix . '_sess'] : "";
         if ( ! preg_match( "/^([a-zA-Z0-9]{32})([\d]+)$/", $session_id ) )
@@ -1076,14 +1071,9 @@ class Request
         }
         $expire = intval( $expire );
         if ( ! empty( $expire ) ) $expire += NV_CURRENTTIME;
-        if ( PHP_VERSION >= 5.2 )
-        {
-            return setcookie( $name, $value, $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly );
-        }
-        else
-        {
-            return setcookie( $name, $value, $expire, $this->cookie_path, $this->cookie_domain, $this->secure );
-        }
+        
+        return setcookie( $name, $value, $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly );
+        
     }
 
     /**
@@ -1130,14 +1120,9 @@ class Request
                     $name2 = $this->cookie_prefix . '_' . $name;
                     if ( ! isset( $_COOKIE[$name2] ) ) continue;
                     $expire = NV_CURRENTTIME - 3600;
-                    if ( PHP_VERSION >= 5.2 )
-                    {
-                        $result = setcookie( $name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly );
-                    }
-                    else
-                    {
-                        $result = setcookie( $name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure );
-                    }
+                    
+                    $result = setcookie( $name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly );
+                    
                     unset( $_COOKIE[$name2] );
                 }
             }

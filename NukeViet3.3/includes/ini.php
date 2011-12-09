@@ -46,7 +46,7 @@ if ( $sys_info['ini_set_support'] )
 }
 
 $sys_info['safe_mode'] = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
-$sys_info['php_support'] = ( function_exists( 'version_compare' ) and version_compare( phpversion(), '5.0.0', '>=' ) ) ? 1 : 0;
+$sys_info['php_support'] = ( function_exists( 'version_compare' ) and version_compare( phpversion(), '5.2.0', '>=' ) ) ? 1 : 0;
 $sys_info['mysql_support'] = ( extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' ) ) ? 1 : 0;
 
 $sys_info['gd_support'] = ( extension_loaded( 'gd' ) ) ? 1 : 0;
