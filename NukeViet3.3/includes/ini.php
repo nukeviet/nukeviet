@@ -46,7 +46,7 @@ if ( $sys_info['ini_set_support'] )
 }
 
 $sys_info['safe_mode'] = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
-$sys_info['php_support'] = ( function_exists( 'version_compare' ) and version_compare( phpversion(), '5.2.0', '>=' ) ) ? 1 : 0;
+$sys_info['php_support'] = (PHP_VERSION >= 5.2) ? 1 : 0;
 $sys_info['mysql_support'] = ( extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' ) ) ? 1 : 0;
 
 $sys_info['gd_support'] = ( extension_loaded( 'gd' ) ) ? 1 : 0;
@@ -65,7 +65,7 @@ $sys_info['ftp_support'] = ( function_exists( "ftp_connect" ) and ! in_array( 'f
 //Neu he thong khong ho tro php se bao loi
 if ( ! $sys_info['php_support'] )
 {
-    trigger_error( "You are running an unsupported PHP version. Please upgrade to PHP 5.0 or higher before trying to install Nukeviet Portal", 256 );
+    trigger_error( "You are running an unsupported PHP version. Please upgrade to PHP 5.2 or higher before trying to install Nukeviet Portal", 256 );
 }
 
 //Neu he thong khong ho tro MySQL se bao loi

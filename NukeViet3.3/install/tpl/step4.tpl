@@ -10,7 +10,7 @@
 	</tr>
 	<tr>
 		<th scope="row" class="spec">{LANG.php_version}</th>
-		<td>{LANG.required_on} >= 5.0.0</td>
+		<td>{LANG.required_on} >= 5.2.0</td>
 		<td><span class="highlight_green">{DATA_REQUEST.php_support}</span></td>
 	</tr>
 	<tr>
