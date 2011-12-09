@@ -31,8 +31,8 @@
            }
         </script>
         <!--[if IE 6]>
-            <script src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
-            <script>
+            <script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
+            <script type="text/javascript">
             	DD_belatedPNG.fix('.submitform, img');
             </script>
         <![endif]-->

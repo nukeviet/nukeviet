@@ -8,7 +8,7 @@
    </li>
 <!-- END: tree -->
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}js/jquery/jquery.treeview.css" />
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/jquery/jquery.treeview.css" type="text/css"/>
 <script src="{NV_BASE_SITEURL}js/jquery/jquery.cookie.js" type="text/javascript"></script>
 <script src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js" type="text/javascript"></script>
  

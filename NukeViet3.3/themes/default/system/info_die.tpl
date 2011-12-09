@@ -7,8 +7,8 @@
 	<meta http-equiv="expires" content="0" />
 <title>{PAGE_TITLE}</title>
 <!--[if IE 6]>
-	<script src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
-	<script>
+	<script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
+	<script type="text/javascript">
 	/* EXAMPLE */
 	DD_belatedPNG.fix('img');
 	/* string argument can be any CSS selector */

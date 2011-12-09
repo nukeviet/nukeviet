@@ -29,7 +29,7 @@
             var nv_area_admin = 1;
         </script>
         <!--[if IE 6]>
-            <script src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
+            <script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
             <script type="text/javascript">
             /* EXAMPLE */
             DD_belatedPNG.fix('.logo, img');

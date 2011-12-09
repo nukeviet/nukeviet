@@ -7,8 +7,8 @@
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/table.css" />
         <!--[if IE 6]>
-            <script src="{BASE_SITEURL}js/fix-png-ie6.js"></script>
-            <script>
+            <script type="text/javascript" src="{BASE_SITEURL}js/fix-png-ie6.js"></script>
+            <script type="text/javascript">
             DD_belatedPNG.fix('#,img');
             </script>
         <![endif]-->
