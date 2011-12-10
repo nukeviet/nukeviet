@@ -16,69 +16,6 @@ require_once (NV_ROOTDIR . '/includes/core/filesystem_functions.php');
 require_once (NV_ROOTDIR . '/includes/core/cache_functions.php');
 
 /**
- * array_intersect_key()
- *
- * @param mixed $a
- * @param mixed $b
- * @return
- */
-if (!function_exists('array_intersect_key'))
-{
-
-    function array_intersect_key($a, $b)
-    {
-        $c = func_num_args();
-        if ($c > 2)
-        {
-            for ($d = 1; !empty($a) && $d < $c; ++$d)
-            {
-                $e = func_get_arg($d);
-                $array_keys = array_keys($a);
-                foreach ($array_keys as $f)
-                {
-                    if (!isset($e[$f]))
-                        unset($a[$f]);
-                }
-            }
-            return $a;
-        }
-        $g = array();
-        $array_keys = array_keys($a);
-        foreach ($array_keys as $f)
-        {
-            if (isset($b[$f]))
-                $g[$f] = $a[$f];
-        }
-        return $g;
-    }
-
-}
-
-/**
- * array_diff_key()
- *
- * @return
- */
-if (!function_exists('array_diff_key'))
-{
-    function array_diff_key()
-    {
-        $a = func_get_args();
-        $b = array_shift($a);
-        foreach ($a as $c)
-        {
-            foreach ($b as $d => $e)
-            {
-                if (array_key_exists($d, $c))
-                    unset($b[$d]);
-            }
-        }
-        return $b;
-    }
-
-}
-
-/**
  * nv_object2array()
  *
  * @param mixed $a
