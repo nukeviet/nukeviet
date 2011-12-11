@@ -74,7 +74,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
   `full_name` varchar(255) NOT NULL DEFAULT '',
   `gender` char(1) NOT NULL,
   `photo` varchar(255) NOT NULL DEFAULT '',
-  `birthday` int(11) unsigned NOT NULL,
+  `birthday` int(11) NOT NULL,
   `sig` text,
   `regdate` int(11) NOT NULL DEFAULT '0',
   `website` varchar(255) NOT NULL DEFAULT '',

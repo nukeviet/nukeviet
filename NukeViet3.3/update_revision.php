@@ -18,6 +18,11 @@ if (defined("NV_IS_GODADMIN"))
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'statistics_timezone', '" . NV_SITE_TIMEZONE_NAME . "')");
     }
 
+    if ($global_config['revision'] < 1501)
+    {
+        $db->sql_query("ALTER TABLE `" . NV_USERS_GLOBALTABLE . "` CHANGE `birthday` `birthday` INT(11) NOT NULL");
+    }
+
     $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1491')");
     nv_save_file_config_global();
     die("Update successfully, you should immediately delete this file.");
