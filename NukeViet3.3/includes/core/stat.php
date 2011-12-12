@@ -15,12 +15,13 @@ function nv_stat_update()
     global $db, $client_info, $global_config;
 
     list($last_update) = $db->sql_fetchrow($db->sql_query("SELECT `c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type` = 'c_time' AND `c_val`= 'last'"));
-    $last_year = date("Y", $last_update);
-    $last_month = date("M", $last_update);
-    $last_day = date("d", $last_update);
 
     if (NV_SITE_TIMEZONE_NAME == $global_config['statistics_timezone'])
     {
+        $last_year = date("Y", $last_update);
+        $last_month = date("M", $last_update);
+        $last_day = date("d", $last_update);
+
         $current_year = date('Y', NV_CURRENTTIME);
         $current_month = date('M', NV_CURRENTTIME);
         $current_day = date('d', NV_CURRENTTIME);
@@ -30,6 +31,10 @@ function nv_stat_update()
     else
     {
         date_default_timezone_set($global_config['statistics_timezone']);
+        $last_year = date("Y", $last_update);
+        $last_month = date("M", $last_update);
+        $last_day = date("d", $last_update);
+
         $current_year = date('Y', NV_CURRENTTIME);
         $current_month = date('M', NV_CURRENTTIME);
         $current_day = date('d', NV_CURRENTTIME);
