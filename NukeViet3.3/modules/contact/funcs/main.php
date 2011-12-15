@@ -97,7 +97,7 @@ if (defined('NV_IS_USER'))
 $fcon = "";
 $fcode = "";
 $error = "";
-$fpart = isset( $array_op[0] ) ? $array_op[0] : 0;
+$fpart = isset($array_op[0]) ? $array_op[0] : 0;
 $fpart = $nv_Request->get_int('fpart', 'post,get', $fpart);
 $ftitle = filter_text_input('ftitle', 'post,get', '', 1, 250);
 
@@ -162,8 +162,14 @@ if (!empty($array_rows))
 
             $website = "<a href=\"" . $global_config['site_url'] . "\">" . $global_config['site_name'] . "</a>";
             $fcon .= "<br /><br />----------------------------------------<br /><br />";
-            $fcon .= sprintf($lang_module['sendinfo'], $website, $fname, $femail, $client_info['ip'], $array_rows[$fpart]['full_name']);
-
+            if (empty($fphone))
+            {
+                $fcon .= sprintf($lang_module['sendinfo'], $website, $fname, $femail, $client_info['ip'], $array_rows[$fpart]['full_name']);
+            }
+            else
+            {
+                $fcon .= sprintf($lang_module['sendinfo2'], $website, $fname, $femail, $fphone, $client_info['ip'], $array_rows[$fpart]['full_name']);
+            }
             nv_SendMail2User($fpart, $fcon, $ftitle, $femail, $fname);
 
             $url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA;

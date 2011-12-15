@@ -34,6 +34,7 @@ $lang_module['error_part'] = "Hata: Bizimle iletişime geçmek için bölüm se�
 $lang_module['error_content'] = "Hata: Mesaj boş";
 $lang_module['sendcontactok'] = "Teşekkürler! Yöneticilerimiz en kısa sürede cevap verecektir.";
 $lang_module['sendinfo'] = "Bu e-postayı web sitesi iletişim işlevi tarafından gönderildi %1\$s.<br />Gönderenin bilgileri<br /><strong>İsim</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>IP</strong>: %4\$s<br /><strong>Gönderildi</strong>: %5\$s";
+$lang_module['sendinfo2'] = "Bu e-postayı web sitesi iletişim işlevi tarafından gönderildi %1\$s.<br />Gönderenin bilgileri<br /><strong>İsim</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>Telefon</strong>: %4\$s<br /><strong>IP</strong>: %5\$s<br /><strong>Gönderildi</strong>: %6\$s";
 $lang_module['phone'] = "Telefon Numaranız";
 
 ?>

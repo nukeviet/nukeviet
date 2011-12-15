@@ -33,7 +33,8 @@ $lang_module['error_title'] = "Můžete zadat titul zprávy";
 $lang_module['error_part'] = "Nevybrali jste divizi kontaktu";
 $lang_module['error_content'] = "Musíte zadat obsah";
 $lang_module['sendcontactok'] = "Děkujeme Vám za Váš zájem! budeme odpovídat na vaše dopis v nejkratším čase.";
-$lang_module['sendinfo'] = "Tento e-mail poslal přes kontaktní funkce na stránkách%1\$s. <br /> informace o odesílateli <br /> <strong> Přímení a Jméno </ strong>:%2\$s <br /> <strong> E-mail </ strong> :%3\$s <br /> <strong> IP </ strong>:%4\$s <br /> <strong> zasláno na </ strong>:%5\$s";
+$lang_module['sendinfo'] = "Tento e-mail poslal přes kontaktní funkce na stránkách%1\$s. <br /> informace o odesílateli <br /> <strong> Přímení a Jméno </strong>:%2\$s <br /> <strong> E-mail </strong> :%3\$s <br /> <strong> IP </strong>:%4\$s <br /> <strong> zasláno na </strong>:%5\$s";
+$lang_module['sendinfo2'] = "Tento e-mail poslal přes kontaktní funkce na stránkách%1\$s. <br /> informace o odesílateli <br /> <strong> Přímení a Jméno </strong>:%2\$s <br /> <strong> E-mail </strong> :%3\$s <br /> <strong> Telefon </strong>:%4\$s <br /> <strong> IP </strong>:%5\$s <br /> <strong> zasláno na </strong>:%6\$s";
 $lang_module['phone'] = "Telefonní číslo";
 
 ?>
