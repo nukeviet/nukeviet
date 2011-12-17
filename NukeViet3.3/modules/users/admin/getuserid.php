@@ -288,7 +288,7 @@ if ( $nv_Request->isset_request( 'submit', 'get' ) )
     $xtpl->parse( 'resultdata' );
     $contents = $xtpl->text( 'resultdata' );
 
-    print_r( $contents );
+    echo( $contents );
     die();
 }
 
