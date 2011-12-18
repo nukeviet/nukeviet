@@ -99,11 +99,11 @@ class ips
     }
 
     /**
-     * ips::nv_get_serverip()
+     * ips::server_ip()
      * 
      * @return
      */
-    public function nv_get_serverip ( )
+    public function server_ip ( )
     {
         $serverip = $this->nv_getenv( "SERVER_ADDR" );
         if ( $this->nv_validip( $serverip ) )
@@ -114,6 +114,10 @@ class ips
         {
             return "127.0.0.1";
         }
+		elseif(function_exists('gethostbyname'))
+		{
+			return gethostbyname($_SERVER['SERVER_NAME']);
+		}
         return "none";
     }
 
