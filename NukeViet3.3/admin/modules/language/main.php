@@ -39,7 +39,7 @@ if ( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( "a
     $result = $db->sql_query( $query );
     $temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], " langkey : " . $keylang . " [ " . $temp . " ]", $admin_info['userid'] );
-    nv_save_file_config_global();
+    nv_delete_all_cache();
     
     $contents = "<br /><br /><br /><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
     $contents .= "<meta http-equiv=\"Refresh\" content=\"1;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "\" />";
@@ -214,7 +214,7 @@ elseif ( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) an
     }
     $db->sql_query( "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang` = '" . $deletekeylang . "'" );
     $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_setup_language` WHERE `lang` = '" . $deletekeylang . "'" );
-    nv_save_file_config_global();
+    nv_delete_all_cache();
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_delete'], " langkey : " . $deletekeylang, $admin_info['userid'] );
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
     exit();

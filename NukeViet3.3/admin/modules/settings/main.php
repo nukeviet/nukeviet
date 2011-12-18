@@ -63,7 +63,7 @@ if ($submit)
     {
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', 'global', " . $db->dbescape($config_name) . ", " . $db->dbescape($config_value) . ")");
     }
-    nv_save_file_config_global();
+    nv_delete_all_cache();
     if (empty($errormess))
     {
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass());
