@@ -87,7 +87,7 @@ function nv_siteinfo_getmodules ()
     return $array_modules;
 }
 
-if ( defined( 'NV_IS_SPADMIN' ) )
+if ( defined( 'NV_IS_GODADMIN' ) )
 {
     $submenu['system_info'] = $lang_module['site_configs_info'];
     if ( nv_function_exists( 'phpinfo' ) )
@@ -104,10 +104,6 @@ if ( defined( 'NV_IS_SPADMIN' ) )
     }
     $allow_func[] = 'system_info';
     $allow_func[] = 'checkchmod';
-}
-
-if ( defined( 'NV_IS_GODADMIN' ) )
-{
     $allow_func[] = 'logs';
     $allow_func[] = 'logs_del';
     $submenu['logs'] = $lang_module['logs_title'];
