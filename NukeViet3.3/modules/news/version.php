@@ -19,10 +19,10 @@ $module_version = array(
 	"author" => "VINADES (contact@vinades.vn)", // Tac gia
 	"note" => "", // Ghi chu
 	"uploads_dir" => array( 
-	    $module_name, $module_name . "/source", $module_name . "/temp_pic"
+	    $module_name, $module_name . "/source", $module_name . "/temp_pic", $module_name . "/topics"
 	),
 	"files_dir" => array( 
-	    $module_name . "/thumb", $module_name . "/block" 
+	    $module_name . "/thumb", $module_name . "/block", $module_name . "/topics"
 	)
 );
 

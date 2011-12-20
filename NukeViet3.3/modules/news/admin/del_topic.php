@@ -13,11 +13,11 @@ $topicid = $nv_Request->get_int( 'topicid', 'post', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'post' );
 
 $contents = "NO_" . $topicid;
-list( $topicid ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid`=" . intval( $topicid ) . "" ) );
+list( $topicid, $thumbnail ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `thumbnail` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid`=" . intval( $topicid ) . "" ) );
 if ( $topicid > 0 )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_topic', "topicid ".$topicid , $admin_info['userid'] );
-	$check_del_topicid = false;
+    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_topic', "topicid " . $topicid, $admin_info['userid'] );
+    $check_del_topicid = false;
     $query = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `topicid` = '" . $topicid . "'" );
     $check_rows = intval( $db->sql_numrows( $query ) );
     if ( $check_rows > 0 and $checkss == md5( $topicid . session_id() . $global_config['sitekey'] ) )
@@ -48,6 +48,10 @@ if ( $topicid > 0 )
         {
             $db->sql_freeresult();
             nv_fix_topic();
+            if ( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/topics/" . $thumbnail ) )
+            {
+                nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/topics/" . $thumbnail );
+            }
             $contents = "OK_" . $topicid;
         }
     }
