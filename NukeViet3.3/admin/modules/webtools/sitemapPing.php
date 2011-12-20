@@ -95,7 +95,7 @@ function nv_sitemapPing( $module, $link )
     return $result ? $lang_module['pingOK'] : $lang_module['PingNotSupported'];
 }
 
-$file_searchEngines = NV_ROOTDIR . "/" . NV_DATADIR . "/searchEngines.xml";
+$file_searchEngines = NV_ROOTDIR . "/" . NV_DATADIR . "/search_engine_ping.xml";
 $searchEngine = $module = "";
 $searchEngines = array();
 $searchEngines['searchEngine'] = array();
