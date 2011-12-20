@@ -1216,7 +1216,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 {
     global $lang_global;
     $total_pages = ceil($num_items / $per_page);
-    if ($total_pages == 1)
+    if ($total_pages < 2)
     {
         return '';
     }
