@@ -466,7 +466,7 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
         {
             $value = trim( $value );
             $value = trim( $value );
-            $keyword = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search&amp;q=" . urlencode( $value ) . "&amp;mod=all";
+            $keyword = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search&amp;q=" . urlencode( $value );
             $xtpl->assign( 'KEYWORD', $value );
             $xtpl->assign( 'LINK_KEYWORDS', $keyword );
             $xtpl->assign( 'SLASH', ( ( $count - 1 ) == $i ) ? '' : ', ' );
