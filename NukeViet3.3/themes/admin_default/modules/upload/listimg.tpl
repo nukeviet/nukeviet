@@ -11,7 +11,7 @@
 <div style="height:100px"></div>
 <script type="text/javascript">
 //<![CDATA[
-$("img").lazyload({
+$("img.previewimg").lazyload({
     placeholder : "{NV_BASE_SITEURL}images/grey.gif",
     container: $(".filebrowse")
 });
