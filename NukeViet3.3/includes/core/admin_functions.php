@@ -250,18 +250,6 @@ function nv_rewrite_change($array_config_global)
             $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"CJzip.php?file={R:1}.{R:3}\" appendQueryString=\"false\" />\n";
             $rewrite_rule .= "                </rule>\n";
         }
-        $rewrite_rule .= "                <rule name=\"nv_rule_" . ++$rulename . "\">\n";
-        if ($array_config_global['rewrite_optional'])
-        {
-            $rewrite_rule .= "                    <match url=\"^([a-z0-9-]+)\/search\/(.*)$\" ignoreCase=\"false\" />\n";
-            $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "=search&amp;q={R:2}\" appendQueryString=\"false\" />\n";
-        }
-        else
-        {
-            $rewrite_rule .= "                    <match url=\"^([a-z]{2})\/([a-z0-9-]+)\/search\/(.*)$\" ignoreCase=\"false\" />\n";
-            $rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "=search&amp;q={R:3}\" appendQueryString=\"false\" />\n";
-        }
-        $rewrite_rule .= "                </rule>\n";
         $rewrite_rule .= "                <rule name=\"nv_rule_rewrite\">\n";
         $rewrite_rule .= "                	<match url=\"(.*)(" . $endurl . ")$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= "                	<conditions logicalGrouping=\"MatchAll\">\n";
@@ -292,14 +280,6 @@ function nv_rewrite_change($array_config_global)
         if ($sys_info['zlib_support'])
         {
             $rewrite_rule .= "RewriteRule ^((?!http(s?)|ftp\:\/\/).*)\.(css|js)$ CJzip.php?file=$1.$3 [L]\n";
-        }
-        if ($array_config_global['rewrite_optional'])
-        {
-            $rewrite_rule .= "RewriteRule ^([a-z0-9-]+)\/search\/(.*)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=search&q=$2	[L]\n";
-        }
-        else
-        {
-            $rewrite_rule .= "RewriteRule ^([a-z]{2})\/([a-z0-9-]+)\/search\/(.*)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=search&q=$3	[L]\n";
         }
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
