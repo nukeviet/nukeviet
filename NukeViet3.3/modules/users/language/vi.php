@@ -203,7 +203,7 @@ $lang_module['in_group'] = "Đăng ký nhóm";
 $lang_module['no_in_group'] = "Bạn chưa đăng ký nhóm nào";
 $lang_module['no_act'] = "Chức năng này hiện tại chưa được kích hoạt";
 $lang_module['no_set'] = "Hiện tại chưa thiết lập nhóm công cộng";
-$lang_module['re_remove'] = "Đăng ký hoặc bỏ nhóm thành công";
+$lang_module['re_remove'] = "Cập nhật thông tin nhóm thành công";
 
 
 ?>
