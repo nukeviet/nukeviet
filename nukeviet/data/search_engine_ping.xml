@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<searchEngine>
+  <searchEngine_item>
+    <name>Google</name>
+    <value>http://www.google.com/webmasters/tools/ping?sitemap=</value>
+    <active>1</active>
+  </searchEngine_item>
+  <searchEngine_item>
+    <name>Yahoo</name>
+    <value>http://search.yahooapis.com/SiteExplorerService/V1/updateNotification?appid=YahooDemo&amp;url=</value>
+    <active>0</active>
+  </searchEngine_item>
+  <searchEngine_item>
+    <name>Ask</name>
+    <value>http://submissions.ask.com/ping?sitemap=</value>
+    <active>1</active>
+  </searchEngine_item>
+  <searchEngine_item>
+    <name>Bing</name>
+    <value>http://www.bing.com/webmaster/ping.aspx?siteMap=</value>
+    <active>1</active>
+  </searchEngine_item>
+</searchEngine>

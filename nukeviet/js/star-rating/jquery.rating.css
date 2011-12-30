@@ -1,0 +1,8 @@
+div.rating-cancel,div.star-rating{background:transparent;cursor:pointer;display:block;float:left;height:15px;overflow:hidden;text-indent:-999em;width:17px}
+div.rating-cancel,div.rating-cancel a{background:url(delete.gif) no-repeat 0 -16px}
+div.star-rating,div.star-rating a{background:url(star.gif) no-repeat 0 0}
+div.rating-cancel a,div.star-rating a{background-position:0 0;border:0;display:block;height:100%;width:16px}
+div.star-rating-on a{background-position:0 -16px !important}
+div.star-rating-hover a{background-position:0 -32px}
+div.star-rating-readonly a{cursor:default !important}
+div.star-rating{background:transparent !important;overflow:hidden !important}

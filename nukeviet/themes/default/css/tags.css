@@ -1,0 +1,24 @@
+div.news_column {
+    border-bottom: 2px solid #e8e8e8;
+    margin-bottom: 10px
+}
+
+div.news_column div.items {
+    padding: 4px
+}
+
+div.news_column div.items h4 a {
+    color: #0e73e6;
+    font-weight: bold
+}
+
+div.news_column div.items h4 a:hover {
+    color: #649ee1
+}
+
+div.news_column div.items img {
+    border: 1px solid #ccc;
+    float: left;
+    margin-right: 8px;
+    padding: 2px
+}
