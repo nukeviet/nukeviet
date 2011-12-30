@@ -62,8 +62,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 }
 
 $contents .= "</table>\n";
-
-$contents .= "<div style=\"margin-top:8px;position:absolute;right:10px;\">\n";
+$contents .= "<div style=\"margin-top:8px;float:right\">\n";
 $contents .= "<a class=\"button1\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=row\">\n";
 $contents .= "<span><span>" . $lang_module['add_row_title'] . "</span></span></a></div>\n";
 

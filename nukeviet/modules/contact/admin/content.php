@@ -58,7 +58,7 @@ if ( $is_edit )
 }
 else
 {
-    $contents .= "<div style=\"margin-top:8px;position:absolute;right:10px;\">\n";
+    $contents .= "<div style=\"margin-top:8px;float:right\">\n";
     $contents .= "<a class=\"button1\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;is_edit=1\">\n";
     $contents .= "<span><span>" . $lang_global['edit'] . "</span></span></a></div>\n";
     $contents .= "<div style=\"margin-bottom:20px;\">\n";

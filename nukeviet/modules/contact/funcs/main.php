@@ -7,8 +7,7 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (!defined('NV_IS_MOD_CONTACT'))
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_CONTACT')) die('Stop!!!');
 
 /**
  * nv_SendMail2User()
@@ -184,7 +183,12 @@ if (!empty($array_rows))
 
 $bodytext = "";
 $content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . 'Content.txt';
-if (file_exists($content_file))
+
+if( isset( $array_rows[$fpart] ) and ! empty( $array_rows[$fpart]['note'] ) )
+{
+	$bodytext = $array_rows[$fpart]['note'];
+}
+elseif (file_exists($content_file))
 {
     $bodytext = file_get_contents($content_file);
 }
