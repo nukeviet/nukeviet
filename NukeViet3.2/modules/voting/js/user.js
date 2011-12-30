@@ -1,3 +1,0 @@
-var total=0;function nv_check_accept_number(a,f,c){a=a["option[]"];for(var d=total=0;d<a.length;d++)if(a[d].checked&&(total+=1),total>f)return alert(c),!1}
-function nv_sendvoting(a,f,c,d,g){var e="0";c=parseInt(c);if(c==1){a=a.option;for(var b=0;b<a.length;b++)if(a[b].checked)e=a[b].value}else if(c>1){a=a["option[]"];for(b=0;b<a.length;b++)a[b].checked&&(e=e+","+a[b].value)}e=="0"&&c>0?alert(g):Shadowbox.open({content:'<iframe src="'+nv_siteroot+"index.php?"+nv_lang_variable+"="+nv_sitelang+"&"+nv_name_variable+"=voting&"+nv_fc_variable+"=main&vid="+f+"&checkss="+d+"&lid="+e+'" border="0" frameborder="0" style="width:670px;height:400px"></iframe>',player:"html",
-height:400,width:670});return!1};
