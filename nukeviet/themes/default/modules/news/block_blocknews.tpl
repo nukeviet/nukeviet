@@ -26,7 +26,7 @@
       <!-- BEGIN: loop -->
       <li class="clearfix {bg}">
       	<!-- BEGIN: img -->
-        <a href="{ROW.link}" title="{ROW.title}"><img src="{ROW.thumb}" alt=""/></a>
+        <a href="{ROW.link}" title="{ROW.title}"><img src="{ROW.thumb}" alt="{ROW.title}"/></a>
         <!-- END: img -->
       	<a href="{ROW.link}" title="{ROW.title}">{ROW.title}</a>
        </li>
