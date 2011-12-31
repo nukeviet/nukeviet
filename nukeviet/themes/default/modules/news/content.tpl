@@ -52,7 +52,7 @@
 <form action="{CONTENT_URL}" name="fsea" method="post" id="fsea">
 
 <div class="news"><label><strong>{LANG.name}</strong> <span class="txtrequired">(*)</span></label> <input maxlength="255" name="title" id="idtitle" value="{DATA.title}" type="text"></div>
-<div class="news"><label><strong>{LANG.alias}: </strong></label> <input style="width: 330px;" name="alias" id="idalias" value="{DATA.alias}" maxlength="255" type="text">&nbsp;&nbsp; <img src="{NV_BASE_SITEURL}images/refresh.png" widht="16" style="cursor: pointer; vertical-align: middle;" onclick="get_alias();" alt="" height="16"></div>
+<div class="news"><label><strong>{LANG.alias}: </strong></label> <input style="width: 330px;" name="alias" id="idalias" value="{DATA.alias}" maxlength="255" type="text">&nbsp;&nbsp; <img src="{NV_BASE_SITEURL}images/refresh.png" widht="16" style="cursor: pointer; vertical-align: middle;" onclick="get_alias();" alt="Click" height="16"></div>
 <div class="news"><label><strong>{LANG.content_cat}</strong> <span class="txtrequired">(*)</span></label>
 <div style="height: 130px; width: 350px; overflow: auto; text-align: left;">
 <table>
