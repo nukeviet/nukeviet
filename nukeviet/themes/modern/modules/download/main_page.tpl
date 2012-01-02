@@ -8,6 +8,9 @@
             <!-- BEGIN: listsubcat -->
             <a title="{listsubcat.title}" href="{listsubcat.link}">{listsubcat.title}</a>
             <!-- END: listsubcat -->
+            <!-- BEGIN: more -->
+            <a class="more d-more" title="{LANG.categories_viewall}" href="{MORE}">{LANG.categories_viewall}</a>
+            <!-- END: more -->
             <!-- END: subcatbox -->
         </div>
     </div>

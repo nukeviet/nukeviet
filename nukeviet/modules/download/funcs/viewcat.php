@@ -116,6 +116,8 @@ if ( ! empty( $subcats ) )
         $sql = "SELECT `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`, `author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $sub . " AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 0, 3";
         $result = $db->sql_query( $sql );
 		
+		if( ! $db->sql_numrows( $result ) ) continue;
+		
         while ( $row = $db->sql_fetchrow( $result ) )
         {
             $uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );

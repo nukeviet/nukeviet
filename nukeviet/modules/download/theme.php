@@ -31,14 +31,24 @@ function theme_main_download ( $array_cats, $list_cats, $download_config )
         if ( empty( $cat['parentid'] ) )
         {
             $xtpl->assign( 'catbox', $cat );
+			
             if ( ! empty( $cat['subcats'] ) )
             {
+				$i = 0;
                 foreach ( $list_cats as $subcat )
                 {
                     if ( $subcat['parentid'] == $cat['id'] )
                     {
                         $subcat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $subcat['alias'];
                         $xtpl->assign( 'listsubcat', $subcat );
+						
+						if( ++ $i >= 4 )
+						{
+							$xtpl->assign( 'MORE', $cat['link'] );
+							$xtpl->parse( 'main.catbox.subcatbox.more' );
+							break;
+						}
+						
                         $xtpl->parse( 'main.catbox.subcatbox.listsubcat' );
                     }
                 }

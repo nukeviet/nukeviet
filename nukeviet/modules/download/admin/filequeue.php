@@ -60,13 +60,14 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         $array['author_url'] = filter_text_input( 'author_url', 'post', '' );
         $array['fileupload'] = ! empty( $row['fileupload'] ) ? explode( "[NV]", $row['fileupload'] ) : array();
 		
+		// Lay duong dan day du file tai len cu
 		if( ! empty( $array['fileupload'] ) )
 		{
 			$fileupload = $array['fileupload'];
 			$array['fileupload'] = array();
 			foreach( $fileupload as $file )
 			{
-				if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+				if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $file ) )
 				{
 					$file = NV_BASE_SITEURL . NV_UPLOADS_DIR . $file;
 				}
@@ -80,6 +81,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         $array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
         $array['fileimage'] = $row['fileimage'];
 		
+		// Lay duong dan day du hinh cu
 		if( ! empty( $array['fileimage'] ) )
 		{
 			if ( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
@@ -117,7 +119,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 $array['author_url'] = "http://" . $array['author_url'];
             }
         }
-
+		
+		// Cat ngan duong dan file tai len moi
         if ( ! empty( $array['fileupload2'] ) )
         {
             $fileupload2 = $array['fileupload2'];
@@ -140,33 +143,31 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
         {
             $array['fileupload2'] = array();
         }
-
-        if ( empty( $array['fileupload2'] ) )
-        {
-            if ( ! empty( $array['fileupload'] ) )
-            {
-                $fileupload = $array['fileupload'];
-                $array['fileupload'] = array();
-                $array['filesize'] = 0;
-                foreach ( $fileupload as $file )
-                {
-                    if ( ! empty( $file ) )
-                    {
-                        $file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
-                        if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
-                        {
-                            $array['fileupload'][] = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
-                            $array['filesize'] += $filesize;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                $array['fileupload'] = array();
-            }
+		
+		// Cat ngan duong dan file tai len cu
+		if ( ! empty( $array['fileupload'] ) )
+		{
+			$fileupload = $array['fileupload'];
+			$array['fileupload'] = array();
+			$array['filesize'] = 0;
+			foreach ( $fileupload as $file )
+			{
+				if ( ! empty( $file ) )
+				{
+					$file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
+					if ( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
+					{
+						$array['fileupload'][] = substr ( $file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
+						$array['filesize'] += $filesize;
+					}
+				}
+			}
+		}
+		else
+		{
+			$array['fileupload'] = array();
         }
-
+		
         if ( ! empty( $array['linkdirect'] ) )
         {
             $linkdirect = $array['linkdirect'];
@@ -255,11 +256,11 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
             {
                 $array['user_name'] = $row['user_name'];
             }
-
+			
             if ( ! empty( $array['fileupload2'] ) )
             {
                 $array['fileupload'] = $array['fileupload2'];
-            } 
+            }
 			elseif ( ! empty( $array['fileupload'] ) )
             {
                 $fileupload = $array['fileupload'];
@@ -366,6 +367,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
             }
             else
             {
+				// Neu khong co file tai len moi moi xoa
                 if ( ! empty( $row['fileupload'] ) )
                 {
                     $row['fileupload'] = explode( "[NV]", $row['fileupload'] );
@@ -380,7 +382,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                     }
                 }
 				
-				if(empty( $row['fileimage'] ))
+				if( ! empty( $row['fileimage'] ) )
 				{
 	                $fileimage = NV_UPLOADS_DIR . $row['fileimage'];
 	                if ( file_exists( NV_ROOTDIR . '/' . $fileimage ) )

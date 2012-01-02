@@ -1,4 +1,4 @@
-.highlight a,.highlight a:hover{color:#C32B00}
+﻿.highlight a,.highlight a:hover{color:#C32B00}
 .count-comments,.count-down{padding:0 4px 0 22px}
 .count-comments{background:url(../images/download/comment.png) left 50% no-repeat}
 .count-down{background:url(../images/download/down.png) left 50% no-repeat}
@@ -35,3 +35,4 @@ a.link_upload:hover{color:#0073a8}
 .download p,.download .s-border,.down-o h4,.down-o p,.down-o .s-border{margin-bottom:.5em}
 ul.list-down,ul.links_down{list-style-type:none;margin:0;padding:0}
 .gg2,.upload-form dl dt{width:36%}
+.d-more{position:absolute;right:5px;top:6px}
