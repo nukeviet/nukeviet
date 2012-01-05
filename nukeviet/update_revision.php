@@ -36,7 +36,7 @@ if (defined("NV_IS_GODADMIN"))
         $array_lang = array();
         $array_lang_error = array();
         $language_query = $db->sql_query("SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1");
-        while (list($lang) = $db->sql_fetchrow($query))
+        while (list($lang) = $db->sql_fetchrow($language_query))
         {
             list($check) = $db->sql_fetchrow($db->sql_query("SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` WHERE `title`='tags' AND `act`=1"));
             if ($check)
