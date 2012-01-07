@@ -54,12 +54,11 @@ if ($post['mid'] != 0)
     while ($row = $db->sql_fetchrow($result))
     {
         $sp_title = "";
-        if ($row['parentid'] > 0)
+        if ($row['lev'] > 0)
         {
-            $sp_title .= '&nbsp;&nbsp;&nbsp;';
-            for ($i = 1; $i <= $row['parentid']; ++$i)
+            for ($i = 1; $i <= $row['lev']; ++$i)
             {
-                $sp_title .= '&nbsp;';
+                $sp_title .= '&nbsp;&nbsp;&nbsp;&nbsp;';
             }
         }
 
@@ -240,8 +239,7 @@ if ($nv_Request->isset_request('submit1', 'post'))
 				`target`=" . intval($post['target']) . " 
 				 WHERE `id`=" . intval($post['id']);
 
-            
-            if ( $db->sql_query($sql) )
+            if ($db->sql_query($sql))
             {
                 if ($pa_old != $post['parentid'])
                 {
@@ -361,11 +359,13 @@ if ($post['parentid'] != 0)
 $xtpl = new XTemplate("add_menu.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&mid=" . $post['mid']) . "&parentid=" . $post['parentid'];
-
+$xtpl->assign('DATA', $post);
 if (!empty($arr_table))
 {
+    $a = 0;
     foreach ($arr_table as $rows)
     {
+        $rows['class'] = (++$a % 2 == 0) ? ' class="second"' : '';
         $xtpl->assign('ROW', $rows);
 
         for ($i = 1; $i <= $num; ++$i)
@@ -402,12 +402,11 @@ if ($nv_Request->isset_request('item', 'post'))
     while ($row = $db->sql_fetchrow($result))
     {
         $sp_title = "";
-        if ($row['parentid'] > 0)
+        if ($row['lev'] > 0)
         {
-            $sp_title .= '&nbsp;&nbsp;&nbsp;';
-            for ($i = 1; $i <= $row['parentid']; ++$i)
+            for ($i = 1; $i <= $row['lev']; ++$i)
             {
-                $sp_title .= '&nbsp;';
+                $sp_title .= '&nbsp;&nbsp;&nbsp;&nbsp;';
             }
         }
         $arr_item[$row['id']] = array('key' => $row['id'], //
@@ -455,7 +454,7 @@ if ($nv_Request->isset_request('action', 'post'))
         $xtpl->assign('link', $link);
         $xtpl->parse('main.link');
         $contents = $xtpl->text('main.link');
-        
+
         include (NV_ROOTDIR . "/includes/header.php");
         echo $contents;
         include (NV_ROOTDIR . "/includes/footer.php");
@@ -591,8 +590,6 @@ if ($link_title != "")
 }
 $link_menu = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
 $xtpl->assign('link_menu', $link_menu);
-
-$xtpl->assign('DATA', $post);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

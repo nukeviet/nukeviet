@@ -27,7 +27,7 @@
         </tr>
     </thead>
     <!-- BEGIN: loop1 -->
-    <tbody {DATA.class}>
+    <tbody {ROW.class}>
         <tr>
             <td align="center">
                 {ROW.nb}
