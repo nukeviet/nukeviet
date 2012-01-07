@@ -7,10 +7,14 @@
  * @Createdate Dec 22, 2011 10:22:41 AM
  */
 
-if (!defined('NV_IS_MOD_TAGS'))
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_TAGS')) die('Stop!!!');
 
 $q = filter_text_input('q', 'get', '', 0);
+if( ! $q )
+{
+	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA, true ) );
+	exit();
+}
 
 $page_title = $q . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 
@@ -57,4 +61,5 @@ $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $m
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_site_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>
