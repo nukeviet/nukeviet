@@ -1,6 +1,5 @@
 <!-- BEGIN: main -->
 <table class="tab1">
-    <caption>{TABLE_CAPTION}</caption>
     <thead>
         <tr>
             <td>
@@ -68,7 +67,7 @@
     </tr>
     <!-- END: generate_page -->
 </table>
-<div style="margin-top:8px;">
+<div style="margin-top:8px">
     <a class="button1" href="{ADD_NEW_FILE}"><span><span>{LANG.file_addfile}</span></span></a>
 </div>
 <!-- END: main -->
