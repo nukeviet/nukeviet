@@ -345,8 +345,8 @@ foreach ($array_answervote as $id => $title)
     $contents .= "<tbody" . $class . ">\n";
     $contents .= "<tr>\n";
     $contents .= "<td style=\"text-align:right\">" . $lang_module['voting_question_num'] . (++$items) . "</td>\n";
-    $contents .= "<td><input type=\"text\" value=\"" . $title . "\" name=\"answervote[" . $id . "]\" size=\"60\" /></td>\n";
-    $contents .= "<td><input type=\"text\" value=\"" . nv_htmlspecialchars($array_urlvote[$id]) . "\" name=\"urlvote[" . $id . "]\" size=\"80\" /></td>\n";
+    $contents .= "<td><input type=\"text\" value=\"" . $title . "\" name=\"answervote[" . $id . "]\" style=\"width:300px\" /></td>\n";
+    $contents .= "<td><input type=\"text\" value=\"" . nv_htmlspecialchars($array_urlvote[$id]) . "\" name=\"urlvote[" . $id . "]\" style=\"width:350px\"/></td>\n";
     $contents .= "</tr>\n";
     $contents .= "</tbody>\n";
 }
@@ -356,8 +356,8 @@ $class = ($j % 2 == 0) ? " class=\"second additem\"" : " class=\"additem\"";
 $contents .= "<tbody " . $class . ">\n";
 $contents .= "<tr>\n";
 $contents .= "	<td style=\"text-align:right\">" . $lang_module['voting_question_num'] . (++$items) . "</td>\n";
-$contents .= "	<td><input type=\"text\" value=\"\" name=\"answervotenews[]\" size=\"60\" /></td>\n";
-$contents .= "  <td><input type=\"text\" value=\"\" name=\"urlvotenews[]\" size=\"80\" /></td>\n";
+$contents .= "	<td><input type=\"text\" value=\"\" name=\"answervotenews[]\" style=\"width:300px\" /></td>\n";
+$contents .= "  <td><input type=\"text\" value=\"\" name=\"urlvotenews[]\" style=\"width:350px\" /></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "</table>\n";
@@ -366,7 +366,10 @@ $contents .= "</form>\n";
 $contents .= "<script type=\"text/javascript\">
 					var items=" . $items . ";
 				   </script>";
-
+if ( $vid )
+{
+	 $op = '';
+}
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");

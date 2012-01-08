@@ -28,8 +28,8 @@ function nv_vote_additem(mess) {
 	var nclass = (items % 2 == 0) ? " class=\"second\"" : "";
 	var newitem = "<tbody" + nclass + "><tr>";
 	newitem += "	<td style=\"text-align:right\">" + mess + " " + items + "</td>";
-	newitem += "	<td><input type=\"text\" value=\"\" name=\"answervotenews[]\" size=\"60\"></td>";
-	newitem += "	<td><input type=\"text\" value=\"\" name=\"urlvotenews[]\" size=\"80\"></td>";
+	newitem += "	<td><input type=\"text\" value=\"\" name=\"answervotenews[]\" style=\"width:300px\"></td>";
+	newitem += "	<td><input type=\"text\" value=\"\" name=\"urlvotenews[]\" style=\"width:350px\"></td>";
 	newitem += "	</tr>";
 	newitem += "</tbody>";
 	$("#items").append(newitem);
