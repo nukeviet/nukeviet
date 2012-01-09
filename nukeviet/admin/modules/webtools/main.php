@@ -61,7 +61,7 @@ function NukevietChange_getContents($refresh = false)
                     {
                         unset($matches);						
                         $cont = $entry['content'];
-                        preg_match_all("/(modify|add|delete)[^a-z0-9\/\.\-\_]+(\/trunk\/nukeviet3.3\/)([a-z0-9\/\.\-\_]+)/mi", $cont, $matches, PREG_SET_ORDER);
+                        preg_match_all("/(modify|add|delete)[^a-z0-9\/\.\-\_]+(\/trunk\/nukeviet\/)([a-z0-9\/\.\-\_]+)/mi", $cont, $matches, PREG_SET_ORDER);
                         $cont = array();
                         if (!empty($matches))
                         {
