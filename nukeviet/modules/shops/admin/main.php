@@ -8,9 +8,10 @@
  */
 
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
 $page_title = $lang_module['content_main'];
 
-$link = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "";
+$link = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE;
 $array_info = array();
 
 // tong so luong san pham
@@ -58,12 +59,11 @@ list( $number ) = $db->sql_fetchrow( $db->sql_query("SELECT COUNT(*) as number F
 $array_info [] = array("title" => $lang_module['product_number_order_dis_payment'], "value" => $number, "link" => $link."=order" , "unit" => $lang_module['product_order'] );
 
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-//////////////////////////////////////////////////////
 $xtpl->assign("LANG",$lang_module );
 $xtpl->assign("NV_BASE_SITEURL",NV_BASE_SITEURL );
 $xtpl->assign("module",$module_info['custom_title']." (" .$module_name. ")"  );
 $xtpl->assign("module_version","1.0.0 : 20-01-2011");
-/////////////////////////////////////////////////////////////
+
 $i = 0;
 foreach ( $array_info as $info)
 {
@@ -85,8 +85,9 @@ $data = array(
 	"checkss" => md5 (base64_encode( serialize( $info )).base64_encode( $module_file ).md5($global_config['sitekey']))
 );
 $xtpl->assign("DATA",$data);
-/////////////////////////////////////////////////////////////
+
 if ( defined( 'NV_IS_GODADMIN' ) ) $xtpl->parse( 'main.modinfo' );
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
