@@ -25,19 +25,17 @@ if (empty($vid))
     $a = 0;
     foreach ($list as $row)
     {
-        if (( int )$row['exp_time'] < 0 or (( int )$row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME))
+        if ($row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)
         {
             $is_update[] = $row['vid'];
         }
-        else
+        elseif ($row['publ_time'] <= NV_CURRENTTIME AND nv_set_allow($row['who_view'], $row['groups_view']))
         {
-            if (nv_set_allow($row['who_view'], $row['groups_view']))
-            {
-                $allowed[$a] = $row;
-                ++$a;
-            }
+            $allowed[$a] = $row;
+            ++$a;
         }
     }
+		
     if (!empty($is_update))
     {
         $is_update = implode(",", $is_update);

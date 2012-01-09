@@ -130,8 +130,16 @@ if (!empty($submit))
             {
                 $maxoption = $maxoption_data;
             }
-
-            $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `question`=" . $db->dbescape($question) . ", `acceptcm` =  " . $maxoption . ", `admin_id` =  " . $admin_info['admin_id'] . ", `who_view`=" . $who_view . ", `groups_view` = " . $db->dbescape($groups_view) . ", `publ_time`=" . $begindate . ", `exp_time`=" . $enddate . " WHERE `vid` =" . $vid . "";
+			
+            if ($begindate > NV_CURRENTTIME OR ($enddate > 0 AND $enddate < NV_CURRENTTIME))
+            {
+                $act = 0;
+            }
+            else
+            {
+                $act = 1;
+            }
+            $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `question`=" . $db->dbescape($question) . ", `acceptcm` =  " . $maxoption . ", `admin_id` =  " . $admin_info['admin_id'] . ", `who_view`=" . $who_view . ", `groups_view` = " . $db->dbescape($groups_view) . ", `publ_time`=" . $begindate . ", `exp_time`=" . $enddate . ", `act`=" . $act . " WHERE `vid` =" . $vid . "";
             if ($db->sql_query($query))
             {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid']);
