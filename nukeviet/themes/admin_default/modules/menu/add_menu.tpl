@@ -45,7 +45,7 @@
 </div>
 <div class="clear"></div>
 <!-- END: error -->
-<form enctype="multipart/form-data" action="{FORM_ACTION}" method="post">
+<form id="edit" action="{FORM_ACTION}" method="post">
     <input type="hidden" name="id" style="width: 550px" value="{DATA.id}">
     <input type="hidden" name="mid" style="width: 550px" value="{DATA.mid}">
     <input type="hidden" name="pa" style="width: 550px" value="{DATA.parentid}">

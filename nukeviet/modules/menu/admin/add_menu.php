@@ -341,7 +341,7 @@ while ($row = $db->sql_fetchrow($result))
         'weight' => $row['weight'], //
         'title' => $row['title'], //
         'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=" . $row['id'], //
-        'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id'], //
+        'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id']."#edit", //
         'name_block' => $arr_menu[$row['mid']]['title']  //
     );
 
