@@ -42,7 +42,7 @@ if (empty($vid))
     {
         $is_update = implode(",", $is_update);
 
-        $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "`  SET `act`=0 WHERE `id` IN (" . $is_update . ")";
+        $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "`  SET `act`=0 WHERE `vid` IN (" . $is_update . ")";
         $db->sql_query($sql);
 
         nv_del_moduleCache($module_name);
