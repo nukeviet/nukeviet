@@ -98,11 +98,11 @@ function nv_list_cats($is_link = false, $is_parentlink = true)
 }
 
 /**
- * initial_config_data()
+ * nv_mod_down_config()
  *
  * @return
  */
-function initial_config_data()
+function nv_mod_down_config()
 {
     global $module_name, $module_data, $module_name;
 
