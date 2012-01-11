@@ -9,9 +9,7 @@
 if (!defined('NV_IS_MOD_NEWS'))
     die('Stop!!!');
 
-$page = 0;
 $topicalias = trim($array_op[1]);
-$per_page = 1;
 $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == "page-") ? intval(substr($array_op[2], 5)) : 1;
 list($topicid, $page_title, $description, $key_words) = $db->sql_fetchrow($db->sql_query("SELECT `topicid`, `title`, `description`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `alias`=" . $db->dbescape($topicalias) . ""));
 if ($topicid > 0)
