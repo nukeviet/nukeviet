@@ -11,9 +11,9 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( defined( 'NV_SYSTEM' ) )
 {
-    if ( ! nv_function_exists( "initial_config_data" ) )
+    if ( ! nv_function_exists( "nv_mod_down_config" ) )
     {
-        function initial_config_data ($module_data )
+        function nv_mod_down_config ($module_data )
         {
             global $site_mods, $module_info;
             $sql = "SELECT `config_name`,`config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
@@ -53,7 +53,7 @@ if ( defined( 'NV_SYSTEM' ) )
     global $site_mods, $module_name, $module_info, $lang_module, $nv_Request;
     $content = "";
     $module = $block_config['module'];
-    $mod_config = initial_config_data($module);
+    $mod_config = nv_mod_down_config($module);
     if ( isset( $site_mods[$module] ) )
     {
         if ( $module == $module_name )
