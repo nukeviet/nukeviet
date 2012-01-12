@@ -11,7 +11,7 @@ if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['upload'];
 
-$download_config = initial_config_data();
+$download_config = nv_mod_down_config();
 
 if ( ! $download_config['is_addfile_allow'] )
 {

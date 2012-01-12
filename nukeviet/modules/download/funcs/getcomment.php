@@ -74,7 +74,7 @@ if ( $nv_Request->isset_request( 'ajax', 'post' ) )
                         $error[] = $lang_module['comment_error5'];
                     }
                     
-                    $download_config = initial_config_data();
+                    $download_config = nv_mod_down_config();
                     if ( $download_config['is_autocomment_allow'] )
                     {
                         $status = 1;

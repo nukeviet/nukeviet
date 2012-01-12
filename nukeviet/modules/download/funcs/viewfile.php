@@ -11,7 +11,7 @@ if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 $contents = "";
 
-$download_config = initial_config_data();
+$download_config = nv_mod_down_config();
 
 $today = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
 $yesterday = $today - 86400;

@@ -54,7 +54,7 @@ list( $all_page ) = $db->sql_fetchrow( $result_all );
 
 if ( ! empty( $all_page ) )
 {
-    $download_config = initial_config_data();
+    $download_config = nv_mod_down_config();
     $list_cats = nv_list_cats( true );
     
     $array = array();

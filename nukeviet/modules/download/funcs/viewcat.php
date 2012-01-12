@@ -19,7 +19,7 @@ if ( empty( $list_cats ) )
     exit();
 }
 
-$download_config = initial_config_data();
+$download_config = nv_mod_down_config();
 
 $today = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
 $yesterday = $today - 86400;
