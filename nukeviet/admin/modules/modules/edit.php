@@ -62,6 +62,7 @@ $groups_list = nv_groups_list();
 if ($nv_Request->get_int('save', 'post') == '1')
 {
     $custom_title = filter_text_input('custom_title', 'post', 1);
+    $admin_title = filter_text_input('admin_title', 'post', 1);
     $theme = filter_text_input('theme', 'post', '', 1);
     $mobile = filter_text_input('mobile', 'post', '', 1);
     $keywords = filter_text_input('keywords', 'post', '', 1);
@@ -103,7 +104,6 @@ if ($nv_Request->get_int('save', 'post') == '1')
     }
     if ($groups_view != "" and $custom_title != "")
     {
-        $set_layout_site = false;
         $selectthemes = ( empty($theme)) ? $global_config['site_theme'] : $theme;
         $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini');
         $layoutdefault = ( string )$xml->layoutdefault;
@@ -125,11 +125,10 @@ if ($nv_Request->get_int('save', 'post') == '1')
                 if (!in_array($func_id, $array_func_id))
                 {
                     $db->sql_query("INSERT INTO `" . NV_PREFIXLANG . "_modthemes` (`func_id`, `layout`, `theme`) VALUES (" . $func_id . "," . $db->dbescape($layoutdefault) . ", " . $db->dbescape($selectthemes) . ")");
-                    $set_layout_site = true;
                 }
             }
 
-            $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape($custom_title) . ", `theme`=" . $db->dbescape($theme) . ", `mobile`=" . $db->dbescape($mobile) . ", `keywords`=" . $db->dbescape($keywords) . ", `groups_view`=" . $db->dbescape($groups_view) . ", `act`='" . $act . "', `rss`='" . $rss . "'WHERE `title`=" . $db->dbescape($mod);
+            $sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape($custom_title) . ", `admin_title`=" . $db->dbescape($admin_title) . ", `theme`=" . $db->dbescape($theme) . ", `mobile`=" . $db->dbescape($mobile) . ", `keywords`=" . $db->dbescape($keywords) . ", `groups_view`=" . $db->dbescape($groups_view) . ", `act`='" . $act . "', `rss`='" . $rss . "'WHERE `title`=" . $db->dbescape($mod);
             $db->sql_query($sql);
 
             nv_delete_all_cache();
@@ -150,6 +149,7 @@ if ($nv_Request->get_int('save', 'post') == '1')
 else
 {
     $custom_title = $row['custom_title'];
+    $admin_title = $row['admin_title'];
     $theme = $row['theme'];
     $mobile = $row['mobile'];
     $act = $row['act'];
@@ -180,6 +180,7 @@ if (file_exists(NV_ROOTDIR . "/modules/" . $row['module_file'] . "/funcs/rss.php
 
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;mod=" . $mod;
 $contents['custom_title'] = array($lang_module['custom_title'], $custom_title, 70);
+$contents['admin_title'] = array($lang_module['admin_title'], $admin_title, 70);
 $contents['theme'] = array($lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme);
 $contents['mobile'] = array($lang_module['mobile'], $lang_module['theme_default'], $theme_mobile_list, $mobile);
 $contents['act'] = array($lang_global['activate'], $act);

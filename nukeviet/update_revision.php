@@ -154,6 +154,9 @@ if (defined("NV_IS_GODADMIN"))
             {
                 $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_voting_rows` ADD `url` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `title`");
                 $db->sql_query("UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` SET `show_func` = '1' WHERE `in_module`='voting' AND `func_name`='main'");
+
+                $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` ADD `admin_title` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `custom_title`");
+                $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` ADD `main_file` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `set_time`");
             }
         }
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')");

@@ -7,7 +7,8 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (!defined('NV_IS_FILE_MODULES')) die('Stop!!!');
+if (!defined('NV_IS_FILE_MODULES'))
+    die('Stop!!!');
 
 $contents = "";
 
@@ -32,9 +33,10 @@ if (!empty($setmodule))
                 include ($version_file);
             }
             $admin_file = (file_exists(NV_ROOTDIR . "/modules/" . $module_file . "/admin.functions.php") and file_exists(NV_ROOTDIR . "/modules/" . $module_file . "/admin/main.php")) ? 1 : 0;
+            $main_file = (file_exists(NV_ROOTDIR . "/modules/" . $module_file . "/functions.php") and file_exists(NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php")) ? 1 : 0;
             $custom_title = preg_replace('/(\W+)/i', ' ', $setmodule);
             $in_menu = ( file_exists(NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php")) ? 1 : 0;
-            $db->sql_query("INSERT INTO `" . NV_MODULES_TABLE . "` (`title`, `module_file`, `module_data`, `custom_title`, `set_time`, `admin_file`, `theme`, `mobile`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES (" . $db->dbescape($setmodule) . ", " . $db->dbescape($module_file) . ", " . $db->dbescape($module_data) . ", " . $db->dbescape($custom_title) . ", " . NV_CURRENTTIME . ", " . $db->dbescape($admin_file) . ", '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)");
+            $db->sql_query("INSERT INTO `" . NV_MODULES_TABLE . "` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES (" . $db->dbescape($setmodule) . ", " . $db->dbescape($module_file) . ", " . $db->dbescape($module_data) . ", " . $db->dbescape($custom_title) . ", '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)");
             nv_del_moduleCache('modules');
             $return = nv_setup_data_module(NV_LANG_DATA, $setmodule);
             if ($return == "OK_" . $setmodule)
@@ -102,24 +104,24 @@ if (!empty($delmodule))
             Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
             die();
         }
-		else
-		{
-			$xtpl = new XTemplate( "delmodule.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-			$xtpl->assign( 'LANG', $lang_module );
-			
-			if( is_array( $module_exit ) )
-			{
-				$info = sprintf( $lang_module['delete_module_info1'], implode( ", ", $module_exit ) );
-			}
-			else
-			{
-				$info = sprintf( $lang_module['delete_module_info2'], $module_exit );
-			}
+        else
+        {
+            $xtpl = new XTemplate("delmodule.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
+            $xtpl->assign('LANG', $lang_module);
 
-			$xtpl->assign( 'INFO', $info );
-			$xtpl->parse( 'main' );
-			$contents .= $xtpl->text( 'main' );
-		}
+            if (is_array($module_exit))
+            {
+                $info = sprintf($lang_module['delete_module_info1'], implode(", ", $module_exit));
+            }
+            else
+            {
+                $info = sprintf($lang_module['delete_module_info2'], $module_exit);
+            }
+
+            $xtpl->assign('INFO', $info);
+            $xtpl->parse('main');
+            $contents .= $xtpl->text('main');
+        }
     }
 }
 
@@ -268,5 +270,4 @@ $contents .= call_user_func("setup_modules", $array_head, $array_modules, $array
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
-
 ?>

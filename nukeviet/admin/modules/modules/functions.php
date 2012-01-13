@@ -465,6 +465,14 @@ if ($module_name == "modules")
         $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
         $return .= "<col valign=\"top\" width=\"150px\" />\n";
         $return .= "<tr>\n";
+        $return .= "<td>" . $contents['admin_title'][0] . ":</td>\n";
+        $return .= "<td><input name=\"admin_title\" id=\"admin_title\" type=\"text\" value=\"" . $contents['admin_title'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['admin_title'][2] . "\" /></td>\n";
+        $return .= "</tr>\n";
+        $return .= "</table>\n";
+		
+        $return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
+        $return .= "<col valign=\"top\" width=\"150px\" />\n";
+        $return .= "<tr>\n";
         $return .= "<td>" . $contents['theme'][0] . ":</td>\n";
         $return .= "<td><select name=\"theme\" id=\"theme\">\n";
         $return .= "<option value=\"\">" . $contents['theme'][1] . "</option>\n";
