@@ -147,7 +147,7 @@ if (defined("NV_IS_GODADMIN"))
     }
     else
     {
-        if ($global_config['revision'] < 1530)
+        if ($global_config['revision'] < 1559)
         {
             $language_query = $db->sql_query("SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1");
             while (list($lang) = $db->sql_fetchrow($query))
@@ -157,6 +157,8 @@ if (defined("NV_IS_GODADMIN"))
 
                 $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` ADD `admin_title` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `custom_title`");
                 $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` ADD `main_file` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `set_time`");
+
+                $db->sql_query("UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modules` SET `main_file` = '0' WHERE `module_file`='menu'");
             }
         }
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')");
