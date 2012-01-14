@@ -7,13 +7,13 @@
  * @Createdate Sat, 10 Dec 2011 06:46:54 GMT
  */
 
-if (!defined('NV_MAINFILE'))
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) die('Stop!!!');
+
 if (!nv_function_exists('nv_block_news_groups'))
 {
     function nv_block_config_news_groups($module, $data_block, $lang_block)
     {
-        global $db, $language_array, $site_mods;
+        global $site_mods;
         $html = "";
         $html .= "<tr>";
         $html .= "<td>" . $lang_block['blockid'] . "</td>";
@@ -22,8 +22,7 @@ if (!nv_function_exists('nv_block_news_groups'))
         $list = nv_db_cache($sql, '', $module);
         foreach ($list as $l)
         {
-            $sel = ($data_block['blockid'] == $l['bid']) ? ' selected' : '';
-            $html .= "<option value=\"" . $l['bid'] . "\" " . $sel . ">" . $l['title'] . "</option>\n";
+            $html .= "<option value=\"" . $l['bid'] . "\" " . (($data_block['blockid'] == $l['bid']) ? " selected=\"selected\"" : "") . ">" . $l['title'] . "</option>\n";
         }
         $html .= "</select></td>\n";
         $html .= "</tr>";
@@ -47,7 +46,7 @@ if (!nv_function_exists('nv_block_news_groups'))
 
     function nv_block_news_groups($block_config)
     {
-        global $db, $module_array_cat, $module_info, $lang_module, $site_mods;
+        global $module_array_cat, $module_info, $site_mods;
         $module = $block_config['module'];
 
         $sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
@@ -84,14 +83,13 @@ if (!nv_function_exists('nv_block_news_groups'))
                 {
                     $l['thumb'] = $l['homeimgfile'];
                 }
+				
                 $xtpl->assign('ROW', $l);
-                if (!empty($l['thumb']))
-                    $xtpl->parse('main.loop.img');
-                $bg = ($i % 2 == 0) ? "bg" : "";
-                $xtpl->assign('bg', $bg);
-                ++$i;
+                if (!empty($l['thumb']))$xtpl->parse('main.loop.img');
+                $xtpl->assign('bg', (++$i % 2) ? "bg" : "");
                 $xtpl->parse('main.loop');
             }
+			
             $xtpl->parse('main');
             return $xtpl->text('main');
         }

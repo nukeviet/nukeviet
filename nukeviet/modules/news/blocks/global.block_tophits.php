@@ -11,10 +11,8 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! nv_function_exists( 'nv_news_block_tophits' ) )
 {
-
     function nv_block_config_tophits_blocks ( $module, $data_block, $lang_block )
     {
-        global $db, $language_array;
         $html = "";
         $html .= "<tr>";
         $html .= "	<td>" . $lang_block['number_day'] . "</td>";
@@ -40,7 +38,7 @@ if ( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
     function nv_news_block_tophits ( $block_config, $mod_data )
     {
-        global $module_array_cat, $module_info, $lang_module, $db, $module_config;
+        global $module_array_cat, $module_info, $db, $module_config;
         
         $module = $block_config['module'];
         

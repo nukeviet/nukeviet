@@ -11,17 +11,13 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! nv_function_exists( 'nv_news_category' ) )
 {
-
     function nv_block_config_news_category ( $module, $data_block, $lang_block )
     {
-        global $db, $language_array;
         $html = "<select name=\"config_title_length\">\n";
         $html .= "<option value=\"\">" . $lang_block['title_length'] . "</option>\n";
         for ( $i = 0; $i < 100; ++$i )
         {
-            $sel = ( $data_block['title_length'] == $i ) ? ' selected' : '';
-            
-            $html .= "<option value=\"" . $i . "\" " . $sel . ">" . $i . "</option>\n";
+            $html .= "<option value=\"" . $i . "\" " . (( $data_block['title_length'] == $i ) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
         }
         $html .= "</select></td>\n";
         return '<tr><td>' . $lang_block['title_length'] . '</td><td>' . $html . '</td></tr>';
@@ -42,7 +38,7 @@ if ( ! nv_function_exists( 'nv_news_category' ) )
         global $module_array_cat, $module_info, $lang_module;
         
         $xtpl = new XTemplate( "block_category.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/news" );
-        $xtpl->assign( 'LANG', $lang_module );
+
         if ( ! empty( $module_array_cat ) )
         {
             $title_length = $block_config['title_length'];
