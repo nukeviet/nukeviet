@@ -181,12 +181,6 @@ if (preg_match($global_config['check_module'], $module_name))
                 require (NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/language/en.php");
             }
 
-            //Ket noi voi file functions.php, file chua cac function dung chung cho ca module
-            if (file_exists(NV_ROOTDIR . "/modules/" . $module_file . "/functions.php"))
-            {
-                require (NV_ROOTDIR . "/modules/" . $module_file . "/functions.php");
-            }
-
             //Xac dinh template module
             $module_info['template'] = $global_config['module_theme'];
             if (!file_exists(NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file))
@@ -195,6 +189,12 @@ if (preg_match($global_config['check_module'], $module_name))
                 {
                     $module_info['template'] = "default";
                 }
+            }
+
+            //Ket noi voi file functions.php, file chua cac function dung chung cho ca module
+            if (file_exists(NV_ROOTDIR . "/modules/" . $module_file . "/functions.php"))
+            {
+                require (NV_ROOTDIR . "/modules/" . $module_file . "/functions.php");
             }
 
             if (file_exists(NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php"))
@@ -208,8 +208,7 @@ if (preg_match($global_config['check_module'], $module_name))
 
             if (!defined('NV_IS_AJAX'))
             {
-                if ($module_info['submenu'])
-                    nv_create_submenu();
+                if ($module_info['submenu']) nv_create_submenu();
             }
 
             //Ket noi voi cac op cua module de thuc hien
