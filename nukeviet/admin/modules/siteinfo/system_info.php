@@ -147,10 +147,6 @@ if ( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
         array( //
         'key' => NV_FILES_DIR . "/css", //
         'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/css' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) //
-        ), //
-        array( //
-        'key' => NV_FILES_DIR . "/js", //
-        'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/js' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) //
         ) ) );
 }
 

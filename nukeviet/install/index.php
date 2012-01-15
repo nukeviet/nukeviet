@@ -74,7 +74,7 @@ if ($step == 1)
 }
 elseif ($step == 2)
 {
-    $array_dir = array(NV_SESSION_SAVE_PATH, NV_LOGS_DIR, NV_LOGS_DIR . "/data_logs", NV_LOGS_DIR . "/dump_backup", NV_LOGS_DIR . "/error_logs", NV_LOGS_DIR . "/error_logs/errors256", NV_LOGS_DIR . "/error_logs/old", NV_LOGS_DIR . "/error_logs/tmp", NV_LOGS_DIR . "/ip_logs", NV_LOGS_DIR . "/ref_logs", NV_LOGS_DIR . "/voting_logs", NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . "/css", NV_FILES_DIR . "/js", NV_DATADIR, NV_DATADIR . "/ip_files", );
+    $array_dir = array(NV_SESSION_SAVE_PATH, NV_LOGS_DIR, NV_LOGS_DIR . "/data_logs", NV_LOGS_DIR . "/dump_backup", NV_LOGS_DIR . "/error_logs", NV_LOGS_DIR . "/error_logs/errors256", NV_LOGS_DIR . "/error_logs/old", NV_LOGS_DIR . "/error_logs/tmp", NV_LOGS_DIR . "/ip_logs", NV_LOGS_DIR . "/ref_logs", NV_LOGS_DIR . "/voting_logs", NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . "/css", NV_DATADIR, NV_DATADIR . "/ip_files", );
     $array_file_data = nv_scandir(NV_ROOTDIR . "/" . NV_DATADIR, "/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/");
     foreach ($array_file_data as $file_i)
     {
