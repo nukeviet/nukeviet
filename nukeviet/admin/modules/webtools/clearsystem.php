@@ -63,13 +63,6 @@ if ($nv_Request->isset_request('submit', 'post') and $nv_Request->isset_request(
 			$xtpl->assign('DELFILE', $file);
 			$xtpl->parse('main.delfile.loop');
 		}
-		$jsDir = NV_ROOTDIR . '/' . NV_FILES_DIR . '/js';
-		$files = nv_clear_files($jsDir, NV_FILES_DIR . '/js');
-		foreach ($files as $file)
-		{
-			$xtpl->assign('DELFILE', $file);
-			$xtpl->parse('main.delfile.loop');
-		}
 	}
 
 	if (in_array('clearsession', $deltype))
