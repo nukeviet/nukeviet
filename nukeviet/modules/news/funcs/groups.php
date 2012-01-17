@@ -64,8 +64,8 @@ if (isset($array_op[1]))
             $topic_other_array[] = $item;
         }
         unset($query, $row, $arr_listcatid);
-        $contents = topic_theme($topic_array, $topic_other_array);
-        $contents .= nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+        $generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+        $contents = topic_theme($topic_array, $topic_other_array, $generate_page);
         if ($page > 1)
         {
             $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;

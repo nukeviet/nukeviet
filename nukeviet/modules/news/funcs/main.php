@@ -82,8 +82,8 @@ if (empty($contents))
             $array_cat_other[] = $item;
         }
         $viewcat = "viewcat_page_new";
-        $contents = call_user_func($viewcat, $array_catpage, $array_cat_other);
-        $contents .= nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+        $generate_page= nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+        $contents = call_user_func($viewcat, $array_catpage, $array_cat_other, $generate_page);
     }
     elseif ($viewcat == "viewcat_main_left" or $viewcat == "viewcat_main_right" or $viewcat == "viewcat_main_bottom")
     {
@@ -199,8 +199,8 @@ if (empty($contents))
             $array_catpage[] = $item;
         }
         $viewcat = "viewcat_grid_new";
-        $contents = call_user_func($viewcat, $array_catpage, 0);
-        $contents .= nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+        $generate_page= nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+        $contents = call_user_func($viewcat, $array_catpage, 0, $generate_page);
     }
     elseif ($viewcat == "viewcat_list_new" or $viewcat == "viewcat_list_old")
     {
@@ -219,8 +219,8 @@ if (empty($contents))
             $array_catpage[] = $item;
         }
         $viewcat = "viewcat_list_new";
-        $contents = call_user_func($viewcat, $array_catpage, 0, $page);
-        $contents .= nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+        $generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+        $contents = call_user_func($viewcat, $array_catpage, 0, $page, $generate_page);
     }
     if (!defined('NV_IS_MODADMIN') and $contents != "" and $cache_file != "")
     {

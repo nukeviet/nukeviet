@@ -9,7 +9,7 @@
 if (!defined('NV_IS_MOD_NEWS'))
     die('Stop!!!');
 
-function viewcat_grid_new($array_catpage, $catid)
+function viewcat_grid_new($array_catpage, $catid, $generate_page)
 {
     global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
     $xtpl = new XTemplate("viewcat_grid.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file);
@@ -42,11 +42,16 @@ function viewcat_grid_new($array_catpage, $catid)
         $xtpl->parse('main.viewcatloop');
         ++$a;
     }
+    if (!empty($generate_page))
+    {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('main.generate_page');
+    }
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
-function viewcat_list_new($array_catpage, $catid, $page)
+function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 {
     global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
     $xtpl = new XTemplate("viewcat_list.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file);
@@ -79,11 +84,16 @@ function viewcat_list_new($array_catpage, $catid, $page)
         $xtpl->set_autoreset();
         $xtpl->parse('main.viewcatloop');
     }
+    if (!empty($generate_page))
+    {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('main.generate_page');
+    }
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
-function viewcat_page_new($array_catpage, $array_cat_other)
+function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 {
     global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info;
     $xtpl = new XTemplate("viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file);
@@ -121,11 +131,16 @@ function viewcat_page_new($array_catpage, $array_cat_other)
         }
         $xtpl->parse('main.related');
     }
+    if (!empty($generate_page))
+    {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('main.generate_page');
+    }
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
-function viewcat_top($array_catcontent)
+function viewcat_top($array_catcontent, $generate_page)
 {
     global $global_config, $module_name, $module_file, $global_array_cat, $lang_module, $module_config, $module_info;
     $xtpl = new XTemplate("viewcat_top.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file);
@@ -162,6 +177,11 @@ function viewcat_top($array_catcontent)
         }
     }
     // Het cac bai viet phan dau
+    if (!empty($generate_page))
+    {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('main.generate_page');
+    }
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
@@ -556,7 +576,7 @@ function no_permission($func_who_view)
     return $xtpl->text('no_permission');
 }
 
-function topic_theme($topic_array, $topic_other_array)
+function topic_theme($topic_array, $topic_other_array, $generate_page)
 {
     global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config;
     $xtpl = new XTemplate("topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file);
@@ -588,6 +608,11 @@ function topic_theme($topic_array, $topic_other_array)
             $xtpl->parse('main.other.loop');
         }
         $xtpl->parse('main.other');
+    }
+    if (!empty($generate_page))
+    {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('main.generate_page');
     }
     $xtpl->parse('main');
     return $xtpl->text('main');

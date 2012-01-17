@@ -61,8 +61,8 @@ if ($topicid > 0)
     }
     unset($query, $row, $arr_listcatid);
     $base_url = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias;
-    $contents = topic_theme($topic_array, $topic_other_array);
-    $contents .= nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+    $generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+    $contents = topic_theme($topic_array, $topic_other_array, $generate_page);
     if ($page > 1)
     {
         $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;

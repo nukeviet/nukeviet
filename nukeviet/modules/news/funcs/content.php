@@ -764,11 +764,17 @@ elseif (defined('NV_IS_USER'))
         $xtpl->parse('main.viewcatloop');
         ++$a;
     }
-    $xtpl->parse('main');
 
-    $contents .= "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5("0" . $client_info['session_id'] . $global_config['sitekey']) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
+   $contents .= "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5("0" . $client_info['session_id'] . $global_config['sitekey']) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
+    
+    $generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
+    if (!empty($generate_page))
+    {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('main.generate_page');
+    }
+    $xtpl->parse('main');
     $contents .= $xtpl->text('main');
-    $contents .= nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
     if ($page > 1)
     {
         $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
