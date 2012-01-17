@@ -456,7 +456,7 @@ ul.list_item li{
 		clear: both;
 }
 
-.generate_page{border-bottom:0 solid #fff;font-family:tahoma;font-size:10px;padding:5px 1px 0 0}
-.generate_page strong{background-color:#fbfbfb;border:1px solid #666;color:#000;font-family:tahoma;font-size:10px;font-weight:700;padding:4px 6px}
-.generate_page a{background-color:#ebebeb;border:1px solid #c8c8c8;color:#000;font-family:tahoma;font-size:10px;font-weight:700;padding:4px  6px;text-decoration:none}
-.generate_page a:hover{background-color:#e0e0e0;border-bottom:1px solid #cad2cd;border-left:1px solid #a5b4aa;border-right:1px solid #cad2cd;border-top:1px solid #a5b4aa;color:maroon;padding:4px 6px}
+.generate_page{float: left;font-size: 10px; font-weight: 700; margin: 10px;}
+.generate_page strong{background-color:#fbfbfb;border:1px solid #666;color:#000;padding:4px 6px}
+.generate_page a{background-color:#ebebeb;border:1px solid #c8c8c8;color:#000;padding:4px  6px;text-decoration:none}
+.generate_page a:hover{background-color:#e0e0e0;color:red}

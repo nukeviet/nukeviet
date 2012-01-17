@@ -35,4 +35,9 @@
     </ul>
 </div>
 <!-- END: related -->
+<!-- BEGIN: generate_page -->
+<div class="generate_page">
+	{GENERATE_PAGE}
+</div>
+<!-- END: generate_page -->	
 <!-- END: main -->
