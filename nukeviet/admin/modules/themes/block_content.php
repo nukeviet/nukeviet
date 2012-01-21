@@ -28,7 +28,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     $file_name = $row['file_name'] = trim( $array_file_name[0] );
     $module = $row['module'] = filter_text_input( 'module', 'post', '', 0, 55 );
     $row['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
-    
+    	
     $path_file_php = $path_file_ini = '';
     unset( $matches );
     preg_match( $global_config['check_block_module'], $row['file_name'], $matches );
@@ -48,19 +48,18 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
                 $path_file_ini = NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
             }
         }
+		
+		if ( empty( $row['title'] ) )
+		{
+			$row['title'] = str_replace( "_", " ", $matches[1] . ' ' . $matches[2] );
+		}
     }
+	else
+	{
+		$error[] = $lang_module['block_error_nsblock'];
+	}
     
-    if ( empty( $row['title'] ) )
-    {
-        $row['title'] = str_replace( "_", " ", $matches[1] . ' ' . $matches[2] );
-    }
-    
-    $row['link'] = filter_text_input( 'link', 'post' );
-    if ( ! empty( $row['link'] ) and ! nv_is_url( $row['link'] ) )
-    {
-        $error[] = $lang_module['error_invalid_url'];
-    }
-    
+    $row['link'] = filter_text_input( 'link', 'post', '' );
     $row['template'] = filter_text_input( 'template', 'post', '', 0, 55 );
     $row['position'] = filter_text_input( 'position', 'post', '', 0, 55 );
     
