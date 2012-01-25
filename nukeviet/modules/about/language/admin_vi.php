@@ -35,5 +35,6 @@ $lang_module['save'] = "Lưu bài viết";
 $lang_module['errorsave'] = "Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề bài viết có thể bị trùng";
 $lang_module['saveok'] = "Cập nhật bài viết thành công";
 $lang_module['alias'] = "Liên kết tĩnh";
+$lang_module['keywords'] = "Từ khóa";
 
 ?>
