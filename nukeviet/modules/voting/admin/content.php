@@ -33,35 +33,26 @@ if (!empty($submit))
     $urlvotenews = $nv_Request->get_array('urlvotenews', 'post');
     if ($maxoption > ($sizeof = sizeof($answervotenews) + sizeof($array_answervote)) || $maxoption <= 0)
         $maxoption = $sizeof;
-    if (!empty($publ_date) and !preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date))
-        $publ_date = "";
-    if (!empty($exp_date) and !preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date))
-        $exp_date = "";
 
-    if (empty($publ_date))
-    {
-        $begindate = NV_CURRENTTIME;
-    }
-    else
+    if (preg_match("/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m))
     {
         $phour = $nv_Request->get_int('phour', 'post', 0);
         $pmin = $nv_Request->get_int('pmin', 'post', 0);
-        unset($m);
-        preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date, $m);
         $begindate = mktime($phour, $pmin, 0, $m[2], $m[1], $m[3]);
-    }
-
-    if (empty($exp_date))
-    {
-        $enddate = 0;
     }
     else
     {
+        $begindate = NV_CURRENTTIME;
+    }
+    if (preg_match("/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date, $m))
+    {
         $ehour = $nv_Request->get_int('ehour', 'post', 0);
         $emin = $nv_Request->get_int('emin', 'post', 0);
-        unset($m);
-        preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date, $m);
         $enddate = mktime($ehour, $emin, 0, $m[2], $m[1], $m[3]);
+    }
+    else
+    {
+        $enddate = 0;
     }
     //end Exprire date
 
@@ -130,7 +121,7 @@ if (!empty($submit))
             {
                 $maxoption = $maxoption_data;
             }
-			
+
             if ($begindate > NV_CURRENTTIME OR ($enddate > 0 AND $enddate < NV_CURRENTTIME))
             {
                 $act = 0;
@@ -192,7 +183,14 @@ else
     }
 }
 
-$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
+$my_head = "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css\" rel=\"stylesheet\" />\n";
+$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
+$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css\" rel=\"stylesheet\" />\n";
+
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>\n";
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
 $my_head .= "<script type=\"text/javascript\">
           $(document).ready(function(){
@@ -263,14 +261,13 @@ $contents .= "<td>" . $lang_module['voting_time'] . "</td>\n";
 $contents .= "<td>";
 
 $tdate = date("H|i", $rowvote['publ_time']);
-$publ_date = date("d.m.Y", $rowvote['publ_time']);
+$publ_date = date("d/m/Y", $rowvote['publ_time']);
 list($phour, $pmin) = explode("|", $tdate);
 
 // Begin: thoi gian dang
 $contents .= "<input name=\"publ_date\" id=\"publ_date\" value=\"" . $publ_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\" />\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" width=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'publ_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\" />\n";
 $contents .= "<select name=\"phour\">\n";
-for ($i = 0; $i < 23; ++$i)
+for ($i = 0; $i <= 23; ++$i)
 {
     $contents .= "<option value=\"" . $i . "\"" . (($i == $phour) ? " selected=\"selected\"" : "") . ">" . str_pad($i, 2, "0", STR_PAD_LEFT) . "</option>\n";
 }
@@ -296,7 +293,7 @@ $contents .= "<td>";
 if ($rowvote['exp_time'] > 0)
 {
     $tdate = date("H|i", $rowvote['exp_time']);
-    $exp_date = date("d.m.Y", $rowvote['exp_time']);
+    $exp_date = date("d/m/Y", $rowvote['exp_time']);
     list($ehour, $emin) = explode("|", $tdate);
 }
 else
@@ -305,9 +302,8 @@ else
     $exp_date = "";
 }
 $contents .= "<input name=\"exp_date\" id=\"exp_date\" value=\"" . $exp_date . "\" style=\"width: 90px;\" maxlength=\"10\" readonly=\"readonly\" type=\"text\" />\n";
-$contents .= "<img src=\"" . NV_BASE_SITEURL . "images/calendar.jpg\" width=\"18\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"popCalendar.show(this, 'exp_date', 'dd.mm.yyyy', false);\" alt=\"\" height=\"17\" />\n";
 $contents .= "<select name=\"ehour\">\n";
-for ($i = 0; $i < 23; ++$i)
+for ($i = 0; $i <= 23; ++$i)
 {
     $contents .= "<option value=\"" . $i . "\"" . (($i == $ehour) ? " selected=\"selected\"" : "") . ">" . str_pad($i, 2, "0", STR_PAD_LEFT) . "</option>\n";
 }
@@ -373,10 +369,19 @@ $contents .= "<br /><div style=\"text-align:center\"><input type=\"button\" valu
 $contents .= "</form>\n";
 $contents .= "<script type=\"text/javascript\">
 					var items=" . $items . ";
+					$(\"#publ_date,#exp_date\").datepicker({
+					showOn : \"button\",
+					dateFormat : \"dd/mm/yy\",
+					changeMonth : true,
+					changeYear : true,
+					showOtherMonths : true,
+					buttonImage : nv_siteroot + \"images/calendar.gif\",
+					buttonImageOnly : true
+					});					
 				   </script>";
-if ( $vid )
+if ($vid)
 {
-	 $op = '';
+    $op = '';
 }
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
