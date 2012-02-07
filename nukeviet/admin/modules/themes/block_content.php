@@ -22,9 +22,9 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
     $submit = 1;
     $error = array();
-    $list_file_name = filter_text_input( 'file_name', 'post', '', 0 );
+    $list_file_name = filter_text_input( 'file_name', 'post', '', 0 );	
     $array_file_name = explode( "|", $list_file_name );
-    
+ 
     $file_name = $row['file_name'] = trim( $array_file_name[0] );
     $module = $row['module'] = filter_text_input( 'module', 'post', '', 0, 55 );
     $row['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
@@ -32,7 +32,7 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
     $path_file_php = $path_file_ini = '';
     unset( $matches );
     preg_match( $global_config['check_block_module'], $row['file_name'], $matches );
-    if ( ! empty( $array_file_name[1] ) )
+    if ( isset( $array_file_name[1] ) )
     {
         if ( $module == 'global' and file_exists( NV_ROOTDIR . '/includes/blocks/' . $file_name ) and file_exists( NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
         {
