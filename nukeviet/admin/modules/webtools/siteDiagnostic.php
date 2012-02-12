@@ -46,7 +46,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
             $Diagnostic = new Diagnostic();
         }
 		
-        $info = ( $i == "process" ) ? $Diagnostic->process() : $Diagnostic->process( 1 );
+        $info = ( $i == "process" ) ? $Diagnostic->process() : $Diagnostic->process( 300 );
 		
         $refresh = 0;
         $imgs = array();
