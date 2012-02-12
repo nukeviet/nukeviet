@@ -25,10 +25,10 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
             $lang_module['diagnosticGPR'], //
             $lang_module['diagnosticATR'], //
             $lang_module['diagnosticGBL'], //
-            $lang_module['diagnosticYBL'], //
+            // $lang_module['diagnosticYBL'], //
             $lang_module['diagnosticABL'], //
             $lang_module['diagnosticGID'], //
-            $lang_module['diagnosticYID'] //
+            // $lang_module['diagnosticYID'] //
             );
         foreach ( $thead as $r )
         {
@@ -45,9 +45,9 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
 
             $Diagnostic = new Diagnostic();
         }
-
-        $info = ( $i == "process" ) ? $Diagnostic->process() : $Diagnostic->process( 300 );
-
+		
+        $info = ( $i == "process" ) ? $Diagnostic->process() : $Diagnostic->process( 1 );
+		
         $refresh = 0;
         $imgs = array();
         $a = 1;
@@ -57,28 +57,28 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
             $class_PageRank = ( isset( $imgs['PageRank'] ) and $imgs['PageRank'] > $inf['PageRank'] ) ? "down" : ( ( isset( $imgs['PageRank'] ) and $imgs['PageRank'] < $inf['PageRank'] ) ? "up" : "pix" );
             $class_AlexaRank = ( isset( $imgs['AlexaRank'] ) and $imgs['AlexaRank'] < $inf['AlexaRank'] ) ? "down" : ( ( isset( $imgs['AlexaRank'] ) and $imgs['AlexaRank'] > $inf['AlexaRank'] ) ? "up" : "pix" );
             $class_GoogleBackLink = ( isset( $imgs['GoogleBackLink'] ) and $imgs['GoogleBackLink'] > $inf['GoogleBackLink'] ) ? "down" : ( ( isset( $imgs['GoogleBackLink'] ) and $imgs['GoogleBackLink'] < $inf['GoogleBackLink'] ) ? "up" : "pix" );
-            $class_YahooBackLink = ( isset( $imgs['YahooBackLink'] ) and $imgs['YahooBackLink'] > $inf['YahooBackLink'] ) ? "down" : ( ( isset( $imgs['YahooBackLink'] ) and $imgs['YahooBackLink'] < $inf['YahooBackLink'] ) ? "up" : "pix" );
+            // $class_YahooBackLink = ( isset( $imgs['YahooBackLink'] ) and $imgs['YahooBackLink'] > $inf['YahooBackLink'] ) ? "down" : ( ( isset( $imgs['YahooBackLink'] ) and $imgs['YahooBackLink'] < $inf['YahooBackLink'] ) ? "up" : "pix" );
             $class_AlexaBackLink = ( isset( $imgs['AlexaBackLink'] ) and $imgs['AlexaBackLink'] > $inf['AlexaBackLink'] ) ? "down" : ( ( isset( $imgs['AlexaBackLink'] ) and $imgs['AlexaBackLink'] < $inf['AlexaBackLink'] ) ? "up" : "pix" );
             $class_GoogleIndexed = ( isset( $imgs['GoogleIndexed'] ) and $imgs['GoogleIndexed'] > $inf['GoogleIndexed'] ) ? "down" : ( ( isset( $imgs['GoogleIndexed'] ) and $imgs['GoogleIndexed'] < $inf['GoogleIndexed'] ) ? "up" : "pix" );
-            $class_YahooIndexed = ( isset( $imgs['YahooIndexed'] ) and $imgs['YahooIndexed'] > $inf['YahooIndexed'] ) ? "down" : ( ( isset( $imgs['YahooIndexed'] ) and $imgs['YahooIndexed'] < $inf['YahooIndexed'] ) ? "up" : "pix" );
+            // $class_YahooIndexed = ( isset( $imgs['YahooIndexed'] ) and $imgs['YahooIndexed'] > $inf['YahooIndexed'] ) ? "down" : ( ( isset( $imgs['YahooIndexed'] ) and $imgs['YahooIndexed'] < $inf['YahooIndexed'] ) ? "up" : "pix" );
 
             $imgs['PageRank'] = $inf['PageRank'];
             $imgs['AlexaRank'] = $inf['AlexaRank'];
             $imgs['GoogleBackLink'] = $inf['GoogleBackLink'];
-            $imgs['YahooBackLink'] = $inf['YahooBackLink'];
+            // $imgs['YahooBackLink'] = $inf['YahooBackLink'];
             $imgs['AlexaBackLink'] = $inf['AlexaBackLink'];
             $imgs['GoogleIndexed'] = $inf['GoogleIndexed'];
-            $imgs['YahooIndexed'] = $inf['YahooIndexed'];
+            // $imgs['YahooIndexed'] = $inf['YahooIndexed'];
 
             $row = array( //
                 'date' => array( 'class' => '', 'style' => "text-align:left", 'content' => nv_date( "l, d-m-Y H:i:s", $refresh ) ), //
                 'PageRank' => array( 'class' => " class=\"" . $class_PageRank . "\"", 'style' => "text-align:right", 'content' => "<img alt=\"" . $inf['PageRank'] . "\" src=\"" . NV_BASE_SITEURL . "images/rank/" . $inf['PageRank'] . ".gif\" width=\"42\" height=\"7\" /> " . number_format( $inf['PageRank'] ) ), //
                 'AlexaRank' => array( 'class' => " class=\"" . $class_AlexaRank . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['AlexaRank'] ) ), //
                 'GoogleBackLink' => array( 'class' => " class=\"" . $class_GoogleBackLink . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['GoogleBackLink'] ) ), //
-                'YahooBackLink' => array( 'class' => " class=\"" . $class_YahooBackLink . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['YahooBackLink'] ) ), //
+                // 'YahooBackLink' => array( 'class' => " class=\"" . $class_YahooBackLink . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['YahooBackLink'] ) ), //
                 'AlexaBackLink' => array( 'class' => " class=\"" . $class_AlexaBackLink . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['AlexaBackLink'] ) ), //
                 'GoogleIndexed' => array( 'class' => " class=\"" . $class_GoogleIndexed . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['GoogleIndexed'] ) ), //
-                'YahooIndexed' => array( 'class' => " class=\"" . $class_YahooIndexed . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['YahooIndexed'] ) ) //
+                // 'YahooIndexed' => array( 'class' => " class=\"" . $class_YahooIndexed . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['YahooIndexed'] ) ) //
                 );
             foreach ( $row as $td )
             {

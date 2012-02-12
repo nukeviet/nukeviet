@@ -47,19 +47,19 @@ if ( ! isset( $getContent ) or ! is_object( $getContent ) )
  */
 class Diagnostic
 {
-    private $googleDomains = array( //
+    private $googleDomains = array(
         'www.google.com', //
         'toolbarqueries.google.com' //
-        );
+	);
 
-    private $pattern = array( //
+    private $pattern = array(
         'PageRank' => "http://%s/tbr?client=navclient-auto&ch=%s&features=Rank&q=info%s&num=100&filter=0", //
         'AlexaRank' => "http://data.alexa.com/data?cli=10&dat=nsa&url=%s", //
         'YahooBackLink' => "http://siteexplorer.search.yahoo.com/search?ei=UTF-8&p=%s&bwm=i&bwmf=s", //
         'YahooIndexed' => "http://siteexplorer.search.yahoo.com/search?p=%s&bwm=p&bwmf=s&bwmo=d", //
         'GoogleBackLink' => "http://www.google.com/search?hl=en&q=link%s", //
         'GoogleIndexed' => "http://www.google.com/search?hl=en&q=site%s" //
-        );
+	);
 
     private $myDomain;
     public $currentDomain;
@@ -88,7 +88,7 @@ class Diagnostic
         }
         $this->disable_functions = $disable_functions;
         $this->myDomain = NV_SERVER_NAME;
-        //$this->myDomain = "nukeviet.vn";
+        // $this->myDomain = "nukeviet.vn";
     }
 
     /**
@@ -195,18 +195,19 @@ class Diagnostic
             $ch = $this->checkHash( $this->hashURL( $this->currentDomain ) );
             $host = $this->googleDomains[mt_rand( 0, sizeof( $this->googleDomains ) - 1 )];
             $url = sprintf( $this->pattern['PageRank'], $host, $ch, urlencode( ":" . $this->currentDomain ) );
-
+			
             $ch = curl_init();
             curl_setopt( $ch, CURLOPT_HEADER, 0 );
             curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
             curl_setopt( $ch, CURLOPT_URL, $url );
-            $content = curl_exec( $ch );
+            $content = curl_exec( $ch );			
+			
             if ( ! curl_errno( $ch ) )
             {
                 $info = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
                 if ( $info == "200" )
                 {
-                    if ( preg_match( "/^Rank\_(\d+)\:(\d+)\:(\d+)$/", $content, $matches ) )
+                    if ( preg_match( "/^Rank\_(\d+)\:(\d+)\:(\d+)$/i", $content, $matches ) )
                     {
                         curl_close( $ch );
                         return ( int )$matches[3];
@@ -218,6 +219,7 @@ class Diagnostic
 
         $url = "http://safelinks4.me/getpr.php?url=" . urlencode( $this->currentDomain );
         $content = $getContent->get( $url );
+		
         return intval( $content );
     }
 
@@ -259,9 +261,10 @@ class Diagnostic
     public function getYahooBackLink()
     {
         global $getContent;
-
+		
         $url = sprintf( $this->pattern['YahooBackLink'], urlencode( $this->currentDomain ) );
         $content = $getContent->get( $url );
+		
         if ( preg_match( "|>Inlinks \(([^\)]*?)\)<|im", $content, $match ) )
         {
             $bl = preg_replace( "/\,/", "", $match[1] );
@@ -281,10 +284,10 @@ class Diagnostic
     public function getYahooIndexed()
     {
         global $getContent;
-
+		
         $url = sprintf( $this->pattern['YahooIndexed'], urlencode( $this->currentDomain ) );
         $content = $getContent->get( $url );
-
+		
         if ( preg_match( "|>Inlinks \(([^\)]*?)\)<|im", $content, $match ) )
         {
             $bl = preg_replace( "/\,/", "", $match[1] );
@@ -307,9 +310,10 @@ class Diagnostic
 
         $url = sprintf( $this->pattern['GoogleBackLink'], urlencode( ":" . $this->currentDomain ) );
         $content = $getContent->get( $url );
-        if ( preg_match( "/\<div\>Results(.+)\<b\>([0-9\,]+)\<\/b\> linking to \<b\>([^\<]+)\<\/b\>\.\<\/div\>/isU", $content, $match ) )
-        {
-            $bl = preg_replace( "/\,/", "", $match[2] );
+		
+        if ( preg_match( "/\<div\>About ([0-9\,]+) results\<\/div\>/isU", $content, $match ) )
+        {		
+            $bl = preg_replace( "/\,/", "", $match[1] );
             return ( int )$bl;
         }
         else
@@ -329,9 +333,10 @@ class Diagnostic
 
         $url = sprintf( $this->pattern['GoogleIndexed'], urlencode( ":" . $this->currentDomain ) );
         $content = $getContent->get( $url );
-        if ( preg_match( "/\<div\>Results(.+)\<b\>([0-9\,]+)\<\/b\> from \<b\>([^\<]+)\<\/b\>\.\<\/div\>/isU", $content, $match ) )
+			
+        if ( preg_match( "/\<div\>About ([0-9\,]+) results\<\/div\>/isU", $content, $match ) )
         {
-            $bl = preg_replace( "/\,/", "", $match[2] );
+            $bl = preg_replace( "/\,/", "", $match[1] );
             return ( int )$bl;
         }
         else
@@ -361,12 +366,12 @@ class Diagnostic
         $result['date'] = gmdate( "D, d M Y H:i:s", NV_CURRENTTIME ) . " GMT";
         $result['PageRank'] = $this->getPageRank();
         list( $result['AlexaRank'], $result['AlexaBackLink'], $result['AlexaReach'] ) = $this->getAlexaRank();
-        $result['YahooBackLink'] = $this->getYahooBackLink();
-        $result['YahooIndexed'] = $this->getYahooIndexed();
+        // $result['YahooBackLink'] = $this->getYahooBackLink();
+        // $result['YahooIndexed'] = $this->getYahooIndexed();
         $result['GoogleBackLink'] = $this->getGoogleBackLink();
         $result['GoogleIndexed'] = $this->getGoogleIndexed();
         $content['item'][] = $result;
-
+		
         $xmlHeader = '<?xml version="1.0" encoding="UTF-8"?><diagnostic></diagnostic>';
         $xml = new SimpleXMLElement( $xmlHeader );
         foreach ( $content['item'] as $item )
