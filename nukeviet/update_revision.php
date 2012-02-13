@@ -163,12 +163,19 @@ if (defined("NV_IS_GODADMIN"))
         }
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')");
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1530')");
-        nv_save_file_config_global();
+
+        if ($global_config['revision'] < 1576)
+        {
+			$db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'captcha_type', '0')");
+		}
 
         $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional'], 'rewrite_endurl' => $global_config['rewrite_endurl'], 'rewrite_exturl' => $global_config['rewrite_exturl']);
         nv_rewrite_change($array_config_rewrite);
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/searchEngines.xml');
-
+		
+        nv_save_file_config_global();
+		
+		
         die("Update successfully, you should immediately delete this file.");
     }
 }

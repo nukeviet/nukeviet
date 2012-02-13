@@ -489,23 +489,31 @@ function nv_capcha_txt($seccode, $scaptcha = "captcha")
 {
     global $sys_info, $global_config, $nv_Request;
 
-    if (!$sys_info['gd_support'])
-        return true;
+	if( $global_config['captcha_type'] == 1 )
+	{
+		if( empty( $_SESSION['scaptcha'] ) or empty( $seccode ) ) return false;
+		if( strtolower($_SESSION['scaptcha']) != strtolower($seccode) ) return false;
+		return true;
+	}
+	else
+	{
+		if (!$sys_info['gd_support']) return true;
 
-    $scaptcha = preg_replace('/[^a-z0-9]/', '', $scaptcha);
-    $skeycaptcha = ($scaptcha == "captcha") ? "random_num" : "random_" . substr($scaptcha, 0, 20);
+		$scaptcha = preg_replace('/[^a-z0-9]/', '', $scaptcha);
+		$skeycaptcha = ($scaptcha == "captcha") ? "random_num" : "random_" . substr($scaptcha, 0, 20);
 
-    $seccode = strtoupper($seccode);
-    $random_num = $nv_Request->get_string($skeycaptcha, 'session', 0);
-    $datekey = date("F j");
-    $rcode = strtoupper(md5(NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey));
+		$seccode = strtoupper($seccode);
+		$random_num = $nv_Request->get_string($skeycaptcha, 'session', 0);
+		$datekey = date("F j");
+		$rcode = strtoupper(md5(NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey));
 
-    mt_srand(( double )microtime() * 1000000);
-    $maxran = 1000000;
-    $random_num = mt_rand(0, $maxran);
-    $nv_Request->set_Session($skeycaptcha, $random_num);
+		mt_srand(( double )microtime() * 1000000);
+		$maxran = 1000000;
+		$random_num = mt_rand(0, $maxran);
+		$nv_Request->set_Session($skeycaptcha, $random_num);
 
-    return (preg_match("/^[a-zA-Z0-9]{" . NV_GFX_NUM . "}$/", $seccode) and $seccode == substr($rcode, 2, NV_GFX_NUM));
+		return (preg_match("/^[a-zA-Z0-9]{" . NV_GFX_NUM . "}$/", $seccode) and $seccode == substr($rcode, 2, NV_GFX_NUM));
+	}
 }
 
 /**

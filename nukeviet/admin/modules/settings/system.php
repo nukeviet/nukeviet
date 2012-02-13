@@ -32,6 +32,11 @@ $captcha_array = array(//
     7 => $lang_module['captcha_7'] //
 );
 
+$captcha_type_array = array(//
+    0 => $lang_module['captcha_type_0'], //
+    1 => $lang_module['captcha_type_1'] //
+);
+
 $allow_sitelangs = array();
 foreach ($global_config['allow_sitelangs'] as $lang_i)
 {
@@ -69,6 +74,11 @@ if ($nv_Request->isset_request('submit', 'post'))
     if (isset($captcha_array[$gfx_chk]))
     {
         $array_config_global['gfx_chk'] = $gfx_chk;
+    }
+    $captcha_type = $nv_Request->get_int('captcha_type', 'post');
+    if (isset($captcha_type_array[$captcha_type]))
+    {
+        $array_config_global['captcha_type'] = $captcha_type;
     }
 
     $site_email = filter_text_input('site_email', 'post', '', 1, 255);
@@ -209,6 +219,14 @@ foreach ($captcha_array as $gfx_chk_i => $gfx_chk_lang)
     $xtpl->assign('GFX_CHK_VALUE', $gfx_chk_i);
     $xtpl->assign('GFX_CHK_TITLE', $gfx_chk_lang);
     $xtpl->parse('main.opcaptcha');
+}
+
+foreach ($captcha_type_array as $captcha_type_i => $captcha_type_lang)
+{
+    $xtpl->assign('CAPTCHA_TYPE_SELECTED', ($array_config_global['captcha_type'] == $captcha_type_i) ? ' selected="selected"' : '');
+    $xtpl->assign('CAPTCHA_TYPE_VALUE', $captcha_type_i);
+    $xtpl->assign('CAPTCHA_TYPE_TITLE', $captcha_type_lang);
+    $xtpl->parse('main.captcha_type');
 }
 
 foreach ($proxy_blocker_array as $proxy_blocker_i => $proxy_blocker_v)

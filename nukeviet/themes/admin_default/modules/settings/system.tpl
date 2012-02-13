@@ -134,6 +134,20 @@
         <tbody class="second">
             <tr>
                 <td>
+                    <strong>{LANG.captcha_type}</strong>
+                </td>
+                <td>
+                    <select name="captcha_type">
+                        <!-- BEGIN: captcha_type -->
+						<option value="{CAPTCHA_TYPE_VALUE}"{CAPTCHA_TYPE_SELECTED}>{CAPTCHA_TYPE_TITLE}</option>
+                        <!-- END: captcha_type -->
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td>
                     <strong>{LANG.site_timezone}</strong>
                 </td>
                 <td>
@@ -146,7 +160,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.date_pattern}</strong>
@@ -156,7 +170,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.time_pattern}</strong>
@@ -166,7 +180,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.gzip_method}</strong>
@@ -176,7 +190,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.optActive}</strong>
@@ -190,7 +204,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.proxy_blocker}</strong>
@@ -204,7 +218,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.str_referer_blocker}</strong>
@@ -214,7 +228,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.getloadavg}</strong>
@@ -224,7 +238,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody  class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.my_domains}</strong>
@@ -234,7 +248,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.cookie_prefix}</strong>
@@ -244,7 +258,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
+        <tbody>
             <tr>
                 <td>
                     <strong>{LANG.session_prefix}</strong>
@@ -254,7 +268,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="second">
             <tr>
                 <td>
                     <strong>{LANG.searchEngineUniqueID}</strong>
