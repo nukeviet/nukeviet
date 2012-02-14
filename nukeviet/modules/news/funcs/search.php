@@ -144,7 +144,7 @@ if (empty($key))
 }
 else
 {
-    $page_title = $q . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
+    $page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_module['search_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 }
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
