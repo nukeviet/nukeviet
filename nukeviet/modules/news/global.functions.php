@@ -205,7 +205,11 @@ function nv_news_get_bodytext($bodytext)
     {
         foreach ($match[0] as $key => $_m)
         {
-            $textimg = " " . $match[1][$key];
+            $textimg = "";
+            if (strpos($match[1][$key], 'data:image/png;base64') === false)
+            {
+                $textimg = " " . $match[1][$key];
+            }            
             if (preg_match_all("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $_m, $m_alt))
             {
                 $textimg .= " " . $m_alt[1][0];
