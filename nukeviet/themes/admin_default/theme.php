@@ -193,7 +193,7 @@ function nv_admin_theme ( $contents, $head_site = 1 )
     $xtpl->assign( 'THEME_ERROR_INFO', nv_error_info() );
     $xtpl->assign( 'MODULE_CONTENT', $contents );
     $end_time = array_sum( explode( " ", microtime() ) );
-    $total_time = substr( ( $end_time - NV_START_TIME + $db->time ), 0, 5 );
+
     $xtpl->assign( 'NV_TOTAL_TIME', substr( ( $end_time - NV_START_TIME + $db->time ), 0, 5 ) );
     if ( defined( "NV_IS_SPADMIN" ) )
     {
