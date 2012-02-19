@@ -7,14 +7,13 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (!defined('NV_IS_MOD_ABOUT'))
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_ABOUT')) die('Stop!!!');
 
 $contents = "";
 
 if ($id)
 {
-    $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache";
+    $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache";
 
     if (($cache = nv_get_cache($cache_file)) != false)
     {
@@ -79,4 +78,5 @@ else
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_site_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>
