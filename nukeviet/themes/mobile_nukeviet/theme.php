@@ -71,12 +71,6 @@ function nv_site_theme($contents)
     }
     //Breakcolumn
 
-    $theme_stat_img = "";
-    $theme_footer_js = "";
-    if (NV_LANG_INTERFACE == 'vi')
-    {
-        $theme_footer_js .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
-    }
     $xtpl->assign('THEME_IMG_CRONJOBS', NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass());
 
 	// Chuyen doi giao dien
@@ -106,17 +100,22 @@ function nv_site_theme($contents)
 	unset( $theme_type, $i, $num_theme_type );
 	
     $xtpl->parse('main');
+	
     $sitecontent = $xtpl->text('main');
     $sitecontent = nv_blocks_content($sitecontent);
-    $my_footer = $theme_footer_js . $my_footer;
+	
     if (defined('NV_IS_ADMIN'))
     {
         $my_footer = nv_admin_menu() . $my_footer;
     }
+	
     if (!empty($my_head))
         $sitecontent = preg_replace('/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1);
+		
     if (!empty($my_footer))
         $sitecontent = preg_replace('/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1);
+		
     return $sitecontent;
 }
+
 ?>

@@ -1,88 +1,34 @@
-body
-{
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    line-height: 1.4;
-}
-a:link, a:active, a:visited
-{
-    color: #097eaf;
-    text-decoration: none;
-}
-a:hover
-{
-    color: #4491b2;
-}
-#container
-{
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #fff;
-}
-#header
-{
-    background: #A2D8FA url(../images/header.jpg) no-repeat;
-    height: 70px;
-    position: relative;
-}
-#header #logo
-{
-    float: left;
-}
-#header #logo img
-{
-    height: 60px;
-    padding: 5px 0 0 30px;
-    vertical-align: middle;
-}
-#header .language
-{
-    position: absolute;
-    top: 20px;
-    right: 5px;
-}
-#footer
-{
-    border-top: 8px solid #0f45a8;
-    padding: 5px 0;
-}
-#footer p.footer
-{
-    padding: 0 10px;
-    margin: 0;
-    font-size: 11px;
-    color: #9c9c9c;
-}
-div.contentwrapper
-{
-    padding: 0 5px;
-}
-/*Boxed*/
-div.box
-{
-    margin-bottom: 15px;
-    width: 100%;
-}
-div.silver
-{
-    background: #f2f2f2;
-}
-div.box h3.header
-{
-    border: 1px solid #0f69e2;
-    border-bottom: 2px solid #fff;
-    height: 28px;
-    line-height: 28px;
-    color: #fff;
-    text-indent: 10px;
-    background: #0B41A5 url(../images/h3.header.jpg) repeat-x;
-}
-div.box h3.header a
-{
-    color: #fff;
-}
-div.box h3.header strong
-{
-    padding-right: 4px;
-    color: #00ff00;
-}
+﻿html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend{background:transparent;border:0;font-size:100%;margin:0;outline:0;padding:0;vertical-align:baseline}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:''}:focus{outline:0}ins{text-decoration:none}del{text-decoration:line-through}.fl{float:left}.fr{float:right}.clear{clear:both}.noborder{border:0!important}.clearfix:after{clear:both;content:".";display:block;height:0;line-height:0;visibility:hidden}.clearfix{display:inline-block}html[xmlns] .clearfix{display:block}* html .clearfix{height:1%}
+
+body{font-family: Arial, Helvetica, sans-serif;font-size: 12px;line-height: 1.4}
+a:link, a:active, a:visited{color: #097eaf;text-decoration: none}
+a:hover{color: #4491b2}
+.hide{visibility:hidden;display:none}
+.ar{text-align:right}
+.gcot{margin:0;padding:5px}
+
+/* HEADER */
+#header{background:#A2D8FA url(../images/header.jpg) no-repeat;height:50px;position: relative;overflow:hidden}
+#header .language{position: absolute;top:12px;right: 5px}
+
+/* MENU */
+.nav1{height:25px;background:transparent url('../images/nav_bg.jpg') repeat-x;color:#dadada}
+.nav1 li{float:left}
+.nav1 a{line-height:25px;color:#fff;padding:0 5px}
+.nav1 a.h{padding-left:25px;background:url('../images/icons/home.png') no-repeat 5px 0}
+.nav1 a.current{font-weight:700}
+
+/* FOOTER */
+#footer{border-top:8px solid #0f45a8;padding: 5px 0;background:url('../images/f-bg.jpg') repeat-x center top}
+
+/* BREAK COLUM */
+h3.brcl{height:28px;background:url('../images/brcl.gif') repeat-x;padding:0 5px}
+h3.brcl img{vertical-align:middle}
+h3.brcl a{line-height:28px;color:#333}
+h3.brcl a.it{padding-left:20px;background:url('../images/brcl-br.gif') no-repeat 2px -3px}
+
+/* BOX */
+div.box{margin-bottom:15px;width:100%;background:#f4f2f2;border: 1px solid #0f69e2}
+div.box h3.header{height:28px;line-height:28px;color:#fff;text-indent:10px;background:#0B41A5 url(../images/h3.header.jpg) repeat-x}
+div.box h3.header a{color:#fff}
+div.box .ct{padding:5px}
