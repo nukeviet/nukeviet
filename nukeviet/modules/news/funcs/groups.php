@@ -6,8 +6,10 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3-6-2010 0:14
  */
+
 if (!defined('NV_IS_MOD_NEWS'))
     die('Stop!!!');
+
 if (isset($array_op[1]))
 {
     $alias = trim($array_op[1]);
@@ -125,4 +127,5 @@ else
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_site_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>

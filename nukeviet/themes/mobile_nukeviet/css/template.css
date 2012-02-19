@@ -1,6 +1,6 @@
 ﻿html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend{background:transparent;border:0;font-size:100%;margin:0;outline:0;padding:0;vertical-align:baseline}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:''}:focus{outline:0}ins{text-decoration:none}del{text-decoration:line-through}.fl{float:left}.fr{float:right}.clear{clear:both}.noborder{border:0!important}.clearfix:after{clear:both;content:".";display:block;height:0;line-height:0;visibility:hidden}.clearfix{display:inline-block}html[xmlns] .clearfix{display:block}* html .clearfix{height:1%}
 
-body{font-family: Arial, Helvetica, sans-serif;font-size: 12px;line-height: 1.4}
+body{font-family: Arial, Helvetica, sans-serif;font-size: 14px;line-height: 1.4}
 a:link, a:active, a:visited{color: #097eaf;text-decoration: none}
 a:hover{color: #4491b2}
 .hide{visibility:hidden;display:none}

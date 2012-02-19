@@ -19,11 +19,11 @@ if (!defined('NV_IS_MODADMIN') and $page < 5)
 {
     if ($set_view_page)
     {
-        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_page_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
+        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $op . "_" . $catid . "_page_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
     }
     else
     {
-        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
+        $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
     }
     if (($cache = nv_get_cache($cache_file)) != false)
     {
@@ -306,4 +306,5 @@ if ($page > 1)
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_site_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>

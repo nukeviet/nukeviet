@@ -6,8 +6,10 @@
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3-6-2010 0:14
  */
+
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+
 $difftimeout = 360;
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 $content = filter_text_input( 'content', 'post', '', 1 );

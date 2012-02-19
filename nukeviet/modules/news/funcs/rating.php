@@ -8,7 +8,6 @@
  */
 
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
-
 if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $contents = "";
