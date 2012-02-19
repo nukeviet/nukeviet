@@ -70,5 +70,11 @@ $lang_module['cats'] = "Thuộc mục";
 $lang_module['caton'] = " menu con nếu muốn xóa hãy xóa hoặc di chuyển các menu con trước";
 $lang_module['error_menu_link'] = "Lỗi: Bạn chưa nhập đường link";
 $lang_module['name_block'] = "Khối menu";
+$lang_module['here'] = "đây";
+$lang_module['groups'] = "Nếu chọn &quot;Nhóm thành viên&quot; hãy đánh dấu vào các nhóm bên dưới";
+$lang_module['sub_menu'] = "menu con";
+
+$lang_module['main_note_0'] = "Nhấp vào";
+$lang_module['main_note_1'] = "để tạo khối menu mới. Nhấp vào tên mỗi khối menu bên dưới để xem chi tiết và chỉnh sửa các menu.";
 
 ?>

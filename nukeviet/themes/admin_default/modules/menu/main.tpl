@@ -1,5 +1,11 @@
 <!-- BEGIN: first -->
-<a class="button1" href="{ADD_NEW}"><span><span>{LANG.add_menu}</span></span></a>
+<table class="tab1 fixtab">
+	<tbody>
+		</tr>
+			<td>{LANG.main_note_0} <a href="{ADD_NEW}" title="{LANG.add_menu}"><strong>{LANG.here}</strong></a> {LANG.main_note_1}</td>
+		</tr>
+	</tbody>
+</table>
 <!-- BEGIN: table -->
 <script type="text/javascript">
 	var block = '{LANG.block}';
@@ -8,7 +14,7 @@
 <table summary="" class="tab1">
     <thead>
         <tr align="center">
-            <td>
+            <td style="width:50px">
                 <strong>{LANG.number}</strong>
             </td>
             <td>
@@ -21,7 +27,7 @@
                 <strong>{LANG.menu_description}</strong>
             </td>                   
                         
-            <td>
+            <td style="width:100px">
                  <strong>{LANG.action}</strong>
             </td>
         </tr>

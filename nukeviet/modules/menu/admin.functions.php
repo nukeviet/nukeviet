@@ -50,7 +50,6 @@ while ( $row = $db->sql_fetchrow( $result ) )
 /**
  * nv_list_menu()
  *
- * @param integer $parentid
  * @return
  */
 function nv_list_menu()
@@ -71,7 +70,6 @@ function nv_list_menu()
 	}
 
 	return $list;
-
 }
 
 /**

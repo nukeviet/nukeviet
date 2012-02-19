@@ -1,4 +1,4 @@
-.ddsmoothmenu{background:#0B41A5;font:bold 12px Arial;width:100%}
+﻿.ddsmoothmenu{background:#0B41A5;font:bold 12px Arial;width:100%}
 .ddsmoothmenu ul{list-style-type:none;margin:0;padding:0;z-index:100}
 .ddsmoothmenu ul li{display:inline;float:left;position:relative}
 .ddsmoothmenu ul li a{background:#0c42a6;border-right:1px solid #778;color:#2d2b2b;display:block;padding:8px 10px;text-decoration:none}
@@ -21,4 +21,4 @@
 .ddsmoothmenu-v ul li ul{font-weight:normal;position:absolute;top:0;visibility:hidden;width:170px}
 * html .ddsmoothmenu-v ul li{float:left;height:1%}
 * html .ddsmoothmenu,* html .ddsmoothmenu-v ul li a{height:1%}
-.ddsmoothmenu-v ul li a.selected,.ddsmoothmenu-v ul li a:hover{background:#e9eef2;color:#e63707}
+.ddsmoothmenu-v ul li a.selected,.ddsmoothmenu-v ul li a.current,.ddsmoothmenu-v ul li a:hover{background:#e9eef2;color:#e63707}

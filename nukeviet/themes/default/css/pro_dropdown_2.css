@@ -1,13 +1,13 @@
-.preload1{background:url(../images/menu/three_1.gif)}
+﻿.preload1{background:url(../images/menu/three_1.gif)}
 .preload2{background:url(../images/menu/three_1a.gif)}
 #nav{background:#fff url(../images/menu/three_0.gif) repeat-x;font-family:arial, verdana, sans-serif;height:38px;list-style:none;margin:0;padding:0;position:relative;z-index:500}
 #nav li.top{display:block;float:left;height:38px}
 #nav li a.top_link{background:url(../images/menu/three_0.gif);color:#fff;cursor:pointer;display:block;float:left;font-size:11px;font-weight:bold;height:35px;line-height:33px;padding:0 0 0 12px;text-decoration:none}
 #nav li a.top_link span{background:url(../images/menu/three_0.gif) right top no-repeat;display:block;float:left;height:35px;padding:0 24px 0 12px}
 #nav li a.top_link span.down{background:url(../images/menu/three_0a.gif) no-repeat right top;display:block;float:left;height:35px;padding:0 24px 0 12px}
-#nav li:hover a.top_link{background:url(../images/menu/three_1.gif) no-repeat;color:#fff}
-#nav li:hover a.top_link span{background:url(../images/menu/three_1.gif) no-repeat right top}
-#nav li:hover a.top_link span.down{background:url(../images/menu/three_1a.gif) no-repeat right top}
+#nav li:hover a.top_link,#nav li.current a.top_link{background:url(../images/menu/three_1.gif) no-repeat;color:#fff}
+#nav li:hover a.top_link span,#nav li.current a.top_link span{background:url(../images/menu/three_1.gif) no-repeat right top}
+#nav li:hover a.top_link span.down,#nav li.current a.top_link span.down{background:url(../images/menu/three_1a.gif) no-repeat right top}
 #nav li:hover{position:relative;z-index:200}
 #nav li:hover ul.sub{background:#bbd37e;border:1px solid #5c731e;height:auto;left:1px;padding:3px;top:38px;white-space:nowrap;width:120px;z-index:300}
 #nav li:hover ul.sub li{display:block;float:left;font-weight:normal;height:20px;position:relative;width:90px}

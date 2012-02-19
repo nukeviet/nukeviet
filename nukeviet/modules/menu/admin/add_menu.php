@@ -333,11 +333,14 @@ while ($row = $db->sql_fetchrow($result))
     $result1 = $db->sql_query($sql);
     $nu = $db->sql_numrows($result1);
 
+	$row['sub'] = sizeof( array_filter(explode( ',', $row['subitem'] )) );
+	
     $arr_table[$row['id']] = array('id' => $row['id'], //
         'mid' => $row['mid'], //
         'nu' => $nu, //
+        'sub' => $row['sub'], //
         'parentid' => $row['parentid'], //
-        'link' => $row['link'], //
+        'link' => nv_htmlspecialchars( $row['link'] ), //
         'weight' => $row['weight'], //
         'title' => $row['title'], //
         'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=" . $row['id'], //
@@ -382,6 +385,11 @@ if (!empty($arr_table))
             $xtpl->parse('main.table.loop1.weight');
         }
 
+		if( $rows['sub'] )
+		{
+			$xtpl->parse('main.table.loop1.sub');
+		}
+		
         $xtpl->parse('main.table.loop1');
     }
 
@@ -599,4 +607,5 @@ $page_title = $lang_module['add_item'];
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>

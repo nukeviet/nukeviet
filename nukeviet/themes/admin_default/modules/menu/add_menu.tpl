@@ -12,11 +12,11 @@
 <table summary="" class="tab1">
     <thead>
         <tr align="center">
-            <td><strong>{LANG.number}</strong></td>
+            <td style="width:40px"><strong>{LANG.number}</strong></td>
             <td><strong>{LANG.title}</strong></td>
             <td><strong>{LANG.link}</strong></td>
             <td><strong>{LANG.name_block}</strong></td>
-            <td><strong>{LANG.action}</strong></td>
+            <td style="width:100px"><strong>{LANG.action}</strong></td>
         </tr>
     </thead>
     <!-- BEGIN: loop1 -->
@@ -28,7 +28,7 @@
                 <option value="{stt}" {select}>{stt}</option>
                 <!-- END: weight -->
             </select></td>
-            <td><a href="{ROW.url_title}"><strong>{ROW.title} </strong></a></td>
+            <td><a href="{ROW.url_title}"><strong>{ROW.title} </strong></a><!-- BEGIN: sub --> (<span class="requie">{ROW.sub} {LANG.sub_menu}</span>)<!-- END: sub --></td>
             <td>{ROW.link}</td>
             <td>{ROW.name_block}</td>
             <td align="center"><span class="edit_icon"><a href="{ROW.edit_url}">{LANG.edit}</a></span>&nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a></span></td>
@@ -124,7 +124,7 @@
                 </select><!-- BEGIN: group_view_empty -->
                 <br />
                 <strong>{LANG.groups}</strong>
-                <br />
+                <div class="hr"></div>
                 <!-- BEGIN: groups_view -->
                 <input name="groups_view[]" value="{GROUPS_VIEW.key}" type="checkbox"{GROUPS_VIEW.checked} />
                 {GROUPS_VIEW.title}

@@ -1,4 +1,5 @@
-.sf-menu,.sf-menu *{list-style:none;margin:0;padding:0}
+﻿.sf-menu,.sf-menu *{list-style:none;margin:0;padding:0}
+.sf-menu .current{background-color: #91B5FF}
 .sf-menu{float:left;line-height:1.0;margin-bottom:1em}
 .sf-menu ul{position:absolute;top:-999em;width:10em}
 .sf-menu ul li{width:100%}
