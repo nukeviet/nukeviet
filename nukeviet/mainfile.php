@@ -187,7 +187,6 @@ define( 'NV_UPLOAD_MAX_FILESIZE', min( nv_converttoBytes( ini_get( 'upload_max_f
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh duong dan thuc den thu muc upload
 define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) ); //Hau to cua file cache
 
-
 //Ngon ngu
 require ( NV_ROOTDIR . '/includes/language.php' );
 require ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
@@ -202,11 +201,9 @@ $global_config['cookie_domain'] = $nv_Request->cookie_domain; //vd: .mydomain1.c
 $global_config['site_url'] = $nv_Request->site_url; //vd: http://mydomain1.com/ten_thu_muc_chua_site
 $global_config['my_domains'] = $nv_Request->my_domains; //vd: "mydomain1.com,mydomain2.com"
 
-
 $sys_info['register_globals'] = $nv_Request->is_register_globals; //0 = khong, 1 = bat
 $sys_info['magic_quotes_gpc'] = $nv_Request->is_magic_quotes_gpc; // 0 = khong, 1 = co
 $sys_info['sessionpath'] = $nv_Request->session_save_path; //vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
-
 
 $client_info['session_id'] = $nv_Request->session_id; //ten cua session
 $client_info['referer'] = $nv_Request->referer; //referer
@@ -418,6 +415,10 @@ if ( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( 
 {
     include_once ( NV_ROOTDIR . "/includes/core/cronjobs.php" );
 }
+
+// Xac dinh kieu giao dien mac dinh
+$global_config['array_theme_type'] = array_filter( array_map( 'trim', explode( ',', NV_THEME_TYPE ) ) );
+$global_config['current_theme_type'] = $nv_Request->get_string( 'nv' . NV_LANG_DATA . 'themever', 'cookie', '' );
 
 //Kiem tra tu cach admin
 if ( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )

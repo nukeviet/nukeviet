@@ -240,5 +240,9 @@ $lang_global['error_upload_forbidden'] = "Lỗi: Thư mục chứa file tải l�
 $lang_global['error_upload_writable'] = "Lỗi: Thư mục %s không cho phép chứa file tải lên. Có thể bạn cần CHMOD lại thư mục này ở dạng 0777";
 $lang_global['error_upload_urlfile'] = "Lỗi: URL mà bạn đưa ra không đúng";
 $lang_global['error_upload_url_notfound'] = "Lỗi: Không thể tải file từ URL mà bạn đưa ra";
+$lang_global['theme_type_0'] = "Desktop";
+$lang_global['theme_type_1'] = "Mobile";
+$lang_global['theme_type_chose'] = "Chuyển sang giao diện cho %s";
+$lang_global['theme_type_select'] = "Xem bản";
 
 ?>

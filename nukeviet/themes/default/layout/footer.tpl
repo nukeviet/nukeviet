@@ -17,6 +17,11 @@
 	            <li>
 	                <br/><a title="NukeViet" href="http://nukeviet.vn">NukeViet</a> is a registered trademark of <a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a>
 	            </li>
+				<!-- BEGIN: theme_type -->
+				<li>
+					<br />
+					{LANG.theme_type_select}: <!-- BEGIN: loop --><!-- BEGIN: other --><a href="{STHEME_TYPE}" title="{STHEME_INFO}">{STHEME_TITLE}</a><!-- END: other --><!-- BEGIN: current -->{STHEME_TITLE}<!-- END: current --><!-- BEGIN: space --> | <!-- END: space --><!-- END: loop -->
+				</li><!-- END: theme_type -->
 	        </ul>
 	    </div>
 	    <div class="clear">

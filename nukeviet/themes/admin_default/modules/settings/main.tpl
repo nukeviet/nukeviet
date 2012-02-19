@@ -78,6 +78,16 @@
         <tbody>
             <tr>
                 <td>
+                    <strong>{LANG.allow_switch_mobi_des}</strong>
+                </td>
+                <td>
+                    <input type="checkbox" name="switch_mobi_des" value="1"{VALUE.switch_mobi_des}/>
+                </td>
+            </tr>
+        </tbody>
+        <tbody class="second">
+            <tr>
+                <td>
                     <strong>{LANG.disable_content}</strong>
                 </td>
                 <td>

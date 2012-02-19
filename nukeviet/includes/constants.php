@@ -210,12 +210,14 @@ define( "NV_DISPLAY_ERRORS_LIST", E_ALL ); //Danh sach cac loi se hien thi
 define( "NV_LOG_ERRORS_LIST", E_ALL | E_STRICT ); //Danh sach cac loi se ghi log
 define( "NV_SEND_ERRORS_LIST", E_USER_ERROR ); //Danh sach cac loi se gui den email
 
-
-//define( 'NV_ALLOWED_HTML_TAGS', 'a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul' );
+// Ma HTML duoc chap nhan
 define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul' );
 
 //Phan dau cua trang
 define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 3.0\n * @Author VINADES.,JSC (contact@vinades.vn)\n * @Copyright (C) 2010 VINADES.,JSC. All rights reserved\n * @Createdate " . gmdate( "D, d M Y H:i:s" ) . " GMT\n */" );
+
+// Phien ban giao dien tu cao den thap - it nhat phai co hai kieu mac dinh khong duoc it hon
+define( "NV_THEME_TYPE", 'd,t' );
 
 //Chong IFRAME
 define( "NV_ANTI_IFRAME", 0 );

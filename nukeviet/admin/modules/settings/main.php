@@ -19,6 +19,7 @@ if ($submit)
     $array_config = array();
     $array_config['site_theme'] = filter_text_input('site_theme', 'post', '', 1, 255);
     $array_config['site_name'] = filter_text_input('site_name', 'post', '', 1, 255);
+    $array_config['switch_mobi_des'] = $nv_Request->get_int('switch_mobi_des', 'post', 0);
     $site_logo = filter_text_input('site_logo', 'post');
 
     $array_config['site_keywords'] = filter_text_input('site_keywords', 'post', '', 1, 255);
@@ -99,6 +100,8 @@ $global_config['disable_site_content'] = nv_br2nl($global_config['disable_site_c
 // dung de lay data tu CSDL
 $global_config['disable_site_content'] = nv_htmlspecialchars($global_config['disable_site_content']);
 
+$global_config['switch_mobi_des'] = ! empty( $global_config['switch_mobi_des'] ) ? ' checked="checked"' : '';
+
 if (!nv_is_url($global_config['site_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_logo']))
 {
     $site_logo = NV_BASE_SITEURL . $global_config['site_logo'];
@@ -112,7 +115,9 @@ $value_setting = array(//
     "sitename" => $global_config['site_name'], //
     "site_logo" => $site_logo, //
     "site_keywords" => $global_config['site_keywords'], //
-    "description" => $global_config['site_description']);
+    "description" => $global_config['site_description'],  //
+    "switch_mobi_des" => $global_config['switch_mobi_des'],  //
+);
 
 $module_array = array();
 

@@ -216,4 +216,6 @@ $lang_module['searchEngineUniqueID'] = "Google search Engine ID<br />(Có dạng
 $lang_module['timezoneAuto'] = "Theo máy tính của khách truy cập";
 $lang_module['timezoneByCountry'] = "Theo quốc gia của khách truy cập";
 
+$lang_module['allow_switch_mobi_des'] = "Cho phép chuyển đổi giao diện mobile, desktop";
+
 ?>

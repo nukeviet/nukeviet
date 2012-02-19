@@ -30,6 +30,9 @@
 <div id="footer" class="clearfix">
     <div class="fl div2">
     	[FOOTER_SITE]
+		<div class="clear"></div>
+		<!-- BEGIN: theme_type -->
+		{LANG.theme_type_select}: <!-- BEGIN: loop --><!-- BEGIN: other --><a href="{STHEME_TYPE}" title="{STHEME_INFO}">{STHEME_TITLE}</a><!-- END: other --><!-- BEGIN: current -->{STHEME_TITLE}<!-- END: current --><!-- BEGIN: space --> | <!-- END: space --><!-- END: loop --><!-- END: theme_type -->
     </div>
     <div class="fr div2 aright">
         <!-- BEGIN: bottom_menu --><a title="{TOP_MENU.title}" href="{TOP_MENU.link}">{TOP_MENU.title}</a>
