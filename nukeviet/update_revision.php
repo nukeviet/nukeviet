@@ -161,22 +161,44 @@ if (defined("NV_IS_GODADMIN"))
                 $db->sql_query("UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modules` SET `main_file` = '0' WHERE `module_file`='menu'");
             }
         }
-        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')");
-        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1530')");
 
         if ($global_config['revision'] < 1576)
         {
-			$db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'captcha_type', '0')");
-			$db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'switch_mobi_des', '1')");
-		}
+            $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'captcha_type', '0')");
+            $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'switch_mobi_des', '1')");
+        }
+        if ($global_config['revision'] < 1587)
+        {
+            nv_deletefile(NV_ROOTDIR . '/files/js', true);
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/css/nav_menu.css');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/css/reset.css');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/css/tab_info.css');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/footer_bg.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/logo.gif');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_l.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_l.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_r.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_r.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_home_l.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_home_r.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_hover_l.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_hover_r.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_l.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_r.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_sub_a.jpg');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/navmenu-v_hover.jpg');
+        }
+
+        //Update revision
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')");
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1587')");
 
         $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional'], 'rewrite_endurl' => $global_config['rewrite_endurl'], 'rewrite_exturl' => $global_config['rewrite_exturl']);
         nv_rewrite_change($array_config_rewrite);
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/searchEngines.xml');
-		
+
         nv_save_file_config_global();
-		
-		
+
         die("Update successfully, you should immediately delete this file.");
     }
 }
