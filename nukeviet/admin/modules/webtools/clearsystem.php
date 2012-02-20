@@ -49,8 +49,8 @@ if ($nv_Request->isset_request('submit', 'post') and $nv_Request->isset_request(
     clearstatcache();
     if (in_array('clearcache', $deltype))
     {
-        $cacheDir = NV_ROOTDIR . '/cache';
-        $files = nv_clear_files($cacheDir, 'cache');
+        $cacheDir = NV_ROOTDIR . '/' . NV_CACHEDIR;
+        $files = nv_clear_files($cacheDir, NV_CACHEDIR);
         foreach ($files as $file)
         {
             $xtpl->assign('DELFILE', $file);
