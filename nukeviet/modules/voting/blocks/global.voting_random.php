@@ -25,7 +25,7 @@ if ( ! nv_function_exists( 'nv_block_voting' ) )
         
         if ( ! isset( $site_mods['voting'] ) ) return "";
         
-        $sql = "SELECT `vid`, `question`,`acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` 
+        $sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` 
         FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "` 
         WHERE `act`=1";
         
@@ -98,13 +98,13 @@ if ( ! nv_function_exists( 'nv_block_voting' ) )
             $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $site_mods['voting']['module_file'] . "/js/user.js\"></script>\n";
             
             $action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";
-            
+
             $voting_array = array(  //
                 "checkss" => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ), //
 				"accept" => ( int )$current_voting['acceptcm'], //
 				"errsm" => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'], //
 				"vid" => $current_voting['vid'], //
-				"question" => $current_voting['question'], //
+                "question" => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
 				"action" => $action, //
 				"langresult" => $lang_module['voting_result'], //
 				"langsubmit" => $lang_module['voting_hits']  //

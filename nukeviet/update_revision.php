@@ -150,7 +150,7 @@ if (defined("NV_IS_GODADMIN"))
         if ($global_config['revision'] < 1559)
         {
             $language_query = $db->sql_query("SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1");
-            while (list($lang) = $db->sql_fetchrow($query))
+            while (list($lang) = $db->sql_fetchrow($language_query))
             {
                 $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_voting_rows` ADD `url` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `title`");
                 $db->sql_query("UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` SET `show_func` = '1' WHERE `in_module`='voting' AND `func_name`='main'");
@@ -188,10 +188,18 @@ if (defined("NV_IS_GODADMIN"))
             nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_sub_a.jpg');
             nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/navmenu-v_hover.jpg');
         }
+        if ($global_config['revision'] < 1590)
+        {
+            $language_query = $db->sql_query("SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1");
+            while (list($lang) = $db->sql_fetchrow($language_query))
+            {
+                $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_voting` ADD `link` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `question`");
+            }
+        }
 
         //Update revision
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')");
-        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1587')");
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1590')");
 
         $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional'], 'rewrite_endurl' => $global_config['rewrite_endurl'], 'rewrite_exturl' => $global_config['rewrite_exturl']);
         nv_rewrite_change($array_config_rewrite);

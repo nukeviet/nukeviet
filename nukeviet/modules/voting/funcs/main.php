@@ -16,7 +16,7 @@ if (empty($vid))
     $page_title = $module_info['custom_title'];
     $key_words = $module_info['keywords'];
 
-    $sql = "SELECT `vid`, `question`,`acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "`  WHERE `act`=1 ORDER BY `publ_time` DESC";
+    $sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "`  WHERE `act`=1 ORDER BY `publ_time` DESC";
     $list = nv_db_cache($sql, 'vid', 'voting');
 
     $allowed = array();
@@ -58,7 +58,7 @@ if (empty($vid))
                 "accept" => ( int )$current_voting['acceptcm'], //
                 "errsm" => ( int )$current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], ( int )$current_voting['acceptcm']) : $lang_module['voting_warning_accept1'], //
                 "vid" => $current_voting['vid'], //
-                "question" => $current_voting['question'], //
+                "question" => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
                 "action" => $action, //
                 "langresult" => $lang_module['voting_result'], //
                 "langsubmit" => $lang_module['voting_hits']  //

@@ -18,6 +18,7 @@ $submit = $nv_Request->get_string('submit', 'post');
 if (!empty($submit))
 {
     $question = filter_text_input('question', 'post', '', 1);
+    $link = filter_text_input('link', 'post', '', 1);
     $who_view = $nv_Request->get_int('who_view', 'post', 0);
     $groups_view = $nv_Request->get_array('groups_view', 'post');
     $groups_view = implode(',', $groups_view);
@@ -73,14 +74,14 @@ if (!empty($submit))
             ++$number_answer;
         }
     }
-    $rowvote = array("who_view" => 0, "groups_view" => "", "publ_time" => $begindate, "exp_time" => $enddate, "acceptcm" => $maxoption, "question" => $question);
+    $rowvote = array("who_view" => 0, "groups_view" => "", "publ_time" => $begindate, "exp_time" => $enddate, "acceptcm" => $maxoption, "question" => $question, "link" => $link);
 
     if (!empty($question) and $number_answer > 1)
     {
         $error = $lang_module['voting_error'];
         if (empty($vid))
         {
-            $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` (`vid`, `question`, `acceptcm`, `admin_id`, `who_view`, `groups_view`, `publ_time`, `exp_time`, `act`) VALUES (NULL, " . $db->dbescape($question) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape($groups_view) . ", 0,0,1)";
+            $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` (`vid`, `question`, `link`, `acceptcm`, `admin_id`, `who_view`, `groups_view`, `publ_time`, `exp_time`, `act`) VALUES (NULL, " . $db->dbescape($question) . ", " . $db->dbescape($link) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape($groups_view) . ", 0,0,1)";
             $vid = $db->sql_query_insert_id($query);
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid']);
         }
@@ -130,7 +131,7 @@ if (!empty($submit))
             {
                 $act = 1;
             }
-            $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `question`=" . $db->dbescape($question) . ", `acceptcm` =  " . $maxoption . ", `admin_id` =  " . $admin_info['admin_id'] . ", `who_view`=" . $who_view . ", `groups_view` = " . $db->dbescape($groups_view) . ", `publ_time`=" . $begindate . ", `exp_time`=" . $enddate . ", `act`=" . $act . " WHERE `vid` =" . $vid . "";
+            $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `question`=" . $db->dbescape($question) . ", `link`=" . $db->dbescape($link) . ", `acceptcm` =  " . $maxoption . ", `admin_id` =  " . $admin_info['admin_id'] . ", `who_view`=" . $who_view . ", `groups_view` = " . $db->dbescape($groups_view) . ", `publ_time`=" . $begindate . ", `exp_time`=" . $enddate . ", `act`=" . $act . " WHERE `vid` =" . $vid . "";
             if ($db->sql_query($query))
             {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid']);
@@ -179,7 +180,7 @@ else
     }
     else
     {
-        $rowvote = array("who_view" => 0, "groups_view" => "", "publ_time" => NV_CURRENTTIME, "exp_time" => "", "acceptcm" => 1, "question" => "");
+        $rowvote = array("who_view" => 0, "groups_view" => "", "publ_time" => NV_CURRENTTIME, "exp_time" => "", "acceptcm" => 1, "question" => "", "link" => "");
     }
 }
 
@@ -325,10 +326,20 @@ $contents .= "<td>" . $lang_module['voting_maxoption'] . "</td>\n";
 $contents .= "<td><input type=\"text\" name=\"maxoption\" size=\"5\" value=\"" . $rowvote['acceptcm'] . "\" class=\"txt required\" /></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
-$contents .= "<tbody>\n";
+++$j;
+$class = ($j % 2 == 0) ? " class=\"second\"" : "";
+$contents .= "<tbody" . $class . ">\n";
 $contents .= "<tr>\n";
 $contents .= "<td>" . $lang_module['voting_question'] . "</td>\n";
 $contents .= "<td><input type=\"text\" name=\"question\" size=\"60\" value=\"" . $rowvote['question'] . "\" class=\"txt required\" /></td>\n";
+$contents .= "</tr>\n";
+$contents .= "</tbody>\n";
+++$j;
+$class = ($j % 2 == 0) ? " class=\"second\"" : "";
+$contents .= "<tbody" . $class . ">\n";
+$contents .= "<tr>\n";
+$contents .= "<td>" . $lang_module['voting_link'] . "</td>\n";
+$contents .= "<td><input type=\"text\" name=\"link\" size=\"60\" value=\"" . nv_htmlspecialchars($rowvote['link']) . "\" class=\"txt\" /></td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
 $contents .= "</table>\n";

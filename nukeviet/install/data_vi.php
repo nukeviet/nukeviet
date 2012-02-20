@@ -1073,8 +1073,8 @@ $result = $db->sql_query("SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_
 if ($db->sql_numrows($result))
 {
     $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting` VALUES
-		(2, 'Bạn biết gì về NukeViet 3?', 1, 1, 0, '0', 1275318563, 0, 1), 
-		(3, 'Bạn quan tâm gì nhất ở mã nguồn mở?', 1, 1, 0, '0', 1275318589, 0, 1)";
+		(2, 'Bạn biết gì về NukeViet 3?', '', 1, 1, 0, '0', 1275318563, 0, 1), 
+		(3, 'Bạn quan tâm gì nhất ở mã nguồn mở?', '', 1, 1, 0, '0', 1275318589, 0, 1)";
 
     $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting_rows` VALUES
 		(5, 2, 'Một bộ sourcecode cho web hoàn toàn mới.', '', 0), 

@@ -893,7 +893,7 @@ $result = $db->sql_query("SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_
 if ($db->sql_numrows($result))
 {
     $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting` VALUES
-		(1, 'Qu&#039;est ce que NukeViet 3.0?', 1, 1, 0, '0', 1275318563, 0, 1)";
+		(1, 'Qu&#039;est ce que NukeViet 3.0?', '', 1, 1, 0, '0', 1275318563, 0, 1)";
 
     $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting_rows` VALUES
 		(1, 1, 'Une code source de web tout neuve','', 0), 

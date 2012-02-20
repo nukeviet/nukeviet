@@ -18,6 +18,7 @@ $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "` (
   `vid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `question` varchar(255) NOT NULL,
+  `link` varchar(255) NOT NULL default '',  
   `acceptcm` int(2) NOT NULL DEFAULT '1',
   `admin_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `who_view` tinyint(2) unsigned NOT NULL DEFAULT '0',
