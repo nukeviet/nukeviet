@@ -76,5 +76,12 @@ $lang_module['sub_menu'] = "menu con";
 
 $lang_module['main_note_0'] = "Nhấp vào";
 $lang_module['main_note_1'] = "để tạo khối menu mới. Nhấp vào tên mỗi khối menu bên dưới để xem chi tiết và chỉnh sửa các menu.";
+$lang_module['add_type_active'] = "Kiểu active menu.";
+$lang_module['add_type_active_note'] = "Cách thức xác định một menu có đang được kích hoạt hay không bằng cách so sánh liên kết của menu chỉ đến với liên kết hiện tại của trang theo các tiêu chí bên.";
+$lang_module['add_type_active_0'] = "Chính xác với liên kết của menu";
+$lang_module['add_type_active_1'] = "Bắt đầu với liên kết của menu";
+$lang_module['add_type_active_2'] = "Có chứa kiên kết của menu";
+$lang_module['add_type_css'] = "Tên lớp CSS.";
+$lang_module['add_type_css_info'] = "Tên class (CSS) để xác định giao diện menu này.";
 
 ?>

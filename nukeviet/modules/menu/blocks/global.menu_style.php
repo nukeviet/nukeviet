@@ -83,16 +83,31 @@ if (!nv_function_exists('nv_menu_site'))
         return $return;
     }
 	
-	function nv_bmenu_check_currit($url)
+	function nv_bmenu_check_currit( $url, $type = 0 )
 	{
 		global $module_name, $home, $client_info, $global_config;
 		
-		if( $client_info['selfurl'] == $url ) return true;
+		$url = nv_unhtmlspecialchars( $url );
+		
+		if( $client_info['selfurl'] == $url ) return true; // Chinh xac tuyet doi
 		
 		$_curr_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
 		$_url = nv_url_rewrite( $url, true );
-		
-		if( $_curr_url == $_url ) return true;
+
+		if( $type == 2 )
+		{
+			if( preg_match( '#' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
+			return false;
+		}
+		elseif( $type == 1 ) //
+		{
+			if( preg_match( '#^' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
+			return false;
+		}
+		elseif( $_curr_url == $_url )
+		{
+			return true;
+		}
 		
 		return false;
 	}
@@ -107,7 +122,7 @@ if (!nv_function_exists('nv_menu_site'))
 		{
 			$class = ' class="' . $cat['html_class'] . '"';
 		}
-		elseif( $cat['current'] == true and $cat['html_class'] )
+		elseif( $cat['current'] === true and $cat['html_class'] )
 		{
 			$class = ' class="' . $cat['html_class'] . ' current"';
 		}
@@ -125,7 +140,7 @@ if (!nv_function_exists('nv_menu_site'))
         global $db;
 
         $list_cats = array();
-        $sql = "SELECT `id`, `parentid`, `title`, `link`, `note`, `subitem`, `who_view`, `groups_view`, `module_name`, `op`, `target` FROM `" . NV_PREFIXLANG . "_menu_rows` WHERE `status`=1 AND `mid` = " . $block_config['menuid'] . " ORDER BY `weight` ASC";
+        $sql = "SELECT `id`, `parentid`, `title`, `link`, `note`, `subitem`, `who_view`, `groups_view`, `module_name`, `op`, `target`, `css`, `active_type` FROM `" . NV_PREFIXLANG . "_menu_rows` WHERE `status`=1 AND `mid` = " . $block_config['menuid'] . " ORDER BY `weight` ASC";
         $list = nv_db_cache($sql, '', 'menu');
 		
         foreach ($list as $row)
@@ -148,9 +163,9 @@ if (!nv_function_exists('nv_menu_site'))
                     'title' => nv_clean60( $row['title'], $block_config['title_length'] ),  //
                     'target' => $row['target'],  //
                     'note' => ( $block_config['is_viewdes'] and $row['note'] ) ? $row['note'] : $row['title'],  //
-                    'link' => $row['link'],  //
-                    'html_class' => '',  // Thong so nay dang phat trien
-                    'current' => nv_bmenu_check_currit( $row['link'] ),  //
+                    'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ),  //
+                    'html_class' => $row['css'],  //
+                    'current' => nv_bmenu_check_currit( $row['link'], (int)$row['active_type'] ),  //
                 );
             }
         }

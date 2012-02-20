@@ -165,7 +165,12 @@ if (defined("NV_IS_GODADMIN"))
         if ($global_config['revision'] < 1576)
         {
             $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'captcha_type', '0')");
-            $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'switch_mobi_des', '1')");
+			
+            $language_query = $db->sql_query("SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1");
+            while (list($lang) = $db->sql_fetchrow($language_query))
+            {
+				$db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', 'global', 'switch_mobi_des', '1')");
+            }
         }
         if ($global_config['revision'] < 1587)
         {
@@ -196,10 +201,23 @@ if (defined("NV_IS_GODADMIN"))
                 $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_voting` ADD `link` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `question`");
             }
         }
+		// Cap nhat CSDL module menu
+        if ($global_config['revision'] < 1592)
+		{
+            $language_query = $db->sql_query("SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1");
+            while (list($lang) = $db->sql_fetchrow($language_query))
+            {
+                $mquery = $db->sql_query("SELECT `title`, `module_data` FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` WHERE `module_file`='menu'");
+                while (list($mod, $mod_data) = $db->sql_fetchrow($mquery))
+                {
+					$db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_rows` ADD `css` varchar(255) NOT NULL DEFAULT '' AFTER `target`, ADD `active_type` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `css`");
+				}
+            }
+		}
 
         //Update revision
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')");
-        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1590')");
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1592')");
 
         $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional'], 'rewrite_endurl' => $global_config['rewrite_endurl'], 'rewrite_exturl' => $global_config['rewrite_exturl']);
         nv_rewrite_change($array_config_rewrite);

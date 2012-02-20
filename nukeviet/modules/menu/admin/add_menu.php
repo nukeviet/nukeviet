@@ -7,13 +7,12 @@
  * @Createdate 21-04-2011 11:17
  */
 
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 // Default variable
 $error = "";
-$post['id'] = $post['parentid'] = 0;
-$post['type_menu'] = $post['target'] = $post['who_view'] = $post['module_name'] = "";
+$post['id'] = $post['parentid'] = $post['active_type'] = 0;
+$post['type_menu'] = $post['target'] = $post['who_view'] = $post['module_name'] = $post['css'] = "";
 $post['groups_view'] = array();
 $arr_item = array();
 $sp = '&nbsp;&nbsp;&nbsp;';
@@ -117,6 +116,7 @@ if (!empty($groups_list))
 
 $arr_menu = nv_list_menu();
 
+// Tao mot menu/Sua menu
 if ($nv_Request->isset_request('submit1', 'post'))
 {
     $post = array();
@@ -128,13 +128,15 @@ if ($nv_Request->isset_request('submit1', 'post'))
     $post['id'] = $nv_Request->get_int('id', 'post', 0);
     $post['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
     $post['mid'] = $nv_Request->get_int('item_menu', 'post', 0);
-    $post['title'] = filter_text_input('title', 'post', '', '', '');
-    $post['link'] = filter_text_input('link', 'post', '', '', '');
-    $post['note'] = filter_text_input('note', 'post', '', '', '');
-    $post['module_name'] = filter_text_input('module_name', 'post', '', '', '');
-    $post['op'] = filter_text_input('op', 'post', '', '', '');
+    $post['title'] = filter_text_input('title', 'post', '', 1, 255);
+    $post['link'] = filter_text_input('link', 'post', '', 1, 255);
+    $post['note'] = filter_text_input('note', 'post', '', 1, 255);
+    $post['module_name'] = filter_text_input('module_name', 'post', '', 1, 255);
+    $post['op'] = filter_text_input('op', 'post', '', 1, 255);
     $post['who_view'] = $nv_Request->get_int('who_view', 'post', 0);
     $post['target'] = $nv_Request->get_int('target', 'post', 0);
+    $post['active_type'] = $nv_Request->get_int('active_type', 'post', 0);
+    $post['css'] = filter_text_input('css', 'post', '', 1, 255);
 
     $mid_old = $nv_Request->get_int('mid', 'post', 0);
     $pa_old = $nv_Request->get_int('pa', 'post', 0);
@@ -158,7 +160,7 @@ if ($nv_Request->isset_request('submit1', 'post'))
             list($weight) = $db->sql_fetchrow($db->sql_query("SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . intval($post['mid']) . " AND `parentid`=" . intval($post['parentid'] . " AND `mid`=" . $post['mid'])));
             $weight = intval($weight) + 1;
 
-            $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `parentid`, `mid`, `title`,`link`, `note`,`weight`, `order`, `lev`,`subitem`,`who_view`, `groups_view`,`module_name`, `op`,`target`, `status`) VALUES (
+            $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
 				NULL, 
 				" . intval($post['parentid']) . ", 
 				" . intval($post['mid']) . ", 
@@ -172,6 +174,8 @@ if ($nv_Request->isset_request('submit1', 'post'))
 				" . $db->dbescape($post['module_name']) . ", 
 				" . $db->dbescape($post['op']) . ", 
 				" . intval($post['target']) . ", 
+				" . $db->dbescape( $post['css'] ) . ", 
+				" . intval( $post['active_type'] ) . ", 
 				1 
 			)";
 
@@ -236,8 +240,10 @@ if ($nv_Request->isset_request('submit1', 'post'))
 				`groups_view`=" . $db->dbescape($post['groups_view']) . ",
 				`module_name`=" . $db->dbescape($post['module_name']) . ",	
 				`op`=" . $db->dbescape($post['op']) . ",
-				`target`=" . intval($post['target']) . " 
-				 WHERE `id`=" . intval($post['id']);
+				`target`=" . intval($post['target']) . ",
+				`css`=" . $db->dbescape( $post['css'] ) . ", 
+				`active_type`=" . intval( $post['active_type'] ) . "
+			WHERE `id`=" . intval($post['id']);
 
             if ($db->sql_query($sql))
             {
@@ -363,6 +369,7 @@ $xtpl = new XTemplate("add_menu.tpl", NV_ROOTDIR . "/themes/" . $global_config['
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&mid=" . $post['mid']) . "&parentid=" . $post['parentid'];
 $xtpl->assign('DATA', $post);
+
 if (!empty($arr_table))
 {
     $a = 0;
@@ -598,6 +605,17 @@ if ($link_title != "")
 }
 $link_menu = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
 $xtpl->assign('link_menu', $link_menu);
+
+// Xuat kieu active menu
+for( $i = 0; $i <= 2; ++ $i )
+{
+    $xtpl->assign( 'ACTIVE_TYPE', array(
+		'key' => $i,  //
+		'title' => $lang_module['add_type_active_'.$i],  //
+		'selected' => $post['active_type'] == $i ? ' selected="selected"' : '' //
+	) );
+    $xtpl->parse('main.active_type');
+}
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

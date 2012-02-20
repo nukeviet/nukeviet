@@ -11,7 +11,6 @@ if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $sql_drop_module = array();
 
-
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_menu`";
 $sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows`";
 
@@ -32,7 +31,9 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `groups_view` varchar(255) NOT NULL,  
   `module_name` varchar(255) NOT NULL DEFAULT '',
   `op` varchar(255) NOT NULL DEFAULT '', 
-  `target` tinyint(4) NOT NULL DEFAULT '0',  
+  `target` tinyint(4) NOT NULL DEFAULT '0',
+  `css` varchar(255) NOT NULL DEFAULT '', 
+  `active_type` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
    PRIMARY KEY (`id`)
 ) ENGINE=MyISAM";

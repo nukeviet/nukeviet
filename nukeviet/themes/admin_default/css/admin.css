@@ -1,4 +1,4 @@
-/* Reset */
+﻿/* Reset */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend {
     margin: 0;
     padding: 0;
@@ -235,6 +235,9 @@ img {
 input[type=radio], input[type=checkbox] {
     vertical-align: middle
 }
+
+input.txt-full,select.txt-full,textarea.txt-full{width:98%}
+input.txt-half,select.txt-half,textarea.txt-half{width:49%}
 
 textarea {
     font: normal normal 400 10pt/normal Arial, sans-serif
