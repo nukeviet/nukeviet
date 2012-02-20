@@ -1259,7 +1259,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
         return '';
     }
     $title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'];
-    $page_string = ($on_page == 1) ? "<strong>1</strong>, " : "<a title=\"" . $title . " 1\" href=\"" . $base_url . "\">1</a>, ";
+    $page_string = ($on_page == 1) ? "<strong>1</strong> " : "<a title=\"" . $title . " 1\" href=\"" . $base_url . "\">1</a> ";
     if ($total_pages > 10)
     {
         $init_page_max = ($total_pages > 3) ? 3 : $total_pages;
@@ -1267,13 +1267,13 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
         {
             $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
             if ($i < $init_page_max)
-                $page_string .= ", ";
+                $page_string .= " ";
         }
         if ($total_pages > 3)
         {
             if ($on_page > 1 && $on_page < $total_pages)
             {
-                $page_string .= ($on_page > 5) ? " ... " : ", ";
+                $page_string .= ($on_page > 5) ? " ... " : " ";
                 $init_page_min = ($on_page > 4) ? $on_page : 5;
                 $init_page_max = ($on_page < $total_pages - 4) ? $on_page : $total_pages - 4;
                 for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i)
@@ -1281,10 +1281,10 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
                     $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
                     if ($i < $init_page_max + 1)
                     {
-                        $page_string .= ", ";
+                        $page_string .= " ";
                     }
                 }
-                $page_string .= ($on_page < $total_pages - 4) ? " ... " : ", ";
+                $page_string .= ($on_page < $total_pages - 4) ? " ... " : " ";
             }
             else
             {
@@ -1296,7 +1296,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
                 $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
                 if ($i < $total_pages)
                 {
-                    $page_string .= ", ";
+                    $page_string .= " ";
                 }
             }
         }
@@ -1308,7 +1308,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
             $page_string .= ($i == $on_page) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
             if ($i < $total_pages)
             {
-                $page_string .= ", ";
+                $page_string .= " ";
             }
         }
     }
