@@ -15,7 +15,7 @@ if( ! $q )
 	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA, true ) );
 	exit();
 }
-
+$q = str_replace('-', ' ', $q );
 $page_title = $q . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 
 if (preg_match("/(.*)\/page\-([0-9]+)$/", $q, $m))
