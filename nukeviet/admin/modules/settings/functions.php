@@ -11,24 +11,34 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 global $sys_info;
 $submenu['main'] = $lang_module['site_config'];
-$submenu['system'] = $lang_module['global_config'];
-$submenu['statistics'] = $lang_module['global_statistics'];
-$submenu['cronjobs'] = $lang_global['mod_cronjobs'];
-$submenu['smtp'] = $lang_module['smtp_config'];
-if ($sys_info['ftp_support'])
+if (defined('NV_IS_GODADMIN'))
 {
-    $submenu['ftp'] = $lang_module['ftp_config'];
+    $submenu['system'] = $lang_module['global_config'];
+    $submenu['statistics'] = $lang_module['global_statistics'];
+    $submenu['cronjobs'] = $lang_global['mod_cronjobs'];
+    $submenu['smtp'] = $lang_module['smtp_config'];
+    if ($sys_info['ftp_support'])
+    {
+        $submenu['ftp'] = $lang_module['ftp_config'];
+    }
+    $submenu['pagetitle'] = $lang_module['pagetitle'];
+    $submenu['metatags'] = $lang_module['metaTagsConfig'];
+    $submenu['robots'] = $lang_module['robots'];
+    $submenu['bots'] = $lang_module['bots_config'];
+    $submenu['banip'] = $lang_module['banip'];
+    $submenu['uploadconfig'] = $lang_module['uploadconfig'];
 }
-$submenu['pagetitle'] = $lang_module['pagetitle'];
-$submenu['metatags'] = $lang_module['metaTagsConfig'];
-$submenu['robots'] = $lang_module['robots'];
-$submenu['bots'] = $lang_module['bots_config'];
-$submenu['banip'] = $lang_module['banip'];
-$submenu['uploadconfig'] = $lang_module['uploadconfig'];
 
 if ($module_name == "settings")
 {
-    $allow_func = array('main', 'system', 'statistics', 'bots', 'robots', 'smtp', 'ftp', 'pagetitle', 'metatags', 'banip', 'uploadconfig', 'cronjobs', 'cronjobs_add', 'cronjobs_edit', 'cronjobs_del', 'cronjobs_act');
+    if (defined('NV_IS_GODADMIN'))
+    {
+        $allow_func = array('main', 'system', 'statistics', 'bots', 'robots', 'smtp', 'ftp', 'pagetitle', 'metatags', 'banip', 'uploadconfig', 'cronjobs', 'cronjobs_add', 'cronjobs_edit', 'cronjobs_del', 'cronjobs_act');
+    }
+    else
+    {
+        $allow_func = array('main');
+    }
 
     $menu_top = array("title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_settings']);
     unset($page_title, $select_options);

@@ -88,7 +88,7 @@ if ($nv_Request->isset_request('submit', 'post'))
     }
 
     $error_send_email = filter_text_input('error_send_email', 'post', '', 1, 255);
-    if (nv_check_valid_email($array_config_global['error_send_email']) == '')
+    if (nv_check_valid_email($error_send_email) == '')
     {
         $array_config_global['error_send_email'] = $error_send_email;
     }

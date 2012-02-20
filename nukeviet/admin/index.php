@@ -59,10 +59,10 @@ $admin_mods['siteinfo'] = array('custom_title' => $lang_global['mod_siteinfo']);
 $admin_mods['authors'] = array('custom_title' => $lang_global['mod_authors']);
 if (defined('NV_IS_SPADMIN'))
 {
+    $admin_mods['settings'] = array('custom_title' => $lang_global['mod_settings']);
     if (defined('NV_IS_GODADMIN'))
     {
         $admin_mods['database'] = array('custom_title' => $lang_global['mod_database']);
-        $admin_mods['settings'] = array('custom_title' => $lang_global['mod_settings']);
         $admin_mods['webtools'] = array('custom_title' => $lang_global['mod_webtools']);
     }
     $admin_mods['language'] = array('custom_title' => $lang_global['mod_language']);
