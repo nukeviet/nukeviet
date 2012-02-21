@@ -94,7 +94,11 @@ if (!nv_function_exists('nv_menu_site'))
 		$_curr_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
 		$_url = nv_url_rewrite( $url, true );
 
-		if( $type == 2 )
+		if( $home and $_url == nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA) or $_url == NV_BASE_SITEURL . "index.php" or $_url == NV_BASE_SITEURL)
+		{
+			return true;
+		}
+		elseif( $type == 2 )
 		{
 			if( preg_match( '#' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
 			return false;
