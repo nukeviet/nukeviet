@@ -37,6 +37,10 @@
 	</tr>
     </tbody>
 </table>
+<div style="width:98%" class="quote">
+    <blockquote><span>{LANG.smtp_pass_note}</span></blockquote>
+</div>
+<div class="clear"></div>
 <table class="tab1">
 	<caption>{LANG.smtp_username}</caption>
     <tbody>
