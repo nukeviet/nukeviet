@@ -19,7 +19,7 @@ $search = array( //
     'key' => '', //
     'len_key' => 0, //
     'mod' => 'all', //
-    'logic' => 0, //OR
+    'logic' => 1, //OR
     'page' => 0, //
     'is_error' => false, //
     'errorInfo' => '', //
@@ -31,8 +31,8 @@ if ( $nv_Request->isset_request( 'q', 'get' ) )
     $is_search = true;
 
     $search['key'] = filter_text_input( 'q', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
-    $search['logic'] = $nv_Request->get_int( 'l', 'get', 0 );
-    $search['mod'] = filter_text_input( 'm', 'get', 'all', 1 );
+    $search['logic'] = $nv_Request->get_int( 'l', 'get', $search['logic'] );
+    $search['mod'] = filter_text_input( 'm', 'get', 'all', $search['mod'] );
     $search['page'] = $nv_Request->get_int( 'page', 'get', 0 );
 
     if ( $search['logic'] != 1 ) $search['logic'] = 0;
