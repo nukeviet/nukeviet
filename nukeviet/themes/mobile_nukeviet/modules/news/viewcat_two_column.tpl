@@ -1,65 +1,42 @@
 <!-- BEGIN: main -->
-<div class="news_column">
-    <!-- BEGIN: catcontent --><!-- BEGIN: content -->
-    <div class="news-content bordersilver white clearfix">
-        <div class="items">
-            <!-- BEGIN: image -->
-            	<a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}"/></a>
-           	<!-- END: image -->
-			<h3><a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a></h3>
-            <p>
-                {NEWSTOP.hometext}
-            </p>
-            <!-- BEGIN: adminlink -->
-            <p style="text-align : right;">
-                {ADMINLINK}
-            </p>
-            <!-- END: adminlink -->
-        </div>
-        <!-- END: content -->
-        <ul class="related">
-            <!-- BEGIN: other -->
-            <li>
-                <a title="{NEWSTOP.title}" href="{NEWSTOP.link}">{NEWSTOP.title}</a>
-            </li>
-            <!-- END: other -->
-        </ul>
-    </div>
-    <!-- END: catcontent -->
-</div>
-
+<!-- BEGIN: catcontent -->
+<!-- BEGIN: content -->
+<!-- BEGIN: image --><a href="{NEWSTOP.link}"><img class="fl" src="{HOMEIMG0}" width="{IMGWIDTH0}" /></a>
+<!-- END: image -->
+<h3><a href="{NEWSTOP.link}">{NEWSTOP.title}</a></h3>
+<p>{NEWSTOP.hometext}</p>
+<!-- BEGIN: adminlink --><p>{ADMINLINK}</p><!-- END: adminlink -->
+<div class="clear hr"></div>
+<!-- END: content -->
+<ul class="list">
+	<!-- BEGIN: other -->
+	<li><a title="{NEWSTOP.title}" href="{NEWSTOP.link}">{NEWSTOP.title}</a></li><!-- END: other -->
+</ul>
+<br />
+<!-- END: catcontent -->
 <!-- BEGIN: loopcat -->
-<div class="news_column two_column{LAST} fl">
-    <div class="news-content bordersilver white clearfix">
-        <div class="header clearfix">
-            <a class="current" title="{CAT.title}" href="{CAT.link}"><span><span>{CAT.title}</span></span></a>
-        </div>
-        <div class="items{BORDER}">
-            <!-- BEGIN: content -->
-            	<h3><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h3>
-                <!-- BEGIN: image -->
-                	<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" /></a>
-                <!-- END: image -->
-                <p>
-                    {CONTENT.hometext}
-                </p>
-                <!-- BEGIN: adminlink -->
-                <p style="text-align : right;">
-                    {ADMINLINK}
-                </p>
-                <!-- END: adminlink -->
-            <!-- END: content -->
-            <ul class="related">
-                <!-- BEGIN: other -->
-                <li>
-                    <a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
-                </li>
-                <!-- END: other -->
-            </ul>
-        </div>
-     </div>
+<div class="hfit">
+	<div class="mr10{LAST}">
+		<ul class="hd">
+			<li class="cr"><a href="{CAT.link}">{CAT.title}</a><li>
+		</ul>
+		<div class="clear"></div>
+		<div class="cbox">
+			<!-- BEGIN: content -->
+			<!-- BEGIN: image --><a href="{CONTENT.link}"><img class="fl" src="{HOMEIMG01}" width="{IMGWIDTH01}" /></a><!-- END: image -->
+			<h3><a href="{CONTENT.link}">{CONTENT.title}</a></h3>
+			<p>{CONTENT.hometext}</p>
+			<!-- BEGIN: adminlink --><p>{ADMINLINK}</p><!-- END: adminlink -->
+			<div class="clear"></div><!-- END: content -->
+			<ul class="list">
+				<!-- BEGIN: other -->
+				<li><a href="{OTHER.link}">{OTHER.title}</a></li><!-- END: other -->
+			</ul>
+			
+		</div>
+	</div>
 </div>
+<!-- BEGIN: br --><div class="clear"></div><!-- END: br -->
 <!-- END: loopcat -->
-<div style="clear:both;">
-</div>
+<div class="clear"></div>
 <!-- END: main -->

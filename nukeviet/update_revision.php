@@ -201,8 +201,7 @@ if (defined("NV_IS_GODADMIN"))
                 $db->sql_query("ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_voting` ADD `link` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `question`");
             }
         }
-		// Cap nhat CSDL module menu
-        if ($global_config['revision'] < 1592)
+        if ($global_config['revision'] < 1592) // Cap nhat CSDL module menu
 		{
             $language_query = $db->sql_query("SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1");
             while (list($lang) = $db->sql_fetchrow($language_query))
@@ -214,10 +213,31 @@ if (defined("NV_IS_GODADMIN"))
 				}
             }
 		}
-
+        if ($global_config['revision'] < 1597) // Xoa file thua giao dien mobile
+        {
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/css/news.css');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/arrow_down.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/arrow_left_orange.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/bg_link_mod.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/bg_linked_mod.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/cat_header.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/cat_l.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/cat_r.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/comment.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/comment_add.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/content-cat-title-current.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/content-cat-title-ul.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/icon-news.gif');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/module-header.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/other.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/other_link.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/save_file.png');
+            nv_deletefile(NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/user.png');
+		}
+		
         //Update revision
         $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')");
-        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1592')");
+        $db->sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1597')");
 
         $array_config_rewrite = array('rewrite_optional' => $global_config['rewrite_optional'], 'rewrite_endurl' => $global_config['rewrite_endurl'], 'rewrite_exturl' => $global_config['rewrite_exturl']);
         nv_rewrite_change($array_config_rewrite);

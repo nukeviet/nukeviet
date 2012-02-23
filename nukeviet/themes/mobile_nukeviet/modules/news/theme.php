@@ -8,7 +8,7 @@
  */
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-function viewcat_grid_new ( $array_catpage, $catid )
+function viewcat_grid_new( $array_catpage, $catid )
 {
     global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
     $xtpl = new XTemplate( "viewcat_grid.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
@@ -37,15 +37,16 @@ function viewcat_grid_new ( $array_catpage, $catid )
             $xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
             $xtpl->parse( 'main.viewcatloop.image' );
         }
-        $xtpl->set_autoreset();
+
+ 		if( ! (++ $a % 2) ) $xtpl->parse( 'main.viewcatloop.br' );
+		$xtpl->set_autoreset();
         $xtpl->parse( 'main.viewcatloop' );
-        ++$a;
     }
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );
 }
 
-function viewcat_list_new ( $array_catpage, $catid, $page )
+function viewcat_list_new( $array_catpage, $catid, $page )
 {
     global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
     $xtpl = new XTemplate( "viewcat_list.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
@@ -82,7 +83,7 @@ function viewcat_list_new ( $array_catpage, $catid, $page )
     return $xtpl->text( 'main' );
 }
 
-function viewcat_page_new ( $array_catpage, $array_cat_other )
+function viewcat_page_new( $array_catpage, $array_cat_other )
 {
     global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info;
     $xtpl = new XTemplate( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
@@ -312,6 +313,7 @@ function viewcat_two_column ( $array_content, $array_catpage )
     foreach ( $array_catpage as $key => $array_catpage_i )
     {
         $number_content = isset( $array_catpage[$key]['content'] ) ? sizeof( $array_catpage[$key]['content'] ) : 0;
+		
         if ( $number_content > 0 )
         {
             $xtpl->assign( 'CAT', $array_catpage_i );
@@ -342,8 +344,10 @@ function viewcat_two_column ( $array_content, $array_catpage )
                     $xtpl->parse( 'main.loopcat.other' );
                 }
             }
+			
+			if( ! (++ $a % 2) ) $xtpl->parse( 'main.loopcat.br' );
+			
             $xtpl->parse( 'main.loopcat' );
-            ++$a;
         }
     }
     //Theo chu de
@@ -358,21 +362,14 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
     $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
     $my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";
     $my_head .= "<link href='" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css' type=\"text/css\" rel=\"stylesheet\"/>\n";
-    
-    if ( ! defined( 'SHADOWBOX' ) )
-    {
-        $my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-        $my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
-        define( 'SHADOWBOX', true );
-    }
-    
+        
     $xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
     $news_contents['addtime'] = nv_date( "d-m-Y h:i:s", $news_contents['addtime'] );
     $xtpl->assign( 'NEWSID', $news_contents['id'] );
     $xtpl->assign( 'NEWSCHECKSS', $news_contents['newscheckss'] );
     $xtpl->assign( 'DETAIL', $news_contents );
+    $xtpl->assign( 'IMG_DIR', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/' );
     
     if ( $news_contents['allowed_send'] == 1 )
     {
@@ -595,11 +592,13 @@ function topic_theme ( $topic_array, $topic_other_array )
     return $xtpl->text( 'main' );
 }
 
-function comment_theme ( $comment_array )
+function comment_theme( $comment_array )
 {
     $comment = "";
-    global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config;
+    global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config, $lang_module;
     $xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	
     $k = 0;
     foreach ( $comment_array['comment'] as $comment_array_i )
     {

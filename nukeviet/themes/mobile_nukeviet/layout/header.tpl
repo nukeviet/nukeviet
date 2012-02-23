@@ -14,15 +14,20 @@
 	<div id="header">
 		<a href="{THEME_SITE_HREF}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/logo.png" height="45"/></a>
 		<!-- BEGIN: language --><div class="language">
-			Language:
 			<select onchange="document.location=this.value">
 				<!-- BEGIN: langitem --><option value="{LANGSITEURL}">{LANGSITENAME}</option><!-- END: langitem -->
 				<!-- BEGIN: langcuritem -->
 				<option value="{LANGSITEURL}" selected="selected">{LANGSITENAME}</option><!-- END: langcuritem -->
 			</select><!-- END: language -->
 		</div>
-	</div>	
+	</div>
 	[MENU_SITE]
+	<form class="gsebg" action="{NV_BASE_SITEURL}index.php" method="get">
+		<input type="hidden" name="{NV_NAME_VARIABLE}" value="search"/>
+		<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
+		<input type="text" name="q"/>
+		<input type="submit" class="smbt" value="{LANG.search}"/>
+	</form>
 	<!-- BEGIN: mod_title --><h3 class="brcl">
 		<a href="{NV_BASE_SITEURL}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/icons/home.png"/></a>
 		<!-- BEGIN: breakcolumn -->

@@ -1,28 +1,9 @@
 <!-- BEGIN: main -->
-    <table class="table-list-news">
-        <tbody>
-		<!-- BEGIN: cattitle -->
-            <tr>
-            	<th colspan="2">
-                   <a title="{CAT.title}" href="{CAT.link}">{CAT.title}</a>
-                </th>
-        	</tr>		
-		<!-- END: cattitle -->
-		<!-- BEGIN: viewcatloop -->
-                <tr>
-                    <td>
-                        {NUMBER}
-                    </td>
-                    <td>
-                        <a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
-						<!-- BEGIN: adminlink -->
-    						<span style="padding-left: 10px;">
-    							{ADMINLINK}
-    						</span>
-    					<!-- END: adminlink -->                        
-                    </td>
-                </tr>
-		<!-- END: viewcatloop -->
-		</tbody>
-  	</table>
+<!-- BEGIN: cattitle --><h2 class="ac"><a href="{CAT.link}">{CAT.title}</a></h2><!-- END: cattitle -->
+<ul class="list">
+	<!-- BEGIN: viewcatloop -->
+    <li>
+		<a href="{CONTENT.link}">{CONTENT.title}</a><!-- BEGIN: adminlink --> {ADMINLINK}<!-- END: adminlink -->                        
+	</li><!-- END: viewcatloop -->
+</ul>
 <!-- END: main -->

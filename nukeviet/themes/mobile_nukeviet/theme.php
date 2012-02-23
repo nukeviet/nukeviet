@@ -12,7 +12,7 @@ if (!defined('NV_SYSTEM') or !defined('NV_MAINFILE'))
 
 function nv_site_theme($contents)
 {
-    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $module_name, $module_info, $op, $mod_title, $my_head, $my_footer;
+    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $module_name, $module_info, $op, $mod_title, $my_head, $my_footer, $client_info;
 
     if (!file_exists(NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/layout." . $module_info['layout_funcs'][$op] . ".tpl"))
     {
@@ -32,12 +32,11 @@ function nv_site_theme($contents)
     $xtpl->assign('THEME_SITE_JS', nv_html_site_js());
     $xtpl->assign('THEME_CSS', nv_html_css());
     $xtpl->assign('THEME_PAGE_TITLE', nv_html_page_title());
-    $xtpl->assign('NV_TOP_MENU_HOME', $lang_global['Home']);
     $xtpl->assign('MODULE_CONTENT', $contents . "&nbsp;");
-
-    $xtpl->assign('THEME_NOJS', $lang_global['nojs']);
-    $xtpl->assign('THEME_LOGO_TITLE', $global_config['site_name']);
     $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA);
+    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
+    $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
+    $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
 
     if ($global_config['lang_multi'] and sizeof($global_config['allow_sitelangs']) > 1)
     {

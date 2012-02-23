@@ -1,22 +1,21 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: listcat -->
-<div class="news_column">
-    <div class="news-content bordersilver white clearfix">
-        <div class="header clearfix">
-            <a class="current" href="{CAT.link}"><span><span>{CAT.title}</span></span></a>
-            <!-- BEGIN: subcatloop --><a href="{SUBCAT.link}">{SUBCAT.title}</a>
-            <!-- END: subcatloop -->
-        </div>
-        <div class="items {BORDER}clearfix">
-            <!-- BEGIN: image --><a href="{CONTENT.link}"><img src="{HOMEIMG}" width="{IMGWIDTH}" /></a><!-- END: image -->
-            <h3><a href="{CONTENT.link}">{CONTENT.title}</a></h3>
-            <p>{CONTENT.hometext}</p>
-            <!-- BEGIN: adminlink --><p>{ADMINLINK}</p><!-- END: adminlink -->
-        </div>
-        <!-- BEGIN: related -->
-        <ul class="related">
-			<!-- BEGIN: loop -->
-			<li><a href="{OTHER.link}">{OTHER.title}</a></li><!-- END: loop -->
-        </ul><!-- END: related -->
-    </div>
+<ul class="hd">
+	<li class="cr"><a href="{CAT.link}">{CAT.title}</a><li>
+	<!-- BEGIN: subcatloop --><li><a href="{SUBCAT.link}">{SUBCAT.title}</a></li>
+	<!-- END: subcatloop -->
+</ul>
+<div class="clear"></div>
+<div class="cbox">
+	<!-- BEGIN: image --><a href="{CONTENT.link}"><img class="fl" src="{HOMEIMG}" width="{IMGWIDTH}" /></a><!-- END: image -->
+	<h3><a href="{CONTENT.link}">{CONTENT.title}</a></h3>
+	<p>{CONTENT.hometext}</p>
+	<!-- BEGIN: adminlink --><p>{ADMINLINK}</p><!-- END: adminlink -->
+	<div class="clear"></div>
+	<!-- BEGIN: related -->
+	<ul class="list">
+		<!-- BEGIN: loop -->
+		<li><a href="{OTHER.link}">{OTHER.title}</a></li><!-- END: loop -->
+	</ul><!-- END: related -->
+	
 </div><!-- END: listcat --><!-- END: main -->
