@@ -70,24 +70,12 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 
     $nv_max_size = $nv_Request->get_int( 'nv_max_size', 'post', $global_config['nv_max_size'] );
     $nv_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $nv_max_size );
-	
-	$upload_logo = filter_text_input( 'upload_logo', 'post' );
-	if ( ! nv_is_url( $upload_logo ) and file_exists( NV_DOCUMENT_ROOT . $upload_logo ) )
-    {
-        $lu = strlen( NV_BASE_SITEURL );
-        $upload_logo = substr( $upload_logo, $lu );
-    }
-    else
-    {
-        $upload_logo = "images/logo.png";
-    }	
 
     $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'file_allowed_ext', " . $db->dbescape_string( $type ) . ")" );
     $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'forbid_extensions', " . $db->dbescape_string( $ext ) . ")" );
     $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'forbid_mimes', " . $db->dbescape_string( $mime ) . ")" );
     $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'nv_max_size', " . $db->dbescape_string( $nv_max_size ) . ")" );
     $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'upload_checking_mode', " . $db->dbescape_string( $upload_checking_mode ) . ")" );
-    $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'upload_logo', " . $db->dbescape_string( $upload_logo ) . ")" );
 
     nv_save_file_config_global();
 
@@ -151,15 +139,6 @@ if ( ! $strong )
     $contents .= " " . $lang_module['upload_checking_note'];
 }
 
-if ( ! nv_is_url( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR .'/'.$global_config['upload_logo'] ) )
-{
-    $global_config['upload_logo'] = NV_BASE_SITEURL.$global_config['upload_logo'];
-}
-else
-{
-    $global_config['upload_logo'] = $global_config['site_logo'];
-}
-
 $contents .= "</td>";
 $contents .= "</tr>";
 $contents .= "</tbody>";
@@ -198,38 +177,16 @@ foreach ( $myini['mimes'] as $key => $name )
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
 $contents .= "</tbody>\n";
-$contents .= "<tbody  class=\"second\">
-            <tr>
-                <td>
-                    <strong>" . $lang_module['uploadconfig_logo'] . "</strong>
-                </td>
-                <td>
-                    <input type=\"text\" name=\"upload_logo\" id=\"upload_logo\" value=\"".$global_config['upload_logo']."\" style=\"width: 350px\"/><input style=\"width:100px\" type=\"button\" value=\"" . $lang_global['browse_image'] . "\" name=\"selectimg\"/>
-                </td>
-            </tr>
-        </tbody>\n";
-$contents .= "<tbody>\n";
+$contents .= "<tfoot>\n";
 $contents .= "<tr>\n";
 $contents .= "<td colspan=\"2\" style=\"text-align:center\">";
 $contents .= "<input type=\"submit\" value=\"" . $lang_module['banip_confirm'] . "\" name=\"submit\"/>\n";
 $contents .= "</td>\n";
 $contents .= "</tr>\n";
-$contents .= "</tbody>\n";
-
+$contents .= "</tfoot>\n";
 $contents .= "</table>\n";
 $contents .= "</form>\n";
-$contents .= "<script type=\"text/javascript\">\n";
-$contents .= "//<![CDATA[\n";
-$contents .= '$("input[name=selectimg]").click(function(){
-						var area = "upload_logo";
-						var path= "";						
-						var currentpath= "images";						
-						var type= "image";
-						nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "420","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-						return false;
-					});';
-$contents .= "\n//]]>\n";
-$contents .= "</script>\n";
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );

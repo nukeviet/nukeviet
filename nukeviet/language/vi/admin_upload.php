@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Jul 06, 2011, 04:38:01 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Jul 06, 2011, 04:38:01 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE'))
+{
+    die('Stop!!!');
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['upload_manager'] = "Quản lý Files";
 $lang_module['upload_delimg_confirm'] = "Bạn có chắc muốn xóa file";
@@ -89,5 +90,13 @@ $lang_module['maxSizeSize'] = "Kích cỡ tối đa: %dx%dpx";
 $lang_module['addlogo'] = "Thêm Logo";
 $lang_module['addlogosave'] = "Lưu thay đổi";
 $lang_module['notlogo'] = "Lỗi: Hệ thống không tìm thấy file Logo";
-
+$lang_module['upload_logo'] = "Logo khi thêm vào hình ảnh ";
+$lang_module['selectimg'] = "Chọn hình ảnh";
+$lang_module['autologo'] = "Tự động chèn Logo vào ảnh của các module";
+$lang_module['autologomodall'] = "Tất cả các module";
+$lang_module['logosizecaption'] = "Kích thước của logo";
+$lang_module['imagewith'] = "Nếu chiều rộng ảnh";
+$lang_module['logowith'] = "Chiều rộng của logo bằng";
+$lang_module['logosize3'] = "Sử dụng nguyên kích thước logo, Kích thước tối đa của logo bằng";
+$lang_module['fileimage'] = "ảnh";
 ?>
