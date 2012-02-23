@@ -48,7 +48,6 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
     $config_logo['h'] = $nv_Request->get_int('h', 'post', 0);
     if ($config_logo['w'] > 0 and $config_logo['h'] > 0)
     {
-
         require_once (NV_ROOTDIR . "/includes/class/image.class.php");
         $createImage = new image(NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT);
         $createImage->addlogo($upload_logo, '', '', $config_logo);
@@ -77,20 +76,47 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
 
 if (file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo']))
 {
-    $upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
+    $upload_logo = $global_config['upload_logo'];
 }
 elseif (file_exists(NV_ROOTDIR . '/' . $global_config['site_logo']))
 {
-    $upload_logo = NV_BASE_SITEURL . $global_config['site_logo'];
+    $upload_logo = $global_config['site_logo'];
 }
 elseif (file_exists(NV_ROOTDIR . '/images/logo.png'))
 {
-    $upload_logo = NV_BASE_SITEURL . 'images/logo.png';
+    $upload_logo = 'images/logo.png';
 }
 else
 {
     trigger_error($lang_module['notlogo'], 256);
 }
+
+$logo_size = getimagesize(NV_ROOTDIR . '/' . $upload_logo);
+$file_size = getimagesize(NV_ROOTDIR . '/' . $path . '/' . $file);
+if ($file_size[0] <= 150)
+{
+    $w = ceil($logo_size[0] * $global_config['autologosize1'] / 100);
+}
+elseif ($file_size[0] < 350)
+{
+    $w = ceil($logo_size[0] * $global_config['autologosize2'] / 100);
+}
+else
+{
+    if (ceil($file_size[0] * $global_config['autologosize3'] / 100) > $logo_size[0])
+    {
+        $w = $logo_size[0];
+    }
+    else
+    {
+        $w = ceil($file_size[0] * $global_config['autologosize3'] / 100);
+    }
+}
+$h = ceil($w * $logo_size[1] / $logo_size[0]);
+$x = $file_size[0] - $w - 5;
+$y = $file_size[1] - $h - 5;
+
+$logosite = array('p' => NV_BASE_SITEURL . $upload_logo, 'x' => $x, 'y' => $y, 'w' => $w, 'h' => $h);
 
 $xtpl = new XTemplate("addlogo.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign("LANG", $lang_module);
@@ -99,7 +125,7 @@ $xtpl->assign("NV_OP_URL", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . 
 $xtpl->assign("IMG_PATH", $path);
 $xtpl->assign("IMG_FILE", $file);
 $xtpl->assign("IMG_MTIME", filemtime(NV_ROOTDIR . '/' . $path . '/' . $file));
-$xtpl->assign("UPLOAD_LOGO", $upload_logo);
+$xtpl->assign("LOGOSITE", $logosite);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
