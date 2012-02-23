@@ -47,7 +47,7 @@ function nv_set_dir_class( $array )
  */
 function viewdirtree( $dir, $currentpath )
 {
-    global $dirlist, $global_config, $module_file, $array_hidefolders;
+    global $dirlist, $global_config, $module_file;
 
     $pattern = ! empty( $dir ) ? "/^(" . nv_preg_quote( $dir ) . ")\/([^\/]+)$/" : "/^([^\/]+)$/";
     $_dirlist = preg_grep( $pattern, $dirlist );

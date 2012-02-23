@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if ( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $dirlang = filter_text_input( 'dirlang', 'get', '' );

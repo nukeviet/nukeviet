@@ -7,8 +7,7 @@
  * @Createdate 2-11-2010 0:44
  */
 
-if (!defined('NV_IS_FILE_MODULES'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_MODULES')) die('Stop!!!');
 
 $mod = filter_text_input('mod', 'get');
 
@@ -198,4 +197,5 @@ $contents = edit_theme($contents);
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>

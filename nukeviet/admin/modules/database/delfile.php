@@ -1,10 +1,12 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+
 if ( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
 $filename = filter_text_input( 'filename', 'get', '' );
@@ -25,4 +27,5 @@ else
     echo nv_admin_theme( $contents );
     include ( NV_ROOTDIR . "/includes/footer.php" );
 }
+
 ?>

@@ -7,15 +7,14 @@
  * @createdate 12/31/2009 2:29
  */
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'))
-    die('Stop!!!');
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'))die('Stop!!!');
+
 if (defined('NV_IS_GODADMIN'))
 {
     $submenu['config'] = $lang_global['mod_settings'];
 }
 
-if ($module_name != "upload")
-    return;
+if ($module_name != "upload") return;
 
 $menu_top = array("title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_upload']);
 
@@ -25,8 +24,6 @@ if (defined('NV_IS_GODADMIN'))
 {
     $allow_func[] = 'config';
 }
-
-#################################################################################
 
 /**
  * nv_check_allow_upload_dir()
@@ -430,4 +427,5 @@ else
     $dirlist = file_get_contents($dirlistCache);
     $dirlist = unserialize($dirlist);
 }
+
 ?>

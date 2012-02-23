@@ -16,7 +16,7 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
  */
 function nv_save_file_admin_config ( )
 {
-    global $db, $db_config;
+    global $db;
     $content_config_ip = $content_config_user = "";
     
     $sql = "SELECT `keyname`, `mask`, `begintime`, `endtime`, `notice` FROM `" . NV_AUTHORS_GLOBALTABLE . "_config`";

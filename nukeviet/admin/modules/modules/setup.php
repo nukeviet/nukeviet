@@ -7,8 +7,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (!defined('NV_IS_FILE_MODULES'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_MODULES')) die('Stop!!!');
 
 $contents = "";
 
@@ -260,7 +259,6 @@ foreach ($modules_data as $row)
         }
     }
 }
-//$contents['thead'] = array($lang_module['weight'], $lang_module['module_name'], $lang_module['custom_title'], $lang_module['version'], $lang_module['in_menu'] . "(*)", $lang_module['submenu'] . "(**)", $lang_global['activate'], $lang_global['actions']);
 
 $array_head = array("caption" => $lang_module['module_sys'], "head" => array($lang_module['weight'], $lang_module['module_name'], $lang_module['version'], $lang_module['settime'], $lang_module['author'], ""));
 $array_virtual_head = array("caption" => $lang_module['vmodule'], "head" => array($lang_module['weight'], $lang_module['module_name'], $lang_module['vmodule_file'], $lang_module['settime'], $lang_module['vmodule_note'], ""));
@@ -270,4 +268,5 @@ $contents .= call_user_func("setup_modules", $array_head, $array_modules, $array
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>

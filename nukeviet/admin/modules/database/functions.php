@@ -110,9 +110,9 @@ if ( $module_name == "database" )
         }
     }
 
-    function nv_show_tab ( )
+    function nv_show_tab( )
     {
-        global $db, $db_config, $module_name, $page_title, $lang_global, $lang_module, $nv_Request;
+        global $db, $db_config, $module_name, $page_title, $lang_module;
         
         $tab = filter_text_input( 'tab', 'get' );
         

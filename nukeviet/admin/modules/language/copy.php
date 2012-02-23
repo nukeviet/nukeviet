@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if ( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_admin_copy'];
@@ -110,7 +111,9 @@ $contents .= "</select>\n";
 $contents .= "<input type=\"submit\" value=\"" . $lang_module['nv_admin_submit'] . "\" /></center>";
 $contents .= "</form>";
 $contents .= "<br />";
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

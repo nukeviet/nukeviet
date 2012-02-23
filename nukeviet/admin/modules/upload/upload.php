@@ -7,8 +7,7 @@
  * @Createdate 24/1/2011, 1:33
  */
 
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post', NV_UPLOADS_DIR));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
@@ -105,4 +104,5 @@ nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['upload_file'], $path . 
 
 echo $upload_info['basename'];
 exit ;
+
 ?>

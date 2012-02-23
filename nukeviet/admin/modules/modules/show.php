@@ -17,7 +17,7 @@ if (!defined('NV_IS_FILE_MODULES'))
  */
 function nv_show_funcs()
 {
-    global $db, $nv_Request, $lang_module, $client_info, $module_name, $global_config, $site_mods;
+    global $db, $lang_module, $global_config, $site_mods;
 
     $mod = filter_text_input('mod', 'get', '');
 
@@ -242,4 +242,5 @@ $contents = show_funcs_theme($contents);
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>

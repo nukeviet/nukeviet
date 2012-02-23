@@ -7,8 +7,7 @@
  * @Createdate 2-10-2010 9:32
  */
 
-if (!defined('NV_IS_FILE_MODULES'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_MODULES')) die('Stop!!!');
 
 if (sizeof($site_mods) < 2)
 {
@@ -38,4 +37,5 @@ $contents = call_user_func("main_theme", $contents);
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>

@@ -8,7 +8,9 @@
  */
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
+
 global $global_config;
+
 $submenu['main'] = $lang_module['nv_lang_data'];
 if($global_config['lang_multi'] and sizeof($global_config['allow_sitelangs']) > 1)
 {
@@ -65,4 +67,5 @@ if ( $module_name == "language" )
         }
     }
 }
+
 ?>

@@ -6,17 +6,9 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if ( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
-/**
- * nv_admin_write_lang()
- * 
- * @param mixed $dirlang
- * @param mixed $idfile
- * @return error write file
- */
-global $file_lang_tran_no_comp;
-$file_lang_tran_no_comp = array();
 $array_lang_no_check = array();
 
 $array_lang_exit = array();
@@ -29,9 +21,16 @@ while ( $row = $db->sql_fetch_assoc( $result ) )
     }
 }
 
-function nv_admin_write_lang ( $dirlang, $idfile )
+/**
+ * nv_admin_write_lang()
+ * 
+ * @param mixed $dirlang
+ * @param mixed $idfile
+ * @return error write file
+ */
+function nv_admin_write_lang( $dirlang, $idfile )
 {
-    global $module_name, $db, $language_array, $global_config, $include_lang, $lang_module, $file_lang_tran_no_comp, $array_lang_exit, $array_lang_no_check;
+    global $db, $language_array, $global_config, $include_lang, $lang_module, $array_lang_exit, $array_lang_no_check;
     list( $module, $admin_file, $langtype, $author_lang ) = $db->sql_fetchrow( $db->sql_query( "SELECT `module`, `admin_file`, `langtype`, `author_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` WHERE `idfile` ='" . intval( $idfile ) . "'" ) );
     if ( ! empty( $dirlang ) and ! empty( $module ) )
     {

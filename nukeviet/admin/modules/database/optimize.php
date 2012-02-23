@@ -25,6 +25,7 @@ nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['optimize'] , "" , $adm
 $totalfree = 0;
 $tabs = array();
 $result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
+
 while ( $item = $db->sql_fetch_assoc( $result ) )
 {
 	if ( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['Name'], $tables ) ) )

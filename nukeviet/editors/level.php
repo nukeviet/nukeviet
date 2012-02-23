@@ -7,9 +7,8 @@
  * @Createdate 1-27-2010 5:25
  */
 
-
-
 define( 'NV_WYSIWYG', true );
+
 if ( ! defined( 'NV_MAINFILE' ) )
 {
     $temp_dir = str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) );

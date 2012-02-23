@@ -7,8 +7,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $pathimg = nv_check_path_upload($nv_Request->get_string('path', 'get', NV_UPLOADS_DIR));
 $check_allow_upload_dir = nv_check_allow_upload_dir($pathimg);
@@ -72,4 +71,5 @@ if (isset($check_allow_upload_dir['view_dir']))
     }
 }
 exit();
+
 ?>

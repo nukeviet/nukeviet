@@ -8,6 +8,7 @@
  */
 
 if ( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
+
 $page_title = $lang_module['nv_lang_data'];
 $sql = "SELECT lang, setup FROM `" . $db_config['prefix'] . "_setup_language`";
 $result = $db->sql_query( $sql );

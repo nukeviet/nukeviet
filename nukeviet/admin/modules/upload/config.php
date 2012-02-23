@@ -7,8 +7,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 if ($nv_Request->isset_request('submit', 'post'))
 {

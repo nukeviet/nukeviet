@@ -7,8 +7,7 @@
  * @createdate 12/31/2009 5:53
  */
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'))
-    die('Stop!!!');
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) die('Stop!!!');
 
 $submenu['setup'] = $lang_module['modules'];
 $submenu['vmodule'] = $lang_module['vmodule_add'];
@@ -69,7 +68,7 @@ if ($module_name == "modules")
 
     function nv_setup_block_module($mod, $func_id = 0)
     {
-        global $db, $db_config, $global_config;
+        global $db;
         if (empty($func_id))
         {
             //xoa du lieu tai bang blocks
@@ -729,6 +728,6 @@ if ($module_name == "modules")
         }
         return $return;
     }
-
 }
+
 ?>

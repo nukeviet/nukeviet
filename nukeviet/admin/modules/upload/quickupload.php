@@ -6,13 +6,14 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $CKEditorFuncNum = $nv_Request->get_string( 'CKEditorFuncNum', 'post,get', 0 );
 $imgfolder = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'post,get' ) );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $imgfolder );
 
-function SendUploadResults ( $errorNumber, $fileUrl = "", $fileName = "", $customMsg = "" )
+function SendUploadResults( $errorNumber, $fileUrl = "", $fileName = "", $customMsg = "" )
 {
     global $CKEditorFuncNum;
     if ( $CKEditorFuncNum )
