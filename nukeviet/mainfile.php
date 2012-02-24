@@ -193,7 +193,7 @@ require ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
 
 if( NV_LANG_DATA == "vi" )
 {
-    require_once ( NV_ROOTDIR . '/includes/core/amlich.php' );
+    require ( NV_ROOTDIR . '/includes/core/amlich.php' );
 }
 
 $global_config['cookie_path'] = $nv_Request->cookie_path; //vd: /ten_thu_muc_chua_site/
@@ -210,7 +210,6 @@ $client_info['referer'] = $nv_Request->referer; //referer
 $client_info['is_myreferer'] = $nv_Request->referer_key; //0 = referer tu ben ngoai site, 1 = referer noi bo, 2 = khong co referer
 $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri; //trang dang xem
 $client_info['agent'] = $nv_Request->user_agent; //HTTP_USER_AGENT
-
 
 if ( preg_match( "/^[0-9]{10,}$/", $nv_Request->get_string( 'nocache', 'get', '' ) ) and //Xac dinh co phai AJAX hay khong
 $client_info['is_myreferer'] === 1 ) define( 'NV_IS_AJAX', true );
