@@ -7,8 +7,8 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (!defined('NV_IS_MOD_NEWS'))
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_NEWS')) die('Stop!!!');
+
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 
@@ -202,7 +202,7 @@ if (empty($contents))
         $generate_page= nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
         $contents = call_user_func($viewcat, $array_catpage, 0, $generate_page);
     }
-    elseif ($viewcat == "viewcat_list_new" or $viewcat == "viewcat_list_old")
+    elseif ($viewcat == "viewcat_list_new" or $viewcat == "viewcat_list_old") // Xem theo tieu de
     {
         $order_by = ($viewcat == "viewcat_list_new") ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
         $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 AND `inhome`='1' " . $order_by . " LIMIT  " . ($page - 1) * $per_page . "," . $per_page;
@@ -220,7 +220,7 @@ if (empty($contents))
         }
         $viewcat = "viewcat_list_new";
         $generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
-        $contents = call_user_func($viewcat, $array_catpage, 0, $page, $generate_page);
+        $contents = call_user_func($viewcat, $array_catpage, 0, ($page - 1) * $per_page, $generate_page);
     }
     if (!defined('NV_IS_MODADMIN') and $contents != "" and $cache_file != "")
     {
