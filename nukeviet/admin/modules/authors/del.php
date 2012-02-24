@@ -97,13 +97,14 @@ if ( $nv_Request->get_int( 'ok', 'post', 0 ) )
                 nv_del_moduleCache( 'modules' );
             }
         }
-        $query = "DELETE FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id` = " . $admin_id;
+        $sql = "DELETE FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id` = " . $admin_id;
         nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_del'] , "Username: " . $row_user['username'], $admin_info['userid'] );
-        $db->sql_query( $query );
+        $db->sql_query( $sql );
         $db->sql_query( "LOCK TABLE " . NV_AUTHORS_GLOBALTABLE . " WRITE" );
         $db->sql_query( "REPAIR TABLE " . NV_AUTHORS_GLOBALTABLE );
         $db->sql_query( "OPTIMIZE TABLE " . NV_AUTHORS_GLOBALTABLE );
         $db->sql_query( "UNLOCK TABLE " . NV_AUTHORS_GLOBALTABLE );
+		
         if ( $sendmail )
         {
             $title = sprintf( $lang_module['delete_sendmail_title'], $global_config['site_name'] );
@@ -159,8 +160,8 @@ else
 {
     $sendmail = 1;
     $reason = $adminpass = "";
-
 }
+
 $contents = array();
 $contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
 $contents['title'] = ( ! empty( $error ) ) ? $error : sprintf( $lang_module['delete_sendmail_info'], $row_user['username'] );
@@ -170,9 +171,11 @@ $contents['reason'] = array( $lang_module['admin_del_reason'], $reason, 255 );
 $contents['admin_password'] = array( $lang_global['admin_password'], $adminpass, NV_UPASSMAX );
 $contents['submit'] = $lang_module['nv_admin_del'];
 
-//parse content
-$xtpl = new XTemplate( "del.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
 $page_title = $lang_module['nv_admin_del'];
+
+// Parse content
+$xtpl = new XTemplate( "del.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
+
 $class = $contents['is_error'] ? " class=\"error\"" : "";
 $xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );
 $xtpl->assign( 'TITLE', $contents['title'] );
@@ -190,9 +193,10 @@ $xtpl->assign( 'ADMIN_PASSWORD2', $contents['admin_password'][2] );
 
 $xtpl->assign( 'SUBMIT', $contents['submit'] );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
 $xtpl->parse( 'del' );
 $contents = $xtpl->text( 'del' );
+
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
 

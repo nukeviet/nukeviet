@@ -1,64 +1,43 @@
 <!-- BEGIN: del -->
-<div class="quote" style="width:780px;">
-<blockquote{CLASS}><span>{TITLE}</span>
-</blockquote>
+<div class="quote" style="width:98%">
+	<blockquote{CLASS}><span>{TITLE}</span></blockquote>
 </div>
-<div class="clear">
-</div>
+<div class="clear"></div>
 <form method="post" action="{ACTION}">
-    <table style="margin-bottom:8px;width:800px;">
-        <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" />
-        <tr>
-            <td>
-                {SENDMAIL}:
-            </td>
-            <td>
-            </td>
-            <td>
-                <input name="sendmail" id="sendmail" type="checkbox" value="1"{CHECKED} />
-            </td>
-        </tr>
-    </table>
-    <table style="margin-bottom:8px;width:800px;">
-        <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" />
-        <tr>
-            <td>
-                {REASON0}:
-            </td>
-            <td>
-            </td>
-            <td>
-                <input name="reason" id="reason" type="text" value="{REASON1}" style="width:300px" maxlength="{REASON2}" />
-            </td>
-        </tr>
-    </table>
-    <table style="margin-bottom:8px;width:800px;">
-        <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" />
-        <tr>
-            <td>
-                {ADMIN_PASSWORD0}:
-            </td>
-            <td>
-                <sup class="required">
-                    &lowast;
-                </sup>
-            </td>
-            <td>
-                <input name="adminpass_iavim" id="adminpass_iavim" type="password" autocomplete="off" value="{ADMIN_PASSWORD1}" style="width:300px" maxlength="{ADMIN_PASSWORD2}" />
-            </td>
-        </tr>
-    </table>
-    <br/>
-    <table style="margin-bottom:8px;width:800px;">
-        <col valign="top" width="160px" />
-        <tr>
-            <td>
-                <input name="ok" id="ok" type="hidden" value="1" />
-            </td>
-            <td>
-                <input name="go_del" type="submit" value="{SUBMIT}" />
-            </td>
-        </tr>
+	<table class="tab1">
+		<col valign="top" width="150px" />
+		<col valign="top" width="10px" />
+		<col valign="top" />
+		<tbody>
+			<tr>
+				<td>{SENDMAIL}:</td>
+				<td></td>
+				<td><input name="sendmail" type="checkbox" value="1"{CHECKED} /></td>
+			</tr>
+		</tbody>
+		<tbody class="second">
+			<tr>
+				<td>{REASON0}:</td>
+				<td></td>
+				<td><input name="reason" type="text" value="{REASON1}" class="txt-half" maxlength="{REASON2}" /></td>
+			</tr>
+		</tbody>
+			<tr>
+				<td>{ADMIN_PASSWORD0}:</td>
+				<td><sup class="required">&lowast;</sup></td>
+				<td>
+					<input name="adminpass_iavim" type="password" autocomplete="off" value="{ADMIN_PASSWORD1}" class="txt-half" maxlength="{ADMIN_PASSWORD2}" />
+				</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="3">
+					<input name="ok" type="hidden" value="1" />
+					<input name="go_del" type="submit" value="{SUBMIT}" />
+				</td>
+			</tr>
+		<tfoot>
     </table>
 </form>
 <!-- END: del -->
