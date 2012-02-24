@@ -9,7 +9,7 @@
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'))die('Stop!!!');
 
-if (defined('NV_IS_GODADMIN'))
+if (defined('NV_IS_SPADMIN'))
 {
     $submenu['config'] = $lang_global['mod_settings'];
 }
@@ -20,7 +20,7 @@ $menu_top = array("title" => $module_name, "module_file" => "", "custom_title" =
 
 define('NV_IS_FILE_ADMIN', true);
 $allow_func = array('main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'quickupload', 'upload', 'addlogo');
-if (defined('NV_IS_GODADMIN'))
+if (defined('NV_IS_SPADMIN'))
 {
     $allow_func[] = 'config';
 }
