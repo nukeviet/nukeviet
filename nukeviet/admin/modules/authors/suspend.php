@@ -63,9 +63,8 @@ if ( $allow_change )
 {
     $new_suspend = ( $old_suspend ) ? 0 : 1;
     
-    $save = $nv_Request->get_int( 'save', 'post', 0 );
     $error = "";
-    if ( $save )
+    if ( $nv_Request->get_int( 'save', 'post', 0 ) )
     {
         $new_reason = ( ! empty( $new_suspend ) ) ? filter_text_input( 'new_reason', 'post', '', 1 ) : "";
         $sendmail = $nv_Request->get_int( 'sendmail', 'post', 0 );
@@ -236,7 +235,8 @@ else
 }
 
 $page_title = sprintf( $lang_module['nv_admin_chg_suspend'], $row_user['username'] );
-//parse content
+
+// Parse content
 $xtpl = new XTemplate( "suspend.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
 $xtpl->assign( 'SUSPEND_INFO', $contents['suspend_info'][0] );
 if ( empty( $contents['suspend_info'][1] ) )
@@ -289,9 +289,10 @@ if ( ! empty( $contents['change_suspend'] ) )
     $xtpl->parse( 'suspend.change_suspend' );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
 $xtpl->parse( 'suspend' );
 $contents = $xtpl->text( 'suspend' );
+
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
 
