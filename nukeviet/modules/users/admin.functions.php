@@ -17,8 +17,7 @@ $submenu['question'] = $lang_module['question'];
 $submenu['siteterms'] = $lang_module['siteterms'];
 $submenu['config'] = $lang_module['config'];
 
-$allow_func = array( 'main', 'del', 'delconfirm', 'setactive', 'user_add', 'edit', 'user_waiting', 'delawaitinglist', 'question', 'siteterms', 'config', //
-    'groups', 'getuserid' );
+$allow_func = array( 'main', 'del', 'setactive', 'user_add', 'edit', 'user_waiting', 'question', 'siteterms', 'config', 'groups', 'getuserid' );
 
 /**
  * groupList()
