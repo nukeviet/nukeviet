@@ -11,7 +11,7 @@ if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_ABOUT', true );
 
-$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . NV_CACHE_PREFIX . ".cache";
+$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . NV_CACHE_PREFIX . ".cache"; // Cache dung tai tat ca cac giao dien
 
 if ( ( $cache = nv_get_cache( $cache_file ) ) != false )
 {
@@ -28,7 +28,7 @@ else
             'id' => $row['id'], //
             'title' => $row['title'], //
             'alias' => $row['alias'] //
-            );
+		);
     }
 
     $cache = serialize( $abouts );

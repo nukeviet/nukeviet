@@ -232,6 +232,11 @@ img {
     border: 0
 }
 
+img.refresh{
+	vertical-align:middle;
+	cursor:pointer;
+}
+
 input[type=radio], input[type=checkbox] {
     vertical-align: middle
 }
@@ -250,6 +255,10 @@ textarea {
 
 .clear {
     clear: both;
+}
+
+.center{
+	text-align:center;
 }
 
 .default_icon {

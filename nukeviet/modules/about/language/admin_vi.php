@@ -8,7 +8,7 @@
 * @Createdate Jul 06, 2011, 04:38:01 PM
 */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
  die('Stop!!!');
 }
 
@@ -36,5 +36,6 @@ $lang_module['errorsave'] = "Lỗi hệ thống không cập nhật được n�
 $lang_module['saveok'] = "Cập nhật bài viết thành công";
 $lang_module['alias'] = "Liên kết tĩnh";
 $lang_module['keywords'] = "Từ khóa";
+$lang_module['feature'] = "Chức năng";
 
 ?>

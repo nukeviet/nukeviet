@@ -28,11 +28,11 @@ if ( $all_page )
     {
         $url = $link . $alias . "-" . $id;
 
-        $result_array[] = array( //
+        $result_array[] = array(
             'link' => $url, //
             'title' => BoldKeywordInStr( $tilterow, $key, $logic ), //
             'content' => BoldKeywordInStr( $content, $key, $logic ) //
-            );
+		);
     }
 }
 

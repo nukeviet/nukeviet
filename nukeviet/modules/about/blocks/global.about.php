@@ -11,13 +11,12 @@ if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 if ( ! nv_function_exists( 'nv_message_about' ) )
 {
-
     /**
      * nv_message_about()
      * 
      * @return
      */
-    function nv_message_about ( $block_config )
+    function nv_message_about( $block_config )
     {
         global $global_config, $site_mods, $db, $module_name;
         $module = $block_config['module'];
@@ -28,7 +27,7 @@ if ( ! nv_function_exists( 'nv_message_about' ) )
 		
         $is_show = false;
         
-        $pattern = "/^" . NV_LANG_DATA . "\_" . $module . "\_([0-9]+)\_" . NV_CACHE_PREFIX . "\.cache$/i";
+        $pattern = "/^" . NV_LANG_DATA . "\_" . $module . "\_([a-zA-z0-9\_\-]+)\_([0-9]+)\_" . NV_CACHE_PREFIX . "\.cache$/i";
         
         $cache_files = nv_scandir( NV_ROOTDIR . "/" . NV_CACHEDIR, $pattern );
         

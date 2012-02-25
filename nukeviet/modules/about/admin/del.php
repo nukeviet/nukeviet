@@ -13,17 +13,20 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 if ( empty( $id ) ) die( 'NO_' . $id );
 
-$query = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
-$result = $db->sql_query( $query );
-$numrows = $db->sql_numrows( $result );
-if ( $numrows != 1 ) die( 'NO_' . $id );
-nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', "aboutid  " . $id, $admin_info['userid'] );
-$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id` = " . $id;
-$db->sql_query( $query );
+$sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
+$result = $db->sql_query( $sql );
+
+if ( $db->sql_numrows( $result ) != 1 ) die( 'NO_' . $id );
+
+nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete about', "ID:  " . $id, $admin_info['userid'] );
+
+$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id` = " . $id;
+$db->sql_query( $sql );
+
 if ( $db->sql_affectedrows() > 0 )
 {
-    $query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY `weight` ASC";
-    $result = $db->sql_query( $query );
+    $sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY `weight` ASC";
+    $result = $db->sql_query( $sql );
     $weight = 0;
     while ( $row = $db->sql_fetchrow( $result ) )
     {

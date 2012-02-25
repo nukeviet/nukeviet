@@ -32,6 +32,7 @@ if ( intval( $number ) > 0 )
         $alias = $alias . "-" . $weight;
     }
 }
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo $alias;
 include ( NV_ROOTDIR . "/includes/footer.php" );

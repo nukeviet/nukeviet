@@ -13,7 +13,7 @@ $contents = "";
 
 if ($id)
 {
-    $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache";
+    $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache"; // Cache tung giao dien
 
     if (($cache = nv_get_cache($cache_file)) != false)
     {
@@ -62,8 +62,8 @@ if ($id)
         }
 
         $cache['alias'] = $row['alias'];
-        //Dung cho Block
 
+        //Dung cho Block
         $cache = serialize($cache);
         nv_set_cache($cache_file, $cache);
     }

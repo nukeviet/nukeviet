@@ -6,23 +6,24 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
 
 if ($id)
 {
-    $query = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
-    $result = $db->sql_query($query);
-    $numrows = $db->sql_numrows($result);
-    if (empty($numrows))
+    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
+    $result = $db->sql_query($sql);
+	
+    if ( $db->sql_numrows($result) != 1 )
     {
         Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name);
         die();
     }
+	
     $row = $db->sql_fetchrow($result);
-    define('IS_EDIT', true);
+
     $page_title = $lang_module['aabout12'];
     $action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id;
 }
@@ -34,17 +35,13 @@ else
 
 $error = "";
 
-if (defined('NV_EDITOR'))
-{
-    require_once (NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php');
-}
-
 if ($nv_Request->get_int('save', 'post') == '1')
 {
     $title = filter_text_input('title', 'post', '', 1);
     $alias = filter_text_input('alias', 'post', '', 1);
     $bodytext = nv_editor_filter_textarea('bodytext', '', NV_ALLOWED_HTML_TAGS);
     $keywords = nv_strtolower(filter_text_input('keywords', 'post', '', 0));
+	
     if (empty($title))
     {
         $error = $lang_module['aabout9'];
@@ -57,6 +54,7 @@ if ($nv_Request->get_int('save', 'post') == '1')
     {
         $bodytext = nv_editor_nl2br($bodytext);
         $alias = empty($alias) ? change_alias($title) : change_alias($alias);
+		
         if (empty($keywords))
         {
             $keywords = nv_get_keywords($bodytext);
@@ -70,12 +68,12 @@ if ($nv_Request->get_int('save', 'post') == '1')
             }
         }
 
-        if (defined('IS_EDIT'))
+        if ( $id )
         {
-            $query = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET 
+            $sql = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET 
             `title`=" . $db->dbescape($title) . ", `alias` =  " . $db->dbescape($alias) . ", 
             `bodytext`=" . $db->dbescape($bodytext) . ", `keywords`=" . $db->dbescape($keywords) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `id` =" . $id;
-            $db->sql_query($query);
+            $db->sql_query($sql);
             $publtime = $row['add_time'];
         }
         else
@@ -83,25 +81,25 @@ if ($nv_Request->get_int('save', 'post') == '1')
             list($weight) = $db->sql_fetchrow($db->sql_query("SELECT MAX(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "`"));
             $weight = intval($weight) + 1;
 
-            $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
+            $sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
             NULL, " . $db->dbescape($title) . ", " . $db->dbescape($alias) . ", " . $db->dbescape($bodytext) . ", " . $db->dbescape($keywords) . ", 
             " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
-            $id = $db->sql_query_insert_id($query);
+            $id = $db->sql_query_insert_id($sql);
             $publtime = NV_CURRENTTIME;
         }
         nv_del_moduleCache($module_name);
         if ($db->sql_affectedrows() > 0)
         {
-            if (defined('IS_EDIT'))
+            if ( $id )
             {
-                nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_about', "aboutid " . $id, $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit about', "ID:  " . $id, $admin_info['userid']);
             }
             else
             {
-                nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_about', " ", $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'Add about', " ", $admin_info['userid']);
             }
 
-            //nv_update_tags
+            // Update tag
             $text = strip_tags($bodytext);
             $text = nv_clean60($text, 300);
             nv_update_tags($module_name, $id, $keywords, $alias, $title, $text, '', $publtime);
@@ -116,7 +114,7 @@ if ($nv_Request->get_int('save', 'post') == '1')
 }
 else
 {
-    if (defined('IS_EDIT'))
+    if ( $id )
     {
         $title = $row['title'];
         $alias = $row['alias'];
@@ -129,67 +127,45 @@ else
     }
 }
 
-if (!empty($bodytext))
-    $bodytext = nv_htmlspecialchars($bodytext);
+if (!empty($bodytext)) $bodytext = nv_htmlspecialchars($bodytext);
 
-if (!empty($error))
-{
-    $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
-    $contents .= "<blockquote class=\"error\"><span>" . $error . "</span></blockquote>\n";
-    $contents .= "</div>\n";
-    $contents .= "<div class=\"clear\"></div>\n";
-}
+if( defined('NV_EDITOR') ) require_once( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 
-$contents .= "<form action=\"" . $action . "\" method=\"post\">\n";
-$contents .= "<input name=\"save\" type=\"hidden\" value=\"1\" />\n";
-$contents .= "<table summary=\"\" class=\"tab1\" style=\"margin-top:8px;margin-bottom:8px;\">\n";
-$contents .= "<col valign=\"top\" width=\"150px\" />\n";
-$contents .= "<tbody><tr>\n";
-$contents .= "<td>" . $lang_module['aabout2'] . ":</td>\n";
-$contents .= "<td><input style=\"width:400px\" name=\"title\" id=\"idtitle\" type=\"text\" value=\"" . $title . "\" maxlength=\"255\" /></td>\n";
-$contents .= "</tr></tbody>\n";
-$contents .= "<tbody class=\"second\"><tr>\n";
-$contents .= "<td>" . $lang_module['alias'] . ":</td>\n";
-$contents .= "<td><input style=\"width:380px\" name=\"alias\" id=\"idalias\" type=\"text\" value=\"" . $alias . "\" maxlength=\"255\" />&nbsp;&nbsp;";
-$contents .= "	  <img src=\"" . NV_BASE_SITEURL . "images/refresh.png\" width=\"16\" style=\"cursor: pointer; vertical-align: middle;\" onclick=\"get_alias(" . $id . ");\" alt=\"\" height=\"16\" />\n";
-$contents .= "</td>\n";
-$contents .= "</tr></tbody>\n";
-$contents .= "<tbody><tr>\n";
-$contents .= "<td colspan=\"2\">" . $lang_module['aabout11'] . ":<br>\n";
+
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor'))
 {
-    $contents .= nv_aleditor("bodytext", '100%', '300px', $bodytext);
+    $bodytext = nv_aleditor("bodytext", '100%', '300px', $bodytext);
 }
 else
 {
-    $contents .= "<textarea style=\"width:100%;height:300px\" name=\"bodytext\" id=\"bodytext\">" . $bodytext . "</textarea>";
+    $bodytext = "<textarea style=\"width:100%;height:300px\" name=\"bodytext\">" . $bodytext . "</textarea>";
 }
-$contents .= "</td>\n";
-$contents .= "</tr></tbody>\n";
-$contents .= "<tbody class=\"second\"><tr>\n";
-$contents .= "<td>" . $lang_module['keywords'] . ":</td>\n";
-$contents .= "<td><input style=\"width:98%\" name=\"keywords\" type=\"text\" value=\"" . $keywords . "\"/></td>\n";
-$contents .= "</tr></tbody>\n";
-$contents .= "</table>\n";
 
-$contents .= "<br />\n";
-$contents .= "<div style=\"text-align:center\"><input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" /></div>\n";
-$contents .= "</form>\n";
+$xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'FORM_ACTION', $action );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-$contents .= "<script type=\"text/javascript\">\n";
-if (empty($alias))
+$xtpl->assign( 'TITLE', $title );
+$xtpl->assign( 'ALIAS', $alias );
+$xtpl->assign( 'ID', $id );
+$xtpl->assign( 'KEYWORDS', $keywords );
+$xtpl->assign( 'BODYTEXT', $bodytext );
+
+if( empty( $alias ) ) $xtpl->parse( 'main.get_alias' );
+
+if( $error )
 {
-    $contents .= '$("#idtitle").change(function () {
-    get_alias(' . $id . ');
-});';
+	$xtpl->assign( 'ERROR', $error );
+	$xtpl->parse( 'main.error' );
 }
-$contents .= "</script>";
 
-if ($id)
-{
-    $op = '';
-}
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
+
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme($contents);
 include (NV_ROOTDIR . "/includes/footer.php");
+
 ?>

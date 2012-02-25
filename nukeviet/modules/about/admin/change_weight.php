@@ -34,6 +34,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $new_weight . " WHERE `id`=" . $id;
 $db->sql_query( $sql );
 nv_del_moduleCache( $module_name );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo 'OK_' . $id;
 include ( NV_ROOTDIR . "/includes/footer.php" );
