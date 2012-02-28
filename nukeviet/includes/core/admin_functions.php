@@ -7,8 +7,7 @@
  * @createdate 12/31/2009 2:13
  */
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE'))
-    die('Stop!!!');
+if ( ! defined('NV_ADMIN') or ! defined('NV_MAINFILE') ) die('Stop!!!');
 
 /**
  * nv_db_mods()
@@ -24,11 +23,11 @@ function nv_site_mods()
     foreach ($list as $row)
     {
         $allowed = false;
-        if (defined('NV_IS_SPADMIN'))
+        if( defined('NV_IS_SPADMIN') )
         {
             $allowed = true;
         }
-        elseif (defined('NV_IS_ADMIN') and !empty($row['admins']) and in_array($admin_info['admin_id'], explode(",", $row['admins'])))
+        elseif( defined('NV_IS_ADMIN') and !empty($row['admins']) and in_array($admin_info['admin_id'], explode(",", $row['admins'])))
         {
             $allowed = true;
         }
@@ -66,14 +65,14 @@ function nv_save_file_config_global()
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
     $content_config .= "{\n";
-    $content_config .= "    die( 'Stop!!!' );\n";
+    $content_config .= "\tdie( 'Stop!!!' );\n";
     $content_config .= "}\n\n";
 
     $sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' ORDER BY `config_name` ASC";
     $result = $db->sql_query($sql);
     while (list($c_config_name, $c_config_value) = $db->sql_fetchrow($result))
     {
-        if (!is_numeric($c_config_value) || (isset($c_config_value{1}) and $c_config_value{0} == '0'))
+        if (!is_numeric($c_config_value) || (isset($c_config_value{1}) and ( $c_config_value{0} == '0' or $c_config_value{0} == '.' ) ) )
         {
             $content_config .= "\$global_config['" . $c_config_name . "'] = \"" . nv_unhtmlspecialchars($c_config_value) . "\";\n";
         }
@@ -218,7 +217,9 @@ function nv_rewrite_change($array_config_global)
 {
     global $sys_info, $lang_module;
     $rewrite_rule = $filename = '';
-    $endurl = ($array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl']) ? nv_preg_quote($array_config_global['rewrite_endurl']) : nv_preg_quote($array_config_global['rewrite_endurl']) . "|" . nv_preg_quote($array_config_global['rewrite_exturl']);
+	
+    $endurl = ($array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl']) ? nv_preg_quote($array_config_global['rewrite_endurl']) : nv_preg_quote($array_config_global['rewrite_endurl']) . "|" . nv_preg_quote($array_config_global['rewrite_exturl']);	
+	
     if ($sys_info['supports_rewrite'] == "rewrite_mode_iis")
     {
         $filename = NV_ROOTDIR . "/web.config";

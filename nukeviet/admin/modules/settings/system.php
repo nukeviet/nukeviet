@@ -7,104 +7,104 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (!defined('NV_IS_FILE_SETTINGS'))
-    die('Stop!!!');
+if( ! defined('NV_IS_FILE_SETTINGS') ) die('Stop!!!');
 
 $adminThemes = array('');
-$adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . "/themes", $global_config['check_theme_admin']));
-unset($adminThemes[0]);
+$adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] ) );
+unset( $adminThemes[0] );
 
 $closed_site_Modes = array(//
-    '0' => $lang_module['closed_site_0'], //
-    '1' => $lang_module['closed_site_1'], //
-    '2' => $lang_module['closed_site_2'], //
-    '3' => $lang_module['closed_site_3'] //
+	'0' => $lang_module['closed_site_0'], //
+	'1' => $lang_module['closed_site_1'], //
+	'2' => $lang_module['closed_site_2'], //
+	'3' => $lang_module['closed_site_3'] //
 );
 
 $captcha_array = array(//
-    0 => $lang_module['captcha_0'], //
-    1 => $lang_module['captcha_1'], //
-    2 => $lang_module['captcha_2'], //
-    3 => $lang_module['captcha_3'], //
-    4 => $lang_module['captcha_4'], //
-    5 => $lang_module['captcha_5'], //
-    6 => $lang_module['captcha_6'], //
-    7 => $lang_module['captcha_7'] //
+	0 => $lang_module['captcha_0'], //
+	1 => $lang_module['captcha_1'], //
+	2 => $lang_module['captcha_2'], //
+	3 => $lang_module['captcha_3'], //
+	4 => $lang_module['captcha_4'], //
+	5 => $lang_module['captcha_5'], //
+	6 => $lang_module['captcha_6'], //
+	7 => $lang_module['captcha_7'] //
 );
 
 $captcha_type_array = array(//
-    0 => $lang_module['captcha_type_0'], //
-    1 => $lang_module['captcha_type_1'] //
+	0 => $lang_module['captcha_type_0'], //
+	1 => $lang_module['captcha_type_1'] //
 );
 
 $allow_sitelangs = array();
-foreach ($global_config['allow_sitelangs'] as $lang_i)
+foreach( $global_config['allow_sitelangs'] as $lang_i )
 {
-    if (file_exists(NV_ROOTDIR . "/language/" . $lang_i . "/global.php"))
-    {
-        $allow_sitelangs[] = $lang_i;
-    }
+	if( file_exists( NV_ROOTDIR . "/language/" . $lang_i . "/global.php" ) )
+	{
+		$allow_sitelangs[] = $lang_i;
+	}
 }
 
-$timezone_array = array_keys(nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/timezone.ini', true));
+$timezone_array = array_keys( nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/timezone.ini', true ) );
 
-$proxy_blocker_array = array(//
-    0 => $lang_module['proxy_blocker_0'], //
-    1 => $lang_module['proxy_blocker_1'], //
-    2 => $lang_module['proxy_blocker_2'], //
-    3 => $lang_module['proxy_blocker_3']);
+$proxy_blocker_array = array( //
+	0 => $lang_module['proxy_blocker_0'], //
+	1 => $lang_module['proxy_blocker_1'], //
+	2 => $lang_module['proxy_blocker_2'], //
+	3 => $lang_module['proxy_blocker_3']
+);
 
-if ($nv_Request->isset_request('submit', 'post'))
+if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-    $array_config_global = array();
+	$array_config_global = array();
 
-    $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-    if (!empty($admin_theme) and in_array($admin_theme, $adminThemes))
-    {
-        $array_config_global['admin_theme'] = $admin_theme;
-    }
+	$admin_theme = $nv_Request->get_string( 'admin_theme', 'post' );
+	if( ! empty( $admin_theme ) and in_array( $admin_theme, $adminThemes ) )
+	{
+		$array_config_global['admin_theme'] = $admin_theme;
+	}
 
-    $closed_site = $nv_Request->get_int('closed_site', 'post');
-    if (isset($closed_site_Modes[$closed_site]))
-    {
-        $array_config_global['closed_site'] = $closed_site;
-    }
+	$closed_site = $nv_Request->get_int( 'closed_site', 'post' );
+	if( isset( $closed_site_Modes[$closed_site] ) )
+	{
+		$array_config_global['closed_site'] = $closed_site;
+	}
 
-    $gfx_chk = $nv_Request->get_int('gfx_chk', 'post');
-    if (isset($captcha_array[$gfx_chk]))
-    {
-        $array_config_global['gfx_chk'] = $gfx_chk;
-    }
-    $captcha_type = $nv_Request->get_int('captcha_type', 'post');
-    if (isset($captcha_type_array[$captcha_type]))
-    {
-        $array_config_global['captcha_type'] = $captcha_type;
-    }
+	$gfx_chk = $nv_Request->get_int( 'gfx_chk', 'post' );
+	if ( isset( $captcha_array[$gfx_chk] ) )
+	{
+		$array_config_global['gfx_chk'] = $gfx_chk;
+	}
+    $captcha_type = $nv_Request->get_int( 'captcha_type', 'post' );
+    if( isset( $captcha_type_array[$captcha_type] ) )
+	{
+		$array_config_global['captcha_type'] = $captcha_type;
+	}
 
-    $site_email = filter_text_input('site_email', 'post', '', 1, 255);
-    if (nv_check_valid_email($site_email) == '')
-    {
-        $array_config_global['site_email'] = $site_email;
-    }
+    $site_email = filter_text_input( 'site_email', 'post', '', 1, 255 );
+    if( nv_check_valid_email( $site_email ) == '' )
+	{
+		$array_config_global['site_email'] = $site_email;
+	}
 
-    $error_send_email = filter_text_input('error_send_email', 'post', '', 1, 255);
-    if (nv_check_valid_email($error_send_email) == '')
-    {
-        $array_config_global['error_send_email'] = $error_send_email;
-    }
+	$error_send_email = filter_text_input( 'error_send_email', 'post', '', 1, 255 );
+	if( nv_check_valid_email( $error_send_email) == '' )
+	{
+		$array_config_global['error_send_email'] = $error_send_email;
+	}
 
-    $array_config_global['site_phone'] = filter_text_input('site_phone', 'post', '', 1, 255);
+	$array_config_global['site_phone'] = filter_text_input( 'site_phone', 'post', '', 1, 255 );
 
-    $site_lang = filter_text_input('site_lang', 'post', '', 1, 255);
-    if (!empty($site_lang) and in_array($site_lang, $allow_sitelangs))
-    {
-        $array_config_global['site_lang'] = $site_lang;
-    }
+	$site_lang = filter_text_input( 'site_lang', 'post', '', 1, 255 );
+    if( ! empty( $site_lang ) and in_array( $site_lang, $allow_sitelangs ) )
+	{
+		$array_config_global['site_lang'] = $site_lang;
+	}
 
-    $site_timezone = filter_text_input('site_timezone', 'post', '', 0, 255);
-    if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array) or $site_timezone == "byCountry")))
+    $site_timezone = filter_text_input( 'site_timezone', 'post', '', 0, 255 );
+    if( empty( $site_timezone ) or ( ! empty( $site_timezone ) and ( in_array( $site_timezone, $timezone_array ) or $site_timezone == "byCountry" ) ) )
     {
-        $array_config_global['site_timezone'] = $site_timezone;
+		$array_config_global['site_timezone'] = $site_timezone;
     }
 
     $array_config_global['date_pattern'] = filter_text_input('date_pattern', 'post', '', 1, 255);

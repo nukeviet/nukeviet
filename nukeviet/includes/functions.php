@@ -7,13 +7,12 @@
  * @Createdate 1/9/2010, 23:48
  */
 
-if (!defined('NV_MAINFILE'))
-    die('Stop!!!');
+if ( ! defined('NV_MAINFILE') ) die('Stop!!!');
 
-require_once (NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php');
-require_once (NV_ROOTDIR . '/includes/utf8/utf8_functions.php');
-require_once (NV_ROOTDIR . '/includes/core/filesystem_functions.php');
-require_once (NV_ROOTDIR . '/includes/core/cache_functions.php');
+require_once( NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php' );
+require_once( NV_ROOTDIR . '/includes/utf8/utf8_functions.php' );
+require_once( NV_ROOTDIR . '/includes/core/filesystem_functions.php' );
+require_once( NV_ROOTDIR . '/includes/core/cache_functions.php' );
 
 /**
  * nv_object2array()
