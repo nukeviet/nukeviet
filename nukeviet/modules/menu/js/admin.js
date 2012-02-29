@@ -25,9 +25,9 @@ function nv_link1(alias, module)
 function nv_link(module)
 {
     var nv_timer = nv_settimeout_disable('module_name_' + module, 2000);
-
     var new_status = document.getElementById('module_name_' + module).options[document.getElementById('module_name_' + module).selectedIndex].value;
     var new_text = document.getElementById('module_name_' + module).options[document.getElementById('module_name_' + module).selectedIndex].text;
+	
     $('input#title').val(trim(new_text));
     if(new_status != 0)
     {

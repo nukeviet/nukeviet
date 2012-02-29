@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_d . "_cat` ORDER BY `order` ASC";
+$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_d . "_catalogs` ORDER BY `order` ASC";
 $result = $db->sql_query( $sql );
 
 While( $row = $db->sql_fetchrow( $result ) )
@@ -27,8 +27,8 @@ While( $row = $db->sql_fetchrow( $result ) )
 	$arr_cat[$row['catid']] = array(
 		'module' => $module, //
 		'key' => $row['catid'], //
-		'title' => $t_sp . $row['title'], //
-		'alias' => $row['alias'],  //
+		'title' => $t_sp . $row[NV_LANG_DATA . '_title'], //
+		'alias' => $row[NV_LANG_DATA . '_alias'],  //
 	);
 }
 

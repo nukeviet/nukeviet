@@ -7,7 +7,7 @@
  * @Createdate 21-04-2011 11:17
  */
 
-if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
+if( ! defined('NV_IS_FILE_ADMIN') ) die('Stop!!!');
 
 // Default variable
 $error = "";
@@ -444,37 +444,42 @@ if ($nv_Request->isset_request('item', 'post'))
     exit();
 }
 
-if ($nv_Request->isset_request('action', 'post'))
+// Lay chu de cua module duoc chon
+if( $nv_Request->isset_request('action', 'post') )
 {
-    $module = $nv_Request->get_string('module', 'post', '');
+	$module = $nv_Request->get_string('module', 'post', '');
+	if( empty( $module ) ) die( $lang_module['add_error_module'] );
+	
+	$sql = "SELECT `module_file`, `module_data` FROM `" . NV_MODULES_TABLE . "` WHERE `title`= " . $db->dbescape( $module );
+	$result = $db->sql_query( $sql );
+	if( $db->sql_numrows( $result ) != 1 ) die( $lang_module['add_error_module_exist'] );
+	
+	list( $module_f, $module_d ) = $db->sql_fetchrow( $result );
 
-    $sql = "SELECT `module_file`, `module_data` FROM `" . NV_MODULES_TABLE . "` WHERE `title`= " . $db->dbescape($module);
-    $result = $db->sql_query($sql);
-    list($module_f, $module_d) = $db->sql_fetchrow($result);
-
-    if (file_exists(NV_ROOTDIR . '/modules/' . $module_f . '/menu.php'))
-    {
-        $arr_cat = array();
-        include (NV_ROOTDIR . '/modules/' . $module_f . '/menu.php');
-        if (!empty($arr_cat))
+	if( file_exists( NV_ROOTDIR . '/modules/' . $module_f . '/menu.php' ) )
+	{
+		$arr_cat = array();
+		include( NV_ROOTDIR . '/modules/' . $module_f . '/menu.php' );
+		
+        if ( ! empty( $arr_cat ) )
         {
-            foreach ($arr_cat as $item)
+            foreach( $arr_cat as $item )
             {
-                $xtpl->assign('item', $item);
-                $xtpl->parse('main.link.item');
+                $xtpl->assign( 'item', $item );
+                $xtpl->parse( 'main.link.item' );
             }
         }
 
-        $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module;
-        $xtpl->assign('link', $link);
-        $xtpl->parse('main.link');
-        $contents = $xtpl->text('main.link');
+        $xtpl->assign( 'link', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module );
+        $xtpl->parse( 'main.link' );
+		
+        $contents = $xtpl->text( 'main.link' );
 
-        include (NV_ROOTDIR . "/includes/header.php");
+        include( NV_ROOTDIR . '/includes/header.php' );
         echo $contents;
-        include (NV_ROOTDIR . "/includes/footer.php");
+        include( NV_ROOTDIR . '/includes/footer.php' );
     }
-    exit();
+    die( '&nbsp;' );
 }
 
 if ($post['id'] != 0)
