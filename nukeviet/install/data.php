@@ -7,17 +7,16 @@
  * @createdate 12/28/2009 20:8
  */
 
-if (!defined('NV_MAINFILE'))
-    die('Stop!!!');
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 //Ten cac table cua CSDL dung chung cho he thong
-define('NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors');
-define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
-define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
-define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups');
-define('NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language');
-define('NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions');
-define('NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs');
+define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
+define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
+define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
+define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
+define( 'NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language' );
+define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
+define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );
 
 $sql_create_table[] = "CREATE TABLE `" . NV_AUTHORS_GLOBALTABLE . "` (
   `admin_id` mediumint(8) unsigned NOT NULL,
@@ -364,7 +363,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'file_allowed_ext', 'adobe,application,archives,audio,documents,flash,images,real,video'),
 ('sys', 'global', 'forbid_extensions', 'php'),
 ('sys', 'global', 'forbid_mimes', ''),
-('sys', 'global', 'nv_max_size', '" . min(nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size'))) . "'),
+('sys', 'global', 'nv_max_size', '" . min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) ) . "'),
 ('sys', 'global', 'upload_checking_mode', 'strong'),
 ('sys', 'global', 'upload_logo', 'images/logo.png'),
 ('sys', 'global', 'str_referer_blocker', '0'),
@@ -383,7 +382,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'useactivate', '2'),
 ('sys', 'global', 'allowmailchange', '1'),
 ('sys', 'global', 'allow_sitelangs', '" . NV_LANG_DATA . "'),
-('sys', 'global', 'allow_adminlangs', '" . implode(",", $languageslist) . "'),
+('sys', 'global', 'allow_adminlangs', '" . implode( ",", $languageslist ) . "'),
 ('sys', 'global', 'read_type', '0'),
 ('sys', 'global', 'is_url_rewrite', '" . $global_config['is_url_rewrite'] . "'),
 ('sys', 'global', 'rewrite_optional', '" . $global_config['rewrite_optional'] . "'),
