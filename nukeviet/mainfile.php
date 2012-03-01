@@ -7,10 +7,10 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) and ! defined( 'NV_WYSIWYG' ) )
+if( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) and ! defined( 'NV_WYSIWYG' ) )
 {
-    Header( "Location: index.php" );
-    exit();
+	Header( "Location: index.php" );
+	exit();
 }
 
 define( 'NV_MAINFILE', true );
@@ -29,41 +29,41 @@ define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ 
 $sys_info['disable_classes'] = ( ( $disable_classes = ini_get( "disable_classes" ) ) != "" and $disable_classes != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
 $sys_info['disable_functions'] = ( ( $disable_functions = ini_get( "disable_functions" ) ) != "" and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
 
-if ( extension_loaded( 'suhosin' ) )
+if( extension_loaded( 'suhosin' ) )
 {
-    $sys_info['disable_functions'] = array_merge( $sys_info['disable_functions'], array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+	$sys_info['disable_functions'] = array_merge( $sys_info['disable_functions'], array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
 }
 $sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] ) ) ? true : false;
 
 //Ket noi voi cac file constants, config
-require ( NV_ROOTDIR . "/includes/constants.php" );
-if ( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) )
+require( NV_ROOTDIR . "/includes/constants.php" );
+if( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) )
 {
-    require ( realpath( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) );
+	require( realpath( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) );
 }
 else
 {
-    if ( file_exists( NV_ROOTDIR . '/install/index.php' ) )
-    {
-        $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
-        if ( $base_siteurl == DIRECTORY_SEPARATOR ) $base_siteurl = '';
-        if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( DIRECTORY_SEPARATOR, '/', $base_siteurl );
-        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
-        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
-        if ( defined( 'NV_ADMIN' ) )
-        {
-            $base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
-        }
-        if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
-        Header( "Location: " . $base_siteurl . "/install/index.php" );
-    }
-    die();
+	if( file_exists( NV_ROOTDIR . '/install/index.php' ) )
+	{
+		$base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
+		if( $base_siteurl == DIRECTORY_SEPARATOR ) $base_siteurl = '';
+		if( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( DIRECTORY_SEPARATOR, '/', $base_siteurl );
+		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
+		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
+		if( defined( 'NV_ADMIN' ) )
+		{
+			$base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
+		}
+		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
+		Header( "Location: " . $base_siteurl . "/install/index.php" );
+	}
+	die();
 }
 
-require ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
+require( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
 
 //Kiem tra trang thai cua may chu, neu > 80 se thong bao "Server too busy. Please try again later"
-if ( $global_config['getloadavg'] ) require ( NV_ROOTDIR . "/includes/getloadavg.php" );
+if( $global_config['getloadavg'] ) require( NV_ROOTDIR . "/includes/getloadavg.php" );
 
 $global_config['file_allowed_ext'] = ! empty( $global_config['file_allowed_ext'] ) ? explode( ",", $global_config['file_allowed_ext'] ) : array();
 $global_config['forbid_extensions'] = ! empty( $global_config['forbid_extensions'] ) ? explode( ",", $global_config['forbid_extensions'] ) : array();
@@ -72,44 +72,44 @@ $global_config['forbid_mimes'] = ! empty( $global_config['forbid_mimes'] ) ? exp
 $global_config['allow_sitelangs'] = ! empty( $global_config['allow_sitelangs'] ) ? explode( ",", $global_config['allow_sitelangs'] ) : array();
 $global_config['allow_adminlangs'] = ! empty( $global_config['allow_adminlangs'] ) ? explode( ",", $global_config['allow_adminlangs'] ) : array();
 $global_config['openid_servers'] = ! empty( $global_config['openid_servers'] ) ? explode( ",", $global_config['openid_servers'] ) : array();
-if ( empty( $global_config['openid_servers'] ) ) $global_config['openid_mode'] = 0;
-if ( $global_config['is_user_forum'] )
+if( empty( $global_config['openid_servers'] ) ) $global_config['openid_mode'] = 0;
+if( $global_config['is_user_forum'] )
 {
-    $forum_files = @scandir( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' );
-    if ( ! empty( $forum_files ) and in_array( 'is_user.php', $forum_files ) and in_array( 'changepass.php', $forum_files ) and in_array( 'editinfo.php', $forum_files ) and in_array( 'login.php', $forum_files ) and in_array( 'logout.php', $forum_files ) and in_array( 'lostpass.php', $forum_files ) and in_array( 'register.php', $forum_files ) )
-    {
-        define( 'NV_IS_USER_FORUM', true );
-    }
-    else
-    {
-        $global_config['is_user_forum'] = 0;
-    }
+	$forum_files = @scandir( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' );
+	if( ! empty( $forum_files ) and in_array( 'is_user.php', $forum_files ) and in_array( 'changepass.php', $forum_files ) and in_array( 'editinfo.php', $forum_files ) and in_array( 'login.php', $forum_files ) and in_array( 'logout.php', $forum_files ) and in_array( 'lostpass.php', $forum_files ) and in_array( 'register.php', $forum_files ) )
+	{
+		define( 'NV_IS_USER_FORUM', true );
+	}
+	else
+	{
+		$global_config['is_user_forum'] = 0;
+	}
 }
 
-if ( $global_config['openid_mode'] )
+if( $global_config['openid_mode'] )
 {
-    define( 'NV_OPENID_ALLOWED', true );
-    $openid_servers = array();
-    require ( NV_ROOTDIR . '/includes/openid.php' );
-    $openid_servers = array_intersect_key( $openid_servers, array_flip( $global_config['openid_servers'] ) );
+	define( 'NV_OPENID_ALLOWED', true );
+	$openid_servers = array();
+	require( NV_ROOTDIR . '/includes/openid.php' );
+	$openid_servers = array_intersect_key( $openid_servers, array_flip( $global_config['openid_servers'] ) );
 }
 
 //Xac dinh IP cua client
-require ( NV_ROOTDIR . '/includes/class/ips.class.php' );
+require( NV_ROOTDIR . '/includes/class/ips.class.php' );
 $ips = new ips();
 $client_info['ip'] = $ips->remote_ip;
-if ( $client_info['ip'] == "none" ) die( 'Error: Your IP address is not correct' ); //Neu khong co IP
+if( $client_info['ip'] == "none" ) die( 'Error: Your IP address is not correct' ); //Neu khong co IP
 //define( 'NV_SERVER_IP', $ips->server_ip );
 define( 'NV_FORWARD_IP', $ips->forward_ip );
 define( 'NV_REMOTE_ADDR', $ips->remote_addr );
 define( 'NV_CLIENT_IP', $client_info['ip'] );
 
 //Xac dinh Quoc gia
-require ( NV_ROOTDIR . '/includes/countries.php' );
+require( NV_ROOTDIR . '/includes/countries.php' );
 $client_info['country'] = nv_getCountry_from_cookie( $client_info['ip'] );
 
 //Mui gio
-require ( NV_ROOTDIR . '/includes/timezone.php' );
+require( NV_ROOTDIR . '/includes/timezone.php' );
 define( 'NV_CURRENTTIME', isset( $_SERVER['REQUEST_TIME'] ) ? $_SERVER['REQUEST_TIME'] : time() );
 
 $global_config['log_errors_list'] = NV_LOG_ERRORS_LIST;
@@ -120,20 +120,20 @@ $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 //Ket noi voi class Error_handler
-require ( NV_ROOTDIR . '/includes/class/error.class.php' );
+require( NV_ROOTDIR . '/includes/class/error.class.php' );
 $ErrorHandler = new Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
-if ( empty( $global_config['allow_sitelangs'] ) or empty( $global_config['allow_adminlangs'] ) )
+if( empty( $global_config['allow_sitelangs'] ) or empty( $global_config['allow_adminlangs'] ) )
 {
-    trigger_error( "Error! Language variables is empty!", 256 );
+	trigger_error( "Error! Language variables is empty!", 256 );
 }
 
 //Ket noi voi cac file cau hinh, function va template
-require ( NV_ROOTDIR . "/includes/ini.php" );
-require ( NV_ROOTDIR . '/includes/functions.php' );
-require ( NV_ROOTDIR . '/includes/core/theme_functions.php' );
-require ( NV_ROOTDIR . "/includes/class/xtemplate.class.php" );
+require( NV_ROOTDIR . "/includes/ini.php" );
+require( NV_ROOTDIR . '/includes/functions.php' );
+require( NV_ROOTDIR . '/includes/core/theme_functions.php' );
+require( NV_ROOTDIR . "/includes/class/xtemplate.class.php" );
 
 $global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map( "trim", explode( ",", NV_ALLOW_REQUEST_MODS ) ) : "request";
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim( NV_REQUEST_DEFAULT_MODE ) : 'request';
@@ -144,33 +144,33 @@ $global_config['cookie_httponly'] = NV_COOKIE_HTTPONLY;
 $global_config['session_save_path'] = NV_SESSION_SAVE_PATH;
 
 //IP Ban
-if ( nv_is_banIp( $client_info['ip'] ) ) trigger_error( "Hi and Good-bye!!!", 256 );
+if( nv_is_banIp( $client_info['ip'] ) ) trigger_error( "Hi and Good-bye!!!", 256 );
 
 //Chan proxy
-if ( $global_config['proxy_blocker'] != 0 )
+if( $global_config['proxy_blocker'] != 0 )
 {
-    $client_info['is_proxy'] = $ips->nv_check_proxy();
-    if ( nv_is_blocker_proxy( $client_info['is_proxy'], $global_config['proxy_blocker'] ) )
-    {
-        trigger_error( 'ERROR: You are behind a proxy server. Please disconnect and come again!', 256 );
-    }
+	$client_info['is_proxy'] = $ips->nv_check_proxy();
+	if( nv_is_blocker_proxy( $client_info['is_proxy'], $global_config['proxy_blocker'] ) )
+	{
+		trigger_error( 'ERROR: You are behind a proxy server. Please disconnect and come again!', 256 );
+	}
 }
 
 //Xac dinh cac search_engine
 $global_config['engine_allowed'] = array();
-if ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) )
+if( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) )
 {
-    $global_config['engine_allowed'] = nv_object2array( simplexml_load_file( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) );
+	$global_config['engine_allowed'] = nv_object2array( simplexml_load_file( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) );
 }
 
 $language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
-if ( defined( 'NV_SYSTEM' ) )
+if( defined( 'NV_SYSTEM' ) )
 {
-    require ( NV_ROOTDIR . '/includes/request_uri.php' );
+	require( NV_ROOTDIR . '/includes/request_uri.php' );
 }
 
 //Ket noi voi class xu ly request
-require ( NV_ROOTDIR . '/includes/class/request.class.php' );
+require( NV_ROOTDIR . '/includes/class/request.class.php' );
 $nv_Request = new Request( $global_config, $client_info['ip'] );
 
 define( 'NV_SERVER_NAME', $nv_Request->server_name ); //vd: mydomain1.com
@@ -188,12 +188,12 @@ define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR ); //Xac dinh d
 define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) ); //Hau to cua file cache
 
 //Ngon ngu
-require ( NV_ROOTDIR . '/includes/language.php' );
-require ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
+require( NV_ROOTDIR . '/includes/language.php' );
+require( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
 
 if( NV_LANG_DATA == "vi" )
 {
-    require ( NV_ROOTDIR . '/includes/core/amlich.php' );
+	require( NV_ROOTDIR . '/includes/core/amlich.php' );
 }
 
 $global_config['cookie_path'] = $nv_Request->cookie_path; //vd: /ten_thu_muc_chua_site/
@@ -211,19 +211,19 @@ $client_info['is_myreferer'] = $nv_Request->referer_key; //0 = referer tu ben ng
 $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri; //trang dang xem
 $client_info['agent'] = $nv_Request->user_agent; //HTTP_USER_AGENT
 
-if ( preg_match( "/^[0-9]{10,}$/", $nv_Request->get_string( 'nocache', 'get', '' ) ) and //Xac dinh co phai AJAX hay khong
-$client_info['is_myreferer'] === 1 ) define( 'NV_IS_AJAX', true );
+if( preg_match( "/^[0-9]{10,}$/", $nv_Request->get_string( 'nocache', 'get', '' ) ) and //Xac dinh co phai AJAX hay khong
+	$client_info['is_myreferer'] === 1 ) define( 'NV_IS_AJAX', true );
 
 //Chan truy cap neu HTTP_USER_AGENT == 'none'
-if ( NV_USER_AGENT == "none" )
+if( NV_USER_AGENT == "none" )
 {
-    trigger_error( 'We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will  copy websites to your hard drive. If you feel you have gotten this message  in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256 );
+	trigger_error( 'We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will  copy websites to your hard drive. If you feel you have gotten this message  in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256 );
 }
 
 //xac dinh co phai User_Agent cua NukeViet hay khong
-if ( NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] ) )
+if( NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] ) )
 {
-    define( 'NV_IS_MY_USER_AGENT', true );
+	define( 'NV_IS_MY_USER_AGENT', true );
 }
 
 //Xac dinh co phai la bot hay khong
@@ -231,45 +231,44 @@ $client_info['bot_info'] = nv_check_bot();
 $client_info['is_bot'] = ( ! empty( $client_info['bot_info'] ) ) ? 1 : 0;
 
 //Neu la bot va bot bi cam truy cap
-if ( $client_info['is_bot'] and empty( $client_info['bot_info']['allowed'] ) ) trigger_error( 'Sorry! Website does not support the bot', 256 );
+if( $client_info['is_bot'] and empty( $client_info['bot_info']['allowed'] ) ) trigger_error( 'Sorry! Website does not support the bot', 256 );
 
 //Xac dinh borwser cua client
 $client_info['browser'] = $client_info['is_bot'] ? array( 'key' => "Unknown", 'name' => 'Unknown' ) : array_combine( array( 'key', 'name' ), explode( "|", nv_getBrowser( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
 
 //Xac dinh co phai truy cap bang mobile hay khong
-$client_info['is_mobile'] = nv_checkmobile( NV_ROOTDIR . '/includes/ini/mobile.ini');
+$client_info['is_mobile'] = nv_checkmobile( NV_ROOTDIR . '/includes/ini/mobile.ini' );
 //Chan hoac chuyen huong neu truy cap tu mobile
 //if (!empty($client_info['is_mobile']))
 //	trigger_error('Sorry! Website does not support the browser your mobile', 256);
 
-
 //Ket noi voi class chong flood
-if ( defined( 'NV_IS_FLOOD_BLOCKER' ) and NV_IS_FLOOD_BLOCKER == 1 and ! $nv_Request->isset_request( 'admin', 'session' ) and //
-( ! $nv_Request->isset_request( 'second', 'get' ) or ( $nv_Request->isset_request( 'second', 'get' ) and $client_info['is_myreferer'] != 1 ) ) )
+if( defined( 'NV_IS_FLOOD_BLOCKER' ) and NV_IS_FLOOD_BLOCKER == 1 and ! $nv_Request->isset_request( 'admin', 'session' ) and //
+	( ! $nv_Request->isset_request( 'second', 'get' ) or ( $nv_Request->isset_request( 'second', 'get' ) and $client_info['is_myreferer'] != 1 ) ) )
 {
-    require ( NV_ROOTDIR . '/includes/core/flood_blocker.php' );
+	require( NV_ROOTDIR . '/includes/core/flood_blocker.php' );
 }
 
 //Xac dinh OS cua client
 $client_info['client_os'] = $client_info['is_bot'] ? array( 'key' => "Robot", 'name' => $client_info['bot_info']['name'] ) : array_combine( array( 'key', 'name' ), explode( "|", nv_getOs( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/os.ini' ) ) );
 
 //Captcha
-if ( $nv_Request->isset_request( 'scaptcha', 'get' ) )
+if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 {
-    include_once ( NV_ROOTDIR . "/includes/core/captcha.php" );
+	include_once( NV_ROOTDIR . "/includes/core/captcha.php" );
 }
 
 //Bat dau phien lam viec cua MySQL
-require ( NV_ROOTDIR . '/includes/class/mysql.class.php' );
+require( NV_ROOTDIR . '/includes/class/mysql.class.php' );
 $db_config['new_link'] = NV_MYSQL_NEW_LINK;
 $db_config['persistency'] = NV_MYSQL_PERSISTENCY;
 $db_config['collation'] = NV_MYSQL_COLLATION;
 $db = new sql_db( $db_config );
-if ( ! empty( $db->error ) )
+if( ! empty( $db->error ) )
 {
-    $die = ! empty( $db->error['user_message'] ) ? $db->error['user_message'] : $db->error['message'];
-    $die .= ! empty( $db->error['code'] ) ? ' (Code: ' . $db->error['code'] . ')' : '';
-    trigger_error( $die, 256 );
+	$die = ! empty( $db->error['user_message'] ) ? $db->error['user_message'] : $db->error['message'];
+	$die .= ! empty( $db->error['code'] ) ? ' (Code: ' . $db->error['code'] . ')' : '';
+	trigger_error( $die, 256 );
 }
 unset( $db_config['dbpass'] );
 
@@ -299,120 +298,124 @@ define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 
 $sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `module` ASC";
 $list = nv_db_cache( $sql, '', 'settings' );
-foreach ( $list as $row )
+foreach( $list as $row )
 {
-    if ( $row['module'] == "global" )
-    {
-        $global_config[$row['config_name']] = $row['config_value'];
-    }
-    else
-    {
-        $module_config[$row['module']][$row['config_name']] = $row['config_value'];
-    }
+	if( $row['module'] == "global" )
+	{
+		$global_config[$row['config_name']] = $row['config_value'];
+	}
+	else
+	{
+		$module_config[$row['module']][$row['config_name']] = $row['config_value'];
+	}
 }
 
-if ( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array( "mild", "lite", "none" ) ) )
+if( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array(
+	"mild",
+	"lite",
+	"none" ) ) )
 {
-    $global_config['upload_checking_mode'] = "strong";
+	$global_config['upload_checking_mode'] = "strong";
 }
 define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
 
 //Cap nhat Country moi
-if ( ! empty( $newCountry ) )
+if( ! empty( $newCountry ) )
 {
-    if ( $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_ipcountry` VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
-    {
-        $time_del = NV_CURRENTTIME - 604800;
-        $db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "' AND `country`='ZZ' AND `time` < " . $time_del );
-        $result = $db->sql_query( "SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "'" );
-        $array_ip_file = array();
-        while ( $row = $db->sql_fetch_assoc( $result ) )
-        {
-            $array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
-        }
-        file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/ip_files/" . $newCountry['ip_file'] . ".php", "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
-    }
-    unset( $newCountry, $time_del, $array_ip_file, $result, $row );
+	if( $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_ipcountry` VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
+	{
+		$time_del = NV_CURRENTTIME - 604800;
+		$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "' AND `country`='ZZ' AND `time` < " . $time_del );
+		$result = $db->sql_query( "SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "'" );
+		$array_ip_file = array();
+		while( $row = $db->sql_fetch_assoc( $result ) )
+		{
+			$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
+		}
+		file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/ip_files/" . $newCountry['ip_file'] . ".php", "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
+	}
+	unset( $newCountry, $time_del, $array_ip_file, $result, $row );
 }
 
-if ( $global_config['is_url_rewrite'] )
+if( $global_config['is_url_rewrite'] )
 {
-    $check_rewrite_file = nv_check_rewrite_file();
-    if ( $check_rewrite_file )
-    {
-        require ( NV_ROOTDIR . "/includes/rewrite.php" );
-    }
-    else
-    {
-        require ( NV_ROOTDIR . "/includes/rewrite_index.php" );
-    }
-    if ( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" ) . "/i", $_SERVER['REQUEST_URI'] ) )
-    {
-        $url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
-        if ( $url_rewrite != $_SERVER['REQUEST_URI'] )
-        {
-            Header( "Location: " . $url_rewrite );
-            die();
-        }
-    }
-    elseif ( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI']) )
-    {
-        $url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
-        Header( "Location: " . $url_rewrite );
-        die();
-    }
-    elseif ( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI']) )
-    {
-        $url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
-        Header( "Location: " . $url_rewrite );
-        die();
-    }
+	$check_rewrite_file = nv_check_rewrite_file();
+	if( $check_rewrite_file )
+	{
+		require( NV_ROOTDIR . "/includes/rewrite.php" );
+	}
+	else
+	{
+		require( NV_ROOTDIR . "/includes/rewrite_index.php" );
+	}
+	if( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" ) . "/i", $_SERVER['REQUEST_URI'] ) )
+	{
+		$url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
+		if( $url_rewrite != $_SERVER['REQUEST_URI'] )
+		{
+			Header( "Location: " . $url_rewrite );
+			die();
+		}
+	}
+	elseif( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI'] ) )
+	{
+		$url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
+		Header( "Location: " . $url_rewrite );
+		die();
+	}
+	elseif( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI'] ) )
+	{
+		$url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
+		Header( "Location: " . $url_rewrite );
+		die();
+	}
 }
-elseif ( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
+elseif( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
 {
-    require ( NV_ROOTDIR . "/includes/rewrite_language.php" );
-    
-    if ( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA ) . "/i", $_SERVER['REQUEST_URI'] ) )
-    {
-        $url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
-        if ( $url_rewrite != $_SERVER['REQUEST_URI'] )
-        {
-            Header( "Location: " . $url_rewrite );
-            die();
-        }
-    }
+	require( NV_ROOTDIR . "/includes/rewrite_language.php" );
+
+	if( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA ) . "/i", $_SERVER['REQUEST_URI'] ) )
+	{
+		$url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
+		if( $url_rewrite != $_SERVER['REQUEST_URI'] )
+		{
+			Header( "Location: " . $url_rewrite );
+			die();
+		}
+	}
 }
 
-if ( defined( 'NV_ADMIN' ) )
+if( defined( 'NV_ADMIN' ) )
 {
-    if ( ! in_array( NV_LANG_DATA, $global_config['allow_adminlangs'] ) )
-    {
-        if ( $global_config['lang_multi'] )
-        {
-            $nv_Request->set_Cookie( 'data_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME );
-        }
-        Header( "Location: " . NV_BASE_ADMINURL );
-        exit();
-    }
-    if ( ! in_array( NV_LANG_INTERFACE, $global_config['allow_adminlangs'] ) )
-    {
-        if ( $global_config['lang_multi'] )
-        {
-            $nv_Request->set_Cookie( 'int_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME );
-        }
-        Header( "Location: " . NV_BASE_ADMINURL );
-        exit();
-    }
+	if( ! in_array( NV_LANG_DATA, $global_config['allow_adminlangs'] ) )
+	{
+		if( $global_config['lang_multi'] )
+		{
+			$nv_Request->set_Cookie( 'data_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME );
+		}
+		Header( "Location: " . NV_BASE_ADMINURL );
+		exit();
+	}
+	if( ! in_array( NV_LANG_INTERFACE, $global_config['allow_adminlangs'] ) )
+	{
+		if( $global_config['lang_multi'] )
+		{
+			$nv_Request->set_Cookie( 'int_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME );
+		}
+		Header( "Location: " . NV_BASE_ADMINURL );
+		exit();
+	}
 }
+
 //Class ma hoa du lieu $crypt->hash($data)
-require ( NV_ROOTDIR . '/includes/class/crypt.class.php' );
+require( NV_ROOTDIR . '/includes/class/crypt.class.php' );
 $crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
-if ( ! $crypt->_otk ) trigger_error( "sitekey not declared", 256 );
+if( ! $crypt->_otk ) trigger_error( "sitekey not declared", 256 );
 
 //cronjobs
-if ( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( 'second', 'get' ) == "cronjobs" )
+if( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( 'second', 'get' ) == "cronjobs" )
 {
-    include_once ( NV_ROOTDIR . "/includes/core/cronjobs.php" );
+	include_once( NV_ROOTDIR . "/includes/core/cronjobs.php" );
 }
 
 // Xac dinh kieu giao dien mac dinh
@@ -420,55 +423,55 @@ $global_config['array_theme_type'] = array_filter( array_map( 'trim', explode( '
 $global_config['current_theme_type'] = $nv_Request->get_string( 'nv' . NV_LANG_DATA . 'themever', 'cookie', '' );
 
 //Kiem tra tu cach admin
-if ( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )
+if( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )
 {
-    trigger_error( "Hacking attempt", 256 );
+	trigger_error( "Hacking attempt", 256 );
 }
 
 define( 'ADMIN_LOGIN_MODE', ( empty( $global_config['closed_site'] ) ) ? 3 : $global_config['closed_site'] );
 
 $admin_cookie = $nv_Request->get_bool( 'admin', 'session', false );
-if ( ! empty( $admin_cookie ) )
+if( ! empty( $admin_cookie ) )
 {
-    require ( NV_ROOTDIR . "/includes/core/admin_access.php" );
-    require ( NV_ROOTDIR . "/includes/core/is_admin.php" );
+	require( NV_ROOTDIR . "/includes/core/admin_access.php" );
+	require( NV_ROOTDIR . "/includes/core/is_admin.php" );
 }
 
-if ( defined( "NV_IS_ADMIN" ) )
+if( defined( "NV_IS_ADMIN" ) )
 {
-    //Buoc admin khai bao lai pass neu khong online trong khoang thoi gian nhat dinh
-    if ( empty( $admin_info['checkpass'] ) )
-    {
-        if ( $nv_Request->isset_request( NV_ADMINRELOGIN_VARIABLE, 'get' ) and $nv_Request->get_int( NV_ADMINRELOGIN_VARIABLE, 'get' ) == 1 )
-        {
-            require ( NV_ROOTDIR . "/includes/core/admin_relogin.php" );
-            exit();
-        }
-    }
+	//Buoc admin khai bao lai pass neu khong online trong khoang thoi gian nhat dinh
+	if( empty( $admin_info['checkpass'] ) )
+	{
+		if( $nv_Request->isset_request( NV_ADMINRELOGIN_VARIABLE, 'get' ) and $nv_Request->get_int( NV_ADMINRELOGIN_VARIABLE, 'get' ) == 1 )
+		{
+			require( NV_ROOTDIR . "/includes/core/admin_relogin.php" );
+			exit();
+		}
+	}
 }
-elseif ( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
+elseif( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
 {
-    $global_config['closed_site'] = 1;
+	$global_config['closed_site'] = 1;
 }
 
 //Dinh chi hoat dong cua site
-if ( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
+if( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
 {
-    if ( ! empty( $global_config['closed_site'] ) )
-    {
-        $disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        nv_info_die( $global_config['site_description'], $global_config['disable_site_title'], $disable_site_content );
-    }
-    elseif ( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
-    {
-        Header( "Location: " . NV_BASE_SITEURL );
-        exit();
-    }
-    elseif ( empty( $global_config['lang_multi'] ) and NV_LANG_DATA != $global_config['site_lang'] )
-    {
-        Header( "Location: " . NV_BASE_SITEURL );
-        exit();
-    }
+	if( ! empty( $global_config['closed_site'] ) )
+	{
+		$disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
+		nv_info_die( $global_config['site_description'], $global_config['disable_site_title'], $disable_site_content );
+	}
+	elseif( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
+	{
+		Header( "Location: " . NV_BASE_SITEURL );
+		exit();
+	}
+	elseif( empty( $global_config['lang_multi'] ) and NV_LANG_DATA != $global_config['site_lang'] )
+	{
+		Header( "Location: " . NV_BASE_SITEURL );
+		exit();
+	}
 }
 
 define( 'PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' );
