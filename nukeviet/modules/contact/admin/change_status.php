@@ -7,17 +7,18 @@
  * @Createdate 3/7/2010, 3:26
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
-if ( empty( $id ) ) die( "NO" );
+if( empty( $id ) ) die( "NO" );
 
-$query = "SELECT `act` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $id;
-$result = $db->sql_query( $query );
+$sql = "SELECT `act` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $id;
+$result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
-if ( $numrows != 1 ) die( "NO" );
+
+if( $numrows != 1 ) die( "NO" );
 
 $new_status = $nv_Request->get_bool( 'new_status', 'post' );
 $new_status = ( int )$new_status;

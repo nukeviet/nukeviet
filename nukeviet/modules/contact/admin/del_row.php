@@ -1,38 +1,39 @@
 <?php
 
 /**
- * @Project NUKEVIET CMS 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES (contact@vinades.vn)
  * @Copyright 2010 VINADES. All rights reserved
  * @Createdate Apr 22, 2010 3:00:20 PM
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 
-if ( empty( $id ) ) die( 'NO' );
+if( empty( $id ) ) die( 'NO' );
 
-$query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $id;
-$result = $db->sql_query( $query );
-$numrows = $db->sql_numrows( $result );
-if ( $numrows != 1 ) die( 'NO' );
+$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $id;
+$result = $db->sql_query( $sql );
 
-$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_send` WHERE `cid` = " . $id;
-$db->sql_query( $query );
-$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` = " . $id;
+if( $db->sql_numrows( $result ) != 1 ) die( 'NO' );
 
-nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_row', "rowid ".$id, $admin_info['userid'] );
+$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_send` WHERE `cid` = " . $id;
+$db->sql_query( $sql );
 
-$db->sql_query( $query );
-if ( $db->sql_affectedrows() > 0 )
+$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` = " . $id;
+$db->sql_query( $sql );
+
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_row', "rowid " . $id, $admin_info['userid'] );
+
+if( $db->sql_affectedrows() > 0 )
 {
-    $db->sql_query( "OPTIMIZE TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_send`" );
-    $db->sql_query( "OPTIMIZE TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_rows`" );
+	$db->sql_query( "OPTIMIZE TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_send`" );
+	$db->sql_query( "OPTIMIZE TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_rows`" );
 }
 else
 {
-    die( 'NO' );
+	die( 'NO' );
 }
 
 nv_del_moduleCache( $module_name );

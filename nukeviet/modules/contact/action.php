@@ -7,7 +7,7 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $sql_drop_module = array();
 
@@ -50,4 +50,5 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows` (`id`, `full_name`, `phone`, `fax`, `email`, `note`, `admins`, `act`)  VALUES (NULL, 'Webmaster', '', '', '', '', '1/1/1/0;', 1)";
+
 ?>
