@@ -6,8 +6,8 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
- 
-if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+
+if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['autoinstall'];
 
@@ -15,7 +15,7 @@ $xtpl = new XTemplate( "autoinstall.tpl", NV_ROOTDIR . "/themes/" . $global_conf
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
-if ( ! $sys_info['zlib_support'] )
+if( ! $sys_info['zlib_support'] )
 {
 	$xtpl->parse( 'main.error' );
 }

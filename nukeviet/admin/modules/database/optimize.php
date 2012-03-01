@@ -7,11 +7,11 @@
  * @Createdate 2-1-2010 21:47
  */
 
-if ( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
 $tables = filter_text_input( 'tables', 'post' );
 
-if ( empty( $tables ) )
+if( empty( $tables ) )
 {
 	$tables = array();
 }
@@ -20,15 +20,15 @@ else
 	$tables = explode( ",", $tables );
 }
 
-nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['optimize'] , "" , $admin_info['userid'] );
+nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['optimize'], "", $admin_info['userid'] );
 
 $totalfree = 0;
 $tabs = array();
 $result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
 
-while ( $item = $db->sql_fetch_assoc( $result ) )
+while( $item = $db->sql_fetch_assoc( $result ) )
 {
-	if ( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['Name'], $tables ) ) )
+	if( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['Name'], $tables ) ) )
 	{
 		$totalfree += $item['Data_free'];
 		$tabs[] = substr( $item['Name'], strlen( $db_config['prefix'] ) + 1 );

@@ -7,31 +7,37 @@
  * @Createdate 3/7/2010 2:9
  */
 
-if ( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $fid = $nv_Request->get_int( 'fid', 'post', 0 );
 
-if ( empty( $fid ) ) die( "NO|" . $fid );
+if( empty( $fid ) ) die( "NO|" . $fid );
 
 $query = "SELECT `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `func_id`=" . $fid;
 $result = $db->sql_query( $query );
 $numrows = $db->sql_numrows( $result );
-if ( $numrows != 1 ) die( 'NO|' . $fid );
+
+if( $numrows != 1 ) die( 'NO|' . $fid );
 
 $row = $db->sql_fetchrow( $result );
 
 $new_weight = $nv_Request->get_int( 'new_weight', 'post', 0 );
-if ( empty( $new_weight ) ) die( 'NO|' . $fid );
+
+if( empty( $new_weight ) ) die( 'NO|' . $fid );
+
 $sql = "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `subweight`='0' WHERE `in_module`=" . $db->dbescape( $row['in_module'] ) . " AND `show_func` = '0'";
 $db->sql_query( $sql );
 
 $query = "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $row['in_module'] ) . " AND func_id!=" . $fid . " AND `show_func` = '1' ORDER BY `subweight` ASC";
 $result = $db->sql_query( $query );
+
 $weight = 0;
-while ( $row = $db->sql_fetchrow( $result ) )
+while( $row = $db->sql_fetchrow( $result ) )
 {
 	++$weight;
-	if ( $weight == $new_weight ) ++$weight;
+	
+	if( $weight == $new_weight ) ++$weight;
+	
 	$sql = "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `subweight`=" . $weight . " WHERE `func_id`=" . $row['func_id'];
 	$db->sql_query( $sql );
 }
