@@ -1,6 +1,6 @@
 <!-- BEGIN: step -->
-<div id="license" style="height:300px;overflow:auto;margin-bottom:10px">
-		{CONTENT_LICENSE}
+<div id="license" style="height:400px;overflow-x:hidden;overflow-y:auto;margin-bottom:10px;padding-right:10px">
+	{CONTENT_LICENSE}
 </div>
 <ul class="control_t fr">
 	<li><span class="back_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=2">{LANG.previous}</a></span></li>
