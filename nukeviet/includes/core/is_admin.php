@@ -29,6 +29,7 @@ if ( ! empty( $admin_cookie ) )
         $info .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_SITEURL . "\" />";
         die( $info );
     }
+    
     if ( defined( 'NV_ADMIN' ) )
     {
         if ( ! nv_admin_checkfirewall() )
@@ -41,6 +42,7 @@ if ( ! empty( $admin_cookie ) )
     }
     
     $admin_info = nv_admin_checkdata( $admin_cookie );
+    
     if ( $admin_info == array() )
     {
         $nv_Request->unset_request( 'admin,online', 'session' );
@@ -70,6 +72,7 @@ if ( ! empty( $admin_cookie ) )
     {
         define( 'NV_IS_SPADMIN', true );
     }
+    
     if ( $admin_info['level'] == 1 )
     {
         define( 'NV_IS_GODADMIN', true );

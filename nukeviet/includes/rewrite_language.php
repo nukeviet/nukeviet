@@ -7,7 +7,7 @@
  * @Createdate 10/01/2011, 13:03
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $rewrite["#([\"|\']" . NV_BASE_SITEURL . "index.php*\?)" . NV_LANG_VARIABLE . "=([a-z-]*)\&[amp;]*#"] = "\\1\\3";
 

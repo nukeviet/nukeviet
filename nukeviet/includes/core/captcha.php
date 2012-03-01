@@ -24,6 +24,7 @@ if( $global_config['captcha_type'] == 1 )
 	{
 		$captcha->wordsFile = 'keywords/captcha_vi.php';
 	}
+
 	$captcha->session_var = 'scaptcha';
 	$captcha->width = NV_GFX_WIDTH;
 	$captcha->height = NV_GFX_HEIGHT;
@@ -80,6 +81,7 @@ else
 		$ry = mt_rand( 10, NV_GFX_WIDTH - NV_GFX_HEIGHT );
 		ImageFilledEllipse( $image, $cx, $cy, $rx, $ry, $color_elipse );
 	}
+
 	$r = mt_rand( 0, 100 );
 	$g = mt_rand( 0, 100 );
 	$b = mt_rand( 0, 100 );
@@ -87,6 +89,7 @@ else
 
 	$ff = mt_rand( 1, 15 );
 	$font = NV_ROOTDIR . "/includes/fonts/captcha/font" . $ff . ".ttf";
+
 	if ( file_exists( $font ) and nv_function_exists( 'imagettftext' ) )
 	{
 		imagettftext( $image, 15, 0, 5, NV_GFX_HEIGHT - 3, $text_color, $font, $code );
@@ -95,6 +98,7 @@ else
 	{
 		ImageString( $image, 5, 20, 6, $code, $text_color );
 	}
+
 	Header( "Content-type: image/jpeg" );
 	header("Cache-Control:");
 	header("Pragma:");

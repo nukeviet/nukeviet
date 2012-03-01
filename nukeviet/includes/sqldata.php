@@ -6,35 +6,37 @@
  * @Copyright (C) 2010 VINADES ., JSC. All rights reserved
  * @Createdate Jun 20, 2010  8:59:32 PM
  */
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting,rss,menu,tags' );
 
-function nv_delete_table_sys ( $lang )
+function nv_delete_table_sys( $lang )
 {
-    global $db_config, $global_config;
-    $sql_drop_table = array();
-    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modules`";
-    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_blocks_groups`";
-    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_blocks_weight`";
-    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modfuncs`";
-    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_searchkeys`";
-    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_referer_stats`";
-    $sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modthemes`";
-    $sql_drop_table[] = "ALTER TABLE `" . $db_config['prefix'] . "_cronjobs` DROP `" . $lang . "_cron_name`";
-    
-    return $sql_drop_table;
+	global $db_config, $global_config;
+	
+	$sql_drop_table = array();
+	$sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modules`";
+	$sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_blocks_groups`";
+	$sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_blocks_weight`";
+	$sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modfuncs`";
+	$sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_searchkeys`";
+	$sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_referer_stats`";
+	$sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modthemes`";
+	$sql_drop_table[] = "ALTER TABLE `" . $db_config['prefix'] . "_cronjobs` DROP `" . $lang . "_cron_name`";
+
+	return $sql_drop_table;
 }
 
-function nv_create_table_sys ( $lang )
+function nv_create_table_sys( $lang )
 {
-    global $db_config, $global_config;
-    
-    $xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' );
-    $layoutdefault = ( string )$xml->layoutdefault;
-    
-    $sql_create_table = array();
-    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` (
+	global $db_config, $global_config;
+
+	$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' );
+	$layoutdefault = ( string )$xml->layoutdefault;
+
+	$sql_create_table = array();
+	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` (
 	  `title` varchar(55) NOT NULL,
 	  `module_file` varchar(55) NOT NULL DEFAULT '',
 	  `module_data` varchar(55) NOT NULL DEFAULT '',
@@ -55,8 +57,8 @@ function nv_create_table_sys ( $lang )
 	  `rss` tinyint(4) NOT NULL default '1',  
 	  PRIMARY KEY (`title`)
 	) ENGINE=MyISAM";
-    
-    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_blocks_groups` (
+
+	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_blocks_groups` (
 	  `bid` int(11) unsigned NOT NULL AUTO_INCREMENT,
 	  `theme` varchar(55) NOT NULL,
 	  `module` varchar(55) NOT NULL,
@@ -77,15 +79,15 @@ function nv_create_table_sys ( $lang )
 	  KEY `position` (`position`),
 	  KEY `exp_time` (`exp_time`)	 
 	) ENGINE=MyISAM";
-    
-    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_blocks_weight` (
+
+	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_blocks_weight` (
 	  `bid` int(11) NOT NULL DEFAULT '0',
 	  `func_id` int(11) NOT NULL DEFAULT '0',
 	  `weight` int(11) NOT NULL DEFAULT '0',
 	  UNIQUE KEY `bid` (`bid`,`func_id`)	 
 	) ENGINE=MyISAM";
-    
-    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (
+
+	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (
 	  `func_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	  `func_name` varchar(55) NOT NULL,
 	  `func_custom_name` varchar(255) NOT NULL,
@@ -97,8 +99,8 @@ function nv_create_table_sys ( $lang )
 	  PRIMARY KEY (`func_id`),
 	  UNIQUE KEY `func_name` (`func_name`,`in_module`)
 	) ENGINE=MyISAM";
-    
-    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_searchkeys` (
+
+	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_searchkeys` (
 	  `id` varchar(32) NOT NULL DEFAULT '',
 	  `keys` varchar(255) NOT NULL,
 	  `total` int(11) NOT NULL DEFAULT '0',
@@ -107,8 +109,8 @@ function nv_create_table_sys ( $lang )
 	  KEY `keys` (`keys`),
 	  KEY `search_engine` (`search_engine`)
 	) ENGINE=MyISAM";
-    
-    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_referer_stats` (
+
+	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_referer_stats` (
 	  `host` varchar(255) NOT NULL,
 	  `total` int(11) NOT NULL DEFAULT '0',
 	  `month01` int(11) NOT NULL DEFAULT '0',
@@ -127,15 +129,15 @@ function nv_create_table_sys ( $lang )
 	  UNIQUE KEY `host` (`host`),
 	  KEY `total` (`total`)
 	) ENGINE=MyISAM";
-    
-    $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modthemes` (
+
+	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modthemes` (
       `func_id` int(11) DEFAULT NULL,
       `layout` varchar(100) DEFAULT NULL,
       `theme` varchar(100) DEFAULT NULL,
       UNIQUE KEY `func_id` (`func_id`,`layout`,`theme`)
     ) ENGINE=MyISAM";
-    
-    $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
+
+	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
 		('about', 'about', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '0', 1, 1, 1, 1, '',0),
 		('news', 'news', 'news', 'News',  '',1270400000, 1, 1, '', '', '', '0', 1, 2, 1, 1, '',1),
 		('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', '', '', '0', 1, 5, 1, 1, '',0),
@@ -147,8 +149,8 @@ function nv_create_table_sys ( $lang )
 		('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '0', 0, 9, 1, 1, '', 0),
 		('tags', 'tags', 'tags', 'Tags', '', 1324787574, 1, 1, '', '', '', '0', 0, 12, 1, 1, '', 0),
 		('rss', 'rss', 'rss', 'Rss', '', 1279360267, 1, 1, '', '', '', '0', 0, 11, 1, 1, '',0)";
-    
-    $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
+
+	$sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
         ('" . $lang . "', 'global', 'site_name', 'NUKEVIET CMS 3.0'),
     	('" . $lang . "', 'global', 'site_logo', 'images/logo.png'),
     	('" . $lang . "', 'global', 'site_description', 'NUKEVIET CMS 3.0 Developed by Vinades.,Jsc'),
@@ -157,12 +159,13 @@ function nv_create_table_sys ( $lang )
         ('" . $lang . "', 'global', 'site_home_module', 'users'),
         ('" . $lang . "', 'global', 'switch_mobi_des', '1'),
         ('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!')";
-    
-    $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_language` (`lang`, `setup`) VALUES('" . $lang . "', 1)";
-    
-    $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modthemes` (`func_id`, `layout`, `theme`) VALUES ('0','" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
-    $sql_create_table[] = "ALTER TABLE `" . $db_config['prefix'] . "_cronjobs` ADD `" . $lang . "_cron_name` VARCHAR( 255 ) NOT NULL DEFAULT ''";
-    
-    return $sql_create_table;
+
+	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_language` (`lang`, `setup`) VALUES('" . $lang . "', 1)";
+
+	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modthemes` (`func_id`, `layout`, `theme`) VALUES ('0','" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
+	$sql_create_table[] = "ALTER TABLE `" . $db_config['prefix'] . "_cronjobs` ADD `" . $lang . "_cron_name` VARCHAR( 255 ) NOT NULL DEFAULT ''";
+
+	return $sql_create_table;
 }
+
 ?>

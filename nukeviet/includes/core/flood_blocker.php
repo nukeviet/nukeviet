@@ -8,10 +8,10 @@
  */
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+
 require_once ( NV_ROOTDIR . '/includes/class/flood.class.php' );
-$rules = array( 
-    '60' => NV_MAX_REQUESTS_60, '300' => NV_MAX_REQUESTS_300 
-);
+
+$rules = array( '60' => NV_MAX_REQUESTS_60, '300' => NV_MAX_REQUESTS_300 );
 
 $flb = new FloodBlocker( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', $rules, $client_info['ip'] );
 

@@ -7,7 +7,6 @@
  * @Createdate 1-28-2010 14:21
  */
 
-if (! defined('NV_WYSIWYG') or ! defined('NV_MAINFILE'))
-	die('Stop!!!');
+if( ! defined( 'NV_WYSIWYG' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 ?>
