@@ -164,16 +164,6 @@ function nv_list_lang()
     return $lang_value;
 }
 
-if (!function_exists('nv_insert_logs'))
-{
-
-    function nv_insert_logs($lang = "", $module_name = "", $name_key = "", $note_action = "", $userid = 0, $link_acess = "")
-    {
-        return "";
-    }
-
-}
-
 /*******
  tru so luong trong kho $type = "-"
  cong so luong trong kho $type = "+"
