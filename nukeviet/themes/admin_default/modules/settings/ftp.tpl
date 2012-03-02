@@ -1,7 +1,12 @@
-<!-- BEGIN: ftp-->
-<!-- BEGIN: error-->{ERRORCONTENT}<!-- END: error -->
+<!-- BEGIN: main-->
+<!-- BEGIN: error-->
+<div class="quote" style="width:98%">
+	<blockquote class="error"><span>{ERROR}</span></blockquote>
+</div>
+<div class="clear"></div>
+<!-- END: error -->
 <form action="" method="post" id="form_edit_ftp">
-    <table class="tab1" summary="">
+    <table class="tab1">
     	<tbody>
         <tr>
             <td>
@@ -53,8 +58,8 @@
     </table>
 </form>
 <script type="text/javascript">
-	//<![CDATA[
-		document.getElementById('form_edit_ftp').setAttribute("autocomplete", "off");
-	//]]>
+//<![CDATA[
+document.getElementById('form_edit_ftp').setAttribute("autocomplete", "off");
+//]]>
 </script>
-<!-- END: ftp -->
+<!-- END: main -->

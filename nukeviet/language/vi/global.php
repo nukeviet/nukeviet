@@ -244,5 +244,13 @@ $lang_global['theme_type_0'] = "Desktop";
 $lang_global['theme_type_1'] = "Mobile";
 $lang_global['theme_type_chose'] = "Chuyển sang giao diện cho %s";
 $lang_global['theme_type_select'] = "Xem bản";
+$lang_global['ftp_err_connect'] = "Lỗi: Không thể kết nối với FTP server";
+$lang_global['ftp_err_login'] = "Lỗi: Đăng nhập thất bại";
+$lang_global['ftp_err_enable'] = "Lỗi: Máy chủ không hỗ trợ FTP";
+$lang_global['ftp_err_passive_on'] = "Lỗi: Không thể kích hoạt chế độ Passive";
+$lang_global['ftp_err_rawlist'] = "Lỗi: Không thể xác định dach sách thư mục";
+$lang_global['ftp_err_list_detail'] = "Lỗi: Không nhận dạng được tham số của các tệp, thư mục";
+$lang_global['ftp_err_fget'] = "Lỗi: Không thể đọc được nội dung tệp";
+$lang_global['ftp_err_NVbuffet'] = "Lỗi: Thiếu lớp NVbuffer";
 
 ?>
