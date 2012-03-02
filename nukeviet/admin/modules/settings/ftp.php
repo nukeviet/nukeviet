@@ -22,6 +22,7 @@ $array_config['ftp_user_pass'] = filter_text_input( 'ftp_user_pass', 'post', $gl
 $array_config['ftp_path'] = filter_text_input( 'ftp_path', 'post', $global_config['ftp_path'], 1, 255 );
 $array_config['ftp_check_login'] = $global_config['ftp_check_login'];
 
+// Tu dong nhan dang Remove Path
 if( $nv_Request->isset_request( 'tetectftp', 'post' ) )
 {
 	$ftp_server = nv_unhtmlspecialchars( filter_text_input( 'ftp_server', 'post', '', 1, 255 ) );
@@ -59,6 +60,7 @@ if( $nv_Request->isset_request( 'tetectftp', 'post' ) )
 		$ftp->close();
 		die( 'OK|'. $ftp_root );
 	}
+	
 	$ftp->close();
 	die( 'ERROR|' . $lang_module['ftp_error_detect_root'] );
 }

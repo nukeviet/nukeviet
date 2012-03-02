@@ -7,6 +7,8 @@
  * @Createdate  2/3/2012, 19:53
  */
 
+if( ! defined( 'NV_BUFFER_CLASS' ) ) define( 'NV_BUFFER_CLASS', true );
+
 /**
  * NVbuffer
  * 
