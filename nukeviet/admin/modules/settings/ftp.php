@@ -22,6 +22,47 @@ $array_config['ftp_user_pass'] = filter_text_input( 'ftp_user_pass', 'post', $gl
 $array_config['ftp_path'] = filter_text_input( 'ftp_path', 'post', $global_config['ftp_path'], 1, 255 );
 $array_config['ftp_check_login'] = $global_config['ftp_check_login'];
 
+if( $nv_Request->isset_request( 'tetectftp', 'post' ) )
+{
+	$ftp_server = nv_unhtmlspecialchars( filter_text_input( 'ftp_server', 'post', '', 1, 255 ) );
+	$ftp_port = intval( filter_text_input( 'ftp_port', 'post', '21', 1, 255 ) );
+	$ftp_user_name = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_name', 'post', '', 1, 255 ) );
+	$ftp_user_pass = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_pass', 'post', '', 1, 255 ) );
+
+	if( ! $array_config['ftp_server'] or ! $array_config['ftp_user_name'] or ! $array_config['ftp_user_pass'] )
+	{
+		die( 'ERROR|' . $lang_module['ftp_error_full'] );
+	}
+	
+	if( ! defined( 'NV_FTP_CLASS' ) ) require( NV_ROOTDIR . '/includes/class/ftp.class.php' );
+	if( ! defined( 'NV_BUFFER_CLASS' ) ) require( NV_ROOTDIR . '/includes/class/buffer.class.php' );
+	
+	$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
+	
+	if( ! empty( $ftp->error ) )
+	{
+		$ftp->close();
+		die( 'ERROR|' . (string)$ftp->error );
+	}
+	else
+	{
+		$list_valid = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "js", "language", NV_LOGS_DIR, "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+	
+		$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
+		
+		if( $ftp_root === false )
+		{
+			$ftp->close();
+			die( 'ERROR|' . ( empty( $ftp->error ) ? $lang_module['ftp_error_detect_root'] : (string)$ftp->error ) );
+		}
+		
+		$ftp->close();
+		die( 'OK|'. $ftp_root );
+	}
+	$ftp->close();
+	die( 'ERROR|' . $lang_module['ftp_error_detect_root'] );
+}
+
 if( $nv_Request->isset_request( 'ftp_server', 'post' ) )
 {
 	$array_config['ftp_check_login'] = 0;
@@ -101,6 +142,7 @@ if( $nv_Request->isset_request( 'ftp_server', 'post' ) )
 $xtpl = new XTemplate( "ftp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'VALUE', $array_config );
+$xtpl->assign( 'DETECT_FTP', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 
 if( ! empty( $error ) )
 {

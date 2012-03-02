@@ -218,4 +218,8 @@ $lang_module['timezoneByCountry'] = "Theo quốc gia của khách truy cập";
 
 $lang_module['allow_switch_mobi_des'] = "Cho phép chuyển đổi giao diện mobile, desktop";
 
+$lang_module['ftp_auto_detect_root'] = "Xác định tự động";
+$lang_module['ftp_error_full'] = "Hãy nhập đủ các thông số để tự động nhận diện Remote path";
+$lang_module['ftp_error_detect_root'] = "Không thể tìm thấy thông số nào phù hợp, hãy kiểm tra lại tên đăng nhập và mật khẩu";
+
 ?>
