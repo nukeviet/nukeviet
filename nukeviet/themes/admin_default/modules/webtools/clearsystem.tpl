@@ -7,23 +7,17 @@
 			<td><input type="checkbox" value="yes" name="check_all[]" onclick="nv_checkAll(this.form, 'deltype[]', 'check_all[]',this.checked);" /></td>
 		</tr>
 	</thead>
-	<tbody class="second">
+	<tbody>
 		<tr>
 			<td><strong>{LANG.clearcache}</strong></td>
 			<td><input type="checkbox" value="clearcache" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
 		</tr>
 	</tbody>
 
-	<tbody>
+	<tbody class="second">
 		<tr>
 			<td><strong>{LANG.clearsession}</strong></td>
 			<td><input type="checkbox" value="clearsession" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
-		</tr>
-	</tbody>
-	<tbody class="second">
-		<tr>
-			<td><strong>{LANG.cleardumpbackup}</strong></td>
-			<td><input type="checkbox" value="cleardumpbackup" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
 		</tr>
 	</tbody>
 
@@ -45,11 +39,11 @@
 			<td><input type="checkbox" value="clearip_logs" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
 		</tr>
 	</tbody>	
-	<tbody class="tfoot_box">
+	<tfoot>
 		<tr>
 			<td colspan="2" align="center"><input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;" /></td>
 		</tr>
-	</tbody>
+	</tfoot>
 </table>
 </form>
 

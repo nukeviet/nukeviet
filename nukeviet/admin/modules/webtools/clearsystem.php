@@ -76,17 +76,6 @@ if ($nv_Request->isset_request('submit', 'post') and $nv_Request->isset_request(
         }
     }
 
-    if (in_array('cleardumpbackup', $deltype))
-    {
-        $log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
-        $files = nv_clear_files($log_dir, NV_LOGS_DIR . "/dump_backup");
-        foreach ($files as $file)
-        {
-            $xtpl->assign('DELFILE', $file);
-            $xtpl->parse('main.delfile.loop');
-        }
-    }
-
     if (in_array('clearfiletemp', $deltype))
     {
         $dir = NV_ROOTDIR . "/" . NV_TEMP_DIR;
