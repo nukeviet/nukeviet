@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES., JSC (contact@vinades.vn)
@@ -10,7 +11,6 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 {
-
     function nv_block_data_config_banners ( $module, $data_block, $lang_block )
     {
         global $db, $language_array;
@@ -105,6 +105,11 @@ if ( ! nv_function_exists( 'nv_block_data_config_banners' ) )
             $xtpl->assign( 'DATA', $banners );
             if ( $banners['file_ext'] == "swf" )
             {
+				if( ! empty( $banners['file_click'] ) )
+				{
+					$xtpl->parse( 'main.loop.type_swf.fix_link' );
+				}
+				
                 $xtpl->parse( 'main.loop.type_swf' );
             }
             elseif ( ! empty( $banners['file_click'] ) )
@@ -122,6 +127,7 @@ if ( ! nv_function_exists( 'nv_block_data_config_banners' ) )
     
     }
 }
+
 if ( defined( 'NV_SYSTEM' ) )
 {
     $content = nv_block_global_banners( $block_config );
