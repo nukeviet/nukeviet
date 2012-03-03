@@ -179,7 +179,7 @@ if( ! empty( $admins ) )
 {
 	if( $global_config['authors_detail_main'] or $numrows == 1 )
 	{
-		$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
+		$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 		foreach( $admins as $id => $values )
 		{
 			$xtpl->assign( 'ID', $id );
@@ -227,7 +227,7 @@ if( ! empty( $admins ) )
 	}
 	else
 	{
-		$xtpl = new XTemplate( "list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
+		$xtpl = new XTemplate( "list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		
 		$a = 0;

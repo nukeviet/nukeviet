@@ -469,6 +469,10 @@ div.quote blockquote span {
     width: 97%;
 }
 
+.fixtab {
+	margin: 1px 0 !important;
+}
+
 table.tab1 {
     background: #FFF;
     border: 1px solid #DADADA;

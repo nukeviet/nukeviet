@@ -199,7 +199,7 @@ $contents['info'] = $lang_module['nv_admin_add_info'];
 $contents['submit'] = $lang_module['nv_admin_add'];
 
 // Parse content
-$xtpl = new XTemplate( "add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
+$xtpl = new XTemplate( "add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'INFO', $contents['info'] );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -268,6 +268,7 @@ $xtpl->assign( 'POSITION0', $contents['position'][0] );
 $xtpl->assign( 'POSITION1', $contents['position'][1] );
 $xtpl->assign( 'POSITION2', $contents['position'][2] );
 $xtpl->assign( 'SUBMIT', $contents['submit'] );
+
 $xtpl->parse( 'add' );
 $contents = $xtpl->text( 'add' );
 

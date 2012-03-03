@@ -1,14 +1,13 @@
 <!-- BEGIN: edit -->
-<div class="quote" style="width:780px;">
+<div class="quote" style="width:98%">
     <blockquote {CLASS}>
         <span>{INFO}</span>
     </blockquote>
 </div>
-<div class="clear">
-</div>
+<div class="clear"></div>
 <form method="post" action="{ACTION}">
     <!-- BEGIN: position -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -29,7 +28,7 @@
         </tr>
     </table>
     <!-- END: position --><!-- BEGIN: editor -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -49,7 +48,7 @@
         </tr>
     </table>
     <!-- END: editor --><!-- BEGIN: allow_files_type -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -71,7 +70,7 @@
         </tr>
     </table>
     <!-- END: allow_files_type --><!-- BEGIN: allow_modify_files -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -87,7 +86,7 @@
         </tr>
     </table>
     <!-- END: allow_modify_files --><!-- BEGIN: allow_create_subdirectories -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -103,7 +102,7 @@
         </tr>
     </table>
     <!-- END: allow_create_subdirectories --><!-- BEGIN: allow_modify_subdirectories -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -119,7 +118,7 @@
         </tr>
     </table>
     <!-- END: allow_modify_subdirectories --><!-- BEGIN: lev -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -146,10 +145,8 @@
                 <div>
                     <!-- END: else --><!-- BEGIN: loop -->
                     <p>
-                        <input name="modules[]" type="checkbox" value="{VALUE}" {CHECKED} />
-&nbsp;
+                        <input name="modules[]" type="checkbox" value="{VALUE}" {CHECKED} />&nbsp;
                         {CUSTOM_TITLE}
-
                     </p>
                     <!-- END: loop -->
                 </div>
@@ -157,7 +154,7 @@
         </tr>
     </table>
     <!-- END: lev -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="160px" />
         <tr>
             <td>

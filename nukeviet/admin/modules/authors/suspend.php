@@ -259,7 +259,7 @@ else
 $page_title = sprintf( $lang_module['nv_admin_chg_suspend'], $row_user['username'] );
 
 // Parse content
-$xtpl = new XTemplate( "suspend.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
+$xtpl = new XTemplate( "suspend.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'SUSPEND_INFO', $contents['suspend_info'][0] );
 
 if( empty( $contents['suspend_info'][1] ) )

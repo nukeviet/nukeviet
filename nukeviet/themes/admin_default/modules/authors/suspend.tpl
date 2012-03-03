@@ -31,7 +31,6 @@
 	<blockquote{CLASS}><span>{NEW_SUSPEND_CAPTION}</span></blockquote>
 </div>
 <div class="clear"></div>
-
 <form method="post" action="{ACTION}">
     <table class="tab1">
 		<col valign="top" width="150px" />

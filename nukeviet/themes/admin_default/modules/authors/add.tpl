@@ -6,7 +6,7 @@
 </div>
 <div class="clear"></div>
 <form method="post" action="{ACTION}" id="addadmin">
-    <table style="margin-bottom:8px;width:100%">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" width="400px"/><col valign="top"/>
         <tr>
             <td>{LANG.add_user}:</td>
@@ -18,7 +18,7 @@
             <td>&nbsp;</td>
         </tr>
     </table>
-    <table style="margin-bottom:8px;width:100%">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" width="400px"/><col valign="top"/>
         <tr>
             <td>
@@ -39,7 +39,7 @@
         </tr>
     </table>
     <!-- BEGIN: editor -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -59,7 +59,7 @@
         </tr>
     </table>
     <!-- END: editor --><!-- BEGIN: allow_files_type -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -81,7 +81,7 @@
         </tr>
     </table>
     <!-- END: allow_files_type -->
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -96,7 +96,7 @@
             </td>
         </tr>
     </table>
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -111,7 +111,7 @@
             </td>
         </tr>
     </table>
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -126,7 +126,7 @@
             </td>
         </tr>
     </table>
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="150px" /><col valign="top" width="10px" /><col valign="top" /><col valign="top" width="300px" />
         <tr>
             <td>
@@ -164,8 +164,7 @@
             </td>
         </tr>
     </table>
-    <br/>
-    <table style="margin-bottom:8px;width:800px;">
+    <table class="tab1 fixtab">
         <col valign="top" width="160px" />
         <tr>
             <td>
@@ -199,19 +198,13 @@ $(document).ready(function(){
 </script>
 <!-- END: add -->
 <!-- BEGIN: add_result -->
-<table class="tab1">
-    <caption>
-        {TITLE}:
-    </caption>
+<table class="tab1 fixtab">
+    <caption>{TITLE}:</caption>
     <col span="2" valign="top" width="50%" /><!-- BEGIN: loop -->
     <tbody {CLASS}>
         <tr>
-            <td>
-                {VALUE0}
-            </td>
-            <td>
-                {VALUE1}
-            </td>
+            <td>{VALUE0}</td>
+            <td>{VALUE1}</td>
         </tr>
     </tbody>
     <!-- END: loop -->

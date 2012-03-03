@@ -22,8 +22,8 @@ if( empty( $admin_id ) )
 	die();
 }
 
-$query = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id`=" . $admin_id;
-$result = $db->sql_query( $query );
+$sql = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id`=" . $admin_id;
+$result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( empty( $numrows ) )
 {
@@ -43,14 +43,14 @@ function nv_checkAdmpass( $adminpass )
 {
 	global $db, $admin_info, $crypt;
 
-	$query = "SELECT `password` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_info['userid'];
-	$result = $db->sql_query( $query );
+	$sql = "SELECT `password` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_info['userid'];
+	$result = $db->sql_query( $sql );
 	list( $pass ) = $db->sql_fetchrow( $result );
 	return $crypt->validate( $adminpass, $pass );
 }
 
-$query = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
-$result = $db->sql_query( $query );
+$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
+$result = $db->sql_query( $sql );
 $row_user = $db->sql_fetchrow( $result );
 
 $error = "";
@@ -186,7 +186,7 @@ $contents['submit'] = $lang_module['nv_admin_del'];
 $page_title = $lang_module['nv_admin_del'];
 
 // Parse content
-$xtpl = new XTemplate( "del.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
+$xtpl = new XTemplate( "del.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 
 $class = $contents['is_error'] ? " class=\"error\"" : "";
 $xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );

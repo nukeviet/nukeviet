@@ -13,8 +13,8 @@ $admin_id = $nv_Request->get_int( 'admin_id', 'get', 0 );
 
 $query = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id`=" . $admin_id;
 $result = $db->sql_query( $query );
-$numrows = $db->sql_numrows( $result );
-if( empty( $numrows ) )
+
+if( $db->sql_numrows( $result ) != 1 )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();
