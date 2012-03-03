@@ -32,12 +32,14 @@ function cron_siteDiagnostic_update()
 
     $cacheFile = $Diagnostic->currentCache;
     $updtime = 0;
+    
     if ( file_exists( $cacheFile ) )
     {
         $updtime = @filemtime( $cacheFile );
     }
 
     $currentMonth = mktime( 0, 0, 0, date( "m", NV_CURRENTTIME ), 1, date( "Y", NV_CURRENTTIME ) );
+    
     if ( $updtime < $currentMonth )
     {
         $info = $Diagnostic->process( 1 );
