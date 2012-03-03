@@ -68,6 +68,7 @@ $lang_module['log_View'] = "Xem";
 $lang_module['log_del_no_items'] = "Bạn chưa chọn";
 $lang_module['log_note'] = "Ghi chú";
 $lang_module['moduleInfo'] = "Thông tin từ các module";
+$lang_module['pendingInfo'] = "Công việc chờ xử lý từ các module";
 $lang_module['moduleName'] = "Module";
 $lang_module['moduleContent'] = "Nội dung";
 $lang_module['moduleValue'] = "Giá trị";

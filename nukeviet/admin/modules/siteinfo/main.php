@@ -42,13 +42,13 @@ function nv_get_lang_module( $mod )
 }
 
 //Noi dung chinh cua trang
-$info = array();
+$info = $pending_info = array();
 
 foreach( $site_mods as $mod => $value )
 {
 	if( file_exists( NV_ROOTDIR . "/modules/" . $value['module_file'] . "/siteinfo.php" ) )
 	{
-		$siteinfo = array();
+		$siteinfo = $pendinginfo = array();
 		$mod_data = $value['module_data'];
 		
 		include ( NV_ROOTDIR . "/modules/" . $value['module_file'] . "/siteinfo.php" );
@@ -58,82 +58,57 @@ foreach( $site_mods as $mod => $value )
 			$info[$mod]['caption'] = $value['custom_title'];
 			$info[$mod]['field'] = $siteinfo;
 		}
+		
+		if( ! empty( $pendinginfo ) )
+		{
+			$pending_info[$mod]['caption'] = $value['custom_title'];
+			$pending_info[$mod]['field'] = $pendinginfo;
+		}
 	}
 }
 
-if( ! empty( $info ) )
-{
-	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-	
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'CAPTION', $lang_module['moduleInfo'] );
-	
-	$a = 0;
-	foreach( $info as $if )
-	{
-		foreach( $if['field'] as $field )
-		{
-			$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
-			$xtpl->assign( 'KEY', $field['key'] );
-			$xtpl->assign( 'VALUE', $field['value'] );
-			$xtpl->assign( 'MODULE', $if['caption'] );
-			$xtpl->parse( 'main.main1.loop' );
-			++$a;
-		}
-	}
-	$xtpl->parse( 'main.main1' );
+$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
 
-	//Thong tin phien ban NukeViet
-	if( defined( 'NV_IS_GODADMIN' ) )
+if( ! empty( $info ) or ! empty( $pending_info ) )
+{	
+	// Thong tin thong ke tu cac module
+	if( ! empty( $info ) )
 	{
-		$field = array();
-		$field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] . '.r' . $global_config['revision'] );
-		if( file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' ) )
+		$i = 0;
+		foreach( $info as $if )
 		{
-			$new_version = simplexml_load_file( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
-		}
-		else
-		{
-			$new_version = array();
-		}
-		$info = "";
-		if( ! empty( $new_version ) )
-		{
-			$field[] = array( //
-					'key' => $lang_module['version_news'], //
-					'value' => sprintf( $lang_module['newVersion_detail'], //
-					( string )$new_version->version, //
-					nv_date( "d-m-Y H:i", strtotime( $new_version->date ) ) ) );
-
-			if( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
+			foreach( $if['field'] as $field )
 			{
-				$info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate" );
+				$xtpl->assign( 'CLASS', ( ++ $i % 2 ) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'KEY', $field['key'] );
+				$xtpl->assign( 'VALUE', $field['value'] );
+				$xtpl->assign( 'MODULE', $if['caption'] );
+				$xtpl->parse( 'main.info.loop' );
 			}
 		}
-
-		$xtpl->assign( 'CAPTION', $lang_module['version'] );
-		$xtpl->assign( 'ULINK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate" );
-		$xtpl->assign( 'CHECKVERSION', $lang_module['checkversion'] );
-
-		foreach( $field as $key => $value )
-		{
-			$xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
-			$xtpl->assign( 'KEY', $value['key'] );
-			$xtpl->assign( 'VALUE', $value['value'] );
-			$xtpl->parse( 'main.main2.loop' );
-		}
-
-		if( ! empty( $info ) )
-		{
-			$xtpl->assign( 'INFO', $info );
-			$xtpl->parse( 'main.main2.inf' );
-		}
-
-		$xtpl->parse( 'main.main2' );
+		
+		$xtpl->parse( 'main.info' );
 	}
-
-	$xtpl->parse( 'main' );
-	$contents = $xtpl->text( 'main' );
+	
+	// Thong tin dang can duoc xu ly tu cac module
+	if( ! empty( $pending_info ) )
+	{
+		$i = 0;
+		foreach( $pending_info as $if )
+		{
+			foreach( $if['field'] as $field )
+			{
+				$xtpl->assign( 'CLASS', ( ++ $i % 2 ) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'KEY', $field['key'] );
+				$xtpl->assign( 'VALUE', $field['value'] );
+				$xtpl->assign( 'MODULE', $if['caption'] );
+				$xtpl->parse( 'main.pendinginfo.loop' );
+			}
+		}
+		
+		$xtpl->parse( 'main.pendinginfo' );
+	}
 }
 elseif( ! defined( 'NV_IS_SPADMIN' ) and ! empty( $site_mods ) )
 {
@@ -143,6 +118,57 @@ elseif( ! defined( 'NV_IS_SPADMIN' ) and ! empty( $site_mods ) )
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();
 }
+
+//Thong tin phien ban NukeViet
+if( defined( 'NV_IS_GODADMIN' ) )
+{
+	$field = array();
+	$field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] . '.r' . $global_config['revision'] );
+	if( file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' ) )
+	{
+		$new_version = simplexml_load_file( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
+	}
+	else
+	{
+		$new_version = array();
+	}
+	
+	$info = "";
+	if( ! empty( $new_version ) )
+	{
+		$field[] = array(
+			'key' => $lang_module['version_news'], //
+			'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( "d-m-Y H:i", strtotime( $new_version->date ) ) )
+		);
+
+		if( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
+		{
+			$info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate" );
+		}
+	}
+
+	$xtpl->assign( 'ULINK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate" );
+	$xtpl->assign( 'CHECKVERSION', $lang_module['checkversion'] );
+
+	foreach( $field as $key => $value )
+	{
+		$xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'KEY', $value['key'] );
+		$xtpl->assign( 'VALUE', $value['value'] );
+		$xtpl->parse( 'main.version.loop' );
+	}
+
+	if( ! empty( $info ) )
+	{
+		$xtpl->assign( 'INFO', $info );
+		$xtpl->parse( 'main.version.inf' );
+	}
+
+	$xtpl->parse( 'main.version' );
+}
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

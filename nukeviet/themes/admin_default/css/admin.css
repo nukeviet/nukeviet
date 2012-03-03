@@ -241,8 +241,13 @@ input[type=radio], input[type=checkbox] {
     vertical-align: middle
 }
 
-input.txt-full,select.txt-full,textarea.txt-full{width:98%}
-input.txt-half,select.txt-half,textarea.txt-half{width:49%}
+input.txt-full,select.txt-full,textarea.txt-full {
+	width:98%
+}
+
+input.txt-half,select.txt-half,textarea.txt-half {
+	width:49%
+}
 
 textarea {
     font: normal normal 400 10pt/normal Arial, sans-serif
@@ -257,8 +262,12 @@ textarea {
     clear: both;
 }
 
-.center{
-	text-align:center;
+.center {
+	text-align: center;
+}
+
+.aright {
+	text-align: right;
 }
 
 .default_icon {

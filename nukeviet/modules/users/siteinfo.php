@@ -15,18 +15,18 @@ $lang_siteinfo = nv_get_lang_module( $mod );
 list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) as number FROM `" . NV_USERS_GLOBALTABLE . "`" ) );
 if ( $number > 0 )
 {
-    $siteinfo[] = array( 
-        'key' => $lang_siteinfo['siteinfo_user'], 'value' => $number 
-    );
+	$siteinfo[] = array( 
+		'key' => $lang_siteinfo['siteinfo_user'], 'value' => $number 
+	);
 }
 
 // So thanh vien doi kich hoat
 list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) as number FROM `" . NV_USERS_GLOBALTABLE . "_reg`" ) );
 if ( $number > 0 )
 {
-    $siteinfo[] = array( 
-        'key' => $lang_siteinfo['siteinfo_waiting'], 'value' => $number 
-    );
+	$pendinginfo[] = array( 
+		'key' => $lang_siteinfo['siteinfo_waiting'], 'value' => $number 
+	);
 }
 
 ?>
