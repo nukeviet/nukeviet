@@ -34,7 +34,7 @@ if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info[
 }
 else
 {
-	$contents = 'file not exist !';
+	$contents = 'File not exist !';
 
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );

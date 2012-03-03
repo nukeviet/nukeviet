@@ -46,6 +46,7 @@ if( $module_name == "database" )
 
 		$tables = array();
 		$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
+		
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
 			$tables_size = floatval( $item['Data_length'] ) + floatval( $item['Index_length'] );
@@ -62,6 +63,7 @@ if( $module_name == "database" )
 			$db_totalfree += floatval( $item['Data_free'] );
 			++$db_tables_count;
 		}
+		
 		$db->sql_freeresult( $result );
 		$db_size = ! empty( $db_size ) ? nv_convertfromBytes( $db_size ) : 0;
 		$db_totalfree = ! empty( $db_totalfree ) ? nv_convertfromBytes( $db_totalfree ) : 0;
@@ -102,6 +104,7 @@ if( $module_name == "database" )
 			$table_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;tab=" . $key . "\">" . $table_name . "</a>";
 			eval( "\$contents['rows'][\$key] = array('" . $table_name . "','" . implode( "','", $values ) . "');" );
 		}
+		
 		$contents['third'] = sprintf( $lang_module['third'], $db_tables_count, $db_size, $db_totalfree );
 
 		$contents = call_user_func( "nv_show_tables_theme", $contents );
@@ -206,187 +209,142 @@ if( $module_name == "database" )
 
 	function main_theme( $contents )
 	{
-		$return = "";
-		$return .= "<table summary=\"\" class=\"tab1\">\n";
-		$return .= "<caption>" . $contents['captions']['database_info'] . "</caption>\n";
-		$return .= "<col span=\"2\" valign=\"top\" width=\"50%\" />\n";
-	
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		
+		$xtpl->assign( 'CAPTION', $contents['captions']['database_info'] );
+			
 		$a = 0;
 		foreach( $contents['database'] as $key => $value )
-		{
-			$class = ( $a % 2 ) ? " class=\"second\"" : "";
-			$return .= "<tbody" . $class . ">\n";
-			$return .= "<tr>\n";
-			$return .= "<td>" . $key . "</td>\n";
-			$return .= "<td>" . $value . "</td>\n";
-			$return .= "</tr>\n";
-			$return .= "</tbody>\n";
-			++$a;
+		{			
+			$xtpl->assign( 'ROW', array(
+				'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+				'key' => $key,
+				'value' => $value
+			) );
+			
+			$xtpl->parse( 'main.loop' );
 		}
-		$return .= "</table>\n";
 
-		$return .= "<div id=\"show_tables\">\n";
-		$return .= "</div>\n";
-		$return .= "<script type=\"text/javascript\">\n";
-		$return .= "nv_show_dbtables();\n";
-		$return .= "</script>\n";
-		$return .= "<br /><br />\n";
-
-		return $return;
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 
 	function nv_show_tables_theme( $contents )
 	{
-		$return = "";
-		$return .= "<form name=\"myform\" method=\"post\" action=\"" . $contents['action'] . "\" onsubmit=\"nv_chsubmit(this,'tables[]');return false;\">\n";
-		$return .= "<table summary=\"\" class=\"tab1\">\n";
-		$return .= "<caption>" . $contents['captions']['tables_info'] . "</caption>\n";
-		$return .= "<col valign=\"middle\" width=\"10px\" />\n";
-		$return .= "<col span=\"10\" valign=\"top\" />\n";
-		$return .= "<thead>\n";
-		$return .= "<tr>\n";
-		$return .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);\" /></td>\n";
-	
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "tables.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+
+		$xtpl->assign( 'ACTION', $contents['action'] );
+		$xtpl->assign( 'CAPTIONS', $contents['captions']['tables_info'] );
+
 		foreach( $contents['columns'] as $value )
 		{
-			$return .= "<td>" . $value . "</td>\n";
+			$xtpl->assign( 'COLNAME', $value );
+			$xtpl->parse( 'main.columns' );
 		}
-	
-		$return .= "</tr>\n";
-		$return .= "</thead>\n";
-
-		$return .= "<tfoot>\n";
-		$return .= "<tr>\n";
-		$return .= "<td colspan=\"11\">\n";
-		$return .= "<select id=\"op_name\" name=\"" . $contents['op_name'] . "\" onchange=\"nv_checkForm();\">\n";
-	
+		
+		$xtpl->assign( 'OP_NAME', $contents['op_name'] );
+		
 		foreach( $contents['op'] as $key => $val )
 		{
-			$return .= "<option value=\"" . $key . "\">" . $val . "</option>\n";
+			$xtpl->assign( 'KEY', $key );
+			$xtpl->assign( 'VAL', $val );
+			$xtpl->parse( 'main.op' );
 		}
 	
-		$return .= "</select>\n";
-		$return .= "<select id=\"type_name\" name=\"" . $contents['type_name'] . "\">\n";
-	
+		$xtpl->assign( 'TYPE_NAME', $contents['type_name'] );
+		
 		foreach( $contents['type'] as $key => $val )
 		{
-			$return .= "<option value=\"" . $key . "\">" . $val . "</option>\n";
+			$xtpl->assign( 'KEY', $key );
+			$xtpl->assign( 'VAL', $val );
+			$xtpl->parse( 'main.type' );
 		}
 	
-		$return .= "</select>\n";
-		$return .= "<select id=\"ext_name\" name=\"" . $contents['ext_name'] . "\">\n";
-	
+		$xtpl->assign( 'EXT_NAME', $contents['ext_name'] );
+		
 		foreach( $contents['ext'] as $key => $val )
 		{
-			$return .= "<option value=\"" . $key . "\">" . $val . "</option>\n";
+			$xtpl->assign( 'KEY', $key );
+			$xtpl->assign( 'VAL', $val );
+			$xtpl->parse( 'main.ext' );
 		}
-	
-		$return .= "</select>\n";
-		$return .= "<input name=\"Submit1\" id=\"subm_form\" type=\"submit\" value=\"" . $contents['submit'] . "\" />\n";
-		$return .= "</td>\n";
-		$return .= "</tr>\n";
-		$return .= "</tfoot>\n";
+		
+		$xtpl->assign( 'SUBMIT', $contents['submit'] );
 
 		$a = 0;
 		foreach( $contents['rows'] as $key => $values )
 		{
-			$class = ( $a % 2 ) ? " class=\"second\"" : "";
-			$return .= "<tbody" . $class . ">\n";
-			$return .= "<tr>\n";
-			$tag = ( empty( $values[3] ) ) ? "td" : "th";
-			$return .= "<" . $tag . "><input name=\"tables[]\" type=\"checkbox\" value=\"" . $key . "\" onclick=\"nv_UncheckAll(this.form, 'tables[]', 'check_all[]', this.checked);\" /></" . $tag . ">\n";
+			$xtpl->assign( 'ROW', array(
+				'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+				'tag' => ( empty( $values[3] ) ) ? "td" : "th",
+				'key' => $key,
+			) );
+		
 			foreach( $values as $value )
 			{
-				$return .= "<" . $tag . ">" . $value . "</" . $tag . ">\n";
+				$xtpl->assign( 'VALUE', $value );
+				$xtpl->parse( 'main.loop.col' );
 			}
-			$return .= "</tr>\n";
-			$return .= "</tbody>\n";
-			++$a;
+			
+			$xtpl->parse( 'main.loop' );
 		}
-	
-		$return .= "<tbody class=\"third\">\n";
-		$return .= "<tr>\n";
-		$return .= "<td><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);\" /></td>\n";
-		$return .= "<td colspan=\"10\">\n";
-		$return .= "<strong>" . $contents['third'] . "</strong>\n";
-		$return .= "</td>\n";
-		$return .= "</tr>\n";
-		$return .= "</tbody>\n";
-		$return .= "</table>\n";
-		$return .= "</form>\n";
-		$return .= "<br /><br />\n";
-	
-		return $return;
+		
+		$xtpl->assign( 'THIRD', $contents['third'] );
+			
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 
 	function nv_show_tab_theme( $contents )
 	{
-		$return = "";
-		$return .= "<div style=\"width:300px;position:relative;float:left\">\n";
-		$return .= "<table summary=\"\" class=\"tab1\" style=\"width:330px\">\n";
-		$return .= "<caption>" . $contents['table']['caption'] . "</caption>\n";
-		$return .= "<col span=\"2\" valign=\"top\" width=\"50%\" />\n";
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "tabs.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+
+		$xtpl->assign( 'CAPTION', $contents['table']['caption'] );
 	
 		$a = 0;
 		foreach( $contents['table']['info'] as $key => $value )
-		{
-			$class = ( $a % 2 ) ? " class=\"second\"" : "";
-			$return .= "<tbody" . $class . ">\n";
-			$return .= "<tr>\n";
-			$return .= "<td>" . $value[0] . "</td>\n";
-			$return .= "<td>" . $value[1] . "</td>\n";
-			$return .= "</tr>\n";
-			$return .= "</tbody>\n";
-			++$a;
+		{			
+			$xtpl->assign( 'INFO', array(
+				'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+				'val' => $value
+			) );
+			
+			$xtpl->parse( 'main.info' );
 		}
-	
-		$return .= "</table>\n";
-		$return .= "</div>\n";
-		$return .= "<div style=\"margin-top:10px;position:relative;float:right;width:490px;\">\n";
-		$return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"nv_show_highlight('php');\"><span><span>" . $contents['table']['show_lang'][0] . "</span></span></a>\n";
-		$return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"nv_show_highlight('sql');\"><span><span>" . $contents['table']['show_lang'][1] . "</span></span></a>\n";
-		$return .= "<div class=\"clear\"></div>\n";
-		$return .= "<div id=\"my_highlight\" style=\"background-color:#F2F2F2;border: 1px solid #CCC;margin-top:10px;padding:10px;\">\n";
-		$return .= $contents['table']['show'];
-		$return .= "</div>\n";
-		$return .= "</div>\n";
-		$return .= "<div class=\"clear\"></div>\n";
-		$return .= "<br />\n";
-
-		$return .= "<table summary=\"\" class=\"tab1\">\n";
-		$return .= "<caption>" . $contents['table']['row']['caption'] . "</caption>\n";
-		$return .= "<col valign=\"top\" width=\"40%\" />\n";
-		$return .= "<col span=\"5\" valign=\"top\" />\n";
-		$return .= "<thead>\n";
-		$return .= "<tr>\n";
-	
+		
+		$xtpl->assign( 'SHOW_LANG', $contents['table']['show_lang'] );
+		$xtpl->assign( 'SHOW', $contents['table']['show'] );
+		
+		$xtpl->assign( 'RCAPTION', $contents['table']['row']['caption'] );
+		
 		foreach( $contents['table']['row']['columns'] as $value )
 		{
-			$return .= "<td>" . $value . "</td>\n";
+			$xtpl->assign( 'VALUE', $value );
+			$xtpl->parse( 'main.column' );
 		}
-	
-		$return .= "</tr>\n";
-		$return .= "</thead>\n";
-	
+		
 		$a = 0;
 		foreach( $contents['table']['row']['detail'] as $key => $values )
-		{
-			$class = ( $a % 2 ) ? " class=\"second\"" : "";
-			$return .= "<tbody" . $class . ">\n";
-			$return .= "<tr>\n";
+		{			
+			$xtpl->assign( 'CLASS', ( ++ $a % 2 ) ? " class=\"second\"" : "" );
+			
 			foreach( $values as $value )
 			{
-				$return .= "<td>" . $value . "</td>\n";
+				$xtpl->assign( 'VAL', $value );
+				$xtpl->parse( 'main.detail.loop' );
 			}
-			$return .= "</tr>\n";
-			$return .= "</tbody>\n";
-			++$a;
+			
+			$xtpl->parse( 'main.detail' );
 		}
-	
-		$return .= "</table>\n";
-		$return .= "<br /><br />\n";
-	
-		return $return;
+		
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 }
 

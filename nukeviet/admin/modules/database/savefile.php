@@ -43,25 +43,31 @@ $contents['filename'] = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup/" . $file
 include ( NV_ROOTDIR . "/includes/core/dump.php" );
 $result = nv_dump_save( $contents );
 
+$xtpl = new XTemplate( "save.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+
 if( empty( $result ) )
 {
-	$content = sprintf( $lang_module['save_error'], NV_LOGS_DIR . "/dump_backup" );
+	$xtpl->assign( 'ERROR', sprintf( $lang_module['save_error'], NV_LOGS_DIR . "/dump_backup" ) );
+	$xtpl->parse( 'main.error' );
 }
 else
 {
-	$temp = explode( "_", $file_name );
+	$file = explode( "_", $file_name );
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['savefile'], "File name: " . end( $file ), $admin_info['userid'] );
 	
-	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['savefile'], "File name: " . end( $temp ), $admin_info['userid'] );
+	$xtpl->assign( 'LINK_DOWN', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file_name . "&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) );
 	
-	$content = $lang_module['save_ok'];
-	$linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file_name . "&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] );
-	$content .= "<br /><br /><a href=\"" . $linkgetfile . "\">" . $lang_module['save_download'] . "</a>";
+	$xtpl->parse( 'main.result' );
 }
 
 $page_title = $lang_module['save_data'];
 
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
+
 include ( NV_ROOTDIR . "/includes/header.php" );
-echo nv_admin_theme( "<br /><br /><br /><center><b>" . $content . "</b></center>" );
+echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>

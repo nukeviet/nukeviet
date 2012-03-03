@@ -19,14 +19,14 @@ if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info[
 	
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . " " . strtolower( $lang_module['file_backup'] ), "File name: " . end( $temp ), $admin_info['userid'] );
 
-	@unlink( $path_filename );
+	nv_deletefile( $path_filename );
 	
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=file&rand=' . nv_genpass() );
 	exit();
 }
 else
 {
-	$contents = 'file not exist !';
+	$contents = 'File not exist !';
 	
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
