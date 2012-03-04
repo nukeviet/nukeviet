@@ -246,14 +246,22 @@ if( defined( "NV_IS_GODADMIN" ) )
 			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize3', '30')" );
 		}
 
+		// Xoa file thua module menu
+		if( $global_config['revision'] < 1633 )
+		{
+			nv_deletefile( NV_ROOTDIR . '/themes/admin_default/modules/menu/config.tpl' );
+		}
+		
 		//Update revision
 		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')" );
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1604')" );
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1634')" );
 
 		$array_config_rewrite = array(
 			'rewrite_optional' => $global_config['rewrite_optional'],
 			'rewrite_endurl' => $global_config['rewrite_endurl'],
-			'rewrite_exturl' => $global_config['rewrite_exturl'] );
+			'rewrite_exturl' => $global_config['rewrite_exturl']
+		);
+		
 		nv_rewrite_change( $array_config_rewrite );
 		nv_deletefile( NV_ROOTDIR . '/' . NV_DATADIR . '/searchEngines.xml' );
 
