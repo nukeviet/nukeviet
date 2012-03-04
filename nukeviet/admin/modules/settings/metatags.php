@@ -10,6 +10,7 @@
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $file_metatags = NV_ROOTDIR . "/" . NV_DATADIR . "/metatags.xml";
+
 $metatags = array();
 $metatags['meta'] = array();
 $ignore = array( 'content-type', 'generator', 'description', 'keywords' );

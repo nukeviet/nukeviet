@@ -15,14 +15,18 @@ $myini = array( //
     'types' => array( '' ), //
     'exts' => array( '' ), //
     'mimes' => array( '' ) //
-    );
+);
 
 foreach ( $ini as $type => $extmime )
 {
     $myini['types'][] = $type;
     $myini['exts'] = array_merge( $myini['exts'], array_keys( $extmime ) );
     $m = array_values( $extmime );
-    if ( is_string( $m ) ) $myini['mimes'] = array_merge( $myini['mimes'], $m );
+	
+    if ( is_string( $m ) )
+	{
+		$myini['mimes'] = array_merge( $myini['mimes'], $m );
+	}
     else
     {
         foreach ( $m as $m2 )
@@ -37,7 +41,9 @@ sort( $myini['types'] );
 unset( $myini['types'][0] );
 sort( $myini['exts'] );
 unset( $myini['exts'][0] );
+
 $myini['mimes'] = array_unique( $myini['mimes'] );
+
 sort( $myini['mimes'] );
 unset( $myini['mimes'][0] );
 
@@ -85,107 +91,88 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 
 $page_title = $lang_module['uploadconfig'];
 
-$contents = "<form action=\"\" method=\"post\">\n";
-$contents .= "<table class=\"tab1\" style=\"auto\">\n";
-$contents .= "<tbody class=\"second\">\n";
-$contents .= "<tr>\n";
-$contents .= "<td colspan=\"2\"><strong>" . $lang_module['uploadconfig'] . "</strong></td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tbody>";
-$contents .= "<tbody>";
-$contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['nv_max_size'] . ":</strong> </td>\n";
-$contents .= "<td>";
-$contents .= "<select name=\"nv_max_size\">\n";
+$xtpl = new XTemplate( "uploadconfig.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+
 $sys_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) );
 $p_size = $sys_max_size / 100;
+
+$xtpl->assign( 'SYS_MAX_SIZE', nv_convertfromBytes( $sys_max_size ) );
+
 for ( $index = 100; $index > 0; --$index )
 {
     $size = floor( $index * $p_size );
-    $sl = ( $size == $global_config['nv_max_size'] ) ? " selected=\"selected\"" : "";
-    $contents .= "<option value=\"" . $size . "\"" . $sl . ">" . nv_convertfromBytes( $size ) . "</option>\n";
+	
+	$xtpl->assign( 'SIZE', array(
+		'key' => $size,
+		'title' => nv_convertfromBytes( $size ),
+		'selected' => ( $size == $global_config['nv_max_size'] ) ? " selected=\"selected\"" : ""
+	) );
+	
+	$xtpl->parse( 'main.size' );
 }
-$contents .= "</select> \n";
-$contents .= " (" . $lang_module['sys_max_size'] . ": " . nv_convertfromBytes( $sys_max_size ) . ")";
-$contents .= "</td>";
-$contents .= "</tr>";
-$contents .= "</tbody>";
 
-$contents .= "<tbody class=\"second\">";
-$contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['upload_checking_mode'] . ":</strong> </td>\n";
-$contents .= "<td>";
-$contents .= "<select name=\"upload_checking_mode\">\n";
-$_upload_checking_mode = array( 'strong' => $lang_module['strong_mode'], 'mild' => $lang_module['mild_mode'], 'lite' => $lang_module['lite_mode'], 'none' => $lang_module['none_mode'] );
+$_upload_checking_mode = array(
+	'strong' => $lang_module['strong_mode'],
+	'mild' => $lang_module['mild_mode'],
+	'lite' => $lang_module['lite_mode'],
+	'none' => $lang_module['none_mode']
+);
+
 foreach ( $_upload_checking_mode as $m => $n )
 {
-    $sl = ( $m == $global_config['upload_checking_mode'] ) ? " selected=\"selected\"" : "";
-    $contents .= "<option value=\"" . $m . "\"" . $sl . ">" . $n . "</option>\n";
+	$xtpl->assign( 'UPLOAD_CHECKING_MODE', array(
+		'key' => $m,
+		'title' => $n,
+		'selected' => ( $m == $global_config['upload_checking_mode'] ) ? " selected=\"selected\"" : ""
+	) );
+	
+	$xtpl->parse( 'main.upload_checking_mode' );
 }
-$contents .= "</select>\n";
 
 $strong = false;
-if ( nv_function_exists( 'finfo_open' ) //
-    or nv_class_exists( "finfo" ) //
-    or nv_function_exists( 'mime_content_type' ) //
-    or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) //
-    )
+if( nv_function_exists( 'finfo_open' ) or nv_class_exists( "finfo" ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) )
 {
     $strong = true;
 }
 
-if ( ! $strong )
-{
-    $contents .= " " . $lang_module['upload_checking_note'];
-}
+$xtpl->assign( 'UPLOAD_CHECKING_NOTE', ! $strong ? $lang_module['upload_checking_note'] : '' );
 
-$contents .= "</td>";
-$contents .= "</tr>";
-$contents .= "</tbody>";
-
-$contents .= "<tbody>\n";
-$contents .= "<tr>\n";
-$contents .= "<td style=\"width:200px\"><strong>" . $lang_module['uploadconfig_types'] . "</strong></td>\n";
-$contents .= "<td>";
 foreach ( $myini['types'] as $key => $name )
 {
-    $contents .= "<label style=\"display:inline-block;width:100px\"><input type=\"checkbox\" name=\"type[]\" value=\"" . $key . "\"" . ( in_array( $name, $global_config['file_allowed_ext'] ) ? ' checked="checked"' : '' ) . " /> " . $name . "&nbsp;&nbsp;</label>\n";
+	$xtpl->assign( 'TYPES', array(
+		'key' => $key,
+		'title' => $name,
+		'checked' => in_array( $name, $global_config['file_allowed_ext'] ) ? ' checked="checked"' : ''
+	) );
+	
+	$xtpl->parse( 'main.types' );
 }
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tbody>\n";
-$contents .= "<tbody class=\"second\">\n";
-$contents .= "<tr>\n";
-$contents .= "<td style=\"vertical-align:top\"><strong>" . $lang_module['uploadconfig_ban_ext'] . "</strong></td>\n";
-$contents .= "<td>";
+
 foreach ( $myini['exts'] as $key => $name )
 {
-    $contents .= "<label style=\"display:inline-block;width:100px\"><input type=\"checkbox\" name=\"ext[]\" value=\"" . $key . "\"" . ( in_array( $name, $global_config['forbid_extensions'] ) ? ' checked="checked"' : '' ) . " /> " . $name . "&nbsp;&nbsp;</label>\n";
+	$xtpl->assign( 'EXTS', array(
+		'key' => $key,
+		'title' => $name,
+		'checked' => in_array( $name, $global_config['forbid_extensions'] ) ? ' checked="checked"' : ''
+	) );
+	
+	$xtpl->parse( 'main.exts' );
 }
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tbody>\n";
 
-$contents .= "<tbody>\n";
-$contents .= "<tr>\n";
-$contents .= "<td style=\"vertical-align:top\"><strong>" . $lang_module['uploadconfig_ban_mime'] . "</strong></td>\n";
-$contents .= "<td>";
 foreach ( $myini['mimes'] as $key => $name )
 {
-    $contents .= "<label style=\"display:inline-block;width:300px\"><input type=\"checkbox\" name=\"mime[]\" value=\"" . $key . "\"" . ( in_array( $name, $global_config['forbid_mimes'] ) ? ' checked="checked"' : '' ) . " /> " . $name . "&nbsp;&nbsp;</label>\n";
+	$xtpl->assign( 'MIMES', array(
+		'key' => $key,
+		'title' => $name,
+		'checked' => in_array( $name, $global_config['forbid_mimes'] ) ? ' checked="checked"' : ''
+	) );
+	
+	$xtpl->parse( 'main.mimes' );
 }
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tbody>\n";
-$contents .= "<tfoot>\n";
-$contents .= "<tr>\n";
-$contents .= "<td colspan=\"2\" style=\"text-align:center\">";
-$contents .= "<input type=\"submit\" value=\"" . $lang_module['banip_confirm'] . "\" name=\"submit\"/>\n";
-$contents .= "</td>\n";
-$contents .= "</tr>\n";
-$contents .= "</tfoot>\n";
-$contents .= "</table>\n";
-$contents .= "</form>\n";
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

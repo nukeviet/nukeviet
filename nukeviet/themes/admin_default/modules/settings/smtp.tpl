@@ -1,6 +1,12 @@
 <!-- BEGIN: smtp -->
+<!-- BEGIN: error -->
+<div class="quote" style="width:98%">
+	<blockquote class="error">{ERROR}</blockquote>
+</div>
+<div class="clear"></div>
+<!-- END: error -->
 <form action="" method="post" id="form_edit_smtp">
-<table class="tab1" summary="">
+<table class="tab1">
 	<col style="width: 150px; white-space: nowrap" />
 	<tr>
 		<td>{LANG.mail_config}</td>
@@ -64,7 +70,6 @@
 	</tr>
 </table>
 </form>
-
 <script type="text/javascript">
 //<![CDATA[
 	document.getElementById('form_edit_smtp').setAttribute("autocomplete", "off");

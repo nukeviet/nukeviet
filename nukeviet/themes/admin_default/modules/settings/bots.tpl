@@ -1,6 +1,12 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: error -->
+<div class="quote" style="width:98%">
+	<blockquote class="error">{ERROR}</blockquote>
+</div>
+<div class="clear"></div>
+<!-- END: error -->
 <form action="" method="post">
-<table class="tab1" summary="">
+<table class="tab1">
 	<thead>
 		<tr>
 			<td>{LANG.bot_name}</td>

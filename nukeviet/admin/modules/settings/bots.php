@@ -6,7 +6,9 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+
 if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
+
 $page_title = $lang_module['bots_config'];
 $errormess = "";
 
@@ -22,6 +24,7 @@ if ( $submit )
     $bot_ips = $nv_Request->get_array( 'bot_ips', 'post' );
     $bot_allowed = $nv_Request->get_array( 'bot_allowed', 'post' );
     $bots = array();
+	
     foreach ( $bots_name as $key => $value )
     {
         $value = strip_tags( $value );
@@ -35,19 +38,22 @@ if ( $submit )
             );
         }
     }
+	
     $contents = serialize( $bots );
     file_put_contents( $file_bots, $contents, LOCK_EX );
 }
 
 $bots = ( file_exists( $file_bots ) and filesize( $file_bots ) != 0 ) ? unserialize( file_get_contents( $file_bots ) ) : array();
+
 if ( empty( $bots ) and file_exists( NV_ROOTDIR . "/includes/bots.php" ) )
 {
     include ( NV_ROOTDIR . "/includes/bots.php" );
 }
 $a = 0;
 
-$xtpl = new XTemplate( "bots.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( "bots.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
+
 foreach ( $bots as $name => $values )
 {
     $array_data = array();
@@ -75,19 +81,17 @@ for ( $index = 0; $index < 3; ++$index )
     $xtpl->parse( 'main.loop' );
 }
 
-$xtpl->parse( 'main' );
-$content = "";
 if ( $errormess != "" )
-{
-    $content .= "<div class=\"quote\" style=\"width:780px;\">\n";
-    $content .= "<blockquote class=\"error\"><span>" . $errormess . "</span></blockquote>\n";
-    $content .= "</div>\n";
-    $content .= "<div class=\"clear\"></div>\n";
+{	
+	$xtpl->assign( 'ERROR', $errormess );
+    $xtpl->parse( 'main.error' );
 }
-$content = $xtpl->text( 'main' );
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
-echo nv_admin_theme( $content );
+echo nv_admin_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>

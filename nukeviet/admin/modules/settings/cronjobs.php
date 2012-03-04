@@ -11,12 +11,12 @@ if ( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_add"] = $lang_module['nv_admin_add'];
 
-$query = "SELECT * FROM `" . NV_CRONJOBS_GLOBALTABLE . "` ORDER BY `is_sys` DESC";
-$result = $db->sql_query( $query );
-$numrows = $db->sql_numrows( $result );
-if ( empty( $numrows ) )
+$sql = "SELECT * FROM `" . NV_CRONJOBS_GLOBALTABLE . "` ORDER BY `is_sys` DESC";
+$result = $db->sql_query( $sql );
+
+if ( ! $db->sql_numrows( $result ) )
 {
-    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add" );
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_add" );
     die();
 }
 
@@ -25,13 +25,13 @@ $contents = array();
 while ( $row = $db->sql_fetchrow( $result ) )
 {
     $contents[$row['id']]['caption'] = isset( $row[NV_LANG_INTERFACE . '_cron_name'] ) ? $row[NV_LANG_INTERFACE . '_cron_name'] : ( isset( $row[NV_LANG_DATA . '_cron_name'] ) ? $row[NV_LANG_DATA . '_cron_name'] : $row['run_func'] );
-    $contents[$row['id']]['edit'] = array( 
+    $contents[$row['id']]['edit'] = array(
         ( empty( $row['is_sys'] ) ? 1 : 0 ), $lang_global['edit'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_edit&amp;id=" . $row['id'] 
     );
-    $contents[$row['id']]['delete'] = array( 
+    $contents[$row['id']]['delete'] = array(
         ( empty( $row['is_sys'] ) ? 1 : 0 ), $lang_global['delete'] 
     );
-    $contents[$row['id']]['disable'] = array( 
+    $contents[$row['id']]['disable'] = array(
         ( ( empty( $row['is_sys'] ) or empty( $row['act'] ) ) ? 1 : 0 ), ( $row['act'] ? $lang_global['disable'] : $lang_global['activate'] ), NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_act&amp;id=" . $row['id'] 
     );
     $contents[$row['id']]['detail'][$lang_module['run_file']] = $row['run_file'];

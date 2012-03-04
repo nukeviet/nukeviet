@@ -15,12 +15,15 @@ $res = false;
 if ( ! empty( $id ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_del', "id  " . $id, $admin_info['userid'] );
-	$query = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND `is_sys`=0";
-	$result = $db->sql_query( $query );
+	
+	$sql = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND `is_sys`=0";
+	$result = $db->sql_query( $sql );
+	
 	if ( $db->sql_numrows( $result ) == 1 )
 	{
-		$query = "DELETE FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id` = " . $id;
-		$res = $db->sql_query( $query );
+		$sql = "DELETE FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id` = " . $id;
+		$res = $db->sql_query( $sql );
+		
 		$db->sql_query( "LOCK TABLE " . NV_CRONJOBS_GLOBALTABLE . " WRITE" );
 		$db->sql_query( "REPAIR TABLE " . NV_CRONJOBS_GLOBALTABLE );
 		$db->sql_query( "OPTIMIZE TABLE " . NV_CRONJOBS_GLOBALTABLE );

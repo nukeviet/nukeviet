@@ -14,8 +14,10 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 if ( ! empty( $id ) )
 {
     nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_atc', "id  " . $id, $admin_info['userid'] );
-	$query = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND (`is_sys`=0 OR `act`=0)";
-    $result = $db->sql_query( $query );
+	
+	$sql = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND (`is_sys`=0 OR `act`=0)";
+    $result = $db->sql_query( $sql );
+	
     if ( $db->sql_numrows( $result ) == 1 )
     {
         $row = $db->sql_fetchrow( $result );
@@ -25,6 +27,7 @@ if ( ! empty( $id ) )
         $db->sql_query( $sql );
     }
 }
+
 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cronjobs" );
 die();
 
