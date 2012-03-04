@@ -85,7 +85,7 @@
 		<tr>
 			<th class="spec"></th>
 			<td class="spec" colspan="2">
-			<input type="submit" value="{LANG.refesh}" />
+			<input class="button" type="submit" value="{LANG.refesh}" />
 			</td>
 		</tr>
 	</table><!-- BEGIN: errordata --><span class="highlight_red"> {DATA.error} </span>

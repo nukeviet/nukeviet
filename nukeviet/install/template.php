@@ -110,6 +110,17 @@ function nv_step_2( $array_dir_check, $array_ftp_data, $nextstep )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'ACTIONFORM', NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
 
+	if( $nextstep )
+	{
+		$xtpl->parse( 'step.nextstep' );
+	}
+	elseif( $sys_info['ftp_support'] and strpos( $sys_info['os'], 'WIN' ) === false )
+	{
+		$xtpl->assign( 'FTPDATA', $array_ftp_data );
+		$xtpl->parse( 'step.ftpconfig.errorftp' );
+		$xtpl->parse( 'step.ftpconfig' );
+	}
+
 	$a = 0;
 	foreach( $array_dir_check as $dir => $check )
 	{
@@ -125,17 +136,6 @@ function nv_step_2( $array_dir_check, $array_ftp_data, $nextstep )
 		++$a;
 	}
 	
-	if( $nextstep )
-	{
-		$xtpl->parse( 'step.nextstep' );
-	}
-	elseif( $sys_info['ftp_support'] and strpos( $sys_info['os'], 'WIN' ) === false )
-	{
-		$xtpl->assign( 'FTPDATA', $array_ftp_data );
-		$xtpl->parse( 'step.ftpconfig.errorftp' );
-		$xtpl->parse( 'step.ftpconfig' );
-	}
-
 	if( ! ( strpos( $sys_info['os'], 'WIN' ) === false ) )
 	{
 		if( $nextstep )

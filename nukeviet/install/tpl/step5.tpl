@@ -60,7 +60,7 @@
 			<!-- BEGIN: db_detete --> <input
 				type="checkbox" name="db_detete" value="1" />{LANG.db_detete} &nbsp; &nbsp;
 			<!-- END: db_detete -->
-			<input type="submit" value="{LANG.refesh}" />
+			<input class="button" type="submit" value="{LANG.refesh}" />
 		</td>
 	</tr>
 </table>

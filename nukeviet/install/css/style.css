@@ -1,4 +1,4 @@
-body {
+﻿body {
 	font-family: Segoe UI, Tahoma, sans-serif;
 	font-size: 12px;
 	line-height: 1.5;
@@ -270,6 +270,12 @@ div.step_content_title {
 
 .txt,.button,.area,.select {
 	border: 1px solid #e6e6e6;
+}
+
+.button {
+	background: url('../images/button_center_bg.png') repeat-x left center;
+	cursor: pointer;
+	padding: 2px 5px;
 }
 
 .select {

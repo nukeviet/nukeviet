@@ -1,20 +1,4 @@
 <!-- BEGIN: step -->
-<table id="checkchmod" cellspacing="0"
-	summary="{LANG.checkchmod_detail}" style="width: 100%;">
-	<caption>{LANG.if_chmod} <span class="highlight_red">{LANG.not_compatible}</span>.
-	{LANG.please_chmod}.</caption>
-	<tr>
-		<th scope="col" abbr="{LANG.listchmod}" class="nobg">{LANG.listchmod}</th>
-		<th scope="col">{LANG.result}</th>
-	</tr>
-	<!-- BEGIN: loopdir -->
-	<tr>
-		<th scope="col" class="{DATAFILE.class}">{DATAFILE.dir}</th>
-		<td><span class="highlight_green">{DATAFILE.check}</span></td>
-	</tr>
-	<!-- END: loopdir -->
-
-</table>
 <!-- BEGIN: winhost -->
 <blockquote>
 	{LANG.s2_winhost_info} 
@@ -65,13 +49,15 @@
 	<tr>
 		<th scope="col" abbr="{LANG.ftp_path}" class="spec">{LANG.ftp_path}</th>
 		<td><input type="text" name="ftp_path" value="{FTPDATA.ftp_path}"
-			style="width: 300px;" /></td>
+			style="width: 210px;" />
+			<input class="button" type="button" id="find_ftp_path" value="{LANG.ftp_path_find}"/>
+		</td>
 		<td><span class="highlight_green">{LANG.ftp_path_note}</span></td>
 	</tr>
 	<tr>
 		<th scope="col" abbr="{LANG.refesh}" class="nobg"><input type="hidden"
 			name="modftp" value="1" /></th>
-		<td><input type="submit" value="{LANG.refesh}" /></td>
+		<td><input class="button" type="submit" value="{LANG.refesh}" /></td>
 		<td></td>
 	</tr>
 </table>
@@ -81,7 +67,53 @@
 {FTPDATA.error}
 </span>
 <!-- END: errorftp -->
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#find_ftp_path').click(function(){
+		var ftp_server = $('input[name="ftp_server"]').val();
+		var ftp_user_name = $('input[name="ftp_user_name"]').val();
+		var ftp_user_pass = $('input[name="ftp_user_pass"]').val();
+		var ftp_port = $('input[name="ftp_port"]').val();
+		
+		if( ftp_server == '' || ftp_user_name == '' || ftp_user_pass == '' )
+		{
+			alert('{LANG.ftp_error_empty}');
+			return;
+		}
+		
+		$(this).attr('disabled', 'disabled');
+		
+		var data = 'ftp_server=' + ftp_server + '&ftp_port=' + ftp_port + '&ftp_user_name=' + ftp_user_name + '&ftp_user_pass=' + ftp_user_pass + '&tetectftp=1';
+		var url = '{ACTIONFORM}';
+		
+		$.ajax({type:"POST", url:url, data:data, success:function(c){
+			c = c.split('|');
+			if( c[0] == 'OK' ){
+				$('input[name="ftp_path"]').val(c[1]);
+			}else{
+				alert(c[1]);
+			}
+			$('#find_ftp_path').removeAttr('disabled');
+		}});
+	});
+});
+</script>
 <!-- END: ftpconfig -->
+<table id="checkchmod" cellspacing="0"
+	summary="{LANG.checkchmod_detail}" style="width: 100%;">
+	<caption>{LANG.if_chmod} <span class="highlight_red">{LANG.not_compatible}</span>.
+	{LANG.please_chmod}.</caption>
+	<tr>
+		<th scope="col" abbr="{LANG.listchmod}" class="nobg">{LANG.listchmod}</th>
+		<th scope="col">{LANG.result}</th>
+	</tr>
+	<!-- BEGIN: loopdir -->
+	<tr>
+		<th scope="col" class="{DATAFILE.class}">{DATAFILE.dir}</th>
+		<td><span class="highlight_green">{DATAFILE.check}</span></td>
+	</tr>
+	<!-- END: loopdir -->
+</table>
 <ul class="control_t fr">
 	<li><span class="back_step"><a
 		href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=1">{LANG.previous}</a></span></li>

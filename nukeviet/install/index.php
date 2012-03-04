@@ -76,6 +76,50 @@ if( $step == 1 )
 }
 elseif( $step == 2 )
 {
+	// Tu dong nhan dang Remove Path
+	if( $nv_Request->isset_request( 'tetectftp', 'post' ) )
+	{
+		$ftp_server = nv_unhtmlspecialchars( filter_text_input( 'ftp_server', 'post', '', 1, 255 ) );
+		$ftp_port = intval( filter_text_input( 'ftp_port', 'post', '21', 1, 255 ) );
+		$ftp_user_name = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_name', 'post', '', 1, 255 ) );
+		$ftp_user_pass = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_pass', 'post', '', 1, 255 ) );
+		
+		if( ! $ftp_server or ! $ftp_user_name or ! $ftp_user_pass )
+		{
+			die( 'ERROR|' . $lang_module['ftp_error_empty'] );
+		}
+		
+		if( ! defined( 'NV_FTP_CLASS' ) ) require( NV_ROOTDIR . '/includes/class/ftp.class.php' );
+		if( ! defined( 'NV_BUFFER_CLASS' ) ) require( NV_ROOTDIR . '/includes/class/buffer.class.php' );
+		
+		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
+		
+		if( ! empty( $ftp->error ) )
+		{
+			$ftp->close();
+			die( 'ERROR|' . (string)$ftp->error );
+		}
+		else
+		{
+			$list_valid = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "js", "language", NV_LOGS_DIR, "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+		
+			$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
+			
+			if( $ftp_root === false )
+			{
+				$ftp->close();
+				die( 'ERROR|' . ( empty( $ftp->error ) ? $lang_module['ftp_error_detect_root'] : (string)$ftp->error ) );
+			}
+			
+			$ftp->close();
+			die( 'OK|'. $ftp_root );
+		}
+		
+		$ftp->close();
+		die( 'ERROR|' . $lang_module['ftp_error_detect_root'] );
+	}
+
+	// Danh sach cac file can kiem tra quyen ghi
 	$array_dir = array(
 		NV_SESSION_SAVE_PATH,
 		NV_LOGS_DIR,
@@ -97,6 +141,7 @@ elseif( $step == 2 )
 		NV_DATADIR . "/ip_files",
 	);
 	
+	// Them vao cac file trong thu muc data va file cau hinh tam
 	$array_file_data = nv_scandir( NV_ROOTDIR . "/" . NV_DATADIR, "/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/" );
 	foreach( $array_file_data as $file_i )
 	{
@@ -104,6 +149,7 @@ elseif( $step == 2 )
 	}
 	$array_dir[] = $file_config_temp;
 
+	// Them vao file .htaccess va web.config
 	if( ! empty( $sys_info['supports_rewrite'] ) )
 	{
 		if( $sys_info['supports_rewrite'] == "rewrite_mode_apache" )
@@ -116,6 +162,7 @@ elseif( $step == 2 )
 		}
 	}
 
+	// Cau hinh FTP
 	$ftp_check_login = 0;
 	$global_config['ftp_server'] = $nv_Request->get_string( 'ftp_server', 'post', 'localhost' );
 	$global_config['ftp_port'] = $nv_Request->get_int( 'ftp_port', 'post', 21 );
@@ -132,6 +179,7 @@ elseif( $step == 2 )
 		'error' => ''
 	);
 
+	// CHMOD bang FTP
 	$modftp = $nv_Request->get_int( 'modftp', 'post', 0 );
 	if( $modftp )
 	{
@@ -202,6 +250,7 @@ elseif( $step == 2 )
 		}
 	}
 
+	// Kiem tra quyen ghi doi voi nhung file tren
 	$nextstep = 1;
 	$array_dir_check = array();
 	foreach( $array_dir as $dir )
