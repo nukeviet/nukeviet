@@ -18,12 +18,9 @@ $submenu['config'] = $lang_module['config'];
 
 if ( $module_name == "webtools" )
 {
-    $allow_func = array( 
-        'main', 'clearsystem', 'sitemapPing', 'checkupdate', 'siteDiagnostic', 'keywordRank', 'config'
-    );
-    $menu_top = array( 
-        "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_webtools'] 
-    );
+    $allow_func = array( 'main', 'clearsystem', 'sitemapPing', 'checkupdate', 'siteDiagnostic', 'keywordRank', 'config' );
+    $menu_top = array( "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_webtools'] );
+	
     define( 'NV_IS_FILE_WEBTOOLS', true );
 }
 
