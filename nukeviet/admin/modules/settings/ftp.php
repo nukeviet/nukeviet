@@ -30,7 +30,7 @@ if( $nv_Request->isset_request( 'tetectftp', 'post' ) )
 	$ftp_user_name = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_name', 'post', '', 1, 255 ) );
 	$ftp_user_pass = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_pass', 'post', '', 1, 255 ) );
 
-	if( ! $array_config['ftp_server'] or ! $array_config['ftp_user_name'] or ! $array_config['ftp_user_pass'] )
+	if( ! $ftp_server or ! $ftp_user_name or ! $ftp_user_pass )
 	{
 		die( 'ERROR|' . $lang_module['ftp_error_full'] );
 	}
