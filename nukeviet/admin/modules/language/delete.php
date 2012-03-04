@@ -9,8 +9,12 @@
 
 if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
+$xtpl = new XTemplate( "delete.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+
 $dirlang = filter_text_input( 'dirlang', 'get', '' );
-$page_title = $language_array[$dirlang]['name'] . " -> " . $lang_module['nv_admin_read'];
+$page_title = $language_array[$dirlang]['name'] . ": " . $lang_module['nv_admin_read'];
 
 if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . session_id() ) )
 {
@@ -78,17 +82,36 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` DROP `author_" . $dirlang . "`" );
 			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `lang_" . $dirlang . "`" );
 			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `update_" . $dirlang . "`" );
-			$contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_deleteok'] . "</strong></p>";
+			
+			$contents = $lang_module['nv_lang_deleteok'];
 		}
 		else
 		{
-			$contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_delete_error'] . "</strong></p>";
+			$contents = $lang_module['nv_lang_delete_error'];
 		}
 	
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid'] );
-	
-		$contents .= implode( "<br />", $array_filename );
-		$contents .= "<meta http-equiv=\"Refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\" />";
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid'] );		
+		
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting" );
+		$xtpl->assign( 'INFO', $contents );
+		
+		if( ! empty( $array_filename ) )
+		{
+			$i = 0;
+			foreach( $array_filename as $name )
+			{
+				if( empty( $name ) ) continue;
+				
+				$xtpl->assign( 'CLASS', ++ $i % 2 ? ' class="second"' : '' );
+				$xtpl->assign( 'NAME', $name );
+				$xtpl->parse( 'main.info.loop' );
+			}
+			
+			$xtpl->parse( 'main.info' );
+		}
+		
+		$xtpl->parse( 'main' );
+		$contents = $xtpl->text( 'main' );
 	
 		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );

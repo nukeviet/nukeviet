@@ -11,6 +11,10 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_lang_check'];
 
+$xtpl = new XTemplate( "check.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+
 $array_lang_exit = array();
 
 $result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
@@ -26,8 +30,10 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 
 if( empty( $array_lang_exit ) )
 {
-	$contents = "<center><br /><b>" . $lang_module['nv_lang_error_exit'] . "</b></center>";
-	$contents .= "<meta http-equiv=\"Refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\" />";
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting" );
+
+	$xtpl->parse( 'empty' );
+	$contents = $xtpl->text( 'empty' );
 
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
@@ -79,41 +85,35 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 }
 $array_files = array();
 
-$contents .= "<br /><form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"get\"><center>";
-$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-$contents .= "<table class=\"tab1\">";
-$contents .= "<tr><td align=\"right\">" . $lang_module['nv_lang_data'] . ":</td><td><select name=\"typelang\">\n";
-$contents .= " <option value=\"\">" . $lang_module['nv_admin_sl3'] . "</option>\n";
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
 
 foreach( $language_array as $key => $value )
 {
 	if( in_array( $key, $array_lang_exit ) )
 	{
-		$sl = ( $key == $typelang ) ? ' selected="selected"' : '';
-		$contents .= "<option value=\"" . $key . "\" " . $sl . ">" . $value['name'] . "</option>\n";
+		$xtpl->assign( 'LANGUAGE', array( 'key' => $key, 'selected' => ( $key == $typelang ) ? ' selected="selected"' : '', 'title' => $value['name'] ) );
+
+		$xtpl->parse( 'main.language' );
 	}
 }
-$contents .= "</select></td></tr>\n";
-
-$contents .= "<tr><td align=\"right\">" . $lang_module['nv_lang_data_source'] . ":</td><td><select name=\"sourcelang\">\n";
-$contents .= " <option value=\"\">" . $lang_module['nv_admin_sl3'] . "</option>\n";
 
 foreach( $language_array_source as $key )
 {
 	if( in_array( $key, $array_lang_exit ) )
 	{
-		$sl = ( $key == $sourcelang ) ? ' selected="selected"' : '';
-		$contents .= "<option value=\"" . $key . "\" " . $sl . ">" . $language_array[$key]['name'] . "</option>\n";
+		$xtpl->assign( 'LANGUAGE_SOURCE', array( 'key' => $key, 'selected' => ( $key == $sourcelang ) ? ' selected="selected"' : '', 'title' => $language_array[$key]['name'] ) );
+
+		$xtpl->parse( 'main.language_source' );
 	}
 }
-$contents .= "</select></td></tr>\n";
 
-$contents .= "<tr><td align=\"right\"> " . $lang_module['nv_lang_area'] . ":</td><td><select name=\"idfile\">\n";
-$contents .= " <option value=\"0\">" . $lang_module['nv_lang_checkallarea'] . "</option>\n";
-
-$query = "SELECT `idfile`, `module`, `admin_file` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` ORDER BY `idfile` ASC";
-$result = $db->sql_query( $query );
+$sql = "SELECT `idfile`, `module`, `admin_file` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` ORDER BY `idfile` ASC";
+$result = $db->sql_query( $sql );
 
 while( list( $idfile_i, $module, $admin_file, ) = $db->sql_fetchrow( $result ) )
 {
@@ -129,30 +129,22 @@ while( list( $idfile_i, $module, $admin_file, ) = $db->sql_fetchrow( $result ) )
 			$langsitename = $admin_file;
 			break;
 	}
-	
-	$sl = ( $idfile_i == $idfile ) ? ' selected="selected"' : '';
-	$contents .= " <option value=\"" . $idfile_i . "\" " . $sl . ">" . $module . " " . $langsitename . "</option>\n";
+		
+	$xtpl->assign( 'LANGUAGE_AREA', array( 'key' => $idfile_i, 'selected' => ( $idfile_i == $idfile ) ? ' selected="selected"' : '', 'title' => $module . " " . $langsitename ) );
+
+	$xtpl->parse( 'main.language_area' );
 	$array_files[$idfile_i] = $module . " " . $langsitename;
 }
 
-$contents .= "</select></td></tr>\n";
-
-$contents .= "<tr><td align=\"right\">" . $lang_module['nv_check_type'] . ":</td><td><select name=\"check_type\">\n";
 foreach( $language_check_type as $key => $value )
 {
-	$sl = ( $key == $check_type ) ? ' selected="selected"' : '';
-	$contents .= "<option value=\"" . $key . "\" " . $sl . ">" . $value . "</option>\n";
+	$xtpl->assign( 'LANGUAGE_CHECK_TYPE', array( 'key' => $key, 'selected' => ( $key == $check_type ) ? ' selected="selected"' : '', 'title' => $value ) );
+
+	$xtpl->parse( 'main.language_check_type' );
 }
 
-$contents .= "</select></td></tr>\n";
-
-$contents .= "</table>";
-$contents .= "<input type=\"hidden\" name =\"submit\" value=\"1\" />";
-$contents .= "<input type=\"submit\" value=\"" . $lang_module['nv_admin_submit'] . "\" /></center>";
-$contents .= "</form>";
-$contents .= "<br />";
-
 $submit = $nv_Request->get_int( 'submit', 'post,get', 0 );
+
 if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typelang, $array_lang_exit ) )
 {
 	$array_where = array();
@@ -192,57 +184,48 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 	}
 	
 	if( ! empty( $array_lang_data ) )
-	{
-		$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-		$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"submit\" value=\"1\" />";
-		$contents .= "<input type=\"hidden\" name =\"typelang\" value=\"" . $typelang . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"sourcelang\" value=\"" . $sourcelang . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"check_type\" value=\"" . $check_type . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"idfile\" value=\"" . $idfile . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"savedata\" value=\"" . md5( $global_config['sitekey'] . session_id() ) . "\" />";
+	{	
+		$xtpl->assign( 'DATA', array(
+			'typelang' => $typelang,
+			'sourcelang' => $sourcelang,
+			'check_type' => $check_type,
+			'idfile' => $idfile,
+			'savedata' => md5( $global_config['sitekey'] . session_id() )
+		) );
 	
 		foreach( $array_lang_data as $idfile_i => $array_lang_file )
 		{
-			$contents .= "<table summary=\"\" class=\"tab1\">\n";
-			$contents .= "<caption>" . $array_files[$idfile_i] . "</caption>";
-			$contents .= "<col width=\"40\" />";
-			$contents .= "<col width=\"200\" />";
-			$contents .= "<thead>";
-			$contents .= "<tr>";
-			$contents .= "<td>" . $lang_module['nv_lang_nb'] . "</td>";
-			$contents .= "<td>" . $lang_module['nv_lang_key'] . "</td>";
-			$contents .= "<td>" . $lang_module['nv_lang_value'] . "</td>";
-			$contents .= "</tr>";
-			$contents .= "</thead>";
-		
+			$xtpl->assign( 'CAPTION', $array_files[$idfile_i] );
+			
 			foreach( $array_lang_file as $id => $row )
-			{
-				++$i;
-				$class = ( $i % 2 ) ? " class=\"second\"" : "";
-				$contents .= "<tbody" . $class . ">\n";
-				$contents .= "<tr>";
-				$contents .= "<td align=\"center\">" . $i . "</td>";
-				$contents .= "<td align=\"right\">" . $row['lang_key'] . "</td>";
-				$contents .= "<td align=\"left\"><input type=\"text\" value=\"" . nv_htmlspecialchars( $row['datalang'] ) . "\" name=\"pozlang[" . $id . "]\" size=\"90\" /><br />" . nv_htmlspecialchars( $row['sourcelang'] ) . "</td>";
-				$contents .= "</tr>";
-				$contents .= "</tbody>";
+			{				
+				$xtpl->assign( 'ROW', array(
+					'class' => ( ++ $i % 2 ) ? " class=\"second\"" : "",
+					'stt' => $i,
+					'lang_key' => $row['lang_key'],
+					'datalang' => nv_htmlspecialchars( $row['datalang'] ),
+					'id' => $id,
+					'sourcelang' => nv_htmlspecialchars( $row['sourcelang'] ),
+				) );
+				
+				$xtpl->parse( 'main.data.lang.loop' );
 			}
 			
-			$contents .= "</table>";
+			$xtpl->parse( 'main.data.lang' );
 		}
 		
-		$contents .= "<center><input type=\"submit\" value=\"" . $lang_module['nv_admin_edit_save'] . "\" /></center>";
-		$contents .= "</form>";
+		$xtpl->parse( 'main.data' );
 	}
 	else
 	{
-		$contents .= "<br /><br /><center><b>" . $lang_module['nv_lang_check_no_data'] . "</b></center><br /><br /><br /><br />";
+		$xtpl->parse( 'main.nodata' );
 	}
 	
 	unset( $array_lang_data, $array_files );
 }
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

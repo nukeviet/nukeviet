@@ -34,19 +34,7 @@ if( $module_name == "language" )
 		"custom_title" => $lang_global['mod_language']
 	);
 	
-	$allow_func = array(
-		'main',
-		'read',
-		'write',
-		'copy',
-		'edit',
-		'delete',
-		'setting',
-		'download',
-		'interface',
-		'check',
-		'countries'
-	);
+	$allow_func = array( 'main', 'read', 'write', 'copy', 'edit', 'delete', 'setting', 'download', 'interface', 'check', 'countries' );
 
 	define( 'ALLOWED_HTML_LANG', 'a, b, blockquote, br, em, h1, h2, h3, h4, h5, h6, hr, p, span, strong' );
 	
@@ -58,6 +46,12 @@ if( $module_name == "language" )
 
 	$dirlang = filter_text_input( 'dirlang', 'get', '' );
 
+	/**
+	 * nv_admin_add_field_lang()
+	 * 
+	 * @param mixed $dirlang
+	 * @return
+	 */
 	function nv_admin_add_field_lang( $dirlang )
 	{
 		global $module_name, $db_config, $db, $language_array;

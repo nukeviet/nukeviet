@@ -118,24 +118,22 @@ function nv_admin_write_lang( $dirlang, $idfile )
 
 			if( $admin_file )
 			{
-				$content_lang .= "\nif (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){\n";
+				$content_lang .= "\nif( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) ";
 			}
 			else
 			{
-				$content_lang .= "\nif (!defined( 'NV_MAINFILE' )) {\n";
+				$content_lang .= "\nif( ! defined( 'NV_MAINFILE' ) ) ";
 			}
 
-			$content_lang .= " die('Stop!!!');\n";
-			$content_lang .= "}\n";
-			$content_lang .= "\n";
+			$content_lang .= " die( 'Stop!!!' );\n\n";
 
 			$array_translator['info'] = ( isset( $array_translator['info'] ) ) ? $array_translator['info'] : "";
 
-			$content_lang .= "\$lang_translator['author'] =\"" . $array_translator['author'] . "\";\n";
-			$content_lang .= "\$lang_translator['createdate'] =\"" . $array_translator['createdate'] . "\";\n";
-			$content_lang .= "\$lang_translator['copyright'] =\"" . $array_translator['copyright'] . "\";\n";
-			$content_lang .= "\$lang_translator['info'] =\"" . $array_translator['info'] . "\";\n";
-			$content_lang .= "\$lang_translator['langtype'] =\"" . $array_translator['langtype'] . "\";\n";
+			$content_lang .= "\$lang_translator['author'] = \"" . $array_translator['author'] . "\";\n";
+			$content_lang .= "\$lang_translator['createdate'] = \"" . $array_translator['createdate'] . "\";\n";
+			$content_lang .= "\$lang_translator['copyright'] = \"" . $array_translator['copyright'] . "\";\n";
+			$content_lang .= "\$lang_translator['info'] = \"" . $array_translator['info'] . "\";\n";
+			$content_lang .= "\$lang_translator['langtype'] = \"" . $array_translator['langtype'] . "\";\n";
 			$content_lang .= "\n";
 			$content_lang_no_check = "";
 
@@ -228,6 +226,10 @@ function nv_admin_write_lang( $dirlang, $idfile )
 	}
 }
 
+$xtpl = new XTemplate( "write.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+
 $include_lang = "";
 $page_title = $language_array[$dirlang]['name'];
 
@@ -235,14 +237,24 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 {
 	$idfile = $nv_Request->get_int( 'idfile', 'get' );
 	nv_mkdir( NV_ROOTDIR . "/language/", $dirlang );
-	$contents = nv_admin_write_lang( $dirlang, $idfile );
+	$content = nv_admin_write_lang( $dirlang, $idfile );
 	
-	if( empty( $contents ) )
-	{
-		$include_lang = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
-		$contents = $lang_module['nv_lang_wite_ok'] . ": " . $include_lang;
-		$contents .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=interface\" />";
+	if( empty( $content ) )
+	{		
+		$xtpl->assign( 'INCLUDE_LANG', str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) ) );
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=interface" );
+		
+		$xtpl->parse( 'main.complete' );
 	}
+	else
+	{
+		$xtpl->assign( 'CONTENT', $content );
+	
+		$xtpl->parse( 'main.error' );
+	}
+	
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
 	
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
@@ -256,40 +268,54 @@ elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_st
 	{
 		nv_mkdir( NV_ROOTDIR . "/language/", $dirlang );
 		
-		$query = "SELECT `idfile`, `author_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` ORDER BY `idfile` ASC";
-		$result = $db->sql_query( $query );
+		$sql = "SELECT `idfile`, `author_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` ORDER BY `idfile` ASC";
+		$result = $db->sql_query( $sql );
 		
-		$contents = "";
+		$content = "";
 		$array_filename = array();
 		while( list( $idfile, $author_lang ) = $db->sql_fetchrow( $result ) )
 		{
-			$contents = nv_admin_write_lang( $dirlang, $idfile );
+			$content = nv_admin_write_lang( $dirlang, $idfile );
 			
-			if( ! empty( $contents ) )
+			if( ! empty( $content ) )
 			{
 				break;
 			}
 			else
 			{
 				$array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
-
 			}
 		}
 
-		if( empty( $contents ) )
+		if( empty( $content ) )
 		{
-			$contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_wite_ok'] . "</strong></p>";
-			$contents .= implode( "<br />", $array_filename );
-			$array_lang_no_check = array_unique( $array_lang_no_check );
-			//$contents .= "<br /><br /><b>file lang no check</b><br />";
-			//$contents .= implode ( "<br />", $array_lang_no_check );
-			$contents .= "<meta http-equiv=\"Refresh\" content=\"10;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\" />";
+			// Tam thoi bo qua cai nay
+			// $array_lang_no_check = array_unique( $array_lang_no_check );
+			
+			$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting" );
+			
+			$i = 0;
+			foreach( $array_filename as $name )
+			{
+				$xtpl->assign( 'CLASS', ++ $i % 2 ? ' class="second"' : '' );
+				$xtpl->assign( 'NAME', $name );
+				$xtpl->parse( 'main.write_allfile_complete.loop' );
+			}
+			
+			$xtpl->parse( 'main.write_allfile_complete' );
+		}
+		else
+		{
+			$xtpl->parse( 'main.error_write_allfile' );
 		}
 	}
 	else
 	{
-		$contents = $lang_module['nv_error_write_file'];
+		$xtpl->parse( 'main.error_write_allfile' );
 	}
+	
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
 	
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );

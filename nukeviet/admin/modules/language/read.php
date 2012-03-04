@@ -149,6 +149,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 		}
 	
 		$read_type = intval( $global_config['read_type'] );
+		
 		while( list( $lang_key, $lang_value ) = each( $temp_lang ) )
 		{
 			$check_type_update = false;
@@ -185,7 +186,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 }
 
 $dirlang = filter_text_input( 'dirlang', 'get', '' );
-$page_title = $language_array[$dirlang]['name'] . " -> " . $lang_module['nv_admin_read'];
+$page_title = $language_array[$dirlang]['name'] . ": " . $lang_module['nv_admin_read'];
 
 if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . session_id() ) )
 {
@@ -233,9 +234,22 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 		
 		$nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
 		
-		$contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_readok'] . "</strong></p>";
-		$contents .= implode( "<br />", $array_filename );
-		$contents .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=interface\" />";
+		$xtpl = new XTemplate( "read.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl->assign( 'LANG', $lang_module );
+		$xtpl->assign( 'GLANG', $lang_global );
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=interface" );
+		
+		foreach( $array_filename as $name )
+		{
+			if( ! $name ) continue;
+			
+			$xtpl->assign( 'NAME', $name );
+			$xtpl->assign( 'CLASS', ++ $i % 2 ? ' class="second"' : '' );
+			$xtpl->parse( 'main.loop' );
+		}
+		
+		$xtpl->parse( 'main' );
+		$contents = $xtpl->text( 'main' );
 		
 		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );
@@ -243,6 +257,6 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 	}
 }
 
-Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
+Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 
 ?>

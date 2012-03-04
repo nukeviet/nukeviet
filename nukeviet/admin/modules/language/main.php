@@ -11,7 +11,11 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_lang_data'];
 
-$sql = "SELECT lang, setup FROM `" . $db_config['prefix'] . "_setup_language`";
+$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+
+$sql = "SELECT `lang`, `setup` FROM `" . $db_config['prefix'] . "_setup_language`";
 $result = $db->sql_query( $sql );
 
 $array_lang_setup = array();
@@ -40,7 +44,7 @@ if( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( "ac
 	
 	$allow_sitelangs = array_unique( $allow_sitelangs );
 
-	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( implode( ",", $allow_sitelangs ) ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'allow_sitelangs'";
+	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( implode( ",", $allow_sitelangs ) ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_sitelangs'";
 	$result = $db->sql_query( $query );
 
 	$temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
@@ -48,9 +52,11 @@ if( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( "ac
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], " langkey : " . $keylang . " [ " . $temp . " ]", $admin_info['userid'] );
 	nv_save_file_config_global();
 
-	$contents = "<br /><br /><br /><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
-	$contents .= "<meta http-equiv=\"Refresh\" content=\"1;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "\" />";
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 
+	$xtpl->parse( 'activelang' );
+	$contents = $xtpl->text( 'activelang' );
+	
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -190,11 +196,14 @@ elseif( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $gl
 			}
 		}
 		$nv_Request->set_Cookie( 'data_lang', $keylang, NV_LIVE_COOKIE_TIME );
-		$contents_setup = "<br /><br /><center><br /><b>" . $lang_module['nv_data_setup_ok'] . "</b></center>";
-		$contents_setup .= "<meta http-equiv=\"Refresh\" content=\"5;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&" . NV_OP_VARIABLE . "=main\" />";
 
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=settings&" . NV_OP_VARIABLE . "=main" );
+
+		$xtpl->parse( 'contents_setup' );
+		$contents = $xtpl->text( 'contents_setup' );
+		
 		include ( NV_ROOTDIR . "/includes/header.php" );
-		echo nv_admin_theme( $contents_setup );
+		echo nv_admin_theme( $contents );
 		include ( NV_ROOTDIR . "/includes/footer.php" );
 		exit();
 	}
@@ -205,7 +214,7 @@ elseif( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) and
 
 	$lang = $deletekeylang;
 
-	$sql = "SELECT title, module_file, module_data FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` ORDER BY `weight` ASC";
+	$sql = "SELECT `title`, `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` ORDER BY `weight` ASC";
 	$result_del_module = $db->sql_query( $sql );
 
 	while( list( $title, $module_file, $module_data ) = $db->sql_fetchrow( $result_del_module ) )
@@ -243,18 +252,7 @@ elseif( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) and
 
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
 	exit();
-
 }
-
-$contents .= "<table summary=\"\" class=\"tab1\">\n";
-$contents .= "  <thead>\n";
-$contents .= "  <tr>";
-$contents .= "      <td>" . $lang_module['nv_lang_key'] . "</td>";
-$contents .= "      <td>" . $lang_module['nv_lang_name'] . "</td>";
-$contents .= "      <td style=\"width: 120px\">" . $lang_module['nv_lang_slsite'] . "</td>";
-$contents .= "      <td></td>";
-$contents .= "  </tr>";
-$contents .= "  </thead>\n";
 
 $a = 0;
 foreach( $global_config['allow_adminlangs'] as $keylang )
@@ -262,55 +260,60 @@ foreach( $global_config['allow_adminlangs'] as $keylang )
 	$delete = "";
 	$allow_sitelangs = "";
 
+	$xtpl->assign( 'ROW', array(
+		'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+		'keylang' => $keylang,
+		'name' => $language_array[$keylang]['name'],
+	) );
+	
 	if( isset( $array_lang_setup[$keylang] ) and $array_lang_setup[$keylang] == 1 )
 	{
 		if( ! in_array( $keylang, $global_config['allow_sitelangs'] ) )
-		{
-			$setup = "<span class=\"delete_icon\"><a onclick=\"return confirm(nv_is_del_confirm[0])\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;deletekeylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() . "deletekeylang" ) . "\">" . $lang_module['nv_setup_delete'] . "</a></span>";
+		{			
+			$xtpl->assign( 'DELETE', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;deletekeylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() . "deletekeylang" ) );
+			
+			$xtpl->parse( 'main.loop.setup_delete' );
 		}
 		else
 		{
-			$setup = $lang_module['nv_setup'];
+			$xtpl->parse( 'main.loop.setup_note' );
 		}
 	
 		if( $keylang != $global_config['site_lang'] )
 		{
-			$selected_yes = $selected_no = "";
+			$selected_yes = $selected_no = " ";
 		
 			if( in_array( $keylang, $global_config['allow_sitelangs'] ) )
 			{
-				$selected_yes = "selected=\"selected\"";
+				$selected_yes = " selected=\"selected\"";
 			}
 			else
 			{
-				$selected_no = "selected=\"selected\"";
+				$selected_no = " selected=\"selected\"";
 			}
-
-			$allow_sitelangs = "<select onchange=\"top.location.href=this.options[this.selectedIndex].value;return;\">
-                        <option " . $selected_yes . " value=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=1&amp;checksess=" . md5( "activelang_" . $keylang . session_id() ) . "\">" . $lang_global['yes'] . "</option>
-                        <option " . $selected_no . " value=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=0&amp;checksess=" . md5( "activelang_" . $keylang . session_id() ) . "\">" . $lang_global['no'] . "</option>
-                      </select>";
+			
+			$xtpl->assign( 'ALLOW_SITELANGS', array(
+				'selected_yes' => $selected_yes,
+				'selected_no' => $selected_no,
+				'url_yes' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=1&amp;checksess=" . md5( "activelang_" . $keylang . session_id() ),
+				'url_no' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=0&amp;checksess=" . md5( "activelang_" . $keylang . session_id() )
+			) );
+			
+			$xtpl->parse( 'main.loop.allow_sitelangs' );
 		}
 		else
 		{
-			$allow_sitelangs = $lang_module['site_lang'];
+			$xtpl->parse( 'main.loop.allow_sitelangs_note' );
 		}
 	}
 	else
-	{
-		$setup = "<span class=\"default_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() ) . "\">" . $lang_module['nv_setup_new'] . "</a></span>";
+	{		
+		$xtpl->assign( 'INSTALL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() ) );
+		
+		$xtpl->parse( 'main.loop.setup_new' );
 	}
-
-	$class = ( $a % 2 ) ? " class=\"second\"" : "";
-	$contents .= "<tbody" . $class . ">\n";
-	$contents .= "  <tr>";
-	$contents .= "      <td>" . $keylang . "</td>";
-	$contents .= "      <td>" . $language_array[$keylang]['name'] . "</td>";
-	$contents .= "      <td style=\"text-align: center;\">" . $allow_sitelangs . "</td>";
-	$contents .= "      <td>" . $setup . "</td>";
-	$contents .= "  </tr>";
-	$contents .= "  </tbody>\n";
-	++$a;
+	
+	$xtpl->parse( 'main.loop' );
 }
 $contents .= "  </table>\n";
 
@@ -318,6 +321,9 @@ $contents .= "<div class=\"quote\" style=\"width:97.5%;\">\n";
 $contents .= "<blockquote><span>" . $lang_module['nv_data_note'] . "</span></blockquote>\n";
 $contents .= "</div>\n";
 $contents .= "<div class=\"clear\"></div>\n";
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

@@ -11,6 +11,12 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $select_options = array();
 
+$contents = '';
+
+$xtpl = new XTemplate( "edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+
 if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get_string( 'savedata', 'post' ) == md5( session_id() ) )
 {
 	$numberfile = 0;
@@ -73,7 +79,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 }
 
 $dirlang = filter_text_input( 'dirlang', 'get', '' );
-$page_title = $lang_module['nv_admin_edit'] . ' -> ' . $language_array[$dirlang]['name'];
+$page_title = $lang_module['nv_admin_edit'] . ': ' . $language_array[$dirlang]['name'];
 
 if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get_string( 'checksess', 'get' ) == md5( $nv_Request->get_int( 'idfile', 'get' ) . session_id() ) )
 {
@@ -97,80 +103,62 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 			eval( '$array_translator = ' . $author_lang . ';' );
 		}
 		
-		//$array_translator = unserialize( base64_decode( $author_lang ) );
-		$i = 1;
-		$contents .= "<div class=\"quote\" style=\"width:98%;\">\n";
-		$contents .= "<blockquote><span>" . $lang_module['nv_lang_note_edit'] . " : " . ALLOWED_HTML_LANG . "</span></blockquote>\n";
-		$contents .= "</div>\n";
-		$contents .= "<div class=\"clear\"></div>\n";
-
-		$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-		$contents .= "<input type=\"hidden\" name =\"pozauthor[langtype]\"value=\"" . $array_translator['langtype'] . "\" />";
-		$contents .= "<table summary=\"\" class=\"tab1\">\n";
-		$contents .= "<thead>";
-		$contents .= "<tr>";
-		$contents .= "<td>" . $lang_module['nv_lang_nb'] . "</td>";
-		$contents .= "<td>" . $lang_module['nv_lang_key'] . "</td>";
-		$contents .= "<td>" . $lang_module['nv_lang_value'] . "</td>";
-		$contents .= "</tr>";
-		$contents .= "</thead>";
-	
+		$xtpl->assign( 'ALLOWED_HTML_LANG', ALLOWED_HTML_LANG );
+		$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+		$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+		$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+		
+		$xtpl->assign( 'MODULE_NAME', $module_name );
+		$xtpl->assign( 'OP', $op );
+		$xtpl->assign( 'LANGTYPE', $array_translator['langtype'] );
+		
+		$i = 1;	
 		foreach( $array_translator as $lang_key => $lang_value )
 		{
 			if( $lang_key != "langtype" )
-			{
-				++$i;
-				$class = ( $i % 2 ) ? " class=\"second\"" : "";
-				$contents .= "<tbody" . $class . ">\n";
-				$contents .= "<tr>";
-				$contents .= "<td></td>";
-				$contents .= "<td>" . $lang_key . "</td>";
-				$contents .= "<td><input type=\"text\" value='" . nv_htmlspecialchars( $lang_value ) . "' name=\"pozauthor[" . $lang_key . "]\" size=\"90\"/></td>";
-				$contents .= "</tr>";
-				$contents .= "</tbody>";
+			{				
+				$xtpl->assign( 'ARRAY_TRANSLATOR', array(
+					'class' => ( ++ $i % 2 ) ? " class=\"second\"" : "",
+					'lang_key' => $lang_key,
+					'value' => nv_htmlspecialchars( $lang_value )
+				) );
+				
+				$xtpl->parse( 'main.array_translator' );
 			}
 		}
 	
-		for( $a = 1; $a <= 2; ++$a )
-		{
-			++$i;
-			$class = ( $i % 2 ) ? " class=\"second\"" : "";
-			$contents .= "<tbody" . $class . ">\n";
-			$contents .= "<tr>";
-			$contents .= "<td align=\"center\">" . $a . "</td>";
-			$contents .= "<td align=\"right\"><input type=\"text\" value=\"\" name=\"pozlangkey[" . $a . "]\" size=\"10\" /></td>";
-			$contents .= "<td align=\"left\"><input type=\"text\" value=\"\" name=\"pozlangval[" . $a . "]\" size=\"90\" /></td>";
-			$contents .= "</tr>";
-			$contents .= "</tbody>";
+		for( $a = 1; $a <= 2; ++ $a )
+		{			
+			$xtpl->assign( 'ARRAY_BODY', array(
+				'class' => ( ++ $i % 2 ) ? " class=\"second\"" : "",
+				'key' => $a,
+			) );
+			
+			$xtpl->parse( 'main.array_body' );
 		}
 
-		$query = "SELECT `id`, `lang_key`, `lang_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "` WHERE `idfile`='" . $idfile . "' ORDER BY `id` ASC";
-		$result = $db->sql_query( $query );
+		$sql = "SELECT `id`, `lang_key`, `lang_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "` WHERE `idfile`='" . $idfile . "' ORDER BY `id` ASC";
+		$result = $db->sql_query( $sql );
 	
 		while( list( $id, $lang_key, $lang_value ) = $db->sql_fetchrow( $result ) )
-		{
-			++$i;
-			$class = ( $i % 2 ) ? " class=\"second\"" : "";
-			$contents .= "<tbody" . $class . ">\n";
-			$contents .= "<tr>";
-			$contents .= "<td align=\"center\">" . $a . "</td>";
-			$contents .= "<td align=\"right\">" . $lang_key . "</td>";
-			$contents .= "<td align=\"left\"><input type=\"text\" value=\"" . nv_htmlspecialchars( $lang_value ) . "\" name=\"pozlang[" . $id . "]\" size=\"90\" /></td>";
-			$contents .= "</tr>";
-			$contents .= "</tbody>";
-			++$a;
+		{			
+			$xtpl->assign( 'ARRAY_DATA', array(
+				'class' => ( ++ $i % 2 ) ? " class=\"second\"" : "",
+				'key' => $a ++,
+				'lang_key' => $lang_key,
+				'value' => nv_htmlspecialchars( $lang_value ),
+				'id' => $id
+			) );
+			
+			$xtpl->parse( 'main.array_data' );
 		}
-	
-		$contents .= "</table>";
-		$contents .= "<br />";
-		$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"idfile\"value=\"" . $idfile . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"dirlang\"value=\"" . $dirlang . "\" />";
-		$contents .= "<input type=\"hidden\" name =\"savedata\" value=\"" . md5( session_id() ) . "\" />";
-		$contents .= "<center><input type=\"submit\" value=\"" . $lang_module['nv_admin_edit_save'] . "\" /></center>";
-		$contents .= "</form>";
-		$contents .= "<br />";
+		
+		$xtpl->assign( 'IDFILE', $idfile );
+		$xtpl->assign( 'DIRLANG', $dirlang );
+		$xtpl->assign( 'SAVEDATA', md5( session_id() ) );
+		
+		$xtpl->parse( 'main' );
+		$contents .= $xtpl->text( 'main' );
 	}
 }
 

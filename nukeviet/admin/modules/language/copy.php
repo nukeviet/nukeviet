@@ -23,11 +23,17 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 	}
 }
 
+$xtpl = new XTemplate( "copy.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+
 if( empty( $array_lang_exit ) )
 {
-	$contents = "<center><br /><b>" . $lang_module['nv_lang_error_exit'] . "</b></center>";
-	$contents .= "<meta http-equiv=\"Refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\" />";
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting" );
 
+	$xtpl->parse( 'empty' );
+	$contents = $xtpl->text( 'empty' );
+	
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -72,9 +78,11 @@ if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_
 		}
 	
 		$nv_Request->set_Cookie( 'dirlang', $newslang, NV_LIVE_COOKIE_TIME );
-	
-		$contents = "<br /><br /><p align=\"center\"><strong>" . $lang_module['nv_lang_copyok'] . "</strong></p>";
-		$contents .= "<meta http-equiv=\"Refresh\" content=\"3;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=interface\" />";
+			
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=interface" );
+
+		$xtpl->parse( 'copyok' );
+		$contents = $xtpl->text( 'copyok' );
 	
 		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );
@@ -92,39 +100,44 @@ foreach( $lang_array_file_temp as $value )
 	}
 }
 
-$contents .= "<br /><br /><br /><form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-$contents .= "<input type=\"hidden\" name =\"checksess\" value=\"" . md5( session_id() ) . "\" />";
-$contents .= "<center><select name=\"newslang\">\n";
-$contents .= "<option value=\"\">" . $lang_module['nv_admin_sl1'] . "</option>\n";
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
+$xtpl->assign( 'CHECKSESS', md5( session_id() ) );
 
 foreach( $language_array as $key => $value )
 {
-	if( ! in_array( $key, $array_lang_exit ) and ! in_array( $key, $lang_array_file ) ) $contents .= "<option value=\"" . $key . "\">" . $value['name'] . "</option>\n";
+	if( ! in_array( $key, $array_lang_exit ) and ! in_array( $key, $lang_array_file ) )
+	{
+		$xtpl->assign( 'NEWSLANG', array( 'key' => $key, 'title' => $value['name'] ) );
+		$xtpl->parse( 'main.newslang' );
+	}
 }
-$contents .= "</select>\n";
-
-$contents .= "<select name=\"typelang\">\n";
-$contents .= "<option value=\"\">" . $lang_module['nv_admin_sl2'] . "</option>\n";
 
 if( in_array( "vi", $array_lang_exit ) )
 {
-	$contents .= "<option value=\"-vi\">" . $lang_module['nv_lang_copy'] . ":" . $language_array['vi']['name'] . " " . $lang_module['nv_lang_encstring'] . "</option>\n";
+	$xtpl->assign( 'NAME', $language_array['vi']['name'] );
+	$xtpl->parse( 'main.typelang' );
 }
 
 foreach( $language_array as $key => $value )
 {
 	if( in_array( $key, $array_lang_exit ) )
 	{
-		$contents .= "<option value=\"" . $key . "\">" . $lang_module['nv_lang_copy'] . ":" . $value['name'] . "</option>\n";
+		$xtpl->assign( 'TYPELANG', array(
+			'key' => $key,
+			'title' => $lang_module['nv_lang_copy'] . ": " . $value['name']
+		) );
+		
+		$xtpl->parse( 'main.typelang_1' );
 	}
 }
 
-$contents .= "</select>\n";
-$contents .= "<input type=\"submit\" value=\"" . $lang_module['nv_admin_submit'] . "\" /></center>";
-$contents .= "</form>";
-$contents .= "<br />";
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

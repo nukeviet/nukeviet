@@ -19,16 +19,23 @@ $array_type = array(
 	$lang_module['nv_setting_type_2']
 );
 
+$xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+
 if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . "seting" ) )
 {
 	$read_type = $nv_Request->get_int( 'read_type', 'post', 0 );
-	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  '" . $read_type . "' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'read_type'";
-	$result = $db->sql_query( $query );
+	$sql = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  '" . $read_type . "' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'read_type'";
+	$result = $db->sql_query( $sql );
 	
 	nv_save_file_config_global();
 	
-	$contents = "<br /><br /><br /><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
-	$contents .= "<meta http-equiv=\"Refresh\" content=\"2;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting\">";
+	$xtpl->assign( 'INFO', $lang_module['nv_setting_save'] );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting" );
+	
+	$xtpl->parse( 'info' );
+	$contents = $xtpl->text( 'info' );
 	
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
@@ -91,8 +98,11 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "s
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setting_save'], " allow sitelangs : " . $allow_sitelangs . ", allow adminlangs :" . $allow_adminlangs, $admin_info['userid'] );
 	nv_save_file_config_global();
 
-	$contents = "<br /><br /><br /><p align=\"center\">" . $lang_module['nv_setting_save'] . "</p>";
-	$contents .= "<meta http-equiv=\"Refresh\" content=\"2;URL=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting\" />\n";
+	$xtpl->assign( 'INFO', $lang_module['nv_setting_save'] );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting" );
+	
+	$xtpl->parse( 'info' );
+	$contents = $xtpl->text( 'info' );
 
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
@@ -121,22 +131,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$array_lang_setup[] = trim( $row['lang'] );
 }
 
-$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-$contents .= "<table summary=\"\" class=\"tab1\" style=\"width:100%\">\n";
-$contents .= "  <caption>" . $lang_module['nv_lang_show'] . "</caption>";
-$contents .= "  <tr class=\"thead_box\">";
-$contents .= "      <td style=\"width: 50px\">" . $lang_module['nv_lang_key'] . "</td>";
-$contents .= "      <td style=\"width: 180px\">" . $lang_module['nv_lang_name'] . "</td>";
-$contents .= "      <td style=\"width: 120px\">" . $lang_module['nv_lang_slsite'] . "</td>";
-$contents .= "      <td style=\"width: 120px\">" . $lang_module['nv_lang_sladm'] . "</td>";
-$contents .= "      <td></td>";
-$contents .= "  </tr>";
-$contents .= "  </table>";
 
 $a = 0;
-$contents .= "<div style=\"margin-bottom:5px\">";
-$contents .= "<table summary=\"\" class=\"tab1\" style=\"width:100%\">\n";
-
 while( list( $key, $value ) = each( $language_array ) )
 {
 	$arr_lang_func = array();
@@ -158,69 +154,45 @@ while( list( $key, $value ) = each( $language_array ) )
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=download&amp;dirlang=" . $key . "&amp;checksess=" . md5( "downloadallfile" . session_id() ) . "\">" . $lang_module['nv_admin_download'] . "</a>";
 	}
 
-	$class = ( $a % 2 ) ? " class=\"second\"" : "";
-	$contents .= "<tbody" . $class . ">\n";
-	$contents .= "  <tr>";
-	$contents .= "      <td style=\"width: 50px; text-align: center\">" . $key . "</td>";
-	$contents .= "      <td style=\"width: 180px\">" . $value['name'] . "</td>";
-
-	if( $check_lang_exit and in_array( $key, $array_lang_setup ) )
-	{
-		$contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_sitelangs[]\" value=\"" . $key . "\" type=\"checkbox\" " . ( in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "" ) . " /></td>";
-	}
-	else
-	{
-		$contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_sitelangs[]\" value=\"" . $key . "\" type=\"checkbox\" disabled=\"disabled\" /></td>";
-	}
-
-	if( $check_lang_exit )
-	{
-		$contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_adminlangs[]\" value=\"" . $key . "\" type=\"checkbox\" " . ( in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "" ) . " /></td>";
-	}
-	else
-	{
-		$contents .= "<td style=\"width: 120px; text-align: center\"><input name=\"allow_adminlangs[]\" value=\"" . $key . "\" type=\"checkbox\" disabled=\"disabled\" /></td>";
-	}
-
 	if( ! empty( $arr_lang_func ) and ! in_array( $key, $global_config['allow_adminlangs'] ) )
 	{
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delete&amp;dirlang=" . $key . "&amp;checksess=" . md5( "deleteallfile" . session_id() ) . "\">" . $lang_module['nv_admin_delete'] . "</a>";
 	}
-
-	$contents .= "<td style=\"text-align: center\">" . implode( " - ", $arr_lang_func ) . "</td>";
-	$contents .= "</tr>";
-	$contents .= "</tbody>";
-	++$a;
+	
+	$xtpl->assign( 'ROW', array(
+		'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+		'key' => $key,
+		'name' => $value['name'],
+		'arr_lang_func' => implode( " - ", $arr_lang_func ),
+		'allow_sitelangs' => ( $check_lang_exit and in_array( $key, $array_lang_setup ) ) ? ( in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled=\"disabled\"',
+		'allow_adminlangs' => ( $check_lang_exit ) ? ( in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled=\"disabled\"',
+	) );
+	
+	$xtpl->parse( 'main.loop' );
 }
-
-$contents .= "</table>";
-$contents .= "</div>";
-
-$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\" value=\"" . $module_name . "\" />";
-$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\" value=\"" . $op . "\" />";
-$contents .= "<input type=\"hidden\" name =\"checksessshow\" value=\"" . md5( session_id() . "show" ) . "\" />";
-$contents .= "<center><input type=\"submit\" value=\"" . $lang_module['nv_admin_edit_save'] . "\" /></center>";
-$contents .= "</form>";
-
-$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-$contents .= "<table summary=\"\" class=\"tab1\">\n";
-$contents .= "      <caption>" . $lang_module['nv_setting_read'] . "</caption>";
 
 foreach( $array_type as $key => $value )
-{
-	$contents .= "  <tr>";
-	$contents .= "      <td></td>";
-	$contents .= "      <td><input name=\"read_type\" value=\"" . $key . "\" type=\"radio\" " . ( $global_config['read_type'] == $key ? " checked=\"checked\"" : "" ) . " /> " . $value . "</td>";
-	$contents .= "  </tr>";
+{	
+	$xtpl->assign( 'TYPE', array(
+		'key' => $key,
+		'checked' => $global_config['read_type'] == $key ? " checked=\"checked\"" : "",
+		'title' => $value
+	) );
+	
+	$xtpl->parse( 'main.type' );
 }
 
-$contents .= "</table>";
-$contents .= "<br />";
-$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\" value=\"" . $module_name . "\" />";
-$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\" value=\"" . $op . "\" />";
-$contents .= "<input type=\"hidden\" name =\"checksessseting\" value=\"" . md5( session_id() . "seting" ) . "\" />";
-$contents .= "<center><input type=\"submit\" value=\"" . $lang_module['nv_admin_edit_save'] . "\" /></center>\n";
-$contents .= "</form>";
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
+$xtpl->assign( 'CHECKSESSSHOW', md5( session_id() . "show" ) );
+$xtpl->assign( 'CHECKSESSSETING', md5( session_id() . "seting" ) );
+	
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

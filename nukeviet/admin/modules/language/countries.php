@@ -14,7 +14,7 @@ $page_title = $lang_module['countries'];
 $array_lang_setup = array();
 $array_lang_setup[] = array( '', $lang_module['site_lang'] );
 
-$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
+$sql = "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
 $result = $db->sql_query( $sql );
 
 while( list( $lang_i ) = $db->sql_fetchrow( $result ) )
@@ -31,10 +31,7 @@ if( $nv_Request->isset_request( 'countries', 'post' ) == 1 )
 
 	$content_config = "<?php\n\n";
 	$content_config .= NV_FILEHEAD . "\n\n";
-	$content_config .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
-	$content_config .= "{\n";
-	$content_config .= "    die( 'Stop!!!' );\n";
-	$content_config .= "}\n\n";
+	$content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
 	$content_config .= "\$config_geo = array();\n";
 
 	foreach( $countries as $key => $value )
