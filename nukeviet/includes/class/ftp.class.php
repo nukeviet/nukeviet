@@ -161,7 +161,12 @@ class NVftp
 		}
 		
 		// Dang nhap
-		if( ftp_login( $this->conn_id, $this->user, $this->pass ) )
+		if( ftp_login( $this->conn_id, $this->user, $this->pass ) === false )
+		{
+			$this->error = NV_FTP_ERR_LOGIN;
+			return false;
+		}
+		else
 		{
 			$this->logined = true;
 		}
@@ -505,8 +510,8 @@ class NVftp
 	 */
 	public function close()
 	{
-		if( ! $this->check_login() ) return false;
-
+		if( ! is_resource( $this->conn_id ) ) return false;
+		
 		ftp_close( $this->conn_id );
 	}
 
