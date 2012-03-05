@@ -13,15 +13,21 @@ $page_title = $lang_module['autoinstall_module_install'];
 
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
 
+$xtpl = new XTemplate( "install_module.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
+
 if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 {
 	require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 
-	$allowfolder = array(
-		'modules',
-		'themes',
-		'uploads'
-	);
+	$allowfolder = array( 'modules', 'themes', 'uploads' );
 
 	$error = "";
 	$info = array();
@@ -75,16 +81,6 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		}
 	}
 
-	$xtpl = new XTemplate( "install_module.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'GLANG', $lang_global );
-	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
-	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
-	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-	$xtpl->assign( 'MODULE_NAME', $module_name );
-	$xtpl->assign( 'OP', $op );
-
 	if( ! empty( $error ) )
 	{
 		$xtpl->assign( 'ERROR', $error );
@@ -120,15 +116,6 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 }
 else
 {
-	$xtpl = new XTemplate( "install_module.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'GLANG', $lang_global );
-	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
-	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
-	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-	$xtpl->assign( 'MODULE_NAME', $module_name );
-	$xtpl->assign( 'OP', $op );
-
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 

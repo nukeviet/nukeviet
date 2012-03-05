@@ -47,63 +47,35 @@ if( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) 
 $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] ) );
 $modules_data = array();
 
-$sql_data = "SELECT title FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `virtual`='1' ORDER BY `addtime` ASC";
-$result = $db->sql_query( $sql_data );
+$sql = "SELECT title FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `virtual`='1' ORDER BY `addtime` ASC";
+$result = $db->sql_query( $sql );
 
 $page_title = $lang_module['vmodule_add'];
 
-$contents .= "<div class=\"quote\" style=\"width:98%\">\n";
-$contents .= "<blockquote><span>" . $lang_module['vmodule_blockquote'] . "</span></blockquote>\n";
-$contents .= "</div>\n";
-$contents .= "<div class=\"clear\"></div>\n";
+$xtpl = new XTemplate( "vmodule.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
+$xtpl->assign( 'CHECKSS', md5( session_id() . "addmodule" ) );
 
-$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-$contents .= "<input name=\"checkss\" type=\"hidden\" value=\"" . md5( session_id() . "addmodule" ) . "\" />\n";
-$contents .= "<table summary=\"\" class=\"tab1\">\n";
-$contents .= "<tbody>";
-$contents .= "<tr>";
-$contents .= "<td align=\"right\" style=\"width: 250px\"><strong>" . $lang_module['vmodule_name'] . ": </strong></td>\n";
-$contents .= "<td><input style=\"width: 450px\" name=\"title\" type=\"text\" value=\"" . $title . "\" maxlength=\"255\" /></td>\n";
-$contents .= "</tr>";
-$contents .= "</tbody>";
-$contents .= "<tbody class=\"second\">";
-$contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['vmodule_file'] . ": </strong></td>\n";
-$contents .= "<td>";
-$contents .= "<select name=\"module_file\">\n";
-$contents .= "<option value=\"\">" . $lang_module['vmodule_select'] . "</option>\n";
+$xtpl->assign( 'TITLE', $title );
+$xtpl->assign( 'NOTE', $note );
 
 while( list( $modfile_i ) = $db->sql_fetchrow( $result ) )
 {
 	if( in_array( $modfile_i, $modules_exit ) )
 	{
-		$sl = "";
-		
-		if( $modfile_i == $modfile )
-		{
-			$sl = " selected=\"selected\"";
-		}
-		
-		$contents .= "<option value=\"" . $modfile_i . "\" " . $sl . ">" . $modfile_i . "</option>\n";
+		$xtpl->assign( 'MODFILE', array( 'key' => $modfile_i, 'selected' => ( $modfile_i == $modfile ) ? " selected=\"selected\"" : "" ) );
+		$xtpl->parse( 'main.modfile' );
 	}
 }
-$contents .= "</select>\n";
-$contents .= "</td>";
-$contents .= "</tr>";
-$contents .= "</tbody>";
-$contents .= "<tbody>";
-$contents .= "<tr>";
-$contents .= "<td valign=\"top\" align=\"right\"><br /><strong>" . $lang_module['vmodule_note'] . ":</strong></td>\n";
-$contents .= "<td>";
-$contents .= "<textarea style=\"width: 450px\" name=\"note\" cols=\"80\" rows=\"5\">" . $note . "</textarea>";
-$contents .= "</td>";
-$contents .= "</tr>";
-$contents .= "</tbody>";
-$contents .= "</table>";
-$contents .= "<br /><center><input name=\"submit1\" type=\"submit\" value=\"" . $lang_global['submit'] . "\" /></center>\n";
-$contents .= "</form>\n";
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

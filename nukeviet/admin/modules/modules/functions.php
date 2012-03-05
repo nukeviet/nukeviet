@@ -12,29 +12,12 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 $submenu['setup'] = $lang_module['modules'];
 $submenu['vmodule'] = $lang_module['vmodule_add'];
 
-$allow_func = array(
-	'main',
-	'list',
-	'setup',
-	'vmodule',
-	'edit',
-	'del',
-	'change_inmenu',
-	'change_submenu',
-	'change_weight',
-	'change_act',
-	'empty_mod',
-	'recreate_mod',
-	'show',
-	'change_func_weight',
-	'change_custom_name',
-	'change_func_submenu',
-	'change_block_weight'
-);
+$allow_func = array( 'main', 'list', 'setup', 'vmodule', 'edit', 'del', 'change_inmenu', 'change_submenu', 'change_weight', 'change_act', 'empty_mod', 'recreate_mod', 'show', 'change_func_weight', 'change_custom_name', 'change_func_submenu', 'change_block_weight' );
 
 if( defined( "NV_IS_GODADMIN" ) )
 {
 	$submenu['autoinstall'] = $lang_module['autoinstall'];
+	
 	$allow_func[] = "autoinstall";
 	$allow_func[] = "install_module";
 	$allow_func[] = "install_package";
@@ -52,21 +35,33 @@ if( $module_name == "modules" )
 
 	define( 'NV_IS_FILE_MODULES', true );
 
+	/**
+	 * nv_parse_vers()
+	 * 
+	 * @param mixed $ver
+	 * @return
+	 */
 	function nv_parse_vers( $ver )
 	{
 		return $ver[1] . "-" . nv_date( "d/m/Y", $ver[2] );
 	}
 
+	/**
+	 * nv_fix_module_weight()
+	 * 
+	 * @return
+	 */
 	function nv_fix_module_weight()
 	{
 		global $db;
-		$query = "SELECT `title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
-		$result = $db->sql_query( $query );
+		
+		$sql = "SELECT `title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
+		$result = $db->sql_query( $sql );
 		$weight = 0;
 		
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
-			++$weight;
+			++ $weight;
 			$sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `weight`=" . $weight . " WHERE `title`=" . $db->dbescape( $row['title'] );
 			$db->sql_query( $sql );
 		}
@@ -74,6 +69,12 @@ if( $module_name == "modules" )
 		nv_del_moduleCache( 'modules' );
 	}
 
+	/**
+	 * nv_fix_subweight()
+	 * 
+	 * @param mixed $mod
+	 * @return
+	 */
 	function nv_fix_subweight( $mod )
 	{
 		global $db;
@@ -91,6 +92,13 @@ if( $module_name == "modules" )
 		}
 	}
 
+	/**
+	 * nv_setup_block_module()
+	 * 
+	 * @param mixed $mod
+	 * @param integer $func_id
+	 * @return
+	 */
 	function nv_setup_block_module( $mod, $func_id = 0 )
 	{
 		global $db;
@@ -142,6 +150,13 @@ if( $module_name == "modules" )
 		nv_del_moduleCache( "themes" );
 	}
 
+	/**
+	 * nv_setup_data_module()
+	 * 
+	 * @param mixed $lang
+	 * @param mixed $module_name
+	 * @return
+	 */
 	function nv_setup_data_module( $lang, $module_name )
 	{
 		global $db, $db_config, $global_config;
@@ -251,6 +266,7 @@ if( $module_name == "modules" )
 				$new_funcs = preg_replace( $global_config['check_op_file'], "\\1", $new_funcs );
 				$new_funcs = array_flip( $new_funcs );
 				$array_keys = array_keys( $new_funcs );
+				
 				foreach( $array_keys as $func )
 				{
 					$show_func = 0;
@@ -340,486 +356,371 @@ if( $module_name == "modules" )
 		return $return;
 	}
 
+	/**
+	 * main_theme()
+	 * 
+	 * @param mixed $contents
+	 * @return
+	 */
 	function main_theme( $contents )
 	{
-		$return = "";
-		$return .= "<div id=\"" . $contents['div_id'] . "\"></div>\n";
-		$return .= "<script type=\"text/javascript\">\n";
-		$return .= $contents['ajax'] . "\n";
-		$return .= "</script>\n";
-
-		return $return;
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+		$xtpl->assign( 'CONTENT', $contents );
+		
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 
+	/**
+	 * list_theme()
+	 * 
+	 * @param mixed $contents
+	 * @param mixed $act_modules
+	 * @param mixed $deact_modules
+	 * @param mixed $bad_modules
+	 * @param mixed $weight_list
+	 * @return
+	 */
 	function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $weight_list )
 	{
-		$return = "";
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl->assign( 'CAPTION', $contents['caption'] );
 	
 		if( ! empty( $act_modules ) )
 		{
-			$return .= "<table summary=\"" . $contents['caption'][0] . "\" class=\"tab1\">\n";
-			$return .= "<caption>" . $contents['caption'][0] . "</caption>\n";
-			$return .= "<col style=\"width:60px;white-space:nowrap\" />\n";
-			$return .= "<col style=\"width:110px;white-space:nowrap\" />\n";
-			$return .= "<col span=\"5\" valign=\"top;white-space:nowrap\" />\n";
-			$return .= "<col style=\"white-space:nowrap\" />\n";
-			$return .= "<thead>\n";
-			$return .= "<tr>\n";
-		
 			foreach( $contents['thead'] as $thead )
 			{
-				$return .= "<td>" . $thead . "</td>\n";
+				$xtpl->assign( 'THEAD', $thead );
+				$xtpl->parse( 'main.act_modules.thead' );
 			}
-		
-			$return .= "</tr>\n";
-			$return .= "</thead>\n";
-		
+				
 			$a = 0;
 			foreach( $act_modules as $mod => $values )
 			{
-				$class = ( $a % 2 ) ? " class=\"second\"" : "";
-				$return .= "<tbody" . $class . ">\n";
-				$return .= "<tr>\n";
-				$return .= "<td><select name=\"change_weight_" . $mod . "\" id=\"change_weight_" . $mod . "\" onchange=\"" . $values['weight'][1] . "\">\n";
-			
+				$xtpl->assign( 'ROW', array(
+					'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+					'mod' => $mod,
+					'values' => $values,
+					'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
+					'submenu_checked' => $values['submenu'][0] ? " checked=\"checked\"" : "",
+					'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : ""
+				) );
+				
 				foreach( $weight_list as $new_weight )
 				{
-					$return .= "<option value=\"" . $new_weight . "\"" . ( $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) . ">" . $new_weight . "</option>\n";
+					$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) );
+					$xtpl->parse( 'main.act_modules.loop.weight' );
 				}
-			
-				$return .= "</select></td>\n";
-				$return .= "<td><span class=\"search_icon\"><a href=\"" . $values['title'][0] . "\">" . $values['title'][1] . "</a></span></td>\n";
-				$return .= "<td>" . $values['custom_title'] . "</td>\n";
-				$return .= "<td>" . $values['version'] . "</td>\n";
-				$return .= "<td><input name=\"change_inmenu_" . $mod . "\" id=\"change_inmenu_" . $mod . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['in_menu'][1] . "\"" . ( $values['in_menu'][0] ? " checked=\"checked\"" : "" ) . " /></td>\n";
-				$return .= "<td><input name=\"change_submenu_" . $mod . "\" id=\"change_submenu_" . $mod . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['submenu'][1] . "\"" . ( $values['submenu'][0] ? " checked=\"checked\"" : "" ) . " /></td>\n";
-
-				$return .= "<td><input name=\"change_act_" . $mod . "\" id=\"change_act_" . $mod . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['act'][1] . "\" checked=\"checked\"" . ( ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : "" ) . " /></td>\n";
-				$return .= "<td><span class=\"edit_icon\"><a href=\"" . $values['edit'][0] . "\">" . $values['edit'][1] . "</a></span>\n";
-				$return .= "&nbsp;-&nbsp;<span class=\"default_icon\"><a href=\"javascript:void(0);\" onclick=\"" . $values['recreate'][0] . "\">" . $values['recreate'][1] . "</a></span>\n";
-			
-				if( ! empty( $values['del'] ) ) $return .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"" . $values['del'][0] . "\">" . $values['del'][1] . "</a></span>\n";
-			
-				$return .= "</td>\n";
-				$return .= "</tr>\n";
-				$return .= "</tbody>\n";
-			
-				++$a;
+				
+				if( ! empty( $values['del'] ) ) $xtpl->parse( 'main.act_modules.loop.delete' );
+				
+				$xtpl->parse( 'main.act_modules.loop' );
 			}
-			$return .= "</table>\n";
+			
+			$xtpl->parse( 'main.act_modules' );
 		}
 
 		if( ! empty( $deact_modules ) )
-		{
-			$return .= "<table summary=\"" . $contents['caption'][1] . "\" class=\"tab1\">\n";
-			$return .= "<caption>" . $contents['caption'][1] . "</caption>\n";
-			$return .= "<col style=\"width:60px;white-space:nowrap\" />\n";
-			$return .= "<col style=\"width:110px;white-space:nowrap\" />\n";
-			$return .= "<col span=\"5\" valign=\"top;white-space:nowrap\" />\n";
-			$return .= "<col style=\"white-space:nowrap\" />\n";
-			$return .= "<thead>\n";
-			$return .= "<tr>\n";
-		
+		{		
 			foreach( $contents['thead'] as $thead )
 			{
-				$return .= "<td>" . $thead . "</td>\n";
+				$xtpl->assign( 'THEAD', $thead );
+				$xtpl->parse( 'main.deact_modules.thead' );
 			}
 		
-			$return .= "</tr>\n";
-			$return .= "</thead>\n";
-			$a = 0;
-		
+			$a = 0;		
 			foreach( $deact_modules as $mod => $values )
-			{
-				$class = ( $a % 2 ) ? " class=\"second\"" : "";
-				$return .= "<tbody" . $class . ">\n";
-				$return .= "<tr>\n";
-				$return .= "<td><select name=\"change_weight_" . $mod . "\" id=\"change_weight_" . $mod . "\" onchange=\"" . $values['weight'][1] . "\">\n";
-			
+			{			
+				$xtpl->assign( 'ROW', array(
+					'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+					'mod' => $mod,
+					'values' => $values,
+					'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
+					'submenu_checked' => $values['submenu'][0] ? " checked=\"checked\"" : "",
+					'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : ""
+				) );
+				
 				foreach( $weight_list as $new_weight )
 				{
-					$return .= "<option value=\"" . $new_weight . "\"" . ( $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) . ">" . $new_weight . "</option>\n";
+					$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) );
+					$xtpl->parse( 'main.deact_modules.loop.weight' );
 				}
 			
-				$return .= "</select></td>\n";
-				$return .= "<td><span class=\"search_icon\"><a href=\"" . $values['title'][0] . "\">" . $values['title'][1] . "</a></span></td>\n";
-				$return .= "<td>" . $values['custom_title'] . "</td>\n";
-				$return .= "<td>" . $values['version'] . "</td>\n";
-				$return .= "<td><input name=\"change_inmenu_" . $mod . "\" id=\"change_inmenu_" . $mod . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['in_menu'][1] . "\"" . ( $values['in_menu'][0] ? " checked=\"checked\"" : "" ) . " /></td>\n";
-				$return .= "<td><input name=\"change_submenu_" . $mod . "\" id=\"change_submenu_" . $mod . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['submenu'][1] . "\"" . ( $values['submenu'][0] ? " checked=\"checked\"" : "" ) . " /></td>\n";
-
-				$return .= "<td><input name=\"change_act_" . $mod . "\" id=\"change_act_" . $mod . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['act'][1] . "\" /></td>\n";
-				$return .= "<td><span class=\"edit_icon\"><a href=\"" . $values['edit'][0] . "\">" . $values['edit'][1] . "</a></span>\n";
-				$return .= "&nbsp;-&nbsp;<span class=\"default_icon\"><a href=\"javascript:void(0);\" onclick=\"" . $values['recreate'][0] . "\">" . $values['recreate'][1] . "</a></span>\n";
-				if( ! empty( $values['del'] ) ) $return .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"" . $values['del'][0] . "\">" . $values['del'][1] . "</a></span>\n";
-				$return .= "</td>\n";
-				$return .= "</tr>\n";
-				$return .= "</tbody>\n";
-				++$a;
+				if( ! empty( $values['del'] ) ) $xtpl->parse( 'main.deact_modules.loop.delete' );
+				
+				$xtpl->parse( 'main.deact_modules.loop' );
 			}
-		
-			$return .= "</table>\n";
+			
+			$xtpl->parse( 'main.deact_modules' );
 		}
 
 		if( ! empty( $bad_modules ) )
-		{
-			$return .= "<table summary=\"" . $contents['caption'][2] . "\" class=\"tab1\">\n";
-			$return .= "<caption>" . $contents['caption'][2] . "</caption>\n";
-			$return .= "<col style=\"width:60px;white-space:nowrap\" />\n";
-			$return .= "<col style=\"width:110px;white-space:nowrap\" />\n";
-			$return .= "<col span=\"5\" valign=\"top;white-space:nowrap\" />\n";
-			$return .= "<col style=\"white-space:nowrap\" />\n";
-			$return .= "<thead>\n";
-			$return .= "<tr>\n";
-		
+		{		
 			foreach( $contents['thead'] as $thead )
 			{
-				$return .= "<td>" . $thead . "</td>\n";
+				$xtpl->assign( 'THEAD', $thead );
+				$xtpl->parse( 'main.bad_modules.thead' );
 			}
-		
-			$return .= "</tr>\n";
-			$return .= "</thead>\n";
-		
+			
 			$a = 0;
 			foreach( $bad_modules as $mod => $values )
-			{
-				$class = ( $a % 2 ) ? " class=\"second\"" : "";
-				$return .= "<tbody" . $class . ">\n";
-				$return .= "<tr>\n";
-				$return .= "<td><select name=\"change_weight_" . $mod . "\" id=\"change_weight_" . $mod . "\" onchange=\"" . $values['weight'][1] . "\">\n";
-			
+			{		
+				$xtpl->assign( 'ROW', array(
+					'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+					'mod' => $mod,
+					'values' => $values,
+					'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
+					'submenu_checked' => $values['submenu'][0] ? " checked=\"checked\"" : "",
+					'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : ""
+				) );
+				
 				foreach( $weight_list as $new_weight )
 				{
-					$return .= "<option value=\"" . $new_weight . "\"" . ( $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) . ">" . $new_weight . "</option>\n";
+					$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) );
+					$xtpl->parse( 'main.bad_modules.loop.weight' );
 				}
-			
-				$return .= "</select></td>\n";
-				$return .= "<td><span class=\"search_icon\"><a href=\"" . $values['title'][0] . "\">" . $values['title'][1] . "</a></span></td>\n";
-				$return .= "<td>" . $values['custom_title'] . "</td>\n";
-				$return .= "<td>" . $values['version'] . "</td>\n";
-				$return .= "<td><input name=\"change_inmenu_" . $mod . "\" id=\"change_inmenu_" . $mod . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['in_menu'][1] . "\"" . ( $values['in_menu'][0] ? " checked=\"checked\"" : "" ) . " /></td>\n";
-				$return .= "<td><input name=\"change_submenu_" . $mod . "\" id=\"change_submenu_" . $mod . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['submenu'][1] . "\"" . ( $values['submenu'][0] ? " checked=\"checked\"" : "" ) . " /></td>\n";
-
-				$return .= "<td><input name=\"change_act_" . $mod . "\" id=\"change_act_" . $mod . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['act'][1] . "\" /></td>\n";
-				$return .= "<td><span class=\"edit_icon\"><a href=\"" . $values['edit'][0] . "\">" . $values['edit'][1] . "</a></span>\n";
-				$return .= "&nbsp;-&nbsp;<span class=\"default_icon\"><a href=\"javascript:void(0);\" onclick=\"" . $values['recreate'][0] . "\">" . $values['recreate'][1] . "</a></span>\n";
-			
-				if( ! empty( $values['del'] ) ) $return .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"" . $values['del'][0] . "\">" . $values['del'][1] . "</a></span>\n";
-			
-				$return .= "</td>\n";
-				$return .= "</tr>\n";
-				$return .= "</tbody>\n";
-			
-				++$a;
+				
+				if( ! empty( $values['del'] ) ) $xtpl->parse( 'main.bad_modules.loop.delete' );
+				
+				$xtpl->parse( 'main.bad_modules.loop' );
 			}
-			$return .= "</table>\n";
+			
+			$xtpl->parse( 'main.bad_modules' );
 		}
 
-		return $return;
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 
+	/**
+	 * edit_theme()
+	 * 
+	 * @param mixed $contents
+	 * @return
+	 */
 	function edit_theme( $contents )
 	{
-		$return = "<br />";
-		$return .= "<form method=\"post\" action=\"" . $contents['action'] . "\">\n";
-		$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-		$return .= "<col valign=\"top\" width=\"150px\" />\n";
-		$return .= "<tr>\n";
-		$return .= "<td>" . $contents['custom_title'][0] . ":</td>\n";
-		$return .= "<td><input name=\"custom_title\" id=\"custom_title\" type=\"text\" value=\"" . $contents['custom_title'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['custom_title'][2] . "\" /></td>\n";
-		$return .= "</tr>\n";
-		$return .= "</table>\n";
-
-		$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-		$return .= "<col valign=\"top\" width=\"150px\" />\n";
-		$return .= "<tr>\n";
-		$return .= "<td>" . $contents['admin_title'][0] . ":</td>\n";
-		$return .= "<td><input name=\"admin_title\" id=\"admin_title\" type=\"text\" value=\"" . $contents['admin_title'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['admin_title'][2] . "\" /></td>\n";
-		$return .= "</tr>\n";
-		$return .= "</table>\n";
-
-		$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-		$return .= "<col valign=\"top\" width=\"150px\" />\n";
-		$return .= "<tr>\n";
-		$return .= "<td>" . $contents['theme'][0] . ":</td>\n";
-		$return .= "<td><select name=\"theme\" id=\"theme\">\n";
-		$return .= "<option value=\"\">" . $contents['theme'][1] . "</option>\n";
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl->assign( 'CONTENT', $contents );
 	
 		foreach( $contents['theme'][2] as $tm )
 		{
-			$return .= "<option value=\"" . $tm . "\"" . ( $tm == $contents['theme'][3] ? " selected=\"selected\"" : "" ) . ">" . $tm . "</option>\n";
+			$xtpl->assign( 'THEME', array( 'key' => $tm, 'selected' => $tm == $contents['theme'][3] ? " selected=\"selected\"" : "" ) );
+			$xtpl->parse( 'main.theme' );
 		}
 	
-		$return .= "</select></td>\n";
-		$return .= "<td></td>\n";
-		$return .= "</tr>\n";
-		$return .= "</table>\n";
-
 		if( ! empty( $contents['mobile'][2] ) )
-		{
-			$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-			$return .= "<col valign=\"top\" width=\"150px\" />\n";
-			$return .= "<tr>\n";
-			$return .= "<td>" . $contents['mobile'][0] . ":</td>\n";
-			$return .= "<td><select name=\"mobile\" id=\"mobile\">\n";
-			$return .= "<option value=\"\">" . $contents['mobile'][1] . "</option>\n";
-		
+		{		
 			foreach( $contents['mobile'][2] as $tm )
 			{
-				$return .= "<option value=\"" . $tm . "\"" . ( $tm == $contents['mobile'][3] ? " selected=\"selected\"" : "" ) . ">" . $tm . "</option>\n";
+				$xtpl->assign( 'MOBILE', array( 'key' => $tm, 'selected' => $tm == $contents['mobile'][3] ? " selected=\"selected\"" : "" ) );
+				$xtpl->parse( 'main.mobile.loop' );
 			}
-		
-			$return .= "</select></td>\n";
-			$return .= "<td></td>\n";
-			$return .= "</tr>\n";
-			$return .= "</table>\n";
+			
+			$xtpl->parse( 'main.mobile' );
 		}
-
-		$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-		$return .= "<col valign=\"top\" width=\"150px\" />\n";
-		$return .= "<col valign=\"top\" width=\"310px\" />\n";
-		$return .= "<tr>\n";
-		$return .= "<td>" . $contents['keywords'][0] . ":</td>\n";
-		$return .= "<td><input name=\"keywords\" id=\"keywords\" type=\"text\" value=\"" . $contents['keywords'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['keywords'][2] . "\" /></td>\n";
-		$return .= "<td>" . $contents['keywords'][3] . "</td>\n";
-		$return .= "</tr>\n";
-		$return .= "</table>\n";
 
 		if( isset( $contents['who_view'] ) )
 		{
-			$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-			$return .= "<col valign=\"top\" width=\"150px\" />\n";
-			$return .= "<tr>\n";
-			$return .= "<td>" . $contents['who_view'][0] . ":</td>\n";
-			$return .= "<td><select name=\"who_view\" id=\"who_view\" onchange=\"nv_sh('who_view','groups_list')\">\n";
-		
 			foreach( $contents['who_view'][1] as $k => $w )
 			{
-				$return .= "<option value=\"" . $k . "\"" . ( $k == $contents['who_view'][2] ? " selected=\"selected\"" : "" ) . ">" . $w . "</option>\n";
+				$xtpl->assign( 'WHO_VIEW', array( 'key' => $k, 'selected' => $k == $contents['who_view'][2] ? " selected=\"selected\"" : "", 'title' => $w ) );
+				$xtpl->parse( 'main.who_view.loop' );
 			}
 		
-			$return .= "</select></td>\n";
-			$return .= "<td></td>\n";
-			$return .= "</tr>\n";
-			$return .= "</table>\n";
-
-			$return .= "<div id=\"groups_list\" style=\"" . ( $contents['who_view'][2] == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" ) . "\">\n";
-			$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-			$return .= "<col valign=\"top\" width=\"150px\" />\n";
-			$return .= "<tr>\n";
-			$return .= "<td>" . $contents['groups_view'][0] . ":</td>\n";
-			$return .= "<td>\n";
-		
+			$xtpl->assign( 'DISPLAY', $contents['who_view'][2] == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" );
+				
 			foreach( $contents['groups_view'][1] as $group_id => $grtl )
 			{
-				$return .= "<p><input name=\"groups_view[]\" type=\"checkbox\" value=\"" . $group_id . "\"";
-				if( in_array( $group_id, $contents['groups_view'][2] ) ) $return .= " checked=\"checked\"";
-				$return .= " />&nbsp;" . $grtl . "</p>\n";
+				$xtpl->assign( 'GROUPS_VIEW', array( 
+					'key' => $group_id,
+					'checked' => in_array( $group_id, $contents['groups_view'][2] ) ? " checked=\"checked\"" : "",
+					'title' => $grtl
+				) );
+				
+				$xtpl->parse( 'main.who_view.groups_view' );
 			}
-		
-			$return .= "</td>\n";
-			$return .= "</tr>\n";
-			$return .= "</table>\n";
-			$return .= "</div>\n";
+				
+			$xtpl->parse( 'main.who_view' );
 		}
 	
-		$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-		$return .= "<col valign=\"top\" width=\"150px\" />\n";
-		$return .= "<tr>\n";
-		$return .= "<td>" . $contents['act'][0] . ":</td>\n";
-		$return .= "<td><input name=\"act\" id=\"act\" type=\"checkbox\" value=\"1\" " . ( ( $contents['act'][1] == 1 ) ? ' checked="checked"' : '' ) . " /></td>\n";
-		$return .= "</tr>\n";
-		$return .= "</table>\n";
-
+		$xtpl->assign( 'ACTIVE', ( $contents['act'][1] == 1 ) ? ' checked="checked"' : '' );
+	
 		if( isset( $contents['rss'] ) )
 		{
-			$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-			$return .= "<col valign=\"top\" width=\"150px\" />\n";
-			$return .= "<tr>\n";
-			$return .= "<td>" . $contents['rss'][0] . ":</td>\n";
-			$return .= "<td><input name=\"rss\" id=\"rss\" type=\"checkbox\" value=\"1\" " . ( ( $contents['rss'][1] == 1 ) ? ' checked="checked"' : '' ) . " /></td>\n";
-			$return .= "</tr>\n";
-			$return .= "</table>\n";
+			$xtpl->assign( 'RSS', ( $contents['rss'][1] == 1 ) ? ' checked="checked"' : '' );
+			$xtpl->parse( 'main.rss' );
 		}
-	
-		$return .= "<br />\n";
-		$return .= "<table style=\"margin-bottom:8px;width:800px;\">\n";
-		$return .= "<col valign=\"top\" width=\"150px\" />\n";
-		$return .= "<tr>\n";
-		$return .= "<td><input name=\"save\" id=\"save\" type=\"hidden\" value=\"1\" /></td>\n";
-		$return .= "<td><input name=\"go_add\" type=\"submit\" value=\"" . $contents['submit'] . "\" /></td>\n";
-		$return .= "</tr>\n";
-		$return .= "</table>\n";
-
-		$return .= "</form>\n";
-		return $return;
+		
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 
+	/**
+	 * show_funcs_theme()
+	 * 
+	 * @param mixed $contents
+	 * @return
+	 */
 	function show_funcs_theme( $contents )
 	{
-		$return = "";
-		$return .= "<div id=\"" . $contents['div_id'][0] . "\"></div>\n";
-		$return .= "<div>\n";
-		$return .= "<div style=\"DISPLAY:inline;FLOAT:left;PADDING:0;WIDTH:800px;\" id=\"" . $contents['div_id'][1] . "\"></div>\n";
-		$return .= "<div class=\"clear\"></div>\n";
-		$return .= "</div>\n";
-
-		$return .= "<script type=\"text/javascript\">\n";
-	
-		if( ! empty( $contents['ajax'][0] ) ) $return .= $contents['ajax'][0] . "\n";
-		if( ! empty( $contents['ajax'][1] ) ) $return .= $contents['ajax'][1] . "\n";
-	
-		$return .= "</script>\n";
-
-		return $return;
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "show_funcs_theme.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+		$xtpl->assign( 'CONTENT', $contents );
+		
+		if( ! empty( $contents['ajax'][0] ) )
+		{
+			$xtpl->parse( 'main.ajax0' );
+			$xtpl->parse( 'main.loading0' );
+		}
+		
+		if( ! empty( $contents['ajax'][1] ) )
+		{
+			$xtpl->parse( 'main.ajax1' );
+			$xtpl->parse( 'main.loading1' );
+		}
+		
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 
+	/**
+	 * aj_show_funcs_theme()
+	 * 
+	 * @param mixed $contents
+	 * @return
+	 */
 	function aj_show_funcs_theme( $contents )
 	{
-		$return = "";
-		$return .= "<table summary=\"" . $contents['caption'] . "\" class=\"tab1\">\n";
-		$return .= "<caption>" . $contents['caption'] . "</caption>\n";
-		$return .= "<col style=\"width:60px;white-space:nowrap\" />\n";
-		$return .= "<thead>\n";
-		$return .= "<tr>\n";
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "aj_show_funcs_theme.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl->assign( 'CONTENT', $contents );
 	
 		foreach( $contents['thead'] as $key => $thead )
 		{
-			$return .= "<td>" . $thead . "</td>\n";
+			$xtpl->assign( 'THEAD', $thead );
+			$xtpl->parse( 'main.thead' );
 		}
-	
-		$return .= "</tr>\n";
-		$return .= "</thead>\n";
-	
+			
 		if( isset( $contents['rows'] ) )
 		{
 			$a = 0;
 			foreach( $contents['rows'] as $id => $values )
 			{
-				$class = ( $a % 2 ) ? " class=\"second\"" : "";
-				$return .= "<tbody" . $class . ">\n";
-				$return .= "<tr>\n";
-				$return .= "<td><select name=\"change_weight_" . $id . "\" id=\"change_weight_" . $id . "\" onchange=\"" . $values['weight'][1] . "\">\n";
-		
+				$xtpl->assign( 'ROW', array(
+					'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+					'id' => $id,
+					'js_onchange' => $values['weight'][1],
+					'in_submenu_click' => $values['in_submenu'][1],
+					'in_submenu_checked' => $values['in_submenu'][0] ? " checked=\"checked\"" : "",
+					'disabled' => $values['disabled'],
+					'name' => $values['name'],
+					'layout' => $values['layout']
+				) );
+				
 				foreach( $contents['weight_list'] as $new_weight )
 				{
-					$return .= "<option value=\"" . $new_weight . "\"" . ( $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) . ">" . $new_weight . "</option>\n";
+					$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) );
+					$xtpl->parse( 'main.loop.weight' );
 				}
-			
-				$return .= "</select></td>\n";
-				$return .= "<td><input name=\"chang_func_in_submenu_" . $id . "\" id=\"chang_func_in_submenu_" . $id . "\" type=\"checkbox\" value=\"1\" onclick=\"" . $values['in_submenu'][1] . "\"" . ( $values['in_submenu'][0] ? " checked=\"checked\"" : "" ) . "  " . $values['disabled'] . " /></td>\n";
-				$return .= "<td>" . $values['name'][0] . "</td>\n";
-				$return .= "<td><a href=\"#action\" onclick=\"" . $values['name'][2] . "\">" . $values['name'][1] . "</a></td>\n";
-				$return .= "<td>" . $values['layout'][0] . "</td>\n";
-				$return .= "</tr>\n";
-				$return .= "</tbody>\n";
-		
-				++$a;
+				
+				$xtpl->parse( 'main.loop' );
 			}
 		}
-		$return .= "</table>\n";
-		return $return;
+		
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 
+	/**
+	 * change_custom_name_theme()
+	 * 
+	 * @param mixed $contents
+	 * @return
+	 */
 	function change_custom_name_theme( $contents )
 	{
-		$return = "<table summary=\"" . $contents['caption'] . "\" class=\"tab1\">\n";
-		$return .= "<caption>" . $contents['caption'] . "</caption>\n";
-		$return .= "<col style=\"width:150px;white-space:nowrap\" />\n";
-		$return .= "<tbody class=\"second\">\n";
-		$return .= "<tr>\n";
-		$return .= "<td>" . $contents['func_custom_name'][0] . "</td>\n";
-		$return .= "<td><input name=\"" . $contents['func_custom_name'][3] . "\" id=\"" . $contents['func_custom_name'][3] . "\" type=\"text\" value=\"" . $contents['func_custom_name'][1] . "\" style=\"width:300px\" maxlength=\"" . $contents['func_custom_name'][2] . "\" /></td>\n";
-		$return .= "</tr>\n";
-		$return .= "</tbody>\n";
-		$return .= "<tbody>\n";
-		$return .= "<tr>\n";
-		$return .= "<td></td>\n";
-		$return .= "<td>\n";
-		$return .= "<div style=\"HEIGHT:24px;\">\n";
-		$return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"" . $contents['submit'][1] . "\"><span><span>" . $contents['submit'][0] . "</span></span></a>\n";
-		$return .= "<a class=\"button2\" href=\"javascript:void(0);\" onclick=\"" . $contents['cancel'][1] . "\"><span><span>" . $contents['cancel'][0] . "</span></span></a>\n";
-		$return .= "</div>\n";
-		$return .= "</td>\n";
-		$return .= "</tr>\n";
-		$return .= "</tbody>\n";
-		$return .= "</table>\n";
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "change_custom_name_theme.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl->assign( 'CONTENT', $contents );
 
-		return $return;
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 
+	/**
+	 * setup_modules()
+	 * 
+	 * @param mixed $array_head
+	 * @param mixed $array_modules
+	 * @param mixed $array_virtual_head
+	 * @param mixed $array_virtual_modules
+	 * @return
+	 */
 	function setup_modules( $array_head, $array_modules, $array_virtual_head, $array_virtual_modules )
 	{
-		$return = "";
-		$return .= "<table class=\"tab1\">\n";
-		$return .= "<caption>" . $array_head['caption'] . "</caption>\n";
-		$return .= "<thead>\n";
-		$return .= "<tr>\n";
+		global $global_config, $module_file;
+		
+		$xtpl = new XTemplate( "setup_modules.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	
+		$xtpl->assign( 'CAPTION', $array_head['caption'] );
 	
 		foreach( $array_head['head'] as $thead )
 		{
-			$return .= "<td>" . $thead . "</td>\n";
+			$xtpl->assign( 'HEAD', $thead );
+			$xtpl->parse( 'main.head' );
 		}
-	
-		$return .= "</tr>\n";
-		$return .= "</thead>\n";
-	
+		
 		$a = 0;
 		foreach( $array_modules as $mod => $values )
-		{
-			$class = ( $a % 2 ) ? " class=\"second\"" : "";
-			++$a;
-			$return .= "<tbody" . $class . ">\n";
-			$return .= "<tr>\n";
-			$return .= "<td>" . $a . "</td>\n";
-			$return .= "<td>" . $values['title'] . "</td>\n";
-			$return .= "<td>" . $values['version'] . "</td>\n";
-			$return .= "<td>" . $values['addtime'] . "</td>\n";
-			$return .= "<td>" . $values['author'] . "</td>\n";
-			$return .= "<td>" . $values['setup'] . "  " . $values['delete'] . "</td>\n";
-			$return .= "</tr>\n";
-			$return .= "</tbody>\n";
+		{			
+			$xtpl->assign( 'ROW', array(
+				'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+				'stt' => $a,
+				'values' => $values
+			) );
+			
+			$xtpl->parse( 'main.loop' );
 		}
 	
-		$return .= "</table>\n";
-
 		if( ! empty( $array_virtual_modules ) )
 		{
-			$return .= "<table class=\"tab1\">\n";
-			$return .= "<caption>" . $array_virtual_head['caption'] . "</caption>\n";
-			$return .= "<thead>\n";
-			$return .= "<tr>\n";
-		
+			$xtpl->assign( 'VCAPTION', $array_virtual_head['caption'] );
+					
 			foreach( $array_virtual_head['head'] as $thead )
 			{
-				$return .= "<td>" . $thead . "</td>\n";
+				$xtpl->assign( 'VHEAD', $thead );
+				$xtpl->parse( 'main.vmodule.vhead' );
 			}
-		
-			$return .= "</tr>\n";
-			$return .= "</thead>\n";
 		
 			$a = 0;
 			foreach( $array_virtual_modules as $mod => $values )
 			{
-				$class = ( $a % 2 ) ? " class=\"second\"" : "";
-				++$a;
-
-				$return .= "<tbody" . $class . ">\n";
-				$return .= "<tr>\n";
-				$return .= "<td>" . $a . "</td>\n";
-				$return .= "<td>" . $values['title'] . "</td>\n";
-				$return .= "<td>" . $values['module_file'] . "</td>\n";
-				$return .= "<td>" . $values['addtime'] . "</td>\n";
-				$return .= "<td>" . $values['note'] . "</td>\n";
-				$return .= "<td>" . $values['setup'] . "</td>\n";
-				$return .= "</tr>\n";
-				$return .= "</tbody>\n";
+				$xtpl->assign( 'VROW', array(
+					'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+					'stt' => $a,
+					'values' => $values
+				) );
+				
+				$xtpl->parse( 'main.vmodule.loop' );
 			}
-		
-			$return .= "</table>\n";
+			
+			$xtpl->parse( 'main.vmodule' );
 		}
 		
-		return $return;
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
 }
 

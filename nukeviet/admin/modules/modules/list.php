@@ -15,15 +15,15 @@ $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . "/modules", $global_config[
 // Lay danh sach cac module co trong he thong
 $new_modules = array();
 
-$sql = "SELECT title, module_file, is_sysmod, mod_version FROM `" . $db_config['prefix'] . "_setup_modules` ORDER BY `title` ASC";
+$sql = "SELECT `title`, `module_file`, `is_sysmod`, `mod_version` FROM `" . $db_config['prefix'] . "_setup_modules` ORDER BY `title` ASC";
 $result = $db->sql_query( $sql );
 
 $is_delCache = false;
 
-while( list( $m, $module_file, $is_sysmod, $mod_version ) = $db->sql_fetchrow( $result ) )
+while( list( $m, $mod_file, $is_sysmod, $mod_version ) = $db->sql_fetchrow( $result ) )
 {
 	$new_modules[$m] = array(
-		"module_file" => $module_file,
+		"module_file" => $mod_file,
 		"is_sysmod" => $is_sysmod,
 		"mod_version" => $mod_version
 	);
@@ -55,7 +55,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	if( $iw != $row['weight'] )
 	{
 		$row['weight'] = $iw;
-		$db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `weight`=" . $row['weight'] . " WHERE `title`=" . $db->dbescape( $row['title'] ) . "" );
+		$db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `weight`=" . $row['weight'] . " WHERE `title`=" . $db->dbescape( $row['title'] ) );
 		$is_delCache = true;
 	}
 	

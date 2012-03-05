@@ -13,11 +13,10 @@ $mod = filter_text_input( 'mod', 'post' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die( "NO_" . $mod );
 
-$query = "SELECT `act` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
-$result = $db->sql_query( $query );
-$numrows = $db->sql_numrows( $result );
+$sql = "SELECT `act`, `in_menu` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
+$result = $db->sql_query( $sql );
 
-if( $numrows != 1 )
+if( $db->sql_numrows( $result ) != 1 )
 {
 	die( 'NO_' . $mod );
 }

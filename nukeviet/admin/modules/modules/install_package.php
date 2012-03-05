@@ -9,9 +9,9 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
-$title = $note = $module_file = "";
-
 $page_title = $lang_module['autoinstall_method_packet'];
+
+$xtpl = new XTemplate( "install_package.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 
 if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 {
@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 	
 	if( file_exists( $file_src ) )
 	{
-		@unlink( $file_src );
+		@nv_deletefile( $file_src );
 	}
 
 	$zip = new PclZip( $file_src );
@@ -85,83 +85,46 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], "packet " . basename( $modulename ), $admin_info['userid'] );
 
 	$linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;mod=nv3_module_" . $modulename . ".zip&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . "&amp;filename=" . $file_name;
-	echo '<a href="' . $linkgetfile . '"><span style="font-size:16px;color:red">nv3_module_' . $modulename . '' . ' - ' . nv_convertfromBytes( $filesize ) . '</span></a>';
+	
+	$xtpl->assign( 'LINKGETFILE', $linkgetfile );
+	$xtpl->assign( 'MODULENAME', $modulename );
+	$xtpl->assign( 'FILESIZE', nv_convertfromBytes( $filesize ) );
+
+	$xtpl->parse( 'package_complete' );
+	$contents = $xtpl->text( 'package_complete' );
+	
+	include ( NV_ROOTDIR . "/includes/header.php" );
+	echo $contents;
+	include ( NV_ROOTDIR . "/includes/footer.php" );
 }
 else
 {
 	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'get' );
-	$contents .= "<form name='install_module' enctype='multipart/form-data' action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" method=\"post\">";
-	$contents .= "<table summary=\"\" class=\"tab1\">\n";
-	$contents .= "<tbody class=\"second\">";
-	$contents .= "<tr>";
-	$contents .= "<td align=\"center\" colspan='2'><strong>" . $lang_module['autoinstall_package_select'] . ": </strong>\n";
-	$contents .= "<input type='hidden' name='" . NV_OP_VARIABLE . "' value='" . $op . "'/>";
-	$contents .= "<select name=\"modulename\">\n";
-	$contents .= "<option value=\"0\">" . $lang_module['autoinstall_method_none'] . "</option>\n";
-
-	$sql = "SELECT module_file FROM `" . $db_config['prefix'] . "_setup_modules` where `title`=`module_file` ORDER BY `title` ASC";
+	
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
+	$xtpl->assign( 'OP', $op );
+	
+	$sql = "SELECT `module_file` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=`module_file` ORDER BY `title` ASC";
 	$result = $db->sql_query( $sql );
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$contents .= "<option value=\"" . $row['module_file'] . "\">" . $row['module_file'] . "</option>\n";
+		$xtpl->assign( 'MODULE_FILE', $row['module_file'] );
+		$xtpl->parse( 'main.module_file' );
 	}
 
-	$contents .= "</select>\n";
-	$contents .= "</td>";
-	$contents .= "</tr>";
-	$contents .= "</tbody>";
-	$contents .= "<tr>";
-	$contents .= "<td colspan='2' align='center'>";
-	$contents .= "<input name=\"continue\" type=\"button\" value=\"" . $lang_module['autoinstall_continue'] . "\" />\n";
-	$contents .= "<input name=\"back\" type=\"button\" value=\"" . $lang_module['autoinstall_back'] . "\" />\n";
-	$contents .= "</td>";
-	$contents .= "</tr>";
-	$contents .= "<tbody class=\"second\">";
-	$contents .= "<tr>";
-	$contents .= "<td colspan='2' align='center'>";
-	$contents .= "<p id='message' style='color:red;display:none'></p>";
-	$contents .= "</td>";
-	$contents .= "</tr>";
-	$contents .= "</tbody>";
-	$contents .= "</table>";
-	$contents .= "</form>";
-	$contents .= '
-<script type="text/javascript">
- $(function(){
- //<![CDATA[
- 	$("input[name=continue]").click(function(){
- 		var modulename = $("select[name=modulename]").val();
- 		if (modulename!=0){
- 			$("#message").html("<img src=\'' . NV_BASE_SITEURL . 'images/load_bar.gif\' alt=\'\'/>' . $lang_module['autoinstall_package_processing'] . '");
- 			$("#message").fadeIn();
- 			$("input[name=continue]").attr("disabled","disabled");
- 			$("input[name=back]").attr("disabled","disabled");
- 			$("#step1").slideUp();
-			$.ajax({	
-				type: "POST",
-				url: "' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '",
-				data: "modulename="+ modulename+"&' . NV_OP_VARIABLE . '=' . $op . '",
-				success: function(data){				
-					$("input[name=back]").removeAttr("disabled");
-					$("input[name=continue]").removeAttr("disabled");
-					$("#message").html(data);
-				}
-			});
- 		} else {
- 			alert("' . $lang_module['autoinstall_package_noselect'] . '");
- 			return false;
- 		}
- 	});
- 	$("input[name=back]").click(function(){
- 		$("#content").slideUp();
-		$("#step1").slideDown();
- 	});
-
- });
- //]]>
-</script>';
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
+	
+	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo $contents;
+	include ( NV_ROOTDIR . "/includes/footer.php" );
 }
 
 ?>

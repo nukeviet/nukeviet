@@ -215,7 +215,8 @@ foreach( $arr_module_news as $module_name_i => $arr )
 				"version" => "3.0.01", //
 				"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
 				"author" => "", //
-				"note" => "" );
+				"note" => ""
+			);
 		}
 		
 		$date_ver = intval( strtotime( $module_version['date'] ) );

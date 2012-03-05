@@ -13,8 +13,8 @@ $mod = filter_text_input( 'mod', 'post', '' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die( "NO_" . $mod );
 
-$query = "SELECT `weight` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
-$result = $db->sql_query( $query );
+$sql = "SELECT `weight` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
+$result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
 if( $numrows != 1 ) die( 'NO_' . $mod );
@@ -23,8 +23,8 @@ $new_weight = $nv_Request->get_int( 'new_weight', 'post', 0 );
 
 if( empty( $new_weight ) ) die( 'NO_' . $mod );
 
-$query = "SELECT `title` FROM `" . NV_MODULES_TABLE . "` WHERE `title`!=" . $db->dbescape( $mod ) . " ORDER BY `weight` ASC";
-$result = $db->sql_query( $query );
+$sql = "SELECT `title` FROM `" . NV_MODULES_TABLE . "` WHERE `title`!=" . $db->dbescape( $mod ) . " ORDER BY `weight` ASC";
+$result = $db->sql_query( $sql );
 
 $weight = 0;
 while( $row = $db->sql_fetchrow( $result ) )

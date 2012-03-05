@@ -13,8 +13,8 @@ $mod = filter_text_input( 'mod', 'post' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die( "NO_" . $mod );
 
-$query = "SELECT `submenu` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
-$result = $db->sql_query( $query );
+$sql = "SELECT `submenu` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
+$result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
 if( $numrows != 1 )

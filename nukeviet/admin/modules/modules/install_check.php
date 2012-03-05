@@ -14,12 +14,7 @@ $info_error = array();
 $info_error['errorfile'] = array();
 $info_error['errorfolder'] = array();
 
-$allowfolder = array(
-	'themes',
-	'modules',
-	'uploads',
-	'includes/blocks'
-);
+$allowfolder = array( 'themes', 'modules', 'uploads', 'includes/blocks' );
 
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
 

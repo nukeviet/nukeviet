@@ -13,8 +13,8 @@ if( ! $nv_Request->isset_request( 'id', 'post,get' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 
-$query = "SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title,m.custom_title AS mod_custom_title FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE f.func_id=" . $id . " AND f.in_module=m.title";
-$result = $db->sql_query( $query );
+$sql = "SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title,m.custom_title AS mod_custom_title FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE f.func_id=" . $id . " AND f.in_module=m.title";
+$result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
 if( $numrows != 1 ) die( "NO_" . $id );

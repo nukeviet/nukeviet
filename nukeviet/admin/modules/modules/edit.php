@@ -17,11 +17,10 @@ if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
 	die();
 }
 
-$query = "SELECT * FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
-$result = $db->sql_query( $query );
-$numrows = $db->sql_numrows( $result );
+$sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
+$result = $db->sql_query( $sql );
 
-if( $numrows != 1 )
+if( $db->sql_numrows( $result ) != 1 )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();
@@ -124,7 +123,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$array_func_id[] = $func_id;
 			}
 
-			$fnsql = "SELECT func_id FROM `" . NV_MODFUNCS_TABLE . "` WHERE in_module=" . $db->dbescape( $mod ) . " AND show_func='1' ORDER BY `subweight` ASC";
+			$fnsql = "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` `WHERE in_module`=" . $db->dbescape( $mod ) . " AND `show_func`='1' ORDER BY `subweight` ASC";
 			$fnresult = $db->sql_query( $fnsql );
 			
 			while( list( $func_id ) = $db->sql_fetchrow( $fnresult ) )

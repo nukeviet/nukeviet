@@ -22,8 +22,8 @@ function nv_show_funcs()
 
 	if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die();
 
-	$query = "SELECT `module_file`, `custom_title`, `admin_file` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
-	$result = $db->sql_query( $query );
+	$sql = "SELECT `module_file`, `custom_title`, `admin_file` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
+	$result = $db->sql_query( $sql );
 	$numrows = $db->sql_numrows( $result );
 
 	if( $numrows != 1 ) die();
@@ -56,6 +56,7 @@ function nv_show_funcs()
 
 	if( file_exists( $version_file ) )
 	{
+		$module_name = $mod;
 		require_once ( $version_file );
 	}
 
@@ -70,7 +71,8 @@ function nv_show_funcs()
 			"version" => "3.0.01", //
 			"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
 			"author" => "", //
-			"note" => "" );
+			"note" => ""
+		);
 	}
 
 	$module_version['submenu'] = isset( $module_version['submenu'] ) ? trim( $module_version['submenu'] ) : "";
@@ -80,8 +82,8 @@ function nv_show_funcs()
 	$data_funcs = array();
 	$weight_list = array();
 
-	$query = "SELECT * FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . " ORDER BY `subweight` ASC";
-	$result = $db->sql_query( $query );
+	$sql = "SELECT * FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . " ORDER BY `subweight` ASC";
+	$result = $db->sql_query( $sql );
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
@@ -97,7 +99,7 @@ function nv_show_funcs()
 		}
 	
 		$data_funcs[$func]['func_id'] = $row['func_id'];
-		$data_funcs[$func]['layout'] = $row['layout'];
+		$data_funcs[$func]['layout'] = empty( $row['layout'] ) ? '' : $row['layout'];
 		$data_funcs[$func]['show_func'] = $row['show_func'];
 		$data_funcs[$func]['func_custom_name'] = $row['func_custom_name'];
 		$data_funcs[$func]['in_submenu'] = $row['in_submenu'];
@@ -118,12 +120,12 @@ function nv_show_funcs()
 	{
 		foreach( $old_funcs as $func => $values )
 		{
-			$query = "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `func_id` = " . $values['func_id'];
-			$db->sql_query( $query );
-			$query = "DELETE FROM `" . NV_MODFUNCS_TABLE . "` WHERE `func_id` = " . $values['func_id'];
-			$db->sql_query( $query );
-			$query = "DELETE FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id` = " . $values['func_id'];
-			$db->sql_query( $query );
+			$sql = "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `func_id` = " . $values['func_id'];
+			$db->sql_query( $sql );
+			$sql = "DELETE FROM `" . NV_MODFUNCS_TABLE . "` WHERE `func_id` = " . $values['func_id'];
+			$db->sql_query( $sql );
+			$sql = "DELETE FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id` = " . $values['func_id'];
+			$db->sql_query( $sql );
 			$is_delCache = true;
 		}
 	
@@ -175,8 +177,8 @@ function nv_show_funcs()
 		$act_funcs = array();
 		$weight_list = array();
 	
-		$query = "SELECT * FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . " AND `show_func`='1' ORDER BY `subweight` ASC";
-		$result = $db->sql_query( $query );
+		$sql = "SELECT * FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . " AND `show_func`='1' ORDER BY `subweight` ASC";
+		$result = $db->sql_query( $sql );
 	
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
@@ -249,11 +251,10 @@ if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
 	die();
 }
 
-$query = "SELECT `custom_title` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
-$result = $db->sql_query( $query );
-$numrows = $db->sql_numrows( $result );
+$sql = "SELECT `custom_title` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );
+$result = $db->sql_query( $sql );
 
-if( $numrows != 1 )
+if( $db->sql_numrows( $result ) != 1 )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();

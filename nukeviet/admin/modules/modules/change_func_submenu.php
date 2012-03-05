@@ -14,8 +14,8 @@ $content = 'ERR_' . $func_id;
 
 if( $func_id > 0 )
 {
-	$query = "SELECT `in_submenu` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `func_id`=" . $func_id;
-	$result = $db->sql_query( $query );
+	$sql = "SELECT `in_submenu` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `func_id`=" . $func_id;
+	$result = $db->sql_query( $sql );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows == 1 )
 	{
