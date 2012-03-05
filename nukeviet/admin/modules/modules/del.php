@@ -107,6 +107,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			}
 		
 			nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . $modname, true );
+			nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $modname, true );
 			nv_loadUploadDirList( false );
 		}
 	
