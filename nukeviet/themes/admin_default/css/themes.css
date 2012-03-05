@@ -1,0 +1,20 @@
+﻿.hr {
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #dadada;
+	margin: 5px 0;
+}
+
+.tab2 td{
+	border: 1px #dedede solid;
+	background-color: #f9fbfb;
+	padding: 5px;
+}
+
+.tab2 td:hover {
+	background-color: #ecf3f5;
+}
+
+.requie {
+	color: red;
+}

@@ -7,25 +7,25 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if ( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $select_options = array();
-$theme_array = nv_scandir( NV_ROOTDIR . "/themes", array($global_config['check_theme'], $global_config['check_theme_mobile']) );
+$theme_array = nv_scandir( NV_ROOTDIR . "/themes", array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
 
-foreach ( $theme_array as $themes_i )
+foreach( $theme_array as $themes_i )
 {
-    $select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=blocks&amp;selectthemes=" . $themes_i] = $themes_i;
+	$select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=blocks&amp;selectthemes=" . $themes_i] = $themes_i;
 }
 
 $selectthemes_old = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site_theme'] );
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'get', $selectthemes_old );
-if ( ! in_array( $selectthemes, $theme_array ) )
+if( ! in_array( $selectthemes, $theme_array ) )
 {
-    $selectthemes = $global_config['site_theme'];
+	$selectthemes = $global_config['site_theme'];
 }
-if ( $selectthemes_old != $selectthemes )
+if( $selectthemes_old != $selectthemes )
 {
-    $nv_Request->set_Cookie( 'selectthemes', $selectthemes, NV_LIVE_COOKIE_TIME );
+	$nv_Request->set_Cookie( 'selectthemes', $selectthemes, NV_LIVE_COOKIE_TIME );
 }
 
 $page_title = $lang_module['blocks'] . ':' . $selectthemes;
@@ -37,9 +37,9 @@ $contents .= $lang_module['block_select_module'] . " <select name='module'>";
 $contents .= "<option value=''>" . $lang_module['block_select_module'] . "</option>";
 $sql = "SELECT title, custom_title FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
-while ( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
+while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 {
-    $contents .= "<option value='" . $m_title . "'>" . $m_custom_title . "</option>";
+	$contents .= "<option value='" . $m_title . "'>" . $m_custom_title . "</option>";
 }
 $contents .= "</select>\n";
 $contents .= "</td>\n";
@@ -62,64 +62,63 @@ $xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.i
 $content = $xml->xpath( 'positions' ); //array
 $positions = $content[0]->position; //object
 
-
 $blocks_positions = array();
 $result = $db->sql_query( "SELECT `position`, COUNT(*) FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $selectthemes . "' GROUP BY `position`" );
-while ( list( $position, $numposition ) = $db->sql_fetchrow( $result ) )
+while( list( $position, $numposition ) = $db->sql_fetchrow( $result ) )
 {
-    $blocks_positions[$position] = $numposition;
+	$blocks_positions[$position] = $numposition;
 }
 
 $result = $db->sql_query( "SELECT * FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $selectthemes . "' ORDER BY `position` ASC, `weight` ASC" );
-while ( $row = $db->sql_fetchrow( $result ) )
+while( $row = $db->sql_fetchrow( $result ) )
 {
-    $class = ( $a % 2 ) ? " class=\"second\"" : "";
-    $contents .= "<tbody" . $class . ">\n";
-    $contents .= "<tr>\n";
-    $contents .= "<td>";
-    $contents .= '<select class="order" title="' . $row['bid'] . '">';
-    $numposition = $blocks_positions[$row['position']];
-    for ( $i = 1; $i <= $numposition; ++$i )
-    {
-        $sel = ( $row['weight'] == $i ) ? ' selected="selected"' : '';
-        $contents .= '<option value="' . $i . '" ' . $sel . '>' . $i . '</option>';
-    }
-    $contents .= '</select>';
-    $contents .= "</td>\n";
-    
-    $contents .= "<td>";
-    $contents .= "<select name=\"listpos\" title='" . $row['bid'] . "'>\n";
+	$class = ( $a % 2 ) ? " class=\"second\"" : "";
+	$contents .= "<tbody" . $class . ">\n";
+	$contents .= "<tr>\n";
+	$contents .= "<td>";
+	$contents .= '<select class="order" title="' . $row['bid'] . '">';
+	$numposition = $blocks_positions[$row['position']];
+	for( $i = 1; $i <= $numposition; ++$i )
+	{
+		$sel = ( $row['weight'] == $i ) ? ' selected="selected"' : '';
+		$contents .= '<option value="' . $i . '" ' . $sel . '>' . $i . '</option>';
+	}
+	$contents .= '</select>';
+	$contents .= "</td>\n";
 
-    for ( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
-    {
-        $sel = ( $row['position'] == $positions[$i]->tag ) ? ' selected="selected"' : '';
-        $contents .= "<option value=\"" . $positions[$i]->tag . "\" " . $sel . "> " . $positions[$i]->name . '</option>';
-    }
-    $contents .= "</select>";
-    $contents .= "</td>\n";
-    $contents .= "<td>" . $row['title'] . "</td>\n";
-    $contents .= "<td>" . $row['module'] . " " . $row['file_name'] . "</td>\n";
-    $contents .= "<td>" . ( $row['active'] ? $lang_global['yes'] : $lang_global['no'] ) . "</td>\n";
-    $contents .= "<td>";
-    if ( $row['all_func'] == 1 )
-    {
-        $contents .= $lang_module['add_block_all_module'];
-    }
-    else
-    {
-        $result_func = $db->sql_query( "SELECT a.func_id, a.in_module, a.func_custom_name FROM `" . NV_MODFUNCS_TABLE . "` AS a INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS b ON a.func_id=b.func_id WHERE b.bid=" . $row['bid'] . "" );
-        while ( list( $funcid_inlist, $func_inmodule, $funcname_inlist ) = $db->sql_fetchrow( $result_func ) )
-        {
-            $contents .= '<a href="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks_func&amp;func=' . $funcid_inlist . '&amp;module=' . $func_inmodule . '"><span style="font-weight:bold">' . $func_inmodule . '</span>: ' . $funcname_inlist . '</a><br />';
-        }
-    }
-    $contents .= "</td>\n";
-    $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a class=\"block_content\" title=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['edit'] . "</a></span>\n";
-    $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a class=\"delete\" title=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span></td>\n";
-    $contents .= "<td><input type='checkbox' name='idlist' value='" . $row['bid'] . "'/></td>\n";
-    $contents .= "</tr>\n";
-    $contents .= "</tbody>\n";
-    ++$a;
+	$contents .= "<td>";
+	$contents .= "<select name=\"listpos\" title='" . $row['bid'] . "'>\n";
+
+	for( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
+	{
+		$sel = ( $row['position'] == $positions[$i]->tag ) ? ' selected="selected"' : '';
+		$contents .= "<option value=\"" . $positions[$i]->tag . "\" " . $sel . "> " . $positions[$i]->name . '</option>';
+	}
+	$contents .= "</select>";
+	$contents .= "</td>\n";
+	$contents .= "<td>" . $row['title'] . "</td>\n";
+	$contents .= "<td>" . $row['module'] . " " . $row['file_name'] . "</td>\n";
+	$contents .= "<td>" . ( $row['active'] ? $lang_global['yes'] : $lang_global['no'] ) . "</td>\n";
+	$contents .= "<td>";
+	if( $row['all_func'] == 1 )
+	{
+		$contents .= $lang_module['add_block_all_module'];
+	}
+	else
+	{
+		$result_func = $db->sql_query( "SELECT a.func_id, a.in_module, a.func_custom_name FROM `" . NV_MODFUNCS_TABLE . "` AS a INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS b ON a.func_id=b.func_id WHERE b.bid=" . $row['bid'] . "" );
+		while( list( $funcid_inlist, $func_inmodule, $funcname_inlist ) = $db->sql_fetchrow( $result_func ) )
+		{
+			$contents .= '<a href="index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks_func&amp;func=' . $funcid_inlist . '&amp;module=' . $func_inmodule . '"><span style="font-weight:bold">' . $func_inmodule . '</span>: ' . $funcname_inlist . '</a><br />';
+		}
+	}
+	$contents .= "</td>\n";
+	$contents .= "<td align=\"center\"><span class=\"edit_icon\"><a class=\"block_content\" title=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['edit'] . "</a></span>\n";
+	$contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a class=\"delete\" title=\"" . $row['bid'] . "\" href=\"javascript:void(0);\">" . $lang_global['delete'] . "</a></span></td>\n";
+	$contents .= "<td><input type='checkbox' name='idlist' value='" . $row['bid'] . "'/></td>\n";
+	$contents .= "</tr>\n";
+	$contents .= "</tbody>\n";
+	++$a;
 }
 $contents .= "<tbody>\n";
 $contents .= "<tr align=\"right\" class=\"tfoot_box\"><td colspan='8'>
@@ -237,12 +236,12 @@ $contents .= '<script type="text/javascript">
 				//]]>
 				</script>';
 
-if ( ! defined( 'SHADOWBOX' ) )
+if( ! defined( 'SHADOWBOX' ) )
 {
-    $my_head = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-    $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-    $my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-    define( 'SHADOWBOX', true );
+	$my_head = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
+	define( 'SHADOWBOX', true );
 }
 
 include ( NV_ROOTDIR . "/includes/header.php" );
