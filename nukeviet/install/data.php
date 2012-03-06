@@ -346,7 +346,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`confi
 
 $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
 ('sys', 'global', 'closed_site', '0'),
-('sys', 'global', 'site_keywords', 'NukeViet, portal, mysql, php, opensource cms, FOSS Vietnam'),
+('sys', 'global', 'site_keywords', 'NukeViet, portal, mysql, php'),
 ('sys', 'global', 'site_phone', ''),
 ('sys', 'global', 'site_lang', '" . NV_LANG_DATA . "'),
 ('sys', 'global', 'admin_theme', 'admin_full'),
@@ -360,7 +360,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'dump_backup_ext', 'gz'),
 ('sys', 'global', 'dump_backup_day', '30'),
 ('sys', 'global', 'gfx_chk', '" . $global_config['gfx_chk'] . "'),
-('sys', 'global', 'file_allowed_ext', 'adobe,application,archives,audio,documents,flash,images,real,video'),
+('sys', 'global', 'file_allowed_ext', 'adobe,archives,audio,documents,flash,images,real,video'),
 ('sys', 'global', 'forbid_extensions', 'php'),
 ('sys', 'global', 'forbid_mimes', ''),
 ('sys', 'global', 'nv_max_size', '" . min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) ) . "'),
