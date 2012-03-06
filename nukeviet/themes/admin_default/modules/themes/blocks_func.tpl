@@ -77,7 +77,7 @@ $(function(){
 	$("a.block_content").click(function(){
 		var bid = parseInt($(this).attr("title"));
 		Shadowbox.open({
-			content : '<iframe src="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=themes&amp;{NV_OP_VARIABLE}=block_content&amp;bid="+bid+"&amp;blockredirect={BLOCKREDIRECT}" border="1" frameborder="0" style="width:780px;height:450px"></iframe>',
+			content : '<iframe src="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=themes&amp;{NV_OP_VARIABLE}=block_content&amp;bid='+bid+'&amp;blockredirect={BLOCKREDIRECT}" border="1" frameborder="0" style="width:780px;height:450px"></iframe>',
 			player : "html",
 			height : 450,
 			width : 780

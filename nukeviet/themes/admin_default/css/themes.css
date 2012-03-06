@@ -18,3 +18,17 @@
 .requie {
 	color: red;
 }
+
+#shows_all_func td {
+	background-color: #f9f9f9;
+}
+
+.list-funcs{
+	max-height:330px;
+	width:600px;
+	overflow:auto;
+}
+
+.list-funcs td:hover{
+	background-color:#f4f4f4!important;
+}
