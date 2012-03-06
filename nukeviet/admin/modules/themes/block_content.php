@@ -11,25 +11,17 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $functionid = $nv_Request->get_int( 'func', 'get' );
 $blockredirect = $nv_Request->get_string( 'blockredirect', 'get' );
+
 $contents_error = '';
+
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'post,get,cookie', $global_config['site_theme'] );
-$row = array(
-	'bid' => 0,
-	'theme' => '',
-	'module' => 'global',
-	'file_name' => '',
-	'title' => '',
-	'link' => '',
-	'template' => '',
-	'position' => $nv_Request->get_string( 'tag', 'get', '' ),
-	'exp_time' => 0,
-	'active' => 1,
-	'groups_view' => '',
-	'all_func' => 1,
-	'weight' => 0,
-	'config' => '' );
+
+$row = array( 'bid' => 0, 'theme' => '', 'module' => 'global', 'file_name' => '', 'title' => '', 'link' => '', 'template' => '', 'position' => $nv_Request->get_string( 'tag', 'get', '' ), 'exp_time' => 0, 'active' => 1, 'groups_view' => '', 'all_func' => 1, 'weight' => 0, 'config' => '' );
+	
 $row['bid'] = $nv_Request->get_int( 'bid', 'get,post', 0 );
+
 $submit = 0;
+
 if( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
 	$submit = 1;

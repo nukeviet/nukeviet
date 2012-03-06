@@ -9,56 +9,29 @@
 
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
-$title = $note = $module_file = "";
 $page_title = $lang_module['autoinstall'];
+
+$xtpl = new XTemplate( "autoinstall.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
 
 if( ! $sys_info['zlib_support'] )
 {
-	$contents = "<br /><br /><br />" . $lang_global['error_zlib_support'];
+	$xtpl->parse( 'error' );
+	$contents = $xtpl->text( 'error' );
 }
 else
 {
-	$contents = "<div id='step1'><table summary=\"\" class=\"tab1\">\n";
-	$contents .= "<tbody class=\"second\">";
-	$contents .= "<tr>";
-	$contents .= "<td align=\"right\"><strong>" . $lang_module['autoinstall_theme_install'] . ": </strong></td>\n";
-	$contents .= "<td>";
-	$contents .= "<select name=\"installtype\">\n";
-	$contents .= "<option value=\"0\">" . $lang_module['autoinstall_method_none'] . "</option>\n";
-	$contents .= "<option value=\"install_theme\">" . $lang_module['autoinstall_method_install'] . "</option>\n";
-	$contents .= "<option value=\"package_theme\">" . $lang_module['autoinstall_method_packet'] . "</option>\n";
-	$contents .= "<option value=\"package_theme_module\">" . $lang_module['autoinstall_method_packet_module'] . "</option>\n";
-	$contents .= "</select>\n";
-	$contents .= "</td>";
-	$contents .= "</tr>";
-	$contents .= "</tbody>";
-	$contents .= "<tbody>";
-	$contents .= "<tr>";
-	$contents .= "<td colspan='2' align='center'>";
-	$contents .= "<input name=\"method\" type=\"button\" value=\"" . $lang_module['autoinstall_continue'] . "\" />\n";
-	$contents .= "</td>";
-	$contents .= "</tr>";
-	$contents .= "</tbody>";
-	$contents .= "</table></div>";
-	$contents .= "<div id='content'></div>";
-	$contents .= '
-	<script type="text/javascript">
-	//<![CDATA[
-	 $(function(){
-	 	$("input[name=method]").click(function(){
-	 		var method = $("select[name=installtype]").val();
-	 		if (method!=0){
-	 			$("#step1").slideUp();
-	 			$("#content").load("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '="+method);
-	 			$("#content").slideDown();
-	 		} else {
-	 			alert("' . $lang_module['autoinstall_error_nomethod'] . '");
-	 			return false;
-	 		}
-	 	});
-	 });
-	 //]]>
-	</script>';
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+
+	$xtpl->assign( 'MODULE_NAME', $module_name );
+	$xtpl->assign( 'OP', $op );
+	
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
 }
 
 include ( NV_ROOTDIR . "/includes/header.php" );

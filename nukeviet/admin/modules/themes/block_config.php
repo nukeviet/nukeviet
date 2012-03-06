@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-2-2010 12:55
  */
+
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $contents = "";

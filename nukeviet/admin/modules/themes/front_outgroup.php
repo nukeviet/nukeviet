@@ -23,11 +23,14 @@ if( $func_id > 0 and isset( $row['bid'] ) )
 	if( $new_bid > 0 )
 	{
 		$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `bid`='" . $new_bid . "' WHERE `bid`=" . $bid . " AND `func_id`=" . $func_id );
+		
 		if( ! empty( $row['all_func'] ) )
 		{
 			$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET `all_func`='0' WHERE `bid`=" . $bid );
 		}
+		
 		echo $lang_module['block_front_outgroup_success'] . $new_bid;
+		
 		nv_del_moduleCache( 'themes' );
 	}
 	else
