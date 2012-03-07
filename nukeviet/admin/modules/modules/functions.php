@@ -125,7 +125,7 @@ if( $module_name == "modules" )
 		$weight = 0;
 		$old_theme = $old_position = "";
 	
-		$sql = "SELECT `bid`,`theme`, `position` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `all_func`='1' ORDER BY `theme` ASC, `position` ASC, `weight` ASC";
+		$sql = "SELECT `bid`, `theme`, `position` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `all_func`='1' ORDER BY `theme` ASC, `position` ASC, `weight` ASC";
 		$result = $db->sql_query( $sql );
 	
 		while( $row = $db->sql_fetchrow( $result ) )

@@ -43,7 +43,7 @@ foreach( $theme_array as $dir )
 }
 
 $theme_list = $theme_mobile_list = array();
-$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes`  WHERE `func_id`=0";
+$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0";
 $result = $db->sql_query( $sql );
 
 while( list( $theme ) = $db->sql_fetchrow( $result ) )
@@ -122,8 +122,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			{
 				$array_func_id[] = $func_id;
 			}
-
-			$fnsql = "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` `WHERE in_module`=" . $db->dbescape( $mod ) . " AND `show_func`='1' ORDER BY `subweight` ASC";
+			
+			$fnsql = "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . " AND `show_func`='1' ORDER BY `subweight` ASC";
 			$fnresult = $db->sql_query( $fnsql );
 			
 			while( list( $func_id ) = $db->sql_fetchrow( $fnresult ) )

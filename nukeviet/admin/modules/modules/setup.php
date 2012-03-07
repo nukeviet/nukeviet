@@ -13,15 +13,15 @@ $contents = "";
 
 $setmodule = filter_text_input( 'setmodule', 'get', '', 1 );
 
+// Thiet lap module moi
 if( ! empty( $setmodule ) )
 {
 	if( filter_text_input( 'checkss', 'get' ) == md5( "setmodule" . $setmodule . session_id() . $global_config['sitekey'] ) )
 	{
-		$query = "SELECT `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $setmodule );
-		$result = $db->sql_query( $query );
-		$numrows = $db->sql_numrows( $result );
+		$sql = "SELECT `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $setmodule );
+		$result = $db->sql_query( $sql );
 		
-		if( $numrows == 1 )
+		if( $db->sql_numrows( $result ) == 1 )
 		{
 			list( $module_file, $module_data ) = $db->sql_fetchrow( $result );
 			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM `" . NV_MODULES_TABLE . "`" ) );
@@ -65,6 +65,7 @@ if( ! empty( $setmodule ) )
 
 $delmodule = filter_text_input( 'delmodule', 'get', '', 1 );
 
+// Xoa module
 if( ! empty( $delmodule ) )
 {
 	if( filter_text_input( 'checkss', 'get' ) == md5( "delmodule" . $delmodule . session_id() . $global_config['sitekey'] ) )
@@ -315,6 +316,7 @@ $array_head = array(
 		""
 	)
 );
+
 $array_virtual_head = array( 
 	"caption" => $lang_module['vmodule'], 
 	"head" => array(
