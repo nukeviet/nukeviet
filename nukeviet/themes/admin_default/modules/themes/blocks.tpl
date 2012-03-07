@@ -80,8 +80,6 @@
 $(function(){
 	$("a.block_content").click(function(){
 		var bid = parseInt($(this).attr("title"));
-		alert();
-		return;
 		Shadowbox.open({
 			content : '<iframe src="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=block_content&bid='+bid+'&blockredirect={BLOCKREDIRECT}" border="1" frameborder="0" style="width:780px;height:450px"></iframe>',
 			player : "html",
