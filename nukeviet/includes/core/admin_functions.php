@@ -63,10 +63,7 @@ function nv_save_file_config_global()
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
-    $content_config .= "{\n";
-    $content_config .= "\tdie( 'Stop!!!' );\n";
-    $content_config .= "}\n\n";
+    $content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
 
     $sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' ORDER BY `config_name` ASC";
     $result = $db->sql_query($sql);
