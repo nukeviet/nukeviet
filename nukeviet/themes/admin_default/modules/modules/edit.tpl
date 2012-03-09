@@ -1,4 +1,10 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: error -->
+<div class="quote" style="width:98%">
+	<blockquote><span>{CONTENT.error}</span></blockquote>
+</div>
+<div class="clear"></div>
+<!-- END: error -->
 <form method="post" action="{CONTENT.action}">
 <table class="tab1 fixtab">
 	<col valign="top" width="150px" />

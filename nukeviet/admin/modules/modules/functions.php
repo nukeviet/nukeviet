@@ -510,6 +510,11 @@ if( $module_name == "modules" )
 		$xtpl = new XTemplate( "edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 		$xtpl->assign( 'CONTENT', $contents );
 	
+		if( ! empty( $contents['error'] ) )
+		{
+			$xtpl->parse( 'main.error' );
+		}
+	
 		foreach( $contents['theme'][2] as $tm )
 		{
 			$xtpl->assign( 'THEME', array( 'key' => $tm, 'selected' => $tm == $contents['theme'][3] ? " selected=\"selected\"" : "" ) );

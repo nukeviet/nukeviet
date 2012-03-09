@@ -9,6 +9,8 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
+$contents = array();
+
 $mod = filter_text_input( 'mod', 'get' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
@@ -42,12 +44,16 @@ foreach( $theme_array as $dir )
 	}
 }
 
-$theme_list = $theme_mobile_list = array();
+$theme_list = $theme_mobile_list = $array_theme = array();
+
+// Chi nhung giao dien da duoc thiet lap layout moi duoc them
 $sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0";
 $result = $db->sql_query( $sql );
 
 while( list( $theme ) = $db->sql_fetchrow( $result ) )
 {
+	$array_theme[] = $theme;
+	
 	if( in_array( $theme, $theme_site_array ) )
 	{
 		$theme_list[] = $theme;
@@ -108,29 +114,45 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	
 	if( $groups_view != "" and $custom_title != "" )
 	{
-		$selectthemes = ( empty( $theme ) ) ? $global_config['site_theme'] : $theme;
-		$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' );
-		$layoutdefault = ( string )$xml->layoutdefault;
-
-		if( file_exists( NV_ROOTDIR . "/themes/" . $selectthemes . "/layout/layout." . $layoutdefault . ".tpl" ) )
+		$array_layoutdefault = array();
+		
+		foreach( $array_theme as $_theme )
 		{
-			$array_func_id = array();
-			$fnsql = "SELECT `func_id` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `theme`='" . $selectthemes . "'";
-			$fnresult = $db->sql_query( $fnsql );
+			$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $_theme . '/config.ini' );
+			$layoutdefault = ( string )$xml->layoutdefault;
 			
-			while( list( $func_id ) = $db->sql_fetchrow( $fnresult ) )
+			if( ! empty( $layoutdefault ) and file_exists( NV_ROOTDIR . "/themes/" . $_theme . "/layout/layout." . $layoutdefault . ".tpl" ) )
 			{
-				$array_func_id[] = $func_id;
+				$array_layoutdefault[$_theme] = $layoutdefault;
 			}
-			
-			$fnsql = "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . " AND `show_func`='1' ORDER BY `subweight` ASC";
-			$fnresult = $db->sql_query( $fnsql );
-			
-			while( list( $func_id ) = $db->sql_fetchrow( $fnresult ) )
+			else
 			{
-				if( ! in_array( $func_id, $array_func_id ) )
+				$contents['error'][] = $_theme;
+			}
+		}
+		
+		if( empty( $contents['error'] ) )
+		{
+			foreach( $array_layoutdefault as $selectthemes => $layoutdefault )
+			{
+				$array_func_id = array();
+				$fnsql = "SELECT `func_id` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `theme`='" . $selectthemes . "'";
+				$fnresult = $db->sql_query( $fnsql );
+				
+				while( list( $func_id ) = $db->sql_fetchrow( $fnresult ) )
 				{
-					$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_modthemes` (`func_id`, `layout`, `theme`) VALUES (" . $func_id . "," . $db->dbescape( $layoutdefault ) . ", " . $db->dbescape( $selectthemes ) . ")" );
+					$array_func_id[] = $func_id;
+				}
+				
+				$fnsql = "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod ) . " AND `show_func`='1' ORDER BY `subweight` ASC";
+				$fnresult = $db->sql_query( $fnsql );
+				
+				while( list( $func_id ) = $db->sql_fetchrow( $fnresult ) )
+				{
+					if( ! in_array( $func_id, $array_func_id ) )
+					{
+						$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_modthemes` (`func_id`, `layout`, `theme`) VALUES (" . $func_id . "," . $db->dbescape( $layoutdefault ) . ", " . $db->dbescape( $selectthemes ) . ")" );
+					}
 				}
 			}
 
@@ -145,7 +167,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], "File: themes/" . $selectthemes . "/layout/layout." . $layoutdefault . ".tpl not exist" );
+			$contents['error'] = sprintf( $lang_module['edit_error_update_theme'], implode( ", ", $contents['error'] ) );
 		}
 	}
 	elseif( $groups_view != "" )
@@ -179,7 +201,6 @@ else
 if( empty( $custom_title ) ) $custom_title = $mod;
 
 $page_title = sprintf( $lang_module['edit'], $mod );
-$contents = array();
 
 if( file_exists( NV_ROOTDIR . "/modules/" . $row['module_file'] . "/funcs/rss.php" ) )
 {

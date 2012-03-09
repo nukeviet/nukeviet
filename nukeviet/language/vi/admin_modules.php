@@ -24,6 +24,7 @@ $lang_module['language'] = "Cài đặt ngôn ngữ";
 $lang_module['setup'] = "Thiết lập";
 $lang_module['main'] = "Danh sách modules";
 $lang_module['edit'] = "Sửa module &ldquo;%s&rdquo;";
+$lang_module['edit_error_update_theme'] = "Quá trình cập nhật module phát hiện thấy có giao diện %s không đúng chuẩn hoặc bị lỗi, hãy kiểm tra lại.";
 $lang_module['caption_actmod'] = "Danh sách các module đang hoạt động";
 $lang_module['caption_deactmod'] = "Danh sách các module đang ngưng hoạt động";
 $lang_module['caption_badmod'] = "Danh sách các module ngưng hoạt động vì lỗi";
