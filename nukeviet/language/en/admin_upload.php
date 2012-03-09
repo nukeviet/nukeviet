@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:30 PM
+* @Createdate Mar 09, 2012, 07:03:51 PM
 */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
-}
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['upload_manager'] = "Upload Manager";
 $lang_module['upload_delimg_confirm'] = "Are you sure you want to delete the file";
@@ -89,5 +87,14 @@ $lang_module['maxSizeSize'] = "Maximum size: %dx%dpx";
 $lang_module['addlogo'] = "Add logo";
 $lang_module['addlogosave'] = "Save";
 $lang_module['notlogo'] = "Error: the system do not find any logo";
+$lang_module['upload_logo'] = "Logo to be inserted into the picture";
+$lang_module['selectimg'] = "Select image";
+$lang_module['autologo'] = "Automatically insert the logo on the picture of the module";
+$lang_module['autologomodall'] = "All module";
+$lang_module['logosizecaption'] = "Logo size";
+$lang_module['imagewith'] = "If the image width";
+$lang_module['logowith'] = "The width of the logo";
+$lang_module['logosize3'] = "Using the original logo size, maximum size of the logo";
+$lang_module['fileimage'] = "image";
 
 ?>

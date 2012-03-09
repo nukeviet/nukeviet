@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:30 PM
+* @Createdate Mar 09, 2012, 07:03:51 PM
 */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
-}
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_global";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_global";
 
 $lang_global['Content_Language'] = "en";
 $lang_global['LanguageName'] = "english";
@@ -172,7 +170,6 @@ $lang_global['unlimited'] = "unlimited";
 $lang_global['status'] = "Status";
 $lang_global['actions'] = "Action";
 $lang_global['never'] = "Never";
-$lang_global['page'] = "Page";
 $lang_global['pageprev'] = "Previous page";
 $lang_global['pagenext'] = "Next page";
 $lang_global['langinterface'] = "Language";
@@ -240,5 +237,18 @@ $lang_global['error_upload_writable'] = "Directory %s is not writable";
 $lang_global['error_upload_urlfile'] = "The URL is not valid and cannot be loaded";
 $lang_global['error_upload_url_notfound'] = "The url was not found";
 $lang_global['in_groups'] = "Members Groups";
+$lang_global['page'] = "Page";
+$lang_global['theme_type_0'] = "Desktop";
+$lang_global['theme_type_1'] = "Mobile";
+$lang_global['theme_type_chose'] = "Switch to %s theme";
+$lang_global['theme_type_select'] = "View";
+$lang_global['ftp_err_connect'] = "Error: Can not connect to FTP server";
+$lang_global['ftp_err_login'] = "Error: Logon failure";
+$lang_global['ftp_err_enable'] = "Error: The server does not support FTP";
+$lang_global['ftp_err_passive_on'] = "Error: Can not activate Passive mode";
+$lang_global['ftp_err_rawlist'] = "Error: Unable to determine the directory list";
+$lang_global['ftp_err_list_detail'] = "Error: Unrecognized parameter files, folders";
+$lang_global['ftp_err_fget'] = "Error: Can not read the text file";
+$lang_global['ftp_err_NVbuffet'] = "Error: Missing class NVbuffer";
 
 ?>

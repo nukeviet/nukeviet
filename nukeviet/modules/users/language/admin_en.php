@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:30 PM
+* @Createdate Mar 09, 2012, 07:03:51 PM
 */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
-}
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="31/05/2010, 00:07";
-$lang_translator['copyright'] ="Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "31/05/2010, 00:07";
+$lang_translator['copyright'] = "Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['modforum'] = "Members management by forum %1\$s.";
 $lang_module['list_module_title'] = "Members list";

@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:30 PM
+* @Createdate Mar 09, 2012, 07:03:51 PM
 */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
-}
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['metaTagsConfig'] = "Meta-Tags Configuration";
 $lang_module['metaTagsGroupName'] = "Group type";
@@ -30,7 +28,6 @@ $lang_module['googleAnalyticsSetDomainName_1'] = "One domain with multiple subdo
 $lang_module['googleAnalyticsSetDomainName_2'] = "Multiple top-level domains";
 $lang_module['googleAnalyticsID'] = "Google Analytics ID<br />(UA-XXXXX-X, <a href=\"http://www.google.com/analytics/\" target=\"_blank\">Detail</a>)";
 $lang_module['global_config'] = "General configuration";
-$lang_module['global_statistics'] = "Statistics configuration";
 $lang_module['site_config'] = "Site Configuration";
 $lang_module['lang_site_config'] = "Configuration site in %s language:";
 $lang_module['bots_config'] = "Search Engines";
@@ -89,7 +86,6 @@ $lang_module['site_phone'] = "Site's phone";
 $lang_module['lang_multi'] = "Activate multi-language";
 $lang_module['site_lang'] = "Default language";
 $lang_module['site_timezone'] = "Site's timezone";
-$lang_module['statistics_timezone'] = "Timezone statistics";
 $lang_module['date_pattern'] = "Date format";
 $lang_module['time_pattern'] = "Time display format";
 $lang_module['online_upd'] = "Activate monitoring online users";
@@ -196,7 +192,7 @@ $lang_module['pagetitle'] = "Configuration tag \"title\"";
 $lang_module['pagetitle2'] = "Display tag \"title\" option";
 $lang_module['pagetitleNote'] = "<strong>Accept variables:</strong><br /><br />- <strong>pagetitle</strong>: Page title is determined in each specific case,<br />- <strong>funcname</strong>: Function,<br />- <strong>modulename</strong>: Module name,<br />- <strong>sitename</strong>: Site name";
 $lang_module['func_name_not_exist'] = "This function does not exist";
-$lang_module['robots'] = "Configuring the robots.txt file";
+$lang_module['robots'] = "Config. robots.txt";
 $lang_module['robots_number'] = "Order number";
 $lang_module['robots_filename'] = "File name";
 $lang_module['robots_type'] = "Mode";
@@ -210,5 +206,15 @@ $lang_module['timezoneAuto'] = "By computer of visitor";
 $lang_module['banip_error_write'] = "Error: The system can not write the file, please CHMOD folder <strong>%s</strong> to 0777 or \"Change permission\", you can also create file banip.php with below content in folder <strong>%s</strong>";
 $lang_module['timezoneByCountry'] = "By country of visitor";
 $lang_module['uploadconfig_logo'] = "The logo to be added to images";
+$lang_module['global_statistics'] = "Statistics config";
+$lang_module['statistics_timezone'] = "Time zone for statistics";
+$lang_module['captcha_type'] = "Captcha type";
+$lang_module['captcha_type_0'] = "Default captcha";
+$lang_module['captcha_type_1'] = "Cool php captcha";
+$lang_module['allow_switch_mobi_des'] = "Allow to switch mobile, desktop theme";
+$lang_module['smtp_pass_note'] = "Note: SMTP password is not encrypted in the database.";
+$lang_module['ftp_auto_detect_root'] = "Auto detection";
+$lang_module['ftp_error_full'] = "Please enter all the parameters to auto detection the Remote path";
+$lang_module['ftp_error_detect_root'] = "Can not find any suitable parameters, check your username and password";
 
 ?>

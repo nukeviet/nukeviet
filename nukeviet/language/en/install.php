@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:30 PM
+* @Createdate Mar 09, 2012, 07:03:51 PM
 */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
-}
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="29/06/2010, 09:24";
-$lang_translator['copyright'] ="Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "29/06/2010, 09:24";
+$lang_translator['copyright'] = "Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['titlesetup'] = "NukeViet Setup";
 $lang_module['select_language'] = "Select languages";
@@ -92,9 +90,9 @@ $lang_module['host_name_note'] = "Default host name by hosting provider is";
 $lang_module['db_username'] = "Username";
 $lang_module['db_username_note'] = "Database's user name";
 $lang_module['db_pass'] = "Password";
-$lang_module['db_pass_note'] = "Database's password";
+$lang_module['db_pass_note'] = "Database' password";
 $lang_module['db_name'] = "Database name";
-$lang_module['db_name_note'] = "Name of database";
+$lang_module['db_name_note'] = "Prefix for database name";
 $lang_module['db_detete'] = "Delete the existing tables";
 $lang_module['prefix'] = "prefix";
 $lang_module['db_err_prefix'] = "Error: Prefix database has been used";
@@ -134,5 +132,8 @@ $lang_module['s2_winhost_info2'] = "however, be sure all listed folders and sub-
 $lang_module['s2_winhost_info3'] = "Please access to hosting administration to CHMOD all listed folders and sub-folders then click";
 $lang_module['s2_winhost_info4'] = "here";
 $lang_module['s2_winhost_info5'] = "to verify";
+$lang_module['ftp_path_find'] = "Auto find";
+$lang_module['ftp_error_empty'] = "Please enter the parameters to automatically find the Remove Path";
+$lang_module['ftp_error_detect_root'] = "Can not determined automatically Remove Path. Manually enter, please";
 
 ?>

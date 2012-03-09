@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:31 PM
+* @Createdate Mar 09, 2012, 07:03:52 PM
 */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
-}
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['nocatpage'] = "Error:No topic";
 $lang_module['other'] = "Other";
@@ -146,5 +144,6 @@ $lang_module['error_addcontent'] = "Error: You have not been granted permission 
 $lang_module['errorsave'] = "System errors do not update the content, you check the article title may be identical. Change it and try again.";
 $lang_module['update_content'] = "Edit Post";
 $lang_module['del_content'] = "Delete Post";
+$lang_module['search_date_rule'] = "dd.mm.yyyy";
 
 ?>

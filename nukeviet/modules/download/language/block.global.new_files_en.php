@@ -16,6 +16,9 @@ $lang_translator['copyright'] = "";
 $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_block";
 
-$lang_block['htmlcontent'] = "Enter content of block";
+$lang_block['title_length'] = "Title length";
+$lang_block['numrow'] = "Number of files listed";
+$lang_block['class_name'] = "Class name for";
+$lang_block['img_bullet'] = "Bullet image";
 
 ?>

@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:31 PM
+* @Createdate Mar 09, 2012, 07:03:52 PM
 */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
-}
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="";
-$lang_translator['createdate'] ="";
-$lang_translator['copyright'] ="";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_block";
+$lang_translator['author'] = "";
+$lang_translator['createdate'] = "";
+$lang_translator['copyright'] = "";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_block";
 
 $lang_block['menu'] = "Select the menu";
 $lang_block['is_viewdes'] = "Show introduction on menu";
@@ -30,5 +28,6 @@ $lang_block['m_type5'] = "Top Menu Bar";
 $lang_block['m_type6'] = "Side Menu Bar";
 $lang_block['m_type7'] = "Pro_dropdown";
 $lang_block['m_type8'] = "Vertical 2 levels";
+$lang_block['is_viewdes_1'] = "Only suitable for some specific style, some style will display title instead of the menu name.";
 
 ?>

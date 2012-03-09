@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:30 PM
+* @Createdate Mar 09, 2012, 07:03:51 PM
 */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
-}
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['blocks'] = "Blocks management";
 $lang_module['change_func_name'] = "Change the name of the function &ldquo;%1\$s&rdquo; in module &ldquo;%2\$s&rdquo;";
@@ -162,5 +160,6 @@ $lang_module['block_weight'] = "Set the position of block";
 $lang_module['block_weight_confirm'] = "Do you want to set up the position of block? The settings in the function will be the settings.";
 $lang_module['autoinstall_theme_error_warning_overwrite'] = "Info: Package interfaces you install the file already exists, you have to make sure the installation to overwrite this file";
 $lang_module['autoinstall_theme_overwrite'] = "Overwrite";
+$lang_module['block_error_nsblock'] = "Block not yet selected or title of block invalid";
 
 ?>

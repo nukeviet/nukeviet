@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:30 PM
+* @Createdate Mar 09, 2012, 07:03:51 PM
 */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
-}
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['modules'] = "Setup new module";
 $lang_module['blocks'] = "Setting of Blocks";
@@ -95,5 +93,7 @@ $lang_module['autoinstall_package_processing'] = "please wait to complete...";
 $lang_module['mobile'] = "Mobile theme";
 $lang_module['delete_module_info1'] = "This module is used in language <strong>%s</strong>, please delete it in this language before";
 $lang_module['delete_module_info2'] = "There is %d virtual module created by this module, please delete it before";
+$lang_module['admin_title'] = "Title of administration section";
+$lang_module['change_func_name'] = "Rename function \"%s\" of module \"%s\"";
 
 ?>

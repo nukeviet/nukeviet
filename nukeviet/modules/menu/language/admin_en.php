@@ -1,22 +1,20 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Nov 30, 2011, 02:45:31 PM
+* @Createdate Mar 09, 2012, 07:03:52 PM
 */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
-}
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] ="";
-$lang_translator['createdate'] ="";
-$lang_translator['copyright'] ="";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "";
+$lang_translator['createdate'] = "";
+$lang_translator['copyright'] = "";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['menu_manager'] = "Menu management";
 $lang_module['type_menu_manager'] = "Management menu type";
@@ -70,5 +68,19 @@ $lang_module['cats'] = "Belong to Item";
 $lang_module['caton'] = "submenu, if you want to delete, first delete or move submenu to other menu";
 $lang_module['error_menu_link'] = "Error: You do not give the url";
 $lang_module['name_block'] = "Menu block";
+$lang_module['here'] = "here";
+$lang_module['groups'] = "Select groups";
+$lang_module['sub_menu'] = "Only suitable for some specific style, some style will display title instead of the menu name.";
+$lang_module['main_note_0'] = "Click";
+$lang_module['main_note_1'] = "to creat new cubic menu. Click the name of each cubic menu below to see details and edit the menu.";
+$lang_module['add_type_active'] = "Active menu";
+$lang_module['add_type_active_note'] = "To define a menu that is activated or deactivated by comparing the menu link pointing to link existing sites by side criteria.";
+$lang_module['add_type_active_0'] = "Correctly with the menu link";
+$lang_module['add_type_active_1'] = "Start with the menu link";
+$lang_module['add_type_active_2'] = "Contains strong link of menu";
+$lang_module['add_type_css'] = "CSS class name.";
+$lang_module['add_type_css_info'] = "Class name (CSS) to define the menu interface.";
+$lang_module['add_error_module'] = "Error: No any module selected";
+$lang_module['add_error_module_exist'] = "Error: Module not exist";
 
 ?>
