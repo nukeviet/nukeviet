@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
-$checkss = $nv_Request->get_string( 'checkss', 'post,get' );
+$checkss = $nv_Request->get_string( 'checkss', 'post' );
 $theme = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site_theme'] );
 
 if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . session_id() ) )
