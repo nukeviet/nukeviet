@@ -278,10 +278,8 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				}
 				elseif( ! defined( 'NV_IS_ADMIN' ) and $groups_view == "2" )
 				{
-					// login admin
+					// Exit
 					nv_info_die( $lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'] );
-					//$nv_Request->set_Session( 'admin_login_redirect', $client_info['selfurl'] );
-					//Header( "Location: " . NV_BASE_SITEURL . NV_ADMINDIR );
 					die();
 				}
 				break;

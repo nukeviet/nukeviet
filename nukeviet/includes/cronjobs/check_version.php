@@ -11,6 +11,11 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
+/**
+ * cron_auto_check_version()
+ * 
+ * @return
+ */
 function cron_auto_check_version()
 {
 	global $nv_Request, $global_config;

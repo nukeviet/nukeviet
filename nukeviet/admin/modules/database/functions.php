@@ -50,6 +50,7 @@ if( $module_name == "database" )
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
 			$tables_size = floatval( $item['Data_length'] ) + floatval( $item['Index_length'] );
+			
 			$tables[$item['Name']]['table_size'] = nv_convertfromBytes( $tables_size );
 			$tables[$item['Name']]['table_max_size'] = ! empty( $item['Max_data_length'] ) ? nv_convertfromBytes( floatval( $item['Max_data_length'] ) ) : 0;
 			$tables[$item['Name']]['table_datafree'] = ! empty( $item['Data_free'] ) ? nv_convertfromBytes( floatval( $item['Data_free'] ) ) : 0;

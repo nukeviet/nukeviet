@@ -69,6 +69,17 @@ $global_config['file_allowed_ext'] = ! empty( $global_config['file_allowed_ext']
 $global_config['forbid_extensions'] = ! empty( $global_config['forbid_extensions'] ) ? explode( ",", $global_config['forbid_extensions'] ) : array();
 $global_config['forbid_mimes'] = ! empty( $global_config['forbid_mimes'] ) ? explode( ",", $global_config['forbid_mimes'] ) : array();
 
+$search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
+$replace = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~' );
+$global_config['cookie_prefix'] = str_replace( $search, $replace, $global_config['cookie_prefix'] );
+$global_config['date_pattern'] = str_replace( $search, $replace, $global_config['date_pattern'] );
+$global_config['ftp_path'] = str_replace( $search, $replace, $global_config['cookie_prefix'] );
+$global_config['session_prefix'] = str_replace( $search, $replace, $global_config['session_prefix'] );
+$global_config['statistics_timezone'] = str_replace( $search, $replace, $global_config['statistics_timezone'] );
+$global_config['time_pattern'] = str_replace( $search, $replace, $global_config['time_pattern'] );
+$global_config['upload_logo'] = str_replace( $search, $replace, $global_config['upload_logo'] );
+unset( $search, $replace );
+
 $global_config['allow_sitelangs'] = ! empty( $global_config['allow_sitelangs'] ) ? explode( ",", $global_config['allow_sitelangs'] ) : array();
 $global_config['allow_adminlangs'] = ! empty( $global_config['allow_adminlangs'] ) ? explode( ",", $global_config['allow_adminlangs'] ) : array();
 $global_config['openid_servers'] = ! empty( $global_config['openid_servers'] ) ? explode( ",", $global_config['openid_servers'] ) : array();

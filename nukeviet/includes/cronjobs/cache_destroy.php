@@ -11,6 +11,11 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
+/**
+ * cron_auto_del_cache()
+ * 
+ * @return
+ */
 function cron_auto_del_cache()
 {
 	$result = true;

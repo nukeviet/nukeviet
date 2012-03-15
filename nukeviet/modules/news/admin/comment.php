@@ -6,42 +6,40 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
- 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['comment'];
 
 $global_array_cat = array();
-$global_array_cat[0] = array( 
-    "catid" => 0, 
-	"parentid" => 0, 
-	"title" => "Other", 
-	"alias" => "Other", 
-	"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other", 
-	"viewcat" => "viewcat_page_new", 
-	"subcatid" => 0, 
-	"numlinks" => 3, 
-	"description" => "", 
-	"keywords" => "" 
-);
+$global_array_cat[0] = array(
+	"catid" => 0,
+	"parentid" => 0,
+	"title" => "Other",
+	"alias" => "Other",
+	"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other",
+	"viewcat" => "viewcat_page_new",
+	"subcatid" => 0,
+	"numlinks" => 3,
+	"description" => "",
+	"keywords" => "" );
 
 $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, lev FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
 $result = $db->sql_query( $sql );
 
-while ( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i, $numlinks_i, $description_i, $keywords_i, $lev_i ) = $db->sql_fetchrow( $result ) )
+while( list( $catid_i, $parentid_i, $title_i, $alias_i, $viewcat_i, $subcatid_i, $numlinks_i, $description_i, $keywords_i, $lev_i ) = $db->sql_fetchrow( $result ) )
 {
-    $global_array_cat[$catid_i] = array( 
-        "catid" => $catid_i, 
-		"parentid" => $parentid_i, 
-		"title" => $title_i, 
-		"alias" => $alias_i, 
-		"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i, 
-		"viewcat" => $viewcat_i, 
-		"subcatid" => $subcatid_i, 
-		"numlinks" => $numlinks_i, 
-		"description" => $description_i, 
-		"keywords" => $keywords_i 
-    );
+	$global_array_cat[$catid_i] = array(
+		"catid" => $catid_i,
+		"parentid" => $parentid_i,
+		"title" => $title_i,
+		"alias" => $alias_i,
+		"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i,
+		"viewcat" => $viewcat_i,
+		"subcatid" => $subcatid_i,
+		"numlinks" => $numlinks_i,
+		"description" => $description_i,
+		"keywords" => $keywords_i );
 }
 
 $page = $nv_Request->get_int( 'page', 'get', 0 );
@@ -54,18 +52,18 @@ list( $all_page ) = $db->sql_fetchrow( $result_all );
 
 $array = array();
 $a = 0;
-while ( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $userid, $user_email ) = $db->sql_fetchrow( $result ) )
+while( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $userid, $user_email ) = $db->sql_fetchrow( $result ) )
 {
-    ++$a;
-    $arr_listcatid = explode( ",", $listcatid );
-    $catid_i = end( $arr_listcatid );
-	
-    if ( $userid > 0 )
-    {
-        $email = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $userid . "\"> " . $user_email . "</a>";
-    }
-	
-	$array[$cid] = array (
+	++$a;
+	$arr_listcatid = explode( ",", $listcatid );
+	$catid_i = end( $arr_listcatid );
+
+	if( $userid > 0 )
+	{
+		$email = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $userid . "\"> " . $user_email . "</a>";
+	}
+
+	$array[$cid] = array(
 		"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 		"cid" => $cid,
 		"email" => $email,
@@ -74,8 +72,7 @@ while ( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, 
 		"title" => $title,
 		"status" => ( $status == 1 ) ? $lang_module['comment_enable'] : $lang_module['comment_disable'],
 		"linkedit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_comment&cid=" . $cid,
-		"linkdelete" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_comment&list=" . $cid
-	);
+		"linkdelete" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_comment&list=" . $cid );
 }
 
 $base_url = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
@@ -90,16 +87,16 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 
-foreach ( $array as $row )
+foreach( $array as $row )
 {
 	$xtpl->assign( 'ROW', $row );
-	$xtpl->parse( 'main.loop' );	
+	$xtpl->parse( 'main.loop' );
 }
 
-if ( ! empty ( $generate_page ) )
+if( ! empty( $generate_page ) )
 {
 	$xtpl->assign( 'GENERATE_PAGE', $generate_page );
-	$xtpl->parse( 'main.generate_page' );	
+	$xtpl->parse( 'main.generate_page' );
 }
 
 $xtpl->parse( 'main' );

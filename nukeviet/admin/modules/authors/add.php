@@ -156,7 +156,8 @@ $contents['lev'] = array(
 	$lang_module['lev'],
 	$lev,
 	$lang_module['level2'],
-	$lang_module['level3'] );
+	$lang_module['level3']
+);
 
 $editors = array();
 

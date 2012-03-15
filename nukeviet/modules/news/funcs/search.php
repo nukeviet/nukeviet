@@ -12,12 +12,12 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 function GetSourceNews( $sourceid )
 {
 	global $db, $module_data;
-	
+
 	if( $sourceid > 0 )
 	{
 		$sql = "SELECT title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE sourceid = '" . $sourceid . "'";
 		$re = $db->sql_query( $sql );
-	
+
 		if( list( $title ) = $db->sql_fetchrow( $re ) )
 		{
 			return $title;
@@ -30,7 +30,7 @@ function BoldKeywordInStr( $str, $keyword )
 {
 	$str = nv_clean60( $str, 300 );
 	$tmp = explode( " ", $keyword );
-	
+
 	foreach( $tmp as $k )
 	{
 		$tp = strtolower( $k );
@@ -40,7 +40,7 @@ function BoldKeywordInStr( $str, $keyword )
 		$k[0] = strtoupper( $k[0] );
 		$str = str_replace( $k, "<span class=\"keyword\">" . $k . "</span>", $str );
 	}
-	
+
 	return $str;
 }
 
@@ -74,7 +74,7 @@ $tbl_src = "";
 if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 {
 	$dbkey = $db->dblikeescape( $key );
-	
+
 	if( $check_num == 1 )
 	{
 		$tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as tb2 ON ( tb1.id =  tb2.id ) ";
@@ -94,7 +94,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		$where = " AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb1.keywords LIKE '%" . $dbkey . "%' ";
 		$where .= " OR tb1.author LIKE '%" . $dbkey . "%' OR tb1.sourcetext LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%')";
 	}
-	
+
 	if( $to_date != "" )
 	{
 		preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $to_date, $m );
@@ -103,7 +103,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		$fdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 		$where .= " AND ( `publtime` < $fdate AND `publtime` >= $tdate  ) ";
 	}
-	
+
 	if( $catid > 0 )
 	{
 		$table_search = NV_PREFIXLANG . "_" . $module_data . "_" . $catid;
@@ -136,7 +136,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		}
 
 		$img_src = "";
-	
+
 		if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
 		{
 			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
@@ -159,8 +159,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 			"author" => $author,
 			"publtime" => $publtime,
 			"homeimgfile" => $img_src,
-			"sourceid" => $sourceid
-		);
+			"sourceid" => $sourceid );
 	}
 
 	$contents .= call_user_func( "search_result_theme", $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );

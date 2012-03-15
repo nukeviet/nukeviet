@@ -526,7 +526,7 @@ class CKEditor
 		if (is_null($val)) {
 			return 'null';
 		}
-		if (is_bool($val)) {
+		if ( is_bool($val)) {
 			return $val ? 'true' : 'false';
 		}
 		if (is_int($val)) {

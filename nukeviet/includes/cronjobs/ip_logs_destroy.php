@@ -11,6 +11,11 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
+/**
+ * cron_del_ip_logs()
+ * 
+ * @return
+ */
 function cron_del_ip_logs()
 {
 	$result = true;

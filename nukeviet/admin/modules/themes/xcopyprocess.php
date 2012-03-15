@@ -11,6 +11,7 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $theme1 = filter_text_input( 'theme1', 'post' );
 $theme2 = filter_text_input( 'theme2', 'post' );
+
 $position = filter_text_input( 'position', 'post' );
 $position = explode( ',', $position );
 

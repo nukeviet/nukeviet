@@ -11,6 +11,11 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
+/**
+ * cron_online_expired_del()
+ * 
+ * @return
+ */
 function cron_online_expired_del()
 {
 	global $db;

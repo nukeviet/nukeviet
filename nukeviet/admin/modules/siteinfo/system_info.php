@@ -90,15 +90,15 @@ if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 	$info['chmod'] = array(
 		'caption' => $lang_module['chmod'],
 		'field' => array( //
-			array( //
+			array(
 				'key' => NV_DATADIR, //
 				'value' => ( is_writable( NV_ROOTDIR . '/' . NV_DATADIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) //
 			), //
-			array( //
+			array(
 				'key' => NV_SESSION_SAVE_PATH, //
 				'value' => ( is_writable( NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) //
 			), //
-			array( //
+			array(
 				'key' => NV_LOGS_DIR, //
 				'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) //
 			), //

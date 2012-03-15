@@ -11,6 +11,11 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
+/**
+ * cron_dump_autobackup()
+ * 
+ * @return
+ */
 function cron_dump_autobackup()
 {
 	global $db, $db_config, $global_config, $client_info;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @copyright 2009
  * @createdate 12/30/2009 6:18
@@ -55,6 +55,7 @@ include_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
 $admin_mods = array();
 $admin_mods['siteinfo'] = array( 'custom_title' => $lang_global['mod_siteinfo'] );
 $admin_mods['authors'] = array( 'custom_title' => $lang_global['mod_authors'] );
+
 if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$admin_mods['settings'] = array( 'custom_title' => $lang_global['mod_settings'] );
@@ -67,6 +68,7 @@ if( defined( 'NV_IS_SPADMIN' ) )
 	$admin_mods['modules'] = array( 'custom_title' => $lang_global['mod_modules'] );
 	$admin_mods['themes'] = array( 'custom_title' => $lang_global['mod_themes'] );
 }
+
 $admin_mods['upload'] = array( 'custom_title' => $lang_global['mod_upload'] );
 
 $module_name = strtolower( filter_text_input( NV_NAME_VARIABLE, 'post,get', 'siteinfo' ) );
