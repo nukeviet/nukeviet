@@ -15,10 +15,23 @@ $blockredirect = $nv_Request->get_string( 'blockredirect', 'get' );
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'post,get,cookie', $global_config['site_theme'] );
 
 $row = array( 'bid' => 0, 'theme' => '', 'module' => 'global', 'file_name' => '', 'title' => '', 'link' => '', 'template' => '', 'position' => $nv_Request->get_string( 'tag', 'get', '' ), 'exp_time' => 0, 'active' => 1, 'groups_view' => '', 'all_func' => 1, 'weight' => 0, 'config' => '' );
-	
+$row_old = array();
+
 $row['bid'] = $nv_Request->get_int( 'bid', 'get,post', 0 );
 
-$submit = 0;
+if( $row['bid'] > 0 )
+{
+	$result = $db->sql_query( "SELECT * FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE bid=" . $row['bid'] );
+	
+	if( $db->sql_numrows( $result ) > 0 )
+	{
+		$row_old = $row = $db->sql_fetchrow( $result );
+	}
+	else
+	{
+		nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
+	}
+}
 
 $xtpl = new XTemplate( "block_content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -35,7 +48,6 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 
 if( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
-	$submit = 1;
 	$error = array();
 	$list_file_name = filter_text_input( 'file_name', 'post', '', 0 );
 	$array_file_name = explode( "|", $list_file_name );
@@ -44,7 +56,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$module = $row['module'] = filter_text_input( 'module', 'post', '', 0, 55 );
 	$row['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
 
-	$path_file_php = $path_file_ini = '';
+	$path_file_php = $path_file_ini = $path_file_lang = '';
 	
 	unset( $matches );
 	preg_match( $global_config['check_block_module'], $row['file_name'], $matches );
@@ -55,15 +67,41 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		{
 			$path_file_php = NV_ROOTDIR . '/includes/blocks/' . $file_name;
 			$path_file_ini = NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
+
+			if( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/block." . $file_name ) )
+			{
+				$path_file_lang = NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/block." . $file_name;
+			}
+			elseif( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/block." . $file_name ) )
+			{
+				$path_file_lang = NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/block." . $file_name;
+			}
+			elseif( file_exists( NV_ROOTDIR . "/language/en/block." . $file_name ) )
+			{
+				$path_file_lang = NV_ROOTDIR . "/language/en/block." . $file_name;
+			}
 		}
 		elseif( isset( $site_mods[$module] ) )
 		{
-			$module_file = $site_mods[$module]['module_file'];
-			
-			if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $file_name ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
+			$mod_file = $site_mods[$module]['module_file'];
+		
+			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name ) and file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
 			{
-				$path_file_php = NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $file_name;
-				$path_file_ini = NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
+				$path_file_php = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name;
+				$path_file_ini = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
+
+				if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php' ) )
+				{
+					$path_file_lang = NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php';
+				}
+				elseif( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php' ) )
+				{
+					$path_file_lang = NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php';
+				}
+				elseif( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php' ) )
+				{
+					$path_file_lang = NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php';
+				}
 			}
 		}
 
@@ -150,23 +188,31 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				if( nv_function_exists( $submit_function ) )
 				{
 					$lang_block = array(); // Ngon ngu cua block
-					$xmllanguage = $xml->xpath( 'language' );
-					$language = ( array )$xmllanguage[0];
 					
-					if( isset( $language[NV_LANG_INTERFACE] ) )
+					if( ! empty( $path_file_lang ) )
 					{
-						$lang_block = ( array )$language[NV_LANG_INTERFACE];
-					}
-					elseif( isset( $language['en'] ) )
-					{
-						$lang_block = ( array )$language['en'];
+						require $path_file_lang;
 					}
 					else
 					{
-						$key = array_keys( $array_config );
-						$lang_block = array_combine( $key, $key );
+						$xmllanguage = $xml->xpath( 'language' );
+						$language = ( array )$xmllanguage[0];
+					
+						if( isset( $language[NV_LANG_INTERFACE] ) )
+						{
+							$lang_block = ( array )$language[NV_LANG_INTERFACE];
+						}
+						elseif( isset( $language['en'] ) )
+						{
+							$lang_block = ( array )$language['en'];
+						}
+						else
+						{
+							$key = array_keys( $array_config );
+							$lang_block = array_combine( $key, $key );
+						}
 					}
-
+					
 					// Goi ham xu ly hien thi block
 					$array_config = call_user_func( $submit_function, $module, $lang_block );
 					
@@ -225,6 +271,27 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			{
 				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET all_func='0' WHERE `bid`=" . $row['bid'] );
 				$db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid`=" . $row['bid'] . " AND `func_id` in (" . implode( ",", $array_funcid ) . ")" );
+				
+				// Cap nhat lai thu tu cho nhom cu
+				$func_id_old = $weight = 0;
+				$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme=" . $db->dbescape( $row_old['theme'] ) . " AND t2.position=" . $db->dbescape( $row_old['position'] ) . " ORDER BY t1.func_id ASC, t1.weight  ASC" );
+			
+				while( list( $bid_i, $func_id_i ) = $db->sql_fetchrow( $result ) )
+				{
+					if( $func_id_i == $func_id_old )
+					{
+						++$weight;
+					}
+					else
+					{
+						$weight = 1;
+						$func_id_old = $func_id_i;
+					}
+				
+					$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i . " AND `func_id`=" . $func_id_i );
+				}
+				unset( $func_id_old, $weight );
+				
 				$row['bid'] = 0;
 			}
 
@@ -232,7 +299,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			{
 				list( $maxweight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme =" . $db->dbescape( $selectthemes ) . " AND `position`=" . $db->dbescape( $row['position'] ) ) );
 				$row['weight'] = intval( $maxweight ) + 1;
+				
 				$row['bid'] = $db->sql_query_insert_id( "INSERT INTO `" . NV_BLOCKS_TABLE . "_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES ( NULL, " . $db->dbescape( $selectthemes ) . ", " . $db->dbescape( $row['module'] ) . ", '" . mysql_real_escape_string( $row['file_name'] ) . "', " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['link'] ) . ", " . $db->dbescape( $row['template'] ) . ", " . $db->dbescape( $row['position'] ) . ", '" . $row['exp_time'] . "', '" . $row['active'] . "', " . $db->dbescape( $row['groups_view'] ) . ", '" . $row['all_func'] . "', '" . $row['weight'] . "', '" . mysql_real_escape_string( $row['config'] ) . "' )" );
+				
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_add'], 'Name : ' . $row['title'], $admin_info['userid'] );
 			}
 			else
@@ -315,16 +384,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	}
 }
 
-if( $row['bid'] > 0 and $submit == 0 )
-{
-	$result = $db->sql_query( "SELECT * FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE bid=" . $row['bid'] );
-	
-	if( $db->sql_numrows( $result ) > 0 )
-	{
-		$row = $db->sql_fetchrow( $result );
-	}
-}
-
 $who_view = 3;
 $groups_view = array();
 
@@ -351,7 +410,7 @@ $xml = @simplexml_load_file( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.
 $xmlpositions = $xml->xpath( 'positions' ); // array
 $positions = $xmlpositions[0]->position; // object
 
-if( $row['bid'] != 0 )
+if( $row['bid'] != 0 ) // Canh bao tach block khoi nhom
 {
 	$xtpl->parse( 'main.block_group_notice' );
 }
@@ -421,7 +480,7 @@ foreach( $groups_list as $group_id => $grtl )
 	$xtpl->parse( 'main.groups_list' );
 }
 
-if( $row['bid'] != 0 )
+if( $row['bid'] != 0 ) // Tach ra va tao nhom moi
 {
 	list( $blocks_num ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid`=" . $row['bid'] ) );
 	$xtpl->assign( 'BLOCKS_NUM', $blocks_num );
