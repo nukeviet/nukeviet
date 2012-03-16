@@ -96,12 +96,12 @@ if( empty( $contents ) )
 		$array_cat = array();
 
 		$key = 0;
-		foreach( $global_array_cat as $catid => $array_cat_i )
+		foreach( $global_array_cat as $_catid => $array_cat_i )
 		{
 			if( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
 			{
 				$array_cat[$key] = $array_cat_i;
-				$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`= 1 AND `inhome`='1' ORDER BY `publtime` DESC LIMIT 0 , " . $array_cat_i['numlinks'];
+				$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $_catid . "` WHERE `status`= 1 AND `inhome`='1' ORDER BY `publtime` DESC LIMIT 0 , " . $array_cat_i['numlinks'];
 				$result = $db->sql_query( $sql );
 
 				while( $item = $db->sql_fetch_assoc( $result ) )
@@ -142,12 +142,12 @@ if( empty( $contents ) )
 
 		// cac bai viet cua cac chu de con
 		$key = 0;
-		foreach( $global_array_cat as $catid => $array_cat_i )
+		foreach( $global_array_cat as $_catid => $array_cat_i )
 		{
 			if( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
 			{
 				$array_catpage[$key] = $array_cat_i;
-				$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`= 1 AND `inhome`='1' ORDER BY `publtime` DESC LIMIT 0 , " . $array_cat_i['numlinks'];
+				$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $_catid . "` WHERE `status`= 1 AND `inhome`='1' ORDER BY `publtime` DESC LIMIT 0 , " . $array_cat_i['numlinks'];
 				$result = $db->sql_query( $sql );
 
 				while( $item = $db->sql_fetch_assoc( $result ) )
