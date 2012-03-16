@@ -1,4 +1,4 @@
-a.more{background:url(../images/arrow-red.gif) right 5px no-repeat;color:#b93d00;display:inline-block;padding-right:11px}
+﻿a.more{background:url(../images/arrow-red.gif) right 5px no-repeat;color:#b93d00;display:inline-block;padding-right:11px}
 .left{margin-right:.875em !important}
 .right{margin-left:.875em}
 .acenter{text-align:center}
@@ -26,7 +26,7 @@ ul.module-menu li a.current{color:#b93d00}
 .submit-qs{background:none;border:0;cursor:pointer;text-indent:-9999em;width:20px}
 a.rss{background:url(../images/rss.png) 0 0 no-repeat;display:block;height:16px;margin:2px 5px 0 0;text-indent:-9999em;width:16px}
 .header{height:100px;position:relative}
-.logo{left:10px;position:absolute;top:16px;width:400px}
+.logo{left:10px;position:absolute;top:16px;width:400px;height:84px}
 .logo h1{color:#414f5b;font-size:28px;font-weight:normal;line-height:70px;white-space:nowrap}
 .logo img{vertical-align:middle}
 .topadv{height:70px;overflow:hidden;position:absolute;right:40px;top:15px;width:510px}

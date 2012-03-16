@@ -78,6 +78,7 @@ $global_config['session_prefix'] = str_replace( $search, $replace, $global_confi
 $global_config['statistics_timezone'] = str_replace( $search, $replace, $global_config['statistics_timezone'] );
 $global_config['time_pattern'] = str_replace( $search, $replace, $global_config['time_pattern'] );
 $global_config['upload_logo'] = str_replace( $search, $replace, $global_config['upload_logo'] );
+$global_config['rewrite_endurl'] = str_replace( $search, $replace, $global_config['rewrite_endurl'] );
 unset( $search, $replace );
 
 $global_config['allow_sitelangs'] = ! empty( $global_config['allow_sitelangs'] ) ? explode( ",", $global_config['allow_sitelangs'] ) : array();
