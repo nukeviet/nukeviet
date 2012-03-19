@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES., JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES ., JSC. All rights reserved
  * @Createdate Jun 20, 2010  8:59:32 PM
@@ -151,9 +151,9 @@ function nv_create_table_sys( $lang )
 		('rss', 'rss', 'rss', 'Rss', '', 1279360267, 1, 1, '', '', '', '0', 0, 11, 1, 1, '',0)";
 
 	$sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
-        ('" . $lang . "', 'global', 'site_name', 'NUKEVIET CMS 3.0'),
+        ('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 3.x'),
     	('" . $lang . "', 'global', 'site_logo', 'images/logo.png'),
-    	('" . $lang . "', 'global', 'site_description', 'NUKEVIET CMS 3.0 Developed by Vinades.,Jsc'),
+    	('" . $lang . "', 'global', 'site_description', 'NukeViet CMS 3.x Developed by VINADES.,JSC'),
     	('" . $lang . "', 'global', 'site_keywords', ''),
         ('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
         ('" . $lang . "', 'global', 'site_home_module', 'users'),
