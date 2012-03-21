@@ -23,8 +23,8 @@
 		<div class="clear"></div>
 		<div class="cbox">
 			<!-- BEGIN: content -->
-			<!-- BEGIN: image --><a href="{CONTENT.link}"><img class="fl" src="{HOMEIMG01}" width="{IMGWIDTH01}" /></a><!-- END: image -->
 			<h3><a href="{CONTENT.link}">{CONTENT.title}</a></h3>
+			<!-- BEGIN: image --><a href="{CONTENT.link}"><img class="fl" src="{HOMEIMG01}" width="{IMGWIDTH01}" /></a><!-- END: image -->
 			<p>{CONTENT.hometext}</p>
 			<!-- BEGIN: adminlink --><p>{ADMINLINK}</p><!-- END: adminlink -->
 			<div class="clear"></div><!-- END: content -->
