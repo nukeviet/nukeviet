@@ -42,7 +42,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
         else
         {
             $myDomain = NV_SERVER_NAME;
-            //$myDomain = "nukeviet.vn";
+            // $myDomain = "nukeviet.vn";
             $from = "google";
 
             $tempFile = md5( $keyword . $lang . $accuracy . $from . $myDomain );
@@ -66,6 +66,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
                 }
 
                 $info = $keywordRank->process( $keyword, $lang, $accuracy, $from, $myDomain );
+				
                 $put_contents = serialize( $info );
                 @file_put_contents( $tempFile, $put_contents );
             }

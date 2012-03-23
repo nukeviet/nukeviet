@@ -56,12 +56,13 @@ class keywordRank
     private $pattern = array( //
         'googleByDomain' => "http://www.google.com/search?hl=en&domains=%s&q=%s&sitesearch=%s%s", //
         'googleByAll' => "http://www.google.com/search?hl=en&q=%s%s" //
-        );
+	);
+	
     private $langList = array( //
         "af", "sq", "ar", "be", "bg", "ca", "zh-CN", "hr", "cs", "da", "nl", "et", "tl", "fi", "fr", "gl", "de", //
         "en", "el", "ht", "iw", "hi", "hu", "is", "id", "ga", "it", "ja", "ko", "lv", "lt", "mk", "ms", "mt", "no", //
         "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "th", "tr", "uk", "vi", "cy", "yi" //
-        );
+	);
 
     /**
      * keywordRank::__construct()
@@ -94,7 +95,7 @@ class keywordRank
 
         $url = sprintf( $this->pattern['googleByDomain'], $domain, $key, $domain, $lang );
         $content = $getContent->get( $url );
-
+		
         $result = array();
         $result['myPages'] = 0;
         $result['top10MyPages'] = array();
@@ -102,25 +103,36 @@ class keywordRank
         $result['top50AllPages'] = array();
         $result['rank'] = array();
 
-        if ( preg_match( "/\<div\s+id\=resultStats\>[^\d]*([0-9\,]+)[^\<]*\</is", $content, $match ) )
+        if ( preg_match( "/\<div\>About ([0-9,]+) results\<\/div\>/is", $content, $match ) )
         {
             $bl = preg_replace( "/\,/", "", $match[1] );
             $result['myPages'] = ( int )$bl;
+			
             unset( $links );
             preg_match_all( '/\<h3\s+class\=\"?r[^\>]*\>[^\<]*\<a\s+href\s?\=\s?\"([^\"]+)\"[^\>]*>/', $content, $links );
-            if ( ! empty( $links[1] ) ) $result['top10MyPages'] = $links[1];
+			
+            if ( ! empty( $links[1] ) )
+			{
+				foreach( $links[1] as $_k => $_v )
+				{
+					if( preg_match( '/url\?q\=(.*)\&amp\;sa\=/i', $_v, $m ) ) $links[1][$_k] = $m[1];
+				}
+			
+				$result['top10MyPages'] = $links[1];
+			}
         }
 
         $url = sprintf( $this->pattern['googleByAll'], $key, $lang );
+		
         for ( $i = 0; $i < 5; ++$i )
         {
             $start = $i * 10;
             if ( $start != 0 ) $url .= "&start=" . $start;
-            $content = $getContent->get( $url );
-
+            $content = $getContent->get( $url );			
+			
             if ( $start == 0 )
             {
-                if ( preg_match( "/\<div\s+id\=resultStats\>[^\d]*([0-9\,]+)[^\<]*\</is", $content, $match ) )
+                if ( preg_match( "/\<div\>About ([0-9,]+) results\<\/div\>/is", $content, $match ) )
                 {
                     $bl = preg_replace( "/\,/", "", $match[1] );
                     $result['allPages'] = ( int )$bl;
@@ -128,7 +140,7 @@ class keywordRank
             }
 
             unset( $links );
-            preg_match_all( '/\<h3\s+class\=\"?r[^\>]*\>[^\<]*\<a\s+href\s?\=\s?\"((http(s?))[^\"]+)\"[^\>]*>/', $content, $links );
+            preg_match_all( '/\<h3\s+class\=\"?r[^\>]*\>[^\<]*\<a\s+href\s?\=\s?\"\/url\?q\=([^\"]+)\&amp\;sa\=([^\"]+)\"[^\>]*>/', $content, $links );
             if ( ! empty( $links[1] ) ) $result['top50AllPages'] = array_merge( $result['top50AllPages'], $links[1] );
         }
 
@@ -142,7 +154,7 @@ class keywordRank
                 $result['rank'][$k] = $k + 1;
             }
         }
-
+		
         return $result;
     }
 
