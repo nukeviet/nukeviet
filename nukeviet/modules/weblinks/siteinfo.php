@@ -25,7 +25,7 @@ list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) as number 
 if ( $number > 0 )
 {
 	$pendinginfo[] = array( 
-		'key' => $lang_siteinfo['siteinfo_error'], 'value' => $number, 'link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=brokenlink"
+		'key' => $lang_siteinfo['siteinfo_error'], 'value' => $number, 'link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $mod . "&amp;" . NV_OP_VARIABLE . "=brokenlink"
 	);
 }
 
