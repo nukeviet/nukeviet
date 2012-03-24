@@ -18,7 +18,7 @@
 			<td>{MODULE}</td>
 			<td>
 				<!-- BEGIN: link -->
-				<a href="{LINK}" title="{KEY}">{KEY}</a>
+				<a class="link" href="{LINK}" title="{KEY}">{KEY}</a>
 				<!-- END: link -->
 				<!-- BEGIN: text -->
 				{KEY}
@@ -49,7 +49,7 @@
 			<td>{MODULE}</td>
 			<td>
 				<!-- BEGIN: link -->
-				<a href="{LINK}" title="{KEY}">{KEY}</a>
+				<a class="link" href="{LINK}" title="{KEY}">{KEY}</a>
 				<!-- END: link -->
 				<!-- BEGIN: text -->
 				{KEY}

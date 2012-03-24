@@ -108,6 +108,15 @@ a {
     text-decoration: none;
 }
 
+a.link {
+	font-weight: 700;
+	text-decoration: underline !important;
+}
+
+a.link:hover {
+	text-decoration: none !important;
+}
+
 blockquote {
     margin: 1.5em;
     color: #666;
@@ -208,11 +217,6 @@ tfoot {
 
 caption {
     background: #eee;
-}
-
-a {
-    color: #0943ae;
-    text-decoration: underline
 }
 
 body {

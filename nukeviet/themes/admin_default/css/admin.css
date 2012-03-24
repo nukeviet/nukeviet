@@ -210,9 +210,13 @@ caption {
     background: #eee;
 }
 
-a {
-    color: #0943ae;
-    text-decoration: underline
+a.link {
+	font-weight: 700;
+	text-decoration: underline !important;
+}
+
+a.link:hover {
+	text-decoration: none !important;
 }
 
 body {
