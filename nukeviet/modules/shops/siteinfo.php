@@ -80,7 +80,7 @@ list( $number ) = $db->sql_fetchrow( $db->sql_query("SELECT COUNT(*) AS number F
 if ( $number > 0 )
 {
     $pendinginfo[] = array( 
-        'key' => $lang_siteinfo['siteinfo_order_noview'], 'value' => $number 
+        'key' => $lang_siteinfo['siteinfo_order_noview'], 'value' => $number, 'link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $mod . "&amp;" . NV_OP_VARIABLE . "=order"
     );
 }
 

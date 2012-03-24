@@ -43,7 +43,7 @@ list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) as number 
 if ( $number > 0 )
 {
 	$pendinginfo[] = array( 
-		'key' => $lang_siteinfo['siteinfo_comment_pending'], 'value' => $number 
+		'key' => $lang_siteinfo['siteinfo_comment_pending'], 'value' => $number, 'link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $mod . "&amp;" . NV_OP_VARIABLE . "=comment&amp;status=0"
 	);
 }
 
@@ -54,7 +54,7 @@ $number = isset( $array_data[0]['number'] ) ? intval( $array_data[0]['number'] )
 if ( $number > 0 )
 {
 	$pendinginfo[] = array( 
-		'key' => $lang_siteinfo['siteinfo_users_send'], 'value' => $number 
+		'key' => $lang_siteinfo['siteinfo_users_send'], 'value' => $number, 'link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $mod . "&amp;" . NV_OP_VARIABLE . "=filequeue"
 	);
 }
 
@@ -62,8 +62,8 @@ if ( $number > 0 )
 list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) as number FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_report`" ) );
 if ( $number > 0 )
 {
-	$pendinginfo[] = array( 
-		'key' => $lang_siteinfo['siteinfo_eror'], 'value' => $number 
+	$pendinginfo[] = array(
+		'key' => $lang_siteinfo['siteinfo_eror'], 'value' => $number, 'link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $mod . "&amp;" . NV_OP_VARIABLE . "=report"
 	);
 }
 

@@ -84,6 +84,17 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 				$xtpl->assign( 'KEY', $field['key'] );
 				$xtpl->assign( 'VALUE', $field['value'] );
 				$xtpl->assign( 'MODULE', $if['caption'] );
+				
+				if( ! empty( $field['link'] ) )
+				{
+					$xtpl->assign( 'LINK', $field['link'] );
+					$xtpl->parse( 'main.info.loop.link' );
+				}
+				else
+				{
+					$xtpl->parse( 'main.info.loop.text' );
+				}
+				
 				$xtpl->parse( 'main.info.loop' );
 			}
 		}
@@ -103,6 +114,17 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 				$xtpl->assign( 'KEY', $field['key'] );
 				$xtpl->assign( 'VALUE', $field['value'] );
 				$xtpl->assign( 'MODULE', $if['caption'] );
+				
+				if( ! empty( $field['link'] ) )
+				{
+					$xtpl->assign( 'LINK', $field['link'] );
+					$xtpl->parse( 'main.pendinginfo.loop.link' );
+				}
+				else
+				{
+					$xtpl->parse( 'main.pendinginfo.loop.text' );
+				}
+
 				$xtpl->parse( 'main.pendinginfo.loop' );
 			}
 		}

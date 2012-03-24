@@ -16,7 +16,14 @@
 	<tbody{CLASS}>
 		<tr>
 			<td>{MODULE}</td>
-			<td>{KEY}</td>
+			<td>
+				<!-- BEGIN: link -->
+				<a href="{LINK}" title="{KEY}">{KEY}</a>
+				<!-- END: link -->
+				<!-- BEGIN: text -->
+				{KEY}
+				<!-- END: text -->
+			</td>
 			<td class="aright">{VALUE}</td>
 		</tr>
 	</tbody>
@@ -40,7 +47,14 @@
 	<tbody{CLASS}>
 		<tr>
 			<td>{MODULE}</td>
-			<td>{KEY}</td>
+			<td>
+				<!-- BEGIN: link -->
+				<a href="{LINK}" title="{KEY}">{KEY}</a>
+				<!-- END: link -->
+				<!-- BEGIN: text -->
+				{KEY}
+				<!-- END: text -->
+			</td>
 			<td class="aright">{VALUE}</td>
 		</tr>
 	</tbody>
