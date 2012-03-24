@@ -332,7 +332,7 @@ $lang_module['product_number_order'] = "Tổng số đơn đặt hàng";
 $lang_module['product_number_order_new'] = "Tổng số đơn mới đặt hàng";
 $lang_module['product_number_order_no_active'] = "Tổng số đơn đặt hàng chưa duyệt";
 $lang_module['product_number_order_no_payment'] = "Tổng số đơn đặt hàng chưa thanh toán";
-$lang_module['product_number_order_send_payment'] = "Tổng số đơn đặt hàng đã gui thanh toán";
+$lang_module['product_number_order_send_payment'] = "Tổng số đơn đặt hàng đã gửi thanh toán";
 $lang_module['product_number_order_payment'] = "Tổng số đơn đặt hàng đã thanh toán";
 $lang_module['product_number_order_dis_payment'] = "Tổng số đơn đặt hàng đã bị hủy";
 
