@@ -10,7 +10,7 @@
                 <label>
                     {LANG.account}
                 </label>
-                <input id="login_iavim" name="nv_login" value="{DATA.nv_login}" class="required" maxlength="{NICK_MAXLENGTH}" />
+                <input type="text" id="login_iavim" name="nv_login" value="{DATA.nv_login}" class="required" maxlength="{NICK_MAXLENGTH}" />
             </div>
             <div class="clearfix rows">
                 <label>
@@ -28,7 +28,7 @@
                 <label>
                     {LANG.retype_captcha}
                 </label>
-                <input name="nv_seccode" id="seccode_iavim" class="required" maxlength="{GFX_MAXLENGTH}" />
+                <input type="text" name="nv_seccode" id="seccode_iavim" class="required" maxlength="{GFX_MAXLENGTH}" />
             </div><!-- END: captcha --><input name="nv_redirect" value="{DATA.nv_redirect}" type="hidden" /><input type="submit" value="{LANG.login_submit}" class="submit" />
         </fieldset>
         <div class="rows"  style="margin-top:20px;">
