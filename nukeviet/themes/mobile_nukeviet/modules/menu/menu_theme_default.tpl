@@ -1,9 +1,12 @@
 <!-- BEGIN: main -->
-<div class="nav1">
-    <ul>
-        <li><a title="{LANG.Home}" href="{THEME_SITE_HREF}"><span>{LANG.Home}</span></a></li>
-        <!-- BEGIN: top_menu -->
-        <li>| <a {TOP_MENU.current} href="{TOP_MENU.link}">{TOP_MENU.title}</a></li><!-- END: top_menu -->
-    </ul>
+<div class="nav1 ac">
+	<select class="half" onchange="window.location=this.value;">
+		<option value="{THEME_SITE_HREF}">{LANG.Home}</option>
+		<!-- BEGIN: top_menu -->
+		<option value="{TOP_MENU.link}">{TOP_MENU.title}</option>
+		<!-- BEGIN: sub -->
+		<option value="{SUB.link}">&nbsp;&nbsp;&nbsp;&nbsp;{SUB.title}</option>
+		<!-- END: sub --><!-- END: top_menu -->
+	</select>
 </div>
 <!-- END: main -->

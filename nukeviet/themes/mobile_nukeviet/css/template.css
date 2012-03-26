@@ -14,6 +14,8 @@ a:hover{color: #4491b2}
 .fr{float:right}
 .last{padding-right:0!important;margin-right:0!important}
 .rqe{color:red}
+.qter{width:25%}
+.half{width:50%}
 
 h1{font-size:20px}
 h2{font-size:18px}
@@ -26,9 +28,7 @@ h6{font-size:10px}
 #header .language{position: absolute;top:12px;right: 5px}
 
 .nav1{height:30px;background:transparent url('../images/nav_bg.jpg') repeat-x;color:#dadada}
-.nav1 li{float:left}
-.nav1 a{line-height:30px;color:#fff;padding:0 5px}
-.nav1 a.current{font-weight:700}
+.nav1 select{margin-top:4px;height:22px}
 
 #footer{border-top:8px solid #0f45a8;padding: 5px 0;background:url('../images/f-bg.jpg') repeat-x center top}
 
