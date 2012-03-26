@@ -14,7 +14,7 @@
 <div id="ddtopmenubar" class="mattblackmenu">
 	<ul>
 		<!-- BEGIN: loopcat1 -->
-		<li><a title="{CAT1.note}" href="{CAT1.link}" {rel}{CAT1.target}{CAT1.class}><strong>{CAT1.title}</strong></a><!-- END: loopcat1 -->
+		<li><a title="{CAT1.note}" href="{CAT1.link}" {rel}{CAT1.target}{CAT1.class}><strong>{CAT1.title}</strong></a></li><!-- END: loopcat1 -->
 	</ul>
 </div>
 <script type="text/javascript">
