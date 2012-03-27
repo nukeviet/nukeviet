@@ -75,7 +75,7 @@ $lang_module['groups'] = "Nếu chọn &quot;Nhóm thành viên&quot; hãy đán
 $lang_module['sub_menu'] = "menu con";
 
 $lang_module['main_note_0'] = "Nhấp vào";
-$lang_module['main_note_1'] = "để tạo khối menu mới. Nhấp vào tên mỗi khối menu bên dưới để xem chi tiết và chỉnh sửa các menu.";
+$lang_module['main_note_1'] = "để tạo khối menu mới. Nhấp vào tên mỗi khối menu bên dưới để thêm các mục menu vào đây cũng như chỉnh sửa các mục menu. Gợi ý: Bạn có thể tạo nhiều khối menu để sử dụng cho các giao diện và vị trí khác nhau.";
 $lang_module['add_type_active'] = "Kiểu active menu.";
 $lang_module['add_type_active_note'] = "Cách thức xác định một menu có đang được kích hoạt hay không bằng cách so sánh liên kết của menu chỉ đến với liên kết hiện tại của trang theo các tiêu chí bên.";
 $lang_module['add_type_active_0'] = "Chính xác với liên kết của menu";
