@@ -7,7 +7,7 @@
  * @Createdate  03-05-2010
  */
 
-if ( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS `id`,`title`,`alias`,`bodytext` 
 FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "` 
@@ -20,20 +20,20 @@ $tmp_re = $db->sql_query( $sql );
 $result = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $all_page ) = $db->sql_fetchrow( $result );
 
-if ( $all_page )
+if( $all_page )
 {
-    $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
+	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
-    while ( list( $id, $tilterow, $alias, $content ) = $db->sql_fetchrow( $tmp_re ) )
-    {
-        $url = $link . $alias . "-" . $id;
+	while( list( $id, $tilterow, $alias, $content ) = $db->sql_fetchrow( $tmp_re ) )
+	{
+		$url = $link . $alias . "-" . $id;
 
-        $result_array[] = array(
-            'link' => $url, //
-            'title' => BoldKeywordInStr( $tilterow, $key, $logic ), //
-            'content' => BoldKeywordInStr( $content, $key, $logic ) //
+		$result_array[] = array(
+			'link' => $url, //
+			'title' => BoldKeywordInStr( $tilterow, $key, $logic ), //
+			'content' => BoldKeywordInStr( $content, $key, $logic ) //
 		);
-    }
+	}
 }
 
 ?>

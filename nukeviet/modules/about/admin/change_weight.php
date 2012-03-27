@@ -7,32 +7,35 @@
  * @Createdate 2-10-2010 18:49
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
-if ( empty( $id ) ) die( "NO_" . $id );
+if( empty( $id ) ) die( "NO_" . $id );
 
-$query = "SELECT `weight` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
-$result = $db->sql_query( $query );
+$sql = "SELECT `weight` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
+$result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
-if ( $numrows != 1 ) die( 'NO_' . $id );
+if( $numrows != 1 ) die( 'NO_' . $id );
 
 $new_weight = $nv_Request->get_int( 'new_weight', 'post', 0 );
-if ( empty( $new_weight ) ) die( 'NO_' . $mod );
+if( empty( $new_weight ) ) die( 'NO_' . $mod );
 
-$query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`!=" . $id . " ORDER BY `weight` ASC";
-$result = $db->sql_query( $query );
+$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`!=" . $id . " ORDER BY `weight` ASC";
+$result = $db->sql_query( $sql );
+
 $weight = 0;
-while ( $row = $db->sql_fetchrow( $result ) )
+while( $row = $db->sql_fetchrow( $result ) )
 {
-    ++$weight;
-    if ( $weight == $new_weight ) ++$weight;
-    $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
-    $db->sql_query( $sql );
+	++$weight;
+	if( $weight == $new_weight ) ++$weight;
+	
+	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
+	$db->sql_query( $sql );
 }
 
 $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $new_weight . " WHERE `id`=" . $id;
 $db->sql_query( $sql );
+
 nv_del_moduleCache( $module_name );
 
 include ( NV_ROOTDIR . "/includes/header.php" );

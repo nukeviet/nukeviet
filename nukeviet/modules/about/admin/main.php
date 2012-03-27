@@ -7,7 +7,7 @@
  * @Createdate 24-06-2011 10:35
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -26,37 +26,35 @@ if( $num < 1 )
 	die();
 }
 
-$array_status = array( 
-	$lang_module ['aabout6'], $lang_module ['aabout5']
-);
+$array_status = array( $lang_module['aabout6'], $lang_module['aabout5'] );
 
 $i = 0;
-while ( $row = $db->sql_fetchrow( $result ) )
+while( $row = $db->sql_fetchrow( $result ) )
 {
-	$row['class'] = ( ++ $i % 2 ) ? " class=\"second\"" : "";
+	$row['class'] = ( ++$i % 2 ) ? " class=\"second\"" : "";
 	$row['url_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $row['id'];
-	
-	for ( $i = 1; $i <= $num; ++ $i )
+
+	for( $i = 1; $i <= $num; ++$i )
 	{
 		$xtpl->assign( 'WEIGHT', array(
-			'w' => $i,  //
-			'selected' => ( $i == $row['weight'] ) ? " selected=\"selected\"" : "",  //
+			'w' => $i, //
+			'selected' => ( $i == $row['weight'] ) ? " selected=\"selected\"" : "", //
 		) );
-		
+
 		$xtpl->parse( 'main.row.weight' );
 	}
-	
-	foreach ( $array_status as $key => $val )
+
+	foreach( $array_status as $key => $val )
 	{
 		$xtpl->assign( 'STATUS', array(
-			'key' => $key,  //
-			'val' => $val,  //
-			'selected' => ( $key == $row['status'] ) ? " selected=\"selected\"" : "",  //
+			'key' => $key, //
+			'val' => $val, //
+			'selected' => ( $key == $row['status'] ) ? " selected=\"selected\"" : "", //
 		) );
-		
+
 		$xtpl->parse( 'main.row.status' );
 	}
-	
+
 	$xtpl->assign( 'ROW', $row );
 	$xtpl->parse( 'main.row' );
 }
