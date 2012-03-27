@@ -7,13 +7,13 @@
  * @Createdate 3/25/2010 23:58
  */
 
-if ( ! defined( 'NV_IS_MOD_BANNERS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_BANNERS' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-if ( ! defined( 'NV_IS_BANNER_CLIENT' ) or empty( $banner_client_info ) ) die( '&nbsp;' );
+if( ! defined( 'NV_IS_BANNER_CLIENT' ) or empty( $banner_client_info ) ) die( '&nbsp;' );
 
-if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
+if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
 	$pass = strip_tags( $nv_Request->get_string( 'pass_iavim', 'post', '' ) );
 	$re_pass = strip_tags( $nv_Request->get_string( 're_pass_iavim', 'post', '' ) );
@@ -29,20 +29,20 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_email = nv_check_valid_email( $email );
 	$check_pass = nv_check_valid_pass( $pass, NV_UPASSMAX, NV_UPASSMIN );
 
-	if ( $website == "http://" ) $website = "";
+	if( $website == "http://" ) $website = "";
 
-	if ( ! empty( $check_email ) ) die( strip_tags( $check_email ) . '|email_iavim' );
-	elseif ( ! empty( $pass ) and ! empty( $check_pass ) ) die( strip_tags( $check_pass ) . '|pass_iavim' );
-	elseif ( ! empty( $pass ) and empty( $re_pass ) ) die( strip_tags( $lang_global['re_password_empty'] ) . '|pass_iavim' );
-	elseif ( ! empty( $pass ) and $pass != $re_pass ) die( strip_tags( sprintf( $lang_global['passwordsincorrect'], $pass, $re_pass ) ) . '|pass_iavim' );
-	elseif ( empty( $full_name ) ) die( strip_tags( $lang_module['full_name_empty'] ) . '|full_name' );
-	elseif ( ! empty( $website ) and ! nv_is_url( $website ) ) die( strip_tags( $lang_module['website_incorrect'] ) . '|website_iavim' );
-	elseif ( ! empty( $yim ) and ! preg_match( "/^[a-zA-Z0-9\.\-\_]+$/", $yim ) ) die( strip_tags( $lang_module['yim_incorrect'] ) . '|yim_iavim' );
+	if( ! empty( $check_email ) ) die( strip_tags( $check_email ) . '|email_iavim' );
+	elseif( ! empty( $pass ) and ! empty( $check_pass ) ) die( strip_tags( $check_pass ) . '|pass_iavim' );
+	elseif( ! empty( $pass ) and empty( $re_pass ) ) die( strip_tags( $lang_global['re_password_empty'] ) . '|pass_iavim' );
+	elseif( ! empty( $pass ) and $pass != $re_pass ) die( strip_tags( sprintf( $lang_global['passwordsincorrect'], $pass, $re_pass ) ) . '|pass_iavim' );
+	elseif( empty( $full_name ) ) die( strip_tags( $lang_module['full_name_empty'] ) . '|full_name' );
+	elseif( ! empty( $website ) and ! nv_is_url( $website ) ) die( strip_tags( $lang_module['website_incorrect'] ) . '|website_iavim' );
+	elseif( ! empty( $yim ) and ! preg_match( "/^[a-zA-Z0-9\.\-\_]+$/", $yim ) ) die( strip_tags( $lang_module['yim_incorrect'] ) . '|yim_iavim' );
 	list( $count ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `id`!=" . $banner_client_info['id'] . " AND `email`=" . $db->dbescape( $email ) ) );
-	if ( $count > 0 ) die( strip_tags( sprintf( $lang_module['email_is_already_in_use'], $email ) ) . '|email_iavim' );
+	if( $count > 0 ) die( strip_tags( sprintf( $lang_module['email_is_already_in_use'], $email ) ) . '|email_iavim' );
 
 	$sql = "UPDATE `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` SET ";
-	if ( ! empty( $pass ) ) $sql .= "`pass`=" . $db->dbescape( $crypt->hash( $pass ) ) . ", ";
+	if( ! empty( $pass ) ) $sql .= "`pass`=" . $db->dbescape( $crypt->hash( $pass ) ) . ", ";
 	$sql .= "`full_name`=" . $db->dbescape( $full_name ) . ", `email`=" . $db->dbescape( $email ) . ", `website`=" . $db->dbescape( $website ) . ", 
         `location`=" . $db->dbescape( $location ) . ", `yim`=" . $db->dbescape( $yim ) . ", `phone`=" . $db->dbescape( $phone ) . ", `fax`=" . $db->dbescape( $fax ) . ", 
         `mobile`=" . $db->dbescape( $mobile ) . " WHERE `id`=" . $banner_client_info['id'];

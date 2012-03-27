@@ -7,13 +7,12 @@
  * @Createdate 3/12/2010 21:6
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-if ( $client_info['is_myreferer'] != 1 ) die( 'Wrong URL' );
+if( $client_info['is_myreferer'] != 1 ) die( 'Wrong URL' );
 
-$query = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "`";
-$query .= " ORDER BY `blang` ASC";
-$result = $db->sql_query( $query );
+$sql = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` ORDER BY `blang` ASC";
+$result = $db->sql_query( $sql );
 
 $contents = array();
 $contents['caption'] = $lang_module['plans_list2'];
@@ -24,7 +23,7 @@ $contents['add'] = $lang_module['add_banner'];
 $contents['del'] = $lang_global['delete'];
 $contents['rows'] = array();
 
-while ( $row = $db->sql_fetchrow( $result ) )
+while( $row = $db->sql_fetchrow( $result ) )
 {
 	$contents['rows'][$row['id']]['title'] = $row['title'];
 	$contents['rows'][$row['id']]['blang'] = ( ! empty( $row['blang'] ) ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'];

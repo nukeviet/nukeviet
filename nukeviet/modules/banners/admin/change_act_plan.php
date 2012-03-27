@@ -7,18 +7,18 @@
  * @Createdate 3/12/2010 21:52
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 
-if ( empty( $id ) ) die( 'Stop!!!' );
+if( empty( $id ) ) die( 'Stop!!!' );
 
-$query = "SELECT `act` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . $id;
-$result = $db->sql_query( $query );
+$sql = "SELECT `act` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
-if ( $numrows != 1 ) die( 'Stop!!!' );
+if( $numrows != 1 ) die( 'Stop!!!' );
 
 $row = $db->sql_fetchrow( $result );
 $act = $row['act'] ? 0 : 1;

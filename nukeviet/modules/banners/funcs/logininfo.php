@@ -9,14 +9,13 @@
 
 if ( ! defined( 'NV_IS_MOD_BANNERS' ) ) die( 'Stop!!!' );
 
-//if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
-
 if ( defined( 'NV_IS_BANNER_CLIENT' ) ) die( '&nbsp;' );
 
 if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
 	$login = strip_tags( $nv_Request->get_string( 'login', 'post', '' ) );
 	$password = strip_tags( $nv_Request->get_string( 'password', 'post', '' ) );
+
 	if ( $global_config['gfx_chk'] )
 	{
 		$seccode = strip_tags( $nv_Request->get_string( 'seccode', 'post', '' ) );
@@ -30,9 +29,10 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	elseif ( $global_config['gfx_chk'] and ! nv_capcha_txt( $seccode ) ) die( 'action' );
 	else
 	{
-		$query = "SELECT * FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `login` = " . $db->dbescape( $login ) . " AND `act`=1";
-		$result = $db->sql_query( $query );
+		$sql = "SELECT * FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `login` = " . $db->dbescape( $login ) . " AND `act`=1";
+		$result = $db->sql_query( $sql );
 		$numrows = $db->sql_numrows( $result );
+	
 		if ( $numrows != 1 )
 		{
 			die( 'action' );
@@ -52,8 +52,8 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$current_login = NV_CURRENTTIME;
 				$id = intval( $row['id'] );
 				$agent = substr( NV_USER_AGENT, 0, 254 );
-				$query = "UPDATE `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` SET `check_num` = " . $db->dbescape( $checknum ) . ", `last_login` = " . $current_login . ", `last_ip` = " . $db->dbescape( $client_info['ip'] ) . ", `last_agent` = " . $db->dbescape( $agent ) . " WHERE `id`=" . $id;
-				if ( ! $db->sql_query( $query ) ) die( 'action' );
+				$sql = "UPDATE `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` SET `check_num` = " . $db->dbescape( $checknum ) . ", `last_login` = " . $current_login . ", `last_ip` = " . $db->dbescape( $client_info['ip'] ) . ", `last_agent` = " . $db->dbescape( $agent ) . " WHERE `id`=" . $id;
+				if ( ! $db->sql_query( $sql ) ) die( 'action' );
 				$client = array( 'login' => $login, 'checknum' => $checknum, 'current_agent' => $agent, 'last_agent' => $row['last_agent'], 'current_ip' => $client_info['ip'], 'last_ip' => $row['last_ip'], 'current_login' => $current_login, 'last_login' => intval( $row['last_login'] ) );
 				$client = serialize( $client );
 				$nv_Request->set_Cookie( 'bncl', $client, NV_LIVE_COOKIE_TIME );

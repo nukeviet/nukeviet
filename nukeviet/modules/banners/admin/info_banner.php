@@ -7,20 +7,21 @@
  * @Createdate 3/15/2010 16:10
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 
-if ( empty( $id ) )
+if( empty( $id ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();
 }
 
-$query = "SELECT *  FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $id;
-$result = $db->sql_query( $query );
+$sql = "SELECT *  FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
-if ( $numrows != 1 )
+
+if( $numrows != 1 )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();
@@ -29,11 +30,13 @@ if ( $numrows != 1 )
 $row = $db->sql_fetchrow( $result );
 
 list( $ptitle, $plang ) = $db->sql_fetchrow( $db->sql_query( "SELECT `title`, `blang` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE id=" . $row['pid'] ) );
+
 $ptitle = $ptitle . " (" . ( ! empty( $plang ) ? $language_array[$plang]['name'] : $lang_module['blang_all'] ) . ")";
 $ptitle = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'] . "\">" . $ptitle . "</a>";
 
 list( $cl_full_name, $cl_login ) = $db->sql_fetchrow( $db->sql_query( "SELECT `full_name`, `login` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE id=" . $row['clid'] ) );
-if ( ! empty( $cl_full_name ) )
+
+if( ! empty( $cl_full_name ) )
 {
 	$cl_full_name = $cl_full_name . " (" . $cl_login . ")";
 	$cl_full_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_client&amp;id=" . $row['clid'] . "\">" . $cl_full_name . "</a>";
@@ -41,13 +44,14 @@ if ( ! empty( $cl_full_name ) )
 
 $img_info = sprintf( $lang_module['img_info2'], $row['file_ext'], $row['file_mime'], $row['width'], $row['height'] );
 $click_url = $row['click_url'];
-if ( ! empty( $click_url ) ) $click_url = "<a href=\"" . $click_url . "\" target=\"_blank\">" . $click_url . "</a>";
+
+if( ! empty( $click_url ) ) $click_url = "<a href=\"" . $click_url . "\" target=\"_blank\">" . $click_url . "</a>";
 
 $contents = array();
 $contents['caption'] = sprintf( $lang_module['info_banner_caption'], $row['title'] );
 $contents['edit'] = array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_banner&amp;id=" . $id, $lang_global['edit'] );
 $contents['del'] = array( "nv_b_del2(" . $id . ");", $lang_global['delete'] );
-if ( $row['act'] != '2' ) $contents['act'] = array( "nv_b_chang_act2(" . $id . ");", $lang_module['change_act'] );
+if( $row['act'] != '2' ) $contents['act'] = array( "nv_b_chang_act2(" . $id . ");", $lang_module['change_act'] );
 $contents['rows'][] = array( 'id', $row['id'] );
 $contents['rows'][] = array( $lang_module['title'], $row['title'] );
 $contents['rows'][] = array( $lang_module['in_plan'], $ptitle );
@@ -67,9 +71,10 @@ $current_year = date( "Y" );
 $publ_month = date( "n", $row['publ_time'] );
 $publ_year = date( "Y", $row['publ_time'] );
 $bymonth = array();
-for ( $i = $current_month; $i > 0; --$i )
+
+for( $i = $current_month; $i > 0; --$i )
 {
-	if ( $i < $publ_month and $current_year == $publ_year ) break;
+	if( $i < $publ_month and $current_year == $publ_year ) break;
 	$bymonth[$i] = nv_monthname( $i ) . " " . date( "Y" );
 }
 

@@ -7,33 +7,23 @@
  * @Createdate 3-6-2010 0:19
  */
 
-if ( ! defined( 'NV_IS_MOD_BANNERS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_BANNERS' ) ) die( 'Stop!!!' );
 
 $contents = array();
 $contents['info'] = $lang_module['main_page_info'];
 $contents['detail'] = $lang_global['detail'];
 
-$query = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `act`=1";
-$query .= " ORDER BY `blang` ASC";
-$result = $db->sql_query( $query );
+$sql = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `act`=1 ORDER BY `blang` ASC";
+$result = $db->sql_query( $sql );
 $contents['rows'] = array();
-while ( $row = $db->sql_fetchrow( $result ) )
+
+while( $row = $db->sql_fetchrow( $result ) )
 {
-    $contents['rows'][$row['id']]['title'] = array( 
-        $row['title'] 
-    );
-    $contents['rows'][$row['id']]['blang'] = array( 
-        $lang_module['blang'], ( ( ! empty( $row['blang'] ) ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'] ) 
-    );
-    $contents['rows'][$row['id']]['size'] = array( 
-        $lang_module['size'], $row['width'] . ' x ' . $row['height'] . 'px' 
-    );
-    $contents['rows'][$row['id']]['form'] = array( 
-        $lang_module['form'], $row['form'] 
-    );
-    $contents['rows'][$row['id']]['description'] = array( 
-        $lang_module['description'], $row['description'] 
-    );
+	$contents['rows'][$row['id']]['title'] = array( $row['title'] );
+	$contents['rows'][$row['id']]['blang'] = array( $lang_module['blang'], ( ( ! empty( $row['blang'] ) ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'] ) );
+	$contents['rows'][$row['id']]['size'] = array( $lang_module['size'], $row['width'] . ' x ' . $row['height'] . 'px' );
+	$contents['rows'][$row['id']]['form'] = array( $lang_module['form'], $row['form'] );
+	$contents['rows'][$row['id']]['description'] = array( $lang_module['description'], $row['description'] );
 }
 
 $contents['containerid'] = "action";

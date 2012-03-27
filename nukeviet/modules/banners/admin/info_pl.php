@@ -7,17 +7,19 @@
  * @Createdate 3/13/2010 0:12
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
-if ( $client_info['is_myreferer'] != 1 ) die( 'Wrong URL' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( $client_info['is_myreferer'] != 1 ) die( 'Wrong URL' );
 
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 
-if ( empty( $id ) ) die( 'Stop!!!' );
+if( empty( $id ) ) die( 'Stop!!!' );
 
-$query = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . $id;
-$result = $db->sql_query( $query );
+$sql = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
-if ( $numrows != 1 ) die( 'Stop!!!' );
+
+if( $numrows != 1 ) die( 'Stop!!!' );
+
 $row = $db->sql_fetchrow( $result );
 
 $contents = array();
@@ -27,7 +29,8 @@ $contents['rows']['blang'] = array( $lang_module['blang'], ( ! empty( $row['blan
 $contents['rows']['form'] = array( $lang_module['form'], $row['form'] );
 $contents['rows']['size'] = array( $lang_module['size'], $row['width'] . ' x ' . $row['height'] . 'px' );
 $contents['rows']['is_act'] = array( $lang_module['is_act'], $row['act'] ? $lang_global['yes'] : $lang_global['no'] );
-if ( ! empty( $row['description'] ) ) $contents['rows']['description'] = array( $lang_module['description'], $row['description'] );
+
+if( ! empty( $row['description'] ) ) $contents['rows']['description'] = array( $lang_module['description'], $row['description'] );
 
 $contents['edit'] = array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_plan&amp;id=" . $id, $lang_global['edit'] );
 $contents['add'] = array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_banner&amp;pid=" . $id, $lang_module['add_banner'] );

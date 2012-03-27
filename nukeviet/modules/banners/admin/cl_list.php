@@ -7,13 +7,12 @@
  * @Createdate 3/11/2010 23:0
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-$query = "SELECT * FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "`";
-$query .= " ORDER BY `login` ASC";
-$result = $db->sql_query( $query );
+$sql = "SELECT * FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` ORDER BY `login` ASC";
+$result = $db->sql_query( $sql );
 
 $contents = array();
 $contents['caption'] = $lang_module['client_list2'];
@@ -23,7 +22,8 @@ $contents['edit'] = $lang_global['edit'];
 $contents['add'] = $lang_global['add'];
 $contents['del'] = $lang_global['delete'];
 $contents['rows'] = array();
-while ( $row = $db->sql_fetchrow( $result ) )
+
+while( $row = $db->sql_fetchrow( $result ) )
 {
 	$contents['rows'][$row['id']]['login'] = $row['login'];
 	$contents['rows'][$row['id']]['full_name'] = $row['full_name'];
@@ -32,7 +32,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 	$contents['rows'][$row['id']]['act'] = array( 'act_' . $row['id'], $row['act'], "nv_chang_act(" . $row['id'] . ",'act_" . $row['id'] . "');" );
 	$contents['rows'][$row['id']]['view'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_client&amp;id=" . $row['id'];
 	$contents['rows'][$row['id']]['edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_client&amp;id=" . $row['id'];
-    $contents['rows'][$row['id']]['add'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_banner&amp;clid=" . $row['id'];
+	$contents['rows'][$row['id']]['add'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_banner&amp;clid=" . $row['id'];
 	$contents['rows'][$row['id']]['del'] = "nv_cl_del(" . $row['id'] . ");";
 }
 
