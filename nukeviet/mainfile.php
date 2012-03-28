@@ -62,6 +62,9 @@ else
 
 require( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
 
+// Xac dinh cac tags cho phep
+$global_config['allowed_html_tags'] = array_map( "trim", explode( ',', NV_ALLOWED_HTML_TAGS ) );
+
 //Kiem tra trang thai cua may chu, neu > 80 se thong bao "Server too busy. Please try again later"
 if( $global_config['getloadavg'] ) require( NV_ROOTDIR . "/includes/getloadavg.php" );
 

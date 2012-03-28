@@ -153,6 +153,10 @@ class Request
     
     public function __construct ( $config, $ip )
     {
+		if( isset( $config['allowed_html_tags'] ) and is_array( $config['allowed_html_tags'] ) )
+		{
+			$this->disabletags = array_diff( $this->disabletags, $config['allowed_html_tags'] );
+		}
         if ( isset( $config['allow_request_mods'] ) and ! empty( $config['allow_request_mods'] ) )
         {
             if ( ! is_array( $config['allow_request_mods'] ) ) $config['allow_request_mods'] = array( 
@@ -641,24 +645,38 @@ class Request
             if ( ! $attrSet[$i] ) continue;
             $attrSubSet = array_map( "trim", explode( '=', trim( $attrSet[$i] ), 2 ) );
             $attrSubSet[0] = strtolower( $attrSubSet[0] );
+			
             if ( ! preg_match( "/[a-z]+/i", $attrSubSet[0] ) || in_array( $attrSubSet[0], $this->disabledattributes ) || preg_match( "/^on/i", $attrSubSet[0] ) ) continue;
+			
             if ( ! empty( $attrSubSet[1] ) )
             {
                 $attrSubSet[1] = preg_replace( '/[ ]+/', ' ', $attrSubSet[1] );
                 $attrSubSet[1] = preg_replace( "/^\"(.*)\"$/", "\\1", $attrSubSet[1] );
                 $attrSubSet[1] = preg_replace( "/^\'(.*)\'$/", "\\1", $attrSubSet[1] );
-                $attrSubSet[1] = str_replace( array( 
-                    '"', '&quot;' 
-                ), "'", $attrSubSet[1] );
+                $attrSubSet[1] = str_replace( array( '"', '&quot;' ), "'", $attrSubSet[1] );
+				
                 if ( preg_match( "/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $attrSubSet[1] ) ) continue;
+				
                 if ( ! empty( $this->disablecomannds ) and preg_match( '#(' . implode( '|', $this->disablecomannds ) . ')(\s*)\((.*?)\)#si', $attrSubSet[1] ) ) continue;
+				
                 $value = $this->unhtmlentities( $attrSubSet[1] );
                 $search = array( 
-                    'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si', 'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si', 'script' => '/s\s*c\s*r\s*i\s*p\s*t/si', 'applet' => '/a\s*p\s*p\s*l\s*e\s*t/si', 'alert' => '/a\s*l\s*e\s*r\s*t/si', 'document' => '/d\s*o\s*c\s*u\s*m\s*e\s*n\s*t/si', 'write' => '/w\s*r\s*i\s*t\s*e/si', 'cookie' => '/c\s*o\s*o\s*k\s*i\s*e/si', 'window' => '/w\s*i\s*n\s*d\s*o\s*w/si' 
+                    'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
+					'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
+					'script' => '/s\s*c\s*r\s*i\s*p\s*t/si',
+					'applet' => '/a\s*p\s*p\s*l\s*e\s*t/si',
+					'alert' => '/a\s*l\s*e\s*r\s*t/si',
+					'document' => '/d\s*o\s*c\s*u\s*m\s*e\s*n\s*t/si',
+					'write' => '/w\s*r\s*i\s*t\s*e/si',
+					'cookie' => '/c\s*o\s*o\s*k\s*i\s*e/si',
+					'window' => '/w\s*i\s*n\s*d\s*o\s*w/si' 
                 );
                 $value = preg_replace( array_values( $search ), array_keys( $search ), $value );
+				
                 if ( preg_match( "/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $value ) ) continue;
+				
                 if ( ! empty( $this->disablecomannds ) and preg_match( '#(' . implode( '|', $this->disablecomannds ) . ')(\s*)\((.*?)\)#si', $value ) ) continue;
+				
                 $attrSubSet[1] = preg_replace_callback( "/\#([0-9ABCDEFabcdef]{3,6})[\;]*/", 'color_hex2rgb', $attrSubSet[1] );
             }
             elseif ( $attrSubSet[1] !== "0" )
@@ -679,32 +697,38 @@ class Request
     private function filterTags ( $source )
     {
 		$source = preg_replace( "/\<script([^\>]*)\>(.*)\<\/script\>/isU", "", $source );
-		if (preg_match_all("/<iframe[a-z0-9\s\=\"]*src\=\"http(s)?\:\/\/([w]{3})?\.youtube[^\/]+\/embed\/([^\?]+)(\?[^\"]+)?\"[^\>]*\><\/iframe>/isU", $source, $match))
+		
+		if( preg_match_all( "/<iframe[a-z0-9\s\=\"]*src\=\"http(s)?\:\/\/([w]{3})?\.youtube[^\/]+\/embed\/([^\?]+)(\?[^\"]+)?\"[^\>]*\><\/iframe>/isU", $source, $match ) )
 		{
-			foreach ($match[0] as $key => $_m)
+			foreach( $match[0] as $key => $_m )
 			{
 				$vid = $match[3][$key];
-				$width = intval(preg_replace("/^(.*)width\=\"([\d]+)\"(.*)$/isU", "\\2", $_m));
-				$height = intval(preg_replace("/^(.*)height\=\"([\d]+)\"(.*)$/isU", "\\2", $_m));
+				$width = intval( preg_replace( "/^(.*)width\=\"([\d]+)\"(.*)$/isU", "\\2", $_m ) );
+				$height = intval( preg_replace( "/^(.*)height\=\"([\d]+)\"(.*)$/isU", "\\2", $_m ) );
 
-				$width = ($width > 0) ? $width : 480;
-				$height = ($height > 0) ? $height : 360;
+				$width = ( $width > 0 ) ? $width : 480;
+				$height = ( $height > 0 ) ? $height : 360;
 
 				$ojwplayer = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" height="' . $height . '" width="' . $width . '"><param name="movie" value="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf" /><param name="wmode" value="transparent" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value="file=http://www.youtube.com/watch?v=' . $vid . '" /><embed allowfullscreen="true" allowscriptaccess="always" flashvars="file=http://www.youtube.com/watch?v=' . $vid . '" height="' . $height . '" width="' . $width . '" src="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf"></embed></object>';
-				$source = str_replace($_m, $ojwplayer, $source);
+				$source = str_replace( $_m, $ojwplayer, $source );
 			}
-		}			
+		}
+
         $preTag = null;
         $postTag = $source;
         $tagOpen_start = strpos( $source, '<' );
+		
         while ( $tagOpen_start !== false )
         {
             $preTag .= substr( $postTag, 0, $tagOpen_start );
             $postTag = substr( $postTag, $tagOpen_start );
             $fromTagOpen = substr( $postTag, 1 );
             $tagOpen_end = strpos( $fromTagOpen, '>' );
+			
             if ( $tagOpen_end === false ) break;
+			
             $tagOpen_nested = strpos( $fromTagOpen, '<' );
+			
             if ( ( $tagOpen_nested !== false ) && ( $tagOpen_nested < $tagOpen_end ) )
             {
                 $preTag .= substr( $postTag, 0, ( $tagOpen_nested + 1 ) );
@@ -712,17 +736,21 @@ class Request
                 $tagOpen_start = strpos( $postTag, '<' );
                 continue;
             }
+			
             $tagOpen_nested = ( strpos( $fromTagOpen, '<' ) + $tagOpen_start + 1 );
             $currentTag = substr( $fromTagOpen, 0, $tagOpen_end );
             $tagLength = strlen( $currentTag );
+			
             if ( ! $tagOpen_end )
             {
                 $preTag .= $postTag;
                 $tagOpen_start = strpos( $postTag, '<' );
             }
+			
             $tagLeft = $currentTag;
             $attrSet = array();
             $currentSpace = strpos( $tagLeft, ' ' );
+			
             if ( substr( $currentTag, 0, 1 ) == "/" )
             {
                 $isCloseTag = true;
@@ -735,48 +763,67 @@ class Request
                 list( $tagName ) = explode( ' ', $currentTag );
                 $tagName = strtolower( $tagName );
             }
+			
             if ( ( ! preg_match( "/^[a-z][a-z0-9]*$/i", $tagName ) ) || in_array( $tagName, $this->disabletags ) )
             {
                 $postTag = substr( $postTag, ( $tagLength + 2 ) );
                 $tagOpen_start = strpos( $postTag, '<' );
                 continue;
             }
+			
             while ( $currentSpace !== false )
             {
                 $fromSpace = substr( $tagLeft, ( $currentSpace + 1 ) );
                 $nextSpace = strpos( $fromSpace, ' ' );
                 $openQuotes = strpos( $fromSpace, '"' );
                 $closeQuotes = strpos( substr( $fromSpace, ( $openQuotes + 1 ) ), '"' ) + $openQuotes + 1;
+				
                 if ( strpos( $fromSpace, '=' ) !== false )
                 {
-                    if ( ( $openQuotes !== false ) && ( strpos( substr( $fromSpace, ( $openQuotes + 1 ) ), '"' ) !== false ) ) $attr = substr( $fromSpace, 0, ( $closeQuotes + 1 ) );
-                    else $attr = substr( $fromSpace, 0, $nextSpace );
+                    if ( ( $openQuotes !== false ) && ( strpos( substr( $fromSpace, ( $openQuotes + 1 ) ), '"' ) !== false ) )
+					{
+						$attr = substr( $fromSpace, 0, ( $closeQuotes + 1 ) );
+					}
+                    else
+					{
+						$attr = substr( $fromSpace, 0, $nextSpace );
+					}
                 }
                 else
+				{
                     $attr = substr( $fromSpace, 0, $nextSpace );
+				}
+				
                 if ( ! $attr ) $attr = $fromSpace;
+				
                 $attrSet[] = $attr;
                 $tagLeft = substr( $fromSpace, strlen( $attr ) );
                 $currentSpace = strpos( $tagLeft, ' ' );
             }
+			
             if ( ! $isCloseTag )
             {
                 $preTag .= '{:' . $tagName;
+				
                 if ( ! empty( $attrSet ) )
                 {
                     $attrSet = $this->filterAttr( $attrSet );
                     $preTag .= ' ' . implode( ' ', $attrSet );
                 }
+				
                 $preTag .= ( strpos( $fromTagOpen, "</" . $tagName ) ) ? ':}' : ' /:}';
             }
             else
             {
                 $preTag .= '{:/' . $tagName . ':}';
             }
+			
             $postTag = substr( $postTag, ( $tagLength + 2 ) );
             $tagOpen_start = strpos( $postTag, '<' );
         }
+		
         $preTag .= $postTag;
+		
         return $preTag;
     }
 

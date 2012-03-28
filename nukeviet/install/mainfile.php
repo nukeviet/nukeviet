@@ -43,6 +43,9 @@ require_once ( realpath( NV_ROOTDIR . "/install/config.php" ) );
 
 $global_config['my_domains'] = $_SERVER['SERVER_NAME'];
 
+// Xac dinh cac tags cho phep
+$global_config['allowed_html_tags'] = array_map( "trim", explode( ',', NV_ALLOWED_HTML_TAGS ) );
+
 //Xac dinh IP cua client
 require ( NV_ROOTDIR . '/includes/class/ips.class.php' );
 $ips = new ips();
