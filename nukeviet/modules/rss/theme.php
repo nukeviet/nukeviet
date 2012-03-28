@@ -35,7 +35,7 @@ function nv_rss_main_theme( $array )
 {
 	global $img_dir, $module_name, $module_info;
 	
-	$array .= "<img  alt=\"\" style=\"border-width: 0px; vertical-align: middle;\" src=\"" . NV_BASE_SITEURL . "themes/" . $img_dir . "/images/" . $module_name . "/home.gif\" /><b>" . $module_info['custom_title'] . "</b><br />";
+	$array .= ( $array ? "<br />" : "" ) . "<img  alt=\"\" style=\"border-width: 0px; vertical-align: middle;\" src=\"" . NV_BASE_SITEURL . "themes/" . $img_dir . "/images/" . $module_name . "/home.gif\" /><b>" . $module_info['custom_title'] . "</b><br />";
 	
 	$array .= nv_get_rss_link();
 	
