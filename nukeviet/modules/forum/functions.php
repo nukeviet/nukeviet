@@ -7,8 +7,7 @@
  * @createdate 12/31/2009 0:51
  */
 
-if (! defined('NV_SYSTEM'))
-	die('Stop!!!');
+if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_FORUM', true );
 
