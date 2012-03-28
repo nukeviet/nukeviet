@@ -19,6 +19,7 @@ $array['alias'] = "";
 $array['image'] = "";
 $array['description'] = "";
 $array['keywords'] = "";
+$array['thumbnail'] = "";
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
