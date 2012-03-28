@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES., JSC (contact@vinades.vn)
@@ -6,16 +7,16 @@
  * @Createdate Dec 3, 2010  11:24:58 AM 
  */
 
-$module_version = array( 
-    "name" => "Module Menu", //
-    "modfuncs" => "", //
-    "submenu" => "", //
+$module_version = array(
+	"name" => "Module Menu", //
+	"modfuncs" => "", //
+	"submenu" => "", //
 	"is_sysmod" => 1, //
-    "virtual" => 0, //
-    "version" => "3.1.00", //
-    "date" => "Fri, 7 May 2010 09:47:15 GMT", //
-    "author" => "VINADES (contact@vinades.vn)", //
-    "note" => "",
+	"virtual" => 0, //
+	"version" => "3.1.00", //
+	"date" => "Fri, 7 May 2010 09:47:15 GMT", //
+	"author" => "VINADES (contact@vinades.vn)", //
+	"note" => "",
 );
 
 ?>

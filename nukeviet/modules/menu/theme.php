@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES., JSC (contact@vinades.vn)
@@ -6,6 +7,6 @@
  * @Createdate Dec 3, 2010  11:23:15 AM 
  */
 
-if ( ! defined( 'NV_IS_MOD_MENU' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_MENU' ) ) die( 'Stop!!!' );
 
 ?>
