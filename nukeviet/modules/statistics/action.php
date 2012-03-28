@@ -7,8 +7,7 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if (!defined('NV_IS_FILE_MODULES'))
-    die('Stop!!!');
+if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $sql_drop_module = array();
 
@@ -506,4 +505,5 @@ $sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_
         ('country', 'ZW', 0, 0),
         ('country', 'ZZ', 0, 0),
         ('country', 'unkown', 0, 0)";
+
 ?>

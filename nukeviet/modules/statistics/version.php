@@ -7,10 +7,10 @@
  * @createdate 05/07/2010 09:47
  */
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' )) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$module_version = array( 
-    "name" => "Statistics", //
+$module_version = array(
+	"name" => "Statistics", //
 	"modfuncs" => "main,allreferers,allcountries,allbrowsers,allos,allbots,referer", //
 	"submenu" => "main,allreferers,allcountries,allbrowsers,allos,allbots", //
 	"is_sysmod" => 0, //
