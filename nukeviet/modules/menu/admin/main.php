@@ -75,7 +75,7 @@ if ($nv_Request->get_int('save', 'post'))
 
     if (empty($arr_menu['title']))
     {
-        $error = $lang_module['error_menu_blog'];
+        $error = $lang_module['error_menu_block'];
     }
     elseif ($arr_menu['id'] == 0)
     {
