@@ -131,6 +131,7 @@ class Request
 
     private $engine_allowed = array();
 
+	// Cac tags bi cam dung mac dinh, co the go bo bang cach thay doi cac tags cho phep cua NV_ALLOWED_HTML_TAGS
     private $disabletags = array( 
         "applet", "body", "basefont", "head", "html", "id", "meta", "xml", "blink", "link", "style", "script", "iframe", "frame", "frameset", "ilayer", "layer", "bgsound", "title", "base" 
     );
