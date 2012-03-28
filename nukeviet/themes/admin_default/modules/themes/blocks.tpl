@@ -106,7 +106,7 @@ $(function(){
 	});
 	$("a.delete").click(function(){
 		var bid = parseInt($(this).attr("title"));
-		if (bid > 0 && confirm("{LANG.block_delete_per_confirm'] . '")){
+		if (bid > 0 && confirm("{LANG.block_delete_per_confirm}")){
 			$.post("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=blocks_del", "bid="+bid, function(theResponse){
 				alert(theResponse);
 		        window.location="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
