@@ -36,7 +36,6 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 ('banners', 'banners', 'banners', 'Banners', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '0', 0, 7, 1, 1, '', 0),
 ('search', 'search', 'search', 'Search', '', 1273474173, 1, 0, '', 'mobile_nukeviet', '', '0', 0, 8, 1, 1, '', 0),
 ('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', 'mobile_nukeviet', '', '0', 0, 9, 1, 1, '', 0),
-('tags', 'tags', 'tags', 'Tags', '', 1324787574, 1, 0, '', 'mobile_nukeviet', '', '0', 0, 11, 1, 1, '', 0),
 ('rss', 'rss', 'rss', 'Rss', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '0', 0, 10, 1, 1, '', 0)";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs`";
@@ -89,7 +88,6 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (46, 'main', 'Main', 'search', 1, 0, 1, ''),
 (47, 'main', 'Main', 'rss', 1, 0, 1, ''),
 (48, 'regroups', 'Regroups', 'users', 1, 0, 1, ''),
-(49, 'main', 'Main', 'tags', 1, 0, 1, ''),
 (50, 'groups', 'Groups', 'news', 1, 0, 7, '')";
 
 $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
@@ -199,11 +197,6 @@ $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data
 (35, 'body-right', 'modern'),
 (35, 'left-body-right', 'default'),
 (35, 'body', 'mobile_nukeviet')";
-
-$sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
-(49, 'body-right', 'modern'),
-(49, 'left-body-right', 'default'),
-(49, 'body', 'mobile_nukeviet')";
 
 $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
 (50, 'body-right', 'modern'),
@@ -783,24 +776,6 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (20, 35, 1)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES
-(16, 49, 1),
-(10, 49, 1),
-(11, 49, 2),
-(12, 49, 3),
-(13, 49, 4),
-(15, 49, 1),
-(18, 49, 1),
-(17, 49, 1),
-(19, 49, 1),
-(2, 49, 1),
-(3, 49, 2),
-(4, 49, 1),
-(5, 49, 2),
-(6, 49, 3),
-(8, 49, 1),
-(20, 49, 1)";
-
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES
 (16, 50, 1),
 (10, 50, 1),
 (11, 50, 2),
@@ -895,27 +870,6 @@ if( $db->sql_numrows( $result ) )
 
 	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` =  " . $db->dbescape_string( $copyright ) . " WHERE `module` =  'news' AND `config_name` = 'copyright' AND `lang`='" . $lang_data . "'";
 	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` =  'news' WHERE `module` =  'global' AND `config_name` = 'site_home_module' AND `lang`='" . $lang_data . "'";
-
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_tags` VALUES
-		(1, 'VINADES', 3),
-		(2, 'Web', 1),
-		(3, 'HTML5', 1),
-		(4, 'Nguyen Anh Tu', 1),
-		(5, 'NukeViet', 1)";
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_tags_con_1` VALUES
-		('news', 1, 'Co-operate/Invite-to-co-operate-announcement-1', 'Invite to co-operate announcement', 'VINADES.,JSC was founded in order to professionalize NukeViet opensource development and release. We also using NukeViet in our bussiness projects to make it continue developing. Include Advertisment, provide hosting services for NukeViet CMS development.', 'files/news/thumb/hoptac.jpg', 1277689920),
-		('news', 2, 'Around-internet/What-does-WWW-mean-2', 'What does WWW mean?', 'The World Wide Web, abbreviated as WWW and commonly known as the Web, is a system of interlinked hypertext&nbsp; documents accessed via the Internet.', 'files/news/thumb/nukeviet3.jpg', 1277691360),
-		('news', 3, 'Lastest-technologies/HTML-5-review-3', 'HTML 5 review', 'I have to say that my money used to be on XHTML 2.0 eventually winning the battle for the next great web standard. Either that, or the two titans would continue to battle it out for the forseable future, leading to an increasingly fragmented web.', 'files/news/thumb/screenshot.jpg', 1277691840),
-		('news', 4, 'NukeViet-news/First-open-source-company-starts-operation-4', 'First open-source company starts operation', 'The Vietnam Open Source Development Joint Stock Company (VINADES., JSC), the first firm operating in the field of open source in the country, made its debut on February 25.', 'files/news/thumb/nangly.jpg', 1292959020),
-		('news', 5, 'NukeViet-news/NukeViet-30-New-CMS-for-News-site-5', 'NukeViet 3.0 - New CMS for News site', 'NukeViet 3.0 is a professional system: VINADES.,JSC founded to maintain and improve NukeViet 3.0 features. VINADES.,JSC co-operated with many professional hosting providers to test compatibility issues.', 'files/news/thumb/nukeviet3.jpg', 1292959440)";
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_tags_kid_1` VALUES
-		(1, 'news', 1),
-		(1, 'news', 4),
-		(1, 'news', 5),
-		(2, 'news', 2),
-		(3, 'news', 3),
-		(4, 'news', 4),
-		(5, 'news', 5)";
 }
 
 $result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='voting'" );

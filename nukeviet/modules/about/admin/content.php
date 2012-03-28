@@ -101,10 +101,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Add about', " ", $admin_info['userid'] );
 			}
 
-			// Update tag
-			$text = strip_tags( $bodytext );
-			$text = nv_clean60( $text, 300 );
-			nv_update_tags( $module_name, $id, $keywords, $alias, $title, $text, '', $publtime );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
 			die();
 		}

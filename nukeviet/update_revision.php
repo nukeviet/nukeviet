@@ -15,260 +15,132 @@ require_once ( NV_ROOTDIR . "/includes/rewrite.php" );
 
 if( defined( "NV_IS_GODADMIN" ) )
 {
-	$step = $nv_Request->get_int( 'step', 'post,get', 1 );
-	if( $step == 1 )
+	if( $global_config['revision'] < 1491 )
 	{
-		if( $global_config['revision'] < 1491 )
-		{
-			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'statistics_timezone', '" . NV_SITE_TIMEZONE_NAME . "')" );
-		}
-
-		if( $global_config['revision'] < 1501 )
-		{
-			$db->sql_query( "ALTER TABLE `" . NV_USERS_GLOBALTABLE . "` CHANGE `birthday` `birthday` INT(11) NOT NULL" );
-		}
-
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1501')" );
-		nv_save_file_config_global();
-		$link = "<br><br><a href=\"" . NV_BASE_SITEURL . "update_revision.php?step=2\"><font color=\"#616161\">Nâng cấp bước 2</font></a>";
-		nv_info_die( "Nâng cấp hệ thống", "Thông báo nâng cấp", "Thực hiện nâng cấp bước 1 thành công, hãy cài đặt module tags cho tất cả các ngôn ngữ sau đó qay lại đây để thực hiện bước 2" . $link );
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'statistics_timezone', '" . NV_SITE_TIMEZONE_NAME . "')" );
 	}
-	if( $step == 2 )
+	if( $global_config['revision'] < 1501 )
 	{
-		$array_lang = array();
-		$array_lang_error = array();
+		$db->sql_query( "ALTER TABLE `" . NV_USERS_GLOBALTABLE . "` CHANGE `birthday` `birthday` INT(11) NOT NULL" );
+	}
+	if( $global_config['revision'] < 1559 )
+	{
 		$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
 		while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
 		{
-			list( $check ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` WHERE `title`='tags' AND `act`=1" ) );
-			if( $check )
-			{
-				$array_mod = array();
+			$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_voting_rows` ADD `url` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `title`" );
+			$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` SET `show_func` = '1' WHERE `in_module`='voting' AND `func_name`='main'" );
 
-				$mquery = $db->sql_query( "SELECT `title`, module_data FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` WHERE `module_file`='news'" );
-				while( list( $mod, $mod_data ) = $db->sql_fetchrow( $mquery ) )
-				{
-					list( $maxid ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(id) FROM `" . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_rows`" ) );
-					if( $maxid )
-					{
-						$array_mod[$mod] = $maxid;
-					}
-				}
-				$array_lang[$lang] = $array_mod;
-			}
-			else
-			{
-				$array_lang_error[] = $lang;
-			}
-		}
-		if( empty( $array_lang_error ) )
-		{
-			$nv_Request->set_Session( 'langmodserialize', serialize( $array_lang ) );
-			$lang = array_keys( $array_lang );
-			$lang = $lang[0];
+			$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` ADD `admin_title` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `custom_title`" );
+			$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` ADD `main_file` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `set_time`" );
 
-			$mod = array_keys( $array_lang[$lang] );
-			$mod = $mod[0];
-			$refresh = "<meta http-equiv=\"refresh\" content=\"3;URL=" . NV_BASE_SITEURL . "update_revision.php?" . NV_LANG_VARIABLE . "=" . $lang . "&amp;" . NV_NAME_VARIABLE . "=" . $mod . "&amp;step=3\" />";
-			die( "Hệ thống đang thực hiện cập nhật dữ liệu cho module tags: " . $lang . "_" . $mod . $refresh );
-		}
-		else
-		{
-			nv_info_die( "Nâng cấp hệ thống", "Thông báo nâng cấp", "Lỗi: bạn cần cài module tags cho các ngôn ngữ:" . implode( ", ", $array_lang_error ) );
+			$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modules` SET `main_file` = '0' WHERE `module_file`='menu'" );
 		}
 	}
-	elseif( $step == 3 )
+	if( $global_config['revision'] < 1576 )
 	{
-		$array_lang = unserialize( $nv_Request->get_string( 'langmodserialize', 'session' ) );
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'captcha_type', '0')" );
 
-		$module_name = $nv_Request->get_string( NV_NAME_VARIABLE, 'post,get' );
-		$lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'post,get' );
-		list( $module_file, $module_data ) = $db->sql_fetchrow( $db->sql_query( "SELECT module_file, module_data FROM `" . NV_PREFIXLANG . "_modules` WHERE `title`='" . $module_name . "'" ) );
-
-		$lm = $nv_Request->get_int( 'lm', 'get', 0 );
-
-		$sql = "SELECT catid, parentid, title, titlesite, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
-		$global_array_cat = nv_db_cache( $sql, 'catid', $module_name );
-
-		$sql = "SELECT `id`, `catid`, `title`, `alias`, `hometext`, `homeimgthumb`, `homeimgfile`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 AND `id` > " . $lm . " ORDER BY `id` ASC LIMIT 0, 100";
-		$result = $db->sql_query( $sql );
-		while( $rowcontent = $db->sql_fetch_assoc( $result ) )
+		$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
+		while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
 		{
-			$lm = $rowcontent['id'];
-
-			//nv_update_tags
-			$array_img = ( ! empty( $rowcontent['homeimgthumb'] ) ) ? explode( "|", $rowcontent['homeimgthumb'] ) : $array_img = array( "", "" );
-			if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
-			{
-				$image = NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
-			}
-			elseif( nv_is_url( $rowcontent['homeimgfile'] ) )
-			{
-				$image = $rowcontent['homeimgfile'];
-			}
-			elseif( $rowcontent['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
-			{
-				$image = NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
-			}
-			else
-			{
-				$image = "";
-			}
-			nv_update_tags( $module_name, $rowcontent['id'], $rowcontent['keywords'], $global_array_cat[$rowcontent['catid']]['alias'] . "/" . $rowcontent['alias'] . "-" . $rowcontent['id'], $rowcontent['title'], $rowcontent['hometext'], $image, $rowcontent['publtime'] );
-			//end nv_update_tags
-		}
-		if( $lm < $array_lang[$lang][$module_name] )
-		{
-			$refresh = "<meta http-equiv=\"refresh\" content=\"3;URL=" . NV_BASE_SITEURL . "update_revision.php?" . NV_LANG_VARIABLE . "=" . $lang . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;step=3&lm=" . $lm . "\" />";
-			die( "Hệ thống đang thực hiện cập nhật dữ liệu cho module tags: " . $lang . "_" . $module_name . $refresh );
-		}
-		else
-		{
-			unset( $array_lang[$lang][$module_name] );
-			if( empty( $array_lang[$lang] ) )
-			{
-				unset( $array_lang[$lang] );
-			}
-			if( empty( $array_lang ) )
-			{
-				$refresh = "<meta http-equiv=\"refresh\" content=\"3;URL=" . NV_BASE_SITEURL . "update_revision.php?step=4\" />";
-				die( "Cập nhật dữ liệu cho module tags thành công hệ thống sẽ chuyển sang bước kế tiếp " . $refresh );
-			}
-			else
-			{
-				$nv_Request->set_Session( 'langmodserialize', serialize( $array_lang ) );
-				$lang = array_keys( $array_lang );
-				$lang = $lang[0];
-
-				$mod = array_keys( $array_lang[$lang] );
-				$mod = $mod[0];
-				$refresh = "<meta http-equiv=\"refresh\" content=\"3;URL=" . NV_BASE_SITEURL . "update_revision.php?" . NV_LANG_VARIABLE . "=" . $lang . "&amp;" . NV_NAME_VARIABLE . "=" . $mod . "&amp;step=3\" />";
-				die( "Hệ thống đang thực hiện cập nhật dữ liệu cho module tags, vui lòng đợi đến khi có thông báo thực hiện xong<br> " . $lang . "_" . $mod . $refresh );
-			}
+			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', 'global', 'switch_mobi_des', '1')" );
 		}
 	}
-	else
+	if( $global_config['revision'] < 1587 )
 	{
-		if( $global_config['revision'] < 1559 )
-		{
-			$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
-			while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
-			{
-				$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_voting_rows` ADD `url` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `title`" );
-				$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` SET `show_func` = '1' WHERE `in_module`='voting' AND `func_name`='main'" );
-
-				$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` ADD `admin_title` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `custom_title`" );
-				$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_modules` ADD `main_file` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `set_time`" );
-
-				$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modules` SET `main_file` = '0' WHERE `module_file`='menu'" );
-			}
-		}
-
-		if( $global_config['revision'] < 1576 )
-		{
-			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'captcha_type', '0')" );
-
-			$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
-			while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
-			{
-				$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', 'global', 'switch_mobi_des', '1')" );
-			}
-		}
-		if( $global_config['revision'] < 1587 )
-		{
-			nv_deletefile( NV_ROOTDIR . '/files/js', true );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/css/nav_menu.css' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/css/reset.css' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/css/tab_info.css' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/footer_bg.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/logo.gif' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_l.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_l.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_r.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_r.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_home_l.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_home_r.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_hover_l.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_hover_r.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_l.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_r.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_sub_a.jpg' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/navmenu-v_hover.jpg' );
-		}
-		if( $global_config['revision'] < 1590 )
-		{
-			$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
-			while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
-			{
-				$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_voting` ADD `link` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `question`" );
-			}
-		}
-		if( $global_config['revision'] < 1592 ) // Cap nhat CSDL module menu
-		{
-			$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
-			while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
-			{
-				$mquery = $db->sql_query( "SELECT `title`, `module_data` FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` WHERE `module_file`='menu'" );
-				while( list( $mod, $mod_data ) = $db->sql_fetchrow( $mquery ) )
-				{
-					$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_rows` ADD `css` varchar(255) NOT NULL DEFAULT '' AFTER `target`, ADD `active_type` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `css`" );
-				}
-			}
-		}
-		if( $global_config['revision'] < 1597 ) // Xoa file thua giao dien mobile
-		{
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/css/news.css' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/arrow_down.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/arrow_left_orange.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/bg_link_mod.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/bg_linked_mod.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/cat_header.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/cat_l.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/cat_r.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/comment.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/comment_add.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/content-cat-title-current.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/content-cat-title-ul.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/icon-news.gif' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/module-header.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/other.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/other_link.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/save_file.png' );
-			nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/user.png' );
-		}
-
-		// Cap nhat CSDL module upload
-		if( $global_config['revision'] < 1604 )
-		{
-			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologomod', '')" );
-			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize1', '50')" );
-			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize2', '40')" );
-			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize3', '30')" );
-		}
-
-		// Xoa file thua module menu
-		if( $global_config['revision'] < 1633 )
-		{
-			nv_deletefile( NV_ROOTDIR . '/themes/admin_default/modules/menu/config.tpl' );
-		}
-		
-		//Update revision
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')" );
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1661')" );
-
-		$array_config_rewrite = array(
-			'rewrite_optional' => $global_config['rewrite_optional'],
-			'rewrite_endurl' => $global_config['rewrite_endurl'],
-			'rewrite_exturl' => $global_config['rewrite_exturl']
-		);
-		
-		nv_rewrite_change( $array_config_rewrite );
-		nv_deletefile( NV_ROOTDIR . '/' . NV_DATADIR . '/searchEngines.xml' );
-
-		nv_save_file_config_global();
-
-		die( "Update successfully, you should immediately delete this file." );
+		nv_deletefile( NV_ROOTDIR . '/files/js', true );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/css/nav_menu.css' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/css/reset.css' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/css/tab_info.css' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/footer_bg.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/logo.gif' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_l.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_l.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_r.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_current_r.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_home_l.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_home_r.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_hover_l.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_hover_r.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_l.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_r.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/nav_sub_a.jpg' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/navmenu-v_hover.jpg' );
 	}
+	if( $global_config['revision'] < 1590 )
+	{
+		$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
+		while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
+		{
+			$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_voting` ADD `link` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `question`" );
+		}
+	}
+	if( $global_config['revision'] < 1592 ) // Cap nhat CSDL module menu
+	{
+		$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
+		while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
+		{
+			$mquery = $db->sql_query( "SELECT `title`, `module_data` FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` WHERE `module_file`='menu'" );
+			while( list( $mod, $mod_data ) = $db->sql_fetchrow( $mquery ) )
+			{
+				$db->sql_query( "ALTER TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_rows` ADD `css` varchar(255) NOT NULL DEFAULT '' AFTER `target`, ADD `active_type` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `css`" );
+			}
+		}
+	}
+	if( $global_config['revision'] < 1597 ) // Xoa file thua giao dien mobile
+	{
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/css/news.css' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/arrow_down.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/arrow_left_orange.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/bg_link_mod.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/bg_linked_mod.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/cat_header.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/cat_l.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/cat_r.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/comment.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/comment_add.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/content-cat-title-current.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/content-cat-title-ul.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/icon-news.gif' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/module-header.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/other.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/other_link.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/save_file.png' );
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/images/news/user.png' );
+	}
+
+	// Cap nhat CSDL module upload
+	if( $global_config['revision'] < 1604 )
+	{
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologomod', '')" );
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize1', '50')" );
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize2', '40')" );
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize3', '30')" );
+	}
+	
+	// Xoa file thua module menu
+	if( $global_config['revision'] < 1633 )
+	{
+		nv_deletefile( NV_ROOTDIR . '/themes/admin_default/modules/menu/config.tpl' );
+	}
+		
+	//Update revision
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1685')" );
+
+	$array_config_rewrite = array(
+		'rewrite_optional' => $global_config['rewrite_optional'],
+		'rewrite_endurl' => $global_config['rewrite_endurl'],
+		'rewrite_exturl' => $global_config['rewrite_exturl']
+	);
+		
+	nv_rewrite_change( $array_config_rewrite );
+	nv_deletefile( NV_ROOTDIR . '/' . NV_DATADIR . '/searchEngines.xml' );
+
+	nv_save_file_config_global();
+
+	die( "Update successfully, you should immediately delete this file." );
 }
 else
 {

@@ -653,27 +653,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				nv_news_fix_block( $bid_i, false );
 			}
 
-			//nv_update_tags
-			$array_img = ( ! empty( $rowcontent['homeimgthumb'] ) ) ? explode( "|", $rowcontent['homeimgthumb'] ) : $array_img = array( "", "" );
-			if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
-			{
-				$image = NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
-			}
-			elseif( nv_is_url( $rowcontent['homeimgfile'] ) )
-			{
-				$image = $rowcontent['homeimgfile'];
-			}
-			elseif( $rowcontent['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
-			{
-				$image = NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
-			}
-			else
-			{
-				$image = "";
-			}
-			nv_update_tags( $module_name, $rowcontent['id'], $rowcontent['keywords'], $global_array_cat[$rowcontent['catid']]['alias'] . "/" . $rowcontent['alias'] . "-" . $rowcontent['id'], $rowcontent['title'], $rowcontent['hometext'], $image, $rowcontent['publtime'] );
-			//end nv_update_tags
-
 			$url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
 			$msg1 = $lang_module['content_saveok'];
 			$msg2 = $lang_module['content_main'] . " " . $module_info['custom_title'];

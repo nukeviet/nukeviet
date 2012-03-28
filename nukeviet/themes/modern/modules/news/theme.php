@@ -562,7 +562,7 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 			$value = trim( $value );
 			$value = trim( $value );
 
-			$keyword = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=tags&amp;q=" . urlencode( str_replace( ' ', '-', $value ) );
+			$keyword = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search&amp;q=" . urlencode( $value );
 
 			$xtpl->assign( 'KEYWORD', $value );
 			$xtpl->assign( 'LINK_KEYWORDS', $keyword );

@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting,rss,menu,tags' );
+define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting,rss,menu' );
 
 function nv_delete_table_sys( $lang )
 {
@@ -147,7 +147,6 @@ function nv_create_table_sys( $lang )
 		('banners', 'banners', 'banners', 'Banners',  '',1270400000,  1,1, '', '', '', '0', 0, 9, 1, 1, '',0),
 		('search', 'search', 'search', 'Search', '', 1273474173, 1, 0, '', '', '', '0', 0, 10, 1, 1, '',0),
 		('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '0', 0, 9, 1, 1, '', 0),
-		('tags', 'tags', 'tags', 'Tags', '', 1324787574, 1, 1, '', '', '', '0', 0, 12, 1, 1, '', 0),
 		('rss', 'rss', 'rss', 'Rss', '', 1279360267, 1, 1, '', '', '', '0', 0, 11, 1, 1, '',0)";
 
 	$sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES

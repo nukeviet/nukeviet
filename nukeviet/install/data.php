@@ -433,7 +433,6 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` 
 ('statistics', 0, 0, 'statistics', 'statistics', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('faq', 0, 1, 'faq', 'faq', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('menu', 0, 1, 'menu', 'menu', '3.1.00 1273225635', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
-('tags', 1, 0, 'tags', 'tags', '1.0.00 1324787574', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('rss', 1, 0, 'rss', 'rss', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_plans` VALUES
