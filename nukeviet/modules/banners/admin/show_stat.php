@@ -78,6 +78,7 @@ if( $ext == 'country' )
 		{
 			while( $row = $db->sql_fetchrow( $result ) )
 			{
+				if( ! isset( $bd[$row['click_country']] ) ) $bd[$row['click_country']] = 0;
 				$bd[$row['click_country']] = $bd[$row['click_country']] + 1;
 			}
 		}
@@ -118,6 +119,7 @@ elseif( $ext == 'browse' )
 	{
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
+			if( ! isset( $bd[$row['click_browse_name']] ) ) $bd[$row['click_browse_name']] = 0;
 			$bd[$row['click_browse_name']] = $bd[$row['click_browse_name']] + 1;
 		}
 	}
@@ -156,6 +158,7 @@ elseif( $ext == 'os' )
 	{
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
+			if( ! isset( $bd[$row['click_os_name']] ) ) $bd[$row['click_os_name']] = 0;
 			$bd[$row['click_os_name']] = $bd[$row['click_os_name']] + 1;
 		}
 	}
@@ -207,6 +210,7 @@ else
 	{
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
+			if( ! isset( $bd[date( 'd', $row['click_time'] )] ) ) $bd[date( 'd', $row['click_time'] )] = 0;
 			$bd[date( 'd', $row['click_time'] )] = $bd[date( 'd', $row['click_time'] )] + 1;
 		}
 	}
@@ -216,8 +220,8 @@ else
 		$c = isset( $bd[$i] ) ? $bd[$i] : 0;
 		$key = isset( $bd[$i] ) ? "nv_show_list_stat(" . $id . "," . $data_month . ",'day','" . $i . "','statistic',0);" : $i;
 		$cts[$key][0] = str_pad( $i, 2, "0", STR_PAD_LEFT ) . " " . nv_date( "F Y", $time );
-		$cts[$key][1] = round( ( $bd[$i] * 100 ) / $sum, 1 );
-		$cts[$key][2] = $bd[$i];
+		$cts[$key][1] = ( $sum > 0 ) ? round( ( $c * 100 ) / $sum, 1 ) : 0;
+		$cts[$key][2] = $c;
 	}
 
 	$caption = sprintf( $lang_module['info_stat_byday_caption'], nv_monthname( $data_month ), $current_year );
