@@ -373,7 +373,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['catid'] = in_array( $rowcontent['catid'], $catids ) ? $rowcontent['catid'] : $catids[0];
 		$rowcontent['bodytext'] = nv_news_get_bodytext( $rowcontent['bodyhtml'] );
 
-		if( ! empty( $rowcontent['topictext'] ) )
+		if( ! empty( $rowcontent['topictext'] ) and empty( $rowcontent['topicid'] ) )
 		{
 			list( $weightopic ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics`" ) );
 			$weightopic = intval( $weightopic ) + 1;
@@ -381,6 +381,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_topics` (`topicid`, `title`, `alias`, `description`, `image`, `thumbnail`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $rowcontent['topictext'] ) . ", " . $db->dbescape( $aliastopic ) . ", " . $db->dbescape( $rowcontent['topictext'] ) . ", '', '', " . $db->dbescape( $weightopic ) . ", " . $db->dbescape( $rowcontent['topictext'] ) . ", UNIX_TIMESTAMP( ), UNIX_TIMESTAMP( ))";
 			$rowcontent['topicid'] = $db->sql_query_insert_id( $query );
 		}
+		
 		$rowcontent['sourceid'] = 0;
 		if( ! empty( $rowcontent['sourcetext'] ) )
 		{
@@ -411,7 +412,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			}
 		}
 
-		// Xu ly anh minh ha
+		// Xu ly anh minh hoa
 		$rowcontent['homeimgthumb'] = "";
 		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and file_exists( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
