@@ -1,10 +1,12 @@
 <?php
+
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @copyright 2009
  * @createdate 12/31/2009 2:29
  */
+
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $is_refresh = false;
@@ -117,6 +119,14 @@ while ( list( $catid_i, $parentid_i, $title_i, $titlesite_i, $alias_i, $lev_i, $
     );
 }
 
+/**
+ * nv_fix_cat_order()
+ * 
+ * @param integer $parentid
+ * @param integer $order
+ * @param integer $lev
+ * @return
+ */
 function nv_fix_cat_order ( $parentid = 0, $order = 0, $lev = 0 )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
@@ -164,6 +174,12 @@ function nv_fix_cat_order ( $parentid = 0, $order = 0, $lev = 0 )
 }
 
 // tao bang co so du lieu cho cac chu de
+/**
+ * nv_create_table_rows()
+ * 
+ * @param mixed $catid
+ * @return
+ */
 function nv_create_table_rows ( $catid )
 {
     global $db, $module_name, $module_data;
@@ -178,6 +194,11 @@ function nv_create_table_rows ( $catid )
     $db->sql_query( "TRUNCATE TABLE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "" );
 }
 
+/**
+ * nv_fix_topic()
+ * 
+ * @return
+ */
 function nv_fix_topic ( )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
@@ -193,6 +214,11 @@ function nv_fix_topic ( )
     $db->sql_freeresult();
 }
 
+/**
+ * nv_fix_block_cat()
+ * 
+ * @return
+ */
 function nv_fix_block_cat ( )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
@@ -208,6 +234,11 @@ function nv_fix_block_cat ( )
     $db->sql_freeresult();
 }
 
+/**
+ * nv_fix_source()
+ * 
+ * @return
+ */
 function nv_fix_source ( )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
@@ -223,6 +254,13 @@ function nv_fix_source ( )
     $db->sql_freeresult();
 }
 
+/**
+ * nv_news_fix_block()
+ * 
+ * @param mixed $bid
+ * @param bool $repairtable
+ * @return
+ */
 function nv_news_fix_block ( $bid, $repairtable = true )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
@@ -254,6 +292,12 @@ function nv_news_fix_block ( $bid, $repairtable = true )
     }
 }
 
+/**
+ * nv_show_cat_list()
+ * 
+ * @param integer $parentid
+ * @return
+ */
 function nv_show_cat_list ( $parentid = 0 )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_full, $array_viewcat_nosub, $admin_info, $array_cat_admin, $global_array_cat, $admin_id;
@@ -454,6 +498,11 @@ function nv_show_cat_list ( $parentid = 0 )
     return $contents;
 }
 
+/**
+ * nv_show_topics_list()
+ * 
+ * @return
+ */
 function nv_show_topics_list ( )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
@@ -505,6 +554,11 @@ function nv_show_topics_list ( )
     return $contents;
 }
 
+/**
+ * nv_show_block_cat_list()
+ * 
+ * @return
+ */
 function nv_show_block_cat_list ( )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
@@ -578,6 +632,11 @@ function nv_show_block_cat_list ( )
     return $contents;
 }
 
+/**
+ * nv_show_sources_list()
+ * 
+ * @return
+ */
 function nv_show_sources_list ( )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $nv_Request;
@@ -629,6 +688,12 @@ function nv_show_sources_list ( )
     return $contents;
 }
 
+/**
+ * nv_show_block_list()
+ * 
+ * @param mixed $bid
+ * @return
+ */
 function nv_show_block_list ( $bid )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_cat;
@@ -694,6 +759,12 @@ function nv_show_block_list ( $bid )
     return $contents;
 }
 
+/**
+ * GetCatidInParent()
+ * 
+ * @param mixed $catid
+ * @return
+ */
 function GetCatidInParent ( $catid )
 {
     global $global_array_cat;
@@ -724,6 +795,11 @@ function GetCatidInParent ( $catid )
     return array_unique( $array_cat );
 }
 
+/**
+ * nv_array_cat_admin()
+ * 
+ * @return
+ */
 function nv_array_cat_admin ( )
 {
     global $db, $module_data;
@@ -737,6 +813,14 @@ function nv_array_cat_admin ( )
     return $array_cat_admin;
 }
 
+/**
+ * redriect()
+ * 
+ * @param string $msg1
+ * @param string $msg2
+ * @param mixed $nv_redirect
+ * @return
+ */
 function redriect ( $msg1 = "", $msg2 = "", $nv_redirect )
 {
     if ( empty( $nv_redirect ) )
@@ -758,4 +842,5 @@ function redriect ( $msg1 = "", $msg2 = "", $nv_redirect )
     include ( NV_ROOTDIR . "/includes/footer.php" );
     exit();
 }
+
 ?>

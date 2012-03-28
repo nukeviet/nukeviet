@@ -1,51 +1,50 @@
 <?php
 
-	/**
-	 * @Project NUKEVIET 3.0
-	 * @Author VINADES.,JSC (contact@vinades.vn)
-	 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-	 * @Createdate 2-10-2010 20:59
-	 */
+/**
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Createdate 2-10-2010 20:59
+ */
 
-	if (!defined('NV_IS_FILE_MODULES'))
-		die('Stop!!!');
+if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
-	$sql_drop_module = array();
-	$result = $db->sql_query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_" . $module_data . "\_%'");
-	$num_table = intval($db->sql_numrows($result));
-	if ($num_table > 0)
+$sql_drop_module = array();
+$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_" . $module_data . "\_%'" );
+$num_table = intval( $db->sql_numrows( $result ) );
+if( $num_table > 0 )
+{
+	$result = $db->sql_query( "SELECT `catid` FROM `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat` ORDER BY `order` ASC" );
+	while( list( $catid_i ) = $db->sql_fetchrow( $result ) )
 	{
-		$result = $db->sql_query("SELECT `catid` FROM `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat` ORDER BY `order` ASC");
-		while (list($catid_i) = $db->sql_fetchrow($result))
-		{
-			$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_" . $catid_i . "`";
-		}
-		$db->sql_freeresult();
-
-		list($maxid) = $db->sql_fetchrow($db->sql_query("SELECT max(`id`) FROM `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows`"));
-		$i1 = 1;
-		while ($i1 <= $maxid)
-		{
-			$tb = ceil($i1 / 2000);
-			$db->sql_query("DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_bodyhtml_" . $tb . "`");
-			$i1 = $i1 + 2000;
-		}
+		$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_" . $catid_i . "`";
 	}
+	$db->sql_freeresult();
 
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat`";
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources`";
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics`";
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments`";
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat`";
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block`";
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows`";
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_bodytext`";
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post`";
-	$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins`";
+	list( $maxid ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`id`) FROM `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows`" ) );
+	$i1 = 1;
+	while( $i1 <= $maxid )
+	{
+		$tb = ceil( $i1 / 2000 );
+		$db->sql_query( "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_bodyhtml_" . $tb . "`" );
+		$i1 = $i1 + 2000;
+	}
+}
 
-	$sql_create_module = $sql_drop_module;
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_bodytext`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins`";
 
-	$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat` (
+$sql_create_module = $sql_drop_module;
+
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat` (
 	  `catid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	  `parentid` mediumint(8) unsigned NOT NULL DEFAULT '0',
 	  `title` varchar(255) NOT NULL,
@@ -73,7 +72,7 @@
 	  KEY `parentid` (`parentid`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources` (
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources` (
 	  `sourceid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	  `title` varchar(255) NOT NULL DEFAULT '',
 	  `link` varchar(255) NOT NULL DEFAULT '',
@@ -85,7 +84,7 @@
 	  UNIQUE KEY `title` (`title`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics` (
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics` (
 	  `topicid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	  `title` varchar(255) NOT NULL DEFAULT '',
 	  `alias` varchar(255) NOT NULL DEFAULT '',
@@ -101,7 +100,7 @@
 	  UNIQUE KEY `alias` (`alias`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat` (
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat` (
 	  `bid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	  `adddefault` tinyint(4) NOT NULL DEFAULT '0',
 	  `number` mediumint(4) NOT NULL DEFAULT '10',
@@ -119,7 +118,7 @@
 	  UNIQUE KEY `alias` (`alias`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments` (
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments` (
 	  `cid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	  `id` mediumint(8) unsigned NOT NULL DEFAULT '0',
 	  `content` mediumtext NOT NULL,
@@ -134,14 +133,14 @@
 	  KEY `id` (`id`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block` (
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block` (
 	  `bid` int(11) unsigned NOT NULL,
 	  `id` int(11) unsigned NOT NULL,
 	  `weight` int(11) unsigned NOT NULL,
 	  UNIQUE KEY `bid` (`bid`,`id`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows` (
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows` (
 	  `id` int(11) unsigned NOT NULL auto_increment,
 	  `catid` mediumint(8) unsigned NOT NULL default '0',
 	  `listcatid` varchar(255) NOT NULL default '',
@@ -181,13 +180,13 @@
 	  KEY `status` (`status`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_bodytext` (
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_bodytext` (
 	  `id` int(11) unsigned NOT NULL,
 	  `bodytext` mediumtext NOT NULL,
 	  PRIMARY KEY  (`id`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_bodyhtml_1` (
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_bodyhtml_1` (
 	  `id` int(11) unsigned NOT NULL,
 	  `bodyhtml` longtext NOT NULL,
 	  `sourcetext` varchar(255) NOT NULL default '',
@@ -197,9 +196,9 @@
 	  `allowed_print` tinyint(1) NOT NULL default '0',
 	  `allowed_save` tinyint(1) NOT NULL default '0',	  
 	  PRIMARY KEY  (`id`)
-	) ENGINE=MyISAM";	
+	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post` (
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post` (
 	  `pid` mediumint(9) NOT NULL AUTO_INCREMENT,
 	  `member` tinyint(4) NOT NULL,
 	  `group_id` mediumint(9) NOT NULL,
@@ -211,7 +210,7 @@
 	  UNIQUE KEY `member` (`member`,`group_id`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins` (
+$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins` (
 	  `userid` int(11) NOT NULL default '0',
 	  `catid` int(11) NOT NULL default '0',
 	  `admin` tinyint(4) NOT NULL default '0',
@@ -223,19 +222,20 @@
 	  UNIQUE KEY `userid` (`userid`,`catid`)
 	) ENGINE=MyISAM";
 
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'per_page', '20')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'st_links', '10')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'homewidth', '100')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'homeheight', '150')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'blockwidth', '52')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'blockheight', '75')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'imagefull', '460')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '2')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'copyright', '')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'showhometext', '1')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '1')";
-	$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'timecheckstatus', '0')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'per_page', '20')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'st_links', '10')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'homewidth', '100')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'homeheight', '150')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'blockwidth', '52')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'blockheight', '75')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'imagefull', '460')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '2')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'copyright', '')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'showhometext', '1')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '1')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'timecheckstatus', '0')";
+
 ?>
