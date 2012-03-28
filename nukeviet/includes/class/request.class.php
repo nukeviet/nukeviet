@@ -356,6 +356,10 @@ class Request
         {
             $base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
         }
+        elseif ( defined( 'NV_IS_UPDATE' ) )
+        {
+            $base_siteurl = preg_replace( "#/install(.*)$#", '', $base_siteurl );
+        }
         elseif ( ! empty( $base_siteurl ) )
         {
             $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
