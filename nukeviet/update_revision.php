@@ -120,14 +120,15 @@ if( defined( "NV_IS_GODADMIN" ) )
 	}
 	
 	// Xoa file thua module menu
-	if( $global_config['revision'] < 1633 )
+	if( $global_config['revision'] < 1693 )
 	{
 		nv_deletefile( NV_ROOTDIR . '/themes/admin_default/modules/menu/config.tpl' );
+		nv_deletefile( NV_ROOTDIR . '/modules/menu/theme.php' );
 	}
 		
 	//Update revision
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1685')" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1693')" );
 
 	$array_config_rewrite = array(
 		'rewrite_optional' => $global_config['rewrite_optional'],
