@@ -762,6 +762,37 @@ div.quote blockquote.error, #middle_column_r div.info span {
     color: #cb0000
 }
 
+/* INFO BOX */
+div.infook, div.infoerror, div.infoalert {
+	padding: 10px;
+	margin: 5px 0;
+	line-height: 1.5em;
+	text-align: center;
+}
+div.infook {
+	border-top: 1px solid #6C6;
+	border-bottom: 1px solid #6C6;
+	background-color: #CFC;
+}
+div.infoerror {
+	border-top: 1px solid #C33;
+	border-bottom: 1px solid #C33;
+	background-color: #F66;
+	color: white;
+}
+div.infoalert {
+	border-top: 1px solid #9CF;
+	border-bottom: 1px solid #9CF;
+	background-color: #C5DEFA;
+}
+div.infook a, div.inerror a, div.infoalert a {
+	text-decoration: underline;	
+}
+div.infoerror a {
+	color: #fff;
+	text-decoration: underline;	
+}
+
 span.row, sup.required {
     color: #F00
 }
