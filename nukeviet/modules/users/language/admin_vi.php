@@ -209,5 +209,6 @@ $lang_module['UserNotInGroup'] = "Thành viên mà bạn chọn không có trong
 $lang_module['addMemberToGroup'] = "Thêm thành viên vào nhóm";
 $lang_module['detail'] = "Chi tiết";
 $lang_module['exclude_user2'] = "Loại khỏi nhóm";
+$lang_module['ChangeConfigModule'] = "Thay đổi cấu hình module";
 
 ?>

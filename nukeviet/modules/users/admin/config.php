@@ -65,6 +65,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "_config` SET `content`=" . $db->dbescape( $array_config['deny_name'] ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='deny_name'";
     $db->sql_query( $sql );
     
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], "", $admin_info['userid'] );
     nv_save_file_config_global();
     
     Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass() );
