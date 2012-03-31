@@ -419,4 +419,51 @@ function nv_rewrite_rule_iis7( $rewrite_rule = "" )
 	return $doc->saveXML();
 }
 
+/**
+ * nv_getModVersion()
+ * 
+ * @param integer $updatetime
+ * @return
+ */
+function nv_getModVersion( $updatetime = 3600 )
+{
+    global $global_config;
+
+    $my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/modules.version.' . NV_LANG_INTERFACE . '.xml';
+
+    $xmlcontent = false;
+
+    $p = NV_CURRENTTIME - $updatetime;
+
+    if ( file_exists( $my_file ) and @filemtime( $my_file ) > $p )
+    {
+        $xmlcontent = simplexml_load_file( $my_file );
+    }
+    else
+    {
+        include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+        $getContent = new UrlGetContents( $global_config );
+
+        $nv_sites = array( //
+            'update.nukeviet.vn', //
+            'update2.nukeviet.vn', //
+            'update.nukeviet.info', //
+            'update2.nukeviet.info'
+		);
+
+        $content = nv_rand_getVersion( $nv_sites, $getContent, true );
+
+        if ( ! empty( $content ) )
+        {
+            $xmlcontent = simplexml_load_string( $content );
+            if ( $xmlcontent !== false )
+            {
+                file_put_contents( $my_file, $content );
+            }
+        }
+    }
+
+    return $xmlcontent;
+}
+
 ?>
