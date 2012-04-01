@@ -76,7 +76,7 @@ $search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x00
 $replace = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~' );
 $global_config['cookie_prefix'] = str_replace( $search, $replace, $global_config['cookie_prefix'] );
 $global_config['date_pattern'] = str_replace( $search, $replace, $global_config['date_pattern'] );
-$global_config['ftp_path'] = str_replace( $search, $replace, $global_config['cookie_prefix'] );
+$global_config['ftp_path'] = str_replace( $search, $replace, $global_config['ftp_path'] );
 $global_config['session_prefix'] = str_replace( $search, $replace, $global_config['session_prefix'] );
 $global_config['statistics_timezone'] = str_replace( $search, $replace, $global_config['statistics_timezone'] );
 $global_config['time_pattern'] = str_replace( $search, $replace, $global_config['time_pattern'] );
@@ -443,7 +443,9 @@ if( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )
 	trigger_error( "Hacking attempt", 256 );
 }
 
-define( 'ADMIN_LOGIN_MODE', ( empty( $global_config['closed_site'] ) ) ? 3 : $global_config['closed_site'] );
+// Kiem tra ton tai goi cap nhat va tu cach admin
+$nv_check_update = file_exists( NV_ROOTDIR . '/install/update_data.php' );
+define( 'ADMIN_LOGIN_MODE', $nv_check_update ? 1 : ( empty( $global_config['closed_site'] ) ? 3 : $global_config['closed_site'] ) );
 
 $admin_cookie = $nv_Request->get_bool( 'admin', 'session', false );
 if( ! empty( $admin_cookie ) )
@@ -470,12 +472,21 @@ elseif( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
 }
 
 //Dinh chi hoat dong cua site
-if( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
+if( $nv_check_update and ! defined( 'NV_IS_UPDATE' ) )
+{
+	// Dinh chi neu khong la admin toi cao
+	if( ! defined( 'NV_ADMIN' ) and ! defined( 'NV_IS_GODADMIN' ) )
+	{
+		$disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
+		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content );
+	}
+}
+elseif( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
 {
 	if( ! empty( $global_config['closed_site'] ) )
 	{
 		$disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-		nv_info_die( $global_config['site_description'], $global_config['disable_site_title'], $disable_site_content );
+		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content );
 	}
 	elseif( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
 	{
@@ -488,6 +499,8 @@ if( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
 		exit();
 	}
 }
+
+unset( $nv_check_update );
 
 define( 'PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' );
 

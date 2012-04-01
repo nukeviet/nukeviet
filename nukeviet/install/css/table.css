@@ -1,4 +1,4 @@
-table {
+﻿table {
 	width: 100%;
 	padding: 0;
 	margin: 0 0 20px 0;
@@ -32,6 +32,10 @@ th.nobg {
 	color: #ef8609;
 }
 
+th.boder{
+	border: 1px solid #C1DAD7;
+}
+
 td {
 	border-right: 1px solid #C1DAD7;
 	border-bottom: 1px solid #C1DAD7;
@@ -40,9 +44,17 @@ td {
 	color: #4f6b72;
 }
 
+td.bleft{
+	border-left: 1px solid #C1DAD7;	
+}
+
 td.alt {
 	background: #F5FAFA;
 	color: #797268;
+}
+
+td.nopadding{
+	padding: 0;
 }
 
 th.spec {

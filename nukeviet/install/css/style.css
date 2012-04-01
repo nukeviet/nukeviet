@@ -36,6 +36,10 @@ hr {
 	margin-bottom: 20px
 }
 
+.hide {
+	display: none;
+}
+
 #header {
 	height: 73px;
 	background: url(../images/top_bg.png) bottom repeat-x;
@@ -348,4 +352,79 @@ ul.lc li .nb {
 
 .error {
 	color: #a50000;
+}
+
+.center{
+	text-align:center;
+}
+
+/* INFO BOX */
+div.infook, div.infoerror, div.infoalert {
+	padding: 10px;
+	margin: 5px 0;
+	line-height: 1.5em;
+	text-align: center;
+}
+div.infook {
+	border-top: 1px solid #6C6;
+	border-bottom: 1px solid #6C6;
+	background-color: #CFC;
+}
+div.infoerror {
+	border-top: 1px solid #C33;
+	border-bottom: 1px solid #C33;
+	background-color: #F66;
+	color: white;
+}
+div.infoalert {
+	border-top: 1px solid #9CF;
+	border-bottom: 1px solid #9CF;
+	background-color: #C5DEFA;
+}
+div.infook a, div.inerror a, div.infoalert a {
+	text-decoration: underline;	
+}
+div.infoerror a {
+	color: #fff;
+	text-decoration: underline;	
+}
+
+.all-work{
+	height:370px;
+	overflow:auto;
+}
+
+.current-work{
+	height:370px;
+	overflow:auto;
+}
+
+.current-work .data{
+	padding:0 10px;
+	text-align:center;
+}
+
+.workitem {
+	padding:5px;
+	display:block;
+	border-bottom: 1px solid #C1DAD7;
+	padding-left:25px;
+	background:url('../images/pending.png') no-repeat 5px center;
+	font-size:11px;
+}
+
+.ierror{
+	background:url('../images/error.png') no-repeat 5px center;
+}
+
+.iok{
+	background:url('../images/outgroup.png') no-repeat 5px center;
+}
+
+.iwarn{
+	background:url('../images/warning.png') no-repeat 5px center;
+}
+
+.iload{
+	background:url('../images/load.gif') no-repeat 5px center;
 }

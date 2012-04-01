@@ -228,6 +228,8 @@ $lang_module['update_file_backup_info'] = "Bạn nên sao lưu lại các file t
 $lang_module['update_file_backup'] = "Sao lưu";
 $lang_module['update_file_backup_ok'] = "Sao lưu thành công, nhấp vào đây để tải về";
 $lang_module['update_file_backup_error'] = "Hệ thống không tự sao lưu được bạn hãy tự sao lưu";
+$lang_module['update_step5_info'] = "Các bước thực hiện đã hoàn tất, bây giờ bạn hãy đọc và làm theo một số lưu ý sau trước khi chọn &quot;<strong>Bước kế tiếp</strong>&quot;.";
+$lang_module['update_step5_info_error'] = "Hệ thống không tìm thấy hướng dẫn nào, nhấp &quot;<strong>Bước kế tiếp</strong>&quot; để tiếp tục.";
 
 $lang_module['update_log_start'] = "Nâng cấp bắt đầu";
 $lang_module['update_log_dump_file'] = "Sao lưu các file thay đổi";
