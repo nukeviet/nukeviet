@@ -277,7 +277,7 @@
 </table>
 <ul class="control_t fr" id="control_t">
 	<li><span class="back_step"><a
-		href="{NV_BASE_SITEURL}install/update.php?step=2&amp;substep=2">{LANG.previous}</a></span>
+		href="{DATA.PrevStepUrl}">{LANG.previous}</a></span>
 	</li>
 	<!-- BEGIN: next_step -->
 	<li><span class="next_step"><a

@@ -734,7 +734,7 @@ elseif( $nv_update_config['step'] == 2 )
 		{
 			$nv_Request->set_session( 'updatelog', serialize( $nv_update_config['updatelog'] ) );
 		}
-
+		
 		// Neu nang cap nua tu dong ma khong co thay doi file nao thi chuyen trang sang buoc tiep theo luon
 		if( $nv_update_config['update_auto_type'] == 2 and empty( $nv_update_config['updatelog']['file_list'] ) )
 		{
@@ -1005,6 +1005,16 @@ elseif( $nv_update_config['step'] == 2 )
 			else
 			{
 				$array['NextStepUrl'] = NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=4';
+			}
+			
+			// Xac dinh buoc truoc
+			if( $nv_update_config['update_auto_type'] == 2 and empty( $nv_update_config['updatelog']['file_list'] ) )
+			{
+				$array['PrevStepUrl'] = NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=1';
+			}
+			else
+			{
+				$array['PrevStepUrl'] = NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=2';
 			}
 		}
 	}
