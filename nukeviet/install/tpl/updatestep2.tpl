@@ -254,7 +254,7 @@
 							DivClass = 'infoalert';
 						}
 						$('#nv-message').show().html('<div class="' + DivClass + '">' + ( ( DivClass == 'infook' ) ? '{LANG.update_task_all_complete}' : '{LANG.update_task_all_complete_alert}' ) + '</div>');
-						$('#control_t').append('<li><span class="next_step"><a href="{NV_BASE_SITEURL}install/update.php?step=2&amp;substep=4">{LANG.next_step}</a></span></li>');
+						$('#control_t').append('<li><span class="next_step"><a href="' + NVU.NextStepUrl + '">{LANG.next_step}</a></span></li>');
 					}
 					NVU.ShowLoad = function(m){
 						$('#nv-loading').html('<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt=""/><br />{LANG.update_task_load} <strong>' + m + '</strong><br />{LANG.update_task_load_message}.');
