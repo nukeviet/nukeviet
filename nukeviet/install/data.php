@@ -424,7 +424,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` 
 ('banners', 1, 0, 'banners', 'banners', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('contact', 0, 1, 'contact', 'contact', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('news', 0, 1, 'news', 'news', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
-('voting', 0, 0, 'voting', 'voting', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
+('voting', 0, 0, 'voting', 'voting', '3.1.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('forum', 0, 0, 'forum', 'forum', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('search', 1, 0, 'search', 'search', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 ('users', 1, 0, 'users', 'users', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
