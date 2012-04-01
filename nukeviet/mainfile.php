@@ -82,6 +82,8 @@ $global_config['statistics_timezone'] = str_replace( $search, $replace, $global_
 $global_config['time_pattern'] = str_replace( $search, $replace, $global_config['time_pattern'] );
 $global_config['upload_logo'] = str_replace( $search, $replace, $global_config['upload_logo'] );
 $global_config['rewrite_endurl'] = str_replace( $search, $replace, $global_config['rewrite_endurl'] );
+$global_config['rewrite_exturl'] = str_replace( $search, $replace, $global_config['rewrite_exturl'] );
+$global_config['searchEngineUniqueID'] = str_replace( $search, $replace, $global_config['searchEngineUniqueID'] );
 unset( $search, $replace );
 
 $global_config['allow_sitelangs'] = ! empty( $global_config['allow_sitelangs'] ) ? explode( ",", $global_config['allow_sitelangs'] ) : array();
