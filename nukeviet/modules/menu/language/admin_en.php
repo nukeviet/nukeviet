@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 09, 2012, 07:03:52 PM
+* @Createdate Apr 02, 2012, 01:37:30 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -32,14 +32,12 @@ $lang_module['number'] = "Order";
 $lang_module['type_header'] = "Top Menu";
 $lang_module['type_along'] = "Vertical Menu";
 $lang_module['type_footer'] = "Bottom menu";
-$lang_module['menu'] = "Menu";
+$lang_module['menu'] = "List menu";
 $lang_module['type_tree'] = "Menu tree folder";
 $lang_module['m_list'] = "Menu list";
 $lang_module['add_type_menu'] = "Select menu type";
 $lang_module['module_name'] = "Select module";
 $lang_module['cho_module'] = "Select module";
-$lang_module['name_blog'] = "Menu";
-$lang_module['error_menu_blog'] = "Error: No menu block";
 $lang_module['action'] = "Activities";
 $lang_module['data_no'] = "There is no data in the system";
 $lang_module['block'] = "This menu block has";
@@ -72,15 +70,16 @@ $lang_module['here'] = "here";
 $lang_module['groups'] = "Select groups";
 $lang_module['sub_menu'] = "Only suitable for some specific style, some style will display title instead of the menu name.";
 $lang_module['main_note_0'] = "Click";
-$lang_module['main_note_1'] = "to creat new cubic menu. Click the name of each cubic menu below to see details and edit the menu.";
+$lang_module['main_note_1'] = "to creat new menu block. Click the name of each menu block below to add and edit the menu items. Hint: You can create multiple menu block to use each the theme and positions.";
 $lang_module['add_type_active'] = "Active menu";
 $lang_module['add_type_active_note'] = "To define a menu that is activated or deactivated by comparing the menu link pointing to link existing sites by side criteria.";
 $lang_module['add_type_active_0'] = "Correctly with the menu link";
 $lang_module['add_type_active_1'] = "Start with the menu link";
-$lang_module['add_type_active_2'] = "Contains strong link of menu";
+$lang_module['add_type_active_2'] = "Contains link of menu";
 $lang_module['add_type_css'] = "CSS class name.";
 $lang_module['add_type_css_info'] = "Class name (CSS) to define the menu interface.";
 $lang_module['add_error_module'] = "Error: No any module selected";
 $lang_module['add_error_module_exist'] = "Error: Module not exist";
+$lang_module['error_menu_block'] = "Error: Enter name of menu block";
 
 ?>

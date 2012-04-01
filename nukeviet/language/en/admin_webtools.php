@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 09, 2012, 07:03:51 PM
+* @Createdate Apr 02, 2012, 01:37:30 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -109,9 +109,10 @@ $lang_module['nukevietChange_updated'] = "Updated";
 $lang_module['nukevietChange_modify'] = "Modify";
 $lang_module['nukevietChange_add'] = "Add";
 $lang_module['nukevietChange_delete'] = "Delete";
-$lang_module['config'] = "Configuration";
+$lang_module['config'] = "Configure the check version";
 $lang_module['autocheckupdate'] = "Enable automatic version checking";
 $lang_module['updatetime'] = "Time to check new version";
 $lang_module['clearip_logs'] = "Delete ip logs";
+$lang_module['update_manual_delete'] = "Please delete it manually.";
 
 ?>

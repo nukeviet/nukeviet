@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 09, 2012, 07:03:51 PM
+* @Createdate Apr 02, 2012, 01:37:30 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -197,5 +197,6 @@ $lang_module['UserNotInGroup'] = "User of your choice is not in the list of grou
 $lang_module['addMemberToGroup'] = "Add users to group";
 $lang_module['detail'] = "Detail";
 $lang_module['exclude_user2'] = "Remove from group";
+$lang_module['ChangeConfigModule'] = "Change the configuration module";
 
 ?>

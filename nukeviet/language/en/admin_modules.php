@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 09, 2012, 07:03:51 PM
+* @Createdate Apr 02, 2012, 01:37:30 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -95,5 +95,6 @@ $lang_module['delete_module_info1'] = "This module is used in language <strong>%
 $lang_module['delete_module_info2'] = "There is %d virtual module created by this module, please delete it before";
 $lang_module['admin_title'] = "Title of administration section";
 $lang_module['change_func_name'] = "Rename function \"%s\" of module \"%s\"";
+$lang_module['edit_error_update_theme'] = "The update module is detected on theme %s does not properly or defective, please check again.";
 
 ?>

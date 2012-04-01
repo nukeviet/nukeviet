@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 09, 2012, 07:03:51 PM
+* @Createdate Apr 02, 2012, 01:37:30 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -151,5 +151,8 @@ $lang_module['filter_order_by'] = "Sort by %s order";
 $lang_module['log_empty'] = "Delete all";
 $lang_module['log_empty_log'] = "Delete all system logs";
 $lang_module['pendingInfo'] = "Pending job from the module";
+$lang_module['update_package_detected'] = "Detects updated package, the website will temporarily stop working. Please perform the following tasks either before the website will be active again.";
+$lang_module['update_package_delete'] = "Delete the update package";
+$lang_module['update_package_do'] = "Update";
 
 ?>
