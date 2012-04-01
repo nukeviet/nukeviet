@@ -88,8 +88,8 @@ hr.space{background:#fff;color:#fff}
 .cat-news .ot-news ul li,.cat-news .ot-news-full ul li{background:url(../images/download/bullet-orange.png) 2px 13px no-repeat;border-bottom:1px solid #d8d8d8;padding:5px 0 5px 12px}
 .cat-news .ot-news-full ul li{border-bottom:0;border-top:1px solid #d8d8d8}
 .cat-news .ot-news ul li.last{border-bottom:0}
-.breakcoup{border-bottom:1px solid #dadada;padding:5px 0}
-.breakcoup .spector{background:url(../images/download/arrow-red.gif) 0 50% no-repeat;display:inline-block;margin:0 2px;width:11px}
+.breadcrumbs{border-bottom:1px solid #dadada;padding:5px 0}
+.breadcrumbs .spector{background:url(../images/download/arrow-red.gif) 0 50% no-repeat;display:inline-block;margin:0 2px;width:11px}
 .other-news p{margin:0;padding:0;text-align:right}
 .other-news h4{border-bottom:1px solid #b93d00;color:#b93d00;margin-bottom:.5em}
 .other-news ul{list-style-type:none;margin:0 0 .5em}

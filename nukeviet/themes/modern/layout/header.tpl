@@ -49,7 +49,7 @@
             [MENU_SITE]
  			<!-- BEGIN: mod_title -->
 			<div class="main">
-				<div class="breakcoup">
+				<div class="breadcrumbs">
 					<a title="{LANG_GLOBAL.Home}" href="{NV_BASE_SITEURL}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/icons/home.png" alt="{LANG_GLOBAL.Home}" /></a>
 					<!-- BEGIN: breakcolumn -->
 						<span class="spector">&nbsp;</span>

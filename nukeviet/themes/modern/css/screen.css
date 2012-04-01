@@ -95,8 +95,8 @@ ul.list-tab li{display:block;float:left;margin-right:5px}
 ul.list-tab li a{background:#fff url(../images/tab-g.png) 0 0 repeat-x;border:1px solid #d9d9d9;color:#646464;display:block;float:left;font-size:.8em;padding:3px 8px 2px;text-transform:uppercase}
 ul.list-tab li.ui-tabs-selected a{background:#982100 url(../images/tab-g-current.png) 0 0 repeat-x;border:1px solid #a63700;color:#fff}
 .f-action,.openid{border-top:1px solid #d8d8d8;padding-top:8px}
-.breakcoup{border-bottom:1px solid #dadada;padding:5px 0}
-.breakcoup .spector{background:url(../images/arrow-red.gif) 0 50% no-repeat;display:inline-block;margin:0 2px;width:11px}
+.breadcrumbs{border-bottom:1px solid #dadada;padding:5px 0}
+.breadcrumbs .spector{background:url(../images/arrow-red.gif) 0 50% no-repeat;display:inline-block;margin:0 2px;width:11px}
 .header-details{border-bottom:1px solid #dadada;padding:8px 0}
 .header-details .action{border-left:1px solid #dcdcdc;display:block;padding:2px 3px 2px 10px}
 .header-details a.email,.header-details a.print,.header-details a.save{color:#5f5f5f;display:inline-block;margin:2px 5px;padding-left:22px}
