@@ -116,4 +116,5 @@ $lang_module['config'] = "Cấu hình kiểm tra phiên bản";
 $lang_module['autocheckupdate'] = "Bật tính năng kiểm tra phiên bản tự động";
 $lang_module['updatetime'] = "Thời gian kiểm lại phiên bản sau";
 $lang_module['clearip_logs'] = "Xóa ip logs";
+$lang_module['update_manual_delete'] = "Hãy xóa thủ công.";
 ?>
