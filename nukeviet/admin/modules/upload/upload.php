@@ -43,7 +43,7 @@ if( $upload_info['is_img'] )
 	$dir = rtrim( $dir, "/" );
 	$arr_dir = explode( "/", $dir );
 	
-	if( $global_config['autologomod'] == 'all' OR ( $arr_dir[0] == NV_UPLOADS_DIR AND isset($arr_dir[1]) AND in_array( $arr_dir[1], $autologomod ) ) )
+	if( $global_config['autologomod'] == 'all' or ( $arr_dir[0] == NV_UPLOADS_DIR and isset( $arr_dir[1] ) and in_array( $arr_dir[1], $autologomod ) ) )
 	{
 		$upload_logo = '';
 		
