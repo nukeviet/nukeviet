@@ -64,15 +64,20 @@ $nv_update_config['tasklist'][] = array( 'r' => 1702, 'rq' => 2, 'l' => 'update_
 Chuan hoa tra ve:
 array(
 	'status' =>
+	'complete' => 
 	'next' =>
 	'link' =>
 	'lang' =>
 	'message' =>
 );
 
-status:
+status: Trang thai tien trinh dang chay
 - 0: That bai
 - 1: Thanh cong
+
+complete: Trang thai hoan thanh tat ca tien trinh
+- 0: Chua hoan thanh tien trinh nay
+- 1: Da hoan thanh tien trinh nay
 
 next:
 - 0: Tiep tuc ham nay voi "link"
@@ -106,6 +111,7 @@ function nv_up_r1501()
 	
 	$return = array(
 		'status' => $check ? 1 : 0,
+		'complete' => $check ? 1 : 0,
 		'next' => 1,
 		'link' => 'NO',
 		'lang' => 'NO',
@@ -126,6 +132,7 @@ function nv_up_r1559()
 	
 	$return = array(
 		'status' => 1,
+		'complete' => 1,
 		'next' => 1,
 		'link' => 'NO',
 		'lang' => 'NO',
@@ -136,6 +143,7 @@ function nv_up_r1559()
 	if( ! $language_query )
 	{
 		$return['status'] = 0;
+		$return['complete'] = 0;
 		return $return;
 	}
 	
@@ -164,6 +172,7 @@ function nv_up_r1576()
 	
 	$return = array(
 		'status' => 1,
+		'complete' => 1,
 		'next' => 1,
 		'link' => 'NO',
 		'lang' => 'NO',
@@ -176,6 +185,7 @@ function nv_up_r1576()
 	if( ! $language_query )
 	{
 		$return['status'] = 0;
+		$return['complete'] = 0;
 		return $return;
 	}
 	
@@ -237,6 +247,7 @@ function nv_up_r1587()
 		
 	$return = array(
 		'status' => 1,
+		'complete' => 1,
 		'next' => 1,
 		'link' => 'NO',
 		'lang' => 'NO',
@@ -257,6 +268,7 @@ function nv_up_r1590()
 	
 	$return = array(
 		'status' => 1,
+		'complete' => 1,
 		'next' => 1,
 		'link' => 'NO',
 		'lang' => 'NO',
@@ -283,6 +295,7 @@ function nv_up_r1592()
 	
 	$return = array(
 		'status' => 1,
+		'complete' => 1,
 		'next' => 1,
 		'link' => 'NO',
 		'lang' => 'NO',
@@ -313,6 +326,7 @@ function nv_up_r1604()
 	
 	$return = array(
 		'status' => 1,
+		'complete' => 1,
 		'next' => 1,
 		'link' => 'NO',
 		'lang' => 'NO',
@@ -338,6 +352,7 @@ function nv_up_r1702()
 	
 	$return = array(
 		'status' => 1,
+		'complete' => 1,
 		'next' => 1,
 		'link' => 'NO',
 		'lang' => 'NO',
