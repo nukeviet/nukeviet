@@ -210,7 +210,7 @@ class NvUpdate
 		}
 	}
 	
-	public function move_file( $files )
+	public function move_file( $nv_update_config, $files )
 	{
 		if( empty( $files ) ) return true;
 		
@@ -234,6 +234,10 @@ class NvUpdate
 			}
 		}
 		
+		// Nhat ki
+		$logs_message = array();
+		$logs_status = array();
+		
 		// Bat dau tao thu muc
 		foreach ( $files as $file_i )
 		{
@@ -251,9 +255,20 @@ class NvUpdate
 					
 					if ( ! is_dir( NV_ROOTDIR . '/' . $cp . $p ) )
 					{
+						// Nhat ki that bai
+						$logs_message[] = $this->lang['update_log_creat_dir'] . ' ' . $cp . $p;
+						$logs_status[] = false;
+					
+						// Luu nhat ki
+						$this->log( $nv_update_config, $logs_message, $logs_status );
+						
 						if( $is_ftp === true ) $ftp->close();
 						return $this->lang['update_error_creat_dir'] . ' ' . $cp . $p;
 					}
+					
+					// Nhat ki thanh cong
+					$logs_message[] = $this->lang['update_log_creat_dir'] . ' ' . $cp . $p;
+					$logs_status[] = true;
 				}
 				$cp .= $p . '/';
 			}
@@ -283,12 +298,26 @@ class NvUpdate
 				
 				if ( file_exists( NV_ROOTDIR . '/install/update/' . $file_i ) )
 				{
+					// Nhat ki that bai
+					$logs_message[] = $this->lang['update_log_move_file'] . ' ' . $file_i;
+					$logs_status[] = false;
+					
+					// Luu nhat ki
+					$this->log( $nv_update_config, $logs_message, $logs_status );
+					
 					if( $is_ftp === true ) $ftp->close();
 					
 					return $this->lang['update_error_move_file'] . ' ' . $file_i;
 				}
+				
+				// Nhat ki thanh cong
+				$logs_message[] = $this->lang['update_log_move_file'] . ' ' . $file_i;
+				$logs_status[] = true;
 			}
 		}
+		
+		// Luu nhat ki
+		$this->log( $nv_update_config, $logs_message, $logs_status );
 		
 		return true;
 	}
@@ -527,7 +556,7 @@ class NvUpdate
 		{
 			global $sys_info, $nv_update_config;
 			
-			if( ! $array['getcomplete'] and empty( $array['file_list'] ) )
+			if( ! $array['getcomplete'] and ! empty( $array['file_list'] ) )
 			{
 				if( substr( $sys_info['os'], 0, 3 ) == 'WIN' )
 				{
@@ -690,8 +719,19 @@ class NvUpdate
 		$file_log = 'log-update-' . nv_date( 'H-i-s-d-m-Y', $nv_update_config['updatelog']['starttime'] ) . '-' . $client_info['session_id'] . '.log';
 		
 		$time = nv_date( 'H:i:s_d-m-Y' );
-		$status = empty( $status ) ? 'FAILURE' : 'SUCCESS';
-		$contents = $time . '  |  ' . $client_info['ip'] . '  |  ' . $content . '  |  ' . $status . "\n";
+		
+		if( ! is_array( $content ) )
+		{
+			$content = array( 0 => $content );
+			$status = array( 0 => $status );
+		}
+		
+		$contents = '';
+		foreach( $content as $key => $mess )
+		{
+			$st = empty( $status[$key] ) ? 'FAILURE' : 'SUCCESS';
+			$contents .= $time . '  |  ' . $client_info['ip'] . '  |  ' . $mess . '  |  ' . $st . "\n";
+		}
 		
 		if( ! file_exists( NV_ROOTDIR . "/" . NV_LOGS_DIR . "/data_logs/" . $file_log ) )
 		{
@@ -880,8 +920,9 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 					}
 				}
 			}
+			
 			// Sao luu tat ca cac file | Cu de nhung tam thoi co le khong dung duoc
-			else
+			if( empty( $zip_file_backup ) )
 			{
 				$file_list = $NvUpdate->list_all_file( NV_ROOTDIR );
 				
@@ -1444,7 +1485,14 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 		// Di chuyen cac file
 		if( $nv_Request->isset_request( 'move', 'get' ) )
 		{
-			$check = $NvUpdate->move_file( $array['file_list'] );
+			if( ! isset( $nv_update_config['updatelog']['is_start_move_file'] ) )
+			{
+				// Danh dau da di chuyen cac file roi
+				$nv_update_config['updatelog']['is_start_move_file'] = NV_CURRENTTIME;
+				$NvUpdate->set_data_log( $nv_update_config['updatelog'] );
+			}
+			
+			$check = $NvUpdate->move_file( $nv_update_config, $array['file_list'] );
 			if( $check === true )
 			{
 				if( $nv_update_config['updatelog']['step'] < 2 )

@@ -249,5 +249,7 @@ $lang_module['update_log_start'] = "Nâng cấp bắt đầu";
 $lang_module['update_log_dump_file'] = "Sao lưu các file thay đổi";
 $lang_module['update_log_dump_file_down'] = "Tải về bản backup các file thay đổi";
 $lang_module['update_log_ftp'] = "Cập nhật cấu hình FTP";
+$lang_module['update_log_creat_dir'] = "Tạo thư mục";
+$lang_module['update_log_move_file'] = "Di chuyển file";
 
 ?>
