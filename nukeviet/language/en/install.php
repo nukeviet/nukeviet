@@ -5,7 +5,7 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Apr 02, 2012, 01:37:30 AM
+* @Createdate Apr 02, 2012, 11:58:22 PM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -173,7 +173,6 @@ $lang_module['update_dump_error'] = "Error: Can not backup the database but you 
 $lang_module['update_dump_ok'] = "Database has been backed up successfully. Size";
 $lang_module['update_dump_download'] = "Click here to download";
 $lang_module['update_refuse_dump'] = "You can also skip this step and make the next step";
-$lang_module['update_task_empty'] = "No work need to do, you can move to the next step";
 $lang_module['update_info_complete'] = "Upgrade successful, here is the information you need to pay attention.";
 $lang_module['update_current_version'] = "The current version";
 $lang_module['update_lastest_version'] = "The latest version";
@@ -229,5 +228,22 @@ $lang_module['update_log_start'] = "Upgrades start";
 $lang_module['update_log_dump_file'] = "Back up changed files";
 $lang_module['update_log_dump_file_down'] = "Download a backup of changed files";
 $lang_module['update_log_ftp'] = "Updated FTP configuration";
+$lang_module['update_load_waiting'] = "Processing, please wait";
+$lang_module['update_info_list_prosess'] = "Below is a list of job will execute, click <strong>Next step</strong>to continue";
+$lang_module['update_error_log_data'] = "Error: Can not set log, please CHMOD 0777 folder \"<strong>%s</strong>\" and then press F5 (reload the page) to continue.";
+$lang_module['update_data_backuped'] = "You have backed up the database at %s";
+$lang_module['update_file_backuped'] = "You have backed up the change file at %s";
+$lang_module['update_data_not_allow'] = "The amendment took out the database so you can not backup the database again, but you can continue to perform the remaining work";
+$lang_module['update_file_not_allow'] = "<strong>Backup change files</strong><br />No files have been modified or the change took place the file so no need to backup file at this time";
+$lang_module['update_move_num'] = "<strong>%s files waiting to move out of <strong>%s</strong> files";
+$lang_module['update_move_complete'] = "<strong>%s</strong> files have been moved, click \"<strong>Next step</strong>\" to continue.";
+$lang_module['update_move_start'] = "Click here to continue";
+$lang_module['update_move_redo'] = "Click here to try again";
+$lang_module['update_move_redo_message'] = "We recommend that you configure FTP to move the file system";
+$lang_module['update_move_redo_manual'] = "Or you should move the files and folders manually in <strong>install/update/</strong> out of the website root directory (the directory containing index.php, CJzip.php, robots.php ...).";
+$lang_module['update_error_creat_dir'] = "Can not create directory";
+$lang_module['update_error_move_file'] = "Can not move file";
+$lang_module['update_log_creat_dir'] = "Create a directory";
+$lang_module['update_log_move_file'] = "Move the file";
 
 ?>
