@@ -485,6 +485,42 @@ class NVftp
 
 		return ftp_pwd( $this->conn_id );
 	}
+
+	/**
+	 * NVftp::mkdir()
+	 * 
+	 * @return
+	 */
+	public function mkdir( $dir )
+	{
+		if( ! $this->check_login() ) return false;
+
+		return ftp_mkdir( $this->conn_id, $dir );
+	}
+
+	/**
+	 * NVftp::unlink()
+	 * 
+	 * @return
+	 */
+	public function unlink( $dir )
+	{
+		if( ! $this->check_login() ) return false;
+
+		return ftp_delete( $this->conn_id, $dir );
+	}
+
+	/**
+	 * NVftp::rename()
+	 * 
+	 * @return
+	 */
+	public function rename( $old, $new )
+	{
+		if( ! $this->check_login() ) return false;
+
+		return ftp_rename( $this->conn_id, $old, $new );
+	}
 	
 	/**
 	 * NVftp::chdir()
