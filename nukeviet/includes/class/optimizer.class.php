@@ -69,7 +69,15 @@ class optimezer
         {
            $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
         }
+		
         $this->base_siteurl = $base_siteurl . '/';
+		
+		if( defined( 'NV_FILES_DIR' ) )
+		{
+			$this->cssDir = NV_FILES_DIR . '/css';
+			$this->jsDir = NV_FILES_DIR . '/js';
+		}
+		
         $this->_tidySupport = $tidySupport;
     }
 
