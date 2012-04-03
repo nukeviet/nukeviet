@@ -33,6 +33,7 @@ $nv_update_config['lang']['vi']['delete_unuse_file'] = 'Xóa file thừa';
 $nv_update_config['lang']['vi']['update_voting'] = 'Nâng cấp module voting';
 $nv_update_config['lang']['vi']['update_mod_menu'] = 'Cập nhật module menu';
 $nv_update_config['lang']['vi']['update_mod_upload'] = 'Cập nhật module upload';
+$nv_update_config['lang']['vi']['update_theme_mobile_nukeviet'] = 'Cập giao diện mobile_nukeviet';
 $nv_update_config['lang']['vi']['update_nukeviet_version'] = 'Nâng cấp phiên bản và Revision';
 
 // English
@@ -43,6 +44,7 @@ $nv_update_config['lang']['en']['delete_unuse_file'] = 'Delete unused files';
 $nv_update_config['lang']['en']['update_voting'] = 'Update module voting';
 $nv_update_config['lang']['en']['update_mod_menu'] = 'Update module menu';
 $nv_update_config['lang']['en']['update_mod_upload'] = 'Update module upload';
+$nv_update_config['lang']['en']['update_theme_mobile_nukeviet'] = 'Update theme mobile nukeviet';
 $nv_update_config['lang']['en']['update_nukeviet_version'] = 'Update Version and Revision';
 
 $nv_update_config['update_auto_type'] = 2; // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
@@ -57,7 +59,8 @@ $nv_update_config['tasklist'][] = array( 'r' => 1587, 'rq' => 2, 'l' => 'delete_
 $nv_update_config['tasklist'][] = array( 'r' => 1590, 'rq' => 2, 'l' => 'update_voting', 'f' => 'nv_up_r1590' );
 $nv_update_config['tasklist'][] = array( 'r' => 1592, 'rq' => 2, 'l' => 'update_mod_menu', 'f' => 'nv_up_r1592' );
 $nv_update_config['tasklist'][] = array( 'r' => 1604, 'rq' => 2, 'l' => 'update_mod_upload', 'f' => 'nv_up_r1604' );
-$nv_update_config['tasklist'][] = array( 'r' => 1702, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_r1702' );
+$nv_update_config['tasklist'][] = array( 'r' => 1726, 'rq' => 0, 'l' => 'update_theme_mobile_nukeviet', 'f' => 'nv_up_r1726' );
+$nv_update_config['tasklist'][] = array( 'r' => 1726, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
 
 // Danh sach cac function
 /*
@@ -109,14 +112,10 @@ function nv_up_r1501()
 	
 	$check = $db->sql_query( "ALTER TABLE `" . NV_USERS_GLOBALTABLE . "` CHANGE `birthday` `birthday` INT(11) NOT NULL" );
 	
-	$return = array(
-		'status' => $check ? 1 : 0,
-		'complete' => $check ? 1 : 0,
-		'next' => 1,
-		'link' => 'NO',
-		'lang' => 'NO',
-		'message' => '',
-	);
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
+	
+	$return['status'] = $check ? 1 : 0;
+	$return['complete'] = $check ? 1 : 0;
 	
 	return $return;
 }
@@ -130,14 +129,7 @@ function nv_up_r1559()
 {
 	global $nv_update_baseurl, $db, $db_config;
 	
-	$return = array(
-		'status' => 1,
-		'complete' => 1,
-		'next' => 1,
-		'link' => 'NO',
-		'lang' => 'NO',
-		'message' => '',
-	);
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
 	if( ! $language_query )
@@ -170,14 +162,7 @@ function nv_up_r1576()
 {
 	global $nv_update_baseurl, $db, $db_config;
 	
-	$return = array(
-		'status' => 1,
-		'complete' => 1,
-		'next' => 1,
-		'link' => 'NO',
-		'lang' => 'NO',
-		'message' => '',
-	);
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'captcha_type', '0')" );
 
@@ -245,14 +230,7 @@ function nv_up_r1587()
 	nv_deletefile( NV_ROOTDIR . '/themes/admin_default/modules/menu/config.tpl' );
 	nv_deletefile( NV_ROOTDIR . '/modules/menu/theme.php' );
 		
-	$return = array(
-		'status' => 1,
-		'complete' => 1,
-		'next' => 1,
-		'link' => 'NO',
-		'lang' => 'NO',
-		'message' => '',
-	);
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	return $return;
 }
@@ -266,14 +244,7 @@ function nv_up_r1590()
 {
 	global $nv_update_baseurl, $db, $db_config;
 	
-	$return = array(
-		'status' => 1,
-		'complete' => 1,
-		'next' => 1,
-		'link' => 'NO',
-		'lang' => 'NO',
-		'message' => '',
-	);
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
 	while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
@@ -293,14 +264,7 @@ function nv_up_r1592()
 {
 	global $nv_update_baseurl, $db, $db_config;
 	
-	$return = array(
-		'status' => 1,
-		'complete' => 1,
-		'next' => 1,
-		'link' => 'NO',
-		'lang' => 'NO',
-		'message' => '',
-	);
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
 	while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
@@ -324,14 +288,7 @@ function nv_up_r1604()
 {
 	global $nv_update_baseurl, $db, $db_config;
 	
-	$return = array(
-		'status' => 1,
-		'complete' => 1,
-		'next' => 1,
-		'link' => 'NO',
-		'lang' => 'NO',
-		'message' => '',
-	);
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologomod', '')" );
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize1', '50')" );
@@ -342,26 +299,38 @@ function nv_up_r1604()
 }
 
 /**
- * nv_up_r1702()
+ * nv_up_r1726()
  * 
  * @return
  */
-function nv_up_r1702()
+function nv_up_r1726()
+{
+	global $nv_update_baseurl;
+	
+	if( is_file( NV_ROOTDIR . '/themes/mobile_nukeviet/default.jpg' ) )
+	{
+		nv_deletefile( NV_ROOTDIR . '/themes/mobile_nukeviet/default.jpg' );
+	}
+	
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
+	
+	return $return;
+}
+
+/**
+ * nv_up_finish()
+ * 
+ * @return
+ */
+function nv_up_finish()
 {
 	global $nv_update_baseurl, $db, $db_config, $global_config;
 	
-	$return = array(
-		'status' => 1,
-		'complete' => 1,
-		'next' => 1,
-		'link' => 'NO',
-		'lang' => 'NO',
-		'message' => '',
-	);
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	//Update revision
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1713')" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1726')" );
 
 	$array_config_rewrite = array(
 		'rewrite_optional' => $global_config['rewrite_optional'],
