@@ -352,13 +352,13 @@ class Request
         {
             $base_siteurl = preg_replace( "#/" . NV_EDITORSDIR . "(.*)$#", '', $base_siteurl );
         }
+        elseif ( defined( 'NV_IS_UPDATE' ) ) // Update se bao gom ca admin nen update phai dat truoc
+        {
+            $base_siteurl = preg_replace( "#/install(.*)$#", '', $base_siteurl );
+        }
         elseif ( defined( 'NV_ADMIN' ) )
         {
             $base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
-        }
-        elseif ( defined( 'NV_IS_UPDATE' ) )
-        {
-            $base_siteurl = preg_replace( "#/install(.*)$#", '', $base_siteurl );
         }
         elseif ( ! empty( $base_siteurl ) )
         {

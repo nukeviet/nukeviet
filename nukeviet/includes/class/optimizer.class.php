@@ -57,7 +57,11 @@ class optimezer
         if ( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
         if ( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
-        if ( defined( 'NV_ADMIN' ) )
+        if ( defined( 'NV_IS_UPDATE' ) ) // Update se bao gom ca admin nen update phai dat truoc
+        {
+            $base_siteurl = preg_replace( "#/install(.*)$#", '', $base_siteurl );
+        }
+        elseif ( defined( 'NV_ADMIN' ) )
         {
             $base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
         }
