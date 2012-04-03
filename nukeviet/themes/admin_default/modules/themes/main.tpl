@@ -18,7 +18,16 @@
 			<!-- BEGIN: deactive --><td style="padding-left:50px;width:50%"><!-- END: deactive -->
 			<p><b>{ROW.name}</b> {LANG.theme_created_by} <a href="{ROW.website}" title="{LANG.theme_created_website}" style="color:#3B5998" onclick="this.target='_blank'"><b>{ROW.author}</b></a></p>
 			<p><img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" style="max-width:300px;max-height:200px"/></p>
-			<p style="font-size:13px;margin-top:10px;font-weight:bold"><a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_activate}</a> | <a href="javascript:void(0);" class="delete" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_delete}</a></p>
+			<p style="font-size:13px;margin-top:10px;font-weight:bold">
+				<!-- BEGIN: link_active -->
+				<a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_activate}</a> 
+				<!-- END: link_active -->
+				<!-- BEGIN: dash -->
+				 - 
+				<!-- END: dash -->
+				<!-- BEGIN: link_delete -->
+				<a href="javascript:void(0);" class="delete" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_delete}</a></p>
+				<!-- END: link_delete -->
 			<p style="font-size:13px">{ROW.description}</p>
 			<p style="font-size:13px;margin-top:10px">{LANG.theme_created_folder} <span style="background-color:#E5F4FD">/themes/{ROW.value}/</span></p>
 			<p style="font-size:13px;margin-top:20px">{LANG.theme_created_position} {POSITION}</p>
