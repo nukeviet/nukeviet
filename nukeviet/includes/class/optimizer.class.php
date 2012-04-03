@@ -94,7 +94,6 @@ class optimezer
         {
             $this->_conditon = $conditonMatches[0];
             $this->_content = preg_replace_callback( $conditionRegex, array( $this, 'conditionCallback' ), $this->_content );
-
         }
 
         $this->_content = preg_replace( "/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content );
@@ -287,9 +286,9 @@ class optimezer
                 $contents .= $this->getCssContent( $link ) . $this->eol;
                 if ( ! empty( $media ) and ! preg_match( "/all/", $media ) ) $contents .= "}" . $this->eol;
             }
+
             $contents = $this->minifyCss( $contents );
             file_put_contents( $newCSSLinkPath, $contents );
-
         }
 
         return $this->base_siteurl . $this->cssDir . "/" . $newCSSLink . ".opt.css";
@@ -415,6 +414,9 @@ class optimezer
         $cssContent = preg_replace( '/:first-l(etter|ine)\\{/', ':first-l$1 {', $cssContent );
         $cssContent = preg_replace( "/[^\}]+\{[\s|\;]*\}[\s]*/", "", $cssContent );
         $cssContent = preg_replace( "/[ ]+/", " ", $cssContent );
+		
+        $cssContent = str_replace( "\xEF\xBB\xBF", "", $cssContent ); // Remove BOM signature
+		
         $cssContent = trim( $cssContent );
         return $cssContent;
     }
