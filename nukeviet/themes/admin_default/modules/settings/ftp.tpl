@@ -1,3 +1,8 @@
+<!-- BEGIN: no_support-->
+<div class="infoerror">
+	{LANG.ftp_error_support}
+</div>
+<!-- END: no_support-->
 <!-- BEGIN: main-->
 <!-- BEGIN: error-->
 <div class="quote" style="width:98%">

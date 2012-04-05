@@ -216,5 +216,6 @@ $lang_module['smtp_pass_note'] = "Note: SMTP password is not encrypted in the da
 $lang_module['ftp_auto_detect_root'] = "Auto detection";
 $lang_module['ftp_error_full'] = "Please enter all the parameters to auto detection the Remote path";
 $lang_module['ftp_error_detect_root'] = "Can not find any suitable parameters, check your username and password";
+$lang_module['ftp_error_support'] = "Your server is blocking or does not support FTP library, please contact the provider to be enabled.";
 
 ?>

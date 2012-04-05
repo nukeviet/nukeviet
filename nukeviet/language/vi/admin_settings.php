@@ -221,5 +221,6 @@ $lang_module['allow_switch_mobi_des'] = "Cho phép chuyển đổi giao diện m
 $lang_module['ftp_auto_detect_root'] = "Xác định tự động";
 $lang_module['ftp_error_full'] = "Hãy nhập đủ các thông số để tự động nhận diện Remote path";
 $lang_module['ftp_error_detect_root'] = "Không thể tìm thấy thông số nào phù hợp, hãy kiểm tra lại tên đăng nhập và mật khẩu";
+$lang_module['ftp_error_support'] = "Máy chủ của bạn hiện đang chặn hoặc không hỗ trợ thư viện FTP, hãy liên hệ với nhà cung cấp để được kích hoạt.";
 
 ?>

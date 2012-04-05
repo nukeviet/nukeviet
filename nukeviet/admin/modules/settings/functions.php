@@ -19,12 +19,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$submenu['statistics'] = $lang_module['global_statistics'];
 	$submenu['cronjobs'] = $lang_global['mod_cronjobs'];
 	$submenu['smtp'] = $lang_module['smtp_config'];
-	
-	if( $sys_info['ftp_support'] )
-	{
-		$submenu['ftp'] = $lang_module['ftp_config'];
-	}
-	
+	$submenu['ftp'] = $lang_module['ftp_config'];
 	$submenu['pagetitle'] = $lang_module['pagetitle'];
 	$submenu['metatags'] = $lang_module['metaTagsConfig'];
 	$submenu['robots'] = $lang_module['robots'];
