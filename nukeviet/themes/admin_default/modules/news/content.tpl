@@ -241,7 +241,7 @@
 			<tr>
 				<td><strong>{LANG.content_sourceid}</strong></td>
 				<td>
-				<input type="text" maxlength="255" value="{rowcontent.sourcetext}" name="sourcetext" style="width: 98%;" />
+				<input type="text" maxlength="255" value="{rowcontent.sourcetext}" name="sourcetext" id="AjaxSourceText" style="width: 98%;" />
 				</td>
 			</tr>
 			<tr>
@@ -310,6 +310,17 @@
 		});
 
 		$("#AjaxTopicText").autocomplete(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=topicajax", {
+			delay : 10,
+			minChars : 2,
+			matchSubset : 1,
+			matchContains : 1,
+			cacheLength : 10,
+			onItemSelect : selectItem,
+			onFindValue : findValue,
+			autoFill : true
+		});
+		
+		$("#AjaxSourceText").autocomplete(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=sourceajax", {
 			delay : 10,
 			minChars : 2,
 			matchSubset : 1,

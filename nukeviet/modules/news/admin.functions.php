@@ -48,7 +48,7 @@ else
 }
 
 $allow_func = array( 
-    'main', 'exptime', 'publtime', 'content', 'del_content', 'comment', 'edit_comment', 'active_comment', 'del_comment', 'keywords', 'alias', 'topicajax', 'cat', 'change_cat', 'list_cat', 'del_cat' 
+    'main', 'exptime', 'publtime', 'content', 'del_content', 'comment', 'edit_comment', 'active_comment', 'del_comment', 'keywords', 'alias', 'topicajax', 'sourceajax', 'cat', 'change_cat', 'list_cat', 'del_cat' 
 );
 
 $submenu['cat'] = $lang_module['categories'];
