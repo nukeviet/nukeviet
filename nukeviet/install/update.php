@@ -101,6 +101,15 @@ require( NV_ROOTDIR . "/language/" . NV_LANG_UPDATE . "/install.php" );
 $lang_module = array_merge( $lang_module, $nv_update_config['lang'][NV_LANG_UPDATE] );
 unset( $nv_update_config['lang'] );
 
+/**
+ * NvUpdate
+ * 
+ * @package NukeViet
+ * @author VINADES.,JSC
+ * @copyright VINADES.,JSC
+ * @version 2012
+ * @access public
+ */
 class NvUpdate
 {
 	private $db;
@@ -108,6 +117,12 @@ class NvUpdate
 	private $glang;
 	private $config;
 	
+	/**
+	 * NvUpdate::__construct()
+	 * 
+	 * @param mixed $nv_update_config
+	 * @return
+	 */
 	public function __construct( $nv_update_config )
 	{
 		global $db, $lang_module, $lang_global;
@@ -118,6 +133,11 @@ class NvUpdate
 		$this->config = $nv_update_config;
 	}
 	
+	/**
+	 * NvUpdate::check_package()
+	 * 
+	 * @return
+	 */
 	public function check_package()
 	{
 		if( ! isset( $this->config['release_date'] ) ) return false;
@@ -131,30 +151,60 @@ class NvUpdate
 		return true;
 	}
 	
+	/**
+	 * NvUpdate::build_full_ver()
+	 * 
+	 * @param mixed $version
+	 * @param mixed $revision
+	 * @return
+	 */
 	public function build_full_ver( $version, $revision )
 	{
 		return $version . '.r' . $revision;
 	}
 	
+	/**
+	 * NvUpdate::list_data_update()
+	 * 
+	 * @return
+	 */
 	public function list_data_update()
 	{
 		if( empty( $this->config['tasklist'] ) ) return array();
 		
-		global $global_config;
+		global $global_config, $nv_update_config;
 		
 		$tasklist = array();
 		
 		foreach( $this->config['tasklist'] as $task )
 		{
-			if( $task['r'] > $global_config['revision'] )
+			// Neu la nang cap module
+			if( ! empty( $this->config['formodule'] ) )
 			{
-				$tasklist[$task['f']] = array( 'langkey' => $task['l'], 'require' => $task['rq'] );
+				if( nv_version_compare( $task['r'], $nv_update_config['updatelog']['old_version'] ) > 0 )
+				{
+					$tasklist[$task['f']] = array( 'langkey' => $task['l'], 'require' => $task['rq'] );
+				}
+			}
+			else
+			{
+				if( $task['r'] > $global_config['revision'] )
+				{
+					$tasklist[$task['f']] = array( 'langkey' => $task['l'], 'require' => $task['rq'] );
+				}
 			}
 		}
 		
 		return $tasklist;
 	}
 	
+	/**
+	 * NvUpdate::list_all_file()
+	 * 
+	 * @param string $dir
+	 * @param string $base_dir
+	 * @return
+	 */
 	public function list_all_file( $dir = '', $base_dir = '' )
 	{
 		if( empty( $dir ) ) $dir = NV_ROOTDIR . '/install/update';
@@ -187,6 +237,12 @@ class NvUpdate
 		return $file_list;
 	}
 	
+	/**
+	 * NvUpdate::set_data_log()
+	 * 
+	 * @param mixed $data
+	 * @return
+	 */
 	public function set_data_log( $data )
 	{
 		$content_config = "<?php\n\n";
@@ -210,6 +266,13 @@ class NvUpdate
 		}
 	}
 	
+	/**
+	 * NvUpdate::move_file()
+	 * 
+	 * @param mixed $nv_update_config
+	 * @param mixed $files
+	 * @return
+	 */
 	public function move_file( $nv_update_config, $files )
 	{
 		if( empty( $files ) ) return true;
@@ -322,6 +385,12 @@ class NvUpdate
 		return true;
 	}
 	
+	/**
+	 * NvUpdate::template()
+	 * 
+	 * @param mixed $contents
+	 * @return
+	 */
 	public function template( $contents )
 	{
 		global $language_array;
@@ -333,7 +402,14 @@ class NvUpdate
 		$xtpl->assign( 'LANG', $this->lang );
 		$xtpl->assign( 'CONFIG', $this->config );
 		
-		$xtpl->assign( 'SITE_TITLE', $this->config['type'] == 1 ? $this->lang['update_site_title_update'] : $this->lang['update_site_title_upgrade'] );
+		if( ! empty( $this->config['formodule'] ) ) // Lay module_file lam tieu de luon
+		{
+			$xtpl->assign( 'SITE_TITLE', $this->config['type'] == 1 ? sprintf( $this->lang['updatemod_title_update'], $this->config['formodule'] ) : sprintf( $this->lang['updatemod_title_upgrade'], $this->config['formodule'] ) );
+		}
+		else
+		{
+			$xtpl->assign( 'SITE_TITLE', $this->config['type'] == 1 ? $this->lang['update_site_title_update'] : $this->lang['update_site_title_upgrade'] );
+		}
 		
 		$xtpl->assign( 'CONTENT_TITLE', $this->lang['update_step_title_' . $this->config['step'] ] );
 		
@@ -380,6 +456,12 @@ class NvUpdate
 		return $xtpl->text( 'main' );
 	}
 	
+	/**
+	 * NvUpdate::step1()
+	 * 
+	 * @param mixed $array
+	 * @return
+	 */
 	public function step1( $array )
 	{
 		global $global_config;
@@ -390,25 +472,42 @@ class NvUpdate
 		$xtpl->assign( 'DATA', $array );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		
+		$xtpl->assign( 'URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5( $global_config['sitekey'] . session_id() ) );
+		$xtpl->assign( 'URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=siteinfo' );
+		
 		$xtpl->assign( 'RELEASE_DATE', ! empty( $this->config['release_date'] ) ? nv_date( 'd/m/Y H:i:s', $this->config['release_date'] ) : "N/A" );
 		$xtpl->assign( 'ALLOW_OLD_VERSION', ! empty( $this->config['allow_old_version'] ) ? implode( ', ', $this->config['allow_old_version'] ) : "N/A" );
 		$xtpl->assign( 'UPDATE_AUTO_TYPE', isset( $this->config['update_auto_type'] ) ? $this->lang['update_auto_type_' . $this->config['update_auto_type']] : "N/A" );
 		
-		if( $array['isupdate_allow'] )
+		if( ! empty( $this->config['formodule'] ) and empty( $array['module_exist'] ) )
 		{
-			$xtpl->parse( 'main.canupdate' );
+			$xtpl->parse( 'main.notexistmod' );
 		}
 		else
 		{
-			$xtpl->assign( 'URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5( $global_config['sitekey'] . session_id() ) );
-			$xtpl->assign( 'URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=siteinfo' );
-			$xtpl->parse( 'main.cannotupdate' );
+			if( $array['isupdate_allow'] )
+			{
+				$xtpl->parse( 'main.infoupdate.canupdate' );
+			}
+			else
+			{
+				$xtpl->parse( 'main.infoupdate.cannotupdate' );
+			}
+			
+			$xtpl->parse( 'main.infoupdate' );
 		}
 		
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
 	
+	/**
+	 * NvUpdate::step2()
+	 * 
+	 * @param mixed $array
+	 * @param mixed $substep
+	 * @return
+	 */
 	public function step2( $array, $substep )
 	{
 		global $global_config;
@@ -620,6 +719,12 @@ class NvUpdate
 		return $xtpl->text( 'main' );
 	}
 	
+	/**
+	 * NvUpdate::step3()
+	 * 
+	 * @param mixed $array
+	 * @return
+	 */
 	public function step3( $array )
 	{
 		global $global_config;
@@ -634,10 +739,24 @@ class NvUpdate
 		$xtpl->assign( 'URL_GOHOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 		$xtpl->assign( 'URL_GOADMIN', NV_BASE_ADMINURL );
 
+		if( empty( $this->config['formodule'] ) )
+		{
+			$xtpl->parse( 'main.typefull' );
+		}
+		else
+		{
+			$xtpl->parse( 'main.typemodule' );
+		}
+		
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
 	
+	/**
+	 * NvUpdate::PackageErrorTheme()
+	 * 
+	 * @return
+	 */
 	public function PackageErrorTheme()
 	{
 		global $global_config;
@@ -654,6 +773,12 @@ class NvUpdate
 		return $xtpl->text( 'main' );
 	}
 	
+	/**
+	 * NvUpdate::version_info()
+	 * 
+	 * @param mixed $array
+	 * @return
+	 */
 	public function version_info( $array )
 	{		
 		$xtpl = new XTemplate( "updatestep3.tpl", NV_ROOTDIR . "/install/tpl" );
@@ -672,6 +797,13 @@ class NvUpdate
 		exit();
 	}
 	
+	/**
+	 * NvUpdate::module_info()
+	 * 
+	 * @param mixed $onlineModules
+	 * @param mixed $userModules
+	 * @return
+	 */
 	public function module_info( $onlineModules, $userModules )
 	{		
 		global $global_config;
@@ -705,6 +837,51 @@ class NvUpdate
 		exit();
 	}
 	
+	/**
+	 * NvUpdate::module_com_info()
+	 * 
+	 * @param mixed $onlineModules
+	 * @return
+	 */
+	public function module_com_info( $onlineModules )
+	{		
+		global $global_config;
+		
+		$xtpl = new XTemplate( "updatestep3.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl->assign( 'LANG', $this->lang );
+		$xtpl->assign( 'CONFIG', $this->config );
+		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+		
+		$lastest_version = "N/A";
+		if( ! isset( $onlineModules[$this->config['formodule']] ) )
+		{
+			$xtpl->parse( 'commodule.notcertified' );
+		}
+		else
+		{
+			$lastest_version = isset( $onlineModules[$this->config['formodule']]['version'] ) ? ( string ) $onlineModules[$this->config['formodule']]['version'] : "N/A";
+			
+			if( nv_version_compare( $lastest_version, $this->config['to_version'] ) > 0 )
+			{
+				$xtpl->parse( 'commodule.checkversion' );
+			}
+		}
+		
+		$xtpl->assign( 'LASTEST_VERSION', $lastest_version );
+		
+		$xtpl->parse( 'commodule' );
+		echo( $xtpl->text( 'commodule' ) );
+		exit();
+	}
+	
+	/**
+	 * NvUpdate::log()
+	 * 
+	 * @param mixed $nv_update_config
+	 * @param mixed $content
+	 * @param mixed $status
+	 * @return
+	 */
 	public function log( $nv_update_config, $content, $status )
 	{
 		global $client_info;
@@ -741,6 +918,12 @@ class NvUpdate
 		file_put_contents( NV_ROOTDIR . "/" . NV_LOGS_DIR . "/data_logs/" . $file_log, $contents, FILE_APPEND );
 	}
 	
+	/**
+	 * NvUpdate::call_error()
+	 * 
+	 * @param mixed $message
+	 * @return
+	 */
 	public function call_error( $message )
 	{
 		$xtpl = new XTemplate( "updateerror.tpl", NV_ROOTDIR . "/install/tpl" );
@@ -769,20 +952,64 @@ if( $nv_update_config['step'] < 1 or ! isset( $nv_update_config['updatelog']['st
 
 $NvUpdate = new NvUpdate( $nv_update_config );
 
+// Goi $site_mod neu cap nhat module
+if( ! empty( $nv_update_config['formodule'] ) ) $site_mods = nv_site_mods();
+
 // Trang chinh
 $contents = "";
 
 if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lieu
 {
-	if( $NvUpdate->check_package() === false )
+	if( $NvUpdate->check_package() === false ) // Kiem tra chuan goi cap nhat
 	{
 		$contents = $NvUpdate->PackageErrorTheme();
 	}
 	else
 	{
 		$array = array();
-		$array['current_version'] = $NvUpdate->build_full_ver( $global_config['version'], $global_config['revision'] );
 		
+		// Kiem tra ton tai module can nang cap neu kieu nang cap module
+		if( ! empty( $nv_update_config['formodule'] ) )
+		{
+			$array['module_exist'] = false;
+			
+			foreach( $site_mods as $mod )
+			{
+				if( $mod['module_file'] == $nv_update_config['formodule'] )
+				{
+					$array['module_exist'] = true;
+					break;
+				}
+			}
+
+			if( $array['module_exist'] )
+			{
+				// Lay phien ban module
+				$sql = "SELECT `mod_version` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `module_file`=" . $db->dbescape( $nv_update_config['formodule'] );
+				$result = $db->sql_query( $sql );
+				$row = $db->sql_fetchrow( $result );
+				
+				$v = "";
+				$d = 0;
+				if ( preg_match( "/^([^\s]+)\s+([\d]+)$/", $row['mod_version'], $matches ) )
+				{
+					$v = ( string )$matches[1];
+					$d = ( int )$matches[2];
+				}
+				
+				$array['current_version'] = trim( $v );
+			}
+			else
+			{
+				$array['current_version'] = "";
+			}
+		}
+		else
+		{
+			$array['current_version'] = $NvUpdate->build_full_ver( $global_config['version'], $global_config['revision'] );
+		}
+		
+		// Kiem tra ho tro phien ban nang cap
 		if( in_array( $array['current_version'], $nv_update_config['allow_old_version'] ) )
 		{
 			$array['ability'] = $lang_module['update_ability_1'];
@@ -799,6 +1026,7 @@ if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lie
 		if( $step == 0 or ! isset( $nv_update_config['updatelog']['step'] ) or $nv_update_config['updatelog']['step'] < $step )
 		{
 			$nv_update_config['updatelog']['step'] = $step;
+			$nv_update_config['updatelog']['old_version'] = $array['current_version'];
 			$NvUpdate->set_data_log( $nv_update_config['updatelog'] );
 		}
 		unset( $step );
@@ -1172,6 +1400,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 				$func = filter_text_input( 'load', 'get', '' );
 				
 				$nv_update_baseurl = NV_BASE_SITEURL . 'install/update.php?step=2&substep=3&load=' . $func;
+				$old_module_version = $nv_update_config['updatelog']['old_version'];
 				
 				/*
 				Chuan hoa tra ve cho Ajax
@@ -1710,7 +1939,7 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 			
 			$NvUpdate->version_info( $array );
 		}
-		elseif( $type = 'mod' )
+		elseif( $type == 'mod' )
 		{
 			$_modules = nv_getModVersion( 0 );
 			$_modules = nv_object2array( $_modules );
@@ -1755,6 +1984,22 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 			}
 
 			$NvUpdate->module_info( $onlineModules, $userModules );
+		}
+		elseif( $type == 'module' )
+		{
+			$_modules = nv_getModVersion( 0 );
+			$_modules = nv_object2array( $_modules );
+			$_modules = $_modules['module'];
+			$onlineModules = array();
+			foreach ( $_modules as $m )
+			{
+				$name = array_shift( $m );
+				$onlineModules[$name] = $m;
+				unset( $onlineModules[$name]['date'] );
+				$onlineModules[$name]['pubtime'] = strtotime( $m['date'] );
+			}
+			
+			$NvUpdate->module_com_info( $onlineModules );
 		}
 		else
 		{

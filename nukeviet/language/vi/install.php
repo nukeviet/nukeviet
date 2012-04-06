@@ -252,4 +252,9 @@ $lang_module['update_log_ftp'] = "Cập nhật cấu hình FTP";
 $lang_module['update_log_creat_dir'] = "Tạo thư mục";
 $lang_module['update_log_move_file'] = "Di chuyển file";
 
+$lang_module['updatemod_title_update'] = "Nâng cấp module &quot;%s&quot;";
+$lang_module['updatemod_title_upgrade'] = "Cập nhật module &quot;%s&quot;";
+$lang_module['updatemod_notexist'] = "Bạn chưa cài đặt module này lên hệ thống do đó không có công việc nào cần thực hiện, đơn giản hãy xóa gói cập nhật này để website hoạt động trở lại";
+$lang_module['updatemod_notcertified'] = "Module này chưa được chứng nhận do đó hệ thống có thể sẽ không kiểm soát được những rủi ro có thể gặp phải.";
+
 ?>

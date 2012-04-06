@@ -246,4 +246,9 @@ $lang_module['update_error_move_file'] = "Can not move file";
 $lang_module['update_log_creat_dir'] = "Create a directory";
 $lang_module['update_log_move_file'] = "Move the file";
 
+$lang_module['updatemod_title_update'] = "Update module &quot;%s&quot;";
+$lang_module['updatemod_title_upgrade'] = "Upgrade module &quot;%s&quot;";
+$lang_module['updatemod_notexist'] = "Module is not installed so there is no need to do any work, simply delete this update package to website working again";
+$lang_module['updatemod_notcertified'] = "This module has not been certified so the system can not control those risks may be encountered.";
+
 ?>

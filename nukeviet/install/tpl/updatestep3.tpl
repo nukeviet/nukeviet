@@ -37,10 +37,50 @@
 </div>
 <!-- END: checkversion -->
 <!-- END: version_info -->
+<!-- BEGIN: commodule -->
+<table id="checkchmod" cellspacing="0" summary="summary" style="width: 100%;">
+	<tr>
+		<th scope="col" abbr="{LANG.update_step_title_1}" class="nobg" style="width:380px">{LANG.update_step_title_1}</th>
+		<th scope="col">{LANG.update_value}</th>
+	</tr>
+	<tr>
+		<th scope="col" class="spec text_normal">{LANG.update_current_version}</th>
+		<td><span class="highlight_green">{CONFIG.to_version}</span></td>
+	</tr>
+	<tr>
+		<th scope="col" class="specalt text_normal">{LANG.update_lastest_version}</th>
+		<td><span class="highlight_green">{LASTEST_VERSION}</span></td>
+	</tr>
+</table>
+<!-- BEGIN: notcertified -->
+<div class="infoerror">
+	{LANG.updatemod_notcertified}
+</div>
+<!-- END: notcertified -->
+<!-- BEGIN: checkversion -->
+<div class="infoerror">
+	{LANG.update_check_version}
+</div>
+<!-- END: checkversion -->
+<!-- END: commodule -->
 <!-- BEGIN: main -->
 <div class="infook">
 	{LANG.update_info_complete}
 </div>
+<!-- BEGIN: typemodule -->
+<script type="text/javascript">
+$(window).load(function(){
+	$('#versioninfo').load('{NV_BASE_SITEURL}install/update.php?step=3&load=module');
+});
+</script>
+<div id="versioninfo">
+	<div class="infoalert">	
+		<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Loading..."/><br />
+		{LANG.update_waiting}
+	</div>
+</div>
+<!-- END: typemodule -->
+<!-- BEGIN: typefull -->
 <script type="text/javascript">
 function LoadModInfo(){
 	$('#modinfo').load('{NV_BASE_SITEURL}install/update.php?step=3&load=mod');
@@ -65,6 +105,7 @@ $(window).load(function(){
 		{LANG.update_waiting}
 	</div>
 </div>
+<!-- END: typefull -->
 <div id="endupdate">
 	<div class="infoalert" id="infodetectedupg">
 		{LANG.update_info_end}<br />
