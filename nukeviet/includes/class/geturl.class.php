@@ -2,8 +2,8 @@
 
 /**
  * @Project NUKEVIET 3.0
- * @Author VINADES., JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 5-8-2010  1:13
  */
 
@@ -11,7 +11,7 @@
  * Get data from file as a URL
  * 
  * @package NUKEVIET 3.0
- * @author VINADES., JSC
+ * @author VINADES.,JSC
  * @copyright 2010
  * @version $Id$
  * @access public

@@ -2,8 +2,8 @@
 
 /**
  * @Project NUKEVIET 3.0
- * @Author VINADES., JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate  6/5/2010  2:18
  */
 
@@ -11,7 +11,7 @@
  * Associative array to xml transformation class
  * 
  * @package NUKEVIET 3.0
- * @author VINADES., JSC
+ * @author VINADES.,JSC
  * @copyright 2010
  * @version 1.0 PHP5
  * @access public

@@ -2,8 +2,8 @@
 
 /**
  * @project nukeviet 3.0
- * @author vinades.,jsc (contact@vinades.vn)
- * @copyright (c) 2010 vinades., jsc. all rights reserved
+ * @author VINADES.,JSC (contact@vinades.vn)
+ * @copyright (c) 2010 VINADES.,JSC. all rights reserved
  * @createdate 3-6-2010 0:14
  */
 
