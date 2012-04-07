@@ -426,9 +426,8 @@ class optimezer
 
 		// Kiem tra charset va import CSS de chuyen len tren
 		unset( $matchs );
-		preg_match_all( '/\@[charset|import](.*?)[\'|"|\)]\;/is', $cssContent, $matchs );
-		preg_replace( '/\@[charset|import](.*?)[\'|"|\)]\;/is', '', $cssContent );
-
+		preg_match_all( '/\@(charset|import)(.*?)[\'|"|\)]\;/is', $cssContent, $matchs );
+		preg_replace( '/\@(charset|import)(.*?)[\'|"|\)]\;/is', '', $cssContent );
 		if( ! empty( $matchs[0] ) )
 		{
 			$this->_cssImportCharset = "";
