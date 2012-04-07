@@ -13,6 +13,7 @@ $nv_update_config = array();
 
 $nv_update_config['type'] = 1; // Kieu nang cap 1: Update; 2: Upgrade
 $nv_update_config['packageID'] = 'NVUD3400'; // ID goi cap nhat
+$nv_update_config['formodule'] = ""; // Cap nhat cho module nao, de trong neu la cap nhat NukeViet, ten thu muc module neu la cap nhat module
 
 // Thong tin phien ban, tac gia, ho tro
 $nv_update_config['release_date'] = 1333315364;
@@ -20,6 +21,7 @@ $nv_update_config['author'] = "VINADES.,JSC (contact@vinades.vn)";
 $nv_update_config['support_website'] = "http://nukeviet.vn/phpbb/";
 $nv_update_config['to_version'] = "3.4.00.r1713";
 $nv_update_config['allow_old_version'] = array( "3.3.06.r1500" );
+$nv_update_config['update_auto_type'] = 2; // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
 
 $nv_update_config['lang'] = array();
 $nv_update_config['lang']['vi'] = array();
@@ -47,9 +49,8 @@ $nv_update_config['lang']['en']['update_mod_upload'] = 'Update module upload';
 $nv_update_config['lang']['en']['update_theme_mobile_nukeviet'] = 'Update theme mobile nukeviet';
 $nv_update_config['lang']['en']['update_nukeviet_version'] = 'Update Version and Revision';
 
-$nv_update_config['update_auto_type'] = 2; // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
-
 // Require level: 0: Khong bat buoc hoan thanh; 1: Canh bao khi that bai; 2: Bat buoc hoan thanh neu khong se dung nang cap.
+// r: Revision neu la nang cap site, phien ban neu la nang cap module
 
 $nv_update_config['tasklist'] = array();
 $nv_update_config['tasklist'][] = array( 'r' => 1501, 'rq' => 2, 'l' => 'fix_users_birthday', 'f' => 'nv_up_r1501' );
@@ -99,6 +100,7 @@ message:
 - Any message
 
 Duoc ho tro boi bien $nv_update_baseurl de load lai nhieu lan mot function
+Kieu cap nhat module duoc ho tro boi bien $old_module_version
 */
 
 /**
