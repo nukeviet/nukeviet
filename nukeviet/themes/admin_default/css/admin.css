@@ -104,8 +104,8 @@ a:focus, a:hover {
 }
 
 a {
-    color: #414f5b;
-    text-decoration: none;
+	color: #336699;
+	text-decoration: none;
 }
 
 blockquote {
@@ -504,7 +504,8 @@ table.tab1 tbody.second {
 }
 
 table.tab1 td a, table.tab1 th a {
-    color: #333
+	color: #333;
+	text-decoration: underline;
 }
 
 table.tab1 td, table.tab1 th {
