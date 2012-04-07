@@ -46,7 +46,7 @@ class UrlGetContents
      * 
      * @return
      */
-    function __construct( $global_config )
+    function __construct( $global_config, $time_limit = 60 )
     {
         $this->user_agent = 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] );
 
@@ -59,6 +59,8 @@ class UrlGetContents
         
         $safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
 
+		$this->time_limit = ( int ) $time_limit;
+		
         if ( ! $safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $this->disable_functions ) )
         {
             set_time_limit( $this->time_limit );

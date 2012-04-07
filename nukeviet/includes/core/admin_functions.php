@@ -156,7 +156,7 @@ function nv_geVersion( $updatetime = 3600 )
 	else
 	{
 		include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
-		$getContent = new UrlGetContents( $global_config );
+		$getContent = new UrlGetContents( $global_config, 6 );
 
 		$nv_sites = array( //
 			'update.nukeviet.vn', //
@@ -442,8 +442,8 @@ function nv_getModVersion( $updatetime = 3600 )
     else
     {
         include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
-        $getContent = new UrlGetContents( $global_config );
-
+        $getContent = new UrlGetContents( $global_config, 6 );
+		
         $nv_sites = array( //
             'update.nukeviet.vn', //
             'update2.nukeviet.vn', //
