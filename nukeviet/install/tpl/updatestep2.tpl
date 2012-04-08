@@ -456,7 +456,7 @@
 									if( r == 'OK' ){
 										$('.workitem').removeClass('ierror').removeClass('iload').removeClass('iwarn').addClass('iok');
 										$('#nv-message').html('<div class="infook">' + NVMF.OkMessage + '</div>');
-										$('#control_t').append('<li><span class="next_step"><a href="{NV_BASE_SITEURL}install/update.php?step=3">{LANG.next_step}</a></span></li>');
+										$('#control_t').append('<li><span class="next_step"><a href="{DATA.NextStepUrl}">{LANG.next_step}</a></span></li>');
 									}else{
 										if( NVMF.ftp_nosupport ){
 											$('#ftp_nosupport').slideDown(600);
@@ -490,7 +490,7 @@
 	</li>
 	<!-- BEGIN: next_step -->
 	<li><span class="next_step"><a
-		href="{NV_BASE_SITEURL}install/update.php?step=3">{LANG.next_step}</a></span>
+		href="{DATA.NextStepUrl}">{LANG.next_step}</a></span>
 	</li>
 	<!-- END: next_step -->
 </ul>

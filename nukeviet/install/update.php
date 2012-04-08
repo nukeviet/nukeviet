@@ -1711,6 +1711,16 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 		// Danh sach cac file con lai
 		$array['file_list'] = $NvUpdate->list_all_file();
 		
+		// Buoc tiep theo
+		if( ! file_exists( NV_ROOTDIR . '/install/update_docs_' . NV_LANG_UPDATE . '.html' ) )
+		{
+			$array['NextStepUrl'] = NV_BASE_SITEURL . 'install/update.php?step=3';
+		}
+		else
+		{
+			$array['NextStepUrl'] = NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=5';
+		}
+		
 		// Di chuyen cac file
 		if( $nv_Request->isset_request( 'move', 'get' ) )
 		{
@@ -1724,9 +1734,14 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 			$check = $NvUpdate->move_file( $nv_update_config, $array['file_list'] );
 			if( $check === true )
 			{
-				if( $nv_update_config['updatelog']['step'] < 2 )
+				if( ! file_exists( NV_ROOTDIR . '/install/update_docs_' . NV_LANG_UPDATE . '.html' ) )
 				{
 					$nv_update_config['updatelog']['step'] = 2;
+					$NvUpdate->set_data_log( $nv_update_config['updatelog'] );
+				}
+				else
+				{
+					$nv_update_config['updatelog']['substep'] = 4;
 					$NvUpdate->set_data_log( $nv_update_config['updatelog'] );
 				}
 				
