@@ -79,16 +79,16 @@ while ( $row = $db->sql_fetchrow( $query2 ) )
 {
     $users_list[$row['userid']] = array(  //
         'userid' => ( int )$row['userid'], //
-'username' => ( string )$row['username'], //
-'full_name' => ( string )$row['full_name'], //
-'email' => ( string )$row['email'], //
-'regdate' => date( "d/m/Y H:i", $row['regdate'] ), //
-'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "", //
-'disabled' => " onclick=\"nv_chang_status(" . $row['userid'] . ");\"", //
-'is_edit' => true, //
-'is_delete' => true, //
-'level' => $lang_module['level0'], //
-'is_admin' => false  //
+        'username' => ( string )$row['username'], //
+        'full_name' => ( string )$row['full_name'], //
+        'email' => ( string )$row['email'], //
+        'regdate' => date( "d/m/Y H:i", $row['regdate'] ), //
+        'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "", //
+        'disabled' => " onclick=\"nv_chang_status(" . $row['userid'] . ");\"", //
+        'is_edit' => true, //
+        'is_delete' => true, //
+        'level' => $lang_module['level0'], //
+        'is_admin' => false  //
     );
     $admin_in[] = $row['userid'];
 }
@@ -102,9 +102,7 @@ if ( $admin_in )
     {
         $is_my = ( $admin_info['admin_id'] == $row['admin_id'] ) ? true : false;
         $superadmin = ( $row['lev'] == 1 or $row['lev'] == 2 ) ? true : false;
-        
-        $users_list[$row['admin_id']]['checked'] = " checked=\"checked\"";
-        $users_list[$row['admin_id']]['disabled'] = " disabled=\"disabled\"";
+
         $users_list[$row['admin_id']]['is_edit'] = false;
         $users_list[$row['admin_id']]['is_delete'] = false;
         if ( $row['lev'] == 1 )
@@ -136,6 +134,10 @@ if ( $admin_in )
         elseif ( $is_my )
         {
             $users_list[$row['admin_id']]['is_edit'] = true;
+        }
+        if(!($users_list[$row['admin_id']]['is_edit'] AND !$is_my))
+        {
+            $users_list[$row['admin_id']]['disabled'] = " disabled=\"disabled\"";
         }
     }
 }

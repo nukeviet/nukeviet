@@ -49,7 +49,6 @@ if ( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
 
     nv_del_moduleCache( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['changeGroupWeight'], "Id: " . $id, $admin_info['userid'] );
-    sleep( 1 );
     die( "OK" );
 }
 
@@ -65,7 +64,6 @@ if ( $nv_Request->isset_request( 'act', 'post' ) )
 
     nv_del_moduleCache( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeGroupAct'], "Id: " . $id, $admin_info['userid'] );
-    sleep( 1 );
     die( "OK|" . $act );
 }
 
@@ -81,7 +79,6 @@ if ( $nv_Request->isset_request( 'pub', 'post' ) )
 
     nv_del_moduleCache( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeGroupPublic'], "Id: " . $id, $admin_info['userid'] );
-    sleep( 1 );
     die( "OK|" . $pub );
 }
 

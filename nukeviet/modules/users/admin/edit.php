@@ -62,7 +62,6 @@ $error = "";
 
 if ( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
-    nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', "userid " . $userid, $admin_info['userid'] );
     $_user['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
     $_user['email'] = filter_text_input( 'email', 'post', '', 1, 100 );
     $_user['password1'] = filter_text_input( 'password1', 'post', '', 0, NV_UPASSMAX );
@@ -227,6 +226,8 @@ if ( $nv_Request->isset_request( 'confirm', 'post' ) )
         `view_mail`=" . $_user['view_mail'] . ", 
         `in_groups`=" . $db->dbescape_string( $_user['in_groups'] ) . " 
         WHERE `userid`=" . $userid );
+        
+        nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', "userid " . $userid, $admin_info['userid'] );
         
         if ( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
         {

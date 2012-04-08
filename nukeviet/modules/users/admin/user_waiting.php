@@ -68,6 +68,7 @@ if ( $nv_Request->isset_request( 'act', 'get' ) )
     if ( $userid )
     {
         $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $row['userid'] );
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid']);
         
         $full_name = ( ! empty( $row['full_name'] ) ) ? $row['full_name'] : $row['username'];
         $subject = $lang_module['adduser_register'];
@@ -139,10 +140,10 @@ while ( $row = $db->sql_fetchrow( $query2 ) )
 {
     $users_list[$row['userid']] = array(  //
         'userid' => ( int )$row['userid'], //
-'username' => ( string )$row['username'], //
-'full_name' => ( string )$row['full_name'], //
-'email' => ( string )$row['email'], //
-'regdate' => date( "d/m/Y H:i", $row['regdate'] )  //
+        'username' => ( string )$row['username'], //
+        'full_name' => ( string )$row['full_name'], //
+        'email' => ( string )$row['email'], //
+        'regdate' => date( "d/m/Y H:i", $row['regdate'] )  //
     );
 }
 

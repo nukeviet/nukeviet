@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Jul 06, 2011, 04:38:01 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Jul 06, 2011, 04:38:01 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if ( !defined('NV_ADMIN') or !defined('NV_MAINFILE') )
+{
+    die('Stop!!!');
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="30/05/2010, 23:57";
-$lang_translator['copyright'] ="Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "30/05/2010, 23:57";
+$lang_translator['copyright'] = "Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['modforum'] = "Chức năng quản lý thành viên hiện do diễn đàn quản lý.";
 $lang_module['list_module_title'] = "Danh sách thành viên";
@@ -211,4 +212,6 @@ $lang_module['detail'] = "Chi tiết";
 $lang_module['exclude_user2'] = "Loại khỏi nhóm";
 $lang_module['ChangeConfigModule'] = "Thay đổi cấu hình module";
 
+$lang_module['active_users'] = "Kích hoạt thành viên";
+$lang_module['unactive_users'] = "Ngưng Kích hoạt thành viên";
 ?>
