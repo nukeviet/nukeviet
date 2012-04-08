@@ -136,7 +136,7 @@ if( $allowed )
 	$news_contents['newscheckss'] = md5( $news_contents['id'] . session_id() . $global_config['sitekey'] );
 	if( $module_config[$module_name]['config_source'] == 0 ) $news_contents['source'] = $sourcetext;
 	elseif( $module_config[$module_name]['config_source'] == 1 ) $news_contents['source'] = $source_link;
-	else  $news_contents['source'] = "<img width=\"100px\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $source_logo . "\">";
+    elseif( $module_config[$module_name]['config_source'] == 2 && !empty( $source_logo ) )  $news_contents['source'] = "<img width=\"100px\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $source_logo . "\">";
 	$news_contents['publtime'] = nv_date( "l - d/m/Y  H:i", $news_contents['publtime'] );
 
 	$related_new_array = array();
