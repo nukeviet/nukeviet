@@ -36,6 +36,7 @@ $nv_update_config['lang']['vi']['update_voting'] = 'Nâng cấp module voting';
 $nv_update_config['lang']['vi']['update_mod_menu'] = 'Cập nhật module menu';
 $nv_update_config['lang']['vi']['update_mod_upload'] = 'Cập nhật module upload';
 $nv_update_config['lang']['vi']['update_theme_mobile_nukeviet'] = 'Cập giao diện mobile_nukeviet';
+$nv_update_config['lang']['vi']['nv_up_r1749'] = 'Thêm cấu hình hiển thị nguồn tin';
 $nv_update_config['lang']['vi']['update_nukeviet_version'] = 'Nâng cấp phiên bản và Revision';
 
 // English
@@ -47,6 +48,7 @@ $nv_update_config['lang']['en']['update_voting'] = 'Update module voting';
 $nv_update_config['lang']['en']['update_mod_menu'] = 'Update module menu';
 $nv_update_config['lang']['en']['update_mod_upload'] = 'Update module upload';
 $nv_update_config['lang']['en']['update_theme_mobile_nukeviet'] = 'Update theme mobile nukeviet';
+$nv_update_config['lang']['en']['nv_up_r1749'] = 'Add config to show article source';
 $nv_update_config['lang']['en']['update_nukeviet_version'] = 'Update Version and Revision';
 
 // Require level: 0: Khong bat buoc hoan thanh; 1: Canh bao khi that bai; 2: Bat buoc hoan thanh neu khong se dung nang cap.
@@ -61,7 +63,8 @@ $nv_update_config['tasklist'][] = array( 'r' => 1590, 'rq' => 2, 'l' => 'update_
 $nv_update_config['tasklist'][] = array( 'r' => 1592, 'rq' => 2, 'l' => 'update_mod_menu', 'f' => 'nv_up_r1592' );
 $nv_update_config['tasklist'][] = array( 'r' => 1604, 'rq' => 2, 'l' => 'update_mod_upload', 'f' => 'nv_up_r1604' );
 $nv_update_config['tasklist'][] = array( 'r' => 1726, 'rq' => 0, 'l' => 'update_theme_mobile_nukeviet', 'f' => 'nv_up_r1726' );
-$nv_update_config['tasklist'][] = array( 'r' => 1726, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
+$nv_update_config['tasklist'][] = array( 'r' => 1749, 'rq' => 2, 'l' => 'nv_up_r1749', 'f' => 'nv_up_r1749' );
+$nv_update_config['tasklist'][] = array( 'r' => 1755, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
 
 // Danh sach cac function
 /*
@@ -316,6 +319,36 @@ function nv_up_r1726()
 	
 	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
+	return $return;
+}
+
+/**
+ * nv_up_r1749()
+ * 
+ * @return
+ */
+function nv_up_r1749()
+{
+	global $nv_update_baseurl, $db, $db_config;
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
+	
+	$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
+	if( ! $language_query )
+	{
+		$return['status'] = 0;
+		$return['complete'] = 0;
+		return $return;
+	}
+	
+	while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
+	{
+		$mquery = $db->sql_query( "SELECT `title`, `module_data` FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` WHERE `module_file`='news'" );
+		while( list( $mod, $mod_data ) = $db->sql_fetchrow( $mquery ) )
+		{
+			$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $mod . "', 'config_source', '0')" );
+		}
+	}
+
 	return $return;
 }
 
