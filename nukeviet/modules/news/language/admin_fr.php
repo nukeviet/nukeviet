@@ -224,5 +224,9 @@ $lang_module['structure_image_upload'] = "Les images envoyées du module est sto
 $lang_module['content_back'] = "Retour à l'administration";
 $lang_module['content_checkcat'] = "Catégorie de l'article";
 $lang_module['content_checkcatmsg'] = "Veuillez choisir la catégorie pour l'article";
+$lang_module['config_source'] = "Configuration indiqué dans détaillées articles de presse sources";
+$lang_module['config_source_title'] = "Afficher le titre de la source";
+$lang_module['config_source_link'] = "Afficher les liens de sources";
+$lang_module['config_source_logo'] = "Afficher le logo des sources";
 
 ?>

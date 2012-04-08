@@ -217,5 +217,9 @@ $lang_module['permissions_del_content'] = "smazat članky";
 $lang_module['permissions_pub_error'] = "Chyba : nemůžete přidat články do : %1\$s";
 $lang_module['error_no_del_content_id'] = "Chyba : systém nemůže smazat články s id:";
 $lang_module['structure_image_upload'] = "Obrázek v modulu bude uložen podle default.";
+$lang_module['config_source'] = "Konfigurace je uvedeno v podrobných článků zdrojových zpráv";
+$lang_module['config_source_title'] = "Zobrazit zdrojový titul";
+$lang_module['config_source_link'] = "Zobrazit odkazy na zdroje";
+$lang_module['config_source_logo'] = "Zobrazit logo zdrojů";
 
 ?>

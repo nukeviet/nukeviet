@@ -222,5 +222,9 @@ $lang_module['structure_image_upload'] = "The module's upload images are archive
 $lang_module['content_back'] = "Back to edit page";
 $lang_module['content_checkcat'] = "The main topic for this article";
 $lang_module['content_checkcatmsg'] = "You must choose the main category of the article.";
+$lang_module['config_source'] = "Configuration shown in detailed source news articles";
+$lang_module['config_source_title'] = "Show title of sources";
+$lang_module['config_source_link'] = "Show links of sources";
+$lang_module['config_source_logo'] = "Show logo of sources";
 
 ?>

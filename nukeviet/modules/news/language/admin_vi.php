@@ -225,5 +225,9 @@ $lang_module['permissions_del_content'] = "Xóa bài viêt";
 $lang_module['permissions_pub_error'] = "Lỗi: Bạn không được đăng bài viết tại Chuyên mục: %1\$s";
 $lang_module['error_no_del_content_id'] = "Lỗi: Hệ thống không xóa được các bài viết có id:";
 $lang_module['structure_image_upload'] = "Ảnh upload của module được lưu trữ mặc định theo cấu trúc thư mục";
+$lang_module['config_source'] = "Cấu hình hiển thị nguồn bài viết tại chi tiết tin";
+$lang_module['config_source_title'] = "Hiển thị tiêu đề nguồn tin";
+$lang_module['config_source_link'] = "Hiển thị link của nguồn tin";
+$lang_module['config_source_logo'] = "Hiển thị logo của nguồn tin";
 
 ?>

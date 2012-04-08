@@ -237,5 +237,6 @@ $sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mo
 $sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
 $sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '1')";
 $sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'timecheckstatus', '0')";
+$sql_create_module[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . $lang . "', '" . $module_name . "', 'config_source', '0')";
 
 ?>

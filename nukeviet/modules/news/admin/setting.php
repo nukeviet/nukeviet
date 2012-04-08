@@ -31,6 +31,7 @@ if( ! empty( $savesetting ) )
 	$array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
 	$array_config['module_logo'] = filter_text_input( 'module_logo', 'post', '', 0 );
 	$array_config['structure_upload'] = filter_text_input( 'structure_upload', 'post', '', 0 );
+    $array_config['config_source'] = $nv_Request->get_int( 'config_source', 'post', 0 );
 
 	if( ! nv_is_url( $array_config['module_logo'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['module_logo'] ) )
 	{
@@ -218,6 +219,28 @@ $contents .= "</select></td></tr>
         <input name=\"module_logo\" id=\"module_logo\" value=\"" . $module_logo . "\" style=\"width: 340px;\" type=\"text\" />
 		<input style=\"width: 100px;\" value=\"" . $lang_global['browse_image'] . "\" name=\"selectimg\" type=\"button\" />
     </td>
+</tr>
+</tbody>
+<tbody class=\"second\">
+<tr>
+    <td><strong>" . $lang_module['config_source'] . "</strong></td>
+    <td><select name=\"config_source\">";
+$array_config_source = array(
+    $lang_module['config_source_title'],
+    $lang_module['config_source_link'],
+    $lang_module['config_source_logo']
+);
+foreach( $array_config_source as $key => $val )
+{
+	$sl = "";
+	if( $key == $module_config[$module_name]['config_source'] )
+	{
+		$sl = " selected=\"selected\"";
+	}
+
+	$contents .= "<option  value=\"" . $key . "\" " . $sl . ">" . $val . "</option>";
+}
+$contents .= "</select></td>
 </tr>
 </tbody>
 <tbody>
