@@ -214,4 +214,5 @@ $lang_module['ChangeConfigModule'] = "Thay đổi cấu hình module";
 
 $lang_module['active_users'] = "Kích hoạt thành viên";
 $lang_module['unactive_users'] = "Ngưng Kích hoạt thành viên";
+
 ?>

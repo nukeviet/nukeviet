@@ -199,4 +199,7 @@ $lang_module['detail'] = "Detail";
 $lang_module['exclude_user2'] = "Remove from group";
 $lang_module['ChangeConfigModule'] = "Change the configuration module";
 
+$lang_module['active_users'] = "Activate members";
+$lang_module['unactive_users'] = "Unactivate members";
+
 ?>
