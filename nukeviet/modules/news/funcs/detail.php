@@ -132,14 +132,11 @@ if( $allowed )
 
 	list( $sourcetext, $source_link, $source_logo ) = $db->sql_fetchrow( $result );
 	unset( $sql, $result );
-    unset( $sql, $result );
-    $news_contents['newscheckss'] = md5( $news_contents['id'] . session_id() . $global_config['sitekey'] );
-    if( $module_config[$module_name]['config_source'] == 0 )
-    $news_contents['source'] = $sourcetext;
-    elseif( $module_config[$module_name]['config_source'] == 1 )
-    $news_contents['source'] = $source_link;
-    else
-    $news_contents['source'] = "<img width=\"100px\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $source_logo . "\">";
+	unset( $sql, $result );
+	$news_contents['newscheckss'] = md5( $news_contents['id'] . session_id() . $global_config['sitekey'] );
+	if( $module_config[$module_name]['config_source'] == 0 ) $news_contents['source'] = $sourcetext;
+	elseif( $module_config[$module_name]['config_source'] == 1 ) $news_contents['source'] = $source_link;
+	else  $news_contents['source'] = "<img width=\"100px\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $source_logo . "\">";
 	$news_contents['publtime'] = nv_date( "l - d/m/Y  H:i", $news_contents['publtime'] );
 
 	$related_new_array = array();
@@ -185,7 +182,8 @@ if( $allowed )
 				"link" => $link,
 				"time" => nv_date( "d/m/Y", $row['publtime'] ),
 				"topiclink" => $topiclink,
-				"topictitle" => $topic_title );
+				"topictitle" => $topic_title
+			);
 		}
 		$db->sql_freeresult( $topic );
 		unset( $topic, $rows );
@@ -231,7 +229,8 @@ if( $allowed )
 			"poor" => $lang_module['star_poor'],
 			"ok" => $lang_module['star_ok'],
 			"good" => $lang_module['star_good}'],
-			"verygood" => $lang_module['star_verygood'] );
+			"verygood" => $lang_module['star_verygood']
+		);
 	}
 
 	$page_title = $news_contents['title'];
