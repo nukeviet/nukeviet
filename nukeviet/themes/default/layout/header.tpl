@@ -12,6 +12,9 @@
         {THEME_SITE_JS}
     </head>
     <body>
+    <noscript>
+        <div id="nojavascript">{THEME_NOJS}</div>
+    </noscript>
         <div id="container">
             <div id="header">
                 <div id="logo">

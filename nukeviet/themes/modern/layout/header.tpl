@@ -16,6 +16,9 @@
         <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/styleswitch.js"></script>
     </head>
     <body>
+    <noscript>
+        <div id="nojavascript">{THEME_NOJS}</div>
+    </noscript>
         <div class="wrapper">
             <div class="topbar">
                 <div class="top">
