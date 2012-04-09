@@ -11,6 +11,7 @@ if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $nv_Request;
 
+$list_cats = nv_list_cats( true );
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
 $per_page = 15;
@@ -28,10 +29,15 @@ FROM `" . NV_PREFIXLANG . "_" . $module_data . "`";
 if ( $nv_Request->isset_request( 'submit', 'post' ) and ! empty( $key ) )
 {
     $cat = $nv_Request->get_int( 'cat', 'post', 0 );
-    if ( ! empty( $cat ) )
+    if ( ! empty( $cat ) and isset( $list_cats[$cat] ) )
     {
-        $allcat = array();
-        $allcat = getsubcatcid( $cat );
+        $allcat = $list_cats[$cat]['subcats'];
+		
+		if( ! empty( $allcat ) )
+		{
+			$allcat[] = $cat;
+		}
+		
         $allcat = ( empty( $allcat ) ) ? ' AND catid = ' . $cat . ' ' : ' AND catid IN (' . implode( ',', $allcat ) . ') ';
     }
     else
@@ -55,7 +61,6 @@ list( $all_page ) = $db->sql_fetchrow( $result_all );
 if ( ! empty( $all_page ) )
 {
     $download_config = nv_mod_down_config();
-    $list_cats = nv_list_cats( true );
     
     $array = array();
     $today = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
