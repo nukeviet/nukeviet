@@ -84,6 +84,7 @@ $global_config['upload_logo'] = str_replace( $search, $replace, $global_config['
 $global_config['rewrite_endurl'] = str_replace( $search, $replace, $global_config['rewrite_endurl'] );
 $global_config['rewrite_exturl'] = str_replace( $search, $replace, $global_config['rewrite_exturl'] );
 $global_config['searchEngineUniqueID'] = str_replace( $search, $replace, $global_config['searchEngineUniqueID'] );
+$global_config['site_timezone'] = str_replace( $search, $replace, $global_config['site_timezone'] );
 unset( $search, $replace );
 
 $global_config['allow_sitelangs'] = ! empty( $global_config['allow_sitelangs'] ) ? explode( ",", $global_config['allow_sitelangs'] ) : array();
