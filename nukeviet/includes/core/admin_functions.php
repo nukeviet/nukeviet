@@ -60,7 +60,7 @@ function nv_site_mods()
 function nv_groups_list()
 {
 	global $db;
-	$query = "SELECT `group_id`, `title` FROM `" . NV_GROUPS_GLOBALTABLE . "`";
+	$query = "SELECT `group_id`, `title` FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
 	$result = $db->sql_query( $query );
 	$groups = array();
 	while( $row = $db->sql_fetchrow( $result ) )
