@@ -270,7 +270,7 @@ class NVftp
 	 * @param string $type
 	 * @return
 	 */
-	public function listDetail( $path = null, $type = 'raw' )
+	public function listDetail( $path = null, $type = 'raw', $show_hidden = false )
 	{
 		if( ! $this->check_login() ) return false;
 
@@ -282,7 +282,8 @@ class NVftp
 		}
 
 		// Danh sach chi tiet thu muc
-		$list_detail = ftp_rawlist( $this->conn_id, $path );
+		$cmd_path = $show_hidden ? '-al ' . $path : $path;
+		$list_detail = ftp_rawlist( $this->conn_id, $cmd_path );
 		
 		if( $list_detail === false )
 		{
@@ -508,6 +509,18 @@ class NVftp
 		if( ! $this->check_login() ) return false;
 
 		return ftp_delete( $this->conn_id, $dir );
+	}
+
+	/**
+	 * NVftp::rmdir()
+	 * 
+	 * @return
+	 */
+	public function rmdir( $dir )
+	{
+		if( ! $this->check_login() ) return false;
+
+		return ftp_rmdir( $this->conn_id, $dir );
 	}
 
 	/**

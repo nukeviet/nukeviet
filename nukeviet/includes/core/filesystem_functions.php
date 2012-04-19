@@ -450,13 +450,15 @@ function nv_mkdir ( $path, $dir_name )
 function nv_deletefile ( $file, $delsub = false )
 {
     global $lang_global, $sys_info, $global_config;
+	
+	// Kiem tra ten file
     $realpath = realpath( $file );
     if ( empty( $realpath ) ) return array( 0, sprintf( $lang_global['error_non_existent_file'], $file ) );
     $realpath = str_replace( '\\', '/', $realpath );
     $realpath = rtrim( $realpath, "\\/" );
     $preg_match = preg_match( "/^(" . nv_preg_quote( NV_ROOTDIR ) . ")(\/[\S]+)/", $realpath, $path );
     if ( empty( $preg_match ) ) return array( 0, sprintf( $lang_global['error_delete_forbidden'], $file ) );
-    
+	
     $ftp_check_login = 0;
     if ( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) == 1 )
     {
@@ -465,38 +467,44 @@ function nv_deletefile ( $file, $delsub = false )
         $ftp_user_name = nv_unhtmlspecialchars( $global_config['ftp_user_name'] );
         $ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
         $ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
-        // set up basic connection
-        $conn_id = ftp_connect( $ftp_server, $ftp_port, 10 );
-        // login with username and password
-        $login_result = ftp_login( $conn_id, $ftp_user_name, $ftp_user_pass );
-        if ( ( ! $conn_id ) || ( ! $login_result ) )
-        {
-            $ftp_check_login = 3;
-        }
-        elseif ( ftp_chdir( $conn_id, $ftp_path ) )
-        {
-            $ftp_check_login = 1;
-        }
-        else
-        {
-            $ftp_check_login = 2;
-        }
+		
+		// Goi file Class xu ly
+		if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
+		
+		// Ket noi, dang nhap
+		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
+		
+		// Chuyen thu muc
+		if( $ftp->chdir( $ftp_path ) === true )
+		{
+			$ftp_check_login = 1;
+		}
+		else
+		{
+			$ftp->close();
+		}
     }
     
-    $filename = str_replace( NV_ROOTDIR . "/", "", str_replace( '\\', '/', $realpath ) );
+    $filename = str_replace( NV_ROOTDIR . "/", "", str_replace( '\\', '/', $realpath ) ); // Tinh chinh lai file cho phu hop voi chdir
+	
     if ( $ftp_check_login == 1 )
     {
-        if ( is_dir( $realpath ) )
+        if ( is_dir( $realpath ) ) // Xoa thu muc
         {
-            nv_ftp_del_dir( $conn_id, $filename );
+			$check = nv_ftp_del_dir( $ftp, $filename, $delsub );
+			if( $check !== true )
+			{
+				return array( 0, $check );
+			}
         }
-        elseif ( ! ftp_delete( $conn_id, $filename ) )
+        elseif ( $ftp->unlink( $realpath ) === false ) // Xoa file bang FTP khong duoc thi xoa theo cach thong thuong
         {
             @unlink( $realpath );
         }
-        ftp_close( $conn_id );
+		
+		$ftp->close();
     }
-    elseif ( is_dir( $realpath ) )
+    elseif ( is_dir( $realpath ) ) // Khong dung FTP
     {
         $files = scandir( $realpath );
         $files2 = array_diff( $files, array( ".", "..", ".htaccess", "index.html" ) );
@@ -543,31 +551,56 @@ function nv_deletefile ( $file, $delsub = false )
  * 
  * @param mixed $conn_id
  * @param mixed $dst_dir
+ * @param mixed $delsub
  * @return
  */
 
-function nv_ftp_del_dir ( $conn_id, $dst_dir )
+function nv_ftp_del_dir ( $ftp, $dst_dir, $delsub )
 {
-    $dst_dir = preg_replace( "/\\/\$/", "", $dst_dir ); // remove trailing slash
-    $ar_files = ftp_nlist( $conn_id, $dst_dir );
+	global $lang_global;
+	
+    $dst_dir = preg_replace( "/\\/\$/", "", $dst_dir ); // Remove trailing slash
+    $ar_files = $ftp->listDetail( $dst_dir, 'all', true ); // Danh sach cac file (bao gom ca file an)
+	
+	// Bao loi thu muc khong rong
+	if( ! empty( $ar_files ) and ! $delsub )
+	{
+		return sprintf( $lang_global['error_delete_subdirectories_not_empty'], $dst_dir );
+	}
+	
     if ( is_array( $ar_files ) )
-    { // makes sure there are files
+    {
+		// Makes sure there are files
         $sizeof = sizeof( $ar_files );
-        for ( $i = 0; $i < $sizeof; ++$i )
-        { // for each file
-            $st_file = basename( $ar_files[$i] );
-            if ( $st_file == '.' || $st_file == '..' ) continue;
-            if ( ftp_size( $conn_id, $dst_dir . '/' . $st_file ) == - 1 )
-            { // check if it is a directory
-                nv_ftp_del_dir( $conn_id, $dst_dir . '/' . $st_file );
+		
+        for ( $i = 0; $i < $sizeof; ++ $i )
+        { 
+            $st_file = $ar_files[$i]['name']; // Ten file/folder
+			$st_type = $ar_files[$i]['type']; // 1: folder | 0: file
+			
+            if( $st_file == '.' || $st_file == '..' ) continue; // Kiem tra neu co cac file ngoai le
+			
+            if( $st_type == 1 ) // Neu la thu muc thi chay tiep
+            { 
+				$check = nv_ftp_del_dir( $ftp, $dst_dir . '/' . $st_file, $delsub );
+
+				if( $check !== true )
+				{
+					return $check;
+				}
             }
             else
             {
-                ftp_delete( $conn_id, $dst_dir . '/' . $st_file );
+				if( $ftp->unlink( $dst_dir . '/' . $st_file ) === false ) // Khong the xoa duoc file
+				{
+					return sprintf( $lang_global['error_delete_failed'], $dst_dir . '/' . $st_file );
+				}
             }
         }
     }
-    return ftp_rmdir( $conn_id, $dst_dir ); // delete empty directories
+	
+	// Xoa thu muc rong
+    return $ftp->rmdir( $dst_dir );
 }
 
 /**
