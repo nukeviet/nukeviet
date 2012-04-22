@@ -351,7 +351,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     else
     {
         $post['title'] = $post['content'] = $post['exp_time'] = "";
-        $post['public'] = " checked=\"checked\"";
+        $post['public'] = "";
     }
 
     if ( ! empty( $post['content'] ) ) $post['content'] = nv_htmlspecialchars( $post['content'] );
