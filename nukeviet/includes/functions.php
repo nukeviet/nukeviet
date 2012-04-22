@@ -478,7 +478,7 @@ function nv_capcha_txt( $seccode )
 	{
 	    $scaptcha = isset( $_SESSION['scaptcha'] ) ? $_SESSION['scaptcha'] : '';
 	    $_SESSION['scaptcha'] = $random;
-		if( !empty( $scaptcha ) AND strtolower( $scaptcha ) != strtolower( $seccode ) ) return true;
+		if( !empty( $scaptcha ) AND strtolower( $scaptcha ) == strtolower( $seccode ) ) return true;
 		return false;
 	}
 	else
