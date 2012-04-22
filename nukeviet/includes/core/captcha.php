@@ -32,9 +32,9 @@ if( $global_config['captcha_type'] == 1 )
 	$captcha->minWordLength = NV_GFX_NUM;
 	$captcha->maxWordLength = NV_GFX_NUM;
 
-	$captcha->Yperiod    = 0;
+	$captcha->Yperiod    = 1;
 	$captcha->Yamplitude = 0;
-	$captcha->Xperiod    = 0;
+	$captcha->Xperiod    = 1;
 	$captcha->Xamplitude = 0;
 
 	$captcha->maxRotation = 30;
@@ -53,11 +53,7 @@ else
 	$maxran = 1000000;
 	$random_num = mt_rand( 1, $maxran );
 
-	$scaptcha = $nv_Request->get_string( 'scaptcha', 'get' );
-	$scaptcha = preg_replace( '/[^a-z0-9\-]/', '', $scaptcha );
-	$skeycaptcha = ( $scaptcha == "captcha" ) ? "random_num" : "random_" . substr( $scaptcha, 0, 20 );
-
-	$nv_Request->set_Session( $skeycaptcha, $random_num );
+	$nv_Request->set_Session( 'random_num', $random_num );
 
 	$datekey = date( "F j" );
 	$rcode = strtoupper( md5( NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey ) );
