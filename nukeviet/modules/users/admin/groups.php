@@ -323,7 +323,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
                     `exp_time`='" . $post['exp_time'] . "', 
                     `public`= " . $post['public'] . " 
                     WHERE `group_id`=" . $post['id'] . " LIMIT 1";
-            $db->sql_query( $query );
+            $ok = $db->sql_query( $query );
         }
         else
         {
@@ -333,12 +333,18 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
                 " . NV_CURRENTTIME . ", 
                 " . $post['exp_time'] . ", 
                 '', " . $post['public'] . ", " . ( $groupcount + 1 ) . ", 1);";
-            $post['id'] = $db->sql_query_insert_id( $query );
+            $ok = $post['id'] = $db->sql_query_insert_id( $query );
         }
-
-        nv_del_moduleCache( $module_name );
-        nv_insert_logs( NV_LANG_DATA, $module_name, $log_title, "Id: " . $post['id'], $admin_info['userid'] );
-        die( "OK" );
+        if($ok)
+        {
+            nv_del_moduleCache( $module_name );
+            nv_insert_logs( NV_LANG_DATA, $module_name, $log_title, "Id: " . $post['id'], $admin_info['userid'] );
+            die( "OK" );
+        }
+        else
+        {
+            die($lang_module['errorsave']);
+        }
     }
 
     if ( $nv_Request->isset_request( 'edit', 'get' ) )
