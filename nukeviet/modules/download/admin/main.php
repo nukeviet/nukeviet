@@ -249,6 +249,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE `fid`=" . $id;
                     $db->sql_query( $sql );
                 }
+				nv_del_moduleCache( $module_name );
+				
                 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid'] );
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
                 exit();
