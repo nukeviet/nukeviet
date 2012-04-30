@@ -240,7 +240,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	}
 	else
 	{
-		if( $db->sql_numrows( $db->sql_query( "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `title`=" . $db->dbescape( $post['title'] ) . " AND `parentid`=" . $post['parentid'] . " AND `id` NOT IN (" . $post['id'] . ")" ) ) != 0 )
+		if( $db->sql_numrows( $db->sql_query( "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `title`=" . $db->dbescape( $post['title'] ) . " AND `parentid`=" . $post['parentid'] . " AND `mid`=" . $post['mid'] . " AND `id` NOT IN (" . $post['id'] . ")" ) ) != 0 )
 		{
 			$error = $lang_module['title_exit_cat'];
 		}
