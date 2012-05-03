@@ -1,1 +1,9 @@
-﻿NukeViet Update Guide
+<h3>Nếu bạn sử dụng giao diện không phải mặc định của NukeViet hãy làm bước I</h3>
+
+I. Chỉnh sửa file header.tpl.<br />
+Mở file /themes/theme-cua-ban/layout/header.tpl ra tìm<br />
+<p><code>&lt;body&gt;</code></p>
+thêm vào bên dưới<br />
+<p><code>&lt;noscript&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;div id=&quot;nojavascript&quot;&gt;{THEME_NOJS}&lt;/div&gt;<br />
+&lt;/noscript&gt;</code></p>

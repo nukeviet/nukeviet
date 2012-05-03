@@ -12,15 +12,15 @@ if( ! defined( 'NV_IS_UPDATE' ) ) die( 'Stop!!!' );
 $nv_update_config = array();
 
 $nv_update_config['type'] = 1; // Kieu nang cap 1: Update; 2: Upgrade
-$nv_update_config['packageID'] = 'NVUD3400'; // ID goi cap nhat
+$nv_update_config['packageID'] = 'NVUD3401'; // ID goi cap nhat
 $nv_update_config['formodule'] = ""; // Cap nhat cho module nao, de trong neu la cap nhat NukeViet, ten thu muc module neu la cap nhat module
 
 // Thong tin phien ban, tac gia, ho tro
-$nv_update_config['release_date'] = 1333315364;
+$nv_update_config['release_date'] = 1333929600;
 $nv_update_config['author'] = "VINADES.,JSC (contact@vinades.vn)";
 $nv_update_config['support_website'] = "http://nukeviet.vn/phpbb/";
-$nv_update_config['to_version'] = "3.4.00.r1713";
-$nv_update_config['allow_old_version'] = array( "3.3.06.r1500" );
+$nv_update_config['to_version'] = "3.4.01.r1758";
+$nv_update_config['allow_old_version'] = array( "3.4.00.r1722" );
 $nv_update_config['update_auto_type'] = 2; // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
 
 $nv_update_config['lang'] = array();
@@ -64,7 +64,7 @@ $nv_update_config['tasklist'][] = array( 'r' => 1592, 'rq' => 2, 'l' => 'update_
 $nv_update_config['tasklist'][] = array( 'r' => 1604, 'rq' => 2, 'l' => 'update_mod_upload', 'f' => 'nv_up_r1604' );
 $nv_update_config['tasklist'][] = array( 'r' => 1726, 'rq' => 0, 'l' => 'update_theme_mobile_nukeviet', 'f' => 'nv_up_r1726' );
 $nv_update_config['tasklist'][] = array( 'r' => 1749, 'rq' => 2, 'l' => 'nv_up_r1749', 'f' => 'nv_up_r1749' );
-$nv_update_config['tasklist'][] = array( 'r' => 1755, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
+$nv_update_config['tasklist'][] = array( 'r' => 1758, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
 
 // Danh sach cac function
 /*
@@ -364,8 +364,8 @@ function nv_up_finish()
 	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	//Update revision
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.00')" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1726')" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.01')" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1758')" );
 
 	$array_config_rewrite = array(
 		'rewrite_optional' => $global_config['rewrite_optional'],
