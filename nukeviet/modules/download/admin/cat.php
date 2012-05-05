@@ -96,6 +96,7 @@ function nv_del_cat ( $catid )
     
     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $db->sql_query( $sql );
+	
     nv_insert_logs( NV_LANG_DATA, $module_data, "delete category" ,$ti, $admin_info['userid'] );
 }
 
@@ -207,6 +208,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) )
             {
             	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addcat_titlebox'] ,$array['title'], $admin_info['userid'] );
                 nv_del_moduleCache( $module_name );
+				
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
                 exit();
             }
@@ -469,6 +471,7 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 
                 nv_del_moduleCache( $module_name );
                 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['editcat_cat'] ,$array['title'], $admin_info['userid'] );
+				
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
                 exit();
             }

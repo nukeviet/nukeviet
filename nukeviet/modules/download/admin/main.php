@@ -470,6 +470,8 @@ if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
     
     $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `status`=" . $status . " WHERE `id`=" . $id;
     $db->sql_query( $sql );
+	
+	nv_del_moduleCache( $module_name );
     die( "OK" );
 }
 
@@ -519,6 +521,8 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     
     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
     $db->sql_query( $sql );
+	
+	nv_del_moduleCache( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_data, $lang_module['download_filequeue_del']  ,$row['title'], $admin_info['userid'] );
     die( "OK" );
 }

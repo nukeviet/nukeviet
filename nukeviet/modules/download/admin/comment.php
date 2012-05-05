@@ -78,6 +78,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
             }
             else
             {
+				nv_del_moduleCache( $module_name );
+				
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=comment&status=" . $row['status'] );
                 exit();
             }
@@ -140,6 +142,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `id`=" . $id;
     $db->sql_query( $sql );
 
+	nv_del_moduleCache( $module_name );
     die( "OK" );
 }
 
@@ -176,6 +179,8 @@ if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
 
     $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_comments` SET `status`=" . $status . " WHERE `id`=" . $id;
     $db->sql_query( $sql );
+	
+	nv_del_moduleCache( $module_name );
     die( "OK" );
 }
 

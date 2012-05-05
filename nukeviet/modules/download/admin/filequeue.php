@@ -394,6 +394,8 @@ if ( $nv_Request->isset_request( 'edit', 'get' ) )
                 $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `id`=" . $id;
                 $db->sql_query( $sql );
 
+				nv_del_moduleCache( $module_name );
+				
                 Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=filequeue" );
                 exit();
             }
