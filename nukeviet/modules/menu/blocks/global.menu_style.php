@@ -548,37 +548,41 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		{
 			$list = explode( ",", $list_sub );
 
-			foreach( $list as $catid )
+			foreach( $list_cats as $cat )
 			{
-				if( $style == 'pro_dropdown' )
+				$catid = $cat['id'];
+				if( in_array( $catid, $list ) )
 				{
-					if( $list_cats[$catid]['subcats'] != "" )
+					if( $style == 'pro_dropdown' )
 					{
-						$xtpl->assign( 'cla', 'class="fly"' );
+						if( $list_cats[$catid]['subcats'] != "" )
+						{
+							$xtpl->assign( 'cla', 'class="fly"' );
+						}
+						else
+						{
+							$xtpl->assign( 'cla', '' );
+						}
 					}
 					else
 					{
 						$xtpl->assign( 'cla', '' );
 					}
+
+					$list_cats[$catid]['class'] = nv_bmenu_active_menu( $list_cats[$catid] );
+
+					$xtpl->assign( 'MENUTREE', $list_cats[$catid] );
+
+					if( ! empty( $list_cats[$catid]['subcats'] ) )
+					{
+						$tree = nv_sub_menu( $style, $list_cats, $list_cats[$catid]['subcats'] );
+
+						$xtpl->assign( 'TREE_CONTENT', $tree );
+						$xtpl->parse( 'tree.tree_content' );
+					}
+
+					$xtpl->parse( 'tree' );
 				}
-				else
-				{
-					$xtpl->assign( 'cla', '' );
-				}
-
-				$list_cats[$catid]['class'] = nv_bmenu_active_menu( $list_cats[$catid] );
-
-				$xtpl->assign( 'MENUTREE', $list_cats[$catid] );
-
-				if( ! empty( $list_cats[$catid]['subcats'] ) )
-				{
-					$tree = nv_sub_menu( $style, $list_cats, $list_cats[$catid]['subcats'] );
-
-					$xtpl->assign( 'TREE_CONTENT', $tree );
-					$xtpl->parse( 'tree.tree_content' );
-				}
-
-				$xtpl->parse( 'tree' );
 			}
 
 			return $xtpl->text( 'tree' );
