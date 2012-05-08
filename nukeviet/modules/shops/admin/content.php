@@ -303,7 +303,7 @@ if ($nv_Request->get_int('save', 'post') == 1)
                 " . $db->dbescape_string($rowcontent['group_id']) . ", 
                 " . intval($rowcontent['user_id']) . ",
                 " . intval($rowcontent['com_id']) . ", 
-                " . intval($rowcontent['shopcat_id ']) . ", 
+                " . intval($rowcontent['shopcat_id']) . ", 
                 " . intval($rowcontent['source_id']) . ", 
                 " . intval($rowcontent['addtime']) . ", 
                 " . intval($rowcontent['edittime']) . ", 
