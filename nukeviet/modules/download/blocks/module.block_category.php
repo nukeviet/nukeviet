@@ -11,8 +11,9 @@ if ( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 global $module_name, $lang_module, $module_data, $list_cats, $module_file;
 
-$download_config = initial_config_data();
+$download_config = nv_mod_down_config();
 $list_cats = nv_list_cats();
+
 $xtpl = new XTemplate( "block_category.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 
