@@ -130,7 +130,7 @@ function nv_comment_module( $id, $page )
  */
 function nv_del_content_module( $id )
 {
-	global $db, $module_name, $module_data, $title;
+	global $db, $module_name, $module_data, $title, $lang_module;
 	$content_del = "NO_" . $id;
 	$title = "";
 	list( $id, $listcatid, $title, $homeimgfile, $homeimgthumb ) = $db->sql_fetchrow( $db->sql_query( "SELECT `id`, `listcatid`, `title`, `homeimgfile`, `homeimgthumb` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . intval( $id ) . "" ) );
