@@ -66,7 +66,7 @@
         <div class="cl-viewpages">
             {VIEW_PAGES}
         </div>
-        <!-- END: pages_viewpages -->
+        <!-- END: pages_result -->
     <div class="cl-info">
         <i>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title} 
             <br />
