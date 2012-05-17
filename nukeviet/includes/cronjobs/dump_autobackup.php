@@ -51,24 +51,26 @@ function cron_dump_autobackup()
 			clearstatcache();
 		}
 
-		$contents['tables'] = array();
-		$res = $db->sql_query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
-		
-		while( $item = $db->sql_fetchrow( $res ) )
+		if( $global_config['dump_autobackup'] )
 		{
-			$contents['tables'][] = $item[0];
+			$contents['tables'] = array();
+			$res = $db->sql_query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
+			
+			while( $item = $db->sql_fetchrow( $res ) )
+			{
+				$contents['tables'][] = $item[0];
+			}
+			$db->sql_freeresult( $res );
+
+			$contents['type'] = "all";
+
+			include ( NV_ROOTDIR . "/includes/core/dump.php" );
+
+			if( ! nv_dump_save( $contents ) )
+			{
+				$result = false;
+			}
 		}
-		$db->sql_freeresult( $res );
-
-		$contents['type'] = "all";
-
-		include ( NV_ROOTDIR . "/includes/core/dump.php" );
-
-		if( ! nv_dump_save( $contents ) )
-		{
-			$result = false;
-		}
-
 	}
 	
 	return $result;
