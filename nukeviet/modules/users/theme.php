@@ -536,13 +536,13 @@ function user_welcome ( )
     $user_info['view_mail'] = empty( $user_info['view_mail'] ) ? $lang_module['no'] : $lang_module['yes'];
     $user_info['last_login'] = empty( $user_info['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $user_info['last_login'] );
     $user_info['current_login'] = nv_date( 'l, d/m/Y H:i', $user_info['current_login'] );
-    $user_info['st_login'] = $user_info['st_login'] ? $lang_module['yes'] : $lang_module['no'];
+    $user_info['st_login'] = ! empty( $user_info['st_login'] ) ? $lang_module['yes'] : $lang_module['no'];
     
-    if ( $user_info['current_mode'] == 3 )
+    if ( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 3 )
     {
         $user_info['current_mode'] = $lang_module['admin_login'];
     }
-    elseif ( $user_info['current_mode'] == 2 )
+    elseif ( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 2 )
     {
         $user_info['current_mode'] = $lang_module['openid_login'] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
     }
@@ -567,7 +567,7 @@ function user_welcome ( )
         $xtpl->parse( 'main.pass_empty_note' );
     }
     
-    if ( ! $user_info['valid_question'] )
+    if ( empty( $user_info['valid_question'] ) )
     {
         $xtpl->parse( 'main.question_empty_note' );
     }
