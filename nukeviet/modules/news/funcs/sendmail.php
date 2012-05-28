@@ -53,7 +53,7 @@ if( $id > 0 and $catid > 0 )
 			$to_mail = $content = "";
 			if( $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $allowed_send == 1 )
 			{
-				$link = "" . $global_config['site_url'] . "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;
+				$link = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id, true );
 				$link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
 				$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
 
