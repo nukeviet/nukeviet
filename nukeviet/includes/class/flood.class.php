@@ -53,11 +53,28 @@ class FloodBlocker
 		if( substr( $logs_path, -1 ) != '/' ) $logs_path .= '/';
 
 		if( empty( $ip ) ) $ip = $_SERVER['REMOTE_ADDR'];
-		$ip = ip2long( $ip );
-		if( $ip == -1 || $ip === false ) trigger_error( FloodBlocker::INCORRECT_IP_ADDRESS, E_USER_ERROR );
+		if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
+		{
+			$ip2long = ip2long( $ip );
+		}
+		else
+		{
+            if (substr_count($ip, '::'))
+            {
+                $ip = str_replace('::', str_repeat(':0000', 8 - substr_count($ip, ':')) . ':', $ip);
+            }
+            $ip = explode(':', $ip);
+            $r_ip = '';
+            foreach ($ip as $v)
+            {
+                $r_ip .= str_pad(base_convert($v, 16, 2), 16, 0, STR_PAD_LEFT);
+            }
+            $ip2long = base_convert($r_ip, 2, 10);			
+		}
+		if( $ip2long == -1 || $ip2long === false ) trigger_error( FloodBlocker::INCORRECT_IP_ADDRESS, E_USER_ERROR );
 
 		$this->logs_path = $logs_path;
-		$this->ip_addr = $ip;
+		$this->ip_addr = $ip2long;
 		if( ! empty( $rules ) ) $this->rules = $rules;
 		$this->is_blocker = false;
 		$this->time_blocker = 0;

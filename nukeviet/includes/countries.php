@@ -374,27 +374,35 @@ function nv_getCountry( $ip )
  * @param string $ip
  * @return
  */
-function nv_getCountry_from_file( $ip )
+function nv_getCountry_from_file($ip)
 {
-	global $countries;
+    global $countries;
+    if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
+    {
+        $numbers = preg_split("/\./", $ip);
+        $code = ($numbers[0] * 16777216) + ($numbers[1] * 65536) + ($numbers[2] * 256) + ($numbers[3]);
 
-	$numbers = preg_split( "/\./", $ip );
-	$code = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + ( $numbers[2] * 256 ) + ( $numbers[3] );
+        $ranges = array();
+        include (NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $numbers[0] . '.php');
 
-	$ranges = array();
-	include ( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $numbers[0] . '.php' );
+        if (!empty($ranges))
+        {
+            foreach ($ranges as $key => $value)
+            {
+                if ($key <= $code and $value[0] >= $code)
+                    return $value[1];
+            }
+        }
 
-	if( ! empty( $ranges ) )
-	{
-		foreach( $ranges as $key => $value )
-		{
-			if( $key <= $code and $value[0] >= $code ) return $value[1];
-		}
-	}
+        return nv_getCountry($ip);
+    }
+    else
+    {
+        return "ZZ";
+    }
 
-	return nv_getCountry( $ip );
 }
-
+ 
 /**
  * nv_getCountry_from_cookie()
  *

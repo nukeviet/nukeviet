@@ -178,11 +178,31 @@ class Request
         if ( ! empty( $config['str_referer_blocker'] ) ) $this->str_referer_blocker = true;
         $this->engine_allowed = ( array )$config['engine_allowed'];
         if ( empty( $ip ) ) $ip = $_SERVER['REMOTE_ADDR'];
-        $this->ip_addr = ip2long( $ip );
-        if ( $this->ip_addr == - 1 || $this->ip_addr === false )
+		
+		if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
+		{
+			$ip2long = ip2long( $ip );
+		}
+		else
+		{
+            if (substr_count($ip, '::'))
+            {
+                $ip = str_replace('::', str_repeat(':0000', 8 - substr_count($ip, ':')) . ':', $ip);
+            }
+            $ip = explode(':', $ip);
+            $r_ip = '';
+            foreach ($ip as $v)
+            {
+                $r_ip .= str_pad(base_convert($v, 16, 2), 16, 0, STR_PAD_LEFT);
+            }
+            $ip2long = base_convert($r_ip, 2, 10);			
+		}
+			
+        if ( $ip2long == - 1 || $ip2long === false )
         {
             trigger_error( Request::INCORRECT_IP, 256 );
         }
+        $this->ip_addr = $ip2long;
         $this->cookie_key = md5( $this->cookie_key );
         if ( ini_get( 'register_globals' ) == '1' || strtolower( ini_get( 'register_globals' ) ) == 'on' ) $this->is_register_globals = true;
         if ( function_exists( 'get_magic_quotes_gpc' ) )
@@ -398,10 +418,6 @@ class Request
         else
         {
             $domains = array_map( "trim", explode( ",", $my_domains ) );
-            $domains = preg_replace( array( 
-                '/^[a-zA-Z]+\:\/\//e', '/\/$/e' 
-            ), '', $domains );
-            $domains = preg_replace( '/^([^\:|\/]+)[\:|\/]*(.*)$/', '\\1', $domains );
             $domains = array_map( "strtolower", $domains );
         }
         $domains = array_unique( $domains );

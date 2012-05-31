@@ -110,7 +110,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_global['date_pattern'] = filter_text_input( 'date_pattern', 'post', '', 1, 255 );
 	$array_config_global['time_pattern'] = filter_text_input( 'time_pattern', 'post', '', 1, 255 );
 
-	$my_domains = filter_text_input( 'my_domains', 'post', '', 1, 255 );
+	$my_domains = filter_text_input( 'my_domains', 'post', '' );
 	$array_config_global['my_domains'] = array( NV_SERVER_NAME );
 	
 	if( ! empty( $my_domains ) )
@@ -122,7 +122,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			{
 				$dm2 = ( ! preg_match( "/^(http|https|ftp|gopher)\:\/\//", $dm ) ) ? "http://" . $dm : $dm;
 				
-				if( nv_is_url( $dm2 ) or $dm == "localhost" )
+				if( nv_is_url( $dm2 ) or $dm == "localhost" or filter_var($dm, FILTER_VALIDATE_IP))
 				{
 					$array_config_global['my_domains'][] = $dm;
 				}

@@ -127,7 +127,25 @@ E_USER_DEPRECATED => "User-generated warning message"
         $this->month = date( "m-Y", NV_CURRENTTIME );
         
         $ip = $this->get_Env( "REMOTE_ADDR" );
-        $ip2long = ip2long( $ip );
+		if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
+		{
+			$ip2long = ip2long( $ip );
+		}
+		else
+		{
+            if (substr_count($ip, '::'))
+            {
+                $ip = str_replace('::', str_repeat(':0000', 8 - substr_count($ip, ':')) . ':', $ip);
+            }
+            $ip = explode(':', $ip);
+            $r_ip = '';
+            foreach ($ip as $v)
+            {
+                $r_ip .= str_pad(base_convert($v, 16, 2), 16, 0, STR_PAD_LEFT);
+            }
+            $ip2long = base_convert($r_ip, 2, 10);		
+		}
+			
         if ( $ip2long === - 1 and $ip2long === false ) die( Error::INCORRECT_IP );
         $this->ip = $ip;
         $request = $this->get_request();
