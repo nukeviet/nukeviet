@@ -408,7 +408,15 @@ class Request
         $this->server_name = $_SERVER['SERVER_NAME'];
         $this->server_protocol = strtolower( preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'] ) ) . ( ( $this->get_Env( "HTTPS" ) == "on" ) ? "s" : "" );
         $this->server_port = ( $_SERVER['SERVER_PORT'] == "80" ) ? "" : ( ":" . $_SERVER['SERVER_PORT'] );
-        $this->my_current_domain = $this->server_protocol . '://' . $this->server_name . $this->server_port;
+        
+        if(filter_var($this->server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === FALSE)
+		{
+        	$this->my_current_domain = $this->server_protocol . '://' . $this->server_name . $this->server_port;
+		}
+		else{
+        	$this->my_current_domain = $this->server_protocol . '://[' . $this->server_name .']'. $this->server_port;
+		}
+		
         $this->headerstatus = ( substr( php_sapi_name(), 0, 3 ) == 'cgi' ) ? "Status:" : $_SERVER['SERVER_PROTOCOL'];
         $domains = array();
         if ( empty( $my_domains ) )
@@ -441,9 +449,12 @@ class Request
         if ( ! empty( $this->referer ) )
         {
             $ref = @parse_url( $this->referer );
+			if(substr($ref['host'], 0, 1)=='[' AND substr($ref['host'], -1)==']'){
+				$ref['host'] = substr($ref['host'], 1, -1);
+			}
             if ( $ref and isset( $ref['scheme'] ) and in_array( $ref['scheme'], array( 
                 'http', 'https', 'ftp', 'gopher' 
-            ) ) and isset( $ref['host'] ) and ( preg_match( "/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/", $ref['host'] ) or preg_match( '/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $ref['host'] ) or $ref['host'] == 'localhost' ) )
+            ) ) and isset( $ref['host'] ) and ( preg_match( "/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/", $ref['host'] ) or filter_var($ref['host'], FILTER_VALIDATE_IP) or $ref['host'] == 'localhost' ) )
             {
                 if ( preg_match( "/^" . preg_quote( $ref['host'] ) . "/", $this->server_name ) )
                 {

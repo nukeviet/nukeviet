@@ -74,6 +74,7 @@ $global_config['forbid_mimes'] = ! empty( $global_config['forbid_mimes'] ) ? exp
 
 $search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
 $replace = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~' );
+$global_config['my_domains'] = str_replace( $search, $replace, $global_config['my_domains'] );
 $global_config['cookie_prefix'] = str_replace( $search, $replace, $global_config['cookie_prefix'] );
 $global_config['date_pattern'] = str_replace( $search, $replace, $global_config['date_pattern'] );
 $global_config['ftp_path'] = str_replace( $search, $replace, $global_config['ftp_path'] );
