@@ -123,9 +123,9 @@ $lang_module['logout_title'] = "Thoát";
 $lang_module['edit_info_title'] = "Sửa";
 $lang_module['img_size_title'] = "Ảnh hiển thị 80x80";
 $lang_module['email_active'] = "Thông tin kích hoạt thay đổi email";
-$lang_module['email_active_info'] = "Xin chào %1\$s,<br /><br />Bạn đã thay đổi địa chỉ email của tài khoản %2\$s, do đó bạn cần  kích hoạt lại tài khoản. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: %3\$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %4\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %5\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site";
-$lang_module['email_active_mes'] = "Tài khoản của bạn vừa được cập nhật. Tuy nhiên, hệ thống yêu cầu bạn phải kích hoạt lại tài khoản của mình do bạn thay đổi địa chỉ email. Một khóa kích hoạt vừa được gửi đến địa chỉ email mới mà bạn đã cung cấp. Hãy vui lòng kiểm tra email của bạn để biết thêm thông tin.";
-$lang_module['email_active_error_mail'] = "Lỗi: Tài khoản của bạn vừa được cập nhật, Nhưng hệ thống không gửi email để kích hoạt tài khoản. Vui lòng liên hệ với Quản trị Website để được hỗ trợ.";
+$lang_module['email_active_info'] = "Xin chào %1\$s,<br /><br />Bạn đã thay đổi địa chỉ email của tài khoản %2\$s, hệ thống yêu cầu bạn phải xác nhận địa chị email mới này. Để xác nhận, bạn hãy click vào link dưới đây:<br /><br />URL: %3\$s<br /><br />Việc xác nhận chỉ có hiệu lực đến %4\$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %5\$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site";
+$lang_module['email_active_mes'] = "Tài khoản của bạn vừa được cập nhật. Địa chỉ email đã được thay đổi, hệ thống yêu cầu bạn phải xác nhận email mới. Một khóa xác nhận vừa được gửi đến địa chỉ email mới mà bạn đã cung cấp. Hãy vui lòng kiểm tra email của bạn để biết thêm thông tin. Lưu ý: Bạn phải đăng xuất khỏi phiên đăng nhập này trước khi xác nhận địa chỉ email mới";
+$lang_module['email_active_error_mail'] = "Tài khoản của bạn vừa được cập nhật, Nhưng hệ thống không gửi được email để xác nhận email mới của bạn. Vui lòng liên hệ với Quản trị Website để được hỗ trợ.";
 $lang_module['st_login'] = "Đăng nhập theo kiểu thông thường";
 $lang_module['st_login2'] = "Khả năng đăng nhập thông thường";
 $lang_module['admin_login'] = "Đăng nhập nhờ tài khoản Admin";
@@ -178,7 +178,7 @@ $lang_module['changequestion_step1'] = "Để thay đổi câu hỏi bảo mật
 $lang_module['changequestion_step2'] = "Bạn có thể thay câu hỏi bảo mật và câu trả lời mới";
 $lang_module['changequestion_submit1'] = "Đề nghị xác nhận";
 $lang_module['changequestion_submit2'] = "Đề nghị thay đổi";
-$lang_module['editinfo_error'] = "ngoại trừ %s vì không hợp lệ";
+$lang_module['editinfo_error'] = ". Chú ý %s";
 $lang_module['editinfo_ok'] = "Các thay đổi đã được lưu";
 $lang_module['question2'] = "Câu hỏi bảo mật";
 $lang_module['current_mode'] = "Đăng nhập lần này";
@@ -205,5 +205,7 @@ $lang_module['no_act'] = "Chức năng này hiện tại chưa được kích ho
 $lang_module['no_set'] = "Hiện tại chưa thiết lập nhóm công cộng";
 $lang_module['re_remove'] = "Đăng ký hoặc bỏ nhóm thành công";
 
+$lang_module['account_change_mail_ok'] = "Địa chỉ email đã được xác nhận thành công";
+$lang_module['account_change_mail_error'] = "Có lỗi trong quá trình xác nhận địa chỉ email, hãy liên hệ với quản trị site để được hướng dẫn.";
 
 ?>
