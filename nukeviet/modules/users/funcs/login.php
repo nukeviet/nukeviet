@@ -505,7 +505,7 @@ function openidLogin_Res1 ( $attribs )
             '', 
             " . $db->dbescape( $reg_attribs['email'] ) . ", 
             " . $db->dbescape( $reg_attribs['full_name'] ) . ", 
-            " . $db->dbescape( ucfirst( $reg_attribs['gender'] ) ) . ", 
+            " . $db->dbescape( ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : "" ) ) . ", 
             '', 0, " . NV_CURRENTTIME . ", '', '', 
             " . $db->dbescape( $reg_attribs['yim'] ) . ", 
             '', '', '', '', '', '', 0, 0, '', 1, '', 0, '', '', ''
