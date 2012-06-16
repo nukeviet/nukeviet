@@ -89,7 +89,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 				{
 					$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $list_cat[$row['catid']] . "/" . $row['alias'];
 
-					$row['updatetime'] = nv_date( "d/y/Y", $row['updatetime'] );
+					$row['updatetime'] = nv_date( "d/m/Y", $row['updatetime'] );
 					$row['stitle'] = nv_clean60( $row['title'], $block_config['title_length'] );
 
 					$xtpl->assign( 'ROW', $row );
