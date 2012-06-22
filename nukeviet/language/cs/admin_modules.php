@@ -92,5 +92,6 @@ $lang_module['autoinstall_module_error_movefile'] = "automaticky Instalace nemů
 $lang_module['autoinstall_package_select'] = "Zvolte modul do balíčku";
 $lang_module['autoinstall_package_noselect'] = "Prosím, vyberte modul do balíčku";
 $lang_module['autoinstall_package_processing'] = "Prosím, vyčkejte na dokončení ...";
+$lang_module['description'] = "Popis stránek";
 
 ?>

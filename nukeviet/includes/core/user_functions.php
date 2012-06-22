@@ -94,6 +94,7 @@ function nv_site_mods()
 				$site_mods[$m_title]['admin_file'] = $row['admin_file'];
 				$site_mods[$m_title]['theme'] = $row['theme'];
 				$site_mods[$m_title]['mobile'] = $row['mobile'];
+                $site_mods[$m_title]['description'] = $row['description'];
 				$site_mods[$m_title]['keywords'] = $row['keywords'];
 				$site_mods[$m_title]['groups_view'] = $row['groups_view'];
 				$site_mods[$m_title]['in_menu'] = $row['in_menu'];
@@ -393,6 +394,10 @@ function nv_html_meta_tags()
 		{
 			$return .= "<meta name=\"description\" content=\"" . strip_tags( $description ) . "\" />\n";
 		}
+        elseif( ! empty( $module_info['description'] ) )
+        {
+            $return .= "<meta name=\"description\" content=\"" . strip_tags( $module_info['description'] ) . "\" />\n";
+        }
 		else
 		{
 			$ds = array();

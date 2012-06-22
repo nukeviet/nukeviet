@@ -98,5 +98,6 @@ $lang_module['autoinstall_package_processing'] = " xin chờ quá trình thực 
 $lang_module['delete_module_info1'] = "Module này hiện đang tồn tại trên ngôn ngữ <strong>%s</strong>, hãy xóa module trên các ngôn ngữ đó để có thể xóa module gốc";
 $lang_module['delete_module_info2'] = "Có %d module ảo được tạo ra từ module này, hãy xóa chúng trước khi xóa module gốc";
 $lang_module['change_func_name'] = "Đổi tên function &quot;%s&quot; của module &quot;%s&quot;";
+$lang_module['description'] = "Mô tả";
 
 ?>

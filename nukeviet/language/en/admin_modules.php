@@ -96,5 +96,6 @@ $lang_module['delete_module_info2'] = "There is %d virtual module created by thi
 $lang_module['admin_title'] = "Title of administration section";
 $lang_module['change_func_name'] = "Rename function \"%s\" of module \"%s\"";
 $lang_module['edit_error_update_theme'] = "The update module is detected on theme %s does not properly or defective, please check again.";
+$lang_module['description'] = "Descripton";
 
 ?>

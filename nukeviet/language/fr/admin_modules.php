@@ -95,5 +95,6 @@ $lang_module['autoinstall_package_processing'] = "Veuillez patienter quelques in
 $lang_module['mobile'] = "Theme mobile";
 $lang_module['delete_module_info1'] = "Ce module existe sur la langue <strong>%s</strong>, il faut tout d'abord supprimer ce module sur cette langue";
 $lang_module['delete_module_info2'] = "Il y a %d modules virtuels basés sur ce module, il faut les supprimer d'abord";
+$lang_module['description'] = "Description";
 
 ?>

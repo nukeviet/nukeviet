@@ -56,6 +56,15 @@
 	<col valign="top" width="150px" />
 	<col valign="top" width="310px" />
 	<tr>
+		<td>{CONTENT.description.0}:</td>
+		<td><input name="description" id="description" type="text" value="{CONTENT.description.1}" style="width:300px" maxlength="{CONTENT.description.2}" /></td>
+		<td></td>
+	</tr>
+</table>
+<table class="tab1 fixtab">
+	<col valign="top" width="150px" />
+	<col valign="top" width="310px" />
+	<tr>
 		<td>{CONTENT.keywords.0}:</td>
 		<td><input name="keywords" id="keywords" type="text" value="{CONTENT.keywords.1}" style="width:300px" maxlength="{CONTENT.keywords.2}" /></td>
 		<td>{CONTENT.keywords.3}</td>

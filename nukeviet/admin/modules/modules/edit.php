@@ -78,6 +78,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$admin_title = filter_text_input( 'admin_title', 'post', 1 );
 	$theme = filter_text_input( 'theme', 'post', '', 1 );
 	$mobile = filter_text_input( 'mobile', 'post', '', 1 );
+    $description = filter_text_input( 'description', 'post', '', 1, 255 );
 	$keywords = filter_text_input( 'keywords', 'post', '', 1 );
 	$act = $nv_Request->get_int( 'act', 'post', 0 );
 	$rss = $nv_Request->get_int( 'rss', 'post', 0 );
@@ -162,7 +163,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				}
 			}
 
-			$sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape( $custom_title ) . ", `admin_title`=" . $db->dbescape( $admin_title ) . ", `theme`=" . $db->dbescape( $theme ) . ", `mobile`=" . $db->dbescape( $mobile ) . ", `keywords`=" . $db->dbescape( $keywords ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `act`='" . $act . "', `rss`='" . $rss . "'WHERE `title`=" . $db->dbescape( $mod );
+			$sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `custom_title`=" . $db->dbescape( $custom_title ) . ", `admin_title`=" . $db->dbescape( $admin_title ) . ", `theme`=" . $db->dbescape( $theme ) . ", `mobile`=" . $db->dbescape( $mobile ) . ", `description`=" . $db->dbescape( $description ) . ", `keywords`=" . $db->dbescape( $keywords ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `act`='" . $act . "', `rss`='" . $rss . "'WHERE `title`=" . $db->dbescape( $mod );
 			$db->sql_query( $sql );
 
 			nv_delete_all_cache();
@@ -188,6 +189,7 @@ else
 	$theme = $row['theme'];
 	$mobile = $row['mobile'];
 	$act = $row['act'];
+    $description = $row['description'];
 	$keywords = $row['keywords'];
 	$rss = $row['rss'];
 }
@@ -219,6 +221,7 @@ $contents['admin_title'] = array( $lang_module['admin_title'], $admin_title, 70 
 $contents['theme'] = array( $lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme );
 $contents['mobile'] = array( $lang_module['mobile'], $lang_module['theme_default'], $theme_mobile_list, $mobile );
 $contents['act'] = array( $lang_global['activate'], $act );
+$contents['description'] = array( $lang_module['description'], $description, 255 );
 $contents['keywords'] = array( $lang_module['keywords'], $keywords, 255, $lang_module['keywords_info'] );
 
 if( $mod != $global_config['site_home_module'] )

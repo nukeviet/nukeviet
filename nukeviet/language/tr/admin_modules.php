@@ -92,5 +92,6 @@ $lang_module['autoinstall_module_error_movefile'] = "Kurulumdan sonra hareketli 
 $lang_module['autoinstall_package_select'] = "Modül paketi seç";
 $lang_module['autoinstall_package_noselect'] = "Modül paketi seçilemedi";
 $lang_module['autoinstall_package_processing'] = "Tamamlamak için lütfen bekleyin ...";
+$lang_module['description'] = "Tanımı";
 
 ?>
