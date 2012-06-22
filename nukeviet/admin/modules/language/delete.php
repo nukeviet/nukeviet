@@ -49,6 +49,17 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 			
 				$array_filename[] = $arrcrt[1];
 			}
+            if( file_exists( NV_ROOTDIR . "/js/language/" . $dirlang . ".js" ) )
+            {
+                $arrcrt = nv_deletefile( NV_ROOTDIR . "/js/language/" . $dirlang . ".js", true );
+    
+                if( $arrcrt[0] == 0 )
+                {
+                    $err = 1;
+                }
+    
+                $array_filename[] = $arrcrt[1];
+            }
 
 			$blocks = nv_scandir( NV_ROOTDIR . "/modules/" . $module . "/language/", "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
 		

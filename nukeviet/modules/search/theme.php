@@ -95,7 +95,7 @@ function result_theme( $result_array, $mod, $mod_custom_title, $search, $is_gene
 
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&q=" . urlencode( $search['key'] );
 	if( $mod != "all" ) $base_url .= "&m=" . $mod;
-	if( $search['logic'] != 0 ) $base_url .= "&l=1";
+	$base_url .= "&l=" . $search['logic'];
 
 	if( $is_generate_page )
 	{

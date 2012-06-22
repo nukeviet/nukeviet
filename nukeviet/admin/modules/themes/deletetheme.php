@@ -62,17 +62,17 @@ if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) 
 				$db->sql_query( "LOCK TABLE `" . $db_config['prefix'] . "_" . $_lang . "_modthemes` WRITE" );
 				$db->sql_query( "REPAIR TABLE `" . $db_config['prefix'] . "_" . $_lang . "_modthemes`" );
 				$db->sql_query( "OPTIMIZE TABLE `" . $db_config['prefix'] . "_" . $_lang . "_modthemes`" );
-				$db->sql_query( "UNLOCK TABLE `" . $db_config['prefix'] . "_" . $_lang . "_modthemes`" );
+				$db->sql_query( "UNLOCK TABLE" );
 
 				$db->sql_query( "LOCK TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_weight` WRITE" );
 				$db->sql_query( "REPAIR TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_weight`" );
 				$db->sql_query( "OPTIMIZE TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_weight`" );
-				$db->sql_query( "UNLOCK TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_weight`" );
+				$db->sql_query( "UNLOCK TABLE" );
 
 				$db->sql_query( "LOCK TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_groups` WRITE" );
 				$db->sql_query( "REPAIR TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_groups`" );
 				$db->sql_query( "OPTIMIZE TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_groups`" );
-				$db->sql_query( "UNLOCK TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_modthemes`" );
+				$db->sql_query( "UNLOCK TABLE" );
 			}
 
 			nv_del_moduleCache( 'themes' );
