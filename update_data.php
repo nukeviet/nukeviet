@@ -385,6 +385,25 @@ function nv_up_r1780()
 	return $return;
 }
 
+/**
+ * nv_up_r1811() to r1758 -> r1811
+ *
+ * @return
+ */
+function nv_up_r1811()
+{
+	global $nv_update_baseurl, $db;
+	
+	$check = $db->sql_query( " ALTER TABLE `" . $db_config['prefix'] . "_" . $lang ."_modules` ADD `description` VARCHAR( 255 ) NOT NULL AFTER `mobile`" );
+
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
+	
+	$return['status'] = $check ? 1 : 0;
+	$return['complete'] = $check ? 1 : 0;
+	
+	return $return;
+}
+
 function nv_up_finish()
 {
 	global $nv_update_baseurl, $db, $db_config, $global_config;
