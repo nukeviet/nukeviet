@@ -41,7 +41,7 @@ if( ! empty( $setmodule ) )
 			$custom_title = preg_replace( '/(\W+)/i', ' ', $setmodule );
 			$in_menu = ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php" ) ) ? 1 : 0;
 		
-			$db->sql_query( "INSERT INTO `" . NV_MODULES_TABLE . "` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES (" . $db->dbescape( $setmodule ) . ", " . $db->dbescape( $module_file ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $custom_title ) . ", '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)" );
+			$db->sql_query( "INSERT INTO `" . NV_MODULES_TABLE . "` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES (" . $db->dbescape( $setmodule ) . ", " . $db->dbescape( $module_file ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $custom_title ) . ", '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)" );
 		
 			nv_del_moduleCache( 'modules' );
 		
