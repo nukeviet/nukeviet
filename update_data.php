@@ -40,6 +40,7 @@ $nv_update_config['lang']['vi']['update_theme_mobile_nukeviet'] = 'Cập giao di
 $nv_update_config['lang']['vi']['nv_up_r1749'] = 'Thêm cấu hình hiển thị nguồn tin';
 $nv_update_config['lang']['vi']['nv_up_r1767'] = 'Xóa file CSS thừa giao diện admin';
 $nv_update_config['lang']['vi']['nv_up_r1780'] = 'Sửa lỗi bảng nhóm thành viên';
+$nv_update_config['lang']['vi']['nv_up_r1811'] = 'Thêm description vào bảng modules';
 
 // English
 $nv_update_config['lang']['en']['update_nukeviet_version'] = 'Update Version and Revision';
@@ -54,6 +55,7 @@ $nv_update_config['lang']['en']['update_theme_mobile_nukeviet'] = 'Update theme 
 $nv_update_config['lang']['en']['nv_up_r1749'] = 'Add config to show article source';
 $nv_update_config['lang']['en']['nv_up_r1767'] = 'Delete unused CSS files';
 $nv_update_config['lang']['en']['nv_up_r1780'] = 'Fix table groups';
+$nv_update_config['lang']['en']['nv_up_r1811'] = 'Add description field to modules table';
 
 // Require level: 0: Khong bat buoc hoan thanh; 1: Canh bao khi that bai; 2: Bat buoc hoan thanh neu khong se dung nang cap.
 // r: Revision neu la nang cap site, phien ban neu la nang cap module
@@ -70,8 +72,9 @@ $nv_update_config['tasklist'][] = array( 'r' => 1726, 'rq' => 0, 'l' => 'update_
 $nv_update_config['tasklist'][] = array( 'r' => 1749, 'rq' => 2, 'l' => 'nv_up_r1749', 'f' => 'nv_up_r1749' );
 $nv_update_config['tasklist'][] = array( 'r' => 1767, 'rq' => 0, 'l' => 'nv_up_r1767', 'f' => 'nv_up_r1767' );
 $nv_update_config['tasklist'][] = array( 'r' => 1780, 'rq' => 2, 'l' => 'nv_up_r1780', 'f' => 'nv_up_r1780' );
+$nv_update_config['tasklist'][] = array( 'r' => 1811, 'rq' => 2, 'l' => 'nv_up_r1811', 'f' => 'nv_up_r1811' );
 
-$nv_update_config['tasklist'][] = array( 'r' => 1783, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
+$nv_update_config['tasklist'][] = array( 'r' => 1811, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
 
 // Danh sach cac function
 /*
@@ -392,9 +395,14 @@ function nv_up_r1780()
  */
 function nv_up_r1811()
 {
-	global $nv_update_baseurl, $db;
+	global $nv_update_baseurl, $db, $db_config;
 	
-	$check = $db->sql_query( " ALTER TABLE `" . $db_config['prefix'] . "_" . $lang ."_modules` ADD `description` VARCHAR( 255 ) NOT NULL AFTER `mobile`" );
+	$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
+	while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
+	{
+		$check = $db->sql_query( " ALTER TABLE `" . $db_config['prefix'] . "_" . $lang ."_modules` ADD `description` VARCHAR( 255 ) NOT NULL AFTER `mobile`" );
+		if( ! $check ) break;
+	}
 
 	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
@@ -412,16 +420,7 @@ function nv_up_finish()
 	
 	//Update revision
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.01')" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1783')" );
-
-	$array_config_rewrite = array(
-		'rewrite_optional' => $global_config['rewrite_optional'],
-		'rewrite_endurl' => $global_config['rewrite_endurl'],
-		'rewrite_exturl' => $global_config['rewrite_exturl']
-	);
-	
-	nv_rewrite_change( $array_config_rewrite );
-	nv_deletefile( NV_ROOTDIR . '/' . NV_DATADIR . '/searchEngines.xml' );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1811')" );
 
 	nv_save_file_config_global();
 	
