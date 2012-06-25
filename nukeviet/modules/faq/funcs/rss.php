@@ -12,9 +12,9 @@ if ( ! defined( 'NV_IS_MOD_FAQ' ) ) die( 'Stop!!!' );
 $channel = array();
 $items = array();
 
-$channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_info['custom_title'];
+$channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-$channel['description'] = $global_config['site_description'];
+$channel['description'] = !empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
 
 $list_cats = nv_list_cats();
 
@@ -36,7 +36,7 @@ if ( ! empty( $list_cats ) )
     
     if ( $catid > 0 )
     {
-        $channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_name . ' - ' . $list_cats[$catid]['title'];
+        $channel['title'] = $module_name . ' - ' . $list_cats[$catid]['title'];
         $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$catid]['alias'];
         $channel['description'] = $list_cats[$catid]['description'];
         

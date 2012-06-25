@@ -12,9 +12,9 @@ if ( ! defined( 'NV_IS_MOD_WEBLINKS' ) ) die( 'Stop!!!' );
 $channel = array();
 $items = array();
 
-$channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_info['custom_title'];
+$channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-$channel['description'] = $global_config['site_description'];
+$channel['description'] = !empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
 $catid = 0;
 if ( isset( $array_op[1] ) )
 {
@@ -31,7 +31,7 @@ if ( isset( $array_op[1] ) )
 }
 if ( ! empty( $catid ) )
 {
-    $channel['title'] = $global_config['site_name'] . ' RSS: ' . $module_info['custom_title'] . ' - ' . $global_array_cat[$catid]['title'];
+    $channel['title'] = $module_info['custom_title'] . ' - ' . $global_array_cat[$catid]['title'];
     $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $alias_cat_url;
     $channel['description'] = $global_array_cat[$catid]['description'];
     
