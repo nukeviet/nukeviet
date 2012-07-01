@@ -25,14 +25,11 @@ if ( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/",
  */
 class Error
 {
-
     const INCORRECT_IP = 'Incorrect IP address specified';
 
     const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
 
-    
     const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
-
     
     private $log_errors_list;
 
@@ -74,20 +71,20 @@ class Error
 
     private $errortype = array( 
         E_ERROR => "Error", //
-E_WARNING => "Warning", //
-E_PARSE => "Parsing Error", //
-E_NOTICE => "Notice", //
-E_CORE_ERROR => "Core Error", //
-E_CORE_WARNING => "Core Warning", //
-E_COMPILE_ERROR => "Compile Error", //
-E_COMPILE_WARNING => "Compile Warning", //
-E_USER_ERROR => "User Error", //
-E_USER_WARNING => "User Warning", //
-E_USER_NOTICE => "User Notice", //
-E_STRICT => "Runtime Notice", //
-E_RECOVERABLE_ERROR => "Catchable fatal error", //
-E_DEPRECATED => "Run-time notices", //
-E_USER_DEPRECATED => "User-generated warning message" 
+		E_WARNING => "Warning", //
+		E_PARSE => "Parsing Error", //
+		E_NOTICE => "Notice", //
+		E_CORE_ERROR => "Core Error", //
+		E_CORE_WARNING => "Core Warning", //
+		E_COMPILE_ERROR => "Compile Error", //
+		E_COMPILE_WARNING => "Compile Warning", //
+		E_USER_ERROR => "User Error", //
+		E_USER_WARNING => "User Warning", //
+		E_USER_NOTICE => "User Notice", //
+		E_STRICT => "Runtime Notice", //
+		E_RECOVERABLE_ERROR => "Catchable fatal error", //
+		E_DEPRECATED => "Run-time notices", //
+		E_USER_DEPRECATED => "User-generated warning message" 
     );
 
     /**
@@ -97,7 +94,6 @@ E_USER_DEPRECATED => "User-generated warning message"
      * @return
      */
     public function __construct ( $config )
-    
     {
         $this->log_errors_list = $this->parse_error_num( ( int )$config['log_errors_list'] );
         $this->display_errors_list = $this->parse_error_num( ( int )$config['display_errors_list'] );
@@ -289,31 +285,46 @@ E_USER_DEPRECATED => "User-generated warning message"
         return $result;
     }
 
-    function get_request ( )
+    function get_request( )
     {
         $request = array();
         if ( sizeof( $_GET ) )
         {
             foreach ( $_GET as $key => $value )
             {
-                if ( preg_match( "/^[a-zA-Z0-9\_]+$/", $key ) and ! is_numeric( $key ) )
-                {
-                    $value = strip_tags( stripslashes( $value ) );
-                    $value = preg_replace( "/[\'|\"|\t|\r|\n|\.\.\/]+/", "", $value );
-                    $value = str_replace( array( 
-                        "'", '"', "&" 
-                    ), array( 
-                        "&rsquo;", "&quot;", "&amp;" 
-                    ), $value );
-                    if ( ! empty( $value ) ) $request[$key] = $value;
-                }
-            }
+				$value = $this->queryCheck( $key, $value );
+				if ( $value !== false ) $request[$key] = $value;
+			}
         }
-        
+		
         $request = ! empty( $request ) ? '?' . http_build_query( $request ) : "";
         $request = $this->get_Env( "PHP_SELF" ) . $request;
+		
         return $request;
     }
+	
+	private function queryCheck( $key, $value )
+	{
+		if( preg_match( "/^[a-zA-Z0-9\_]+$/", $key ) )
+		{
+			if( is_array( $value ) )
+			{
+				foreach( $value as $k => $v )
+				{
+					$_value = $this->queryCheck( $k, $v );
+					if( $_value !== false ) $value[$k] = $_value;
+				}
+				return $value;
+			}
+			
+			$value = strip_tags( stripslashes( $value ) );
+			$value = preg_replace( "/[\'|\"|\t|\r|\n|\.\.\/]+/", "", $value );
+			$value = str_replace( array( "'", '"', "&" ), array( "&rsquo;", "&quot;", "&amp;" ), $value );
+			return $value;
+		}
+
+		return false;
+	}
 
     private function info_die ( )
     {
