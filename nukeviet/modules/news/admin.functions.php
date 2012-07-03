@@ -300,8 +300,12 @@ function nv_news_fix_block ( $bid, $repairtable = true )
  */
 function nv_show_cat_list ( $parentid = 0 )
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_full, $array_viewcat_nosub, $admin_info, $array_cat_admin, $global_array_cat, $admin_id;
-    
+    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_full, $array_viewcat_nosub, $admin_info, $array_cat_admin, $global_array_cat, $admin_id, $global_config, $module_file;
+
+	$xtpl = new XTemplate( "cat_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	
     // Cac chu de co quyen han
     $array_cat_check_content = array();
     foreach ( $global_array_cat as $catid_i => $array_value )
@@ -330,8 +334,8 @@ function nv_show_cat_list ( $parentid = 0 )
             }
         }
     }
+	
     // Cac chu de co quyen han    
-    $contents = "";
     if ( $parentid > 0 )
     {
         $parentid_i = $parentid;
@@ -342,36 +346,19 @@ function nv_show_cat_list ( $parentid = 0 )
             $parentid_i = $global_array_cat[$parentid_i]['parentid'];
         }
         sort( $array_cat_title, SORT_NUMERIC );
-        $contents .= implode( " -> ", $array_cat_title );
+		
+		$xtpl->assign( 'CAT_TITLE', implode( " &raquo; ", $array_cat_title ) );
+		$xtpl->parse( 'main.cat_title' );
     }
     
-    $sql = "SELECT catid, parentid, title, weight, viewcat, numsubcat, inhome, numlinks FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid` = '" . $parentid . "' ORDER BY `weight` ASC";
+    $sql = "SELECT `catid`, `parentid`, `title`, `weight`, `viewcat`, `numsubcat`, `inhome`, `numlinks` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid` = '" . $parentid . "' ORDER BY `weight` ASC";
     $result = $db->sql_query( $sql );
     $num = $db->sql_numrows( $result );
+	
     if ( $num > 0 )
     {
-        $contents .= "<table class=\"tab1\">\n";
-        $contents .= "<col style=\"white-space: nowrap;\" />";
-        $contents .= "<col style=\"white-space: nowrap;\" />";
-        $contents .= "<col style=\"white-space: nowrap;\" />";
-        $contents .= "<col style=\"white-space: nowrap;\" />";
-        $contents .= "<col style=\"white-space: nowrap;\" />";
-        $contents .= "<col style=\"white-space: nowrap;\" />";
-        
-        $contents .= "<thead>\n";
-        $contents .= "<tr>\n";
-        $contents .= "<td align=\"center\">" . $lang_module['weight'] . "</td>\n";
-        $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-        $contents .= "<td align=\"center\">" . $lang_module['inhome'] . "</td>\n";
-        $contents .= "<td>" . $lang_module['viewcat_page'] . "</td>\n";
-        $contents .= "<td align=\"center\">" . $lang_module['numlinks'] . "</td>\n";
-        $contents .= "<td></td>\n";
-        $contents .= "</tr>\n";
-        $contents .= "</thead>\n";
         $a = 1;
-        $array_inhome = array( 
-            $lang_global['no'], $lang_global['yes'] 
-        );
+        $array_inhome = array( $lang_global['no'], $lang_global['yes'] );
         
         while ( list( $catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks ) = $db->sql_fetchrow( $result ) )
         {
@@ -384,6 +371,7 @@ function nv_show_cat_list ( $parentid = 0 )
                 $array_cat = GetCatidInParent( $catid );
                 $check_show = array_intersect( $array_cat, $array_cat_check_content );
             }
+			
             if ( ! empty( $check_show ) )
             {
                 $array_viewcat = ( $numsubcat > 0 ) ? $array_viewcat_full : $array_viewcat_nosub;
@@ -411,90 +399,87 @@ function nv_show_cat_list ( $parentid = 0 )
                     $weight_disabled = false;
                     $admin_funcs[] = "<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\">" . $lang_global['delete'] . "</a></span>";
                 }
+				
+				$xtpl->assign( 'ROW', array(
+					"class" => ( $a % 2 ) ? " class=\"second\"" : "",
+					"catid" => $catid,
+					"link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid,
+					"title" => $title,
+					"adminfuncs" => implode( "&nbsp;-&nbsp;", $admin_funcs ),
+				) );
                 
-                $class = ( $a % 2 ) ? " class=\"second\"" : "";
-                $contents .= "<tbody" . $class . ">\n";
-                $contents .= "<tr>\n";
-                $contents .= "<td align=\"center\">";
                 if ( $weight_disabled )
                 {
-                    $contents .= $a;
+					$xtpl->assign( "STT", $a );
+					$xtpl->parse( 'main.data.loop.stt' );
                 }
                 else
                 {
-                    $contents .= "<select id=\"id_weight_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','weight');\">\n";
-                    for ( $i = 1; $i <= $num; ++$i )
-                    {
-                        $contents .= "<option value=\"" . $i . "\"" . ( $i == $weight ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
-                    }
-                    $contents .= "</select>";
+					for ( $i = 1; $i <= $num; ++ $i )
+					{
+						$xtpl->assign( 'WEIGHT', array( "key" => $i, "title" => $i, "selected" => $i == $weight ? " selected=\"selected\"" : "" ) );
+						$xtpl->parse( 'main.data.loop.weight.loop' );
+					}
+					$xtpl->parse( 'main.data.loop.weight' );
                 }
-                $contents .= "</td>\n";
-                $contents .= "<td nowrap=\"nowrap\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid . "\"><strong>" . $title . "</strong></a>";
-                if ( $numsubcat > 0 ) $contents .= "  <span style=\"color:#FF0101;\">(" . $numsubcat . ")</span>";
-                $contents .= "</td>\n";
-                $contents .= "<td align=\"center\">";
+				
                 if ( $func_cat_disabled )
                 {
-                    $contents .= $array_inhome[$inhome];
+					$xtpl->assign( "INHOME", $array_inhome[$inhome] );
+					$xtpl->parse( 'main.data.loop.disabled_inhome' );
+					
+					$xtpl->assign( "VIEWCAT", $array_viewcat[$viewcat] );
+					$xtpl->parse( 'main.data.loop.disabled_viewcat' );
+					
+					$xtpl->assign( "NUMLINKS", $numlinks );
+					$xtpl->parse( 'main.data.loop.title_numlinks' );
                 }
                 else
                 {
-                    $contents .= "<select id=\"id_inhome_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','inhome');\">\n";
                     foreach ( $array_inhome as $key => $val )
-                    {
-                        $contents .= "<option value=\"" . $key . "\"" . ( $key == $inhome ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
-                    }
-                    $contents .= "</select>";
-                }
-                $contents .= "</td>\n";
-                $contents .= "<td align=\"left\">";
-                if ( $func_cat_disabled )
-                {
-                    $contents .= $array_viewcat[$viewcat];
-                }
-                else
-                {
-                    $contents .= "<select id=\"id_viewcat_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','viewcat');\">\n";
+					{
+						$xtpl->assign( 'INHOME', array( "key" => $key, "title" => $val, "selected" => $key == $inhome ? " selected=\"selected\"" : "" ) );
+						$xtpl->parse( 'main.data.loop.inhome.loop' );
+					}
+					$xtpl->parse( 'main.data.loop.inhome' );
+					
                     foreach ( $array_viewcat as $key => $val )
                     {
-                        $contents .= "<option value=\"" . $key . "\"" . ( $key == $viewcat ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
+						$xtpl->assign( 'VIEWCAT', array( "key" => $key, "title" => $val, "selected" => $key == $viewcat ? " selected=\"selected\"" : "" ) );
+						$xtpl->parse( 'main.data.loop.viewcat.loop' );
                     }
-                    $contents .= "</select>";
-                }
-                $contents .= "</td>\n";
-                $contents .= "<td align=\"center\">";
-                if ( $func_cat_disabled )
-                {
-                    $contents .= $numlinks;
-                
-                }
-                else
-                {
-                    $contents .= "<select id=\"id_numlinks_" . $catid . "\" onchange=\"nv_chang_cat('" . $catid . "','numlinks');\">\n";
-                    for ( $i = 0; $i <= 10; ++$i )
+					$xtpl->parse( 'main.data.loop.viewcat' );
+					
+                    for ( $i = 0; $i <= 10; ++ $i )
                     {
-                        $contents .= "<option value=\"" . $i . "\"" . ( $i == $numlinks ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+						$xtpl->assign( 'NUMLINKS', array( "key" => $i, "title" => $i, "selected" => $i == $numlinks ? " selected=\"selected\"" : "" ) );
+						$xtpl->parse( 'main.data.loop.numlinks.loop' );
                     }
-                    $contents .= "</select>";
+					$xtpl->parse( 'main.data.loop.numlinks' );
                 }
-                $contents .= "</td>\n";
-                $contents .= "<td nowrap=\"nowrap\" align=\"center\">";
-                $contents .= implode( "&nbsp;-&nbsp;", $admin_funcs );
-                $contents .= "</td>\n";
-                $contents .= "</tr>\n";
-                $contents .= "</tbody>\n";
-                ++$a;
+				
+				if( $numsubcat )
+				{
+					$xtpl->assign( 'NUMSUBCAT', $numsubcat );
+					$xtpl->parse( 'main.data.loop.numsubcat' );
+				}
+				
+				$xtpl->parse( 'main.data.loop' );
+                ++ $a;
             }
         }
-        $contents .= "</table>\n";
+
+		$xtpl->parse( 'main.data' );
     }
     else
     {
-        $contents .= "&nbsp;";
+        $contents = "&nbsp;";
     }
     $db->sql_freeresult();
-    unset( $sql, $result );
+	
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
+
     return $contents;
 }
 
@@ -505,46 +490,45 @@ function nv_show_cat_list ( $parentid = 0 )
  */
 function nv_show_topics_list ( )
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
+    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_config, $module_file;
+	
     $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` ORDER BY `weight` ASC";
     $result = $db->sql_query( $sql );
     $num = $db->sql_numrows( $result );
+	
+	$xtpl = new XTemplate( "topics_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	
     if ( $num > 0 )
     {
-        $contents = "<table class=\"tab1\">\n";
-        $contents .= "<thead>\n";
-        $contents .= "<tr>\n";
-        $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
-        $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-        $contents .= "<td>" . $lang_module['description'] . "</td>\n";
-        $contents .= "<td align=\"center\" style=\"width:120px;\"></td>\n";
-        $contents .= "</tr>\n";
-        $contents .= "</thead>\n";
         $a = 0;
-        $array_inhome = array( 
-            $lang_global['no'], $lang_global['yes'] 
-        );
         while ( $row = $db->sql_fetchrow( $result ) )
         {
-            $class = ( $a % 2 ) ? " class=\"second\"" : "";
-            $contents .= "<tbody" . $class . ">\n";
-            $contents .= "<tr>\n";
-            $contents .= "<td align=\"center\"><select id=\"id_weight_" . $row['topicid'] . "\" onchange=\"nv_chang_topic('" . $row['topicid'] . "','weight');\">\n";
-            for ( $i = 1; $i <= $num; ++$i )
-            {
-                $contents .= "<option value=\"" . $i . "\"" . ( $i == $row['weight'] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
-            }
-            $contents .= "</select></td>\n";
             list( $numnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `topicid`=" . $row['topicid'] . "" ) );
-            $contents .= ( $numnews > 0 ) ? "<td><a href='index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topicsnews&amp;topicid=" . $row['topicid'] . "'>" . $row['title'] . " ($numnews " . $lang_module['topic_num_news'] . ")</a></td>\n" : "<td><a href='index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topicsnews&amp;topicid=" . $row['topicid'] . "'>" . $row['title'] . "</a></td>\n";
-            $contents .= "<td>" . $row['description'] . "</td>\n";
-            $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topics&amp;topicid=" . $row['topicid'] . "#edit\">" . $lang_global['edit'] . "</a></span>\n";
-            $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_topic(" . $row['topicid'] . ")\">" . $lang_global['delete'] . "</a></span></td>\n";
-            $contents .= "</tr>\n";
-            $contents .= "</tbody>\n";
-            ++$a;
+			
+			$xtpl->assign( 'ROW', array(
+				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
+				"topicid" => $row['topicid'],
+				"description" => $row['description'],
+				"title" => $row['title'],
+				"link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topicsnews&amp;topicid=" . $row['topicid'],
+				"numnews" => $numnews ? " (" . $numnews . " " . $lang_module['topic_num_news'] . ")" : "",
+				"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topics&amp;topicid=" . $row['topicid'] . "#edit",
+			) );
+			
+            for ( $i = 1; $i <= $num; ++ $i )
+            {
+				$xtpl->assign( 'WEIGHT', array( "key" => $i, "title" => $i, "selected" => $i == $row['weight'] ? " selected=\"selected\"" : "" ) );
+				$xtpl->parse( 'main.loop.weight' );
+            }
+			
+			$xtpl->parse( 'main.loop' );
+            ++ $a;
         }
-        $contents .= "</table>\n";
+		
+		$xtpl->parse( 'main' );
+		$contents = $xtpl->text( 'main' );
     }
     else
     {
@@ -561,73 +545,64 @@ function nv_show_topics_list ( )
  */
 function nv_show_block_cat_list ( )
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
+    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config;
+	
     $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
     $result = $db->sql_query( $sql );
     $num = $db->sql_numrows( $result );
+	
+	$xtpl = new XTemplate( "blockcat_lists.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	
     if ( $num > 0 )
     {
-        $contents = "<table class=\"tab1\">\n";
-        $contents .= "<thead>\n";
-        $contents .= "<tr>\n";
-        $contents .= "<td style=\"width:50px;\">" . $lang_module['weight'] . "</td>\n";
-        $contents .= "<td align=\"center\" style=\"width:40px;\">ID</td>\n";
-        $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-        $contents .= "<td align=\"center\">" . $lang_module['adddefaultblock'] . "</td>\n";
-        $contents .= "<td align=\"center\" style=\"width:90px;\">" . $lang_module['numlinks'] . "</td>\n";
-        $contents .= "<td style=\"width:100px;\"></td>\n";
-        $contents .= "</tr>\n";
-        $contents .= "</thead>\n";
         $a = 0;
-        $array_adddefault = array( 
-            $lang_global['no'], $lang_global['yes'] 
-        );
+        $array_adddefault = array( $lang_global['no'], $lang_global['yes'] );
+		
         while ( $row = $db->sql_fetchrow( $result ) )
         {
-            $class = ( $a % 2 ) ? " class=\"second\"" : "";
-            $contents .= "<tbody" . $class . ">\n";
-            $contents .= "<tr>\n";
-            $contents .= "<td align=\"center\"><select id=\"id_weight_" . $row['bid'] . "\" onchange=\"nv_chang_block_cat('" . $row['bid'] . "','weight');\">\n";
-            for ( $i = 1; $i <= $num; ++$i )
+            list( $numnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` where `bid`=" . $row['bid'] ) );
+			
+			$xtpl->assign( 'ROW', array(
+				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
+				"bid" => $row['bid'],
+				"title" => $row['title'],
+				"numnews" => $numnews ? " (" . $numnews . " " . $lang_module['topic_num_news'] . ")" : "",
+				"link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=block&amp;bid=" . $row['bid'],
+				"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $row['bid'] . "#edit",
+			) );
+			
+            for( $i = 1; $i <= $num; ++ $i )
             {
-                $contents .= "<option value=\"" . $i . "\"" . ( $i == $row['weight'] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+				$xtpl->assign( 'WEIGHT', array( "key" => $i, "title" => $i, "selected" => $i == $row['weight'] ? " selected=\"selected\"" : "" ) );
+				$xtpl->parse( 'main.loop.weight' );
             }
-            $contents .= "</select></td>\n";
-            $contents .= "<td align=\"center\"><b>" . $row['bid'] . "</b></td>\n";
-            list( $numnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` where `bid`=" . $row['bid'] . "" ) );
-            if ( $numnews )
-            {
-                $contents .= "<td><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=block&amp;bid=" . $row['bid'] . "\">" . $row['title'] . " ($numnews " . $lang_module['topic_num_news'] . ")</a>";
-            }
-            else
-            {
-                $contents .= "<td><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=block&amp;bid=" . $row['bid'] . "\">" . $row['title'] . "</a>";
-            }
-            $contents .= " </td>\n";
-            $contents .= "<td align=\"center\"><select id=\"id_adddefault_" . $row['bid'] . "\" onchange=\"nv_chang_block_cat('" . $row['bid'] . "','adddefault');\">\n";
-            foreach ( $array_adddefault as $key => $val )
-            {
-                $contents .= "<option value=\"" . $key . "\"" . ( $key == $row['adddefault'] ? " selected=\"selected\"" : "" ) . ">" . $val . "</option>\n";
-            }
-            $contents .= "</select></td>\n";
-            $contents .= "<td align=\"center\"><select id=\"id_numlinks_" . $row['bid'] . "\" onchange=\"nv_chang_block_cat('" . $row['bid'] . "','numlinks');\">\n";
-            for ( $i = 1; $i <= 30; ++$i )
-            {
-                $contents .= "<option value=\"" . $i . "\"" . ( $i == $row['number'] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
-            }
-            $contents .= "</select></td>\n";
-            $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $row['bid'] . "#edit\">" . $lang_global['edit'] . "</a></span>\n";
-            $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_block_cat(" . $row['bid'] . ")\">" . $lang_global['delete'] . "</a></span></td>\n";
-            $contents .= "</tr>\n";
-            $contents .= "</tbody>\n";
-            ++$a;
+			
+			foreach( $array_adddefault as $key => $val )
+			{
+				$xtpl->assign( 'ADDDEFAULT', array( "key" => $key, "title" => $val, "selected" => $key == $row['adddefault'] ? " selected=\"selected\"" : "" ) );
+				$xtpl->parse( 'main.loop.adddefault' );
+			}
+			
+			for( $i = 1; $i <= 30; ++ $i )
+			{
+				$xtpl->assign( 'NUMBER', array( "key" => $i, "title" => $i, "selected" => $i == $row['number'] ? " selected=\"selected\"" : "" ) );
+				$xtpl->parse( 'main.loop.number' );
+			}
+			
+			$xtpl->parse( 'main.loop' );
+            ++ $a;
         }
-        $contents .= "</table>\n";
+		
+		$xtpl->parse( 'main' );
+		$contents = $xtpl->text( 'main' );
     }
     else
     {
         $contents = "&nbsp;";
     }
+	
     $db->sql_freeresult();
     return $contents;
 }
@@ -639,52 +614,59 @@ function nv_show_block_cat_list ( )
  */
 function nv_show_sources_list ( )
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $nv_Request;
+    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $nv_Request, $module_file, $global_config;
+	
     $num = $db->sql_numrows( $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` ORDER BY `weight` ASC" ) );
     $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_data . "&amp;" . NV_OP_VARIABLE . "=sources";
     $all_page = ( $num > 1 ) ? $num : 1;
     $per_page = 15;
     $page = $nv_Request->get_int( 'page', 'get', 0 );
+
+	$xtpl = new XTemplate( "sources_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	
     if ( $num > 0 )
     {
-        $contents = "<table class=\"tab1\">\n";
-        $contents .= "<thead>\n";
-        $contents .= "<tr>\n";
-        $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
-        $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-        $contents .= "<td>" . $lang_module['link'] . "</td>\n";
-        $contents .= "<td style=\"width:120px;\"></td>\n";
-        $contents .= "</tr>\n";
-        $contents .= "</thead>\n";
         $a = 0;
         $result = $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` ORDER BY `weight` LIMIT $page, $per_page" );
         while ( $row = $db->sql_fetchrow( $result ) )
         {
-            $class = ( $a % 2 ) ? " class=\"second\"" : "";
-            $contents .= "<tbody" . $class . ">\n";
-            $contents .= "<tr>\n";
-            $contents .= "<td align=\"center\"><select id=\"id_weight_" . $row['sourceid'] . "\" onchange=\"nv_chang_sources('" . $row['sourceid'] . "','weight');\">\n";
-            for ( $i = 1; $i <= $num; ++$i )
+			$xtpl->assign( 'ROW', array(
+				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
+				"sourceid" => $row['sourceid'],
+				"title" => $row['title'],
+				"link" => $row['link'],
+				"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sources&amp;sourceid=" . $row['sourceid'] . "#edit",
+			) );
+			
+            for ( $i = 1; $i <= $num; ++ $i )
             {
-                $contents .= "<option value=\"" . $i . "\"" . ( $i == $row['weight'] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+				$xtpl->assign( 'WEIGHT', array( "key" => $i, "title" => $i, "selected" => $i == $row['weight'] ? " selected=\"selected\"" : "" ) );
+				$xtpl->parse( 'main.loop.weight' );
             }
-            $contents .= "</select></td>\n";
-            $contents .= "<td>" . $row['title'] . "</td>\n";
-            $contents .= "<td>" . $row['link'] . "</td>\n";
-            $contents .= "<td align=\"center\"><span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sources&amp;sourceid=" . $row['sourceid'] . "#edit\">" . $lang_global['edit'] . "</a></span>\n";
-            $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_source(" . $row['sourceid'] . ")\">" . $lang_global['delete'] . "</a></span></td>\n";
-            $contents .= "</tr>\n";
-            $contents .= "</tbody>\n";
-            ++$a;
+			
+			$xtpl->parse( 'main.loop' );
+            ++ $a;
         }
-        $contents .= "</table>\n";
-        $contents .= nv_generate_page( $base_url, $all_page, $per_page, $page );
+		
+		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+		if( ! empty( $generate_page ) )
+		{
+			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
+			$xtpl->parse( 'main.generate_page' );
+		}
+		
+		$xtpl->parse( 'main' );
+		$contents = $xtpl->text( 'main' );
     }
     else
     {
         $contents = "&nbsp;";
     }
+	
     $db->sql_freeresult();
+	
     return $contents;
 }
 
@@ -696,60 +678,48 @@ function nv_show_sources_list ( )
  */
 function nv_show_block_list ( $bid )
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_cat;
-    $contents = "";
+    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_cat, $module_file, $global_config;
+	
+	$xtpl = new XTemplate( "block_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
+	$xtpl->assign( 'OP', $op );
+	$xtpl->assign( 'BID', $bid );
     
-    $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other";
-    $global_array_cat[0] = array( 
-        "catid" => 0, "parentid" => 0, "title" => "Other", "alias" => "Other", "link" => $link_i, "viewcat" => "viewcat_page_new", "subcatid" => 0, "numlinks" => 3, "description" => "", "keywords" => "" 
-    );
+    $global_array_cat[0] = array( "alias" => "Other" );
     
     $sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t2.weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status='1' ORDER BY t2.weight ASC";
     $result = $db->sql_query( $sql );
     $num = $db->sql_numrows( $result );
     if ( $num > 0 )
     {
-        $contents = "<form name=\"block_list\" action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $bid . "\" method=\"get\">";
-        $contents .= "<table class=\"tab1\">\n";
-        $contents .= "<thead>\n";
-        $contents .= "<tr>\n";
-        $contents .= "<td align=\"center\"><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
-        $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
-        $contents .= "<td>" . $lang_module['name'] . "</td>\n";
-        $contents .= "<td></td>\n";
-        $contents .= "</tr>\n";
-        $contents .= "</thead>\n";
-        $contents .= "<tfoot>\n";
-        $contents .= "<tr align=\"left\">\n";
-        $contents .= "<td colspan=\"5\"><input type=\"button\" onclick=\"nv_del_block_list(this.form, " . $bid . ")\" value=\"" . $lang_module['delete_from_block'] . "\">\n";
-        $contents .= "</td>\n";
-        $contents .= "</tr>\n";
-        $contents .= "</tfoot>\n";
         $a = 0;
         while ( list( $id, $catid_i, $title, $alias, $weight ) = $db->sql_fetchrow( $result ) )
         {
-            $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
-            $class = ( $a % 2 ) ? " class=\"second\"" : "";
-            $contents .= "<tbody" . $class . ">\n";
-            $contents .= "<tr>\n";
-            $contents .= "<td align=\"center\"><input type=\"checkbox\" onclick=\"nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);\" value=\"" . $id . "\" name=\"idcheck[]\" /></td>\n";
-            $contents .= "<td align=\"center\"><select id=\"id_weight_" . $id . "\" onchange=\"nv_chang_block(" . $bid . ", " . $id . ",'weight');\">\n";
-            for ( $i = 1; $i <= $num; ++$i )
+			$xtpl->assign( 'ROW', array(
+				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
+				"id" => $id,
+				"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id,
+				"title" => $title,
+			) );
+			
+            for ( $i = 1; $i <= $num; ++ $i )
             {
-                $contents .= "<option value=\"" . $i . "\"" . ( $i == $weight ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
+				$xtpl->assign( 'WEIGHT', array( "key" => $i, "title" => $i, "selected" => $i == $weight ? " selected=\"selected\"" : "" ) );
+				$xtpl->parse( 'main.loop.weight' );
             }
-            $contents .= "</select></td>\n";
-            $contents .= "<td align=\"left\"><a target=\"_blank\" href=\"" . $link . "\">" . $title . "</a></td>\n";
-            $contents .= "<td align=\"center\">\n";
-            $contents .= "<span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a></span>\n";
-            $contents .= "&nbsp;-&nbsp;<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_chang_block(" . $bid . ", " . $id . ",'delete')\">" . $lang_module['delete_from_block'] . "</a></span>\n";
-            $contents .= "</td>\n";
-            $contents .= "</tr>\n";
-            $contents .= "</tbody>\n";
-            ++$a;
+			
+			$xtpl->parse( 'main.loop' );
+            ++ $a;
         }
-        $contents .= "</table>\n";
-        $contents .= "</form>\n";
+		
+		$xtpl->parse( 'main' );
+		$contents = $xtpl->text( 'main' );
+		
         $db->sql_freeresult();
     }
     else
@@ -803,13 +773,16 @@ function GetCatidInParent ( $catid )
 function nv_array_cat_admin ( )
 {
     global $db, $module_data;
+	
     $array_cat_admin = array();
     $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_admins` ORDER BY `userid` ASC";
     $result = $db->sql_query( $sql );
+	
     while ( $row = $db->sql_fetchrow( $result ) )
     {
         $array_cat_admin[$row['userid']][$row['catid']] = $row;
     }
+	
     return $array_cat_admin;
 }
 
@@ -823,24 +796,25 @@ function nv_array_cat_admin ( )
  */
 function redriect ( $msg1 = "", $msg2 = "", $nv_redirect )
 {
-    if ( empty( $nv_redirect ) )
-    {
-        $nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
-    }
-    //////////////////////////////////////////////////////////////////////
-    $contents = "<table><tr><td>";
-    $contents .= "<div align=\"center\">";
-    $contents .= "<strong>" . $msg1 . "</strong><br /><br />\n";
-    $contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\" /><br /><br />\n";
-    $contents .= "<strong><a href=\"" . $nv_redirect . "\">" . $msg2 . "</a></strong>";
-    $contents .= "</div>";
-    $contents .= "</td></tr></table>";
-    $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
-    
-    include ( NV_ROOTDIR . "/includes/header.php" );
-    echo nv_admin_theme( $contents );
-    include ( NV_ROOTDIR . "/includes/footer.php" );
-    exit();
+	global $global_config, $module_file, $module_name;
+	$xtpl = new XTemplate( "redriect.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	
+	if ( empty( $nv_redirect ) )
+	{
+		$nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+	}
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_REDIRECT', $nv_redirect );
+	$xtpl->assign( 'MSG1', $msg1 );
+	$xtpl->assign( 'MSG2', $msg2 );
+	
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
+
+	include ( NV_ROOTDIR . "/includes/header.php" );
+	echo nv_admin_theme( $contents );
+	include ( NV_ROOTDIR . "/includes/footer.php" );
+	exit();
 }
 
 ?>

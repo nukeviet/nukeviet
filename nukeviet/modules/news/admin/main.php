@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['content_list'];
 
@@ -33,7 +34,8 @@ $val_cat_content = array();
 $val_cat_content[] = array(
 	"value" => 0,
 	"selected" => ( $catid == 0 ) ? " selected=\"selected\"" : "",
-	"title" => $lang_module['search_cat_all'] );
+	"title" => $lang_module['search_cat_all']
+);
 
 $array_cat_view = array();
 foreach( $global_array_cat as $catid_i => $array_value )
@@ -91,7 +93,8 @@ foreach( $global_array_cat as $catid_i => $array_value )
 		$val_cat_content[] = array(
 			"value" => $catid_i,
 			"selected" => $sl,
-			"title" => $xtitle_i );
+			"title" => $xtitle_i
+		);
 		$array_cat_view[] = $catid_i;
 	}
 }
@@ -108,18 +111,21 @@ $array_search = array(
 	"bodytext" => $lang_module['search_bodytext'],
 	"author" => $lang_module['search_author'],
 	"admin_id" => $lang_module['search_admin'],
-	"sourcetext" => $lang_module['sources'] );
+	"sourcetext" => $lang_module['sources']
+);
 
 $array_in_rows = array(
 	"title",
 	"bodytext",
 	"author",
-	"sourcetext" );
+	"sourcetext"
+);
 
 $array_in_ordername = array(
 	"title",
 	"publtime",
-	"exptime" );
+	"exptime"
+);
 
 if( ! in_array( $stype, array_keys( $array_search ) ) )
 {
@@ -212,7 +218,8 @@ $global_array_cat[0] = array(
 	"subcatid" => 0,
 	"numlinks" => 3,
 	"description" => "",
-	"keywords" => "" );
+	"keywords" => ""
+);
 
 $search_type = array();
 foreach( $array_search as $key => $val )
@@ -220,7 +227,8 @@ foreach( $array_search as $key => $val )
 	$search_type[] = array(
 		"key" => $key,
 		"value" => $val,
-		"selected" => ( $key == $stype ) ? " selected=\"selected\"" : "" );
+		"selected" => ( $key == $stype ) ? " selected=\"selected\"" : ""
+	);
 }
 
 $i = 5;
@@ -326,7 +334,8 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		"publtime" => $publtime,
 		"status" => $lang_module['status_' . $status],
 		"username" => $username,
-		"feature" => implode( "&nbsp;-&nbsp;", $admin_funcs ) );
+		"feature" => implode( "&nbsp;-&nbsp;", $admin_funcs )
+	);
 
 	++$a;
 }
@@ -334,7 +343,8 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 $array_list_action = array(
 	'delete' => $lang_global['delete'],
 	'publtime' => $lang_module['publtime'],
-	'exptime' => $lang_module['exptime'] );
+	'exptime' => $lang_module['exptime']
+);
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$array_list_action['addtoblock'] = $lang_module['addtoblock'];

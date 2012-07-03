@@ -6,15 +6,16 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['block'];
 $set_active_op = "blockcat";
 
-$sql = "SELECT bid, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
+$sql = "SELECT `bid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
-$num = $db->sql_numrows( $result );
-if( $num > 0 )
+
+if( $db->sql_numrows( $result ) )
 {
 	$array_block = array();
 	while( list( $bid_i, $title_i ) = $db->sql_fetchrow( $result ) )
@@ -64,11 +65,17 @@ foreach( $array_block as $xbid => $blockname )
 {
 	$select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $xbid] = $blockname;
 }
-$contents = "<div id=\"module_show_list\">";
-$contents .= nv_show_block_list( $bid );
-$contents .= "</div><br />\n";
 
-$contents .= "<div id=\"add\">";
+$xtpl = new XTemplate( "block.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
+$xtpl->assign( 'BLOCK_LIST', nv_show_block_list( $bid ) );
+
 $id_array = array();
 $listid = $nv_Request->get_string( 'listid', 'get', '' );
 if( $listid == "" )
@@ -84,48 +91,32 @@ else
 $result = $db->sql_query( $sql );
 if( $db->sql_numrows( $result ) )
 {
-	$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-	$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-	$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-	$contents .= "<table class=\"tab1\">\n";
-	$contents .= " <caption>" . $lang_module['addtoblock'] . "</caption>\n";
-	$contents .= "<thead>\n";
-	$contents .= "<tr>\n";
-	$contents .= "<td align=\"center\" width=\"60\"><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
-	$contents .= "<td>" . $lang_module['name'] . "</td>\n";
-	$contents .= "</tr>\n";
-	$contents .= "</thead>\n";
 	$a = 0;
 	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
-	{
-		$class = ( $a % 2 ) ? " class=\"second\"" : "";
-		$contents .= "<tbody" . $class . ">\n";
-		$contents .= "<tr>\n";
-		$contents .= "<td align=\"center\"><input type=\"checkbox\" onclick=\"nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);\" value=\"" . $id . "\" name=\"idcheck[]\" " . ( in_array( $id, $id_array ) ? "checked" : "" ) . "></td>\n";
-		$contents .= "<td>" . $title . "</td>\n";
-		$contents .= "</tr>\n";
-		$contents .= "</tbody>\n";
-		++$a;
+	{		
+		$xtpl->assign( 'ROW', array(
+			"class" => ( $a % 2 ) ? " class=\"second\"" : "",
+			"checked" => in_array( $id, $id_array ) ? " checked=\"checked\"" : "",
+			"title" => $title,
+			"id" => $id,
+		) );
+		
+		$xtpl->parse( 'main.news.loop' );
+		++ $a;
 	}
-	$contents .= "<tfoot>\n";
-	$contents .= "<tr align=\"left\">\n";
-	$contents .= "<td align=\"center\"><input name=\"check_all[]\" type=\"checkbox\" value=\"yes\" onclick=\"nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);\" /></td>\n";
-	$contents .= "<td>";
-	$contents .= "<select name=\"bid\">\n";
+
 	foreach( $array_block as $xbid => $blockname )
 	{
-		$sl = ( $xbid == $bid ) ? " selected" : "";
-		$contents .= "<option value=\"" . $xbid . "\" " . $sl . ">" . $blockname . "</option>\n";
+		$xtpl->assign( 'BID', array( "key" => $xbid, "title" => $blockname, "selected" => $xbid == $bid ? " selected=\"selected\"" : "" ) );
+		$xtpl->parse( 'main.news.bid' );
 	}
-	$contents .= "</select><input type=\"hidden\" name =\"checkss\"value=\"" . md5( session_id() . $bid ) . "\" />";
-	$contents .= "<input name=\"submit1\" type=\"submit\" value=\"" . $lang_module['save'] . "\" />\n";
-	$contents .= "</td>\n";
-	$contents .= "</tr>\n";
-	$contents .= "</tfoot>\n";
-	$contents .= "</table>\n";
-	$contents .= "</form>\n";
+	
+	$xtpl->assign( 'CHECKSESS', md5( session_id() . $bid ) );
+	$xtpl->parse( 'main.news' );
 }
-$contents .= "</div>";
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

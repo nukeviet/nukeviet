@@ -8,6 +8,7 @@
  */
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
 $listcid = $nv_Request->get_string( 'list', 'post,get' );
 
 if( ! empty( $listcid ) )

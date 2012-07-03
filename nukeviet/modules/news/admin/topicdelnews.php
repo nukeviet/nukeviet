@@ -14,7 +14,7 @@ $id = explode( ',', $id );
 
 foreach( $id as $value )
 {
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET topicid=0 WHERE id='$value'";
+	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `topicid`=0 WHERE id='" . $value . "'";
 	$result = $db->sql_query( $sql );
 }
 

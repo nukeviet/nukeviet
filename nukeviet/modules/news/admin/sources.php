@@ -11,12 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['sources'];
 
-list( $sourceid, $title, $link, $logo, $error ) = array(
-	0,
-	"",
-	"http://",
-	"",
-	"" );
+list( $sourceid, $title, $link, $logo, $error ) = array( 0, "", "http://", "", "" );
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
@@ -60,8 +55,8 @@ if( ! empty( $savecat ) )
 	{
 		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources`" ) );
 		$weight = intval( $weight ) + 1;
-		$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_sources` (`sourceid`, `title`, `link`, `logo`, `weight`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP( ), UNIX_TIMESTAMP( ))";
-		if( $db->sql_query_insert_id( $query ) )
+		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_sources` (`sourceid`, `title`, `link`, `logo`, `weight`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP( ), UNIX_TIMESTAMP( ))";
+		if( $db->sql_query_insert_id( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " ", $admin_info['userid'] );
 			$db->sql_freeresult();
@@ -75,8 +70,8 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `title`=" . $db->dbescape( $title ) . ", `link` =  " . $db->dbescape( $link ) . ", `logo`=" . $db->dbescape( $logo ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `sourceid` =" . $sourceid;
-		$db->sql_query( $query );
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `title`=" . $db->dbescape( $title ) . ", `link` =  " . $db->dbescape( $link ) . ", `logo`=" . $db->dbescape( $logo ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `sourceid` =" . $sourceid;
+		$db->sql_query( $sql );
 		if( $db->sql_affectedrows() > 0 )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_source', "sourceid " . $sourceid, $admin_info['userid'] );

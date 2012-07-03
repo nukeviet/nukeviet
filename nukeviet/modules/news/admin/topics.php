@@ -6,7 +6,9 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
+
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+
 $page_title = $lang_module['topics'];
 
 $error = "";
@@ -33,7 +35,7 @@ if( ! empty( $savecat ) )
 	$array['description'] = strip_tags( $array['description'] );
 	$array['description'] = nv_nl2br( nv_htmlspecialchars( $array['description'] ), '<br />' );
 
-	// Xu ly anh minh ha
+	// Xu ly anh minh hoa
 	$array['image'] = filter_text_input( 'homeimg', 'post', '' );
 	if( ! nv_is_url( $array['image'] ) and file_exists( NV_DOCUMENT_ROOT . $array['image'] ) )
 	{

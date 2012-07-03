@@ -7,10 +7,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-{
-	die( 'Stop!!!' );
-}
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' ); 
 
 $page_title = $lang_module['addtotopics'];
 $contents .= "<div id=\"add\">";
