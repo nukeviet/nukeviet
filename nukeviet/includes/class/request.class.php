@@ -472,7 +472,7 @@ class Request
                     {
                         if ( preg_match( "/^[a-zA-Z\_][a-zA-Z0-9\_]*$/", $key ) )
                         {
-                            $tmp[$key] = $this->security_get( $value );
+                            $tmp[$key] = $this->security_get( $value, true );
                         }
                     }
                 }
@@ -849,20 +849,25 @@ class Request
      * @param mixed $value
      * @return
      */
-    private function security_get ( $value )
+    private function security_get ( $value, $decode = false )
     {
         if ( is_array( $value ) )
         {
             $keys = array_keys( $value );
             foreach ( $keys as $key )
             {
-                $value[$key] = $this->security_get( $value[$key] );
+                $value[$key] = $this->security_get( $value[$key], $decode );
             }
         }
         else
         {
             if ( ! empty( $value ) and ! is_numeric( $value ) )
             {
+				if( $decode == true )
+				{
+					$value = urldecode( $value );
+				}
+				
                 $value = str_replace( array( "\t", "\r", "\n", "../" ), "", $value );
                 $value = $this->unhtmlentities( $value );
                 unset( $matches );
