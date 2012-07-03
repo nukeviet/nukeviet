@@ -14,7 +14,9 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
     function nv_block_config_news_blocks ( $module, $data_block, $lang_block )
     {
         global $site_mods;
+		
         $html = "";
+		
         $html .= "<tr>";
         $html .= "	<td>" . $lang_block['blockid'] . "</td>";
         $html .= "	<td><select name=\"config_blockid\">\n";
@@ -26,10 +28,12 @@ if ( ! nv_function_exists( 'nv_news_blocks' ) )
         }
         $html .= "	</select></td>\n";
         $html .= "</tr>";
+		
         $html .= "<tr>";
         $html .= "	<td>" . $lang_block['numrow'] . "</td>";
         $html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
         $html .= "</tr>";
+		
         return $html;
     }
 
