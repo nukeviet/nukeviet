@@ -863,8 +863,8 @@ if( $db->sql_numrows( $result ) )
 
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_sources` VALUES
 		(1, 'Báo Hà Nội Mới', 'http://hanoimoi.com.vn', '', 1, 1274989177, 1274989177), 
-		(2, 'VINADES.,JSC', '', 'http://vinades.vn', 2, 1274989787, 1274989787),
-		(3, 'NukeViet', '', 'http://nukeviet.vn', 2, 1274989787, 1274989787), 
+		(2, 'VINADES.,JSC', 'http://vinades.vn', '', 2, 1274989787, 1274989787),
+		(3, 'NukeViet', 'http://nukeviet.vn', '', 2, 1274989787, 1274989787), 
 		(4, 'Báo điện tử Dân Trí', 'http://dantri.com.vn', '', 3, 1322685396, 1322685396)";
 
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_topics` VALUES
