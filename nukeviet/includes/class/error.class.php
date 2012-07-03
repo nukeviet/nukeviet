@@ -122,24 +122,24 @@ class Error
         $this->error_date = date( "r", NV_CURRENTTIME );
         $this->month = date( "m-Y", NV_CURRENTTIME );
         
-        $ip = $this->get_Env( "REMOTE_ADDR" );
-		if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
+		$ip = $this->get_Env( "REMOTE_ADDR" );
+		if( preg_match( '#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip ) )
 		{
 			$ip2long = ip2long( $ip );
 		}
 		else
 		{
-            if (substr_count($ip, '::'))
-            {
-                $ip = str_replace('::', str_repeat(':0000', 8 - substr_count($ip, ':')) . ':', $ip);
-            }
-            $ip = explode(':', $ip);
-            $r_ip = '';
-            foreach ($ip as $v)
-            {
-                $r_ip .= str_pad(base_convert($v, 16, 2), 16, 0, STR_PAD_LEFT);
-            }
-            $ip2long = base_convert($r_ip, 2, 10);		
+			if( substr_count( $ip, '::' ) )
+			{
+				$ip = str_replace( '::', str_repeat( ':0000', 8 - substr_count( $ip, ':' ) ) . ':', $ip );
+			}
+			$ip = explode( ':', $ip );
+			$r_ip = '';
+			foreach( $ip as $v )
+			{
+				$r_ip .= str_pad( base_convert( $v, 16, 2 ), 16, 0, STR_PAD_LEFT );
+			}
+			$ip2long = base_convert( $r_ip, 2, 10 );
 		}
 			
         if ( $ip2long === - 1 and $ip2long === false ) die( Error::INCORRECT_IP );
@@ -210,9 +210,7 @@ class Error
     private function get_error_log_path ( $path )
     {
         $log_path = NV_ROOTDIR;
-        $path = ltrim( rtrim( preg_replace( array( 
-            "/\\\\/", "/\/{2,}/" 
-        ), "/", $path ), "/" ), "/" );
+        $path = ltrim( rtrim( preg_replace( array( "/\\\\/", "/\/{2,}/" ), "/", $path ), "/" ), "/" );
         if ( ! empty( $path ) )
         {
             $e = explode( "/", $path );
@@ -238,7 +236,6 @@ class Error
         }
         if ( ! is_dir( $log_path . '/tmp' ) )
         {
-            //@mkdir( $log_path . '/tmp', 0777 );
             @mkdir( $log_path . '/tmp' );
         }
         if ( is_dir( $log_path . '/tmp' ) )
@@ -290,20 +287,23 @@ class Error
         $request = array();
         if ( sizeof( $_GET ) )
         {
-            foreach ( $_GET as $key => $value )
+            foreach( $_GET as $key => $value )
             {
-				$value = $this->queryCheck( $key, $value );
-				if ( $value !== false ) $request[$key] = $value;
+				if( preg_match( "/^[a-zA-Z0-9\_]+$/", $key ) and ! is_numeric( $key ) )
+				{
+					$value = $this->fixQuery( $key, $value );
+					if ( $value !== false ) $request[$key] = $value;
+				}
 			}
         }
 		
         $request = ! empty( $request ) ? '?' . http_build_query( $request ) : "";
         $request = $this->get_Env( "PHP_SELF" ) . $request;
-		
+
         return $request;
     }
 	
-	private function queryCheck( $key, $value )
+	private function fixQuery( $key, $value )
 	{
 		if( preg_match( "/^[a-zA-Z0-9\_]+$/", $key ) )
 		{
@@ -311,7 +311,7 @@ class Error
 			{
 				foreach( $value as $k => $v )
 				{
-					$_value = $this->queryCheck( $k, $v );
+					$_value = $this->fixQuery( $k, $v );
 					if( $_value !== false ) $value[$k] = $_value;
 				}
 				return $value;

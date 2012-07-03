@@ -48,7 +48,6 @@ if ( ! function_exists( 'color_hex2rgb' ) )
 
 class Request
 {
-
     const IS_HEADERS_SENT = 'Warning: Headers already sent';
 
     const INCORRECT_IP = 'Incorrect IP address specified';
@@ -179,30 +178,31 @@ class Request
         $this->engine_allowed = ( array )$config['engine_allowed'];
         if ( empty( $ip ) ) $ip = $_SERVER['REMOTE_ADDR'];
 		
-		if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
+		if( preg_match( '#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip ) )
 		{
 			$ip2long = ip2long( $ip );
 		}
 		else
 		{
-            if (substr_count($ip, '::'))
-            {
-                $ip = str_replace('::', str_repeat(':0000', 8 - substr_count($ip, ':')) . ':', $ip);
-            }
-            $ip = explode(':', $ip);
-            $r_ip = '';
-            foreach ($ip as $v)
-            {
-                $r_ip .= str_pad(base_convert($v, 16, 2), 16, 0, STR_PAD_LEFT);
-            }
-            $ip2long = base_convert($r_ip, 2, 10);			
+			if( substr_count( $ip, '::' ) )
+			{
+				$ip = str_replace( '::', str_repeat( ':0000', 8 - substr_count( $ip, ':' ) ) . ':', $ip );
+			}
+			$ip = explode( ':', $ip );
+			$r_ip = '';
+			foreach( $ip as $v )
+			{
+				$r_ip .= str_pad( base_convert( $v, 16, 2 ), 16, 0, STR_PAD_LEFT );
+			}
+			$ip2long = base_convert( $r_ip, 2, 10 );
 		}
-			
-        if ( $ip2long == - 1 || $ip2long === false )
-        {
-            trigger_error( Request::INCORRECT_IP, 256 );
-        }
-        $this->ip_addr = $ip2long;
+
+		if( $ip2long == -1 || $ip2long === false )
+		{
+			trigger_error( Request::INCORRECT_IP, 256 );
+		}
+		$this->ip_addr = $ip2long;
+
         $this->cookie_key = md5( $this->cookie_key );
         if ( ini_get( 'register_globals' ) == '1' || strtolower( ini_get( 'register_globals' ) ) == 'on' ) $this->is_register_globals = true;
         if ( function_exists( 'get_magic_quotes_gpc' ) )
@@ -280,9 +280,7 @@ class Request
             {
                 if ( $this->is_register_globals )
                 {
-                    if ( in_array( $k, array( 
-                        'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' 
-                    ) ) ) die();
+                    if ( in_array( $k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ) ) ) die();
                     unset( $GLOBALS[$k] );
                     unset( $GLOBALS[$k] );
                 }
@@ -300,9 +298,7 @@ class Request
             {
                 if ( $this->is_register_globals )
                 {
-                    if ( in_array( $k, array( 
-                        'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' 
-                    ) ) ) die();
+                    if ( in_array( $k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ) ) ) die();
                     unset( $GLOBALS[$k] );
                     unset( $GLOBALS[$k] );
                 }
@@ -320,9 +316,7 @@ class Request
             {
                 if ( $this->is_register_globals )
                 {
-                    if ( in_array( $k, array( 
-                        'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' 
-                    ) ) ) die();
+                    if ( in_array( $k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ) ) ) die();
                     unset( $GLOBALS[$k] );
                     unset( $GLOBALS[$k] );
                 }
@@ -341,9 +335,7 @@ class Request
             {
                 if ( $this->is_register_globals )
                 {
-                    if ( in_array( $k, array( 
-                        'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' 
-                    ) ) ) die();
+                    if ( in_array( $k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ) ) ) die();
                     unset( $GLOBALS[$k] );
                     unset( $GLOBALS[$k] );
                 }
@@ -356,9 +348,7 @@ class Request
         }
         $query = http_build_query( $_GET );
         $_SERVER['QUERY_STRING'] = $query;
-        $_SERVER['argv'] = array( 
-            $query 
-        );
+        $_SERVER['argv'] = array( $query );
         $this->request_uri = ( empty( $_SERVER['REQUEST_URI'] ) ) ? $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] : $_SERVER['REQUEST_URI'];
         $doc_root = isset( $_SERVER['DOCUMENT_ROOT'] ) ? $_SERVER['DOCUMENT_ROOT'] : '';
         if ( ! empty( $doc_root ) ) $doc_root = str_replace( DIRECTORY_SEPARATOR, '/', $doc_root );
@@ -395,11 +385,7 @@ class Request
             $_SERVER['DOCUMENT_ROOT'] = $doc_root;
         }
         $_SERVER['SCRIPT_FILENAME'] = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['PHP_SELF'];
-        $_SERVER['SERVER_NAME'] = preg_replace( array( 
-            '/^[a-zA-Z]+\:\/\//e' 
-        ), '', $this->get_Env( array( 
-            'SERVER_NAME', 'HTTP_HOST' 
-        ) ) );
+        $_SERVER['SERVER_NAME'] = preg_replace( array( '/^[a-zA-Z]+\:\/\//e' ), '', $this->get_Env( array( 'SERVER_NAME', 'HTTP_HOST' ) ) );
         $_SERVER['SERVER_PORT'] = $this->get_Env( "SERVER_PORT" );
         $_SERVER['SERVER_PROTOCOL'] = $this->get_Env( "SERVER_PROTOCOL" );
         $this->base_siteurl = $base_siteurl;
@@ -409,12 +395,13 @@ class Request
         $this->server_protocol = strtolower( preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'] ) ) . ( ( $this->get_Env( "HTTPS" ) == "on" ) ? "s" : "" );
         $this->server_port = ( $_SERVER['SERVER_PORT'] == "80" ) ? "" : ( ":" . $_SERVER['SERVER_PORT'] );
         
-        if(filter_var($this->server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === FALSE)
+		if( filter_var( $this->server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) === false )
 		{
-        	$this->my_current_domain = $this->server_protocol . '://' . $this->server_name . $this->server_port;
+			$this->my_current_domain = $this->server_protocol . '://' . $this->server_name . $this->server_port;
 		}
-		else{
-        	$this->my_current_domain = $this->server_protocol . '://[' . $this->server_name .']'. $this->server_port;
+		else
+		{
+			$this->my_current_domain = $this->server_protocol . '://[' . $this->server_name . ']' . $this->server_port;
 		}
 		
         $this->headerstatus = ( substr( php_sapi_name(), 0, 3 ) == 'cgi' ) ? "Status:" : $_SERVER['SERVER_PROTOCOL'];
@@ -449,14 +436,13 @@ class Request
         if ( ! empty( $this->referer ) )
         {
             $ref = @parse_url( $this->referer );
-			if(substr($ref['host'], 0, 1)=='[' AND substr($ref['host'], -1)==']'){
-				$ref['host'] = substr($ref['host'], 1, -1);
+			if( substr( $ref['host'], 0, 1 ) == '[' AND substr( $ref['host'], -1 ) == ']' )
+			{
+				$ref['host'] = substr( $ref['host'], 1, -1 );
 			}
-            if ( $ref and isset( $ref['scheme'] ) and in_array( $ref['scheme'], array( 
-                'http', 'https', 'ftp', 'gopher' 
-            ) ) and isset( $ref['host'] ) and ( preg_match( "/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/", $ref['host'] ) or filter_var($ref['host'], FILTER_VALIDATE_IP) or $ref['host'] == 'localhost' ) )
+            if( $ref and isset( $ref['scheme'] ) and in_array( $ref['scheme'], array( 'http', 'https', 'ftp', 'gopher' ) ) and isset( $ref['host'] ) and ( preg_match( "/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/", $ref['host'] ) or filter_var( $ref['host'], FILTER_VALIDATE_IP ) or $ref['host'] == 'localhost' ) )
             {
-                if ( preg_match( "/^" . preg_quote( $ref['host'] ) . "/", $this->server_name ) )
+                if( preg_match( "/^" . preg_quote( $ref['host'] ) . "/", $this->server_name ) )
                 {
                     $this->referer_key = 1;
                 }
@@ -486,7 +472,7 @@ class Request
                     {
                         if ( preg_match( "/^[a-zA-Z\_][a-zA-Z0-9\_]*$/", $key ) )
                         {
-                            $tmp[$key] = $this->security_get( urldecode( $value ) );
+                            $tmp[$key] = $this->security_get( $value );
                         }
                     }
                 }
@@ -619,9 +605,7 @@ class Request
             {
                 if ( $this->is_register_globals )
                 {
-                    if ( in_array( $k, array( 
-                        'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' 
-                    ) ) ) die();
+                    if ( in_array( $k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ) ) ) die();
                     unset( $GLOBALS[$k] );
                     unset( $GLOBALS[$k] );
                 }
@@ -879,20 +863,14 @@ class Request
         {
             if ( ! empty( $value ) and ! is_numeric( $value ) )
             {
-                $value = str_replace( array( 
-                    "\t", "\r", "\n", "../" 
-                ), "", $value );
+                $value = str_replace( array( "\t", "\r", "\n", "../" ), "", $value );
                 $value = $this->unhtmlentities( $value );
                 unset( $matches );
                 preg_match_all( '/<!\[cdata\[(.*?)\]\]>/is', $value, $matches );
                 $value = str_replace( $matches[0], $matches[1], $value );
                 $value = strip_tags( $value );
                 $value = preg_replace( '#(' . implode( '|', $this->disablecomannds ) . ')(\s*)\((.*?)\)#si', "", $value );
-                $value = str_replace( array( 
-                    "'", '"', '<', '>' 
-                ), array( 
-                    "&#039;", "&quot;", "&lt;", "&gt;" 
-                ), $value );
+                $value = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $value );
                 $value = trim( $value );
             }
         }
