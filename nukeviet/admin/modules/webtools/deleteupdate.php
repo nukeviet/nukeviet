@@ -46,7 +46,7 @@ if( $checksess ==  md5( $global_config['sitekey'] . session_id() ) and file_exis
 	}
 	
 	// Xoa file log
-	$list_file_logs = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, "/^config_update_NVUD([0-9]+)\.php$/" );
+	$list_file_logs = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, "/^config_update_NVUD([A-Z0-9]+)\.php$/" );
 	foreach( $list_file_logs as $logsfile )
 	{
 		$check_del = nv_deletefile( NV_ROOTDIR . '/' . NV_DATADIR . '/' . $logsfile );
