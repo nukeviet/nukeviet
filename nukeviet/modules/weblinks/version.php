@@ -19,9 +19,10 @@ $module_version = array(
     "author" => "VINADES (contact@vinades.vn)", //
     "note" => "",
 	"uploads_dir" => array(
-		$module_name, $module_name . "/cat",
-		$module_name . "/thumb" 
-	) 
+		$module_name,
+		$module_name . "/cat",
+		$module_name . "/thumb",
+	)
 );
 
 ?>
