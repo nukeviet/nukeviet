@@ -113,7 +113,7 @@ $lang_module['weblink_checkalivelink'] = "Zkontrolujte odkaz nástroj";
 $lang_module['weblink_check_error'] = "<span style=\"color:red\"> Neaktivní </ span> <br />";
 $lang_module['weblink_check_active'] = "Aktivní";
 $lang_module['weblink_check_confirm'] = "Pokračovat";
-$lang_module['weblink_check_notice'] = "Chcete-li zjistit, klikněte prosím na tlačítko Pokračovat <br /> Čekat na nějaký čas na dokončení <br /> <br />";
+$lang_module['weblink_check_notice'] = "Chcete-li zjistit, klikněte prosím na tlačítko Pokračovat. Čekat na nějaký čas na dokončení";
 $lang_module['weblink_link_broken'] = "Odkaz oznámit";
 $lang_module['weblink_link_broken_status'] = "Odkaz typu";
 $lang_module['weblink_link_broken_die'] = "<span style=\"color:red\"> poruše </ span>";

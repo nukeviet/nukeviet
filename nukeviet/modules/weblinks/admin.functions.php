@@ -13,11 +13,17 @@ $submenu['content'] = $lang_module['weblink_add_link'];
 $submenu['cat'] = $lang_module['weblink_catlist'];
 $submenu['brokenlink'] = $lang_module['weblink_link_broken'];
 $submenu['config'] = $lang_module['weblink_config'];
-$allow_func = array( 
-    'main', 'cat', 'change_cat', 'del_cat', 'content', 'del_link', 'config', 'multidel', 'checklink', 'brokenlink', 'delbroken' 
-);
+
+$allow_func = array( 'main', 'cat', 'change_cat', 'del_cat', 'content', 'del_link', 'config', 'multidel', 'checklink', 'brokenlink', 'delbroken' );
+
 define( 'NV_IS_FILE_ADMIN', true );
 
+/**
+ * nv_fix_cat()
+ * 
+ * @param mixed $parentid
+ * @return
+ */
 function nv_fix_cat ( $parentid )
 {
     global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
@@ -33,7 +39,16 @@ function nv_fix_cat ( $parentid )
     $db->sql_freeresult();
 }
 
-///////////////////////
+/**
+ * drawselect_number()
+ * 
+ * @param string $select_name
+ * @param integer $number_start
+ * @param integer $number_end
+ * @param integer $number_curent
+ * @param string $func_onchange
+ * @return
+ */
 function drawselect_number ( $select_name = "", $number_start = 0, $number_end = 1, $number_curent = 0, $func_onchange = "" )
 {
     $html = "<select name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
@@ -46,6 +61,15 @@ function drawselect_number ( $select_name = "", $number_start = 0, $number_end =
     return $html;
 }
 
+/**
+ * getlevel()
+ * 
+ * @param mixed $pid
+ * @param mixed $array_cat
+ * @param integer $numxtitle
+ * @param string $xkey
+ * @return
+ */
 function getlevel ( $pid, $array_cat, $numxtitle = 5, $xkey = "&nbsp;" )
 {
     $html = "";
@@ -57,6 +81,16 @@ function getlevel ( $pid, $array_cat, $numxtitle = 5, $xkey = "&nbsp;" )
     return $html;
 }
 
+/**
+ * drawselect_yesno()
+ * 
+ * @param string $select_name
+ * @param integer $curent
+ * @param string $lang_no
+ * @param string $lang_yes
+ * @param string $func_onchange
+ * @return
+ */
 function drawselect_yesno ( $select_name = "", $curent = 1, $lang_no = "", $lang_yes = "", $func_onchange = "" )
 {
     global $lang_module;

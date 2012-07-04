@@ -113,7 +113,7 @@ $lang_module['weblink_checkalivelink'] = "Outil de vérification de lien";
 $lang_module['weblink_check_error'] = "<span style=\"color:red\"> Inactif </ span> <br />";
 $lang_module['weblink_check_active'] = "Actif <br />";
 $lang_module['weblink_check_confirm'] = "Continuer";
-$lang_module['weblink_check_notice'] = "Pour vérifier, cliquez sur Continuer <br /> Merci de patienter un certain temps pour terminer <br /> <br />";
+$lang_module['weblink_check_notice'] = "Pour vérifier, cliquez sur Continuer. Merci de patienter un certain temps pour terminer.";
 $lang_module['weblink_link_broken'] = "Rapports";
 $lang_module['weblink_link_broken_status'] = "Type de lien";
 $lang_module['weblink_link_broken_die'] = "> <span Style=\"color:red\">Cassé </span>";

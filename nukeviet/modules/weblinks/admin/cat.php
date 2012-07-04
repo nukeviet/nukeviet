@@ -88,8 +88,8 @@ if( ! empty( $savecat ) )
 			}
 			else
 			{
-				$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $data_content['parentid'] ) . ", `title`=" . $db->dbescape( $data_content['title'] ) . ", `catimage` =  " . $db->dbescape( $data_content['catimage'] ) . ", `alias` =  " . $db->dbescape( $data_content['alias'] ) . ", `description`=" . $db->dbescape( $data_content['description'] ) . ", `keywords`= " . $db->dbescape( $data_content['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `catid` =" . $data_content['catid'] . "";
-				$db->sql_query( $query );
+				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $data_content['parentid'] ) . ", `title`=" . $db->dbescape( $data_content['title'] ) . ", `catimage` =  " . $db->dbescape( $data_content['catimage'] ) . ", `alias` =  " . $db->dbescape( $data_content['alias'] ) . ", `description`=" . $db->dbescape( $data_content['description'] ) . ", `keywords`= " . $db->dbescape( $data_content['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `catid` =" . $data_content['catid'] . "";
+				$db->sql_query( $sql );
 
 				if( $db->sql_affectedrows() > 0 )
 				{
@@ -135,7 +135,6 @@ else
 $lang_module['edit'] = $lang_global['edit'];
 $lang_module['delete'] = $lang_global['delete'];
 
-// get template
 $xtpl = new XTemplate( "cat.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data_content );

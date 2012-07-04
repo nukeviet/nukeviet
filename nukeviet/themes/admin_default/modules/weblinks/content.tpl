@@ -1,9 +1,9 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error --> 
-    <div class="quote" style="width:780px;">
-    <blockquote class="error"><span>{error}</span></blockquote>
-    </div>
-    <div class="clear"></div>
+<div class="quote" style="width:98%">
+	<blockquote class="error"><span>{error}</span></blockquote>
+</div>
+<div class="clear"></div>
 <!-- END: error --> 
 <div id="list_mods">
     <form action="" method="post">

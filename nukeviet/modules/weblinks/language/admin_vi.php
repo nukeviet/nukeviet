@@ -113,7 +113,7 @@ $lang_module['weblink_checkalivelink'] = "Công cụ check link";
 $lang_module['weblink_check_error'] = " <span style=\"color:red\">Không hoạt động</span><br />";
 $lang_module['weblink_check_active'] = " Hoạt động<br />";
 $lang_module['weblink_check_confirm'] = "Tiếp tục";
-$lang_module['weblink_check_notice'] = "Để bắt đầu kiểm tra, hãy click vào nút Tiếp tục<br />Việc này tốn một ít thời gian và bạn phải chờ cho đến khi quá trình hoàn thành<br /><br />";
+$lang_module['weblink_check_notice'] = "Để bắt đầu kiểm tra, hãy click vào nút Tiếp tục. Việc này tốn một ít thời gian và bạn phải chờ cho đến khi quá trình hoàn thành";
 $lang_module['weblink_link_broken'] = "Báo cáo link";
 $lang_module['weblink_link_broken_status'] = "Loại link";
 $lang_module['weblink_link_broken_die'] = "<span style=\"color:red\">Hỏng</span>";

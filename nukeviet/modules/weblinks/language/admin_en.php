@@ -111,7 +111,7 @@ $lang_module['weblink_checkalivelink'] = "Check link tool";
 $lang_module['weblink_check_error'] = "<span style=\"color:red\">Deactive</span><br />";
 $lang_module['weblink_check_active'] = "Active <br />";
 $lang_module['weblink_check_confirm'] = "Continue";
-$lang_module['weblink_check_notice'] = "To check, Please click Continue button<br />Wait for some time to finish<br /><br />";
+$lang_module['weblink_check_notice'] = "To check, Please click Continue button. Wait for some time to finish";
 $lang_module['weblink_link_broken'] = "Link notify";
 $lang_module['weblink_link_broken_status'] = "Link type";
 $lang_module['weblink_link_broken_die'] = "<span style=\"color:red\">Fail</span>";

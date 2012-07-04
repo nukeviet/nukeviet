@@ -35,7 +35,7 @@ $array_mod_title = array();
 $global_array_cat = array();
 global $weblinks_config;
 
-//Xac dinh RSS
+// Xac dinh RSS
 if( $module_info['rss'] )
 {
 	$rss[] = array( //
@@ -53,7 +53,7 @@ while( $row = $db->sql_fetchrow( $result, 2 ) )
 }
 unset( $sql, $result );
 
-$sql = "SELECT `catid`, `parentid`, `title`, `description`, `catimage`, `alias`, `keywords`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `inhome`='1' ORDER BY parentid, weight";
+$sql = "SELECT `catid`, `parentid`, `title`, `description`, `catimage`, `alias`, `keywords`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `inhome`='1' ORDER BY `parentid`, `weight`";
 $result = $db->sql_query( $sql );
 
 while( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alias_i, $keywords_i ) = $db->sql_fetchrow( $result ) )
@@ -141,7 +141,8 @@ if( ! empty( $array_op ) )
 			$array_mod_title[] = array(
 				'catid' => $parentid,
 				'title' => $array_cat_i['title'],
-				'link' => $array_cat_i['link'] );
+				'link' => $array_cat_i['link']
+			);
 			$parentid = $array_cat_i['parentid'];
 		}
 		sort( $array_mod_title, SORT_NUMERIC );
