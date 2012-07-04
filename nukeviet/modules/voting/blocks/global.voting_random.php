@@ -11,7 +11,6 @@ if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 if ( ! nv_function_exists( 'nv_block_voting' ) )
 {
-
     /**
      * nv_block_voting()
      * 
