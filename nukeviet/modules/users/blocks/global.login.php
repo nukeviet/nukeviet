@@ -6,6 +6,7 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 3/25/2010 18:6
  */
+
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $openid_servers, $lang_module;

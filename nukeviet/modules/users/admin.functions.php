@@ -10,6 +10,7 @@
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_FILE_ADMIN', true );
+
 $submenu['user_add'] = $lang_module['user_add'];
 $submenu['user_waiting'] = $lang_module['member_wating'];
 $submenu['groups'] = $lang_global['mod_groups'];
@@ -22,14 +23,14 @@ $allow_func = array( 'main', 'del', 'setactive', 'user_add', 'edit', 'user_waiti
 /**
  * groupList()
  * 
- * @return void
+ * @return
  */
 function groupList()
 {
     global $db;
 
-    $query = "SELECT * FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
-    $result = $db->sql_query( $query );
+    $sql = "SELECT * FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
+    $result = $db->sql_query( $sql );
 
     $groups = array();
     while ( $row = $db->sql_fetchrow( $result ) )
@@ -40,12 +41,17 @@ function groupList()
     return $groups;
 }
 
+/**
+ * nv_fix_question()
+ * 
+ * @return
+ */
 function nv_fix_question()
 {
     global $db;
 
-    $query = "SELECT `qid` FROM `" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
-    $result = $db->sql_query( $query );
+    $sql = "SELECT `qid` FROM `" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
+    $result = $db->sql_query( $sql );
     $weight = 0;
     while ( $row = $db->sql_fetchrow( $result ) )
     {

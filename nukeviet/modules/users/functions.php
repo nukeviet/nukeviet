@@ -10,8 +10,17 @@
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_USER', true );
+
 $lang_module['in_groups'] = $lang_global['in_groups'];
 
+/**
+ * validUserLog()
+ * 
+ * @param mixed $array_user
+ * @param mixed $remember
+ * @param mixed $opid
+ * @return
+ */
 function validUserLog( $array_user, $remember, $opid )
 {
     global $db, $client_info, $crypt, $nv_Request;
@@ -29,7 +38,8 @@ function validUserLog( $array_user, $remember, $opid )
         'current_login' => NV_CURRENTTIME, //
         'last_login' => intval( $array_user['last_login'] ), //
         'last_openid' => $array_user['last_openid'], //
-        'current_openid' => $opid );
+        'current_openid' => $opid
+	);
 
     $user = nv_base64_encode( serialize( $user ) );
 

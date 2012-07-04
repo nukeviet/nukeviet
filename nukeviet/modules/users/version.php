@@ -10,16 +10,16 @@
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $module_version = array( //
-    "name" => "Users", //
-    "modfuncs" => "main,login,logout,register,lostpass,changepass,active,editinfo,lostactivelink,openid,regroups", //
-    "submenu" => "main,login,logout,register,lostpass,changepass,active,openid,editinfo,lostactivelink,regroups", //
-    "is_sysmod" => 1, //
-    "virtual" => 0, //
-    "version" => "3.0.01", //
-    "date" => "Wed, 20 Oct 2010 00:00:00 GMT", //
-    "author" => "VINADES (contact@vinades.vn)", //
-    "note" => "", //
-    "uploads_dir" => array( $module_name ) //
-    );
+	"name" => "Users", //
+	"modfuncs" => "main,login,logout,register,lostpass,changepass,active,editinfo,lostactivelink,openid,regroups", //
+	"submenu" => "main,login,logout,register,lostpass,changepass,active,openid,editinfo,lostactivelink,regroups", //
+	"is_sysmod" => 1, //
+	"virtual" => 0, //
+	"version" => "3.0.01", //
+	"date" => "Wed, 20 Oct 2010 00:00:00 GMT", //
+	"author" => "VINADES (contact@vinades.vn)", //
+	"note" => "", //
+	"uploads_dir" => array( $module_name ) //
+);
 
 ?>

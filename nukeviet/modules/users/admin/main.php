@@ -6,6 +6,7 @@
  * @Copyright(C) 2010 VINADES. All rights reserved
  * @Createdate 04/05/2010 
  */
+
 if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];

@@ -75,28 +75,30 @@ else
 
 if ( ! empty( $content ) ) $content = nv_htmlspecialchars( $content );
 
-$contents = "";
+$xtpl = new XTemplate( "siteterms.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
 
 if ( ! empty( $error ) )
 {
-    $contents .= "<div class=\"quote\" style=\"width:780px;\">\n";
-    $contents .= "<blockquote class=\"error\"><span>" . $error . "</span></blockquote>\n";
-    $contents .= "</div>\n";
-    $contents .= "<div class=\"clear\"></div>\n";
+	$xtpl->assign( 'ERROR', $error );
+	$xtpl->parse( 'main.error' );
 }
 
-$contents .= "<form action=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "\" method=\"post\">";
-$contents .= "<input type=\"hidden\" name =\"save\"value=\"1\" />";
 if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
-    $contents .= nv_aleditor( "content", '100%', '300px', $content );
+    $data = nv_aleditor( "content", '100%', '300px', $content );
 }
 else
 {
-    $contents .= "<textarea style=\"width: 100%\" name=\"content\" id=\"content\" cols=\"20\" rows=\"8\">" . $content . "</textarea>";
+    $data = "<textarea style=\"width: 100%\" name=\"content\" id=\"content\" cols=\"20\" rows=\"8\">" . $content . "</textarea>";
 }
-$contents .= "<div style=\"text-align:center;padding-top:15px\"><input name=\"submit1\" type=\"submit\" value=\"" . $lang_global['save'] . "\" /></div>\n";
-$contents .= "</form>\n";
+
+$xtpl->assign( 'DATA', $data );
+
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

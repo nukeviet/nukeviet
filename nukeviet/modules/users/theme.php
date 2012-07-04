@@ -7,11 +7,17 @@
  * @createdate 10/03/2010 10:51
  */
 
-if ( ! defined( 'NV_IS_MOD_USER' ) )
-{
-    die( 'Stop!!!' );
-}
+if ( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
+/**
+ * user_register()
+ * 
+ * @param mixed $gfx_chk
+ * @param mixed $array_register
+ * @param mixed $siteterms
+ * @param mixed $data_questions
+ * @return
+ */
 function user_register ( $gfx_chk, $array_register, $siteterms, $data_questions )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
@@ -57,6 +63,15 @@ function user_register ( $gfx_chk, $array_register, $siteterms, $data_questions 
     return $xtpl->text( 'main' );
 }
 
+/**
+ * openid_register()
+ * 
+ * @param mixed $gfx_chk
+ * @param mixed $array_register
+ * @param mixed $siteterms
+ * @param mixed $data_questions
+ * @return
+ */
 function openid_register ( $gfx_chk, $array_register, $siteterms, $data_questions )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $nv_redirect;
@@ -101,6 +116,13 @@ function openid_register ( $gfx_chk, $array_register, $siteterms, $data_question
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_login()
+ * 
+ * @param mixed $gfx_chk
+ * @param mixed $array_login
+ * @return
+ */
 function user_login ( $gfx_chk, $array_login )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $openid_servers;
@@ -161,6 +183,14 @@ function user_login ( $gfx_chk, $array_login )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_openid_login()
+ * 
+ * @param mixed $gfx_chk
+ * @param mixed $array_login
+ * @param mixed $attribs
+ * @return
+ */
 function user_openid_login ( $gfx_chk, $array_login, $attribs )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $openid_servers;
@@ -215,6 +245,13 @@ function user_openid_login ( $gfx_chk, $array_login, $attribs )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_openid_login2()
+ * 
+ * @param mixed $attribs
+ * @param mixed $array_user_login
+ * @return
+ */
 function user_openid_login2 ( $attribs, $array_user_login )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $openid_servers, $nv_redirect;
@@ -251,6 +288,13 @@ function user_openid_login2 ( $attribs, $array_user_login )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_lostpass()
+ * 
+ * @param mixed $data
+ * @param mixed $question
+ * @return
+ */
 function user_lostpass ( $data, $question )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
@@ -290,6 +334,13 @@ function user_lostpass ( $data, $question )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_lostactivelink()
+ * 
+ * @param mixed $data
+ * @param mixed $question
+ * @return
+ */
 function user_lostactivelink ( $data, $question )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
@@ -329,6 +380,12 @@ function user_lostactivelink ( $data, $question )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_changepass()
+ * 
+ * @param mixed $array_data
+ * @return
+ */
 function user_changepass ( $array_data = array() )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
@@ -374,6 +431,12 @@ function user_changepass ( $array_data = array() )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_changequestion()
+ * 
+ * @param mixed $array_data
+ * @return
+ */
 function user_changequestion ( $array_data )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
@@ -430,6 +493,12 @@ function user_changequestion ( $array_data )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_info()
+ * 
+ * @param mixed $data
+ * @return
+ */
 function user_info ( $data )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
@@ -489,6 +558,11 @@ function user_info ( $data )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_welcome()
+ * 
+ * @return
+ */
 function user_welcome ( )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $user_info, $lang_global;
@@ -576,6 +650,12 @@ function user_welcome ( )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_info_exit()
+ * 
+ * @param mixed $info
+ * @return
+ */
 function user_info_exit ( $info )
 {
     global $module_info, $module_file;
@@ -586,6 +666,13 @@ function user_info_exit ( $info )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * openid_account_confirm()
+ * 
+ * @param mixed $gfx_chk
+ * @param mixed $attribs
+ * @return
+ */
 function openid_account_confirm ( $gfx_chk, $attribs )
 {
     global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $openid_servers, $nv_redirect;
@@ -633,6 +720,13 @@ function openid_account_confirm ( $gfx_chk, $attribs )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * openid_active_confirm()
+ * 
+ * @param mixed $gfx_chk
+ * @param mixed $attribs
+ * @return
+ */
 function openid_active_confirm ( $gfx_chk, $attribs )
 {
     global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $openid_servers;
@@ -679,6 +773,12 @@ function openid_active_confirm ( $gfx_chk, $attribs )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * user_openid_administrator()
+ * 
+ * @param mixed $data
+ * @return
+ */
 function user_openid_administrator ( $data )
 {
     global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $global_config, $openid_servers;
@@ -744,6 +844,12 @@ function user_openid_administrator ( $data )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * nv_regroup_theme()
+ * 
+ * @param mixed $groups
+ * @return
+ */
 function nv_regroup_theme( $groups )
 {
 	global $module_info, $module_file, $module_name, $lang_module;

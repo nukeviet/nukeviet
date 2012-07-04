@@ -13,6 +13,12 @@ $page_title = $lang_module['config'];
 
 $array_config = array();
 
+/**
+ * valid_name_config()
+ * 
+ * @param mixed $array_name
+ * @return
+ */
 function valid_name_config ( $array_name )
 {
     $array_retutn = array();
