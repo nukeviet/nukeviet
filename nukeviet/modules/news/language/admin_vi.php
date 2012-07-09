@@ -64,6 +64,7 @@ $lang_module['delcat_msg_cat'] = "Chuyên mục này có %s Chuyên mục thành
 $lang_module['delcat_msg_rows'] = "Chuyên mục có %s bài viết, bạn có chắc chắn xóa hoặc di chuyển sang Chuyên mục khác";
 $lang_module['delcat_msg_rows_select'] = "Chú ý: Chuyên mục %1\$s có %2\$s bài viết. <br />Bạn xóa Chuyên mục này tức là xóa tất cả bài viết bên trong nó.";
 $lang_module['delcat_msg_rows_move'] = "Hoặc chọn Chuyên mục để di chuyển bài viết tới";
+$lang_module['delcat_msg_cat_permissions'] = "Bạn không có quyền thực hiện thao tác này";
 $lang_module['delcatandrows'] = "Xóa Chuyên mục và các bài viết";
 $lang_module['delcat_msg_rows_noselect'] = "Bạn cần chọn Chuyên mục để di chuyển bài viết tới";
 $lang_module['deltopic_msg_rows'] = "nhóm tin liên quan có %s bài viết, bạn có chắc chắn xóa, khi đó nhóm tin liên quan sẽ bị xóa khỏi các bài viết.";
