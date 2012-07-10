@@ -253,7 +253,20 @@ $client_info['is_bot'] = ( ! empty( $client_info['bot_info'] ) ) ? 1 : 0;
 if( $client_info['is_bot'] and empty( $client_info['bot_info']['allowed'] ) ) trigger_error( 'Sorry! Website does not support the bot', 256 );
 
 //Xac dinh borwser cua client
-$client_info['browser'] = $client_info['is_bot'] ? array( 'key' => "Unknown", 'name' => 'Unknown' ) : array_combine( array( 'key', 'name' ), explode( "|", nv_getBrowser( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
+if ( $client_info['is_bot'] )
+{
+	$client_info['browser'] = array(
+		'key' => "Unknown",
+		'name' => 'Unknown',
+		'version' => 0 );
+}
+else
+{
+	$client_info['browser'] = array_combine( array( 'key', 'name' ), explode( "|", nv_getBrowser( NV_USER_AGENT, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
+	preg_match( "/^([^0-9]+)([0-9]+)\.(.*)$/", $client_info['browser']['name'], $matches );
+	$client_info['browser']['version'] = ( int )$matches[2];
+	unset( $matches );
+}
 
 //Xac dinh co phai truy cap bang mobile hay khong
 $client_info['is_mobile'] = nv_checkmobile( NV_ROOTDIR . '/includes/ini/mobile.ini' );

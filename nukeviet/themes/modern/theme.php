@@ -27,11 +27,7 @@ function nv_site_theme( $contents )
 	}
 	else
 	{
-		unset( $matches );
-		preg_match( "/^([^0-9]+)([0-9]+)\.(.*)$/", $client_info['browser']['name'], $matches );
-		$ieversion = ( int )$matches[2];
-	
-		if( $ieversion == 6 )
+		if( $client_info['browser']['version'] == 6 )
 		{
 			$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/ie6.css\" />\n";
 			$js .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/fix-png-ie6.js\"></script>\n";
@@ -41,7 +37,7 @@ function nv_site_theme( $contents )
 		{
 			$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/gtie6.css\" />\n";
 		
-			if( $ieversion >= 9 )
+			if( $client_info['browser']['version'] >= 9 )
 			{
 				$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/ie9.css\" />\n";
 			}

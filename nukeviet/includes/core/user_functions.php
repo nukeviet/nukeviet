@@ -168,21 +168,15 @@ function nv_setBlockAllowed( $groups_view )
  */
 function nv_blocks_content( $sitecontent )
 {
-	global $db, $module_info, $module_name, $op, $global_config, $lang_global, $site_mods, $user_info;
+	global $db, $module_info, $module_name, $op, $global_config, $lang_global, $site_mods, $user_info, $themeConfig;
 
-	//Lay danh sach cac nhom block trong config.ini
-	$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini' );
-	$_content = $xml->xpath( 'positions' );
-	$_position = $_content[0]->position;
 	$_posAllowed = array();
-	
-	foreach( $_position as $_pos )
+
+	foreach ( $themeConfig['positions']['position'] as $_pos )
 	{
-		$_pos = trim( ( string )$_pos->tag );
-		if( preg_match( "/^\[([^\]]+)\]$/is", $_pos, $matches ) )
-		{
-			$_posAllowed[] = $matches[1];
-		}
+		$_pos = trim( ( string )$_pos['tag'] );
+		unset( $matches );
+		if ( preg_match( "/^\[([^\]]+)\]$/is", $_pos, $matches ) ) $_posAllowed[] = $matches[1];
 	}
 
 	if( empty( $_posAllowed ) ) return $sitecontent;

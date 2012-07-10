@@ -201,6 +201,9 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				$cache = serialize( $module_info['layout_funcs'] );
 				nv_set_cache( $cache_file, $cache );
 			}
+            
+            //Doc file cau hinh giao dien
+            $themeConfig = nv_object2array( simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini' ) );
 			require( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/theme.php" );
 
 			// Ket noi ngon ngu theo theme
