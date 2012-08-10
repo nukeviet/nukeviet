@@ -201,6 +201,58 @@
             </tr>
         </tbody>
         <!-- END: group_empty -->
+        <tbody class="second">
+            <tr>
+                <td style="vertical-align:top">
+                    {LANG.who_view}
+                </td>
+                <td>
+                    <select name="who_view">
+                        <!-- BEGIN: who_view -->
+                        <option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
+                        <!-- END: who_view -->
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+        <!-- BEGIN: group_empty_view -->
+        <tbody>
+            <tr>
+                <td>{LANG.groups_upload}</td>
+                <td style="white-space: nowrap">
+                    <!-- BEGIN: groups_view -->
+                    <input name="groups_view[]" value="{GROUPS_VIEW.key}" type="checkbox"{GROUPS_VIEW.checked} /> {GROUPS_VIEW.title}<br />
+                    <!-- END: groups_view -->
+                </td>
+            </tr>
+        </tbody>
+        <!-- END: group_empty_view -->
+        <tbody class="second">
+            <tr>
+                <td style="vertical-align:top">
+                    {LANG.who_download}
+                </td>
+                <td>
+                    <select name="who_download">
+                        <!-- BEGIN: who_download -->
+                        <option value="{WHO_DOWNLOAD.key}"{WHO_DOWNLOAD.selected}>{WHO_DOWNLOAD.title}</option>
+                        <!-- END: who_download -->
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+        <!-- BEGIN: group_empty_download -->
+        <tbody>
+            <tr>
+                <td>{LANG.groups_upload}</td>
+                <td style="white-space: nowrap">
+                    <!-- BEGIN: groups_download -->
+                    <input name="groups_download[]" value="{GROUPS_DOWNLOAD.key}" type="checkbox"{GROUPS_DOWNLOAD.checked} /> {GROUPS_DOWNLOAD.title}<br />
+                    <!-- END: groups_download -->
+                </td>
+            </tr>
+        </tbody>
+        <!-- END: group_empty_download -->
     </table>
     
     <div style="textarea-align:center;padding-top:15px">

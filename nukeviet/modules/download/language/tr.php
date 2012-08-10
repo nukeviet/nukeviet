@@ -121,4 +121,7 @@ $lang_module['search_result'] = "Arama Sonuçları";
 $lang_module['search_noresult'] = "No data suitable to your requirements!";
 $lang_module['upload_files_log'] = "Yeni dosya Mesaj";
 
+$lang_module['error_not_permission_title'] = "Üzgünüz, bu belge görüntülemek için izniniz yok!";
+$lang_module['error_not_permission_content'] = "Yönetici belgenin içeriğine erişim erişmesine izin verilmez. Decode cevap olmak için lütfen bize ulaşın";
+
 ?>

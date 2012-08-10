@@ -121,4 +121,7 @@ $lang_module['search_result'] = "Résultats de la recherche";
 $lang_module['search_noresult'] = "Pas de données adaptées à vos besoins!";
 $lang_module['upload_files_log'] = "Poster un nouveau fichier";
 
+$lang_module['error_not_permission_title'] = "Désolé, vous n'avez pas la permission pour voir le document présent!";
+$lang_module['error_not_permission_content'] = "Administrateur n'est pas vous permettre d'accéder l'accès au contenu du document. S'il vous plaît Contactez-nous pour être la réponse de décodage";
+
 ?>

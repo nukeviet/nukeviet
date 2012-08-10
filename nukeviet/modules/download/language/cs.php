@@ -120,4 +120,7 @@ $lang_module['search_option'] = "Vyberte téma";
 $lang_module['search_result'] = "Výsledky vyhledávání";
 $lang_module['search_noresult'] = "Žádné údaje vhodné pro vaše požadavky!";
 
+$lang_module['error_not_permission_title'] = "Je nám líto, nemáte oprávnění k prohlížení tohoto dokumentu!";
+$lang_module['error_not_permission_content'] = "Administrátor není Vám umožní přístup přístup k obsahu dokumentu. Prosím, kontaktujte nás, že dekódovat odpověď";
+
 ?>

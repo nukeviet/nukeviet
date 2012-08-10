@@ -121,4 +121,7 @@ $lang_module['search_result'] = "Kết quả tìm kiếm";
 $lang_module['search_noresult'] = "Không có dữ liệu phù hợp với yêu cầu của bạn !";
 $lang_module['upload_files_log'] = "Đăng file mới";
 
+$lang_module['error_not_permission_title'] = "Xin lỗi, Bạn không có quyền xem chi tiết tài liệu này!";
+$lang_module['error_not_permission_content'] = "Quản trị không cho phép bạn truy cập vào nội dung của tài liệu. Vui lòng liên hệ BQT để được giải đáp";
+
 ?>
