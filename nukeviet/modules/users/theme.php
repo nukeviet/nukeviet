@@ -922,7 +922,16 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 function nv_memberslist_detail_theme( $item )
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $lang_global;
-    $xtpl = new XTemplate( "viewdetailusers.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+    
+    if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/viewdetailusers.tpl" ) )
+    {
+        $block_theme = $module_info['template'];
+    }
+    else
+    {
+        $block_theme = "default";
+    }
+    $xtpl = new XTemplate( "viewdetailusers.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
 

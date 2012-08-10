@@ -15,6 +15,12 @@
 		<option value="{SEARCH_TYPE.key}" {SEARCH_TYPE.selected} >{SEARCH_TYPE.value}</option>
 		<!-- END: search_type -->
 	</select>
+    <label>{LANG.search_status}: </label>
+	<select name="sstatus">
+		<!-- BEGIN: search_status -->
+		<option value="{SEARCH_STATUS.key}" {SEARCH_STATUS.selected} >{SEARCH_STATUS.value}</option>
+		<!-- END: search_status -->
+	</select>
 	<label>{LANG.search_per_page}: </label>
 	<select name="per_page">
 		<!-- BEGIN: s_per_page -->
