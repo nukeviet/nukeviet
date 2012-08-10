@@ -94,6 +94,7 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 						{
 							$in_submenu_users = array();
 							$in_submenu_users[] = "changepass";
+                            $in_submenu_users[] = "memberlist";
 							if( defined( 'NV_OPENID_ALLOWED' ) )
 							{
 								$in_submenu_users[] = "openid";
@@ -108,7 +109,8 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 							$in_submenu_users = array(
 								"login",
 								"register",
-								"lostpass" );
+								"lostpass",
+								"memberlist" );
 						}
 						foreach( $modvalues['funcs'] as $key => $sub_item )
 						{
