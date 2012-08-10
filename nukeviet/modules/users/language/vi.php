@@ -208,4 +208,9 @@ $lang_module['re_remove'] = "Đăng ký hoặc bỏ nhóm thành công";
 $lang_module['account_change_mail_ok'] = "Địa chỉ email đã được xác nhận thành công";
 $lang_module['account_change_mail_error'] = "Có lỗi trong quá trình xác nhận địa chỉ email, hãy liên hệ với quản trị site để được hướng dẫn.";
 
+$lang_module['allow_admin'] = "Tính năng này chỉ giới hạn cho quản trị được phép truy cập.";
+$lang_module['allow_user'] = "Tính năng này chỉ giới hạn cho thành viên được phép truy cập.";
+$lang_module['listusers'] = "Danh sách thành viên";
+$lang_module['notuser'] = "Không tồn tại thành viên nào theo lựa chọn này !";
+
 ?>

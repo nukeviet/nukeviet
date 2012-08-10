@@ -199,4 +199,12 @@ $lang_module['error_update_users_info'] = "Error: System cannot update your user
 $lang_module['account_active_log'] = "Hesabınızı etkinleştirin";
 $lang_module['openid_add'] = "Yeni bir OpenID ekle";
 
+$lang_module['account_change_mail_ok'] = "E-posta adresi başarıyla onaylandı";
+$lang_module['account_change_mail_error'] = "E-posta adresi doğrulama sırasında hataları vardı, talimatlar için site yöneticisi ile irtibata geçiniz.";
+
+$lang_module['allow_admin'] = "Bu özellik, yöneticilerin yetkisiz erişimi sınırlamak için olanak sağlar.";
+$lang_module['allow_user'] = "This özelliğe erişmek için izin üyeleri ile sınırlıdır.";
+$lang_module['listusers'] = "Üye Listesi";
+$lang_module['notuser'] = "Üyeler bu seçeneği altında yok!";
+
 ?>

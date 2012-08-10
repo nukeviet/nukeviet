@@ -204,4 +204,12 @@ $lang_module['no_set'] = "Il n'existe actuellement aucun groupe public établi";
 $lang_module['re_remove'] = "S'inscrire ou quitter le groupe avec succès";
 $lang_module['in_group'] = "S'enregistrer au Groupe";
 
+$lang_module['account_change_mail_ok'] = "Adresse e-mail a été validé avec succès";
+$lang_module['account_change_mail_error'] = "Il y avait des erreurs lors de la validation des adresses e-mail, s'il vous plaît contactez l'administrateur du site pour obtenir des instructions.";
+
+$lang_module['allow_admin'] = "Cette fonctionnalité permet aux administrateurs de limiter l'accès non autorisé.";
+$lang_module['allow_user'] = "La fonction est limitée aux membres sont autorisés à accéder.";
+$lang_module['listusers'] = "Liste des membres";
+$lang_module['notuser'] = "Les membres n'existent pas en vertu de cette option!";
+
 ?>

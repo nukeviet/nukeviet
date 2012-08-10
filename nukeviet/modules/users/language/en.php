@@ -202,4 +202,13 @@ $lang_module['no_set'] = "There are currently any established public group";
 $lang_module['re_remove'] = "Register or quit the group successfully";
 $lang_module['in_group'] = "Register in Group";
 
+$lang_module['account_change_mail_ok'] = "Email address has been successfully validated";
+$lang_module['account_change_mail_error'] = "There were errors during address validation email, please contact the site administrator for instructions.";
+
+$lang_module['allow_admin'] = "This feature allows administrators to limit unauthorized access.";
+$lang_module['allow_user'] = "This feature is limited to members are allowed to access.";
+$lang_module['listusers'] = "Members List";
+$lang_module['notuser'] = "Members do not exist under this option!";
+
+
 ?>

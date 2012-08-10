@@ -197,4 +197,12 @@ $lang_module['openid_add_new'] = "Přidat další OpenID na svůj účet";
 $lang_module['email_is_exists'] = "Váš email OpenID byla použitá. <br /> Prosím, vyberte jiný OpenID";
 $lang_module['error_update_users_info'] = "Chyba: Systém nemůže aktualizovat informace  svého uživatele,kontaktujte  se prosím na webu admin.";
 
+$lang_module['account_change_mail_ok'] = "E-mailová adresa byla úspěšně ověřena";
+$lang_module['account_change_mail_error'] = "Byly tam chyby při e-mailové adresy ověřování, prosím, kontaktujte správce pokyny. Tato funkce umožňuje administrátorům omezit neoprávněný přístup.";
+
+$lang_module['allow_admin'] = "Ttato funkce je omezena na členy jsou povolen přístup.";
+$lang_module['allow_user'] = "La fonction est limitée aux membres sont autorisés à accéder.";
+$lang_module['listusers'] = "Seznam členů";
+$lang_module['notuser'] = "Členové neexistují rámci této možnosti!";
+
 ?>
