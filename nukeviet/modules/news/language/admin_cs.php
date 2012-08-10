@@ -91,6 +91,7 @@ $lang_module['viewcat_grid_new'] = "nové kolonky nahoru";
 $lang_module['viewcat_grid_old'] = "staré kolonky nahoru";
 $lang_module['search'] = "Hledání";
 $lang_module['search_type'] = "Vyhledávání podle";
+$lang_module['search_status'] = "Postavení";
 $lang_module['search_id'] = "ID";
 $lang_module['search_key'] = "Klíčové slovo";
 $lang_module['search_cat'] = "Kategorie";
