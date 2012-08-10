@@ -89,6 +89,7 @@ $lang_module['viewcat_grid_new'] = "grid, new front";
 $lang_module['viewcat_grid_old'] = "grid, old front";
 $lang_module['search'] = "Search";
 $lang_module['search_type'] = "Search by";
+$lang_module['search_status'] = "Status";
 $lang_module['search_id'] = "ID";
 $lang_module['search_key'] = "Key word";
 $lang_module['search_cat'] = "Categories";

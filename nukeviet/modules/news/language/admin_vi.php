@@ -92,6 +92,7 @@ $lang_module['viewcat_grid_new'] = "theo lưới, mới lên trên";
 $lang_module['viewcat_grid_old'] = "theo lưới, cũ lên trên";
 $lang_module['search'] = "Tìm kiếm";
 $lang_module['search_type'] = "Tìm kiếm theo";
+$lang_module['search_status'] = "Trạng thái";
 $lang_module['search_id'] = "ID";
 $lang_module['search_key'] = "Từ khóa tìm kiếm";
 $lang_module['search_cat'] = "Chuyên mục bài viết";

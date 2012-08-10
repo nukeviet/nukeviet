@@ -91,6 +91,7 @@ $lang_module['viewcat_grid_new'] = "grid, new front";
 $lang_module['viewcat_grid_old'] = "grid, old front";
 $lang_module['search'] = "Arama";
 $lang_module['search_type'] = "Ara";
+$lang_module['search_status'] = "Durum";
 $lang_module['search_id'] = "ID";
 $lang_module['search_key'] = "Anahtar kelime";
 $lang_module['search_cat'] = "Kategoriler";

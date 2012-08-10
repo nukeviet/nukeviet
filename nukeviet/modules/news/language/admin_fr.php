@@ -91,6 +91,7 @@ $lang_module['viewcat_grid_new'] = "par grille, nouveau en haut";
 $lang_module['viewcat_grid_old'] = "par grille, ancien en haut";
 $lang_module['search'] = "Rechercher";
 $lang_module['search_type'] = "Recherche par";
+$lang_module['search_status'] = "Statut";
 $lang_module['search_id'] = "ID";
 $lang_module['search_key'] = "Mot clé";
 $lang_module['search_cat'] = "Catégorie";
