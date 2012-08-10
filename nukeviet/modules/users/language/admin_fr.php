@@ -200,4 +200,9 @@ $lang_module['addMemberToGroup'] = "Ajouter un membre au groupe";
 $lang_module['detail'] = "Détails";
 $lang_module['exclude_user2'] = "Retirer du groupe";
 
+$lang_module['whoviewlistuser'] = "Qui peut voir une liste des membres";
+$lang_module['whoview_all'] = "Tous";
+$lang_module['whoview_user'] = "Utilisateur";
+$lang_module['whoview_admin'] = "Administrateur";
+
 ?>

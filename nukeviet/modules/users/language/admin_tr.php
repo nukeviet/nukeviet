@@ -164,4 +164,9 @@ $lang_module['exclude_user'] = "Grupta %1\$s kullanıcı sil %2\$s";
 $lang_module['siteinfo_user'] = "Kullanıcılar";
 $lang_module['siteinfo_waiting'] = "Pasif Kullanıcılar";
 
+$lang_module['whoviewlistuser'] = "Kimler üye listesini görebilirsiniz";
+$lang_module['whoview_all'] = "Tüm";
+$lang_module['whoview_user'] = "Kullanıcı";
+$lang_module['whoview_admin'] = "Yönetici";
+
 ?>

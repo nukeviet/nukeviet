@@ -215,4 +215,10 @@ $lang_module['ChangeConfigModule'] = "Thay đổi cấu hình module";
 $lang_module['active_users'] = "Kích hoạt thành viên";
 $lang_module['unactive_users'] = "Ngưng Kích hoạt thành viên";
 
+//cau hinh xem danh sach thanh vien
+$lang_module['whoviewlistuser'] = "Ai được xem danh sách thành viên";
+$lang_module['whoview_all'] = "Tất cả";
+$lang_module['whoview_user'] = "Thành viên";
+$lang_module['whoview_admin'] = "Quản trị";
+
 ?>

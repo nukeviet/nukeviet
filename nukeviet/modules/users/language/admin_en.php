@@ -202,4 +202,9 @@ $lang_module['ChangeConfigModule'] = "Change the configuration module";
 $lang_module['active_users'] = "Activate members";
 $lang_module['unactive_users'] = "Unactivate members";
 
+$lang_module['whoviewlistuser'] = "Who can view a list of members";
+$lang_module['whoview_all'] = "All";
+$lang_module['whoview_user'] = "User";
+$lang_module['whoview_admin'] = "Administrator";
+
 ?>

@@ -20,7 +20,7 @@ function nv_site_mods()
 
 	if( defined( "NV_IS_USER" ) )
 	{
-		$user_ops = array( 'main', 'changepass', 'openid', 'editinfo', 'regroups' );
+		$user_ops = array( 'main', 'changepass', 'openid', 'editinfo', 'regroups', 'memberlist' );
 		if( ! defined( "NV_IS_ADMIN" ) )
 		{
 			$user_ops[] = 'logout';
@@ -28,7 +28,7 @@ function nv_site_mods()
 	}
 	else
 	{
-		$user_ops = array( 'main', 'login', 'register', 'lostpass' );
+		$user_ops = array( 'main', 'login', 'register', 'lostpass', 'memberlist' );
 		if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1 )
 		{
 			$user_ops[] = 'lostactivelink';

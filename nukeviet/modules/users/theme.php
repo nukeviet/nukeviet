@@ -874,4 +874,84 @@ function nv_regroup_theme( $groups )
     return $xtpl->text( 'main' );
 }
 
+function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
+{
+    global $module_info, $module_file, $module_name, $lang_module;
+
+    if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/memberslist.tpl" ) )
+    {
+        $block_theme = $module_info['template'];
+    }
+    else
+    {
+        $block_theme = "default";
+    }
+
+    $xtpl = new XTemplate( "memberslist.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_file );
+    $xtpl->assign( 'LANG', $lang_module );
+
+    foreach( $array_order_new as $key => $link )
+    {
+        $xtpl->assign( $key, $link );
+    }
+
+    foreach( $users_array as $user )
+    {
+        $xtpl->assign( 'USER', $user );
+        if( ! empty( $user['full_name'] ) && $user['full_name'] != $user['username'] )
+        {
+            $xtpl->parse( 'main.list.fullname' );
+        }
+        if( ! empty( $user['yim'] ) )
+        {
+            $xtpl->parse( 'main.list.yahoo' );
+        }
+        else  $xtpl->parse( 'main.list.nullyahoo' );
+
+        $xtpl->parse( 'main.list' );
+    }
+    if( ! empty( $generate_page ) )
+    {
+        $xtpl->assign( 'GENERATE_PAGE', $generate_page );
+        $xtpl->parse( 'main.generate_page' );
+    }
+    $xtpl->parse( 'main' );
+    return $xtpl->text( 'main' );
+}
+
+function nv_memberslist_detail_theme( $item )
+{
+    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $lang_global;
+    $xtpl = new XTemplate( "viewdetailusers.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+    $xtpl->assign( 'LANG', $lang_module );
+    $xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
+
+    if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . "/" . $item['photo'] ) )
+    {
+        $xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . $item['photo'] );
+    }
+    else
+    {
+        $xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_avatar.jpg" );
+    }
+    $item['gender'] = ( $item['gender'] == "M" ) ? $lang_module['male'] : ( $item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
+    $item['birthday'] = empty( $item['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $item['birthday'] );
+    $item['regdate'] = nv_date( 'd/m/Y', $item['regdate'] );
+    $item['website'] = empty( $item['website'] ) ? $lang_module['na'] : "<a href=\"" . $item['website'] . "\" target=\"_blank\">" . $item['website'] . "</a>";
+    $item['location'] = empty( $item['location'] ) ? $lang_module['na'] : $item['location'];
+    $item['yim'] = empty( $item['yim'] ) ? $lang_module['na'] : $item['yim'];
+    $item['telephone'] = empty( $item['telephone'] ) ? $lang_module['na'] : $lang_module['telephone'];
+    $item['fax'] = empty( $item['fax'] ) ? $lang_module['na'] : $item['fax'];
+    $item['mobile'] = empty( $item['mobile'] ) ? $lang_module['na'] : $item['mobile'];
+    $item['last_login'] = empty( $item['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $item['last_login'] );
+    
+    $xtpl->assign( 'USER', $item );
+    if( ! empty( $item['view_mail'] ) )
+    {
+        $xtpl->parse( 'main.viewemail' );
+    }
+    $xtpl->parse( 'main' );
+    return $xtpl->text( 'main' );
+}
+
 ?>

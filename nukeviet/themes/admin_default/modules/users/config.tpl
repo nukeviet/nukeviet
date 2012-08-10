@@ -3,7 +3,7 @@
     <form action="{FORM_ACTION}" method="post">
         <table class="tab1">
             <!-- BEGIN: user_forum -->
-            <tbody>
+            <tbody class="second">
                 <tr>
                     <td>{LANG.is_user_forum}</td>
                     <td>
@@ -12,7 +12,7 @@
                 </tr>
             </tbody>
             <!-- END: user_forum -->
-            <tbody class="second">
+            <tbody>
                 <tr>
                     <td>{LANG.type_reg}</td>
                     <td>
@@ -20,6 +20,18 @@
                             <!-- BEGIN: registertype -->
                             <option value="{REGISTERTYPE.id}"{REGISTERTYPE.select}> {REGISTERTYPE.value}</option>
                             <!-- END: registertype -->
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="second">
+                <tr>
+                    <td>{LANG.whoviewlistuser}</td>
+                    <td>
+                        <select name="whoviewuser">
+                            <!-- BEGIN: whoviewlistuser -->
+                            <option value="{WHOVIEW.id}"{WHOVIEW.select}> {WHOVIEW.value}</option>
+                            <!-- END: whoviewlistuser -->
                         </select>
                     </td>
                 </tr>
