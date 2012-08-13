@@ -442,6 +442,32 @@ function nv_up_r1827()
 	return $return;
 }
 
+/**
+ *
+ * @return
+ */
+function nv_up_r1841()
+{
+	global $nv_update_baseurl, $db, $db_config;
+	
+	$language_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
+	while( list( $lang ) = $db->sql_fetchrow( $language_query ) )
+	{
+		$check = $db->sql_query( " ALTER TABLE `" . $db_config['prefix'] . "_" . $lang ."_download` ADD `who_view` tinyint(4) unsigned NOT NULL AFTER `groups_comment`" );
+    $check = $db->sql_query( " ALTER TABLE `" . $db_config['prefix'] . "_" . $lang ."_download` ADD `groups_view` varchar(255) NOT NULL AFTER `who_view`" );
+		$check = $db->sql_query( " ALTER TABLE `" . $db_config['prefix'] . "_" . $lang ."_download` ADD `who_download` tinyint(4) unsigned NOT NULL AFTER `groups_view`" );
+		$check = $db->sql_query( " ALTER TABLE `" . $db_config['prefix'] . "_" . $lang ."_download` ADD `groups_download` varchar(255) NOT NULL AFTER `who_download`" );    
+	}
+   $db->sql_query( " INSERT INTO `" . $db_config['prefix'] . "_config` ( `lang` , `module` , `config_name` , `config_value` ) VALUES ( 'sys', 'global', 'whoviewuser', '1' )" );
+
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
+	
+	$return['status'] = $check ? 1 : 0;
+	$return['complete'] = $check ? 1 : 0;
+	
+	return $return;
+}
+
 function nv_up_finish()
 {
 	global $nv_update_baseurl, $db, $db_config, $global_config;
