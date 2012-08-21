@@ -34,6 +34,7 @@ $lang_module['na'] = "N/A";
 $lang_module['account'] = "Tên đăng nhập";
 $lang_module['email'] = "Email";
 $lang_module['check'] = "Kiểm tra";
+$lang_module['page'] = "Trang %d";
 $lang_module['creat'] = "Tạo mới";
 $lang_module['password'] = "Mật khẩu";
 $lang_module['re_password'] = "Lặp lại mật khẩu";
@@ -211,6 +212,12 @@ $lang_module['account_change_mail_error'] = "Có lỗi trong quá trình xác nh
 $lang_module['allow_admin'] = "Tính năng này chỉ giới hạn cho quản trị được phép truy cập.";
 $lang_module['allow_user'] = "Tính năng này chỉ giới hạn cho thành viên được phép truy cập.";
 $lang_module['listusers'] = "Danh sách thành viên";
+$lang_module['listusers_sort_by'] = " xếp theo %s, %s";
+$lang_module['listusers_sort_by_username'] = "tên đăng nhập";
+$lang_module['listusers_sort_by_gender'] = "giới tính";
+$lang_module['listusers_sort_by_regdate'] = "ngày tham gia";
+$lang_module['listusers_order_DESC'] = "giảm dần";
+$lang_module['listusers_order_ASC'] = "tăng dần";
 $lang_module['notuser'] = "Không tồn tại thành viên nào theo lựa chọn này !";
 
 ?>

@@ -1,75 +1,69 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.4
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 - 2012 VINADES.,JSC. All rights reserved
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT GMT
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
+
 $page_title = $module_info['funcs'][$op]['func_custom_name'];
 $key_words = $module_info['keywords'];
-$mod_title = isset( $lang_module['listusers'] ) ? $lang_module['listusers'] : $page_title;
+$mod_title = $lang_module['listusers'];
 
-$uid = $nv_Request->get_int( 'uid', 'get', 0 );
+// Them vao tieu de
+$array_mod_title[] = array(
+	'catid' => 0,
+	'title' => $lang_module['listusers'],
+	'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op,
+);
+
+$uid = 0;
+if( isset( $array_op[1] ) )
+{
+	$uid = ( int ) $array_op[1];
+}
 
 if( $uid > 0 )
 {
-	$query = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . $uid );
-	if( $db->sql_numrows( $query ) > 0 )
+	$result = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=1 AND `userid` = " . $uid );
+	if( $db->sql_numrows( $result ) > 0 )
 	{
-		$item = $db->sql_fetch_assoc( $query );
+		$item = $db->sql_fetch_assoc( $result );
+		
+		// Them vao tieu de
+		$array_mod_title[] = array(
+			'catid' => 0,
+			'title' => $item['username'],
+			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "/" . $item['userid'],
+		);
+		
 		$contents = nv_memberslist_detail_theme( $item );
 	}
 	else
 	{
-		$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=memberlist";
-
-		$info = "<div style=\"text-align:center;\">";
-		$info .= $lang_module['notuser'] . "<br /><br />\n";
-		$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
-		$info .= "</div>";
-		$contents = $info;
-		$contents .= "<meta http-equiv=\"refresh\" content=\"3;url=" . nv_url_rewrite( $nv_redirect ) . "\" />";
+		// Chuyen ve trang module ngay khong can thong bao
+		Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+		exit();
 	}
+	
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_site_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
     exit();
 }
 
-if( $global_config['whoviewuser'] == 2 && ! defined( "NV_IS_ADMIN" ) )
+if( $global_config['whoviewuser'] == 2 and ! defined( "NV_IS_ADMIN" ) )
 {
-	$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
-
-	$info = "<div style=\"text-align:center;\">";
-	$info .= $lang_module['allow_admin'] . "<br /><br />\n";
-	$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
-	$info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $lang_module['redirect_to_home'] . "</a>]";
-	$info .= "</div>";
-	$contents = $info;
-	$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( $nv_redirect ) . "\" />";
-
-	include ( NV_ROOTDIR . "/includes/header.php" );
-	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	$nv_redirect = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+	user_info_exit_redirect( $lang_module['allow_admin'], $nv_redirect );
 }
-elseif( $global_config['whoviewuser'] == 1 && ! defined( 'NV_IS_USER' ) )
+elseif( $global_config['whoviewuser'] == 1 and ! defined( 'NV_IS_USER' ) )
 {
-	$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
-
-	$info = "<div style=\"text-align:center;\">";
-	$info .= $lang_module['allow_user'] . "<br /><br />\n";
-	$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
-	$info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $lang_module['redirect_to_home'] . "</a>]";
-	$info .= "</div>";
-	$contents = $info;
-	$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( $nv_redirect ) . "\" />";
-
-	include ( NV_ROOTDIR . "/includes/header.php" );
-	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	$nv_redirect = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+	user_info_exit_redirect( $lang_module['allow_user'], $nv_redirect );
 }
 else
 {
@@ -77,6 +71,13 @@ else
     $sortby = $nv_Request->get_string( 'sortby', 'get', 'DESC' );
     $page = $nv_Request->get_int( 'page', 'get', 0 );
     
+	// Kiem tra du lieu hop chuan
+	if( ( ! empty( $orderby ) and ! in_array( $orderby, array( 'username', 'gender', 'regdate' ) ) ) or ( ! empty( $sortby ) and ! in_array( $sortby, array( 'DESC', 'ASC' ) ) ) )
+	{
+		Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+		exit();
+	}
+	
     $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=" . $orderby . "&sortby=" . $sortby;
     
     $per_page = 25;
@@ -87,18 +88,27 @@ else
         
     );
     
-    foreach( $array_order as $key => $link ){
-       if( $orderby == $key ){
-        $sortby_new = ( $sortby == "DESC" )? "ASC" : "DESC";
-        $array_order_new[$key] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=" . $key . "&sortby=" . $sortby_new;
-       } else{
+    foreach( $array_order as $key => $link )
+	{
+		if( $orderby == $key )
+		{
+			$sortby_new = ( $sortby == "DESC" )? "ASC" : "DESC";
+			$array_order_new[$key] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=" . $key . "&sortby=" . $sortby_new;
+		}
+		else
+		{
             $array_order_new[$key] = $link;
-       }
+		}
     }
-	$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `full_name`, `photo`, `gender`, `yim`, `regdate` FROM `" . NV_USERS_GLOBALTABLE . "` ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
+	
+	$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `full_name`, `photo`, `gender`, `yim`, `regdate` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
+	
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 	list( $all_page ) = $db->sql_fetchrow( $result_all );
-	while( $item = $db->sql_fetch_assoc( $query ) )
+	
+	$users_array = array();
+	
+	while( $item = $db->sql_fetch_assoc( $result ) )
 	{
 		if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . "/" . $item['photo'] ) )
 		{
@@ -108,16 +118,38 @@ else
 		{
 			$item['photo'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_avatar.jpg";
 		}
+		
 		$item['regdate'] = nv_date( "d/m/Y", $item['regdate'] );
-		$item['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=memberlist&uid=" . $item['userid'];
+		$item['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=memberlist/" . $item['userid'];
 		$item['gender'] = ( $item['gender'] == "M" ) ? $lang_module['male'] : ( $item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
+		
 		$users_array[$item['userid']] = $item;
 	}
+	
+	// Khong cho dat trang tuy tien
+	if( empty( $users_array ) and $page > 0 )
+	{
+		Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+		exit();
+	}
     
+	// Them vao tieu de trang
+	if( ! empty( $orderby ) )
+	{
+		$page_title .= " " . sprintf( $lang_module['listusers_sort_by'], $lang_module['listusers_sort_by_' . $orderby], $lang_module['listusers_order_' . $sortby] );
+	}
+	
+	// Tieu de khi phan trang
+	if( $page > 0 )
+	{
+		$page_title .= " " . NV_TITLEBAR_DEFIS . " " . sprintf( $lang_module['page'], ceil( $page / $per_page ) );
+	}
+	
     $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
     
-	$db->sql_freeresult( $query );
-	unset( $query, $row );
+	$db->sql_freeresult( $result );
+	unset( $result, $item );
+	
 	$contents = nv_memberslist_theme( $users_array, $array_order_new, $generate_page );
 }
 

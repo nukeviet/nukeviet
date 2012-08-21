@@ -1,4 +1,4 @@
-#users .padding_0{padding:4px 0}
+﻿#users .padding_0{padding:4px 0}
 #users .gray{background:#F2F2F2}
 #users .line{border-bottom:1px solid #ccc}
 #users ul#menu{margin:10px 0 0 20px}
@@ -36,3 +36,4 @@
 #users .con{line-height:25px}
 .register1{background:#FBFBFB;border:1px solid #F4F4F4;margin:auto;text-align:center}
 #users .rows input,#users .rows select,#users .rows img,#users .userinfo dd,#users .userinfo dt,#users .topleft{float:left}
+.user-center{text-align:center}
