@@ -874,6 +874,14 @@ function nv_regroup_theme( $groups )
 	return $xtpl->text( 'main' );
 }
 
+/**
+ * nv_memberslist_theme()
+ * 
+ * @param mixed $users_array
+ * @param mixed $array_order_new
+ * @param mixed $generate_page
+ * @return
+ */
 function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 {
 	global $module_info, $module_file, $lang_module;
@@ -914,6 +922,12 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 	return $xtpl->text( 'main' );
 }
 
+/**
+ * nv_memberslist_detail_theme()
+ * 
+ * @param mixed $item
+ * @return
+ */
 function nv_memberslist_detail_theme( $item )
 {
 	global $module_info, $module_file, $lang_module, $module_name;
@@ -953,6 +967,13 @@ function nv_memberslist_detail_theme( $item )
 	return $xtpl->text( 'main' );
 }
 
+/**
+ * user_info_exit_redirect()
+ * 
+ * @param mixed $info
+ * @param mixed $nv_redirect
+ * @return void
+ */
 function user_info_exit_redirect( $info, $nv_redirect )
 {
 	global $module_info, $module_file, $lang_module;
