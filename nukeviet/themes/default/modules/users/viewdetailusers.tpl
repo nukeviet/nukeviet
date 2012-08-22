@@ -52,10 +52,6 @@
         	   <dt class="fl" style="width:48%;">{LANG.regdate}:</dt>
                <dd class="fl">{USER.regdate}</dd>
             </dl>
-            <dl class="clearfix gray">
-        	   <dt class="fl" style="width:48%;">{LANG.st_login2}:</dt>
-               <dd class="fl">{USER.st_login}</dd>
-            </dl>
         </div>      
     </div>
 </div>
