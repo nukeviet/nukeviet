@@ -88,7 +88,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (46, 'main', 'Main', 'search', 1, 0, 1, ''),
 (47, 'main', 'Main', 'rss', 1, 0, 1, ''),
 (48, 'regroups', 'Regroups', 'users', 1, 0, 1, ''),
-(50, 'groups', 'Groups', 'news', 1, 0, 7, '')";
+(50, 'memberlist', 'Member List', 'users', 1, 1, 1, ''),
+(51, 'groups', 'Groups', 'news', 1, 0, 7, '')";
 
 $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
 (0, 'body-right', 'modern'),
