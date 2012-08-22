@@ -58,14 +58,14 @@ $result = $db->sql_query( $sql );
 
 while( list( $theme ) = $db->sql_fetchrow( $result ) )
 {
-	$array_theme[] = $theme;
-
 	if( in_array( $theme, $theme_site_array ) )
 	{
+		$array_theme[] = $theme;
 		$theme_list[] = $theme;
 	}
 	elseif( in_array( $theme, $theme_mobile_array ) )
 	{
+		$array_theme[] = $theme;
 		$theme_mobile_list[] = $theme;
 	}
 }
