@@ -20,13 +20,13 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 	{
 		$tempfolder = NV_ROOTDIR . '/' . NV_TEMP_DIR;
 
-		//module folder
+		// Module folder
 		if( file_exists( NV_ROOTDIR . '/modules/' . $modulename . '/' ) )
 		{
 			$allowfolder[] = NV_ROOTDIR . '/modules/' . $modulename . '/';
 		}
 
-		//theme folder
+		// Theme folder
 		$theme_package = "";
 		if( is_dir( NV_ROOTDIR . '/themes/default/modules/' . $modulename ) )
 		{
@@ -52,7 +52,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 			}
 		}
 
-		// admin default theme
+		// Admin default theme
 		if( file_exists( NV_ROOTDIR . '/themes/admin_default' ) )
 		{
 			if( file_exists( NV_ROOTDIR . '/themes/admin_default/css/' . $modulename . '.css' ) )
@@ -95,6 +95,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		$xtpl->parse( 'package_complete' );
 		$contents = $xtpl->text( 'package_complete' );
 	}
+	
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo $contents;
 	include ( NV_ROOTDIR . "/includes/footer.php" );

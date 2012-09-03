@@ -14,7 +14,11 @@ $contents = 'NO_' . $modname;
 
 if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname ) )
 {
-	list( $is_sysmod, $module_file, $module_data ) = $db->sql_fetchrow( $db->sql_query( "SELECT is_sysmod, module_file, module_data FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $modname ) . "" ) );
+	list( $is_sysmod, $module_file, $module_data ) = $db->sql_fetchrow( $db->sql_query( "SELECT is_sysmod, module_file, module_data FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $modname ) ) );
+	
+	// Unfixdb
+	$module_file = $db->unfixdb( $module_file );
+	$module_data = $db->unfixdb( $module_data );
 	
 	if( intval( $is_sysmod ) != 1 )
 	{
@@ -39,7 +43,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			}
 		}
 
-		//xoa du lieu tai bang nv3_vi_blocks
+		// Xoa du lieu tai bang nv3_vi_blocks
 		$sql = "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid` in (SELECT `bid` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `module`=" . $db->dbescape( $modname ) . ")";
 	
 		if( ! $db->sql_query( $sql ) )
@@ -56,14 +60,14 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 
 		nv_del_moduleCache( "themes" );
 
-		$sql = "DELETE FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id` in (SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $modname ) . ")";
+		$sql = "DELETE FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id` IN (SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $modname ) . ")";
 	
 		if( ! $db->sql_query( $sql ) )
 		{
 			die( 'NO_' . $modname );
 		}
 
-		//xoa du lieu tai bang  nv3_vi_modfuncs
+		// Xoa du lieu tai bang  nv3_vi_modfuncs
 		$sql = "DELETE FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $modname );
 	
 		if( ! $db->sql_query( $sql ) )
@@ -71,14 +75,15 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			die( 'NO_' . $modname );
 		}
 
-		//xoa du lieu tai bang  nv3_vi_modules
+		// Xoa du lieu tai bang  nv3_vi_modules
 		$sql = "DELETE FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $modname );
 	
 		if( ! $db->sql_query( $sql ) )
 		{
 			die( 'NO_' . $modname );
 		}
-		///xoa du lieu tai bang nv3_config
+		
+		// Xoa du lieu tai bang nv3_config
 		$sql = "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`=" . $db->dbescape( NV_LANG_DATA ) . " AND `module`=" . $db->dbescape( $modname );
 		$db->sql_query( $sql );
 

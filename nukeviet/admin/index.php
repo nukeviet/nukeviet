@@ -9,7 +9,7 @@
 
 define( 'NV_ADMIN', true );
 
-//Ket noi den mainfile.php nam o thu muc goc.
+// Ket noi den mainfile.php nam o thu muc goc.
 $realpath_mainfile = $set_active_op = "";
 
 $temp_dir = str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) );
@@ -29,7 +29,7 @@ require ( $realpath_mainfile );
 
 ob_start();
 
-//Admin dang nhap
+// Admin dang nhap
 if( ! defined( 'NV_IS_ADMIN' ) or ! isset( $admin_info ) or empty( $admin_info ) )
 {
 	require ( NV_ROOTDIR . "/includes/core/admin_access.php" );
@@ -106,7 +106,7 @@ if( ! empty( $module_name ) )
 		$include_functions = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_file . "/functions.php";
 		$include_file = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_file . "/" . $op . ".php";
 
-		//ket noi voi file ngon ngu cua module
+		// Ket noi voi file ngon ngu cua module
 		if( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $module_file . ".php" ) )
 		{
 			require ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $module_file . ".php" );

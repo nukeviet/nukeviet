@@ -31,7 +31,7 @@ function nv_show_funcs()
 	$row = $db->sql_fetchrow( $result );
 
 	$custom_title = $row['custom_title'];
-	$module_file = $row['module_file'];
+	$module_file = $db->unfixdb( $row['module_file'] );
 	$admin_file = ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin.functions.php" ) and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/main.php" ) ) ? 1 : 0;
 
 	$is_delCache = false;
@@ -87,7 +87,7 @@ function nv_show_funcs()
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$func = $row['func_name'];
+		$func = $db->unfixdb( $row['func_name'] );
 		$show_func = in_array( $func, $modfuncs ) ? 1 : 0;
 	
 		if( $row['show_func'] != $show_func )
@@ -182,13 +182,15 @@ function nv_show_funcs()
 	
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
-			$func = $row['func_name'];
+			$func = $db->unfixdb( $row['func_name'] );
+			
 			$act_funcs[$func]['func_id'] = $row['func_id'];
-			$act_funcs[$func]['layout'] = $row['layout'];
+			$act_funcs[$func]['layout'] = empty( $row['layout'] ) ? "" : $row['layout'];
 			$act_funcs[$func]['show_func'] = $row['show_func'];
 			$act_funcs[$func]['func_custom_name'] = $row['func_custom_name'];
 			$act_funcs[$func]['in_submenu'] = $row['in_submenu'];
 			$act_funcs[$func]['subweight'] = $row['subweight'];
+			
 			$weight_list[] = $row['subweight'];
 		}
 	}

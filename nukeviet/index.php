@@ -181,8 +181,8 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			}
 			unset( $theme_type );
 
-			//Xac dinh layout funcs cua module
-			$sql = "SELECT f.func_name, t.layout FROM `" . NV_MODFUNCS_TABLE . "` AS f INNER JOIN `" . NV_PREFIXLANG . "_modthemes` AS t ON f.func_id=t.func_id WHERE f.in_module = '" . $module_name . "' AND t.theme='" . $global_config['module_theme'] . "'";
+			// Xac dinh layout funcs cua module
+			$sql = "SELECT f.func_name, t.layout FROM `" . NV_MODFUNCS_TABLE . "` AS f INNER JOIN `" . NV_PREFIXLANG . "_modthemes` AS t ON f.func_id=t.func_id WHERE f.in_module =" . $db->dbescape_string( $module_name ) . " AND t.theme=" . $db->dbescape_string( $global_config['module_theme'] );
 			$cache_file = NV_LANG_DATA . "_modules_" . md5( $sql ) . "_" . NV_CACHE_PREFIX . ".cache";
 
 			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
@@ -195,13 +195,13 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				$result = $db->sql_query( $sql );
 				while( $row = $db->sql_fetch_assoc( $result ) )
 				{
-					$module_info['layout_funcs'][$row['func_name']] = $row['layout'];
+					$module_info['layout_funcs'][$db->unfixdb( $row['func_name'] )] = $db->unfixdb( $row['layout'] );
 				}
 				$db->sql_freeresult( $result );
 				$cache = serialize( $module_info['layout_funcs'] );
 				nv_set_cache( $cache_file, $cache );
 			}
-            
+
             //Doc file cau hinh giao dien
             $themeConfig = nv_object2array( simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini' ) );
 			require( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/theme.php" );

@@ -15,20 +15,6 @@ if( sizeof( $site_mods ) < 2 )
 	exit();
 }
 
-$theme_array = array();
-$theme_array_file = nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme'] );
-
-$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes`  WHERE `func_id`=0";
-$result = $db->sql_query( $sql );
-
-while( list( $theme ) = $db->sql_fetchrow( $result ) )
-{
-	if( in_array( $theme, $theme_array_file ) )
-	{
-		$theme_array[] = $theme;
-	}
-}
-
 $page_title = $lang_module['main'];
 
 $contents['div_id'] = "list_mods";

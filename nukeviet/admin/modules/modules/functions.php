@@ -170,6 +170,11 @@ if( $module_name == "modules" )
 		if( $numrows == 1 )
 		{
 			list( $module_file, $module_data, $module_theme ) = $db->sql_fetchrow( $result );
+			
+			// Unfixdb
+			$module_file = $db->unfixdb( $module_file );
+			$module_data = $db->unfixdb( $module_data );
+			$module_theme = $db->unfixdb( $module_theme );
 		
 			$module_version = array();
 			$version_file = NV_ROOTDIR . "/modules/" . $module_file . "/version.php";
@@ -180,7 +185,7 @@ if( $module_name == "modules" )
 			}
 		
 			$arr_modfuncs = ( isset( $module_version['modfuncs'] ) and ! empty( $module_version['modfuncs'] ) ) ? array_map( "trim", explode( ",", $module_version['modfuncs'] ) ) : array();
-			//xoa du lieu tai bang _config
+			// Xoa du lieu tai bang _config
 		
 			$sql = "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`=" . $db->dbescape( $lang ) . " AND `module`=" . $db->dbescape( $module_name );
 			$db->sql_query( $sql );
@@ -211,7 +216,7 @@ if( $module_name == "modules" )
 		
 			if( ! empty( $new_funcs ) )
 			{
-				// get default layout
+				// Get default layout
 				$layout_array = nv_scandir( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/layout', $global_config['check_op_layout'] );
 				if( ! empty( $layout_array ) )
 				{
@@ -260,7 +265,7 @@ if( $module_name == "modules" )
 				$result = $db->sql_query( $sql );
 				while( $row = $db->sql_fetchrow( $result ) )
 				{
-					$arr_func_id_old[$row['func_name']] = $row['func_id'];
+					$arr_func_id_old[ $db->unfixdb( $row['func_name'] ) ] = $row['func_id'];
 				}
 
 				$new_funcs = preg_replace( $global_config['check_op_file'], "\\1", $new_funcs );
@@ -300,7 +305,7 @@ if( $module_name == "modules" )
 			}
 			else
 			{
-				//xoa du lieu tai bang _modfuncs
+				// Xoa du lieu tai bang _modfuncs
 				$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` WHERE `in_module`=" . $db->dbescape( $module_name );
 				$db->sql_query( $sql );
 			}

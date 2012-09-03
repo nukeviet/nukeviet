@@ -16,7 +16,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  */
 function nv_site_mods()
 {
-	global $admin_info, $user_info, $global_config;
+	global $admin_info, $user_info, $global_config, $db;
 
 	if( defined( "NV_IS_USER" ) )
 	{
@@ -46,8 +46,9 @@ function nv_site_mods()
 	{
 		$allowed = false;
 		$is_modadmin = false;
-		$m_title = $row['title'];
+		$m_title = $db->unfixdb( $row['title'] );
 		$groups_view = ( string )$row['groups_view'];
+		
 		if( isset( $site_mods[$m_title] ) )
 		{
 			$allowed = true;
@@ -88,11 +89,11 @@ function nv_site_mods()
 		{
 			if( ! isset( $site_mods[$m_title] ) )
 			{
-				$site_mods[$m_title]['module_file'] = $row['module_file'];
-				$site_mods[$m_title]['module_data'] = $row['module_data'];
+				$site_mods[$m_title]['module_file'] = $db->unfixdb( $row['module_file'] );
+				$site_mods[$m_title]['module_data'] = $db->unfixdb( $row['module_data'] );
 				$site_mods[$m_title]['custom_title'] = $row['custom_title'];
 				$site_mods[$m_title]['admin_file'] = $row['admin_file'];
-				$site_mods[$m_title]['theme'] = $row['theme'];
+				$site_mods[$m_title]['theme'] = $db->unfixdb( $row['theme'] );
 				$site_mods[$m_title]['mobile'] = $row['mobile'];
                 $site_mods[$m_title]['description'] = $row['description'];
 				$site_mods[$m_title]['keywords'] = $row['keywords'];
@@ -103,7 +104,7 @@ function nv_site_mods()
 				$site_mods[$m_title]['rss'] = $row['rss'];
 			}
 			
-			$func_name = $row['func_name'];
+			$func_name = $db->unfixdb( $row['func_name'] );
 			if( ! empty( $func_name ) and ( ( $m_title != "users" ) or ( $m_title == "users" and in_array( $func_name, $user_ops ) ) ) )
 			{
 				$site_mods[$m_title]['funcs'][$func_name]['func_id'] = $row['func_id'];
@@ -207,6 +208,8 @@ function nv_blocks_content( $sitecontent )
 		$list = nv_db_cache( $sql, '', 'modules' );
 		foreach( $list as $row )
 		{
+			$row['title'] = $db->unfixdb( $row['title'] );
+			
 			if( $row['title'] == $module_name and $row['show_func'] )
 			{
 				$in[] = $row['func_id'];
@@ -224,14 +227,19 @@ function nv_blocks_content( $sitecontent )
 
 		while( $_row = $db->sql_fetch_assoc( $_result ) )
 		{
-			//Cau hinh block
+			$_row['module'] = $db->unfixdb( $_row['module'] );
+			$_row['file_name'] = $db->unfixdb( $_row['file_name'] );
+			$_row['template'] = $db->unfixdb( $_row['template'] );
+			$_row['position'] = $db->unfixdb( $_row['position'] );
+		
+			// Cau hinh block
 			$block_config = ( ! empty( $_row['config'] ) ) ? unserialize( $_row['config'] ) : array();
 			$block_config['bid'] = $_row['bid'];
 			$block_config['module'] = $_row['module'];
 			$block_config['title'] = $_row['title'];
 			$block_config['block_name'] = substr( $_row['file_name'], 0, -4 );
 
-			//tieu de block
+			// Tieu de block
 			$blockTitle = ( ! empty( $_row['title'] ) and ! empty( $_row['link'] ) ) ? "<a href=\"" . $_row['link'] . "\">" . $_row['title'] . "</a>" : $_row['title'];
 
 			if( ! isset( $cache[$_row['func_id']] ) ) $cache[$_row['func_id']] = array();

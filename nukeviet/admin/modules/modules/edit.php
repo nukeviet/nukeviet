@@ -58,6 +58,8 @@ $result = $db->sql_query( $sql );
 
 while( list( $theme ) = $db->sql_fetchrow( $result ) )
 {
+	$theme = $db->unfixdb( $theme );
+	
 	if( in_array( $theme, $theme_site_array ) )
 	{
 		$array_theme[] = $theme;
@@ -143,7 +145,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			foreach( $array_layoutdefault as $selectthemes => $layoutdefault )
 			{
 				$array_func_id = array();
-				$fnsql = "SELECT `func_id` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `theme`='" . $selectthemes . "'";
+				$fnsql = "SELECT `func_id` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `theme`=" . $db->dbescape( $selectthemes );
 				$fnresult = $db->sql_query( $fnsql );
 
 				while( list( $func_id ) = $db->sql_fetchrow( $fnresult ) )
@@ -210,7 +212,7 @@ if( empty( $custom_title ) ) $custom_title = $mod;
 
 $page_title = sprintf( $lang_module['edit'], $mod );
 
-if( file_exists( NV_ROOTDIR . "/modules/" . $row['module_file'] . "/funcs/rss.php" ) )
+if( file_exists( NV_ROOTDIR . "/modules/" . $db->unfixdb( $row['module_file'] ) . "/funcs/rss.php" ) )
 {
 	$contents['rss'] = array( $lang_module['activate_rss'], $rss );
 }

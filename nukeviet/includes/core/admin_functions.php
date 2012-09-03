@@ -33,13 +33,15 @@ function nv_site_mods()
 		}
 		if( $allowed )
 		{
+			$row['title'] = $db->unfixdb( $row['title'] );
+			
 			$site_mods[$row['title']] = array(
-				'module_file' => $row['module_file'],
-				'module_data' => $row['module_data'],
+				'module_file' => $db->unfixdb( $row['module_file'] ),
+				'module_data' => $db->unfixdb( $row['module_data'] ),
 				'custom_title' => empty( $row['admin_title'] ) ? $row['custom_title'] : $row['admin_title'],
 				'main_file' => $row['main_file'],
 				'admin_file' => $row['admin_file'],
-				'theme' => $row['theme'],
+				'theme' => $db->unfixdb( $row['theme'] ),
 				'keywords' => $row['keywords'],
 				'groups_view' => $row['groups_view'],
 				'in_menu' => intval( $row['in_menu'] ),
@@ -49,6 +51,7 @@ function nv_site_mods()
 				'rss' => $row['rss'] );
 		}
 	}
+
 	return $site_mods;
 }
 

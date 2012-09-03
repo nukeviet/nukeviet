@@ -47,7 +47,7 @@ if( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) 
 $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] ) );
 $modules_data = array();
 
-$sql = "SELECT title FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `virtual`='1' ORDER BY `addtime` ASC";
+$sql = "SELECT `title` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `virtual`='1' ORDER BY `addtime` ASC";
 $result = $db->sql_query( $sql );
 
 $page_title = $lang_module['vmodule_add'];
@@ -67,6 +67,8 @@ $xtpl->assign( 'NOTE', $note );
 
 while( list( $modfile_i ) = $db->sql_fetchrow( $result ) )
 {
+	$modfile_i = $db->unfixdb( $modfile_i );
+
 	if( in_array( $modfile_i, $modules_exit ) )
 	{
 		$xtpl->assign( 'MODFILE', array( 'key' => $modfile_i, 'selected' => ( $modfile_i == $modfile ) ? " selected=\"selected\"" : "" ) );

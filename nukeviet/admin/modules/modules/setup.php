@@ -24,7 +24,12 @@ if( ! empty( $setmodule ) )
 		if( $db->sql_numrows( $result ) == 1 )
 		{
 			list( $module_file, $module_data ) = $db->sql_fetchrow( $result );
-			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM `" . NV_MODULES_TABLE . "`" ) );
+			
+			// Unfixdb
+			$module_file = $db->unfixdb( $module_file );
+			$module_data = $db->unfixdb( $module_data );
+
+			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM `" . NV_MODULES_TABLE . "`" ) );
 			$weight = intval( $weight ) + 1;
 
 			$module_version = array();
@@ -72,7 +77,7 @@ if( ! empty( $delmodule ) )
 	{
 		$module_exit = array();
 	
-		$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where setup='1'";
+		$sql = "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`='1'";
 		$result = $db->sql_query( $sql );
 	
 		while( list( $lang_i ) = $db->sql_fetchrow( $result ) )
@@ -160,6 +165,9 @@ $module_virtual_setup = array();
 
 while( $row = $db->sql_fetchrow( $result ) )
 {
+	$row['title'] = $db->unfixdb( $row['title'] );
+	$row['module_file'] = $db->unfixdb( $row['module_file'] );
+
 	if( array_key_exists( $row['module_file'], $modules_exit ) )
 	{
 		$modules_data[$row['title']] = $row;
@@ -171,8 +179,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 	}
 	else
 	{
-		$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title` = '" . $row['title'] . "'" );
-		$db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=2 WHERE `title`='" . $row['title'] . "'" );
+		$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape_string( $row['title'] ) );
+		$db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=2 WHERE `title`=" . $db->dbescape_string( $row['title'] ) );
 		$is_delCache = true;
 	}
 }
@@ -241,6 +249,9 @@ if( $check_addnews_modules )
 	$result = $db->sql_query( $sql_data );
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
+		$row['title'] = $db->unfixdb( $row['title'] );
+		$row['module_file'] = $db->unfixdb( $row['module_file'] );
+	
 		$modules_data[$row['title']] = $row;
 	}
 }
@@ -253,6 +264,8 @@ $result = $db->sql_query( $sql );
 
 while( $row = $db->sql_fetchrow( $result ) )
 {
+	$row['title'] = $db->unfixdb( $row['title'] );
+	
 	$modules_for_lang[$row['title']] = $row;
 }
 
