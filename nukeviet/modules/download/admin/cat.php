@@ -37,11 +37,11 @@ function nv_FixWeightCat ( $parentid = 0 )
  */
 function nv_del_cat ( $catid )
 {
-    global $db, $module_data;
+    global $db, $module_data, $admin_info;
     
-    $sql = "SELECT `parentid`,`title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
+    $sql = "SELECT `parentid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $result = $db->sql_query( $sql );
-    list( $p,$ti ) = $db->sql_fetchrow( $result );
+    list( $p, $title ) = $db->sql_fetchrow( $result );
     
     $sql = "SELECT `id`, `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid;
     $result = $db->sql_query( $sql );
@@ -97,7 +97,7 @@ function nv_del_cat ( $catid )
     $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
     $db->sql_query( $sql );
 	
-    nv_insert_logs( NV_LANG_DATA, $module_data, "delete category" ,$ti, $admin_info['userid'] );
+    nv_insert_logs( NV_LANG_DATA, $module_data, "Delete Category", $title, $admin_info['userid'] );
 }
 
 $groups_list = nv_groups_list();
