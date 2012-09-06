@@ -45,7 +45,7 @@ if( $allowed )
 			$time_set = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'session' );
 			if( empty( $time_set ) )
 			{
-				$nv_Request->set_Session( $module_name . '_' . $op . '_' . $id, NV_CURRENTTIME );
+				$nv_Request->set_Session( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
 				$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET hitstotal=hitstotal+1 WHERE `id`=" . $id;
 				$db->sql_query( $query );
 
