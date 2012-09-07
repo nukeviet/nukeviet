@@ -2,7 +2,7 @@
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3/9/2010 23:25
  */
 
@@ -37,7 +37,7 @@ if ( ! function_exists( 'nv_others_product' ) )
 			$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $addtime_i)  );
 			if ( $pro_config['active_price'] == '1' && $showprice_i == '1' )
             {
-                $product_price = CurrencyConversion( $product_price_i, $money_unit_i, $pro_config['money_unit'],$block_config ); 
+                $product_price = CurrencyConversion( $product_price_i, $money_unit_i, $pro_config['money_unit'] ); 
                 $xtpl->assign( 'product_price', $product_price );
                 $xtpl->assign( 'money_unit', $pro_config['money_unit'] );
                 if ( $product_discounts_i != 0 )
@@ -56,7 +56,7 @@ if ( ! function_exists( 'nv_others_product' ) )
 			$bg = ($i%2 == 0) ? "bg" : "";
 			$xtpl->assign( "bg", $bg );
 			$xtpl->parse( 'main.loop' );
-			++$i;
+			$i++;
 		}
 		///////////////////////////////////////////////////////////////////////////////////
 	    $xtpl->parse( 'main' );

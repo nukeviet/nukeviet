@@ -2,7 +2,7 @@
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3-6-2010 0:14
  */
 
@@ -35,7 +35,7 @@ if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . 
             "price" => $listprice[$i], "num" => $listnum[$i] 
         );
         $arrayid[] = $proid;
-        ++$i;
+        $i ++;
     }
     
     if ( ! empty( $arrayid ) )
@@ -71,7 +71,7 @@ if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . 
                 $payment_config['domain'] = $row['domain'];
                 $images_button = $row['images_button'];
                 $url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;order_id=" . $order_id . "&amp;payment=" . $row['payment'] . "&amp;checksum=" . md5( $order_id . $row['payment'] . $global_config['sitekey'] . session_id() );
-                if ( ! nv_is_url( $images_button ) and is_file( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $images_button ) )
+                if ( ! empty( $images_button ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $images_button ) )
                 {
                     $images_button = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $images_button;
                 }
@@ -147,7 +147,6 @@ elseif ( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $n
         $userid = ( defined( 'NV_IS_USER' ) ) ? $user_info['userid'] : 0;
         $transaction_id = $db->sql_query_insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
         $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = 1 WHERE `order_id`=" . $order_id );
-        
         require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/payment/" . $payment . ".checkout_url.php" );
     }
     else if ( $db->sql_numrows( $query ) > 0 )

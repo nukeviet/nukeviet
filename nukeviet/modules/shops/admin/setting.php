@@ -49,6 +49,8 @@ if ( $savesetting == 1 )
     $data['active_order_number'] = $nv_Request->get_int( 'active_order_number', 'post', 0 );
     $data['active_payment'] = $nv_Request->get_int( 'active_payment', 'post', 0 );
     $data['active_showhomtext'] = $nv_Request->get_int( 'active_showhomtext', 'post', 0 );
+    $data['active_tooltip'] = $nv_Request->get_int( 'active_tooltip', 'post', 0 );
+    
     if ( $error == '' )
     {
         foreach ( $data as $config_name => $config_value )
@@ -130,6 +132,9 @@ $xtpl->assign( 'ck_active_payment', $check );
 $check = ( $data['active_showhomtext'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_showhomtext', $check );
 
+$check = ( $data['active_tooltip'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_tooltip', $check );
+
 $check_all = ( $data['who_comment'] == 'all' ) ? "selected=\"selected\"" : "";
 $check_member = ( $data['who_comment'] == 'member' ) ? "selected=\"selected\"" : "";
 if ( $data['who_comment'] == 'member' ) $who_comment = $lang_module['setting_allow_all'];
@@ -172,7 +177,7 @@ if ( ! empty( $array_setting_payment ) )
         $value['slect_weight'] = drawselect_number( $value['payment'], 1, $all_page + 1, $value['weight'], "nv_chang_pays('" . $value['payment'] . "',this,url_change_weight,url_back);" );
         $xtpl->assign( 'DATA_PM', $value );
         $xtpl->parse( 'main.payment.paymentloop' );
-        ++$a;
+        $a ++;
     }
     $xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
     $xtpl->assign( 'url_change', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=changepay" );

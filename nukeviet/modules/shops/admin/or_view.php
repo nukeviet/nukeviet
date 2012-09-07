@@ -8,110 +8,111 @@
 $page_title = $lang_module['order_title'];
 $table_name = $db_config['prefix'] . "_" . $module_data . "_orders";
 
-$order_id = $nv_Request->get_int('order_id', 'post,get', 0);
-$re = $db->sql_query("UPDATE `" . $table_name . "` SET view = 1 WHERE `order_id`=" . $order_id);
+$order_id = $nv_Request->get_int( 'order_id', 'post,get', 0 );
+$re = $db->sql_query( "UPDATE `" . $table_name . "` SET view = 1 WHERE `order_id`=" . $order_id );
 ///////////////////////////////////////////
-$save = $nv_Request->get_string('save', 'post', '');
-$re = $db->sql_query("SELECT *  FROM `" . $table_name . "` WHERE `order_id`=" . $order_id);
-$data_content = $db->sql_fetchrow($re, 2);
-if (empty($data_content))
-    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order");
+$save = $nv_Request->get_string( 'save', 'post', '' );
+$re = $db->sql_query( "SELECT *  FROM `" . $table_name . "` WHERE `order_id`=" . $order_id );
+$data_content = $db->sql_fetchrow( $re, 2 );
+if ( empty( $data_content ) ) Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order" );
 
-if ($save == 1 and intval($data_content['transaction_status']) == -1)
+if ( $save == 1 and intval( $data_content['transaction_status'] ) == - 1 )
 {
-    $order_id = $nv_Request->get_int('order_id', 'post', 0);
+    $order_id = $nv_Request->get_int( 'order_id', 'post', 0 );
     $transaction_status = 0;
     $payment_id = 0;
     $payment_amount = 0;
     $payment_data = "";
     $payment = "";
     $userid = $admin_info['userid'];
-    $transaction_id = $db->sql_query_insert_id("INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')");
-    if ($transaction_id > 0)
+    $transaction_id = $db->sql_query_insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
+    if ( $transaction_id > 0 )
     {
-        $db->sql_query("UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $transaction_status . " , transaction_id = " . $transaction_id . " WHERE `order_id`=" . $order_id);
-
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_process_product', "order_id " . $order_id, $admin_info['userid']);
+        $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $transaction_status . " , transaction_id = " . $transaction_id . " WHERE `order_id`=" . $order_id );
+        
+        nv_insert_logs( NV_LANG_DATA, $module_name, 'log_process_product', "order_id " . $order_id, $admin_info['userid'] );
     }
-    nv_del_moduleCache($module_name);
-    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order");
+    nv_del_moduleCache( $module_name );
+    Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order" );
 }
 
 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 
-$listid = explode("|", $data_content['listid']);
-$listnum = explode("|", $data_content['listnum']);
-$listprice = explode("|", $data_content['listprice']);
+$listid = explode( "|", $data_content['listid'] );
+$listnum = explode( "|", $data_content['listnum'] );
+$listprice = explode( "|", $data_content['listprice'] );
 $data_pro = array();
 $i = 0;
-foreach ($listid as $id)
+foreach ( $listid as $id )
 {
     $sql = "SELECT t1.id, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1.product_price,t2." . NV_LANG_DATA . "_title  FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` as t2, `" . $db_config['prefix'] . "_" . $module_data . "_rows` as t1 WHERE t1.product_unit = t2.id AND t1.id =" . $id . "  AND t1.status=1 AND t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime>" . NV_CURRENTTIME . ")";
-    $result = $db->sql_query($sql);
-    list($id, $publtime, $title, $alias, $note, $product_price, $unit) = $db->sql_fetchrow($result);
-    $data_pro[] = array("id" => $id, "publtime" => $publtime, "title" => $title, "alias" => $alias, "product_price" => $listprice[$i], "product_unit" => $unit, "link_pro" => $link . "detail/" . $id . "/" . $alias, "product_number" => $listnum[$i]);
-    ++$i;
+    $result = $db->sql_query( $sql );
+    list( $id, $publtime, $title, $alias, $note, $product_price, $unit ) = $db->sql_fetchrow( $result );
+    $data_pro[] = array( 
+        "id" => $id, "publtime" => $publtime, "title" => $title, "alias" => $alias, "product_price" => $listprice[$i], "product_unit" => $unit, "link_pro" => $link . "detail/" . $id . "/" . $alias, "product_number" => $listnum[$i] 
+    );
+    $i ++;
 }
 
-$xtpl = new XTemplate("or_view.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('dateup', date("d-m-Y", $data_content['order_time']));
-$xtpl->assign('moment', date("h:i' ", $data_content['order_time']));
-$xtpl->assign('DATA', $data_content);
-$xtpl->assign('order_id', $data_content['order_id']);
+$xtpl = new XTemplate( "or_view.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'dateup', date( "d-m-Y", $data_content['order_time'] ) );
+$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
+$xtpl->assign( 'DATA', $data_content );
+$xtpl->assign( 'order_id', $data_content['order_id'] );
 ////////////////////////////////////////////////////////
 $i = 0;
-foreach ($data_pro as $pdata)
+foreach ( $data_pro as $pdata )
 {
-    $xtpl->assign('product_name', $pdata['title']);
-    $xtpl->assign('product_number', $pdata['product_number']);
-    $xtpl->assign('product_price', nv_number_format($pdata['product_price']));
-    $xtpl->assign('product_unit', $pdata['product_unit']);
-    $xtpl->assign('link_pro', $pdata['link_pro']);
-    $xtpl->assign('pro_no', $i + 1);
-    $bg = ($i % 2 == 0) ? "class=\"bg\"" : "";
-    $xtpl->assign('bg', $bg);
+    $xtpl->assign( 'product_name', $pdata['title'] );
+    $xtpl->assign( 'product_number', $pdata['product_number'] );
+    $xtpl->assign( 'product_price', FormatNumber( $pdata['product_price'], 2, '.', ',' ) );
+    $xtpl->assign( 'product_unit', $pdata['product_unit'] );
+    $xtpl->assign( 'link_pro', $pdata['link_pro'] );
+    $xtpl->assign( 'pro_no', $i + 1 );
+    $bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
+    $xtpl->assign( 'bg', $bg );
     ;
-    $xtpl->parse('main.loop');
-    ++$i;
+    $xtpl->parse( 'main.loop' );
+    $i ++;
 }
-if (!empty($data_content['order_note']))
+if ( ! empty( $data_content['order_note'] ) )
 {
-    $xtpl->parse('main.order_note');
+    $xtpl->parse( 'main.order_note' );
 }
-$xtpl->assign('order_total', nv_number_format($data_content['order_total']));
-$xtpl->assign('unit', $data_content['unit_total']);
+$xtpl->assign( 'order_total', FormatNumber( $data_content['order_total'], 2, '.', ',' ) );
+$xtpl->assign( 'unit', $data_content['unit_total'] );
 
-/* transaction_status: Trang thai giao dich:
- -1 - Giao dich cho duyet
- 0 - Giao dich moi tao
- 1 - Chua thanh toan;
- 2 - Da thanh toan, dang bi tam giu;
- 3 - Giao dich bi huy;
- 4 - Giao dich da hoan thanh thanh cong (truong hop thanh toan ngay hoac thanh toan tam giu nhung nguoi mua da phe chuan)
- */
+/* transaction_status: Trang thai giao dich: 
+			-1 - Giao dich cho duyet
+			0 - Giao dich moi tao
+			1 - Chua thanh toan; 
+			2 - Da thanh toan, dang bi tam giu; 
+			3 - Giao dich bi huy; 
+			4 - Giao dich da hoan thanh thanh cong (truong hop thanh toan ngay hoac thanh toan tam giu nhung nguoi mua da phe chuan)
+		*/
 
-if ($data_content['transaction_status'] == 4)
+if ( $data_content['transaction_status'] == 4 )
 {
     $html_payment = $lang_module['history_payment_yes'];
 }
-elseif ($data_content['transaction_status'] == 3)
+elseif ( $data_content['transaction_status'] == 3 )
 {
     $html_payment = $lang_module['history_payment_cancel'];
 }
-elseif ($data_content['transaction_status'] == 2)
+elseif ( $data_content['transaction_status'] == 2 )
 {
     $html_payment = $lang_module['history_payment_check'];
 }
-elseif ($data_content['transaction_status'] == 1)
+elseif ( $data_content['transaction_status'] == 1 )
 {
     $html_payment = $lang_module['history_payment_send'];
 }
-elseif ($data_content['transaction_status'] == 0)
+elseif ( $data_content['transaction_status'] == 0 )
 {
     $html_payment = $lang_module['history_payment_no'];
 }
-elseif ($data_content['transaction_status'] == -1)
+elseif ( $data_content['transaction_status'] == - 1 )
 {
     $html_payment = $lang_module['history_payment_wait'];
 }
@@ -120,89 +121,90 @@ else
     $html_payment = "ERROR";
 }
 
-$xtpl->assign('payment', $html_payment);
+$xtpl->assign( 'payment', $html_payment );
 
-if ($data_content['transaction_status'] == -1)
+if ( $data_content['transaction_status'] == - 1 )
 {
-    $xtpl->parse('main.onsubmit');
+    $xtpl->parse( 'main.onsubmit' );
 }
 
-if ($data_content['transaction_status'] != "4")
-    $xtpl->parse('main.onpay');
+if ( $data_content['transaction_status'] != "4" ) $xtpl->parse( 'main.onpay' );
 
-$xtpl->assign('LINK_PRINT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=print&order_id=" . $data_content['order_id'] . "&checkss=" . md5($data_content['order_id'] . $global_config['sitekey'] . session_id()));
-$xtpl->assign('URL_ACTIVE_PAY', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active_pay&order_id=" . $order_id);
-$xtpl->assign('URL_BACK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=or_view&order_id=" . $order_id);
+$xtpl->assign( 'LINK_PRINT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=print&order_id=" . $data_content['order_id'] . "&checkss=" . md5( $data_content['order_id'] . $global_config['sitekey'] . session_id() ) );
+$xtpl->assign( 'URL_ACTIVE_PAY', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active_pay&order_id=" . $order_id );
+$xtpl->assign( 'URL_BACK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=or_view&order_id=" . $order_id );
 
 $array_data_payment = array();
 $sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` ORDER BY `weight` ASC";
-$result = $db->sql_query($sql);
-while ($row = $db->sql_fetchrow($result))
+$result = $db->sql_query( $sql );
+while ( $row = $db->sql_fetchrow( $result ) )
 {
     $payment = $row['payment'];
-    $array_data_payment[$payment] = array('config' => array(), 'orders_id' => array(), 'data' => array());
+    $array_data_payment[$payment] = array( 
+        'config' => array(), 'orders_id' => array(), 'data' => array() 
+    );
     $array_data_payment[$payment]['domain'] = $row['domain'];
     $array_data_payment[$payment]['paymentname'] = $row['paymentname'];
-    if (file_exists(NV_ROOTDIR . "/modules/" . $module_file . "/payment/" . $payment . ".config.ini"))
+    if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/payment/" . $payment . ".config.ini" ) )
     {
-        $array_data_payment[$payment]['config'] = unserialize(nv_base64_decode($row['config']));
+        $array_data_payment[$payment]['config'] = unserialize( nv_base64_decode( $row['config'] ) );
     }
 }
 
 //check lai cac doen hang
-$checkpayment = $nv_Request->get_string('checkpayment', 'post,get', '');
-if (!empty($checkpayment) and $checkpayment == md5($order_id . session_id() . $global_config['sitekey']))
+$checkpayment = $nv_Request->get_string( 'checkpayment', 'post,get', '' );
+if ( ! empty( $checkpayment ) and $checkpayment == md5( $order_id . session_id() . $global_config['sitekey'] ) )
 {
     $order_code = $data_content['order_code'];
-    require_once (NV_ROOTDIR . "/modules/" . $module_file . "/payment/nganluong.class.php");
+    require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/payment/nganluong.class.php" );
     $payment_config = $array_data_payment['nganluong']['config'];
-    $nl = new NL_Checkout($payment_config['checkout_url'], $payment_config['merchant_site'], $payment_config['secure_pass']);
-    $transaction_i = $nl->checkOrder($payment_config['public_api_url'], $order_code, 0);
-    if ($transaction_i !== false)
+    $nl = new NL_Checkout( $payment_config['checkout_url'], $payment_config['merchant_site'], $payment_config['secure_pass'] );
+    $transaction_i = $nl->checkOrder( $payment_config['public_api_url'], $order_code, 0 );
+    if ( $transaction_i !== false )
     {
-        print_r($transaction_i);
+        print_r( $transaction_i );
         die();
     }
 }
 //end check lai cac doen hang
 
+
 $a = 1;
 $array_transaction = array();
-$re = $db->sql_query("SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_transaction` WHERE `order_id`=" . $order_id . " ORDER BY `transaction_id` ASC");
-if ($db->sql_numrows($re))
+$re = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_transaction` WHERE `order_id`=" . $order_id . " ORDER BY `transaction_id` ASC" );
+if ( $db->sql_numrows( $re ) )
 {
     $array_payment = array();
-    while ($row = $db->sql_fetchrow($re))
+    while ( $row = $db->sql_fetchrow( $re ) )
     {
-        $row['a'] = ++$a;
-        $row['transaction_time'] = nv_date("H:i:s d/m/y", $row['transaction_time']);
-        $row['order_id'] = (!empty($row['order_id'])) ? $row['order_id'] : "";
-        $row['payment_time'] = (!empty($row['payment_time'])) ? nv_date("H:i:s d/m/y", $row['payment_time']) : "";
-        $row['payment_id'] = (!empty($row['payment_id'])) ? $row['payment_id'] : "";
-        if (!empty($row['payment_id']))
-            $array_payment[] = $row['payment_id'];
-        $row['payment_amount'] = nv_number_format($row['payment_amount']);
-        if ($row['transaction_status'] == 4)
+        $row['a'] = $a ++;
+        $row['transaction_time'] = nv_date( "H:i:s d/m/y", $row['transaction_time'] );
+        $row['order_id'] = ( ! empty( $row['order_id'] ) ) ? $row['order_id'] : "";
+        $row['payment_time'] = ( ! empty( $row['payment_time'] ) ) ? nv_date( "H:i:s d/m/y", $row['payment_time'] ) : "";
+        $row['payment_id'] = ( ! empty( $row['payment_id'] ) ) ? $row['payment_id'] : "";
+        if ( ! empty( $row['payment_id'] ) ) $array_payment[] = $row['payment_id'];
+        $row['payment_amount'] = FormatNumber( $row['payment_amount'], 2, '.', ',' );
+        if ( $row['transaction_status'] == 4 )
         {
             $row['transaction'] = $lang_module['history_payment_yes'];
         }
-        elseif ($row['transaction_status'] == 3)
+        elseif ( $row['transaction_status'] == 3 )
         {
             $row['transaction'] = $lang_module['history_payment_cancel'];
         }
-        elseif ($row['transaction_status'] == 2)
+        elseif ( $row['transaction_status'] == 2 )
         {
             $row['transaction'] = $lang_module['history_payment_check'];
         }
-        elseif ($row['transaction_status'] == 1)
+        elseif ( $row['transaction_status'] == 1 )
         {
             $row['transaction'] = $lang_module['history_payment_send'];
         }
-        elseif ($row['transaction_status'] == 0)
+        elseif ( $row['transaction_status'] == 0 )
         {
             $row['transaction'] = $lang_module['history_payment_no'];
         }
-        elseif ($row['transaction_status'] == -1)
+        elseif ( $row['transaction_status'] == - 1 )
         {
             $row['transaction'] = $lang_module['history_payment_wait'];
         }
@@ -210,13 +212,13 @@ if ($db->sql_numrows($re))
         {
             $row['transaction'] = "ERROR";
         }
-        if ($row['userid'] > 0)
+        if ( $row['userid'] > 0 )
         {
-            list($username) = $db->sql_fetchrow($db->sql_query("SELECT `username` FROM " . NV_USERS_GLOBALTABLE . " WHERE userid=" . $row['userid']));
+            list( $username ) = $db->sql_fetchrow( $db->sql_query( "SELECT `username` FROM " . NV_USERS_GLOBALTABLE . " WHERE userid=" . $row['userid'] ) );
             $row['payment'] = $username;
             $row['link_user'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $row['userid'];
         }
-        elseif (isset($array_data_payment[$row['payment']]))
+        elseif ( isset( $array_data_payment[$row['payment']] ) )
         {
             $row['link_user'] = $array_data_payment[$row['payment']]['domain'];
             $row['payment'] = $array_data_payment[$row['payment']]['paymentname'];
@@ -225,22 +227,22 @@ if ($db->sql_numrows($re))
         {
             $row['link_user'] = "#";
         }
-        $xtpl->assign('DATA_TRANS', $row);
-        $xtpl->parse('main.transaction.looptrans');
+        $xtpl->assign( 'DATA_TRANS', $row );
+        $xtpl->parse( 'main.transaction.looptrans' );
     }
-    if (!empty($array_payment))
+    if ( ! empty( $array_payment ) )
     {
-        $xtpl->assign('LINK_CHECK_PAYMENT', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&order_id=" . $order_id . "&checkpayment=" . md5($order_id . session_id() . $global_config['sitekey']));
-        $xtpl->parse('main.transaction.checkpayment');
+        $xtpl->assign( 'LINK_CHECK_PAYMENT', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&order_id=" . $order_id . "&checkpayment=" . md5( $order_id . session_id() . $global_config['sitekey'] ) );
+        $xtpl->parse( 'main.transaction.checkpayment' );
     }
-    $xtpl->parse('main.transaction');
+    $xtpl->parse( 'main.transaction' );
 }
 
-$xtpl->parse('main');
-$contents .= $xtpl->text('main');
+$xtpl->parse( 'main' );
+$contents .= $xtpl->text( 'main' );
 
 $set_active_op = "order";
-include (NV_ROOTDIR . "/includes/header.php");
-echo nv_admin_theme($contents);
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
+echo nv_admin_theme( $contents );
+include ( NV_ROOTDIR . "/includes/footer.php" );
 ?>

@@ -48,7 +48,9 @@ if ( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
               DROP `" . $lang . "_note`,
               DROP `" . $lang . "_hometext`,
               DROP `" . $lang . "_bodytext`,
-              DROP `" . $lang . "_address`";
+              DROP `" . $lang . "_address`,
+              DROP `" . $lang . "_warranty`,
+              DROP `" . $lang . "_promotional`";
     
     $sql_drop_module[] = "ALTER TABLE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs`
               DROP `" . $lang . "_title`,
@@ -126,6 +128,7 @@ $sql_create_module[] = "ALTER TABLE `" . $db_config['prefix'] . "_" . $module_da
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $module_data . "_group` (
   `groupid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `parentid` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `cateid` int(11) NOT NULL DEFAULT '0',
   `image` varchar(255) NOT NULL DEFAULT '',
   `thumbnail` varchar(255) NOT NULL DEFAULT '',
   `weight` smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -142,6 +145,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `del_cache_time` int(11) NOT NULL DEFAULT '0',
   `who_view` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `groups_view` varchar(255) NOT NULL DEFAULT '',
+  `numpro` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`groupid`),
   KEY `parentid` (`parentid`)
 ) ENGINE=MyISAM ";
@@ -153,6 +157,7 @@ $sql_create_module[] = "ALTER TABLE `" . $db_config['prefix'] . "_" . $module_da
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $module_data . "_rows` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `listcatid` int(11) NOT NULL DEFAULT '0',
+  `topic_id` mediumint(8) NOT NULL DEFAULT '0',
   `group_id` varchar(255) NOT NULL,
   `com_id` mediumint(8) NOT NULL DEFAULT '0',
   `shopcat_id` mediumint(8) NOT NULL DEFAULT '0',
@@ -164,7 +169,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `publtime` int(11) unsigned NOT NULL DEFAULT '0',
   `exptime` int(11) unsigned NOT NULL DEFAULT '0',
   `archive` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `product_code` varchar(32) NOT NULL DEFAULT '',  
   `product_number` int(11) NOT NULL DEFAULT '0',
   `product_price` double NOT NULL DEFAULT '0',
   `product_discounts` int(11) NOT NULL DEFAULT '0',
@@ -173,6 +177,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `homeimgfile` varchar(255) NOT NULL DEFAULT '',
   `homeimgthumb` varchar(255) NOT NULL DEFAULT '',
   `homeimgalt` varchar(255) NOT NULL,
+  `otherimage` text NOT NULL,
   `imgposition` tinyint(1) NOT NULL DEFAULT '1',
   `copyright` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `inhome` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -188,6 +193,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `showprice` tinyint(2) NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   KEY `listcatid` (`listcatid`),
+  KEY `topic_id` (`topic_id`),
   KEY `com_id` (`com_id`),
   KEY `shopcat_id` (`shopcat_id`),
   KEY `user_id` (`user_id`),
@@ -202,7 +208,9 @@ $sql_create_module[] = "ALTER TABLE `" . $db_config['prefix'] . "_" . $module_da
 						ADD `" . $lang . "_note` text NOT NULL,
 						ADD `" . $lang . "_hometext` text NOT NULL,
 						ADD `" . $lang . "_bodytext` mediumtext NOT NULL,
-						ADD `" . $lang . "_address` text NOT NULL";
+						ADD `" . $lang . "_address` text NOT NULL,
+						ADD `" . $lang . "_warranty` text NOT NULL,
+						ADD `" . $lang . "_promotional` text NOT NULL";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "_" . $module_data . "_sources` (
   `sourceid` mediumint(8) unsigned NOT NULL auto_increment,
@@ -312,7 +320,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `id` mediumint(11) NOT NULL,
   `code` char(3) NOT NULL,
   `currency` varchar(255) NOT NULL,
-  `exchange` double NOT NULL default '0',
+  `exchange` float NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `code` (`code`)
 ) ENGINE=MyISAM";
@@ -345,7 +353,7 @@ $data['active_order'] = 1;
 $data['active_price'] = 1;
 $data['active_order_number'] = 0;
 $data['active_payment'] = 1;
-
+$data['active_tooltip'] = 1;
 foreach ( $data as $config_name => $config_value )
 {
     $sql_create_module[] = "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . $lang . "', " . $db->dbescape( $module_name ) . ", " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")";
@@ -353,7 +361,7 @@ foreach ( $data as $config_name => $config_value )
 
 if ( ! empty( $set_lang_data ) )
 {
-    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs`" ) );
+    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs`" ) );
     if ( $numrow )
     {
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` SET `" . $lang . "_title` = `" . $global_config['site_lang'] . "_title`";
@@ -362,7 +370,7 @@ if ( ! empty( $set_lang_data ) )
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` SET `" . $lang . "_keywords` = `" . $set_lang_data . "_keywords`";
     }
     
-    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows`" ) );
+    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows`" ) );
     if ( $numrow )
     {
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `" . $lang . "_title` = `" . $set_lang_data . "_title`";
@@ -372,22 +380,25 @@ if ( ! empty( $set_lang_data ) )
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `" . $lang . "_hometext` = `" . $set_lang_data . "_hometext`";
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `" . $lang . "_bodytext` = `" . $set_lang_data . "_bodytext`";
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `" . $lang . "_address` = `" . $set_lang_data . "_address`";
+        $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `" . $lang . "_warranty` = `" . $set_lang_data . "_warranty`";
+        $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `" . $lang . "_promotional` = `" . $set_lang_data . "_promotional`";
+        $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `" . $lang . "_note` = `" . $set_lang_data . "_note`";
     }
     
-    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_units`" ) );
+    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_units`" ) );
     if ( $numrow )
     {
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_units` SET `" . $lang . "_title` = `" . $set_lang_data . "_title`";
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_units` SET `" . $lang . "_note` = `" . $set_lang_data . "_note`";
     }
     
-    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources`" ) );
+    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources`" ) );
     if ( $numrow )
     {
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_sources` SET `" . $lang . "_title` = `" . $set_lang_data . "_title`";
     }
     
-    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat`" ) );
+    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat`" ) );
     if ( $numrow )
     {
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` SET `" . $lang . "_title` = `" . $set_lang_data . "_title`";
@@ -396,11 +407,21 @@ if ( ! empty( $set_lang_data ) )
         $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` SET `" . $lang . "_keywords` = `" . $set_lang_data . "_keywords`";
     }
     
-    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat`" ) );
+	list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_group`" ) );
+    if ( $numrow )
+    {
+        $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `" . $lang . "_title` = `" . $set_lang_data . "_title`";
+        $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `" . $lang . "_alias` = `" . $set_lang_data . "_alias`";
+        $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `" . $lang . "_description` = `" . $set_lang_data . "_description`";
+        $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `" . $lang . "_keywords` = `" . $set_lang_data . "_keywords`";
+    }
+    
+    list( $numrow ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*)  FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat`" ) );
     if ( $numrow )
     {
         $sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_money_" . $set_lang_data . "`";
     }
+    
     $sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . "` SET `exchange` = '1'";
 }
 
@@ -408,6 +429,7 @@ $sql_create_module[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $module_d
 $sql_create_module[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . "` (`id`, `code`, `currency`, `exchange`) VALUES (704, 'VND', 'Vietnam Dong', 1)";
 
 $sql_create_module[] = "ALTER TABLE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ADD UNIQUE (`" . $lang . "_alias`)";
+$sql_create_module[] = "ALTER TABLE `" . $db_config['prefix'] . "_" . $module_data . "_group` ADD UNIQUE (`" . $lang . "_alias`)";
 $sql_create_module[] = "ALTER TABLE `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` ADD UNIQUE (`" . $lang . "_alias`)";
 
 ?>

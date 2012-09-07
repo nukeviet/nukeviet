@@ -24,8 +24,8 @@ if ( $catid > 0 )
 		$weight = 0;
 		while ( $row = $db->sql_fetchrow( $result ) )
 		{
-			++$weight;
-			if ( $weight == $new_vid ) ++$weight;
+			$weight++;
+			if ( $weight == $new_vid ) $weight++;
 			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` SET `weight`=" . $weight . " WHERE `catid`=" . intval( $row['catid'] );
 			$db->sql_query( $sql );
 		}

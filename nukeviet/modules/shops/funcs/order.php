@@ -2,7 +2,7 @@
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3-6-2010 0:14
  */
 
@@ -51,7 +51,7 @@ if ( $post_order == 1 )
                 $listprice .= "|" . $info['price'];
             }
             $total = $total + ( ( int )$info['num'] * ( double )$info['price'] );
-            ++$i;
+            $i ++;
         }
     }
     
@@ -145,7 +145,7 @@ if ( $action == 0 )
             $data_content[] = array( 
                 "id" => $id, "publtime" => $publtime, "title" => $title, "alias" => $alias, "note" => $note, "hometext" => $hometext, "homeimgalt" => $homeimgalt, "homeimgthumb" => $thumb[0], "product_price" => $product_price, "product_discounts" => $product_discounts, "product_unit" => $unit, "money_unit" => $money_unit, "link_pro" => $link . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id, "num" => $_SESSION[$module_data . '_cart'][$id]['num'] 
             );
-            ++$i;
+            $i ++;
         }
     }
     if ( $i == 0 )

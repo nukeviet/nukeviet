@@ -20,15 +20,15 @@ if ( $mod == "weight" and $new_vid > 0 )
     $query = "SELECT * FROM `" . $db_config ['prefix'] . "_" . $module_data . "_block_cat` WHERE `bid`=" . $bid;
     $result = $db->sql_query( $query );
     $numrows = $db->sql_numrows( $result );
-    if ( $numrows != 1 ) die( 'NO_' . $bid );
+    if ( $numrows != 1 ) die( 'NO_' . $topicid );
     
     $query = "SELECT `bid` FROM `" . $db_config ['prefix'] . "_" . $module_data . "_block_cat` WHERE `bid`!=" . $bid . " ORDER BY `weight` ASC";
     $result = $db->sql_query( $query );
     $weight = 0;
     while ( $row = $db->sql_fetchrow( $result ) )
     {
-        ++$weight;
-        if ( $weight == $new_vid ) ++$weight;
+        $weight ++;
+        if ( $weight == $new_vid ) $weight ++;
         $sql = "UPDATE `" . $db_config ['prefix'] . "_" . $module_data . "_block_cat` SET `weight`=" . $weight . " WHERE `bid`=" . intval( $row['bid'] );
         $db->sql_query( $sql );
     }

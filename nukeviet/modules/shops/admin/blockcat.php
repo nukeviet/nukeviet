@@ -103,7 +103,7 @@ $contents .= "<input name=\"savecat\" type=\"hidden\" value=\"1\" />\n";
 $contents .= "<table summary=\"\" class=\"tab1\">\n";
 $contents .= "<caption>" . $lang_module['add_block_cat'] . "</caption>\n";
 $contents .= "<tr>";
-$contents .= "<td align=\"right\"><strong>" . $lang_module['block'] . ": </strong></td>\n";
+$contents .= "<td align=\"right\"><strong>" . $lang_module['name'] . ": </strong></td>\n";
 $contents .= "<td><input style=\"width: 650px\" name=\"title\" type=\"text\" value=\"" . $data['title'] . "\" maxlength=\"255\" /></td>\n";
 $contents .= "</tr>";
 

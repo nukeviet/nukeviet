@@ -1,9 +1,13 @@
 <!-- BEGIN: main -->
-<div style="padding:5px">
-	<ul>
-    	<!-- BEGIN: loop -->
-        <li>{ROW.xtitle}{ROW.tag}<a {ROW.bolder} href="{ROW.link}" title="{ROW.title}">{ROW.title}</a></li>
-        <!-- END: loop -->
-    </ul>
+<style type="text/css">
+.class_group{ padding: 5 }
+.class_group .parent{
+	background:#F8F8F8;
+	line-height:22px;
+}
+</style>
+<div class="class_group">
+    {content1}
+    {content2}
 </div>
 <!-- END: main -->

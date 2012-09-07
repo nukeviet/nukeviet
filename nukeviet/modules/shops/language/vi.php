@@ -8,9 +8,9 @@
  * @Createdate May 31, 2010, 08:01:47 PM
  */
 
-if (!defined('NV_MAINFILE'))
+if ( ! defined( 'NV_MAINFILE' ) )
 {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
@@ -127,7 +127,7 @@ $lang_module['content_add'] = "Đăng sản phẩm";
 // post product
 $lang_module['post_err'] = "Lỗi";
 $lang_module['err_no_title'] = "Không có tiêu đề cho sản phẩm đăng!";
-$lang_module['err_no_hometext'] = "Bạn cần mô tả ngắn gọi sản phẩm!";
+$lang_module['err_no_hometext'] = "Bạn cần mô tả ngắn gọn sản phẩm!";
 $lang_module['err_no_bodytext'] = "Bạn chưa nhập phần chi tiết cho sản phẩm!";
 $lang_module['err_no_save'] = "Dữ liệu không được cập nhật được. tiêu đề có thể bị trùng!";
 $lang_module['err_no_image'] = "File bạn tải lên không phải là ảnh!";
@@ -139,7 +139,7 @@ $lang_module['product_post_info'] = "Thông tin có dấu * là bắt buộc!";
 $lang_module['product_info'] = "Thông tin sản phẩm";
 $lang_module['product_title'] = "Tiêu đề";
 $lang_module['product_catalogs'] = "Loại sản phẩm";
-$lang_module['product_cate_of_shop'] = "Dạnh mục của shop";
+$lang_module['product_cate_of_shop'] = "Danh mục của shop";
 $lang_module['product_image'] = "Hình ảnh sản phẩm";
 $lang_module['product_intro'] = "Mô tả ngắn gọn";
 $lang_module['product_detail'] = "Chi tiết sản phẩm";
@@ -156,8 +156,6 @@ $lang_module['product_post_ok'] = "Bạn đã đăng thành công!";
 $lang_module['redirect_to_back'] = "Bấm vào đây để về trang quản lý";
 $lang_module['product_post_fail'] = "Bạn đang truy câp trái phép!";
 $lang_module['product_alias'] = "Liên kết tĩnh";
-$lang_module['product_code'] = "Mã sản phẩm";
-
 // detail
 $lang_module['price_contact'] = "Liên hệ";
 $lang_module['detail_product_name'] = "Tên sản phẩm";
@@ -191,9 +189,15 @@ $lang_module['print_link'] = "URL của tài liệu này";
 $lang_module['detail_rate_ok'] = "Bạn đã cho %s điểm. Xin cảm ơn!";
 $lang_module['detail_rate_timeout'] = "Bạn đã đánh giá vui lòng đợi %s phút sau để tiếp tục";
 $lang_module['detail_do_not_view'] = "Bạn đã không thể xem được xin xem link khác!";
+$lang_module['detail_product_address'] = "Địa điểm bán";
+$lang_module['detail_source'] = "Hãng sản xuất";
+$lang_module['detail_product_discounts'] = "Giảm giá";
+$lang_module['detail_promotional'] = "Khuyến mại";
+$lang_module['detail_warranty'] = "Bảo hành";
+
 $lang_module['redirect_to_back_shops'] = "Quay lại trang chủ";
 $lang_module['company_product'] = "Sản phẩm thuộc gian hàng";
-// cart
+// cart 
 $lang_module['cart_check_cart'] = "Kiểm tra giỏ hàng";
 $lang_module['cart_order'] = "Đặt hàng";
 $lang_module['cart_payment'] = "Thanh toán";
@@ -218,7 +222,7 @@ $lang_module['cart_remove_pro'] = "Xóa";
 $lang_module['cart_total_print'] = "Tổng tiền";
 $lang_module['cart_update_pro'] = "Cập nhật";
 $lang_module['cart_update'] = "Cập nhật giỏ hàng";
-// order
+// order 
 $lang_module['order_info'] = "Xin điền đầy đủ thông tin vào các mục đánh dấu(*)";
 $lang_module['order_contact'] = "Thông tin liên hệ";
 $lang_module['order_product_cart'] = "Sản phẩm trong giỏ";
@@ -337,8 +341,37 @@ $lang_module['order_by_payment'] = "Đơn hàng này bạn đang thực hiện q
 $lang_module['update_order'] = "Thông báo: Hệ thống đã cập nhật lại thông tin giao dịch các đơn hàng: %1\$s";
 $lang_module['no_update_order'] = "Thông báo: Hệ thống không tìm thấy các giao dịch nào mới";
 
-/**/
+/**/ 
 $lang_module['active_order_dis'] = "Chức năng đặt hàng trực truyến đã bị tắt";
 /*group*/
 $lang_module['group_title'] = "Nhóm sản phẩm";
+$lang_module['notresult'] = "Không tìm thấy kết quả nào!!";
+$lang_module['sort_by'] = "Sắp xếp";
+$lang_module['sort_by_name_az'] = "Tên tăng dần";
+$lang_module['sort_by_name_za'] = "Tên giảm dần";
+$lang_module['sort_by_price_az'] = "Giá tăng dần";
+$lang_module['sort_by_price_za'] = "Giá giảm dần";
+$lang_module['last_product'] = "Sản phẩm mới";
+$lang_module['top_product'] = "Xem nhiều";
+$lang_module['add_otherimage'] = "Hình ảnh khác";
+
+$lang_module['catagories'] = "Danh mục";
+$lang_module['allcatagories'] = "Tất cả danh mục";
+$lang_module['search'] = "Tìm kiếm";
+$lang_module['advance'] = "Tìm kiếm mở rộng";
+$lang_module['keyword'] = "Từ khóa";
+$lang_module['up'] = "Trên";
+$lang_module['all'] = "Tất cả";
+$lang_module['moneyunit'] = "Tiền tệ";
+$lang_module['price1'] = "Giá từ";
+$lang_module['price2'] = "Đến";
+$lang_module['price1_small'] = "Dưới";
+$lang_module['price2_over'] = "Trên";
+$lang_module['isnumber'] = "Giá phải là số";
+$lang_module['noneprice'] = "Giá đến phải lớn hơn từ";
+$lang_module['search_adv'] = "Tìm kiếm nâng cao";
+$lang_module['money_thousand'] = "nghìn";
+$lang_module['money_million'] = "triệu";
+$lang_module['source_title'] = "Tất cả hãng sản xuất";
+
 ?>

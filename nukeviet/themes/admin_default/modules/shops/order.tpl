@@ -27,8 +27,8 @@
 	<!-- END: row -->
 	<tfoot>
 		<tr>
-			<td colspan="6"><a href="#" id="checkall">{LANG.prounit_select}</a> | <a href="#" id="uncheckall">{LANG.prounit_unselect}</a> |<a href="#" id="delall">{LANG.prounit_del_select}</a></td>
-            <td colspan="2">{PAGES}</td>
+			<td colspan="2"><a href="#" id="checkall">{LANG.prounit_select}</a> | <a href="#" id="uncheckall">{LANG.prounit_unselect}</a> |<a href="#" id="delall">{LANG.prounit_del_select}</a></td>
+            <td colspan="5">{PAGES}</td>
 		</tr>
 	</tfoot>
 </table>

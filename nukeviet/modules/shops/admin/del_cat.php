@@ -15,14 +15,14 @@ list( $catid, $parentid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT `
 if ( $catid > 0 )
 {
     $delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
-    list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `parentid` = '" . $catid . "'" ) );
+    list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `parentid` = '" . $catid . "'" ) );
     if ( intval( $check_parentid ) > 0 )
     {
         $contents = "ERR_CAT_" . sprintf( $lang_module['delcat_msg_cat'], $check_parentid );
     }
     else
     {
-        list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` LIKE '%" . $catid . "%'" ) );
+        list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` LIKE '%" . $catid . "%'" ) );
         if ( intval( $check_rows ) > 0 )
         {
             if ( $delallcheckss == md5( $catid . session_id() . $global_config['sitekey'] ) )
@@ -42,7 +42,7 @@ if ( $catid > 0 )
                         if ( $lev_i > 0 )
                         {
                             $xtitle_i .= "&nbsp;&nbsp;&nbsp;|";
-                            for ( $i = 1; $i <= $lev_i; ++$i )
+                            for ( $i = 1; $i <= $lev_i; $i ++ )
                             {
                                 $xtitle_i .= "---";
                             }

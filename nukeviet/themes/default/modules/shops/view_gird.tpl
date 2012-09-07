@@ -6,16 +6,19 @@
         <div class="items" style="width:{pwidth}%">
             <div class="items_content">
                 <div class="content_top">
-                    <a title="{title_pro}" href="{link_pro}">
+                    <a title="{title_pro}" href="{link_pro}" class="tip_trigger">
                         <img src="{img_pro}" alt="{title_pro}" style="max-height:{height}px;max-width:{width}px;"/>
+                        <!-- BEGIN: tooltip -->
+                        <span class="tip"><strong>{title_pro}</strong><img src="{img_pro}" style="max-width:{width}px;">{intro}</span>
+                        <!-- END: tooltip -->
                     </a><br />
                     <span><a href="{LINK}" title="{title_pro}">{title_pro0}</a></span> <br />
                 </div>
                 <!-- BEGIN: price -->
                 <p class="content_price">
-                    <span class="{class_money}">{product_price} {money_unit}</span><br />
+                    <span class="{class_money}">{product_price} {money_unit}</span>
                     <!-- BEGIN: discounts -->
-                        <span class="money">{product_discounts} {money_unit}</span><br />
+                        <span class="money">{product_discounts} {money_unit}</span>
                     <!-- END: discounts -->
                 </p>
                 <!-- END: price -->
@@ -42,4 +45,7 @@
 	</div>
 </div>
 <div class="msgshow" id="msgshow"></div>
+<!-- BEGIN: tooltip_js -->
+<script type="text/javascript">tooltip_shop();</script>
+<!-- END: tooltip_js -->
 <!-- END: main -->

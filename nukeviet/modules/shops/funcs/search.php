@@ -2,7 +2,7 @@
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 10-5-2010 0:14
  */
 if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
@@ -42,7 +42,7 @@ foreach ( $global_array_cat as $arr_cat_i )
     $xtitle = "";
     if ( $arr_cat_i['lev'] > 0 )
     {
-        for ( $i = 1; $i <= $arr_cat_i['lev']; ++$i )
+        for ( $i = 1; $i <= $arr_cat_i['lev']; $i ++ )
         {
             $xtitle .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
         }
@@ -55,10 +55,10 @@ foreach ( $global_array_cat as $arr_cat_i )
 $contents = call_user_func( "search_theme", $key, $check_num, $date_array, $array_cat_search );
 $where = "";
 $tbl_src = "";
-if ( isset( $key{NV_MIN_SEARCH_LENGTH-1} ) )
+if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 {
     $dbkey = $db->dblikeescape( $key );
-    $where = "AND ( " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR product_code LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_keywords LIKE '%" . $dbkey . "%' ) ";
+    $where = "AND ( " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_keywords LIKE '%" . $dbkey . "%' ) ";
     if ( $catid != 0 )
     {
         $where .= "AND ( listcatid = " . intval($catid) . ")";

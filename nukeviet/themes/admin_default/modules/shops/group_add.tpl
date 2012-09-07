@@ -22,11 +22,12 @@
         <tr>
         <td align="right"><strong>{LANG.group_sub}</strong></td>
         <td>
-        	<select name="parentid">
+        	<select name="parentid" onchange="nv_getcatalog(this)">
               <!-- BEGIN: parent_loop -->
                 <option value="{pgroup_i}" {pselect}>{ptitle_i}</option>
               <!-- END: parent_loop -->
             </select>
+            <span id="vcatid"></span>
         </td>
         </tr>
       </tbody>
@@ -77,5 +78,8 @@
     <br><center><input name="submit1" type="submit" value="{LANG.save}"/></center>
 	</form>
 </div>
+<script type="text/javascript">
+$('#vcatid').load('{URL}');
+</script>
 <!-- END: main -->
 

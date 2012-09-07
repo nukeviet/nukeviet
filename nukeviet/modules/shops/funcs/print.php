@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3-6-2010 0:14
  */
 if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
@@ -31,7 +31,7 @@ if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . 
             "price" => $listprice[$i], "num" => $listnum[$i] 
         );
         $arrayid[] = $proid;
-        ++$i;
+        $i ++;
     }
     
     if ( ! empty( $arrayid ) )

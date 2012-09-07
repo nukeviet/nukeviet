@@ -16,7 +16,7 @@ $contents .= "<tr align=\"center\">\n";
 $contents .= "<td></td>\n";
 $contents .= "<td style=\"width:60px;\">" . $lang_module['weight'] . "</td>\n";
 $contents .= "<td>" . $lang_module['comment_content'] . "</td>\n";
-$contents .= "<td>" . $lang_module['product'] . "</td>\n";
+$contents .= "<td>" . $lang_module['comment_topic'] . "</td>\n";
 $contents .= "<td style=\"width:150px;\">" . $lang_module['comment_email'] . "</td>\n";
 $contents .= "<td>" . $lang_module['comment_status'] . "</td>\n";
 $contents .= "</tr>\n";

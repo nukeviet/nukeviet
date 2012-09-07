@@ -15,14 +15,14 @@ list( $groupid, $parentid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT
 if ( $groupid > 0 )
 {
     $delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
-    list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `parentid` = '" . $groupid . "'" ) );
+    list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `parentid` = '" . $groupid . "'" ) );
     if ( intval( $check_parentid ) > 0 )
     {
         $contents = "ERR_CAT_" . sprintf( $lang_module['delgroup_msg_group'], $check_parentid );
     }
     else
     {
-        list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listgroupid` LIKE '%" . $groupid . "%'" ) );
+        list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listgroupid` LIKE '%" . $groupid . "%'" ) );
         if ( intval( $check_rows ) > 0 )
         {
             if ( $delallcheckss == md5( $groupid . session_id() . $global_config['sitekey'] ) )
@@ -42,7 +42,7 @@ if ( $groupid > 0 )
                         if ( $lev_i > 0 )
                         {
                             $xtitle_i .= "&nbsp;&nbsp;&nbsp;|";
-                            for ( $i = 1; $i <= $lev_i; ++$i )
+                            for ( $i = 1; $i <= $lev_i; $i ++ )
                             {
                                 $xtitle_i .= "---";
                             }

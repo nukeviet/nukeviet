@@ -104,7 +104,7 @@ if ( $db->sql_numrows( $result ) )
         $contents .= "<td>" . $title . "</td>\n";
         $contents .= "</tr>\n";
         $contents .= "</tbody>\n";
-        ++$a;
+        $a ++;
     }
     $contents .= "<tfoot>\n";
     $contents .= "<tr align=\"left\">\n";

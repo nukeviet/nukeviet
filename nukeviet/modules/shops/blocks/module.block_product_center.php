@@ -2,7 +2,7 @@
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3/9/2010 23:25
  */
 
@@ -45,10 +45,10 @@ if ( ! function_exists( 'nv_product_center' ) )
             if ($i%$num_view == 0){ 
             	
             	$page_i .= "<li><a href=\"#\">".$j."</a></li>";
-            	++$j;
+            	$j++;
             	$xtpl->parse( 'main.loop' );
             }
-            ++$i;
+            $i++;
         }
 		if ($i> $num_view && ($i-1)%$num_view != 0 ) {
 			$page_i .= "<li><a href=\"#\">".$j."</a></li>";

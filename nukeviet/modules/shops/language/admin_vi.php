@@ -8,9 +8,9 @@
  * @Createdate May 31, 2010, 08:01:47 PM
  */
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE'))
+if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
 {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
@@ -20,6 +20,7 @@ $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
 $lang_module['categories'] = "Loại sản phẩm";
+$lang_module['topics'] = "Tiêu chí cho loại sản phẩm";
 $lang_module['sources'] = "Hãng sản xuất";
 $lang_module['comments'] = "comments";
 $lang_module['save'] = "Lưu thay đổi";
@@ -37,7 +38,6 @@ $lang_module['errorsave'] = "Lỗi hệ thống không cập nhật được n�
 $lang_module['saveok'] = "Cập nhật sản phẩm thành công";
 $lang_module['alias'] = "Liên kết tĩnh";
 $lang_module['name'] = "Tên sản phẩm";
-$lang_module['product'] = "sản phẩm";
 $lang_module['error_name'] = "Lỗi:Bạn cần nhập Tên sản phẩm";
 $lang_module['weight'] = "vị trí";
 $lang_module['numsubcat'] = "Số sản phẩm con";
@@ -48,8 +48,10 @@ $lang_module['keywords'] = "Từ khóa";
 $lang_module['content_list'] = "Danh sách sản phẩm";
 $lang_module['content_add'] = "Thêm sản phẩm";
 $lang_module['add_cat'] = "Thêm loại sản phẩm";
+$lang_module['add_topic'] = "Thêm nhóm sản phẩm";
 $lang_module['add_sources'] = "Thêm hãng sản xuất";
 $lang_module['edit_cat'] = "Sửa loại sản phẩm";
+$lang_module['edit_topic'] = "Sửa nhóm sản phẩm";
 $lang_module['edit_sources'] = "Sửa hãng sản xuất";
 $lang_module['siteinfo_publtime'] = "Tổng số sản phẩm";
 $lang_module['siteinfo_pending'] = "Số sản phẩm chờ đăng";
@@ -57,9 +59,10 @@ $lang_module['siteinfo_comment_pending'] = "Số chưa duyệt";
 $lang_module['siteinfo_comment'] = "Số bình luận đã đăng";
 $lang_module['siteinfo_order'] = "Tổng số đơn đặt hàng";
 $lang_module['siteinfo_order_noview'] = "Số đơn đặt hàng chưa xem";
-$lang_module['siteinfo_exptime'] = "Số sản phẩm sắp hết hạn";
+$lang_module['siteinfo_expired'] = "Số sản phẩm đã hết hạn";
 
 $lang_module['catalog_name'] = "Tên loại sản phẩm";
+$lang_module['topics_name'] = "Tên nhóm sản phẩm";
 
 $lang_module['add_block_cat'] = "Thêm nhóm block";
 $lang_module['edit_block_cat'] = "Sửa nhóm block";
@@ -69,15 +72,17 @@ $lang_module['content_main'] = "Thông tin module";
 $lang_module['document_payment'] = "Hướng dẫn thanh toán";
 $lang_module['document_payment_note'] = "Nội dung này hiển trong phần chi tiết mỗi sản phẩm hỗ trợ thanh toán";
 $lang_module['cat_title'] = "Danh sách loại sản phẩm";
-$lang_module['link'] = "Website";
+$lang_module['link'] = "url ngồn tin";
 $lang_module['cat_sub'] = "Thuộc chủ đề";
 $lang_module['cat_sub_sl'] = "Là chủ đề chính";
+$lang_module['topic_sl'] = "Chọn nhóm sản phẩm hoặc tự điền";
 $lang_module['delcat_msg_cat'] = "Chủ đề này có %s chủ đề thành phần, bạn cần xóa hoặc di chuyển các chủ đề thành phần trước";
 $lang_module['delcat_msg_rows'] = "Chủ đề có %s sản phẩm, bạn có chắc chắn xóa hoặc di chuyển sang chủ đề khác";
 $lang_module['delcat_msg_rows_select'] = "Chú ý: chủ đề %1\$s có %2\$s sản phẩm. <br>Bạn xóa chủ đề này tức là xóa tất cả sản phẩm bên trong nó.";
 $lang_module['delcat_msg_rows_move'] = "Hoặc chọn chủ đề để di chuyển sản phẩm tới";
 $lang_module['delcatandrows'] = "Xóa chủ đề và các sản phẩm";
 $lang_module['delcat_msg_rows_noselect'] = "Bạn cần chọn chủ đề để di chuyển sản phẩm tới";
+$lang_module['deltopic_msg_rows'] = "nhóm tin liên quan có %s sản phẩm, bạn có chắc chắn xóa, khi đó nhóm tin liên quan sẽ bị xóa khỏi các sản phẩm.";
 $lang_module['setting'] = "Cấu hình module";
 $lang_module['setting_indexfile'] = "Phương án thể hiện trang chủ";
 $lang_module['setting_homesite'] = "Kích thước của hình tại trang chủ";
@@ -102,8 +107,9 @@ $lang_module['setting_active_order'] = "Bật chức năng đặt hàng ngoài t
 $lang_module['setting_active_price'] = "Hiển thị giá sản phẩm";
 $lang_module['setting_active_order_number'] = "Kích hoạt chức năng đặt hàng không giới hạn số lượng sản phẩm";
 $lang_module['setting_active_order_number_note'] = "Chức năng này dùng khi không sử chức năng thanh toán trực tuyến, bật chức năng này thanh toán trực tuyến vô tác dụng";
-$lang_module['setting_active_payment'] = "Cho phép thanh toán trực tuyến với các cổng đã tích hợp";
+$lang_module['setting_active_payment'] = "Cho phép thanh toán trực tuyến với các cổng đã tích hợp"; 
 $lang_module['setting_active_payment_note'] = "Chức năng này bật thì được phép thành toán trực truyến, nếu đặt hàng với số lượng không giới hạn thì không còn tác dụng";
+$lang_module['setting_active_tooltip'] = "Bật chức năng tooltip cho sản phẩm";
 
 $lang_module['setup_payment'] = "Tích hợp cổng thanh toán";
 $lang_module['setting_stt'] = "STT";
@@ -148,6 +154,7 @@ $lang_module['error_product_discounts'] = "Lỗi: tỷ lệ giảm giá không �
 $lang_module['sources_sl'] = "Hãy chọn hoặc tự điền";
 $lang_module['content_cat'] = "Loại sản phẩm";
 $lang_module['content_block'] = "Sản phẩm thuộc các block";
+$lang_module['content_topic'] = "Là thành phần của nhóm sản phẩm";
 $lang_module['content_homeimg'] = "Hình minh họa cho phần giới thiệu";
 $lang_module['content_homeimgalt'] = "Chú thích cho hình minh họa ( phần chi tiết sản phẩm )";
 $lang_module['content_hometext'] = "Giới thiệu ngắn gọn";
@@ -176,7 +183,6 @@ $lang_module['content_business'] = "Thuộc doanh nghiệp";
 $lang_module['content_note'] = "Ghi chú";
 $lang_module['content_product_number'] = "Số lượng trong kho";
 $lang_module['content_product_number1'] = "SL trong kho";
-$lang_module['content_product_code'] = "Mã sản phẩm";
 $lang_module['content_product_product_price'] = "Giá sản phẩm";
 $lang_module['content_product_money_unit'] = "Đơn vị tiền tệ";
 $lang_module['content_product_address'] = "Địa điểm bán";
@@ -185,6 +191,8 @@ $lang_module['content_product_discounts'] = "Giảm giá";
 $lang_module['content_copyright'] = "Giữ bản quyền sản phẩm";
 $lang_module['content_archive'] = "Lưu trữ sau thời gian hết hạn";
 $lang_module['content_showprice'] = "Cho phép hiển thị giá sản phẩm này";
+$lang_module['content_promotional'] = "Khuyến mại";
+$lang_module['content_warranty'] = "Bảo hành";
 $lang_module['content_showorder'] = "Cho phép đặt hàng sản phẩm này";
 $lang_module['imgposition'] = "Hình ảnh tại sản phẩm";
 $lang_module['imgposition_0'] = "Không hiển thị";
@@ -200,6 +208,7 @@ $lang_module['emailcomm'] = "Hiển thị email của người đăng bình lu�
 $lang_module['comment_delete'] = "Xóa";
 $lang_module['comment_funcs'] = "Chức năng";
 $lang_module['comment_email'] = "Người gửi";
+$lang_module['comment_topic'] = "sản phẩm";
 $lang_module['comment_content'] = "Nội dung";
 $lang_module['comment_status'] = "Trạng thái";
 $lang_module['comment_delete_title'] = "Xóa bình luận";
@@ -218,7 +227,25 @@ $lang_module['comment_update_success'] = "Cập nhật thành công !";
 $lang_module['block'] = "Block sản phẩm";
 $lang_module['adddefaultblock'] = "Chọn mặc định khi đăng sản phẩm";
 
-$lang_module['source_logo'] = "Logo";
+$lang_module['source_logo'] = "Logo nguồn tin";
+/*topics*/
+$lang_module['cat_no'] = "STT";
+$lang_module['topic_title'] = "Tên tiêu chí";
+$lang_module['edit_topics'] = "Sửa nội dung tiêu chí";
+$lang_module['add_topics'] = "Thêm tiêu chí cho";
+$lang_module['topic_sub'] = "Các tiêu chí con";
+$lang_module['topic_search'] = "Tiêu chí tìm kiếm";
+$lang_module['topic_sub_note'] = "Các tiêu chí con cách nhau dấu <strong>;</strong> <br />Eg: tiêu chí 1; tiêu chí 2 ";
+$lang_module['topic_page'] = "Sản phẩm thuộc nhóm liên quan";
+$lang_module['topic_del'] = "Xóa khỏi nhóm tin liên quan";
+$lang_module['topic_nocheck'] = "Hãy chọn ít nhất 1 sản phẩm để có thể thực hiện";
+$lang_module['topic_delete_confirm'] = "Bạn có chắc muốn xóa tiêu chí này?";
+$lang_module['topic_delete_success'] = "Loại bỏ thành công !";
+$lang_module['topic_nonews'] = "Hiện tại không có sản phẩm nào thuộc nhóm sản phẩm này !";
+$lang_module['addtotopics'] = "Thêm vào nhóm sản phẩm";
+$lang_module['topic_update_success'] = "Cập nhật thành công !";
+$lang_module['topic_num_news'] = " Sản phẩm";
+$lang_module['content_product_shop'] = "Gian hàng";
 
 /*prounit*/
 $lang_module['prounit'] = "Đơn vị sản phẩm";
@@ -263,8 +290,7 @@ $lang_module['order_submit_pay_ok'] = "Đã xác nhận thanh toán xong";
 $lang_module['order_payment'] = "Trạng thái thanh toán";
 $lang_module['order_yes_payment'] = "Đã thanh toán";
 $lang_module['order_no_payment'] = "Chưa thanh toán";
-$lang_module['order_yes_part_payment'] = "Thanh toán tạm giữ";
-// doi xac nhan khi gui hang
+$lang_module['order_yes_part_payment'] = "Thanh toán tạm giữ"; // doi xac nhan khi gui hang
 $lang_module['order_payment_cancel'] = "Thanh toán đã bị hủy";
 
 $lang_module['order_print'] = "in đơn";
@@ -332,7 +358,7 @@ $lang_module['product_number_order'] = "Tổng số đơn đặt hàng";
 $lang_module['product_number_order_new'] = "Tổng số đơn mới đặt hàng";
 $lang_module['product_number_order_no_active'] = "Tổng số đơn đặt hàng chưa duyệt";
 $lang_module['product_number_order_no_payment'] = "Tổng số đơn đặt hàng chưa thanh toán";
-$lang_module['product_number_order_send_payment'] = "Tổng số đơn đặt hàng đã gửi thanh toán";
+$lang_module['product_number_order_send_payment'] = "Tổng số đơn đặt hàng đã gui thanh toán";
 $lang_module['product_number_order_payment'] = "Tổng số đơn đặt hàng đã thanh toán";
 $lang_module['product_number_order_dis_payment'] = "Tổng số đơn đặt hàng đã bị hủy";
 
@@ -360,4 +386,8 @@ $lang_module['delgroup_msg_rows_move'] = "Hoặc chọn nhóm để di chuyển 
 $lang_module['delgroupandrows'] = "Xóa nhóm và các sản phẩm";
 $lang_module['delgroup_msg_rows_noselect'] = "Bạn cần chọn nhóm để di chuyển sản phẩm tới";
 $lang_module['content_group'] = "Là sản phẩm thuộc nhóm";
+$lang_module['add_otherimage'] = "Thêm hình minh họa khác";
+$lang_module['file_selectfile'] = "Chọn hình ảnh";
+$lang_module['group_of'] = "của loại sản phẩm";
+$lang_module['group_of_none'] = "Không của loại nào";
 ?>

@@ -24,8 +24,8 @@ if ( $groupid > 0 )
 		$weight = 0;
 		while ( $row = $db->sql_fetchrow( $result ) )
 		{
-			++$weight;
-			if ( $weight == $new_vid ) ++$weight;
+			$weight++;
+			if ( $weight == $new_vid ) $weight++;
 			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `weight`=" . $weight . " WHERE `groupid`=" . intval( $row['groupid'] );
 			$db->sql_query( $sql );
 		}

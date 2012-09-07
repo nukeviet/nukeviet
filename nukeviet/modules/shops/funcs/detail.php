@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 VINADES., JSC. All rights reserved
  * @Createdate 3-6-2010 0:14
  */
 if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
@@ -69,14 +69,18 @@ while ( list( $cid, $post_time, $post_name, $post_id, $post_email, $post_ip, $st
     $data_comment[] = array( 
         "cid" => $cid, "post_time" => $post_time, "post_name" => $post_name, "post_id" => $post_id, "post_email" => $post_email, "post_ip" => $post_ip, "status" => $status, "content" => $content, "photo" => $photo 
     );
-    ++$num_com;
+    $num_com ++;
 }
 
-$s = "SELECT id, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias, homeimgthumb,addtime, product_price,product_discounts, money_unit,showprice  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id!= ".$id." AND listcatid = " . $data_content['listcatid'] . " AND inhome=1 AND status=1 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") ORDER BY ID DESC LIMIT ".($pro_config['per_row']*2);
+$query = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_content['source_id'] . "" );
+$data_temp = $db->sql_fetchrow( $query );
+$data_content['source'] = $data_temp[NV_LANG_DATA . '_title'];
+
+$s = "SELECT id, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias, homeimgthumb,addtime, product_price,product_discounts, money_unit,showprice," . NV_LANG_DATA . "_hometext  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id!= ".$id." AND listcatid = " . $data_content['listcatid'] . " AND inhome=1 AND status=1 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") ORDER BY ID DESC LIMIT ".($pro_config['per_row']*2);
 $re = $db->sql_query( $s );
 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 $data_others = array();
-while ( list( $id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $re ) )
+while ( list( $id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $db->sql_fetchrow( $re ) )
 {
     $thumb = explode( "|", $homeimgthumb );
     if ( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
@@ -88,7 +92,7 @@ while ( list( $id, $title, $alias, $homeimgthumb, $addtime, $product_price, $pro
         $thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
     }
     $data_others[] = array( 
-        "id" => $id, "title" => $title, "alias" => $alias, "homeimgthumb" => $thumb[0], "addtime" => $addtime, "product_price" => $product_price, "product_discounts" => $product_discounts, "money_unit" => $money_unit, "showprice" => $showprice, "link_pro" => $link . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $id, "link_order" => $link . "setcart&amp;id=" . $id 
+        "id" => $id, "title" => $title, "alias" => $alias, "homeimgthumb" => $thumb[0], "hometext" => $hometext ,"addtime" => $addtime, "product_price" => $product_price, "product_discounts" => $product_discounts, "money_unit" => $money_unit, "showprice" => $showprice, "link_pro" => $link . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $id, "link_order" => $link . "setcart&amp;id=" . $id 
     );
 }
 ///////////////////////////////////////////////////////////////////////////////////
@@ -104,10 +108,10 @@ if ( ! empty( $_SESSION[$module_data . '_proview'] ) )
         }
     }
     $arrtempid = implode( ",", $arrid );
-    $s = "SELECT id, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias, homeimgthumb,addtime, product_price,product_discounts, money_unit,showprice  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id IN ( " . $arrtempid . ") AND inhome=1 AND status=1 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") ORDER BY ID DESC LIMIT ".($pro_config['per_row']*2);
+    $s = "SELECT id, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias, homeimgthumb,addtime, product_price,product_discounts, money_unit,showprice, " . NV_LANG_DATA . "_hometext  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id IN ( " . $arrtempid . ") AND inhome=1 AND status=1 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") ORDER BY ID DESC LIMIT ".($pro_config['per_row']*2);
     $re = $db->sql_query( $s );
     $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
-    while ( list( $id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $re ) )
+    while ( list( $id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice,$hometext ) = $db->sql_fetchrow( $re ) )
     {
         $thumb = explode( "|", $homeimgthumb );
         if ( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
@@ -119,7 +123,7 @@ if ( ! empty( $_SESSION[$module_data . '_proview'] ) )
             $thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
         }
         $array_other_view[] = array( 
-            "id" => $id, "title" => $title, "alias" => $alias, "homeimgthumb" => $thumb[0], "addtime" => $addtime, "product_price" => $product_price, "product_discounts" => $product_discounts, "money_unit" => $money_unit, "showprice" => $showprice, "link_pro" => $link . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $id, "link_order" => $link . "setcart&amp;id=" . $id 
+            "id" => $id, "title" => $title, "alias" => $alias, "homeimgthumb" => $thumb[0],"hometext" => $hometext, "addtime" => $addtime, "product_price" => $product_price, "product_discounts" => $product_discounts, "money_unit" => $money_unit, "showprice" => $showprice, "link_pro" => $link . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $id, "link_order" => $link . "setcart&amp;id=" . $id 
         );
     }
 }

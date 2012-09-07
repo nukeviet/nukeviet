@@ -15,7 +15,7 @@ $contents = "NO_" . $sourceid;
 list( $sourceid ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid`=" . intval( $sourceid ) . "" ) );
 if ( $sourceid > 0 )
 {
-    list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `sourceid` = '" . $sourceid . "'" ) );
+    list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `sourceid` = '" . $sourceid . "'" ) );
     if ( intval( $check_rows ) > 0 )
     {
         $contents = "ERR_" . sprintf( $lang_module['delcat_msg_rows'], $check_rows );

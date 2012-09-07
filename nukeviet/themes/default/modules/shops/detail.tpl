@@ -10,9 +10,6 @@
         </span>
         <div class="info_product fl">
             <h2>{TITLE}</h2>
-            <!-- BEGIN: product_code -->
-             <b>{LANG.product_code}: {PRODUCT_CODE}</b>
-            <!-- END: product_code -->
             <span class="date_up">{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}</span>
             <!-- BEGIN: price -->
             <p>
@@ -30,7 +27,19 @@
             	{hometext}
             </p>	
             <!-- END: hometext -->
-            <p>
+            <!-- BEGIN: source -->
+            <div>{LANG.detail_source} : <a href="{link_source}">{source}</a></div>
+            <!-- END: source -->
+            <!-- BEGIN: promotional -->
+            <div>{LANG.detail_promotional} : {promotional}</div>
+            <!-- END: promotional -->
+            <!-- BEGIN: warranty -->
+            <div>{LANG.detail_warranty} : {warranty}</div>
+            <!-- END: warranty -->
+            <!-- BEGIN: note -->
+            <div>{LANG.cart_note} : {note}</div>
+            <!-- END: note -->
+            <p style="padding:6px 0; border-bottom:1px dotted #000000; color:#006699">
             	<span>{LANG.detail_rank} : <span class="math_rate">{RATE}</span> {LANG.detail_rate_math}</span>
                 <span class="div_rate">
                     <a href="#" class="rate">1</a>
@@ -40,7 +49,7 @@
                     <a href="#" class="rate">5</a>
                 </span>
             <p>
-            <div class="clearfix fl" style="width:170px">
+            <div class="clearfix fl" style="width:170px; padding:6px 0px">
             	<strong class="fl">{LANG.detail_share} : </strong>
                 <span class="share clearfix">
 					<a href="{LINK_PRINT}" title="print" id="click_print">
@@ -61,7 +70,7 @@
 				</span>
             </div>
             <!-- BEGIN: order -->
-            <div class="clearfix fr" style="width:170px">
+            <div class="clearfix fr" style="width:170px; padding:6px 0px">
                 <!-- BEGIN: num -->
                 <span class="fl" style="line-height:22px;">{LANG.title_order} : &nbsp;</span> 
                 <input type="text" name="num" value="1" style="width:30px; height:15px" id="pnum" class="fl">
@@ -82,13 +91,23 @@
 	 	<div class="TabView" id="TabView">
 	        <div class="Tabs">
 	            <a href="#">{LANG.product_detail}</a> 
-	            <a href="#">{LANG.detail_comments}</a>
+                <a href="#">{LANG.add_otherimage}</a>
+                <a href="#">{LANG.detail_comments}</a>
 	        </div>
 	        <div class="Pages">
 	            <div class="Page">
 	                {DETAIL}
 	            </div>
-	            <div class="Page">
+                <div class="Page" align="center">
+	                <div class="clearfix">
+                        <!-- BEGIN: othersimg -->
+                        <div style="width:33%; float:left; text-align:center">
+                            <a href="{IMG_SRC_OTHER}" rel="shadowbox[miss]"><img src="{IMG_SRC_OTHER}" style="max-width:100%" height="140px"/></a>
+                        </div>
+                        <!-- END: othersimg -->
+                    </div>
+	            </div>
+                <div class="Page">
 	                <!-- BEGIN: comment -->
 				    <div class="prd_rate">
 				        <form class="comment" action="">

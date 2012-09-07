@@ -2,7 +2,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/popcalendar/popcalendar.js">
 </script>
 <div class="search">
-    <h3 class="title-search">{LANG.search_title}</h3>
+    <h3 class="title-search">{LANG.info_title}</h3>
     <form action="{BASE_URL_SITE}" name="fsea" method="get" id="fsea">
         <div class="rows clearfix">
             <span>{LANG.key_title} :</span>
@@ -21,10 +21,10 @@
         <div class="rows clearfix">
             <span>{LANG.finter_title} :</span>
             <input name="to_date" id="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/>
-            <img src="{NV_BASE_SITEURL}images/calendar.jpg" widht="18" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'to_date', 'dd.mm.yyyy', true);" alt="" height="17" />
+			<input type="button" value=" " onclick="popCalendar.show(this, 'to_date', 'dd.mm.yyyy', true);" class="date"/>
 			{LANG.to_date} &nbsp;
 			<input name="from_date" id="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text" />
-			<img src="{NV_BASE_SITEURL}images/calendar.jpg" widht="18" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'from_date', 'dd.mm.yyyy', true);" alt="" height="17" />
+			<input type="button" value=" " onclick="popCalendar.show(this, 'from_date', 'dd.mm.yyyy', true);" class="date"/>
         </div>
         <div class="rows clearfix" align="center">
             <input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
@@ -83,7 +83,7 @@
         <b>{LANG.search_adv_internet} :</b>
     </div>
     <center>
-        <form method="get" action="http://www.google.com.vn/search" target="_top">
+        <form method="get" action="http://www.google.com.vn/custom" target="_top">
             <input type="hidden" name="domains" value="{MY_DOMAIN}" />
             <table width="100%">
                 <tr>
