@@ -21,7 +21,7 @@ if( ! isset( $_FILES ) and ! nv_is_url( $nv_Request->get_string( 'fileurl', 'pos
 require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
 $upload = new upload( $admin_info['allow_files_type'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 
-if( is_uploaded_file( $_FILES['fileupload']['tmp_name'] ) )
+if( isset( $_FILES['fileupload']['tmp_name'] ) and is_uploaded_file( $_FILES['fileupload']['tmp_name'] ) )
 {
 	$upload_info = $upload->save_file( $_FILES['fileupload'], NV_ROOTDIR . '/' . $path, false );
 }
