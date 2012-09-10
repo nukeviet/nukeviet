@@ -1,5 +1,4 @@
-/* CSS Document */
-h1{
+﻿h1{
 	font-size: 14px;
 	line-height: 24px;
 	padding: 0;
@@ -53,30 +52,22 @@ ul{ margin: 0; padding: 0}
 .btnum {
 	text-align: center;
 }
-/*o*/
-a.pro_order {
+
+/* BUTTON */
+a.pro_order, a.pro_detail {
 	color:#000000;
 	padding:2px 0px;
-	padding-right:16px;
-	background:url(../images/cart.gif) no-repeat right center;
+	background:url(../images/shops/bgbt.png)repeat 0 0;
 	display:inline-block;
-	width:50px;
-	text-align:center;
-}
-a.pro_order:hover{
-}
-a.pro_detail {
-	color:#000000;
-	display:inline-block;
-	padding:2px 0px;
 	width:60px;
 	text-align:center;
-	font-weight:bold;
+	border: 1px solid #FC0;
 }
-a.pro_detail:hover {
+a.pro_detail:hover, a.pro_order:hover{
 	background:#FFCC33
 }
-/*detail product*/
+
+/* DETAIL */
 #detail { padding:5px 0px;}
 #detail .info_product {
 	margin-left:5px;
@@ -105,7 +96,8 @@ a.pro_detail:hover {
 	padding-left: 20px;
 	display: inline-block;
 }
-/*form comment*/
+
+/* COMMENT FORM */
 #detail .prd_rate {
 	padding: 0px;
 }
@@ -152,11 +144,11 @@ a.pro_detail:hover {
 #detail .prd_rate div.cm_c {
 	float: right;
 }
-/**other product**/
+
+/* OTHER PRODUCT */
 #detail .others {
 	padding: 10px;
 }
-#detail .others ul {}
 #detail .others ul li {
 	background: url(../images/shops/square.jpg) no-repeat 0px 5px;
 	padding-left: 8px;
@@ -168,14 +160,13 @@ a.pro_detail:hover {
 	border-bottom: #CCC 1px solid;
 	margin-bottom: 5px;
 }
-#detail .div_rate {}
 #detail .div_rate a {
 	padding-right: 18px;
 	background: url('../images/shops/star.png') no-repeat right center;
 	margin-right: 5px;
 }
 
-/** other class**/
+/* OTHER */
 .payment {
 	color: #ff0000;
 	font-weight: bold;
@@ -185,7 +176,6 @@ a.pro_detail:hover {
 	padding: 3px;
 	text-transform: uppercase;
 }
-/******/
 .pages {
 	display: inline-block;
 	float: right;
@@ -213,8 +203,7 @@ a.pro_detail:hover {
 	font-weight: normal;
 }
 
-/* --- GRID LIST VIEW --- */
-/*catalogs*/
+/* GIRD */
 #category {
 	margin-bottom: 8px;
 	background: #ffffff;
@@ -262,10 +251,6 @@ a.pro_detail:hover {
 
 #category .list_rows div.list_c h3 {
 	margin-bottom: 10px;
-}
-
-#category .list_rows div.list_c h3 a {
-	
 }
 
 #category .list_rows div.list_c p.des {
@@ -317,10 +302,6 @@ table.rows2 {
 	padding: 5px;
 }
 
-table.rows2 td {
-	
-}
-
 table.rows {
 	width: 100%;
 }
@@ -345,11 +326,7 @@ table.rows tr.bgtop {
 	line-height: 22px;
 }
 
-/*---BASKET---*/ /*----STEPBAR---*/
-div.step_bar {
-	
-}
-
+/* CART */
 div.step_bar a.step {
 	display: block;
 	float: left;
@@ -373,7 +350,6 @@ div.step_bar a.step span {
 	color: #039;
 }
 
-.share {}
 .share a {
 	padding: 0px;
 	margin: 0px;
@@ -426,7 +402,7 @@ div.step_bar a.step span {
 	padding: 5px;
 }
 
-/*Tabview*/
+/* TAB */
 div.TabView {
 	margin-top: 10px;
 }
@@ -481,7 +457,7 @@ div.TabView div.Pages div.Page {
 	border-top:0;
 }
 
-/*product center*/
+/* BLOCK PRODUCT CENTER */
 .product_center {
 	z-index: 2;
 	margin-bottom: 2px;
@@ -511,10 +487,6 @@ div.TabView div.Pages div.Page {
 	top: 0;
 	width: 960px;
 	display: none;
-}
-
-.product_center .slides>div a {
-	
 }
 
 #block_newtop .slides>div a:hover {
@@ -565,14 +537,7 @@ div.TabView div.Pages div.Page {
 	padding: 2px;
 }
 
-/*block other ptoducts*/
-.others_product {
-}
-
-.others_product ul {
-	
-}
-
+/* BLOCK OTHER PRODUCT */
 .others_product ul li {
 	list-style: none;
 	padding: 5px;
@@ -587,9 +552,6 @@ div.TabView div.Pages div.Page {
 	background:#FFFFFF
 }
 
-.others_product ul li a {
-	
-}
 .others_product ul li.bg {
 	background:#FFFFF0;
 }
@@ -598,16 +560,8 @@ div.TabView div.Pages div.Page {
 	font-size: 11px
 }
 
-.block-nobg {
-	
-}
-
 .block-nobg .title_adv {
 	background: url('../images/dot_gray.gif') repeat-x center;
-}
-
-.block-nobg .title_adv span {
-	
 }
 
 .frame {
@@ -616,7 +570,7 @@ div.TabView div.Pages div.Page {
 }
 
 
-/*search*/
+/* SEARCH */
 .search{ 
 	border:1px solid #ebebeb;
 	padding:5px;
@@ -667,11 +621,11 @@ div.TabView div.Pages div.Page {
 	z-index: 10020 !important;
 }
 
-/*--Tooltip Styles--*/
+/* TOOLTIP */
 #products .tip {
 	color: #fff;
 	background:#1d1d1d;
-	display:none; /*--Hides by default--*/
+	display:none;
 	padding:10px;
 	position:absolute;	
 	z-index:3000;
