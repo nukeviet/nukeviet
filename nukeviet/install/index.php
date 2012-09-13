@@ -825,6 +825,10 @@ elseif( $step == 6 )
 					Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
 					exit();
 				}
+                else
+                {
+                	$error = sprintf($lang_module['file_not_writable'], "config_global.php");
+                }
 			}
 			else
 			{
