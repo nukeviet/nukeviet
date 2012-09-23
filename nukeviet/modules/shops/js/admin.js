@@ -14,8 +14,6 @@ function nv_chang_cat(catid, mod) {
 	return;
 }
 
-// ---------------------------------------
-
 function nv_chang_cat_result(res) {
 	var r_split = res.split("_");
 	if (r_split[0] != 'OK') {
@@ -68,8 +66,6 @@ function nv_chang_group(groupid, mod) {
 	return;
 }
 
-// ---------------------------------------
-
 function nv_chang_group_result(res) {
 	var r_split = res.split("_");
 	if (r_split[0] != 'OK') {
@@ -107,56 +103,6 @@ function nv_del_group_result(res) {
 			var groupid = r_split[2];
 			var delallcheckss = r_split[3];
 			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_group&catid=' + groupid + '&delallcheckss=' + delallcheckss, 'edit', '');
-		}
-	} else {
-		alert(nv_is_del_confirm[2]);
-	}
-	return false;
-}
-
-// Xu ly topics ---------------------------------------
-
-function nv_chang_topic(topicid, mod) {
-	var nv_timer = nv_settimeout_disable('id_' + mod + '_' + topicid, 5000);
-	var new_vid = document.getElementById('id_' + mod + '_' + topicid).options[document.getElementById('id_' + mod + '_' + topicid).selectedIndex].value;
-	nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_topic&topicid=' + topicid + '&mod=' + mod + '&new_vid=' + new_vid + '&num=' + nv_randomPassword(8), '', 'nv_chang_topic_result');
-	return;
-}
-
-function nv_chang_topic_result(res) {
-	var r_split = res.split("_");
-	if (r_split[0] != 'OK') {
-		alert(nv_is_change_act_confirm[2]);
-	}
-	clearTimeout(nv_timer);
-	nv_show_list_topic();
-	return;
-}
-
-function nv_show_list_topic() {
-	if (document.getElementById('module_show_list')) {
-		nv_ajax("get", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list_topic&num=' + nv_randomPassword(8), 'module_show_list');
-	}
-	return;
-}
-
-function nv_del_topic(topicid) {
-	nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_topic&topicid=' + topicid, '', 'nv_del_topic_result');
-}
-
-function nv_del_topic_result(res) {
-	var r_split = res.split("_");
-	if (r_split[0] == 'OK') {
-		nv_show_list_topic();
-	} else if (r_split[0] == 'ERR') {
-		if (r_split[1] == 'ROWS') {
-			if (confirm(r_split[4])) {
-				var topicid = r_split[2];
-				var checkss = r_split[3];
-				nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_topic&topicid=' + topicid + '&checkss=' + checkss, '', 'nv_del_topic_result');
-			}
-		} else {
-			alert(r_split[1]);
 		}
 	} else {
 		alert(nv_is_del_confirm[2]);
@@ -261,8 +207,6 @@ function nv_chang_block(bid, id, mod) {
 	return;
 }
 
-// ---------------------------------------
-
 function nv_chang_block_result(res) {
 	var r_split = res.split("_");
 	if (r_split[0] != 'OK') {
@@ -315,8 +259,6 @@ function nv_main_action(oForm, checkss, msgnocheck) {
 			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=publtime&listid=' + listid + '&checkss=' + checkss;
 		} else if (action == 'exptime') {
 			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=exptime&listid=' + listid + '&checkss=' + checkss;
-		} else {
-			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=addtotopics&listid=' + listid;
 		}
 	} else {
 		alert(msgnocheck);
@@ -350,7 +292,7 @@ function nv_del_content_result(res) {
 	return false;
 }
 
-// Xu ly bai viet ---------------------------------------
+// Xu ly san pham ---------------------------------------
 
 function create_keywords() {
 	var content = strip_tags(document.getElementById('keywords').value);
@@ -378,7 +320,7 @@ function nv_sh(sl_id, div_id) {
 	return false;
 }
 
-// autocomplete function
+// Autocomplete function
 
 function findValue(li) {
 	if (li == null)
@@ -399,9 +341,6 @@ function selectItem(li) {
 function formatItem(row) {
 	return row[0] + " (" + row[1] + ")";
 }
-
-// end autocomplete function
-
 
 function nv_chang_pays(payid, object,url_change,url_back) {
 	var value = $(object).val();
@@ -444,26 +383,12 @@ function res_get_alias(res) {
 	return false;
 }
 
-function nv_chang_topics(obid, object,url_change,url_back) {
-	var value = $(object).val();
-	$.ajax({	
-		type: 'POST',
-		url: url_change,
-		data:'oid='+obid + '&w='+value,
-		success: function(data){
-			window.location = url_back;
-		}
-	});
-	return;
-}
-function nv_add_otherimage()
-{
+function nv_add_otherimage() {
    var newitem = "<tr><td><input class=\"txt\" value=\"\" name=\"otherimage[]\" id=\"otherimage_" + file_items + "\" style=\"width : 80%\" maxlength=\"255\" />";
    newitem += "&nbsp;<input type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse_file( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=otherimage_" + file_items + "&path=" + file_dir + "&type=file&currentpath="+currentpath+"', 'NVImg', 850, 400, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" /></td></tr>";
    $( "#otherimage" ).append( newitem );
    file_items ++ ;
 }
-// end autocomplete function
 
 function nv_getcatalog(obj){
 	var pid = $(obj).val();
