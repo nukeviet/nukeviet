@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Pусский
-* @Createdate Nov 14, 2010, 02:03:35 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Pусский
+ * @Createdate Nov 14, 2010, 02:03:35 PM
+ */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
+if( ! defined( 'NV_MAINFILE' ) )
+{
+	die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="Language translated by http://translate.google.com";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "Language translated by http://translate.google.com";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['nocatpage'] = "Ошибка не предметом";
 $lang_module['comment_success'] = "Комментарии успеха";

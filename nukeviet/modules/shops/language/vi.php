@@ -8,9 +8,9 @@
  * @Createdate May 31, 2010, 08:01:47 PM
  */
 
-if ( ! defined( 'NV_MAINFILE' ) )
+if( ! defined( 'NV_MAINFILE' ) )
 {
-    die( 'Stop!!!' );
+	die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
@@ -197,7 +197,7 @@ $lang_module['detail_warranty'] = "Bảo hành";
 
 $lang_module['redirect_to_back_shops'] = "Quay lại trang chủ";
 $lang_module['company_product'] = "Sản phẩm thuộc gian hàng";
-// cart 
+// cart
 $lang_module['cart_check_cart'] = "Kiểm tra giỏ hàng";
 $lang_module['cart_order'] = "Đặt hàng";
 $lang_module['cart_payment'] = "Thanh toán";
@@ -222,7 +222,7 @@ $lang_module['cart_remove_pro'] = "Xóa";
 $lang_module['cart_total_print'] = "Tổng tiền";
 $lang_module['cart_update_pro'] = "Cập nhật";
 $lang_module['cart_update'] = "Cập nhật giỏ hàng";
-// order 
+// order
 $lang_module['order_info'] = "Xin điền đầy đủ thông tin vào các mục đánh dấu(*)";
 $lang_module['order_contact'] = "Thông tin liên hệ";
 $lang_module['order_product_cart'] = "Sản phẩm trong giỏ";
@@ -341,7 +341,7 @@ $lang_module['order_by_payment'] = "Đơn hàng này bạn đang thực hiện q
 $lang_module['update_order'] = "Thông báo: Hệ thống đã cập nhật lại thông tin giao dịch các đơn hàng: %1\$s";
 $lang_module['no_update_order'] = "Thông báo: Hệ thống không tìm thấy các giao dịch nào mới";
 
-/**/ 
+/**/
 $lang_module['active_order_dis'] = "Chức năng đặt hàng trực truyến đã bị tắt";
 /*group*/
 $lang_module['group_title'] = "Nhóm sản phẩm";

@@ -107,7 +107,7 @@ $lang_module['setting_active_order'] = "Bật chức năng đặt hàng ngoài t
 $lang_module['setting_active_price'] = "Hiển thị giá sản phẩm";
 $lang_module['setting_active_order_number'] = "Kích hoạt chức năng đặt hàng không giới hạn số lượng sản phẩm";
 $lang_module['setting_active_order_number_note'] = "Chức năng này dùng khi không sử chức năng thanh toán trực tuyến, bật chức năng này thanh toán trực tuyến vô tác dụng";
-$lang_module['setting_active_payment'] = "Cho phép thanh toán trực tuyến với các cổng đã tích hợp"; 
+$lang_module['setting_active_payment'] = "Cho phép thanh toán trực tuyến với các cổng đã tích hợp";
 $lang_module['setting_active_payment_note'] = "Chức năng này bật thì được phép thành toán trực truyến, nếu đặt hàng với số lượng không giới hạn thì không còn tác dụng";
 $lang_module['setting_active_tooltip'] = "Bật chức năng tooltip cho sản phẩm";
 
@@ -143,7 +143,7 @@ $lang_module['search_bodytext'] = "Nội dung";
 $lang_module['search_author'] = "Tác giả sản phẩm";
 $lang_module['search_admin'] = "Người nhập liệu";
 $lang_module['search_per_page'] = "Số sản phẩm hiển thị";
-$lang_module['search_note'] = "Từ khóa tìm kiếm không ít hơn 2 ký tự, không lớn hơn 64 ký tự, không dùng các mã html";
+$lang_module['search_note'] = "Từ khóa tìm kiếm không ít hơn %d ký tự, không lớn hơn %d ký tự, không dùng các mã html";
 $lang_module['content_edit'] = "Sửa sản phẩm";
 $lang_module['error_title'] = "Lỗi: Sản phẩm chưa có tên";
 $lang_module['error_bodytext'] = "Lỗi: Sản phẩm chưa có nội dung";
@@ -225,6 +225,9 @@ $lang_module['comment_uncheckall'] = "Bỏ chọn tất cả";
 $lang_module['comment_nocheck'] = "Hãy chọn ít nhất 1 bình luận để có thể thực hiện";
 $lang_module['comment_update_success'] = "Cập nhật thành công !";
 $lang_module['block'] = "Block sản phẩm";
+$lang_module['block_name'] = "Tên block sản phẩm";
+$lang_module['block_error_name'] = "Lỗi: Tên block sản phẩm không được để trống";
+$lang_module['block_error_alias'] = "Lỗi: Liên kết tĩnh này đã tồn tại, hãy chọn tên khác";
 $lang_module['adddefaultblock'] = "Chọn mặc định khi đăng sản phẩm";
 
 $lang_module['source_logo'] = "Logo nguồn tin";
@@ -368,11 +371,7 @@ $lang_module['product_unit'] = "sản phẩm";
 $lang_module['product_comment'] = "bình luận";
 $lang_module['product_order'] = "đơn đặt";
 $lang_module['detail_info'] = "Chi tiết";
-$lang_module['module_name'] = "Tên module";
-$lang_module['module_version'] = "Phiên bản sử dụng";
-$lang_module['site_key'] = "SITE KEY";
-$lang_module['module_regis'] = "Sử dụng dịch vụ hỗ trợ";
-/***group**/
+
 $lang_module['group'] = "Nhóm sản phẩm";
 $lang_module['group_sub_sl'] = "Nhóm chính";
 $lang_module['edit_group'] = "Sửa nhóm sản phẩm";

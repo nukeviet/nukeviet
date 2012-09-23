@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Pусский
-* @Createdate Nov 14, 2010, 02:03:35 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Pусский
+ * @Createdate Nov 14, 2010, 02:03:35 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+	die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
-$lang_translator['createdate'] ="04/03/2010, 15:22";
-$lang_translator['copyright'] ="@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
-$lang_translator['info'] ="Language translated by http://translate.google.com";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['createdate'] = "04/03/2010, 15:22";
+$lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights reserved";
+$lang_translator['info'] = "Language translated by http://translate.google.com";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['categories'] = "Тип продукта";
 $lang_module['topics'] = "Группа продуктов";
@@ -111,7 +112,7 @@ $lang_module['search_bodytext'] = "Содержание";
 $lang_module['search_author'] = "Автор продукты";
 $lang_module['search_admin'] = "Человеческого фактора";
 $lang_module['search_per_page'] = "Продукты Показать";
-$lang_module['search_note'] = "Поиск по ключевым словам не менее 2 символов, не более 64 символов, не используя HTML-код";
+$lang_module['search_note'] = "Поиск по ключевым словам не менее %d символов, не более %d символов, не используя HTML-код";
 $lang_module['content_edit'] = "Этот продукт";
 $lang_module['error_title'] = "Ошибка: продукт еще не названный";
 $lang_module['error_bodytext'] = "Ошибка: Продукт не имеет содержания";
@@ -191,15 +192,6 @@ $lang_module['comment_update_success'] = "Успешно обновлены!";
 $lang_module['block'] = "Блок продукты";
 $lang_module['adddefaultblock'] = "Выберите по умолчанию при регистрации продуктов";
 $lang_module['source_logo'] = "Источники Logo";
-$lang_module['topic_page'] = "Группа сопутствующих товаров";
-$lang_module['topic_del'] = "Удалить из соответствующих групп";
-$lang_module['topic_nocheck'] = "Пожалуйста, выберите по крайней мере один продукт для выполнения";
-$lang_module['topic_delete_confirm'] = "Вы уверены, что хотите удалить из всех групп продуктов?";
-$lang_module['topic_delete_success'] = "Удаление успеха!";
-$lang_module['topic_nonews'] = "Есть в настоящее время нет товаров в этой группе продуктов!";
-$lang_module['addtotopics'] = "Добавить групп продуктов";
-$lang_module['topic_update_success'] = "Успешно обновлены!";
-$lang_module['topic_num_news'] = "Продукты";
 $lang_module['content_product_shop'] = "Стенд";
 $lang_module['prounit'] = "Единицу продукции";
 $lang_module['prounit_name_unit'] = "Наименование";

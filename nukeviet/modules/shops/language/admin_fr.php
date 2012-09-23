@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Français
-* @Createdate Nov 30, 2011, 02:45:43 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @Createdate Nov 30, 2011, 02:45:43 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+	die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="";
-$lang_translator['createdate'] ="";
-$lang_translator['copyright'] ="";
-$lang_translator['info'] ="Language translated from http://translate.nukeviet.vn";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "";
+$lang_translator['createdate'] = "";
+$lang_translator['copyright'] = "";
+$lang_translator['info'] = "Language translated from http://translate.nukeviet.vn";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['categories'] = "Catégories";
 $lang_module['sources'] = "Fabricant";
@@ -127,7 +128,7 @@ $lang_module['search_bodytext'] = "Contenu";
 $lang_module['search_author'] = "Auteur";
 $lang_module['search_admin'] = "Rédacteur";
 $lang_module['search_per_page'] = "Nombre de produits affichés";
-$lang_module['search_note'] = "Mots-clés doivent être de plus de 2 caractères, moins de 64 caractères, sans code HTML";
+$lang_module['search_note'] = "Mots-clés doivent être de plus de %d caractères, moins de %d caractères, sans code HTML";
 $lang_module['content_edit'] = "Modifier le produit";
 $lang_module['error_title'] = "Erreur: le nom du produit manquant";
 $lang_module['error_bodytext'] = "Erreur: les descriptions de produit manquants";
@@ -304,10 +305,7 @@ $lang_module['product_unit'] = "produits";
 $lang_module['product_comment'] = "commentaires";
 $lang_module['product_order'] = "Commandes";
 $lang_module['detail_info'] = "Détails";
-$lang_module['module_name'] = "Nom du module";
-$lang_module['module_version'] = "Version utilisée";
-$lang_module['site_key'] = "CLÉ DU SITE";
-$lang_module['module_regis'] = "Utiliser le support";
+
 $lang_module['group'] = "Groupe de produits";
 $lang_module['group_sub_sl'] = "Groupe principal";
 $lang_module['edit_group'] = "Modifier Groupe de produits";

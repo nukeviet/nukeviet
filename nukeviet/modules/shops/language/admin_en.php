@@ -1,22 +1,23 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Apr 23, 2011, 01:55:53 PM
-*/
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Apr 23, 2011, 01:55:53 PM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')){
- die('Stop!!!');
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+{
+	die( 'Stop!!!' );
 }
 
-$lang_translator['author'] ="";
-$lang_translator['createdate'] ="";
-$lang_translator['copyright'] ="";
-$lang_translator['info'] ="";
-$lang_translator['langtype'] ="lang_module";
+$lang_translator['author'] = "";
+$lang_translator['createdate'] = "";
+$lang_translator['copyright'] = "";
+$lang_translator['info'] = "";
+$lang_translator['langtype'] = "lang_module";
 
 $lang_module['categories'] = "Catalog";
 $lang_module['topics'] = "Criteria for products";
@@ -135,7 +136,7 @@ $lang_module['search_bodytext'] = "Content";
 $lang_module['search_author'] = "Poster product";
 $lang_module['search_admin'] = "Human input";
 $lang_module['search_per_page'] = "Products show";
-$lang_module['search_note'] = "Keyword search is not less than 2 characters, not more than 64 characters, not using the html code";
+$lang_module['search_note'] = "Keyword search is not less than %d characters, not more than %d characters, not using the html code";
 $lang_module['content_edit'] = "Edit product";
 $lang_module['error_title'] = "Error: Product not yet named";
 $lang_module['error_bodytext'] = "Error: Product not have content";
@@ -220,21 +221,6 @@ $lang_module['block'] = "Block Products";
 $lang_module['adddefaultblock'] = "Select the default when post products";
 $lang_module['source_logo'] = "Source logo";
 $lang_module['cat_no'] = "No";
-$lang_module['topic_title'] = "Name of criteria";
-$lang_module['edit_topics'] = "Edit content criteria";
-$lang_module['add_topics'] = "Add content criteria";
-$lang_module['topic_sub'] = "Subs criteria";
-$lang_module['topic_search'] = "Search Criteria";
-$lang_module['topic_sub_note'] = "The criteria for the sign apart <strong />;  <br /> Eg: criterion 1; 2 criteria";
-$lang_module['topic_page'] = "Group related products";
-$lang_module['topic_del'] = "Remove from relevant groups";
-$lang_module['topic_nocheck'] = "Please select at least one product to perform";
-$lang_module['topic_delete_confirm'] = "Are you sure you want to remove this criterion?";
-$lang_module['topic_delete_success'] = "Removal success!";
-$lang_module['topic_nonews'] = "There are currently no products in this product group!";
-$lang_module['addtotopics'] = "Add product groups";
-$lang_module['topic_update_success'] = "Successfully updated!";
-$lang_module['topic_num_news'] = "Products";
 $lang_module['content_product_shop'] = "Shop";
 $lang_module['prounit'] = "Product unit";
 $lang_module['prounit_name_unit'] = "Product unit name";
@@ -333,10 +319,6 @@ $lang_module['product_unit'] = "Products";
 $lang_module['product_comment'] = "Comment";
 $lang_module['product_order'] = "Order";
 $lang_module['detail_info'] = "Detail";
-$lang_module['module_name'] = "Module name";
-$lang_module['module_version'] = "Module version";
-$lang_module['site_key'] = "SITE KEY";
-$lang_module['module_regis'] = "Using support services";
 $lang_module['group'] = "Group Products";
 $lang_module['group_sub_sl'] = "Main group";
 $lang_module['edit_group'] = "Edit group";
