@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<div id="module_show_list">{GROUP_LIST}</div>
 <div id="edit">
     <!-- BEGIN: error -->
     <div class="quote" style="width:780px; margin:auto">

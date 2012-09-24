@@ -33,8 +33,8 @@ function nv_show_list_cat(parentid) {
 }
 
 function nv_del_cat(catid) {
-	if (confirm('do you want delete?')) {
-	nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&catid=' + catid, '', 'nv_del_cat_result');
+	if( confirm( nv_is_del_confirm[0] ) ) {
+		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&catid=' + catid, '', 'nv_del_cat_result');
 	}
 	return false;
 }
@@ -50,7 +50,7 @@ function nv_del_cat_result(res) {
 		if (confirm(r_split[4])) {
 			var catid = r_split[2];
 			var delallcheckss = r_split[3];
-			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&catid=' + catid + '&delallcheckss=' + delallcheckss, 'edit', '');
+			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&catid=' + catid + '&delallcheckss=' + delallcheckss, 'cat-delete-area', '');
 		}
 	} else {
 		alert(nv_is_del_confirm[2]);
@@ -85,8 +85,8 @@ function nv_show_list_group(parentid) {
 }
 
 function nv_del_group(catid) {
-	if (confirm('Do you want delete?')) {
-	nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_group&groupid=' + catid, '', 'nv_del_group_result');
+	if ( confirm( nv_is_del_confirm[0] ) ) {
+		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_group&groupid=' + catid, '', 'nv_del_group_result');
 	}
 	return false;
 }
@@ -102,7 +102,7 @@ function nv_del_group_result(res) {
 		if (confirm(r_split[4])) {
 			var groupid = r_split[2];
 			var delallcheckss = r_split[3];
-			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_group&catid=' + groupid + '&delallcheckss=' + delallcheckss, 'edit', '');
+			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_group&groupid=' + groupid + '&delallcheckss=' + delallcheckss, 'edit', '');
 		}
 	} else {
 		alert(nv_is_del_confirm[2]);

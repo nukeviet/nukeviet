@@ -2,6 +2,7 @@
 <div id="module_show_list">
 	{CAT_LIST}
 </div>
+<div id="cat-delete-area"></div>
 <div id="edit">
 	<!-- BEGIN: error -->
 	<div class="quote" style="width:98%; margin:auto">

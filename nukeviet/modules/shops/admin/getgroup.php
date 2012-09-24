@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-10-2010 18:49
@@ -49,8 +49,9 @@ $array_groupid_in_row = unserialize( $inrow );
 
 $array_cat = GetCatidInChild( $cid );
 
-$sql = "SELECT groupid,parentid ,cateid," . NV_LANG_DATA . "_title as title,lev,numsubgroup FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` ORDER BY `order` ASC";
+$sql = "SELECT `groupid`, `parentid`, `cateid`, `" . NV_LANG_DATA . "_title` AS `title`, `lev`, `numsubgroup` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` ORDER BY `order` ASC";
 $result_group = $db->sql_query( $sql );
+
 $data_group = array();
 while( $row = $db->sql_fetchrow( $result_group, 2 ) )
 {
@@ -89,6 +90,8 @@ foreach( $data_group as $groupid_i => $groupinfo_i )
 	}
 }
 
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents_temp_none . "<hr />" . $contents_temp_cate;
+include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>

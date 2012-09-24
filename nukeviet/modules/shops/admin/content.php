@@ -110,7 +110,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	
 	$group_id = array_unique( $nv_Request->get_typed_array( 'groupids', 'post', 'int', array() ) );
 	$rowcontent['group_id'] = implode( ",", $group_id );
-	if( ! empty( $rowcontent['group_id'] ) ) $rowcontent['group_id'] = $rowcontent['group_id'] . ',';
 
 	$rowcontent['source_id'] = $nv_Request->get_int( 'sourceid', 'post', 0 );
 	$rowcontent['showprice'] = $nv_Request->get_int( 'showprice', 'post', 0 );

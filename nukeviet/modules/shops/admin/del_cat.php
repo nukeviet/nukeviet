@@ -12,18 +12,18 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $catid = $nv_Request->get_int( 'catid', 'post', 0 );
 $contents = "NO_" . $catid;
 
-list( $catid, $parentid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT `catid`, `parentid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid`=" . intval( $catid ) ) );
+list( $catid, $parentid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT `catid`, `parentid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid`=" . $catid ) );
 
 if( $catid > 0 )
 {
 	$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
 	list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `parentid` = '" . $catid . "'" ) );
 	
-	if( intval( $check_parentid ) > 0 )
+	if( intval( $check_parentid ) > 0 ) // Chu de con
 	{
 		$contents = "ERR_CAT_" . sprintf( $lang_module['delcat_msg_cat'], $check_parentid );
 	}
-	else
+	else // San pham trong chu de
 	{
 		list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid`='" . $catid . "'" ) );
 		
@@ -35,7 +35,7 @@ if( $catid > 0 )
 				$movecat = $nv_Request->get_string( 'movecat', 'post', "" );
 				$catidnews = $nv_Request->get_int( 'catidnews', 'post', 0 );
 				
-				if( empty( $delcatandrows ) and empty( $movecat ) )
+				if( empty( $delcatandrows ) and empty( $movecat ) ) // Hien form
 				{
 					$sql = "SELECT `catid`, `" . NV_LANG_DATA . "_title`, `lev` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid` !='" . $catid . "' ORDER BY `order` ASC";
 					$result = $db->sql_query( $sql );
@@ -58,56 +58,61 @@ if( $catid > 0 )
 						$xtitle_i .= $title_i;
 						$array_cat_list[$catid_i] = $xtitle_i;
 					}
+					
+					$xtpl = new XTemplate( "cat_delete.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+					$xtpl->assign( 'LANG', $lang_module );
+					$xtpl->assign( 'GLANG', $lang_global );
+					$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+					$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+					$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+					$xtpl->assign( 'MODULE_NAME', $module_name );
+					$xtpl->assign( 'OP', $op );
+					
+					$xtpl->assign( 'CATID', $catid );
+					$xtpl->assign( 'DELALLCHECKSS', $delallcheckss );
+					$xtpl->assign( 'INFO', sprintf( $lang_module['delcat_msg_rows_select'], $title, $check_rows ) );
 
-					$contents = "<form action=\"" . NV_BASE_ADMINURL . "index.php\" method=\"post\">";
-					$contents .= "<input type=\"hidden\" name =\"" . NV_NAME_VARIABLE . "\"value=\"" . $module_name . "\" />";
-					$contents .= "<input type=\"hidden\" name =\"" . NV_OP_VARIABLE . "\"value=\"" . $op . "\" />";
-					$contents .= "<input type=\"hidden\" name =\"catid\" value=\"" . $catid . "\" />";
-					$contents .= "<input type=\"hidden\" name =\"delallcheckss\" value=\"" . $delallcheckss . "\" />";
-					$contents .= "<center>";
-					$contents .= "<b>" . sprintf( $lang_module['delcat_msg_rows_select'], $title, $check_rows ) . "</b>";
-					$contents .= "<br><br><input name=\"delcatandrows\" type=\"submit\" value=\"" . $lang_module['delcatandrows'] . "\" />";
-					$contents .= "<br><br><b>" . $lang_module['delcat_msg_rows_move'] . "</b>: <select name=\"catidnews\">\n";
 					while( list( $catid_i, $title_i ) = each( $array_cat_list ) )
 					{
-						$contents .= "<option value=\"" . $catid_i . "\">" . $title_i . "</option>\n";
+						$xtpl->assign( 'CAT_ID', $catid_i );
+						$xtpl->assign( 'CAT_TITLE', $title_i );
+						$xtpl->parse( 'main.catloop' );
 					}
-					$contents .= "</select><input name=\"movecat\" type=\"submit\" value=\"" . $lang_module['action'] . "\"  onclick=\"return nv_check_movecat(this.form, '" . $lang_module['delcat_msg_rows_noselect'] . "')\">\n";
-					$contents .= "</center>";
-					$contents .= "</form>";
+					
+					$xtpl->parse( 'main' );
+					$contents = $xtpl->text( 'main' );
 				}
-				elseif( ! empty( $delcatandrows ) )
+				elseif( ! empty( $delcatandrows ) ) // Xoa loai san pham va san pham
 				{
-					$query = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` LIKE '%" . $catid . "%'" );
-					while( $row = $db->sql_fetchrow( $query ) )
+					$sql = $db->sql_query( "SELECT `id`, `listcatid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid`=" . $catid );
+					while( $row = $db->sql_fetchrow( $sql ) )
 					{
-						if( ( string )$row['listcatid'] == ( string )$catid )
-						{
-							nv_del_content_module( $row['id'] );
-						}
+						nv_del_content_module( $row['id'] );
 					}
+					
 					$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid`=" . $catid );
 
 					nv_fix_cat_order();
 					nv_del_moduleCache( $module_name );
-					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid . "" );
+					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid );
 					die();
 				}
-				elseif( ! empty( $movecat ) and $catidnews > 0 and $catidnews != $catid )
+				elseif( ! empty( $movecat ) and $catidnews > 0 and $catidnews != $catid ) // Di chuyen san pham sang chu de moi
 				{
 					list( $catidnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT `catid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs`  WHERE `catid` =" . $catidnews ) );
+					
 					if( $catidnews > 0 )
 					{
-						$query = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` LIKE '%" . $catid . "%'" );
-						while( $row = $db->sql_fetchrow( $query ) )
+						$sql = $db->sql_query( "SELECT `id`, `listcatid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid`=" . $catid );
+						while( $row = $db->sql_fetchrow( $sql ) )
 						{
-							$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `listcatid` = '" . $catidnews . "' WHERE `id` =" . $row['id'] );
+							$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `listcatid`=" . $catidnews . " WHERE `id` =" . $row['id'] );
 						}
 						$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid`=" . $catid );
 						nv_fix_cat_order();
 						nv_del_moduleCache( $module_name );
 
-						Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid . "" );
+						Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid );
 						die();
 					}
 				}
@@ -118,10 +123,11 @@ if( $catid > 0 )
 			}
 		}
 	}
+	
 	if( $contents == "NO_" . $catid )
 	{
-		$query = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE catid=" . $catid . "";
-		if( $db->sql_query( $query ) )
+		$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE catid=" . $catid;
+		if( $db->sql_query( $sql ) )
 		{
 			$db->sql_freeresult();
 			nv_fix_cat_order();
@@ -131,6 +137,7 @@ if( $catid > 0 )
 		nv_del_moduleCache( $module_name );
 	}
 }
+
 if( defined( 'NV_IS_AJAX' ) )
 {
 	include ( NV_ROOTDIR . "/includes/header.php" );

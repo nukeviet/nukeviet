@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
@@ -54,7 +54,7 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 	nv_del_moduleCache( $module_name );
 }
 
-Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=items" );
 die();
 
 ?>
