@@ -83,6 +83,7 @@ $lang_module['delcat_msg_rows_move'] = "Hoặc chọn chủ đề để di chuy�
 $lang_module['delcatandrows'] = "Xóa chủ đề và các sản phẩm";
 $lang_module['delcat_msg_rows_noselect'] = "Bạn cần chọn chủ đề để di chuyển sản phẩm tới";
 $lang_module['deltopic_msg_rows'] = "nhóm sản phẩm này có %s sản phẩm, bạn có chắc chắn xóa, khi đó nhóm sản phẩm sẽ bị xóa khỏi các sản phẩm.";
+$lang_module['delsource_msg_rows'] = "Hãng sản xuất có %s sản phẩm bạn phải di chuyển chúng sang hãng sản xuất khác hoặc xóa chúng mới có thể xóa hãng sản xuất này";
 $lang_module['setting'] = "Cấu hình module";
 $lang_module['setting_indexfile'] = "Phương án thể hiện trang chủ";
 $lang_module['setting_homesite'] = "Kích thước của hình tại trang chủ";
