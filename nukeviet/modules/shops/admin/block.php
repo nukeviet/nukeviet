@@ -48,7 +48,7 @@ if( $cookie_bid != $bid )
 }
 $page_title = $array_block[$bid];
 
-if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get_string( 'checkss', 'post' ) == md5( session_id() . $bid ) )
+if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get_string( 'checkss', 'post' ) == md5( session_id() ) )
 {
 	$id_array = array_map( "intval", $nv_Request->get_array( 'idcheck', 'post' ) );
 	foreach( $id_array as $id )
@@ -69,7 +69,7 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
-$xtpl->assign( 'CHECKSESS', md5( session_id() . $bid ) );
+$xtpl->assign( 'CHECKSESS', md5( session_id() ) );
 
 $xtpl->assign( 'BLOCK_LIST', nv_show_block_list( $bid ) );
 

@@ -102,7 +102,7 @@ function nv_del_group_result(res) {
 		if (confirm(r_split[4])) {
 			var groupid = r_split[2];
 			var delallcheckss = r_split[3];
-			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_group&groupid=' + groupid + '&delallcheckss=' + delallcheckss, 'edit', '');
+			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_group&groupid=' + groupid + '&delallcheckss=' + delallcheckss, 'group-delete-area', '');
 		}
 	} else {
 		alert(nv_is_del_confirm[2]);
@@ -111,7 +111,6 @@ function nv_del_group_result(res) {
 }
 
 // Xu ly sources ---------------------------------------
-
 function nv_chang_sources(sourceid, mod) {
 	var nv_timer = nv_settimeout_disable('id_' + mod + '_' + sourceid, 5000);
 	var new_vid = document.getElementById('id_' + mod + '_' + sourceid).options[document.getElementById('id_' + mod + '_' + sourceid).selectedIndex].value;
@@ -227,9 +226,15 @@ function nv_show_list_block(bid) {
 function nv_del_block_list(oForm, bid) {
 	var del_list = '';
 	var fa = oForm['idcheck[]'];
-	for ( var i = 0; i < fa.length; i++) {
-		if (fa[i].checked) {
-			del_list = del_list + ',' + fa[i].value;
+	if (fa.length) {
+		for ( var i = 0; i < fa.length; i++) {
+			if (fa[i].checked) {
+				del_list = del_list + ',' + fa[i].value;
+			}
+		}
+	} else {
+		if (fa.checked) {
+			del_list = del_list + ',' + fa.value;
 		}
 	}
 	if (del_list != '') {
@@ -242,9 +247,15 @@ function nv_del_block_list(oForm, bid) {
 function nv_main_action(oForm, checkss, msgnocheck) {
 	var fa = oForm['idcheck[]'];
 	var listid = '';
-	for ( var i = 0; i < fa.length; i++) {
-		if (fa[i].checked) {
-			listid = listid + fa[i].value + ',';
+	if (fa.length) {
+		for ( var i = 0; i < fa.length; i++) {
+			if (fa[i].checked) {
+				listid = listid + fa[i].value + ',';
+			}
+		}
+	} else {
+		if (fa.checked) {
+			listid = listid + fa.value + ',';
 		}
 	}
 	if (listid != '') {
