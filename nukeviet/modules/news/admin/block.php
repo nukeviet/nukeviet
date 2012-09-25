@@ -47,7 +47,7 @@ if( $cookie_bid != $bid )
 }
 $page_title = $array_block[$bid];
 
-if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get_string( 'checkss', 'post' ) == md5( session_id() . $bid ) )
+if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get_string( 'checkss', 'post' ) == md5( session_id() ) )
 {
 	$id_array = array_map( "intval", $nv_Request->get_array( 'idcheck', 'post' ) );
 	foreach( $id_array as $id )
@@ -111,7 +111,7 @@ if( $db->sql_numrows( $result ) )
 		$xtpl->parse( 'main.news.bid' );
 	}
 	
-	$xtpl->assign( 'CHECKSESS', md5( session_id() . $bid ) );
+	$xtpl->assign( 'CHECKSESS', md5( session_id() ) );
 	$xtpl->parse( 'main.news' );
 }
 
