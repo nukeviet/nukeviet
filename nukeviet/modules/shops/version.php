@@ -23,6 +23,7 @@ $module_version = array(
 		$module_name . "/thumb",
 		$module_name . "/block",
 		$module_name . "/temp_pic",
+		$module_name . "/source",
 		$module_name . "/" . date( "Y_m" )
 	)
 );

@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `id`,`" . NV_LANG_DATA . "_title`,`" . NV_LANG_DATA . "_alias`,`listcatid`,`" . NV_LANG_DATA . "_hometext`,`" . NV_LANG_DATA . "_bodytext` 
+$sql = "SELECT SQL_CALC_FOUND_ROWS `id`,`" . NV_LANG_DATA . "_title`,`" . NV_LANG_DATA . "_alias`, `listcatid`,  `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_bodytext` 
 FROM `" . $db_config['prefix'] . "_" . $m_values['module_data'] . "_rows` 
 WHERE (" . nv_like_logic( NV_LANG_DATA . '_title', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( NV_LANG_DATA . '_bodytext', $dbkeyword, $logic ) . " 

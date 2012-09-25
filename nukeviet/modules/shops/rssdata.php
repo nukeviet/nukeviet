@@ -14,7 +14,7 @@ global $db_config;
 $rssarray = array();
 //$rssarray[] = array( 'catid' => 0, 'parentid' => 0, 'title' => '', 'link' =>  '');
 
-$sql = "SELECT `catid`, `parentid`, `" . NV_LANG_DATA . "_title` AS `title`, `" . NV_LANG_DATA . "_alias` AS `alias` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_catalogs` ORDER BY `weight`,`order`";
+$sql = "SELECT `catid`, `parentid`, `" . NV_LANG_DATA . "_title` AS `title`, `" . NV_LANG_DATA . "_alias` AS `alias` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_catalogs` ORDER BY `weight`, `order`";
 $list = nv_db_cache( $sql, '', $mod_name );
 foreach ( $list as $value )
 {

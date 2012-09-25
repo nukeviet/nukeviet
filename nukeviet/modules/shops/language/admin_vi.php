@@ -72,7 +72,7 @@ $lang_module['content_main'] = "Thông tin module";
 $lang_module['document_payment'] = "Hướng dẫn thanh toán";
 $lang_module['document_payment_note'] = "Nội dung này hiển trong phần chi tiết mỗi sản phẩm hỗ trợ thanh toán";
 $lang_module['cat_title'] = "Danh sách loại sản phẩm";
-$lang_module['link'] = "url nguồn tin";
+$lang_module['link'] = "url hãng sản xuất";
 $lang_module['cat_sub'] = "Thuộc chủ đề";
 $lang_module['cat_sub_sl'] = "Là chủ đề chính";
 $lang_module['topic_sl'] = "Chọn nhóm sản phẩm hoặc tự điền";
@@ -231,7 +231,9 @@ $lang_module['block_error_name'] = "Lỗi: Tên block sản phẩm không đư�
 $lang_module['block_error_alias'] = "Lỗi: Liên kết tĩnh này đã tồn tại, hãy chọn tên khác";
 $lang_module['adddefaultblock'] = "Chọn mặc định khi đăng sản phẩm";
 
-$lang_module['source_logo'] = "Logo nguồn tin";
+$lang_module['source_logo'] = "Logo hãng sản xuất";
+$lang_module['source_title'] = "Tên hãng sản xuất";
+$lang_module['source_error_title'] = "Lỗi: Tên hãng sản xuất còn trống";
 /*topics*/
 $lang_module['cat_no'] = "STT";
 $lang_module['topic_title'] = "Tên tiêu chí";
