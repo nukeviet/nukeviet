@@ -76,8 +76,9 @@ else
     
     $result = $db->sql_query( $sql );
     $result_page = $db->sql_query( "SELECT FOUND_ROWS()" );
-    list( $all_page ) = $db->sql_fetchrow( $result_page );
-    
+	list( $numf ) = $db->sql_fetchrow( $result_page );
+	$all_page = ( $numf ) ? $numf : 1;
+	    
     $data_content = GetDataIn( $result, $catid );
     $data_content['count'] = $all_page;
     $pages = nv_products_page( $base_url, $all_page, $per_page, $page );

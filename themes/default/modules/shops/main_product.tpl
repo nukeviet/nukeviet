@@ -4,15 +4,19 @@
     <div class="items" style="width:{pwidth}%">
         <div class="items_content">
             <p class="content_top">
-                <a href="{LINK}" title="{TITLE}">
-                    <img src="{IMG_SRC}" alt="" style="max-height:{height}px;max-width:{width}px;"/></a><br />
+                <a href="{LINK}" class="tip_trigger">
+                    <img src="{IMG_SRC}" alt="" style="max-height:{height}px;max-width:{width}px;"/>
+                    <!-- BEGIN: tooltip -->
+                    <span class="tip"><strong>{TITLE}</strong><img src="{IMG_SRC}" style="max-width:{width}px;">{hometext}</span>
+                    <!-- END: tooltip -->
+                </a><br />
                 <span><a href="{LINK}" title="{TITLE}">{TITLE0}</a></span> <br />
             </p>
             <!-- BEGIN: price -->
             <p class="content_price">
                 <span class="{class_money}">{product_price} {money_unit}</span>
                 <!-- BEGIN: discounts -->
-                    <br /><span class="money">{product_discounts} {money_unit}</span>
+                <span class="money">{product_discounts} {money_unit}</span>
                 <!-- END: discounts -->
             </p>
             <!-- END: price -->
@@ -34,5 +38,11 @@
     <!-- END: break -->
     <!-- END: items -->
 </div>
+<!-- BEGIN: pages -->
+<div class="pages">{generate_page}</div>
+<!-- END: pages -->
 <div class="msgshow" id="msgshow"></div>
+<!-- BEGIN: tooltip_js -->
+<script type="text/javascript">tooltip_shop();</script>
+<!-- END: tooltip_js -->
 <!-- END: main -->

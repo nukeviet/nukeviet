@@ -19,18 +19,8 @@ if ( ! empty( $temp_id ) )
     $array_page = explode( '-', $temp_id );
     $groupid = intval( end( $array_page ) );
 }
-
 if ( $groupid == 0 ) $contents = "Access error!";
 if ( empty( $global_array_group[$groupid] ) ) $contents = "Access error!";
-
-$page = 0;
-if ( ! empty( $array_op[2] ) )
-{
-	if ( substr( $array_op[2], 0, 5 ) == "page-" )
-	{
-		$page = intval( substr( $array_op[2], 5 ) );
-	}
-}
 
 if ( empty( $contents ) )
 {
@@ -41,7 +31,7 @@ if ( empty( $contents ) )
     
     /*call funtion view*/
     $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
-    $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group/" . $global_array_group[$groupid]['alias'] . "-" . $groupid;
+    $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group/" . $global_array_group[$groupid]['alias'] . "";
     $sql = "SELECT SQL_CALC_FOUND_ROWS id,listcatid, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_address, homeimgalt, homeimgthumb,product_price,product_discounts,money_unit,showprice  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE ";
     $sql .= " group_id LIKE '%" . $groupid . ",%'";
     $sql .= " AND status=1 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") ORDER BY ID DESC LIMIT " . $page . "," . $per_page . "";

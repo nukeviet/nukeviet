@@ -122,6 +122,13 @@
 	</tbody>
     
     <tbody>
+		<tr>
+			<td><strong>{LANG.setting_active_tooltip}</strong></td>
+			<td><input type="checkbox" value="1" name="active_tooltip" {ck_active_tooltip} id="active_tooltip" /></td>
+		</tr>
+	</tbody>
+    
+    <tbody class="second">
         <tr>
             <td colspan="2" style="text-align: center; padding:10px">
             <input type="submit" value="{LANG.save}" name="Submit1" /> 

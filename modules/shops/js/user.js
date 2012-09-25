@@ -1,5 +1,5 @@
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate 1 - 31 - 2010 5 : 12
@@ -205,4 +205,95 @@ function cartorder_detail(a_ob){
 function alert_msg(msg) {
 	$('#msgshow').html(msg); 
 	$('#msgshow').show('slide').delay(3000).hide('slow'); 
+}
+
+function tooltip_shop (){
+	$(".tip_trigger").hover(function(){
+		tip = $(this).find('.tip');
+		tip.show(); //Show tooltip
+	}, function() {
+		tip.hide(); //Hide tooltip		  
+	}).mousemove(function(e) {
+		var mousex = e.pageX + 20; //Get X coodrinates
+		var mousey = e.pageY + 20; //Get Y coordinates
+		var tipWidth = tip.width(); //Find width of tooltip
+		var tipHeight = tip.height(); //Find height of tooltip
+		
+		//Distance of element from the right edge of viewport
+		var tipVisX = $(window).width() - (mousex + tipWidth);
+		//Distance of element from the bottom of viewport
+		var tipVisY = $(window).height() - (mousey + tipHeight);
+		  
+		if ( tipVisX < 20 ) { //If tooltip exceeds the X coordinate of viewport
+			mousex = e.pageX - tipWidth - 20;
+		} if ( tipVisY < 20 ) { //If tooltip exceeds the Y coordinate of viewport
+			mousey = e.pageY - tipHeight - 20;
+		} 
+		tip.css({  top: mousey, left: mousex });
+	});
+}
+
+function checknum(){
+	var price1 = $('#price1').val();
+	var price2 = $('#price2').val();
+	if(price2 == '') { price2 = 0 }
+	if(price2 < price1){
+		document.getElementById('price2').value = '';
+	}
+	if (isNaN(price1)) {
+		alert(isnumber);
+		document.getElementById('submit').disabled = true;
+	}else if (price2 != 0 && isNaN(price2)) {
+		alert(isnumber);
+		document.getElementById('submit').disabled = true;
+	}
+}
+function cleartxtinput(id,txt_default){
+	$("#"+id).focusin(function(){
+		var txt = $(this).val();
+		if (txt_default == txt ){
+			$(this).val('');
+		}
+	});
+	$("#"+id).focusout(function(){
+		var txt = $(this).val();
+		if ( txt == '') {
+			$(this).val(txt_default);
+		}
+	}); 
+}
+
+function onsubmitsearch()
+{
+	var keyword = $('#keyword').val();
+    var price1 = $('#price1').val(); if ( price1 == null ) price1 ='';
+    var price2 = $('#price2').val(); if ( price2 == null ) price2 ='';
+    var sid = $('#sourceid').val();
+    var typemoney = $('#typemoney').val(); if ( typemoney == null ) typemoney ='';
+    var cataid = $('#cata').val();
+    if ( keyword == '' && price1 == '' && price2 == '' && cataid == 0 && sid == 0 )
+    {
+    	return false;
+    }
+    else {
+    	window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=shops&' + nv_fc_variable + '=search_result&keyword='+rawurlencode(keyword)+'&price1='+price1+'&price2='+price2+'&typemoney='+typemoney+'&cata='+cataid+'&sid='+sid;
+    }
+    return false;
+}
+function onsubmitsearch1()
+{
+    var keyword = $('#keyword1').val();
+    var price1 = $('#price11').val(); if ( price1 == null ) price1 ='';
+    var price2 = $('#price21').val(); if ( price2 == null ) price2 ='';
+    var sid = $('#sourceid1').val();
+    var typemoney = $('#typemoney1').val(); if ( typemoney == null ) typemoney ='';
+    var cataid = $('#cata1').val();
+    if ( keyword == '' && price1 == '' && price2 == '' && cataid == 0 && sid == 0 )
+    {
+    	return false;
+    }
+    else {
+    	window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=search_result&keyword='+rawurlencode(keyword)+'&price1='+price1+'&price2='+price2+'&typemoney='+typemoney+'&cata='+cataid+'&sid='+sid;
+    }
+    return false;
 }

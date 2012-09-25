@@ -147,7 +147,6 @@ elseif ( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $n
         $userid = ( defined( 'NV_IS_USER' ) ) ? $user_info['userid'] : 0;
         $transaction_id = $db->sql_query_insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
         $db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = 1 WHERE `order_id`=" . $order_id );
-        
         require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/payment/" . $payment . ".checkout_url.php" );
     }
     else if ( $db->sql_numrows( $query ) > 0 )

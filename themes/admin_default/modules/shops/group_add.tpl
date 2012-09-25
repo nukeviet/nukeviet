@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<div id="module_show_list">{GROUP_LIST}</div>
+<div id="group-delete-area"></div>
 <div id="edit">
     <!-- BEGIN: error -->
     <div class="quote" style="width:780px; margin:auto">
@@ -22,11 +24,12 @@
         <tr>
         <td align="right"><strong>{LANG.group_sub}</strong></td>
         <td>
-        	<select name="parentid">
+        	<select name="parentid" onchange="nv_getcatalog(this)">
               <!-- BEGIN: parent_loop -->
                 <option value="{pgroup_i}" {pselect}>{ptitle_i}</option>
               <!-- END: parent_loop -->
             </select>
+            <span id="vcatid"></span>
         </td>
         </tr>
       </tbody>
@@ -77,5 +80,8 @@
     <br><center><input name="submit1" type="submit" value="{LANG.save}"/></center>
 	</form>
 </div>
+<script type="text/javascript">
+$('#vcatid').load('{URL}');
+</script>
 <!-- END: main -->
 

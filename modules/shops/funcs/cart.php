@@ -49,7 +49,7 @@ if ( ! empty( $_SESSION[$module_data . '_cart'] ) )
                 $thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
             }
             $number = $_SESSION[$module_data . '_cart'][$id]['num'];
-            if ( $number > $product_number )
+            if ( $number > $product_number && $number>0 )
             {
                 $number = $_SESSION[$module_data . '_cart'][$id]['num'] = $product_number;
                 $array_error_product_number[] = sprintf( $lang_module['product_number_max'], $title, $product_number );
