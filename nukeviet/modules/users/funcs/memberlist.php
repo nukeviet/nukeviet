@@ -53,7 +53,7 @@ else
 				$array_mod_title[] = array(
 					'catid' => 0,
 					'title' => $item['username'],
-					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "/" . $item['username'],
+					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "/" . change_alias( $item['username'] ) . "-" . $item['md5username'],
 					);
 
 				$contents = nv_memberslist_detail_theme( $item );
