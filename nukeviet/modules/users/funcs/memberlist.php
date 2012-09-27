@@ -34,25 +34,36 @@ else
 	//xem chi tiet thanh vien
 	if( isset( $array_op[1] ) && ! empty( $array_op[1] ) )
 	{
-		$result = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `username` = " . $db->dbescape( $array_op[1] ) );
-		if( $db->sql_numrows( $result ) > 0 )
+		$md5 = "";
+		unset( $matches );
+		if( preg_match( "/^(.*)\-([a-z0-9]{32})$/", $array_op[1], $matches ) ) $md5 = $matches[2];
+		if( ! empty( $md5 ) )
 		{
-			$item = $db->sql_fetch_assoc( $result );
+			$result = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` = " . $db->dbescape( $md5 ) );
+			if( $db->sql_numrows( $result ) > 0 )
+			{
+				$item = $db->sql_fetch_assoc( $result );
+				if( change_alias( $item['username'] ) != $matches[1] )
+				{
+					// Chuyen ve trang module ngay khong can thong bao
+					Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+					exit();
+				}
+				// Them vao tieu de
+				$array_mod_title[] = array(
+					'catid' => 0,
+					'title' => $item['username'],
+					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "/" . $item['username'],
+					);
 
-			// Them vao tieu de
-			$array_mod_title[] = array(
-				'catid' => 0,
-				'title' => $item['username'],
-				'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "/" . $item['username'],
-				);
-
-			$contents = nv_memberslist_detail_theme( $item );
-		}
-		else
-		{
-			// Chuyen ve trang module ngay khong can thong bao
-			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-			exit();
+				$contents = nv_memberslist_detail_theme( $item );
+			}
+			else
+			{
+				// Chuyen ve trang module ngay khong can thong bao
+				Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+				exit();
+			}
 		}
 
 		include ( NV_ROOTDIR . "/includes/header.php" );
@@ -98,8 +109,8 @@ else
 				$array_order_new[$key] = $link;
 			}
 		}
-        
-		$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `full_name`, `photo`, `gender`, `yim`, `regdate` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
+
+		$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `md5username`, `full_name`, `photo`, `gender`, `yim`, `regdate` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
@@ -118,7 +129,7 @@ else
 			}
 
 			$item['regdate'] = nv_date( "d/m/Y", $item['regdate'] );
-			$item['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=memberlist/" . urlencode( $item['username'] );
+			$item['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=memberlist/" . change_alias( $item['username'] ) . "-" . $item['md5username'];
 			$item['gender'] = ( $item['gender'] == "M" ) ? $lang_module['male'] : ( $item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
 
 			$users_array[$item['userid']] = $item;
