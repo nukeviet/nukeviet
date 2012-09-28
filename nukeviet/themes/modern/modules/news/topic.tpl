@@ -1,4 +1,13 @@
 <!-- BEGIN: main -->
+<div class="cat-nav" style="border:1px solid #ccc;padding:4px;">
+    <a href="{TOPPIC_LINK}" class="current-cat" title="{TOPPIC_TITLE}">{TOPPIC_TITLE}</a> 
+</div>
+<!-- BEGIN: topicdescription -->
+<div style="border:1px solid #ccc;border-top:none;padding:4px;">
+    {TOPPIC_DESCRIPTION}
+</div>
+<!-- END: topicdescription -->
+<div class="clear">&nbsp;</div>
 <!-- BEGIN: topic -->
 <div class="box-border-shadow m-bottom listz-news">
     <div class="content-box">

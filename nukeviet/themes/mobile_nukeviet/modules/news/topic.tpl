@@ -1,4 +1,8 @@
 <!-- BEGIN: main -->
+<p>
+	<a href="{TOPPIC_LINK}" title="{TOPPIC_TITLE}"><strong>{TOPPIC_TITLE}</strong><a/><br />
+	{TOPPIC_DESCRIPTION}
+</p>
 <!-- BEGIN: topic -->
 <!-- BEGIN: homethumb -->
 <a href="{TOPIC.link}"><img class="fl" src="{TOPIC.src}" width="{TOPIC.width}"/></a>

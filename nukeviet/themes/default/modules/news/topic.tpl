@@ -1,4 +1,12 @@
 <!-- BEGIN: main -->
+	<div style="background:#F2F2F2;border : 1px solid #ccc; padding:5px">
+   	    <a style="font-size:13px;" title="{TOPPIC_TITLE}" href="{TOPPIC_LINK}"><strong>{TOPPIC_TITLE}</strong></a>
+    </div>
+    <!-- BEGIN: topicdescription -->
+    <div style="background:#fff; padding:8px; border-bottom : 1px solid #ccc;">
+        {TOPPIC_DESCRIPTION}
+    </div>
+    <!-- END: topicdescription -->
     <!-- BEGIN: topic -->
     <div class="news_column">
         <div class="items clearfix">

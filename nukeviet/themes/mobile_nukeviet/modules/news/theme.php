@@ -555,10 +555,13 @@ function no_permission ( $func_who_view )
     return $xtpl->text( 'no_permission' );
 }
 
-function topic_theme ( $topic_array, $topic_other_array )
+function topic_theme ( $topic_array, $topic_other_array, $page_title, $description )
 {
     global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config;
     $xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl->assign( 'TOPPIC_TITLE', $page_title );
+    $xtpl->assign( 'TOPPIC_LINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias );
+    $xtpl->assign( 'TOPPIC_DESCRIPTION', $description );
     if ( ! empty( $topic_array ) )
     {
         foreach ( $topic_array as $topic_array_i )

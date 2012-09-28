@@ -73,7 +73,7 @@ if( $topicid > 0 )
 
 	$base_url = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias;
 	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
-	$contents = topic_theme( $topic_array, $topic_other_array, $generate_page );
+	$contents = topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description );
 
 	if( $page > 1 )
 	{

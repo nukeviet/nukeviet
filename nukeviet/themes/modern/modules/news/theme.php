@@ -687,13 +687,18 @@ function no_permission( $func_who_view )
 	return $xtpl->text( 'no_permission' );
 }
 
-function topic_theme( $topic_array, $topic_other_array, $generate_page )
+function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description )
 {
-	global $lang_module, $module_info, $module_file;
+	global $lang_module, $module_info, $module_name, $module_file, $topicalias;
 
 	$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
-
+	$xtpl->assign( 'TOPPIC_TITLE', $page_title );
+    $xtpl->assign( 'TOPPIC_LINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias );
+    if( !empty( $description )){
+        $xtpl->assign( 'TOPPIC_DESCRIPTION', $description );
+        $xtpl->parse( 'main.topicdescription' );
+    }
 	if( ! empty( $topic_array ) )
 	{
 		foreach( $topic_array as $topic_array_i )
