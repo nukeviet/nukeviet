@@ -145,18 +145,24 @@ if ( $nv_Request->isset_request( 'gid,uid', 'post' ) )
     $sql = $db->sql_query( $sql );
     if ( $db->sql_numrows( $sql ) == 0 ) die( $lang_module['search_not_result'] );
     list( $in_groups ) = $db->sql_fetchrow( $sql );
-    if ( ! empty( $in_groups ) and preg_match( "/\," . $gid . "\,/", "," . $in_groups . "," ) ) die( $lang_module['UserInGroup'] );
-
+	$in_groups = $in_groups ? explode( ",", $in_groups ) : array();
+	
+	// Kiem tra neu thuoc nhom roi
+	if( in_array( $gid, $in_groups ) ) die( $lang_module['UserInGroup'] );
+	
     $users = $groupsList[$gid]['users'];
-    if ( ! empty( $users ) ) $users .= ",";
-    $users .= $uid;
-    $query = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `users` = " . $db->dbescape_string( $users ) . " WHERE `group_id`=" . $gid . " LIMIT 1";
-    $db->sql_query( $query );
+	$users = $users ? explode( ",", $users ) : array();
+	$users[] = $uid;
+	$users = implode( ",", array_filter( array_unique( array_map( "intval", $users ) ) ) );
+	
+    $sql = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `users` = " . $db->dbescape_string( $users ) . " WHERE `group_id`=" . $gid . " LIMIT 1";
+    $db->sql_query( $sql );
 
-    if ( ! empty( $in_groups ) ) $in_groups .= ",";
-    $in_groups .= $gid;
-    $query = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `in_groups` = " . $db->dbescape_string( $in_groups ) . " WHERE `userid`=" . $uid . " LIMIT 1";
-    $db->sql_query( $query );
+	$in_groups[] = $gid;
+	$in_groups = implode( ",", array_filter( array_unique( array_map( "intval", $in_groups ) ) ) );
+	
+    $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `in_groups` = " . $db->dbescape_string( $in_groups ) . " WHERE `userid`=" . $uid . " LIMIT 1";
+    $db->sql_query( $sql );
 
     nv_del_moduleCache( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addMemberToGroup'], "Member Id: " . $uid . " group ID: " . $gid, $admin_info['userid'] );
@@ -164,7 +170,7 @@ if ( $nv_Request->isset_request( 'gid,uid', 'post' ) )
     die( "OK" );
 }
 
-//Loaij thanh vien khoi nhom
+//Loai thanh vien khoi nhom
 if ( $nv_Request->isset_request( 'gid,exclude', 'post' ) )
 {
     $gid = $nv_Request->get_int( 'gid', 'post', 0 );
