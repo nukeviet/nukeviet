@@ -351,7 +351,7 @@ if ( $checkss == $array_data['checkss'] )
     {
         @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
         
-        $upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, 80, 80 );
+        $upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
         $upload_info = $upload->save_file( $_FILES['avatar'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
         
         @unlink( $_FILES['avatar']['tmp_name'] );
@@ -365,7 +365,23 @@ if ( $checkss == $array_data['checkss'] )
                 @nv_deletefile( NV_ROOTDIR . '/' . $array_data['photo'] );
             }
             
-            $file_name = str_replace( NV_ROOTDIR . "/", "", $upload_info['name'] );
+            $image = $upload_info['name'];
+			$basename = $upload_info['basename'];
+
+			$imginfo = nv_is_image( $image );
+
+			$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $user_info['userid'] . '-' . 80 . '-' . 80 . '\2', $basename );
+
+			$_image = new image( $image, 80, 80 );
+			$_image->resizeXY( 80, 80 );
+			$_image->save( NV_UPLOADS_REAL_DIR . '/' . $module_name, $basename );
+			if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $basename ) )
+			{
+				$file_name = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $basename;
+				//@chmod($file_name, 0644);
+				$file_name = str_replace( NV_ROOTDIR . "/", "", $file_name );
+				@nv_deletefile( $upload_info['name'] );
+			}
             
             $sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape_string( $file_name ) . " WHERE `userid`=" . $user_info['userid'];
             $db->sql_query( $sql );
