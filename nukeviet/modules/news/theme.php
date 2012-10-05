@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @copyright 2009
  * @createdate 12/31/2009 0:51
@@ -19,7 +19,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
  */
 function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 {
-	global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
+	global $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
 	$xtpl = new XTemplate( "viewcat_grid.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
@@ -70,7 +70,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
  */
 function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 {
-	global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
+	global $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
 	$xtpl = new XTemplate( "viewcat_list.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
@@ -120,7 +120,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
  */
 function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 {
-	global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info;
+	global $module_name, $module_file, $lang_module, $module_config, $module_info;
 	$xtpl = new XTemplate( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
@@ -174,7 +174,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
  */
 function viewcat_top( $array_catcontent, $generate_page )
 {
-	global $global_config, $module_name, $module_file, $global_array_cat, $lang_module, $module_config, $module_info;
+	global $module_name, $module_file, $lang_module, $module_config, $module_info;
 	$xtpl = new XTemplate( "viewcat_top.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
@@ -227,7 +227,7 @@ function viewcat_top( $array_catcontent, $generate_page )
  */
 function viewsubcat_main( $viewcat, $array_cat )
 {
-	global $global_config, $module_name, $module_file, $global_array_cat, $lang_module, $module_config, $module_info;
+	global $module_name, $module_file, $global_array_cat, $lang_module, $module_config, $module_info;
 	$xtpl = new XTemplate( $viewcat . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	// Hien thi cac chu de con
@@ -334,7 +334,7 @@ function viewsubcat_main( $viewcat, $array_cat )
  */
 function viewcat_two_column( $array_content, $array_catpage )
 {
-	global $global_config, $module_name, $module_file, $module_config, $module_info, $home, $lang_module;
+	global $module_name, $module_file, $module_config, $module_info, $lang_module;
 	$xtpl = new XTemplate( "viewcat_two_column.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	//Bai viet o phan dau
@@ -427,7 +427,7 @@ function viewcat_two_column( $array_content, $array_catpage )
  */
 function detail_theme( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable )
 {
-	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $global_array_cat, $my_head, $lang_global, $user_info, $admin_info, $catid;
+	global $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info;
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
 	$my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";
@@ -619,7 +619,7 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
  */
 function no_permission( $func_who_view )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $db, $module_name;
+	global $module_info, $module_file, $lang_module;
 	$xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	if( $func_who_view == 1 )
 	{
@@ -648,7 +648,7 @@ function no_permission( $func_who_view )
  */
 function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description )
 {
-	global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config;
+	global $module_info, $module_name, $module_file, $topicalias, $module_config;
 	$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'TOPPIC_TITLE', $page_title );
     $xtpl->assign( 'TOPPIC_LINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias );
@@ -702,8 +702,7 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
  */
 function comment_theme( $comment_array )
 {
-	$comment = "";
-	global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config;
+	global $module_info, $module_name, $module_file, $module_config;
 	$xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$k = 0;
 	foreach( $comment_array['comment'] as $comment_array_i )
@@ -734,7 +733,7 @@ function comment_theme( $comment_array )
  */
 function sendmail_themme( $sendmail )
 {
-	global $module_name, $module_info, $module_file, $global_config, $lang_module, $lang_global;
+	global $module_info, $module_file, $global_config, $lang_module, $lang_global;
 	$script = nv_html_site_js();
 	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
 	$script .= "<script type=\"text/javascript\">\n";
@@ -783,7 +782,7 @@ function sendmail_themme( $sendmail )
  */
 function news_print( $result )
 {
-	global $module_name, $module_info, $module_file, $global_config, $lang_module;
+	global $module_info, $module_file, $lang_module;
 	$xtpl = new XTemplate( "print.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'CONTENT', $result );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -826,7 +825,6 @@ function news_print( $result )
 	return $xtpl->text( 'main' );
 }
 
-//// search.php
 /**
  * search_theme()
  * 
@@ -838,7 +836,7 @@ function news_print( $result )
  */
 function search_theme( $key, $check_num, $date_array, $array_cat_search )
 {
-	global $module_name, $module_info, $module_file, $global_config, $lang_module, $module_name;
+	global $module_name, $module_info, $module_file, $lang_module, $module_name;
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$base_url_site = NV_BASE_SITEURL . "?";
 	$xtpl->assign( 'LANG', $lang_module );
@@ -880,7 +878,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
  */
 function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
 {
-	global $module_file, $module_info, $global_config, $lang_global, $lang_module, $db, $module_name, $global_array_cat, $module_config;
+	global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config;
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
 	$xtpl->assign( 'LANG', $lang_module );

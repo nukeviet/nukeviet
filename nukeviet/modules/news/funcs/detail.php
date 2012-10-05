@@ -131,7 +131,7 @@ if( $allowed )
 
 	list( $sourcetext, $source_link, $source_logo ) = $db->sql_fetchrow( $result );
 	unset( $sql, $result );
-	unset( $sql, $result );
+
 	$news_contents['newscheckss'] = md5( $news_contents['id'] . session_id() . $global_config['sitekey'] );
 	if( $module_config[$module_name]['config_source'] == 0 ) $news_contents['source'] = $sourcetext;
 	elseif( $module_config[$module_name]['config_source'] == 1 ) $news_contents['source'] = $source_link;

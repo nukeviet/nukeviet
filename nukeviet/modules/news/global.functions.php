@@ -22,7 +22,7 @@ if( $timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME )
  */
 function nv_set_status_module()
 {
-	global $db, $module_name, $module_data, $global_config, $module_config;
+	global $db, $module_name, $module_data, $global_config;
 
 	$check_run_cronjobs = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/cronjobs_' . md5( $module_data . 'nv_set_status_module' . $global_config['sitekey'] ) . '.txt';
 	$p = NV_CURRENTTIME - 300;
