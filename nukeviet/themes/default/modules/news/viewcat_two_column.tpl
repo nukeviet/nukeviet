@@ -1,4 +1,36 @@
 <!-- BEGIN: main -->
+<script type="text/javascript">
+function resize_panel_two(start_pos, end_pos)
+{
+	intCol 	= 2;
+	hMax 	= 0;	
+	if(document.getElementById('col-' + start_pos ))
+	{
+		intH = parseInt(jQuery("#col-" + start_pos).height());
+	}
+	if(intH > hMax)
+	{
+		hMax = intH;
+	}
+    if(document.getElementById('col-' + end_pos ))
+	{
+		intH = parseInt(jQuery("#col-" + end_pos).height());
+	}
+	
+	if(intH > hMax)
+	{
+		hMax = intH;
+	}	
+	if(document.getElementById('col-'+start_pos))
+	{
+		jQuery("#col-"+start_pos).css({height:hMax});
+	}
+    if(document.getElementById('col-'+end_pos))
+	{
+		jQuery("#col-"+end_pos).css({height:hMax});
+	}
+}
+</script>
 <div class="news_column">
     <!-- BEGIN: catcontent --><!-- BEGIN: content -->
     <div class="news-content bordersilver white clearfix">
@@ -30,7 +62,7 @@
 
 <!-- BEGIN: loopcat -->
 <div class="news_column two_column{LAST} fl">
-    <div class="news-content bordersilver white clearfix">
+    <div id="col-{ID}" class="news-content bordersilver white clearfix">
         <div class="header clearfix">
             <a class="current" title="{CAT.title}" href="{CAT.link}"><span><span>{CAT.title}</span></span></a>
         </div>
@@ -59,6 +91,11 @@
         </div>
      </div>
 </div>
+<!-- BEGIN: clear -->
+<script type="text/javascript">
+	resize_panel_two( {col1}, {col2} );
+</script>
+<!-- END: clear -->
 <!-- END: loopcat -->
 <div style="clear:both;">
 </div>

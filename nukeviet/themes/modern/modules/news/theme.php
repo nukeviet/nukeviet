@@ -432,11 +432,13 @@ function viewcat_two_column( $array_content, $array_catpage )
 			}
 		
 			$xtpl->assign( 'FLOAT', $a % 2 ? ' fr' : ' fl' );
-	
-			if( $a % 2 )
-			{
-				$xtpl->parse( 'main.loopcat.clear' );
-			}
+	       
+			if ($a % 2)
+            {
+                $xtpl->assign('col1', $a );
+                $xtpl->assign('col2', $a + 1 );
+                $xtpl->parse('main.loopcat.clear');
+            }
 		
 			$xtpl->parse( 'main.loopcat' );
 			++$a;

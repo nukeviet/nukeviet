@@ -1,4 +1,36 @@
 <!-- BEGIN: main -->
+<script type="text/javascript">
+function resize_panel_two(start_pos, end_pos)
+{
+	intCol 	= 2;
+	hMax 	= 0;	
+	if(document.getElementById('col-' + start_pos ))
+	{
+		intH = parseInt(jQuery("#col-" + start_pos).height());
+	}
+	if(intH > hMax)
+	{
+		hMax = intH;
+	}
+    if(document.getElementById('col-' + end_pos ))
+	{
+		intH = parseInt(jQuery("#col-" + end_pos).height());
+	}
+	
+	if(intH > hMax)
+	{
+		hMax = intH;
+	}	
+	if(document.getElementById('col-'+start_pos))
+	{
+		jQuery("#col-"+start_pos).css({height:hMax});
+	}
+    if(document.getElementById('col-'+end_pos))
+	{
+		jQuery("#col-"+end_pos).css({height:hMax});
+	}
+}
+</script>
 <!-- BEGIN: catcontent -->
 <div class="box-border-shadow m-bottom t-news">
     <!-- BEGIN: content -->
@@ -31,7 +63,7 @@
 </div>
 <!-- END: catcontent --><!-- BEGIN: loopcat -->
 <div id="catid-{ID}" class="m-bottom box50{FLOAT}">
-    <div class="box-border-shadow">
+    <div id="col-{ID}" class="box-border-shadow">
         <div class="cat-nav">
             <a class="rss" href="{CAT.rss}">RSS</a>
             <a class="current-cat" title="{CAT.title}" href="{CAT.link}">{CAT.title}</a>
@@ -67,8 +99,10 @@
     </div>
 </div>
 <!-- BEGIN: clear -->
-<div style="clear:both;">
-</div>
+<script type="text/javascript">
+		resize_panel_two( {col1}, {col2} );
+	</script>
+<div style="clear:both"></div>
 <!-- END: clear -->
 <!-- END: loopcat -->
 <!-- END: main -->

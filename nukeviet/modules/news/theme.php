@@ -406,6 +406,12 @@ function viewcat_two_column( $array_content, $array_catpage )
 					$xtpl->parse( 'main.loopcat.other' );
 				}
 			}
+            if ($a % 2)
+            {
+                $xtpl->assign('col1', $a -1 );
+                $xtpl->assign('col2', $a );
+                $xtpl->parse('main.loopcat.clear');
+            }
 			$xtpl->parse( 'main.loopcat' );
 			++$a;
 		}
