@@ -1,36 +1,4 @@
 <!-- BEGIN: main -->
-<script type="text/javascript">
-function resize_panel_two(start_pos, end_pos)
-{
-	intCol 	= 2;
-	hMax 	= 0;	
-	if(document.getElementById('col-' + start_pos ))
-	{
-		intH = parseInt(jQuery("#col-" + start_pos).height());
-	}
-	if(intH > hMax)
-	{
-		hMax = intH;
-	}
-    if(document.getElementById('col-' + end_pos ))
-	{
-		intH = parseInt(jQuery("#col-" + end_pos).height());
-	}
-	
-	if(intH > hMax)
-	{
-		hMax = intH;
-	}	
-	if(document.getElementById('col-'+start_pos))
-	{
-		jQuery("#col-"+start_pos).css({height:hMax});
-	}
-    if(document.getElementById('col-'+end_pos))
-	{
-		jQuery("#col-"+end_pos).css({height:hMax});
-	}
-}
-</script>
 <div class="news_column">
     <!-- BEGIN: catcontent --><!-- BEGIN: content -->
     <div class="news-content bordersilver white clearfix">
@@ -59,10 +27,9 @@ function resize_panel_two(start_pos, end_pos)
     </div>
     <!-- END: catcontent -->
 </div>
-
 <!-- BEGIN: loopcat -->
 <div class="news_column two_column{LAST} fl">
-    <div id="col-{ID}" class="news-content bordersilver white clearfix">
+    <div class="news-content bordersilver white clearfix news-cat-two-column">
         <div class="header clearfix">
             <a class="current" title="{CAT.title}" href="{CAT.link}"><span><span>{CAT.title}</span></span></a>
         </div>
@@ -89,14 +56,24 @@ function resize_panel_two(start_pos, end_pos)
                 <!-- END: other -->
             </ul>
         </div>
-     </div>
+	</div>
 </div>
 <!-- BEGIN: clear -->
-<script type="text/javascript">
-	resize_panel_two( {col1}, {col2} );
-</script>
+<div class="clear"></div>
 <!-- END: clear -->
 <!-- END: loopcat -->
-<div style="clear:both;">
-</div>
+<script type="text/javascript">
+$(window).load(function(){
+	$.each( $('.news-cat-two-column'), function(k,v){
+		if( k % 2 == 0 ){
+			var height1 = $($('.news-cat-two-column')[k]).height();
+			var height2 = $($('.news-cat-two-column')[k+1]).height();
+			var height = ( height1 > height2 ? height1 : height2 );
+			$($('.news-cat-two-column')[k]).height( height );
+			$($('.news-cat-two-column')[k+1]).height( height );
+		}
+	});
+});
+</script>
+<div class="clear"></div>
 <!-- END: main -->
