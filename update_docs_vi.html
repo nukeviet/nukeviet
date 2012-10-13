@@ -1,170 +1,65 @@
-<h1>Revision 1882</h1>
-<h3>I. Fix chiều cao 2 cột trong viewcat_two_column.tpl bằng nhau.</h3>
+<h3>Nếu bạn sử dụng giao diện không phải mặc định của NukeViet hãy làm bước I</h3>
+
+I. Chỉnh sửa file header.tpl.<br />
+Mở file /themes/theme-cua-ban/layout/header.tpl ra tìm<br />
+<p><code>&lt;body&gt;</code></p>
+thêm vào bên dưới<br />
+<p><code>&lt;noscript&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;div id=&quot;nojavascript&quot;&gt;{THEME_NOJS}&lt;/div&gt;<br />
+&lt;/noscript&gt;</code></p>
+
+II. Revision: 1794
+File /themes/ten-theme/modulews/news/search.tpl
+Tìm <br /><br />
+<code>&lt;!-- END: pages_viewpages --&gt;</code><br /><br />
+Thay lại thành<br />
+<code>&lt;!-- END: pages_result --&gt;</code>
+
+<p>
+	III. Revision: 1841<br /><br />
+	- Chú ý nếu giao diện đang dùng không phải mặc định (default hoặc modern) thì copy file viewdetailusers.tpl và memberslist.tpl từ hai theme gốc tương ứng vào theme đang dùng.<br />
+	- Sau khi nâng cấp xong vào quản lý giao diện =&gt; thiết lập layout nhấp <b>Lưu lại</b> để hệ thống cập nhật giao diện mới cho chức năng xem danh sách thành viên.<br />
+	- Từ r1841 hệ thống tạo thêm chức năng xem danh sách thành viên và đặt phân quyền ở mức tất cả các thành viên được xem. Để thay đổi quyền xem, vào cấu hình module của module users và thay đổi giá trị đó thành <b>Tất cả</b> hoặc <b>Quản trị</b>.
+</p>
+
+
+----------------------------------------
+<h1>Revision 1877</h1>
+<h3>Nếu bạn sử dụng giao diện không phải mặc định của NukeViet hãy thực hiện như sau.</h3>
 1. Nếu theme của bạn làm từ theme default.<br />
- Mở file /themes/theme-cua-ban/modules/news/viewcat_two_column.tpl ra tìm<br />
+ Mở file /themes/theme-cua-ban/modules/news/topic.tpl ra tìm<br />
 <p><code>&lt;!-- BEGIN: main --&gt;</code></p>
 thêm vào bên dưới<br />
 <p><code>
-	<script type="text/javascript">
-function resize_panel_two(start_pos, end_pos)
-{
-	intCol 	= 2;
-	hMax 	= 0;	
-	if(document.getElementById('col-' + start_pos ))
-	{
-		intH = parseInt(jQuery("#col-" + start_pos).height());
-	}
-	if(intH > hMax)
-	{
-		hMax = intH;
-	}
-    if(document.getElementById('col-' + end_pos ))
-	{
-		intH = parseInt(jQuery("#col-" + end_pos).height());
-	}
-	
-	if(intH > hMax)
-	{
-		hMax = intH;
-	}	
-	if(document.getElementById('col-'+start_pos))
-	{
-		jQuery("#col-"+start_pos).css({height:hMax});
-	}
-    if(document.getElementById('col-'+end_pos))
-	{
-		jQuery("#col-"+end_pos).css({height:hMax});
-	}
-}
-</script>
-</code></p>
-- Tìm đoạn : 
-<p>
-	<code>
-		<div class="news-content bordersilver white clearfix">
-	</code>
-</p>
-Thay lại bằng đoạn :
-<p>
-	<code>
-		<div id="col-{ID}" class="news-content bordersilver white clearfix">
-	</code>
-</p>
-Tìm đoạn : 
-<p>
-	<code>
-		 	<!-- END: loopcat -->
-	</code>
-</p>
-Thêm vào bên trên đoạn :
-<p>
-	<code>
-		<!-- BEGIN: clear -->
-		<script type="text/javascript">
-			resize_panel_two( {col1}, {col2} );
-		</script>
-		<!-- END: clear -->
-	</code>
-</p>
-- Nếu theme của bạn có file /themes/theme-cua-ban/modules/news/theme.php Mở file theme.php ra tìm<br />
-<code>
-	$xtpl->parse( 'main.loopcat' );
- 	++$a;
-</code>
-Thêm vào bên trên đoạn sau :
-<p>
-	<code>
-		if ($a % 2)
-	 	{
-		 	$xtpl->assign('col1', $a -1 );
-		 	$xtpl->assign('col2', $a );
-		 	$xtpl->parse('main.loopcat.clear');
-	 	}
-	</code>
-</p>
+&lt;div style=&quot;background:#F2F2F2;border : 1px solid #ccc; padding:5px&quot;&gt;<br />
+	&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &lt;a style=&quot;font-size:13px;&quot; title=&quot;{TOPPIC_TITLE}&quot; href=&quot;{TOPPIC_LINK}&quot;&gt;&lt;strong&gt;{TOPPIC_TITLE}&lt;/strong&gt;&lt;/a&gt;<br />
+	&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br />
+	&nbsp;&nbsp;&nbsp; &lt;!-- BEGIN: topicdescription --&gt;<br />
+	&nbsp;&nbsp;&nbsp; &lt;div style=&quot;background:#fff; padding:8px; border-bottom : 1px solid #ccc;&quot;&gt;<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {TOPPIC_DESCRIPTION}<br />
+	&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br />
+	&nbsp;&nbsp;&nbsp; &lt;!-- END: topicdescription --&gt;</code></p>
 2. Nếu theme của bạn làm từ theme modern.<br />
-Mở file /themes/theme-cua-ban/modules/news/viewcat_two_column.tpl ra tìm<<br />
+Mở file /themes/theme-cua-ban/modules/news/topic.tpl ra tìm<br />
 <p><code>&lt;!-- BEGIN: main --&gt;</code></p>
 thêm vào bên dưới<br />
 <p><code>
-	<script type="text/javascript">
-	function resize_panel_two(start_pos, end_pos)
-	{
-		intCol 	= 2;
-		hMax 	= 0;	
-		if(document.getElementById('col-' + start_pos ))
-		{
-			intH = parseInt(jQuery("#col-" + start_pos).height());
-		}
-		if(intH > hMax)
-		{
-			hMax = intH;
-		}
-	    if(document.getElementById('col-' + end_pos ))
-		{
-			intH = parseInt(jQuery("#col-" + end_pos).height());
-		}
-		
-		if(intH > hMax)
-		{
-			hMax = intH;
-		}	
-		if(document.getElementById('col-'+start_pos))
-		{
-			jQuery("#col-"+start_pos).css({height:hMax});
-		}
-	    if(document.getElementById('col-'+end_pos))
-		{
-			jQuery("#col-"+end_pos).css({height:hMax});
-		}
-	}
-	</script>
+	&lt;div class=&quot;cat-nav&quot; style=&quot;border:1px solid #ccc;padding:4px;&quot;&gt;<br />
+	&lt;a href=&quot;{TOPPIC_LINK}&quot; class=&quot;current-cat&quot; title=&quot;{TOPPIC_TITLE}&quot;&gt;{TOPPIC_TITLE}&lt;/a&gt;<br />
+	&lt;/div&gt;<br />
+	&lt;!-- BEGIN: topicdescription --&gt;<br />
+	&lt;div style=&quot;border:1px solid #ccc;border-top:none;padding:4px;&quot;&gt;<br />
+	{TOPPIC_DESCRIPTION}<br />
+	&lt;/div&gt;<br />
+	&lt;!-- END: topicdescription --&gt;<br />
+	&lt;div class=&quot;clear&quot;&gt;&amp;nbsp;&lt;/div&gt;
 </code></p>
-Tìm đoạn :
-<p>
-	<code>
-		<div class="box-border-shadow">
-        	<div class="cat-nav">
-	</code>
-</p>
-Thay bằng đoạn :
-<p>
-	<code>
-		<div id="col-{ID}" class="box-border-shadow">
-        	<div class="cat-nav">
-	</code>
-</p>
-Tìm đoạn :
-<p>
-	<code>
-		<!-- BEGIN: clear -->
-		<div style="clear:both">
-		</div>
-		<!-- END: clear -->
-	</code>
-</p>
-Thay bằng đoạn :
-<p>
-	<code>
-		<!-- BEGIN: clear -->
-			<script type="text/javascript">
-				resize_panel_two( {col1}, {col2} );
-			</script>
-		<div style="clear:both"></div>
-		<!-- END: clear -->
-	</code>
-</p>
-- Nếu theme của bạn có file /themes/theme-cua-ban/modules/news/theme.php mở nó ra tìm <br />
-<p><code>
-	$xtpl->parse( 'main.loopcat' );
-	++$a;
-</code></p>
-Thêm vào bên trên đoạn
-<p><code>
-	if ($a % 2)
-    {
-        $xtpl->assign('col1', $a );
-        $xtpl->assign('col2', $a + 1 );
-        $xtpl->parse('main.loopcat.clear');
-    }
-</code></p>
+
+3. Nếu theme của bạn có file /themes/theme-cua-ban/modules/news/theme.php mở nó ra tìm <br />
+<p><code>function topic_theme( $topic_array, $topic_other_array, $generate_page )</code></p>
+Thay lại bằng
+<p><code>function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description )</code></p>
+Tìm <br />
+<p><code>$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );</code></p>
+Thêm vào bên dưới
+<p><code>$xtpl-&gt;assign( &#39;TOPPIC_TITLE&#39;, $page_title ); <br />$xtpl-&gt;assign( &#39;TOPPIC_LINK&#39;, NV_BASE_SITEURL . &quot;index.php?&quot; . NV_LANG_VARIABLE . &quot;=&quot; . NV_LANG_DATA . &quot;&amp;&quot; . NV_NAME_VARIABLE . &quot;=&quot; . $module_name . &quot;&amp;&quot; . NV_OP_VARIABLE . &quot;=topic/&quot; . $topicalias ); <br />if( !empty( $description )){ $xtpl-&gt;assign( &#39;TOPPIC_DESCRIPTION&#39;, $description ); <br />$xtpl-&gt;parse( &#39;main.topicdescription&#39; ); }</code></p>
