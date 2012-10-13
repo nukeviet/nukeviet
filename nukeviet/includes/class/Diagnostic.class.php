@@ -56,7 +56,9 @@ class Diagnostic
 		'PageRank' => "http://%s/tbr?client=navclient-auto&ch=%s&features=Rank&q=info%s&num=100&filter=0", //
 		'AlexaRank' => "http://data.alexa.com/data?cli=10&dat=nsa&url=%s", //
 		'GoogleBackLink' => "http://www.google.com/search?hl=en&q=link%s", //
-		'GoogleIndexed' => "http://www.google.com/search?hl=en&q=site%s" //
+		'GoogleIndexed' => "http://www.google.com/search?hl=en&q=site%s", //
+		'BingBackLink' => "http://www.bing.com/search?q=link%s&go=&qs=bs&form=QBRE", //
+		'BingIndexed' => "http://www.bing.com/search?q=site%s&go=&qs=bs&form=QBRE", //
 	);
 
 	private $myDomain;
@@ -77,11 +79,15 @@ class Diagnostic
 		if ( isset( $_pattern['AlexaRank'] ) ) $this->$pattern['AlexaRank'] = $_pattern['AlexaRank'];
 		if ( isset( $_pattern['GoogleBackLink'] ) ) $this->$pattern['GoogleBackLink'] = $_pattern['GoogleBackLink'];
 		if ( isset( $_pattern['GoogleIndexed'] ) ) $this->$pattern['GoogleIndexed'] = $_pattern['GoogleIndexed'];
+		if ( isset( $_pattern['BingBackLink'] ) ) $this->$pattern['BingBackLink'] = $_pattern['BingBackLink'];
+		if ( isset( $_pattern['BingIndexed'] ) ) $this->$pattern['BingIndexed'] = $_pattern['BingIndexed'];
+		
 		$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 		if ( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
 		}
+		
 		$this->disable_functions = $disable_functions;
 		$this->myDomain = NV_SERVER_NAME;
 		// $this->myDomain = "nukeviet.vn";
@@ -293,6 +299,52 @@ class Diagnostic
 	}
 
 	/**
+	 * Diagnostic::getBingBackLink()
+	 * 
+	 * @return
+	 */
+	public function getBingBackLink()
+	{
+		global $getContent;
+
+		$url = sprintf( $this->pattern['BingBackLink'], urlencode( ":" . $this->currentDomain ) );
+		$content = $getContent->get( $url );
+		
+		if ( preg_match( "/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match ) )
+		{
+			$bl = preg_replace( "/\,/", "", $match[1] );
+			return ( int )$bl;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	/**
+	 * Diagnostic::getBingIndexed()
+	 * 
+	 * @return
+	 */
+	public function getBingIndexed()
+	{
+		global $getContent;
+
+		$url = sprintf( $this->pattern['BingIndexed'], urlencode( ":" . $this->currentDomain ) );
+		$content = $getContent->get( $url );
+
+		if ( preg_match( "/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match ) )
+		{
+			$bl = preg_replace( "/\,/", "", $match[1] );
+			return ( int )$bl;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	/**
 	 * Diagnostic::newGetInfo()
 	 * 
 	 * @param mixed $content
@@ -315,6 +367,8 @@ class Diagnostic
 		list( $result['AlexaRank'], $result['AlexaBackLink'], $result['AlexaReach'] ) = $this->getAlexaRank();
 		$result['GoogleBackLink'] = $this->getGoogleBackLink();
 		$result['GoogleIndexed'] = $this->getGoogleIndexed();
+		$result['BingBackLink'] = $this->getBingBackLink();
+		$result['BingIndexed'] = $this->getBingIndexed();
 		$content['item'][] = $result;
 		
 		$xmlHeader = '<?xml version="1.0" encoding="UTF-8"?><diagnostic></diagnostic>';
@@ -352,7 +406,9 @@ class Diagnostic
 				'AlexaBackLink' => 0, //
 				'AlexaReach' => 0, //
 				'GoogleBackLink' => 0, //
-				'GoogleIndexed' => 0 //
+				'GoogleIndexed' => 0, //
+				'BingBackLink' => 0, //
+				'BingIndexed' => 0, //
 			);
 			return $content;
 		}
