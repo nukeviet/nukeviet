@@ -2,7 +2,7 @@
 <div id="siteDiagnostic"></div>
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){$("#siteDiagnostic").load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=siteDiagnostic&i=process&num="+nv_randomPassword(10))});
+$(document).ready(function(){$("#siteDiagnostic").html('<p class="center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=siteDiagnostic&i=process&num="+nv_randomPassword(10))});
 //]]>
 </script>
 <!-- END: main -->
@@ -38,7 +38,7 @@ $(document).ready(function(){$("#siteDiagnostic").load("index.php?{NV_NAME_VARIA
 <div style="text-align:right;"><a id="diagnosticRefresh" href="#">{LANG.reCheck}</a></div>
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){$("#diagnosticRefresh").click(function(){$("#siteDiagnostic").text("").load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=siteDiagnostic&i=refresh&num="+nv_randomPassword(10));return false})});
+$(document).ready(function(){$("#diagnosticRefresh").click(function(){$("#siteDiagnostic").text("").html('<p class="center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=siteDiagnostic&i=refresh&num="+nv_randomPassword(10));return false})});
 //]]>
 </script>
 <!-- END: ref -->

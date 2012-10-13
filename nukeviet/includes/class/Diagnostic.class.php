@@ -48,7 +48,7 @@ if ( ! isset( $getContent ) or ! is_object( $getContent ) )
 class Diagnostic
 {
 	private $googleDomains = array(
-		'www.google.com', //
+		// 'www.google.com', //
 		'toolbarqueries.google.com' //
 	);
 
@@ -185,19 +185,19 @@ class Diagnostic
 	public function getPageRank()
 	{
 		global $getContent;
-
+		
 		if ( extension_loaded( 'curl' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! preg_grep( '/^curl\_/', $this->disable_functions ) ) ) )
 		{
 			$ch = $this->checkHash( $this->hashURL( $this->currentDomain ) );
 			$host = $this->googleDomains[mt_rand( 0, sizeof( $this->googleDomains ) - 1 )];
 			$url = sprintf( $this->pattern['PageRank'], $host, $ch, urlencode( ":" . $this->currentDomain ) );
-			
+
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_HEADER, 0 );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 			curl_setopt( $ch, CURLOPT_URL, $url );
 			$content = curl_exec( $ch );			
-			
+
 			if ( ! curl_errno( $ch ) )
 			{
 				$info = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
@@ -212,11 +212,8 @@ class Diagnostic
 			}
 			curl_close( $ch );
 		}
-
-		$url = "http://safelinks4.me/getpr.php?url=" . urlencode( $this->currentDomain );
-		$content = $getContent->get( $url );
 		
-		return intval( $content );
+		return 0;
 	}
 
 	/**
@@ -261,9 +258,9 @@ class Diagnostic
 		$url = sprintf( $this->pattern['GoogleBackLink'], urlencode( ":" . $this->currentDomain ) );
 		$content = $getContent->get( $url );
 		
-		if ( preg_match( "/\<div\>About ([0-9\,]+) results\<\/div\>/isU", $content, $match ) )
-		{		
-			$bl = preg_replace( "/\,/", "", $match[1] );
+		if ( preg_match( "/\<div(.*?)\>About ([0-9\,]+) results(.*?)<\/div\>/isU", $content, $match ) )
+		{
+			$bl = preg_replace( "/\,/", "", $match[2] );
 			return ( int )$bl;
 		}
 		else
@@ -284,9 +281,9 @@ class Diagnostic
 		$url = sprintf( $this->pattern['GoogleIndexed'], urlencode( ":" . $this->currentDomain ) );
 		$content = $getContent->get( $url );
 			
-		if ( preg_match( "/\<div\>About ([0-9\,]+) results\<\/div\>/isU", $content, $match ) )
+		if ( preg_match( "/\<div(.*?)\>About ([0-9\,]+) results(.*?)\<\/div\>/isU", $content, $match ) )
 		{
-			$bl = preg_replace( "/\,/", "", $match[1] );
+			$bl = preg_replace( "/\,/", "", $match[2] );
 			return ( int )$bl;
 		}
 		else
@@ -356,7 +353,7 @@ class Diagnostic
 				'AlexaReach' => 0, //
 				'GoogleBackLink' => 0, //
 				'GoogleIndexed' => 0 //
-				);
+			);
 			return $content;
 		}
 
