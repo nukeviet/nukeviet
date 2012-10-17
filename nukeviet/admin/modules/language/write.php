@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
 
@@ -95,25 +95,27 @@ function nv_admin_write_lang( $dirlang, $idfile )
 		}
 		else
 		{
-			if( ! file_exists( $include_lang ) )
+		    if ( preg_match("/^(0?\d|[1-2]{1}\d|3[0-1]{1})[\-\/\.]{1}(0?\d|1[0-2]{1})[\-\/\.]{1}(19[\d]{2}|20[\d]{2})[\-\/\.\,\\s]{2}(0?\d|[1]{1}\d|2[0-4]{1})[\-\/\.\:]{1}([0-5]?[0-9])$/", $array_translator['createdate'], $m ) )
 			{
-				@file_put_contents( $include_lang, "", LOCK_EX );
+				$createdate = mktime($m[4],$m[5],0,$m[2],$m[1],$m[3]);
 			}
-			
-			if( ! is_writable( $include_lang ) )
+			elseif ( preg_match("/^(0?\d|[1-2]{1}\d|3[0-1]{1})[\-\/\.]{1}(0?\d|1[0-2]{1})[\-\/\.]{1}(19[\d]{2}|20[\d]{2})$/", $array_translator['createdate'], $m ) )
 			{
-				$errfile = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
-				return $lang_module['nv_error_write_file'] . " : " . $errfile;
+				$createdate = mktime(0,0,0,$m[2],$m[1],$m[3]);
 			}
-			
+			else
+			{
+			    if (!empty($array_translator['createdate']))die($include_lang);
+				$createdate = time();
+			}
 			$content_lang_no_tran = "";
 			$content_lang = "<?php\n\n";
 			$content_lang .= "/**\n";
-			$content_lang .= "* @Project NUKEVIET 3.0\n";
+			$content_lang .= "* @Project NUKEVIET 3.x\n";
 			$content_lang .= "* @Author VINADES.,JSC (contact@vinades.vn)\n";
-			$content_lang .= "* @Copyright (C) 2010 VINADES.,JSC. All rights reserved\n";
+			$content_lang .= "* @Copyright (C) " . date( "Y" ) . " VINADES.,JSC. All rights reserved\n";
 			$content_lang .= "* @Language " . $language_array[$dirlang]['name'] . "\n";
-			$content_lang .= "* @Createdate " . date( "M d, Y, h:i:s A" ) . "\n";
+			$content_lang .= "* @Createdate " . gmdate( "M d, Y, h:i:s A", $createdate ) . "\n";
 			$content_lang .= "*/\n";
 
 			if( $admin_file )
@@ -129,13 +131,14 @@ function nv_admin_write_lang( $dirlang, $idfile )
 
 			$array_translator['info'] = ( isset( $array_translator['info'] ) ) ? $array_translator['info'] : "";
 
-			$content_lang .= "\$lang_translator['author'] = \"" . $array_translator['author'] . "\";\n";
-			$content_lang .= "\$lang_translator['createdate'] = \"" . $array_translator['createdate'] . "\";\n";
-			$content_lang .= "\$lang_translator['copyright'] = \"" . $array_translator['copyright'] . "\";\n";
-			$content_lang .= "\$lang_translator['info'] = \"" . $array_translator['info'] . "\";\n";
-			$content_lang .= "\$lang_translator['langtype'] = \"" . $array_translator['langtype'] . "\";\n";
+			$content_lang .= "\$lang_translator['author'] = '" . $array_translator['author'] . "';\n";
+			$content_lang .= "\$lang_translator['createdate'] = '" . $array_translator['createdate'] . "';\n";
+			$content_lang .= "\$lang_translator['copyright'] = '" . $array_translator['copyright'] . "';\n";
+			$content_lang .= "\$lang_translator['info'] = '" . $array_translator['info'] . "';\n";
+			$content_lang .= "\$lang_translator['langtype'] = '" . $array_translator['langtype'] . "';\n";
 			$content_lang .= "\n";
 			$content_lang_no_check = "";
+			$numrows = 0;
 
 			if( in_array( "vi", $array_lang_exit ) and in_array( "en", $array_lang_exit ) and $dirlang != "vi" and $dirlang != "en" )
 			{
@@ -146,20 +149,21 @@ function nv_admin_write_lang( $dirlang, $idfile )
 				{
 					if( $lang_value != "" )
 					{
-						$lang_value = nv_unhtmlspecialchars( $lang_value );
+					    $numrows++;
+					    $lang_value = nv_unhtmlspecialchars( $lang_value );
 						$lang_value = str_replace( '$', '\$', $lang_value );
-						$lang_value = str_replace( '"', '\"', $lang_value );
+						$lang_value = str_replace( "'", "\'", $lang_value );
 						$lang_value = nv_nl2br( $lang_value );
 						$lang_value = str_replace( '<br  />', '<br />', $lang_value );
 
-						$content_temp = "\$" . $langtype . "['" . $lang_key . "'] = \"$lang_value\";\n";
+						$content_temp = "\$" . $langtype . "['" . $lang_key . "'] = '$lang_value';\n";
 						$content_temp .= "/*\n";
 					
 						if( $dirlang != "vi" and ! empty( $lang_value_vi ) )
 						{
 							$lang_value_vi = nv_unhtmlspecialchars( $lang_value_vi );
 							$lang_value_vi = str_replace( '$', '\$', $lang_value_vi );
-							$lang_value_vi = str_replace( '"', '\"', $lang_value_vi );
+							$lang_value_vi = str_replace( "'", "\'", $lang_value_vi );
 							$lang_value_vi = nv_nl2br( $lang_value_vi );
 							$lang_value_vi = str_replace( '<br  />', '<br />', $lang_value_vi );
 							$content_temp .= "\t vietnam:\t  " . $lang_value_vi . "\n";
@@ -169,7 +173,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 						{
 							$lang_value_en = nv_unhtmlspecialchars( $lang_value_en );
 							$lang_value_en = str_replace( '$', '\$', $lang_value_en );
-							$lang_value_en = str_replace( '"', '\"', $lang_value_en );
+							$lang_value_en = str_replace( "'", "\'", $lang_value_en );
 							$lang_value_en = nv_nl2br( $lang_value_en );
 							$lang_value_en = str_replace( '<br  />', '<br />', $lang_value_en );
 							$content_temp .= "\t english:\t  " . $lang_value_en . "\n";
@@ -204,19 +208,27 @@ function nv_admin_write_lang( $dirlang, $idfile )
 				{
 					if( $lang_value != "" )
 					{
-						$lang_value = nv_unhtmlspecialchars( $lang_value );
+					    $numrows++;
+					    $lang_value = nv_unhtmlspecialchars( $lang_value );
 						$lang_value = str_replace( '$', '\$', $lang_value );
-						$lang_value = str_replace( '"', '\"', $lang_value );
+						$lang_value = str_replace( "'", "\'", $lang_value );
 						$lang_value = nv_nl2br( $lang_value );
 						$lang_value = str_replace( '<br  />', '<br />', $lang_value );
-						$content_lang .= "\$" . $langtype . "['" . $lang_key . "'] = \"$lang_value\";\n";
+						$content_lang .= "\$" . $langtype . "['" . $lang_key . "'] = '$lang_value';\n";
 					}
 				}
 			}
-			
-			$content_lang .= "\n";
-			$content_lang .= "?>";
-			file_put_contents( $include_lang, $content_lang, LOCK_EX );
+			if ($numrows)
+			{
+    			$content_lang .= "\n";
+    			$content_lang .= "?>";
+    			$number_bytes =file_put_contents( $include_lang, $content_lang, LOCK_EX );
+    			if (empty($number_bytes))
+    			{
+        			$errfile = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
+        			return $lang_module['nv_error_write_file'] . " : " . $errfile;
+    			}
+			}
 		}
 		return "";
 	}

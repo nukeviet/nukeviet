@@ -1,23 +1,21 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
+* @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Jul 06, 2011, 04:38:03 PM
+* @Createdate Oct 17, 2012, 07:19:06 AM
 */
 
- if (!defined( 'NV_MAINFILE' )) {
- die('Stop!!!');
-}
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
-$lang_translator['author'] ="";
-$lang_translator['createdate'] ="";
-$lang_translator['copyright'] ="";
-$lang_translator['info'] ="Language translated from http://translate.nukeviet.vn";
-$lang_translator['langtype'] ="lang_block";
+$lang_translator['author'] = '';
+$lang_translator['createdate'] = '';
+$lang_translator['copyright'] = '';
+$lang_translator['info'] = 'Language translated from http://translate.nukeviet.vn';
+$lang_translator['langtype'] = 'lang_block';
 
-$lang_block['title_length'] = "Başlık için karakter sayısı";
+$lang_block['title_length'] = 'Başlık için karakter sayısı';
 
 ?>
