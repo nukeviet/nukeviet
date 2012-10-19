@@ -69,6 +69,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 			$xtpl->assign( 'DELFILE', $file );
 			$xtpl->parse( 'main.delfile.loop' );
 		}
+		$timestamp = intval($global_config['timestamp']) + 1;
+		$db -> sql_query("REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'timestamp', " . $timestamp . ")");
+		nv_save_file_config_global();
 	}
 
 	if( in_array( 'clearsession', $deltype ) )

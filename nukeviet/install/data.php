@@ -401,6 +401,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'spadmin_add_admin', '1'),
 ('sys', 'global', 'openid_servers', 'yahoo,google,myopenid'),
 ('sys', 'global', 'optActive', '1'),
+('sys', 'global', 'timestamp', '1'),
 ('sys', 'global', 'googleAnalyticsID', ''),
 ('sys', 'global', 'googleAnalyticsSetDomainName', '0'),
 ('sys', 'global', 'searchEngineUniqueID', ''),

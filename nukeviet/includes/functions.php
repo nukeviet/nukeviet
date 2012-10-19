@@ -1669,7 +1669,6 @@ function nv_change_buffer( $buffer )
 	if( ! empty( $global_config['googleAnalyticsID'] ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
 	{
 		$dp = "";
-	
 		if( $global_config['googleAnalyticsSetDomainName'] == 1 )
 		{
 			$dp .= "_gaq.push([\"_setDomainName\",\"" . $global_config['cookie_domain'] . "\"]);";
@@ -1688,47 +1687,49 @@ function nv_change_buffer( $buffer )
 		$buffer = preg_replace( '/(<\/head>)/i', $googleAnalytics . "\\1", $buffer, 1 );
 	}
 
-	$optActive = ( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) ) ? true : false;
+	if ( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
+	{
+		include_once ( NV_ROOTDIR . '/includes/class/optimizer.class.php' );
+		$optimezer = new optimezer( $buffer, $sys_info['supports_tidy'] );
+		$buffer = $optimezer->process();
 
-	if( ! $optActive ) return $buffer;
+		//http://tidy.sourceforge.net/docs/quickref.html
+		$config = array( //
+			'doctype' => 'transitional', // Chuan HTML: omit, auto, strict, transitional, user
+			'input-encoding' => 'utf8', // Bang ma nguon
+			'output-encoding' => 'utf8', //Bang ma dich
+			'output-xhtml' => true, // Chuan xhtml
+			'drop-empty-paras' => true, // Xoa cac tags p rong
+			'drop-proprietary-attributes' => true, // Xoa tat ca nhung attributes dac thu cua microsoft (vi du: tu word)
+			'word-2000' => true, //Xoa tat ca nhung ma cua word khong phu hop voi chuan html
+			'enclose-block-text' => true, // Tat ca cac block-text duoc dong bang tag p
+			'enclose-text' => true, // Tat ca cac text nam trong khu vuc body nhung khong nam trong bat ky mot tag nao khac se duoc cho vao <p>text</p>
+			'hide-comments' => false, // Xoa cac chu thich
+			'hide-endtags' => true, // Xoa tat ca ve^' dong khong cua nhung tag khong doi hoi phai dong
+			'indent' => false, // Thut dau dong
+			'indent-spaces' => 4, //1 don vi indent = 4 dau cach
+			'logical-emphasis' => true, // Thay cac tag i va b bang em va strong
+			'lower-literals' => true, // Tat ca cac html-tags duoc bien thanh dang chu thuong
+			'markup' => true, // Sua cac loi Markup
+			'preserve-entities' => true, // Giu nguyen cac chu da duoc ma hoa trong nguon
+			'quote-ampersand' => true, // Thay & bang &amp;
+			'quote-marks' => true, // Thay cac dau ngoac bang ma html tuong ung
+			'quote-nbsp' => true, // Thay dau cach bang to hop &nbsp;
+			'show-warnings' => false, // Hien thi thong bao loi
+			'wrap' => 0, // Moi dong khong qua 150 ky tu
+			'alt-text' => true	//Bat buoc phai co alt trong IMG
+		);
+		$buffer = nv_valid_html( $buffer, $config );
+	}
 
-	include_once ( NV_ROOTDIR . '/includes/class/optimizer.class.php' );
-
-	$optimezer = new optimezer( $buffer, $sys_info['supports_tidy'] );
-	$buffer = $optimezer->process();
-
-	if( ! $sys_info['supports_rewrite'] ) $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . NV_BASE_SITEURL . "CJzip.php?file=\\4&amp;r=1\"\\7>", $buffer );
-
-	//http://tidy.sourceforge.net/docs/quickref.html
-	$config = array( //
-		'doctype' => 'transitional', // Chuan HTML: omit, auto, strict, transitional, user
-		'input-encoding' => 'utf8', // Bang ma nguon
-		'output-encoding' => 'utf8', //Bang ma dich
-		'output-xhtml' => true, // Chuan xhtml
-		'drop-empty-paras' => true, // Xoa cac tags p rong
-		'drop-proprietary-attributes' => true, // Xoa tat ca nhung attributes dac thu cua microsoft (vi du: tu word)
-		'word-2000' => true, //Xoa tat ca nhung ma cua word khong phu hop voi chuan html
-		'enclose-block-text' => true, // Tat ca cac block-text duoc dong bang tag p
-		'enclose-text' => true, // Tat ca cac text nam trong khu vuc body nhung khong nam trong bat ky mot tag nao khac se duoc cho vao <p>text</p>
-		'hide-comments' => false, // Xoa cac chu thich
-		'hide-endtags' => true, // Xoa tat ca ve^' dong khong cua nhung tag khong doi hoi phai dong
-		'indent' => false, // Thut dau dong
-		'indent-spaces' => 4, //1 don vi indent = 4 dau cach
-		'logical-emphasis' => true, // Thay cac tag i va b bang em va strong
-		'lower-literals' => true, // Tat ca cac html-tags duoc bien thanh dang chu thuong
-		'markup' => true, // Sua cac loi Markup
-		'preserve-entities' => true, // Giu nguyen cac chu da duoc ma hoa trong nguon
-		'quote-ampersand' => true, // Thay & bang &amp;
-		'quote-marks' => true, // Thay cac dau ngoac bang ma html tuong ung
-		'quote-nbsp' => true, // Thay dau cach bang to hop &nbsp;
-		'show-warnings' => false, // Hien thi thong bao loi
-		'wrap' => 0, // Moi dong khong qua 150 ky tu
-		'alt-text' => true
-	);
-	//Bat buoc phai co alt trong IMG
-
-	$buffer = nv_valid_html( $buffer, $config );
-
+	if( ! $sys_info['supports_rewrite'] ) 
+	{
+		$buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . NV_BASE_SITEURL . "CJzip.php?file=\\4&amp;r=".$global_config['timestamp']."\"\\7>", $buffer );
+	}
+	else
+	{
+		$buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=".$global_config['timestamp']."\"\\7>", $buffer );
+	}
 	return $buffer;
 }
 

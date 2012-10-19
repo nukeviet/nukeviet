@@ -103,7 +103,7 @@ class CJzip
 		}
 
 		$this->currenttime = time();
-		if( isset( $_GET['r'] ) and $_GET['r'] == 1 )
+		if( isset( $_GET['r'] ) )
 		{
 			$this->root = true;
 			$this->file['md5file'] = md5( $this->file['path'] . "_root" );
