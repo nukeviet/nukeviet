@@ -182,6 +182,7 @@ $lang_module['content_admin'] = "Người tạo";
 $lang_module['content_author'] = "Người đăng";
 $lang_module['content_business'] = "Thuộc doanh nghiệp";
 $lang_module['content_note'] = "Ghi chú";
+$lang_module['content_product_code'] = "Mã sản phẩm";
 $lang_module['content_product_number'] = "Số lượng trong kho";
 $lang_module['content_product_number1'] = "SL trong kho";
 $lang_module['content_product_product_price'] = "Giá sản phẩm";

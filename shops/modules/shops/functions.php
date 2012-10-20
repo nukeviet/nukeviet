@@ -66,7 +66,7 @@ foreach( $list as $row )
 		"cateid" => $row['cateid'],
 		"title" => $row['title'],
 		"alias" => $row['alias'],
-		"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group/" . $row['groupid'] . "-" . $row['groupid'],
+		"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group/" . $row['alias'],
 		"viewgroup" => $row['viewgroup'],
 		"numsubgroup" => $row['numsubgroup'],
 		"subgroupid" => $row['subgroupid'],
@@ -82,7 +82,7 @@ foreach( $list as $row )
 }
 unset( $list, $row );
 
-$page = 0;
+$page = 1;
 $per_page = $pro_config['per_page'];
 $count_op = sizeof( $array_op );
 
@@ -91,23 +91,21 @@ if( ! empty( $array_op ) and $op == "main" )
 	if( $catid == 0 )
 	{
 		$contents = $lang_module['nocatpage'] . $array_op[0];
-		if( ! empty( $array_op[1] ) )
+		
+		if( preg_match( "/$([0-9]+)^/", ( isset( $array_op[1] ) ? $array_op[1] : "" ), $m ) )
 		{
-			if( substr( $array_op[1], 0, 5 ) == "page-" )
-			{
-				$page = intval( substr( $array_op[1], 5 ) );
-			}
+			$page = ( int ) $m[1];
 		}
 	}
 	else
 	{
 		$op = "main";
-		if( $count_op == 1 or substr( $array_op[1], 0, 5 ) == "page-" )
+		if( $count_op == 1 or preg_match( "/$([0-9]+)^/", $array_op[1], $m ) )
 		{
 			$op = "viewcat";
 			if( $count_op > 1 )
 			{
-				$page = intval( substr( $array_op[1], 5 ) );
+				$page = intval( $m[1] );
 			}
 		}
 		elseif( $count_op == 2 )

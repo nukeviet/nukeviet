@@ -1,8 +1,6 @@
 <!-- BEGIN: main -->  
 <!-- BEGIN: error -->
-<div class="error">
-	{error}
-</div>
+<div class="error">{error}</div>
 <!-- END: error -->
 <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}js/jquery/jquery.autocomplete.css" />
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.autocomplete.js"></script>
@@ -20,7 +18,7 @@
 							<tr>
 								<td width="120px"><strong>{LANG.name} <span class="require">(*)</span></strong></td>
 								<td>
-									<input type="text" maxlength="255" value="{rowcontent.title}" name="title" id="idtitle" style="width:90%" />
+									<input type="text" maxlength="255" value="{rowcontent.title}" name="title" id="idtitle" class="txt-full" />
 								</td>
 							</tr>
 						</tbody>
@@ -28,8 +26,16 @@
 							<tr>
 								<td><strong>{LANG.alias}: </strong></td>
 								<td>
-									<input style="width:90%" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255"/>
+									<input class="txt-half" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255"/>
 									<input type="button" value="GET" onclick="get_alias();" style="font-size:11px"  /> 
+								</td>
+							</tr>
+						</tbody>
+						<tbody>
+							<tr>
+								<td><strong>{LANG.content_product_code}: </strong></td>
+								<td>
+									<input class="txt-full" name="product_code" type="text" value="{rowcontent.product_code}" maxlength="255"/>
 								</td>
 							</tr>
 						</tbody>

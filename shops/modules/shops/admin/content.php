@@ -46,18 +46,16 @@ if( $subcatid > 0 )
 $rowcontent = array(
 	"id" => 0,
 	"listcatid" => $catid,
-	"topic_id" => "",
 	"group_id" => "",
 	"user_id" => $admin_info['admin_id'],
 	"source_id" => 0,
-	'shopcat_id' => 0,
-	'com_id' => 0,
 	"addtime" => NV_CURRENTTIME,
 	"edittime" => NV_CURRENTTIME,
 	"status" => 0,
 	"publtime" => NV_CURRENTTIME,
 	"exptime" => 0,
 	"archive" => 1,
+	"product_code" => "",
 	"product_number" => 1,
 	"product_price" => 1,
 	"product_discounts" => 0,
@@ -106,7 +104,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$id_block_content = array_unique( $nv_Request->get_typed_array( 'bids', 'post', 'int', array() ) );
 
 	$rowcontent['listcatid'] = $nv_Request->get_int( 'catid', 'post', 0 );
-	$rowcontent['topic_id'] = $nv_Request->get_int( 'topicid', 'post', 0 );
 	
 	$group_id = array_unique( $nv_Request->get_typed_array( 'groupids', 'post', 'int', array() ) );
 	$rowcontent['group_id'] = implode( ",", $group_id );
@@ -173,10 +170,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['alias'] = ( $alias == "" ) ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
 
 	$rowcontent['hometext'] = filter_text_input( 'hometext', 'post', '' );
+	$rowcontent['product_code'] = filter_text_input( 'product_code', 'post', '', 1, 255 );
 	$rowcontent['product_number'] = $nv_Request->get_int( 'product_number', 'post', 0 );
 	$rowcontent['product_price'] = $nv_Request->get_int( 'product_price', 'post', 0 );
 	$rowcontent['product_discounts'] = $nv_Request->get_int( 'product_discounts', 'post', 0 );
-	$rowcontent['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" ); //$pro_config[''] ;
+	$rowcontent['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" );
 	$rowcontent['product_unit'] = $nv_Request->get_int( 'product_unit', 'post', 0 );
 	$rowcontent['homeimgfile'] = filter_text_input( 'homeimg', 'post', '' );
 	$rowcontent['homeimgalt'] = filter_text_input( 'homeimgalt', 'post', '', 1 );
@@ -195,6 +193,27 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['allowed_print'] = ( int )$nv_Request->get_bool( 'allowed_print', 'post' );
 	$rowcontent['allowed_save'] = ( int )$nv_Request->get_bool( 'allowed_save', 'post' );
 	$rowcontent['keywords'] = filter_text_input( 'keywords', 'post', '', 1 );
+		
+	// Xu ly anh minh hoa khac
+	$otherimage = $nv_Request->get_typed_array( 'otherimage', 'post', 'string' );
+	$array_otherimage = array();
+	foreach( $otherimage as $otherimage_i )
+	{
+		if( ! nv_is_url( $otherimage_i ) and file_exists( NV_DOCUMENT_ROOT . $otherimage_i ) )
+		{
+			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
+			$otherimage_i = substr( $otherimage_i, $lu );
+		}
+		elseif( ! nv_is_url( $otherimage_i ) )
+		{
+			$otherimage_i = "";
+		}
+		if( ! empty( $otherimage_i ) )
+		{
+			$array_otherimage[] = $otherimage_i;
+		}
+	}
+	$rowcontent['otherimage'] = implode( "|", $array_otherimage );
 
 	if( empty( $rowcontent['title'] ) )
 	{
@@ -343,27 +362,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$rowcontent['homeimgthumb'] = $thumb_name . "|" . $block_name;
 		}
 		
-		// Xu ly anh minh hoa khac
-		$otherimage = $nv_Request->get_typed_array( 'otherimage', 'post', 'string' );
-		$array_otherimage = array();
-		foreach( $otherimage as $otherimage_i )
-		{
-			if( ! nv_is_url( $otherimage_i ) and file_exists( NV_DOCUMENT_ROOT . $otherimage_i ) )
-			{
-				$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
-				$otherimage_i = substr( $otherimage_i, $lu );
-			}
-			elseif( ! nv_is_url( $otherimage_i ) )
-			{
-				$otherimage_i = "";
-			}
-			if( ! empty( $otherimage_i ) )
-			{
-				$array_otherimage[] = $otherimage_i;
-			}
-		}
-		$rowcontent['otherimage'] = implode( "|", $array_otherimage );
-		
 		$listfield = "";
 		$listvalue = "";
 		foreach( $field_lang as $field_lang_i )
@@ -384,13 +382,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		{
 			$rowcontent['publtime'] = ( $rowcontent['publtime'] > NV_CURRENTTIME ) ? $rowcontent['publtime'] : NV_CURRENTTIME;
 			
-			$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_rows` (`id` ,`listcatid` ,`topic_id` ,`group_id` ,`user_id`, `com_id`,`shopcat_id` ,`source_id` ,`addtime` ,`edittime` ,`status` ,`publtime` ,`exptime` ,`archive` ,`product_number` ,`product_price`,`product_discounts` ,`money_unit` , `product_unit` ,`homeimgfile` ,`homeimgthumb` ,`homeimgalt`,`otherimage`,`imgposition` ,`copyright` ,`inhome` ,`allowed_comm` ,`allowed_rating` ,`ratingdetail` ,`allowed_send` ,`allowed_print` ,`allowed_save` ,`hitstotal` ,`hitscm` ,`hitslm`,`showprice` " . $listfield . ") 
+			$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_rows` (`id`, `listcatid`, `group_id`, `user_id`, `source_id`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `product_code`, `product_number`, `product_price`,`product_discounts`, `money_unit` , `product_unit`, `homeimgfile`, `homeimgthumb`, `homeimgalt`,`otherimage`,`imgposition`, `copyright`, `inhome`, `allowed_comm`, `allowed_rating`, `ratingdetail`, `allowed_send`, `allowed_print`, `allowed_save`, `hitstotal`, `hitscm`, `hitslm`, `showprice` " . $listfield . ") 
                 VALUES ( NULL , " . $db->dbescape_string( $rowcontent['listcatid'] ) . ", 
-                " . intval( $rowcontent['topic_id'] ) . ", 
                 " . $db->dbescape_string( $rowcontent['group_id'] ) . ", 
                 " . intval( $rowcontent['user_id'] ) . ",
-                " . intval( $data_content['com_id'] ) . ", 
-                " . intval( $data_content['shopcat_id '] ) . ", 
                 " . intval( $rowcontent['source_id'] ) . ", 
                 " . intval( $rowcontent['addtime'] ) . ", 
                 " . intval( $rowcontent['edittime'] ) . ", 
@@ -398,6 +393,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
                 " . intval( $rowcontent['publtime'] ) . ",  
                 " . intval( $rowcontent['exptime'] ) . ",  
                 " . intval( $rowcontent['archive'] ) . ",  
+                " . $db->dbescape_string( $rowcontent['product_code'] ) . ",  
                 " . intval( $rowcontent['product_number'] ) . ",  
                 " . intval( $rowcontent['product_price'] ) . ",  
                 " . intval( $rowcontent['product_discounts'] ) . ", 
@@ -449,7 +445,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			
 			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET 
 			   `listcatid`=" . $db->dbescape_string( $rowcontent['listcatid'] ) . ", 
-			   `topic_id`=" . intval( $rowcontent['topic_id'] ) . ", 
 			   `group_id`=" . $db->dbescape_string( $rowcontent['group_id'] ) . ", 
 			   `user_id`=" . intval( $rowcontent['user_id'] ) . ",
 			   `source_id`=" . intval( $rowcontent['source_id'] ) . ", 
@@ -458,6 +453,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			   `exptime`=" . intval( $rowcontent['exptime'] ) . ", 
 			   `edittime`=UNIX_TIMESTAMP( ) ,
 			   `archive`=" . intval( $rowcontent['archive'] ) . ", 
+			   `product_code` = " . $db->dbescape_string( $rowcontent['product_code'] ) . ",  
 			   `product_number` = `product_number` + " . intval( $rowcontent['product_number'] ) . ",  
 			   `product_price` = " . intval( $rowcontent['product_price'] ) . ",  
 			   `product_discounts` = " . intval( $rowcontent['product_discounts'] ) . ",
@@ -542,7 +538,6 @@ elseif( $rowcontent['id'] > 0 )
 	$rowcontent = array(
 		"id" => $rowdata['id'],
 		"listcatid" => $rowdata['listcatid'],
-		"topic_id" => $rowdata['topic_id'],
 		"group_id" => $rowdata['group_id'],
 		"user_id" => $rowdata['user_id'],
 		"source_id" => $rowdata['source_id'],
@@ -552,6 +547,7 @@ elseif( $rowcontent['id'] > 0 )
 		"publtime" => $rowdata['publtime'],
 		"exptime" => $rowdata['exptime'],
 		"archive" => $rowdata['archive'],
+		"product_code" => $rowdata['product_code'],
 		"product_number" => $rowdata['product_number'],
 		"product_price" => $rowdata['product_price'],
 		"product_discounts" => $rowdata['product_discounts'],
