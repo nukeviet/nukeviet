@@ -19,7 +19,6 @@ $lang_translator['copyright'] = "";
 $lang_translator['info'] = "Language translated from http://translate.nukeviet.vn";
 $lang_translator['langtype'] = "lang_module";
 
-$lang_module['nocatpage'] = "Erreur: catégorie manquante";
 $lang_module['comment_success'] = "Commentaire avec succès";
 $lang_module['comment_unsuccess'] = "Erreur de traitement des données ou des données manquantes";
 $lang_module['comment_view'] = "Voir les commentaires";

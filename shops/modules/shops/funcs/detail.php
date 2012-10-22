@@ -9,18 +9,13 @@
 
 if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
-$id = 0;
-$temp_id = isset( $array_op[1] ) ? $array_op[1] : "";
-if ( ! empty( $temp_id ) )
+if( empty( $id ) or empty( $alias_url ) )
 {
-    $array_page = explode( '-', $temp_id );
-    $id = intval( end( $array_page ) );
+	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	exit();
 }
 
-$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `hitstotal`=`hitstotal`+1 WHERE `id`=" . $id;
-$db->sql_query( $sql );
 $sql = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id . " AND `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime` > " . NV_CURRENTTIME . ")" );
-
 $data_content = $db->sql_fetchrow( $sql, 2 );
 $data_shop = array();
 
@@ -29,6 +24,9 @@ if ( empty( $data_content ) )
     $nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
     redict_link( $lang_module['detail_do_not_view'], $lang_module['redirect_to_back_shops'], $nv_redirect );
 }
+
+$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `hitstotal`=`hitstotal`+1 WHERE `id`=" . $id;
+$db->sql_query( $sql );
 
 $catid = $data_content['listcatid'];
 
@@ -77,7 +75,7 @@ $sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`,
 $result = $db->sql_query( $sql );
 
 $data_others = array();
-while ( list( $id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $db->sql_fetchrow( $result ) )
+while ( list( $_id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $db->sql_fetchrow( $result ) )
 {
     $thumb = explode( "|", $homeimgthumb );
     if ( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
@@ -90,7 +88,7 @@ while ( list( $id, $title, $alias, $homeimgthumb, $addtime, $product_price, $pro
     }
 	
     $data_others[] = array( 
-        "id" => $id,
+        "id" => $_id,
 		"title" => $title,
 		"alias" => $alias,
 		"homeimgthumb" => $thumb[0],
@@ -100,8 +98,8 @@ while ( list( $id, $title, $alias, $homeimgthumb, $addtime, $product_price, $pro
 		"product_discounts" => $product_discounts,
 		"money_unit" => $money_unit,
 		"showprice" => $showprice,
-		"link_pro" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $id,
-		"link_order" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart&amp;id=" . $id 
+		"link_pro" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $_id,
+		"link_order" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart&amp;id=" . $_id 
     );
 }
 
@@ -121,7 +119,7 @@ if ( ! empty( $_SESSION[$module_data . '_proview'] ) )
     $sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgthumb`, `addtime`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` IN ( " . $arrtempid . ") AND `inhome`=1 AND `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND ( `exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `id` DESC LIMIT ".( $pro_config['per_row'] * 2 );
     $result = $db->sql_query( $sql );
 	
-    while ( list( $id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice,$hometext ) = $db->sql_fetchrow( $result ) )
+    while ( list( $_id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice,$hometext ) = $db->sql_fetchrow( $result ) )
     {
         $thumb = explode( "|", $homeimgthumb );
         if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
@@ -134,7 +132,7 @@ if ( ! empty( $_SESSION[$module_data . '_proview'] ) )
         }
 		
         $array_other_view[] = array( 
-            "id" => $id,
+            "id" => $_id,
 			"title" => $title,
 			"alias" => $alias,
 			"homeimgthumb" => $thumb[0],
@@ -144,8 +142,8 @@ if ( ! empty( $_SESSION[$module_data . '_proview'] ) )
 			"product_discounts" => $product_discounts,
 			"money_unit" => $money_unit,
 			"showprice" => $showprice,
-			"link_pro" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $id,
-			"link_order" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart&amp;id=" . $id 
+			"link_pro" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $_id,
+			"link_order" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart&amp;id=" . $_id 
         );
     }
 }

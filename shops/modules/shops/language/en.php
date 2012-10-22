@@ -19,7 +19,6 @@ $lang_translator['copyright'] = "";
 $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
-$lang_module['nocatpage'] = "Error no subject";
 $lang_module['comment_success'] = "Comments success";
 $lang_module['comment_unsuccess'] = "Error processing project data or incomplete data";
 $lang_module['comment_view'] = "View feedback";

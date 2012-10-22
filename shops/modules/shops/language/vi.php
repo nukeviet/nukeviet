@@ -19,7 +19,6 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
-$lang_module['nocatpage'] = "Lỗi không có chủ đề";
 $lang_module['comment_success'] = "Bình luận thành công";
 $lang_module['comment_unsuccess'] = "Lỗi trình quá trình xử lý dữ liệu hoặc dữ liệu không đầy đủ";
 $lang_module['comment_view'] = "Xem phản hồi";

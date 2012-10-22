@@ -19,7 +19,6 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = "Language translated by http://translate.google.com";
 $lang_translator['langtype'] = "lang_module";
 
-$lang_module['nocatpage'] = "Ошибка не предметом";
 $lang_module['comment_success'] = "Комментарии успеха";
 $lang_module['comment_unsuccess'] = "Ошибка при обработке данных проекта или неполных данных";
 $lang_module['comment_view'] = "Просмотреть отзывы";

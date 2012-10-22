@@ -18,6 +18,8 @@ $catid = 0;
 $parentid = 0;
 $set_viewcat = "";
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
+$alias_group_url = isset( $array_op[1] ) ? $array_op[1] : "";
+$groupid = 0;
 
 // Categories
 $global_array_cat = array();
@@ -50,7 +52,6 @@ foreach( $list as $row )
 		$parentid = $row['parentid'];
 	}
 }
-unset( $list, $alias_cat_url, $row );
 
 // Groups
 $global_array_group = array();
@@ -79,45 +80,43 @@ foreach( $list as $row )
 		"lev" => $row['lev'],
 		"numpro" => $row['numpro']
 	);
+	
+	if( $alias_group_url == $row['alias'] )
+	{
+		$groupid = $row['groupid'];
+	}
 }
-unset( $list, $row );
+unset( $list, $alias_cat_url, $row, $alias_group_url );
 
 $page = 1;
 $per_page = $pro_config['per_page'];
-$count_op = sizeof( $array_op );
 
-if( ! empty( $array_op ) and $op == "main" )
+if( $op == "main" )
 {
-	if( $catid == 0 )
+	if( empty( $catid ) )
 	{
-		$contents = $lang_module['nocatpage'] . $array_op[0];
-		
-		if( preg_match( "/$([0-9]+)^/", ( isset( $array_op[1] ) ? $array_op[1] : "" ), $m ) )
+		if( preg_match( "/^page\-([0-9]+)$/", ( isset( $array_op[0] ) ? $array_op[0] : "" ), $m ) )
 		{
 			$page = ( int ) $m[1];
 		}
 	}
 	else
 	{
-		$op = "main";
-		if( $count_op == 1 or preg_match( "/$([0-9]+)^/", $array_op[1], $m ) )
+		if( sizeof( $array_op ) == 2 and ! preg_match( "/^page\-([0-9]+)$/", $array_op[1], $m ) )
 		{
-			$op = "viewcat";
-			if( $count_op > 1 )
-			{
-				$page = intval( $m[1] );
-			}
+			$alias_url = preg_replace( "/^(.*?)\-([0-9]+)$/", '${1}', $array_op[1] );
+			$id = preg_replace( "/^(.*?)\-([0-9]+)$/", '${2}', $array_op[1] );
+			
+			$op = "detail";
 		}
-		elseif( $count_op == 2 )
+		else
 		{
-			$array_page = explode( "-", $array_op[1] );
-			$id = intval( end( $array_page ) );
-			$number = strlen( $id ) + 1;
-			$alias_url = substr( $array_op[1], 0, -$number );
-			if( $id > 0 and $alias_url != "" )
+			if( preg_match( "/^page\-([0-9]+)$/", ( isset( $array_op[1] ) ? $array_op[1] : "" ), $m ) )
 			{
-				$op = "detail";
+				$page = ( int ) $m[1];
 			}
+			
+			$op = "viewcat";
 		}
 		$parentid = $catid;
 		while( $parentid > 0 )

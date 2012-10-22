@@ -69,9 +69,12 @@ a.pro_detail:hover, a.pro_order:hover{
 
 /* DETAIL */
 #detail { padding:5px 0px;}
+#detail .image-demo{
+	float:left;
+	width:150px;
+}
 #detail .info_product {
-	margin-left:5px;
-	width:70%;
+	padding-left:150px;
 }
 #detail .date_up {
 	color: #bcbcbc;
@@ -645,4 +648,7 @@ div.TabView div.Pages div.Page {
 	font-weight:bold;
 	text-align:left;
 	display:block;
+}
+.no-wrap{
+	white-space:nowrap
 }

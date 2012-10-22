@@ -77,7 +77,7 @@
 <table class="rows2" style="margin-top: 2px">
 	<tr>
 		<td><input type="checkbox" name="check" value="1" id="check" /><span id="idselect">{LANG.order_true_info}</span> <br /> {ERROR.order_check}</td>
-		<td align="right"><a class="btn_view" title="{LANG.order_submit_send}" href="#" id="submit_send"><span>{LANG.order_submit_send}</span></a></td>
+		<td align="right" class="no-wrap"><a class="btn_view" title="{LANG.order_submit_send}" href="#" id="submit_send"><span>{LANG.order_submit_send}</span></a></td>
 	</tr>
 </table>
 </form>

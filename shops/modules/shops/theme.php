@@ -10,99 +10,6 @@
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 /**
- * nv_generate_page_shop()
- * 
- * @param mixed $base_url
- * @param mixed $num_items
- * @param mixed $per_page
- * @param mixed $start_item
- * @param bool $add_prevnext_text
- * @param bool $onclick
- * @param string $js_func_name
- * @param string $containerid
- * @return
- */
-function nv_generate_page_shop( $base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page' )
-{
-	global $lang_global;
-
-	$total_pages = ceil( $num_items / $per_page );
-	if( $total_pages == 1 ) return '';
-	@$on_page = floor( $start_item / $per_page ) + 1;
-	$amp = preg_match( "/\?/", $base_url ) ? "&amp;" : "?";
-	$page_string = "";
-	if( $total_pages > 10 )
-	{
-		$init_page_max = ( $total_pages > 3 ) ? 3 : $total_pages;
-		for( $i = 1; $i <= $init_page_max; $i++ )
-		{
-			$href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
-			$page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
-			if( $i < $init_page_max ) $page_string .= " ";
-		}
-		if( $total_pages > 3 )
-		{
-			if( $on_page > 1 && $on_page < $total_pages )
-			{
-				$page_string .= ( $on_page > 5 ) ? " ... " : ", ";
-				$init_page_min = ( $on_page > 4 ) ? $on_page : 5;
-				$init_page_max = ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4;
-				for( $i = $init_page_min - 1; $i < $init_page_max + 2; $i++ )
-				{
-					$href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
-					$page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
-					if( $i < $init_page_max + 1 )
-					{
-						$page_string .= " ";
-					}
-				}
-				$page_string .= ( $on_page < $total_pages - 4 ) ? " ... " : ", ";
-			}
-			else
-			{
-				$page_string .= " ... ";
-			}
-
-			for( $i = $total_pages - 2; $i < $total_pages + 1; $i++ )
-			{
-				$href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
-				$page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
-				if( $i < $total_pages )
-				{
-					$page_string .= " ";
-				}
-			}
-		}
-	}
-	else
-	{
-		for( $i = 1; $i < $total_pages + 1; $i++ )
-		{
-			$href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $i - 1 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
-			$page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a " . $href . ">" . $i . "</a>";
-			if( $i < $total_pages )
-			{
-				$page_string .= " ";
-			}
-		}
-	}
-	if( $add_prevnext_text )
-	{
-		if( $on_page > 1 )
-		{
-			$href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( ( $on_page - 2 ) * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( ( $on_page - 2 ) * $per_page ) ) ) . "','" . $containerid . "')\"";
-			$page_string = "&nbsp;&nbsp;<span><a " . $href . ">" . $lang_global['pageprev'] . "</a></span>&nbsp;&nbsp;" . $page_string;
-		}
-		if( $on_page < $total_pages )
-		{
-			$href = ! $onclick ? "href=\"" . $base_url . $amp . "page=" . ( $on_page * $per_page ) . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $base_url . $amp . "page=" . ( $on_page * $per_page ) ) ) . "','" . $containerid . "')\"";
-			$page_string .= "&nbsp;&nbsp;<span><a " . $href . ">" . $lang_global['pagenext'] . "</a></span>";
-		}
-	}
-	return $page_string;
-}
-
-/**
  * redict_link()
  * 
  * @param mixed $lang_view
@@ -1009,7 +916,7 @@ function print_pay( $data_content, $data_pro )
 	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
 	$xtpl->assign( 'DATA', $data_content );
 	$xtpl->assign( 'order_id', $data_content['id'] );
-	////////////////////////////////////////////////////////
+	
 	$i = 0;
 	foreach( $data_pro as $pdata )
 	{
@@ -1264,34 +1171,36 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
  * 
  * @param mixed $data_content
  * @param mixed $data_cata
- * @param mixed $data_catshop
  * @param mixed $data_unit
- * @param mixed $shopid
  * @param mixed $error
  * @param mixed $lang_submit
  * @return
  */
-function post_product( $data_content, $data_cata, $data_catshop, $data_unit, $shopid, $error, $lang_submit )
+function post_product( $data_content, $data_cata, $data_unit, $error, $lang_submit )
 {
 	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config, $money_config;
+	
 	$xtpl = new XTemplate( "post.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	
 	if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 	{
 		$editor = nv_aleditor( 'bodytext', '98%', '150px', $data_content['bodytext'] );
 	}
 	else
 	{
-		$editor = "<textarea style='width:700px' rows='8' name=\"bodytext\" id=\"bodytext\">" . $data_content['bodytext'] . "</textarea>";
+		$editor = "<textarea style=\"width:99%\" rows=\"8\" name=\"bodytext\" id=\"bodytext\">" . $data_content['bodytext'] . "</textarea>";
 	}
+	
 	$xtpl->assign( 'NV_EDITOR', $editor );
 	$xtpl->assign( 'DATA', $data_content );
+	
 	if( $data_content['homeimgthumb'] != "" )
 	{
 		$array_img = explode( "|", $data_content['homeimgthumb'] );
-		if( ! empty( $array_img[0] ) && ! nv_is_url( $array_img[0] ) )
+		if( ! empty( $array_img[0] ) and ! nv_is_url( $array_img[0] ) )
 		{
 			$array_img[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_img[0];
 		}
@@ -1302,6 +1211,7 @@ function post_product( $data_content, $data_cata, $data_catshop, $data_unit, $sh
 		$xtpl->assign( 'img_pro', $array_img[0] );
 		$xtpl->parse( 'main.imgpro' );
 	}
+	
 	if( ! empty( $data_cata ) )
 	{
 		foreach( $data_cata as $dcat )
@@ -1314,7 +1224,9 @@ function post_product( $data_content, $data_cata, $data_catshop, $data_unit, $sh
 			$xtpl->parse( 'main.loop_cata' );
 		}
 	}
+	
 	$xtpl->assign( 'unit_config', $pro_config['money_unit'] );
+	
 	if( ! empty( $data_unit ) )
 	{
 		foreach( $data_unit as $dunit )
@@ -1325,6 +1237,7 @@ function post_product( $data_content, $data_cata, $data_catshop, $data_unit, $sh
 			$xtpl->parse( 'main.loop_product_unit' );
 		}
 	}
+	
 	if( ! empty( $money_config ) )
 	{
 		foreach( $money_config as $code => $info )
@@ -1334,13 +1247,15 @@ function post_product( $data_content, $data_cata, $data_catshop, $data_unit, $sh
 			$xtpl->parse( 'main.money_unit' );
 		}
 	}
+	
 	if( $error != "" )
 	{
 		$xtpl->assign( 'info', $error );
 		$xtpl->parse( 'main.error' );
 	}
-	$xtpl->assign( 'shopid', $shopid );
+	
 	$xtpl->assign( 'lang_submit', $lang_submit );
+	
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1396,6 +1311,7 @@ function my_product( $data_pro, $pages_pro, $page )
 
 	$xtpl->assign( 'PROFILE_URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=profile" );
 	$xtpl->assign( 'USER_EDIT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=editinfo" );
+	$xtpl->assign( 'USER_LOGOUT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=logout" );
 
 	$xtpl->assign( 'URL_MYPRO', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=myproduct" );
 
