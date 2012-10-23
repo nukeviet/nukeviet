@@ -381,6 +381,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		if( $rowcontent['id'] == 0 )
 		{
 			$rowcontent['publtime'] = ( $rowcontent['publtime'] > NV_CURRENTTIME ) ? $rowcontent['publtime'] : NV_CURRENTTIME;
+			if( $rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME )
+			{
+				$rowcontent['status'] = 2;
+			}
 			
 			$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_rows` (`id`, `listcatid`, `group_id`, `user_id`, `source_id`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `product_code`, `product_number`, `product_price`,`product_discounts`, `money_unit` , `product_unit`, `homeimgfile`, `homeimgthumb`, `homeimgalt`,`otherimage`,`imgposition`, `copyright`, `inhome`, `allowed_comm`, `allowed_rating`, `ratingdetail`, `allowed_send`, `allowed_print`, `allowed_save`, `hitstotal`, `hitscm`, `hitslm`, `showprice` " . $listfield . ") 
                 VALUES ( NULL , " . $db->dbescape_string( $rowcontent['listcatid'] ) . ", 
@@ -442,6 +446,15 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			{
 				$rowcontent['status'] = 1;
 			}
+			if( intval( $rowcontent['publtime'] ) < intval( $rowcontent_old['addtime'] ) )
+			{
+				$rowcontent['publtime'] = $rowcontent_old['addtime'];
+			}
+
+			if( $rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME )
+			{
+				$rowcontent['status'] = 2;
+			}
 			
 			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET 
 			   `listcatid`=" . $db->dbescape_string( $rowcontent['listcatid'] ) . ", 
@@ -497,7 +510,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			}
 			$db->sql_freeresult();
 		}
-		
+		nv_set_status_module();
 		if( $error == "" )
 		{
 			if( $rowcontent['publtime'] > NV_CURRENTTIME or $rowcontent['exptime'] > 0 )
@@ -626,6 +639,7 @@ else
 	$tdate = date( "H|i", $rowcontent['exptime'] );
 	list( $ehour, $emin ) = explode( "|", $tdate );
 }
+
 if( ! empty( $rowcontent['otherimage'] ) )
 {
 	$otherimage = explode( "|", $rowcontent['otherimage'] );

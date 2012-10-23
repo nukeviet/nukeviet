@@ -287,8 +287,7 @@
 									<td>
 										<div>
 											<input name="exp_date" id="exp_date" value="{exp_date}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/>
-											  <img src="{NV_BASE_SITEURL}images/calendar.jpg" widht="18" style="cursor: pointer; vertical-align: middle;" 
-											  onclick="popCalendar.show(this, 'exp_date', 'dd/mm/yyyy', false);" alt="" height="17">
+											<img src="{NV_BASE_SITEURL}images/calendar.jpg" widht="18" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'exp_date', 'dd/mm/yyyy', false);" alt="" height="17">
 											<select name="ehour">
 												{ehour}
 											</select>:

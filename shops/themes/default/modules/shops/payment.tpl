@@ -146,7 +146,7 @@
         $('#click_print').click(function(event){
             var href = $(this).attr("href");
             event.preventDefault();
-            NewWindow(href, '', '640', '300', 'yes');
+            NewWindow(href, '', '640', '500', 'yes');
             return false;
         });
     });

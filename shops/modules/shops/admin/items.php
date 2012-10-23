@@ -183,22 +183,6 @@ $result = $db->sql_query( $sql );
 $a = 0;
 while( list( $id, $listcatid, $admin_id, $title, $alias, $status, $publtime, $exptime, $product_number ) = $db->sql_fetchrow( $result ) )
 {
-	if( $status == 0 )
-	{
-		$status = $lang_module['status_0'];
-	}
-	elseif( $publtime < NV_CURRENTTIME and ( $exptime == 0 or $exptime > NV_CURRENTTIME ) )
-	{
-		$status = $lang_module['status_1'];
-	}
-	elseif( $publtime > NV_CURRENTTIME )
-	{
-		$status = $lang_module['status_2'];
-	}
-	else
-	{
-		$status = $lang_module['status_3'];
-	}
 	$publtime = nv_date( "H:i d/m/y", $publtime );
 	$title = nv_clean60( $title );
 
@@ -218,7 +202,7 @@ while( list( $id, $listcatid, $admin_id, $title, $alias, $status, $publtime, $ex
 		"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id,
 		"title" => $title,
 		"publtime" => $publtime,
-		"status" => $status,
+		"status" => $lang_module['status_' . $status],
 		"admin_id" => isset( $array_admin[$admin_id] ) ? $array_admin[$admin_id] : "",
 		"product_number" => $product_number,
 		"link_edit" => nv_link_edit_page( $id ),

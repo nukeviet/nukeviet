@@ -33,6 +33,7 @@ elseif( md5( $id . session_id() ) == $checkss )
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_product', "id " . $id, $admin_info['userid'] );
 }
 
+nv_set_status_module();
 nv_del_moduleCache( $module_name );
 
 include ( NV_ROOTDIR . "/includes/header.php" );

@@ -349,6 +349,7 @@ $data['active_price'] = 1;
 $data['active_order_number'] = 0;
 $data['active_payment'] = 1;
 $data['active_tooltip'] = 1;
+$data['timecheckstatus'] = 0;
 
 foreach ( $data as $config_name => $config_value )
 {

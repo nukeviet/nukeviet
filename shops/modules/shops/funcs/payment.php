@@ -9,6 +9,8 @@
 
 if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
+$page_title = $lang_module['order_view'];
+
 $order_id = $nv_Request->get_int( 'order_id', 'get', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . session_id() ) )

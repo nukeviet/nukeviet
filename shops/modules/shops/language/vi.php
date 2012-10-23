@@ -36,12 +36,12 @@ $lang_module['comment_do_not_send'] = "Bạn phải đăng nhập thành viên m
 $lang_module['comment_date'] = "Ngày";
 $lang_module['comment_customer'] = "Khách";
 
-///////////////////////////////////////////////
 $lang_module['title_products'] = "sản phẩm";
 
 //main product
 $lang_module['product_host'] = "Sản phẩm hot";
 $lang_module['product_page'] = "Trang";
+
 // view cat
 $lang_module['title_eshop'] = "Cho vào giỏ hàng";
 $lang_module['title_viewnum'] = "Hiển thị";
@@ -59,6 +59,7 @@ $lang_module['title_product_in_page'] = "sản phẩm trên trang";
 $lang_module['title_next'] = "Xem tiếp";
 $lang_module['add_product'] = "Đặt hàng";
 $lang_module['detail_product'] = "Chi tiết";
+
 // set cart
 $lang_module['set_cart_success'] = 'Đã thêm "%s" vào giỏ hàng';
 
@@ -250,6 +251,7 @@ $lang_module['system_waring'] = "Hệ thống đang nâng cấp chức năng nà
 $lang_module['order_title'] = "Đơn đặt hàng";
 $lang_module['unit_total'] = "Đơn vị";
 $lang_module['view'] = "Xem";
+$lang_module['order_view'] = "Xem chi tiết đơn hàng";
 $lang_module['order_date'] = "Đặt ngày";
 $lang_module['order_moment'] = "lúc";
 $lang_module['order_no_products'] = "STT";

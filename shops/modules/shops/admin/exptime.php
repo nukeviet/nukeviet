@@ -26,6 +26,7 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 		}
 	}
 	
+	nv_set_status_module();
 	nv_del_moduleCache( $module_name );
 }
 
