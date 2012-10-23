@@ -65,7 +65,7 @@ if( empty( $data_pro ) and $page > 1 )
 }
 
 $pages_pro = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
-$contents = call_user_func( "my_product", $data_pro, $pages_pro, $page );
+$contents = call_user_func( "my_product", $data_pro, $pages_pro, $page, $per_page );
 
 if( $page > 1 )
 {

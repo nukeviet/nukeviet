@@ -1,17 +1,4 @@
-﻿h1{
-	font-size: 14px;
-	line-height: 24px;
-	padding: 0;
-	margin: 0px
-}
-li{
-	list-style: none;
-	padding: 0;
-	margin: 0
-}
-ul{ margin: 0; padding: 0}
-
-#products{
+﻿#products{
 	background: #ffffff;
 }
 #products .items{
@@ -293,10 +280,6 @@ a.pro_detail:hover, a.pro_order:hover{
 	width: 33%;
 	float: left;
 	margin-top: 10px;
-}
-
-em {
-	color: #ff0000;
 }
 
 table.rows2 {
@@ -611,7 +594,9 @@ div.TabView div.Pages div.Page {
 	background:#F9F9F9;
 	line-height:28px;
 	margin-top:10px;
-	padding:0px 10px
+	padding:0px 10px;
+	font-size:14px;
+	text-transform:uppercase;
 }
 .msgshow {
 	background:#F5F5F5;
@@ -652,3 +637,42 @@ div.TabView div.Pages div.Page {
 .no-wrap{
 	white-space:nowrap
 }
+
+/* POST */
+.post-product h2{
+	border-bottom:1px #D8D8D8 solid;
+}
+.post-product .txt-full{
+	width:99%;
+}
+.title_group{
+	margin-bottom:10px;
+	border-bottom:1px #e8e8e8 solid;
+	line-height:20px;
+}
+.info-require{
+	color:red;
+	font-size:11px;
+	font-style:italic;
+}
+.span-require{
+	color:red;
+	font-style:italic;
+}
+.post-error{
+	border:1px solid #FFAAD5;
+	margin:0 auto 10px;
+	background:#FFD2E9;
+	padding:10px;
+}
+.post-error span{
+	color:#F00;
+	font-weight:bold;
+}
+.post-product .show-date{
+	vertical-align:middle;
+}
+
+
+
+

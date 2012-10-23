@@ -69,6 +69,7 @@ $data_content = array(
 	"id" => 0,
 	"listcatid" => $catid,
 	"user_id" => $user_info['userid'],
+	"group_id" => "",
 	"source_id" => 0,
 	"addtime" => NV_CURRENTTIME,
 	"edittime" => NV_CURRENTTIME,
@@ -79,11 +80,13 @@ $data_content = array(
 	"product_code" => 0,
 	"product_number" => 0,
 	"product_price" => 0,
+	"product_discounts" => 0,
 	"money_unit" => "",
 	"product_unit" => "",
 	"homeimgfile" => "",
 	"homeimgthumb" => "",
 	"homeimgalt" => "",
+	"otherimage" => "",
 	"imgposition" => 1,
 	"copyright" => 0,
 	"inhome" => 1,
@@ -96,6 +99,7 @@ $data_content = array(
 	"hitstotal" => 0,
 	"hitscm" => 0,
 	"hitslm" => 0,
+	"showprice" => 1,
 	"title" => "",
 	"alias" => "",
 	"hometext" => "",
@@ -108,6 +112,9 @@ $data_content = array(
 	"move" => "",
 	"sourcetext" => "",
 	"topictext" => "",
+	"description" => "",
+	"warranty" => "",
+	"promotional" => "",
 );
 
 $page_title = $lang_module['content_add'];
@@ -138,17 +145,16 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$data_content['product_code'] = filter_text_input( 'product_code', 'post', '', 1, 255 );
 	$data_content['product_number'] = $nv_Request->get_int( 'product_number', 'post', 0 );
 	$data_content['product_price'] = $nv_Request->get_int( 'product_price', 'post', 0 );
-	$data_content['money_unit'] = filter_text_input( 'money_unit', 'post', 'VND' );
+	$data_content['money_unit'] = filter_text_input( 'money_unit', 'post', 'VND', 1, 3 );
 	$data_content['product_unit'] = $nv_Request->get_int( 'product_unit', 'post', 0 );
-	$data_content['address'] = filter_text_input( 'address', 'post', '', 1 );
+	$data_content['address'] = filter_text_input( 'address', 'post', '', 1, 255 );
 	$data_content['listcatid'] = $nv_Request->get_int( 'catalogs', 'post', 0 );
-	$data_content['keywords'] = filter_text_input( 'keywords', 'post', '' );
-	$data_content['pstatus'] = filter_text_input( 'pstatus', 'post', '' );
-	$data_content['payment'] = filter_text_input( 'payment', 'post', '' );
+	$data_content['keywords'] = filter_text_input( 'keywords', 'post', '', 1, 255 );
+	$data_content['pstatus'] = filter_text_input( 'pstatus', 'post', '', 1, 255 );
+	$data_content['payment'] = filter_text_input( 'payment', 'post', '', 1, 255 );
 	$data_content['move'] = filter_text_input( 'move', 'post', '' );
-	$data_content['com_id'] = $com_id;
 	
-	$alias = filter_text_input( 'alias', 'post', '' );
+	$alias = filter_text_input( 'alias', 'post', '', 1, 255 );
 	$data_content['alias'] = ( $alias == "" ) ? change_alias( $data_content['title'] ) : change_alias( $alias );
 	
 	$data_content['note'] = $data_content['pstatus'] . "|" . $data_content['payment'] . "|" . $data_content['move'];
@@ -297,9 +303,10 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			
 			$data_content['publtime'] = ( $data_content['publtime'] > NV_CURRENTTIME ) ? $data_content['publtime'] : NV_CURRENTTIME;
 			
-			$sql = "INSERT INTO `" . $table_name . "` (`id`, `listcatid`, `user_id`, `source_id`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `product_code`, `product_number`, `product_price`, `money_unit`,  `product_unit`, `homeimgfile`, `homeimgthumb`, `homeimgalt`,`imgposition`, `copyright`, `inhome`, `allowed_comm`, `allowed_rating`, `ratingdetail`, `allowed_send`, `allowed_print`, `allowed_save`, `hitstotal`, `hitscm`, `hitslm` " . $listfield . ") 
+			$sql = "INSERT INTO `" . $table_name . "` (`id`, `listcatid`, `group_id`, `user_id`, `source_id`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `product_code`, `product_number`, `product_price`, `product_discounts`, `money_unit`, `product_unit`, `homeimgfile`, `homeimgthumb`, `homeimgalt`, `otherimage`, `imgposition`, `copyright`, `inhome`, `allowed_comm`, `allowed_rating`, `ratingdetail`, `allowed_send`, `allowed_print`, `allowed_save`, `hitstotal`, `hitscm`, `hitslm`, `showprice` " . $listfield . ") 
 				VALUES ( NULL,
 				" . $data_content['listcatid'] . ", 
+				" . $db->dbescape_string( $data_content['group_id'] ) . ",  
 				" . intval( $data_content['user_id'] ) . ",
 				" . intval( $data_content['source_id'] ) . ", 
 				" . intval( $data_content['addtime'] ) . ", 
@@ -311,11 +318,13 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				" . $db->dbescape_string( $data_content['product_code'] ) . ",  
 				" . intval( $data_content['product_number'] ) . ",  
 				" . intval( $data_content['product_price'] ) . ",  
+				" . intval( $data_content['product_discounts'] ) . ",  
 				" . $db->dbescape_string( $data_content['money_unit'] ) . ",
 				" . intval( $data_content['product_unit'] ) . ", 
 				" . $db->dbescape_string( $data_content['homeimgfile'] ) . ", 
 				" . $db->dbescape_string( $data_content['homeimgthumb'] ) . ", 
 				" . $db->dbescape_string( $data_content['homeimgalt'] ) . ", 
+				" . $db->dbescape_string( $data_content['otherimage'] ) . ", 
 				" . intval( $data_content['imgposition'] ) . ", 
 				" . intval( $data_content['copyright'] ) . ", 
 				" . intval( $data_content['inhome'] ) . ", 
@@ -327,7 +336,8 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				" . intval( $data_content['allowed_save'] ) . ", 
 				" . intval( $data_content['hitstotal'] ) . ", 
 				" . intval( $data_content['hitscm'] ) . ", 
-				" . intval( $data_content['hitslm'] ) . "
+				" . intval( $data_content['hitslm'] ) . ",
+				" . intval( $data_content['showprice'] ) . "
 				" . $listvalue . 
 			")";
 			
@@ -335,7 +345,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			
 			if ( $data_content['id'] > 0 )
 			{
-				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=profile";
+				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=myproduct";
 				$info = "<div class=\"frame\">";
 				$info .= $lang_module['product_post_ok'] . "<br /><br />\n";
 				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
@@ -343,6 +353,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$info .= "</div>";
 				$contents .= $info;
 				$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
+				
 				include ( NV_ROOTDIR . "/includes/header.php" );
 				echo nv_site_theme( $contents );
 				include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -402,9 +413,9 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			
 			if ( $db->sql_affectedrows() > 0 )
 			{
-				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=profile";
+				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=myproduct";
 				$info = "<div class=\"frame\">";
-				$info .= $lang_module['product_post_ok'] . "<br /><br />\n";
+				$info .= $lang_module['product_edit_ok'] . "<br /><br />\n";
 				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
 				$info .= "<a href=\"" . $nv_redirect . "\">" . $lang_module['redirect_to_back'] . "</a>";
 				$info .= "</div>";

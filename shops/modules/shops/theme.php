@@ -1066,7 +1066,6 @@ function history_order( $data_content, $link_check_order )
 	return $xtpl->text( 'main' );
 }
 
-//// search.php
 /**
  * search_theme()
  * 
@@ -1080,13 +1079,13 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 {
 	global $module_name, $module_info, $module_file, $global_config, $lang_module, $module_name;
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$base_url_site = NV_BASE_SITEURL . "?";
+	
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
-	$xtpl->assign( 'BASE_URL_SITE', $base_url_site );
+	$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL );
 	$xtpl->assign( 'TO_DATE', $date_array['to_date'] );
 	$xtpl->assign( 'FROM_DATE', $date_array['from_date'] );
 	$xtpl->assign( 'KEY', $key );
@@ -1135,6 +1134,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		{
 			$catid_i = ( $catid > 0 ) ? $catid : end( explode( ",", $value['listcatid'] ) );
 			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
+			
 			$xtpl->assign( 'LINK', $url );
 			$xtpl->assign( 'TITLEROW', BoldKeywordInStr( $value['title'], $key ) );
 			$xtpl->assign( 'CONTENT', BoldKeywordInStr( $value['hometext'], $key ) . "..." );
@@ -1178,7 +1178,11 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
  */
 function post_product( $data_content, $data_cata, $data_unit, $error, $lang_submit )
 {
-	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config, $money_config;
+	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config, $money_config, $my_head;
+	
+	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.css\" />\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
 	
 	$xtpl = new XTemplate( "post.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1301,7 +1305,7 @@ function users_profile()
  * @param mixed $page
  * @return
  */
-function my_product( $data_pro, $pages_pro, $page )
+function my_product( $data_pro, $pages_pro, $page, $per_page )
 {
 	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config;
 	$xtpl = new XTemplate( "my_product.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
@@ -1313,9 +1317,9 @@ function my_product( $data_pro, $pages_pro, $page )
 	$xtpl->assign( 'USER_EDIT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=editinfo" );
 	$xtpl->assign( 'USER_LOGOUT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=logout" );
 
-	$xtpl->assign( 'URL_MYPRO', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=myproduct" );
+	$xtpl->assign( 'URL_MYPRO', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=myproduct" );
 
-	$i = $page + 1;
+	$i = ( ( $page - 1 ) * $per_page ) + 1;
 	$xtpl->assign( 'unit_config', $pro_config['money_unit'] );
 
 	if( ! empty( $data_pro ) )
@@ -1339,7 +1343,6 @@ function my_product( $data_pro, $pages_pro, $page )
 			$xtpl->parse( 'main.rows' );
 			$i++;
 		}
-		$xtpl->assign( 'LINK_BACK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=profile" );
 	}
 
 	$xtpl->assign( 'pages_pro', $pages_pro );

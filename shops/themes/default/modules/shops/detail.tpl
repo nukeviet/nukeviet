@@ -52,7 +52,7 @@
 			<div class="clearfix fl" style="width:170px; padding:6px 0px">
 				<strong class="fl">{LANG.detail_share} : </strong>
 				<span class="share clearfix">
-					<a href="{LINK_PRINT}" title="print" id="click_print">
+					<a rel="nofollow" href="{LINK_PRINT}" title="print" id="click_print">
 						<img border="0" alt="print" src="{THEME_URL}/images/shops/print.png">
 					</a>
 					<a onclick="share_facebook();" href="javascript:;" title="Share on Facebook">
@@ -190,7 +190,7 @@
 		$('#click_print').click(function(event){
 			var href = $(this).attr("href");
 			event.preventDefault();
-			NewWindow(href, '', '640', '300', 'yes');
+			NewWindow(href, '', '640', '500', 'yes');
 			return false;
 		});
 		$("a.rate").click(function(event){

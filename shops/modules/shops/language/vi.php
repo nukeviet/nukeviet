@@ -152,6 +152,7 @@ $lang_module['product_keywords'] = "Từ khóa";
 $lang_module['product_move_form'] = "Vận chuyển";
 $lang_module['lang_post'] = "Thực hiện";
 $lang_module['product_post_ok'] = "Bạn đã đăng thành công!";
+$lang_module['product_edit_ok'] = "Bạn đã cập nhật thông tin thành công!";
 $lang_module['redirect_to_back'] = "Bấm vào đây để về trang quản lý";
 $lang_module['product_post_fail'] = "Bạn đang truy câp trái phép!";
 $lang_module['product_alias'] = "Liên kết tĩnh";
