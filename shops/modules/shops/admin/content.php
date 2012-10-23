@@ -510,18 +510,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			}
 			$db->sql_freeresult();
 		}
+		
 		nv_set_status_module();
+		
 		if( $error == "" )
 		{
-			if( $rowcontent['publtime'] > NV_CURRENTTIME or $rowcontent['exptime'] > 0 )
-			{
-				$rowcontent['exptime'] = ( $rowcontent['exptime'] > 0 ) ? $rowcontent['exptime'] : NV_CURRENTTIME + 26000000;
-				$catid = $rowcontent['listcatid'];
-				list( $del_cache_time ) = $db->sql_fetchrow( $db->sql_query( "SELECT `del_cache_time` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs`  WHERE `catid` =" . $catid ) );
-				$del_cache_time = min( $rowcontent['publtime'], $rowcontent['exptime'], $del_cache_time );
-				$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` SET `del_cache_time`=" . $db->dbescape( $del_cache_time ) . " WHERE `catid`=" . $catid . "" );
-			}
-
 			foreach( $id_block_content as $bid_i )
 			{
 				$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid_i . "', '" . $rowcontent['id'] . "', '0')" );

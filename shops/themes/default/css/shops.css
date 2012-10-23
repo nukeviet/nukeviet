@@ -673,6 +673,9 @@ div.TabView div.Pages div.Page {
 	vertical-align:middle;
 }
 
-
+.ddsmoothmenu-v ul, .ddsmoothmenu-v li, ddsmoothmenu-h ul, .ddsmoothmenu-h li{
+	list-style:none;
+	margin:0;
+}
 
 

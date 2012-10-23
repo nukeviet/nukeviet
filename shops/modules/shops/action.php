@@ -141,7 +141,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
   `admins` mediumtext NOT NULL,
   `add_time` int(11) unsigned NOT NULL DEFAULT '0',
   `edit_time` int(11) unsigned NOT NULL DEFAULT '0',
-  `del_cache_time` int(11) NOT NULL DEFAULT '0',
   `who_view` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `groups_view` varchar(255) NOT NULL DEFAULT '',
   `numpro` int(11) unsigned NOT NULL DEFAULT '0',

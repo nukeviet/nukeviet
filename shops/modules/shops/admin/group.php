@@ -79,8 +79,8 @@ if( ! empty( $savegroup ) )
 		$viewgroup = "viewgroup_page_list";
 		$subgroupid = "";
 		
-		$sql = "INSERT INTO " . $table_name . " (`groupid`, `parentid`,`cateid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewgroup`, `numsubgroup`, `subgroupid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `del_cache_time`, `who_view`, `groups_view`,`numpro` " . $listfield . " ) 
-         VALUES (NULL, " . $db->dbescape( $data['parentid'] ) . "," . $db->dbescape( $data['cateid'] ) . ",' ',' '," . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewgroup ) . ", '0', " . $db->dbescape( $subgroupid ) . ", '1', '4'," . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + 26000000, " . $db->dbescape( $data['who_view'] ) . "," . $db->dbescape( $groups_view ) . ',0 ' . $listvalue . " )";
+		$sql = "INSERT INTO " . $table_name . " (`groupid`, `parentid`,`cateid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewgroup`, `numsubgroup`, `subgroupid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view`,`numpro` " . $listfield . " ) 
+         VALUES (NULL, " . $db->dbescape( $data['parentid'] ) . "," . $db->dbescape( $data['cateid'] ) . ",' ',' '," . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewgroup ) . ", '0', " . $db->dbescape( $subgroupid ) . ", '1', '4'," . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $db->dbescape( $data['who_view'] ) . "," . $db->dbescape( $groups_view ) . ',0 ' . $listvalue . " )";
 
 		$newgroupid = intval( $db->sql_query_insert_id( $sql ) );
 		if( $newgroupid > 0 )
