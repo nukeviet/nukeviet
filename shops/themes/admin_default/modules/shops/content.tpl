@@ -74,7 +74,7 @@
 							<tr>
 								<td>   
 									<input class="txt" value="{DATAOTHERIMAGE.value}" name="otherimage[]" id="otherimage_{DATAOTHERIMAGE.id}" style="width:80%" maxlength="255">
-									<input value="Select File" name="selectfile" onclick="nv_open_browse_file( '/shop/admin/index.php?nv=upload&amp;popup=1&amp;area=otherimage_{DATAOTHERIMAGE.id}&amp;path=uploads/media&amp;type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button">    
+									<input value="Select File" name="selectfile" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button">    
 								</td>
 							</tr>
 							<!-- END: otherimage -->
@@ -402,18 +402,17 @@ $("input[name=selectimg]").click(function(){
 });
 $(document).ready(function() {
 	$("#AjaxSourceText").autocomplete("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={module_name}&{NV_OP_VARIABLE}=sourceajax",
-		{
-			delay:10,
-			minChars:2,
-			matchSubset:1,
-			matchContains:1,
-			cacheLength:10,
-			onItemSelect:selectItem,
-			onFindValue:findValue,
-			formatItem:formatItem,
-			autoFill:true
-		}
-	);
+	{
+		delay:10,
+		minChars:2,
+		matchSubset:1,
+		matchContains:1,
+		cacheLength:10,
+		onItemSelect:selectItem,
+		onFindValue:findValue,
+		formatItem:formatItem,
+		autoFill:true
+	});
 });
 <!-- BEGIN: getalias -->
 $("#idtitle").change(function () {

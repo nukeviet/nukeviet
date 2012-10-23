@@ -642,6 +642,7 @@ $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'module_name', $module_name );
+$xtpl->assign( 'CURRENT', NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" ) );
 
 if( $error != "" )
 {
@@ -853,8 +854,6 @@ if( empty( $rowcontent['alias'] ) )
 {
 	$xtpl->parse( 'main.getalias' );
 }
-
-$xtpl->assign( 'CURRENT', NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" ) );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
