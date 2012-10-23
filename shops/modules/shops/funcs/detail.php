@@ -149,10 +149,12 @@ if ( ! empty( $_SESSION[$module_data . '_proview'] ) )
 }
 
 $page_title = $data_content[NV_LANG_DATA . '_title'];
+$key_words = $data_content[NV_LANG_DATA . '_keywords'];
+$description = $data_content[NV_LANG_DATA . '_hometext'];
 
 SetSessionProView( $data_content['id'], $data_content[NV_LANG_DATA . '_title'], $data_content[NV_LANG_DATA . '_alias'], $data_content['addtime'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $data_content[NV_LANG_DATA . '_alias'] . "-" . $data_content['id'], $data_content['homeimgthumb'] );
 
-$contents = detail_product( $data_content, $data_unit, $data_comment, $num_com, $data_others, $data_shop,$array_other_view );
+$contents = detail_product( $data_content, $data_unit, $data_comment, $num_com, $data_others, $data_shop, $array_other_view );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
