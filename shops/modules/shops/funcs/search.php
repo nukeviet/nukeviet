@@ -88,7 +88,7 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 	
 	$table_search = $db_config['prefix'] . "_" . $module_data . "_rows";
 	
-	$sql = " SELECT SQL_CALC_FOUND_ROWS `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `listcatid`, `" . NV_LANG_DATA . "_hometext`, `publtime`, `homeimgfile`, `homeimgthumb`, `source_id` FROM `" . $table_search . "` WHERE (`status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ) " . $where . " ORDER BY `id` DESC LIMIT " . $pages . "," . $per_pages;
+	$sql = " SELECT SQL_CALC_FOUND_ROWS `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `listcatid`, `" . NV_LANG_DATA . "_hometext`, `publtime`, `homeimgfile`, `homeimgthumb`, `source_id` FROM `" . $table_search . "` WHERE`status`=1 " . $where . " ORDER BY `id` DESC LIMIT " . $pages . "," . $per_pages;
 	
 	$result = $db->sql_query( $sql );
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );

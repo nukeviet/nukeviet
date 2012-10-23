@@ -37,7 +37,7 @@ if ( $global_array_cat[$catid]['viewcat'] == "view_home_cat" and $global_array_c
 		$array_cat = array();
 		$array_cat = GetCatidInParent( $catid_i );
 		
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `inhome`=1 AND `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
 		$result = $db->sql_query( $sql );
 		
 		$data_pro = array();
@@ -102,7 +102,7 @@ else
 		$array_cat = GetCatidInParent( $catid );
 		$sql .= " `listcatid` IN (" . implode( ",", $array_cat ) . ")";
 	}
-	$sql .= " AND `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND ( `exptime`=0 OR `exptime` > " . NV_CURRENTTIME . ") ORDER BY `id` DESC LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
+	$sql .= " AND `status`=1 ORDER BY `id` DESC LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
 	$result = $db->sql_query( $sql );
 
 	list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );

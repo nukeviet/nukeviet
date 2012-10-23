@@ -19,7 +19,7 @@ if ( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile 
 }
 else
 {
-	$sql = "SELECT `id`, `listcatid`, `edittime`, `" . NV_LANG_DATA . "_alias` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `inhome`='1' AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime` >" . NV_CURRENTTIME . ") ORDER BY `publtime` DESC LIMIT 1000";
+	$sql = "SELECT `id`, `listcatid`, `edittime`, `" . NV_LANG_DATA . "_alias` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 1000";
 	$result = $db->sql_query( $sql );
 	$url = array();
 	
@@ -27,7 +27,8 @@ else
 	{
 		$url[] = array(
 			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id,
-			'publtime' => $edittime );
+			'publtime' => $edittime
+		);
 	}
 	
 	$cache = serialize( $url );

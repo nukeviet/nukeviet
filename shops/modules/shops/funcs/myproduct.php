@@ -22,7 +22,7 @@ if( preg_match( "/^page\-([0-9]+)$/", ( isset( $array_op[1] ) ? $array_op[1] : "
 	$page = ( int ) $m[1];
 }
 
-list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1, `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 WHERE t1.product_unit = t2.id AND t1.user_id = " . $user_info['userid'] . " AND t1.`status`=1 AND t1.`publtime` < " . NV_CURRENTTIME . " AND (t1.`exptime`=0 OR t1.`exptime`>" . NV_CURRENTTIME . ")" ) );
+list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1, `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 WHERE t1.product_unit = t2.id AND t1.user_id = " . $user_info['userid'] ) );
 
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
@@ -34,7 +34,7 @@ $data_pro = array();
 while( list( $id, $listcatid, $publtime, $exptime, $title, $alias, $homeimgthumb, $product_price, $status ) = $db->sql_fetchrow( $result ) )
 {
 	$thumb = explode( "|", $homeimgthumb );
-	if( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
+	if( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
 	{
 		$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
 	}

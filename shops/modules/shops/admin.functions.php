@@ -23,10 +23,10 @@ $global_array_cat[0] = array(
 	"keywords" => ""
 );
 
-$sql = "SELECT `catid`, `parentid`, `lev`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `viewcat`, `numsubcat`, `subcatid`, `numlinks`, `del_cache_time`, `" . NV_LANG_DATA . "_description`, `inhome`, `" . NV_LANG_DATA . "_keywords`, `who_view`, `groups_view` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
+$sql = "SELECT `catid`, `parentid`, `lev`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `viewcat`, `numsubcat`, `subcatid`, `numlinks`, `" . NV_LANG_DATA . "_description`, `inhome`, `" . NV_LANG_DATA . "_keywords`, `who_view`, `groups_view` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
 $result = $db->sql_query( $sql );
 
-while( list( $catid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewcat_i, $numsubcat_i, $subcatid_i, $numlinks_i, $del_cache_time_i, $description_i, $inhome_i, $keywords_i, $who_view_i, $groups_view_i ) = $db->sql_fetchrow( $result ) )
+while( list( $catid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewcat_i, $numsubcat_i, $subcatid_i, $numlinks_i, $description_i, $inhome_i, $keywords_i, $who_view_i, $groups_view_i ) = $db->sql_fetchrow( $result ) )
 {
 	$xtitle_i = "";
 	if( $lev_i > 0 )

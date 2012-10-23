@@ -86,8 +86,8 @@ if( ! empty( $savecat ) )
 		$viewcat = "viewcat_page_list";
 		$subcatid = "";
 		
-		$sql = "INSERT INTO `" . $table_name . "` (`catid`, `parentid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `del_cache_time`, `who_view`, `groups_view` " . $listfield . " ) 
-         VALUES (NULL, " . $db->dbescape( $data['parentid'] ) . ",' ',' '," . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewcat ) . ", '0', " . $db->dbescape( $subcatid ) . ", '1', '4'," . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + 26000000, " . $db->dbescape( $data['who_view'] ) . "," . $db->dbescape( $groups_view ) . $listvalue . " )";
+		$sql = "INSERT INTO `" . $table_name . "` (`catid`, `parentid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view` " . $listfield . " ) 
+         VALUES (NULL, " . $db->dbescape( $data['parentid'] ) . ",' ',' '," . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewcat ) . ", '0', " . $db->dbescape( $subcatid ) . ", '1', '4'," . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $db->dbescape( $data['who_view'] ) . "," . $db->dbescape( $groups_view ) . $listvalue . " )";
 		
 		$newcatid = intval( $db->sql_query_insert_id( $sql ) );
 		if( $newcatid > 0 )

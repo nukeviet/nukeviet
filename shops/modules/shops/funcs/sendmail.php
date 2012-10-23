@@ -13,7 +13,7 @@ $checkss = $nv_Request->get_string( 'checkss', 'post', '' );
 $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 $catid = $nv_Request->get_int( 'catid', 'post,get', 0 );
 
-$sql = "SELECT `id`, `title`, `alias`, `hometext`, `allowed_send` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `id` ='" . $id . "' AND `status`=1 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ")";
+$sql = "SELECT `id`, `title`, `alias`, `hometext`, `allowed_send` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `id` ='" . $id . "' AND `status`=1";
 $result = $db->sql_query( $sql );
 
 list( $id, $title, $alias, $hometext, $allowed_send ) = $db->sql_fetchrow( $result );
