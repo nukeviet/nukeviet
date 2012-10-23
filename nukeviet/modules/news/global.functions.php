@@ -70,10 +70,11 @@ function nv_set_status_module()
 	// Tim kiem thoi gian chay lan ke tiep
 	list( $time_publtime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(publtime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=2 AND `publtime` > " . NV_CURRENTTIME ) );
 	list( $time_exptime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(exptime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `exptime` > " . NV_CURRENTTIME ) );
-	$timecheckstatus = intval( $time_publtime );
-	$timecheckstatus = ( $time_exptime > 0 and $time_exptime < $timecheckstatus ) ? $time_exptime : $timecheckstatus;
+	
+	$timecheckstatus = min( $time_publtime, $time_exptime ); 
+	if( ! $timecheckstatus ) $timecheckstatus = max( $time_publtime, $time_exptime );
 
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", 'timecheckstatus', " . $timecheckstatus . ")" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", 'timecheckstatus', " . intval( $timecheckstatus ) . ")" );
 	nv_del_moduleCache( 'settings' );
 	nv_del_moduleCache( $module_name );
 
