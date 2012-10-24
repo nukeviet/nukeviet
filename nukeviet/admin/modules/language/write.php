@@ -54,7 +54,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 		$include_lang = "";
 
 		$modules_exit = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
-	
+
 		if( $module == "global" and preg_match( "/^block\.global\.([a-zA-Z0-9\-\_]+)$/", $admin_file ) )
 		{
 			$include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/" . $admin_file . ".php";
@@ -95,19 +95,19 @@ function nv_admin_write_lang( $dirlang, $idfile )
 		}
 		else
 		{
-		    if ( preg_match("/^(0?\d|[1-2]{1}\d|3[0-1]{1})[\-\/\.]{1}(0?\d|1[0-2]{1})[\-\/\.]{1}(19[\d]{2}|20[\d]{2})[\-\/\.\,\\s]{2}(0?\d|[1]{1}\d|2[0-4]{1})[\-\/\.\:]{1}([0-5]?[0-9])$/", $array_translator['createdate'], $m ) )
+			if( preg_match( "/^(0?\d|[1-2]{1}\d|3[0-1]{1})[\-\/\.]{1}(0?\d|1[0-2]{1})[\-\/\.]{1}(19[\d]{2}|20[\d]{2})[\-\/\.\,\\s]{2}(0?\d|[1]{1}\d|2[0-4]{1})[\-\/\.\:]{1}([0-5]?[0-9])$/", $array_translator['createdate'], $m ) )
 			{
-				$createdate = mktime($m[4],$m[5],0,$m[2],$m[1],$m[3]);
+				$createdate = mktime( $m[4], $m[5], 0, $m[2], $m[1], $m[3] );
 			}
-			elseif ( preg_match("/^(0?\d|[1-2]{1}\d|3[0-1]{1})[\-\/\.]{1}(0?\d|1[0-2]{1})[\-\/\.]{1}(19[\d]{2}|20[\d]{2})$/", $array_translator['createdate'], $m ) )
+			elseif( preg_match( "/^(0?\d|[1-2]{1}\d|3[0-1]{1})[\-\/\.]{1}(0?\d|1[0-2]{1})[\-\/\.]{1}(19[\d]{2}|20[\d]{2})$/", $array_translator['createdate'], $m ) )
 			{
-				$createdate = mktime(0,0,0,$m[2],$m[1],$m[3]);
+				$createdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 			}
 			else
 			{
-			    if (!empty($array_translator['createdate']))die($include_lang);
 				$createdate = time();
 			}
+			
 			$content_lang_no_tran = "";
 			$content_lang = "<?php\n\n";
 			$content_lang .= "/**\n";
@@ -142,15 +142,15 @@ function nv_admin_write_lang( $dirlang, $idfile )
 
 			if( in_array( "vi", $array_lang_exit ) and in_array( "en", $array_lang_exit ) and $dirlang != "vi" and $dirlang != "en" )
 			{
-				$query = "SELECT `lang_key`, `lang_vi`, `lang_en`, `lang_" . $dirlang . "`, `update_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "` WHERE `idfile`='" . $idfile . "' ORDER BY `id` ASC";
-				$result = $db->sql_query( $query );
-			
+				$sql = "SELECT `lang_key`, `lang_vi`, `lang_en`, `lang_" . $dirlang . "`, `update_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "` WHERE `idfile`='" . $idfile . "' ORDER BY `id` ASC";
+				$result = $db->sql_query( $sql );
+
 				while( list( $lang_key, $lang_value_vi, $lang_value_en, $lang_value, $update_time ) = $db->sql_fetchrow( $result ) )
 				{
 					if( $lang_value != "" )
 					{
-					    $numrows++;
-					    $lang_value = nv_unhtmlspecialchars( $lang_value );
+						$numrows++;
+						$lang_value = nv_unhtmlspecialchars( $lang_value );
 						$lang_value = str_replace( '$', '\$', $lang_value );
 						$lang_value = str_replace( "'", "\'", $lang_value );
 						$lang_value = nv_nl2br( $lang_value );
@@ -158,7 +158,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 
 						$content_temp = "\$" . $langtype . "['" . $lang_key . "'] = '$lang_value';\n";
 						$content_temp .= "/*\n";
-					
+
 						if( $dirlang != "vi" and ! empty( $lang_value_vi ) )
 						{
 							$lang_value_vi = nv_unhtmlspecialchars( $lang_value_vi );
@@ -178,9 +178,9 @@ function nv_admin_write_lang( $dirlang, $idfile )
 							$lang_value_en = str_replace( '<br  />', '<br />', $lang_value_en );
 							$content_temp .= "\t english:\t  " . $lang_value_en . "\n";
 						}
-					
+
 						$content_temp .= "*/\n\n";
-					
+
 						if( $update_time > 0 )
 						{
 							$content_lang .= $content_temp;
@@ -194,22 +194,22 @@ function nv_admin_write_lang( $dirlang, $idfile )
 
 				if( ! empty( $content_lang_no_check ) )
 				{
-					$content_lang .= "\n\n/*---------------------------------------- language untested ----------------------------------------------*/\n";
+					$content_lang .= "\n\n/*---------------------------------------- Language untested ----------------------------------------------*/\n";
 					$content_lang .= $content_lang_no_check;
 					$array_lang_no_check[] = $include_lang;
 				}
 			}
 			else
 			{
-				$query = "SELECT `lang_key`, `lang_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "` WHERE `idfile`='" . $idfile . "' ORDER BY `id` ASC";
-				$result = $db->sql_query( $query );
-			
+				$sql = "SELECT `lang_key`, `lang_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "` WHERE `idfile`='" . $idfile . "' ORDER BY `id` ASC";
+				$result = $db->sql_query( $sql );
+
 				while( list( $lang_key, $lang_value ) = $db->sql_fetchrow( $result ) )
 				{
 					if( $lang_value != "" )
 					{
-					    $numrows++;
-					    $lang_value = nv_unhtmlspecialchars( $lang_value );
+						$numrows++;
+						$lang_value = nv_unhtmlspecialchars( $lang_value );
 						$lang_value = str_replace( '$', '\$', $lang_value );
 						$lang_value = str_replace( "'", "\'", $lang_value );
 						$lang_value = nv_nl2br( $lang_value );
@@ -218,16 +218,16 @@ function nv_admin_write_lang( $dirlang, $idfile )
 					}
 				}
 			}
-			if ($numrows)
+			if( $numrows )
 			{
-    			$content_lang .= "\n";
-    			$content_lang .= "?>";
-    			$number_bytes =file_put_contents( $include_lang, $content_lang, LOCK_EX );
-    			if (empty($number_bytes))
-    			{
-        			$errfile = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
-        			return $lang_module['nv_error_write_file'] . " : " . $errfile;
-    			}
+				$content_lang .= "\n";
+				$content_lang .= "?>";
+				$number_bytes = file_put_contents( $include_lang, $content_lang, LOCK_EX );
+				if( empty( $number_bytes ) )
+				{
+					$errfile = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
+					return $lang_module['nv_error_write_file'] . " : " . $errfile;
+				}
 			}
 		}
 		return "";
@@ -250,24 +250,24 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 	$idfile = $nv_Request->get_int( 'idfile', 'get' );
 	nv_mkdir( NV_ROOTDIR . "/language/", $dirlang );
 	$content = nv_admin_write_lang( $dirlang, $idfile );
-	
+
 	if( empty( $content ) )
-	{		
+	{
 		$xtpl->assign( 'INCLUDE_LANG', str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) ) );
 		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=interface" );
-		
+
 		$xtpl->parse( 'main.complete' );
 	}
 	else
 	{
 		$xtpl->assign( 'CONTENT', $content );
-	
+
 		$xtpl->parse( 'main.error' );
 	}
-	
+
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
-	
+
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -275,20 +275,20 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_string( 'checksess', 'get' ) == md5( "writeallfile" . session_id() ) )
 {
 	$dirlang = $nv_Request->get_string( 'dirlang', 'get', '' );
-	
+
 	if( $dirlang != "" )
 	{
 		nv_mkdir( NV_ROOTDIR . "/language/", $dirlang );
-		
+
 		$sql = "SELECT `idfile`, `author_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` ORDER BY `idfile` ASC";
 		$result = $db->sql_query( $sql );
-		
+
 		$content = "";
 		$array_filename = array();
 		while( list( $idfile, $author_lang ) = $db->sql_fetchrow( $result ) )
 		{
 			$content = nv_admin_write_lang( $dirlang, $idfile );
-			
+
 			if( ! empty( $content ) )
 			{
 				break;
@@ -303,17 +303,17 @@ elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_st
 		{
 			// Tam thoi bo qua cai nay
 			// $array_lang_no_check = array_unique( $array_lang_no_check );
-			
+
 			$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting" );
-			
+
 			$i = 0;
 			foreach( $array_filename as $name )
 			{
-				$xtpl->assign( 'CLASS', ++ $i % 2 ? ' class="second"' : '' );
+				$xtpl->assign( 'CLASS', ++$i % 2 ? ' class="second"' : '' );
 				$xtpl->assign( 'NAME', $name );
 				$xtpl->parse( 'main.write_allfile_complete.loop' );
 			}
-			
+
 			$xtpl->parse( 'main.write_allfile_complete' );
 		}
 		else
@@ -325,10 +325,10 @@ elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_st
 	{
 		$xtpl->parse( 'main.error_write_allfile' );
 	}
-	
+
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
-	
+
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
