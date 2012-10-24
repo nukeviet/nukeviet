@@ -17,10 +17,10 @@ $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['blocks'] = 'Gestion des blocks';
-$lang_module['change_func_name'] = 'Renommer la fonction &ldquo;%1\$s&rdquo; du module &ldquo;%2\$s&rdquo;';
-$lang_module['bl_list_title'] = 'Les blocks à &ldquo;%1\$s&rdquo; de la fonction &ldquo;%2\$s&rdquo;';
-$lang_module['add_block_title'] = 'Ajouter le block à &ldquo;%1\$s&rdquo; de la fonction &ldquo;%2\$s&rdquo; du module &ldquo;%3\$s&rdquo;';
-$lang_module['edit_block_title'] = 'Modifier le block &ldquo;%1\$s&rdquo; à &ldquo;%2\$s&rdquo; de la fonction &ldquo;%3\$s&rdquo; du module &ldquo;%4\$s&rdquo;';
+$lang_module['change_func_name'] = 'Renommer la fonction &ldquo;%1$s&rdquo; du module &ldquo;%2$s&rdquo;';
+$lang_module['bl_list_title'] = 'Les blocks à &ldquo;%1$s&rdquo; de la fonction &ldquo;%2$s&rdquo;';
+$lang_module['add_block_title'] = 'Ajouter le block à &ldquo;%1$s&rdquo; de la fonction &ldquo;%2$s&rdquo; du module &ldquo;%3$s&rdquo;';
+$lang_module['edit_block_title'] = 'Modifier le block &ldquo;%1$s&rdquo; à &ldquo;%2$s&rdquo; de la fonction &ldquo;%3$s&rdquo; du module &ldquo;%4$s&rdquo;';
 $lang_module['block_add'] = 'Ajouter un block';
 $lang_module['block_edit'] = 'Modifier le block';
 $lang_module['block_title'] = 'Titre de block';

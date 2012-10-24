@@ -114,8 +114,8 @@ $lang_module['revision_error'] = 'Chyba : systém se nemůže připojit k server
 $lang_module['autoupdate_system'] = 'Automatické aktualizace site';
 $lang_module['autoupdate_get_error'] = 'Upozornění : systém nedokáže zkontrolovat aktualizované informace ve verzi NukeViet';
 $lang_module['autoupdate_download'] = 'Stáhnout nejnovější verzi NukeViet';
-$lang_module['autoupdate_download_waiting'] = 'Čekejte, až bude stažení dokončené.  <br /><br />pokud dojde k chybě<br /><br /><a title="klikněte zde pro stažení " href="%1\$s">%2\$s</a> <br /><br />';
-$lang_module['autoupdate_download_error'] = 'Chyba ve stažení nebo v unzipu, stáhněte tento soubor <br /><br /><a title=" klikněte zde pro stažení " href="%1\$s">%2\$s</a> <br /><br />';
+$lang_module['autoupdate_download_waiting'] = 'Čekejte, až bude stažení dokončené.  <br /><br />pokud dojde k chybě<br /><br /><a title="klikněte zde pro stažení " href="%1$s">%2$s</a> <br /><br />';
+$lang_module['autoupdate_download_error'] = 'Chyba ve stažení nebo v unzipu, stáhněte tento soubor <br /><br /><a title=" klikněte zde pro stažení " href="%1$s">%2$s</a> <br /><br />';
 $lang_module['autoupdate_invalidfile'] = 'Chyba : soubor je neplatný';
 $lang_module['autoupdate_download_complete'] = 'Stažení úspěšně dokončeno.  Klikněte zde pro kontrolu aktualizace';
 $lang_module['autoupdate_form_upload'] = 'Systém rozpoznal nejnovější verze.  Klikněte zde pro kontrolu aktualizace.';

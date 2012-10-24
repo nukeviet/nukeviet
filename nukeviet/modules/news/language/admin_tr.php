@@ -60,7 +60,7 @@ $lang_module['cat_sub_sl'] = 'Ana kategori';
 $lang_module['topic_sl'] = 'Konular seç';
 $lang_module['delcat_msg_cat'] = 'Error:Categories has %s sub-categories';
 $lang_module['delcat_msg_rows'] = 'Error:Delete categories fail because categories %s article.';
-$lang_module['delcat_msg_rows_select'] = 'Note: Remove category %1\$s and all %2\$s topics.';
+$lang_module['delcat_msg_rows_select'] = 'Note: Remove category %1$s and all %2$s topics.';
 $lang_module['delcat_msg_rows_move'] = 'Taşımak için kategori seçin';
 $lang_module['delcatandrows'] = 'Konu ve makale sil';
 $lang_module['delcat_msg_rows_noselect'] = 'You should choose the topic to move to article';
@@ -217,7 +217,7 @@ $lang_module['permissions_add_content'] = 'Makale Ekle';
 $lang_module['permissions_pub_content'] = 'Onaylı yazı';
 $lang_module['permissions_edit_content'] = 'Makale Düzenle';
 $lang_module['permissions_del_content'] = 'Makale Sil';
-$lang_module['permissions_pub_error'] = 'Error: You can not post messages in category: %1\$s';
+$lang_module['permissions_pub_error'] = 'Error: You can not post messages in category: %1$s';
 $lang_module['error_no_del_content_id'] = 'Error: The system does not delete the article id:';
 $lang_module['structure_image_upload'] = 'The module\'s upload images are archived in the default into directory structure';
 

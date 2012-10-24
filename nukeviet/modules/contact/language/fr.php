@@ -31,8 +31,8 @@ $lang_module['error_title'] = 'Manque d\'Objet';
 $lang_module['error_part'] = 'Sélectionnez le destinataire';
 $lang_module['error_content'] = 'Veuillez saisir votre message';
 $lang_module['sendcontactok'] = 'Merci de votre message! Nous allons étudier et vous répondre au plus tôt.';
-$lang_module['sendinfo'] = 'Ce message a été envoyé par l\'outil Contact du site %1\$s.<br />Expéditeur<br /><strong>Nom complet</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>IP</strong>: %4\$s<br /><strong>Destinataire</strong>: %5\$s';
-$lang_module['sendinfo2'] = 'Ce message a été envoyé par l\'outil Contact du site %1\$s.<br />Expéditeur<br /><strong>Nom complet</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>Téléphone</strong>: %4\$s<br /><strong>IP</strong>: %5\$s<br /><strong>Destinataire</strong>: %6\$s';
+$lang_module['sendinfo'] = 'Ce message a été envoyé par l\'outil Contact du site %1$s.<br />Expéditeur<br /><strong>Nom complet</strong>: %2$s<br /><strong>E-mail</strong>: %3$s<br /><strong>IP</strong>: %4$s<br /><strong>Destinataire</strong>: %5$s';
+$lang_module['sendinfo2'] = 'Ce message a été envoyé par l\'outil Contact du site %1$s.<br />Expéditeur<br /><strong>Nom complet</strong>: %2$s<br /><strong>E-mail</strong>: %3$s<br /><strong>Téléphone</strong>: %4$s<br /><strong>IP</strong>: %5$s<br /><strong>Destinataire</strong>: %6$s';
 $lang_module['phone'] = 'Téléphone';
 
 ?>

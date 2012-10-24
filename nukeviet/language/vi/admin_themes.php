@@ -17,10 +17,10 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['blocks'] = 'Quản lý block';
-$lang_module['change_func_name'] = 'Thay đổi tên gọi của function &ldquo;%1\$s&rdquo; thuộc module &ldquo;%2\$s&rdquo;';
-$lang_module['bl_list_title'] = 'Các block ở &ldquo;%1\$s&rdquo; của function &ldquo;%2\$s&rdquo;';
-$lang_module['add_block_title'] = 'Thêm block vào &ldquo;%1\$s&rdquo; của function &ldquo;%2\$s&rdquo; thuộc module &ldquo;%3\$s&rdquo;';
-$lang_module['edit_block_title'] = 'Sửa block &ldquo;%1\$s&rdquo; tại &ldquo;%2\$s&rdquo; của function &ldquo;%3\$s&rdquo; thuộc module &ldquo;%4\$s&rdquo;';
+$lang_module['change_func_name'] = 'Thay đổi tên gọi của function &ldquo;%1$s&rdquo; thuộc module &ldquo;%2$s&rdquo;';
+$lang_module['bl_list_title'] = 'Các block ở &ldquo;%1$s&rdquo; của function &ldquo;%2$s&rdquo;';
+$lang_module['add_block_title'] = 'Thêm block vào &ldquo;%1$s&rdquo; của function &ldquo;%2$s&rdquo; thuộc module &ldquo;%3$s&rdquo;';
+$lang_module['edit_block_title'] = 'Sửa block &ldquo;%1$s&rdquo; tại &ldquo;%2$s&rdquo; của function &ldquo;%3$s&rdquo; thuộc module &ldquo;%4$s&rdquo;';
 $lang_module['block_add'] = 'Thêm block';
 $lang_module['block_edit'] = 'Sửa block';
 $lang_module['block_title'] = 'Tên block';

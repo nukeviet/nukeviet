@@ -17,10 +17,10 @@ $lang_translator['info'] = 'Dil Sevimsiz tarafından tercüme edildi';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['blocks'] = 'Blok kur';
-$lang_module['change_func_name'] = 'işlevin adını değiştirin &ldquo;%1\$s&rdquo; modülü &ldquo;%2\$s&rdquo;';
-$lang_module['bl_list_title'] = 'Bloklar &ldquo;%1\$s&rdquo; is of function &ldquo;%2\$s&rdquo;';
-$lang_module['add_block_title'] = 'Add block &ldquo;%1\$s&rdquo; of function &ldquo;%2\$s&rdquo; in module &ldquo;%3\$s&rdquo;';
-$lang_module['edit_block_title'] = 'Edit block &ldquo;%1\$s&rdquo; at &ldquo;%2\$s&rdquo; of function &ldquo;%3\$s&rdquo; of module &ldquo;%4\$s&rdquo;';
+$lang_module['change_func_name'] = 'işlevin adını değiştirin &ldquo;%1$s&rdquo; modülü &ldquo;%2$s&rdquo;';
+$lang_module['bl_list_title'] = 'Bloklar &ldquo;%1$s&rdquo; is of function &ldquo;%2$s&rdquo;';
+$lang_module['add_block_title'] = 'Add block &ldquo;%1$s&rdquo; of function &ldquo;%2$s&rdquo; in module &ldquo;%3$s&rdquo;';
+$lang_module['edit_block_title'] = 'Edit block &ldquo;%1$s&rdquo; at &ldquo;%2$s&rdquo; of function &ldquo;%3$s&rdquo; of module &ldquo;%4$s&rdquo;';
 $lang_module['block_add'] = 'Blok Ekle';
 $lang_module['block_edit'] = 'Blok Düzenle';
 $lang_module['block_title'] = 'Blok adı';

@@ -151,7 +151,6 @@ function nv_admin_write_lang( $dirlang, $idfile )
 					{
 						$numrows++;
 						$lang_value = nv_unhtmlspecialchars( $lang_value );
-						$lang_value = str_replace( '$', '\$', $lang_value );
 						$lang_value = str_replace( "'", "\'", $lang_value );
 						$lang_value = nv_nl2br( $lang_value );
 						$lang_value = str_replace( '<br  />', '<br />', $lang_value );
@@ -162,7 +161,6 @@ function nv_admin_write_lang( $dirlang, $idfile )
 						if( $dirlang != "vi" and ! empty( $lang_value_vi ) )
 						{
 							$lang_value_vi = nv_unhtmlspecialchars( $lang_value_vi );
-							$lang_value_vi = str_replace( '$', '\$', $lang_value_vi );
 							$lang_value_vi = str_replace( "'", "\'", $lang_value_vi );
 							$lang_value_vi = nv_nl2br( $lang_value_vi );
 							$lang_value_vi = str_replace( '<br  />', '<br />', $lang_value_vi );
@@ -172,7 +170,6 @@ function nv_admin_write_lang( $dirlang, $idfile )
 						if( $dirlang != "en" and ! empty( $lang_value_en ) )
 						{
 							$lang_value_en = nv_unhtmlspecialchars( $lang_value_en );
-							$lang_value_en = str_replace( '$', '\$', $lang_value_en );
 							$lang_value_en = str_replace( "'", "\'", $lang_value_en );
 							$lang_value_en = nv_nl2br( $lang_value_en );
 							$lang_value_en = str_replace( '<br  />', '<br />', $lang_value_en );
@@ -210,7 +207,6 @@ function nv_admin_write_lang( $dirlang, $idfile )
 					{
 						$numrows++;
 						$lang_value = nv_unhtmlspecialchars( $lang_value );
-						$lang_value = str_replace( '$', '\$', $lang_value );
 						$lang_value = str_replace( "'", "\'", $lang_value );
 						$lang_value = nv_nl2br( $lang_value );
 						$lang_value = str_replace( '<br  />', '<br />', $lang_value );

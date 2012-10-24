@@ -118,8 +118,8 @@ $lang_module['revision_error'] = 'Error: The system is not connected with SVN Se
 $lang_module['autoupdate_system'] = 'Automatic upgrade site';
 $lang_module['autoupdate_get_error'] = 'Notice: System does not check the version upgrade Nukeviet';
 $lang_module['autoupdate_download'] = 'Download Nukeviet güncelleştirme paketleri';
-$lang_module['autoupdate_download_waiting'] = 'Please wait the system download complete. <br /> <br />If the download or extract then fails, you download files <br /> <br /> <a title="Please click to download" href="%1\$s" />%\$s <br /><br /> unzip and upload to the folder install/update/ to proceed';
-$lang_module['autoupdate_download_error'] = 'Download or unzip then fail, you download files <br /><br /><a title="Click here to download" href="%1\$s">%2\$s</a> <br /> <br /> unzip and upload to the folder install/update/ to proceed';
+$lang_module['autoupdate_download_waiting'] = 'Please wait the system download complete. <br /> <br />If the download or extract then fails, you download files <br /> <br /> <a title="Please click to download" href="%1$s" />%$s <br /><br /> unzip and upload to the folder install/update/ to proceed';
+$lang_module['autoupdate_download_error'] = 'Download or unzip then fail, you download files <br /><br /><a title="Click here to download" href="%1$s">%2$s</a> <br /> <br /> unzip and upload to the folder install/update/ to proceed';
 $lang_module['autoupdate_invalidfile'] = 'Hatası: zip dosyası geçersiz';
 $lang_module['autoupdate_download_complete'] = 'Dosya indirme Başarılı, güncellemeler işlemine devam etmek için onay tıklayınız.';
 $lang_module['autoupdate_form_upload'] = 'Sistem güncellemeleri işlemine devam etmek için onay tıklayınız, bir sürüm yükseltme tespit etti.';

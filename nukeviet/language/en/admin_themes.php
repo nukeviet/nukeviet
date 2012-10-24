@@ -17,10 +17,10 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['blocks'] = 'Blocks management';
-$lang_module['change_func_name'] = 'Change the name of the function &ldquo;%1\$s&rdquo; in module &ldquo;%2\$s&rdquo;';
-$lang_module['bl_list_title'] = 'Blocks in &ldquo;%1\$s&rdquo; is of function &ldquo;%2\$s&rdquo;';
-$lang_module['add_block_title'] = 'Add block &ldquo;%1\$s&rdquo; of function &ldquo;%2\$s&rdquo; in module &ldquo;%3\$s&rdquo;';
-$lang_module['edit_block_title'] = 'Edit block &ldquo;%1\$s&rdquo; at &ldquo;%2\$s&rdquo; of function &ldquo;%3\$s&rdquo; of module &ldquo;%4\$s&rdquo;';
+$lang_module['change_func_name'] = 'Change the name of the function &ldquo;%1$s&rdquo; in module &ldquo;%2$s&rdquo;';
+$lang_module['bl_list_title'] = 'Blocks in &ldquo;%1$s&rdquo; is of function &ldquo;%2$s&rdquo;';
+$lang_module['add_block_title'] = 'Add block &ldquo;%1$s&rdquo; of function &ldquo;%2$s&rdquo; in module &ldquo;%3$s&rdquo;';
+$lang_module['edit_block_title'] = 'Edit block &ldquo;%1$s&rdquo; at &ldquo;%2$s&rdquo; of function &ldquo;%3$s&rdquo; of module &ldquo;%4$s&rdquo;';
 $lang_module['block_add'] = 'Add block';
 $lang_module['block_edit'] = 'Edit block';
 $lang_module['block_title'] = 'Block name';

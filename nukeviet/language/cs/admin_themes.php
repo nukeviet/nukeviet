@@ -17,10 +17,10 @@ $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['blocks'] = 'Nastavení blok';
-$lang_module['change_func_name'] = 'Změnit názvu funkce "%1\$s" v modulu "%2\$s"';
-$lang_module['bl_list_title'] = 'Bloky v "%1\$s" je funkce "%2\$s"';
-$lang_module['add_block_title'] = 'Přidat bloku do "%1\$s" funkce "%2\$s" v modulu "%3\$s"';
-$lang_module['edit_block_title'] = 'Upravit blok "%1\$s" na "%2\$s" z funkce "%3\$s" v modulu "%4\$s"';
+$lang_module['change_func_name'] = 'Změnit názvu funkce "%1$s" v modulu "%2$s"';
+$lang_module['bl_list_title'] = 'Bloky v "%1$s" je funkce "%2$s"';
+$lang_module['add_block_title'] = 'Přidat bloku do "%1$s" funkce "%2$s" v modulu "%3$s"';
+$lang_module['edit_block_title'] = 'Upravit blok "%1$s" na "%2$s" z funkce "%3$s" v modulu "%4$s"';
 $lang_module['block_add'] = 'Přidat bloku';
 $lang_module['block_edit'] = 'Upravit blok';
 $lang_module['block_title'] = 'Jméno blocku';

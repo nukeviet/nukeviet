@@ -31,8 +31,8 @@ $lang_module['error_title'] = 'Bạn cần nhập tiêu đề thư';
 $lang_module['error_part'] = 'Bạn chưa chọn bộ phận liên hệ';
 $lang_module['error_content'] = 'Bạn cần nhập nội dung';
 $lang_module['sendcontactok'] = 'Xin cảm ơn quý vị đã quan tâm! chúng tôi sẽ trả lời thư của Quý vị trong thời gian sớm nhất.';
-$lang_module['sendinfo'] = 'Thư này được gửi thông qua tiện ích Liên hệ tại website %1\$s.<br />Thông tin về người gửi<br /><strong>Họ và tên</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>IP</strong>: %4\$s<br /><strong>Gửi đến bộ phận</strong>: %5\$s';
-$lang_module['sendinfo2'] = 'Thư này được gửi thông qua tiện ích Liên hệ tại website %1\$s.<br />Thông tin về người gửi<br /><strong>Họ và tên</strong>: %2\$s<br /><strong>E-mail</strong>: %3\$s<br /><strong>Điện thoại</strong>: %4\$s<br /><strong>IP</strong>: %5\$s<br /><strong>Gửi đến bộ phận</strong>: %6\$s';
+$lang_module['sendinfo'] = 'Thư này được gửi thông qua tiện ích Liên hệ tại website %1$s.<br />Thông tin về người gửi<br /><strong>Họ và tên</strong>: %2$s<br /><strong>E-mail</strong>: %3$s<br /><strong>IP</strong>: %4$s<br /><strong>Gửi đến bộ phận</strong>: %5$s';
+$lang_module['sendinfo2'] = 'Thư này được gửi thông qua tiện ích Liên hệ tại website %1$s.<br />Thông tin về người gửi<br /><strong>Họ và tên</strong>: %2$s<br /><strong>E-mail</strong>: %3$s<br /><strong>Điện thoại</strong>: %4$s<br /><strong>IP</strong>: %5$s<br /><strong>Gửi đến bộ phận</strong>: %6$s';
 $lang_module['phone'] = 'Điện thoại';
 
 ?>
