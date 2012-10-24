@@ -13,7 +13,7 @@ if( ! function_exists( 'nv_search_product' ) )
 {
 	function nv_search_product( $block_config )
 	{
-		global $site_mods, $my_head, $db_config, $db, $module_name, $module_info, $nv_Request, $catid, $module_config;
+		global $site_mods, $my_head, $db_config, $module_name, $module_info, $nv_Request, $catid, $module_config;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
@@ -35,7 +35,7 @@ if( ! function_exists( 'nv_search_product' ) )
 		if( $price2_temp == '' ) $price2 = -1;
 		else  $price2 = floatval( $price2_temp );
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module . "/block.search.tpl" ) )
+		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $mod_file . "/block.search.tpl" ) )
 		{
 			$block_theme = $module_info['template'];
 		}
@@ -49,13 +49,14 @@ if( ! function_exists( 'nv_search_product' ) )
 			$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $mod_file . "/js/user.js\"></script>\n";
 		}
 		
-		$xtpl = new XTemplate( "block.search.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module );
+		$xtpl = new XTemplate( "block.search.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-		$sql = "SELECT `catid`, `lev`, `" . NV_LANG_DATA . "_title` as title FROM `" . $db_config['prefix'] . "_" . $module . "_catalogs` ORDER BY `order` ASC";
-		$result = $db->sql_query( $sql );
-		while( $row = $db->sql_fetchrow( $result, 2 ) )
+		$sql = "SELECT `catid`, `lev`, `" . NV_LANG_DATA . "_title` AS `title` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_catalogs` ORDER BY `order` ASC";
+		$list = nv_db_cache( $sql, '', $module );
+		
+		foreach( $list as $row )
 		{
 			$xtitle_i = "";
 			if( $row['lev'] > 0 )
@@ -74,18 +75,20 @@ if( ! function_exists( 'nv_search_product' ) )
 		}
 		
 		// Get money
-		$sql = "SELECT `code`, `currency` FROM `" . $db_config['prefix'] . "_" . $module . "_money_" . NV_LANG_DATA . "`";
-		$result = $db->sql_query( $sql );
-		while( $row = $db->sql_fetchrow( $result, 2 ) )
+		$sql = "SELECT `code`, `currency` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_money_" . NV_LANG_DATA . "`";
+		$list = nv_db_cache( $sql, '', $module );
+		
+		foreach( $list as $row )
 		{
 			$row['selected'] = ( $typemoney == $row['code'] ) ? "selected=\"selected\"" : "";
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'main.typemoney' );
 		}
 		
-		$sql = "SELECT `" . NV_LANG_DATA . "_title` AS `title`, `sourceid` FROM `" . $db_config['prefix'] . "_" . $module . "_sources`";
-		$result = $db->sql_query( $sql );
-		while( $row = $db->sql_fetchrow( $result, 2 ) )
+		$sql = "SELECT `" . NV_LANG_DATA . "_title` AS `title`, `sourceid` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_sources`";
+		$list = nv_db_cache( $sql, '', $module );
+		
+		foreach( $list as $row )
 		{
 			$row['selected'] = ( $row['sourceid'] == $sourceid ) ? "selected=\"selected\"" : "";
 			$xtpl->assign( 'ROW', $row );

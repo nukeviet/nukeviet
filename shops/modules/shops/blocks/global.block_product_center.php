@@ -60,7 +60,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 
 	function nv_global_product_center( $block_config )
 	{
-		global $site_mods, $global_config, $module_name, $global_array_cat, $db, $db_config, $my_head;
+		global $site_mods, $global_config, $module_name, $global_array_cat, $db_config, $my_head;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
@@ -70,11 +70,6 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$num_view = $block_config['numrow'];
 		$num = $num_slide * $num_view;
 
-		$sql = "SELECT `bid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module . "_block_cat` WHERE `bid`=" . $block_config['blockid'];
-		$result = $db->sql_query( $sql );
-		list( $bid, $titlebid ) = $db->sql_fetchrow( $result );
-
-		$array_content = array();
 		$i = 1;
 		$j = 1;
 		$page_i = "";
@@ -129,14 +124,14 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$xtpl = new XTemplate( "block.product_center.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . "themes/" . $block_theme );
 
-		$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1.homeimgthumb , t1.homeimgalt FROM `" . $db_config['prefix'] . "_" . $module . "_rows` as t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status=1 ORDER BY t1.id DESC LIMIT 0," . $num;
-		$result = $db->sql_query( $sql );
+		$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS `title`, t1." . NV_LANG_DATA . "_alias AS `alias`, t1.homeimgthumb , t1.homeimgalt FROM `" . $db_config['prefix'] . "_" . $module . "_rows` as t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status=1 ORDER BY t1.id DESC LIMIT 0," . $num;
+		$list = nv_db_cache( $sql, '', $module );
 
-		while( list( $id, $listcatid, $title, $alias, $homeimgthumb, $homeimgalt ) = $db->sql_fetchrow( $result ) )
+		foreach( $list as $row )
 		{
-			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $array_cat_shops[$listcatid]['alias'] . "/" . $alias . "-" . $id;
+			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $array_cat_shops[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
 
-			$thumb = explode( "|", $homeimgthumb );
+			$thumb = explode( "|", $row['homeimgthumb'] );
 			if( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
 			{
 				$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module . "/" . $thumb[0];
@@ -147,8 +142,8 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			}
 
 			$xtpl->assign( 'LINK', $link );
-			$xtpl->assign( 'TITLE', $title );
-			$xtpl->assign( 'TITLE0', nv_clean60( $title, 30 ) );
+			$xtpl->assign( 'TITLE', $row['title'] );
+			$xtpl->assign( 'TITLE0', nv_clean60( $row['title'], 30 ) );
 			$xtpl->assign( 'SRC_IMG', $thumb[0] );
 			$xtpl->parse( 'main.loop.items' );
 

@@ -86,7 +86,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 	function nv_relates_product( $block_config )
 	{
-		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db, $db_config, $my_head;
+		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db_config, $my_head;
 		
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
@@ -140,15 +140,15 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 		$xtpl = new XTemplate( "block.others_product.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
 		
-		$sql = "SELECT  t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1.addtime,t1.homeimgthumb,t1.product_price,t1.product_discounts,t1.money_unit,t1.showprice FROM `" . $db_config['prefix'] . "_" . $module . "_rows` as t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 AND  t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime >" . NV_CURRENTTIME . ") ORDER BY t1.addtime DESC, t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
-		$result = $db->sql_query( $sql );
+		$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS `title`, t1." . NV_LANG_DATA . "_alias AS `alias`, t1.addtime, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice FROM `" . $db_config['prefix'] . "_" . $module . "_rows` AS t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status=1 ORDER BY t1.addtime DESC, t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
+		$list = nv_db_cache( $sql, "id", $module );
 		
 		$i = 1;
 		$cut_num = $block_config['cut_num'];
 
-		while( list( $id_i, $listcatid_i, $title_i, $alias_i, $addtime_i, $homeimgthumb_i, $product_price_i, $product_discounts_i, $money_unit_i, $showprice_i ) = $db->sql_fetchrow( $result ) )
+		foreach( $list as $row )
 		{
-			$thumb = explode( "|", $homeimgthumb_i );
+			$thumb = explode( "|", $row['homeimgthumb'] );
 			if( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
 			{
 				$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module . "/" . $thumb[0];
@@ -157,21 +157,21 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 			{
 				$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $mod_file . "/no-image.jpg";
 			}
-			$xtpl->assign( 'link', $link . $array_cat_shops[$listcatid_i]['alias'] . "/" . $alias_i . "-" . $id_i );
-			$title_i = nv_clean60( $title_i, $cut_num );
-			$xtpl->assign( 'title', $title_i );
+			
+			$xtpl->assign( 'link', $link . $array_cat_shops[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] );
+			$xtpl->assign( 'title', nv_clean60( $row['title'], $cut_num ) );
 			$xtpl->assign( 'src_img', $thumb[0] );
-			$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $addtime_i ) );
-			if( $pro_config['active_price'] == '1' && $showprice_i == '1' )
+			$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $row['addtime'] ) );
+			
+			if( $pro_config['active_price'] == '1' and $row['showprice'] == '1' )
 			{
-
-				$product_price = CurrencyConversion( $product_price_i, $money_unit_i, $pro_config['money_unit'], $block_config );
+				$product_price = CurrencyConversion( $row['product_price'], $row['money_unit'], $pro_config['money_unit'], $block_config );
 				$xtpl->assign( 'product_price', $product_price );
 				$xtpl->assign( 'money_unit', $pro_config['money_unit'] );
-				if( $product_discounts_i != 0 )
+				if( $row['product_discounts'] != 0 )
 				{
-					$price_product_discounts = $product_price_i - ( $product_price_i * ( $product_discounts_i / 100 ) );
-					$xtpl->assign( 'product_discounts', CurrencyConversion( $price_product_discounts, $money_unit_i, $pro_config['money_unit'], $block_config ) );
+					$price_product_discounts = $row['product_price'] - ( $row['product_price'] * ( $row['product_discounts'] / 100 ) );
+					$xtpl->assign( 'product_discounts', CurrencyConversion( $price_product_discounts, $row['money_unit'], $pro_config['money_unit'], $block_config ) );
 					$xtpl->assign( 'class_money', 'discounts_money' );
 					$xtpl->parse( 'main.loop.discounts' );
 				}
@@ -181,6 +181,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 				}
 				$xtpl->parse( 'main.loop.price' );
 			}
+			
 			$bg = ( $i % 2 == 0 ) ? "bg" : "";
 			$xtpl->assign( "bg", $bg );
 			$xtpl->parse( 'main.loop' );
