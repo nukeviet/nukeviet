@@ -23,7 +23,7 @@ if( ! function_exists( 'nv_product_center' ) )
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . "themes/" . $module_info['template'] );
 		
-		$cache_file = NV_LANG_DATA . "_" . $module_data . "_block_module_product_center_" . NV_CACHE_PREFIX . ".cache";
+		$cache_file = NV_LANG_DATA . "_" . $module_name . "_block_module_product_center_" . NV_CACHE_PREFIX . ".cache";
 		if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 		{
 			$array = unserialize( $cache );
