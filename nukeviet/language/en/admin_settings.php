@@ -82,6 +82,7 @@ $lang_module['smtp_username'] = 'Mail Account';
 $lang_module['smtp_login'] = 'User Name';
 $lang_module['smtp_pass'] = 'Password';
 $lang_module['smtp_pass_note'] = 'Note: SMTP password is not encrypted in the database.';
+$lang_module['smtp_error_openssl'] = 'Error: Server not support send mail ssl';
 $lang_module['bot_name'] = 'Server\'s name';
 $lang_module['bot_agent'] = 'UserAgent';
 $lang_module['bot_ips'] = 'Server\'s IP';

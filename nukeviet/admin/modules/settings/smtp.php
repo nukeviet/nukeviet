@@ -51,7 +51,7 @@ if ( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
         $array_phpmod = phpinfo_array( 8, 1 );
         if ( ! empty( $array_phpmod ) and ! array_key_exists( "openssl", $array_phpmod ) )
         {
-            $errormess = "Error: Server not support send mail ssl";
+            $errormess = $lang_module['smtp_error_openssl'];
         }
     }
 	
