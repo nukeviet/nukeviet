@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.3
+ * @Project NUKEVIET 3.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES. All rights reserved
+ * @Copyright (C) 2012 VINADES. All rights reserved
  * @Createdate Dec 26, 2011 10:22:41 AM
  * @Data keywords generator from http://www.informatik.uni-leipzig.de/~duc/Dict/VietViet.zip
  */

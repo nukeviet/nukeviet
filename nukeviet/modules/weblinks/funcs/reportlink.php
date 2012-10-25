@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @project nukeviet 3.0
+ * @Project NUKEVIET 3.x
  * @author VINADES.,JSC (contact@vinades.vn)
- * @copyright (c) 2010 VINADES.,JSC. all rights reserved
+ * @Copyright (C) 2012 VINADES.,JSC. all rights reserved
  * @createdate 3-6-2010 0:14
  */
 

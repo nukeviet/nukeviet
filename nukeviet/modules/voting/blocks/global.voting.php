@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.3
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 - 2011 VINADES.,JSC. All rights reserved
  * @Createdate Sat, 10 Dec 2011 06:46:54 GMT

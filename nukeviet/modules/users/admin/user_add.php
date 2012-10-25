@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET CMS 3.0
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES. All rights reserved
+ * @Copyright (C) 2012 VINADES. All rights reserved
  * @Createdate 04/05/2010 
  */
 

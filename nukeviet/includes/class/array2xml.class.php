@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @Createdate  6/5/2010  2:18
  */
 
 /**
  * Associative array to xml transformation class
  * 
- * @package NUKEVIET 3.0
+ * @package NUKEVIET 3.x
  * @author VINADES.,JSC
  * @copyright 2010
  * @version 1.0 PHP5

@@ -1,7 +1,7 @@
 /* *
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES ( contact@vinades.vn )
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @Createdate 2 - 10 - 2010 16 : 3
  */
 function nv_show_list_mods(){

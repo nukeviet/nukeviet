@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @Createdate 18/1/2011, 1:11
  */
 
@@ -43,7 +43,7 @@ define( '_ERROR_UPLOAD_URL_NOTFOUND', isset( $lang_global['error_upload_url_notf
 /**
  * upload
  * 
- * @package NUKEVIET 3.0
+ * @package NUKEVIET 3.x
  * @author VINADES.,JSC
  * @copyright 2011
  * @version $Id$

@@ -1,5 +1,5 @@
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @copyright 2009
  * @createdate 19/3/2010 22:58
