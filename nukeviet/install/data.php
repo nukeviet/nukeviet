@@ -408,7 +408,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'captcha_type', '0'),
 ('sys', 'global', 'revision', '" . $global_config['revision'] . "'),
 ('sys', 'global', 'version', '" . $global_config['version'] . "'),
-('sys', 'global', 'whoviewuser', '1')";
+('sys', 'global', 'whoviewuser', '2')";
 
 $sql_create_table[] = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`) VALUES
 (NULL, " . NV_CURRENTTIME . ", 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 0, 0),
