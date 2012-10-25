@@ -64,7 +64,7 @@
 							<tr>
 								<td>
 									<input style="width:400px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/>
-									<input type="button" value="Browse server" name="selectimg"/>
+									<input type="button" value="{LANG.browse_image}" name="selectimg"/>
 									<input type="button" onclick="nv_add_otherimage();" value="{LANG.add_otherimage}">
 								</td>
 							</tr>
@@ -74,7 +74,7 @@
 							<tr>
 								<td>   
 									<input class="txt" value="{DATAOTHERIMAGE.value}" name="otherimage[]" id="otherimage_{DATAOTHERIMAGE.id}" style="width:80%" maxlength="255">
-									<input value="Select File" name="selectfile" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button">    
+									<input value="{LANG.browse_image}" name="selectfile" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button">    
 								</td>
 							</tr>
 							<!-- END: otherimage -->
