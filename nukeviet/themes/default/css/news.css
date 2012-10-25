@@ -1,4 +1,4 @@
-#topnews{background:#ecf2f7;border:1px solid #c3d3e0;margin-bottom:10px;padding:4px}
+﻿#topnews{background:#ecf2f7;border:1px solid #c3d3e0;margin-bottom:10px;padding:4px}
 #topnews div.indent{background:#f9fbfd}
 #topnews ul.lastest-news li{text-indent:10px}
 #topnews ul.lastest-news a{background:transparent url(../images/squared-blue.png) no-repeat 5px 9px;border-bottom:1px dotted #bbdbf6;color:#383838;display:block;font-weight:normal;padding:2px 0}
@@ -118,3 +118,8 @@ div.news_column div.header a:hover,div.news_column ul.related a:hover{color:#333
 div.span-25 div.items,div.news_column div.border_b{border-bottom:1px dotted #ccc}
 div.news_column div.items p,div.news_column #hometext,div.news_column div.bodytext,#news_detail h1{text-align:justify}
 .cl-viewall a,.cl-viewpages span a{color:#069;text-decoration:none}
+div.news_right{background:#fff url(../images/news_cat_header.png) repeat-x 0 bottom;border-bottom: 1px solid #CCC;padding: 4px 0 0 4px;}
+ul.list-number{color:#a62c00;list-style-type:none;margin:0 0 8px;padding:0}
+ul.list-number li.bg{background:#F3F3F3}
+ul.list-number .small{font-size:11px;color:#666;display:block;border-bottom:1px #ccc solid;margin-bottom:5px;padding:0 0 2px 0}
+ul.list-number li{padding-bottom:5px;}
