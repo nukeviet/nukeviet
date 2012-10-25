@@ -18,7 +18,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['main'] = 'General Informations';
 $lang_module['database_info'] = 'General information about the database &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['tables_info'] = 'Tables of database';
+$lang_module['tables_info'] = 'Tables of database &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_caption'] = 'Table information &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_row_caption'] = 'Table field information &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['db_host_info'] = 'Mysql server';
