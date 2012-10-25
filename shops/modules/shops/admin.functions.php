@@ -354,7 +354,7 @@ function nv_show_cat_list( $parentid = 0 )
  */
 function nv_fix_group_order( $parentid = 0, $order = 0, $lev = 0 )
 {
-	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
+	global $db, $db_config, $module_data;
 	
 	$sql = "SELECT `groupid`, `parentid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `parentid`=" . $parentid . " ORDER BY `weight` ASC";
 	$result = $db->sql_query( $sql );
@@ -411,7 +411,7 @@ function nv_fix_group_order( $parentid = 0, $order = 0, $lev = 0 )
  */
 function nv_show_group_list( $parentid = 0 )
 {
-	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_full, $array_viewcat_nosub, $module_file, $global_config;
+	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_nosub, $module_file, $global_config;
 	
 	$xtpl = new XTemplate( "group_lists.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -731,7 +731,7 @@ function drawselect_number( $select_name = "", $number_start = 0, $number_end = 
  */
 function nv_fix_group_count( $listid )
 {
-	global $db, $module_name, $module_data, $db_config;
+	global $db, $module_data, $db_config;
 	
 	$array_id = explode( ',', $listid );
 	
@@ -753,6 +753,7 @@ function nv_fix_group_count( $listid )
 		}
 	}
 }
+
 /**
  * GetCatidInChild()
  * 
@@ -762,7 +763,9 @@ function nv_fix_group_count( $listid )
 function GetCatidInChild( $catid )
 {
 	global $global_array_cat, $array_cat;
+	
 	$array_cat[] = $catid;
+	
 	if( $global_array_cat[$catid]['parentid'] > 0 )
 	{
 		$array_cat[] = $global_array_cat[$catid]['parentid'];
