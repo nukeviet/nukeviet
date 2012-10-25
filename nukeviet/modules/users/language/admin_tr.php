@@ -5,13 +5,13 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Jun 14, 2011, 02:30:00 AM
+* @Createdate Oct 25, 2012, 12:49:35 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Nukevietdestek.com (destek@nukevietdestek.com)';
-$lang_translator['createdate'] = '14/06/2011, 03:30';
+$lang_translator['createdate'] = '14/06/2011/03:30';
 $lang_translator['copyright'] = '@Copyright (C) 2011 Nukevietdestek.com tüm hakları saklıdır';
 $lang_translator['info'] = 'Dil Sevimsiz tarafından tercüme edildi';
 $lang_translator['langtype'] = 'lang_module';
@@ -161,9 +161,5 @@ $lang_module['add_user'] = 'Kullanıcı %1$s Grupları %2$s';
 $lang_module['exclude_user'] = 'Grupta %1$s kullanıcı sil %2$s';
 $lang_module['siteinfo_user'] = 'Kullanıcılar';
 $lang_module['siteinfo_waiting'] = 'Pasif Kullanıcılar';
-$lang_module['whoviewlistuser'] = 'Kimler üye listesini görebilirsiniz';
-$lang_module['whoview_all'] = 'Tüm';
-$lang_module['whoview_user'] = 'Kullanıcı';
-$lang_module['whoview_admin'] = 'Yönetici';
 
 ?>

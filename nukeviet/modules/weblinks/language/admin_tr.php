@@ -5,13 +5,13 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Jun 14, 2011, 02:30:00 AM
+* @Createdate Oct 25, 2012, 12:49:35 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Nukevietdestek.com (destek@nukevietdestek.com)';
-$lang_translator['createdate'] = '14/06/2011, 03:30';
+$lang_translator['createdate'] = '14/06/2011/03:30';
 $lang_translator['copyright'] = '@Copyright (C) 2011 Nukevietdestek.com tüm hakları saklıdır';
 $lang_translator['info'] = 'Dil Sevimsiz tarafından tercüme edildi';
 $lang_translator['langtype'] = 'lang_module';
@@ -111,7 +111,7 @@ $lang_module['weblink_checkalivelink'] = 'Kontrol bağlantı aracı';
 $lang_module['weblink_check_error'] = '<span style="color:red">Pasif</span><br />';
 $lang_module['weblink_check_active'] = 'Aktif';
 $lang_module['weblink_check_confirm'] = 'Devam';
-$lang_module['weblink_check_notice'] = 'Bunu mu demek istediniz? Number of column to display categories Metin veya web sitesi adresi yazın ya da bir dokümanı çevirin. İptal Dinleyin Fonetik olarak okuyun İngilizce dilinden Türkçe diline çeviri Kontrol etmek için Devam Et düğmesini tıklayın. Bir süre tamamlanmasını bekleyin';
+$lang_module['weblink_check_notice'] = 'Bunu mu demek istediniz? Number of column to display categories Metin veya web sitesi adresi yazın ya da bir dokümanı çevirin. İptal Dinleyin Fonetik olarak okuyun İngilizce dilinden Türkçe diline çeviri Kontrol etmek için Devam Et düğmesini tıklayın<br />Bir süre tamamlanmasını bekleyin<br /><br />';
 $lang_module['weblink_link_broken'] = 'Link notify';
 $lang_module['weblink_link_broken_status'] = 'Link type';
 $lang_module['weblink_link_broken_die'] = '<span style="color:red">Fail</span>';

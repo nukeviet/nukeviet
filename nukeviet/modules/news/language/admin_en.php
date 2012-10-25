@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -89,7 +89,6 @@ $lang_module['viewcat_grid_new'] = 'grid, new front';
 $lang_module['viewcat_grid_old'] = 'grid, old front';
 $lang_module['search'] = 'Search';
 $lang_module['search_type'] = 'Search by';
-$lang_module['search_status'] = 'Status';
 $lang_module['search_id'] = 'ID';
 $lang_module['search_key'] = 'Key word';
 $lang_module['search_cat'] = 'Categories';
@@ -136,10 +135,7 @@ $lang_module['content_sourceid'] = 'Source';
 $lang_module['content_copyright'] = 'Copyright';
 $lang_module['content_saveok'] = 'Successfully recorded data';
 $lang_module['content_main'] = 'Back to management';
-$lang_module['content_back'] = 'Back to edit page';
 $lang_module['redircet_title'] = 'Action well done';
-$lang_module['content_checkcat'] = 'The main topic for this article';
-$lang_module['content_checkcatmsg'] = 'You must choose the main category of the article.';
 $lang_module['content_archive'] = 'Save after expire date';
 $lang_module['showhometext'] = 'Show hometext on view content';
 $lang_module['imgposition'] = 'Article image';
@@ -223,9 +219,14 @@ $lang_module['permissions_del_content'] = 'Delete article';
 $lang_module['permissions_pub_error'] = 'Error: You can not post messages in category: %1$s';
 $lang_module['error_no_del_content_id'] = 'Error: The system does not delete the article id:';
 $lang_module['structure_image_upload'] = 'The module\'s upload images are archived in the default into directory structure';
-$lang_module['config_source'] = 'Configuration shown in detailed source news articles';
-$lang_module['config_source_title'] = 'Show title of sources';
-$lang_module['config_source_link'] = 'Show links of sources';
-$lang_module['config_source_logo'] = 'Show logo of sources';
+$lang_module['content_back'] = 'Back to edit page';
+$lang_module['content_checkcat'] = 'The main topic for this article';
+$lang_module['content_checkcatmsg'] = 'You must choose the main category of the article.';
+$lang_module['config_source'] = 'Configuration display writing source at detail information';
+$lang_module['config_source_title'] = 'Show title of information source';
+$lang_module['config_source_link'] = 'Show link of information source';
+$lang_module['config_source_logo'] = 'Show logo of information source';
+$lang_module['delcat_msg_cat_permissions'] = 'You are not allowed to do this action';
+$lang_module['search_status'] = 'Status';
 
 ?>

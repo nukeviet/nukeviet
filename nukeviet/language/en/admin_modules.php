@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -22,14 +22,12 @@ $lang_module['language'] = 'Setup language';
 $lang_module['setup'] = 'Setup';
 $lang_module['main'] = 'List of modules';
 $lang_module['edit'] = 'Edit modules &ldquo;%s&rdquo;';
-$lang_module['edit_error_update_theme'] = 'The update module is detected on theme %s does not properly or defective, please check again.';
 $lang_module['caption_actmod'] = 'List of active modules';
 $lang_module['caption_deactmod'] = 'List of inactive modules';
 $lang_module['caption_badmod'] = 'List error modules';
 $lang_module['caption_newmod'] = 'List deactive modules';
 $lang_module['module_name'] = 'Module';
 $lang_module['custom_title'] = 'Name';
-$lang_module['admin_title'] = 'Title of administration section';
 $lang_module['weight'] = 'Order';
 $lang_module['in_menu'] = 'Top Menu';
 $lang_module['submenu'] = 'Sub Menu';
@@ -37,7 +35,6 @@ $lang_module['version'] = 'Version';
 $lang_module['settime'] = 'Setup time';
 $lang_module['author'] = 'Author';
 $lang_module['theme'] = 'Theme';
-$lang_module['mobile'] = 'Mobile theme';
 $lang_module['theme_default'] = 'Default';
 $lang_module['keywords'] = 'Keywork';
 $lang_module['keywords_info'] = 'Separated by commas';
@@ -93,9 +90,12 @@ $lang_module['autoinstall_module_error_movefile'] = 'The installation can not co
 $lang_module['autoinstall_package_select'] = 'Select module to package';
 $lang_module['autoinstall_package_noselect'] = 'No module selected';
 $lang_module['autoinstall_package_processing'] = 'please wait to complete...';
+$lang_module['mobile'] = 'Mobile theme';
 $lang_module['delete_module_info1'] = 'This module is used in language <strong>%s</strong>, please delete it in this language before';
 $lang_module['delete_module_info2'] = 'There is %d virtual module created by this module, please delete it before';
+$lang_module['admin_title'] = 'Title of administration section';
 $lang_module['change_func_name'] = 'Rename function "%s" of module "%s"';
-$lang_module['description'] = 'Descripton';
+$lang_module['edit_error_update_theme'] = 'The update module is detected on theme %s does not properly or defective, please check again.';
+$lang_module['description'] = 'Description';
 
 ?>

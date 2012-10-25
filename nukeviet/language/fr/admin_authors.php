@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -48,7 +48,7 @@ $lang_module['full_name_incorrect'] = 'Vous n\'avez pas encore entré le nom de 
 $lang_module['position_incorrect'] = 'Vous n\'avez pas encore entré la fonction de cet administateur';
 $lang_module['nv_admin_add_info'] = 'Pour créer un nouveau compte d\'administration, remplissez tous les champs ci-dessous. Vous ne pouvez créer qu\'un administrateur inférieur de votre privilège';
 $lang_module['if_level3_selected'] = 'Cochez les modules à gérer';
-$lang_module['login_info'] = 'Vous devez entrer le nom d\'utilisateur, s\'il n\'y a pas de membre, vous devez créer un membre d\'abord.';
+$lang_module['login_info'] = 'Vous devez entrer le nom d\'utilisateur, s\'il n\'y a pas d\'utilisateur, vous devez créer un utilisateur d\'abord.';
 $lang_module['nv_admin_add_result'] = 'Infos du nouveau administrateur';
 $lang_module['nv_admin_add_title'] = 'Le système a été créé un nouveau compte d\'administration avec les infos ci-dessous';
 $lang_module['nv_admin_modules'] = 'Gestion de module';
@@ -133,11 +133,11 @@ $lang_module['rule_user'] = 'Utiliser uniquement les caractères a-zA-Z0-9_- pou
 $lang_module['rule_pass'] = 'Utiliser uniquement les caractères a-zA-Z0-9_- pour le mot de passe';
 $lang_module['spadmin_add_admin'] = 'Autoriser l\'administrateur général de changer les droits des administrateurs de module';
 $lang_module['authors_detail_main'] = 'Afficher les détails du compte de l\'administrateur';
-$lang_module['add_user'] = 'Désigner un membre';
+$lang_module['add_user'] = 'Désigner un utilisateur';
 $lang_module['add_select'] = 'Sélectionner';
-$lang_module['add_error_choose'] = 'Erreur: Vous n\'avez pas désigné un membre pour l\'administrateur';
-$lang_module['add_error_exist'] = 'Erreur: ce membre est un administrateur';
-$lang_module['add_error_notexist'] = 'Erreur: ce membre n\'existe pas';
+$lang_module['add_error_choose'] = 'Erreur: Vous n\'avez pas désigné un utilisateur pour l\'administrateur';
+$lang_module['add_error_exist'] = 'Erreur: cet utilisateur est un administrateur';
+$lang_module['add_error_notexist'] = 'Erreur: cet utilisateur n\'existe pas';
 $lang_module['add_error_diff'] = 'Une erreur indéfinie est survenue';
 
 ?>

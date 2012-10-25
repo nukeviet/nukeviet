@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -153,13 +153,13 @@ $lang_module['nv_admin_edit_title'] = 'Chcete-li upravit úlohu, je třeba, abys
 $lang_module['cron_name'] = 'Zaměstnání název';
 $lang_module['file_none'] = 'Nelze připojit';
 $lang_module['run_file'] = 'Lze připojit soubor';
-$lang_module['run_file_info'] = 'Spustitelný soubor je obsazen v adresáři "<strong> includes / cronjobs / </strong>"';
+$lang_module['run_file_info'] = 'Spustitelný soubor je obsazen v adresáři "<strong> includes / cronjobs / </ strong>"';
 $lang_module['run_func'] = 'Připojit funkce';
-$lang_module['run_func_info'] = 'Funkce musí být začínající "<strong> cron_ </strong>"';
+$lang_module['run_func_info'] = 'Funkce musí být začínající "<strong> cron_ </ strong>"';
 $lang_module['params'] = 'Parametr';
 $lang_module['params_info'] = 'Oddělené čárkami';
 $lang_module['interval'] = 'Opakujte práci';
-$lang_module['interval_info'] = 'Pokud si vybere "<strong> 0 </strong>", bude práce provádět pouze jednou';
+$lang_module['interval_info'] = 'Pokud si vybere "<strong> 0 </ strong>", bude práce provádět pouze jednou';
 $lang_module['start_time'] = 'Start čas';
 $lang_module['min'] = 'minuta';
 $lang_module['hour'] = 'hodina';
@@ -187,5 +187,6 @@ $lang_module['closed_site_0'] = 'Stránky byl aktivovat';
 $lang_module['closed_site_1'] = 'Uzavření stránky .Přístup pouze k Nejvyššímu správnímu';
 $lang_module['closed_site_2'] = 'Uzavření stránky .Přístupných pouze moderátoři';
 $lang_module['closed_site_3'] = 'Uzavření stránky .Přístup všechny admin';
+$lang_module['getloadavg'] = 'Zkontrolujte stav serveru, jestli  > 80% bude oznámení že  "Server too busy. Please try again later"';
 
 ?>

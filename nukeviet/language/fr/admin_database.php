@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -67,7 +67,7 @@ $lang_module['save_ok'] = 'Sauvegarder avec succès';
 $lang_module['save_download'] = 'Cliquez ici pour télécharger le fichier.';
 $lang_module['dump_autobackup'] = 'Activer le sauvegarde automatique de données';
 $lang_module['dump_backup_ext'] = 'Type de fichier de données';
-$lang_module['dump_backup_day'] = 'Nombre de backups';
+$lang_module['dump_backup_day'] = 'Temps de garder les backups (jours)';
 $lang_module['file_backup'] = 'Backups';
 $lang_module['file_nb'] = 'Ordre';
 $lang_module['file_name'] = 'Nom du fichier';

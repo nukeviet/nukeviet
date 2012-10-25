@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 30, 2010, 04:40:00 PM
+* @Createdate Jun 30, 2010, 10:40:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '30/06/2010, 17:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -111,7 +111,7 @@ $lang_module['weblink_checkalivelink'] = 'Outil de vérification de lien';
 $lang_module['weblink_check_error'] = '<span style="color:red"> Inactif </ span> <br />';
 $lang_module['weblink_check_active'] = 'Actif <br />';
 $lang_module['weblink_check_confirm'] = 'Continuer';
-$lang_module['weblink_check_notice'] = 'Pour vérifier, cliquez sur Continuer. Merci de patienter un certain temps pour terminer.';
+$lang_module['weblink_check_notice'] = 'Cliquer sur Continuer pour vérifier. Merci de patienter un certain temps pour que le procès termine';
 $lang_module['weblink_link_broken'] = 'Rapports';
 $lang_module['weblink_link_broken_status'] = 'Type de lien';
 $lang_module['weblink_link_broken_die'] = '> <span Style="color:red">Cassé </span>';

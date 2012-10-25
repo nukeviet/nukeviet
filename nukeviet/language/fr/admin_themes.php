@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 04:30:00 PM
+* @Createdate Jun 21, 2010, 10:30:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 17:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -157,8 +157,6 @@ $lang_module['block_weight'] = 'Rétablir la position des blocks';
 $lang_module['block_weight_confirm'] = 'Êtes vous sur de vouloir rétablir la position des blocks?';
 $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Notification: Fichiers existants. Voulez-vous remplacer ces fichiers?';
 $lang_module['autoinstall_theme_overwrite'] = 'Remplacer';
-$lang_module['block_error_title'] = 'Vous n\'avez pas nommé le block ou ce nom a été utilisé !';
-$lang_module['error_empty_title'] = 'Vous n\'avez pas nommé le block';
-$lang_module['error_invalid_url'] = 'Lien incorrect';
+$lang_module['block_error_nsblock'] = 'Block pas encore choisi ou nom du block invalide';
 
 ?>

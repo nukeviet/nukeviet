@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Oct 17, 2012, 07:18:48 AM
+* @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] = '';
-$lang_translator['createdate'] = '';
-$lang_translator['copyright'] = '';
+$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['createdate'] = '15/04/2011, 15:22';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -38,7 +38,6 @@ $lang_module['m_list'] = 'Menu list';
 $lang_module['add_type_menu'] = 'Select menu type';
 $lang_module['module_name'] = 'Select module';
 $lang_module['cho_module'] = 'Select module';
-$lang_module['error_menu_block'] = 'Error: Enter name of menu block';
 $lang_module['action'] = 'Activities';
 $lang_module['data_no'] = 'There is no data in the system';
 $lang_module['block'] = 'This menu block has';
@@ -81,5 +80,6 @@ $lang_module['add_type_css'] = 'CSS class name.';
 $lang_module['add_type_css_info'] = 'Class name (CSS) to define the menu interface.';
 $lang_module['add_error_module'] = 'Error: No any module selected';
 $lang_module['add_error_module_exist'] = 'Error: Module not exist';
+$lang_module['error_menu_block'] = 'Error: Enter name of menu block';
 
 ?>

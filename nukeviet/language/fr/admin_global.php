@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_global';
 
@@ -36,9 +36,9 @@ $lang_global['admin_password'] = 'Votre mot de passe';
 $lang_global['admin_no_allow_func'] = 'Vous n\'êtes pas authorisé d\'accéder à cette fonction';
 $lang_global['who_view'] = 'Afficher pour';
 $lang_global['who_view0'] = 'Tous';
-$lang_global['who_view1'] = 'Membres';
+$lang_global['who_view1'] = 'Utilisateurs';
 $lang_global['who_view2'] = 'Administrateurs';
-$lang_global['who_view3'] = 'Groupe de membres';
+$lang_global['who_view3'] = 'Groupe d\'utilisateurs';
 $lang_global['groups_view'] = 'Les groupes autorisés';
 $lang_global['block_modules'] = 'Blocks de modules';
 $lang_global['hello_admin1'] = 'Bonjour %1$s ! Votre dernière session était à %2$s';

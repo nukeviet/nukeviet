@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_global';
 
@@ -56,7 +56,6 @@ $lang_global['admin_page'] = 'Administration';
 $lang_global['admin_module_sector'] = 'Module Management';
 $lang_global['adminlogin'] = 'Login to Administration';
 $lang_global['module_for_admin'] = 'We are Sorry but this section of our site is for <i>Administrators Only.</i>';
-$lang_global['in_groups'] = 'Members Groups';
 $lang_global['username'] = 'Username';
 $lang_global['password'] = 'Password';
 $lang_global['password2'] = 'Repeat password';
@@ -89,7 +88,7 @@ $lang_global['month'] = 'Month';
 $lang_global['year'] = 'Year';
 $lang_global['today'] = 'Today';
 $lang_global['current_month'] = 'This month';
-$lang_global['nojs'] = 'Your browser has disabled JavaScript .<br />Website only work when it enable.<br />To enable JAVASCRIPT, Please<a href="http://www.google.com/support/bin/answer.py?hl=en&answer=23852">click here</a>!';
+$lang_global['nojs'] = 'Your browser has disabled JavaScript .<br />Website only work when it enable.<br />To enable JavaScript, Please<a >click here</a>!';
 $lang_global['sun'] = 'SUN';
 $lang_global['mon'] = 'MON';
 $lang_global['tue'] = 'TUE';
@@ -171,7 +170,6 @@ $lang_global['unlimited'] = 'unlimited';
 $lang_global['status'] = 'Status';
 $lang_global['actions'] = 'Action';
 $lang_global['never'] = 'Never';
-$lang_global['page'] = 'Page';
 $lang_global['pageprev'] = 'Previous page';
 $lang_global['pagenext'] = 'Next page';
 $lang_global['langinterface'] = 'Language';
@@ -238,6 +236,8 @@ $lang_global['error_upload_forbidden'] = 'Error: The folder containing the file 
 $lang_global['error_upload_writable'] = 'Directory %s is not writable';
 $lang_global['error_upload_urlfile'] = 'The URL is not valid and cannot be loaded';
 $lang_global['error_upload_url_notfound'] = 'The url was not found';
+$lang_global['in_groups'] = 'Members Groups';
+$lang_global['page'] = 'Page';
 $lang_global['theme_type_0'] = 'Desktop';
 $lang_global['theme_type_1'] = 'Mobile';
 $lang_global['theme_type_chose'] = 'Switch to %s theme';

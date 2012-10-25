@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 30, 2010, 06:30:00 PM
+* @Createdate Jun 29, 2010, 05:00:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
-$lang_translator['createdate'] = '30/06/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['createdate'] = '30/06/2010';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -87,5 +87,14 @@ $lang_module['maxSizeSize'] = 'Taille maximum: %dx%dpx';
 $lang_module['addlogo'] = 'Ajouter le logo';
 $lang_module['addlogosave'] = 'Sauver';
 $lang_module['notlogo'] = 'Erreur: logo introuvable';
+$lang_module['upload_logo'] = 'Logo à ajouter aux images';
+$lang_module['selectimg'] = 'Sélectionner l\'image';
+$lang_module['autologo'] = 'Ajouter automatiquement le logo aux images';
+$lang_module['autologomodall'] = 'Tous les modules';
+$lang_module['logosizecaption'] = 'Taille de logo';
+$lang_module['imagewith'] = 'Si la largeur de l\'image';
+$lang_module['logowith'] = 'Largeur de logo est égale';
+$lang_module['logosize3'] = 'Utiliser la taille originale du logo, taille maximum du logo';
+$lang_module['fileimage'] = 'image';
 
 ?>

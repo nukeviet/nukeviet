@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -161,5 +161,27 @@ $lang_module['add_user'] = 'Členské%1$s skupina%2$s';
 $lang_module['exclude_user'] = 'Odstranit člen%1$s ve skupině%2$s';
 $lang_module['siteinfo_user'] = 'Celkem členy';
 $lang_module['siteinfo_waiting'] = 'Počet členů čeká na aktivaci';
+$lang_module['allow_public'] = 'Povolit registrovaných veřejné skupiny';
+$lang_module['allow_question'] = 'Odpověď na otázku tajemství , když zapomenu své heslo';
+$lang_module['pagetitle'] = 'ID členové';
+$lang_module['pagetitle1'] = 'Hledat ID členové';
+$lang_module['search'] = 'Hledat členové';
+$lang_module['reset'] = 'reset';
+$lang_module['waiting'] = 'Zadejte údaje a stiskněte tlačítko Hledat člen';
+$lang_module['from'] = 'od';
+$lang_module['to'] = 'do';
+$lang_module['select'] = 'Vybrat';
+$lang_module['noresult'] = 'Žádné výsledků na vaše požadat';
+$lang_module['enter_key'] = 'zadejte slovo';
+$lang_module['username'] = 'uživatel';
+$lang_module['full_name'] = 'Přímení a jméno';
+$lang_module['regdate'] = 'Datum registrace';
+$lang_module['yim'] = 'Yahoo učet';
+$lang_module['last_login'] = 'Poslední příhlášit';
+$lang_module['last_idlogin'] = 'IP poslední příhlášit';
+$lang_module['web'] = 'Website';
+$lang_module['select_gender'] = 'Vyberte pohlaví';
+$lang_module['select_gender_male'] = 'Muže';
+$lang_module['select_gender_female'] = 'Ženy';
 
 ?>

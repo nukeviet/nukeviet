@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -56,7 +56,6 @@ $lang_module['block_change_pos_warning'] = 'If you change the position of this b
 $lang_module['block_change_pos_warning2'] = 'Do you want to change position?';
 $lang_module['block_error_nogroup'] = 'Please select at least 1 group';
 $lang_module['block_error_noblock'] = 'Please select at least 1 block';
-$lang_module['block_error_nsblock'] = 'Block not yet selected or title of block invalid';
 $lang_module['block_delete_confirm'] = 'Are you sure you want to delete all the selected block. If this will not be deleted to recover?';
 $lang_module['block_delete_per_confirm'] = 'Are you sure you want to remove this block?';
 $lang_module['block_add_success'] = 'Add successful';
@@ -158,8 +157,6 @@ $lang_module['block_weight'] = 'Set the position of block';
 $lang_module['block_weight_confirm'] = 'Do you want to set up the position of block? The settings in the function will be the settings.';
 $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Info: Package interfaces you install the file already exists, you have to make sure the installation to overwrite this file';
 $lang_module['autoinstall_theme_overwrite'] = 'Overwrite';
-$lang_module['block_error_title'] = 'Block title is empty or exists!';
-$lang_module['error_empty_title'] = 'You do not declare block name';
-$lang_module['error_invalid_url'] = 'you have entered URL that does not correct';
+$lang_module['block_error_nsblock'] = 'Block not yet selected or title of block invalid';
 
 ?>

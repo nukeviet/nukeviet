@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -142,5 +142,7 @@ $lang_module['save_content_waite'] = 'Příjem článků potvrzen, <br /> schvá
 $lang_module['save_content_waite_home'] = 'Příjem článků potvrzen, <br /> schválíme váš článek a zveřejníme ho v nejbližší době, <br /> Prohlížeč vás převede  zpět na hlavní stránku';
 $lang_module['error_addcontent'] = 'Chyba: nemáte právo posílat články';
 $lang_module['errorsave'] = 'Chyba : název článku již existuje.';
+$lang_module['update_content'] = 'Editovat příspěvky';
+$lang_module['del_content'] = 'Smazat příspěvky';
 
 ?>

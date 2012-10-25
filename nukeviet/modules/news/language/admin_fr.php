@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -89,7 +89,6 @@ $lang_module['viewcat_grid_new'] = 'par grille, nouveau en haut';
 $lang_module['viewcat_grid_old'] = 'par grille, ancien en haut';
 $lang_module['search'] = 'Rechercher';
 $lang_module['search_type'] = 'Recherche par';
-$lang_module['search_status'] = 'Statut';
 $lang_module['search_id'] = 'ID';
 $lang_module['search_key'] = 'Mot clé';
 $lang_module['search_cat'] = 'Catégorie';
@@ -136,10 +135,7 @@ $lang_module['content_sourceid'] = 'Source';
 $lang_module['content_copyright'] = 'Garder le droit d\'auteur';
 $lang_module['content_saveok'] = 'Enregistrement de données avec succès';
 $lang_module['content_main'] = 'Retour à la gestion';
-$lang_module['content_back'] = 'Retour à l\'administration';
 $lang_module['redircet_title'] = 'Action réussie';
-$lang_module['content_checkcat'] = 'Catégorie de l\'article';
-$lang_module['content_checkcatmsg'] = 'Veuillez choisir la catégorie pour l\'article';
 $lang_module['content_archive'] = 'Archiver à l\'expiration';
 $lang_module['showhometext'] = 'Afficher l\'introduction lors de la lecture d\'article complet';
 $lang_module['imgposition'] = 'Position de l\'image';
@@ -190,13 +186,13 @@ $lang_module['addtotopics'] = 'Ajout au sujet';
 $lang_module['topic_update_success'] = 'Mise à jour réussie !';
 $lang_module['topic_num_news'] = 'articles';
 $lang_module['siteinfo_publtime'] = 'Total des articles actifs';
-$lang_module['siteinfo_users_send'] = 'Articles envoyés par les membres';
+$lang_module['siteinfo_users_send'] = 'Articles envoyés par les utilisateurs';
 $lang_module['siteinfo_pending'] = 'Articles suspens';
 $lang_module['siteinfo_expired'] = 'Articles expirés';
 $lang_module['siteinfo_exptime'] = 'Articles à peine expirés';
 $lang_module['siteinfo_comment'] = 'Commentaires publiés';
 $lang_module['siteinfo_comment_pending'] = 'Commentaires suspens';
-$lang_module['group_content'] = 'Configuration d’envoi des membres';
+$lang_module['group_content'] = 'Configuration d’envoi des utilisateurs';
 $lang_module['group_addcontent'] = 'Envoi autorisé';
 $lang_module['group_postcontent'] = 'Publier sans censurer';
 $lang_module['group_editcontent'] = 'Édition des articles publiés autorisée';
@@ -204,7 +200,7 @@ $lang_module['group_delcontent'] = 'Suppression autorisée';
 $lang_module['admin'] = 'Décentralisation de la gestion';
 $lang_module['admin_permissions'] = 'Pouvoirs';
 $lang_module['admin_edit'] = 'Modifier le pouvoir';
-$lang_module['admin_edit_user'] = 'Changer les droits de membre';
+$lang_module['admin_edit_user'] = 'Changer les droits d\'utilisateur';
 $lang_module['admin_full_module'] = 'Administrateur du module';
 $lang_module['admin_module'] = 'Administrateur de module';
 $lang_module['admin_module_for_user'] = 'Vous avez tous les pouvoirs du module, hors de la gestion décentralisée';
@@ -223,9 +219,14 @@ $lang_module['permissions_del_content'] = 'Supprimer l\'article';
 $lang_module['permissions_pub_error'] = 'Erreur: Vous ne pouvez pas poster les articles dans la catégorie: %1$s';
 $lang_module['error_no_del_content_id'] = 'Erreur: impossible de supprimer l\'article ayant ID:';
 $lang_module['structure_image_upload'] = 'Les images envoyées du module est stockés selon la structure de dossier';
-$lang_module['config_source'] = 'Configuration indiqué dans détaillées articles de presse sources';
+$lang_module['content_back'] = 'Retour à l\'administration';
+$lang_module['content_checkcat'] = 'Catégorie de l\'article';
+$lang_module['content_checkcatmsg'] = 'Veuillez choisir la catégorie pour l\'article';
+$lang_module['config_source'] = 'Méthode d\'afficher la source de l’article';
 $lang_module['config_source_title'] = 'Afficher le titre de la source';
-$lang_module['config_source_link'] = 'Afficher les liens de sources';
-$lang_module['config_source_logo'] = 'Afficher le logo des sources';
+$lang_module['config_source_link'] = 'Afficher le lien de la source';
+$lang_module['config_source_logo'] = 'Afficher le logo de la source';
+$lang_module['delcat_msg_cat_permissions'] = 'Vous n’êtes pas autorisé à faire cette action';
+$lang_module['search_status'] = 'État';
 
 ?>

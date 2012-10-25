@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -111,7 +111,7 @@ $lang_module['weblink_checkalivelink'] = 'Check link tool';
 $lang_module['weblink_check_error'] = '<span style="color:red">Deactive</span><br />';
 $lang_module['weblink_check_active'] = 'Active <br />';
 $lang_module['weblink_check_confirm'] = 'Continue';
-$lang_module['weblink_check_notice'] = 'To check, Please click Continue button. Wait for some time to finish';
+$lang_module['weblink_check_notice'] = 'Click Continue to Check. Please wait a moment';
 $lang_module['weblink_link_broken'] = 'Link notify';
 $lang_module['weblink_link_broken_status'] = 'Link type';
 $lang_module['weblink_link_broken_die'] = '<span style="color:red">Fail</span>';

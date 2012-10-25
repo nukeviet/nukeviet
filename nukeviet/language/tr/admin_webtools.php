@@ -5,13 +5,13 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Jun 14, 2011, 02:30:00 AM
+* @Createdate Oct 25, 2012, 12:49:35 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Nukevietdestek.com (destek@nukevietdestek.com)';
-$lang_translator['createdate'] = '14/06/2011, 03:30';
+$lang_translator['createdate'] = '14/06/2011/03:30';
 $lang_translator['copyright'] = '@Copyright (C) 2011 Nukevietdestek.com tüm hakları saklıdır';
 $lang_translator['info'] = 'Dil Sevimsiz tarafından tercüme edildi';
 $lang_translator['langtype'] = 'lang_module';
@@ -111,42 +111,5 @@ $lang_module['config'] = 'Yapılandırma';
 $lang_module['autocheckupdate'] = 'Otomatik versiyon denetimini etkinleştir';
 $lang_module['updatetime'] = 'Zaman yeni sürümünü kontrol etmek';
 $lang_module['clearip_logs'] = 'Ip kayıtları silme';
-$lang_module['revision_no_support'] = 'Error, function only use this for greater than the NukeViet version 3.0.12';
-$lang_module['revision'] = 'Güncelleme';
-$lang_module['revision_nochange'] = 'Yeni güncelleme yok';
-$lang_module['revision_error'] = 'Error: The system is not connected with SVN Server,please check again later';
-$lang_module['autoupdate_system'] = 'Automatic upgrade site';
-$lang_module['autoupdate_get_error'] = 'Notice: System does not check the version upgrade Nukeviet';
-$lang_module['autoupdate_download'] = 'Download Nukeviet güncelleştirme paketleri';
-$lang_module['autoupdate_download_waiting'] = 'Please wait the system download complete. <br /> <br />If the download or extract then fails, you download files <br /> <br /> <a title="Please click to download" href="%1$s" />%$s <br /><br /> unzip and upload to the folder install/update/ to proceed';
-$lang_module['autoupdate_download_error'] = 'Download or unzip then fail, you download files <br /><br /><a title="Click here to download" href="%1$s">%2$s</a> <br /> <br /> unzip and upload to the folder install/update/ to proceed';
-$lang_module['autoupdate_invalidfile'] = 'Hatası: zip dosyası geçersiz';
-$lang_module['autoupdate_download_complete'] = 'Dosya indirme Başarılı, güncellemeler işlemine devam etmek için onay tıklayınız.';
-$lang_module['autoupdate_form_upload'] = 'Sistem güncellemeleri işlemine devam etmek için onay tıklayınız, bir sürüm yükseltme tespit etti.';
-$lang_module['autoupdate_check_file'] = 'Güncelleştirmeleri denetleyin';
-$lang_module['autoupdate_error_dir_update'] = 'Hata: güncelleştirme paketi düzgün değil, klasör kontrol ediniz: install / güncelleme';
-$lang_module['autoupdate_change'] = 'The system has checked that you\'ve changed the following files from the original';
-$lang_module['autoupdate_overwrite'] = 'If you want to overwrite this file, please click on the button to upgrade';
-$lang_module['autoupdate_click_update'] = 'Please click on upgrade button';
-$lang_module['autoupdate_backupfile'] = 'If you continue the upgrade process, will create a file system backup of the file changes';
-$lang_module['autoupdate_backupfile_error'] = 'Upgrade process error: The system does not create backup file, please check the directory chmode';
-$lang_module['autoupdate'] = 'System upgrade';
-$lang_module['autoupdate_confirm'] = 'Are you sure you upgrade your system';
-$lang_module['autoupdate_error_create_folder'] = 'Yükseltme işlemi hata: sistem aşağıdaki klasörler oluşturamaz';
-$lang_module['autoupdate_error_move_file'] = 'Yükseltme işlemi hata: sistem aşağıdaki dosyaları taşıyamaz';
-$lang_module['autoupdate_complete_file'] = 'Uyarı: Sistem dosyaları başarılı bir şekilde taşıma işlemi gerçekleştirdi';
-$lang_module['autoupdate_complete'] = 'Yükseltme işlemi tamamlayın';
-$lang_module['autoupdate_complete_error_del_file'] = 'Başarılı bir şekilde yükseltme yapıldı. Eğer install klasörü / sunucu üzerindeyse silmeniz gerekir';
-$lang_module['autoupdate_error_data'] = 'And see the error on database update';
-$lang_module['revision_nosuport'] = 'Error: The updated system will only support revision from the 3.1 Nukeviet';
-$lang_module['revision_error_cache_file'] = 'Hata: Sistem değil günlük güncellemeleri dosya bulundu';
-$lang_module['revision_list_file'] = 'The system has detected update information files changed as follows';
-$lang_module['revision_add_files'] = 'Yeni Dosyalar';
-$lang_module['revision_mod_files'] = 'Değiştirilmiş dosyalar';
-$lang_module['revision_del_files'] = 'Silinmiş Dosyalar';
-$lang_module['revision_msg_download'] = 'To make updates you need to click on "Proceed to download files" for the system to download the necessary files, the download process faster or slower depending on the number of files and your network, please wait until has announced the next step';
-$lang_module['revision_download_files'] = 'Proceed to download files';
-$lang_module['revision_download_error'] = 'Hataları ile dosya indirme işlemi';
-$lang_module['revision_config_ftp'] = 'Bunu sistem oluşturabilir ve dosya taşımak, yapılandırmak için Configuration menüsünden FTP Config yapılandırmanız gerekir.';
 
 ?>

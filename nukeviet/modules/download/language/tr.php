@@ -5,13 +5,13 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Jun 14, 2011, 02:30:00 AM
+* @Createdate Oct 25, 2012, 12:49:35 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Nukevietdestek.com (destek@nukevietdestek.com)';
-$lang_translator['createdate'] = '14/06/2011, 03:30';
+$lang_translator['createdate'] = '14/06/2011/03:30';
 $lang_translator['copyright'] = '@Copyright (C) 2011 Nukevietdestek.com tüm hakları saklıdır';
 $lang_translator['info'] = 'Dil Sevimsiz tarafından tercüme edildi';
 $lang_translator['langtype'] = 'lang_module';
@@ -118,7 +118,5 @@ $lang_module['search_option'] = 'Lütfen bir konu seçin';
 $lang_module['search_result'] = 'Arama Sonuçları';
 $lang_module['search_noresult'] = 'No data suitable to your requirements!';
 $lang_module['upload_files_log'] = 'Yeni dosya Mesaj';
-$lang_module['error_not_permission_title'] = 'Üzgünüz, bu belge görüntülemek için izniniz yok!';
-$lang_module['error_not_permission_content'] = 'Yönetici belgenin içeriğine erişim erişmesine izin verilmez. Decode cevap olmak için lütfen bize ulaşın';
 
 ?>

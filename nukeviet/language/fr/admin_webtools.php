@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Oct 17, 2012, 07:19:01 AM
+* @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] = '';
-$lang_translator['createdate'] = '';
-$lang_translator['copyright'] = '';
+$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['createdate'] = '15/04/2011, 15:22';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = 'Language translated from http://translate.nukeviet.vn';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -107,9 +107,10 @@ $lang_module['nukevietChange_updated'] = 'Mis à jour';
 $lang_module['nukevietChange_modify'] = 'Modifier';
 $lang_module['nukevietChange_add'] = 'Ajouter';
 $lang_module['nukevietChange_delete'] = 'Supprimer';
-$lang_module['config'] = 'Configuration';
+$lang_module['config'] = 'Configuration de la vérification de version';
 $lang_module['autocheckupdate'] = 'Activer la mise à jour automatique';
 $lang_module['updatetime'] = 'Échéance de vérification';
 $lang_module['clearip_logs'] = 'Effacer ip logs';
+$lang_module['update_manual_delete'] = 'Merci de supprimer manuellement';
 
 ?>

@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -127,9 +127,9 @@ $lang_module['log_edit_theme'] = 'modifier thème';
 $lang_module['log_intall_theme'] = 'installer thème';
 $lang_module['log_setlayout_theme'] = 'établir layout';
 $lang_module['log_del_block'] = 'supprimer block';
-$lang_module['log_del_user'] = 'modifier membre';
-$lang_module['log_add_user'] = 'ajouter membre';
-$lang_module['log_edit_user'] = 'modifier membre';
+$lang_module['log_del_user'] = 'modifier utilisateur';
+$lang_module['log_add_user'] = 'ajouter utilisateur';
+$lang_module['log_edit_user'] = 'modifier utilisateur';
 $lang_module['log_del_vote'] = 'supprimer évaluation';
 $lang_module['log_add_vote'] = 'ajouter vote';
 $lang_module['log_edit_vote'] = 'modifier vote';
@@ -150,5 +150,9 @@ $lang_module['filter_lang_desc'] = 'descendant';
 $lang_module['filter_order_by'] = 'Arranger par ordre %s';
 $lang_module['log_empty'] = 'Supprimer tout';
 $lang_module['log_empty_log'] = 'Supprimer tous les historiques du système';
+$lang_module['pendingInfo'] = 'Tâches en attente des modules';
+$lang_module['update_package_detected'] = 'Mise à jours disponibles, le site sera en suspens. Merci de faire 1 de 2 procès suivants avant que le site puisse remet en marche';
+$lang_module['update_package_delete'] = 'Supprimer la mise à jour';
+$lang_module['update_package_do'] = 'Mettre à jour';
 
 ?>

@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -25,7 +25,6 @@ $lang_module['nv_admin_read'] = 'Read file in database';
 $lang_module['nv_admin_read_all'] = 'Read all file in database';
 $lang_module['nv_admin_sl1'] = 'Choose new language';
 $lang_module['nv_admin_sl2'] = 'Method';
-$lang_module['nv_admin_sl3'] = 'Select a language';
 $lang_module['nv_admin_submit'] = 'Submit';
 $lang_module['nv_lang_module'] = 'Module';
 $lang_module['nv_admin_write'] = 'Export to file';
@@ -83,5 +82,6 @@ $lang_module['nv_check_type_2'] = 'Check all';
 $lang_module['nv_lang_check_title'] = 'Check the language has not been translated';
 $lang_module['countries'] = 'Language by country';
 $lang_module['countries_name'] = 'Country';
+$lang_module['nv_admin_sl3'] = 'Select a language';
 
 ?>

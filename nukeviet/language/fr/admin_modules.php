@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 04:30:00 PM
+* @Createdate Jun 21, 2010, 10:30:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 17:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -35,7 +35,6 @@ $lang_module['version'] = 'Version';
 $lang_module['settime'] = 'Date d\'installation';
 $lang_module['author'] = 'Auteur';
 $lang_module['theme'] = 'Thème';
-$lang_module['mobile'] = 'Theme mobile';
 $lang_module['theme_default'] = 'Défaut';
 $lang_module['keywords'] = 'Mots clés';
 $lang_module['keywords_info'] = 'Séparer par virgule';
@@ -91,8 +90,12 @@ $lang_module['autoinstall_module_error_movefile'] = 'Installation automatique im
 $lang_module['autoinstall_package_select'] = 'Choisir le module à paqueter';
 $lang_module['autoinstall_package_noselect'] = 'Il faut sé1ectionner un module pour paqueter';
 $lang_module['autoinstall_package_processing'] = 'Veuillez patienter quelques instants...';
+$lang_module['mobile'] = 'Theme mobile';
 $lang_module['delete_module_info1'] = 'Ce module existe sur la langue <strong>%s</strong>, il faut tout d\'abord supprimer ce module sur cette langue';
 $lang_module['delete_module_info2'] = 'Il y a %d modules virtuels basés sur ce module, il faut les supprimer d\'abord';
+$lang_module['admin_title'] = 'Titre de la section d\'administration';
+$lang_module['change_func_name'] = 'Changer le nom de la fonction "%s" de module "%s"';
+$lang_module['edit_error_update_theme'] = 'La mise a jour a détecté que le thème  %s est invalide ou erroné, merci de vérifier';
 $lang_module['description'] = 'Description';
 
 ?>

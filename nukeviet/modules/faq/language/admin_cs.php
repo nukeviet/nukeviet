@@ -5,10 +5,10 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 17, 2012, 07:18:54 AM
+* @Createdate Oct 25, 2012, 12:49:49 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = '';
 $lang_translator['createdate'] = '';
@@ -54,5 +54,11 @@ $lang_module['faq_manager'] = 'správce často kladené otázky';
 $lang_module['faq_pos'] = 'Umístění';
 $lang_module['faq_feature'] = 'Funkce';
 $lang_module['faq_active'] = 'Aktivity';
+$lang_module['nocat'] = 'Žádná témata';
+$lang_module['config'] = 'configurace';
+$lang_module['config_type_main'] = 'Configurace hlavní stránka';
+$lang_module['config_type_main_0'] = 'Zobrazit témata';
+$lang_module['config_type_main_1'] = 'Nějnověší';
+$lang_module['config_type_main_2'] = 'Nějstarší';
 
 ?>

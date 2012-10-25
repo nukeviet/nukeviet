@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -157,8 +157,5 @@ $lang_module['block_weight'] = 'Nastavení umístění blocku.';
 $lang_module['block_weight_confirm'] = 'Chcete opravdu nastavit umístění blocku ? Po nastavení budou funkce změněny podle nových umístění.';
 $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Pozor : Šablony již existují,chcete je přepsat a pokračovat ?';
 $lang_module['autoinstall_theme_overwrite'] = 'Potvrdit';
-$lang_module['block_error_title'] = 'Blok titule je prázdný nebo neexistuje!';
-$lang_module['error_empty_title'] = 'Nemáte deklarovat jméno bloku';
-$lang_module['error_invalid_url'] = 'jste zadali adresu URL, která nevyřeší';
 
 ?>

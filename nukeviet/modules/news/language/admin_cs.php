@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -89,7 +89,6 @@ $lang_module['viewcat_grid_new'] = 'nové kolonky nahoru';
 $lang_module['viewcat_grid_old'] = 'staré kolonky nahoru';
 $lang_module['search'] = 'Hledání';
 $lang_module['search_type'] = 'Vyhledávání podle';
-$lang_module['search_status'] = 'Postavení';
 $lang_module['search_id'] = 'ID';
 $lang_module['search_key'] = 'Klíčové slovo';
 $lang_module['search_cat'] = 'Kategorie';
@@ -202,8 +201,12 @@ $lang_module['admin'] = 'Rozdělení práva na správu.';
 $lang_module['admin_permissions'] = 'práva';
 $lang_module['admin_edit'] = 'Editovat práva';
 $lang_module['admin_edit_user'] = 'editovat práva členové';
+$lang_module['admin_full_module'] = 'Všechny práva modulu';
 $lang_module['admin_module'] = 'Správce module';
+$lang_module['admin_module_for_user'] = 'Máte všechny práva modulu,only není decentralizované řízení';
 $lang_module['admin_cat'] = 'správce category';
+$lang_module['admin_cat_for_user'] = 'Vaše práva v kategorii';
+$lang_module['admin_no_user'] = 'Pouze správce modulu,musíte přídat správce než decentralizované řízení';
 $lang_module['admin_userid'] = 'ID';
 $lang_module['admin_username'] = 'Uživatelské jméno';
 $lang_module['admin_full_name'] = 'Přímení a jméno';
@@ -216,9 +219,6 @@ $lang_module['permissions_del_content'] = 'smazat članky';
 $lang_module['permissions_pub_error'] = 'Chyba : nemůžete přidat články do : %1$s';
 $lang_module['error_no_del_content_id'] = 'Chyba : systém nemůže smazat články s id:';
 $lang_module['structure_image_upload'] = 'Obrázek v modulu bude uložen podle default.';
-$lang_module['config_source'] = 'Konfigurace je uvedeno v podrobných článků zdrojových zpráv';
-$lang_module['config_source_title'] = 'Zobrazit zdrojový titul';
-$lang_module['config_source_link'] = 'Zobrazit odkazy na zdroje';
-$lang_module['config_source_logo'] = 'Zobrazit logo zdrojů';
+$lang_module['content_back'] = 'Zpět editovat příspěvky';
 
 ?>

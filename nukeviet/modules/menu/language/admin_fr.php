@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Oct 17, 2012, 07:19:02 AM
+* @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] = '';
-$lang_translator['createdate'] = '';
-$lang_translator['copyright'] = '';
+$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['createdate'] = '15/04/2011, 15:22';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = 'Language translated from http://translate.nukeviet.vn';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -32,7 +32,7 @@ $lang_module['number'] = 'Ordre';
 $lang_module['type_header'] = 'Top Menu';
 $lang_module['type_along'] = 'Menu vertical';
 $lang_module['type_footer'] = 'Menu en bas';
-$lang_module['menu'] = 'Menu';
+$lang_module['menu'] = 'Sous-Menu';
 $lang_module['type_tree'] = 'Menu arborescent';
 $lang_module['m_list'] = 'Liste des menus';
 $lang_module['add_type_menu'] = 'Choisissez Type de Menu';
@@ -66,7 +66,20 @@ $lang_module['cats'] = 'Appartenir à l’élément';
 $lang_module['caton'] = 'Si vous voulez supprimer ce menu, supprimez ou déplacez d\'abord les sous-menus';
 $lang_module['error_menu_link'] = 'Erreur: Vous n\'avez pas saisi le lien';
 $lang_module['name_block'] = 'Block de Menu';
-$lang_module['name_blog'] = 'Menu';
-$lang_module['error_menu_blog'] = 'Erreur: Aucun block menu';
+$lang_module['here'] = 'ici';
+$lang_module['groups'] = 'Sélectionner les groupes';
+$lang_module['sub_menu'] = 'Sous-menu';
+$lang_module['main_note_0'] = 'Cliquer';
+$lang_module['main_note_1'] = 'Cliquer sur le nom du menu pour créer les nouveaux menu ou pour éditer. Vous pouvez créer plusieurs menu pour utiliser aux différents thèmes et positions.';
+$lang_module['add_type_active'] = 'Menu actif';
+$lang_module['add_type_active_note'] = 'La façon de de préciser si un menu est actif est de comparer le lien défini par menu avec le lien réel de la page';
+$lang_module['add_type_active_0'] = 'Même lien que le menu';
+$lang_module['add_type_active_1'] = 'Commencer avec le lien du menu';
+$lang_module['add_type_active_2'] = 'Contenir le lien du menu';
+$lang_module['add_type_css'] = 'Nom de la classe CSS';
+$lang_module['add_type_css_info'] = 'Nom de la classe (CSS) pour déterminer ce menu';
+$lang_module['add_error_module'] = 'Erreur: aucun module désigné';
+$lang_module['add_error_module_exist'] = 'Erreur: module inexistant';
+$lang_module['error_menu_block'] = 'Erreur: manque de nom du menu';
 
 ?>

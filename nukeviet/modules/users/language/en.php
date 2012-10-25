@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -121,9 +121,9 @@ $lang_module['logout_title'] = 'Logout';
 $lang_module['edit_info_title'] = 'Edit';
 $lang_module['img_size_title'] = 'Image size';
 $lang_module['email_active'] = 'Activation information for changing email';
-$lang_module['email_active_info'] = 'Hi %1$s, Your are changed email address of account %2$s, so youd should reactive the account. To active, you click to link below: <br /><br />URL: %3$s<br /><br />The activation the account only enabled to %4$s. <br /><br />This is automatically message from website %5$s to your email. If you do not understand the content of this message. Simple please delete it! <br /><br /><br /><br />website Administrator';
-$lang_module['email_active_mes'] = 'Your account has been updated. However, the system requires you to reactivate your account because you change your email address. An activation key has been sent to the new email address that you are provided. Please check your email for more information.';
-$lang_module['email_active_error_mail'] = 'Your account has been updated, but the system does not send the email to activate your account. Please contact the website administrator for assistance.';
+$lang_module['email_active_info'] = 'Hi %1$s,<br /><br />You are changed email address of account %2$s, system require that you have to confirm the new email address  account. To confirm, you click to link below:<br /><br />URL: %3$s<br /><br />The confirmation is just valid untill %4$s<br /><br />This letter is automatically to sent your email-box from website  %5$s. If you do not understand about the contents of this letter, simply please delete it.<br /><br /><br /><br />website administrator';
+$lang_module['email_active_mes'] = 'Your account has been updating. Email adress has changed, system require that you have to confirm the new email. A key to confirm has sent to your new email which is provided by you. Please check your email to know information. Notice: You have to logout your account before you confirm the new email';
+$lang_module['email_active_error_mail'] = 'Your account updated. But system did not send email to confirm your new email. Please contact to website administrator to receive help.';
 $lang_module['st_login'] = 'Regular login';
 $lang_module['st_login2'] = 'Regular login';
 $lang_module['admin_login'] = 'Login by admin account';
@@ -176,7 +176,7 @@ $lang_module['changequestion_step1'] = 'In order to change your secret question,
 $lang_module['changequestion_step2'] = 'You can change your question';
 $lang_module['changequestion_submit1'] = 'Please confirm';
 $lang_module['changequestion_submit2'] = 'Please change';
-$lang_module['editinfo_error'] = 'except %s because it  not valid';
+$lang_module['editinfo_error'] = '. Notice %s';
 $lang_module['editinfo_ok'] = 'Updated';
 $lang_module['question2'] = 'Reserve question';
 $lang_module['current_mode'] = 'Current login';
@@ -196,16 +196,23 @@ $lang_module['email_is_exists'] = 'Your OpenID\'s email was used.<br />Please ch
 $lang_module['error_update_users_info'] = 'Error: System cannot update your user infomation, please contact site admin.';
 $lang_module['account_active_log'] = 'Activate account';
 $lang_module['openid_add'] = 'Add a new OpenID';
-$lang_module['in_group'] = 'Register in Group';
 $lang_module['no_in_group'] = 'You have not registered in any group';
 $lang_module['no_act'] = 'This function is currently not active';
 $lang_module['no_set'] = 'There are currently any established public group';
 $lang_module['re_remove'] = 'Register or quit the group successfully';
-$lang_module['account_change_mail_ok'] = 'Email address has been successfully validated';
-$lang_module['account_change_mail_error'] = 'There were errors during address validation email, please contact the site administrator for instructions.';
+$lang_module['in_group'] = 'Register in Group';
+$lang_module['account_change_mail_ok'] = 'Email adress has been confirmed sucessfully';
+$lang_module['account_change_mail_error'] = 'Have error in process confirm email adress, please contact to website administrator to receive instruction.';
 $lang_module['allow_admin'] = 'This feature allows administrators to limit unauthorized access.';
 $lang_module['allow_user'] = 'This feature is limited to members are allowed to access.';
 $lang_module['listusers'] = 'Members List';
 $lang_module['notuser'] = 'Members do not exist under this option!';
+$lang_module['page'] = 'Page %d';
+$lang_module['listusers_sort_by'] = 'sort by %s, %s';
+$lang_module['listusers_sort_by_username'] = 'username';
+$lang_module['listusers_sort_by_gender'] = 'gender';
+$lang_module['listusers_sort_by_regdate'] = 'join date';
+$lang_module['listusers_order_DESC'] = 'descending';
+$lang_module['listusers_order_ASC'] = 'ascending';
 
 ?>

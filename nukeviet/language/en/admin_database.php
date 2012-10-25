@@ -5,19 +5,19 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['main'] = 'General Informations';
-$lang_module['database_info'] = 'Database General informations';
+$lang_module['database_info'] = 'General information about the database &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['tables_info'] = 'Tables of database';
 $lang_module['table_caption'] = 'Table information &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_row_caption'] = 'Table field information &ldquo;<strong>%s</strong>&rdquo;';
@@ -67,7 +67,7 @@ $lang_module['save_ok'] = 'Save successfully';
 $lang_module['save_download'] = 'Click here to download the file.';
 $lang_module['dump_autobackup'] = 'Activate auto backup';
 $lang_module['dump_backup_ext'] = 'File extension';
-$lang_module['dump_backup_day'] = 'Number of backups';
+$lang_module['dump_backup_day'] = 'Time to save database files backup (day)';
 $lang_module['file_backup'] = 'Backups';
 $lang_module['file_nb'] = 'No.';
 $lang_module['file_name'] = 'File name';

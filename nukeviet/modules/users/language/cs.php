@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -194,11 +194,12 @@ $lang_module['openid_is_exists'] = 'Tento OpenID byl použitý. <br /> Prosím, 
 $lang_module['openid_add_new'] = 'Přidat další OpenID na svůj účet';
 $lang_module['email_is_exists'] = 'Váš email OpenID byla použitá. <br /> Prosím, vyberte jiný OpenID';
 $lang_module['error_update_users_info'] = 'Chyba: Systém nemůže aktualizovat informace  svého uživatele,kontaktujte  se prosím na webu admin.';
-$lang_module['account_change_mail_ok'] = 'E-mailová adresa byla úspěšně ověřena';
-$lang_module['account_change_mail_error'] = 'Byly tam chyby při e-mailové adresy ověřování, prosím, kontaktujte správce pokyny. Tato funkce umožňuje administrátorům omezit neoprávněný přístup.';
-$lang_module['allow_admin'] = 'Ttato funkce je omezena na členy jsou povolen přístup.';
-$lang_module['allow_user'] = 'La fonction est limitée aux membres sont autorisés à accéder.';
-$lang_module['listusers'] = 'Seznam členů';
-$lang_module['notuser'] = 'Členové neexistují rámci této možnosti!';
+$lang_module['account_active_log'] = 'Aktivace účtu';
+$lang_module['openid_add'] = 'Přídat nové OpenID';
+$lang_module['no_in_group'] = 'Nejste registrace skupiny';
+$lang_module['no_act'] = 'Tato funkce je v současné době není aktivní';
+$lang_module['no_set'] = 'Momentálně zde nejsou žádné stanoveny veřejné skupiny';
+$lang_module['re_remove'] = 'Rejstříku nebo odstranit skupinu úspěšně';
+$lang_module['in_group'] = 'Registrace skupiny';
 
 ?>

@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_global';
 
@@ -31,7 +31,7 @@ $lang_global['go_clientsector'] = 'Domovská stránka';
 $lang_global['go_clientmod'] = 'Viz naše webové stránky';
 $lang_global['please_select'] = 'Prosím, vyberte';
 $lang_global['admin_password_empty'] = 'Heslo správce nebylo prohlášeno';
-$lang_global['adminpassincorrect'] = 'Heslo správce "<strong>%s </strong>" je nepřesné. Zkuste to znovu';
+$lang_global['adminpassincorrect'] = 'Heslo správce "<strong>%s </ strong>" je nepřesné. Zkuste to znovu';
 $lang_global['admin_password'] = 'Heslo';
 $lang_global['admin_no_allow_func'] = 'Nemůžete přístup k této funkci';
 $lang_global['who_view'] = 'Zobrazit právo';

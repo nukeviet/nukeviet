@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -66,7 +66,6 @@ $lang_module['log_View'] = 'View';
 $lang_module['log_del_no_items'] = 'You may choose';
 $lang_module['log_note'] = 'Notes';
 $lang_module['moduleInfo'] = 'Modules Informations';
-$lang_module['pendingInfo'] = 'Pending job from the module';
 $lang_module['moduleName'] = 'Module';
 $lang_module['moduleContent'] = 'Content';
 $lang_module['moduleValue'] = 'Value';
@@ -151,6 +150,7 @@ $lang_module['filter_lang_desc'] = 'descending';
 $lang_module['filter_order_by'] = 'Sort by %s order';
 $lang_module['log_empty'] = 'Delete all';
 $lang_module['log_empty_log'] = 'Delete all system logs';
+$lang_module['pendingInfo'] = 'Pending job from the module';
 $lang_module['update_package_detected'] = 'Detects updated package, the website will temporarily stop working. Please perform the following tasks either before the website will be active again.';
 $lang_module['update_package_delete'] = 'Delete the update package';
 $lang_module['update_package_do'] = 'Update';

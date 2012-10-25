@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -112,7 +112,6 @@ $lang_module['counter'] = 'counter';
 $lang_module['total_comment'] = 'Feedback';
 $lang_module['search_cat'] = 'Search in topics';
 $lang_module['search_all'] = 'Search all topics';
-$lang_module['search_date_rule'] = 'dd.mm.yyyy';
 $lang_module['content'] = 'Management Articles';
 $lang_module['add_content'] = 'Add Articles';
 $lang_module['topic_sl'] = 'Select the relevant group';
@@ -145,5 +144,6 @@ $lang_module['error_addcontent'] = 'Error: You have not been granted permission 
 $lang_module['errorsave'] = 'System errors do not update the content, you check the article title may be identical. Change it and try again.';
 $lang_module['update_content'] = 'Edit Post';
 $lang_module['del_content'] = 'Delete Post';
+$lang_module['search_date_rule'] = 'dd.mm.yyyy';
 
 ?>

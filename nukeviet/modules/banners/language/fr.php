@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -64,7 +64,7 @@ $lang_module['plan_not_selected'] = 'Veuillez sélectionner le block pour cette 
 $lang_module['click_url_invalid'] = 'Lien invalide';
 $lang_module['file_upload_empty'] = 'Erreur: manque d\'image';
 $lang_module['upload_blocked'] = 'Le transfert de fichier flash est interdit par le système, donc vous ne pouvez pas ajouter les publicités. Vérifiez la configuration du site ou l\'autorisation des fichiers transférés.';
-$lang_module['addads_require_login'] = 'Cette fonctinonalité est réservée uniquement aux membres';
+$lang_module['addads_require_login'] = 'Cette fonctinonalité est réservée uniquement aux utilisateurs enregistrées';
 $lang_module['addads_success'] = 'Ajout de la publicité avec succès. Nous allons étudier votre demande et vous contacter au plus tôt';
 $lang_module['stats_views'] = 'Statistiques';
 $lang_module['stats_views_country'] = 'Pays';

@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -21,11 +21,10 @@ $lang_module['site_lang'] = 'Langue par défaut';
 $lang_module['nv_lang_interface'] = 'Langue d\'interface';
 $lang_module['nv_admin_copy'] = 'Création de langue';
 $lang_module['nv_lang_setting'] = 'Configuration';
-$lang_module['nv_admin_read'] = 'Lire les données';
+$lang_module['nv_admin_read'] = 'Importer les données';
 $lang_module['nv_admin_read_all'] = 'Lire';
 $lang_module['nv_admin_sl1'] = 'Choisir la nouvelle langue';
 $lang_module['nv_admin_sl2'] = 'Méthode d\'exécution';
-$lang_module['nv_admin_sl3'] = 'Sélectionner une langue';
 $lang_module['nv_admin_submit'] = 'Exécuter';
 $lang_module['nv_lang_module'] = 'Module';
 $lang_module['nv_admin_write'] = 'Exporter';
@@ -83,5 +82,6 @@ $lang_module['nv_check_type_2'] = 'Vérifier tout';
 $lang_module['nv_lang_check_title'] = 'Vérifier les lignes pas encore traduites';
 $lang_module['countries'] = 'Langue selon pays';
 $lang_module['countries_name'] = 'Pays';
+$lang_module['nv_admin_sl3'] = 'Sélectionner une langue';
 
 ?>

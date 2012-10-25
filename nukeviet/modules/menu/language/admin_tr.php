@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Oct 17, 2012, 07:19:06 AM
+* @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] = '';
-$lang_translator['createdate'] = '';
-$lang_translator['copyright'] = '';
+$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['createdate'] = '15/04/2011, 15:22';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = 'Language translated from http://translate.nukeviet.vn';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -66,7 +66,5 @@ $lang_module['cats'] = 'Öğe menü Belong';
 $lang_module['caton'] = 'submenu, if you want to delete, first delete or move submenu to other menu';
 $lang_module['error_menu_link'] = 'Error: You do not give the url';
 $lang_module['name_block'] = 'Menü blok';
-$lang_module['name_blog'] = 'Menü';
-$lang_module['error_menu_blog'] = 'Hata: Menü bloğu yok';
 
 ?>

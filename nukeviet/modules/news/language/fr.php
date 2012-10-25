@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -98,9 +98,9 @@ $lang_module['type_title'] = 'Méthode de recherche';
 $lang_module['finter_title'] = 'Depuis:';
 $lang_module['source_title'] = 'Source';
 $lang_module['keywords'] = 'Mot clé';
-$lang_module['member_view'] = 'Cette section est réservée uniquement aux membres!';
+$lang_module['member_view'] = 'Cette section est réservée uniquement aux utilisateurs!';
 $lang_module['admin_view'] = 'Cette section est réservée uniquement aux administrateurs!';
-$lang_module['group_view'] = 'Cette section est réservée uniquement aux groupes de membres!';
+$lang_module['group_view'] = 'Cette section est réservée uniquement aux groupes d\'utilisateurs!';
 $lang_module['rating_error1'] = 'Évaluation invalide';
 $lang_module['rating_error2'] = 'Vous avez déjà évalué cet article';
 $lang_module['pubtime'] = 'Rédigé à';
@@ -144,5 +144,6 @@ $lang_module['error_addcontent'] = 'Erreur: Vous n\'avez pas été autorisé à 
 $lang_module['errorsave'] = 'Erreurs: Impossible d\'ajouter, vérifiez si le titre est existant';
 $lang_module['update_content'] = 'Éditer l\'article';
 $lang_module['del_content'] = 'Supprimer l\'article';
+$lang_module['search_date_rule'] = 'dd.mm.yyyy';
 
 ?>

@@ -5,10 +5,10 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate May 30, 2010, 11:07:00 PM
+* @Createdate May 30, 2010, 05:07:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '31/05/2010, 00:07';
@@ -75,8 +75,6 @@ $lang_module['allow_login'] = 'Allow login';
 $lang_module['allow_change_email'] = 'Allow change email';
 $lang_module['type_reg'] = 'Register type';
 $lang_module['active_not_allow'] = 'Not grant to register';
-$lang_module['allow_public'] = 'Allow members register in public groups';
-$lang_module['allow_question'] = 'Answer secret question for Lost Password';
 $lang_module['active_admin_check'] = 'Admin active';
 $lang_module['active_all'] = 'No need to active';
 $lang_module['active_email'] = 'Email activation';
@@ -163,6 +161,8 @@ $lang_module['add_user'] = 'Member %1$s group %2$s';
 $lang_module['exclude_user'] = 'Delete member %1$s in group %2$s';
 $lang_module['siteinfo_user'] = 'Members';
 $lang_module['siteinfo_waiting'] = 'Unactive members';
+$lang_module['allow_public'] = 'Allow members register in public groups';
+$lang_module['allow_question'] = 'Answer secret question for Lost Password';
 $lang_module['pagetitle'] = 'Get Member ID';
 $lang_module['pagetitle1'] = 'Search Member ID';
 $lang_module['search'] = 'Find Member';
@@ -197,9 +197,9 @@ $lang_module['UserNotInGroup'] = 'User of your choice is not in the list of grou
 $lang_module['addMemberToGroup'] = 'Add users to group';
 $lang_module['detail'] = 'Detail';
 $lang_module['exclude_user2'] = 'Remove from group';
-$lang_module['ChangeConfigModule'] = 'Change the configuration module';
+$lang_module['ChangeConfigModule'] = 'Change module configuration';
 $lang_module['active_users'] = 'Activate members';
-$lang_module['unactive_users'] = 'Unactivate members';
+$lang_module['unactive_users'] = 'Inactivates members';
 $lang_module['whoviewlistuser'] = 'Who can view a list of members';
 $lang_module['whoview_all'] = 'All';
 $lang_module['whoview_user'] = 'User';

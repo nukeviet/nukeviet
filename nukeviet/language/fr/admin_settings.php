@@ -5,20 +5,17 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['pagetitle'] = 'Configuration tag "title"';
-$lang_module['pagetitle2'] = 'Méthode d\'affichage de tag "title"';
-$lang_module['pagetitleNote'] = '<strong>Variables acceptés:</strong><br /><br />- <strong>pagetitle</strong>: Titre de page pour des cas définis,<br />- <strong>funcname</strong>: Nom de la function,<br />- <strong>modulename</strong>: Nom de module,<br />- <strong>sitename</strong>: Nom du site';
 $lang_module['metaTagsConfig'] = 'Configuration de Meta-Tags';
 $lang_module['metaTagsGroupName'] = 'Group type';
 $lang_module['metaTagsGroupValue'] = 'Group Name';
@@ -32,7 +29,6 @@ $lang_module['googleAnalyticsSetDomainName_2'] = 'Multiple top-level domains';
 $lang_module['googleAnalyticsID'] = 'Google Analytics ID<br />(UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>)';
 $lang_module['global_config'] = 'Configuration générale';
 $lang_module['site_config'] = 'Configuration du site';
-$lang_module['global_statistics'] = 'Configuration Statistiques';
 $lang_module['lang_site_config'] = 'Configuration selon langue: %s';
 $lang_module['bots_config'] = 'Moteurs de recherche';
 $lang_module['optActive'] = 'Activer la fonction Optimisation du site';
@@ -54,11 +50,11 @@ $lang_module['err_supports_rewrite'] = 'Erreur: le serveur ne supporte pas le mo
 $lang_module['captcha'] = 'Configuration de captcha';
 $lang_module['captcha_0'] = 'Masqué';
 $lang_module['captcha_1'] = 'Lors de l\'identification de l\'admin';
-$lang_module['captcha_2'] = 'Lors de l\'identification de membre';
-$lang_module['captcha_3'] = 'Lors de l\'inscription de membre';
-$lang_module['captcha_4'] = 'Lors de l\'identification de membre ou à l\'inscription';
-$lang_module['captcha_5'] = 'Lors de l\'identification de l\'admin ou de membre';
-$lang_module['captcha_6'] = 'Lors de l\'identification de l\'admin ou l\'inscription du membre';
+$lang_module['captcha_2'] = 'Lors de l\'identification d\'utilisateur';
+$lang_module['captcha_3'] = 'Lors de l\'inscription d\'utilisateur';
+$lang_module['captcha_4'] = 'Lors de l\'identification d\'utilisateur ou à l\'inscription';
+$lang_module['captcha_5'] = 'Lors de l\'identification de l\'admin ou de l\'utilisateur';
+$lang_module['captcha_6'] = 'Lors de l\'identification de l\'admin ou l\'inscription de l\'utilisateur';
 $lang_module['captcha_7'] = 'Toujours';
 $lang_module['ftp_config'] = 'Configuration de FTP';
 $lang_module['smtp_config'] = 'Configuration de SMTP';
@@ -88,11 +84,8 @@ $lang_module['site_email'] = 'E-mail du site';
 $lang_module['error_send_email'] = 'E-mail recevant les notifications d\'erreurs';
 $lang_module['site_phone'] = 'Téléphone du site';
 $lang_module['lang_multi'] = 'Activer le multi-langage';
-$lang_module['lang_geo'] = 'Activer la définition de langue selon pays';
-$lang_module['lang_geo_config'] = 'Configuration de la fonctionnalité de définir la langue selon pays';
 $lang_module['site_lang'] = 'Langue par défaut';
 $lang_module['site_timezone'] = 'Fuseau horaire';
-$lang_module['statistics_timezone'] = 'Fuseau horaire des statistiques';
 $lang_module['date_pattern'] = 'Format de la date';
 $lang_module['time_pattern'] = 'Type d\'affichage: Heure Minute';
 $lang_module['online_upd'] = 'Activer le compteur de visiteurs en ligne';
@@ -107,7 +100,7 @@ $lang_module['str_referer_blocker'] = 'Activer le contrôle des liens vers le si
 $lang_module['my_domains'] = 'Les domaines du site';
 $lang_module['cookie_prefix'] = 'Préfixe de cookie';
 $lang_module['session_prefix'] = 'Préfixe de session';
-$lang_module['is_user_forum'] = 'Confier la gestion de membres au forum';
+$lang_module['is_user_forum'] = 'Confier la gestion d\'utilisateurs au forum';
 $lang_module['banip'] = 'IPs interdits';
 $lang_module['banip_ip'] = 'IP';
 $lang_module['banip_timeban'] = 'Commencer';
@@ -137,7 +130,6 @@ $lang_module['banip_delete'] = 'Supprimer';
 $lang_module['banip_error_ip'] = 'Saisissez IP à interdire';
 $lang_module['banip_error_area'] = 'Merci de sélectionner la zone';
 $lang_module['banip_error_validip'] = 'Erreur: Adresse IP invalide';
-$lang_module['banip_error_write'] = 'Erreur: Vous n\'avez pas donné au système le droit de modifier les fichiers. Merci de CHMOD le dossier <strong>%s</strong> à 0777 ou "Changer la permission" pour que le système puisse modifier les fichiers, sinon, créer un fichier banip.php avec le contenu ci-dessous et mettre dans le dossier <strong>%s</strong>';
 $lang_module['uploadconfig'] = 'Configuration du Transfert';
 $lang_module['uploadconfig_ban_ext'] = 'Extensioins interdites';
 $lang_module['uploadconfig_ban_mime'] = 'Types de Mime interdits';
@@ -156,7 +148,6 @@ $lang_module['nv_admin_del'] = 'Supprimer la tâche';
 $lang_module['cron_name_empty'] = 'Vous n\'avez pas encore donné le nom de la tâche';
 $lang_module['file_not_exist'] = 'Fichier inexistant';
 $lang_module['func_name_invalid'] = 'Vous n\'avez pas déclaré la fonction ou le nom de fonction est invalide';
-$lang_module['func_name_not_exist'] = 'Cette fonction n\'existe pas';
 $lang_module['nv_admin_add_title'] = 'Pour ajouter une tâche, remplissez les champs ci-dessous';
 $lang_module['nv_admin_edit_title'] = 'Pour modifier la tâche, remplissez les champs ci-dessous';
 $lang_module['cron_name'] = 'Nom de la tâche';
@@ -197,16 +188,33 @@ $lang_module['closed_site_1'] = 'Fermeture du site, seulement l\'administrateur 
 $lang_module['closed_site_2'] = 'Fermeture du site - les administrateurs générales peuvent se connecter';
 $lang_module['closed_site_3'] = 'Fermeture du site - les administrateur peuvent se connecter';
 $lang_module['getloadavg'] = 'Vérifier le status du serveur, au cas ou l\'activite de CPU depasse 80%, le systeme donnera une notification: "The server is temporarily busy, try again later!"';
-$lang_module['robots'] = 'Configuration du fichier robots.txt';
+$lang_module['pagetitle'] = 'Configuration tag "title"';
+$lang_module['pagetitle2'] = 'Méthode d\'affichage de tag "title"';
+$lang_module['pagetitleNote'] = '<strong>Variables acceptés:</strong><br /><br />- <strong>pagetitle</strong>: Titre de page pour des cas définis,<br />- <strong>funcname</strong>: Nom de la function,<br />- <strong>modulename</strong>: Nom de module,<br />- <strong>sitename</strong>: Nom du site';
+$lang_module['func_name_not_exist'] = 'Cette fonction n\'existe pas';
+$lang_module['robots'] = 'Config. de robots.txt';
 $lang_module['robots_number'] = 'Ordre';
 $lang_module['robots_filename'] = 'Nom du fichier';
 $lang_module['robots_type'] = 'Mode';
 $lang_module['robots_type_0'] = 'Accès interdit';
 $lang_module['robots_type_1'] = 'Ne pas afficher dans le fichier robots.txt';
 $lang_module['robots_error_writable'] = 'Erreur: impossible d\'enregistrer le fichier robots.txt, veuillez créer un fichier robots.txt avec le contenu ci-dessous et mettre dans la répertoire parente du site';
+$lang_module['lang_geo'] = 'Activer la définition de langue selon pays';
+$lang_module['lang_geo_config'] = 'Configuration de la fonctionnalité de définir la langue selon pays';
 $lang_module['searchEngineUniqueID'] = 'ID de moteur de recherche Google<br />(forma 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">voir détails</a>)';
 $lang_module['timezoneAuto'] = 'Selon l\'ordinateur du visiteur';
+$lang_module['banip_error_write'] = 'Erreur: Vous n\'avez pas donné au système le droit de modifier les fichiers. Merci de CHMOD le dossier <strong>%s</strong> à 0777 ou "Changer la permission" pour que le système puisse modifier les fichiers, sinon, créer un fichier banip.php avec le contenu ci-dessous et mettre dans le dossier <strong>%s</strong>';
 $lang_module['timezoneByCountry'] = 'Selon le pays du visiteur';
-$lang_module['uploadconfig_logo'] = 'Le logo à ajouter aux images';
+$lang_module['global_statistics'] = 'Config. de Statistiques';
+$lang_module['statistics_timezone'] = 'Fuseau horaire pour les statistiques';
+$lang_module['captcha_type'] = 'Type de captcha';
+$lang_module['captcha_type_0'] = 'Défaut captcha';
+$lang_module['captcha_type_1'] = 'Cool php captcha';
+$lang_module['allow_switch_mobi_des'] = 'Échange possible de thème de mobile et de bureau';
+$lang_module['smtp_pass_note'] = 'Attention: mot de passe SMTP n\'est pas encrypté dans a base de donnée';
+$lang_module['ftp_auto_detect_root'] = 'Détection automatique';
+$lang_module['ftp_error_full'] = 'Rentrer complètement les infos pour détecter automatiquement Remote path';
+$lang_module['ftp_error_detect_root'] = 'Il est impossible de déterminer, merci de vérifier l\'identifiant et le mot de passe';
+$lang_module['ftp_error_support'] = 'Votre hébergeur a bloqué FTP, veuillez leur contacter pour l\'activer';
 
 ?>

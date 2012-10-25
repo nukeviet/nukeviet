@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -21,7 +21,7 @@ $lang_module['required'] = 'Obligatoire';
 $lang_module['register'] = 'Créer un compte';
 $lang_module['login_title'] = 'Si vous avez un compte';
 $lang_module['lostpass_title'] = 'Si vous oubliez le mot de passe';
-$lang_module['memberlist'] = 'Liste des membres';
+$lang_module['memberlist'] = 'Liste des utilisateurs';
 $lang_module['gohome'] = 'Retour à l\'Accueil';
 $lang_module['info'] = 'Pour créer un compte, veuillez remplisser les champs ci-dessous';
 $lang_module['name'] = 'Nom et prénom';
@@ -121,9 +121,9 @@ $lang_module['logout_title'] = 'Déconnexion';
 $lang_module['edit_info_title'] = 'Éditer';
 $lang_module['img_size_title'] = 'Taille de l\'image: 80x80';
 $lang_module['email_active'] = 'Infos d\'activation de changement d\'email';
-$lang_module['email_active_info'] = 'Bonjour %1$s,<br /><br />Vous avez changé l’émail du compte %2$s, vous devez donc réactiver le compte. Cliquez sur le lien suivant:<br /><br />URL: %3$s<br /><br />L\'activation doit être faite avant %4$s<br /><br />Ce message est généré automatiquement depuis le site %5$s. Merci de supprimer si vous le recevez par erreur.<br /><br /><br /><br />Administrateur';
-$lang_module['email_active_mes'] = 'Votre compte a été mis à jour. Toutefois, le système vous demande de réactiver votre compte parce que vous changez votre adresse e-mail. Une clé d\'activation a été envoyé à l\'adresse e-mail que vous fournissez. S\'il vous plaît consulter votre courrier électronique pour plus d\'informations.';
-$lang_module['email_active_error_mail'] = 'Erreur: Votre compte a été mis à jour, mais le système n\'envoie pas le courriel pour activer votre compte. S\'il vous plaît contacter l\'administrateur du site.';
+$lang_module['email_active_info'] = 'Bonjour %1$s,<br /><br />Vous avez changé l’émail du compte %2$s, vous devez donc confirmer cet e-mail. Cliquez sur le lien suivant:<br /><br />URL: %3$s<br /><b  />L\'activation doit être faite avant %4$s<br /><br />Ce message est généré automatiquement depuis le site %5$s. Merci de supprimer si vous le recevez par erreur.<br /><br /><br /><br />Administrateur';
+$lang_module['email_active_mes'] = 'Votre compte a été mis à jour. Toutefois, le système vous demande de réactiver votre compte parce que vous changez votre adresse e-mail. Une clé d\'activation a été envoyé à la nouvelle adresse e-mail. Merci de consulter votre courrier électronique pour plus d\'informations. Attention: vous devez déconnecter avant de confirmer le nouvel e-mail.';
+$lang_module['email_active_error_mail'] = 'Votre compte a été mis à jour, mais le système ne peut pas envoyer le courriel pour confirmer votre nouveau e-mail. S\'il vous plaît contacter a l\'administrateur du site.';
 $lang_module['st_login'] = 'Connexion normale';
 $lang_module['st_login2'] = 'Possibilité d\'identification avec un compte normal';
 $lang_module['admin_login'] = 'Connexion avec un compte d\'administrateur';
@@ -176,7 +176,7 @@ $lang_module['changequestion_step1'] = 'Vous devez fournir le mot de passe pour 
 $lang_module['changequestion_step2'] = 'Vous pouvez changer la question/ réponse secrète';
 $lang_module['changequestion_submit1'] = 'Soumettre';
 $lang_module['changequestion_submit2'] = 'Soumettre';
-$lang_module['editinfo_error'] = 'excepte: %s invalide';
+$lang_module['editinfo_error'] = '. Remarque %s';
 $lang_module['editinfo_ok'] = 'Changement réussi';
 $lang_module['question2'] = 'Question secrète';
 $lang_module['current_mode'] = 'Cette connexion';
@@ -196,16 +196,23 @@ $lang_module['email_is_exists'] = 'E-mail de cet OpenID a été utilisé.<br />E
 $lang_module['error_update_users_info'] = 'Erreur: mise à jour impossible de voos coordonnées. Merci d\'informer l\'administrateur';
 $lang_module['account_active_log'] = 'Activer le compte';
 $lang_module['openid_add'] = 'Ajouter une nouvelle OpenID';
-$lang_module['in_group'] = 'S\'enregistrer au Groupe';
 $lang_module['no_in_group'] = 'Vous n\'avez pas enregistré à aucun groupe';
 $lang_module['no_act'] = 'Cette fonction n\'est actuellement pas active';
 $lang_module['no_set'] = 'Il n\'existe actuellement aucun groupe public établi';
 $lang_module['re_remove'] = 'S\'inscrire ou quitter le groupe avec succès';
-$lang_module['account_change_mail_ok'] = 'Adresse e-mail a été validé avec succès';
-$lang_module['account_change_mail_error'] = 'Il y avait des erreurs lors de la validation des adresses e-mail, s\'il vous plaît contactez l\'administrateur du site pour obtenir des instructions.';
-$lang_module['allow_admin'] = 'Cette fonctionnalité permet aux administrateurs de limiter l\'accès non autorisé.';
-$lang_module['allow_user'] = 'La fonction est limitée aux membres sont autorisés à accéder.';
-$lang_module['listusers'] = 'Liste des membres';
-$lang_module['notuser'] = 'Les membres n\'existent pas en vertu de cette option!';
+$lang_module['in_group'] = 'S\'enregistrer au Groupe';
+$lang_module['account_change_mail_ok'] = 'Les  e-mails sont confirmées avec succès';
+$lang_module['account_change_mail_error'] = 'Erreur lors de la confirmation de mails, contactez à l\'administrateur du site.';
+$lang_module['allow_admin'] = 'Cette fonctionnalité est réservée à l\'administrateur.';
+$lang_module['allow_user'] = 'Cette fonctionnalité est réservée aux utilisateurs';
+$lang_module['listusers'] = 'Liste d\'utilisateurs';
+$lang_module['notuser'] = 'Aucun utilisateur pour cette option!';
+$lang_module['page'] = 'Page %d';
+$lang_module['listusers_sort_by'] = 'trier par %s, %s';
+$lang_module['listusers_sort_by_username'] = 'identifiant';
+$lang_module['listusers_sort_by_gender'] = 'sexualité';
+$lang_module['listusers_sort_by_regdate'] = 'date de participation';
+$lang_module['listusers_order_DESC'] = 'descendant';
+$lang_module['listusers_order_ASC'] = 'ascendant';
 
 ?>

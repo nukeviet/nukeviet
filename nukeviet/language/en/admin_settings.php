@@ -5,20 +5,17 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Mar 04, 2010, 03:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['pagetitle'] = 'Configuration tag "title"';
-$lang_module['pagetitle2'] = 'Display tag "title" option';
-$lang_module['pagetitleNote'] = '<strong>Accept variables:</strong><br /><br />- <strong>pagetitle</strong>: Page title is determined in each specific case,<br />- <strong>funcname</strong>: Function,<br />- <strong>modulename</strong>: Module name,<br />- <strong>sitename</strong>: Site name';
 $lang_module['metaTagsConfig'] = 'Meta-Tags Configuration';
 $lang_module['metaTagsGroupName'] = 'Group type';
 $lang_module['metaTagsGroupValue'] = 'Group Name';
@@ -32,7 +29,6 @@ $lang_module['googleAnalyticsSetDomainName_2'] = 'Multiple top-level domains';
 $lang_module['googleAnalyticsID'] = 'Google Analytics ID<br />(UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>)';
 $lang_module['global_config'] = 'General configuration';
 $lang_module['site_config'] = 'Site Configuration';
-$lang_module['global_statistics'] = 'Statistics config';
 $lang_module['lang_site_config'] = 'Configuration site in %s language:';
 $lang_module['bots_config'] = 'Search Engines';
 $lang_module['optActive'] = 'Enable Site Optimization function';
@@ -51,9 +47,6 @@ $lang_module['disable_content'] = 'Site closing notification';
 $lang_module['submit'] = 'Submit';
 $lang_module['err_writable'] = 'Error system can\'t write file %s. Please chmod or check server config!';
 $lang_module['err_supports_rewrite'] = 'Error, server doesn\'t support rewrite.';
-$lang_module['captcha_type'] = 'Captcha type';
-$lang_module['captcha_type_0'] = 'Default captcha';
-$lang_module['captcha_type_1'] = 'Cool php captcha';
 $lang_module['captcha'] = 'Captcha display method';
 $lang_module['captcha_0'] = 'Hide';
 $lang_module['captcha_1'] = 'When admin login';
@@ -81,8 +74,6 @@ $lang_module['outgoing_port'] = 'Outgoing port';
 $lang_module['smtp_username'] = 'Mail Account';
 $lang_module['smtp_login'] = 'User Name';
 $lang_module['smtp_pass'] = 'Password';
-$lang_module['smtp_pass_note'] = 'Note: SMTP password is not encrypted in the database.';
-$lang_module['smtp_error_openssl'] = 'Error: Server not support send mail ssl';
 $lang_module['bot_name'] = 'Server\'s name';
 $lang_module['bot_agent'] = 'UserAgent';
 $lang_module['bot_ips'] = 'Server\'s IP';
@@ -93,11 +84,8 @@ $lang_module['site_email'] = 'Site\'s email';
 $lang_module['error_send_email'] = 'Email receiving error notices';
 $lang_module['site_phone'] = 'Site\'s phone';
 $lang_module['lang_multi'] = 'Activate multi-language';
-$lang_module['lang_geo'] = 'Enable the definition of language according to country';
-$lang_module['lang_geo_config'] = 'Configure the function to define language by country';
 $lang_module['site_lang'] = 'Default language';
 $lang_module['site_timezone'] = 'Site\'s timezone';
-$lang_module['statistics_timezone'] = 'Time zone for statistics';
 $lang_module['date_pattern'] = 'Date format';
 $lang_module['time_pattern'] = 'Time display format';
 $lang_module['online_upd'] = 'Activate monitoring online users';
@@ -142,7 +130,6 @@ $lang_module['banip_delete'] = 'Delete';
 $lang_module['banip_error_ip'] = 'Please enter ip address want to ban';
 $lang_module['banip_error_area'] = 'Please select an area';
 $lang_module['banip_error_validip'] = 'Error: Please enter a valid Ip address';
-$lang_module['banip_error_write'] = 'Error: The system can not write the file, please CHMOD folder <strong>%s</strong> to 0777 or "Change permission", you can also create file banip.php with below content in folder <strong>%s</strong>';
 $lang_module['uploadconfig'] = 'Upload Configuration';
 $lang_module['uploadconfig_ban_ext'] = 'Forbidden Extensions';
 $lang_module['uploadconfig_ban_mime'] = 'Forbidden Mimes';
@@ -161,7 +148,6 @@ $lang_module['nv_admin_del'] = 'Delete job';
 $lang_module['cron_name_empty'] = 'You do not declare the name of the job';
 $lang_module['file_not_exist'] = 'File does not exist';
 $lang_module['func_name_invalid'] = 'You do not declare function\'s name or function\'s name is invalid';
-$lang_module['func_name_not_exist'] = 'This function does not exist';
 $lang_module['nv_admin_add_title'] = 'To add job, you need to declare fully the box below';
 $lang_module['nv_admin_edit_title'] = 'To edit job, you need to declare fully the box below';
 $lang_module['cron_name'] = 'Job name';
@@ -173,7 +159,7 @@ $lang_module['run_func_info'] = 'Function must be beginning with &ldquo;<strong>
 $lang_module['params'] = 'Parameter';
 $lang_module['params_info'] = 'Separated by commas';
 $lang_module['interval'] = 'Repeat following jobs';
-$lang_module['interval_info'] = 'If choice &ldquo;<strong>0</strong>&rdquo;, Job will be done one time only';
+$lang_module['interval_info'] = 'If choice &ldquo;<strong>0</strong>&rdquo;, the work will be performed one time only';
 $lang_module['start_time'] = 'Start time';
 $lang_module['min'] = 'minute';
 $lang_module['hour'] = 'hours';
@@ -202,6 +188,10 @@ $lang_module['closed_site_1'] = 'Closing of the site only has access to the Supr
 $lang_module['closed_site_2'] = 'Moderator\'s closing general site access';
 $lang_module['closed_site_3'] = 'Close all of the site admin access';
 $lang_module['getloadavg'] = 'Check server status, if server exceeds 80% processing level, the system will notify "The server is temporarily busy, try again later!".';
+$lang_module['pagetitle'] = 'Configuration tag "title"';
+$lang_module['pagetitle2'] = 'Display tag "title" option';
+$lang_module['pagetitleNote'] = '<strong>Accept variables:</strong><br /><br />- <strong>pagetitle</strong>: Page title is determined in each specific case,<br />- <strong>funcname</strong>: Function,<br />- <strong>modulename</strong>: Module name,<br />- <strong>sitename</strong>: Site name';
+$lang_module['func_name_not_exist'] = 'This function does not exist';
 $lang_module['robots'] = 'Config. robots.txt';
 $lang_module['robots_number'] = 'Order number';
 $lang_module['robots_filename'] = 'File name';
@@ -209,14 +199,23 @@ $lang_module['robots_type'] = 'Mode';
 $lang_module['robots_type_0'] = 'No Access';
 $lang_module['robots_type_1'] = 'Not show in the robots.txt file';
 $lang_module['robots_error_writable'] = 'Error: The system can not write the robots.txt file, please create a file robots.txt with below content and put into the site parent folder';
+$lang_module['lang_geo'] = 'Enable the definition of language according to country';
+$lang_module['lang_geo_config'] = 'Configure the function to define language by country';
 $lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>)';
 $lang_module['timezoneAuto'] = 'By computer of visitor';
+$lang_module['banip_error_write'] = 'Error: The system can not write the file, please CHMOD folder <strong>%s</strong> to 0777 or "Change permission", you can also create file banip.php with below content in folder <strong>%s</strong>';
 $lang_module['timezoneByCountry'] = 'By country of visitor';
+$lang_module['global_statistics'] = 'Statistics config';
+$lang_module['statistics_timezone'] = 'Time zone for statistics';
+$lang_module['captcha_type'] = 'Captcha type';
+$lang_module['captcha_type_0'] = 'Default captcha';
+$lang_module['captcha_type_1'] = 'Cool php captcha';
 $lang_module['allow_switch_mobi_des'] = 'Allow to switch mobile, desktop theme';
+$lang_module['smtp_pass_note'] = 'Note: SMTP password is not encrypted in the database.';
 $lang_module['ftp_auto_detect_root'] = 'Auto detection';
 $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detection the Remote path';
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
 $lang_module['ftp_error_support'] = 'Your server is blocking or does not support FTP library, please contact the provider to be enabled.';
-$lang_module['uploadconfig_logo'] = 'The logo to be added to images';
+$lang_module['smtp_error_openssl'] = 'Error: Your server does not support sending mail via ssl';
 
 ?>

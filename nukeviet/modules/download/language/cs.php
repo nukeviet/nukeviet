@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -117,7 +117,6 @@ $lang_module['search'] = 'Vyhledávání data';
 $lang_module['search_option'] = 'Vyberte téma';
 $lang_module['search_result'] = 'Výsledky vyhledávání';
 $lang_module['search_noresult'] = 'Žádné údaje vhodné pro vaše požadavky!';
-$lang_module['error_not_permission_title'] = 'Je nám líto, nemáte oprávnění k prohlížení tohoto dokumentu!';
-$lang_module['error_not_permission_content'] = 'Administrátor není Vám umožní přístup přístup k obsahu dokumentu. Prosím, kontaktujte nás, že dekódovat odpověď';
+$lang_module['upload_files_log'] = 'Přídat sobory';
 
 ?>

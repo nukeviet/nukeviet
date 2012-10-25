@@ -5,10 +5,10 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Oct 17, 2012, 07:18:54 AM
+* @Createdate Oct 25, 2012, 12:49:49 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = '';
 $lang_translator['createdate'] = '';
@@ -107,41 +107,9 @@ $lang_module['nukevietChange_updated'] = 'aktulizovat';
 $lang_module['nukevietChange_modify'] = 'editovat';
 $lang_module['nukevietChange_add'] = 'přídat';
 $lang_module['nukevietChange_delete'] = 'smazat';
-$lang_module['revision_no_support'] = 'Chyba : tyto funkce jsou určeny pouze pro novější verze.';
-$lang_module['revision'] = 'Aktualizace podle Revision';
-$lang_module['revision_nochange'] = 'Momentálně nejsou nové verze';
-$lang_module['revision_error'] = 'Chyba : systém se nemůže připojit k serveru SVN.  Zkontrolujte prosím později.';
-$lang_module['autoupdate_system'] = 'Automatické aktualizace site';
-$lang_module['autoupdate_get_error'] = 'Upozornění : systém nedokáže zkontrolovat aktualizované informace ve verzi NukeViet';
-$lang_module['autoupdate_download'] = 'Stáhnout nejnovější verzi NukeViet';
-$lang_module['autoupdate_download_waiting'] = 'Čekejte, až bude stažení dokončené.  <br /><br />pokud dojde k chybě<br /><br /><a title="klikněte zde pro stažení " href="%1$s">%2$s</a> <br /><br />';
-$lang_module['autoupdate_download_error'] = 'Chyba ve stažení nebo v unzipu, stáhněte tento soubor <br /><br /><a title=" klikněte zde pro stažení " href="%1$s">%2$s</a> <br /><br />';
-$lang_module['autoupdate_invalidfile'] = 'Chyba : soubor je neplatný';
-$lang_module['autoupdate_download_complete'] = 'Stažení úspěšně dokončeno.  Klikněte zde pro kontrolu aktualizace';
-$lang_module['autoupdate_form_upload'] = 'Systém rozpoznal nejnovější verze.  Klikněte zde pro kontrolu aktualizace.';
-$lang_module['autoupdate_check_file'] = 'Zkontrolovat aktualizace';
-$lang_module['autoupdate_error_dir_update'] = 'Stažený soubor je neplatný, zkontrolujte prosím složku: install/update';
-$lang_module['autoupdate_change'] = 'Seznam pozměněných složek od původních.';
-$lang_module['autoupdate_overwrite'] = 'Pokud chcete přepsat tyto soubory, klikněte na aktualizaci.';
-$lang_module['autoupdate_click_update'] = 'Klikněte na aktualizaci.';
-$lang_module['autoupdate_backupfile'] = 'Pokračujete-li v aktualizaci, systém automaticky vytvoří zálohu.';
-$lang_module['autoupdate_backupfile_error'] = 'Chyba v aktualizaci : systém nedokáže vytvořit zálohu.  Zkontrolujte zápisy v souboru.';
-$lang_module['autoupdate'] = 'aktulizovat systému';
-$lang_module['autoupdate_confirm'] = 'Chcete-li aktulizovat sytému';
-$lang_module['autoupdate_error_create_folder'] = 'Aktualizační proces chyba: Systém nemůže vytvořit složky:';
-$lang_module['autoupdate_error_move_file'] = 'Chyba v aktualizaci: systém nedokáže přesunout tyto soubory:';
-$lang_module['autoupdate_complete_file'] = 'Upozornění : přesun úspěšně dokončeno.';
-$lang_module['autoupdate_complete'] = 'Aktulizovat úspěch.';
-$lang_module['autoupdate_complete_error_del_file'] = 'Aktualizace úspěšně dokončena.  Musíte smazat soubory install/update ze serveru.';
-$lang_module['autoupdate_error_data'] = 'Chyba v aktualizaci dat.';
-$lang_module['revision_nosuport'] = 'Chyba : aktualizace podle revision podporuje pouze verzi NukeViet 3.1';
-$lang_module['revision_error_cache_file'] = 'Chyba : systém nenalezl soubory obsahující aktualizované informace.';
-$lang_module['revision_list_file'] = 'Systém aktualizoval seznam souborů.';
-$lang_module['revision_add_files'] = 'Nový soubor';
-$lang_module['revision_mod_files'] = 'Soubor změn';
-$lang_module['revision_del_files'] = 'soubor smazat';
-$lang_module['revision_msg_download'] = 'Pro aktualizaci klikněte na Download.  Rychlost stažení závisí na množství souboru na vašem serveru, čekejte prosím na další krok.';
-$lang_module['revision_download_files'] = 'Stažení začalo.';
-$lang_module['revision_download_error'] = 'chyba ve stažení';
+$lang_module['config'] = 'Configurace';
+$lang_module['autocheckupdate'] = 'Zapout automaticky aktualizace';
+$lang_module['updatetime'] = 'aktualizace času';
+$lang_module['clearip_logs'] = 'Smazat IP logs';
 
 ?>

@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -79,5 +79,6 @@ $lang_module['nv_check_type'] = 'Podmínky kontrolovat';
 $lang_module['nv_check_type_0'] = 'Kontrolovat Jazykové  nebyla přeložit';
 $lang_module['nv_check_type_1'] = 'Kontrolovat  stejným Jazykem';
 $lang_module['nv_check_type_2'] = 'Vše kontrolovat';
+$lang_module['nv_lang_check_title'] = 'Zkontrolujte, zda jazyk není přeloženo';
 
 ?>

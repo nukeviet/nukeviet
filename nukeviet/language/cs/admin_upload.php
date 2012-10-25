@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -81,5 +81,8 @@ $lang_module['mirrorFile'] = 'Uložit kopii ve starém složka';
 $lang_module['errorNotSelectFile'] = 'Chyba: Soubor nebyl vybráno';
 $lang_module['errorNotCopyFile'] = 'Chyba: Z nějakého důvodu, systém nelze přenášet soubory do nové složky';
 $lang_module['errorNotRenameFile'] = 'Chyba: Z nějakého důvodu, že systém nemohl přejmenovat soubor';
+$lang_module['nopreview'] = 'Náhled není';
+$lang_module['errorNewSize'] = 'Pouze velikost šířka :10-%d px, výška: 10-%d px';
+$lang_module['maxSizeSize'] = 'Maximal :%dx%dpx';
 
 ?>

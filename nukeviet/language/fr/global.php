@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 06:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_global';
 
@@ -56,7 +56,6 @@ $lang_global['admin_page'] = 'Administration';
 $lang_global['admin_module_sector'] = 'Gestion de Module';
 $lang_global['adminlogin'] = 'Connexion à l\'Administration';
 $lang_global['module_for_admin'] = 'Section réservé à l\'administrateur';
-$lang_global['in_groups'] = 'Groupes  de membres';
 $lang_global['username'] = 'Identifiant';
 $lang_global['password'] = 'Mot de passe';
 $lang_global['password2'] = 'Confirmer le mot de passe';
@@ -89,7 +88,7 @@ $lang_global['month'] = 'Mois';
 $lang_global['year'] = 'An';
 $lang_global['today'] = 'Aujourd\'hui';
 $lang_global['current_month'] = 'Ce mois';
-$lang_global['nojs'] = 'Votre navigateur a désactivé le support de JAVASCRIPT.<br />Vous devez l\'activer pour que notre site fonctionne correctement.<br />Pour consulter comment activer JAVASCRIPT, cliquez <a href="http://www.google.com/support/bin/answer.py?hl=en&answer=23852">ici</a>!';
+$lang_global['nojs'] = 'Votre navigateur a désactivé le support de JAVASCRIPT.<br />Vous devez l\'activer pour que notre site fonctionne correctement.<br />Pour consulter comment activer JAVASCRIPT, cliquez <a >ici</a>!';
 $lang_global['sun'] = 'Dim';
 $lang_global['mon'] = 'Lun';
 $lang_global['tue'] = 'Mar';
@@ -171,7 +170,6 @@ $lang_global['unlimited'] = 'Illimité';
 $lang_global['status'] = 'Status';
 $lang_global['actions'] = 'Action';
 $lang_global['never'] = 'Jamais';
-$lang_global['page'] = 'Page';
 $lang_global['pageprev'] = 'Page précédente';
 $lang_global['pagenext'] = 'Page suivante';
 $lang_global['langinterface'] = 'Langue';
@@ -188,14 +186,14 @@ $lang_global['error_warning'] = 'Avertissement';
 $lang_global['error_notice'] = 'Attention';
 $lang_global['error_sendmail'] = 'Erreur: Impossible d\'envoyer les e-mails, Merci de contacter l\'administrateur pour les soutients nécessaires';
 $lang_global['error_sendmail_admin'] = 'Erreur: Impossible d\'envoyer les e-mails, Merci de signaler l\'administrateur de vérifier la configuration';
-$lang_global['error_sendmail_subject'] = 'Notification d\'erreur du site %s';
-$lang_global['error_sendmail_content'] = 'Le système a recu les notifications d\'erreurs. Veuillez étudier le fichier attaché pour les détails';
+$lang_global['error_sendmail_subject'] = 'Notification du site %s';
+$lang_global['error_sendmail_content'] = 'Le système a reçu des notifications. Veuillez étudier le fichier attaché pour les détails';
 $lang_global['search'] = 'Rechercher';
 $lang_global['drag_block'] = 'Activer le glisser-déposer de blocks';
 $lang_global['no_drag_block'] = 'Désactiver le glisser-déposer de blocks';
 $lang_global['blocks_saved'] = 'La configuration a été entregistrée!';
 $lang_global['blocks_saved_error'] = 'Erreur: impossible d\'enregistrer la configuration';
-$lang_global['users'] = 'Membres';
+$lang_global['users'] = 'Utilisateurs';
 $lang_global['bots'] = 'Moteurs de recherche';
 $lang_global['guests'] = 'Invités';
 $lang_global['total'] = 'Total';
@@ -238,5 +236,19 @@ $lang_global['error_upload_forbidden'] = 'Erreur: Dossier contenant les images n
 $lang_global['error_upload_writable'] = 'Erreur: Dossier  %s ne permis pas l\'ạout de fichier. Merci de revoir les permissions (chmod 777)';
 $lang_global['error_upload_urlfile'] = 'Erreur: lien incorrect';
 $lang_global['error_upload_url_notfound'] = 'Erreur: impossible de prendre le fichier depuis votre lien';
+$lang_global['in_groups'] = 'Groupes  d\'utilisateurs';
+$lang_global['page'] = 'Page';
+$lang_global['theme_type_0'] = 'Desktop';
+$lang_global['theme_type_1'] = 'Mobile';
+$lang_global['theme_type_chose'] = 'Changer au thème %s';
+$lang_global['theme_type_select'] = 'Interface';
+$lang_global['ftp_err_connect'] = 'Erreur: impossible de connecter au serveur FTP';
+$lang_global['ftp_err_login'] = 'Erreur: Connexion échouée';
+$lang_global['ftp_err_enable'] = 'Erreur: FTP non supporté';
+$lang_global['ftp_err_passive_on'] = 'Erreur: impossible d\'activer le mode passif';
+$lang_global['ftp_err_rawlist'] = 'Erreur: impossible de déterminer la liste de répertoires';
+$lang_global['ftp_err_list_detail'] = 'Erreur: paramètres de fichiers, de dossiers non reconnus';
+$lang_global['ftp_err_fget'] = 'Erreur: lecture impossible du fichier';
+$lang_global['ftp_err_NVbuffet'] = 'Erreur: manque de NVbuffer';
 
 ?>

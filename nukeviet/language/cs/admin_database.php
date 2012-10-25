@@ -5,22 +5,22 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 08:40:00 PM
+* @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC.. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights reserved';
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['main'] = 'Obecné informace';
-$lang_module['database_info'] = 'Informace o databázi &ldquo;<strong>%s </strong>&rdquo;';
-$lang_module['tables_info'] = 'Tabulka v databázi &ldquo;<strong>%s </strong>&rdquo;';
-$lang_module['table_caption'] = 'Tabulka o informaci &ldquo;<strong>%s </strong>&rdquo;';
-$lang_module['table_row_caption'] = 'Tabulka o informaci soubory &ldquo;<strong>%s </strong>&rdquo;';
+$lang_module['database_info'] = 'Informace o databázi "<strong>%s </ strong>"';
+$lang_module['tables_info'] = 'Tabulka v databázi "<strong>%s </ strong>"';
+$lang_module['table_caption'] = 'Tabulka o informaci "<strong>%s </ strong>"';
+$lang_module['table_row_caption'] = 'Tabulka o informaci soubory "<strong>%s </ strong>"';
 $lang_module['db_host_info'] = 'Mysql server';
 $lang_module['db_sql_version'] = 'Mysql verze';
 $lang_module['db_proto_info'] = 'Mysql TCP / IP verze';

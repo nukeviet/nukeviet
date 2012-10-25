@@ -5,14 +5,14 @@
 * @Author VINADES.,JSC (contact@vinades.vn)
 * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Aug 15, 2010, 11:00:00 PM
+* @Createdate Aug 15, 2010, 05:00:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '16/08/2010';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -42,7 +42,7 @@ $lang_module['copyright'] = 'Infos du droit d\'auteur';
 $lang_module['filesize'] = 'Taille';
 $lang_module['fileimage'] = 'Image';
 $lang_module['download_detail'] = 'Télécharger';
-$lang_module['download_not_allow_info1'] = 'Pour télécharger, vous devez <a href="%1$s">vous identifier</a> en tant que membre. Si vous n\'avez pas un compte, vous pouvez vous inscrire en cliquant <a href="%2$s">ici</a>';
+$lang_module['download_not_allow_info1'] = 'Pour télécharger, vous devez <a href="%1$s">vous identifier</a> en tant qu\'utilisateur du site. Si vous n\'avez pas un compte, vous pouvez vous inscrire en cliquant <a href="%2$s">ici</a>';
 $lang_module['download_not_allow_info2'] = 'Pour télécharger, vous devez vous identifier en tant qu\'administrateur';
 $lang_module['download_fileupload'] = 'À partir du site';
 $lang_module['download_linkdirect'] = 'À';
@@ -118,7 +118,7 @@ $lang_module['search_option'] = 'Choisissez une catégorie';
 $lang_module['search_result'] = 'Résultats de la recherche';
 $lang_module['search_noresult'] = 'Pas de données adaptées à vos besoins!';
 $lang_module['upload_files_log'] = 'Poster un nouveau fichier';
-$lang_module['error_not_permission_title'] = 'Désolé, vous n\'avez pas la permission pour voir le document présent!';
-$lang_module['error_not_permission_content'] = 'Administrateur n\'est pas vous permettre d\'accéder l\'accès au contenu du document. S\'il vous plaît Contactez-nous pour être la réponse de décodage';
+$lang_module['error_not_permission_title'] = 'Désolé, vous n’êtes pas autorisé de voir ce document!';
+$lang_module['error_not_permission_content'] = 'L\'administrateur ne vous permet pas d’accéder à ce document. Veuillez le contacter!';
 
 ?>
