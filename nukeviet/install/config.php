@@ -42,7 +42,7 @@ $global_config['engine_allowed'] = array();
 $global_config['site_theme'] = "modern";
 $global_config['gfx_chk'] = 3;
 
-$global_config['version'] = "3.4.02"; // NukeViet 3.4.02.1922
-$global_config['revision'] = 1922;
+$global_config['version'] = "3.4.02"; // NukeViet 3.4.02.r1925
+$global_config['revision'] = 1925;
 
 ?>
