@@ -1,0 +1,50 @@
+I. Edit the module news - generate page:<br />
+If your theme is not the default, open the file /themes/ten-theme/modulews/news/search.tpl find (if exists) <br />
+<code>&lt;!-- END: pages_viewpages --&gt;</code><br />
+Replace with<br />
+<code>&lt;!-- END: pages_result --&gt;</code><br /><br />
+
+II. Update function to view the member list and member information:<br />
+- Note: If your theme is not the default (default or modern) copy viewdetailusers.tpl and memberslist.tpl from original theme to your theme.<br />
+- After upgrading, go to the management interface =&gt; layout settings, click <b>Save</b>, system will update the new function to view the list of members.<br />
+- From r1841 functional view the member list is added and default permissions is admin can view. To change the permissions, go to the configuration of module users and change the value to <b>All</b> or <b>Members</b>.<br /><br />
+
+III. Edit the funcs topic of the module news:<br />
+If you use non-default theme of NukeViet please do the following.<br />
+1. If your theme from the default theme.<br />
+Open file /themes/your-theme/modules/news/topic.tpl find<br />
+<code>&lt;!-- BEGIN: main --&gt;</code><br />
+add after<br />
+<code>
+&lt;div style=&quot;background:#F2F2F2;border : 1px solid #ccc; padding:5px&quot;&gt;<br />
+	&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &lt;a style=&quot;font-size:13px;&quot; title=&quot;{TOPPIC_TITLE}&quot; href=&quot;{TOPPIC_LINK}&quot;&gt;&lt;strong&gt;{TOPPIC_TITLE}&lt;/strong&gt;&lt;/a&gt;<br />
+	&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br />
+	&nbsp;&nbsp;&nbsp; &lt;!-- BEGIN: topicdescription --&gt;<br />
+	&nbsp;&nbsp;&nbsp; &lt;div style=&quot;background:#fff; padding:8px; border-bottom : 1px solid #ccc;&quot;&gt;<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {TOPPIC_DESCRIPTION}<br />
+	&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br />
+	&nbsp;&nbsp;&nbsp; &lt;!-- END: topicdescription --&gt;</code><br />
+2. If your theme from theme modern.<br />
+Open file /themes/your-theme/modules/news/topic.tpl find<br />
+<code>&lt;!-- BEGIN: main --&gt;</code><br />
+add after<br />
+<code>
+	&lt;div class=&quot;cat-nav&quot; style=&quot;border:1px solid #ccc;padding:4px;&quot;&gt;<br />
+	&lt;a href=&quot;{TOPPIC_LINK}&quot; class=&quot;current-cat&quot; title=&quot;{TOPPIC_TITLE}&quot;&gt;{TOPPIC_TITLE}&lt;/a&gt;<br />
+	&lt;/div&gt;<br />
+	&lt;!-- BEGIN: topicdescription --&gt;<br />
+	&lt;div style=&quot;border:1px solid #ccc;border-top:none;padding:4px;&quot;&gt;<br />
+	{TOPPIC_DESCRIPTION}<br />
+	&lt;/div&gt;<br />
+	&lt;!-- END: topicdescription --&gt;<br />
+	&lt;div class=&quot;clear&quot;&gt;&amp;nbsp;&lt;/div&gt;
+</code><br />
+
+3. If file /themes/your-theme/modules/news/theme.php is exists in your theme, open it anh find <br />
+<code>function topic_theme( $topic_array, $topic_other_array, $generate_page )</code><br />
+Replace with<br />
+<code>function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description )</code><br />
+Find <br />
+<code>$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );</code><br />
+Add after<br />
+<code>$xtpl-&gt;assign( &#39;TOPPIC_TITLE&#39;, $page_title ); <br />$xtpl-&gt;assign( &#39;TOPPIC_LINK&#39;, NV_BASE_SITEURL . &quot;index.php?&quot; . NV_LANG_VARIABLE . &quot;=&quot; . NV_LANG_DATA . &quot;&amp;&quot; . NV_NAME_VARIABLE . &quot;=&quot; . $module_name . &quot;&amp;&quot; . NV_OP_VARIABLE . &quot;=topic/&quot; . $topicalias ); <br />if( !empty( $description )){ $xtpl-&gt;assign( &#39;TOPPIC_DESCRIPTION&#39;, $description ); <br />$xtpl-&gt;parse( &#39;main.topicdescription&#39; ); }</code><br />
