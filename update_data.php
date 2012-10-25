@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @Createdate 29-03-2012 03:29
  */
 
@@ -16,10 +16,10 @@ $nv_update_config['packageID'] = 'NVUD3402'; // ID goi cap nhat
 $nv_update_config['formodule'] = ""; // Cap nhat cho module nao, de trong neu la cap nhat NukeViet, ten thu muc module neu la cap nhat module
 
 // Thong tin phien ban, tac gia, ho tro
-$nv_update_config['release_date'] = 1333929600;
+$nv_update_config['release_date'] = 1348606800;
 $nv_update_config['author'] = "VINADES.,JSC (contact@vinades.vn)";
 $nv_update_config['support_website'] = "http://forum.nukeviet.vn/";
-$nv_update_config['to_version'] = "3.4.02.r1908";
+$nv_update_config['to_version'] = "3.4.02.r1920";
 $nv_update_config['allow_old_version'] = array( "3.4.00.r1722", "3.4.01.r1758" );
 $nv_update_config['update_auto_type'] = 1; // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
 
@@ -83,7 +83,7 @@ $nv_update_config['tasklist'][] = array( 'r' => 1827, 'rq' => 2, 'l' => 'nv_up_r
 $nv_update_config['tasklist'][] = array( 'r' => 1841, 'rq' => 2, 'l' => 'nv_up_r1841', 'f' => 'nv_up_r1841' );
 $nv_update_config['tasklist'][] = array( 'r' => 1896, 'rq' => 2, 'l' => 'nv_up_r1896', 'f' => 'nv_up_r1896' );
 
-$nv_update_config['tasklist'][] = array( 'r' => 1907, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
+$nv_update_config['tasklist'][] = array( 'r' => 1920, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
 
 // Danh sach cac function
 /*
@@ -511,7 +511,7 @@ function nv_up_finish()
 	
 	// Update revision
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.02')" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1908')" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1920')" );
 
 	nv_save_file_config_global();
 	
