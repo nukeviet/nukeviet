@@ -412,7 +412,7 @@ function nv_up_r1811()
 		$check = $db->sql_query( " ALTER TABLE `" . $db_config['prefix'] . "_" . $lang ."_modules` ADD `description` VARCHAR( 255 ) NOT NULL AFTER `mobile`" );
 		if( ! $check ) break;
 	}
-
+	
 	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	$return['status'] = $check ? 1 : 0;
@@ -439,6 +439,8 @@ function nv_up_r1827()
 			if( ! $check ) break;
 		}
 	}
+	
+	nv_deletefile( NV_ROOTDIR . '/modules/weblinks/funcs/link.php' );
 
 	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
