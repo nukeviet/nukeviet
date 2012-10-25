@@ -12,15 +12,15 @@ if( ! defined( 'NV_IS_UPDATE' ) ) die( 'Stop!!!' );
 $nv_update_config = array();
 
 $nv_update_config['type'] = 1; // Kieu nang cap 1: Update; 2: Upgrade
-$nv_update_config['packageID'] = 'NVUD3401'; // ID goi cap nhat
+$nv_update_config['packageID'] = 'NVUD3402'; // ID goi cap nhat
 $nv_update_config['formodule'] = ""; // Cap nhat cho module nao, de trong neu la cap nhat NukeViet, ten thu muc module neu la cap nhat module
 
 // Thong tin phien ban, tac gia, ho tro
 $nv_update_config['release_date'] = 1333929600;
 $nv_update_config['author'] = "VINADES.,JSC (contact@vinades.vn)";
-$nv_update_config['support_website'] = "http://nukeviet.vn/phpbb/";
-$nv_update_config['to_version'] = "3.4.01.r1841";
-$nv_update_config['allow_old_version'] = array( "3.4.00.r1722", "3.4.00.r1758" );
+$nv_update_config['support_website'] = "http://forum.nukeviet.vn/";
+$nv_update_config['to_version'] = "3.4.02.r1908";
+$nv_update_config['allow_old_version'] = array( "3.4.00.r1722", "3.4.01.r1758" );
 $nv_update_config['update_auto_type'] = 1; // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
 
 $nv_update_config['lang'] = array();
@@ -43,6 +43,7 @@ $nv_update_config['lang']['vi']['nv_up_r1780'] = 'Sửa lỗi bảng nhóm thàn
 $nv_update_config['lang']['vi']['nv_up_r1811'] = 'Thêm description vào bảng modules';
 $nv_update_config['lang']['vi']['nv_up_r1827'] = 'Xóa funcs thừ trong module weblinks';
 $nv_update_config['lang']['vi']['nv_up_r1841'] = 'Cập nhật chức năng xem danh sách thành viên của site và phân quuyền xem file, tải file đến từng file của module download';
+$nv_update_config['lang']['vi']['nv_up_r1896'] = 'Thêm cấu hình timestamp';
 
 // English
 $nv_update_config['lang']['en']['update_nukeviet_version'] = 'Update Version and Revision';
@@ -60,6 +61,7 @@ $nv_update_config['lang']['en']['nv_up_r1780'] = 'Fix table groups';
 $nv_update_config['lang']['en']['nv_up_r1811'] = 'Add description field to modules table';
 $nv_update_config['lang']['en']['nv_up_r1827'] = 'Delete funcs of module weblinks';
 $nv_update_config['lang']['en']['nv_up_r1841'] = 'Update function to view the member list of site and set permissions to view file, download the file to each file of the module download';
+$nv_update_config['lang']['en']['nv_up_r1896'] = 'Add global config timestamp';
 
 // Require level: 0: Khong bat buoc hoan thanh; 1: Canh bao khi that bai; 2: Bat buoc hoan thanh neu khong se dung nang cap.
 // r: Revision neu la nang cap site, phien ban neu la nang cap module
@@ -79,8 +81,9 @@ $nv_update_config['tasklist'][] = array( 'r' => 1780, 'rq' => 2, 'l' => 'nv_up_r
 $nv_update_config['tasklist'][] = array( 'r' => 1811, 'rq' => 2, 'l' => 'nv_up_r1811', 'f' => 'nv_up_r1811' );
 $nv_update_config['tasklist'][] = array( 'r' => 1827, 'rq' => 2, 'l' => 'nv_up_r1827', 'f' => 'nv_up_r1827' );
 $nv_update_config['tasklist'][] = array( 'r' => 1841, 'rq' => 2, 'l' => 'nv_up_r1841', 'f' => 'nv_up_r1841' );
+$nv_update_config['tasklist'][] = array( 'r' => 1896, 'rq' => 2, 'l' => 'nv_up_r1896', 'f' => 'nv_up_r1896' );
 
-$nv_update_config['tasklist'][] = array( 'r' => 1841, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
+$nv_update_config['tasklist'][] = array( 'r' => 1907, 'rq' => 2, 'l' => 'update_nukeviet_version', 'f' => 'nv_up_finish' );
 
 // Danh sach cac function
 /*
@@ -482,6 +485,24 @@ function nv_up_r1841()
  *
  * @return
  */
+function nv_up_r1896()
+{
+	global $nv_update_baseurl, $db, $db_config;
+	
+	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
+	
+	$check = $db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'timestamp', '1')" );
+	nv_save_file_config_global();
+	
+	if( ! $check ) $return['status'] = 0;
+	
+	return $return;
+}
+
+/**
+ *
+ * @return
+ */
 function nv_up_finish()
 {
 	global $nv_update_baseurl, $db, $db_config, $global_config;
@@ -489,8 +510,8 @@ function nv_up_finish()
 	$return = array( 'status' => 1, 'complete' => 1, 'next' => 1, 'link' => 'NO', 'lang' => 'NO', 'message' => '', );
 	
 	// Update revision
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.5.00')" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1841')" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'version', '3.4.02')" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'revision', '1908')" );
 
 	nv_save_file_config_global();
 	
