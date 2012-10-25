@@ -22,11 +22,24 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "downloadallfile" . se
 	
 		foreach( $dirs as $module )
 		{
+			// Zip lang block
+			$files_lang_block = nv_scandir( NV_ROOTDIR . "/modules/" . $module . "/language", '/^block.(module|global)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '.php$/' );
+
+			foreach( $files_lang_block as $file_lang_block )
+			{
+				if( file_exists( NV_ROOTDIR . "/modules/" . $module . "/language/" . $file_lang_block ) )
+				{
+					$allowfolder[] = NV_ROOTDIR . "/modules/" . $module . "/language/" . $file_lang_block;
+				}
+			}
+			
+			// Lang module admin
 			if( file_exists( NV_ROOTDIR . "/modules/" . $module . "/language/admin_" . $dirlang . ".php" ) )
 			{
 				$allowfolder[] = NV_ROOTDIR . "/modules/" . $module . "/language/admin_" . $dirlang . ".php";
 			}
 			
+			// Lang module site
 			if( file_exists( NV_ROOTDIR . "/modules/" . $module . "/language/" . $dirlang . ".php" ) )
 			{
 				$allowfolder[] = NV_ROOTDIR . "/modules/" . $module . "/language/" . $dirlang . ".php";
