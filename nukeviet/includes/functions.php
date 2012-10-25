@@ -1098,6 +1098,7 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 	try
 	{
 		$mail = new PHPMailer( true );
+		$mail->SetLanguage(NV_LANG_INTERFACE, NV_ROOTDIR . '/includes/phpmailer/language/');
 		$mail->CharSet = $global_config['site_charset'];
 		$mailer_mode = strtolower( $global_config['mailer_mode'] );
 		

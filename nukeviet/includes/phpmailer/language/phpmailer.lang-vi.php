@@ -1,26 +1,20 @@
 <?php
-/**
-* PHPMailer language file: refer to English translation for definitive list
-* Spanish version
-* Versión en español
-*/
 
-$PHPMAILER_LANG['authenticate']         = 'Error SMTP: No se pudo autentificar.';
-$PHPMAILER_LANG['connect_host']         = 'Error SMTP: No puedo conectar al servidor SMTP.';
-$PHPMAILER_LANG['data_not_accepted']    = 'Error SMTP: Datos no aceptados.';
-//$PHPMAILER_LANG['empty_message']        = 'Message body empty';
-$PHPMAILER_LANG['encoding']             = 'Codificación desconocida: ';
-$PHPMAILER_LANG['execute']              = 'No puedo ejecutar: ';
-$PHPMAILER_LANG['file_access']          = 'No puedo acceder al archivo: ';
-$PHPMAILER_LANG['file_open']            = 'Error de Archivo: No puede abrir el archivo: ';
-$PHPMAILER_LANG['from_failed']          = 'La(s) siguiente(s) direcciones de remitente fallaron: ';
-$PHPMAILER_LANG['instantiate']          = 'No pude crear una instancia de la función Mail.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
-$PHPMAILER_LANG['mailer_not_supported'] = ' mailer no está soportado.';
-$PHPMAILER_LANG['provide_address']      = 'Debe proveer al menos una dirección de email como destinatario.';
-$PHPMAILER_LANG['recipients_failed']    = 'Error SMTP: Los siguientes destinatarios fallaron: ';
-$PHPMAILER_LANG['signing']              = 'Error al firmar: ';
-//$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
-//$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
-//$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
+$PHPMAILER_LANG['provide_address'] = 'Bạn phải cung cấp ít nhất một địa chỉ người nhận.';
+$PHPMAILER_LANG['mailer_not_supported'] = ' trình gửi thư không được hỗ trợ.';
+$PHPMAILER_LANG['execute'] = 'Không thực hiện được: ';
+$PHPMAILER_LANG['instantiate'] = 'Không dùng được các hàm gửi thư.';
+$PHPMAILER_LANG['authenticate'] = 'Lỗi SMTP: Không thể xác thực.';
+$PHPMAILER_LANG['from_failed'] = 'Lỗi địa chỉ gửi đi: ';
+$PHPMAILER_LANG['recipients_failed'] = 'Lỗi SMTP: lỗi địa chỉ người nhận: ';
+$PHPMAILER_LANG['data_not_accepted'] = 'Lỗi SMTP: Dữ liệu không được chấp nhận.';
+$PHPMAILER_LANG['connect_host'] = 'Lỗi SMTP: Không thể kết nối máy chủ SMTP.';
+$PHPMAILER_LANG['file_access'] = 'Không thể truy cập tệp tin ';
+$PHPMAILER_LANG['file_open'] = 'Lỗi Tập tin: Không thể mở tệp tin: ';
+$PHPMAILER_LANG['encoding'] = 'Mã hóa không xác định: ';
+$PHPMAILER_LANG['signing'] = 'Lỗi đăng nhập: ';
+$PHPMAILER_LANG['smtp_error'] = 'Lỗi máy chủ smtp ';
+$PHPMAILER_LANG['empty_message'] = 'Không có nội dung';
+$PHPMAILER_LANG['invalid_address'] = 'Đại chỉ emai không đúng';
+$PHPMAILER_LANG['variable_set'] = 'Không thể thiết lập hoặc thiết lập lại biến: ';
 ?>
