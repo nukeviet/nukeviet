@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_MOD_WEBLINKS' ) ) die( 'Stop!!!' );
 
-global $global_array_cat, $catid;
+global $catid;
 
 if( empty( $catid ) ) $catid = 0;
 
@@ -17,7 +17,7 @@ if( ! nv_function_exists( 'nv_weblink_category' ) )
 {
 	function nv_weblink_category()
 	{
-		global $global_array_cat, $lang_module, $module_file, $module_info;
+		global $global_array_cat, $module_file, $module_info;
 
 		$xtpl = new XTemplate( "block_category.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 		$xtpl->assign( 'TEMPLATE', $module_info['template'] );
