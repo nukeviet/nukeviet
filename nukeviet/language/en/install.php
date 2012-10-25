@@ -212,7 +212,7 @@ $lang_module['update_task_load_message'] = 'We recommend that you should not dis
 $lang_module['update_task_next'] = 'The work would be done';
 $lang_module['update_task_start'] = 'Start';
 $lang_module['update_task_do1_error'] = 'The task';
-$lang_module['update_task_do2_error'] = 'Therefore faulty upgrade can not continue. Access the <a href="http://nukeviet.vn/phpbb/" title="\\'NukeViet forum\'">forum</a> and report this error message for assistance.';
+$lang_module['update_task_do2_error'] = 'Therefore faulty upgrade can not continue. Access the <a href="http://nukeviet.vn/phpbb/" title="NukeViet forum">forum</a> and report this error message for assistance.';
 $lang_module['update_nav_confirm'] = 'Work in progress, close the browser or close page can lead to errors.';
 $lang_module['update_file_info_win'] = 'Warning: On the window to move the file can not be done, we encourage you to perform manually move the files and folders in <strong>install/update/</strong> out directory root of the website (which contains index.php, CJzip.php, robots.php ...).';
 $lang_module['update_file_info_win_manual'] = 'After move you can click here to continue.';

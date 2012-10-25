@@ -154,7 +154,7 @@ $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_
 $client_info['agent'] = $nv_Request->user_agent;
 //HTTP_USER_AGENT
 $client_info['session_id'] = $nv_Request->session_id; //ten cua session
-$global_config['sitekey'] = md5( $global_config['my_domains'] . NV_ROOTDIR . $client_info['session_id'] );
+$global_config['sitekey'] = md5( $_SERVER['SERVER_NAME'] . NV_ROOTDIR . $client_info['session_id'] );
 
 //Xac dinh co phai AJAX hay khong
 if( preg_match( "/^[0-9]{10,}$/", $nv_Request->get_string( 'nocache', 'get', '' ) ) and $client_info['is_myreferer'] === 1 )
