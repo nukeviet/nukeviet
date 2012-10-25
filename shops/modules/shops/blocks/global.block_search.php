@@ -11,6 +11,12 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! function_exists( 'nv_search_product' ) )
 {
+	/**
+	 * nv_search_product()
+	 * 
+	 * @param mixed $block_config
+	 * @return
+	 */
 	function nv_search_product( $block_config )
 	{
 		global $site_mods, $my_head, $db_config, $module_name, $module_info, $nv_Request, $catid, $module_config;

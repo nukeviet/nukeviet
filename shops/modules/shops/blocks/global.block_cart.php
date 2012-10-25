@@ -11,6 +11,12 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! function_exists( 'nv_cart_info' ) )
 {
+	/**
+	 * nv_cart_info()
+	 * 
+	 * @param mixed $block_config
+	 * @return
+	 */
 	function nv_cart_info ( $block_config )
 	{
 		$module = $block_config['module'];

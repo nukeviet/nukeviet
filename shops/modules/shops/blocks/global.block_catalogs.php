@@ -11,6 +11,14 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! function_exists( 'nv_pro_catalogs' ) )
 {
+	/**
+	 * nv_block_config_product_catalogs_blocks()
+	 * 
+	 * @param mixed $module
+	 * @param mixed $data_block
+	 * @param mixed $lang_block
+	 * @return
+	 */
 	function nv_block_config_product_catalogs_blocks( $module, $data_block, $lang_block )
 	{
 		global $db, $language_array, $db_config;
@@ -45,6 +53,13 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 		return $html;
 	}
 
+	/**
+	 * nv_block_config_product_catalogs_blocks_submit()
+	 * 
+	 * @param mixed $module
+	 * @param mixed $lang_block
+	 * @return
+	 */
 	function nv_block_config_product_catalogs_blocks_submit( $module, $lang_block )
 	{
 		global $nv_Request;
@@ -56,6 +71,12 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 		return $return;
 	}
 
+	/**
+	 * nv_pro_catalogs()
+	 * 
+	 * @param mixed $block_config
+	 * @return
+	 */
 	function nv_pro_catalogs( $block_config )
 	{
 		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db, $db_config, $array_cat_shops;
@@ -140,6 +161,13 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 		return $xtpl->text( 'main' );
 	}
 
+	/**
+	 * html_viewsub()
+	 * 
+	 * @param mixed $list_sub
+	 * @param mixed $block_config
+	 * @return
+	 */
 	function html_viewsub( $list_sub, $block_config )
 	{
 		global $array_cat_shops;

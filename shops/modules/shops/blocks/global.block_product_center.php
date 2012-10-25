@@ -11,6 +11,14 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_global_product_center' ) )
 {
+	/**
+	 * nv_block_config_product_center_blocks()
+	 * 
+	 * @param mixed $module
+	 * @param mixed $data_block
+	 * @param mixed $lang_block
+	 * @return
+	 */
 	function nv_block_config_product_center_blocks( $module, $data_block, $lang_block )
 	{
 		global $db_config, $site_mods;
@@ -46,6 +54,13 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		return $html;
 	}
 
+	/**
+	 * nv_block_config_product_center_blocks_submit()
+	 * 
+	 * @param mixed $module
+	 * @param mixed $lang_block
+	 * @return
+	 */
 	function nv_block_config_product_center_blocks_submit( $module, $lang_block )
 	{
 		global $nv_Request;
@@ -58,6 +73,12 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		return $return;
 	}
 
+	/**
+	 * nv_global_product_center()
+	 * 
+	 * @param mixed $block_config
+	 * @return
+	 */
 	function nv_global_product_center( $block_config )
 	{
 		global $site_mods, $global_config, $module_name, $global_array_cat, $db_config, $my_head;

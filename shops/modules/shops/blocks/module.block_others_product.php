@@ -11,6 +11,11 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 if( ! function_exists( 'nv_others_product' ) )
 {
+	/**
+	 * nv_others_product()
+	 * 
+	 * @return
+	 */
 	function nv_others_product()
 	{
 		global $op;

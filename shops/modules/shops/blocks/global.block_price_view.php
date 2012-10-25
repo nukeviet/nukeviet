@@ -11,6 +11,14 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! function_exists( 'nv_view_product_price' ) )
 {
+	/**
+	 * nv_block_config_product_price_blocks()
+	 * 
+	 * @param mixed $module
+	 * @param mixed $data_block
+	 * @param mixed $lang_block
+	 * @return
+	 */
 	function nv_block_config_product_price_blocks( $module, $data_block, $lang_block )
 	{
 		$html = "";
@@ -28,6 +36,13 @@ if( ! function_exists( 'nv_view_product_price' ) )
 		$html .= "</tr>";
 		return $html;
 	}
+	/**
+	 * numoney_to_strmoney()
+	 * 
+	 * @param mixed $money
+	 * @param mixed $mod_file
+	 * @return
+	 */
 	function numoney_to_strmoney( $money, $mod_file )
 	{
 		include ( NV_ROOTDIR . "/modules/" . $mod_file . "/language/" . NV_LANG_DATA . ".php" );
@@ -43,6 +58,13 @@ if( ! function_exists( 'nv_view_product_price' ) )
 		}
 		return $money;
 	}
+	/**
+	 * nv_block_config_product_price_blocks_submit()
+	 * 
+	 * @param mixed $module
+	 * @param mixed $lang_block
+	 * @return
+	 */
 	function nv_block_config_product_price_blocks_submit( $module, $lang_block )
 	{
 		global $nv_Request;
@@ -54,6 +76,12 @@ if( ! function_exists( 'nv_view_product_price' ) )
 		$return['config']['price_step'] = $nv_Request->get_float( 'config_price_step', 'post', 0 );
 		return $return;
 	}
+	/**
+	 * nv_view_product_price()
+	 * 
+	 * @param mixed $block_config
+	 * @return
+	 */
 	function nv_view_product_price( $block_config )
 	{
 		global $site_mods, $module_info, $nv_Request, $catid;

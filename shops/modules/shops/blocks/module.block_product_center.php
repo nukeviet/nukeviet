@@ -11,6 +11,11 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 if( ! function_exists( 'nv_product_center' ) )
 {
+	/**
+	 * nv_product_center()
+	 * 
+	 * @return
+	 */
 	function nv_product_center()
 	{
 		global $module_name, $lang_module, $module_info, $module_file, $global_array_cat, $db, $module_data, $db_config;

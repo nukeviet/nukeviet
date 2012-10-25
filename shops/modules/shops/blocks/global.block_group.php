@@ -11,6 +11,12 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! function_exists( 'nv_pro_group' ) )
 {
+	/**
+	 * GetCatidInChild()
+	 * 
+	 * @param mixed $catid
+	 * @return
+	 */
 	function GetCatidInChild( $catid )
 	{
 		global $global_array_cat, $array_cat;
@@ -26,6 +32,14 @@ if( ! function_exists( 'nv_pro_group' ) )
 		}
 		return array_unique( $array_cat );
 	}
+	/**
+	 * getgroup_ckhtml()
+	 * 
+	 * @param mixed $data_group
+	 * @param mixed $pid
+	 * @param integer $catid
+	 * @return
+	 */
 	function getgroup_ckhtml( $data_group, $pid, $catid = 0 )
 	{
 		$contents_temp = "";
@@ -54,6 +68,12 @@ if( ! function_exists( 'nv_pro_group' ) )
 		return $contents_temp;
 	}
 
+	/**
+	 * nv_pro_group()
+	 * 
+	 * @param mixed $block_config
+	 * @return
+	 */
 	function nv_pro_group( $block_config )
 	{
 		global $site_mods, $db_config, $db, $global_array_group, $module_name, $module_info, $catid, $array_op;

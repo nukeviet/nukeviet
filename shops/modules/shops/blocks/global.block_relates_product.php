@@ -11,6 +11,14 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_relates_product' ) )
 {
+	/**
+	 * nv_block_config_relates_blocks()
+	 * 
+	 * @param mixed $module
+	 * @param mixed $data_block
+	 * @param mixed $lang_block
+	 * @return
+	 */
 	function nv_block_config_relates_blocks( $module, $data_block, $lang_block )
 	{
 		global $db_config, $site_mods;
@@ -43,6 +51,13 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		return $html;
 	}
 
+	/**
+	 * nv_block_config_relates_blocks_submit()
+	 * 
+	 * @param mixed $module
+	 * @param mixed $lang_block
+	 * @return
+	 */
 	function nv_block_config_relates_blocks_submit( $module, $lang_block )
 	{
 		global $nv_Request;
@@ -57,6 +72,15 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 	if( ! function_exists( 'CurrencyConversion' ) )
 	{
+		/**
+		 * CurrencyConversion()
+		 * 
+		 * @param mixed $price
+		 * @param mixed $currency_curent
+		 * @param mixed $currency_convert
+		 * @param mixed $block_config
+		 * @return
+		 */
 		function CurrencyConversion( $price, $currency_curent, $currency_convert, $block_config )
 		{
 			global $money_config, $module_config;
@@ -84,6 +108,12 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		}
 	}
 
+	/**
+	 * nv_relates_product()
+	 * 
+	 * @param mixed $block_config
+	 * @return
+	 */
 	function nv_relates_product( $block_config )
 	{
 		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db_config, $my_head;

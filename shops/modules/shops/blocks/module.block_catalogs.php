@@ -11,6 +11,11 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 if( ! function_exists( 'nv_pro_catalogs' ) )
 {
+	/**
+	 * nv_pro_catalogs()
+	 * 
+	 * @return
+	 */
 	function nv_pro_catalogs()
 	{
 		global $lang_module, $module_info, $module_file, $global_array_cat;
@@ -42,6 +47,12 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 		return $xtpl->text( 'main' );
 	}
 
+	/**
+	 * html_viewsub()
+	 * 
+	 * @param mixed $list_sub
+	 * @return
+	 */
 	function html_viewsub( $list_sub )
 	{
 		global $global_array_cat, $cut_num;
