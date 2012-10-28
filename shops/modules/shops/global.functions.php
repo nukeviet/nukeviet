@@ -48,6 +48,16 @@ if( $pro_config['timecheckstatus'] > 0 and $pro_config['timecheckstatus'] < NV_C
 }
 
 /**
+ * nv_fomart_money()
+ * 
+ * @return
+ */
+function nv_fomart_money( $number, $dec_point = ",", $thousands_sep = " " )
+{
+	return preg_replace( "/\\" . $dec_point . "00$/", "", number_format( $number, 2, $dec_point, $thousands_sep) );
+}
+
+/**
  * nv_set_status_module()
  * 
  * @return

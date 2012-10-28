@@ -11,6 +11,17 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['content_list'];
 
+if ( ! defined( 'SHADOWBOX' ) )
+{
+	$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "Shadowbox.init();\n";
+	$my_head .= "</script>\n";
+	
+	define( 'SHADOWBOX', true );
+}
+
 $stype = $nv_Request->get_string( 'stype', 'get', '-' );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $per_page_old = $nv_Request->get_int( 'per_page', 'cookie', 50 );
@@ -176,14 +187,17 @@ $xtpl->assign( 'BASE_URL_PUBLTIME', $base_url_publtime );
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=" . $ordername . "&amp;order=" . $order;
 $ord_sql = "ORDER BY `" . ( $ordername == "title" ? NV_LANG_DATA . "_title" : $ordername ) . "` " . $order;
-$sql = "SELECT `id`, `listcatid`, `user_id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `status`, `publtime`, `exptime`, `product_number` FROM " . $from . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
+$sql = "SELECT `id`, `listcatid`, `user_id`, `homeimgfile`, `homeimgthumb`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `status`, `edittime`, `publtime`, `exptime`, `product_number`, `product_price`, `product_discounts`, `money_unit` FROM " . $from . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
 
 $result = $db->sql_query( $sql );
 
+$theme = $site_mods[$module_name]['theme'] ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $a = 0;
-while( list( $id, $listcatid, $admin_id, $title, $alias, $status, $publtime, $exptime, $product_number ) = $db->sql_fetchrow( $result ) )
+
+while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $alias, $status, $edittime, $publtime, $exptime, $product_number, $product_price, $product_discounts, $money_unit ) = $db->sql_fetchrow( $result ) )
 {
 	$publtime = nv_date( "H:i d/m/y", $publtime );
+	$edittime = nv_date( "H:i d/m/y", $edittime );
 	$title = nv_clean60( $title );
 
 	$catid_i = 0;
@@ -196,15 +210,60 @@ while( list( $id, $listcatid, $admin_id, $title, $alias, $status, $publtime, $ex
 		$catid_i = $listcatid;
 	}
 	
+	// Xac dinh anh nho
+	$thumb = explode( "|", $homeimgthumb );
+	if ( ! empty( $thumb[1] ) and ! nv_is_url( $thumb[1] ) )
+	{
+		$thumb[1] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[1];
+	}
+	else
+	{
+		if( file_exists( NV_ROOTDIR . "/themes/" . $theme . "/images/" . $module_file . "/no-image.jpg" ) )
+		{
+			$thumb[1] = NV_BASE_SITEURL . "themes/" . $theme . "/images/" . $module_file . "/no-image.jpg";
+		}
+		else
+		{
+			$thumb[1] = NV_BASE_SITEURL . "themes/default/images/" . $module_file . "/no-image.jpg";
+		}
+	}
+	
+	// Xac dinh anh lon
+	if( nv_is_url( $homeimgfile ) )
+	{
+		$imghome = $homeimgfile;
+	}
+	elseif( $homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile ) )
+	{
+		$imghome = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+	}
+	else
+	{
+		if( file_exists( NV_ROOTDIR . "/themes/" . $theme . "/images/" . $module_file . "/no-image.jpg" ) )
+		{
+			$imghome = NV_BASE_SITEURL . "themes/" . $theme . "/images/" . $module_file . "/no-image.jpg";
+		}
+		else
+		{
+			$imghome = NV_BASE_SITEURL . "themes/default/images/" . $module_file . "/no-image.jpg";
+		}
+	}
+	
 	$xtpl->assign( 'ROW', array(
 		"class" => ( $a % 2 == 0 ) ? "" : " class=\"second\"",
 		"id" => $id,
 		"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id,
 		"title" => $title,
 		"publtime" => $publtime,
+		"edittime" => $edittime,
 		"status" => $lang_module['status_' . $status],
 		"admin_id" => isset( $array_admin[$admin_id] ) ? $array_admin[$admin_id] : "",
 		"product_number" => $product_number,
+		"product_price" => nv_fomart_money( $product_price, ",", "." ),
+		"money_unit" => $money_unit,
+		"thumb" => $thumb[1],
+		"imghome" => $imghome,
+		"product_discounts" => $product_discounts,
 		"link_edit" => nv_link_edit_page( $id ),
 		"link_delete" => nv_link_delete_page( $id ),
 	) );
