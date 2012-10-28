@@ -61,7 +61,7 @@ if( ! in_array( $ordername, array_keys( $array_in_ordername ) ) )
 	$ordername = "id";
 }
 
-$from = "`" . $db_config['prefix'] . "_" . $module_data . "_rows`";
+$from = "`" . $db_config['prefix'] . "_" . $module_data . "_rows` AS a LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` AS b ON a.user_id=b.userid";
 
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
@@ -126,14 +126,6 @@ if( $checkss == md5( session_id() ) )
 
 list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . $from ) );
 
-$sql = "SELECT `userid`, `username` FROM " . NV_USERS_GLOBALTABLE;
-$result = $db->sql_query( $sql );
-$array_admin = array();
-while( list( $admin_id, $admin_login ) = $db->sql_fetchrow( $result ) )
-{
-	$array_admin[$admin_id] = $admin_login;
-}
-
 $xtpl = new XTemplate( "items.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -187,14 +179,14 @@ $xtpl->assign( 'BASE_URL_PUBLTIME', $base_url_publtime );
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=" . $ordername . "&amp;order=" . $order;
 $ord_sql = "ORDER BY `" . ( $ordername == "title" ? NV_LANG_DATA . "_title" : $ordername ) . "` " . $order;
-$sql = "SELECT `id`, `listcatid`, `user_id`, `homeimgfile`, `homeimgthumb`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `status`, `edittime`, `publtime`, `exptime`, `product_number`, `product_price`, `product_discounts`, `money_unit` FROM " . $from . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
+$sql = "SELECT `id`, `listcatid`, `user_id`, `homeimgfile`, `homeimgthumb`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `status`, `edittime`, `publtime`, `exptime`, `product_number`, `product_price`, `product_discounts`, `money_unit`, `username` FROM " . $from . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
 
 $result = $db->sql_query( $sql );
 
 $theme = $site_mods[$module_name]['theme'] ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $a = 0;
 
-while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $alias, $status, $edittime, $publtime, $exptime, $product_number, $product_price, $product_discounts, $money_unit ) = $db->sql_fetchrow( $result ) )
+while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $alias, $status, $edittime, $publtime, $exptime, $product_number, $product_price, $product_discounts, $money_unit, $username ) = $db->sql_fetchrow( $result ) )
 {
 	$publtime = nv_date( "H:i d/m/y", $publtime );
 	$edittime = nv_date( "H:i d/m/y", $edittime );
@@ -257,7 +249,7 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 		"publtime" => $publtime,
 		"edittime" => $edittime,
 		"status" => $lang_module['status_' . $status],
-		"admin_id" => isset( $array_admin[$admin_id] ) ? $array_admin[$admin_id] : "",
+		"admin_id" => ! empty( $username ) ? $username : "",
 		"product_number" => $product_number,
 		"product_price" => nv_fomart_money( $product_price, ",", "." ),
 		"money_unit" => $money_unit,
