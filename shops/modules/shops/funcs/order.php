@@ -81,7 +81,7 @@ if ( $post_order == 1 )
 	$data_order['listnum'] = $listnum;
 	$data_order['listprice'] = $listprice;
 	$data_order['order_total'] = $total;
-	
+
 	if ( empty( $data_order['order_name'] ) ) $error['order_name'] = $lang_module['order_name_err'];
 	elseif ( nv_check_valid_email( $data_order['order_email'] ) != "" ) $error['order_email'] = $lang_module['order_email_err'];
 	elseif ( empty( $data_order['order_phone'] ) ) $error['order_phone'] = $lang_module['order_phone_err'];
@@ -115,6 +115,7 @@ if ( $post_order == 1 )
 		
 		if ( $order_id > 0 )
 		{
+			// Neu tat chuc nang dat hang vo han thi tru so sp trong kho
 			if ( $pro_config['active_order_number'] == '0' )
 			{
 				product_number_order( $data_order['listid'], $data_order['listnum'] );

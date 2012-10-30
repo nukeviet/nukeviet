@@ -1,5 +1,5 @@
 ﻿#products{
-	background: #ffffff;
+	background: #fff;
 }
 #products .items{
 	float: left;
@@ -677,5 +677,9 @@ div.TabView div.Pages div.Page {
 	list-style:none;
 	margin:0;
 }
-
-
+.rows3 td{
+	padding:1px;
+}
+.error{
+	color:red;
+}

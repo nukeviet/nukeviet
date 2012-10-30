@@ -292,7 +292,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		{
 			$rowcontent['homeimgfile'] = "";
 		}
-		$check_thumb = false;
+		
+		$check_thumb = false; // Kiem tra lai anh thumb
 		
 		if( $rowcontent['id'] > 0 )
 		{
@@ -593,7 +594,7 @@ elseif( $rowcontent['id'] > 0 )
 	$rowcontent['topictext'] = "";
 
 	$id_block_content = array();
-	$sql = "SELECT bid FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` where `id`='" . $rowcontent['id'] . "' ";
+	$sql = "SELECT bid FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` where `id`='" . $rowcontent['id'] . "'";
 	$result = $db->sql_query( $sql );
 	
 	while( list( $bid_i ) = $db->sql_fetchrow( $result ) )
