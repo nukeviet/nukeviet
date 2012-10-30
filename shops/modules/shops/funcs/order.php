@@ -127,6 +127,63 @@ if ( $post_order == 1 )
 				$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET `order_code`=" . $db->dbescape_string( $order_code2 ) . "  WHERE `order_id`=" . $order_id );
 			}
 			
+			// Gui email thong bao don hang
+			$data_order['id'] = $order_id;
+			$data_order['order_code'] = $order_code2;
+			
+			// Thong tin san pham dat hang
+			$listid = explode( "|", $data_order['listid'] );
+			$listnum = explode( "|", $data_order['listnum'] );
+			$listprice = explode( "|", $data_order['listprice'] );
+			$data_pro = array();
+			$temppro = array();
+			$i = 0;
+			
+			foreach ( $listid as $proid )
+			{
+				if ( empty( $listprice[$i] ) ) $listprice[$i] = 0;
+				if ( empty( $listnum[$i] ) ) $listnum[$i] = 0;
+				
+				$temppro[$proid] = array( 
+					"price" => $listprice[$i],
+					"num" => $listnum[$i] 
+				);
+				
+				$arrayid[] = $proid;
+				$i ++;
+			}
+			
+			if ( ! empty( $arrayid ) )
+			{
+				$templistid = implode( ",", $arrayid );
+				
+				$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE  t1.id IN (" . $templistid . ")  AND t1.status=1";
+				$result = $db->sql_query( $sql );
+				
+				while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $unit, $money_unit ) = $db->sql_fetchrow( $result ) )
+				{
+					$data_pro[] = array(
+						"id" => $id,
+						"publtime" => $publtime,
+						"title" => $title,
+						"alias" => $alias,
+						"product_note" => $note,
+						"hometext" => $hometext,
+						"product_price" => $temppro[$id]['price'],
+						"product_unit" => $unit,
+						"money_unit" => $money_unit,
+						"product_number" => $temppro[$id]['num'] 
+					);
+				}
+			}
+			
+			$lang_module['order_email_noreply'] = sprintf( $lang_module['order_email_noreply'], $global_config['site_url'], $global_config['site_url'] );
+			$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks'], $global_config['site_url'] );
+			$email_contents = call_user_func( "email_new_order", $data_order, $data_pro );
+			
+			nv_sendmail( array( $global_config['site_name'], $global_config['site_email'] ), $data_order['order_email'], sprintf( $lang_module['order_email_title'], $module_info['custom_title'], $data_order['order_code'] ), $email_contents );
+			
+			// Chuyen trang xem thong tin don hang vua dat
 			$checkss = md5( $order_id . $global_config['sitekey'] . session_id() );
 			unset( $_SESSION[$module_data . '_cart'] );
 			

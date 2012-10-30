@@ -926,7 +926,7 @@ function print_pay( $data_content, $data_pro )
 	$xtpl->assign( 'dateup', date( "d-m-Y", $data_content['order_time'] ) );
 	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
 	$xtpl->assign( 'DATA', $data_content );
-	$xtpl->assign( 'order_id', $data_content['id'] );
+	$xtpl->assign( 'order_id', $data_content['order_id'] );
 	
 	$i = 0;
 	foreach( $data_pro as $pdata )
@@ -1393,6 +1393,58 @@ function user_get( $user_info )
 	$user_info['st_login'] = $user_info['st_login'] ? $lang_module['yes'] : $lang_module['no'];
 	$user_info['email'] = $user_info['email'] = empty( $user_info['email'] ) ? $lang_module['na'] : $user_info['email'];
 	return $user_info;
+}
+
+/**
+ * email_new_order()
+ * 
+ * @param mixed $data_content
+ * @param mixed $data_pro
+ * @return
+ */
+function email_new_order( $data_content, $data_pro )
+{
+	global $module_info, $lang_module, $module_file, $pro_config, $global_config;
+	
+	$xtpl = new XTemplate( "email_new_order.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'dateup', date( "d-m-Y", $data_content['order_time'] ) );
+	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
+	$xtpl->assign( 'DATA', $data_content );
+	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+	$xtpl->assign( 'SITE_DOMAIN', $global_config['site_url'] );
+	
+	$i = 0;
+	foreach( $data_pro as $pdata )
+	{
+		$xtpl->assign( 'product_name', $pdata['title'] );
+		$xtpl->assign( 'product_number', $pdata['product_number'] );
+		$xtpl->assign( 'product_price', FormatNumber( $pdata['product_price'], 2, '.', ',' ) );
+		$xtpl->assign( 'product_unit', $pdata['product_unit'] );
+		$xtpl->assign( 'product_note', $pdata['product_note'] );
+		$xtpl->assign( 'pro_no', $i + 1 );
+
+		$bg = ( $i % 2 == 0 ) ? " style=\"background:#f3f3f3;\"" : "";
+		$xtpl->assign( 'bg', $bg );
+		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.loop.price2' );
+		if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.loop.num2' );
+		$xtpl->parse( 'main.loop' );
+		$i++;
+	}
+	
+	if( ! empty( $data_content['order_note'] ) )
+	{
+		$xtpl->parse( 'main.order_note' );
+	}
+	
+	$xtpl->assign( 'order_total', FormatNumber( $data_content['order_total'], 2, '.', ',' ) );
+	$xtpl->assign( 'unit', $data_content['unit_total'] );
+
+	if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.price1' );
+	if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.num1' );
+	if( $pro_config['active_price'] == '1' && $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.price3' );
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
 }
 
 ?>
