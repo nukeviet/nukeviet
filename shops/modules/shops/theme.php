@@ -581,6 +581,7 @@ function detail_product( $data_content, $data_unit, $data_comment, $num_comment,
 		{
 			$xtpl->assign( 'class_money', 'money' );
 		}
+		
 		$xtpl->assign( 'pro_unit', $data_unit['title'] );
 		$xtpl->assign( 'address', $data_content[NV_LANG_DATA . '_address'] );
 		$xtpl->assign( 'product_number', $data_content['product_number'] );
@@ -671,6 +672,20 @@ function detail_product( $data_content, $data_unit, $data_comment, $num_comment,
 			$xtpl->parse( 'main.order' );
 		}
 	}
+	
+	if( ! empty( $data_content['allowed_rating'] ) )
+	{
+		$xtpl->parse( 'main.allowed_rating' );
+		$xtpl->parse( 'main.allowed_rating_js' );
+	}
+	if( ! empty( $data_content['allowed_send'] ) ) $xtpl->parse( 'main.allowed_send' );
+	if( ! empty( $data_content['allowed_print'] ) )
+	{
+		$xtpl->parse( 'main.allowed_print' );
+		$xtpl->parse( 'main.allowed_print_js' );
+	}
+	if( ! empty( $data_content['allowed_save'] ) ) $xtpl->parse( 'main.allowed_save' );
+	
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

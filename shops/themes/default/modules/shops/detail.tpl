@@ -39,6 +39,7 @@
 			<!-- BEGIN: note -->
 			<div>{LANG.cart_note} : {note}</div>
 			<!-- END: note -->
+			<!-- BEGIN: allowed_rating -->
 			<p style="padding:6px 0; border-bottom:1px dotted #000000; color:#006699">
 				<span>{LANG.detail_rank} : <span class="math_rate">{RATE}</span> {LANG.detail_rate_math}</span>
 				<span class="div_rate">
@@ -49,12 +50,14 @@
 					<a href="#" class="rate">5</a>
 				</span>
 			<p>
+			<!-- END: allowed_rating -->
 			<div class="clearfix fl" style="width:170px; padding:6px 0px">
 				<strong class="fl">{LANG.detail_share} : </strong>
 				<span class="share clearfix">
+					<!-- BEGIN: allowed_print -->
 					<a rel="nofollow" href="{LINK_PRINT}" title="print" id="click_print">
 						<img border="0" alt="print" src="{THEME_URL}/images/shops/print.png">
-					</a>
+					</a><!-- END: allowed_print -->
 					<a onclick="share_facebook();" href="javascript:;" title="Share on Facebook">
 						<img border="0" alt="Share on Facebook" src="{THEME_URL}/images/shops/flickr.png">
 					</a>
@@ -187,12 +190,15 @@
 			});
 			return false;
 		});
+		<!-- BEGIN: allowed_print_js -->
 		$('#click_print').click(function(event){
 			var href = $(this).attr("href");
 			event.preventDefault();
 			NewWindow(href, '', '640', '500', 'yes');
 			return false;
 		});
+		<!-- END: allowed_print_js -->
+		<!-- BEGIN: allowed_rating_js -->
 		$("a.rate").click(function(event){
 			event.preventDefault();
 			var val = $(this).html();
@@ -207,6 +213,7 @@
 			});
 			return false;
 		});
+		<!-- END: allowed_rating_js -->
 	});
 </script>
 <!-- END: main -->
