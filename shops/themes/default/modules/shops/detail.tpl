@@ -108,6 +108,7 @@
 							<a href="{IMG_SRC_OTHER}" rel="shadowbox[miss]"><img src="{IMG_SRC_OTHER}" style="max-width:100%" height="140px"/></a>
 						</div>
 						<!-- END: othersimg -->
+						<!-- BEGIN: no_otherimage -->{LANG.detail_no_otherimage}<!-- END: no_otherimage -->
 					</div>
 				</div>
 				<div class="Page">

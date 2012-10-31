@@ -615,6 +615,10 @@ function detail_product( $data_content, $data_unit, $data_comment, $num_comment,
 				}
 			}
 		}
+		else
+		{
+			$xtpl->parse( 'main.no_otherimage' );
+		}
 	}
 	if( $pro_config['comment'] == "1" )
 	{
