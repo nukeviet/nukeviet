@@ -25,6 +25,13 @@ if( ! empty( $data ) )
 	$data['homeheight'] = $temp[1];
 }
 
+$groups_list = nv_groups_list();
+$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
+if ( ! empty( $groups_list ) )
+{
+    $array_who[] = $lang_global['who_view3'];
+}
+
 $page_title = $lang_module['setting'];
 
 $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
@@ -40,6 +47,7 @@ if( $savesetting == 1 )
 	$data['comment'] = $nv_Request->get_int( 'comment', 'post', 0 );
 	$data['comment_auto'] = $nv_Request->get_int( 'comment_auto', 'post', 0 );
 	$data['who_comment'] = $nv_Request->get_string( 'who_comment', 'post', 0 );
+	$data['groups_comment'] = $nv_Request->get_typed_array( 'groups_comment', 'post', 'int' );
 	$data['auto_check_order'] = $nv_Request->get_string( 'auto_check_order', 'post', 0 );
 	$data['post_auto_member'] = $nv_Request->get_string( 'post_auto_member', 'post', 0 );
 	$data['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" );
@@ -52,6 +60,12 @@ if( $savesetting == 1 )
 	$data['active_showhomtext'] = $nv_Request->get_int( 'active_showhomtext', 'post', 0 );
 	$data['active_tooltip'] = $nv_Request->get_int( 'active_tooltip', 'post', 0 );
 
+	if ( ! in_array( $data['who_comment'], array_keys( $array_who ) ) )
+	{
+		$data['who_comment'] = 0;
+	}
+	$data['groups_comment'] = ( ! empty( $data['groups_comment'] ) ) ? implode( ',', $data['groups_comment'] ) : '';
+	
 	if( $error == '' )
 	{
 		foreach( $data as $config_name => $config_value )
@@ -85,6 +99,32 @@ if( $data['active_payment'] == '1' )
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$array_setting_payment[$row['payment']] = $row;
+	}
+}
+
+// Xu ly quyen binh luan
+$who_comment = $data['who_comment'];
+$data['who_comment'] = array();
+foreach ( $array_who as $key => $who )
+{
+	$data['who_comment'][$key] = array(
+		'key' => $key, //
+		'title' => $who, //
+		'selected' => $key == $who_comment ? " selected=\"selected\"" : "" //
+	);
+}
+
+$groups_comment = ! empty( $data['groups_comment'] ) ? explode( ",", $data['groups_comment'] ) : array();
+$data['groups_comment'] = array();
+if ( ! empty( $groups_list ) )
+{
+	foreach ( $groups_list as $key => $title )
+	{
+		$data['groups_comment'][$key] = array(
+			'key' => $key, //
+			'title' => $title, //
+			'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : "" //
+		);
 	}
 }
 
@@ -140,13 +180,23 @@ $xtpl->assign( 'ck_active_showhomtext', $check );
 $check = ( $data['active_tooltip'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_tooltip', $check );
 
-$check_all = ( $data['who_comment'] == 'all' ) ? "selected=\"selected\"" : "";
-$check_member = ( $data['who_comment'] == 'member' ) ? "selected=\"selected\"" : "";
-if( $data['who_comment'] == 'member' ) $who_comment = $lang_module['setting_allow_all'];
-$who_comment = "<option value=\"all\" " . $check_all . ">" . $lang_module['setting_allow_all'] . "</option>";
-$who_comment .= "<option value=\"member\" " . $check_member . ">" . $lang_module['setting_allow_member'] . "</option>";
-$xtpl->assign( 'WHO_COMMENT', $who_comment );
+// Binh luan
+foreach ( $data['who_comment'] as $who )
+{
+	$xtpl->assign( 'WHO_COMMENT', $who );
+	$xtpl->parse( 'main.who_comment' );
+}
+if ( ! empty( $data['groups_comment'] ) )
+{
+	foreach ( $data['groups_comment'] as $group )
+	{
+		$xtpl->assign( 'GROUPS_COMMENT', $group );
+		$xtpl->parse( 'main.group.groups_comment' );
+	}
+	$xtpl->parse( 'main.group' );
+}
 
+// Tien te
 $result = $db->sql_query( "SELECT `code`, `currency` FROM `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` ORDER BY `code` DESC" );
 while( list( $code, $currency ) = $db->sql_fetchrow( $result ) )
 {

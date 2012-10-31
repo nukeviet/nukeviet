@@ -11,49 +11,42 @@
 			</select></td>
 		</tr>
 	</tbody>
-    
     <tbody>
         <tr>
             <td><strong>{LANG.setting_homesite}</strong></td>
             <td><input type="text" value="{DATA.homewidth}" style="width: 40px;" name="homewidth" /> x <input type="text" value="{DATA.homeheight}" style="width: 40px;" name="homeheight" /></td>
         </tr>
     </tbody>
-    
 	<tbody class="second">
 		<tr>
 			<td><strong>{LANG.setting_per_page}</strong></td>
 			<td><input type="text" value="{DATA.per_page}" style="width: 40px;" name="per_page" /> {LANG.setting_per_note_home}</td>
 		</tr>
 	</tbody>
-    
     <tbody>
         <tr>
             <td><strong>{LANG.setting_per_row}</strong></td>
             <td><input type="text" value="{DATA.per_row}" style="width: 40px;" name="per_row" /> {LANG.setting_per_note}</td>
         </tr>
     </tbody>
-    
     <tbody class="second">
         <tr>
             <td><strong>{LANG.setting_hometext}</strong></td>
             <td><input type="checkbox" value="1" name="active_showhomtext" {ck_active_showhomtext} /></td>
         </tr>
     </tbody>
-    
     <tbody>
         <tr>
             <td><strong>{LANG.setting_active_order}</strong></td>
             <td><input type="checkbox" value="1" name="active_order" {ck_active_order} /></td>
         </tr>
     </tbody>
-    
     <tbody class="second">
         <tr>
             <td><strong>{LANG.setting_active_price}</strong></td>
             <td><input type="checkbox" value="1" name="active_price" {ck_active_price} id="active_price" /></td>
         </tr>
     </tbody>
-    
     <tbody>
         <tr>
             <td><strong>{LANG.setting_active_order_number}</strong></td>
@@ -72,30 +65,32 @@
             </td>
         </tr>
     </tbody>
-    
     <tbody>
         <tr>
             <td><strong>{LANG.activecomm}</strong></td>
             <td><input type="checkbox" value="1" name="comment" {ck_comment} /></td>
         </tr>
     </tbody>
-    
 	<tbody class="second">
 		<tr>
 			<td><strong>{LANG.setting_auto_postcomm}</strong></td>
 			<td><input type="checkbox" value="1" name="comment_auto" {ck_comment_auto}/></td>
 		</tr>
 	</tbody>
-    
 	<tbody>
 		<tr>
 			<td><strong>{LANG.setting_setcomm}</strong></td>
-			<td><select name="who_comment">
-				{WHO_COMMENT}
-			</select></td>
+			<td>
+				<select name="who_comment">
+					<!-- BEGIN: who_comment --><option value="{WHO_COMMENT.key}"{WHO_COMMENT.selected}>{WHO_COMMENT.title}</option><!-- END: who_comment -->
+				</select>
+				<!-- BEGIN: group -->
+				<br />{LANG.group_select_info}<br />
+				<!-- BEGIN: groups_comment --><label><input type="checkbox" name="groups_comment[]" value="{GROUPS_COMMENT.key}"{GROUPS_COMMENT.checked}/> {GROUPS_COMMENT.title}</label><br /><!-- END: groups_comment -->
+				<!-- END: group -->
+			</td>
 		</tr>
 	</tbody>
-    
 	<tbody class="second">
         <tr>
             <td><strong>{LANG.setting_money_all}</strong></td>
@@ -106,28 +101,24 @@
             </select></td>
         </tr>
 	</tbody>
-    
 	<tbody>
         <tr>
             <td><strong>{LANG.format_order_id}</strong></td>
             <td><input type="text" value="{DATA.format_order_id}" style="width: 100px;" name="format_order_id" /> {LANG.format_order_id_note}</td>
         </tr>	
 	</tbody>
-	
 	<tbody class="second">
 		<tr>
 			<td><strong>{LANG.setting_active_auto_check_order}</strong></td>
 			<td><input type="checkbox" value="1" name="auto_check_order" {ck_auto_check_order} id="auto_check_order" /></td>
 		</tr>
 	</tbody>
-    
     <tbody>
 		<tr>
 			<td><strong>{LANG.setting_active_tooltip}</strong></td>
 			<td><input type="checkbox" value="1" name="active_tooltip" {ck_active_tooltip} id="active_tooltip" /></td>
 		</tr>
 	</tbody>
-    
     <tbody class="second">
         <tr>
             <td colspan="2" style="text-align: center; padding:10px">

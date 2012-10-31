@@ -195,6 +195,7 @@ $lang_module['detail_source'] = "Hãng sản xuất";
 $lang_module['detail_product_discounts'] = "Giảm giá";
 $lang_module['detail_promotional'] = "Khuyến mại";
 $lang_module['detail_warranty'] = "Bảo hành";
+$lang_module['detail_no_permission'] = "Chú ý: Bạn không được quyền xem chi tiết sản phẩm này";
 
 $lang_module['redirect_to_back_shops'] = "Quay lại trang chủ";
 $lang_module['company_product'] = "Sản phẩm thuộc gian hàng";

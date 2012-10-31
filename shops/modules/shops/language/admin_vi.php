@@ -19,6 +19,7 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = "";
 $lang_translator['langtype'] = "lang_module";
 
+$lang_module['group_select_info'] = 'Nếu chọn "Nhóm thành viên", hãy đánh dấu vào các nhóm cho phép';
 $lang_module['categories'] = "Loại sản phẩm";
 $lang_module['topics'] = "Tiêu chí cho loại sản phẩm";
 $lang_module['sources'] = "Hãng sản xuất";
