@@ -357,7 +357,7 @@
 		<table summary="" class="tab1">
 			<tbody>
 				<tr>
-					<td><strong>{LANG.content_bodytext}</strong>{LANG.content_bodytext_note}</td>
+					<td><strong>{LANG.content_bodytext} <span class="require">(*)</span></strong>{LANG.content_bodytext_note}</td>
 				</tr>
 			</tbody>
 			<tbody class="second">
