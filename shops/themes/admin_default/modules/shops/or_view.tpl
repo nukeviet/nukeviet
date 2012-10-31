@@ -14,8 +14,8 @@
 				<td>{DATA.order_email}</td>
 			</tr>
 			<tr>
-				<td>{LANG.order_phone}</td>
-				<td>: {DATA.order_phone}</td>
+				<td>{LANG.order_phone}:</td>
+				<td>{DATA.order_phone}</td>
 			</tr>
 			<tr>
 				<td valign="top">{LANG.order_address}:</td>
