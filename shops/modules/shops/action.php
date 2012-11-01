@@ -338,7 +338,7 @@ $data['comment'] = 1;
 $data['comment_auto'] = 1;
 $data['who_comment'] = 0;
 $data['groups_comment'] = '';
-$data['money_unit'] = 'USD';
+$data['money_unit'] = 'VND';
 $data['post_auto_member'] = 0;
 $data['auto_check_order'] = 1;
 $data['format_order_id'] = strtoupper( substr( $module_name, 0, 1 ) ) . '%06s';
@@ -423,7 +423,7 @@ if ( ! empty( $set_lang_data ) )
 	$sql_create_module[] = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . "` SET `exchange` = '1'";
 }
 
-$sql_create_module[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . "` (`id`, `code`, `currency`, `exchange`) VALUES (840, 'USD', 'US Dollar', 1)";
+$sql_create_module[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . "` (`id`, `code`, `currency`, `exchange`) VALUES (840, 'USD', 'US Dollar', 21000)";
 $sql_create_module[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . "` (`id`, `code`, `currency`, `exchange`) VALUES (704, 'VND', 'Vietnam Dong', 1)";
 
 $sql_create_module[] = "ALTER TABLE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ADD UNIQUE (`" . $lang . "_alias`)";
