@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 3.0
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Createdate 1-11-2012 0:14
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Createdate 3-6-2010 0:14
  */
 
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
