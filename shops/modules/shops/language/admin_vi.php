@@ -112,6 +112,7 @@ $lang_module['setting_active_order_number_note'] = "Chức năng này dùng khi 
 $lang_module['setting_active_payment'] = "Cho phép thanh toán trực tuyến với các cổng đã tích hợp";
 $lang_module['setting_active_payment_note'] = "Chức năng này bật thì được phép thành toán trực truyến, nếu đặt hàng với số lượng không giới hạn thì không còn tác dụng";
 $lang_module['setting_active_tooltip'] = "Bật chức năng tooltip cho sản phẩm";
+$lang_module['setting_show_product_code'] = "Hiển thị mã sản phẩm";
 
 $lang_module['setup_payment'] = "Tích hợp cổng thanh toán";
 $lang_module['setting_stt'] = "STT";

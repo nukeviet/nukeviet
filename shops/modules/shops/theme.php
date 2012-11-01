@@ -69,6 +69,8 @@ function view_home_cat( $data_content, $html_pages = "" )
 	
 	$num_view = $pro_config['per_row'];
 	
+	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
+	
 	if( ! empty( $data_content ) )
 	{
 		foreach( $data_content as $data_row )
@@ -90,6 +92,8 @@ function view_home_cat( $data_content, $html_pages = "" )
 					$xtpl->assign( 'height', $pro_config['homeheight'] );
 					$xtpl->assign( 'width', $pro_config['homewidth'] );
 					$xtpl->assign( 'hometext', $data_row_i['hometext'] );
+					$xtpl->assign( 'PRODUCT_CODE', $data_row_i['product_code'] );
+					
 					if( $pro_config['active_price'] == '1' )
 					{
 						if( $data_row_i['showprice'] == '1' )
@@ -114,7 +118,9 @@ function view_home_cat( $data_content, $html_pages = "" )
 							$xtpl->parse( 'main.catalogs.items.contact' );
 						}
 					}
+					
 					$pwidth = ( int )( 100 / $num_view );
+					
 					if( $i % $pro_config['per_row'] == 0 )
 					{
 						$xtpl->parse( 'main.catalogs.items.break' );
@@ -125,7 +131,9 @@ function view_home_cat( $data_content, $html_pages = "" )
 					{
 						$pwidth = ( int )( 100 / $num_view );
 					}
+					
 					$xtpl->assign( 'pwidth', $pwidth );
+					
 					if( $pro_config['active_order'] == '1' )
 					{
 						if( $data_row_i['showprice'] == '1' )
@@ -134,6 +142,11 @@ function view_home_cat( $data_content, $html_pages = "" )
 						}
 					}
 					if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.catalogs.items.tooltip' );
+
+					if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_row_i['product_code'] ) )
+					{
+						$xtpl->parse( 'main.catalogs.items.product_code' );
+					}
 					
 					if( defined( 'NV_IS_MODADMIN' ) )
 					{
@@ -173,6 +186,8 @@ function view_home_all( $data_content, $html_pages = "" )
 	
 	$num_view = $pro_config['per_row'];
 	
+	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
+	
 	if( ! empty( $data_content ) )
 	{
 		$i = 1;
@@ -187,6 +202,7 @@ function view_home_all( $data_content, $html_pages = "" )
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
 			$xtpl->assign( 'hometext', $data_row['hometext'] );
+			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 			$pwidth = ( int )( 100 / $num_view );
 			if( $i % $pro_config['per_row'] == 0 )
 			{
@@ -231,6 +247,11 @@ function view_home_all( $data_content, $html_pages = "" )
 				}
 			}
 			if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.items.tooltip' );
+
+			if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_row['product_code'] ) )
+			{
+				$xtpl->parse( 'main.items.product_code' );
+			}
 			
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
@@ -372,6 +393,8 @@ function viewcat_page_gird( $data_content, $pages )
 	$xtpl->assign( 'CAT_NAME', $data_content['title'] );
 	$xtpl->assign( 'count', $data_content['count'] );
 	
+	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
+	
 	if( ! empty( $data_content['data'] ) )
 	{
 		$i = 1;
@@ -385,6 +408,7 @@ function viewcat_page_gird( $data_content, $pages )
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
 			$xtpl->assign( 'intro', $data_row['hometext'] );
+			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 			if( $pro_config['active_price'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -431,6 +455,11 @@ function viewcat_page_gird( $data_content, $pages )
 				}
 			}
 			if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.grid_rows.tooltip' );
+
+			if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_row['product_code'] ) )
+			{
+				$xtpl->parse( 'main.grid_rows.product_code' );
+			}
 			
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
@@ -484,7 +513,8 @@ function viewcat_page_list( $data_content, $pages )
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
 			$xtpl->assign( 'intro', $data_row['hometext'] );
-
+			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
+			
 			if( $pro_config['active_price'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -519,6 +549,11 @@ function viewcat_page_list( $data_content, $pages )
 				{
 					$xtpl->parse( 'main.row.order' );
 				}
+			}
+
+			if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_row['product_code'] ) )
+			{
+				$xtpl->parse( 'main.row.product_code' );
 			}
 			
 			if( defined( 'NV_IS_MODADMIN' ) )
@@ -583,6 +618,7 @@ function detail_product( $data_content, $data_unit, $data_comment, $num_comment,
 		$xtpl->assign( 'LINK_ORDER', $link2 . "setcart&id=" . $data_content['id'] );
 		$xtpl->assign( 'product_price', CurrencyConversion( $data_content['product_price'], $data_content['money_unit'], $pro_config['money_unit'] ) );
 		$xtpl->assign( 'money_unit', $pro_config['money_unit'] );
+		$xtpl->assign( 'PRODUCT_CODE', $data_content['product_code'] );
 		if( ! empty( $data_content[NV_LANG_DATA . '_warranty'] ) )
 		{
 			$xtpl->assign( 'promotional', $data_content[NV_LANG_DATA . '_promotional'] );
@@ -652,6 +688,11 @@ function detail_product( $data_content, $data_unit, $data_comment, $num_comment,
 		else
 		{
 			$xtpl->parse( 'main.no_otherimage' );
+		}
+
+		if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_content['product_code'] ) )
+		{
+			$xtpl->parse( 'main.product_code' );
 		}
 	}
 	if( $pro_config['comment'] == "1" )

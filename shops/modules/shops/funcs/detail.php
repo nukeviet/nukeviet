@@ -99,11 +99,11 @@ if( $allowed )
 	$data_temp = $db->sql_fetchrow( $sql );
 	$data_content['source'] = $data_temp[NV_LANG_DATA . '_title'];
 
-	$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgthumb`, `addtime`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id!=" . $id . " AND `listcatid` = " . $data_content['listcatid'] . " AND `status`=1 ORDER BY ID DESC LIMIT " . ( $pro_config['per_row'] * 2 );
+	$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgthumb`, `addtime`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id!=" . $id . " AND `listcatid` = " . $data_content['listcatid'] . " AND `status`=1 ORDER BY ID DESC LIMIT " . ( $pro_config['per_row'] * 2 );
 	$result = $db->sql_query( $sql );
 
 	$data_others = array();
-	while ( list( $_id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $db->sql_fetchrow( $result ) )
+	while ( list( $_id, $title, $alias, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $db->sql_fetchrow( $result ) )
 	{
 		$thumb = explode( "|", $homeimgthumb );
 		if ( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
@@ -122,6 +122,7 @@ if( $allowed )
 			"homeimgthumb" => $thumb[0],
 			"hometext" => $hometext,
 			"addtime" => $addtime,
+			"product_code" => $product_code,
 			"product_price" => $product_price,
 			"product_discounts" => $product_discounts,
 			"money_unit" => $money_unit,
@@ -144,10 +145,10 @@ if( $allowed )
 		}
 		$arrtempid = implode( ",", $arrid );
 		
-		$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgthumb`, `addtime`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` IN ( " . $arrtempid . ") AND `status`=1 ORDER BY `id` DESC LIMIT ".( $pro_config['per_row'] * 2 );
+		$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgthumb`, `addtime`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` IN ( " . $arrtempid . ") AND `status`=1 ORDER BY `id` DESC LIMIT ".( $pro_config['per_row'] * 2 );
 		$result = $db->sql_query( $sql );
 		
-		while ( list( $_id, $title, $alias, $homeimgthumb, $addtime, $product_price, $product_discounts, $money_unit, $showprice,$hometext ) = $db->sql_fetchrow( $result ) )
+		while ( list( $_id, $title, $alias, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice,$hometext ) = $db->sql_fetchrow( $result ) )
 		{
 			$thumb = explode( "|", $homeimgthumb );
 			if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
@@ -166,6 +167,7 @@ if( $allowed )
 				"homeimgthumb" => $thumb[0],
 				"hometext" => $hometext,
 				"addtime" => $addtime,
+				"product_code" => $product_code,
 				"product_price" => $product_price,
 				"product_discounts" => $product_discounts,
 				"money_unit" => $money_unit,

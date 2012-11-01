@@ -18,6 +18,9 @@
 #products .items .items_content .content_top {
 	height:135px;
 }
+#products .items .items_content .show-product-code{
+	height:156px;
+}
 #products .items .items_content .content_price {
 	height:35px;
 }

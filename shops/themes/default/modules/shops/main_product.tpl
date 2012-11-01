@@ -3,15 +3,18 @@
 	<!-- BEGIN: items -->
 	<div class="items" style="width:{pwidth}%">
 		<div class="items_content">
-			<p class="content_top">
-				<a href="{LINK}" class="tip_trigger">
+			<div class="content_top{CSS_PRODUCT_CODE}">
+				<div href="{LINK}" class="tip_trigger">
 					<img src="{IMG_SRC}" alt="" style="max-height:{height}px;max-width:{width}px;"/>
 					<!-- BEGIN: tooltip -->
 					<span class="tip"><strong>{TITLE}</strong><img src="{IMG_SRC}" style="max-width:{width}px;">{hometext}</span>
 					<!-- END: tooltip -->
-				</a><br />
+				</div>
 				<span><a href="{LINK}" title="{TITLE}">{TITLE0}</a></span> <br />
-			</p>
+				<!-- BEGIN: product_code -->
+				<div class="shops-center">{PRODUCT_CODE}</div>
+				<!-- END: product_code -->
+			</div>
 			<!-- BEGIN: adminlink -->
 			<div class="shops-center">{ADMINLINK}</div>
 			<!-- END: adminlink -->

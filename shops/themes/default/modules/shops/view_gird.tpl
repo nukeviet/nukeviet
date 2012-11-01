@@ -5,7 +5,7 @@
 	<!-- BEGIN: grid_rows -->
 		<div class="items" style="width:{pwidth}%">
 			<div class="items_content">
-				<div class="content_top">
+				<div class="content_top{CSS_PRODUCT_CODE}">
 					<a title="{title_pro}" href="{link_pro}" class="tip_trigger">
 						<img src="{img_pro}" alt="{title_pro}" style="max-height:{height}px;max-width:{width}px;"/>
 						<!-- BEGIN: tooltip -->
@@ -13,6 +13,9 @@
 						<!-- END: tooltip -->
 					</a><br />
 					<span><a href="{LINK}" title="{title_pro}">{title_pro0}</a></span> <br />
+					<!-- BEGIN: product_code -->
+					<div class="shops-center">{PRODUCT_CODE}</div>
+					<!-- END: product_code -->
 				</div>
 				<!-- BEGIN: adminlink -->
 				<div class="shops-center">{ADMINLINK}</div>

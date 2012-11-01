@@ -41,6 +41,7 @@ $lang_module['title_products'] = "sản phẩm";
 //main product
 $lang_module['product_host'] = "Sản phẩm hot";
 $lang_module['product_page'] = "Trang";
+$lang_module['product_code'] = "Mã sản phẩm";
 
 // view cat
 $lang_module['title_eshop'] = "Cho vào giỏ hàng";

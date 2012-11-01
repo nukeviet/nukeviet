@@ -180,7 +180,7 @@ function GetDataIn( $result, $catid )
 	global $global_array_cat, $module_name, $db, $link, $module_info;
 	$data_content = array();
 	$data = array();
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
 	{
 		$thumb = explode( "|", $homeimgthumb );
 		if( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
@@ -200,6 +200,7 @@ function GetDataIn( $result, $catid )
 			"address" => $address,
 			"homeimgalt" => $homeimgalt,
 			"homeimgthumb" => $thumb[0],
+			"product_code" => $product_code,
 			"product_price" => $product_price,
 			"product_discounts" => $product_discounts,
 			"money_unit" => $money_unit,
@@ -231,7 +232,7 @@ function GetDataInGroup( $result, $groupid )
 	$data_content = array();
 	$data = array();
 	
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
 	{
 		$thumb = explode( "|", $homeimgthumb );
 		if( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
@@ -251,6 +252,7 @@ function GetDataInGroup( $result, $groupid )
 			"address" => $address,
 			"homeimgalt" => $homeimgalt,
 			"homeimgthumb" => $thumb[0],
+			"product_code" => $product_code,
 			"product_price" => $product_price,
 			"product_discounts" => $product_discounts,
 			"money_unit" => $money_unit,

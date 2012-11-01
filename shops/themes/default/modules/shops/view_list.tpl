@@ -10,6 +10,7 @@
         </div>
         <p style="padding:5px">
             <strong><a title="{title_pro}" href="{link_pro}">{title_pro}</a></strong><br />
+            <!-- BEGIN: product_code -->{LANG.product_code}: <strong>{PRODUCT_CODE}</strong><br /><!-- END: product_code -->
 			<span class="time_up">{publtime}</span><br />
             <span>
             	<!-- BEGIN: price -->

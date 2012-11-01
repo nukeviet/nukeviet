@@ -14,6 +14,7 @@
 		<div class="info_product">
 			<h2>{TITLE}</h2>
 			<span class="date_up">{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}</span>
+			<!-- BEGIN: product_code -->{LANG.product_code}: <strong>{PRODUCT_CODE}</strong><br /><!-- END: product_code -->
 			<!-- BEGIN: price -->
 			<p>
 				{LANG.detail_pro_price} : <span class="{class_money}">{product_price} {money_unit}</span>

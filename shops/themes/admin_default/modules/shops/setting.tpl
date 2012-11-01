@@ -126,6 +126,12 @@
 		</tr>
 	</tbody>
     <tbody>
+		<tr>
+			<td><strong>{LANG.setting_show_product_code}</strong></td>
+			<td><input type="checkbox" value="1" name="show_product_code" {ck_show_product_code} id="show_product_code" /></td>
+		</tr>
+	</tbody>
+    <tbody>
         <tr>
             <td colspan="2" style="text-align: center; padding:10px">
             <input type="submit" value="{LANG.save}" name="Submit1" /> 

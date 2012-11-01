@@ -51,13 +51,13 @@ if( empty( $contents ) )
 			$array_cat = array();
 			$array_cat = GetCatidInParent( $catid_i );
 			
-			$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
+			$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
 			$result = $db->sql_query( $sql );
 			
 			$data_pro = array();
 			list( $num_pro ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
 			
-			while ( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_price, $product_discounts, $money_unit,$showprice ) = $db->sql_fetchrow( $result ) )
+			while ( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit,$showprice ) = $db->sql_fetchrow( $result ) )
 			{
 				$thumb = explode( "|", $homeimgthumb );
 				if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
@@ -77,6 +77,7 @@ if( empty( $contents ) )
 					"address" => $address,
 					"homeimgalt" => $homeimgalt,
 					"homeimgthumb" => $thumb[0],
+					"product_code" => $product_code,
 					"product_price" => $product_price,
 					"product_discounts" => $product_discounts,
 					"money_unit" => $money_unit,
@@ -105,7 +106,7 @@ if( empty( $contents ) )
 	}
 	else
 	{
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE";
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE";
 		if ( $global_array_cat[$catid]['numsubcat'] == 0 )
 		{
 			$sql .= " `listcatid`=" . $catid;
