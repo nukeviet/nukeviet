@@ -215,9 +215,27 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	}
 	$rowcontent['otherimage'] = implode( "|", $array_otherimage );
 
+	// Kiem tra ma san pham trung
+	$error_product_code = false;
+	if( ! empty( $rowcontent['product_code'] ) )
+	{
+		if( $rowcontent['id'] == 0 and $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `product_code`=" . $db->dbescape( $rowcontent['product_code'] ) ) ) )
+		{
+			$error_product_code = true;
+		}
+		elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `product_code`=" . $db->dbescape( $rowcontent['product_code'] ) . " AND `id`!=" . $rowcontent['id'] ) ) )
+		{
+			$error_product_code = true;
+		}
+	}
+	
 	if( empty( $rowcontent['title'] ) )
 	{
 		$error = $lang_module['error_title'];
+	}
+	elseif( $error_product_code )
+	{
+		$error = $lang_module['error_product_code'];
 	}
 	elseif( empty( $rowcontent['listcatid'] ) )
 	{
@@ -428,6 +446,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			
 			if( $rowcontent['id'] > 0 )
 			{
+				$auto_product_code = "";
+				if( ! empty( $pro_config['format_code_id'] ) and empty( $rowcontent['product_code'] ) )
+				{
+					$i = 1;
+					$auto_product_code = vsprintf( $pro_config['format_code_id'], $rowcontent['id'] );
+					while( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `product_code`=" . $db->dbescape( $auto_product_code ) ) ) )
+					{
+						$auto_product_code = vsprintf( $pro_config['format_code_id'], ( $rowcontent['id'] + $i ++ ) );
+					}
+					
+					$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `product_code`=" . $db->dbescape( $auto_product_code ) . " WHERE `id`=" . $rowcontent['id'] );
+				}
+				
 				nv_fix_group_count( $rowcontent['group_id'] );
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Add A Product', "ID: " . $rowcontent['id'], $admin_info['userid'] );
 			}

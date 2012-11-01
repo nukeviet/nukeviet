@@ -108,18 +108,24 @@
         </tr>	
 	</tbody>
 	<tbody class="second">
+        <tr>
+            <td><strong>{LANG.format_code_id}</strong></td>
+            <td><input type="text" value="{DATA.format_code_id}" style="width: 100px;" name="format_code_id" /> {LANG.format_order_id_note}</td>
+        </tr>	
+	</tbody>
+	<tbody>
 		<tr>
 			<td><strong>{LANG.setting_active_auto_check_order}</strong></td>
 			<td><input type="checkbox" value="1" name="auto_check_order" {ck_auto_check_order} id="auto_check_order" /></td>
 		</tr>
 	</tbody>
-    <tbody>
+    <tbody class="second">
 		<tr>
 			<td><strong>{LANG.setting_active_tooltip}</strong></td>
 			<td><input type="checkbox" value="1" name="active_tooltip" {ck_active_tooltip} id="active_tooltip" /></td>
 		</tr>
 	</tbody>
-    <tbody class="second">
+    <tbody>
         <tr>
             <td colspan="2" style="text-align: center; padding:10px">
             <input type="submit" value="{LANG.save}" name="Submit1" /> 

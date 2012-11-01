@@ -148,6 +148,7 @@ $lang_module['search_per_page'] = "Số sản phẩm hiển thị";
 $lang_module['search_note'] = "Từ khóa tìm kiếm không ít hơn %d ký tự, không lớn hơn %d ký tự, không dùng các mã html";
 $lang_module['content_edit'] = "Sửa sản phẩm";
 $lang_module['error_title'] = "Lỗi: Sản phẩm chưa có tên";
+$lang_module['error_product_code'] = "Lỗi: Mã sản phẩm bạn chọn bị trùng";
 $lang_module['error_bodytext'] = "Lỗi: Sản phẩm chưa có nội dung";
 $lang_module['error_product_unit'] = "Bạn cần thêm đơn vị cho sản phẩm";
 $lang_module['error_cat'] = "Lỗi: Sản phẩm chưa có loại sản phẩm";
@@ -266,8 +267,9 @@ $lang_module['prounit_unselect'] = "Bỏ chọn";
 $lang_module['prounit_del_select'] = "Xóa mục chọn";
 $lang_module['prounit_del_no_items'] = "Bạn chưa chọn mục nào";
 $lang_module['prounit_info'] = "Thông tin đơn vị sản phẩm";
-// order
+// Order
 $lang_module['format_order_id'] = "Định dạng mã hóa đơn";
+$lang_module['format_code_id'] = "Định dạng mã sản phẩm tự động";
 $lang_module['format_order_id_note'] = "(Cần nhập theo mẫu: ABC%06sDEF)";
 
 $lang_module['order_title'] = "Đơn đặt hàng";
