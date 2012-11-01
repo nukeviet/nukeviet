@@ -743,7 +743,6 @@ function detail_product( $data_content, $data_unit, $data_comment, $num_comment,
 		if( $data_content['showprice'] == '1' ) $xtpl->parse( 'main.price' );
 		else  $xtpl->parse( 'main.contact' );
 	}
-	if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.order.num' );
 	if( $pro_config['active_order'] == '1' )
 	{
 		if( $data_content['showprice'] == '1' )
@@ -850,18 +849,23 @@ function cart_product( $data_content, $array_error_number )
 			$xtpl->assign( 'title_pro', $data_row['title'] );
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
+			
 			$note = str_replace( "|", ", ", $data_row['note'] );
 			$xtpl->assign( 'note', nv_clean60( $note, 50 ) );
+			
 			$price_product_discounts = $data_row['product_price'] - ( $data_row['product_price'] * ( $data_row['product_discounts'] / 100 ) );
 			$price_product_discounts = CurrencyConversionToNumber( $price_product_discounts, $data_row['money_unit'], $pro_config['money_unit'] );
+			
 			$xtpl->assign( 'product_price', FormatNumber( $price_product_discounts, 0, "", "" ) );
 			$xtpl->assign( 'pro_num', $data_row['num'] );
 			$xtpl->assign( 'product_unit', $data_row['product_unit'] );
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
+		
 			$bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
 			$xtpl->assign( 'bg', $bg );
+			
 			if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.rows.price2' );
-			if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.rows.num2' );
+			
 			$xtpl->parse( 'main.rows' );
 			$price_total = $price_total + ( double )( $price_product_discounts ) * ( int )( $data_row['num'] );
 			$i++;
@@ -882,13 +886,13 @@ function cart_product( $data_content, $array_error_number )
 	$xtpl->assign( 'LINK_CART', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cart" );
 	$xtpl->assign( 'LINK_PRODUCTS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "" );
 	$xtpl->assign( 'link_order_all', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order" );
-	if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.price1' );
-	if( $pro_config['active_order_number'] == '0' )
+	
+	if( $pro_config['active_price'] == '1' )
 	{
-		$xtpl->parse( 'main.num1' );
-		$xtpl->parse( 'main.num4' );
+		$xtpl->parse( 'main.price1' );
+		$xtpl->parse( 'main.price3' );
 	}
-	if( $pro_config['active_price'] == '1' && $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.price3' );
+	
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -929,7 +933,6 @@ function uers_order( $data_content, $data_order, $error )
 			$bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
 			$xtpl->assign( 'bg', $bg );
 			if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.rows.price2' );
-			if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.rows.num2' );
 			$xtpl->parse( 'main.rows' );
 			$price_total = $price_total + ( double )( $price_product_discounts ) * ( int )( $data_row['num'] );
 			$i++;
@@ -940,9 +943,13 @@ function uers_order( $data_content, $data_order, $error )
 	$xtpl->assign( 'DATA', $data_order );
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->assign( 'LINK_CART', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cart" );
-	if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.price1' );
-	if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.num1' );
-	if( $pro_config['active_price'] == '1' && $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.price3' );
+	
+	if( $pro_config['active_price'] == '1' )
+	{
+		$xtpl->parse( 'main.price1' );
+		$xtpl->parse( 'main.price3' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -976,10 +983,12 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 		$xtpl->assign( 'product_note', $pdata['product_note'] );
 		$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 		$xtpl->assign( 'pro_no', $i + 1 );
+		
 		$bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
 		$xtpl->assign( 'bg', $bg );
+		
 		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.loop.price2' );
-		if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.loop.num2' );
+		
 		$xtpl->parse( 'main.loop' );
 		$i++;
 	}
@@ -1000,12 +1009,16 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 		$xtpl->parse( 'main.actpay.payment' );
 	}
 	$xtpl->assign( 'intro_pay', $intro_pay );
-	if( $pro_config['active_payment'] == '1' && $pro_config['active_order'] == '1' && $pro_config['active_price'] == '1' && $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.actpay' );
+	if( $pro_config['active_payment'] == '1' and $pro_config['active_order'] == '1' and $pro_config['active_price'] == '1' and $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.actpay' );
 	$xtpl->assign( 'url_finsh', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name );
 	$xtpl->assign( 'url_print', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print&order_id=" . $data_content['order_id'] . "&checkss=" . md5( $data_content['order_id'] . $global_config['sitekey'] . session_id() ) );
-	if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.price1' );
-	if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.num1' );
-	if( $pro_config['active_price'] == '1' && $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.price3' );
+
+	if( $pro_config['active_price'] == '1' )
+	{
+		$xtpl->parse( 'main.price1' );
+		$xtpl->parse( 'main.price3' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1041,7 +1054,6 @@ function print_pay( $data_content, $data_pro )
 		$bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
 		$xtpl->assign( 'bg', $bg );
 		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.loop.price2' );
-		if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.loop.num2' );
 		$xtpl->parse( 'main.loop' );
 		$i++;
 	}
@@ -1082,9 +1094,12 @@ function print_pay( $data_content, $data_pro )
 		$payment = "ERROR";
 	}
 	$xtpl->assign( 'payment', $payment );
-	if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.price1' );
-	if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.num1' );
-	if( $pro_config['active_price'] == '1' && $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.price3' );
+	if( $pro_config['active_price'] == '1' )
+	{
+		$xtpl->parse( 'main.price1' );
+		$xtpl->parse( 'main.price3' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1532,8 +1547,8 @@ function email_new_order( $data_content, $data_pro )
 
 		$bg = ( $i % 2 == 0 ) ? " style=\"background:#f3f3f3;\"" : "";
 		$xtpl->assign( 'bg', $bg );
+		
 		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.loop.price2' );
-		if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.loop.num2' );
 		$xtpl->parse( 'main.loop' );
 		$i++;
 	}
@@ -1546,9 +1561,12 @@ function email_new_order( $data_content, $data_pro )
 	$xtpl->assign( 'order_total', FormatNumber( $data_content['order_total'], 2, '.', ',' ) );
 	$xtpl->assign( 'unit', $data_content['unit_total'] );
 
-	if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.price1' );
-	if( $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.num1' );
-	if( $pro_config['active_price'] == '1' && $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.price3' );
+	if( $pro_config['active_price'] == '1' )
+	{
+		$xtpl->parse( 'main.price1' );
+		$xtpl->parse( 'main.price3' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

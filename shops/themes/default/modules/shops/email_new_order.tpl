@@ -56,11 +56,9 @@
 						{LANG.cart_price} ({unit})
 					</td>
 					<!-- END: price1 -->
-					<!-- BEGIN: num1 -->
 					<td class="amount" align="center" width="60px" style="padding:5px">
 						{LANG.cart_numbers}
 					</td>
-					<!-- END: num1 -->
 					<td class="unit" width="40" style="padding:5px">
 						{LANG.cart_unit}
 					</td>
@@ -79,11 +77,9 @@
 							<strong>{product_price}</strong>
 						</td>
 						<!-- END: price2 -->
-						<!-- BEGIN: num2 -->
 						<td class="amount" align="center" style="padding:5px">
 							{product_number}
 						</td>
-						<!-- END: num2 -->
 						<td class="unit" style="padding:5px">
 							{product_unit}
 						</td>

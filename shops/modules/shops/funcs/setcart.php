@@ -34,9 +34,8 @@ else
 			$price_product_discounts = CurrencyConversionToNumber( $price_product_discounts, $data_content['money_unit'], $pro_config['money_unit'] );
 			
 			if ( $pro_config['active_price'] == '0' ) { $price_product_discounts = 0; }
-			if ( $pro_config['active_order_number'] == '1' ) { $num = 0; }
 			
-			if ( $num > $data_content['product_number'] and $pro_config['active_order_number'] == '0' )
+			if ( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
 			{
 				$contents_msg = 'ERR_' . $lang_module['cart_set_err_num'];
 			}
@@ -54,7 +53,7 @@ else
 				}
 				else
 				{
-					if ( ( $_SESSION[$module_data . '_cart'][$id]['num'] + $num ) > $data_content['product_number'] )
+					if ( ( $_SESSION[$module_data . '_cart'][$id]['num'] + $num ) > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
 					{
 						$contents_msg = 'ERR_' . $lang_module['cart_set_err_num'] . ': ' . $data_content['product_number'];
 						$update_cart = false;
@@ -80,7 +79,7 @@ else
 			$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
 			$data_content = $db->sql_fetchrow( $result, 2 );
 			
-			if ( $num > $data_content['product_number'] )
+			if ( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
 			{
 				$contents_msg = 'ERR_' . $lang_module['cart_set_err_num'] . ': ' . $data_content['product_number'];
 			}

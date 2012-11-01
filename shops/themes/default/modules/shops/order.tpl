@@ -33,9 +33,7 @@
 				<!-- BEGIN: price1 -->
 				<td class="price" align="right">{LANG.cart_price} ({unit_config})</td>
 				<!-- END: price1 -->
-				<!-- BEGIN: num1 -->
 				<td class="amount" align="center" width="60px">{LANG.cart_numbers}</td>
-				<!-- END: num1 -->
 				<td class="unit">{LANG.cart_unit}</td>
 			</tr>
 			<tbody>
@@ -46,9 +44,7 @@
 					<!-- BEGIN: price2 -->
 					<td class="money" align="right"><strong>{product_price}</strong></td>
 					<!-- END: price2 -->
-					<!-- BEGIN: num2 -->
 					<td class="amount" align="center">{pro_num}</td>
-					<!-- END: num2 -->
 					<td class="unit">{product_unit}</td>
 				</tr>
 				<!-- END: rows -->

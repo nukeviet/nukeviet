@@ -57,7 +57,7 @@ if ( ! empty( $_SESSION[$module_data . '_cart'] ) )
 			}
 			
 			$number = $_SESSION[$module_data . '_cart'][$id]['num'];
-			if ( $number > $product_number && $number>0 )
+			if ( $number > $product_number and $number > 0 and empty( $pro_config['active_order_number'] ) )
 			{
 				$number = $_SESSION[$module_data . '_cart'][$id]['num'] = $product_number;
 				$array_error_product_number[] = sprintf( $lang_module['product_number_max'], $title, $product_number );

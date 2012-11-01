@@ -44,7 +44,7 @@ if ( defined( 'NV_IS_USER' ) )
 $xtpl->assign( 'money_unit', $pro_config['money_unit'] );
 $xtpl->assign( 'num', $num );
 
-if ( $pro_config['active_price'] == '1' && $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.enable.price' );
+if ( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.enable.price' );
 
 if ( $pro_config['active_order'] == '1' ) 
 {

@@ -78,10 +78,8 @@
 			</div>
 			<!-- BEGIN: order -->
 			<div class="clearfix fr" style="width:170px; padding:6px 0px">
-				<!-- BEGIN: num -->
 				<span class="fl" style="line-height:22px;">{LANG.title_order} : &nbsp;</span> 
 				<input type="text" name="num" value="1" style="width:30px; height:15px" id="pnum" class="fl">
-				<!-- END: num -->
 				<a href="javascript:void(0)" id="{proid}" title="{title_pro}" class="pro_order fl" onclick="cartorder_detail(this)">
 					{LANG.add_product}
 				</a>

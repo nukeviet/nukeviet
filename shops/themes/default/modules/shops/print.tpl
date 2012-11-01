@@ -102,11 +102,9 @@ a{ text-decoration:none; color:#000000}
                 {LANG.cart_price} ({unit})
             </td>
             <!-- END: price1 -->
-            <!-- BEGIN: num1 -->
             <td class="amount" align="center" width="60px">
                 {LANG.cart_numbers}
             </td>
-            <!-- END: num1 -->
 			<td class="unit" width="40">
                 {LANG.cart_unit}
             </td>
@@ -125,11 +123,9 @@ a{ text-decoration:none; color:#000000}
                     <strong>{product_price}</strong>
                 </td>
                 <!-- END: price2 -->
-                <!-- BEGIN: num2 -->
                 <td class="amount" align="center">
                     {product_number}
                 </td>
-                <!-- END: num2 -->
 				<td class="unit" >
                     {product_unit}
                 </td>

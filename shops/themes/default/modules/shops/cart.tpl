@@ -20,9 +20,7 @@
             <!-- BEGIN: price1 -->
             <td class="price" style="width:80px" align="right">{LANG.cart_price} ({unit_config})</td>
             <!-- END: price1 -->
-            <!-- BEGIN: num1 -->
             <td class="amount" align="center" width="40">{LANG.cart_numbers}</td>
-            <!-- END: num1 -->
             <td class="unit" style="width:50px">{LANG.cart_unit}</td>
             <td class="remove" align="center" width="20">   </td>
         </tr>
@@ -41,11 +39,9 @@
                     <strong>{product_price}</strong>
                 </td>
                 <!-- END: price2 -->
-                <!-- BEGIN: num2 -->
                 <td class="amount" align="center">
                     <input size="1" value="{pro_num}" name="listproid[{id}]" id="{id}" class="btnum"/>
                 </td>
-                <!-- END: num2 -->
                 <td class="unit">{product_unit}</td>
                 <td align="center">
                     <a class="remove_cart" title="{LANG.cart_remove_pro}" href="{link_remove}">
@@ -69,9 +65,7 @@
                 <a class="back" title="{LANG.cart_back} {LANG.cart_page_product}" href="{LINK_PRODUCTS}">{LANG.cart_back} <span>{LANG.cart_page_product}</span></a>
             </div>
             <div class="fr">
-            	<!-- BEGIN: num4 -->
                 <input type="submit" name="cart_update" title="{LANG.cart_update}" value="{LANG.cart_update}">
-                <!-- END: num4 -->
                 <input type="submit" name="cart_order" title="{LANG.cart_order}" value="{LANG.cart_order}">
             </div>
         </div>
