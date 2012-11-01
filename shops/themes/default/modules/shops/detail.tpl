@@ -97,7 +97,7 @@
 			<div class="Tabs">
 				<a href="#">{LANG.product_detail}</a> 
 				<a href="#">{LANG.add_otherimage}</a>
-				<a href="#">{LANG.detail_comments}</a>
+				<!-- BEGIN: comment_tab --><a href="#">{LANG.detail_comments}</a><!-- END: comment_tab -->
 			</div>
 			<div class="Pages">
 				<div class="Page">
@@ -113,8 +113,8 @@
 						<!-- BEGIN: no_otherimage -->{LANG.detail_no_otherimage}<!-- END: no_otherimage -->
 					</div>
 				</div>
+				<!-- BEGIN: comment -->
 				<div class="Page">
-					<!-- BEGIN: comment -->
 					<div class="prd_rate">
 						<!-- BEGIN: form -->
 						<form class="comment" action="" onsubmit="return false;">
@@ -141,8 +141,8 @@
 						<!-- END: form_login -->
 						<div id="showcomment">{COMMENTCONTENT}</div>
 					</div>
-					<!-- END: comment -->
 				</div>
+				<!-- END: comment -->
 			</div>
 		</div>
 	</div>

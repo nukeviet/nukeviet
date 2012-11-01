@@ -695,6 +695,11 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 		}
 	}
 	
+	if( $allow_comment != 0 )
+	{
+		$xtpl->parse( 'main.comment_tab' );
+	}
+	
 	$xtpl->assign( 'COMMENTCONTENT', $data_content['comment'] );
 	if( $pro_config['comment'] == "1" )
 	{

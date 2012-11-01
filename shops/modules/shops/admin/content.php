@@ -43,6 +43,15 @@ if( $subcatid > 0 )
 	die();
 }
 
+if( $pro_config['who_comment'] == 0 )
+{
+	$allowed_comm = 1;
+}
+else
+{
+	$allowed_comm = 2;
+}
+
 $rowcontent = array(
 	"id" => 0,
 	"listcatid" => $catid,
@@ -67,7 +76,7 @@ $rowcontent = array(
 	"imgposition" => 0,
 	"copyright" => 0,
 	"inhome" => 1,
-	"allowed_comm" => 1,
+	"allowed_comm" => $allowed_comm,
 	"allowed_rating" => 1,
 	"ratingdetail" => "0",
 	"allowed_send" => 1,
