@@ -83,7 +83,7 @@ if( ! function_exists( 'nv_search_product' ) )
 		// Get money
 		$sql = "SELECT `code`, `currency` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_money_" . NV_LANG_DATA . "`";
 		$list = nv_db_cache( $sql, '', $module );
-		
+
 		foreach( $list as $row )
 		{
 			$row['selected'] = ( $typemoney == $row['code'] ) ? "selected=\"selected\"" : "";

@@ -1,15 +1,14 @@
 <!-- BEGIN: form -->
 <div class="clear"></div>
 <form action="{NV_BASE_SITEURL}" method="get" name="frm_search" style="background:#F5F5F5" onsubmit="return onsubmitsearch1();">
-	<!-- BEGIN: price -->
 	<table width="100%">
 		<tr>
-			<td width="80">{LANG.price1} :</td>
-			<td><input id="price11" type="text" value="{value_price1}" name="price1" style="text-align:center"></td>
-			<td width="80">{LANG.price2} :</td>
-			<td><input id="price21" size="20" type="text" value="{value_price2}" name="price2" style="text-align:center"></td>
+			<td width="50">{LANG.price1} :</td>
+			<td><input id="price11" type="text" value="{value_price1}" name="price1" style="text-align:center" class="txt-full"></td>
+			<td width="50">{LANG.price2} :</td>
+			<td><input id="price21" size="20" type="text" value="{value_price2}" name="price2" style="text-align:center" class="txt-full"></td>
 			<td width="80" align="right">
-				<select name="typemoney" id="typemoney1">
+				<select name="typemoney" id="typemoney1" class="txt-full">
 					<option value="0">{LANG.moneyunit}</option>
 					<!-- BEGIN: typemoney -->
 						<option {ROW.selected} value="{ROW.code}">{ROW.currency}</option>
@@ -18,7 +17,6 @@
 			</td>
 		</tr>
 	</table>
-	<!-- END: price -->
 	<table width="100%">
 		<tr>
 			<td>
@@ -43,7 +41,7 @@
 	   <tr>
 			<td width="60">{LANG.keyword} :</td>
 			<td><input id="keyword1" type="text" value="{value_keyword}" name="keyword" style="width:98%"></td>
-			<td width="80" align="right"><input type="button" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch1()"></td>
+			<td width="80" align="right"><input type="button" class="button" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch1()"></td>
 		</tr>
 	</table>
 </form>
