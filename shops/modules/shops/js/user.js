@@ -12,17 +12,9 @@ function sendrating(id, point, newscheckss) {
 }
 
 function sendcommment(id, newscheckss, gfx_count) {
-    var commentname = document.getElementById('commentname');
-    var commentemail = document.getElementById('commentemail_iavim');
     var commentseccode = document.getElementById('commentseccode_iavim');
     var commentcontent = strip_tags(document.getElementById('commentcontent').value);
-    if (commentname.value == "") {
-        alert(nv_fullname);
-        commentname.focus();
-    } else if (!nv_email_check(commentemail)) {
-        alert(nv_error_email);
-        commentemail.focus();
-    } else if (!nv_name_check(commentseccode)) {
+    if (!nv_name_check(commentseccode)) {
         error = nv_error_seccode.replace(/\[num\]/g, gfx_count);
         alert(error);
         commentseccode.focus();
@@ -32,7 +24,7 @@ function sendcommment(id, newscheckss, gfx_count) {
     } else {
         var sd = document.getElementById('buttoncontent');
         sd.disabled = true;
-        nv_ajax('post', nv_siteroot + 'index.php', nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=postcomment&id=' + id + '&checkss=' + newscheckss + '&name=' + commentname.value + '&email=' + commentemail.value + '&code=' + commentseccode.value + '&content=' + encodeURIComponent(commentcontent), '', 'nv_commment_result');
+        nv_ajax('post', nv_siteroot + 'index.php', nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=postcomment&code=' + commentseccode.value + '&id=' + id + '&checkss=' + newscheckss + '&content=' + encodeURIComponent(commentcontent), '', 'nv_commment_result');
     }
     return;
 }
@@ -42,7 +34,6 @@ function nv_commment_result(res) {
     var r_split = res.split("_");
     if (r_split[0] == 'OK') {
         document.getElementById('commentcontent').value = "";
-        nv_show_hidden('showcomment', 1);
         nv_show_comment(r_split[1], r_split[2], r_split[3]);
         alert(r_split[4]);
     } else if (r_split[0] == 'ERR') {

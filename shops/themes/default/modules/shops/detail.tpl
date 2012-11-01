@@ -116,39 +116,30 @@
 				<div class="Page">
 					<!-- BEGIN: comment -->
 					<div class="prd_rate">
-						<form class="comment" action="">
+						<!-- BEGIN: form -->
+						<form class="comment" action="" onsubmit="return false;">
 							<input type="hidden" value="{proid}" name="proid" id="proid" />
 							<fieldset>
 								<span id="charlimitinfo">{LANG.comment_limit_characters}</span>
-								<textarea id="comment" rows="5" name="comment" style="width:90%"></textarea>
+								<textarea id="commentcontent" rows="5" name="commentcontent" style="width:90%"></textarea>
 								<div class="fl clearfix">
 									<label for="captcha">
 										{LANG.comment_capcha}
 									</label>
 									<img height="20" name="vimg" src="{NV_BASE_SITEURL}?scaptcha=captcha" title="{LANG.captcha}" alt="{LANG.captcha}" id="vimg" />
-									<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" style="width:60px"/>
-									<input type="button" value="Reset" class="button" onclick="nv_change_captcha('vimg','fcode_iavim');" style="margin-right:5px" />
+									<input type="text" maxlength="{NV_GFX_NUM}" value="" id="commentseccode_iavim" name="fcode" style="width:60px"/>
+									<input type="button" value="Reset" class="button" onclick="nv_change_captcha('vimg','commentseccode_iavim');" style="margin-right:5px" />
 								</div>
 								<div>
-									<input type="button" value="{LANG.comment_send}" id="submit" class="button"/>
+									<input onclick="sendcommment('{proid}','{COMMENT_CHECKSESS}','{NV_GFX_NUM}')" type="button" value="{LANG.comment_send}" id="buttoncontent" class="button"/>
 								</div>
 							</fieldset>
 						</form>
-						<!-- BEGIN: list -->
-						<div class="cm_rows clearfix">
-							<div class="cm_u fl">
-								<a title="{LANG.comment_user_view_info} {username}" href="#"><strong>{username}</strong></a>
-								<span class="date">{date_up}</span>
-							</div>
-							<div class="fr">
-								<a title="Like" href="#" class="like_off">&nbsp;</a>
-							</div>
-							<div class="clear"></div>
-							<p>
-								{content}
-							</p>
-						</div>
-						<!-- END: list -->
+						<!-- END: form -->
+						<!-- BEGIN: form_login -->
+						<p>{COMMENT_LOGIN}</p>
+						<!-- END: form_login -->
+						<div id="showcomment">{COMMENTCONTENT}</div>
 					</div>
 					<!-- END: comment -->
 				</div>
@@ -170,29 +161,6 @@
 </script>
 <script type="text/javascript">
 	$(function(){
-		$("#submit").click(function(event){
-			event.preventDefault();
-			var comment = $('#comment').val();
-			var fcode_iavim = $('#fcode_iavim').val();
-			var id = $('#proid').val();
-			$.ajax({
-				type: "POST",
-				url: '{link_addcomment}',
-				data: 'id=' + id + '&content=' + comment + '&code=' + fcode_iavim,
-				success: function(data){
-					var s = data.split('_');
-					if (s[0] == 'ERR') {
-						alert(s[1]);
-						nv_change_captcha('vimg', 'fcode_iavim');
-					}
-					if (s[0] == 'OK') {
-						$("#comment").val('');
-						alert(s[1]);
-					}
-				}
-			});
-			return false;
-		});
 		<!-- BEGIN: allowed_print_js -->
 		$('#click_print').click(function(event){
 			var href = $(this).attr("href");

@@ -75,24 +75,18 @@ if( $allowed )
 	}
 	$data_content['homeimgthumb'] = $array_img[0];
 
-	$sql = $db->sql_query( "SELECT `cid`, `post_time`, `post_name`, `post_id`, `post_email`, `post_ip`, `status`, `content`, `photo` FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` WHERE `status` = 1 AND `id`=" . $id . " ORDER BY cid DESC LIMIT 20" );
-	$data_comment = array();
-	$num_com = 0;
-	while ( list( $cid, $post_time, $post_name, $post_id, $post_email, $post_ip, $status, $content, $photo ) = $db->sql_fetchrow( $sql ) )
+	$data_content['comment'] = "";
+	$allow_comment = 0;
+	
+	if( nv_set_allow( $pro_config['who_comment'], $pro_config['groups_comment'] ) and ! empty( $pro_config['comment'] ) and ( ( $data_content['allowed_comm'] == 1 ) or ( $data_content['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
 	{
-		$photo = ( $photo == "" ) ? NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_image.gif" : NV_BASE_SITEURL . $photo;
-		$data_comment[] = array( 
-			"cid" => $cid,
-			"post_time" => $post_time,
-			"post_name" => $post_name,
-			"post_id" => $post_id,
-			"post_email" => $post_email,
-			"post_ip" => $post_ip,
-			"status" => $status,
-			"content" => $content,
-			"photo" => $photo 
-		);
-		$num_com ++;
+		$data_comment = nv_comment_module( $data_content['id'], 0 );
+		$data_content['comment'] = comment_theme( $data_comment );
+		$allow_comment = 1;
+	}
+	elseif( $data_content['allowed_comm'] == 2 and ( $pro_config['who_comment'] == 1 or $pro_config['who_comment'] == 0 ) and ! defined( 'NV_IS_USER' ) )
+	{
+		$allow_comment = 2;
 	}
 
 	$sql = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_content['source_id'] );
@@ -180,7 +174,7 @@ if( $allowed )
 
 	SetSessionProView( $data_content['id'], $data_content[NV_LANG_DATA . '_title'], $data_content[NV_LANG_DATA . '_alias'], $data_content['addtime'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $data_content[NV_LANG_DATA . '_alias'] . "-" . $data_content['id'], $data_content['homeimgthumb'] );
 
-	$contents = detail_product( $data_content, $data_unit, $data_comment, $num_com, $data_others, $data_shop, $array_other_view );
+	$contents = detail_product( $data_content, $data_unit, $allow_comment, $data_others, $data_shop, $array_other_view );
 }
 else
 {

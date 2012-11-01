@@ -128,35 +128,37 @@ function nv_set_status_module()
  */
 function nv_comment_module( $id, $page )
 {
-	global $db, $module_name, $module_data, $global_config, $module_config, $per_page_comment;
+	global $db, $module_name, $module_data, $global_config, $module_config, $db_config;
 	
 	$comment_array = array();
+	$per_page = 10;
 	
-	list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments` where `id`= '" . $id . "' AND `status`=1" ) );
-	
-	$all_page = ( $numf ) ? $numf : 1;
-	$per_page = $per_page_comment;
-	
-	$sql = "SELECT `content`, `post_time`, `post_name`, `post_email` FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments` WHERE `id`= '" . $id . "' AND `status`=1 ORDER BY `id` ASC LIMIT " . $page . "," . $per_page;
-	$result = $db->sql_query( $sql );
-	
-	while( $row = $db->sql_fetchrow( $result ) )
+	$sql = "SELECT SQL_CALC_FOUND_ROWS a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo, b.view_mail FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` AS a LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` AS b ON a.post_id =b.userid  WHERE a.id= '" . $id . "' AND a.status=1 ORDER BY a.cid DESC LIMIT " . $page . "," . $per_page;
+	$comment = $db->sql_query( $sql );
+	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+	list( $all_page ) = $db->sql_fetchrow( $result_all );
+
+	while( list( $content, $post_time, $post_name, $post_email, $userid, $user_email, $user_full_name, $photo, $view_mail ) = $db->sql_fetchrow( $comment ) )
 	{
-		$row['post_email'] = ( $module_config[$module_name]['emailcomm'] ) ? $row['post_email'] : "";
+		if( $userid > 0 )
+		{
+			$post_email = $user_email;
+			$post_name = $user_full_name;
+		}
+		$post_email = $view_mail ? $post_email : "";
 		$comment_array[] = array(
-			"content" => $row['content'],
-			"post_time" => $row['post_time'],
-			"post_name" => $row['post_name'],
-			"post_email" => $row['post_email']
+			"content" => $content,
+			"post_time" => $post_time,
+			"userid" => $userid,
+			"post_name" => $post_name,
+			"post_email" => $post_email,
+			"photo" => $photo
 		);
 	}
-	$db->sql_freeresult( $result );
-	unset( $row, $result );
-	
+	$db->sql_freeresult( $comment );
+	unset( $row, $comment );
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;id=" . $id . "&checkss=" . md5( $id . session_id() . $global_config['sitekey'] );
-	
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page, true, true, 'nv_urldecode_ajax', 'showcomment' );
-	
 	return array( "comment" => $comment_array, "page" => $generate_page );
 }
 

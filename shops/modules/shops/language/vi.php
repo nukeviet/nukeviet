@@ -32,7 +32,7 @@ $lang_module['comment_limit'] = "Bạn đã hết ký tự được gõ";
 $lang_module['comment_list'] = "Danh sách phản hồi";
 $lang_module['comment_user_view_info'] = "Xem hồ sơ";
 $lang_module['comment_send'] = "Gửi bình luận";
-$lang_module['comment_do_not_send'] = "Bạn phải đăng nhập thành viên mới được post bài tại đây";
+$lang_module['comment_do_not_send'] = "Bạn phải đăng nhập thành viên mới được gửi bình luận tại đây";
 $lang_module['comment_date'] = "Ngày";
 $lang_module['comment_customer'] = "Khách";
 

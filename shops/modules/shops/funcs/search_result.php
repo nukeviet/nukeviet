@@ -63,7 +63,7 @@ while ( $row = $db->sql_fetchrow( $result, 2 ) )
 }
 
 // Get sources
-$sql = "SELECT " . NV_LANG_DATA . "_title as title,sourceid FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources`";
+$sql = "SELECT " . NV_LANG_DATA . "_title as title, sourceid FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources`";
 $result = $db->sql_query( $sql );
 
 while ( $row = $db->sql_fetchrow( $result, 2 ) )

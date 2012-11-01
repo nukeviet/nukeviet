@@ -577,16 +577,15 @@ function viewcat_page_list( $data_content, $pages )
  * 
  * @param mixed $data_content
  * @param mixed $data_unit
- * @param mixed $data_comment
- * @param mixed $num_comment
+ * @param mixed $allow_comment
  * @param mixed $data_others
  * @param mixed $data_shop
  * @param mixed $array_other_view
  * @return
  */
-function detail_product( $data_content, $data_unit, $data_comment, $num_comment, $data_others, $data_shop, $array_other_view )
+function detail_product( $data_content, $data_unit, $allow_comment, $data_others, $data_shop, $array_other_view )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config;
+	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config;
 	
 	if( ! defined( 'SHADOWBOX' ) )
 	{
@@ -695,24 +694,26 @@ function detail_product( $data_content, $data_unit, $data_comment, $num_comment,
 			$xtpl->parse( 'main.product_code' );
 		}
 	}
+	
+	$xtpl->assign( 'COMMENTCONTENT', $data_content['comment'] );
 	if( $pro_config['comment'] == "1" )
 	{
-		if( ! empty( $data_comment ) )
+		if( $allow_comment == 1 )
 		{
-			foreach( $data_comment as $cdata )
-			{
-				$xtpl->assign( 'username', $cdata['post_name'] );
-				$xtpl->assign( 'avata', $cdata['photo'] );
-				$xtpl->assign( 'content', $cdata['content'] );
-				$xtpl->assign( 'date_up', nv_date( 'd-m-Y h:i:s A', $cdata['post_time'] ) );
-				$xtpl->parse( 'main.comment.list' );
-			}
+			$xtpl->assign( "COMMENT_CHECKSESS", md5( $data_content['id'] . session_id() . $global_config['sitekey'] ) );
+			$xtpl->assign( "NV_GFX_NUM", NV_GFX_NUM );
+			$xtpl->parse( 'main.comment.form' );
 		}
+		elseif( $allow_comment == 2 )
+		{
+			global $client_info, $lang_global;
+			$link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] . "#formcomment" );
+			$xtpl->assign( 'COMMENT_LOGIN', "<a title=\"" . $lang_global['loginsubmit'] . "\" href=\"" . $link_login . "\">" . $lang_module['comment_do_not_send'] . "</a>" );
+			$xtpl->parse( 'main.comment.form_login' );
+		}
+
 		$xtpl->parse( 'main.comment' );
 	}
-	$xtpl->assign( 'link_addcomment', $link2 . "addcomment" );
-	$xtpl->assign( 'num_comment', $num_comment );
-	$xtpl->assign( 'link_shop_re', $link . "=detail/" . $data_content['id'] . "/" . $data_content[NV_LANG_DATA . '_alias'] );
 
 	if( ! empty( $data_others ) )
 	{
@@ -732,12 +733,6 @@ function detail_product( $data_content, $data_unit, $data_comment, $num_comment,
 	$xtpl->assign( 'LINK_PRINT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=print_pro&id=" . $data_content['id'] );
 	$xtpl->assign( 'LINK_RATE', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=rate&id=" . $data_content['id'] );
 
-	if( ! empty( $data_shop ) )
-	{
-		$xtpl->assign( 'title_shop', $data_shop[NV_LANG_DATA . '_title'] );
-		$xtpl->assign( 'link_shop', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=estore&amp;" . NV_OP_VARIABLE . "=shop/" . $data_shop['alias'] . "-" . $data_shop['com_id'] );
-		$xtpl->parse( 'main.shop' );
-	}
 	if( $pro_config['active_price'] == '1' )
 	{
 		if( $data_content['showprice'] == '1' ) $xtpl->parse( 'main.price' );
@@ -1567,6 +1562,38 @@ function email_new_order( $data_content, $data_pro )
 		$xtpl->parse( 'main.price3' );
 	}
 
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
+ * comment_theme()
+ * 
+ * @param mixed $comment_array
+ * @return
+ */
+function comment_theme( $comment_array )
+{
+	global $module_info, $module_name, $module_file, $module_config;
+	
+	$xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$k = 0;
+	foreach( $comment_array['comment'] as $comment_array_i )
+	{
+		$comment_array_i['post_time'] = nv_date( "d/m/Y H:i", $comment_array_i['post_time'] );
+		$comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
+		$xtpl->assign( 'COMMENT', $comment_array_i );
+		if( ! empty( $comment_array_i['post_email'] ) )
+		{
+			$xtpl->parse( 'main.detail.emailcomm' );
+		}
+		$xtpl->parse( 'main.detail' );
+		++$k;
+	}
+	if( ! empty( $comment_array['page'] ) )
+	{
+		$xtpl->assign( 'PAGE', $comment_array['page'] );
+	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
