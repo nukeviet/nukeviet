@@ -197,6 +197,7 @@ $lang_module['detail_promotional'] = "Khuyến mại";
 $lang_module['detail_warranty'] = "Bảo hành";
 $lang_module['detail_no_permission'] = "Chú ý: Bạn không được quyền xem chi tiết sản phẩm này";
 $lang_module['detail_no_otherimage'] = "Sản phẩm này không có hình ảnh khác";
+$lang_module['detail_close_feature'] = "Chức năng này đã bị tắt";
 
 $lang_module['redirect_to_back_shops'] = "Quay lại trang chủ";
 $lang_module['company_product'] = "Sản phẩm thuộc gian hàng";
