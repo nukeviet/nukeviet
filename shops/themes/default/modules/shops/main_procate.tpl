@@ -18,6 +18,9 @@
 						</a><br />
 						<span><a href="{LINK}" title="{TITLE}">{TITLE0}</a></span><br />
 					</div>
+					<!-- BEGIN: adminlink -->
+					<div class="shops-center">{ADMINLINK}</div>
+					<!-- END: adminlink -->
 					<!-- BEGIN: price -->
 					<p class="content_price">
 						<span class="{class_money}">{product_price} {money_unit}</span>
@@ -40,7 +43,7 @@
 				</div>
 			</div>
 			<!-- BEGIN: break -->
-				<div style="clear:both"></div>
+			<div style="clear:both"></div>
 			<!-- END: break -->
 			<!-- END: items -->
 		</div>

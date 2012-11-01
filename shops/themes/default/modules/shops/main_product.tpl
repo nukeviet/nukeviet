@@ -12,6 +12,9 @@
 				</a><br />
 				<span><a href="{LINK}" title="{TITLE}">{TITLE0}</a></span> <br />
 			</p>
+			<!-- BEGIN: adminlink -->
+			<div class="shops-center">{ADMINLINK}</div>
+			<!-- END: adminlink -->
 			<!-- BEGIN: price -->
 			<p class="content_price">
 				<span class="{class_money}">{product_price} {money_unit}</span>

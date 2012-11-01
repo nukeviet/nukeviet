@@ -61,6 +61,9 @@
 		<div class="result-content">
 			<!-- BEGIN: result_img --><img src="{IMG_SRC}" border="0" width="100px" style="float:left; margin-right:5px;"/><!-- END: result_img -->
 			{CONTENT}<br />
+			<!-- BEGIN: adminlink -->
+			<div class="fr">{ADMINLINK}</div>
+			<!-- END: adminlink -->
 			<div style="clear:both;"></div>
 		</div>
 		<!-- END: result -->

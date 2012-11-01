@@ -134,6 +134,12 @@ function view_home_cat( $data_content, $html_pages = "" )
 						}
 					}
 					if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.catalogs.items.tooltip' );
+					
+					if( defined( 'NV_IS_MODADMIN' ) )
+					{
+						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row_i['id'] ) );
+						$xtpl->parse( 'main.catalogs.items.adminlink' );
+					}
 					$xtpl->parse( 'main.catalogs.items' );
 					$i++;
 				}
@@ -225,6 +231,13 @@ function view_home_all( $data_content, $html_pages = "" )
 				}
 			}
 			if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.items.tooltip' );
+			
+			if( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
+				$xtpl->parse( 'main.items.adminlink' );
+			}
+
 			$xtpl->parse( 'main.items' );
 			$i++;
 		}
@@ -314,6 +327,13 @@ function view_search_all( $data_content, $html_pages = "" )
 				}
 			}
 			if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.items.tooltip' );
+			
+			if( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
+				$xtpl->parse( 'main.items.adminlink' );
+			}
+			
 			$xtpl->parse( 'main.items' );
 			$i++;
 		}
@@ -411,6 +431,13 @@ function viewcat_page_gird( $data_content, $pages )
 				}
 			}
 			if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.grid_rows.tooltip' );
+			
+			if( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
+				$xtpl->parse( 'main.grid_rows.adminlink' );
+			}
+			
 			$xtpl->parse( 'main.grid_rows' );
 			$i++;
 		}
@@ -493,6 +520,13 @@ function viewcat_page_list( $data_content, $pages )
 					$xtpl->parse( 'main.row.order' );
 				}
 			}
+			
+			if( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
+				$xtpl->parse( 'main.row.adminlink' );
+			}
+			
 			$xtpl->parse( 'main.row' );
 		}
 	}
@@ -690,6 +724,12 @@ function detail_product( $data_content, $data_unit, $data_comment, $num_comment,
 	}
 	if( ! empty( $data_content['allowed_save'] ) ) $xtpl->parse( 'main.allowed_save' );
 	
+	if( defined( 'NV_IS_MODADMIN' ) )
+	{
+		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_content['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_content['id'] ) );
+		$xtpl->parse( 'main.adminlink' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1174,6 +1214,12 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 
 			$xtpl->assign( 'IMG_SRC', $value['homeimgthumb'] );
 			$xtpl->parse( 'results.result.result_img' );
+			
+			if( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $value['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $value['id'] ) );
+				$xtpl->parse( 'results.result.adminlink' );
+			}
 
 			$xtpl->parse( 'results.result' );
 		}

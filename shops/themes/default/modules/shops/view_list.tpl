@@ -25,6 +25,7 @@
             </span>
         </p>
 		<div class="fr" style="margin-bottom:5px; width:140px" align="right">
+			<!-- BEGIN: adminlink -->{ADMINLINK}<!-- END: adminlink -->
         	<!-- BEGIN: order -->
             <a href="javascript:void(0)" id="{id}" title="{title_pro}" class="pro_order" onclick="cartorder(this)">{LANG.add_product}</a>
             <!-- END: order -->

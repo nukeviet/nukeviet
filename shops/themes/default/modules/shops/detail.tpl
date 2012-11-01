@@ -7,6 +7,9 @@
 			</a>
 			<br />
 			<a href="{SRC_PRO_LAGE}" title="{TITLE}" rel="shadowbox[miss]"><span class="zoom_img">{LANG.detail_view_lage_img}</span></a>
+			<!-- BEGIN: adminlink -->
+			<div class="fl">{ADMINLINK}</div>
+			<!-- END: adminlink -->
 		</span>
 		<div class="info_product">
 			<h2>{TITLE}</h2>

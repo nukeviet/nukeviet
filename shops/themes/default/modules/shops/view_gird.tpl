@@ -14,6 +14,9 @@
 					</a><br />
 					<span><a href="{LINK}" title="{title_pro}">{title_pro0}</a></span> <br />
 				</div>
+				<!-- BEGIN: adminlink -->
+				<div class="shops-center">{ADMINLINK}</div>
+				<!-- END: adminlink -->
 				<!-- BEGIN: price -->
 				<p class="content_price">
 					<span class="{class_money}">{product_price} {money_unit}</span>
