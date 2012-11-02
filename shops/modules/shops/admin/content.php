@@ -250,6 +250,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$error = $lang_module['error_cat'];
 	}
+	elseif( trim( strip_tags( $rowcontent['hometext'] ) ) == "" )
+	{
+		$error = $lang_module['error_hometext'];
+	}
 	elseif( trim( strip_tags( $rowcontent['bodytext'] ) ) == "" )
 	{
 		$error = $lang_module['error_bodytext'];

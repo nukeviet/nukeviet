@@ -141,6 +141,7 @@ $lang_module['content_edit'] = 'Sửa sản phẩm';
 $lang_module['error_title'] = 'Lỗi: Sản phẩm chưa có tên';
 $lang_module['error_product_code'] = 'Lỗi: Mã sản phẩm bạn chọn bị trùng';
 $lang_module['error_bodytext'] = 'Lỗi: Sản phẩm chưa có nội dung';
+$lang_module['error_hometext'] = 'Lỗi: Phần giới thiệu ngắn gọn chưa có nội dung';
 $lang_module['error_product_unit'] = 'Bạn cần thêm đơn vị cho sản phẩm';
 $lang_module['error_cat'] = 'Lỗi: Sản phẩm chưa có loại sản phẩm';
 $lang_module['error_product_price'] = 'Lỗi: giá sản phẩm không được âm hoặc bằng 0. Nếu bạn không muốn hiển thị giá, hãy hủy tùy chọn Cho phép hiển thị giá sản phẩm này ở phần Tính năng mở rộng';
