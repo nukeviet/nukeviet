@@ -522,7 +522,7 @@ function nv_show_block_cat_list()
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
-	$xtpl->assign( 'OP', $op );
+	$xtpl->assign( 'OP', 'blockcat' );
 
 	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
 	$result = $db->sql_query( $sql );
