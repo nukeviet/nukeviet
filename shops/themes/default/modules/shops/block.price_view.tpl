@@ -7,7 +7,7 @@ ul.price_view, ul.price_view li{
 }
 ul.price_view{ padding:5px}
 ul.price_view li{
-	background:url('{NV_BASE_SITEURL}themes/{TEMPLATE}/images/shops/access_head_bg.png') no-repeat center left;
+	background:url('{NV_BASE_SITEURL}themes/{TEMPLATE}/images/{MODULE_FILE}/access_head_bg.png') no-repeat center left;
 	padding-left:20px;
 }
 </style>

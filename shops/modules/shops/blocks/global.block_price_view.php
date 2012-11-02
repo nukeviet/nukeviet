@@ -111,6 +111,7 @@ if( ! function_exists( 'nv_view_product_price' ) )
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'TEMPLATE', $block_theme );
+		$xtpl->assign( 'MODULE_FILE', $mod_file );
 		
 		$val = $block_config['price_begin'];
 
