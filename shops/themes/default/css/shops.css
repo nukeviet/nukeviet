@@ -91,6 +91,31 @@ a.pro_detail:hover, a.pro_order:hover{
 }
 
 /* COMMENT FORM */
+#detail .list-comments .alt{
+	background:#f6f6f6;
+}
+#detail .list-comments .m-bottom{
+	margin-bottom:5px;
+}
+#detail .list-comments .bg{
+	background-image:none;
+}
+#detail .list-comments h4{
+	color:#b93d00;
+	margin-bottom:.5em;
+}
+#detail .list-comments .ava{
+	float:left;
+	width:60px;
+}
+#detail .list-comments .ava img{
+	vertical-align:middle;
+	width:40px;
+}
+#detail .list-comments .comment-content{
+	margin-left:60px;
+}
+
 #detail .prd_rate {
 	padding: 0px;
 }

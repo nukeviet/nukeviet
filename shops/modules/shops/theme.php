@@ -1579,14 +1579,17 @@ function email_new_order( $data_content, $data_pro )
  */
 function comment_theme( $comment_array )
 {
-	global $module_info, $module_name, $module_file, $module_config;
+	global $module_info, $module_name, $module_file, $module_config, $lang_module;
 	
 	$xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	
 	$k = 0;
 	foreach( $comment_array['comment'] as $comment_array_i )
 	{
 		$comment_array_i['post_time'] = nv_date( "d/m/Y H:i", $comment_array_i['post_time'] );
 		$comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
+		$comment_array_i['photo'] = $comment_array_i['photo'] ? NV_BASE_SITEURL . $comment_array_i['photo'] : NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
 		$xtpl->assign( 'COMMENT', $comment_array_i );
 		if( ! empty( $comment_array_i['post_email'] ) )
 		{
