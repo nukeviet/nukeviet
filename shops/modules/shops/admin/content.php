@@ -356,9 +356,21 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$check_thumb = true;
 		}
 		
-		$homeimgfile = NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $rowcontent['homeimgfile'];
+		if( nv_is_url( $homeimgfile ) )
+		{
+			$homeimgfile = $rowcontent['homeimgfile'];
+		}
+		elseif( $rowcontent['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+		{
+			$homeimgfile = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
 		
-		if( $check_thumb and file_exists( $homeimgfile ) )
+		}
+		else
+		{
+			$homeimgfile = "";
+		}
+		
+		if( $check_thumb and ! empty( $homeimgfile ) )
 		{
 			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 
