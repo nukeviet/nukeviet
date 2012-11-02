@@ -137,9 +137,10 @@ if( $op == "main" )
  * GetCatidInParent()
  * 
  * @param mixed $catid
+ * @param integer $check_inhome
  * @return
  */
-function GetCatidInParent( $catid )
+function GetCatidInParent( $catid, $check_inhome = 0 )
 {
 	global $global_array_cat, $array_cat;
 	$array_cat[] = $catid;
@@ -152,14 +153,20 @@ function GetCatidInParent( $catid )
 			{
 				if( $global_array_cat[$id]['numsubcat'] == 0 )
 				{
-					$array_cat[] = $id;
+					if( ! $check_inhome or ( $check_inhome and $global_array_cat[$id]['inhome'] == 1 ) )
+					{
+						$array_cat[] = $id;
+					}
 				}
 				else
 				{
-					$array_cat_temp = GetCatidInParent( $id );
+					$array_cat_temp = GetCatidInParent( $id, $check_inhome );
 					foreach( $array_cat_temp as $catid_i )
 					{
-						$array_cat[] = $catid_i;
+						if( ! $check_inhome or ( $check_inhome and $global_array_cat[$catid_i]['inhome'] == 1 ) )
+						{
+							$array_cat[] = $catid_i;
+						}
 					}
 				}
 			}
@@ -172,9 +179,10 @@ function GetCatidInParent( $catid )
  * GetGroupidInParent()
  * 
  * @param mixed $groupid
+ * @param integer $check_inhome
  * @return
  */
-function GetGroupidInParent( $groupid )
+function GetGroupidInParent( $groupid, $check_inhome = 0 )
 {
 	global $global_array_group, $array_group;
 	$array_group[] = $groupid;
@@ -187,14 +195,20 @@ function GetGroupidInParent( $groupid )
 			{
 				if( $global_array_group[$id]['numsubgroup'] == 0 )
 				{
-					$array_group[] = $id;
+					if( ! $check_inhome or ( $check_inhome and $global_array_group[$id]['inhome'] == 1 ) )
+					{
+						$array_group[] = $id;
+					}
 				}
 				else
 				{
-					$array_group_temp = GetGroupidInParent( $id );
+					$array_group_temp = GetGroupidInParent( $id, $check_inhome );
 					foreach( $array_group_temp as $groupid_i )
 					{
-						$array_group[] = $groupid_i;
+						if( ! $check_inhome or ( $check_inhome and $global_array_group[$groupid_i]['inhome'] == 1 ) )
+						{
+							$array_group[] = $groupid_i;
+						}
 					}
 				}
 			}

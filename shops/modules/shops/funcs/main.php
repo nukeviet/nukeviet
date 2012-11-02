@@ -79,10 +79,10 @@ if( empty( $contents ) )
 	{
 		foreach ( $global_array_cat as $catid_i => $array_info_i )
 		{
-			if ( $array_info_i['parentid'] == 0 )
+			if ( $array_info_i['parentid'] == 0 and $array_info_i['inhome'] != 0 )
 			{
 				$array_cat = array();
-				$array_cat = GetCatidInParent( $catid_i );
+				$array_cat = GetCatidInParent( $catid_i, true );
 				
 				$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `inhome`=1 AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
 			
@@ -145,10 +145,10 @@ if( empty( $contents ) )
 	
 		foreach ( $global_array_group as $groupid_i => $array_info_i )
 		{
-			if ( $array_info_i['parentid'] == 0 )
+			if ( $array_info_i['parentid'] == 0 and $array_info_i['inhome'] != 0 )
 			{
 				$array_group = array();
-				$array_group = GetGroupidInParent( $groupid_i );
+				$array_group = GetGroupidInParent( $groupid_i, true );
 
 				$sql_regexp = array();
 				foreach( $array_group as $_gid )
