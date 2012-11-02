@@ -63,18 +63,30 @@ if( $allowed )
 	$data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
 
 	$array_img = explode( "|", $data_content['homeimgthumb'] );
-	if ( ! empty( $array_img[0] ) && ! nv_is_url( $array_img[0] ) )
+	if ( ! empty( $array_img[0] ) and ! nv_is_url( $array_img[0] ) )
 	{
-		$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $data_content['homeimgfile'];
 		$array_img[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_img[0];
 	}
 	else
 	{
-		$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/thumb/no_image.jpg";
 		$array_img[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
 	}
 	$data_content['homeimgthumb'] = $array_img[0];
 
+	// Xac dinh anh lon
+	if( nv_is_url( $data_content['homeimgfile'] ) )
+	{
+		$data_content['homeimgfile'] = $data_content['homeimgfile'];
+	}
+	elseif( $data_content['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['homeimgfile'] ) )
+	{
+		$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['homeimgfile'];
+	}
+	else
+	{
+		$data_content['homeimgfile'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+	}
+	
 	$data_content['comment'] = "";
 	$allow_comment = 0;
 	
@@ -100,7 +112,7 @@ if( $allowed )
 	while ( list( $_id, $title, $alias, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $db->sql_fetchrow( $result ) )
 	{
 		$thumb = explode( "|", $homeimgthumb );
-		if ( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
+		if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
 		{
 			$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
 		}
