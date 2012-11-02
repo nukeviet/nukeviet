@@ -5,11 +5,11 @@
 	//<![CDATA[
     $(function(){
         $("#loopedslider").loopedSlider({
-                containerClick: false,
-                autoStart: 5000,
-                restart: 8000,
-                slidespeed: 500,
-                fadespeed: 500
+			containerClick: false,
+			autoStart: 5000,
+			restart: 8000,
+			slidespeed: 500,
+			fadespeed: 500
         });
     });
     //]]>

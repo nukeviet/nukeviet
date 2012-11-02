@@ -11,7 +11,7 @@
 				<div class="items_content">
 					<div class="content_top{CSS_PRODUCT_CODE}">
 						<a href="{LINK}" class="tip_trigger">
-							<img src="{IMG_SRC}" alt="" style="max-height:{height}px;max-width:{width}px;"/>
+							<img src="{IMG_SRC}" alt="{TITLE}" style="max-height:{height}px;max-width:{width}px;"/>
 							<!-- BEGIN: tooltip -->
 							<span class="tip"><strong>{TITLE}</strong><img src="{IMG_SRC}" style="max-width:{width}px;">{hometext}</span>
 							<!-- END: tooltip -->

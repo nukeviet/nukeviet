@@ -4,12 +4,12 @@
 	<div class="items" style="width:{pwidth}%">
 		<div class="items_content">
 			<div class="content_top{CSS_PRODUCT_CODE}">
-				<div href="{LINK}" class="tip_trigger">
-					<img src="{IMG_SRC}" alt="" style="max-height:{height}px;max-width:{width}px;"/>
+				<a href="{LINK}" class="tip_trigger">
+					<img src="{IMG_SRC}" alt="{TITLE}" style="max-height:{height}px;max-width:{width}px;"/>
 					<!-- BEGIN: tooltip -->
 					<span class="tip"><strong>{TITLE}</strong><img src="{IMG_SRC}" style="max-width:{width}px;">{hometext}</span>
 					<!-- END: tooltip -->
-				</div>
+				</a><br />
 				<span><a href="{LINK}" title="{TITLE}">{TITLE0}</a></span> <br />
 				<!-- BEGIN: product_code -->
 				<div class="shops-center">{PRODUCT_CODE}</div>
