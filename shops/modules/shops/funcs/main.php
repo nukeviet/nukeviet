@@ -139,6 +139,79 @@ if( empty( $contents ) )
 			exit();
 		}
 	}
+	elseif( $pro_config['home_view'] == "view_home_group" )
+	{
+		$num_links = $pro_config['per_row'] * 3 ;
+	
+		foreach ( $global_array_group as $groupid_i => $array_info_i )
+		{
+			if ( $array_info_i['parentid'] == 0 )
+			{
+				$array_group = array();
+				$array_group = GetGroupidInParent( $groupid_i );
+
+				$sql_regexp = array();
+				foreach( $array_group as $_gid )
+				{
+					$sql_regexp[] = "( `group_id`='" . $_gid . "' OR `group_id` REGEXP '^" . $_gid . "\\\,' OR `group_id` REGEXP '\\\," . $_gid . "\\\,' OR `group_id` REGEXP '\\\," . $_gid . "$' )";
+				}
+				$sql_regexp = "(" . implode( " OR ", $sql_regexp ) . ")";
+				
+				$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE " . $sql_regexp . " AND `inhome`=1 AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $num_links;
+			
+				$result = $db->sql_query( $sql );
+				list( $num_pro ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
+				
+				$data_pro = array();
+				
+				while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
+				{
+					$thumb = explode( "|", $homeimgthumb );
+					if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
+					{
+						$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
+					}
+					else
+					{
+						$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+					}
+					
+					$data_pro[] = array( 
+						"id" => $id,
+						"publtime" => $publtime,
+						"title" => $title,
+						"alias" => $alias,
+						"hometext" => $hometext,
+						"address" => $address,
+						"homeimgalt" => $homeimgalt,
+						"homeimgthumb" => $thumb[0],
+						"product_code" => $product_code,
+						"product_price" => $product_price,
+						"product_discounts" => $product_discounts,
+						"money_unit" => $money_unit,
+						"showprice" => $showprice,
+						"link_pro" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id,
+						"link_order" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart&amp;id=" . $id,
+					);
+				}
+				
+				$data_content[] = array(
+					"groupid" => $groupid_i,
+					"title" => $array_info_i['title'],
+					"link" => $array_info_i['link'],
+					'data' => $data_pro,
+					'num_pro' => $num_pro,
+					"num_link" => $num_links,
+				);
+			}
+		}
+		
+		if( $page > 1 )
+		{
+			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+			exit();
+		}
+	}
 	else
 	{
 		include ( NV_ROOTDIR . "/includes/header.php" );

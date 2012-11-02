@@ -52,6 +52,123 @@ function draw_option_select_number( $select = -1, $begin = 0, $end = 100, $step 
 }
 
 /**
+ * view_home_group()
+ * 
+ * @param mixed $data_content
+ * @param string $html_pages
+ * @return
+ */
+function view_home_group( $data_content, $html_pages = "" )
+{
+	global $module_info, $lang_module, $module_file, $pro_config;
+	
+	$xtpl = new XTemplate( "main_procate.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	
+	$num_view = $pro_config['per_row'];
+	
+	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
+	
+	if( ! empty( $data_content ) )
+	{
+		foreach( $data_content as $data_row )
+		{
+			if( $data_row['num_pro'] > 0 )
+			{
+				$xtpl->assign( 'TITLE_CATALOG', $data_row['title'] );
+				$xtpl->assign( 'LINK_CATALOG', $data_row['link'] );
+				$xtpl->assign( 'NUM_PRO', $data_row['num_pro'] );
+				$i = 1;
+				foreach( $data_row['data'] as $data_row_i )
+				{
+					$xtpl->assign( 'ID', $data_row_i['id'] );
+					$xtpl->assign( 'LINK', $data_row_i['link_pro'] );
+					$xtpl->assign( 'TITLE', $data_row_i['title'] );
+					$xtpl->assign( 'TITLE0', nv_clean60( $data_row_i['title'], 25 ) );
+					$xtpl->assign( 'IMG_SRC', $data_row_i['homeimgthumb'] );
+					$xtpl->assign( 'LINK_ORDER', $data_row_i['link_order'] );
+					$xtpl->assign( 'height', $pro_config['homeheight'] );
+					$xtpl->assign( 'width', $pro_config['homewidth'] );
+					$xtpl->assign( 'hometext', $data_row_i['hometext'] );
+					$xtpl->assign( 'PRODUCT_CODE', $data_row_i['product_code'] );
+					
+					if( $pro_config['active_price'] == '1' )
+					{
+						if( $data_row_i['showprice'] == '1' )
+						{
+							$xtpl->assign( 'product_price', CurrencyConversion( $data_row_i['product_price'], $data_row_i['money_unit'], $pro_config['money_unit'] ) );
+							$xtpl->assign( 'money_unit', $pro_config['money_unit'] );
+							if( $data_row_i['product_discounts'] != 0 )
+							{
+								$price_product_discounts = $data_row_i['product_price'] - ( $data_row_i['product_price'] * ( $data_row_i['product_discounts'] / 100 ) );
+								$xtpl->assign( 'product_discounts', CurrencyConversion( $price_product_discounts, $data_row_i['money_unit'], $pro_config['money_unit'] ) );
+								$xtpl->assign( 'class_money', 'discounts_money' );
+								$xtpl->parse( 'main.catalogs.items.price.discounts' );
+							}
+							else
+							{
+								$xtpl->assign( 'class_money', 'money' );
+							}
+							$xtpl->parse( 'main.catalogs.items.price' );
+						}
+						else
+						{
+							$xtpl->parse( 'main.catalogs.items.contact' );
+						}
+					}
+					
+					$pwidth = ( int )( 100 / $num_view );
+					
+					if( $i % $pro_config['per_row'] == 0 )
+					{
+						$xtpl->parse( 'main.catalogs.items.break' );
+						$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
+						$i = 0;
+					}
+					else
+					{
+						$pwidth = ( int )( 100 / $num_view );
+					}
+					
+					$xtpl->assign( 'pwidth', $pwidth );
+					
+					if( $pro_config['active_order'] == '1' )
+					{
+						if( $data_row_i['showprice'] == '1' )
+						{
+							$xtpl->parse( 'main.catalogs.items.order' );
+						}
+					}
+					if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.catalogs.items.tooltip' );
+
+					if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_row_i['product_code'] ) )
+					{
+						$xtpl->parse( 'main.catalogs.items.product_code' );
+					}
+					
+					if( defined( 'NV_IS_MODADMIN' ) )
+					{
+						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row_i['id'] ) );
+						$xtpl->parse( 'main.catalogs.items.adminlink' );
+					}
+					$xtpl->parse( 'main.catalogs.items' );
+					$i++;
+				}
+				if( $data_row['num_pro'] > $data_row['num_link'] ) $xtpl->parse( 'main.catalogs.view_next' );
+				$xtpl->parse( 'main.catalogs' );
+			}
+		}
+	}
+	
+	if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.tooltip_js' );
+	
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
  * view_home_cat()
  * 
  * @param mixed $data_content

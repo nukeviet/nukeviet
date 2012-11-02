@@ -122,6 +122,7 @@ $lang_module['setting_home_view'] = 'Cách hiển thị tại trang chủ';
 $lang_module['view_home_none'] = 'Không hiển thị sản phẩm';
 $lang_module['view_home_all'] = 'Các sản phẩm cho phép hiển thị tại trang chủ';
 $lang_module['view_home_cat'] = 'Hiển thị theo loại sản phẩm';
+$lang_module['view_home_group'] = 'Hiển thị theo nhóm sản phẩm';
 $lang_module['cat_have_product_err'] = 'Bạn không thể thêm loại sản phẩm vào chủ đề đã có sản phẩm bên trong';
 $lang_module['cat_do_not_add'] = 'Không thêm được';
 $lang_module['error_cat_name'] = 'Không có tên chủ đề';

@@ -135,7 +135,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 
-$check_view = array( "view_home_all" => "", "view_home_cat" => "", "view_home_none" => "" );
+$check_view = array( "view_home_all" => "", "view_home_cat" => "", "view_home_group" => "", "view_home_none" => "" );
 $check_view[$data['home_view']] = "selected=\"selected\"";
 
 foreach( $check_view as $type_view => $select )

@@ -169,6 +169,41 @@ function GetCatidInParent( $catid )
 }
 
 /**
+ * GetGroupidInParent()
+ * 
+ * @param mixed $groupid
+ * @return
+ */
+function GetGroupidInParent( $groupid )
+{
+	global $global_array_group, $array_group;
+	$array_group[] = $groupid;
+	$subgroupid = explode( ",", $global_array_group[$groupid]['subgroupid'] );
+	if( ! empty( $subgroupid ) )
+	{
+		foreach( $subgroupid as $id )
+		{
+			if( $id > 0 )
+			{
+				if( $global_array_group[$id]['numsubgroup'] == 0 )
+				{
+					$array_group[] = $id;
+				}
+				else
+				{
+					$array_group_temp = GetGroupidInParent( $id );
+					foreach( $array_group_temp as $groupid_i )
+					{
+						$array_group[] = $groupid_i;
+					}
+				}
+			}
+		}
+	}
+	return array_unique( $array_group );
+}
+
+/**
  * GetDataIn()
  * 
  * @param mixed $result

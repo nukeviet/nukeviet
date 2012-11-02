@@ -724,37 +724,6 @@ function drawselect_number( $select_name = "", $number_start = 0, $number_end = 
 }
 
 /**
- * nv_fix_group_count()
- * 
- * @param mixed $listid
- * @return
- */
-function nv_fix_group_count( $listid )
-{
-	global $db, $module_data, $db_config;
-	
-	$array_id = explode( ',', $listid );
-	
-	foreach( $array_id as $id )
-	{
-		if( ! empty( $id ) )
-		{
-			$sql = "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE ( `group_id`='" . $id . "' OR `group_id` REGEXP '^" . $id . "\\\,' OR `group_id` REGEXP '\\\," . $id . "\\\,' OR `group_id` REGEXP '\\\," . $id . "$' ) AND `status`=1 AND `publtime` <= " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime` >=" . NV_CURRENTTIME . ")";
-			$result = $db->sql_query( $sql );
-			
-			list( $num ) = $db->sql_fetchrow( $result );
-			$db->sql_freeresult();
-			
-			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `numpro`=" . $num . " WHERE `groupid`=" . intval( $id );
-			$db->sql_query( $sql );
-			$db->sql_freeresult();
-			
-			unset( $result );
-		}
-	}
-}
-
-/**
  * GetCatidInChild()
  * 
  * @param mixed $catid
