@@ -126,7 +126,10 @@ if ( empty( $search ) )
 }
 
 $show_price = "";
-if ( $pro_config['active_price'] ) $show_price = "AND `showprice`=1";
+if ( $pro_config['active_price'] )
+{
+	if( ! empty( $price1_temp ) or ! empty( $price2_temp ) ) $show_price = "AND `showprice`=1";
+}
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=1 " . $search . " " . $show_price . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page;
 

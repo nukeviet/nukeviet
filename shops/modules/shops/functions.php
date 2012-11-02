@@ -303,7 +303,6 @@ function CurrencyConversion( $price, $currency_curent, $currency_convert )
 	{
 		if( $currency_curent == $pro_config['money_unit'] )
 		{
-
 			$value = doubleval( $money_config[$currency_convert]['exchange'] );
 			$price = doubleval( $price / $value );
 			$str = number_format( $price, 0, '.', ' ' );
@@ -338,12 +337,12 @@ function CurrencyConversionToNumber( $price, $currency_curent, $currency_convert
 		if( $currency_curent == $pro_config['money_unit'] )
 		{
 			$value = doubleval( $money_config[$currency_convert]['exchange'] );
-			$price = doubleval( $price * $value );
+			$price = doubleval( $price / $value );
 		}
 		elseif( $currency_convert == $pro_config['money_unit'] )
 		{
 			$value = doubleval( $money_config[$currency_curent]['exchange'] );
-			$price = doubleval( $price / $value );
+			$price = doubleval( $price * $value );
 		}
 	}
 	return $price;

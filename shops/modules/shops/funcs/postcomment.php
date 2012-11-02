@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-$difftimeout = 1;
+$difftimeout = 360;
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 $content = filter_text_input( 'content', 'post', '', 1 );
 $code = filter_text_input( 'code', 'post', '' );
