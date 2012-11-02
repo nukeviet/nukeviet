@@ -518,6 +518,7 @@ div.TabView div.Pages div.Page {
 
 .product_center ul.pagination li {
 	float: left;
+	list-style:none;
 }
 
 .product_center ul.pagination a {
