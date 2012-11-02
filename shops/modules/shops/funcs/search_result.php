@@ -90,16 +90,16 @@ if ( $keyword != "" )
 {
 	$search = " AND `" . NV_LANG_DATA . "_title` like '%" . $db->dblikeescape( $keyword ) . "%' ";
 }
-if ( ( $price1 >= 0 && $price2 > 0 ) )
+if ( ( $price1 >= 0 and $price2 > 0 ) )
 {
 	$search .= " AND product_price-(product_discounts/100)*product_price BETWEEN " . $price1 . " AND " . $price2 . " ";
 
 }
-elseif ( $price2 == -1 && $price1 >= 0 )
+elseif ( $price2 == -1 and $price1 >= 0 )
 {
 	$search .= " AND product_price-(product_discounts/100)*product_price >= " . $price1 . " ";
 }
-elseif ( $price1 == -1 && $price2 > 0 )
+elseif ( $price1 == -1 and $price2 > 0 )
 {
 	$search .= " AND product_price-(product_discounts/100)*product_price >= " . $price2 . " ";
 }
@@ -144,7 +144,7 @@ $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA .
 while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
 {
 	$thumb = explode( "|", $homeimgthumb );
-	if ( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
+	if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
 	{
 		$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
 	}

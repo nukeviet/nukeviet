@@ -263,6 +263,7 @@ $lang_module['history_payment_check'] = 'Đã thanh toán, đang tạm giữ';
 $lang_module['history_payment_cancel'] = 'Bị hoàn trả';
 $lang_module['history_payment_yes'] = 'Đã thanh toán, tiền đã nhận';
 $lang_module['history_title'] = 'Lịch sử giao dịch';
+$lang_module['history_update'] = 'Cập nhật lại';
 $lang_module['del_history_error_status'] = 'Đơn này đã duyệt bạn không thể hủy được nữa';
 $lang_module['del_history_ok'] = 'Đơn này đã hủy';
 $lang_module['history_del_confirm'] = 'Bạn muốn hủy đơn này';
