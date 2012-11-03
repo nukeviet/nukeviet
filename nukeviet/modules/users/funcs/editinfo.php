@@ -370,7 +370,7 @@ if ( $checkss == $array_data['checkss'] )
 
 			$imginfo = nv_is_image( $image );
 
-			$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $user_info['userid'] . '-' . 80 . '-' . 80 . '\2', $basename );
+			$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $user_info['userid'] . '-80-80\2', $basename );
 
 			$_image = new image( $image, 80, 80 );
 			$_image->resizeXY( 80, 80 );
