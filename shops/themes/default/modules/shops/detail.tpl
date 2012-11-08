@@ -40,6 +40,9 @@
 			<!-- BEGIN: warranty -->
 			<div>{LANG.detail_warranty} : {warranty}</div>
 			<!-- END: warranty -->
+			<!-- BEGIN: address -->
+			<div>{LANG.detail_product_address} : {address}</div>
+			<!-- END: address -->
 			<!-- BEGIN: note -->
 			<div>{LANG.cart_note} : {note}</div>
 			<!-- END: note -->

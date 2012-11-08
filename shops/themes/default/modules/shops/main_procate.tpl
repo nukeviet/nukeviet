@@ -13,7 +13,7 @@
 						<a href="{LINK}" class="tip_trigger">
 							<img src="{IMG_SRC}" alt="{TITLE}" style="max-height:{height}px;max-width:{width}px;"/>
 							<!-- BEGIN: tooltip -->
-							<span class="tip"><strong>{TITLE}</strong><img src="{IMG_SRC}" style="max-width:{width}px;">{hometext}</span>
+							<span class="tip"><strong>{TITLE}</strong><br /><img src="{IMG_SRC}" style="max-width:{width}px;">{hometext}</span>
 							<!-- END: tooltip -->
 						</a><br />
 						<span><a href="{LINK}" title="{TITLE}">{TITLE0}</a></span><br />

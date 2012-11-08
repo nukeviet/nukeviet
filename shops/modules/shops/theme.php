@@ -745,6 +745,11 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 			$xtpl->assign( 'warranty', $data_content[NV_LANG_DATA . '_warranty'] );
 			$xtpl->parse( 'main.warranty' );
 		}
+		if( ! empty( $data_content[NV_LANG_DATA . '_address'] ) )
+		{
+			$xtpl->assign( 'address', $data_content[NV_LANG_DATA . '_address'] );
+			$xtpl->parse( 'main.address' );
+		}
 		if( ! empty( $data_content[NV_LANG_DATA . '_note'] ) )
 		{
 			$xtpl->assign( 'note', $data_content[NV_LANG_DATA . '_note'] );

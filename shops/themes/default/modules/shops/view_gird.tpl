@@ -9,7 +9,7 @@
 					<a title="{title_pro}" href="{link_pro}" class="tip_trigger">
 						<img src="{img_pro}" alt="{title_pro}" style="max-height:{height}px;max-width:{width}px;"/>
 						<!-- BEGIN: tooltip -->
-						<span class="tip"><strong>{title_pro}</strong><img src="{img_pro}" style="max-width:{width}px;">{intro}</span>
+						<span class="tip"><strong>{title_pro}</strong><br /><img src="{img_pro}" style="max-width:{width}px;">{intro}</span>
 						<!-- END: tooltip -->
 					</a><br />
 					<span><a href="{LINK}" title="{title_pro}">{title_pro0}</a></span> <br />
