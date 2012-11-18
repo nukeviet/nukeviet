@@ -39,6 +39,7 @@
 		<tr>
 			<td width="30px">{LANG.order_no_products}</td>
 			<td>{LANG.order_products_name}</td>
+			<td>{LANG.content_product_code}</td>
 			<td align="center" width="60px">{LANG.order_product_numbers}</td>
 			<td>{LANG.order_product_unit}</td>
 			<td align="right">{LANG.order_product_price} ({unit})</td>
@@ -49,6 +50,7 @@
 		<tr{bg}>
 			<td align="center">{pro_no}</td>
 			<td class="prd"><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></td>
+			<td><strong>{product_code}</strong></td>
 			<td class="amount" align="center">{product_number}</td>
 			<td class="unit">{product_unit}</td>
 			<td class="money" align="right"><strong>{product_price}</strong></td>

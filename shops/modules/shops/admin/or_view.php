@@ -53,17 +53,18 @@ $i = 0;
 
 foreach( $listid as $id )
 {
-	$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1.product_price,t2." . NV_LANG_DATA . "_title FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2, `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 WHERE t1.product_unit = t2.id AND t1.id =" . $id . "  AND t1.status=1 AND t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime>" . NV_CURRENTTIME . ")";
+	$sql = "SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1.product_price,t2." . NV_LANG_DATA . "_title FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2, `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 WHERE t1.product_unit = t2.id AND t1.id =" . $id . "  AND t1.status=1 AND t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime>" . NV_CURRENTTIME . ")";
 	
 	$result = $db->sql_query( $sql );
 	
-	list( $id, $_catid, $publtime, $title, $alias, $note, $product_price, $unit ) = $db->sql_fetchrow( $result );
+	list( $id, $_catid, $product_code, $publtime, $title, $alias, $note, $product_price, $unit ) = $db->sql_fetchrow( $result );
 	$data_pro[] = array(
 		"id" => $id,
 		"publtime" => $publtime,
 		"title" => $title,
 		"alias" => $alias,
 		"product_price" => $listprice[$i],
+		"product_code" => $product_code,
 		"product_unit" => $unit,
 		"link_pro" => $link . $global_array_cat[$_catid]['alias'] .  "/" . $alias . "-" . $id,
 		"product_number" => $listnum[$i]
@@ -81,6 +82,7 @@ $xtpl->assign( 'order_id', $data_content['order_id'] );
 $i = 0;
 foreach( $data_pro as $pdata )
 {
+	$xtpl->assign( 'product_code', $pdata['product_code'] );
 	$xtpl->assign( 'product_name', $pdata['title'] );
 	$xtpl->assign( 'product_number', $pdata['product_number'] );
 	$xtpl->assign( 'product_price', FormatNumber( $pdata['product_price'], 2, '.', ',' ) );
