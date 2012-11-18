@@ -1374,6 +1374,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'KEY', $key );
 

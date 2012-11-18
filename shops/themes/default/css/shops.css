@@ -712,3 +712,6 @@ div.TabView div.Pages div.Page {
 .error{
 	color:red;
 }
+img.calendar{
+	vertical-align:middle;
+}

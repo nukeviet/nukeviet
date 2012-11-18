@@ -88,7 +88,7 @@ $contents = $xtpl->text( 'form' );
 $search = "";
 if ( $keyword != "" )
 {
-	$search = " AND `" . NV_LANG_DATA . "_title` like '%" . $db->dblikeescape( $keyword ) . "%' ";
+	$search = " AND (`" . NV_LANG_DATA . "_title` LIKE '%" . $db->dblikeescape( $keyword ) . "%' OR `product_code` LIKE '%" . $db->dblikeescape( $keyword ) . "%')";
 }
 if ( ( $price1 >= 0 and $price2 > 0 ) )
 {
