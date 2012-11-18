@@ -48,7 +48,7 @@
 	<tbody>
 		<tr{bg}>
 			<td align="center">{pro_no}</td>
-			<td class="prd"><a title="{product_name}" href="{link_pro}">{product_name}</a></td>
+			<td class="prd"><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></td>
 			<td class="amount" align="center">{product_number}</td>
 			<td class="unit">{product_unit}</td>
 			<td class="money" align="right"><strong>{product_price}</strong></td>
