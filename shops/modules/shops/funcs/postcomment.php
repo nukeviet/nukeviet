@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $difftimeout = 360;
 $id = $nv_Request->get_int( 'id', 'post', 0 );
-$content = filter_text_input( 'content', 'post', '', 1 );
+$content = filter_text_input( 'content', 'post', '', 1, 250 );
 $code = filter_text_input( 'code', 'post', '' );
 $checkss = filter_text_input( 'checkss', 'post' );
 $status = $pro_config['comment_auto'];
