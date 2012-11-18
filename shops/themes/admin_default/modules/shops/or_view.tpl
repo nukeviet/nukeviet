@@ -59,7 +59,7 @@
 	<!-- END: loop -->
 	<tfoot>
 		<tr>
-			<td align="right" valign="top" colspan="5">{LANG.order_total}: <strong id="total">{order_total}</strong></td>
+			<td align="right" valign="top" colspan="8">{LANG.order_total}: <strong id="total">{order_total}</strong></td>
 		</tr>
 	</tfoot>
 </table>
@@ -103,7 +103,7 @@
 	<!-- BEGIN: checkpayment -->
 	<tfoot>
 		<tr>
-			<td colspan="7" align="right"><a href="{LINK_CHECK_PAYMENT}">{LANG.checkpayment}</a></td>
+			<td colspan="8" align="right"><a href="{LINK_CHECK_PAYMENT}">{LANG.checkpayment}</a></td>
 		</tr>	
 	</tfoot>
 	<!-- END: checkpayment -->
