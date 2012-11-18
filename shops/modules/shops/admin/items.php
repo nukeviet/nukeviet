@@ -43,6 +43,7 @@ $order = $nv_Request->get_string( 'order', 'get' ) == "asc" ? 'asc' : 'desc';
 
 $array_search = array(
 	"-" => "---",
+	"product_code" => $lang_module['search_product_code'],
 	"title" => $lang_module['search_title'],
 	"bodytext" => $lang_module['search_bodytext'],
 	"author" => $lang_module['search_author'],
@@ -69,7 +70,11 @@ $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 if( $checkss == md5( session_id() ) )
 {
 	// Tim theo tu khoa
-	if( in_array( $stype, $array_in_rows ) and ! empty( $q ) )
+	if( $stype == "product_code" )
+	{
+		$from .= " WHERE `product_code` LIKE '%" . $db->dblikeescape( $q ) . "%' ";
+	}
+	elseif( in_array( $stype, $array_in_rows ) and ! empty( $q ) )
 	{
 		$from .= " WHERE `" . NV_LANG_DATA . "_" . $stype . "` LIKE '%" . $db->dblikeescape( $q ) . "%' ";
 	}
@@ -96,6 +101,7 @@ if( $checkss == md5( session_id() ) )
 		}
 		
 		$arr_from = array();
+		$arr_from[] = "(`product_code` LIKE '%" . $db->dblikeescape( $q ) . "%')";
 		foreach( $array_in_rows as $val )
 		{
 			$arr_from[] = "(`" . NV_LANG_DATA . "_" . $val . "` LIKE '%" . $db->dblikeescape( $q ) . "%')";

@@ -132,6 +132,7 @@ $lang_module['search_key'] = 'Keywords';
 $lang_module['search_cat'] = 'Category';
 $lang_module['search_cat_all'] = 'All categories';
 $lang_module['search_title'] = 'Product name';
+$lang_module['search_product_code'] = 'Product code';
 $lang_module['search_bodytext'] = 'Content';
 $lang_module['search_author'] = 'Author';
 $lang_module['search_admin'] = 'Redactor';

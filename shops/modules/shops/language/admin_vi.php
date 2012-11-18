@@ -133,6 +133,7 @@ $lang_module['search_key'] = 'Từ khóa tìm kiếm';
 $lang_module['search_cat'] = 'Loại sản phẩm';
 $lang_module['search_cat_all'] = 'Tất cả các loại sản phẩm';
 $lang_module['search_title'] = 'Tên sản phẩm';
+$lang_module['search_product_code'] = 'Mã sản phẩm';
 $lang_module['search_bodytext'] = 'Nội dung';
 $lang_module['search_author'] = 'Tác giả sản phẩm';
 $lang_module['search_admin'] = 'Người nhập liệu';
