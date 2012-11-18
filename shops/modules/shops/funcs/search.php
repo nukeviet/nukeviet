@@ -73,7 +73,16 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 	
 	if ( $catid != 0 )
 	{
-		$where .= "AND ( listcatid = " . intval( $catid ) . ")";
+		if ( $global_array_cat[$catid]['numsubcat'] == 0 )
+		{
+			$where .= "AND `listcatid`=" . $catid;
+		}
+		else
+		{
+			$array_cat = array();
+			$array_cat = GetCatidInParent( $catid );
+			$where .= "AND `listcatid` IN (" . implode( ",", $array_cat ) . ")";
+		}
 	}
 	
 	if ( $to_date != "" )

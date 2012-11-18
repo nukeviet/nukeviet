@@ -126,7 +126,16 @@ if( $checkss == md5( session_id() ) )
 			$from .= " AND";
 		}
 		
-		$from .= " `listcatid`=" . $catid;
+		if ( $global_array_cat[$catid]['numsubcat'] == 0 )
+		{
+			$from .= " `listcatid`=" . $catid;
+		}
+		else
+		{
+			$array_cat = array();
+			$array_cat = GetCatidInParent( $catid );
+			$from .= " `listcatid` IN (" . implode( ",", $array_cat ) . ")";
+		}
 	}
 }
 
