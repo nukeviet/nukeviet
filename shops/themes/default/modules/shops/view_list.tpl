@@ -20,7 +20,7 @@
 				<!-- END: discounts --> <br />
                 <!-- END: price -->
                 <!-- BEGIN: contact -->
-                {LANG.detail_pro_price} : <span class="money">{LANG.price_contact}</span><br />
+                {LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span><br />
                 <!-- END: contact -->
                 {intro}
             </span>

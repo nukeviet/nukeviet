@@ -87,7 +87,7 @@
                 <span><strong>{TITLE}</strong></span><br />
 				<span>{DATE_UP}- {NUM_VIEW} {LANG.detail_num_view} </span><br />
                 <!-- BEGIN: price -->
-				<span>{LANG.detail_pro_price} : </span>
+				<span>{LANG.detail_pro_price}: </span>
                 <span><strong>{product_price}</strong> {money_unit} / 1 {pro_unit}</span>
                 <!-- END: price -->
                 <br>

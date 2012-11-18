@@ -30,7 +30,7 @@
 				<!-- END: price -->
 				<!-- BEGIN: contact -->
 				<p class="content_price">
-					{LANG.detail_pro_price} : <span class="money">{LANG.price_contact}</span>
+					{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
 				</p>
 				<!-- END: contact -->
 				<div align="center">

@@ -17,14 +17,14 @@
 			<!-- BEGIN: product_code -->{LANG.product_code}: <strong>{PRODUCT_CODE}</strong><br /><!-- END: product_code -->
 			<!-- BEGIN: price -->
 			<p>
-				{LANG.detail_pro_price} : <span class="{class_money}">{product_price} {money_unit}</span>
+				{LANG.detail_pro_price}: <span class="{class_money}">{product_price} {money_unit}</span>
 				<!-- BEGIN: discounts -->
 				<span class="money">{product_discounts} {money_unit}</span>
 				<!-- END: discounts --> / 1 {pro_unit}
 			</p>
 			<!-- END: price -->
 			<!-- BEGIN: contact -->
-			{LANG.detail_pro_price} : <span class="money">{LANG.price_contact}</span>
+			{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
 			<!-- END: contact -->
 			<!-- BEGIN: hometext -->
 			<p>
