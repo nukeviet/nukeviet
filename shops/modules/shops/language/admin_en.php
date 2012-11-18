@@ -108,6 +108,7 @@ $lang_module['setting_active_payment_note'] = 'If this function is enable, the o
 $lang_module['setting_active_tooltip'] = 'Enable tooltip for products';
 $lang_module['setting_show_product_code'] = 'Show product code';
 $lang_module['setup_payment'] = 'Integrate the on-line payment';
+$lang_module['setup_payment_guide'] = 'See the tutorial';
 $lang_module['setting_stt'] = 'Order';
 $lang_module['active_change_complete'] = 'Change succesfully';
 $lang_module['active_change_not_complete'] = 'Can not change';

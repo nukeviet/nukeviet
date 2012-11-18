@@ -108,6 +108,7 @@ $lang_module['setting_active_payment_note'] = 'Chức năng này bật thì đư
 $lang_module['setting_active_tooltip'] = 'Bật chức năng tooltip cho sản phẩm';
 $lang_module['setting_show_product_code'] = 'Hiển thị mã sản phẩm';
 $lang_module['setup_payment'] = 'Tích hợp cổng thanh toán';
+$lang_module['setup_payment_guide'] = 'Xem hướng dẫn tích hợp';
 $lang_module['setting_stt'] = 'STT';
 $lang_module['active_change_complete'] = 'Thay đổi thành công';
 $lang_module['active_change_not_complete'] = 'Thay đổi không thành công';

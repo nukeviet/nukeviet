@@ -214,6 +214,11 @@ if( ! empty( $data_pay ) )
 	$xtpl->parse( 'main.paymentedit' );
 }
 
+if( NV_LANG_DATA == 'vi' )
+{
+	$xtpl->parse( 'main.guide' );
+}
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
