@@ -137,7 +137,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		
 			if( $id )
 			{
-				$xtpl->assign( 'pagetitle', $lang_module['addads_success'] . '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name, true ) . '">' );
+				$xtpl->assign( 'pagetitle', $lang_module['addads_success'] . '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . '">' );
 			}
 		}
 	}
