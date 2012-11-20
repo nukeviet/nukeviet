@@ -103,8 +103,9 @@ if( ! empty( $delmodule ) )
 		if( empty( $module_exit ) )
 		{
 			$theme_list_site = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme'] );
+			$theme_list_mobile = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme_mobile'] );
 			$theme_list_admin = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme_admin'] );
-			$theme_list = array_merge( $theme_list_site, $theme_list_admin );
+			$theme_list = array_merge( $theme_list_site, $theme_list_mobile, $theme_list_admin );
 		
 			foreach( $theme_list as $theme )
 			{
