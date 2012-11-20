@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate May 30, 2010, 10:57:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate May 30, 2010, 10:57:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '30/05/2010, 23:57';
@@ -205,4 +206,12 @@ $lang_module['whoview_all'] = 'Tất cả';
 $lang_module['whoview_user'] = 'Thành viên';
 $lang_module['whoview_admin'] = 'Quản trị';
 
+$lang_module['access_caption'] = 'Cấu hình quyền hạn sử dụng module';
+$lang_module['access_admin'] = 'Nhóm quản trị';
+$lang_module['access_addus'] = 'Tạo thành viên';
+$lang_module['access_waiting'] = 'Kích hoạt thành viên';
+$lang_module['access_editus'] = 'Sửa thành viên';
+$lang_module['access_delus'] = 'Xóa thành viên';
+$lang_module['access_passus'] = 'Đổi mật khẩu';
+$lang_module['access_groups'] = 'Quản lý nhóm';
 ?>

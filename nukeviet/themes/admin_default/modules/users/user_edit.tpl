@@ -225,7 +225,7 @@
         </tbody>
         <!-- END: group -->
     </table>
-    <br />
+    <!-- BEGIN: changepass -->
     <table class="tab1">
         <caption>
             {LANG.edit_password_note}
@@ -251,10 +251,12 @@
             </tr>
         </tbody>
     </table>
-    <div style="padding-top:15px">
+    <!-- END: changepass -->
+    <div style="text-align: center">
         <input type="submit" name="confirm" value="{LANG.edit_title}" />
     </div>
 </form>
+<br />
 <script type="text/javascript">
 //<![CDATA[
 document.getElementById('form_edit_user').setAttribute("autocomplete", "off");
