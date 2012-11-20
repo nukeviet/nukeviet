@@ -1,4 +1,10 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: error -->
+<div class="quote" style="width:98%">
+	<blockquote class="error">{ERROR}</blockquote>
+</div>
+<div class="clear"></div>
+<!-- END: error -->
 <form action="" method="post">
     <table class="tab1" summary="">
         <tbody class="second">
@@ -272,4 +278,5 @@
     <div style="width: 200px; margin: 10px auto; text-align: center;">
         <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/>
     </div>
-</form><!-- END: main -->
+</form>
+<!-- END: main -->
