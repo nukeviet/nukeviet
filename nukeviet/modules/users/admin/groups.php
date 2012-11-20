@@ -247,6 +247,8 @@ if ( $nv_Request->isset_request( 'userlist', 'get' ) )
         die();
     }
 
+	$filtersql = " FIND_IN_SET('".$id."',`in_groups`)=0";
+	$xtpl->assign( 'FILTERSQL', nv_encrypt_filtersql( $filtersql ) );
     $xtpl->assign( 'GID', $id );
 
     $xtpl->parse( 'userlist' );

@@ -7,7 +7,8 @@
  * @Createdate 26/5/2011, 23:28
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) )
+	die( 'Stop!!!' );
 
 $area = filter_text_input( 'area', 'get', '' );
 if( empty( $area ) )
@@ -16,6 +17,7 @@ if( empty( $area ) )
 }
 
 $page_title = $lang_module['pagetitle'];
+$filtersql = $nv_Request->get_string( 'filtersql', 'get', '' );
 
 $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -26,15 +28,15 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'MODULE_FILE', $module_file );
 $xtpl->assign( 'AREA', $area );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&area=" . $area );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&area=" . $area . "&filtersql=" . $filtersql );
 
-$array = array();
+$array = array( );
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;area=" . $area . "&amp;submit=1";
 
 if( $nv_Request->isset_request( 'submit', 'get' ) )
 {
-	$array_user = array();
+	$array_user = array( );
 	$generate_page = "";
 
 	$orderid = filter_text_input( 'orderid', 'get', '' );
@@ -42,10 +44,14 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 	$orderemail = filter_text_input( 'orderemail', 'get', '' );
 	$orderregdate = filter_text_input( 'orderregdate', 'get', '' );
 
-	if( $orderid != "DESC" and $orderid != "" ) $orderid = "ASC";
-	if( $orderusername != "DESC" and $orderusername != "" ) $orderusername = "ASC";
-	if( $orderemail != "DESC" and $orderemail != "" ) $orderemail = "ASC";
-	if( $orderregdate != "DESC" and $orderregdate != "" ) $orderregdate = "ASC";
+	if( $orderid != "DESC" and $orderid != "" )
+		$orderid = "ASC";
+	if( $orderusername != "DESC" and $orderusername != "" )
+		$orderusername = "ASC";
+	if( $orderemail != "DESC" and $orderemail != "" )
+		$orderemail = "ASC";
+	if( $orderregdate != "DESC" and $orderregdate != "" )
+		$orderregdate = "ASC";
 
 	$array['username'] = filter_text_input( 'username', 'get', '' );
 	$array['full_name'] = filter_text_input( 'full_name', 'get', '' );
@@ -199,26 +205,35 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 			$base_url .= "&amp;last_loginto=" . rawurlencode( nv_date( "d.m.Y", $array['last_loginto1'] ) );
 			$sql .= " AND ( last_login <= " . $array['last_loginto1'] . " )";
 		}
-
-		$sql1 = "SELECT COUNT(*) " . $sql;
-		$result1 = $db->sql_query( $sql1 );
-		list( $all_page ) = $db->sql_fetchrow( $result1 );
+		if( ! empty( $filtersql ) )
+		{
+			list( $data_str ) = $db->sql_fetchrow( $db->sql_query( "SELECT AES_DECRYPT('" . mysql_real_escape_string( nv_base64_decode( $filtersql ) ) . "', '" . md5( $global_config['sitekey'] . $client_info['session_id'] ) . "')" ) );
+			if( ! empty( $data_str ) )
+			{
+				$sql .= " AND " . $data_str;
+			}
+		}
 
 		// Order data
-		$orderida = array( "url" => ( $orderid == "ASC" ) ? $base_url . "&amp;orderid=DESC" : $base_url . "&amp;orderid=ASC", //
-				"class" => ( $orderid == "" ) ? "nooder" : strtolower( $orderid ) //
-				);
+		$orderida = array(
+			"url" => ($orderid == "ASC") ? $base_url . "&amp;orderid=DESC" : $base_url . "&amp;orderid=ASC", //
+			"class" => ($orderid == "") ? "nooder" : strtolower( $orderid ) //
+		);
 
-		$orderusernamea = array( "url" => ( $orderusername == "ASC" ) ? $base_url . "&amp;orderusername=DESC" : $base_url . "&amp;orderusername=ASC", "class" => ( $orderusername == "" ) ? "nooder" : strtolower( $orderusername ) //
-				);
+		$orderusernamea = array(
+			"url" => ($orderusername == "ASC") ? $base_url . "&amp;orderusername=DESC" : $base_url . "&amp;orderusername=ASC",
+			"class" => ($orderusername == "") ? "nooder" : strtolower( $orderusername ) //
+		);
 
-		$orderemaila = array( "url" => ( $orderemail == "ASC" ) ? $base_url . "&amp;orderemail=DESC" : $base_url . "&amp;orderemail=ASC", //
-				"class" => ( $orderemail == "" ) ? "nooder" : strtolower( $orderemail ) //
-				);
+		$orderemaila = array(
+			"url" => ($orderemail == "ASC") ? $base_url . "&amp;orderemail=DESC" : $base_url . "&amp;orderemail=ASC", //
+			"class" => ($orderemail == "") ? "nooder" : strtolower( $orderemail ) //
+		);
 
-		$orderregdatea = array( "url" => ( $orderregdate == "ASC" ) ? $base_url . "&amp;orderregdate=DESC" : $base_url . "&amp;orderregdate=ASC", //
-				"class" => ( $orderregdate == "" ) ? "nooder" : strtolower( $orderregdate ) //
-				);
+		$orderregdatea = array(
+			"url" => ($orderregdate == "ASC") ? $base_url . "&amp;orderregdate=DESC" : $base_url . "&amp;orderregdate=ASC", //
+			"class" => ($orderregdate == "") ? "nooder" : strtolower( $orderregdate ) //
+		);
 
 		// SQL data
 		if( ! empty( $orderid ) )
@@ -245,8 +260,11 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$page = $nv_Request->get_int( 'page', 'get', 0 );
 		$per_page = 10;
 
-		$sql2 = "SELECT `userid`, `username`, `email`, `regdate` " . $sql . " LIMIT " . $page . ", " . $per_page;
+		$sql2 = "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `email`, `regdate` " . $sql . " LIMIT " . $page . ", " . $per_page;
 		$query2 = $db->sql_query( $sql2 );
+
+		$result = $db->sql_query( "SELECT FOUND_ROWS()" );
+		list( $all_page ) = $db->sql_fetchrow( $result );
 
 		while( $row = $db->sql_fetchrow( $query2 ) )
 		{
@@ -255,7 +273,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 				"username" => $row['username'], //
 				"email" => $row['email'], //
 				"regdate" => nv_date( "d/m/Y H:i", $row['regdate'] ) //
-					);
+			);
 		}
 
 		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
@@ -271,7 +289,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$a = 0;
 		foreach( $array_user as $row )
 		{
-			$xtpl->assign( 'CLASS', ( $a % 2 == 1 ) ? " class=\"second\"" : "" );
+			$xtpl->assign( 'CLASS', ($a % 2 == 1) ? " class=\"second\"" : "" );
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'resultdata.data.row' );
 			++$a;
@@ -296,21 +314,21 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 else
 {
 	$gender = isset( $array['gender'] ) ? $array['gender'] : "";
-	$array['gender'] = array();
+	$array['gender'] = array( );
 	$array['gender'][] = array(
 		"key" => "", //
 		"title" => $lang_module['select_gender'], //
-		"selected" => ( "" == $gender ) ? " selected=\"selected\"" : "" //
+		"selected" => ("" == $gender) ? " selected=\"selected\"" : "" //
 	);
 	$array['gender'][] = array(
 		"key" => "M", //
 		"title" => $lang_module['select_gender_male'], //
-		"selected" => ( "M" == $gender ) ? " selected=\"selected\"" : "" //
+		"selected" => ("M" == $gender) ? " selected=\"selected\"" : "" //
 	);
 	$array['gender'][] = array(
 		"key" => "F", //
 		"title" => $lang_module['select_gender_female'], //
-		"selected" => ( "F" == $gender ) ? " selected=\"selected\"" : "" //
+		"selected" => ("F" == $gender) ? " selected=\"selected\"" : "" //
 	);
 
 	foreach( $array['gender'] as $gender )
@@ -323,9 +341,8 @@ else
 	$contents = $xtpl->text( 'main' );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include (NV_ROOTDIR . "/includes/header.php");
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
-exit();
-
+include (NV_ROOTDIR . "/includes/footer.php");
+exit( );
 ?>

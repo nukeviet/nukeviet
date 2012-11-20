@@ -199,13 +199,16 @@ $contents['position'] = array(
 $contents['info'] = $lang_module['nv_admin_add_info'];
 $contents['submit'] = $lang_module['nv_admin_add'];
 
+//filtersql
+$filtersql = " `userid` NOT IN (SELECT `admin_id` FROM `" . NV_AUTHORS_GLOBALTABLE . "`)";
+
 // Parse content
 $xtpl = new XTemplate( "add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'INFO', $contents['info'] );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'RESULT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&result=1&checksess=" . md5( $global_config['sitekey'] . session_id() ) );
-
+$xtpl->assign( 'FILTERSQL', nv_encrypt_filtersql( $filtersql ) );
 $xtpl->assign( 'ACTION', $contents['action'] );
 
 if( isset( $contents['editor'] ) )

@@ -13,7 +13,7 @@
             <td><sup class="required">&lowast;</sup></td>
             <td>
 				<input name="userid" id="userid" type="text" value="{USERID}" style="width:300px" maxlength="20" />
-				<input type="button" value="{LANG.add_select}" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?' + nv_name_variable + '=users&' + nv_fc_variable + '=getuserid&area=userid', 'NVImg', '850', '600', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' )" />
+				<input type="button" value="{LANG.add_select}" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?' + nv_name_variable + '=users&' + nv_fc_variable + '=getuserid&area=userid&filtersql={FILTERSQL}', 'NVImg', '850', '600', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' )" />
 			</td>
             <td>&nbsp;</td>
         </tr>
