@@ -12,24 +12,10 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 //Xac dinh ten mui gio
 function nv_getTimezoneName_from_cookie( $cookie )
 {
+	global $nv_parse_ini_timezone;
 	if( preg_match( "/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|(.*)$/", rawurldecode( $cookie ), $matches ) )
 	{
-		$ini = file( NV_ROOTDIR . '/includes/ini/timezone.ini' );
-		$timezones = array();
-	
-		foreach( $ini as $i )
-		{
-			if( preg_match( '/\[(.+)\]/', $i, $ms ) )
-			{
-				$last = trim( $ms[1] );
-			}
-			elseif( preg_match( '/(.+)[ ]*\=[ ]*(\-?\d+)/', $i, $ms ) )
-			{
-				$timezones[$last][trim( $ms[1] )] = trim( $ms[2] );
-			}
-		}
-	
-		foreach( $timezones as $name => $offset )
+		foreach( $nv_parse_ini_timezone as $name => $offset )
 		{
 			if( $offset['winter_offset'] == intval( $matches[2] ) * 60 && $offset['summer_offset'] == intval( $matches[2] ) * 60 ) return $name;
 		}
@@ -37,7 +23,6 @@ function nv_getTimezoneName_from_cookie( $cookie )
 	return '';
 }
 
-unset( $matches, $matches2 );
 $global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) ) ? "nv3" : $global_config['cookie_prefix'];
 
 if( isset( $_COOKIE[$global_config['cookie_prefix'] . '_cltn'] ) )

@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
-$timezone_array = array_keys( nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/timezone.ini', true ) );
+$timezone_array = array_keys( $nv_parse_ini_timezone );
 
 $array_config_global = array();
 
