@@ -242,10 +242,9 @@ if ( $global_config['lang_multi'] == 1 )
     $xtpl->parse( 'main.lang_multi' );
 }
 $xtpl->parse( 'main' );
-
+$global_config['mudim_active'] = 0;
 include ( NV_ROOTDIR . "/includes/header.php" );
 $xtpl->out( 'main' );
 include ( NV_ROOTDIR . "/includes/footer.php" );
-die();
 
 ?>
