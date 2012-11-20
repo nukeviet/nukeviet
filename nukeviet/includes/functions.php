@@ -9,11 +9,6 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-require_once ( NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php' );
-require_once ( NV_ROOTDIR . '/includes/utf8/utf8_functions.php' );
-require_once ( NV_ROOTDIR . '/includes/core/filesystem_functions.php' );
-require_once ( NV_ROOTDIR . '/includes/core/cache_functions.php' );
-
 /**
  * nv_object2array()
  *
@@ -178,20 +173,18 @@ function nv_check_bot()
  * nv_checkmobile()
  *
  * @param string $inifile
+ * @param string $user_agent
  * @return
  */
-function nv_checkmobile( $inifile )
+function nv_checkmobile( $user_agent )
 {
-	$user_agent = $_SERVER['HTTP_USER_AGENT'];
+	global $nv_parse_ini_mobile;
 
 	if( preg_match( "/Creative\ AutoUpdate/i", $user_agent ) ) return array();
 
-	$browsers = array();
-	if( file_exists( $inifile ) ) $browsers = nv_parse_ini_file( $inifile, true );
-
-	if( ! empty( $browsers ) )
+	if( ! empty( $nv_parse_ini_mobile ) )
 	{
-		foreach( $browsers as $key => $info )
+		foreach( $nv_parse_ini_mobile as $key => $info )
 		{
 			if( preg_match( $info['rule'], $user_agent ) ) return array( 'key' => $key, 'name' => $info['name'] );			
 		}
@@ -232,14 +225,13 @@ function nv_checkmobile( $inifile )
  * nv_getBrowser()
  *
  * @param string $agent
- * @param string $brinifile
  * @return
  */
-function nv_getBrowser( $agent, $brinifile )
+function nv_getBrowser( $agent)
 {
-	$browsers = nv_parse_ini_file( $brinifile, true );
+	global $nv_parse_ini_browsers;
 	
-	foreach( $browsers as $key => $info )
+	foreach( $nv_parse_ini_browsers as $key => $info )
 	{
 		if( preg_match( "#" . $info['rule'] . "#i", $agent, $results ) )
 		{
@@ -256,14 +248,13 @@ function nv_getBrowser( $agent, $brinifile )
  * nv_getOs()
  *
  * @param string $agent
- * @param string $osinifile
  * @return
  */
-function nv_getOs( $agent, $osinifile )
+function nv_getOs( $agent )
 {
-	$os = nv_parse_ini_file( $osinifile, true );
+	global $nv_parse_ini_os;
 	
-	foreach( $os as $key => $info )
+	foreach( $nv_parse_ini_os as $key => $info )
 	{
 		if( preg_match( "#" . $info['rule'] . "#i", $agent, $results ) )
 		{
@@ -1089,7 +1080,7 @@ function nv_get_keywords( $content = "" )
  */
 function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 {
-	global $global_config, $sys_info;
+	global $db, $global_config, $sys_info;
 
 	$sendmail_from = ini_get( 'sendmail_from' );
 	
@@ -1098,7 +1089,7 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 	try
 	{
 		$mail = new PHPMailer( true );
-		$mail->SetLanguage(NV_LANG_INTERFACE, NV_ROOTDIR . '/includes/phpmailer/language/');
+		$mail->SetLanguage(NV_LANG_INTERFACE, NV_ROOTDIR . '/language/'.NV_LANG_INTERFACE.'/');
 		$mail->CharSet = $global_config['site_charset'];
 		$mailer_mode = strtolower( $global_config['mailer_mode'] );
 		
@@ -1137,6 +1128,8 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 			return false;
 		}
 
+		$message = $db->unfixdb( $message );
+		$message = nv_url_rewrite( $message );
 		$message = nv_change_buffer( $message );
 		$message = nv_unhtmlspecialchars( $message );
 		$subject = nv_unhtmlspecialchars( $subject );
@@ -1411,6 +1404,38 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
 }
 
 /**
+ * nv_check_domain()
+ *
+ * @param string $domain
+ * @return string $domain_ascii
+ */
+function nv_check_domain( $domain )
+{
+	if( preg_match( "/^([a-z0-9]+)([a-z0-9\-\.]+)\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mf|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|post|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|xxx|ye|yt|za|zm|zw)$/", $domain ) or $domain == 'localhost' or  filter_var( $domain, FILTER_VALIDATE_IP ))
+	{
+		return $domain;
+	}
+	else
+	{
+		if( function_exists( 'idn_to_ascii' ) )
+		{
+			$domain_ascii = idn_to_ascii( $domain );
+		}
+		else
+		{
+			require_once (NV_ROOTDIR . '/includes/class/idna_convert.class.php');
+			$IDN = new idna_convert( array( 'idn_version' => 2008 ) );
+			$domain_ascii = $IDN->encode( $domain );
+		}
+		if( preg_match( "/^xn\-\-([a-z0-9\-\.]+)\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mf|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|post|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|xxx|ye|yt|za|zm|zw|xn--0zwm56d|xn--11b5bs3a9aj6g|xn--3e0b707e|xn--45brj9c|xn--54b7fta0cc|xn--80akhbyknj4f|xn--80ao21a|xn--90a3ac|xn--9t4b11yi5a|xn--clchc0ea0b2g2a9gcd|xn--deba0ad|xn--fiqs8s|xn--fiqz9s|xn--fpcrj9c3d|xn--fzc2c9e2c|xn--g6w251d|xn--gecrj9c|xn--h2brj9c|xn--hgbk6aj7f53bba|xn--hlcj6aya9esc7a|xn--j1amh|xn--j6w193g|xn--jxalpdlp|xn--kgbechtv|xn--kprw13d|xn--kpry57d|xn--l1acc|xn--lgbbat1ad8j|xn--mgb9awbf|xn--mgba3a4f16a|xn--mgbaam7a8h|xn--mgbai9azgqp6j|xn--mgbayh7gpa|xn--mgbbh1a71e|xn--mgbc0a9azcg|xn--mgberp4a5d4ar|xn--mgbx4cd0ab|xn--node|xn--o3cw4h|xn--ogbpf8fl|xn--p1ai|xn--pgbs0dh|xn--s9brj9c|xn--wgbh1c|xn--wgbl6a|xn--xkc2al3hye2a|xn--xkc2dl3a5ee0h|xn--yfro4i67o|xn--ygbi2ammx|xn--zckzah)$/", $domain_ascii ) )
+		{
+			return $domain_ascii;
+		}
+	}
+	return '';
+}
+
+/**
  * nv_is_url()
  *
  * @param string $url
@@ -1418,22 +1443,15 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
  */
 function nv_is_url( $url )
 {
-	if( empty( $url ) ) return false;
+	if( ! preg_match( '/^(http|https|ftp|gopher)\:\/\//', $url ) ) return false;
 
 	$url = nv_strtolower( $url );
 
 	if( ! ( $parts = @parse_url( $url ) ) ) return false;
 
-	if( ! isset( $parts['scheme'] ) or ! isset( $parts['host'] ) or ( ! in_array( $parts['scheme'], array( 'http', 'https', 'ftp', 'gopher' ) ) ) ) return false;
-
-	if( ! preg_match( "/^[0-9a-z]([\-\.]?[0-9a-z])*\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw|xxx)$/", $parts['host'] ) )
-	{
-		if( $parts['host'] != 'localhost' and ! filter_var($parts['host'], FILTER_VALIDATE_IP) )
-		{
-			return false;
-		}
-	}
-
+	$domain = ( isset( $parts['host'] ) ) ? nv_check_domain( $parts['host'] ) : '';
+	if( empty( $domain ) ) return false;
+	
 	if( isset( $parts['user'] ) and ! preg_match( "/^([0-9a-z\-]|[\_])*$/", $parts['user'] ) ) return false;
 
 	if( isset( $parts['pass'] ) and ! preg_match( "/^([0-9a-z\-]|[\_])*$/", $parts['pass'] ) ) return false;
@@ -1570,36 +1588,6 @@ function nv_check_url( $url, $is_200 = 0 )
 }
 
 /**
- * nv_check_rewrite_file()
- *
- * @return
- */
-function nv_check_rewrite_file()
-{
-	global $sys_info;
-
-	if( $sys_info['supports_rewrite'] == 'rewrite_mode_apache' )
-	{
-		if( ! file_exists( NV_ROOTDIR . '/.htaccess' ) ) return false;
-
-		$htaccess = @file_get_contents( NV_ROOTDIR . '/.htaccess' );
-	
-		return ( preg_match( "/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s", $htaccess ) );
-	}
-
-	if( $sys_info['supports_rewrite'] == 'rewrite_mode_iis' )
-	{
-		if( ! file_exists( NV_ROOTDIR . '/web.config' ) ) return false;
-
-		$web_config = @file_get_contents( NV_ROOTDIR . '/web.config' );
-	
-		return ( preg_match( "/<rule name=\"nv_rule_rewrite\">(.*)<\/rule>/s", $web_config ) );
-	}
-
-	return false;
-}
-
-/**
  * nv_url_rewrite()
  *
  * @param string $buffer
@@ -1608,13 +1596,13 @@ function nv_check_rewrite_file()
  */
 function nv_url_rewrite( $buffer, $is_url = false )
 {
-	global $rewrite;
+	global $rewrite_keys, $rewrite_values;
 
-	if( ! empty( $rewrite ) )
+	if( ! empty( $rewrite_keys ) )
 	{
 		if( $is_url ) $buffer = "\"" . $buffer . "\"";
 
-		$buffer = preg_replace( array_keys( $rewrite ), array_values( $rewrite ), $buffer );
+		$buffer = preg_replace( $rewrite_keys, $rewrite_values, $buffer );
 
 		if( $is_url ) $buffer = substr( $buffer, 1, -1 );
 	}
@@ -1662,12 +1650,9 @@ function nv_change_buffer( $buffer )
 {
 	global $db, $sys_info, $global_config;
 
-	$buffer = $db->unfixdb( $buffer );
-	$buffer = nv_url_rewrite( $buffer );
-
 	if( defined( "NV_ANTI_IFRAME" ) and NV_ANTI_IFRAME ) $buffer = preg_replace( "/(<body[^>]*>)/", "$1\r\n<script type=\"text/javascript\">if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1 );
 
-	if( ! empty( $global_config['googleAnalyticsID'] ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
+	if( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
 	{
 		$dp = "";
 		if( $global_config['googleAnalyticsSetDomainName'] == 1 )
@@ -1687,6 +1672,21 @@ function nv_change_buffer( $buffer )
 	
 		$buffer = preg_replace( '/(<\/head>)/i', $googleAnalytics . "\\1", $buffer, 1 );
 	}
+
+	$body_replace = "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\">
+						<img alt=\"\" title=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=".nv_genpass()."\" width=\"1\" height=\"1\" />
+					</div>";
+
+	if( NV_LANG_INTERFACE == 'vi' AND ($global_config['mudim_active']==1 OR ($global_config['mudim_active']==2 AND defined( 'NV_SYSTEM' )) OR ($global_config['mudim_active']==3 AND defined( 'NV_ADMIN') )))
+	{
+		$body_replace .= "<script type=\"text/javascript\">
+				var mudim_showPanel = ".(($global_config['mudim_showpanel']) ? "true" : "false").";
+				var mudim_displayMode = ".$global_config['mudim_displaymode'].";
+				var mudim_method = ".$global_config['mudim_method'].";
+			</script>";
+		$body_replace .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
+	}
+	$buffer = preg_replace( '/(<\/body>)/i', $body_replace . "\\1", $buffer, 1 );
 
 	if ( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
 	{

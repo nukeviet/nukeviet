@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE'))
+    die('Stop!!!');
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -115,4 +116,13 @@ $lang_module['updatetime'] = 'Thời gian kiểm lại phiên bản sau';
 $lang_module['clearip_logs'] = 'Xóa ip logs';
 $lang_module['update_manual_delete'] = 'Hãy xóa thủ công.';
 
+$lang_module['mudim'] = 'Cấu hình bộ gõ Tiếng Việt';
+$lang_module['mudim_active'] = 'Kích hoạt bộ gõ tiếng việt Mudim';
+$lang_module['mudim_active_no'] = 'Không kích hoạt';
+$lang_module['mudim_active_all'] = 'Kích hoạt toàn site';
+$lang_module['mudim_active_site'] = 'Kích hoạt khu vực ngoài site';
+$lang_module['mudim_active_admin'] = 'Kích hoạt khu vực admin';
+$lang_module['mudim_showpanel'] = 'Hiển thị bảng điều khiển Mudim';
+$lang_module['mudim_method'] = 'Kiểu gõ mặc định';
+$lang_module['mudim_displaymode'] = 'Hiển thị công cụ dưới dạng';
 ?>

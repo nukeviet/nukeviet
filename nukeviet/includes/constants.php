@@ -165,9 +165,7 @@ define( "NV_ALLOW_REQUEST_MODS", "get,post,cookie,session,request,env,server" );
 
 define( "NV_REQUEST_DEFAULT_MODE", "request" );
 
-define( "NV_XSS_REPLACESTRING", "<x>" );
-
-//HIen thi, ghi loi
+//Hien thi, ghi loi
 //Khong chinh sua gi o 4 dong duoi nay
 if ( ! defined( 'E_STRICT' ) ) define( 'E_STRICT', 2048 ); //khong sua
 if ( ! defined( 'E_RECOVERABLE_ERROR' ) ) define( 'E_RECOVERABLE_ERROR', 4096 ); //khong sua

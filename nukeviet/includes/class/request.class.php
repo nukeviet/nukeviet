@@ -120,8 +120,6 @@ class Request
 
     private $ip_addr;
 
-    private $XSS_replaceString = '<x>';
-
     private $is_session_start = false;
 
     private $is_filter = false;
@@ -172,8 +170,7 @@ class Request
         if ( isset( $config['cookie_httponly'] ) and ! empty( $config['cookie_httponly'] ) ) $this->httponly = true;
         if ( isset( $config['cookie_prefix'] ) and ! empty( $config['cookie_prefix'] ) ) $this->cookie_prefix = preg_replace( "/[^a-zA-Z0-9\_]+/", "", $config['cookie_prefix'] );
         if ( isset( $config['session_prefix'] ) and ! empty( $config['session_prefix'] ) ) $this->session_prefix = preg_replace( "/[^a-zA-Z0-9\_]+/", "", $config['session_prefix'] );
-        if ( isset( $config['cookie_key'] ) and ! empty( $config['cookie_key'] ) ) $this->cookie_key = $config['cookie_key'];
-        if ( isset( $config['XSS_replaceString'] ) and ! empty( $config['XSS_replaceString'] ) ) $this->XSS_replaceString = $config['XSS_replaceString'];
+        if ( isset( $config['sitekey'] ) and ! empty( $config['sitekey'] ) ) $this->cookie_key = $config['sitekey'];
         if ( ! empty( $config['str_referer_blocker'] ) ) $this->str_referer_blocker = true;
         $this->engine_allowed = ( array )$config['engine_allowed'];
         if ( empty( $ip ) ) $ip = $_SERVER['REMOTE_ADDR'];
@@ -436,12 +433,12 @@ class Request
         if ( ! empty( $this->referer ) )
         {
             $ref = @parse_url( $this->referer );
-			if( substr( $ref['host'], 0, 1 ) == '[' AND substr( $ref['host'], -1 ) == ']' )
-			{
-				$ref['host'] = substr( $ref['host'], 1, -1 );
-			}
-            if( $ref and isset( $ref['scheme'] ) and in_array( $ref['scheme'], array( 'http', 'https', 'ftp', 'gopher' ) ) and isset( $ref['host'] ) and ( preg_match( "/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/", $ref['host'] ) or filter_var( $ref['host'], FILTER_VALIDATE_IP ) or $ref['host'] == 'localhost' ) )
+            if( isset( $ref['scheme'] ) and in_array( $ref['scheme'], array( 'http', 'https', 'ftp', 'gopher' ) ) and isset( $ref['host'] ) )
             {
+				if( substr( $ref['host'], 0, 1 ) == '[' AND substr( $ref['host'], -1 ) == ']' )
+				{
+					$ref['host'] = substr( $ref['host'], 1, -1 );
+				}            	
                 if( preg_match( "/^" . preg_quote( $ref['host'] ) . "/", $this->server_name ) )
                 {
                     $this->referer_key = 1;
@@ -521,7 +518,7 @@ class Request
      * 
      * @return
      */
-    private function get_cookie_save_path ( )
+    private function get_cookie_save_path ()
     {
         $this->cookie_path = $this->base_siteurl . '/';
         $cookie_domain = preg_replace( "/^([w]{3})\./", "", $this->server_name );
@@ -553,6 +550,7 @@ class Request
                     $oldumask = umask( 0 );
                     $res = @mkdir( $save_path, 0755 );
                     umask( $oldumask );
+					die($save_path);
                 }
                 if ( ! @is_writable( $save_path ) )
                 {
@@ -575,7 +573,7 @@ class Request
      * 
      * @return
      */
-    private function sessionStart ( )
+    private function sessionStart ()
     {
         if ( headers_sent() || connection_status() != 0 || connection_aborted() )
         {

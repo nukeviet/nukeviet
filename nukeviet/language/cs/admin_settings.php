@@ -187,6 +187,5 @@ $lang_module['closed_site_0'] = 'Stránky byl aktivovat';
 $lang_module['closed_site_1'] = 'Uzavření stránky .Přístup pouze k Nejvyššímu správnímu';
 $lang_module['closed_site_2'] = 'Uzavření stránky .Přístupných pouze moderátoři';
 $lang_module['closed_site_3'] = 'Uzavření stránky .Přístup všechny admin';
-$lang_module['getloadavg'] = 'Zkontrolujte stav serveru, jestli  > 80% bude oznámení že  "Server too busy. Please try again later"';
 
 ?>

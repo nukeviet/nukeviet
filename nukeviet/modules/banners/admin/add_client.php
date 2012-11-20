@@ -125,7 +125,7 @@ $contents['fax'] = array( $lang_module['fax'], 'fax', $fax, 255 );
 $contents['mobile'] = array( $lang_module['mobile'], 'mobile', $mobile, 255 );
 $contents['uploadtype'] = array( $lang_module['uploadtype'], 'uploadtype' );
 
-$ini = parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
+$ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 $contents['types'] = array_keys( $ini );
 
 $contents = call_user_func( "nv_add_client_theme", $contents );

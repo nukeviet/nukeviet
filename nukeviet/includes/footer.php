@@ -7,32 +7,34 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' )) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
-global $db, $nv_Request, $sys_info;
+unset( $lang_global, $lang_module, $language_array, $nv_parse_ini_browsers, $nv_parse_ini_mobile, $nv_parse_ini_os, $nv_parse_ini_timezone );
+global $db, $nv_Request;
 
-$db->sql_close();
-$page = ob_get_contents();
-ob_end_clean();
-
+$contents = ob_get_contents( );
+ob_end_clean( );
+$contents = $db->unfixdb( $contents );
+$contents = nv_url_rewrite( $contents );
 if( ! defined( 'NV_IS_AJAX' ) )
 {
-	$page = nv_change_buffer( $page );
+	$contents = nv_change_buffer( $contents );
+	if( defined( 'NV_IS_SPADMIN' ) )
+	{
+		$contents = str_replace( '[COUNT_SHOW_QUERIES]', sizeof( $db->query_strs ) . ' / ' . nv_convertfromBytes( memory_get_usage( ) ) . ' / ' . number_format( (array_sum( explode( " ", microtime( ) ) ) - NV_START_TIME), 3, '.', '' ), $contents );
+	}
 }
-else
-{
-	$page = $db->unfixdb( $page );
-	$page = nv_url_rewrite( $page );
-}
+$db->sql_close( );
 
 //Nen trang
 if( defined( 'NV_IS_GZIP' ) )
 {
 	$http_accept_encoding = $nv_Request->get_string( 'HTTP_ACCEPT_ENCODING', 'server', '' );
-	
+
 	if( ! empty( $http_accept_encoding ) )
 	{
-		$compress_list = array();
+		$compress_list = array( );
 		$compress_list['deflate'] = 'gzdeflate';
 		$compress_list['gzip'] = 'gzencode';
 		$compress_list['x-gzip'] = 'gzencode';
@@ -47,8 +49,7 @@ if( defined( 'NV_IS_GZIP' ) )
 			{
 				if( nv_function_exists( $compress_list[$enc] ) )
 				{
-					$page = call_user_func( $compress_list[$enc], $page, ZLIB_OUTPUT_COMPRESSION_LEVEL );
-					
+					$contents = call_user_func( $compress_list[$enc], $contents, ZLIB_OUTPUT_COMPRESSION_LEVEL );
 					@Header( 'Content-Encoding: ' . $enc );
 					@Header( 'Vary: Accept-Encoding' );
 					break;
@@ -58,11 +59,6 @@ if( defined( 'NV_IS_GZIP' ) )
 	}
 }
 
-/*$strlen = strlen( $page );
-@Header( 'Content-Length: ' . $strlen );
-@Header( 'Accept-Ranges: bytes' );*/
-
-echo $page;
-exit();
-
+echo $contents;
+exit( );
 ?>

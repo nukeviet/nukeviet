@@ -73,9 +73,9 @@ if( $numrows )
 		$last_agent = $row['last_agent'];
 		$row['full_name'] = empty( $row['full_name'] ) ? $row['full_name'] : $row['username'];
 
-		$browser = array_combine( array( 'key', 'name' ), explode( "|", nv_getBrowser( $last_agent, NV_ROOTDIR . '/includes/ini/br.ini' ) ) );
+		$browser = array_combine( array( 'key', 'name' ), explode( "|", nv_getBrowser( $last_agent ) ) );
 
-		$os = array_combine( array( 'key', 'name' ), explode( "|", nv_getOs( $last_agent, NV_ROOTDIR . '/includes/ini/os.ini' ) ) );
+		$os = array_combine( array( 'key', 'name' ), explode( "|", nv_getOs( $last_agent ) ) );
 
 		$is_suspend = intval( $row['is_suspend'] );
 		if( empty( $is_suspend ) )

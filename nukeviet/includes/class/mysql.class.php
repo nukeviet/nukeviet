@@ -6,7 +6,6 @@
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @Createdate 3/28/2010 19:3
  */
-
 if ( defined( 'NV_CLASS_SQL_DB_PHP' ) ) return;
 define( 'NV_CLASS_SQL_DB_PHP', true );
 
@@ -48,8 +47,6 @@ class sql_db
 
     public $error = array();
 
-    public $time = 0;
-
     public $query_strs = array();
 
     private $persistency = false;
@@ -74,8 +71,6 @@ class sql_db
      */
     public function __construct ( $db_config = array() )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
-        
         if ( isset( $db_config['dbhost'] ) and ! empty( $db_config['dbhost'] ) ) $this->server = $db_config['dbhost'];
         if ( isset( $db_config['dbport'] ) and ! empty( $db_config['dbport'] ) ) $this->server .= ':' . $db_config['dbport'];
         if ( isset( $db_config['dbname'] ) ) $this->dbname = $db_config['dbname'];
@@ -88,8 +83,6 @@ class sql_db
         $this->sql_connect( $db_config['dbpass'] );
         
         if ( $this->db_connect_id ) $this->sql_setdb();
-        
-        $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
     }
 
     /**
@@ -244,7 +237,6 @@ class sql_db
      */
     public function sql_query ( $query = "" )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
         $this->query_result = false;
         if ( ! empty( $query ) )
         {
@@ -258,12 +250,10 @@ class sql_db
         {
             unset( $this->row[$this->query_result] );
             unset( $this->rowset[$this->query_result] );
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return $this->query_result;
         }
         else
         {
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return false;
         }
     }
@@ -296,16 +286,13 @@ class sql_db
      */
     public function sql_numrows ( $query_id = 0 )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
         if ( empty( $query_id ) ) $query_id = $this->query_result;
         
         if ( ! empty( $query_id ) )
         {
             $result = @mysql_num_rows( $query_id );
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return $result;
         }
-        $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
         return false;
     }
 
@@ -316,14 +303,11 @@ class sql_db
      */
     public function sql_affectedrows ( )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
         if ( $this->db_connect_id )
         {
             $result = @mysql_affected_rows( $this->db_connect_id );
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return $result;
         }
-        $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
         return false;
     }
 
@@ -335,16 +319,13 @@ class sql_db
      */
     public function sql_numfields ( $query_id = 0 )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
         if ( empty( $query_id ) ) $query_id = $this->query_result;
         
         if ( ! empty( $query_id ) )
         {
             $result = @mysql_num_fields( $query_id );
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return $result;
         }
-        $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
         return false;
     }
 
@@ -357,16 +338,13 @@ class sql_db
      */
     public function sql_fieldname ( $offset, $query_id = 0 )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
         if ( empty( $query_id ) ) $query_id = $this->query_result;
         
         if ( ! empty( $query_id ) )
         {
             $result = @mysql_field_name( $query_id, $offset );
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return $result;
         }
-        $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
         return false;
     }
 
@@ -379,16 +357,13 @@ class sql_db
      */
     public function sql_fieldtype ( $offset, $query_id = 0 )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
         if ( empty( $query_id ) ) $query_id = $this->query_result;
         
         if ( ! empty( $query_id ) )
         {
             $result = @mysql_field_type( $query_id, $offset );
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return $result;
         }
-        $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
         return false;
     }
 
@@ -401,7 +376,6 @@ class sql_db
      */
     public function sql_fetchrow ( $query_id = 0, $type = 0 )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
         if ( empty( $query_id ) ) $query_id = $this->query_result;
         
         if ( ! empty( $query_id ) )
@@ -420,10 +394,8 @@ class sql_db
                 default:
                     $this->row['' . $query_id . ''] = @mysql_fetch_array( $query_id, MYSQL_BOTH );
             }
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return $this->row['' . $query_id . ''];
         }
-        $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
         return false;
     }
 
@@ -435,7 +407,6 @@ class sql_db
      */
     public function sql_fetchrowset ( $query_id = 0 )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
         if ( empty( $query_id ) ) $query_id = $this->query_result;
         
         if ( ! empty( $query_id ) )
@@ -446,10 +417,8 @@ class sql_db
             {
                 $result[] = $this->rowset['' . $query_id . ''];
             }
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return $result;
         }
-        $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
         return false;
     }
 
@@ -521,16 +490,13 @@ class sql_db
      */
     public function sql_fetch_assoc ( $query_id = 0 )
     {
-        $stime = array_sum( explode( " ", microtime() ) );
         if ( empty( $query_id ) ) $query_id = $this->query_result;
         
         if ( ! empty( $query_id ) )
         {
             $this->row['' . $query_id . ''] = @mysql_fetch_assoc( $query_id );
-            $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
             return $this->row['' . $query_id . ''];
         }
-        $this->time += ( array_sum( explode( " ", microtime() ) ) - $stime );
         return false;
     }
 

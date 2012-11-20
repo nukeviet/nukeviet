@@ -187,6 +187,5 @@ $lang_module['closed_site_0'] = 'Sites ordinary activities';
 $lang_module['closed_site_1'] = 'Closing of the site only has access to the Supreme Administrative';
 $lang_module['closed_site_2'] = 'Siteyi tüm Moderatorlere kapatın';
 $lang_module['closed_site_3'] = 'Siteyi tüm yöneticilere kapatın';
-$lang_module['getloadavg'] = 'Checking server status, if server exceeds 80% processing power, the system will notify "Server too busy. Please try again later".';
 
 ?>

@@ -341,6 +341,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_ipcountry` (
 
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
         ('registertype', '1', " . NV_CURRENTTIME . "),
+		('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462),        
         ('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . "),
         ('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', " . NV_CURRENTTIME . ")";
 
@@ -367,7 +368,6 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'upload_checking_mode', 'strong'),
 ('sys', 'global', 'upload_logo', 'images/logo.png'),
 ('sys', 'global', 'str_referer_blocker', '0'),
-('sys', 'global', 'getloadavg', '0'),
 ('sys', 'global', 'mailer_mode', ''),
 ('sys', 'global', 'smtp_host', 'smtp.gmail.com'),
 ('sys', 'global', 'smtp_ssl', '1'),
@@ -402,6 +402,10 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'openid_servers', 'yahoo,google,myopenid'),
 ('sys', 'global', 'optActive', '1'),
 ('sys', 'global', 'timestamp', '1'),
+('sys', 'global', 'mudim_displaymode', '0'),
+('sys', 'global', 'mudim_method', '4'),
+('sys', 'global', 'mudim_showpanel', '1'),
+('sys', 'global', 'mudim_active', '1'),
 ('sys', 'global', 'googleAnalyticsID', ''),
 ('sys', 'global', 'googleAnalyticsSetDomainName', '0'),
 ('sys', 'global', 'searchEngineUniqueID', ''),

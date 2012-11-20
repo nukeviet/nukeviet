@@ -187,7 +187,6 @@ $lang_module['closed_site_0'] = 'Mode normal';
 $lang_module['closed_site_1'] = 'Fermeture du site, seulement l\'administrateur suprême peut se connecter';
 $lang_module['closed_site_2'] = 'Fermeture du site - les administrateurs générales peuvent se connecter';
 $lang_module['closed_site_3'] = 'Fermeture du site - les administrateur peuvent se connecter';
-$lang_module['getloadavg'] = 'Vérifier le status du serveur, au cas ou l\'activite de CPU depasse 80%, le systeme donnera une notification: "The server is temporarily busy, try again later!"';
 $lang_module['pagetitle'] = 'Configuration tag "title"';
 $lang_module['pagetitle2'] = 'Méthode d\'affichage de tag "title"';
 $lang_module['pagetitleNote'] = '<strong>Variables acceptés:</strong><br /><br />- <strong>pagetitle</strong>: Titre de page pour des cas définis,<br />- <strong>funcname</strong>: Nom de la function,<br />- <strong>modulename</strong>: Nom de module,<br />- <strong>sitename</strong>: Nom du site';

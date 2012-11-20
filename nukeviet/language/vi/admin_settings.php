@@ -201,7 +201,6 @@ $lang_module['closed_site_0'] = 'Site hoạt động bình thường';
 $lang_module['closed_site_1'] = 'Đóng cửa site chỉ có Quản trị tối cao truy cập';
 $lang_module['closed_site_2'] = 'Đóng cửa site Người điều hành chung truy cập';
 $lang_module['closed_site_3'] = 'Đóng cửa site Tất cả admin truy cập';
-$lang_module['getloadavg'] = 'Kiểm tra trạng thái máy chủ, nếu > 80% sẽ thông báo "Server too busy. Please try again later"';
 $lang_module['robots'] = 'Cấu hình file robots.txt';
 $lang_module['robots_number'] = 'Số thứ tự';
 $lang_module['robots_filename'] = 'Tên file';

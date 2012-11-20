@@ -387,7 +387,7 @@ function nv_xmlSitemap_generate( $url )
  */
 function nv_xmlSitemapIndex_generate()
 {
-	global $db_config, $db, $global_config, $nv_Request, $sys_info, $check_rewrite_file;
+	global $db_config, $db, $global_config, $nv_Request, $sys_info;
 
 	if( file_exists( NV_ROOTDIR . 'themes/' . $global_config['site_theme'] . '/css/sitemapindex.xsl' ) )
 	{
@@ -437,7 +437,7 @@ function nv_xmlSitemapIndex_generate()
 
 	if( $sys_info['supports_rewrite'] and $global_config['is_url_rewrite'] )
 	{
-		if( $check_rewrite_file )
+		if( $global_config['check_rewrite_file'] )
 		{
 			$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "Sitemap-\\1.xml", $contents );
 			$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "Sitemap-\\1.\\2.xml", $contents );

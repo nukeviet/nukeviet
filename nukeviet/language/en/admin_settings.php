@@ -187,7 +187,6 @@ $lang_module['closed_site_0'] = 'Sites ordinary activities';
 $lang_module['closed_site_1'] = 'Closing of the site only has access to the Supreme Administrative';
 $lang_module['closed_site_2'] = 'Moderator\'s closing general site access';
 $lang_module['closed_site_3'] = 'Close all of the site admin access';
-$lang_module['getloadavg'] = 'Check server status, if server exceeds 80% processing level, the system will notify "The server is temporarily busy, try again later!".';
 $lang_module['pagetitle'] = 'Configuration tag "title"';
 $lang_module['pagetitle2'] = 'Display tag "title" option';
 $lang_module['pagetitleNote'] = '<strong>Accept variables:</strong><br /><br />- <strong>pagetitle</strong>: Page title is determined in each specific case,<br />- <strong>funcname</strong>: Function,<br />- <strong>modulename</strong>: Module name,<br />- <strong>sitename</strong>: Site name';

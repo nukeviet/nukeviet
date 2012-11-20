@@ -707,11 +707,9 @@ function nv_admin_menu()
 
 		$new_drag_block = ( defined( 'NV_IS_DRAG_BLOCK' ) ) ? 0 : 1;
 		$lang_drag_block = ( $new_drag_block ) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
-		$total_time = substr( ( array_sum( explode( " ", microtime() ) ) - NV_START_TIME + $db->time ), 0, 5 );
 
 		$xtpl->assign( 'URL_DBLOCK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;drag_block=" . $new_drag_block );
 		$xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );
-		$xtpl->assign( 'COUNT_SHOW_QUERIES', sizeof( $db->query_strs ) . " / " . $total_time );
 
 		foreach( $db->query_strs as $key => $field )
 		{

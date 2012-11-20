@@ -436,5 +436,6 @@ else
 	$dirlist = file_get_contents( $dirlistCache );
 	$dirlist = unserialize( $dirlist );
 }
+$global_config['upload_logo'] = $db->unfixdb(nv_unhtmlspecialchars( $global_config['upload_logo']));
 
 ?>
