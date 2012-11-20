@@ -81,8 +81,6 @@ function nv_site_theme( $contents )
 		$xtpl->parse( 'main.mod_title' );
 	}
 
-	$xtpl->assign( 'THEME_IMG_CRONJOBS', NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() );
-
 	// Chuyen doi giao dien
 	if( ! empty( $global_config['switch_mobi_des'] ) and ! empty( $module_info['mobile'] ) )
 	{

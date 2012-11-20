@@ -164,7 +164,7 @@
 	
     <div id="footer" class="clearfix">
         <div class="copyright">
-            {NV_DB_NUM_QUERIES}: {COUNT_QUERY_STRS}/{NV_TOTAL_TIME} <a href="#queries" onclick="nv_show_hidden('div_hide',2);">{NV_SHOW_QUERIES}</a>
+            {NV_DB_NUM_QUERIES}: [COUNT_SHOW_QUERIES] <a href="#queries" onclick="nv_show_hidden('div_hide',2);">{NV_SHOW_QUERIES}</a>
             <br/>
             <strong>{NV_COPYRIGHT}</strong>
         </div>

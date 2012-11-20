@@ -1421,28 +1421,23 @@ Mudim.AutoDetectMode = function(c) {
 // Function: Mudim.SetPreference()
 //----------------------------------------------------------------------------
 Mudim.SetPreference = function() {
-	var d=new Date();
-	d.setTime(d.getTime()+604800000);
-	var tail=';expires='+d.toGMTString()+';path=/';
 	var value = Mudim.method;
 	var value= CHIM.Speller.enabled ? value + 8 : value;
 	value = Mudim.newAccentRule ? value + 16 : value;
 	value = Mudim.showPanel ? value + 32 : value;
 	value += Mudim.displayMode * 64;
-	document.cookie='|mudim-settings='+value+tail;
-	//console.debug('Cookie value written : |mudim-settings='+value+tail);
+	nv_setCookie('mudimvalue', value, 86400000);
 };
 //----------------------------------------------------------------------------
 // Function: Mudim.GetPreference()
 //----------------------------------------------------------------------------
 Mudim.GetPreference = function() {
-	var c=document.cookie.split(';');
-	for (var i=0;i<c.length && c[i].indexOf('|mudim-settings')<0;i++);
-	if (i==c.length) {
+	value = nv_getCookie('mudimvalue');
+	if (value == null){
 		CHIM.SetDisplay();
-	} else {
-		var value=parseInt(c[i].split('=')[1],10);
-		//console.debug('Cookie value read : %d',value);
+	}
+	else
+	{
 		Mudim.method = value & 7;
 		CHIM.Speller.enabled = (value & 8) ? true : false;
 		CHIM.newAccentRule = (value & 16) ? true : false;
@@ -1542,7 +1537,7 @@ Mudim.GetPanelStyle = function() {
 * Define method
 * Values: 0 - off, 1 - vni, 2 - telex, 3 - viqr, 4 - combined, 5 - auto
 */
-Mudim.method = 4;
+Mudim.method = mudim_method;
 /**
 * Use the new accent rule
 */
@@ -1554,7 +1549,7 @@ Mudim.oldMethod = 4;
 /**
 *Visibility of panel. Assign to this variable to set default value
 */
-Mudim.showPanel = false;
+Mudim.showPanel = mudim_showPanel;
 /**
 *
 */
@@ -1615,7 +1610,7 @@ Mudim.IGNORE_ID = /^.+(_iavim)$/;
 /**
 *Panel display mode. 0 = full; 1 = minimized
 */
-Mudim.displayMode = 0;
+Mudim.displayMode = mudim_displayMode;
 /**
 *Panel's HTML content for each display mode
 */
@@ -1626,74 +1621,3 @@ Mudim.REV = 153;
 for (var i=1;i<100;i++) {
 	setTimeout("Mudim.Init()",2000*i);
 }
-
-// Change log
-
-// Add display modes (full and minimized)
-// Move panel from top to bottom of the page
-// Add 2 hooks BeforeInit and AfterInit
-// Use polling method to activate Mudim
-
-
-// Changes in 0.8
-// Add escape method with Ctrl and Shift
-// Fix issue #10
-// Improve compatibility with other js input methods (specifically, with avim)
-// Fix issue #30
-
-// Changes in 0.7
-// Fix issue #21 (return false in toggle links)
-// Fix issue #23 (typo error in creating cookie)
-// Fix issue #19 : some word cannot put accent on due to  new spell checking rule
-// Fix issue #20 about error in console when there's no text target
-// Remove Viqr from method Auto
-// Save accent rule setting, and show/hide panel setting
-// Add spelling rule as described in Issue #16 comment #0 and comment #1
-// Take frequently used array from Append, make them global
-// Forbid ng[ie], c[ie] and q[^u]
-// Fix the qui't issue
-// Fix the appear-again khuyur issue as magically as when it disappeared
-
-//Changes in 0.6
-// Add AUTO method, which allows user to type in any of 3 methods
-// Fix issue 9
-// Fix issue 8
-//SetPreference when Show/Hide Panel
-
-//Changes in 0.5
-// Issue 6,7 fixed
-
-//Changes in 0.4
-// - Standardize coding style for compatibility with javascript compressor (issue 3)
-// - Fix spelling feature (issue 4)
-// - Fix problem with readding accent
-
-//Changes in version 0.3
-// - First public release
-// - Shorthand ruoiw for ruwowi and similar situations
-// - Refactoring work:
-//	+ FindAccentPos and PutMark from AddKey
-//	+ UpdateUI from KeyHandler
-// - Added attribute Mudim.accent which store information about the last accent function ResetAccentInfo
-// - Auto adjust accent position
-// - The problem with khuyur in 0.2 disappeared magically (Why?)
-// - Fix serious problem with textbox and textarea due to caret position (issue 2)
-// - Fix su73a in VNI and some issue related to 'uo' composiotion (issue 1)
-
-
-//Changes in version 0.2
-// - Happy to see it run on Opera and Konqueror, some modifications in hotkey implementation, though, 
-//	which use new attribute Mudin.oldMethod to store the old method when toggle.
-// - Fix some bugs with 'ua' composition
-// - Limited support for old accent rule with new attribute Mudin.newAccentRule.
-//	I peronally recommend the new accent rule, that's why I don't store this attribute in cookie.
-//	It means that if you prefer the old rule, you have to explicitly select it every time you open a new page.
-// - Add 1 more toggle hotkey F10 as an alternative to F9 in case of conflict with browser hotkeys.
-// - Fix permission error in javascript console when try to attach to cross-site iframe
-// - Known issue : khuyur
-
-//Changes in Mudim 0.1 from CHIM:
-// - Easy-to-use control panel (credit for this smart idea goes to Wasabi with his BIM)
-// - Save settings in cookie
-// - Ability to put ALL diacritical marks at the end of word
-// - Fix hotkey problem in IE

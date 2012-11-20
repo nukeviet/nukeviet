@@ -7,7 +7,8 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 function nv_admin_theme( $contents, $head_site = 1 )
 {
@@ -18,7 +19,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	if( $head_site == 1 )
 	{
 		$file_name_tpl = "main.tpl";
-		
+
 		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/" . $file_name_tpl ) )
 		{
 			$dir_template = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
@@ -32,7 +33,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	else
 	{
 		$file_name_tpl = "content.tpl";
-	
+
 		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/" . $file_name_tpl ) )
 		{
 			$dir_template = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
@@ -91,7 +92,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
 	{
-		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js() );
+		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js( ) );
 		$xtpl->parse( 'main.nv_add_editor_js' );
 	}
 
@@ -103,7 +104,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 	$xtpl->assign( 'NV_GO_CLIENTSECTOR', $lang_global['go_clientsector'] );
 
-	$lang_site = ( ! empty( $site_mods ) ) ? NV_LANG_DATA : $global_config['site_lang'];
+	$lang_site = ( ! empty( $site_mods )) ? NV_LANG_DATA : $global_config['site_lang'];
 	$xtpl->assign( 'NV_GO_CLIENTSECTOR_URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_site );
 	$xtpl->assign( 'NV_LOGOUT', $lang_global['logout'] );
 
@@ -112,10 +113,10 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		if( ! empty( $array_lang_admin ) )
 		{
 			$xtpl->assign( 'NV_LANGDATA', $lang_global['langdata'] );
-		
+
 			foreach( $array_lang_admin as $lang_i => $lang_name )
 			{
-				$xtpl->assign( 'SELECTED', ( $lang_i == NV_LANG_DATA ) ? " selected=\"selected\"" : "" );
+				$xtpl->assign( 'SELECTED', ($lang_i == NV_LANG_DATA) ? " selected=\"selected\"" : "" );
 				$xtpl->assign( 'LANGVALUE', $lang_name );
 				$xtpl->assign( 'LANGOP', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_i );
 				$xtpl->parse( 'main.langdata.option' );
@@ -128,16 +129,16 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		{
 			if( ! empty( $v['custom_title'] ) )
 			{
-				$xtpl->assign( 'TOP_MENU_CURRENT', ( ( $module_name == $m ) ? " class=\"current\"" : "" ) );
+				$xtpl->assign( 'TOP_MENU_CURRENT', (($module_name == $m) ? " class=\"current\"" : "") );
 				$xtpl->assign( 'TOP_MENU_HREF', $m );
 				$xtpl->assign( 'TOP_MENU_NAME', $v['custom_title'] );
 				$xtpl->parse( 'main.top_menu.top_menu_loop' );
 			}
 		}
-	
+
 		$xtpl->parse( 'main.top_menu' );
 		$xtpl->assign( 'NV_DIGCLOCK', nv_date( "H:i T l, d/m/Y", NV_CURRENTTIME ) );
-	
+
 		if( $admin_info['current_login'] >= NV_CURRENTTIME - 60 )
 		{
 			if( ! empty( $admin_info['last_login'] ) )
@@ -165,25 +166,25 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			//Vertical menu
 			foreach( $admin_menu_mods as $m => $v )
 			{
-				$xtpl->assign( 'VERTICAL_MENU_CURRENT', ( ( $module_name == $m ) ? "class=\"current\"" : "" ) );
+				$xtpl->assign( 'VERTICAL_MENU_CURRENT', (($module_name == $m) ? "class=\"current\"" : "") );
 				$xtpl->assign( 'VERTICAL_MENU_HREF', $m );
 				$xtpl->assign( 'VERTICAL_MENU_NAME', $v );
-			
+
 				if( $m == $module_name and ! empty( $submenu ) )
 				{
 					foreach( $submenu as $n => $l )
 					{
-						$xtpl->assign( 'VERTICAL_MENU_SUB_CURRENT', ( ( ( ! empty( $op ) and $op == $n ) or ( ! empty( $set_active_op ) and $set_active_op == $n ) ) ? " class=\"sub_current\"" : " class=\"sub_normal\"" ) );
+						$xtpl->assign( 'VERTICAL_MENU_SUB_CURRENT', ((( ! empty( $op ) and $op == $n) or ( ! empty( $set_active_op ) and $set_active_op == $n)) ? " class=\"sub_current\"" : " class=\"sub_normal\"") );
 						$xtpl->assign( 'VERTICAL_MENU_SUB_HREF', $m );
 						$xtpl->assign( 'VERTICAL_MENU_SUB_HREF1', $n );
 						$xtpl->assign( 'VERTICAL_MENU_SUB_NAME', $l );
 						$xtpl->parse( 'main.vertical_menu.vertical_menu_loop.vertical_menu_sub_loop' );
 					}
 				}
-			
+
 				$xtpl->parse( 'main.vertical_menu.vertical_menu_loop' );
 			}
-		
+
 			$xtpl->parse( 'main.vertical_menu' );
 		}
 	}
@@ -191,14 +192,14 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	if( ! empty( $select_options ) )
 	{
 		$xtpl->assign( 'PLEASE_SELECT', $lang_global['please_select'] );
-	
+
 		foreach( $select_options as $value => $link )
 		{
 			$xtpl->assign( 'SELECT_NAME', $link );
 			$xtpl->assign( 'SELECT_VALUE', $value );
 			$xtpl->parse( 'main.select_option.select_option_loop' );
 		}
-	
+
 		$xtpl->parse( 'main.select_option' );
 	}
 	elseif( isset( $site_mods[$module_name]['main_file'] ) and $site_mods[$module_name]['main_file'] )
@@ -213,44 +214,27 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.empty_page_title' );
 	}
 
-	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info() );
+	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info( ) );
 	$xtpl->assign( 'MODULE_CONTENT', $contents );
 
-	$end_time = array_sum( explode( " ", microtime() ) );
-
-	$xtpl->assign( 'NV_TOTAL_TIME', substr( ( $end_time - NV_START_TIME + $db->time ), 0, 5 ) );
-
-	if( defined( "NV_IS_SPADMIN" ) )
-	{
-		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
-	}
-
-	$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
-	$xtpl->assign( 'COUNT_QUERY_STRS', sizeof( $db->query_strs ) );
 	$xtpl->assign( 'NV_COPYRIGHT', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
 
 	if( defined( "NV_IS_SPADMIN" ) )
 	{
+		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
+		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
 		foreach( $db->query_strs as $key => $field )
 		{
-			$xtpl->assign( 'NV_SHOW_QUERIES_CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
-			$xtpl->assign( 'NV_FIELD1', ( $field[1] ? "<img alt=\"" . $lang_global['ok'] . "\" title=\"" . $lang_global['ok'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/images/icons/good.png\" />" : "<img alt=\"" . $lang_global['fail'] . "\" title=\"" . $lang_global['fail'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/images/icons/bad.png\" />" ) );
+			$xtpl->assign( 'NV_SHOW_QUERIES_CLASS', ($key % 2) ? " class=\"second\"" : "" );
+			$xtpl->assign( 'NV_FIELD1', ($field[1] ? "<img alt=\"" . $lang_global['ok'] . "\" title=\"" . $lang_global['ok'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/images/icons/good.png\" />" : "<img alt=\"" . $lang_global['fail'] . "\" title=\"" . $lang_global['fail'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/images/icons/bad.png\" />") );
 			$xtpl->assign( 'NV_FIELD', $field[0] );
 			$xtpl->parse( 'main.nv_show_queries.nv_show_queries_loop' );
 		}
-	
 		$xtpl->parse( 'main.nv_show_queries' );
 	}
 
-	if( NV_LANG_INTERFACE == 'vi' and NV_LANG_DATA == 'vi' )
-	{
-		$xtpl->parse( 'main.nv_if_mudim' );
-	}
-	
-	$xtpl->assign( 'NV_GENPASS', nv_genpass() );
 	$xtpl->parse( 'main' );
 
 	return $xtpl->text( 'main' );
 }
-
 ?>

@@ -259,21 +259,12 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info() );
 	$xtpl->assign( 'MODULE_CONTENT', $contents );
 
-	$end_time = array_sum( explode( " ", microtime() ) );
-
-	$xtpl->assign( 'NV_TOTAL_TIME', substr( ( $end_time - NV_START_TIME + $db->time ), 0, 5 ) );
-
-	if( defined( "NV_IS_SPADMIN" ) )
-	{
-		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
-	}
-
-	$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
-	$xtpl->assign( 'COUNT_QUERY_STRS', sizeof( $db->query_strs ) );
 	$xtpl->assign( 'NV_COPYRIGHT', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
 
 	if( defined( "NV_IS_SPADMIN" ) )
 	{
+		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
+		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
 		foreach( $db->query_strs as $key => $field )
 		{
 			$xtpl->assign( 'NV_SHOW_QUERIES_CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
@@ -281,16 +272,8 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			$xtpl->assign( 'NV_FIELD', $field[0] );
 			$xtpl->parse( 'main.nv_show_queries.nv_show_queries_loop' );
 		}
-
 		$xtpl->parse( 'main.nv_show_queries' );
 	}
-
-	if( NV_LANG_INTERFACE == 'vi' and NV_LANG_DATA == 'vi' )
-	{
-		$xtpl->parse( 'main.nv_if_mudim' );
-	}
-
-	$xtpl->assign( 'NV_GENPASS', nv_genpass() );
 	$xtpl->parse( 'main' );
 
 	return $xtpl->text( 'main' );

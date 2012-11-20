@@ -42,9 +42,6 @@
 		<a href="http://nukeviet.vn">NukeViet</a> is registered trademark of <a href="http://vinades.vn">VINADES.,JSC</a>
     </div>
 	<div class="clear"></div>
-    <div id="run_cronjobs" style="visibility: hidden; display: none;">
-        <img alt="Cronjob" src="{THEME_IMG_CRONJOBS}" width="1" height="1" />
-    </div>
 </div>
 </body>
 </html>

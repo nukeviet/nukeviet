@@ -185,13 +185,7 @@ function nv_site_theme( $contents )
 	$theme_footer_js .= "nv_DigitalClock('digclock');\n";
 	$theme_footer_js .= "</script>\n";
 
-	if( NV_LANG_INTERFACE == 'vi' )
-	{
-		$theme_footer_js .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
-	}
-
 	$xtpl->assign( 'THEME_STAT_IMG', $theme_stat_img );
-	$xtpl->assign( 'THEME_IMG_CRONJOBS', NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() );
 
 	// Chuyen doi giao dien
 	if( ! empty( $global_config['switch_mobi_des'] ) and ! empty( $module_info['mobile'] ) )
