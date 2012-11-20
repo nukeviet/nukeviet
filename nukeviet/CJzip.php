@@ -186,6 +186,18 @@ class CJzip
 	 */
 	private function loadData()
 	{
+		$disable_functions = ( ( $disable_functions = ini_get( "disable_functions" ) ) != "" and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
+		if( extension_loaded( 'suhosin' ) )
+		{
+			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+		}
+		if ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) )
+		{
+			if( ( integer )ini_get( 'memory_limit' ) < 64 )
+			{
+				ini_set( "memory_limit", "64M" );
+			}			
+		}
 		$data = file_get_contents( $this->file['path'] );
 
 		if( ! $this->isOptimized )
