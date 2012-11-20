@@ -41,10 +41,9 @@ if( $id > 0 and $catid > 0 )
 		list( $sourcetext ) = $db->sql_fetchrow( $result );
 		unset( $sql, $result );
 
-		$url_page = $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id;
-		$link = "<a href=\"" . $url_page . "\" title=\"" . $content['title'] . "\">" . $url_page . "</a>\n";
+		$canonicalUrl = NV_MY_DOMAIN.nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id, true);
+		$link = "<a href=\"" . $canonicalUrl . "\" title=\"" . $content['title'] . "\">" . $canonicalUrl . "</a>\n";
 
-		$canonicalUrl = $global_config['site_url'] . "/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$content['catid']]['alias'] . "/" . $content['alias'] . "-" . $id;
 		$meta_tags = nv_html_meta_tags();
 
 		$result = array(
