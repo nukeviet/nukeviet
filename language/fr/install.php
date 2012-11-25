@@ -249,5 +249,6 @@ $lang_module['updatemod_title_update'] = 'Mettre à jour le module "%s"';
 $lang_module['updatemod_title_upgrade'] = 'Mettre à jour le module "%s"';
 $lang_module['updatemod_notexist'] = 'Ce module n\'est pas installé sur votre site, donc supprimez-le.';
 $lang_module['updatemod_notcertified'] = 'Ce module n\'est pas certifié et le système ne peut pas contrôler les risques';
+$lang_module['file_not_writable'] = 'Erreur: impossible de modifier le fichier %1$s';
 
 ?>

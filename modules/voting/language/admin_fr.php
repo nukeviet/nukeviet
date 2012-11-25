@@ -51,5 +51,7 @@ $lang_module['voting_delete_success'] = 'Le sondage a été supprimé !';
 $lang_module['voting_delete_unsuccess'] = 'Erreur de suppression de données!';
 $lang_module['warning'] = 'Remarque: Nombre d\'options doivent être moins ou égale au nombre de réponses données';
 $lang_module['voting_error_content'] = 'Remarques: vous devez saisir le contenu de sondage et les réponses';
+$lang_module['voting_answer'] = 'Réponses';
+$lang_module['voting_link'] = 'Liens vers page';
 
 ?>

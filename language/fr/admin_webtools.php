@@ -102,5 +102,7 @@ $lang_module['autocheckupdate'] = 'Activer la mise à jour automatique';
 $lang_module['updatetime'] = 'Échéance de vérification';
 $lang_module['clearip_logs'] = 'Effacer ip logs';
 $lang_module['update_manual_delete'] = 'Merci de supprimer manuellement';
+$lang_module['diagnosticBBL'] = 'Bing<br />BackLink';
+$lang_module['diagnosticBID'] = 'Bing<br />Indexed';
 
 ?>
