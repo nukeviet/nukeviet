@@ -72,6 +72,6 @@ $lang_module['file_backup'] = 'Backups';
 $lang_module['file_nb'] = 'Ordre';
 $lang_module['file_name'] = 'Nom du fichier';
 $lang_module['file_time'] = 'Horaire';
-$lang_module['file_site'] = 'Taille';
+$lang_module['file_size'] = 'Taille';
 
 ?>

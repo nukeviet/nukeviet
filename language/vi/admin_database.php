@@ -72,6 +72,6 @@ $lang_module['file_backup'] = 'Data backup';
 $lang_module['file_nb'] = 'STT';
 $lang_module['file_name'] = 'Tên file';
 $lang_module['file_time'] = 'Thời gian backup';
-$lang_module['file_site'] = 'Dung lượng';
+$lang_module['file_size'] = 'Dung lượng';
 
 ?>

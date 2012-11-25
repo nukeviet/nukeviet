@@ -4,7 +4,7 @@
 		<tr align="center">
 			<td>{LANG.file_nb}</td>
 			<td>{LANG.file_name}</td>
-			<td>{LANG.file_site}</td>
+			<td>{LANG.file_size}</td>
 			<td>{LANG.file_time}</td>
 			<td></td>
 		</tr>

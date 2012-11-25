@@ -72,6 +72,6 @@ $lang_module['file_backup'] = 'Veri yedekleme';
 $lang_module['file_nb'] = 'Numara';
 $lang_module['file_name'] = 'Dosya adı';
 $lang_module['file_time'] = 'Zaman';
-$lang_module['file_site'] = 'Boyut';
+$lang_module['file_size'] = 'Boyut';
 
 ?>

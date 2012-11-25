@@ -72,6 +72,6 @@ $lang_module['file_backup'] = 'Zálohování dat';
 $lang_module['file_nb'] = 'Číslo:';
 $lang_module['file_name'] = 'Název soubor';
 $lang_module['file_time'] = 'Doba zálohování';
-$lang_module['file_site'] = 'Velikost';
+$lang_module['file_size'] = 'Velikost';
 
 ?>
