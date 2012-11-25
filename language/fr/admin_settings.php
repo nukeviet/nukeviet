@@ -215,5 +215,6 @@ $lang_module['ftp_auto_detect_root'] = 'Détection automatique';
 $lang_module['ftp_error_full'] = 'Rentrer complètement les infos pour détecter automatiquement Remote path';
 $lang_module['ftp_error_detect_root'] = 'Il est impossible de déterminer, merci de vérifier l\'identifiant et le mot de passe';
 $lang_module['ftp_error_support'] = 'Votre hébergeur a bloqué FTP, veuillez leur contacter pour l\'activer';
+$lang_module['smtp_error_openssl'] = 'Erreur: Voitre serveur ne supporte pas d\'envoyer les e mails par ssl';
 
 ?>
