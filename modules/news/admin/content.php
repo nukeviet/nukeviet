@@ -676,10 +676,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				nv_news_fix_block( $bid_i, false );
 			}
 
-			$url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
-			$msg1 = $lang_module['content_saveok'];
-			$msg2 = $lang_module['content_main'] . " " . $module_info['custom_title'];
-			redriect( $msg1, $msg2, $url );
+			if(isset($submenu['rpc']) and isset($module_config[$module_name]['prcservice']) and !empty($module_config[$module_name]['prcservice']) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME+1 and ( $rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME+1 ) )
+            {
+                 Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=rpc&id=".$rowcontent['id']."&rand=" . nv_genpass());
+                die();
+            }
+            else{
+				$url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+				$msg1 = $lang_module['content_saveok'];
+				$msg2 = $lang_module['content_main'] . " " . $module_info['custom_title'];
+				redriect( $msg1, $msg2, $url );
+            }
+
 		}
 	}
 	else

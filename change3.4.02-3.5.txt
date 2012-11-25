@@ -71,3 +71,8 @@ Thêm lên trên nó đoạn sau
 		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
 
 5) Xóa chức năng hiển thị các thông tin cập nhật từ google code
+6) Thêm chức năng Ping bài viết qua RPC
+- Chức năng này chỉ hoạt động nếu máy chủ support cURL cho php
+- Vào menu Dịch vụ PING để chọn các dịch vụ, sau đó lưu lại cấu hình đó.
+- Khi thêm hoặc sửa bài viết, nếu bài viết ở chế độ kích hoạt, hệ thống sẽ chuyển đến trang Dịch vụ PING và ping tự động bài viết.
+- Để bổ sung proxies hãy sửa file modules/news/proxies.php, thwo hướng dẫn trong file đó. 
