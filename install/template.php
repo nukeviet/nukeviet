@@ -20,7 +20,7 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 	$xtpl->assign( 'MAIN_TITLE', $titletheme );
 	$xtpl->assign( 'MAIN_STEP', $step );
 	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'VERSION', "v" . $global_config['version'] . " r" . $global_config['revision'] );
+	$xtpl->assign( 'VERSION', "v" . $global_config['version'] );
 
 	$step_bar = array(
 		$lang_module['select_language'],

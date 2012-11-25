@@ -153,7 +153,7 @@ elseif( ! defined( 'NV_IS_SPADMIN' ) and ! empty( $site_mods ) )
 if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$field = array();
-	$field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] . '.r' . $global_config['revision'] );
+	$field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] );
 	if( file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' ) )
 	{
 		$new_version = simplexml_load_file( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );

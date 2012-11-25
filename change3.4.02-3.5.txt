@@ -1,64 +1,4 @@
 Các thay đổi cần chỉnh sửa cho giao diện từ NukeViet 3.4.02 cho NukeViet 3.5
-1) Thay đổi cronjobs
-	Tìm và xóa đoạn sau trong file /themes/my_theme/layout/footer.tpl
-	    <div id="run_cronjobs" style="visibility: hidden; display: none;">
-	        <img alt="" title="" src="{THEME_IMG_CRONJOBS}" width="1" height="1" />
-	    </div>
-	    
-   	Tìm và xóa đoạn sau trong file /themes/my_theme/theme.php
-    	$xtpl->assign( 'THEME_IMG_CRONJOBS', NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() );
-
-
-2) Thay đổi bộ gõ mudim
-	Tìm và xóa đoạn sau trong file /themes/my_theme/theme.php (giao diện site)
-	if( NV_LANG_INTERFACE == 'vi' )
-	{
-		$theme_footer_js .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
-	}
-	
-	Tìm và xóa đoạn sau trong file /themes/admin_my_theme/theme.php (giao diện admin)
-	if( NV_LANG_INTERFACE == 'vi' and NV_LANG_DATA == 'vi' )
-	{
-		$xtpl->parse( 'main.nv_if_mudim' );
-	}
-	
-	Tìm và xóa đoạn sau trong file /themes/admin_my_theme/system/footer.tpl
-	<!-- BEGIN: nv_if_mudim -->
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/mudim.js"></script>
-	<!-- END: nv_if_mudim -->
-
-3) Xóa getloadavg.php, bởi nó ít tác dụng mà khi bật lên làm chậm site
-$db->sql_query( "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'getloadavg'" );
-
-4) Thay đổi giao diện admin
-Tìm và sửa đoạn sau trong file /themes/admin_my_theme/system/main.tpl
-{COUNT_QUERY_STRS}/{NV_TOTAL_TIME}
-Sửa thành
-[COUNT_SHOW_QUERIES]
-
-
-Tìm và xóa đoạn sau trong file /themes/admin_my_theme/theme.php (giao diện admin)
-
-	$end_time = array_sum( explode( " ", microtime() ) );
-
-	$xtpl->assign( 'NV_TOTAL_TIME', substr( ( $end_time - NV_START_TIME + $db->time ), 0, 5 ) );
-
-	if( defined( "NV_IS_SPADMIN" ) )
-	{
-		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
-	}
-
-	$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
-	$xtpl->assign( 'COUNT_QUERY_STRS', sizeof( $db->query_strs ) );
-	$xtpl->assign( 'NV_COPYRIGHT', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
-
-Tìm dòng sau trong file file /themes/admin_my_theme/theme.php (giao diện admin)
-		foreach( $db->query_strs as $key => $field )
-Thêm lên trên nó đoạn sau
-		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
-		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
-
-Các thay đổi cần chỉnh sửa cho giao diện từ NukeViet 3.4.02 cho NukeViet 3.5
 
 Kiểm tra lại link các trang web, các link để rewite được cần tuân theo các nguyên tắc sau
 - Sử dụng nháy đôi ("), trong việc viết mã html.
@@ -130,3 +70,4 @@ Thêm lên trên nó đoạn sau
 		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
 		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
 
+5) Xóa chức năng hiển thị các thông tin cập nhật từ google code
