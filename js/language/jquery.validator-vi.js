@@ -3,7 +3,7 @@
  * Locale: VI (Vietnamese; Tiếng Việt)
  */
 jQuery.extend(jQuery.validator.messages, {
- required: "Hãy nhập.",
+ required: "Trường này là bắt buộc.",
  remote: "Hãy sửa cho đúng.",
  email: "Hãy nhập email.",
  url: "Hãy nhập URL.",
