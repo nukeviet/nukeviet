@@ -71,7 +71,6 @@
 				}
 			});
         </script>
-        {SCRIPT_JS}
     </body>
 </html>
 <!-- END: main -->

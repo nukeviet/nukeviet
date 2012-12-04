@@ -40,8 +40,7 @@ if( defined( "NV_IS_ADMIN" ) )
 						require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
 					}
 
-					$query = $db->constructQuery( "SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE t1.admin_id = [s] AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1", $admin_info['admin_id'] );
-					$result = $db->sql_query( $query );
+					$result = $db->sql_query( "SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE t1.admin_id = ".$admin_info['admin_id']." AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1");
 					$row = $db->sql_fetchrow( $result );
 					$db->sql_freeresult( $result );
 					if( ! $crypt->validate( $nv_password, $row['admin_pass'] ) )
