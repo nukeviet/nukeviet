@@ -15,7 +15,8 @@
         <script type="text/javascript" src="{BASE_SITEURL}js/global.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/language/{LANG_DATA}.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.validate.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}js/language/jquery.validator-{LANG_DATA}.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
                 $('span.language_head').click(function(){
