@@ -78,8 +78,8 @@ if( $submit )
 	}
 	else
 	{
-		$sql = $db->constructQuery( "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` 
-        WHERE `lang`=[s] OR `lang`=[s] ORDER BY `module` ASC", 'sys', NV_LANG_DATA );
+		$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` 
+        			WHERE `lang`='sys' OR `lang`='".NV_LANG_DATA."' ORDER BY `module` ASC";
 		$result = $db->sql_query( $sql );
 		
 		while( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )

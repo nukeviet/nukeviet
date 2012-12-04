@@ -98,7 +98,6 @@ if( defined( 'NV_IS_USER' ) )
 {
 	$fname = ! empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'];
 	$femail = $user_info['email'];
-	$fphone = $user_info['telephone'];
 }
 
 $fcon = "";

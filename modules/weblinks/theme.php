@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 12/31/2009 0:51
  */
 
@@ -229,8 +229,6 @@ function report( $row, $check )
 	$xtpl->assign( 'ROW', $row );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	
-	$xtpl->assign( 'SCRIPT_JS', "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>" );
-
 	if( ! empty( $row['error'] ) )
 	{
 		$xtpl->parse( 'main.error' );
