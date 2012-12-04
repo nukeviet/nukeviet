@@ -43,7 +43,6 @@ $lang_module['main'] = 'Liste des Administrateurs';
 $lang_module['nv_admin_edit'] = 'Mofifier les infos de l\'administrateur';
 $lang_module['nv_admin_add'] = 'Ajouter l\'administrateur';
 $lang_module['nv_admin_del'] = 'Supprimer l\'administrateur';
-$lang_module['username_incorrect'] = 'Erreur: impossible de trouver le compte:%s';
 $lang_module['full_name_incorrect'] = 'Vous n\'avez pas encore entré le nom de cet administateur';
 $lang_module['position_incorrect'] = 'Vous n\'avez pas encore entré la fonction de cet administateur';
 $lang_module['nv_admin_add_info'] = 'Pour créer un nouveau compte d\'administration, remplissez tous les champs ci-dessous. Vous ne pouvez créer qu\'un administrateur inférieur de votre privilège';

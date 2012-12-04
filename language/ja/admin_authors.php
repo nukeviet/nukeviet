@@ -43,7 +43,6 @@ $lang_module['main'] = 'サイト管理者のリスト';
 $lang_module['nv_admin_edit'] = 'サイト管理者の情報を編集';
 $lang_module['nv_admin_add'] = 'サイト管理者を追加';
 $lang_module['nv_admin_del'] = 'サイト管理者を削除';
-$lang_module['username_incorrect'] = 'エラー：%sアカウントが見つかりません。';
 $lang_module['full_name_incorrect'] = 'この管理者の名前を入力していません。';
 $lang_module['position_incorrect'] = 'この管理者の位置を入力していません。';
 $lang_module['nv_admin_add_info'] = '新アカウント管理サイトを追加するには、以下のボックスに情報を入力してください。あなたの管理レベルの下にあるアカウント管理を作成できます。';
