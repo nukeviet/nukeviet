@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -21,6 +22,7 @@ $lang_module['level2'] = 'Điều hành chung';
 $lang_module['level3'] = 'Quản lý module';
 $lang_module['is_suspend0'] = 'Hoạt động';
 $lang_module['is_suspend1'] = 'Bị đình chỉ vào &ldquo;%1$s&rdquo; bởi &ldquo;%2$s&rdquo; với lý do &ldquo;%3$s&rdquo;';
+$lang_module['is_suspend2'] = 'Bị đình chỉ';
 $lang_module['last_login0'] = 'Chưa bao giờ';
 $lang_module['login'] = 'Tên tài khoản';
 $lang_module['email'] = 'Email';
@@ -140,4 +142,8 @@ $lang_module['add_error_exist'] = 'Lỗi: Thành viên này đã là quản tr�
 $lang_module['add_error_notexist'] = 'Lỗi: Thành viên này không tồn tại';
 $lang_module['add_error_diff'] = 'Xảy ra lỗi không xác định';
 
+$lang_module['action_account'] = 'Tài khoản thành viên';
+$lang_module['action_account_nochange'] = 'Dữ nguyên tài khoản thành viên';
+$lang_module['action_account_suspend'] = 'Khóa tài khoản thành viên';
+$lang_module['action_account_del'] = 'Xóa tài khoản thành viên';
 ?>
