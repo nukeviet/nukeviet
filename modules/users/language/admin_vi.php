@@ -52,12 +52,6 @@ $lang_module['birthday'] = 'Ngày tháng năm sinh';
 $lang_module['date'] = 'Ngày';
 $lang_module['month'] = 'Tháng';
 $lang_module['year'] = 'Năm';
-$lang_module['website'] = 'Website';
-$lang_module['address'] = 'Địa chỉ';
-$lang_module['ym'] = 'Tài khoản Yahoo';
-$lang_module['phone'] = 'Điện thoại';
-$lang_module['fax'] = 'Fax';
-$lang_module['mobile'] = 'Di động';
 $lang_module['show_email'] = 'Hiển thị email';
 $lang_module['sig'] = 'Chữ ký';
 $lang_module['in_group'] = 'Là thành viên của nhóm';
@@ -177,10 +171,8 @@ $lang_module['enter_key'] = 'Hãy nhập thông tin để tìm một thành viê
 $lang_module['username'] = 'Tên đăng nhập';
 $lang_module['full_name'] = 'Họ và tên';
 $lang_module['regdate'] = 'Ngày đăng kí';
-$lang_module['yim'] = 'Tài khoản yahoo';
 $lang_module['last_login'] = 'Lần đăng nhập cuối';
 $lang_module['last_idlogin'] = 'IP đăng nhập cuối';
-$lang_module['web'] = 'Website';
 $lang_module['select_gender'] = 'Chọn giới tính';
 $lang_module['select_gender_male'] = 'Nam';
 $lang_module['select_gender_female'] = 'Nữ';
@@ -206,6 +198,9 @@ $lang_module['whoview_all'] = 'Tất cả';
 $lang_module['whoview_user'] = 'Thành viên';
 $lang_module['whoview_admin'] = 'Quản trị';
 
+$lang_module['usactive_0'] = 'Tài khoản bị khóa';
+$lang_module['usactive_1'] = 'Tài khoản hoạt động';
+
 $lang_module['access_caption'] = 'Cấu hình quyền hạn sử dụng module';
 $lang_module['access_admin'] = 'Nhóm quản trị';
 $lang_module['access_addus'] = 'Tạo thành viên';
@@ -214,4 +209,12 @@ $lang_module['access_editus'] = 'Sửa thành viên';
 $lang_module['access_delus'] = 'Xóa thành viên';
 $lang_module['access_passus'] = 'Đổi mật khẩu';
 $lang_module['access_groups'] = 'Quản lý nhóm';
+
+$lang_module['fields'] = 'Custom User Fields';
+$lang_module['captionform_add'] = 'Add User Fields';
+$lang_module['captionform_edit'] = 'Edit User Fields';
+$lang_module['field_edit'] = 'Sửa';
+$lang_module['field_match_type_error'] = '%s không đúng quy tắc';
+$lang_module['field_match_type_required'] = '%s bắt buộc nhập';
+$lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s ký tự';
 ?>

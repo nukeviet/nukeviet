@@ -94,66 +94,6 @@
             <dl class="clearfix gray">
                 <dd class="fl">
                     <label>
-                        {LANG.website}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="website" value="{DATA.website}" maxlength="255" />
-                </dt>
-            </dl>
-            <dl class="clearfix">
-                <dd class="fl">
-                    <label>
-                        {LANG.address}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="address" value="{DATA.address}" maxlength="255" />
-                </dt>
-            </dl>
-            <dl class="clearfix gray">
-                <dd class="fl">
-                    <label>
-                        {LANG.yahoo}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="yim" value="{DATA.yim}" maxlength="100" />
-                </dt>
-            </dl>
-            <dl class="clearfix">
-                <dd class="fl">
-                    <label>
-                        {LANG.phone}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="telephone" value="{DATA.telephone}" maxlength="100" />
-                </dt>
-            </dl>
-            <dl class="clearfix gray">
-                <dd class="fl">
-                    <label>
-                        {LANG.fax}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="fax" value="{DATA.fax}" maxlength="100" />
-                </dt>
-            </dl>
-            <dl class="clearfix">
-                <dd class="fl">
-                    <label>
-                        {LANG.mobile}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="mobile" value="{DATA.mobile}" maxlength="100" />
-                </dt>
-            </dl>
-            <dl class="clearfix gray">
-                <dd class="fl">
-                    <label>
                         {LANG.showmail}
                     </label>
                 </dd>

@@ -249,7 +249,7 @@ $countries = array(
 function nv_ParseIP( $ip )
 {
 	if( $ip == '127.0.0.1' || $ip == '0.0.0.1' ) return "localhost";
-
+trigger_error('nv_ParseIP.'.$ip,256);
 	if( ! function_exists( "fsockopen" ) ) return false;
 
 	if( ! $fp = @fsockopen( "whois.arin.net", 43, $errno, $errstr, 10 ) ) return false;

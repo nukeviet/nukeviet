@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 12/29/2009 4:15
  */
 
@@ -23,7 +23,7 @@ elseif( defined( 'NV_IS_USER_FORUM' ) )
 	
 	if( isset( $user_info['userid'] ) and $user_info['userid'] > 0 )
 	{
-		$query = "SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, `website`, `location`, `yim`, `telephone`, `fax`, `mobile`, 
+		$query = "SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, 
         `view_mail`, `remember`, `in_groups`, `last_login` AS `current_login`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_openid`, `password` 
         FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . intval( $user_info['userid'] ) . " AND `active`=1 LIMIT 1";
 		$result = $db->sql_query( $query );
@@ -65,7 +65,7 @@ else
 			{
 				if( isset( $user['checknum'] ) and preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $user['checknum'] ) )
 				{
-					$query = "SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, `website`, `location`, `yim`, `telephone`, `fax`, 
+					$query = "SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, 
                     `mobile`, `view_mail`, `remember`, `in_groups`, `checknum`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_login` AS `current_login`, 
                     `last_openid` AS `current_openid`, `password`, `question`, `answer` 
                     FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . $user['userid'] . " AND `active`=1 LIMIT 1";

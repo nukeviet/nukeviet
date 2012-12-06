@@ -52,30 +52,6 @@
                <dd class="fl">{USER.gender}</dd>
             </dl>
             <dl class="clearfix">
-        	   <dt class="fl">{LANG.address}:</dt>
-               <dd class="fl">{USER.location}</dd>
-            </dl>
-            <dl class="clearfix">
-        	   <dt class="fl">{LANG.website}:</dt>
-               <dd class="fl">{USER.website}</dd>
-            </dl>
-            <dl class="clearfix">
-        	   <dt class="fl">{LANG.yahoo}:</dt>
-               <dd class="fl">{USER.yim}</dd>
-            </dl>
-            <dl class="clearfix">
-        	   <dt class="fl">{LANG.phone}:</dt>
-               <dd class="fl">{USER.telephone}</dd>
-            </dl>
-            <dl class="clearfix">
-        	   <dt class="fl">{LANG.fax}:</dt>
-               <dd class="fl">{USER.fax}</dd>
-            </dl>
-            <dl class="clearfix">
-        	   <dt class="fl">{LANG.mobile}:</dt>
-               <dd class="fl">{USER.mobile}</dd>
-            </dl>
-            <dl class="clearfix">
         	   <dt class="fl">{LANG.showmail}:</dt>
                <dd class="fl">{USER.view_mail}</dd>
             </dl>

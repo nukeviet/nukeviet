@@ -9,7 +9,7 @@
 
 /**
  * if(!file_exists(NV_ROOTDIR."/uploads/1237974658.jpg")) {
- * @require_once(NV_ROOTDIR."/includes/class/image.class.php");
+ * require_once(NV_ROOTDIR."/includes/class/image.class.php");
  * $image = new image(NV_ROOTDIR."/images/logo.png", $max_width,$max_height);
  * $image->resizePercent(200);
  * $image->cropFromCenter(150,200);

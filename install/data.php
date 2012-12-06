@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 12/28/2009 20:8
  */
 
@@ -76,12 +76,6 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
   `birthday` int(11) NOT NULL,
   `sig` text,
   `regdate` int(11) NOT NULL DEFAULT '0',
-  `website` varchar(255) NOT NULL DEFAULT '',
-  `location` varchar(255) NOT NULL,
-  `yim` varchar(100) NOT NULL DEFAULT '',
-  `telephone` varchar(100) NOT NULL DEFAULT '',
-  `fax` varchar(100) NOT NULL DEFAULT '',
-  `mobile` varchar(100) NOT NULL DEFAULT '',
   `question` varchar(255) NOT NULL,
   `answer` varchar(255) NOT NULL DEFAULT '',
   `passlostkey` varchar(40) NOT NULL DEFAULT '',
@@ -125,6 +119,39 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_openid` (
   PRIMARY KEY (`opid`),
   KEY `userid` (`userid`),
   KEY `email` (`email`)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_field` (
+  `fid` int(11) NOT NULL AUTO_INCREMENT,
+  `field` varchar(25) NOT NULL,
+  `weight` int(10) unsigned NOT NULL DEFAULT '1',
+  `field_type` enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
+  `field_choices` mediumtext NOT NULL,
+  `match_type` enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
+  `match_regex` varchar(250) NOT NULL DEFAULT '',
+  `func_callback` varchar(75) NOT NULL DEFAULT '',
+  `min_length` int(11) NOT NULL DEFAULT '0',
+  `max_length` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `required` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `show_register` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `user_editable` enum('yes','once','never') NOT NULL DEFAULT 'yes',
+  `show_profile` tinyint(4) NOT NULL DEFAULT '1',
+  `class` varchar(50) NOT NULL,
+  `language` text NOT NULL,
+  `default_value` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`fid`),
+  UNIQUE KEY `field` (`field`)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_info` (
+  `userid` mediumint(8) unsigned NOT NULL,
+  `website` varchar(255) NOT NULL DEFAULT '',
+  `location` varchar(255) NOT NULL DEFAULT '',
+  `yim` varchar(40) NOT NULL DEFAULT '',
+  `telephone` varchar(100) NOT NULL DEFAULT '',
+  `fax` varchar(100) NOT NULL DEFAULT '',
+  `mobile` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`userid`)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_CONFIG_GLOBALTABLE . "` (

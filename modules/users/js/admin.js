@@ -207,13 +207,6 @@ function nv_chang_status_res( res )
    return;
 }
 
-/**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Createdate 1 - 31 - 2010 5 : 12
- */
-
 function nv_group_change_status(group_id)
 {
    var nv_timer = nv_settimeout_disable('select_' + group_id, 5000);
@@ -384,3 +377,4 @@ function nv_group_exclude_user_res(res)
       nv_urldecode_ajax(url3, 'list_users');
    }
 }
+

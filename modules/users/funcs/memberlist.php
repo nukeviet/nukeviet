@@ -110,7 +110,7 @@ else
 			}
 		}
 
-		$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `md5username`, `full_name`, `photo`, `gender`, `yim`, `regdate` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
+		$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `md5username`, `full_name`, `photo`, `gender`, `regdate` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );

@@ -56,10 +56,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 	$array['username'] = filter_text_input( 'username', 'get', '' );
 	$array['full_name'] = filter_text_input( 'full_name', 'get', '' );
 	$array['email'] = filter_text_input( 'email', 'get', '' );
-	$array['website'] = filter_text_input( 'website', 'get', '' );
-	$array['address'] = filter_text_input( 'address', 'get', '' );
-	$array['phone'] = filter_text_input( 'phone', 'get', '' );
-	$array['mobile'] = filter_text_input( 'mobile', 'get', '' );
+	$array['sig'] = filter_text_input( 'sig', 'get', '' );
 
 	$array['regdatefrom'] = filter_text_input( 'regdatefrom', 'get', '' );
 	$array['regdateto'] = filter_text_input( 'regdateto', 'get', '' );
@@ -70,7 +67,6 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 	$array['last_ip'] = filter_text_input( 'last_ip', 'get', '' );
 
 	$array['gender'] = filter_text_input( 'gender', 'get', '' );
-	$array['yim'] = filter_text_input( 'yim', 'get', '' );
 
 	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['regdatefrom'], $m ) )
 	{
@@ -140,40 +136,16 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 			$sql .= " AND ( email LIKE '%" . $db->dblikeescape( $array['email'] ) . "%' )";
 		}
 
-		if( ! empty( $array['website'] ) )
+		if( ! empty( $array['sig'] ) )
 		{
-			$base_url .= "&amp;website=" . rawurlencode( $array['website'] );
-			$sql .= " AND ( website LIKE '%" . $db->dblikeescape( $array['website'] ) . "%' )";
-		}
-
-		if( ! empty( $array['address'] ) )
-		{
-			$base_url .= "&amp;address=" . rawurlencode( $array['address'] );
-			$sql .= " AND ( address LIKE '%" . $db->dblikeescape( $array['address'] ) . "%' )";
-		}
-
-		if( ! empty( $array['phone'] ) )
-		{
-			$base_url .= "&amp;phone=" . rawurlencode( $array['phone'] );
-			$sql .= " AND ( phone LIKE '%" . $db->dblikeescape( $array['phone'] ) . "%' )";
-		}
-
-		if( ! empty( $array['mobile'] ) )
-		{
-			$base_url .= "&amp;mobile=" . rawurlencode( $array['mobile'] );
-			$sql .= " AND ( mobile LIKE '%" . $db->dblikeescape( $array['mobile'] ) . "%' )";
+			$base_url .= "&amp;sig=" . rawurlencode( $array['sig'] );
+			$sql .= " AND ( sig LIKE '%" . $db->dblikeescape( $array['sig'] ) . "%' )";
 		}
 
 		if( ! empty( $array['last_ip'] ) )
 		{
 			$base_url .= "&amp;last_ip=" . rawurlencode( $array['last_ip'] );
 			$sql .= " AND ( last_ip LIKE '%" . $db->dblikeescape( $array['last_ip'] ) . "%' )";
-		}
-
-		if( ! empty( $array['yim'] ) )
-		{
-			$base_url .= "&amp;yim=" . rawurlencode( $array['yim'] );
-			$sql .= " AND ( yim LIKE '%" . $db->dblikeescape( $array['yim'] ) . "%' )";
 		}
 
 		if( ! empty( $array['gender'] ) )
