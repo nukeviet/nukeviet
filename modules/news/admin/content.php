@@ -303,7 +303,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$publ_date = filter_text_input( 'publ_date', 'post', '' );
 
-	if( ! empty( $publ_date ) and preg_match( "/^([0-9]{1,2})\\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m ) )
+	if( ! empty( $publ_date ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m ) )
 	{
 		$phour = $nv_Request->get_int( 'phour', 'post', 0 );
 		$pmin = $nv_Request->get_int( 'pmin', 'post', 0 );
@@ -315,7 +315,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	}
 
 	$exp_date = filter_text_input( 'exp_date', 'post', '' );
-	if( ! empty( $exp_date ) and preg_match( "/^([0-9]{1,2})\\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date, $m ) )
+	if( ! empty( $exp_date ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date, $m ) )
 	{
 		$ehour = $nv_Request->get_int( 'ehour', 'post', 0 );
 		$emin = $nv_Request->get_int( 'emin', 'post', 0 );
