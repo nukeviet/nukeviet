@@ -20,6 +20,14 @@
 <div class="clear"></div>
 <!-- END: error -->
 <!-- BEGIN: edit_user -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <form id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
 	<table class="tab1">
 		<colgroup>
@@ -31,7 +39,7 @@
 				<td> {LANG.account} </td>
 				<td> (<span style="color:#FF0000">*</span>) </td>
 				<td>
-				<input class="txt" value="{DATA.username}" name="username" id="username_iavim" style="width:300px" />
+				<input class="txt required" value="{DATA.username}" name="username" id="username_iavim" style="width:300px" />
 				</td>
 			</tr>
 		</tbody>
@@ -40,7 +48,7 @@
 				<td> {LANG.email} </td>
 				<td> (<span style="color:#FF0000">*</span>) </td>
 				<td>
-				<input class="txt" value="{DATA.email}" name="email" id="email_iavim" style="width:300px" />
+				<input class="txt email required" value="{DATA.email}" name="email" id="email_iavim" style="width:300px" />
 				</td>
 			</tr>
 		</tbody>
@@ -49,7 +57,7 @@
 				<td> {LANG.question} </td>
 				<td> (<span style="color:#FF0000">*</span>) </td>
 				<td>
-				<input class="txt" type="text" value="{DATA.question}" name="question" style="width:300px" />
+				<input class="txt required" type="text" value="{DATA.question}" name="question" style="width:300px" />
 				</td>
 			</tr>
 		</tbody>
@@ -58,7 +66,7 @@
 				<td> {LANG.answer} </td>
 				<td> (<span style="color:#FF0000">*</span>) </td>
 				<td>
-				<input class="txt" type="text" value="{DATA.answer}" name="answer" style="width:300px" />
+				<input class="txt required" type="text" value="{DATA.answer}" name="answer" style="width:300px" />
 				</td>
 			</tr>
 		</tbody>
@@ -100,8 +108,7 @@
 			<tr>
 				<td colspan="2"> {LANG.birthday} </td>
 				<td>
-				<input name="birthday" id="birthday" value="{DATA.birthday}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
-				<img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'birthday', 'dd.mm.yyyy', true);" alt="" height="17" /></td>
+				<input name="birthday" class="datepicker" value="{DATA.birthday}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
 			</tr>
 		</tbody>
 		<tbody>
@@ -147,21 +154,28 @@
 		<!-- BEGIN: loop -->
 		<tbody {FIELD.tbodyclass}>
 			<tr>
-				<td> {FIELD.title} </td>
+				<td><b>{FIELD.title}</b>
+				<br>
+				<i>{FIELD.description}</i></td>
 				<td><!-- BEGIN: required --> (<span style="color:#FF0000">*</span>) <!-- END: required --></td>
-				<td><!-- BEGIN: textbox -->
-				<input class="txt" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:300px" title="{FIELD.description}"/>
-				<!-- END: textbox --><!-- BEGIN: textarea -->				<textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]" title="{FIELD.description}">{FIELD.value}</textarea><!-- END: textarea --><!-- BEGIN: editor --> {EDITOR} <!-- END: editor --><!-- BEGIN: select -->
-				<select name="custom_fields[{FIELD.field}]" title="{FIELD.description}">
+				<td>
+				<!-- BEGIN: textbox -->
+				<input class="txt {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:300px"/>
+				<!-- END: textbox -->
+				<!-- BEGIN: date -->
+				<input class="txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:90px"/>
+				<!-- END: date -->
+				<!-- BEGIN: textarea -->				<textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea><!-- END: textarea --><!-- BEGIN: editor --> {EDITOR} <!-- END: editor --><!-- BEGIN: select -->
+				<select name="custom_fields[{FIELD.field}]">
 					<!-- BEGIN: loop -->
 					<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
 					<!-- END: loop -->
 				</select><!-- END: loopselect --><!-- BEGIN: radio --><label for="lb_{FIELD_CHOICES.id}">
-					<input title="{FIELD.description}" type="radio" name="custom_fields[{FIELD.field}]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" {FIELD_CHOICES.checked}>
+					<input type="radio" name="custom_fields[{FIELD.field}]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" {FIELD_CHOICES.checked}>
 					{FIELD_CHOICES.value} </label><!-- END: radio --><!-- BEGIN: checkbox --><label for="lb_{FIELD_CHOICES.id}">
-					<input title="{FIELD.description}" type="checkbox" name="custom_fields[{FIELD.field}][]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" {FIELD_CHOICES.checked}>
+					<input type="checkbox" name="custom_fields[{FIELD.field}][]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" {FIELD_CHOICES.checked}>
 					{FIELD_CHOICES.value} </label><!-- END: checkbox --><!-- BEGIN: multiselect -->
-				<select name="custom_fields[{FIELD.field}][]" multiple="multiple" title="{FIELD.description}">
+				<select name="custom_fields[{FIELD.field}][]" multiple="multiple">
 					<!-- BEGIN: loop -->
 					<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
 					<!-- END: loop -->
@@ -207,12 +221,25 @@
     document.getElementById('form_user').setAttribute("autocomplete", "off");
     $(function()
     {
-        var tooltips = $("[title]").tooltip(
+        $('#form_user').validate(
         {
-            position :
+            rules :
             {
-                my : "left+10 top+5"
+                username :
+                {
+                    minlength : 5
+                }
             }
+        });
+        $(".datepicker").datepicker(
+        {
+            showOn : "button",
+            dateFormat : "dd/mm/yy",
+            changeMonth : true,
+            changeYear : true,
+            showOtherMonths : true,
+            buttonImage : nv_siteroot + "images/calendar.gif",
+            buttonImageOnly : true
         });
     });
     //]]>

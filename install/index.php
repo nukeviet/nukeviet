@@ -753,7 +753,7 @@ elseif( $step == 6 )
 
 			if( $userid > 0 and $db->sql_query( $sql ) )
 			{
-				$db->sql_query( "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_info` (`userid`) VALUES (" . $userid . ")" );
+				$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_users_info` (`userid`) VALUES (" . $userid . ")" );
 				
 				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'site_email', " . $db->dbescape_string( $global_config['site_email'] ) . ")");
 				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'error_send_email', " . $db->dbescape_string( $global_config['site_email'] ) . ")");

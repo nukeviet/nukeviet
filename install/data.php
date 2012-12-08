@@ -145,12 +145,6 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_field` (
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_info` (
   `userid` mediumint(8) unsigned NOT NULL,
-  `website` varchar(255) NOT NULL DEFAULT '',
-  `location` varchar(255) NOT NULL DEFAULT '',
-  `yim` varchar(40) NOT NULL DEFAULT '',
-  `telephone` varchar(100) NOT NULL DEFAULT '',
-  `fax` varchar(100) NOT NULL DEFAULT '',
-  `mobile` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`userid`)
 ) ENGINE=MyISAM";
 

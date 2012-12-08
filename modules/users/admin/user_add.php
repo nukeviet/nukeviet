@@ -253,6 +253,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $_user );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=user_add" );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 
 if( ! empty( $error ) )
 {
@@ -281,6 +282,7 @@ else
 		}
 		$xtpl->parse( 'main.edit_user.group' );
 	}
+
 	if( ! empty( $array_field_config ) )
 	{
 		$a = 0;
@@ -293,9 +295,20 @@ else
 				{
 					if( ! empty( $row['field_choices'] ) )
 					{
-						$temp = array_keys( $row['field_choices'] );
-						$tempkey = intval( $row['default_value'] ) - 1;
-						$row['value'] = (isset( $temp[$tempkey] )) ? $temp[$tempkey] : '';
+						if( $row['field_type'] == 'date' )
+						{
+							$row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+						}
+						elseif( $row['field_type'] == 'number' )
+						{
+							$row['value'] = $row['default_value'];
+						}
+						else
+						{
+							$temp = array_keys( $row['field_choices'] );
+							$tempkey = intval( $row['default_value'] ) - 1;
+							$row['value'] = (isset( $temp[$tempkey] )) ? $temp[$tempkey] : '';
+						}
 					}
 					else
 					{
@@ -313,9 +326,15 @@ else
 				{
 					$xtpl->parse( 'main.edit_user.field.loop.required' );
 				}
-				if( $row['field_type'] == 'textbox' )
+				if( $row['field_type'] == 'textbox' OR $row['field_type'] == 'number' )
 				{
 					$xtpl->parse( 'main.edit_user.field.loop.textbox' );
+				}
+				elseif( $row['field_type'] == 'date' )
+				{
+					$row['value'] = (empty( $row['value'] )) ? '' : date( 'd/m/Y', $row['value'] );
+					$xtpl->assign( 'FIELD', $row );
+					$xtpl->parse( 'main.edit_user.field.loop.date' );
 				}
 				elseif( $row['field_type'] == 'textarea' )
 				{
@@ -370,7 +389,7 @@ else
 				elseif( $row['field_type'] == 'checkbox' )
 				{
 					$number = 0;
-					$valuecheckbox = explode( ',', $row['value'] );
+					$valuecheckbox = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
@@ -384,7 +403,7 @@ else
 				}
 				elseif( $row['field_type'] == 'multiselect' )
 				{
-					$valueselect = ( isset( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
+					$valueselect = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
@@ -406,11 +425,6 @@ else
 }
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
-
-$my_head = '';
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme( $contents );
