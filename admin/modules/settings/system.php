@@ -21,22 +21,6 @@ $closed_site_Modes = array( //
 	'3' => $lang_module['closed_site_3'] //
 );
 
-$captcha_array = array( //
-	0 => $lang_module['captcha_0'], //
-	1 => $lang_module['captcha_1'], //
-	2 => $lang_module['captcha_2'], //
-	3 => $lang_module['captcha_3'], //
-	4 => $lang_module['captcha_4'], //
-	5 => $lang_module['captcha_5'], //
-	6 => $lang_module['captcha_6'], //
-	7 => $lang_module['captcha_7'] //
-);
-
-$captcha_type_array = array( //
-	0 => $lang_module['captcha_type_0'], //
-	1 => $lang_module['captcha_type_1'] //
-);
-
 $allow_sitelangs = array( );
 foreach( $global_config['allow_sitelangs'] as $lang_i )
 {
@@ -47,13 +31,6 @@ foreach( $global_config['allow_sitelangs'] as $lang_i )
 }
 
 $timezone_array = array_keys( $nv_parse_ini_timezone );
-
-$proxy_blocker_array = array( //
-	0 => $lang_module['proxy_blocker_0'], //
-	1 => $lang_module['proxy_blocker_1'], //
-	2 => $lang_module['proxy_blocker_2'], //
-	3 => $lang_module['proxy_blocker_3']
-);
 
 $errormess = '';
 if( $nv_Request->isset_request( 'submit', 'post' ) )
@@ -70,17 +47,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	if( isset( $closed_site_Modes[$closed_site] ) )
 	{
 		$array_config_global['closed_site'] = $closed_site;
-	}
-
-	$gfx_chk = $nv_Request->get_int( 'gfx_chk', 'post' );
-	if( isset( $captcha_array[$gfx_chk] ) )
-	{
-		$array_config_global['gfx_chk'] = $gfx_chk;
-	}
-	$captcha_type = $nv_Request->get_int( 'captcha_type', 'post' );
-	if( isset( $captcha_type_array[$captcha_type] ) )
-	{
-		$array_config_global['captcha_type'] = $captcha_type;
 	}
 
 	$site_email = filter_text_input( 'site_email', 'post', '', 1, 255 );
@@ -135,12 +101,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	$array_config_global['my_domains'] = array_unique( $array_config_global['my_domains'] );
 	$array_config_global['my_domains'] = implode( ",", $array_config_global['my_domains'] );
-	$preg_replace = array(
-		'pattern' => "/[^a-zA-Z0-9\_]/",
-		'replacement' => ''
-	);
-	$array_config_global['cookie_prefix'] = filter_text_input( 'cookie_prefix', 'post', '', 0, 255, $preg_replace );
-	$array_config_global['session_prefix'] = filter_text_input( 'session_prefix', 'post', '', 0, 255, $preg_replace );
 
 	$array_config_global['searchEngineUniqueID'] = filter_text_input( 'searchEngineUniqueID', 'post', '' );
 	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_global['searchEngineUniqueID'] ) )
@@ -149,15 +109,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 	$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
 	$array_config_global['optActive'] = $nv_Request->get_int( 'optActive', 'post' );
-	$array_config_global['str_referer_blocker'] = $nv_Request->get_int( 'str_referer_blocker', 'post' );
 	$array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post', 0 );
-
-	$proxy_blocker = $nv_Request->get_int( 'proxy_blocker', 'post' );
-
-	if( isset( $proxy_blocker_array[$proxy_blocker] ) )
-	{
-		$array_config_global['proxy_blocker'] = $proxy_blocker;
-	}
 
 	if( $array_config_global['lang_multi'] == 0 )
 	{
@@ -216,7 +168,6 @@ while( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 $lang_multi = $array_config_global['lang_multi'];
 $array_config_global['gzip_method'] = ($array_config_global['gzip_method']) ? ' checked="checked"' : '';
 $array_config_global['lang_multi'] = ($array_config_global['lang_multi']) ? ' checked="checked"' : '';
-$array_config_global['str_referer_blocker'] = ($array_config_global['str_referer_blocker']) ? ' checked="checked"' : '';
 $array_config_global['searchEngineUniqueID'] = isset( $array_config_global['searchEngineUniqueID'] ) ? $array_config_global['searchEngineUniqueID'] : "";
 
 $xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
@@ -241,30 +192,6 @@ foreach( $closed_site_Modes as $value => $name )
 	$xtpl->assign( 'MODE_NAME', $name );
 	$xtpl->assign( 'MODE_SELECTED', ($value == $array_config_global['closed_site'] ? " selected=\"selected\"" : "") );
 	$xtpl->parse( 'main.closed_site_mode' );
-}
-
-foreach( $captcha_array as $gfx_chk_i => $gfx_chk_lang )
-{
-	$xtpl->assign( 'GFX_CHK_SELECTED', ($array_config_global['gfx_chk'] == $gfx_chk_i) ? ' selected="selected"' : '' );
-	$xtpl->assign( 'GFX_CHK_VALUE', $gfx_chk_i );
-	$xtpl->assign( 'GFX_CHK_TITLE', $gfx_chk_lang );
-	$xtpl->parse( 'main.opcaptcha' );
-}
-
-foreach( $captcha_type_array as $captcha_type_i => $captcha_type_lang )
-{
-	$xtpl->assign( 'CAPTCHA_TYPE_SELECTED', ($array_config_global['captcha_type'] == $captcha_type_i) ? ' selected="selected"' : '' );
-	$xtpl->assign( 'CAPTCHA_TYPE_VALUE', $captcha_type_i );
-	$xtpl->assign( 'CAPTCHA_TYPE_TITLE', $captcha_type_lang );
-	$xtpl->parse( 'main.captcha_type' );
-}
-
-foreach( $proxy_blocker_array as $proxy_blocker_i => $proxy_blocker_v )
-{
-	$xtpl->assign( 'PROXYSELECTED', ($array_config_global['proxy_blocker'] == $proxy_blocker_i) ? ' selected="selected"' : '' );
-	$xtpl->assign( 'PROXYOP', $proxy_blocker_i );
-	$xtpl->assign( 'PROXYVALUE', $proxy_blocker_v );
-	$xtpl->parse( 'main.proxy_blocker' );
 }
 
 $xtpl->assign( 'CHECKED1', ($array_config_global['is_url_rewrite'] == 1) ? ' checked ' : '' );

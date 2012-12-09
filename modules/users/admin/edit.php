@@ -104,7 +104,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 	$custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
 
-	if( ($error_username = nv_check_valid_login( $_user['username'], NV_UNICKMAX, NV_UNICKMIN )) != "" )
+	if( $_user['username'] != $row['username'] AND ($error_username = nv_check_valid_login( $_user['username'], NV_UNICKMAX, NV_UNICKMIN )) != "" )
 	{
 		$error = $error_username;
 	}

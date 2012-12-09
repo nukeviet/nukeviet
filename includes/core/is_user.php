@@ -66,7 +66,7 @@ else
 				if( isset( $user['checknum'] ) and preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $user['checknum'] ) )
 				{
 					$query = "SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, 
-                    `mobile`, `view_mail`, `remember`, `in_groups`, `checknum`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_login` AS `current_login`, 
+                    `view_mail`, `remember`, `in_groups`, `checknum`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_login` AS `current_login`, 
                     `last_openid` AS `current_openid`, `password`, `question`, `answer` 
                     FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . $user['userid'] . " AND `active`=1 LIMIT 1";
 					$result = $db->sql_query( $query );

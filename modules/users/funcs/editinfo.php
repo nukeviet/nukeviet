@@ -232,10 +232,14 @@ if( $checkss == $array_data['checkss'] )
 	if( $array_data['allowloginchange'] )
 	{
 		$array_data['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
-		if( nv_check_username_change( $array_data['username'] ) != "" )
+		if( $array_data['username'] != $row['username']) 
 		{
-			$array_data['username'] = $row['username'];
-			$error[] = $lang_module['account'];
+			 $checkusername = nv_check_username_change( $array_data['username'] );
+			 if($checkusername!="")
+			 {
+				$array_data['username'] = $row['username'];
+				$error[] = $checkusername;
+			 }
 		}
 	}
 

@@ -17,6 +17,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['dir_forum'] = 'Thư mục chứa diễn';
 $lang_module['modforum'] = 'Chức năng quản lý thành viên hiện do diễn đàn quản lý.';
 $lang_module['list_module_title'] = 'Danh sách thành viên';
 $lang_module['member_add'] = 'Thêm thành viên';
@@ -201,6 +202,14 @@ $lang_module['whoview_admin'] = 'Quản trị';
 $lang_module['usactive_0'] = 'Tài khoản bị khóa';
 $lang_module['usactive_1'] = 'Tài khoản hoạt động';
 
+$lang_module['access_register'] = 'Cấu hình đăng ký tài khoản';
+$lang_module['nv_unick'] = 'Số ký tự của tài khoản';
+$lang_module['nv_unick_type'] = 'Các ký tự cho phép khi tạo tài khoản';
+$lang_module['nv_upass'] = 'Số ký tự của mật khẩu';
+$lang_module['unick_type_0'] = 'Được sử dụng ký tự bất kỳ';
+$lang_module['nv_upass_type'] = 'Độ phức tạp của mật khẩu';
+$lang_module['upass_type_0'] = 'Không giới hạn';
+$lang_module['access_other'] = 'Cấu hình khác';
 $lang_module['access_caption'] = 'Cấu hình quyền hạn sử dụng module';
 $lang_module['access_admin'] = 'Nhóm quản trị';
 $lang_module['access_addus'] = 'Tạo thành viên';

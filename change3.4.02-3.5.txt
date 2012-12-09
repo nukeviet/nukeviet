@@ -142,5 +142,31 @@ ALTER TABLE `nv3_users`
   DROP `fax`,
   DROP `mobile`; 
 
+7) Cấu hình đăng ký thành viên
+
+REPLACE INTO `nv3_config` (`lang`, `module`, `config_name`, `config_value`) VALUES
+('sys', 'global', 'cookie_httponly', '1'),
+('sys', 'global', 'admin_check_pass_time', '1800'),
+('sys', 'global', 'adminrelogin_max', '0'),
+('sys', 'global', 'cookie_secure', '1'),
+('sys', 'global', 'nv_unick_type', '0'),
+('sys', 'global', 'nv_upass_type', '0'),
+('sys', 'global', 'is_flood_blocker', '1'),
+('sys', 'global', 'max_requests_60', '400'),
+('sys', 'global', 'max_requests_300', '1500'),
+('sys', 'global', 'nv_display_errors_list', '1'),
+('sys', 'global', 'display_errors_list', '1'),
+('sys', 'define', 'nv_unickmin', '4'),
+('sys', 'define', 'nv_unickmax', '20'),
+('sys', 'define', 'nv_upassmin', '5'),
+('sys', 'define', 'nv_upassmax', '255'),
+('sys', 'define', 'nv_gfx_num', '6'),
+('sys', 'define', 'nv_gfx_width', '120'),
+('sys', 'define', 'nv_gfx_height', '25'),
+('sys', 'define', 'nv_max_width', '1500'),
+('sys', 'define', 'nv_max_height', '1500'),
+('sys', 'define', 'nv_live_cookie_time', '31104000'),
+('sys', 'define', 'nv_live_session_time', '0'),
+('sys', 'define', 'dir_forum', '');
 
 note: fix commit git push -f 

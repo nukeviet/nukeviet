@@ -79,7 +79,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'NV_SITE_COPYRIGHT', "" . $global_config['site_name'] . " [" . $global_config['site_email'] . "] " );
 	$xtpl->assign( 'NV_SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'NV_SITE_TITLE', "" . $global_config['site_name'] . " " . NV_TITLEBAR_DEFIS . " " . $lang_global['admin_page'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['custom_title'] . "" );
-	$xtpl->assign( 'NV_ADMIN_CHECK_PASS_TIME', NV_ADMIN_CHECK_PASS_TIME );
+	$xtpl->assign( 'NV_ADMIN_CHECK_PASS_TIME', $global_config['admin_check_pass_time'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );

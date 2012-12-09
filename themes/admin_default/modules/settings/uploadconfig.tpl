@@ -1,7 +1,18 @@
 <!-- BEGIN: main -->
-<form action="" method="post">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<form action="" method="post" id="frm">
 	<table class="tab1" style="auto">
 		<col width="200"/>
+		<tbody class="second">
+			<tr>
+				<td><strong>{LANG.nv_max_width_height}</strong></td>
+				<td>
+				<input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_WIDTH}" name="nv_max_width" maxlength="4"/> x 
+				<input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_HEIGHT}" name="nv_max_height" maxlength="4"/>
+				</td>
+			</tr>
+		</tbody>		
 		<tbody>
 			<tr>
 				<td class="aright"><strong>{LANG.nv_max_size}:</strong></td>
@@ -67,4 +78,10 @@
 		</tfoot>
 	</table>
 </form>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        $('#frm').validate();
+    }); 
+</script>
 <!-- END: main -->
