@@ -501,7 +501,9 @@ function nv_add_banner_theme( $contents )
 	
 	$xtpl = new XTemplate( "add_banner.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
+	
 	if( ! empty( $contents['upload_blocked'] ) )
 	{
 		$xtpl->parse( 'upload_blocked' );
@@ -538,6 +540,8 @@ function nv_edit_banner_theme( $contents )
 	
 	$xtpl = new XTemplate( "edit_banner.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 
 	if( ! empty( $contents['upload_blocked'] ) )
 	{

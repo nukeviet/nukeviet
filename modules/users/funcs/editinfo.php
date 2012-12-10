@@ -256,7 +256,7 @@ if( $checkss == $array_data['checkss'] )
 	if( $array_data['gender'] != "M" and $array_data['gender'] != "F" )
 		$array_data['gender'] = "";
 
-	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array_data['birthday'], $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array_data['birthday'], $m ) )
 	{
 		$array_data['birthday'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -406,7 +406,7 @@ else
 {
 	$array_data['full_name'] = $row['full_name'];
 	$array_data['gender'] = $row['gender'];
-	$array_data['birthday'] = ! empty( $row['birthday'] ) ? date( "d.m.Y", $row['birthday'] ) : "";
+	$array_data['birthday'] = ! empty( $row['birthday'] ) ? date( "d/m/Y", $row['birthday'] ) : "";
 	$array_data['view_mail'] = intval( $row['view_mail'] );
 }
 

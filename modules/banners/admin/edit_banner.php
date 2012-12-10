@@ -92,8 +92,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$publ_date = strip_tags( $nv_Request->get_string( 'publ_date', 'post', '' ) );
 	$exp_date = strip_tags( $nv_Request->get_string( 'exp_date', 'post', '' ) );
 
-	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date ) ) $publ_date = "";
-	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date ) ) $exp_date = "";
+	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = "";
+	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = "";
 
 	if( ! empty( $clid ) and ! isset( $clients[$clid] ) ) $clid = 0;
 	if( $click_url == "http://" ) $click_url = "";
@@ -142,30 +142,26 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		
 		if( empty( $error ) )
 		{
-			if( empty( $publ_date ) )
+			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m ) )
 			{
-				$publtime = NV_CURRENTTIME;
-			}
-			else
-			{
-				unset( $m );
-				preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date, $m );
 				$publtime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 				if( $publtime < $row['add_time'] ) $publtime = $row['add_time'];
 			}
-
-			if( empty( $exp_date ) )
+			else
 			{
-				$exptime = 0;
+				$publtime = $publtime = $row['add_time'];
+			}
+
+			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date, $m ) )
+			{
+				$exptime = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
+				if( $exptime <= $publtime ) $exptime = $publtime;
 			}
 			else
 			{
-				unset( $m );
-				preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date, $m );
-				$exptime = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
+				$exptime = 0;
 			}
 
-			if( $exptime != 0 and $exptime <= $publtime ) $exptime = $publtime;
 			list( $pid_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT `pid` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . intval( $id ) . "" ) );
 
 			$sql = "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `title`=" . $db->dbescape( $title ) . ", `pid`=" . $pid . ", `clid`=" . $clid . ", 
@@ -195,11 +191,10 @@ else
 	$clid = $row['clid'];
 	$file_alt = $row['file_alt'];
 	$click_url = $row['click_url'];
-	$publ_date = ! empty( $row['publ_time'] ) ? date( "d.m.Y", $row['publ_time'] ) : "";
+	$publ_date = ! empty( $row['publ_time'] ) ? date( "d/m/Y", $row['publ_time'] ) : "";
 	$exp_date = ! empty( $row['exp_time'] ) ? date( "d.m.Y", $row['exp_time'] ) : "";
 }
 
-if( $click_url == "" ) $click_url = "http://";
 $contents['info'] = ( ! empty( $error ) ) ? $error : $lang_module['edit_banner_info'];
 $contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
 $contents['file_allowed_ext'] = implode( ", ", $contents['file_allowed_ext'] );
@@ -212,11 +207,10 @@ $contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_
 $contents['upload'] = array( sprintf( $lang_module['re_upload'], $contents['file_allowed_ext'] ), 'banner' );
 $contents['file_alt'] = array( $lang_module['file_alt'], 'file_alt', $file_alt, 255 );
 $contents['click_url'] = array( $lang_module['click_url'], 'click_url', $click_url, 255 );
-$contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10, NV_BASE_SITEURL . "images/calendar.jpg", 18, 17, "popCalendar.show(this, 'publ_date', 'dd.mm.yyyy', true);" );
-$contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10, NV_BASE_SITEURL . "images/calendar.jpg", 18, 17, "popCalendar.show(this, 'exp_date', 'dd.mm.yyyy', true);" );
+$contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10);
+$contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10);
 
-$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 $my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
 $my_head .= "<script type=\"text/javascript\">\n";
 $my_head .= "Shadowbox.init({\n";
