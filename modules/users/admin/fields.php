@@ -45,6 +45,7 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 }
 
 //ADD
+$error = '';
 $field_choices = array( );
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
@@ -106,7 +107,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$dataform['func_callback'] = '';
 		}
 
-		$dataform['min_length'] = $nv_Request->get_int( 'min_length', 'post', 255 );
 		if( $dataform['field_type'] == 'editor' )
 		{
 			$dataform['editor_width'] = $nv_Request->get_string( 'editor_width', 'post', '100%', 0 );
@@ -120,18 +120,84 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				$dataform['editor_height'] = '300px';
 			}
 			$dataform['class'] = $dataform['editor_width'] . '@' . $dataform['editor_height'];
-			$dataform['max_length'] = 16777216;
 		}
-		else
-		{
-			$dataform['max_length'] = $nv_Request->get_int( 'max_length', 'post', 255 );
-		}
+		$dataform['min_length'] = $nv_Request->get_int( 'min_length', 'post', 255 );
+		$dataform['max_length'] = $nv_Request->get_int( 'max_length', 'post', 255 );
 		$dataform['default_value'] = filter_text_input( 'default_value', 'post', '' );
 		$dataform['field_choices'] = '';
 	}
+	elseif( $dataform['field_type'] == 'number' )
+	{
+		$number_fields = 1;
+		$dataform['number_type'] = $nv_Request->get_int( 'number_type', 'post', 1 );
+		if( $dataform['number_type'] == 1 )
+		{
+			$dataform['default_value_number'] = $nv_Request->get_int( 'default_value_number', 'post', 0 );
+		}
+		else
+		{
+			$dataform['default_value_number'] = $nv_Request->get_float( 'default_value_number', 'post', 0 );
+		}
+		$dataform['min_length'] = $nv_Request->get_int( 'min_number_length', 'post', 0 );
+		$dataform['max_length'] = $nv_Request->get_int( 'max_number_length', 'post', 0 );
+		$dataform['match_type'] = 'none';
+		$dataform['match_regex'] = $dataform['func_callback'] = '';
+
+		$field_choices['number_type'] = $dataform['number_type'];
+		$dataform['default_value'] = $dataform['default_value_number'];
+
+		if( $dataform['min_length'] >= $dataform['max_length'] )
+		{
+			$error = $lang_module['field_number_error'];
+		}
+		else
+		{
+			$dataform['field_choices'] = serialize( array( 'number_type' => $dataform['number_type'] ) );
+		}
+	}
+	elseif( $dataform['field_type'] == 'date' )
+	{
+		$date_fields = 1;
+		if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'min_date', 'post' ), $m ) )
+		{
+			$dataform['min_length'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		}
+		else
+		{
+			$dataform['min_length'] = 0;
+		}
+		if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'max_date', 'post' ), $m ) )
+		{
+			$dataform['max_length'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		}
+		else
+		{
+			$dataform['max_length'] = 0;
+		}
+
+		$dataform['current_date'] = $nv_Request->get_int( 'current_date', 'post', 0 );
+		if( ! $dataform['current_date'] AND preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'default_date', 'post' ), $m ) )
+		{
+			$dataform['default_value'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		}
+		else
+		{
+			$dataform['default_value'] = 0;
+		}
+		$dataform['match_type'] = 'none';
+		$dataform['match_regex'] = $dataform['func_callback'] = '';
+		$field_choices['current_date'] = $dataform['current_date'];
+		if( $dataform['min_length'] >= $dataform['max_length'] )
+		{
+			$error = $lang_module['field_date_error'];
+		}
+		else
+		{
+			$dataform['field_choices'] = serialize( array( 'current_date' => $dataform['current_date'] ) );
+		}
+	}
 	else
 	{
-		$text_fields = 0;
 		$dataform['match_type'] = 'none';
 		$dataform['match_regex'] = $dataform['func_callback'] = '';
 		$dataform['min_length'] = 0;
@@ -141,14 +207,22 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$field_choice_value = $nv_Request->get_array( 'field_choice', 'post' );
 		$field_choice_text = $nv_Request->get_array( 'field_choice_text', 'post' );
 		$field_choices = array_combine( array_map( 'strip_punctuation', $field_choice_value ), array_map( 'strip_punctuation', $field_choice_text ) );
-		unset( $field_choices[''] );
-		$dataform['field_choices'] = (sizeof( $field_choices )) ? serialize( $field_choices ) : '';
+		if( sizeof( $field_choices ) )
+		{
+			$dataform['field_choices'] = serialize( $field_choices );
+		}
+		else
+		{
+			$error = $lang_module['field_choices_empty'];
+		}
 	}
-	if( $text_fields == 1 OR ! empty( $dataform['field_choices'] ) )
+	if( empty( $error ) )
 	{
 		if( empty( $dataform['fid'] ) )
 		{
-			if( $dataform['max_length'] <= 4294967296 AND ! empty( $dataform['field'] ) AND ! empty( $dataform['title'] ) )
+			$numrows = $db->sql_numrows( $db->sql_query( "SHOW COLUMNS FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `Field`='" . $dataform['field'] . "'" ) );
+
+			if( empty( $numrows ) AND $dataform['max_length'] <= 4294967296 AND ! empty( $dataform['field'] ) AND ! empty( $dataform['title'] ) )
 			{
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(`weight`) FROM `" . NV_USERS_GLOBALTABLE . "_field`" ) );
 				$weight = intval( $weight ) + 1;
@@ -167,7 +241,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				if( $dataform['fid'] )
 				{
 					$type_date = '';
-					if( $dataform['max_length'] <= 255 )
+					if( $dataform['field_type'] == 'number' OR $dataform['field_type'] == 'date' )
+					{
+						$type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
+					}
+					elseif( $dataform['max_length'] <= 255 )
 					{
 						$type_date = "VARCHAR( " . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
 					}
@@ -208,7 +286,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			if( $save AND $dataform['max_length'] != $dataform_old['max_length'] )
 			{
 				$type_date = '';
-				if( $dataform['max_length'] <= 255 )
+				if( $dataform['field_type'] == 'number' OR $dataform['field_type'] == 'date' )
+				{
+					$type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
+				}
+				elseif( $dataform['max_length'] <= 255 )
 				{
 					$type_date = "VARCHAR( " . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
 				}
@@ -367,6 +449,7 @@ else
 				}
 			}
 			$dataform['fieldid'] = $dataform['field'];
+			$dataform['default_value_number'] = $dataform['default_value'];
 		}
 		else
 		{
@@ -385,6 +468,11 @@ else
 			$dataform['editor_width'] = '100%';
 			$dataform['editor_height'] = '100px';
 			$dataform['fieldid'] = '';
+			$dataform['default_value_number'] = 0;
+			$dataform['min_number'] = 0;
+			$dataform['max_number'] = 1000;
+			$dataform['number_type_1'] = ' checked="checked"';
+			$dataform['current_date_0'] = ' checked="checked"';
 		}
 	}
 
@@ -396,10 +484,19 @@ else
 	elseif( $dataform['field_type'] == 'number' )
 	{
 		$number_fields = 1;
+		$dataform['min_number'] = $dataform['min_length'];
+		$dataform['max_number'] = $dataform['max_length'];
+		$dataform['number_type_1'] = ($field_choices['number_type'] == 1) ? ' checked="checked"' : '';
+		$dataform['number_type_2'] = ($field_choices['number_type'] == 2) ? ' checked="checked"' : '';
 	}
 	elseif( $dataform['field_type'] == 'date' )
 	{
 		$date_fields = 1;
+		$dataform['current_date_1'] = ($field_choices['current_date'] == 1) ? ' checked="checked"' : '';
+		$dataform['current_date_0'] = ($field_choices['current_date'] == 0) ? ' checked="checked"' : '';
+		$dataform['default_date'] = empty( $dataform['default_value'] ) ? '' : date( 'd/m/Y', $dataform['default_value'] );
+		$dataform['min_date'] = empty( $dataform['min_length'] ) ? '' : date( 'd/m/Y', $dataform['min_length'] );
+		$dataform['max_date'] = empty( $dataform['max_length'] ) ? '' : date( 'd/m/Y', $dataform['max_length'] );
 	}
 	else
 	{
@@ -468,9 +565,12 @@ else
 	}
 	$array_match_type = array( );
 	$array_match_type['none'] = 'none';
-	$array_match_type['alphanumeric'] = 'A-Z, 0-9, and _ only';
-	$array_match_type['email'] = $lang_global['email'];
-	$array_match_type['url'] = 'Url';
+	if( $dataform['field_type'] != 'editor' AND $dataform['field_type'] != 'textarea' )
+	{
+		$array_match_type['alphanumeric'] = 'A-Z, 0-9, and _ only';
+		$array_match_type['email'] = $lang_global['email'];
+		$array_match_type['url'] = 'Url';
+	}
 	$array_match_type['regex'] = 'Regular expression';
 	$array_match_type['callback'] = 'Func callback';
 	foreach( $array_match_type as $key => $value )
@@ -489,7 +589,11 @@ else
 		}
 		$xtpl->parse( 'main.load.match_type' );
 	}
-
+	if( ! empty( $error ) )
+	{
+		$xtpl->assign( 'ERROR', $error );
+		$xtpl->parse( 'main.load.error' );
+	}
 	$xtpl->parse( 'main.load' );
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );

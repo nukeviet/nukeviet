@@ -15,18 +15,46 @@ foreach( $array_field_config as $row_f )
 	$value = (isset( $custom_fields[$row_f['field']] )) ? $custom_fields[$row_f['field']] : '';
 	if( $value != '' )
 	{
-		if( $row_f['field_type'] == 'textbox' )
+		if( $row_f['field_type'] == 'number' )
 		{
-			if( $row_f['match_type'] == 'number' )
+			$number_type = $row_f['field_choices']['number_type'];
+			$pattern = ($number_type == 1) ? "/^[0-9]+$/" : "/^[0-9\.]+$/";
+			if( ! preg_match( $pattern, $value ) )
 			{
-				$value = intval( $value );
+				$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
 			}
-			elseif( $row_f['match_type'] == 'alphanumeric' )
+			else
+			{
+				$value = ($number_type == 1) ? intval( $value ) : floatval( $value );
+				if( $value < $row_f['min_length'] OR $value > $row_f['max_length'] )
+				{
+					$error = sprintf( $lang_module['field_min_max_value'], $row_f['title'], $row_f['min_length'], $row_f['max_length'] );
+				}
+			}
+
+		}
+		elseif( $row_f['field_type'] == 'date' )
+		{
+			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $value, $m ) )
+			{
+				$value = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+				if( $value < $row_f['min_length'] OR $value > $row_f['max_length'] )
+				{
+					$error = sprintf( $lang_module['field_min_max_value'], $row_f['title'], date( 'd/m/Y', $row_f['min_length'] ), date( 'd/m/Y', $row_f['max_length'] ) );
+				}
+			}
+			else
+			{
+				$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
+			}
+		}
+		elseif( $row_f['field_type'] == 'textbox' )
+		{
+			if( $row_f['match_type'] == 'alphanumeric' )
 			{
 				if( ! preg_match( "/^[a-zA-Z0-9\_]+$/", $value ) )
 				{
 					$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
-					break;
 				}
 			}
 			elseif( $row_f['match_type'] == 'email' )
@@ -38,7 +66,6 @@ foreach( $array_field_config as $row_f )
 				if( ! nv_is_url( $value ) )
 				{
 					$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
-					break;
 				}
 			}
 			elseif( $row_f['match_type'] == 'regex' )
@@ -46,7 +73,6 @@ foreach( $array_field_config as $row_f )
 				if( ! preg_match( "/" . $row_f['match_regex'] . "/", $value ) )
 				{
 					$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
-					break;
 				}
 			}
 			elseif( $row_f['match_type'] == 'callback' )
@@ -56,29 +82,35 @@ foreach( $array_field_config as $row_f )
 					if( ! call_user_func( $row_f['func_callback'], $value ) )
 					{
 						$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
-						break;
 					}
 				}
 				else
 				{
 					$error = "error function not exists " . $row_f['func_callback'];
-					break;
 				}
 			}
 			else
 			{
 				$value = nv_htmlspecialchars( $value );
 			}
+			$strlen = nv_strlen( $value );
+			if( $strlen < $row_f['min_length'] OR $strlen > $row_f['max_length'] )
+			{
+				$error = sprintf( $lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'] );
+			}
 		}
 		elseif( $row_f['field_type'] == 'textarea' OR $row_f['field_type'] == 'editor' )
 		{
-			$value = filter_text_textarea( 'custom_fields[' . $row_f['field'] . ']', '', NV_ALLOWED_HTML_TAGS );
+			$allowed_html_tags = array_map( "trim", explode( ",", NV_ALLOWED_HTML_TAGS ) );
+			$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
+			$value = strip_tags( $value, $allowed_html_tags );
+			$value = nv_nl2br( $value, '<br />' );
+
 			if( $row_f['match_type'] == 'regex' )
 			{
 				if( ! preg_match( "/" . $row_f['match_regex'] . "/", $value ) )
 				{
 					$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
-					break;
 				}
 			}
 			elseif( $row_f['match_type'] == 'callback' )
@@ -88,17 +120,19 @@ foreach( $array_field_config as $row_f )
 					if( ! call_user_func( $row_f['func_callback'], $value ) )
 					{
 						$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
-						break;
 					}
 				}
 				else
 				{
 					$error = "error function not exists " . $row_f['func_callback'];
-					break;
 				}
 			}
-
 			$value = ($row_f['field_type'] == 'textarea') ? nv_nl2br( $value, '<br />' ) : nv_editor_nl2br( $value );
+			$strlen = nv_strlen( $value );
+			if( $strlen < $row_f['min_length'] OR $strlen > $row_f['max_length'] )
+			{
+				$error = sprintf( $lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'] );
+			}
 		}
 		elseif( $row_f['field_type'] == 'checkbox' OR $row_f['field_type'] == 'multiselect' )
 		{
@@ -119,20 +153,9 @@ foreach( $array_field_config as $row_f )
 				$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
 			}
 		}
-		else
-		{
-			die( $row_f['field_type'] . '---------' . $value );
-		}
+		$custom_fields[$row_f['field']] = $value;
 	}
-	if( ! empty( $value ) )
-	{
-		$strlen = nv_strlen( $value );
-		if( $strlen < $row_f['min_length'] OR $strlen > $row_f['max_length'] )
-		{
-			$error = sprintf( $lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'] );
-		}
-	}
-	elseif( $row_f['required'] )
+	if( empty( $value ) AND $row_f['required'] )
 	{
 		$error = sprintf( $lang_module['field_match_type_required'], $row_f['title'] );
 	}

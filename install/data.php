@@ -145,12 +145,6 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_field` (
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_info` (
   `userid` mediumint(8) unsigned NOT NULL,
-  `website` varchar(255) NOT NULL DEFAULT '',
-  `location` varchar(255) NOT NULL DEFAULT '',
-  `yim` varchar(40) NOT NULL DEFAULT '',
-  `telephone` varchar(100) NOT NULL DEFAULT '',
-  `fax` varchar(100) NOT NULL DEFAULT '',
-  `mobile` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`userid`)
 ) ENGINE=MyISAM";
 
@@ -389,7 +383,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'dump_backup_day', '30'),
 ('sys', 'global', 'gfx_chk', '" . $global_config['gfx_chk'] . "'),
 ('sys', 'global', 'file_allowed_ext', 'adobe,archives,audio,documents,flash,images,real,video'),
-('sys', 'global', 'forbid_extensions', 'php'),
+('sys', 'global', 'forbid_extensions', 'php,php3,php4,php5,phtml,inc'),
 ('sys', 'global', 'forbid_mimes', ''),
 ('sys', 'global', 'nv_max_size', '" . min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) ) . "'),
 ('sys', 'global', 'upload_checking_mode', 'strong'),
@@ -429,7 +423,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'openid_servers', 'yahoo,google,myopenid'),
 ('sys', 'global', 'optActive', '1'),
 ('sys', 'global', 'timestamp', '1'),
-('sys', 'global', 'mudim_displaymode', '0'),
+('sys', 'global', 'mudim_displaymode', '1'),
 ('sys', 'global', 'mudim_method', '4'),
 ('sys', 'global', 'mudim_showpanel', '1'),
 ('sys', 'global', 'mudim_active', '1'),
@@ -438,7 +432,30 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'searchEngineUniqueID', ''),
 ('sys', 'global', 'captcha_type', '0'),
 ('sys', 'global', 'version', '" . $global_config['version'] . "'),
-('sys', 'global', 'whoviewuser', '2')";
+('sys', 'global', 'whoviewuser', '2'),
+('sys', 'global', 'cookie_httponly', '1'),
+('sys', 'global', 'admin_check_pass_time', '1800'),
+('sys', 'global', 'adminrelogin_max', '0'),
+('sys', 'global', 'cookie_secure', '1'),
+('sys', 'global', 'nv_unick_type', '0'),
+('sys', 'global', 'nv_upass_type', '0'),
+('sys', 'global', 'is_flood_blocker', '1'),
+('sys', 'global', 'max_requests_60', '400'),
+('sys', 'global', 'max_requests_300', '1500'),
+('sys', 'global', 'nv_display_errors_list', '1'),
+('sys', 'global', 'display_errors_list', '1'),
+('sys', 'define', 'nv_unickmin', '".NV_UNICKMIN."'),
+('sys', 'define', 'nv_unickmax', '".NV_UNICKMAX."'),
+('sys', 'define', 'nv_upassmin', '".NV_UPASSMIN."'),
+('sys', 'define', 'nv_upassmax', '".NV_UPASSMAX."'),
+('sys', 'define', 'nv_gfx_num', '6'),
+('sys', 'define', 'nv_gfx_width', '120'),
+('sys', 'define', 'nv_gfx_height', '25'),
+('sys', 'define', 'nv_max_width', '1500'),
+('sys', 'define', 'nv_max_height', '1500'),
+('sys', 'define', 'nv_live_cookie_time', '31104000'),
+('sys', 'define', 'nv_live_session_time', '0'),
+('sys', 'define', 'dir_forum', '')";
 
 $sql_create_table[] = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`) VALUES
 (NULL, " . NV_CURRENTTIME . ", 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 0, 0),

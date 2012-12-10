@@ -104,7 +104,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 	$custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
 
-	if( ($error_username = nv_check_valid_login( $_user['username'], NV_UNICKMAX, NV_UNICKMIN )) != "" )
+	if( $_user['username'] != $row['username'] AND ($error_username = nv_check_valid_login( $_user['username'], NV_UNICKMAX, NV_UNICKMIN )) != "" )
 	{
 		$error = $error_username;
 	}
@@ -331,6 +331,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $_user );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $userid );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 
 if( ! empty( $error ) )
 {
@@ -384,15 +385,50 @@ else
 			if( ($row['show_register'] AND $userid == 0) OR $userid > 0 )
 			{
 				$row['tbodyclass'] = ($a % 2) ? " class=\"second\"" : "";
-				$row['value'] = (isset( $custom_fields[$row['field']] )) ? $custom_fields[$row['field']] : '';
+				if( $userid == 0 AND ! $nv_Request->isset_request( 'confirm', 'post' ) )
+				{
+					if( ! empty( $row['field_choices'] ) )
+					{
+						if( $row['field_type'] == 'date' )
+						{
+							$row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+						}
+						elseif( $row['field_type'] == 'number' )
+						{
+							$row['value'] = $row['default_value'];
+						}
+						else
+						{
+							$temp = array_keys( $row['field_choices'] );
+							$tempkey = intval( $row['default_value'] ) - 1;
+							$row['value'] = (isset( $temp[$tempkey] )) ? $temp[$tempkey] : '';
+						}
+					}
+					else
+					{
+						$row['value'] = $row['default_value'];
+					}
+				}
+				else
+				{
+					$row['value'] = (isset( $custom_fields[$row['field']] )) ? $custom_fields[$row['field']] : $row['default_value'];
+				}
+				$row['required'] = ($row['required']) ? 'required' : '';
+
 				$xtpl->assign( 'FIELD', $row );
 				if( $row['required'] )
 				{
 					$xtpl->parse( 'main.edit_user.field.loop.required' );
 				}
-				if( $row['field_type'] == 'textbox' )
+				if( $row['field_type'] == 'textbox' OR $row['field_type'] == 'number' )
 				{
 					$xtpl->parse( 'main.edit_user.field.loop.textbox' );
+				}
+				elseif( $row['field_type'] == 'date' )
+				{
+					$row['value'] = (empty( $row['value'] )) ? '' : date( 'd/m/Y', $row['value'] );
+					$xtpl->assign( 'FIELD', $row );
+					$xtpl->parse( 'main.edit_user.field.loop.date' );
 				}
 				elseif( $row['field_type'] == 'textarea' )
 				{
@@ -447,7 +483,7 @@ else
 				elseif( $row['field_type'] == 'checkbox' )
 				{
 					$number = 0;
-					$valuecheckbox = explode( ',', $row['value'] );
+					$valuecheckbox = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
@@ -461,7 +497,7 @@ else
 				}
 				elseif( $row['field_type'] == 'multiselect' )
 				{
-					$valueselect = ( isset( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
+					$valueselect = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
@@ -484,23 +520,6 @@ else
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
-
-$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css\" rel=\"stylesheet\" />\n";
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.tooltip.css\" rel=\"stylesheet\" />\n";
-
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.tooltip.min.js\"></script>\n";
-
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_head .= "<script type=\"text/javascript\">\n";
-$my_head .= "Shadowbox.init({\n";
-$my_head .= "});\n";
-$my_head .= "</script>\n";
 
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme( $contents );

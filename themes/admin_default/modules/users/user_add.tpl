@@ -20,6 +20,14 @@
 <div class="clear"></div>
 <!-- END: error -->
 <!-- BEGIN: edit_user -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <form id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
 	<table class="tab1">
 		<tbody>
@@ -107,8 +115,7 @@
 			<tr>
 				<td colspan="2"> {LANG.birthday} </td>
 				<td>
-				<input name="birthday" id="birthday" value="{DATA.birthday}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
-				<img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'birthday', 'dd.mm.yyyy', true);" alt="" height="17" /></td>
+				<input name="birthday" class="datepicker" value="{DATA.birthday}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
 			</tr>
 		</tbody>
 		<tbody>
@@ -142,7 +149,6 @@
 		</tbody>
 		<!-- END: group -->
 	</table>
-
 	<!-- BEGIN: field -->
 	<table class="tab1">
 		<caption>
@@ -155,11 +161,18 @@
 		<!-- BEGIN: loop -->
 		<tbody {FIELD.tbodyclass}>
 			<tr>
-				<td> <b>{FIELD.title}</b> <br><i>{FIELD.description}</i></td>
+				<td><b>{FIELD.title}</b>
+				<br>
+				<i>{FIELD.description}</i></td>
 				<td><!-- BEGIN: required --> (<span style="color:#FF0000">*</span>) <!-- END: required --></td>
-				<td><!-- BEGIN: textbox -->
+				<td>
+				<!-- BEGIN: textbox -->
 				<input class="txt {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:300px"/>
-				<!-- END: textbox --><!-- BEGIN: textarea -->				<textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea><!-- END: textarea --><!-- BEGIN: editor --> {EDITOR} <!-- END: editor --><!-- BEGIN: select -->
+				<!-- END: textbox -->
+				<!-- BEGIN: date -->
+				<input class="txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:90px"/>
+				<!-- END: date -->
+				<!-- BEGIN: textarea -->				<textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea><!-- END: textarea --><!-- BEGIN: editor --> {EDITOR} <!-- END: editor --><!-- BEGIN: select -->
 				<select name="custom_fields[{FIELD.field}]">
 					<!-- BEGIN: loop -->
 					<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
@@ -205,6 +218,16 @@
                     equalTo : "#pass_iavim"
                 }
             }
+        });
+        $(".datepicker").datepicker(
+        {
+            showOn : "button",
+            dateFormat : "dd/mm/yy",
+            changeMonth : true,
+            changeYear : true,
+            showOtherMonths : true,
+            buttonImage : nv_siteroot + "images/calendar.gif",
+            buttonImageOnly : true
         });
     });
     //]]>

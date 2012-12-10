@@ -91,8 +91,6 @@ require (NV_ROOTDIR . "/includes/class/xtemplate.class.php");
 
 $global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map( "trim", explode( ",", NV_ALLOW_REQUEST_MODS ) ) : "request";
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim( NV_REQUEST_DEFAULT_MODE ) : 'request';
-$global_config['cookie_secure'] = NV_COOKIE_SECURE;
-$global_config['cookie_httponly'] = NV_COOKIE_HTTPONLY;
 $global_config['session_save_path'] = NV_SESSION_SAVE_PATH;
 
 $language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );

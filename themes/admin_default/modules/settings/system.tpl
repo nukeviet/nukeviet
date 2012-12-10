@@ -81,16 +81,14 @@
                 </td>
             </tr>
         </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
-                    <strong>{LANG.error_send_email}</strong>
-                </td>
-                <td>
-                    <input type="text" name="error_send_email" value="{DATA.error_send_email}" style="width: 450px"/>
-                </td>
-            </tr>
-        </tbody>
+		<tbody class="second">
+			<tr>
+				<td><strong>{LANG.error_send_email}</strong></td>
+				<td>
+				<input type="text" name="error_send_email" value="{DATA.error_send_email}" style="width: 450px"/>
+				</td>
+			</tr>
+		</tbody>        
         <tbody>
             <tr>
                 <td>
@@ -123,34 +121,6 @@
             </tr>
         </tbody>
 		<!-- END: rewrite_optional -->
-        <tbody>
-            <tr>
-                <td>
-                    <strong>{LANG.captcha}</strong>
-                </td>
-                <td>
-                    <select name="gfx_chk">
-                        <!-- BEGIN: opcaptcha -->
-						<option value="{GFX_CHK_VALUE}"{GFX_CHK_SELECTED}>{GFX_CHK_TITLE}  </option>
-                        <!-- END: opcaptcha -->
-                    </select>
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
-                    <strong>{LANG.captcha_type}</strong>
-                </td>
-                <td>
-                    <select name="captcha_type">
-                        <!-- BEGIN: captcha_type -->
-						<option value="{CAPTCHA_TYPE_VALUE}"{CAPTCHA_TYPE_SELECTED}>{CAPTCHA_TYPE_TITLE}</option>
-                        <!-- END: captcha_type -->
-                    </select>
-                </td>
-            </tr>
-        </tbody>
         <tbody>
             <tr>
                 <td>
@@ -213,54 +183,10 @@
         <tbody class="second">
             <tr>
                 <td>
-                    <strong>{LANG.proxy_blocker}</strong>
-                </td>
-                <td>
-                    <select name="proxy_blocker">
-                        <!-- BEGIN: proxy_blocker -->
-						<option value="{PROXYOP}" {PROXYSELECTED}>{PROXYVALUE}  </option>
-                        <!-- END: proxy_blocker -->
-                    </select>
-                </td>
-            </tr>
-        </tbody>
-        <tbody>
-            <tr>
-                <td>
-                    <strong>{LANG.str_referer_blocker}</strong>
-                </td>
-                <td>
-                    <input type="checkbox" value="1" name="str_referer_blocker" {DATA.str_referer_blocker} />
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
                     <strong>{LANG.my_domains}</strong>
                 </td>
                 <td>
                     <input type="text" name="my_domains" value="{DATA.my_domains}" style="width: 450px"/>
-                </td>
-            </tr>
-        </tbody>
-        <tbody>
-            <tr>
-                <td>
-                    <strong>{LANG.cookie_prefix}</strong>
-                </td>
-                <td>
-                    <input type="text" name="cookie_prefix" value="{DATA.cookie_prefix}" style="width: 450px"/>
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="second">
-            <tr>
-                <td>
-                    <strong>{LANG.session_prefix}</strong>
-                </td>
-                <td>
-                    <input type="text" name="session_prefix" value="{DATA.session_prefix}" style="width: 450px"/>
                 </td>
             </tr>
         </tbody>

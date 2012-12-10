@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -38,14 +39,25 @@ $lang_global['cancel'] = 'Hủy bỏ';
 $lang_global['fail'] = 'Thất bại';
 $lang_global['firewallsystem'] = 'Administrators Section';
 $lang_global['firewallincorrect'] = 'Hệ thống tường lửa đã chặn việc truy cập với tư cách Admin của bạn!';
+
 $lang_global['username_empty'] = 'Tên tài khoản đăng nhập chưa được khai báo';
 $lang_global['usernamelong'] = 'Tên tài khoản &ldquo;<strong>%1$s</strong>&rdquo; quá dài. Giới hạn ở mức &ldquo;<strong>%2$d</strong>&rdquo; ký tự';
 $lang_global['usernameadjective'] = 'Tên tài khoản &ldquo;<strong>%1$s</strong>&rdquo; quá ngắn. Ít nhất phải có &ldquo;<strong>%2$d</strong>&rdquo; ký tự';
+$lang_global['unick_type_1'] = 'Tài khoản chỉ được sử dụng chữ số';
+$lang_global['unick_type_2'] = 'Tài khoản chỉ được sử dụng chữ số và chữ cái';
+$lang_global['unick_type_3'] = 'Tài khoản chỉ được sử dụng chữ số, chữ cái, và các ký tự sau nằm giữa: gạch ngan, gạch dưới, cách trống';
+$lang_global['unick_type_4'] = 'Tài khoản chỉ được sử dụng Unicode, không có các ký tự đặc biệt';
+
 $lang_global['password_empty'] = 'Mật khẩu đăng nhập chưa được khai báo';
 $lang_global['passwordlong'] = 'Mật khẩu &ldquo;<strong>%1$s</strong>&rdquo; quá dài. Giới hạn ở mức &ldquo;<strong>%2$d</strong>&rdquo; ký tự';
 $lang_global['passwordadjective'] = 'Mật khẩu &ldquo;<strong>%1$s</strong>&rdquo; quá ngắn. Ít nhất phải có &ldquo;<strong>%2$d</strong>&rdquo; ký tự';
 $lang_global['passwordsincorrect'] = 'Mật khẩu &ldquo;<strong>%1$s</strong>&rdquo; và &ldquo;<strong>%2$s</strong>&rdquo; khác nhau. Hãy khai báo lại';
 $lang_global['re_password_empty'] = 'Bạn chưa viết lại mật khẩu vào ô mật khẩu thứ hai';
+$lang_global['upass_type_1'] = 'Mật khẩu cần kết hợp số và chữ';
+$lang_global['upass_type_2'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có ký tự đặc biệt';
+$lang_global['upass_type_3'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA';
+$lang_global['upass_type_4'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA, có ký tự đặc biệt';
+
 $lang_global['securitycodeincorrect'] = 'Mã chống spam không chính xác';
 $lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai Tên tài khoản hoặc Mật khẩu truy cập';
 $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công. Bây giờ hệ thống sẽ chuyển bạn đến khu vực Quản trị của site';
@@ -250,5 +262,4 @@ $lang_global['ftp_err_rawlist'] = 'Lỗi: Không thể xác định danh sách t
 $lang_global['ftp_err_list_detail'] = 'Lỗi: Không nhận dạng được tham số của các tệp, thư mục';
 $lang_global['ftp_err_fget'] = 'Lỗi: Không thể đọc được nội dung tệp';
 $lang_global['ftp_err_NVbuffet'] = 'Lỗi: Thiếu lớp NVbuffer';
-
 ?>

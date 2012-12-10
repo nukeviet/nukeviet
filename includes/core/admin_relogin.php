@@ -65,7 +65,7 @@ if( defined( "NV_IS_ADMIN" ) )
 					}
 				}
 			}
-			if( $check_hits > NV_ADMINRELOGIN_MAX )
+			if( $check_hits > $global_config['adminrelogin_max'] )
 			{
 				$nv_Request->unset_request( 'admin,online', 'session' );
 				$nv_Request->unset_request( 'admin_relogin_redirect', 'session' );
@@ -84,7 +84,7 @@ if( defined( "NV_IS_ADMIN" ) )
 				die();
 			}
 
-			$info = ( ! empty( $error ) ) ? '<div class="error">' . sprintf( $lang_global['relogin_error_info'], $error, ( NV_ADMINRELOGIN_MAX - $check_hits + 1 ) ) . '</div>' : '<div class="normal">' . sprintf( $lang_global['relogin_info'], NV_ADMINRELOGIN_MAX - $check_hits + 1 ) . '</div>';
+			$info = ( ! empty( $error ) ) ? '<div class="error">' . sprintf( $lang_global['relogin_error_info'], $error, ( $global_config['adminrelogin_max'] - $check_hits + 1 ) ) . '</div>' : '<div class="normal">' . sprintf( $lang_global['relogin_info'], $global_config['adminrelogin_max'] - $check_hits + 1 ) . '</div>';
 			$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
 			$dir_template = "";

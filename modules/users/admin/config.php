@@ -9,8 +9,6 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
-$page_title = $lang_module['config'];
-$array_config = array( );
 
 /**
  * valid_name_config()
@@ -32,8 +30,27 @@ function valid_name_config( $array_name )
 	return $array_retutn;
 }
 
+$array_config = array( );
+$array_config_define = array( );
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
+	$array_config_define['dir_forum'] = $nv_Request->get_string( 'dir_forum', 'post', 0 );
+	if( ! is_dir( NV_ROOTDIR . '/' . $array_config_define['dir_forum'] . '/nukeviet' ) )
+	{
+		$array_config_define['dir_forum'] = '';
+	}
+	$array_config_define['nv_unickmin'] = $nv_Request->get_int( 'nv_unickmin', 'post', 3 );
+	$array_config_define['nv_unickmax'] = $nv_Request->get_int( 'nv_unickmax', 'post', 100 );
+	$array_config_define['nv_upassmin'] = $nv_Request->get_int( 'nv_upassmin', 'post', 5 );
+	$array_config_define['nv_upassmax'] = $nv_Request->get_int( 'nv_upassmax', 'post', 255 );
+
+	foreach( $array_config_define as $config_name => $config_value )
+	{
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+	}
+
+	$array_config['nv_upass_type'] = $nv_Request->get_int( 'nv_upass_type', 'post', 0 );
+	$array_config['nv_unick_type'] = $nv_Request->get_int( 'nv_unick_type', 'post', 0 );
 	$array_config['allowmailchange'] = $nv_Request->get_int( 'allowmailchange', 'post', 0 );
 	$array_config['allowuserpublic'] = $nv_Request->get_int( 'allowuserpublic', 'post', 0 );
 	$array_config['allowquestion'] = $nv_Request->get_int( 'allowquestion', 'post', 0 );
@@ -82,13 +99,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass( ) );
 	die( );
 }
-$array_config = array( );
-$sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND `module`='global' AND \n`config_name` IN ('allowmailchange','allowuserpublic','allowquestion','allowuserreg','allowloginchange','allowuserlogin','openid_mode','is_user_forum','openid_servers', 'whoviewuser')";
-$result = $db->sql_query( $sql );
-while( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
+else
 {
-	$array_config[$c_config_name] = $c_config_value;
+	$array_config = $global_config;
 }
+
 $array_config['allowmailchange'] = ! empty( $array_config['allowmailchange'] ) ? " checked=\"checked\"" : "";
 $array_config['allowuserpublic'] = ! empty( $array_config['allowuserpublic'] ) ? " checked=\"checked\"" : "";
 $array_config['allowquestion'] = ! empty( $array_config['allowquestion'] ) ? " checked=\"checked\"" : "";
@@ -97,7 +112,7 @@ $array_config['allowuserlogin'] = ! empty( $array_config['allowuserlogin'] ) ? "
 $array_config['openid_mode'] = ! empty( $array_config['openid_mode'] ) ? " checked=\"checked\"" : "";
 $array_config['is_user_forum'] = ! empty( $array_config['is_user_forum'] ) ? " checked=\"checked\"" : "";
 $servers = $array_config['openid_servers'];
-$servers = ! empty( $servers ) ? explode( ",", $servers ) : array( );
+
 $openid_servers = array( );
 include (NV_ROOTDIR . '/includes/openid.php');
 $array_config['openid_servers'] = array( );
@@ -145,16 +160,97 @@ if( file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' ) )
 		$xtpl->parse( 'main.user_forum' );
 	}
 }
-foreach( $array_registertype as $id => $titleregister )
+
+for( $id = 3; $id < 20; $id++ )
 {
-	$select = ($array_config['allowuserreg'] == $id) ? " selected=\"selected\"" : "";
 	$array = array(
 		"id" => $id,
-		"select" => $select,
+		"select" => (NV_UNICKMIN == $id) ? " selected=\"selected\"" : "",
+		"value" => $id
+	);
+	$xtpl->assign( 'OPTION', $array );
+	$xtpl->parse( 'main.nv_unickmin' );
+}
+for( $id = 20; $id < 100; $id++ )
+{
+	$array = array(
+		"id" => $id,
+		"select" => (NV_UNICKMAX == $id) ? " selected=\"selected\"" : "",
+		"value" => $id
+	);
+	$xtpl->assign( 'OPTION', $array );
+	$xtpl->parse( 'main.nv_unickmax' );
+}
+
+$lang_global['unick_type_0'] = $lang_module['unick_type_0'];
+for( $id = 0; $id < 5; $id++ )
+{
+	$array = array(
+		"id" => $id,
+		"select" => ($global_config['nv_unick_type'] == $id) ? " selected=\"selected\"" : "",
+		"value" => $lang_global['unick_type_' . $id]
+	);
+	$xtpl->assign( 'OPTION', $array );
+	$xtpl->parse( 'main.nv_unick_type' );
+}
+
+for( $id = 5; $id < 20; $id++ )
+{
+	$array = array(
+		"id" => $id,
+		"select" => (NV_UPASSMIN == $id) ? " selected=\"selected\"" : "",
+		"value" => $id
+	);
+	$xtpl->assign( 'OPTION', $array );
+	$xtpl->parse( 'main.nv_upassmin' );
+}
+for( $id = 20; $id < 255; $id++ )
+{
+	$array = array(
+		"id" => $id,
+		"select" => (NV_UPASSMAX == $id) ? " selected=\"selected\"" : "",
+		"value" => $id
+	);
+	$xtpl->assign( 'OPTION', $array );
+	$xtpl->parse( 'main.nv_upassmax' );
+}
+
+$lang_global['upass_type_0'] = $lang_module['upass_type_0'];
+for( $id = 0; $id < 5; $id++ )
+{
+	$array = array(
+		"id" => $id,
+		"select" => ($global_config['nv_upass_type'] == $id) ? " selected=\"selected\"" : "",
+		"value" => $lang_global['upass_type_' . $id]
+	);
+	$xtpl->assign( 'OPTION', $array );
+	$xtpl->parse( 'main.nv_upass_type' );
+}
+
+foreach( $array_registertype as $id => $titleregister )
+{
+	$array = array(
+		"id" => $id,
+		"select" => ($array_config['allowuserreg'] == $id) ? " selected=\"selected\"" : "",
 		"value" => $titleregister
 	);
 	$xtpl->assign( 'REGISTERTYPE', $array );
 	$xtpl->parse( 'main.registertype' );
+}
+
+$nv_files = @scandir( NV_ROOTDIR );
+foreach( $nv_files as $key => $value )
+{
+	if( is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
+	{
+		$array = array(
+			"id" => $key,
+			"select" => ($key == DIR_FORUM) ? " selected=\"selected\"" : "",
+			"value" => $value
+		);
+		$xtpl->assign( 'DIR_FORUM', $array );
+		$xtpl->parse( 'main.dir_forum' );
+	}
 }
 
 foreach( $array_whoview as $id => $titleregister )
@@ -207,6 +303,8 @@ foreach( $array_access as $access )
 }
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
+
+$page_title = $lang_module['config'];
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme( $contents );
 include (NV_ROOTDIR . "/includes/footer.php");

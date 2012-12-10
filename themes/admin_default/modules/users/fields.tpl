@@ -44,33 +44,22 @@
 <div id="module_show_list"></div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<script type="text/javascript">
-    $(document).ready(function()
-    {
-        $.validator.addMethod('validalphanumeric', function(str)
-        {
-            if (str == '')
-            {
-                return true;
-            }
-            var fieldCheck_rule = /^([a-zA-Z0-9_])+$/;
-            return (fieldCheck_rule.test(str) ) ? true : false;
-        }, ' required a-z, 0-9, and _ only');
-
-        $('#ffields').validate(
-        {
-            rules :
-            {
-                field :
-                {
-                    required : true,
-                    validalphanumeric : true
-                }
-            }
-        });
-    }); 
-</script>
-
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<!-- BEGIN: error -->
+<div style="width: 780px;" class="quote">
+	<blockquote class="error">
+		<p>
+			<span>{ERROR}</span>
+		</p>
+	</blockquote>
+</div>
+<div class="clear"></div>
+<!-- END: error -->
 <form action="{FORM_ACTION}" method="post" id="ffields">
 	<table class="tab1">
 		<caption>
@@ -213,7 +202,7 @@
 				</td>
 			</tr>
 		</tbody>
-		<tbody id="max_length" {DATAFORM.classdisabled}>
+		<tbody id="max_length">
 			<tr>
 				<td>Min Length:</td>
 				<td>
@@ -236,27 +225,27 @@
 			<tr>
 				<td>Number Type:</td>
 				<td>
-				<input type="radio" value="1" name="number_type">
+				<input type="radio" value="1" name="number_type" {DATAFORM.number_type_1}>
 				Integer
-				<input type="radio" value="2" name="number_type">
-				Decimal </td>
+				<input type="radio" value="2" name="number_type" {DATAFORM.number_type_2}>
+				Real </td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>Default Value:</td>
 				<td>
-				<input maxlength="255" style="width:300px" type="text" value="{DATAFORM.default_value}" name="default_value">
+				<input class="required number" maxlength="255" style="width:300px" type="text" value="{DATAFORM.default_value_number}" name="default_value_number">
 				</td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
-				<td>Min:</td>
+				<td>Min Value:</td>
 				<td>
-				<input class="number" style="width:100px" type="text" value="{DATAFORM.min_number}" name="min_length">
-				<span style="margin-left: 50px;">Max:</span>
-				<input class="number" style="width:100px" type="text" value="{DATAFORM.max_number}" name="max_length">
+				<input class="required number" class="number" style="width:100px" type="text" value="{DATAFORM.min_number}" name="min_number_length" maxlength="11">
+				<span style="margin-left: 50px;">Max Value:</span>
+				<input class="required number" class="number" style="width:100px" type="text" value="{DATAFORM.max_number}" name="max_number_length" maxlength="11">
 				</td>
 			</tr>
 		</tbody>
@@ -272,12 +261,22 @@
 		<tbody>
 			<tr>
 				<td>Default Value:</td>
+				<td><label>
+					<input type="radio" value="1" name="current_date" {DATAFORM.current_date_1}>
+					Use the current date</label><label>
+					<input type="radio" value="0" name="current_date" {DATAFORM.current_date_0}>
+					Default Date </label>
+				<input class="date" style="width:80px" type="text" value="{DATAFORM.default_date}" name="default_date">
+				</td>
+			</tr>
+		</tbody>
+		<tbody class="second">
+			<tr>
+				<td>Min Date:</td>
 				<td>
-				<input type="radio" value="1" name="default_date">
-				Use the current date
-				<input type="radio" value="0" name="default_date">
-				Default Date
-				<input style="width:100px" type="text" value="" name="default_date_value">
+				<input class="datepicker required date" style="width:80px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10" value="{DATAFORM.min_date}">
+				<span style="margin-left: 50px;">Max Date:</span>
+				<input class="datepicker required date" style="width:80px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10" value="{DATAFORM.max_date}">
 				</td>
 			</tr>
 		</tbody>
@@ -396,10 +395,61 @@
         window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid;
     }
 
-    if ($("input[name=fid]").val() == 0)
+    function nv_load_current_date()
     {
-        nv_show_list_field();
+        if ($("input[name=current_date]:checked").val() == 1)
+        {
+            $("input[name=default_date]").attr('disabled', 'disabled');
+            $("input[name=default_date]").datepicker("destroy");
+        }
+        else
+        {
+            $("input[name=default_date]").datepicker(
+            {
+                showOn : "button",
+                dateFormat : "dd/mm/yy",
+                changeMonth : true,
+                changeYear : true,
+                showOtherMonths : true,
+                buttonImage : nv_siteroot + "images/calendar.gif",
+                buttonImageOnly : true
+            });
+            $("input[name=default_date]").removeAttr("disabled");
+            $("input[name=default_date]").focus();
+        }
     }
+
+
+    $(document).ready(function()
+    {
+        if ($("input[name=fid]").val() == 0)
+        {
+            nv_show_list_field();
+        }
+        nv_load_current_date();
+
+        $.validator.addMethod('validalphanumeric', function(str)
+        {
+            if (str == '')
+            {
+                return true;
+            }
+            var fieldCheck_rule = /^([a-zA-Z0-9_])+$/;
+            return (fieldCheck_rule.test(str) ) ? true : false;
+        }, ' required a-z, 0-9, and _ only');
+
+        $('#ffields').validate(
+        {
+            rules :
+            {
+                field :
+                {
+                    required : true,
+                    validalphanumeric : true
+                }
+            }
+        });
+    });
 
     $("input[name=field_type]").click(function()
     {
@@ -440,18 +490,6 @@
             $("#numberfields").hide();
             $("#datefields").hide();
         }
-        if (field_type == 'editor')
-        {
-            $("#editorfields").show();
-            $("#classfields").hide();
-            $("#max_length").hide();
-        }
-        else
-        {
-            $("#classfields").show();
-            $("#editorfields").hide();
-            $("#max_length").show();
-        }
     });
     $("input[name=required],input[name=show_register]").click(function()
     {
@@ -487,17 +525,20 @@
         }
     });
 
-    $("input[name=default_date]").click(function()
+    $("input[name=current_date]").click(function()
     {
-        if ($("input[name=default_date]:checked").val() == "0")
-        {
-            $("input[name=default_date_value]").removeAttr("disabled");
-            $("input[name=default_date_value]").focus();
-        }
-        else
-        {
-            $("input[name=default_date_value]").attr('disabled', 'disabled');
-        }
+        nv_load_current_date();
+    });
+
+    $(".datepicker").datepicker(
+    {
+        showOn : "button",
+        dateFormat : "dd/mm/yy",
+        changeMonth : true,
+        changeYear : true,
+        showOtherMonths : true,
+        buttonImage : nv_siteroot + "images/calendar.gif",
+        buttonImageOnly : true
     }); 
 </script>
 <!-- END: load -->
