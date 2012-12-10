@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 12/30/2009 1:31
  */
 
@@ -118,18 +118,16 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
                     }
                     else
                     {
-                        $current_login = NV_CURRENTTIME;
                         nv_insert_logs( NV_LANG_DATA, "login", "[" . $nv_username . "] " . strtolower( $lang_global['loginsubmit'] ), " Client IP:" . NV_CLIENT_IP, 0 );
                         $admin_id = intval( $row['admin_id'] );
                         $agent = substr( NV_USER_AGENT, 0, 254 );
                         $checknum = nv_genpass( 10 );
                         $checknum = $crypt->hash( $checknum );
                         $array_admin = array( 
-                            'admin_id' => $admin_id, 'checknum' => $checknum, 'current_agent' => $agent, 'last_agent' => $row['admin_last_agent'], 'current_ip' => $client_info['ip'], 'last_ip' => $row['admin_last_ip'], 'current_login' => $current_login, 'last_login' => intval( $row['admin_last_login'] ) 
+                            'admin_id' => $admin_id, 'checknum' => $checknum, 'current_agent' => $agent, 'last_agent' => $row['admin_last_agent'], 'current_ip' => $client_info['ip'], 'last_ip' => $row['admin_last_ip'], 'current_login' => NV_CURRENTTIME, 'last_login' => intval( $row['admin_last_login'] ) 
                         );
                         $admin_serialize = serialize( $array_admin );
-                        $query = $db->constructQuery( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `check_num` = [s], `last_login` = [d], `last_ip` = [s], `last_agent` = [s] WHERE `admin_id`=[d]", $checknum, $current_login, $client_info['ip'], $agent, $admin_id );
-                        $db->sql_query( $query );
+                        $db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `check_num` = '".$checknum."', `last_login` = ".NV_CURRENTTIME.", `last_ip` = '".$client_info['ip']."', `last_agent` = ".$db->dbescape_string($agent)." WHERE `admin_id`=".$admin_id );
                         $nv_Request->set_Session( 'admin', $admin_serialize );
                         $nv_Request->set_Session( 'online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0' );
                         define( 'NV_IS_ADMIN', true );

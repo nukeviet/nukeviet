@@ -139,7 +139,7 @@ class sql_db
         {
             preg_match( "/^(\d+)\.(\d+)\.(\d+)/", mysql_get_server_info(), $m );
             $this->sql_version = ( $m[1] . '.' . $m[2] . '.' . $m[3] );
-            if ( version_compare( $this->sql_version, '4.1.0', '>=' ) )
+            if ( version_compare( $this->sql_version, '5.0.2', '>=' ) )
             {
                 @mysql_query( "SET SESSION `time_zone`='" . NV_SITE_TIMEZONE_GMT_NAME . "'", $this->db_connect_id );
                 
@@ -166,18 +166,19 @@ class sql_db
 				
                 @mysql_query( "SET NAMES 'utf8'", $this->db_connect_id );
                 
-                if ( version_compare( $this->sql_version, '5.0.2', '>=' ) )
+                $modes = ( ! empty( $row['sql_mode'] ) ) ? array_map( 'trim', explode( ',', $row['sql_mode'] ) ) : array();
+                if ( ! in_array( 'TRADITIONAL', $modes ) )
                 {
-                    $modes = ( ! empty( $row['sql_mode'] ) ) ? array_map( 'trim', explode( ',', $row['sql_mode'] ) ) : array();
-                    if ( ! in_array( 'TRADITIONAL', $modes ) )
-                    {
-                        if ( ! in_array( 'STRICT_ALL_TABLES', $modes ) ) $modes[] = 'STRICT_ALL_TABLES';
-                        if ( ! in_array( 'STRICT_TRANS_TABLES', $modes ) ) $modes[] = 'STRICT_TRANS_TABLES';
-                    }
-                    $mode = implode( ',', $modes );
-                    @mysql_query( "SET SESSION `sql_mode`='" . $mode . "'", $this->db_connect_id );
+                    if ( ! in_array( 'STRICT_ALL_TABLES', $modes ) ) $modes[] = 'STRICT_ALL_TABLES';
+                    if ( ! in_array( 'STRICT_TRANS_TABLES', $modes ) ) $modes[] = 'STRICT_TRANS_TABLES';
                 }
+                $mode = implode( ',', $modes );
+                @mysql_query( "SET SESSION `sql_mode`='" . $mode . "'", $this->db_connect_id );
             }
+			else
+			{
+				trigger_error( "NukeViet requires MySQL 5.0.2 or newer", 256 );
+			}
         }
     }
 
@@ -636,93 +637,6 @@ class sql_db
         }
         
         return $value;
-    }
-
-    /**
-     * sql_db::constructQuery()
-     * 
-     * @return
-     */
-    public function constructQuery ( )
-    {
-        $numargs = func_num_args();
-        if ( empty( $numargs ) ) return false;
-        
-        $pattern = func_get_arg( 0 );
-        if ( empty( $pattern ) ) return false;
-        unset( $matches );
-        $pattern = preg_replace( "/[\n\r\t]/", " ", $pattern );
-        $pattern = preg_replace( "/[ ]+/", " ", $pattern );
-        $pattern = preg_replace( array( 
-            "/([\S]+)\[/", "/\]([\S]+)/", "/\[[\s]+/", "/[\s]+\]/", "/[\s]*\,[\s]*/" 
-        ), array( 
-            "\\1 [", "] \\1", "[", "]", ", " 
-        ), $pattern );
-        
-        preg_match_all( "/[\s]*[\"|\']*[\s]*\[([s|d])([a]*)\][\s]*[\"|\']*[\s]*/", $pattern, $matches );
-        
-        $replacement = func_get_args();
-        unset( $replacement[0] );
-        
-        $count1 = sizeof( $matches[0] );
-        $count2 = sizeof( $replacement );
-        
-        if ( ! empty( $count1 ) )
-        {
-            if ( $count2 < $count1 ) return false;
-            $replacement = array_values( $replacement );
-            $pattern = str_replace( "%", "[:25:]", $pattern );
-            $pattern = preg_replace( "/[\s]*[\"|\']*[\s]*\[([s|d])([a]*)\][\s]*[\"|\']*[\s]*/", " %s ", $pattern );
-            
-            $repls = array();
-            foreach ( $matches[1] as $key => $datatype )
-            {
-                $repls[$key] = $replacement[$key];
-                if ( $datatype == 's' )
-                {
-                    if ( isset( $matches[2][$key] ) and $matches[2][$key] == 'a' )
-                    {
-                        $repls[$key] = ( array )$repls[$key];
-                        if ( ! empty( $repls[$key] ) )
-                        {
-                            $repls[$key] = array_map( array( 
-                                $this, 'fixdb' 
-                            ), $repls[$key] );
-                            $repls[$key] = array_map( 'mysql_real_escape_string', $repls[$key] );
-                            $repls[$key] = "'" . implode( "','", $repls[$key] ) . "'";
-                        }
-                        else
-                        {
-                            $repls[$key] = "''";
-                        }
-                    }
-                    else
-                    {
-                        $repls[$key] = "'" . ( ! empty( $repls[$key] ) ? mysql_real_escape_string( $this->fixdb( $repls[$key] ) ) : "" ) . "'";
-                    }
-                }
-                else
-                {
-                    if ( isset( $matches[2][$key] ) and $matches[2][$key] == 'a' )
-                    {
-                        $repls[$key] = ( array )$repls[$key];
-                        $repls[$key] = ( ! empty( $repls[$key] ) ) ? "'" . implode( "','", array_map( 'intval', $repls[$key] ) ) . "'" : "'0'";
-                    }
-                    else
-                    {
-                        $repls[$key] = "'" . intval( $repls[$key] ) . "'";
-                    }
-                }
-            }
-            eval( "\$query = sprintf(\$pattern,\"" . implode( "\",\"", $repls ) . "\");" );
-            $query = str_replace( "[:25:]", "%", $query );
-        }
-        else
-        {
-            $query = $pattern;
-        }
-        
-        return $query;
     }
 }
 

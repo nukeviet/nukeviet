@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 12/29/2009 2:39
  */
 
@@ -131,7 +131,7 @@ if ( ! empty( $admin_cookie ) )
     $admin_info['checkhits'] = intval( $admin_online[3] );
     if ( $admin_info['checkpass'] )
     {
-        if ( ( NV_CURRENTTIME - $admin_info['last_online'] ) > NV_ADMIN_CHECK_PASS_TIME ) $admin_info['checkpass'] = 0;
+        if ( ( NV_CURRENTTIME - $admin_info['last_online'] ) > $global_config['admin_check_pass_time'] ) $admin_info['checkpass'] = 0;
     }
     
     $nv_Request->set_Session( 'online', $admin_info['checkpass'] . '|' . $admin_info['last_online'] . '|' . NV_CURRENTTIME . '|' . $admin_info['checkhits'] );

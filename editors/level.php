@@ -30,9 +30,6 @@ if( ! defined( 'NV_MAINFILE' ) )
 	@require_once ( $realpath_mainfile );
 }
 
-@include_once ( NV_ROOTDIR . "/includes/core/wysyiwyg_functions.php" );
-define( 'NV_IS_ABSOLUTE_URL', true );
-
 $nv_editor = array();
 $nv_editor['allow_files_type'] = defined( 'NV_ALLOW_FILES_TYPE' ) ? explode( "|", NV_ALLOW_FILES_TYPE ) : array();
 

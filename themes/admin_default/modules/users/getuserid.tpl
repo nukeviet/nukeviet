@@ -74,38 +74,6 @@
 				<tbody>
 					<tr>
 						<td>
-							{LANG.web}
-						</td>
-						<td>
-							<input class="fixwidthinput" type="text" name="website" value="" maxlength="255" />
-						</td>
-						<td>
-							{LANG.address}
-						</td>
-						<td>
-							<input class="fixwidthinput" type="text" name="address" value="" maxlength="255" />
-						</td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td>
-							{LANG.phone}
-						</td>
-						<td>
-							<input class="fixwidthinput" type="text" name="phone" value="" maxlength="100" />
-						</td>
-						<td>
-							{LANG.mobile}
-						</td>
-						<td>
-							<input class="fixwidthinput" type="text" name="mobile" value="" maxlength="100" />
-						</td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td>
 							{LANG.regdate}
 						</td>
 						<td>
@@ -115,10 +83,10 @@
 							<input class="txt" type="text" value="" name="regdateto" id="regdateto" style="width:90px" maxlength="100" />
 						</td>
 						<td>
-							{LANG.yim}
+							{LANG.sig}
 						</td>
 						<td>
-							<input class="fixwidthinput" type="text" name="yim" value="" maxlength="100" />
+							<input class="fixwidthinput" type="text" name="sig" value="" maxlength="100" />
 						</td>
 					</tr>
 				</tbody>
@@ -157,7 +125,7 @@
 		//<![CDATA[
 		$(document).ready(function(){
 			$("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
-				showOn: "button",
+				showOn: "both",
 				dateFormat: "dd.mm.yy",
 				changeMonth: true,
 				changeYear: true,

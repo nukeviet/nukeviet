@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @Project NUKEVIET CMS 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 12/31/2009 2:29
  */
 
@@ -53,6 +53,8 @@ if( defined( 'NV_IS_SPADMIN' ) )
 	$allow_func[] = 'siteterms';
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
+		$submenu['fields'] = $lang_module['fields'];
+		$allow_func[] = 'fields';
 		$submenu['config'] = $lang_module['config'];
 		$allow_func[] = 'config';
 	}

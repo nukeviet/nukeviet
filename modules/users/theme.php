@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 10/03/2010 10:51
  */
 
@@ -21,7 +21,9 @@ if ( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 function user_register ( $gfx_chk, $array_register, $siteterms, $data_questions )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+	
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#registerForm').validate({
@@ -76,7 +78,8 @@ function openid_register ( $gfx_chk, $array_register, $siteterms, $data_question
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $nv_redirect;
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#registerForm').validate({
@@ -129,7 +132,8 @@ function user_login ( $gfx_chk, $array_login )
 	
 	$xtpl = new XTemplate( "login.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/users" );
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#loginForm').validate();
@@ -197,7 +201,8 @@ function user_openid_login ( $gfx_chk, $array_login, $attribs )
 	
 	$xtpl = new XTemplate( "openid_login.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/users" );
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#loginForm').validate();
@@ -301,7 +306,8 @@ function user_lostpass ( $data, $question )
 	
 	$xtpl = new XTemplate( "lostpass.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#lostpassForm').validate();
@@ -347,7 +353,8 @@ function user_lostactivelink ( $data, $question )
 	
 	$xtpl = new XTemplate( "lostactivelink.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#lostpassForm').validate();
@@ -394,7 +401,8 @@ function user_changepass ( $array_data = array() )
 	
 	$xtpl = new XTemplate( "changepass.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#changePassForm').validate();
@@ -445,7 +453,8 @@ function user_changequestion ( $array_data )
 	
 	$xtpl = new XTemplate( "changequestion.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#changeQuestionForm').validate();
@@ -507,10 +516,9 @@ function user_info ( $data )
 	
 	$xtpl = new XTemplate( "info.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-	
 	$xtpl->assign( 'EDITINFO_FORM', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=editinfo" );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'LANG', $lang_module );
 	
 	$xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
@@ -601,12 +609,6 @@ function user_welcome ( )
 	$user_info['gender'] = ( $user_info['gender'] == "M" ) ? $lang_module['male'] : ( $user_info['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
 	$user_info['birthday'] = empty( $user_info['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $user_info['birthday'] );
 	$user_info['regdate'] = nv_date( 'd/m/Y', $user_info['regdate'] );
-	$user_info['website'] = empty( $user_info['website'] ) ? $lang_module['na'] : "<a href=\"" . $user_info['website'] . "\" target=\"_blank\">" . $user_info['website'] . "</a>";
-	$user_info['location'] = empty( $user_info['location'] ) ? $lang_module['na'] : $user_info['location'];
-	$user_info['yim'] = empty( $user_info['yim'] ) ? $lang_module['na'] : $user_info['yim'];
-	$user_info['telephone'] = empty( $user_info['telephone'] ) ? $lang_module['na'] : $user_info['telephone'];
-	$user_info['fax'] = empty( $user_info['fax'] ) ? $lang_module['na'] : $user_info['fax'];
-	$user_info['mobile'] = empty( $user_info['mobile'] ) ? $lang_module['na'] : $user_info['mobile'];
 	$user_info['view_mail'] = empty( $user_info['view_mail'] ) ? $lang_module['no'] : $lang_module['yes'];
 	$user_info['last_login'] = empty( $user_info['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $user_info['last_login'] );
 	$user_info['current_login'] = nv_date( 'l, d/m/Y H:i', $user_info['current_login'] );
@@ -677,7 +679,8 @@ function openid_account_confirm ( $gfx_chk, $attribs )
 {
 	global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $openid_servers, $nv_redirect;
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#loginForm').validate();
@@ -731,7 +734,8 @@ function openid_active_confirm ( $gfx_chk, $attribs )
 {
 	global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $openid_servers;
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#loginForm').validate();
@@ -902,13 +906,6 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 		{
 			$xtpl->parse( 'main.list.fullname' );
 		}
-		
-		if( ! empty( $user['yim'] ) )
-		{
-			$xtpl->parse( 'main.list.yahoo' );
-		}
-		else  $xtpl->parse( 'main.list.nullyahoo' );
-
 		$xtpl->parse( 'main.list' );
 	}
 	
@@ -948,12 +945,6 @@ function nv_memberslist_detail_theme( $item )
 	$item['gender'] = ( $item['gender'] == "M" ) ? $lang_module['male'] : ( $item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
 	$item['birthday'] = empty( $item['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $item['birthday'] );
 	$item['regdate'] = nv_date( 'd/m/Y', $item['regdate'] );
-	$item['website'] = empty( $item['website'] ) ? $lang_module['na'] : "<a href=\"" . $item['website'] . "\" target=\"_blank\">" . $item['website'] . "</a>";
-	$item['location'] = empty( $item['location'] ) ? $lang_module['na'] : $item['location'];
-	$item['yim'] = empty( $item['yim'] ) ? $lang_module['na'] : $item['yim'];
-	$item['telephone'] = empty( $item['telephone'] ) ? $lang_module['na'] : $lang_module['telephone'];
-	$item['fax'] = empty( $item['fax'] ) ? $lang_module['na'] : $item['fax'];
-	$item['mobile'] = empty( $item['mobile'] ) ? $lang_module['na'] : $item['mobile'];
 	$item['last_login'] = empty( $item['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $item['last_login'] );
 	
 	$xtpl->assign( 'USER', $item );

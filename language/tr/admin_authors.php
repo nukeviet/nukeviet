@@ -43,7 +43,6 @@ $lang_module['main'] = 'Web site yönetici listesi';
 $lang_module['nv_admin_edit'] = 'Web site yöneticisinin bilgilerini düzenleme';
 $lang_module['nv_admin_add'] = 'Web site yönetici bilgi ekle';
 $lang_module['nv_admin_del'] = 'Web site yöneticisi bilgilerini sil';
-$lang_module['username_incorrect'] = 'Hata: Bu ​​üyenin hesabı bulunamadı:% s';
 $lang_module['full_name_incorrect'] = 'You do not declare the name of this administrator';
 $lang_module['position_incorrect'] = 'You do not declare the position of this administrator';
 $lang_module['nv_admin_add_info'] = 'Yeni bir web sitesi yönetici hesabı eklemek için, aşağıdaki kutuya tam olarak beyan etmek gerekir. Eğer düzey yönetim altında bir hesap oluşturabilirsiniz';

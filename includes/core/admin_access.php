@@ -160,8 +160,7 @@ function nv_admin_checkdata( $adm_session_value )
 	$query = "SELECT a.admin_id AS `admin_id`, a.lev AS `lev`, a.position AS `position`, a.check_num AS `check_num`, a.last_agent AS `current_agent`, 
     a.last_ip AS `current_ip`, a.last_login AS `current_login`, a.files_level AS `files_level`, a.editor AS `editor`, b.userid AS `userid`, 
     b.username AS `username`, b.email AS `email`, b.full_name AS `full_name`, b.view_mail AS `view_mail`, b.regdate AS `regdate`, 
-    b.sig AS `sig`, b.gender AS `gender`, b.photo AS `photo`, b.birthday AS `birthday`, b.website AS `website`, b.location AS `location`, 
-    b.yim AS `yim`, b.telephone AS `telephone`, b.fax AS `fax`, b.mobile AS `mobile`, b.in_groups AS `in_groups`, b.last_openid AS `last_openid`, 
+    b.sig AS `sig`, b.gender AS `gender`, b.photo AS `photo`, b.birthday AS `birthday`, b.in_groups AS `in_groups`, b.last_openid AS `last_openid`, 
     b.password AS `password`, b.question AS `question`, b.answer AS `answer` 
     FROM `" . NV_AUTHORS_GLOBALTABLE . "` a, `" . NV_USERS_GLOBALTABLE . "` b 
     WHERE a.admin_id = " . $array_admin['admin_id'] . " 

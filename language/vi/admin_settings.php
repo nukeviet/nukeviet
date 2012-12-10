@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -51,6 +52,12 @@ $lang_module['disable_content'] = 'Nội dung thông báo site ngưng hoạt đ�
 $lang_module['submit'] = 'Lưu';
 $lang_module['err_writable'] = 'Lỗi hệ thống không ghi được file: %s bạn cần cấu hình server cho phép ghi file này.';
 $lang_module['err_supports_rewrite'] = 'Lỗi, Máy chủ của bạn không hỗ trợ module rewrite';
+
+$lang_module['security'] = 'Thiết lập an ninh';
+$lang_module['is_flood_blocker'] = 'Kích hoạt tính năng chống flood';
+$lang_module['max_requests_60'] = 'Số requests tối đa trong 1 phút';
+$lang_module['max_requests_300'] = 'Số requests tối đa trong 5 phút';
+
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
@@ -63,6 +70,9 @@ $lang_module['captcha_4'] = 'Khi thành viên đăng nhập hoặc khách đăng
 $lang_module['captcha_5'] = 'Khi admin hoặc thành viên đăng nhập';
 $lang_module['captcha_6'] = 'Khi admin đăng nhập hoặc khách đăng ký';
 $lang_module['captcha_7'] = 'Hiển thị trong mọi trường hợp';
+$lang_module['captcha_num'] = 'Số ký tự của captcha';
+$lang_module['captcha_size'] = 'Kích thước của captcha';
+
 $lang_module['ftp_config'] = 'Cấu hình FTP';
 $lang_module['smtp_config'] = 'Cấu hình SMTP';
 $lang_module['server'] = 'Server or Url';
@@ -110,8 +120,16 @@ $lang_module['proxy_blocker_2'] = 'Kiểm tra vừa';
 $lang_module['proxy_blocker_3'] = 'Kiểm tra tuyệt đối';
 $lang_module['str_referer_blocker'] = 'Kích hoạt tiện ích kiểm tra và chuyển hướng các REFERER bên ngoài đến trang chủ';
 $lang_module['my_domains'] = 'Các domain chạy site, cách nhau bởi dấu phảy';
+
+$lang_module['variables'] = 'Cấu hình cookie session';
 $lang_module['cookie_prefix'] = 'Tiến tố cookie';
 $lang_module['session_prefix'] = 'Tiền tố session';
+$lang_module['live_cookie_time'] = 'Thời gian tồn tại của cookie';
+$lang_module['live_session_time'] = 'Thời gian tồn tại session';
+$lang_module['live_session_time0'] = '=0 Tồn tại đến khi đóng trình duyệt';
+$lang_module['cookie_secure'] = 'cookie secure';
+$lang_module['cookie_httponly'] = 'cookie httponly';
+
 $lang_module['is_user_forum'] = 'Chuyển quản lý thành viên cho diễn đàn';
 $lang_module['banip'] = 'Quản lý IP cấm';
 $lang_module['banip_ip'] = 'Ip';
@@ -149,6 +167,7 @@ $lang_module['uploadconfig_ban_mime'] = 'Loại mime bị cấm';
 $lang_module['uploadconfig_types'] = 'Loại files cho phép';
 $lang_module['sys_max_size'] = 'Server của bạn chỉ cho phép tải file có dung lượng tối đa';
 $lang_module['nv_max_size'] = 'Dung lượng tối đa của file tải lên';
+$lang_module['nv_max_width_height'] = 'Kích thước tối đa của file tải lên';
 $lang_module['upload_checking_mode'] = 'Kiểu kiểm tra file tải lên';
 $lang_module['strong_mode'] = 'Mạnh';
 $lang_module['mild_mode'] = 'Vừa phải';
@@ -216,5 +235,4 @@ $lang_module['ftp_auto_detect_root'] = 'Xác định tự động';
 $lang_module['ftp_error_full'] = 'Hãy nhập đủ các thông số để tự động nhận diện Remote path';
 $lang_module['ftp_error_detect_root'] = 'Không thể tìm thấy thông số nào phù hợp, hãy kiểm tra lại tên đăng nhập và mật khẩu';
 $lang_module['ftp_error_support'] = 'Máy chủ của bạn hiện đang chặn hoặc không hỗ trợ thư viện FTP, hãy liên hệ với nhà cung cấp để được kích hoạt.';
-
 ?>

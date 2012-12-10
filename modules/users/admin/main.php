@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Project NUKEVIET CMS 3.0
+ * @Project NUKEVIET 3.x
  * @Author VINADES (contact@vinades.vn)
  * @Copyright(C) 2010 VINADES. All rights reserved
  * @Createdate 04/05/2010
@@ -11,32 +11,39 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];
+$usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 1 );
+$usactive = (int)$nv_Request->get_bool( 'usactive', 'post,get', $usactive_old );
+if( $usactive_old != $usactive )
+{
+	$nv_Request->set_Cookie( 'usactive', $usactive );
+}
+$sql = "FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=" . $usactive;
 
-$sql = "FROM `" . NV_USERS_GLOBALTABLE . "`";
-$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&usactive=" . $usactive;
 
-$methods = array( //
+$methods = array(
 	'userid' => array(
 		'key' => 'userid',
 		'value' => $lang_module['search_id'],
 		'selected' => ''
-	), //
+	),
 	'username' => array(
 		'key' => 'username',
 		'value' => $lang_module['search_account'],
 		'selected' => ''
-	), //
+	),
 	'full_name' => array(
 		'key' => 'full_name',
 		'value' => $lang_module['search_name'],
 		'selected' => ''
-	), //
+	),
 	'email' => array(
 		'key' => 'email',
 		'value' => $lang_module['search_mail'],
 		'selected' => ''
-	) //
+	)
 );
+
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ($nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '');
 $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ($nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '');
 
@@ -63,11 +70,11 @@ if( ! empty( $methodvalue ) )
 		{
 			$array_like[] = "`" . $method_i . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
 		}
-		$sql .= " WHERE " . implode( " OR ", $array_like );
+		$sql .= " AND (" . implode( " OR ", $array_like ) . ")";
 	}
 	else
 	{
-		$sql .= " WHERE `" . $method . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
+		$sql .= " AND (`" . $method . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%')";
 		$methods[$method]['selected'] = " selected=\"selected\"";
 	}
 	$base_url .= "&amp;method=" . urlencode( $method ) . "&amp;value=" . urlencode( $methodvalue );
@@ -210,6 +217,16 @@ foreach( $methods as $m )
 {
 	$xtpl->assign( 'METHODS', $m );
 	$xtpl->parse( 'main.method' );
+}
+for( $i = 1; $i >= 0; $i-- )
+{
+	$m = array(
+		'key' => $i,
+		'selected' => ($i == $usactive) ? 'selected="seelected"' : '',
+		'value' => $lang_module['usactive_' . $i]
+	);
+	$xtpl->assign( 'USACTIVE', $m );
+	$xtpl->parse( 'main.usactive' );
 }
 
 foreach( $head_tds as $head_td )

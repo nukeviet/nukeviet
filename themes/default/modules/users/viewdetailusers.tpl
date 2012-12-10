@@ -25,30 +25,6 @@
                <dd class="fl">{USER.gender}</dd>
             </dl>
             <dl class="clearfix">
-        	   <dt class="fl" style="width:48%;">{LANG.address}:</dt>
-               <dd class="fl">{USER.location}</dd>
-            </dl>
-            <dl class="clearfix gray">
-        	   <dt class="fl" style="width:48%;">{LANG.website}:</dt>
-               <dd class="fl">{USER.website}</dd>
-            </dl>
-            <dl class="clearfix">
-        	   <dt class="fl" style="width:48%;">{LANG.yahoo}:</dt>
-               <dd class="fl">{USER.yim}</dd>
-            </dl>
-            <dl class="clearfix gray">
-        	   <dt class="fl" style="width:48%;">{LANG.phone}:</dt>
-               <dd class="fl">{USER.telephone}</dd>
-            </dl>
-            <dl class="clearfix">
-        	   <dt class="fl" style="width:48%;">{LANG.fax}:</dt>
-               <dd class="fl">{USER.fax}</dd>
-            </dl>
-            <dl class="clearfix gray">
-        	   <dt class="fl" style="width:48%;">{LANG.mobile}:</dt>
-               <dd class="fl">{USER.mobile}</dd>
-            </dl>
-            <dl class="clearfix">
         	   <dt class="fl" style="width:48%;">{LANG.regdate}:</dt>
                <dd class="fl">{USER.regdate}</dd>
             </dl>

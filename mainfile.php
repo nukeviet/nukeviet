@@ -242,7 +242,7 @@ $client_info['is_mobile'] = nv_checkmobile( NV_USER_AGENT );
 //	trigger_error('Sorry! Website does not support the browser your mobile', 256);
 
 //Ket noi voi class chong flood
-if( defined( 'NV_IS_FLOOD_BLOCKER' ) and NV_IS_FLOOD_BLOCKER == 1 and ! $nv_Request->isset_request( 'admin', 'session' ) and //
+if( $global_config['is_flood_blocker'] and ! $nv_Request->isset_request( 'admin', 'session' ) and //
 ( ! $nv_Request->isset_request( 'second', 'get' ) or ($nv_Request->isset_request( 'second', 'get' ) and $client_info['is_myreferer'] != 1)) )
 {
 	require (NV_ROOTDIR . '/includes/core/flood_blocker.php');

@@ -395,15 +395,46 @@ function nv_class_exists( $clName )
  */
 function nv_check_valid_login( $login, $max, $min )
 {
-	global $lang_global;
+	global $lang_global, $global_config;
 
-	$login = strip_tags( trim( $login ) );
-	
-	if( empty( $login ) ) return $lang_global['username_empty'];
-	if( isset( $login{$max} ) ) return sprintf( $lang_global['usernamelong'], $login, $max );
-	if( ! isset( $login{$min - 1} ) ) return sprintf( $lang_global['usernameadjective'], $login, $min );
-	
-	return "";
+	$login = trim( strip_tags( $login ) );
+
+	if( empty( $login ) )
+		return $lang_global['username_empty'];
+	if( isset( $login{$max} ) )
+		return sprintf( $lang_global['usernamelong'], $login, $max );
+	if( ! isset( $login{$min - 1} ) )
+		return sprintf( $lang_global['usernameadjective'], $login, $min );
+
+	$type = $global_config['nv_unick_type'];
+	switch ($type)
+	{
+		case 1 :
+			$pattern = '/^[0-9]+$/';
+			break;
+		case 2 :
+			$pattern = '/^[0-9a-z]+$/i';
+			break;
+		case 3 :
+			$pattern = '/^[0-9a-z]+[0-9a-z\-\_\\s]+[0-9a-z]+$/i';
+			break;
+		case 4 :
+			if( $login == strip_punctuation( $login ) )
+			{
+				return '';
+			}
+			else
+			{
+				return $lang_global['unick_type_' . $type];
+			}
+		default :
+			return '';
+	}
+	if( ! preg_match( $pattern, $login ) )
+	{
+		return $lang_global['unick_type_' . $type];
+	}
+	return '';
 }
 
 /**
@@ -416,15 +447,47 @@ function nv_check_valid_login( $login, $max, $min )
  */
 function nv_check_valid_pass( $pass, $max, $min )
 {
-	global $lang_global;
+	global $lang_global, $global_config;
 
-	$pass = strip_tags( trim( $pass ) );
-	
-	if( empty( $pass ) ) return $lang_global['password_empty'];
-	if( isset( $pass{$max} ) ) return sprintf( $lang_global['passwordlong'], $pass, $max );
-	if( ! isset( $pass{$min - 1} ) ) return sprintf( $lang_global['passwordadjective'], $pass, $min );
-	
-	return "";
+	$pass = trim( strip_tags( $pass ) );
+
+	if( empty( $pass ) )
+		return $lang_global['password_empty'];
+	if( isset( $pass{$max} ) )
+		return sprintf( $lang_global['passwordlong'], $pass, $max );
+	if( ! isset( $pass{$min - 1} ) )
+		return sprintf( $lang_global['passwordadjective'], $pass, $min );
+
+	$type = $global_config['nv_upass_type'];
+	if( $type == 1 )
+	{
+		if( ! (preg_match( '#[a-z]#ui', $pass ) AND preg_match( '#[0-9]#u', $pass )) )
+		{
+			return $lang_global['upass_type_' . $type];
+		}
+	}
+	elseif( $type == 3 )
+	{
+		if( ! (preg_match( '#[A-Z]#u', $pass ) AND preg_match( '#[0-9]#u', $pass )) )
+		{
+			return $lang_global['upass_type_' . $type];
+		}
+	}
+	elseif( $type == 2 )
+	{
+		if( ! (preg_match( '#[^A-Za-z0-9]#u', $pass ) AND preg_match( '#[a-z]#ui', $pass ) AND preg_match( '#[0-9]#u', $pass )) )
+		{
+			return $lang_global['upass_type_' . $type];
+		}
+	}	
+	elseif( $type == 4 )
+	{
+		if( ! (preg_match( '#[^A-Za-z0-9]#u', $pass ) AND preg_match( '#[A-Z]#u', $pass ) AND preg_match( '#[0-9]#u', $pass )) )
+		{
+			return $lang_global['upass_type_' . $type];
+		}
+	}
+	return '';
 }
 
 /**

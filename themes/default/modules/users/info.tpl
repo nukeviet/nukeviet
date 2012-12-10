@@ -1,4 +1,13 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+
 <div id="users">
     <h2 class="line padding_0" style="margin-bottom:5px">{LANG.editinfo_pagetitle}</h2>
     <div style="padding-bottom:10px">
@@ -14,7 +23,7 @@
         </div>
     <div class="clear"></div>
     </div>
-    <form action="{EDITINFO_FORM}" method="post" class="register" enctype="multipart/form-data">
+    <form id="frm" action="{EDITINFO_FORM}" method="post" class="register" enctype="multipart/form-data">
         <div class="content">
             <dl class="clearfix gray">
                 <dd class="fl">
@@ -24,7 +33,7 @@
                 </dd>
                 <dt class="fr">
                     <!-- BEGIN: username_change -->
-                    <input class="txt" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
+                    <input class="txt required" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
                     <!-- END: username_change -->
                     <!-- BEGIN: username_no_change -->
                     <strong>{DATA.username}</strong>
@@ -39,7 +48,7 @@
                 </dd>
                 <dt class="fr">
                     <!-- BEGIN: email_change -->
-                    <input class="txt" name="email" value="{DATA.email}" id="nv_email_iavim" maxlength="100" />
+                    <input class="txt required email" name="email" value="{DATA.email}" id="nv_email_iavim" maxlength="100" />
                     <!-- END: email_change -->
                     <!-- BEGIN: email_no_change -->
                     <strong>{DATA.email}</strong>
@@ -87,68 +96,7 @@
                     </label>
                 </dd>
                 <dt class="fr">
-                    <input name="birthday" id="birthday" value="{DATA.birthday}" style="width: 150px;text-align:left" maxlength="10" readonly="readonly" type= "text" />
-                    <img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'birthday', 'dd.mm.yyyy', true);" alt="" height="17" />
-                </dt>
-            </dl>
-            <dl class="clearfix gray">
-                <dd class="fl">
-                    <label>
-                        {LANG.website}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="website" value="{DATA.website}" maxlength="255" />
-                </dt>
-            </dl>
-            <dl class="clearfix">
-                <dd class="fl">
-                    <label>
-                        {LANG.address}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="address" value="{DATA.address}" maxlength="255" />
-                </dt>
-            </dl>
-            <dl class="clearfix gray">
-                <dd class="fl">
-                    <label>
-                        {LANG.yahoo}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="yim" value="{DATA.yim}" maxlength="100" />
-                </dt>
-            </dl>
-            <dl class="clearfix">
-                <dd class="fl">
-                    <label>
-                        {LANG.phone}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="telephone" value="{DATA.telephone}" maxlength="100" />
-                </dt>
-            </dl>
-            <dl class="clearfix gray">
-                <dd class="fl">
-                    <label>
-                        {LANG.fax}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="fax" value="{DATA.fax}" maxlength="100" />
-                </dt>
-            </dl>
-            <dl class="clearfix">
-                <dd class="fl">
-                    <label>
-                        {LANG.mobile}
-                    </label>
-                </dd>
-                <dt class="fr">
-                    <input type="text" class="txt" name="mobile" value="{DATA.mobile}" maxlength="100" />
+                    <input name="birthday" class="datepicker" value="{DATA.birthday}" style="width: 150px;text-align:left" maxlength="10" readonly="readonly" type= "text" />
                 </dt>
             </dl>
             <dl class="clearfix gray">
@@ -171,4 +119,20 @@
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+		$('#frm').validate();
+	    $(".datepicker").datepicker(
+	    {
+	        showOn : "both",
+	        dateFormat : "dd/mm/yy",
+	        changeMonth : true,
+	        changeYear : true,
+	        showOtherMonths : true,
+	        buttonImage : nv_siteroot + "images/calendar.gif",
+	        buttonImageOnly : true
+	    }); 		
+	});
+</script>
 <!-- END: main -->

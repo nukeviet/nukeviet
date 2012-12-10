@@ -1,4 +1,10 @@
 <!-- BEGIN: add -->
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <div id="pageContent">
     <form id="addCat" method="post" action="{ACTION_URL}">
         <h3 class="myh3">{PTITLE}</h3>
@@ -14,8 +20,7 @@
                 <tr>
                     <td>{LANG.exp_time}:</td>
                     <td>
-                        <input type="text" name="exp_time" id="exp_time" value="{DATA.exp_time}" style="width: 150px;" maxlength="10" />
-                        <img class="popCal" src="{NV_BASE_SITEURL}images/calendar.jpg" alt="" width="18" height="17" style="cursor: pointer; vertical-align: middle;" />
+                        <input type="text" name="exp_time" class="datepicker" value="{DATA.exp_time}" style="width: 150px;" maxlength="10" />
                         &nbsp;&nbsp;&nbsp;{LANG.emptyIsUnlimited}
                     </td>
                 </tr>
@@ -35,50 +40,24 @@
 </div>
 <script type="text/javascript">
 //<![CDATA[
-function isDate() {
-  var a = $("input[name=exp_time]").val();
-  if(a == "") {
-    return true
-  }
-  a = a.match(/^([\d]{1,2})\.([\d]{1,2})\.([\d]{4,4})$/m);
-  if(a == null) {
-    return alert("{LANG.dateError}"), $("input[name=exp_time]").select(), false
-  }
-  day = intval(a[1]);
-  month = intval(a[2]);
-  year = intval(a[3]);
-  if(month < 1 || month > 12) {
-    return alert("{LANG.dateError}"), $("input[name=exp_time]").select(), false
-  }
-  if(day < 1 || day > 31) {
-    return alert("{LANG.dateError}"), $("input[name=exp_time]").select(), false
-  }
-  if(year < 1900) {
-    return alert("{LANG.dateError}"), $("input[name=exp_time]").select(), false
-  }
-  if((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
-    return alert("{LANG.dateError}"), $("input[name=exp_time]").select(), false
-  }
-  if(month == 2 && (day > 29 || day == 29 && !(year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)))) {
-    return alert("{LANG.dateError}"), $("input[name=exp_time]").select(), false
-  }
-  day < 10 && (day = "0" + day);
-  month < 10 && (month = "0" + month);
-  $("input[name=exp_time]").val(day + "." + month + "." + year);
-  return true
-}
-$("img.popCal").click(function(a) {
-  popCalendar.show(this, "exp_time", "dd.mm.yyyy", true, a.pageX - 20, a.pageY - 20);
-  return false
+$(document).ready(function()
+{
+    $(".datepicker").datepicker(
+    {
+        showOn : "both",
+        dateFormat : "dd/mm/yy",
+        changeMonth : true,
+        changeYear : true,
+        showOtherMonths : true,
+        buttonImage : nv_siteroot + "images/calendar.gif",
+        buttonImageOnly : true
+    }); 		
 });
 $("form#addCat").submit(function() {
   var a = $("input[name=title]").val(), a = trim(a);
   $("input[name=title]").val(a);
   if(a == "") {
     return alert("{LANG.title_empty}"), $("input[name=title]").select(), false
-  }
-  if(!isDate()) {
-    return false
   }
   <!-- BEGIN: is_editor -->
   $("textarea[name=content]").val(CKEDITOR.instances.content.getData());
