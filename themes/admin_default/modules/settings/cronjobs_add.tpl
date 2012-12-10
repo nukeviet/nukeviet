@@ -121,7 +121,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#start_date").datepicker({
-		showOn : "button",
+		showOn : "both",
 		dateFormat : "dd/mm/yy",
 		changeMonth : true,
 		changeYear : true,

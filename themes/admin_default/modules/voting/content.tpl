@@ -121,7 +121,7 @@
 <script type="text/javascript">
 	var items = {NEW_ITEM_NUM};
 	$("#publ_date,#exp_date").datepicker({
-		showOn : "button",
+		showOn : "both",
 		dateFormat : "dd/mm/yy",
 		changeMonth : true,
 		changeYear : true,
