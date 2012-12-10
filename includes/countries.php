@@ -249,7 +249,7 @@ $countries = array(
 function nv_ParseIP( $ip )
 {
 	if( $ip == '127.0.0.1' || $ip == '0.0.0.1' ) return "localhost";
-
+trigger_error('nv_ParseIP.'.$ip,256);
 	if( ! function_exists( "fsockopen" ) ) return false;
 
 	if( ! $fp = @fsockopen( "whois.arin.net", 43, $errno, $errstr, 10 ) ) return false;
@@ -435,7 +435,7 @@ function nv_getCountry_from_cookie( $ip )
 	$cookie_domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/^([w]{3})\./' ), array( '', '' ), $cookie_domain );
 	$cookie_domain = preg_match( "/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/", $cookie_domain ) ? '.' . $cookie_domain : '';
 
-	setcookie( $global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, '/', $cookie_domain, ( bool )NV_COOKIE_SECURE, ( bool )NV_COOKIE_HTTPONLY );
+	setcookie( $global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, '/', $cookie_domain, ( bool )$global_config['cookie_secure'], ( bool )$global_config['cookie_httponly'] );
 
 	return $country;
 }

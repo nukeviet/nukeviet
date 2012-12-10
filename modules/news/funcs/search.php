@@ -7,7 +7,8 @@
  * @Createdate 10-5-2010 0:14
  */
 
-if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_NEWS' ) )
+	die( 'Stop!!!' );
 
 function GetSourceNews( $sourceid )
 {
@@ -44,25 +45,27 @@ function BoldKeywordInStr( $str, $keyword )
 	return $str;
 }
 
-$key = filter_text_input( 'q', 'get', '', 1, 1000 );
+$key = filter_text_input( 'q', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
 $pages = $nv_Request->get_int( 'page', 'get', 0 );
-$from_date = filter_text_input( 'from_date', 'get', '', 1, 1000 );
-$to_date = filter_text_input( 'to_date', 'get', '', 1, 100 );
+$from_date = filter_text_input( 'from_date', 'get', '', 0 );
+$to_date = filter_text_input( 'to_date', 'get', '', 0 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $check_num = filter_text_input( 'choose', 'get', 1, 1, 1 );
 $date_array['from_date'] = $from_date;
 $date_array['to_date'] = $to_date;
 $per_pages = 20;
 
-if( $key == '' ) $key = isset( $_SESSION["keyword"] ) ? $_SESSION["keyword"] : '';
-$array_cat_search = array();
+$key = strip_punctuation( nv_unhtmlspecialchars( $key ) );
+
+$array_cat_search = array( );
 
 foreach( $global_array_cat as $arr_cat_i )
 {
 	$array_cat_search[$arr_cat_i['catid']] = array(
 		'catid' => $arr_cat_i['catid'],
 		'title' => $arr_cat_i['title'],
-		'select' => ( $arr_cat_i['catid'] == $catid ) ? "selected" : "" );
+		'select' => ($arr_cat_i['catid'] == $catid) ? "selected" : ""
+	);
 }
 
 $array_cat_search[0]['title'] = $lang_module['search_all'];
@@ -95,13 +98,13 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		$where .= " OR tb1.author LIKE '%" . $dbkey . "%' OR tb1.sourcetext LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%')";
 	}
 
-	if( $to_date != "" )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $to_date, $m ) )
 	{
-		preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $to_date, $m );
-		$tdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
-		preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $from_date, $m );
-		$fdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
-		$where .= " AND ( `publtime` < $fdate AND `publtime` >= $tdate  ) ";
+		$where .= " AND `publtime` >=" . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+	}
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $from_date, $m ) )
+	{
+		$where .= " AND `publtime` <= " . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 
 	if( $catid > 0 )
@@ -121,7 +124,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 	list( $numRecord ) = $db->sql_fetchrow( $result_all );
 
-	$array_content = array();
+	$array_content = array( );
 	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
 
 	while( list( $id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $db->sql_fetchrow( $result ) )
@@ -132,7 +135,10 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		}
 		else
 		{
-			$array_img = array( "", "" );
+			$array_img = array(
+				"",
+				""
+			);
 		}
 
 		$img_src = "";
@@ -159,7 +165,8 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 			"author" => $author,
 			"publtime" => $publtime,
 			"homeimgfile" => $img_src,
-			"sourceid" => $sourceid );
+			"sourceid" => $sourceid
+		);
 	}
 
 	$contents .= call_user_func( "search_result_theme", $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );
@@ -177,8 +184,7 @@ else
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include (NV_ROOTDIR . "/includes/header.php");
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
-
+include (NV_ROOTDIR . "/includes/footer.php");
 ?>

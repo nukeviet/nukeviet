@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 12/31/2009 0:51
  */
 if ( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
@@ -627,16 +627,16 @@ function sendmail_themme ( $sendmail )
 {
     global $module_name, $module_info, $module_file, $global_config, $lang_module, $lang_global;
     $script = nv_html_site_js();
-    $script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.js\"></script>\n";
+
+        $script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+    $script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+
     $script .= "<script type=\"text/javascript\">\n";
     $script .= "          $(document).ready(function(){\n";
     $script .= "            $(\"#sendmailForm\").validate();\n";
     $script .= "          });\n";
     $script .= "</script>\n";
-    if ( NV_LANG_INTERFACE == 'vi' )
-    {
-        $script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
-    }
+
     $sendmail['script'] = $script;
     $xtpl = new XTemplate( "sendmail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'SENDMAIL', $sendmail );

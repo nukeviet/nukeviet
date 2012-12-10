@@ -32,7 +32,7 @@ $error = "";
 
 if ( $nv_Request->isset_request( 'addfile', 'post' ) )
 {
-    @require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
+    require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
     
     $addfile = $nv_Request->get_string( 'addfile', 'post', '' );
     

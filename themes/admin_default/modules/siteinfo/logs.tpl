@@ -35,7 +35,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#from,#to").datepicker({
-		showOn: "button",
+		showOn: "both",
 		dateFormat: "dd.mm.yy",
 		changeMonth: true,
 		changeYear: true,

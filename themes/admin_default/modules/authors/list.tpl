@@ -6,6 +6,7 @@
 			<td>{LANG.email}</td>
 			<td>{LANG.lev}</td>
 			<td>{LANG.position}</td>
+			<td>{LANG.is_suspend}</td>
 			<td>{LANG.adminip_funcs}</td>
 		</tr>
 	</thead>
@@ -16,6 +17,7 @@
 			<td>{DATA.email}</td>
 			<td>{DATA.lev}</td>
 			<td>{DATA.position}</td>
+			<td>{DATA.is_suspend}</td>
 			<td>
 				<!-- BEGIN: edit -->
 				<span class="edit_icon"><a href="{EDIT_HREF}">{EDIT_NAME}</a></span>

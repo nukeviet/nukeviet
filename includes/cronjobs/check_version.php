@@ -18,7 +18,7 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
  */
 function cron_auto_check_version()
 {
-	global $nv_Request, $global_config;
+	global $nv_Request, $global_config, $client_info;
 
 	$admin_cookie = $nv_Request->get_bool( 'admin', 'session', false );
 	

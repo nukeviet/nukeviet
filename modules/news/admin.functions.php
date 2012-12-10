@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 12/31/2009 2:29
  */
 
@@ -91,6 +91,13 @@ if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/admins.php" 
     $submenu['admins'] = $lang_module['admin'];
     $allow_func[] = 'admins';
 }
+/** -------------------------------------------------- RPC ------------------------------------**/
+if ( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ))
+{
+    $allow_func[] = 'rpc';
+    $submenu['rpc'] = $lang_module['rpc'];
+}
+/** -------------------------------------------------- RPC ------------------------------------**/
 
 $array_viewcat_full = array( 
     'viewcat_page_new' => $lang_module['viewcat_page_new'], 'viewcat_page_old' => $lang_module['viewcat_page_old'], 'viewcat_list_new' => $lang_module['viewcat_list_new'], 'viewcat_list_old' => $lang_module['viewcat_list_old'], 'viewcat_grid_new' => $lang_module['viewcat_grid_new'], 'viewcat_grid_old' => $lang_module['viewcat_grid_old'], 'viewcat_main_left' => $lang_module['viewcat_main_left'], 'viewcat_main_right' => $lang_module['viewcat_main_right'], 'viewcat_main_bottom' => $lang_module['viewcat_main_bottom'], 'viewcat_two_column' => $lang_module['viewcat_two_column'] 

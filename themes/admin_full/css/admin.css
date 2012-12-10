@@ -23,7 +23,8 @@ blockquote, q {
 
 blockquote:before, blockquote:after, q:before, q:after {
     content: '';
-}:focus {
+}
+:focus {
     outline: 0
 }
 
@@ -104,17 +105,17 @@ a:focus, a:hover {
 }
 
 a {
-	color: #336699;
-	text-decoration: none;
+    color: #336699;
+    text-decoration: none;
 }
 
 a.link {
-	font-weight: 700;
-	text-decoration: underline !important;
+    font-weight: 700;
+    text-decoration: underline !important;
 }
 
 a.link:hover {
-	text-decoration: none !important;
+    text-decoration: none !important;
 }
 
 blockquote {
@@ -236,21 +237,21 @@ img {
     border: 0
 }
 
-img.refresh{
-	vertical-align:middle;
-	cursor:pointer;
+img.refresh {
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 input[type=radio], input[type=checkbox] {
     vertical-align: middle
 }
 
-input.txt-full,select.txt-full,textarea.txt-full {
-	width:98%
+input.txt-full, select.txt-full, textarea.txt-full {
+    width: 98%
 }
 
-input.txt-half,select.txt-half,textarea.txt-half {
-	width:49%
+input.txt-half, select.txt-half, textarea.txt-half {
+    width: 49%
 }
 
 textarea {
@@ -266,12 +267,12 @@ textarea {
     clear: both;
 }
 
-.center{
-	text-align:center;
+.center {
+    text-align: center;
 }
 
 .aright {
-	text-align: right
+    text-align: right
 }
 
 .default_icon {
@@ -474,7 +475,7 @@ div.quote blockquote span {
 }
 
 .fixtab {
-	margin: 1px 0 !important;
+    margin: 1px 0 !important;
 }
 
 table.tab1 {
@@ -765,33 +766,33 @@ div.quote blockquote.error, #middle_column_r div.info span {
 
 /* INFO BOX */
 div.infook, div.infoerror, div.infoalert {
-	padding: 10px;
-	margin: 5px 0;
-	line-height: 1.5em;
-	text-align: center;
+    padding: 10px;
+    margin: 5px 0;
+    line-height: 1.5em;
+    text-align: center;
 }
 div.infook {
-	border-top: 1px solid #6C6;
-	border-bottom: 1px solid #6C6;
-	background-color: #CFC;
+    border-top: 1px solid #6C6;
+    border-bottom: 1px solid #6C6;
+    background-color: #CFC;
 }
 div.infoerror {
-	border-top: 1px solid #C33;
-	border-bottom: 1px solid #C33;
-	background-color: #F66;
-	color: white;
+    border-top: 1px solid #C33;
+    border-bottom: 1px solid #C33;
+    background-color: #F66;
+    color: white;
 }
 div.infoalert {
-	border-top: 1px solid #9CF;
-	border-bottom: 1px solid #9CF;
-	background-color: #C5DEFA;
+    border-top: 1px solid #9CF;
+    border-bottom: 1px solid #9CF;
+    background-color: #C5DEFA;
 }
 div.infook a, div.inerror a, div.infoalert a {
-	text-decoration: underline;	
+    text-decoration: underline;
 }
 div.infoerror a {
-	color: #fff;
-	text-decoration: underline;	
+    color: #fff;
+    text-decoration: underline;
 }
 
 span.row, sup.required {
@@ -954,4 +955,11 @@ html[xmlns] .clearfix {
     display: inline-block;
     height: 100%;
     padding-left: 20px;
+}
+
+.error {
+    color: red
+}
+.ui-datepicker-trigger {
+    margin-left: 5px
 }

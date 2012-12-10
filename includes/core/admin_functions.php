@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @createdate 12/31/2009 2:13
  */
 
@@ -131,17 +131,45 @@ function nv_save_file_config_global( )
 	$content_config .= "\n";
 
 	$config_variable = array( );
-	$sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' ORDER BY `config_name` ASC";
+	$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' ORDER BY `config_name` ASC";
 	$result = $db->sql_query( $sql );
-	while( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result, 1 ) )
+	while( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result, 1 ) )
 	{
-		$config_variable[$c_config_name] = $c_config_value;
+		if( $c_module == 'define' )
+		{
+			if( preg_match( '/^\d+$/', $c_config_value ) )
+			{
+				$content_config .= "define('" . strtoupper( $c_config_name ) . "', " . $c_config_value . ");\n";
+			}
+			else
+			{
+				$content_config .= "define('" . strtoupper( $c_config_name ) . "', '" . $c_config_value . "');\n";
+			}
+		}
+		else
+		{
+			$config_variable[$c_config_name] = $c_config_value;
+		}
 	}
+	$nv_eol = strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? '"\r\n"' : (strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? '"\r"' : '"\n"');
+	$upload_max_filesize = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $config_variable['nv_max_size'] );
+
+	$content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
+	$content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . $upload_max_filesize . ");\n";
+
+	if( $config_variable['openid_mode'] )
+	{
+		$content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
+		$openid_servers = array( );
+		$key_openid_servers = explode( ",", $config_variable['openid_servers'] );
+		require (NV_ROOTDIR . '/includes/openid.php');
+		$openid_servers = array_intersect_key( $openid_servers, array_flip( $key_openid_servers ) );
+		$content_config .= "\$openid_servers=" . nv_var_export( $openid_servers ) . ";\n";
+	}
+
 	$config_variable['check_rewrite_file'] = nv_check_rewrite_file( );
 	$config_variable['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? NV_ALLOW_REQUEST_MODS : "request";
 	$config_variable['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim( NV_REQUEST_DEFAULT_MODE ) : 'request';
-	$config_variable['cookie_secure'] = NV_COOKIE_SECURE;
-	$config_variable['cookie_httponly'] = NV_COOKIE_HTTPONLY;
 	$config_variable['session_save_path'] = NV_SESSION_SAVE_PATH;
 
 	$config_variable['log_errors_list'] = NV_LOG_ERRORS_LIST;
@@ -226,23 +254,7 @@ function nv_save_file_config_global( )
 	//Xac dinh cac search_engine
 	$engine_allowed = ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' )) ? nv_object2array( simplexml_load_file( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) ) : array( );
 	$content_config .= "\$global_config['engine_allowed']=" . nv_var_export( $engine_allowed ) . ";\n";
-
-	$nv_eol = strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? '"\r\n"' : (strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? '"\r"' : '"\n"');
-	$upload_max_filesize = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $config_variable['nv_max_size'] );
-
 	$content_config .= "\n";
-	$content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
-	$content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . $upload_max_filesize . ");\n";
-
-	if( $config_variable['openid_mode'] )
-	{
-		$content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
-		$openid_servers = array( );
-		$key_openid_servers = explode( ",", $config_variable['openid_servers'] );
-		require (NV_ROOTDIR . '/includes/openid.php');
-		$openid_servers = array_intersect_key( $openid_servers, array_flip( $key_openid_servers ) );
-		$content_config .= "\$openid_servers=" . nv_var_export( $openid_servers ) . ";\n";
-	}
 
 	$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 	$content_config .= "\$language_array=" . nv_var_export( $tmp_array ) . ";\n";

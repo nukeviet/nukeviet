@@ -38,17 +38,13 @@ list( $username, $full_name, $email, $photo, $in_groups ) = $db->sql_fetchrow( $
 
 $userdelete = ( ! empty( $full_name ) ) ? $full_name . " (" . $username . ")" : $username;
 
-$sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid;
-$result = $db->sql_query( $sql );
-
+$result = $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid );
 if ( ! $result )
 {
     die( "NO" );
 }
 
-$sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`=" . $userid;
-$result = $db->sql_query( $sql );
-
+$result = $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`=" . $userid );
 if ( !empty($in_groups) )
 {
     $result = $db->sql_query("SELECT `group_id`, `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id` IN (" . $in_groups . ")");

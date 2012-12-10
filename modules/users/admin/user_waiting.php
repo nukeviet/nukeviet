@@ -4,10 +4,11 @@
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES.,JSC All rights reserved
- * @Createdate 04/05/2010 
+ * @Createdate 04/05/2010
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) )
+	die( 'Stop!!!' );
 
 //Xoa thanh vien
 if( $nv_Request->isset_request( 'del', 'post' ) )
@@ -33,7 +34,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	if( ! $userid )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-		die();
+		die( );
 	}
 
 	$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $userid;
@@ -42,13 +43,13 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	if( $numrows != 1 )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-		die();
+		die( );
 	}
 	$row = $db->sql_fetchrow( $result );
 
 	$sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
     `userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
-    `regdate`, `website`, `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, 
+    `regdate`, `question`, 
     `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, `active`, `checknum`, 
     `last_login`, `last_ip`, `last_agent`, `last_openid`
     ) VALUES (
@@ -58,7 +59,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
     " . $db->dbescape( $row['password'] ) . ", 
     " . $db->dbescape( $row['email'] ) . ", 
     " . $db->dbescape( $row['full_name'] ) . ", 
-    '', '', 0, " . $row['regdate'] . ", '', '', '', '', '', '', 
+    '', '', 0, " . $row['regdate'] . ",  
     " . $db->dbescape( $row['question'] ) . ", 
     " . $db->dbescape( $row['answer'] ) . ", 
     '', 0, 0, '', 1, '', 0, '', '', '')";
@@ -68,9 +69,19 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	if( $userid )
 	{
 		$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $row['userid'] );
+
+		$query_field = array( );
+		$query_field['`userid`'] = $userid;
+		$result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `fid` ASC" );
+		while( $row_f = $db->sql_fetch_assoc( $result_field ) )
+		{
+			$query_field["`" . $row_f['field'] . "`"] = "''";
+		}
+		$db->sql_query( "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_info` (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" );
+
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid'] );
 
-		$full_name = ( ! empty( $row['full_name'] ) ) ? $row['full_name'] : $row['username'];
+		$full_name = ( ! empty( $row['full_name'] )) ? $row['full_name'] : $row['username'];
 		$subject = $lang_module['adduser_register'];
 		$message = sprintf( $lang_module['adduser_register_info'], $full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, $row['username'] );
 		$message .= "<br /><br />------------------------------------------------<br /><br />";
@@ -79,7 +90,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	}
 
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=user_waiting" );
-	die();
+	die( );
 }
 
 $page_title = $table_caption = $lang_module['member_wating'];
@@ -109,13 +120,20 @@ $methods = array( //
 		'selected' => ''
 	) //
 );
-$method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
-$methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ( $nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '' );
+$method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ($nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '');
+$methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ($nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '');
 
-$orders = array( 'userid', 'username', 'full_name', 'email', 'regdate' );
+$orders = array(
+	'userid',
+	'username',
+	'full_name',
+	'email',
+	'regdate'
+);
 $orderby = $nv_Request->get_string( 'sortby', 'get', '' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', '' );
-if( $ordertype != "ASC" ) $ordertype = "DESC";
+if( $ordertype != "ASC" )
+	$ordertype = "DESC";
 
 if( ! empty( $method ) and isset( $methods[$method] ) and ! empty( $methodvalue ) )
 {
@@ -139,9 +157,9 @@ $query2 = $db->sql_query( $sql2 );
 
 $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $numf ) = $db->sql_fetchrow( $result_all );
-$all_page = ( $numf ) ? $numf : 1;
+$all_page = ($numf) ? $numf : 1;
 
-$users_list = array();
+$users_list = array( );
 while( $row = $db->sql_fetchrow( $query2 ) )
 {
 	$users_list[$row['userid']] = array( //
@@ -155,7 +173,7 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
-$head_tds = array();
+$head_tds = array( );
 $head_tds['userid']['title'] = $lang_module['userid'];
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=user_waiting&amp;sortby=userid&amp;sorttype=ASC";
 $head_tds['username']['title'] = $lang_module['account'];
@@ -222,8 +240,7 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
-
+include (NV_ROOTDIR . "/includes/footer.php");
 ?>

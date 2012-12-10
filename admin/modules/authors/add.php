@@ -56,12 +56,13 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	list( $count ) = $db->sql_fetchrow( $result );
 	if( $count ) die( $lang_module['add_error_exist'] );
 
-	$sql = "SELECT `userid`, `username` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid . " LIMIT 1";
+	$sql = "SELECT `userid`, `username`, `active` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid . " LIMIT 1";
 	$result = $db->sql_query( $sql );
-	list( $userid, $username ) = $db->sql_fetchrow( $result );
-	if( empty( $userid ) ) die( $lang_module['add_error_notexist'] );
+	list( $userid, $username, $active ) = $db->sql_fetchrow( $result );
 
+	if( empty( $userid ) ) die( $lang_module['add_error_notexist'] );
 	if( empty( $position ) ) die( $lang_module['position_incorrect'] );
+	if( empty( $active ) ) die( sprintf($lang_module['username_noactive'], $username) );
 
 	$lev = ( $lev != 2 or ! defined( "NV_IS_GODADMIN" ) ) ? 3 : 2;
 	$mds = array();

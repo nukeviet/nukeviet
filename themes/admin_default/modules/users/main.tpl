@@ -1,12 +1,4 @@
 <!-- BEGIN: main -->
-<script type="text/javascript">
-function nv_check_form(OForm){
-	if(document.getElementById('f_value').value != ''){
-		OForm.submit();
-	}
-	return false;
-}
-</script>
 <div id="users">
     <!-- BEGIN: is_forum -->
     <div class="quote" style="width:780px;">
@@ -17,7 +9,7 @@ function nv_check_form(OForm){
     <div class="clear"></div>
     <!-- END: is_forum -->
     <div style="padding-top:10px;">
-    <form action="{FORM_ACTION}" method="post" onsubmit="nv_check_form(this);return false;">
+    <form action="{FORM_ACTION}" method="post">
         <span><strong>{LANG.search_type}:</strong></span>
         <select name="method" id="f_method">
             <option value="">---</option>
@@ -26,6 +18,11 @@ function nv_check_form(OForm){
             <!-- END: method -->
         </select>
         <input type="text" name="value" id="f_value" value="{SEARCH_VALUE}" />
+        <select name="usactive">
+            <!-- BEGIN: usactive -->
+            <option value="{USACTIVE.key}"{USACTIVE.selected}>{USACTIVE.value}</option>
+            <!-- END: usactive -->
+        </select>
         <input name='search' type="submit" value="{LANG.submit}" />
         <p>
             {LANG.search_note}

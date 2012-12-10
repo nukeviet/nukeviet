@@ -13,8 +13,6 @@ $page_title = $module_info['custom_title'];
 
 global $global_config, $module_name, $module_info, $lang_module;
 
-$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>";
-
 if( defined( 'NV_IS_BANNER_CLIENT' ) )
 {
 	$upload_blocked = "";
@@ -43,6 +41,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	$xtpl = new XTemplate( "addads.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_BASE_URLSITE', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'clientinfo_link', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=clientinfo" );
 	$xtpl->assign( 'clientinfo_addads', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=addads" );
 	$xtpl->assign( 'clientinfo_stats', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=stats" );
@@ -59,8 +58,8 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		$begintime = filter_text_input( 'begintime', 'post', '', 1 );
 		$endtime = filter_text_input( 'endtime', 'post', '', 1 );
 
-		if( ! empty( $begintime ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $begintime ) ) $begintime = "";
-		if( ! empty( $endtime ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $endtime ) ) $endtime = "";
+		if( ! empty( $begintime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime ) ) $begintime = "";
+		if( ! empty( $endtime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime ) ) $endtime = "";
 		if( $url == "http://" ) $url = "";
 	
 		if( empty( $title ) )
@@ -111,7 +110,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 			else
 			{
 				unset( $m );
-				preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $begintime, $m );
+				preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime, $m );
 				$begintime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 				if( $begintime < NV_CURRENTTIME ) $begintime = NV_CURRENTTIME;
 			}
@@ -123,7 +122,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 			else
 			{
 				unset( $m );
-				preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $endtime, $m );
+				preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime, $m );
 				$endtime = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
 			}
 

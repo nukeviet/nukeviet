@@ -72,8 +72,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$publ_date = strip_tags( $nv_Request->get_string( 'publ_date', 'post', '' ) );
 	$exp_date = strip_tags( $nv_Request->get_string( 'exp_date', 'post', '' ) );
 	
-	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date ) ) $publ_date = "";
-	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date ) ) $exp_date = "";
+	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = "";
+	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = "";
 
 	if( ! empty( $clid ) and ! isset( $clients[$clid] ) ) $clid = 0;
 	if( $click_url == "http://" ) $click_url = "";
@@ -122,7 +122,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			else
 			{
 				unset( $m );
-				preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $publ_date, $m );
+				preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m );
 				$publtime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 				if( $publtime < NV_CURRENTTIME ) $publtime = NV_CURRENTTIME;
 			}
@@ -134,7 +134,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			else
 			{
 				unset( $m );
-				preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $exp_date, $m );
+				preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date, $m );
 				$exptime = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
 			}
 
@@ -160,7 +160,7 @@ else
 {
 	$pid = $clid = 0;
 	$title = $file_alt = $click_url = $exp_date = "";
-	$publ_date = date( "d.m.Y", NV_CURRENTTIME );
+	$publ_date = date( "d/m/Y", NV_CURRENTTIME );
 
 	if( $nv_Request->get_bool( 'pid', 'get' ) and isset( $plans[$nv_Request->get_int( 'pid', 'get' )] ) )
 	{
@@ -173,8 +173,6 @@ else
 	}
 }
 
-if( $click_url == "" ) $click_url = "http://";
-
 $contents['info'] = ( ! empty( $error ) ) ? $error : $lang_module['add_banner_info'];
 $contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
 $contents['file_allowed_ext'] = implode( ", ", $contents['file_allowed_ext'] );
@@ -186,10 +184,8 @@ $contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid 
 $contents['upload'] = array( sprintf( $lang_module['upload'], $contents['file_allowed_ext'] ), 'banner' );
 $contents['file_alt'] = array( $lang_module['file_alt'], 'file_alt', $file_alt, 255 );
 $contents['click_url'] = array( $lang_module['click_url'], 'click_url', $click_url, 255 );
-$contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10, NV_BASE_SITEURL . "images/calendar.jpg", 18, 17, "popCalendar.show(this, 'publ_date', 'dd.mm.yyyy', false);" );
-$contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10, NV_BASE_SITEURL . "images/calendar.jpg", 18, 17, "popCalendar.show(this, 'exp_date', 'dd.mm.yyyy', false);" );
-
-$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>";
+$contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10);
+$contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10);
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( nv_add_banner_theme( $contents ) );

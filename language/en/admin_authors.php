@@ -43,7 +43,6 @@ $lang_module['main'] = 'List of Administrators';
 $lang_module['nv_admin_edit'] = 'Edit administrator\'s information';
 $lang_module['nv_admin_add'] = 'Add a admistrator';
 $lang_module['nv_admin_del'] = 'Delete Administrator';
-$lang_module['username_incorrect'] = 'Error: Don\'t found this member account:% s';
 $lang_module['full_name_incorrect'] = 'You do not declare the name of this administrator';
 $lang_module['position_incorrect'] = 'You do not declare the position of this administrator';
 $lang_module['nv_admin_add_info'] = 'To add new website administrator account, you need to declare fully in the box below. You can create an account below your level management';

@@ -311,7 +311,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 
         $post['exp_time'] = filter_text_input( 'exp_time', 'post', '' );
 
-        if ( preg_match( "/^([\d]{1,2})\.([\d]{1,2})\.([\d]{4})$/", $post['exp_time'], $matches ) )
+        if ( preg_match( "/^([\d]{1,2})\/([\d]{1,2})\/([\d]{4})$/", $post['exp_time'], $matches ) )
         {
             $post['exp_time'] = mktime( 23, 59, 59, $matches[2], $matches[1], $matches[3] );
         }
@@ -359,7 +359,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     {
         $post = $groupsList[$post['id']];
         $post['content'] = nv_editor_br2nl( $post['content'] );
-        $post['exp_time'] = ! empty( $post['exp_time'] ) ? date( "d.m.Y", $post['exp_time'] ) : "";
+        $post['exp_time'] = ! empty( $post['exp_time'] ) ? date( "d/m/Y", $post['exp_time'] ) : "";
         $post['public'] = $post['public'] ? " checked=\"checked\"" : "";
     }
     else
@@ -382,11 +382,10 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         $_cont = "<textarea style=\"width:100%;height:300px\" name=\"content\" id=\"content\">" . $post['content'] . "</textarea>";
     }
     $xtpl->assign( 'CONTENT', $_cont );
-
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
     $xtpl->parse( 'add' );
     $contents = $xtpl->text( 'add' );
-
-    $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
 
     include ( NV_ROOTDIR . "/includes/header.php" );
     echo nv_admin_theme( $contents );
@@ -403,8 +402,8 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
         $loop = array( //
             'id' => $id, //
             'title' => $values['title'], //
-            'add_time' => nv_date( "d.m.Y H:i", $values['add_time'] ), //
-            'exp_time' => ! empty( $values['exp_time'] ) ? nv_date( "d.m.Y H:i", $values['exp_time'] ) : $lang_global['unlimited'], //
+            'add_time' => nv_date( "d/m/Y H:i", $values['add_time'] ), //
+            'exp_time' => ! empty( $values['exp_time'] ) ? nv_date( "d/m/Y H:i", $values['exp_time'] ) : $lang_global['unlimited'], //
             'public' => $values['public'] ? " checked=\"checked\"" : "", //
             'users' => ! empty( $values['users'] ) ? sizeof( explode( ",", $values['users'] ) ) : 0, //
             'act' => $values['act'] ? " checked=\"checked\"" : "" //
@@ -428,7 +427,6 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
     exit;
 }
 
-//Trang chu
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 

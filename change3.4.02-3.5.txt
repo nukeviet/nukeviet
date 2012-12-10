@@ -38,6 +38,7 @@ $link = nv_url_rewrite( $link, true );
 	<!-- BEGIN: nv_if_mudim -->
 	<script type="text/javascript" src="{NV_BASE_SITEURL}js/mudim.js"></script>
 	<!-- END: nv_if_mudim -->
+	(Xóa tất cả các chỗ có gắn js/mudim.js ngoại trừ function nv_change_buffer và /install/tpl/step6.tpl)
 
 3) Xóa getloadavg.php, bởi nó ít tác dụng mà khi bật lên làm chậm site
 $db->sql_query( "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang` = 'sys' AND `module` = 'global' AND `config_name` = 'getloadavg'" );
@@ -47,7 +48,6 @@ Tìm và sửa đoạn sau trong file /themes/admin_my_theme/system/main.tpl
 {COUNT_QUERY_STRS}/{NV_TOTAL_TIME}
 Sửa thành
 [COUNT_SHOW_QUERIES]
-
 
 Tìm và xóa đoạn sau trong file /themes/admin_my_theme/theme.php (giao diện admin)
 
@@ -71,3 +71,104 @@ Thêm lên trên nó đoạn sau
 		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
 
 5) Xóa chức năng hiển thị các thông tin cập nhật từ google code
+
+6) Thêm chức năng Ping bài viết qua RPC
+- Chức năng này chỉ hoạt động nếu máy chủ support cURL cho php
+- Vào menu Dịch vụ PING để chọn các dịch vụ, sau đó lưu lại cấu hình đó.
+- Khi thêm hoặc sửa bài viết, nếu bài viết ở chế độ kích hoạt, hệ thống sẽ chuyển đến trang Dịch vụ PING và ping tự động bài viết.
+- Để bổ sung proxies hãy sửa file modules/news/proxies.php, theo hướng dẫn trong file đó. 
+
+7) Thay thế jquery.validate
+Tìm tất cả các chỗ có jquery.validate để thay thế
+Nếu mã html trước khi thay thế là 
+<script type="text/javascript" src="/js/jquery/jquery.validate.js"></script>
+Cần sửa lại thành
+<script type="text/javascript" src="/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/js/language/jquery.validator-vi.js"></script>
+
+Trong đó vi: Là ngôn ngữ đang sử dụng của site
+
+7) Tùy biến trường dữ liệu thành viên
+
+CREATE TABLE IF NOT EXISTS `nv3_users_field` (
+  `fid` int(11) NOT NULL AUTO_INCREMENT,
+  `field` varchar(25) NOT NULL,
+  `weight` int(10) unsigned NOT NULL DEFAULT '1',
+  `field_type` enum('textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
+  `field_choices` mediumtext NOT NULL,
+  `match_type` enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
+  `match_regex` varchar(250) NOT NULL DEFAULT '',
+  `func_callback` varchar(75) NOT NULL DEFAULT '',
+  `min_length` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `max_length` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `required` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `show_register` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `user_editable` enum('yes','once','never') NOT NULL DEFAULT 'yes',
+  `show_profile` tinyint(4) NOT NULL DEFAULT '1',
+  `class` varchar(50) NOT NULL,
+  `language` text NOT NULL,
+  `default_value` varchar(255) NOT NULL DEFAULT '',  
+  PRIMARY KEY (`fid`),
+  UNIQUE KEY `field` (`field`)
+) ENGINE=MyISAM;
+
+INSERT INTO `nv3_users_field` (`fid`, `field`, `weight`, `field_type`, `field_choices`, `match_type`, `match_regex`, `func_callback`, `max_length`, `required`, `show_register`, `user_editable`, `show_profile`, `class`, `language`) VALUES
+(1, 'website', 1, 'textbox', '', 'callback', '', 'nv_is_url', 255, 0, 0, 'yes', 1, '', 'a:1:{s:2:"vi";a:2:{i:0;s:7:"Website";i:1;s:0:"";}}'),
+(2, 'location', 2, 'textbox', '', 'none', '', '', 255, 0, 0, 'yes', 1, '', 'a:1:{s:2:"vi";a:2:{i:0;s:12:"Địa chỉ";i:1;s:0:"";}}'),
+(3, 'yim', 3, 'textbox', '', 'none', '', '', 40, 0, 0, 'yes', 1, '', 'a:1:{s:2:"vi";a:2:{i:0;s:18:"Tài khoản Yahoo";i:1;s:0:"";}}'),
+(4, 'telephone', 4, 'textbox', '', 'regex', '^[a-zA-Z0-9-_.,]{3,20}$', '', 100, 0, 0, 'yes', 1, '', 'a:1:{s:2:"vi";a:2:{i:0;s:15:"Điện thoại";i:1;s:0:"";}}'),
+(5, 'fax', 5, 'textbox', '', 'regex', '^[a-zA-Z0-9-_.,]{3,20}$', '', 100, 0, 0, 'yes', 1, '', 'a:1:{s:2:"vi";a:2:{i:0;s:3:"Fax";i:1;s:0:"";}}'),
+(6, 'mobile', 6, 'textbox', '', 'regex', '^[a-zA-Z0-9-_.,]{3,20}$', '', 100, 0, 0, 'yes', 1, '', 'a:1:{s:2:"vi";a:2:{i:0;s:10:"Di động";i:1;s:0:"";}}');
+
+
+CREATE TABLE IF NOT EXISTS `nv3_users_info` (
+  `userid` mediumint(8) unsigned NOT NULL,
+  `website` varchar(100) NOT NULL DEFAULT '',
+  `location` varchar(100) NOT NULL DEFAULT '',
+  `yim` varchar(100) NOT NULL DEFAULT '',
+  `telephone` varchar(100) NOT NULL DEFAULT '',
+  `fax` varchar(100) NOT NULL DEFAULT '',
+  `mobile` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`userid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO  `nv3_users_info` SELECT `userid`, `website`, `location`, `yim`, `telephone`, `fax`, `mobile` FROM `nv3_users`
+
+ALTER TABLE `nv3_users`
+  DROP `website`,
+  DROP `location`,
+  DROP `yim`,
+  DROP `telephone`,
+  DROP `fax`,
+  DROP `mobile`; 
+
+7) Cấu hình đăng ký thành viên
+
+REPLACE INTO `nv3_config` (`lang`, `module`, `config_name`, `config_value`) VALUES
+('sys', 'global', 'cookie_httponly', '1'),
+('sys', 'global', 'admin_check_pass_time', '1800'),
+('sys', 'global', 'adminrelogin_max', '0'),
+('sys', 'global', 'cookie_secure', '1'),
+('sys', 'global', 'nv_unick_type', '0'),
+('sys', 'global', 'nv_upass_type', '0'),
+('sys', 'global', 'is_flood_blocker', '1'),
+('sys', 'global', 'max_requests_60', '400'),
+('sys', 'global', 'max_requests_300', '1500'),
+('sys', 'global', 'nv_display_errors_list', '1'),
+('sys', 'global', 'display_errors_list', '1'),
+('sys', 'define', 'nv_unickmin', '4'),
+('sys', 'define', 'nv_unickmax', '20'),
+('sys', 'define', 'nv_upassmin', '5'),
+('sys', 'define', 'nv_upassmax', '255'),
+('sys', 'define', 'nv_gfx_num', '6'),
+('sys', 'define', 'nv_gfx_width', '120'),
+('sys', 'define', 'nv_gfx_height', '25'),
+('sys', 'define', 'nv_max_width', '1500'),
+('sys', 'define', 'nv_max_height', '1500'),
+('sys', 'define', 'nv_live_cookie_time', '31104000'),
+('sys', 'define', 'nv_live_session_time', '0'),
+('sys', 'define', 'dir_forum', '');
+
+8) xóa popcalendar.js (bản nâng cấp không xóa js này, bởi nhiều module khách có thể sử dụng )
+
+note: fix commit git push -f 

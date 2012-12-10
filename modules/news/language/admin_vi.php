@@ -229,4 +229,26 @@ $lang_module['config_source_title'] = 'Hiển thị tiêu đề nguồn tin';
 $lang_module['config_source_link'] = 'Hiển thị link của nguồn tin';
 $lang_module['config_source_logo'] = 'Hiển thị logo của nguồn tin';
 
+$lang_module['rpc'] = "Dịch vụ PING";
+$lang_module['rpc_setting'] = "Cấu hình dịch vụ PING";
+$lang_module['rpc_error_timeout'] = "Vui lòng đợi %s nữa để tiếp tục Ping";
+$lang_module['rpc_error_titleEmpty'] = "Vui lòng khai báo tên của URL cần Ping";
+$lang_module['rpc_error_urlEmpty'] = "Vui lòng khai báo đúng URL cần Ping";
+$lang_module['rpc_error_rsschannelEmpty'] = "Vui lòng khai báo đúng kênh RSS của URL này";
+$lang_module['rpc_error_serviceEmpty'] = "Dịch vụ chưa khả dụng. Vui lòng thông báo đến Ban quản trị website";
+$lang_module['rpc_error_unknown'] = "Lỗi không xác định";
+$lang_module['rpc_flerror0'] = "PING thành công";
+$lang_module['rpc_flerror1'] = "Lỗi";
+$lang_module['rpc_ftitle'] = "PING là một tiện ích miễn phí giúp bạn nhanh chóng tạo chỉ mục cho các trang tin của mình trên các máy chủ tìm kiếm lớn.";
+$lang_module['rpc_webtitle'] = "Tiêu đề trang tin";
+$lang_module['rpc_weblink'] = "URL của trang tin";
+$lang_module['rpc_rsslink'] = "Kênh RSS của trang tin";
+$lang_module['rpc_submit'] = "PING !";
+$lang_module['rpc_linkname'] = "Máy chủ";
+$lang_module['rpc_reruslt'] = "Kết quả";
+$lang_module['rpc_message'] = "Thông tin";
+$lang_module['rpc_ping'] = "PING  khi cập nhận dữ liệu";
+$lang_module['rpc_ping_page'] = "PING  bài viết";
+$lang_module['rpc_finish'] = "Hoàn thành quá trình PING, bạn có muốn chuyển về trang quản lý bài viết ?";
+
 ?>

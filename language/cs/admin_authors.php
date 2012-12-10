@@ -43,7 +43,6 @@ $lang_module['main'] = 'Seznam adminsistratorů webové stránky';
 $lang_module['nv_admin_edit'] = 'Upravit webovou stránku informace administrátora';
 $lang_module['nv_admin_add'] = 'Přidat webová stránka informace administratora';
 $lang_module['nv_admin_del'] = 'Odstranit webová stránka informace administratora';
-$lang_module['username_incorrect'] = 'Chyba: Nebyl nalezen užívatelský účet:%s';
 $lang_module['full_name_incorrect'] = 'Nemáte prohlášení tento název administratora';
 $lang_module['position_incorrect'] = 'Nemáte deklarování pozice tohoto administratora';
 $lang_module['nv_admin_add_info'] = 'Chcete-li registrovat webovou stránku nového administratora, je třeba, abyste doplnili všechby pole . Můžete si vytvořit účet pod svou úroveň řízení';

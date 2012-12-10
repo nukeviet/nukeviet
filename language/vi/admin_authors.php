@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -21,6 +22,7 @@ $lang_module['level2'] = 'Điều hành chung';
 $lang_module['level3'] = 'Quản lý module';
 $lang_module['is_suspend0'] = 'Hoạt động';
 $lang_module['is_suspend1'] = 'Bị đình chỉ vào &ldquo;%1$s&rdquo; bởi &ldquo;%2$s&rdquo; với lý do &ldquo;%3$s&rdquo;';
+$lang_module['is_suspend2'] = 'Bị đình chỉ';
 $lang_module['last_login0'] = 'Chưa bao giờ';
 $lang_module['login'] = 'Tên tài khoản';
 $lang_module['email'] = 'Email';
@@ -43,7 +45,7 @@ $lang_module['main'] = 'Danh sách Quản trị website';
 $lang_module['nv_admin_edit'] = 'Sửa thông tin Quản trị website';
 $lang_module['nv_admin_add'] = 'Thêm Quản trị website';
 $lang_module['nv_admin_del'] = 'Xóa Quản trị website';
-$lang_module['username_incorrect'] = 'Lỗi: không tìm thấy thành viên có tài khoản: %s';
+$lang_module['username_noactive'] = 'Lỗi: tài khoản: %s chưa được kích hoạt, bạn cần kích hoạt tài khoản này trước khi thêm vào quản trị site';
 $lang_module['full_name_incorrect'] = 'Bạn chưa khai báo tên gọi của người quản trị này';
 $lang_module['position_incorrect'] = 'Bạn chưa khai báo chức danh của người quản trị này';
 $lang_module['nv_admin_add_info'] = 'Để tạo một tài khoản Quản trị website mới, bạn cần khai báo đầy đủ vào các ô trống dưới đây. Bạn chỉ có quyền tạo tài khoản Quản trị dưới cấp của mình';
@@ -133,6 +135,9 @@ $lang_module['rule_user'] = 'Tài khoản chỉ dùng các ký tự a-zA-Z0-9_-'
 $lang_module['rule_pass'] = 'Mật khẩu chỉ dùng các ký tự a-zA-Z0-9_-';
 $lang_module['spadmin_add_admin'] = 'Cho phép người điều hành chung tạo và thay đổi quyền hạn người điều hành modules';
 $lang_module['authors_detail_main'] = 'Hiển thị chi tiết các thông tin tài khoản của người quản trị';
+
+$lang_module['adminrelogin_max'] = 'Số lần admin được nhập lại nếu gõ sai, sau đó  hệ thống sẽ tước quyền truy cập admin và đẩy ra trang chủ';
+$lang_module['admin_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu admin không sử dụng trình duyệt';
 $lang_module['add_user'] = 'Chỉ định thành viên';
 $lang_module['add_select'] = 'Chọn';
 $lang_module['add_error_choose'] = 'Lỗi: Bạn chưa chọn thành viên được chỉ định làm quản trị';
@@ -140,4 +145,8 @@ $lang_module['add_error_exist'] = 'Lỗi: Thành viên này đã là quản tr�
 $lang_module['add_error_notexist'] = 'Lỗi: Thành viên này không tồn tại';
 $lang_module['add_error_diff'] = 'Xảy ra lỗi không xác định';
 
+$lang_module['action_account'] = 'Tài khoản thành viên';
+$lang_module['action_account_nochange'] = 'Dữ nguyên tài khoản thành viên';
+$lang_module['action_account_suspend'] = 'Khóa tài khoản thành viên';
+$lang_module['action_account_del'] = 'Xóa tài khoản thành viên';
 ?>
