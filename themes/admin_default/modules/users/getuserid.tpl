@@ -125,7 +125,7 @@
 		//<![CDATA[
 		$(document).ready(function(){
 			$("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
-				showOn: "button",
+				showOn: "both",
 				dateFormat: "dd.mm.yy",
 				changeMonth: true,
 				changeYear: true,

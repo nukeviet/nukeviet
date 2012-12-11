@@ -516,10 +516,9 @@ function user_info ( $data )
 	
 	$xtpl = new XTemplate( "info.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-	
 	$xtpl->assign( 'EDITINFO_FORM', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=editinfo" );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'LANG', $lang_module );
 	
 	$xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );

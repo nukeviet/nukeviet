@@ -406,7 +406,7 @@
         {
             $("input[name=default_date]").datepicker(
             {
-                showOn : "button",
+                showOn : "both",
                 dateFormat : "dd/mm/yy",
                 changeMonth : true,
                 changeYear : true,
@@ -532,7 +532,7 @@
 
     $(".datepicker").datepicker(
     {
-        showOn : "button",
+        showOn : "both",
         dateFormat : "dd/mm/yy",
         changeMonth : true,
         changeYear : true,

@@ -213,7 +213,7 @@ $("#block_config").hide();
 $("select[name=file_name]").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=loadblocks&module={ROW.module}&bid={ROW.bid}&nocache="+new Date().getTime());
 $(function(){
 	$("#exp_time").datepicker({
-		showOn: "button",
+		showOn: "both",
 		dateFormat: "dd/mm/yy",
 		changeMonth: true,
 		changeYear: true,

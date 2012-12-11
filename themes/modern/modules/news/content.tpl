@@ -9,7 +9,6 @@
 <meta http-equiv="refresh" content="5;URL={DATA.urlrefresh}" />
 <!-- END: mainrefresh -->
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/popcalendar/popcalendar.js"></script>
 <style type="text/css">
 	.txtrequired
 	{

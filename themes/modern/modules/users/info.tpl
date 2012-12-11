@@ -1,4 +1,12 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <div id="users">
 	<div class="page-header">
 		<h3>{LANG.editinfo_pagetitle}</h3>
@@ -11,7 +19,7 @@
 				<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
 				<!-- BEGIN: logout --><li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li><!-- END: logout -->
 			</ul>
-	<form action="{EDITINFO_FORM}" method="post" class="box-border content-box clearfix bgray" enctype="multipart/form-data">
+	<form id="frm" action="{EDITINFO_FORM}" method="post" class="box-border content-box clearfix bgray" enctype="multipart/form-data">
 		<div class="box-border content-box clearfix m-bottom edit-info bwhite">
             <dl class="clearfix">
                 <dt class="fl">
@@ -21,7 +29,7 @@
                 </dt>
                 <dd class="fl">
                     <!-- BEGIN: username_change -->
-                    <input class="input" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
+                    <input class="input required" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
                     <!-- END: username_change -->
                     <!-- BEGIN: username_no_change -->
                     <strong>{DATA.username}</strong>
@@ -36,7 +44,7 @@
                 </dt>
                 <dd class="fl">
                     <!-- BEGIN: email_change -->
-                    <input class="input" name="email" value="{DATA.email}" id="nv_email_iavim" maxlength="100" />
+                    <input class="input required email" name="email" value="{DATA.email}" id="nv_email_iavim" maxlength="100" />
                     <!-- END: email_change -->
                     <!-- BEGIN: email_no_change -->
                     <strong>{DATA.email}</strong>
@@ -84,8 +92,7 @@
                     </label>
                 </dt>
                 <dd class="fl">
-                    <input name="birthday" id="birthday" value="{DATA.birthday}" style="width: 150px;text-align:left" class="input" maxlength="10" readonly="readonly" type= "text" />
-                    <img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'birthday', 'dd.mm.yyyy', true);" alt="" height="17" />
+                    <input name="birthday" value="{DATA.birthday}" style="width: 150px;text-align:left" class="input datepicker" maxlength="10" readonly="readonly" type= "text" />
                 </dd>
             </dl>
             <dl class="clearfix">
@@ -108,4 +115,20 @@
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+		$('#frm').validate();
+	    $(".datepicker").datepicker(
+	    {
+	        showOn : "both",
+	        dateFormat : "dd/mm/yy",
+	        changeMonth : true,
+	        changeYear : true,
+	        showOtherMonths : true,
+	        buttonImage : nv_siteroot + "images/calendar.gif",
+	        buttonImageOnly : true
+	    });
+	});
+</script>
 <!-- END: main -->

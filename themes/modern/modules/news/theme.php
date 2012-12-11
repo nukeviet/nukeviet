@@ -895,8 +895,6 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 {
 	global $module_name, $module_info, $module_file, $lang_module, $module_name, $my_head;
 
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );

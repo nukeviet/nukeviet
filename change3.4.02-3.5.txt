@@ -169,4 +169,6 @@ REPLACE INTO `nv3_config` (`lang`, `module`, `config_name`, `config_value`) VALU
 ('sys', 'define', 'nv_live_session_time', '0'),
 ('sys', 'define', 'dir_forum', '');
 
+8) xóa popcalendar.js (bản nâng cấp không xóa js này, bởi nhiều module khách có thể sử dụng )
+
 note: fix commit git push -f 
