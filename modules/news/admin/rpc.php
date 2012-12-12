@@ -11,6 +11,8 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
 $page_title = $lang_module['rpc'];
+if ( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ))
+{
 
 /**
  * Chu y:
@@ -944,6 +946,10 @@ else
 
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
+}
+}
+else{
+	$contents = 'System not support function php "curl_init" !';
 }
 
 include (NV_ROOTDIR . "/includes/header.php");
