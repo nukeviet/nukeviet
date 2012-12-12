@@ -107,7 +107,6 @@ $lang_module['change_pass_ok'] = 'Thay đổi mật khẩu thành công';
 $lang_module['lostpass_email_subject'] = 'Hướng dẫn khôi phục mật khẩu tại website %s';
 $lang_module['lostpass_email_content'] = 'Xin chào %1$s,<br /><br />Bạn vừa gửi đề nghị thay đổi mật khẩu đăng nhập của mình tại website %2$s. Để thay đổi mật khẩu, bạn cần truy cập theo link dưới đây:<br /><br />URL: %3$s<br /><br />Dưới đây là thông tin đăng nhập mới:<br /><br />Tên tài khoản: %4$s<br />Mật khẩu: %5$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['lostpass_content_mess'] = 'Chúng tôi đã gửi đến e-mail %1$s thông tin,<br /><br /> bạn hãy hàm theo hướng dẫn để kích hoạt tài khoản';
-$lang_module['lostpass_send_pass'] = 'Mật khẩu của bạn đã được thay đổi và được gửi qua email %s';
 $lang_module['lostpass_active_error_link'] = 'Lỗi, link kích hoạt không đúng';
 $lang_module['changepass_title'] = 'Đổi mật khẩu';
 $lang_module['logout_title'] = 'Thoát';

@@ -418,7 +418,7 @@ function nv_filesList( $pathimg, $refresh, $newFile = "", $delFile = "" )
 }
 
 $allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
-$array_hidefolders = array( ".svn", "CVS", ".", "..", "index.html", ".htaccess", ".tmp" );
+$array_hidefolders = array( ".", "..", "index.html", ".htaccess", ".tmp" );
 
 $array_images = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
 $array_flash = array( 'swf', 'swc', 'flv' );

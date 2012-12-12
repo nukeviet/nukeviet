@@ -745,7 +745,7 @@ elseif( $step == 6 )
 
 			$db->sql_query( "TRUNCATE TABLE `" . $db_config['prefix'] . "_users`" );
 			$sql = "INSERT INTO `" . $db_config['prefix'] . "_users` (`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `sig`, `regdate`, `question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) 
-                VALUES(NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( md5( $login ) ) . ", " . $db->dbescape( $password ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( $login ) . ", '', '', 0, NULL, " . NV_CURRENTTIME . ", " . $db->dbescape( $question ) . ", " . $db->dbescape( $answer_question ) . ", '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '')";
+                VALUES(NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( nv_md5safe( $login ) ) . ", " . $db->dbescape( $password ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( $login ) . ", '', '', 0, NULL, " . NV_CURRENTTIME . ", " . $db->dbescape( $question ) . ", " . $db->dbescape( $answer_question ) . ", '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '')";
 			$userid = $db->sql_query_insert_id( $sql );
 
 			$db->sql_query( "TRUNCATE TABLE `" . $db_config['prefix'] . "_authors`" );

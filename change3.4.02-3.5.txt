@@ -175,4 +175,8 @@ REPLACE INTO `nv3_config` (`lang`, `module`, `config_name`, `config_value`) VALU
  
 ALTER TABLE `nv3_users` CHANGE `passlostkey` `passlostkey` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''
 DELETE FROM `nv3_users_config` WHERE `config` = 'registertype';
+
+10) Cập nhật chức năng không phân viết tài khoản chữ hoa và chữ thường.
+UPDATE `nv3_users` SET `md5username` = MD5(LOWER(`username`))
+
 note: fix commit git push -f
