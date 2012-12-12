@@ -78,7 +78,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
   `regdate` int(11) NOT NULL DEFAULT '0',
   `question` varchar(255) NOT NULL,
   `answer` varchar(255) NOT NULL DEFAULT '',
-  `passlostkey` varchar(40) NOT NULL DEFAULT '',
+  `passlostkey` varchar(50) NOT NULL DEFAULT '',
   `view_mail` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `remember` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `in_groups` varchar(255) NOT NULL DEFAULT '',
@@ -361,7 +361,6 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_ipcountry` (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
-        ('registertype', '1', " . NV_CURRENTTIME . "),
 		('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462),        
         ('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . "),
         ('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', " . NV_CURRENTTIME . ")";

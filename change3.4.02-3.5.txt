@@ -171,4 +171,8 @@ REPLACE INTO `nv3_config` (`lang`, `module`, `config_name`, `config_value`) VALU
 
 8) xóa popcalendar.js (bản nâng cấp không xóa js này, bởi nhiều module khách có thể sử dụng )
 
+9) Thay đổi CSDL module users để phù hợp với chức năng tìm lại mật khẩu
+ 
+ALTER TABLE `nv3_users` CHANGE `passlostkey` `passlostkey` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''
+DELETE FROM `nv3_users_config` WHERE `config` = 'registertype';
 note: fix commit git push -f

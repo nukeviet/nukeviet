@@ -148,11 +148,19 @@ $array_whoview = array(
 	2 => $lang_module['whoview_admin']
 );
 
+$ignorefolders = array(
+	"",
+	".",
+	"..",
+	"index.html",
+	".htaccess"
+);
+
 $xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
-if( file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' ) )
+if( ! in_array( DIR_FORUM, $ignorefolders ) AND file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' ) )
 {
 	$forum_files = @scandir( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' );
 	if( ! empty( $forum_files ) and in_array( 'is_user.php', $forum_files ) and in_array( 'changepass.php', $forum_files ) and in_array( 'editinfo.php', $forum_files ) and in_array( 'login.php', $forum_files ) and in_array( 'logout.php', $forum_files ) and in_array( 'lostpass.php', $forum_files ) and in_array( 'register.php', $forum_files ) )
@@ -239,13 +247,13 @@ foreach( $array_registertype as $id => $titleregister )
 }
 
 $nv_files = @scandir( NV_ROOTDIR );
-foreach( $nv_files as $key => $value )
+foreach( $nv_files as $value )
 {
-	if( is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
+	if( ! in_array( $value, $ignorefolders ) AND is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
 	{
 		$array = array(
-			"id" => $key,
-			"select" => ($key == DIR_FORUM) ? " selected=\"selected\"" : "",
+			"id" => $value,
+			"select" => ($value == DIR_FORUM) ? " selected=\"selected\"" : "",
 			"value" => $value
 		);
 		$xtpl->assign( 'DIR_FORUM', $array );
