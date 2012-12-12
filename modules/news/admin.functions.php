@@ -92,11 +92,10 @@ if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/admins.php" 
     $allow_func[] = 'admins';
 }
 /** -------------------------------------------------- RPC ------------------------------------**/
-if ( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ))
-{
-    $allow_func[] = 'rpc';
-    $submenu['rpc'] = $lang_module['rpc'];
-}
+
+$allow_func[] = 'rpc';
+$submenu['rpc'] = $lang_module['rpc'];
+
 /** -------------------------------------------------- RPC ------------------------------------**/
 
 $array_viewcat_full = array( 
