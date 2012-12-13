@@ -341,7 +341,8 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 $array_list_action = array(
 	'delete' => $lang_global['delete'],
 	'publtime' => $lang_module['publtime'],
-	'exptime' => $lang_module['exptime'] );
+	'exptime' => $lang_module['exptime'],
+	'waiting' => $lang_module['status_action_0'] );//chuyen sang cho duyet
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$array_list_action['addtoblock'] = $lang_module['addtoblock'];

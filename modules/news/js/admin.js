@@ -314,7 +314,9 @@ function nv_main_action(oForm, checkss, msgnocheck) {
 			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=publtime&listid=' + listid + '&checkss=' + checkss;
 		} else if (action == 'exptime') {
 			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=exptime&listid=' + listid + '&checkss=' + checkss;
-		} else {
+		} else if (action == 'waiting') {
+			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=waiting&listid=' + listid + '&checkss=' + checkss;
+		}else {
 			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=addtotopics&listid=' + listid;
 		}
 	} else {

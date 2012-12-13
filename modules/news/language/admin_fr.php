@@ -27,6 +27,7 @@ $lang_module['move'] = 'Déplacer';
 $lang_module['save_temp'] = 'Sauver sans publier';
 $lang_module['publtime'] = 'Publier';
 $lang_module['exptime'] = 'Expirer l\'article';
+$lang_module['status_action_0'] = 'Mettez à attendre l\'approbation';
 $lang_module['status'] = 'Status';
 $lang_module['status_0'] = 'Suspens';
 $lang_module['status_1'] = 'Publié';
