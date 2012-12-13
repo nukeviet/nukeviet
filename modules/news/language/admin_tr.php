@@ -27,6 +27,7 @@ $lang_module['move'] = 'Taşı';
 $lang_module['save_temp'] = 'Taslak';
 $lang_module['publtime'] = 'Yayınla';
 $lang_module['exptime'] = 'Make expired';
+$lang_module['status_action_0'] = 'Onay için bekleyebilir geçiş';
 $lang_module['status'] = 'Durum';
 $lang_module['status_0'] = 'Bekleyin';
 $lang_module['status_1'] = 'Yayınlandı';
