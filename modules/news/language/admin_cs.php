@@ -27,6 +27,7 @@ $lang_module['move'] = 'Přesunout';
 $lang_module['save_temp'] = 'Uložit články bez publikovat';
 $lang_module['publtime'] = 'Publikovat';
 $lang_module['exptime'] = 'Pro vypršela příspěvky';
+$lang_module['status_action_0'] = 'Přepnout čekat na schválení';
 $lang_module['status'] = 'Postavení';
 $lang_module['status_0'] = 'Počkat';
 $lang_module['status_1'] = 'Publikováno';
