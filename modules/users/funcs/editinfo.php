@@ -284,7 +284,7 @@ if( $checkss == $array_data['checkss'] )
 		{
 			$checknum = nv_genpass( 10 );
 			$checknum = md5( $checknum . $email_new );
-			$md5_username = md5( $array_data['username'] );
+			$md5_username = nv_md5safe( $array_data['username'] );
 
 			$sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `md5username`=" . $db->dbescape( $md5_username );
 			$db->sql_query( $sql );
@@ -331,7 +331,7 @@ if( $checkss == $array_data['checkss'] )
 
 	$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET 
     `username`=" . $db->dbescape_string( $array_data['username'] ) . ", 
-    `md5username`=" . $db->dbescape_string( md5( $array_data['username'] ) ) . ", 
+    `md5username`=" . $db->dbescape_string( nv_md5safe( $array_data['username'] ) ) . ", 
     `email`=" . $db->dbescape_string( $array_data['email'] ) . ", 
     `full_name`=" . $db->dbescape_string( $array_data['full_name'] ) . ", 
     `gender`=" . $db->dbescape_string( $array_data['gender'] ) . ", 

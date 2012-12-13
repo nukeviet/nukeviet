@@ -385,6 +385,18 @@ function nv_class_exists( $clName )
 	return ( class_exists( $clName ) and ! in_array( $clName, $sys_info['disable_classes'] ) );
 }
 
+
+/**
+ * nv_md5safe()
+ *
+ * @param string $username
+ * @return
+ */
+function nv_md5safe( $username )
+{
+	return md5(nv_strtolower($username));
+}
+
 /**
  * nv_check_valid_login()
  *

@@ -312,7 +312,7 @@ function openidLogin_Res1 ( $attribs )
                         `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) VALUES (
                         NULL, 
                         " . $db->dbescape( $row['username'] ) . ", 
-                        " . $db->dbescape( md5( $row['username'] ) ) . ", 
+                        " . $db->dbescape( nv_md5safe( $row['username'] ) ) . ", 
                         " . $db->dbescape( $row['password'] ) . ", 
                         " . $db->dbescape( $row['email'] ) . ", 
                         " . $db->dbescape( ! empty( $row['full_name'] ) ? $row['full_name'] : $reg_attribs['full_name'] ) . ", 
@@ -427,7 +427,7 @@ function openidLogin_Res1 ( $attribs )
                 {
                     $error = $lang_global['loginincorrect'];
                     
-                    $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . md5( $nv_username ) . "'";
+                    $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
                     $result = $db->sql_query( $sql );
                     if ( $db->sql_numrows( $result ) == 1 )
                     {
@@ -501,7 +501,7 @@ function openidLogin_Res1 ( $attribs )
             (
             NULL, 
             " . $db->dbescape( $reg_attribs['username'] ) . ", 
-            " . $db->dbescape( md5( $reg_attribs['username'] ) ) . ", 
+            " . $db->dbescape( nv_md5safe( $reg_attribs['username'] ) ) . ", 
             '', 
             " . $db->dbescape( $reg_attribs['email'] ) . ", 
             " . $db->dbescape( $reg_attribs['full_name'] ) . ", 
@@ -669,7 +669,7 @@ if ( $nv_Request->isset_request( 'nv_login', 'post' ) )
         {
             $error = $lang_global['loginincorrect'];
             
-            $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . md5( $nv_username ) . "'";
+            $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
             $result = $db->sql_query( $sql );
             if ( $db->sql_numrows( $result ) == 1 )
             {
