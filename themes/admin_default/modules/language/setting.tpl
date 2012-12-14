@@ -6,22 +6,26 @@
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
 	<table class="tab1 fixtab">
 		<caption>{LANG.nv_lang_show}</caption>
-		<tr class="thead_box">
-			<td style="width:50px">{LANG.nv_lang_key}</td>
-			<td style="width:180px">{LANG.nv_lang_name}</td>
-			<td style="width:120px">{LANG.nv_lang_slsite}</td>
-			<td style="width:120px">{LANG.nv_lang_sladm}</td>
-			<td></td>
-		</tr>
-	</table>
-	<table class="tab1 fixtab">
+		<thead>
+			<tr class="thead_box">
+				<td style="width:50px"></td>
+				<td style="width:50px">{LANG.nv_lang_key}</td>
+				<td>{LANG.nv_lang_name}</td>
+				<td>{LANG.nv_lang_native_name}</td>
+				<td style="width:120px">{LANG.nv_lang_slsite}</td>
+				<td style="width:120px">{LANG.nv_lang_sladm}</td>
+				<td style="width:220px"></td>
+			</tr>
+		</thead>
 		<!-- BEGIN: loop -->
-		<tbody{ROW.class}>
+		<tbody {ROW.class}>
 			<tr>
-				<td style="width: 50px; text-align: center">{ROW.key}</td>
-				<td style="width: 180px">{ROW.name}</td>
-				<td style="width: 120px; text-align: center"><input name="allow_sitelangs[]" value="{ROW.key}" type="checkbox" {ROW.allow_sitelangs} /></td>
-				<td style="width: 120px; text-align: center"><input name="allow_adminlangs[]" value="{ROW.key}" type="checkbox" {ROW.allow_adminlangs} /></td>
+				<td style="text-align: center">{ROW.number}</td>
+				<td style="text-align: center">{ROW.key}</td>
+				<td>{ROW.language}</td>
+				<td>{ROW.name}</td>
+				<td style="text-align: center"><input name="allow_sitelangs[]" value="{ROW.key}" type="checkbox" {ROW.allow_sitelangs} /></td>
+				<td style="text-align: center"><input name="allow_adminlangs[]" value="{ROW.key}" type="checkbox" {ROW.allow_adminlangs} /></td>
 				<td class="center">{ROW.arr_lang_func}</td>
 			</tr>
 		</tbody>

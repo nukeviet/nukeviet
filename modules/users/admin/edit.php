@@ -116,7 +116,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_xemail;
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $userid . " AND `md5username`=" . $db->dbescape( md5( $_user['username'] ) ) ) ) != 0 )
+	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $userid . " AND `md5username`=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) ) ) != 0 )
 	{
 		$error = $lang_module['edit_error_username_exist'];
 	}
@@ -225,7 +225,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 			$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET 
 	        `username`=" . $db->dbescape( $_user['username'] ) . ", 
-	        `md5username`=" . $db->dbescape( md5( $_user['username'] ) ) . ", 
+	        `md5username`=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) . ", 
 	        `password`=" . $db->dbescape( $password ) . ", 
 	        `email`=" . $db->dbescape( $_user['email'] ) . ", 
 	        `full_name`=" . $db->dbescape( $_user['full_name'] ) . ", 

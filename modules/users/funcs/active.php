@@ -68,7 +68,7 @@ if ( $checknum == $row['checknum'] )
 					`active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) VALUES (
 					NULL, 
 					" . $db->dbescape( $row['username'] ) . ", 
-					" . $db->dbescape( md5( $row['username'] ) ) . ", 
+					" . $db->dbescape( nv_md5safe( $row['username'] ) ) . ", 
 					" . $db->dbescape( $row['password'] ) . ", 
 					" . $db->dbescape( $row['email'] ) . ", 
 					" . $db->dbescape( $row['full_name'] ) . ", 

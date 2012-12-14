@@ -77,7 +77,7 @@ if ( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
         }
         
         $userid = 0;
-        $sql = "SELECT `userid`, `username`, `password` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` ='" . md5( $nv_username ) . "'";
+        $sql = "SELECT `userid`, `username`, `password` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` ='" . nv_md5safe( $nv_username ) . "'";
         $result = $db->sql_query( $sql );
         if ( $db->sql_numrows( $result ) == 1 )
         {

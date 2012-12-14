@@ -256,7 +256,14 @@ function nv_save_file_config_global( )
 	$content_config .= "\$global_config['engine_allowed']=" . nv_var_export( $engine_allowed ) . ";\n";
 	$content_config .= "\n";
 
-	$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
+	$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
+	$tmp_array = array( );
+	$lang_array_exit = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}+$/" );
+	foreach( $lang_array_exit as $lang )
+	{
+		$tmp_array[$lang] = $language_array[$lang];
+	}
+	unset( $language_array );
 	$content_config .= "\$language_array=" . nv_var_export( $tmp_array ) . ";\n";
 
 	$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/br.ini', true );
