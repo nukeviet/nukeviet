@@ -179,7 +179,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		}
 		if( ! empty( $filtersql ) )
 		{
-			list( $data_str ) = $db->sql_fetchrow( $db->sql_query( "SELECT AES_DECRYPT('" . mysql_real_escape_string( nv_base64_decode( $filtersql ) ) . "', '" . md5( $global_config['sitekey'] . $client_info['session_id'] ) . "')" ) );
+			$data_str = $crypt->aes_decrypt( nv_base64_decode( $filtersql ), md5( $global_config['sitekey'] . $client_info['session_id'] ) );
 			if( ! empty( $data_str ) )
 			{
 				$sql .= " AND " . $data_str;

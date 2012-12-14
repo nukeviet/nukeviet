@@ -707,16 +707,4 @@ function nv_getModVersion( $updatetime = 3600 )
 	return $xmlcontent;
 }
 
-/**
- * nv_encrypt_filtersql()
- *
- * @param string $filtersql
- * @return
- */
-function nv_encrypt_filtersql( $filtersql )
-{
-	global $db, $global_config, $client_info;
-	list( $filtersql ) = $db->sql_fetchrow( $db->sql_query( "SELECT AES_ENCRYPT('" . mysql_real_escape_string( $filtersql ) . "', '" . md5( $global_config['sitekey'] . $client_info['session_id'] ) . "')" ) );
-	return nv_base64_encode( $filtersql );
-}
 ?>
