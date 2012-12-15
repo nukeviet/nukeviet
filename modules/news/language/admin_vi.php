@@ -27,6 +27,7 @@ $lang_module['move'] = 'Di chuyển bài viết';
 $lang_module['save_temp'] = 'Lưu bài viết không đăng';
 $lang_module['publtime'] = 'Đăng bài viết';
 $lang_module['exptime'] = 'Cho hết hạn bài viết';
+$lang_module['status_action_0'] = 'Chuyển sang chờ duyệt';
 $lang_module['status'] = 'Trạng thái';
 $lang_module['status_0'] = 'Chờ duyệt';
 $lang_module['status_1'] = 'Xuất bản';

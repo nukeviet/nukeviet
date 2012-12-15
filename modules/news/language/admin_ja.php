@@ -27,6 +27,7 @@ $lang_module['move'] = '移動';
 $lang_module['save_temp'] = '下書き保存';
 $lang_module['publtime'] = '投稿';
 $lang_module['exptime'] = '期限切れにする。';
+$lang_module['status_action_0'] = '承認のために待機するようにスイッチ';
 $lang_module['status'] = 'ステータス';
 $lang_module['status_0'] = '承認を待ている。';
 $lang_module['status_1'] = '出版';
