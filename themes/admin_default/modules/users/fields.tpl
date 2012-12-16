@@ -332,20 +332,20 @@
     function nv_choice_fields_additem()
     {
         items++;
-        var nclass = (items % 2 == 0) ? " class=\"second\"" : "";
-        var newitem = "<tbody" + nclass + "><tr align=\"center\">";
-        newitem += "	<td>" + items + "</td>";
-        newitem += "	<td><input class=\"validalphanumeric\" type=\"text\" value=\"\" name=\"field_choice[" + items + "]\" style=\"width:100px\"></td>";
-        newitem += "	<td><input type=\"text\" value=\"\" name=\"field_choice_text[" + items + "]\" style=\"width:350px\"></td>";
-        newitem += "	<td><input type=\"radio\" value=\"" + items + "\" name=\"default_value_choice\"></td>";
-        newitem += "	</tr>";
-        newitem += "</tbody>";
-        $("#choiceitems").append(newitem);
+        var nclass = (items % 2 == 0) ? ' class="second"' : '';
+        var newitem = '<tbody' + nclass + '><tr align="center">';
+        newitem += '	<td>' + items + '</td>';
+        newitem += '	<td><input class="validalphanumeric" type="text" value="" name="field_choice[' + items + ']" style="width:100px"></td>';
+        newitem += '	<td><input type="text" value="" name="field_choice_text[' + items + ']" style="width:350px"></td>';
+        newitem += '	<td><input type="radio" value="' + items + '" name="default_value_choice"></td>';
+        newitem += '	</tr>';
+        newitem += '</tbody>';
+        $('#choiceitems').append(newitem);
     }
 
     function nv_show_list_field()
     {
-        $("#module_show_list").html("<center><img src=\"{NV_BASE_SITEURL}images/load_bar.gif\"</center>").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=fields&qlist=1&nocache=" + new Date().getTime());
+        $('#module_show_list').html('<center><img alt="" src="{NV_BASE_SITEURL}images/load_bar.gif"></center>').load('{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=fields&qlist=1&nocache=' + new Date().getTime());
         return;
     }
 
