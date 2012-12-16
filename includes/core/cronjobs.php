@@ -90,8 +90,8 @@ if ($db->sql_numrows( $cron_result ))
 
 $image = imagecreate( 1, 1 );
 Header( "Content-type: image/jpg" );
-ImageJPEG( $image, '', 0 );
-ImageDestroy( $image );
+imagejpeg( $image, null, 80 );
+imagedestroy( $image );
 die();
 
 ?>
