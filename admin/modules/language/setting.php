@@ -145,7 +145,7 @@ while( list( $key, $value ) = each( $language_array ) )
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&amp;dirlang=" . $key . "&amp;checksess=" . md5( "readallfile" . session_id( ) ) . "\">" . $lang_module['nv_admin_read_all'] . "</a>";
 	}
 
-	if( in_array( $key, $lang_array_data_exit ) )
+	if( in_array( $key, $lang_array_data_exit ) AND in_array( 'write', $allow_func ) )
 	{
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $key . "&amp;checksess=" . md5( "writeallfile" . session_id( ) ) . "\">" . $lang_module['nv_admin_write'] . "</a>";
 	}
@@ -155,7 +155,7 @@ while( list( $key, $value ) = each( $language_array ) )
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=download&amp;dirlang=" . $key . "&amp;checksess=" . md5( "downloadallfile" . session_id( ) ) . "\">" . $lang_module['nv_admin_download'] . "</a>";
 	}
 
-	if( ! empty( $arr_lang_func ) and ! in_array( $key, $global_config['allow_adminlangs'] ) )
+	if( ! empty( $arr_lang_func ) and ! in_array( $key, $global_config['allow_adminlangs'] ) AND in_array( 'delete', $allow_func ) )
 	{
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delete&amp;dirlang=" . $key . "&amp;checksess=" . md5( "deleteallfile" . session_id( ) ) . "\">" . $lang_module['nv_admin_delete'] . "</a>";
 	}
