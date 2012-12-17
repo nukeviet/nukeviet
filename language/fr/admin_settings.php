@@ -199,7 +199,6 @@ $lang_module['captcha_type'] = 'Type de captcha';
 $lang_module['captcha_type_0'] = 'Défaut captcha';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
 $lang_module['allow_switch_mobi_des'] = 'Échange possible de thème de mobile et de bureau';
-$lang_module['smtp_pass_note'] = 'Attention: mot de passe SMTP n\'est pas encrypté dans a base de donnée';
 $lang_module['ftp_auto_detect_root'] = 'Détection automatique';
 $lang_module['ftp_error_full'] = 'Rentrer complètement les infos pour détecter automatiquement Remote path';
 $lang_module['ftp_error_detect_root'] = 'Il est impossible de déterminer, merci de vérifier l\'identifiant et le mot de passe';

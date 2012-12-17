@@ -198,7 +198,6 @@ $lang_module['captcha_type'] = 'Captcha type';
 $lang_module['captcha_type_0'] = 'Default captcha';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
 $lang_module['allow_switch_mobi_des'] = 'Allow to switch mobile, desktop theme';
-$lang_module['smtp_pass_note'] = 'Note: SMTP password is not encrypted in the database.';
 $lang_module['ftp_auto_detect_root'] = 'Auto detection';
 $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detection the Remote path';
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';

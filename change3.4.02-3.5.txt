@@ -215,4 +215,6 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 	$db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_module` SET `checksum` = '" . $checksum . "' WHERE `mid` = " . $row['mid'] );
 }
 
+12) Mã hóa mật khẩu smtp, ftp: Quản trị tối cao cần thiết lập lại hai thông số này
+
 note: fix commit git push -f

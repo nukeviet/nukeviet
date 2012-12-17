@@ -199,7 +199,6 @@ $lang_module['captcha_type'] = 'タイプのCAPTCHA';
 $lang_module['captcha_type_0'] = 'デフォルトCaptcha';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
 $lang_module['allow_switch_mobi_des'] = 'モバイル、デスクトップテーマを切り替えることができます。';
-$lang_module['smtp_pass_note'] = '注：SMTPパスワードがデータベース内で暗号化されていません。';
 $lang_module['ftp_auto_detect_root'] = '自動検出';
 $lang_module['ftp_error_full'] = 'リモートパスを自動検出する為に<br />全てのパラメータを入力してください。';
 $lang_module['ftp_error_detect_root'] = '適当なパラメータを見つけることができません。あなたのユーザー名とパスワードをチェックしてください。';

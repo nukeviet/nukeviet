@@ -418,7 +418,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'smtp_ssl', '1'),
 ('sys', 'global', 'smtp_port', '465'),
 ('sys', 'global', 'smtp_username', 'user@gmail.com'),
-('sys', 'global', 'smtp_password', 'userpass'),
+('sys', 'global', 'smtp_password', ''),
 ('sys', 'global', 'allowuserreg', '1'),
 ('sys', 'global', 'allowuserlogin', '1'),
 ('sys', 'global', 'allowloginchange', '0'),

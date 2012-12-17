@@ -22,7 +22,6 @@ define( 'NV_CLASS_CRYPT', true );
  */
 class nv_Crypt
 {
-	public $_otk;
 	private $_func;
 	private $_ipad;
 	private $_opad;
@@ -37,7 +36,6 @@ class nv_Crypt
 	 */
 	function __construct( $key, $method )
 	{
-		$this->_otk = ! empty( $key ) ? true : false;
 		$this->_func = $method != 'md5' ? 'sha1' : 'md5';
 		$this->_key = call_user_func( $this->_func, $key );
 		if( isset( $key{64} ) )

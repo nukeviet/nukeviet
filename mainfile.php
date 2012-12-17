@@ -262,6 +262,11 @@ if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 {
 	include_once (NV_ROOTDIR . "/includes/core/captcha.php");
 }
+//Class ma hoa du lieu
+require (NV_ROOTDIR . '/includes/class/crypt.class.php');
+$crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
+$global_config['ftp_user_pass'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['ftp_user_pass'] ) );
+$global_config['smtp_password'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['smtp_password'] ) );
 
 //Bat dau phien lam viec cua MySQL
 require (NV_ROOTDIR . '/includes/class/mysql.class.php');
@@ -364,12 +369,6 @@ if( defined( 'NV_ADMIN' ) )
 		exit( );
 	}
 }
-
-//Class ma hoa du lieu $crypt->hash($data)
-require (NV_ROOTDIR . '/includes/class/crypt.class.php');
-$crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
-if( ! $crypt->_otk )
-	trigger_error( "sitekey not declared", 256 );
 
 //cronjobs
 if( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( 'second', 'get' ) == "cronjobs" )

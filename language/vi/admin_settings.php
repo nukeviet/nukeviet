@@ -91,7 +91,6 @@ $lang_module['outgoing_port'] = 'Cổng gửi mail';
 $lang_module['smtp_username'] = 'Tài khoản gửi mail';
 $lang_module['smtp_login'] = 'Tên Tài khoản';
 $lang_module['smtp_pass'] = 'Mật khẩu';
-$lang_module['smtp_pass_note'] = 'Chú ý: mật khẩu SMTP không được mã hóa trong CSDL.';
 $lang_module['smtp_error_openssl'] = 'Lỗi: Máy chủ của bạn không hỗ trợ gửi mail qua ssl';
 $lang_module['bot_name'] = 'Tên máy chủ ';
 $lang_module['bot_agent'] = 'UserAgent của máy chủ';
