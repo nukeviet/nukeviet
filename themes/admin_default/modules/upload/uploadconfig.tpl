@@ -72,7 +72,7 @@
 		<tfoot>
 			<tr>
 				<td colspan="2" class="center">
-					<input type="submit" value="{LANG.banip_confirm}" name="submit"/>
+					<input type="submit" value="{LANG.pubdate}" name="submit"/>
 				</td>
 			</tr>
 		</tfoot>
