@@ -130,6 +130,7 @@ $lang_module['content_bodytext'] = 'Body text';
 $lang_module['search_author'] = 'Author';
 $lang_module['content_keywords'] = 'Keywords';
 $lang_module['save_temp'] = 'Submit';
+$lang_module['save_draft'] = 'Save Draft';
 $lang_module['save_content'] = 'Published';
 $lang_module['captcha'] = 'Captcha';
 $lang_module['error_cat'] = 'Error: Select Category for article, please.';

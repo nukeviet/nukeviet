@@ -130,6 +130,7 @@ $lang_module['content_bodytext'] = 'Body text';
 $lang_module['search_author'] = 'Yazar';
 $lang_module['content_keywords'] = 'Anahtar kelimeler';
 $lang_module['save_temp'] = 'Gönder';
+$lang_module['save_draft'] = 'Taslak kaydet';
 $lang_module['save_content'] = 'Yayınlandı';
 $lang_module['captcha'] = 'Güvenlik';
 $lang_module['error_cat'] = 'Error: Select Category for article, please.';

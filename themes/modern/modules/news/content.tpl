@@ -131,6 +131,7 @@
 	<div style="width: 500px; text-align: center;">
 		<input type="hidden" name="contentid" value="{DATA.id}" />
 		<input type="hidden" name="checkss" value="{CHECKSS}" />
+		<input type="submit" value="{LANG.save_draft}" name="status4">
 		<!-- BEGIN: save_temp -->
 		<input type="submit" value="{LANG.save_temp}" name="status0">
 		<!-- END: save_temp -->
