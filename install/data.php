@@ -53,6 +53,31 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_config` (
   PRIMARY KEY (`config`)
 ) ENGINE=MyISAM";
 
+$sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_module` (
+  `mid` int(11) NOT NULL AUTO_INCREMENT,
+  `module` varchar(55) NOT NULL,
+  `lang_key` varchar(50) NOT NULL DEFAULT '',
+  `weight` int(11) NOT NULL DEFAULT '0',
+  `act_1` tinyint(4) NOT NULL DEFAULT '0',
+  `act_2` tinyint(4) NOT NULL DEFAULT '1',
+  `act_3` tinyint(4) NOT NULL DEFAULT '1',
+  `checksum` varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`mid`),
+  UNIQUE KEY `module` (`module`)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_module` 
+(`mid`, `module`, `lang_key`, `weight`, `act_1`, `act_2`, `act_3`, `checksum`) VALUES
+(1, 'siteinfo', 'mod_siteinfo', 1, 1, 1, 1, ''),
+(2, 'authors', 'mod_authors', 2, 1, 1, 1, ''),
+(3, 'settings', 'mod_settings', 3, 1, 1, 0, ''),
+(4, 'database', 'mod_database', 4, 1, 0, 0, ''),
+(5, 'webtools', 'mod_webtools', 5, 1, 0, 0, ''),
+(6, 'language', 'mod_language', 6, 1, 1, 0, ''),
+(7, 'modules', 'mod_modules', 7, 1, 1, 0, ''),
+(8, 'themes', 'mod_themes', 8, 1, 1, 0, ''),
+(9, 'upload', 'mod_upload', 9, 1, 1, 1, '')";
+
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_question` (
   `qid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '',
@@ -393,7 +418,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'smtp_ssl', '1'),
 ('sys', 'global', 'smtp_port', '465'),
 ('sys', 'global', 'smtp_username', 'user@gmail.com'),
-('sys', 'global', 'smtp_password', 'userpass'),
+('sys', 'global', 'smtp_password', ''),
 ('sys', 'global', 'allowuserreg', '1'),
 ('sys', 'global', 'allowuserlogin', '1'),
 ('sys', 'global', 'allowloginchange', '0'),

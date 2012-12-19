@@ -97,4 +97,17 @@ $lang_module['logowith'] = 'The width of the logo';
 $lang_module['logosize3'] = 'Using the original logo size, maximum size of the logo';
 $lang_module['fileimage'] = 'image';
 
+$lang_module['uploadconfig'] = 'Upload Configuration';
+$lang_module['uploadconfig_ban_ext'] = 'Forbidden Extensions';
+$lang_module['uploadconfig_ban_mime'] = 'Forbidden Mimes';
+$lang_module['uploadconfig_types'] = 'Allowed file types';
+$lang_module['sys_max_size'] = 'Your server only allows upload maximum';
+$lang_module['nv_max_size'] = 'Maximum size of uploaded file';
+$lang_module['upload_checking_mode'] = 'Upload Checking Mode';
+$lang_module['strong_mode'] = 'Hight';
+$lang_module['mild_mode'] = 'Medium';
+$lang_module['lite_mode'] = 'Low';
+$lang_module['none_mode'] = 'None';
+$lang_module['upload_checking_note'] = 'Your server does not support some functions defined file types. If you chose "Strong", you will not be able to upload files to your host';
+
 ?>

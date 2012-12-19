@@ -99,8 +99,8 @@ else
 	header("Cache-Control:");
 	header("Pragma:");
 	header("Set-Cookie:");
-	ImageJPEG( $image, '', 90 );
-	ImageDestroy( $image );
+	imagejpeg( $image, null, 80 );
+	imagedestroy( $image );
 	die();
 }
 

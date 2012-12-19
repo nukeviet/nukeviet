@@ -7,13 +7,14 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_LANG' ) )
+	die( 'Stop!!!' );
 
 $xtpl = new XTemplate( "interface.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
-$array_lang_exit = array();
+$array_lang_exit = array( );
 
 $result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
 
@@ -25,7 +26,7 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 	}
 }
 
-$select_options = array();
+$select_options = array( );
 
 foreach( $array_lang_exit as $langkey )
 {
@@ -49,16 +50,16 @@ $sql = "SELECT `idfile`, `module`, `admin_file`, `langtype`, `author_" . $dirlan
 $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) == 0 )
-{	
-	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&dirlang=" . $dirlang . "&checksess=" . md5( "readallfile" . session_id() ) );
+{
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&dirlang=" . $dirlang . "&checksess=" . md5( "readallfile" . session_id( ) ) );
 
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
-	
-	include ( NV_ROOTDIR . "/includes/header.php" );
+
+	include (NV_ROOTDIR . "/includes/header.php");
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
-	exit();
+	include (NV_ROOTDIR . "/includes/footer.php");
+	exit( );
 }
 
 $page_title = $lang_module['nv_lang_interface'] . ": " . $language_array[$dirlang]['name'];
@@ -68,20 +69,20 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 {
 	switch( $admin_file )
 	{
-		case '1':
+		case '1' :
 			$langsitename = $lang_module['nv_lang_admin'];
 			break;
-		case '0':
+		case '0' :
 			$langsitename = $lang_module['nv_lang_site'];
 			break;
-		default:
+		default :
 			$langsitename = $admin_file;
 			break;
 	}
 
 	if( empty( $author_lang ) )
 	{
-		$array_translator = array();
+		$array_translator = array( );
 		$array_translator['author'] = "";
 		$array_translator['createdate'] = "";
 		$array_translator['copyright'] = "";
@@ -92,26 +93,28 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 	{
 		eval( '$array_translator = ' . $author_lang . ';' );
 	}
-		
+
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+		'class' => (++$a % 2) ? " class=\"second\"" : "",
 		'stt' => $a,
 		'module' => $module,
 		'langsitename' => $langsitename,
 		'author' => $array_translator['author'],
 		'createdate' => $array_translator['createdate'],
-		'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id() ),
-		'url_export' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id() )
+		'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id( ) ),
+		'url_export' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id( ) )
 	) );
-	
+	if( in_array( 'write', $allow_func ) )
+	{
+		$xtpl->parse( 'main.loop.write' );
+	}
 	$xtpl->parse( 'main.loop' );
 }
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include (NV_ROOTDIR . "/includes/header.php");
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
-
+include (NV_ROOTDIR . "/includes/footer.php");
 ?>

@@ -85,4 +85,17 @@ $lang_module['nopreview'] = 'Náhled není';
 $lang_module['errorNewSize'] = 'Pouze velikost šířka :10-%d px, výška: 10-%d px';
 $lang_module['maxSizeSize'] = 'Maximal :%dx%dpx';
 
+$lang_module['uploadconfig'] = 'Konfigurace nahravaní';
+$lang_module['uploadconfig_ban_ext'] = 'rozšíření zakazáno';
+$lang_module['uploadconfig_ban_mime'] = 'Zakazáno mime';
+$lang_module['uploadconfig_types'] = 'Typ soubor je povolen';
+$lang_module['sys_max_size'] = 'Vaše server je povolen stáhnout soubor, který je obsazen maximal';
+$lang_module['nv_max_size'] = 'Obsah souboru , který byl nahravan';
+$lang_module['upload_checking_mode'] = 'Zkontrolovat nahrávat soubory';
+$lang_module['strong_mode'] = 'Silný';
+$lang_module['mild_mode'] = 'normání';
+$lang_module['lite_mode'] = 'Slabý';
+$lang_module['none_mode'] = 'Nemá';
+$lang_module['upload_checking_note'] = 'Server nepodporuje tento format.  Budete-li pokračovat, soubor nebude nahrán';
+
 ?>

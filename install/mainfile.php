@@ -80,7 +80,7 @@ set_error_handler( array(
 ) );
 
 //Ket noi voi cac file cau hinh, function va template
-require (NV_ROOTDIR . '/includes/ini.php');
+require (NV_ROOTDIR . '/install/ini.php');
 require (NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php');
 require (NV_ROOTDIR . '/includes/utf8/utf8_functions.php');
 require (NV_ROOTDIR . '/includes/core/filesystem_functions.php');
@@ -170,9 +170,8 @@ if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 	include_once (NV_ROOTDIR . "/includes/core/captcha.php");
 }
 
-//Class ma hoa du lieu $crypt->hash($data)
+//Class ma hoa du lieu
 require (NV_ROOTDIR . '/includes/class/crypt.class.php');
 $crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
-if( ! $crypt->_otk )
-	trigger_error( "sitekey not declared", 256 );
+
 ?>
