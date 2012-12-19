@@ -12,10 +12,10 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 $ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 
-$myini = array( //
-	'types' => array( '' ), //
-	'exts' => array( '' ), //
-	'mimes' => array( '' ) //
+$myini = array(
+	'types' => array( '' ), 
+	'exts' => array( '' ), 
+	'mimes' => array( '' ) 
 );
 
 foreach( $ini as $type => $extmime )

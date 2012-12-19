@@ -32,6 +32,12 @@
 	</tr>
 
 	<tr>
+		<th scope="row" class="specalt">{LANG.mcrypt_support}</th>
+		<td class="alt">{LANG.request}</td>
+		<td class="alt"><span class="highlight_green">{DATA_REQUEST.mcrypt_support}</span></td>
+	</tr>
+
+	<tr>
 		<th scope="row" class="spec">{LANG.session_support}</th>
 		<td>{LANG.request}</td>
 		<td><span class="highlight_green">{DATA_REQUEST.session_support}</span></td>

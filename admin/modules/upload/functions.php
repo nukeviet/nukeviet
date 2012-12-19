@@ -7,24 +7,53 @@
  * @createdate 12/31/2009 2:29
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
+	die( 'Stop!!!' );
 
 if( defined( 'NV_IS_SPADMIN' ) )
 {
-	$submenu['config'] = $lang_global['mod_settings'];
+	$submenu['config'] = $lang_module['configlogo'];
+	if( defined( 'NV_IS_GODADMIN' ) )
+	{
+		$submenu['uploadconfig'] = $lang_module['uploadconfig'];
+	}
 }
 
-if( $module_name != "upload" ) return;
+if( $module_name != "upload" )
+	return;
 
-$menu_top = array( "title" => $module_name, "module_file" => "", "custom_title" => $lang_global['mod_upload'] );
+$menu_top = array(
+	"title" => $module_name,
+	"module_file" => "",
+	"custom_title" => $lang_global['mod_upload']
+);
 
 define( 'NV_IS_FILE_ADMIN', true );
 
-$allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'quickupload', 'upload', 'addlogo' );
+$allow_func = array(
+	'main',
+	'imglist',
+	'delimg',
+	'createimg',
+	'dlimg',
+	'renameimg',
+	'moveimg',
+	'folderlist',
+	'delfolder',
+	'renamefolder',
+	'createfolder',
+	'quickupload',
+	'upload',
+	'addlogo'
+);
 
 if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$allow_func[] = 'config';
+	if( defined( 'NV_IS_GODADMIN' ) )
+	{
+		$allow_func[] = 'uploadconfig';
+	}
 }
 
 /**
@@ -38,12 +67,13 @@ function nv_check_allow_upload_dir( $dir )
 	global $site_mods, $allow_upload_dir, $admin_info;
 
 	$dir = trim( $dir );
-	if( empty( $dir ) ) return array();
+	if( empty( $dir ) )
+		return array( );
 
 	$dir = str_replace( "\\", "/", $dir );
 	$dir = rtrim( $dir, "/" );
 	$arr_dir = explode( "/", $dir );
-	$level = array();
+	$level = array( );
 
 	if( in_array( $arr_dir[0], $allow_upload_dir ) )
 	{
@@ -55,7 +85,7 @@ function nv_check_allow_upload_dir( $dir )
 			{
 				$level['create_dir'] = true;
 			}
-			
+
 			if( $admin_info['allow_modify_subdirectories'] and ! in_array( $dir, $allow_upload_dir ) )
 			{
 				$level['rename_dir'] = true;
@@ -66,12 +96,12 @@ function nv_check_allow_upload_dir( $dir )
 					unset( $level['rename_dir'], $level['delete_dir'] );
 				}
 			}
-			
+
 			if( ! empty( $admin_info['allow_files_type'] ) )
 			{
 				$level['upload_file'] = true;
 			}
-			
+
 			if( $admin_info['allow_modify_files'] )
 			{
 				$level['create_file'] = true;
@@ -88,18 +118,18 @@ function nv_check_allow_upload_dir( $dir )
 			{
 				$level['create_dir'] = true;
 			}
-			
+
 			if( isset( $arr_dir[2] ) and ! empty( $arr_dir[2] ) and $admin_info['allow_modify_subdirectories'] )
 			{
 				$level['rename_dir'] = true;
 				$level['delete_dir'] = true;
 			}
-			
+
 			if( ! empty( $admin_info['allow_files_type'] ) )
 			{
 				$level['upload_file'] = true;
 			}
-			
+
 			if( $admin_info['allow_modify_files'] )
 			{
 				$level['create_file'] = true;
@@ -130,10 +160,12 @@ function nv_check_path_upload( $path )
 
 	$path = htmlspecialchars( trim( $path ), ENT_QUOTES );
 	$path = rtrim( $path, "/" );
-	if( empty( $path ) ) return "";
+	if( empty( $path ) )
+		return "";
 
 	$path = NV_ROOTDIR . "/" . $path;
-	if( ( $path = realpath( $path ) ) === false ) return "";
+	if( ($path = realpath( $path )) === false )
+		return "";
 
 	$path = str_replace( "\\", "/", $path );
 	$path = str_replace( NV_ROOTDIR . "/", "", $path );
@@ -149,7 +181,8 @@ function nv_check_path_upload( $path )
 		}
 	}
 
-	if( $result === false ) return "";
+	if( $result === false )
+		return "";
 	return $path;
 }
 
@@ -162,15 +195,18 @@ function nv_check_path_upload( $path )
 function nv_delete_cache_upload( $path )
 {
 	$tempFile = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . md5( $path );
-	
+
 	if( file_exists( $tempFile ) )
 	{
 		@nv_deletefile( $tempFile );
 	}
 
 	$files = scandir( NV_ROOTDIR . '/' . $path );
-	$files = array_diff( $files, array( ".", ".." ) );
-	
+	$files = array_diff( $files, array(
+		".",
+		".."
+	) );
+
 	if( sizeof( $files ) )
 	{
 		foreach( $files as $file )
@@ -212,22 +248,27 @@ function nv_get_viewImage( $fileName, $w = 80, $h = 80 )
 		return array(
 			$viewFile,
 			$size[0],
-			$size[1] );
+			$size[1]
+		);
 	}
 
-	include_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+	include_once (NV_ROOTDIR . "/includes/class/image.class.php");
 	$image = new image( NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 	$image->resizeXY( $w, $h );
 	$image->save( NV_ROOTDIR . '/' . $viewDir, $md5_view_image, 75 );
 	$create_Image_info = $image->create_Image_info;
 	$error = $image->error;
-	$image->close();
-	
+	$image->close( );
+
 	if( empty( $error ) )
 	{
-		return array( $viewDir . '/' . basename( $create_Image_info['src'] ), $create_Image_info['width'], $create_Image_info['height'] );
+		return array(
+			$viewDir . '/' . basename( $create_Image_info['src'] ),
+			$create_Image_info['width'],
+			$create_Image_info['height']
+		);
 	}
-	
+
 	return false;
 }
 
@@ -242,16 +283,16 @@ function nv_getFileInfo( $pathimg, $file )
 {
 	global $array_images, $array_flash, $array_archives, $array_documents;
 
-	clearstatcache();
+	clearstatcache( );
 
 	unset( $matches );
 	preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $file, $matches );
 
-	$info = array();
+	$info = array( );
 	$info[0] = $file;
 	if( isset( $file{17} ) )
 	{
-		$info[0] = substr( $matches[1], 0, ( 13 - strlen( $matches[2] ) ) ) . "..." . $matches[2];
+		$info[0] = substr( $matches[1], 0, (13 - strlen( $matches[2] )) ) . "..." . $matches[2];
 	}
 
 	$info[1] = $matches[2];
@@ -265,7 +306,7 @@ function nv_getFileInfo( $pathimg, $file )
 	$info[6] = 32;
 	$info[7] = "|";
 	$ext = strtolower( $matches[2] );
-	
+
 	if( in_array( $ext, $array_images ) )
 	{
 		$size = @getimagesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
@@ -277,7 +318,7 @@ function nv_getFileInfo( $pathimg, $file )
 
 		if( $size[0] > 80 or $size[1] > 80 )
 		{
-			if( ( $_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 ) ) !== false )
+			if( ($_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 )) !== false )
 			{
 				$info[4] = $_src[0];
 				$info[5] = $_src[1];
@@ -343,7 +384,7 @@ function nv_filesList( $pathimg, $refresh, $newFile = "", $delFile = "" )
 	$md5 = md5( $pathimg );
 	$tempFile = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . $md5;
 	$file_exists = file_exists( $tempFile );
-	$results = array();
+	$results = array( );
 
 	if( $file_exists )
 	{
@@ -361,10 +402,11 @@ function nv_filesList( $pathimg, $refresh, $newFile = "", $delFile = "" )
 		{
 			if( $dh = opendir( NV_ROOTDIR . "/" . $pathimg ) )
 			{
-				$files = array();
-				while( ( $file = readdir( $dh ) ) !== false )
+				$files = array( );
+				while( ($file = readdir( $dh )) !== false )
 				{
-					if( in_array( $file, $array_hidefolders ) ) continue;
+					if( in_array( $file, $array_hidefolders ) )
+						continue;
 
 					if( preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $file ) )
 					{
@@ -378,8 +420,10 @@ function nv_filesList( $pathimg, $refresh, $newFile = "", $delFile = "" )
 						}
 						else
 						{
-							if( isset( $results[$file][8] ) ) $info[8] = $results[$file][8];
-							if( isset( $results[$file][9] ) ) $info[9] = $results[$file][9];
+							if( isset( $results[$file][8] ) )
+								$info[8] = $results[$file][8];
+							if( isset( $results[$file][9] ) )
+								$info[9] = $results[$file][9];
 						}
 
 						$results[$file] = $info;
@@ -417,25 +461,54 @@ function nv_filesList( $pathimg, $refresh, $newFile = "", $delFile = "" )
 	return $results;
 }
 
-$allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
-$array_hidefolders = array( ".", "..", "index.html", ".htaccess", ".tmp" );
+$allow_upload_dir = array(
+	'images',
+	NV_UPLOADS_DIR
+);
+$array_hidefolders = array(
+	".",
+	"..",
+	"index.html",
+	".htaccess",
+	".tmp"
+);
 
-$array_images = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
-$array_flash = array( 'swf', 'swc', 'flv' );
-$array_archives = array( 'rar', 'zip', 'tar' );
-$array_documents = array( 'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' );
+$array_images = array(
+	"gif",
+	"jpg",
+	"jpeg",
+	"pjpeg",
+	"png"
+);
+$array_flash = array(
+	'swf',
+	'swc',
+	'flv'
+);
+$array_archives = array(
+	'rar',
+	'zip',
+	'tar'
+);
+$array_documents = array(
+	'doc',
+	'xls',
+	'chm',
+	'pdf',
+	'docx',
+	'xlsx'
+);
 
 $dirlistCache = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/dirlist-" . md5( implode( $allow_upload_dir ) );
 
-if( ! file_exists( $dirlistCache ) or ( $nv_Request->isset_request( 'dirListRefresh', 'get' ) and filemtime( $dirlistCache ) < ( NV_CURRENTTIME - 30 ) ) )
+if( ! file_exists( $dirlistCache ) or ($nv_Request->isset_request( 'dirListRefresh', 'get' ) and filemtime( $dirlistCache ) < (NV_CURRENTTIME - 30)) )
 {
-	$dirlist = nv_loadUploadDirList();
+	$dirlist = nv_loadUploadDirList( );
 }
 else
 {
 	$dirlist = file_get_contents( $dirlistCache );
 	$dirlist = unserialize( $dirlist );
 }
-$global_config['upload_logo'] = $db->unfixdb(nv_unhtmlspecialchars( $global_config['upload_logo']));
-
+$global_config['upload_logo'] = $db->unfixdb( nv_unhtmlspecialchars( $global_config['upload_logo'] ) );
 ?>

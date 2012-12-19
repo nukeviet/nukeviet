@@ -97,4 +97,17 @@ $lang_module['logowith'] = 'Largeur de logo est égale';
 $lang_module['logosize3'] = 'Utiliser la taille originale du logo, taille maximum du logo';
 $lang_module['fileimage'] = 'image';
 
+$lang_module['uploadconfig'] = 'Configuration du Transfert';
+$lang_module['uploadconfig_ban_ext'] = 'Extensioins interdites';
+$lang_module['uploadconfig_ban_mime'] = 'Types de Mime interdits';
+$lang_module['uploadconfig_types'] = 'Types de fichier autorisés';
+$lang_module['sys_max_size'] = 'Taille maximum du fichier transféré autorisé par votre serveur';
+$lang_module['nv_max_size'] = 'Taille maximum du fichier transféré';
+$lang_module['upload_checking_mode'] = 'Upload Checking Mode';
+$lang_module['strong_mode'] = 'Strict';
+$lang_module['mild_mode'] = 'Moyen';
+$lang_module['lite_mode'] = 'Faible';
+$lang_module['none_mode'] = 'None';
+$lang_module['upload_checking_note'] = 'Votre serveur ne supporte pas certaines fonctions déterminant le type de fichier. Si vous choisissez «renforcé», vous ne serez pas en mesure de télécharger des fichiers sur votre hôte';
+
 ?>

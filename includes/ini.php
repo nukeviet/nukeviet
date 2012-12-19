@@ -49,12 +49,7 @@ if( $sys_info['ini_set_support'] )
 }
 
 $sys_info['safe_mode'] = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
-$sys_info['php_support'] = ( PHP_VERSION >= 5.2 ) ? 1 : 0;
-$sys_info['mysql_support'] = ( extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' ) ) ? 1 : 0;
-
-$sys_info['gd_support'] = ( extension_loaded( 'gd' ) ) ? 1 : 0;
 $sys_info['zlib_support'] = ( extension_loaded( 'zlib' ) ) ? 1 : 0;
-$sys_info['session_support'] = ( extension_loaded( 'session' ) ) ? 1 : 0;
 $sys_info['mb_support'] = ( extension_loaded( 'mbstring' ) ) ? 1 : 0;
 $sys_info['iconv_support'] = ( extension_loaded( 'iconv' ) ) ? 1 : 0;
 $sys_info['allowed_set_time_limit'] = ( ! $sys_info['safe_mode'] and function_exists( "set_time_limit" ) and ! in_array( 'set_time_limit', $sys_info['disable_functions'] ) ) ? 1 : 0;
@@ -62,37 +57,42 @@ $sys_info['os'] = strtoupper( ( function_exists( "php_uname" ) and ! in_array( '
 
 $sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' ) ) ? 1 : 0;
 $sys_info['curl_support'] = ( extension_loaded( 'curl' ) and ( empty( $sys_info['disable_functions'] ) or ( ! empty( $sys_info['disable_functions'] ) and ! preg_grep( '/^curl\_/', $sys_info['disable_functions'] ) ) ) ) ? 1 : 0;
-$sys_info['opendir_support'] = ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) ? 1 : 0;
 $sys_info['ftp_support'] = ( function_exists( "ftp_connect" ) and ! in_array( 'ftp_connect', $sys_info['disable_functions'] ) and function_exists( "ftp_chmod" ) and ! in_array( 'ftp_chmod', $sys_info['disable_functions'] ) and function_exists( "ftp_mkdir" ) and ! in_array( 'ftp_mkdir', $sys_info['disable_functions'] ) and function_exists( "ftp_chdir" ) and ! in_array( 'ftp_chdir', $sys_info['disable_functions'] ) and function_exists( "ftp_nlist" ) and ! in_array( 'ftp_nlist', $sys_info['disable_functions'] ) ) ? 1 : 0;
 
 //Neu he thong khong ho tro php se bao loi
-if( ! $sys_info['php_support'] )
+if( PHP_VERSION < 5.2 )
 {
 	trigger_error( "You are running an unsupported PHP version. Please upgrade to PHP 5.2 or higher before trying to install Nukeviet Portal", 256 );
 }
 
 //Neu he thong khong ho tro MySQL se bao loi
-if( ! $sys_info['mysql_support'] )
+if( ! ( extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' ) ) )
 {
 	trigger_error( "MySQL is not supported", 256 );
 }
 
 //Neu he thong khong ho tro opendir se bao loi
-if( ! $sys_info['opendir_support'] )
+if( ! ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) )
 {
 	trigger_error( "Opendir function is not supported", 256 );
 }
 
 //Neu he thong khong ho tro GD se bao loi
-if( ! $sys_info['gd_support'] )
+if( ! ( extension_loaded( 'gd' ) ) )
 {
 	trigger_error( "GD not installed", 256 );
 }
 
 //Neu he thong khong ho tro session se bao loi
-if( ! $sys_info['session_support'] )
+if( ! extension_loaded( 'session' ) )
 {
 	trigger_error( "Session object not supported", 256 );
+}
+
+//Neu he thong khong ho tro mcrypt library se bao loi
+if( ! function_exists( 'mcrypt_encrypt' ) )
+{
+	trigger_error( "Mcrypt library not available", 256 );
 }
 
 //Xac dinh tien ich mo rong lam viec voi string

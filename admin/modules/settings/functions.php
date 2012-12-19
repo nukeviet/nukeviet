@@ -26,7 +26,6 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$submenu['robots'] = $lang_module['robots'];
 	$submenu['bots'] = $lang_module['bots_config'];
 	$submenu['variables'] = $lang_module['variables'];
-	$submenu['uploadconfig'] = $lang_module['uploadconfig'];
 	$submenu['statistics'] = $lang_module['global_statistics'];
 }
 
@@ -45,7 +44,6 @@ if( $module_name == "settings" )
 			'pagetitle',
 			'metatags',
 			'security',
-			'uploadconfig',
 			'cronjobs',
 			'cronjobs_add',
 			'cronjobs_edit',

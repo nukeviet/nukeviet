@@ -15,7 +15,7 @@
 		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
+	<tbody {ROW.class}>
 		<tr>
 			<td class="center">{ROW.stt}</td>
 			<td>{ROW.module}</td>
@@ -24,8 +24,10 @@
 			<td class="center">{ROW.createdate}</td>
 			<td class="center">
 				<span class="edit_icon"><a href="{ROW.url_edit}" title="{LANG.nv_admin_edit}">{LANG.nv_admin_edit}</a></span>
+				<!-- BEGIN: write -->
 				- 
 				<span class="default_icon"><a href="{ROW.url_export}" title="{LANG.nv_admin_write}">{LANG.nv_admin_write}</a></span>
+				<!-- END: write -->
 			</td>
 		</tr>
 	</tbody>

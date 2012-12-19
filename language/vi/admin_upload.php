@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -84,6 +85,8 @@ $lang_module['errorNotRenameFile'] = 'Lỗi: Vì một lý do nào đó hệ th�
 $lang_module['nopreview'] = 'Không hỗ trợ xem trước loại tệp tin này.';
 $lang_module['errorNewSize'] = 'Bạn chỉ có thể tạo ảnh mới với chiều rộng: 10 - %d px, chiều cao: 10 - %d px';
 $lang_module['maxSizeSize'] = 'Kích cỡ tối đa: %dx%dpx';
+
+$lang_module['configlogo'] = 'Cấu hình chèn logo';
 $lang_module['addlogo'] = 'Thêm Logo';
 $lang_module['addlogosave'] = 'Lưu thay đổi';
 $lang_module['notlogo'] = 'Lỗi: Hệ thống không tìm thấy file Logo';
@@ -96,5 +99,19 @@ $lang_module['imagewith'] = 'Nếu chiều rộng ảnh';
 $lang_module['logowith'] = 'Chiều rộng của logo bằng';
 $lang_module['logosize3'] = 'Sử dụng nguyên kích thước logo, Kích thước tối đa của logo bằng';
 $lang_module['fileimage'] = 'ảnh';
+
+$lang_module['uploadconfig'] = 'Cấu hình upload';
+$lang_module['uploadconfig_ban_ext'] = 'Phần mở rộng bị cấm';
+$lang_module['uploadconfig_ban_mime'] = 'Loại mime bị cấm';
+$lang_module['uploadconfig_types'] = 'Loại files cho phép';
+$lang_module['sys_max_size'] = 'Server của bạn chỉ cho phép tải file có dung lượng tối đa';
+$lang_module['nv_max_size'] = 'Dung lượng tối đa của file tải lên';
+$lang_module['nv_max_width_height'] = 'Kích thước tối đa của file tải lên';
+$lang_module['upload_checking_mode'] = 'Kiểu kiểm tra file tải lên';
+$lang_module['strong_mode'] = 'Mạnh';
+$lang_module['mild_mode'] = 'Vừa phải';
+$lang_module['lite_mode'] = 'Yếu';
+$lang_module['none_mode'] = 'Không';
+$lang_module['upload_checking_note'] = 'Máy chủ của bạn không hỗ trợ một số hàm xác định loại file. Nếu chọn "Mạnh", bạn sẽ không thể upload file lên host';
 
 ?>
