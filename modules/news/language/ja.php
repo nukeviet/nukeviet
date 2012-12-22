@@ -130,6 +130,7 @@ $lang_module['content_bodytext'] = '詳細内容';
 $lang_module['search_author'] = '記事作者';
 $lang_module['content_keywords'] = 'キーワード';
 $lang_module['save_temp'] = 'サイト管理へ記事を送ります。';
+$lang_module['save_draft'] = '下書きを保存';
 $lang_module['save_content'] = '記事を投稿';
 $lang_module['captcha'] = 'Captcha';
 $lang_module['error_cat'] = 'エラー：この記事はカテゴリを選択しません。';

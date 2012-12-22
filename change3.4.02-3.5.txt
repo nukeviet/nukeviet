@@ -115,3 +115,10 @@ $ip_update = "";// IP của máy tính thực hiện nâng cấp
 Sau đó truy cập site theo địa chỉ: http://mysite.com/update.php Thực hiện theo hướng dẫn
 
 note: fix commit git push -f
+
+9. Cập nhật thêm trạng thái cho module News.
+Nếu theme không sử dụng default hoặc modern thì mở file content.tpl của themes/ten-theme/modules/news (nếu có) 
+tìm: 
+<input type="hidden" name="checkss" value="{CHECKSS}" /> 
+Thêm vào sau đoạn:
+<input type="submit" value="{LANG.save_draft}" name="status4">

@@ -130,6 +130,7 @@ $lang_module['content_bodytext'] = 'Détails';
 $lang_module['search_author'] = 'Auteur';
 $lang_module['content_keywords'] = 'mots clés pour les moteurs de recherche';
 $lang_module['save_temp'] = 'Soumettre';
+$lang_module['save_draft'] = 'Enregistrer le brouillon';
 $lang_module['save_content'] = 'Publier';
 $lang_module['captcha'] = 'Code de sécurité';
 $lang_module['error_cat'] = 'Erreur: sélectionnez la catégorie';

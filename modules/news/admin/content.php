@@ -266,7 +266,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$rowcontent['listcatid'] = implode( ",", $catids );
 
-	$rowcontent['status'] = ( $nv_Request->isset_request( 'status1', 'post' ) ) ? 1 : 0;
+	$rowcontent['status'] = ( $nv_Request->isset_request( 'status1', 'post' ) ) ? 1 : 4;
 
 	if( $rowcontent['status'] and $rowcontent['publtime'] > NV_CURRENTTIME )
 	{
