@@ -463,8 +463,12 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		}
 		else
 		{
-			$rowcontent['status'] = ( $array_post_user['postcontent'] and $nv_Request->isset_request( 'status1', 'post' ) ) ? 1 : 0;
-
+			if (($array_post_user['postcontent']) && $nv_Request -> isset_request('status1', 'post'))
+				$rowcontent['status'] = 1;
+			elseif ($nv_Request -> isset_request('status0', 'post'))
+				$rowcontent['status'] = 0;
+			elseif ($nv_Request -> isset_request('status4', 'post'))
+				$rowcontent['status'] = 4;
 			$rowcontent['catid'] = in_array( $rowcontent['catid'], $catids ) ? $rowcontent['catid'] : $catids[0];
 			$rowcontent['bodytext'] = nv_news_get_bodytext( $rowcontent['bodyhtml'] );
 

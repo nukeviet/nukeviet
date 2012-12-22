@@ -120,6 +120,8 @@ $array_status_view = array(
 	"1" => $lang_module['status_1'],
 	"2" => $lang_module['status_2'],
 	"3" => $lang_module['status_3'],
+	"4" => $lang_module['status_4'],
+	"5" => $lang_module['status_5'],
 	);
 
 if( ! in_array( $stype, array_keys( $array_search ) ) )
@@ -340,11 +342,13 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 }
 $array_list_action = array(
 	'delete' => $lang_global['delete'],
+	're-published' => $lang_module['re_published'],
 	'publtime' => $lang_module['publtime'],
 	'exptime' => $lang_module['exptime'],
 	'waiting' => $lang_module['status_action_0'] );//chuyen sang cho duyet
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
 {
+	$array_list_action['declined'] = $lang_module['declined'];
 	$array_list_action['addtoblock'] = $lang_module['addtoblock'];
 	$array_list_action['addtotopics'] = $lang_module['addtotopics'];
 }

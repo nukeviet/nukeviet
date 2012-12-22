@@ -130,6 +130,7 @@ $lang_module['content_bodytext'] = 'Detaily obsahu';
 $lang_module['search_author'] = 'author';
 $lang_module['content_keywords'] = 'Vyhledávání podle klíčových slov pro servery';
 $lang_module['save_temp'] = 'Odeslat článek na správce webu';
+$lang_module['save_draft'] = 'Uložit koncept';
 $lang_module['save_content'] = 'Publikované články';
 $lang_module['captcha'] = 'Anti-spam kód';
 $lang_module['error_cat'] = 'Chyba: článek není předmětem';
