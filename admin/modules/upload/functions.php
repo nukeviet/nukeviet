@@ -187,47 +187,6 @@ function nv_check_path_upload( $path )
 }
 
 /**
- * nv_delete_cache_upload()
- *
- * @param mixed $realpath
- * @return
- */
-function nv_delete_cache_upload( $path )
-{
-	$tempFile = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . md5( $path );
-
-	if( file_exists( $tempFile ) )
-	{
-		@nv_deletefile( $tempFile );
-	}
-
-	$files = scandir( NV_ROOTDIR . '/' . $path );
-	$files = array_diff( $files, array(
-		".",
-		".."
-	) );
-
-	if( sizeof( $files ) )
-	{
-		foreach( $files as $file )
-		{
-			if( is_dir( NV_ROOTDIR . '/' . $path . '/' . $file ) )
-			{
-				nv_delete_cache_upload( $path . '/' . $file );
-			}
-			else
-			{
-				$md5_view_image = NV_ROOTDIR . "/" . NV_FILES_DIR . "/images/" . md5( $path . '/' . $file ) . "." . nv_getextension( $file );
-				if( file_exists( $md5_view_image ) )
-				{
-					@nv_deletefile( $md5_view_image );
-				}
-			}
-		}
-	}
-}
-
-/**
  * nv_get_viewImage()
  *
  * @param mixed $fileName
@@ -289,176 +248,187 @@ function nv_getFileInfo( $pathimg, $file )
 	preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $file, $matches );
 
 	$info = array( );
-	$info[0] = $file;
+	$info['name'] = $file;
 	if( isset( $file{17} ) )
 	{
-		$info[0] = substr( $matches[1], 0, (13 - strlen( $matches[2] )) ) . "..." . $matches[2];
+		$info['name'] = substr( $matches[1], 0, (13 - strlen( $matches[2] )) ) . "..." . $matches[2];
 	}
 
-	$info[1] = $matches[2];
-	$info[2] = "file";
+	$info['ext'] = $matches[2];
+	$info['type'] = "file";
 
 	$stat = @stat( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
-	$info[3] = $stat['size'];
+	$info['filesize'] = $stat['size'];
 
-	$info[4] = 'images/file.gif';
-	$info[5] = 32;
-	$info[6] = 32;
-	$info[7] = "|";
+	$info['src'] = 'images/file.gif';
+	$info['srcwidth'] = 32;
+	$info['srcheight'] = 32;
+	$info['size'] = "|";
 	$ext = strtolower( $matches[2] );
 
 	if( in_array( $ext, $array_images ) )
 	{
 		$size = @getimagesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
-		$info[2] = "image";
-		$info[4] = $pathimg . '/' . $file;
-		$info[5] = $size[0];
-		$info[6] = $size[1];
-		$info[7] = $size[0] . "|" . $size[1];
+		$info['type'] = "image";
+		$info['src'] = $pathimg . '/' . $file;
+		$info['srcwidth'] = $size[0];
+		$info['srcheight'] = $size[1];
+		$info['size'] = $size[0] . "|" . $size[1];
 
 		if( $size[0] > 80 or $size[1] > 80 )
 		{
 			if( ($_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 )) !== false )
 			{
-				$info[4] = $_src[0];
-				$info[5] = $_src[1];
-				$info[6] = $_src[2];
+				$info['src'] = $_src[0];
+				$info['srcwidth'] = $_src[1];
+				$info['srcheight'] = $_src[2];
 			}
 			else
 			{
-				if( $info[5] > 80 )
+				if( $info['srcwidth'] > 80 )
 				{
-					$info[6] = round( 80 / $info[5] * $info[6] );
-					$info[5] = 80;
+					$info['srcheight'] = round( 80 / $info['srcwidth'] * $info['srcheight'] );
+					$info['srcwidth'] = 80;
 				}
 
-				if( $info[6] > 80 )
+				if( $info['srcheight'] > 80 )
 				{
-					$info[5] = round( 80 / $info[6] * $info[5] );
-					$info[6] = 80;
+					$info['srcwidth'] = round( 80 / $info['srcheight'] * $info['srcwidth'] );
+					$info['srcheight'] = 80;
 				}
 			}
 		}
 	}
 	elseif( in_array( $ext, $array_flash ) )
 	{
-		$info[2] = "flash";
-		$info[4] = 'images/flash.gif';
+		$info['type'] = "flash";
+		$info['src'] = 'images/flash.gif';
 
 		if( $matches[2] == "swf" )
 		{
 			$size = @getimagesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
 			if( isset( $size, $size[0], $size[1] ) )
 			{
-				$info[7] = $size[0] . "|" . $size[1];
+				$info['size'] = $size[0] . "|" . $size[1];
 			}
 		}
 	}
 	elseif( in_array( $ext, $array_archives ) )
 	{
-		$info[4] = 'images/zip.gif';
+		$info['src'] = 'images/zip.gif';
 	}
 	elseif( in_array( $ext, $array_documents ) )
 	{
-		$info[4] = 'images/doc.gif';
+		$info['src'] = 'images/doc.gif';
 	}
 
-	$info[8] = 0;
-	$info[9] = $stat['mtime'];
+	$info['userid'] = 0;
+	$info['mtime'] = $stat['mtime'];
 
 	return $info;
 }
 
 /**
- * nv_filesList()
+ * nv_filesListRefresh()
  *
  * @param mixed $pathimg
- * @param bool $refresh
- * @param string $newFile
  * @return
  */
-function nv_filesList( $pathimg, $refresh, $newFile = "", $delFile = "" )
+function nv_filesListRefresh( $pathimg )
 {
-	global $array_hidefolders, $admin_info;
-
-	$md5 = md5( $pathimg );
-	$tempFile = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . $md5;
-	$file_exists = file_exists( $tempFile );
+	global $array_hidefolders, $admin_info, $db_config, $module_data, $db, $array_dirname;
 	$results = array( );
-
-	if( $file_exists )
+	$did = $array_dirname[$pathimg];
+	if( is_dir( NV_ROOTDIR . "/" . $pathimg ) )
 	{
-		$results = file_get_contents( $tempFile );
-		$results = unserialize( $results );
+		$result = $db->sql_query( "SELECT * FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $did );
+		while( $row = $db->sql_fetch_assoc( $result ) )
+		{
+			$results[$row['title']] = $row;
+		}
+
+		if( $dh = opendir( NV_ROOTDIR . "/" . $pathimg ) )
+		{
+			while( ($title = readdir( $dh )) !== false )
+			{
+				if( in_array( $title, $array_hidefolders ) )
+					continue;
+
+				if( preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $title, $m ) )
+				{
+					$info = nv_getFileInfo( $pathimg, $title );
+					$info['did'] = $did;
+					$info['title'] = $title;
+					if( isset( $results[$title] ) )
+					{
+						$info['userid'] = $results[$title]['userid'];
+						$dif = array_diff_assoc( $info, $results[$title] );
+						if( ! empty( $dif ) )
+						{
+							//Cập nhật CSDL file thay đổi
+							$db->sql_query( "REPLACE INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
+										(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
+										VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
+						}
+						unset( $results[$title] );
+					}
+					else
+					{
+						$info['userid'] = $admin_info['userid'];
+						// Thêm file mới
+						$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
+										(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
+										VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
+					}
+				}
+			}
+			closedir( $dh );
+
+			if( ! empty( $results ) )
+			{
+				// Xóa CSDL file không còn tồn tại
+				foreach( $results as $title => $value )
+				{
+					$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $did . " AND `title`='" . $title . "'" );
+				}
+			}
+			$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET `time` = '" . NV_CURRENTTIME . "' WHERE `did` = " . $did );
+		}
 	}
 	else
 	{
-		$refresh = true;
+		// Xóa CSDL thư mục không còn tồn tại
+		$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $did );
+		$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` WHERE `did` = " . $did );
 	}
+}
 
-	if( is_dir( NV_ROOTDIR . "/" . $pathimg ) )
+/**
+ * nv_listUploadDir()
+ *
+ * @param mixed $dir
+ * @param mixed $real_dirlist
+ * @return
+ */
+function nv_listUploadDir( $dir, $real_dirlist = array() )
+{
+	$real_dirlist[] = $dir;
+
+	if( ($dh = @opendir( NV_ROOTDIR . '/' . $dir )) !== false )
 	{
-		if( $refresh )
+		while( false !== ($subdir = readdir( $dh )) )
 		{
-			if( $dh = opendir( NV_ROOTDIR . "/" . $pathimg ) )
+			if( preg_match( "/^[a-zA-Z0-9\-\_]+$/", $subdir ) )
 			{
-				$files = array( );
-				while( ($file = readdir( $dh )) !== false )
-				{
-					if( in_array( $file, $array_hidefolders ) )
-						continue;
-
-					if( preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $file ) )
-					{
-						$files[] = $file;
-
-						$info = nv_getFileInfo( $pathimg, $file );
-						if( ! empty( $newFile ) and $file == $newFile )
-						{
-							$info[8] = $admin_info['userid'];
-							$info[9] = NV_CURRENTTIME;
-						}
-						else
-						{
-							if( isset( $results[$file][8] ) )
-								$info[8] = $results[$file][8];
-							if( isset( $results[$file][9] ) )
-								$info[9] = $results[$file][9];
-						}
-
-						$results[$file] = $info;
-					}
-				}
-				closedir( $dh );
-
-				$files = array_flip( $files );
-				$results = array_intersect_key( $results, $files );
-			}
-			ksort( $results );
-			file_put_contents( $tempFile, serialize( $results ) );
-		}
-		else
-		{
-			if( ! empty( $newFile ) )
-			{
-				$info = nv_getFileInfo( $pathimg, $newFile );
-				$info[8] = $admin_info['userid'];
-				$info[9] = NV_CURRENTTIME;
-
-				$results[$newFile] = $info;
-				ksort( $results );
-				file_put_contents( $tempFile, serialize( $results ) );
-			}
-
-			if( ! empty( $delFile ) )
-			{
-				unset( $results[$delFile] );
-				file_put_contents( $tempFile, serialize( $results ) );
+				if( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) )
+					$real_dirlist = nv_listUploadDir( $dir . '/' . $subdir, $real_dirlist );
 			}
 		}
+
+		closedir( $dh );
 	}
 
-	return $results;
+	return $real_dirlist;
 }
 
 $allow_upload_dir = array(
@@ -499,16 +469,36 @@ $array_documents = array(
 	'xlsx'
 );
 
-$dirlistCache = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/dirlist-" . md5( implode( $allow_upload_dir ) );
+$sql = "SELECT `did`, `dirname` FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` ORDER BY `dirname` ASC";
+$result = $db->sql_query( $sql );
+$array_dirname = array( );
+while( $row = $db->sql_fetch_assoc( $result ) )
+{
+	$array_dirname[$row['dirname']] = $row['did'];
+}
+if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
+{
+	$real_dirlist = array( );
+	foreach( $allow_upload_dir as $dir )
+	{
+		$real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
+	}
+	$dirlist = array_keys( $array_dirname );
+	$result_no_exit = array_diff( $dirlist, $real_dirlist );
+	foreach( $result_no_exit as $dirname )
+	{
+		// Xóa CSDL thư mục không còn tồn tại
+		$did = $array_dirname[$dirname];
+		$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $did );
+		$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` WHERE `did` = " . $did );
+		unset( $array_dirname[$dirname] );
+	}
+	$result_new = array_diff( $real_dirlist, $dirlist );
+	foreach( $result_new as $dirname )
+	{
+		$array_dirname[$dirname] = $db->sql_query_insert_id( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`) VALUES (NULL, '" . $dirname . "', 0)" );
+	}
+}
 
-if( ! file_exists( $dirlistCache ) or ($nv_Request->isset_request( 'dirListRefresh', 'get' ) and filemtime( $dirlistCache ) < (NV_CURRENTTIME - 30)) )
-{
-	$dirlist = nv_loadUploadDirList( );
-}
-else
-{
-	$dirlist = file_get_contents( $dirlistCache );
-	$dirlist = unserialize( $dirlist );
-}
 $global_config['upload_logo'] = $db->unfixdb( nv_unhtmlspecialchars( $global_config['upload_logo'] ) );
 ?>

@@ -104,6 +104,8 @@ Trong đó vi: Là ngôn ngữ đang sử dụng của site
 
 14) Mã hóa mật khẩu smtp, ftp
 
+15) Chuyển CSDL của module file vào DataBase
+
 Hướng dẫn nâng cấp
 - Upload các file thay đổi
 - Sửa các file theo hướng dẫn bên trên.

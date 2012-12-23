@@ -2,12 +2,15 @@
 <!-- BEGIN: loopimg -->
 <div class="imgcontent{IMG.sel}" title="{IMG.title}">
     <div style="width:100px;height:96px;display:table-cell; vertical-align:middle;">
-        <img class="previewimg" title="{IMG.title}" name="{IMG.name}" src="{IMG.src}" width="{IMG.srcWidth}" height="{IMG.srcHeight}" />
+        <img class="previewimg" title="{IMG.title}" name="{IMG.data}" src="{IMG.src}" width="{IMG.srcwidth}" height="{IMG.srcheight}" />
     </div>
-    <div class="imgInfo">{IMG.name0}<br />{IMG.size}</div>
+    <div class="imgInfo">{IMG.name}<br />{IMG.size}</div>
 </div>
 <!-- END: loopimg -->
 <div style="clear:both"></div>
+<!-- BEGIN: generate_page -->
+<div class="generate_page">{GENERATE_PAGE}</p>
+<!-- END: generate_page -->
 <div style="height:100px"></div>
 <script type="text/javascript">
 //<![CDATA[

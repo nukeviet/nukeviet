@@ -469,5 +469,7 @@ if( ! nv_save_file_config_global( ) )
 	die( sprintf( $lang_module['file_not_writable'], NV_DATADIR . "/config_global.php" ) );
 }
 
-die( 'Thực hiện nâng cấp CSDL thành công, bạn cần xóa file này ngay lập tức' );
+$contents = "<meta http-equiv=\"refresh\" content=\"1;URL=" . NV_BASE_SITEURL . "update2.php?step=1\" />";
+
+die( 'Thực hiện nâng cấp CSDL thành công, Chương trình sẽ chuyển sang bước nâng cấp CSDL module Upload' . $contents );
 ?>

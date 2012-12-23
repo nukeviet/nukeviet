@@ -25,6 +25,7 @@ if( $type != "image" and $type != "flash" ) $type = "file";
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 if( $popup )
 {
+	$lang_module['browse_file'] = $lang_global['browse_file'];
 	$xtpl->assign( "NV_BASE_SITEURL", NV_BASE_SITEURL );
 	$xtpl->assign( "ADMIN_THEME", $global_config['module_theme'] );
 	$xtpl->assign( "NV_OP_VARIABLE", NV_OP_VARIABLE );

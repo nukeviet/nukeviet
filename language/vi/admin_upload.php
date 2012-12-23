@@ -45,6 +45,7 @@ $lang_module['deletefolder'] = 'Xóa folder';
 $lang_module['createfolder'] = 'Tạo folder';
 $lang_module['rename_newname'] = 'Tên mới';
 $lang_module['rename_noname'] = 'Bạn chưa đặt tên mới cho file';
+$lang_module['rename_error_folder'] = 'Lỗi: Hệ thống không đổi tên được thư mục';
 $lang_module['rename_nonamefolder'] = 'Bạn chưa đặt tên mới cho thư mục hoặc tên thư mục không đúng quy chuẩn';
 $lang_module['preview'] = 'Xem chi tiết';
 $lang_module['movefolder'] = 'Chuyển đến thư mục';
@@ -114,4 +115,7 @@ $lang_module['lite_mode'] = 'Yếu';
 $lang_module['none_mode'] = 'Không';
 $lang_module['upload_checking_note'] = 'Máy chủ của bạn không hỗ trợ một số hàm xác định loại file. Nếu chọn "Mạnh", bạn sẽ không thể upload file lên host';
 
+$lang_module['search'] = 'Tìm kiếm';
+$lang_module['searchdir'] = 'Tìm kiếm trong thư mục';
+$lang_module['searchkey'] = 'Từ khóa tìm kiếm';
 ?>
