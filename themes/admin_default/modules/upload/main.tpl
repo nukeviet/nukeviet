@@ -100,7 +100,7 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
     </div>
     <div class="uploadForm" style="display:none">
         <div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">{LANG.upload_file}</div>
-        <div class="upload"><input type="file" name="fileupload" id="myfile"/></div>
+        <div class="upload"><input type="file" name="upload" id="myfile"/></div>
         <div style="margin-top:10px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></div>
         <div style="margin-top:5px;margin-left:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/ok.png"/></div>
         <div style="margin-top:7px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/error.png"/></div>

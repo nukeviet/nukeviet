@@ -380,8 +380,8 @@ function fileMouseup(a)
 
 function is_allowed_upload()
 {
-    $("input[name=fileupload]").parent().css("display", "block");
-    $("span#upload_file").attr("title") == "1" ? $("input[name=fileupload]").parent().parent().css("display", "block").next().css("display", "none") : $("input[name=fileupload]").parent().parent().css("display", "none").next().css("display", "block")
+    $("input[name=upload]").parent().css("display", "block");
+    $("span#upload_file").attr("title") == "1" ? $("input[name=upload]").parent().parent().css("display", "block").next().css("display", "none") : $("input[name=upload]").parent().parent().css("display", "none").next().css("display", "block")
 }
 
 //  ---------------------------------------
@@ -553,7 +553,7 @@ $(".search a").click(function()
 
 //  ---------------------------------------
 
-$("input[name=fileupload]").change(function()
+$("input[name=upload]").change(function()
 {
     var a = $(this).val();
     f = a.replace(/.*\\(.*)/, "$1").replace(/.*\/(.*)/, "$1");
@@ -573,22 +573,22 @@ $("input[name=imgurl]").change(function()
 
 $("#confirm").click(function()
 {
-    var a = $("input[name=fileupload]").val(), b = $("span#foldervalue").attr("title"), d = $("input[name=currentFileUpload]").val(), e = a + " " + b, g = $("select[name=imgtype]").val(), h = $("select[name=author]").val() == 1 ? "&author" : "";
+    var a = $("input[name=upload]").val(), b = $("span#foldervalue").attr("title"), d = $("input[name=currentFileUpload]").val(), e = a + " " + b, g = $("select[name=imgtype]").val(), h = $("select[name=author]").val() == 1 ? "&author" : "";
     if (a != "" && d != e)
     {
-        $("input[name=fileupload]").parent().css("display", "none").next().css("display", "block").next().css("display", "none");
-        $("input[name=fileupload]").upload(nv_module_url + "upload&random=" + nv_randomNum(10), "path=" + b, function(k)
+        $("input[name=upload]").parent().css("display", "none").next().css("display", "block").next().css("display", "none");
+        $("input[name=upload]").upload(nv_module_url + "upload&random=" + nv_randomNum(10), "path=" + b, function(k)
         {
             $("input[name=currentFileUpload]").val(e);
             var l = k.split("_");
             if (l[0] == "ERROR")
             {
                 $("div#errorInfo").html(l[1]).dialog("open");
-                $("input[name=fileupload]").parent().css("display", "block").next().css("display", "none").next().css("display", "none").next().css("display", "block")
+                $("input[name=upload]").parent().css("display", "block").next().css("display", "none").next().css("display", "none").next().css("display", "block")
             }
             else
             {
-                $("input[name=fileupload]").parent().css("display", "block").next().css("display", "none").next().css("display", "block");
+                $("input[name=upload]").parent().css("display", "block").next().css("display", "none").next().css("display", "block");
                 $("input[name=selFile]").val(k);
                 var ckf = $("input[name=CKEditorFuncNum]").val(), area = $("input[name=area]").val();
                 if (ckf > 0 || area != "")

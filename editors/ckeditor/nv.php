@@ -7,13 +7,14 @@
  * @Createdate Apr 10, 2010  10:08:08 AM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
-@require_once ( str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/ckeditor_php5.php' );
+@require_once (str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/ckeditor_php5.php');
 
 /**
  * nv_aleditor()
- * 
+ *
  * @param mixed $textareaname
  * @param string $width
  * @param string $height
@@ -24,12 +25,12 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '', $path = '', $currentpath = '' )
 {
 	global $module_name, $admin_info, $client_info;
-	
+
 	if( empty( $path ) and empty( $currentpath ) )
 	{
 		$path = NV_UPLOADS_DIR;
 		$currentpath = NV_UPLOADS_DIR;
-		
+
 		if( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . date( "Y_m" ) ) )
 		{
 			$currentpath = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" );
@@ -42,19 +43,19 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 	}
 	// Create class instance.
 
-	$CKEditor = new CKEditor();
+	$CKEditor = new CKEditor( );
 	// Do not print the code directly to the browser, return it instead
 	$CKEditor->returnOutput = true;
-	
+
 	if( preg_match( "/^(Internet Explorer v([0-9])\.([0-9]))+$/", $client_info['browser']['name'], $m ) )
 	{
-		$jwplayer = ( $m[2] < 8 ) ? false : true;
+		$jwplayer = ($m[2] < 8) ? false : true;
 	}
 	else
 	{
 		$jwplayer = true;
 	}
-	
+
 	if( $jwplayer )
 	{
 		$CKEditor->config['extraPlugins'] = 'jwplayer';
@@ -171,7 +172,7 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 			)
 		);
 	}
-	
+
 	$CKEditor->config['skin'] = 'v2';
 	$CKEditor->config['entities'] = false;
 	$CKEditor->config['enterMode'] = 2;
@@ -184,7 +185,7 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 	// If not set, CKEditor will try to detect the correct path.
 	$CKEditor->basePath = NV_BASE_SITEURL . '' . NV_EDITORSDIR . '/ckeditor/';
 	// Set global configuration (will be used by all instances of CKEditor).
-	
+
 	if( ! empty( $width ) )
 	{
 		$CKEditor->config['width'] = strpos( $width, '%' ) ? $width : intval( $width );
@@ -196,7 +197,10 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 	}
 
 	// Change default textarea attributes
-	$CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
+	$CKEditor->textareaAttributes = array(
+		"cols" => 80,
+		"rows" => 10
+	);
 
 	$CKEditor->config['filebrowserBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&path=" . $path . "&currentpath=" . $currentpath;
 	$CKEditor->config['filebrowserImageBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&type=image&path=" . $path . "&currentpath=" . $currentpath;
@@ -204,32 +208,29 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 
 	if( ! empty( $admin_info['allow_files_type'] ) )
 	{
-		$CKEditor->config['filebrowserUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=quickupload&currentpath=" . $currentpath;
+		$CKEditor->config['filebrowserUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=upload&editor=ckeditor&path=" . $currentpath;
 	}
 
 	if( in_array( 'images', $admin_info['allow_files_type'] ) )
 	{
-		$CKEditor->config['filebrowserImageUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=quickupload&type=image&currentpath=" . $currentpath;
+		$CKEditor->config['filebrowserImageUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=upload&editor=ckeditor&path=" . $currentpath . "&type=image";
 	}
 
 	if( in_array( 'flash', $admin_info['allow_files_type'] ) )
 	{
-		$CKEditor->config['filebrowserFlashUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=quickupload&type=flash&currentpath=" . $currentpath;
+		$CKEditor->config['filebrowserFlashUploadUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=upload&editor=ckeditor&path=" . $currentpath . "&type=flash";
 	}
-
 	$val = nv_unhtmlspecialchars( $val );
-
 	return $CKEditor->editor( $textareaname, $val );
 }
 
 /**
  * nv_add_editor_js()
- * 
+ *
  * @return
  */
-function nv_add_editor_js()
+function nv_add_editor_js( )
 {
 	return "";
 }
-
 ?>

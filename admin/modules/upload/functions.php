@@ -42,7 +42,6 @@ $allow_func = array(
 	'delfolder',
 	'renamefolder',
 	'createfolder',
-	'quickupload',
 	'upload',
 	'addlogo'
 );

@@ -13,9 +13,9 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 $ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 
 $myini = array(
-	'types' => array( '' ), 
-	'exts' => array( '' ), 
-	'mimes' => array( '' ) 
+	'types' => array( '' ),
+	'exts' => array( '' ),
+	'mimes' => array( '' )
 );
 
 foreach( $ini as $type => $extmime )
@@ -79,11 +79,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$nv_max_size = $nv_Request->get_int( 'nv_max_size', 'post', $global_config['nv_max_size'] );
 	$nv_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $nv_max_size );
+	$nv_auto_resize = (int)$nv_Request->get_bool( 'nv_auto_resize', 'post', 0 );
 
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'file_allowed_ext', " . $db->dbescape_string( $type ) . ")" );
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'forbid_extensions', " . $db->dbescape_string( $ext ) . ")" );
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'forbid_mimes', " . $db->dbescape_string( $mime ) . ")" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'nv_max_size', " . $db->dbescape_string( $nv_max_size ) . ")" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'nv_auto_resize', " . $nv_auto_resize . ")" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'nv_max_size', " . $nv_max_size . ")" );
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'upload_checking_mode', " . $db->dbescape_string( $upload_checking_mode ) . ")" );
 
 	$array_config_define = array( );
@@ -109,6 +111,7 @@ $sys_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_c
 $p_size = $sys_max_size / 100;
 
 $xtpl->assign( 'SYS_MAX_SIZE', nv_convertfromBytes( $sys_max_size ) );
+$xtpl->assign( 'NV_AUTO_RESIZE', ($global_config['nv_auto_resize']) ? ' checked="checked"' : '' );
 
 for( $index = 100; $index > 0; --$index )
 {
