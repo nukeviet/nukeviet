@@ -25,7 +25,6 @@ $n_dir = nv_mkdir( NV_ROOTDIR . '/' . $path, $newname );
 
 if( ! empty( $n_dir[0] ) )
 {
-	nv_loadUploadDirList( false );
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['createfolder'], $newpath, $admin_info['userid'] );
 	echo $path . '/' . $newname;
 	exit;

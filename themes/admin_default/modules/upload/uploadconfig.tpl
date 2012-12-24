@@ -10,6 +10,7 @@
 				<td>
 				<input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_WIDTH}" name="nv_max_width" maxlength="4"/> x 
 				<input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_HEIGHT}" name="nv_max_height" maxlength="4"/>
+				<input type="checkbox" style="margin-left:40px;" name="nv_auto_resize" value="1" {NV_AUTO_RESIZE}/>{LANG.nv_auto_resize}
 				</td>
 			</tr>
 		</tbody>		
@@ -64,7 +65,7 @@
 				<td style="vertical-align:top"><strong>{LANG.uploadconfig_ban_mime}</strong></td>
 				<td>
 					<!-- BEGIN: mimes -->
-					<label style="display:inline-block;width:300px"><input type="checkbox" name="ext[]" value="{MIMES.key}"{MIMES.checked} /> {MIMES.title}&nbsp;&nbsp;</label>
+					<label style="display:inline-block;width:48%"><input type="checkbox" name="ext[]" value="{MIMES.key}"{MIMES.checked} /> {MIMES.title}&nbsp;&nbsp;</label>
 					<!-- END: mimes -->
 				</td>
 			</tr>

@@ -7,20 +7,24 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) )
+	die( 'Stop!!!' );
 
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post' ) );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
-if( ! isset( $check_allow_upload_dir['move_file'] ) ) die( "ERROR_" . $lang_module['notlevel'] );
+if( ! isset( $check_allow_upload_dir['move_file'] ) )
+	die( "ERROR_" . $lang_module['notlevel'] );
 
 $newfolder = nv_check_path_upload( $nv_Request->get_string( 'newpath', 'post' ) );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $newfolder );
-if( ! isset( $check_allow_upload_dir['create_file'] ) ) die( "ERROR_" . $lang_module['notlevel'] );
+if( ! isset( $check_allow_upload_dir['create_file'] ) )
+	die( "ERROR_" . $lang_module['notlevel'] );
 
 $image = htmlspecialchars( trim( $nv_Request->get_string( 'file', 'post' ) ), ENT_QUOTES );
 $image = basename( $image );
-if( empty( $image ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $image ) ) die( "ERROR_" . $lang_module['errorNotSelectFile'] );
+if( empty( $image ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $image ) )
+	die( "ERROR_" . $lang_module['errorNotSelectFile'] );
 
 $mirror = $nv_Request->get_int( 'mirror', 'post', 0 );
 
@@ -32,9 +36,19 @@ while( file_exists( NV_ROOTDIR . '/' . $newfolder . '/' . $file ) )
 	++$i;
 }
 
-if( ! nv_copyfile( NV_ROOTDIR . '/' . $path . '/' . $image, NV_ROOTDIR . '/' . $newfolder . '/' . $file ) ) die( "ERROR_" . $lang_module['errorNotCopyFile'] );
+if( ! nv_copyfile( NV_ROOTDIR . '/' . $path . '/' . $image, NV_ROOTDIR . '/' . $newfolder . '/' . $file ) )
+	die( "ERROR_" . $lang_module['errorNotCopyFile'] );
 
-nv_filesList( $newfolder, false, $file );
+if( isset( $array_dirname[$newfolder] ) )
+{
+	$did = $array_dirname[$newfolder];
+	$info = nv_getFileInfo( $newfolder, $file );
+	$info['userid'] = $admin_info['userid'];
+
+	$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
+							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) VALUES 
+							('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')" );
+}
 
 if( ! $mirror )
 {
@@ -45,13 +59,15 @@ if( ! $mirror )
 	{
 		@nv_deletefile( $md5_view_image );
 	}
-
-	nv_filesList( $path, false, '', $image );
+	if( isset( $array_dirname[$path] ) )
+	{
+		$did = $array_dirname[$path];
+		$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $did . " AND `title`='" . $image . "'" );
+	}
 }
 
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['move'], $path . '/' . $image . " -> " . $newfolder . '/' . $file, $admin_info['userid'] );
 
 echo $file;
-exit;
-
+exit ;
 ?>

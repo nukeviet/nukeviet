@@ -297,6 +297,8 @@ define( 'NV_BANNERS_CLICK_GLOBALTABLE', $db_config['prefix'] . '_banners_click' 
 define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
 define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );
 
+define( 'NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload' );
+
 define( 'NV_PREFIXLANG', $db_config['prefix'] . '_' . NV_LANG_DATA );
 define( 'NV_MODULES_TABLE', NV_PREFIXLANG . '_modules' );
 define( 'NV_BLOCKS_TABLE', NV_PREFIXLANG . '_blocks' );

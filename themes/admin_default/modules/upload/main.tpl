@@ -8,7 +8,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=8" />
-<title>Management Upload File</title>
+<title>{LANG.upload_manager}</title>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.upload.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.lazyload.js"></script>
@@ -32,8 +33,8 @@ td{border:1px solid #CCC;}
 .imgInfo{font:400 10px/12px tahoma,arial,sans-serif;height:30px;}
 .imgsel{background:#fd8;border:2px solid #fb0;color:#333}
 .notupload{color:#F00;float:right;font-size:10px;font-weight:bold;padding:5px;}
-.refresh{float:left;margin-left:15px;margin-top:3px;position:relative;}
-.refresh img{border:none;}
+.refresh, .search{float:left;margin:3px 10px 0;position:relative;}
+.refresh, .search img{border:none;}
 .upload{background:url('{NV_BASE_SITEURL}images/upload.gif') no-repeat 0px 0px;cursor:pointer;float:left;height:26px;overflow:hidden;position:relative;width:77px;}
 .uploadForm{float:right;position:relative;}
 img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-width:80px;padding:2px;}
@@ -42,6 +43,10 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
 .imgcontent:hover{background:#F2F9FC;border:2px solid #DDEFF8;color:#333;}
 .upload:hover{background:url('{NV_BASE_SITEURL}images/upload.gif') no-repeat 0px -26px;}
 .red{color:red}
+.generate_page{font-size: 10px; font-weight: 700; margin: 10px;text-align: center}
+.generate_page strong{background-color:#fbfbfb;border:1px solid #666;color:#000;padding:4px 6px}
+.generate_page a{background-color:#ebebeb;border:1px solid #c8c8c8;color:#000;padding:4px  6px;text-decoration:none}
+.generate_page a:hover{background-color:#e0e0e0;color:red}
 </style>
 
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
@@ -59,7 +64,7 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
         <tbody>
                 <tr>
                     <td valign="top" width="200">
-                    	<div id="imgfolder" class="imgfolder"></div>
+                    	<div id="imgfolder" class="imgfolder"><p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...</p></div>
                     </td>
                     <td valign="top">
                         <div class="filebrowse">
@@ -73,6 +78,9 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
     </table>
 </div>
 <div class="footer">
+    <div class="refresh">
+        <a href="#"><img alt="{LANG.refresh}" title="{LANG.refresh}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/refresh.png" width="16" height="16"/></a>
+    </div>
     <div class="filetype">
         {LANG.selectfiletype}: 
         <select name="imgtype" id="imgtype">
@@ -87,12 +95,12 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
             <option value="1">{LANG.author1}</option>
         </select>
     </div>
-    <div class="refresh">
-        <a href="#"><img alt="{LANG.refresh}" title="{LANG.refresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16"/></a>
+    <div class="search">
+        <a href="#"><img alt="{LANG.search}" title="{LANG.search}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/search.png" width="16" height="16"/></a>
     </div>
     <div class="uploadForm" style="display:none">
-        <div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">&nbsp;&nbsp;</div>
-        <div class="upload"><input type="file" name="fileupload" id="myfile"/></div>
+        <div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">{LANG.upload_file}</div>
+        <div class="upload"><input type="file" name="upload" id="myfile"/></div>
         <div style="margin-top:10px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></div>
         <div style="margin-top:5px;margin-left:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/ok.png"/></div>
         <div style="margin-top:7px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/error.png"/></div>
@@ -158,6 +166,15 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
     <div style="margin-bottom:10px"><input style="vertical-align:middle" name="goNewPath" type="checkbox" class="dynamic" /> {LANG.goNewPath}</div>
     <input style="width:60px;" type="button" value="OK" name="newPathOK" />
 </div>
+<div id="filesearch" style="display:none;padding:10px;font-size:11px;" title="{LANG.search}">
+	<form method="get" onsubmit="return searchfile();">
+	    {LANG.searchdir}:
+	    <div style="margin:10px 0 20px"><select name="searchPath"></select></div>
+	    {LANG.searchkey}:
+	    <div style="margin:10px 0"><input name="q" type="text" class="dynamic" style="width:200px;"/></div>
+	    <input style="margin-left:50px;width:100px;" type="submit" value="{LANG.search}" name="search" />
+    </form>
+</div>
 <div id="filerename" style="display:none;padding:10px;font-size:11px;text-align:center;" title="{LANG.rename}">
     <div id="filerenameOrigName" style="font-weight:800;margin-bottom:10px" class="dynamic"></div>
     <div style="margin-top:10px;margin-bottom:10px">
@@ -169,6 +186,15 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
 </div>
 <script type="text/javascript">
 //<![CDATA[
+
+function searchfile()
+{
+	a = $("select[name=searchPath]").val(), q = $("input[name=q]").val();
+	$("div#filesearch").dialog("close");
+   	$("#imglist").html('<p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...</p>').load(nv_module_url + 'imglist&path='+a+'&q='+rawurlencode(q)+'&random=' + nv_randomNum(10))
+    return false;
+}
+
 var LANG = [];
 LANG.upload_size = "{LANG.upload_size}";
 LANG.pubdate = "{LANG.pubdate}";
@@ -215,6 +241,7 @@ $(function() {
    $("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10))
   });
 });
+
 //]]>
 </script>
 <!-- BEGIN: footer -->

@@ -613,6 +613,9 @@ class UrlGetContents
             {
                 $url_info['path'] = '/' . $url_info['path'];
             }
+			$path_array = explode('/', $url_info['path']);
+			$path_array =array_map('rawurlencode', $path_array);
+			$url_info['path'] = implode('/', $path_array);
         }
         else
         {

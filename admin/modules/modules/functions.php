@@ -323,8 +323,11 @@ if( $module_name == "modules" )
 						{
 							if( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $cp . $p ) )
 							{
-								nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $cp, $p );
-								nv_loadUploadDirList( false );
+								$mk = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $cp, $p );
+								if($mk[0])
+								{
+									$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $cp . $p . "', 0)" );
+								}
 							}
 						
 							$cp .= $p . '/';
