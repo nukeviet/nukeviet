@@ -197,8 +197,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$ip = filter_text_input( 'ip', 'post', '', 1 );
 	$area = $nv_Request->get_int( 'area', 'post', 0 );
 	$mask = $nv_Request->get_int( 'mask', 'post', 0 );
-	$begintime = filter_text_input( 'begintime', 'post', 0, 1 );
-	$endtime = filter_text_input( 'endtime', 'post', 0, 1 );
 
 	if( empty( $ip ) || ! $ips->nv_validip( $ip ) )
 	{
@@ -210,7 +208,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$error[] = $lang_module['banip_error_area'];
 	}
 
-	if( ! empty( $begintime ) && preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime, $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'begintime', 'post' ), $m ) )
 	{
 		$begintime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -219,7 +217,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$begintime = NV_CURRENTTIME;
 	}
 
-	if( ! empty( $endtime ) && preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime, $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'endtime', 'post' ), $m ) )
 	{
 		$endtime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}

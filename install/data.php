@@ -423,7 +423,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'site_phone', ''),
 ('sys', 'global', 'site_lang', '" . NV_LANG_DATA . "'),
 ('sys', 'global', 'admin_theme', 'admin_full'),
-('sys', 'global', 'date_pattern', 'l, d-m-Y'),
+('sys', 'global', 'date_pattern', 'l, d/m/Y'),
 ('sys', 'global', 'time_pattern', 'H:i'),
 ('sys', 'global', 'block_admin_ip', '0'),
 ('sys', 'global', 'admfirewall', '0'),

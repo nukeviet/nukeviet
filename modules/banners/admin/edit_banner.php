@@ -192,7 +192,7 @@ else
 	$file_alt = $row['file_alt'];
 	$click_url = $row['click_url'];
 	$publ_date = ! empty( $row['publ_time'] ) ? date( "d/m/Y", $row['publ_time'] ) : "";
-	$exp_date = ! empty( $row['exp_time'] ) ? date( "d.m.Y", $row['exp_time'] ) : "";
+	$exp_date = ! empty( $row['exp_time'] ) ? date( "d/m/Y", $row['exp_time'] ) : "";
 }
 
 $contents['info'] = ( ! empty( $error ) ) ? $error : $lang_module['edit_banner_info'];
