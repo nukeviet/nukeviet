@@ -50,6 +50,15 @@ if( isset( $check_allow_upload_dir['view_dir'] ) AND isset( $array_dirname[$path
 		$sql = "SELECT SQL_CALC_FOUND_ROWS t1.*, t2.dirname FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` AS t1 INNER JOIN `" . NV_UPLOAD_GLOBALTABLE . "_dir` AS t2 ON t1.`did` = t2.`did`";
 		$sql .= " WHERE (t2.`dirname` = '" . $pathimg . "' OR t2.`dirname` LIKE '" . $pathimg . "/%')";
 		$sql .= " AND `title` LIKE '%" . $db->dblikeescape( $q ) . "%'";
+		if( $type == "image" OR $type == "flash" )
+		{
+			$sql .= " AND t1.`type`='" . $type . "'";
+		}
+		if( $nv_Request->isset_request( 'author', 'get' ) )
+		{
+			$sql .= " AND t1.`userid`=" . $admin_info['userid'];
+			$base_url .= "&amp;author";
+		}		
 		$sql .= "  ORDER BY t1.`title` ASC LIMIT " . $page . "," . $per_page;
 		$base_url .= "&amp;q=" . $q;
 	}
