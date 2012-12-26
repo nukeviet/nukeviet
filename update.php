@@ -396,6 +396,8 @@ $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, 
 ('sys', 'define', 'nv_max_width', '1500'),
 ('sys', 'define', 'nv_max_height', '1500'),
 ('sys', 'define', 'nv_live_cookie_time', '" . NV_LIVE_COOKIE_TIME . "'),
+('sys', 'define', 'nv_anti_iframe', '".NV_ANTI_IFRAME."'),
+('sys', 'define', 'nv_allowed_html_tags', '".NV_ALLOWED_HTML_TAGS."'),
 ('sys', 'define', 'nv_live_session_time', '0'),
 ('sys', 'define', 'dir_forum', '')" );
 

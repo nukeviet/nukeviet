@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
 	<table class="tab1" summary="">
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td><strong>{LANG.statistics_timezone}</strong></td>
 				<td>
@@ -28,7 +28,7 @@
 				</td>
 			</tr>
 		</tbody>
-		<tbody>
+		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.googleAnalyticsID}</strong></td>
 				<td>
@@ -36,7 +36,7 @@
 				</td>
 			</tr>
 		</tbody>
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td><strong>{LANG.googleAnalyticsSetDomainName_title}</strong></td>
 				<td>

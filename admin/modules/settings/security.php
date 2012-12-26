@@ -142,6 +142,20 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	$array_config_define['nv_gfx_num'] = $nv_Request->get_int( 'nv_gfx_num', 'post' );
 	$array_config_define['nv_gfx_width'] = $nv_Request->get_int( 'nv_gfx_width', 'post' );
 	$array_config_define['nv_gfx_height'] = $nv_Request->get_int( 'nv_gfx_height', 'post' );
+	$array_config_define['nv_anti_iframe'] = (int)$nv_Request->get_bool( 'nv_anti_iframe', 'post' );
+	$variable = $nv_Request->get_string( 'nv_allowed_html_tags', 'post' );
+	$variable = str_replace( ';', ',', strtolower( $variable ) );
+	$variable = explode( ',', $variable );
+	$nv_allowed_html_tags = array( );
+	foreach( $variable as $value )
+	{
+		$value = trim( $value );
+		if( preg_match( "/^[a-z0-9]+$/", $value ) )
+		{
+			$nv_allowed_html_tags[] = $value;
+		}
+	}
+	$array_config_define['nv_allowed_html_tags'] = implode( ', ', $nv_allowed_html_tags );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
 		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
@@ -269,6 +283,7 @@ $xtpl->assign( 'REFERER_BLOCKER', ($global_config['str_referer_blocker']) ? ' ch
 $xtpl->assign( 'IS_FLOOD_BLOCKER', ($global_config['is_flood_blocker']) ? ' checked="checked"' : '' );
 $xtpl->assign( 'MAX_REQUESTS_60', $global_config['max_requests_60'] );
 $xtpl->assign( 'MAX_REQUESTS_300', $global_config['max_requests_300'] );
+$xtpl->assign( 'ANTI_IFRAME', (NV_ANTI_IFRAME) ? ' checked="checked"' : '' );
 
 foreach( $captcha_array as $gfx_chk_i => $gfx_chk_lang )
 {
@@ -303,6 +318,7 @@ for( $i = 2; $i < 10; $i++ )
 }
 $xtpl->assign( 'NV_GFX_WIDTH', NV_GFX_WIDTH );
 $xtpl->assign( 'NV_GFX_HEIGHT', NV_GFX_HEIGHT );
+$xtpl->assign( 'NV_ALLOWED_HTML_TAGS', NV_ALLOWED_HTML_TAGS );
 
 $mask_text_array = array( );
 $mask_text_array[0] = "255.255.255.255";
@@ -348,6 +364,7 @@ if( ! empty( $cid ) )
 
 $xtpl->assign( 'MASK_TEXT_ARRAY', $mask_text_array );
 $xtpl->assign( 'BANIP_AREA_ARRAY', $banip_area_array );
+$xtpl->assign( 'BANIP_TITLE', ($cid) ? $lang_module['banip_title_edit'] : $lang_module['banip_title_add'] );
 
 $xtpl->assign( 'DATA', array(
 	'cid' => $cid,
