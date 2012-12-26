@@ -854,7 +854,7 @@ elseif( defined( 'NV_IS_USER' ) )
 	$a = 0;
 	foreach( $array_catpage as $array_row_i )
 	{
-		$array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
 		$xtpl->assign( 'CONTENT', $array_row_i );
 		$id = $array_row_i['id'];
 		$array_link_content = array();

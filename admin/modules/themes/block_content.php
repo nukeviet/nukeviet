@@ -119,12 +119,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$row['template'] = filter_text_input( 'template', 'post', '', 0, 55 );
 	$row['position'] = filter_text_input( 'position', 'post', '', 0, 55 );
 
-	$exp_time = filter_text_input( 'exp_time', 'post', "", 1 );
-	
-	if( ! empty( $exp_time ) && preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_time ) )
+	if(preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'exp_time', 'post' ), $m ) )
 	{
-		$exp_time = explode( '/', $exp_time );
-		$row['exp_time'] = mktime( 0, 0, 0, $exp_time[1], $exp_time[0], $exp_time[2] );
+		$row['exp_time'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 	else
 	{
@@ -430,7 +427,7 @@ while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 
 $xtpl->assign( 'ROW', array(
 	'title' => $row['title'],
-	'exp_time' => ( $row['exp_time'] > 0 ) ? date( 'd.m.Y', $row['exp_time'] ) : '',
+	'exp_time' => ( $row['exp_time'] > 0 ) ? date( 'd/m/Y', $row['exp_time'] ) : '',
 	'block_active' => ( intval( $row['active'] ) == 1 ) ? " checked=\"checked\"" : "",
 	'link' => $row['link'],
 	'bid' => $row['bid'],

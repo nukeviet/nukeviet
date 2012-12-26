@@ -59,6 +59,22 @@
 				</td>
 			</tr>
 		</tbody>
+		<tbody class="second">
+			<tr>
+				<td><strong>{LANG.nv_anti_iframe}</strong></td>
+				<td>
+				<input type="checkbox" value="1" name="nv_anti_iframe" {ANTI_IFRAME} />
+				</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<td><strong>{LANG.nv_allowed_html_tags}</strong></td>
+				<td>
+					<textarea name="nv_allowed_html_tags" style="width: 550px; height: 60px" class="required">{NV_ALLOWED_HTML_TAGS}</textarea>
+				</td>
+			</tr>
+		</tbody>				
 	</table>
 	<table class="tab1" summary="">
 		<caption>
@@ -181,7 +197,7 @@
 		<col width="200"/>
 		<tbody class="second">
 			<tr>
-				<td colspan="2"><strong>{LANG.banip_add}</strong></td>
+				<td colspan="2"><strong>{BANIP_TITLE}</strong></td>
 			</tr>
 		</tbody>
 		<tbody>

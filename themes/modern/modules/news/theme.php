@@ -26,7 +26,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	$a = 0;
 	foreach( $array_catpage as $array_row_i )
 	{
-		$array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'CONTENT', $array_row_i );
 	
@@ -75,7 +75,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	$a = $page;
 	foreach( $array_catpage as $array_row_i )
 	{
-		$array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'NUMBER', ++$a );
 		$xtpl->assign( 'CONTENT', $array_row_i );
@@ -117,7 +117,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 	$a = 0;
 	foreach( $array_catpage as $array_row_i )
 	{
-		$array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
 		$array_row_i['listcatid'] = explode( ',', $array_row_i['listcatid'] );
 		$num_cat = sizeof( $array_row_i['listcatid'] );
 	
@@ -190,7 +190,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 	{
 		foreach( $array_catcontent as $key => $array_catcontent_i )
 		{
-			$array_catcontent_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_catcontent_i['publtime'] );
+			$array_catcontent_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_catcontent_i['publtime'] );
 			$xtpl->assign( 'CONTENT', $array_catcontent_i );
 		
 			if( $key == 0 )
@@ -277,7 +277,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 		
 			foreach( $array_cat[$key]['content'] as $array_row_i )
 			{
-				$array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+				$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
 				++$a;
 			
 				if( $a == 1 )
@@ -355,7 +355,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 	
 		foreach( $array_content as $key => $array_content_i )
 		{
-			$array_content_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_content_i['publtime'] );
+			$array_content_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_content_i['publtime'] );
 			$xtpl->assign( 'NEWSTOP', $array_content_i );
 		
 			if( $key == 0 )
@@ -403,7 +403,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 		
 			$array_content_i = $array_catpage_i['content'][0];
 			$array_content_i['hometext'] = nv_clean60( $array_content_i['hometext'], 200 );
-			$array_content_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_content_i['publtime'] );
+			$array_content_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_content_i['publtime'] );
 		
 			$xtpl->assign( 'CONTENT', $array_content_i );
 		
@@ -470,7 +470,7 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'LANG', $lang_module );
 
-	$news_contents['addtime'] = nv_date( "d-m-Y h:i:s", $news_contents['addtime'] );
+	$news_contents['addtime'] = nv_date( "d/m/Y h:i:s", $news_contents['addtime'] );
 
 	$xtpl->assign( 'NEWSID', $news_contents['id'] );
 	$xtpl->assign( 'NEWSCHECKSS', $news_contents['newscheckss'] );
@@ -950,7 +950,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 			$xtpl->assign( 'LINK', $url );
 			$xtpl->assign( 'TITLEROW', strip_tags( BoldKeywordInStr( $value['title'], $key ) ) );
 			$xtpl->assign( 'CONTENT', BoldKeywordInStr( $value['hometext'], $key ) . "..." );
-			$xtpl->assign( 'TIME', date( 'd-m-Y h:i:s A', $value['publtime'] ) );
+			$xtpl->assign( 'TIME', date( 'd/m/Y h:i:s A', $value['publtime'] ) );
 			$xtpl->assign( 'AUTHOR', BoldKeywordInStr( $value['author'], $key ) );
 			$xtpl->assign( 'SOURCE', BoldKeywordInStr( GetSourceNews( $value['sourceid'] ), $key ) );
 

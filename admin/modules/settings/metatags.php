@@ -71,10 +71,12 @@ $xtpl->assign( 'VARS', $lang_module['metaTagsVar'] . ": " . implode( ", ", $vas 
 
 if ( ! empty( $metatags['meta'] ) )
 {
+    $number = 0;
     foreach ( $metatags['meta'] as $value )
     {
         $value['h_selected'] = $value['group'] == 'http-equiv' ? " selected=\"selected\"" : "";
         $value['n_selected'] = $value['group'] == 'name' ? " selected=\"selected\"" : "";
+		$value['class'] = ( ++$number % 2 == 0 ) ? ' class="second"' : '';
         $xtpl->assign( 'DATA', $value );
         $xtpl->parse( 'main.loop' );
     }
@@ -82,7 +84,7 @@ if ( ! empty( $metatags['meta'] ) )
 
 for ( $i = 0; $i < 3; ++$i )
 {
-    $data = array( 'content' => '', 'value' => '', 'h_selected' => '', 'n_selected' => '' );
+    $data = array('content' => '', 'value' => '', 'h_selected' => '', 'n_selected' => '', 'class' => ( ++$number % 2 == 0 ) ? ' class="second"' : '');
     $xtpl->assign( 'DATA', $data );
     $xtpl->parse( 'main.loop' );
 }

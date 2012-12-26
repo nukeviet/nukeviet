@@ -108,7 +108,6 @@ $lang_module['banip_timeendban'] = 'Terminer';
 $lang_module['banip_funcs'] = 'Fonctions';
 $lang_module['banip_checkall'] = 'Sélectionner tout';
 $lang_module['banip_uncheckall'] = 'Desélectionner tout';
-$lang_module['banip_add'] = 'Ajouter';
 $lang_module['banip_address'] = 'Adresse IP';
 $lang_module['banip_begintime'] = 'Commencer';
 $lang_module['banip_endtime'] = 'Terminer';

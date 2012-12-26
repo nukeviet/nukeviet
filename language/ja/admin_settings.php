@@ -108,7 +108,6 @@ $lang_module['banip_timeendban'] = '禁止の終了時間';
 $lang_module['banip_funcs'] = 'IP禁止機能';
 $lang_module['banip_checkall'] = 'すべて選択';
 $lang_module['banip_uncheckall'] = 'すべて選択を外す';
-$lang_module['banip_add'] = '追加';
 $lang_module['banip_address'] = '住所';
 $lang_module['banip_begintime'] = '禁止の開始時間';
 $lang_module['banip_endtime'] = '終了時間';

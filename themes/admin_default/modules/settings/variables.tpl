@@ -37,7 +37,7 @@
 			</tr>
 		</tbody>
 
-		<tbody>
+		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.live_session_time}</strong></td>
 				<td>
@@ -55,7 +55,7 @@
 			</tr>
 		</tbody>
 
-		<tbody>
+		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.cookie_httponly}</strong></td>
 				<td>

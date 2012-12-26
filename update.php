@@ -396,6 +396,8 @@ $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, 
 ('sys', 'define', 'nv_max_width', '1500'),
 ('sys', 'define', 'nv_max_height', '1500'),
 ('sys', 'define', 'nv_live_cookie_time', '" . NV_LIVE_COOKIE_TIME . "'),
+('sys', 'define', 'nv_anti_iframe', '".NV_ANTI_IFRAME."'),
+('sys', 'define', 'nv_allowed_html_tags', '".NV_ALLOWED_HTML_TAGS."'),
 ('sys', 'define', 'nv_live_session_time', '0'),
 ('sys', 'define', 'dir_forum', '')" );
 
@@ -449,6 +451,9 @@ foreach( $array_config as $config_name => $config_value )
 				AND `lang` = 'sys' AND `module`='global' 
 				LIMIT 1" );
 }
+//17) Thêm cấu hình thời gian lặp lại quá trình backup CSDL
+$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'dump_interval', '1')" );
+
 require_once (NV_ROOTDIR . "/includes/core/admin_functions.php");
 if( ! nv_save_file_config_global( ) )
 {
