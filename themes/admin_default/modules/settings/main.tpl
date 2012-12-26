@@ -7,7 +7,7 @@
 <!-- END: error -->
 <form action="" method="post">
 	<table class="tab1">
-		<col width="150" />
+		<col style="width: 250px;" />
 		<tfoot>
 			<tr>
 				<td colspan="2" align="center">

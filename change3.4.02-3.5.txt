@@ -106,6 +106,17 @@ Trong đó vi: Là ngôn ngữ đang sử dụng của site
 
 15) Chuyển CSDL của module file vào DataBase
 
+16) Cập nhật thêm trạng thái cho module News.
+Nếu theme không sử dụng default hoặc modern thì mở file content.tpl của themes/ten-theme/modules/news (nếu có) 
+tìm: 
+<input type="hidden" name="checkss" value="{CHECKSS}" /> 
+Thêm vào sau đoạn:
+<input type="submit" value="{LANG.save_draft}" name="status4">
+
+17) Thêm cấu hình thời gian lặp lại quá trình backup CSDL
+
+##########################################################################
+
 Hướng dẫn nâng cấp
 - Upload các file thay đổi
 - Sửa các file theo hướng dẫn bên trên.
@@ -118,9 +129,3 @@ Sau đó truy cập site theo địa chỉ: http://mysite.com/update.php Thực 
 
 note: fix commit git push -f
 
-9. Cập nhật thêm trạng thái cho module News.
-Nếu theme không sử dụng default hoặc modern thì mở file content.tpl của themes/ten-theme/modules/news (nếu có) 
-tìm: 
-<input type="hidden" name="checkss" value="{CHECKSS}" /> 
-Thêm vào sau đoạn:
-<input type="submit" value="{LANG.save_draft}" name="status4">

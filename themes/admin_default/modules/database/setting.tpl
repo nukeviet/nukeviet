@@ -22,13 +22,24 @@
 		</tbody>
 		<tbody class="second">
 			<tr>
+				<td><strong>{LANG.dump_interval}</strong></td>
+				<td>
+				<select name="dump_interval">
+					<!-- BEGIN: dump_interval -->
+					<option value="{BACKUPDAYVALUE}" {BACKUPDAYSELECTED}>{BACKUPDAYVALUE}</option>
+					<!-- END: dump_interval -->
+				</select> ({GLANG.day})</td>
+			</tr>
+		</tbody>		
+		<tbody>
+			<tr>
 				<td><strong>{LANG.dump_backup_day}</strong></td>
 				<td>
 				<select name="dump_backup_day">
 					<!-- BEGIN: dump_backup_day -->
 					<option value="{BACKUPDAYVALUE}" {BACKUPDAYSELECTED}>{BACKUPDAYVALUE}</option>
 					<!-- END: dump_backup_day -->
-				</select></td>
+				</select> ({GLANG.day})</td>
 			</tr>
 		</tbody>
 		<tfoot>

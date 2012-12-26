@@ -68,7 +68,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 
 	$array['gender'] = filter_text_input( 'gender', 'get', '' );
 
-	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['regdatefrom'], $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array['regdatefrom'], $m ) )
 	{
 		$array['regdatefrom1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -77,7 +77,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$array['regdatefrom1'] = "";
 	}
 
-	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['regdateto'], $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array['regdateto'], $m ) )
 	{
 		$array['regdateto1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -86,7 +86,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$array['regdateto1'] = "";
 	}
 
-	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['last_loginfrom'], $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array['last_loginfrom'], $m ) )
 	{
 		$array['last_loginfrom1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -95,7 +95,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$array['last_loginfrom1'] = "";
 	}
 
-	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['last_loginto'], $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array['last_loginto'], $m ) )
 	{
 		$array['last_loginto1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -156,25 +156,25 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 
 		if( ! empty( $array['regdatefrom1'] ) )
 		{
-			$base_url .= "&amp;regdatefrom=" . rawurlencode( nv_date( "d.m.Y", $array['regdatefrom1'] ) );
+			$base_url .= "&amp;regdatefrom=" . rawurlencode( nv_date( "d/m/Y", $array['regdatefrom1'] ) );
 			$sql .= " AND ( regdate >= " . $array['regdatefrom1'] . " )";
 		}
 
 		if( ! empty( $array['regdateto1'] ) )
 		{
-			$base_url .= "&amp;regdateto=" . rawurlencode( nv_date( "d.m.Y", $array['regdateto1'] ) );
+			$base_url .= "&amp;regdateto=" . rawurlencode( nv_date( "d/m/Y", $array['regdateto1'] ) );
 			$sql .= " AND ( regdate <= " . $array['regdateto1'] . " )";
 		}
 
 		if( ! empty( $array['last_loginfrom1'] ) )
 		{
-			$base_url .= "&amp;last_loginfrom=" . rawurlencode( nv_date( "d.m.Y", $array['last_loginfrom1'] ) );
+			$base_url .= "&amp;last_loginfrom=" . rawurlencode( nv_date( "d/m/Y", $array['last_loginfrom1'] ) );
 			$sql .= " AND ( last_login >= " . $array['last_loginfrom1'] . " )";
 		}
 
 		if( ! empty( $array['last_loginto1'] ) )
 		{
-			$base_url .= "&amp;last_loginto=" . rawurlencode( nv_date( "d.m.Y", $array['last_loginto1'] ) );
+			$base_url .= "&amp;last_loginto=" . rawurlencode( nv_date( "d/m/Y", $array['last_loginto1'] ) );
 			$sql .= " AND ( last_login <= " . $array['last_loginto1'] . " )";
 		}
 		if( ! empty( $filtersql ) )

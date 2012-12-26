@@ -52,7 +52,7 @@ for( $index = $count; $index >= 0; --$index )
 		'stt' => $a,
 		'name' => $mc[2] . "." . $mc[3],
 		'filesize' => nv_convertfromBytes( $value['filesize'] ),
-		'filetime' => nv_date( "l d-m-Y h:i:s A", $filetime ),
+		'filetime' => nv_date( "l d/m/Y h:i:s A", $filetime ),
 		'link_getfile' => $link_getfile,
 		'link_delete' => $link_delete
 	) );

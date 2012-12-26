@@ -9,7 +9,7 @@
 		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
-	<tbody class="{DATA.class}">
+	<tbody {DATA.class}>
 		<tr>
 			<td><select name="metaGroupsName[]">
                 <option value="name"{DATA.n_selected}>name</option>

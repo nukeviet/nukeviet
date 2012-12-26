@@ -79,7 +79,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
                 $loop[] = array( 'key' => $lang_module['language'], 'value' => ! empty( $info['lang'] ) ? strtoupper( $info['lang'] ) : $lang_module['langAll'] );
                 $loop[] = array( 'key' => $lang_module['accuracy'], 'value' => $info['accuracy'] == "keyword" ? $lang_module['byKeyword'] : $lang_module['byPhrase'] );
                 $loop[] = array( 'key' => $lang_module['fromEngine'], 'value' => strtoupper( $info['fromEngine'] ) );
-                $loop[] = array( 'key' => $lang_module['updDate'], 'value' => nv_date( "d-m-Y H:i", $info['updtime'] ) );
+                $loop[] = array( 'key' => $lang_module['updDate'], 'value' => nv_date( "d/m/Y H:i", $info['updtime'] ) );
                 foreach ( $loop as $a => $l )
                 {
                     $xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );

@@ -145,7 +145,7 @@ if( $nv_Request->isset_request( 'submituser', 'post' ) )
 	{
 		$begintime1 = NV_CURRENTTIME;
 	}
-	if( ! empty( $endtime1 ) && preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $endtime1, $m ) )
+	if( ! empty( $endtime1 ) && preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime1, $m ) )
 	{
 		$endtime1 = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -192,7 +192,7 @@ if( $nv_Request->isset_request( 'submitip', 'post' ) )
 	{
 		$error[] = $lang_module['adminip_error_validip'];
 	}
-	if( ! empty( $begintime ) && preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $begintime, $m ) )
+	if( ! empty( $begintime ) && preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime, $m ) )
 	{
 		$begintime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -200,7 +200,7 @@ if( $nv_Request->isset_request( 'submitip', 'post' ) )
 	{
 		$begintime = NV_CURRENTTIME;
 	}
-	if( ! empty( $endtime ) && preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $endtime, $m ) )
+	if( ! empty( $endtime ) && preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime, $m ) )
 	{
 		$endtime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}

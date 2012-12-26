@@ -10,14 +10,14 @@
         <title>XML Sitemap Index for</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <style type="text/css">
-a{color:#000;display:block;}
-body,td,th{font:13px Tahoma,Arial,sans-serif;}
-h1{color:#FF4500;font:bold 16px/20px Tahoma,Arial,sans-serif;}
-h2{font:bold 13px Tahoma,Arial,sans-serif;}
-h3{font:bold 10px Tahoma,Arial,sans-serif;}
-th{background:#D3D3D3;font-weight:800;padding-right:30px;text-align:left;}
-tr.high{background:whitesmoke;}
-tr:hover{background:#FAF0E6;}
+a{color:#000;display:block}
+body,td,th{font:13px Tahoma,Arial,sans-serif}
+h1{color:#FF4500;font:bold 16px/20px Tahoma,Arial,sans-serif}
+h2{font:bold 13px Tahoma,Arial,sans-serif}
+h3{font:bold 10px Tahoma,Arial,sans-serif}
+th{background:#D3D3D3;font-weight:800;padding-right:30px;text-align:left}
+tr.high{background:whitesmoke}
+tr:hover{background:#FAF0E6}
 		</style>
 		</head>
 		<body>

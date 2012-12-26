@@ -108,7 +108,6 @@ $lang_module['banip_timeendban'] = 'Čas ukončení';
 $lang_module['banip_funcs'] = 'Funkce';
 $lang_module['banip_checkall'] = 'Vybrat všechny';
 $lang_module['banip_uncheckall'] = 'Zrušit vše';
-$lang_module['banip_add'] = 'Přídat';
 $lang_module['banip_address'] = 'Adresa';
 $lang_module['banip_begintime'] = 'Čas zahájení zákaz';
 $lang_module['banip_endtime'] = 'Čas zákaz končí';

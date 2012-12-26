@@ -23,7 +23,7 @@ function viewcat_grid_new( $array_catpage, $catid )
     $a = 0;
     foreach ( $array_catpage as $array_row_i )
     {
-        $array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+        $array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
         $xtpl->clear_autoreset();
         $xtpl->assign( 'CONTENT', $array_row_i );
         if ( defined( 'NV_IS_MODADMIN' ) )
@@ -61,7 +61,7 @@ function viewcat_list_new( $array_catpage, $catid, $page )
     $a = $page;
     foreach ( $array_catpage as $array_row_i )
     {
-        $array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+        $array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
         $xtpl->clear_autoreset();
         $xtpl->assign( 'NUMBER', ++ $a );
         $xtpl->assign( 'CONTENT', $array_row_i );
@@ -92,7 +92,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other )
     $a = 0;
     foreach ( $array_catpage as $array_row_i )
     {
-        $array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+        $array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
         $xtpl->clear_autoreset();
         $xtpl->assign( 'CONTENT', $array_row_i );
         if ( defined( 'NV_IS_MODADMIN' ) )
@@ -138,7 +138,7 @@ function viewcat_top ( $array_catcontent )
     {
         foreach ( $array_catcontent as $key => $array_catcontent_i )
         {
-            $array_catcontent_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_catcontent_i['publtime'] );
+            $array_catcontent_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_catcontent_i['publtime'] );
             $xtpl->assign( 'CONTENT', $array_catcontent_i );
             if ( $key == 0 )
             {
@@ -212,7 +212,7 @@ function viewsubcat_main ( $viewcat, $array_cat )
             $xtpl->assign( 'IMGWIDTH', $module_config[$module_name]['homewidth'] );
             foreach ( $array_cat[$key]['content'] as $array_row_i )
             {
-                $array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+                $array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
                 ++$a;
                 if ( $a == 1 )
                 {
@@ -365,7 +365,7 @@ function detail_theme ( $news_contents, $related_new_array, $related_array, $top
         
     $xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-    $news_contents['addtime'] = nv_date( "d-m-Y h:i:s", $news_contents['addtime'] );
+    $news_contents['addtime'] = nv_date( "d/m/Y h:i:s", $news_contents['addtime'] );
     $xtpl->assign( 'NEWSID', $news_contents['id'] );
     $xtpl->assign( 'NEWSCHECKSS', $news_contents['newscheckss'] );
     $xtpl->assign( 'DETAIL', $news_contents );

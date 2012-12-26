@@ -168,7 +168,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$field[] = array(
 			'key' => $lang_module['version_news'], //
-			'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( "d-m-Y H:i", strtotime( $new_version->date ) ) )
+			'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( "d/m/Y H:i", strtotime( $new_version->date ) ) )
 		);
 
 		if( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
