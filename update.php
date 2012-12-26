@@ -449,6 +449,9 @@ foreach( $array_config as $config_name => $config_value )
 				AND `lang` = 'sys' AND `module`='global' 
 				LIMIT 1" );
 }
+//17) Thêm cấu hình thời gian lặp lại quá trình backup CSDL
+$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'dump_interval', '1')" );
+
 require_once (NV_ROOTDIR . "/includes/core/admin_functions.php");
 if( ! nv_save_file_config_global( ) )
 {
