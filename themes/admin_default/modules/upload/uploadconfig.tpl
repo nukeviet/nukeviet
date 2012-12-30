@@ -3,7 +3,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 <form action="" method="post" id="frm">
 	<table class="tab1" style="auto">
-		<col width="200"/>
+		<col width="230"/>
 		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.nv_max_width_height}</strong></td>
@@ -16,7 +16,7 @@
 		</tbody>		
 		<tbody>
 			<tr>
-				<td class="aright"><strong>{LANG.nv_max_size}:</strong></td>
+				<td><strong>{LANG.nv_max_size}:</strong></td>
 				<td>
 					<select name="nv_max_size">
 						<!-- BEGIN: size -->
@@ -29,7 +29,7 @@
 		</tbody>
 		<tbody class="second">
 			<tr>
-				<td class="aright"><strong>{LANG.upload_checking_mode}:</strong></td>
+				<td><strong>{LANG.upload_checking_mode}:</strong></td>
 				<td>
 					<select name="upload_checking_mode">
 						<!-- BEGIN: upload_checking_mode -->

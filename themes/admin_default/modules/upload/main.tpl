@@ -82,17 +82,21 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
         <a href="#"><img alt="{LANG.refresh}" title="{LANG.refresh}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/refresh.png" width="16" height="16"/></a>
     </div>
     <div class="filetype">
-        {LANG.selectfiletype}: 
-        <select name="imgtype" id="imgtype">
+        <select name="imgtype" class="vchange">
             <option value="file"{SFILE}>{LANG.type_file}</option>
             <option value="image"{SIMAGE}>{LANG.type_image}</option>
             <option value="flash"{SFLASH}>{LANG.type_flash}</option>
         </select>
     </div>
     <div class="authorFile">
-        <select name="author" id="author">
+        <select name="author" class="vchange">
             <option value="0">{LANG.author0}</option>
             <option value="1">{LANG.author1}</option>
+        </select>
+        <select name="order" class="vchange">
+            <option value="0">{LANG.order0}</option>
+            <option value="1">{LANG.order1}</option>
+            <option value="2">{LANG.order2}</option>
         </select>
     </div>
     <div class="search">
@@ -191,7 +195,7 @@ function searchfile()
 	a = $("select[name=searchPath]").val(), q = $("input[name=q]").val();
 	b = $("select[name=imgtype]").val(),e = $("select[name=author]").val() == 1 ? "&author" : "";
 	$("div#filesearch").dialog("close");
-   	$("#imglist").html('<p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...</p>').load(nv_module_url + 'imglist&path='+a+'&type='+b+e+'&q='+rawurlencode(q)+'&random=' + nv_randomNum(10))
+   	$("#imglist").html('<p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...</p>').load(nv_module_url + 'imglist&path='+a+'&type='+b+e+'&q='+rawurlencode(q)+'&order='+$('select[name=order]').val()+'&random=' + nv_randomNum(10))
     return false;
 }
 
