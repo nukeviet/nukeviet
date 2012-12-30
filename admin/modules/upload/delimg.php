@@ -21,17 +21,13 @@ if( empty( $file ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $file ) )
 	die( "ERROR_" . $lang_module['errorNotSelectFile'] );
 
 @nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $file );
-
-$md5_view_image = NV_ROOTDIR . "/" . NV_FILES_DIR . "/images/" . md5( $path . '/' . $file ) . "." . nv_getextension( $file );
-if( file_exists( $md5_view_image ) )
+if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i", $path . '/' . $file, $m ) )
 {
-	@nv_deletefile( $md5_view_image );
+	@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] );
 }
-
 if( isset( $array_dirname[$path] ) )
 {
-	$did = $array_dirname[$path];
-	$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $did . " AND `title`='" . $file . "'" );
+	$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $array_dirname[$path] . " AND `title`='" . $file . "'" );
 }
 
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $file, $admin_info['userid'] );

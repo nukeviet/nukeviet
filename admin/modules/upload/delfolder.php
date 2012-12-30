@@ -23,6 +23,10 @@ if( empty( $path ) or $path == NV_UPLOADS_DIR )
 $d = nv_deletefile( NV_ROOTDIR . '/' . $path, true );
 if( $d[0] )
 {
+	if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m ) )
+	{
+		@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1], true );
+	}
 	$result = $db->sql_query( "SELECT `did` FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` WHERE `dirname`='" . $path . "' OR `dirname` LIKE '" . $path . "/%'" );
 	while( list( $did ) = $db->sql_fetchrow( $result, 1 ) )
 	{
@@ -33,6 +37,7 @@ if( $d[0] )
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['deletefolder'], $path, $admin_info['userid'] );
 	echo "OK";
 }
+else
 {
 	die( "ERROR_" . $d[1] );
 }
