@@ -486,7 +486,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'whoviewuser', '2'),
 ('sys', 'global', 'cookie_httponly', '" . $global_config['cookie_httponly'] . "'),
 ('sys', 'global', 'admin_check_pass_time', '1800'),
-('sys', 'global', 'adminrelogin_max', '0'),
+('sys', 'global', 'adminrelogin_max', '3'),
 ('sys', 'global', 'cookie_secure', '" . $global_config['cookie_secure'] . "'),
 ('sys', 'global', 'nv_unick_type', '" . $global_config['nv_unick_type'] . "'),
 ('sys', 'global', 'nv_upass_type', '" . $global_config['nv_upass_type'] . "'),
