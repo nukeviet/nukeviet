@@ -334,7 +334,7 @@ function filedelete()
         data : "path=" + b + "&file=" + a,
         success : function()
         {
-            $("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + d + e + "&num=" + +nv_randomNum(10))
+            $("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + d + e + "&order="+$("select[name=order]").val()+"&num=" + +nv_randomNum(10))
         }
     })
 }
@@ -407,7 +407,7 @@ function folderClick(a)
         {
             a = $("select[name=imgtype]").val();
             var d = $("input[name=selFile]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
-            $("div#imglist").html('<p style="padding:20px; text-align:center"><img src="' + nv_base_siteurl + 'images/load_bar.gif"/> please wait...</p>').load(nv_module_url + "imglist&path=" + b + "&imgfile=" + d + "&type=" + a + e + "&random=" + nv_randomNum(10))
+            $("div#imglist").html('<p style="padding:20px; text-align:center"><img src="' + nv_base_siteurl + 'images/load_bar.gif"/> please wait...</p>').load(nv_module_url + "imglist&path=" + b + "&imgfile=" + d + "&type=" + a + e + "&order="+$("select[name=order]").val()+"&random=" + nv_randomNum(10))
         }
         else
         {
@@ -496,7 +496,7 @@ function deletefolder()
                     b = $("select[name=imgtype]").val();
                     var d = $("select[name=author]").val() == 1 ? "&author" : "", e = $("span#path").attr("title"), g = $("input[name=selFile]").val();
                     $("#imgfolder").load(nv_module_url + "folderlist&path=" + e + "&currentpath=" + a + "&random=" + nv_randomNum(10));
-                    $("div#imglist").load(nv_module_url + "imglist&path=" + a + "&imgfile=" + g + "&type=" + b + d + "&random=" + nv_randomNum(10))
+                    $("div#imglist").load(nv_module_url + "imglist&path=" + a + "&imgfile=" + g + "&type=" + b + d + "&order="+$("select[name=order]").val()+"&order="+$("select[name=order]").val()+"&random=" + nv_randomNum(10))
                 }
             }
         })
@@ -505,18 +505,10 @@ function deletefolder()
 
 //  ---------------------------------------
 
-$("select[name=imgtype]").change(function()
-{
-    var a = $("span#foldervalue").attr("title"), b = $(this).val(), d = $("input[name=selFile]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
-    $("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&random=" + nv_randomNum(10))
-});
-
-//  ---------------------------------------
-
-$("select[name=author]").change(function()
+$(".vchange").change(function()
 {
     var a = $("span#foldervalue").attr("title"), b = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $(this).val() == 1 ? "&author" : "";
-    $("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + d + "&imgfile=" + b + e + "&random=" + nv_randomNum(10))
+    $("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + d + "&imgfile=" + b + e + "&order="+$("select[name=order]").val()+"&random=" + nv_randomNum(10))
 });
 
 //  ---------------------------------------
@@ -525,7 +517,7 @@ $(".refresh a").click(function()
 {
     var a = $("span#foldervalue").attr("title"), b = $("select[name=imgtype]").val(), d = $("input[name=selFile]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "", g = $("span#path").attr("title");
     $("#imgfolder").load(nv_module_url + "folderlist&path=" + g + "&currentpath=" + a + "&dirListRefresh&random=" + nv_randomNum(10));
-    $("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&random=" + nv_randomNum(10));
+    $("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&order="+$("select[name=order]").val()+"&random=" + nv_randomNum(10));
     return false
 });
 
@@ -599,7 +591,7 @@ $("#confirm").click(function()
                 {
                     $("#cfile").html(k);
                 }
-                $("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + h + "&imgfile=" + k);
+                $("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + h + "&order=0&imgfile=" + k);
             }
         }, "html")
     }
@@ -629,7 +621,7 @@ $("#confirm").click(function()
                     {
                         $("input[name=imgurl]").parent().css("display", "block").next().css("display", "none").next().css("display", "block").next().css("display", "none");
                         $("input[name=selFile]").val(k);
-                        $("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + "&imgfile=" + k + h + "&num=" + +nv_randomNum(10))
+                        $("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + "&imgfile=" + k + h + "&order=0&num=" + +nv_randomNum(10))
                     }
                 }
             })
@@ -758,7 +750,7 @@ $("div#createfolder").dialog(
                         e = $("select[name=imgtype]").val();
                         var g = $("select[name=author]").val() == 1 ? "&author" : "", h = $("span#path").attr("title");
                         $("#imgfolder").load(nv_module_url + "folderlist&path=" + h + "&currentpath=" + d + "&random=" + nv_randomNum(10));
-                        $("div#imglist").load(nv_module_url + "imglist&path=" + d + "&type=" + e + g + "&random=" + nv_randomNum(10))
+                        $("div#imglist").load(nv_module_url + "imglist&path=" + d + "&type=" + e + g + "&order="+$("select[name=order]").val()+"&random=" + nv_randomNum(10))
                     }
                 }
             });
@@ -827,7 +819,7 @@ $("input[name=newSizeOK]").click(function()
                         $("input[name=selFile]").val(h);
                         $("input[name=newSizeOK]").removeAttr("disabled");
                         $("div#imgcreate").dialog("close");
-                        $("#imglist").load(nv_module_url + "imglist&path=" + g + "&type=" + j + "&imgfile=" + h + k + "&num=" + +nv_randomNum(10))
+                        $("#imglist").load(nv_module_url + "imglist&path=" + g + "&type=" + j + "&imgfile=" + h + k + "&order="+$("select[name=order]").val()+"&num=" + +nv_randomNum(10))
                     }
                 }
             })
@@ -871,11 +863,11 @@ $("input[name=newPathOK]").click(function()
                     {
                         j = $("span#path").attr("title");
                         $("#imgfolder").load(nv_module_url + "folderlist&path=" + j + "&currentpath=" + b + "&random=" + nv_randomNum(10));
-                        $("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + h + "&imgfile=" + g + k + "&num=" + +nv_randomNum(10))
+                        $("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + h + "&imgfile=" + g + k + "&order="+$("select[name=order]").val()+"&num=" + +nv_randomNum(10))
                     }
                     else
                     {
-                        $("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + h + "&imgfile=" + g + k + "&num=" + +nv_randomNum(10))
+                        $("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + h + "&imgfile=" + g + k + "&order="+$("select[name=order]").val()+"&num=" + +nv_randomNum(10))
                     }
                 }
             }
@@ -924,7 +916,7 @@ $("input[name=filerenameOK]").click(function()
                         var j = $("select[name=author]").val() == 1 ? "&author" : "";
                         $("input[name=filerenameOK]").removeAttr("disabled");
                         $("div#filerename").dialog("close");
-                        $("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + h + "&imgfile=" + g + j + "&num=" + nv_randomNum(10))
+                        $("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + h + "&imgfile=" + g + j + "&order="+$("select[name=order]").val()+"&num=" + nv_randomNum(10))
                     }
                 }
             })

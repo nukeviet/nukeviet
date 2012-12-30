@@ -53,11 +53,9 @@ if( isset( $array_dirname[$newfolder] ) )
 if( ! $mirror )
 {
 	@nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $image );
-
-	$md5_view_image = NV_ROOTDIR . '/' . NV_FILES_DIR . '/images/' . md5( $path . '/' . $image ) . "." . nv_getextension( $image );
-	if( file_exists( $md5_view_image ) )
+	if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m ) )
 	{
-		@nv_deletefile( $md5_view_image );
+		@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] . '/' . $image );
 	}
 	if( isset( $array_dirname[$path] ) )
 	{

@@ -6,7 +6,6 @@
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
-
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
 	die( 'Stop!!!' );
 
@@ -106,6 +105,8 @@ $page_title = $lang_module['uploadconfig'];
 
 $xtpl = new XTemplate( "uploadconfig.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'NV_MAX_WIDTH', NV_MAX_WIDTH );
+$xtpl->assign( 'NV_MAX_HEIGHT', NV_MAX_HEIGHT );
 
 $sys_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) );
 $p_size = $sys_max_size / 100;

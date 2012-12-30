@@ -44,16 +44,14 @@ $newname = $newname2;
 if( ! @rename( NV_ROOTDIR . '/' . $path . '/' . $file, NV_ROOTDIR . '/' . $path . '/' . $newname ) )
 	die( "ERROR_" . $lang_module['errorNotRenameFile'] );
 
-$md5_view_image = NV_ROOTDIR . '/' . NV_FILES_DIR . '/images/' . md5( $path . '/' . $file ) . "." . $ext;
-if( file_exists( $md5_view_image ) )
+if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i", $path . '/' . $file, $m ) )
 {
-	@nv_deletefile( $md5_view_image );
+	@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] );
 }
 if( isset( $array_dirname[$path] ) )
 {
-	$did = $array_dirname[$path];
 	$info = nv_getFileInfo( $path, $newname );
-	$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_file` SET `name` = '" . $info['name'] . "', `src` = '" . $info['src'] . "', `title` = '" . $newname . "' WHERE `did` = " . $did . " AND `title` = '" . $file . "'" );
+	$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_file` SET `name` = '" . $info['name'] . "', `src` = '" . $info['src'] . "', `title` = '" . $newname . "' WHERE `did` = " . $array_dirname[$path] . " AND `title` = '" . $file . "'" );
 }
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['rename'], $path . '/' . $file . " -> " . $path . '/' . $newname, $admin_info['userid'] );
 

@@ -12,6 +12,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 if( defined( 'NV_IS_SPADMIN' ) )
 {
+	$submenu['thumbconfig'] = $lang_module['thumbconfig'];
 	$submenu['config'] = $lang_module['configlogo'];
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
@@ -49,6 +50,7 @@ $allow_func = array(
 if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$allow_func[] = 'config';
+	$allow_func[] = 'thumbconfig';
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$allow_func[] = 'uploadconfig';
@@ -193,40 +195,96 @@ function nv_check_path_upload( $path )
  * @param integer $h
  * @return
  */
-function nv_get_viewImage( $fileName, $w = 80, $h = 80 )
+function nv_get_viewImage( $fileName )
 {
-	$ext = nv_getextension( $fileName );
-	$md5_view_image = md5( $fileName );
-	$viewDir = NV_FILES_DIR . '/images';
-	$viewFile = $viewDir . '/' . $md5_view_image . '.' . $ext;
-
-	if( file_exists( NV_ROOTDIR . '/' . $viewFile ) )
+	global $array_thumb_config;
+	if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i", $fileName, $m ) )
 	{
-		$size = @getimagesize( NV_ROOTDIR . '/' . $viewFile );
+		$viewFile = NV_FILES_DIR . '/' . $m[1];
+		if( file_exists( NV_ROOTDIR . '/' . $viewFile ) )
+		{
+			$size = @getimagesize( NV_ROOTDIR . '/' . $viewFile );
+			return array(
+				$viewFile,
+				$size[0],
+				$size[1]
+			);
+		}
+		else
+		{
+			$m[2] = rtrim( $m[2], '/' );
+			$thumb_config = (isset( $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] )) ? $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] : $array_thumb_config[''];
+			$viewDir = NV_FILES_DIR;
+			if( ! empty( $m[2] ) )
+			{
+				if( ! is_dir( NV_ROOTDIR . '/' . $m[2] ) )
+				{
+					$e = explode( "/", $m[2] );
+					$cp = NV_FILES_DIR;
+					foreach( $e as $p )
+					{
+						if( is_dir( NV_ROOTDIR . '/' . $cp . '/' . $p ) )
+						{
+							$viewDir .= '/' . $p;
+						}
+						else
+						{
+							$mk = nv_mkdir( NV_ROOTDIR . '/' . $cp, $p );
+							if( $mk[0] > 0 )
+							{
+								$viewDir .= '/' . $p;
+							}
+						}
+						$cp .= '/' . $p;
+					}
+				}
+			}
+			include_once (NV_ROOTDIR . "/includes/class/image.class.php");
+			$image = new image( NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT );
+			if( $thumb_config['thumb_type'] == 4 )
+			{
+				$thumb_width = $thumb_config['thumb_width'];
+				$thumb_height = $thumb_config['thumb_height'];
+				$maxwh = max( $thumb_width, $thumb_height );
+				if( $image->fileinfo['width'] > $image->fileinfo['height'] )
+				{
+					$thumb_config['thumb_width'] = 0;
+					$thumb_config['thumb_height'] = $maxwh;
+				}
+				else
+				{
+					$thumb_config['thumb_width'] = $maxwh;
+					$thumb_config['thumb_height'] = 0;
+				}
+			}
+			$image->resizeXY( $thumb_config['thumb_width'], $thumb_config['thumb_height'] );
+			if( $thumb_config['thumb_type'] == 4 )
+			{
+				$image->cropFromCenter( $thumb_width, $thumb_height );
+			}
+			$image->save( NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality'] );
+			$create_Image_info = $image->create_Image_info;
+			$error = $image->error;
+			$image->close( );
+			if( empty( $error ) )
+			{
+				return array(
+					$viewDir . '/' . basename( $create_Image_info['src'] ),
+					$create_Image_info['width'],
+					$create_Image_info['height']
+				);
+			}
+		}
+	}
+	else
+	{
+		$size = @getimagesize( NV_ROOTDIR . '/' . $fileName );
 		return array(
 			$viewFile,
 			$size[0],
 			$size[1]
 		);
 	}
-
-	include_once (NV_ROOTDIR . "/includes/class/image.class.php");
-	$image = new image( NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-	$image->resizeXY( $w, $h );
-	$image->save( NV_ROOTDIR . '/' . $viewDir, $md5_view_image, 75 );
-	$create_Image_info = $image->create_Image_info;
-	$error = $image->error;
-	$image->close( );
-
-	if( empty( $error ) )
-	{
-		return array(
-			$viewDir . '/' . basename( $create_Image_info['src'] ),
-			$create_Image_info['width'],
-			$create_Image_info['height']
-		);
-	}
-
 	return false;
 }
 
@@ -273,29 +331,24 @@ function nv_getFileInfo( $pathimg, $file )
 		$info['srcwidth'] = $size[0];
 		$info['srcheight'] = $size[1];
 		$info['size'] = $size[0] . "|" . $size[1];
-
-		if( $size[0] > 80 or $size[1] > 80 )
+		if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\.\/]+)$/i", $pathimg . '/' . $file, $m ) )
 		{
-			if( ($_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 )) !== false )
+			if( ($thub_src = nv_get_viewImage( $pathimg . '/' . $file )) !== false )
 			{
-				$info['src'] = $_src[0];
-				$info['srcwidth'] = $_src[1];
-				$info['srcheight'] = $_src[2];
+				$info['src'] = $thub_src[0];
+				$info['srcwidth'] = $thub_src[1];
+				$info['srcheight'] = $thub_src[2];
 			}
-			else
-			{
-				if( $info['srcwidth'] > 80 )
-				{
-					$info['srcheight'] = round( 80 / $info['srcwidth'] * $info['srcheight'] );
-					$info['srcwidth'] = 80;
-				}
-
-				if( $info['srcheight'] > 80 )
-				{
-					$info['srcwidth'] = round( 80 / $info['srcheight'] * $info['srcwidth'] );
-					$info['srcheight'] = 80;
-				}
-			}
+		}
+		if( $info['srcwidth'] > 80 )
+		{
+			$info['srcheight'] = round( 80 / $info['srcwidth'] * $info['srcheight'] );
+			$info['srcwidth'] = 80;
+		}
+		if( $info['srcheight'] > 80 )
+		{
+			$info['srcwidth'] = round( 80 / $info['srcheight'] * $info['srcwidth'] );
+			$info['srcheight'] = 80;
 		}
 	}
 	elseif( in_array( $ext, $array_flash ) )
@@ -467,14 +520,28 @@ $array_documents = array(
 	'docx',
 	'xlsx'
 );
-
-$sql = "SELECT `did`, `dirname` FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` ORDER BY `dirname` ASC";
-$result = $db->sql_query( $sql );
 $array_dirname = array( );
+$array_thumb_config = array( );
+
+$refresh = $nv_Request->isset_request( 'refresh', 'get', 0 );
+$path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) );
+
+$sql = "SELECT * FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` ORDER BY `dirname` ASC";
+$result = $db->sql_query( $sql );
 while( $row = $db->sql_fetch_assoc( $result ) )
 {
 	$array_dirname[$row['dirname']] = $row['did'];
+	if( $row['thumb_type'] )
+	{
+		$array_thumb_config[$row['dirname']] = $row;
+	}
+	if( empty( $row['time'] ) AND $row['dirname'] == $path )
+	{
+		$refresh = true;
+	}
 }
+unset( $array_dirname[''] );
+
 if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 {
 	$real_dirlist = array( );
@@ -495,7 +562,7 @@ if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 	$result_new = array_diff( $real_dirlist, $dirlist );
 	foreach( $result_new as $dirname )
 	{
-		$array_dirname[$dirname] = $db->sql_query_insert_id( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`) VALUES (NULL, '" . $dirname . "', 0)" );
+		$array_dirname[$dirname] = $db->sql_query_insert_id( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`, `thumb_type`, `thumb_width`, `thumb_height`, `thumb_quality`) VALUES (NULL, '" . $dirname . "', '0', '0', '0', '0', '0')" );
 	}
 }
 
