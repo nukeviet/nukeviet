@@ -399,6 +399,8 @@ $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, 
 ('sys', 'define', 'nv_anti_iframe', '".NV_ANTI_IFRAME."'),
 ('sys', 'define', 'nv_allowed_html_tags', '".NV_ALLOWED_HTML_TAGS."'),
 ('sys', 'define', 'nv_live_session_time', '0'),
+('sys', 'define', 'nv_auto_resize', '1'),
+('sys', 'define', 'cdn_url', ''),
 ('sys', 'define', 'dir_forum', '')" );
 
 //11) Thay đổi CSDL module users để phù hợp với chức năng tìm lại mật khẩu

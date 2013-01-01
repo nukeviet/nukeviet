@@ -1797,8 +1797,11 @@ function nv_change_buffer( $buffer )
 		);
 		$buffer = nv_valid_html( $buffer, $config );
 	}
-
-	if( ! $sys_info['supports_rewrite'] ) 
+	if(!empty($global_config['cdn_url']))
+	{
+		$buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"".$global_config['cdn_url']."\\4?t=".$global_config['timestamp']."\"\\7>", $buffer );
+	}
+	elseif( ! $sys_info['supports_rewrite'] ) 
 	{
 		$buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . NV_BASE_SITEURL . "CJzip.php?file=\\4&amp;r=".$global_config['timestamp']."\"\\7>", $buffer );
 	}
