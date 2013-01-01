@@ -55,7 +55,7 @@ div.news_column p.copyright{background-color:#6cf;color:#fff;margin:5px auto;pad
 #showcomment .name{background:url(../images/news/user.png) 0 2px no-repeat;border-bottom:1px dotted #ccc;font-weight:bold;height:20px;line-height:20px;padding:0 0 0 20px}
 #showcomment span{font-weight:normal;margin:0 4px}
 #showcomment .email{background:url(../images/news/email.png) 0 2px no-repeat;float:none;padding:0 0 0 20px}
-#showcomment .time{background:url(../images/news/calendar.png) no-repeat;float:none;padding:0 0 0 20px}
+#showcomment .time{background:url(../images/icons/calendar.png) no-repeat;float:none;padding:0 0 0 20px}
 #showcomment .bg{background:#F9FDFF}
 #showcomment .page{float:none}
 .sea-frame{background:#F0F0F0;border:#CCC 1px solid;margin-bottom:10px;margin-top:10px;padding:10px}
