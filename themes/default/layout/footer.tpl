@@ -1,4 +1,4 @@
-	<div class="clear"></div>
+<div class="clear"></div>
 	<div id="footer" class="clearfix">
 		<div class="fl">
 			{THEME_STAT_IMG} {THEME_NUKEVIET_IMG} 
