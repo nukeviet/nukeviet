@@ -122,7 +122,7 @@ hr.space{background:#fff;color:#fff}
 .small .c-stars img{vertical-align:text-top}
 .download h4{font-size:1.3em;font-weight:bold;line-height:1.6;margin-bottom:0}
 a.download-button{background:url(../images/download/tab-g.png) 0 0 repeat-x;border:1px solid #d8d8d8;padding:2px 4px}
-a.download-button span{background:url(../images/download/download/download.png) 2px 50% no-repeat;padding-left:20px}
+a.download-button span{background:url(../images/download/download.png) 2px 50% no-repeat;padding-left:20px}
 ul.other-down li{background:url(../images/download/bullet-orange.png) 2px 12px no-repeat;border-top:1px solid #d8d8d8;padding:5px 0 5px 12px}
 ul.list-down-w{list-style-position:inside;list-style-type:none;margin:0}
 ul.list-down-w li{border-bottom:1px solid #d8d8d8;display:block;height:1%;margin:0 0 .5em;padding:0;position:relative}
@@ -130,9 +130,9 @@ ul.list-down-w li .number{color:#f60;left:0;position:absolute;top:0}
 ul.list-down-w li p{margin-bottom:.5em;padding-left:20px}
 .down-o h4{font-weight:bold}
 .down-o .info{border-top:1px solid #d8d8d8;padding-top:6px}
-ul.list-down li{background:url(../images/download/download/download.png) 2px 6px no-repeat;border-bottom:1px solid #d8d8d8;padding:4px 0 6px 24px}
+ul.list-down li{background:url(../images/download/download.png) 2px 6px no-repeat;border-bottom:1px solid #d8d8d8;padding:4px 0 6px 24px}
 .note{background:#fdfae2;border-left:5px solid #fad08e;padding:8px 10px 4px}
-ul.links_down li{background:url(../images/download/download/download.png) left 0 no-repeat;margin-bottom:5px;padding-bottom:2px;padding-left:20px}
+ul.links_down li{background:url(../images/download/download.png) left 0 no-repeat;margin-bottom:5px;padding-bottom:2px;padding-left:20px}
 a.block_link{background:url(../images/download/arr_red.png) 5px 6px no-repeat;color:#e81616;padding-left:12px;visibility:hidden}
 a.block_link:hover{color:#e81616}
 .download-hh{font-size:1.2em;font-weight:bold;margin-bottom:.8em}
