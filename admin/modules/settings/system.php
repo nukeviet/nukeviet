@@ -14,11 +14,11 @@ $adminThemes = array( '' );
 $adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] ) );
 unset( $adminThemes[0] );
 
-$closed_site_Modes = array( //
-	'0' => $lang_module['closed_site_0'], //
-	'1' => $lang_module['closed_site_1'], //
-	'2' => $lang_module['closed_site_2'], //
-	'3' => $lang_module['closed_site_3'] //
+$closed_site_Modes = array(
+	'0' => $lang_module['closed_site_0'],
+	'1' => $lang_module['closed_site_1'],
+	'2' => $lang_module['closed_site_2'],
+	'3' => $lang_module['closed_site_3']
 );
 
 $allow_sitelangs = array( );
@@ -122,6 +122,17 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['lang_geo'] = $nv_Request->get_int( 'lang_geo', 'post', 0 );
 	}
 
+	$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
+	if( nv_is_url( $cdn_url ) )
+	{
+		$array_config_global['cdn_url'] = $cdn_url;
+		$array_config_global['optActive'] = 0;
+	}
+	else
+	{
+		$array_config_global['cdn_url'] = '';
+	}
+
 	foreach( $array_config_global as $config_name => $config_value )
 	{
 		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
@@ -173,6 +184,7 @@ $array_config_global['searchEngineUniqueID'] = isset( $array_config_global['sear
 $xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config_global );
+$xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id( ) ) );
 if( $errormess != "" )
 {
 	$xtpl->assign( 'ERROR', $errormess );

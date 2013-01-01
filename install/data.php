@@ -510,6 +510,8 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'define', 'nv_gfx_height', '25'),
 ('sys', 'define', 'nv_max_width', '1500'),
 ('sys', 'define', 'nv_max_height', '1500'),
+('sys', 'define', 'nv_auto_resize', '1'),
+('sys', 'define', 'cdn_url', ''),
 ('sys', 'define', 'nv_live_cookie_time', '" . NV_LIVE_COOKIE_TIME . "'),
 ('sys', 'define', 'nv_live_session_time', '0'),
 ('sys', 'define', 'nv_anti_iframe', '" . NV_ANTI_IFRAME . "'),

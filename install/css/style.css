@@ -286,18 +286,6 @@ div.step_content_title {
 	padding: 1px
 }
 
-.choose_lang_en {
-	background: url(../images/us-uk.png) 2px 0px no-repeat;
-	padding-left: 20px;
-	margin: 5px 0
-}
-
-.choose_lang_vi {
-	background: url(../images/vn.png) 2px 0px no-repeat;
-	padding-left: 20px;
-	margin: 5px 0
-}
-
 .highlight_green {
 	color: #449a05
 }
