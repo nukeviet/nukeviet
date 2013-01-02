@@ -7,10 +7,9 @@
  * @createdate 12/28/2009 20:8
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-//Ten cac table cua CSDL dung chung cho he thong
+// Ten cac table cua CSDL dung chung cho he thong
 define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
 define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
 define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
@@ -501,6 +500,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'max_requests_300', '150'),
 ('sys', 'global', 'nv_display_errors_list', '1'),
 ('sys', 'global', 'display_errors_list', '1'),
+('sys', 'global', 'nv_auto_resize', '1'),
 ('sys', 'define', 'nv_unickmin', '" . NV_UNICKMIN . "'),
 ('sys', 'define', 'nv_unickmax', '" . NV_UNICKMAX . "'),
 ('sys', 'define', 'nv_upassmin', '" . NV_UPASSMIN . "'),
@@ -510,7 +510,6 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'define', 'nv_gfx_height', '25'),
 ('sys', 'define', 'nv_max_width', '1500'),
 ('sys', 'define', 'nv_max_height', '1500'),
-('sys', 'define', 'nv_auto_resize', '1'),
 ('sys', 'define', 'cdn_url', ''),
 ('sys', 'define', 'nv_live_cookie_time', '" . NV_LIVE_COOKIE_TIME . "'),
 ('sys', 'define', 'nv_live_session_time', '0'),
@@ -553,4 +552,5 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_rows` V
 (1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', 'http://www.mofa.gov.vn', '', '', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1), 
 (2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', 'http://vinades.vn', '', '', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,2), 
 (3, 'Quang cao giua trang', 1, 0, 'webnhanh_vn.gif', 'gif', 'image/gif', 510, 65, '', 'http://webnhanh.vn', '', '', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
+
 ?>

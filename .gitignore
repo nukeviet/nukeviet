@@ -1,12 +1,11 @@
 /.project
+/.buildpath
 /.settings
 /config.php
 /cache/*.cache
 /cache/*.xml
 /data/diagnostic-*.xml
 /files/css/*.opt.css
-/files/dcache/
-/files/images/
 /logs/data_logs/
 /logs/dump_backup/
 /logs/error_logs/
