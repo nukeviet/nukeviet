@@ -25,8 +25,6 @@ $module_version = array(
 		$module_name . "/topics"
 	),
 	"files_dir" => array(
-		$module_name . "/thumb",
-		$module_name . "/block",
 		$module_name . "/topics"
 	)
 );

@@ -67,30 +67,22 @@ foreach ( $list as $row )
     }
     else
     {
-        if ( ! empty( $row['homeimgthumb'] ) )
-        {
-            $array_img = explode( "|", $row['homeimgthumb'] );
-        }
-        else
-        {
-            $array_img = array( "", "" );
-        }
-        if ( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
-        {
-            $row['imgsource'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
-        }
-        elseif ( $row['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['homeimgfile'] ) )
-        {
-            $row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
-        }
-        elseif ( nv_is_url( $row['homeimgfile'] ) )
-        {
-            $row['imgsource'] = $row['homeimgfile'];
-        }
-        else
-        {
-            $row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
-        }
+    	if( $row['homeimgthumb'] == 1 )
+    	{
+    		$row['imgsource'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
+    	}
+    	elseif( $row['homeimgthumb'] == 2 )
+    	{
+    		$row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
+    	}
+    	elseif( $row['homeimgthumb'] == 3 )
+    	{
+    		$row['imgsource'] = $row['homeimgfile'];
+    	}
+    	else
+    	{
+    		$row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+    	}
         $xtpl->assign( 'othernews', $row );
         $xtpl->parse( 'main.othernews' );
     }
