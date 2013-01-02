@@ -85,23 +85,21 @@ if( $id > 0 and $catid > 0 )
 			{
 				$src = $alt = $note = "";
 				$width = $height = 0;
-				$array_img = explode( "|", $content['homeimgthumb'] );
-				if( ! empty( $array_img[0] ) and $content['imgposition'] == 1 and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+				if($content['homeimgthumb'] ==1 and $content['imgposition'] == 1 and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
 				{
-					$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+					$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
 					$width = $module_config[$module_name]['homewidth'];
 				}
-				elseif( nv_is_url( $content['homeimgfile'] ) )
+				elseif($content['homeimgthumb'] ==3 )
 				{
 					$src = $content['homeimgfile'];
 					$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 				}
-				else
-					if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
-					{
-						$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
-						$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
-					}
+				elseif( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
+				{
+					$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
+					$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
+				}
 				$alt = ( empty( $content['homeimgalt'] ) ) ? $content['title'] : $content['homeimgalt'];
 
 				$result['image'] = array(

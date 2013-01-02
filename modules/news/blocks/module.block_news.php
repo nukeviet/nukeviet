@@ -52,32 +52,22 @@ if (!nv_function_exists('nv_news_block_news'))
             while (list($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile) = $db->sql_fetchrow($result))
             {
                 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;
-
-                if (!empty($homeimgthumb))
+                if( $homeimgthumb == 1 ) //image thumb
                 {
-                    $array_img = explode("|", $homeimgthumb);
+                	$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $homeimgfile;
                 }
-                else
+                elseif( $homeimgthumb == 2 ) //image file
                 {
-                    $array_img = array("", "");
+                	$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $homeimgfile;
                 }
-                if ($array_img[0] != "" and file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module . '/' . $array_img[0]))
+                elseif( $homeimgthumb == 3 ) //image url
                 {
-                    $imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $array_img[0];
+                	$item['imghome'] = $homeimgfile;
                 }
-                elseif (nv_is_url($homeimgfile))
+                else //no image
                 {
-                    $imgurl = $homeimgfile;
+                	$item['imghome'] = '';
                 }
-                elseif ($homeimgfile != "" and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module . '/' . $homeimgfile))
-                {
-                    $imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $homeimgfile;
-                }
-                else
-                {
-                    $imgurl = "";
-                }
-
                 $array_block_news[] = array('id' => $id, 'title' => $title, 'link' => $link, 'imgurl' => $imgurl, 'width' => $blockwidth);
             }
             $cache = serialize($array_block_news);

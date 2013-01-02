@@ -115,6 +115,45 @@ Thêm vào sau đoạn:
 
 17) Thêm cấu hình thời gian lặp lại quá trình backup CSDL
 
+18) Sửa module news để dùng ảnh thumb do module upload tạo ra làm ảnh thumb cho bài viết, cần viết lại tất cả các block của module này
+
+Thí dụ lúc trước xác đụng ảnh thumb theo cách
+			$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
+
+			if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+			}
+			elseif( nv_is_url( $item['homeimgfile'] ) )
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+			}
+			else
+			{
+				$item['imghome'] = "";
+			}
+Giờ cần sửa lại code theo cách
+			if( $item['homeimgthumb'] == 1 ) //image thumb
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 2 ) //image file
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 3 ) //image url
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			else //no image
+			{
+				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
+Tool update, CSDL, ảnh của module  được viết tại file update3.php
 ##########################################################################
 
 Hướng dẫn nâng cấp

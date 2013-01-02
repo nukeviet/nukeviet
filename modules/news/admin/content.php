@@ -428,83 +428,29 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		}
 
 		// Xu ly anh minh hoa
-		$rowcontent['homeimgthumb'] = "";
+		$rowcontent['homeimgthumb'] = 0;
 		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and file_exists( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
 			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
-		}
-		elseif( ! nv_is_url( $rowcontent['homeimgfile'] ) )
-		{
-			$rowcontent['homeimgfile'] = "";
-		}
-		$check_thumb = false;
-		if( $rowcontent['id'] > 0 )
-		{
-			list( $homeimgfile, $homeimgthumb ) = $db->sql_fetchrow( $db->sql_query( "SELECT `homeimgfile`, `homeimgthumb` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $rowcontent['id'] ) );
-			if( $rowcontent['homeimgfile'] != $homeimgfile )
+			if( file_exists( NV_ROOTDIR . NV_FILES_DIR . "/" . $module_name . "/" . $rowcontent['homeimgfile'] ) )
 			{
-				$check_thumb = true;
-				if( $homeimgthumb != "" and $homeimgthumb != "|" )
-				{
-					$rowcontent['homeimgthumb'] = "";
-					$homeimgthumb_arr = explode( "|", $homeimgthumb );
-					foreach( $homeimgthumb_arr as $homeimgthumb_i )
-					{
-						if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgthumb_i ) )
-						{
-							nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgthumb_i );
-						}
-					}
-
-				}
+				$rowcontent['homeimgthumb'] = 1;
 			}
 			else
 			{
-				$rowcontent['homeimgthumb'] = $homeimgthumb;
+				$rowcontent['homeimgthumb'] = 2;
 			}
 		}
-		elseif( ! empty( $rowcontent['homeimgfile'] ) )
+		elseif( nv_is_url( $rowcontent['homeimgfile'] ) )
 		{
-			$check_thumb = true;
+			$rowcontent['homeimgthumb'] = 3;
 		}
-		$homeimgfile = NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $rowcontent['homeimgfile'];
-		if( $check_thumb and file_exists( $homeimgfile ) )
+		else
 		{
-			require_once (NV_ROOTDIR . "/includes/class/image.class.php");
-
-			$basename = basename( $homeimgfile );
-			$image = new image( $homeimgfile, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-
-			$thumb_basename = $basename;
-			$i = 1;
-			while( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/thumb/' . $thumb_basename ) )
-			{
-				$thumb_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
-				++$i;
-			}
-
-			$image->resizeXY( $module_config[$module_name]['homewidth'], $module_config[$module_name]['homeheight'] );
-			$image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/thumb', $thumb_basename );
-			$image_info = $image->create_Image_info;
-			$thumb_name = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/', '', $image_info['src'] );
-
-			$block_basename = $basename;
-			$i = 1;
-			while( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/block/' . $block_basename ) )
-			{
-				$block_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
-				++$i;
-			}
-			$image->resizeXY( $module_config[$module_name]['blockwidth'], $module_config[$module_name]['blockheight'] );
-			$image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/block', $block_basename );
-			$image_info = $image->create_Image_info;
-			$block_name = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/', '', $image_info['src'] );
-
-			$image->close( );
-			$rowcontent['homeimgthumb'] = $thumb_name . "|" . $block_name;
+			$rowcontent['homeimgfile'] = "";
 		}
-
+		
 		if( $rowcontent['id'] == 0 )
 		{
 			$rowcontent['publtime'] = ($rowcontent['publtime'] > NV_CURRENTTIME) ? $rowcontent['publtime'] : NV_CURRENTTIME;

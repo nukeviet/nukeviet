@@ -30,25 +30,22 @@ if( $topicid > 0 )
 
 	while( $item = $db->sql_fetch_assoc( $query ) )
 	{
-		$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
-
-		if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+		if( $item['homeimgthumb'] == 1 ) //image thumb
 		{
-			$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+			$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		elseif( nv_is_url( $item['homeimgfile'] ) )
-		{
-			$item['src'] = $item['homeimgfile'];
-		}
-		elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+		elseif( $item['homeimgthumb'] == 2 ) //image file
 		{
 			$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		else
+		elseif( $item['homeimgthumb'] == 3 ) //image url
 		{
-			$item['src'] = "";
+			$item['src'] = $item['homeimgfile'];
 		}
-
+		else //no image
+		{
+			$item['src'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+		}
 		$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
 		$item['width'] = $module_config[$module_name]['homewidth'];
 
