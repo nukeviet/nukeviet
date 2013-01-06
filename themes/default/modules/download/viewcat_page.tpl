@@ -8,7 +8,7 @@
     <div class="content-box clearfix download">
     	<!-- BEGIN: image -->
         <a href="{itemcat.more_link}">
-        	<img src="{itemcat.fileimage.orig_src}" alt="{itemcat.title}" style="width:120px;height:107px" class="s-border left fl" />
+        	<img src="{itemcat.imagesrc}" alt="{itemcat.title}" style="width:120px;height:107px" class="s-border left fl" />
 		</a>
 		<!-- END: image -->
 		<h4><a href="{itemcat.more_link}">{itemcat.title}</a></h4>
@@ -47,7 +47,7 @@
 		</div>	    
 		<!-- END: is_admin -->
     	<!-- BEGIN: image -->
-        <img src="{listpostcat.fileimage.orig_src}" alt="{listpostcat.title}" class="s-border left fl" style="width:60px;height:54px"/>
+        <img src="{listpostcat.imagesrc}" alt="{listpostcat.title}" class="s-border left fl" style="width:60px;height:54px"/>
     	<!-- END: image -->
 		<h4><a title="{listpostcat.title}" href="{listpostcat.more_link}">{listpostcat.title}</a>                 	
 		</h4>

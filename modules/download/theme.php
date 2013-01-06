@@ -58,7 +58,7 @@ function theme_main_download ( $array_cats, $list_cats, $download_config )
             #parse the first items
             $thefirstcat = current( $items );
             $xtpl->assign( 'itemcat', $thefirstcat );
-            if ( ! empty( $thefirstcat['fileimage']['orig_src'] ) )
+            if ( ! empty( $thefirstcat['imagesrc'] ) )
             {
                 $xtpl->parse( 'main.catbox.itemcat.image' );
             }
@@ -110,7 +110,7 @@ function theme_viewcat_download ( $array, $download_config, $subs, $generate_pag
                 #parse the first items
                 $thefirstcat = current( $items );
                 $xtpl->assign( 'itemcat', $thefirstcat );
-                if ( ! empty( $thefirstcat['fileimage']['orig_src'] ) )
+                if ( ! empty( $thefirstcat['imagesrc'] ) )
                 {
                     $xtpl->parse( 'main.listsubcat.itemcat.image' );
                 }
@@ -143,7 +143,7 @@ function theme_viewcat_download ( $array, $download_config, $subs, $generate_pag
                 $xtpl->parse( 'main.row.author_name' );
             }
             
-            if ( ! empty( $row['fileimage']['orig_src'] ) )
+            if ( ! empty( $row['imagesrc'] ) )
             {
                 $xtpl->parse( 'main.listpostcat.image' );
             }

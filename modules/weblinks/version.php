@@ -20,8 +20,7 @@ $module_version = array(
     "note" => "",
 	"uploads_dir" => array(
 		$module_name,
-		$module_name . "/cat",
-		$module_name . "/thumb",
+		$module_name . "/cat"
 	)
 );
 
