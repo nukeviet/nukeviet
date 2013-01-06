@@ -791,6 +791,11 @@ elseif( $step == 6 )
 					$checksum = md5( $row['module'] . "#" . $row['act_1'] . "#" . $row['act_2'] . "#" . $row['act_3'] . "#" . $global_config['sitekey'] );
 					$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_authors_module` SET `checksum` = '" . $checksum . "' WHERE `mid` = " . $row['mid'] );
 				}
+				
+				if( ! (nv_function_exists( 'finfo_open' ) or nv_class_exists( "finfo" ) or nv_function_exists( 'mime_content_type' ) or (substr( $sys_info['os'], 0, 3 ) != 'WIN' and (nv_function_exists( 'system' ) or nv_function_exists( 'exec' )))) )
+				{
+					$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  'mild' WHERE `lang`='sys' AND `module` =  'global' AND `config_name` = 'upload_checking_mode'" );
+				}
 
 				nv_save_file_config( );
 
