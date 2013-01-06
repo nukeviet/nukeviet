@@ -167,6 +167,9 @@ bằng
 itemcat.fileimage.imagesrc
 
 Xóa thư mục /uploads/download/thumb/
+
+20) Xóa các trường không sử dụng trong CSDL module bannner
+
 ##########################################################################
 
 Hướng dẫn nâng cấp
