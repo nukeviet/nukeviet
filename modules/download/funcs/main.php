@@ -139,10 +139,7 @@ foreach ( $list_cats as $value )
                 {
                     $uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );
                 }
-                
-                $img = NV_UPLOADS_DIR . $row['fileimage'];
-                $imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
-                
+               
                 $array_item[$row['id']] = array(
                     'id' => ( int )$row['id'], //
 					'title' => $row['title'], //
@@ -150,7 +147,7 @@ foreach ( $list_cats as $value )
 					'uploadtime' => $uploadtime, //
 					'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'], //
 					'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
-					'fileimage' => $imageinfo, //
+                	'imagesrc' => (! empty( $row['fileimage'] )) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
 					'view_hits' => ( int )$row['view_hits'], //
 					'download_hits' => ( int )$row['download_hits'], //
 					'more_link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "/" . $row['alias'], //

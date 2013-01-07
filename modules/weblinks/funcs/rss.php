@@ -44,15 +44,15 @@ else
 if ( $module_info['rss'] )
 {
     $result = $db->sql_query( $sql );
-    while ( list( $id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgfile ) = $db->sql_fetchrow( $result ) )
+    while ( list( $id, $catid_i, $publtime, $title, $alias, $description, $urlimg ) = $db->sql_fetchrow( $result ) )
     {
-        $rimages = ( ! empty( $homeimgfile ) ) ? "<img src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/$homeimgfile\" width=\"100\" align=\"left\" border=\"0\">" : "";
+        $rimages = ( ! empty( $urlimg ) ) ? "<img src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/" . $urlimg."\" width=\"100\" align=\"left\" border=\"0\">" : "";
         $catalias = $global_array_cat[$catid_i]['alias'];
         $items[] = array(  //
             'title' => $title, //
 			'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id, //
 			'guid' => $module_name . '_' . $id, //
-			'description' => $rimages . $hometext, //
+			'description' => $rimages . $description, //
 			'pubdate' => $publtime  //
         );
     }

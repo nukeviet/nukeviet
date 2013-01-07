@@ -22,6 +22,7 @@ function main_theme( $array_cat, $array_cat_content )
 	
 	$xtpl = new XTemplate( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'BASE_URL', NV_BASE_SITEURL );
+	$xtpl->assign( 'SRC_IMG_WIDTH', $weblinks_config['imgwidth'] );
 	
 	foreach( $array_cat as $catid => $array_cat_i )
 	{
@@ -53,19 +54,14 @@ function main_theme( $array_cat, $array_cat_content )
 					{
 						if( $content['urlimg'] != '' )
 						{
-							if( ! nv_is_url( $content['urlimg'] ) )
-							{
-								$content['urlimg'] = $content['urlimg'];
-							}
-							$xtpl->assign( 'SRC_IMG', $content['urlimg'] );
-							$xtpl->assign( 'SRC_IMG_WIDTH', $weblinks_config['imgwidth'] );
-							$xtpl->parse( 'main.loop_tab_cate.have_data.img' );
+							$urlimg = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $content['urlimg'];
 						}
 						else
 						{
-							$xtpl->assign( 'SRC_IMG', "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
-							$xtpl->parse( 'main.loop_tab_cate.have_data.img' );
+							$urlimg = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif";
 						}
+						$xtpl->assign( 'SRC_IMG', $urlimg );
+						$xtpl->parse( 'main.loop_tab_cate.have_data.img' );
 					}
 					$intro = strip_tags( $content['description'] );
 					$xtpl->assign( 'TEXT_HOME', nv_clean60( $intro, 200 ) . "..." );
@@ -143,16 +139,13 @@ function viewcat( $array_subcat, $array_cat, $items )
 			$items_i['description'] = _substr( $items_i['description'], 200 );
 			if( ! empty( $items_i['urlimg'] ) )
 			{
-				if( ! nv_is_url( $items_i['urlimg'] ) )
-				{
-					$items_i['urlimg'] = $items_i['urlimg'];
-				}
-				$xtpl->assign( 'IMG', $items_i['urlimg'] );
+				$urlimg = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $items_i['urlimg'];
 			}
 			else
 			{
-				$xtpl->assign( 'IMG', "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
+				$urlimg = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif";
 			}
+			$xtpl->assign( 'IMG', $urlimg);
 			$items_i['url'] = nv_clean60( $items_i['url'], 70 ) . "...";
 			$xtpl->assign( 'ITEM', $items_i );
 			if( defined( 'NV_IS_ADMIN' ) )

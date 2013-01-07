@@ -820,7 +820,7 @@ class image
                     break;
 
                 case IMAGETYPE_JPEG :
-                    ImageJpeg($this->createImage, '', $quality);
+                    ImageJpeg($this->createImage, null, $quality);
                     break;
 
                 case IMAGETYPE_PNG :

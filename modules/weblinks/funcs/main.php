@@ -38,26 +38,11 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 		
 		$sql = "SELECT `id` , `author` , `title` , `alias` , `url` , `urlimg` , `note` , `description` , `add_time` , `hits_total` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status` = 1 AND `catid` =" . $catid_i . " ORDER BY " . $orderby . $sort . " LIMIT 0,3";
 		$result = $db->sql_query( $sql );
-		
-		while( list( $id, $author, $title, $alias, $url, $urlimg, $note, $description, $add_time, $hits_total ) = $db->sql_fetchrow( $result ) )
+		while( $row = $db->sql_fetch_assoc( $result ) )
 		{
-			$urlimg = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $urlimg;
-			$imageinfo = nv_ImageInfo( $urlimg, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
-			
-			$content[] = array(
-				'link' => $global_array_cat[$catid_i]['link'] . "/" . $alias . "-" . $id,
-				'id' => $id,
-				'author' => $author,
-				'title' => $title,
-				'alias' => $alias,
-				'url' => $url,
-				'urlimg' => $imageinfo['src'],
-				'note' => $note,
-				'description' => $description,
-				'add_time' => $add_time,
-				'hits_total' => $hits_total,
-				'linkvi' => $urllink . "visitlink-" . $alias . "-" . $id
-			);
+			$row['link'] = $global_array_cat[$catid_i]['link'] . "/" . $row['alias'] . "-" . $row['id'];
+			$row['linkvi'] = $urllink . "visitlink-" . $row['alias'] . "-" . $row['id'];
+			$content[] = $row;
 		}
 	}
 	else

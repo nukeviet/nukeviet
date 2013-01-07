@@ -156,7 +156,7 @@ $("input[name=selectimg]").click(function(){
 	var type= "image";
 	var path= "{PATH}";
 	var currentpath= "{CURRENTPATH}";
-	nv_open_browse_file("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", "850", "420","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+	nv_open_browse_file("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420,"resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 	return false;
 });
 //]]>
