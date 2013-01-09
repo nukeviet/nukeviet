@@ -230,9 +230,15 @@ else
 		'key',
 		'name'
 	), explode( "|", nv_getBrowser( NV_USER_AGENT ) ) );
-	preg_match( "/^([^0-9]+)([0-9]+)\.(.*)$/", $client_info['browser']['name'], $matches );
-	$client_info['browser']['version'] = ( int )$matches[2];
-	unset( $matches );
+	if (preg_match( "/^([^0-9]+)([0-9]+)\.(.*)$/", $client_info['browser']['name'], $matches ))
+	{
+		$client_info['browser']['version'] = ( int )$matches[2];
+		unset( $matches );
+	}
+	else
+	{
+		$client_info['browser']['version'] = 0;
+	}
 }
 
 //Xac dinh co phai truy cap bang mobile hay khong
