@@ -90,31 +90,9 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 					}
 					elseif( $modname == "users" )
 					{
-						if( defined( 'NV_IS_USER' ) )
-						{
-							$in_submenu_users = array();
-							$in_submenu_users[] = "changepass";
-                            $in_submenu_users[] = "memberlist";
-							if( defined( 'NV_OPENID_ALLOWED' ) )
-							{
-								$in_submenu_users[] = "openid";
-							}
-							if( ! defined( 'NV_IS_ADMIN' ) )
-							{
-								$in_submenu_users[] = "logout";
-							}
-						}
-						else
-						{
-							$in_submenu_users = array(
-								"login",
-								"register",
-								"lostpass",
-								"memberlist" );
-						}
 						foreach( $modvalues['funcs'] as $key => $sub_item )
 						{
-							if( $sub_item['in_submenu'] == 1 and in_array( $key, $in_submenu_users ) )
+							if( $sub_item['in_submenu'] == 1 )
 							{
 								$sub_nav_item[] = array( "title" => $sub_item['func_custom_name'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=" . $key );
 							}

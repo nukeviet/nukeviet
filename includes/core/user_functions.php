@@ -18,43 +18,56 @@ function nv_site_mods()
 {
 	global $admin_info, $user_info, $global_config, $db;
 
-	if( defined( "NV_IS_USER" ) )
+	$cache_file = NV_LANG_DATA . "_modules_sitemods_" . NV_CACHE_PREFIX . ".cache";
+	if( ($cache = nv_get_cache( $cache_file )) != false )
 	{
-		$user_ops = array( 'main', 'changepass', 'openid', 'editinfo', 'regroups', 'memberlist' );
-		if( ! defined( "NV_IS_ADMIN" ) )
-		{
-			$user_ops[] = 'logout';
-		}
+		$site_mods = unserialize( $cache );
 	}
 	else
 	{
-		$user_ops = array( 'main', 'login', 'register', 'lostpass', 'memberlist' );
-		if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1 )
+		$site_mods = array ();
+		$result = $db->sql_query( "SELECT * FROM  `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight" );
+		while( $row = $db->sql_fetch_assoc( $result ) )
 		{
-			$user_ops[] = 'lostactivelink';
-			$user_ops[] = 'active';
+			$m_title = $db->unfixdb( $row['title'] );
+			if( ! isset( $site_mods[$m_title] ) )
+			{
+				$site_mods[$m_title] = array (
+						'module_file' => $db->unfixdb( $row['module_file'] ),
+						'module_data' => $db->unfixdb( $row['module_data'] ),
+						'custom_title' => $row['custom_title'],
+						'admin_file' => $row['admin_file'],
+						'theme' => $db->unfixdb( $row['theme'] ),
+						'mobile' => $row['mobile'],
+						'description' => $row['description'],
+						'keywords' => $row['keywords'],
+						'groups_view' => $row['groups_view'],
+						'in_menu' => $row['in_menu'],
+						'submenu' => $row['submenu'],
+						'is_modadmin' => false,
+						'rss' => $row['rss'],
+						'funcs' => array ()
+				);
+			}
+			$site_mods[$m_title]['funcs'][$db->unfixdb( $row['func_name'] )] = array (
+					'func_id' => $row['func_id'],
+					'show_func' => $row['show_func'],
+					'func_custom_name' => $row['func_custom_name'],
+					'in_submenu' => $row['in_submenu']
+			);
 		}
+		$cache = serialize( $site_mods );
+		nv_set_cache( $cache_file, $cache );
+		unset( $cache, $result );
 	}
 
-	$sql = "SELECT * FROM  `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight";
-	$list = nv_db_cache( $sql, '', 'modules' );
-
-	if( empty( $list ) ) return array();
-
-	$site_mods = array();
-	foreach( $list as $row )
+	foreach( $site_mods as $m_title => $row )
 	{
 		$allowed = false;
 		$is_modadmin = false;
-		$m_title = $db->unfixdb( $row['title'] );
-		$groups_view = ( string )$row['groups_view'];
-		
-		if( isset( $site_mods[$m_title] ) )
-		{
-			$allowed = true;
-			$is_modadmin = $site_mods[$m_title]['is_modadmin'];
-		}
-		elseif( defined( 'NV_IS_SPADMIN' ) )
+		$groups_view = (string) $row['groups_view'];
+
+		if( defined( 'NV_IS_SPADMIN' ) )
 		{
 			$allowed = true;
 			$is_modadmin = true;
@@ -87,34 +100,56 @@ function nv_site_mods()
 
 		if( $allowed )
 		{
-			if( ! isset( $site_mods[$m_title] ) )
+			$site_mods[$m_title]['is_modadmin'] = $is_modadmin;
+		}
+		else
+		{
+			unset( $site_mods[$m_title] );
+		}
+	}
+	if( isset( $site_mods['users'] ) )
+	{
+		if( defined( "NV_IS_USER" ) )
+		{
+			$user_ops = array (
+					'main',
+					'changepass',
+					'openid',
+					'editinfo',
+					'regroups'
+			);
+			if( ! defined( "NV_IS_ADMIN" ) )
 			{
-				$site_mods[$m_title]['module_file'] = $db->unfixdb( $row['module_file'] );
-				$site_mods[$m_title]['module_data'] = $db->unfixdb( $row['module_data'] );
-				$site_mods[$m_title]['custom_title'] = $row['custom_title'];
-				$site_mods[$m_title]['admin_file'] = $row['admin_file'];
-				$site_mods[$m_title]['theme'] = $db->unfixdb( $row['theme'] );
-				$site_mods[$m_title]['mobile'] = $row['mobile'];
-                $site_mods[$m_title]['description'] = $row['description'];
-				$site_mods[$m_title]['keywords'] = $row['keywords'];
-				$site_mods[$m_title]['groups_view'] = $row['groups_view'];
-				$site_mods[$m_title]['in_menu'] = $row['in_menu'];
-				$site_mods[$m_title]['submenu'] = $row['submenu'];
-				$site_mods[$m_title]['is_modadmin'] = $is_modadmin;
-				$site_mods[$m_title]['rss'] = $row['rss'];
+				$user_ops[] = 'logout';
 			}
-			
-			$func_name = $db->unfixdb( $row['func_name'] );
-			if( ! empty( $func_name ) and ( ( $m_title != "users" ) or ( $m_title == "users" and in_array( $func_name, $user_ops ) ) ) )
+		}
+		else
+		{
+			$user_ops = array (
+					'main',
+					'login',
+					'register',
+					'lostpass'
+			);
+			if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1 )
 			{
-				$site_mods[$m_title]['funcs'][$func_name]['func_id'] = $row['func_id'];
-				$site_mods[$m_title]['funcs'][$func_name]['show_func'] = $row['show_func'];
-				$site_mods[$m_title]['funcs'][$func_name]['func_custom_name'] = $row['func_custom_name'];
-				$site_mods[$m_title]['funcs'][$func_name]['in_submenu'] = $row['in_submenu'];
+				$user_ops[] = 'lostactivelink';
+				$user_ops[] = 'active';
+			}
+		}
+		if( ($global_config['whoviewuser'] == 2 and defined( "NV_IS_ADMIN" )) OR ( $global_config['whoviewuser'] == 1 and ! defined( 'NV_IS_USER' )) OR $global_config['whoviewuser'] == 0)
+		{
+			$user_ops[] = 'memberlist';
+		}
+		$func_us = $site_mods['users']['funcs'];
+		foreach( $func_us as $func => $row )
+		{
+			if( ! in_array( $func, $user_ops ) )
+			{
+				unset( $site_mods['users']['funcs'][$func] );
 			}
 		}
 	}
-
 	return $site_mods;
 }
 
