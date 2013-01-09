@@ -17,7 +17,7 @@ var comment_subject_defaul = '{ROW.comment_subject}';
     <div class="gg fl">
         <!-- BEGIN: is_image -->
 			<div class="acenter m-bottom">
-				<a href="{FILEIMAGE.orig_src}" rel="shadowbox;height={FILEIMAGE.orig_height};width={FILEIMAGE.orig_width}"><img src="{FILEIMAGE.orig_src}" alt="{ROW.title}" style="width:257px;height:161px" class="s-border"/></a>
+				<a href="{FILEIMAGE.orig_src}" rel="shadowbox;height={FILEIMAGE.orig_height};width={FILEIMAGE.orig_width}"><img src="{FILEIMAGE.src}" alt="{ROW.title}" style="width:257px;height:161px" class="s-border"/></a>
 				<br/>
 				<span class="small">{ROW.title}</span>
 			</div>
