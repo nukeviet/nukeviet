@@ -62,7 +62,12 @@
 			<tr>
 				<td>{CONTENTS.file_name.0}:</td>
 				<td></td>
-				<td><a href="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a></td>
+				<td>
+					<a href="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a>
+					<!-- BEGIN: imageforswf1 -->
+					<a href="{CONTENTS.file_name.5}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.6}" width="16" height="16" style="cursor: pointer; margin-left: 20px;" /></a>
+					<!-- END: imageforswf1 -->
+					</td>
 			</tr>
 		</tbody>
 		<tbody class="second">
@@ -71,6 +76,13 @@
 				<td></td>
 				<td><input name="{CONTENTS.upload.1}" type="file" /></td>
 			</tr>
+			<!-- BEGIN: imageforswf2 -->
+			<tr>
+				<td>{CONTENTS.upload.2}:</td>
+				<td></td>
+				<td><input name="{CONTENTS.upload.3}" type="file" /></td>
+			</tr>	
+			<!-- END: imageforswf2 -->
 		</tbody>
 		<tbody>
 			<tr>

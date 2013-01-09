@@ -456,6 +456,13 @@ foreach( $array_config as $config_name => $config_value )
 //17) Thêm cấu hình thời gian lặp lại quá trình backup CSDL
 $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'dump_interval', '1')" );
 
+//20) Xóa các trường không sử dụng trong CSDL module bannner
+$db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."`
+  DROP `file_name_tmp`,
+  DROP `file_alt_tmp`,
+  DROP `click_url_tmp`");
+$db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."` ADD `imageforswf` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `file_alt`"); 
+
 require_once (NV_ROOTDIR . "/includes/core/admin_functions.php");
 if( ! nv_save_file_config_global( ) )
 {
