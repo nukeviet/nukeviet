@@ -377,7 +377,7 @@ if( $is )
 $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
 ('sys', 'global', 'cookie_httponly', '" . $global_config['cookie_httponly'] . "'),
 ('sys', 'global', 'admin_check_pass_time', '1800'),
-('sys', 'global', 'adminrelogin_max', '0'),
+('sys', 'global', 'adminrelogin_max', '3'),
 ('sys', 'global', 'cookie_secure', '" . $global_config['cookie_secure'] . "'),
 ('sys', 'global', 'nv_unick_type', '" . $global_config['nv_unick_type'] . "'),
 ('sys', 'global', 'nv_upass_type', '" . $global_config['nv_upass_type'] . "'),
@@ -396,7 +396,11 @@ $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, 
 ('sys', 'define', 'nv_max_width', '1500'),
 ('sys', 'define', 'nv_max_height', '1500'),
 ('sys', 'define', 'nv_live_cookie_time', '" . NV_LIVE_COOKIE_TIME . "'),
+('sys', 'define', 'nv_anti_iframe', '".NV_ANTI_IFRAME."'),
+('sys', 'define', 'nv_allowed_html_tags', '".NV_ALLOWED_HTML_TAGS."'),
 ('sys', 'define', 'nv_live_session_time', '0'),
+('sys', 'define', 'nv_auto_resize', '1'),
+('sys', 'define', 'cdn_url', ''),
 ('sys', 'define', 'dir_forum', '')" );
 
 //11) Thay đổi CSDL module users để phù hợp với chức năng tìm lại mật khẩu
@@ -449,6 +453,16 @@ foreach( $array_config as $config_name => $config_value )
 				AND `lang` = 'sys' AND `module`='global' 
 				LIMIT 1" );
 }
+//17) Thêm cấu hình thời gian lặp lại quá trình backup CSDL
+$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'dump_interval', '1')" );
+
+//20) Xóa các trường không sử dụng trong CSDL module bannner
+$db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."`
+  DROP `file_name_tmp`,
+  DROP `file_alt_tmp`,
+  DROP `click_url_tmp`");
+$db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."` ADD `imageforswf` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `file_alt`"); 
+
 require_once (NV_ROOTDIR . "/includes/core/admin_functions.php");
 if( ! nv_save_file_config_global( ) )
 {

@@ -17,7 +17,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['dir_forum'] = 'Thư mục chứa diễn';
+$lang_module['dir_forum'] = 'Thư mục chứa diễn đàn';
 $lang_module['modforum'] = 'Chức năng quản lý thành viên hiện do diễn đàn quản lý.';
 $lang_module['list_module_title'] = 'Danh sách thành viên';
 $lang_module['member_add'] = 'Thêm thành viên';

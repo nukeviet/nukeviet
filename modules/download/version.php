@@ -23,8 +23,7 @@ $module_version = array(  //
 	    $module_name, //
 		$module_name . "/files", //
 		$module_name . "/images", //
-		$module_name . "/temp", //
-		$module_name . "/thumb"  //
+		$module_name . "/temp"
 	) 
 );
 

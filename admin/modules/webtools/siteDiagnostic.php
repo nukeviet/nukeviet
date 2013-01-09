@@ -71,7 +71,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
 			$imgs['BingIndexed'] = $inf['BingIndexed'];
 
 			$row = array(
-				'date' => array( 'class' => '', 'style' => "text-align:left", 'content' => nv_date( "l, d-m-Y H:i:s", $refresh ) ), //
+				'date' => array( 'class' => '', 'style' => "text-align:left", 'content' => nv_date( "l, d/m/Y H:i:s", $refresh ) ), //
 				'PageRank' => array( 'class' => " class=\"" . $class_PageRank . "\"", 'style' => "text-align:right", 'content' => "<img alt=\"" . $inf['PageRank'] . "\" src=\"" . NV_BASE_SITEURL . "images/rank/" . $inf['PageRank'] . ".gif\" width=\"42\" height=\"7\" /> " . number_format( $inf['PageRank'] ) ), //
 				'AlexaRank' => array( 'class' => " class=\"" . $class_AlexaRank . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['AlexaRank'] ) ), //
 				'GoogleBackLink' => array( 'class' => " class=\"" . $class_GoogleBackLink . "\"", 'style' => "text-align:right", 'content' => number_format( $inf['GoogleBackLink'] ) ), //

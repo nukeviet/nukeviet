@@ -22,7 +22,7 @@ blockquote, q {
 }
 
 blockquote:before, blockquote:after, q:before, q:after {
-    content: '';
+    content: ''
 }:focus {
     outline: 0
 }
@@ -43,180 +43,180 @@ table {
 /* Typo */
 h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
-    color: #111;
+    color: #111
 }
 
 h1 {
     font-size: 3em;
     line-height: 1;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.5em
 }
 
 h2 {
     font-size: 2em;
-    margin-bottom: 0.75em;
+    margin-bottom: 0.75em
 }
 
 h3 {
     font-size: 1.5em;
     line-height: 1;
-    margin-bottom: 1em;
+    margin-bottom: 1em
 }
 
 h4 {
     font-size: 1.2em;
     line-height: 1.25;
-    margin-bottom: 1.25em;
+    margin-bottom: 1.25em
 }
 
 h5 {
     font-size: 1em;
     font-weight: bold;
-    margin-bottom: 1.5em;
+    margin-bottom: 1.5em
 }
 
 h6 {
     font-size: 1em;
-    font-weight: bold;
+    font-weight: bold
 }
 
 h1 img, h2 img, h3 img, h4 img, h5 img, h6 img {
-    margin: 0;
+    margin: 0
 }
 
 p {
-    margin: 0 0 1em;
+    margin: 0 0 1em
 }
 
 p img.left {
     float: left;
     margin: 1.5em 1.5em 1.5em 0;
-    padding: 0;
+    padding: 0
 }
 
 p img.right {
     float: right;
-    margin: 1.5em 0 1.5em 1.5em;
+    margin: 1.5em 0 1.5em 1.5em
 }
 
 a:focus, a:hover {
-    color: #000;
+    color: #000
 }
 
 a {
 	color: #336699;
-	text-decoration: none;
+	text-decoration: none
 }
 
 blockquote {
     margin: 1.5em;
     color: #666;
-    font-style: italic;
+    font-style: italic
 }
 
 strong {
-    font-weight: bold;
+    font-weight: bold
 }
 
 em, dfn {
-    font-style: italic;
+    font-style: italic
 }
 
 dfn {
-    font-weight: bold;
+    font-weight: bold
 }
 
 sup, sub {
-    line-height: 0;
+    line-height: 0
 }
 
 abbr, acronym {
-    border-bottom: 1px dotted #666;
+    border-bottom: 1px dotted #666
 }
 
 address {
     margin: 0 0 1.5em;
-    font-style: italic;
+    font-style: italic
 }
 
 del {
-    color: #666;
+    color: #666
 }
 
 pre {
     margin: 1.5em 0;
-    white-space: pre;
+    white-space: pre
 }
 
 pre, code, tt {
     font: 1em 'andale mono', 'lucida console', monospace;
-    line-height: 1.5;
+    line-height: 1.5
 }
 
 li ul, li ol {
-    margin: 0 1.5em;
+    margin: 0 1.5em
 }
 
 ul, ol {
-    margin: 0 1.5em 1.5em 1.5em;
+    margin: 0 1.5em 1.5em 1.5em
 }
 
 ul {
-    list-style-type: disc;
+    list-style-type: disc
 }
 
 ol {
-    list-style-type: decimal;
+    list-style-type: decimal
 }
 
 dl {
-    margin: 0 0 1.5em 0;
+    margin: 0 0 1.5em 0
 }
 
 dl dt {
-    font-weight: bold;
+    font-weight: bold
 }
 
 dd {
-    margin-left: 1.5em;
+    margin-left: 1.5em
 }
 
 table {
     margin-bottom: 1.4em;
-    width: 100%;
+    width: 100%
 }
 
 th {
-    font-weight: bold;
+    font-weight: bold
 }
 
 thead th {
-    background: #c3d9ff;
+    background: #c3d9ff
 }
 
 th, td, caption {
-    padding: 2px;
+    padding: 2px
 }
 
 tr.even td {
-    background: #e5ecf9;
+    background: #e5ecf9
 }
 
 tfoot {
-    font-style: italic;
+    font-style: italic
 }
 
 caption {
-    background: #eee;
+    background: #eee
 }
 
 a.link {
 	font-weight: 700;
-	text-decoration: underline !important;
+	text-decoration: underline !important
 }
 
 a.link:hover {
-	text-decoration: none !important;
+	text-decoration: none !important
 }
 
 body {
@@ -229,7 +229,7 @@ body {
 }
 
 html {
-    height: 100%;
+    height: 100%
 }
 
 img {
@@ -238,7 +238,7 @@ img {
 
 img.refresh{
 	vertical-align:middle;
-	cursor:pointer;
+	cursor:pointer
 }
 
 input[type=radio], input[type=checkbox] {
@@ -259,19 +259,19 @@ textarea {
 
 .add_icon {
     background: url('../images/icons/add.png') no-repeat left center;
-    padding-left: 15px;
+    padding-left: 15px
 }
 
 .clear {
-    clear: both;
+    clear: both
 }
 
 .center {
-	text-align: center;
+	text-align: center
 }
 
 .aright {
-	text-align: right;
+	text-align: right
 }
 
 .default_icon {
@@ -373,7 +373,7 @@ a.button1 {
     margin-left: 2px;
     padding-right: 10px;
     text-decoration: none;
-    text-align: center;
+    text-align: center
 }
 
 a.button1 span {
@@ -385,7 +385,7 @@ a.button1 span {
     line-height: 20px;
     padding-left: 10px;
     text-decoration: none;
-    float: left;
+    float: left
 }
 
 a.button1 span span {
@@ -397,7 +397,7 @@ a.button1 span span {
     line-height: 20px;
     padding-left: 0px;
     text-decoration: none;
-    float: left;
+    float: left
 }
 
 a.button2 {
@@ -413,7 +413,7 @@ a.button2 {
     outline: none;
     padding-right: 10px;
     text-decoration: none;
-    text-align: center;
+    text-align: center
 }
 
 a.button2 span {
@@ -425,7 +425,7 @@ a.button2 span {
     line-height: 20px;
     padding-left: 10px;
     text-decoration: none;
-    float: left;
+    float: left
 }
 
 a.button2 span span {
@@ -437,7 +437,7 @@ a.button2 span span {
     line-height: 20px;
     padding-left: 0px;
     text-decoration: none;
-    float: left;
+    float: left
 }
 
 div.generate_page {
@@ -464,17 +464,17 @@ div.quote blockquote {
     font: 12px Arial, Helvetica, sans-serif;
     margin: 2px;
     padding: 3px;
-    text-indent: 23px;
+    text-indent: 23px
 }
 
 div.quote blockquote span {
     background: transparent url('../images/bottom-quote.gif') no-repeat bottom right;
     display: inline-block;
-    width: 97%;
+    width: 97%
 }
 
 .fixtab {
-	margin: 1px 0 !important;
+	margin: 1px 0 !important
 }
 
 table.tab1 {
@@ -505,7 +505,7 @@ table.tab1 tbody.second {
 
 table.tab1 td a, table.tab1 th a {
 	color: #333;
-	text-decoration: underline;
+	text-decoration: underline
 }
 
 table.tab1 td, table.tab1 th {
@@ -530,7 +530,7 @@ table.tab1 thead, table.tab1 .thead_box {
 }
 
 table.tab1 td {
-    font-size: 12px !important;
+    font-size: 12px !important
 }
 
 #div_hide {
@@ -558,7 +558,7 @@ table.tab1 td {
     padding: 0;
     position: relative;
     width: 850px;
-    clear: both;
+    clear: both
 }
 
 #footer div.imgstat {
@@ -573,7 +573,7 @@ table.tab1 td {
 #header {
     background: #e5f4fd;
     height: 50px;
-    position: relative;
+    position: relative
 }
 
 #header div.lang {
@@ -582,7 +582,7 @@ table.tab1 td {
     text-align: center;
     width: 470px;
     top: 15px;
-    left: 250px;
+    left: 250px
 }
 
 #header div.logo {
@@ -593,7 +593,7 @@ table.tab1 td {
     width: 250px;
     height: 50px;
     top: 0;
-    left: 0;
+    left: 0
 }
 
 #header div.logout {
@@ -601,7 +601,7 @@ table.tab1 td {
     position: absolute;
     top: 20px;
     left: 820px;
-    text-align: right;
+    text-align: right
 }
 
 #middle_column_l {
@@ -646,22 +646,22 @@ table.tab1 td {
     background: #fff;
     margin: 0 auto;
     padding: 0;
-    width: 1000px;
+    width: 1000px
 }
 
 #topmenu {
     background: #0D43B0 url(../images/top_menu_bg.jpg) repeat-x;
-    color: #E0E0E0;
+    color: #E0E0E0
 }
 
 #topmenu ul {
     list-style-type: none;
     float: left;
-    margin: 0;
+    margin: 0
 }
 
 #topmenu ul li {
-    display: inline;
+    display: inline
 }
 
 #topmenu ul li a {
@@ -671,43 +671,43 @@ table.tab1 td {
     line-height: 27px;
     color: #fff;
     text-decoration: none;
-    padding: 0 10px 0 0;
+    padding: 0 10px 0 0
 }
 
 #topmenu ul li a span {
     padding: 0 0 0 10px;
     font-weight: 600;
     font-size: 11px;
-    display: block;
+    display: block
 }
 
 #topmenu ul li a span strong {
     color: #0F0;
-    padding: 0 4px 0 0;
+    padding: 0 4px 0 0
 }
 
 #topmenu ul li a:hover {
-    background: url(../images/topmenu_hover_r.jpg) no-repeat top right;
+    background: url(../images/topmenu_hover_r.jpg) no-repeat top right
 }
 
 #topmenu ul li a:hover span {
-    background: url(../images/topmenu_hover_l.jpg) no-repeat;
+    background: url(../images/topmenu_hover_l.jpg) no-repeat
 }
 
 #topmenu ul li a:hover span strong {
-    color: #fff;
+    color: #fff
 }
 
 #topmenu ul li.current a {
-    background: url(../images/topmenu_current_r.jpg) no-repeat top right;
+    background: url(../images/topmenu_current_r.jpg) no-repeat top right
 }
 
 #topmenu ul li.current a span {
-    background: url(../images/topmenu_current_l.jpg) no-repeat;
+    background: url(../images/topmenu_current_l.jpg) no-repeat
 }
 
 #topmenu ul li.current a span strong {
-    color: #ff0000;
+    color: #ff0000
 }
 
 #top_message {
@@ -719,7 +719,7 @@ table.tab1 td {
 #top_message div.clock {
     float: left;
     height: 30px;
-    position: relative;
+    position: relative
 }
 
 #top_message div.clock label {
@@ -728,7 +728,7 @@ table.tab1 td {
     font: bold 10px/27px Arial, Verdana, sans-serif;
     height: 30px;
     line-height: 27px;
-    padding: 0 0 0 10px;
+    padding: 0 0 0 10px
 }
 
 #top_message div.clock label span {
@@ -737,7 +737,7 @@ table.tab1 td {
     font: bold 10px/27px Arial, Verdana, sans-serif;
     height: 30px;
     line-height: 27px;
-    padding: 0 10px 0 0;
+    padding: 0 10px 0 0
 }
 
 #top_message div.clock_container {
@@ -745,7 +745,7 @@ table.tab1 td {
     height: 30px;
     position: relative;
     width: 210px;
-    white-space: nowrap;
+    white-space: nowrap
 }
 
 #top_message div.info {
@@ -788,7 +788,7 @@ table.tab1 td {
     color: #333;
     padding-right: 5px;
     text-align: right;
-    text-indent: 0;
+    text-indent: 0
 }
 
 div.quote blockquote.error, #middle_column_r div.info span {
@@ -800,23 +800,23 @@ div.infook, div.infoerror, div.infoalert {
 	padding: 10px;
 	margin: 5px 0;
 	line-height: 1.5em;
-	text-align: center;
+	text-align: center
 }
 div.infook {
 	border-top: 1px solid #6C6;
 	border-bottom: 1px solid #6C6;
-	background-color: #CFC;
+	background-color: #CFC
 }
 div.infoerror {
 	border-top: 1px solid #C33;
 	border-bottom: 1px solid #C33;
 	background-color: #F66;
-	color: white;
+	color: white
 }
 div.infoalert {
 	border-top: 1px solid #9CF;
 	border-bottom: 1px solid #9CF;
-	background-color: #C5DEFA;
+	background-color: #C5DEFA
 }
 div.infook a, div.inerror a, div.infoalert a {
 	text-decoration: underline;	
@@ -906,25 +906,25 @@ table.tab1 tbody:hover, table.tab1 tbody.second:hover {
     clear: both;
     visibility: hidden;
     line-height: 0;
-    height: 0;
+    height: 0
 }
 
 .clearfix {
-    display: inline-block;
+    display: inline-block
 }
 
 html[xmlns] .clearfix {
-    display: block;
+    display: block
 }
 * html .clearfix {
-    height: 1%;
+    height: 1%
 }
 
 .tab2 td, .tab2 tr, .tab2 tbody {
     margin: 0;
-    padding: 0;
+    padding: 0
 }
 
 .message_head {
-    margin: 0;
+    margin: 0
 }

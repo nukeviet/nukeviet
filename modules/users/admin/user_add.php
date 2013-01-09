@@ -108,7 +108,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$_user['gender'] = "";
 			}
 
-			if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $_user['birthday'], $m ) )
+			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $_user['birthday'], $m ) )
 			{
 				$_user['birthday'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 			}

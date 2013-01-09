@@ -54,7 +54,7 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 
 	function nv_block_global_banners( $block_config )
 	{
-		global $global_config;
+		global $global_config, $client_info;
 
 		$xmlfile = NV_ROOTDIR . '/' . NV_DATADIR . '/bpl_' . $block_config['idplanbanner'] . '.xml';
 	
@@ -82,7 +82,11 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 
 			$banners['file_height'] = round( $banners['file_height'] * $width_banners / $banners['file_width'] );
 			$banners['file_width'] = $width_banners;
-
+			if( ! empty( $banners['imageforswf'] ) AND ! empty( $client_info['is_mobile'] ) )
+			{
+				$banners['file_name'] = $banners['imageforswf'];
+				$banners['file_ext'] = nv_getextension( $banners['file_name'] );
+			}			
 			$banners['file_alt'] = ( ! empty( $banners['file_alt'] ) ) ? $banners['file_alt'] : $banners['title'];
 			$banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'];
 			$banners['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=banners&amp;" . NV_OP_VARIABLE . "=click&amp;id=" . $banners['id'];

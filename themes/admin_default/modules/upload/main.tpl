@@ -16,32 +16,32 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/admin.js"></script>
 </head>
 <style type="text/css">
-body{background:#EAEAEA;font:12px Arial;height:100%;margin:0;padding:0;position:fixed;width:100%;}
+body{background:#EAEAEA;font:12px Arial;height:100%;margin:0;padding:0;position:fixed;width:100%}
 </style>
 <body>
 <!-- END: header -->
 <style type="text/css">
-input[type="file"]{cursor:pointer;filter:alpha(opacity=0);font-size:30px;height:33px;left:-320px;opacity:0;position:relative;z-index:1;}
-td{border:1px solid #CCC;}
-.authorFile{float:left;margin-left:5px;position:relative;}
-.content{background:#FFF;font:12px Arial;}
-.filebrowse{background:#F5F5F5;height:360px;overflow:auto;width:100%;}
-.filetype{float:left;position:relative;}
-.footer{font:12px Arial;padding:5px;}
-.imgcontent{background:#fff;border:2px solid #EAEAEA;color:#666;cursor:pointer;float:left;height:124px;line-height:16px;margin-bottom:2px;margin-right:2px;padding:5px;text-align:center;width:100px;}
-.imgfolder{background:#FFF;cursor:pointer;height:360px;margin:1px;overflow:auto;width:200px;}
-.imgInfo{font:400 10px/12px tahoma,arial,sans-serif;height:30px;}
+input[type="file"]{cursor:pointer;filter:alpha(opacity=0);font-size:30px;height:33px;left:-320px;opacity:0;position:relative;z-index:1}
+td{border:1px solid #CCC}
+.authorFile{float:left;margin-left:5px;position:relative}
+.content{background:#FFF;font:12px Arial}
+.filebrowse{background:#F5F5F5;height:360px;overflow:auto;width:100%}
+.filetype{float:left;position:relative}
+.footer{font:12px Arial;padding:5px}
+.imgcontent{background:#fff;border:2px solid #EAEAEA;color:#666;cursor:pointer;float:left;height:124px;line-height:16px;margin-bottom:2px;margin-right:2px;padding:5px;text-align:center;width:100px}
+.imgfolder{background:#FFF;cursor:pointer;height:360px;margin:1px;overflow:auto;width:200px}
+.imgInfo{font:400 10px/12px tahoma,arial,sans-serif;height:30px}
 .imgsel{background:#fd8;border:2px solid #fb0;color:#333}
-.notupload{color:#F00;float:right;font-size:10px;font-weight:bold;padding:5px;}
-.refresh, .search{float:left;margin:3px 10px 0;position:relative;}
-.refresh, .search img{border:none;}
-.upload{background:url('{NV_BASE_SITEURL}images/upload.gif') no-repeat 0px 0px;cursor:pointer;float:left;height:26px;overflow:hidden;position:relative;width:77px;}
-.uploadForm{float:right;position:relative;}
-img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-width:80px;padding:2px;}
-#errorInfo{color:#F00;font-size:12px;padding:15px;}
-#imglist{margin:5px;}
-.imgcontent:hover{background:#F2F9FC;border:2px solid #DDEFF8;color:#333;}
-.upload:hover{background:url('{NV_BASE_SITEURL}images/upload.gif') no-repeat 0px -26px;}
+.notupload{color:#F00;float:right;font-size:10px;font-weight:bold;padding:5px}
+.refresh, .search{float:left;margin:3px 10px 0;position:relative}
+.refresh, .search img{border:none}
+.upload{background:url('{NV_BASE_SITEURL}images/upload.gif') no-repeat 0px 0px;cursor:pointer;float:left;height:26px;overflow:hidden;position:relative;width:77px}
+.uploadForm{float:right;position:relative}
+img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-width:80px;padding:2px}
+#errorInfo{color:#F00;font-size:12px;padding:15px}
+#imglist{margin:5px}
+.imgcontent:hover{background:#F2F9FC;border:2px solid #DDEFF8;color:#333}
+.upload:hover{background:url('{NV_BASE_SITEURL}images/upload.gif') no-repeat 0px -26px}
 .red{color:red}
 .generate_page{font-size: 10px; font-weight: 700; margin: 10px;text-align: center}
 .generate_page strong{background-color:#fbfbfb;border:1px solid #666;color:#000;padding:4px 6px}
@@ -82,17 +82,21 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
         <a href="#"><img alt="{LANG.refresh}" title="{LANG.refresh}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/refresh.png" width="16" height="16"/></a>
     </div>
     <div class="filetype">
-        {LANG.selectfiletype}: 
-        <select name="imgtype" id="imgtype">
+        <select name="imgtype" class="vchange">
             <option value="file"{SFILE}>{LANG.type_file}</option>
             <option value="image"{SIMAGE}>{LANG.type_image}</option>
             <option value="flash"{SFLASH}>{LANG.type_flash}</option>
         </select>
     </div>
     <div class="authorFile">
-        <select name="author" id="author">
+        <select name="author" class="vchange">
             <option value="0">{LANG.author0}</option>
             <option value="1">{LANG.author1}</option>
+        </select>
+        <select name="order" class="vchange">
+            <option value="0">{LANG.order0}</option>
+            <option value="1">{LANG.order1}</option>
+            <option value="2">{LANG.order2}</option>
         </select>
     </div>
     <div class="search">
@@ -186,12 +190,12 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
 </div>
 <script type="text/javascript">
 //<![CDATA[
-
 function searchfile()
 {
 	a = $("select[name=searchPath]").val(), q = $("input[name=q]").val();
+	b = $("select[name=imgtype]").val(),e = $("select[name=author]").val() == 1 ? "&author" : "";
 	$("div#filesearch").dialog("close");
-   	$("#imglist").html('<p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...</p>').load(nv_module_url + 'imglist&path='+a+'&q='+rawurlencode(q)+'&random=' + nv_randomNum(10))
+   	$("#imglist").html('<p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...</p>').load(nv_module_url + 'imglist&path='+a+'&type='+b+e+'&q='+rawurlencode(q)+'&order='+$('select[name=order]').val()+'&random=' + nv_randomNum(10))
     return false;
 }
 

@@ -71,7 +71,7 @@ $(document).ready(function(){
 		var path= "";                       
 		var currentpath= "images";                      
 		var type= "image";
-		nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "420","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", 850, 420,"resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
 });

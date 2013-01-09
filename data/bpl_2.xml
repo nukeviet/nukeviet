@@ -12,6 +12,7 @@
       <title>Bo ngoai giao</title>
       <clid>0</clid>
       <file_name>bongoaigiao.jpg</file_name>
+      <imageforswf></imageforswf>
       <file_ext>jpg</file_ext>
       <file_mime>image/jpeg</file_mime>
       <file_width>160</file_width>
@@ -24,6 +25,7 @@
       <title>vinades</title>
       <clid>0</clid>
       <file_name>vinades.jpg</file_name>
+      <imageforswf></imageforswf>
       <file_ext>jpg</file_ext>
       <file_mime>image/jpeg</file_mime>
       <file_width>190</file_width>

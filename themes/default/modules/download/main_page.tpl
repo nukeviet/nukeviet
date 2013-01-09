@@ -27,7 +27,7 @@
                 </div>
                 <!-- BEGIN: image -->
                 <a title="{itemcat.title}" href="{itemcat.more_link}">
-                <img class="s-border fl left" style="width:120px" src="{itemcat.fileimage.orig_src}" alt="{itemcat.title}"/>
+                <img class="s-border fl left" style="width:120px" src="{itemcat.imagesrc}" alt="{itemcat.title}"/>
                 </a>
                 <!-- END: image -->
                 <p>

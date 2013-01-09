@@ -25,7 +25,7 @@ if( empty( $newname ) )
 	die( "ERROR_" . $lang_module['rename_nonamefolder'] );
 
 unset( $matches );
-preg_match( "/(.*)\/(.*)$/", $path, $matches );
+preg_match( "/(.*)\/([a-z0-9\-\_]+)$/i", $path, $matches );
 if( ! isset( $matches ) or empty( $matches ) )
 	die( "ERROR_" . $lang_module['notlevel'] );
 
@@ -35,24 +35,31 @@ if( is_dir( NV_ROOTDIR . '/' . $newpath ) )
 
 if( rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath ) )
 {
+	$action = 0;
+	if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m1 ) AND preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $newpath, $m2 ) )
+	{
+		rename( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m1[1], NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m2[1] );
+		$action = 1;
+		$dir_replace1 = NV_FILES_DIR . '/' . $m1[1] . '/';
+		$dir_replace2 = NV_FILES_DIR . '/' . $m2[1] . '/';
+	}
+
 	$result = $db->sql_query( "SELECT `did`, `dirname` FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` WHERE `dirname`='" . $path . "' OR `dirname` LIKE '" . $path . "/%'" );
 	while( list( $did, $dirname ) = $db->sql_fetchrow( $result, 1 ) )
 	{
 		$dirname2 = str_replace( NV_ROOTDIR . '/' . $path, $newpath, NV_ROOTDIR . '/' . $dirname );
-		$result_file = $db->sql_query( "SELECT `ext`, `scr`, `title` FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did`='" . $did . "' AND `type` = 'image'" );
-		while( list( $ext, $src, $title ) = $db->sql_fetchrow( $result_file, 1 ) )
+		$result_file = $db->sql_query( "SELECT `src`, `title` FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did`='" . $did . "' AND `type` = 'image'" );
+		while( list( $src, $title ) = $db->sql_fetchrow( $result_file, 1 ) )
 		{
-			$view_image1 = NV_ROOTDIR . "/" . NV_FILES_DIR . "/images/" . md5( $dirname . '/' . $title ) . "." . $ext;
-			if( file_exists( $view_image1 ) )
+			if( $action )
 			{
-				$src2 = NV_FILES_DIR . "/images/" . md5( $dirname2 . '/' . $title ) . "." . $ext;
-				rename( $view_image1, NV_ROOTDIR . "/" . $src2 );
+				$src2 = preg_replace( "/^" . nv_preg_quote( $dir_replace1 ) . "/", $dir_replace2, $src );
 			}
 			else
 			{
-				$src2 = str_replace( NV_ROOTDIR . '/' . $dirname, $dirname2, NV_ROOTDIR . '/' . $dirname . '/' . $title );
+				$src2 = preg_replace( "/^" . nv_preg_quote( $dirname ) . "/", $dirname2, $src );
 			}
-			$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET `scr` = '" . $src2 . "' WHERE `did` = " . $did . "  AND `title`='" . $title . "'" );
+			$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_file` SET `src` = '" . $src2 . "' WHERE `did` = " . $did . "  AND `title`='" . $title . "'" );
 		}
 		$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET `dirname` = '" . $dirname2 . "' WHERE `did` = " . $did );
 	}

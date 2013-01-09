@@ -49,7 +49,8 @@ if( $module_name == "settings" )
 			'cronjobs_edit',
 			'cronjobs_del',
 			'cronjobs_act',
-			'variables'
+			'variables',
+			'cdn'
 		);
 	}
 	else

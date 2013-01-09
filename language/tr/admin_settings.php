@@ -108,7 +108,6 @@ $lang_module['banip_timeendban'] = 'Ban bitiş saati';
 $lang_module['banip_funcs'] = 'Özellik';
 $lang_module['banip_checkall'] = 'Hepsini işaretle';
 $lang_module['banip_uncheckall'] = 'Tüm işaretini kaldırın';
-$lang_module['banip_add'] = 'Yeni ekle';
 $lang_module['banip_address'] = 'Adres';
 $lang_module['banip_begintime'] = 'Başlangıç zamanı';
 $lang_module['banip_endtime'] = 'Bitiş zamanı';

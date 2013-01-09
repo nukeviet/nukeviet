@@ -79,6 +79,7 @@ $lang_module['add_banner_info'] = 'Để thêm quảng cáo mới, bạn cần k
 $lang_module['of_client'] = 'Khách hàng';
 $lang_module['upload'] = 'File hình quảng cáo (%s)';
 $lang_module['re_upload'] = 'Thay hình quảng cáo mới (%s)';
+$lang_module['imageforswf'] = 'Hình quảng cáo nếu trình duyệt là mobile';
 $lang_module['file_alt'] = 'Chú thích cho hình';
 $lang_module['click_url'] = 'URL khi click vào hình';
 $lang_module['add_date'] = 'Khởi tạo';

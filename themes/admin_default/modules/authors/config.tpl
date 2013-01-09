@@ -62,7 +62,7 @@
 			<tr>
 				<td>{LANG.adminrelogin_max}</td>
 				<td>
-				<select name="nv_adminrelogin_max">
+				<select name="adminrelogin_max">
 					<!-- BEGIN: adminrelogin_max -->
 					<option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
 					<!-- END: adminrelogin_max -->
