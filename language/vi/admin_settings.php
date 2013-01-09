@@ -57,6 +57,8 @@ $lang_module['security'] = 'Thiết lập an ninh';
 $lang_module['is_flood_blocker'] = 'Kích hoạt tính năng chống flood';
 $lang_module['max_requests_60'] = 'Số requests tối đa trong 1 phút';
 $lang_module['max_requests_300'] = 'Số requests tối đa trong 5 phút';
+$lang_module['nv_anti_iframe'] = 'Chống IFRAME';
+$lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử dụng trong hệ thống';
 
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
@@ -137,7 +139,8 @@ $lang_module['banip_timeendban'] = 'Thời gian kết thúc';
 $lang_module['banip_funcs'] = 'Chức năng';
 $lang_module['banip_checkall'] = 'Chọn tất cả';
 $lang_module['banip_uncheckall'] = 'Bỏ chọn tất cả';
-$lang_module['banip_add'] = 'Thêm';
+$lang_module['banip_title_add'] = 'Thêm địa chỉ IP cấm';
+$lang_module['banip_title_edit'] = 'Sửa địa chỉ IP cấm';
 $lang_module['banip_address'] = 'Địa chỉ';
 $lang_module['banip_begintime'] = 'Thời gian bắt đầu cấm';
 $lang_module['banip_endtime'] = 'Thời gian bắt kết thúc';
@@ -222,4 +225,6 @@ $lang_module['ftp_auto_detect_root'] = 'Xác định tự động';
 $lang_module['ftp_error_full'] = 'Hãy nhập đủ các thông số để tự động nhận diện Remote path';
 $lang_module['ftp_error_detect_root'] = 'Không thể tìm thấy thông số nào phù hợp, hãy kiểm tra lại tên đăng nhập và mật khẩu';
 $lang_module['ftp_error_support'] = 'Máy chủ của bạn hiện đang chặn hoặc không hỗ trợ thư viện FTP, hãy liên hệ với nhà cung cấp để được kích hoạt.';
+$lang_module['cdn_url'] = 'Hosting CDN cho javascript, css';
+$lang_module['cdn_download'] = 'Download các file javascript, css';
 ?>

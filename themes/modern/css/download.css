@@ -30,7 +30,7 @@ ul.spec li{border-bottom:1px solid #d8d8d8;font-size:.9em;padding:5px 0;text-tra
 .upload-form .input{width:300px}
 .upload-form .error,.comment-form .error{color:red;display:block;font-size:11px}
 .bgray{background:#f8f8f8}
-a.link_upload{background:url(../images/download/upload.png) 6px 50% no-repeat;border-bottom:1px solid #d8d8d8;color:#0073a8;display:block;font-size:1.6em;line-height:1;padding:10px 10px 10px 40px}
+a.link_upload{background:url(../images/download/upload.gif) 6px 50% no-repeat;border-bottom:1px solid #d8d8d8;color:#0073a8;display:block;font-size:1.6em;line-height:1;padding:10px 10px 10px 40px}
 a.link_upload:hover{color:#0073a8}
 .download p,.download .s-border,.down-o h4,.down-o p,.down-o .s-border{margin-bottom:.5em}
 ul.list-down,ul.links_down{list-style-type:none;margin:0;padding:0}

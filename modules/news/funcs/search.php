@@ -141,21 +141,23 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 			);
 		}
 
-		$img_src = "";
-
-		if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+		if( $homeimgthumb == 1 ) //image thumb
 		{
-			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile ) )
+		elseif( $homeimgthumb == 2 ) //image file
 		{
 			$img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( nv_is_url( $homeimgfile ) )
+		elseif( $homeimgthumb == 3 ) //image url
 		{
 			$img_src = $homeimgfile;
 		}
-
+		else //no image
+		{
+			$img_src = "";
+		}
+		
 		$array_content[] = array(
 			"id" => $id,
 			"title" => $title,

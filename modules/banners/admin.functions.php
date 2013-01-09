@@ -76,6 +76,7 @@ function nv_CreateXML_bannerPlan()
 				'title' => $row2['title'], //
 				'clid' => $row2['clid'], //
 				'file_name' => $row2['file_name'], //
+				'imageforswf' => $row2['imageforswf'], //
 				'file_ext' => $row2['file_ext'], //
 				'file_mime' => $row2['file_mime'], //
 				'file_width' => $row2['width'], //
@@ -562,7 +563,14 @@ function nv_edit_banner_theme( $contents )
 		$xtpl->assign( 'CLIENT', array( 'key' => $clid, 'title' => $clname, 'selected' => $clid == $contents['client'][3] ? " selected=\"selected\"" : "" ) );
 		$xtpl->parse( 'main.client' );
 	}
-	
+	if(!empty($contents['file_name'][5]))
+	{
+		$xtpl->parse( 'main.imageforswf1' );
+	}
+	if(substr( $contents['file_name'][1], - 3 )=='swf')
+	{
+		$xtpl->parse( 'main.imageforswf2' );
+	}	
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

@@ -142,6 +142,20 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	$array_config_define['nv_gfx_num'] = $nv_Request->get_int( 'nv_gfx_num', 'post' );
 	$array_config_define['nv_gfx_width'] = $nv_Request->get_int( 'nv_gfx_width', 'post' );
 	$array_config_define['nv_gfx_height'] = $nv_Request->get_int( 'nv_gfx_height', 'post' );
+	$array_config_define['nv_anti_iframe'] = (int)$nv_Request->get_bool( 'nv_anti_iframe', 'post' );
+	$variable = $nv_Request->get_string( 'nv_allowed_html_tags', 'post' );
+	$variable = str_replace( ';', ',', strtolower( $variable ) );
+	$variable = explode( ',', $variable );
+	$nv_allowed_html_tags = array( );
+	foreach( $variable as $value )
+	{
+		$value = trim( $value );
+		if( preg_match( "/^[a-z0-9]+$/", $value ) )
+		{
+			$nv_allowed_html_tags[] = $value;
+		}
+	}
+	$array_config_define['nv_allowed_html_tags'] = implode( ', ', $nv_allowed_html_tags );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
 		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
@@ -183,8 +197,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$ip = filter_text_input( 'ip', 'post', '', 1 );
 	$area = $nv_Request->get_int( 'area', 'post', 0 );
 	$mask = $nv_Request->get_int( 'mask', 'post', 0 );
-	$begintime = filter_text_input( 'begintime', 'post', 0, 1 );
-	$endtime = filter_text_input( 'endtime', 'post', 0, 1 );
 
 	if( empty( $ip ) || ! $ips->nv_validip( $ip ) )
 	{
@@ -196,7 +208,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$error[] = $lang_module['banip_error_area'];
 	}
 
-	if( ! empty( $begintime ) && preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime, $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'begintime', 'post' ), $m ) )
 	{
 		$begintime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -205,7 +217,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$begintime = NV_CURRENTTIME;
 	}
 
-	if( ! empty( $endtime ) && preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime, $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'endtime', 'post' ), $m ) )
 	{
 		$endtime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -269,6 +281,7 @@ $xtpl->assign( 'REFERER_BLOCKER', ($global_config['str_referer_blocker']) ? ' ch
 $xtpl->assign( 'IS_FLOOD_BLOCKER', ($global_config['is_flood_blocker']) ? ' checked="checked"' : '' );
 $xtpl->assign( 'MAX_REQUESTS_60', $global_config['max_requests_60'] );
 $xtpl->assign( 'MAX_REQUESTS_300', $global_config['max_requests_300'] );
+$xtpl->assign( 'ANTI_IFRAME', (NV_ANTI_IFRAME) ? ' checked="checked"' : '' );
 
 foreach( $captcha_array as $gfx_chk_i => $gfx_chk_lang )
 {
@@ -303,6 +316,7 @@ for( $i = 2; $i < 10; $i++ )
 }
 $xtpl->assign( 'NV_GFX_WIDTH', NV_GFX_WIDTH );
 $xtpl->assign( 'NV_GFX_HEIGHT', NV_GFX_HEIGHT );
+$xtpl->assign( 'NV_ALLOWED_HTML_TAGS', NV_ALLOWED_HTML_TAGS );
 
 $mask_text_array = array( );
 $mask_text_array[0] = "255.255.255.255";
@@ -348,6 +362,7 @@ if( ! empty( $cid ) )
 
 $xtpl->assign( 'MASK_TEXT_ARRAY', $mask_text_array );
 $xtpl->assign( 'BANIP_AREA_ARRAY', $banip_area_array );
+$xtpl->assign( 'BANIP_TITLE', ($cid) ? $lang_module['banip_title_edit'] : $lang_module['banip_title_add'] );
 
 $xtpl->assign( 'DATA', array(
 	'cid' => $cid,

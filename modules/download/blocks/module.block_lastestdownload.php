@@ -18,7 +18,7 @@ while ( $row = $db->sql_fetchrow( $result ) )
 {
     $catalias = $list_cats[$row['catid']]['alias'];
     $row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $row['alias'];
-    $row['updatetime'] = date( 'd.m.Y h:i', $row['uploadtime'] );
+    $row['updatetime'] = date( 'd/m/Y h:i', $row['uploadtime'] );
     $xtpl->assign( 'loop', $row );
     $xtpl->parse( 'main.loop' );
 }

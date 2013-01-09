@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 
 	if( ! empty( $data_search['from'] ) )
 	{
-		if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $data_search['from'], $match ) )
+		if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $data_search['from'], $match ) )
 		{
 			$from = mktime( 0, 0, 0, $match[2], $match[1], $match[3] );
 			$sql .= " AND `log_time` >= " . $from;
@@ -84,7 +84,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 
 	if( ! empty( $data_search['to'] ) )
 	{
-		if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $data_search['to'], $match ) )
+		if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $data_search['to'], $match ) )
 		{
 			$to = mktime( 0, 0, 0, $match[2], $match[1], $match[3] );
 			$sql .= " AND `log_time` <= " . $to;
@@ -186,7 +186,7 @@ while( $data_i = $db->sql_fetchrow( $result_query ) )
 		}
 	}
 	
-	$data_i['time'] = nv_date( "d-m-Y h:i:s A", $data_i['log_time'] );
+	$data_i['time'] = nv_date( "d/m/Y h:i:s A", $data_i['log_time'] );
 	$data[] = $data_i;
 	unset( $data_i );
 }

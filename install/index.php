@@ -25,6 +25,7 @@ foreach( $dirs as $file )
 }
 
 require_once (NV_ROOTDIR . "/modules/users/language/" . NV_LANG_DATA . ".php");
+require_once (NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/global.php");
 require_once (NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/install.php");
 require_once (NV_ROOTDIR . "/install/template.php");
 require_once (NV_ROOTDIR . "/includes/core/admin_functions.php");
@@ -474,6 +475,11 @@ elseif( $step == 5 )
 			""
 		), strtolower( $db_config['prefix'] ) );
 
+		if( substr( $sys_info['os'], 0, 3 ) == 'WIN' AND $db_config['dbhost'] == 'localhost' )
+		{
+			$db_config['dbhost'] = '127.0.0.1';
+		}
+
 		$db = new sql_db( $db_config );
 
 		if( ! empty( $db->error ) )
@@ -772,7 +778,7 @@ elseif( $step == 6 )
 				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_server', " . $db->dbescape_string( $global_config['ftp_server'] ) . ")" );
 				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_port', " . $db->dbescape_string( $global_config['ftp_port'] ) . ")" );
 				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_user_name', " . $db->dbescape_string( $global_config['ftp_user_name'] ) . ")" );
-				
+
 				$ftp_user_pass = nv_base64_encode( $crypt->aes_encrypt( $global_config['ftp_user_pass'] ) );
 				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_user_pass', " . $db->dbescape_string( $ftp_user_pass ) . ")" );
 				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_path', " . $db->dbescape_string( $global_config['ftp_path'] ) . ")" );
@@ -784,6 +790,11 @@ elseif( $step == 6 )
 				{
 					$checksum = md5( $row['module'] . "#" . $row['act_1'] . "#" . $row['act_2'] . "#" . $row['act_3'] . "#" . $global_config['sitekey'] );
 					$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_authors_module` SET `checksum` = '" . $checksum . "' WHERE `mid` = " . $row['mid'] );
+				}
+				
+				if( ! (nv_function_exists( 'finfo_open' ) or nv_class_exists( "finfo" ) or nv_function_exists( 'mime_content_type' ) or (substr( $sys_info['os'], 0, 3 ) != 'WIN' and (nv_function_exists( 'system' ) or nv_function_exists( 'exec' )))) )
+				{
+					$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  'mild' WHERE `lang`='sys' AND `module` =  'global' AND `config_name` = 'upload_checking_mode'" );
 				}
 
 				nv_save_file_config( );

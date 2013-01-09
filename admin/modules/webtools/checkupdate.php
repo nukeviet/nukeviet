@@ -26,7 +26,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
         $values = array();
         $values['userVersion'] = $global_config['version'];
         $new_version = ( $i == 'sysUpd' ) ? nv_geVersion( 28800 ) : nv_geVersion( 120 );
-        $values['onlineVersion'] = sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, ( string )$new_version->name, nv_date( "d-m-Y H:i", strtotime( $new_version->date ) ) );
+        $values['onlineVersion'] = sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, ( string )$new_version->name, nv_date( "d/m/Y H:i", strtotime( $new_version->date ) ) );
         $xtpl->assign( 'VALUE', $values );
         if ( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
         {
@@ -37,7 +37,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
 
         clearstatcache();
         $sysUpdDate = filemtime( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
-        $xtpl->assign( 'SYSUPDDATE', nv_date( "d-m-Y H:i", $sysUpdDate ) );
+        $xtpl->assign( 'SYSUPDDATE', nv_date( "d/m/Y H:i", $sysUpdDate ) );
 
         $xtpl->parse( 'sysUpd' );
         echo $xtpl->text( 'sysUpd' );
@@ -127,11 +127,11 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
                 $tooltip = array();
                 $tooltip[] = array( //
                     'title' => $lang_module['userVersion'], //
-                    'content' => ( ! empty( $values['u_version'] ) ? $values['u_version'] : "n/a" ) . ( ! empty( $values['u_pubtime'] ) ? " (" . nv_date( "d-m-Y H:i", $values['u_pubtime'] ) . ")" : "" ) //
+                    'content' => ( ! empty( $values['u_version'] ) ? $values['u_version'] : "n/a" ) . ( ! empty( $values['u_pubtime'] ) ? " (" . nv_date( "d/m/Y H:i", $values['u_pubtime'] ) . ")" : "" ) //
                     );
                 $tooltip[] = array( //
                     'title' => $lang_module['onlineVersion'], //
-                    'content' => ( ! empty( $values['version'] ) ? $values['version'] : "n/a" ) . ( ! empty( $values['pubtime'] ) ? " (" . nv_date( "d-m-Y H:i", $values['pubtime'] ) . ")" : "" ) //
+                    'content' => ( ! empty( $values['version'] ) ? $values['version'] : "n/a" ) . ( ! empty( $values['pubtime'] ) ? " (" . nv_date( "d/m/Y H:i", $values['pubtime'] ) . ")" : "" ) //
                     );
 
                 if ( isset( $values['author'] ) and ! empty( $values['author'] ) )
@@ -195,7 +195,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
                 ++$a;
             }
 
-            $xtpl->assign( 'MODUPDDATE', nv_date( "d-m-Y H:i", $modUpdDate ) );
+            $xtpl->assign( 'MODUPDDATE', nv_date( "d/m/Y H:i", $modUpdDate ) );
 
             if ( ! empty( $newModules ) )
             {
@@ -213,7 +213,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
                 $tooltip = array();
                 $tooltip[] = array( //
                     'title' => $lang_module['onlineVersion'], //
-                    'content' => ( ! empty( $values['version'] ) ? $values['version'] : "n/a" ) . ( ! empty( $values['pubtime'] ) ? " (" . nv_date( "d-m-Y H:i", $values['pubtime'] ) . ")" : "" ) //
+                    'content' => ( ! empty( $values['version'] ) ? $values['version'] : "n/a" ) . ( ! empty( $values['pubtime'] ) ? " (" . nv_date( "d/m/Y H:i", $values['pubtime'] ) . ")" : "" ) //
                     );
 
                 if ( isset( $values['author'] ) and ! empty( $values['author'] ) )
@@ -252,7 +252,7 @@ if ( $nv_Request->isset_request( 'i', 'get' ) )
                 $xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
                 $xtpl->assign( 'MODNAME', $modname );
                 $xtpl->assign( 'MODINFO', $values['message'] );
-                $xtpl->assign( 'MODUPDDATE', nv_date( "d-m-Y H:i", $modUpdDate ) );
+                $xtpl->assign( 'MODUPDDATE', nv_date( "d/m/Y H:i", $modUpdDate ) );
 
                 foreach ( $tooltip as $t )
                 {

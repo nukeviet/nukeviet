@@ -68,6 +68,7 @@ $lang_module['save_download'] = 'Klikněte zde pro stažení souboru.';
 $lang_module['dump_autobackup'] = 'Aktivovat automatické k zálohování';
 $lang_module['dump_backup_ext'] = 'Ukládat formáty souboru';
 $lang_module['dump_backup_day'] = 'Počet souboru';
+$lang_module['dump_interval'] = 'Opakujte práci';
 $lang_module['file_backup'] = 'Zálohování dat';
 $lang_module['file_nb'] = 'Číslo:';
 $lang_module['file_name'] = 'Název soubor';
