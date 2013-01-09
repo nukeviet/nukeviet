@@ -37,80 +37,24 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 
 		$catid = empty( $catid ) ? 1 : $catid;
 		$array_cat_menu = array();
-		if( $module_name == 'users' )
-		{
-			if( defined( 'NV_IS_USER' ) )
-			{
-				$in_submenu_users = array();
-				$in_submenu_users[] = "changepass";
-                $in_submenu_users[] = "memberlist";
-				if( defined( 'NV_OPENID_ALLOWED' ) )
-				{
-					$in_submenu_users[] = "openid";
-				}
-				if( ! defined( 'NV_IS_ADMIN' ) )
-				{
-					$in_submenu_users[] = "logout";
-				}
-			}
-			else
-			{
-				$in_submenu_users = array(
-					"login",
-					"register",
-					"lostpass",
-					"memberlist" );
-			}
-			$modvalues = $site_mods['users'];
-
-			$array_cat_menu[] = array(
-				"catid" => 1,
-				"parentid" => 0,
-				"title" => $modvalues['custom_title'],
-				"alias" => '',
-				"link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users" );
-
-			foreach( $modvalues['funcs'] as $key => $sub_item )
-			{
-				if( $sub_item['in_submenu'] == 1 and in_array( $key, $in_submenu_users ) )
-				{
-					$array_cat_menu[] = array(
-						"catid" => 1,
-						"parentid" => 1,
-						"title" => $sub_item['func_custom_name'],
-						"alias" => '',
-						"link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=" . $key );
-				}
-			}
-		}
-		elseif( $module_file == "news" )
+		if( $module_file == "news" )
 		{
 			$sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
-			$result = $db->sql_query( $sql );
-			while( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+			$list = nv_db_cache( $sql, 'catid', $module_name );
+			foreach( $list as $l )
 			{
-				$link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-				$array_cat_menu[$catid_i] = array(
-					"catid" => $catid_i,
-					"parentid" => $parentid_i,
-					"title" => $title_i,
-					"alias" => $alias_i,
-					"link" => $link_i );
+				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$array_cat_menu[$l['catid']] = $l;
 			}
 		}
 		elseif( $module_file == "shops" )
 		{
-			$sql = "SELECT catid, parentid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
-			$result = $db->sql_query( $sql );
-			while( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+			$sql = "SELECT catid, parentid, " . NV_LANG_DATA . "_title as title, " . NV_LANG_DATA . "_alias AS alias FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
+			$list = nv_db_cache( $sql, 'catid', $module_name );
+			foreach( $list as $l )
 			{
-				$link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-				$array_cat_menu[$catid_i] = array(
-					"catid" => $catid_i,
-					"parentid" => $parentid_i,
-					"title" => $title_i,
-					"alias" => $alias_i,
-					"link" => $link_i );
+				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$array_cat_menu[$l['catid']] = $l;
 			}
 		}
 		elseif( $module_file == "message" )
@@ -128,32 +72,23 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		elseif( $module_file == "weblinks" )
 		{
 			$sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `parentid` ASC, `weight` ASC";
-			$result = $db->sql_query( $sql );
-			while( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+			$list = nv_db_cache( $sql, 'catid', $module_name );
+			foreach( $list as $l )
 			{
-				$link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-				$array_cat_menu[$catid_i] = array(
-					"catid" => $catid_i,
-					"parentid" => $parentid_i,
-					"title" => $title_i,
-					"alias" => $alias_i,
-					"link" => $link_i );
+				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$array_cat_menu[$l['catid']] = $l;
 			}
 		}
 		elseif( $module_file == "download" )
 		{
 			$sql = "SELECT id, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` ORDER BY `weight` ASC";
-			$result = $db->sql_query( $sql );
-			while( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+			$list = nv_db_cache( $sql, 'id', $module_name );
+			foreach( $list as $l )
 			{
-				$link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-				$array_cat_menu[$catid_i] = array(
-					"catid" => $catid_i,
-					"parentid" => $parentid_i,
-					"title" => $title_i,
-					"alias" => $alias_i,
-					"link" => $link_i );
-			}
+				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$l['catid'] = $l['id'];
+				$array_cat_menu[$l['id']] = $l;
+			}			
 		}
 		else
 		{
@@ -182,17 +117,12 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		if( $module_name != "news" and empty( $array_cat_menu ) )
 		{
 			$sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_news_cat` ORDER BY `order` ASC";
-			$result = $db->sql_query( $sql );
-			while( list( $catid_i, $parentid_i, $title_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+			$list = nv_db_cache( $sql, 'catid', 'news' );
+			foreach( $list as $l )
 			{
-				$link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-				$array_cat_menu[$catid_i] = array(
-					"catid" => $catid_i,
-					"parentid" => $parentid_i,
-					"title" => $title_i,
-					"alias" => $alias_i,
-					"link" => $link_i );
-			}
+				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$array_cat_menu[$l['catid']] = $l;
+			}			
 		}
 
 		// Process cat module
