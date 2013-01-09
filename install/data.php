@@ -499,6 +499,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'nv_display_errors_list', '1'),
 ('sys', 'global', 'display_errors_list', '1'),
 ('sys', 'global', 'nv_auto_resize', '1'),
+('sys', 'global', 'dump_interval', '1'),
 ('sys', 'define', 'nv_unickmin', '" . NV_UNICKMIN . "'),
 ('sys', 'define', 'nv_unickmax', '" . NV_UNICKMAX . "'),
 ('sys', 'define', 'nv_upassmin', '" . NV_UPASSMIN . "'),
