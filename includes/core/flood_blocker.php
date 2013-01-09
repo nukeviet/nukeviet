@@ -9,7 +9,7 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-require_once ( NV_ROOTDIR . '/includes/class/flood.class.php' );
+require ( NV_ROOTDIR . '/includes/class/flood.class.php' );
 
 $rules = array( '60' => $global_config['max_requests_60'], '300' => $global_config['max_requests_300'] );
 

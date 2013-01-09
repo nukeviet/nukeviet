@@ -1,0 +1,1 @@
+- Link check Server support mod_rewrite: http://mysite.com/install/check.rewrite

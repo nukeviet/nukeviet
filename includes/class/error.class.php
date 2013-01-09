@@ -209,11 +209,15 @@ class Error
      */
     private function get_error_log_path ( $path )
     {
-        $log_path = NV_ROOTDIR;
         $path = ltrim( rtrim( preg_replace( array( "/\\\\/", "/\/{2,}/" ), "/", $path ), "/" ), "/" );
-        if ( ! empty( $path ) )
+        if ( is_dir( NV_ROOTDIR . '/' . $path ) )
         {
-            $e = explode( "/", $path );
+        	$log_path = NV_ROOTDIR. '/' . $path;
+        }
+        else
+        {
+        	$log_path = NV_ROOTDIR;
+        	$e = explode( "/", $path );
             $cp = '';
             foreach ( $e as $p )
             {
@@ -233,26 +237,17 @@ class Error
                 $cp .= $p . '/';
             }
             $log_path .= '/' . $path;
-        }
-        if ( ! is_dir( $log_path . '/tmp' ) )
-        {
             @mkdir( $log_path . '/tmp' );
+            @mkdir( $log_path . '/errors256' );
+            @mkdir( $log_path . '/old' );
         }
         if ( is_dir( $log_path . '/tmp' ) )
         {
             $this->error_log_tmp = $log_path . '/tmp';
         }
-        if ( ! is_dir( $log_path . '/errors256' ) )
-        {
-            @mkdir( $log_path . '/errors256' );
-        }
         if ( is_dir( $log_path . '/errors256' ) )
         {
             $this->error_log_256 = $log_path . '/errors256';
-        }
-        if ( ! is_dir( $log_path . '/old' ) )
-        {
-            @mkdir( $log_path . '/old' );
         }
         return $log_path;
     }

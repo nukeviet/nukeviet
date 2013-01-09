@@ -230,9 +230,15 @@ else
 		'key',
 		'name'
 	), explode( "|", nv_getBrowser( NV_USER_AGENT ) ) );
-	preg_match( "/^([^0-9]+)([0-9]+)\.(.*)$/", $client_info['browser']['name'], $matches );
-	$client_info['browser']['version'] = ( int )$matches[2];
-	unset( $matches );
+	if (preg_match( "/^([^0-9]+)([0-9]+)\.(.*)$/", $client_info['browser']['name'], $matches ))
+	{
+		$client_info['browser']['version'] = ( int )$matches[2];
+		unset( $matches );
+	}
+	else
+	{
+		$client_info['browser']['version'] = 0;
+	}
 }
 
 //Xac dinh co phai truy cap bang mobile hay khong
@@ -260,7 +266,7 @@ $client_info['client_os'] = $client_info['is_bot'] ? array(
 //Captcha
 if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 {
-	include_once (NV_ROOTDIR . "/includes/core/captcha.php");
+	require (NV_ROOTDIR . "/includes/core/captcha.php");
 }
 //Class ma hoa du lieu
 require (NV_ROOTDIR . '/includes/class/crypt.class.php');
@@ -375,7 +381,7 @@ if( defined( 'NV_ADMIN' ) )
 //cronjobs
 if( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( 'second', 'get' ) == "cronjobs" )
 {
-	include_once (NV_ROOTDIR . "/includes/core/cronjobs.php");
+	require (NV_ROOTDIR . "/includes/core/cronjobs.php");
 }
 
 // Xac dinh kieu giao dien mac dinh
