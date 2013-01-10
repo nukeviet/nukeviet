@@ -127,7 +127,39 @@ function nv_save_file_config_global( )
 	//ini_set_support
 	$sys_info['ini_set_support'] = (function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] )) ? true : false;
 	$ini_set_support = ($sys_info['ini_set_support']) ? 'true' : 'false';
-	$content_config .= "\$sys_info['ini_set_support']  = " . $ini_set_support . ";\n";
+	$content_config .= "\$sys_info['ini_set_support']= " . $ini_set_support . ";\n";
+	//Kiem tra ho tro rewrite
+	if( function_exists( 'apache_get_modules' ) )
+	{
+		$apache_modules = apache_get_modules( );
+		if( in_array( "mod_rewrite", $apache_modules ) )
+		{
+			$sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+		}
+		else
+		{
+			$sys_info['supports_rewrite'] = false;
+		}
+	}
+	elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.' ) !== false )
+	{
+		if( isset( $_SERVER['IIS_UrlRewriteModule'] ) AND class_exists( 'DOMDocument' ) )
+		{
+			$sys_info['supports_rewrite'] = "rewrite_mode_iis";
+		}
+		else
+		{
+			$sys_info['supports_rewrite'] = false;
+		}
+	}
+	if( $sys_info['supports_rewrite'] == 'rewrite_mode_iis' OR $sys_info['supports_rewrite'] == 'rewrite_mode_apache' )
+	{
+		$content_config .= "\$sys_info['supports_rewrite']='" . $sys_info['supports_rewrite'] . "';\n";
+	}
+	else
+	{
+		$content_config .= "\$sys_info['supports_rewrite']=false;\n";
+	}
 	$content_config .= "\n";
 
 	$config_variable = array( );
@@ -297,7 +329,9 @@ function nv_save_file_config_global( )
 	{
 		require (NV_ROOTDIR . "/includes/rewrite_language.php");
 	}
+
 	$content_config .= "\n";
+
 	$content_config .= "\$rewrite_keys=" . nv_var_export( array_keys( $rewrite ) ) . ";\n";
 	$content_config .= "\$rewrite_values=" . nv_var_export( array_values( $rewrite ) ) . ";\n";
 	$content_config .= "\n";
@@ -706,5 +740,4 @@ function nv_getModVersion( $updatetime = 3600 )
 
 	return $xmlcontent;
 }
-
 ?>

@@ -63,7 +63,13 @@ if( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) and $step < 7 )
 	Header( "Location: " . NV_BASE_SITEURL . "index.php" );
 	exit( );
 }
-
+if( empty( $sys_info['supports_rewrite'] ) )
+{
+	if (isset($_COOKIE['supports_rewrite']) AND $_COOKIE['supports_rewrite']==md5($global_config['sitekey']))
+	{
+		$sys_info['supports_rewrite'] = "rewrite_mode_apache";
+	}
+}
 if( $step == 1 )
 {
 	if( $step < 2 )

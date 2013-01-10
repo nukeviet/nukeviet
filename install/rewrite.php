@@ -1,3 +1,3 @@
 <?php
-	print 'mod_rewrite works!';
+die( 'mod_rewrite works' );
 ?>

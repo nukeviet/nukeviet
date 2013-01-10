@@ -84,9 +84,5 @@ elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.' ) !== false )
 		$sys_info['supports_rewrite'] = "rewrite_mode_iis";
 	}
 }
-elseif( $sys_info['os'] == "LINUX" )
-{
-	$sys_info['supports_rewrite'] = "rewrite_mode_apache";
-}
 
 ?>
