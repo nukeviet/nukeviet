@@ -26,8 +26,23 @@
 	<option value="other">Other Language</option>
 </select></p>
 <ul class="control_t fr">
-	<li><span class="next_step"><a
+	<li><span class="next_step" id="next_step"><a
 		href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=2">{LANG.next_step}</a></span></li>
 </ul>
 </form>
+<!-- BEGIN: check_supports_rewrite -->
+<script type="text/javascript">
+	$("#next_step").hide();
+	var supports_rewrite = '';
+	$.get("{BASE_SITEURL}install/check.rewrite", function(theResponse)
+	{
+		if (theResponse=="mod_rewrite works")
+		{
+			supports_rewrite = '{SUPPORTS_REWRITE}';
+		}
+		nv_setCookie("supports_rewrite", supports_rewrite, 86400);
+		$("#next_step").show();
+	});	
+</script>
+<!-- END: check_supports_rewrite -->
 <!-- END: step -->
