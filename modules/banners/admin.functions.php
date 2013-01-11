@@ -82,7 +82,9 @@ function nv_CreateXML_bannerPlan()
 				'file_width' => $row2['width'], //
 				'file_height' => $row2['height'], //
 				'file_alt' => $row2['file_alt'], //
-				'file_click' => $row2['click_url'] //
+				'file_click' => $row2['click_url'], //
+				'publ_time' => $row2['publ_time'], //
+				'exp_time' => $row2['exp_time'] //
 			);
 		}
 
