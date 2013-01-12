@@ -1686,36 +1686,6 @@ function nv_url_rewrite( $buffer, $is_url = false )
 }
 
 /**
- * nv_valid_html()
- *
- * @param string $html
- * @param mixed $config
- * @param string $encoding
- * @return
- */
-function nv_valid_html( $html, $config, $encoding = 'utf8' )
-{
-	global $sys_info;
-
-	if( $sys_info['supports_tidy'] == "class" )
-	{
-		$tidy = new tidy();
-		$tidy->parseString( $html, $config, $encoding );
-		$tidy->cleanRepair();
-		return $tidy;
-	}
-
-	if( $sys_info['supports_tidy'] == "func" )
-	{
-		$tidy = tidy_parse_string( $html, $config, $encoding );
-		tidy_clean_repair();
-		return $tidy;
-	}
-
-	return $html;
-}
-
-/**
  * nv_change_buffer()
  *
  * @param mixed $buffer
@@ -1749,7 +1719,7 @@ function nv_change_buffer( $buffer )
 	}
 
 	$body_replace = "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\">
-						<img alt=\"\" title=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=".nv_genpass()."\" width=\"1\" height=\"1\" />
+						<img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=".nv_genpass()."\" width=\"1\" height=\"1\" />
 					</div>";
 
 	if( NV_LANG_INTERFACE == 'vi' AND ($global_config['mudim_active']==1 OR ($global_config['mudim_active']==2 AND defined( 'NV_SYSTEM' )) OR ($global_config['mudim_active']==3 AND defined( 'NV_ADMIN') )))
@@ -1762,41 +1732,15 @@ function nv_change_buffer( $buffer )
 		$body_replace .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
 	}
 	$buffer = preg_replace( '/(<\/body>)/i', $body_replace . "\\1", $buffer, 1 );
-
+	
 	if ( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
 	{
 		include_once ( NV_ROOTDIR . '/includes/class/optimizer.class.php' );
-		$optimezer = new optimezer( $buffer, $sys_info['supports_tidy'] );
+		$opt_css_file = (empty($global_config['cdn_url'])) ? true : false;
+		$optimezer = new optimezer( $buffer, $opt_css_file );
 		$buffer = $optimezer->process();
-
-		//http://tidy.sourceforge.net/docs/quickref.html
-		$config = array( //
-			'doctype' => 'transitional', // Chuan HTML: omit, auto, strict, transitional, user
-			'input-encoding' => 'utf8', // Bang ma nguon
-			'output-encoding' => 'utf8', //Bang ma dich
-			'output-xhtml' => true, // Chuan xhtml
-			'drop-empty-paras' => true, // Xoa cac tags p rong
-			'drop-proprietary-attributes' => true, // Xoa tat ca nhung attributes dac thu cua microsoft (vi du: tu word)
-			'word-2000' => true, //Xoa tat ca nhung ma cua word khong phu hop voi chuan html
-			'enclose-block-text' => true, // Tat ca cac block-text duoc dong bang tag p
-			'enclose-text' => true, // Tat ca cac text nam trong khu vuc body nhung khong nam trong bat ky mot tag nao khac se duoc cho vao <p>text</p>
-			'hide-comments' => false, // Xoa cac chu thich
-			'hide-endtags' => true, // Xoa tat ca ve^' dong khong cua nhung tag khong doi hoi phai dong
-			'indent' => false, // Thut dau dong
-			'indent-spaces' => 4, //1 don vi indent = 4 dau cach
-			'logical-emphasis' => true, // Thay cac tag i va b bang em va strong
-			'lower-literals' => true, // Tat ca cac html-tags duoc bien thanh dang chu thuong
-			'markup' => true, // Sua cac loi Markup
-			'preserve-entities' => true, // Giu nguyen cac chu da duoc ma hoa trong nguon
-			'quote-ampersand' => true, // Thay & bang &amp;
-			'quote-marks' => true, // Thay cac dau ngoac bang ma html tuong ung
-			'quote-nbsp' => true, // Thay dau cach bang to hop &nbsp;
-			'show-warnings' => false, // Hien thi thong bao loi
-			'wrap' => 0, // Moi dong khong qua 150 ky tu
-			'alt-text' => true	//Bat buoc phai co alt trong IMG
-		);
-		$buffer = nv_valid_html( $buffer, $config );
 	}
+	
 	if(!empty($global_config['cdn_url']))
 	{
 		$buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"".$global_config['cdn_url']."\\4?t=".$global_config['timestamp']."\"\\7>", $buffer );

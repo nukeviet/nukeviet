@@ -123,15 +123,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 
 	$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
-	if( nv_is_url( $cdn_url ) )
-	{
-		$array_config_global['cdn_url'] = $cdn_url;
-		$array_config_global['optActive'] = 0;
-	}
-	else
-	{
-		$array_config_global['cdn_url'] = '';
-	}
+	$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url ) ) ? $cdn_url : '';
 
 	foreach( $array_config_global as $config_name => $config_value )
 	{

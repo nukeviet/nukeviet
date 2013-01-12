@@ -463,6 +463,9 @@ $db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."`
   DROP `click_url_tmp`");
 $db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."` ADD `imageforswf` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `file_alt`"); 
 
+require_once (NV_ROOTDIR . "/modules/banners/admin.functions.php");
+nv_CreateXML_bannerPlan();
+
 require_once (NV_ROOTDIR . "/includes/core/admin_functions.php");
 if( ! nv_save_file_config_global( ) )
 {

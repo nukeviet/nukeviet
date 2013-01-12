@@ -21,7 +21,7 @@
 	<tbody{ROW.class}>
 		<tr>
 			<td><input name="sends[]" type="checkbox" value="{ROW.id}" onclick="nv_UncheckAll(this.form, 'sends[]', 'check_all[]', this.checked);" /></td>
-			<td{ROW.style} {ROW.onclick} width="10px"><img alt="{ROW.status}" title="{ROW.status}" src="{ROW.image.0}" width="{ROW.image.1}" height="{ROW.image.2}" /></td>
+			<td{ROW.style} {ROW.onclick} width="10px"><img alt="{ROW.status}" src="{ROW.image.0}" width="{ROW.image.1}" height="{ROW.image.2}" /></td>
 			<td{ROW.style} {ROW.onclick}>{ROW.sender_name}</td>
 			<td{ROW.style} {ROW.onclick}>{ROW.path}</td>
 			<td{ROW.style} {ROW.onclick}>{ROW.title}</td>

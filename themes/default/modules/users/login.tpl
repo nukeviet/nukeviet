@@ -22,7 +22,7 @@
                 <label>
                     {LANG.captcha}
                 </label>
-                <img id="vimglogin" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimglogin','seccode_iavim');"/>
+                <img id="vimglogin" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimglogin','seccode_iavim');"/>
             </div>
             <div class="clearfix rows">
                 <label>
@@ -44,12 +44,12 @@
         </div>
         <!-- BEGIN: openid -->
         <div style="margin:20px;">
-            <img style="margin-left:10px;vertical-align:middle;" alt="{LANG.openid_login}" title="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" />
+            <img style="margin-left:10px;vertical-align:middle;" alt="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" />
             <div style="margin-bottom:10px;">
                 {DATA.openid_info}
             </div>
             <!-- BEGIN: server -->
-			<a href="{OPENID.href}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" />{OPENID.title}</a>
+			<a href="{OPENID.href}" title="{OPENID.title}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" />{OPENID.title}</a>
 			<!-- END: server -->
         </div>
 		<!-- END: openid -->

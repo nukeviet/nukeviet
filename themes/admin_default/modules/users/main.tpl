@@ -54,7 +54,7 @@
                 </td>
                 <td>
                     <!-- BEGIN: is_admin -->
-                    <img style="vertical-align:middle;" alt="{CONTENT_TD.level}" title="{CONTENT_TD.level}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/{CONTENT_TD.img}.png" width="38" height="18" />
+                    <img style="vertical-align:middle;" alt="{CONTENT_TD.level}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/{CONTENT_TD.img}.png" width="38" height="18" />
                     <!-- END: is_admin -->
                     {CONTENT_TD.username}
                 </td>
