@@ -202,8 +202,8 @@ var comment_subject_defaul = '{ROW.comment_subject}';
                 <textarea rows="1" cols="1" name="comment_content" id="comment_content" class="input typer box2" value=""></textarea>
             </p>
             <p>
-                {LANG.file_comment_captcha}: &nbsp; <img  style="vertical-align: middle" height="22" id="vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" title="{GLANG.captcha}" alt="{GLANG.captcha}" />
-				<img style="vertical-align: middle" alt="{GLANG.captcharefresh}" title="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','comment_seccode_iavim');" />
+                {LANG.file_comment_captcha}: &nbsp; <img  style="vertical-align: middle" height="22" id="vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{GLANG.captcha}" />
+				<img style="vertical-align: middle" alt="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','comment_seccode_iavim');" />
                 &nbsp; <input type="text" class="input capcha" name="comment_seccode" id="comment_seccode_iavim" maxlength="{CAPTCHA_MAXLENGTH}"/>&nbsp; <input type="submit" class="button" id="comment_submit" name="comment_submit" type="submit" value="{LANG.file_comment_send}" />
             </p>
         </div>

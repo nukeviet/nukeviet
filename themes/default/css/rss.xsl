@@ -35,7 +35,7 @@ a.item:link,a.item:visited,a.item:active,a.item:hover,.subhead{font-weight:bold}
 			<div class="banbox">
 			<div class="padbanbox">			
 			<div class="mvb">
-			<div class="fltl"><span class="subhead">RSS Feed for: </span></div><a href="{link}" class="item"><img height="16" hspace="5" vspace="0" border="0" width="16" alt="RSS feed" src="/images/rss.png" title="RSS feed" align="left" /><xsl:value-of select="$title"/></a><br clear="all" />
+			<div class="fltl"><span class="subhead">RSS Feed for: </span></div><a href="{link}" class="item"><img height="16" hspace="5" vspace="0" border="0" width="16" alt="RSS feed" src="/images/rss.png" align="left" /><xsl:value-of select="$title"/></a><br clear="all" />
 			</div>
 			<div class="fltclear">Below is the latest content available from this feed.
             </div>

@@ -114,7 +114,7 @@
                 </dt>
                 <dd class="fr" style="width:290px;">
                     <p style="text-align:left;">
-                        <img id="vimg" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimg','nv_seccode_iavim');"/>
+                        <img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimg','nv_seccode_iavim');"/>
                     </p>
                     <input name="nv_seccode" id="nv_seccode_iavim" class="required" maxlength="{GFX_MAXLENGTH}" />
                 </dd>

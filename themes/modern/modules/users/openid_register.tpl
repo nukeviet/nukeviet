@@ -2,7 +2,7 @@
 <div id="users">
     <h2 class="line padding_0" style="margin-bottom:5px">{LANG.register}</h2>
     <div style="text-align:center">
-        <img alt="{LANG.openid_register}" title="{LANG.openid_register}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" /><br />
+        <img alt="{LANG.openid_register}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" /><br />
     </div>
     <div style="text-align:center;padding:10px">
         {DATA.info}
@@ -82,7 +82,7 @@
                 </dt>
                 <dd class="fr" style="width:290px;">
                     <p style="text-align:left;">
-                        <img id="vimg" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimg','nv_seccode_iavim');"/>
+                        <img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimg','nv_seccode_iavim');"/>
                     </p>
                     <input name="nv_seccode" id="nv_seccode_iavim" class="required" maxlength="{GFX_MAXLENGTH}" />
                 </dd>
