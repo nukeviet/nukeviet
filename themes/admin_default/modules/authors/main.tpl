@@ -16,7 +16,7 @@
 						<a class="button1" href="{DEL_HREF}"><span><span>{DEL_NAME}</span></span></a>
 						<!-- END: del -->
 					</div>
-					<img class="refresh" alt="{OPTION_LEV}" title="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /> {CAPTION}
+					<img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /> {CAPTION}
 				</td>
 			</tr>
 		</thead>

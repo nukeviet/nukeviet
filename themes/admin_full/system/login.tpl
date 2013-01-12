@@ -30,7 +30,7 @@
     <body>
         <div id="wrapper">
             <div id="logo">
-                <a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img alt="{SITE_NAME}" title="{SITE_NAME}" src="{LOGO_SRC}" width="{LOGO_WIDTH}" height="{LOGO_HEIGHT}" /></a>
+                <a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img alt="{SITE_NAME}" src="{LOGO_SRC}" width="{LOGO_WIDTH}" height="{LOGO_HEIGHT}" /></a>
             </div>
             <div id="login-header">
                 <div id="login-header-left"></div>
@@ -66,7 +66,7 @@
                             <!-- BEGIN: captcha -->
                             <li>
                                 <label>{N_CAPTCHA}:</label>
-                                <input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" style="width:60px;"/><img id="vimg" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" title="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha();"/>
+                                <input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" style="width:60px;"/><img id="vimg" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha();"/>
                             </li><!-- END: captcha -->
                         </ul>
                         <div id="smb">

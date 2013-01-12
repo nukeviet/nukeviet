@@ -27,7 +27,7 @@
             <label>
                 {LANG.captcha}
             </label>
-            <img id="vimg" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+            <img id="vimg" alt="{N_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
             <img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimg','seccode_iavim');"/>
         </div>
         <div class="clearfix rows">

@@ -13,7 +13,7 @@
 			</ul>
 	<div class="box-border-shadow">
 		<div class="acenter">
-			<img alt="{LANG.openid_administrator}" title="{LANG.openid_administrator}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" />
+			<img alt="{LANG.openid_administrator}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" />
 		</div>
 		<!-- BEGIN: openid_empty -->
 		<form id="openidForm" action="{FORM_ACTION}" method="post">
@@ -38,7 +38,7 @@
 				{DATA.info}
 			</p>
 			<!-- BEGIN: server -->
-				<a href="{OPENID.href}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /> {OPENID.title}</a>
+				<a title="{OPENID.title}" href="{OPENID.href}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /> {OPENID.title}</a>
 			<!-- END: server -->
 		</div>
 	</div>

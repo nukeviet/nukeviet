@@ -15,7 +15,7 @@
     <div class="clear"></div>
     </div>
     <div style="text-align:center">
-        <img alt="{LANG.openid_administrator}" title="{LANG.openid_administrator}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" /><br />
+        <img alt="{LANG.openid_administrator}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" /><br />
     </div>
     <!-- BEGIN: openid_empty -->
     <form id="openidForm" action="{FORM_ACTION}" method="post" class="register">
@@ -42,7 +42,7 @@
             {DATA.info}
         </div>
         <!-- BEGIN: server -->
-        <a href="{OPENID.href}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /> {OPENID.title}</a>
+        <a href="{OPENID.href}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /> {OPENID.title}</a>
         <!-- END: server -->
     </div>
 </div>

@@ -38,7 +38,7 @@
     <div class="detail_faq">
         <div class="title">
             <div class="gotop">
-                <a href="#faqlist" title="{LANG.go_top}"><img alt="{LANG.go_top}" title="{LANG.go_top}" src="{IMG_GO_TOP_SRC}top.gif" width="16" height="16" /></a>
+                <a href="#faqlist" title="{LANG.go_top}"><img alt="{LANG.go_top}" src="{IMG_GO_TOP_SRC}top.gif" width="16" height="16" /></a>
             </div>
             {ROW.title}
         </div>
