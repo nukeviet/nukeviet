@@ -79,7 +79,20 @@
 				<td><input class="url" name="{CONTENTS.click_url.1}" type="text" value="{CONTENTS.click_url.2}" style="width:300px" maxlength="{CONTENTS.click_url.3}" /></td>
 			</tr>
 		</tbody>
-		<tbody class="second">
+		<tbody  class="second">
+			<tr>
+				<td>{CONTENTS.target.0}:</td>
+				<td></td>
+				<td>
+					<select name="{CONTENTS.target.1}">
+						<!-- BEGIN: target -->
+						<option value="{TARGET.key}"{TARGET.selected}>{TARGET.title}</option>
+						<!-- END: target -->
+					</select>
+				</td>
+			</tr>
+		</tbody>		
+		<tbody>
 			<tr>
 				<td>{CONTENTS.publ_date.0}:</td>
 				<td></td>
@@ -87,7 +100,7 @@
 				</td>
 			</tr>
 		</tbody>
-		<tbody>
+		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.exp_date.0}:</td>
 				<td></td>

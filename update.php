@@ -461,7 +461,8 @@ $db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."`
   DROP `file_name_tmp`,
   DROP `file_alt_tmp`,
   DROP `click_url_tmp`");
-$db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."` ADD `imageforswf` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `file_alt`"); 
+$db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."` ADD `imageforswf` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `file_alt`");
+$db->sql_query( "ALTER TABLE `".NV_BANNERS_ROWS_GLOBALTABLE."` ADD `target` VARCHAR( 10 ) NOT NULL DEFAULT '_blank' AFTER `click_url`");  
 
 require_once (NV_ROOTDIR . "/modules/banners/admin.functions.php");
 nv_CreateXML_bannerPlan();

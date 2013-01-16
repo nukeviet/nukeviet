@@ -64,6 +64,8 @@ if(!empty($row['imageforswf']))
 $contents['rows'][] = array( $lang_module['img_info1'], $img_info );
 $contents['rows'][] = array( $lang_module['file_alt'], $row['file_alt'] );
 $contents['rows'][] = array( $lang_module['click_url'], $click_url );
+$contents['rows'][] = array( $lang_module['target'], $targets[$row['target']] );
+
 $contents['rows'][] = array( $lang_module['add_date'], date( "d/m/Y H:i", $row['add_time'] ) );
 $contents['rows'][] = array( $lang_module['publ_date'], date( "d/m/Y H:i", $row['publ_time'] ) );
 $contents['rows'][] = array( $lang_module['exp_date'], ( ! empty( $row['exp_time'] ) ? date( "d/m/Y H:i", $row['exp_time'] ) : $lang_module['unlimited'] ) );

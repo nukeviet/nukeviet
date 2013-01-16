@@ -9,6 +9,24 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
+$submenu['client_list'] = $lang_module['client_list'];
+$submenu['add_client'] = $lang_module['add_client'];
+$submenu['plans_list'] = $lang_module['plans_list'];
+$submenu['add_plan'] = $lang_module['add_plan'];
+$submenu['banners_list'] = $lang_module['banners_list'];
+$submenu['add_banner'] = $lang_module['add_banner'];
+
+$allow_func = array( 'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list','plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list','change_act_banner', 'info_banner', 'show_stat', 'show_list_stat', 'del_banner' );
+
+define( 'NV_IS_FILE_ADMIN', true );
+
+$targets = array(
+	'_blank' => $lang_module['target_blank'],
+	'_top' => $lang_module['target_top'],
+	'_self' => $lang_module['target_self'],
+	'_parent' => $lang_module['target_parent']
+);
+
 /**
  * nv_CreateXML_bannerPlan()
  * 
@@ -83,6 +101,7 @@ function nv_CreateXML_bannerPlan()
 				'file_height' => $row2['height'], //
 				'file_alt' => $row2['file_alt'], //
 				'file_click' => $row2['click_url'], //
+				'target' => $row2['target'], //
 				'publ_time' => $row2['publ_time'], //
 				'exp_time' => $row2['exp_time'] //
 			);
@@ -124,17 +143,6 @@ function nv_fix_banner_weight( $pid )
 		$db->sql_query( $sql );
 	}
 }
-
-$submenu['client_list'] = $lang_module['client_list'];
-$submenu['add_client'] = $lang_module['add_client'];
-$submenu['plans_list'] = $lang_module['plans_list'];
-$submenu['add_plan'] = $lang_module['add_plan'];
-$submenu['banners_list'] = $lang_module['banners_list'];
-$submenu['add_banner'] = $lang_module['add_banner'];
-
-$allow_func = array( 'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list','plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list','change_act_banner', 'info_banner', 'show_stat', 'show_list_stat', 'del_banner' );
-
-define( 'NV_IS_FILE_ADMIN', true );
 
 /**
  * nv_add_client_theme()
@@ -526,7 +534,11 @@ function nv_add_banner_theme( $contents )
 		$xtpl->assign( 'CLIENT', array( 'key' => $clid, 'title' => $clname, 'selected' => $clid == $contents['client'][3] ? " selected=\"selected\"" : "" ) );
 		$xtpl->parse( 'main.client' );
 	}
-
+	foreach( $contents['target'][2] as $target => $ptitle )
+	{
+		$xtpl->assign( 'TARGET', array( 'key' => $target, 'title' => $ptitle, 'selected' => $target == $contents['target'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->parse( 'main.target' );
+	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -565,6 +577,13 @@ function nv_edit_banner_theme( $contents )
 		$xtpl->assign( 'CLIENT', array( 'key' => $clid, 'title' => $clname, 'selected' => $clid == $contents['client'][3] ? " selected=\"selected\"" : "" ) );
 		$xtpl->parse( 'main.client' );
 	}
+	
+	foreach( $contents['target'][2] as $target => $ptitle )
+	{
+		$xtpl->assign( 'TARGET', array( 'key' => $target, 'title' => $ptitle, 'selected' => $target == $contents['target'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->parse( 'main.target' );
+	}
+		
 	if(!empty($contents['file_name'][5]))
 	{
 		$xtpl->parse( 'main.imageforswf1' );

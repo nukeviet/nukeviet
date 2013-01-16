@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language česky
-* @Createdate Aug 01, 2010, 02:40:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language česky
+ * @Createdate Aug 01, 2010, 02:40:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
@@ -131,4 +132,9 @@ $lang_module['delfile_success'] = 'Smazat soubor úspěch';
 $lang_module['delfile_error'] = 'odstranit chyby';
 $lang_module['weight'] = 'Pozice';
 
+$lang_module['target'] = 'Cíl';
+$lang_module['target_blank'] = 'Nové okno (_blank)';
+$lang_module['target_top'] = 'Okno nejvyšší úrovně (_top)';
+$lang_module['target_self'] = 'Stejné okno (_self)';
+$lang_module['target_parent'] = 'Rodičovské okno (_parent)';
 ?>

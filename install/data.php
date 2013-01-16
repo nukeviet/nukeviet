@@ -336,6 +336,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_rows` 
   `file_alt` varchar(255) NOT NULL,
   `imageforswf` varchar(255) NOT NULL,
   `click_url` varchar(255) NOT NULL,
+  `target` varchar(10) NOT NULL DEFAULT '_blank',
   `add_time` int(11) unsigned NOT NULL DEFAULT '0',
   `publ_time` int(11) unsigned NOT NULL DEFAULT '0',
   `exp_time` int(11) unsigned NOT NULL DEFAULT '0',
@@ -548,8 +549,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_plans` 
 (2, '', 'Quang cao trai', '', 'sequential', 190, 500, 1)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_rows` VALUES
-(1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', '', 'http://www.mofa.gov.vn', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1), 
-(2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', '', 'http://vinades.vn', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,2), 
-(3, 'Quang cao giua trang', 1, 0, 'webnhanh_vn.gif', 'gif', 'image/gif', 510, 65, '', '', 'http://webnhanh.vn', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
+(1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', '', 'http://www.mofa.gov.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1), 
+(2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', '', 'http://vinades.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,2), 
+(3, 'Quang cao giua trang', 1, 0, 'webnhanh_vn.gif', 'gif', 'image/gif', 510, 65, '', '', 'http://webnhanh.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
 
 ?>
