@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Türkçe
+ * @Createdate Oct 25, 2012, 03:11:41 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Nukevietdestek.com (destek@nukevietdestek.com)';
 $lang_translator['createdate'] = '14/06/2011/03:30';
@@ -131,4 +132,9 @@ $lang_module['delfile_success'] = 'Silindi!';
 $lang_module['delfile_error'] = 'Silme Hatası';
 $lang_module['weight'] = 'Pozisyon';
 
+$lang_module['target'] = 'Hedef';
+$lang_module['target_blank'] = 'Yeni Pencere (_blank)';
+$lang_module['target_top'] = 'Enüst Pencere (_top)';
+$lang_module['target_self'] = 'Aynı Pencere (_self)';
+$lang_module['target_parent'] = 'Ana Pencere (_parent)';
 ?>

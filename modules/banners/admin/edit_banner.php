@@ -93,6 +93,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$click_url = strip_tags( $nv_Request->get_string( 'click_url', 'post', '' ) );
 	$publ_date = strip_tags( $nv_Request->get_string( 'publ_date', 'post', '' ) );
 	$exp_date = strip_tags( $nv_Request->get_string( 'exp_date', 'post', '' ) );
+	$target = $nv_Request->get_string( 'target', 'post', '' );
+	if( ! isset( $targets[$target] ) )
+	{
+		$target = '_blank';
+	}
 
 	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) )
 		$publ_date = "";
@@ -174,7 +179,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			if( ! empty( $imageforswf ) and is_file( NV_ROOTDIR . '/' . $imageforswf ) )
 			{
 				@nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . '/' . $imageforswf );
-			}			
+			}
 			$imageforswf = '';
 		}
 		if( empty( $error ) )
@@ -205,7 +210,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			$sql = "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `title`=" . $db->dbescape( $title ) . ", `pid`=" . $pid . ", `clid`=" . $clid . ", 
             `file_name`=" . $db->dbescape( $file_name ) . ", `file_ext`=" . $db->dbescape( $file_ext ) . ", `file_mime`=" . $db->dbescape( $file_mime ) . ", 
-            `width`=" . $width . ", `height`=" . $height . ", `file_alt`=" . $db->dbescape( $file_alt ) . ", `imageforswf`=" . $db->dbescape( $imageforswf ) . ", `click_url`=" . $db->dbescape( $click_url ) . ", 
+            `width`=" . $width . ", `height`=" . $height . ", `file_alt`=" . $db->dbescape( $file_alt ) . ", `imageforswf`=" . $db->dbescape( $imageforswf ) . ", 
+            `click_url`=" . $db->dbescape( $click_url ) . ", `target`=" . $db->dbescape( $target ) . ", 
             `publ_time`=" . $publtime . ", `exp_time`=" . $exptime . " WHERE `id`=" . $id;
 			$db->sql_query( $sql );
 
@@ -230,6 +236,7 @@ else
 	$clid = $row['clid'];
 	$file_alt = $row['file_alt'];
 	$click_url = $row['click_url'];
+	$target = $row['target'];
 	$publ_date = ! empty( $row['publ_time'] ) ? date( "d/m/Y", $row['publ_time'] ) : "";
 	$exp_date = ! empty( $row['exp_time'] ) ? date( "d/m/Y", $row['exp_time'] ) : "";
 }
@@ -288,6 +295,14 @@ $contents['click_url'] = array(
 	$click_url,
 	255
 );
+
+$contents['target'] = array(
+	$lang_module['target'],
+	'target',
+	$targets,
+	$target
+);
+
 $contents['publ_date'] = array(
 	$lang_module['publ_date'],
 	'publ_date',

@@ -100,12 +100,25 @@
 		</tbody>
 		<tbody>
 			<tr>
+				<td>{CONTENTS.target.0}:</td>
+				<td></td>
+				<td>
+					<select name="{CONTENTS.target.1}">
+						<!-- BEGIN: target -->
+						<option value="{TARGET.key}"{TARGET.selected}>{TARGET.title}</option>
+						<!-- END: target -->
+					</select>
+				</td>
+			</tr>
+		</tbody>
+		<tbody class="second">
+			<tr>
 				<td>{CONTENTS.publ_date.0}:</td>
 				<td></td>
 				<td><input name="{CONTENTS.publ_date.1}" class="datepicker" type="text" value="{CONTENTS.publ_date.2}" style="width:100px" maxlength="{CONTENTS.publ_date.3}" readonly="readonly" /></td>
 			</tr>
 		</tbody>
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td>{CONTENTS.exp_date.0}:</td>
 				<td></td>
