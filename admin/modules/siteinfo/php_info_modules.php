@@ -14,6 +14,9 @@ $page_title = $lang_module['extensions_php'];
 require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
 
 $array = phpinfo_array( 8, 1 );
+unset($array['Apache Environment']['HTTP_COOKIE']);
+unset($array['HTTP Headers Information']['Cookie']);
+unset($array['HTTP Headers Information']['Set-Cookie']);
 
 if( ! empty( $array ) )
 {
