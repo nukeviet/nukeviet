@@ -523,7 +523,7 @@ $array_documents = array(
 $array_dirname = array( );
 $array_thumb_config = array( );
 
-$refresh = $nv_Request->isset_request( 'refresh', 'get', 0 );
+$refresh = $nv_Request->isset_request( 'refresh', 'get' );
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) );
 
 $sql = "SELECT * FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` ORDER BY `dirname` ASC";

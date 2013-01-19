@@ -11,7 +11,7 @@ var comment_subject_defaul = '{ROW.comment_subject}';
     </div>
     <!-- BEGIN: is_image -->
     <div class="image" style="padding-top:8px">
-        <a href="{FILEIMAGE.orig_src}" rel="shadowbox;height={FILEIMAGE.orig_height};width={FILEIMAGE.orig_width}"><img alt="{ROW.title}" title="{ROW.title}" src="{FILEIMAGE.src}" width="{FILEIMAGE.width}" height="{FILEIMAGE.height}" /></a>
+        <a  title="{ROW.title}" href="{FILEIMAGE.orig_src}" rel="shadowbox;height={FILEIMAGE.orig_height};width={FILEIMAGE.orig_width}"><img alt="{ROW.title}"src="{FILEIMAGE.src}" width="{FILEIMAGE.width}" height="{FILEIMAGE.height}" /></a>
     </div>
     <!-- END: is_image -->
     <!-- BEGIN: introtext -->
@@ -246,8 +246,8 @@ var comment_subject_defaul = '{ROW.comment_subject}';
                 </label>
             </dd>
             <dt class="fr">
-                <img  style="vertical-align: middle" height="22" id="vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" title="{GLANG.captcha}" alt="{GLANG.captcha}" />
-                <img style="vertical-align: middle" alt="{GLANG.captcharefresh}" title="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','comment_seccode_iavim');" />
+                <img style="vertical-align: middle" height="22" id="vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{GLANG.captcha}" />
+                <img style="vertical-align: middle" alt="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','comment_seccode_iavim');" />
             </dt>
             <dt class="fr" style="width:200px">
                 <input style="width:80px;vertical-align: middle" type="text" value="" name="comment_seccode" id="comment_seccode_iavim" maxlength="{CAPTCHA_MAXLENGTH}" />

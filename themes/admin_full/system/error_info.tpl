@@ -7,7 +7,7 @@
 <tbody{TPL_E_CLASS}>
 <tr>
     <td>
-        <img alt="{TPL_E_ALT}" title="{TPL_E_ALT}" src="{TPL_E_SRC}" width="16" height="16" />
+        <img alt="{TPL_E_ALT}" src="{TPL_E_SRC}" width="16" height="16" />
     </td>
     <td>
         {TPL_E_ERRNO}: {TPL_E_MESS}

@@ -164,8 +164,8 @@
                 {LANG.file_upload_captcha}
             </dt>
             <dd class="fl">
-                <img  style="vertical-align: middle" height="22" name="upload_vimg" id="upload_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" title="{GLANG.captcha}" alt="{GLANG.captcha}" />
-                <img style="vertical-align: middle" alt="{GLANG.captcharefresh}" title="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('upload_vimg','upload_seccode_iavim');" />
+                <img  style="vertical-align: middle" height="22" name="upload_vimg" id="upload_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{GLANG.captcha}" />
+                <img style="vertical-align: middle" alt="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('upload_vimg','upload_seccode_iavim');" />
             </dd>
         </dl>
         <dl class="clearfix">

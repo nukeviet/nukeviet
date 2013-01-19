@@ -226,7 +226,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		foreach( $db->query_strs as $key => $field )
 		{
 			$xtpl->assign( 'NV_SHOW_QUERIES_CLASS', ($key % 2) ? " class=\"second\"" : "" );
-			$xtpl->assign( 'NV_FIELD1', ($field[1] ? "<img alt=\"" . $lang_global['ok'] . "\" title=\"" . $lang_global['ok'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/images/icons/good.png\" />" : "<img alt=\"" . $lang_global['fail'] . "\" title=\"" . $lang_global['fail'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/images/icons/bad.png\" />") );
+			$xtpl->assign( 'NV_FIELD1', ($field[1] ? "<img alt=\"" . $lang_global['ok'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/images/icons/good.png\" />" : "<img alt=\"" . $lang_global['fail'] . "\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/images/icons/bad.png\" />") );
 			$xtpl->assign( 'NV_FIELD', $field[0] );
 			$xtpl->parse( 'main.nv_show_queries.nv_show_queries_loop' );
 		}

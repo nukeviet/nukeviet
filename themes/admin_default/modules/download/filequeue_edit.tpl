@@ -86,7 +86,7 @@
                         <!-- END: if_fileupload -->
                         <!-- BEGIN: fileupload2 -->
                         <input readonly="readonly" class="txt" value="{FILEUPLOAD2.value}" name="fileupload2[]" id="fileupload2_{FILEUPLOAD2.key}" style="width:300px" maxlength="255" />&nbsp;
-						<input type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload2_{FILEUPLOAD2.key}&path={FILES_DIR}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" />&nbsp;
+						<input type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload2_{FILEUPLOAD2.key}&path={FILES_DIR}&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" />&nbsp;
 						<input type="button" value="{LANG.file_checkUrl}" id= "check_fileupload2_{FILEUPLOAD2.key}" onclick="nv_checkfile('fileupload2_{FILEUPLOAD2.key}',1, 'check_fileupload2_{FILEUPLOAD2.key}');" />&nbsp;
 						<input type="button" value="{LANG.file_gourl}" id= "go_fileupload2_{FILEUPLOAD2.key}" onclick="nv_gourl('fileupload2_{FILEUPLOAD2.key}',1, 'go_fileupload2_{FILEUPLOAD2.key}');" /><br />
                         <!-- END: fileupload2 -->
@@ -288,7 +288,7 @@
 <script type="text/javascript">
 $( "input[name=selectimg]" ).click( function()
 {
-   nv_open_browse_file( "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileimage2&path={IMG_DIR}&type=image", "NVImg", "850", "500", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no" );
+   nv_open_browse_file( "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileimage2&path={IMG_DIR}&type=image", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no" );
    return false;
 }
  );

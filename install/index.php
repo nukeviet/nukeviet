@@ -63,7 +63,13 @@ if( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) and $step < 7 )
 	Header( "Location: " . NV_BASE_SITEURL . "index.php" );
 	exit( );
 }
-
+if( empty( $sys_info['supports_rewrite'] ) )
+{
+	if (isset($_COOKIE['supports_rewrite']) AND $_COOKIE['supports_rewrite']==md5($global_config['sitekey']))
+	{
+		$sys_info['supports_rewrite'] = "rewrite_mode_apache";
+	}
+}
 if( $step == 1 )
 {
 	if( $step < 2 )
@@ -790,6 +796,11 @@ elseif( $step == 6 )
 				{
 					$checksum = md5( $row['module'] . "#" . $row['act_1'] . "#" . $row['act_2'] . "#" . $row['act_3'] . "#" . $global_config['sitekey'] );
 					$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_authors_module` SET `checksum` = '" . $checksum . "' WHERE `mid` = " . $row['mid'] );
+				}
+				
+				if( ! (nv_function_exists( 'finfo_open' ) or nv_class_exists( "finfo" ) or nv_function_exists( 'mime_content_type' ) or (substr( $sys_info['os'], 0, 3 ) != 'WIN' and (nv_function_exists( 'system' ) or nv_function_exists( 'exec' )))) )
+				{
+					$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  'mild' WHERE `lang`='sys' AND `module` =  'global' AND `config_name` = 'upload_checking_mode'" );
 				}
 
 				nv_save_file_config( );

@@ -153,15 +153,21 @@ function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink =
  */
 function nv_xmlOutput( $content, $lastModified )
 {
-	$tidy_options = array( //
-		'input-xml' => true, //
-		'output-xml' => true, //
-		'indent' => true, //
-		'indent-cdata' => true, //
-		'wrap' => false //
-	);
-	$content = ( string )nv_valid_html( $content, $tidy_options, 'utf8' );
-
+	if( class_exists( 'tidy' ) )
+	{
+		$tidy_options = array(
+			'input-xml' => true,
+			'output-xml' => true,
+			'indent' => true,
+			'indent-cdata' => true, 
+			'wrap' => false
+		);
+		$tidy = new tidy( );
+		$tidy->parseString( $content, $tidy_options, 'utf8' );
+		$tidy->cleanRepair( );
+		$content = ( string ) $tidy;
+	}
+	
 	@Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
 	@Header( "Expires: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
 	@Header( "Content-Type: text/xml; charset=utf-8" );

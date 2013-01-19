@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -79,6 +80,7 @@ $lang_module['add_banner_info'] = 'Để thêm quảng cáo mới, bạn cần k
 $lang_module['of_client'] = 'Khách hàng';
 $lang_module['upload'] = 'File hình quảng cáo (%s)';
 $lang_module['re_upload'] = 'Thay hình quảng cáo mới (%s)';
+$lang_module['imageforswf'] = 'Hình quảng cáo nếu trình duyệt là mobile';
 $lang_module['file_alt'] = 'Chú thích cho hình';
 $lang_module['click_url'] = 'URL khi click vào hình';
 $lang_module['add_date'] = 'Khởi tạo';
@@ -131,4 +133,9 @@ $lang_module['delfile_success'] = 'Đã xóa xong';
 $lang_module['delfile_error'] = 'Xóa lỗi';
 $lang_module['weight'] = 'vị trí';
 
+$lang_module['target'] = 'Đích đếm';
+$lang_module['target_blank'] = 'Cửa sổ mới (_blank)';
+$lang_module['target_top'] = 'Cửa sổ trên cùng (_top)';
+$lang_module['target_self'] = 'Tại trang (_self)';
+$lang_module['target_parent'] = 'Cửa sổ cha (_parent)';
 ?>

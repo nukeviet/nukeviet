@@ -3,7 +3,7 @@
     <h2 class="line padding_0" style="margin-bottom:5px">{LANG.openid_login}</h2>
     <form id="loginForm" action="{OPENID_LOGIN}" method="post" class="register1 clearfix">
         <div>
-            <img style="margin-left:10px;vertical-align:middle;" alt="{LANG.openid_login}" title="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" />
+            <img style="margin-left:10px;vertical-align:middle;" alt="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" />
         </div>
         <div class="info padding_0" style="padding-bottom:10px">
             {LANG.login_info}
@@ -19,7 +19,7 @@
             <label>
                 {LANG.captcha}
             </label>
-            <img id="vimglogin" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimglogin','seccode_iavim');"/>
+            <img id="vimglogin" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimglogin','seccode_iavim');"/>
         </div>
         <div class="clearfix rows">
             <label>
@@ -37,7 +37,7 @@
                 {LANG.openid_login2}
             </div>
             <!-- BEGIN: server -->
-            <a href="{OPENID.href}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /> {OPENID.title}</a>
+            <a href="{OPENID.href}" title="{OPENID.title}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /> {OPENID.title}</a>
             <!-- END: server -->
         </div>
         <br />

@@ -23,10 +23,10 @@
 		</object>
 		<!--> <![endif]-->
 	</object>
-	<!-- BEGIN: fix_link --><a href="{DATA.link}" onclick="this.target='_blank'" title="{DATA.file_alt}" style="position:absolute; top:0;left:0;width:{DATA.file_width}px; height:{DATA.file_height}px">&nbsp;</a><!-- END: fix_link -->
+	<!-- BEGIN: fix_link --><a href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}" style="position:absolute; top:0;left:0;width:{DATA.file_width}px; height:{DATA.file_height}px">&nbsp;</a><!-- END: fix_link -->
 	<!-- END: type_swf -->
 	<!-- BEGIN: type_image_link -->
-	<a href="{DATA.link}" onclick="this.target='_blank'" title="{DATA.file_alt}">
+	<a href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}">
 		<img alt="{DATA.file_alt}" style="border-width:0px" src="{DATA.file_image}" width="{DATA.file_width}" height="{DATA.file_height}" />
 	</a>
 	<!-- END: type_image_link -->

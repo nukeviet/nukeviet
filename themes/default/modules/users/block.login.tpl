@@ -32,10 +32,10 @@
         <!-- BEGIN: openid -->
         <div style="padding-top:10px;">
             <label>
-                <img style="margin-right:3px;vertical-align:middle;" alt="{LANG.openid_login}" title="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" /> {LANG.openid_login} 
+                <img style="margin-right:3px;vertical-align:middle;" alt="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" /> {LANG.openid_login} 
             </label>
             <!-- BEGIN: server -->
-            <a class="forgot fl" title="{OPENID.title}" href="{OPENID.href}"><img style="margin-right:3px;vertical-align:middle;" alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /> {OPENID.title}</a>
+            <a class="forgot fl" title="{OPENID.title}" href="{OPENID.href}"><img style="margin-right:3px;vertical-align:middle;" alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /> {OPENID.title}</a>
             <!-- END: server -->
         </div>
         <!-- END: openid -->

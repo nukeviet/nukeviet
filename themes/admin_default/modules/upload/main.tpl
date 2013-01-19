@@ -79,7 +79,7 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
 </div>
 <div class="footer">
     <div class="refresh">
-        <a href="#"><img alt="{LANG.refresh}" title="{LANG.refresh}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/refresh.png" width="16" height="16"/></a>
+        <a href="#" title="{LANG.refresh}"><img alt="{LANG.refresh}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/refresh.png" width="16" height="16"/></a>
     </div>
     <div class="filetype">
         <select name="imgtype" class="vchange">
@@ -100,7 +100,7 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
         </select>
     </div>
     <div class="search">
-        <a href="#"><img alt="{LANG.search}" title="{LANG.search}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/search.png" width="16" height="16"/></a>
+        <a href="#" title="{LANG.search}"><img alt="{LANG.search}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/search.png" width="16" height="16"/></a>
     </div>
     <div class="uploadForm" style="display:none">
         <div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">{LANG.upload_file}</div>
@@ -157,7 +157,7 @@ img.previewimg{background:#FFF;border:2px solid #F0F0F0;max-height:80px;max-widt
         <div style="text-align:center;font-size:12px;font-weight:800;" id="fileInfoName2" class="dynamic"></div>
         <div style="text-align:center;" id="fileInfoDetail2" class="dynamic"></div>
         <div style="width:360px;height:230px;text-align:center;margin-top:10px">
-            <img name="myFile2" title="{LANG.clickSize}" alt="{LANG.clickSize}" style="border:2px solid #F0F0F0;" width="0" height="0" src="" />
+            <img name="myFile2" alt="{LANG.clickSize}" style="border:2px solid #F0F0F0;" width="0" height="0" src="" />
         </div>
     </div>
     <div style="clear:both"></div>

@@ -98,29 +98,6 @@ if( ! function_exists( 'mcrypt_encrypt' ) )
 //Xac dinh tien ich mo rong lam viec voi string
 $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ( $sys_info['iconv_support'] ? 'iconv' : 'php' );
 
-//Kiem tra ho tro rewrite
-$sys_info['supports_rewrite'] = false;
-
-if( function_exists( 'apache_get_modules' ) )
-{
-	$apache_modules = apache_get_modules();
-	if( in_array( "mod_rewrite", $apache_modules ) )
-	{
-		$sys_info['supports_rewrite'] = "rewrite_mode_apache";
-	}
-}
-elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.' ) !== false )
-{
-	if( isset( $_SERVER['IIS_UrlRewriteModule'] ) && ( php_sapi_name() == 'cgi-fcgi' ) && class_exists( 'DOMDocument' ) )
-	{
-		$sys_info['supports_rewrite'] = "rewrite_mode_iis";
-	}
-}
-elseif( $sys_info['os'] == "LINUX" )
-{
-	$sys_info['supports_rewrite'] = "rewrite_mode_apache";
-}
-
 //Xac dinh function nen string
 $sys_info['str_compress'] = array();
 
@@ -135,8 +112,5 @@ if( $sys_info['zlib_support'] )
 		$sys_info['str_compress'] = array( 'gzdeflate', 'gzinflate' );
 	}
 }
-
-//Xac dinh tidy
-$sys_info['supports_tidy'] = ( class_exists( 'tidy' ) ) ? "class" : ( function_exists( 'tidy_parse_string' ) ? "func" : false );
 
 ?>

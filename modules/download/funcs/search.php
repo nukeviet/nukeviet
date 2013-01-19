@@ -85,9 +85,6 @@ if ( ! empty( $all_page ) )
             $uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );
         }
         
-        $img = NV_UPLOADS_DIR . $row['fileimage'];
-        $imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
-        
         $array[$row['id']] = array(  //
             'id' => ( int )$row['id'], //
 			'title' => $row['title'], //
@@ -96,7 +93,7 @@ if ( ! empty( $all_page ) )
 			'uploadtime' => $uploadtime, //
 			'author_name' => $row['author_name'], //
 			'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
-			'fileimage' => $imageinfo, //
+        	'imagesrc' => (! empty( $row['fileimage'] )) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
 			'view_hits' => ( int )$row['view_hits'], //
 			'download_hits' => ( int )$row['download_hits'], //
 			'more_link' => $more_link, //
