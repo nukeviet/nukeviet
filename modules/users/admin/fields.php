@@ -8,7 +8,9 @@
  */
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) )
+{
 	die( 'Stop!!!' );
+}
 
 // Chinh thu tu
 if( $nv_Request->isset_request( 'changeweight', 'post' ) )
@@ -344,16 +346,17 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	}
 	die( "NO" );
 }
-$array_field_type = array( );
-$array_field_type['number'] = 'Number';
-$array_field_type['date'] = 'Date';
-$array_field_type['textbox'] = 'Single-line text box';
-$array_field_type['textarea'] = 'Multi-line text box';
-$array_field_type['editor'] = 'Editor';
-$array_field_type['select'] = 'Drop down selection';
-$array_field_type['radio'] = 'Radio Buttons';
-$array_field_type['checkbox'] = 'Check Boxes';
-$array_field_type['multiselect'] = 'Multiple-choice drop down selection';
+$array_field_type = array(
+	'number' => $lang_module['field_type_number'],
+	'date' => $lang_module['field_type_date'],
+	'textbox' => $lang_module['field_type_textbox'],
+	'textarea' => $lang_module['field_type_textarea'],
+	'editor' => $lang_module['field_type_editor'],
+	'select' => $lang_module['field_type_select'],
+	'radio' => $lang_module['field_type_radio'],
+	'checkbox' => $lang_module['field_type_checkbox'],
+	'multiselect' => $lang_module['field_type_multiselect']
+);
 
 $xtpl = new XTemplate( "fields.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
@@ -564,15 +567,15 @@ else
 		$xtpl->assign( 'FIELD_TYPE_TEXT', $array_field_type[$dataform['field_type']] );
 	}
 	$array_match_type = array( );
-	$array_match_type['none'] = 'none';
+	$array_match_type['none'] = $lang_module['field_match_type_none'];
 	if( $dataform['field_type'] != 'editor' AND $dataform['field_type'] != 'textarea' )
 	{
-		$array_match_type['alphanumeric'] = 'A-Z, 0-9, and _ only';
+		$array_match_type['alphanumeric'] = $lang_module['field_match_type_alphanumeric'];
 		$array_match_type['email'] = $lang_global['email'];
-		$array_match_type['url'] = 'Url';
+		$array_match_type['url'] = $lang_module['field_match_type_url'];
 	}
-	$array_match_type['regex'] = 'Regular expression';
-	$array_match_type['callback'] = 'Func callback';
+	$array_match_type['regex'] = $lang_module['field_match_type_regex'];
+	$array_match_type['callback'] = $lang_module['field_match_type_callback'];
 	foreach( $array_match_type as $key => $value )
 	{
 		$xtpl->assign( 'MATCH_TYPE', array(
