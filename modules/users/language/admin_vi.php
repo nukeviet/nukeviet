@@ -276,4 +276,9 @@ $lang_module['field_match_type_error'] = '%s không đúng quy tắc';
 $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
 $lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s ký tự';
 $lang_module['field_min_max_value'] = '%1$s cần nhập từ %2$s đến %3$s';
+
+$lang_module['facebook_config'] = 'Cấu hình đăng nhập, đăng kí bằng facebook';
+$lang_module['facebook_client_id'] = 'App ID/API Key';
+$lang_module['facebook_client_secret'] = 'Mã Bí Mật';
+
 ?>
