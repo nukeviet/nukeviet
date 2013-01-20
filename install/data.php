@@ -488,6 +488,8 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'captcha_type', '0'),
 ('sys', 'global', 'version', '" . $global_config['version'] . "'),
 ('sys', 'global', 'whoviewuser', '2'),
+('sys', 'global', 'facebook_client_id', ''),
+('sys', 'global', 'facebook_client_secret', ''),
 ('sys', 'global', 'cookie_httponly', '" . $global_config['cookie_httponly'] . "'),
 ('sys', 'global', 'admin_check_pass_time', '1800'),
 ('sys', 'global', 'adminrelogin_max', '3'),

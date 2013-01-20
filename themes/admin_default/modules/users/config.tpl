@@ -59,7 +59,6 @@
 				</select></td>
 			</tr>
 		</tbody>
-
 		<tbody class="second">
 			<tr>
 				<td>{LANG.nv_unick}</td>
@@ -87,7 +86,6 @@
 				</select></td>
 			</tr>
 		</tbody>
-
 		<tbody class="second">
 			<tr>
 				<td>{LANG.nv_upass}</td>
@@ -116,6 +114,22 @@
 			</tr>
 		</tbody>
 	</table>
+	<table name="facebook_config" class="tab1">
+		<caption>{LANG.facebook_config}</caption>
+		<col width="320"/>
+		<tbody>
+			<tr>
+				<td><strong>{LANG.facebook_client_id}</strong></td>
+				<td><input type="text" class="txt-half" name="facebook_client_id" value="{DATA.facebook_client_id}"/></td>
+			</tr>
+		<tbody>
+		<tbody class="second">
+			<tr>
+				<td><strong>{LANG.facebook_client_secret}</strong></td>
+				<td><input type="text" class="txt-half" name="facebook_client_secret" value="{DATA.facebook_client_secret}"/></td>
+			</tr>
+		<tbody>
+	</table>
 	<table class="tab1">
 		<caption>
 			{LANG.access_other}
@@ -130,7 +144,6 @@
 				</td>
 			</tr>
 		</tfoot>
-
 		<!-- BEGIN: user_forum -->
 		<tbody class="second">
 			<tr>
@@ -225,13 +238,13 @@
 		<tbody class="second">
 			<tr>
 				<td>{LANG.deny_email}</td>
-				<td>				<textarea name="deny_email" rows="7" cols="70">{DATA.deny_email}</textarea></td>
+				<td><textarea name="deny_email" rows="7" cols="70">{DATA.deny_email}</textarea></td>
 			</tr>
 		</tbody>
 		<tbody >
 			<tr>
 				<td>{LANG.deny_name}</td>
-				<td>				<textarea name="deny_name" rows="7" cols="70">{DATA.deny_name}</textarea></td>
+				<td><textarea name="deny_name" rows="7" cols="70">{DATA.deny_name}</textarea></td>
 			</tr>
 		</tbody>
 	</table>
