@@ -48,6 +48,8 @@ $global_config['gfx_chk'] = 3;
 $global_config['nv_unick_type']=4;// Tài khoản chỉ được sử dụng Unicode, không có các ký tự đặc biệt
 $global_config['nv_upass_type']=0;// Mật khẩu cần kết hợp số và chữ
 
+$global_config['dump_interval'] = 1; // Thời gian lặp lại việc sao lưu CSDL tính bằng ngày
+
 //so ky tu toi da cua password doi voi user
 define( 'NV_UPASSMAX', 20 );
 
