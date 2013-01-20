@@ -51,4 +51,14 @@ $openid_servers['nukeviet'] = array( //
 	) //
 );
 
+$openid_servers['facebook'] = array( //
+	'identity' => 'http://www.facebook.com/profile.php?id=%s', //
+	'required' => array( //
+		'email' => 'contact/email', //
+		'username' => 'namePerson/friendly', //
+		'name' => 'namePerson', //
+		'gender' => 'person/gender', //
+	) //
+);
+
 ?>
