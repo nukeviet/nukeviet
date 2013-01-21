@@ -58,7 +58,7 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 
 	if( $jwplayer )
 	{
-		$CKEditor->config['extraPlugins'] = 'jwplayer';
+		$CKEditor->config['extraPlugins'] = 'jwplayer,ckeditor_wiris';
 		$editortoolbar = array(
 			array(
 				'Cut',
@@ -107,7 +107,7 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 				'-',
 				'TextColor',
 				'BGColor',
-				'SpecialChar',
+				'SpecialChar','ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS',
 				'Smiley',
 				'PageBreak',
 				'Source',
