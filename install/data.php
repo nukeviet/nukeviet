@@ -130,6 +130,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
   `question` varchar(255) NOT NULL,
   `answer` varchar(255) NOT NULL DEFAULT '',
   `checknum` varchar(50) NOT NULL DEFAULT '',
+  `users_info` mediumtext NOT NULL,  
   PRIMARY KEY (`userid`),
   UNIQUE KEY `login` (`username`),
   UNIQUE KEY `md5username` (`md5username`),

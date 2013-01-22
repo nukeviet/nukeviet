@@ -127,7 +127,7 @@
 		<tbody  class="second" id="classfields" {DATAFORM.classdisabled}>
 			<tr>
 				<td>{LANG.field_class}</td>
-				<td><input class="validalphanumeric" style="width:300px" type="text" value="" name="class" maxlength="50"></td>
+				<td><input class="validalphanumeric" style="width:300px" type="text" value="{DATAFORM.class}" name="class" maxlength="50"></td>
 			</tr>
 		</tbody>
 		<tbody class="second" id="editorfields" {DATAFORM.editordisabled}>

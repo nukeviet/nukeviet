@@ -211,6 +211,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$field_choices = array_combine( array_map( 'strip_punctuation', $field_choice_value ), array_map( 'strip_punctuation', $field_choice_text ) );
 		if( sizeof( $field_choices ) )
 		{
+			unset( $field_choices[""] );
 			$dataform['field_choices'] = serialize( $field_choices );
 		}
 		else
@@ -471,6 +472,7 @@ else
 			$dataform['editor_width'] = '100%';
 			$dataform['editor_height'] = '100px';
 			$dataform['fieldid'] = '';
+			$dataform['class'] = 'input';
 			$dataform['default_value_number'] = 0;
 			$dataform['min_number'] = 0;
 			$dataform['max_number'] = 1000;
