@@ -115,15 +115,17 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post', 0 );
 		$array_config_global['lang_geo'] = 0;
+		$array_config_global['rewrite_op_mod'] = ($nv_Request->get_int( 'rewrite_op_mod', 'post' )) ? $global_config['site_home_module'] : '';
 	}
 	else
 	{
 		$array_config_global['rewrite_optional'] = 0;
 		$array_config_global['lang_geo'] = $nv_Request->get_int( 'lang_geo', 'post', 0 );
+		$array_config_global['rewrite_op_mod'] = '';
 	}
 
 	$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
-	$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url ) ) ? $cdn_url : '';
+	$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url )) ? $cdn_url : '';
 
 	foreach( $array_config_global as $config_name => $config_value )
 	{
@@ -173,6 +175,8 @@ $array_config_global['gzip_method'] = ($array_config_global['gzip_method']) ? ' 
 $array_config_global['lang_multi'] = ($array_config_global['lang_multi']) ? ' checked="checked"' : '';
 $array_config_global['searchEngineUniqueID'] = isset( $array_config_global['searchEngineUniqueID'] ) ? $array_config_global['searchEngineUniqueID'] : "";
 
+$lang_module['rewrite_op_mod'] = sprintf( $lang_module['rewrite_op_mod'], $global_config['site_home_module'] );
+
 $xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config_global );
@@ -203,6 +207,7 @@ $xtpl->assign( 'CHECKED1', ($array_config_global['is_url_rewrite'] == 1) ? ' che
 if( $lang_multi == 0 )
 {
 	$xtpl->assign( 'CHECKED2', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '' );
+	$xtpl->assign( 'CHECKED3', ($array_config_global['rewrite_op_mod'] ) ? ' checked ' : '' );
 	$xtpl->parse( 'main.rewrite_optional' );
 }
 if( $lang_multi and sizeof( $global_config['allow_sitelangs'] ) > 1 )

@@ -20,8 +20,15 @@
 
 define('WRS_DEFAULT_CONFIG_FILE', dirname(__FILE__) . '/../default_configuration.ini');
 define('WRS_CONFIG_FILE', dirname(__FILE__) . '/../configuration.ini');
-define('WRS_CACHE_DIRECTORY', dirname(__FILE__) . '/../cache');
-define('WRS_FORMULA_DIRECTORY', dirname(__FILE__) . '/../formulas');
+//define('WRS_CACHE_DIRECTORY', dirname(__FILE__) . '/../cache');
+//define('WRS_FORMULA_DIRECTORY', dirname(__FILE__) . '/../formulas');
+
+define( 'NV_MAINFILE', true );
+define( 'NV_ROOTDIR', str_replace( '\\', '/', realpath( pathinfo( __file__, PATHINFO_DIRNAME ) . '/../../../../../' ) ) );
+require (NV_ROOTDIR . "/includes/constants.php");
+
+define( 'WRS_CACHE_DIRECTORY', NV_ROOTDIR . '/' . NV_FILES_DIR . '/formulas' );
+define( 'WRS_FORMULA_DIRECTORY', NV_ROOTDIR . '/' . NV_DATADIR . '/formulas' );
 
 global $wrs_imageConfigProperties, $wrs_xmlFileAttributes;
 

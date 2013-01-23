@@ -372,6 +372,7 @@ if( $is )
 	  DROP `fax`,
 	  DROP `mobile`" );
 }
+$db->sql_query( "ALTER TABLE `" . NV_USERS_GLOBALTABLE . "_reg` ADD `users_info` MEDIUMTEXT NOT NULL" );
 
 //9) Cấu hình đăng ký thành viên
 $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
@@ -386,6 +387,7 @@ $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, 
 ('sys', 'global', 'max_requests_300', '150'),
 ('sys', 'global', 'nv_display_errors_list', '1'),
 ('sys', 'global', 'display_errors_list', '1'),
+('sys', 'global', 'rewrite_op_mod', ''),
 ('sys', 'define', 'nv_unickmin', '" . NV_UNICKMIN . "'),
 ('sys', 'define', 'nv_unickmax', '" . NV_UNICKMAX . "'),
 ('sys', 'define', 'nv_upassmin', '" . NV_UPASSMIN . "'),

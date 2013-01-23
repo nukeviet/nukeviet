@@ -127,7 +127,7 @@
 		<tbody  class="second" id="classfields" {DATAFORM.classdisabled}>
 			<tr>
 				<td>{LANG.field_class}</td>
-				<td><input class="validalphanumeric" style="width:300px" type="text" value="" name="class" maxlength="50"></td>
+				<td><input class="validalphanumeric" style="width:300px" type="text" value="{DATAFORM.class}" name="class" maxlength="50"></td>
 			</tr>
 		</tbody>
 		<tbody class="second" id="editorfields" {DATAFORM.editordisabled}>
@@ -382,7 +382,7 @@
 		$("#numberfields").hide();
 		$("#datefields").hide();
 		$("#choiceitems").hide();
-
+		$("#editorfields").hide();
 		if (field_type == 'textbox' || field_type == 'textarea' || field_type == 'editor')
 		{
 			if (field_type == 'textbox')
@@ -396,16 +396,18 @@
 				$("#li_alphanumeric").hide();
 				$("#li_email").hide();
 				$("#li_url").hide();
+				if (field_type == 'editor')
+				{
+					$("#editorfields").show();
+				}
 			}
 			$("#textfields").show();
 		}
-		else
-		if (field_type == 'number')
+		else if (field_type == 'number')
 		{
 			$("#numberfields").show();
 		}
-		else
-		if (field_type == 'date')
+		else if (field_type == 'date')
 		{
 			$("#datefields").show();
 		}
@@ -437,8 +439,7 @@
 				$("input[name=max_length]").val(11);
 			}
 		}
-		else
-		if (max_length == 11)
+		else if (max_length == 11)
 		{
 			$("input[name=max_length]").val(255);
 		}
@@ -446,8 +447,7 @@
 		{
 			$("input[name=match_regex]").removeAttr("disabled");
 		}
-		else
-		if (match_type == 'callback')
+		else if (match_type == 'callback')
 		{
 			$("input[name=match_callback]").removeAttr("disabled");
 		}

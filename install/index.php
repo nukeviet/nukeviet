@@ -638,7 +638,7 @@ elseif( $step == 5 )
 					$sql = "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
 					$db->sql_query( $sql );
 
-					///xoa du lieu tai bang nv3_config
+					//xoa du lieu tai bang nv3_config
 					$sql = "DELETE FROM `" . $db_config['prefix'] . "_config` WHERE `lang`=" . $db->dbescape( $lang_data ) . " AND `module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
 					$db->sql_query( $sql );
 
