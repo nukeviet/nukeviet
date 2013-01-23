@@ -232,7 +232,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 				$dataform['fid'] = $db->sql_query_insert_id( "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_field` 
 				(`fid`, `field`, `weight`, `field_type`, `field_choices`, `match_type`, 
-				`match_regex`, `func_callback`, `max_length`, `min_length`, 
+				`match_regex`, `func_callback`, `min_length`, `max_length`, 
 				`required`, `show_register`, `user_editable`, 
 				`show_profile`, `class`, `language`, `default_value`) VALUES
 				(NULL, '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['match_type'] . "', 
