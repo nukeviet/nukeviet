@@ -94,7 +94,7 @@ if( $checknum == $row['checknum'] )
 
 			if( $db->sql_query( "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_info` (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
 			{
-				$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $userid );
+				$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $row['userid'] );
 				$check_update_user = true;
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['account_active_log'], $row['username'] . " | " . $client_info['ip'], 0 );

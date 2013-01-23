@@ -20,6 +20,12 @@
 				<!-- BEGIN: logout --><li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li><!-- END: logout -->
 			</ul>
 	<form id="frm" action="{EDITINFO_FORM}" method="post" class="box-border content-box clearfix bgray" enctype="multipart/form-data">
+		<!-- BEGIN: error -->
+		<div style="color:#fb490b;text-align:center;">
+			{ERROR}
+		</div>
+		<br/>
+		<!-- END: error -->
 		<div class="box-border content-box clearfix m-bottom edit-info bwhite">
             <dl class="clearfix">
                 <dt class="fl">
@@ -108,6 +114,52 @@
                     </select>
                 </dd>
             </dl>
+            
+			<!-- BEGIN: field -->
+			<!-- BEGIN: loop -->
+			<dl class="clearfix">
+				<dt class="fl">
+					<label>{FIELD.title} <!-- BEGIN: required --> <span class="error">(*)</span> <!-- END: required --> </label>
+					<br>
+					<i>{FIELD.description}</i>
+				</dt>
+				<dd class="fr">
+					<!-- BEGIN: textbox -->
+					<input class="{FIELD.required} {FIELD.class}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
+					<!-- END: textbox -->
+					<!-- BEGIN: date -->
+					<input class="datepicker {FIELD.required} {FIELD.class}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
+					<!-- END: date -->
+					<!-- BEGIN: textarea -->
+					<textarea name="custom_fields[{FIELD.field}]" class="{FIELD.class}">{FIELD.value}</textarea>
+					<!-- END: textarea -->
+					<!-- BEGIN: editor -->
+					{EDITOR}
+					<!-- END: editor -->
+					<!-- BEGIN: select -->
+					<select name="custom_fields[{FIELD.field}]" class="{FIELD.class}">
+						<!-- BEGIN: loop -->
+						<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
+						<!-- END: loop -->
+					</select>
+					<!-- END: loopselect -->
+					<!-- BEGIN: radio -->
+					<label for="lb_{FIELD_CHOICES.id}"> <input type="radio" name="custom_fields[{FIELD.field}]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" class="{FIELD.class}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
+					<!-- END: radio -->
+					<!-- BEGIN: checkbox -->
+					<label for="lb_{FIELD_CHOICES.id}"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" class="{FIELD.class}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
+					<!-- END: checkbox -->
+					<!-- BEGIN: multiselect -->
+					<select name="custom_fields[{FIELD.field}][]" multiple="multiple" class="{FIELD.class}">
+						<!-- BEGIN: loop -->
+						<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
+						<!-- END: loop -->
+					</select>
+					<!-- END: multiselect -->
+				</dd>
+			</dl>
+			<!-- END: loop -->
+			<!-- END: field -->            
 		</div>	
         <div class="aright">
 			<input type="hidden" name="checkss" value="{DATA.checkss}" />

@@ -102,6 +102,94 @@ function nv_check_email_change( $email )
 	return "";
 }
 
+$array_field_config = array( );
+$result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
+while( $row_field = $db->sql_fetch_assoc( $result_field ) )
+{
+	$language = unserialize( $row_field['language'] );
+	$row_field['title'] = ( isset( $language[NV_LANG_DATA] )) ? $language[NV_LANG_DATA][0] : $row['field'];
+	$row_field['description'] = ( isset( $language[NV_LANG_DATA] )) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
+	$row_field['field_choices'] = ( ! empty( $row_field['field_choices'] )) ? unserialize( $row_field['field_choices'] ) : array( );
+	$array_field_config[] = $row_field;
+}
+if( defined( 'NV_EDITOR' ) )
+{
+	require_once (NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php');
+}
+elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' ) )
+{
+	define( 'NV_EDITOR', true );
+	define( 'NV_IS_CKEDITOR', true );
+	require_once (NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php');
+	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
+	{
+		// Create class instance.
+		$editortoolbar = array(
+			array(
+				'Link',
+				'Unlink',
+				'Image',
+				'Table',
+				'Font',
+				'FontSize',
+				'RemoveFormat'
+			),
+			array(
+				'Bold',
+				'Italic',
+				'Underline',
+				'StrikeThrough',
+				'-',
+				'Subscript',
+				'Superscript',
+				'-',
+				'JustifyLeft',
+				'JustifyCenter',
+				'JustifyRight',
+				'JustifyBlock',
+				'OrderedList',
+				'UnorderedList',
+				'-',
+				'Outdent',
+				'Indent',
+				'TextColor',
+				'BGColor',
+				'Source'
+			)
+		);
+		$CKEditor = new CKEditor( );
+		// Do not print the code directly to the browser, return it instead
+		$CKEditor->returnOutput = true;
+		$CKEditor->config['skin'] = 'kama';
+		$CKEditor->config['entities'] = false;
+		// $CKEditor->config['enterMode'] = 2;
+		$CKEditor->config['language'] = NV_LANG_INTERFACE;
+		$CKEditor->config['toolbar'] = $editortoolbar;
+		// Path to CKEditor directory, ideally instead of relative dir, use an
+		// absolute path:
+		// $CKEditor->basePath = '/ckeditor/'
+		// If not set, CKEditor will try to detect the correct path.
+		$CKEditor->basePath = NV_BASE_SITEURL . '' . NV_EDITORSDIR . '/ckeditor/';
+		// Set global configuration (will be used by all instances of CKEditor).
+		if( ! empty( $width ) )
+		{
+			$CKEditor->config['width'] = strpos( $width, '%' ) ? $width : intval( $width );
+		}
+		if( ! empty( $height ) )
+		{
+			$CKEditor->config['height'] = strpos( $height, '%' ) ? $height : intval( $height );
+		}
+		// Change default textarea attributes
+		$CKEditor->textareaAttributes = array(
+			"cols" => 80,
+			"rows" => 10
+		);
+		$val = nv_unhtmlspecialchars( $val );
+		return $CKEditor->editor( $textareaname, $val );
+	}
+
+}
+
 $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
 $query = $db->sql_query( $sql );
 $row = $db->sql_fetchrow( $query );
@@ -171,9 +259,9 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 			else
 			{
 				$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` 
-                SET `question`=" . $db->dbescape( $array_data['your_question'] ) . ", 
-                `answer`=" . $db->dbescape( $array_data['answer'] ) . " 
-                WHERE `userid`=" . $user_info['userid'];
+			                SET `question`=" . $db->dbescape( $array_data['your_question'] ) . ", 
+			                `answer`=" . $db->dbescape( $array_data['answer'] ) . " 
+			                WHERE `userid`=" . $user_info['userid'];
 				$db->sql_query( $sql );
 
 				$contents = user_info_exit( $lang_module['change_question_ok'] );
@@ -183,6 +271,7 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 				echo nv_site_theme( $contents );
 				include (NV_ROOTDIR . "/includes/footer.php");
 				exit( );
+
 			}
 		}
 	}
@@ -209,6 +298,12 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 	include (NV_ROOTDIR . "/includes/footer.php");
 	exit( );
 }
+else
+{
+	$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $user_info['userid'];
+	$result = $db->sql_query( $sql );
+	$custom_fields = $db->sql_fetch_assoc( $result );
+}
 
 //Thay doi thong tin khac
 $page_title = $mod_title = $lang_module['editinfo_pagetitle'];
@@ -232,14 +327,14 @@ if( $checkss == $array_data['checkss'] )
 	if( $array_data['allowloginchange'] )
 	{
 		$array_data['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
-		if( $array_data['username'] != $row['username']) 
+		if( $array_data['username'] != $row['username'] )
 		{
-			 $checkusername = nv_check_username_change( $array_data['username'] );
-			 if($checkusername!="")
-			 {
+			$checkusername = nv_check_username_change( $array_data['username'] );
+			if( $checkusername != "" )
+			{
 				$array_data['username'] = $row['username'];
 				$error[] = $checkusername;
-			 }
+			}
 		}
 	}
 
@@ -305,7 +400,7 @@ if( $checkss == $array_data['checkss'] )
                 " . NV_CURRENTTIME . ", 
                 '', 
                 '', 
-                " . $db->dbescape( $checknum ) . ")";
+                " . $db->dbescape( $checknum ) . ", '')";
 				$userid_check = $db->sql_query_insert_id( $sql );
 
 				if( $userid_check > 0 )
@@ -393,14 +488,38 @@ if( $checkss == $array_data['checkss'] )
 		$info = $info . ", " . sprintf( $lang_module['editinfo_error'], "<span style=\"color:#fb490b;\">" . $error . "</span>" );
 		$sec = 5;
 	}
+	$query_field = array( );
+	if( ! empty( $array_field_config ) )
+	{
+		$userid = $user_info['userid'];
+		$error = '';
+		$custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
+		require (NV_ROOTDIR . "/modules/users/fields.check.php");
+		if( empty( $error ) )
+		{
+			$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . "  WHERE `userid`=" . $user_info['userid'] );
+			$contents = user_info_exit( $info );
+			$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-	$contents = user_info_exit( $info );
-	$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+			include (NV_ROOTDIR . "/includes/header.php");
+			echo nv_site_theme( $contents );
+			include (NV_ROOTDIR . "/includes/footer.php");
+		}
+		else
+		{
+			$info = $error;
+		}
+	}
+	else
+	{
+		$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . "  WHERE `userid`=" . $user_info['userid'] );
+		$contents = user_info_exit( $info );
+		$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-	include (NV_ROOTDIR . "/includes/header.php");
-	echo nv_site_theme( $contents );
-	include (NV_ROOTDIR . "/includes/footer.php");
-	exit( );
+		include (NV_ROOTDIR . "/includes/header.php");
+		echo nv_site_theme( $contents );
+		include (NV_ROOTDIR . "/includes/footer.php");
+	}
 }
 else
 {
@@ -429,7 +548,7 @@ $array_data['gender_array']['F'] = array(
 	'selected' => ($array_data['gender'] == 'F' ? " selected=\"selected\"" : "")
 );
 
-$contents = user_info( $array_data );
+$contents = user_info( $array_data, $array_field_config, $custom_fields, $info );
 
 include (NV_ROOTDIR . "/includes/header.php");
 echo nv_site_theme( $contents );
