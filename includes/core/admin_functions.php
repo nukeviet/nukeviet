@@ -313,6 +313,7 @@ function nv_save_file_config_global( )
 	$rewrite = array( );
 	$global_config['rewrite_optional'] = $config_variable['rewrite_optional'];
 	$global_config['is_url_rewrite'] = $config_variable['is_url_rewrite'];
+	$global_config['rewrite_op_mod'] = $config_variable['rewrite_op_mod'];
 
 	if( $config_variable['is_url_rewrite'] )
 	{

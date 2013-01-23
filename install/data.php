@@ -465,6 +465,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 ('sys', 'global', 'rewrite_optional', '" . $global_config['rewrite_optional'] . "'),
 ('sys', 'global', 'rewrite_endurl', '" . $global_config['rewrite_endurl'] . "'),
 ('sys', 'global', 'rewrite_exturl', '" . $global_config['rewrite_exturl'] . "'),
+('sys', 'global', 'rewrite_op_mod', ''),
 ('sys', 'global', 'autocheckupdate', '1'),
 ('sys', 'global', 'autologomod', ''),
 ('sys', 'global', 'autologosize1', '50'),

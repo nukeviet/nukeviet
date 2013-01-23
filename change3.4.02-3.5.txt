@@ -224,7 +224,7 @@ Tìm và thay thế trong file /themes/my_theme/blocks/global.banners.tpl
 onclick="this.target='_blank'"
 Bằng
 onclick="this.target='{DATA.target}'"
-
+21) Thêm chức năng bỏ tên Module (mặc định) trong url
 ##########################################################################
 
 Hướng dẫn nâng cấp

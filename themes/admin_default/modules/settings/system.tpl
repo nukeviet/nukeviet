@@ -93,7 +93,7 @@
 			</tr>
 		</tbody>
 		<!-- BEGIN: rewrite_optional -->
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td><strong>{LANG.rewrite_optional}</strong></td>
 				<td>
@@ -101,6 +101,14 @@
 				</td>
 			</tr>
 		</tbody>
+		<tbody class="second">
+			<tr>
+				<td><strong>{LANG.rewrite_op_mod}</strong></td>
+				<td>
+				<input type="checkbox" value="1" name="rewrite_op_mod" {CHECKED3} />
+				</td>
+			</tr>
+		</tbody>		
 		<!-- END: rewrite_optional -->
 		<tbody>
 			<tr>

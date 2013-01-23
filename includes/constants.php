@@ -159,7 +159,7 @@ define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 3.x\n * @Author VINADES.,JSC (
 define( "NV_THEME_TYPE", 'd,t' );
 
 $global_config['site_charset'] = "utf-8";
-$global_config['check_module'] = "/^[a-z0-9\-]+$/";
+$global_config['check_module'] = "/^[a-zA-Z0-9\-]+$/";
 $global_config['check_op'] = "/^[a-zA-Z0-9\-]+$/";
 $global_config['check_op_file'] = "/^([a-zA-Z0-9\-\_]+)\.php$/";
 $global_config['check_block_global'] = "/^global\.([a-zA-Z0-9\-\_]+)\.php$/";
