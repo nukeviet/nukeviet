@@ -206,8 +206,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 else
 {
 	$_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = "";
-	$_user['full_name'] = $_user['gender'] = $_user['website'] = $_user['location'] = $_user['yim'] = $_user['telephone'] = "";
-	$_user['fax'] = $_user['mobile'] = $_user['sig'] = $_user['birthday'] = "";
+	$_user['full_name'] = $_user['gender'] = $_user['sig'] = $_user['birthday'] = "";
 	$_user['view_mail'] = 0;
 	$_user['in_groups'] = array( );
 }
@@ -291,7 +290,7 @@ else
 			if( ($row['show_register'] AND $userid == 0) OR $userid > 0 )
 			{
 				$row['tbodyclass'] = ($a % 2) ? " class=\"second\"" : "";
-				if( $userid == 0 AND ! $nv_Request->isset_request( 'confirm', 'post' ) )
+				if( $userid == 0 AND empty( $custom_fields ) )
 				{
 					if( ! empty( $row['field_choices'] ) )
 					{
@@ -355,6 +354,7 @@ else
 					else
 					{
 						$row['value'] = nv_htmlspecialchars( nv_br2nl( $row['value'] ) );
+						$row['class'] = '';
 						$xtpl->assign( 'FIELD', $row );
 						$xtpl->parse( 'main.edit_user.field.loop.textarea' );
 					}

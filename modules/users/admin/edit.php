@@ -449,6 +449,7 @@ else
 					else
 					{
 						$row['value'] = nv_htmlspecialchars( nv_br2nl( $row['value'] ) );
+						$row['class'] = '';
 						$xtpl->assign( 'FIELD', $row );
 						$xtpl->parse( 'main.edit_user.field.loop.textarea' );
 					}

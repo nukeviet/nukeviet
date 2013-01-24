@@ -211,6 +211,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$field_choices = array_combine( array_map( 'strip_punctuation', $field_choice_value ), array_map( 'strip_punctuation', $field_choice_text ) );
 		if( sizeof( $field_choices ) )
 		{
+			unset( $field_choices[""] );
 			$dataform['field_choices'] = serialize( $field_choices );
 		}
 		else
@@ -231,7 +232,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 				$dataform['fid'] = $db->sql_query_insert_id( "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_field` 
 				(`fid`, `field`, `weight`, `field_type`, `field_choices`, `match_type`, 
-				`match_regex`, `func_callback`, `max_length`, `min_length`, 
+				`match_regex`, `func_callback`, `min_length`, `max_length`, 
 				`required`, `show_register`, `user_editable`, 
 				`show_profile`, `class`, `language`, `default_value`) VALUES
 				(NULL, '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['match_type'] . "', 
@@ -471,6 +472,7 @@ else
 			$dataform['editor_width'] = '100%';
 			$dataform['editor_height'] = '100px';
 			$dataform['fieldid'] = '';
+			$dataform['class'] = 'input';
 			$dataform['default_value_number'] = 0;
 			$dataform['min_number'] = 0;
 			$dataform['max_number'] = 1000;

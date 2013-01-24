@@ -307,8 +307,8 @@ function openidLogin_Res1 ( $attribs )
                         $reg_attribs = set_reg_attribs( $attribs );
                         
                         $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
-                        `userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, `website`, 
-                        `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, 
+                        `userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, 
+                        `question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, 
                         `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) VALUES (
                         NULL, 
                         " . $db->dbescape( $row['username'] ) . ", 
@@ -319,9 +319,6 @@ function openidLogin_Res1 ( $attribs )
                         " . $db->dbescape( $reg_attribs['gender'] ) . ", 
                         '', 0, 
                         " . $db->dbescape( $row['regdate'] ) . ", 
-                        '', '', 
-                        " . $db->dbescape( $reg_attribs['yim'] ) . ", 
-                        '', '', '', 
                         " . $db->dbescape( $row['question'] ) . ", 
                         " . $db->dbescape( $row['answer'] ) . ", 
                         '', 1, 1, '', 1, '', 0, '', '', '')";
@@ -496,7 +493,7 @@ function openidLogin_Res1 ( $attribs )
         {
             $sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` 
             (`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
-            `regdate`, `website`, `location`, `yim`, `telephone`, `fax`, `mobile`, `question`, `answer`, `passlostkey`, 
+            `regdate`, `question`, `answer`, `passlostkey`, 
             `view_mail`, `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`) VALUES 
             (
             NULL, 
@@ -506,9 +503,8 @@ function openidLogin_Res1 ( $attribs )
             " . $db->dbescape( $reg_attribs['email'] ) . ", 
             " . $db->dbescape( $reg_attribs['full_name'] ) . ", 
             " . $db->dbescape( ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : "" ) ) . ", 
-            '', 0, " . NV_CURRENTTIME . ", '', '', 
-            " . $db->dbescape( $reg_attribs['yim'] ) . ", 
-            '', '', '', '', '', '', 0, 0, '', 1, '', 0, '', '', ''
+            '', 0, " . NV_CURRENTTIME . ", 
+			'', '', '', 0, 0, '', 1, '', 0, '', '', ''
             )";
             $userid = $db->sql_query_insert_id( $sql );
             

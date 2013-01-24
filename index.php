@@ -111,6 +111,14 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		include_once (NV_ROOTDIR . "/includes/core/statimg.php");
 	}
 	
+	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
+	if( empty( $op ) ) $op = "main";
+	if( $global_config['rewrite_op_mod'] != '' AND ! isset( $site_mods[$module_name] ) )
+	{
+		$op = ($op == 'main') ? $module_name : $module_name . '/' . $op;
+		$module_name = $global_config['rewrite_op_mod'];
+	}
+		
 	if( isset( $site_mods[$module_name] ) )
 	{
 		$module_info = $site_mods[$module_name];
@@ -135,9 +143,6 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			
 			// Xac dinh cac $op, $array_op
 			$array_op = array ();
-			
-			$op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
-			if( empty( $op ) ) $op = "main";
 			
 			if( ! preg_match( "/^[a-z0-9\-\_\/]+$/i", $op ) )
 			{
