@@ -6,7 +6,7 @@
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @Createdate 31/05/2010, 00:36
  */
-//test
+//test23
 define( 'NV_SYSTEM', true );
 
 require (str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php');
