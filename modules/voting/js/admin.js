@@ -11,6 +11,7 @@ function nv_del_content(vid, checkss) {
 	}
 	return false;
 }
+
 function nv_del_content_result(res) {
 	var r_split = res.split("_");
 	if (r_split[0] == 'OK') {
