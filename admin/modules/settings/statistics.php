@@ -19,7 +19,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_global['statistic'] = $nv_Request->get_int( 'statistic', 'post' );
 
 	$statistics_timezone = filter_text_input( 'statistics_timezone', 'post', '', 0, 255 );
-	
+
 	if( ! empty( $statistics_timezone ) and in_array( $statistics_timezone, $timezone_array ) )
 	{
 		$array_config_global['statistics_timezone'] = $statistics_timezone;
@@ -30,9 +30,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 
 	$array_config_global['googleAnalyticsID'] = filter_text_input( 'googleAnalyticsID', 'post', '', 1, 20 );
-	
+
 	if( ! preg_match( '/^UA-\d{4,}-\d+$/', $array_config_global['googleAnalyticsID'] ) ) $array_config_global['googleAnalyticsID'] = "";
-	
+
 	$array_config_global['googleAnalyticsSetDomainName'] = $nv_Request->get_int( 'googleAnalyticsSetDomainName', 'post' );
 
 	foreach( $array_config_global as $config_name => $config_value )
@@ -48,8 +48,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 $page_title = $lang_module['global_statistics'];
 
-$array_config_global['online_upd'] = ( $global_config['online_upd'] ) ? ' checked="checked"' : '';
-$array_config_global['statistic'] = ( $global_config['statistic'] ) ? ' checked="checked"' : '';
+$array_config_global['online_upd'] = ($global_config['online_upd']) ? ' checked="checked"' : '';
+$array_config_global['statistic'] = ($global_config['statistic']) ? ' checked="checked"' : '';
 $array_config_global['googleAnalyticsID'] = $global_config['googleAnalyticsID'];
 
 $xtpl = new XTemplate( "statistics.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
@@ -60,14 +60,14 @@ sort( $timezone_array );
 foreach( $timezone_array as $site_timezone_i )
 {
 	$xtpl->assign( 'TIMEZONEOP', $site_timezone_i );
-	$xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $global_config['statistics_timezone'] ) ? "selected='selected'" : "" );
+	$xtpl->assign( 'TIMEZONESELECTED', ($site_timezone_i == $global_config['statistics_timezone']) ? "selected='selected'" : "" );
 	$xtpl->assign( 'TIMEZONELANGVALUE', $site_timezone_i );
 	$xtpl->parse( 'main.timezone' );
 }
 
 for( $i = 0; $i < 3; ++$i )
 {
-	$xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_SELECTED', ( $global_config['googleAnalyticsSetDomainName'] == $i ) ? ' selected="selected"' : '' );
+	$xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_SELECTED', ($global_config['googleAnalyticsSetDomainName'] == $i) ? ' selected="selected"' : '' );
 	$xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_VALUE', $i );
 	$xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_TITLE', $lang_module['googleAnalyticsSetDomainName_' . $i] );
 	$xtpl->parse( 'main.googleAnalyticsSetDomainName' );

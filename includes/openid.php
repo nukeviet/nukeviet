@@ -7,7 +7,7 @@
  * @Createdate 26/7/2010, 5:0
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $openid_servers = array();
 

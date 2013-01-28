@@ -11,7 +11,14 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 $submenu['content'] = $lang_module['aabout1'];
 
-$allow_func = array( 'main', 'content', 'alias', 'change_status', 'change_weight', 'del' );
+$allow_func = array(
+	'main',
+	'content',
+	'alias',
+	'change_status',
+	'change_weight',
+	'del'
+);
 
 define( 'NV_IS_FILE_ADMIN', true );
 

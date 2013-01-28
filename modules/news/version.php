@@ -24,9 +24,7 @@ $module_version = array(
 		$module_name . "/temp_pic",
 		$module_name . "/topics"
 	),
-	"files_dir" => array(
-		$module_name . "/topics"
-	)
+	"files_dir" => array( $module_name . "/topics" )
 );
 
 ?>

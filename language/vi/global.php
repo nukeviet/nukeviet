@@ -8,8 +8,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -262,4 +261,5 @@ $lang_global['ftp_err_rawlist'] = 'Lỗi: Không thể xác định danh sách t
 $lang_global['ftp_err_list_detail'] = 'Lỗi: Không nhận dạng được tham số của các tệp, thư mục';
 $lang_global['ftp_err_fget'] = 'Lỗi: Không thể đọc được nội dung tệp';
 $lang_global['ftp_err_NVbuffet'] = 'Lỗi: Thiếu lớp NVbuffer';
+
 ?>

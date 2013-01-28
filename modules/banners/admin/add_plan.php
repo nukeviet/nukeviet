@@ -62,8 +62,8 @@ if( ! empty( $description ) ) $description = nv_htmlspecialchars( $description )
 if( empty( $width ) ) $width = 50;
 if( empty( $height ) ) $height = 50;
 
-$info = ( ! empty( $error ) ) ? $error : $lang_module['add_plan_info'];
-$is_error = ( ! empty( $error ) ) ? 1 : 0;
+$info = ( ! empty( $error )) ? $error : $lang_module['add_plan_info'];
+$is_error = ( ! empty( $error )) ? 1 : 0;
 
 $allow_langs = array_flip( $global_config['allow_sitelangs'] );
 $allow_langs = array_intersect_key( $language_array, $allow_langs );
@@ -73,13 +73,46 @@ $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['add_plan'];
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_plan";
-$contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
-$contents['blang'] = array( $lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang );
-$contents['form'] = array( $lang_module['form'], 'form', $forms, $form );
+$contents['title'] = array(
+	$lang_module['title'],
+	'title',
+	$title,
+	255
+);
+$contents['blang'] = array(
+	$lang_module['blang'],
+	'blang',
+	$lang_module['blang_all'],
+	$allow_langs,
+	$blang
+);
+$contents['form'] = array(
+	$lang_module['form'],
+	'form',
+	$forms,
+	$form
+);
 $contents['size'] = $lang_module['size'];
-$contents['width'] = array( $lang_module['width'], 'width', $width, 4 );
-$contents['height'] = array( $lang_module['height'], 'height', $height, 4 );
-$contents['description'] = array( $lang_module['description'], 'description', $description, '99%', '300px', defined( 'NV_EDITOR' ) ? true : false );
+$contents['width'] = array(
+	$lang_module['width'],
+	'width',
+	$width,
+	4
+);
+$contents['height'] = array(
+	$lang_module['height'],
+	'height',
+	$height,
+	4
+);
+$contents['description'] = array(
+	$lang_module['description'],
+	'description',
+	$description,
+	'99%',
+	'300px',
+	defined( 'NV_EDITOR' ) ? true : false
+);
 
 if( defined( 'NV_EDITOR' ) ) @require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 

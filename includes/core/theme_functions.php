@@ -14,7 +14,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-function nv_error_info()
+function nv_error_info( )
 {
 	global $lang_global, $global_config, $error_info;
 
@@ -36,7 +36,7 @@ function nv_error_info()
 		E_STRICT => array( $lang_global['error_notice'], "comment.png" ), //
 		E_RECOVERABLE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
 		E_DEPRECATED => array( $lang_global['error_notice'], "comment.png" ), //
-		E_USER_DEPRECATED => array( $lang_global['error_warning'], "warning.png" )
+		E_USER_DEPRECATED => array( $lang_global['error_warning'], "warning.png" ) 
 	);
 
 	if( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/error_info.tpl" ) )
@@ -62,11 +62,11 @@ function nv_error_info()
 
 	$xtpl = new XTemplate( "error_info.tpl", $tpl_path );
 	$xtpl->assign( 'TPL_E_CAPTION', $lang_global['error_info_caption'] );
-	
+
 	$a = 0;
 	foreach( $error_info as $key => $value )
 	{
-		$xtpl->assign( 'TPL_E_CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'TPL_E_CLASS', ($a % 2) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'TPL_E_ALT', $errortype[$value['errno']][0] );
 		$xtpl->assign( 'TPL_E_SRC', $image_path . $errortype[$value['errno']][1] );
 		$xtpl->assign( 'TPL_E_ERRNO', $errortype[$value['errno']][0] );
@@ -75,7 +75,7 @@ function nv_error_info()
 		$xtpl->parse( 'error_info.error_item' );
 		++$a;
 	}
-	
+
 	$xtpl->parse( 'error_info' );
 	return $xtpl->text( 'error_info' );
 }
@@ -93,7 +93,7 @@ function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink =
 	global $lang_global, $global_config;
 
 	if( empty( $page_title ) ) $page_title = $global_config['site_description'];
-	
+
 	if( defined( 'NV_ADMIN' ) and isset( $global_config['admin_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/info_die.tpl" ) )
 	{
 		$tpl_path = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
@@ -159,15 +159,15 @@ function nv_xmlOutput( $content, $lastModified )
 			'input-xml' => true,
 			'output-xml' => true,
 			'indent' => true,
-			'indent-cdata' => true, 
+			'indent-cdata' => true,
 			'wrap' => false
 		);
-		$tidy = new tidy( );
+		$tidy = new tidy();
 		$tidy->parseString( $content, $tidy_options, 'utf8' );
-		$tidy->cleanRepair( );
-		$content = ( string ) $tidy;
+		$tidy->cleanRepair();
+		$content = ( string )$tidy;
 	}
-	
+
 	@Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
 	@Header( "Expires: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
 	@Header( "Content-Type: text/xml; charset=utf-8" );
@@ -184,18 +184,18 @@ function nv_xmlOutput( $content, $lastModified )
 	@Header( "Pragma: no-cache" );
 
 	$encoding = "none";
-	
+
 	if( nv_function_exists( 'gzencode' ) )
 	{
-		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
+		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : (strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none');
 
 		if( $encoding != 'none' )
 		{
 			if( ! strstr( $_SERVER['HTTP_USER_AGENT'], 'Opera' ) && preg_match( '/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches ) )
 			{
 				$version = floatval( $matches[1] );
-				
-				if( $version < 6 || ( $version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' ) ) ) $encoding = 'none';
+
+				if( $version < 6 || ($version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' )) ) $encoding = 'none';
 			}
 		}
 	}
@@ -391,7 +391,7 @@ function nv_xmlSitemap_generate( $url )
  *
  * @return void
  */
-function nv_xmlSitemapIndex_generate()
+function nv_xmlSitemapIndex_generate( )
 {
 	global $db_config, $db, $global_config, $nv_Request, $sys_info;
 
@@ -426,7 +426,7 @@ function nv_xmlSitemapIndex_generate()
 	else
 	{
 		$site_mods = nv_site_mods();
-	
+
 		foreach( $site_mods as $modname => $values )
 		{
 			if( isset( $values['funcs'] ) and isset( $values['funcs']['Sitemap'] ) )

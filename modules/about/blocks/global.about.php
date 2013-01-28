@@ -13,7 +13,7 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 {
 	/**
 	 * nv_message_about()
-	 * 
+	 *
 	 * @return
 	 */
 	function nv_message_about( $block_config )
@@ -31,13 +31,13 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 
 		$cache_files = nv_scandir( NV_ROOTDIR . "/" . NV_CACHEDIR, $pattern );
 
-		if( ( $count = sizeof( $cache_files ) ) >= 1 )
+		if( ($count = sizeof( $cache_files )) >= 1 )
 		{
 			$num = rand( 1, $count );
 			--$num;
 			$cache_file = $cache_files[$num];
 
-			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+			if( ($cache = nv_get_cache( $cache_file )) != false )
 			{
 				$cache = unserialize( $cache );
 				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=about&amp;" . NV_OP_VARIABLE . "=" . $cache['alias'];
@@ -52,9 +52,9 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 		{
 			$sql = "SELECT `id`,`title`,`alias`,`bodytext`,`keywords`,`add_time`,`edit_time` FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "` WHERE `status`=1 ORDER BY rand() DESC LIMIT 1";
 
-			if( ( $query = $db->sql_query( $sql ) ) !== false )
+			if( ($query = $db->sql_query( $sql )) !== false )
 			{
-				if( ( $row = $db->sql_fetchrow( $query ) ) !== false )
+				if( ($row = $db->sql_fetchrow( $query )) !== false )
 				{
 					$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $row['alias'];
 					$title = $row['title'];
@@ -85,13 +85,14 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 			$xtpl->assign( 'LINK', $link );
 			$xtpl->assign( 'TITLE', $title );
 			$xtpl->assign( 'BODYTEXT', $bodytext );
-			
+
 			$xtpl->parse( 'main' );
 			return $xtpl->text( 'main' );
 		}
 
 		return "";
 	}
+
 }
 
 $content = nv_message_about( $block_config );

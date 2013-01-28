@@ -7,13 +7,12 @@
  * @Createdate 2-1-2010 21:23
  */
 
-if( ! defined( 'NV_IS_FILE_AUTHORS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_SPADMIN' ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 
 $admin_id = $nv_Request->get_int( 'admin_id', 'get', 0 );
@@ -21,7 +20,7 @@ $admin_id = $nv_Request->get_int( 'admin_id', 'get', 0 );
 if( empty( $admin_id ) or $admin_id == $admin_info['admin_id'] )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 
 $sql = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id`=" . $admin_id;
@@ -30,7 +29,7 @@ $numrows = $db->sql_numrows( $result );
 if( empty( $numrows ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 
 $row = $db->sql_fetchrow( $result );
@@ -38,7 +37,7 @@ $row = $db->sql_fetchrow( $result );
 if( $row['lev'] == 1 or ( ! defined( "NV_IS_GODADMIN" ) and $row['lev'] == 2) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 
 function nv_checkAdmpass( $adminpass )
@@ -55,7 +54,7 @@ list( $access_admin ) = $db->sql_fetchrow( $db->sql_query( "SELECT `content` FRO
 $access_admin = unserialize( $access_admin );
 $level = $admin_info['level'];
 
-$array_action_account = array( );
+$array_action_account = array();
 $array_action_account[0] = $lang_module['action_account_nochange'];
 if( isset( $access_admin['access_waiting'][$level] ) AND $access_admin['access_waiting'][$level] == 1 )
 {
@@ -73,7 +72,7 @@ $row_user = $db->sql_fetchrow( $result );
 $action_account = $nv_Request->get_int( 'action_account', 'post', 0 );
 $action_account = (isset( $array_action_account[$action_account] )) ? $action_account : 0;
 $error = "";
-$checkss = md5( $admin_id . session_id( ) . $global_config['sitekey'] );
+$checkss = md5( $admin_id . session_id() . $global_config['sitekey'] );
 if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
 {
 	$sendmail = $nv_Request->get_int( 'sendmail', 'post', 0 );
@@ -196,7 +195,7 @@ if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
 			}
 		}
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-		die( );
+		die();
 	}
 }
 else
@@ -205,7 +204,7 @@ else
 	$reason = $adminpass = "";
 }
 
-$contents = array( );
+$contents = array();
 $contents['is_error'] = ( ! empty( $error )) ? 1 : 0;
 $contents['title'] = ( ! empty( $error )) ? $error : sprintf( $lang_module['delete_sendmail_info'], $row_user['username'] );
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del&amp;admin_id=" . $admin_id;
@@ -254,7 +253,8 @@ foreach( $array_action_account as $key => $value )
 $xtpl->parse( 'del' );
 $contents = $xtpl->text( 'del' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

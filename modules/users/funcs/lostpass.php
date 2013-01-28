@@ -7,19 +7,18 @@
  * @createdate 10/03/2010 10:51
  */
 
-if( ! defined( 'NV_IS_MOD_USER' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_IS_USER' ) )
 {
 	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-	die( );
+	die();
 }
 
 if( defined( 'NV_IS_USER_FORUM' ) )
 {
-	require_once (NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/lostpass.php');
-	exit( );
+	require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/lostpass.php' );
+	exit();
 }
 
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
@@ -47,7 +46,7 @@ if( $nv_Request->isset_request( 'u', 'get' ) AND $nv_Request->isset_request( 'k'
 }
 else
 {
-	$data = array( );
+	$data = array();
 	$data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
 	$data['userField'] = filter_text_input( 'userField', 'post', '', 1, 100 );
 	$data['answer'] = filter_text_input( 'answer', 'post', '', 1, 255 );
@@ -105,10 +104,10 @@ else
 						$contents = user_info_exit( $info );
 						$contents .= "<meta http-equiv=\"refresh\" content=\"15;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=lostpass", true ) . "\" />";
 
-						include (NV_ROOTDIR . "/includes/header.php");
+						include ( NV_ROOTDIR . "/includes/header.php" );
 						echo nv_site_theme( $contents );
-						include (NV_ROOTDIR . "/includes/footer.php");
-						exit( );
+						include ( NV_ROOTDIR . "/includes/footer.php" );
+						exit();
 					}
 					if( $global_config['allowquestion'] == 0 )
 					{
@@ -153,10 +152,10 @@ else
 							$contents = user_info_exit( $info );
 							$contents .= "<meta http-equiv=\"refresh\" content=\"10;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-							include (NV_ROOTDIR . "/includes/header.php");
+							include ( NV_ROOTDIR . "/includes/header.php" );
 							echo nv_site_theme( $contents );
-							include (NV_ROOTDIR . "/includes/footer.php");
-							exit( );
+							include ( NV_ROOTDIR . "/includes/footer.php" );
+							exit();
 						}
 						else
 						{
@@ -193,7 +192,8 @@ else
 	$contents = user_lostpass( $data, $question );
 }
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

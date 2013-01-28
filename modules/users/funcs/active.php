@@ -15,7 +15,7 @@ if( ! defined( 'NV_IS_MOD_USER' ) )
 if( defined( 'NV_IS_USER_FORUM' ) )
 {
 	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-	die( );
+	die();
 }
 
 $userid = $nv_Request->get_int( 'userid', 'get', '', 1 );
@@ -24,7 +24,7 @@ $checknum = filter_text_input( 'checknum', 'get', '', 1 );
 if( empty( $userid ) or empty( $checknum ) )
 {
 	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-	die( );
+	die();
 }
 
 $del = NV_CURRENTTIME - 86400;
@@ -38,7 +38,7 @@ $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 )
 {
 	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-	die( );
+	die();
 }
 $page_title = $mod_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
@@ -57,7 +57,7 @@ if( $checknum == $row['checknum'] )
 		$userid_change_email = intval( substr( $row['username'], 20 ) );
 		$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `email`=" . $db->dbescape_string( $row['email'] ) . " WHERE `userid`=" . $userid_change_email;
 		$db->sql_query( $sql );
-		if( $db->sql_affectedrows( ) )
+		if( $db->sql_affectedrows() )
 		{
 			$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $db->dbescape( $userid ) );
 			$check_update_user = true;
@@ -84,7 +84,7 @@ if( $checknum == $row['checknum'] )
 		if( $userid )
 		{
 			$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
-			$query_field = array( );
+			$query_field = array();
 			$query_field['`userid`'] = $userid;
 			$result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `fid` ASC" );
 			while( $row_f = $db->sql_fetch_assoc( $result_field ) )
@@ -136,7 +136,8 @@ $info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "="
 $contents = user_info_exit( $info );
 $contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

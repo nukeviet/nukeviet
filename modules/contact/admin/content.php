@@ -44,9 +44,9 @@ $xtpl->assign( 'GLANG', $lang_global );
 if( $is_edit )
 {
 	if( ! empty( $bodytext ) ) $bodytext = nv_htmlspecialchars( $bodytext );
-	
+
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
-	
+
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 	{
 		$data = nv_aleditor( "bodytext", '99%', '300px', $bodytext );
@@ -55,16 +55,16 @@ if( $is_edit )
 	{
 		$data = "<textarea style=\"width: 99%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"8\">" . $bodytext . "</textarea>";
 	}
-	
+
 	$xtpl->assign( 'DATA', $data );
-	
+
 	$xtpl->parse( 'main.edit' );
 }
 else
-{	
+{
 	$xtpl->assign( 'DATA', $bodytext );
 	$xtpl->assign( 'URL_EDIT', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;is_edit=1" );
-	
+
 	$xtpl->parse( 'main.data' );
 }
 

@@ -8,8 +8,7 @@
  * @Createdate Jun 21, 2010, 12:30:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -137,4 +136,5 @@ $lang_module['target_blank'] = 'Nouvelle fenêtre (_blank)';
 $lang_module['target_top'] = 'Fenêtre supérieure (_top)';
 $lang_module['target_self'] = 'Même fenêtre (_self)';
 $lang_module['target_parent'] = 'Fenêtre parent (_parent)';
+
 ?>

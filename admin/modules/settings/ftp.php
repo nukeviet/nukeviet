@@ -7,8 +7,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $error = "";
 
@@ -19,7 +18,7 @@ $xtpl->assign( 'LANG', $lang_module );
 
 if( $sys_info['ftp_support'] )
 {
-	$array_config = array( );
+	$array_config = array();
 
 	$array_config['ftp_server'] = filter_text_input( 'ftp_server', 'post', $global_config['ftp_server'], 1, 255 );
 	$array_config['ftp_port'] = filter_text_input( 'ftp_port', 'post', $global_config['ftp_port'], 1, 255 );
@@ -41,16 +40,14 @@ if( $sys_info['ftp_support'] )
 			die( 'ERROR|' . $lang_module['ftp_error_full'] );
 		}
 
-		if( ! defined( 'NV_FTP_CLASS' ) )
-			require (NV_ROOTDIR . '/includes/class/ftp.class.php');
-		if( ! defined( 'NV_BUFFER_CLASS' ) )
-			require (NV_ROOTDIR . '/includes/class/buffer.class.php');
+		if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
+		if( ! defined( 'NV_BUFFER_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/buffer.class.php' );
 
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
 		if( ! empty( $ftp->error ) )
 		{
-			$ftp->close( );
+			$ftp->close();
 			die( 'ERROR|' . (string)$ftp->error );
 		}
 		else
@@ -74,15 +71,15 @@ if( $sys_info['ftp_support'] )
 
 			if( $ftp_root === false )
 			{
-				$ftp->close( );
+				$ftp->close();
 				die( 'ERROR|' . (empty( $ftp->error ) ? $lang_module['ftp_error_detect_root'] : (string)$ftp->error) );
 			}
 
-			$ftp->close( );
+			$ftp->close();
 			die( 'OK|' . $ftp_root );
 		}
 
-		$ftp->close( );
+		$ftp->close();
 		die( 'ERROR|' . $lang_module['ftp_error_detect_root'] );
 	}
 
@@ -98,8 +95,7 @@ if( $sys_info['ftp_support'] )
 			$ftp_user_pass = nv_unhtmlspecialchars( $array_config['ftp_user_pass'] );
 			$ftp_path = nv_unhtmlspecialchars( $array_config['ftp_path'] );
 
-			if( ! defined( 'NV_FTP_CLASS' ) )
-				require (NV_ROOTDIR . '/includes/class/ftp.class.php');
+			if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
 
 			$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
@@ -156,7 +152,7 @@ if( $sys_info['ftp_support'] )
 					$error = $lang_global['ftp_error_path'];
 				}
 			}
-			$ftp->close( );
+			$ftp->close();
 		}
 
 		$array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $ftp_user_pass ) );
@@ -170,9 +166,9 @@ if( $sys_info['ftp_support'] )
 		}
 		if( empty( $error ) )
 		{
-			nv_save_file_config_global( );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-			exit( );
+			nv_save_file_config_global();
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+			exit();
 		}
 		$array_config['ftp_user_pass'] = $ftp_user_pass;
 	}
@@ -195,7 +191,8 @@ else
 	$contents = $xtpl->text( 'no_support' );
 }
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

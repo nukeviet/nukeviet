@@ -13,7 +13,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 {
 	/**
 	 * nv_menu_theme_modern()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
@@ -66,7 +66,8 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 					'parentid' => 0,
 					'title' => $lang_global['your_account'],
 					'alias' => "",
-					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=config" );
+					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=config"
+				);
 			}
 		}
 		elseif( $module_file == "weblinks" )
@@ -88,7 +89,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
 				$l['catid'] = $l['id'];
 				$array_cat_menu[$l['id']] = $l;
-			}			
+			}
 		}
 		else
 		{
@@ -97,11 +98,12 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 				if( $sub_item['in_submenu'] == 1 )
 				{
 					$array_cat_menu[] = array(
-						"catid" => ( $op == $key ) ? 1 : 0,
+						"catid" => ($op == $key) ? 1 : 0,
 						"parentid" => 1,
 						"title" => $sub_item['func_custom_name'],
 						"alias" => '',
-						"link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $key );
+						"link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $key
+					);
 				}
 			}
 			if( ! empty( $array_cat_menu ) )
@@ -111,7 +113,8 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 					"parentid" => 0,
 					"title" => $module_info['custom_title'],
 					"alias" => '',
-					"link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name );
+					"link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name
+				);
 			}
 		}
 		if( $module_name != "news" and empty( $array_cat_menu ) )
@@ -122,7 +125,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 			{
 				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
 				$array_cat_menu[$l['catid']] = $l;
-			}			
+			}
 		}
 
 		// Process cat module
@@ -132,7 +135,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 			if( ! empty( $catvalue['catid'] ) && empty( $catvalue['parentid'] ) )
 			{
 				$check_cat = isset( $array_cat_menu[$catid]['parentid'] ) ? $array_cat_menu[$catid]['parentid'] : 0;
-				if( ( $catvalue['catid'] == $catid ) || ( $check_cat == $catvalue['catid'] ) || ( empty( $catid ) && $i == 1 ) )
+				if( ($catvalue['catid'] == $catid) || ($check_cat == $catvalue['catid']) || (empty( $catid ) && $i == 1) )
 				{
 					$catvalue['current'] = 'class="current"';
 					$i = 0;
@@ -142,7 +145,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 				{
 					if( $subcatvalue['parentid'] == $catvalue['catid'] )
 					{
-						$subcatvalue['current'] = ( $subcatvalue['catid'] == $catid ) ? 'class="current"' : '';
+						$subcatvalue['current'] = ($subcatvalue['catid'] == $catid) ? 'class="current"' : '';
 						$xtpl->assign( 'loop', $subcatvalue );
 						$xtpl->parse( 'main.news_cat.mainloop.sub.loop' );
 					}
@@ -159,6 +162,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
+
 }
 
 if( defined( 'NV_SYSTEM' ) )

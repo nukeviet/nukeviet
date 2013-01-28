@@ -7,8 +7,7 @@
  * @Createdate 24/1/2011, 1:33
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post,get', NV_UPLOADS_DIR ) );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
@@ -44,10 +43,10 @@ else
 	}
 	else
 	{
-		$allow_files_type = array( );
+		$allow_files_type = array();
 	}
 
-	require_once (NV_ROOTDIR . "/includes/class/upload.class.php");
+	require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
 
 	if( $global_config['nv_auto_resize'] )
 	{
@@ -76,11 +75,11 @@ else
 	{
 		if( $upload_info['img_info'][0] > NV_MAX_WIDTH OR $upload_info['img_info'][0] > NV_MAX_HEIGHT )
 		{
-			require_once (NV_ROOTDIR . "/includes/class/image.class.php");
+			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 			$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1] );
 			$createImage->resizeXY( NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], 90 );
-			$createImage->close( );
+			$createImage->close();
 			$info = $createImage->create_Image_info;
 			$upload_info['img_info'][0] = $info['width'];
 			$upload_info['img_info'][1] = $info['height'];
@@ -159,13 +158,13 @@ else
 						$x = $file_size[0] - $w - 5;
 						$y = $file_size[1] - $h - 5;
 
-						$config_logo = array( );
+						$config_logo = array();
 						$config_logo['x'] = $file_size[0] - $w - 5;
 						$config_logo['y'] = $file_size[1] - $h - 5;
 						$config_logo['w'] = $w;
 						$config_logo['h'] = $h;
 
-						require_once (NV_ROOTDIR . "/includes/class/image.class.php");
+						require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 						$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
 						$createImage->addlogo( NV_ROOTDIR . '/' . $upload_logo, '', '', $config_logo );
 						$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'] );
@@ -215,4 +214,5 @@ else
 }
 
 exit ;
+
 ?>

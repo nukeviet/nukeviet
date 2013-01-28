@@ -15,8 +15,16 @@ $error = "";
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $pid = $nv_Request->get_int( 'pid', 'get', 0 );
 
-$data_content = array( 'catid' => $catid, 'parentid_old' => 0, 'parentid' => $pid, 'title' => '', 'alias' => '', 'description' => '', 'keywords' => '' );
-	
+$data_content = array(
+	'catid' => $catid,
+	'parentid_old' => 0,
+	'parentid' => $pid,
+	'title' => '',
+	'alias' => '',
+	'description' => '',
+	'keywords' => ''
+);
+
 // Get array catid
 $querysubcat = $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `parentid`, `weight` ASC" );
 $array_cat = array();
@@ -43,7 +51,7 @@ if( ! empty( $savecat ) )
 	$data_content['keywords'] = filter_text_input( 'keywords', 'post' );
 	$data_content['alias'] = filter_text_input( 'alias', 'post', '', 1, 100 );
 	$data_content['description'] = filter_text_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
-	$data_content['alias'] = ( $data_content['alias'] == "" ) ? change_alias( $data_content['title'] ) : change_alias( $data_content['alias'] );
+	$data_content['alias'] = ($data_content['alias'] == "") ? change_alias( $data_content['title'] ) : change_alias( $data_content['alias'] );
 
 	if( empty( $data_content['title'] ) )
 	{
@@ -55,9 +63,9 @@ if( ! empty( $savecat ) )
 		{
 			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . $db->dbescape( $data_content['parentid'] ) . "" ) );
 			$weight = intval( $weight ) + 1;
-			
+
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_cat` (`catid`, `parentid`, `title`, `catimage`, `alias`, `description`, `weight`, `inhome`, `numlinks`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $data_content['parentid'] ) . ", " . $db->dbescape( $data_content['title'] ) . ", " . $db->dbescape( $data_content['catimage'] ) . " , " . $db->dbescape( $data_content['alias'] ) . ", " . $db->dbescape( $data_content['description'] ) . ", " . $db->dbescape( $weight ) . ", '1', '3', " . $db->dbescape( $data_content['keywords'] ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
-			
+
 			$idnew = $db->sql_query_insert_id( $sql );
 
 			if( $idnew > 0 )
@@ -88,7 +96,7 @@ if( ! empty( $savecat ) )
 			}
 			else
 			{
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $data_content['parentid'] ) . ", `title`=" . $db->dbescape( $data_content['title'] ) . ", `catimage` =  " . $db->dbescape( $data_content['catimage'] ) . ", `alias` =  " . $db->dbescape( $data_content['alias'] ) . ", `description`=" . $db->dbescape( $data_content['description'] ) . ", `keywords`= " . $db->dbescape( $data_content['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `catid` =" . $data_content['catid'] . "";
+				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $data_content['parentid'] ) . ", `title`=" . $db->dbescape( $data_content['title'] ) . ", `catimage` =  " . $db->dbescape( $data_content['catimage'] ) . ", `alias` =  " . $db->dbescape( $data_content['alias'] ) . ", `description`=" . $db->dbescape( $data_content['description'] ) . ", `keywords`= " . $db->dbescape( $data_content['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `catid` =" . $data_content['catid'] . "";
 				$db->sql_query( $sql );
 
 				if( $db->sql_affectedrows() > 0 )
@@ -151,16 +159,16 @@ if( ! empty( $array_cat ) )
 	foreach( $array_cat as $cat )
 	{
 		$xtitle = "";
-		
+
 		if( $cat['catid'] != $data_content['catid'] )
 		{
 			if( $cat['parentid'] != 0 ) $xtitle = getlevel( $cat['parentid'], $array_cat );
 			$cat['xtitle'] = $xtitle . $cat['title'];
-			$cat['sl'] = ( $cat['catid'] == $data_content['parentid'] ) ? "selected=\"selected\"" : "";
+			$cat['sl'] = ($cat['catid'] == $data_content['parentid']) ? "selected=\"selected\"" : "";
 			$xtpl->assign( 'CAT', $cat );
 			$xtpl->parse( 'main.loopcat' );
 		}
-		
+
 		if( $cat['parentid'] == $data_content['parentid'] )
 		{
 			$cat['link_add'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;pid=" . $cat['catid'] . "";
@@ -171,7 +179,7 @@ if( ! empty( $array_cat ) )
 			$xtpl->parse( 'main.data.loop' );
 		}
 	}
-	
+
 	$xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&pid=" . $data_content['parentid'] . "" );
 	if( $numcat > 0 ) $xtpl->parse( 'main.data' );
 }

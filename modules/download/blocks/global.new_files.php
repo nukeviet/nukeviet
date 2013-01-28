@@ -104,6 +104,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 			}
 		}
 	}
+
 }
 
 if( defined( 'NV_SYSTEM' ) )

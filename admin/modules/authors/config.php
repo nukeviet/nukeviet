@@ -7,8 +7,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 /**
  * nv_save_file_admin_config()
@@ -70,18 +69,18 @@ if( ! empty( $delid ) )
 	$res = $db->sql_query( $sql );
 	list( $keyname ) = $db->sql_fetchrow( $res );
 	$db->sql_query( "DELETE FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE id=" . $delid . " LIMIT 1" );
-	nv_save_file_admin_config( );
+	nv_save_file_admin_config();
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip_delete'] . " " . $lang_module['config'], " keyname : " . $keyname, $admin_info['userid'] );
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-	die( );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+	die();
 }
 
-$error = array( );
+$error = array();
 $contents = "";
 
 if( $nv_Request->isset_request( 'savesetting', 'post' ) )
 {
-	$array_config_global = array( );
+	$array_config_global = array();
 	$array_config_global['admfirewall'] = $nv_Request->get_int( 'admfirewall', 'post' );
 	$array_config_global['block_admin_ip'] = $nv_Request->get_int( 'block_admin_ip', 'post' );
 
@@ -96,10 +95,10 @@ if( $nv_Request->isset_request( 'savesetting', 'post' ) )
 		$db->sql_query( $query );
 	}
 
-	nv_save_file_config_global( );
+	nv_save_file_config_global();
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['save'] . " " . $lang_module['config'], "config", $admin_info['userid'] );
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-	exit( );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+	exit();
 }
 
 if( $nv_Request->isset_request( 'submituser', 'post' ) )
@@ -170,9 +169,9 @@ if( $nv_Request->isset_request( 'submituser', 'post' ) )
 			$db->sql_query( "REPLACE INTO `" . NV_AUTHORS_GLOBALTABLE . "_config` VALUES (NULL, " . $db->dbescape( $username ) . ",'-1',$begintime1, $endtime1," . $db->dbescape( md5( $password ) ) . " )" );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_add'] . " username: " . $username, $admin_info['userid'] );
 		}
-		nv_save_file_admin_config( );
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-		die( );
+		nv_save_file_admin_config();
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+		die();
 	}
 }
 else
@@ -221,9 +220,9 @@ if( $nv_Request->isset_request( 'submitip', 'post' ) )
 			$db->sql_query( "REPLACE INTO `" . NV_AUTHORS_GLOBALTABLE . "_config` VALUES (NULL, " . $db->dbescape( $keyname ) . "," . $db->dbescape( $mask ) . ",$begintime, $endtime," . $db->dbescape( $notice ) . " )" );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_add'] . " " . $keyname, $admin_info['userid'] );
 		}
-		nv_save_file_admin_config( );
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-		die( );
+		nv_save_file_admin_config();
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+		die();
 	}
 }
 else
@@ -259,12 +258,7 @@ for( $i = 2; $i < 11; $i++ )
 	$xtpl->parse( 'main.adminrelogin_max' );
 }
 
-$xtpl->assign( 'DATA', array(
-	'admfirewall' => $global_config['admfirewall'] ? " checked=\"checked\"" : "",
-	'block_admin_ip' => $global_config['block_admin_ip'] ? " checked=\"checked\"" : "",
-	'authors_detail_main' => $global_config['authors_detail_main'] ? " checked=\"checked\"" : "",
-	'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? " checked=\"checked\"" : "",
-) );
+$xtpl->assign( 'DATA', array( 'admfirewall' => $global_config['admfirewall'] ? " checked=\"checked\"" : "", 'block_admin_ip' => $global_config['block_admin_ip'] ? " checked=\"checked\"" : "", 'authors_detail_main' => $global_config['authors_detail_main'] ? " checked=\"checked\"" : "", 'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? " checked=\"checked\"" : "", ) );
 
 if( ! empty( $error ) )
 {
@@ -312,10 +306,9 @@ $xtpl->assign( 'FIREWALLDATA', array(
 	'endtime1' => ! empty( $endtime1 ) ? date( 'd/m/Y', $endtime1 ) : '',
 ) );
 
-if( ! empty( $uid ) )
-	$xtpl->parse( 'main.nochangepass' );
+if( ! empty( $uid ) ) $xtpl->parse( 'main.nochangepass' );
 
-$mask_text_array = array( );
+$mask_text_array = array();
 $mask_text_array[0] = "255.255.255.255";
 $mask_text_array[3] = "255.255.255.xxx";
 $mask_text_array[2] = "255.255.xxx.xxx";
@@ -369,7 +362,8 @@ $page_title = $lang_module['config'];
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

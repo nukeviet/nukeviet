@@ -9,7 +9,12 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'add_menu', 'change_weight_row', 'del_row' );
+$allow_func = array(
+	'main',
+	'add_menu',
+	'change_weight_row',
+	'del_row'
+);
 
 global $global_arr_menu;
 global $arr_menu_item;
@@ -24,7 +29,7 @@ $list = nv_db_cache( $sql, '', 'modules' );
 foreach( $list as $row )
 {
 	$list_module[$row['title']] = array( "module_data" => $row['custom_title'] //
-			);
+	);
 }
 
 $array_who_view = array(
@@ -54,7 +59,7 @@ while( $row = $db->sql_fetchrow( $result ) )
  *
  * @return
  */
-function nv_list_menu()
+function nv_list_menu( )
 {
 	global $db, $module_data;
 

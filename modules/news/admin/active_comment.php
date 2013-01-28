@@ -7,14 +7,14 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' ); 
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $status = $nv_Request->get_int( 'active', 'post' );
 $listcid = $nv_Request->get_string( 'list', 'post' );
 
 if( ! empty( $listcid ) )
 {
-	$status = ( $status == 1 ) ? 1 : 0;
+	$status = ($status == 1) ? 1 : 0;
 	$cid_array = explode( ',', $listcid );
 	$cid_array = array_map( "intval", $cid_array );
 
@@ -54,7 +54,7 @@ if( ! empty( $listcid ) )
 			$db->sql_query( $sql );
 		}
 	}
-	
+
 	echo $lang_module['comment_update_success'];
 }
 

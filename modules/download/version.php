@@ -7,10 +7,10 @@
  * @createdate 05/07/2010 09:47
  */
 
-if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$module_version = array(  //
-    "name" => "Download", //
+$module_version = array( //
+	"name" => "Download", //
 	"modfuncs" => "main,viewcat,viewfile,down,upload,report,search", //
 	"submenu" => "main,upload,search", //
 	"is_sysmod" => 0, //
@@ -19,12 +19,12 @@ $module_version = array(  //
 	"date" => "Wed, 20 Oct 2010 00:00:00 GMT", //
 	"author" => "VINADES (contact@vinades.vn)", //
 	"note" => "", //
-	"uploads_dir" => array(  //
-	    $module_name, //
+	"uploads_dir" => array( //
+		$module_name, //
 		$module_name . "/files", //
 		$module_name . "/images", //
 		$module_name . "/temp"
-	) 
+	)
 );
 
 ?>

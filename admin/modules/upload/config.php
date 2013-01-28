@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$upload_logo = filter_text_input( 'upload_logo', 'post' );
-	
+
 	if( ! nv_is_url( $upload_logo ) and file_exists( NV_DOCUMENT_ROOT . $upload_logo ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL );
@@ -28,8 +28,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$autologosize3 = $nv_Request->get_int( 'autologosize3', 'post', 30 );
 
 	$autologomod = $nv_Request->get_array( 'autologomod', 'post' );
-	
-	if( ( in_array( 'all', $autologomod ) ) )
+
+	if( ( in_array( 'all', $autologomod )) )
 	{
 		$autologomod = 'all';
 	}
@@ -38,7 +38,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$autologomod = array_intersect( $autologomod, array_keys( $site_mods ) );
 		$autologomod = implode( ',', $autologomod );
 	}
-	
+
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'upload_logo', " . $db->dbescape_string( $upload_logo ) . ")" );
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize1', " . $autologosize1 . ")" );
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize2', " . $autologosize2 . ")" );
@@ -97,10 +97,10 @@ foreach( $site_mods as $mod => $value )
 	{
 		$a++;
 		$xtpl->assign( 'MOD_VALUE', $mod );
-		$xtpl->assign( 'LEV_CHECKED', ( in_array( $mod, $autologomod ) ) ? "checked=\"checked\"" : "" );
+		$xtpl->assign( 'LEV_CHECKED', ( in_array( $mod, $autologomod )) ? "checked=\"checked\"" : "" );
 		$xtpl->assign( 'CUSTOM_TITLE', $value['custom_title'] );
 		$xtpl->parse( 'main.loop1.loop2' );
-		
+
 		if( $a % 3 == 0 )
 		{
 			$xtpl->parse( 'main.loop1' );
@@ -111,7 +111,7 @@ foreach( $site_mods as $mod => $value )
 
 $a++;
 $xtpl->assign( 'MOD_VALUE', 'all' );
-$xtpl->assign( 'LEV_CHECKED', ( $global_config['autologomod'] == 'all' ) ? "checked=\"checked\"" : "" );
+$xtpl->assign( 'LEV_CHECKED', ($global_config['autologomod'] == 'all') ? "checked=\"checked\"" : "" );
 $xtpl->assign( 'CUSTOM_TITLE', '<b>' . $lang_module['autologomodall'] . '</b>' );
 
 $xtpl->parse( 'main.loop1.loop2' );

@@ -7,8 +7,7 @@
  * @Createdate Jan 10, 2011  6:04:30 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 {
@@ -40,9 +39,9 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 	function nv_block_data_config_banners_submit( $module, $lang_block )
 	{
 		global $nv_Request;
-		$return = array( );
-		$return['error'] = array( );
-		$return['config'] = array( );
+		$return = array();
+		$return['error'] = array();
+		$return['config'] = array();
 		$return['config']['idplanbanner'] = $nv_Request->get_int( 'config_idplanbanner', 'post', 0 );
 
 		if( empty( $return['config']['idplanbanner'] ) )
@@ -75,7 +74,7 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 		$height_banners = intval( $xml->height );
 		$array_banners = $xml->banners->banners_item;
 
-		$array_banners_content = array( );
+		$array_banners_content = array();
 
 		foreach( $array_banners as $banners )
 		{
@@ -154,4 +153,5 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_block_global_banners( $block_config );
 }
+
 ?>

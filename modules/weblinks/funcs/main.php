@@ -14,11 +14,12 @@ $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 $array_cat = array();
 
-$sort = ( $weblinks_config['sort'] == 'des' ) ? 'desc' : 'asc';
+$sort = ($weblinks_config['sort'] == 'des') ? 'desc' : 'asc';
 if( $weblinks_config['sortoption'] == 'byhit' ) $orderby = 'hits_total ';
 elseif( $weblinks_config['sortoption'] == 'byid' ) $orderby = 'id ';
 elseif( $weblinks_config['sortoption'] == 'bytime' ) $orderby = 'add_time ';
-else  $orderby = 'rand() ';
+else
+	$orderby = 'rand() ';
 
 $array_cat_content = array();
 $urllink = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
@@ -35,7 +36,7 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 			"catimage" => $array_cat_i['catimage'],
 			"subcat" => array()
 		);
-		
+
 		$sql = "SELECT `id` , `author` , `title` , `alias` , `url` , `urlimg` , `note` , `description` , `add_time` , `hits_total` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status` = 1 AND `catid` =" . $catid_i . " ORDER BY " . $orderby . $sort . " LIMIT 0,3";
 		$result = $db->sql_query( $sql );
 		while( $row = $db->sql_fetch_assoc( $result ) )
@@ -48,7 +49,7 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 	else
 	{
 		$parentid = $array_cat_i['parentid'];
-		
+
 		$array_cat[$parentid]['subcat'][] = array(
 			"title" => $global_array_cat[$catid_i]['title'],
 			"link" => $global_array_cat[$catid_i]['link'],

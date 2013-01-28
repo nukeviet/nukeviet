@@ -29,7 +29,7 @@ else
 
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'OP', $op );
-	
+
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 }

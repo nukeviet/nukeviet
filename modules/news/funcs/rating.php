@@ -16,7 +16,8 @@ $array_point = array(
 	2,
 	3,
 	4,
-	5 );
+	5
+);
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 $point = $nv_Request->get_int( 'point', 'post', 0 );

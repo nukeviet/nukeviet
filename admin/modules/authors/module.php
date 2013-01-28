@@ -7,8 +7,7 @@
  * @Createdate 16-12-2012 15:48
  */
 
-if( ! defined( 'NV_IS_FILE_AUTHORS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_IS_AJAX' ) )
 {
@@ -23,8 +22,7 @@ if( defined( 'NV_IS_AJAX' ) )
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			++$weight;
-			if( $weight == $new_vid )
-				++$weight;
+			if( $weight == $new_vid ) ++$weight;
 			$sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_module` SET `weight`=" . $weight . " WHERE `mid`=" . $row['mid'];
 			$db->sql_query( $sql );
 		}
@@ -76,7 +74,7 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 		$xtpl->parse( 'main.loop.weight' );
 	}
 	$row['custom_title'] = isset( $lang_global[$row['lang_key']] ) ? $lang_global[$row['lang_key']] : '';
-	$chang_act = array( );
+	$chang_act = array();
 	for( $i = 1; $i <= 3; $i++ )
 	{
 		$chang_act[$i] = ($row['act_' . $i]) ? ' checked="checked"' : '';
@@ -103,7 +101,8 @@ if( ! defined( 'NV_IS_AJAX' ) )
 	$contents = nv_admin_theme( $contents );
 }
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

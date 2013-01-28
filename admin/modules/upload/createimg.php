@@ -7,14 +7,12 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post' ) );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
-if( ! isset( $check_allow_upload_dir['create_file'] ) )
-	die( "ERROR_" . $lang_module['notlevel'] );
+if( ! isset( $check_allow_upload_dir['create_file'] ) ) die( "ERROR_" . $lang_module['notlevel'] );
 
 $width = $nv_Request->get_int( 'width', 'post' );
 $height = $nv_Request->get_int( 'height', 'post' );
@@ -30,11 +28,11 @@ while( file_exists( NV_ROOTDIR . '/' . $path . '/' . $file ) )
 	++$i;
 }
 
-require_once (NV_ROOTDIR . "/includes/class/image.class.php");
+require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 $createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $imagename, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 $createImage->resizeXY( $width, $height );
 $createImage->save( NV_ROOTDIR . '/' . $path, $file, 75 );
-$createImage->close( );
+$createImage->close();
 
 if( isset( $array_dirname[$path] ) )
 {
@@ -50,4 +48,5 @@ nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_createimage'], 
 
 echo $file;
 exit ;
+
 ?>

@@ -34,7 +34,8 @@ if( $all_page )
 		$countries_list[$country] = array(
 			$fullname,
 			$count,
-			$last_visit );
+			$last_visit
+		);
 	}
 
 	if( ! empty( $countries_list ) )

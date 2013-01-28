@@ -7,8 +7,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_DATABASE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_global['mod_settings'];
 $submit = $nv_Request->get_string( 'submit', 'post' );
@@ -18,14 +17,14 @@ $array_sql_ext = array(
 );
 
 $errormess = "";
-$array_config_global = array( );
+$array_config_global = array();
 $array_config_global['dump_backup_day'] = $global_config['dump_backup_day'];
 $array_config_global['dump_backup_ext'] = $global_config['dump_backup_ext'];
 $array_config_global['dump_interval'] = $global_config['dump_interval'];
 
 if( $submit )
 {
-	$array_config_global = array( );
+	$array_config_global = array();
 	$array_config_global['dump_backup_ext'] = filter_text_input( 'dump_backup_ext', 'post', '', 1, 255 );
 	$array_config_global['dump_autobackup'] = $nv_Request->get_int( 'dump_autobackup', 'post' );
 	$array_config_global['dump_backup_day'] = $nv_Request->get_int( 'dump_backup_day', 'post' );
@@ -47,10 +46,10 @@ if( $submit )
         LIMIT 1" );
 	}
 
-	nv_save_file_config_global( );
+	nv_save_file_config_global();
 
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-	exit( );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+	exit();
 }
 $array_config_global['dump_autobackup'] = ($global_config['dump_autobackup']) ? ' checked="checked"' : '';
 
@@ -83,7 +82,8 @@ for( $index = 2; $index < 100; ++$index )
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $content );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

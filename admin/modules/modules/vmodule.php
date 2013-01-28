@@ -27,9 +27,9 @@ if( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) 
 		$author = "";
 		$note = nv_nl2br( $note, '<br />' );
 		$module_data = preg_replace( '/(\W+)/i', '_', $title );
-	
+
 		$ok = $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES (" . $db->dbescape( $title ) . ", '0', '0', " . $db->dbescape( $modfile ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $mod_version ) . ", '" . NV_CURRENTTIME . "', " . $db->dbescape( $author ) . ", " . $db->dbescape( $note ) . ")" );
-	
+
 		if( $ok )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['vmodule_add'] . ' "' . $module_data . '"', '', $admin_info['userid'] );
@@ -39,7 +39,7 @@ if( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) 
 		{
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setup" );
 		}
-		
+
 		die();
 	}
 }
@@ -71,7 +71,10 @@ while( list( $modfile_i ) = $db->sql_fetchrow( $result ) )
 
 	if( in_array( $modfile_i, $modules_exit ) )
 	{
-		$xtpl->assign( 'MODFILE', array( 'key' => $modfile_i, 'selected' => ( $modfile_i == $modfile ) ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'MODFILE', array(
+			'key' => $modfile_i,
+			'selected' => ($modfile_i == $modfile) ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.modfile' );
 	}
 }

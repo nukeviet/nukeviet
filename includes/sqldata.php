@@ -14,7 +14,7 @@ define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact
 function nv_delete_table_sys( $lang )
 {
 	global $db_config, $global_config;
-	
+
 	$sql_drop_table = array();
 	$sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_modules`";
 	$sql_drop_table[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_blocks_groups`";

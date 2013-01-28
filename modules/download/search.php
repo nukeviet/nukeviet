@@ -7,13 +7,13 @@
  * @Createdate  05-05-2010
  */
 
-if ( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_sdown_cats' ) )
 {
 	/**
 	 * nv_sdown_cats()
-	 * 
+	 *
 	 * @param mixed $module_data
 	 * @return
 	 */
@@ -25,9 +25,9 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 		$result = $db->sql_query( $sql );
 
 		$list = array();
-		while ( $row = $db->sql_fetchrow( $result ) )
+		while( $row = $db->sql_fetchrow( $result ) )
 		{
-			if ( nv_set_allow( $row['who_view'], $row['groups_view'] ) )
+			if( nv_set_allow( $row['who_view'], $row['groups_view'] ) )
 			{
 				$list[$row['id']] = array(
 					'id' => ( int )$row['id'], //
@@ -38,6 +38,7 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 		}
 		return $list;
 	}
+
 }
 
 $list_cats = nv_sdown_cats( $m_values['module_data'] );
@@ -56,14 +57,14 @@ $tmp_re = $db->sql_query( $sql );
 $result = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $all_page ) = $db->sql_fetchrow( $result );
 
-if ( $all_page )
+if( $all_page )
 {
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
-	while ( list( $alias, $tilterow, $content, $introtext, $catid ) = $db->sql_fetchrow( $tmp_re ) )
+	while( list( $alias, $tilterow, $content, $introtext, $catid ) = $db->sql_fetchrow( $tmp_re ) )
 	{
 		$content = $content . ' ' . $introtext;
-		
+
 		$result_array[] = array(
 			'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias, //
 			'title' => BoldKeywordInStr( $tilterow, $key, $logic ), //

@@ -27,7 +27,11 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 {
 	require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 
-	$allowfolder = array( 'modules', 'themes', 'uploads' );
+	$allowfolder = array(
+		'modules',
+		'themes',
+		'uploads'
+	);
 
 	$error = "";
 	$info = array();
@@ -38,7 +42,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		{
 			$zip = new PclZip( $filename );
 			$status = $zip->properties();
-		
+
 			if( $status['status'] == 'ok' )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], basename( $_FILES['modulefile']['name'] ), $admin_info['userid'] );
@@ -53,7 +57,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 				// Show file and folder
 				$list = $zip->listContent();
 				$sizeof = sizeof( $list );
-			
+
 				for( $i = 0, $j = 1; $i < $sizeof; ++$i, ++$j )
 				{
 					if( ! $list[$i]['folder'] )
@@ -65,7 +69,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 						$bytes = "";
 						$validfolder[] = $list[$i]['filename'];
 					}
-				
+
 					$info['filefolder'][] = $list[$i]['filename'];
 					$info['filelist'][] = '[' . $j . "] " . $list[$i]['filename'] . " " . $bytes;
 				}
@@ -97,7 +101,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 			foreach( $info['filelist'] as $file )
 			{
 				$xtpl->assign( 'FILE', $file );
-				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', ($i % 2 == 0) ? " class=\"second\"" : "" );
 				$xtpl->parse( 'info.fileinfo.file.loop' );
 				++$i;
 			}
@@ -120,7 +124,7 @@ else
 	$contents = $xtpl->text( 'main' );
 
 	include ( NV_ROOTDIR . "/includes/header.php" );
-	echo ( $contents );
+	echo($contents);
 	include ( NV_ROOTDIR . "/includes/footer.php" );
 }
 

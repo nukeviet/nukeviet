@@ -6,16 +6,14 @@
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
  * @Createdate 2-9-2010 14:43
  */
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 
 $myini = array(
 	'types' => array( '' ),
 	'exts' => array( '' ),
-	'mimes' => array( '' )
-);
+	'mimes' => array( '' ) );
 
 foreach( $ini as $type => $extmime )
 {
@@ -31,8 +29,7 @@ foreach( $ini as $type => $extmime )
 	{
 		foreach( $m as $m2 )
 		{
-			if( ! is_array( $m2 ) )
-				$m2 = array( $m2 );
+			if( ! is_array( $m2 ) ) $m2 = array( $m2 );
 			$myini['mimes'] = array_merge( $myini['mimes'], $m2 );
 		}
 	}
@@ -73,8 +70,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$mime = implode( ',', $mime );
 
 	$upload_checking_mode = $nv_Request->get_string( 'upload_checking_mode', 'post', '' );
-	if( $upload_checking_mode != "mild" and $upload_checking_mode != "lite" and $upload_checking_mode != "strong" )
-		$upload_checking_mode = "none";
+	if( $upload_checking_mode != "mild" and $upload_checking_mode != "lite" and $upload_checking_mode != "strong" ) $upload_checking_mode = "none";
 
 	$nv_max_size = $nv_Request->get_int( 'nv_max_size', 'post', $global_config['nv_max_size'] );
 	$nv_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $nv_max_size );
@@ -87,7 +83,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'nv_max_size', " . $nv_max_size . ")" );
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'upload_checking_mode', " . $db->dbescape_string( $upload_checking_mode ) . ")" );
 
-	$array_config_define = array( );
+	$array_config_define = array();
 	$array_config_define['nv_max_width'] = $nv_Request->get_int( 'nv_max_width', 'post' );
 	$array_config_define['nv_max_height'] = $nv_Request->get_int( 'nv_max_height', 'post' );
 	foreach( $array_config_define as $config_name => $config_value )
@@ -95,10 +91,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
 	}
 
-	nv_save_file_config_global( );
+	nv_save_file_config_global();
 
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-	die( );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+	die();
 }
 
 $page_title = $lang_module['uploadconfig'];
@@ -185,7 +181,8 @@ foreach( $myini['mimes'] as $key => $name )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

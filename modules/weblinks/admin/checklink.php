@@ -30,19 +30,19 @@ if( $nv_Request->isset_request( 'ok', 'cookie' ) )
 
 	$numcat = $db->sql_numrows( $db->sql_query( "SELECT id FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` " ) );
 	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=checklink";
-	$all_page = ( $numcat > 1 ) ? $numcat : 1;
+	$all_page = ($numcat > 1) ? $numcat : 1;
 	$per_page = 5;
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 
 	$sql = "SELECT `url` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` LIMIT $page,$per_page";
 	$result = $db->sql_query( $sql );
-	
+
 	$i = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$xtpl->assign( 'CLASS', $i ++ % 2 ? " class=\"second\"" : "" );
+		$xtpl->assign( 'CLASS', $i++ % 2 ? " class=\"second\"" : "" );
 		$xtpl->assign( 'URL', $row['url'] );
-		
+
 		if( $check->check_curl( $row['url'] ) )
 		{
 			$xtpl->parse( 'main.check.loop.ok' );
@@ -51,17 +51,17 @@ if( $nv_Request->isset_request( 'ok', 'cookie' ) )
 		{
 			$xtpl->parse( 'main.check.loop.error' );
 		}
-		
+
 		$xtpl->parse( 'main.check.loop' );
 	}
-	
+
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 	if( ! empty( $generate_page ) )
 	{
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.check.generate_page' );
 	}
-	
+
 	$xtpl->parse( 'main.check' );
 }
 else

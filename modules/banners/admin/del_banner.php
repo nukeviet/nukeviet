@@ -7,8 +7,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $id = $nv_Request->get_int( 'id', 'post,get' );
 
 $sql = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $id;
@@ -33,7 +32,7 @@ if( $db->sql_numrows( $result ) )
 	$sql = "DELETE FROM `" . NV_BANNERS_CLICK_GLOBALTABLE . "` WHERE bid='$id'";
 	$result = $db->sql_query( $sql );
 
-	nv_CreateXML_bannerPlan( );
+	nv_CreateXML_bannerPlan();
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_banner', "bannerid " . $id, $admin_info['userid'] );
 	echo $lang_module['delfile_success'];
@@ -42,4 +41,5 @@ else
 {
 	echo $lang_module['delfile_error'];
 }
+
 ?>

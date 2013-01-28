@@ -20,9 +20,9 @@ $page_title = $lang_global['mod_siteinfo'];
 function nv_get_lang_module( $mod )
 {
 	global $site_mods;
-	
+
 	$lang_module = array();
-	
+
 	if( isset( $site_mods[$mod] ) )
 	{
 		if( file_exists( NV_ROOTDIR . "/modules/" . $site_mods[$mod]['module_file'] . "/language/admin_" . NV_LANG_INTERFACE . ".php" ) )
@@ -50,15 +50,15 @@ foreach( $site_mods as $mod => $value )
 	{
 		$siteinfo = $pendinginfo = array();
 		$mod_data = $value['module_data'];
-		
+
 		include ( NV_ROOTDIR . "/modules/" . $value['module_file'] . "/siteinfo.php" );
-		
+
 		if( ! empty( $siteinfo ) )
 		{
 			$info[$mod]['caption'] = $value['custom_title'];
 			$info[$mod]['field'] = $siteinfo;
 		}
-		
+
 		if( ! empty( $pendinginfo ) )
 		{
 			$pending_info[$mod]['caption'] = $value['custom_title'];
@@ -80,7 +80,7 @@ if( defined( 'NV_IS_GODADMIN' ) and file_exists( NV_ROOTDIR . '/install/update_d
 
 // Thong tin thong ke tu cac module
 if( ! empty( $info ) or ! empty( $pending_info ) )
-{	
+{
 	if( ! empty( $info ) )
 	{
 		$i = 0;
@@ -88,11 +88,11 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 		{
 			foreach( $if['field'] as $field )
 			{
-				$xtpl->assign( 'CLASS', ( ++ $i % 2 ) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', (++$i % 2) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'KEY', $field['key'] );
 				$xtpl->assign( 'VALUE', $field['value'] );
 				$xtpl->assign( 'MODULE', $if['caption'] );
-				
+
 				if( ! empty( $field['link'] ) )
 				{
 					$xtpl->assign( 'LINK', $field['link'] );
@@ -102,14 +102,14 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 				{
 					$xtpl->parse( 'main.info.loop.text' );
 				}
-				
+
 				$xtpl->parse( 'main.info.loop' );
 			}
 		}
-		
+
 		$xtpl->parse( 'main.info' );
 	}
-	
+
 	// Thong tin dang can duoc xu ly tu cac module
 	if( ! empty( $pending_info ) )
 	{
@@ -118,11 +118,11 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 		{
 			foreach( $if['field'] as $field )
 			{
-				$xtpl->assign( 'CLASS', ( ++ $i % 2 ) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', (++$i % 2) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'KEY', $field['key'] );
 				$xtpl->assign( 'VALUE', $field['value'] );
 				$xtpl->assign( 'MODULE', $if['caption'] );
-				
+
 				if( ! empty( $field['link'] ) )
 				{
 					$xtpl->assign( 'LINK', $field['link'] );
@@ -136,7 +136,7 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 				$xtpl->parse( 'main.pendinginfo.loop' );
 			}
 		}
-		
+
 		$xtpl->parse( 'main.pendinginfo' );
 	}
 }
@@ -144,7 +144,7 @@ elseif( ! defined( 'NV_IS_SPADMIN' ) and ! empty( $site_mods ) )
 {
 	$arr_mod = array_keys( $site_mods );
 	$module_name = $arr_mod[0];
-	
+
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();
 }
@@ -153,7 +153,10 @@ elseif( ! defined( 'NV_IS_SPADMIN' ) and ! empty( $site_mods ) )
 if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$field = array();
-	$field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] );
+	$field[] = array(
+		'key' => $lang_module['version_user'],
+		'value' => $global_config['version']
+	);
 	if( file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' ) )
 	{
 		$new_version = simplexml_load_file( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
@@ -162,7 +165,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$new_version = array();
 	}
-	
+
 	$info = "";
 	if( ! empty( $new_version ) )
 	{
@@ -182,7 +185,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 
 	foreach( $field as $key => $value )
 	{
-		$xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'CLASS', ($key % 2) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $value['key'] );
 		$xtpl->assign( 'VALUE', $value['value'] );
 		$xtpl->parse( 'main.version.loop' );

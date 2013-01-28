@@ -32,7 +32,7 @@ if( ! empty( $submit ) )
 
 	$answervotenews = $nv_Request->get_array( 'answervotenews', 'post' );
 	$urlvotenews = $nv_Request->get_array( 'urlvotenews', 'post' );
-	if( $maxoption > ( $sizeof = sizeof( $answervotenews ) + sizeof( $array_answervote ) ) || $maxoption <= 0 ) $maxoption = $sizeof;
+	if( $maxoption > ($sizeof = sizeof( $answervotenews ) + sizeof( $array_answervote )) || $maxoption <= 0 ) $maxoption = $sizeof;
 
 	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m ) )
 	{
@@ -85,7 +85,7 @@ if( ! empty( $submit ) )
 	if( ! empty( $question ) and $number_answer > 1 )
 	{
 		$error = $lang_module['voting_error'];
-		
+
 		if( empty( $vid ) )
 		{
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` (`vid`, `question`, `link`, `acceptcm`, `admin_id`, `who_view`, `groups_view`, `publ_time`, `exp_time`, `act`) VALUES (NULL, " . $db->dbescape( $question ) . ", " . $db->dbescape( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
@@ -130,7 +130,7 @@ if( ! empty( $submit ) )
 				$maxoption = $maxoption_data;
 			}
 
-			if( $begindate > NV_CURRENTTIME or ( $enddate > 0 and $enddate < NV_CURRENTTIME ) )
+			if( $begindate > NV_CURRENTTIME or ($enddate > 0 and $enddate < NV_CURRENTTIME) )
 			{
 				$act = 0;
 			}
@@ -177,7 +177,7 @@ else
 		$sql = "SELECT `id`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`='" . $vid . "' ORDER BY `id` ASC";
 		$result = $db->sql_query( $sql );
 		$maxoption = $db->sql_numrows( $result );
-		$maxoption = ( $maxoption > 0 ) ? $maxoption : 1;
+		$maxoption = ($maxoption > 0) ? $maxoption : 1;
 
 		while( list( $id, $title, $url ) = $db->sql_fetchrow( $result ) )
 		{
@@ -226,8 +226,17 @@ if( $error != "" )
 	$xtpl->parse( 'main.error' );
 }
 
-$array_who_view = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] );
-$array_allowed_comm = array( $lang_global['no'], $lang_global['who_view0'], $lang_global['who_view1'] );
+$array_who_view = array(
+	$lang_global['who_view0'],
+	$lang_global['who_view1'],
+	$lang_global['who_view2'],
+	$lang_global['who_view3']
+);
+$array_allowed_comm = array(
+	$lang_global['no'],
+	$lang_global['who_view0'],
+	$lang_global['who_view1']
+);
 
 $groups_list = nv_groups_list();
 $tdate = date( "d|m|Y|H|i" );
@@ -246,7 +255,11 @@ $xtpl->assign( 'SHOW_GROUPS_LIST', $who_view == 3 ? "visibility:visible;display:
 $groups_view = explode( ',', $rowvote['groups_view'] );
 foreach( $groups_list as $group_id => $grtl )
 {
-	$xtpl->assign( 'GROUPS_VIEW', array( "key" => $group_id, "title" => $grtl, "checked" => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : "" ) );
+	$xtpl->assign( 'GROUPS_VIEW', array(
+		"key" => $group_id,
+		"title" => $grtl,
+		"checked" => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : ""
+	) );
 	$xtpl->parse( 'main.groups_view' );
 }
 
@@ -256,14 +269,22 @@ list( $phour, $pmin ) = explode( "|", $tdate );
 
 // Thoi gian dang
 $xtpl->assign( 'PUBL_DATE', $publ_date );
-for( $i = 0; $i <= 23; ++ $i )
+for( $i = 0; $i <= 23; ++$i )
 {
-	$xtpl->assign( 'PHOUR', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $phour ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'PHOUR', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $phour ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.phour' );
 }
 for( $i = 0; $i < 60; ++$i )
 {
-	$xtpl->assign( 'PMIN', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $pmin ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'PMIN', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $pmin ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.pmin' );
 }
 
@@ -280,14 +301,22 @@ else
 	$exp_date = "";
 }
 $xtpl->assign( 'EXP_DATE', $exp_date );
-for( $i = 0; $i <= 23; ++ $i )
+for( $i = 0; $i <= 23; ++$i )
 {
-	$xtpl->assign( 'EHOUR', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $ehour ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'EHOUR', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $ehour ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.ehour' );
 }
-for( $i = 0; $i < 60; ++ $i )
+for( $i = 0; $i < 60; ++$i )
 {
-	$xtpl->assign( 'EMIN', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $emin ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'EMIN', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $emin ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.emin' );
 }
 
@@ -295,28 +324,28 @@ $items = 0;
 $j = 0;
 foreach( $array_answervote as $id => $title )
 {
-	++ $j;
-	
+	++$j;
+
 	$xtpl->assign( 'ITEM', array(
-		"class" => ( $j % 2 == 0 ) ? " class=\"second\"" : "",
-		"stt" => ++ $items,
+		"class" => ($j % 2 == 0) ? " class=\"second\"" : "",
+		"stt" => ++$items,
 		"id" => $id,
 		"title" => $title,
 		"link" => nv_htmlspecialchars( $array_urlvote[$id] ),
 	) );
-	
+
 	$xtpl->parse( 'main.item' );
 }
 
-++ $j;
-$class = ( $j % 2 == 0 ) ? " class=\"second additem\"" : " class=\"additem\"";
+++$j;
+$class = ($j % 2 == 0) ? " class=\"second additem\"" : " class=\"additem\"";
 $xtpl->assign( 'NEW_CLASS', $class );
-$xtpl->assign( 'NEW_ITEM', ++ $items );
+$xtpl->assign( 'NEW_ITEM', ++$items );
 $xtpl->assign( 'NEW_ITEM_NUM', $items );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
-if( $vid ) $op = ''; 
+if( $vid ) $op = '';
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

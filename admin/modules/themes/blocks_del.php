@@ -42,7 +42,7 @@ if( intval( $bid ) > 0 )
 			$weight = 1;
 			$func_id_old = $func_id_i;
 		}
-	
+
 		$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i . " AND `func_id`=" . $func_id_i );
 	}
 

@@ -31,11 +31,11 @@ if( $act == 2 )
 	{
 		die( 'NO_' . $mod );
 	}
-	
+
 	$in_menu = 0;
 }
 
-$act = ( $act != 1 ) ? 1 : 0;
+$act = ($act != 1) ? 1 : 0;
 if( $act == 0 and $mod == $global_config['site_home_module'] )
 {
 	die( 'NO_' . $mod );
@@ -46,7 +46,7 @@ $db->sql_query( $sql );
 
 nv_del_moduleCache( 'modules' );
 
-$temp = ( $act == 1 ) ? $lang_global['yes'] : $lang_global['no'];
+$temp = ($act == 1) ? $lang_global['yes'] : $lang_global['no'];
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['activate'] . ' module "' . $mod . '"', $temp, $admin_info['userid'] );
 
 include ( NV_ROOTDIR . "/includes/header.php" );

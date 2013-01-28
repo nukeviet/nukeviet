@@ -7,8 +7,7 @@
  * @Createdate 04/05/2010
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];
 $usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 1 );
@@ -22,26 +21,10 @@ $sql = "FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=" . $usactive;
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&usactive=" . $usactive;
 
 $methods = array(
-	'userid' => array(
-		'key' => 'userid',
-		'value' => $lang_module['search_id'],
-		'selected' => ''
-	),
-	'username' => array(
-		'key' => 'username',
-		'value' => $lang_module['search_account'],
-		'selected' => ''
-	),
-	'full_name' => array(
-		'key' => 'full_name',
-		'value' => $lang_module['search_name'],
-		'selected' => ''
-	),
-	'email' => array(
-		'key' => 'email',
-		'value' => $lang_module['search_mail'],
-		'selected' => ''
-	)
+	'userid' => array( 'key' => 'userid', 'value' => $lang_module['search_id'], 'selected' => '' ),
+	'username' => array( 'key' => 'username', 'value' => $lang_module['search_account'], 'selected' => '' ),
+	'full_name' => array( 'key' => 'full_name', 'value' => $lang_module['search_name'], 'selected' => '' ),
+	'email' => array( 'key' => 'email', 'value' => $lang_module['search_mail'], 'selected' => '' ) 
 );
 
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ($nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '');
@@ -56,8 +39,7 @@ $orders = array(
 );
 $orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', 'DESC' );
-if( $ordertype != "ASC" )
-	$ordertype = "DESC";
+if( $ordertype != "ASC" ) $ordertype = "DESC";
 $method = ( ! empty( $method ) and isset( $methods[$method] )) ? $method : '';
 
 if( ! empty( $methodvalue ) )
@@ -65,7 +47,7 @@ if( ! empty( $methodvalue ) )
 	if( empty( $method ) )
 	{
 		$key_methods = array_keys( $methods );
-		$array_like = array( );
+		$array_like = array();
 		foreach( $key_methods as $method_i )
 		{
 			$array_like[] = "`" . $method_i . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
@@ -96,8 +78,8 @@ $query2 = $db->sql_query( $sql2 );
 $result = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $all_page ) = $db->sql_fetchrow( $result );
 
-$users_list = array( );
-$admin_in = array( );
+$users_list = array();
+$admin_in = array();
 $is_edit = (in_array( 'edit', $allow_func )) ? true : false;
 $is_delete = (in_array( 'del', $allow_func )) ? true : false;
 $is_setactive = (in_array( 'setactive', $allow_func )) ? true : false;
@@ -175,7 +157,7 @@ if( $admin_in )
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
-$head_tds = array( );
+$head_tds = array();
 $head_tds['userid']['title'] = $lang_module['userid'];
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=userid&amp;sorttype=ASC";
 $head_tds['username']['title'] = $lang_module['account'];
@@ -270,7 +252,8 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

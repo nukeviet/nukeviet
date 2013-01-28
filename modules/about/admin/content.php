@@ -87,9 +87,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$id = $db->sql_query_insert_id( $sql );
 			$publtime = NV_CURRENTTIME;
 		}
-		
+
 		nv_del_moduleCache( $module_name );
-		
+
 		if( $db->sql_affectedrows() > 0 )
 		{
 			if( $id )

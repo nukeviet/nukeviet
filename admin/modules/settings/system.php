@@ -7,8 +7,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_SETTINGS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $adminThemes = array( '' );
 $adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] ) );
@@ -21,7 +20,7 @@ $closed_site_Modes = array(
 	'3' => $lang_module['closed_site_3']
 );
 
-$allow_sitelangs = array( );
+$allow_sitelangs = array();
 foreach( $global_config['allow_sitelangs'] as $lang_i )
 {
 	if( file_exists( NV_ROOTDIR . "/language/" . $lang_i . "/global.php" ) )
@@ -35,7 +34,7 @@ $timezone_array = array_keys( $nv_parse_ini_timezone );
 $errormess = '';
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-	$array_config_global = array( );
+	$array_config_global = array();
 
 	$admin_theme = $nv_Request->get_string( 'admin_theme', 'post' );
 	if( ! empty( $admin_theme ) and in_array( $admin_theme, $adminThemes ) )
@@ -103,8 +102,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_global['my_domains'] = implode( ",", $array_config_global['my_domains'] );
 
 	$array_config_global['searchEngineUniqueID'] = filter_text_input( 'searchEngineUniqueID', 'post', '' );
-	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_global['searchEngineUniqueID'] ) )
-		$array_config_global['searchEngineUniqueID'] = "";
+	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_global['searchEngineUniqueID'] ) ) $array_config_global['searchEngineUniqueID'] = "";
 
 	$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 	$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
@@ -134,7 +132,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$nv_rewrite_change = ($global_config['is_url_rewrite'] != $array_config_global['is_url_rewrite'] or $global_config['rewrite_optional'] != $array_config_global['rewrite_optional']) ? true : false;
 
-	nv_save_file_config_global( );
+	nv_save_file_config_global();
 
 	if( $nv_rewrite_change )
 	{
@@ -148,8 +146,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	if( empty( $errormess ) )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-		exit( );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+		exit();
 	}
 }
 
@@ -180,7 +178,7 @@ $lang_module['rewrite_op_mod'] = sprintf( $lang_module['rewrite_op_mod'], $globa
 $xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config_global );
-$xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id( ) ) );
+$xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) );
 if( $errormess != "" )
 {
 	$xtpl->assign( 'ERROR', $errormess );
@@ -207,7 +205,7 @@ $xtpl->assign( 'CHECKED1', ($array_config_global['is_url_rewrite'] == 1) ? ' che
 if( $lang_multi == 0 )
 {
 	$xtpl->assign( 'CHECKED2', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '' );
-	$xtpl->assign( 'CHECKED3', ($array_config_global['rewrite_op_mod'] ) ? ' checked ' : '' );
+	$xtpl->assign( 'CHECKED3', ($array_config_global['rewrite_op_mod']) ? ' checked ' : '' );
 	$xtpl->parse( 'main.rewrite_optional' );
 }
 if( $lang_multi and sizeof( $global_config['allow_sitelangs'] ) > 1 )
@@ -250,7 +248,8 @@ foreach( $timezone_array as $site_timezone_i )
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $content );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>
