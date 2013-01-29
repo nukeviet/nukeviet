@@ -56,122 +56,23 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 		$jwplayer = true;
 	}
 
+	//@formatter:off
 	if( $jwplayer )
 	{
 		$CKEditor->config['extraPlugins'] = 'jwplayer,ckeditor_wiris';
 		$editortoolbar = array(
-			array(
-				'Cut',
-				'Copy',
-				'Paste',
-				'PasteText',
-				'PasteFromWord',
-				'-',
-				'Undo',
-				'Redo',
-				'-',
-				'Link',
-				'Unlink',
-				'Anchor',
-				'-',
-				'Image',
-				'Flash',
-				'jwplayer',
-				'Table',
-				'Font',
-				'FontSize',
-				'RemoveFormat',
-				'Templates',
-				'Maximize'
-			),
-			array(
-				'Bold',
-				'Italic',
-				'Underline',
-				'Strike',
-				'-',
-				'Subscript',
-				'Superscript',
-				'-',
-				'JustifyLeft',
-				'JustifyCenter',
-				'JustifyRight',
-				'JustifyBlock',
-				'NumberedList',
-				'BulletedList',
-				'-',
-				'Outdent',
-				'Indent',
-				'Blockquote',
-				'CreateDiv',
-				'-',
-				'TextColor',
-				'BGColor',
-				'SpecialChar','ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS',
-				'Smiley',
-				'PageBreak',
-				'Source',
-				'About'
-			)
+			array( 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'jwplayer', 'Table', 'Font', 'FontSize', 'Format', 'RemoveFormat', 'Templates', 'Maximize' ), 
+			array( 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS', 'Smiley', 'PageBreak', 'Source', 'About' )
 		);
 	}
 	else
 	{
 		$editortoolbar = array(
-			array(
-				'Cut',
-				'Copy',
-				'Paste',
-				'PasteText',
-				'PasteFromWord',
-				'-',
-				'Undo',
-				'Redo',
-				'-',
-				'Link',
-				'Unlink',
-				'Anchor',
-				'-',
-				'Image',
-				'Flash',
-				'Table',
-				'Font',
-				'FontSize',
-				'RemoveFormat',
-				'Templates',
-				'Maximize'
-			),
-			array(
-				'Bold',
-				'Italic',
-				'Underline',
-				'Strike',
-				'-',
-				'Subscript',
-				'Superscript',
-				'-',
-				'JustifyLeft',
-				'JustifyCenter',
-				'JustifyRight',
-				'JustifyBlock',
-				'NumberedList',
-				'BulletedList',
-				'-',
-				'Outdent',
-				'Indent',
-				'Blockquote',
-				'CreateDiv',
-				'-',
-				'TextColor',
-				'BGColor',
-				'SpecialChar',
-				'Smiley',
-				'PageBreak',
-				'Source',
-				'About'
-			)
+			array( 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'Table', 'Font', 'FontSize', 'Format', 'RemoveFormat', 'Templates', 'Maximize' ), 
+			array( 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'Smiley', 'PageBreak', 'Source', 'About' )
 		);
 	}
+	//@formatter:on
 
 	$CKEditor->config['skin'] = 'v2';
 	$CKEditor->config['entities'] = false;
