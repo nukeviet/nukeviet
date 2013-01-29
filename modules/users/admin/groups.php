@@ -374,7 +374,6 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 	{
-		$xtpl->parse( 'add.is_editor' );
 		$_cont = nv_aleditor( 'content', '100%', '300px', $post['content'] );
 	}
 	else

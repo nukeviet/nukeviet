@@ -42,10 +42,7 @@ if ( typeof (nv_cookie_prefix ) == 'undefined') {
 	var nv_cookie_prefix = 'nv3';
 }
 
-----------------
-
-var
-OP = (navigator.userAgent.indexOf('Opera') != -1 );
+var OP = (navigator.userAgent.indexOf('Opera') != -1 );
 var IE = (navigator.userAgent.indexOf('MSIE') != -1 && !OP );
 var GK = (navigator.userAgent.indexOf('Gecko') != -1 );
 var SA = (navigator.userAgent.indexOf('Safari') != -1 );
@@ -683,4 +680,4 @@ function NewWindow(mypage, myname, w, h, scroll) {
 	win = window.open(mypage, myname, settings)
 }
 
-nv_check_timezone();
+nv_check_timezone(); 
