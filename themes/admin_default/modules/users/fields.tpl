@@ -49,8 +49,7 @@
 	<blockquote class="error">
 		<p>
 			<span>{ERROR}</span>
-		</p>
-	</blockquote>
+		</p></blockquote>
 </div>
 <div class="clear"></div>
 <!-- END: error -->
@@ -77,7 +76,7 @@
 		<tbody>
 			<tr>
 				<td>{LANG.field_description}:</td>
-				<td valign="center">				<textarea style="width:350px" cols="60" rows="3" name="description" style="overflow: hidden;">{DATAFORM.description}</textarea></td>
+				<td valign="center"><textarea style="width:350px" cols="60" rows="3" name="description" style="overflow: hidden;">{DATAFORM.description}</textarea></td>
 			</tr>
 		</tbody>
 
@@ -114,14 +113,17 @@
 		<tbody>
 			<tr>
 				<td>{LANG.field_type}:</td>
-				<td><!-- BEGIN: field_type -->
+				<td>
+				<!-- BEGIN: field_type -->
 				<ul style="list-style: none">
 					<!-- BEGIN: loop -->
 					<li>
 						<label for="f_{FIELD_TYPE.key}"> <input type="radio" {FIELD_TYPE.checked} id="f_{FIELD_TYPE.key}" value="{FIELD_TYPE.key}" name="field_type"> {FIELD_TYPE.value}</label>
 					</li>
 					<!-- END: loop -->
-				</ul>{LANG.field_type_note}<!-- END: field_type --> {FIELD_TYPE_TEXT} </td>
+				</ul>{LANG.field_type_note}
+				<!-- END: field_type -->
+				{FIELD_TYPE_TEXT} </td>
 			</tr>
 		</tbody>
 		<tbody  class="second" id="classfields" {DATAFORM.classdisabled}>
@@ -253,8 +255,7 @@
 </form>
 <script type="text/javascript">
 	var items = '{FIELD_CHOICES_NUMBER}';
-	function nv_choice_fields_additem()
-	{
+	function nv_choice_fields_additem() {
 		items++;
 		var nclass = (items % 2 == 0) ? ' class="second"' : '';
 		var newitem = '<tbody' + nclass + '><tr align="center">';
@@ -267,24 +268,20 @@
 		$('#choiceitems').append(newitem);
 	}
 
-	function nv_show_list_field()
-	{
+	function nv_show_list_field() {
 		$('#module_show_list').html('<center><img alt="" src="{NV_BASE_SITEURL}images/load_bar.gif"></center>').load('{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=fields&qlist=1&nocache=' + new Date().getTime());
 		return;
 	}
 
-	function nv_chang_field(fid)
-	{
+	function nv_chang_field(fid) {
 		var nv_timer = nv_settimeout_disable('id_weight_' + fid, 5000);
 		var new_vid = document.getElementById( 'id_weight_' + fid ).options[document.getElementById('id_weight_' + fid).selectedIndex].value;
 		nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&changeweight=1&fid=' + fid + '&new_vid=' + new_vid + '&num=' + nv_randomPassword(8), '', 'nv_chang_field_result');
 		return;
 	}
 
-	function nv_chang_field_result(res)
-	{
-		if (res != 'OK')
-		{
+	function nv_chang_field_result(res) {
+		if (res != 'OK') {
 			alert(nv_is_change_act_confirm[2]);
 		}
 		clearTimeout(nv_timer);
@@ -292,44 +289,32 @@
 		return;
 	}
 
-	function nv_del_field(fid)
-	{
-		if (confirm(nv_is_del_confirm[0]))
-		{
+	function nv_del_field(fid) {
+		if (confirm(nv_is_del_confirm[0])) {
 			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&del=1&fid=' + fid, '', 'nv_del_field_result');
 		}
 		return false;
 	}
 
-	function nv_del_field_result(res)
-	{
-		if (res == 'OK')
-		{
+	function nv_del_field_result(res) {
+		if (res == 'OK') {
 			nv_show_list_field();
-		}
-		else
-		{
+		} else {
 			alert(nv_is_del_confirm[2]);
 		}
 		return false;
 	}
 
-	function nv_edit_field(fid)
-	{
+	function nv_edit_field(fid) {
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid;
 	}
 
-	function nv_load_current_date()
-	{
-		if ($("input[name=current_date]:checked").val() == 1)
-		{
+	function nv_load_current_date() {
+		if ($("input[name=current_date]:checked").val() == 1) {
 			$("input[name=default_date]").attr('disabled', 'disabled');
 			$("input[name=default_date]").datepicker("destroy");
-		}
-		else
-		{
-			$("input[name=default_date]").datepicker(
-			{
+		} else {
+			$("input[name=default_date]").datepicker({
 				showOn : "both",
 				dateFormat : "dd/mm/yy",
 				changeMonth : true,
@@ -344,30 +329,23 @@
 	}
 
 
-	$(document).ready(function()
-	{
-		if ($("input[name=fid]").val() == 0)
-		{
+	$(document).ready(function() {
+		if ($("input[name=fid]").val() == 0) {
 			nv_show_list_field();
 		}
 		nv_load_current_date();
 
-		$.validator.addMethod('validalphanumeric', function(str)
-		{
-			if (str == '')
-			{
+		$.validator.addMethod('validalphanumeric', function(str) {
+			if (str == '') {
 				return true;
 			}
 			var fieldCheck_rule = /^([a-zA-Z0-9_])+$/;
 			return (fieldCheck_rule.test(str) ) ? true : false;
 		}, ' required a-z, 0-9, and _ only');
 
-		$('#ffields').validate(
-		{
-			rules :
-			{
-				field :
-				{
+		$('#ffields').validate({
+			rules : {
+				field : {
 					required : true,
 					validalphanumeric : true
 				}
@@ -375,91 +353,67 @@
 		});
 	});
 
-	$("input[name=field_type]").click(function()
-	{
+	$("input[name=field_type]").click(function() {
 		var field_type = $("input[name='field_type']:checked").val();
 		$("#textfields").hide();
 		$("#numberfields").hide();
 		$("#datefields").hide();
 		$("#choiceitems").hide();
 		$("#editorfields").hide();
-		if (field_type == 'textbox' || field_type == 'textarea' || field_type == 'editor')
-		{
-			if (field_type == 'textbox')
-			{
+		if (field_type == 'textbox' || field_type == 'textarea' || field_type == 'editor') {
+			if (field_type == 'textbox') {
 				$("#li_alphanumeric").show();
 				$("#li_email").show();
 				$("#li_url").show();
-			}
-			else
-			{
+			} else {
 				$("#li_alphanumeric").hide();
 				$("#li_email").hide();
 				$("#li_url").hide();
-				if (field_type == 'editor')
-				{
+				if (field_type == 'editor') {
 					$("#editorfields").show();
 				}
 			}
 			$("#textfields").show();
-		}
-		else if (field_type == 'number')
-		{
+		} else if (field_type == 'number') {
 			$("#numberfields").show();
-		}
-		else if (field_type == 'date')
-		{
+		} else if (field_type == 'date') {
 			$("#datefields").show();
-		}
-		else
-		{
+		} else {
 			$("#choiceitems").show();
 			$("#textfields").hide();
 			$("#numberfields").hide();
 			$("#datefields").hide();
 		}
 	});
-	$("input[name=required],input[name=show_register]").click(function()
-	{
-		if ($("input[name='required']:checked").val() == 1)
-		{
+	$("input[name=required],input[name=show_register]").click(function() {
+		if ($("input[name='required']:checked").val() == 1) {
 			$("input[name=show_register]").attr("checked", true);
 		}
 	});
-	$("input[name=match_type]").click(function()
-	{
+	$("input[name=match_type]").click(function() {
 		$("input[name=match_regex]").attr('disabled', 'disabled');
 		$("input[name=match_callback]").attr('disabled', 'disabled');
 		var match_type = $("input[name='match_type']:checked").val();
 		var max_length = $("input[name=max_length]").val();
-		if (match_type == 'number')
-		{
-			if (max_length == 255)
-			{
+		if (match_type == 'number') {
+			if (max_length == 255) {
 				$("input[name=max_length]").val(11);
 			}
-		}
-		else if (max_length == 11)
-		{
+		} else if (max_length == 11) {
 			$("input[name=max_length]").val(255);
 		}
-		if (match_type == 'regex')
-		{
+		if (match_type == 'regex') {
 			$("input[name=match_regex]").removeAttr("disabled");
-		}
-		else if (match_type == 'callback')
-		{
+		} else if (match_type == 'callback') {
 			$("input[name=match_callback]").removeAttr("disabled");
 		}
 	});
 
-	$("input[name=current_date]").click(function()
-	{
+	$("input[name=current_date]").click(function() {
 		nv_load_current_date();
 	});
 
-	$(".datepicker").datepicker(
-	{
+	$(".datepicker").datepicker({
 		showOn : "both",
 		dateFormat : "dd/mm/yy",
 		changeMonth : true,

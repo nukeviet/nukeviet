@@ -1,14 +1,16 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: nowrite -->
 <div class="quote" style="width:98%">
-	<blockquote class="error">{TITLE}</blockquote>
+	<blockquote class="error"> {TITLE} </blockquote>
 </div>
 <div style="clear:both"></div>
-<div class="codecontent">{CONTENT}</div>
+<div class="codecontent">
+	{CONTENT}
+</div>
 <!-- END: nowrite -->
 <form action="" method="post">
-	<center>
-		<table class="tab1" summary="" style="width:auto; text-align: left;">
+	<div align="center">
+		<table class="tab1" style="width:auto; text-align: left;">
 			<thead>
 				<tr align="center">
 					<td>{LANG.robots_number}</td>
@@ -34,6 +36,6 @@
 		<p>
 			<input type="submit" name="submit" value="{LANG.submit}" />
 		</p>
-	</center>
+	</div>
 </form>
 <!-- END: main -->

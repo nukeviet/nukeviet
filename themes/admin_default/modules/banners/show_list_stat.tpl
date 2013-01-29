@@ -1,10 +1,12 @@
 <!-- BEGIN: main -->
 <table summary="{CONTENTS.caption}" class="tab1">
 	<caption>{CONTENTS.caption}</caption>
-	<col style="width:120px;white-space:nowrap" />
-	<col style="width:100px;white-space:nowrap" />
-	<col span="3" style="white-space:nowrap" />
-	<col style="width:90px;white-space:nowrap" />
+	<colgroup>
+		<col style="width:120px;white-space:nowrap" />
+		<col style="width:100px;white-space:nowrap" />
+		<col span="3" style="white-space:nowrap" />
+		<col style="width:90px;white-space:nowrap" />
+	</colgroup>
 	<thead>
 		<tr>
 			<!-- BEGIN: thead -->
@@ -13,12 +15,12 @@
 		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
-	<tr>
-		<!-- BEGIN: r -->
-		<td>{R}</td>
-		<!-- END: r -->
-	</tr>
+	<tbody {ROW.class}>
+		<tr>
+			<!-- BEGIN: r -->
+			<td>{R}</td>
+			<!-- END: r -->
+		</tr>
 	</tbody>
 	<!-- END: loop -->
 </table>

@@ -185,23 +185,6 @@ if( $module_name == "authors" )
 			++$a;
 		}
 
-		$xtpl->assign( 'ACTION', $contents['action'] );
-		foreach( $contents['change'] as $key => $values )
-		{
-			$xtpl->assign( 'KEY', $key );
-			if( $key != "password" )
-			{
-				$xtpl->assign( 'VALUE1', $values[1] );
-				$xtpl->parse( 'edit_resuilt.loop1.if' );
-			}
-			else
-			{
-				$xtpl->assign( 'VALUE2', $values[2] );
-				$xtpl->parse( 'edit_resuilt.loop1.else' );
-			}
-			$xtpl->parse( 'edit_resuilt.loop1' );
-		}
-
 		$xtpl->assign( 'DOWNLOAD', $contents['download'] );
 		$xtpl->assign( 'SENDMAIL', $contents['sendmail'] );
 		$xtpl->assign( 'EDIT_NAME', $contents['go_edit'][0] );

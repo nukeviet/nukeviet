@@ -7,7 +7,8 @@
 		<thead>
 			<tr>
 				<td><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);" /></td>
-				<!-- BEGIN: columns --><td>{COLNAME}</td>
+				<!-- BEGIN: columns -->
+				<td>{COLNAME}</td>
 				<!-- END: columns -->
 			</tr>
 		</thead>
@@ -28,16 +29,15 @@
 					<!-- BEGIN: ext -->
 					<option value="{KEY}">{VAL}</option>
 					<!-- END: ext -->
-				</select>
-				<input name="Submit1" id="subm_form" type="submit" value="{SUBMIT}" />
-				</td>
+				</select><input name="Submit1" id="subm_form" type="submit" value="{SUBMIT}" /></td>
 			</tr>
 		</tfoot>
 		<!-- BEGIN: loop -->
-		<tbody{ROW.class}>
+		<tbody {ROW.class}>
 			<tr>
 				<{ROW.tag}><input name="tables[]" type="checkbox" value="{ROW.key}" onclick="nv_UncheckAll(this.form, 'tables[]', 'check_all[]', this.checked);" /></{ROW.tag}>
-				<!-- BEGIN: col --><{ROW.tag}>{VALUE}</{ROW.tag}>
+				<!-- BEGIN: col -->
+				<{ROW.tag}>{VALUE}</{ROW.tag}>
 				<!-- END: col -->
 			</tr>
 		</tbody>

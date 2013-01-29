@@ -449,10 +449,6 @@ if( isset( $contents['lev'] ) )
 		$xtpl->assign( 'STYLE', $contents['lev'][3] == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" );
 		$xtpl->parse( 'edit.lev.if' );
 	}
-	else
-	{
-		$xtpl->parse( 'edit.lev.else' );
-	}
 	foreach( $contents['lev'][2] as $mod => $value )
 	{
 		$xtpl->assign( 'VALUE', $mod );

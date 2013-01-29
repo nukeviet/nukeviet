@@ -8,17 +8,13 @@
 <!-- BEGIN: confirm -->
 <div id="list_mods">
 	<form name="del_link" action="" method="post">
-		<table summary="" class="tab1">
+		<table class="tab1">
 			<input type="hidden" name="id" value="{ID}">
 			<tr>
 				<td width="50px" style="padding-left:60px">{LANG.weblink_del_link_confirm}</td>
 			</tr>
 			<tr>
-				<td width="50px" style="padding-left:80px">
-					<label><input name="confirm" type="radio" value="1" id="confirm_0">{LANG.weblink_yes}</label>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<label><input name="confirm" type="radio" value="0" id="confirm_1"/>{LANG.weblink_no}</label>
-				</td>
+				<td width="50px" style="padding-left:80px"><label><input name="confirm" type="radio" value="1" id="confirm_0">{LANG.weblink_yes}</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label><input name="confirm" type="radio" value="0" id="confirm_1"/>{LANG.weblink_no}</label></td>
 			</tr>
 			<tbody class="second">
 				<tr>

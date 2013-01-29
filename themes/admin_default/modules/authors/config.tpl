@@ -1,9 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
 <div class="quote" style="width:98%">
-	<blockquote class="error">
-		{ERROR}
-	</blockquote>
+	<blockquote class="error"> {ERROR} </blockquote>
 </div>
 <div class="clear"></div>
 <!-- END: error -->
@@ -29,33 +27,25 @@
 		<tbody class="second">
 			<tr>
 				<td>{LANG.admfirewall}</td>
-				<td>
-				<input type="checkbox" value="1" name="admfirewall"{DATA.admfirewall} />
-				</td>
+				<td><input type="checkbox" value="1" name="admfirewall"{DATA.admfirewall} /></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{LANG.block_admin_ip}</td>
-				<td>
-				<input type="checkbox" value="1" name="block_admin_ip"{DATA.block_admin_ip} />
-				</td>
+				<td><input type="checkbox" value="1" name="block_admin_ip"{DATA.block_admin_ip} /></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{LANG.authors_detail_main}</td>
-				<td>
-				<input type="checkbox" value="1" name="authors_detail_main"{DATA.authors_detail_main} />
-				</td>
+				<td><input type="checkbox" value="1" name="authors_detail_main"{DATA.authors_detail_main} /></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{LANG.spadmin_add_admin}</td>
-				<td>
-				<input type="checkbox" value="1" name="spadmin_add_admin"{DATA.spadmin_add_admin} />
-				</td>
+				<td><input type="checkbox" value="1" name="spadmin_add_admin"{DATA.spadmin_add_admin} /></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
@@ -72,26 +62,19 @@
 		<tbody>
 			<tr>
 				<td>{LANG.admin_check_pass_time}</td>
-				<td>
-				<input class="digits" style="width:30px; text-align: right" type="text" value="{ADMIN_CHECK_PASS_TIME}" name="admin_check_pass_time" maxlength="3"/>
-				({GLANG.min}) </td>
+				<td><input class="digits" style="width:30px; text-align: right" type="text" value="{ADMIN_CHECK_PASS_TIME}" name="admin_check_pass_time" maxlength="3"/> ({GLANG.min}) </td>
 			</tr>
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="2">
-				<input type="submit" value=" {LANG.save} " name="Submit1" />
-				<input type="hidden" value="1" name="savesetting" />
-				</td>
+				<td colspan="2"><input type="submit" value=" {LANG.save} " name="Submit1" /><input type="hidden" value="1" name="savesetting" /></td>
 			</tr>
 		</tfoot>
 	</table>
 </form>
 <!-- BEGIN: list_firewall -->
 <table id="iduser" class="tab1">
-	<caption>
-		{LANG.title_username}
-	</caption>
+	<caption> {LANG.title_username} </caption>
 	<thead>
 		<tr align="center">
 			<td>{GLANG.username}</td>
@@ -101,15 +84,15 @@
 		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
+	<tbody {ROW.class}>
 		<tr>
 			<td align="left">{ROW.keyname}</td>
 			<td align="center">{ROW.dbbegintime}</td>
 			<td align="center">{ROW.dbendtime}</td>
 			<td align="center"><span class="edit_icon"> <a class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> </span> - <span class="delete_icon"> <a class="deleteuser" href="{ROW.url_delete}">{GLANG.delete}</a> </span></td>
 		</tr>
-		</tbody>
-		<!-- END: loop -->
+	</tbody>
+	<!-- END: loop -->
 </table>
 <!-- END: list_firewall -->
 <form id="form_add_user" action="{NV_BASE_ADMINURL}index.php" method="post">
@@ -125,64 +108,54 @@
 		<tbody class="second">
 			<tr>
 				<td style="width:150px">{GLANG.username} (<span style="color:red">*</span>)</td>
-				<td>
-				<input type="text" name="username" value="{FIREWALLDATA.username}" style="width:200px"/>
-				</td>
+				<td><input type="text" name="username" value="{FIREWALLDATA.username}" style="width:200px"/></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{GLANG.password} (<span style="color:red">*</span>)</td>
-				<td>
-				<input type="password" name="password" value="{FIREWALLDATA.password}" style="width:200px"/>
-				</td>
+				<td><input type="password" name="password" value="{FIREWALLDATA.password}" style="width:200px"/></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{GLANG.password2} (<span style="color:red">*</span>)</td>
-				<td>
-				<input type="password" name="password2" value="{FIREWALLDATA.password2}" style="width:200px"/>
-				</td>
+				<td><input type="password" name="password2" value="{FIREWALLDATA.password2}" style="width:200px"/></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{LANG.adminip_begintime}</td>
-				<td>
-				<input type="text" name="begintime1" class="datepicker" value="{FIREWALLDATA.begintime1}" style="width:80px"/>
-				</td>
+				<td><input type="text" name="begintime1" class="datepicker" value="{FIREWALLDATA.begintime1}" style="width:80px"/></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{LANG.adminip_endtime}</td>
-				<td>
-				<input type="text" name="endtime1" class="datepicker" value="{FIREWALLDATA.endtime1}" style="width:80px"/>
-				</td>
+				<td><input type="text" name="endtime1" class="datepicker" value="{FIREWALLDATA.endtime1}" style="width:80px"/></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
-				<td colspan="2">
-				<input type="submit" value="{LANG.save}" name="submituser"/>
+				<td colspan="2"><input type="submit" value="{LANG.save}" name="submituser"/>
 				<br />
 				<br />
-				<!-- BEGIN: nochangepass -->{LANG.nochangepass}<!-- END: nochangepass --></td>
+				<!-- BEGIN: nochangepass -->
+				{LANG.nochangepass}
+				<!-- END: nochangepass -->
+				</td>
 			</tr>
 		</tbody>
 	</table>
 </form>
 <script type="text/javascript">
-    //<![CDATA[
-    document.getElementById('form_add_user').setAttribute("autocomplete", "off");
-    //]]>
+	//<![CDATA[
+	document.getElementById('form_add_user').setAttribute("autocomplete", "off");
+	//]]>
 </script>
 <!-- BEGIN: ipaccess -->
 <table id="idip" class="tab1">
-	<caption>
-		{LANG.adminip}
-	</caption>
+	<caption> {LANG.adminip} </caption>
 	<thead>
 		<tr align="center">
 			<td>{LANG.adminip_ip}</td>
@@ -193,7 +166,7 @@
 		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
+	<tbody {ROW.class}>
 		<tr>
 			<td align="center">{ROW.keyname}</td>
 			<td align="center">{ROW.mask_text_array}</td>
@@ -201,8 +174,8 @@
 			<td align="center">{ROW.dbendtime}</td>
 			<td align="center"><span class="edit_icon"> <a title="{GLANG.edit}" class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> </span> - <span class="delete_icon"> <a title="{GLANG.delete}" class="deleteone" href="{ROW.url_delete}">{GLANG.delete}</a> </span></td>
 		</tr>
-		</tbody>
-		<!-- END: loop -->
+	</tbody>
+	<!-- END: loop -->
 </table>
 <!-- END: ipaccess -->
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
@@ -218,9 +191,7 @@
 		<tbody>
 			<tr>
 				<td style="width:150px">{LANG.adminip_address} (<span style="color:red">*</span>)</td>
-				<td>
-				<input class="required" type="text" name="keyname" value="{IPDATA.keyname}" style="width:200px"/>
-				(xxx.xxx.xxx.xxx)</td>
+				<td><input class="required" type="text" name="keyname" value="{IPDATA.keyname}" style="width:200px"/> (xxx.xxx.xxx.xxx)</td>
 			</tr>
 		</tbody>
 		<tbody class="second">
@@ -238,29 +209,24 @@
 		<tbody>
 			<tr>
 				<td>{LANG.adminip_begintime}</td>
-				<td>
-				<input type="text" name="begintime" class="datepicker" value="{IPDATA.begintime}" style="width:80px"/>
-				</td>
+				<td><input type="text" name="begintime" class="datepicker" value="{IPDATA.begintime}" style="width:80px"/></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{LANG.adminip_endtime}</td>
-				<td>
-				<input type="text" name="endtime" class="datepicker" value="{IPDATA.endtime}" style="width:80px"/>
-				</td>
+				<td><input type="text" name="endtime" class="datepicker" value="{IPDATA.endtime}" style="width:80px"/></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{LANG.adminip_notice}</td>
-				<td>				<textarea rows="4" name="notice" style="width:400px;height:50px">{IPDATA.notice}</textarea></td>
+				<td><textarea rows="4" name="notice" style="width:400px;height:50px">{IPDATA.notice}</textarea></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
-				<td colspan="2">
-				<input type="submit" value="{LANG.save}" name="submitip"/>
+				<td colspan="2"><input type="submit" value="{LANG.save}" name="submitip"/>
 				<br />
 				<br />
 				{LANG.adminip_note}</td>
@@ -269,105 +235,85 @@
 	</table>
 </form>
 <script type='text/javascript'>
-    //<![CDATA[
-    $(document).ready(function()
-    {
-        $(".datepicker").datepicker(
-        {
-            showOn : "both",
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonImage : nv_siteroot + "images/calendar.gif",
-            buttonImageOnly : true
-        });
-        $('form').validate();
-    });
-    $('input[name=submitip]').click(function()
-    {
-        var ip = $('input[name=keyname]').val();
-        $('input[name=keyname]').focus();
-        if (ip == '')
-        {
-            alert('{LANG.adminip_error_ip}');
-            return false;
-        }
-    });
-    $('input[name=submituser]').click(function()
-    {
-        var username = $('input[name=username]').val();
-        var nv_rule = /^([a-zA-Z0-9_-])+$/;
-        if (username == '')
-        {
-            $('input[name=username]').focus();
-            alert('{GLANG.username_empty}');
-            return false;
-        }
-        else if (!nv_rule.test(username))
-        {
-            $('input[name=username]').focus();
-            alert('{LANG.rule_user}');
-            return false;
-        }
-        var password = $('input[name=password]').val();
-        if (password == '' && $('input[name=uid]').val() == '0')
-        {
-            $('input[name=password]').focus();
-            alert('{GLANG.password_empty}');
-            return false;
-        }
-        if (password != $('input[name=password2]').val())
-        {
-            $('input[name=password2]').focus();
-            alert('{LANG.passwordsincorrect}');
-            return false;
-        }
-        else if (password != '' && !nv_rule.test(password))
-        {
-            $('input[name=password]').focus();
-            alert('{LANG.rule_pass}');
-            return false;
-        }
-    });
-    $('a.deleteone').click(function()
-    {
-        if (confirm('{LANG.adminip_delete_confirm}'))
-        {
-            var url = $(this).attr('href');
-            $.ajax(
-            {
-                type : 'POST',
-                url : url,
-                data : '',
-                success : function(data)
-                {
-                    alert('{LANG.adminip_del_success}');
-                    window.location = 'index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}';
-                }
-            });
-        }
-        return false;
-    });
-    $('a.deleteuser').click(function()
-    {
-        if (confirm('{LANG.nicknam_delete_confirm}'))
-        {
-            var url = $(this).attr('href');
-            $.ajax(
-            {
-                type : 'POST',
-                url : url,
-                data : '',
-                success : function(data)
-                {
-                    alert('{LANG.adminip_del_success}');
-                    window.location = 'index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}';
-                }
-            });
-        }
-        return false;
-    });
-    //]]>
+	//<![CDATA[
+	$(document).ready(function() {
+		$(".datepicker").datepicker({
+			showOn : "both",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImageOnly : true
+		});
+		$('form').validate();
+	});
+	$('input[name=submitip]').click(function() {
+		var ip = $('input[name=keyname]').val();
+		$('input[name=keyname]').focus();
+		if (ip == '') {
+			alert('{LANG.adminip_error_ip}');
+			return false;
+		}
+	});
+	$('input[name=submituser]').click(function() {
+		var username = $('input[name=username]').val();
+		var nv_rule = /^([a-zA-Z0-9_-])+$/;
+		if (username == '') {
+			$('input[name=username]').focus();
+			alert('{GLANG.username_empty}');
+			return false;
+		} else if (!nv_rule.test(username)) {
+			$('input[name=username]').focus();
+			alert('{LANG.rule_user}');
+			return false;
+		}
+		var password = $('input[name=password]').val();
+		if (password == '' && $('input[name=uid]').val() == '0') {
+			$('input[name=password]').focus();
+			alert('{GLANG.password_empty}');
+			return false;
+		}
+		if (password != $('input[name=password2]').val()) {
+			$('input[name=password2]').focus();
+			alert('{LANG.passwordsincorrect}');
+			return false;
+		} else if (password != '' && !nv_rule.test(password)) {
+			$('input[name=password]').focus();
+			alert('{LANG.rule_pass}');
+			return false;
+		}
+	});
+	$('a.deleteone').click(function() {
+		if (confirm('{LANG.adminip_delete_confirm}')) {
+			var url = $(this).attr('href');
+			$.ajax({
+				type : 'POST',
+				url : url,
+				data : '',
+				success : function(data) {
+					alert('{LANG.adminip_del_success}');
+					window.location = 'index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}';
+				}
+			});
+		}
+		return false;
+	});
+	$('a.deleteuser').click(function() {
+		if (confirm('{LANG.nicknam_delete_confirm}')) {
+			var url = $(this).attr('href');
+			$.ajax({
+				type : 'POST',
+				url : url,
+				data : '',
+				success : function(data) {
+					alert('{LANG.adminip_del_success}');
+					window.location = 'index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}';
+				}
+			});
+		}
+		return false;
+	});
+	//]]>
 </script>
 <!-- END: main -->

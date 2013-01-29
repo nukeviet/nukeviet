@@ -1,21 +1,23 @@
 <!-- BEGIN: tree -->
-            <li class="{DIRTREE.class1}"><span{DIRTREE.style} class="{DIRTREE.class2}" title="{DIRTREE.title}">&nbsp;{DIRTREE.titlepath}</span>
-                <ul>
-                <!-- BEGIN: tree_content -->
-                {TREE_CONTENT}
-                <!-- END: tree_content -->
-                </ul>
-            </li>
+<li class="{DIRTREE.class1}">
+	<span {DIRTREE.style} class="{DIRTREE.class2}" title="{DIRTREE.title}"> &nbsp;{DIRTREE.titlepath}</span>
+	<ul>
+		<!-- BEGIN: tree_content -->
+		{TREE_CONTENT}
+		<!-- END: tree_content -->
+	</ul>
+</li>
 <!-- END: tree -->
 <!-- BEGIN: main -->
 <ul id="foldertree" class="filetree">
-    <li class="open collapsable"><span{DATA.style} class="{DATA.class}" title="{DATA.title}">&nbsp;{DATA.titlepath}</span>
-        <ul>
-        <!-- BEGIN: main_content -->
-        {CONTENT}
-        <!-- END: main_content -->
-        </ul>
-    </li>
+	<li class="open collapsable">
+		<span {DATA.style} class="{DATA.class}" title="{DATA.title}"> &nbsp; {DATA.titlepath}</span>
+		<ul>
+			<!-- BEGIN: main_content -->
+			{CONTENT}
+			<!-- END: main_content -->
+		</ul>
+	</li>
 </ul>
 
 <span style="display:none" id="path" title="{PATH}"></span>
@@ -31,26 +33,39 @@
 <span style="display:none" id="move_file" title="{MOVE_FILE}"></span>
 
 <script type="text/javascript">
-//<![CDATA[
-is_allowed_upload();
+	//<![CDATA[
+	is_allowed_upload();
 
-$("#foldertree").treeview({collapsed:true, unique:true, persist:"location"});
+	$("#foldertree").treeview({
+		collapsed : true,
+		unique : true,
+		persist : "location"
+	});
 
-$("span.folder").click(function() {
-  folderClick(this)
-});
+	$("span.folder").click(function() {
+		folderClick(this)
+	});
 
-$("span.menu").mouseup(function() {
-  menuMouseup(this)
-});
+	$("span.menu").mouseup(function() {
+		menuMouseup(this)
+	});
 
-$("span.menu").contextMenu("contextMenu", {menuStyle:{width:"120px"}, bindings:{renamefolder:function() {
-  renamefolder()
-}, createfolder:function() {
-  createfolder()
-}, deletefolder:function() {
-  deletefolder()
-}}});
-//]]>
+	$("span.menu").contextMenu("contextMenu", {
+		menuStyle : {
+			width : "120px"
+		},
+		bindings : {
+			renamefolder : function() {
+				renamefolder()
+			},
+			createfolder : function() {
+				createfolder()
+			},
+			deletefolder : function() {
+				deletefolder()
+			}
+		}
+	});
+	//]]>
 </script>
 <!-- END: main -->

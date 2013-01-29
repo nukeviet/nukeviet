@@ -5,12 +5,15 @@
 	<tbody>
 		<tr>
 			<td style="vertical-align:top">{LANG.infor_user_send_title}</td>
-			<td>
-				{DATA.send_name} &lt;{DATA.sender_email}&gt;<br />
-				<!-- BEGIN: sender_phone -->{GLANG.phonenumber}: {DATA.sender_phone}<br /><!-- END: sender_phone -->
-				IP: {DATA.sender_ip}<br />
-				{DATA.time}
-			</td>
+			<td> {DATA.send_name} &lt;{DATA.sender_email}&gt;
+			<br />
+			<!-- BEGIN: sender_phone -->
+			{GLANG.phonenumber}: {DATA.sender_phone}
+			<br />
+			<!-- END: sender_phone -->
+			IP: {DATA.sender_ip}
+			<br />
+			{DATA.time} </td>
 		</tr>
 	</tbody>
 	<tbody class="second">
@@ -29,10 +32,10 @@
 	<tbody>
 		<tr>
 			<td class="center">
-				<!-- BEGIN: reply --><a class="button1" href="{URL_REPLY}"><span><span>{LANG.send_title}</span></span></a><!-- END: reply -->
-				<a class="button1" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});"><span><span>{GLANG.delete}</span></span></a>
-				<a class="button1" href="{DATA.url_back}"><span><span>{LANG.back_title}</span></span></a>
-			</td>
+			<!-- BEGIN: reply -->
+			<a class="button1" href="{URL_REPLY}"><span><span>{LANG.send_title}</span></span></a>
+			<!-- END: reply -->
+			<a class="button1" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});"><span><span>{GLANG.delete}</span></span></a><a class="button1" href="{DATA.url_back}"><span><span>{LANG.back_title}</span></span></a></td>
 		</tr>
 	</tbody>
 </table>
@@ -43,10 +46,9 @@
 	<tbody>
 		<tr>
 			<td style="vertical-align:top">{LANG.infor_user_send_title}</td>
-			<td>
-				{REPLY.reply_name} &lt;{REPLY.admin_email}&gt;<br />
-				{REPLY.time}
-			</td>
+			<td> {REPLY.reply_name} &lt;{REPLY.admin_email}&gt;
+			<br />
+			{REPLY.time} </td>
 		</tr>
 	</tbody>
 	<tbody class="second">

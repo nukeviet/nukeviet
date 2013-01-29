@@ -223,7 +223,6 @@ $xtpl->assign( 'LINKLOSTPASS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE
 
 if( $global_config['gfx_chk'] == 1 )
 {
-	$xtpl->parse( 'main.jscaptcha' );
 	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
 	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );
 	$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );

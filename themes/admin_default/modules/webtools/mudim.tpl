@@ -15,9 +15,7 @@
 		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.mudim_showpanel}</strong></td>
-				<td>
-				<input type="checkbox" value="1" name="mudim_showpanel" {MUDIM_SHOWPANEL}/>
-				</td>
+				<td><input type="checkbox" value="1" name="mudim_showpanel" {MUDIM_SHOWPANEL}/></td>
 			</tr>
 		</tbody>
 
@@ -47,9 +45,7 @@
 
 		<tfoot>
 			<tr>
-				<td colspan="2" align="center">
-				<input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;" />
-				</td>
+				<td colspan="2" align="center"><input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;" /></td>
 			</tr>
 		</tfoot>
 	</table>
