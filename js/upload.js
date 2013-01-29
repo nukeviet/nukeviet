@@ -106,7 +106,7 @@ function pathList(a, b) {
 function insertvaluetofield() {
 	var a = $("input[name=CKEditorFuncNum]").val(), b = $("input[name=area]").val();
 	var c = $("input[name=selFile]").val();
-	var e = $("img[title='" + c + "']").attr("name").split("|");
+	var e = $("img[alt='" + c + "']").attr("name").split("|");
 	f = (e[7] == "") ? $("span#foldervalue").attr("title") : e[7];
 	d = nv_base_siteurl + f + "/" + c;
 	if (a > 0) {
@@ -133,7 +133,7 @@ function nv_selFile(d) {
 
 function download() {
 	var c = $("input[name=selFile]").val();
-	var e = $("img[title='" + c + "']").attr("name").split("|");
+	var e = $("img[alt='" + c + "']").attr("name").split("|");
 	p = (e[7] == "") ? $("span#foldervalue").attr("title") : e[7];
 	$("iframe#Fdownload").attr("src", nv_module_url + "dlimg&path=" + p + "&img=" + c)
 }
@@ -142,7 +142,7 @@ function preview() {
 	$("div.dynamic").text("");
 	$("input.dynamic").val("");
 	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
-	var d = $("img[title='" + a + "']").attr("name").split("|");
+	var d = $("img[alt='" + a + "']").attr("name").split("|");
 	b = (d[7] == "") ? $("span#foldervalue").attr("title") : d[7];
 	if (d[3] == "image" || d[2] == "swf") {
 		var g = calSize(d[0], d[1], 360, 230);
@@ -174,7 +174,7 @@ function preview() {
 
 function addlogo() {
 	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
-	var c = $("img[title='" + a + "']").attr("name").split("|");
+	var c = $("img[alt='" + a + "']").attr("name").split("|");
 	b = (c[7] == "") ? $("span#foldervalue").attr("title") : c[7];
 	var win = null;
 	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
@@ -186,7 +186,7 @@ function addlogo() {
 function create() {
 	$("div.dynamic").text("");
 	$("input.dynamic").val("");
-	var a = $("input[name=selFile]").val(), d = $("img[title='" + a + "']").attr("name");
+	var a = $("input[name=selFile]").val(), d = $("img[alt='" + a + "']").attr("name");
 	d = d.split("|");
 	if (d[3] == "image") {
 		b = (d[7] == "") ? $("span#foldervalue").attr("title") : d[7];
@@ -216,7 +216,7 @@ function move() {
 		d = a == b[e] ? ' selected="selected"' : "";
 		$("select[name=newPath]").append('<option value="' + b[e] + '"' + d + ">" + b[e] + "</option>")
 	}
-	d = $("img[title='" + g + "']").attr("name").split("|");
+	d = $("img[alt='" + g + "']").attr("name").split("|");
 	a = (d[7] == "") ? $("span#foldervalue").attr("title") : d[7];
 	$("div[title=pathFileName]").text(a + "/" + g);
 	$("div#filemove").dialog({
@@ -244,7 +244,7 @@ function filerename() {
 
 function filedelete() {
 	var a = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
-	var f = $("img[title='" + a + "']").attr("name").split("|");
+	var f = $("img[alt='" + a + "']").attr("name").split("|");
 	var b = (f[7] == "") ? $("span#foldervalue").attr("title") : f[7];
 	confirm(LANG.upload_delimg_confirm + " " + a + " ?") && $.ajax({
 		type : "POST",
@@ -662,7 +662,7 @@ $("input[name=filerenameOK]").click(function() {
 		if (e[1] == d) {
 			$("div#filerename").dialog("close")
 		} else {
-			n = $("img[title='" + b + "']").attr("name").split("|");
+			n = $("img[alt='" + b + "']").attr("name").split("|");
 			a = (n[7] == "") ? $("span#foldervalue").attr("title") : n[7];
 
 			$(this).attr("disabled", "disabled");
