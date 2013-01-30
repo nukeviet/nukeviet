@@ -12,7 +12,17 @@
 	<h2 class="line padding_0" style="margin-bottom:5px">{LANG.editinfo_pagetitle}</h2>
 	<div style="padding-bottom:10px">
 		<div class="utop">
-			<span class="topright"> <a href="{URL_HREF}main">{LANG.user_info}</a> <strong>&middot;</strong> <a href="{URL_HREF}changepass">{LANG.changepass_title}</a> <strong>&middot;</strong> <a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a> <!-- BEGIN: allowopenid --><strong>&middot;</strong> <a href="{URL_HREF}openid">{LANG.openid_administrator}</a><!-- END: allowopenid --> <!-- BEGIN: regroups --><strong>&middot;</strong><a href="{URL_HREF}regroups">{LANG.in_group}</a><!-- END: regroups --> <!-- BEGIN: logout --><strong>&middot;</strong> <a href="{URL_HREF}logout">{LANG.logout_title}</a><!-- END: logout --> </span>
+			<span class="topright"> <a href="{URL_HREF}main">{LANG.user_info}</a> <strong>&middot;</strong> <a href="{URL_HREF}changepass">{LANG.changepass_title}</a> <strong>&middot;</strong> <a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a>
+				<!-- BEGIN: allowopenid -->
+				<strong>&middot;</strong> <a href="{URL_HREF}openid">{LANG.openid_administrator}</a>
+				<!-- END: allowopenid -->
+				<!-- BEGIN: regroups -->
+				<strong>&middot;</strong><a href="{URL_HREF}regroups">{LANG.in_group}</a>
+				<!-- END: regroups -->
+				<!-- BEGIN: logout -->
+				<strong>&middot;</strong> <a href="{URL_HREF}logout">{LANG.logout_title}</a>
+				<!-- END: logout -->
+			</span>
 		</div>
 		<div class="clear"></div>
 	</div>
@@ -21,7 +31,7 @@
 		<div style="color:#fb490b;text-align:center;">
 			{ERROR}
 		</div>
-		<!-- END: error -->		
+		<!-- END: error -->
 		<div class="content">
 			<dl class="clearfix gray">
 				<dd class="fl">
@@ -100,7 +110,11 @@
 			<!-- BEGIN: loop -->
 			<dl class="clearfix">
 				<dt class="fl">
-					<label>{FIELD.title} <!-- BEGIN: required --> <span class="error">(*)</span> <!-- END: required --> </label>
+					<label>{FIELD.title}
+						<!-- BEGIN: required -->
+						<span class="error">(*)</span>
+						<!-- END: required -->
+					</label>
 					<br>
 					<i>{FIELD.description}</i>
 				</dt>
@@ -111,8 +125,7 @@
 					<!-- BEGIN: date -->
 					<input class="datepicker {FIELD.required} {FIELD.class}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
 					<!-- END: date -->
-					<!-- BEGIN: textarea -->
-					<textarea name="custom_fields[{FIELD.field}]" class="{FIELD.class}">{FIELD.value}</textarea>
+					<!-- BEGIN: textarea --><textarea name="custom_fields[{FIELD.field}]" class="{FIELD.class}">{FIELD.value}</textarea>
 					<!-- END: textarea -->
 					<!-- BEGIN: editor -->
 					{EDITOR}
@@ -149,11 +162,9 @@
 	</form>
 </div>
 <script type="text/javascript">
-	$(document).ready(function()
-	{
+	$(document).ready(function() {
 		$('#frm').validate();
-		$(".datepicker").datepicker(
-		{
+		$(".datepicker").datepicker({
 			showOn : "both",
 			dateFormat : "dd/mm/yy",
 			changeMonth : true,
