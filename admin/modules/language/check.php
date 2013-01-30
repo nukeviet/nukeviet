@@ -51,7 +51,10 @@ foreach( $lang_array_file_temp as $value )
 	}
 }
 
-$language_array_source = array( "vi", "en" );
+$language_array_source = array(
+	"vi",
+	"en"
+);
 
 $language_check_type = array(
 	0 => $lang_module['nv_check_type_0'],
@@ -75,7 +78,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 		{
 			$id = intval( $id );
 			$lang_value = trim( strip_tags( $lang_value, NV_ALLOWED_HTML_LANG ) );
-		
+
 			if( ! empty( $lang_value ) )
 			{
 				$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $typelang . "`='" . mysql_real_escape_string( $lang_value ) . "' WHERE `id`='" . $id . "'" );
@@ -96,7 +99,11 @@ foreach( $language_array as $key => $value )
 {
 	if( in_array( $key, $array_lang_exit ) )
 	{
-		$xtpl->assign( 'LANGUAGE', array( 'key' => $key, 'selected' => ( $key == $typelang ) ? ' selected="selected"' : '', 'title' => $value['name'] ) );
+		$xtpl->assign( 'LANGUAGE', array(
+			'key' => $key,
+			'selected' => ($key == $typelang) ? ' selected="selected"' : '',
+			'title' => $value['name']
+		) );
 
 		$xtpl->parse( 'main.language' );
 	}
@@ -106,7 +113,11 @@ foreach( $language_array_source as $key )
 {
 	if( in_array( $key, $array_lang_exit ) )
 	{
-		$xtpl->assign( 'LANGUAGE_SOURCE', array( 'key' => $key, 'selected' => ( $key == $sourcelang ) ? ' selected="selected"' : '', 'title' => $language_array[$key]['name'] ) );
+		$xtpl->assign( 'LANGUAGE_SOURCE', array(
+			'key' => $key,
+			'selected' => ($key == $sourcelang) ? ' selected="selected"' : '',
+			'title' => $language_array[$key]['name']
+		) );
 
 		$xtpl->parse( 'main.language_source' );
 	}
@@ -119,18 +130,22 @@ while( list( $idfile_i, $module, $admin_file, ) = $db->sql_fetchrow( $result ) )
 {
 	switch( $admin_file )
 	{
-		case '1':
+		case '1' :
 			$langsitename = $lang_module['nv_lang_admin'];
 			break;
-		case '0':
+		case '0' :
 			$langsitename = $lang_module['nv_lang_site'];
 			break;
-		default:
+		default :
 			$langsitename = $admin_file;
 			break;
 	}
-		
-	$xtpl->assign( 'LANGUAGE_AREA', array( 'key' => $idfile_i, 'selected' => ( $idfile_i == $idfile ) ? ' selected="selected"' : '', 'title' => $module . " " . $langsitename ) );
+
+	$xtpl->assign( 'LANGUAGE_AREA', array(
+		'key' => $idfile_i,
+		'selected' => ($idfile_i == $idfile) ? ' selected="selected"' : '',
+		'title' => $module . " " . $langsitename
+	) );
 
 	$xtpl->parse( 'main.language_area' );
 	$array_files[$idfile_i] = $module . " " . $langsitename;
@@ -138,7 +153,11 @@ while( list( $idfile_i, $module, $admin_file, ) = $db->sql_fetchrow( $result ) )
 
 foreach( $language_check_type as $key => $value )
 {
-	$xtpl->assign( 'LANGUAGE_CHECK_TYPE', array( 'key' => $key, 'selected' => ( $key == $check_type ) ? ' selected="selected"' : '', 'title' => $value ) );
+	$xtpl->assign( 'LANGUAGE_CHECK_TYPE', array(
+		'key' => $key,
+		'selected' => ($key == $check_type) ? ' selected="selected"' : '',
+		'title' => $value
+	) );
 
 	$xtpl->parse( 'main.language_check_type' );
 }
@@ -182,9 +201,9 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 			'sourcelang' => $datasourcelang
 		);
 	}
-	
+
 	if( ! empty( $array_lang_data ) )
-	{	
+	{
 		$xtpl->assign( 'DATA', array(
 			'typelang' => $typelang,
 			'sourcelang' => $sourcelang,
@@ -192,35 +211,35 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 			'idfile' => $idfile,
 			'savedata' => md5( $global_config['sitekey'] . session_id() )
 		) );
-	
+
 		foreach( $array_lang_data as $idfile_i => $array_lang_file )
 		{
 			$xtpl->assign( 'CAPTION', $array_files[$idfile_i] );
-			
+
 			foreach( $array_lang_file as $id => $row )
-			{				
+			{
 				$xtpl->assign( 'ROW', array(
-					'class' => ( ++ $i % 2 ) ? " class=\"second\"" : "",
+					'class' => (++$i % 2) ? " class=\"second\"" : "",
 					'stt' => $i,
 					'lang_key' => $row['lang_key'],
 					'datalang' => nv_htmlspecialchars( $row['datalang'] ),
 					'id' => $id,
 					'sourcelang' => nv_htmlspecialchars( $row['sourcelang'] ),
 				) );
-				
+
 				$xtpl->parse( 'main.data.lang.loop' );
 			}
-			
+
 			$xtpl->parse( 'main.data.lang' );
 		}
-		
+
 		$xtpl->parse( 'main.data' );
 	}
 	else
 	{
 		$xtpl->parse( 'main.nodata' );
 	}
-	
+
 	unset( $array_lang_data, $array_files );
 }
 

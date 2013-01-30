@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 /**
  * viewcat_grid_new()
- * 
+ *
  * @param mixed $array_catpage
  * @param mixed $catid
  * @param mixed $generate_page
@@ -61,7 +61,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 
 /**
  * viewcat_list_new()
- * 
+ *
  * @param mixed $array_catpage
  * @param mixed $catid
  * @param mixed $page
@@ -112,7 +112,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 
 /**
  * viewcat_page_new()
- * 
+ *
  * @param mixed $array_catpage
  * @param mixed $array_cat_other
  * @param mixed $generate_page
@@ -167,7 +167,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 
 /**
  * viewcat_top()
- * 
+ *
  * @param mixed $array_catcontent
  * @param mixed $generate_page
  * @return
@@ -220,7 +220,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 
 /**
  * viewsubcat_main()
- * 
+ *
  * @param mixed $viewcat
  * @param mixed $array_cat
  * @return
@@ -254,7 +254,10 @@ function viewsubcat_main( $viewcat, $array_cat )
 						}
 						else
 						{
-							$more = array( 'title' => $lang_module['more'], 'link' => $global_array_cat[$catid]['link'] );
+							$more = array(
+								'title' => $lang_module['more'],
+								'link' => $global_array_cat[$catid]['link']
+							);
 							$xtpl->assign( 'MORE', $more );
 							$xtpl->parse( 'main.listcat.subcatmore' );
 							$xtpl->set_autoreset();
@@ -327,7 +330,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 /**
  * viewcat_two_column()
- * 
+ *
  * @param mixed $array_content
  * @param mixed $array_catpage
  * @return
@@ -406,10 +409,10 @@ function viewcat_two_column( $array_content, $array_catpage )
 					$xtpl->parse( 'main.loopcat.other' );
 				}
 			}
-            if( $a % 2 )
-            {
-                $xtpl->parse('main.loopcat.clear');
-            }
+			if( $a % 2 )
+			{
+				$xtpl->parse( 'main.loopcat.clear' );
+			}
 			$xtpl->parse( 'main.loopcat' );
 			++$a;
 		}
@@ -421,7 +424,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 
 /**
  * detail_theme()
- * 
+ *
  * @param mixed $news_contents
  * @param mixed $related_new_array
  * @param mixed $related_array
@@ -527,7 +530,7 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 			$keyword = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search&amp;q=" . urlencode( $value );
 			$xtpl->assign( 'KEYWORD', $value );
 			$xtpl->assign( 'LINK_KEYWORDS', $keyword );
-			$xtpl->assign( 'SLASH', ( ( $count - 1 ) == $i ) ? '' : ', ' );
+			$xtpl->assign( 'SLASH', (($count - 1) == $i) ? '' : ', ' );
 			$xtpl->parse( 'main.keywords.loop' );
 		}
 		$xtpl->parse( 'main.keywords' );
@@ -617,7 +620,7 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 
 /**
  * no_permission()
- * 
+ *
  * @param mixed $func_who_view
  * @return
  */
@@ -644,7 +647,7 @@ function no_permission( $func_who_view )
 
 /**
  * topic_theme()
- * 
+ *
  * @param mixed $topic_array
  * @param mixed $topic_other_array
  * @param mixed $generate_page
@@ -655,11 +658,12 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 	global $module_info, $module_name, $module_file, $topicalias, $module_config;
 	$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'TOPPIC_TITLE', $page_title );
-    $xtpl->assign( 'TOPPIC_LINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias );
-    if( !empty( $description )){
-        $xtpl->assign( 'TOPPIC_DESCRIPTION', $description );
-        $xtpl->parse( 'main.topicdescription' );
-    }
+	$xtpl->assign( 'TOPPIC_LINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias );
+	if( ! empty( $description ) )
+	{
+		$xtpl->assign( 'TOPPIC_DESCRIPTION', $description );
+		$xtpl->parse( 'main.topicdescription' );
+	}
 	if( ! empty( $topic_array ) )
 	{
 		foreach( $topic_array as $topic_array_i )
@@ -700,7 +704,7 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 
 /**
  * comment_theme()
- * 
+ *
  * @param mixed $comment_array
  * @return
  */
@@ -712,7 +716,7 @@ function comment_theme( $comment_array )
 	foreach( $comment_array['comment'] as $comment_array_i )
 	{
 		$comment_array_i['post_time'] = nv_date( "d/m/Y H:i", $comment_array_i['post_time'] );
-		$comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
+		$comment_array_i['bg'] = ($k % 2) ? " bg" : "";
 		$xtpl->assign( 'COMMENT', $comment_array_i );
 		if( $module_config[$module_name]['emailcomm'] and ! empty( $comment_array_i['post_email'] ) )
 		{
@@ -731,7 +735,7 @@ function comment_theme( $comment_array )
 
 /**
  * sendmail_themme()
- * 
+ *
  * @param mixed $sendmail
  * @return
  */
@@ -740,8 +744,8 @@ function sendmail_themme( $sendmail )
 	global $module_info, $module_file, $global_config, $lang_module, $lang_global;
 	$script = nv_html_site_js();
 	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
-    $script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	
+	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+
 	$script .= "<script type=\"text/javascript\">\n";
 	$script .= "          $(document).ready(function(){\n";
 	$script .= "            $(\"#sendmailForm\").validate();\n";
@@ -779,7 +783,7 @@ function sendmail_themme( $sendmail )
 
 /**
  * news_print()
- * 
+ *
  * @param mixed $result
  * @return
  */
@@ -830,7 +834,7 @@ function news_print( $result )
 
 /**
  * search_theme()
- * 
+ *
  * @param mixed $key
  * @param mixed $check_num
  * @param mixed $date_array
@@ -861,7 +865,8 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	for( $i = 0; $i <= 3; ++$i )
 	{
 		if( $check_num == $i ) $xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
-		else  $xtpl->assign( 'CHECK' . $i, "" );
+		else
+			$xtpl->assign( 'CHECK' . $i, "" );
 	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -869,7 +874,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 
 /**
  * search_result_theme()
- * 
+ *
  * @param mixed $key
  * @param mixed $numRecord
  * @param mixed $per_pages
@@ -915,7 +920,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		$xtpl->assign( 'INMOD', $lang_module['search_modul_title'] );
 		$xtpl->parse( 'results.noneresult' );
 	}
-	if( $numRecord > $per_pages ) // show pages
+	if( $numRecord > $per_pages )// show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
 		$in = strpos( $url_link, '&page' );

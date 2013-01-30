@@ -32,11 +32,11 @@ while( $item = $db->sql_fetchrow( $result ) )
 $db->sql_freeresult( $result );
 
 $contents = array();
-$contents['tables'] = ( empty( $tables ) ) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
-$contents['type'] = ( $type != "str" ) ? "all" : "str";
-$contents['savetype'] = ( $ext != "sql" ) ? "gz" : "sql";
+$contents['tables'] = ( empty( $tables )) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
+$contents['type'] = ($type != "str") ? "all" : "str";
+$contents['savetype'] = ($ext != "sql") ? "gz" : "sql";
 
-$file_ext = ( $contents['savetype'] == "sql" ) ? "sql" : "sql.gz";
+$file_ext = ($contents['savetype'] == "sql") ? "sql" : "sql.gz";
 $file_name = md5( $client_info['session_id'] ) . "_backupdata_" . date( "Y-m-d-H-i", time() ) . "." . $file_ext;
 $contents['filename'] = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup/" . $file_name;
 
@@ -55,9 +55,9 @@ else
 {
 	$file = explode( "_", $file_name );
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['savefile'], "File name: " . end( $file ), $admin_info['userid'] );
-	
+
 	$xtpl->assign( 'LINK_DOWN', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file_name . "&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) );
-	
+
 	$xtpl->parse( 'main.result' );
 }
 

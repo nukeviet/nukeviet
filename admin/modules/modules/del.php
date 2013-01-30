@@ -7,8 +7,7 @@
  * @Createdate 2-17-2010 0:5
  */
 
-if( ! defined( 'NV_IS_FILE_MODULES' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $modname = filter_text_input( 'mod', 'post' );
 $contents = 'NO_' . $modname;
@@ -28,9 +27,9 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action.php' ) )
 		{
 			$lang = NV_LANG_DATA;
-			$sql_drop_module = array( );
+			$sql_drop_module = array();
 
-			require_once (NV_ROOTDIR . '/modules/' . $module_file . '/action.php');
+			require_once ( NV_ROOTDIR . '/modules/' . $module_file . '/action.php' );
 
 			if( ! empty( $sql_drop_module ) )
 			{
@@ -125,13 +124,14 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 		}
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . ' module "' . $modname . '"', '', $admin_info['userid'] );
-		nv_delete_all_cache( );
+		nv_delete_all_cache();
 	}
 }
 
-nv_fix_module_weight( );
+nv_fix_module_weight();
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

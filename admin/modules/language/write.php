@@ -24,7 +24,7 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 
 /**
  * nv_admin_write_lang()
- * 
+ *
  * @param mixed $dirlang
  * @param mixed $idfile
  * @return error write file
@@ -107,7 +107,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 			{
 				$createdate = time();
 			}
-			
+
 			$content_lang_no_tran = "";
 			$content_lang = "<?php\n\n";
 			$content_lang .= "/**\n";
@@ -129,7 +129,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 
 			$content_lang .= " die( 'Stop!!!' );\n\n";
 
-			$array_translator['info'] = ( isset( $array_translator['info'] ) ) ? $array_translator['info'] : "";
+			$array_translator['info'] = ( isset( $array_translator['info'] )) ? $array_translator['info'] : "";
 
 			$content_lang .= "\$lang_translator['author'] = '" . $array_translator['author'] . "';\n";
 			$content_lang .= "\$lang_translator['createdate'] = '" . $array_translator['createdate'] . "';\n";

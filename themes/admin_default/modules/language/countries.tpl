@@ -10,9 +10,7 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="3" align="center">
-				<input type="submit" name="submit" value="{LANG.nv_admin_submit}" style="width: 100px;"/>
-				</td>
+				<td colspan="3" align="center"><input type="submit" name="submit" value="{LANG.nv_admin_submit}" style="width: 100px;"/></td>
 			</tr>
 		</tfoot>
 		<!-- BEGIN: countries -->

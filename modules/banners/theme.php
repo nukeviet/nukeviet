@@ -11,7 +11,7 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 /**
  * nv_banner_theme_main()
- * 
+ *
  * @param mixed $contents
  * @return
  */
@@ -64,7 +64,7 @@ function nv_banner_theme_main( $contents )
 
 /**
  * logininfo_theme()
- * 
+ *
  * @param mixed $contents
  * @return
  */
@@ -102,7 +102,7 @@ function logininfo_theme( $contents )
 
 /**
  * clientinfo_theme()
- * 
+ *
  * @param mixed $contents
  * @return
  */
@@ -120,7 +120,7 @@ function clientinfo_theme( $contents )
 
 /**
  * clinfo_theme()
- * 
+ *
  * @param mixed $contents
  * @param mixed $manament
  * @return
@@ -139,11 +139,11 @@ function clinfo_theme( $contents, $manament )
 		$xtpl->assign( 'clientinfo_stats', $manament['clientinfo_stats'] );
 		$xtpl->parse( 'clinfo.management' );
 	}
-	
+
 	$a = 0;
 	foreach( $contents['rows'] as $values )
 	{
-		$class = ( $a % 2 == 0 ) ? "act" : "deact";
+		$class = ($a % 2 == 0) ? "act" : "deact";
 
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'CLASS', $class );
@@ -154,17 +154,17 @@ function clinfo_theme( $contents, $manament )
 
 		++$a;
 	}
-	
+
 	$xtpl->assign( 'EDIT_ONCLICK', $contents['edit_onclick'] );
 	$xtpl->assign( 'EDIT_NAME', $contents['edit_name'] );
 	$xtpl->parse( 'clinfo' );
-	
+
 	return $xtpl->text( 'clinfo' );
 }
 
 /**
  * cledit_theme()
- * 
+ *
  * @param mixed $contents
  * @return
  */

@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_MOD_ABOUT' ) ) die( 'Stop!!!' );
 
 /**
  * nv_about_main()
- * 
+ *
  * @param mixed $row
  * @param mixed $ab_links
  * @return
@@ -23,7 +23,7 @@ function nv_about_main( $row, $ab_links )
 	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CONTENT', $row );
-	
+
 	if( ! empty( $ab_links ) )
 	{
 		foreach( $ab_links as $row )
@@ -33,7 +33,7 @@ function nv_about_main( $row, $ab_links )
 		}
 		$xtpl->parse( 'main.other' );
 	}
-	
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

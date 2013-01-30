@@ -1,8 +1,6 @@
 <!-- BEGIN: main -->
 <div class="quote" style="width:98%">
-	<blockquote>
-		<span>{LANG.thumb_note}</span>
-	</blockquote>
+	<blockquote><span>{LANG.thumb_note}</span></blockquote>
 </div>
 <div class="clear"></div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
@@ -28,14 +26,8 @@
 					<option value="{TYPE.id}" {TYPE.selected}>{TYPE.name}</option>
 					<!-- END: thumb_type -->
 				</select></td>
-				<td>
-				<input class="digits" style="width:40px; text-align: right" type="text" value="{DATA.thumb_width}" name="thumb_width[{DATA.did}]" maxlength="3"/>
-				x
-				<input class="digits" style="width:40px; text-align: right" type="text" value="{DATA.thumb_height}" name="thumb_height[{DATA.did}]" maxlength="3"/>
-				</td>
-				<td>
-				<input class="digits" style="width:40px; text-align: right" type="text" value="{DATA.thumb_quality}" name="thumb_quality[{DATA.did}]" maxlength="2"/>
-				</td>
+				<td><input class="digits" style="width:40px; text-align: right" type="text" value="{DATA.thumb_width}" name="thumb_width[{DATA.did}]" maxlength="3"/> x <input class="digits" style="width:40px; text-align: right" type="text" value="{DATA.thumb_height}" name="thumb_height[{DATA.did}]" maxlength="3"/></td>
+				<td><input class="digits" style="width:40px; text-align: right" type="text" value="{DATA.thumb_quality}" name="thumb_quality[{DATA.did}]" maxlength="2"/></td>
 			</tr>
 		</tbody>
 		<!-- END: loop -->
@@ -54,29 +46,20 @@
 					<option value="{TYPE.id}">{TYPE.name}</option>
 					<!-- END: other_type -->
 				</select></td>
-				<td>
-				<input class="digits" style="width:40px; text-align: right" type="text" value="100" name="other_thumb_width" maxlength="3"/>
-				x
-				<input class="digits" style="width:40px; text-align: right" type="text" value="120" name="other_thumb_height" maxlength="3"/>
-				</td>
-				<td>
-				<input class="digits" style="width:40px; text-align: right" type="text" value="90" name="other_thumb_quality" maxlength="2"/>
-				</td>
+				<td><input class="digits" style="width:40px; text-align: right" type="text" value="100" name="other_thumb_width" maxlength="3"/> x <input class="digits" style="width:40px; text-align: right" type="text" value="120" name="other_thumb_height" maxlength="3"/></td>
+				<td><input class="digits" style="width:40px; text-align: right" type="text" value="90" name="other_thumb_quality" maxlength="2"/></td>
 			</tr>
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="4" class="center">
-				<input type="submit" value="{LANG.pubdate}" name="submit"/>
-				</td>
+				<td colspan="4" class="center"><input type="submit" value="{LANG.pubdate}" name="submit"/></td>
 			</tr>
 		</tfoot>
 	</table>
 </form>
 <script type="text/javascript">
-    $(document).ready(function()
-    {
-        $('#frm').validate();
-    }); 
+	$(document).ready(function() {
+		$('#frm').validate();
+	}); 
 </script>
 <!-- END: main -->

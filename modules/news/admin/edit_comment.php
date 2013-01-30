@@ -29,7 +29,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$content = nv_nl2br( filter_text_textarea( 'content', '', NV_ALLOWED_HTML_TAGS ) );
 			$active = $nv_Request->get_int( 'active', 'post', 0 );
-			$status = ( $status == 1 ) ? 1 : 0;
+			$status = ($status == 1) ? 1 : 0;
 			$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_comments` SET `content`=" . $db->dbescape( $content ) . ", `status`=" . $active . " WHERE `cid`=" . $cid );
 		}
 
@@ -62,7 +62,7 @@ if( $db->sql_numrows( $result ) == 0 )
 $row = $db->sql_fetchrow( $result );
 $row['content'] = nv_htmlspecialchars( nv_br2nl( $row['content'] ) );
 
-$row['status'] = ( $row['status'] ) ? "checked=\"checked\"" : "";
+$row['status'] = ($row['status']) ? "checked=\"checked\"" : "";
 
 $xtpl = new XTemplate( "comment_edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );

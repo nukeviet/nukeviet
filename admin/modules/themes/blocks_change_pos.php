@@ -1,4 +1,4 @@
-<?php
+3<?php
 
 /**
  * @Project NUKEVIET 3.x
@@ -25,7 +25,7 @@ if( $bid > 0 )
 	if( $db->sql_numrows( $result ) )
 	{
 		$weight = 0;
-	
+
 		while( list( $bid_i ) = $db->sql_fetchrow( $result ) )
 		{
 			++$weight;
@@ -34,7 +34,7 @@ if( $bid > 0 )
 
 		$func_id_old = $weight = 0;
 		$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme='" . $theme . "' AND t2.position='" . $pos_old . "' ORDER BY t1.func_id ASC, t1.weight  ASC" );
-	
+
 		while( list( $bid_i, $func_id_i ) = $db->sql_fetchrow( $result ) )
 		{
 			if( $func_id_i == $func_id_old )
@@ -46,7 +46,7 @@ if( $bid > 0 )
 				$weight = 1;
 				$func_id_old = $func_id_i;
 			}
-		
+
 			$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i . " AND `func_id`=" . $func_id_i );
 		}
 	}
@@ -65,7 +65,7 @@ if( $bid > 0 )
 
 		$func_id_old = $weight = 0;
 		$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme='" . $theme . "' AND t2.position=" . $db->dbescape_string( $pos_new ) . " ORDER BY t1.func_id ASC, t1.weight  ASC" );
-	
+
 		while( list( $bid_i, $func_id_i ) = $db->sql_fetchrow( $result ) )
 		{
 			if( $func_id_i == $func_id_old )

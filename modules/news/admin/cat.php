@@ -13,7 +13,17 @@ $page_title = $lang_module['categories'];
 
 $error = $admins = "";
 $savecat = 0;
-list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $who_view, $groups_view ) = array( 0, 0, "", "", "", "", "", 0, "" );
+list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $who_view, $groups_view ) = array(
+	0,
+	0,
+	"",
+	"",
+	"",
+	"",
+	"",
+	0,
+	""
+);
 
 $groups_list = nv_groups_list();
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
@@ -28,7 +38,7 @@ if( ! empty( $savecat ) )
 	$alias = filter_text_input( 'alias', 'post', '' );
 	$description = $nv_Request->get_string( 'description', 'post', '' );
 	$description = nv_nl2br( nv_htmlspecialchars( strip_tags( $description ) ), '<br />' );
-	$alias = ( $alias == "" ) ? change_alias( $title ) : change_alias( $alias );
+	$alias = ($alias == "") ? change_alias( $title ) : change_alias( $alias );
 
 	$who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
 	$groups_view = "";
@@ -39,7 +49,7 @@ if( ! empty( $savecat ) )
 
 	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 	{
-		if( ! ( isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
+		if( ! (isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 		{
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
 			die();
@@ -62,12 +72,12 @@ if( ! empty( $savecat ) )
 			$db->sql_freeresult();
 			nv_create_table_rows( $newcatid );
 			nv_fix_cat_order();
-			
+
 			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 			{
 				$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_admins` (`userid`, `catid`, `admin`, `add_content`, `pub_content`, `edit_content`, `del_content`, `comment`) VALUES ('" . $admin_id . "', '" . $newcatid . "', '1', '1', '1', '1', '1', '1')" );
 			}
-			
+
 			nv_del_moduleCache( $module_name );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['add_cat'], $title, $admin_info['userid'] );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
@@ -80,25 +90,25 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $catid > 0 and $title != "" )
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $parentid ) . ", `title`=" . $db->dbescape( $title ) . ", `titlesite`=" . $db->dbescape( $titlesite ) . ", `alias` =  " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `who_view`=" . $db->dbescape( $who_view ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `catid` =" . $catid;
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $parentid ) . ", `title`=" . $db->dbescape( $title ) . ", `titlesite`=" . $db->dbescape( $titlesite ) . ", `alias` =  " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `who_view`=" . $db->dbescape( $who_view ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `catid` =" . $catid;
 		$db->sql_query( $sql );
-		
+
 		if( $db->sql_affectedrows() > 0 )
 		{
 			$db->sql_freeresult();
-			
+
 			if( $parentid != $parentid_old )
 			{
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . $db->dbescape( $parentid ) ) );
 				$weight = intval( $weight ) + 1;
-				
+
 				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `weight`=" . $weight . " WHERE `catid`=" . intval( $catid );
 				$db->sql_query( $sql );
-				
+
 				nv_fix_cat_order();
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_cat'], $title, $admin_info['userid'] );
 			}
-			
+
 			nv_del_moduleCache( $module_name );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
 			die();
@@ -131,7 +141,7 @@ if( $catid > 0 and isset( $global_array_cat[$catid] ) )
 
 	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 	{
-		if( ! ( isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
+		if( ! (isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 		{
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
 			die();
@@ -156,7 +166,7 @@ if( defined( 'NV_IS_ADMIN_MODULE' ) )
 foreach( $global_array_cat as $catid_i => $array_value )
 {
 	$lev_i = $array_value['lev'];
-	if( defined( 'NV_IS_ADMIN_MODULE' ) or ( isset( $array_cat_admin[$admin_id][$catid_i] ) and $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 ) )
+	if( defined( 'NV_IS_ADMIN_MODULE' ) or (isset( $array_cat_admin[$admin_id][$catid_i] ) and $array_cat_admin[$admin_id][$catid_i]['admin'] == 1) )
 	{
 		$xtitle_i = "";
 		if( $lev_i > 0 )
@@ -182,7 +192,7 @@ if( ! empty( $array_cat_list ) )
 		{
 			$cat_listsub[] = array(
 				"value" => $catid_i,
-				"selected" => ( $catid_i == $parentid ) ? " selected=\"selected\"" : "",
+				"selected" => ($catid_i == $parentid) ? " selected=\"selected\"" : "",
 				"title" => $title_i
 			);
 		}
@@ -193,7 +203,7 @@ if( ! empty( $array_cat_list ) )
 	{
 		$who_views[] = array(
 			"value" => $k,
-			"selected" => ( $who_view == $k ) ? " selected=\"selected\"" : "",
+			"selected" => ($who_view == $k) ? " selected=\"selected\"" : "",
 			"title" => $w
 		);
 	}

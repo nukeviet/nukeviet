@@ -138,7 +138,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		}
 		else
 		{
-			$layout_name = ( isset( $array_layout_func_default[$in_module][$func_name] ) ) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
+			$layout_name = ( isset( $array_layout_func_default[$in_module][$func_name] )) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_modthemes` (`func_id`, `layout`, `theme`) VALUES ('" . $func_id . "'," . $db->dbescape( $layout_name ) . ", " . $db->dbescape( $selectthemes ) . ")";
 			$db->sql_query( $sql );
 
@@ -148,7 +148,8 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		$array_layout_func[$in_module][$func_name] = array(
 			$func_id,
 			$func_custom_name,
-			$layout_name );
+			$layout_name
+		);
 	}
 
 	if( $set_layout_site )
@@ -174,7 +175,10 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 			{
 				foreach( $layout_array as $value )
 				{
-					$xtpl->assign( 'OPTION', array( 'key' => $value, 'selected' => ( $func_arr_val[2] == $value ) ? " selected=\"selected\"" : "" ) );
+					$xtpl->assign( 'OPTION', array(
+						'key' => $value,
+						'selected' => ($func_arr_val[2] == $value) ? " selected=\"selected\"" : ""
+					) );
 					$xtpl->parse( 'main.loop.func.option' );
 				}
 

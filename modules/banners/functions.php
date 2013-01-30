@@ -18,7 +18,7 @@ $lang_array = array(
 
 /**
  * nv_banner_client_checkdata()
- * 
+ *
  * @param mixed $cookie
  * @return
  */
@@ -28,7 +28,7 @@ function nv_banner_client_checkdata( $cookie )
 
 	$client = unserialize( $cookie );
 
-	$strlen = ( NV_CRYPT_SHA1 == 1 ) ? 40 : 32;
+	$strlen = (NV_CRYPT_SHA1 == 1) ? 40 : 32;
 
 	$banner_client_info = array();
 
@@ -47,10 +47,9 @@ function nv_banner_client_checkdata( $cookie )
 			$db->sql_freeresult( $result );
 
 			if( strcasecmp( $client['checknum'], $row['check_num'] ) == 0 and //checknum
-				! empty( $client['current_agent'] ) and strcasecmp( $client['current_agent'], $row['last_agent'] ) == 0 and //user_agent
-				! empty( $client['current_ip'] ) and strcasecmp( $client['current_ip'], $row['last_ip'] ) == 0 and //IP
-				! empty( $client['current_login'] ) and strcasecmp( $client['current_login'], intval( $row['last_login'] ) ) == 0
-			)
+			! empty( $client['current_agent'] ) and strcasecmp( $client['current_agent'], $row['last_agent'] ) == 0 and //user_agent
+			! empty( $client['current_ip'] ) and strcasecmp( $client['current_ip'], $row['last_ip'] ) == 0 and //IP
+			! empty( $client['current_login'] ) and strcasecmp( $client['current_login'], intval( $row['last_login'] ) ) == 0 )
 			{
 				$banner_client_info['id'] = intval( $row['id'] );
 				$banner_client_info['login'] = $row['login'];
@@ -73,7 +72,7 @@ function nv_banner_client_checkdata( $cookie )
 			}
 		}
 	}
-	
+
 	return $banner_client_info;
 }
 
@@ -82,7 +81,7 @@ $bncl = $nv_Request->get_string( 'bncl', 'cookie' );
 if( ! empty( $bncl ) )
 {
 	$banner_client_info = nv_banner_client_checkdata( $bncl );
-	
+
 	if( empty( $banner_client_info ) )
 	{
 		$nv_Request->unset_request( 'bncl', 'cookie' );

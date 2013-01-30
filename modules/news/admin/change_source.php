@@ -25,19 +25,19 @@ if( $mod == "weight" and $new_vid > 0 )
 
 	$sql = "SELECT `sourceid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`!=" . $sourceid . " ORDER BY `weight` ASC";
 	$result = $db->sql_query( $sql );
-	
+
 	$weight = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		++ $weight;
+		++$weight;
 		if( $weight == $new_vid ) ++$weight;
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `weight`=" . $weight . " WHERE `sourceid`=" . intval( $row['sourceid'] );
 		$db->sql_query( $sql );
 	}
-	
+
 	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `weight`=" . $new_vid . " WHERE `sourceid`=" . intval( $sourceid );
 	$db->sql_query( $sql );
-	
+
 	$content = "OK_" . $sourceid;
 	nv_del_moduleCache( $module_name );
 }

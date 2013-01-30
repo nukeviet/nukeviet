@@ -26,7 +26,7 @@ if( $db->sql_numrows( $result ) )
 		$sql1 = "SELECT SUM(hitstotal) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`='" . $row['vid'] . "'";
 		$result1 = $db->sql_query( $sql1 );
 		$totalvote = $db->sql_fetchrow( $result1 );
-		
+
 		$xtpl->assign( 'ROW', array(
 			"class" => $a % 2 ? " class=\"second\"" : "",
 			"status" => $row['act'] == 1 ? $lang_module['voting_yes'] : $lang_module['voting_no'],
@@ -36,11 +36,11 @@ if( $db->sql_numrows( $result ) )
 			"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;vid=" . $row['vid'],
 			"checksess" => md5( $row['vid'] . session_id() ),
 		) );
-		
+
 		$xtpl->parse( 'main.loop' );
-		++ $a;
+		++$a;
 	}
-	
+
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 

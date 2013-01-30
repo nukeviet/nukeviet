@@ -59,7 +59,7 @@ $result = $db->sql_query( $sql );
 while( list( $theme ) = $db->sql_fetchrow( $result ) )
 {
 	$theme = $db->unfixdb( $theme );
-	
+
 	if( in_array( $theme, $theme_site_array ) )
 	{
 		$array_theme[] = $theme;
@@ -80,7 +80,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$admin_title = filter_text_input( 'admin_title', 'post', 1 );
 	$theme = filter_text_input( 'theme', 'post', '', 1 );
 	$mobile = filter_text_input( 'mobile', 'post', '', 1 );
-    $description = filter_text_input( 'description', 'post', '', 1, 255 );
+	$description = filter_text_input( 'description', 'post', '', 1, 255 );
 	$keywords = filter_text_input( 'keywords', 'post', '', 1 );
 	$act = $nv_Request->get_int( 'act', 'post', 0 );
 	$rss = $nv_Request->get_int( 'rss', 'post', 0 );
@@ -191,7 +191,7 @@ else
 	$theme = $row['theme'];
 	$mobile = $row['mobile'];
 	$act = $row['act'];
-    $description = $row['description'];
+	$description = $row['description'];
 	$keywords = $row['keywords'];
 	$rss = $row['rss'];
 }
@@ -214,31 +214,63 @@ $page_title = sprintf( $lang_module['edit'], $mod );
 
 if( file_exists( NV_ROOTDIR . "/modules/" . $db->unfixdb( $row['module_file'] ) . "/funcs/rss.php" ) )
 {
-	$contents['rss'] = array( $lang_module['activate_rss'], $rss );
+	$contents['rss'] = array(
+		$lang_module['activate_rss'],
+		$rss
+	);
 }
 
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;mod=" . $mod;
-$contents['custom_title'] = array( $lang_module['custom_title'], $custom_title, 70 );
-$contents['admin_title'] = array( $lang_module['admin_title'], $admin_title, 70 );
-$contents['theme'] = array( $lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme );
-$contents['mobile'] = array( $lang_module['mobile'], $lang_module['theme_default'], $theme_mobile_list, $mobile );
-$contents['act'] = array( $lang_global['activate'], $act );
-$contents['description'] = array( $lang_module['description'], $description, 255 );
-$contents['keywords'] = array( $lang_module['keywords'], $keywords, 255, $lang_module['keywords_info'] );
+$contents['custom_title'] = array(
+	$lang_module['custom_title'],
+	$custom_title,
+	70
+);
+$contents['admin_title'] = array(
+	$lang_module['admin_title'],
+	$admin_title,
+	70
+);
+$contents['theme'] = array(
+	$lang_module['theme'],
+	$lang_module['theme_default'],
+	$theme_list,
+	$theme
+);
+$contents['mobile'] = array(
+	$lang_module['mobile'],
+	$lang_module['theme_default'],
+	$theme_mobile_list,
+	$mobile
+);
+$contents['act'] = array(
+	$lang_global['activate'],
+	$act
+);
+$contents['description'] = array(
+	$lang_module['description'],
+	$description,
+	255
+);
+$contents['keywords'] = array(
+	$lang_module['keywords'],
+	$keywords,
+	255,
+	$lang_module['keywords_info']
+);
 
 if( $mod != $global_config['site_home_module'] )
 {
 	$contents['who_view'] = array(
 		$lang_global['who_view'],
-		array(
-			$lang_global['who_view0'],
-			$lang_global['who_view1'],
-			$lang_global['who_view2'],
-			$lang_global['who_view3']
-		),
+	 array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] ),
 		$who_view
 	);
-	$contents['groups_view'] = array( $lang_global['groups_view'], $groups_list, $groups_view );
+	$contents['groups_view'] = array(
+		$lang_global['groups_view'],
+		$groups_list,
+		$groups_view
+	);
 }
 $contents['submit'] = $lang_global['submit'];
 

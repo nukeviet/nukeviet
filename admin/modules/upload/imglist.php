@@ -7,8 +7,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $per_page = 50;
 
@@ -131,11 +130,12 @@ if( isset( $check_allow_upload_dir['view_dir'] ) AND isset( $array_dirname[$path
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
 
-		include (NV_ROOTDIR . "/includes/header.php");
+		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo $contents;
-		include (NV_ROOTDIR . "/includes/footer.php");
+		include ( NV_ROOTDIR . "/includes/footer.php" );
 	}
 }
 
-exit( );
+exit();
+
 ?>

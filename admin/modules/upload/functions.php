@@ -7,8 +7,7 @@
  * @createdate 12/31/2009 2:29
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_IS_SPADMIN' ) )
 {
@@ -20,8 +19,7 @@ if( defined( 'NV_IS_SPADMIN' ) )
 	}
 }
 
-if( $module_name != "upload" )
-	return;
+if( $module_name != "upload" ) return;
 
 $menu_top = array(
 	"title" => $module_name,
@@ -68,13 +66,12 @@ function nv_check_allow_upload_dir( $dir )
 	global $site_mods, $allow_upload_dir, $admin_info;
 
 	$dir = trim( $dir );
-	if( empty( $dir ) )
-		return array( );
+	if( empty( $dir ) ) return array();
 
 	$dir = str_replace( "\\", "/", $dir );
 	$dir = rtrim( $dir, "/" );
 	$arr_dir = explode( "/", $dir );
-	$level = array( );
+	$level = array();
 
 	if( in_array( $arr_dir[0], $allow_upload_dir ) )
 	{
@@ -161,12 +158,10 @@ function nv_check_path_upload( $path )
 
 	$path = htmlspecialchars( trim( $path ), ENT_QUOTES );
 	$path = rtrim( $path, "/" );
-	if( empty( $path ) )
-		return "";
+	if( empty( $path ) ) return "";
 
 	$path = NV_ROOTDIR . "/" . $path;
-	if( ($path = realpath( $path )) === false )
-		return "";
+	if( ($path =realpath( $path )) === false ) return "";
 
 	$path = str_replace( "\\", "/", $path );
 	$path = str_replace( NV_ROOTDIR . "/", "", $path );
@@ -182,8 +177,7 @@ function nv_check_path_upload( $path )
 		}
 	}
 
-	if( $result === false )
-		return "";
+	if( $result === false ) return "";
 	return $path;
 }
 
@@ -239,7 +233,7 @@ function nv_get_viewImage( $fileName )
 					}
 				}
 			}
-			include_once (NV_ROOTDIR . "/includes/class/image.class.php");
+			include_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 			$image = new image( NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			if( $thumb_config['thumb_type'] == 4 )
 			{
@@ -265,7 +259,7 @@ function nv_get_viewImage( $fileName )
 			$image->save( NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality'] );
 			$create_Image_info = $image->create_Image_info;
 			$error = $image->error;
-			$image->close( );
+			$image->close();
 			if( empty( $error ) )
 			{
 				return array(
@@ -299,12 +293,12 @@ function nv_getFileInfo( $pathimg, $file )
 {
 	global $array_images, $array_flash, $array_archives, $array_documents;
 
-	clearstatcache( );
+	clearstatcache();
 
 	unset( $matches );
 	preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $file, $matches );
 
-	$info = array( );
+	$info = array();
 	$info['name'] = $file;
 	if( isset( $file{17} ) )
 	{
@@ -389,7 +383,7 @@ function nv_getFileInfo( $pathimg, $file )
 function nv_filesListRefresh( $pathimg )
 {
 	global $array_hidefolders, $admin_info, $db_config, $module_data, $db, $array_dirname;
-	$results = array( );
+	$results = array();
 	$did = $array_dirname[$pathimg];
 	if( is_dir( NV_ROOTDIR . "/" . $pathimg ) )
 	{
@@ -403,8 +397,7 @@ function nv_filesListRefresh( $pathimg )
 		{
 			while( ($title = readdir( $dh )) !== false )
 			{
-				if( in_array( $title, $array_hidefolders ) )
-					continue;
+				if( in_array( $title, $array_hidefolders ) ) continue;
 
 				if( preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $title, $m ) )
 				{
@@ -472,8 +465,7 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 		{
 			if( preg_match( "/^[a-zA-Z0-9\-\_]+$/", $subdir ) )
 			{
-				if( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) )
-					$real_dirlist = nv_listUploadDir( $dir . '/' . $subdir, $real_dirlist );
+				if( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) ) $real_dirlist = nv_listUploadDir( $dir . '/' . $subdir, $real_dirlist );
 			}
 		}
 
@@ -520,8 +512,8 @@ $array_documents = array(
 	'docx',
 	'xlsx'
 );
-$array_dirname = array( );
-$array_thumb_config = array( );
+$array_dirname = array();
+$array_thumb_config = array();
 
 $refresh = $nv_Request->isset_request( 'refresh', 'get' );
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) );
@@ -544,7 +536,7 @@ unset( $array_dirname[''] );
 
 if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 {
-	$real_dirlist = array( );
+	$real_dirlist = array();
 	foreach( $allow_upload_dir as $dir )
 	{
 		$real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
@@ -567,4 +559,5 @@ if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 }
 
 $global_config['upload_logo'] = $db->unfixdb( nv_unhtmlspecialchars( $global_config['upload_logo'] ) );
+
 ?>

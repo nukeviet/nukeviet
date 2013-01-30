@@ -21,7 +21,7 @@ if( $t == 3 )
 elseif( $t == 2 )
 {
 	$sends = $nv_Request->get_array( 'sends', 'post', array() );
-	
+
 	if( ! empty( $sends ) )
 	{
 		$in = implode( ",", $sends );
@@ -32,7 +32,7 @@ elseif( $t == 2 )
 else
 {
 	$id = $nv_Request->get_int( 'id', 'get', 0 );
-	
+
 	if( $id )
 	{
 		$sql = $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_send` WHERE id = " . $id;

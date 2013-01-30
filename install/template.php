@@ -31,20 +31,20 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 		$lang_module['website_info'],
 		$lang_module['done']
 	);
-	
+
 	foreach( $step_bar as $i => $step_bar_i )
 	{
 		$n = $i + 1;
 		$class = "";
-		
+
 		if( $step >= $n )
 		{
 			$class = " class=\"";
-			$class .= ( $step > $n ) ? 'passed_step' : '';
-			$class .= ( $step == $n ) ? 'current_step' : '';
+			$class .= ($step > $n) ? 'passed_step' : '';
+			$class .= ($step == $n) ? 'current_step' : '';
 			$class .= "\"";
 		}
-		
+
 		$xtpl->assign( 'CLASS_STEP', $class );
 		$xtpl->assign( 'STEP_BAR', $step_bar_i );
 		$xtpl->assign( 'NUM', $n );
@@ -57,7 +57,7 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 
 	foreach( $languageslist as $languageslist_i )
 	{
-		if( ! empty( $languageslist_i ) and ( NV_LANG_DATA != $languageslist_i ) )
+		if( ! empty( $languageslist_i ) and (NV_LANG_DATA != $languageslist_i) )
 		{
 			$xtpl->assign( 'LANGTYPE', $languageslist_i );
 			$langname = $language_array[$languageslist_i]['name'];
@@ -65,14 +65,14 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 			$xtpl->parse( 'main.looplang' );
 		}
 	}
-	
+
 	$xtpl->parse( 'main.step_bar' );
 	$xtpl->assign( 'MAIN_CONTENT', $contenttheme );
 	$xtpl->parse( 'main' );
 	$xtpl->out( 'main' );
 }
 
-function nv_step_1()
+function nv_step_1( )
 {
 	global $lang_module, $languageslist, $language_array, $sys_info, $global_config;
 
@@ -84,20 +84,20 @@ function nv_step_1()
 	{
 		if( ! empty( $languageslist_i ) )
 		{
-			$langname = ( isset( $language_array[$languageslist_i]['name_' . NV_LANG_DATA] ) ) ? $language_array[$languageslist_i]['name_' . NV_LANG_DATA] : $language_array[$languageslist_i]['name'];
+			$langname = ( isset( $language_array[$languageslist_i]['name_' . NV_LANG_DATA] )) ? $language_array[$languageslist_i]['name_' . NV_LANG_DATA] : $language_array[$languageslist_i]['name'];
 
 			$xtpl->assign( 'LANGTYPE', $languageslist_i );
-			$xtpl->assign( 'SELECTED', ( NV_LANG_DATA == $languageslist_i ) ? ' selected="selected"' : '' );
+			$xtpl->assign( 'SELECTED', (NV_LANG_DATA == $languageslist_i) ? ' selected="selected"' : '' );
 			$xtpl->assign( 'LANGNAME', $langname );
 			$xtpl->parse( 'step.languagelist' );
 		}
 	}
-	
+
 	$xtpl->assign( 'CURRENTLANG', NV_LANG_DATA );
 	$xtpl->assign( 'LANG', $lang_module );
 	if( empty( $sys_info['supports_rewrite'] ) )
 	{
-		$xtpl->assign( 'SUPPORTS_REWRITE', md5($global_config['sitekey']) );
+		$xtpl->assign( 'SUPPORTS_REWRITE', md5( $global_config['sitekey'] ) );
 		$xtpl->parse( 'step.check_supports_rewrite' );
 	}
 	$xtpl->parse( 'step' );
@@ -107,7 +107,7 @@ function nv_step_1()
 function nv_step_2( $array_dir_check, $array_ftp_data, $nextstep )
 {
 	global $lang_module, $sys_info, $step;
-	
+
 	$xtpl = new XTemplate( "step2.tpl", NV_ROOTDIR . "/install/tpl/" );
 	$xtpl->assign( 'BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'LANG_VARIABLE', NV_LANG_VARIABLE );
@@ -129,19 +129,15 @@ function nv_step_2( $array_dir_check, $array_ftp_data, $nextstep )
 	$a = 0;
 	foreach( $array_dir_check as $dir => $check )
 	{
-		$class = ( $a % 2 == 0 ) ? "spec text_normal" : "specalt text_normal";
-	
-		$xtpl->assign( 'DATAFILE', array(
-			"dir" => $dir,
-			"check" => $check,
-			"class" => $class
-		) );
-	
+		$class = ($a % 2 == 0) ? "spec text_normal" : "specalt text_normal";
+
+		$xtpl->assign( 'DATAFILE', array( "dir" => $dir, "check" => $check, "class" => $class ) );
+
 		$xtpl->parse( 'step.loopdir' );
 		++$a;
 	}
-	
-	if( ! ( strpos( $sys_info['os'], 'WIN' ) === false ) )
+
+	if( ! (strpos( $sys_info['os'], 'WIN' ) === false) )
 	{
 		if( $nextstep )
 		{

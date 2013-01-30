@@ -1,5 +1,4 @@
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td
-	{
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -13,20 +12,17 @@ body {
 	line-height: 1
 }
 
-ol,ul {
+ol, ul {
 	list-style: none
 }
 
-blockquote,q {
+blockquote, q {
 	quotes: none
 }
 
-blockquote:before,blockquote:after,q:before,q:after {
+blockquote:before, blockquote:after, q:before, q:after {
 	content: ''
-}
-
-/* remember to define focus styles! */
-:focus {
+}:focus {
 	outline: 0
 }
 
@@ -79,7 +75,7 @@ a {
 	height: 59px
 }
 
-#login-header-left,#login-header-center,#login-header-right {
+#login-header-left, #login-header-center, #login-header-right {
 	height: 59px;
 	float: left
 }
@@ -121,10 +117,10 @@ div#login-content div div {
 }
 
 #login-footer {
-	
+
 }
 
-#login-footer-left,#login-footer-center,#login-footer-right {
+#login-footer-left, #login-footer-center, #login-footer-right {
 	height: 17px;
 	float: left
 }
@@ -145,7 +141,7 @@ div#login-content div div {
 }
 
 .loginform {
-	
+
 }
 
 .loginform ul li {
@@ -161,7 +157,7 @@ div#login-content div div {
 	line-height: 22px
 }
 
-.loginform input,.loginform select {
+.loginform input, .loginform select {
 	border: 1px solid #ccc
 }
 

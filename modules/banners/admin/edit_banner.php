@@ -7,22 +7,20 @@
  * @Createdate 3/14/2010 0:50
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( empty( $id ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 
 $sql = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
-if( $numrows != 1 )
-	die( 'Stop!!!' );
+if( $numrows != 1 ) die( 'Stop!!!' );
 
 $row = $db->sql_fetchrow( $result );
 
@@ -34,9 +32,9 @@ $height = $row['height'];
 $imageforswf = $row['imageforswf'];
 $page_title = $lang_module['edit_banner'];
 
-$contents = array( );
+$contents = array();
 $contents['upload_blocked'] = "";
-$contents['file_allowed_ext'] = array( );
+$contents['file_allowed_ext'] = array();
 
 if( preg_match( "/images/", NV_ALLOW_FILES_TYPE ) )
 {
@@ -52,16 +50,16 @@ if( empty( $contents['file_allowed_ext'] ) )
 {
 	$contents['upload_blocked'] = $lang_module['upload_blocked'];
 
-	include (NV_ROOTDIR . "/includes/header.php");
+	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( nv_edit_banner_theme( $contents ) );
-	include (NV_ROOTDIR . "/includes/footer.php");
-	exit( );
+	include ( NV_ROOTDIR . "/includes/footer.php" );
+	exit();
 }
 
 $sql = "SELECT `id`,`login`,`full_name` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` ORDER BY `login` ASC";
 $result = $db->sql_query( $sql );
 
-$clients = array( );
+$clients = array();
 while( $cl_row = $db->sql_fetchrow( $result ) )
 {
 	$clients[$cl_row['id']] = $cl_row['full_name'] . " (" . $cl_row['login'] . ")";
@@ -70,7 +68,7 @@ while( $cl_row = $db->sql_fetchrow( $result ) )
 $sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` ORDER BY `blang`, `title` ASC";
 $result = $db->sql_query( $sql );
 
-$plans = array( );
+$plans = array();
 while( $pl_row = $db->sql_fetchrow( $result ) )
 {
 	$plans[$pl_row['id']] = $pl_row['title'] . " (" . ( ! empty( $pl_row['blang'] ) ? $language_array[$pl_row['blang']]['name'] : $lang_module['blang_all']) . ")";
@@ -79,7 +77,7 @@ while( $pl_row = $db->sql_fetchrow( $result ) )
 if( empty( $plans ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_plan" );
-	die( );
+	die();
 }
 
 $error = "";
@@ -99,15 +97,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		$target = '_blank';
 	}
 
-	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) )
-		$publ_date = "";
-	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) )
-		$exp_date = "";
+	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = "";
+	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = "";
 
-	if( ! empty( $clid ) and ! isset( $clients[$clid] ) )
-		$clid = 0;
-	if( $click_url == "http://" )
-		$click_url = "";
+	if( ! empty( $clid ) and ! isset( $clients[$clid] ) ) $clid = 0;
+	if( $click_url == "http://" ) $click_url = "";
 
 	if( empty( $title ) )
 	{
@@ -125,7 +119,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( isset( $_FILES['banner'] ) and is_uploaded_file( $_FILES['banner']['tmp_name'] ) )
 		{
-			require_once (NV_ROOTDIR . "/includes/class/upload.class.php");
+			require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
 			$upload = new upload( $contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$upload_info = $upload->save_file( $_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 			@unlink( $_FILES['banner']['tmp_name'] );
@@ -154,7 +148,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		{
 			if( isset( $_FILES['imageforswf'] ) and is_uploaded_file( $_FILES['imageforswf']['tmp_name'] ) )
 			{
-				require_once (NV_ROOTDIR . "/includes/class/upload.class.php");
+				require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
 				$upload = new upload( $contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 				$upload_info = $upload->save_file( $_FILES['imageforswf'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 				@unlink( $_FILES['imageforswf']['tmp_name'] );
@@ -187,8 +181,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m ) )
 			{
 				$publtime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
-				if( $publtime < $row['add_time'] )
-					$publtime = $row['add_time'];
+				if( $publtime < $row['add_time'] ) $publtime = $row['add_time'];
 			}
 			else
 			{
@@ -198,8 +191,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date, $m ) )
 			{
 				$exptime = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
-				if( $exptime <= $publtime )
-					$exptime = $publtime;
+				if( $exptime <= $publtime ) $exptime = $publtime;
 			}
 			else
 			{
@@ -222,10 +214,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			}
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_banner', "bannerid " . $id, $admin_info['userid'] );
-			nv_CreateXML_bannerPlan( );
+			nv_CreateXML_bannerPlan();
 
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=info_banner&id=" . $id );
-			die( );
+			die();
 		}
 	}
 }
@@ -323,7 +315,8 @@ $my_head .= "Shadowbox.init({\n";
 $my_head .= "});\n";
 $my_head .= "</script>\n";
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( nv_edit_banner_theme( $contents ) );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

@@ -6,9 +6,9 @@
 	</p>
 </div>
 <!-- END: loop1 -->
-<script type="text/javascript">
 <!-- BEGIN: loop2 -->
-{AJ}
-<!-- END: loop2 -->
+<script type="text/javascript">
+	{AJ}
 </script>
+<!-- END: loop2 -->
 <!-- END: main -->

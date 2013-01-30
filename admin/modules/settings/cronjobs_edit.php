@@ -50,7 +50,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$start_time = NV_CURRENTTIME;
 	}
-	
+
 	if( empty( $cron_name ) )
 	{
 		$error = $lang_module['cron_name_empty'];
@@ -108,17 +108,56 @@ $contents = array();
 $contents['is_error'] = ! empty( $error ) ? 1 : 0;
 $contents['title'] = ! empty( $error ) ? $error : $lang_module['nv_admin_edit_title'];
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id;
-$contents['cron_name'] = array( $lang_module['cron_name'], $cron_name, 100 );
+$contents['cron_name'] = array(
+	$lang_module['cron_name'],
+	$cron_name,
+	100
+);
 
 $filelist = nv_scandir( NV_ROOTDIR . '/includes/cronjobs', "/^([a-zA-Z0-9\_\.]+)\.php$/" );
-$contents['run_file'] = array( $lang_module['run_file'], $lang_module['file_none'], $filelist, $run_file, $lang_module['run_file_info'] );
-$contents['run_func'] = array( $lang_module['run_func'], $run_func, 255, $lang_module['run_func_info'] );
-$contents['params'] = array( $lang_module['params'], $params, 255, $lang_module['params_info'] );
-$contents['start_time'] = array( $lang_module['start_time'], $lang_module['day'], date( "d/m/Y", $start_time ) );
-$contents['min'] = array( $lang_module['min'], $min );
-$contents['hour'] = array( $lang_module['hour'], $hour );
-$contents['interval'] = array( $lang_module['interval'], $interval, 11, $lang_module['min'], $lang_module['interval_info'] );
-$contents['del'] = array( $lang_module['is_del'], $del );
+$contents['run_file'] = array(
+	$lang_module['run_file'],
+	$lang_module['file_none'],
+	$filelist,
+	$run_file,
+	$lang_module['run_file_info']
+);
+$contents['run_func'] = array(
+	$lang_module['run_func'],
+	$run_func,
+	255,
+	$lang_module['run_func_info']
+);
+$contents['params'] = array(
+	$lang_module['params'],
+	$params,
+	255,
+	$lang_module['params_info']
+);
+$contents['start_time'] = array(
+	$lang_module['start_time'],
+	$lang_module['day'],
+	date( "d/m/Y", $start_time )
+);
+$contents['min'] = array(
+	$lang_module['min'],
+	$min
+);
+$contents['hour'] = array(
+	$lang_module['hour'],
+	$hour
+);
+$contents['interval'] = array(
+	$lang_module['interval'],
+	$interval,
+	11,
+	$lang_module['min'],
+	$lang_module['interval_info']
+);
+$contents['del'] = array(
+	$lang_module['is_del'],
+	$del
+);
 
 $contents['submit'] = $lang_global['save'];
 $contents = call_user_func( "nv_admin_add_theme", $contents );

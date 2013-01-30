@@ -11,7 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_news_groups' ) )
 {
-	function nv_block_config_news_groups( $module,$data_block,$lang_block )
+	function nv_block_config_news_groups( $module, $data_block, $lang_block )
 	{
 		global $site_mods;
 		$html = "";
@@ -32,24 +32,26 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		$html .= "</tr>";
 		return $html;
 	}
-	function nv_block_config_news_groups_submit( $module,$lang_block )
+
+	function nv_block_config_news_groups_submit( $module, $lang_block )
 	{
 		global $nv_Request;
-		$return = array ();
-		$return['error'] = array ();
-		$return['config'] = array ();
+		$return = array();
+		$return['error'] = array();
+		$return['config'] = array();
 		$return['config']['blockid'] = $nv_Request->get_int( 'config_blockid', 'post', 0 );
 		$return['config']['numrow'] = $nv_Request->get_int( 'config_numrow', 'post', 0 );
 		return $return;
 	}
+
 	function nv_block_news_groups( $block_config )
 	{
 		global $module_array_cat, $module_info, $site_mods;
 		$module = $block_config['module'];
-		
+
 		$sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
 		$list = nv_db_cache( $sql, '', $module );
-		
+
 		$i = 1;
 		if( ! empty( $list ) )
 		{
@@ -77,17 +79,18 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 				{
 					$l['thumb'] = "";
 				}
-				
+
 				$xtpl->assign( 'ROW', $l );
 				if( ! empty( $l['thumb'] ) ) $xtpl->parse( 'main.loop.img' );
-				$xtpl->assign( 'bg', (++ $i % 2) ? "bg" : "" );
+				$xtpl->assign( 'bg', (++$i % 2) ? "bg" : "" );
 				$xtpl->parse( 'main.loop' );
 			}
-			
+
 			$xtpl->parse( 'main' );
 			return $xtpl->text( 'main' );
 		}
 	}
+
 }
 if( defined( 'NV_SYSTEM' ) )
 {
@@ -102,7 +105,7 @@ if( defined( 'NV_SYSTEM' ) )
 		}
 		else
 		{
-			$module_array_cat = array ();
+			$module_array_cat = array();
 			$sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_cat` ORDER BY `order` ASC";
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $l )

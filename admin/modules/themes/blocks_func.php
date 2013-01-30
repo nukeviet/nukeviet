@@ -74,8 +74,12 @@ $xtpl->assign( 'OP', $op );
 $sql = "SELECT `title`, `custom_title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
 while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
-{	
-	$xtpl->assign( 'MODULE', array( 'key' => $m_title, 'selected' => ( $selectedmodule == $m_title ) ? ' selected="selected"' : '', 'title' => $m_custom_title ) );
+{
+	$xtpl->assign( 'MODULE', array(
+		'key' => $m_title,
+		'selected' => ($selectedmodule == $m_title) ? ' selected="selected"' : '',
+		'title' => $m_custom_title
+	) );
 	$xtpl->parse( 'main.module' );
 }
 
@@ -86,8 +90,12 @@ $result = $db->sql_query( $sql );
 while( list( $f_id, $f_custom_title ) = $db->sql_fetchrow( $result ) )
 {
 	$array_func_id[$f_id] = $f_custom_title;
-	
-	$xtpl->assign( 'FUNCTION', array( 'key' => $f_id, 'selected' => ( $func_id == $f_id ) ? ' selected="selected"' : '', 'title' => $f_custom_title ) );
+
+	$xtpl->assign( 'FUNCTION', array(
+		'key' => $f_id,
+		'selected' => ($func_id == $f_id) ? ' selected="selected"' : '',
+		'title' => $f_custom_title
+	) );
 	$xtpl->parse( 'main.function' );
 }
 
@@ -103,37 +111,46 @@ while( list( $position, $numposition ) = $db->sql_fetchrow( $result ) )
 
 // load position file
 $xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' );
-$content = $xml->xpath( 'positions' ); //array
-$positions = $content[0]->position; //object
+$content = $xml->xpath( 'positions' );
+//array
+$positions = $content[0]->position;
+//object
 
 $sql = "SELECT t1.*, t2.func_id, t2.weight as bweight FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 ON t1.bid = t2.bid WHERE t2.func_id='" . $func_id . "' AND t1.theme ='" . $selectthemes . "' ORDER BY t1.position ASC, t2.weight ASC";
 $result = $db->sql_query( $sql );
 
 while( $row = $db->sql_fetchrow( $result ) )
-{	
+{
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",
+		'class' => (++$a % 2) ? " class=\"second\"" : "",
 		'bid' => $row['bid'],
 		'title' => $row['title'],
 		'module' => $row['module'],
 		'file_name' => $row['file_name'],
 		'active' => $row['active'] ? $lang_global['yes'] : $lang_global['no'],
 	) );
-	
+
 	$numposition = $blocks_positions[$row['position']];
-	
+
 	for( $i = 1; $i <= $numposition; ++$i )
 	{
-		$xtpl->assign( 'ORDER', array( 'key' => $i, 'selected' => ( $row['bweight'] == $i ) ? ' selected="selected"' : '' ) );
+		$xtpl->assign( 'ORDER', array(
+			'key' => $i,
+			'selected' => ($row['bweight'] == $i) ? ' selected="selected"' : ''
+		) );
 		$xtpl->parse( 'main.loop.order' );
 	}
-	
+
 	for( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
 	{
-		$xtpl->assign( 'POSITION', array( 'key' => ( string ) $positions[$i]->tag, 'selected' => ( $row['position'] == $positions[$i]->tag ) ? ' selected="selected"' : '', 'title' => ( string ) $positions[$i]->name ) );
+		$xtpl->assign( 'POSITION', array(
+			'key' => ( string )$positions[$i]->tag,
+			'selected' => ($row['position'] == $positions[$i]->tag) ? ' selected="selected"' : '',
+			'title' => ( string )$positions[$i]->name
+		) );
 		$xtpl->parse( 'main.loop.position' );
 	}
-	
+
 	$xtpl->parse( 'main.loop' );
 }
 

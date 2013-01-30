@@ -28,7 +28,8 @@ $groups_list = nv_groups_list();
 $array_who = array(
 	$lang_global['who_view0'],
 	$lang_global['who_view1'],
-	$lang_global['who_view2'] );
+	$lang_global['who_view2']
+);
 if( ! empty( $groups_list ) )
 {
 	$array_who[] = $lang_global['who_view3'];
@@ -51,8 +52,8 @@ if( $post['mid'] != 0 )
 	$arr_item[0] = array(
 		'key' => 0, //
 		'title' => $lang_module['cat0'], //
-		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "" //
-			);
+		'selected' => ($post['parentid'] == 0) ? " selected=\"selected\"" : "" //
+	);
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
@@ -68,8 +69,8 @@ if( $post['mid'] != 0 )
 		$arr_item[$row['id']] = array(
 			'key' => $row['id'], //
 			'title' => $sp_title . $row['title'], //
-			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : "" //
-				);
+			"selected" => ($post['parentid'] == $row['parentid']) ? " selected=\"selected\"" : "" //
+		);
 	}
 }
 
@@ -80,7 +81,7 @@ foreach( $list as $key => $title )
 	$list_module[] = array(
 		"key" => $key,
 		"title" => $title['module_data'],
-		"selected" => ( $key == $post['module_name'] ) ? " selected=\"selected\"" : "",
+		"selected" => ($key == $post['module_name']) ? " selected=\"selected\"" : "",
 	);
 }
 
@@ -90,7 +91,7 @@ foreach( $type_target as $key => $target )
 	$list_target[] = array(
 		"key" => $key,
 		"title" => $target,
-		"selected" => ( $key == $post['target'] ) ? " selected=\"selected\"" : "",
+		"selected" => ($key == $post['target']) ? " selected=\"selected\"" : "",
 	);
 }
 
@@ -391,7 +392,7 @@ if( ! empty( $arr_table ) )
 	$a = 0;
 	foreach( $arr_table as $rows )
 	{
-		$rows['class'] = ( ++$a % 2 == 0 ) ? ' class="second"' : '';
+		$rows['class'] = (++$a % 2 == 0) ? ' class="second"' : '';
 		$xtpl->assign( 'ROW', $rows );
 
 		for( $i = 1; $i <= $num; ++$i )
@@ -428,7 +429,7 @@ if( $nv_Request->isset_request( 'item', 'post' ) )
 	$arr_item[0] = array(
 		'key' => 0, //
 		'title' => $lang_module['cat0'], //
-		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "" //
+		'selected' => ($post['parentid'] == 0) ? " selected=\"selected\"" : "" //
 	);
 
 	while( $row = $db->sql_fetchrow( $result ) )
@@ -444,7 +445,7 @@ if( $nv_Request->isset_request( 'item', 'post' ) )
 		$arr_item[$row['id']] = array(
 			'key' => $row['id'], //
 			'title' => $sp_title . $row['title'], //
-			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : "" //
+			"selected" => ($post['parentid'] == $row['parentid']) ? " selected=\"selected\"" : "" //
 		);
 	}
 
@@ -507,7 +508,7 @@ if( $post['id'] != 0 )
 		$arr_cat = array();
 
 		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $post['module_name'] . "_cat` ORDER BY `catid` ASC";
-		if( ( $result = $db->sql_query( $sql ) ) == false )
+		if( ($result = $db->sql_query( $sql )) == false )
 		{
 			$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $post['module_name'] . "_categories` ORDER BY `catid` ASC";
 			if( $result = $db->sql_query( $sql ) == true )
@@ -521,7 +522,7 @@ if( $post['id'] != 0 )
 						'title' => $row['title'], //
 						'alias' => $row['alias'], //
 						'module' => $post['module_name'], //
-						"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : "" //
+						"selected" => ($row['alias'] == $post['op']) ? " selected=\"selected\"" : "" //
 					);
 				}
 			}
@@ -537,7 +538,7 @@ if( $post['id'] != 0 )
 					'key' => $row['catid'], //
 					'title' => $row['title'], //
 					'alias' => $row['alias'], //
-					"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : "" //
+					"selected" => ($row['alias'] == $post['op']) ? " selected=\"selected\"" : "" //
 				);
 			}
 		}

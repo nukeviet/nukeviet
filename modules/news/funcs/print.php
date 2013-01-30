@@ -29,42 +29,42 @@ if( $id > 0 and $catid > 0 )
 	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `id` ='" . $id . "' AND `status`=1";
 	$result = $db->sql_query( $sql );
 	$content = $db->sql_fetch_assoc( $result );
-	
+
 	$body_contents = $db->sql_fetch_assoc( $db->sql_query( "SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM `" . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $content['id'] / 2000 ) . "` where `id`=" . $content['id'] ) );
 	$content = array_merge( $content, $body_contents );
 	unset( $sql, $result, $body_contents );
-	
+
 	if( $content['allowed_print'] == 1 )
 	{
 		$sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` = '" . $content['sourceid'] . "'";
 		$result = $db->sql_query( $sql );
-		list ( $sourcetext ) = $db->sql_fetchrow( $result );
+		list( $sourcetext ) = $db->sql_fetchrow( $result );
 		unset( $sql, $result );
-		
+
 		$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id, true );
 		$link = "<a href=\"" . $canonicalUrl . "\" title=\"" . $content['title'] . "\">" . $canonicalUrl . "</a>\n";
-		
+
 		$meta_tags = nv_html_meta_tags();
-		
-		$result = array (
-				"url" => $global_config['site_url'],
-				"meta_tags" => $meta_tags,
-				"sitename" => $global_config['site_name'],
-				"title" => $content['title'],
-				"alias" => $content['alias'],
-				"image" => "",
-				"position" => $content['imgposition'],
-				"time" => nv_date( "l - d/m/Y  H:i", $content['publtime'] ),
-				"hometext" => $content['hometext'],
-				"bodytext" => $content['bodytext'],
-				"copyright" => $content['copyright'],
-				"copyvalue" => $module_config[$module_name]['copyright'],
-				"link" => $link,
-				"contact" => $global_config['site_email'],
-				"author" => $content['author'],
-				"source" => $sourcetext 
+
+		$result = array(
+			"url" => $global_config['site_url'],
+			"meta_tags" => $meta_tags,
+			"sitename" => $global_config['site_name'],
+			"title" => $content['title'],
+			"alias" => $content['alias'],
+			"image" => "",
+			"position" => $content['imgposition'],
+			"time" => nv_date( "l - d/m/Y  H:i", $content['publtime'] ),
+			"hometext" => $content['hometext'],
+			"bodytext" => $content['bodytext'],
+			"copyright" => $content['copyright'],
+			"copyvalue" => $module_config[$module_name]['copyright'],
+			"link" => $link,
+			"contact" => $global_config['site_email'],
+			"author" => $content['author'],
+			"source" => $sourcetext
 		);
-		
+
 		if( ! empty( $content['homeimgfile'] ) and $content['imgposition'] > 0 )
 		{
 			$src = $alt = $note = "";
@@ -85,19 +85,19 @@ if( $id > 0 and $catid > 0 )
 				$width = ($content['imgposition'] == 1) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 			}
 			$alt = (empty( $content['homeimgalt'] )) ? $content['title'] : $content['homeimgalt'];
-			
-			$result['image'] = array (
-					"src" => $src,
-					"width" => $width,
-					"alt" => $alt,
-					"note" => $content['homeimgalt'],
-					"position" => $content['imgposition'] 
+
+			$result['image'] = array(
+				"src" => $src,
+				"width" => $width,
+				"alt" => $alt,
+				"note" => $content['homeimgalt'],
+				"position" => $content['imgposition']
 			);
 		}
 		$contents = call_user_func( "news_print", $result );
-		include (NV_ROOTDIR . "/includes/header.php");
+		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo $contents;
-		include (NV_ROOTDIR . "/includes/footer.php");
+		include ( NV_ROOTDIR . "/includes/footer.php" );
 	}
 }
 header( "Location: " . $global_config['site_url'] );

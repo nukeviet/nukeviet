@@ -20,15 +20,15 @@ $xtpl->assign( 'GLANG', $lang_global );
 if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get_string( 'savedata', 'post' ) == md5( session_id() ) )
 {
 	$numberfile = 0;
-	
+
 	$idfile = $nv_Request->get_int( 'idfile', 'post', 0 );
 	$dirlang = filter_text_input( 'dirlang', 'post', '' );
-	
+
 	$lang_translator = $nv_Request->get_array( 'pozauthor', 'post', array() );
 	$lang_translator_save = array();
-	
+
 	$langtype = isset( $lang_translator['langtype'] ) ? strip_tags( $lang_translator['langtype'] ) : "lang_module";
-	
+
 	$lang_translator_save['author'] = isset( $lang_translator['author'] ) ? nv_htmlspecialchars( strip_tags( $lang_translator['author'] ) ) : "VINADES.,JSC (contact@vinades.vn)";
 	$lang_translator_save['createdate'] = isset( $lang_translator['createdate'] ) ? nv_htmlspecialchars( strip_tags( $lang_translator['createdate'] ) ) : date( "d/m/Y, H:i" );
 	$lang_translator_save['copyright'] = isset( $lang_translator['copyright'] ) ? nv_htmlspecialchars( strip_tags( $lang_translator['copyright'] ) ) : "@Copyright (C) 2012 VINADES.,JSC. All rights reserved";
@@ -64,7 +64,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 	{
 		$lang_key = strip_tags( $pozlangkey[$i] );
 		$lang_value = strip_tags( $pozlangval[$i], NV_ALLOWED_HTML_LANG );
-		
+
 		if( $lang_key != "" and $lang_value != "" )
 		{
 			$lang_value = nv_nl2br( $lang_value );
@@ -73,7 +73,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 			$db->sql_query( $sql );
 		}
 	}
-	
+
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=interface&dirlang=" . $dirlang . "" );
 	die();
 }
@@ -102,61 +102,61 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 		{
 			eval( '$array_translator = ' . $author_lang . ';' );
 		}
-		
+
 		$xtpl->assign( 'ALLOWED_HTML_LANG', ALLOWED_HTML_LANG );
 		$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 		$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 		$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
-		
+
 		$xtpl->assign( 'MODULE_NAME', $module_name );
 		$xtpl->assign( 'OP', $op );
 		$xtpl->assign( 'LANGTYPE', $array_translator['langtype'] );
-		
-		$i = 1;	
+
+		$i = 1;
 		foreach( $array_translator as $lang_key => $lang_value )
 		{
 			if( $lang_key != "langtype" )
-			{				
+			{
 				$xtpl->assign( 'ARRAY_TRANSLATOR', array(
-					'class' => ( ++ $i % 2 ) ? " class=\"second\"" : "",
+					'class' => (++$i % 2) ? " class=\"second\"" : "",
 					'lang_key' => $lang_key,
 					'value' => nv_htmlspecialchars( $lang_value )
 				) );
-				
+
 				$xtpl->parse( 'main.array_translator' );
 			}
 		}
-	
-		for( $a = 1; $a <= 2; ++ $a )
-		{			
+
+		for( $a = 1; $a <= 2; ++$a )
+		{
 			$xtpl->assign( 'ARRAY_BODY', array(
-				'class' => ( ++ $i % 2 ) ? " class=\"second\"" : "",
+				'class' => (++$i % 2) ? " class=\"second\"" : "",
 				'key' => $a,
 			) );
-			
+
 			$xtpl->parse( 'main.array_body' );
 		}
 
 		$sql = "SELECT `id`, `lang_key`, `lang_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "` WHERE `idfile`='" . $idfile . "' ORDER BY `id` ASC";
 		$result = $db->sql_query( $sql );
-	
+
 		while( list( $id, $lang_key, $lang_value ) = $db->sql_fetchrow( $result ) )
-		{			
+		{
 			$xtpl->assign( 'ARRAY_DATA', array(
-				'class' => ( ++ $i % 2 ) ? " class=\"second\"" : "",
-				'key' => $a ++,
+				'class' => (++$i % 2) ? " class=\"second\"" : "",
+				'key' => $a++,
 				'lang_key' => $lang_key,
 				'value' => nv_htmlspecialchars( $lang_value ),
 				'id' => $id
 			) );
-			
+
 			$xtpl->parse( 'main.array_data' );
 		}
-		
+
 		$xtpl->assign( 'IDFILE', $idfile );
 		$xtpl->assign( 'DIRLANG', $dirlang );
 		$xtpl->assign( 'SAVEDATA', md5( session_id() ) );
-		
+
 		$xtpl->parse( 'main' );
 		$contents .= $xtpl->text( 'main' );
 	}

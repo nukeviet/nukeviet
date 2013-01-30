@@ -7,8 +7,7 @@
  * @Createdate 2-2-2010 1:58
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 global $global_config;
 
@@ -30,7 +29,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 if( $module_name == "language" )
 {
 	unset( $page_title, $select_options );
-	$select_options = array( );
+	$select_options = array();
 
 	$menu_top = array(
 		"title" => $module_name,
@@ -100,4 +99,5 @@ if( $module_name == "language" )
 	}
 
 }
+
 ?>

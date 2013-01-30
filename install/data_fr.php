@@ -7,6 +7,8 @@
  * @Createdate 31/05/2010, 00:36
  */
 
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+
 function nv_create_table_news( $catid )
 {
 	global $db, $db_config, $lang_data;
@@ -815,7 +817,7 @@ $array_cron_name['cron_auto_check_version'] = 'Vérifier la version NukeViet';
 $result = $db->sql_query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
 while( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
 {
-	$cron_name = ( isset( $array_cron_name[$run_func] ) ) ? $array_cron_name[$run_func] : $run_func;
+	$cron_name = ( isset( $array_cron_name[$run_func] )) ? $array_cron_name[$run_func] : $run_func;
 	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` =  " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id;
 }
 $db->sql_freeresult();

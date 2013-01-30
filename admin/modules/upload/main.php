@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['upload_manager'];
 $contents = "";
 
-$path = ( defined( 'NV_IS_SPADMIN' ) ) ? "" : NV_UPLOADS_DIR;
+$path = ( defined( 'NV_IS_SPADMIN' )) ? "" : NV_UPLOADS_DIR;
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', $path ) );
 $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'get', $path ) );
 $type = $nv_Request->get_string( 'type', 'get' );
@@ -42,9 +42,9 @@ if( $popup )
 	$xtpl->assign( "AREA", $area );
 	$xtpl->assign( "FUNNUM", $nv_Request->get_int( 'CKEditorFuncNum', 'get', 0 ) );
 
-	$sfile = ( $type == 'file' ) ? '  selected="selected"' : '';
-	$simage = ( $type == 'image' ) ? '  selected="selected"' : '';
-	$sflash = ( $type == 'flash' ) ? '  selected="selected"' : '';
+	$sfile = ($type == 'file') ? '  selected="selected"' : '';
+	$simage = ($type == 'image') ? '  selected="selected"' : '';
+	$sflash = ($type == 'flash') ? '  selected="selected"' : '';
 
 	$xtpl->assign( "SFLASH", $sflash );
 	$xtpl->assign( "SIMAGE", $simage );

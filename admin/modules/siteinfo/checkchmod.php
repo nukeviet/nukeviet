@@ -30,16 +30,16 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		NV_FILES_DIR,
 		NV_FILES_DIR . '/css'
 	);
-	
+
 	$error = array();
 	$ftp_check_login = 0;
-	
+
 	if( ! empty( $global_config['ftp_server'] ) and ! empty( $global_config['ftp_user_name'] ) and ! empty( $global_config['ftp_user_pass'] ) )
 	{
 		$conn_id = ftp_connect( $global_config['ftp_server'], $global_config['ftp_port'], 10 );
 		$login_result = ftp_login( $conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass'] );
-	
-		if( ( ! $conn_id ) || ( ! $login_result ) )
+
+		if( ( ! $conn_id) || ( ! $login_result) )
 		{
 			$error[] = $lang_module['checkchmod_error_account'];
 		}
@@ -52,7 +52,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 			$error[] = $lang_module['checkchmod_error_path'];
 		}
 	}
-	
+
 	foreach( $array_dir as $dir )
 	{
 		if( $ftp_check_login == 1 )
@@ -61,7 +61,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 			{
 				ftp_mkdir( $conn_id, $dir );
 			}
-		
+
 			if( ! is_writable( NV_ROOTDIR . '/' . $dir ) )
 			{
 				nv_chmod_dir( $conn_id, $dir, true );

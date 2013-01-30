@@ -14,7 +14,7 @@
 				</tr>
 			</thead>
 			<!-- BEGIN: loop -->
-			<tbody{ROW.class}>
+			<tbody {ROW.class}>
 				<tr>
 					<td><input type="checkbox" name="idcheck[]" value="{ROW.id}"></td>
 					<td>{ROW.title}</td>
@@ -43,6 +43,8 @@
 	<!-- END: empty -->
 </div>
 <!-- BEGIN: generate_page -->
-<p align="center">{GENERATE_PAGE}</p>
+<p align="center">
+	{GENERATE_PAGE}
+</p>
 <!-- END: generate_page -->
 <!-- END: main -->

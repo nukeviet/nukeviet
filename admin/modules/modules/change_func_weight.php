@@ -35,9 +35,9 @@ $weight = 0;
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	++$weight;
-	
+
 	if( $weight == $new_weight ) ++$weight;
-	
+
 	$sql = "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `subweight`=" . $weight . " WHERE `func_id`=" . $row['func_id'];
 	$db->sql_query( $sql );
 }

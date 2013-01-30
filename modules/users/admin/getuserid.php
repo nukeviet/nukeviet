@@ -7,8 +7,7 @@
  * @Createdate 26/5/2011, 23:28
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $area = filter_text_input( 'area', 'get', '' );
 if( empty( $area ) )
@@ -30,13 +29,13 @@ $xtpl->assign( 'MODULE_FILE', $module_file );
 $xtpl->assign( 'AREA', $area );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&area=" . $area . "&filtersql=" . $filtersql );
 
-$array = array( );
+$array = array();
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;area=" . $area . "&amp;submit=1";
 
 if( $nv_Request->isset_request( 'submit', 'get' ) )
 {
-	$array_user = array( );
+	$array_user = array();
 	$generate_page = "";
 
 	$orderid = filter_text_input( 'orderid', 'get', '' );
@@ -44,14 +43,10 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 	$orderemail = filter_text_input( 'orderemail', 'get', '' );
 	$orderregdate = filter_text_input( 'orderregdate', 'get', '' );
 
-	if( $orderid != "DESC" and $orderid != "" )
-		$orderid = "ASC";
-	if( $orderusername != "DESC" and $orderusername != "" )
-		$orderusername = "ASC";
-	if( $orderemail != "DESC" and $orderemail != "" )
-		$orderemail = "ASC";
-	if( $orderregdate != "DESC" and $orderregdate != "" )
-		$orderregdate = "ASC";
+	if( $orderid != "DESC" and $orderid != "" ) $orderid = "ASC";
+	if( $orderusername != "DESC" and $orderusername != "" ) $orderusername = "ASC";
+	if( $orderemail != "DESC" and $orderemail != "" ) $orderemail = "ASC";
+	if( $orderregdate != "DESC" and $orderregdate != "" ) $orderregdate = "ASC";
 
 	$array['username'] = filter_text_input( 'username', 'get', '' );
 	$array['full_name'] = filter_text_input( 'full_name', 'get', '' );
@@ -286,7 +281,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 else
 {
 	$gender = isset( $array['gender'] ) ? $array['gender'] : "";
-	$array['gender'] = array( );
+	$array['gender'] = array();
 	$array['gender'][] = array(
 		"key" => "", //
 		"title" => $lang_module['select_gender'], //
@@ -313,8 +308,9 @@ else
 	$contents = $xtpl->text( 'main' );
 }
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
-include (NV_ROOTDIR . "/includes/footer.php");
-exit( );
+include ( NV_ROOTDIR . "/includes/footer.php" );
+exit();
+
 ?>

@@ -17,10 +17,10 @@ if( $timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME )
 
 /**
  * nv_set_status_module()
- * 
+ *
  * @return
  */
-function nv_set_status_module()
+function nv_set_status_module( )
 {
 	global $db, $module_name, $module_data, $global_config;
 
@@ -70,8 +70,8 @@ function nv_set_status_module()
 	// Tim kiem thoi gian chay lan ke tiep
 	list( $time_publtime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(publtime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=2 AND `publtime` > " . NV_CURRENTTIME ) );
 	list( $time_exptime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(exptime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `exptime` > " . NV_CURRENTTIME ) );
-	
-	$timecheckstatus = min( $time_publtime, $time_exptime ); 
+
+	$timecheckstatus = min( $time_publtime, $time_exptime );
 	if( ! $timecheckstatus ) $timecheckstatus = max( $time_publtime, $time_exptime );
 
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", 'timecheckstatus', '" . intval( $timecheckstatus ) . "')" );
@@ -84,7 +84,7 @@ function nv_set_status_module()
 
 /**
  * nv_comment_module()
- * 
+ *
  * @param mixed $id
  * @param mixed $page
  * @return
@@ -106,7 +106,7 @@ function nv_comment_module( $id, $page )
 			$post_email = $user_email;
 			$post_name = $user_full_name;
 		}
-		$post_email = ( $module_config[$module_name]['emailcomm'] and $view_mail ) ? $post_email : "";
+		$post_email = ($module_config[$module_name]['emailcomm'] and $view_mail) ? $post_email : "";
 		$comment_array[] = array(
 			"content" => $content,
 			"post_time" => $post_time,
@@ -120,12 +120,15 @@ function nv_comment_module( $id, $page )
 	unset( $row, $comment );
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;id=" . $id . "&checkss=" . md5( $id . session_id() . $global_config['sitekey'] );
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page, true, true, 'nv_urldecode_ajax', 'showcomment' );
-	return array( "comment" => $comment_array, "page" => $generate_page );
+	return array(
+		"comment" => $comment_array,
+		"page" => $generate_page
+	);
 }
 
 /**
  * nv_del_content_module()
- * 
+ *
  * @param mixed $id
  * @return
  */
@@ -195,7 +198,7 @@ function nv_del_content_module( $id )
 
 /**
  * nv_archive_content_module()
- * 
+ *
  * @param mixed $id
  * @param mixed $listcatid
  * @return
@@ -217,7 +220,7 @@ function nv_archive_content_module( $id, $listcatid )
 
 /**
  * nv_link_edit_page()
- * 
+ *
  * @param mixed $id
  * @return
  */
@@ -230,7 +233,7 @@ function nv_link_edit_page( $id )
 
 /**
  * nv_link_delete_page()
- * 
+ *
  * @param mixed $id
  * @return
  */
@@ -243,7 +246,7 @@ function nv_link_delete_page( $id )
 
 /**
  * nv_news_get_bodytext()
- * 
+ *
  * @param mixed $bodytext
  * @return
  */

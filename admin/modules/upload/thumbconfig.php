@@ -7,8 +7,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
@@ -63,7 +62,7 @@ $xtpl->assign( 'LANG', $lang_module );
 
 $sql = "SELECT * FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` ORDER BY `dirname` ASC";
 $result = $db->sql_query( $sql );
-$thumb_type = array( );
+$thumb_type = array();
 $i = 0;
 
 $lang_module['thumb_type_0'] = '';
@@ -115,7 +114,8 @@ $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['thumbconfig'];
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

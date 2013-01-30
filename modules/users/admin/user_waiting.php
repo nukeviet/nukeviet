@@ -7,8 +7,7 @@
  * @Createdate 04/05/2010
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 //Xoa thanh vien
 if( $nv_Request->isset_request( 'del', 'post' ) )
@@ -34,7 +33,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	if( ! $userid )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-		die( );
+		die();
 	}
 
 	$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $userid;
@@ -43,7 +42,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	if( $numrows != 1 )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-		die( );
+		die();
 	}
 	$row = $db->sql_fetchrow( $result );
 
@@ -68,7 +67,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	if( $userid )
 	{
 		$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
-		$query_field = array( );
+		$query_field = array();
 		$query_field['`userid`'] = $userid;
 		$result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `fid` ASC" );
 		while( $row_f = $db->sql_fetch_assoc( $result_field ) )
@@ -92,7 +91,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		}
 	}
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=user_waiting" );
-	die( );
+	die();
 }
 
 $page_title = $table_caption = $lang_module['member_wating'];
@@ -101,26 +100,10 @@ $sql = "FROM `" . NV_USERS_GLOBALTABLE . "_reg`";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=user_waiting";
 
 $methods = array( //
-	'userid' => array(
-		'key' => 'userid',
-		'value' => $lang_module['search_id'],
-		'selected' => ''
-	), //
-	'username' => array(
-		'key' => 'username',
-		'value' => $lang_module['search_account'],
-		'selected' => ''
-	), //
-	'full_name' => array(
-		'key' => 'full_name',
-		'value' => $lang_module['search_name'],
-		'selected' => ''
-	), //
-	'email' => array(
-		'key' => 'email',
-		'value' => $lang_module['search_mail'],
-		'selected' => ''
-	) //
+	'userid' => array( 'key' => 'userid', 'value' => $lang_module['search_id'], 'selected' => '' ), //
+	'username' => array( 'key' => 'username', 'value' => $lang_module['search_account'], 'selected' => '' ), //
+	'full_name' => array( 'key' => 'full_name', 'value' => $lang_module['search_name'], 'selected' => '' ), //
+	'email' => array( 'key' => 'email', 'value' => $lang_module['search_mail'], 'selected' => '' ) //
 );
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ($nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '');
 $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ($nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '');
@@ -134,8 +117,7 @@ $orders = array(
 );
 $orderby = $nv_Request->get_string( 'sortby', 'get', '' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', '' );
-if( $ordertype != "ASC" )
-	$ordertype = "DESC";
+if( $ordertype != "ASC" ) $ordertype = "DESC";
 
 if( ! empty( $method ) and isset( $methods[$method] ) and ! empty( $methodvalue ) )
 {
@@ -161,7 +143,7 @@ $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $numf ) = $db->sql_fetchrow( $result_all );
 $all_page = ($numf) ? $numf : 1;
 
-$users_list = array( );
+$users_list = array();
 while( $row = $db->sql_fetchrow( $query2 ) )
 {
 	$users_list[$row['userid']] = array( //
@@ -175,7 +157,7 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
-$head_tds = array( );
+$head_tds = array();
 $head_tds['userid']['title'] = $lang_module['userid'];
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=user_waiting&amp;sortby=userid&amp;sorttype=ASC";
 $head_tds['username']['title'] = $lang_module['account'];
@@ -242,7 +224,8 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

@@ -6,7 +6,7 @@
 <!-- END: upload_blocked -->
 <!-- BEGIN: main -->
 <div class="quote" style="width:98%">
-	<blockquote{CLASS}><span>{CONTENTS.info}</span></blockquote>
+	<blockquote {CLASS}><span>{CONTENTS.info}</span></blockquote>
 </div>
 <div class="clear"></div>
 
@@ -36,92 +36,88 @@
 				<td>{CONTENTS.plan.0}:</td>
 				<td><sup class="required">&lowast;</sup></td>
 				<td>
-					<select name="{CONTENTS.plan.1}">
-						<!-- BEGIN: plan -->
-						<option value="{PLAN.key}"{PLAN.selected}>{PLAN.title}</option>
-						<!-- END: plan -->
-					</select>
-				</td>
+				<select name="{CONTENTS.plan.1}">
+					<!-- BEGIN: plan -->
+					<option value="{PLAN.key}"{PLAN.selected}>{PLAN.title}</option>
+					<!-- END: plan -->
+				</select></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
-			<td>{CONTENTS.client.0}:</td>
-				<td></td>
+				<td>{CONTENTS.client.0}:</td>
+				<td>&nbsp;</td>
 				<td>
-					<select name="{CONTENTS.client.1}">
-						<option value="">&nbsp;</option>
-						<!-- BEGIN: client -->
-						<option value="{CLIENT.key}"{CLIENT.selected}>{CLIENT.title}</option>
-						<!-- END: client -->
-					</select>
-				</td>
+				<select name="{CONTENTS.client.1}">
+					<option value="">&nbsp;</option>
+					<!-- BEGIN: client -->
+					<option value="{CLIENT.key}"{CLIENT.selected}>{CLIENT.title}</option>
+					<!-- END: client -->
+				</select></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{CONTENTS.file_name.0}:</td>
-				<td></td>
-				<td>
-					<a href="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a>
-					<!-- BEGIN: imageforswf1 -->
-					<a href="{CONTENTS.file_name.5}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.6}" width="16" height="16" style="cursor: pointer; margin-left: 20px;" /></a>
-					<!-- END: imageforswf1 -->
-					</td>
+				<td>&nbsp;</td>
+				<td><a href="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a>
+				<!-- BEGIN: imageforswf1 -->
+				<a href="{CONTENTS.file_name.5}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.6}" width="16" height="16" style="cursor: pointer; margin-left: 20px;" /></a>
+				<!-- END: imageforswf1 -->
+				</td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.upload.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.upload.1}" type="file" /></td>
 			</tr>
 			<!-- BEGIN: imageforswf2 -->
 			<tr>
 				<td>{CONTENTS.upload.2}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.upload.3}" type="file" /></td>
-			</tr>	
+			</tr>
 			<!-- END: imageforswf2 -->
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{CONTENTS.file_alt.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.file_alt.1}" type="text" value="{CONTENTS.file_alt.2}" style="width:300px" maxlength="{CONTENTS.file_alt.3}" /></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.click_url.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input class="url" name="{CONTENTS.click_url.1}" type="text" value="{CONTENTS.click_url.2}" style="width:300px" maxlength="{CONTENTS.click_url.3}" /></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{CONTENTS.target.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td>
-					<select name="{CONTENTS.target.1}">
-						<!-- BEGIN: target -->
-						<option value="{TARGET.key}"{TARGET.selected}>{TARGET.title}</option>
-						<!-- END: target -->
-					</select>
-				</td>
+				<select name="{CONTENTS.target.1}">
+					<!-- BEGIN: target -->
+					<option value="{TARGET.key}"{TARGET.selected}>{TARGET.title}</option>
+					<!-- END: target -->
+				</select></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.publ_date.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.publ_date.1}" class="datepicker" type="text" value="{CONTENTS.publ_date.2}" style="width:100px" maxlength="{CONTENTS.publ_date.3}" readonly="readonly" /></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{CONTENTS.exp_date.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.exp_date.1}" class="datepicker" type="text" value="{CONTENTS.exp_date.2}" style="width:100px" maxlength="{CONTENTS.exp_date.3}" readonly="readonly" /></td>
 			</tr>
 		</tbody>
@@ -131,19 +127,17 @@
 	</div>
 </form>
 <script type="text/javascript">
-    $(document).ready(function()
-    {
+	$(document).ready(function() {
 		$('#frm').validate();
-	    $(".datepicker").datepicker(
-	    {
-	        showOn : "both",
-	        dateFormat : "dd/mm/yy",
-	        changeMonth : true,
-	        changeYear : true,
-	        showOtherMonths : true,
-	        buttonImage : nv_siteroot + "images/calendar.gif",
-	        buttonImageOnly : true
-	    }); 		
-	});
+		$(".datepicker").datepicker({
+			showOn : "both",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImageOnly : true
+		});
+	}); 
 </script>
 <!-- END: main -->

@@ -35,7 +35,8 @@ if( $all_page )
 		$host_list[$host] = array(
 			$count,
 			$last_visit,
-			$bymonth );
+			$bymonth
+		);
 	}
 
 	if( ! empty( $host_list ) )

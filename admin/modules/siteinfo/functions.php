@@ -18,7 +18,7 @@ $allow_func = array( 'main' );
  *
  * @return
  */
-function nv_siteinfo_getlang()
+function nv_siteinfo_getlang( )
 {
 	global $db_config;
 	$sql = "SELECT DISTINCT `lang` FROM `" . $db_config['prefix'] . "_logs`";
@@ -41,7 +41,7 @@ function nv_siteinfo_getlang()
  *
  * @return
  */
-function nv_siteinfo_getuser()
+function nv_siteinfo_getuser( )
 {
 	global $db_config;
 	$sql = "SELECT `userid`, `username` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN ( SELECT DISTINCT `userid` FROM `" . $db_config['prefix'] . "_logs` WHERE `userid`!=0 ) ORDER BY `username` ASC";
@@ -52,7 +52,10 @@ function nv_siteinfo_getuser()
 	{
 		foreach( $result as $row )
 		{
-			$array_user[] = array( "userid" => ( int )$row['userid'], "username" => $row['username'] );
+			$array_user[] = array(
+				"userid" => ( int )$row['userid'],
+				"username" => $row['username']
+			);
 		}
 	}
 
@@ -64,7 +67,7 @@ function nv_siteinfo_getuser()
  *
  * @return
  */
-function nv_siteinfo_getmodules()
+function nv_siteinfo_getmodules( )
 {
 	global $db_config;
 	$sql = "SELECT DISTINCT `module_name` FROM `" . $db_config['prefix'] . "_logs`";

@@ -7,14 +7,13 @@
  * @Createdate 3/12/2010 12:11
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['add_banner'];
 
-$contents = array( );
+$contents = array();
 $contents['upload_blocked'] = "";
-$contents['file_allowed_ext'] = array( );
+$contents['file_allowed_ext'] = array();
 
 if( preg_match( "/images/", NV_ALLOW_FILES_TYPE ) )
 {
@@ -30,16 +29,16 @@ if( empty( $contents['file_allowed_ext'] ) )
 {
 	$contents['upload_blocked'] = $lang_module['upload_blocked'];
 
-	include (NV_ROOTDIR . "/includes/header.php");
+	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( nv_add_banner_theme( $contents ) );
-	include (NV_ROOTDIR . "/includes/footer.php");
-	exit( );
+	include ( NV_ROOTDIR . "/includes/footer.php" );
+	exit();
 }
 
 $sql = "SELECT `id`,`login`,`full_name` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` ORDER BY `login` ASC";
 $result = $db->sql_query( $sql );
 
-$clients = array( );
+$clients = array();
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$clients[$row['id']] = $row['full_name'] . " (" . $row['login'] . ")";
@@ -48,7 +47,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 $sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` ORDER BY `blang`, `title` ASC";
 $result = $db->sql_query( $sql );
 
-$plans = array( );
+$plans = array();
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$plans[$row['id']] = $row['title'] . " (" . ( ! empty( $row['blang'] ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ")";
@@ -57,7 +56,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 if( empty( $plans ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_plan" );
-	die( );
+	die();
 }
 
 $error = "";
@@ -77,15 +76,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$publ_date = strip_tags( $nv_Request->get_string( 'publ_date', 'post', '' ) );
 	$exp_date = strip_tags( $nv_Request->get_string( 'exp_date', 'post', '' ) );
 
-	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) )
-		$publ_date = "";
-	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) )
-		$exp_date = "";
+	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = "";
+	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = "";
 
-	if( ! empty( $clid ) and ! isset( $clients[$clid] ) )
-		$clid = 0;
-	if( $click_url == "http://" )
-		$click_url = "";
+	if( ! empty( $clid ) and ! isset( $clients[$clid] ) ) $clid = 0;
+	if( $click_url == "http://" ) $click_url = "";
 
 	if( empty( $title ) )
 	{
@@ -105,7 +100,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	}
 	else
 	{
-		require_once (NV_ROOTDIR . "/includes/class/upload.class.php");
+		require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
 
 		$upload = new upload( $contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 		$upload_info = $upload->save_file( $_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
@@ -133,8 +128,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				unset( $m );
 				preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m );
 				$publtime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
-				if( $publtime < NV_CURRENTTIME )
-					$publtime = NV_CURRENTTIME;
+				if( $publtime < NV_CURRENTTIME ) $publtime = NV_CURRENTTIME;
 			}
 
 			if( empty( $exp_date ) )
@@ -148,8 +142,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$exptime = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
 			}
 
-			if( $exptime != 0 and $exptime <= $publtime )
-				$exptime = $publtime;
+			if( $exptime != 0 and $exptime <= $publtime ) $exptime = $publtime;
 
 			$sql = "INSERT INTO `" . NV_BANNERS_ROWS_GLOBALTABLE . "` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `imageforswf`, `click_url`, `target`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES 
             (NULL, " . $db->dbescape( $title ) . ", " . $pid . ", " . $clid . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ", 
@@ -160,10 +153,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			nv_fix_banner_weight( $pid );
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_banner', "bannerid " . $id, $admin_info['userid'] );
-			nv_CreateXML_bannerPlan( );
+			nv_CreateXML_bannerPlan();
 			$op2 = ($file_ext == 'swf') ? 'edit_banner' : 'info_banner';
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op2 . "&id=" . $id );
-			die( );
+			die();
 		}
 	}
 }
@@ -243,7 +236,8 @@ $contents['exp_date'] = array(
 	10
 );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( nv_add_banner_theme( $contents ) );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

@@ -82,7 +82,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
+			'class' => (++$a % 2) ? " class=\"second\"" : "",
 			'bid' => $row['bid'],
 			'title' => $row['title'],
 			'module' => $row['module'],
@@ -94,7 +94,10 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 
 		for( $i = 1; $i <= $numposition; ++$i )
 		{
-			$xtpl->assign( 'WEIGHT', array( 'key' => $i, 'selected' => ( $row['weight'] == $i ) ? ' selected="selected"' : '' ) );
+			$xtpl->assign( 'WEIGHT', array(
+				'key' => $i,
+				'selected' => ($row['weight'] == $i) ? ' selected="selected"' : ''
+			) );
 			$xtpl->parse( 'main.loop.weight' );
 		}
 
@@ -102,7 +105,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		{
 			$xtpl->assign( 'POSITION', array(
 				'key' => ( string )$positions[$i]->tag,
-				'selected' => ( $row['position'] == $positions[$i]->tag ) ? ' selected="selected"' : '',
+				'selected' => ($row['position'] == $positions[$i]->tag) ? ' selected="selected"' : '',
 				'title' => ( string )$positions[$i]->name
 			) );
 			$xtpl->parse( 'main.loop.position' );

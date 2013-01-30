@@ -32,7 +32,7 @@ $order = $nv_Request->get_string( 'order', 'get' ) == "asc" ? 'asc' : 'desc';
 $val_cat_content = array();
 $val_cat_content[] = array(
 	"value" => 0,
-	"selected" => ( $catid == 0 ) ? " selected=\"selected\"" : "",
+	"selected" => ($catid == 0) ? " selected=\"selected\"" : "",
 	"title" => $lang_module['search_cat_all']
 );
 $array_cat_view = array();
@@ -89,7 +89,8 @@ foreach( $global_array_cat as $catid_i => $array_value )
 		$val_cat_content[] = array(
 			"value" => $catid_i,
 			"selected" => $sl,
-			"title" => $xtitle_i );
+			"title" => $xtitle_i
+		);
 		$array_cat_view[] = $catid_i;
 	}
 }
@@ -104,16 +105,19 @@ $array_search = array(
 	"bodytext" => $lang_module['search_bodytext'],
 	"author" => $lang_module['search_author'],
 	"admin_id" => $lang_module['search_admin'],
-	"sourcetext" => $lang_module['sources'] );
+	"sourcetext" => $lang_module['sources']
+);
 $array_in_rows = array(
 	"title",
 	"bodytext",
 	"author",
-	"sourcetext" );
+	"sourcetext"
+);
 $array_in_ordername = array(
 	"title",
 	"publtime",
-	"exptime" );
+	"exptime"
+);
 $array_status_view = array(
 	"-" => "---",
 	"0" => $lang_module['status_0'],
@@ -122,7 +126,7 @@ $array_status_view = array(
 	"3" => $lang_module['status_3'],
 	"4" => $lang_module['status_4'],
 	"5" => $lang_module['status_5'],
-	);
+);
 
 if( ! in_array( $stype, array_keys( $array_search ) ) )
 {
@@ -147,7 +151,7 @@ else
 $where = "";
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
-if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != "-" )
+if( ($checkss == md5( session_id() ) and ! empty( $q )) || $sstatus != "-" )
 {
 	if( $stype == "bodytext" )
 	{
@@ -205,7 +209,7 @@ if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 		$from_catid[] = "r.listcatid like '%," . $catid_i . ",%'";
 		$from_catid[] = "r.listcatid like '%," . $catid_i . "'";
 	}
-	$where .= ( empty( $where ) ) ? " WHERE (" . implode( " OR ", $from_catid ) . ")" : " AND (" . implode( " OR ", $from_catid ) . ")";
+	$where .= ( empty( $where )) ? " WHERE (" . implode( " OR ", $from_catid ) . ")" : " AND (" . implode( " OR ", $from_catid ) . ")";
 }
 $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other";
 $global_array_cat[0] = array(
@@ -218,14 +222,16 @@ $global_array_cat[0] = array(
 	"subcatid" => 0,
 	"numlinks" => 3,
 	"description" => "",
-	"keywords" => "" );
+	"keywords" => ""
+);
 $search_type = array();
 foreach( $array_search as $key => $val )
 {
 	$search_type[] = array(
 		"key" => $key,
 		"value" => $val,
-		"selected" => ( $key == $stype ) ? " selected=\"selected\"" : "" );
+		"selected" => ($key == $stype) ? " selected=\"selected\"" : ""
+	);
 }
 $a = 0;
 foreach( $array_status_view as $key => $val )
@@ -242,17 +248,21 @@ foreach( $array_status_view as $key => $val )
 	$search_status[] = array(
 		"key" => $key,
 		"value" => $val,
-		"selected" => $sl );
+		"selected" => $sl
+	);
 }
 $i = 5;
 $search_per_page = array();
 while( $i <= 1000 )
 {
-	$search_per_page[] = array( "page" => $i, "selected" => ( $i == $per_page ) ? " selected=\"selected\"" : "" );
+	$search_per_page[] = array(
+		"page" => $i,
+		"selected" => ($i == $per_page) ? " selected=\"selected\"" : ""
+	);
 	$i = $i + 5;
 }
 $a = 0;
-$order2 = ( $order == "asc" ) ? "desc" : "asc";
+$order2 = ($order == "asc") ? "desc" : "asc";
 $base_url_id = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=id&amp;order=" . $order2 . "&amp;page=" . $page;
 $base_url_name = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=title&amp;order=" . $order2 . "&amp;page=" . $page;
 $base_url_publtime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=publtime&amp;order=" . $order2 . "&amp;page=" . $page;
@@ -268,7 +278,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 {
 	$publtime = nv_date( "H:i d/m/y", $publtime );
 	$title = nv_clean60( $title );
-	$class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
+	$class = ($a % 2 == 0) ? "" : " class=\"second\"";
 	if( $catid > 0 )
 	{
 		$catid_i = $catid;
@@ -337,7 +347,8 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		"publtime" => $publtime,
 		"status" => $lang_module['status_' . $status],
 		"username" => $username,
-		"feature" => implode( "&nbsp;-&nbsp;", $admin_funcs ) );
+		"feature" => implode( "&nbsp;-&nbsp;", $admin_funcs )
+	);
 	++$a;
 }
 $array_list_action = array(
@@ -345,7 +356,9 @@ $array_list_action = array(
 	're-published' => $lang_module['re_published'],
 	'publtime' => $lang_module['publtime'],
 	'exptime' => $lang_module['exptime'],
-	'waiting' => $lang_module['status_action_0'] );//chuyen sang cho duyet
+	'waiting' => $lang_module['status_action_0']
+);
+//chuyen sang cho duyet
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$array_list_action['declined'] = $lang_module['declined'];
@@ -355,7 +368,10 @@ if( defined( 'NV_IS_ADMIN_MODULE' ) )
 $action = array();
 while( list( $catid_i, $title_i ) = each( $array_list_action ) )
 {
-	$action[] = array( "value" => $catid_i, "title" => $title_i );
+	$action[] = array(
+		"value" => $catid_i,
+		"title" => $title_i
+	);
 }
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );

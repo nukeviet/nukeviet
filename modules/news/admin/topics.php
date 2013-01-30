@@ -88,7 +88,7 @@ if( ! empty( $savecat ) )
 		$array['thumbnail'] = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/', '', $image_info['src'] );
 	}
 
-	$array['alias'] = ( $array['alias'] == "" ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
+	$array['alias'] = ($array['alias'] == "") ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
 
 	if( empty( $array['title'] ) )
 	{
@@ -115,7 +115,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `title`=" . $db->dbescape( $array['title'] ) . ", `alias` =  " . $db->dbescape( $array['alias'] ) . ", `description`=" . $db->dbescape( $array['description'] ) . ", `image` =  " . $db->dbescape( $array['image'] ) . ", `thumbnail`=" . $db->dbescape( $array['thumbnail'] ) . ", `keywords`= " . $db->dbescape( $array['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `topicid` =" . $array['topicid'];
+		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `title`=" . $db->dbescape( $array['title'] ) . ", `alias` =  " . $db->dbescape( $array['alias'] ) . ", `description`=" . $db->dbescape( $array['description'] ) . ", `image` =  " . $db->dbescape( $array['image'] ) . ", `thumbnail`=" . $db->dbescape( $array['thumbnail'] ) . ", `keywords`= " . $db->dbescape( $array['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `topicid` =" . $array['topicid'];
 		$db->sql_query( $query );
 		if( $db->sql_affectedrows() > 0 )
 		{

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
-	<table class="tab1" summary="">
+	<table class="tab1">
 		<tbody>
 			<tr>
 				<td><strong>{LANG.statistics_timezone}</strong></td>
@@ -15,25 +15,19 @@
 		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.online_upd}</strong></td>
-				<td>
-				<input type="checkbox" value="1" name="online_upd" {DATA.online_upd} />
-				</td>
+				<td><input type="checkbox" value="1" name="online_upd" {DATA.online_upd} /></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td><strong>{LANG.statistic}</strong></td>
-				<td>
-				<input type="checkbox" value="1" name="statistic" {DATA.statistic} />
-				</td>
+				<td><input type="checkbox" value="1" name="statistic" {DATA.statistic} /></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.googleAnalyticsID}</strong></td>
-				<td>
-				<input type="text" name="googleAnalyticsID" value="{DATA.googleAnalyticsID}" style="width: 450px" maxlength="20" />
-				</td>
+				<td><input type="text" name="googleAnalyticsID" value="{DATA.googleAnalyticsID}" style="width: 450px" maxlength="20" /></td>
 			</tr>
 		</tbody>
 		<tbody>

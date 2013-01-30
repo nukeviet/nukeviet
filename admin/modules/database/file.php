@@ -25,7 +25,7 @@ foreach( $files as $file )
 		$filesize = filesize( $log_dir . '/' . $file );
 		$filetime = intval( filemtime( $log_dir . '/' . $file ) );
 		$array_time[] = $filetime;
-		
+
 		$array_content[$filetime] = array(
 			"file" => $file,
 			'mc' => $mc,
@@ -48,7 +48,7 @@ for( $index = $count; $index >= 0; --$index )
 	$link_delete = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delfile&amp;filename=" . $file . "&amp;checkss=" . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
 
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++ $a % 2 == 0 ) ? "" : " class=\"second\"",
+		'class' => (++$a % 2 == 0) ? "" : " class=\"second\"",
 		'stt' => $a,
 		'name' => $mc[2] . "." . $mc[3],
 		'filesize' => nv_convertfromBytes( $value['filesize'] ),
@@ -56,7 +56,7 @@ for( $index = $count; $index >= 0; --$index )
 		'link_getfile' => $link_getfile,
 		'link_delete' => $link_delete
 	) );
-	
+
 	$xtpl->parse( 'main.loop' );
 }
 

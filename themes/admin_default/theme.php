@@ -7,8 +7,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_admin_theme( $contents, $head_site = 1 )
 {
@@ -92,7 +91,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
 	{
-		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js( ) );
+		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js() );
 		$xtpl->parse( 'main.nv_add_editor_js' );
 	}
 
@@ -214,7 +213,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.empty_page_title' );
 	}
 
-	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info( ) );
+	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info() );
 	$xtpl->assign( 'MODULE_CONTENT', $contents );
 
 	$xtpl->assign( 'NV_COPYRIGHT', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
@@ -237,4 +236,5 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 	return $xtpl->text( 'main' );
 }
+
 ?>

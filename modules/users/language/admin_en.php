@@ -248,4 +248,5 @@ $lang_module['field_number'] = 'STT';
 $lang_module['field_value'] = 'Value';
 $lang_module['field_text'] = 'Text';
 $lang_module['field_add_choice'] = 'Thêm lựa chọn';
+
 ?>

@@ -33,7 +33,7 @@ $a = 0;
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$xtpl->assign( 'ROW', array(
-		"class" => ( $a % 2 ) ? " class=\"second\"" : "",
+		"class" => ($a % 2) ? " class=\"second\"" : "",
 		"id" => $row['id'],
 		"title" => $row['title'],
 		"url" => $row['url'],
@@ -42,9 +42,9 @@ while( $row = $db->sql_fetchrow( $result ) )
 		"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $row['id'],
 		"url_delete" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_link&amp;id=" . $row['id'],
 	) );
-	
+
 	$xtpl->parse( 'main.loop' );
-	++ $a;
+	++$a;
 }
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );

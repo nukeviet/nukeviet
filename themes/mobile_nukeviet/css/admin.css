@@ -1,4 +1,7 @@
-﻿#footer{margin-bottom:30px!important}
+﻿#footer {
+	margin-bottom: 30px !important
+}
+
 p.show_query {
 	margin-bottom: 30px !important
 }
@@ -31,7 +34,7 @@ p.show_query {
 	padding: 3px 9px 5px 9px
 }
 
-#toolbar .bottom_menu a:link,#toolbar .bottom_menu a:visited {
+#toolbar .bottom_menu a:link, #toolbar .bottom_menu a:visited {
 	color: #333333;
 	background-color: #EEEEEE
 }
@@ -88,10 +91,10 @@ p.show_query {
 }
 
 #toolbar .action a span {
-	
+
 }
 
-.delete_icon,.edit_icon,.search_icon,.default_icon {
+.delete_icon, .edit_icon, .search_icon, .default_icon {
 	padding-left: 15px
 }
 
@@ -135,9 +138,8 @@ p.show_query {
 
 /*Show query for admin*/
 h3.queries {
-	background: url('../images/arrows/arrow4_red.gif') no-repeat left center
-		;
-	font: bold 13px/ 27px tahoma, verdana, sans-serif;
+	background: url('../images/arrows/arrow4_red.gif') no-repeat left center;
+	font: bold 13px/27px tahoma, verdana, sans-serif;
 	margin-top: 8px;
 	text-indent: 12px
 }

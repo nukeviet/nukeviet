@@ -19,7 +19,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "downloadallfile" . se
 		$allowfolder = array();
 		$dirs = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
 		$err = 0;
-	
+
 		foreach( $dirs as $module )
 		{
 			// Zip lang block
@@ -32,20 +32,20 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "downloadallfile" . se
 					$allowfolder[] = NV_ROOTDIR . "/modules/" . $module . "/language/" . $file_lang_block;
 				}
 			}
-			
+
 			// Lang module admin
 			if( file_exists( NV_ROOTDIR . "/modules/" . $module . "/language/admin_" . $dirlang . ".php" ) )
 			{
 				$allowfolder[] = NV_ROOTDIR . "/modules/" . $module . "/language/admin_" . $dirlang . ".php";
 			}
-			
+
 			// Lang module site
 			if( file_exists( NV_ROOTDIR . "/modules/" . $module . "/language/" . $dirlang . ".php" ) )
 			{
 				$allowfolder[] = NV_ROOTDIR . "/modules/" . $module . "/language/" . $dirlang . ".php";
 			}
 		}
-		
+
 		if( is_dir( NV_ROOTDIR . "/language/" . $dirlang ) )
 		{
 			$allowfolder[] = NV_ROOTDIR . "/language/" . $dirlang;
@@ -60,10 +60,10 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "downloadallfile" . se
 		{
 			$allowfolder[] = NV_ROOTDIR . "/js/language/en.js";
 		}
-		
+
 		$pattern_lang_js = "/[a-zA-Z0-9\-\_\.]+\-" . $dirlang . "\.js$/";
 		$array_lang_js = nv_scandir( NV_ROOTDIR . "/js/language", $pattern_lang_js );
-		
+
 		if( ! empty( $array_lang_js ) )
 		{
 			foreach( $array_lang_js as $fjs )

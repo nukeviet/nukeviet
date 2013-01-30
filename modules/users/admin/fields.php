@@ -7,28 +7,22 @@
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT GMT
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-{
-	die( 'Stop!!!' );
-}
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 // Chinh thu tu
 if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 {
-	if( ! defined( 'NV_IS_AJAX' ) )
-		die( 'Wrong URL' );
+	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 	$fid = $nv_Request->get_int( 'fid', 'post', 0 );
 	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-	if( empty( $fid ) )
-		die( "NO" );
+	if( empty( $fid ) ) die( "NO" );
 
 	$query = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` WHERE `fid`=" . $fid;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
-	if( $numrows != 1 )
-		die( 'NO' );
+	if( $numrows != 1 ) die( 'NO' );
 
 	$query = "SELECT `fid` FROM `" . NV_USERS_GLOBALTABLE . "_field` WHERE `fid`!=" . $fid . " ORDER BY `weight` ASC";
 	$result = $db->sql_query( $query );
@@ -36,8 +30,7 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		++$weight;
-		if( $weight == $new_vid )
-			++$weight;
+		if( $weight == $new_vid ) ++$weight;
 		$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "_field` SET `weight`=" . $weight . " WHERE `fid`=" . $row['fid'];
 		$db->sql_query( $sql );
 	}
@@ -48,7 +41,7 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 
 //ADD
 $error = '';
-$field_choices = array( );
+$field_choices = array();
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$preg_replace = array(
@@ -56,7 +49,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		'replacement' => ''
 	);
 
-	$dataform = array( );
+	$dataform = array();
 	$dataform['fid'] = $nv_Request->get_int( 'fid', 'post', 0 );
 
 	$dataform['title'] = filter_text_input( 'title', 'post', '' );
@@ -79,7 +72,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$dataform['field_type'] = filter_text_input( 'field_type', 'post', '', 0, 50, $preg_replace );
 
 	$save = 0;
-	$language = array( );
+	$language = array();
 	if( $dataform['fid'] )
 	{
 		$dataform_old = $db->sql_fetch_assoc( $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` WHERE `fid`=" . $dataform['fid'] ) );
@@ -314,16 +307,15 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		if( $save )
 		{
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass( ) );
-			die( );
+			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass() );
+			die();
 		}
 	}
 }
 // DEL
 if( $nv_Request->isset_request( 'del', 'post' ) )
 {
-	if( ! defined( 'NV_IS_AJAX' ) )
-		die( 'Wrong URL' );
+	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 	$fid = $nv_Request->get_int( 'fid', 'post', 0 );
 
@@ -372,8 +364,7 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 // Danh sach cau hoi
 if( $nv_Request->isset_request( 'qlist', 'get' ) )
 {
-	if( ! defined( 'NV_IS_AJAX' ) )
-		die( 'Wrong URL' );
+	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 	$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC";
 	$result = $db->sql_query( $sql );
 	$num = $db->sql_numrows( $result );
@@ -396,11 +387,7 @@ if( $nv_Request->isset_request( 'qlist', 'get' ) )
 
 			for( $i = 1; $i <= $num; ++$i )
 			{
-				$xtpl->assign( 'WEIGHT', array(
-					"key" => $i,
-					"title" => $i,
-					"selected" => $i == $row['weight'] ? " selected=\"selected\"" : ""
-				) );
+				$xtpl->assign( 'WEIGHT', array( "key" => $i, "title" => $i, "selected" => $i == $row['weight'] ? " selected=\"selected\"" : "" ) );
 				$xtpl->parse( 'main.data.loop.weight' );
 			}
 
@@ -457,7 +444,7 @@ else
 		}
 		else
 		{
-			$dataform = array( );
+			$dataform = array();
 			$dataform['show_register'] = 1;
 			$dataform['required'] = 0;
 			$dataform['show_profile'] = 1;
@@ -568,7 +555,7 @@ else
 	{
 		$xtpl->assign( 'FIELD_TYPE_TEXT', $array_field_type[$dataform['field_type']] );
 	}
-	$array_match_type = array( );
+	$array_match_type = array();
 	$array_match_type['none'] = $lang_module['field_match_type_none'];
 	if( $dataform['field_type'] != 'editor' AND $dataform['field_type'] != 'textarea' )
 	{
@@ -606,7 +593,8 @@ else
 	$page_title = $lang_module['fields'];
 	$contents = nv_admin_theme( $contents );
 }
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

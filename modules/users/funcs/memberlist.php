@@ -30,7 +30,7 @@ else
 		'catid' => 0,
 		'title' => $lang_module['listusers'],
 		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op,
-		);
+	);
 	//xem chi tiet thanh vien
 	if( isset( $array_op[1] ) && ! empty( $array_op[1] ) )
 	{
@@ -54,7 +54,7 @@ else
 					'catid' => 0,
 					'title' => $item['username'],
 					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "/" . change_alias( $item['username'] ) . "-" . $item['md5username'],
-					);
+				);
 
 				$contents = nv_memberslist_detail_theme( $item );
 			}
@@ -70,7 +70,7 @@ else
 		echo nv_site_theme( $contents );
 		include ( NV_ROOTDIR . "/includes/footer.php" );
 		exit();
-	} //danh sach thanh vien
+	}//danh sach thanh vien
 	else
 	{
 		$orderby = $nv_Request->get_string( 'orderby', 'get', 'username' );
@@ -78,10 +78,7 @@ else
 		$page = $nv_Request->get_int( 'page', 'get', 0 );
 
 		// Kiem tra du lieu hop chuan
-		if( ( ! empty( $orderby ) and ! in_array( $orderby, array(
-			'username',
-			'gender',
-			'regdate' ) ) ) or ( ! empty( $sortby ) and ! in_array( $sortby, array( 'DESC', 'ASC' ) ) ) )
+		if( ( ! empty( $orderby ) and ! in_array( $orderby, array( 'username', 'gender', 'regdate' ) )) or ( ! empty( $sortby ) and ! in_array( $sortby, array( 'DESC', 'ASC' ) )) )
 		{
 			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
 			exit();
@@ -94,14 +91,13 @@ else
 			"username" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=username&sortby=" . $sortby,
 			"gender" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=gender&sortby=" . $sortby,
 			"regdate" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=regdate&sortby=" . $sortby,
-
-			);
+		);
 
 		foreach( $array_order as $key => $link )
 		{
 			if( $orderby == $key )
 			{
-				$sortby_new = ( $sortby == "DESC" ) ? "ASC" : "DESC";
+				$sortby_new = ($sortby == "DESC") ? "ASC" : "DESC";
 				$array_order_new[$key] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=" . $key . "&sortby=" . $sortby_new;
 			}
 			else
@@ -130,7 +126,7 @@ else
 
 			$item['regdate'] = nv_date( "d/m/Y", $item['regdate'] );
 			$item['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=memberlist/" . change_alias( $item['username'] ) . "-" . $item['md5username'];
-			$item['gender'] = ( $item['gender'] == "M" ) ? $lang_module['male'] : ( $item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
+			$item['gender'] = ($item['gender'] == "M") ? $lang_module['male'] : ($item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na']);
 
 			$users_array[$item['userid']] = $item;
 		}

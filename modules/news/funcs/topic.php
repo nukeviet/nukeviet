@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 $topicalias = isset( $array_op[1] ) ? trim( $array_op[1] ) : '';
-$page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-" ) ? intval( substr( $array_op[2], 5 ) ) : 1;
+$page = (isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-") ? intval( substr( $array_op[2], 5 ) ) : 1;
 
 list( $topicid, $page_title, $description, $key_words ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title`, `description`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `alias`=" . $db->dbescape( $topicalias ) . "" ) );
 
@@ -19,9 +19,10 @@ if( $topicid > 0 )
 	$array_mod_title[] = array(
 		'catid' => 0,
 		'title' => $page_title,
-		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias );
+		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias
+	);
 
-	$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = '" . $topicid . "' ORDER BY `publtime` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page );
+	$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = '" . $topicid . "' ORDER BY `publtime` DESC LIMIT " . ($page - 1) * $per_page . "," . $per_page );
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 	list( $all_page ) = $db->sql_fetchrow( $result_all );
 
@@ -30,19 +31,19 @@ if( $topicid > 0 )
 
 	while( $item = $db->sql_fetch_assoc( $query ) )
 	{
-		if( $item['homeimgthumb'] == 1 ) //image thumb
+		if( $item['homeimgthumb'] == 1 )//image thumb
 		{
 			$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		elseif( $item['homeimgthumb'] == 2 ) //image file
+		elseif( $item['homeimgthumb'] == 2 )//image file
 		{
 			$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		elseif( $item['homeimgthumb'] == 3 ) //image url
+		elseif( $item['homeimgthumb'] == 3 )//image url
 		{
 			$item['src'] = $item['homeimgfile'];
 		}
-		else //no image
+		else//no image
 		{
 			$item['src'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 		}

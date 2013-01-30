@@ -23,7 +23,7 @@ function nv_chsubmit(oForm, cbName) {
 	var op_name = document.getElementById('op_name').options[document.getElementById('op_name').selectedIndex].value;
 	if (op_name == 'optimize') {
 		var tabs = "";
-		for ( var i = 0; i < oForm[cbName].length; i++) {
+		for (var i = 0; i < oForm[cbName].length; i++) {
 			if (oForm[cbName][i].checked) {
 				tabs += (tabs != "") ? "," : "";
 				tabs += oForm[cbName][i].value;
@@ -49,8 +49,7 @@ function nv_show_dbtables() {
 	nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&show_tabs=1&num=' + nv_randomPassword(8), 'show_tables');
 }
 
-function nv_show_highlight(tp)
-{
-	nv_ajax( "post", window.location.href, 'show_highlight=' + tp, 'my_highlight' );
+function nv_show_highlight(tp) {
+	nv_ajax("post", window.location.href, 'show_highlight=' + tp, 'my_highlight');
 	return false;
 }

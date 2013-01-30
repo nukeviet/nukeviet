@@ -18,7 +18,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
 $xtpl->assign( 'MODULE_NAME', $module_name );
-	
+
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
@@ -27,7 +27,7 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 {
 	require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-	
+
 	if( is_uploaded_file( $_FILES['themefile']['tmp_name'] ) )
 	{
 		if( move_uploaded_file( $_FILES['themefile']['tmp_name'], $filename ) )
@@ -35,12 +35,12 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 			$zip = new PclZip( $filename );
 			$status = $zip->properties();
 			$check_number = 0;
-			
+
 			if( $status['status'] == 'ok' )
 			{
 				$list = $zip->listContent();
 				$theme = $list[0]['filename'];
-				
+
 				foreach( $list as $file_i )
 				{
 					if( $file_i['filename'] == $theme . "theme.php" or $file_i['filename'] == $theme . "config.ini" )
@@ -49,25 +49,25 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 					}
 				}
 			}
-			
+
 			if( $check_number == 2 )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_install'], 'file name : ' . basename( $_FILES['themefile']['name'] ), $admin_info['userid'] );
-				
+
 				$filelist = array();
 				$validfolder = array();
-				
+
 				$filesize = nv_convertfromBytes( $_FILES['themefile']['size'] );
-				
+
 				$xtpl->assign( 'FILENAME', $_FILES['themefile']['name'] );
 				$xtpl->assign( 'FILESIZE', $filesize );
-				
+
 				// Show file and folder
 				$xtpl->assign( 'FILENUM', $status['nb'] );
 				$xtpl->assign( 'OP', $op );
-				
+
 				$sizeof = sizeof( $list );
-				
+
 				for( $i = 0, $j = 1; $i < $sizeof; ++$i, ++$j )
 				{
 					if( ! $list[$i]['folder'] )
@@ -79,21 +79,21 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 						$bytes = "";
 						$validfolder[] = $list[$i]['filename'];
 					}
-					
+
 					$filelist[] = array(
 						'stt' => $j,
 						'filename' => $list[$i]['filename'],
 						'size' => $bytes,
 					);
 				}
-				
+
 				foreach( $filelist as $i => $file )
 				{
 					$xtpl->assign( 'FILE', $file );
 					$xtpl->assign( 'CLASS', $i % 2 ? ' class="second"' : '' );
 					$xtpl->parse( 'autoinstall_theme_uploadedfile.loop' );
 				}
-				
+
 				$xtpl->parse( 'autoinstall_theme_uploadedfile' );
 				$contents = $xtpl->text( 'autoinstall_theme_uploadedfile' );
 			}
@@ -109,7 +109,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 			$contents = $xtpl->text( 'autoinstall_theme_error_uploadfile' );
 		}
 	}
-	
+
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
@@ -118,10 +118,10 @@ else
 {
 	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'get', '' );
 	$xtpl->assign( 'OP', $op );
-	
+
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
-	
+
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo $contents;
 	include ( NV_ROOTDIR . "/includes/footer.php" );

@@ -28,17 +28,17 @@
 		</div>
 		<div class="box-border" id="topcomment">
 			<div class="content-box">
-			<!-- BEGIN: topcomment -->
+				<!-- BEGIN: topcomment -->
 				<ul class="list-number">
-				<!-- BEGIN: loop -->
+					<!-- BEGIN: loop -->
 					<li>
 						<a title="{topcomment.content}" href="{topcomment.link}">{topcomment.content}</a>
 					</li>
-				<!-- END: loop -->
+					<!-- END: loop -->
 				</ul>
-			<!-- END: topcomment -->
+				<!-- END: topcomment -->
 			</div>
-		</div>		
+		</div>
 	</div>
 </div>
 <!-- END: main -->

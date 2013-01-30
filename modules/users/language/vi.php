@@ -8,8 +8,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -211,4 +210,5 @@ $lang_module['field_match_type_error'] = '%s không đúng quy tắc';
 $lang_module['field_min_max_value'] = '%1$s cần nhập từ %2$s đến %3$s';
 $lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s ký tự';
 $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
+
 ?>

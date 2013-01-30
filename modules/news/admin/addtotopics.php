@@ -7,7 +7,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' ); 
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['addtotopics'];
 
@@ -17,16 +17,16 @@ $listid = $nv_Request->get_string( 'listid', 'get,post', '' );
 if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', "listid " . $listid, $admin_info['userid'] );
-	
+
 	$topicsid = $nv_Request->get_int( 'topicsid', 'post' );
 	$listid = explode( ',', $listid );
-	
+
 	foreach( $listid as $value )
 	{
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET topicid='$topicsid' WHERE id='$value'";
 		$result = $db->sql_query( $sql );
 	}
-	
+
 	nv_del_moduleCache( $module_name );
 
 	include ( NV_ROOTDIR . "/includes/header.php" );
@@ -57,7 +57,7 @@ if( $db->sql_numrows( $result ) )
 	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			"class" => ( $a ++ % 2 ) ? " class=\"second\"" : "",
+			"class" => ($a++ % 2) ? " class=\"second\"" : "",
 			"id" => $id,
 			"title" => $title,
 			"checked" => in_array( $id, $id_array ) ? " checked=\"checked\"" : "",

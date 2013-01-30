@@ -8,8 +8,7 @@
  * @Createdate Apr 15, 2011, 08:22:00 AM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '15/04/2011, 15:22';
@@ -137,4 +136,5 @@ $lang_module['target_blank'] = '新しいウィンドウ (_空白)';
 $lang_module['target_top'] = '最上部ウィンドウ (_トップ)';
 $lang_module['target_self'] = '同じウィンドウ (_同一)';
 $lang_module['target_parent'] = '親ウィンドウ (_親)';
+
 ?>

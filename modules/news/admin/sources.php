@@ -11,7 +11,13 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['sources'];
 
-list( $sourceid, $title, $link, $logo, $error ) = array( 0, "", "http://", "", "" );
+list( $sourceid, $title, $link, $logo, $error ) = array(
+	0,
+	"",
+	"http://",
+	"",
+	""
+);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
@@ -43,7 +49,7 @@ if( ! empty( $savecat ) )
 	{
 		$logo = $logo_old;
 	}
-	if( ( $logo != $logo_old ) and ! empty( $logo_old ) )
+	if( ($logo != $logo_old) and ! empty( $logo_old ) )
 	{
 		@unlink( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/source/" . $logo_old );
 	}
@@ -70,7 +76,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `title`=" . $db->dbescape( $title ) . ", `link` =  " . $db->dbescape( $link ) . ", `logo`=" . $db->dbescape( $logo ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `sourceid` =" . $sourceid;
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `title`=" . $db->dbescape( $title ) . ", `link` =  " . $db->dbescape( $link ) . ", `logo`=" . $db->dbescape( $logo ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `sourceid` =" . $sourceid;
 		$db->sql_query( $sql );
 		if( $db->sql_affectedrows() > 0 )
 		{

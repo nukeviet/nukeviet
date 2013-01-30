@@ -95,7 +95,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		$xtpl->parse( 'package_complete' );
 		$contents = $xtpl->text( 'package_complete' );
 	}
-	
+
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo $contents;
 	include ( NV_ROOTDIR . "/includes/footer.php" );

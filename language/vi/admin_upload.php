@@ -8,8 +8,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -135,4 +134,5 @@ $lang_module['order2'] = 'Sắp xếp theo tên file';
 
 $lang_module['searchdir'] = 'Tìm kiếm trong thư mục';
 $lang_module['searchkey'] = 'Từ khóa tìm kiếm';
+
 ?>

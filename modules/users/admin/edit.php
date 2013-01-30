@@ -7,8 +7,7 @@
  * @Createdate 04/05/2010
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['edit_title'];
 
@@ -17,7 +16,7 @@ $userid = $nv_Request->get_int( 'userid', 'get', 0 );
 if( empty( $userid ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 
 $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid;
@@ -26,10 +25,10 @@ $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 $row = $db->sql_fetchrow( $result );
-$array_old_groups = ( ! empty( $row['in_groups'] )) ? explode( ',', $row['in_groups'] ) : array( );
+$array_old_groups = ( ! empty( $row['in_groups'] )) ? explode( ',', $row['in_groups'] ) : array();
 
 $allow = false;
 
@@ -53,27 +52,27 @@ else
 if( ! $allow )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 
-$_user = array( );
+$_user = array();
 
-$groups_list = nv_groups_list( );
+$groups_list = nv_groups_list();
 
-$array_field_config = array( );
+$array_field_config = array();
 $result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
 while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 {
 	$language = unserialize( $row_field['language'] );
 	$row_field['title'] = ( isset( $language[NV_LANG_DATA] )) ? $language[NV_LANG_DATA][0] : $row['field'];
 	$row_field['description'] = ( isset( $language[NV_LANG_DATA] )) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
-	$row_field['field_choices'] = ( ! empty( $row_field['field_choices'] )) ? unserialize( $row_field['field_choices'] ) : array( );
+	$row_field['field_choices'] = ( ! empty( $row_field['field_choices'] )) ? unserialize( $row_field['field_choices'] ) : array();
 	$array_field_config[] = $row_field;
 }
 
 if( defined( 'NV_EDITOR' ) )
 {
-	require_once (NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php');
+	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 }
 
 $error = "";
@@ -150,10 +149,10 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	}
 	else
 	{
-		$query_field = array( );
+		$query_field = array();
 		if( ! empty( $array_field_config ) )
 		{
-			require (NV_ROOTDIR . "/modules/users/fields.check.php");
+			require ( NV_ROOTDIR . "/modules/users/fields.check.php" );
 		}
 
 		if( empty( $error ) )
@@ -175,7 +174,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$array_in_groups = array_values( $_user['in_groups'] );
 			$array_all_groups = array_unique( array_merge( $array_old_groups, $array_in_groups ) );
 
-			$_user['in_groups'] = array( );
+			$_user['in_groups'] = array();
 			if( ! empty( $array_all_groups ) )
 			{
 				foreach( $array_all_groups as $group_id_i )
@@ -187,7 +186,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					{
 						$row_users = $db->sql_fetchrow( $result );
 						$users = trim( $row_users['users'] );
-						$users = ! empty( $users ) ? explode( ",", $users ) : array( );
+						$users = ! empty( $users ) ? explode( ",", $users ) : array();
 						if( in_array( $group_id_i, $array_in_groups ) )
 						{
 							$users = array_merge( $users, array( $userid ) );
@@ -248,7 +247,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 			if( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
 			{
-				@require_once (NV_ROOTDIR . "/includes/class/upload.class.php");
+				@require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
 
 				$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 				$upload_info = $upload->save_file( $_FILES['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
@@ -272,7 +271,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			}
 
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-			exit( );
+			exit();
 		}
 	}
 }
@@ -281,9 +280,8 @@ else
 	$_user = $row;
 	$_user['password1'] = $_user['password2'] = "";
 	$_user['birthday'] = ! empty( $_user['birthday'] ) ? date( "d/m/Y", $_user['birthday'] ) : "";
-	$_user['in_groups'] = ! empty( $_user['in_groups'] ) ? explode( ",", $_user['in_groups'] ) : array( );
-	if( ! empty( $_user['sig'] ) )
-		$_user['sig'] = nv_br2nl( $_user['sig'] );
+	$_user['in_groups'] = ! empty( $_user['in_groups'] ) ? explode( ",", $_user['in_groups'] ) : array();
+	if( ! empty( $_user['sig'] ) ) $_user['sig'] = nv_br2nl( $_user['sig'] );
 
 	$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $userid;
 	$result = $db->sql_query( $sql );
@@ -291,29 +289,16 @@ else
 }
 
 $genders = array(
-	'N' => array(
-		'key' => 'N',
-		'title' => $lang_module['NA'],
-		'selected' => ''
-	),
-	'M' => array(
-		'key' => 'M',
-		'title' => $lang_module['male'],
-		'selected' => $_user['gender'] == "M" ? " selected=\"selected\"" : ""
-	),
-	'F' => array(
-		'key' => 'F',
-		'title' => $lang_module['female'],
-		'selected' => $_user['gender'] == "F" ? " selected=\"selected\"" : ""
-	)
+	'N' => array( 'key' => 'N', 'title' => $lang_module['NA'], 'selected' => '' ),
+	'M' => array( 'key' => 'M', 'title' => $lang_module['male'], 'selected' => $_user['gender'] == "M" ? " selected=\"selected\"" : "" ),
+	'F' => array( 'key' => 'F', 'title' => $lang_module['female'], 'selected' => $_user['gender'] == "F" ? " selected=\"selected\"" : "" ) 
 );
 
 $_user['view_mail'] = $_user['view_mail'] ? " checked=\"checked\"" : "";
 
-if( ! empty( $_user['sig'] ) )
-	$_user['sig'] = nv_htmlspecialchars( $_user['sig'] );
+if( ! empty( $_user['sig'] ) ) $_user['sig'] = nv_htmlspecialchars( $_user['sig'] );
 
-$groups = array( );
+$groups = array();
 if( ! empty( $groups_list ) )
 {
 	foreach( $groups_list as $group_id => $grtl )
@@ -484,7 +469,7 @@ else
 				elseif( $row['field_type'] == 'checkbox' )
 				{
 					$number = 0;
-					$valuecheckbox = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
+					$valuecheckbox = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array();
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
@@ -498,7 +483,7 @@ else
 				}
 				elseif( $row['field_type'] == 'multiselect' )
 				{
-					$valueselect = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
+					$valueselect = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array();
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
@@ -522,7 +507,8 @@ else
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

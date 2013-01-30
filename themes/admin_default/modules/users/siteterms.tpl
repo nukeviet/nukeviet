@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
 <div class="quote" style="width:98%">
-    <blockquote class="error"><span>{ERROR}</span></blockquote>
+	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
 <div class="clear"></div>
 <!-- END: error -->

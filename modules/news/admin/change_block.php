@@ -40,7 +40,7 @@ if( $bid > 0 )
 			{
 				$query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`!=" . $id . " ORDER BY `weight` ASC";
 				$result = $db->sql_query( $query );
-				
+
 				$weight = 0;
 				while( $row = $db->sql_fetchrow( $result ) )
 				{
@@ -49,11 +49,11 @@ if( $bid > 0 )
 					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $weight . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $row['id'] );
 					$db->sql_query( $sql );
 				}
-				
+
 				$db->sql_freeresult();
 				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $new_vid . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $id );
 				$db->sql_query( $sql );
-				
+
 				$content = "OK_" . $bid;
 			}
 			elseif( $mod == "delete" )
@@ -63,7 +63,7 @@ if( $bid > 0 )
 			}
 		}
 	}
-	
+
 	nv_news_fix_block( $bid );
 	nv_del_moduleCache( $module_name );
 }

@@ -10,7 +10,6 @@
 	</p>
 </div>
 <script type="text/javascript">
-	{CONTENTS.aj.0}
-	{CONTENTS.aj.1}
+	{CONTENTS.aj.0} {CONTENTS.aj.1}
 </script>
 <!-- END: main -->

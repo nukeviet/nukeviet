@@ -7,13 +7,12 @@
  * @Createdate 28/10/2012, 14:51
  */
 
-if( ! defined( 'NV_IS_FILE_SETTINGS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
-if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id( ) ) == $nv_Request->get_string( 'cdndl', 'get' ) )
+if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) == $nv_Request->get_string( 'cdndl', 'get' ) )
 {
 	$dir = NV_ROOTDIR;
-	$allowzip = array( );
+	$allowzip = array();
 	$allowzip[] = $dir . '/.htaccess';
 	$allowzip[] = $dir . '/web.config';
 	$allowzip[] = $dir . '/CJzip.php';
@@ -33,7 +32,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id( ) ) =
 		NV_ROOTDIR . '/' . NV_DATADIR,
 		NV_ROOTDIR . '/' . NV_CACHEDIR
 	);
-	$error = array( );
+	$error = array();
 	//Ten thu muc luu data
 	$stack[] = $dir;
 	while( $stack )
@@ -119,17 +118,17 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id( ) ) =
 	if( empty( $error ) )
 	{
 		$allowzip = array_unique( $allowzip );
-		$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'cdn_' . md5( nv_genpass( 10 ) . session_id( ) ) . '.zip';
+		$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'cdn_' . md5( nv_genpass( 10 ) . session_id() ) . '.zip';
 		require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 		$zip = new PclZip( $file_src );
 		$zip->add( $allowzip, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR );
 		$zip->add( NV_ROOTDIR . '/themes/index.html', PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
 
 		//Download file
-		require_once (NV_ROOTDIR . '/includes/class/download.class.php');
+		require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
 		$download = new download( $file_src, NV_ROOTDIR . "/" . NV_TEMP_DIR, 'js_css_cdn_' . date( 'Ymd' ) . '.zip' );
-		$download->download_file( );
-		exit( );
+		$download->download_file();
+		exit();
 	}
 	else
 	{
@@ -141,9 +140,10 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id( ) ) =
 			asort( $value );
 			$contents .= "<b>" . $key . " </b><br>&nbsp;&nbsp;&nbsp;&nbsp; " . implode( "<br>&nbsp;&nbsp;&nbsp;&nbsp;", $value ) . "<br><br>";
 		}
-		include (NV_ROOTDIR . "/includes/header.php");
+		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );
-		include (NV_ROOTDIR . "/includes/footer.php");
+		include ( NV_ROOTDIR . "/includes/footer.php" );
 	}
 }
+
 ?>

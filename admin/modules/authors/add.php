@@ -7,35 +7,34 @@
  * @Createdate 2-1-2010 21:13
  */
 
-if( ! defined( 'NV_IS_FILE_AUTHORS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
 if( ! (defined( "NV_IS_GODADMIN" ) or (defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1)) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 
 if( $nv_Request->get_int( 'result', 'get', 0 ) )
 {
 	$checksess = filter_text_input( 'checksess', 'get', '' );
-	if( $checksess != md5( $global_config['sitekey'] . session_id( ) ) )
+	if( $checksess != md5( $global_config['sitekey'] . session_id() ) )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-		die( );
+		die();
 	}
 
 	$session_files = $nv_Request->get_string( 'nv_admin_profile', 'session', '' );
 	if( empty( $session_files ) )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-		die( );
+		die();
 	}
 
 	$session_files = unserialize( $session_files );
 	$nv_Request->unset_request( 'nv_admin_profile', 'session' );
 	nv_admin_add_result( $session_files );
-	exit( );
+	exit();
 }
 
 if( $nv_Request->get_int( 'save', 'post', 0 ) )
@@ -43,39 +42,34 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	$userid = $nv_Request->get_int( 'userid', 'post', 0 );
 	$lev = $nv_Request->get_int( 'lev', 'post', 0 );
 	$editor = filter_text_input( 'editor', 'post' );
-	$allow_files_type = $nv_Request->get_array( 'allow_files_type', 'post', array( ) );
+	$allow_files_type = $nv_Request->get_array( 'allow_files_type', 'post', array() );
 	$allow_create_subdirectories = $nv_Request->get_int( 'allow_create_subdirectories', 'post', 0 );
 	$allow_modify_files = $nv_Request->get_int( 'allow_modify_files', 'post', 0 );
 	$allow_modify_subdirectories = $nv_Request->get_int( 'allow_modify_subdirectories', 'post', 0 );
-	$modules = $nv_Request->get_array( 'modules', 'post', array( ) );
+	$modules = $nv_Request->get_array( 'modules', 'post', array() );
 	$position = filter_text_input( 'position', 'post', '', 1 );
 
-	if( ! $userid )
-		die( $lang_module['add_error_choose'] );
+	if( ! $userid ) die( $lang_module['add_error_choose'] );
 
 	$sql = "SELECT COUNT(*) FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id`=" . $userid;
 	$result = $db->sql_query( $sql );
 	list( $count ) = $db->sql_fetchrow( $result );
-	if( $count )
-		die( $lang_module['add_error_exist'] );
+	if( $count ) die( $lang_module['add_error_exist'] );
 
 	$sql = "SELECT `userid`, `username`, `active` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid . " LIMIT 1";
 	$result = $db->sql_query( $sql );
 	list( $userid, $username, $active ) = $db->sql_fetchrow( $result );
 
-	if( empty( $userid ) )
-		die( $lang_module['add_error_notexist'] );
-	if( empty( $position ) )
-		die( $lang_module['position_incorrect'] );
-	if( empty( $active ) )
-		die( sprintf( $lang_module['username_noactive'], $username ) );
+	if( empty( $userid ) ) die( $lang_module['add_error_notexist'] );
+	if( empty( $position ) ) die( $lang_module['position_incorrect'] );
+	if( empty( $active ) ) die( sprintf( $lang_module['username_noactive'], $username ) );
 
 	$lev = ($lev != 2 or ! defined( "NV_IS_GODADMIN" )) ? 3 : 2;
-	$mds = array( );
+	$mds = array();
 	if( $lev == 3 and ! empty( $modules ) )
 	{
 		$update = "UPDATE `" . NV_MODULES_TABLE . "` SET `admins`= CASE ";
-		$titles = array( );
+		$titles = array();
 		$array_keys = array_keys( $site_mods );
 		foreach( $array_keys as $i => $mod )
 		{
@@ -142,7 +136,7 @@ else
 	$userid = 0;
 	$editor = "ckeditor";
 	$lev = 3;
-	$modules = array( );
+	$modules = array();
 	$allow_files_type = array(
 		'images',
 		'archives'
@@ -152,7 +146,7 @@ else
 
 $page_title = $lang_module['nv_admin_add'];
 
-$mods = array( );
+$mods = array();
 $array_keys = array_keys( $site_mods );
 foreach( $array_keys as $mod )
 {
@@ -160,7 +154,7 @@ foreach( $array_keys as $mod )
 	$mods[$mod]['custom_title'] = $site_mods[$mod]['custom_title'];
 }
 
-$contents = array( );
+$contents = array();
 
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add";
 $contents['lev'] = array(
@@ -170,15 +164,14 @@ $contents['lev'] = array(
 	$lang_module['level3']
 );
 
-$editors = array( );
+$editors = array();
 
 $dirs = nv_scandir( NV_ROOTDIR . '/' . NV_EDITORSDIR, "/^[a-zA-Z0-9_]+$/" );
 if( ! empty( $dirs ) )
 {
 	foreach( $dirs as $dir )
 	{
-		if( file_exists( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $dir . '/nv.php' ) )
-			$editors[] = $dir;
+		if( file_exists( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $dir . '/nv.php' ) ) $editors[] = $dir;
 	}
 }
 
@@ -234,7 +227,7 @@ $xtpl = new XTemplate( "add.tpl", NV_ROOTDIR . "/themes/" . $global_config['modu
 $xtpl->assign( 'INFO', $contents['info'] );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
-$xtpl->assign( 'RESULT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&result=1&checksess=" . md5( $global_config['sitekey'] . session_id( ) ) );
+$xtpl->assign( 'RESULT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&result=1&checksess=" . md5( $global_config['sitekey'] . session_id() ) );
 $xtpl->assign( 'FILTERSQL', nv_base64_encode( $crypt->aes_encrypt( $filtersql, md5( $global_config['sitekey'] . $client_info['session_id'] ) ) ) );
 $xtpl->assign( 'ACTION', $contents['action'] );
 
@@ -303,7 +296,8 @@ $xtpl->assign( 'SUBMIT', $contents['submit'] );
 $xtpl->parse( 'add' );
 $contents = $xtpl->text( 'add' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

@@ -33,38 +33,38 @@ if( $sys_info['ini_set_support'] )
 	ini_set( 'allow_url_fopen', 1 );
 	ini_set( "user_agent", 'NV3' );
 	ini_set( "default_charset", $global_config['site_charset'] );
-	
+
 	$memoryLimitMB = ( integer )ini_get( 'memory_limit' );
-	
+
 	if( $memoryLimitMB < 64 )
 	{
 		ini_set( "memory_limit", "64M" );
 	}
-	
+
 	ini_set( 'arg_separator.output', '&' );
 	ini_set( 'auto_detect_line_endings', 0 );
 }
 
-$sys_info['safe_mode'] = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
-$sys_info['php_support'] = ( PHP_VERSION >= 5.2 ) ? 1 : 0;
+$sys_info['safe_mode'] = (ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on') ? 1 : 0;
+$sys_info['php_support'] = (PHP_VERSION >= 5.2) ? 1 : 0;
 
-$sys_info['mysql_support'] = ( extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' ) ) ? 1 : 0;
-$sys_info['opendir_support'] = ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) ? 1 : 0;
-$sys_info['gd_support'] = ( extension_loaded( 'gd' ) ) ? 1 : 0;
-$sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' ) ) ? 1 : 0;
-$sys_info['zlib_support'] = ( extension_loaded( 'zlib' ) ) ? 1 : 0;
-$sys_info['session_support'] = ( extension_loaded( 'session' ) ) ? 1 : 0;
-$sys_info['mb_support'] = ( extension_loaded( 'mbstring' ) ) ? 1 : 0;
-$sys_info['iconv_support'] = ( extension_loaded( 'iconv' ) ) ? 1 : 0;
-$sys_info['curl_support'] = ( extension_loaded( 'curl' ) and function_exists( "curl_init" ) and ! in_array( 'curl_init', $sys_info['disable_functions'] ) ) ? 1 : 0;
-$sys_info['allowed_set_time_limit'] = ( ! $sys_info['safe_mode'] and function_exists( "set_time_limit" ) and ! in_array( 'set_time_limit', $sys_info['disable_functions'] ) ) ? 1 : 0;
+$sys_info['mysql_support'] = (extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' )) ? 1 : 0;
+$sys_info['opendir_support'] = (function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] )) ? 1 : 0;
+$sys_info['gd_support'] = ( extension_loaded( 'gd' )) ? 1 : 0;
+$sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' )) ? 1 : 0;
+$sys_info['zlib_support'] = ( extension_loaded( 'zlib' )) ? 1 : 0;
+$sys_info['session_support'] = ( extension_loaded( 'session' )) ? 1 : 0;
+$sys_info['mb_support'] = ( extension_loaded( 'mbstring' )) ? 1 : 0;
+$sys_info['iconv_support'] = ( extension_loaded( 'iconv' )) ? 1 : 0;
+$sys_info['curl_support'] = (extension_loaded( 'curl' ) and function_exists( "curl_init" ) and ! in_array( 'curl_init', $sys_info['disable_functions'] )) ? 1 : 0;
+$sys_info['allowed_set_time_limit'] = ( ! $sys_info['safe_mode'] and function_exists( "set_time_limit" ) and ! in_array( 'set_time_limit', $sys_info['disable_functions'] )) ? 1 : 0;
 
-$sys_info['os'] = strtoupper( ( function_exists( "php_uname" ) and ! in_array( 'php_uname', $sys_info['disable_functions'] ) and php_uname( 's' ) != '' ) ? php_uname( 's' ) : PHP_OS );
-$sys_info['ftp_support'] = ( function_exists( "ftp_connect" ) and ! in_array( 'ftp_connect', $sys_info['disable_functions'] ) and function_exists( "ftp_chmod" ) and ! in_array( 'ftp_chmod', $sys_info['disable_functions'] ) and function_exists( "ftp_mkdir" ) and ! in_array( 'ftp_mkdir', $sys_info['disable_functions'] ) and function_exists( "ftp_chdir" ) and ! in_array( 'ftp_chdir', $sys_info['disable_functions'] ) and function_exists( "ftp_nlist" ) and ! in_array( 'ftp_nlist', $sys_info['disable_functions'] ) ) ? 1 : 0;
-$sys_info['mcrypt_support'] = ( function_exists( 'mcrypt_encrypt' ) ) ? 1 : 0;
+$sys_info['os'] = strtoupper( (function_exists( "php_uname" ) and ! in_array( 'php_uname', $sys_info['disable_functions'] ) and php_uname( 's' ) != '') ? php_uname( 's' ) : PHP_OS );
+$sys_info['ftp_support'] = (function_exists( "ftp_connect" ) and ! in_array( 'ftp_connect', $sys_info['disable_functions'] ) and function_exists( "ftp_chmod" ) and ! in_array( 'ftp_chmod', $sys_info['disable_functions'] ) and function_exists( "ftp_mkdir" ) and ! in_array( 'ftp_mkdir', $sys_info['disable_functions'] ) and function_exists( "ftp_chdir" ) and ! in_array( 'ftp_chdir', $sys_info['disable_functions'] ) and function_exists( "ftp_nlist" ) and ! in_array( 'ftp_nlist', $sys_info['disable_functions'] )) ? 1 : 0;
+$sys_info['mcrypt_support'] = ( function_exists( 'mcrypt_encrypt' )) ? 1 : 0;
 
 //Xac dinh tien ich mo rong lam viec voi string
-$sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ( $sys_info['iconv_support'] ? 'iconv' : 'php' );
+$sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ($sys_info['iconv_support'] ? 'iconv' : 'php');
 
 //Kiem tra ho tro rewrite
 $sys_info['supports_rewrite'] = false;
@@ -79,7 +79,7 @@ if( function_exists( 'apache_get_modules' ) )
 }
 elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.' ) !== false )
 {
-	if( isset( $_SERVER['IIS_UrlRewriteModule'] ) && ( php_sapi_name() == 'cgi-fcgi' ) && class_exists( 'DOMDocument' ) )
+	if( isset( $_SERVER['IIS_UrlRewriteModule'] ) && (php_sapi_name() == 'cgi-fcgi') && class_exists( 'DOMDocument' ) )
 	{
 		$sys_info['supports_rewrite'] = "rewrite_mode_iis";
 	}

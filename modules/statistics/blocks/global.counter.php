@@ -11,7 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_counter' ) )
 {
-	function nv_block_counter()
+	function nv_block_counter( )
 	{
 		global $global_config, $db, $lang_global;
 
@@ -33,7 +33,7 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 		$xtpl->assign( 'LANG', $lang_global );
 		$xtpl->assign( 'IMG_PATH', NV_BASE_SITEURL . "themes/" . $block_theme . "/" );
 
-		$sql = "SELECT `c_type`, `c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE (`c_type`='day' AND `c_val`='".date( 'd', NV_CURRENTTIME )."') OR (`c_type`='month' AND `c_val`='".date( 'M', NV_CURRENTTIME )."') OR (`c_type`='total' AND `c_val`='hits')";
+		$sql = "SELECT `c_type`, `c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE (`c_type`='day' AND `c_val`='" . date( 'd', NV_CURRENTTIME ) . "') OR (`c_type`='month' AND `c_val`='" . date( 'M', NV_CURRENTTIME ) . "') OR (`c_type`='total' AND `c_val`='hits')";
 		$query = $db->sql_query( $sql );
 		while( list( $c_type, $c_count ) = $db->sql_fetchrow( $query ) )
 		{
@@ -45,13 +45,13 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 			{
 				$xtpl->assign( 'COUNT_MONTH', $c_count );
 			}
-			elseif( $c_type == 'total')
+			elseif( $c_type == 'total' )
 			{
 				$xtpl->assign( 'COUNT_ALL', $c_count );
 			}
 		}
 
-		$sql = "SELECT `uid`, `full_name` FROM `" . NV_SESSIONS_GLOBALTABLE . "` WHERE `onl_time` >= " . ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME );
+		$sql = "SELECT `uid`, `full_name` FROM `" . NV_SESSIONS_GLOBALTABLE . "` WHERE `onl_time` >= " . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME);
 		$query = $db->sql_query( $sql );
 
 		$count_online = $users = $bots = $guests = 0;
@@ -103,6 +103,7 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 
 		return $content;
 	}
+
 }
 
 if( defined( 'NV_SYSTEM' ) )

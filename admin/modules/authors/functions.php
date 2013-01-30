@@ -7,8 +7,7 @@
  * @Createdate 1-27-2010 5:25
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $allow_func = array(
 	'main',
@@ -54,16 +53,16 @@ if( $module_name == "authors" )
 		if( ! defined( 'NV_IS_GODADMIN' ) )
 		{
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-			die( );
+			die();
 		}
 		//parse content
 		$xtpl = new XTemplate( "add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
 
 		$lev = ($result['lev'] == 2) ? $lang_module['level2'] : $lang_module['level3'];
-		$contents = array( );
+		$contents = array();
 		$contents['admin_id'] = $result['admin_id'];
 		$contents['title'] = $lang_module['nv_admin_add_title'];
-		$contents['info'] = array( );
+		$contents['info'] = array();
 		$contents['info']['lev'] = array(
 			$lang_module['lev'],
 			$lev
@@ -131,9 +130,9 @@ if( $module_name == "authors" )
 		$xtpl->parse( 'add_result' );
 		$contents = $xtpl->text( 'add_result' );
 
-		include (NV_ROOTDIR . "/includes/header.php");
+		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );
-		include (NV_ROOTDIR . "/includes/footer.php");
+		include ( NV_ROOTDIR . "/includes/footer.php" );
 	}
 
 	/**
@@ -146,7 +145,7 @@ if( $module_name == "authors" )
 	{
 		global $lang_module, $lang_global, $page_title, $module_name, $global_config;
 		$xtpl = new XTemplate( "edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
-		$contents = array( );
+		$contents = array();
 		$contents['title'] = sprintf( $lang_module['nv_admin_edit_result_title'], $result['login'] );
 
 		$contents['thead'] = array(
@@ -186,23 +185,6 @@ if( $module_name == "authors" )
 			++$a;
 		}
 
-		$xtpl->assign( 'ACTION', $contents['action'] );
-		foreach( $contents['change'] as $key => $values )
-		{
-			$xtpl->assign( 'KEY', $key );
-			if( $key != "password" )
-			{
-				$xtpl->assign( 'VALUE1', $values[1] );
-				$xtpl->parse( 'edit_resuilt.loop1.if' );
-			}
-			else
-			{
-				$xtpl->assign( 'VALUE2', $values[2] );
-				$xtpl->parse( 'edit_resuilt.loop1.else' );
-			}
-			$xtpl->parse( 'edit_resuilt.loop1' );
-		}
-
 		$xtpl->assign( 'DOWNLOAD', $contents['download'] );
 		$xtpl->assign( 'SENDMAIL', $contents['sendmail'] );
 		$xtpl->assign( 'EDIT_NAME', $contents['go_edit'][0] );
@@ -213,9 +195,9 @@ if( $module_name == "authors" )
 		$xtpl->parse( 'edit_resuilt' );
 		$contents = $xtpl->text( 'edit_resuilt' );
 
-		include (NV_ROOTDIR . "/includes/header.php");
+		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );
-		include (NV_ROOTDIR . "/includes/footer.php");
+		include ( NV_ROOTDIR . "/includes/footer.php" );
 	}
 
 	/**
@@ -240,4 +222,5 @@ if( $module_name == "authors" )
 	}
 
 }
+
 ?>

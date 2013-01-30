@@ -7,8 +7,7 @@
  * @Createdate 2-6-2010 21:16
  */
 
-if( defined( 'NV_CLASS_CRYPT' ) )
-	return;
+if( defined( 'NV_CLASS_CRYPT' ) ) return;
 define( 'NV_CLASS_CRYPT', true );
 
 /**
@@ -38,11 +37,9 @@ class nv_Crypt
 	{
 		$this->_func = $method != 'md5' ? 'sha1' : 'md5';
 		$this->_key = call_user_func( $this->_func, $key );
-		if( isset( $key{64} ) )
-			$key = pack( 'H32', $this->_key );
+		if( isset( $key{64} ) ) $key = pack( 'H32', $this->_key );
 
-		if( ! isset( $key{63} ) )
-			$key = str_pad( $key, 64, chr( 0 ) );
+		if( ! isset( $key{63} ) ) $key = str_pad( $key, 64, chr( 0 ) );
 
 		$this->_ipad = substr( $key, 0, 64 ) ^ str_repeat( chr( 0x36 ), 64 );
 		$this->_opad = substr( $key, 0, 64 ) ^ str_repeat( chr( 0x5C ), 64 );
@@ -59,8 +56,7 @@ class nv_Crypt
 	{
 		$inner = pack( 'H32', call_user_func( $this->_func, $this->_ipad . $data ) );
 		$digest = call_user_func( $this->_func, $this->_opad . $inner );
-		if( ! $is_salt )
-			return $digest;
+		if( ! $is_salt ) return $digest;
 
 		$mhast = constant( 'MHASH_' . strtoupper( $this->_func ) );
 		$salt = substr( str_shuffle( "abcdefghijklmnopqrstuvwxyz0123456789" ), 0, 8 );
@@ -147,5 +143,7 @@ class nv_Crypt
 			return null;
 		}
 	}
+
 }
+
 ?>
