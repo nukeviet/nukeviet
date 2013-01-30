@@ -7,16 +7,15 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['smtp_config'];
-$smtp_encrypted_array = array( );
+$smtp_encrypted_array = array();
 $smtp_encrypted_array[0] = "None";
 $smtp_encrypted_array[1] = "SSL";
 $smtp_encrypted_array[2] = "TSL";
 
-$array_config = array( );
+$array_config = array();
 $errormess = "";
 $array_config['mailer_mode'] = filter_text_input( 'mailer_mode', 'post', $global_config['mailer_mode'], 1, 255 );
 $array_config['smtp_host'] = filter_text_input( 'smtp_host', 'post', $global_config['smtp_host'], 1, 255 );
@@ -46,11 +45,11 @@ if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
         LIMIT 1" );
 	}
 
-	nv_save_file_config_global( );
+	nv_save_file_config_global();
 
 	if( $array_config['smtp_ssl'] == 1 )
 	{
-		require_once (NV_ROOTDIR . "/includes/core/phpinfo.php");
+		require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
 		$array_phpmod = phpinfo_array( 8, 1 );
 		if( ! empty( $array_phpmod ) and ! array_key_exists( "openssl", $array_phpmod ) )
 		{
@@ -60,8 +59,8 @@ if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
 
 	if( empty( $errormess ) )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-		exit( );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+		exit();
 	}
 	$array_config['smtp_password'] = $smtp_password;
 }
@@ -98,7 +97,8 @@ if( $errormess != "" )
 $xtpl->parse( 'smtp' );
 $contents = $xtpl->text( 'smtp' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

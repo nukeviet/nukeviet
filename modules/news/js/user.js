@@ -6,7 +6,7 @@
  */
 
 function sendrating(id, point, newscheckss) {
-	if(point==1 || point==2 || point==3 || point==4 || point==5){
+	if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
 		nv_ajax('post', nv_siteroot + 'index.php', nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&id=' + id + '&checkss=' + newscheckss + '&point=' + point, 'stringrating', '');
 	}
 }
@@ -23,7 +23,7 @@ function sendcommment(id, newscheckss, gfx_count) {
 		alert(nv_error_email);
 		commentemail.focus();
 	} else if (!nv_name_check(commentseccode)) {
-		error = nv_error_seccode.replace( /\[num\]/g, gfx_count );
+		error = nv_error_seccode.replace(/\[num\]/g, gfx_count);
 		alert(error);
 		commentseccode.focus();
 	} else if (commentcontent == "") {
@@ -69,6 +69,7 @@ function nv_del_content(id, checkss, base_adminurl) {
 	}
 	return false;
 }
+
 function nv_del_content_result(res) {
 	var r_split = res.split("_");
 	if (r_split[0] == 'OK') {

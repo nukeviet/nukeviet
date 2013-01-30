@@ -23,12 +23,12 @@ if( $submit )
 	$site_logo = filter_text_input( 'site_logo', 'post' );
 
 	$array_config['site_keywords'] = filter_text_input( 'site_keywords', 'post', '', 1, 255 );
-	
+
 	if( ! empty( $array_config['site_keywords'] ) )
 	{
 		$site_keywords = array_map( "trim", explode( ",", $array_config['site_keywords'] ) );
 		$array_config['site_keywords'] = array();
-		
+
 		if( ! empty( $site_keywords ) )
 		{
 			foreach( $site_keywords as $keywords )
@@ -39,8 +39,8 @@ if( $submit )
 				}
 			}
 		}
-		
-		$array_config['site_keywords'] = ( ! empty( $array_config['site_keywords'] ) ) ? implode( ", ", $array_config['site_keywords'] ) : "";
+
+		$array_config['site_keywords'] = ( ! empty( $array_config['site_keywords'] )) ? implode( ", ", $array_config['site_keywords'] ) : "";
 	}
 
 	if( ! nv_is_url( $site_logo ) and file_exists( NV_DOCUMENT_ROOT . $site_logo ) )
@@ -61,16 +61,16 @@ if( $submit )
 	{
 		$array_config['disable_site_content'] = $lang_global['disable_site_content'];
 	}
-	
+
 	$array_config['disable_site_content'] = nv_editor_nl2br( $array_config['disable_site_content'] );
 
 	foreach( $array_config as $config_name => $config_value )
 	{
 		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', 'global', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
 	}
-	
+
 	nv_delete_all_cache();
-	
+
 	if( empty( $errormess ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass() );
@@ -79,13 +79,14 @@ if( $submit )
 	else
 	{
 		$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` 
-        			WHERE `lang`='sys' OR `lang`='".NV_LANG_DATA."' ORDER BY `module` ASC";
+        			WHERE `lang`='sys' OR `lang`='" . NV_LANG_DATA . "' ORDER BY `module` ASC";
 		$result = $db->sql_query( $sql );
-		
+
 		while( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 		{
 			if( $c_module == "global" ) $global_config[$c_config_name] = $c_config_value;
-			else  $module_config[$c_module][$c_config_name] = $c_config_value;
+			else
+				$module_config[$c_module][$c_config_name] = $c_config_value;
 		}
 	}
 }
@@ -147,14 +148,14 @@ $xtpl->assign( 'VALUE', $value_setting );
 
 foreach( $theme_array as $folder )
 {
-	$xtpl->assign( 'SELECTED', ( $global_config['site_theme'] == $folder ) ? ' selected="selected"' : '' );
+	$xtpl->assign( 'SELECTED', ($global_config['site_theme'] == $folder) ? ' selected="selected"' : '' );
 	$xtpl->assign( 'SITE_THEME', $folder );
 	$xtpl->parse( 'main.site_theme' );
 }
 
 foreach( $module_array as $mod )
 {
-	$xtpl->assign( 'SELECTED', ( $global_config['site_home_module'] == $mod['title'] ) ? ' selected="selected"' : '' );
+	$xtpl->assign( 'SELECTED', ($global_config['site_home_module'] == $mod['title']) ? ' selected="selected"' : '' );
 	$xtpl->assign( 'MODULE', $mod );
 	$xtpl->parse( 'main.module' );
 }
@@ -177,7 +178,7 @@ $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 
 if( $errormess != "" )
-{	
+{
 	$xtpl->assign( 'ERROR', $errormess );
 	$xtpl->parse( 'main.error' );
 }

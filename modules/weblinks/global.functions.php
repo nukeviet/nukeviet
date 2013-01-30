@@ -11,7 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 /**
  * _substr()
- * 
+ *
  * @param mixed $str
  * @param mixed $length
  * @param integer $minword
@@ -24,7 +24,7 @@ function _substr( $str, $length, $minword = 3 )
 
 	foreach( explode( ' ', $str ) as $word )
 	{
-		$part = ( ( $sub != '' ) ? ' ' : '' ) . $word;
+		$part = (($sub != '') ? ' ' : '') . $word;
 		$sub .= $part;
 		$len += strlen( $part );
 
@@ -34,7 +34,7 @@ function _substr( $str, $length, $minword = 3 )
 		}
 	}
 
-	return $sub . ( ( isset( $str{$len} ) ) ? '...' : '' );
+	return $sub . (( isset( $str{$len} )) ? '...' : '');
 }
 
 ?>

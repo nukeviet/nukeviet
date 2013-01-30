@@ -10,7 +10,13 @@ a {
 	color: #1b7fa9
 }
 
-blockquote{margin:0 0 18px 4px;padding:0 16px;font-style:italic;border-left:5px solid #a50000;color:#808080}
+blockquote {
+	margin: 0 0 18px 4px;
+	padding: 0 16px;
+	font-style: italic;
+	border-left: 5px solid #a50000;
+	color: #808080
+}
 
 .fl {
 	float: left
@@ -197,34 +203,29 @@ div.step_content_title {
 
 .control_t li span {
 	height: 27px;
-	background: url(../images/button_right_corner.png) right center
-		no-repeat;
+	background: url(../images/button_right_corner.png) right center no-repeat;
 	display: block;
 	float: left;
 	padding-right: 11px
 }
 
 .control_t li span.back_step {
-	background: url(../images/button_right_back_corner.png) right center
-		no-repeat;
+	background: url(../images/button_right_back_corner.png) right center no-repeat;
 	padding-right: 26px
 }
 
 .control_t li span.next_step {
-	background: url(../images/button_right_next_corner.png) right center
-		no-repeat;
+	background: url(../images/button_right_next_corner.png) right center no-repeat;
 	padding-right: 26px
 }
 
 .control_t li span.okay {
-	background: url(../images/button_right_okay_corner.png) right center
-		no-repeat;
+	background: url(../images/button_right_okay_corner.png) right center no-repeat;
 	padding-right: 26px
 }
 
 .control_t li span.home {
-	background: url(../images/button_right_home_corner.png) right center
-		no-repeat;
+	background: url(../images/button_right_home_corner.png) right center no-repeat;
 	padding-right: 26px
 }
 
@@ -272,7 +273,7 @@ div.step_content_title {
 	margin-left: 40px
 }
 
-.txt,.button,.area,.select {
+.txt, .button, .area, .select {
 	border: 1px solid #e6e6e6
 }
 
@@ -342,8 +343,8 @@ ul.lc li .nb {
 	color: #a50000
 }
 
-.center{
-	text-align:center
+.center {
+	text-align: center
 }
 
 /* INFO BOX */
@@ -353,66 +354,71 @@ div.infook, div.infoerror, div.infoalert {
 	line-height: 1.5em;
 	text-align: center
 }
+
 div.infook {
 	border-top: 1px solid #6C6;
 	border-bottom: 1px solid #6C6;
 	background-color: #CFC
 }
+
 div.infoerror {
 	border-top: 1px solid #C33;
 	border-bottom: 1px solid #C33;
 	background-color: #F66;
 	color: white
 }
+
 div.infoalert {
 	border-top: 1px solid #9CF;
 	border-bottom: 1px solid #9CF;
 	background-color: #C5DEFA
 }
+
 div.infook a, div.inerror a, div.infoalert a {
-	text-decoration: underline;	
+	text-decoration: underline;
 }
+
 div.infoerror a {
 	color: #fff;
-	text-decoration: underline;	
+	text-decoration: underline;
 }
 
-.all-work{
-	height:370px;
-	overflow:auto
+.all-work {
+	height: 370px;
+	overflow: auto
 }
 
-.current-work{
-	height:370px;
-	overflow:auto
+.current-work {
+	height: 370px;
+	overflow: auto
 }
 
-.current-work .data{
-	padding:0 10px;
-	text-align:center
+.current-work .data {
+	padding: 0 10px;
+	text-align: center
 }
 
 .workitem {
-	padding:5px;
-	display:block;
+	padding: 5px;
+	display: block;
 	border-bottom: 1px solid #C1DAD7;
-	padding-left:25px;
-	background:url('../images/pending.png') no-repeat 5px center;
-	font-size:11px
+	padding-left: 25px;
+	background: url('../images/pending.png') no-repeat 5px center;
+	font-size: 11px
 }
 
-.ierror{
-	background:url('../images/error.png') no-repeat 5px center
+.ierror {
+	background: url('../images/error.png') no-repeat 5px center
 }
 
-.iok{
-	background:url('../images/outgroup.png') no-repeat 5px center
+.iok {
+	background: url('../images/outgroup.png') no-repeat 5px center
 }
 
-.iwarn{
-	background:url('../images/warning.png') no-repeat 5px center
+.iwarn {
+	background: url('../images/warning.png') no-repeat 5px center
 }
 
-.iload{
-	background:url('../images/load.gif') no-repeat 5px center
+.iload {
+	background: url('../images/load.gif') no-repeat 5px center
 }

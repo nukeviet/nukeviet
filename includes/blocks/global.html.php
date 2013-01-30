@@ -20,9 +20,9 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 			require ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 		}
 
-		$htmlcontent = ( defined( 'NV_EDITOR' ) ) ? nv_editor_br2nl( $data_block['htmlcontent'] ) : nv_br2nl( $data_block['htmlcontent'] );
+		$htmlcontent = ( defined( 'NV_EDITOR' )) ? nv_editor_br2nl( $data_block['htmlcontent'] ) : nv_br2nl( $data_block['htmlcontent'] );
 		$htmlcontent = nv_htmlspecialchars( $htmlcontent );
-	
+
 		if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 		{
 			$html = nv_aleditor( "htmlcontent", '100%', '150px', $htmlcontent );
@@ -31,7 +31,7 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 		{
 			$html = "<textarea style=\"width: 100%\" name=\"htmlcontent\" id=\"htmlcontent\" cols=\"20\" rows=\"8\">" . $htmlcontent . "</textarea>";
 		}
-	
+
 		return '<tr><td colspan="2">' . $lang_block['htmlcontent'] . '<br>' . $html . '</td></tr>';
 	}
 
@@ -43,7 +43,7 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 		$return['error'] = array();
 		$return['config'] = array();
 		$return['config']['htmlcontent'] = defined( 'NV_EDITOR' ) ? nv_editor_nl2br( $xhtml ) : nv_nl2br( $xhtml, '<br />' );
-	
+
 		return $return;
 	}
 
@@ -51,6 +51,7 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 	{
 		return $block_config['htmlcontent'];
 	}
+
 }
 
 if( defined( 'NV_SYSTEM' ) )

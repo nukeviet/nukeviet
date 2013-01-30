@@ -81,14 +81,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	else
 	{
 		$pass_crypt = $crypt->hash( $pass );
-	
+
 		$sql = "INSERT INTO `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` (`id`, `login`, `pass`, `reg_time`, `full_name`, `email`, `website`, `location`, `yim`, `phone`, `fax`, `mobile`, `act`, `check_num`, `last_login`, `last_ip`, `last_agent`, `uploadtype`) VALUES 
         (NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( $pass_crypt ) . ", " . NV_CURRENTTIME . ", " . $db->dbescape( $full_name ) . ", 
         " . $db->dbescape( $email ) . ", " . $db->dbescape( $website ) . ", " . $db->dbescape( $location ) . ", " . $db->dbescape( $yim ) . ", 
         " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", " . $db->dbescape( $mobile ) . ", 1, '', 0, '', ''," . $db->dbescape( $uploadtype ) . ")";
-	
+
 		$id = $db->sql_query_insert_id( $sql );
-	
+
 		if( $id )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_client', "bannerid " . $id, $admin_info['userid'] );
@@ -104,26 +104,84 @@ else
 
 if( $website == "" ) $website = "http://";
 
-$info = ( ! empty( $error ) ) ? $error : $lang_module['add_client_info'];
-$is_error = ( ! empty( $error ) ) ? 1 : 0;
+$info = ( ! empty( $error )) ? $error : $lang_module['add_client_info'];
+$is_error = ( ! empty( $error )) ? 1 : 0;
 
 $contents = array();
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['add_client_submit'];
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_client";
-$contents['login'] = array( $lang_module['login'], 'login_iavim', $login, NV_UNICKMAX );
-$contents['pass'] = array( $lang_global['password'], 'pass_iavim', $pass, NV_UPASSMAX );
-$contents['re_pass'] = array( $lang_global['password2'], 're_pass_iavim', $re_pass, NV_UPASSMAX );
-$contents['full_name'] = array( $lang_module['full_name'], 'full_name', $full_name, 255 );
-$contents['email'] = array( $lang_module['email'], 'email_iavim', $email, 70 );
-$contents['website'] = array( $lang_module['website'], 'website_iavim', $website, 255 );
-$contents['location'] = array( $lang_module['location'], 'location', $location, 255 );
-$contents['yim'] = array( $lang_module['yim'], 'yim_iavim', $yim, 255 );
-$contents['phone'] = array( $lang_module['phone'], 'phone', $phone, 255 );
-$contents['fax'] = array( $lang_module['fax'], 'fax', $fax, 255 );
-$contents['mobile'] = array( $lang_module['mobile'], 'mobile', $mobile, 255 );
-$contents['uploadtype'] = array( $lang_module['uploadtype'], 'uploadtype' );
+$contents['login'] = array(
+	$lang_module['login'],
+	'login_iavim',
+	$login,
+	NV_UNICKMAX
+);
+$contents['pass'] = array(
+	$lang_global['password'],
+	'pass_iavim',
+	$pass,
+	NV_UPASSMAX
+);
+$contents['re_pass'] = array(
+	$lang_global['password2'],
+	're_pass_iavim',
+	$re_pass,
+	NV_UPASSMAX
+);
+$contents['full_name'] = array(
+	$lang_module['full_name'],
+	'full_name',
+	$full_name,
+	255
+);
+$contents['email'] = array(
+	$lang_module['email'],
+	'email_iavim',
+	$email,
+	70
+);
+$contents['website'] = array(
+	$lang_module['website'],
+	'website_iavim',
+	$website,
+	255
+);
+$contents['location'] = array(
+	$lang_module['location'],
+	'location',
+	$location,
+	255
+);
+$contents['yim'] = array(
+	$lang_module['yim'],
+	'yim_iavim',
+	$yim,
+	255
+);
+$contents['phone'] = array(
+	$lang_module['phone'],
+	'phone',
+	$phone,
+	255
+);
+$contents['fax'] = array(
+	$lang_module['fax'],
+	'fax',
+	$fax,
+	255
+);
+$contents['mobile'] = array(
+	$lang_module['mobile'],
+	'mobile',
+	$mobile,
+	255
+);
+$contents['uploadtype'] = array(
+	$lang_module['uploadtype'],
+	'uploadtype'
+);
 
 $ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 $contents['types'] = array_keys( $ini );

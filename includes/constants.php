@@ -7,8 +7,7 @@
  * @Createdate 1-27-2010 5:25
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 //Neu thay doi bat ky gia tri trong file nay ban can vao admin phan cau hinh he thong va luu lai
 
@@ -171,4 +170,5 @@ $global_config['check_theme_admin'] = "/^(admin)\_[a-zA-Z0-9\-\_]+$/";
 $global_config['check_email'] = '/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/';
 $global_config['check_cron'] = "/^(cron)\_[a-zA-Z0-9\_]+$/";
 $global_config['check_op_layout'] = "/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/";
+
 ?>

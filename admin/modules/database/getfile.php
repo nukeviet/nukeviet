@@ -19,10 +19,10 @@ if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info[
 
 	//Download file
 	require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
-	
+
 	$name = basename( $path_filename );
 	$name_arr = explode( "_", $name );
-	
+
 	if( sizeof( $name_arr ) > 1 and strlen( $name_arr[0] ) == 32 )
 	{
 		$name = substr( $name, 33 );

@@ -13,7 +13,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 {
 	/**
 	 * nv_block_data_config_rss()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $data_block
 	 * @param mixed $lang_block
@@ -31,7 +31,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		$html = "<select name=\"config_number\">\n";
 		for( $index = 1; $index <= 50; ++$index )
 		{
-			$sel = ( $index == $data_block['number'] ) ? ' selected' : '';
+			$sel = ($index == $data_block['number']) ? ' selected' : '';
 			$html .= "<option value=\"" . $index . "\" " . $sel . ">" . $index . "</option>\n";
 		}
 		$html .= "</select>\n";
@@ -41,25 +41,25 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		$html = "<select name=\"config_title_length\">\n";
 		for( $index = 0; $index <= 255; ++$index )
 		{
-			$sel = ( $index == $data_block['title_length'] ) ? ' selected' : '';
+			$sel = ($index == $data_block['title_length']) ? ' selected' : '';
 			$html .= "<option value=\"" . $index . "\" " . $sel . ">" . $index . "</option>\n";
 		}
 		$html .= "</select>\n";
 		$return .= '<tr><td>' . $lang_block['title_length'] . '</td><td>' . $html . '</td></tr>';
 
-		$sel = ( intval( $data_block['isdescription'] ) == 1 ) ? "checked=\"checked\"" : "";
+		$sel = (intval( $data_block['isdescription'] ) == 1) ? "checked=\"checked\"" : "";
 		$html = "<input type=\"checkbox\" name=\"config_isdescription\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "</td>\n";
 		$return .= '<tr><td>' . $lang_block['isdescription'] . '</td><td>' . $html . '</td></tr>';
 
-		$sel = ( intval( $data_block['ishtml'] ) == 1 ) ? "checked=\"checked\"" : "";
+		$sel = (intval( $data_block['ishtml'] ) == 1) ? "checked=\"checked\"" : "";
 		$html = "<input type=\"checkbox\" name=\"config_ishtml\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "</td>\n";
 		$return .= '<tr><td>' . $lang_block['ishtml'] . '</td><td>' . $html . '</td></tr>';
 
-		$sel = ( intval( $data_block['ispubdate'] ) == 1 ) ? "checked=\"checked\"" : "";
+		$sel = (intval( $data_block['ispubdate'] ) == 1) ? "checked=\"checked\"" : "";
 		$html = "<input type=\"checkbox\" name=\"config_ispubdate\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "</td>\n";
 		$return .= '<tr><td>' . $lang_block['ispubdate'] . '</td><td>' . $html . '</td></tr>';
 
-		$sel = ( intval( $data_block['istarget'] ) == 1 ) ? "checked=\"checked\"" : "";
+		$sel = (intval( $data_block['istarget'] ) == 1) ? "checked=\"checked\"" : "";
 		$html = "<input type=\"checkbox\" name=\"config_istarget\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "</td>\n";
 
 		$return .= '<tr><td>' . $lang_block['istarget'] . '</td><td>' . $html . '</td></tr>';
@@ -69,7 +69,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 
 	/**
 	 * nv_block_data_config_rss_submit()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $lang_block
 	 * @return
@@ -96,7 +96,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 
 	/**
 	 * nv_get_rss()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @return
 	 */
@@ -107,7 +107,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		$cache_file = NV_LANG_DATA . "_rss_" . md5( $url ) . "_" . NV_CACHE_PREFIX . ".cache";
 		if( file_exists( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) and filemtime( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) > NV_CURRENTTIME - 1200 )
 		{
-			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+			if( ($cache = nv_get_cache( $cache_file )) != false )
 			{
 				$array_data = unserialize( $cache );
 			}
@@ -155,7 +155,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 
 	/**
 	 * nv_block_global_rss()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
@@ -183,9 +183,9 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		{
 			if( $a <= $block_config['number'] )
 			{
-				$item['description'] = ( $block_config['ishtml'] ) ? $item['description'] : strip_tags( $item['description'] );
-				$item['target'] = ( $block_config['istarget'] ) ? " onclick=\"this.target='_blank'\" " : "";
-				$item['class'] = ( $a % 2 == 0 ) ? "second" : "";
+				$item['description'] = ($block_config['ishtml']) ? $item['description'] : strip_tags( $item['description'] );
+				$item['target'] = ($block_config['istarget']) ? " onclick=\"this.target='_blank'\" " : "";
+				$item['class'] = ($a % 2 == 0) ? "second" : "";
 				if( $title_length > 0 )
 				{
 					$item['text'] = nv_clean60( $item['title'], $title_length );

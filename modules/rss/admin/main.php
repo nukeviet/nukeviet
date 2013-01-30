@@ -55,14 +55,14 @@ if( $is_edit )
 	}
 
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
-	
+
 	$xtpl->parse( 'main.edit' );
 }
 else
 {
 	$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;is_edit=1" );
 	$xtpl->assign( 'DATA', $bodytext );
-	
+
 	$xtpl->parse( 'main.add' );
 }
 

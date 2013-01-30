@@ -21,7 +21,7 @@ if( $catid > 0 )
 	{
 		$sql = "SELECT `catid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid`!=" . $catid . " AND `parentid`=" . $parentid . " ORDER BY `weight` ASC";
 		$result = $db->sql_query( $sql );
-		
+
 		$weight = 0;
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
@@ -30,14 +30,14 @@ if( $catid > 0 )
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `weight`=" . $weight . " WHERE `catid`=" . intval( $row['catid'] );
 			$db->sql_query( $sql );
 		}
-		
+
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `weight`=" . $new_vid . " WHERE `catid`=" . intval( $catid );
 		$db->sql_query( $sql );
-		
+
 		$content = "OK_" . $catid;
 
 	}
-	elseif( $mod == "inhome" and ( $new_vid == 0 or $new_vid == 1 ) )
+	elseif( $mod == "inhome" and ($new_vid == 0 or $new_vid == 1) )
 	{
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `inhome`=" . $new_vid . " WHERE `catid`=" . intval( $catid );
 		$db->sql_query( $sql );

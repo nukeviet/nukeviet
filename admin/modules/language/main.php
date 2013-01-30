@@ -7,8 +7,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_LANG' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_lang_data'];
 
@@ -19,7 +18,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $sql = "SELECT `lang`, `setup` FROM `" . $db_config['prefix'] . "_setup_language`";
 $result = $db->sql_query( $sql );
 
-$array_lang_setup = array( );
+$array_lang_setup = array();
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$array_lang_setup[$row['lang']] = intval( $row['setup'] );
@@ -31,7 +30,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$keylang = filter_text_input( 'keylang', 'get', '', 1, 2 );
 	$deletekeylang = filter_text_input( 'deletekeylang', 'get', '', 1, 2 );
 
-	if( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( "activelang_" . $keylang . session_id( ) ) )
+	if( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( "activelang_" . $keylang . session_id() ) )
 	{
 		$activelang = $nv_Request->get_int( 'activelang', 'get', 0 );
 		$allow_sitelangs = $global_config['allow_sitelangs'];
@@ -53,19 +52,19 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		$temp = ($activelang == 1) ? $lang_global['yes'] : $lang_global['no'];
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], " langkey : " . $keylang . " [ " . $temp . " ]", $admin_info['userid'] );
-		nv_save_file_config_global( );
+		nv_save_file_config_global();
 
 		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 
 		$xtpl->parse( 'activelang' );
 		$contents = $xtpl->text( 'activelang' );
 
-		include (NV_ROOTDIR . "/includes/header.php");
+		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );
-		include (NV_ROOTDIR . "/includes/footer.php");
-		exit( );
+		include ( NV_ROOTDIR . "/includes/footer.php" );
+		exit();
 	}
-	elseif( $checksess == md5( $keylang . session_id( ) ) and in_array( $keylang, $global_config['allow_adminlangs'] ) )
+	elseif( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $global_config['allow_adminlangs'] ) )
 	{
 		if( isset( $array_lang_setup[$keylang] ) and $array_lang_setup[$keylang] == 1 )
 		{
@@ -79,7 +78,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 
 			$global_config['site_theme'] = $site_theme;
 
-			require_once (NV_ROOTDIR . '/includes/sqldata.php');
+			require_once ( NV_ROOTDIR . '/includes/sqldata.php' );
 
 			$sql_create_table = nv_create_table_sys( $keylang );
 
@@ -100,7 +99,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 				$lang_global['mod_modules'] = "";
 
 				$module_name = "modules";
-				require_once (NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/modules/functions.php");
+				require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/modules/functions.php" );
 				$module_name = "";
 
 				$array_module_setup = explode( ",", NV_MODULE_SETUP_DEFAULT );
@@ -133,16 +132,16 @@ if( defined( 'NV_IS_GODADMIN' ) )
 				}
 				if( ! empty( $filesavedata ) )
 				{
-					$sql_create_table = array( );
-					include_once (NV_ROOTDIR . "/install/data_" . $filesavedata . ".php");
+					$sql_create_table = array();
+					include_once ( NV_ROOTDIR . "/install/data_" . $filesavedata . ".php" );
 					foreach( $sql_create_table as $query )
 					{
 						if( ! $db->sql_query( $query ) )
 						{
-							include (NV_ROOTDIR . "/includes/header.php");
+							include ( NV_ROOTDIR . "/includes/header.php" );
 							echo nv_admin_theme( "ERROR SETUP SQL: <br />" . $query );
-							include (NV_ROOTDIR . "/includes/footer.php");
-							exit( );
+							include ( NV_ROOTDIR . "/includes/footer.php" );
+							exit();
 						}
 					}
 
@@ -183,7 +182,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 						{
 							nv_create_table_news( $catid_i );
 						}
-						$db->sql_freeresult( );
+						$db->sql_freeresult();
 
 						$result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
 						while( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
@@ -194,7 +193,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 								$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
 							}
 						}
-						$db->sql_freeresult( );
+						$db->sql_freeresult();
 					}
 				}
 			}
@@ -205,13 +204,13 @@ if( defined( 'NV_IS_GODADMIN' ) )
 			$xtpl->parse( 'contents_setup' );
 			$contents = $xtpl->text( 'contents_setup' );
 
-			include (NV_ROOTDIR . "/includes/header.php");
+			include ( NV_ROOTDIR . "/includes/header.php" );
 			echo nv_admin_theme( $contents );
-			include (NV_ROOTDIR . "/includes/footer.php");
-			exit( );
+			include ( NV_ROOTDIR . "/includes/footer.php" );
+			exit();
 		}
 	}
-	elseif( $checksess == md5( $deletekeylang . session_id( ) . "deletekeylang" ) and ! in_array( $deletekeylang, $global_config['allow_sitelangs'] ) )
+	elseif( $checksess == md5( $deletekeylang . session_id() . "deletekeylang" ) and ! in_array( $deletekeylang, $global_config['allow_sitelangs'] ) )
 	{
 		define( 'NV_IS_FILE_MODULES', true );
 
@@ -224,9 +223,9 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		{
 			if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action.php' ) )
 			{
-				$sql_drop_module = array( );
+				$sql_drop_module = array();
 
-				include (NV_ROOTDIR . '/modules/' . $module_file . '/action.php');
+				include ( NV_ROOTDIR . '/modules/' . $module_file . '/action.php' );
 
 				if( ! empty( $sql_drop_module ) )
 				{
@@ -238,7 +237,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 			}
 		}
 
-		require_once (NV_ROOTDIR . '/includes/sqldata.php');
+		require_once ( NV_ROOTDIR . '/includes/sqldata.php' );
 
 		$sql_drop_table = nv_delete_table_sys( $deletekeylang );
 
@@ -250,11 +249,11 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		$db->sql_query( "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang` = '" . $deletekeylang . "'" );
 		$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_setup_language` WHERE `lang` = '" . $deletekeylang . "'" );
 
-		nv_delete_all_cache( );
+		nv_delete_all_cache();
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_delete'], " langkey : " . $deletekeylang, $admin_info['userid'] );
 
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass( ) );
-		exit( );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
+		exit();
 	}
 }
 $a = 0;
@@ -274,7 +273,7 @@ foreach( $global_config['allow_adminlangs'] as $keylang )
 		{
 			if( ! in_array( $keylang, $global_config['allow_sitelangs'] ) )
 			{
-				$xtpl->assign( 'DELETE', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;deletekeylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id( ) . "deletekeylang" ) );
+				$xtpl->assign( 'DELETE', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;deletekeylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() . "deletekeylang" ) );
 
 				$xtpl->parse( 'main.loop.setup_delete' );
 			}
@@ -299,8 +298,8 @@ foreach( $global_config['allow_adminlangs'] as $keylang )
 				$xtpl->assign( 'ALLOW_SITELANGS', array(
 					'selected_yes' => $selected_yes,
 					'selected_no' => $selected_no,
-					'url_yes' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=1&amp;checksess=" . md5( "activelang_" . $keylang . session_id( ) ),
-					'url_no' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=0&amp;checksess=" . md5( "activelang_" . $keylang . session_id( ) )
+					'url_yes' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=1&amp;checksess=" . md5( "activelang_" . $keylang . session_id() ),
+					'url_no' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;activelang=0&amp;checksess=" . md5( "activelang_" . $keylang . session_id() )
 				) );
 
 				$xtpl->parse( 'main.loop.allow_sitelangs' );
@@ -312,7 +311,7 @@ foreach( $global_config['allow_adminlangs'] as $keylang )
 		}
 		else
 		{
-			$xtpl->assign( 'INSTALL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id( ) ) );
+			$xtpl->assign( 'INSTALL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;keylang=" . $keylang . "&amp;checksess=" . md5( $keylang . session_id() ) );
 			$xtpl->parse( 'main.loop.setup_new' );
 		}
 	}
@@ -328,7 +327,8 @@ $contents .= "<div class=\"clear\"></div>\n";
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

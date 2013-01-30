@@ -7,12 +7,11 @@
  * @Createdate 2-1-2010 21:24
  */
 
-if( ! defined( 'NV_IS_FILE_AUTHORS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['main'];
 
-$admins = array( );
+$admins = array();
 if( $nv_Request->isset_request( 'id', 'get' ) )
 {
 	$admin_id = $nv_Request->get_int( 'id', 'get', 0 );
@@ -25,7 +24,7 @@ if( $nv_Request->isset_request( 'id', 'get' ) )
 	if( $numrows != 1 )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-		die( );
+		die();
 	}
 }
 else
@@ -59,7 +58,7 @@ if( $numrows )
 		}
 		else
 		{
-			$array_mod = array( );
+			$array_mod = array();
 			foreach( $list_modules as $row_mod )
 			{
 				if( ! empty( $row_mod['admins'] ) and in_array( $row['admin_id'], explode( ",", $row_mod['admins'] ) ) )
@@ -74,15 +73,9 @@ if( $numrows )
 		$last_agent = $row['last_agent'];
 		$row['full_name'] = empty( $row['full_name'] ) ? $row['full_name'] : $row['username'];
 
-		$browser = array_combine( array(
-			'key',
-			'name'
-		), explode( "|", nv_getBrowser( $last_agent ) ) );
+		$browser = array_combine( array( 'key', 'name' ), explode( "|", nv_getBrowser( $last_agent ) ) );
 
-		$os = array_combine( array(
-			'key',
-			'name'
-		), explode( "|", nv_getOs( $last_agent ) ) );
+		$os = array_combine( array( 'key', 'name' ), explode( "|", nv_getOs( $last_agent ) ) );
 
 		$is_suspend = intval( $row['is_suspend'] );
 		if( empty( $is_suspend ) )
@@ -98,7 +91,7 @@ if( $numrows )
 			$is_suspend = sprintf( $lang_module['is_suspend1'], nv_date( "d/m/Y H:i", $last_reason['starttime'] ), $susp_admin_name, $last_reason['info'] );
 		}
 
-		$thead = array( );
+		$thead = array();
 		$thead['level'] = $level;
 		if( defined( "NV_IS_GODADMIN" ) )
 		{
@@ -174,21 +167,21 @@ if( $numrows )
 
 		if( empty( $row['files_level'] ) )
 		{
-			$allow_files_type = array( );
+			$allow_files_type = array();
 			$allow_modify_files = $allow_create_subdirectories = $allow_modify_subdirectories = 0;
 		}
 		else
 		{
 			list( $allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories ) = explode( "|", $row['files_level'] );
-			$allow_files_type = ! empty( $allow_files_type ) ? explode( ",", $allow_files_type ) : array( );
+			$allow_files_type = ! empty( $allow_files_type ) ? explode( ",", $allow_files_type ) : array();
 			$allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
 		}
 
-		$admins[$row['admin_id']] = array( );
+		$admins[$row['admin_id']] = array();
 		$admins[$row['admin_id']]['caption'] = ($row['admin_id'] == $admin_info['admin_id']) ? sprintf( $lang_module['admin_info_title2'], $row['full_name'] ) : sprintf( $lang_module['admin_info_title1'], $row['full_name'] );
 		$admins[$row['admin_id']]['link'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;id=" . $row['admin_id'];
 		$admins[$row['admin_id']]['thead'] = $thead;
-		$admins[$row['admin_id']]['options'] = array( );
+		$admins[$row['admin_id']]['options'] = array();
 		$admins[$row['admin_id']]['options']['login'] = array(
 			$lang_module['login'],
 			$login
@@ -342,7 +335,7 @@ if( ! empty( $admins ) )
 			$xtpl->assign( 'THREAD_LEV', $values['thead']['level'] );
 			$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
 
-			$data_row = array( );
+			$data_row = array();
 			$data_row['link'] = $values['link'];
 			$data_row['login'] = $values['options']['login'][1];
 			$data_row['email'] = $values['options']['email'][1];
@@ -366,10 +359,11 @@ if( ! empty( $admins ) )
 
 	$xtpl->parse( 'main' );
 
-	$contents = nv_check_add_admin( ) . $xtpl->text( 'main' );
+	$contents = nv_check_add_admin() . $xtpl->text( 'main' );
 }
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

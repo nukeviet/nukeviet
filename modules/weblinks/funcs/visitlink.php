@@ -21,7 +21,7 @@ if( $row['url'] != "" )
 	{
 		$url = "http://" . $url;
 	}
-	
+
 	if( isset( $_COOKIE['timeout'] ) and $_COOKIE['timeout'] == $id )
 	{
 		$contents .= sprintf( $lang_module['notimeout'], $timeout );
@@ -31,7 +31,7 @@ if( $row['url'] != "" )
 		setcookie( 'timeout', $id, time() + $timeout * 60 );
 		$db->sql_query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET `hits_total`=`hits_total`+1 WHERE id='" . $id . "'" );
 	}
-	
+
 	Header( "Location: " . $row['url'] );
 	exit();
 }

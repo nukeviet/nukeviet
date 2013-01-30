@@ -36,14 +36,15 @@ $array_cat[] = array(
 	"description" => $global_array_cat[$catid]['description']
 );
 
-$sort = ( $weblinks_config['sort'] == 'des' ) ? 'desc' : 'asc';
+$sort = ($weblinks_config['sort'] == 'des') ? 'desc' : 'asc';
 if( $weblinks_config['sortoption'] == 'byhit' ) $orderby = 'hits_total ';
 elseif( $weblinks_config['sortoption'] == 'byid' ) $orderby = 'id ';
 elseif( $weblinks_config['sortoption'] == 'bytime' ) $orderby = 'add_time ';
-else  $orderby = 'rand() ';
+else
+	$orderby = 'rand() ';
 $base_url = $global_array_cat[$catid]['link'];
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `author`, `title`, `alias`, `url`, `urlimg`, `add_time`, `description`,`hits_total` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE status='1' AND catid='" . $catid . "' ORDER BY " . $orderby . $sort . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `author`, `title`, `alias`, `url`, `urlimg`, `add_time`, `description`,`hits_total` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE status='1' AND catid='" . $catid . "' ORDER BY " . $orderby . $sort . " LIMIT " . ($page - 1) * $per_page . "," . $per_page;
 $result = $db->sql_query( $sql );
 
 $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -52,7 +53,7 @@ list( $all_page ) = $db->sql_fetchrow( $result_all );
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$author = explode( '|', $row['author'] );
-	
+
 	if( $author[0] == 1 )
 	{
 		$sql1 = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `id`=" . $author[1] . "";
@@ -60,7 +61,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 		$row1 = $db->sql_fetchrow( $result1 );
 		$row['author'] = $row1;
 	}
-	
+
 	$row['link'] = $global_array_cat[$catid]['link'] . "/" . $row['alias'] . "-" . $row['id'];
 	$row['visit'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=visitlink-" . $row['alias'] . "-" . $row['id'];
 	$row['report'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=reportlink-" . $row['alias'] . "-" . $row['id'];

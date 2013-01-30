@@ -11,61 +11,58 @@
 			<tr>
 				<td>{LANG.voting_allowcm}</td>
 				<td>
-					<select name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')" style="width: 250px;">
-						<!-- BEGIN: who_view -->
-						<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
-						<!-- END: who_view -->
-					</select><br />
-					<div id="groups_list" style="{SHOW_GROUPS_LIST}">
-						{GLANG.groups_view}:
-						<table style="margin-bottom:8px;width:250px;">
+				<select name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')" style="width: 250px;">
+					<!-- BEGIN: who_view -->
+					<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
+					<!-- END: who_view -->
+				</select>
+				<br />
+				<div id="groups_list" style="{SHOW_GROUPS_LIST}">
+					{GLANG.groups_view}:
+					<table style="margin-bottom:8px;width:250px;">
 						<col valign="top" width="150px" />
-							<tr>
-								<td>
-									<!-- BEGIN: groups_view -->
-									<p><input name="groups_view[]" type="checkbox"{GROUPS_VIEW.checked} value="{GROUPS_VIEW.key}"/>{GROUPS_VIEW.title}</p>
-									<!-- END: groups_view -->
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
+						<tr>
+							<td>
+							<!-- BEGIN: groups_view -->
+							<p><input name="groups_view[]" type="checkbox"{GROUPS_VIEW.checked} value="{GROUPS_VIEW.key}"/>{GROUPS_VIEW.title}
+							</p>
+							<!-- END: groups_view -->
+							</td>
+						</tr>
+					</table>
+				</div></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{LANG.voting_time}</td>
-				<td>
-					<input name="publ_date" id="publ_date" value="{PUBL_DATE}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
-					<select name="phour">
-						<!-- BEGIN: phour -->
-						<option value="{PHOUR.key}"{PHOUR.selected}>{PHOUR.title}</option>
-						<!-- END: phour -->
-					</select>:
-					<select name="pmin">
-						<!-- BEGIN: pmin -->
-						<option value="{PMIN.key}"{PMIN.selected}>{PMIN.title}</option>
-						<!-- END: pmin -->
-					</select>
-				</td>
+				<td><input name="publ_date" id="publ_date" value="{PUBL_DATE}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
+				<select name="phour">
+					<!-- BEGIN: phour -->
+					<option value="{PHOUR.key}"{PHOUR.selected}>{PHOUR.title}</option>
+					<!-- END: phour -->
+				</select>:
+				<select name="pmin">
+					<!-- BEGIN: pmin -->
+					<option value="{PMIN.key}"{PMIN.selected}>{PMIN.title}</option>
+					<!-- END: pmin -->
+				</select></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{LANG.voting_timeout}</td>
-				<td>
-					<input name="exp_date" id="exp_date" value="{EXP_DATE}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
-					<select name="ehour">
-						<!-- BEGIN: ehour -->
-						<option value="{EHOUR.key}"{EHOUR.selected}>{EHOUR.title}</option>
-						<!-- END: ehour -->
-					</select>:
-					<select name="emin">
-						<!-- BEGIN: emin -->
-						<option value="{EMIN.key}"{EMIN.selected}>{EMIN.title}</option>
-						<!-- END: emin -->
-					</select>
-				</td>
+				<td><input name="exp_date" id="exp_date" value="{EXP_DATE}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
+				<select name="ehour">
+					<!-- BEGIN: ehour -->
+					<option value="{EHOUR.key}"{EHOUR.selected}>{EHOUR.title}</option>
+					<!-- END: ehour -->
+				</select>:
+				<select name="emin">
+					<!-- BEGIN: emin -->
+					<option value="{EMIN.key}"{EMIN.selected}>{EMIN.title}</option>
+					<!-- END: emin -->
+				</select></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
@@ -90,13 +87,13 @@
 	<table class="tab1" id="items">
 		<thead>
 			<tr>
-				<td></td>
+				<td>&nbsp;</td>
 				<td>{LANG.voting_answer}</td>
 				<td>{LANG.voting_link}</td>
 			</tr>
 		</thead>
 		<!-- BEGIN: item -->
-		<tbody{ITEM.class}>
+		<tbody {ITEM.class}>
 			<tr>
 				<td style="text-align:right">{LANG.voting_question_num} {ITEM.stt}</td>
 				<td><input type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" style="width:300px" /></td>
@@ -104,7 +101,7 @@
 			</tr>
 		</tbody>
 		<!-- END: item -->
-		<tbody{NEW_CLASS}>
+		<tbody {NEW_CLASS}>
 			<tr>
 				<td style="text-align:right">{LANG.voting_question_num} {NEW_ITEM}</td>
 				<td><input type="text" value="" name="answervotenews[]" style="width:300px" /></td>
@@ -119,15 +116,16 @@
 	</div>
 </form>
 <script type="text/javascript">
-	var items = {NEW_ITEM_NUM};
-	$("#publ_date,#exp_date").datepicker({
-		showOn : "both",
-		dateFormat : "dd/mm/yy",
-		changeMonth : true,
-		changeYear : true,
-		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
-		buttonImageOnly : true
-	});					
+var items = {NEW_ITEM_NUM}
+};
+$("#publ_date,#exp_date").datepicker({
+showOn : "both",
+dateFormat : "dd/mm/yy",
+changeMonth : true,
+changeYear : true,
+showOtherMonths : true,
+buttonImage : nv_siteroot + "images/calendar.gif",
+buttonImageOnly : true
+});
 </script>
 <!-- END: main -->

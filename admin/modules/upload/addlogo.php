@@ -7,8 +7,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post,get' ) );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
@@ -45,7 +44,7 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 		die( "ERROR#" . $lang_module['notlogo'] );
 	}
 
-	$config_logo = array( );
+	$config_logo = array();
 	$config_logo['x'] = $nv_Request->get_int( 'x', 'post', 0 );
 	$config_logo['y'] = $nv_Request->get_int( 'y', 'post', 0 );
 	$config_logo['w'] = $nv_Request->get_int( 'w', 'post', 0 );
@@ -53,7 +52,7 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 	if( $config_logo['w'] > 0 and $config_logo['h'] > 0 )
 	{
-		require_once (NV_ROOTDIR . "/includes/class/image.class.php");
+		require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 		$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 		$createImage->addlogo( $upload_logo, '', '', $config_logo );
 		$createImage->save( NV_ROOTDIR . '/' . $path, $file );
@@ -62,7 +61,7 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 		$createImage->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/images', md5( $path . '/' . $file ), 75 );
 		$create_Image_info = $createImage->create_Image_info;
 
-		$createImage->close( );
+		$createImage->close();
 
 		if( isset( $array_dirname[$path] ) )
 		{
@@ -146,7 +145,8 @@ $xtpl->assign( "LOGOSITE", $logosite );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

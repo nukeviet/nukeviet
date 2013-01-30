@@ -194,9 +194,12 @@
 		<tbody >
 			<tr>
 				<td>{LANG.openid_servers}</td>
-				<td><!-- BEGIN: openid_servers --><input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} /> {OPENID.name}
+				<td>
+				<!-- BEGIN: openid_servers -->
+				<input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} /> {OPENID.name}
 				<br />
-				<!-- END: openid_servers --></td>
+				<!-- END: openid_servers -->
+				</td>
 			</tr>
 		</tbody>
 		<tbody class="second">

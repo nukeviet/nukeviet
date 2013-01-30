@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
 /**
  * main_theme()
- * 
+ *
  * @param mixed $is_search
  * @param mixed $search
  * @param mixed $array_modul
@@ -38,7 +38,7 @@ function main_theme( $is_search, $search, $array_modul )
 		foreach( $array_modul as $m_name => $m_info )
 		{
 			$m_info['value'] = $m_name;
-			$m_info['selected'] = ( $m_name == $search['mod'] ) ? " selected=\"selected\"" : "";
+			$m_info['selected'] = ($m_name == $search['mod']) ? " selected=\"selected\"" : "";
 			$xtpl->assign( 'MOD', $m_info );
 			$xtpl->parse( 'main.select_option' );
 		}
@@ -68,7 +68,7 @@ function main_theme( $is_search, $search, $array_modul )
 
 /**
  * result_theme()
- * 
+ *
  * @param mixed $result_array
  * @param mixed $mod
  * @param mixed $mod_custom_title

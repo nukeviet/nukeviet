@@ -16,7 +16,7 @@ if( $func_id > 0 )
 {
 	$sql = "SELECT `in_submenu` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `func_id`=" . $func_id;
 	$result = $db->sql_query( $sql );
-	
+
 	if( $db->sql_numrows( $result ) == 1 )
 	{
 		$row = $db->sql_fetchrow( $result );

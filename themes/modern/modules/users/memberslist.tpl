@@ -10,22 +10,22 @@
 	<!-- BEGIN: list -->
 	<tbody>
 		<tr>
-	   <td>
-		<a href="{USER.link}">
-			{USER.username} <!-- BEGIN: fullname -->&nbsp;( {USER.full_name} ) <!-- END: fullname -->
-		</a>
-	   </td>
-	   <td>{USER.gender}</td>
-	   <td class="fl">{USER.regdate}</td>
-	   </tr>
+			<td><a href="{USER.link}"> {USER.username}
+			<!-- BEGIN: fullname -->
+			&nbsp;( {USER.full_name} )
+			<!-- END: fullname -->
+			</a></td>
+			<td>{USER.gender}</td>
+			<td class="fl">{USER.regdate}</td>
+		</tr>
 	</tbody>
 	<!-- END: list -->
 	<!-- BEGIN: generate_page -->
-		<tfoot>
-			<tr>
-				<td colspan="3">{GENERATE_PAGE}</td>
-			</tr>
-		</tfoot>
+	<tfoot>
+		<tr>
+			<td colspan="3">{GENERATE_PAGE}</td>
+		</tr>
+	</tfoot>
 	<!-- END: generate_page -->
-</table>      
+</table>
 <!-- END: main -->

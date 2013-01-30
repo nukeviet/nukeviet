@@ -1,20 +1,19 @@
 <!-- BEGIN: main -->
 <style type="text/css">
-	#rpc
-	{
+	#rpc {
 	}
-	#rpc .borderRed
-	{
+
+	#rpc .borderRed {
 		border: 1px solid #FF0000 !important;
 	}
-	#rpc .end
-	{
+
+	#rpc .end {
 		margin-left: 162px;
 		margin-top: 20px;
 		text-align: left;
 	}
-	#rpc .form
-	{
+
+	#rpc .form {
 		-moz-border-radius: .5em;
 		-moz-box-shadow: 2px 2px 4px rgba(0,0,0,.4);
 		-webkit-border-radius: .5em;
@@ -27,8 +26,8 @@
 		padding: 20px;
 		position: relative;
 	}
-	#rpc .form .submit
-	{
+
+	#rpc .form .submit {
 		-moz-border-radius: .5em;
 		-moz-box-shadow: 2px 2px 4px rgba(0,0,0,.4);
 		-webkit-border-radius: .5em;
@@ -44,8 +43,8 @@
 		vertical-align: middle;
 		width: 100px;
 	}
-	#rpc .form .txt
-	{
+
+	#rpc .form .txt {
 		-moz-border-radius: .5em;
 		-webkit-border-radius: .5em;
 		border: 1px solid #ccc;
@@ -55,27 +54,27 @@
 		vertical-align: middle;
 		width: 300px;
 	}
-	#rpc .form label
-	{
+
+	#rpc .form label {
 		display: inline-block;
 		margin-right: 10px;
 		text-align: right;
 		vertical-align: middle;
 		width: 150px;
 	}
-	#rpc .form label span
-	{
+
+	#rpc .form label span {
 		color: #F00;
 	}
-	#rpc .head
-	{
+
+	#rpc .head {
 		background: #DFDFDF;
 		border-bottom: 1px solid #ccc;
 		font-weight: bold;
 		position: relative;
 	}
-	#rpc .list
-	{
+
+	#rpc .list {
 		-moz-border-radius: .5em;
 		-moz-box-shadow: 2px 2px 4px rgba(0,0,0,.4);
 		-webkit-border-radius: .5em;
@@ -86,64 +85,64 @@
 		box-shadow: 2px 2px 4px rgba(0,0,0,.4);
 		position: relative;
 	}
-	#rpc .list .col1
-	{
+
+	#rpc .list .col1 {
 		border-right: 1px solid #ccc;
 		float: left;
 		padding: 10px;
 		width: 120px;
 	}
-	#rpc .list .col1 span
-	{
+
+	#rpc .list .col1 span {
 		display: inline-block;
 		vertical-align: middle;
 	}
-	#rpc .list .col2
-	{
+
+	#rpc .list .col2 {
 		border-right: 1px solid #ccc;
 		float: left;
 		padding: 10px;
 		width: 50px;
 	}
-	#rpc .list .col3, #rpc .list .col3a
-	{
+
+	#rpc .list .col3, #rpc .list .col3a {
 		cursor: pointer;
 		float: left;
 		padding: 10px;
 	}
-	#rpc .list .error
-	{
+
+	#rpc .list .error {
 		background: transparent url({IMGPATH}/error.png) no-repeat center center;
 	}
-	#rpc .list .load
-	{
+
+	#rpc .list .load {
 		background: transparent url({IMGPATH}/load.gif) no-repeat center center;
 	}
-	#rpc .list .ok
-	{
+
+	#rpc .list .ok {
 		background: transparent url({IMGPATH}/ok.png) no-repeat center center;
 	}
-	#rpc .list img
-	{
+
+	#rpc .list img {
 		height: 16px;
 		margin-right: 10px;
 		text-align: center;
 		vertical-align: middle;
 		width: 16px;
 	}
-	#rpc .row
-	{
+
+	#rpc .row {
 		margin: 0 auto 10px auto;
 		position: relative;
 		width: 500px;
 	}
-	#rpc .service
-	{
+
+	#rpc .service {
 		border-bottom: 1px solid #ccc;
 		position: relative;
 	}
-	#rpc h3
-	{
+
+	#rpc h3 {
 		font: bold 13px Arial;
 		margin-bottom: 20px;
 	}
@@ -166,8 +165,12 @@
 		<!-- BEGIN: service -->
 		<div class="service">
 			<div class="col1">
-				<!-- BEGIN: icon --><img src="{IMGPATH}/{SERVICE.icon}" alt="" /><!-- END: icon -->
-				<!-- BEGIN: noticon --><img src="{IMGPATH}/link.png" alt="" /><!-- END: noticon -->
+				<!-- BEGIN: icon -->
+				<img src="{IMGPATH}/{SERVICE.icon}" alt="" />
+				<!-- END: icon -->
+				<!-- BEGIN: noticon -->
+				<img src="{IMGPATH}/link.png" alt="" />
+				<!-- END: noticon -->
 				<span>{SERVICE.title}</span>
 			</div>
 			<div class="col2 ld" id="res{SERVICE.id}">
@@ -196,12 +199,13 @@
 					$("#mes" + a).text(c);
 				});
 				var c = jQuery(b).find("break").text(), b = jQuery(b).find("finish").text();
-				if(b == "OK") {
+				if (b == "OK") {
 					$("#rpc .ld").removeClass("load");
-					if(confirm('{LANG.rpc_finish}')) {
+					if (confirm('{LANG.rpc_finish}')) {
 						window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name
 					}
-				} else {b == "WAIT" ? sload(c) : ( b = b.split("|"), alert(b[1]), $("#rpc .ld").removeClass("load"));
+				} else {
+					b == "WAIT" ? sload(c) : ( b = b.split("|"), alert(b[1]), $("#rpc .ld").removeClass("load"));
 				}
 				return !1
 			}
@@ -211,7 +215,8 @@
 
 
 	$("#rpc .col3").click(function() {
-		var a = $(this).attr("title"); a != "" && alert(a);
+		var a = $(this).attr("title");
+		a != "" && alert(a);
 		return !1
 	});
 

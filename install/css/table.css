@@ -32,7 +32,7 @@ th.nobg {
 	color: #ef8609
 }
 
-th.boder{
+th.boder {
 	border: 1px solid #C1DAD7
 }
 
@@ -44,8 +44,8 @@ td {
 	color: #4f6b72
 }
 
-td.bleft{
-	border-left: 1px solid #C1DAD7;	
+td.bleft {
+	border-left: 1px solid #C1DAD7;
 }
 
 td.alt {
@@ -53,7 +53,7 @@ td.alt {
 	color: #797268
 }
 
-td.nopadding{
+td.nopadding {
 	padding: 0
 }
 

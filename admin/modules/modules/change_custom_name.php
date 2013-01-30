@@ -47,8 +47,14 @@ $contents['func_custom_name'] = array(
 	255,
 	'func_custom_name'
 );
-$contents['submit'] = array( $lang_global['submit'], "nv_change_custom_name_submit( " . $id . ",'func_custom_name' );" );
-$contents['cancel'] = array( $lang_global['cancel'], "nv_action_cancel('action');" );
+$contents['submit'] = array(
+	$lang_global['submit'],
+	"nv_change_custom_name_submit( " . $id . ",'func_custom_name' );"
+);
+$contents['cancel'] = array(
+	$lang_global['cancel'],
+	"nv_action_cancel('action');"
+);
 
 $contents = call_user_func( "change_custom_name_theme", $contents );
 

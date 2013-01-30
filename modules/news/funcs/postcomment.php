@@ -49,7 +49,7 @@ if( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( 
 	{
 		$query = $db->sql_query( "SELECT listcatid, allowed_comm FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` = " . $id . " AND `status`=1" );
 		$row = $db->sql_fetchrow( $query );
-		if( isset( $row['allowed_comm'] ) and ( $row['allowed_comm'] == 1 or ( $row['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
+		if( isset( $row['allowed_comm'] ) and ($row['allowed_comm'] == 1 or ($row['allowed_comm'] == 2 and defined( 'NV_IS_USER' ))) )
 		{
 			$array_catid = explode( ",", $row['listcatid'] );
 			$content = nv_nl2br( $content, '<br />' );
@@ -69,7 +69,7 @@ if( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( 
 						$db->sql_query( $query );
 					}
 				}
-				$page = ceil( ( $numf - $per_page_comment ) / $per_page_comment ) * $per_page_comment;
+				$page = ceil( ($numf - $per_page_comment) / $per_page_comment ) * $per_page_comment;
 				if( $page < 0 ) $page = 0;
 				$nv_Request->set_Cookie( $module_name . '_' . $op . '_' . $id, NV_CURRENTTIME );
 				$contents = "OK_" . $id . "_" . $checkss . "_" . $page . "_" . $lang_module['comment_success'];
@@ -86,7 +86,7 @@ if( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( 
 	}
 	else
 	{
-		$timeout = ceil( ( $difftimeout - NV_CURRENTTIME + $timeout ) / 60 );
+		$timeout = ceil( ($difftimeout - NV_CURRENTTIME + $timeout) / 60 );
 		$timeoutmsg = sprintf( $lang_module['comment_timeout'], $timeout );
 		$contents = "ERR_" . $timeoutmsg;
 	}

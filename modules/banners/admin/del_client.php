@@ -34,7 +34,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	if( ! empty( $row['imageforswf'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] ) )
 	{
 		@nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] );
-	}	
+	}
 	$banners_id[] = $row['id'];
 }
 
@@ -43,7 +43,7 @@ if( ! empty( $banners_id ) )
 	$banners_id = implode( ",", $banners_id );
 
 	$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . NV_BANNERS_CLICK_GLOBALTABLE . "\_%'" );
-	
+
 	while( $item = $db->sql_fetch_assoc( $result ) )
 	{
 		$query = "DELETE FROM `" . $item['Name'] . "` WHERE `bid` IN (" . $banners_id . ")";

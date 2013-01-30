@@ -16,7 +16,21 @@ require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/global.functions.php"
 global $global_array_cat;
 $global_array_cat = array();
 $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other";
-$global_array_cat[0] = array( "catid" => 0, "parentid" => 0, "title" => "Other", "titlesite" => "", "alias" => "Other", "link" => $link_i, "viewcat" => "viewcat_page_new", "subcatid" => 0, "numlinks" => 3, "description" => "", "inhome" => 0, "keywords" => "" );$catid = 0;
+$global_array_cat[0] = array(
+	"catid" => 0,
+	"parentid" => 0,
+	"title" => "Other",
+	"titlesite" => "",
+	"alias" => "Other",
+	"link" => $link_i,
+	"viewcat" => "viewcat_page_new",
+	"subcatid" => 0,
+	"numlinks" => 3,
+	"description" => "",
+	"inhome" => 0,
+	"keywords" => ""
+);
+$catid = 0;
 $parentid = 0;
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 $array_mod_title = array();
@@ -77,7 +91,8 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 			$array_cat_i['title'],
 			$array_cat_i['link'],
 			$act,
-			'submenu' => $submenu );
+			'submenu' => $submenu
+		);
 	}
 
 	//Xac dinh RSS
@@ -129,7 +144,7 @@ if( ! empty( $array_op ) and $op == "main" )
 			$array_page = explode( "-", $array_op[1] );
 			$id = intval( end( $array_page ) );
 			$number = strlen( $id ) + 1;
-			$alias_url = substr( $array_op[1], 0, -$number );
+			$alias_url = substr( $array_op[1], 0, - $number );
 			if( $id > 0 and $alias_url != "" )
 			{
 				$op = "detail";

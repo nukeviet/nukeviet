@@ -16,20 +16,21 @@
 		</tbody>
 		<tbody class="second">
 			<tr>
-			<td align="right"><strong>{LANG.vmodule_file}: </strong></td>
+				<td align="right"><strong>{LANG.vmodule_file}: </strong></td>
 				<td>
-					<select name="module_file">
-						<option value="">{LANG.vmodule_select}</option>
-						<!-- BEGIN: modfile -->
-						<option value="{MODFILE.key}"{MODFILE.selected}>{MODFILE.key}</option>
-						<!-- END: modfile -->
-					</select>
-				</td>
+				<select name="module_file">
+					<option value="">{LANG.vmodule_select}</option>
+					<!-- BEGIN: modfile -->
+					<option value="{MODFILE.key}"{MODFILE.selected}>{MODFILE.key}</option>
+					<!-- END: modfile -->
+				</select></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
-				<td valign="top" align="right"><br /><strong>{LANG.vmodule_note}:</strong></td>
+				<td valign="top" align="right">
+				<br />
+				<strong>{LANG.vmodule_note}:</strong></td>
 				<td><textarea style="width: 450px" name="note" cols="80" rows="5">{NOTE}</textarea></td>
 			</tr>
 		</tbody>

@@ -30,7 +30,10 @@ if( $all_page )
 	while( list( $browser, $count, $last_visit ) = $db->sql_fetchrow( $result ) )
 	{
 		$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
-		$browsers_list[$browser] = array( $count, $last_visit );
+		$browsers_list[$browser] = array(
+			$count,
+			$last_visit
+		);
 	}
 
 	if( ! empty( $browsers_list ) )

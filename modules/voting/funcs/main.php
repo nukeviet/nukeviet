@@ -7,7 +7,8 @@
  * @Createdate 3-6-2010 0:33
  */
 
-if( ! defined( 'NV_IS_MOD_VOTING' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_VOTING' ) )
+	die( 'Stop!!!' );
 
 $vid = $nv_Request->get_int( 'vid', 'get', 0 );
 
@@ -19,8 +20,8 @@ if( empty( $vid ) )
 	$sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "`  WHERE `act`=1 ORDER BY `publ_time` DESC";
 	$list = nv_db_cache( $sql, 'vid', 'voting' );
 
-	$allowed = array();
-	$is_update = array();
+	$allowed = array( );
+	$is_update = array( );
 
 	$a = 0;
 	foreach( $list as $row )
@@ -58,17 +59,17 @@ if( empty( $vid ) )
 				"accept" => ( int )$current_voting['acceptcm'], //
 				"errsm" => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'], //
 				"vid" => $current_voting['vid'], //
-				"question" => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
+				"question" => ( empty( $current_voting['link'] )) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
 				"action" => $action, //
 				"langresult" => $lang_module['voting_result'], //
 				"langsubmit" => $lang_module['voting_hits'] //
 			);
 
 			$xtpl->assign( 'VOTING', $voting_array );
-			
+
 			$sql = "SELECT `id`, `vid`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows` WHERE `vid` = " . $current_voting['vid'] . "  ORDER BY `id` ASC";
 			$list = nv_db_cache( $sql, '', $module_name );
-			
+
 			foreach( $list as $row )
 			{
 				if( ! empty( $row['url'] ) )
@@ -90,9 +91,9 @@ if( empty( $vid ) )
 		$contents = $xtpl->text( 'main.loop' );
 	}
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include (NV_ROOTDIR . "/includes/header.php");
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include (NV_ROOTDIR . "/includes/footer.php");
 }
 else
 {
@@ -102,7 +103,7 @@ else
 	if( $checkss != md5( $vid . $client_info['session_id'] . $global_config['sitekey'] ) or $vid <= 0 or $lid == '' )
 	{
 		header( "location:" . $global_config['site_url'] );
-		exit();
+		exit( );
 	}
 
 	$sql = "SELECT `vid`, `question`,`acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `act`=1";
@@ -112,20 +113,20 @@ else
 	if( empty( $list ) or ! isset( $list[$vid] ) )
 	{
 		header( "location:" . $global_config['site_url'] );
-		exit();
+		exit( );
 	}
 
 	$row = $list[$vid];
-	if( ( int )$row['exp_time'] < 0 or ( ( int )$row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME ) )
+	if( ( int )$row['exp_time'] < 0 or (( int )$row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME) )
 	{
 		header( "location:" . $global_config['site_url'] );
-		exit();
+		exit( );
 	}
 
 	if( ! nv_set_allow( $row['who_view'], $row['groups_view'] ) )
 	{
 		header( "location:" . $global_config['site_url'] );
-		exit();
+		exit( );
 	}
 
 	$difftimeout = 3600;
@@ -162,7 +163,7 @@ else
 		if( file_exists( $dir . '/' . $logfile ) )
 		{
 			$timeout = filemtime( $dir . '/' . $logfile );
-			$timeout = ceil( ( $difftimeout - NV_CURRENTTIME + $vtime ) / 60 );
+			$timeout = ceil( ($difftimeout - NV_CURRENTTIME + $vtime) / 60 );
 			$note = sprintf( $lang_module['timeoutmsg'], $timeout );
 		}
 		elseif( $count <= $acceptcm )
@@ -175,7 +176,7 @@ else
 		}
 		else
 		{
-			$note = ( $acceptcm > 1 ) ? sprintf( $lang_module['voting_warning_all'], $acceptcm ) : $lang_module['voting_warning_accept1'];
+			$note = ($acceptcm > 1) ? sprintf( $lang_module['voting_warning_all'], $acceptcm ) : $lang_module['voting_warning_accept1'];
 		}
 	}
 
@@ -183,7 +184,7 @@ else
 	$result = $db->sql_query( $sql );
 
 	$totalvote = 0;
-	$vrow = array();
+	$vrow = array( );
 
 	while( $row2 = $db->sql_fetchrow( $result ) )
 	{
@@ -207,9 +208,8 @@ else
 	);
 
 	$contents = voting_result( $voting );
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include (NV_ROOTDIR . "/includes/header.php");
 	echo $contents;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include (NV_ROOTDIR . "/includes/footer.php");
 }
-
 ?>

@@ -39,7 +39,7 @@ if( $allowed )
 		$body_contents = $db->sql_fetch_assoc( $db->sql_query( "SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM `" . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $news_contents['id'] / 2000 ) . "` where `id`=" . $news_contents['id'] ) );
 		$news_contents = array_merge( $news_contents, $body_contents );
 		unset( $body_contents );
-		
+
 		if( defined( 'NV_IS_MODADMIN' ) or ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME)) )
 		{
 			$time_set = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'session' );
@@ -48,7 +48,7 @@ if( $allowed )
 				$nv_Request->set_Session( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
 				$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET hitstotal=hitstotal+1 WHERE `id`=" . $id;
 				$db->sql_query( $query );
-				
+
 				$array_catid = explode( ",", $news_contents['listcatid'] );
 				foreach( $array_catid as $catid_i )
 				{
@@ -92,17 +92,17 @@ if( $allowed )
 						}
 					}
 				}
-				
+
 				if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] ) )
 				{
 					$news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
 				}
-				$news_contents['image'] = array (
-						"src" => $src,
-						"width" => $width,
-						"alt" => $news_contents['homeimgalt'],
-						"note" => $news_contents['homeimgalt'],
-						"position" => $news_contents['imgposition'] 
+				$news_contents['image'] = array(
+					"src" => $src,
+					"width" => $width,
+					"alt" => $news_contents['homeimgalt'],
+					"note" => $news_contents['homeimgalt'],
+					"position" => $news_contents['imgposition']
 				);
 			}
 			if( $alias_url == $db->unfixdb( $news_contents['alias'] ) )
@@ -111,7 +111,7 @@ if( $allowed )
 			}
 		}
 	}
-	
+
 	if( $publtime == 0 )
 	{
 		$redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
@@ -121,78 +121,78 @@ if( $allowed )
 	{
 		$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$news_contents['catid']]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
 	}
-	
+
 	$news_contents['url_sendmail'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
 	$news_contents['url_print'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
 	$news_contents['url_savefile'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=savefile/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
-	
+
 	$sql = "SELECT `title`, `link`, `logo` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` = '" . $news_contents['sourceid'] . "'";
 	$result = $db->sql_query( $sql );
-	
-	list ( $sourcetext, $source_link, $source_logo ) = $db->sql_fetchrow( $result );
+
+	list( $sourcetext, $source_link, $source_logo ) = $db->sql_fetchrow( $result );
 	unset( $sql, $result );
-	
+
 	$news_contents['newscheckss'] = md5( $news_contents['id'] . session_id() . $global_config['sitekey'] );
 	if( $module_config[$module_name]['config_source'] == 0 ) $news_contents['source'] = $sourcetext;
 	elseif( $module_config[$module_name]['config_source'] == 1 ) $news_contents['source'] = $source_link;
 	elseif( $module_config[$module_name]['config_source'] == 2 && ! empty( $source_logo ) ) $news_contents['source'] = "<img width=\"100px\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $source_logo . "\">";
 	$news_contents['publtime'] = nv_date( "l - d/m/Y  H:i", $news_contents['publtime'] );
-	
-	$related_new_array = array ();
+
+	$related_new_array = array();
 	$related_new = $db->sql_query( "SELECT `id`, `title`, `alias`,`publtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` > " . $publtime . " AND `publtime` < " . NV_CURRENTTIME . " ORDER BY `id` ASC LIMIT 0, " . $st_links . "" );
 	while( $row = $db->sql_fetch_assoc( $related_new ) )
 	{
 		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
-		$related_new_array[] = array (
-				"title" => $row['title'],
-				"time" => nv_date( "d/m/Y", $row['publtime'] ),
-				"link" => $link 
+		$related_new_array[] = array(
+			"title" => $row['title'],
+			"time" => nv_date( "d/m/Y", $row['publtime'] ),
+			"link" => $link
 		);
 	}
 	sort( $related_new_array, SORT_NUMERIC );
-	
+
 	$db->sql_freeresult( $related_new );
 	unset( $related_new, $row );
-	
-	$related_array = array ();
+
+	$related_array = array();
 	$related = $db->sql_query( "SELECT `id`, `title`, `alias`,`publtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . $publtime . " AND `publtime` < " . NV_CURRENTTIME . " ORDER BY `id` DESC LIMIT 0, " . $st_links . "" );
 	while( $row = $db->sql_fetch_assoc( $related ) )
 	{
 		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
-		$related_array[] = array (
-				"title" => $row['title'],
-				"time" => nv_date( "d/m/Y", $row['publtime'] ),
-				"link" => $link 
+		$related_array[] = array(
+			"title" => $row['title'],
+			"time" => nv_date( "d/m/Y", $row['publtime'] ),
+			"link" => $link
 		);
 	}
 	$db->sql_freeresult( $related );
 	unset( $related, $row );
-	
-	$topic_array = array ();
+
+	$topic_array = array();
 	$topic_a = "";
 	if( $news_contents['topicid'] > 0 )
 	{
-		list ( $topic_title, $topic_alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT `title`,`alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid` = '" . $news_contents['topicid'] . "'" ) );
+		list( $topic_title, $topic_alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT `title`,`alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid` = '" . $news_contents['topicid'] . "'" ) );
 		$topic = $db->sql_query( "SELECT `id`, `catid`, `title`, `alias`,`publtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = '" . $news_contents['topicid'] . "' AND `id` != " . $id . " ORDER BY `id` DESC  LIMIT 0, " . $st_links . "" );
 		while( $row = $db->sql_fetch_assoc( $topic ) )
 		{
 			$topiclink = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topic_alias;
 			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
-			$topic_array[] = array (
-					"title" => $row['title'],
-					"link" => $link,
-					"time" => nv_date( "d/m/Y", $row['publtime'] ),
-					"topiclink" => $topiclink,
-					"topictitle" => $topic_title 
+			$topic_array[] = array(
+				"title" => $row['title'],
+				"link" => $link,
+				"time" => nv_date( "d/m/Y", $row['publtime'] ),
+				"topiclink" => $topiclink,
+				"topictitle" => $topic_title
 			);
 		}
 		$db->sql_freeresult( $topic );
 		unset( $topic, $rows );
 	}
-	
+
 	// Check: comment
 	$commentenable = 0;
-	
+
 	if( $news_contents['allowed_comm'] and $module_config[$module_name]['activecomm'] )
 	{
 		$comment_array = nv_comment_module( $news_contents['id'], 0 );
@@ -224,23 +224,23 @@ if( $allowed )
 		$news_contents['stringrating'] = sprintf( $lang_module['stringrating'], $news_contents['total_rating'], $news_contents['click_rating'] );
 		$news_contents['click_rating'] = ($news_contents['click_rating'] > 0) ? $news_contents['click_rating'] : 1;
 		$news_contents['numberrating'] = round( $news_contents['total_rating'] / $news_contents['click_rating'] ) - 1;
-		$news_contents['langstar'] = array (
-				"note" => $lang_module['star_note'],
-				"verypoor" => $lang_module['star_verypoor'],
-				"poor" => $lang_module['star_poor'],
-				"ok" => $lang_module['star_ok'],
-				"good" => $lang_module['star_good}'],
-				"verygood" => $lang_module['star_verygood'] 
+		$news_contents['langstar'] = array(
+			"note" => $lang_module['star_note'],
+			"verypoor" => $lang_module['star_verypoor'],
+			"poor" => $lang_module['star_poor'],
+			"ok" => $lang_module['star_ok'],
+			"good" => $lang_module['star_good}'],
+			"verygood" => $lang_module['star_verygood']
 		);
 	}
-	
+
 	$page_title = $news_contents['title'];
 	$key_words = $news_contents['keywords'];
 	$description = $news_contents['hometext'];
-	
-	list ( $post_username, $post_full_name ) = $db->sql_fetchrow( $db->sql_query( "SELECT `username`, `full_name` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = '" . $news_contents['admin_id'] . "' LIMIT 0,1 " ) );
+
+	list( $post_username, $post_full_name ) = $db->sql_fetchrow( $db->sql_query( "SELECT `username`, `full_name` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = '" . $news_contents['admin_id'] . "' LIMIT 0,1 " ) );
 	$news_contents['post_name'] = empty( $post_full_name ) ? $post_username : $post_full_name;
-	
+
 	$contents = detail_theme( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable );
 }
 else
@@ -248,8 +248,8 @@ else
 	$contents = no_permission( $func_who_view );
 }
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>

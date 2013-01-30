@@ -23,107 +23,107 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 		$dirs = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
 		$err = 0;
 		$array_filename = array();
-		
+
 		foreach( $dirs as $module )
 		{
 			if( file_exists( NV_ROOTDIR . "/modules/" . $module . "/language/admin_" . $dirlang . ".php" ) )
 			{
 				$arrcrt = nv_deletefile( NV_ROOTDIR . "/modules/" . $module . "/language/admin_" . $dirlang . ".php" );
-			
+
 				if( $arrcrt[0] == 0 )
 				{
 					$err = 1;
 				}
-			
+
 				$array_filename[] = $arrcrt[1];
 			}
-		
+
 			if( file_exists( NV_ROOTDIR . "/modules/" . $module . "/language/" . $dirlang . ".php" ) )
 			{
 				$arrcrt = nv_deletefile( NV_ROOTDIR . "/modules/" . $module . "/language/" . $dirlang . ".php" );
-			
+
 				if( $arrcrt[0] == 0 )
 				{
 					$err = 1;
 				}
-			
+
 				$array_filename[] = $arrcrt[1];
 			}
-            if( file_exists( NV_ROOTDIR . "/js/language/" . $dirlang . ".js" ) )
-            {
-                $arrcrt = nv_deletefile( NV_ROOTDIR . "/js/language/" . $dirlang . ".js", true );
-    
-                if( $arrcrt[0] == 0 )
-                {
-                    $err = 1;
-                }
-    
-                $array_filename[] = $arrcrt[1];
-            }
+			if( file_exists( NV_ROOTDIR . "/js/language/" . $dirlang . ".js" ) )
+			{
+				$arrcrt = nv_deletefile( NV_ROOTDIR . "/js/language/" . $dirlang . ".js", true );
+
+				if( $arrcrt[0] == 0 )
+				{
+					$err = 1;
+				}
+
+				$array_filename[] = $arrcrt[1];
+			}
 
 			$blocks = nv_scandir( NV_ROOTDIR . "/modules/" . $module . "/language/", "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
-		
+
 			foreach( $blocks as $file_i )
 			{
 				$arrcrt = nv_deletefile( NV_ROOTDIR . "/modules/" . $module . "/language/" . $file_i );
-			
+
 				if( $arrcrt[0] == 0 )
 				{
 					$err = 1;
 				}
-			
+
 				$array_filename[] = $arrcrt[1];
 			}
 		}
-	
+
 		if( is_dir( NV_ROOTDIR . "/language/" . $dirlang ) )
 		{
 			$arrcrt = nv_deletefile( NV_ROOTDIR . "/language/" . $dirlang, true );
-		
+
 			if( $arrcrt[0] == 0 )
 			{
 				$err = 1;
 			}
-		
+
 			$array_filename[] = $arrcrt[1];
 		}
-		
+
 		if( $err == 0 )
 		{
 			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` DROP `author_" . $dirlang . "`" );
 			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `lang_" . $dirlang . "`" );
 			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `update_" . $dirlang . "`" );
-			
+
 			$contents = $lang_module['nv_lang_deleteok'];
 		}
 		else
 		{
 			$contents = $lang_module['nv_lang_delete_error'];
 		}
-	
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid'] );		
-		
+
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid'] );
+
 		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting" );
 		$xtpl->assign( 'INFO', $contents );
-		
+
 		if( ! empty( $array_filename ) )
 		{
 			$i = 0;
 			foreach( $array_filename as $name )
 			{
 				if( empty( $name ) ) continue;
-				
-				$xtpl->assign( 'CLASS', ++ $i % 2 ? ' class="second"' : '' );
+
+				$xtpl->assign( 'CLASS', ++$i % 2 ? ' class="second"' : '' );
 				$xtpl->assign( 'NAME', $name );
 				$xtpl->parse( 'main.info.loop' );
 			}
-			
+
 			$xtpl->parse( 'main.info' );
 		}
-		
+
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
-	
+
 		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );
 		include ( NV_ROOTDIR . "/includes/footer.php" );

@@ -26,30 +26,33 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 $a = 0;
 while( $row = $db->sql_fetchrow( $result ) )
-{	
+{
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",  //
-		'full_name' => $row['full_name'],  //
-		'email' => $row['email'],  //
-		'phone' => $row['phone'],  //
-		'fax' => $row['fax'],  //
-		'id' => $row['id'],  //
-		'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=row&amp;id=" . $row['id']  //
+		'class' => (++$a % 2) ? " class=\"second\"" : "", //
+		'full_name' => $row['full_name'], //
+		'email' => $row['email'], //
+		'phone' => $row['phone'], //
+		'fax' => $row['fax'], //
+		'id' => $row['id'], //
+		'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=row&amp;id=" . $row['id'] //
 	) );
 
-	$array = array( $lang_global['disable'], $lang_global['active'] );
-	
+	$array = array(
+		$lang_global['disable'],
+		$lang_global['active']
+	);
+
 	foreach( $array as $key => $val )
 	{
 		$xtpl->assign( 'STATUS', array(
-			'key' => $key,  //
-			'selected' => $key == $row['act'] ? " selected=\"selected\"" : "",  //
-			'title' => $val  //
+			'key' => $key, //
+			'selected' => $key == $row['act'] ? " selected=\"selected\"" : "", //
+			'title' => $val //
 		) );
-		
+
 		$xtpl->parse( 'main.row.status' );
 	}
-	
+
 	$xtpl->parse( 'main.row' );
 }
 

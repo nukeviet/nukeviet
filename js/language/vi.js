@@ -5,17 +5,17 @@
  * @Createdate 3-13-2010 15:24
  */
 
-var nv_aryDayName = new Array('Chủ nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy');
-var nv_aryDayNS = new Array('CN','Hai','Ba','Tư','Năm','Sáu','Bảy');
-var nv_aryMonth = new Array('Tháng Một','Tháng Hai','Tháng Ba','Tháng Tư','Tháng Năm','Tháng Sáu','Tháng Bảy','Tháng Tám','Tháng Chín','Tháng Mười','Tháng Mười một','Tháng Mười hai');
-var nv_aryMS = new Array('Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12');
-var nv_admlogout_confirm = new Array('Bạn thực sự muốn thoát khỏi tài khoản Quản trị?','Toàn bộ thông tin đăng nhập đã được xóa. Bạn đã thoát khỏi tài khoản Quản trị');
-var nv_is_del_confirm = new Array('Bạn thực sự muốn xóa? Nếu đồng ý, tất cả dữ liệu liên quan sẽ bị xóa. Bạn sẽ không thể phục hồi lại chúng sau này','Lệnh Xóa đã được thực hiện','Vì một lý do nào đó lệnh Xóa đã không được thực hiện');
-var nv_is_change_act_confirm = new Array('Bạn thực sự muốn thực hiện lệnh \'Thay đổi\'?','Lệnh \'Thay đổi\' đã được thực hiện','Vì một lý do nào đó lệnh \'Thay đổi\' đã không được thực hiện');
-var nv_is_empty_confirm = new Array('Bạn thực sự muốn thực hiện lệnh \'Làm rỗng\'?','Lệnh \'Làm rỗng\' đã được thực hiện','Vì một lý do nào đó lệnh \'Làm rỗng\' đã không được thực hiện');
-var nv_is_recreate_confirm = new Array('Bạn thực sự muốn thực hiện lệnh \'Cài lại\'?','Lệnh \'Cài lại\' đã được thực hiện','Vì một lý do nào đó lệnh \'Cài lại\' đã không được thực hiện');
-var nv_is_add_user_confirm = new Array('Bạn thực sự muốn thêm thành viên này vào nhóm?','Lệnh \'Thêm vào nhóm\' đã được thực hiện','Vì một lý do nào đó lệnh \'Thêm vào nhóm\' đã không được thực hiện');
-var nv_is_exclude_user_confirm = new Array('Bạn thực sự muốn loại thành viên này ra khỏi nhóm?','Lệnh \'Loại khỏi nhóm\' đã được thực hiện','Vì một lý do nào đó lệnh \'Loại khỏi nhóm\' đã không được thực hiện');
+var nv_aryDayName = new Array('Chủ nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy');
+var nv_aryDayNS = new Array('CN', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy');
+var nv_aryMonth = new Array('Tháng Một', 'Tháng Hai', 'Tháng Ba', 'Tháng Tư', 'Tháng Năm', 'Tháng Sáu', 'Tháng Bảy', 'Tháng Tám', 'Tháng Chín', 'Tháng Mười', 'Tháng Mười một', 'Tháng Mười hai');
+var nv_aryMS = new Array('Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12');
+var nv_admlogout_confirm = new Array('Bạn thực sự muốn thoát khỏi tài khoản Quản trị?', 'Toàn bộ thông tin đăng nhập đã được xóa. Bạn đã thoát khỏi tài khoản Quản trị');
+var nv_is_del_confirm = new Array('Bạn thực sự muốn xóa? Nếu đồng ý, tất cả dữ liệu liên quan sẽ bị xóa. Bạn sẽ không thể phục hồi lại chúng sau này', 'Lệnh Xóa đã được thực hiện', 'Vì một lý do nào đó lệnh Xóa đã không được thực hiện');
+var nv_is_change_act_confirm = new Array('Bạn thực sự muốn thực hiện lệnh \'Thay đổi\'?', 'Lệnh \'Thay đổi\' đã được thực hiện', 'Vì một lý do nào đó lệnh \'Thay đổi\' đã không được thực hiện');
+var nv_is_empty_confirm = new Array('Bạn thực sự muốn thực hiện lệnh \'Làm rỗng\'?', 'Lệnh \'Làm rỗng\' đã được thực hiện', 'Vì một lý do nào đó lệnh \'Làm rỗng\' đã không được thực hiện');
+var nv_is_recreate_confirm = new Array('Bạn thực sự muốn thực hiện lệnh \'Cài lại\'?', 'Lệnh \'Cài lại\' đã được thực hiện', 'Vì một lý do nào đó lệnh \'Cài lại\' đã không được thực hiện');
+var nv_is_add_user_confirm = new Array('Bạn thực sự muốn thêm thành viên này vào nhóm?', 'Lệnh \'Thêm vào nhóm\' đã được thực hiện', 'Vì một lý do nào đó lệnh \'Thêm vào nhóm\' đã không được thực hiện');
+var nv_is_exclude_user_confirm = new Array('Bạn thực sự muốn loại thành viên này ra khỏi nhóm?', 'Lệnh \'Loại khỏi nhóm\' đã được thực hiện', 'Vì một lý do nào đó lệnh \'Loại khỏi nhóm\' đã không được thực hiện');
 
 var nv_formatString = "dd.mm.yyyy";
 var nv_gotoString = "Chọn tháng hiện tại";
@@ -61,4 +61,4 @@ NVJL.error404 = "Không tìm thấy tập tin yêu cầu. Có thể do URL khôn
 NVJL.error406 = "Không được chấp nhận. Trình duyệt không chấp nhận kiểu MIME của tập tin được yêu cầu.";
 NVJL.error500 = "Lỗi từ phía máy chủ nội bộ.";
 NVJL.error502 = "Web server nhận được phản hồi không hợp lệ trong khi hoạt động như một gateway hoặc proxy. Bạn nhận được thông báo lỗi khi cố gắng chạy một kịch bản CGI.";
-NVJL.error503 = "Dịch vụ không khả dụng.";
+NVJL.error503 = "Dịch vụ không khả dụng."; 

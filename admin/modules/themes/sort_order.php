@@ -21,7 +21,7 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 
 	$sql = "SELECT `bid`, `theme`, `position` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE position !=" . $db->dbescape_string( $pos_new ) . " AND bid IN (" . implode( ',', $array_bid ) . ")";
 	$result = $db->sql_query( $sql );
-	
+
 	if( $db->sql_numrows( $result ) == 1 )
 	{
 		list( $bid, $theme, $pos_old ) = $db->sql_fetchrow( $result );
@@ -31,7 +31,7 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 
 		//Update weight for old position
 		$result = $db->sql_query( "SELECT bid FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $theme . "' AND position='" . $pos_old . "' ORDER BY weight ASC" );
-		
+
 		if( $db->sql_numrows( $result ) )
 		{
 			$weight = 0;
@@ -43,7 +43,7 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 
 			$func_id_old = $weight = 0;
 			$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme='" . $theme . "' AND t2.position='" . $pos_old . "' ORDER BY t1.func_id ASC, t1.weight  ASC" );
-			
+
 			while( list( $bid_i, $func_id_i ) = $db->sql_fetchrow( $result ) )
 			{
 				if( $func_id_i == $func_id_old )
@@ -61,7 +61,7 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 
 		//Update weight for news position
 		$result = $db->sql_query( "SELECT bid FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $theme . "' AND position=" . $db->dbescape_string( $pos_new ) . " ORDER BY weight ASC" );
-		
+
 		if( $db->sql_numrows( $result ) )
 		{
 			$weight = 0;
@@ -73,7 +73,7 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 
 			$func_id_old = $weight = 0;
 			$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme='" . $theme . "' AND t2.position=" . $db->dbescape_string( $pos_new ) . " ORDER BY t1.func_id ASC, t1.weight  ASC" );
-			
+
 			while( list( $bid_i, $func_id_i ) = $db->sql_fetchrow( $result ) )
 			{
 				if( $func_id_i == $func_id_old )
@@ -88,7 +88,7 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i . " AND `func_id`=" . $func_id_i );
 			}
 		}
-		
+
 		$db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_groups`" );
 		$db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_weight`" );
 	}

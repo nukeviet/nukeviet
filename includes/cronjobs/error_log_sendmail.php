@@ -13,10 +13,10 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
 /**
  * cron_auto_sendmail_error_log()
- * 
+ *
  * @return
  */
-function cron_auto_sendmail_error_log()
+function cron_auto_sendmail_error_log( )
 {
 	global $global_config, $lang_global;
 

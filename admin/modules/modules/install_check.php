@@ -14,7 +14,12 @@ $info_error = array();
 $info_error['errorfile'] = array();
 $info_error['errorfolder'] = array();
 
-$allowfolder = array( 'themes', 'modules', 'uploads', 'includes/blocks' );
+$allowfolder = array(
+	'themes',
+	'modules',
+	'uploads',
+	'includes/blocks'
+);
 
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
 
@@ -39,7 +44,7 @@ if( file_exists( $filename ) )
 
 			//Check valid folder structure nukeviet (modules, themes, uploads)
 			$folder = explode( '/', $array_file['filename'] );
-		
+
 			if( ! in_array( $folder[0], $allowfolder ) and ! in_array( $folder[0] . '/' . $folder[1], $allowfolder ) )
 			{
 				$info_error['errorfolder'][] = $array_file['filename'];
@@ -61,7 +66,7 @@ if( file_exists( $filename ) )
 		}
 
 		$ftp_check_login = 0;
-	
+
 		if( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) == 1 )
 		{
 			$ftp_server = nv_unhtmlspecialchars( $global_config['ftp_server'] );
@@ -73,8 +78,8 @@ if( file_exists( $filename ) )
 			$conn_id = ftp_connect( $ftp_server, $ftp_port, 10 );
 			// login with username and password
 			$login_result = ftp_login( $conn_id, $ftp_user_name, $ftp_user_pass );
-		
-			if( ( ! $conn_id ) || ( ! $login_result ) )
+
+			if( ( ! $conn_id) || ( ! $login_result) )
 			{
 				$ftp_check_login = 3;
 			}
@@ -91,16 +96,16 @@ if( file_exists( $filename ) )
 		if( $ftp_check_login == 1 )
 		{
 			ftp_mkdir( $conn_id, $temp_extract_dir );
-		
+
 			if( substr( $sys_info['os'], 0, 3 ) != 'WIN' ) ftp_chmod( $conn_id, 0777, $temp_extract_dir );
-		
-			foreach( $ziplistContent as $array_file )	
+
+			foreach( $ziplistContent as $array_file )
 			{
 				if( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
 				{
 					$cp = "";
 					$e = explode( "/", $array_file['filename'] );
-				
+
 					foreach( $e as $p )
 					{
 						if( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $cp . $p ) )
@@ -108,7 +113,7 @@ if( file_exists( $filename ) )
 							ftp_mkdir( $conn_id, $temp_extract_dir . '/' . $cp . $p );
 							if( substr( $sys_info['os'], 0, 3 ) != 'WIN' ) ftp_chmod( $conn_id, 0777, $temp_extract_dir . '/' . $cp . $p );
 						}
-					
+
 						$cp .= $p . '/';
 					}
 				}
@@ -116,11 +121,11 @@ if( file_exists( $filename ) )
 		}
 
 		$extract = $zip->extract( PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir );
-	
+
 		foreach( $extract as $extract_i )
 		{
 			$filename_i = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $extract_i['filename'] ) );
-		
+
 			if( $extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory' )
 			{
 				$no_extract[] = $filename_i;
@@ -132,7 +137,7 @@ if( file_exists( $filename ) )
 			foreach( $ziplistContent as $array_file )
 			{
 				$dir_name = "";
-			
+
 				if( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $array_file['filename'] ) )
 				{
 					$dir_name = $array_file['filename'];
@@ -141,17 +146,17 @@ if( file_exists( $filename ) )
 				{
 					$dir_name = dirname( $array_file['filename'] );
 				}
-			
+
 				if( ! empty( $dir_name ) )
 				{
 					$cp = "";
 					$e = explode( "/", $dir_name );
-				
+
 					foreach( $e as $p )
 					{
 						if( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/' . $cp . $p ) )
 						{
-							if( ! ( $ftp_check_login == 1 and ftp_mkdir( $conn_id, $cp . $p ) ) )
+							if( ! ($ftp_check_login == 1 and ftp_mkdir( $conn_id, $cp . $p )) )
 							{
 								@mkdir( NV_ROOTDIR . '/' . $cp . $p );
 							}
@@ -161,7 +166,7 @@ if( file_exists( $filename ) )
 								break;
 							}
 						}
-					
+
 						$cp .= $p . '/';
 					}
 				}
@@ -177,17 +182,17 @@ if( file_exists( $filename ) )
 					{
 						if( file_exists( NV_ROOTDIR . '/' . $array_file['filename'] ) )
 						{
-							if( ! ( $ftp_check_login == 1 and ftp_delete( $conn_id, $array_file['filename'] ) ) )
+							if( ! ($ftp_check_login == 1 and ftp_delete( $conn_id, $array_file['filename'] )) )
 							{
 								nv_deletefile( NV_ROOTDIR . '/' . $array_file['filename'] );
 							}
 						}
-					
-						if( ! ( $ftp_check_login == 1 and ftp_rename( $conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename'] ) ) )
+
+						if( ! ($ftp_check_login == 1 and ftp_rename( $conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename'] )) )
 						{
 							@rename( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], NV_ROOTDIR . '/' . $array_file['filename'] );
 						}
-					
+
 						if( file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
 						{
 							$error_move_folder[] = $array_file['filename'];
@@ -201,7 +206,7 @@ if( file_exists( $filename ) )
 					nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
 				}
 			}
-			
+
 			if( $ftp_check_login > 0 )
 			{
 				ftp_close( $conn_id );
@@ -224,41 +229,41 @@ if( file_exists( $filename ) )
 			foreach( $no_extract as $tmp )
 			{
 				$xtpl->assign( 'FILENAME', $tmp );
-				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', ($i % 2 == 0) ? " class=\"second\"" : "" );
 				$xtpl->parse( 'complete.no_extract.loop' );
 				++$i;
 			}
-		
+
 			$xtpl->parse( 'complete.no_extract' );
 		}
 		elseif( ! empty( $error_create_folder ) )
 		{
 			$i = 0;
 			asort( $error_create_folder );
-		
+
 			foreach( $error_create_folder as $tmp )
 			{
 				$xtpl->assign( 'FILENAME', $tmp );
-				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', ($i % 2 == 0) ? " class=\"second\"" : "" );
 				$xtpl->parse( 'complete.error_create_folder.loop' );
 				++$i;
 			}
-		
+
 			$xtpl->parse( 'complete.error_create_folder' );
 		}
 		elseif( ! empty( $error_move_folder ) )
 		{
-			$i = 0;		
+			$i = 0;
 			asort( $error_move_folder );
-		
+
 			foreach( $error_move_folder as $tmp )
 			{
 				$xtpl->assign( 'FILENAME', $tmp );
-				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', ($i % 2 == 0) ? " class=\"second\"" : "" );
 				$xtpl->parse( 'complete.error_move_folder.loop' );
 				++$i;
 			}
-		
+
 			$xtpl->parse( 'complete.error_move_folder' );
 		}
 		else
@@ -271,7 +276,7 @@ if( file_exists( $filename ) )
 		$contents = $xtpl->text( 'complete' );
 
 		include ( NV_ROOTDIR . "/includes/header.php" );
-		echo ( $contents );
+		echo($contents);
 		include ( NV_ROOTDIR . "/includes/footer.php" );
 		exit();
 	}
@@ -308,7 +313,7 @@ if( ! empty( $info_error['errorfile'] ) )
 	foreach( $info_error['errorfile'] as $tmp )
 	{
 		$xtpl->assign( 'FILENAME', $tmp );
-		$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'CLASS', ($i % 2 == 0) ? " class=\"second\"" : "" );
 		$xtpl->parse( 'main.errorfile.loop' );
 		++$i;
 	}
@@ -321,7 +326,7 @@ if( ! empty( $info_error['errorfolder'] ) )
 	foreach( $info_error['errorfolder'] as $tmp )
 	{
 		$xtpl->assign( 'FILENAME', $tmp );
-		$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'CLASS', ($i % 2 == 0) ? " class=\"second\"" : "" );
 		$xtpl->parse( 'main.errorfolder.loop' );
 		++$i;
 	}
@@ -332,7 +337,7 @@ $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
-echo ( $contents );
+echo($contents);
 include ( NV_ROOTDIR . "/includes/footer.php" );
 
 ?>

@@ -9,14 +9,13 @@ var nv_aryDayName = new Array('Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi',
 var nv_aryDayNS = nv_aryDayNS = new Array('Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam');
 var nv_aryMonth = nv_aryMonth = new Array('Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre');
 var nv_aryMS = new Array('Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aout', 'Sep', 'Oct', 'Nov', 'Dec');
-var nv_admlogout_confirm = new Array('Êtes-vous sûr de vouloir quitter l\'Administration?','Toutes les informations de votre session ont été supprimées. Vous avez quitté l\'Administration');
-var nv_is_del_confirm = new Array('Êtes-vous sûr de vouloir supprimer? Si vous acceptez, toutes les données seront supprimées, il est impossible de les restauter.','Suppression réussie','Suppression échouée');
-var nv_is_change_act_confirm = new Array('Êtes-vous sûr de vouloir \'changer\'?',' \'Changement\' réussi',' \'Changement\' échoué');
-var nv_is_empty_confirm = new Array('Êtes-vous sûr de vouloir \'vider\'?',' \'vider\' avec succès',' \'vider\' échoué pour une raison inconnue');
-var nv_is_recreate_confirm = new Array('Êtes-vous sûr de vouloir \'ré-installer\'?',' \'Ré-installation\' réussie','\'Ré-installation\' échouée pour une raison inconnue');
-var nv_is_add_user_confirm = new Array('Êtes-vous sûr de vouloir ajouter les nouveaux membres au groupe?','\'Ajout\' de nouveaux membres au groupe avec succcès',' \'Ajout \' échoué pour une raison inconnue');
-var nv_is_exclude_user_confirm = new Array('Êtes-vous sûr de vouloir éliminer ce membre?','\'Élimination\' réussie',' \'Élimination\  échouée pour une raison inconnue');
-
+var nv_admlogout_confirm = new Array('Êtes-vous sûr de vouloir quitter l\'Administration?', 'Toutes les informations de votre session ont été supprimées. Vous avez quitté l\'Administration');
+var nv_is_del_confirm = new Array('Êtes-vous sûr de vouloir supprimer? Si vous acceptez, toutes les données seront supprimées, il est impossible de les restauter.', 'Suppression réussie', 'Suppression échouée');
+var nv_is_change_act_confirm = new Array('Êtes-vous sûr de vouloir \'changer\'?', ' \'Changement\' réussi', ' \'Changement\' échoué');
+var nv_is_empty_confirm = new Array('Êtes-vous sûr de vouloir \'vider\'?', ' \'vider\' avec succès', ' \'vider\' échoué pour une raison inconnue');
+var nv_is_recreate_confirm = new Array('Êtes-vous sûr de vouloir \'ré-installer\'?', ' \'Ré-installation\' réussie', '\'Ré-installation\' échouée pour une raison inconnue');
+var nv_is_add_user_confirm = new Array('Êtes-vous sûr de vouloir ajouter les nouveaux membres au groupe?', '\'Ajout\' de nouveaux membres au groupe avec succcès', ' \'Ajout \' échoué pour une raison inconnue');
+var nv_is_exclude_user_confirm = new Array('Êtes-vous sûr de vouloir éliminer ce membre?', '\'Élimination\' réussie', ' \'Élimination\  échouée pour une raison inconnue');
 
 var nv_formatString = "jj.mm.aaaa";
 var nv_gotoString = "Aller au mois actuel";
@@ -28,7 +27,6 @@ var nv_scrollRightMessage = "Cliquez pour aller au mois suivant. Enfoncez le bou
 var nv_selectMonthMessage = "Cliquez pour sélectionner un mois.";
 var nv_selectYearMessage = "Cliquez pour sélectionner un an.";
 var nv_selectDateMessage = "Sélectionnez [date] comme date.";
-
 
 var nv_loadingText = "Chargement...";
 var nv_loadingTitle = "Cliquez pour annuler";

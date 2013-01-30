@@ -29,14 +29,14 @@ if( ! empty( $array['PHP Core'] ) )
 	$xtpl->assign( 'THEAD0', $thead[0] );
 	$xtpl->assign( 'THEAD1', $thead[1] );
 	$xtpl->assign( 'THEAD2', $thead[2] );
-	
+
 	$a = 0;
 	foreach( $array['PHP Core'] as $key => $value )
 	{
-		$class = ( $a % 2 ) ? " class=\"second\"" : "";
-		$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
+		$class = ($a % 2) ? " class=\"second\"" : "";
+		$xtpl->assign( 'CLASS', ($a % 2) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $key );
-		
+
 		if( ! is_array( $value ) )
 		{
 			$xtpl->assign( 'VALUE', $value );
@@ -48,11 +48,11 @@ if( ! empty( $array['PHP Core'] ) )
 			$xtpl->assign( 'VALUE1', $value[1] );
 			$xtpl->parse( 'main.loop.else' );
 		}
-		
+
 		$xtpl->parse( 'main.loop' );
 		++$a;
 	}
-	
+
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 }

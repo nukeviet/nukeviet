@@ -9,7 +9,7 @@
 
 define( 'NV_SYSTEM', true );
 
-require (str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php');
+require ( str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php' );
 
 // Cần viết upadte cho tất cả các ngôn ngữ và các module ảo của module news;
 $module_name = $module_data = 'news';
@@ -22,9 +22,9 @@ if( $db->sql_numrows( $result ) )
 {
 	while( $item = $db->sql_fetch_assoc( $result ) )
 	{
-		$array_img = (! empty( $item['homeimgthumb'] )) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array (
-				"",
-				"" 
+		$array_img = ( ! empty( $item['homeimgthumb'] )) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array(
+			"",
+			""
 		);
 		$homeimgthumb = 0;
 		if( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) and $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
@@ -92,4 +92,5 @@ else
 	}
 	die( 'Thực hiện nâng cấp CSDL thành công, Bạn cần xóa các file update3.php ở thư mục gốc của site ngay lập tức' );
 }
+
 ?>

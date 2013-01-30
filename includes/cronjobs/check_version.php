@@ -13,15 +13,15 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
 /**
  * cron_auto_check_version()
- * 
+ *
  * @return
  */
-function cron_auto_check_version()
+function cron_auto_check_version( )
 {
 	global $nv_Request, $global_config, $client_info;
 
 	$admin_cookie = $nv_Request->get_bool( 'admin', 'session', false );
-	
+
 	if( ! empty( $admin_cookie ) and $global_config['autocheckupdate'] )
 	{
 		require ( NV_ROOTDIR . "/includes/core/admin_access.php" );
@@ -33,7 +33,7 @@ function cron_auto_check_version()
 			nv_geVersion( $global_config['autoupdatetime'] * 3600 );
 		}
 	}
-	
+
 	return true;
 }
 

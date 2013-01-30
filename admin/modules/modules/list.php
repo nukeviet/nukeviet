@@ -27,8 +27,8 @@ while( list( $m, $mod_file, $is_sysmod, $mod_version ) = $db->sql_fetchrow( $res
 		"is_sysmod" => $is_sysmod,
 		"mod_version" => $mod_version
 	);
-	
-	if( ! isset( $modules_exit[ $db->unfixdb( $m ) ] ) )
+
+	if( ! isset( $modules_exit[$db->unfixdb( $m )] ) )
 	{
 		$db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `act`=2 WHERE `module_file`=" . $db->dbescape( $m ) );
 		$is_delCache = true;
@@ -58,7 +58,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 		$db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `weight`=" . $row['weight'] . " WHERE `title`=" . $db->dbescape( $row['title'] ) );
 		$is_delCache = true;
 	}
-	
+
 	$mod = array();
 	$m = $row['module_file'];
 	$mf = $row['module_file'];
@@ -82,18 +82,42 @@ while( $row = $db->sql_fetchrow( $result ) )
 	}
 
 	$weight_list[] = $row['weight'];
-	
-	$mod['title'] = array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=show&amp;mod=" . $row['title'], $row['title'] );
+
+	$mod['title'] = array(
+		NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=show&amp;mod=" . $row['title'],
+		$row['title']
+	);
 	$mod['version'] = preg_replace_callback( "/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/", "nv_parse_vers", $row['mod_version'] );
 	$mod['custom_title'] = $row['custom_title'];
-	$mod['in_menu'] = array( $row['in_menu'], "nv_chang_in_menu('" . $row['title'] . "');" );
-	$mod['submenu'] = array( $row['submenu'], "nv_chang_submenu('" . $row['title'] . "');" );
-	$mod['weight'] = array( $row['weight'], "nv_chang_weight('" . $row['title'] . "');" );
-	$mod['act'] = array( $row['act'], "nv_chang_act('" . $row['title'] . "');" );
+	$mod['in_menu'] = array(
+		$row['in_menu'],
+		"nv_chang_in_menu('" . $row['title'] . "');"
+	);
+	$mod['submenu'] = array(
+		$row['submenu'],
+		"nv_chang_submenu('" . $row['title'] . "');"
+	);
+	$mod['weight'] = array(
+		$row['weight'],
+		"nv_chang_weight('" . $row['title'] . "');"
+	);
+	$mod['act'] = array(
+		$row['act'],
+		"nv_chang_act('" . $row['title'] . "');"
+	);
 
-	$mod['edit'] = array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;mod=" . $row['title'], $lang_global['edit'] );
-	$mod['recreate'] = array( "nv_recreate_mod('" . $row['title'] . "');", $lang_global['recreate'] );
-	$mod['del'] = ( $row['is_sysmod'] == 0 or $row['title'] != $row['module_file'] ) ? array( "nv_mod_del('" . $row['title'] . "');", $lang_global['delete'] ) : array();
+	$mod['edit'] = array(
+		NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;mod=" . $row['title'],
+		$lang_global['edit']
+	);
+	$mod['recreate'] = array(
+		"nv_recreate_mod('" . $row['title'] . "');",
+		$lang_global['recreate']
+	);
+	$mod['del'] = ($row['is_sysmod'] == 0 or $row['title'] != $row['module_file']) ? array(
+		"nv_mod_del('" . $row['title'] . "');",
+		$lang_global['delete']
+	) : array();
 
 	if( $row['title'] == $global_config['site_home_module'] )
 	{

@@ -7,31 +7,25 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post' ) );
 $newname = nv_string_to_filename( htmlspecialchars( trim( $nv_Request->get_string( 'newname', 'post' ) ), ENT_QUOTES ) );
 
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
-if( ! isset( $check_allow_upload_dir['rename_dir'] ) or $check_allow_upload_dir['rename_dir'] !== true )
-	die( "ERROR_" . $lang_module['notlevel'] );
+if( ! isset( $check_allow_upload_dir['rename_dir'] ) or $check_allow_upload_dir['rename_dir'] !== true ) die( "ERROR_" . $lang_module['notlevel'] );
 
-if( empty( $path ) or $path == NV_UPLOADS_DIR )
-	die( "ERROR_" . $lang_module['notlevel'] );
+if( empty( $path ) or $path == NV_UPLOADS_DIR ) die( "ERROR_" . $lang_module['notlevel'] );
 
-if( empty( $newname ) )
-	die( "ERROR_" . $lang_module['rename_nonamefolder'] );
+if( empty( $newname ) ) die( "ERROR_" . $lang_module['rename_nonamefolder'] );
 
 unset( $matches );
 preg_match( "/(.*)\/([a-z0-9\-\_]+)$/i", $path, $matches );
-if( ! isset( $matches ) or empty( $matches ) )
-	die( "ERROR_" . $lang_module['notlevel'] );
+if( ! isset( $matches ) or empty( $matches ) ) die( "ERROR_" . $lang_module['notlevel'] );
 
 $newpath = $matches[1] . '/' . $newname;
-if( is_dir( NV_ROOTDIR . '/' . $newpath ) )
-	die( "ERROR_" . $lang_module['folder_exists'] );
+if( is_dir( NV_ROOTDIR . '/' . $newpath ) ) die( "ERROR_" . $lang_module['folder_exists'] );
 
 if( rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath ) )
 {
@@ -70,4 +64,5 @@ else
 {
 	die( "ERROR_" . $lang_module['rename_error_folder'] );
 }
+
 ?>

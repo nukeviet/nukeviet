@@ -37,14 +37,14 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 	if( ! empty( $admins ) )
 	{
 		$admins = array_map( "trim", explode( ";", $admins ) );
-	
+
 		$a_l = array();
 		foreach( $admins as $adm )
 		{
 			if( preg_match( "/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i", $adm ) )
 			{
 				$adm2 = array_map( "trim", explode( "/", $adm ) );
-			
+
 				if( $adm2[3] == 1 )
 				{
 					$a_l[] = intval( $adm2[0] );
@@ -55,10 +55,10 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 		if( ! empty( $a_l ) )
 		{
 			$a_l = implode( ",", $a_l );
-		
+
 			$sql = "SELECT t2.email as admin_email FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (" . $a_l . ")";
 			$result = $db->sql_query( $sql );
-		
+
 			while( $row = $db->sql_fetchrow( $result ) )
 			{
 				if( nv_check_valid_email( $row['admin_email'] ) == "" )
@@ -73,8 +73,11 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 
 	if( ! empty( $email_list ) )
 	{
-		$from = array( $full_name, $femail );
-	
+		$from = array(
+			$full_name,
+			$femail
+		);
+
 		foreach( $email_list as $to )
 		{
 			@nv_sendmail( $from, $to, $ftitle, $fcontent );
@@ -168,7 +171,7 @@ if( ! empty( $array_rows ) )
 
 			$website = "<a href=\"" . $global_config['site_url'] . "\">" . $global_config['site_name'] . "</a>";
 			$fcon .= "<br /><br />----------------------------------------<br /><br />";
-		
+
 			if( empty( $fphone ) )
 			{
 				$fcon .= sprintf( $lang_module['sendinfo'], $website, $fname, $femail, $client_info['ip'], $array_rows[$fpart]['full_name'] );
@@ -177,12 +180,12 @@ if( ! empty( $array_rows ) )
 			{
 				$fcon .= sprintf( $lang_module['sendinfo2'], $website, $fname, $femail, $fphone, $client_info['ip'], $array_rows[$fpart]['full_name'] );
 			}
-		
+
 			nv_SendMail2User( $fpart, $fcon, $ftitle, $femail, $fname );
 
 			$url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA;
 			$contents .= call_user_func( "sendcontact", $url );
-		
+
 			include ( NV_ROOTDIR . "/includes/header.php" );
 			echo nv_site_theme( $contents );
 			include ( NV_ROOTDIR . "/includes/footer.php" );

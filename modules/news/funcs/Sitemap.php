@@ -16,7 +16,7 @@ $url = array();
 $cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_data . "_Sitemap.cache";
 $pa = NV_CURRENTTIME - 7200;
 
-if( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile ) >= $pa )
+if( ($cache = nv_get_cache( $cacheFile )) != false and filemtime( $cacheFile ) >= $pa )
 {
 	$url = unserialize( $cache );
 }
@@ -30,9 +30,9 @@ else
 	{
 		$catalias = $global_array_cat[$catid_i]['alias'];
 		$url[] = array( //
-				'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id, //
-				'publtime' => $publtime //
-				);
+			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id, //
+			'publtime' => $publtime //
+		);
 	}
 
 	$cache = serialize( $url );

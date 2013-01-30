@@ -7,12 +7,11 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_LANG' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_admin_copy'];
 
-$array_lang_exit = array( );
+$array_lang_exit = array();
 $result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
 
 $add_field = true;
@@ -35,13 +34,13 @@ if( empty( $array_lang_exit ) )
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
 
-	include (NV_ROOTDIR . "/includes/header.php");
+	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
-	include (NV_ROOTDIR . "/includes/footer.php");
-	exit( );
+	include ( NV_ROOTDIR . "/includes/footer.php" );
+	exit();
 }
 
-if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_Request->get_string( 'checksess', 'post' ) == md5( session_id( ) ) )
+if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_Request->get_string( 'checksess', 'post' ) == md5( session_id() ) )
 {
 	$newslang = filter_text_input( 'newslang', 'post', '' );
 	$typelang = filter_text_input( 'typelang', 'post', '' );
@@ -87,12 +86,12 @@ if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_
 		$xtpl->parse( 'copyok' );
 		$contents = $xtpl->text( 'copyok' );
 
-		include (NV_ROOTDIR . "/includes/header.php");
+		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );
-		include (NV_ROOTDIR . "/includes/footer.php");
+		include ( NV_ROOTDIR . "/includes/footer.php" );
 	}
 }
-$lang_array_file = array( );
+$lang_array_file = array();
 
 $lang_array_file_temp = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}+$/" );
 foreach( $lang_array_file_temp as $value )
@@ -109,17 +108,14 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
-$xtpl->assign( 'CHECKSESS', md5( session_id( ) ) );
+$xtpl->assign( 'CHECKSESS', md5( session_id() ) );
 
 $language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 foreach( $language_array as $key => $value )
 {
 	if( ! in_array( $key, $array_lang_exit ) and ! in_array( $key, $lang_array_file ) )
 	{
-		$xtpl->assign( 'NEWSLANG', array(
-			'key' => $key,
-			'title' => $value['name'] . ' - ' . $value['language']
-		) );
+		$xtpl->assign( 'NEWSLANG', array( 'key' => $key, 'title' => $value['name'] . ' - ' . $value['language'] ) );
 		$xtpl->parse( 'main.newslang' );
 	}
 }
@@ -134,10 +130,7 @@ foreach( $language_array as $key => $value )
 {
 	if( in_array( $key, $array_lang_exit ) )
 	{
-		$xtpl->assign( 'TYPELANG', array(
-			'key' => $key,
-			'title' => $value['name'] . ' - ' . $value['language']
-		) );
+		$xtpl->assign( 'TYPELANG', array( 'key' => $key, 'title' => $value['name'] . ' - ' . $value['language'] ) );
 
 		$xtpl->parse( 'main.typelang_1' );
 	}
@@ -146,7 +139,8 @@ foreach( $language_array as $key => $value )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

@@ -9,7 +9,7 @@
 
 define( 'NV_SYSTEM', true );
 
-require (str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php');
+require ( str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php' );
 
 $array_hidefolders = array(
 	".",
@@ -29,8 +29,7 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 		{
 			if( preg_match( "/^[a-zA-Z0-9\-\_]+$/", $subdir ) )
 			{
-				if( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) )
-					$real_dirlist = nv_listUploadDir( $dir . '/' . $subdir, $real_dirlist );
+				if( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) ) $real_dirlist = nv_listUploadDir( $dir . '/' . $subdir, $real_dirlist );
 			}
 		}
 
@@ -44,12 +43,12 @@ function nv_getFileInfo( $pathimg, $file )
 {
 	global $array_images, $array_flash, $array_archives, $array_documents;
 
-	clearstatcache( );
+	clearstatcache();
 
 	unset( $matches );
 	preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $file, $matches );
 
-	$info = array( );
+	$info = array();
 	$info['name'] = $file;
 	if( isset( $file{17} ) )
 	{
@@ -167,7 +166,7 @@ if( $step == 1 )
 		) ENGINE=MyISAM" );
 
 	$contents = "<br><br>";
-	$real_dirlist = array( );
+	$real_dirlist = array();
 	$allow_upload_dir = array(
 		'images',
 		NV_UPLOADS_DIR
@@ -192,7 +191,7 @@ elseif( $step == 2 )
 	if( $did )
 	{
 		$tempFile = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . md5( $pathimg );
-		$results = array( );
+		$results = array();
 		if( file_exists( $tempFile ) )
 		{
 			$results = file_get_contents( $tempFile );
@@ -222,4 +221,5 @@ else
 	$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET `time` = '0'" );
 	die( 'Thực hiện nâng cấp CSDL thành công, Bạn cần xóa các file update.php, update2.php ở thư mục gốc của site ngay lập tức' );
 }
+
 ?>

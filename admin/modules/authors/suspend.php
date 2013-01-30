@@ -33,7 +33,7 @@ if( empty( $numrows ) )
 
 $row = $db->sql_fetchrow( $result );
 
-if( $row['lev'] == 1 or ( ! defined( "NV_IS_GODADMIN" ) and $row['lev'] == 2 ) )
+if( $row['lev'] == 1 or ( ! defined( "NV_IS_GODADMIN" ) and $row['lev'] == 2) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();
@@ -46,7 +46,7 @@ $last_reason = array();
 if( ! empty( $row['susp_reason'] ) )
 {
 	$susp_reason = unserialize( $row['susp_reason'] );
-	$last_reason = ( ! empty( $susp_reason ) ) ? $susp_reason[0] : "";
+	$last_reason = ( ! empty( $susp_reason )) ? $susp_reason[0] : "";
 }
 
 $old_suspend = intval( $row['is_suspend'] );
@@ -57,22 +57,22 @@ if( empty( $old_suspend ) )
 }
 else
 {
-	$allow_change = ( defined( "NV_IS_GODADMIN" ) ) ? true : ( ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) ? true : false );
+	$allow_change = ( defined( "NV_IS_GODADMIN" )) ? true : ((defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1) ? true : false);
 }
 
 $contents = array();
 $contents['change_suspend'] = array();
 if( $allow_change )
 {
-	$new_suspend = ( $old_suspend ) ? 0 : 1;
+	$new_suspend = ($old_suspend) ? 0 : 1;
 
 	$error = "";
 	if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	{
-		$new_reason = ( ! empty( $new_suspend ) ) ? filter_text_input( 'new_reason', 'post', '', 1 ) : "";
+		$new_reason = ( ! empty( $new_suspend )) ? filter_text_input( 'new_reason', 'post', '', 1 ) : "";
 		$sendmail = $nv_Request->get_int( 'sendmail', 'post', 0 );
 		$clean_history = defined( "NV_IS_GODADMIN" ) ? $nv_Request->get_int( 'clean_history', 'post', 0 ) : 0;
-		
+
 		if( ! empty( $new_suspend ) and empty( $new_reason ) )
 		{
 			$error = sprintf( $lang_module['susp_reason_empty'], $row_user['username'] );
@@ -94,13 +94,7 @@ if( $allow_change )
 				}
 				else
 				{
-					array_unshift( $susp_reason, array(
-						'starttime' => NV_CURRENTTIME,
-						'endtime' => 0,
-						'start_admin' => $admin_info['admin_id'],
-						'end_admin' => '',
-						'info' => $new_reason 
-					) );
+					array_unshift( $susp_reason, array( 'starttime' => NV_CURRENTTIME, 'endtime' => 0, 'start_admin' => $admin_info['admin_id'], 'end_admin' => '', 'info' => $new_reason ) );
 				}
 			}
 			else
@@ -127,9 +121,9 @@ if( $allow_change )
 				if( ! empty( $sendmail ) )
 				{
 					$title = sprintf( $lang_module['suspend_sendmail_title'], $global_config['site_name'] );
-					$my_sig = ( ! empty( $admin_info['sig'] ) ) ? $admin_info['sig'] : "All the best";
+					$my_sig = ( ! empty( $admin_info['sig'] )) ? $admin_info['sig'] : "All the best";
 					$my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $global_config['site_email'];
-					
+
 					if( $new_suspend )
 					{
 						$message = sprintf( $lang_module['suspend_sendmail_mess1'], $global_config['site_name'], nv_date( "d/m/Y H:i", NV_CURRENTTIME ), $new_reason, $my_mail );
@@ -161,12 +155,15 @@ if( $allow_change )
 					$xtpl->assign( 'AUTHOR_POS', $admin_info['position'] );
 					$xtpl->assign( 'AUTHOR_EMAIL', $my_mail );
 					$xtpl->parse( 'main' );
-					
+
 					$content = $xtpl->text( 'main' );
-					$from = array( $admin_info['username'], $my_mail );
+					$from = array(
+						$admin_info['username'],
+						$my_mail
+					);
 					$to = $row_user['email'];
 					$send = nv_sendmail( $from, $to, nv_EncString( $title ), $content );
-					
+
 					if( ! $send )
 					{
 						nv_info_die( $lang_global['error_info_caption'], $lang_global['site_info'], $lang_global['error_sendmail_admin'], 1 );
@@ -182,23 +179,30 @@ if( $allow_change )
 		$clean_history = $sendmail = 0;
 	}
 
-	$contents['change_suspend']['new_suspend_caption'] = ( ! empty( $error ) ) ? $error : $lang_module['chg_is_suspend' . $new_suspend];
-	$contents['change_suspend']['new_suspend_is_error'] = ( ! empty( $error ) ) ? 1 : 0;
+	$contents['change_suspend']['new_suspend_caption'] = ( ! empty( $error )) ? $error : $lang_module['chg_is_suspend' . $new_suspend];
+	$contents['change_suspend']['new_suspend_is_error'] = ( ! empty( $error )) ? 1 : 0;
 	$contents['change_suspend']['new_suspend_action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=suspend&amp;admin_id=" . $admin_id;
-	$contents['change_suspend']['sendmail'] = array( $lang_module['suspend_sendmail'], $sendmail );
-	
+	$contents['change_suspend']['sendmail'] = array(
+		$lang_module['suspend_sendmail'],
+		$sendmail
+	);
+
 	if( ! empty( $new_suspend ) )
 	{
 		$contents['change_suspend']['new_reason'] = array(
 			$lang_module['suspend_reason'],
 			$new_reason,
-			255 );
+			255
+		);
 	}
 	if( defined( "NV_IS_GODADMIN" ) )
 	{
-		if( ( $new_suspend and ! empty( $susp_reason ) ) or ( empty( $new_suspend ) and sizeof( $susp_reason ) >= 1 ) )
+		if( ($new_suspend and ! empty( $susp_reason )) or (empty( $new_suspend ) and sizeof( $susp_reason ) >= 1) )
 		{
-			$contents['change_suspend']['clean_history'] = array( $lang_module['clean_history'], $clean_history );
+			$contents['change_suspend']['clean_history'] = array(
+				$lang_module['clean_history'],
+				$clean_history
+			);
 		}
 	}
 	$contents['change_suspend']['submit'] = $lang_module['suspend' . $new_suspend];
@@ -206,25 +210,28 @@ if( $allow_change )
 
 if( empty( $susp_reason ) )
 {
-	$contents['suspend_info'] = array( sprintf( $lang_module['suspend_info_empty'], $row_user['username'] ), array() );
+	$contents['suspend_info'] = array(
+		sprintf( $lang_module['suspend_info_empty'], $row_user['username'] ),
+		array()
+	);
 
 }
 else
 {
 	$inf = array();
 	$ads = array();
-	
+
 	foreach( $susp_reason as $vals )
 	{
 		$ads[] = $vals['start_admin'];
 		if( ! empty( $vals['end_admin'] ) ) $ads[] = $vals['end_admin'];
 	}
-	
+
 	$ads = array_unique( $ads );
 	$ads = "'" . implode( "','", $ads ) . "'";
 	$query2 = "SELECT `userid`, `username`, `full_name` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $ads . ")";
 	$result2 = $db->sql_query( $query2 );
-	
+
 	$ads = array();
 	while( $row2 = $db->sql_fetchrow( $result2 ) )
 	{
@@ -271,11 +278,11 @@ else
 	$xtpl->assign( 'SUSPEND_INFO2', $contents['suspend_info'][2] );
 	$xtpl->assign( 'SUSPEND_INFO3', $contents['suspend_info'][3] );
 	$xtpl->assign( 'SUSPEND_INFO4', $contents['suspend_info'][4] );
-	
+
 	$a = 0;
 	foreach( $contents['suspend_info'][1] as $value )
 	{
-		$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'CLASS', ($a % 2) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'VALUE0', $value[0] );
 		$xtpl->assign( 'VALUE1', $value[1] );
 		$xtpl->assign( 'VALUE2', $value[2] );
@@ -287,8 +294,8 @@ else
 
 if( ! empty( $contents['change_suspend'] ) )
 {
-	$class = ( $contents['change_suspend']['new_suspend_is_error'] ) ? " class=\"error\"" : "";
-	$xtpl->assign( 'CLASS', ( $contents['change_suspend']['new_suspend_is_error'] ) ? " class=\"error\"" : "" );
+	$class = ($contents['change_suspend']['new_suspend_is_error']) ? " class=\"error\"" : "";
+	$xtpl->assign( 'CLASS', ($contents['change_suspend']['new_suspend_is_error']) ? " class=\"error\"" : "" );
 	$xtpl->assign( 'NEW_SUSPEND_CAPTION', $contents['change_suspend']['new_suspend_caption'] );
 	$xtpl->assign( 'ACTION', $contents['change_suspend']['new_suspend_action'] );
 
@@ -309,7 +316,7 @@ if( ! empty( $contents['change_suspend'] ) )
 		$xtpl->assign( 'CHECKED1', $contents['change_suspend']['clean_history'][1] ? " checked=\"checked\"" : "" );
 		$xtpl->parse( 'suspend.change_suspend.clean_history' );
 	}
-	
+
 	$xtpl->assign( 'SUBMIT', $contents['change_suspend']['submit'] );
 	$xtpl->parse( 'suspend.change_suspend' );
 }

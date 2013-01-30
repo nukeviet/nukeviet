@@ -26,7 +26,7 @@ if( ! empty( $mod ) and file_exists( $path_filename ) and $checkss == md5( $file
 else
 {
 	$contents = 'file not exist !';
-	
+
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );

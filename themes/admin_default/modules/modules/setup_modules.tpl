@@ -9,7 +9,7 @@
 		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
+	<tbody {ROW.class}>
 		<tr>
 			<td>{ROW.stt}</td>
 			<td>{ROW.values.title}</td>
@@ -32,7 +32,7 @@
 		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
-	<tbody{VROW.class}>
+	<tbody {VROW.class}>
 		<tr>
 			<td>{VROW.stt}</td>
 			<td>{VROW.values.title}</td>
