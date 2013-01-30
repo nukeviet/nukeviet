@@ -45,19 +45,17 @@
 	</form>
 </div>
 <script type="text/javascript">
-    $(document).ready(function()
-    {
-        $(".datepicker").datepicker(
-        {
-            showOn : "both",
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonImage : nv_siteroot + "images/calendar.gif",
-            buttonImageOnly : true
-        });
-    }); 
+	$(document).ready(function() {
+		$(".datepicker").datepicker({
+			showOn : "both",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImageOnly : true
+		});
+	}); 
 </script>
 <!-- END: main -->
 <!-- BEGIN: results -->
@@ -105,21 +103,13 @@
 			<table width="100%">
 				<tr>
 					<td align="center" width="100px"><img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" /></td>
-					<td align="left">
-					<input type="text" name="q" size="38" maxlength="255" value="{KEY}" id="sbi" />
-					</td>
-					<td>
-					<input type="submit" name="sa" value="{LANG.search_title}" id="sbb">
-					</td>
+					<td align="left"><input type="text" name="q" size="38" maxlength="255" value="{KEY}" id="sbi" /></td>
+					<td><input type="submit" name="sa" value="{LANG.search_title}" id="sbb"></td>
 				</tr>
 			</table>
 			<table width="100%">
 				<tr>
-					<td>
-					<input type="radio" name="sitesearch" value="" checked id="ss0" />
-					{LANG.search_on_internet}
-					<input type="radio" name="sitesearch" value="{MY_DOMAIN}" />
-					{LANG.search_on_nuke} {MY_DOMAIN}
+					<td><input type="radio" name="sitesearch" value="" checked id="ss0" /> {LANG.search_on_internet} <input type="radio" name="sitesearch" value="{MY_DOMAIN}" /> {LANG.search_on_nuke} {MY_DOMAIN}
 				</tr>
 			</table>
 		</form>

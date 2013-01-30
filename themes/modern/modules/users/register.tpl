@@ -79,7 +79,11 @@
 		<!-- BEGIN: loop -->
 		<dl class="clearfix">
 			<dt class="fl">
-				<label>{FIELD.title} <!-- BEGIN: required --> <span class="error">(*)</span> <!-- END: required --> </label>
+				<label>{FIELD.title}
+					<!-- BEGIN: required -->
+					<span class="error">(*)</span>
+					<!-- END: required -->
+				</label>
 				<br>
 				<i>{FIELD.description}</i>
 			</dt>
@@ -90,8 +94,7 @@
 				<!-- BEGIN: date -->
 				<input class="datepicker {FIELD.required} {FIELD.class}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
 				<!-- END: date -->
-				<!-- BEGIN: textarea -->
-				<textarea name="custom_fields[{FIELD.field}]" class="{FIELD.class}">{FIELD.value}</textarea>
+				<!-- BEGIN: textarea --><textarea name="custom_fields[{FIELD.field}]" class="{FIELD.class}">{FIELD.value}</textarea>
 				<!-- END: textarea -->
 				<!-- BEGIN: editor -->
 				{EDITOR}

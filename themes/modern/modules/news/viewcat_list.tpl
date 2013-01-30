@@ -3,23 +3,16 @@
 	<tbody>
 		<!-- BEGIN: cattitle -->
 		<tr>
-			<th colspan="2">
-				<a title="{CAT.title}" href="{CAT.link}">{CAT.title}</a>
-			</th>
-		</tr>		
+			<th colspan="2"><a title="{CAT.title}" href="{CAT.link}">{CAT.title}</a></th>
+		</tr>
 		<!-- END: cattitle -->
 		<!-- BEGIN: viewcatloop -->
 		<tr>
-			<td>
-				{NUMBER}
-			</td>
-			<td>
-				<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
-				<!-- BEGIN: adminlink -->
-				<span class="aright">
-					{ADMINLINK}
-				</span>
-				<!-- END: adminlink -->                        
+			<td> {NUMBER} </td>
+			<td><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+			<!-- BEGIN: adminlink -->
+			<span class="aright"> {ADMINLINK} </span>
+			<!-- END: adminlink -->
 			</td>
 		</tr>
 		<!-- END: viewcatloop -->

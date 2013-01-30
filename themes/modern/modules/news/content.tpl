@@ -10,42 +10,41 @@
 <!-- END: mainrefresh -->
 <!-- BEGIN: main -->
 <style type="text/css">
-	.txtrequired
-	{
+	.txtrequired {
 		color: #ff0000;
 	}
-	.news
-	{
+
+	.news {
 		margin: 10px 0;
 		clear: both;
 	}
-	.news label
-	{
+
+	.news label {
 		width: 150px;
 		text-align: left;
 		float: left;
 		display: inline;
 		border-bottom: 1px dotted #ccc;
 	}
-	.news input
-	{
+
+	.news input {
 		width: 450px;
 	}
-	.news select
-	{
+
+	.news select {
 		width: 450px;
 	}
-	.news input, .news select
-	{
+
+	.news input, .news select {
 		border: 1px solid #ccc;
 	}
-	.textareaform
-	{
+
+	.textareaform {
 		width: 600px;
 		border: 1px solid #ccc;
 	}
-	.news_checkbox
-	{
+
+	.news_checkbox {
 		width: 18px !important;
 	}
 </style>
@@ -66,9 +65,7 @@
 				<tbody>
 					<!-- BEGIN: catid -->
 					<tr>
-						<td>
-						<input class="news_checkbox" name="catids[]" value="{DATACATID.value}" type="checkbox"{DATACATID.checked}>
-						{DATACATID.title}</td>
+						<td><input class="news_checkbox" name="catids[]" value="{DATACATID.value}" type="checkbox"{DATACATID.checked}> {DATACATID.title}</td>
 					</tr>
 					<!-- END: catid -->
 				</tbody>
@@ -101,8 +98,7 @@
 	</div>
 	<br />
 	<strong>{LANG.content_hometext}</strong></label>
-	<br />
-	<textarea class="textareaform" rows="6" cols="60" name="hometext"> {DATA.hometext}</textarea>
+	<br /><textarea class="textareaform" rows="6" cols="60" name="hometext"> {DATA.hometext}</textarea>
 	<br />
 	<br />
 	<strong>{LANG.content_bodytext}</strong><span class="txtrequired">(*)</span>
@@ -142,24 +138,18 @@
 	<br />
 </form>
 <script type="text/javascript">
-	function get_alias()
-	{
+	function get_alias() {
 		var title = strip_tags(document.getElementById('idtitle').value);
-		if(title != '')
-		{
+		if (title != '') {
 			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&get_alias=' + encodeURIComponent(title), '', 'res_get_alias');
 		}
 		return false;
 	}
 
-	function res_get_alias(res)
-	{
-		if(res != "")
-		{
+	function res_get_alias(res) {
+		if (res != "") {
 			document.getElementById('idalias').value = res;
-		}
-		else
-		{
+		} else {
 			document.getElementById('idalias').value = '';
 		}
 		return false;
