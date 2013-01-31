@@ -13,7 +13,7 @@
 		<param name="loop" value="true" />
 		<!--[if !IE]> <-->
 		<object type="application/x-shockwave-flash" width="{DATA.file_width}" height="{DATA.file_height}" data="{DATA.file_image}" >
-		<param name="wmode" value="transparent" />
+			<param name="wmode" value="transparent" />
 			<param name="pluginurl" value="http://www.adobe.com/go/getflashplayer" />
 			<param name="loop" value="true" />
 			<param name="quality" value="high" />
@@ -23,12 +23,12 @@
 		</object>
 		<!--> <![endif]-->
 	</object>
-	<!-- BEGIN: fix_link --><a href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}" style="position:absolute; top:0;left:0;width:{DATA.file_width}px; height:{DATA.file_height}px">&nbsp;</a><!-- END: fix_link -->
+	<!-- BEGIN: fix_link -->
+	<a href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}" style="position:absolute; top:0;left:0;width:{DATA.file_width}px; height:{DATA.file_height}px">&nbsp;</a>
+	<!-- END: fix_link -->
 	<!-- END: type_swf -->
 	<!-- BEGIN: type_image_link -->
-	<a href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}">
-		<img alt="{DATA.file_alt}" style="border-width:0px" src="{DATA.file_image}" width="{DATA.file_width}" height="{DATA.file_height}" />
-	</a>
+	<a href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}"> <img alt="{DATA.file_alt}" style="border-width:0px" src="{DATA.file_image}" width="{DATA.file_width}" height="{DATA.file_height}" /> </a>
 	<!-- END: type_image_link -->
 	<!-- BEGIN: type_image -->
 	<img alt="{DATA.file_alt}" style="border-width:0px" src="{DATA.file_image}" width="{DATA.file_width}" height="{DATA.file_height}" />
