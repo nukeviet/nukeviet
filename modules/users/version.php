@@ -7,8 +7,8 @@
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT GMT
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+
 $module_version = array(
 	"name" => "Users",
 	"modfuncs" => "main,login,logout,register,lostpass,changepass,active,editinfo,lostactivelink,openid,regroups,thu,memberlist",
@@ -21,4 +21,5 @@ $module_version = array(
 	"note" => "",
 	"uploads_dir" => array( $module_name )
 );
+
 ?>
