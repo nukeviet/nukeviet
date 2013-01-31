@@ -9,18 +9,23 @@
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
+// Dang nhap thanh vien thi khong duoc truy cap
 if( defined( 'NV_IS_USER' ) )
 {
 	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
 	die();
 }
 
+// Chuyen trang dang ki neu tich hop dien dan
 if( defined( 'NV_IS_USER_FORUM' ) )
 {
 	require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/register.php' );
 	exit();
 }
+
 $nv_redirect = filter_text_input( 'nv_redirect', 'post,get', '' );
+
+// Ngung dang ki thanh vien
 if( ! $global_config['allowuserreg'] )
 {
 	$page_title = $lang_module['register'];
@@ -36,16 +41,20 @@ if( ! $global_config['allowuserreg'] )
 	exit();
 }
 
+/**
+ * nv_check_username_reg()
+ * Ham kiem tra ten dang nhap kha dung
+ * 
+ * @param mixed $login
+ * @return
+ */
 function nv_check_username_reg( $login )
 {
 	global $db, $lang_module;
 
 	$error = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
 	if( $error != "" ) return preg_replace( "/\&(l|r)dquo\;/", "", strip_tags( $error ) );
-	if( $login != $db->fixdb( $login ) )
-	{
-		return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
-	}
+	if( $login != $db->fixdb( $login ) ) return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
 
 	$sql = "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_name'";
 	$result = $db->sql_query( $sql );
@@ -63,6 +72,13 @@ function nv_check_username_reg( $login )
 	return "";
 }
 
+/**
+ * nv_check_email_reg()
+ * Ham kiem tra email kha dung
+ * 
+ * @param mixed $email
+ * @return
+ */
 function nv_check_email_reg( $email )
 {
 	global $db, $lang_module;
@@ -95,6 +111,7 @@ function nv_check_email_reg( $email )
 	return "";
 }
 
+// Cau hoi lay lai mat khau
 $data_questions = array();
 $data_questions[0] = array(
 	'qid' => 0,
@@ -112,6 +129,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	);
 }
 
+// Captcha
 $gfx_chk = ( in_array( $global_config['gfx_chk'], array( 3, 4, 6, 7 ) )) ? 1 : 0;
 
 $array_register = array();
@@ -121,7 +139,7 @@ $checkss = filter_text_input( 'checkss', 'post', '' );
 
 $contents = $error = "";
 
-//Dang ky qua OpenID
+// Dang ky qua OpenID
 if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', false ) )
 {
 	$page_title = $lang_module['openid_register'];
@@ -311,6 +329,15 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	define( 'NV_EDITOR', true );
 	define( 'NV_IS_CKEDITOR', true );
 	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' );
+	/**
+	 * nv_aleditor()
+	 * 
+	 * @param mixed $textareaname
+	 * @param string $width
+	 * @param string $height
+	 * @param string $val
+	 * @return
+	 */
 	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
 		// Create class instance.

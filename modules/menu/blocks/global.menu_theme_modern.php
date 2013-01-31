@@ -95,10 +95,12 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		{
 			foreach( $module_info['funcs'] as $key => $sub_item )
 			{
+				if( $key == "main" ) continue;
+			
 				if( $sub_item['in_submenu'] == 1 )
 				{
 					$array_cat_menu[] = array(
-						"catid" => ($op == $key) ? 1 : 0,
+						"catid" => ( $op == $key ) ? 1 : 0,
 						"parentid" => 1,
 						"title" => $sub_item['func_custom_name'],
 						"alias" => '',
@@ -106,6 +108,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 					);
 				}
 			}
+			
 			if( ! empty( $array_cat_menu ) )
 			{
 				$array_cat_menu[] = array(
@@ -117,10 +120,12 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 				);
 			}
 		}
+		
 		if( $module_name != "news" and empty( $array_cat_menu ) )
 		{
 			$sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_news_cat` ORDER BY `order` ASC";
 			$list = nv_db_cache( $sql, 'catid', 'news' );
+			
 			foreach( $list as $l )
 			{
 				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
@@ -132,20 +137,24 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		$i = 1;
 		foreach( $array_cat_menu as $catvalue )
 		{
-			if( ! empty( $catvalue['catid'] ) && empty( $catvalue['parentid'] ) )
+			if( ! empty( $catvalue['catid'] ) and empty( $catvalue['parentid'] ) )
 			{
 				$check_cat = isset( $array_cat_menu[$catid]['parentid'] ) ? $array_cat_menu[$catid]['parentid'] : 0;
-				if( ($catvalue['catid'] == $catid) || ($check_cat == $catvalue['catid']) || (empty( $catid ) && $i == 1) )
+				
+				if( ( $catvalue['catid'] == $catid ) || ( $check_cat == $catvalue['catid'] ) || ( empty( $catid ) and $i == 1 ) )
 				{
 					$catvalue['current'] = 'class="current"';
 					$i = 0;
 				}
+				
 				$xtpl->assign( 'mainloop', $catvalue );
+				
 				foreach( $array_cat_menu as $subcatvalue )
 				{
 					if( $subcatvalue['parentid'] == $catvalue['catid'] )
 					{
-						$subcatvalue['current'] = ($subcatvalue['catid'] == $catid) ? 'class="current"' : '';
+						$subcatvalue['current'] = ( $subcatvalue['catid'] == $catid ) ? 'class="current"' : '';
+						
 						$xtpl->assign( 'loop', $subcatvalue );
 						$xtpl->parse( 'main.news_cat.mainloop.sub.loop' );
 					}
@@ -154,15 +163,17 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 						$xtpl->parse( 'main.news_cat.mainloop.sub.null' );
 					}
 				}
+				
 				$xtpl->parse( 'main.news_cat.mainloop.sub' );
 				$xtpl->parse( 'main.news_cat.mainloop' );
 			}
 		}
+		
 		$xtpl->parse( 'main.news_cat' );
 		$xtpl->parse( 'main' );
+		
 		return $xtpl->text( 'main' );
 	}
-
 }
 
 if( defined( 'NV_SYSTEM' ) )
