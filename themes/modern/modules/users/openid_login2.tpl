@@ -11,7 +11,7 @@
 	<ol style="padding-top:10px">
 		<!-- BEGIN: login_note -->
 		<li>
-			<span>-</span><a href="{USER_LOGIN.link}">{USER_LOGIN.title}</a>
+			<span>- </span><a href="{USER_LOGIN.link}">{USER_LOGIN.title}</a>
 		</li>
 		<!-- END: login_note -->
 	</ol>
