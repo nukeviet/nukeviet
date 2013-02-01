@@ -569,6 +569,10 @@ function openidLogin_Res1( $attribs )
 		"title" => $lang_module['openid_note5'],
 		"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $attribs['server'] . "&amp;result=1&amp;option=3&amp;nv_redirect=" . $nv_redirect
 	);
+	
+	$page_title = $lang_module['openid_login'];
+	$key_words = $module_info['keywords'];
+	$mod_title = $lang_module['openid_login'];
 
 	$contents .= user_openid_login2( $attribs, $array_user_login );
 

@@ -5,8 +5,6 @@
 /cache/*.cache
 /cache/*.xml
 /data/diagnostic-*.xml
-/data/ip_files/*.php
-/data/config_global.php
 /files/css/*.opt.css
 /logs/data_logs/
 /logs/dump_backup/
@@ -16,5 +14,3 @@
 /logs/voting_logs/
 /sess/sess_*
 /tmp/
-/.htaccess
-/robots.txt
