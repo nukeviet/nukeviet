@@ -30,7 +30,7 @@ if( is_dir( NV_ROOTDIR . '/' . $newpath ) ) die( "ERROR_" . $lang_module['folder
 if( rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath ) )
 {
 	$action = 0;
-	if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m1 ) AND preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $newpath, $m2 ) )
+	if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m1 ) and preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $newpath, $m2 ) )
 	{
 		rename( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m1[1], NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m2[1] );
 		$action = 1;

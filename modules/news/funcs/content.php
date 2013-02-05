@@ -18,13 +18,11 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	define( 'NV_EDITOR', true );
 	define( 'NV_IS_CKEDITOR', true );
 	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' );
+
 	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
 		// Create class instance.
-		$editortoolbar = array(
-		 array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ),
-		 array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) 
-		);
+		$editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
 		$CKEditor = new CKEditor();
 		// Do not print the code directly to the browser, return it instead
 		$CKEditor->returnOutput = true;
@@ -48,14 +46,10 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 			$CKEditor->config['height'] = strpos( $height, '%' ) ? $height : intval( $height );
 		}
 		// Change default textarea attributes
-		$CKEditor->textareaAttributes = array(
-			"cols" => 80,
-			"rows" => 10
-		);
+		$CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
 		$val = nv_unhtmlspecialchars( $val );
 		return $CKEditor->editor( $textareaname, $val );
 	}
-
 }
 
 $page_title = $lang_module['content'];
@@ -202,7 +196,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 	if( $contentid > 0 )
 	{
 		$rowcontent_old = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `id`=" . $contentid . " and `admin_id`= " . $user_info['userid'] . "" ), 2 );
-		$contentid = (isset( $rowcontent_old['id'] )) ? intval( $rowcontent_old['id'] ) : 0;
+		$contentid = ( isset( $rowcontent_old['id'] ) ) ? intval( $rowcontent_old['id'] ) : 0;
 
 		if( empty( $contentid ) )
 		{
@@ -210,7 +204,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			die();
 		}
 
-		if( $nv_Request->get_int( 'delcontent', 'get' ) and (empty( $rowcontent_old['status'] ) or $array_post_user['delcontent']) )
+		if( $nv_Request->get_int( 'delcontent', 'get' ) and ( empty( $rowcontent_old['status'] ) or $array_post_user['delcontent'] ) )
 		{
 			nv_del_content_module( $contentid );
 
@@ -225,7 +219,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op, true ) );
 			die();
 		}
-		elseif( ! (empty( $rowcontent_old['status'] ) or $array_post_user['editcontent']) )
+		elseif( ! ( empty( $rowcontent_old['status'] ) or $array_post_user['editcontent'] ) )
 		{
 			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op, true ) );
 			die();
@@ -253,9 +247,9 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 	$rowcontent = array(
 		"id" => "",
 		"listcatid" => "",
-		"catid" => ($contentid > 0) ? $rowcontent_old['catid'] : 0,
+		"catid" => ( $contentid > 0 ) ? $rowcontent_old['catid'] : 0,
 		"topicid" => "",
-		"admin_id" => (defined( 'NV_IS_USER' )) ? $user_info['userid'] : 0,
+		"admin_id" => ( defined( 'NV_IS_USER' ) ) ? $user_info['userid'] : 0,
 		"author" => "",
 		"sourceid" => 0,
 		"addtime" => NV_CURRENTTIME,
@@ -323,7 +317,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 		$rowcontent['title'] = filter_text_input( 'title', 'post', '', 1 );
 		$alias = filter_text_input( 'alias', 'post', '' );
-		$rowcontent['alias'] = ($alias == "") ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
+		$rowcontent['alias'] = ( $alias == "" ) ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
 
 		$rowcontent['hometext'] = filter_text_input( 'hometext', 'post', '' );
 
@@ -388,7 +382,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		}
 		else
 		{
-			if( ($array_post_user['postcontent']) && $nv_Request->isset_request( 'status1', 'post' ) ) $rowcontent['status'] = 1;
+			if( ( $array_post_user['postcontent'] ) && $nv_Request->isset_request( 'status1', 'post' ) ) $rowcontent['status'] = 1;
 			elseif( $nv_Request->isset_request( 'status0', 'post' ) ) $rowcontent['status'] = 0;
 			elseif( $nv_Request->isset_request( 'status4', 'post' ) ) $rowcontent['status'] = 4;
 			$rowcontent['catid'] = in_array( $rowcontent['catid'], $catids ) ? $rowcontent['catid'] : $catids[0];
@@ -674,7 +668,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		$array_temp = array();
 		$array_temp['value'] = $value['catid'];
 		$array_temp['title'] = $xtitle_i . $value['title'];
-		$array_temp['checked'] = (in_array( $value['catid'], $array_catid_in_row )) ? " checked=\"checked\"" : "";
+		$array_temp['checked'] = ( in_array( $value['catid'], $array_catid_in_row ) ) ? " checked=\"checked\"" : "";
 
 		$xtpl->assign( 'DATACATID', $array_temp );
 		$xtpl->parse( 'main.catid' );
@@ -685,7 +679,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		$array_temp = array();
 		$array_temp['value'] = $topicid_i;
 		$array_temp['title'] = $title_i;
-		$array_temp['selected'] = ($topicid_i == $rowcontent['topicid']) ? " selected=\"selected\"" : "";
+		$array_temp['selected'] = ( $topicid_i == $rowcontent['topicid'] ) ? " selected=\"selected\"" : "";
 		$xtpl->assign( 'DATATOPIC', $array_temp );
 		$xtpl->parse( 'main.topic' );
 	}
@@ -695,18 +689,18 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		$array_temp = array();
 		$array_temp['value'] = $id_imgposition;
 		$array_temp['title'] = $title_imgposition;
-		$array_temp['selected'] = ($id_imgposition == $rowcontent['imgposition']) ? " selected=\"selected\"" : "";
+		$array_temp['selected'] = ( $id_imgposition == $rowcontent['imgposition'] ) ? " selected=\"selected\"" : "";
 
 		$xtpl->assign( 'DATAIMGOP', $array_temp );
 		$xtpl->parse( 'main.imgposition' );
 	}
 
-	if( ! ($rowcontent['status'] and $rowcontent['id']) )
+	if( ! ( $rowcontent['status'] and $rowcontent['id'] ) )
 	{
 		$xtpl->parse( 'main.save_temp' );
 	}
 
-	if( $array_post_user['postcontent'] or ($rowcontent['status'] and $rowcontent['id'] and $array_post_user['editcontent']) )
+	if( $array_post_user['postcontent'] or ( $rowcontent['status'] and $rowcontent['id'] and $array_post_user['editcontent'] ) )
 	{
 		$xtpl->parse( 'main.postcontent' );
 	}
@@ -733,7 +727,7 @@ elseif( defined( 'NV_IS_USER' ) )
 	}
 
 	$array_catpage = array();
-	$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . ($page - 1) * $per_page . "," . $per_page;
+	$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
 	$result = $db->sql_query( $sql );
 
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -741,25 +735,25 @@ elseif( defined( 'NV_IS_USER' ) )
 
 	while( $item = $db->sql_fetchrow( $result ) )
 	{
-		if( $item['homeimgthumb'] == 1 )// image thumb
+		if( $item['homeimgthumb'] == 1 ) // image thumb
 		{
 			$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		elseif( $item['homeimgthumb'] == 2 )// image file
+		elseif( $item['homeimgthumb'] == 2 ) // image file
 		{
 			$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		elseif( $item['homeimgthumb'] == 3 )// image url
+		elseif( $item['homeimgthumb'] == 3 ) // image url
 		{
 			$item['imghome'] = $item['homeimgfile'];
 		}
-		else// no image
+		else // no image
 		{
 			$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 		}
 
-		$item['is_edit_content'] = (empty( $item['status'] ) or $array_post_user['editcontent']) ? 1 : 0;
-		$item['is_del_content'] = (empty( $item['status'] ) or $array_post_user['delcontent']) ? 1 : 0;
+		$item['is_edit_content'] = ( empty( $item['status'] ) or $array_post_user['editcontent'] ) ? 1 : 0;
+		$item['is_del_content'] = ( empty( $item['status'] ) or $array_post_user['delcontent'] ) ? 1 : 0;
 
 		$catid = $item['catid'];
 		$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
@@ -811,10 +805,7 @@ elseif( defined( 'NV_IS_USER' ) )
 		{
 			if( isset( $global_array_cat[$catid_i] ) )
 			{
-				$listcat = array(
-					'title' => $global_array_cat[$catid_i]['title'],
-					"link" => $global_array_cat[$catid_i]['link']
-				);
+				$listcat = array( 'title' => $global_array_cat[$catid_i]['title'], "link" => $global_array_cat[$catid_i]['link'] );
 				$xtpl->assign( 'CAT', $listcat );
 				if( $n < $num_cat )
 				{

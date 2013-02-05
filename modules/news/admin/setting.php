@@ -56,8 +56,8 @@ if( ! empty( $savesetting ) )
 	die();
 }
 
-$module_logo = ( isset( $module_config[$module_name]['module_logo'] )) ? $module_config[$module_name]['module_logo'] : $global_config['site_logo'];
-$module_logo = ( ! nv_is_url( $module_logo )) ? NV_BASE_SITEURL . $module_logo : $module_logo;
+$module_logo = ( isset( $module_config[$module_name]['module_logo'] ) ) ? $module_config[$module_name]['module_logo'] : $global_config['site_logo'];
+$module_logo = ( ! nv_is_url( $module_logo ) ) ? NV_BASE_SITEURL . $module_logo : $module_logo;
 
 $xtpl = new XTemplate( "settings.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -72,21 +72,33 @@ $xtpl->assign( 'DATA', $module_config[$module_name] );
 // Cach hien thi tren trang chu
 foreach( $array_viewcat_full as $key => $val )
 {
-	$xtpl->assign( 'INDEXFILE', array( "key" => $key, "title" => $val, "selected" => $key == $module_config[$module_name]['indexfile'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'INDEXFILE', array(
+		"key" => $key,
+		"title" => $val,
+		"selected" => $key == $module_config[$module_name]['indexfile'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.indexfile' );
 }
 
 // So bai viet tren mot trang
 for( $i = 5; $i <= 30; ++$i )
 {
-	$xtpl->assign( 'PER_PAGE', array( "key" => $i, "title" => $i, "selected" => $i == $module_config[$module_name]['per_page'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'PER_PAGE', array(
+		"key" => $i,
+		"title" => $i,
+		"selected" => $i == $module_config[$module_name]['per_page'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.per_page' );
 }
 
 // Bai viet chi hien thi link
 for( $i = 0; $i <= 20; ++$i )
 {
-	$xtpl->assign( 'ST_LINKS', array( "key" => $i, "title" => $i, "selected" => $i == $module_config[$module_name]['st_links'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'ST_LINKS', array(
+		"key" => $i,
+		"title" => $i,
+		"selected" => $i == $module_config[$module_name]['st_links'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.st_links' );
 }
 
@@ -99,7 +111,11 @@ $xtpl->assign( 'MODULE_LOGO', $module_logo );
 // Thao luan mac dinh khi tao bai viet moi
 while( list( $comm_i, $title_i ) = each( $array_allowed_comm ) )
 {
-	$xtpl->assign( 'SETCOMM', array( "key" => $comm_i, "title" => $title_i, "selected" => $comm_i == $module_config[$module_name]['setcomm'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'SETCOMM', array(
+		"key" => $comm_i,
+		"title" => $title_i,
+		"selected" => $comm_i == $module_config[$module_name]['setcomm'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.setcomm' );
 }
 
@@ -123,19 +139,23 @@ $structure_image_upload = isset( $module_config[$module_name]['structure_upload'
 // Thu muc uploads
 foreach( $array_structure_image as $type => $dir )
 {
-	$xtpl->assign( 'STRUCTURE_UPLOAD', array( "key" => $type, "title" => $dir, "selected" => $type == $structure_image_upload ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'STRUCTURE_UPLOAD', array(
+		"key" => $type,
+		"title" => $dir,
+		"selected" => $type == $structure_image_upload ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.structure_upload' );
 }
 
 // Cau hinh hien thi nguon tin
-$array_config_source = array(
-	$lang_module['config_source_title'],
-	$lang_module['config_source_link'],
-	$lang_module['config_source_logo']
-);
+$array_config_source = array( $lang_module['config_source_title'], $lang_module['config_source_link'], $lang_module['config_source_logo'] );
 foreach( $array_config_source as $key => $val )
 {
-	$xtpl->assign( 'CONFIG_SOURCE', array( "key" => $key, "title" => $val, "selected" => $key == $module_config[$module_name]['config_source'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'CONFIG_SOURCE', array(
+		"key" => $key,
+		"title" => $val,
+		"selected" => $key == $module_config[$module_name]['config_source'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.config_source' );
 }
 
@@ -161,11 +181,11 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 
 		foreach( $array_pid as $pid )
 		{
-			$addcontent = (isset( $array_addcontent[$pid] ) and intval( $array_addcontent[$pid] ) == 1) ? 1 : 0;
-			$postcontent = (isset( $array_postcontent[$pid] ) and intval( $array_postcontent[$pid] ) == 1) ? 1 : 0;
-			$editcontent = (isset( $array_editcontent[$pid] ) and intval( $array_editcontent[$pid] ) == 1) ? 1 : 0;
-			$delcontent = (isset( $array_delcontent[$pid] ) and intval( $array_delcontent[$pid] ) == 1) ? 1 : 0;
-			$addcontent = ($postcontent == 1) ? 1 : $addcontent;
+			$addcontent = ( isset( $array_addcontent[$pid] ) and intval( $array_addcontent[$pid] ) == 1 ) ? 1 : 0;
+			$postcontent = ( isset( $array_postcontent[$pid] ) and intval( $array_postcontent[$pid] ) == 1 ) ? 1 : 0;
+			$editcontent = ( isset( $array_editcontent[$pid] ) and intval( $array_editcontent[$pid] ) == 1 ) ? 1 : 0;
+			$delcontent = ( isset( $array_delcontent[$pid] ) and intval( $array_delcontent[$pid] ) == 1 ) ? 1 : 0;
+			$addcontent = ( $postcontent == 1 ) ? 1 : $addcontent;
 			$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` SET `addcontent` = '" . $addcontent . "', `postcontent` = '" . $postcontent . "', `editcontent` = '" . $editcontent . "', `delcontent` = '" . $delcontent . "' WHERE `pid` =" . $pid . " LIMIT 1" );
 		}
 
@@ -222,7 +242,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 		{
 			++$a;
 
-			$pid = ( isset( $array_post_member[$member][$group_id] )) ? $array_post_member[$member][$group_id] : 0;
+			$pid = ( isset( $array_post_member[$member][$group_id] ) ) ? $array_post_member[$member][$group_id] : 0;
 			if( $pid > 0 )
 			{
 				$addcontent = $array_post_data[$pid]['addcontent'];
@@ -237,13 +257,13 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 			}
 
 			$xtpl->assign( 'ROW', array(
-				"class" => ($a % 2 == 0) ? "" : " class=\"second\"",
+				"class" => ( $a % 2 == 0 ) ? "" : " class=\"second\"",
 				"array_post_2" => $array_post_2,
 				"pid" => $pid,
 				"addcontent" => $addcontent ? " checked=\"checked\"" : "",
 				"postcontent" => $postcontent ? " checked=\"checked\"" : "",
 				"editcontent" => $editcontent ? " checked=\"checked\"" : "",
-				"delcontent" => $delcontent ? " checked=\"checked\"" : "",
+				"delcontent" => $delcontent ? " checked=\"checked\"" : ""
 			) );
 
 			$xtpl->parse( 'main.admin_config_post.loop' );

@@ -47,7 +47,7 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 
 		foreach( $array_funcid as $func_id )
 		{
-			if( ! in_array( $func_id, $func_list ) )// Cac function chua duoc them
+			if( ! in_array( $func_id, $func_list ) ) // Cac function chua duoc them
 			{
 				$sql = "SELECT MAX(t1.weight) FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t1.func_id=" . $func_id . " AND t2.theme=" . $db->dbescape( $theme ) . " AND t2.position=" . $db->dbescape( $position );
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( $sql ) );

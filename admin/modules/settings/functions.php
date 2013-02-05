@@ -32,25 +32,7 @@ if( $module_name == "settings" )
 {
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
-		$allow_func = array(
-			'main',
-			'system',
-			'statistics',
-			'bots',
-			'robots',
-			'smtp',
-			'ftp',
-			'pagetitle',
-			'metatags',
-			'security',
-			'cronjobs',
-			'cronjobs_add',
-			'cronjobs_edit',
-			'cronjobs_del',
-			'cronjobs_act',
-			'variables',
-			'cdn'
-		);
+		$allow_func = array( 'main', 'system', 'statistics', 'bots', 'robots', 'smtp', 'ftp', 'pagetitle', 'metatags', 'security', 'cronjobs', 'cronjobs_add', 'cronjobs_edit', 'cronjobs_del', 'cronjobs_act', 'variables', 'cdn' );
 	}
 	else
 	{
@@ -148,7 +130,7 @@ if( $module_name == "settings" )
 			foreach( $values['detail'] as $key => $value )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => (++$a % 2) ? " class=\"second\"" : "",
+					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'key' => $key,
 					'value' => $value
 				) );
@@ -161,7 +143,6 @@ if( $module_name == "settings" )
 
 		return $xtpl->text( 'main' );
 	}
-
 }
 
 ?>

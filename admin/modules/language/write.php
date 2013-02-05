@@ -129,7 +129,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 
 			$content_lang .= " die( 'Stop!!!' );\n\n";
 
-			$array_translator['info'] = ( isset( $array_translator['info'] )) ? $array_translator['info'] : "";
+			$array_translator['info'] = ( isset( $array_translator['info'] ) ) ? $array_translator['info'] : "";
 
 			$content_lang .= "\$lang_translator['author'] = '" . $array_translator['author'] . "';\n";
 			$content_lang .= "\$lang_translator['createdate'] = '" . $array_translator['createdate'] . "';\n";

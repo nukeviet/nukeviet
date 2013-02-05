@@ -18,7 +18,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$did = $nv_Request->get_int( 'other_dir', 'post', 0 );
 	$other_type = $nv_Request->get_int( 'other_type', 'post', 0 );
-	if( $did AND $other_type )
+	if( $did and $other_type )
 	{
 		$thumb_type[$did] = $other_type;
 		$thumb_width[$did] = $nv_Request->get_int( 'other_thumb_width', 'post', 0 );
@@ -34,7 +34,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$width = 0;
 		}
-		elseif( $width > 1000 OR $width < 1 )
+		elseif( $width > 1000 or $width < 1 )
 		{
 			$width = 100;
 		}
@@ -43,12 +43,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$height = 0;
 		}
-		elseif( $height > 1000 OR $height < 1 )
+		elseif( $height > 1000 or $height < 1 )
 		{
 			$height = 100;
 		}
 		$quality = $thumb_quality[$did];
-		if( $quality > 100 OR $quality < 20 )
+		if( $quality > 100 or $quality < 20 )
 		{
 			$quality = 90;
 		}
@@ -79,12 +79,12 @@ while( $data = $db->sql_fetch_assoc( $result ) )
 	}
 	if( $data['thumb_type'] )
 	{
-		$data['class'] = (++$i % 2 == 0) ? ' class="second"' : '';
+		$data['class'] = ( ++$i % 2 == 0 ) ? ' class="second"' : '';
 		for( $id = $forid; $id < 5; $id++ )
 		{
 			$type = array(
 				'id' => $id,
-				'selected' => ($id == $data['thumb_type']) ? ' selected="selected"' : '',
+				'selected' => ( $id == $data['thumb_type'] ) ? ' selected="selected"' : '',
 				'name' => $lang_module['thumb_type_' . $id]
 			);
 			$xtpl->assign( 'TYPE', $type );
@@ -102,10 +102,7 @@ while( $data = $db->sql_fetch_assoc( $result ) )
 
 for( $id = 0; $id < 5; $id++ )
 {
-	$type = array(
-		'id' => $id,
-		'name' => $lang_module['thumb_type_' . $id]
-	);
+	$type = array( 'id' => $id, 'name' => $lang_module['thumb_type_' . $id] );
 	$xtpl->assign( 'TYPE', $type );
 	$xtpl->parse( 'main.other_type' );
 }

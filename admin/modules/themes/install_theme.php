@@ -83,7 +83,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 					$filelist[] = array(
 						'stt' => $j,
 						'filename' => $list[$i]['filename'],
-						'size' => $bytes,
+						'size' => $bytes
 					);
 				}
 

@@ -51,10 +51,7 @@ foreach( $lang_array_file_temp as $value )
 	}
 }
 
-$language_array_source = array(
-	"vi",
-	"en"
-);
+$language_array_source = array( "vi", "en" );
 
 $language_check_type = array(
 	0 => $lang_module['nv_check_type_0'],
@@ -101,7 +98,7 @@ foreach( $language_array as $key => $value )
 	{
 		$xtpl->assign( 'LANGUAGE', array(
 			'key' => $key,
-			'selected' => ($key == $typelang) ? ' selected="selected"' : '',
+			'selected' => ( $key == $typelang ) ? ' selected="selected"' : '',
 			'title' => $value['name']
 		) );
 
@@ -115,7 +112,7 @@ foreach( $language_array_source as $key )
 	{
 		$xtpl->assign( 'LANGUAGE_SOURCE', array(
 			'key' => $key,
-			'selected' => ($key == $sourcelang) ? ' selected="selected"' : '',
+			'selected' => ( $key == $sourcelang ) ? ' selected="selected"' : '',
 			'title' => $language_array[$key]['name']
 		) );
 
@@ -130,20 +127,20 @@ while( list( $idfile_i, $module, $admin_file, ) = $db->sql_fetchrow( $result ) )
 {
 	switch( $admin_file )
 	{
-		case '1' :
+		case '1':
 			$langsitename = $lang_module['nv_lang_admin'];
 			break;
-		case '0' :
+		case '0':
 			$langsitename = $lang_module['nv_lang_site'];
 			break;
-		default :
+		default:
 			$langsitename = $admin_file;
 			break;
 	}
 
 	$xtpl->assign( 'LANGUAGE_AREA', array(
 		'key' => $idfile_i,
-		'selected' => ($idfile_i == $idfile) ? ' selected="selected"' : '',
+		'selected' => ( $idfile_i == $idfile ) ? ' selected="selected"' : '',
 		'title' => $module . " " . $langsitename
 	) );
 
@@ -155,7 +152,7 @@ foreach( $language_check_type as $key => $value )
 {
 	$xtpl->assign( 'LANGUAGE_CHECK_TYPE', array(
 		'key' => $key,
-		'selected' => ($key == $check_type) ? ' selected="selected"' : '',
+		'selected' => ( $key == $check_type ) ? ' selected="selected"' : '',
 		'title' => $value
 	) );
 
@@ -219,12 +216,12 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 			foreach( $array_lang_file as $id => $row )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => (++$i % 2) ? " class=\"second\"" : "",
+					'class' => ( ++$i % 2 ) ? " class=\"second\"" : "",
 					'stt' => $i,
 					'lang_key' => $row['lang_key'],
 					'datalang' => nv_htmlspecialchars( $row['datalang'] ),
 					'id' => $id,
-					'sourcelang' => nv_htmlspecialchars( $row['sourcelang'] ),
+					'sourcelang' => nv_htmlspecialchars( $row['sourcelang'] )
 				) );
 
 				$xtpl->parse( 'main.data.lang.loop' );

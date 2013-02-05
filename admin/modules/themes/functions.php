@@ -13,29 +13,7 @@ $submenu['setuplayout'] = $lang_module['setup_layout'];
 $submenu['blocks'] = $lang_module['blocks'];
 $submenu['xcopyblock'] = $lang_module['xcopyblock'];
 
-$allow_func = array(
-	'main',
-	'setuplayout',
-	'activatetheme',
-	'deletetheme',
-	'change_layout',
-	'blocks',
-	'block_content',
-	'block_config',
-	'front_outgroup',
-	'loadblocks',
-	'blocks_change_pos',
-	'blocks_change_order',
-	'blocks_change_order_group',
-	'blocks_del',
-	'blocks_del_group',
-	'blocks_func',
-	'blocks_reset_order',
-	'sort_order',
-	'xcopyblock',
-	'loadposition',
-	'xcopyprocess'
-);
+$allow_func = array( 'main', 'setuplayout', 'activatetheme', 'deletetheme', 'change_layout', 'blocks', 'block_content', 'block_config', 'front_outgroup', 'loadblocks', 'blocks_change_pos', 'blocks_change_order', 'blocks_change_order_group', 'blocks_del', 'blocks_del_group', 'blocks_func', 'blocks_reset_order', 'sort_order', 'xcopyblock', 'loadposition', 'xcopyprocess' );
 
 if( defined( "NV_IS_GODADMIN" ) )
 {

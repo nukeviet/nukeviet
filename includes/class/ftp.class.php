@@ -39,12 +39,12 @@ if( ! defined( 'FTP_ASCII' ) ) define( 'FTP_ASCII', 0 );
 
 // Kiem tra thu vien FTP hoat dong
 $disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
-if ( extension_loaded( 'suhosin' ) )
+if( extension_loaded( 'suhosin' ) )
 {
 	$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
 }
 
-if ( extension_loaded( 'ftp' ) and ( empty( $disable_functions ) or ( ! empty( $disable_functions ) and ! preg_grep( '/^ftp\_/', $disable_functions ) ) ) )
+if( extension_loaded( 'ftp' ) and ( empty( $disable_functions ) or ( ! empty( $disable_functions ) and ! preg_grep( '/^ftp\_/', $disable_functions ) ) ) )
 {
 	define( 'IS_ALLOW_FTP', 1 );
 }
@@ -76,9 +76,9 @@ class NVftp
 
 	// Cau hinh chung
 	private $config = array(
-		'timeout' 			=>		90,						// Thoi gian het han ket noi
-		'type' 				=>		FTP_BINARY,				// Kieu
-		'os' 				=>		'UNIX',					// He dieu hanh
+		'timeout' => 90, // Thoi gian het han ket noi
+		'type' => FTP_BINARY, // Kieu
+		'os' => 'UNIX' // He dieu hanh
 	);
 
 	// Du lieu xuat ra, du lieu kiem tra
@@ -86,11 +86,14 @@ class NVftp
 	public $logined = false;
 
 	// Ki tu ket thuc moi dong trong cac he dieu hanh khac nhau
-	private $line_end = array( 'UNIX' => "\n", 'MAC' => "\r", 'WIN' => "\r\n" );
+	private $line_end = array(
+		'UNIX' => "\n",
+		'MAC' => "\r",
+		'WIN' => "\r\n"
+	);
 
 	// Loai file xac nhan trong mode FTP_AUTOASCII
 	private $AutoAscii = array( "asp", "bat", "c", "cpp", "csv", "h", "htm", "html", "shtml", "ini", "inc", "log", "php", "php3", "pl", "perl", "sh", "sql", "txt", "xhtml", "xml" );
-
 	private $current_path = null;
 
 	/**
@@ -159,7 +162,7 @@ class NVftp
 
 			ftp_set_option( $this->conn_id, FTP_TIMEOUT_SEC, $this->config['timeout'] );
 		}
-		
+
 		// Dang nhap
 		if( ftp_login( $this->conn_id, $this->user, $this->pass ) === false )
 		{
@@ -203,58 +206,58 @@ class NVftp
 		if( ! $this->check_login() ) return false;
 
 		$cwd = $this->pwd();
-		$cwd = rtrim($cwd, '/');
+		$cwd = rtrim( $cwd, '/' );
 
 		$list_folder = $this->listDetail( null, 'folders' );
 
 		if( empty( $list_folder ) ) return false;
 
 		// Chi lay ten thu muc
-		for( $i = 0, $n = sizeof( $list_folder ); $i < $n; ++ $i )
+		for( $i = 0, $n = sizeof( $list_folder ); $i < $n; ++$i )
 		{
 			$list_folder[$i] = $list_folder[$i]['name'];
 		}
-		
+
 		if( ! is_array( $list_valid ) ) $list_valid = array( $list_valid );
-		
+
 		$paths = array();
-		
+
 		// Neu cac file kiem tra dat ngay thu muc dang tro den
-		if( sizeof( array_diff( $list_valid, $list_folder ) ) == 0 ) $paths[] = $cwd . '/';		
-		
+		if( sizeof( array_diff( $list_valid, $list_folder ) ) == 0 ) $paths[] = $cwd . '/';
+
 		// Tim kiem cac thu muc khac tro den duong dan chi dinh
 		$parts = explode( '/', $path_root );
 		$tmp = '';
-		
-		for( $i = sizeof( $parts ) - 1; $i >= 0; -- $i )
+
+		for( $i = sizeof( $parts ) - 1; $i >= 0; --$i )
 		{
 			$tmp = '/' . $parts[$i] . $tmp;
-			
+
 			if( in_array( $parts[$i], $list_folder ) )
 			{
 				$paths[] = $cwd . $tmp;
 			}
 		}
-		
+
 		if( $read_buffer === true )
 		{
 			$return_path = false;
 			$check_value = file_get_contents( $path_root . '/' . $read_file );
-			
+
 			foreach( $paths as $tmp )
 			{
 				$filePath = rtrim( $tmp, '/' ) . '/' . $read_file;
 				$buffer = null;
-				
+
 				$this->read( $filePath, $buffer );
-				
+
 				if( $buffer == $check_value )
 				{
 					$return_path = $tmp;
 					break;
 				}
 			}
-			
+
 			return $return_path;
 		}
 		else
@@ -284,18 +287,18 @@ class NVftp
 		// Danh sach chi tiet thu muc
 		$cmd_path = $show_hidden ? '-al ' . $path : $path;
 		$list_detail = ftp_rawlist( $this->conn_id, $cmd_path );
-		
+
 		if( $list_detail === false )
 		{
 			$this->error = NV_FTP_ERR_RAWLIST;
 			return false;
 		}
-		
+
 		$dir_list = array();
-		
+
 		if( $type == 'raw' ) return $list_detail;
 		if( empty( $list_detail[0] ) ) return $dir_list;
-		
+
 		if( strtolower( substr( $list_detail[0], 0, 6 ) ) == 'total ' )
 		{
 			array_shift( $list_detail );
@@ -304,42 +307,42 @@ class NVftp
 				return $dir_list;
 			}
 		}
-		
+
 		// Xac dinh chuan dinh dang cua 3 he dieu hanh
 		$regexps = array(
 			'UNIX' => '#([-dl][rwxstST-]+).* ([0-9]*) ([a-zA-Z0-9]+).* ([a-zA-Z0-9]+).* ([0-9]*) ([a-zA-Z]+[0-9: ]*[0-9])[ ]+(([0-9]{1,2}:[0-9]{2})|[0-9]{4}) (.+)#',
 			'MAC' => '#([-dl][rwxstST-]+).* ?([0-9 ]*)?([a-zA-Z0-9]+).* ([a-zA-Z0-9]+).* ([0-9]*) ([a-zA-Z]+[0-9: ]*[0-9])[ ]+(([0-9]{2}:[0-9]{2})|[0-9]{4}) (.+)#',
 			'WIN' => '#([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)#'
 		);
-		
+
 		// Xac dinh he dieu hanh thich hop
 		$osType = null;
-		
+
 		foreach( $regexps as $k => $v )
 		{
-			if( preg_match( $v, $list_detail[0]) )
+			if( preg_match( $v, $list_detail[0] ) )
 			{
 				$osType = $k;
 				$regexp = $v;
 				break;
 			}
 		}
-		
+
 		if( ! $osType )
 		{
 			$this->error = NV_FTP_ERR_LISTDETAIL_NOTRECONIZE;
 			return false;
 		}
-		
+
 		if( $osType == 'UNIX' )
 		{
 			foreach( $list_detail as $file )
 			{
 				$tmp_array = null;
-				
+
 				if( preg_match( $regexp, $file, $regs ) )
 				{
-					$fType = ( int ) strpos( "-dl", $regs[1]{0} );
+					$fType = ( int )strpos( "-dl", $regs[1]{0} );
 
 					$tmp_array['type'] = $fType;
 					$tmp_array['rights'] = $regs[1];
@@ -351,7 +354,7 @@ class NVftp
 					$tmp_array['time'] = $regs[7];
 					$tmp_array['name'] = $regs[9];
 				}
-				
+
 				if( $type != 'all' )
 				{
 					if( $type == 'files' and $tmp_array['type'] == 1 ) continue;
@@ -366,10 +369,10 @@ class NVftp
 			foreach( $list_detail as $file )
 			{
 				$tmp_array = null;
-				
+
 				if( preg_match( $regexp, $file, $regs ) )
 				{
-					$fType = ( int ) strpos( "-dl", $regs[1]{0} );
+					$fType = ( int )strpos( "-dl", $regs[1]{0} );
 
 					$tmp_array['type'] = $fType;
 					$tmp_array['rights'] = $regs[1];
@@ -381,7 +384,7 @@ class NVftp
 					$tmp_array['time'] = $regs[7];
 					$tmp_array['name'] = $regs[9];
 				}
-				
+
 				if( $type != 'all' )
 				{
 					if( $type == 'files' and $tmp_array['type'] == 1 ) continue;
@@ -396,10 +399,10 @@ class NVftp
 			foreach( $list_detail as $file )
 			{
 				$tmp_array = null;
-				
+
 				if( preg_match( $regexp, $file, $regs ) )
 				{
-					$fType = ( int ) ( $regs[7] == '<DIR>' );
+					$fType = ( int )( $regs[7] == '<DIR>' );
 					$timestamp = strtotime( "$regs[3]-$regs[1]-$regs[2] $regs[4]:$regs[5]$regs[6]" );
 
 					$tmp_array['type'] = $fType;
@@ -407,12 +410,12 @@ class NVftp
 
 					$tmp_array['user'] = '';
 					$tmp_array['group'] = '';
-					$tmp_array['size'] = ( int ) $regs[7];
+					$tmp_array['size'] = ( int )$regs[7];
 					$tmp_array['date'] = $timestamp;
 					$tmp_array['time'] = $timestamp;
 					$tmp_array['name'] = $regs[8];
 				}
-				
+
 				if( $type != 'all' )
 				{
 					if( $type == 'files' and $tmp_array['type'] == 1 ) continue;
@@ -461,17 +464,17 @@ class NVftp
 			$this->error = NV_FTP_ERR_FGET;
 			return false;
 		}
-		
+
 		rewind( $tmp );
-		
+
 		$buffer = '';
 		while( ! feof( $tmp ) )
 		{
 			$buffer .= fread( $tmp, 8192 );
 		}
-		
+
 		fclose( $tmp );
-		
+
 		return true;
 	}
 
@@ -534,7 +537,7 @@ class NVftp
 
 		return ftp_rename( $this->conn_id, $old, $new );
 	}
-	
+
 	/**
 	 * NVftp::chdir()
 	 * 
@@ -544,7 +547,7 @@ class NVftp
 	public function chdir( $path )
 	{
 		if( ! $this->check_login() ) return false;
-		
+
 		if( ftp_chdir( $this->conn_id, $path ) === false )
 		{
 			return false;
@@ -560,7 +563,7 @@ class NVftp
 	public function close()
 	{
 		if( ! is_resource( $this->conn_id ) ) return false;
-		
+
 		ftp_close( $this->conn_id );
 	}
 
@@ -594,7 +597,7 @@ class NVftp
 		{
 			$mode = FTP_BINARY;
 		}
-		
+
 		return $mode;
 	}
 }

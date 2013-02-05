@@ -25,7 +25,7 @@ function nv_clear_files( $dir, $base )
 	$dels = array();
 	if( $dh = opendir( $dir ) )
 	{
-		while( ($file = readdir( $dh )) !== false )
+		while( ( $file = readdir( $dh ) ) !== false )
 		{
 			if( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and $file != "index.html" and is_file( $dir . '/' . $file ) and $file != "sess_" . $client_info['session_id'] )
 			{
@@ -90,7 +90,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 		$dir = NV_ROOTDIR . "/" . NV_TEMP_DIR;
 		if( $dh = opendir( $dir ) )
 		{
-			while( ($file = readdir( $dh )) !== false )
+			while( ( $file = readdir( $dh ) ) !== false )
 			{
 				if( preg_match( "/^(" . nv_preg_quote( NV_TEMPNAM_PREFIX ) . ")[a-zA-Z0-9\_\.]+$/", $file ) )
 				{

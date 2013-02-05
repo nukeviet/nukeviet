@@ -13,18 +13,8 @@ $file_metatags = NV_ROOTDIR . "/" . NV_DATADIR . "/metatags.xml";
 
 $metatags = array();
 $metatags['meta'] = array();
-$ignore = array(
-	'content-type',
-	'generator',
-	'description',
-	'keywords'
-);
-$vas = array(
-	'{CONTENT-LANGUAGE} (' . $lang_global['Content_Language'] . ')',
-	'{LANGUAGE} (' . $lang_global['LanguageName'] . ')',
-	'{SITE_NAME} (' . $global_config['site_name'] . ')',
-	'{SITE_EMAIL} (' . $global_config['site_email'] . ')'
-);
+$ignore = array( 'content-type', 'generator', 'description', 'keywords' );
+$vas = array( '{CONTENT-LANGUAGE} (' . $lang_global['Content_Language'] . ')', '{LANGUAGE} (' . $lang_global['LanguageName'] . ')', '{SITE_NAME} (' . $global_config['site_name'] . ')', '{SITE_EMAIL} (' . $global_config['site_email'] . ')' );
 
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
@@ -68,8 +58,7 @@ else
 		if( $mt['meta_item'] )
 		{
 			if( isset( $mt['meta_item'][0] ) ) $metatags['meta'] = $mt['meta_item'];
-			else
-				$metatags['meta'][] = $mt['meta_item'];
+			else $metatags['meta'][] = $mt['meta_item'];
 		}
 	}
 }
@@ -89,7 +78,7 @@ if( ! empty( $metatags['meta'] ) )
 	{
 		$value['h_selected'] = $value['group'] == 'http-equiv' ? " selected=\"selected\"" : "";
 		$value['n_selected'] = $value['group'] == 'name' ? " selected=\"selected\"" : "";
-		$value['class'] = (++$number % 2 == 0) ? ' class="second"' : '';
+		$value['class'] = ( ++$number % 2 == 0 ) ? ' class="second"' : '';
 		$xtpl->assign( 'DATA', $value );
 		$xtpl->parse( 'main.loop' );
 	}
@@ -102,7 +91,7 @@ for( $i = 0; $i < 3; ++$i )
 		'value' => '',
 		'h_selected' => '',
 		'n_selected' => '',
-		'class' => (++$number % 2 == 0) ? ' class="second"' : ''
+		'class' => ( ++$number % 2 == 0 ) ? ' class="second"' : ''
 	);
 	$xtpl->assign( 'DATA', $data );
 	$xtpl->parse( 'main.loop' );

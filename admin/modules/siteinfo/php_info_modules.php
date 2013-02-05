@@ -22,11 +22,7 @@ if( ! empty( $array ) )
 {
 	$xtpl = new XTemplate( "extensions_php.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 
-	$thead = array(
-		$lang_module['directive'],
-		$lang_module['local_value'],
-		$lang_module['master_value']
-	);
+	$thead = array( $lang_module['directive'], $lang_module['local_value'], $lang_module['master_value'] );
 
 	foreach( $array as $module => $mod_vals )
 	{
@@ -38,7 +34,7 @@ if( ! empty( $array ) )
 		$a = 0;
 		foreach( $mod_vals as $key => $value )
 		{
-			$xtpl->assign( 'CLASS', ($a % 2) ? " class=\"second\"" : "" );
+			$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 			$xtpl->assign( 'KEY', $key );
 
 			if( ! is_array( $value ) )

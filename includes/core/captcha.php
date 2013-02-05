@@ -18,7 +18,6 @@ if( $global_config['captcha_type'] == 1 )
 	if( file_exists( NV_ROOTDIR . '/includes/keywords/ccaptcha_' . NV_LANG_INTERFACE . '.php' ) )
 	{
 		$captcha->wordsFile = 'keywords/ccaptcha_' . NV_LANG_INTERFACE . '.php';
-
 	}
 	else
 	{
@@ -41,11 +40,7 @@ if( $global_config['captcha_type'] == 1 )
 	$captcha->scale = 3;
 	$captcha->debug = false;
 
-	$captcha->backgroundColor = array(
-		228,
-		228,
-		228
-	);
+	$captcha->backgroundColor = array( 228, 228, 228 );
 	$captcha->resourcesPath = NV_ROOTDIR . '/includes';
 
 	$captcha->CreateImage();

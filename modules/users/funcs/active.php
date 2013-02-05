@@ -63,7 +63,7 @@ if( $checknum == $row['checknum'] )
 			$check_update_user = true;
 		}
 	}
-	elseif( ! defined( 'NV_IS_USER' ) AND $global_config['allowuserreg'] == 2 )
+	elseif( ! defined( 'NV_IS_USER' ) and $global_config['allowuserreg'] == 2 )
 	{
 		$sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
 					`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, 
@@ -89,7 +89,7 @@ if( $checknum == $row['checknum'] )
 			$result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `fid` ASC" );
 			while( $row_f = $db->sql_fetch_assoc( $result_field ) )
 			{
-				$query_field["`" . $row_f['field'] . "`"] = (isset( $users_info["`" . $row_f['field'] . "`"] )) ? $users_info["`" . $row_f['field'] . "`"] : $db->dbescape( $row_f['default_value'] );
+				$query_field["`" . $row_f['field'] . "`"] = ( isset( $users_info["`" . $row_f['field'] . "`"] ) ) ? $users_info["`" . $row_f['field'] . "`"] : $db->dbescape( $row_f['default_value'] );
 			}
 
 			if( $db->sql_query( "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_info` (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
@@ -103,7 +103,6 @@ if( $checknum == $row['checknum'] )
 			{
 				$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $row['userid'] );
 			}
-
 		}
 	}
 }

@@ -22,10 +22,10 @@ if( $module == 'global' )
 
 	foreach( $block_file_list as $file_name )
 	{
-		$sel = ($file == $file_name) ? ' selected' : '';
+		$sel = ( $file == $file_name ) ? ' selected' : '';
 		unset( $matches );
 		preg_match( $global_config['check_block_module'], $file_name, $matches );
-		$load_config = ( file_exists( NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' )) ? 1 : 0;
+		$load_config = ( file_exists( NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) ) ? 1 : 0;
 
 		echo "<option value=\"" . $file_name . "|" . $load_config . "\" " . $sel . ">" . $matches[1] . " " . $matches[2] . " </option>\n";
 	}
@@ -45,12 +45,12 @@ elseif( preg_match( $global_config['check_module'], $module ) )
 
 			foreach( $block_file_list as $file_name )
 			{
-				$sel = ($file == $file_name) ? ' selected' : '';
+				$sel = ( $file == $file_name ) ? ' selected' : '';
 
 				unset( $matches );
 				preg_match( $global_config['check_block_module'], $file_name, $matches );
 
-				$load_config = ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' )) ? 1 : 0;
+				$load_config = ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) ) ? 1 : 0;
 
 				echo "<option value=\"" . $file_name . "|" . $load_config . "\" " . $sel . ">" . $matches[1] . " " . $matches[2] . " </option>\n";
 			}

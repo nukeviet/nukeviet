@@ -88,7 +88,7 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 		{
 			foreach( $if['field'] as $field )
 			{
-				$xtpl->assign( 'CLASS', (++$i % 2) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', ( ++$i % 2 ) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'KEY', $field['key'] );
 				$xtpl->assign( 'VALUE', $field['value'] );
 				$xtpl->assign( 'MODULE', $if['caption'] );
@@ -118,7 +118,7 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 		{
 			foreach( $if['field'] as $field )
 			{
-				$xtpl->assign( 'CLASS', (++$i % 2) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', ( ++$i % 2 ) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'KEY', $field['key'] );
 				$xtpl->assign( 'VALUE', $field['value'] );
 				$xtpl->assign( 'MODULE', $if['caption'] );
@@ -153,10 +153,7 @@ elseif( ! defined( 'NV_IS_SPADMIN' ) and ! empty( $site_mods ) )
 if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$field = array();
-	$field[] = array(
-		'key' => $lang_module['version_user'],
-		'value' => $global_config['version']
-	);
+	$field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] );
 	if( file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' ) )
 	{
 		$new_version = simplexml_load_file( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
@@ -185,7 +182,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 
 	foreach( $field as $key => $value )
 	{
-		$xtpl->assign( 'CLASS', ($key % 2) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $value['key'] );
 		$xtpl->assign( 'VALUE', $value['value'] );
 		$xtpl->parse( 'main.version.loop' );

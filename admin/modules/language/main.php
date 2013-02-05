@@ -49,7 +49,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( implode( ",", $allow_sitelangs ) ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_sitelangs'";
 		$result = $db->sql_query( $query );
 
-		$temp = ($activelang == 1) ? $lang_global['yes'] : $lang_global['no'];
+		$temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], " langkey : " . $keylang . " [ " . $temp . " ]", $admin_info['userid'] );
 		nv_save_file_config_global();
@@ -263,9 +263,9 @@ foreach( $global_config['allow_adminlangs'] as $keylang )
 	$allow_sitelangs = "";
 
 	$xtpl->assign( 'ROW', array(
-		'class' => (++$a % 2) ? " class=\"second\"" : "",
+		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'keylang' => $keylang,
-		'name' => $language_array[$keylang]['name'],
+		'name' => $language_array[$keylang]['name']
 	) );
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{

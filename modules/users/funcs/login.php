@@ -15,7 +15,7 @@ if( defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 	die();
 }
 
-$gfx_chk = ( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) )) ? 1 : 0;
+$gfx_chk = ( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) ) ? 1 : 0;
 
 /**
  * openidLogin_Res0()
@@ -68,7 +68,7 @@ function set_reg_attribs( $attribs )
 	}
 
 	$username = str_pad( $username, NV_UNICKMIN, "0", STR_PAD_RIGHT );
-	$username = substr( $username, 0, (NV_UNICKMAX - 2) );
+	$username = substr( $username, 0, ( NV_UNICKMAX - 2 ) );
 	$username2 = $username;
 	for( $i = 0; $i < 100; ++$i )
 	{
@@ -136,7 +136,7 @@ function set_reg_attribs( $attribs )
 function openidLogin_Res1( $attribs )
 {
 	global $page_title, $key_words, $mod_title, $db, $crypt, $nv_Request, $lang_module, $lang_global, $module_name, $module_info, $global_config, $gfx_chk, $nv_redirect, $op;
-	$email = (isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "") ? $attribs['contact/email'] : "";
+	$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "" ) ? $attribs['contact/email'] : "";
 	if( empty( $email ) )
 	{
 		$nv_Request->unset_request( 'openid_attribs', 'session' );
@@ -219,7 +219,7 @@ function openidLogin_Res1( $attribs )
 		{
 			$password = $nv_Request->get_string( 'password', 'post', '' );
 			$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
-			$nv_seccode = ! $gfx_chk ? 1 : (nv_capcha_txt( $nv_seccode ) ? 1 : 0);
+			$nv_seccode = ! $gfx_chk ? 1 : ( nv_capcha_txt( $nv_seccode ) ? 1 : 0 );
 
 			$nv_Request->unset_request( 'openid_attribs', 'session' );
 			if( defined( 'NV_IS_USER_FORUM' ) and file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' ) )
@@ -283,7 +283,7 @@ function openidLogin_Res1( $attribs )
 		$query = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $email );
 		if( $global_config['allowuserreg'] == 2 )
 		{
-			$query .= " AND `regdate`>" . (NV_CURRENTTIME - 86400);
+			$query .= " AND `regdate`>" . ( NV_CURRENTTIME - 86400 );
 		}
 		$result = $db->sql_query( $query );
 		$numrows = $db->sql_numrows( $result );
@@ -300,7 +300,7 @@ function openidLogin_Res1( $attribs )
 
 					$password = $nv_Request->get_string( 'password', 'post', '' );
 					$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
-					$nv_seccode = ! $gfx_chk ? 1 : (nv_capcha_txt( $nv_seccode ) ? 1 : 0);
+					$nv_seccode = ! $gfx_chk ? 1 : ( nv_capcha_txt( $nv_seccode ) ? 1 : 0 );
 
 					if( $crypt->validate( $password, $row['password'] ) and $nv_seccode )
 					{
@@ -400,7 +400,7 @@ function openidLogin_Res1( $attribs )
 			$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
 			//$check_login = nv_check_valid_login( $nv_username, NV_UNICKMAX, NV_UNICKMIN );
 			// $check_pass = nv_check_valid_pass( $nv_password, NV_UPASSMAX, NV_UPASSMIN );
-			$check_seccode = ! $gfx_chk ? true : (nv_capcha_txt( $nv_seccode ) ? true : false);
+			$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
 
 			if( ! $check_seccode )
 			{
@@ -549,27 +549,15 @@ function openidLogin_Res1( $attribs )
 	$array_user_login = array();
 	if( ! defined( 'NV_IS_USER_FORUM' ) )
 	{
-		$array_user_login[] = array(
-			"title" => $lang_module['openid_note3'],
-			"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $attribs['server'] . "&amp;result=1&amp;option=1&amp;nv_redirect=" . $nv_redirect
-		);
-		$array_user_login[] = array(
-			"title" => $lang_module['openid_note4'],
-			"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $attribs['server'] . "&amp;result=1&amp;option=2&amp;nv_redirect=" . $nv_redirect
-		);
+		$array_user_login[] = array( "title" => $lang_module['openid_note3'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $attribs['server'] . "&amp;result=1&amp;option=1&amp;nv_redirect=" . $nv_redirect );
+		$array_user_login[] = array( "title" => $lang_module['openid_note4'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $attribs['server'] . "&amp;result=1&amp;option=2&amp;nv_redirect=" . $nv_redirect );
 	}
 	else
 	{
-		$array_user_login[] = array(
-			"title" => $lang_module['openid_note6'],
-			"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register&amp;nv_redirect=" . $nv_redirect
-		);
+		$array_user_login[] = array( "title" => $lang_module['openid_note6'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register&amp;nv_redirect=" . $nv_redirect );
 	}
-	$array_user_login[] = array(
-		"title" => $lang_module['openid_note5'],
-		"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $attribs['server'] . "&amp;result=1&amp;option=3&amp;nv_redirect=" . $nv_redirect
-	);
-	
+	$array_user_login[] = array( "title" => $lang_module['openid_note5'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $attribs['server'] . "&amp;result=1&amp;option=3&amp;nv_redirect=" . $nv_redirect );
+
 	$page_title = $lang_module['openid_login'];
 	$key_words = $module_info['keywords'];
 	$mod_title = $lang_module['openid_login'];
@@ -693,7 +681,11 @@ if( defined( 'NV_OPENID_ALLOWED' ) )
 				}
 				else
 				{
-					$attribs = array( 'result' => 'is_res', 'id' => $openid->identity, 'server' => $server ) + $openid->getAttributes();
+					$attribs = array(
+						'result' => 'is_res',
+						'id' => $openid->identity,
+						'server' => $server
+					) + $openid->getAttributes();
 				}
 
 				$attribs = serialize( $attribs );
@@ -754,7 +746,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 	$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
 	//$check_login = nv_check_valid_login( $nv_username, NV_UNICKMAX, NV_UNICKMIN );
 	// $check_pass = nv_check_valid_pass( $nv_password, NV_UPASSMAX, NV_UPASSMIN );
-	$check_seccode = ! $gfx_chk ? true : (nv_capcha_txt( $nv_seccode ) ? true : false);
+	$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
 
 	if( ! $check_seccode )
 	{

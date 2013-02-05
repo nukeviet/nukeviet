@@ -143,7 +143,7 @@ function clinfo_theme( $contents, $manament )
 	$a = 0;
 	foreach( $contents['rows'] as $values )
 	{
-		$class = ($a % 2 == 0) ? "act" : "deact";
+		$class = ( $a % 2 == 0 ) ? "act" : "deact";
 
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'CLASS', $class );

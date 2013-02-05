@@ -32,9 +32,9 @@ while( $item = $db->sql_fetchrow( $result ) )
 $db->sql_freeresult( $result );
 
 $contents = array();
-$contents['tables'] = ( empty( $tables )) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
-$contents['type'] = ($type != "str") ? "all" : "str";
-$contents['savetype'] = ($ext != "sql") ? "gz" : "sql";
+$contents['tables'] = ( empty( $tables ) ) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
+$contents['type'] = ( $type != "str" ) ? "all" : "str";
+$contents['savetype'] = ( $ext != "sql" ) ? "gz" : "sql";
 $contents['filename'] = tempnam( NV_ROOTDIR . "/" . NV_TEMP_DIR, NV_TEMPNAM_PREFIX );
 
 include ( NV_ROOTDIR . "/includes/core/dump.php" );
@@ -44,7 +44,7 @@ if( ! empty( $result ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download'], "File name: " . basename( $contents['filename'] ), $admin_info['userid'] );
 
-	$content['mime'] = ($contents['savetype'] == "gz") ? 'application/x-gzip' : 'text/x-sql';
+	$content['mime'] = ( $contents['savetype'] == "gz" ) ? 'application/x-gzip' : 'text/x-sql';
 	$contents['fname'] = $db->dbname . '.sql';
 
 	if( $contents['savetype'] == "gz" )

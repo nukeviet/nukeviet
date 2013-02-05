@@ -32,11 +32,11 @@ while( $item = $db->sql_fetchrow( $result ) )
 $db->sql_freeresult( $result );
 
 $contents = array();
-$contents['tables'] = ( empty( $tables )) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
-$contents['type'] = ($type != "str") ? "all" : "str";
-$contents['savetype'] = ($ext != "sql") ? "gz" : "sql";
+$contents['tables'] = ( empty( $tables ) ) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
+$contents['type'] = ( $type != "str" ) ? "all" : "str";
+$contents['savetype'] = ( $ext != "sql" ) ? "gz" : "sql";
 
-$file_ext = ($contents['savetype'] == "sql") ? "sql" : "sql.gz";
+$file_ext = ( $contents['savetype'] == "sql" ) ? "sql" : "sql.gz";
 $file_name = md5( $client_info['session_id'] ) . "_backupdata_" . date( "Y-m-d-H-i", time() ) . "." . $file_ext;
 $contents['filename'] = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup/" . $file_name;
 

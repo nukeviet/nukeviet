@@ -24,21 +24,10 @@ $contents = array();
 
 while( $row = $db->sql_fetchrow( $result ) )
 {
-	$contents[$row['id']]['caption'] = isset( $row[NV_LANG_INTERFACE . '_cron_name'] ) ? $row[NV_LANG_INTERFACE . '_cron_name'] : (isset( $row[NV_LANG_DATA . '_cron_name'] ) ? $row[NV_LANG_DATA . '_cron_name'] : $row['run_func']);
-	$contents[$row['id']]['edit'] = array(
-		(empty( $row['is_sys'] ) ? 1 : 0),
-		$lang_global['edit'],
-		NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_edit&amp;id=" . $row['id']
-	);
-	$contents[$row['id']]['delete'] = array(
-		(empty( $row['is_sys'] ) ? 1 : 0),
-		$lang_global['delete']
-	);
-	$contents[$row['id']]['disable'] = array(
-		((empty( $row['is_sys'] ) or empty( $row['act'] )) ? 1 : 0),
-		($row['act'] ? $lang_global['disable'] : $lang_global['activate']),
-		NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_act&amp;id=" . $row['id']
-	);
+	$contents[$row['id']]['caption'] = isset( $row[NV_LANG_INTERFACE . '_cron_name'] ) ? $row[NV_LANG_INTERFACE . '_cron_name'] : ( isset( $row[NV_LANG_DATA . '_cron_name'] ) ? $row[NV_LANG_DATA . '_cron_name'] : $row['run_func'] );
+	$contents[$row['id']]['edit'] = array( ( empty( $row['is_sys'] ) ? 1 : 0 ), $lang_global['edit'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_edit&amp;id=" . $row['id'] );
+	$contents[$row['id']]['delete'] = array( ( empty( $row['is_sys'] ) ? 1 : 0 ), $lang_global['delete'] );
+	$contents[$row['id']]['disable'] = array( ( ( empty( $row['is_sys'] ) or empty( $row['act'] ) ) ? 1 : 0 ), ( $row['act'] ? $lang_global['disable'] : $lang_global['activate'] ), NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_act&amp;id=" . $row['id'] );
 	$contents[$row['id']]['detail'][$lang_module['run_file']] = $row['run_file'];
 	$contents[$row['id']]['detail'][$lang_module['run_func']] = $row['run_func'];
 	$contents[$row['id']]['detail'][$lang_module['params']] = ! empty( $row['params'] ) ? implode( ", ", explode( ",", $row['params'] ) ) : "";
@@ -64,7 +53,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 		}
 		else
 		{
-			$next_time = nv_date( "l, d/m/Y H:i", $row['start_time'] + ceil( (NV_CURRENTTIME - $row['start_time']) / $interval ) * $interval );
+			$next_time = nv_date( "l, d/m/Y H:i", $row['start_time'] + ceil( ( NV_CURRENTTIME - $row['start_time'] ) / $interval ) * $interval );
 		}
 	}
 

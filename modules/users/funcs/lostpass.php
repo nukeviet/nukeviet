@@ -24,7 +24,7 @@ if( defined( 'NV_IS_USER_FORUM' ) )
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
 
-if( $nv_Request->isset_request( 'u', 'get' ) AND $nv_Request->isset_request( 'k', 'get' ) )
+if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k', 'get' ) )
 {
 	$contents = $lang_module['lostpass_active_error_link'];
 
@@ -36,7 +36,7 @@ if( $nv_Request->isset_request( 'u', 'get' ) AND $nv_Request->isset_request( 'k'
 		$row = $db->sql_fetchrow( $result );
 		$k = $nv_Request->get_string( 'k', 'get' );
 
-		if( ! empty( $row['passlostkey'] ) AND $k == md5( $row['userid'] . $row['passlostkey'] . $global_config['sitekey'] ) )
+		if( ! empty( $row['passlostkey'] ) and $k == md5( $row['userid'] . $row['passlostkey'] . $global_config['sitekey'] ) )
 		{
 			$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `password`='" . $row['passlostkey'] . "', `passlostkey`='' WHERE `userid`=" . $row['userid'] );
 			$contents = $lang_module['change_pass_ok'];
@@ -60,7 +60,7 @@ else
 
 	if( $checkss == $data['checkss'] )
 	{
-		if( ( ! empty( $seccode ) and md5( $data['nv_seccode'] ) == $seccode) or nv_capcha_txt( $data['nv_seccode'] ) )
+		if( ( ! empty( $seccode ) and md5( $data['nv_seccode'] ) == $seccode ) or nv_capcha_txt( $data['nv_seccode'] ) )
 		{
 			if( ! empty( $data['userField'] ) )
 			{
@@ -140,7 +140,7 @@ else
 								$db->sql_query( $sql );
 								if( ! empty( $check_email ) )
 								{
-									$row['email'] = substr( $row['email'], 0, 3 ) . '***' . substr( $row['email'], - 6 );
+									$row['email'] = substr( $row['email'], 0, 3 ) . '***' . substr( $row['email'], -6 );
 								}
 								$info = sprintf( $lang_module['lostpass_content_mess'], $row['email'] );
 							}
@@ -170,7 +170,6 @@ else
 					$nv_Request->unset_request( 'lostpass_seccode', 'session' );
 					$error = $lang_module['lostpass_no_info2'];
 				}
-
 			}
 			else
 			{

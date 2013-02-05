@@ -30,7 +30,7 @@ if( $nv_Request->isset_request( 'ok', 'cookie' ) )
 
 	$numcat = $db->sql_numrows( $db->sql_query( "SELECT id FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` " ) );
 	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=checklink";
-	$all_page = ($numcat > 1) ? $numcat : 1;
+	$all_page = ( $numcat > 1 ) ? $numcat : 1;
 	$per_page = 5;
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 

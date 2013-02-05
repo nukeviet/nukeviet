@@ -71,9 +71,9 @@ else
 	{
 		$error = $upload_info['error'];
 	}
-	elseif( $upload_info['is_img'] AND $global_config['nv_auto_resize'] )
+	elseif( $upload_info['is_img'] and $global_config['nv_auto_resize'] )
 	{
-		if( $upload_info['img_info'][0] > NV_MAX_WIDTH OR $upload_info['img_info'][0] > NV_MAX_HEIGHT )
+		if( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT )
 		{
 			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 			$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1] );
@@ -93,7 +93,7 @@ else
 		}
 		elseif( $upload_info['is_img'] )
 		{
-			if( $upload_info['img_info'][0] > NV_MAX_WIDTH OR $upload_info['img_info'][0] > NV_MAX_HEIGHT )
+			if( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT )
 			{
 				nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'] );
 				if( $upload_info['img_info'][0] > NV_MAX_WIDTH )
@@ -112,7 +112,7 @@ else
 				$dir = rtrim( $dir, "/" );
 				$arr_dir = explode( "/", $dir );
 
-				if( $global_config['autologomod'] == 'all' or ($arr_dir[0] == NV_UPLOADS_DIR and isset( $arr_dir[1] ) and in_array( $arr_dir[1], $autologomod )) )
+				if( $global_config['autologomod'] == 'all' or ( $arr_dir[0] == NV_UPLOADS_DIR and isset( $arr_dir[1] ) and in_array( $arr_dir[1], $autologomod ) ) )
 				{
 					$upload_logo = '';
 
@@ -193,7 +193,6 @@ if( empty( $error ) )
 	if( $editor == 'ckeditor' )
 	{
 		echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $path . "/" . $upload_info['basename'] . "', '');</script>";
-
 	}
 	else
 	{
@@ -205,7 +204,6 @@ else
 	if( $editor == 'ckeditor' )
 	{
 		echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $error . "');</script>";
-
 	}
 	else
 	{
@@ -213,6 +211,6 @@ else
 	}
 }
 
-exit ;
+exit();
 
 ?>

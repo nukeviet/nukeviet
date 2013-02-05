@@ -109,7 +109,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 
 	if( ! empty( $data_search['user'] ) )
 	{
-		$user_tmp = ($data_search['user'] == "system") ? 0 : ( int )$data_search['user'];
+		$user_tmp = ( $data_search['user'] == "system" ) ? 0 : ( int )$data_search['user'];
 
 		$sql .= " AND `userid`=" . $user_tmp;
 		$base_url .= "&amp;user=" . $data_search['user'];
@@ -118,11 +118,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 
 // Order data
 $order = array();
-$check_order = array(
-	"ASC",
-	"DESC",
-	"NO"
-);
+$check_order = array( "ASC", "DESC", "NO" );
 $opposite_order = array(
 	"NO" => "ASC",
 	"DESC" => "ASC",
@@ -222,7 +218,7 @@ $array_lang = array();
 $array_lang[] = array(
 	"key" => "", //
 	"title" => $lang_module['filter_lang'], //
-	"selected" => ($data_search['lang'] == "") ? " selected=\"selected\"" : "" //
+	"selected" => ( $data_search['lang'] == "" ) ? " selected=\"selected\"" : "" //
 );
 
 foreach( $list_lang as $lang )
@@ -230,7 +226,7 @@ foreach( $list_lang as $lang )
 	$array_lang[] = array(
 		"key" => $lang, //
 		"title" => $language_array[$lang]['name'], //
-		"selected" => ($data_search['lang'] == $lang) ? " selected=\"selected\"" : "" //
+		"selected" => ( $data_search['lang'] == $lang ) ? " selected=\"selected\"" : "" //
 	);
 }
 
@@ -240,7 +236,7 @@ $array_module = array();
 $array_module[] = array(
 	"key" => "", //
 	"title" => $lang_module['filter_module'], //
-	"selected" => ($data_search['module'] == "") ? " selected=\"selected\"" : "" //
+	"selected" => ( $data_search['module'] == "" ) ? " selected=\"selected\"" : "" //
 );
 
 foreach( $list_module as $module )
@@ -248,7 +244,7 @@ foreach( $list_module as $module )
 	$array_module[] = array(
 		"key" => $module, //
 		"title" => $module, //
-		"selected" => ($data_search['module'] == $module) ? " selected=\"selected\"" : "" //
+		"selected" => ( $data_search['module'] == $module ) ? " selected=\"selected\"" : "" //
 	);
 }
 
@@ -258,12 +254,12 @@ $array_user = array();
 $array_user[] = array(
 	"key" => "", //
 	"title" => $lang_module['filter_user'], //
-	"selected" => ($data_search['user'] == "") ? " selected=\"selected\"" : "" //
+	"selected" => ( $data_search['user'] == "" ) ? " selected=\"selected\"" : "" //
 );
 $array_user[] = array(
 	"key" => "system", //
 	"title" => $lang_module['filter_system'], //
-	"selected" => ($data_search['user'] == "system") ? " selected=\"selected\"" : "" //
+	"selected" => ( $data_search['user'] == "system" ) ? " selected=\"selected\"" : "" //
 );
 
 foreach( $list_user as $user )
@@ -271,7 +267,7 @@ foreach( $list_user as $user )
 	$array_user[] = array(
 		"key" => $user['userid'], //
 		"title" => $user['username'], //
-		"selected" => (( int )$data_search['user'] == $user['userid']) ? " selected=\"selected\"" : "" //
+		"selected" => ( ( int )$data_search['user'] == $user['userid'] ) ? " selected=\"selected\"" : "" //
 	);
 }
 

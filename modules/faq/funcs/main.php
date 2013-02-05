@@ -69,7 +69,7 @@ elseif( $module_setting['type_main'] == 0 )
 }
 elseif( $module_setting['type_main'] == 1 or $module_setting['type_main'] == 2 )
 {
-	$order = ($module_setting['type_main'] == 1) ? "DESC" : "ASC";
+	$order = ( $module_setting['type_main'] == 1 ) ? "DESC" : "ASC";
 
 	$query = "SELECT `id`,`title`, `question`, `answer` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `status`=1 ORDER BY `addtime` " . $order;
 	$result = $db->sql_query( $query );

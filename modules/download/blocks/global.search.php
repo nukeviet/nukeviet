@@ -46,7 +46,7 @@ if( defined( 'NV_SYSTEM' ) )
 		$xtpl->assign( 'FORMACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=search' );
 		foreach( $list as $row )
 		{
-			$row['select'] = ($row['id'] == $cat) ? 'selected=selected' : '';
+			$row['select'] = ( $row['id'] == $cat ) ? 'selected=selected' : '';
 			$xtpl->assign( 'loop', $row );
 			$xtpl->parse( 'main.loop' );
 		}

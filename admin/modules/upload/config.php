@@ -29,7 +29,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$autologomod = $nv_Request->get_array( 'autologomod', 'post' );
 
-	if( ( in_array( 'all', $autologomod )) )
+	if( ( in_array( 'all', $autologomod ) ) )
 	{
 		$autologomod = 'all';
 	}
@@ -97,7 +97,7 @@ foreach( $site_mods as $mod => $value )
 	{
 		$a++;
 		$xtpl->assign( 'MOD_VALUE', $mod );
-		$xtpl->assign( 'LEV_CHECKED', ( in_array( $mod, $autologomod )) ? "checked=\"checked\"" : "" );
+		$xtpl->assign( 'LEV_CHECKED', ( in_array( $mod, $autologomod ) ) ? "checked=\"checked\"" : "" );
 		$xtpl->assign( 'CUSTOM_TITLE', $value['custom_title'] );
 		$xtpl->parse( 'main.loop1.loop2' );
 
@@ -111,7 +111,7 @@ foreach( $site_mods as $mod => $value )
 
 $a++;
 $xtpl->assign( 'MOD_VALUE', 'all' );
-$xtpl->assign( 'LEV_CHECKED', ($global_config['autologomod'] == 'all') ? "checked=\"checked\"" : "" );
+$xtpl->assign( 'LEV_CHECKED', ( $global_config['autologomod'] == 'all' ) ? "checked=\"checked\"" : "" );
 $xtpl->assign( 'CUSTOM_TITLE', '<b>' . $lang_module['autologomodall'] . '</b>' );
 
 $xtpl->parse( 'main.loop1.loop2' );

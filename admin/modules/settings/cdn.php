@@ -21,17 +21,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 	$allowzip[] = $dir . '/modules/index.html';
 	$allowzip[] = $dir . '/themes/index.html';
 	$allowzip[] = $dir . '/' . NV_EDITORSDIR . '/index.html';
-	$dir_no_scan = array(
-		NV_ROOTDIR . '/' . 'install',
-		NV_ROOTDIR . '/' . NV_ADMINDIR,
-		NV_ROOTDIR . '/' . NV_UPLOADS_DIR,
-		NV_ROOTDIR . '/' . NV_FILES_DIR,
-		NV_ROOTDIR . '/' . NV_LOGS_DIR,
-		NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH,
-		NV_ROOTDIR . '/' . NV_TEMP_DIR,
-		NV_ROOTDIR . '/' . NV_DATADIR,
-		NV_ROOTDIR . '/' . NV_CACHEDIR
-	);
+	$dir_no_scan = array( NV_ROOTDIR . '/' . 'install', NV_ROOTDIR . '/' . NV_ADMINDIR, NV_ROOTDIR . '/' . NV_UPLOADS_DIR, NV_ROOTDIR . '/' . NV_FILES_DIR, NV_ROOTDIR . '/' . NV_LOGS_DIR, NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH, NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_ROOTDIR . '/' . NV_DATADIR, NV_ROOTDIR . '/' . NV_CACHEDIR );
 	$error = array();
 	//Ten thu muc luu data
 	$stack[] = $dir;
@@ -43,7 +33,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 			$i = 0;
 			while( isset( $dircont[$i] ) )
 			{
-				if( $dircont[$i] != '.' AND $dircont[$i] != '..' )
+				if( $dircont[$i] != '.' and $dircont[$i] != '..' )
 				{
 					$current_file = $thisdir . "/" . $dircont[$i];
 					if( is_file( $current_file ) )
@@ -106,7 +96,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 							}
 						}
 					}
-					elseif( is_dir( $current_file ) AND ! in_array( $current_file, $dir_no_scan ) )
+					elseif( is_dir( $current_file ) and ! in_array( $current_file, $dir_no_scan ) )
 					{
 						$stack[] = $current_file;
 					}

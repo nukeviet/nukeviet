@@ -13,11 +13,7 @@ $a = 1;
 
 $page_title = $lang_module['nv_lang_setting'];
 
-$array_type = array(
-	$lang_module['nv_setting_type_0'],
-	$lang_module['nv_setting_type_1'],
-	$lang_module['nv_setting_type_2']
-);
+$array_type = array( $lang_module['nv_setting_type_0'], $lang_module['nv_setting_type_1'], $lang_module['nv_setting_type_2'] );
 
 $xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -144,7 +140,7 @@ while( list( $key, $value ) = each( $language_array ) )
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&amp;dirlang=" . $key . "&amp;checksess=" . md5( "readallfile" . session_id() ) . "\">" . $lang_module['nv_admin_read_all'] . "</a>";
 	}
 
-	if( in_array( $key, $lang_array_data_exit ) AND in_array( 'write', $allow_func ) )
+	if( in_array( $key, $lang_array_data_exit ) and in_array( 'write', $allow_func ) )
 	{
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $key . "&amp;checksess=" . md5( "writeallfile" . session_id() ) . "\">" . $lang_module['nv_admin_write'] . "</a>";
 	}
@@ -154,20 +150,20 @@ while( list( $key, $value ) = each( $language_array ) )
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=download&amp;dirlang=" . $key . "&amp;checksess=" . md5( "downloadallfile" . session_id() ) . "\">" . $lang_module['nv_admin_download'] . "</a>";
 	}
 
-	if( ! empty( $arr_lang_func ) and ! in_array( $key, $global_config['allow_adminlangs'] ) AND in_array( 'delete', $allow_func ) )
+	if( ! empty( $arr_lang_func ) and ! in_array( $key, $global_config['allow_adminlangs'] ) and in_array( 'delete', $allow_func ) )
 	{
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delete&amp;dirlang=" . $key . "&amp;checksess=" . md5( "deleteallfile" . session_id() ) . "\">" . $lang_module['nv_admin_delete'] . "</a>";
 	}
 
 	$xtpl->assign( 'ROW', array(
-		'class' => (++$a % 2) ? " class=\"second\"" : "",
+		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'number' => $a,
 		'key' => $key,
 		'language' => $value['language'],
 		'name' => $value['name'],
 		'arr_lang_func' => implode( " - ", $arr_lang_func ),
-		'allow_sitelangs' => ($check_lang_exit and in_array( $key, $array_lang_setup )) ? (in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "") : ' disabled=\"disabled\"',
-		'allow_adminlangs' => ($check_lang_exit) ? (in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "") : ' disabled=\"disabled\"',
+		'allow_sitelangs' => ( $check_lang_exit and in_array( $key, $array_lang_setup ) ) ? ( in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled=\"disabled\"',
+		'allow_adminlangs' => ( $check_lang_exit ) ? ( in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled=\"disabled\"'
 	) );
 
 	$xtpl->parse( 'main.loop' );
@@ -175,7 +171,11 @@ while( list( $key, $value ) = each( $language_array ) )
 
 foreach( $array_type as $key => $value )
 {
-	$xtpl->assign( 'TYPE', array( 'key' => $key, 'checked' => $global_config['read_type'] == $key ? " checked=\"checked\"" : "", 'title' => $value ) );
+	$xtpl->assign( 'TYPE', array(
+		'key' => $key,
+		'checked' => $global_config['read_type'] == $key ? " checked=\"checked\"" : "",
+		'title' => $value
+	) );
 
 	$xtpl->parse( 'main.type' );
 }

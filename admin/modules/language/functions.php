@@ -37,16 +37,7 @@ if( $module_name == "language" )
 		"custom_title" => $lang_global['mod_language']
 	);
 
-	$allow_func = array(
-		'main',
-		'read',
-		'copy',
-		'edit',
-		'download',
-		'interface',
-		'check',
-		'countries'
-	);
+	$allow_func = array( 'main', 'read', 'copy', 'edit', 'download', 'interface', 'check', 'countries' );
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$allow_func[] = 'setting';
@@ -97,7 +88,6 @@ if( $module_name == "language" )
 			}
 		}
 	}
-
 }
 
 ?>

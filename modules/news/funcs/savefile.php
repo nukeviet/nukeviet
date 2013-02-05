@@ -17,8 +17,7 @@ function nv_src_href_callback( $matches )
 	if( ! empty( $matches[2] ) and ! preg_match( "/^http\:\/\//", $matches[2] ) and ! preg_match( "/^javascript/", $matches[2] ) )
 	{
 		if( preg_match( "/^\//", $matches[2] ) ) $_url = NV_MY_DOMAIN;
-		else
-			$_url = NV_MY_DOMAIN . "/";
+		else $_url = NV_MY_DOMAIN . "/";
 		$matches[2] = $_url . $matches[2];
 	}
 	return $matches[1] . "=\"" . $matches[2] . "\"";
@@ -95,14 +94,14 @@ if( $id > 0 and $catid > 0 )
 				elseif( $content['homeimgthumb'] == 3 )
 				{
 					$src = $content['homeimgfile'];
-					$width = ($content['imgposition'] == 1) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
+					$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 				}
 				elseif( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
 				{
 					$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
-					$width = ($content['imgposition'] == 1) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
+					$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 				}
-				$alt = ( empty( $content['homeimgalt'] )) ? $content['title'] : $content['homeimgalt'];
+				$alt = ( empty( $content['homeimgalt'] ) ) ? $content['title'] : $content['homeimgalt'];
 
 				$result['image'] = array(
 					"src" => $src,

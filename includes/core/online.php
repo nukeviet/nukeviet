@@ -14,7 +14,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  *
  * @return void
  */
-function nv_online_upd( )
+function nv_online_upd()
 {
 	global $db, $client_info, $user_info;
 	$userid = 0;

@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $per_page = 50;
 
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
-if( isset( $check_allow_upload_dir['view_dir'] ) AND isset( $array_dirname[$path] ) )
+if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path] ) )
 {
 	if( $refresh )
 	{
@@ -33,7 +33,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) AND isset( $array_dirname[$path
 	if( empty( $q ) )
 	{
 		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $array_dirname[$path];
-		if( $type == "image" OR $type == "flash" )
+		if( $type == "image" or $type == "flash" )
 		{
 			$sql .= " AND `type`='" . $type . "'";
 		}
@@ -60,7 +60,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) AND isset( $array_dirname[$path
 		$sql = "SELECT SQL_CALC_FOUND_ROWS t1.*, t2.dirname FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` AS t1 INNER JOIN `" . NV_UPLOAD_GLOBALTABLE . "_dir` AS t2 ON t1.`did` = t2.`did`";
 		$sql .= " WHERE (t2.`dirname` = '" . $path . "' OR t2.`dirname` LIKE '" . $path . "/%')";
 		$sql .= " AND t1.`title` LIKE '%" . $db->dblikeescape( $q ) . "%'";
-		if( $type == "image" OR $type == "flash" )
+		if( $type == "image" or $type == "flash" )
 		{
 			$sql .= " AND t1.`type`='" . $type . "'";
 		}
@@ -107,9 +107,9 @@ if( isset( $check_allow_upload_dir['view_dir'] ) AND isset( $array_dirname[$path
 			}
 
 			$file['data'] .= "|" . $file['ext'] . "|" . $file['type'] . "|" . nv_convertfromBytes( $file['filesize'] ) . "|" . $file['userid'] . "|" . nv_date( "l, d F Y, H:i:s P", $file['mtime'] ) . "|";
-			$file['data'] .= ( empty( $q )) ? '' : $file['dirname'];
+			$file['data'] .= ( empty( $q ) ) ? '' : $file['dirname'];
 
-			$file['sel'] = ($selectfile == $file['title']) ? " imgsel" : "";
+			$file['sel'] = ( $selectfile == $file['title'] ) ? " imgsel" : "";
 			$file['src'] = NV_BASE_SITEURL . $file['src'] . '?' . $file['mtime'];
 
 			$xtpl->assign( "IMG", $file );

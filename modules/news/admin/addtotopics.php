@@ -57,10 +57,10 @@ if( $db->sql_numrows( $result ) )
 	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			"class" => ($a++ % 2) ? " class=\"second\"" : "",
+			"class" => ( $a++ % 2 ) ? " class=\"second\"" : "",
 			"id" => $id,
 			"title" => $title,
-			"checked" => in_array( $id, $id_array ) ? " checked=\"checked\"" : "",
+			"checked" => in_array( $id, $id_array ) ? " checked=\"checked\"" : ""
 		) );
 
 		$xtpl->parse( 'main.loop' );

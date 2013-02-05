@@ -1,5 +1,6 @@
 <?php
 
+
 //
 //  Copyright (c) 2011, Maths for More S.L. http://www.wiris.com
 //  This file is part of WIRIS Plugin.
@@ -37,4 +38,5 @@ else {
 		readfile('../core/cas.gif');
 	}
 }
+
 ?>

@@ -51,6 +51,6 @@ if( isset( $array_dirname[$path] ) )
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['rename'], $path . '/' . $file . " -> " . $path . '/' . $newname, $admin_info['userid'] );
 
 echo $newname;
-exit ;
+exit();
 
 ?>

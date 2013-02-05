@@ -65,12 +65,12 @@ if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
 	$array_config['smtp_password'] = $smtp_password;
 }
 
-$array_config['smtp_ssl_checked'] = ($array_config['smtp_ssl'] == 1) ? ' checked="checked"' : '';
+$array_config['smtp_ssl_checked'] = ( $array_config['smtp_ssl'] == 1 ) ? ' checked="checked"' : '';
 
-$array_config['mailer_mode_smtpt'] = ($array_config['mailer_mode'] == "smtp") ? ' checked="checked"' : '';
-$array_config['mailer_mode_sendmail'] = ($array_config['mailer_mode'] == "sendmail") ? ' checked="checked"' : '';
-$array_config['mailer_mode_phpmail'] = ($array_config['mailer_mode'] == "") ? ' checked="checked"' : '';
-$array_config['mailer_mode_smtpt_show'] = ($array_config['mailer_mode'] == "smtp") ? "" : " style=\"display: none\" ";
+$array_config['mailer_mode_smtpt'] = ( $array_config['mailer_mode'] == "smtp" ) ? ' checked="checked"' : '';
+$array_config['mailer_mode_sendmail'] = ( $array_config['mailer_mode'] == "sendmail" ) ? ' checked="checked"' : '';
+$array_config['mailer_mode_phpmail'] = ( $array_config['mailer_mode'] == "" ) ? ' checked="checked"' : '';
+$array_config['mailer_mode_smtpt_show'] = ( $array_config['mailer_mode'] == "smtp" ) ? "" : " style=\"display: none\" ";
 
 $xtpl = new XTemplate( "smtp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
@@ -81,7 +81,7 @@ foreach( $smtp_encrypted_array as $id => $value )
 	$encrypted = array(
 		"id" => $id,
 		"value" => $value,
-		"sl" => ($global_config['smtp_ssl'] == $id) ? ' selected="selected"' : ''
+		"sl" => ( $global_config['smtp_ssl'] == $id ) ? ' selected="selected"' : ''
 	);
 
 	$xtpl->assign( 'EMCRYPTED', $encrypted );

@@ -12,13 +12,13 @@ if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 if( $nv_Request->get_bool( 'show_tabs', 'post' ) )
 {
 	nv_show_tables();
-	exit ;
+	exit();
 }
 
 if( $nv_Request->isset_request( 'tab', 'get' ) and preg_match( "/^(" . $db_config['prefix'] . ")\_[a-zA-Z0-9\_\.\-]+$/", filter_text_input( 'tab', 'get' ) ) )
 {
 	nv_show_tab();
-	exit ;
+	exit();
 }
 
 $database = array();

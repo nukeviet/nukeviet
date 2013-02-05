@@ -19,7 +19,7 @@ function nv_delete_cache( $pattern )
 {
 	if( $dh = opendir( NV_ROOTDIR . "/" . NV_CACHEDIR ) )
 	{
-		while( ($file = readdir( $dh )) !== false )
+		while( ( $file = readdir( $dh ) ) !== false )
 		{
 			if( preg_match( $pattern, $file ) )
 			{
@@ -35,7 +35,7 @@ function nv_delete_cache( $pattern )
  *
  * @return
  */
-function nv_delete_all_cache( )
+function nv_delete_all_cache()
 {
 	$pattern = "/(.*)\.cache/";
 
@@ -110,18 +110,18 @@ function nv_db_cache( $sql, $key = '', $modname = '', $lang = NV_LANG_DATA )
 
 	$cache_file = $lang . "_" . $modname . "_" . md5( $sql ) . "_" . NV_CACHE_PREFIX . ".cache";
 
-	if( ($cache = nv_get_cache( $cache_file )) != false )
+	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 	{
 		$list = unserialize( $cache );
 	}
 	else
 	{
-		if( ($result = $db->sql_query( $sql )) !== false )
+		if( ( $result = $db->sql_query( $sql ) ) !== false )
 		{
 			$a = 0;
 			while( $row = $db->sql_fetch_assoc( $result ) )
 			{
-				$key2 = ( ! empty( $key ) and isset( $row[$key] )) ? $row[$key] : $a;
+				$key2 = ( ! empty( $key ) and isset( $row[$key] ) ) ? $row[$key] : $a;
 				$list[$key2] = $row;
 				++$a;
 			}

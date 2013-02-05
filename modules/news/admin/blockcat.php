@@ -12,13 +12,7 @@ $page_title = $lang_module['block'];
 
 $error = "";
 $savecat = 0;
-list( $bid, $title, $alias, $description, $keywords ) = array(
-	0,
-	"",
-	"",
-	"",
-	""
-);
+list( $bid, $title, $alias, $description, $keywords ) = array( 0, "", "", "", "" );
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
@@ -29,7 +23,7 @@ if( ! empty( $savecat ) )
 	$alias = filter_text_input( 'alias', 'post', '' );
 	$description = $nv_Request->get_string( 'description', 'post', '' );
 	$description = nv_nl2br( nv_htmlspecialchars( strip_tags( $description ) ), '<br />' );
-	$alias = ($alias == "") ? change_alias( $title ) : change_alias( $alias );
+	$alias = ( $alias == "" ) ? change_alias( $title ) : change_alias( $alias );
 
 	if( empty( $title ) )
 	{

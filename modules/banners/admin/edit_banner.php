@@ -71,7 +71,7 @@ $result = $db->sql_query( $sql );
 $plans = array();
 while( $pl_row = $db->sql_fetchrow( $result ) )
 {
-	$plans[$pl_row['id']] = $pl_row['title'] . " (" . ( ! empty( $pl_row['blang'] ) ? $language_array[$pl_row['blang']]['name'] : $lang_module['blang_all']) . ")";
+	$plans[$pl_row['id']] = $pl_row['title'] . " (" . ( ! empty( $pl_row['blang'] ) ? $language_array[$pl_row['blang']]['name'] : $lang_module['blang_all'] ) . ")";
 }
 
 if( empty( $plans ) )
@@ -233,80 +233,27 @@ else
 	$exp_date = ! empty( $row['exp_time'] ) ? date( "d/m/Y", $row['exp_time'] ) : "";
 }
 
-$contents['info'] = ( ! empty( $error )) ? $error : $lang_module['edit_banner_info'];
-$contents['is_error'] = ( ! empty( $error )) ? 1 : 0;
+$contents['info'] = ( ! empty( $error ) ) ? $error : $lang_module['edit_banner_info'];
+$contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
 $contents['file_allowed_ext'] = implode( ", ", $contents['file_allowed_ext'] );
 $contents['submit'] = $lang_module['edit_banner'];
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_banner&amp;id=" . $id;
-$contents['title'] = array(
-	$lang_module['title'],
-	'title',
-	$title,
-	255
-);
-$contents['plan'] = array(
-	$lang_module['in_plan'],
-	'pid',
-	$plans,
-	$pid
-);
-$contents['client'] = array(
-	$lang_module['of_client'],
-	'clid',
-	$clients,
-	$clid
-);
+$contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
+$contents['plan'] = array( $lang_module['in_plan'], 'pid', $plans, $pid );
+$contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid );
 
-$imageforswf = ( ! empty( $imageforswf )) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $imageforswf : '';
+$imageforswf = ( ! empty( $imageforswf ) ) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $imageforswf : '';
 
-$contents['file_name'] = array(
-	$lang_module['file_name'],
-	NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $file_name,
-	"rel=\"shadowbox;height=" . $height . ";width=" . $width . "\"",
-	NV_BASE_SITEURL . "images/ico_" . $file_ext . ".gif",
-	$lang_global['show_picture'],
-	$imageforswf,
-	NV_BASE_SITEURL . "images/ico_" . substr( $imageforswf, - 3 ) . ".gif"
-);
+$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $file_name, "rel=\"shadowbox;height=" . $height . ";width=" . $width . "\"", NV_BASE_SITEURL . "images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . "images/ico_" . substr( $imageforswf, -3 ) . ".gif" );
 
-$contents['upload'] = array(
-	sprintf( $lang_module['re_upload'], $contents['file_allowed_ext'] ),
-	'banner',
-	$lang_module['imageforswf'],
-	'imageforswf'
-);
-$contents['file_alt'] = array(
-	$lang_module['file_alt'],
-	'file_alt',
-	$file_alt,
-	255
-);
-$contents['click_url'] = array(
-	$lang_module['click_url'],
-	'click_url',
-	$click_url,
-	255
-);
+$contents['upload'] = array( sprintf( $lang_module['re_upload'], $contents['file_allowed_ext'] ), 'banner', $lang_module['imageforswf'], 'imageforswf' );
+$contents['file_alt'] = array( $lang_module['file_alt'], 'file_alt', $file_alt, 255 );
+$contents['click_url'] = array( $lang_module['click_url'], 'click_url', $click_url, 255 );
 
-$contents['target'] = array(
-	$lang_module['target'],
-	'target',
-	$targets,
-	$target
-);
+$contents['target'] = array( $lang_module['target'], 'target', $targets, $target );
 
-$contents['publ_date'] = array(
-	$lang_module['publ_date'],
-	'publ_date',
-	$publ_date,
-	10
-);
-$contents['exp_date'] = array(
-	$lang_module['exp_date'],
-	'exp_date',
-	$exp_date,
-	10
-);
+$contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10 );
+$contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10 );
 
 $my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 $my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";

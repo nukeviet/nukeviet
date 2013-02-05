@@ -28,7 +28,7 @@ $result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\
 
 while( $item = $db->sql_fetch_assoc( $result ) )
 {
-	if( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['Name'], $tables )) )
+	if( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['Name'], $tables ) ) )
 	{
 		$totalfree += $item['Data_free'];
 		$tabs[] = substr( $item['Name'], strlen( $db_config['prefix'] ) + 1 );

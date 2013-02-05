@@ -38,9 +38,9 @@ if( defined( 'NV_IS_AJAX' ) )
 		if( $db->sql_numrows( $result ) )
 		{
 			$row = $db->sql_fetch_assoc( $result );
-			if( ! (($row['module'] == 'database' AND $act > 1) OR ($row['module'] == 'settings' AND $act > 2)) )
+			if( ! ( ( $row['module'] == 'database' and $act > 1 ) or ( $row['module'] == 'settings' and $act > 2 ) ) )
 			{
-				$act_val = ($row['act_' . $act]) ? 0 : 1;
+				$act_val = ( $row['act_' . $act] ) ? 0 : 1;
 				$checksum = md5( $row['module'] . "#" . $row['act_1'] . "#" . $row['act_2'] . "#" . $row['act_3'] . "#" . $global_config['sitekey'] );
 				$db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_module` SET `act_" . $act . "` = '" . $act_val . "', `checksum` = '" . $checksum . "' WHERE `mid` = " . $mid );
 			}
@@ -64,21 +64,18 @@ $result = $db->sql_query( "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "_module`
 $numrows = $db->sql_numrows( $result );
 while( $row = $db->sql_fetch_assoc( $result ) )
 {
-	$row['class'] = ($a++ % 2 == 0) ? ' class="second"' : '';
+	$row['class'] = ( $a++ % 2 == 0 ) ? ' class="second"' : '';
 	for( $i = 1; $i <= $numrows; $i++ )
 	{
-		$xtpl->assign( 'WEIGHT', array(
-			'key' => $i,
-			'selected' => ($i == $row['weight']) ? ' selected="selected"' : ''
-		) );
+		$xtpl->assign( 'WEIGHT', array( 'key' => $i, 'selected' => ( $i == $row['weight'] ) ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.loop.weight' );
 	}
 	$row['custom_title'] = isset( $lang_global[$row['lang_key']] ) ? $lang_global[$row['lang_key']] : '';
 	$chang_act = array();
 	for( $i = 1; $i <= 3; $i++ )
 	{
-		$chang_act[$i] = ($row['act_' . $i]) ? ' checked="checked"' : '';
-		if( ($row['module'] == 'database' AND $i > 1) OR ($row['module'] == 'settings' AND $i > 2) )
+		$chang_act[$i] = ( $row['act_' . $i] ) ? ' checked="checked"' : '';
+		if( ( $row['module'] == 'database' and $i > 1 ) or ( $row['module'] == 'settings' and $i > 2 ) )
 		{
 			$chang_act[$i] .= ' disabled="disabled"';
 		}

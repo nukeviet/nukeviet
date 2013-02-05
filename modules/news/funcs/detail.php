@@ -40,7 +40,7 @@ if( $allowed )
 		$news_contents = array_merge( $news_contents, $body_contents );
 		unset( $body_contents );
 
-		if( defined( 'NV_IS_MODADMIN' ) or ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME)) )
+		if( defined( 'NV_IS_MODADMIN' ) or ( $news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ( $news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME ) ) )
 		{
 			$time_set = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'session' );
 			if( empty( $time_set ) )
@@ -57,7 +57,7 @@ if( $allowed )
 				}
 			}
 			$news_contents['showhometext'] = $module_config[$module_name]['showhometext'];
-			$news_contents['homeimgalt'] = (empty( $news_contents['homeimgalt'] )) ? $news_contents['title'] : $news_contents['homeimgalt'];
+			$news_contents['homeimgalt'] = ( empty( $news_contents['homeimgalt'] ) ) ? $news_contents['title'] : $news_contents['homeimgalt'];
 			if( ! empty( $news_contents['homeimgfile'] ) and $news_contents['imgposition'] > 0 )
 			{
 				$src = $alt = $note = "";
@@ -70,7 +70,7 @@ if( $allowed )
 				elseif( $news_contents['homeimgthumb'] == 3 )
 				{
 					$src = $news_contents['homeimgfile'];
-					$width = ($news_contents['imgposition'] == 1) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
+					$width = ( $news_contents['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 				}
 				elseif( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] ) )
 				{
@@ -197,7 +197,7 @@ if( $allowed )
 	{
 		$comment_array = nv_comment_module( $news_contents['id'], 0 );
 		$news_contents['comment'] = comment_theme( $comment_array );
-		if( $news_contents['allowed_comm'] == 1 or ($news_contents['allowed_comm'] == 2 and defined( 'NV_IS_USER' )) )
+		if( $news_contents['allowed_comm'] == 1 or ( $news_contents['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) )
 		{
 			$commentenable = 1;
 		}
@@ -222,7 +222,7 @@ if( $allowed )
 			$news_contents['disablerating'] = 0;
 		}
 		$news_contents['stringrating'] = sprintf( $lang_module['stringrating'], $news_contents['total_rating'], $news_contents['click_rating'] );
-		$news_contents['click_rating'] = ($news_contents['click_rating'] > 0) ? $news_contents['click_rating'] : 1;
+		$news_contents['click_rating'] = ( $news_contents['click_rating'] > 0 ) ? $news_contents['click_rating'] : 1;
 		$news_contents['numberrating'] = round( $news_contents['total_rating'] / $news_contents['click_rating'] ) - 1;
 		$news_contents['langstar'] = array(
 			"note" => $lang_module['star_note'],

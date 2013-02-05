@@ -1,5 +1,6 @@
 <?php
 
+
 //
 //  Copyright (c) 2011, Maths for More S.L. http://www.wiris.com
 //  This file is part of WIRIS Plugin.
@@ -49,4 +50,5 @@ if (isset($_POST['image'])) {
 else {
 	echo $currentPath . '../core/cas.gif';
 }
+
 ?>

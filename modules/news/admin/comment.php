@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['comment'];
 
 $global_array_cat = array();
-$global_array_cat[0] = array( "alias" => "Other", );
+$global_array_cat[0] = array( "alias" => "Other" );
 
 $sql = "SELECT `catid`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
 $result = $db->sql_query( $sql );
@@ -43,13 +43,13 @@ while( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $
 	}
 
 	$array[$cid] = array(
-		"class" => ($a % 2) ? " class=\"second\"" : "",
+		"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 		"cid" => $cid,
 		"email" => $email,
 		"content" => $content,
 		"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id,
 		"title" => $title,
-		"status" => ($status == 1) ? $lang_module['comment_enable'] : $lang_module['comment_disable'],
+		"status" => ( $status == 1 ) ? $lang_module['comment_enable'] : $lang_module['comment_disable'],
 		"linkedit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_comment&cid=" . $cid,
 		"linkdelete" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_comment&list=" . $cid
 	);

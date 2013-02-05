@@ -130,7 +130,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 }
 
 // Captcha
-$gfx_chk = ( in_array( $global_config['gfx_chk'], array( 3, 4, 6, 7 ) )) ? 1 : 0;
+$gfx_chk = ( in_array( $global_config['gfx_chk'], array( 3, 4, 6, 7 ) ) ) ? 1 : 0;
 
 $array_register = array();
 $array_register['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
@@ -180,17 +180,17 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 		$array_register['agreecheck'] = $nv_Request->get_int( 'agreecheck', 'post', 0 );
 		$nv_seccode = filter_text_input( 'nv_seccode', 'post', '', 1, NV_GFX_NUM );
 
-		$check_seccode = ! $gfx_chk ? true : (nv_capcha_txt( $nv_seccode ) ? true : false);
+		$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
 
 		if( ! $check_seccode )
 		{
 			$error = $lang_global['securitycodeincorrect'];
 		}
-		elseif( ($check_login = nv_check_username_reg( $array_register['username'] )) != "" )
+		elseif( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) != "" )
 		{
 			$error = $check_login;
 		}
-		elseif( ! empty( $array_register['password'] ) and ($check_pass = nv_check_valid_pass( $array_register['password'], NV_UPASSMAX, NV_UPASSMIN )) != "" )
+		elseif( ! empty( $array_register['password'] ) and ( $check_pass = nv_check_valid_pass( $array_register['password'], NV_UPASSMAX, NV_UPASSMIN ) ) != "" )
 		{
 			$error = $check_pass;
 		}
@@ -315,9 +315,9 @@ $result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_fie
 while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 {
 	$language = unserialize( $row_field['language'] );
-	$row_field['title'] = ( isset( $language[NV_LANG_DATA] )) ? $language[NV_LANG_DATA][0] : $row['field'];
-	$row_field['description'] = ( isset( $language[NV_LANG_DATA] )) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
-	$row_field['field_choices'] = ( ! empty( $row_field['field_choices'] )) ? unserialize( $row_field['field_choices'] ) : array();
+	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
+	$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
+	$row_field['field_choices'] = ( ! empty( $row_field['field_choices'] ) ) ? unserialize( $row_field['field_choices'] ) : array();
 	$array_field_config[] = $row_field;
 }
 if( defined( 'NV_EDITOR' ) )
@@ -329,6 +329,7 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	define( 'NV_EDITOR', true );
 	define( 'NV_IS_CKEDITOR', true );
 	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' );
+
 	/**
 	 * nv_aleditor()
 	 * 
@@ -341,10 +342,7 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
 		// Create class instance.
-		$editortoolbar = array(
-		 array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ),
-		 array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) 
-		);
+		$editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
 		$CKEditor = new CKEditor();
 		// Do not print the code directly to the browser, return it instead
 		$CKEditor->returnOutput = true;
@@ -368,14 +366,10 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 			$CKEditor->config['height'] = strpos( $height, '%' ) ? $height : intval( $height );
 		}
 		// Change default textarea attributes
-		$CKEditor->textareaAttributes = array(
-			"cols" => 80,
-			"rows" => 10
-		);
+		$CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
 		$val = nv_unhtmlspecialchars( $val );
 		return $CKEditor->editor( $textareaname, $val );
 	}
-
 }
 
 $custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
@@ -397,21 +391,21 @@ if( $checkss == $array_register['checkss'] )
 	$array_register['agreecheck'] = $nv_Request->get_int( 'agreecheck', 'post', 0 );
 	$nv_seccode = filter_text_input( 'nv_seccode', 'post', '', 1, NV_GFX_NUM );
 
-	$check_seccode = ! $gfx_chk ? true : (nv_capcha_txt( $nv_seccode ) ? true : false);
+	$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
 
 	if( ! $check_seccode )
 	{
 		$error = $lang_global['securitycodeincorrect'];
 	}
-	elseif( (($check_login = nv_check_username_reg( $array_register['username'] ))) != "" )
+	elseif( ( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) ) != "" )
 	{
 		$error = $check_login;
 	}
-	elseif( ($check_email = nv_check_email_reg( $array_register['email'] )) != "" )
+	elseif( ( $check_email = nv_check_email_reg( $array_register['email'] ) ) != "" )
 	{
 		$error = $check_email;
 	}
-	elseif( ($check_pass = nv_check_valid_pass( $array_register['password'], NV_UPASSMAX, NV_UPASSMIN )) != "" )
+	elseif( ( $check_pass = nv_check_valid_pass( $array_register['password'], NV_UPASSMAX, NV_UPASSMIN ) ) != "" )
 	{
 		$error = $check_pass;
 	}

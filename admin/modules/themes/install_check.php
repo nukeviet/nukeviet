@@ -85,7 +85,7 @@ if( file_exists( $filename ) )
 			$conn_id = ftp_connect( $ftp_server, $ftp_port, 10 );
 			// login with username and password
 			$login_result = ftp_login( $conn_id, $ftp_user_name, $ftp_user_pass );
-			if( ( ! $conn_id) || ( ! $login_result) )
+			if( ( ! $conn_id ) || ( ! $login_result ) )
 			{
 				$ftp_check_login = 3;
 			}
@@ -163,7 +163,7 @@ if( file_exists( $filename ) )
 					{
 						if( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/themes/' . $cp . $p ) )
 						{
-							if( ! ($ftp_check_login == 1 and ftp_mkdir( $conn_id, 'themes/' . $cp . $p )) )
+							if( ! ( $ftp_check_login == 1 and ftp_mkdir( $conn_id, 'themes/' . $cp . $p ) ) )
 							{
 								@mkdir( NV_ROOTDIR . '/themes/' . $cp . $p );
 							}
@@ -212,13 +212,13 @@ if( file_exists( $filename ) )
 					{
 						if( file_exists( NV_ROOTDIR . '/themes/' . $array_file['filename'] ) )
 						{
-							if( ! ($ftp_check_login == 1 and ftp_delete( $conn_id, 'themes/' . $array_file['filename'] )) )
+							if( ! ( $ftp_check_login == 1 and ftp_delete( $conn_id, 'themes/' . $array_file['filename'] ) ) )
 							{
 								nv_deletefile( NV_ROOTDIR . '/themes/' . $array_file['filename'] );
 							}
 						}
 
-						if( ! ($ftp_check_login == 1 and ftp_rename( $conn_id, $temp_extract_dir . '/' . $array_file['filename'], 'themes/' . $array_file['filename'] )) )
+						if( ! ( $ftp_check_login == 1 and ftp_rename( $conn_id, $temp_extract_dir . '/' . $array_file['filename'], 'themes/' . $array_file['filename'] ) ) )
 						{
 							@rename( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], NV_ROOTDIR . '/themes/' . $array_file['filename'] );
 						}
@@ -237,7 +237,7 @@ if( file_exists( $filename ) )
 					nv_deletefile( $filename );
 					nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
 
-					$theme = substr( $ziplistContent[0]['filename'], 0, - 1 );
+					$theme = substr( $ziplistContent[0]['filename'], 0, -1 );
 					$nv_redirect = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setuplayout&selectthemes=' . $theme;
 
 					$xtpl->assign( 'NV_REDIRECT', $nv_redirect );

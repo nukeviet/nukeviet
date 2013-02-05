@@ -59,7 +59,7 @@ else
 		if( ! empty( $user ) and $global_config['allowuserlogin'] )
 		{
 			$user = unserialize( nv_base64_decode( $user ) );
-			$strlen = (NV_CRYPT_SHA1 == 1) ? 40 : 32;
+			$strlen = ( NV_CRYPT_SHA1 == 1 ) ? 40 : 32;
 
 			if( isset( $user['userid'] ) and is_numeric( $user['userid'] ) and $user['userid'] > 0 )
 			{
@@ -76,10 +76,10 @@ else
 						$user_info = $db->sql_fetch_assoc( $result );
 						$db->sql_freeresult( $result );
 
-						if( strcasecmp( $user['checknum'], $user_info['checknum'] ) == 0 and //checknum
-						isset( $user['current_agent'] ) and ! empty( $user['current_agent'] ) and strcasecmp( $user['current_agent'], $user_info['current_agent'] ) == 0 and //user_agent
-						isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $user_info['current_ip'] ) == 0 and //current IP
-						isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $user_info['current_login'] ) ) == 0 )//current login
+						if( strcasecmp( $user['checknum'], $user_info['checknum'] ) == 0 and 						//checknum
+isset( $user['current_agent'] ) and ! empty( $user['current_agent'] ) and strcasecmp( $user['current_agent'], $user_info['current_agent'] ) == 0 and 						//user_agent
+isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $user_info['current_ip'] ) == 0 and 						//current IP
+isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $user_info['current_login'] ) ) == 0 ) //current login
 						{
 							if( empty( $user_info['full_name'] ) ) $user_info['full_name'] = $user_info['username'];
 
@@ -89,7 +89,7 @@ else
 							$user_info['last_ip'] = $user['last_ip'];
 							$user_info['last_openid'] = $user['last_openid'];
 							$user_info['st_login'] = ! empty( $user_info['password'] ) ? true : false;
-							$user_info['valid_question'] = ( ! empty( $user_info['question'] ) and ! empty( $user_info['answer'] )) ? true : false;
+							$user_info['valid_question'] = ( ! empty( $user_info['question'] ) and ! empty( $user_info['answer'] ) ) ? true : false;
 							$user_info['current_mode'] = ! empty( $user_info['current_openid'] ) ? 2 : 1;
 
 							unset( $user_info['checknum'], $user_info['password'], $user_info['question'], $user_info['answer'] );

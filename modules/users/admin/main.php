@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];
 $usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 1 );
-$usactive = (int)$nv_Request->get_bool( 'usactive', 'post,get', $usactive_old );
+$usactive = ( int )$nv_Request->get_bool( 'usactive', 'post,get', $usactive_old );
 if( $usactive_old != $usactive )
 {
 	$nv_Request->set_Cookie( 'usactive', $usactive );
@@ -21,26 +21,36 @@ $sql = "FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=" . $usactive;
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&usactive=" . $usactive;
 
 $methods = array(
-	'userid' => array( 'key' => 'userid', 'value' => $lang_module['search_id'], 'selected' => '' ),
-	'username' => array( 'key' => 'username', 'value' => $lang_module['search_account'], 'selected' => '' ),
-	'full_name' => array( 'key' => 'full_name', 'value' => $lang_module['search_name'], 'selected' => '' ),
-	'email' => array( 'key' => 'email', 'value' => $lang_module['search_mail'], 'selected' => '' ) 
+	'userid' => array(
+		'key' => 'userid',
+		'value' => $lang_module['search_id'],
+		'selected' => ''
+	),
+	'username' => array(
+		'key' => 'username',
+		'value' => $lang_module['search_account'],
+		'selected' => ''
+	),
+	'full_name' => array(
+		'key' => 'full_name',
+		'value' => $lang_module['search_name'],
+		'selected' => ''
+	),
+	'email' => array(
+		'key' => 'email',
+		'value' => $lang_module['search_mail'],
+		'selected' => ''
+	)
 );
 
-$method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ($nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '');
-$methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ($nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '');
+$method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
+$methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ( $nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '' );
 
-$orders = array(
-	'userid',
-	'username',
-	'full_name',
-	'email',
-	'regdate'
-);
+$orders = array( 'userid', 'username', 'full_name', 'email', 'regdate' );
 $orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', 'DESC' );
 if( $ordertype != "ASC" ) $ordertype = "DESC";
-$method = ( ! empty( $method ) and isset( $methods[$method] )) ? $method : '';
+$method = ( ! empty( $method ) and isset( $methods[$method] ) ) ? $method : '';
 
 if( ! empty( $methodvalue ) )
 {
@@ -80,9 +90,9 @@ list( $all_page ) = $db->sql_fetchrow( $result );
 
 $users_list = array();
 $admin_in = array();
-$is_edit = (in_array( 'edit', $allow_func )) ? true : false;
-$is_delete = (in_array( 'del', $allow_func )) ? true : false;
-$is_setactive = (in_array( 'setactive', $allow_func )) ? true : false;
+$is_edit = ( in_array( 'edit', $allow_func ) ) ? true : false;
+$is_delete = ( in_array( 'del', $allow_func ) ) ? true : false;
+$is_setactive = ( in_array( 'setactive', $allow_func ) ) ? true : false;
 while( $row = $db->sql_fetchrow( $query2 ) )
 {
 	$users_list[$row['userid']] = array( //
@@ -92,7 +102,7 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 		'email' => ( string )$row['email'], //
 		'regdate' => date( "d/m/Y H:i", $row['regdate'] ), //
 		'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "", //
-		'disabled' => ($is_setactive) ? " onclick=\"nv_chang_status(" . $row['userid'] . ");\"" : " disabled=\"disabled\"", //
+		'disabled' => ( $is_setactive ) ? " onclick=\"nv_chang_status(" . $row['userid'] . ");\"" : " disabled=\"disabled\"", //
 		'is_edit' => $is_edit, //
 		'is_delete' => $is_delete, //
 		'level' => $lang_module['level0'], //
@@ -108,8 +118,8 @@ if( $admin_in )
 	$query = $db->sql_query( $sql );
 	while( $row = $db->sql_fetchrow( $query ) )
 	{
-		$is_my = ($admin_info['admin_id'] == $row['admin_id']) ? true : false;
-		$superadmin = ($row['lev'] == 1 or $row['lev'] == 2) ? true : false;
+		$is_my = ( $admin_info['admin_id'] == $row['admin_id'] ) ? true : false;
+		$superadmin = ( $row['lev'] == 1 or $row['lev'] == 2 ) ? true : false;
 
 		$users_list[$row['admin_id']]['is_delete'] = false;
 		if( $row['lev'] == 1 )
@@ -135,7 +145,7 @@ if( $admin_in )
 			{
 				$users_list[$row['admin_id']]['is_edit'] = true;
 			}
-			elseif( defined( 'NV_IS_SPADMIN' ) and ($is_my or ! $superadmin) )
+			elseif( defined( 'NV_IS_SPADMIN' ) and ( $is_my or ! $superadmin ) )
 			{
 				$users_list[$row['admin_id']]['is_edit'] = true;
 			}
@@ -148,7 +158,7 @@ if( $admin_in )
 				$users_list[$row['admin_id']]['is_edit'] = false;
 			}
 		}
-		if( ! ($users_list[$row['admin_id']]['is_edit'] AND ! $is_my) )
+		if( ! ( $users_list[$row['admin_id']]['is_edit'] and ! $is_my ) )
 		{
 			$users_list[$row['admin_id']]['disabled'] = " disabled=\"disabled\"";
 		}
@@ -204,7 +214,7 @@ for( $i = 1; $i >= 0; $i-- )
 {
 	$m = array(
 		'key' => $i,
-		'selected' => ($i == $usactive) ? 'selected="seelected"' : '',
+		'selected' => ( $i == $usactive ) ? 'selected="seelected"' : '',
 		'value' => $lang_module['usactive_' . $i]
 	);
 	$xtpl->assign( 'USACTIVE', $m );

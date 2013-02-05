@@ -12,11 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['file_addfile'];
 
 $groups_list = nv_groups_list();
-$array_who = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2']
-);
+$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 if( ! empty( $groups_list ) )
 {
 	$array_who[] = $lang_global['who_view3'];
@@ -69,7 +65,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			if( ! empty( $file ) )
 			{
 				$file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
-				if( file_exists( NV_ROOTDIR . '/' . $file2 ) and ($filesize = filesize( NV_ROOTDIR . '/' . $file2 )) != 0 )
+				if( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
 				{
 					$array['fileupload'][] = substr( $file, strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
 					$array['filesize'] += $filesize;
@@ -161,7 +157,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$is_error = true;
 		$error = $lang_module['file_title_exists'];
 	}
-	elseif( ! empty( $array['author_email'] ) and ($check_valid_email = nv_check_valid_email( $array['author_email'] )) != "" )
+	elseif( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
 	{
 		$is_error = true;
 		$error = $check_valid_email;
@@ -180,8 +176,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['introtext'] = ! empty( $array['introtext'] ) ? nv_nl2br( $array['introtext'], "<br />" ) : "";
 		$array['description'] = ! empty( $array['description'] ) ? nv_editor_nl2br( $array['description'] ) : $array['introtext'];
-		$array['fileupload'] = ( ! empty( $array['fileupload'] )) ? implode( "[NV]", $array['fileupload'] ) : "";
-		if( ( ! empty( $array['linkdirect'] )) )
+		$array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? implode( "[NV]", $array['fileupload'] ) : "";
+		if( ( ! empty( $array['linkdirect'] ) ) )
 		{
 			$array['linkdirect'] = array_map( "nv_nl2br", $array['linkdirect'] );
 			$array['linkdirect'] = implode( "[NV]", $array['linkdirect'] );
@@ -204,9 +200,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$array['who_download'] = 0;
 		}
 
-		$array['groups_comment'] = ( ! empty( $array['groups_comment'] )) ? implode( ',', $array['groups_comment'] ) : '';
-		$array['groups_view'] = ( ! empty( $array['groups_view'] )) ? implode( ',', $array['groups_view'] ) : '';
-		$array['groups_download'] = ( ! empty( $array['groups_download'] )) ? implode( ',', $array['groups_download'] ) : '';
+		$array['groups_comment'] = ( ! empty( $array['groups_comment'] ) ) ? implode( ',', $array['groups_comment'] ) : '';
+		$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
+		$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
 
 		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
                 NULL, 
@@ -250,7 +246,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 			exit();
 		}
-		$array['fileupload'] = ( ! empty( $array['fileupload'] )) ? explode( "[NV]", $array['fileupload'] ) : array();
+		$array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? explode( "[NV]", $array['fileupload'] ) : array();
 	}
 }
 else

@@ -11,11 +11,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 $submenu['content'] = $lang_module['voting_add'];
 
-$allow_func = array(
-	'main',
-	'content',
-	'del'
-);
+$allow_func = array( 'main', 'content', 'del' );
 
 define( 'NV_IS_FILE_ADMIN', true );
 

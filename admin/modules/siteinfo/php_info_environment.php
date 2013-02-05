@@ -17,10 +17,7 @@ $xtpl = new XTemplate( "environment_php.tpl", NV_ROOTDIR . "/themes/" . $global_
 
 $array = phpinfo_array( 16, 1 );
 $caption = $lang_module['environment_php'];
-$thead = array(
-	$lang_module['variable'],
-	$lang_module['value']
-);
+$thead = array( $lang_module['variable'], $lang_module['value'] );
 
 if( ! empty( $array['Environment'] ) )
 {
@@ -31,7 +28,7 @@ if( ! empty( $array['Environment'] ) )
 	$a = 0;
 	foreach( $array['Environment'] as $key => $value )
 	{
-		$xtpl->assign( 'CLASS', ($a % 2) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $key );
 		$xtpl->assign( 'VALUE', $value );
 		$xtpl->parse( 'main.loop' );

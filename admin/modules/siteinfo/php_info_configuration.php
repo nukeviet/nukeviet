@@ -17,11 +17,7 @@ $xtpl = new XTemplate( "configuration_php.tpl", NV_ROOTDIR . "/themes/" . $globa
 
 $array = phpinfo_array( 4, 1 );
 $caption = $lang_module['configuration_php'];
-$thead = array(
-	$lang_module['directive'],
-	$lang_module['local_value'],
-	$lang_module['master_value']
-);
+$thead = array( $lang_module['directive'], $lang_module['local_value'], $lang_module['master_value'] );
 
 if( ! empty( $array['PHP Core'] ) )
 {
@@ -33,8 +29,8 @@ if( ! empty( $array['PHP Core'] ) )
 	$a = 0;
 	foreach( $array['PHP Core'] as $key => $value )
 	{
-		$class = ($a % 2) ? " class=\"second\"" : "";
-		$xtpl->assign( 'CLASS', ($a % 2) ? " class=\"second\"" : "" );
+		$class = ( $a % 2 ) ? " class=\"second\"" : "";
+		$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $key );
 
 		if( ! is_array( $value ) )

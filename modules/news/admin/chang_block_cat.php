@@ -43,7 +43,7 @@ if( $mod == "weight" and $new_vid > 0 )
 }
 elseif( $mod == "adddefault" and $bid > 0 )
 {
-	$new_vid = (intval( $new_vid ) == 1) ? 1 : 0;
+	$new_vid = ( intval( $new_vid ) == 1 ) ? 1 : 0;
 	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `adddefault`=" . $new_vid . " WHERE `bid`=" . intval( $bid );
 	$db->sql_query( $sql );
 	$content = "OK_" . $bid;

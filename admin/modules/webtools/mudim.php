@@ -42,19 +42,16 @@ $mudim_method = array(
 	'4' => 'COMBINED',
 	'5' => 'AUTO'
 );
-$mudim_displaymode = array(
-	'0' => 'Hiển thị đầy đủ',
-	'1' => 'Hiển thị tối giản'
-);
+$mudim_displaymode = array( '0' => 'Hiển thị đầy đủ', '1' => 'Hiển thị tối giản' );
 
 $xtpl = new XTemplate( "mudim.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'MUDIM_SHOWPANEL', ($global_config['mudim_showpanel']) ? ' checked="checked"' : '' );
+$xtpl->assign( 'MUDIM_SHOWPANEL', ( $global_config['mudim_showpanel'] ) ? ' checked="checked"' : '' );
 
 foreach( $mudim_active_modes as $key => $value )
 {
 	$xtpl->assign( 'MUDIM_ACTIVE_OP', $key );
-	$xtpl->assign( 'MUDIM_ACTIVE_SELECTED', ($key == $global_config['mudim_active']) ? "selected='selected'" : "" );
+	$xtpl->assign( 'MUDIM_ACTIVE_SELECTED', ( $key == $global_config['mudim_active'] ) ? "selected='selected'" : "" );
 	$xtpl->assign( 'MUDIM_ACTIVE_TEXT', $value );
 	$xtpl->parse( 'main.mudim_active' );
 }
@@ -62,7 +59,7 @@ foreach( $mudim_active_modes as $key => $value )
 foreach( $mudim_method as $key => $value )
 {
 	$xtpl->assign( 'MUDIM_METHOD_OP', $key );
-	$xtpl->assign( 'MUDIM_METHOD_SELECTED', ($key == $global_config['mudim_method']) ? "selected='selected'" : "" );
+	$xtpl->assign( 'MUDIM_METHOD_SELECTED', ( $key == $global_config['mudim_method'] ) ? "selected='selected'" : "" );
 	$xtpl->assign( 'MUDIM_METHOD_TEXT', $value );
 	$xtpl->parse( 'main.mudim_method' );
 }
@@ -70,7 +67,7 @@ foreach( $mudim_method as $key => $value )
 foreach( $mudim_displaymode as $key => $value )
 {
 	$xtpl->assign( 'MUDIM_DISPLAYMODE_OP', $key );
-	$xtpl->assign( 'MUDIM_DISPLAYMODE_SELECTED', ($key == $global_config['mudim_displaymode']) ? "selected='selected'" : "" );
+	$xtpl->assign( 'MUDIM_DISPLAYMODE_SELECTED', ( $key == $global_config['mudim_displaymode'] ) ? "selected='selected'" : "" );
 	$xtpl->assign( 'MUDIM_DISPLAYMODE_TEXT', $value );
 	$xtpl->parse( 'main.mudim_displaymode' );
 }

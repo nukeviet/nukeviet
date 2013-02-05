@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
-if( ! (defined( "NV_IS_GODADMIN" ) or (defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1)) )
+if( ! ( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();
@@ -64,7 +64,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	if( empty( $position ) ) die( $lang_module['position_incorrect'] );
 	if( empty( $active ) ) die( sprintf( $lang_module['username_noactive'], $username ) );
 
-	$lev = ($lev != 2 or ! defined( "NV_IS_GODADMIN" )) ? 3 : 2;
+	$lev = ( $lev != 2 or ! defined( "NV_IS_GODADMIN" ) ) ? 3 : 2;
 	$mds = array();
 	if( $lev == 3 and ! empty( $modules ) )
 	{
@@ -75,7 +75,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 		{
 			if( ! empty( $mod ) and in_array( $mod, $modules ) )
 			{
-				$site_mods_admins = (( ! empty( $site_mods[$mod]['admins'] )) ? $site_mods[$mod]['admins'] . "," : "") . $userid;
+				$site_mods_admins = ( ( ! empty( $site_mods[$mod]['admins'] ) ) ? $site_mods[$mod]['admins'] . "," : "" ) . $userid;
 				$site_mods_admins = explode( ",", $site_mods_admins );
 				$site_mods_admins = array_unique( $site_mods_admins );
 				$site_mods_admins = implode( ",", $site_mods_admins );
@@ -94,7 +94,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	}
 
 	$allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
-	$files_level = ( ! empty( $allow_files_type ) ? implode( ",", $allow_files_type ) : "") . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
+	$files_level = ( ! empty( $allow_files_type ) ? implode( ",", $allow_files_type ) : "" ) . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
 
 	$sql = "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "` (`admin_id`, `editor`, `lev`, `files_level`, `position`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) VALUES (
         " . $userid . ", 
@@ -116,7 +116,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 			'allow_create_subdirectories' => $allow_create_subdirectories,
 			'allow_modify_subdirectories' => $allow_modify_subdirectories,
 			'position' => $position,
-			'modules' => ( ! empty( $mds )) ? implode( ", ", $mds ) : ""
+			'modules' => ( ! empty( $mds ) ) ? implode( ", ", $mds ) : ""
 		);
 
 		$session_files = serialize( $result );
@@ -137,10 +137,7 @@ else
 	$editor = "ckeditor";
 	$lev = 3;
 	$modules = array();
-	$allow_files_type = array(
-		'images',
-		'archives'
-	);
+	$allow_files_type = array( 'images', 'archives' );
 	$allow_modify_files = $allow_create_subdirectories = $allow_modify_subdirectories = 0;
 }
 
@@ -157,12 +154,7 @@ foreach( $array_keys as $mod )
 $contents = array();
 
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add";
-$contents['lev'] = array(
-	$lang_module['lev'],
-	$lev,
-	$lang_module['level2'],
-	$lang_module['level3']
-);
+$contents['lev'] = array( $lang_module['lev'], $lev, $lang_module['level2'], $lang_module['level3'] );
 
 $editors = array();
 
@@ -177,45 +169,20 @@ if( ! empty( $dirs ) )
 
 if( ! empty( $editors ) )
 {
-	$contents['editor'] = array(
-		$lang_module['editor'],
-		$editors,
-		$editor,
-		$lang_module['not_use']
-	);
+	$contents['editor'] = array( $lang_module['editor'], $editors, $editor, $lang_module['not_use'] );
 }
 
 if( ! empty( $global_config['file_allowed_ext'] ) )
 {
-	$contents['allow_files_type'] = array(
-		$lang_module['allow_files_type'],
-		$global_config['file_allowed_ext'],
-		$allow_files_type
-	);
+	$contents['allow_files_type'] = array( $lang_module['allow_files_type'], $global_config['file_allowed_ext'], $allow_files_type );
 }
 
-$contents['allow_modify_files'] = array(
-	$lang_module['allow_modify_files'],
-	$allow_modify_files
-);
-$contents['allow_create_subdirectories'] = array(
-	$lang_module['allow_create_subdirectories'],
-	$allow_create_subdirectories
-);
-$contents['allow_modify_subdirectories'] = array(
-	$lang_module['allow_modify_subdirectories'],
-	$allow_modify_subdirectories
-);
+$contents['allow_modify_files'] = array( $lang_module['allow_modify_files'], $allow_modify_files );
+$contents['allow_create_subdirectories'] = array( $lang_module['allow_create_subdirectories'], $allow_create_subdirectories );
+$contents['allow_modify_subdirectories'] = array( $lang_module['allow_modify_subdirectories'], $allow_modify_subdirectories );
 
-$contents['mods'] = array(
-	$lang_module['if_level3_selected'],
-	$mods
-);
-$contents['position'] = array(
-	$lang_module['position'],
-	$position,
-	$lang_module['position_info']
-);
+$contents['mods'] = array( $lang_module['if_level3_selected'], $mods );
+$contents['position'] = array( $lang_module['position'], $position, $lang_module['position_info'] );
 $contents['info'] = $lang_module['nv_admin_add_info'];
 $contents['submit'] = $lang_module['nv_admin_add'];
 
@@ -283,7 +250,7 @@ if( defined( "NV_IS_GODADMIN" ) )
 foreach( $contents['mods'][1] as $mod => $value )
 {
 	$xtpl->assign( 'MOD_VALUE', $mod );
-	$xtpl->assign( 'LEV_CHECKED', ( ! empty( $value['checked'] )) ? "checked=\"checked\"" : "" );
+	$xtpl->assign( 'LEV_CHECKED', ( ! empty( $value['checked'] ) ) ? "checked=\"checked\"" : "" );
 	$xtpl->assign( 'CUSTOM_TITLE', $value['custom_title'] );
 	$xtpl->parse( 'add.lev_loop' );
 }

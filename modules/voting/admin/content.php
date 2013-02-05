@@ -32,7 +32,7 @@ if( ! empty( $submit ) )
 
 	$answervotenews = $nv_Request->get_array( 'answervotenews', 'post' );
 	$urlvotenews = $nv_Request->get_array( 'urlvotenews', 'post' );
-	if( $maxoption > ($sizeof = sizeof( $answervotenews ) + sizeof( $array_answervote )) || $maxoption <= 0 ) $maxoption = $sizeof;
+	if( $maxoption > ( $sizeof = sizeof( $answervotenews ) + sizeof( $array_answervote ) ) || $maxoption <= 0 ) $maxoption = $sizeof;
 
 	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m ) )
 	{
@@ -130,7 +130,7 @@ if( ! empty( $submit ) )
 				$maxoption = $maxoption_data;
 			}
 
-			if( $begindate > NV_CURRENTTIME or ($enddate > 0 and $enddate < NV_CURRENTTIME) )
+			if( $begindate > NV_CURRENTTIME or ( $enddate > 0 and $enddate < NV_CURRENTTIME ) )
 			{
 				$act = 0;
 			}
@@ -177,7 +177,7 @@ else
 		$sql = "SELECT `id`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`='" . $vid . "' ORDER BY `id` ASC";
 		$result = $db->sql_query( $sql );
 		$maxoption = $db->sql_numrows( $result );
-		$maxoption = ($maxoption > 0) ? $maxoption : 1;
+		$maxoption = ( $maxoption > 0 ) ? $maxoption : 1;
 
 		while( list( $id, $title, $url ) = $db->sql_fetchrow( $result ) )
 		{
@@ -226,17 +226,8 @@ if( $error != "" )
 	$xtpl->parse( 'main.error' );
 }
 
-$array_who_view = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2'],
-	$lang_global['who_view3']
-);
-$array_allowed_comm = array(
-	$lang_global['no'],
-	$lang_global['who_view0'],
-	$lang_global['who_view1']
-);
+$array_who_view = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] );
+$array_allowed_comm = array( $lang_global['no'], $lang_global['who_view0'], $lang_global['who_view1'] );
 
 $groups_list = nv_groups_list();
 $tdate = date( "d|m|Y|H|i" );
@@ -246,7 +237,11 @@ $emonth = $eday = $eyear = $emin = $ehour = 0;
 $who_view = $rowvote['who_view'];
 foreach( $array_who_view as $k => $w )
 {
-	$xtpl->assign( 'WHO_VIEW', array( "key" => $k, "title" => $w, "selected" => $who_view == $k ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'WHO_VIEW', array(
+		"key" => $k,
+		"title" => $w,
+		"selected" => $who_view == $k ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.who_view' );
 }
 
@@ -327,18 +322,18 @@ foreach( $array_answervote as $id => $title )
 	++$j;
 
 	$xtpl->assign( 'ITEM', array(
-		"class" => ($j % 2 == 0) ? " class=\"second\"" : "",
+		"class" => ( $j % 2 == 0 ) ? " class=\"second\"" : "",
 		"stt" => ++$items,
 		"id" => $id,
 		"title" => $title,
-		"link" => nv_htmlspecialchars( $array_urlvote[$id] ),
+		"link" => nv_htmlspecialchars( $array_urlvote[$id] )
 	) );
 
 	$xtpl->parse( 'main.item' );
 }
 
 ++$j;
-$class = ($j % 2 == 0) ? " class=\"second additem\"" : " class=\"additem\"";
+$class = ( $j % 2 == 0 ) ? " class=\"second additem\"" : " class=\"additem\"";
 $xtpl->assign( 'NEW_CLASS', $class );
 $xtpl->assign( 'NEW_ITEM', ++$items );
 $xtpl->assign( 'NEW_ITEM_NUM', $items );

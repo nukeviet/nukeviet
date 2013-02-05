@@ -34,7 +34,7 @@ if( $db->sql_numrows( $result ) )
 			"question" => $row['question'],
 			"totalvote" => $totalvote[0],
 			"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;vid=" . $row['vid'],
-			"checksess" => md5( $row['vid'] . session_id() ),
+			"checksess" => md5( $row['vid'] . session_id() )
 		) );
 
 		$xtpl->parse( 'main.loop' );

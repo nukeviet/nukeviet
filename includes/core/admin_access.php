@@ -14,7 +14,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-function nv_admin_checkip( )
+function nv_admin_checkip()
 {
 	global $global_config, $client_info;
 
@@ -29,7 +29,7 @@ function nv_admin_checkip( )
 
 			foreach( $array_adminip as $ip_i => $array_ip )
 			{
-				if( $array_ip['begintime'] < NV_CURRENTTIME and ($array_ip['endtime'] == 0 or $array_ip['endtime'] > NV_CURRENTTIME) )
+				if( $array_ip['begintime'] < NV_CURRENTTIME and ( $array_ip['endtime'] == 0 or $array_ip['endtime'] > NV_CURRENTTIME ) )
 				{
 					if( preg_replace( $array_ip['mask'], "", $client_info['ip'] ) == preg_replace( $array_ip['mask'], "", $ip_i ) )
 					{
@@ -50,7 +50,7 @@ function nv_admin_checkip( )
  *
  * @return
  */
-function nv_set_authorization( )
+function nv_set_authorization()
 {
 	$auth_user = $auth_pw = "";
 	if( nv_getenv( 'PHP_AUTH_USER' ) )
@@ -96,10 +96,7 @@ function nv_set_authorization( )
 		}
 		unset( $usr_pass );
 	}
-	return array(
-		'auth_user' => $auth_user,
-		'auth_pw' => $auth_pw
-	);
+	return array( 'auth_user' => $auth_user, 'auth_pw' => $auth_pw );
 }
 
 /**
@@ -107,7 +104,7 @@ function nv_set_authorization( )
  *
  * @return
  */
-function nv_admin_checkfirewall( )
+function nv_admin_checkfirewall()
 {
 	global $global_config;
 
@@ -128,7 +125,7 @@ function nv_admin_checkfirewall( )
 			if( isset( $adv_admins[$md5_auth_user] ) )
 			{
 				$array_us = $adv_admins[$md5_auth_user];
-				if( $array_us['password'] == md5( $auth['auth_pw'] ) and $array_us['begintime'] < NV_CURRENTTIME and ($array_us['endtime'] == 0 or $array_us['endtime'] > NV_CURRENTTIME) ) return true;
+				if( $array_us['password'] == md5( $auth['auth_pw'] ) and $array_us['begintime'] < NV_CURRENTTIME and ( $array_us['endtime'] == 0 or $array_us['endtime'] > NV_CURRENTTIME ) ) return true;
 			}
 
 			return false;
@@ -148,7 +145,7 @@ function nv_admin_checkdata( $adm_session_value )
 {
 	global $db, $global_config;
 
-	$strlen = (NV_CRYPT_SHA1 == 1) ? 40 : 32;
+	$strlen = ( NV_CRYPT_SHA1 == 1 ) ? 40 : 32;
 	$array_admin = unserialize( $adm_session_value );
 
 	if( ! isset( $array_admin['admin_id'] ) or ! is_numeric( $array_admin['admin_id'] ) or $array_admin['admin_id'] <= 0 or ! isset( $array_admin['checknum'] ) or ! preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $array_admin['checknum'] ) ) return array();
@@ -171,11 +168,11 @@ function nv_admin_checkdata( $adm_session_value )
 	$admin_info = $db->sql_fetch_assoc( $result );
 	$db->sql_freeresult( $result );
 
-	if( strcasecmp( $array_admin['checknum'], $admin_info['check_num'] ) != 0 or //check_num
-		! isset( $array_admin['current_agent'] ) or empty( $array_admin['current_agent'] ) or strcasecmp( $array_admin['current_agent'], $admin_info['current_agent'] ) != 0 or //user_agent
-		! isset( $array_admin['current_ip'] ) or empty( $array_admin['current_ip'] ) or strcasecmp( $array_admin['current_ip'], $admin_info['current_ip'] ) != 0 or //IP
-		! isset( $array_admin['current_login'] ) or empty( $array_admin['current_login'] ) or strcasecmp( $array_admin['current_login'], intval( $admin_info['current_login'] ) ) != 0 )//current_login
-		return array();
+	if( strcasecmp( $array_admin['checknum'], $admin_info['check_num'] ) != 0 or 	//check_num
+! isset( $array_admin['current_agent'] ) or empty( $array_admin['current_agent'] ) or strcasecmp( $array_admin['current_agent'], $admin_info['current_agent'] ) != 0 or 	//user_agent
+! isset( $array_admin['current_ip'] ) or empty( $array_admin['current_ip'] ) or strcasecmp( $array_admin['current_ip'], $admin_info['current_ip'] ) != 0 or 	//IP
+! isset( $array_admin['current_login'] ) or empty( $array_admin['current_login'] ) or strcasecmp( $array_admin['current_login'], intval( $admin_info['current_login'] ) ) != 0 ) 	//current_login
+return array();
 
 	if( empty( $admin_info['files_level'] ) )
 	{
@@ -211,7 +208,7 @@ function nv_admin_checkdata( $adm_session_value )
 
 	$admin_info['current_openid'] = '';
 	$admin_info['st_login'] = ! empty( $admin_info['password'] ) ? true : false;
-	$admin_info['valid_question'] = ( ! empty( $admin_info['question'] ) and ! empty( $admin_info['answer'] )) ? true : false;
+	$admin_info['valid_question'] = ( ! empty( $admin_info['question'] ) and ! empty( $admin_info['answer'] ) ) ? true : false;
 	$admin_info['current_mode'] = 3;
 
 	unset( $admin_info['lev'], $admin_info['files_level'], $admin_info['password'], $admin_info['question'], $admin_info['answer'], $admin_info['check_num'] );

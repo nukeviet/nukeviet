@@ -14,7 +14,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-function nv_site_mods( )
+function nv_site_mods()
 {
 	global $db, $admin_info;
 	$site_mods = array();
@@ -61,7 +61,7 @@ function nv_site_mods( )
  *
  * @return
  */
-function nv_groups_list( )
+function nv_groups_list()
 {
 	global $db;
 	$query = "SELECT `group_id`, `title` FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
@@ -86,7 +86,7 @@ function nv_var_export( $var_array )
 	return $ct;
 }
 
-function nv_save_file_config_global( )
+function nv_save_file_config_global()
 {
 	global $db, $sys_info, $global_config;
 
@@ -95,7 +95,7 @@ function nv_save_file_config_global( )
 	$content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
 
 	//disable_classes
-	$sys_info['disable_classes'] = (($disable_classes = ini_get( "disable_classes" )) != "" and $disable_classes != false) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
+	$sys_info['disable_classes'] = ( ( $disable_classes = ini_get( "disable_classes" ) ) != "" and $disable_classes != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
 	if( ! empty( $sys_info['disable_classes'] ) )
 	{
 		$disable_classes = "'" . implode( "','", $sys_info['disable_classes'] ) . "'";
@@ -107,7 +107,7 @@ function nv_save_file_config_global( )
 	$content_config .= "\$sys_info['disable_classes']=array(" . $disable_classes . ");\n";
 
 	//disable_functions
-	$sys_info['disable_functions'] = (($disable_functions = ini_get( "disable_functions" )) != "" and $disable_functions != false) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
+	$sys_info['disable_functions'] = ( ( $disable_functions = ini_get( "disable_functions" ) ) != "" and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
 
 	if( extension_loaded( 'suhosin' ) )
 	{
@@ -124,8 +124,8 @@ function nv_save_file_config_global( )
 	$content_config .= "\$sys_info['disable_functions']=array(" . $disable_functions . ");\n";
 
 	//ini_set_support
-	$sys_info['ini_set_support'] = (function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] )) ? true : false;
-	$ini_set_support = ($sys_info['ini_set_support']) ? 'true' : 'false';
+	$sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] ) ) ? true : false;
+	$ini_set_support = ( $sys_info['ini_set_support'] ) ? 'true' : 'false';
 	$content_config .= "\$sys_info['ini_set_support']= " . $ini_set_support . ";\n";
 	//Kiem tra ho tro rewrite
 	if( function_exists( 'apache_get_modules' ) )
@@ -142,7 +142,7 @@ function nv_save_file_config_global( )
 	}
 	elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.' ) !== false )
 	{
-		if( isset( $_SERVER['IIS_UrlRewriteModule'] ) AND class_exists( 'DOMDocument' ) )
+		if( isset( $_SERVER['IIS_UrlRewriteModule'] ) and class_exists( 'DOMDocument' ) )
 		{
 			$sys_info['supports_rewrite'] = "rewrite_mode_iis";
 		}
@@ -151,7 +151,7 @@ function nv_save_file_config_global( )
 			$sys_info['supports_rewrite'] = false;
 		}
 	}
-	if( $sys_info['supports_rewrite'] == 'rewrite_mode_iis' OR $sys_info['supports_rewrite'] == 'rewrite_mode_apache' )
+	if( $sys_info['supports_rewrite'] == 'rewrite_mode_iis' or $sys_info['supports_rewrite'] == 'rewrite_mode_apache' )
 	{
 		$content_config .= "\$sys_info['supports_rewrite']='" . $sys_info['supports_rewrite'] . "';\n";
 	}
@@ -182,7 +182,7 @@ function nv_save_file_config_global( )
 			$config_variable[$c_config_name] = $c_config_value;
 		}
 	}
-	$nv_eol = strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? '"\r\n"' : (strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? '"\r"' : '"\n"');
+	$nv_eol = strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? '"\r\n"' : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? '"\r"' : '"\n"' );
 	$upload_max_filesize = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $config_variable['nv_max_size'] );
 
 	$content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
@@ -210,15 +210,7 @@ function nv_save_file_config_global( )
 	$config_variable['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 	$config_variable['error_log_fileext'] = NV_LOGS_EXT;
 
-	$config_name_array = array(
-		'file_allowed_ext',
-		'forbid_extensions',
-		'forbid_mimes',
-		'allow_sitelangs',
-		'allow_adminlangs',
-		'openid_servers',
-		'allow_request_mods'
-	);
+	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_adminlangs', 'openid_servers', 'allow_request_mods' );
 
 	if( empty( $config_variable['openid_servers'] ) )
 	{
@@ -261,7 +253,7 @@ function nv_save_file_config_global( )
 			else
 			{
 				$c_config_value = nv_unhtmlspecialchars( $c_config_value );
-				if( ! preg_match( "/^[a-z0-9\-\_\.\,\;\:\@\/\\s]+$/i", $c_config_value ) AND $c_config_name != 'my_domains' )
+				if( ! preg_match( "/^[a-z0-9\-\_\.\,\;\:\@\/\\s]+$/i", $c_config_value ) and $c_config_name != 'my_domains' )
 				{
 					$c_config_value = nv_htmlspecialchars( $c_config_value );
 				}
@@ -283,7 +275,7 @@ function nv_save_file_config_global( )
 	$content_config .= "\$global_config['allowed_html_tags']=array(" . $allowed_html_tags . ");\n";
 
 	//Xac dinh cac search_engine
-	$engine_allowed = ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' )) ? nv_object2array( simplexml_load_file( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) ) : array();
+	$engine_allowed = ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) ) ? nv_object2array( simplexml_load_file( NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml' ) ) : array();
 	$content_config .= "\$global_config['engine_allowed']=" . nv_var_export( $engine_allowed ) . ";\n";
 	$content_config .= "\n";
 
@@ -466,7 +458,7 @@ function nv_version_compare( $version1, $version2 )
  *
  * @return
  */
-function nv_check_rewrite_file( )
+function nv_check_rewrite_file()
 {
 	global $sys_info;
 
@@ -476,7 +468,7 @@ function nv_check_rewrite_file( )
 
 		$htaccess = @file_get_contents( NV_ROOTDIR . '/.htaccess' );
 
-		return ( preg_match( "/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s", $htaccess ));
+		return ( preg_match( "/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s", $htaccess ) );
 	}
 
 	if( $sys_info['supports_rewrite'] == 'rewrite_mode_iis' )
@@ -485,7 +477,7 @@ function nv_check_rewrite_file( )
 
 		$web_config = @file_get_contents( NV_ROOTDIR . '/web.config' );
 
-		return ( preg_match( "/<rule name=\"nv_rule_rewrite\">(.*)<\/rule>/s", $web_config ));
+		return ( preg_match( "/<rule name=\"nv_rule_rewrite\">(.*)<\/rule>/s", $web_config ) );
 	}
 
 	return false;
@@ -502,7 +494,7 @@ function nv_rewrite_change( $array_config_global )
 	global $sys_info, $lang_module;
 	$rewrite_rule = $filename = '';
 
-	$endurl = ($array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl']) ? nv_preg_quote( $array_config_global['rewrite_endurl'] ) : nv_preg_quote( $array_config_global['rewrite_endurl'] ) . "|" . nv_preg_quote( $array_config_global['rewrite_exturl'] );
+	$endurl = ( $array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl'] ) ? nv_preg_quote( $array_config_global['rewrite_endurl'] ) : nv_preg_quote( $array_config_global['rewrite_endurl'] ) . "|" . nv_preg_quote( $array_config_global['rewrite_exturl'] );
 
 	if( $sys_info['supports_rewrite'] == "rewrite_mode_iis" )
 	{
@@ -596,15 +588,12 @@ function nv_rewrite_change( $array_config_global )
 				$return = false;
 			}
 		}
-		catch ( exception $e )
+		catch( exception $e )
 		{
 			$return = false;
 		}
 	}
-	return array(
-		$return,
-		NV_BASE_SITEURL . basename( $filename )
-	);
+	return array( $return, NV_BASE_SITEURL . basename( $filename ) );
 }
 
 /**
@@ -613,7 +602,6 @@ function nv_rewrite_change( $array_config_global )
  * @param mixed $rewrite_rule
  * @return
  */
-
 function nv_rewrite_rule_iis7( $rewrite_rule = "" )
 {
 	$filename = NV_ROOTDIR . "/web.config";

@@ -127,14 +127,18 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			$xtpl->assign( 'ROW', array(
-				"class" => ($a % 2) ? " class=\"second\"" : "",
+				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 				"qid" => $row['qid'],
-				"title" => $row['title'],
+				"title" => $row['title']
 			) );
 
 			for( $i = 1; $i <= $num; ++$i )
 			{
-				$xtpl->assign( 'WEIGHT', array( "key" => $i, "title" => $i, "selected" => $i == $row['weight'] ? " selected=\"selected\"" : "" ) );
+				$xtpl->assign( 'WEIGHT', array(
+					"key" => $i,
+					"title" => $i,
+					"selected" => $i == $row['weight'] ? " selected=\"selected\"" : ""
+				) );
 				$xtpl->parse( 'main.data.loop.weight' );
 			}
 
@@ -151,7 +155,7 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo $contents;
 	include ( NV_ROOTDIR . "/includes/footer.php" );
-	exit ;
+	exit();
 }
 
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );

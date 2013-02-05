@@ -29,21 +29,7 @@ $menu_top = array(
 
 define( 'NV_IS_FILE_ADMIN', true );
 
-$allow_func = array(
-	'main',
-	'imglist',
-	'delimg',
-	'createimg',
-	'dlimg',
-	'renameimg',
-	'moveimg',
-	'folderlist',
-	'delfolder',
-	'renamefolder',
-	'createfolder',
-	'upload',
-	'addlogo'
-);
+$allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'upload', 'addlogo' );
 
 if( defined( 'NV_IS_SPADMIN' ) )
 {
@@ -161,7 +147,7 @@ function nv_check_path_upload( $path )
 	if( empty( $path ) ) return "";
 
 	$path = NV_ROOTDIR . "/" . $path;
-	if( ($path =realpath( $path )) === false ) return "";
+	if( ( $path = realpath( $path ) ) === false ) return "";
 
 	$path = str_replace( "\\", "/", $path );
 	$path = str_replace( NV_ROOTDIR . "/", "", $path );
@@ -198,16 +184,12 @@ function nv_get_viewImage( $fileName )
 		if( file_exists( NV_ROOTDIR . '/' . $viewFile ) )
 		{
 			$size = @getimagesize( NV_ROOTDIR . '/' . $viewFile );
-			return array(
-				$viewFile,
-				$size[0],
-				$size[1]
-			);
+			return array( $viewFile, $size[0], $size[1] );
 		}
 		else
 		{
 			$m[2] = rtrim( $m[2], '/' );
-			$thumb_config = (isset( $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] )) ? $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] : $array_thumb_config[''];
+			$thumb_config = ( isset( $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] ) ) ? $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] : $array_thumb_config[''];
 			$viewDir = NV_FILES_DIR;
 			if( ! empty( $m[2] ) )
 			{
@@ -262,22 +244,14 @@ function nv_get_viewImage( $fileName )
 			$image->close();
 			if( empty( $error ) )
 			{
-				return array(
-					$viewDir . '/' . basename( $create_Image_info['src'] ),
-					$create_Image_info['width'],
-					$create_Image_info['height']
-				);
+				return array( $viewDir . '/' . basename( $create_Image_info['src'] ), $create_Image_info['width'], $create_Image_info['height'] );
 			}
 		}
 	}
 	else
 	{
 		$size = @getimagesize( NV_ROOTDIR . '/' . $fileName );
-		return array(
-			$viewFile,
-			$size[0],
-			$size[1]
-		);
+		return array( $viewFile, $size[0], $size[1] );
 	}
 	return false;
 }
@@ -302,7 +276,7 @@ function nv_getFileInfo( $pathimg, $file )
 	$info['name'] = $file;
 	if( isset( $file{17} ) )
 	{
-		$info['name'] = substr( $matches[1], 0, (13 - strlen( $matches[2] )) ) . "..." . $matches[2];
+		$info['name'] = substr( $matches[1], 0, ( 13 - strlen( $matches[2] ) ) ) . "..." . $matches[2];
 	}
 
 	$info['ext'] = $matches[2];
@@ -327,7 +301,7 @@ function nv_getFileInfo( $pathimg, $file )
 		$info['size'] = $size[0] . "|" . $size[1];
 		if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\.\/]+)$/i", $pathimg . '/' . $file, $m ) )
 		{
-			if( ($thub_src = nv_get_viewImage( $pathimg . '/' . $file )) !== false )
+			if( ( $thub_src = nv_get_viewImage( $pathimg . '/' . $file ) ) !== false )
 			{
 				$info['src'] = $thub_src[0];
 				$info['srcwidth'] = $thub_src[1];
@@ -395,7 +369,7 @@ function nv_filesListRefresh( $pathimg )
 
 		if( $dh = opendir( NV_ROOTDIR . "/" . $pathimg ) )
 		{
-			while( ($title = readdir( $dh )) !== false )
+			while( ( $title = readdir( $dh ) ) !== false )
 			{
 				if( in_array( $title, $array_hidefolders ) ) continue;
 
@@ -459,9 +433,9 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 {
 	$real_dirlist[] = $dir;
 
-	if( ($dh = @opendir( NV_ROOTDIR . '/' . $dir )) !== false )
+	if( ( $dh = @opendir( NV_ROOTDIR . '/' . $dir ) ) !== false )
 	{
-		while( false !== ($subdir = readdir( $dh )) )
+		while( false !== ( $subdir = readdir( $dh ) ) )
 		{
 			if( preg_match( "/^[a-zA-Z0-9\-\_]+$/", $subdir ) )
 			{
@@ -475,43 +449,13 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 	return $real_dirlist;
 }
 
-$allow_upload_dir = array(
-	'images',
-	NV_UPLOADS_DIR
-);
-$array_hidefolders = array(
-	".",
-	"..",
-	"index.html",
-	".htaccess",
-	".tmp"
-);
+$allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
+$array_hidefolders = array( ".", "..", "index.html", ".htaccess", ".tmp" );
 
-$array_images = array(
-	"gif",
-	"jpg",
-	"jpeg",
-	"pjpeg",
-	"png"
-);
-$array_flash = array(
-	'swf',
-	'swc',
-	'flv'
-);
-$array_archives = array(
-	'rar',
-	'zip',
-	'tar'
-);
-$array_documents = array(
-	'doc',
-	'xls',
-	'chm',
-	'pdf',
-	'docx',
-	'xlsx'
-);
+$array_images = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
+$array_flash = array( 'swf', 'swc', 'flv' );
+$array_archives = array( 'rar', 'zip', 'tar' );
+$array_documents = array( 'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' );
 $array_dirname = array();
 $array_thumb_config = array();
 
@@ -527,7 +471,7 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 	{
 		$array_thumb_config[$row['dirname']] = $row;
 	}
-	if( empty( $row['time'] ) AND $row['dirname'] == $path )
+	if( empty( $row['time'] ) and $row['dirname'] == $path )
 	{
 		$refresh = true;
 	}

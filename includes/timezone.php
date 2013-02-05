@@ -23,7 +23,7 @@ function nv_getTimezoneName_from_cookie( $cookie )
 	return '';
 }
 
-$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] )) ? "nv3" : $global_config['cookie_prefix'];
+$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) ) ? "nv3" : $global_config['cookie_prefix'];
 
 if( isset( $_COOKIE[$global_config['cookie_prefix'] . '_cltn'] ) )
 {
@@ -54,7 +54,7 @@ if( ! defined( 'NV_CLIENT_TIMEZONE_NAME' ) and isset( $_COOKIE[$global_config['c
 	{
 		$sd = floor( $matches2[2] >= 0 ? $matches2[2] / 60 : - $matches2[2] / 60 );
 
-		define( 'NV_CLIENT_TIMEZONE_NAME', ($matches2[2] >= 0 ? "+" : "-") . str_pad( $sd, 2, '0', STR_PAD_LEFT ) . ":00" );
+		define( 'NV_CLIENT_TIMEZONE_NAME', ( $matches2[2] >= 0 ? "+" : "-" ) . str_pad( $sd, 2, '0', STR_PAD_LEFT ) . ":00" );
 		define( 'NV_CLIENT_TIMEZONE_OFFSET', floor( $matches2[3] / 60 ) * 3600 );
 	}
 
@@ -67,7 +67,7 @@ if( ! defined( 'NV_CLIENT_TIMEZONE_NAME' ) and isset( $_COOKIE[$global_config['c
 	unset( $client_timezone_name, $sd );
 }
 
-$site_timezone = ($global_config['site_timezone'] == "byCountry") ? $countries[$client_info['country']][2] : $global_config['site_timezone'];
+$site_timezone = ( $global_config['site_timezone'] == "byCountry" ) ? $countries[$client_info['country']][2] : $global_config['site_timezone'];
 
 if( $site_timezone == '' )
 {
@@ -82,7 +82,7 @@ if( $site_timezone == '' )
 date_default_timezone_set( $site_timezone );
 define( 'NV_SITE_TIMEZONE_GMT_NAME', preg_replace( "/^([\+|\-]{1}\d{2})(\d{2})$/", "$1:$2", date( "O" ) ) );
 
-if( strcasecmp( date_default_timezone_get( ), $site_timezone ) == 0 )
+if( strcasecmp( date_default_timezone_get(), $site_timezone ) == 0 )
 {
 	define( 'NV_SITE_TIMEZONE_NAME', $site_timezone );
 }

@@ -71,10 +71,7 @@ while( list( $modfile_i ) = $db->sql_fetchrow( $result ) )
 
 	if( in_array( $modfile_i, $modules_exit ) )
 	{
-		$xtpl->assign( 'MODFILE', array(
-			'key' => $modfile_i,
-			'selected' => ($modfile_i == $modfile) ? " selected=\"selected\"" : ""
-		) );
+		$xtpl->assign( 'MODFILE', array( 'key' => $modfile_i, 'selected' => ( $modfile_i == $modfile ) ? " selected=\"selected\"" : "" ) );
 		$xtpl->parse( 'main.modfile' );
 	}
 }

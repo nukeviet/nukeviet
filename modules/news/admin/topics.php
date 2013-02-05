@@ -88,7 +88,7 @@ if( ! empty( $savecat ) )
 		$array['thumbnail'] = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/', '', $image_info['src'] );
 	}
 
-	$array['alias'] = ($array['alias'] == "") ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
+	$array['alias'] = ( $array['alias'] == "" ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
 
 	if( empty( $array['title'] ) )
 	{

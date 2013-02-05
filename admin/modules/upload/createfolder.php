@@ -28,7 +28,7 @@ if( ! empty( $n_dir[0] ) )
 	$db->sql_query_insert_id( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`, `thumb_type`, `thumb_width`, `thumb_height`, `thumb_quality`) VALUES (NULL, '" . $newpath . "', '0', '0', '0', '0', '0')" );
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['createfolder'], $newpath, $admin_info['userid'] );
 	echo $newpath;
-	exit ;
+	exit();
 }
 else
 {

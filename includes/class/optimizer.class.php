@@ -33,7 +33,6 @@ class optimezer
 	private $_jsInline = array();
 	private $_jsMatches = array();
 	private $_jsCount = 0;
-
 	private $siteRoot;
 	private $base_siteurl;
 	private $cssDir = "files/css";
@@ -41,9 +40,7 @@ class optimezer
 	private $cssImgNewPath;
 	private $_tidySupport = false;
 	private $opt_css_file = false;
-
 	private $_cssImportCharset = null;
-	
 	private $tidy_options = array( //
 		'doctype' => 'transitional', // Chuan HTML: omit, auto, strict, transitional, user
 		'input-encoding' => 'utf8', // Bang ma nguon
@@ -67,7 +64,7 @@ class optimezer
 		'quote-nbsp' => true, // Thay dau cach bang to hop &nbsp;
 		'show-warnings' => false, // Hien thi thong bao loi
 		'wrap' => 0, // Moi dong khong qua 150 ky tu
-		'alt-text' => true	//Bat buoc phai co alt trong IMG
+		'alt-text' => true //Bat buoc phai co alt trong IMG
 	);
 
 	/**
@@ -79,7 +76,7 @@ class optimezer
 	public function __construct( $content, $opt_css_file )
 	{
 		$this->_content = $content;
-		$this->opt_css_file = ($opt_css_file) ? true : false;
+		$this->opt_css_file = ( $opt_css_file ) ? true : false;
 		$this->siteRoot = preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) );
 		$base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 		if( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
@@ -105,7 +102,7 @@ class optimezer
 		{
 			$this->cssDir = NV_FILES_DIR . '/css';
 		}
-		
+
 		if( class_exists( 'tidy' ) )
 		{
 			$this->_tidySupport = true;
@@ -135,7 +132,7 @@ class optimezer
 		}
 
 		$this->_meta['http-equiv'] = $this->_meta['name'] = array();
-		
+
 		if( $this->opt_css_file )
 		{
 			$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
@@ -265,9 +262,9 @@ class optimezer
 
 		if( $this->_tidySupport )
 		{
-			$tidy = new tidy( );
+			$tidy = new tidy();
 			$tidy->parseString( $this->_content, $this->tidy_options, 'utf8' );
-			$tidy->cleanRepair( );
+			$tidy->cleanRepair();
 			return $tidy;
 		}
 		return $this->_content;
@@ -532,7 +529,7 @@ class optimezer
 		$content = preg_replace( '#<(br|hr|input|img|meta)([^>]+)>#', "<\\1 \\2 />", $content );
 		$content = preg_replace( '#\s*\/\s*\/>#', " />", $content );
 		$content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
-        $content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
+		$content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
 		$content = preg_replace( '/^\s+/m', '', $content );
 
 		return $content;

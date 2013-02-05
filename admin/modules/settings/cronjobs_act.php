@@ -22,7 +22,7 @@ if( ! empty( $id ) )
 	{
 		$row = $db->sql_fetchrow( $result );
 		$act = intval( $row['act'] );
-		$new_act = ( ! empty( $act )) ? 0 : 1;
+		$new_act = ( ! empty( $act ) ) ? 0 : 1;
 		$sql = "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `act`=" . $new_act . " WHERE `id`=" . $id;
 		$db->sql_query( $sql );
 	}

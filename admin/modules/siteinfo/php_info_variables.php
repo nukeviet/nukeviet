@@ -18,10 +18,7 @@ if( ! empty( $array['PHP Variables'] ) )
 	$xtpl = new XTemplate( "variables_php.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 
 	$caption = $lang_module['variables_php'];
-	$thead = array(
-		$lang_module['variable'],
-		$lang_module['value']
-	);
+	$thead = array( $lang_module['variable'], $lang_module['value'] );
 
 	$xtpl->assign( 'CAPTION', $caption );
 	$xtpl->assign( 'THEAD0', $thead[0] );
@@ -42,7 +39,7 @@ if( ! empty( $array['PHP Variables'] ) )
 	{
 		if( substr( $key, 0, 7 ) != "_COOKIE" and ! in_array( $key, $array_key_no_show ) )
 		{
-			$xtpl->assign( 'CLASS', ($a % 2) ? " class=\"second\"" : "" );
+			$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 			$xtpl->assign( 'KEY', $key );
 			$xtpl->assign( 'VALUE', $value );
 			$xtpl->parse( 'main.loop' );

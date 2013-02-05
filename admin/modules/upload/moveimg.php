@@ -62,6 +62,6 @@ if( ! $mirror )
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['move'], $path . '/' . $image . " -> " . $newfolder . '/' . $file, $admin_info['userid'] );
 
 echo $file;
-exit ;
+exit();
 
 ?>

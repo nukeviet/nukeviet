@@ -11,6 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 {
+
 	function nv_block_data_config_banners( $module, $data_block, $lang_block )
 	{
 		global $db, $language_array;
@@ -23,11 +24,11 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 		while( $row_bpn = $db->sql_fetchrow( $result ) )
 		{
 			$value = $row_bpn['title'] . " (";
-			$value .= (( ! empty( $row_bpn['blang'] ) and isset( $language_array[$row_bpn['blang']] )) ? $language_array[$row_bpn['blang']]['name'] : $lang_block['blang_all']) . ", ";
+			$value .= ( ( ! empty( $row_bpn['blang'] ) and isset( $language_array[$row_bpn['blang']] ) ) ? $language_array[$row_bpn['blang']]['name'] : $lang_block['blang_all'] ) . ", ";
 			$value .= $row_bpn['form'] . ", ";
 			$value .= $row_bpn['width'] . "x" . $row_bpn['height'] . "px";
 			$value .= ")";
-			$sel = ($data_block['idplanbanner'] == $row_bpn['id']) ? ' selected' : '';
+			$sel = ( $data_block['idplanbanner'] == $row_bpn['id'] ) ? ' selected' : '';
 
 			$html .= "<option value=\"" . $row_bpn['id'] . "\" " . $sel . ">" . $value . "</option>\n";
 		}
@@ -79,16 +80,16 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 		foreach( $array_banners as $banners )
 		{
 			$banners = ( array )$banners;
-			if( $banners['publ_time'] < NV_CURRENTTIME AND ($banners['exp_time'] == 0 OR $banners['exp_time'] > NV_CURRENTTIME) )
+			if( $banners['publ_time'] < NV_CURRENTTIME and ( $banners['exp_time'] == 0 or $banners['exp_time'] > NV_CURRENTTIME ) )
 			{
 				$banners['file_height'] = round( $banners['file_height'] * $width_banners / $banners['file_width'] );
 				$banners['file_width'] = $width_banners;
-				if( ! empty( $banners['imageforswf'] ) AND ! empty( $client_info['is_mobile'] ) )
+				if( ! empty( $banners['imageforswf'] ) and ! empty( $client_info['is_mobile'] ) )
 				{
 					$banners['file_name'] = $banners['imageforswf'];
 					$banners['file_ext'] = nv_getextension( $banners['file_name'] );
 				}
-				$banners['file_alt'] = ( ! empty( $banners['file_alt'] )) ? $banners['file_alt'] : $banners['title'];
+				$banners['file_alt'] = ( ! empty( $banners['file_alt'] ) ) ? $banners['file_alt'] : $banners['title'];
 				$banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'];
 				$banners['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=banners&amp;" . NV_OP_VARIABLE . "=click&amp;id=" . $banners['id'];
 				$array_banners_content[] = $banners;
@@ -146,7 +147,6 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 			return $xtpl->text( 'main' );
 		}
 	}
-
 }
 
 if( defined( 'NV_SYSTEM' ) )

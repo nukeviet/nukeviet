@@ -1,5 +1,6 @@
 <?php
 
+
 //
 //  Copyright (c) 2011, Maths for More S.L. http://www.wiris.com
 //  This file is part of WIRIS Plugin.
@@ -28,4 +29,5 @@ $accessibleParameters = array('wirisimageservicehost', 'wirisimageserviceport', 
  'wiriscasarchive', 'wiriscasclass', 'wiriscaslanguages', 'CAS_width', 'CAS_height', 'wirisconfigurationclass', 'wirisconfigurationrefreshtime');
 */
 echo json_encode($config);
+
 ?>

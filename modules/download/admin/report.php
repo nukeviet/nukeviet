@@ -137,7 +137,7 @@ if( ! $num )
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
-	exit ;
+	exit();
 }
 
 $listcats = nv_listcats( 0 );

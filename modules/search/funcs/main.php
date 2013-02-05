@@ -41,12 +41,7 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 	if( ! empty( $search['key'] ) )
 	{
 		$search['key'] = nv_unhtmlspecialchars( $search['key'] );
-		if( ! $search['logic'] )
-			$search['key'] = preg_replace( array(
-				"/^([\S]{1})\s/uis",
-				"/\s([\S]{1})\s/uis",
-				"/\s([\S]{1})$/uis"
-			), " ", $search['key'] );
+		if( ! $search['logic'] ) $search['key'] = preg_replace( array( "/^([\S]{1})\s/uis", "/\s([\S]{1})\s/uis", "/\s([\S]{1})$/uis" ), " ", $search['key'] );
 		$search['key'] = strip_punctuation( $search['key'] );
 		$search['key'] = trim( $search['key'] );
 		$search['len_key'] = nv_strlen( $search['key'] );
@@ -99,4 +94,5 @@ $contents = call_user_func( "main_theme", $is_search, $search, $array_modul );
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

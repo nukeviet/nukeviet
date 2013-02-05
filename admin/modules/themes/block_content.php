@@ -160,7 +160,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		$row['groups_view'] = ( string )$who_view;
 	}
 
-	$all_func = ($nv_Request->get_int( 'all_func', 'post' ) == 1 and preg_match( $global_config['check_block_global'], $row['file_name'] )) ? 1 : 0;
+	$all_func = ( $nv_Request->get_int( 'all_func', 'post' ) == 1 and preg_match( $global_config['check_block_global'], $row['file_name'] ) ) ? 1 : 0;
 	$array_funcid = $nv_Request->get_array( 'func_id', 'post' );
 
 	if( empty( $all_func ) and empty( $array_funcid ) )
@@ -415,10 +415,7 @@ $func_result = $db->sql_query( $sql );
 $aray_mod_func = array();
 while( list( $id_i, $func_custom_name_i, $in_module_i ) = $db->sql_fetchrow( $func_result ) )
 {
-	$aray_mod_func[$in_module_i][] = array(
-		"id" => $id_i,
-		"func_custom_name" => $func_custom_name_i
-	);
+	$aray_mod_func[$in_module_i][] = array( "id" => $id_i, "func_custom_name" => $func_custom_name_i );
 }
 
 // Load position file
@@ -428,14 +425,14 @@ $xmlpositions = $xml->xpath( 'positions' );
 $positions = $xmlpositions[0]->position;
 // object
 
-if( $row['bid'] != 0 )// Canh bao tach block khoi nhom
+if( $row['bid'] != 0 ) // Canh bao tach block khoi nhom
 {
 	$xtpl->parse( 'main.block_group_notice' );
 }
 
 $xtpl->assign( 'SELECTTHEMES', $selectthemes );
 $xtpl->assign( 'BLOCKREDIRECT', $blockredirect );
-$xtpl->assign( 'GLOBAL_SELECTED', ($row['module'] == 'global') ? ' selected="selected"' : '' );
+$xtpl->assign( 'GLOBAL_SELECTED', ( $row['module'] == 'global' ) ? ' selected="selected"' : '' );
 
 $sql = "SELECT `title`, `custom_title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
@@ -444,7 +441,7 @@ while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 {
 	$xtpl->assign( 'MODULE', array(
 		'key' => $m_title,
-		'selected' => ($m_title == trim( $row['module'] )) ? " selected=\"selected\"" : "",
+		'selected' => ( $m_title == trim( $row['module'] ) ) ? " selected=\"selected\"" : "",
 		'title' => $m_custom_title
 	) );
 	$xtpl->parse( 'main.module' );
@@ -452,12 +449,12 @@ while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 
 $xtpl->assign( 'ROW', array(
 	'title' => $row['title'],
-	'exp_time' => ($row['exp_time'] > 0) ? date( 'd/m/Y', $row['exp_time'] ) : '',
-	'block_active' => (intval( $row['active'] ) == 1) ? " checked=\"checked\"" : "",
+	'exp_time' => ( $row['exp_time'] > 0 ) ? date( 'd/m/Y', $row['exp_time'] ) : '',
+	'block_active' => ( intval( $row['active'] ) == 1 ) ? " checked=\"checked\"" : "",
 	'link' => $row['link'],
 	'bid' => $row['bid'],
 	'module' => $row['module'],
-	'file_name' => $row['file_name'],
+	'file_name' => $row['file_name']
 ) );
 
 $templ_list = nv_scandir( NV_ROOTDIR . "/themes/" . $selectthemes . "/layout", "/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/" );
@@ -469,7 +466,7 @@ foreach( $templ_list as $value )
 	{
 		$xtpl->assign( 'TEMPLATE', array(
 			'key' => $value,
-			'selected' => ($row['template'] == $value) ? " selected=\"selected\"" : "",
+			'selected' => ( $row['template'] == $value ) ? " selected=\"selected\"" : "",
 			'title' => $value
 		) );
 		$xtpl->parse( 'main.template' );
@@ -480,25 +477,20 @@ for( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
 {
 	$xtpl->assign( 'POSITION', array(
 		'key' => ( string )$positions[$i]->tag,
-		'selected' => ($row['position'] == $positions[$i]->tag) ? " selected=\"selected\"" : "",
+		'selected' => ( $row['position'] == $positions[$i]->tag ) ? " selected=\"selected\"" : "",
 		'title' => ( string )$positions[$i]->name
 	) );
 	$xtpl->parse( 'main.position' );
 }
 
-$array_who_view = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2'],
-	$lang_global['who_view3']
-);
+$array_who_view = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] );
 
 $row['groups_view'] = intval( $row['groups_view'] );
 foreach( $array_who_view as $k => $w )
 {
 	$xtpl->assign( 'WHO_VIEW', array(
 		'key' => $k,
-		'selected' => ($k == $row['groups_view']) ? ' selected="selected"' : '',
+		'selected' => ( $k == $row['groups_view'] ) ? ' selected="selected"' : '',
 		'title' => $w
 	) );
 	$xtpl->parse( 'main.who_view' );
@@ -512,13 +504,13 @@ foreach( $groups_list as $group_id => $grtl )
 {
 	$xtpl->assign( 'GROUPS_LIST', array(
 		'key' => $group_id,
-		'selected' => ( in_array( $group_id, $groups_view )) ? " checked=\"checked\"" : "",
+		'selected' => ( in_array( $group_id, $groups_view ) ) ? " checked=\"checked\"" : "",
 		'title' => $grtl
 	) );
 	$xtpl->parse( 'main.groups_list' );
 }
 
-if( $row['bid'] != 0 )// Tach ra va tao nhom moi
+if( $row['bid'] != 0 ) // Tach ra va tao nhom moi
 {
 	list( $blocks_num ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid`=" . $row['bid'] ) );
 	$xtpl->assign( 'BLOCKS_NUM', $blocks_num );
@@ -526,27 +518,24 @@ if( $row['bid'] != 0 )// Tach ra va tao nhom moi
 	$xtpl->parse( 'main.edit' );
 }
 
-$add_block_module = array(
-	1 => $lang_module['add_block_all_module'],
-	0 => $lang_module['add_block_select_module']
-);
+$add_block_module = array( 1 => $lang_module['add_block_all_module'], 0 => $lang_module['add_block_select_module'] );
 
 $i = 1;
 foreach( $add_block_module as $b_key => $b_value )
 {
-	$showsdisplay = ( ! preg_match( $global_config['check_block_global'], $row['file_name'] ) and $b_key == 1) ? " style=\"display:none\"" : "";
+	$showsdisplay = ( ! preg_match( $global_config['check_block_global'], $row['file_name'] ) and $b_key == 1 ) ? " style=\"display:none\"" : "";
 
 	$xtpl->assign( 'I', $i );
 	$xtpl->assign( 'SHOWSDISPLAY', $showsdisplay );
 	$xtpl->assign( 'B_KEY', $b_key );
 	$xtpl->assign( 'B_VALUE', $b_value );
-	$xtpl->assign( 'CK', ($row['all_func'] == $b_key) ? " checked=\"checked\"" : "" );
+	$xtpl->assign( 'CK', ( $row['all_func'] == $b_key ) ? " checked=\"checked\"" : "" );
 
 	$xtpl->parse( 'main.add_block_module' );
 	++$i;
 }
 
-$xtpl->assign( 'SHOWS_ALL_FUNC', ( intval( $row['all_func'] )) ? " style=\"display:none\" " : "" );
+$xtpl->assign( 'SHOWS_ALL_FUNC', ( intval( $row['all_func'] ) ) ? " style=\"display:none\" " : "" );
 
 $func_list = array();
 
@@ -586,7 +575,7 @@ while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 
 		$xtpl->assign( 'M_TITLE', $m_title );
 		$xtpl->assign( 'M_CUSTOM_TITLE', $m_custom_title );
-		$xtpl->assign( 'M_CHECKED', (sizeof( $aray_mod_func[$m_title] ) == $i) ? " checked=\"checked\"" : "" );
+		$xtpl->assign( 'M_CHECKED', ( sizeof( $aray_mod_func[$m_title] ) == $i ) ? " checked=\"checked\"" : "" );
 
 		$xtpl->parse( 'main.loopfuncs' );
 	}

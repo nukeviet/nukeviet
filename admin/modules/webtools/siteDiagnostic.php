@@ -28,7 +28,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 			$lang_module['diagnosticABL'], //
 			$lang_module['diagnosticBBL'], //
 			$lang_module['diagnosticGID'], //
-			$lang_module['diagnosticBID'], //
+			$lang_module['diagnosticBID'] //
 		);
 		foreach( $thead as $r )
 		{
@@ -46,7 +46,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 			$Diagnostic = new Diagnostic();
 		}
 
-		$info = ($i == "process") ? $Diagnostic->process() : $Diagnostic->process( 300 );
+		$info = ( $i == "process" ) ? $Diagnostic->process() : $Diagnostic->process( 300 );
 
 		$refresh = 0;
 		$imgs = array();
@@ -54,13 +54,13 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 		foreach( $info['item'] as $inf )
 		{
 			$refresh = strtotime( $inf['date'] );
-			$class_PageRank = (isset( $imgs['PageRank'] ) and $imgs['PageRank'] > $inf['PageRank']) ? "down" : ((isset( $imgs['PageRank'] ) and $imgs['PageRank'] < $inf['PageRank']) ? "up" : "pix");
-			$class_AlexaRank = (isset( $imgs['AlexaRank'] ) and $imgs['AlexaRank'] < $inf['AlexaRank']) ? "down" : ((isset( $imgs['AlexaRank'] ) and $imgs['AlexaRank'] > $inf['AlexaRank']) ? "up" : "pix");
-			$class_GoogleBackLink = (isset( $imgs['GoogleBackLink'] ) and $imgs['GoogleBackLink'] > $inf['GoogleBackLink']) ? "down" : ((isset( $imgs['GoogleBackLink'] ) and $imgs['GoogleBackLink'] < $inf['GoogleBackLink']) ? "up" : "pix");
-			$class_AlexaBackLink = (isset( $imgs['AlexaBackLink'] ) and $imgs['AlexaBackLink'] > $inf['AlexaBackLink']) ? "down" : ((isset( $imgs['AlexaBackLink'] ) and $imgs['AlexaBackLink'] < $inf['AlexaBackLink']) ? "up" : "pix");
-			$class_BingBackLink = (isset( $imgs['BingBackLink'] ) and $imgs['BingBackLink'] > $inf['BingBackLink']) ? "down" : ((isset( $imgs['BingBackLink'] ) and $imgs['BingBackLink'] < $inf['BingBackLink']) ? "up" : "pix");
-			$class_GoogleIndexed = (isset( $imgs['GoogleIndexed'] ) and $imgs['GoogleIndexed'] > $inf['GoogleIndexed']) ? "down" : ((isset( $imgs['GoogleIndexed'] ) and $imgs['GoogleIndexed'] < $inf['GoogleIndexed']) ? "up" : "pix");
-			$class_BingIndexed = (isset( $imgs['BingIndexed'] ) and $imgs['BingIndexed'] > $inf['BingIndexed']) ? "down" : ((isset( $imgs['BingIndexed'] ) and $imgs['BingIndexed'] < $inf['BingIndexed']) ? "up" : "pix");
+			$class_PageRank = ( isset( $imgs['PageRank'] ) and $imgs['PageRank'] > $inf['PageRank'] ) ? "down" : ( ( isset( $imgs['PageRank'] ) and $imgs['PageRank'] < $inf['PageRank'] ) ? "up" : "pix" );
+			$class_AlexaRank = ( isset( $imgs['AlexaRank'] ) and $imgs['AlexaRank'] < $inf['AlexaRank'] ) ? "down" : ( ( isset( $imgs['AlexaRank'] ) and $imgs['AlexaRank'] > $inf['AlexaRank'] ) ? "up" : "pix" );
+			$class_GoogleBackLink = ( isset( $imgs['GoogleBackLink'] ) and $imgs['GoogleBackLink'] > $inf['GoogleBackLink'] ) ? "down" : ( ( isset( $imgs['GoogleBackLink'] ) and $imgs['GoogleBackLink'] < $inf['GoogleBackLink'] ) ? "up" : "pix" );
+			$class_AlexaBackLink = ( isset( $imgs['AlexaBackLink'] ) and $imgs['AlexaBackLink'] > $inf['AlexaBackLink'] ) ? "down" : ( ( isset( $imgs['AlexaBackLink'] ) and $imgs['AlexaBackLink'] < $inf['AlexaBackLink'] ) ? "up" : "pix" );
+			$class_BingBackLink = ( isset( $imgs['BingBackLink'] ) and $imgs['BingBackLink'] > $inf['BingBackLink'] ) ? "down" : ( ( isset( $imgs['BingBackLink'] ) and $imgs['BingBackLink'] < $inf['BingBackLink'] ) ? "up" : "pix" );
+			$class_GoogleIndexed = ( isset( $imgs['GoogleIndexed'] ) and $imgs['GoogleIndexed'] > $inf['GoogleIndexed'] ) ? "down" : ( ( isset( $imgs['GoogleIndexed'] ) and $imgs['GoogleIndexed'] < $inf['GoogleIndexed'] ) ? "up" : "pix" );
+			$class_BingIndexed = ( isset( $imgs['BingIndexed'] ) and $imgs['BingIndexed'] > $inf['BingIndexed'] ) ? "down" : ( ( isset( $imgs['BingIndexed'] ) and $imgs['BingIndexed'] < $inf['BingIndexed'] ) ? "up" : "pix" );
 
 			$imgs['PageRank'] = $inf['PageRank'];
 			$imgs['AlexaRank'] = $inf['AlexaRank'];
@@ -110,14 +110,14 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					'class' => " class=\"" . $class_GoogleIndexed . "\"",
 					'style' => "text-align:right",
 					'content' => number_format( $inf['BingIndexed'] )
-				), //
+				) //
 			);
 			foreach( $row as $td )
 			{
 				$xtpl->assign( 'TD', $td );
 				$xtpl->parse( 'scontent.loop.td' );
 			}
-			$xtpl->assign( 'CLASS', ($a % 2) ? " class=\"second\"" : "" );
+			$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 			$xtpl->parse( 'scontent.loop' );
 			++$a;
 		}

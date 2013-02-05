@@ -69,15 +69,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 
 	$site_timezone = filter_text_input( 'site_timezone', 'post', '', 0, 255 );
-	if( empty( $site_timezone ) or ( ! empty( $site_timezone ) and (in_array( $site_timezone, $timezone_array ) or $site_timezone == "byCountry")) )
+	if( empty( $site_timezone ) or ( ! empty( $site_timezone ) and ( in_array( $site_timezone, $timezone_array ) or $site_timezone == "byCountry" ) ) )
 	{
 		$array_config_global['site_timezone'] = $site_timezone;
 	}
 
-	$preg_replace = array(
-		'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i",
-		'replacement' => ''
-	);
+	$preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
 	$array_config_global['date_pattern'] = filter_text_input( 'date_pattern', 'post', '', 0, 255, $preg_replace );
 	$array_config_global['time_pattern'] = filter_text_input( 'time_pattern', 'post', '', 0, 255, $preg_replace );
 
@@ -113,7 +110,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post', 0 );
 		$array_config_global['lang_geo'] = 0;
-		$array_config_global['rewrite_op_mod'] = ($nv_Request->get_int( 'rewrite_op_mod', 'post' )) ? $global_config['site_home_module'] : '';
+		$array_config_global['rewrite_op_mod'] = ( $nv_Request->get_int( 'rewrite_op_mod', 'post' ) ) ? $global_config['site_home_module'] : '';
 	}
 	else
 	{
@@ -123,14 +120,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 
 	$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
-	$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url )) ? $cdn_url : '';
+	$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url ) ) ? $cdn_url : '';
 
 	foreach( $array_config_global as $config_name => $config_value )
 	{
 		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
 	}
 
-	$nv_rewrite_change = ($global_config['is_url_rewrite'] != $array_config_global['is_url_rewrite'] or $global_config['rewrite_optional'] != $array_config_global['rewrite_optional']) ? true : false;
+	$nv_rewrite_change = ( $global_config['is_url_rewrite'] != $array_config_global['is_url_rewrite'] or $global_config['rewrite_optional'] != $array_config_global['rewrite_optional'] ) ? true : false;
 
 	nv_save_file_config_global();
 
@@ -169,8 +166,8 @@ while( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 }
 
 $lang_multi = $array_config_global['lang_multi'];
-$array_config_global['gzip_method'] = ($array_config_global['gzip_method']) ? ' checked="checked"' : '';
-$array_config_global['lang_multi'] = ($array_config_global['lang_multi']) ? ' checked="checked"' : '';
+$array_config_global['gzip_method'] = ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '';
+$array_config_global['lang_multi'] = ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '';
 $array_config_global['searchEngineUniqueID'] = isset( $array_config_global['searchEngineUniqueID'] ) ? $array_config_global['searchEngineUniqueID'] : "";
 
 $lang_module['rewrite_op_mod'] = sprintf( $lang_module['rewrite_op_mod'], $global_config['site_home_module'] );
@@ -188,7 +185,7 @@ if( $errormess != "" )
 foreach( $adminThemes as $name )
 {
 	$xtpl->assign( 'THEME_NAME', $name );
-	$xtpl->assign( 'THEME_SELECTED', ($name == $array_config_global['admin_theme'] ? " selected=\"selected\"" : "") );
+	$xtpl->assign( 'THEME_SELECTED', ( $name == $array_config_global['admin_theme'] ? " selected=\"selected\"" : "" ) );
 	$xtpl->parse( 'main.admin_theme' );
 }
 
@@ -196,27 +193,27 @@ foreach( $closed_site_Modes as $value => $name )
 {
 	$xtpl->assign( 'MODE_VALUE', $value );
 	$xtpl->assign( 'MODE_NAME', $name );
-	$xtpl->assign( 'MODE_SELECTED', ($value == $array_config_global['closed_site'] ? " selected=\"selected\"" : "") );
+	$xtpl->assign( 'MODE_SELECTED', ( $value == $array_config_global['closed_site'] ? " selected=\"selected\"" : "" ) );
 	$xtpl->parse( 'main.closed_site_mode' );
 }
 
-$xtpl->assign( 'CHECKED1', ($array_config_global['is_url_rewrite'] == 1) ? ' checked ' : '' );
+$xtpl->assign( 'CHECKED1', ( $array_config_global['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
 
 if( $lang_multi == 0 )
 {
-	$xtpl->assign( 'CHECKED2', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '' );
-	$xtpl->assign( 'CHECKED3', ($array_config_global['rewrite_op_mod']) ? ' checked ' : '' );
+	$xtpl->assign( 'CHECKED2', ( $array_config_global['rewrite_optional'] == 1 ) ? ' checked ' : '' );
+	$xtpl->assign( 'CHECKED3', ( $array_config_global['rewrite_op_mod'] ) ? ' checked ' : '' );
 	$xtpl->parse( 'main.rewrite_optional' );
 }
 if( $lang_multi and sizeof( $global_config['allow_sitelangs'] ) > 1 )
 {
 	$xtpl->assign( 'CONFIG_LANG_GEO', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language&op&' . NV_OP_VARIABLE . '=countries' );
-	$xtpl->assign( 'CHECKED_LANG_GEO', ($array_config_global['lang_geo'] == 1) ? ' checked ' : '' );
+	$xtpl->assign( 'CHECKED_LANG_GEO', ( $array_config_global['lang_geo'] == 1 ) ? ' checked ' : '' );
 
 	foreach( $allow_sitelangs as $lang_i )
 	{
 		$xtpl->assign( 'LANGOP', $lang_i );
-		$xtpl->assign( 'SELECTED', ($lang_i == $array_config_global['site_lang']) ? "selected='selected'" : "" );
+		$xtpl->assign( 'SELECTED', ( $lang_i == $array_config_global['site_lang'] ) ? "selected='selected'" : "" );
 		$xtpl->assign( 'LANGVALUE', $language_array[$lang_i]['name'] );
 		$xtpl->parse( 'main.lang_multi.site_lang_option' );
 	}
@@ -226,13 +223,13 @@ if( $lang_multi and sizeof( $global_config['allow_sitelangs'] ) > 1 )
 foreach( $optActive_Modes as $key => $value )
 {
 	$xtpl->assign( 'OPTACTIVE_OP', $key );
-	$xtpl->assign( 'OPTACTIVE_SELECTED', ($key == $array_config_global['optActive']) ? "selected='selected'" : "" );
+	$xtpl->assign( 'OPTACTIVE_SELECTED', ( $key == $array_config_global['optActive'] ) ? "selected='selected'" : "" );
 	$xtpl->assign( 'OPTACTIVE_TEXT', $value );
 	$xtpl->parse( 'main.optActive' );
 }
 
 $xtpl->assign( 'TIMEZONEOP', "byCountry" );
-$xtpl->assign( 'TIMEZONESELECTED', ($array_config_global['site_timezone'] == "byCountry") ? "selected='selected'" : "" );
+$xtpl->assign( 'TIMEZONESELECTED', ( $array_config_global['site_timezone'] == "byCountry" ) ? "selected='selected'" : "" );
 $xtpl->assign( 'TIMEZONELANGVALUE', $lang_module['timezoneByCountry'] );
 $xtpl->parse( 'main.opsite_timezone' );
 
@@ -240,7 +237,7 @@ sort( $timezone_array );
 foreach( $timezone_array as $site_timezone_i )
 {
 	$xtpl->assign( 'TIMEZONEOP', $site_timezone_i );
-	$xtpl->assign( 'TIMEZONESELECTED', ($site_timezone_i == $array_config_global['site_timezone']) ? "selected='selected'" : "" );
+	$xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $array_config_global['site_timezone'] ) ? "selected='selected'" : "" );
 	$xtpl->assign( 'TIMEZONELANGVALUE', $site_timezone_i );
 	$xtpl->parse( 'main.opsite_timezone' );
 }

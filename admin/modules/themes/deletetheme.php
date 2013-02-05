@@ -16,7 +16,7 @@ if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) 
 	$check_exit_mod = false;
 	$lang_module_array = array();
 
-	$sql_theme = ( preg_match( $global_config['check_theme_mobile'], $theme )) ? 'mobile' : 'theme';
+	$sql_theme = ( preg_match( $global_config['check_theme_mobile'], $theme ) ) ? 'mobile' : 'theme';
 
 	$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where setup='1'";
 	$result = $db->sql_query( $sql );

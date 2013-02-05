@@ -12,16 +12,13 @@ if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 $errormess = '';
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-	$preg_replace = array(
-		'pattern' => "/[^a-zA-Z0-9\_]/",
-		'replacement' => ''
-	);
+	$preg_replace = array( 'pattern' => "/[^a-zA-Z0-9\_]/", 'replacement' => '' );
 
 	$array_config_global = array();
 	$array_config_global['cookie_prefix'] = filter_text_input( 'cookie_prefix', 'post', '', 0, 255, $preg_replace );
 	$array_config_global['session_prefix'] = filter_text_input( 'session_prefix', 'post', '', 0, 255, $preg_replace );
-	$array_config_global['cookie_secure'] = (int)$nv_Request->get_bool( 'cookie_secure', 'post', 0 );
-	$array_config_global['cookie_httponly'] = (int)$nv_Request->get_bool( 'cookie_httponly', 'post', 0 );
+	$array_config_global['cookie_secure'] = ( int )$nv_Request->get_bool( 'cookie_secure', 'post', 0 );
+	$array_config_global['cookie_httponly'] = ( int )$nv_Request->get_bool( 'cookie_httponly', 'post', 0 );
 
 	foreach( $array_config_global as $config_name => $config_value )
 	{
@@ -52,8 +49,8 @@ $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'DATA', $global_config );
 $xtpl->assign( 'NV_LIVE_COOKIE_TIME', round( NV_LIVE_COOKIE_TIME / 86400 ) );
 $xtpl->assign( 'NV_LIVE_SESSION_TIME', round( NV_LIVE_SESSION_TIME / 60 ) );
-$xtpl->assign( 'CHECKBOX_COOKIE_SECURE', ($global_config['cookie_secure'] == 1) ? ' checked="checked"' : '' );
-$xtpl->assign( 'CHECKBOX_COOKIE_HTTPONLY', ($global_config['cookie_httponly'] == 1) ? ' checked="checked"' : '' );
+$xtpl->assign( 'CHECKBOX_COOKIE_SECURE', ( $global_config['cookie_secure'] == 1 ) ? ' checked="checked"' : '' );
+$xtpl->assign( 'CHECKBOX_COOKIE_HTTPONLY', ( $global_config['cookie_httponly'] == 1 ) ? ' checked="checked"' : '' );
 
 if( $errormess != "" )
 {

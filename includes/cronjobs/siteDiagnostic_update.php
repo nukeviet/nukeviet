@@ -26,7 +26,7 @@ if( ! isset( $Diagnostic ) or ! is_object( $Diagnostic ) )
  *
  * @return
  */
-function cron_siteDiagnostic_update( )
+function cron_siteDiagnostic_update()
 {
 	global $Diagnostic;
 

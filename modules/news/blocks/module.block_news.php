@@ -11,6 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_news_block_news' ) )
 {
+
 	function nv_block_config_news( $module, $data_block, $lang_block )
 	{
 		$html = "";
@@ -40,31 +41,31 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		$array_block_news = array();
 
 		$cache_file = NV_LANG_DATA . "_" . $module . "_block_news_" . NV_CACHE_PREFIX . ".cache";
-		if( ($cache = nv_get_cache( $cache_file )) != false )
+		if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 		{
 			$array_block_news = unserialize( $cache );
 		}
 		else
 		{
-			$numrow = (isset( $block_config['numrow'] )) ? $block_config['numrow'] : 20;
+			$numrow = ( isset( $block_config['numrow'] ) ) ? $block_config['numrow'] : 20;
 			$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_rows` WHERE `status`= 1 ORDER BY `publtime` DESC LIMIT 0 , " . $numrow;
 			$result = $db->sql_query( $sql );
 			while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
 			{
 				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;
-				if( $homeimgthumb == 1 )//image thumb
+				if( $homeimgthumb == 1 ) //image thumb
 				{
 					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $homeimgfile;
 				}
-				elseif( $homeimgthumb == 2 )//image file
+				elseif( $homeimgthumb == 2 ) //image file
 				{
 					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $homeimgfile;
 				}
-				elseif( $homeimgthumb == 3 )//image url
+				elseif( $homeimgthumb == 3 ) //image url
 				{
 					$item['imghome'] = $homeimgfile;
 				}
-				else//no image
+				else //no image
 				{
 					$item['imghome'] = '';
 				}
@@ -98,14 +99,13 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 				$xtpl->parse( 'main.newloop.imgblock' );
 			}
 			$xtpl->parse( 'main.newloop' );
-			$xtpl->assign( 'BACKGROUND', ($a % 2) ? 'bg ' : '' );
+			$xtpl->assign( 'BACKGROUND', ( $a % 2 ) ? 'bg ' : '' );
 			++$a;
 		}
 
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
-
 }
 
 if( defined( 'NV_SYSTEM' ) )

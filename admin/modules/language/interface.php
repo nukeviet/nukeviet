@@ -68,13 +68,13 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 {
 	switch( $admin_file )
 	{
-		case '1' :
+		case '1':
 			$langsitename = $lang_module['nv_lang_admin'];
 			break;
-		case '0' :
+		case '0':
 			$langsitename = $lang_module['nv_lang_site'];
 			break;
-		default :
+		default:
 			$langsitename = $admin_file;
 			break;
 	}
@@ -94,7 +94,7 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 	}
 
 	$xtpl->assign( 'ROW', array(
-		'class' => (++$a % 2) ? " class=\"second\"" : "",
+		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'stt' => $a,
 		'module' => $module,
 		'langsitename' => $langsitename,

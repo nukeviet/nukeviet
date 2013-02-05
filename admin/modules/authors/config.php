@@ -14,7 +14,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
  *
  * @return
  */
-function nv_save_file_admin_config( )
+function nv_save_file_admin_config()
 {
 	global $db;
 	$content_config_ip = $content_config_user = "";
@@ -34,16 +34,16 @@ function nv_save_file_admin_config( )
 			{
 				switch( $dbmask )
 				{
-					case 3 :
+					case 3:
 						$ip_mask = "/\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$/";
 						break;
-					case 2 :
+					case 2:
 						$ip_mask = "/\.[0-9]{1,3}.[0-9]{1,3}$/";
 						break;
-					case 1 :
+					case 1:
 						$ip_mask = "/\.[0-9]{1,3}$/";
 						break;
-					default :
+					default:
 						$ip_mask = "//";
 				}
 				$content_config_ip .= "\$array_adminip['" . $keyname . "'] = array( 'mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . " );\n";
@@ -251,14 +251,19 @@ for( $i = 2; $i < 11; $i++ )
 {
 	$array = array(
 		"value" => $i,
-		"select" => ($i == $global_config['adminrelogin_max']) ? ' selected="selected"' : '',
+		"select" => ( $i == $global_config['adminrelogin_max'] ) ? ' selected="selected"' : '',
 		"text" => $i
 	);
 	$xtpl->assign( 'OPTION', $array );
 	$xtpl->parse( 'main.adminrelogin_max' );
 }
 
-$xtpl->assign( 'DATA', array( 'admfirewall' => $global_config['admfirewall'] ? " checked=\"checked\"" : "", 'block_admin_ip' => $global_config['block_admin_ip'] ? " checked=\"checked\"" : "", 'authors_detail_main' => $global_config['authors_detail_main'] ? " checked=\"checked\"" : "", 'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? " checked=\"checked\"" : "", ) );
+$xtpl->assign( 'DATA', array(
+	'admfirewall' => $global_config['admfirewall'] ? " checked=\"checked\"" : "",
+	'block_admin_ip' => $global_config['block_admin_ip'] ? " checked=\"checked\"" : "",
+	'authors_detail_main' => $global_config['authors_detail_main'] ? " checked=\"checked\"" : "",
+	'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? " checked=\"checked\"" : ""
+) );
 
 if( ! empty( $error ) )
 {
@@ -280,7 +285,7 @@ if( $db->sql_numrows( $result ) )
 			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
 			'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : $lang_module['adminip_nolimit'],
 			'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;uid=" . $dbid . "#iduser",
-			'url_delete' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delid=" . $dbid,
+			'url_delete' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delid=" . $dbid
 		) );
 
 		$xtpl->parse( 'main.list_firewall.loop' );
@@ -303,7 +308,7 @@ $xtpl->assign( 'FIREWALLDATA', array(
 	'password' => $password,
 	'password2' => $password2,
 	'begintime1' => ! empty( $begintime1 ) ? date( 'd/m/Y', $begintime1 ) : '',
-	'endtime1' => ! empty( $endtime1 ) ? date( 'd/m/Y', $endtime1 ) : '',
+	'endtime1' => ! empty( $endtime1 ) ? date( 'd/m/Y', $endtime1 ) : ''
 ) );
 
 if( ! empty( $uid ) ) $xtpl->parse( 'main.nochangepass' );
@@ -329,7 +334,7 @@ if( $db->sql_numrows( $result ) )
 			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
 			'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : '',
 			'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $dbid . "#idip",
-			'url_delete' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delid=" . $dbid,
+			'url_delete' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delid=" . $dbid
 		) );
 
 		$xtpl->parse( 'main.ipaccess.loop' );
@@ -347,12 +352,12 @@ if( ! empty( $cid ) )
 $xtpl->assign( 'IPDATA', array(
 	'cid' => $cid,
 	'keyname' => $keyname,
-	'selected3' => ($mask == 3) ? ' selected="selected"' : '',
-	'selected2' => ($mask == 2) ? ' selected="selected"' : '',
-	'selected1' => ($mask == 1) ? ' selected="selected"' : '',
+	'selected3' => ( $mask == 3 ) ? ' selected="selected"' : '',
+	'selected2' => ( $mask == 2 ) ? ' selected="selected"' : '',
+	'selected1' => ( $mask == 1 ) ? ' selected="selected"' : '',
 	'begintime' => ! empty( $begintime ) ? date( 'd/m/Y', $begintime ) : '',
 	'endtime' => ! empty( $endtime ) ? date( 'd/m/Y', $endtime ) : '',
-	'notice' => $notice,
+	'notice' => $notice
 ) );
 
 $xtpl->assign( 'MASK_TEXT_ARRAY', $mask_text_array );

@@ -12,10 +12,7 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['countries'];
 
 $array_lang_setup = array();
-$array_lang_setup[] = array(
-	'',
-	$lang_module['site_lang']
-);
+$array_lang_setup[] = array( '', $lang_module['site_lang'] );
 
 $sql = "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
 $result = $db->sql_query( $sql );
@@ -24,10 +21,7 @@ while( list( $lang_i ) = $db->sql_fetchrow( $result ) )
 {
 	if( in_array( $lang_i, $global_config['allow_sitelangs'] ) )
 	{
-		$array_lang_setup[$lang_i] = array(
-			$lang_i,
-			$language_array[$lang_i]['name']
-		);
+		$array_lang_setup[$lang_i] = array( $lang_i, $language_array[$lang_i]['name'] );
 	}
 }
 
@@ -72,7 +66,7 @@ foreach( $countries as $key => $value )
 	foreach( $array_lang_setup as $data_name )
 	{
 		$data_key = $data_name[0];
-		$xtpl->assign( 'DATA_SELECTED', (isset( $config_geo[$key] ) and $config_geo[$key] == $data_key) ? ' selected="selected"' : '' );
+		$xtpl->assign( 'DATA_SELECTED', ( isset( $config_geo[$key] ) and $config_geo[$key] == $data_key ) ? ' selected="selected"' : '' );
 		$xtpl->assign( 'DATA_KEY', $data_key );
 		$xtpl->assign( 'DATA_TITLE', $data_name[1] );
 		$xtpl->parse( 'main.countries.language' );

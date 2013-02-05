@@ -22,16 +22,7 @@ if( NV_LANG_INTERFACE == 'vi' )
 
 if( $module_name == "webtools" )
 {
-	$allow_func = array(
-		'main',
-		'clearsystem',
-		'sitemapPing',
-		'checkupdate',
-		'siteDiagnostic',
-		'keywordRank',
-		'config',
-		'mudim'
-	);
+	$allow_func = array( 'main', 'clearsystem', 'sitemapPing', 'checkupdate', 'siteDiagnostic', 'keywordRank', 'config', 'mudim' );
 	$menu_top = array(
 		"title" => $module_name,
 		"module_file" => "",

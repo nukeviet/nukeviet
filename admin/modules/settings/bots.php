@@ -32,7 +32,7 @@ if( $submit )
 		if( $value != "" and $agent != "" )
 		{
 			$ips = strip_tags( $bot_ips[$key] );
-			$allowed = (isset( $bot_allowed[$key] ) and intval( $bot_allowed[$key] )) ? 1 : 0;
+			$allowed = ( isset( $bot_allowed[$key] ) and intval( $bot_allowed[$key] ) ) ? 1 : 0;
 			$bots[$value] = array(
 				'agent' => $bot_agent[$key],
 				'ips' => $ips,
@@ -45,7 +45,7 @@ if( $submit )
 	file_put_contents( $file_bots, $contents, LOCK_EX );
 }
 
-$bots = (file_exists( $file_bots ) and filesize( $file_bots ) != 0) ? unserialize( file_get_contents( $file_bots ) ) : array();
+$bots = ( file_exists( $file_bots ) and filesize( $file_bots ) != 0 ) ? unserialize( file_get_contents( $file_bots ) ) : array();
 
 if( empty( $bots ) and file_exists( NV_ROOTDIR . "/includes/bots.php" ) )
 {
@@ -59,12 +59,12 @@ $xtpl->assign( 'LANG', $lang_module );
 foreach( $bots as $name => $values )
 {
 	$array_data = array();
-	$array_data['class'] = ($a % 2 == 0) ? "second" : "";
+	$array_data['class'] = ( $a % 2 == 0 ) ? "second" : "";
 	$array_data['id'] = ++$a;
 	$array_data['name'] = $name;
 	$array_data['agent'] = $values['agent'];
 	$array_data['ips'] = $values['ips'];
-	$array_data['checked'] = ( empty( $values['allowed'] )) ? "" : "checked=\"checked\"";
+	$array_data['checked'] = ( empty( $values['allowed'] ) ) ? "" : "checked=\"checked\"";
 
 	$xtpl->assign( 'DATA', $array_data );
 	$xtpl->parse( 'main.loop' );
@@ -73,7 +73,7 @@ foreach( $bots as $name => $values )
 for( $index = 0; $index < 3; ++$index )
 {
 	$array_data = array();
-	$array_data['class'] = ($a % 2 == 0) ? "second" : "";
+	$array_data['class'] = ( $a % 2 == 0 ) ? "second" : "";
 	$array_data['id'] = ++$a;
 	$array_data['name'] = "";
 	$array_data['agent'] = "";

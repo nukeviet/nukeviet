@@ -38,7 +38,7 @@ function main_theme( $is_search, $search, $array_modul )
 		foreach( $array_modul as $m_name => $m_info )
 		{
 			$m_info['value'] = $m_name;
-			$m_info['selected'] = ($m_name == $search['mod']) ? " selected=\"selected\"" : "";
+			$m_info['selected'] = ( $m_name == $search['mod'] ) ? " selected=\"selected\"" : "";
 			$xtpl->assign( 'MOD', $m_info );
 			$xtpl->parse( 'main.select_option' );
 		}

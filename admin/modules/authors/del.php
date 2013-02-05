@@ -34,7 +34,7 @@ if( empty( $numrows ) )
 
 $row = $db->sql_fetchrow( $result );
 
-if( $row['lev'] == 1 or ( ! defined( "NV_IS_GODADMIN" ) and $row['lev'] == 2) )
+if( $row['lev'] == 1 or ( ! defined( "NV_IS_GODADMIN" ) and $row['lev'] == 2 ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 	die();
@@ -56,11 +56,11 @@ $level = $admin_info['level'];
 
 $array_action_account = array();
 $array_action_account[0] = $lang_module['action_account_nochange'];
-if( isset( $access_admin['access_waiting'][$level] ) AND $access_admin['access_waiting'][$level] == 1 )
+if( isset( $access_admin['access_waiting'][$level] ) and $access_admin['access_waiting'][$level] == 1 )
 {
 	$array_action_account[1] = $lang_module['action_account_suspend'];
 }
-if( isset( $access_admin['access_delus'][$level] ) AND $access_admin['access_delus'][$level] == 1 )
+if( isset( $access_admin['access_delus'][$level] ) and $access_admin['access_delus'][$level] == 1 )
 {
 	$array_action_account[2] = $lang_module['action_account_del'];
 }
@@ -70,7 +70,7 @@ $result = $db->sql_query( $sql );
 $row_user = $db->sql_fetchrow( $result );
 
 $action_account = $nv_Request->get_int( 'action_account', 'post', 0 );
-$action_account = (isset( $array_action_account[$action_account] )) ? $action_account : 0;
+$action_account = ( isset( $array_action_account[$action_account] ) ) ? $action_account : 0;
 $error = "";
 $checkss = md5( $admin_id . session_id() . $global_config['sitekey'] );
 if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
@@ -147,7 +147,7 @@ if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
 		if( $sendmail )
 		{
 			$title = sprintf( $lang_module['delete_sendmail_title'], $global_config['site_name'] );
-			$my_sig = ( ! empty( $admin_info['sig'] )) ? $admin_info['sig'] : "All the best";
+			$my_sig = ( ! empty( $admin_info['sig'] ) ) ? $admin_info['sig'] : "All the best";
 			$my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $global_config['site_email'];
 			if( empty( $reason ) )
 			{
@@ -183,10 +183,7 @@ if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
 			$xtpl->parse( 'main' );
 			$content = $xtpl->text( 'main' );
 
-			$from = array(
-				$admin_info['username'],
-				$my_mail
-			);
+			$from = array( $admin_info['username'], $my_mail );
 			$to = $row_user['email'];
 			$send = nv_sendmail( $from, $to, nv_EncString( $title ), $content );
 			if( ! $send )
@@ -205,21 +202,14 @@ else
 }
 
 $contents = array();
-$contents['is_error'] = ( ! empty( $error )) ? 1 : 0;
-$contents['title'] = ( ! empty( $error )) ? $error : sprintf( $lang_module['delete_sendmail_info'], $row_user['username'] );
+$contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
+$contents['title'] = ( ! empty( $error ) ) ? $error : sprintf( $lang_module['delete_sendmail_info'], $row_user['username'] );
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del&amp;admin_id=" . $admin_id;
 $contents['sendmail'] = $sendmail;
 
-$contents['reason'] = array(
-	$reason,
-	255
-);
+$contents['reason'] = array( $reason, 255 );
 
-$contents['admin_password'] = array(
-	$lang_global['admin_password'],
-	$adminpass,
-	NV_UPASSMAX
-);
+$contents['admin_password'] = array( $lang_global['admin_password'], $adminpass, NV_UPASSMAX );
 
 $page_title = $lang_module['nv_admin_del'];
 
@@ -245,7 +235,7 @@ $xtpl->assign( 'ADMIN_PASSWORD2', $contents['admin_password'][2] );
 foreach( $array_action_account as $key => $value )
 {
 	$xtpl->assign( 'ACTION_ACCOUNT_KEY', $key );
-	$xtpl->assign( 'ACTION_ACCOUNT_CHECK', ($key == $action_account) ? ' checked="checked"' : '' );
+	$xtpl->assign( 'ACTION_ACCOUNT_CHECK', ( $key == $action_account ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'ACTION_ACCOUNT_TITLE', $value );
 	$xtpl->parse( 'del.action_account' );
 }

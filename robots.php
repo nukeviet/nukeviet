@@ -39,7 +39,7 @@ else
 	$robots_data['/web.config'] = 0;
 }
 
-$host = (isset( $_GET['action'] ) and ! empty( $_GET['action'] )) ? $_GET['action'] : $_SERVER['HTTP_HOST'];
+$host = ( isset( $_GET['action'] ) and ! empty( $_GET['action'] ) ) ? $_GET['action'] : $_SERVER['HTTP_HOST'];
 
 $maxAge = 2592000;
 $expTme = $createTime + $maxAge;

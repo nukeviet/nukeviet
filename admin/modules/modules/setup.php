@@ -40,11 +40,11 @@ if( ! empty( $setmodule ) )
 				include ( $version_file );
 			}
 
-			$admin_file = (file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin.functions.php" ) and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/main.php" )) ? 1 : 0;
-			$main_file = (file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/functions.php" ) and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php" )) ? 1 : 0;
+			$admin_file = ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin.functions.php" ) and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/main.php" ) ) ? 1 : 0;
+			$main_file = ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/functions.php" ) and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php" ) ) ? 1 : 0;
 
 			$custom_title = preg_replace( '/(\W+)/i', ' ', $setmodule );
-			$in_menu = ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php" )) ? 1 : 0;
+			$in_menu = ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php" ) ) ? 1 : 0;
 
 			$db->sql_query( "INSERT INTO `" . NV_MODULES_TABLE . "` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES (" . $db->dbescape( $setmodule ) . ", " . $db->dbescape( $module_file ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $custom_title ) . ", '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)" );
 
@@ -202,7 +202,7 @@ foreach( $arr_module_news as $module_name_i => $arr )
 	$check_admin_main = NV_ROOTDIR . "/modules/" . $module_name_i . "/admin/main.php";
 	$check_admin_functions = NV_ROOTDIR . "/modules/" . $module_name_i . "/admin.functions.php";
 
-	if( (file_exists( $check_file_main ) and filesize( $check_file_main ) != 0 and file_exists( $check_file_functions ) and filesize( $check_file_functions ) != 0) or (file_exists( $check_admin_main ) and filesize( $check_admin_main ) != 0 and file_exists( $check_admin_functions ) and filesize( $check_admin_functions ) != 0) )
+	if( ( file_exists( $check_file_main ) and filesize( $check_file_main ) != 0 and file_exists( $check_file_functions ) and filesize( $check_file_functions ) != 0 ) or ( file_exists( $check_admin_main ) and filesize( $check_admin_main ) != 0 and file_exists( $check_admin_functions ) and filesize( $check_admin_functions ) != 0 ) )
 	{
 		$check_addnews_modules = true;
 
@@ -321,11 +321,13 @@ foreach( $modules_data as $row )
 
 $array_head = array(
 	"caption" => $lang_module['module_sys'],
-	"head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['version'], $lang_module['settime'], $lang_module['author'], "" ) );
+	"head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['version'], $lang_module['settime'], $lang_module['author'], "" )
+);
 
 $array_virtual_head = array(
 	"caption" => $lang_module['vmodule'],
-	"head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['vmodule_file'], $lang_module['settime'], $lang_module['vmodule_note'], "" ) );
+	"head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['vmodule_file'], $lang_module['settime'], $lang_module['vmodule_note'], "" )
+);
 
 $contents .= call_user_func( "setup_modules", $array_head, $array_modules, $array_virtual_head, $array_virtual_modules );
 

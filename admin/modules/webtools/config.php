@@ -31,13 +31,13 @@ $lang_module['hour'] = $lang_global['hour'];
 
 $xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'AUTOCHECKUPDATE', ($global_config['autocheckupdate']) ? ' checked="checked"' : '' );
+$xtpl->assign( 'AUTOCHECKUPDATE', ( $global_config['autocheckupdate'] ) ? ' checked="checked"' : '' );
 
 for( $i = 1; $i <= 100; ++$i )
 {
 	$xtpl->assign( 'VALUE', $i );
 	$xtpl->assign( 'TEXT', $i );
-	$xtpl->assign( 'SELECTED', ($i == $global_config['autoupdatetime'] ? " selected=\"selected\"" : "") );
+	$xtpl->assign( 'SELECTED', ( $i == $global_config['autoupdatetime'] ? " selected=\"selected\"" : "" ) );
 	$xtpl->parse( 'main.updatetime' );
 }
 

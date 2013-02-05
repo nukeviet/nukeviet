@@ -105,7 +105,6 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "downloadallfile" . se
 		$download = new download( $file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, $file_basename );
 		$download->download_file();
 		exit();
-
 	}
 }
 else

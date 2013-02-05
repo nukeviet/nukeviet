@@ -169,7 +169,7 @@ else
 			'num' => $b, //
 			'link_view' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $row['id'], //
 			'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;add=1&amp;id=" . $row['id'], //
-			'description' => $row['description'], //
+			'description' => $row['description'] //
 		);
 	}
 
@@ -192,7 +192,7 @@ else
 		$i = 0;
 		foreach( $array as $row )
 		{
-			$row['class'] = (++$i % 2 == 0) ? ' class="second"' : '';
+			$row['class'] = ( ++$i % 2 == 0 ) ? ' class="second"' : '';
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'first.table.loop1' );
 		}
@@ -213,7 +213,7 @@ $contents = $xtpl->text( 'first' );
 // Prase Add/Edit template
 if( $nv_Request->isset_request( 'add', 'get' ) )
 {
-	$page_title = ( ! $arr['id']) ? $lang_module['add_menu'] : $lang_module['edit_menu'];
+	$page_title = ( ! $arr['id'] ) ? $lang_module['add_menu'] : $lang_module['edit_menu'];
 
 	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );

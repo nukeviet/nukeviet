@@ -13,7 +13,8 @@ $ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 $myini = array(
 	'types' => array( '' ),
 	'exts' => array( '' ),
-	'mimes' => array( '' ) );
+	'mimes' => array( '' )
+);
 
 foreach( $ini as $type => $extmime )
 {
@@ -74,7 +75,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$nv_max_size = $nv_Request->get_int( 'nv_max_size', 'post', $global_config['nv_max_size'] );
 	$nv_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $nv_max_size );
-	$nv_auto_resize = (int)$nv_Request->get_bool( 'nv_auto_resize', 'post', 0 );
+	$nv_auto_resize = ( int )$nv_Request->get_bool( 'nv_auto_resize', 'post', 0 );
 
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'file_allowed_ext', " . $db->dbescape_string( $type ) . ")" );
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'forbid_extensions', " . $db->dbescape_string( $ext ) . ")" );
@@ -108,7 +109,7 @@ $sys_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_c
 $p_size = $sys_max_size / 100;
 
 $xtpl->assign( 'SYS_MAX_SIZE', nv_convertfromBytes( $sys_max_size ) );
-$xtpl->assign( 'NV_AUTO_RESIZE', ($global_config['nv_auto_resize']) ? ' checked="checked"' : '' );
+$xtpl->assign( 'NV_AUTO_RESIZE', ( $global_config['nv_auto_resize'] ) ? ' checked="checked"' : '' );
 
 for( $index = 100; $index > 0; --$index )
 {
@@ -117,7 +118,7 @@ for( $index = 100; $index > 0; --$index )
 	$xtpl->assign( 'SIZE', array(
 		'key' => $size,
 		'title' => nv_convertfromBytes( $size ),
-		'selected' => ($size == $global_config['nv_max_size']) ? " selected=\"selected\"" : ""
+		'selected' => ( $size == $global_config['nv_max_size'] ) ? " selected=\"selected\"" : ""
 	) );
 
 	$xtpl->parse( 'main.size' );
@@ -135,13 +136,13 @@ foreach( $_upload_checking_mode as $m => $n )
 	$xtpl->assign( 'UPLOAD_CHECKING_MODE', array(
 		'key' => $m,
 		'title' => $n,
-		'selected' => ($m == $global_config['upload_checking_mode']) ? " selected=\"selected\"" : ""
+		'selected' => ( $m == $global_config['upload_checking_mode'] ) ? " selected=\"selected\"" : ""
 	) );
 	$xtpl->parse( 'main.upload_checking_mode' );
 }
 
 $strong = false;
-if( nv_function_exists( 'finfo_open' ) or nv_class_exists( "finfo" ) or nv_function_exists( 'mime_content_type' ) or (substr( $sys_info['os'], 0, 3 ) != 'WIN' and (nv_function_exists( 'system' ) or nv_function_exists( 'exec' ))) )
+if( nv_function_exists( 'finfo_open' ) or nv_class_exists( "finfo" ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) )
 {
 	$strong = true;
 }

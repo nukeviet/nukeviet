@@ -13,7 +13,7 @@ if( ! defined( 'NV_MAINFILE' ) )
 {
 	$temp_dir = str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) );
 	$temp_path = "/../";
-	
+
 	for( $i = 0; $i < 10; ++$i )
 	{
 		$realpath_mainfile = @realpath( $temp_dir . $temp_path . 'mainfile.php' );
@@ -26,7 +26,7 @@ if( ! defined( 'NV_MAINFILE' ) )
 	{
 		die();
 	}
-	
+
 	@require_once ( $realpath_mainfile );
 }
 

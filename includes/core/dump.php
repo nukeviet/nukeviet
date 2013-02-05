@@ -20,15 +20,10 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  */
 class dumpsave
 {
-
 	var $savetype;
-
 	var $filesavename;
-
 	var $mode;
-
 	var $comp_level = 9;
-
 	var $fp = false;
 
 	/**
@@ -58,9 +53,9 @@ class dumpsave
 	 *
 	 * @return
 	 */
-	function open( )
+	function open()
 	{
-		$this->fp = call_user_func_array( ($this->savetype == 'gz') ? "gzopen" : "fopen", array( $this->filesavename, $this->mode ) );
+		$this->fp = call_user_func_array( ( $this->savetype == 'gz' ) ? "gzopen" : "fopen", array( $this->filesavename, $this->mode ) );
 		return $this->fp;
 	}
 
@@ -74,7 +69,7 @@ class dumpsave
 	{
 		if( $this->fp )
 		{
-			return @call_user_func_array( ($this->savetype == 'gz') ? "gzwrite" : "fwrite", array( $this->fp, $content ) );
+			return @call_user_func_array( ( $this->savetype == 'gz' ) ? "gzwrite" : "fwrite", array( $this->fp, $content ) );
 		}
 		return false;
 	}
@@ -84,11 +79,11 @@ class dumpsave
 	 *
 	 * @return
 	 */
-	function close( )
+	function close()
 	{
 		if( $this->fp )
 		{
-			$return = @call_user_func( ($this->savetype == 'gz') ? "gzclose" : "fclose", $this->fp );
+			$return = @call_user_func( ( $this->savetype == 'gz' ) ? "gzclose" : "fclose", $this->fp );
 			if( $return )
 			{
 				@chmod( $this->filesavename, 0666 );
@@ -97,7 +92,6 @@ class dumpsave
 		}
 		return false;
 	}
-
 }
 
 /**
@@ -132,9 +126,9 @@ function nv_dump_save( $params )
 		{
 			$tables[$a]['name'] = $item['Name'];
 			$tables[$a]['size'] = intval( $item['Data_length'] ) + intval( $item['Index_length'] );
-			$tables[$a]['limit'] = 1 + round( 1048576 / ($item['Avg_row_length'] + 1) );
+			$tables[$a]['limit'] = 1 + round( 1048576 / ( $item['Avg_row_length'] + 1 ) );
 			$tables[$a]['numrow'] = $item['Rows'];
-			$tables[$a]['charset'] = ( preg_match( "/^([a-z0-9]+)_/i", $item['Collation'], $m )) ? $m[1] : "";
+			$tables[$a]['charset'] = ( preg_match( "/^([a-z0-9]+)_/i", $item['Collation'], $m ) ) ? $m[1] : "";
 			$tables[$a]['type'] = isset( $item['Engine'] ) ? $item['Engine'] : $item['Type'];
 			++$a;
 			$dbsize += intval( $item['Data_length'] ) + intval( $item['Index_length'] );
@@ -164,20 +158,8 @@ function nv_dump_save( $params )
 
 	$template = explode( "@@@", file_get_contents( $path_dump ) );
 
-	$patterns = array(
-		"/\{\|SERVER_NAME\|\}/",
-		"/\{\|GENERATION_TIME\|\}/",
-		"/\{\|SQL_VERSION\|\}/",
-		"/\{\|PHP_VERSION\|\}/",
-		"/\{\|DB_NAME\|\}/"
-	);
-	$replacements = array(
-		$db->server,
-		gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT",
-		$db->sql_version,
-		PHP_VERSION,
-		$db->dbname
-	);
+	$patterns = array( "/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/" );
+	$replacements = array( $db->server, gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT", $db->sql_version, PHP_VERSION, $db->dbname );
 
 	if( ! $dumpsave->write( preg_replace( $patterns, $replacements, $template[0] ) ) )
 	{
@@ -196,14 +178,8 @@ function nv_dump_save( $params )
 		$content = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $content[1] );
 		$content = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $content );
 
-		$patterns = array(
-			"/\{\|TABLE_NAME\|\}/",
-			"/\{\|TABLE_STR\|\}/"
-		);
-		$replacements = array(
-			$table['name'],
-			$content
-		);
+		$patterns = array( "/\{\|TABLE_NAME\|\}/", "/\{\|TABLE_STR\|\}/" );
+		$replacements = array( $table['name'], $content );
 
 		if( ! $dumpsave->write( preg_replace( $patterns, $replacements, $template[1] ) ) )
 		{
@@ -243,7 +219,7 @@ function nv_dump_save( $params )
 					$row2 = array();
 					foreach( $columns as $key => $kt )
 					{
-						$row2[] = isset( $row[$key] ) ? (($kt == 'int') ? $row[$key] : "'" . mysql_real_escape_string( $row[$key] ) . "'") : "NULL";
+						$row2[] = isset( $row[$key] ) ? ( ( $kt == 'int' ) ? $row[$key] : "'" . mysql_real_escape_string( $row[$key] ) . "'" ) : "NULL";
 					}
 					$row2 = NV_EOL . "(" . implode( ", ", $row2 ) . ")";
 
@@ -274,10 +250,7 @@ function nv_dump_save( $params )
 	{
 		return false;
 	}
-	return array(
-		$params['filename'],
-		$dbsize
-	);
+	return array( $params['filename'], $dbsize );
 }
 
 function nv_dump_restore( $file )
@@ -291,7 +264,7 @@ function nv_dump_restore( $file )
 	//bat doc doc file
 	$arr_file = explode( "/", $file );
 	$ext = nv_getextension( end( $arr_file ) );
-	$str = ($ext == "gz") ? @gzfile( $file ) : @file( $file );
+	$str = ( $ext == "gz" ) ? @gzfile( $file ) : @file( $file );
 
 	$sql = $insert = "";
 	$query_len = 0;
@@ -335,10 +308,7 @@ function nv_dump_restore( $file )
 
 				if( $execute )
 				{
-					$sql = preg_replace( array(
-						"/\{\|prefix\|\}/",
-						"/\{\|lang\|\}/"
-					), array( $db_config['prefix'], NV_LANG_DATA ), $sql );
+					$sql = preg_replace( array( "/\{\|prefix\|\}/", "/\{\|lang\|\}/" ), array( $db_config['prefix'], NV_LANG_DATA ), $sql );
 					if( ! $db->sql_query( $sql ) ) return false;
 					$sql = '';
 					$query_len = 0;

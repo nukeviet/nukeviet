@@ -61,10 +61,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		else
 		{
 			$xtpl->assign( 'TITLE', $lang_module['robots_error_writable'] );
-			$xtpl->assign( 'CONTENT', str_replace( array( "\n", "\t" ), array(
-				"<br />",
-				"&nbsp;&nbsp;&nbsp;&nbsp;"
-			), nv_htmlspecialchars( $rbcontents ) ) );
+			$xtpl->assign( 'CONTENT', str_replace( array( "\n", "\t" ), array( "<br />", "&nbsp;&nbsp;&nbsp;&nbsp;" ), nv_htmlspecialchars( $rbcontents ) ) );
 			$xtpl->parse( 'main.nowrite' );
 		}
 	}
@@ -109,13 +106,12 @@ foreach( $files as $file )
 	if( ! preg_match( "/^\.(.*)$/", $file ) )
 	{
 		if( is_dir( NV_ROOTDIR . '/' . $file ) ) $file = "/" . $file . "/";
-		else
-			$file = "/" . $file;
+		else $file = "/" . $file;
 
 		$data = array(
 			'number' => ++$number,
 			'filename' => $file,
-			'class' => ($number % 2 == 0) ? ' class="second"' : ''
+			'class' => ( $number % 2 == 0 ) ? ' class="second"' : ''
 		);
 
 		$type = isset( $robots_data[$file] ) ? $robots_data[$file] : 1;
@@ -125,12 +121,11 @@ foreach( $files as $file )
 			$option = array(
 				'value' => $i,
 				'title' => $lang_module['robots_type_' . $i],
-				'selected' => ($type == $i) ? ' selected="selected"' : ''
+				'selected' => ( $type == $i ) ? ' selected="selected"' : ''
 			);
 
 			$xtpl->assign( 'OPTION', $option );
 			$xtpl->parse( 'main.loop.option' );
-
 		}
 
 		$xtpl->assign( 'DATA', $data );

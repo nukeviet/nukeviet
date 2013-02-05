@@ -113,13 +113,13 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 		$temp_lang = array();
 		switch( $langtype )
 		{
-			case 'lang_global' :
+			case 'lang_global':
 				$temp_lang = $lang_global;
 				break;
-			case 'lang_module' :
+			case 'lang_module':
 				$temp_lang = $lang_module;
 				break;
-			case 'lang_block' :
+			case 'lang_block':
 				$temp_lang = $lang_block;
 				break;
 		}

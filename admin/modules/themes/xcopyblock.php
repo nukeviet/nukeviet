@@ -42,10 +42,7 @@ while( list( $theme ) = $db->sql_fetchrow( $result ) )
 
 foreach( $theme_list as $value )
 {
-	$xtpl->assign( 'THEME_TO', array(
-		'key' => $value,
-		'selected' => ($selectthemes == $value and $selectthemes != "default") ? " selected=\"selected\"" : ""
-	) );
+	$xtpl->assign( 'THEME_TO', array( 'key' => $value, 'selected' => ( $selectthemes == $value and $selectthemes != "default" ) ? " selected=\"selected\"" : "" ) );
 	$xtpl->parse( 'main.theme_to' );
 }
 

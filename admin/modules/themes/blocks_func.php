@@ -77,7 +77,7 @@ while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 {
 	$xtpl->assign( 'MODULE', array(
 		'key' => $m_title,
-		'selected' => ($selectedmodule == $m_title) ? ' selected="selected"' : '',
+		'selected' => ( $selectedmodule == $m_title ) ? ' selected="selected"' : '',
 		'title' => $m_custom_title
 	) );
 	$xtpl->parse( 'main.module' );
@@ -93,7 +93,7 @@ while( list( $f_id, $f_custom_title ) = $db->sql_fetchrow( $result ) )
 
 	$xtpl->assign( 'FUNCTION', array(
 		'key' => $f_id,
-		'selected' => ($func_id == $f_id) ? ' selected="selected"' : '',
+		'selected' => ( $func_id == $f_id ) ? ' selected="selected"' : '',
 		'title' => $f_custom_title
 	) );
 	$xtpl->parse( 'main.function' );
@@ -122,22 +122,19 @@ $result = $db->sql_query( $sql );
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$xtpl->assign( 'ROW', array(
-		'class' => (++$a % 2) ? " class=\"second\"" : "",
+		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'bid' => $row['bid'],
 		'title' => $row['title'],
 		'module' => $row['module'],
 		'file_name' => $row['file_name'],
-		'active' => $row['active'] ? $lang_global['yes'] : $lang_global['no'],
+		'active' => $row['active'] ? $lang_global['yes'] : $lang_global['no']
 	) );
 
 	$numposition = $blocks_positions[$row['position']];
 
 	for( $i = 1; $i <= $numposition; ++$i )
 	{
-		$xtpl->assign( 'ORDER', array(
-			'key' => $i,
-			'selected' => ($row['bweight'] == $i) ? ' selected="selected"' : ''
-		) );
+		$xtpl->assign( 'ORDER', array( 'key' => $i, 'selected' => ( $row['bweight'] == $i ) ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.loop.order' );
 	}
 
@@ -145,7 +142,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'POSITION', array(
 			'key' => ( string )$positions[$i]->tag,
-			'selected' => ($row['position'] == $positions[$i]->tag) ? ' selected="selected"' : '',
+			'selected' => ( $row['position'] == $positions[$i]->tag ) ? ' selected="selected"' : '',
 			'title' => ( string )$positions[$i]->name
 		) );
 		$xtpl->parse( 'main.loop.position' );

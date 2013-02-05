@@ -73,10 +73,7 @@ if( defined( "NV_IS_ADMIN" ) )
 				if( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 )
 				{
 					$server_name = preg_replace( '/^www\./e', '', nv_getenv( "HTTP_HOST" ) );
-					$nohttp_redirect = preg_replace( array(
-						'/^[a-zA-Z]+\:\/\//e',
-						'/www\./e'
-					), array( '', '' ), $redirect );
+					$nohttp_redirect = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/www\./e' ), array( '', '' ), $redirect );
 					if( ! preg_match( "/^" . preg_quote( $server_name ) . '\/' . preg_quote( NV_ADMINDIR ) . "/", $nohttp_redirect ) )
 					{
 						Header( "Location: " . $redirect );
@@ -87,7 +84,7 @@ if( defined( "NV_IS_ADMIN" ) )
 				die();
 			}
 
-			$info = ( ! empty( $error )) ? '<div class="error">' . sprintf( $lang_global['relogin_error_info'], $error, ($global_config['adminrelogin_max'] - $check_hits + 1) ) . '</div>' : '<div class="normal">' . sprintf( $lang_global['relogin_info'], $global_config['adminrelogin_max'] - $check_hits + 1 ) . '</div>';
+			$info = ( ! empty( $error ) ) ? '<div class="error">' . sprintf( $lang_global['relogin_error_info'], $error, ( $global_config['adminrelogin_max'] - $check_hits + 1 ) ) . '</div>' : '<div class="normal">' . sprintf( $lang_global['relogin_info'], $global_config['adminrelogin_max'] - $check_hits + 1 ) . '</div>';
 			$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
 			$dir_template = "";

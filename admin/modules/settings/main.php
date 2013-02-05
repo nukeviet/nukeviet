@@ -40,7 +40,7 @@ if( $submit )
 			}
 		}
 
-		$array_config['site_keywords'] = ( ! empty( $array_config['site_keywords'] )) ? implode( ", ", $array_config['site_keywords'] ) : "";
+		$array_config['site_keywords'] = ( ! empty( $array_config['site_keywords'] ) ) ? implode( ", ", $array_config['site_keywords'] ) : "";
 	}
 
 	if( ! nv_is_url( $site_logo ) and file_exists( NV_DOCUMENT_ROOT . $site_logo ) )
@@ -85,8 +85,7 @@ if( $submit )
 		while( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 		{
 			if( $c_module == "global" ) $global_config[$c_config_name] = $c_config_value;
-			else
-				$module_config[$c_module][$c_config_name] = $c_config_value;
+			else $module_config[$c_module][$c_config_name] = $c_config_value;
 		}
 	}
 }
@@ -124,7 +123,7 @@ $value_setting = array( //
 	"site_logo" => $site_logo, //
 	"site_keywords" => $global_config['site_keywords'], //
 	"description" => $global_config['site_description'], //
-	"switch_mobi_des" => $global_config['switch_mobi_des'], //
+	"switch_mobi_des" => $global_config['switch_mobi_des'] //
 );
 
 $module_array = array();
@@ -148,14 +147,14 @@ $xtpl->assign( 'VALUE', $value_setting );
 
 foreach( $theme_array as $folder )
 {
-	$xtpl->assign( 'SELECTED', ($global_config['site_theme'] == $folder) ? ' selected="selected"' : '' );
+	$xtpl->assign( 'SELECTED', ( $global_config['site_theme'] == $folder ) ? ' selected="selected"' : '' );
 	$xtpl->assign( 'SITE_THEME', $folder );
 	$xtpl->parse( 'main.site_theme' );
 }
 
 foreach( $module_array as $mod )
 {
-	$xtpl->assign( 'SELECTED', ($global_config['site_home_module'] == $mod['title']) ? ' selected="selected"' : '' );
+	$xtpl->assign( 'SELECTED', ( $global_config['site_home_module'] == $mod['title'] ) ? ' selected="selected"' : '' );
 	$xtpl->assign( 'MODULE', $mod );
 	$xtpl->parse( 'main.module' );
 }

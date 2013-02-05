@@ -38,7 +38,7 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 	$themename = $nv_Request->get_string( 'themename', 'post' );
 	$modulename = $nv_Request->get_string( 'modulename', 'post' );
 
-	if( preg_match( $global_config['check_module'], $modulename ) and (preg_match( $global_config['check_theme'], $themename ) or preg_match( $global_config['check_theme_mobile'], $themename )) )
+	if( preg_match( $global_config['check_module'], $modulename ) and ( preg_match( $global_config['check_theme'], $themename ) or preg_match( $global_config['check_theme_mobile'], $themename ) ) )
 	{
 		$allowfolder = array();
 		$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/modules/' . $modulename . '/';

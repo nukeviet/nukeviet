@@ -28,7 +28,7 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-$url = ! empty( $client_info['referer'] ) ? $client_info['referer'] : (isset( $_SERVER['SCRIPT_URI'] ) ? $_SERVER['SCRIPT_URI'] : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA);
+$url = ! empty( $client_info['referer'] ) ? $client_info['referer'] : ( isset( $_SERVER['SCRIPT_URI'] ) ? $_SERVER['SCRIPT_URI'] : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA );
 
 $info = $lang_module['logout_ok'] . "<br /><br />\n";
 $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";

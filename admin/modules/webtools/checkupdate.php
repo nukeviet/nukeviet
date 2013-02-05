@@ -25,7 +25,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 	{
 		$values = array();
 		$values['userVersion'] = $global_config['version'];
-		$new_version = ($i == 'sysUpd') ? nv_geVersion( 28800 ) : nv_geVersion( 120 );
+		$new_version = ( $i == 'sysUpd' ) ? nv_geVersion( 28800 ) : nv_geVersion( 120 );
 		$values['onlineVersion'] = sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, ( string )$new_version->name, nv_date( "d/m/Y H:i", strtotime( $new_version->date ) ) );
 		$xtpl->assign( 'VALUE', $values );
 		if( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
@@ -44,7 +44,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 	}
 	elseif( $i == "modUpd" or $i == "modUpdRef" or $i == "modNewUpd" or $i == "modNewUpdRef" )
 	{
-		$_modules = ($i == 'modUpd' or $i == "modNewUpd") ? nv_getModVersion( 28800 ) : nv_getModVersion( 120 );
+		$_modules = ( $i == 'modUpd' or $i == "modNewUpd" ) ? nv_getModVersion( 28800 ) : nv_getModVersion( 120 );
 		$_modules = nv_object2array( $_modules );
 		$_modules = $_modules['module'];
 		$onlineModules = array();
@@ -75,7 +75,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 			{
 				$userModules[$module_file] = $onlineModules[$module_file];
 
-				if( isset( $onlineModules[$module_file]['pubtime'], $onlineModules[$module_file]['version'], $onlineModules[$module_file]['author'] ) and $onlineModules[$module_file]['version'] == $v and ($onlineModules[$module_file]['pubtime'] != $p or $onlineModules[$module_file]['author'] != $author) )
+				if( isset( $onlineModules[$module_file]['pubtime'], $onlineModules[$module_file]['version'], $onlineModules[$module_file]['author'] ) and $onlineModules[$module_file]['version'] == $v and ( $onlineModules[$module_file]['pubtime'] != $p or $onlineModules[$module_file]['author'] != $author ) )
 				{
 					$sql2 = "UPDATE `" . $db_config['prefix'] . "_setup_modules` 
 		                SET `mod_version`=" . $db->dbescape( $v . ' ' . $onlineModules[$module_file]['pubtime'] ) . ", 
@@ -126,56 +126,35 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				$info .= ! empty( $values['version'] ) ? $values['version'] : "n/a";
 
 				$tooltip = array();
-				$tooltip[] = array(
-					'title' => $lang_module['userVersion'],
-					'content' => ( ! empty( $values['u_version'] ) ? $values['u_version'] : "n/a") . ( ! empty( $values['u_pubtime'] ) ? " (" . nv_date( "d/m/Y H:i", $values['u_pubtime'] ) . ")" : "")
-				);
-				$tooltip[] = array(
-					'title' => $lang_module['onlineVersion'],
-					'content' => ( ! empty( $values['version'] ) ? $values['version'] : "n/a") . ( ! empty( $values['pubtime'] ) ? " (" . nv_date( "d/m/Y H:i", $values['pubtime'] ) . ")" : "")
-				);
+				$tooltip[] = array( 'title' => $lang_module['userVersion'], 'content' => ( ! empty( $values['u_version'] ) ? $values['u_version'] : "n/a" ) . ( ! empty( $values['u_pubtime'] ) ? " (" . nv_date( "d/m/Y H:i", $values['u_pubtime'] ) . ")" : "" ) );
+				$tooltip[] = array( 'title' => $lang_module['onlineVersion'], 'content' => ( ! empty( $values['version'] ) ? $values['version'] : "n/a" ) . ( ! empty( $values['pubtime'] ) ? " (" . nv_date( "d/m/Y H:i", $values['pubtime'] ) . ")" : "" ) );
 
 				if( isset( $values['author'] ) and ! empty( $values['author'] ) )
 				{
-					$tooltip[] = array(
-						'title' => $lang_module['moduleAuthor'],
-						'content' => $values['author']
-					);
+					$tooltip[] = array( 'title' => $lang_module['moduleAuthor'], 'content' => $values['author'] );
 				}
 
 				if( isset( $values['license'] ) and ! empty( $values['license'] ) )
 				{
-					$tooltip[] = array(
-						'title' => $lang_module['moduleLicense'],
-						'content' => $values['license']
-					);
+					$tooltip[] = array( 'title' => $lang_module['moduleLicense'], 'content' => $values['license'] );
 				}
 
 				if( isset( $values['mode'] ) and ! empty( $values['mode'] ) )
 				{
-					$tooltip[] = array(
-						'title' => $lang_module['moduleMode'],
-						'content' => $values['mode'] == "sys" ? $lang_module['moduleModeSys'] : $lang_module['moduleModeOther']
-					);
+					$tooltip[] = array( 'title' => $lang_module['moduleMode'], 'content' => $values['mode'] == "sys" ? $lang_module['moduleModeSys'] : $lang_module['moduleModeOther'] );
 				}
 
 				if( isset( $values['link'] ) and ! empty( $values['link'] ) )
 				{
-					$tooltip[] = array(
-						'title' => $lang_module['moduleLink'],
-						'content' => "<a href=\"" . $values['link'] . "\">" . $values['link'] . "</a>"
-					);
+					$tooltip[] = array( 'title' => $lang_module['moduleLink'], 'content' => "<a href=\"" . $values['link'] . "\">" . $values['link'] . "</a>" );
 				}
 
 				if( isset( $values['support'] ) and ! empty( $values['support'] ) )
 				{
-					$tooltip[] = array(
-						'title' => $lang_module['moduleSupport'],
-						'content' => "<a href=\"" . $values['support'] . "\">" . $values['support'] . "</a>"
-					);
+					$tooltip[] = array( 'title' => $lang_module['moduleSupport'], 'content' => "<a href=\"" . $values['support'] . "\">" . $values['support'] . "</a>" );
 				}
 
-				$xtpl->assign( 'CLASS', ($a % 2) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'MODNAME', $modname );
 				$xtpl->assign( 'MODINFO', $info );
 
@@ -212,45 +191,30 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 			foreach( $newModules as $modname => $values )
 			{
 				$tooltip = array();
-				$tooltip[] = array(
-					'title' => $lang_module['onlineVersion'],
-					'content' => ( ! empty( $values['version'] ) ? $values['version'] : "n/a") . ( ! empty( $values['pubtime'] ) ? " (" . nv_date( "d/m/Y H:i", $values['pubtime'] ) . ")" : "")
-				);
+				$tooltip[] = array( 'title' => $lang_module['onlineVersion'], 'content' => ( ! empty( $values['version'] ) ? $values['version'] : "n/a" ) . ( ! empty( $values['pubtime'] ) ? " (" . nv_date( "d/m/Y H:i", $values['pubtime'] ) . ")" : "" ) );
 
 				if( isset( $values['author'] ) and ! empty( $values['author'] ) )
 				{
-					$tooltip[] = array(
-						'title' => $lang_module['moduleAuthor'],
-						'content' => $values['author']
-					);
+					$tooltip[] = array( 'title' => $lang_module['moduleAuthor'], 'content' => $values['author'] );
 				}
 
 				if( isset( $values['license'] ) and ! empty( $values['license'] ) )
 				{
-					$tooltip[] = array(
-						'title' => $lang_module['moduleLicense'],
-						'content' => $values['license']
-					);
+					$tooltip[] = array( 'title' => $lang_module['moduleLicense'], 'content' => $values['license'] );
 				}
 
 				if( isset( $values['link'] ) and ! empty( $values['link'] ) )
 				{
 					$modname = "<a href=\"" . $values['link'] . "\" title=\"" . $lang_module['moduleNote2'] . "\">" . $modname . "</a>";
-					$tooltip[] = array(
-						'title' => $lang_module['moduleLink'],
-						'content' => "<a href=\"" . $values['link'] . "\">" . $values['link'] . "</a>"
-					);
+					$tooltip[] = array( 'title' => $lang_module['moduleLink'], 'content' => "<a href=\"" . $values['link'] . "\">" . $values['link'] . "</a>" );
 				}
 
 				if( isset( $values['support'] ) and ! empty( $values['support'] ) )
 				{
-					$tooltip[] = array(
-						'title' => $lang_module['moduleSupport'],
-						'content' => "<a href=\"" . $values['support'] . "\">" . $values['support'] . "</a>"
-					);
+					$tooltip[] = array( 'title' => $lang_module['moduleSupport'], 'content' => "<a href=\"" . $values['support'] . "\">" . $values['support'] . "</a>" );
 				}
 
-				$xtpl->assign( 'CLASS', ($a % 2) ? " class=\"second\"" : "" );
+				$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'MODNAME', $modname );
 				$xtpl->assign( 'MODINFO', $values['message'] );
 				$xtpl->assign( 'MODUPDDATE', nv_date( "d/m/Y H:i", $modUpdDate ) );

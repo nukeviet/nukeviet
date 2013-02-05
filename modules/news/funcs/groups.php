@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 if( isset( $array_op[1] ) )
 {
 	$alias = trim( $array_op[1] );
-	$page = (isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-") ? intval( substr( $array_op[2], 5 ) ) : 1;
+	$page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-" ) ? intval( substr( $array_op[2], 5 ) ) : 1;
 
 	list( $bid, $page_title, $description, $key_words ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `title`, `description`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` WHERE `alias`=" . $db->dbescape( $alias ) ) );
 
@@ -26,7 +26,7 @@ if( isset( $array_op[1] ) )
 			'link' => $base_url
 		);
 
-		$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t1.keywords, t2.weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT " . ($page - 1) * $per_page . "," . $per_page );
+		$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t1.keywords, t2.weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
@@ -36,19 +36,19 @@ if( isset( $array_op[1] ) )
 
 		while( $item = $db->sql_fetch_assoc( $query ) )
 		{
-			if( $item['homeimgthumb'] == 1 )//image thumb
+			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
 				$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
-			elseif( $item['homeimgthumb'] == 2 )//image file
+			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
 				$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
-			elseif( $item['homeimgthumb'] == 3 )//image url
+			elseif( $item['homeimgthumb'] == 3 ) //image url
 			{
 				$item['src'] = $item['homeimgfile'];
 			}
-			else//no image
+			else //no image
 			{
 				$item['src'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
@@ -105,19 +105,19 @@ else
 
 		while( $item = $db->sql_fetch_assoc( $query ) )
 		{
-			if( $item['homeimgthumb'] == 1 )//image thumb
+			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
 				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
-			elseif( $item['homeimgthumb'] == 2 )//image file
+			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
 				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
-			elseif( $item['homeimgthumb'] == 3 )//image url
+			elseif( $item['homeimgthumb'] == 3 ) //image url
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else//no image
+			else //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}

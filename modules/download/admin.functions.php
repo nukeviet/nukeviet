@@ -16,15 +16,7 @@ $submenu['cat'] = $lang_module['download_catmanager'];
 $submenu['comment'] = $lang_module['download_comment'];
 $submenu['config'] = $lang_module['download_config'];
 
-$allow_func = array(
-	'main',
-	'add',
-	'filequeue',
-	'report',
-	'config',
-	'cat',
-	'comment'
-);
+$allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'comment' );
 
 define( 'NV_IS_FILE_ADMIN', true );
 
@@ -33,7 +25,7 @@ define( 'NV_IS_FILE_ADMIN', true );
  *
  * @return
  */
-function get_allow_exts( )
+function get_allow_exts()
 {
 	global $global_config;
 

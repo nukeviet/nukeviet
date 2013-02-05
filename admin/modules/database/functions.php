@@ -20,21 +20,12 @@ if( $module_name == "database" )
 		"custom_title" => $lang_global['mod_database']
 	);
 
-	$allow_func = array(
-		'main',
-		'savefile',
-		'download',
-		'optimize',
-		'setting',
-		'file',
-		'getfile',
-		'delfile'
-	);
+	$allow_func = array( 'main', 'savefile', 'download', 'optimize', 'setting', 'file', 'getfile', 'delfile' );
 	unset( $page_title, $select_options );
 
 	define( 'NV_IS_FILE_DATABASE', true );
 
-	function nv_show_tables( )
+	function nv_show_tables()
 	{
 		global $db, $db_config, $lang_module, $lang_global, $module_name;
 
@@ -55,9 +46,9 @@ if( $module_name == "database" )
 			$tables[$item['Name']]['table_max_size'] = ! empty( $item['Max_data_length'] ) ? nv_convertfromBytes( floatval( $item['Max_data_length'] ) ) : 0;
 			$tables[$item['Name']]['table_datafree'] = ! empty( $item['Data_free'] ) ? nv_convertfromBytes( floatval( $item['Data_free'] ) ) : 0;
 			$tables[$item['Name']]['table_numrow'] = intval( $item['Rows'] );
-			$tables[$item['Name']]['table_charset'] = ( ! empty( $item['Collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['Collation'], $m )) ? $m[1] : "";
-			$tables[$item['Name']]['table_type'] = ( isset( $item['Engine'] )) ? $item['Engine'] : $item['Type'];
-			$tables[$item['Name']]['table_auto_increment'] = ( isset( $item['Auto_increment'] )) ? intval( $item['Auto_increment'] ) : "n/a";
+			$tables[$item['Name']]['table_charset'] = ( ! empty( $item['Collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['Collation'], $m ) ) ? $m[1] : "";
+			$tables[$item['Name']]['table_type'] = ( isset( $item['Engine'] ) ) ? $item['Engine'] : $item['Type'];
+			$tables[$item['Name']]['table_auto_increment'] = ( isset( $item['Auto_increment'] ) ) ? intval( $item['Auto_increment'] ) : "n/a";
 			$tables[$item['Name']]['table_create_time'] = ! empty( $item['Create_time'] ) ? strftime( "%H:%M %d/%m/%Y", strtotime( $item['Create_time'] ) ) : "n/a";
 			$tables[$item['Name']]['table_update_time'] = ! empty( $item['Update_time'] ) ? strftime( "%H:%M %d/%m/%Y", strtotime( $item['Update_time'] ) ) : "n/a";
 			$db_size += $tables_size;
@@ -79,31 +70,14 @@ if( $module_name == "database" )
 		);
 
 		$contents['op_name'] = NV_OP_VARIABLE;
-		$contents['type'] = array(
-			'all' => $lang_module['download_all'],
-			'str' => $lang_module['download_str']
-		);
+		$contents['type'] = array( 'all' => $lang_module['download_all'], 'str' => $lang_module['download_str'] );
 		$contents['type_name'] = "type";
-		$contents['ext'] = array(
-			'sql' => $lang_module['ext_sql'],
-			'gz' => $lang_module['ext_gz']
-		);
+		$contents['ext'] = array( 'sql' => $lang_module['ext_sql'], 'gz' => $lang_module['ext_gz'] );
 		$contents['ext_name'] = "ext";
 		$contents['submit'] = $lang_module['submit'];
 		$contents['captions']['tables_info'] = sprintf( $lang_module['tables_info'], $db->dbname );
 
-		$contents['columns'] = array(
-			$lang_module['table_name'],
-			$lang_module['table_size'],
-			$lang_module['table_max_size'],
-			$lang_module['table_datafree'],
-			$lang_module['table_numrow'],
-			$lang_module['table_charset'],
-			$lang_module['table_type'],
-			$lang_module['table_auto_increment'],
-			$lang_module['table_create_time'],
-			$lang_module['table_update_time']
-		);
+		$contents['columns'] = array( $lang_module['table_name'], $lang_module['table_size'], $lang_module['table_max_size'], $lang_module['table_datafree'], $lang_module['table_numrow'], $lang_module['table_charset'], $lang_module['table_type'], $lang_module['table_auto_increment'], $lang_module['table_create_time'], $lang_module['table_update_time'] );
 
 		foreach( $tables as $key => $values )
 		{
@@ -142,7 +116,7 @@ if( $module_name == "database" )
 		}
 	}
 
-	function nv_show_tab( )
+	function nv_show_tab()
 	{
 		global $db, $db_config, $module_name, $page_title, $lang_module;
 
@@ -169,77 +143,31 @@ if( $module_name == "database" )
 		$tablename = substr( $item['Name'], strlen( $db_config['prefix'] ) + 1 );
 		$contents = array();
 		$contents['table']['caption'] = sprintf( $lang_module['table_caption'], $tablename );
-		$contents['table']['info']['name'] = array(
-			$lang_module['table_name'],
-			$tablename
-		);
-		$contents['table']['info']['engine'] = array(
-			$lang_module['table_type'],
-			(( isset( $item['Engine'] )) ? $item['Engine'] : $item['Type'])
-		);
-		$contents['table']['info']['row_format'] = array(
-			$lang_module['row_format'],
-			$item['Row_format']
-		);
-		$contents['table']['info']['data_length'] = array(
-			$lang_module['table_size'],
-			nv_convertfromBytes( intval( $item['Data_length'] ) + intval( $item['Index_length'] ) )
-		);
-		$contents['table']['info']['max_data_length'] = array(
-			$lang_module['table_max_size'],
-			( ! empty( $item['Max_data_length'] ) ? nv_convertfromBytes( floatval( $item['Max_data_length'] ) ) : 'n/a')
-		);
-		$contents['table']['info']['data_free'] = array(
-			$lang_module['table_datafree'],
-			( ! empty( $item['Data_free'] ) ? nv_convertfromBytes( intval( $item['Data_free'] ) ) : 0)
-		);
-		$contents['table']['info']['rows'] = array(
-			$lang_module['table_numrow'],
-			$item['Rows']
-		);
-		$contents['table']['info']['auto_increment'] = array(
-			$lang_module['table_auto_increment'],
-			(( isset( $item['Auto_increment'] )) ? intval( $item['Auto_increment'] ) : "n/a")
-		);
-		$contents['table']['info']['create_time'] = array(
-			$lang_module['table_create_time'],
-			( ! empty( $item['Create_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['Create_time'] ) ) : "n/a")
-		);
-		$contents['table']['info']['update_time'] = array(
-			$lang_module['table_update_time'],
-			( ! empty( $item['Update_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['Update_time'] ) ) : "n/a")
-		);
-		$contents['table']['info']['check_time'] = array(
-			$lang_module['table_check_time'],
-			( ! empty( $item['Check_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['Check_time'] ) ) : "n/a")
-		);
-		$contents['table']['info']['collation'] = array(
-			$lang_module['table_charset'],
-			(( ! empty( $item['Collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['Collation'], $m )) ? $m[1] : "")
-		);
+		$contents['table']['info']['name'] = array( $lang_module['table_name'], $tablename );
+		$contents['table']['info']['engine'] = array( $lang_module['table_type'], ( ( isset( $item['Engine'] ) ) ? $item['Engine'] : $item['Type'] ) );
+		$contents['table']['info']['row_format'] = array( $lang_module['row_format'], $item['Row_format'] );
+		$contents['table']['info']['data_length'] = array( $lang_module['table_size'], nv_convertfromBytes( intval( $item['Data_length'] ) + intval( $item['Index_length'] ) ) );
+		$contents['table']['info']['max_data_length'] = array( $lang_module['table_max_size'], ( ! empty( $item['Max_data_length'] ) ? nv_convertfromBytes( floatval( $item['Max_data_length'] ) ) : 'n/a' ) );
+		$contents['table']['info']['data_free'] = array( $lang_module['table_datafree'], ( ! empty( $item['Data_free'] ) ? nv_convertfromBytes( intval( $item['Data_free'] ) ) : 0 ) );
+		$contents['table']['info']['rows'] = array( $lang_module['table_numrow'], $item['Rows'] );
+		$contents['table']['info']['auto_increment'] = array( $lang_module['table_auto_increment'], ( ( isset( $item['Auto_increment'] ) ) ? intval( $item['Auto_increment'] ) : "n/a" ) );
+		$contents['table']['info']['create_time'] = array( $lang_module['table_create_time'], ( ! empty( $item['Create_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['Create_time'] ) ) : "n/a" ) );
+		$contents['table']['info']['update_time'] = array( $lang_module['table_update_time'], ( ! empty( $item['Update_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['Update_time'] ) ) : "n/a" ) );
+		$contents['table']['info']['check_time'] = array( $lang_module['table_check_time'], ( ! empty( $item['Check_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['Check_time'] ) ) : "n/a" ) );
+		$contents['table']['info']['collation'] = array( $lang_module['table_charset'], ( ( ! empty( $item['Collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['Collation'], $m ) ) ? $m[1] : "" ) );
 
 		$contents['table']['show'] = nv_highlight_string( $tab, "php" );
-		$contents['table']['show_lang'] = array(
-			$lang_module['php_code'],
-			$lang_module['sql_code']
-		);
+		$contents['table']['show_lang'] = array( $lang_module['php_code'], $lang_module['sql_code'] );
 
 		$contents['table']['row']['caption'] = sprintf( $lang_module['table_row_caption'], $tablename );
-		$contents['table']['row']['columns'] = array(
-			$lang_module['field_name'],
-			$lang_module['field_type'],
-			$lang_module['field_null'],
-			$lang_module['field_key'],
-			$lang_module['field_default'],
-			$lang_module['field_extra']
-		);
+		$contents['table']['row']['columns'] = array( $lang_module['field_name'], $lang_module['field_type'], $lang_module['field_null'], $lang_module['field_key'], $lang_module['field_default'], $lang_module['field_extra'] );
 
 		$contents['table']['row']['detail'] = array();
 		$result = $db->sql_query( "SHOW COLUMNS FROM `" . $tab . "`" );
 		while( $row = $db->sql_fetch_assoc( $result ) )
 		{
-			$row['Null'] = ($row['Null'] == "NO") ? "NOT NULL" : "NULL";
-			$row['Key'] = empty( $row['Key'] ) ? "" : ($row['Key'] == 'PRI' ? "PRIMARY KEY" : ($row['Key'] == 'UNI' ? "UNIQUE KEY" : "KEY"));
+			$row['Null'] = ( $row['Null'] == "NO" ) ? "NOT NULL" : "NULL";
+			$row['Key'] = empty( $row['Key'] ) ? "" : ( $row['Key'] == 'PRI' ? "PRIMARY KEY" : ( $row['Key'] == 'UNI' ? "UNIQUE KEY" : "KEY" ) );
 			$contents['table']['row']['detail'][] = $row;
 		}
 		$db->sql_freeresult( $result );
@@ -265,7 +193,7 @@ if( $module_name == "database" )
 		foreach( $contents['database'] as $key => $value )
 		{
 			$xtpl->assign( 'ROW', array(
-				'class' => (++$a % 2) ? " class=\"second\"" : "",
+				'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 				'key' => $key,
 				'value' => $value
 			) );
@@ -325,9 +253,9 @@ if( $module_name == "database" )
 		foreach( $contents['rows'] as $key => $values )
 		{
 			$xtpl->assign( 'ROW', array(
-				'class' => (++$a % 2) ? " class=\"second\"" : "",
-				'tag' => ( empty( $values[3] )) ? "td" : "th",
-				'key' => $key,
+				'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
+				'tag' => ( empty( $values[3] ) ) ? "td" : "th",
+				'key' => $key
 			) );
 
 			foreach( $values as $value )
@@ -356,10 +284,7 @@ if( $module_name == "database" )
 		$a = 0;
 		foreach( $contents['table']['info'] as $key => $value )
 		{
-			$xtpl->assign( 'INFO', array(
-				'class' => (++$a % 2) ? " class=\"second\"" : "",
-				'val' => $value
-			) );
+			$xtpl->assign( 'INFO', array( 'class' => ( ++$a % 2 ) ? " class=\"second\"" : "", 'val' => $value ) );
 
 			$xtpl->parse( 'main.info' );
 		}
@@ -378,7 +303,7 @@ if( $module_name == "database" )
 		$a = 0;
 		foreach( $contents['table']['row']['detail'] as $key => $values )
 		{
-			$xtpl->assign( 'CLASS', (++$a % 2) ? " class=\"second\"" : "" );
+			$xtpl->assign( 'CLASS', ( ++$a % 2 ) ? " class=\"second\"" : "" );
 
 			foreach( $values as $value )
 			{
@@ -392,7 +317,6 @@ if( $module_name == "database" )
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
-
 }
 
 ?>

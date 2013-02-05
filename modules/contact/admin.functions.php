@@ -14,7 +14,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
  *
  * @return
  */
-function nv_getAllowed( )
+function nv_getAllowed()
 {
 	global $module_data, $db, $admin_info;
 
@@ -63,26 +63,11 @@ if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$submenu['list_row'] = $lang_module['list_row_title'];
 	$submenu['content'] = $lang_module['content'];
-	$allow_func = array(
-		'main',
-		'reply',
-		'del',
-		'list_row',
-		'row',
-		'del_row',
-		'content',
-		'view',
-		'change_status'
-	);
+	$allow_func = array( 'main', 'reply', 'del', 'list_row', 'row', 'del_row', 'content', 'view', 'change_status' );
 }
 else
 {
-	$allow_func = array(
-		'main',
-		'reply',
-		'del',
-		'view'
-	);
+	$allow_func = array( 'main', 'reply', 'del', 'view' );
 }
 
 define( 'NV_IS_FILE_ADMIN', true );

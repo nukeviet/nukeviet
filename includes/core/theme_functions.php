@@ -14,7 +14,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-function nv_error_info( )
+function nv_error_info()
 {
 	global $lang_global, $global_config, $error_info;
 
@@ -36,7 +36,7 @@ function nv_error_info( )
 		E_STRICT => array( $lang_global['error_notice'], "comment.png" ), //
 		E_RECOVERABLE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
 		E_DEPRECATED => array( $lang_global['error_notice'], "comment.png" ), //
-		E_USER_DEPRECATED => array( $lang_global['error_warning'], "warning.png" ) 
+		E_USER_DEPRECATED => array( $lang_global['error_warning'], "warning.png" )
 	);
 
 	if( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/error_info.tpl" ) )
@@ -66,7 +66,7 @@ function nv_error_info( )
 	$a = 0;
 	foreach( $error_info as $key => $value )
 	{
-		$xtpl->assign( 'TPL_E_CLASS', ($a % 2) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'TPL_E_CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'TPL_E_ALT', $errortype[$value['errno']][0] );
 		$xtpl->assign( 'TPL_E_SRC', $image_path . $errortype[$value['errno']][1] );
 		$xtpl->assign( 'TPL_E_ERRNO', $errortype[$value['errno']][0] );
@@ -187,7 +187,7 @@ function nv_xmlOutput( $content, $lastModified )
 
 	if( nv_function_exists( 'gzencode' ) )
 	{
-		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : (strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none');
+		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
 
 		if( $encoding != 'none' )
 		{
@@ -195,7 +195,7 @@ function nv_xmlOutput( $content, $lastModified )
 			{
 				$version = floatval( $matches[1] );
 
-				if( $version < 6 || ($version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' )) ) $encoding = 'none';
+				if( $version < 6 || ( $version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' ) ) ) $encoding = 'none';
 			}
 		}
 	}
@@ -391,7 +391,7 @@ function nv_xmlSitemap_generate( $url )
  *
  * @return void
  */
-function nv_xmlSitemapIndex_generate( )
+function nv_xmlSitemapIndex_generate()
 {
 	global $db_config, $db, $global_config, $nv_Request, $sys_info;
 

@@ -40,7 +40,7 @@ if( empty( $level ) or $admin_info['level'] < $level )
 	$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `active`=" . $active . " WHERE `userid`=" . $userid;
 	$result = $db->sql_query( $sql );
 
-	$note = ($active) ? $lang_module['active_users'] : $lang_module['unactive_users'];
+	$note = ( $active ) ? $lang_module['active_users'] : $lang_module['unactive_users'];
 	nv_insert_logs( NV_LANG_DATA, $module_name, $note, 'userid: ' . $userid . ' - username: ' . $username, $admin_info['userid'] );
 	echo "OK";
 }

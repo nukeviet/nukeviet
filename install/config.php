@@ -327,7 +327,7 @@ $nv_parse_ini_timezone = array(
 	'Pacific/Chatham' => array( 'winter_offset' => '49500', 'summer_offset' => '45900' ),
 	'Pacific/Enderbury' => array( 'winter_offset' => '46800', 'summer_offset' => '46800' ),
 	'Pacific/Tongatapu' => array( 'winter_offset' => '46800', 'summer_offset' => '46800' ),
-	'Pacific/Kiritimati' => array( 'winter_offset' => '50400', 'summer_offset' => '50400' ) 
+	'Pacific/Kiritimati' => array( 'winter_offset' => '50400', 'summer_offset' => '50400' )
 );
 
 $global_config['version'] = "3.5.00";

@@ -28,20 +28,12 @@ $plans_form = array();
 
 while( $row = $db->sql_fetchrow( $result ) )
 {
-	$plans[$row['id']] = $row['title'] . " (" . ( ! empty( $row['blang'] ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ")";
+	$plans[$row['id']] = $row['title'] . " (" . ( ! empty( $row['blang'] ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'] ) . ")";
 	$plans_form[$row['id']] = $row['form'];
 }
 
 $contents = array();
-$contents['thead'] = array(
-	$lang_module['title'],
-	$lang_module['in_plan'],
-	$lang_module['of_client'],
-	$lang_module['publ_date'],
-	$lang_module['exp_date'],
-	$lang_module['is_act'],
-	$lang_global['actions']
-);
+$contents['thead'] = array( $lang_module['title'], $lang_module['in_plan'], $lang_module['of_client'], $lang_module['publ_date'], $lang_module['exp_date'], $lang_module['is_act'], $lang_global['actions'] );
 $contents['view'] = $lang_global['detail'];
 $contents['edit'] = $lang_global['edit'];
 $contents['del'] = $lang_global['delete'];
@@ -49,12 +41,7 @@ $contents['rows'] = array();
 
 $sql = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE ";
 $where = array();
-$aray_act = array(
-	1,
-	2,
-	3,
-	4
-);
+$aray_act = array( 1, 2, 3, 4 );
 $act = $nv_Request->get_int( 'act', 'get', 0 );
 $clid = $nv_Request->get_int( 'clid', 'get', 0 );
 $pid = $nv_Request->get_int( 'pid', 'get' );
@@ -135,7 +122,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 
 		for( $i = 1; $i <= $num; ++$i )
 		{
-			$weight_banner .= "<option value=\"" . $i . "\"" . ($i == $row['weight'] ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
+			$weight_banner .= "<option value=\"" . $i . "\"" . ( $i == $row['weight'] ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
 		}
 
 		$weight_banner .= "</select>";
@@ -143,18 +130,11 @@ while( $row = $db->sql_fetchrow( $result ) )
 
 	$contents['rows'][$row['id']]['weight'] = $weight_banner;
 	$contents['rows'][$row['id']]['title'] = $row['title'];
-	$contents['rows'][$row['id']]['pid'] = array(
-		NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'],
-		$plans[$row['pid']]
-	);
+	$contents['rows'][$row['id']]['pid'] = array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'], $plans[$row['pid']] );
 	$contents['rows'][$row['id']]['clid'] = ! empty( $client ) ? array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_client&amp;id=" . $row['clid'], $client ) : array();
 	$contents['rows'][$row['id']]['publ_date'] = date( "d/m/Y", $row['publ_time'] );
 	$contents['rows'][$row['id']]['exp_date'] = ! empty( $row['exp_time'] ) ? date( "d/m/Y", $row['exp_time'] ) : $lang_module['unlimited'];
-	$contents['rows'][$row['id']]['act'] = array(
-		'act_' . $row['id'],
-		$row['act'],
-		"nv_b_chang_act(" . $row['id'] . ",'act_" . $row['id'] . "');"
-	);
+	$contents['rows'][$row['id']]['act'] = array( 'act_' . $row['id'], $row['act'], "nv_b_chang_act(" . $row['id'] . ",'act_" . $row['id'] . "');" );
 	$contents['rows'][$row['id']]['view'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_banner&amp;id=" . $row['id'];
 	$contents['rows'][$row['id']]['edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_banner&amp;id=" . $row['id'];
 	$contents['rows'][$row['id']]['del'] = "nv_b_del(" . $row['id'] . ");";

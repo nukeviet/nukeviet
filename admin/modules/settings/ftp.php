@@ -48,31 +48,18 @@ if( $sys_info['ftp_support'] )
 		if( ! empty( $ftp->error ) )
 		{
 			$ftp->close();
-			die( 'ERROR|' . (string)$ftp->error );
+			die( 'ERROR|' . ( string )$ftp->error );
 		}
 		else
 		{
-			$list_valid = array(
-				NV_CACHEDIR,
-				NV_DATADIR,
-				"images",
-				"includes",
-				"js",
-				"language",
-				NV_LOGS_DIR,
-				"modules",
-				NV_SESSION_SAVE_PATH,
-				"themes",
-				NV_TEMP_DIR,
-				NV_UPLOADS_DIR
-			);
+			$list_valid = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "js", "language", NV_LOGS_DIR, "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
 
 			$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 
 			if( $ftp_root === false )
 			{
 				$ftp->close();
-				die( 'ERROR|' . (empty( $ftp->error ) ? $lang_module['ftp_error_detect_root'] : (string)$ftp->error) );
+				die( 'ERROR|' . ( empty( $ftp->error ) ? $lang_module['ftp_error_detect_root'] : ( string )$ftp->error ) );
 			}
 
 			$ftp->close();
@@ -111,22 +98,7 @@ if( $sys_info['ftp_support'] )
 			}
 			else
 			{
-				$check_files = array(
-					NV_CACHEDIR,
-					NV_DATADIR,
-					"images",
-					"includes",
-					"index.php",
-					"js",
-					"language",
-					NV_LOGS_DIR,
-					"mainfile.php",
-					"modules",
-					NV_SESSION_SAVE_PATH,
-					"themes",
-					NV_TEMP_DIR,
-					NV_UPLOADS_DIR
-				);
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
 
 				$list_files = $ftp->listDetail( $ftp_path, 'all' );
 

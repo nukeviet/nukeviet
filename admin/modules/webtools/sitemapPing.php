@@ -23,7 +23,7 @@ function nv_sitemapPing( $module, $link )
 	$md5 = md5( $link . $module . NV_LANG_DATA );
 	$cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/sitemapPing_" . $md5 . ".cache";
 
-	if( file_exists( $cacheFile ) and filemtime( $cacheFile ) > (NV_CURRENTTIME - 3600) ) return $lang_module['pleasePingAgain'];
+	if( file_exists( $cacheFile ) and filemtime( $cacheFile ) > ( NV_CURRENTTIME - 3600 ) ) return $lang_module['pleasePingAgain'];
 
 	if( $sys_info['supports_rewrite'] )
 	{
@@ -69,10 +69,10 @@ function nv_sitemapPing( $module, $link )
 		if( ! isset( $url_parts['host'] ) ) return $lang_module['searchEngineFailed'];
 		if( ! isset( $url_parts['path'] ) ) $url_parts['path'] = '/';
 
-		$sock = fsockopen( $url_parts['host'], (isset( $url_parts['port'] ) ? ( int )$url_parts['port'] : 80), $errno, $errstr, 3 );
+		$sock = fsockopen( $url_parts['host'], ( isset( $url_parts['port'] ) ? ( int )$url_parts['port'] : 80 ), $errno, $errstr, 3 );
 		if( ! $sock ) return $lang_module['PingNotSupported'];
 
-		$request = "GET " . $url_parts['path'] . (isset( $url_parts['query'] ) ? '?' . $url_parts['query'] : '') . " HTTP/1.1\r\n";
+		$request = "GET " . $url_parts['path'] . ( isset( $url_parts['query'] ) ? '?' . $url_parts['query'] : '' ) . " HTTP/1.1\r\n";
 		$request .= 'Host: ' . $url_parts['host'] . "\r\n";
 		$request .= "Connection: Close\r\n\r\n";
 		fwrite( $sock, $request );
@@ -153,8 +153,7 @@ else
 		if( $mt['searchEngine_item'] )
 		{
 			if( isset( $mt['searchEngine_item'][0] ) ) $searchEngines['searchEngine'] = $mt['searchEngine_item'];
-			else
-				$searchEngines['searchEngine'][] = $mt['searchEngine_item'];
+			else $searchEngines['searchEngine'][] = $mt['searchEngine_item'];
 		}
 	}
 
@@ -204,7 +203,7 @@ if( ! empty( $searchEngines['searchEngine'] ) )
 		{
 			$xtpl->assign( 'MODULE_NAME', $name );
 			$xtpl->assign( 'MODULE_TITLE', $title );
-			$xtpl->assign( 'MODULE_SELECTED', ($name == $module ? " selected=\"selected\"" : "") );
+			$xtpl->assign( 'MODULE_SELECTED', ( $name == $module ? " selected=\"selected\"" : "" ) );
 			$xtpl->parse( 'searchEngineList.is_ping.Module' );
 		}
 

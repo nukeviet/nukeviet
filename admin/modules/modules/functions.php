@@ -12,25 +12,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 $submenu['setup'] = $lang_module['modules'];
 $submenu['vmodule'] = $lang_module['vmodule_add'];
 
-$allow_func = array(
-	'main',
-	'list',
-	'setup',
-	'vmodule',
-	'edit',
-	'del',
-	'change_inmenu',
-	'change_submenu',
-	'change_weight',
-	'change_act',
-	'empty_mod',
-	'recreate_mod',
-	'show',
-	'change_func_weight',
-	'change_custom_name',
-	'change_func_submenu',
-	'change_block_weight'
-);
+$allow_func = array( 'main', 'list', 'setup', 'vmodule', 'edit', 'del', 'change_inmenu', 'change_submenu', 'change_weight', 'change_act', 'empty_mod', 'recreate_mod', 'show', 'change_func_weight', 'change_custom_name', 'change_func_submenu', 'change_block_weight' );
 
 if( defined( "NV_IS_GODADMIN" ) )
 {
@@ -69,7 +51,7 @@ if( $module_name == "modules" )
 	 *
 	 * @return
 	 */
-	function nv_fix_module_weight( )
+	function nv_fix_module_weight()
 	{
 		global $db;
 
@@ -202,7 +184,7 @@ if( $module_name == "modules" )
 				include ( $version_file );
 			}
 
-			$arr_modfuncs = (isset( $module_version['modfuncs'] ) and ! empty( $module_version['modfuncs'] )) ? array_map( "trim", explode( ",", $module_version['modfuncs'] ) ) : array();
+			$arr_modfuncs = ( isset( $module_version['modfuncs'] ) and ! empty( $module_version['modfuncs'] ) ) ? array_map( "trim", explode( ",", $module_version['modfuncs'] ) ) : array();
 			// Xoa du lieu tai bang _config
 
 			$sql = "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`=" . $db->dbescape( $lang ) . " AND `module`=" . $db->dbescape( $module_name );
@@ -294,7 +276,7 @@ if( $module_name == "modules" )
 				{
 					$show_func = 0;
 					$weight = 0;
-					$layout = ( isset( $array_layout_func_default[$module_name][$func] )) ? $array_layout_func_default[$module_name][$func] : $layoutdefault;
+					$layout = ( isset( $array_layout_func_default[$module_name][$func] ) ) ? $array_layout_func_default[$module_name][$func] : $layoutdefault;
 					if( isset( $arr_func_id_old[$func] ) and isset( $arr_func_id_old[$func] ) > 0 )
 					{
 						$arr_func_id[$func] = $arr_func_id_old[$func];
@@ -429,12 +411,12 @@ if( $module_name == "modules" )
 			foreach( $act_modules as $mod => $values )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => (++$a % 2) ? " class=\"second\"" : "",
+					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'mod' => $mod,
 					'values' => $values,
 					'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
 					'submenu_checked' => $values['submenu'][0] ? " checked=\"checked\"" : "",
-					'act_disabled' => (isset( $values['act'][2] ) and $values['act'][2] == 1) ? " disabled=\"disabled\"" : ""
+					'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : ""
 				) );
 
 				foreach( $weight_list as $new_weight )
@@ -463,12 +445,12 @@ if( $module_name == "modules" )
 			foreach( $deact_modules as $mod => $values )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => (++$a % 2) ? " class=\"second\"" : "",
+					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'mod' => $mod,
 					'values' => $values,
 					'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
 					'submenu_checked' => $values['submenu'][0] ? " checked=\"checked\"" : "",
-					'act_disabled' => (isset( $values['act'][2] ) and $values['act'][2] == 1) ? " disabled=\"disabled\"" : ""
+					'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : ""
 				) );
 
 				foreach( $weight_list as $new_weight )
@@ -497,12 +479,12 @@ if( $module_name == "modules" )
 			foreach( $bad_modules as $mod => $values )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => (++$a % 2) ? " class=\"second\"" : "",
+					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'mod' => $mod,
 					'values' => $values,
 					'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
 					'submenu_checked' => $values['submenu'][0] ? " checked=\"checked\"" : "",
-					'act_disabled' => (isset( $values['act'][2] ) and $values['act'][2] == 1) ? " disabled=\"disabled\"" : ""
+					'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : ""
 				) );
 
 				foreach( $weight_list as $new_weight )
@@ -562,7 +544,11 @@ if( $module_name == "modules" )
 		{
 			foreach( $contents['who_view'][1] as $k => $w )
 			{
-				$xtpl->assign( 'WHO_VIEW', array( 'key' => $k, 'selected' => $k == $contents['who_view'][2] ? " selected=\"selected\"" : "", 'title' => $w ) );
+				$xtpl->assign( 'WHO_VIEW', array(
+					'key' => $k,
+					'selected' => $k == $contents['who_view'][2] ? " selected=\"selected\"" : "",
+					'title' => $w
+				) );
 				$xtpl->parse( 'main.who_view.loop' );
 			}
 
@@ -582,11 +568,11 @@ if( $module_name == "modules" )
 			$xtpl->parse( 'main.who_view' );
 		}
 
-		$xtpl->assign( 'ACTIVE', ($contents['act'][1] == 1) ? ' checked="checked"' : '' );
+		$xtpl->assign( 'ACTIVE', ( $contents['act'][1] == 1 ) ? ' checked="checked"' : '' );
 
 		if( isset( $contents['rss'] ) )
 		{
-			$xtpl->assign( 'RSS', ($contents['rss'][1] == 1) ? ' checked="checked"' : '' );
+			$xtpl->assign( 'RSS', ( $contents['rss'][1] == 1 ) ? ' checked="checked"' : '' );
 			$xtpl->parse( 'main.rss' );
 		}
 
@@ -649,7 +635,7 @@ if( $module_name == "modules" )
 			foreach( $contents['rows'] as $id => $values )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => (++$a % 2) ? " class=\"second\"" : "",
+					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'id' => $id,
 					'js_onchange' => $values['weight'][1],
 					'in_submenu_click' => $values['in_submenu'][1],
@@ -717,7 +703,7 @@ if( $module_name == "modules" )
 		foreach( $array_modules as $mod => $values )
 		{
 			$xtpl->assign( 'ROW', array(
-				'class' => (++$a % 2) ? " class=\"second\"" : "",
+				'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 				'stt' => $a,
 				'values' => $values
 			) );
@@ -739,7 +725,7 @@ if( $module_name == "modules" )
 			foreach( $array_virtual_modules as $mod => $values )
 			{
 				$xtpl->assign( 'VROW', array(
-					'class' => (++$a % 2) ? " class=\"second\"" : "",
+					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'stt' => $a,
 					'values' => $values
 				) );
@@ -753,7 +739,6 @@ if( $module_name == "modules" )
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
-
 }
 
 ?>
