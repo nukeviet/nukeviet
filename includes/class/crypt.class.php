@@ -107,7 +107,7 @@ class nv_Crypt
 			$key[$a % 16] = chr( ord( $key[$a % 16] ) ^ ord( $ky[$a] ) );
 		$mode = MCRYPT_MODE_ECB;
 		$enc = MCRYPT_RIJNDAEL_128;
-		$val = str_pad( $val, (16 * (floor( strlen( $val ) / 16 ) + (strlen( $val ) % 16 == 0 ? 2 : 1))), chr( 16 - (strlen( $val ) % 16) ) );
+		$val = str_pad( $val, ( 16 * ( floor( strlen( $val ) / 16 ) + ( strlen( $val ) % 16 == 0 ? 2 : 1 ) ) ), chr( 16 - ( strlen( $val ) % 16 ) ) );
 		return mcrypt_encrypt( $enc, $key, $val, $mode, mcrypt_create_iv( mcrypt_get_iv_size( $enc, $mode ), MCRYPT_DEV_URANDOM ) );
 	}
 
@@ -131,19 +131,18 @@ class nv_Crypt
 		$enc = MCRYPT_RIJNDAEL_128;
 		$dec = mcrypt_decrypt( $enc, $key, $val, $mode, @mcrypt_create_iv( @mcrypt_get_iv_size( $enc, $mode ), MCRYPT_DEV_URANDOM ) );
 
-		$slast = ord( substr( $dec, - 1 ) );
+		$slast = ord( substr( $dec, -1 ) );
 		$slastc = chr( $slast );
-		$pcheck = substr( $dec, - $slast );
+		$pcheck = substr( $dec, -$slast );
 		if( preg_match( "/$slastc{" . $slast . "}/", $dec ) )
 		{
-			return rtrim( $dec, ((ord( substr( $dec, strlen( $dec ) - 1, 1 ) ) >= 0 and ord( substr( $dec, strlen( $dec ) - 1, 1 ) ) <= 16) ? chr( ord( substr( $dec, strlen( $dec ) - 1, 1 ) ) ) : null) );
+			return rtrim( $dec, ( ( ord( substr( $dec, strlen( $dec ) - 1, 1 ) ) >= 0 and ord( substr( $dec, strlen( $dec ) - 1, 1 ) ) <= 16 ) ? chr( ord( substr( $dec, strlen( $dec ) - 1, 1 ) ) ) : null ) );
 		}
 		else
 		{
 			return null;
 		}
 	}
-
 }
 
 ?>

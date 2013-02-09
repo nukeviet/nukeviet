@@ -11,6 +11,7 @@ if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_sdown_cats' ) )
 {
+
 	/**
 	 * nv_sdown_cats()
 	 *
@@ -38,7 +39,6 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 		}
 		return $list;
 	}
-
 }
 
 $list_cats = nv_sdown_cats( $m_values['module_data'] );

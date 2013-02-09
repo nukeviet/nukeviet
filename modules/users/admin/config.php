@@ -128,11 +128,8 @@ if( ! empty( $openid_servers ) )
 	$array_keys = array_keys( $openid_servers );
 	foreach( $array_keys as $server )
 	{
-		$checked = ( ! empty( $servers ) and in_array( $server, $servers )) ? " checked=\"checked\"" : "";
-		$array_config['openid_servers'][] = array(
-			'name' => $server,
-			'checked' => $checked
-		);
+		$checked = ( ! empty( $servers ) and in_array( $server, $servers ) ) ? " checked=\"checked\"" : "";
+		$array_config['openid_servers'][] = array( 'name' => $server, 'checked' => $checked );
 	}
 }
 $sql = "SELECT `config`, `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email' OR `config`='deny_name'";
@@ -155,13 +152,7 @@ $array_whoview = array(
 	2 => $lang_module['whoview_admin']
 );
 
-$ignorefolders = array(
-	"",
-	".",
-	"..",
-	"index.html",
-	".htaccess"
-);
+$ignorefolders = array( "", ".", "..", "index.html", ".htaccess" );
 
 $xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
@@ -180,7 +171,7 @@ for( $id = 3; $id < 20; $id++ )
 {
 	$array = array(
 		"id" => $id,
-		"select" => (NV_UNICKMIN == $id) ? " selected=\"selected\"" : "",
+		"select" => ( NV_UNICKMIN == $id ) ? " selected=\"selected\"" : "",
 		"value" => $id
 	);
 	$xtpl->assign( 'OPTION', $array );
@@ -190,7 +181,7 @@ for( $id = 20; $id < 100; $id++ )
 {
 	$array = array(
 		"id" => $id,
-		"select" => (NV_UNICKMAX == $id) ? " selected=\"selected\"" : "",
+		"select" => ( NV_UNICKMAX == $id ) ? " selected=\"selected\"" : "",
 		"value" => $id
 	);
 	$xtpl->assign( 'OPTION', $array );
@@ -202,7 +193,7 @@ for( $id = 0; $id < 5; $id++ )
 {
 	$array = array(
 		"id" => $id,
-		"select" => ($global_config['nv_unick_type'] == $id) ? " selected=\"selected\"" : "",
+		"select" => ( $global_config['nv_unick_type'] == $id ) ? " selected=\"selected\"" : "",
 		"value" => $lang_global['unick_type_' . $id]
 	);
 	$xtpl->assign( 'OPTION', $array );
@@ -213,7 +204,7 @@ for( $id = 5; $id < 20; $id++ )
 {
 	$array = array(
 		"id" => $id,
-		"select" => (NV_UPASSMIN == $id) ? " selected=\"selected\"" : "",
+		"select" => ( NV_UPASSMIN == $id ) ? " selected=\"selected\"" : "",
 		"value" => $id
 	);
 	$xtpl->assign( 'OPTION', $array );
@@ -223,7 +214,7 @@ for( $id = 20; $id < 255; $id++ )
 {
 	$array = array(
 		"id" => $id,
-		"select" => (NV_UPASSMAX == $id) ? " selected=\"selected\"" : "",
+		"select" => ( NV_UPASSMAX == $id ) ? " selected=\"selected\"" : "",
 		"value" => $id
 	);
 	$xtpl->assign( 'OPTION', $array );
@@ -235,7 +226,7 @@ for( $id = 0; $id < 5; $id++ )
 {
 	$array = array(
 		"id" => $id,
-		"select" => ($global_config['nv_upass_type'] == $id) ? " selected=\"selected\"" : "",
+		"select" => ( $global_config['nv_upass_type'] == $id ) ? " selected=\"selected\"" : "",
 		"value" => $lang_global['upass_type_' . $id]
 	);
 	$xtpl->assign( 'OPTION', $array );
@@ -246,7 +237,7 @@ foreach( $array_registertype as $id => $titleregister )
 {
 	$array = array(
 		"id" => $id,
-		"select" => ($array_config['allowuserreg'] == $id) ? " selected=\"selected\"" : "",
+		"select" => ( $array_config['allowuserreg'] == $id ) ? " selected=\"selected\"" : "",
 		"value" => $titleregister
 	);
 	$xtpl->assign( 'REGISTERTYPE', $array );
@@ -260,7 +251,7 @@ foreach( $nv_files as $value )
 	{
 		$array = array(
 			"id" => $value,
-			"select" => ($value == DIR_FORUM) ? " selected=\"selected\"" : "",
+			"select" => ( $value == DIR_FORUM ) ? " selected=\"selected\"" : "",
 			"value" => $value
 		);
 		$xtpl->assign( 'DIR_FORUM', $array );
@@ -270,7 +261,7 @@ foreach( $nv_files as $value )
 
 foreach( $array_whoview as $id => $titleregister )
 {
-	$select = ($array_config['whoviewuser'] == $id) ? " selected=\"selected\"" : "";
+	$select = ( $array_config['whoviewuser'] == $id ) ? " selected=\"selected\"" : "";
 	$array = array(
 		"id" => $id,
 		"select" => $select,
@@ -288,22 +279,22 @@ if( ! empty( $array_config['openid_servers'] ) )
 	}
 }
 $array_access = array(
- array( 'id' => 1, 'title' => $lang_module['level1'] ),
- array( 'id' => 2, 'title' => $lang_module['level2'] ),
- array( 'id' => 3, 'title' => $lang_module['level3'] ) 
+	array( 'id' => 1, 'title' => $lang_module['level1'] ),
+	array( 'id' => 2, 'title' => $lang_module['level2'] ),
+	array( 'id' => 3, 'title' => $lang_module['level3'] )
 );
 $i = 0;
 
 foreach( $array_access as $access )
 {
 	$level = $access['id'];
-	$access['class'] = (++$i % 2 == 0) ? ' class="second"' : '';
-	$access['checked_addus'] = (isset( $access_admin['access_addus'][$level] ) and $access_admin['access_addus'][$level] == 1) ? ' checked="checked" ' : '';
-	$access['checked_waiting'] = (isset( $access_admin['access_waiting'][$level] ) and $access_admin['access_waiting'][$level] == 1) ? ' checked="checked" ' : '';
-	$access['checked_editus'] = (isset( $access_admin['access_editus'][$level] ) and $access_admin['access_editus'][$level] == 1) ? ' checked="checked" ' : '';
-	$access['checked_delus'] = (isset( $access_admin['access_delus'][$level] ) and $access_admin['access_delus'][$level] == 1) ? ' checked="checked" ' : '';
-	$access['checked_passus'] = (isset( $access_admin['access_passus'][$level] ) and $access_admin['access_passus'][$level] == 1) ? ' checked="checked" ' : '';
-	$access['checked_groups'] = (isset( $access_admin['access_groups'][$level] ) and $access_admin['access_groups'][$level] == 1) ? ' checked="checked" ' : '';
+	$access['class'] = ( ++$i % 2 == 0 ) ? ' class="second"' : '';
+	$access['checked_addus'] = ( isset( $access_admin['access_addus'][$level] ) and $access_admin['access_addus'][$level] == 1 ) ? ' checked="checked" ' : '';
+	$access['checked_waiting'] = ( isset( $access_admin['access_waiting'][$level] ) and $access_admin['access_waiting'][$level] == 1 ) ? ' checked="checked" ' : '';
+	$access['checked_editus'] = ( isset( $access_admin['access_editus'][$level] ) and $access_admin['access_editus'][$level] == 1 ) ? ' checked="checked" ' : '';
+	$access['checked_delus'] = ( isset( $access_admin['access_delus'][$level] ) and $access_admin['access_delus'][$level] == 1 ) ? ' checked="checked" ' : '';
+	$access['checked_passus'] = ( isset( $access_admin['access_passus'][$level] ) and $access_admin['access_passus'][$level] == 1 ) ? ' checked="checked" ' : '';
+	$access['checked_groups'] = ( isset( $access_admin['access_groups'][$level] ) and $access_admin['access_groups'][$level] == 1 ) ? ' checked="checked" ' : '';
 	$xtpl->assign( 'ACCESS', $access );
 	$xtpl->parse( 'main.access' );
 }

@@ -22,10 +22,7 @@ if( $db->sql_numrows( $result ) )
 {
 	while( $item = $db->sql_fetch_assoc( $result ) )
 	{
-		$array_img = ( ! empty( $item['homeimgthumb'] )) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array(
-			"",
-			""
-		);
+		$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
 		$homeimgthumb = 0;
 		if( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) and $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
 		{

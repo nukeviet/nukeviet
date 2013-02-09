@@ -16,7 +16,7 @@ define( 'NV_IS_MOD_SEARCH', true );
  *
  * @return
  */
-function LoadModulesSearch( )
+function LoadModulesSearch()
 {
 	global $site_mods, $global_config;
 
@@ -87,10 +87,7 @@ function BoldKeywordInStr( $str, $keyword, $logic )
 
 	if( $logic == 'AND' )
 	{
-		$array_keyword = array(
-			$keyword,
-			nv_EncString( $keyword )
-		);
+		$array_keyword = array( $keyword, nv_EncString( $keyword ) );
 	}
 	else
 	{
@@ -112,7 +109,7 @@ function BoldKeywordInStr( $str, $keyword, $logic )
 				$lstrlen = nv_strlen( $matches[1] );
 				$rstrlen = $strlen - $lstrlen - $kstrlen;
 
-				$medium = round( (300 - $kstrlen) / 2 );
+				$medium = round( ( 300 - $kstrlen ) / 2 );
 				if( $lstrlen <= $medium )
 				{
 					$str = nv_clean60( $str, 300 );
@@ -147,10 +144,7 @@ function BoldKeywordInStr( $str, $keyword, $logic )
 	}
 
 	$str = preg_replace( $pattern, "{\\1}", $str );
-	$str = str_replace( array( "{", "}" ), array(
-		"<span class=\"keyword\">",
-		"</span>"
-	), $str );
+	$str = str_replace( array( "{", "}" ), array( "<span class=\"keyword\">", "</span>" ), $str );
 
 	return $str;
 }

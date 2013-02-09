@@ -49,8 +49,8 @@ if( preg_match( "/^[0-9]{1,2}$/", $nv_Request->get_int( 'month', 'get' ) ) )
 $table = NV_BANNERS_CLICK_GLOBALTABLE;
 
 $time = mktime( 0, 0, 0, $data_month, 15, $current_year );
-$day_max = ($data_month == $current_month) ? $current_day : date( "t", $time );
-$day_min = ($current_month == $publ_month and $current_year == $publ_year) ? $publ_day : 1;
+$day_max = ( $data_month == $current_month ) ? $current_day : date( "t", $time );
+$day_min = ( $current_month == $publ_month and $current_year == $publ_year ) ? $publ_day : 1;
 
 $sql = "SELECT COUNT(*) FROM `" . $table . "` WHERE `bid`=" . $bid . "";
 
@@ -63,7 +63,7 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 {
 	switch( $nv_Request->get_string( 'ext', 'get' ) )
 	{
-		case 'day' :
+		case 'day':
 			if( $nv_Request->isset_request( 'val', 'get' ) and preg_match( "/^[0-9]+$/", $nv_Request->get_string( 'val', 'get' ) ) and $nv_Request->get_int( 'val', 'get', 0 ) <= $day_max and $nv_Request->get_int( 'val', 'get', 0 ) >= $day_min )
 			{
 				$data_ext = 'day';
@@ -76,18 +76,18 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 			}
 			break;
 
-		case 'country' :
-			if( $nv_Request->isset_request( 'val', 'get' ) and ($nv_Request->get_string( 'val', 'get' ) == 'Unknown' or preg_match( "/^[A-Z]{2}$/", $nv_Request->get_string( 'val', 'get' ) )) )
+		case 'country':
+			if( $nv_Request->isset_request( 'val', 'get' ) and ( $nv_Request->get_string( 'val', 'get' ) == 'Unknown' or preg_match( "/^[A-Z]{2}$/", $nv_Request->get_string( 'val', 'get' ) ) ) )
 			{
 				$data_ext = 'country';
 				$data_val = $nv_Request->get_string( 'val', 'get' );
 				$sql .= " AND `click_country`=" . $db->dbescape( $data_val );
 				$base_url .= "&amp;ext=" . $data_ext . "&amp;val=" . $data_val;
-				$caption = sprintf( $lang_module['show_list_stat3'], (isset( $countries[$data_val] ) ? $countries[$data_val][1] : $data_val), nv_monthname( $data_month ), $current_year );
+				$caption = sprintf( $lang_module['show_list_stat3'], ( isset( $countries[$data_val] ) ? $countries[$data_val][1] : $data_val ), nv_monthname( $data_month ), $current_year );
 			}
 			break;
 
-		case 'browse' :
+		case 'browse':
 			if( $nv_Request->isset_request( 'val', 'get' ) and preg_match( "/^[a-zA-Z0-9]+$/", $nv_Request->get_string( 'val', 'get' ) ) )
 			{
 				$data_ext = 'browse';
@@ -98,7 +98,7 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 			}
 			break;
 
-		case 'os' :
+		case 'os':
 			if( $nv_Request->isset_request( 'val', 'get' ) and preg_match( "/^[a-zA-Z0-9-\\s]+$/", $nv_Request->get_string( 'val', 'get' ) ) )
 			{
 				$data_ext = 'os';
@@ -147,14 +147,7 @@ if( ! empty( $replacement ) )
 }
 
 $contents['caption'] = $caption;
-$contents['thead'] = array(
-	$lang_module['click_date'],
-	$lang_module['click_ip'],
-	$lang_module['click_country'],
-	$lang_module['click_browse'],
-	$lang_module['click_os'],
-	$lang_module['click_ref']
-);
+$contents['thead'] = array( $lang_module['click_date'], $lang_module['click_ip'], $lang_module['click_country'], $lang_module['click_browse'], $lang_module['click_os'], $lang_module['click_ref'] );
 $contents['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page, true, true, 'nv_urldecode_ajax', 'statistic' );
 
 $contents = call_user_func( "nv_show_list_stat_theme", $contents );

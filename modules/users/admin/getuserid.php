@@ -183,23 +183,21 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 
 		// Order data
 		$orderida = array(
-			"url" => ($orderid == "ASC") ? $base_url . "&amp;orderid=DESC" : $base_url . "&amp;orderid=ASC", //
-			"class" => ($orderid == "") ? "nooder" : strtolower( $orderid ) //
+			"url" => ( $orderid == "ASC" ) ? $base_url . "&amp;orderid=DESC" : $base_url . "&amp;orderid=ASC", //
+			"class" => ( $orderid == "" ) ? "nooder" : strtolower( $orderid ) //
 		);
 
-		$orderusernamea = array(
-			"url" => ($orderusername == "ASC") ? $base_url . "&amp;orderusername=DESC" : $base_url . "&amp;orderusername=ASC",
-			"class" => ($orderusername == "") ? "nooder" : strtolower( $orderusername ) //
-		);
+		$orderusernamea = array( "url" => ( $orderusername == "ASC" ) ? $base_url . "&amp;orderusername=DESC" : $base_url . "&amp;orderusername=ASC", "class" => ( $orderusername == "" ) ? "nooder" : strtolower( $orderusername ) //
+);
 
 		$orderemaila = array(
-			"url" => ($orderemail == "ASC") ? $base_url . "&amp;orderemail=DESC" : $base_url . "&amp;orderemail=ASC", //
-			"class" => ($orderemail == "") ? "nooder" : strtolower( $orderemail ) //
+			"url" => ( $orderemail == "ASC" ) ? $base_url . "&amp;orderemail=DESC" : $base_url . "&amp;orderemail=ASC", //
+			"class" => ( $orderemail == "" ) ? "nooder" : strtolower( $orderemail ) //
 		);
 
 		$orderregdatea = array(
-			"url" => ($orderregdate == "ASC") ? $base_url . "&amp;orderregdate=DESC" : $base_url . "&amp;orderregdate=ASC", //
-			"class" => ($orderregdate == "") ? "nooder" : strtolower( $orderregdate ) //
+			"url" => ( $orderregdate == "ASC" ) ? $base_url . "&amp;orderregdate=DESC" : $base_url . "&amp;orderregdate=ASC", //
+			"class" => ( $orderregdate == "" ) ? "nooder" : strtolower( $orderregdate ) //
 		);
 
 		// SQL data
@@ -256,7 +254,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$a = 0;
 		foreach( $array_user as $row )
 		{
-			$xtpl->assign( 'CLASS', ($a % 2 == 1) ? " class=\"second\"" : "" );
+			$xtpl->assign( 'CLASS', ( $a % 2 == 1 ) ? " class=\"second\"" : "" );
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'resultdata.data.row' );
 			++$a;
@@ -285,17 +283,17 @@ else
 	$array['gender'][] = array(
 		"key" => "", //
 		"title" => $lang_module['select_gender'], //
-		"selected" => ("" == $gender) ? " selected=\"selected\"" : "" //
+		"selected" => ( "" == $gender ) ? " selected=\"selected\"" : "" //
 	);
 	$array['gender'][] = array(
 		"key" => "M", //
 		"title" => $lang_module['select_gender_male'], //
-		"selected" => ("M" == $gender) ? " selected=\"selected\"" : "" //
+		"selected" => ( "M" == $gender ) ? " selected=\"selected\"" : "" //
 	);
 	$array['gender'][] = array(
 		"key" => "F", //
 		"title" => $lang_module['select_gender_female'], //
-		"selected" => ("F" == $gender) ? " selected=\"selected\"" : "" //
+		"selected" => ( "F" == $gender ) ? " selected=\"selected\"" : "" //
 	);
 
 	foreach( $array['gender'] as $gender )

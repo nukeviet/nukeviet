@@ -54,7 +54,7 @@ function main_theme( $array_content, $select_options, $base_url, $checkss )
 		{
 			$xtpl->assign( 'SELECT_NAME', $link['full_name'] );
 			$xtpl->assign( 'SELECT_VALUE', $value );
-			$xtpl->assign( 'SELECTED', ($array_content['fpart'] == $value) ? ' selected="selected"' : '' );
+			$xtpl->assign( 'SELECTED', ( $array_content['fpart'] == $value ) ? ' selected="selected"' : '' );
 			$xtpl->parse( 'main.form.select_option_loop' );
 		}
 

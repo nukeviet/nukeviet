@@ -97,9 +97,9 @@ $result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_fie
 while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 {
 	$language = unserialize( $row_field['language'] );
-	$row_field['title'] = ( isset( $language[NV_LANG_DATA] )) ? $language[NV_LANG_DATA][0] : $row['field'];
-	$row_field['description'] = ( isset( $language[NV_LANG_DATA] )) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
-	$row_field['field_choices'] = ( ! empty( $row_field['field_choices'] )) ? unserialize( $row_field['field_choices'] ) : array();
+	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
+	$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
+	$row_field['field_choices'] = ( ! empty( $row_field['field_choices'] ) ) ? unserialize( $row_field['field_choices'] ) : array();
 	$array_field_config[] = $row_field;
 }
 if( defined( 'NV_EDITOR' ) )
@@ -111,13 +111,11 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	define( 'NV_EDITOR', true );
 	define( 'NV_IS_CKEDITOR', true );
 	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' );
+
 	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
 		// Create class instance.
-		$editortoolbar = array(
-		 array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ),
-		 array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) 
-		);
+		$editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
 		$CKEditor = new CKEditor();
 		// Do not print the code directly to the browser, return it instead
 		$CKEditor->returnOutput = true;
@@ -141,14 +139,10 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 			$CKEditor->config['height'] = strpos( $height, '%' ) ? $height : intval( $height );
 		}
 		// Change default textarea attributes
-		$CKEditor->textareaAttributes = array(
-			"cols" => 80,
-			"rows" => 10
-		);
+		$CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
 		$val = nv_unhtmlspecialchars( $val );
 		return $CKEditor->editor( $textareaname, $val );
 	}
-
 }
 
 $sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
@@ -232,7 +226,6 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 				echo nv_site_theme( $contents );
 				include ( NV_ROOTDIR . "/includes/footer.php" );
 				exit();
-
 			}
 		}
 	}
@@ -275,7 +268,7 @@ $array_data['email'] = $row['email'];
 $array_data['photo'] = $row['photo'];
 
 $array_data['allowmailchange'] = $global_config['allowmailchange'];
-$array_data['allowloginchange'] = ($global_config['allowloginchange'] or ( ! empty( $row['last_openid'] ) and empty( $user_info['last_login'] ) and empty( $user_info['last_agent'] ) and empty( $user_info['last_ip'] ) and empty( $user_info['last_openid'] ))) ? 1 : 0;
+$array_data['allowloginchange'] = ( $global_config['allowloginchange'] or ( ! empty( $row['last_openid'] ) and empty( $user_info['last_login'] ) and empty( $user_info['last_agent'] ) and empty( $user_info['last_ip'] ) and empty( $user_info['last_openid'] ) ) ) ? 1 : 0;
 
 if( $checkss == $array_data['checkss'] )
 {
@@ -497,12 +490,12 @@ $array_data['gender_array']['N'] = array(
 $array_data['gender_array']['M'] = array(
 	'value' => 'M',
 	'title' => $lang_module['male'],
-	'selected' => ($array_data['gender'] == 'M' ? " selected=\"selected\"" : "")
+	'selected' => ( $array_data['gender'] == 'M' ? " selected=\"selected\"" : "" )
 );
 $array_data['gender_array']['F'] = array(
 	'value' => 'F',
 	'title' => $lang_module['female'],
-	'selected' => ($array_data['gender'] == 'F' ? " selected=\"selected\"" : "")
+	'selected' => ( $array_data['gender'] == 'F' ? " selected=\"selected\"" : "" )
 );
 
 $contents = user_info( $array_data, $array_field_config, $custom_fields, $info );

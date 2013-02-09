@@ -14,7 +14,7 @@ if( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-function nv_get_rss_link( )
+function nv_get_rss_link()
 {
 	global $db, $module_data, $global_config, $imgmid, $imgmid2, $iconrss, $site_mods;
 	$contentrss = "";
@@ -32,11 +32,11 @@ function nv_get_rss_link( )
 			include ( NV_ROOTDIR . "/modules/" . $mod_file . "/rssdata.php" );
 			foreach( $rssarray as $key => $value )
 			{
-				$parentid = ( isset( $value['parentid'] )) ? $value['parentid'] : 0;
+				$parentid = ( isset( $value['parentid'] ) ) ? $value['parentid'] : 0;
 				if( $parentid == 0 )
 				{
 					$contentrss .= $imgmid . $imgmid2 . "<a href=\"" . $value['link'] . "\">" . $iconrss . " " . $value['title'] . "</a><br />";
-					$catid = ( isset( $value['catid'] )) ? $value['catid'] : 0;
+					$catid = ( isset( $value['catid'] ) ) ? $value['catid'] : 0;
 					if( $catid > 0 )
 					{
 						$contentrss .= nv_get_sub_rss_link( $rssarray, $catid, $imgmid . $imgmid );
@@ -44,7 +44,6 @@ function nv_get_rss_link( )
 				}
 			}
 		}
-
 	}
 	return $contentrss;
 }
@@ -66,7 +65,7 @@ function nv_get_sub_rss_link( $rssarray, $id, $image )
 		if( isset( $value['parentid'] ) and $value['parentid'] == $id )
 		{
 			$content .= $image . $imgmid2 . "<a href=\"" . $value['link'] . "\">" . $iconrss . " " . $value['title'] . "</a><br />";
-			$catid = ( isset( $value['catid'] )) ? $value['catid'] : 0;
+			$catid = ( isset( $value['catid'] ) ) ? $value['catid'] : 0;
 			if( $catid > 0 )
 			{
 				$content .= nv_get_sub_rss_link( $rssarray, $catid, $image . $imgmid );

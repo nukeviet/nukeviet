@@ -59,7 +59,7 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 						$error[] = $lang_module['comment_error3'];
 					}
 
-					if( ($validemail = nv_check_valid_email( $uemail )) != "" )
+					if( ( $validemail = nv_check_valid_email( $uemail ) ) != "" )
 					{
 						$error[] = $validemail;
 					}
@@ -124,7 +124,6 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 					{
 						die( "WAIT" );
 					}
-
 				}
 			}
 		}
@@ -180,7 +179,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 					}
 					else
 					{
-						$row['post_email'] = ($row['view_mail']) ? $row['email'] : "";
+						$row['post_email'] = ( $row['view_mail'] ) ? $row['email'] : "";
 						$row['post_name'] = $row['full_name'];
 						if( defined( 'NV_IS_MODADMIN' ) )
 						{
@@ -261,7 +260,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 						{
 							foreach( $users[$userid] as $id )
 							{
-								if( ! empty( $array[$id]['post_email'] ) and (defined( 'NV_IS_ADMIN' ) or $view_mail) )
+								if( ! empty( $array[$id]['post_email'] ) and ( defined( 'NV_IS_ADMIN' ) or $view_mail ) )
 								{
 									$array[$id]['post_email'] = nv_EncodeEmail( $array[$id]['post_email'] );
 									$array[$id]['post_name'] .= " (" . $array[$id]['post_email'] . ", " . $array[$id]['post_ip'] . ")";

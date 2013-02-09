@@ -29,7 +29,7 @@ if( $db->sql_numrows( $cron_result ) )
 		else
 		{
 			$interval = $cron_row['interval'] * 60;
-			$current_time = $cron_row['start_time'] + floor( (NV_CURRENTTIME - $cron_row['start_time']) / $interval ) * $interval;
+			$current_time = $cron_row['start_time'] + floor( ( NV_CURRENTTIME - $cron_row['start_time'] ) / $interval ) * $interval;
 			if( $cron_row['last_time'] < $current_time )
 			{
 				$cron_allowed = true;
@@ -58,7 +58,7 @@ if( $db->sql_numrows( $cron_result ) )
 			}
 			file_put_contents( $check_run_cronjobs, '' );
 
-			$params = ( ! empty( $cron_row['params'] )) ? array_map( "trim", explode( ",", $cron_row['params'] ) ) : array();
+			$params = ( ! empty( $cron_row['params'] ) ) ? array_map( "trim", explode( ",", $cron_row['params'] ) ) : array();
 			$result2 = call_user_func_array( $cron_row['run_func'], $params );
 			if( ! $result2 )
 			{

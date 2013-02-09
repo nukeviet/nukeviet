@@ -114,7 +114,7 @@ function viewcat( $array_subcat, $array_cat, $items )
 		foreach( $array_subcat as $array_subcat_i )
 		{
 			$xtpl->assign( 'SUB', $array_subcat_i );
-			if( ($weblinks_config['showcatimage'] == 1) and ! empty( $array_subcat_i['catimage'] ) )
+			if( ( $weblinks_config['showcatimage'] == 1 ) and ! empty( $array_subcat_i['catimage'] ) )
 			{
 				if( file_exists( NV_UPLOADS_REAL_DIR . NV_UPLOADS_DIR . "/" . $array_subcat_i['catimage'] ) && $array_subcat_i['catimage'] != "" )
 				{
@@ -190,7 +190,6 @@ function detail( $row )
 		else
 		{
 			$xtpl->assign( 'IMG', "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
-
 		}
 		$xtpl->parse( 'main.img' );
 	}

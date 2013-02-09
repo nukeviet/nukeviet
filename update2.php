@@ -11,21 +11,15 @@ define( 'NV_SYSTEM', true );
 
 require ( str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php' );
 
-$array_hidefolders = array(
-	".",
-	"..",
-	"index.html",
-	".htaccess",
-	".tmp"
-);
+$array_hidefolders = array( ".", "..", "index.html", ".htaccess", ".tmp" );
 
 function nv_listUploadDir( $dir, $real_dirlist = array() )
 {
 	$real_dirlist[] = $dir;
 
-	if( ($dh = @opendir( NV_ROOTDIR . '/' . $dir )) !== false )
+	if( ( $dh = @opendir( NV_ROOTDIR . '/' . $dir ) ) !== false )
 	{
-		while( false !== ($subdir = readdir( $dh )) )
+		while( false !== ( $subdir = readdir( $dh ) ) )
 		{
 			if( preg_match( "/^[a-zA-Z0-9\-\_]+$/", $subdir ) )
 			{
@@ -52,7 +46,7 @@ function nv_getFileInfo( $pathimg, $file )
 	$info['name'] = $file;
 	if( isset( $file{17} ) )
 	{
-		$info['name'] = substr( $matches[1], 0, (13 - strlen( $matches[2] )) ) . "..." . $matches[2];
+		$info['name'] = substr( $matches[1], 0, ( 13 - strlen( $matches[2] ) ) ) . "..." . $matches[2];
 	}
 
 	$info['ext'] = $matches[2];
@@ -78,7 +72,7 @@ function nv_getFileInfo( $pathimg, $file )
 
 		if( $size[0] > 80 or $size[1] > 80 )
 		{
-			if( ($_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 )) !== false )
+			if( ( $_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 ) ) !== false )
 			{
 				$info['src'] = $_src[0];
 				$info['srcwidth'] = $_src[1];
@@ -167,10 +161,7 @@ if( $step == 1 )
 
 	$contents = "<br><br>";
 	$real_dirlist = array();
-	$allow_upload_dir = array(
-		'images',
-		NV_UPLOADS_DIR
-	);
+	$allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
 
 	foreach( $allow_upload_dir as $dir )
 	{

@@ -38,7 +38,7 @@ function viewcat_grid_new( $array_catpage, $catid )
 			$xtpl->parse( 'main.viewcatloop.image' );
 		}
 
-		if( ! (++$a % 2) ) $xtpl->parse( 'main.viewcatloop.br' );
+		if( ! ( ++$a % 2 ) ) $xtpl->parse( 'main.viewcatloop.br' );
 		$xtpl->set_autoreset();
 		$xtpl->parse( 'main.viewcatloop' );
 	}
@@ -195,10 +195,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 						}
 						else
 						{
-							$more = array(
-								'title' => $lang_module['more'],
-								'link' => $global_array_cat[$catid]['link']
-							);
+							$more = array( 'title' => $lang_module['more'], 'link' => $global_array_cat[$catid]['link'] );
 							$xtpl->assign( 'MORE', $more );
 							$xtpl->parse( 'main.listcat.subcatmore' );
 							$xtpl->set_autoreset();
@@ -345,7 +342,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 				}
 			}
 
-			if( ! (++$a % 2) ) $xtpl->parse( 'main.loopcat.br' );
+			if( ! ( ++$a % 2 ) ) $xtpl->parse( 'main.loopcat.br' );
 
 			$xtpl->parse( 'main.loopcat' );
 		}
@@ -446,7 +443,7 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 			$keyword = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search&amp;q=" . urlencode( $value );
 			$xtpl->assign( 'KEYWORD', $value );
 			$xtpl->assign( 'LINK_KEYWORDS', $keyword );
-			$xtpl->assign( 'SLASH', (($count - 1) == $i) ? '' : ', ' );
+			$xtpl->assign( 'SLASH', ( ( $count - 1 ) == $i ) ? '' : ', ' );
 			$xtpl->parse( 'main.keywords.loop' );
 		}
 		$xtpl->parse( 'main.keywords' );
@@ -606,7 +603,7 @@ function comment_theme( $comment_array )
 	foreach( $comment_array['comment'] as $comment_array_i )
 	{
 		$comment_array_i['post_time'] = nv_date( "d/m/Y H:i", $comment_array_i['post_time'] );
-		$comment_array_i['bg'] = ($k % 2) ? " bg" : "";
+		$comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
 		$xtpl->assign( 'COMMENT', $comment_array_i );
 		if( $module_config[$module_name]['emailcomm'] and ! empty( $comment_array_i['post_email'] ) )
 		{
@@ -736,8 +733,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	for( $i = 0; $i <= 3; ++$i )
 	{
 		if( $check_num == $i ) $xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
-		else
-			$xtpl->assign( 'CHECK' . $i, "" );
+		else $xtpl->assign( 'CHECK' . $i, "" );
 	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -779,7 +775,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		$xtpl->assign( 'INMOD', $lang_module['search_modul_title'] );
 		$xtpl->parse( 'results.noneresult' );
 	}
-	if( $numRecord > $per_pages )// show pages
+	if( $numRecord > $per_pages ) // show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
 		$in = strpos( $url_link, '&page' );

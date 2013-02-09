@@ -234,7 +234,7 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 
 	$xtpl->parse( 'listUsers' );
 	$xtpl->out( 'listUsers' );
-	exit ;
+	exit();
 }
 
 //Danh sach thanh vien
@@ -257,7 +257,7 @@ if( $nv_Request->isset_request( 'userlist', 'get' ) )
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
-	exit ;
+	exit();
 }
 
 //Them + sua nhom
@@ -340,7 +340,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
                 " . $db->dbescape( $post['content'] ) . ", 
                 " . NV_CURRENTTIME . ", 
                 " . $post['exp_time'] . ", 
-                '', " . $post['public'] . ", " . ($groupcount + 1) . ", 1);";
+                '', " . $post['public'] . ", " . ( $groupcount + 1 ) . ", 1);";
 			$ok = $post['id'] = $db->sql_query_insert_id( $query );
 		}
 		if( $ok )
@@ -411,10 +411,7 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 
 		for( $i = 1; $i <= $groupcount; $i++ )
 		{
-			$opt = array(
-				'value' => $i,
-				'selected' => $i == $values['weight'] ? " selected=\"selected\"" : ""
-			);
+			$opt = array( 'value' => $i, 'selected' => $i == $values['weight'] ? " selected=\"selected\"" : "" );
 			$xtpl->assign( 'NEWWEIGHT', $opt );
 			$xtpl->parse( 'list.loop.option' );
 		}
@@ -426,7 +423,7 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 
 	$xtpl->parse( 'list' );
 	$xtpl->out( 'list' );
-	exit ;
+	exit();
 }
 
 $xtpl->parse( 'main' );

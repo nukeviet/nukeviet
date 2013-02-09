@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-function nv_referer_update( )
+function nv_referer_update()
 {
 	global $nv_Request, $client_info, $global_config, $db, $prefix;
 

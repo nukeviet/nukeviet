@@ -1,5 +1,6 @@
 <?php
 
+
 //
 //  Copyright (c) 2011, Maths for More S.L. http://www.wiris.com
 //  This file is part of WIRIS Plugin.
@@ -33,35 +34,48 @@ define( 'WRS_FORMULA_DIRECTORY', NV_ROOTDIR . '/' . NV_DATADIR . '/formulas' );
 global $wrs_imageConfigProperties, $wrs_xmlFileAttributes;
 
 $wrs_imageConfigProperties = array(
+
 	'bgColor' => 'wirisimagebgcolor',
+
 	'symbolColor' => 'wirisimagesymbolcolor',
+
 	'transparency' => 'wiristransparency',
+
 	'fontSize' => 'wirisimagefontsize',
+
 	'numberColor' => 'wirisimagenumbercolor',
+
 	'identColor' => 'wirisimageidentcolor',
+
 	'identMathvariant' => 'wirisimageidentmathvariant',
+
 	'numberMathvariant' => 'wirisimagenumbermathvariant',
+
 	'fontIdent' => 'wirisimagefontident',
+
 	'fontNumber' => 'wirisimagefontnumber',
+
 	'version' => 'wirisimageserviceversion',
+
 	'color' => 'wiriscolor'
+
 );
 
 $wrs_xmlFileAttributes = array(
-	'bgColor',
-	'symbolColor',
-	'transparency',
-	'fontSize',
-	'numberColor',
-	'identColor',
-	'identMathvariant',
-	'numberMathvariant',
-	'fontIdent',
-	'fontNumber',
-	'zoom',
-	'dpi', 
-	'color'
-);
+ 'bgColor',
+ 'symbolColor',
+ 'transparency',
+ 'fontSize',
+ 'numberColor',
+ 'identColor',
+ 'identMathvariant',
+ 'numberMathvariant',
+ 'fontIdent',
+ 'fontNumber',
+ 'zoom',
+ 'dpi', 
+ 'color'
+ );
 
 function wrs_applyConfigRetrocompatibility($config) {
 	if (isset($config['']['wirisimageserviceprotocol']) && isset($config['']['wirisimageservicehost']) && isset($config['']['wirisimageserviceport']) && isset($config['']['wirisimageservicepath'])) {
@@ -220,9 +234,9 @@ function wrs_getContents($config, $url, $postVariables = NULL) {
 	
 	if (is_null($postVariables)) {
 		$httpConfiguration = array(
-			'method' => 'GET',
-			'header' => 'Referer: ' . $referer
-		);
+ 'method' => 'GET',
+ 'header' => 'Referer: ' . $referer
+ );
 	}
 	else {
 		$httpConfiguration = array(
@@ -232,7 +246,7 @@ function wrs_getContents($config, $url, $postVariables = NULL) {
 		);
 	}
 	
-	$contextArray = array('http' =>	$httpConfiguration);
+	$contextArray = array('http' =>$httpConfiguration);
 
 	if (isset($config['wirisproxy']) && $config['wirisproxy'] == 'true') {
 		$contextArray['http']['proxy'] = 'tcp://' . $config['wirisproxy_host'] . ':' . $config['wirisproxy_port'];
@@ -415,4 +429,5 @@ if (get_magic_quotes_gpc() == 1) {
 	$_GET = array_map('wrs_secureStripslashes', $_GET);
 	$_POST = array_map('wrs_secureStripslashes', $_POST);
 }
+
 ?>

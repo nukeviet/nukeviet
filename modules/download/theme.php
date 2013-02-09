@@ -373,7 +373,6 @@ function show_comment( $array, $generate_page )
 	{
 		return "&nbsp;";
 	}
-
 }
 
 /**

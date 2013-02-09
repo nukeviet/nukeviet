@@ -13,6 +13,7 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	if( ! nv_function_exists( "nv_mod_down_config" ) )
 	{
+
 		function nv_mod_down_config( $module_data )
 		{
 			global $site_mods, $module_info;
@@ -49,7 +50,6 @@ if( defined( 'NV_SYSTEM' ) )
 			$download_config['is_autocomment_allow'] = nv_set_allow( $download_config['who_autocomment'], $download_config['groups_autocomment'] );
 			return $download_config;
 		}
-
 	}
 	global $site_mods, $module_name, $module_info, $lang_module, $nv_Request;
 	$content = "";

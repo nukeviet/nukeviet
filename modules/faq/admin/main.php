@@ -65,11 +65,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 	}
 
 	$groups_list = nv_groups_list();
-	$array_who = array(
-		$lang_global['who_view0'],
-		$lang_global['who_view1'],
-		$lang_global['who_view2']
-	);
+	$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 	if( ! empty( $groups_list ) )
 	{
 		$array_who[] = $lang_global['who_view3'];
@@ -458,7 +454,7 @@ while( $row = $db->sql_fetchrow( $query ) )
 		{
 			$weight[$i]['title'] = $i;
 			$weight[$i]['pos'] = $i;
-			$weight[$i]['selected'] = ($i == $row['weight']) ? " selected=\"selected\"" : "";
+			$weight[$i]['selected'] = ( $i == $row['weight'] ) ? " selected=\"selected\"" : "";
 		}
 
 		$array[$row['id']]['weight'] = $weight;

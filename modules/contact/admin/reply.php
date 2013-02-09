@@ -72,10 +72,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$from = $admin_info['email'];
 		}
 
-		$from = array(
-			$admin_name,
-			$from
-		);
+		$from = array( $admin_name, $from );
 
 		$subject = "Re: " . $row['title'];
 

@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['weblink_del_link_title'];
 
-$id = ($nv_Request->get_int( 'id', 'get' ) > 0) ? $nv_Request->get_int( 'id', 'post,get' ) : 0;
+$id = ( $nv_Request->get_int( 'id', 'get' ) > 0 ) ? $nv_Request->get_int( 'id', 'post,get' ) : 0;
 
 if( empty( $id ) )
 {

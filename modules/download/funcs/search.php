@@ -37,7 +37,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and ! empty( $key ) )
 			$allcat[] = $cat;
 		}
 
-		$allcat = ( empty( $allcat )) ? ' AND catid = ' . $cat . ' ' : ' AND catid IN (' . implode( ',', $allcat ) . ') ';
+		$allcat = ( empty( $allcat ) ) ? ' AND catid = ' . $cat . ' ' : ' AND catid IN (' . implode( ',', $allcat ) . ') ';
 	}
 	else
 	{
@@ -50,7 +50,7 @@ else
 {
 	$sql .= "WHERE `status`='1'";
 }
-$sql .= "ORDER BY `uploadtime` DESC LIMIT " . ($page - 1) * $per_page . ", " . $per_page;
+$sql .= "ORDER BY `uploadtime` DESC LIMIT " . ( $page - 1 ) * $per_page . ", " . $per_page;
 
 $result = $db->sql_query( $sql );
 
@@ -92,19 +92,18 @@ if( ! empty( $all_page ) )
 			'uploadtime' => $uploadtime, //
 			'author_name' => $row['author_name'], //
 			'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
-			'imagesrc' => ( ! empty( $row['fileimage'] )) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
+			'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
 			'view_hits' => ( int )$row['view_hits'], //
 			'download_hits' => ( int )$row['download_hits'], //
 			'more_link' => $more_link, //
-			'edit_link' => ( defined( 'NV_IS_MODADMIN' )) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'] : "", //
-			'del_link' => ( defined( 'NV_IS_MODADMIN' )) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name : ""
+			'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'] : "", //
+			'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name : ""
 		);
 
 		if( $row['comment_allow'] )
 		{
 			$array[$row['id']]['comment_hits'] = ( int )$row['comment_hits'];
 		}
-
 	}
 	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 

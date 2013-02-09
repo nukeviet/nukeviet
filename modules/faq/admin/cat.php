@@ -54,11 +54,7 @@ function nv_del_cat( $catid )
 }
 
 $groups_list = nv_groups_list();
-$array_who = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2']
-);
+$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 if( ! empty( $groups_list ) )
 {
 	$array_who[] = $lang_global['who_view3'];
@@ -125,7 +121,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 				$array['who_view'] = 0;
 			}
 
-			$array['groups_view'] = ( ! empty( $array['groups_view'] )) ? implode( ',', $array['groups_view'] ) : '';
+			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
 
 			$sql = "SELECT MAX(weight) AS new_weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $array['parentid'];
 			$result = $db->sql_query( $sql );
@@ -168,7 +164,13 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		$array['groups_view'] = array();
 	}
 
-	$listcats = array( array( 'id' => 0, 'name' => $lang_module['faq_category_cat_maincat'], 'selected' => "" ) );
+	$listcats = array(
+		array(
+			'id' => 0,
+			'name' => $lang_module['faq_category_cat_maincat'],
+			'selected' => ""
+		)
+	);
 	$listcats = $listcats + nv_listcats( $array['parentid'] );
 
 	$who_view = $array['who_view'];
@@ -236,7 +238,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
 
-	exit ;
+	exit();
 }
 
 //Sua chu de
@@ -317,7 +319,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$array['who_view'] = 0;
 			}
 
-			$array['groups_view'] = ( ! empty( $array['groups_view'] )) ? implode( ',', $array['groups_view'] ) : '';
+			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
 
 			if( $array['parentid'] != $row['parentid'] )
 			{
@@ -369,7 +371,13 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['groups_view'] = ! empty( $row['groups_view'] ) ? explode( ",", $row['groups_view'] ) : array();
 	}
 
-	$listcats = array( array( 'id' => 0, 'name' => $lang_module['faq_category_cat_maincat'], 'selected' => "" ) );
+	$listcats = array(
+		array(
+			'id' => 0,
+			'name' => $lang_module['faq_category_cat_maincat'],
+			'selected' => ""
+		)
+	);
 	$listcats = $listcats + nv_listcats( $array['parentid'], $catid );
 
 	$who_view = $array['who_view'];
@@ -437,7 +445,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
 
-	exit ;
+	exit();
 }
 
 //Xoa chu de
@@ -576,10 +584,10 @@ while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$weight[$i]['title'] = $i;
 		$weight[$i]['pos'] = $i;
-		$weight[$i]['selected'] = ($i == $row['weight']) ? " selected=\"selected\"" : "";
+		$weight[$i]['selected'] = ( $i == $row['weight'] ) ? " selected=\"selected\"" : "";
 	}
 
-	$class = ($a % 2) ? " class=\"second\"" : "";
+	$class = ( $a % 2 ) ? " class=\"second\"" : "";
 
 	$list[$row['id']] = array( //
 		'id' => ( int )$row['id'], //

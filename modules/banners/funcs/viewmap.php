@@ -30,23 +30,23 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		'11' => 30,
 		'12' => 31
 	);
-	$month_array['2'] = (($year % 100 == 0) && ($year % 400 == 0)) ? 29 : 28;
+	$month_array['2'] = ( ( $year % 100 == 0 ) && ( $year % 400 == 0 ) ) ? 29 : 28;
 	$firstdate = mktime( 0, 0, 0, $month, 1, $year );
 	$enddate = mktime( 24, 60, 60, $month, $month_array[$month], $year );
 	$onetype = '';
 
 	switch( $type )
 	{
-		case 'country' :
+		case 'country':
 			$onetype = 'click_country';
 			break;
-		case 'browser' :
+		case 'browser':
 			$onetype = 'click_browse_name';
 			break;
-		case 'os' :
+		case 'os':
 			$onetype = 'click_os_name';
 			break;
-		case 'date' :
+		case 'date':
 			$onetype = 'click_time';
 			break;
 	}
@@ -81,7 +81,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 			}
 			else
 			{
-				$process[$country . '(' . round( ((intval( $quantity ) * 100) / $total), 2 ) . '%)'] = round( ((intval( $quantity ) * 100) / $total), 2 );
+				$process[$country . '(' . round( ( ( intval( $quantity ) * 100 ) / $total ), 2 ) . '%)'] = round( ( ( intval( $quantity ) * 100 ) / $total ), 2 );
 			}
 		}
 

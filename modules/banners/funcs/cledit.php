@@ -53,65 +53,17 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 $website = ! empty( $banner_client_info['website'] ) ? $banner_client_info['website'] : "http://";
 
 $contents = array();
-$contents['rows']['full_name'] = array(
-	$lang_global['full_name'],
-	"full_name",
-	$banner_client_info['full_name'],
-	255
-);
-$contents['rows']['email'] = array(
-	$lang_global['email'],
-	"email_iavim",
-	$banner_client_info['email'],
-	50
-);
-$contents['rows']['website'] = array(
-	$lang_module['website'],
-	"website_iavim",
-	$website,
-	255
-);
-$contents['rows']['location'] = array(
-	$lang_module['location'],
-	"location",
-	$banner_client_info['location'],
-	255
-);
-$contents['rows']['yim'] = array(
-	$lang_module['yim'],
-	"yim_iavim",
-	$banner_client_info['yim'],
-	100
-);
-$contents['rows']['phone'] = array(
-	$lang_global['phonenumber'],
-	"phone",
-	$banner_client_info['phone'],
-	100
-);
-$contents['rows']['fax'] = array(
-	$lang_module['fax'],
-	"fax",
-	$banner_client_info['fax'],
-	100
-);
-$contents['rows']['mobile'] = array(
-	$lang_module['mobile'],
-	"mobile",
-	$banner_client_info['mobile'],
-	100
-);
+$contents['rows']['full_name'] = array( $lang_global['full_name'], "full_name", $banner_client_info['full_name'], 255 );
+$contents['rows']['email'] = array( $lang_global['email'], "email_iavim", $banner_client_info['email'], 50 );
+$contents['rows']['website'] = array( $lang_module['website'], "website_iavim", $website, 255 );
+$contents['rows']['location'] = array( $lang_module['location'], "location", $banner_client_info['location'], 255 );
+$contents['rows']['yim'] = array( $lang_module['yim'], "yim_iavim", $banner_client_info['yim'], 100 );
+$contents['rows']['phone'] = array( $lang_global['phonenumber'], "phone", $banner_client_info['phone'], 100 );
+$contents['rows']['fax'] = array( $lang_module['fax'], "fax", $banner_client_info['fax'], 100 );
+$contents['rows']['mobile'] = array( $lang_module['mobile'], "mobile", $banner_client_info['mobile'], 100 );
 
-$contents['npass']['pass'] = array(
-	$lang_module['new_pass'],
-	"pass_iavim",
-	NV_UPASSMAX
-);
-$contents['npass']['re_pass'] = array(
-	$lang_global['password2'],
-	"re_pass_iavim",
-	NV_UPASSMAX
-);
+$contents['npass']['pass'] = array( $lang_module['new_pass'], "pass_iavim", NV_UPASSMAX );
+$contents['npass']['re_pass'] = array( $lang_global['password2'], "re_pass_iavim", NV_UPASSMAX );
 
 $contents['edit_name'] = $lang_global['submit'];
 $contents['edit_onclick'] = "nv_cl_edit_save('full_name','email_iavim','website_iavim','location','yim_iavim','phone','fax','mobile','pass_iavim','re_pass_iavim','submit_button');";

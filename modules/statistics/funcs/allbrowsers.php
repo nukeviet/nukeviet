@@ -30,20 +30,13 @@ if( $all_page )
 	while( list( $browser, $count, $last_visit ) = $db->sql_fetchrow( $result ) )
 	{
 		$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
-		$browsers_list[$browser] = array(
-			$count,
-			$last_visit
-		);
+		$browsers_list[$browser] = array( $count, $last_visit );
 	}
 
 	if( ! empty( $browsers_list ) )
 	{
 		$cts = array();
-		$cts['thead'] = array(
-			$lang_module['browser'],
-			$lang_module['hits'],
-			$lang_module['last_visit']
-		);
+		$cts['thead'] = array( $lang_module['browser'], $lang_module['hits'], $lang_module['last_visit'] );
 		$cts['rows'] = $browsers_list;
 		$cts['max'] = $max;
 		$cts['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page );

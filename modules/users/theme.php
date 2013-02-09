@@ -7,8 +7,7 @@
  * @createdate 10/03/2010 10:51
  */
 
-if( ! defined( 'NV_IS_MOD_USER' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 /**
  * user_register()
@@ -51,16 +50,16 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 		$userid = 0;
 		foreach( $array_field_config as $row )
 		{
-			if( ($row['show_register'] AND $userid == 0) OR $userid > 0 )
+			if( ( $row['show_register'] and $userid == 0 ) or $userid > 0 )
 			{
-				$row['tbodyclass'] = ($a % 2) ? " class=\"second\"" : "";
-				if( $userid == 0 AND empty( $custom_fields ) )
+				$row['tbodyclass'] = ( $a % 2 ) ? " class=\"second\"" : "";
+				if( $userid == 0 and empty( $custom_fields ) )
 				{
 					if( ! empty( $row['field_choices'] ) )
 					{
 						if( $row['field_type'] == 'date' )
 						{
-							$row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+							$row['value'] = ( $row['field_choices']['current_date'] ) ? NV_CURRENTTIME : $row['default_value'];
 						}
 						elseif( $row['field_type'] == 'number' )
 						{
@@ -70,7 +69,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 						{
 							$temp = array_keys( $row['field_choices'] );
 							$tempkey = intval( $row['default_value'] ) - 1;
-							$row['value'] = (isset( $temp[$tempkey] )) ? $temp[$tempkey] : '';
+							$row['value'] = ( isset( $temp[$tempkey] ) ) ? $temp[$tempkey] : '';
 						}
 					}
 					else
@@ -80,22 +79,22 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 				}
 				else
 				{
-					$row['value'] = (isset( $custom_fields[$row['field']] )) ? $custom_fields[$row['field']] : $row['default_value'];
+					$row['value'] = ( isset( $custom_fields[$row['field']] ) ) ? $custom_fields[$row['field']] : $row['default_value'];
 				}
-				$row['required'] = ($row['required']) ? 'required' : '';
+				$row['required'] = ( $row['required'] ) ? 'required' : '';
 
 				$xtpl->assign( 'FIELD', $row );
 				if( $row['required'] )
 				{
 					$xtpl->parse( 'main.field.loop.required' );
 				}
-				if( $row['field_type'] == 'textbox' OR $row['field_type'] == 'number' )
+				if( $row['field_type'] == 'textbox' or $row['field_type'] == 'number' )
 				{
 					$xtpl->parse( 'main.field.loop.textbox' );
 				}
 				elseif( $row['field_type'] == 'date' )
 				{
-					$row['value'] = (empty( $row['value'] )) ? '' : date( 'd/m/Y', $row['value'] );
+					$row['value'] = ( empty( $row['value'] ) ) ? '' : date( 'd/m/Y', $row['value'] );
 					$xtpl->assign( 'FIELD', $row );
 					$xtpl->parse( 'main.field.loop.date' );
 				}
@@ -129,7 +128,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							"key" => $key,
-							"selected" => ($key == $row['value']) ? ' selected="selected"' : '',
+							"selected" => ( $key == $row['value'] ) ? ' selected="selected"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.field.loop.select.loop' );
@@ -144,7 +143,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							"id" => $row['fid'] . '_' . $number++,
 							"key" => $key,
-							"checked" => ($key == $row['value']) ? ' checked="checked"' : '',
+							"checked" => ( $key == $row['value'] ) ? ' checked="checked"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.field.loop.radio' );
@@ -153,13 +152,13 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 				elseif( $row['field_type'] == 'checkbox' )
 				{
 					$number = 0;
-					$valuecheckbox = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
+					$valuecheckbox = ( ! empty( $row['value'] ) ) ? explode( ',', $row['value'] ) : array();
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							"id" => $row['fid'] . '_' . $number++,
 							"key" => $key,
-							"checked" => (in_array( $key, $valuecheckbox )) ? ' checked="checked"' : '',
+							"checked" => ( in_array( $key, $valuecheckbox ) ) ? ' checked="checked"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.field.loop.checkbox' );
@@ -167,12 +166,12 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 				}
 				elseif( $row['field_type'] == 'multiselect' )
 				{
-					$valueselect = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
+					$valueselect = ( ! empty( $row['value'] ) ) ? explode( ',', $row['value'] ) : array();
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							"key" => $key,
-							"selected" => (in_array( $key, $valueselect )) ? ' selected="selected"' : '',
+							"selected" => ( in_array( $key, $valueselect ) ) ? ' selected="selected"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.field.loop.multiselect.loop' );
@@ -309,7 +308,7 @@ function user_login( $gfx_chk, $array_login )
 		$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 		$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 
-		$assigns = array( );
+		$assigns = array();
 		foreach( $openid_servers as $server => $value )
 		{
 			$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
@@ -360,7 +359,7 @@ function user_openid_login( $gfx_chk, $array_login, $attribs )
 	$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 	$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 
-	$assigns = array( );
+	$assigns = array();
 	foreach( $openid_servers as $server => $value )
 	{
 		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
@@ -417,7 +416,7 @@ function user_openid_login2( $attribs, $array_user_login )
 		$xtpl->parse( 'main.login_note' );
 	}
 
-	$assigns = array( );
+	$assigns = array();
 	foreach( $openid_servers as $server => $value )
 	{
 		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server . "&amp;nv_redirect=" . $nv_redirect;
@@ -539,7 +538,7 @@ function user_changepass( $array_data = array() )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
 
-	$groups_list = nv_groups_list_pub( );
+	$groups_list = nv_groups_list_pub();
 
 	$xtpl = new XTemplate( "changepass.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
@@ -591,7 +590,7 @@ function user_changequestion( $array_data )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
 
-	$groups_list = nv_groups_list_pub( );
+	$groups_list = nv_groups_list_pub();
 
 	$xtpl = new XTemplate( "changequestion.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
@@ -654,7 +653,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
 
-	$groups_list = nv_groups_list_pub( );
+	$groups_list = nv_groups_list_pub();
 
 	$xtpl = new XTemplate( "info.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
@@ -715,16 +714,16 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 		$userid = 0;
 		foreach( $array_field_config as $row )
 		{
-			if( ($row['show_register'] AND $userid == 0) OR $userid > 0 )
+			if( ( $row['show_register'] and $userid == 0 ) or $userid > 0 )
 			{
-				$row['tbodyclass'] = ($a % 2) ? " class=\"second\"" : "";
-				if( $userid == 0 AND empty( $custom_fields ) )
+				$row['tbodyclass'] = ( $a % 2 ) ? " class=\"second\"" : "";
+				if( $userid == 0 and empty( $custom_fields ) )
 				{
 					if( ! empty( $row['field_choices'] ) )
 					{
 						if( $row['field_type'] == 'date' )
 						{
-							$row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+							$row['value'] = ( $row['field_choices']['current_date'] ) ? NV_CURRENTTIME : $row['default_value'];
 						}
 						elseif( $row['field_type'] == 'number' )
 						{
@@ -734,7 +733,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 						{
 							$temp = array_keys( $row['field_choices'] );
 							$tempkey = intval( $row['default_value'] ) - 1;
-							$row['value'] = (isset( $temp[$tempkey] )) ? $temp[$tempkey] : '';
+							$row['value'] = ( isset( $temp[$tempkey] ) ) ? $temp[$tempkey] : '';
 						}
 					}
 					else
@@ -744,22 +743,22 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 				}
 				else
 				{
-					$row['value'] = (isset( $custom_fields[$row['field']] )) ? $custom_fields[$row['field']] : $row['default_value'];
+					$row['value'] = ( isset( $custom_fields[$row['field']] ) ) ? $custom_fields[$row['field']] : $row['default_value'];
 				}
-				$row['required'] = ($row['required']) ? 'required' : '';
+				$row['required'] = ( $row['required'] ) ? 'required' : '';
 
 				$xtpl->assign( 'FIELD', $row );
 				if( $row['required'] )
 				{
 					$xtpl->parse( 'main.field.loop.required' );
 				}
-				if( $row['field_type'] == 'textbox' OR $row['field_type'] == 'number' )
+				if( $row['field_type'] == 'textbox' or $row['field_type'] == 'number' )
 				{
 					$xtpl->parse( 'main.field.loop.textbox' );
 				}
 				elseif( $row['field_type'] == 'date' )
 				{
-					$row['value'] = (empty( $row['value'] )) ? '' : date( 'd/m/Y', $row['value'] );
+					$row['value'] = ( empty( $row['value'] ) ) ? '' : date( 'd/m/Y', $row['value'] );
 					$xtpl->assign( 'FIELD', $row );
 					$xtpl->parse( 'main.field.loop.date' );
 				}
@@ -793,7 +792,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							"key" => $key,
-							"selected" => ($key == $row['value']) ? ' selected="selected"' : '',
+							"selected" => ( $key == $row['value'] ) ? ' selected="selected"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.field.loop.select.loop' );
@@ -808,7 +807,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							"id" => $row['fid'] . '_' . $number++,
 							"key" => $key,
-							"checked" => ($key == $row['value']) ? ' checked="checked"' : '',
+							"checked" => ( $key == $row['value'] ) ? ' checked="checked"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.field.loop.radio' );
@@ -817,13 +816,13 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 				elseif( $row['field_type'] == 'checkbox' )
 				{
 					$number = 0;
-					$valuecheckbox = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
+					$valuecheckbox = ( ! empty( $row['value'] ) ) ? explode( ',', $row['value'] ) : array();
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							"id" => $row['fid'] . '_' . $number++,
 							"key" => $key,
-							"checked" => (in_array( $key, $valuecheckbox )) ? ' checked="checked"' : '',
+							"checked" => ( in_array( $key, $valuecheckbox ) ) ? ' checked="checked"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.field.loop.checkbox' );
@@ -831,12 +830,12 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 				}
 				elseif( $row['field_type'] == 'multiselect' )
 				{
-					$valueselect = ( ! empty( $row['value'] )) ? explode( ',', $row['value'] ) : array( );
+					$valueselect = ( ! empty( $row['value'] ) ) ? explode( ',', $row['value'] ) : array();
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							"key" => $key,
-							"selected" => (in_array( $key, $valueselect )) ? ' selected="selected"' : '',
+							"selected" => ( in_array( $key, $valueselect ) ) ? ' selected="selected"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.field.loop.multiselect.loop' );
@@ -857,7 +856,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
  *
  * @return
  */
-function user_welcome( )
+function user_welcome()
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $user_info, $lang_global;
 
@@ -867,7 +866,7 @@ function user_welcome( )
 
 	$xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
 
-	$groups_list = nv_groups_list_pub( );
+	$groups_list = nv_groups_list_pub();
 
 	if( defined( 'NV_OPENID_ALLOWED' ) )
 	{
@@ -878,7 +877,7 @@ function user_welcome( )
 	{
 		$xtpl->parse( 'main.logout' );
 	}
-	if( ( ! empty( $groups_list )) && ($global_config['allowuserpublic'] == 1) )
+	if( ( ! empty( $groups_list ) ) && ( $global_config['allowuserpublic'] == 1 ) )
 	{
 		$xtpl->parse( 'main.regroups' );
 	}
@@ -892,7 +891,7 @@ function user_welcome( )
 		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_avatar.jpg" );
 	}
 
-	$user_info['gender'] = ($user_info['gender'] == "M") ? $lang_module['male'] : ($user_info['gender'] == 'F' ? $lang_module['female'] : $lang_module['na']);
+	$user_info['gender'] = ( $user_info['gender'] == "M" ) ? $lang_module['male'] : ( $user_info['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
 	$user_info['birthday'] = empty( $user_info['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $user_info['birthday'] );
 	$user_info['regdate'] = nv_date( 'd/m/Y', $user_info['regdate'] );
 	$user_info['view_mail'] = empty( $user_info['view_mail'] ) ? $lang_module['no'] : $lang_module['yes'];
@@ -993,7 +992,7 @@ function openid_account_confirm( $gfx_chk, $attribs )
 	$xtpl->assign( 'USER_LOGIN', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . $nv_redirect );
 	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register&amp;nv_redirect=" . $nv_redirect );
 
-	$assigns = array( );
+	$assigns = array();
 	foreach( $openid_servers as $server => $value )
 	{
 		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
@@ -1047,7 +1046,7 @@ function openid_active_confirm( $gfx_chk, $attribs )
 	$xtpl->assign( 'USER_LOGIN', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login" );
 	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register" );
 
-	$assigns = array( );
+	$assigns = array();
 	foreach( $openid_servers as $server => $value )
 	{
 		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
@@ -1073,7 +1072,7 @@ function user_openid_administrator( $data )
 {
 	global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $global_config, $openid_servers;
 
-	$groups_list = nv_groups_list_pub( );
+	$groups_list = nv_groups_list_pub();
 
 	$xtpl = new XTemplate( "openid_administrator.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1118,7 +1117,7 @@ function user_openid_administrator( $data )
 		$xtpl->parse( 'main.openid_empty' );
 	}
 
-	$assigns = array( );
+	$assigns = array();
 	foreach( $openid_servers as $server => $value )
 	{
 		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=openid&amp;server=" . $server;
@@ -1158,8 +1157,7 @@ function nv_regroup_theme( $groups )
 		$xtpl->parse( 'main.list' );
 	}
 
-	if( ! defined( 'NV_IS_ADMIN' ) )
-		$xtpl->parse( 'main.logout' );
+	if( ! defined( 'NV_IS_ADMIN' ) ) $xtpl->parse( 'main.logout' );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -1229,7 +1227,7 @@ function nv_memberslist_detail_theme( $item )
 		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_avatar.jpg" );
 	}
 
-	$item['gender'] = ($item['gender'] == "M") ? $lang_module['male'] : ($item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na']);
+	$item['gender'] = ( $item['gender'] == "M" ) ? $lang_module['male'] : ( $item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
 	$item['birthday'] = empty( $item['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $item['birthday'] );
 	$item['regdate'] = nv_date( 'd/m/Y', $item['regdate'] );
 	$item['last_login'] = empty( $item['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $item['last_login'] );
@@ -1266,9 +1264,10 @@ function user_info_exit_redirect( $info, $nv_redirect )
 
 	$contents = $xtpl->text( 'main' );
 
-	include (NV_ROOTDIR . "/includes/header.php");
+	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_site_theme( $contents );
-	include (NV_ROOTDIR . "/includes/footer.php");
-	exit( );
+	include ( NV_ROOTDIR . "/includes/footer.php" );
+	exit();
 }
+
 ?>

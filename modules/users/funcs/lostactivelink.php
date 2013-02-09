@@ -45,7 +45,7 @@ $error = $question = "";
 
 if( $checkss == $data['checkss'] )
 {
-	if( ( ! empty( $seccode ) and md5( $data['nv_seccode'] ) == $seccode) or nv_capcha_txt( $data['nv_seccode'] ) )
+	if( ( ! empty( $seccode ) and md5( $data['nv_seccode'] ) == $seccode ) or nv_capcha_txt( $data['nv_seccode'] ) )
 	{
 		if( ! empty( $data['userField'] ) )
 		{

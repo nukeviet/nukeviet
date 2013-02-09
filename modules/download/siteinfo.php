@@ -15,30 +15,21 @@ $lang_siteinfo = nv_get_lang_module( $mod );
 list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) as number FROM `" . NV_PREFIXLANG . "_" . $mod_data . "` where `status`= 1" ) );
 if( $number > 0 )
 {
-	$siteinfo[] = array(
-		'key' => $lang_siteinfo['siteinfo_publtime'],
-		'value' => $number
-	);
+	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_publtime'], 'value' => $number );
 }
 
 // Tong so file het han
 list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) as number FROM `" . NV_PREFIXLANG . "_" . $mod_data . "` where `status`= 0" ) );
 if( $number > 0 )
 {
-	$siteinfo[] = array(
-		'key' => $lang_siteinfo['siteinfo_expired'],
-		'value' => $number
-	);
+	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_expired'], 'value' => $number );
 }
 
 // Tong so binh luan duoc dang
 list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) as number FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_comments` where `status` = 1" ) );
 if( $number > 0 )
 {
-	$siteinfo[] = array(
-		'key' => $lang_siteinfo['siteinfo_comment'],
-		'value' => $number
-	);
+	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_comment'], 'value' => $number );
 }
 
 // So binh luan cho duyet

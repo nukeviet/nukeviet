@@ -124,12 +124,9 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 		$n = 1;
 		foreach( $array_row_i['listcatid'] as $listcatid )
 		{
-			$listcat = array(
-				'title' => $global_array_cat[$listcatid]['title'],
-				"link" => $global_array_cat[$listcatid]['link']
-			);
+			$listcat = array( 'title' => $global_array_cat[$listcatid]['title'], "link" => $global_array_cat[$listcatid]['link'] );
 			$xtpl->assign( 'CAT', $listcat );
-			(($n < $num_cat) ? $xtpl->parse( 'main.viewcatloop.cat.comma' ) : '');
+			( ( $n < $num_cat ) ? $xtpl->parse( 'main.viewcatloop.cat.comma' ) : '' );
 			$xtpl->parse( 'main.viewcatloop.cat' );
 			++$n;
 		}
@@ -264,10 +261,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 						}
 						else
 						{
-							$more = array(
-								'title' => $lang_module['more'],
-								'link' => $global_array_cat[$catid]['link']
-							);
+							$more = array( 'title' => $lang_module['more'], 'link' => $global_array_cat[$catid]['link'] );
 							$xtpl->assign( 'MORE', $more );
 							$xtpl->parse( 'main.listcat.subcatmore' );
 							$xtpl->set_autoreset();
@@ -403,7 +397,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$array_catpage_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_catpage_i['alias'] . "";
 
 			$xtpl->assign( 'CAT', $array_catpage_i );
-			$xtpl->assign( 'ID', ($a + 1) );
+			$xtpl->assign( 'ID', ( $a + 1 ) );
 
 			$k = 0;
 
@@ -572,7 +566,7 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 
 			$xtpl->assign( 'KEYWORD', $value );
 			$xtpl->assign( 'LINK_KEYWORDS', $keyword );
-			$xtpl->assign( 'SLASH', (($count - 1) == $i) ? '' : ', ' );
+			$xtpl->assign( 'SLASH', ( ( $count - 1 ) == $i ) ? '' : ', ' );
 			$xtpl->parse( 'main.keywords.loop' );
 		}
 
@@ -772,7 +766,7 @@ function comment_theme( $comment_array )
 			$comment_array_i['photo'] = NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_avatar.jpg";
 		}
 
-		$comment_array_i['bg'] = ($k % 2) ? " bg" : "";
+		$comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
 
 		$xtpl->assign( 'COMMENT', $comment_array_i );
 
@@ -978,7 +972,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		$xtpl->parse( 'results.noneresult' );
 	}
 
-	if( $numRecord > $per_pages )// show pages
+	if( $numRecord > $per_pages ) // show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
 		$in = strpos( $url_link, '&page' );

@@ -110,7 +110,7 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
  *
  * @return
  */
-function initial_config_data( )
+function initial_config_data()
 {
 	global $module_data;
 
@@ -195,29 +195,20 @@ foreach( $list_cats as $c )
 	if( $c['parentid'] == 0 )
 	{
 		$sub_menu = array();
-		$act = ($c['id'] == $catid) ? 1 : 0;
-		if( $act or ($catid > 0 and $c['id'] == $list_cats[$catid]['parentid']) )
+		$act = ( $c['id'] == $catid ) ? 1 : 0;
+		if( $act or ( $catid > 0 and $c['id'] == $list_cats[$catid]['parentid'] ) )
 		{
 			foreach( $c['subcats'] as $catid_i )
 			{
 				$s_c = $list_cats[$catid_i];
-				$s_act = ($s_c['alias'] == $alias) ? 1 : 0;
+				$s_act = ( $s_c['alias'] == $alias ) ? 1 : 0;
 				$s_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $s_c['alias'];
-				$sub_menu[] = array(
-					$s_c['title'],
-					$s_link,
-					$s_act
-				);
+				$sub_menu[] = array( $s_c['title'], $s_link, $s_act );
 			}
 		}
 
 		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $c['alias'];
-		$nv_vertical_menu[] = array(
-			$c['title'],
-			$link,
-			$act,
-			'submenu' => $sub_menu
-		);
+		$nv_vertical_menu[] = array( $c['title'], $link, $act, 'submenu' => $sub_menu );
 	}
 	if( $module_info['rss'] )
 	{

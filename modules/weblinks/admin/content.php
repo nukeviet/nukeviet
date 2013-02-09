@@ -21,7 +21,7 @@ function check_url( $id, $url )
 	global $db, $module_data;
 	$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` != '" . $id . "' AND `url` = '" . $url . "'";
 	list( $numurl ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
-	$msg = ($numurl > 0) ? false : true;
+	$msg = ( $numurl > 0 ) ? false : true;
 	return $msg;
 }
 
@@ -36,7 +36,7 @@ function check_title( $title )
 	global $db, $module_data;
 	$sql = 'SELECT `title` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `title` = "' . $title . '"';
 	$numtitle = $db->sql_numrows( $db->sql_query( $sql ) );
-	$msg = ($numtitle > 0) ? false : true;
+	$msg = ( $numtitle > 0 ) ? false : true;
 	return $msg;
 }
 
@@ -63,7 +63,7 @@ if( ! empty( $submit ) )
 	$catid = $nv_Request->get_int( 'catid', 'post', 0 );
 	$title = filter_text_input( 'title', 'post', '', 1 );
 	$alias = filter_text_input( 'alias', 'post', '', 1 );
-	$alias = ($alias == "") ? change_alias( $title ) : change_alias( $alias );
+	$alias = ( $alias == "" ) ? change_alias( $title ) : change_alias( $alias );
 	$url = filter_text_input( 'url', 'post', '' );
 	$image = filter_text_input( 'image', 'post', '' );
 
@@ -88,9 +88,9 @@ if( ! empty( $submit ) )
 	$admin_email = "";
 	$note = "";
 	$description = filter_text_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
-	$description = ( defined( 'NV_EDITOR' )) ? nv_editor_nl2br( $description ) : nv_nl2br( $description, '<br />' );
+	$description = ( defined( 'NV_EDITOR' ) ) ? nv_editor_nl2br( $description ) : nv_nl2br( $description, '<br />' );
 
-	$status = ($nv_Request->get_int( 'status', 'post' ) == 1) ? 1 : 0;
+	$status = ( $nv_Request->get_int( 'status', 'post' ) == 1 ) ? 1 : 0;
 	// check url
 	if( empty( $url ) || ! nv_is_url( $url ) || ! check_url( $id, $url ) || ! nv_check_url( $url ) )
 	{
@@ -161,7 +161,7 @@ if( empty( $data_content['id'] ) )
 }
 
 // dung de lay data tu CSDL
-$data_content['description'] = ( defined( 'NV_EDITOR' )) ? nv_editor_br2nl( $data_content['description'] ) : nv_br2nl( $data_content['description'] );
+$data_content['description'] = ( defined( 'NV_EDITOR' ) ) ? nv_editor_br2nl( $data_content['description'] ) : nv_br2nl( $data_content['description'] );
 
 // dung de dua vao editor
 $data_content['description'] = nv_htmlspecialchars( $data_content['description'] );
@@ -211,7 +211,7 @@ if( ! empty( $array_cat ) )
 		$xtitle = "";
 		if( $cat['parentid'] != 0 ) $xtitle = getlevel( $cat['parentid'], $array_cat );
 		$cat['title'] = $xtitle . $cat['title'];
-		$cat['sl'] = ($cat['catid'] == $data_content['catid']) ? "selected=\"selected\"" : "";
+		$cat['sl'] = ( $cat['catid'] == $data_content['catid'] ) ? "selected=\"selected\"" : "";
 		$xtpl->assign( 'CAT', $cat );
 		$xtpl->parse( 'main.loopcat' );
 	}

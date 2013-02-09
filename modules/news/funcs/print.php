@@ -77,14 +77,14 @@ if( $id > 0 and $catid > 0 )
 			elseif( $content['homeimgthumb'] == 3 )
 			{
 				$src = $content['homeimgfile'];
-				$width = ($content['imgposition'] == 1) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
+				$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 			}
 			elseif( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
 			{
 				$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
-				$width = ($content['imgposition'] == 1) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
+				$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 			}
-			$alt = (empty( $content['homeimgalt'] )) ? $content['title'] : $content['homeimgalt'];
+			$alt = ( empty( $content['homeimgalt'] ) ) ? $content['title'] : $content['homeimgalt'];
 
 			$result['image'] = array(
 				"src" => $src,

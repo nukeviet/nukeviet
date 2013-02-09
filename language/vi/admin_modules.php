@@ -56,6 +56,7 @@ $lang_module['vmodule_file'] = 'Module gốc';
 $lang_module['vmodule_note'] = 'Ghi chú';
 $lang_module['vmodule_select'] = 'Chọn module';
 $lang_module['vmodule_blockquote'] = 'Ghi chú: Tên module mới chỉ gồm các chữ cái, số và dấu gạch ngang.';
+$lang_module['vmodule_exit'] = 'Lỗi: Module bạn đặt đã có trong hệ thống.';
 $lang_module['autoinstall'] = 'Cài đặt và đóng gói tự động';
 $lang_module['autoinstall_method'] = 'Lựa chọn tiến trình';
 $lang_module['autoinstall_method_none'] = 'Hãy lựa chọn: ';

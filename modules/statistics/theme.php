@@ -14,7 +14,7 @@ if( ! defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-function referer( )
+function referer()
 {
 	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $countries_list, $cts, $host_list, $total;
 
@@ -28,7 +28,7 @@ function referer( )
 		{
 			if( ! empty( $m['count'] ) )
 			{
-				$proc = ceil( ($m['count'] / $cts['max']) * 100 );
+				$proc = ceil( ( $m['count'] / $cts['max'] ) * 100 );
 
 				$xtpl->assign( 'M', $m );
 				$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
@@ -66,7 +66,7 @@ function referer( )
  *
  * @return
  */
-function allreferers( )
+function allreferers()
 {
 	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $countries_list, $cts, $host_list;
 
@@ -81,7 +81,7 @@ function allreferers( )
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'VALUE', $value );
@@ -89,7 +89,7 @@ function allreferers( )
 
 				if( $value[0] )
 				{
-					$proc = ceil( ($value[0] / $cts['max']) * 100 );
+					$proc = ceil( ( $value[0] / $cts['max'] ) * 100 );
 
 					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
@@ -118,7 +118,7 @@ function allreferers( )
  *
  * @return
  */
-function allbots( )
+function allbots()
 {
 	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $bot_list, $cts;
 
@@ -133,7 +133,7 @@ function allbots( )
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -141,7 +141,7 @@ function allbots( )
 
 				if( $value[0] )
 				{
-					$proc = ceil( ($value[0] / $cts['max']) * 100 );
+					$proc = ceil( ( $value[0] / $cts['max'] ) * 100 );
 
 					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
@@ -169,7 +169,7 @@ function allbots( )
  *
  * @return
  */
-function allos( )
+function allos()
 {
 	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $os_list, $cts;
 
@@ -184,7 +184,7 @@ function allos( )
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -192,7 +192,7 @@ function allos( )
 
 				if( $value[0] )
 				{
-					$proc = ceil( ($value[0] / $cts['max']) * 100 );
+					$proc = ceil( ( $value[0] / $cts['max'] ) * 100 );
 
 					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
@@ -202,7 +202,6 @@ function allos( )
 				++$a;
 
 				$xtpl->parse( 'main.loop' );
-
 			}
 
 			if( ! empty( $cts['generate_page'] ) )
@@ -221,7 +220,7 @@ function allos( )
  *
  * @return
  */
-function allbrowsers( )
+function allbrowsers()
 {
 	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $browsers_list, $cts;
 
@@ -236,7 +235,7 @@ function allbrowsers( )
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -244,7 +243,7 @@ function allbrowsers( )
 
 				if( $value[0] )
 				{
-					$proc = ceil( ($value[0] / $cts['max']) * 100 );
+					$proc = ceil( ( $value[0] / $cts['max'] ) * 100 );
 
 					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
@@ -272,7 +271,7 @@ function allbrowsers( )
  *
  * @return
  */
-function allcountries( )
+function allcountries()
 {
 	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $countries_list, $cts;
 
@@ -287,7 +286,7 @@ function allcountries( )
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'VALUE', $value );
@@ -295,7 +294,7 @@ function allcountries( )
 
 				if( $value[0] )
 				{
-					$proc = ceil( ($value[1] / $cts['max']) * 100 );
+					$proc = ceil( ( $value[1] / $cts['max'] ) * 100 );
 
 					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
@@ -324,7 +323,7 @@ function allcountries( )
  *
  * @return
  */
-function main( )
+function main()
 {
 	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh, $contents;
 
@@ -337,7 +336,7 @@ function main( )
 		if( ! empty( $m ) )
 		{
 			$xtpl->assign( 'M', $m );
-			$proc = ceil( ($m / $ctsy['max']) * 100 );
+			$proc = ceil( ( $m / $ctsy['max'] ) * 100 );
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
 
@@ -373,7 +372,7 @@ function main( )
 		if( ! empty( $m['count'] ) )
 		{
 			$contents .= $m['count'] . "<br />";
-			$proc = ceil( ($m['count'] / $ctsm['max']) * 100 );
+			$proc = ceil( ( $m['count'] / $ctsm['max'] ) * 100 );
 			$xtpl->assign( 'M', $m );
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
@@ -399,7 +398,6 @@ function main( )
 		}
 
 		$xtpl->parse( 'main.month.loop_1' );
-
 	}
 
 	$xtpl->parse( 'main.month' );
@@ -414,7 +412,7 @@ function main( )
 
 		if( ! empty( $m ) )
 		{
-			$proc = ceil( ($m / $ctsdm['max']) * 100 );
+			$proc = ceil( ( $m / $ctsdm['max'] ) * 100 );
 
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
@@ -452,7 +450,7 @@ function main( )
 
 		if( ! empty( $m['count'] ) )
 		{
-			$proc = ceil( ($m['count'] / $ctsdw['max']) * 100 );
+			$proc = ceil( ( $m['count'] / $ctsdw['max'] ) * 100 );
 
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
@@ -493,7 +491,7 @@ function main( )
 			{
 				$xtpl->assign( 'M', $m );
 
-				$proc = ceil( ($m / $ctsh['max']) * 100 );
+				$proc = ceil( ( $m / $ctsh['max'] ) * 100 );
 
 				$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 				$xtpl->assign( 'HEIGHT', $proc * 2 );
@@ -530,14 +528,14 @@ function main( )
 	$a = 0;
 	foreach( $ctsc['rows'] as $key => $value )
 	{
-		$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'VALUE', $value );
 		$xtpl->assign( 'KEY', $key );
 
 		if( $value[1] )
 		{
-			$proc = ceil( ($value[1] / $ctsc['max']) * 100 );
+			$proc = ceil( ( $value[1] / $ctsc['max'] ) * 100 );
 
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
 			$xtpl->assign( 'WIDTH', $proc * 3 );
@@ -551,7 +549,7 @@ function main( )
 
 	if( $ctsc['others'][1] )
 	{
-		$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics&amp;" . NV_OP_VARIABLE . "=allcountries" );
 
@@ -567,14 +565,14 @@ function main( )
 	$a = 0;
 	foreach( $ctsb['rows'] as $key => $value )
 	{
-		$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
 		$xtpl->assign( 'VALUE', $value );
 
 		if( $value[0] )
 		{
-			$proc = ceil( ($value[0] / $ctsb['max']) * 100 );
+			$proc = ceil( ( $value[0] / $ctsb['max'] ) * 100 );
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
 			$xtpl->assign( 'WIDTH', $proc * 3 );
 
@@ -587,7 +585,7 @@ function main( )
 
 	if( $ctsb['others'][1] )
 	{
-		$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 
 		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics&amp;" . NV_OP_VARIABLE . "=allbrowsers" );
@@ -604,7 +602,7 @@ function main( )
 	$a = 0;
 	foreach( $ctso['rows'] as $key => $value )
 	{
-		$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
@@ -612,7 +610,7 @@ function main( )
 
 		if( $value[0] )
 		{
-			$proc = ceil( ($value[0] / $ctso['max']) * 100 );
+			$proc = ceil( ( $value[0] / $ctso['max'] ) * 100 );
 
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
 			$xtpl->assign( 'WIDTH', $proc * 3 );
@@ -625,7 +623,7 @@ function main( )
 
 	if( $ctso['others'][1] )
 	{
-		$class = ($a % 2 == 0) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics&amp;" . NV_OP_VARIABLE . "=allos" );

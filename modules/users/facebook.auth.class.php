@@ -7,8 +7,7 @@
  * @Createdate  3/6/2012, 2:4
  */
 
-if( ! defined( 'NV_IS_MOD_USER' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 /**
  * FaceBookAuth
@@ -116,7 +115,7 @@ class FaceBookAuth
 	 */
 	public function getAttributes( $data, $config )
 	{
-		$return = array( );
+		$return = array();
 		foreach( $config as $val => $key )
 		{
 			if( ! isset( $data->$val ) )
@@ -130,6 +129,6 @@ class FaceBookAuth
 		}
 		return $return;
 	}
-
 }
+
 ?>

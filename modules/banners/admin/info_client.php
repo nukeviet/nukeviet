@@ -32,14 +32,8 @@ $row = $db->sql_fetchrow( $result );
 $page_title = $lang_module['info_client_title'];
 
 $contents = array();
-$contents['containerid'] = array(
-	'client_info',
-	'banners_list'
-);
-$contents['aj'] = array(
-	"nv_client_info(" . $id . ", 'client_info');",
-	"nv_show_banners_list('banners_list', " . $id . ", 0, 1);"
-);
+$contents['containerid'] = array( 'client_info', 'banners_list' );
+$contents['aj'] = array( "nv_client_info(" . $id . ", 'client_info');", "nv_show_banners_list('banners_list', " . $id . ", 0, 1);" );
 
 $contents = call_user_func( "nv_info_client_theme", $contents );
 

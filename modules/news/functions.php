@@ -78,21 +78,11 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 					{
 						$sub_act = 1;
 					}
-					$submenu[] = array(
-						$array_sub_cat_i['title'],
-						$array_sub_cat_i['link'],
-						$sub_act
-					);
+					$submenu[] = array( $array_sub_cat_i['title'], $array_sub_cat_i['link'], $sub_act );
 				}
 			}
-
 		}
-		$nv_vertical_menu[] = array(
-			$array_cat_i['title'],
-			$array_cat_i['link'],
-			$act,
-			'submenu' => $submenu
-		);
+		$nv_vertical_menu[] = array( $array_cat_i['title'], $array_cat_i['link'], $act, 'submenu' => $submenu );
 	}
 
 	//Xac dinh RSS
@@ -144,7 +134,7 @@ if( ! empty( $array_op ) and $op == "main" )
 			$array_page = explode( "-", $array_op[1] );
 			$id = intval( end( $array_page ) );
 			$number = strlen( $id ) + 1;
-			$alias_url = substr( $array_op[1], 0, - $number );
+			$alias_url = substr( $array_op[1], 0, -$number );
 			if( $id > 0 and $alias_url != "" )
 			{
 				$op = "detail";

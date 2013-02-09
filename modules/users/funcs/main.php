@@ -22,7 +22,7 @@ else
 {
 	if( ! defined( 'NV_IS_USER' ) )
 	{
-		$gfx_chk = ( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) )) ? 1 : 0;
+		$gfx_chk = ( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) ) ? 1 : 0;
 		$array_login = array(
 			"nv_login" => '',
 			"nv_password" => '',

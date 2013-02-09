@@ -159,7 +159,7 @@ require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
 $download = new download( $file_src, $directory, $file_basename, $is_resume, $max_speed );
 if( $is_zip )
 {
-	$mtime = ($mtime = filemtime( $session_files['fileupload'][$file]['src'] )) > 0 ? $mtime : NV_CURRENTTIME;
+	$mtime = ( $mtime = filemtime( $session_files['fileupload'][$file]['src'] ) ) > 0 ? $mtime : NV_CURRENTTIME;
 	$download->set_property( 'mtime', $mtime );
 }
 $download->download_file();

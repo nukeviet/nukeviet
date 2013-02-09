@@ -76,10 +76,7 @@ if( $id > 0 and $catid > 0 )
 				{
 					$subject = $lang_module['sendmail_subject'] . "$name";
 					$message .= "" . $lang_module['sendmail_welcome'] . " <strong>" . $global_config['site_name'] . "</strong> " . $lang_module['sendmail_welcome1'] . "<br /><br />" . $content . "<br /><br />" . $hometext . " <br/><br /><strong>" . $lang_module['sendmail_welcome2'] . "</strong><br />" . $link;
-					$from = array(
-						$name,
-						$youremail
-					);
+					$from = array( $name, $youremail );
 					$check = nv_sendmail( $from, $to_mail, $subject, $message );
 					if( $check )
 					{

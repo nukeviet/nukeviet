@@ -32,20 +32,13 @@ if( $all_page )
 	while( list( $bot, $count, $last_visit ) = $db->sql_fetchrow( $result ) )
 	{
 		$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
-		$bot_list[$bot] = array(
-			$count,
-			$last_visit
-		);
+		$bot_list[$bot] = array( $count, $last_visit );
 	}
 
 	if( ! empty( $bot_list ) )
 	{
 		$cts = array();
-		$cts['thead'] = array(
-			$lang_module['bot'],
-			$lang_module['hits'],
-			$lang_module['last_visit']
-		);
+		$cts['thead'] = array( $lang_module['bot'], $lang_module['hits'], $lang_module['last_visit'] );
 		$cts['rows'] = $bot_list;
 		$cts['max'] = $max;
 		$cts['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page );

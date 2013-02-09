@@ -53,25 +53,8 @@ function nv_del_cat( $catid )
 
 		//Khong xao file vi co the co truong hop file dung chung
 		/*
-		 if(!empty($fileupload))
-		 {
-		 $fileupload = explode("[NV]",$fileupload);
-
-		 foreach($fileupload as $file)
-		 {
-		 $file = substr($file,strlen(NV_BASE_SITEURL));
-		 if ( ! empty( $file ) and file_exists( NV_ROOTDIR . '/' . $file ) )
-		 {
-		 @nv_deletefile( NV_ROOTDIR . '/' . $file );
-		 }
-		 }
-		 }
-
-		 $fileimage = substr($array['fileimage'],strlen(NV_BASE_SITEURL));
-		 if ( ! empty( $fileimage ) and file_exists( NV_ROOTDIR . '/' . $fileimage ) )
-		 {
-		 @nv_deletefile( NV_ROOTDIR . '/' . $fileimage );
-		 }*/
+		 * if(!empty($fileupload)) { $fileupload = explode("[NV]",$fileupload); foreach($fileupload as $file) { $file = substr($file,strlen(NV_BASE_SITEURL)); if ( ! empty( $file ) and file_exists( NV_ROOTDIR . '/' . $file ) ) { @nv_deletefile( NV_ROOTDIR . '/' . $file ); } } } $fileimage = substr($array['fileimage'],strlen(NV_BASE_SITEURL)); if ( ! empty( $fileimage ) and file_exists( NV_ROOTDIR . '/' . $fileimage ) ) { @nv_deletefile( NV_ROOTDIR . '/' . $fileimage ); }
+		 */
 	}
 
 	if( ! empty( $ids ) )
@@ -101,11 +84,7 @@ function nv_del_cat( $catid )
 }
 
 $groups_list = nv_groups_list();
-$array_who = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2']
-);
+$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 if( ! empty( $groups_list ) )
 {
 	$array_who[] = $lang_global['who_view3'];
@@ -129,7 +108,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		$array['who_download'] = $nv_Request->get_int( 'who_download', 'post', 0 );
 		$array['groups_download'] = $nv_Request->get_typed_array( 'groups_download', 'post', 'int' );
 		$array['alias'] = filter_text_input( 'alias', 'post', '' );
-		$array['alias'] = ($array['alias'] == "") ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
+		$array['alias'] = ( $array['alias'] == "" ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
 		if( empty( $array['title'] ) )
 		{
 			$error = $lang_module['error_cat2'];
@@ -171,14 +150,14 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 				$array['who_view'] = 0;
 			}
 
-			$array['groups_view'] = ( ! empty( $array['groups_view'] )) ? implode( ',', $array['groups_view'] ) : '';
+			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
 
 			if( ! in_array( $array['who_download'], array_keys( $array_who ) ) )
 			{
 				$array['who_download'] = 0;
 			}
 
-			$array['groups_download'] = ( ! empty( $array['groups_download'] )) ? implode( ',', $array['groups_download'] ) : '';
+			$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
 
 			$sql = "SELECT MAX(weight) AS new_weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $array['parentid'];
 			$result = $db->sql_query( $sql );
@@ -228,7 +207,13 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		$array['groups_download'] = array();
 	}
 
-	$listcats = array( array( 'id' => 0, 'name' => $lang_module['category_cat_maincat'], 'selected' => "" ) );
+	$listcats = array(
+		array(
+			'id' => 0,
+			'name' => $lang_module['category_cat_maincat'],
+			'selected' => ""
+		)
+	);
 	$listcats = $listcats + nv_listcats( $array['parentid'] );
 
 	$who_view = $array['who_view'];
@@ -378,7 +363,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['groups_download'] = $nv_Request->get_typed_array( 'groups_download', 'post', 'int' );
 
 		$array['alias'] = filter_text_input( 'alias', 'post', '' );
-		$array['alias'] = ($array['alias'] == "") ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
+		$array['alias'] = ( $array['alias'] == "" ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
 
 		if( empty( $array['title'] ) )
 		{
@@ -420,14 +405,14 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$array['who_view'] = 0;
 			}
 
-			$array['groups_view'] = ( ! empty( $array['groups_view'] )) ? implode( ',', $array['groups_view'] ) : '';
+			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
 
 			if( ! in_array( $array['who_download'], array_keys( $array_who ) ) )
 			{
 				$array['who_download'] = 0;
 			}
 
-			$array['groups_download'] = ( ! empty( $array['groups_download'] )) ? implode( ',', $array['groups_download'] ) : '';
+			$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
 
 			if( $array['parentid'] != $row['parentid'] )
 			{
@@ -487,7 +472,13 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['groups_download'] = ! empty( $row['groups_download'] ) ? explode( ",", $row['groups_download'] ) : array();
 	}
 
-	$listcats = array( array( 'id' => 0, 'name' => $lang_module['category_cat_maincat'], 'selected' => "" ) );
+	$listcats = array(
+		array(
+			'id' => 0,
+			'name' => $lang_module['category_cat_maincat'],
+			'selected' => ""
+		)
+	);
 	$listcats = $listcats + nv_listcats( $array['parentid'], $catid );
 
 	$who_view = $array['who_view'];
@@ -742,10 +733,10 @@ while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$weight[$i]['title'] = $i;
 		$weight[$i]['pos'] = $i;
-		$weight[$i]['selected'] = ($i == $row['weight']) ? " selected=\"selected\"" : "";
+		$weight[$i]['selected'] = ( $i == $row['weight'] ) ? " selected=\"selected\"" : "";
 	}
 
-	$class = ($a % 2) ? " class=\"second\"" : "";
+	$class = ( $a % 2 ) ? " class=\"second\"" : "";
 
 	$list[$row['id']] = array( //
 		'id' => ( int )$row['id'], //

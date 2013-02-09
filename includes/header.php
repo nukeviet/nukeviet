@@ -7,7 +7,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' )) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 global $global_config, $sys_info, $client_info, $lang_global, $nv_Request;
 

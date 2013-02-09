@@ -51,7 +51,7 @@ if( ! empty( $savecat ) )
 	$data_content['keywords'] = filter_text_input( 'keywords', 'post' );
 	$data_content['alias'] = filter_text_input( 'alias', 'post', '', 1, 100 );
 	$data_content['description'] = filter_text_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
-	$data_content['alias'] = ($data_content['alias'] == "") ? change_alias( $data_content['title'] ) : change_alias( $data_content['alias'] );
+	$data_content['alias'] = ( $data_content['alias'] == "" ) ? change_alias( $data_content['title'] ) : change_alias( $data_content['alias'] );
 
 	if( empty( $data_content['title'] ) )
 	{
@@ -164,7 +164,7 @@ if( ! empty( $array_cat ) )
 		{
 			if( $cat['parentid'] != 0 ) $xtitle = getlevel( $cat['parentid'], $array_cat );
 			$cat['xtitle'] = $xtitle . $cat['title'];
-			$cat['sl'] = ($cat['catid'] == $data_content['parentid']) ? "selected=\"selected\"" : "";
+			$cat['sl'] = ( $cat['catid'] == $data_content['parentid'] ) ? "selected=\"selected\"" : "";
 			$xtpl->assign( 'CAT', $cat );
 			$xtpl->parse( 'main.loopcat' );
 		}

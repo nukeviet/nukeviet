@@ -17,12 +17,12 @@ $error = 0;
 
 if( ! empty( $submit ) )
 {
-	$sort = ($nv_Request->get_string( 'sort', 'post' ) == 'asc') ? 'asc' : 'des';
+	$sort = ( $nv_Request->get_string( 'sort', 'post' ) == 'asc' ) ? 'asc' : 'des';
 	$sortoption = nv_htmlspecialchars( $nv_Request->get_string( 'sortoption', 'post', 'byid' ) );
 	$showlinkimage = $nv_Request->get_int( 'showlinkimage', 'post', 0 );
-	$imgwidth = ($nv_Request->get_int( 'imgwidth', 'post' ) >= 0) ? $nv_Request->get_int( 'imgwidth', 'post' ) : 100;
-	$imgheight = ($nv_Request->get_int( 'imgheight', 'post' ) >= 0) ? $nv_Request->get_int( 'imgheight', 'post' ) : 75;
-	$per_page = ($nv_Request->get_int( 'per_page', 'post' ) >= 0) ? $nv_Request->get_int( 'per_page', 'post' ) : 10;
+	$imgwidth = ( $nv_Request->get_int( 'imgwidth', 'post' ) >= 0 ) ? $nv_Request->get_int( 'imgwidth', 'post' ) : 100;
+	$imgheight = ( $nv_Request->get_int( 'imgheight', 'post' ) >= 0 ) ? $nv_Request->get_int( 'imgheight', 'post' ) : 75;
+	$per_page = ( $nv_Request->get_int( 'per_page', 'post' ) >= 0 ) ? $nv_Request->get_int( 'per_page', 'post' ) : 10;
 
 	$sql = array();
 	$sql[] = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config` SET value='" . $sort . "' WHERE name='sort'";
@@ -51,12 +51,12 @@ while( $row = $db->sql_fetchrow( $result ) )
 
 // Set data adv
 $data_content['asc'] = $data_content['des'] = "";
-($data_content['sort'] == "asc") ? $data_content['asc'] = 'checked' : $data_content['des'] = 'checked';
-$data_content['byid'] = ($data_content['sortoption'] == 'byid') ? ' checked' : '';
-$data_content['byrand'] = ($data_content['sortoption'] == 'byrand') ? ' checked' : '';
-$data_content['bytime'] = ($data_content['sortoption'] == 'bytime') ? ' checked' : '';
-$data_content['byhit'] = ($data_content['sortoption'] == 'byhit') ? ' checked' : '';
-$data_content['ck_showlinkimage'] = ($data_content['showlinkimage'] == 1) ? ' checked' : '';
+( $data_content['sort'] == "asc" ) ? $data_content['asc'] = 'checked' : $data_content['des'] = 'checked';
+$data_content['byid'] = ( $data_content['sortoption'] == 'byid' ) ? ' checked' : '';
+$data_content['byrand'] = ( $data_content['sortoption'] == 'byrand' ) ? ' checked' : '';
+$data_content['bytime'] = ( $data_content['sortoption'] == 'bytime' ) ? ' checked' : '';
+$data_content['byhit'] = ( $data_content['sortoption'] == 'byhit' ) ? ' checked' : '';
+$data_content['ck_showlinkimage'] = ( $data_content['showlinkimage'] == 1 ) ? ' checked' : '';
 
 $xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -64,7 +64,7 @@ $xtpl->assign( 'DATA', $data_content );
 
 if( ! empty( $submit ) )
 {
-	$msg_error = ($error == 0) ? $lang_module['weblink_config_success'] : $lang_module['weblink_config_unsuccess'];
+	$msg_error = ( $error == 0 ) ? $lang_module['weblink_config_success'] : $lang_module['weblink_config_unsuccess'];
 	$xtpl->assign( 'error', $msg_error );
 	$xtpl->assign( 'redirect', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 	$xtpl->parse( 'main.error' );
