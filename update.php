@@ -421,8 +421,8 @@ nv_CreateXML_bannerPlan();
 require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
 if( ! nv_save_file_config_global() )
 {
-	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/settings/banip.php" );
-	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/settings/uploadconfig.php" );
+	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/settings/banip.php" );
+	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/settings/uploadconfig.php" );
 	nv_deletefile( NV_ROOTDIR . "/includes/getloadavg.php" );
 	nv_deletefile( NV_ROOTDIR . "/includes/core/wysyiwyg_functions.php" );
 	nv_deletefile( NV_ROOTDIR . "/includes/ini/langs_multi.ini" );

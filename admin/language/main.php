@@ -99,7 +99,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 				$lang_global['mod_modules'] = "";
 
 				$module_name = "modules";
-				require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/modules/functions.php" );
+				require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/functions.php" );
 				$module_name = "";
 
 				$array_module_setup = explode( ",", NV_MODULE_SETUP_DEFAULT );

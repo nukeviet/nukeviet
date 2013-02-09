@@ -15,7 +15,7 @@ function nv_get_submenu( $mod )
 
 	$submenu = array();
 
-	if( $mod != $module_name and file_exists( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $mod . "/functions.php" ) )
+	if( $mod != $module_name and file_exists( NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $mod . "/functions.php" ) )
 	{
 		//ket noi voi file ngon ngu cua module
 		if( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $mod . ".php" ) )
@@ -31,7 +31,7 @@ function nv_get_submenu( $mod )
 			include ( NV_ROOTDIR . "/language/en/admin_" . $mod . ".php" );
 		}
 
-		include ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $mod . "/functions.php" );
+		include ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $mod . "/functions.php" );
 		unset( $lang_module );
 	}
 

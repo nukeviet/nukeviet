@@ -202,7 +202,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 		nv_admin_read_lang( $dirlang, "global", 1 );
 
 		$array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
-		$dirs = nv_scandir( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules", $global_config['check_module'] );
+		$dirs = nv_scandir( NV_ROOTDIR . "/" . NV_ADMINDIR, $global_config['check_module'] );
 
 		foreach( $dirs as $module )
 		{

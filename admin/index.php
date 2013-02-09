@@ -113,8 +113,8 @@ if( ! empty( $module_name ) )
 		if( md5( $module_info['module'] . "#" . $module_info['act_1'] . "#" . $module_info['act_2'] . "#" . $module_info['act_3'] . "#" . $global_config['sitekey'] ) )
 		{
 			$module_file = $module_name;
-			$include_functions = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_file . "/functions.php";
-			$include_file = NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/" . $module_file . "/" . $op . ".php";
+			$include_functions = NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $module_file . "/functions.php";
+			$include_file = NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $module_file . "/" . $op . ".php";
 
 			// Ket noi voi file ngon ngu cua module
 			if( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $module_file . ".php" ) )

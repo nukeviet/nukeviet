@@ -458,7 +458,7 @@ elseif( $step == 5 )
 					$lang_module['autoinstall'] = "";
 					$lang_global['mod_modules'] = "";
 
-					require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/modules/functions.php" );
+					require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/functions.php" );
 
 					$module_name = "";
 
