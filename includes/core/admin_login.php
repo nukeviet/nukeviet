@@ -34,12 +34,7 @@ if( ! nv_admin_checkfirewall() )
 $error = "";
 $login = "";
 
-$array_gfx_chk = array(
-	1,
-	5,
-	6,
-	7
-);
+$array_gfx_chk = array( 1, 5, 6, 7 );
 if( in_array( $global_config['gfx_chk'], $array_gfx_chk ) )
 {
 	$global_config['gfx_chk'] = 1;
@@ -98,7 +93,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 		if( $userid > 0 )
 		{
 			$query = "SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE t1.admin_id = " . $userid . " AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1";
-			if( ($result = $db->sql_query( $query )) !== false )
+			if( ( $result = $db->sql_query( $query ) ) !== false )
 			{
 				$numrows = $db->sql_numrows( $result );
 				if( $numrows == 1 )
@@ -177,7 +172,7 @@ elseif( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
 	require_once ( NV_ROOTDIR . "/language/en/admin_global.php" );
 }
 
-$info = ( ! empty( $error )) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
+$info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
 $size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
 $dir_template = "";
@@ -199,7 +194,7 @@ $xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme'] );
 $xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
-$xtpl->assign( 'CHECK_SC', ($global_config['gfx_chk'] == 1) ? 1 : 0 );
+$xtpl->assign( 'CHECK_SC', ( $global_config['gfx_chk'] == 1 ) ? 1 : 0 );
 $xtpl->assign( 'LOGIN_TITLE', $lang_global['adminlogin'] );
 $xtpl->assign( 'LOGIN_INFO', $info );
 $xtpl->assign( 'N_LOGIN', $lang_global['username'] );
@@ -239,7 +234,7 @@ if( $global_config['lang_multi'] == 1 )
 		{
 			$xtpl->assign( 'LANGOP', NV_BASE_ADMINURL . "index.php?langinterface=" . $lang_i );
 			$xtpl->assign( 'LANGTITLE', $lang_global['langinterface'] );
-			$xtpl->assign( 'SELECTED', ($lang_i == NV_LANG_INTERFACE) ? "selected='selected'" : "" );
+			$xtpl->assign( 'SELECTED', ( $lang_i == NV_LANG_INTERFACE ) ? "selected='selected'" : "" );
 			$xtpl->assign( 'LANGVALUE', $language_array[$lang_i]['name'] );
 			$xtpl->parse( 'main.lang_multi.option' );
 		}

@@ -34,11 +34,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$row = $db->sql_fetchrow( $result );
 
 	$groups_list = nv_groups_list();
-	$array_who = array(
-		$lang_global['who_view0'],
-		$lang_global['who_view1'],
-		$lang_global['who_view2']
-	);
+	$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 	if( ! empty( $groups_list ) )
 	{
 		$array_who[] = $lang_global['who_view3'];
@@ -139,7 +135,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				if( ! empty( $file ) )
 				{
 					$file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
-					if( file_exists( NV_ROOTDIR . '/' . $file2 ) and ($filesize = filesize( NV_ROOTDIR . '/' . $file2 )) != 0 )
+					if( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
 					{
 						$array['fileupload2'][] = substr( $file, strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
 						$array['filesize'] += $filesize;
@@ -163,7 +159,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				if( ! empty( $file ) )
 				{
 					$file2 = substr( $file, strlen( NV_BASE_SITEURL ) );
-					if( file_exists( NV_ROOTDIR . '/' . $file2 ) and ($filesize = filesize( NV_ROOTDIR . '/' . $file2 )) != 0 )
+					if( file_exists( NV_ROOTDIR . '/' . $file2 ) and ( $filesize = filesize( NV_ROOTDIR . '/' . $file2 ) ) != 0 )
 					{
 						$array['fileupload'][] = substr( $file, strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
 						$array['filesize'] += $filesize;
@@ -232,7 +228,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$is_error = true;
 			$error = $lang_module['file_title_exists'];
 		}
-		elseif( ! empty( $array['author_email'] ) and ($check_valid_email = nv_check_valid_email( $array['author_email'] )) != "" )
+		elseif( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
 		{
 			$is_error = true;
 			$error = $check_valid_email;
@@ -266,9 +262,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$array['who_download'] = 0;
 			}
 
-			$array['groups_comment'] = ( ! empty( $array['groups_comment'] )) ? implode( ',', $array['groups_comment'] ) : '';
-			$array['groups_view'] = ( ! empty( $array['groups_view'] )) ? implode( ',', $array['groups_view'] ) : '';
-			$array['groups_download'] = ( ! empty( $array['groups_download'] )) ? implode( ',', $array['groups_download'] ) : '';
+			$array['groups_comment'] = ( ! empty( $array['groups_comment'] ) ) ? implode( ',', $array['groups_comment'] ) : '';
+			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
+			$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
 
 			if( $row['user_id'] )
 			{
@@ -308,8 +304,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				}
 			}
 
-			$array['fileupload'] = ( ! empty( $array['fileupload'] )) ? implode( "[NV]", $array['fileupload'] ) : "";
-			if( ( ! empty( $array['linkdirect'] )) )
+			$array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? implode( "[NV]", $array['fileupload'] ) : "";
+			if( ( ! empty( $array['linkdirect'] ) ) )
 			{
 				$array['linkdirect'] = array_map( "nv_nl2br", $array['linkdirect'] );
 				$array['linkdirect'] = implode( "[NV]", $array['linkdirect'] );
@@ -420,7 +416,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				exit();
 			}
 		}
-
 	}
 	else
 	{
@@ -722,7 +717,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
-	exit ;
+	exit();
 }
 
 //Delete file
@@ -838,7 +833,7 @@ if( ! $all_file )
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
-	exit ;
+	exit();
 }
 
 $listcats = nv_listcats( 0 );
@@ -860,7 +855,7 @@ while( $row = $db->sql_fetchrow( $result2 ) )
 		'title' => $row['title'], //
 		'cattitle' => $listcats[$row['catid']]['title'], //
 		'catlink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['catid'], //
-		'uploadtime' => nv_date( "d/m/Y H:i", $row['uploadtime'] ), //
+		'uploadtime' => nv_date( "d/m/Y H:i", $row['uploadtime'] ) //
 	);
 }
 

@@ -1,5 +1,6 @@
 <?php
 
+
 //
 //  Copyright (c) 2011, Maths for More S.L. http://www.wiris.com
 //  This file is part of WIRIS Plugin.
@@ -63,4 +64,5 @@ if (!is_null($digest)) {
 else {
 	echo 'Error: no digest has been sent.';
 }
+
 ?>

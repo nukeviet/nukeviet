@@ -54,7 +54,7 @@ if( ! empty( $list_cats ) )
 	}
 	if( $module_info['rss'] )
 	{
-		if( ($result = $db->sql_query( $sql )) !== false )
+		if( ( $result = $db->sql_query( $sql ) ) !== false )
 		{
 			while( list( $id, $cid, $title, $question, $addtime ) = $db->sql_fetchrow( $result ) )
 			{

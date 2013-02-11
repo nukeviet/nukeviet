@@ -16,7 +16,7 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-function cron_auto_check_version( )
+function cron_auto_check_version()
 {
 	global $nv_Request, $global_config, $client_info;
 

@@ -14,7 +14,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-function nv_block_headline( )
+function nv_block_headline()
 {
 	global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat;
 
@@ -22,7 +22,7 @@ function nv_block_headline( )
 
 	$cache_file = NV_LANG_DATA . "_" . $module_name . "_block_headline_" . NV_CACHE_PREFIX . ".cache";
 
-	if( ($cache = nv_get_cache( $cache_file )) != false )
+	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 	{
 		$array_bid_content = unserialize( $cache );
 	}

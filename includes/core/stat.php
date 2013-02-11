@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-function nv_stat_update( )
+function nv_stat_update()
 {
 	global $db, $client_info, $global_config;
 
@@ -58,8 +58,8 @@ function nv_stat_update( )
 		$db->sql_query( $query );
 	}
 
-	$bot_name = ($client_info['is_bot'] and ! empty( $client_info['bot_info']['name'] )) ? $client_info['bot_info']['name'] : "Not_bot";
-	$browser = ($client_info['is_mobile']) ? "Mobile" : $client_info['browser']['key'];
+	$bot_name = ( $client_info['is_bot'] and ! empty( $client_info['bot_info']['name'] ) ) ? $client_info['bot_info']['name'] : "Not_bot";
+	$browser = ( $client_info['is_mobile'] ) ? "Mobile" : $client_info['browser']['key'];
 
 	$query = "UPDATE `" . NV_COUNTER_TABLE . "` SET `c_count`= c_count + 1, `last_update`=" . NV_CURRENTTIME . " WHERE 
 	(`c_type`='total' AND `c_val`='hits') OR 

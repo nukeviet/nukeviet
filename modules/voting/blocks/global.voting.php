@@ -10,6 +10,7 @@
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 if( ! nv_function_exists( 'nv_block_voting_select' ) )
 {
+
 	function nv_block_voting_select_config( $module, $data_block, $lang_block )
 	{
 		global $db, $language_array, $site_mods;
@@ -25,7 +26,7 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 		$list = nv_db_cache( $sql, 'vid', $module );
 		foreach( $list as $l )
 		{
-			$sel = ($data_block['vid'] == $l['vid']) ? ' selected' : '';
+			$sel = ( $data_block['vid'] == $l['vid'] ) ? ' selected' : '';
 			$html .= "<option value=\"" . $l['vid'] . "\" " . $sel . ">" . $l['question'] . "</option>\n";
 		}
 		$html .= "\t</select></td>";
@@ -97,7 +98,7 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 					"accept" => $current_voting['acceptcm'], //
 					"errsm" => $current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], $current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'], //
 					"vid" => $current_voting['vid'], //
-					"question" => ( empty( $current_voting['link'] )) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
+					"question" => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
 					"action" => $action, //
 					"langresult" => $lang_module['voting_result'], //
 					"langsubmit" => $lang_module['voting_hits'] //
@@ -126,7 +127,6 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 			}
 		}
 	}
-
 }
 if( defined( 'NV_SYSTEM' ) )
 {

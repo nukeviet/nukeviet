@@ -28,7 +28,7 @@ While( $row = $db->sql_fetchrow( $result ) )
 		'module' => $module, //
 		'key' => $row['catid'], //
 		'title' => $t_sp . $row['title'], //
-		'alias' => $row['alias'], //
+		'alias' => $row['alias'] //
 	);
 }
 

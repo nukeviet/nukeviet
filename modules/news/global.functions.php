@@ -20,7 +20,7 @@ if( $timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME )
  *
  * @return
  */
-function nv_set_status_module( )
+function nv_set_status_module()
 {
 	global $db, $module_name, $module_data, $global_config;
 
@@ -106,7 +106,7 @@ function nv_comment_module( $id, $page )
 			$post_email = $user_email;
 			$post_name = $user_full_name;
 		}
-		$post_email = ($module_config[$module_name]['emailcomm'] and $view_mail) ? $post_email : "";
+		$post_email = ( $module_config[$module_name]['emailcomm'] and $view_mail ) ? $post_email : "";
 		$comment_array[] = array(
 			"content" => $content,
 			"post_time" => $post_time,
@@ -120,10 +120,7 @@ function nv_comment_module( $id, $page )
 	unset( $row, $comment );
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;id=" . $id . "&checkss=" . md5( $id . session_id() . $global_config['sitekey'] );
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page, true, true, 'nv_urldecode_ajax', 'showcomment' );
-	return array(
-		"comment" => $comment_array,
-		"page" => $generate_page
-	);
+	return array( "comment" => $comment_array, "page" => $generate_page );
 }
 
 /**

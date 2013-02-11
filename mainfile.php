@@ -182,8 +182,7 @@ $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_
 $client_info['agent'] = $nv_Request->user_agent;
 
 if( preg_match( "/^[0-9]{10,}$/", $nv_Request->get_string( 'nocache', 'get', '' ) ) and //Xac dinh co phai AJAX hay khong
-	$client_info['is_myreferer'] === 1 )
-	define( 'NV_IS_AJAX', true );
+$client_info['is_myreferer'] === 1 ) define( 'NV_IS_AJAX', true );
 
 //Chan truy cap neu HTTP_USER_AGENT == 'none'
 if( NV_USER_AGENT == "none" )
@@ -199,7 +198,7 @@ if( NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed 
 
 //Xac dinh co phai la bot hay khong
 $client_info['bot_info'] = nv_check_bot();
-$client_info['is_bot'] = ( ! empty( $client_info['bot_info'] )) ? 1 : 0;
+$client_info['is_bot'] = ( ! empty( $client_info['bot_info'] ) ) ? 1 : 0;
 
 //Neu la bot va bot bi cam truy cap
 if( $client_info['is_bot'] and empty( $client_info['bot_info']['allowed'] ) ) trigger_error( 'Sorry! Website does not support the bot', 256 );
@@ -235,7 +234,7 @@ $client_info['is_mobile'] = nv_checkmobile( NV_USER_AGENT );
 
 //Ket noi voi class chong flood
 if( $global_config['is_flood_blocker'] and ! $nv_Request->isset_request( 'admin', 'session' ) and //
-( ! $nv_Request->isset_request( 'second', 'get' ) or ($nv_Request->isset_request( 'second', 'get' ) and $client_info['is_myreferer'] != 1)) )
+( ! $nv_Request->isset_request( 'second', 'get' ) or ( $nv_Request->isset_request( 'second', 'get' ) and $client_info['is_myreferer'] != 1 ) ) )
 {
 	require ( NV_ROOTDIR . '/includes/core/flood_blocker.php' );
 }
@@ -371,7 +370,7 @@ if( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )
 
 // Kiem tra ton tai goi cap nhat va tu cach admin
 $nv_check_update = file_exists( NV_ROOTDIR . '/install/update_data.php' );
-define( 'ADMIN_LOGIN_MODE', $nv_check_update ? 1 : (empty( $global_config['closed_site'] ) ? 3 : $global_config['closed_site']) );
+define( 'ADMIN_LOGIN_MODE', $nv_check_update ? 1 : ( empty( $global_config['closed_site'] ) ? 3 : $global_config['closed_site'] ) );
 
 $admin_cookie = $nv_Request->get_bool( 'admin', 'session', false );
 if( ! empty( $admin_cookie ) )
@@ -403,7 +402,7 @@ if( $nv_check_update and ! defined( 'NV_IS_UPDATE' ) )
 	// Dinh chi neu khong la admin toi cao
 	if( ! defined( 'NV_ADMIN' ) and ! defined( 'NV_IS_GODADMIN' ) )
 	{
-		$disable_site_content = (isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] )) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
+		$disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
 		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content );
 	}
 }
@@ -411,7 +410,7 @@ elseif( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
 {
 	if( ! empty( $global_config['closed_site'] ) )
 	{
-		$disable_site_content = (isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] )) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
+		$disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
 		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content );
 	}
 	elseif( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )

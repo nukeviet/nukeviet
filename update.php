@@ -23,15 +23,15 @@ $db_config = $global_config = $module_config = $client_info = $user_info = $admi
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = "";
 $editor = false;
 
-$sys_info['disable_classes'] = (($disable_classes = ini_get( "disable_classes" )) != "" and $disable_classes != false) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
-$sys_info['disable_functions'] = (($disable_functions = ini_get( "disable_functions" )) != "" and $disable_functions != false) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
+$sys_info['disable_classes'] = ( ( $disable_classes = ini_get( "disable_classes" ) ) != "" and $disable_classes != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
+$sys_info['disable_functions'] = ( ( $disable_functions = ini_get( "disable_functions" ) ) != "" and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
 
 if( extension_loaded( 'suhosin' ) )
 {
 	$sys_info['disable_functions'] = array_merge( $sys_info['disable_functions'], array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
 }
 
-$sys_info['ini_set_support'] = (function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] )) ? true : false;
+$sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] ) ) ? true : false;
 
 //Xac dinh thu muc goc cua site
 define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
@@ -48,62 +48,15 @@ else
 {
 	die( 'sys not install' );
 }
-if( $global_config['sitekey'] != $sitekey OR empty( $global_config['sitekey'] ) )
+if( $global_config['sitekey'] != $sitekey or empty( $global_config['sitekey'] ) )
 {
 	die( 'error sitekey config' );
-
 }
 
 require ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
 
-$search = array(
-	'&amp;',
-	'&#039;',
-	'&quot;',
-	'&lt;',
-	'&gt;',
-	'&#x005C;',
-	'&#x002F;',
-	'&#40;',
-	'&#41;',
-	'&#42;',
-	'&#91;',
-	'&#93;',
-	'&#33;',
-	'&#x3D;',
-	'&#x23;',
-	'&#x25;',
-	'&#x5E;',
-	'&#x3A;',
-	'&#x7B;',
-	'&#x7D;',
-	'&#x60;',
-	'&#x7E;'
-);
-$replace = array(
-	'&',
-	'\'',
-	'"',
-	'<',
-	'>',
-	'\\',
-	'/',
-	'(',
-	')',
-	'*',
-	'[',
-	']',
-	'!',
-	'=',
-	'#',
-	'%',
-	'^',
-	':',
-	'{',
-	'}',
-	'`',
-	'~'
-);
+$search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
+$replace = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~' );
 $global_config['my_domains'] = str_replace( $search, $replace, $global_config['my_domains'] );
 $global_config['cookie_prefix'] = str_replace( $search, $replace, $global_config['cookie_prefix'] );
 $global_config['date_pattern'] = str_replace( $search, $replace, $global_config['date_pattern'] );
@@ -202,7 +155,7 @@ define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' );
 //vd: /ten_thu_muc_chua_site/admin/
 define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root );
 // D:/AppServ/www
-define( 'NV_EOL', (strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : (strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n")) );
+define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) );
 //Ngat dong
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR );
 //Xac dinh duong dan thuc den thu muc upload
@@ -468,8 +421,8 @@ nv_CreateXML_bannerPlan();
 require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
 if( ! nv_save_file_config_global() )
 {
-	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/settings/banip.php" );
-	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/settings/uploadconfig.php" );
+	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/settings/banip.php" );
+	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/settings/uploadconfig.php" );
 	nv_deletefile( NV_ROOTDIR . "/includes/getloadavg.php" );
 	nv_deletefile( NV_ROOTDIR . "/includes/core/wysyiwyg_functions.php" );
 	nv_deletefile( NV_ROOTDIR . "/includes/ini/langs_multi.ini" );

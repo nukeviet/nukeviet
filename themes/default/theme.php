@@ -166,7 +166,7 @@ function nv_site_theme( $contents )
 	$xtpl->parse( 'main' );
 	$sitecontent = $xtpl->text( 'main' );
 	$sitecontent = nv_blocks_content( $sitecontent );
-	$sitecontent = str_replace( '[THEME_ERROR_INFO]', nv_error_info( ), $sitecontent );
+	$sitecontent = str_replace( '[THEME_ERROR_INFO]', nv_error_info(), $sitecontent );
 
 	$my_footer = $theme_footer_js . $my_footer;
 

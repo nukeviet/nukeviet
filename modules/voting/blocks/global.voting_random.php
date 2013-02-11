@@ -11,12 +11,13 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_voting' ) )
 {
+
 	/**
 	 * nv_block_voting()
 	 *
 	 * @return
 	 */
-	function nv_block_voting( )
+	function nv_block_voting()
 	{
 		global $db, $my_head, $site_mods, $global_config, $client_info;
 
@@ -42,7 +43,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 			{
 				$is_update[] = $row['vid'];
 			}
-			elseif( $row['publ_time'] <= NV_CURRENTTIME AND nv_set_allow( $row['who_view'], $row['groups_view'] ) )
+			elseif( $row['publ_time'] <= NV_CURRENTTIME and nv_set_allow( $row['who_view'], $row['groups_view'] ) )
 			{
 				$allowed[$a] = $row;
 				++$a;
@@ -103,7 +104,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 				"accept" => ( int )$current_voting['acceptcm'], //
 				"errsm" => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'], //
 				"vid" => $current_voting['vid'], //
-				"question" => (empty( $current_voting['link'] )) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
+				"question" => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
 				"action" => $action, //
 				"langresult" => $lang_module['voting_result'], //
 				"langsubmit" => $lang_module['voting_hits'] //
@@ -133,7 +134,6 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 
 		return $content;
 	}
-
 }
 if( defined( 'NV_SYSTEM' ) )
 {

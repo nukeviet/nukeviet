@@ -11,6 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_menu_site' ) )
 {
+
 	/**
 	 * nv_block_config_menu()
 	 *
@@ -30,7 +31,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		$list = nv_db_cache( $sql, 'id', $module );
 		foreach( $list as $l )
 		{
-			$sel = ($data_block['menuid'] == $l['id']) ? ' selected' : '';
+			$sel = ( $data_block['menuid'] == $l['id'] ) ? ' selected' : '';
 			$html .= "<option value=\"" . $l['id'] . "\" " . $sel . ">" . $l['title'] . "</option>\n";
 		}
 
@@ -39,21 +40,21 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['type'] . "</td>";
 		$html .= "	<td><select name=\"type\">\n";
-		$sel = ($data_block['type'] == 1) ? ' selected' : '';
+		$sel = ( $data_block['type'] == 1 ) ? ' selected' : '';
 		$html .= "<option value=\"1\" " . $sel . ">" . $lang_block['m_type1'] . "</option>\n";
-		$sel = ($data_block['type'] == 2) ? ' selected' : '';
+		$sel = ( $data_block['type'] == 2 ) ? ' selected' : '';
 		$html .= "<option value=\"2\" " . $sel . ">" . $lang_block['m_type2'] . "</option>\n";
-		$sel = ($data_block['type'] == 3) ? ' selected' : '';
+		$sel = ( $data_block['type'] == 3 ) ? ' selected' : '';
 		$html .= "<option value=\"3\" " . $sel . ">" . $lang_block['m_type3'] . "</option>\n";
-		$sel = ($data_block['type'] == 4) ? ' selected' : '';
+		$sel = ( $data_block['type'] == 4 ) ? ' selected' : '';
 		$html .= "<option value=\"4\" " . $sel . ">" . $lang_block['m_type4'] . "</option>\n";
-		$sel = ($data_block['type'] == 5) ? ' selected' : '';
+		$sel = ( $data_block['type'] == 5 ) ? ' selected' : '';
 		$html .= "<option value=\"5\" " . $sel . ">" . $lang_block['m_type5'] . "</option>\n";
-		$sel = ($data_block['type'] == 6) ? ' selected' : '';
+		$sel = ( $data_block['type'] == 6 ) ? ' selected' : '';
 		$html .= "<option value=\"6\" " . $sel . ">" . $lang_block['m_type6'] . "</option>\n";
-		$sel = ($data_block['type'] == 7) ? ' selected' : '';
+		$sel = ( $data_block['type'] == 7 ) ? ' selected' : '';
 		$html .= "<option value=\"7\" " . $sel . ">" . $lang_block['m_type7'] . "</option>\n";
-		$sel = ($data_block['type'] == 8) ? ' selected' : '';
+		$sel = ( $data_block['type'] == 8 ) ? ' selected' : '';
 		$html .= "<option value=\"8\" " . $sel . ">" . $lang_block['m_type8'] . "</option>\n";
 		$html .= "	</select></td>\n";
 		$html .= "</tr>";
@@ -62,7 +63,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		$html .= $lang_block['is_viewdes'];
 		$html .= "</td>";
 		$html .= "<td>";
-		$html .= "<input type=\"checkbox\" name=\"config_is_viewdes\" value=\"1\"" . ( ! empty( $data_block['is_viewdes'] ) ? ' checked="checked"' : '') . "/> " . $lang_block['is_viewdes_1'];
+		$html .= "<input type=\"checkbox\" name=\"config_is_viewdes\" value=\"1\"" . ( ! empty( $data_block['is_viewdes'] ) ? ' checked="checked"' : '' ) . "/> " . $lang_block['is_viewdes_1'];
 		$html .= "</td>";
 		$html .= "</tr>";
 		$html .= "<tr>";
@@ -116,7 +117,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		$_curr_url = NV_BASE_SITEURL . str_replace( $global_config['site_url'] . '/', '', $client_info['selfurl'] );
 		$_url = nv_url_rewrite( $url, true );
 
-		if( $home and ($_url == nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA ) or $_url == NV_BASE_SITEURL . "index.php" or $_url == NV_BASE_SITEURL) )
+		if( $home and ( $_url == nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA ) or $_url == NV_BASE_SITEURL . "index.php" or $_url == NV_BASE_SITEURL ) )
 		{
 			return true;
 		}
@@ -125,7 +126,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			if( preg_match( '#' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
 			return false;
 		}
-		elseif( $type == 1 )//
+		elseif( $type == 1 ) //
 		{
 			if( preg_match( '#^' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
 			return false;
@@ -187,10 +188,10 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			{
 				switch( $row['target'] )
 				{
-					case 1 :
+					case 1:
 						$row['target'] = '';
 						break;
-					default :
+					default:
 						$row['target'] = ' onclick="this.target=\'_blank\'"';
 				}
 
@@ -200,10 +201,10 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 					'subcats' => $row['subitem'], //
 					'title' => nv_clean60( $row['title'], $block_config['title_length'] ), //
 					'target' => $row['target'], //
-					'note' => ($block_config['is_viewdes'] and $row['note']) ? $row['note'] : $row['title'], //
+					'note' => ( $block_config['is_viewdes'] and $row['note'] ) ? $row['note'] : $row['title'], //
 					'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ), //
 					'html_class' => $row['css'], //
-					'current' => nv_bmenu_check_currit( $row['link'], ( int )$row['active_type'] ), //
+					'current' => nv_bmenu_check_currit( $row['link'], ( int )$row['active_type'] ) //
 				);
 			}
 		}
@@ -369,7 +370,6 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 
 							$xtpl->parse( 'main.cat2.loopcat2' );
 						}
-
 					}
 					$xtpl->parse( 'main.cat2' );
 				}
@@ -377,7 +377,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		}
 
 		$xtpl->parse( 'main' );
-		return ($xtpl->text( 'main' ));
+		return ( $xtpl->text( 'main' ) );
 	}
 
 	// Kieu VII:: Pro_dropdown
@@ -589,7 +589,6 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			return $xtpl->text( 'tree' );
 		}
 	}
-
 }
 
 if( defined( 'NV_SYSTEM' ) )

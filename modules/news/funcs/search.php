@@ -63,7 +63,7 @@ foreach( $global_array_cat as $arr_cat_i )
 	$array_cat_search[$arr_cat_i['catid']] = array(
 		'catid' => $arr_cat_i['catid'],
 		'title' => $arr_cat_i['title'],
-		'select' => ($arr_cat_i['catid'] == $catid) ? "selected" : ""
+		'select' => ( $arr_cat_i['catid'] == $catid ) ? "selected" : ""
 	);
 }
 
@@ -134,25 +134,22 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		}
 		else
 		{
-			$array_img = array(
-				"",
-				""
-			);
+			$array_img = array( "", "" );
 		}
 
-		if( $homeimgthumb == 1 )//image thumb
+		if( $homeimgthumb == 1 ) //image thumb
 		{
 			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 2 )//image file
+		elseif( $homeimgthumb == 2 ) //image file
 		{
 			$img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 3 )//image url
+		elseif( $homeimgthumb == 3 ) //image url
 		{
 			$img_src = $homeimgfile;
 		}
-		else//no image
+		else //no image
 		{
 			$img_src = "";
 		}

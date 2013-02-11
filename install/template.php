@@ -22,15 +22,7 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'VERSION', "v" . $global_config['version'] );
 
-	$step_bar = array(
-		$lang_module['select_language'],
-		$lang_module['check_chmod'],
-		$lang_module['license'],
-		$lang_module['check_server'],
-		$lang_module['config_database'],
-		$lang_module['website_info'],
-		$lang_module['done']
-	);
+	$step_bar = array( $lang_module['select_language'], $lang_module['check_chmod'], $lang_module['license'], $lang_module['check_server'], $lang_module['config_database'], $lang_module['website_info'], $lang_module['done'] );
 
 	foreach( $step_bar as $i => $step_bar_i )
 	{
@@ -40,8 +32,8 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 		if( $step >= $n )
 		{
 			$class = " class=\"";
-			$class .= ($step > $n) ? 'passed_step' : '';
-			$class .= ($step == $n) ? 'current_step' : '';
+			$class .= ( $step > $n ) ? 'passed_step' : '';
+			$class .= ( $step == $n ) ? 'current_step' : '';
 			$class .= "\"";
 		}
 
@@ -57,7 +49,7 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 
 	foreach( $languageslist as $languageslist_i )
 	{
-		if( ! empty( $languageslist_i ) and (NV_LANG_DATA != $languageslist_i) )
+		if( ! empty( $languageslist_i ) and ( NV_LANG_DATA != $languageslist_i ) )
 		{
 			$xtpl->assign( 'LANGTYPE', $languageslist_i );
 			$langname = $language_array[$languageslist_i]['name'];
@@ -72,7 +64,7 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 	$xtpl->out( 'main' );
 }
 
-function nv_step_1( )
+function nv_step_1()
 {
 	global $lang_module, $languageslist, $language_array, $sys_info, $global_config;
 
@@ -84,10 +76,10 @@ function nv_step_1( )
 	{
 		if( ! empty( $languageslist_i ) )
 		{
-			$langname = ( isset( $language_array[$languageslist_i]['name_' . NV_LANG_DATA] )) ? $language_array[$languageslist_i]['name_' . NV_LANG_DATA] : $language_array[$languageslist_i]['name'];
+			$langname = ( isset( $language_array[$languageslist_i]['name_' . NV_LANG_DATA] ) ) ? $language_array[$languageslist_i]['name_' . NV_LANG_DATA] : $language_array[$languageslist_i]['name'];
 
 			$xtpl->assign( 'LANGTYPE', $languageslist_i );
-			$xtpl->assign( 'SELECTED', (NV_LANG_DATA == $languageslist_i) ? ' selected="selected"' : '' );
+			$xtpl->assign( 'SELECTED', ( NV_LANG_DATA == $languageslist_i ) ? ' selected="selected"' : '' );
 			$xtpl->assign( 'LANGNAME', $langname );
 			$xtpl->parse( 'step.languagelist' );
 		}
@@ -129,15 +121,19 @@ function nv_step_2( $array_dir_check, $array_ftp_data, $nextstep )
 	$a = 0;
 	foreach( $array_dir_check as $dir => $check )
 	{
-		$class = ($a % 2 == 0) ? "spec text_normal" : "specalt text_normal";
+		$class = ( $a % 2 == 0 ) ? "spec text_normal" : "specalt text_normal";
 
-		$xtpl->assign( 'DATAFILE', array( "dir" => $dir, "check" => $check, "class" => $class ) );
+		$xtpl->assign( 'DATAFILE', array(
+			"dir" => $dir,
+			"check" => $check,
+			"class" => $class
+		) );
 
 		$xtpl->parse( 'step.loopdir' );
 		++$a;
 	}
 
-	if( ! (strpos( $sys_info['os'], 'WIN' ) === false) )
+	if( ! ( strpos( $sys_info['os'], 'WIN' ) === false ) )
 	{
 		if( $nextstep )
 		{

@@ -149,7 +149,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$row['title'] .= ' (' . (empty( $row['blang'] ) ? $lang_module['addads_block_lang_all'] : $lang_array[$row['blang']]) . ')';
+		$row['title'] .= ' (' . ( empty( $row['blang'] ) ? $lang_module['addads_block_lang_all'] : $lang_array[$row['blang']] ) . ')';
 		$xtpl->assign( 'blockitem', $row );
 		$xtpl->parse( 'main.blockitem' );
 	}

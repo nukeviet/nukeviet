@@ -64,11 +64,11 @@ else
 	$cookie = $nv_Request->get_string( 'u_lang', 'cookie' );
 	$site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post' );
 
-	if( ! empty( $site_lang ) and ( in_array( $site_lang, $global_config['allow_sitelangs'] )) and file_exists( NV_ROOTDIR . "/language/" . $site_lang . "/global.php" ) )
+	if( ! empty( $site_lang ) and ( in_array( $site_lang, $global_config['allow_sitelangs'] ) ) and file_exists( NV_ROOTDIR . "/language/" . $site_lang . "/global.php" ) )
 	{
 		if( $site_lang != $cookie ) $nv_Request->set_Cookie( 'u_lang', $site_lang, NV_LIVE_COOKIE_TIME );
 	}
-	elseif( preg_match( "/^[a-z]{2}$/", $cookie ) and ( in_array( $cookie, $global_config['allow_sitelangs'] )) and file_exists( NV_ROOTDIR . "/language/" . $cookie . "/global.php" ) )
+	elseif( preg_match( "/^[a-z]{2}$/", $cookie ) and ( in_array( $cookie, $global_config['allow_sitelangs'] ) ) and file_exists( NV_ROOTDIR . "/language/" . $cookie . "/global.php" ) )
 	{
 		$site_lang = $cookie;
 	}

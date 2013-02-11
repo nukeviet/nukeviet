@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_MOD_WEBLINKS' ) ) die( 'Stop!!!' );
 
 $submit = $nv_Request->get_string( 'submit', 'post' );
 $report_id = $nv_Request->get_int( 'report_id', 'post' );
-$id = ($id == 0) ? $report_id : $id;
+$id = ( $id == 0 ) ? $report_id : $id;
 
 $sql = "SELECT `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`='" . $id . "'";
 
@@ -39,7 +39,6 @@ if( $id )
 		if( $report == 0 and empty( $report_note ) )
 		{
 			$row['error'] = $lang_module['error'];
-
 		}
 		elseif( ! empty( $report_note ) and ! isset( $report_note{9} ) )
 		{

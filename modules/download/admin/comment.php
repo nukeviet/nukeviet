@@ -113,7 +113,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
 	include ( NV_ROOTDIR . "/includes/footer.php" );
-	exit ;
+	exit();
 }
 
 //del
@@ -218,7 +218,7 @@ if( $nv_Request->isset_request( "fid", "get" ) )
 		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_admin_theme( $contents );
 		include ( NV_ROOTDIR . "/includes/footer.php" );
-		exit ;
+		exit();
 	}
 }
 else
@@ -246,7 +246,7 @@ else
 			include ( NV_ROOTDIR . "/includes/header.php" );
 			echo nv_admin_theme( $contents );
 			include ( NV_ROOTDIR . "/includes/footer.php" );
-			exit ;
+			exit();
 		}
 		else
 		{
@@ -262,7 +262,7 @@ else
 			include ( NV_ROOTDIR . "/includes/header.php" );
 			echo nv_admin_theme( $contents );
 			include ( NV_ROOTDIR . "/includes/footer.php" );
-			exit ;
+			exit();
 		}
 	}
 }
@@ -287,7 +287,7 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 	$st = array();
 	for( $i = 0; $i <= 2; ++$i )
 	{
-		if( ($i == 0 and $row['status']) or ($i == 2 and ! $row['status']) )
+		if( ( $i == 0 and $row['status'] ) or ( $i == 2 and ! $row['status'] ) )
 		{
 			continue;
 		}

@@ -20,7 +20,7 @@ function nv_faq_set_allow( $who, $groups )
 {
 	global $user_info;
 
-	if( ! $who or ($who == 1 and defined( 'NV_IS_USER' )) or ($who == 2 and defined( 'NV_IS_ADMIN' )) )
+	if( ! $who or ( $who == 1 and defined( 'NV_IS_USER' ) ) or ( $who == 2 and defined( 'NV_IS_ADMIN' ) ) )
 	{
 		return true;
 	}

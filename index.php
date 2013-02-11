@@ -113,9 +113,9 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 
 	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
 	if( empty( $op ) ) $op = "main";
-	if( $global_config['rewrite_op_mod'] != '' AND ! isset( $site_mods[$module_name] ) )
+	if( $global_config['rewrite_op_mod'] != '' and ! isset( $site_mods[$module_name] ) )
 	{
-		$op = ($op == 'main') ? $module_name : $module_name . '/' . $op;
+		$op = ( $op == 'main' ) ? $module_name : $module_name . '/' . $op;
 		$module_name = $global_config['rewrite_op_mod'];
 	}
 
@@ -153,7 +153,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			if( $op != "main" and ! isset( $module_info['funcs'][$op] ) )
 			{
 				$array_op = explode( "/", $op );
-				$op = (isset( $module_info['funcs'][$array_op[0]] )) ? $array_op[0] : 'main';
+				$op = ( isset( $module_info['funcs'][$array_op[0]] ) ) ? $array_op[0] : 'main';
 			}
 
 			// Xac dinh quyen dieu hanh module
@@ -196,7 +196,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			$is_mobile = false;
 			$theme_type = '';
 
-			if( (( ! empty( $client_info['is_mobile'] ) and (empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ))) or ($global_config['current_theme_type'] == $global_config['array_theme_type'][1] and ! empty( $global_config['switch_mobi_des'] ))) and ! empty( $module_info['mobile'] ) and file_exists( NV_ROOTDIR . "/themes/" . $module_info['mobile'] . "/theme.php" ) )
+			if( ( ( ! empty( $client_info['is_mobile'] ) and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == $global_config['array_theme_type'][1] and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $module_info['mobile'] ) and file_exists( NV_ROOTDIR . "/themes/" . $module_info['mobile'] . "/theme.php" ) )
 			{
 				$global_config['module_theme'] = $module_info['mobile'];
 				$is_mobile = true;
@@ -234,7 +234,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			$sql = "SELECT f.func_name, t.layout FROM `" . NV_MODFUNCS_TABLE . "` AS f INNER JOIN `" . NV_PREFIXLANG . "_modthemes` AS t ON f.func_id=t.func_id WHERE f.in_module =" . $db->dbescape_string( $module_name ) . " AND t.theme=" . $db->dbescape_string( $global_config['module_theme'] );
 			$cache_file = NV_LANG_DATA . "_modules_" . md5( $sql ) . "_" . NV_CACHE_PREFIX . ".cache";
 
-			if( ($cache = nv_get_cache( $cache_file )) != false )
+			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 			{
 				$module_info['layout_funcs'] = unserialize( $cache );
 			}
@@ -322,7 +322,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		{
 			if( $row['title'] == $module_name )
 			{
-				$groups_view = (string)$row['groups_view'];
+				$groups_view = ( string )$row['groups_view'];
 				if( ! defined( 'NV_IS_USER' ) and $groups_view == 1 )
 				{
 					// login users

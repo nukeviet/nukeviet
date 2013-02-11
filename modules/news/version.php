@@ -18,12 +18,7 @@ $module_version = array(
 	"date" => "Wed, 20 Oct 2010 00:00:00 GMT", // Ngay phat hanh phien ban
 	"author" => "VINADES (contact@vinades.vn)", // Tac gia
 	"note" => "", // Ghi chu
-	"uploads_dir" => array(
-		$module_name,
-		$module_name . "/source",
-		$module_name . "/temp_pic",
-		$module_name . "/topics"
-	),
+	"uploads_dir" => array( $module_name, $module_name . "/source", $module_name . "/temp_pic", $module_name . "/topics" ),
 	"files_dir" => array( $module_name . "/topics" )
 );
 

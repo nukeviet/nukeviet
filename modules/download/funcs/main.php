@@ -37,7 +37,7 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 		$id = ( int )$m[1];
 		$point = ( int )$m[2];
 
-		if( $id and ($point > 0 and $point < 6) )
+		if( $id and ( $point > 0 and $point < 6 ) )
 		{
 			$query = "SELECT `rating_detail` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id . " AND `catid` IN (" . $in . ") AND `status`=1";
 			$result = $db->sql_query( $query );
@@ -147,12 +147,12 @@ foreach( $list_cats as $value )
 					'uploadtime' => $uploadtime, //
 					'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'], //
 					'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
-					'imagesrc' => ( ! empty( $row['fileimage'] )) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
+					'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
 					'view_hits' => ( int )$row['view_hits'], //
 					'download_hits' => ( int )$row['download_hits'], //
 					'more_link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "/" . $row['alias'], //
-					'edit_link' => ( defined( 'NV_IS_MODADMIN' )) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'] : "", //
-					'del_link' => ( defined( 'NV_IS_MODADMIN' )) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name : ""
+					'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'] : "", //
+					'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name : ""
 				);
 
 				if( $row['comment_allow'] )
@@ -169,7 +169,6 @@ foreach( $list_cats as $value )
 			$array_cats[$catid_i]['subcats'] = $list_cats[$value['id']]['subcats'];
 			$array_cats[$catid_i]['items'] = $array_item;
 		}
-
 	}
 }
 

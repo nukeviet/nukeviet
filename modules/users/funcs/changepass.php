@@ -45,7 +45,7 @@ if( $checkss == $array_data['checkss'] )
 		$error = $lang_global['incorrect_password'];
 		$error = str_replace( $lang_global['password'], $lang_module['pass_old'], $error );
 	}
-	elseif( ($check_new_password = nv_check_valid_pass( $array_data['new_password'], NV_UPASSMAX, NV_UPASSMIN )) != "" )
+	elseif( ( $check_new_password = nv_check_valid_pass( $array_data['new_password'], NV_UPASSMAX, NV_UPASSMIN ) ) != "" )
 	{
 		$error = $check_new_password;
 	}

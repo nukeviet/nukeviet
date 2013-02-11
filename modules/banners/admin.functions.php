@@ -16,34 +16,7 @@ $submenu['add_plan'] = $lang_module['add_plan'];
 $submenu['banners_list'] = $lang_module['banners_list'];
 $submenu['add_banner'] = $lang_module['add_banner'];
 
-$allow_func = array(
-	'main',
-	'client_list',
-	'cl_list',
-	'add_client',
-	'edit_client',
-	'del_client',
-	'change_act_client',
-	'info_client',
-	'info_cl',
-	'plans_list',
-	'plist',
-	'change_act_plan',
-	'add_plan',
-	'edit_plan',
-	'del_plan',
-	'info_plan',
-	'info_pl',
-	'banners_list',
-	'add_banner',
-	'edit_banner',
-	'b_list',
-	'change_act_banner',
-	'info_banner',
-	'show_stat',
-	'show_list_stat',
-	'del_banner'
-);
+$allow_func = array( 'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat', 'del_banner' );
 
 define( 'NV_IS_FILE_ADMIN', true );
 
@@ -59,7 +32,7 @@ $targets = array(
  *
  * @return
  */
-function nv_CreateXML_bannerPlan( )
+function nv_CreateXML_bannerPlan()
 {
 	global $db, $global_config;
 
@@ -249,7 +222,7 @@ function nv_cl_list_theme( $contents )
 	{
 		foreach( $contents['rows'] as $cl_id => $values )
 		{
-			$values['class'] = ($a++ % 2) ? " class=\"second\"" : "";
+			$values['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 			$values['checked'] = $values['act'][1] ? " checked=\"checked\"" : "";
 
 			$xtpl->assign( 'ROW', $values );
@@ -295,7 +268,7 @@ function nv_info_cl_theme( $contents )
 	$a = 0;
 	foreach( $contents['rows'] as $row )
 	{
-		$row['class'] = ($a++ % 2) ? " class=\"second\"" : "";
+		$row['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 
 		$xtpl->assign( 'ROW', $row );
 		$xtpl->parse( 'main.loop' );
@@ -347,13 +320,21 @@ function nv_add_plan_theme( $contents )
 
 	foreach( $contents['blang'][3] as $key => $blang )
 	{
-		$xtpl->assign( 'BLANG', array( 'key' => $key, 'title' => $blang['name'], 'selected' => $key == $contents['blang'][4] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'BLANG', array(
+			'key' => $key,
+			'title' => $blang['name'],
+			'selected' => $key == $contents['blang'][4] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.blang' );
 	}
 
 	foreach( $contents['form'][2] as $form )
 	{
-		$xtpl->assign( 'FORM', array( 'key' => $form, 'title' => $form, 'selected' => $form == $contents['form'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'FORM', array(
+			'key' => $form,
+			'title' => $form,
+			'selected' => $form == $contents['form'][3] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.form' );
 	}
 
@@ -388,13 +369,21 @@ function nv_edit_plan_theme( $contents )
 
 	foreach( $contents['blang'][3] as $key => $blang )
 	{
-		$xtpl->assign( 'BLANG', array( 'key' => $key, 'title' => $blang['name'], 'selected' => $key == $contents['blang'][4] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'BLANG', array(
+			'key' => $key,
+			'title' => $blang['name'],
+			'selected' => $key == $contents['blang'][4] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.blang' );
 	}
 
 	foreach( $contents['form'][2] as $form )
 	{
-		$xtpl->assign( 'FORM', array( 'key' => $form, 'title' => $form, 'selected' => $form == $contents['form'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'FORM', array(
+			'key' => $form,
+			'title' => $form,
+			'selected' => $form == $contents['form'][3] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.form' );
 	}
 
@@ -455,7 +444,7 @@ function nv_plist_theme( $contents )
 	{
 		foreach( $contents['rows'] as $pl_id => $values )
 		{
-			$values['class'] = ($a++ % 2) ? " class=\"second\"" : "";
+			$values['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 			$values['checked'] = $values['act'][1] ? " checked=\"checked\"" : "";
 
 			$xtpl->assign( 'ROW', $values );
@@ -501,7 +490,7 @@ function nv_info_pl_theme( $contents )
 	$a = 0;
 	foreach( $contents['rows'] as $key => $row )
 	{
-		$row['class'] = ($a++ % 2) ? " class=\"second\"" : "";
+		$row['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 
 		$xtpl->assign( 'ROW', $row );
 
@@ -551,18 +540,30 @@ function nv_add_banner_theme( $contents )
 
 	foreach( $contents['plan'][2] as $pid => $ptitle )
 	{
-		$xtpl->assign( 'PLAN', array( 'key' => $pid, 'title' => $ptitle, 'selected' => $pid == $contents['plan'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'PLAN', array(
+			'key' => $pid,
+			'title' => $ptitle,
+			'selected' => $pid == $contents['plan'][3] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.plan' );
 	}
 
 	foreach( $contents['client'][2] as $clid => $clname )
 	{
-		$xtpl->assign( 'CLIENT', array( 'key' => $clid, 'title' => $clname, 'selected' => $clid == $contents['client'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'CLIENT', array(
+			'key' => $clid,
+			'title' => $clname,
+			'selected' => $clid == $contents['client'][3] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.client' );
 	}
 	foreach( $contents['target'][2] as $target => $ptitle )
 	{
-		$xtpl->assign( 'TARGET', array( 'key' => $target, 'title' => $ptitle, 'selected' => $target == $contents['target'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'TARGET', array(
+			'key' => $target,
+			'title' => $ptitle,
+			'selected' => $target == $contents['target'][3] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.target' );
 	}
 	$xtpl->parse( 'main' );
@@ -594,19 +595,31 @@ function nv_edit_banner_theme( $contents )
 
 	foreach( $contents['plan'][2] as $pid => $ptitle )
 	{
-		$xtpl->assign( 'PLAN', array( 'key' => $pid, 'title' => $ptitle, 'selected' => $pid == $contents['plan'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'PLAN', array(
+			'key' => $pid,
+			'title' => $ptitle,
+			'selected' => $pid == $contents['plan'][3] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.plan' );
 	}
 
 	foreach( $contents['client'][2] as $clid => $clname )
 	{
-		$xtpl->assign( 'CLIENT', array( 'key' => $clid, 'title' => $clname, 'selected' => $clid == $contents['client'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'CLIENT', array(
+			'key' => $clid,
+			'title' => $clname,
+			'selected' => $clid == $contents['client'][3] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.client' );
 	}
 
 	foreach( $contents['target'][2] as $target => $ptitle )
 	{
-		$xtpl->assign( 'TARGET', array( 'key' => $target, 'title' => $ptitle, 'selected' => $target == $contents['target'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'TARGET', array(
+			'key' => $target,
+			'title' => $ptitle,
+			'selected' => $target == $contents['target'][3] ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.target' );
 	}
 
@@ -614,7 +627,7 @@ function nv_edit_banner_theme( $contents )
 	{
 		$xtpl->parse( 'main.imageforswf1' );
 	}
-	if( substr( $contents['file_name'][1], - 3 ) == 'swf' )
+	if( substr( $contents['file_name'][1], -3 ) == 'swf' )
 	{
 		$xtpl->parse( 'main.imageforswf2' );
 	}
@@ -671,7 +684,7 @@ function nv_b_list_theme( $contents )
 	{
 		foreach( $contents['rows'] as $b_id => $values )
 		{
-			$values['class'] = ($a++ % 2) ? " class=\"second\"" : "";
+			$values['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 			$values['delfile'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_banner&amp;id=" . $b_id;
 			$values['checked'] = $values['act'][1] == '1' ? " checked=\"checked\"" : "";
 
@@ -719,7 +732,7 @@ function nv_info_b_theme( $contents )
 	$a = 0;
 	foreach( $contents['rows'] as $row )
 	{
-		$row['class'] = ($a++ % 2) ? " class=\"second\"" : "";
+		$row['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 
 		$xtpl->assign( 'ROW1', $row );
 		$xtpl->parse( 'main.loop1' );
@@ -763,7 +776,7 @@ function nv_show_stat_theme( $contents )
 		$a = 0;
 		foreach( $contents[2] as $key => $value )
 		{
-			$value['class'] = ($a++ % 2) ? " class=\"second\"" : "";
+			$value['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 
 			$xtpl->assign( 'KEY', $key );
 			$xtpl->assign( 'ROW', $value );
@@ -815,7 +828,7 @@ function nv_show_list_stat_theme( $contents )
 	$a = 0;
 	foreach( $contents['rows'] as $row )
 	{
-		$row['class'] = ($a++ % 2) ? " class=\"second\"" : "";
+		$row['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'ROW', $row );
 
 		foreach( $row as $r )

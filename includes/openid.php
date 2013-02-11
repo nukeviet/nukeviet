@@ -17,7 +17,7 @@ $openid_servers['google'] = array( //
 		'email' => 'contact/email', //
 		'firstname' => 'namePerson/first', //
 		'lastname' => 'namePerson/last', //
-		'gender' => 'person/gender', //
+		'gender' => 'person/gender' //
 	) //
 );
 
@@ -27,7 +27,7 @@ $openid_servers['yahoo'] = array( //
 		'email' => 'contact/email', //
 		'nickname' => 'namePerson/friendly', //
 		'fullname' => 'namePerson', //
-		'gender' => 'person/gender', //
+		'gender' => 'person/gender' //
 	) //
 );
 
@@ -37,7 +37,7 @@ $openid_servers['myopenid'] = array( //
 		'email' => 'contact/email', //
 		'nickname' => 'namePerson/friendly', //
 		'fullname' => 'namePerson', //
-		'gender' => 'person/gender', //
+		'gender' => 'person/gender' //
 	) //
 );
 
@@ -47,7 +47,7 @@ $openid_servers['nukeviet'] = array( //
 		'email' => 'contact/email', //
 		'nickname' => 'namePerson/friendly', //
 		'fullname' => 'namePerson', //
-		'gender' => 'person/gender', //
+		'gender' => 'person/gender' //
 	) //
 );
 
@@ -57,7 +57,7 @@ $openid_servers['facebook'] = array( //
 		'email' => 'contact/email', //
 		'username' => 'namePerson/friendly', //
 		'name' => 'namePerson', //
-		'gender' => 'person/gender', //
+		'gender' => 'person/gender' //
 	) //
 );
 

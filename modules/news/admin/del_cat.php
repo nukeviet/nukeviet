@@ -15,7 +15,7 @@ $contents = "NO_" . $catid;
 list( $catid, $parentid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT `catid`, `parentid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid`=" . intval( $catid ) ) );
 if( $catid > 0 )
 {
-	if( (defined( 'NV_IS_ADMIN_MODULE' ) or ($parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) )
+	if( ( defined( 'NV_IS_ADMIN_MODULE' ) or ( $parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) ) )
 	{
 		$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
 		list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid` = '" . $catid . "'" ) );

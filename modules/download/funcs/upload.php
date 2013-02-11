@@ -136,7 +136,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 		$is_error = true;
 		$error = $lang_module['file_catid_exists'];
 	}
-	elseif( ! empty( $array['author_email'] ) and ($check_valid_email = nv_check_valid_email( $array['author_email'] )) != "" )
+	elseif( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
 	{
 		$is_error = true;
 		$error = $check_valid_email;

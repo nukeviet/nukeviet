@@ -7,8 +7,7 @@
  * @createdate 10/03/2010 10:51
  */
 
-if( ! defined( 'NV_SYSTEM' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_USER', true );
 
@@ -53,8 +52,9 @@ function validUserLog( $array_user, $remember, $opid )
     `remember` = " . $remember . " 
     WHERE `userid`=" . $array_user['userid'] );
 
-	$live_cookie_time = ($remember) ? NV_LIVE_COOKIE_TIME : 0;
+	$live_cookie_time = ( $remember ) ? NV_LIVE_COOKIE_TIME : 0;
 
 	$nv_Request->set_Cookie( 'nvloginhash', $user, $live_cookie_time );
 }
+
 ?>

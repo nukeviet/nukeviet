@@ -16,11 +16,11 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-function cron_online_expired_del( )
+function cron_online_expired_del()
 {
 	global $db;
 
-	$query = "DELETE FROM `" . NV_SESSIONS_GLOBALTABLE . "` WHERE `onl_time` < " . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME);
+	$query = "DELETE FROM `" . NV_SESSIONS_GLOBALTABLE . "` WHERE `onl_time` < " . ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME );
 	$db->sql_query( $query );
 	return true;
 }

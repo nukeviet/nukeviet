@@ -21,17 +21,17 @@ $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_h
 $editor = false;
 
 //Xac dinh thu muc goc cua site
-define( 'NV_ROOTDIR', str_replace( '\\', '/',realpath( pathinfo( __file__, PATHINFO_DIRNAME ) . '/../' ) ) );
+define( 'NV_ROOTDIR', str_replace( '\\', '/', realpath( pathinfo( __file__, PATHINFO_DIRNAME ) . '/../' ) ) );
 
-$sys_info['disable_classes'] = (($disable_classes = ini_get( "disable_classes" )) != "" and $disable_classes != false) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
-$sys_info['disable_functions'] = (($disable_functions = ini_get( "disable_functions" )) != "" and $disable_functions != false) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
+$sys_info['disable_classes'] = ( ( $disable_classes = ini_get( "disable_classes" ) ) != "" and $disable_classes != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
+$sys_info['disable_functions'] = ( ( $disable_functions = ini_get( "disable_functions" ) ) != "" and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
 
 if( extension_loaded( 'suhosin' ) )
 {
 	$sys_info['disable_functions'] = array_merge( $sys_info['disable_functions'], array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
 }
 
-$sys_info['ini_set_support'] = (function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] )) ? true : false;
+$sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] ) ) ? true : false;
 
 //Ket noi voi cac file constants, config
 require ( NV_ROOTDIR . "/includes/constants.php" );
@@ -113,7 +113,7 @@ define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' );
 //vd: /ten_thu_muc_chua_site/admin/
 define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root );
 // D:/AppServ/www
-define( 'NV_EOL', (strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : (strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n")) );
+define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) );
 //Ngat dong
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR );
 //Xac dinh duong dan thuc den thu muc upload

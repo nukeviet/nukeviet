@@ -12,14 +12,14 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 foreach( $array_field_config as $row_f )
 {
 	$value = ( isset( $custom_fields[$row_f['field']] ) ) ? $custom_fields[$row_f['field']] : '';
-	
+
 	if( $value != '' )
 	{
 		if( $row_f['field_type'] == 'number' )
 		{
 			$number_type = $row_f['field_choices']['number_type'];
 			$pattern = ( $number_type == 1 ) ? "/^[0-9]+$/" : "/^[0-9\.]+$/";
-			
+
 			if( ! preg_match( $pattern, $value ) )
 			{
 				$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
@@ -27,20 +27,19 @@ foreach( $array_field_config as $row_f )
 			else
 			{
 				$value = ( $number_type == 1 ) ? intval( $value ) : floatval( $value );
-				
+
 				if( $value < $row_f['min_length'] or $value > $row_f['max_length'] )
 				{
 					$error = sprintf( $lang_module['field_min_max_value'], $row_f['title'], $row_f['min_length'], $row_f['max_length'] );
 				}
 			}
-
 		}
 		elseif( $row_f['field_type'] == 'date' )
 		{
 			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $value, $m ) )
 			{
 				$value = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
-				
+
 				if( $value < $row_f['min_length'] or $value > $row_f['max_length'] )
 				{
 					$error = sprintf( $lang_module['field_min_max_value'], $row_f['title'], date( 'd/m/Y', $row_f['min_length'] ), date( 'd/m/Y', $row_f['max_length'] ) );
@@ -96,9 +95,9 @@ foreach( $array_field_config as $row_f )
 			{
 				$value = nv_htmlspecialchars( $value );
 			}
-			
+
 			$strlen = nv_strlen( $value );
-			
+
 			if( $strlen < $row_f['min_length'] or $strlen > $row_f['max_length'] )
 			{
 				$error = sprintf( $lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'] );
@@ -132,10 +131,10 @@ foreach( $array_field_config as $row_f )
 					$error = "error function not exists " . $row_f['func_callback'];
 				}
 			}
-			
+
 			$value = ( $row_f['field_type'] == 'textarea' ) ? nv_nl2br( $value, '<br />' ) : nv_editor_nl2br( $value );
 			$strlen = nv_strlen( $value );
-			
+
 			if( $strlen < $row_f['min_length'] or $strlen > $row_f['max_length'] )
 			{
 				$error = sprintf( $lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'] );
@@ -151,7 +150,7 @@ foreach( $array_field_config as $row_f )
 					$temp_value[] = $value_i;
 				}
 			}
-			
+
 			$value = implode( ',', $temp_value );
 		}
 		elseif( $row_f['field_type'] == 'select' or $row_f['field_type'] == 'radio' )
@@ -161,10 +160,10 @@ foreach( $array_field_config as $row_f )
 				$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
 			}
 		}
-		
+
 		$custom_fields[$row_f['field']] = $value;
 	}
-	
+
 	if( empty( $value ) and $row_f['required'] )
 	{
 		$error = sprintf( $lang_module['field_match_type_required'], $row_f['title'] );

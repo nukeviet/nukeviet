@@ -24,7 +24,7 @@ if( $nv_Request->isset_request( 'del', 'get' ) )
 	{
 		foreach( $openid_del as $opid )
 		{
-			if( ! empty( $opid ) and (empty( $user_info['current_openid'] ) or ( ! empty( $user_info['current_openid'] ) and $user_info['current_openid'] != $opid)) )
+			if( ! empty( $opid ) and ( empty( $user_info['current_openid'] ) or ( ! empty( $user_info['current_openid'] ) and $user_info['current_openid'] != $opid ) ) )
 			{
 				$sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `opid`=" . $db->dbescape( $opid );
 				$db->sql_query( $sql );
@@ -76,7 +76,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 							$openid = sprintf( $openid_servers[$server]['identity'], $data->id );
 							$attribs = $FaceBookAuth->getAttributes( $data, $openid_servers[$server]['required'] );
 
-							$email = (isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "") ? $attribs['contact/email'] : "";
+							$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "" ) ? $attribs['contact/email'] : "";
 							if( empty( $openid ) or empty( $email ) )
 							{
 								$nv_Request->set_Session( 'openid_error', 3 );
@@ -113,7 +113,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 								$query = "SELECT COUNT(*) AS `count` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $email );
 								if( $global_config['allowuserreg'] == 2 )
 								{
-									$query .= " AND `regdate`>" . (NV_CURRENTTIME - 86400);
+									$query .= " AND `regdate`>" . ( NV_CURRENTTIME - 86400 );
 								}
 								$result = $db->sql_query( $query );
 								list( $count ) = $db->sql_fetchrow( $result );
@@ -175,7 +175,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 				{
 					$openid = $openid_class->identity;
 					$attribs = $openid_class->getAttributes();
-					$email = (isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "") ? $attribs['contact/email'] : "";
+					$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "" ) ? $attribs['contact/email'] : "";
 					if( empty( $openid ) or empty( $email ) )
 					{
 						$nv_Request->set_Session( 'openid_error', 3 );
@@ -212,7 +212,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 						$query = "SELECT COUNT(*) AS `count` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $email );
 						if( $global_config['allowuserreg'] == 2 )
 						{
-							$query .= " AND `regdate`>" . (NV_CURRENTTIME - 86400);
+							$query .= " AND `regdate`>" . ( NV_CURRENTTIME - 86400 );
 						}
 						$result = $db->sql_query( $query );
 						list( $count ) = $db->sql_fetchrow( $result );
@@ -258,39 +258,38 @@ while( $row = $db->sql_fetchrow( $query ) )
 		'openid' => $row['openid'], //
 		'server' => $server['host'], //
 		'email' => $row['email'], //
-		'disabled' => (( ! empty( $user_info['current_openid'] ) and $user_info['current_openid'] == $row['opid']) ? " disabled=\"disabled\"" : "")
+		'disabled' => ( ( ! empty( $user_info['current_openid'] ) and $user_info['current_openid'] == $row['opid'] ) ? " disabled=\"disabled\"" : "" )
 	);
 	//
-
 }
 
 $error = $nv_Request->get_int( 'openid_error', 'session', 0 );
 $nv_Request->unset_request( 'openid_error', 'session' );
 
-switch ( $error )
+switch( $error )
 {
-	case 1 :
+	case 1:
 		$data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['canceled_authentication'] . "</div>";
 		break;
 
-	case 2 :
+	case 2:
 		$data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['not_logged_in'] . "</div>";
 		break;
 
-	case 3 :
+	case 3:
 		$data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['logged_in_failed'] . "</div>";
 		break;
 
-	case 4 :
+	case 4:
 		$data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['openid_is_exists'] . "</div>";
 		break;
 
-	case 5 :
-	case 6 :
+	case 5:
+	case 6:
 		$data['info'] = "<div style=\"color:#fb490b;\">" . $lang_module['email_is_exists'] . "</div>";
 		break;
 
-	default :
+	default:
 		$data['info'] = $lang_module['openid_add_new'];
 }
 

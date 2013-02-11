@@ -11,6 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_news_groups' ) )
 {
+
 	function nv_block_config_news_groups( $module, $data_block, $lang_block )
 	{
 		global $site_mods;
@@ -22,7 +23,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		$list = nv_db_cache( $sql, '', $module );
 		foreach( $list as $l )
 		{
-			$html .= "<option value=\"" . $l['bid'] . "\" " . (($data_block['blockid'] == $l['bid']) ? " selected=\"selected\"" : "") . ">" . $l['title'] . "</option>\n";
+			$html .= "<option value=\"" . $l['bid'] . "\" " . ( ( $data_block['blockid'] == $l['bid'] ) ? " selected=\"selected\"" : "" ) . ">" . $l['title'] . "</option>\n";
 		}
 		$html .= "</select></td>\n";
 		$html .= "</tr>";
@@ -82,7 +83,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 
 				$xtpl->assign( 'ROW', $l );
 				if( ! empty( $l['thumb'] ) ) $xtpl->parse( 'main.loop.img' );
-				$xtpl->assign( 'bg', (++$i % 2) ? "bg" : "" );
+				$xtpl->assign( 'bg', ( ++$i % 2 ) ? "bg" : "" );
 				$xtpl->parse( 'main.loop' );
 			}
 
@@ -90,7 +91,6 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 			return $xtpl->text( 'main' );
 		}
 	}
-
 }
 if( defined( 'NV_SYSTEM' ) )
 {

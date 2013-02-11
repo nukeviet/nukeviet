@@ -11,13 +11,14 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_news_category' ) )
 {
+
 	function nv_block_config_news_category( $module, $data_block, $lang_block )
 	{
 		$html = "<select name=\"config_title_length\">\n";
 		$html .= "<option value=\"\">" . $lang_block['title_length'] . "</option>\n";
 		for( $i = 0; $i < 100; ++$i )
 		{
-			$html .= "<option value=\"" . $i . "\" " . (($data_block['title_length'] == $i) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
+			$html .= "<option value=\"" . $i . "\" " . ( ( $data_block['title_length'] == $i ) ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
 		}
 		$html .= "</select></td>\n";
 		return '<tr><td>' . $lang_block['title_length'] . '</td><td>' . $html . '</td></tr>';
@@ -84,7 +85,6 @@ if( ! nv_function_exists( 'nv_news_category' ) )
 			return $html;
 		}
 	}
-
 }
 
 if( defined( 'NV_SYSTEM' ) )

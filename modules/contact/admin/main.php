@@ -41,32 +41,20 @@ if( ! empty( $contact_allowed['view'] ) )
 
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
-			$image = array(
-				NV_BASE_SITEURL . 'images/mail_new.gif',
-				12,
-				9
-			);
+			$image = array( NV_BASE_SITEURL . 'images/mail_new.gif', 12, 9 );
 			$status = "New";
 			$style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
 
 			if( $row['is_read'] == 1 )
 			{
-				$image = array(
-					NV_BASE_SITEURL . 'images/mail_old.gif',
-					12,
-					11
-				);
+				$image = array( NV_BASE_SITEURL . 'images/mail_old.gif', 12, 11 );
 				$status = $lang_module['tt1_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
 
 			if( $row['is_reply'] )
 			{
-				$image = array(
-					NV_BASE_SITEURL . 'images/mail_reply.gif',
-					13,
-					14
-				);
+				$image = array( NV_BASE_SITEURL . 'images/mail_reply.gif', 13, 14 );
 				$status = $lang_module['tt2_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
@@ -74,7 +62,7 @@ if( ! empty( $contact_allowed['view'] ) )
 			$onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
 
 			$xtpl->assign( 'ROW', array(
-				'class' => (++$a % 2) ? " class=\"second\"" : "", //
+				'class' => ( ++$a % 2 ) ? " class=\"second\"" : "", //
 				'id' => $row['id'], //
 				'sender_name' => $row['sender_name'], //
 				'path' => $contact_allowed['view'][$row['cid']], //
@@ -83,7 +71,7 @@ if( ! empty( $contact_allowed['view'] ) )
 				'style' => $style, //
 				'onclick' => $onclick, //
 				'status' => $status, //
-				'image' => $image, //
+				'image' => $image //
 			) );
 
 			$xtpl->parse( 'main.data.row' );

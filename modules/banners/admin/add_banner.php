@@ -50,7 +50,7 @@ $result = $db->sql_query( $sql );
 $plans = array();
 while( $row = $db->sql_fetchrow( $result ) )
 {
-	$plans[$row['id']] = $row['title'] . " (" . ( ! empty( $row['blang'] ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ")";
+	$plans[$row['id']] = $row['title'] . " (" . ( ! empty( $row['blang'] ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'] ) . ")";
 }
 
 if( empty( $plans ) )
@@ -154,7 +154,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			nv_fix_banner_weight( $pid );
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_banner', "bannerid " . $id, $admin_info['userid'] );
 			nv_CreateXML_bannerPlan();
-			$op2 = ($file_ext == 'swf') ? 'edit_banner' : 'info_banner';
+			$op2 = ( $file_ext == 'swf' ) ? 'edit_banner' : 'info_banner';
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op2 . "&id=" . $id );
 			die();
 		}
@@ -178,63 +178,20 @@ else
 	}
 }
 
-$contents['info'] = ( ! empty( $error )) ? $error : $lang_module['add_banner_info'];
-$contents['is_error'] = ( ! empty( $error )) ? 1 : 0;
+$contents['info'] = ( ! empty( $error ) ) ? $error : $lang_module['add_banner_info'];
+$contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
 $contents['file_allowed_ext'] = implode( ", ", $contents['file_allowed_ext'] );
 $contents['submit'] = $lang_module['add_banner'];
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_banner";
-$contents['title'] = array(
-	$lang_module['title'],
-	'title',
-	$title,
-	255
-);
-$contents['plan'] = array(
-	$lang_module['in_plan'],
-	'pid',
-	$plans,
-	$pid
-);
-$contents['client'] = array(
-	$lang_module['of_client'],
-	'clid',
-	$clients,
-	$clid
-);
-$contents['upload'] = array(
-	sprintf( $lang_module['upload'], $contents['file_allowed_ext'] ),
-	'banner'
-);
-$contents['file_alt'] = array(
-	$lang_module['file_alt'],
-	'file_alt',
-	$file_alt,
-	255
-);
-$contents['click_url'] = array(
-	$lang_module['click_url'],
-	'click_url',
-	$click_url,
-	255
-);
-$contents['target'] = array(
-	$lang_module['target'],
-	'target',
-	$targets,
-	$target
-);
-$contents['publ_date'] = array(
-	$lang_module['publ_date'],
-	'publ_date',
-	$publ_date,
-	10
-);
-$contents['exp_date'] = array(
-	$lang_module['exp_date'],
-	'exp_date',
-	$exp_date,
-	10
-);
+$contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
+$contents['plan'] = array( $lang_module['in_plan'], 'pid', $plans, $pid );
+$contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid );
+$contents['upload'] = array( sprintf( $lang_module['upload'], $contents['file_allowed_ext'] ), 'banner' );
+$contents['file_alt'] = array( $lang_module['file_alt'], 'file_alt', $file_alt, 255 );
+$contents['click_url'] = array( $lang_module['click_url'], 'click_url', $click_url, 255 );
+$contents['target'] = array( $lang_module['target'], 'target', $targets, $target );
+$contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10 );
+$contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10 );
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( nv_add_banner_theme( $contents ) );

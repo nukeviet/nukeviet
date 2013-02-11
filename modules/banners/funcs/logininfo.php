@@ -67,7 +67,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$client = serialize( $client );
 				$nv_Request->set_Cookie( 'bncl', $client, NV_LIVE_COOKIE_TIME );
 				echo "OK";
-				exit ;
+				exit();
 			}
 		}
 	}

@@ -54,23 +54,23 @@ if( $module_info['rss'] )
 		if( ! empty( $catid ) ) $catid_i = $catid;
 		$catalias = $global_array_cat[$catid_i]['alias'];
 
-		if( $homeimgthumb == 1 )// image thumb
+		if( $homeimgthumb == 1 ) // image thumb
 		{
 			$rimages = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 2 )// image file
+		elseif( $homeimgthumb == 2 ) // image file
 		{
 			$rimages = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 3 )// image url
+		elseif( $homeimgthumb == 3 ) // image url
 		{
 			$rimages = $homeimgfile;
 		}
-		else// no image
+		else // no image
 		{
 			$rimages = '';
 		}
-		$rimages = ( ! empty( $rimages )) ? "<img src=\"" . $rimages . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
+		$rimages = ( ! empty( $rimages ) ) ? "<img src=\"" . $rimages . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
 
 		$items[] = array(
 			'title' => $title,

@@ -88,7 +88,7 @@ function nv_site_theme( $contents )
 			$langname = $language_array[$lang_i]['name'];
 			$xtpl->assign( 'LANGSITENAME', $langname );
 			$xtpl->assign( 'LANGSITEURL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_i );
-			$xtpl->assign( 'SELECTED', (NV_LANG_DATA == $lang_i) ? ' selected' : '' );
+			$xtpl->assign( 'SELECTED', ( NV_LANG_DATA == $lang_i ) ? ' selected' : '' );
 			$xtpl->parse( 'main.language.langitem' );
 		}
 
@@ -99,10 +99,7 @@ function nv_site_theme( $contents )
 		$xtpl->parse( 'main.color_select' );
 	}
 
-	$arr_home['index'] = array(
-		"custom_title" => $lang_global['Home'],
-		"in_menu" => 1
-	);
+	$arr_home['index'] = array( "custom_title" => $lang_global['Home'], "in_menu" => 1 );
 	$site_mods = array_merge( $arr_home, $site_mods );
 
 	$a = 0;
@@ -221,7 +218,7 @@ function nv_site_theme( $contents )
 	$xtpl->parse( 'main' );
 	$sitecontent = $xtpl->text( 'main' );
 	$sitecontent = nv_blocks_content( $sitecontent );
-	$sitecontent = str_replace( '[THEME_ERROR_INFO]', nv_error_info( ), $sitecontent );
+	$sitecontent = str_replace( '[THEME_ERROR_INFO]', nv_error_info(), $sitecontent );
 
 	$my_footer = $theme_footer_js . $my_footer;
 

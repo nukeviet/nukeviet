@@ -1,5 +1,6 @@
 <?php
 
+
 //
 //  Copyright (c) 2011, Maths for More S.L. http://www.wiris.com
 //  This file is part of WIRIS Plugin.
@@ -25,11 +26,12 @@ if (!empty($_POST['mml'])) {
 		$api = new com_wiris_plugin_PluginAPI();
 		echo $api->mathml2img($_POST['mml'], dirname($_SERVER['PHP_SELF']), $_POST);
 	}
-	catch (Exception $e) {
+	catch(Exception $e) {
 		echo $e->getMessage();
 	}
 }
 else {
 	echo 'Error: no mathml has been sent.';
 }
+
 ?>

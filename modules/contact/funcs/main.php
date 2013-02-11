@@ -73,10 +73,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 
 	if( ! empty( $email_list ) )
 	{
-		$from = array(
-			$full_name,
-			$femail
-		);
+		$from = array( $full_name, $femail );
 
 		foreach( $email_list as $to )
 		{

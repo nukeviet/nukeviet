@@ -123,7 +123,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		{
 			if( $values['level'] === 1 )
 			{
-				$obt_level = ( isset( $admins[$admid] )) ? $admins[$admid]['obt_level'] : 0;
+				$obt_level = ( isset( $admins[$admid] ) ) ? $admins[$admid]['obt_level'] : 0;
 				$admins_list[] = $admid . '/1/1/' . $obt_level;
 			}
 			else
@@ -258,22 +258,22 @@ $xtpl->assign( 'DATA', array(
 	'phone' => $phone, //
 	'fax' => $fax, //
 	'email' => $email, //
-	'note' => $note, //
+	'note' => $note //
 ) );
 
 $a = 0;
 foreach( $adms as $admid => $values )
 {
 	$xtpl->assign( 'ADMIN', array(
-		'class' => (++$a % 2) ? " class=\"second\"" : "", //
+		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "", //
 		'login' => $values['login'], //
 		'fullname' => $values['fullname'], //
 		'email' => $values['email'], //
 		'admid' => $admid, //
-		'view_level' => ($values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ))) ? " checked=\"checked\"" : "", //
-		'reply_level' => ($values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ))) ? " checked=\"checked\"" : "", //
-		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level )) ? " checked=\"checked\"" : "", //
-		'disabled' => $values['level'] === 1 ? " disabled=\"disabled\"" : "", //
+		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? " checked=\"checked\"" : "", //
+		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? " checked=\"checked\"" : "", //
+		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? " checked=\"checked\"" : "", //
+		'disabled' => $values['level'] === 1 ? " disabled=\"disabled\"" : "" //
 	) );
 
 	$xtpl->parse( 'main.admin' );

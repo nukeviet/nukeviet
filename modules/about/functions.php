@@ -14,7 +14,7 @@ define( 'NV_IS_MOD_ABOUT', true );
 $cache_file = NV_LANG_DATA . "_" . $module_name . "_" . NV_CACHE_PREFIX . ".cache";
 // Cache dung tai tat ca cac giao dien
 
-if( ($cache = nv_get_cache( $cache_file )) != false )
+if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 {
 	$abouts = unserialize( $cache );
 }
@@ -41,42 +41,27 @@ $ab_links = array();
 
 if( ! empty( $abouts ) )
 {
-	$alias = ( ! empty( $array_op ) and ! empty( $array_op[0] )) ? $array_op[0] : "";
+	$alias = ( ! empty( $array_op ) and ! empty( $array_op[0] ) ) ? $array_op[0] : "";
 
 	if( ! empty( $alias ) and isset( $abouts[$alias] ) )
 	{
 		$id = $abouts[$alias]['id'];
-		$nv_vertical_menu[] = array(
-			$abouts[$alias]['title'],
-			NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $abouts[$alias]['alias'],
-			1
-		);
+		$nv_vertical_menu[] = array( $abouts[$alias]['title'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $abouts[$alias]['alias'], 1 );
 		unset( $abouts[$alias] );
 	}
 	else
 	{
 		$about = array_shift( $abouts );
 		$id = $about['id'];
-		$nv_vertical_menu[] = array(
-			$about['title'],
-			NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'],
-			1
-		);
+		$nv_vertical_menu[] = array( $about['title'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'], 1 );
 	}
 
 	if( ! empty( $abouts ) )
 	{
 		foreach( $abouts as $about )
 		{
-			$nv_vertical_menu[] = array(
-				$about['title'],
-				NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'],
-				0
-			);
-			$ab_links[] = array(
-				"title" => $about['title'],
-				"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias']
-			);
+			$nv_vertical_menu[] = array( $about['title'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'], 0 );
+			$ab_links[] = array( "title" => $about['title'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'] );
 		}
 	}
 }

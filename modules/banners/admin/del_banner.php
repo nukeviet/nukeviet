@@ -17,12 +17,12 @@ if( $db->sql_numrows( $result ) )
 {
 	$row = $db->sql_fetchrow( $result );
 
-	if( ! empty( $row['file_name'] ) AND file_exists( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'] ) )
+	if( ! empty( $row['file_name'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'] ) )
 	{
 		nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'], false );
 	}
 
-	if( ! empty( $row['imageforswf'] ) AND file_exists( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['imageforswf'] ) )
+	if( ! empty( $row['imageforswf'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['imageforswf'] ) )
 	{
 		nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['imageforswf'], false );
 	}

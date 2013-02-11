@@ -35,14 +35,14 @@ else
 		$groups[] = array(
 			'id' => $group_id,
 			'title' => $grtl,
-			'checked' => ( ! empty( $in_groups ) and in_array( $group_id, $in_group )) ? " checked=\"checked\"" : ""
+			'checked' => ( ! empty( $in_groups ) and in_array( $group_id, $in_group ) ) ? " checked=\"checked\"" : ""
 		);
 	}
 
 	if( $nv_Request->get_string( 'save', 'post' ) != "" )
 	{
 		$_user['in_groups'] = $nv_Request->get_typed_array( 'group', 'post', 'int' );
-		$data_in_groups = ( ! empty( $_user['in_groups'] )) ? implode( ',', $_user['in_groups'] ) : '';
+		$data_in_groups = ( ! empty( $_user['in_groups'] ) ) ? implode( ',', $_user['in_groups'] ) : '';
 
 		foreach( $groups_list as $key => $val )
 			$gl[] = $key;
@@ -74,7 +74,6 @@ else
 						$sql = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `users`=" . $db->dbescape_string( $u ) . " WHERE `group_id`=" . $g;
 						$db->sql_query( $sql );
 					}
-
 				}
 			}
 		}

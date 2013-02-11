@@ -1,5 +1,6 @@
 <?php
 
+
 //
 //  Copyright (c) 2011, Maths for More S.L. http://www.wiris.com
 //  This file is part of WIRIS Plugin.
@@ -45,4 +46,5 @@ if (isset($_POST['service'])) {
 else {
 	echo 'Error: undefined service.';
 }
+
 ?>

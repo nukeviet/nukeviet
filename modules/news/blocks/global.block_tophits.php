@@ -11,6 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 {
+
 	function nv_block_config_tophits_blocks( $module, $data_block, $lang_block )
 	{
 		$html = "";
@@ -50,19 +51,19 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$result = $db->sql_query( $sql );
 		while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
 		{
-			if( $item['homeimgthumb'] == 1 )// image thumb
+			if( $item['homeimgthumb'] == 1 ) // image thumb
 			{
 				$imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $homeimgfile;
 			}
-			elseif( $item['homeimgthumb'] == 2 )// image file
+			elseif( $item['homeimgthumb'] == 2 ) // image file
 			{
 				$imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $homeimgfile;
 			}
-			elseif( $item['homeimgthumb'] == 3 )// image url
+			elseif( $item['homeimgthumb'] == 3 ) // image url
 			{
 				$imgurl = $item['homeimgfile'];
 			}
-			else// no image
+			else // no image
 			{
 				$imgurl = '';
 			}
@@ -97,13 +98,12 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 				$xtpl->parse( 'main.newloop.imgblock' );
 			}
 			$xtpl->parse( 'main.newloop' );
-			$xtpl->assign( 'BACKGROUND', ($a % 2) ? 'bg ' : '' );
+			$xtpl->assign( 'BACKGROUND', ( $a % 2 ) ? 'bg ' : '' );
 			++$a;
 		}
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
-
 }
 
 if( defined( 'NV_SYSTEM' ) )

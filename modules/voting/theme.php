@@ -38,7 +38,7 @@ function voting_result( $voting )
 		{
 			if( $voting['total'] )
 			{
-				$width = ($voting_i['hitstotal'] / $voting['total']) * 100;
+				$width = ( $voting_i['hitstotal'] / $voting['total'] ) * 100;
 				$width = round( $width, 2 );
 			}
 			else
@@ -52,7 +52,7 @@ function voting_result( $voting )
 			}
 
 			$xtpl->assign( 'VOTING', $voting_i );
-			$xtpl->assign( 'BG', (($b % 2 == 1) ? 'background-color: rgb(0, 102, 204);' : '') );
+			$xtpl->assign( 'BG', ( ( $b % 2 == 1 ) ? 'background-color: rgb(0, 102, 204);' : '' ) );
 			$xtpl->assign( 'ID', $a );
 			$xtpl->assign( 'WIDTH', $width );
 			$xtpl->assign( 'TOTAL', $voting['total'] );

@@ -19,11 +19,9 @@
 class CJzip
 {
 	private $is_gzip = false;
-
 	private $getName = "file";
 	private $file = array();
 	private $maxAge = 2592000;
-
 	private $encoding = 'none';
 	private $currenttime;
 	private $siteRoot;
@@ -37,7 +35,7 @@ class CJzip
 	 *
 	 * @return
 	 */
-	public function __construct( )
+	public function __construct()
 	{
 		if( ! isset( $_GET[$this->getName] ) )
 		{
@@ -48,13 +46,13 @@ class CJzip
 		{
 			if( strtolower( ini_get( 'zlib.output_compression' ) ) == "on" or ini_get( 'zlib.output_compression' ) == 1 )
 			{
-				$disable_functions = (ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+				$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 				if( extension_loaded( 'suhosin' ) )
 				{
 					$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
 				}
 
-				$ini_set_support = (function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions )) ? true : false;
+				$ini_set_support = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) ) ? true : false;
 				if( $ini_set_support )
 				{
 					ini_set( 'zlib.output_compression_level', 6 );
@@ -66,7 +64,7 @@ class CJzip
 			}
 		}
 
-		$this->siteRoot = str_replace( '\\', '/',realpath( dirname( __file__ ) ) );
+		$this->siteRoot = str_replace( '\\', '/', realpath( dirname( __file__ ) ) );
 		$base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 		if( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
 		if( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
@@ -96,7 +94,7 @@ class CJzip
 		}
 
 		$this->file['ext'] = $matches[2];
-		$this->file['contenttype'] = ($this->file['ext'] == "css") ? "css" : "javascript";
+		$this->file['contenttype'] = ( $this->file['ext'] == "css" ) ? "css" : "javascript";
 		if( preg_match( "/\.opt$/", $matches[1] ) )
 		{
 			$this->isOptimized = true;
@@ -126,15 +124,15 @@ class CJzip
 	{
 		switch( $num )
 		{
-			case 304 :
+			case 304:
 				$info = "HTTP/1.1 304 Not Modified";
 				break;
 
-			case 403 :
+			case 403:
 				$info = "HTTP/1.1 403 Forbidden";
 				break;
 
-			default :
+			default:
 				$info = "HTTP/1.1 404 Not Found";
 		}
 		header( $info );
@@ -150,7 +148,7 @@ class CJzip
 	 */
 	private function is_notModified( $hash )
 	{
-		return (isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) == '"' . $hash . '"');
+		return ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) == '"' . $hash . '"' );
 	}
 
 	/**
@@ -158,20 +156,20 @@ class CJzip
 	 *
 	 * @return
 	 */
-	private function check_encode( )
+	private function check_encode()
 	{
-		if( ! $this->is_gzip ) return ('none');
+		if( ! $this->is_gzip ) return ( 'none' );
 
-		if( ! function_exists( 'gzencode' ) ) return ('none');
+		if( ! function_exists( 'gzencode' ) ) return ( 'none' );
 
-		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : (strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none');
+		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
 
 		if( $encoding != 'none' )
 		{
 			if( ! strstr( $_SERVER['HTTP_USER_AGENT'], 'Opera' ) && preg_match( '/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches ) )
 			{
 				$version = floatval( $matches[1] );
-				if( $version < 6 || ($version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' )) ) $encoding = 'none';
+				if( $version < 6 || ( $version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' ) ) ) $encoding = 'none';
 			}
 		}
 
@@ -183,9 +181,9 @@ class CJzip
 	 *
 	 * @return
 	 */
-	private function loadData( )
+	private function loadData()
 	{
-		$disable_functions = (($disable_functions = ini_get( "disable_functions" )) != "" and $disable_functions != false) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
+		$disable_functions = ( ( $disable_functions = ini_get( "disable_functions" ) ) != "" and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -201,7 +199,7 @@ class CJzip
 
 		if( ! $this->isOptimized )
 		{
-			$data = ($this->file['contenttype'] == 'css') ? $this->compress_css( $data ) : $this->compress_javascript( $data );
+			$data = ( $this->file['contenttype'] == 'css' ) ? $this->compress_css( $data ) : $this->compress_javascript( $data );
 		}
 
 		if( $this->file['contenttype'] == 'css' and $this->root == true )
@@ -233,7 +231,7 @@ class CJzip
 	 */
 	private function commentCB( $m )
 	{
-		$hasSurroundingWs = (trim( $m[0] ) !== $m[1]);
+		$hasSurroundingWs = ( trim( $m[0] ) !== $m[1] );
 		$m = $m[1];
 		if( $m === 'keep' )
 		{
@@ -251,7 +249,7 @@ class CJzip
 		{
 			return "/*/" . $n[1] . "/**/";
 		}
-		if( substr( $m, - 1 ) === '\\' )
+		if( substr( $m, -1 ) === '\\' )
 		{
 			return '/*\\*/';
 		}
@@ -357,7 +355,7 @@ class CJzip
 	 *
 	 * @return
 	 */
-	public function loadFile( )
+	public function loadFile()
 	{
 		$hash = $this->file['lastmod'] . '-' . $this->file['md5file'];
 		header( "Etag: \"" . $hash . "\"" );
@@ -367,10 +365,9 @@ class CJzip
 		$this->encoding = $this->check_encode();
 		$this->loadData();
 	}
-
 }
 
-$CJzip = new CJzip;
+$CJzip = new CJzip();
 $CJzip->loadFile();
 
 ?>
