@@ -30,7 +30,7 @@
 			<!-- END: service -->
 			<tfoot>
 				<tr>
-					<td align="center" colspan="3"><input name="submitprcservice" type="submit" value="{LANG.save}" /></td>
+					<td align="center" colspan="3"><input name="submitprcservice" type="submit" value="{LANG.submit}" /></td>
 				</tr>
 			</tfoot>
 		</table>

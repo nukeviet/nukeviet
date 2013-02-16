@@ -47,7 +47,7 @@ else
 	}
 }
 
-$allow_func = array( 'main', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'del_content', 'comment', 'edit_comment', 'active_comment', 'del_comment', 'keywords', 'alias', 'topicajax', 'sourceajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
+$allow_func = array( 'main', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'comment', 'edit_comment', 'active_comment', 'del_comment', 'keywords', 'alias', 'topicajax', 'sourceajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
 
 $submenu['cat'] = $lang_module['categories'];
 $submenu['content'] = $lang_module['content_add'];
@@ -89,12 +89,6 @@ if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/admins.php" )
 	$submenu['admins'] = $lang_module['admin'];
 	$allow_func[] = 'admins';
 }
-/** -------------------------------------------------- RPC ------------------------------------**/
-
-$allow_func[] = 'rpc';
-$submenu['rpc'] = $lang_module['rpc'];
-
-/** -------------------------------------------------- RPC ------------------------------------**/
 
 $array_viewcat_full = array(
 	'viewcat_page_new' => $lang_module['viewcat_page_new'],
@@ -550,7 +544,7 @@ function nv_show_topics_list()
 		$a = 0;
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
-			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `topicid`=" . $row['topicid'] . "" ) );
+			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `topicid`=" . $row['topicid'] . "" ) );
 
 			$xtpl->assign( 'ROW', array(
 				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
@@ -611,7 +605,7 @@ function nv_show_block_cat_list()
 
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
-			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*)  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` where `bid`=" . $row['bid'] ) );
+			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` where `bid`=" . $row['bid'] ) );
 
 			$xtpl->assign( 'ROW', array(
 				"class" => ( $a % 2 ) ? " class=\"second\"" : "",

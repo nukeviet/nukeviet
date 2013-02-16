@@ -14,6 +14,7 @@ $submenu['siteDiagnostic'] = $lang_module['siteDiagnostic'];
 $submenu['keywordRank'] = $lang_module['keywordRank'];
 $submenu['sitemapPing'] = $lang_module['sitemapPing'];
 $submenu['checkupdate'] = $lang_module['checkupdate'];
+$submenu['rpc'] = $lang_module['rpc_setting'];
 $submenu['config'] = $lang_module['config'];
 if( NV_LANG_INTERFACE == 'vi' )
 {
@@ -22,7 +23,7 @@ if( NV_LANG_INTERFACE == 'vi' )
 
 if( $module_name == "webtools" )
 {
-	$allow_func = array( 'main', 'clearsystem', 'sitemapPing', 'checkupdate', 'siteDiagnostic', 'keywordRank', 'config', 'mudim' );
+	$allow_func = array( 'main', 'rpc', 'clearsystem', 'sitemapPing', 'checkupdate', 'siteDiagnostic', 'keywordRank', 'config', 'mudim' );
 	$menu_top = array(
 		"title" => $module_name,
 		"module_file" => "",
