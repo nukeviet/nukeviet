@@ -64,7 +64,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (21, 'logout', 'Logout', 'users', 1, 1, 3, ''),
 (22, 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 9, ''),
 (23, 'lostpass', 'Quên mật khẩu', 'users', 1, 1, 5, ''),
-(24, 'main', 'Main', 'users', 1, 1, 1, ''),
+(24, 'main', 'Main', 'users', 1, 0, 1, ''),
 (25, 'openid', 'Openid', 'users', 1, 1, 7, ''),
 (26, 'register', 'Đăng ký', 'users', 1, 1, 4, ''),
 (27, 'main', 'Main', 'contact', 1, 0, 1, ''),
@@ -75,7 +75,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (32, 'allreferers', 'Theo đường dẫn đến site', 'statistics', 1, 1, 2, ''),
 (33, 'main', 'Main', 'statistics', 1, 0, 1, ''),
 (34, 'referer', 'Đường dẫn đến site theo tháng', 'statistics', 1, 0, 7, ''),
-(35, 'main', 'Main', 'voting', 1, 0, 0, ''),
+(35, 'main', 'Main', 'voting', 1, 0, 1, ''),
 (36, 'addads', 'Addads', 'banners', 1, 0, 1, ''),
 (37, 'cledit', 'Cledit', 'banners', 0, 0, 0, ''),
 (38, 'click', 'Click', 'banners', 0, 0, 0, ''),
@@ -88,8 +88,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (45, 'adv', 'Adv', 'search', 0, 0, 0, ''),
 (46, 'main', 'Main', 'search', 1, 0, 1, ''),
 (47, 'main', 'Main', 'rss', 1, 0, 1, ''),
-(48, 'regroups', 'Nhóm thành viên', 'users', 1, 0, 1, ''),
-(50, 'memberlist', 'Danh sách thành viên', 'users', 1, 1, 1, ''),
+(48, 'regroups', 'Nhóm thành viên', 'users', 1, 0, 11, ''),
+(50, 'memberlist', 'Danh sách thành viên', 'users', 1, 1, 12, ''),
 (51, 'groups', 'Groups', 'news', 1, 0, 7, '')";
 
 $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
