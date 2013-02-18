@@ -53,6 +53,9 @@ if( defined( 'NV_IS_SPADMIN' ) )
 		$allow_func[] = 'fields';
 		$submenu['config'] = $lang_module['config'];
 		$allow_func[] = 'config';
+		$submenu['import'] = $lang_module['import'];
+		$allow_func[] = 'import';
+		$allow_func[] = 'export';
 	}
 }
 
