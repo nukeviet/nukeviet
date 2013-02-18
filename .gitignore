@@ -14,3 +14,6 @@
 /logs/voting_logs/
 /sess/sess_*
 /tmp/
+
+/includes/class/PHPExcel/
+/includes/class/PHPExcel.php

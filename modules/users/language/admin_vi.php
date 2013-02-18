@@ -281,4 +281,26 @@ $lang_module['facebook_config'] = 'Cấu hình đăng nhập, đăng kí bằng 
 $lang_module['facebook_client_id'] = 'App ID/API Key';
 $lang_module['facebook_client_secret'] = 'Mã Bí Mật';
 
+$lang_module['import'] = 'Nhập dữ liệu từ file Excel';
+$lang_module['import_note'] = 'Để nhập dữ liệu từ file Excel, bạn cần <a title="Download file dữ liệu mẫu" href="%1$s"><b>download file dữ liệu mẫu</b></a>, sau đó điền đầy đủ dữ liệu mỗi file không quá 2.000 tài khoản sau đó upload lên thư mục <b>%2$s</b>';
+$lang_module['export'] = 'Xuất dữ liệu ra file Excel';
+$lang_module['export_example'] = 'File dữ liệu mẫu module users';
+$lang_module['required_phpexcel'] = 'Để sử dụng chức năng này bạn cần cài đặt thư viện PHPExcel, bạn có thể download tại <a title="Download PHPExcel" href="http://nukeviet.vn/vi/store/other/phpexcel/">NukeViet Store</a>';
+$lang_module['export_comment_userid'] = 'Nên để trống dữ liệu này, Nếu nhập giá trị này hệ thống sẽ thay thế tài khoản ứng với userid đã có';
+$lang_module['export_comment_password'] = 'Nếu không điền dữ liệu hệ thống sẽ đặt mật khẩu mặc định là ngày tháng hiện tại';
+$lang_module['export_comment_gender'] = 'Chấp nhận giá trị: M = Nam; F = Nữ';
+$lang_module['export_comment_date'] = 'Cần nhập theo:Tháng/Ngày/Năm hoặc bỏ trống';
+$lang_module['export_complete'] = "Xuất dữ liệu thành công, bạn hãy download và giải nén để lấy các file dữ liệu";
+$lang_module['export_note'] = "Quá trình xuất dữ liệu có thể diễn ra trong vòng vài phút, vui lòng đợi đến khi có thông báo hoàn thành";
+
+$lang_module['read_note'] = "Để tiếp tục quá trình đọc các file dữ liệu, bạn cần chọn các file Sau đó click vào nút thực hiện, Quá trình đọc dữ liệu có thể diễn ra trong vòng vài phút, vui lòng đợi đến khi có thông báo";
+$lang_module['read_submit'] = "Thực hiện";
+$lang_module['read_filename'] = "Tên file";
+$lang_module['read_filesite'] = "Dung lượng";
+$lang_module['read_complete'] = "Đọc dữ liệu thành công, bạn có muốn chuyển tới trang danh sách thành viên";
+$lang_module['read_error'] = "Lỗi khi đọc file %1\$s, Hệ thống không cập nhật được tài khoản: %2\$s Họ và tên: %3\$s. Vì vậy hệ thống bị dừng lại !";
+$lang_module['read_error_field'] = "Lỗi khi đọc file %1\$s, Bạn cần kiểm tra lại cột : %2\$s Cột này cần là : %3\$s. Vì vậy hệ thống bị dừng lại !";
+$lang_module['read_error_memory_limit'] = "Lỗi: Hệ thống không đọc được dữ liệu, vui lòng kiểm tra lại các file dữ liệu chỉ để khoảng 2.000 dòng mỗi file hoặc bạn phải cấu hình file php.ini giá trị memory_limit (128MB đọc được khoảng 2.000 dòng)";
+$lang_module['read_ignore'] = "Đọc các dữ liệu không đúng chuẩn";
+
 ?>
