@@ -95,18 +95,18 @@ $is_delete = ( in_array( 'del', $allow_func ) ) ? true : false;
 $is_setactive = ( in_array( 'setactive', $allow_func ) ) ? true : false;
 while( $row = $db->sql_fetchrow( $query2 ) )
 {
-	$users_list[$row['userid']] = array( //
-		'userid' => ( int )$row['userid'], //
-		'username' => ( string )$row['username'], //
-		'full_name' => ( string )$row['full_name'], //
-		'email' => ( string )$row['email'], //
-		'regdate' => date( "d/m/Y H:i", $row['regdate'] ), //
-		'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "", //
-		'disabled' => ( $is_setactive ) ? " onclick=\"nv_chang_status(" . $row['userid'] . ");\"" : " disabled=\"disabled\"", //
-		'is_edit' => $is_edit, //
-		'is_delete' => $is_delete, //
-		'level' => $lang_module['level0'], //
-		'is_admin' => false //
+	$users_list[$row['userid']] = array(
+		'userid' => ( int )$row['userid'],
+		'username' => ( string )$row['username'],
+		'full_name' => ( string )$row['full_name'],
+		'email' => ( string )$row['email'],
+		'regdate' => date( "d/m/Y H:i", $row['regdate'] ),
+		'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "",
+		'disabled' => ( $is_setactive ) ? " onclick=\"nv_chang_status(" . $row['userid'] . ");\"" : " disabled=\"disabled\"",
+		'is_edit' => $is_edit,
+		'is_delete' => $is_delete,
+		'level' => $lang_module['level0'],
+		'is_admin' => false
 	);
 	$admin_in[] = $row['userid'];
 }
@@ -195,7 +195,9 @@ foreach( $orders as $order )
 
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php" );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 $xtpl->assign( 'SEARCH_VALUE', $methodvalue );
 $xtpl->assign( 'TABLE_CAPTION', $table_caption );
@@ -227,8 +229,10 @@ foreach( $head_tds as $head_td )
 	$xtpl->parse( 'main.head_td' );
 }
 
+$a = 0;
 foreach( $users_list as $u )
 {
+	$u['class'] = ( ++$a % 2 == 0 ) ? ' class="second"' : '';
 	$xtpl->assign( 'CONTENT_TD', $u );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
@@ -257,6 +261,11 @@ if( ! empty( $generate_page ) )
 {
 	$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 	$xtpl->parse( 'main.generate_page' );
+}
+
+if( defined( 'NV_IS_GODADMIN' ) )
+{
+	$xtpl->parse( 'main.exportfile' );
 }
 
 $xtpl->parse( 'main' );

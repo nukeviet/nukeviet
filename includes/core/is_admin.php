@@ -140,6 +140,12 @@ if( ! empty( $admin_cookie ) )
 	{
 		if( ! $nv_Request->isset_request( NV_ADMINRELOGIN_VARIABLE, 'get' ) or $nv_Request->get_int( NV_ADMINRELOGIN_VARIABLE, 'get' ) != 1 )
 		{
+			// check selfurl cronjobs
+			if( $nv_Request->get_string( 'second', 'get' ) == "cronjobs" )
+			{
+				$client_info['selfurl'] = $nv_Request->my_current_domain . NV_BASE_ADMINURL;
+			}
+			
 			$nv_Request->set_Session( 'admin_relogin_redirect', $client_info['selfurl'] );
 			Header( "Location: " . $global_config['site_url'] . "/index.php?" . NV_ADMINRELOGIN_VARIABLE . "=1" );
 			exit();
