@@ -31,20 +31,13 @@ if( $all_page )
 	{
 		$fullname = isset( $countries[$country] ) ? $countries[$country][1] : $lang_module['unknown'];
 		$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
-		$countries_list[$country] = array(
-			$fullname,
-			$count,
-			$last_visit );
+		$countries_list[$country] = array( $fullname, $count, $last_visit );
 	}
 
 	if( ! empty( $countries_list ) )
 	{
 		$cts = array();
-		$cts['thead'] = array(
-			$lang_module['country'],
-			$lang_module['hits'],
-			$lang_module['last_visit']
-		);
+		$cts['thead'] = array( $lang_module['country'], $lang_module['hits'], $lang_module['last_visit'] );
 		$cts['rows'] = $countries_list;
 		$cts['max'] = $max;
 		$cts['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page );

@@ -7,10 +7,9 @@
  * @Createdate Apr 10, 2010  10:08:08 AM
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-@require_once (str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/ckeditor_php5.php');
+@require_once ( str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/ckeditor_php5.php' );
 
 /**
  * nv_aleditor()
@@ -21,7 +20,6 @@ if( ! defined( 'NV_MAINFILE' ) )
  * @param string $val
  * @return
  */
-
 function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '', $path = '', $currentpath = '' )
 {
 	global $module_name, $admin_info, $client_info;
@@ -43,135 +41,36 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 	}
 	// Create class instance.
 
-	$CKEditor = new CKEditor( );
+	$CKEditor = new CKEditor();
 	// Do not print the code directly to the browser, return it instead
 	$CKEditor->returnOutput = true;
 
 	if( preg_match( "/^(Internet Explorer v([0-9])\.([0-9]))+$/", $client_info['browser']['name'], $m ) )
 	{
-		$jwplayer = ($m[2] < 8) ? false : true;
+		$jwplayer = ( $m[2] < 8 ) ? false : true;
 	}
 	else
 	{
 		$jwplayer = true;
 	}
 
+	//@formatter:off
 	if( $jwplayer )
 	{
-		$CKEditor->config['extraPlugins'] = 'jwplayer';
-		$editortoolbar = array(
-			array(
-				'Cut',
-				'Copy',
-				'Paste',
-				'PasteText',
-				'PasteFromWord',
-				'-',
-				'Undo',
-				'Redo',
-				'-',
-				'Link',
-				'Unlink',
-				'Anchor',
-				'-',
-				'Image',
-				'Flash',
-				'jwplayer',
-				'Table',
-				'Font',
-				'FontSize',
-				'RemoveFormat',
-				'Templates',
-				'Maximize'
-			),
-			array(
-				'Bold',
-				'Italic',
-				'Underline',
-				'Strike',
-				'-',
-				'Subscript',
-				'Superscript',
-				'-',
-				'JustifyLeft',
-				'JustifyCenter',
-				'JustifyRight',
-				'JustifyBlock',
-				'NumberedList',
-				'BulletedList',
-				'-',
-				'Outdent',
-				'Indent',
-				'Blockquote',
-				'CreateDiv',
-				'-',
-				'TextColor',
-				'BGColor',
-				'SpecialChar',
-				'Smiley',
-				'PageBreak',
-				'Source',
-				'About'
-			)
+		$CKEditor->config['extraPlugins'] = 'jwplayer,ckeditor_wiris';
+		$editortoolbar = array( //
+			 array( 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'jwplayer', 'Table', 'Font', 'FontSize', 'Format', 'RemoveFormat', 'Templates', 'Maximize' ), // 
+			 array( 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS', 'Smiley', 'PageBreak', 'Source', 'About' ) //
 		);
 	}
 	else
 	{
-		$editortoolbar = array(
-			array(
-				'Cut',
-				'Copy',
-				'Paste',
-				'PasteText',
-				'PasteFromWord',
-				'-',
-				'Undo',
-				'Redo',
-				'-',
-				'Link',
-				'Unlink',
-				'Anchor',
-				'-',
-				'Image',
-				'Flash',
-				'Table',
-				'Font',
-				'FontSize',
-				'RemoveFormat',
-				'Templates',
-				'Maximize'
-			),
-			array(
-				'Bold',
-				'Italic',
-				'Underline',
-				'Strike',
-				'-',
-				'Subscript',
-				'Superscript',
-				'-',
-				'JustifyLeft',
-				'JustifyCenter',
-				'JustifyRight',
-				'JustifyBlock',
-				'NumberedList',
-				'BulletedList',
-				'-',
-				'Outdent',
-				'Indent',
-				'Blockquote',
-				'CreateDiv',
-				'-',
-				'TextColor',
-				'BGColor',
-				'SpecialChar',
-				'Smiley',
-				'PageBreak',
-				'Source',
-				'About'
-			)
+		$editortoolbar = array( //
+			 array( 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image', 'Flash', 'Table', 'Font', 'FontSize', 'Format', 'RemoveFormat', 'Templates', 'Maximize' ), // 
+			 array( 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', '-', 'TextColor', 'BGColor', 'SpecialChar', 'Smiley', 'PageBreak', 'Source', 'About' ) //
 		);
 	}
+	//@formatter:on
 
 	$CKEditor->config['skin'] = 'v2';
 	$CKEditor->config['entities'] = false;
@@ -197,10 +96,7 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
 	}
 
 	// Change default textarea attributes
-	$CKEditor->textareaAttributes = array(
-		"cols" => 80,
-		"rows" => 10
-	);
+	$CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
 
 	$CKEditor->config['filebrowserBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&path=" . $path . "&currentpath=" . $currentpath;
 	$CKEditor->config['filebrowserImageBrowseUrl'] = NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&type=image&path=" . $path . "&currentpath=" . $currentpath;
@@ -229,8 +125,9 @@ function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = 
  *
  * @return
  */
-function nv_add_editor_js( )
+function nv_add_editor_js()
 {
 	return "";
 }
+
 ?>

@@ -10,7 +10,7 @@
 define( 'NV_MAINFILE', true );
 define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
 
-require( NV_ROOTDIR . "/includes/constants.php" );
+require ( NV_ROOTDIR . "/includes/constants.php" );
 
 $cache_file = NV_ROOTDIR . "/" . NV_DATADIR . "/robots.php";
 if( file_exists( $cache_file ) )

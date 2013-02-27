@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
 /**
  * cron_dump_autobackup()
- * 
+ *
  * @return
  */
 function cron_dump_autobackup()
@@ -46,7 +46,7 @@ function cron_dump_autobackup()
 					}
 				}
 			}
-			
+
 			closedir( $dh );
 			clearstatcache();
 		}
@@ -55,7 +55,7 @@ function cron_dump_autobackup()
 		{
 			$contents['tables'] = array();
 			$res = $db->sql_query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
-			
+
 			while( $item = $db->sql_fetchrow( $res ) )
 			{
 				$contents['tables'][] = $item[0];
@@ -72,7 +72,7 @@ function cron_dump_autobackup()
 			}
 		}
 	}
-	
+
 	return $result;
 }
 

@@ -38,7 +38,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'WEIGHT', array(
 			'w' => $i, //
-			'selected' => ( $i == $row['weight'] ) ? " selected=\"selected\"" : "", //
+			'selected' => ( $i == $row['weight'] ) ? " selected=\"selected\"" : "" //
 		) );
 
 		$xtpl->parse( 'main.row.weight' );
@@ -49,7 +49,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 		$xtpl->assign( 'STATUS', array(
 			'key' => $key, //
 			'val' => $val, //
-			'selected' => ( $key == $row['status'] ) ? " selected=\"selected\"" : "", //
+			'selected' => ( $key == $row['status'] ) ? " selected=\"selected\"" : "" //
 		) );
 
 		$xtpl->parse( 'main.row.status' );

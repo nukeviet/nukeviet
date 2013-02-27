@@ -5,20 +5,16 @@
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td style="color:red">
-				<strong>{LANG.autoinstall_theme_error_warning_fileexist}</strong>
-			</td>
+			<td style="color:red"><strong>{LANG.autoinstall_theme_error_warning_fileexist}</strong></td>
 		</tr>
 	</tbody>
 </table>
 <div style="overflow:auto;max-height:300px;width:100%">
 	<table class="tab1 fixtab">
 		<!-- BEGIN: loop -->
-		<tbody{CLASS}>
+		<tbody {CLASS}>
 			<tr>
-				<td style="color:red">
-					{FILE}
-				</td>
+				<td style="color:red"> {FILE} </td>
 			</tr>
 		</tbody>
 		<!-- END: loop -->
@@ -27,35 +23,31 @@
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td style="color:red">
-				<b>{LANG.autoinstall_theme_error_warning_overwrite}</b>
-			</td>
+			<td style="color:red"><b>{LANG.autoinstall_theme_error_warning_overwrite}</b></td>
 		</tr>
 	</tbody>
 </table>
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td class="center">
-				<input type="button" name="install_content_overwrite" value="{LANG.autoinstall_theme_overwrite}"/>
-			</td>
+			<td class="center"><input type="button" name="install_content_overwrite" value="{LANG.autoinstall_theme_overwrite}"/></td>
 		</tr>
 	</tbody>
 </table>
 <script type="text/javascript">
-//<![CDATA[		 
-$(function(){
-	$("input[name=install_content_overwrite]").click(function(){
-		if(confirm("{LANG.autoinstall_theme_error_warning_overwrite}")){
-			$("#message").show();
-			$("#step1").html("");
-			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}&overwrite={OVERWRITE}", function(){
-				$("#message").hide();
-			});
-		}
+	//<![CDATA[
+	$(function() {
+		$("input[name=install_content_overwrite]").click(function() {
+			if (confirm("{LANG.autoinstall_theme_error_warning_overwrite}")) {
+				$("#message").show();
+				$("#step1").html("");
+				$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}&overwrite={OVERWRITE}", function() {
+					$("#message").hide();
+				});
+			}
+		});
 	});
-});
-//]]>
+	//]]>
 </script>
 <!-- END: exists -->
 <!-- BEGIN: nounzip -->
@@ -75,17 +67,17 @@ $(function(){
 	<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" />{LANG.autoinstall_package_processing}
 </div>
 <script type="text/javascript">
-$(function(){
-//<![CDATA[	
-	$("input[name=checkfile]").click(function(){
-		$("#message").show();
-		$("#step1").html("");
-		$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function(){
-			$("#message").hide();
+	$(function() {
+		//<![CDATA[
+		$("input[name=checkfile]").click(function() {
+			$("#message").show();
+			$("#step1").html("");
+			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
+				$("#message").hide();
+			});
 		});
 	});
-});
-//]]>
+	//]]>
 </script>
 <!-- END: nounzip -->
 <!-- BEGIN: error_create_folder -->
@@ -96,7 +88,7 @@ $(function(){
 		</tr>
 	</tbody>
 	<!-- BEGIN: loop -->
-	<tbody{CLASS}>
+	<tbody {CLASS}>
 		<tr>
 			<td class="requie">{FOLDER}</td>
 		</tr>
@@ -112,7 +104,7 @@ $(function(){
 		</tr>
 	</tbody>
 	<!-- BEGIN: loop -->
-	<tbody{CLASS}>
+	<tbody {CLASS}>
 		<tr>
 			<td class="requie">{FOLDER}</td>
 		</tr>
@@ -124,19 +116,20 @@ $(function(){
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td class="center" style="color:green">
-				<strong>{LANG.autoinstall_theme_unzip_success}</strong><br /><br />
-				<a href="{NV_REDIRECT}" title="{LANG.autoinstall_theme_unzip_setuppage}">{LANG.autoinstall_theme_unzip_setuppage}</a>
-			</td>
+			<td class="center" style="color:green"><strong>{LANG.autoinstall_theme_unzip_success}</strong>
+			<br />
+			<br />
+			<a href="{NV_REDIRECT}" title="{LANG.autoinstall_theme_unzip_setuppage}">{LANG.autoinstall_theme_unzip_setuppage}</a></td>
 		</tr>
 	</tbody>
 </table>
 <script type="text/javascript">
-//<![CDATA[
-setTimeout("redirect_page()",5000);
-function redirect_page(){
-	parent.location="{NV_REDIRECT}";
-}
-//]]>
+	//<![CDATA[
+	setTimeout("redirect_page()", 5000);
+	function redirect_page() {
+		parent.location = "{NV_REDIRECT}";
+	}
+
+	//]]>
 </script>
 <!-- END: complete -->

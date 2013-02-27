@@ -169,7 +169,7 @@ else
 			'num' => $b, //
 			'link_view' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $row['id'], //
 			'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;add=1&amp;id=" . $row['id'], //
-			'description' => $row['description'], //
+			'description' => $row['description'] //
 		);
 	}
 

@@ -16,7 +16,21 @@ require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/global.functions.php"
 global $global_array_cat;
 $global_array_cat = array();
 $link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other";
-$global_array_cat[0] = array( "catid" => 0, "parentid" => 0, "title" => "Other", "titlesite" => "", "alias" => "Other", "link" => $link_i, "viewcat" => "viewcat_page_new", "subcatid" => 0, "numlinks" => 3, "description" => "", "inhome" => 0, "keywords" => "" );$catid = 0;
+$global_array_cat[0] = array(
+	"catid" => 0,
+	"parentid" => 0,
+	"title" => "Other",
+	"titlesite" => "",
+	"alias" => "Other",
+	"link" => $link_i,
+	"viewcat" => "viewcat_page_new",
+	"subcatid" => 0,
+	"numlinks" => 3,
+	"description" => "",
+	"inhome" => 0,
+	"keywords" => ""
+);
+$catid = 0;
 $parentid = 0;
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 $array_mod_title = array();
@@ -64,20 +78,11 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 					{
 						$sub_act = 1;
 					}
-					$submenu[] = array(
-						$array_sub_cat_i['title'],
-						$array_sub_cat_i['link'],
-						$sub_act
-					);
+					$submenu[] = array( $array_sub_cat_i['title'], $array_sub_cat_i['link'], $sub_act );
 				}
 			}
-
 		}
-		$nv_vertical_menu[] = array(
-			$array_cat_i['title'],
-			$array_cat_i['link'],
-			$act,
-			'submenu' => $submenu );
+		$nv_vertical_menu[] = array( $array_cat_i['title'], $array_cat_i['link'], $act, 'submenu' => $submenu );
 	}
 
 	//Xac dinh RSS

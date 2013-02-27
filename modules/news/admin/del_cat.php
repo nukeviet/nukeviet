@@ -54,7 +54,7 @@ if( $catid > 0 )
 							$xtitle_i .= $title_i;
 							$array_cat_list[$catid_i] = $xtitle_i;
 						}
-						
+
 						$xtpl = new XTemplate( "del_cat.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 						$xtpl->assign( 'LANG', $lang_module );
 						$xtpl->assign( 'GLANG', $lang_global );
@@ -65,15 +65,15 @@ if( $catid > 0 )
 						$xtpl->assign( 'OP', $op );
 						$xtpl->assign( 'CATID', $catid );
 						$xtpl->assign( 'DELALLCHECKSS', $delallcheckss );
-						
+
 						$xtpl->assign( 'TITLE', sprintf( $lang_module['delcat_msg_rows_select'], $title, $check_rows ) );
-						
+
 						while( list( $catid_i, $title_i ) = each( $array_cat_list ) )
 						{
 							$xtpl->assign( 'CATIDNEWS', array( "key" => $catid_i, "title" => $title_i ) );
 							$xtpl->parse( 'main.catidnews' );
 						}
-						
+
 						$xtpl->parse( 'main' );
 						$contents = $xtpl->text( 'main' );
 					}

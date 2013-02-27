@@ -65,10 +65,10 @@ if( empty( $vid ) )
 			);
 
 			$xtpl->assign( 'VOTING', $voting_array );
-			
+
 			$sql = "SELECT `id`, `vid`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows` WHERE `vid` = " . $current_voting['vid'] . "  ORDER BY `id` ASC";
 			$list = nv_db_cache( $sql, '', $module_name );
-			
+
 			foreach( $list as $row )
 			{
 				if( ! empty( $row['url'] ) )

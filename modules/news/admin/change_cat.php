@@ -21,19 +21,19 @@ if( $catid > 0 )
 	{
 		$sql = "SELECT `catid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid`!=" . $catid . " AND `parentid`=" . $parentid . " ORDER BY `weight` ASC";
 		$result = $db->sql_query( $sql );
-		
+
 		$weight = 0;
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
-			++ $weight;
+			++$weight;
 			if( $weight == $new_vid ) ++$weight;
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `weight`=" . $weight . " WHERE `catid`=" . intval( $row['catid'] );
 			$db->sql_query( $sql );
 		}
-		
+
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `weight`=" . $new_vid . " WHERE `catid`=" . intval( $catid );
 		$db->sql_query( $sql );
-		
+
 		nv_fix_cat_order();
 		$content = "OK_" . $parentid;
 	}

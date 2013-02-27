@@ -32,7 +32,7 @@ $data_month = $current_month;
 if( preg_match( "/^[0-9]{1,2}$/", $nv_Request->get_int( 'month', 'get' ) ) )
 {
 	$post_month = $nv_Request->get_int( 'month', 'get' );
-	
+
 	if( $post_month < $current_month )
 	{
 		if( $current_year != $publ_year )
@@ -128,7 +128,7 @@ $replacement = "";
 $a = 0;
 while( $row = $db->sql_fetchrow( $result ) )
 {
-	$contents['rows'][$a][] = nv_date( "d-m-Y H:i", $row['click_time'] );
+	$contents['rows'][$a][] = nv_date( "d/m/Y H:i", $row['click_time'] );
 	$contents['rows'][$a][] = $row['click_ip'];
 	$contents['rows'][$a][] = isset( $countries[$row['click_country']] ) ? $countries[$row['click_country']][1] : $row['click_country'];
 	$contents['rows'][$a][] = $row['click_browse_name'];

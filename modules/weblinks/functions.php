@@ -15,7 +15,7 @@ require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/global.functions.php"
 
 /**
  * adminlink()
- * 
+ *
  * @param mixed $id
  * @return
  */
@@ -59,12 +59,12 @@ $result = $db->sql_query( $sql );
 while( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alias_i, $keywords_i ) = $db->sql_fetchrow( $result ) )
 {
 	$link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-	
+
 	$sql1 = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `catid` = $catid_i";
 	$result1 = $db->sql_query( $sql1 );
-	
+
 	list( $count_link ) = $db->sql_fetchrow( $result1 );
-	
+
 	$global_array_cat[$catid_i] = array(
 		"catid" => $catid_i,
 		"parentid" => $parentid_i,
@@ -76,7 +76,7 @@ while( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alia
 		"catimage" => $catimage_i,
 		"count_link" => $count_link
 	);
-	
+
 	if( $alias_cat_url == $alias_i )
 	{
 		$catid = $catid_i;

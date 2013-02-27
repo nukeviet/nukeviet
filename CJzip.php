@@ -9,8 +9,8 @@
 
 /**
  * CJzip
- * 
- * @package   
+ *
+ * @package
  * @author NUKEVIET 3.0
  * @copyright VINADES.,JSC
  * @version 2010
@@ -19,11 +19,9 @@
 class CJzip
 {
 	private $is_gzip = false;
-
 	private $getName = "file";
 	private $file = array();
 	private $maxAge = 2592000;
-
 	private $encoding = 'none';
 	private $currenttime;
 	private $siteRoot;
@@ -34,7 +32,7 @@ class CJzip
 
 	/**
 	 * CJzip::__construct()
-	 * 
+	 *
 	 * @return
 	 */
 	public function __construct()
@@ -118,7 +116,7 @@ class CJzip
 
 	/**
 	 * CJzip::browseInfo()
-	 * 
+	 *
 	 * @param mixed $num
 	 * @return
 	 */
@@ -136,7 +134,6 @@ class CJzip
 
 			default:
 				$info = "HTTP/1.1 404 Not Found";
-
 		}
 		header( $info );
 		header( 'Content-Length: 0' );
@@ -145,7 +142,7 @@ class CJzip
 
 	/**
 	 * CJzip::is_notModified()
-	 * 
+	 *
 	 * @param mixed $hash
 	 * @return
 	 */
@@ -156,7 +153,7 @@ class CJzip
 
 	/**
 	 * CJzip::check_encode()
-	 * 
+	 *
 	 * @return
 	 */
 	private function check_encode()
@@ -181,7 +178,7 @@ class CJzip
 
 	/**
 	 * CJzip::loadData()
-	 * 
+	 *
 	 * @return
 	 */
 	private function loadData()
@@ -191,12 +188,12 @@ class CJzip
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
 		}
-		if ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) )
+		if( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) )
 		{
 			if( ( integer )ini_get( 'memory_limit' ) < 64 )
 			{
 				ini_set( "memory_limit", "64M" );
-			}			
+			}
 		}
 		$data = file_get_contents( $this->file['path'] );
 
@@ -228,7 +225,7 @@ class CJzip
 
 	/**
 	 * CJzip::commentCB()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -265,7 +262,7 @@ class CJzip
 
 	/**
 	 * CJzip::selectorsCB()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -276,7 +273,7 @@ class CJzip
 
 	/**
 	 * CJzip::fontFamilyCB()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -288,7 +285,7 @@ class CJzip
 
 	/**
 	 * CJzip::changeCssURL()
-	 * 
+	 *
 	 * @param mixed $matches
 	 * @return
 	 */
@@ -311,7 +308,7 @@ class CJzip
 
 	/**
 	 * CJzip::compress_css()
-	 * 
+	 *
 	 * @param mixed $cssContent
 	 * @return
 	 */
@@ -327,19 +324,7 @@ class CJzip
 		$cssContent = preg_replace( '/[\s\t\r\n]+/', ' ', $cssContent );
 		$cssContent = preg_replace( '/[\s]*(\:|\,|\;|\{|\})[\s]*/', "$1", $cssContent );
 		$cssContent = preg_replace( "/[\#]+/", "#", $cssContent );
-		$cssContent = str_replace( array(
-			' 0px',
-			':0px',
-			';}',
-			':0 0 0 0',
-			':0.',
-			' 0.' ), array(
-			' 0',
-			':0',
-			'}',
-			':0',
-			':.',
-			' .' ), $cssContent );
+		$cssContent = str_replace( array( ' 0px', ':0px', ';}', ':0 0 0 0', ':0.', ' 0.' ), array( ' 0', ':0', '}', ':0', ':.', ' .' ), $cssContent );
 		$cssContent = preg_replace( '/\\s*([{;])\\s*([\\*_]?[\\w\\-]+)\\s*:\\s*(\\b|[#\'"-])/x', '$1$2:$3', $cssContent );
 
 		$cssContent = preg_replace_callback( '/(?:\\s*[^~>+,\\s]+\\s*[,>+~])+\\s*[^~>+,\\s]+{/x', array( $this, 'selectorsCB' ), $cssContent );
@@ -355,7 +340,7 @@ class CJzip
 
 	/**
 	 * CJzip::compress_javascript()
-	 * 
+	 *
 	 * @param mixed $jsContent
 	 * @return
 	 */
@@ -367,7 +352,7 @@ class CJzip
 
 	/**
 	 * CJzip::loadFile()
-	 * 
+	 *
 	 * @return
 	 */
 	public function loadFile()
@@ -382,7 +367,7 @@ class CJzip
 	}
 }
 
-$CJzip = new CJzip;
+$CJzip = new CJzip();
 $CJzip->loadFile();
 
 ?>

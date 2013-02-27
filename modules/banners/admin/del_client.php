@@ -22,19 +22,18 @@ $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 ) die( 'Stop!!!' );
 
 $banners_id = array();
-$sql = "SELECT `id`, `file_name`,`file_name_tmp` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `clid`=" . $id;
+$sql = "SELECT `id`, `file_name`, `imageforswf` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `clid`=" . $id;
 $result = $db->sql_query( $sql );
 
 while( $row = $db->sql_fetchrow( $result ) )
 {
-	if( ! empty( $row['file_name'] ) and is_file( NV_ROOTDIR . '/' . $row['file_name'] ) )
+	if( ! empty( $row['file_name'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'] ) )
 	{
-		@nv_deletefile( NV_ROOTDIR . '/' . $row['file_name'] );
+		@nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'] );
 	}
-
-	if( ! empty( $row['file_name_tmp'] ) and is_file( NV_ROOTDIR . '/' . $row['file_name_tmp'] ) )
+	if( ! empty( $row['imageforswf'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] ) )
 	{
-		@nv_deletefile( NV_ROOTDIR . '/' . $row['file_name_tmp'] );
+		@nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] );
 	}
 	$banners_id[] = $row['id'];
 }
@@ -44,7 +43,7 @@ if( ! empty( $banners_id ) )
 	$banners_id = implode( ",", $banners_id );
 
 	$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . NV_BANNERS_CLICK_GLOBALTABLE . "\_%'" );
-	
+
 	while( $item = $db->sql_fetch_assoc( $result ) )
 	{
 		$query = "DELETE FROM `" . $item['Name'] . "` WHERE `bid` IN (" . $banners_id . ")";

@@ -33,16 +33,39 @@ class optimezer
 	private $_jsInline = array();
 	private $_jsMatches = array();
 	private $_jsCount = 0;
-
 	private $siteRoot;
 	private $base_siteurl;
 	private $cssDir = "files/css";
-	private $jsDir = "files/js";
 	private $eol = "\r\n";
 	private $cssImgNewPath;
 	private $_tidySupport = false;
-
+	private $opt_css_file = false;
 	private $_cssImportCharset = null;
+	private $tidy_options = array( //
+		'doctype' => 'transitional', // Chuan HTML: omit, auto, strict, transitional, user
+		'input-encoding' => 'utf8', // Bang ma nguon
+		'output-encoding' => 'utf8', //Bang ma dich
+		'output-xhtml' => true, // Chuan xhtml
+		'drop-empty-paras' => true, // Xoa cac tags p rong
+		'drop-proprietary-attributes' => true, // Xoa tat ca nhung attributes dac thu cua microsoft (vi du: tu word)
+		'word-2000' => true, //Xoa tat ca nhung ma cua word khong phu hop voi chuan html
+		'enclose-block-text' => true, // Tat ca cac block-text duoc dong bang tag p
+		'enclose-text' => true, // Tat ca cac text nam trong khu vuc body nhung khong nam trong bat ky mot tag nao khac se duoc cho vao <p>text</p>
+		'hide-comments' => false, // Xoa cac chu thich
+		'hide-endtags' => true, // Xoa tat ca ve^' dong khong cua nhung tag khong doi hoi phai dong
+		'indent' => false, // Thut dau dong
+		'indent-spaces' => 4, //1 don vi indent = 4 dau cach
+		'logical-emphasis' => true, // Thay cac tag i va b bang em va strong
+		'lower-literals' => true, // Tat ca cac html-tags duoc bien thanh dang chu thuong
+		'markup' => true, // Sua cac loi Markup
+		'preserve-entities' => true, // Giu nguyen cac chu da duoc ma hoa trong nguon
+		'quote-ampersand' => true, // Thay & bang &amp;
+		'quote-marks' => true, // Thay cac dau ngoac bang ma html tuong ung
+		'quote-nbsp' => true, // Thay dau cach bang to hop &nbsp;
+		'show-warnings' => false, // Hien thi thong bao loi
+		'wrap' => 0, // Moi dong khong qua 150 ky tu
+		'alt-text' => true //Bat buoc phai co alt trong IMG
+	);
 
 	/**
 	 * optimezer::__construct()
@@ -50,9 +73,10 @@ class optimezer
 	 * @param mixed $content
 	 * @return
 	 */
-	public function __construct( $content, $tidySupport )
+	public function __construct( $content, $opt_css_file )
 	{
 		$this->_content = $content;
+		$this->opt_css_file = ( $opt_css_file ) ? true : false;
 		$this->siteRoot = preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) );
 		$base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 		if( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
@@ -77,10 +101,12 @@ class optimezer
 		if( defined( 'NV_FILES_DIR' ) )
 		{
 			$this->cssDir = NV_FILES_DIR . '/css';
-			$this->jsDir = NV_FILES_DIR . '/js';
 		}
 
-		$this->_tidySupport = $tidySupport;
+		if( class_exists( 'tidy' ) )
+		{
+			$this->_tidySupport = true;
+		}
 	}
 
 	/**
@@ -91,8 +117,7 @@ class optimezer
 	public function process()
 	{
 		$conditionRegex = "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is";
-		preg_match_all( $conditionRegex, $this->_content, $conditonMatches );
-		if( $conditonMatches )
+		if( preg_match_all( $conditionRegex, $this->_content, $conditonMatches ) )
 		{
 			$this->_conditon = $conditonMatches[0];
 			$this->_content = preg_replace_callback( $conditionRegex, array( $this, 'conditionCallback' ), $this->_content );
@@ -100,8 +125,7 @@ class optimezer
 
 		$this->_content = preg_replace( "/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content );
 		$jsRegex = "/<script[^>]*>[^\<]*<\/script>/is";
-		preg_match_all( $jsRegex, $this->_content, $jsMatches );
-		if( $jsMatches )
+		if( preg_match_all( $jsRegex, $this->_content, $jsMatches ) )
 		{
 			$this->_jsMatches = $jsMatches[0];
 			$this->_content = preg_replace_callback( $jsRegex, array( $this, 'jsCallback' ), $this->_content );
@@ -109,9 +133,16 @@ class optimezer
 
 		$this->_meta['http-equiv'] = $this->_meta['name'] = array();
 
-		$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
-		preg_match_all( $regex, $this->_content, $matches );
-		if( $matches )
+		if( $this->opt_css_file )
+		{
+			$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
+		}
+		else
+		{
+			$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<style[^>]*>[^\<]*</style>!is";
+		}
+
+		if( preg_match_all( $regex, $this->_content, $matches ) )
 		{
 			foreach( $matches[0] as $tag )
 			{
@@ -160,15 +191,6 @@ class optimezer
 						$this->_links[] = $tag;
 					}
 				}
-				
-				// Khong nen JS nua vi ke tu NukeViet 3.3 cac file JS da duoc nen het roi
-				/*elseif ( preg_match( "/^<script[^>]+src\s*=\s*[\"|']((?!http(s?)|ftp\:\/\/)[^\"']+\.js)[\"|'][^>]*>/is", $tag, $matches2 ) )
-				{
-				$this->_jsLinks[] = $matches2[1];
-				} elseif ( preg_match( "/<script[^>]*>([^\<]*)<\/script>/is", $tag, $matches2 ) )
-				{
-				$this->_jsInline[] = $matches2[1];
-				}*/
 			}
 
 			$this->_content = preg_replace( $regex, "", $this->_content );
@@ -238,12 +260,13 @@ class optimezer
 		if( ! $this->_tidySupport ) $head = $this->minifyHTML( $head );
 		$this->_content = preg_replace( '/<head>/i', $head, $this->_content, 1 );
 
-		/*$body = "";
-		if ( ! empty( $this->_jsLinks ) ) $body .= "<script type=\"text/javascript\" src=\"" . $this->newJSLink() . "\"></script>" . $this->eol;
-		if ( ! empty( $this->_jsInline ) ) $body .= "<script type=\"text/javascript\">" . $this->eol . $this->minifyJsInline( implode( $this->eol, $this->_jsInline ) ) . $this->eol . "</script>" . $this->eol;
-		$body .= "</body>";
-		$this->_content = preg_replace( '/<\/body>/i', $body, $this->_content, 1 );*/
-
+		if( $this->_tidySupport )
+		{
+			$tidy = new tidy();
+			$tidy->parseString( $this->_content, $this->tidy_options, 'utf8' );
+			$tidy->cleanRepair();
+			return $tidy;
+		}
 		return $this->_content;
 	}
 
@@ -300,32 +323,6 @@ class optimezer
 		}
 
 		return $this->base_siteurl . $this->cssDir . "/" . $newCSSLink . ".opt.css";
-	}
-
-	/**
-	 * optimezer::newJSLink()
-	 * 
-	 * @return
-	 */
-	private function newJSLink()
-	{
-		$newJSLink = md5( implode( $this->_jsLinks ) );
-		$newJSLinkPath = $this->siteRoot . '/' . $this->jsDir . '/' . $newJSLink . '.opt.js';
-
-		if( ! file_exists( $newJSLinkPath ) )
-		{
-			$contents = "";
-			foreach( $this->_jsLinks as $link )
-			{
-				$link = preg_replace( "#^" . $this->base_siteurl . "#", "", $link );
-				$contents .= file_get_contents( $this->siteRoot . '/' . $link ) . $this->eol;
-			}
-			$contents = $this->minifyJs( $contents );
-			file_put_contents( $newJSLinkPath, $contents );
-
-		}
-
-		return $this->base_siteurl . $this->jsDir . "/" . $newJSLink . ".opt.js";
 	}
 
 	/**
@@ -532,7 +529,7 @@ class optimezer
 		$content = preg_replace( '#<(br|hr|input|img|meta)([^>]+)>#', "<\\1 \\2 />", $content );
 		$content = preg_replace( '#\s*\/\s*\/>#', " />", $content );
 		$content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
-        $content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
+		$content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
 		$content = preg_replace( '/^\s+/m', '', $content );
 
 		return $content;

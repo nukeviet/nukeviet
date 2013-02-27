@@ -13,14 +13,14 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
 /**
  * cron_auto_del_cache()
- * 
+ *
  * @return
  */
 function cron_auto_del_cache()
 {
 	$result = true;
 	$dir = NV_ROOTDIR . "/" . NV_CACHEDIR;
-	
+
 	if( $dh = opendir( $dir ) )
 	{
 		while( ( $file = readdir( $dh ) ) !== false )
@@ -33,11 +33,11 @@ function cron_auto_del_cache()
 				}
 			}
 		}
-		
+
 		closedir( $dh );
 		clearstatcache();
 	}
-	
+
 	return $result;
 }
 

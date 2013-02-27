@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['comment'];
 
 $global_array_cat = array();
-$global_array_cat[0] = array( "alias" => "Other", );
+$global_array_cat[0] = array( "alias" => "Other" );
 
 $sql = "SELECT `catid`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
 $result = $db->sql_query( $sql );
@@ -33,7 +33,7 @@ $array = array();
 $a = 0;
 while( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $userid, $user_email ) = $db->sql_fetchrow( $result ) )
 {
-	++ $a;
+	++$a;
 	$arr_listcatid = explode( ",", $listcatid );
 	$catid_i = end( $arr_listcatid );
 

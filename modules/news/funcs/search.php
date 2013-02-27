@@ -7,8 +7,7 @@
  * @Createdate 10-5-2010 0:14
  */
 
-if( ! defined( 'NV_IS_MOD_NEWS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 function GetSourceNews( $sourceid )
 {
@@ -57,14 +56,14 @@ $per_pages = 20;
 
 $key = strip_punctuation( nv_unhtmlspecialchars( $key ) );
 
-$array_cat_search = array( );
+$array_cat_search = array();
 
 foreach( $global_array_cat as $arr_cat_i )
 {
 	$array_cat_search[$arr_cat_i['catid']] = array(
 		'catid' => $arr_cat_i['catid'],
 		'title' => $arr_cat_i['title'],
-		'select' => ($arr_cat_i['catid'] == $catid) ? "selected" : ""
+		'select' => ( $arr_cat_i['catid'] == $catid ) ? "selected" : ""
 	);
 }
 
@@ -124,7 +123,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 	list( $numRecord ) = $db->sql_fetchrow( $result_all );
 
-	$array_content = array( );
+	$array_content = array();
 	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
 
 	while( list( $id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $db->sql_fetchrow( $result ) )
@@ -135,25 +134,24 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		}
 		else
 		{
-			$array_img = array(
-				"",
-				""
-			);
+			$array_img = array( "", "" );
 		}
 
-		$img_src = "";
-
-		if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+		if( $homeimgthumb == 1 ) //image thumb
 		{
-			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile ) )
+		elseif( $homeimgthumb == 2 ) //image file
 		{
 			$img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( nv_is_url( $homeimgfile ) )
+		elseif( $homeimgthumb == 3 ) //image url
 		{
 			$img_src = $homeimgfile;
+		}
+		else //no image
+		{
+			$img_src = "";
 		}
 
 		$array_content[] = array(
@@ -184,7 +182,8 @@ else
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

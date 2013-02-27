@@ -159,7 +159,7 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
 	  `hometext` mediumtext NOT NULL,
 	  `homeimgfile` varchar(255) NOT NULL default '',
 	  `homeimgalt` varchar(255) NOT NULL default '',
-	  `homeimgthumb` varchar(255) NOT NULL default '',
+	  `homeimgthumb` tinyint(4) NOT NULL default '0',
 	  `inhome` tinyint(1) unsigned NOT NULL default '0',
 	  `allowed_comm` tinyint(1) unsigned NOT NULL default '0',
 	  `allowed_rating` tinyint(1) unsigned NOT NULL default '0',

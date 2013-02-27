@@ -108,7 +108,6 @@ $lang_module['banip_timeendban'] = 'Ban end time';
 $lang_module['banip_funcs'] = 'Feature';
 $lang_module['banip_checkall'] = 'Check all';
 $lang_module['banip_uncheckall'] = 'Uncheck all';
-$lang_module['banip_add'] = 'Add new';
 $lang_module['banip_address'] = 'Address';
 $lang_module['banip_begintime'] = 'Begin time';
 $lang_module['banip_endtime'] = 'End time';

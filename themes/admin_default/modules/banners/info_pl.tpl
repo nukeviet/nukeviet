@@ -7,18 +7,20 @@
 </div>
 <table summary = "{CONTENTS.caption}" class="tab1">
 	<caption>{CONTENTS.caption}</caption>
-	<col style="width:50%;white-space:nowrap" />
+	<colgroup>
+		<col style="width:50%;white-space:nowrap" />
+	</colgroup>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
-	<tr>
-		<!-- BEGIN: t1 -->
-		<td>{ROW.0}:</td>
-		<td>{ROW.1}</td>
-		<!-- END: t1 -->
-		<!-- BEGIN: t2 -->
-		<td colspan="2">{ROW.0}:</td>
-		<!-- END: t2 -->
-	</tr>
+	<tbody {ROW.class}>
+		<tr>
+			<!-- BEGIN: t1 -->
+			<td>{ROW.0}:</td>
+			<td>{ROW.1}</td>
+			<!-- END: t1 -->
+			<!-- BEGIN: t2 -->
+			<td colspan="2">{ROW.0}:</td>
+			<!-- END: t2 -->
+		</tr>
 	</tbody>
 	<!-- END: loop -->
 </table>

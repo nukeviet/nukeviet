@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate May 30, 2010, 05:07:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate May 30, 2010, 05:07:00 PM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -19,6 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['modforum'] = 'Members management by forum %1$s.';
 $lang_module['list_module_title'] = 'Members list';
 $lang_module['member_add'] = 'Add member';
+
 $lang_module['member_wating'] = 'Member wating';
 $lang_module['list_question'] = 'Question list';
 $lang_module['search_type'] = 'Search by';
@@ -196,5 +197,56 @@ $lang_module['whoviewlistuser'] = 'Who can view a list of members';
 $lang_module['whoview_all'] = 'All';
 $lang_module['whoview_user'] = 'User';
 $lang_module['whoview_admin'] = 'Administrator';
+
+$lang_module['fields'] = 'Custom User Fields';
+$lang_module['captionform_add'] = 'Add User Fields';
+$lang_module['captionform_edit'] = 'Edit User Fields';
+$lang_module['field_id'] = 'Field ID';
+$lang_module['field_id_note'] = 'This is the unique identifier for this field. It cannot be changed once set ';
+$lang_module['field_title'] = 'Title';
+$lang_module['field_required'] = 'Field is required';
+$lang_module['field_description'] = 'Description';
+$lang_module['field_required_note'] = 'Required fields will always be shown during register';
+$lang_module['field_show_register'] = 'Show during register';
+$lang_module['field_user_editable'] = 'User editable';
+$lang_module['field_user_editable_once'] = 'Editable only once';
+$lang_module['field_show_profile'] = 'Show on profile pages';
+$lang_module['field_type'] = 'Field Type';
+$lang_module['field_type_number'] = 'Number';
+$lang_module['field_type_date'] = 'Date';
+$lang_module['field_type_textbox'] = 'Single-line text box';
+$lang_module['field_type_textarea'] = 'Multi-line text box';
+$lang_module['field_type_editor'] = 'Editor';
+$lang_module['field_type_select'] = 'Drop down selection';
+$lang_module['field_type_radio'] = 'Radio Buttons';
+$lang_module['field_type_checkbox'] = 'Check Boxes';
+$lang_module['field_type_multiselect'] = 'Multiple-choice drop down selection';
+$lang_module['field_type_note'] = 'It cannot be changed once set ';
+$lang_module['field_class'] = 'Html class form';
+$lang_module['field_size'] = 'Size textarea';
+$lang_module['field_options_text'] = 'Options for Text Fields';
+$lang_module['field_match_type'] = 'Value Match Requirements:<br>Empty values are always allowed.';
+$lang_module['field_match_type_none'] = 'none';
+$lang_module['field_match_type_alphanumeric'] = 'A-Z, 0-9, and _ only';
+$lang_module['field_match_type_url'] = 'Url';
+$lang_module['field_match_type_regex'] = 'Regular expression';
+$lang_module['field_match_type_callback'] = 'Func callback';
+$lang_module['field_default_value'] = 'Default Value';
+$lang_module['field_min_length'] = 'Min Length';
+$lang_module['field_max_length'] = 'Max Length';
+$lang_module['field_options_number'] = 'Options for Number Fields';
+$lang_module['field_number_type'] = 'Number Type';
+$lang_module['field_integer'] = 'Integer';
+$lang_module['field_real'] = 'Real';
+$lang_module['field_options_date'] = 'Options for Date Fields';
+$lang_module['field_current_date'] = 'Use the current date';
+$lang_module['field_default_date'] = 'Default Date';
+$lang_module['field_min_date'] = 'Min Date';
+$lang_module['field_max_date'] = 'Max Date';
+$lang_module['field_options_choice'] = 'Options for Choice Fields';
+$lang_module['field_number'] = 'STT';
+$lang_module['field_value'] = 'Value';
+$lang_module['field_text'] = 'Text';
+$lang_module['field_add_choice'] = 'Thêm lựa chọn';
 
 ?>

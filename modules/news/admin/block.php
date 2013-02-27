@@ -93,24 +93,28 @@ if( $db->sql_numrows( $result ) )
 {
 	$a = 0;
 	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
-	{		
+	{
 		$xtpl->assign( 'ROW', array(
 			"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 			"checked" => in_array( $id, $id_array ) ? " checked=\"checked\"" : "",
 			"title" => $title,
-			"id" => $id,
+			"id" => $id
 		) );
-		
+
 		$xtpl->parse( 'main.news.loop' );
-		++ $a;
+		++$a;
 	}
 
 	foreach( $array_block as $xbid => $blockname )
 	{
-		$xtpl->assign( 'BID', array( "key" => $xbid, "title" => $blockname, "selected" => $xbid == $bid ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'BID', array(
+			"key" => $xbid,
+			"title" => $blockname,
+			"selected" => $xbid == $bid ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.news.bid' );
 	}
-	
+
 	$xtpl->assign( 'CHECKSESS', md5( session_id() ) );
 	$xtpl->parse( 'main.news' );
 }

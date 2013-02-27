@@ -36,7 +36,7 @@ function nv_site_theme( $contents )
 		else
 		{
 			$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/gtie6.css\" />\n";
-		
+
 			if( $client_info['browser']['version'] >= 9 )
 			{
 				$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/ie9.css\" />\n";
@@ -81,24 +81,24 @@ function nv_site_theme( $contents )
 	if( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
 	{
 		$xtpl->assign( 'SELECTLANGSITE', $lang_global['langsite'] );
-	
+
 		foreach( $global_config['allow_sitelangs'] as $lang_i )
 		{
 			$langname = $language_array[$lang_i]['name'];
-		
+
 			$xtpl->assign( 'LANGSITENAME', $langname );
 			$xtpl->assign( 'LANGSITEURL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_i );
-		
+
 			if( NV_LANG_DATA != $lang_i )
 			{
-				$xtpl->parse( 'main.language.langitem' );				
+				$xtpl->parse( 'main.language.langitem' );
 			}
 			else
 			{
-				$xtpl->parse( 'main.language.langcuritem' );				
+				$xtpl->parse( 'main.language.langcuritem' );
 			}
 		}
-	
+
 		$xtpl->parse( 'main.language' );
 	}
 
@@ -110,7 +110,7 @@ function nv_site_theme( $contents )
 			'title' => $module_info['custom_title'],
 			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name
 		);
-		
+
 		$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
 		$xtpl->parse( 'main.mod_title.breakcolumn' );
 
@@ -119,16 +119,16 @@ function nv_site_theme( $contents )
 			$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
 			$xtpl->parse( 'main.mod_title.breakcolumn' );
 		}
-		
+
 		$xtpl->parse( 'main.mod_title' );
 	}
 
-	$theme_stat_img = "";	
+	$theme_stat_img = "";
 	if( $global_config['statistic'] and isset( $site_mods['statistics'] ) )
 	{
-		$theme_stat_img .= "<a title=\"" . $lang_global['viewstats'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics\"><img alt=\"" . $lang_global['viewstats'] . "\" title=\"" . $lang_global['viewstats'] . "\" src=\"" . NV_BASE_SITEURL . "index.php?second=statimg&amp;p=" . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
+		$theme_stat_img .= "<a title=\"" . $lang_global['viewstats'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics\"><img alt=\"" . $lang_global['viewstats'] . "\" src=\"" . NV_BASE_SITEURL . "index.php?second=statimg&amp;p=" . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
 	}
-	
+
 	$theme_footer_js = "<script type=\"text/javascript\">\n";
 	$theme_footer_js .= "nv_DigitalClock('digclock');\n";
 	$theme_footer_js .= "</script>\n";
@@ -139,7 +139,7 @@ function nv_site_theme( $contents )
 	if( ! empty( $global_config['switch_mobi_des'] ) and ! empty( $module_info['mobile'] ) )
 	{
 		$num_theme_type = sizeof( $global_config['array_theme_type'] ) - 1;
-	
+
 		foreach( $global_config['array_theme_type'] as $i => $theme_type )
 		{
 			$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;nv" . NV_LANG_DATA . "themever=" . $theme_type . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] ) );
@@ -156,7 +156,7 @@ function nv_site_theme( $contents )
 			}
 
 			if( $i < $num_theme_type ) $xtpl->parse( 'main.theme_type.loop.space' );
-		
+
 			$xtpl->parse( 'main.theme_type.loop' );
 		}
 		$xtpl->parse( 'main.theme_type' );
@@ -169,15 +169,15 @@ function nv_site_theme( $contents )
 	$sitecontent = str_replace( '[THEME_ERROR_INFO]', nv_error_info(), $sitecontent );
 
 	$my_footer = $theme_footer_js . $my_footer;
-	
+
 	if( defined( 'NV_IS_ADMIN' ) )
 	{
 		$my_footer = nv_admin_menu() . $my_footer;
 	}
-	
+
 	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1 );
 	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1 );
-	
+
 	return $sitecontent;
 }
 

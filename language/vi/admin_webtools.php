@@ -8,8 +8,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE'))
-    die('Stop!!!');
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -115,4 +114,27 @@ $lang_module['mudim_active_admin'] = 'Kích hoạt khu vực admin';
 $lang_module['mudim_showpanel'] = 'Hiển thị bảng điều khiển Mudim';
 $lang_module['mudim_method'] = 'Kiểu gõ mặc định';
 $lang_module['mudim_displaymode'] = 'Hiển thị công cụ dưới dạng';
+
+$lang_module['rpc'] = "Dịch vụ PING";
+$lang_module['rpc_setting'] = "Cấu hình dịch vụ PING";
+$lang_module['rpc_error_timeout'] = "Vui lòng đợi %s nữa để tiếp tục Ping";
+$lang_module['rpc_error_titleEmpty'] = "Vui lòng khai báo tên của URL cần Ping";
+$lang_module['rpc_error_urlEmpty'] = "Vui lòng khai báo đúng URL cần Ping";
+$lang_module['rpc_error_rsschannelEmpty'] = "Vui lòng khai báo đúng kênh RSS của URL này";
+$lang_module['rpc_error_serviceEmpty'] = "Dịch vụ chưa khả dụng. Vui lòng thông báo đến Ban quản trị website";
+$lang_module['rpc_error_unknown'] = "Lỗi không xác định";
+$lang_module['rpc_flerror0'] = "PING thành công";
+$lang_module['rpc_flerror1'] = "Lỗi";
+$lang_module['rpc_ftitle'] = "PING là một tiện ích miễn phí giúp bạn nhanh chóng tạo chỉ mục cho các trang tin của mình trên các máy chủ tìm kiếm lớn.";
+$lang_module['rpc_webtitle'] = "Tiêu đề trang tin";
+$lang_module['rpc_weblink'] = "URL của trang tin";
+$lang_module['rpc_rsslink'] = "Kênh RSS của trang tin";
+$lang_module['rpc_submit'] = "PING !";
+$lang_module['rpc_linkname'] = "Máy chủ";
+$lang_module['rpc_reruslt'] = "Kết quả";
+$lang_module['rpc_message'] = "Thông tin";
+$lang_module['rpc_ping'] = "PING  khi cập nhật dữ liệu";
+$lang_module['rpc_ping_page'] = "PING  bài viết";
+$lang_module['rpc_finish'] = "Hoàn thành quá trình PING, bạn có muốn chuyển về trang quản lý bài viết ?";
+
 ?>

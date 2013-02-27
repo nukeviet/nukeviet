@@ -7,7 +7,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if ( ! defined( 'NV_IS_MOD_WEBLINKS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_WEBLINKS' ) ) die( 'Stop!!!' );
 
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
@@ -23,10 +23,14 @@ $page_title = $row['title'] . " - " . $global_array_cat[$row['catid']]['title'];
 $row['visit'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=visitlink-" . $row['alias'] . "-" . $row['id'];
 $row['report'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=reportlink-" . $row['alias'] . "-" . $row['id'];
 
-$urlimg = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $row['urlimg'];
-$imageinfo = nv_ImageInfo( $urlimg, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
-$row['urlimg'] = $imageinfo['src'];
-
+if( ! empty( $row['urlimg'] ) )
+{
+	$row['urlimg'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $row['urlimg'];
+}
+else
+{
+	$row['urlimg'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif";
+}
 $contents = call_user_func( "detail", $row );
 
 include ( NV_ROOTDIR . "/includes/header.php" );

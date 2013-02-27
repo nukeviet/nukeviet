@@ -184,11 +184,7 @@ while( list( $country, $count, $last_visit ) = $db->sql_fetchrow( $result ) )
 {
 	$fullname = isset( $countries[$country] ) ? $countries[$country][1] : $lang_module['unknown'];
 	$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
-	$countries_list[$country] = array(
-		$fullname,
-		$count,
-		$last_visit
-	);
+	$countries_list[$country] = array( $fullname, $count, $last_visit );
 
 	$total = $total + $count;
 }
@@ -200,18 +196,10 @@ $others = $all - $total;
 
 $ctsc = array();
 $ctsc['caption'] = $lang_module['statbycountry'];
-$ctsc['thead'] = array(
-	$lang_module['country'],
-	$lang_module['hits'],
-	$lang_module['last_visit']
-);
+$ctsc['thead'] = array( $lang_module['country'], $lang_module['hits'], $lang_module['last_visit'] );
 $ctsc['rows'] = $countries_list;
 $ctsc['max'] = $max;
-$ctsc['others'] = array(
-	$lang_module['others'],
-	$others,
-	$lang_module['viewall']
-);
+$ctsc['others'] = array( $lang_module['others'], $others, $lang_module['viewall'] );
 
 // trinh duyet
 $sql = "SELECT `c_val`,`c_count`, `last_update` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='browser' AND `c_count`!=0 ORDER BY `c_count` DESC LIMIT 10";
@@ -235,18 +223,10 @@ $others = $all - $total;
 
 $ctsb = array();
 $ctsb['caption'] = $lang_module['statbybrowser'];
-$ctsb['thead'] = array(
-	$lang_module['browser'],
-	$lang_module['hits'],
-	$lang_module['last_visit']
-);
+$ctsb['thead'] = array( $lang_module['browser'], $lang_module['hits'], $lang_module['last_visit'] );
 $ctsb['rows'] = $browsers_list;
 $ctsb['max'] = $max;
-$ctsb['others'] = array(
-	$lang_module['others'],
-	$others,
-	$lang_module['viewall']
-);
+$ctsb['others'] = array( $lang_module['others'], $others, $lang_module['viewall'] );
 
 // he dieu hanh
 $sql = "SELECT `c_val`,`c_count`, `last_update` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='os' AND `c_count`!=0 ORDER BY `c_count` DESC LIMIT 10";
@@ -270,18 +250,10 @@ $others = $all - $total;
 
 $ctso = array();
 $ctso['caption'] = $lang_module['statbyos'];
-$ctso['thead'] = array(
-	$lang_module['os'],
-	$lang_module['hits'],
-	$lang_module['last_visit']
-);
+$ctso['thead'] = array( $lang_module['os'], $lang_module['hits'], $lang_module['last_visit'] );
 $ctso['rows'] = $os_list;
 $ctso['max'] = $max;
-$ctso['others'] = array(
-	$lang_module['others'],
-	$others,
-	$lang_module['viewall']
-);
+$ctso['others'] = array( $lang_module['others'], $others, $lang_module['viewall'] );
 
 $contents = call_user_func( "main" );
 include ( NV_ROOTDIR . "/includes/header.php" );

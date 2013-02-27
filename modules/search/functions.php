@@ -13,7 +13,7 @@ define( 'NV_IS_MOD_SEARCH', true );
 
 /**
  * LoadModulesSearch()
- * 
+ *
  * @return
  */
 function LoadModulesSearch()
@@ -41,7 +41,7 @@ function LoadModulesSearch()
 
 /**
  * nv_substr_clean()
- * 
+ *
  * @param mixed $string
  * @param string $mode
  * @return
@@ -69,7 +69,7 @@ function nv_substr_clean( $string, $mode = 'lr' )
 
 /**
  * BoldKeywordInStr()
- * 
+ *
  * @param mixed $str
  * @param mixed $keyword
  * @return
@@ -151,7 +151,7 @@ function BoldKeywordInStr( $str, $keyword, $logic )
 
 /**
  * nv_like_logic()
- * 
+ *
  * @param mixed $field
  * @param mixed $dbkeyword
  * @param mixed $logic

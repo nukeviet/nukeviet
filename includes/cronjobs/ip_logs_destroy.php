@@ -13,14 +13,14 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
 /**
  * cron_del_ip_logs()
- * 
+ *
  * @return
  */
 function cron_del_ip_logs()
 {
 	$result = true;
 	$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
-	
+
 	if( $dh = opendir( $dir ) )
 	{
 		while( ( $file = readdir( $dh ) ) !== false )
@@ -33,11 +33,11 @@ function cron_del_ip_logs()
 				}
 			}
 		}
-		
+
 		closedir( $dh );
 		clearstatcache();
 	}
-	
+
 	return $result;
 }
 

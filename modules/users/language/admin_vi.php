@@ -8,8 +8,7 @@
  * @Createdate May 30, 2010, 10:57:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '30/05/2010, 23:57';
@@ -17,7 +16,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['dir_forum'] = 'Thư mục chứa diễn';
+$lang_module['dir_forum'] = 'Thư mục chứa diễn đàn';
 $lang_module['modforum'] = 'Chức năng quản lý thành viên hiện do diễn đàn quản lý.';
 $lang_module['list_module_title'] = 'Danh sách thành viên';
 $lang_module['member_add'] = 'Thêm thành viên';
@@ -219,15 +218,89 @@ $lang_module['access_delus'] = 'Xóa thành viên';
 $lang_module['access_passus'] = 'Đổi mật khẩu';
 $lang_module['access_groups'] = 'Quản lý nhóm';
 
-$lang_module['fields'] = 'Custom User Fields';
-$lang_module['captionform_add'] = 'Add User Fields';
-$lang_module['captionform_edit'] = 'Edit User Fields';
+$lang_module['fields'] = 'Tùy biến dữ liệu';
+$lang_module['captionform_add'] = 'Thêm trường dữ liệu';
+$lang_module['captionform_edit'] = 'Sửa trường dữ liệu';
 $lang_module['field_edit'] = 'Sửa';
 $lang_module['field_choices_empty'] = 'Empty Choice Fields';
+$lang_module['field_id'] = 'Trường dữ liệu';
+$lang_module['field_id_note'] = 'Trường dữ liệu này cần duy nhất và không thay đổi được khi đã lưu';
+$lang_module['field_title'] = 'Tiêu đề';
+$lang_module['field_description'] = 'Mô tả';
+$lang_module['field_required'] = 'Trường dữ liệu bắt buộc';
+$lang_module['field_required_note'] = 'Nếu là trường bắt buộc sẽ được hiển thị trong quá trình đăng ký';
+$lang_module['field_show_register'] = 'Hiển thị khi đăng ký';
+$lang_module['field_user_editable'] = 'Thành viên có thể thay đổi';
+$lang_module['field_user_editable_once'] = 'Chỉ được thay đổi 1 lần';
+$lang_module['field_show_profile'] = 'Hiển thị tại trang thành viên';
+$lang_module['field_type'] = 'Loại dữ liệu';
+$lang_module['field_type_number'] = 'Số';
+$lang_module['field_type_date'] = 'Ngày';
+$lang_module['field_type_textbox'] = 'Một dòng (textbox)';
+$lang_module['field_type_textarea'] = 'Nhiều dòng (textarea)';
+$lang_module['field_type_editor'] = 'Trình soạn thảo';
+$lang_module['field_type_select'] = 'Lựa chọn thả xuống (selectbox)';
+$lang_module['field_type_radio'] = 'Một lựa chọn (radio)';
+$lang_module['field_type_checkbox'] = 'Nhiều lựa chọn (checkbox)';
+$lang_module['field_type_multiselect'] = 'Nhiều lựa chọn thả xuống (multi selectbox)';
+$lang_module['field_type_note'] = 'Giá trị sẽ không thay đổi được khi đã lưu';
+$lang_module['field_class'] = 'Thuộc tính class html';
+$lang_module['field_size'] = 'Kích thước ô nhập liệu';
+$lang_module['field_options_text'] = 'Các tùy chọn cho khác';
+$lang_module['field_match_type'] = 'Yêu cầu kiểm tra với giá trị:';
+$lang_module['field_match_type_none'] = 'Không kiểm tra';
+$lang_module['field_match_type_alphanumeric'] = 'Chỉ được dùng các ký tự A-Z, 0-9 và gạch dưới';
+$lang_module['field_match_type_url'] = 'Url';
+$lang_module['field_match_type_regex'] = 'Biểu thức quy tắc';
+$lang_module['field_match_type_callback'] = 'Xử dụng hàm';
+$lang_module['field_default_value'] = 'Giá trị mặc định';
+$lang_module['field_min_length'] = 'Chiều dài ký tự ít nhất';
+$lang_module['field_max_length'] = 'Chiều dài ký tự nhiều nhất';
+$lang_module['field_options_number'] = 'Các tùy chọn cho dữ liệu';
+$lang_module['field_number_type'] = 'Kiểu số';
+$lang_module['field_integer'] = 'Số nguyên';
+$lang_module['field_real'] = 'Số thực';
+$lang_module['field_options_date'] = 'Các tùy chọn dữ liệu ngày tháng';
+$lang_module['field_current_date'] = 'Sử dụng ngày hiện tại';
+$lang_module['field_default_date'] = 'Sử dụng ngày';
+$lang_module['field_min_date'] = 'Từ ngày';
+$lang_module['field_max_date'] = 'Tới ngày';
+$lang_module['field_options_choice'] = 'Các tùy chọn';
+$lang_module['field_number'] = 'STT';
+$lang_module['field_value'] = 'Giá trị';
+$lang_module['field_text'] = 'Miêu tả';
+$lang_module['field_add_choice'] = 'Thêm lựa chọn';
 $lang_module['field_date_error'] = 'Giá trị của Min Date cần nhỏ hơm Max Date';
 $lang_module['field_number_error'] = 'Giá trị của Min Value cần nhỏ hơm Max Value';
 $lang_module['field_match_type_error'] = '%s không đúng quy tắc';
 $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
 $lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s ký tự';
 $lang_module['field_min_max_value'] = '%1$s cần nhập từ %2$s đến %3$s';
+
+$lang_module['facebook_config'] = 'Cấu hình đăng nhập, đăng kí bằng facebook';
+$lang_module['facebook_client_id'] = 'App ID/API Key';
+$lang_module['facebook_client_secret'] = 'Mã Bí Mật';
+
+$lang_module['import'] = 'Nhập dữ liệu từ file Excel';
+$lang_module['import_note'] = 'Để nhập dữ liệu từ file Excel, bạn cần <a title="Download file dữ liệu mẫu" href="%1$s"><b>download file dữ liệu mẫu</b></a>, sau đó điền đầy đủ dữ liệu mỗi file không quá 2.000 tài khoản sau đó upload lên thư mục <b>%2$s</b>';
+$lang_module['export'] = 'Xuất dữ liệu ra file Excel';
+$lang_module['export_example'] = 'File dữ liệu mẫu module users';
+$lang_module['required_phpexcel'] = 'Để sử dụng chức năng này bạn cần cài đặt thư viện PHPExcel, bạn có thể download tại <a title="Download PHPExcel" href="http://nukeviet.vn/vi/store/other/phpexcel/">NukeViet Store</a>';
+$lang_module['export_comment_userid'] = 'Nên để trống dữ liệu này, Nếu nhập giá trị này hệ thống sẽ thay thế tài khoản ứng với userid đã có';
+$lang_module['export_comment_password'] = 'Nếu không điền dữ liệu hệ thống sẽ đặt mật khẩu mặc định là ngày tháng hiện tại';
+$lang_module['export_comment_gender'] = 'Chấp nhận giá trị: M = Nam; F = Nữ';
+$lang_module['export_comment_date'] = 'Cần nhập theo:Tháng/Ngày/Năm hoặc bỏ trống';
+$lang_module['export_complete'] = "Xuất dữ liệu thành công, bạn hãy download và giải nén để lấy các file dữ liệu";
+$lang_module['export_note'] = "Quá trình xuất dữ liệu có thể diễn ra trong vòng vài phút, vui lòng đợi đến khi có thông báo hoàn thành";
+
+$lang_module['read_note'] = "Để tiếp tục quá trình đọc các file dữ liệu, bạn cần chọn các file Sau đó click vào nút thực hiện, Quá trình đọc dữ liệu có thể diễn ra trong vòng vài phút, vui lòng đợi đến khi có thông báo";
+$lang_module['read_submit'] = "Thực hiện";
+$lang_module['read_filename'] = "Tên file";
+$lang_module['read_filesite'] = "Dung lượng";
+$lang_module['read_complete'] = "Đọc dữ liệu thành công, bạn có muốn chuyển tới trang danh sách thành viên";
+$lang_module['read_error'] = "Lỗi khi đọc file %1\$s, Hệ thống không cập nhật được tài khoản: %2\$s Họ và tên: %3\$s. Vì vậy hệ thống bị dừng lại !";
+$lang_module['read_error_field'] = "Lỗi khi đọc file %1\$s, Bạn cần kiểm tra lại cột : %2\$s Cột này cần là : %3\$s. Vì vậy hệ thống bị dừng lại !";
+$lang_module['read_error_memory_limit'] = "Lỗi: Hệ thống không đọc được dữ liệu, vui lòng kiểm tra lại các file dữ liệu chỉ để khoảng 2.000 dòng mỗi file hoặc bạn phải cấu hình file php.ini giá trị memory_limit (128MB đọc được khoảng 2.000 dòng)";
+$lang_module['read_ignore'] = "Đọc các dữ liệu không đúng chuẩn";
+
 ?>

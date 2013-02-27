@@ -80,7 +80,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		{
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_send` SET `is_reply`=1, `reply_content`=" . $db->dbescape( $mess_content ) . ", `reply_time`=" . NV_CURRENTTIME . ", `reply_aid`=" . $admin_info['admin_id'] . " WHERE `id`=" . $id;
 			$db->sql_query( $sql );
-			
+
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=view&id=" . $id );
 			die();
 		}

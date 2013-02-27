@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="quote" style="width:98%">
-<blockquote{CLASS}><span>{CONTENTS.info}</span></blockquote>
+	<blockquote {CLASS}><span>{CONTENTS.info}</span></blockquote>
 </div>
 <div class="clear"></div>
 <form method="post" action="{CONTENTS.action}">
@@ -32,50 +32,50 @@
 		<tbody>
 			<tr>
 				<td>{CONTENTS.website.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.website.1}" id="{CONTENTS.website.1}" type="text" value="{CONTENTS.website.2}" style="width:300px" maxlength="{CONTENTS.website.3}" /></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.location.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.location.1}" id="{CONTENTS.location.1}" type="text" value="{CONTENTS.location.2}" style="width:300px" maxlength="{CONTENTS.location.3}" /></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{CONTENTS.yim.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.yim.1}" id="{CONTENTS.yim.1}" type="text" value="{CONTENTS.yim.2}" style="width:300px" maxlength="{CONTENTS.yim.3}" /></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.phone.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.phone.1}" id="{CONTENTS.phone.1}" type="text" value="{CONTENTS.phone.2}" style="width:300px" maxlength="{CONTENTS.phone.3}" /></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
 				<td>{CONTENTS.fax.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.fax.1}" id="{CONTENTS.fax.1}" type="text" value="{CONTENTS.fax.2}" style="width:300px" maxlength="{CONTENTS.fax.3}" /></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.mobile.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.mobile.1}" id="{CONTENTS.mobile.1}" type="text" value="{CONTENTS.mobile.2}" style="width:300px" maxlength="{CONTENTS.mobile.3}" /></td>
 			</tr>
 		</tbody>
 		<tr>
 			<td>{CONTENTS.uploadtype.0}:</td>
-				<td></td>
-				<td><label><input name="{CONTENTS.uploadtype.1}[]" id="{CONTENTS.uploadtype.1}" type="checkbox" value="images" {CONTENTS.uploadtype.2}/>images</label>&nbsp;<label><input name="{CONTENTS.uploadtype.1}[]" id="{CONTENTS.uploadtype.1}" type="checkbox" value="flash" {CONTENTS.uploadtype.3}/>flash</label></td>
-			</tr>
+			<td>&nbsp;</td>
+			<td><label><input name="{CONTENTS.uploadtype.1}[]" id="{CONTENTS.uploadtype.1}" type="checkbox" value="images" {CONTENTS.uploadtype.2}/>images</label>&nbsp; <label><input name="{CONTENTS.uploadtype.1}[]" id="{CONTENTS.uploadtype.1}" type="checkbox" value="flash" {CONTENTS.uploadtype.3}/>flash</label></td>
+		</tr>
 	</table>
 	<table summary="{CONTENTS.info}" class="tab1">
 		<col style="width:150px;white-space:nowrap" />
@@ -83,14 +83,14 @@
 		<tbody>
 			<tr>
 				<td>{CONTENTS.pass.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.pass.1}" id="{CONTENTS.pass.1}" type="password" autocomplete="off" value="{CONTENTS.pass.2}" style="width:300px" maxlength="{CONTENTS.pass.3}" /></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.re_pass.0}:</td>
-				<td></td>
+				<td>&nbsp;</td>
 				<td><input name="{CONTENTS.re_pass.1}" id="{CONTENTS.re_pass.1}" type="password" autocomplete="off" value="{CONTENTS.re_pass.2}" style="width:300px" maxlength="{CONTENTS.re_pass.3}" /></td>
 			</tr>
 		</tbody>
@@ -100,8 +100,8 @@
 		<col valign="top" width="10px" />
 		<tbody>
 			<tr>
-				<td></td>
-				<td></td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
 				<td><input type="submit" value="{CONTENTS.submit}" /></td>
 			</tr>
 		</tbody>

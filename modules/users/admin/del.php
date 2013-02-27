@@ -7,31 +7,31 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $userid = $nv_Request->get_int( 'userid', 'post', 0 );
 
-if ( ! $userid )
+if( ! $userid )
 {
-    die( "NO" );
+	die( "NO" );
 }
 
 $sql = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id`=" . $userid;
 $query = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $query );
-if ( $numrows )
+if( $numrows )
 {
-    die( "NO" );
+	die( "NO" );
 }
 
 $sql = "SELECT `username`, `full_name`, `email`, `photo`, `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid;
 $query = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $query );
-if ( $numrows != 1 )
+if( $numrows != 1 )
 {
-    die( "NO" );
+	die( "NO" );
 }
 
 list( $username, $full_name, $email, $photo, $in_groups ) = $db->sql_fetchrow( $query );
@@ -39,29 +39,29 @@ list( $username, $full_name, $email, $photo, $in_groups ) = $db->sql_fetchrow( $
 $userdelete = ( ! empty( $full_name ) ) ? $full_name . " (" . $username . ")" : $username;
 
 $result = $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid );
-if ( ! $result )
+if( ! $result )
 {
-    die( "NO" );
+	die( "NO" );
 }
 
 $result = $db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`=" . $userid );
-if ( !empty($in_groups) )
+if( ! empty( $in_groups ) )
 {
-    $result = $db->sql_query("SELECT `group_id`, `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id` IN (" . $in_groups . ")");
-    while ( list( $group_id, $users ) = $db->sql_fetchrow($result) )
-    {
-        $users = "," . $users . ",";
-        $users = str_replace("," . $userid . ",", ",", $users);
-        $users = trim($users, ",");
-        $db->sql_query("UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `users` = '" . $users . "' WHERE `group_id`=" . $group_id);
-    }
+	$result = $db->sql_query( "SELECT `group_id`, `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id` IN (" . $in_groups . ")" );
+	while( list( $group_id, $users ) = $db->sql_fetchrow( $result ) )
+	{
+		$users = "," . $users . ",";
+		$users = str_replace( "," . $userid . ",", ",", $users );
+		$users = trim( $users, "," );
+		$db->sql_query( "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `users` = '" . $users . "' WHERE `group_id`=" . $group_id );
+	}
 }
 
-nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_user', "userid ".$userid, $admin_info['userid'] );
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_user', "userid " . $userid, $admin_info['userid'] );
 
-if ( ! empty( $photo ) and is_file( NV_ROOTDIR . '/' . $photo ) )
+if( ! empty( $photo ) and is_file( NV_ROOTDIR . '/' . $photo ) )
 {
-    @nv_deletefile( NV_ROOTDIR . '/' . $photo );
+	@nv_deletefile( NV_ROOTDIR . '/' . $photo );
 }
 
 $subject = $lang_module['delconfirm_email_title'];

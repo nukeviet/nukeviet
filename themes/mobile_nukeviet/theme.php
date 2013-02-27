@@ -40,13 +40,13 @@ function nv_site_theme( $contents )
 	if( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
 	{
 		$xtpl->assign( 'SELECTLANGSITE', $lang_global['langsite'] );
-	
+
 		foreach( $global_config['allow_sitelangs'] as $lang_i )
 		{
 			$langname = $language_array[$lang_i]['name'];
 			$xtpl->assign( 'LANGSITENAME', $langname );
 			$xtpl->assign( 'LANGSITEURL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_i );
-		
+
 			if( NV_LANG_DATA != $lang_i )
 			{
 				$xtpl->parse( 'main.language.langitem' );
@@ -56,7 +56,7 @@ function nv_site_theme( $contents )
 				$xtpl->parse( 'main.language.langcuritem' );
 			}
 		}
-		
+
 		$xtpl->parse( 'main.language' );
 	}
 
@@ -68,7 +68,7 @@ function nv_site_theme( $contents )
 			'title' => $module_info['custom_title'],
 			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name
 		);
-		
+
 		$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
 		$xtpl->parse( 'main.mod_title.breakcolumn' );
 
@@ -77,7 +77,7 @@ function nv_site_theme( $contents )
 			$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
 			$xtpl->parse( 'main.mod_title.breakcolumn' );
 		}
-		
+
 		$xtpl->parse( 'main.mod_title' );
 	}
 
@@ -85,7 +85,7 @@ function nv_site_theme( $contents )
 	if( ! empty( $global_config['switch_mobi_des'] ) and ! empty( $module_info['mobile'] ) )
 	{
 		$num_theme_type = sizeof( $global_config['array_theme_type'] ) - 1;
-	
+
 		foreach( $global_config['array_theme_type'] as $i => $theme_type )
 		{
 			$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;nv" . NV_LANG_DATA . "themever=" . $theme_type . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] ) );
@@ -104,7 +104,7 @@ function nv_site_theme( $contents )
 			if( $i < $num_theme_type ) $xtpl->parse( 'main.theme_type.loop.space' );
 			$xtpl->parse( 'main.theme_type.loop' );
 		}
-		
+
 		$xtpl->parse( 'main.theme_type' );
 	}
 	unset( $theme_type, $i, $num_theme_type );

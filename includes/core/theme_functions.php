@@ -62,7 +62,7 @@ function nv_error_info()
 
 	$xtpl = new XTemplate( "error_info.tpl", $tpl_path );
 	$xtpl->assign( 'TPL_E_CAPTION', $lang_global['error_info_caption'] );
-	
+
 	$a = 0;
 	foreach( $error_info as $key => $value )
 	{
@@ -75,7 +75,7 @@ function nv_error_info()
 		$xtpl->parse( 'error_info.error_item' );
 		++$a;
 	}
-	
+
 	$xtpl->parse( 'error_info' );
 	return $xtpl->text( 'error_info' );
 }
@@ -93,7 +93,7 @@ function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink =
 	global $lang_global, $global_config;
 
 	if( empty( $page_title ) ) $page_title = $global_config['site_description'];
-	
+
 	if( defined( 'NV_ADMIN' ) and isset( $global_config['admin_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/info_die.tpl" ) )
 	{
 		$tpl_path = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
@@ -153,14 +153,20 @@ function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink =
  */
 function nv_xmlOutput( $content, $lastModified )
 {
-	$tidy_options = array( //
-		'input-xml' => true, //
-		'output-xml' => true, //
-		'indent' => true, //
-		'indent-cdata' => true, //
-		'wrap' => false //
-	);
-	$content = ( string )nv_valid_html( $content, $tidy_options, 'utf8' );
+	if( class_exists( 'tidy' ) )
+	{
+		$tidy_options = array(
+			'input-xml' => true,
+			'output-xml' => true,
+			'indent' => true,
+			'indent-cdata' => true,
+			'wrap' => false
+		);
+		$tidy = new tidy();
+		$tidy->parseString( $content, $tidy_options, 'utf8' );
+		$tidy->cleanRepair();
+		$content = ( string )$tidy;
+	}
 
 	@Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
 	@Header( "Expires: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
@@ -178,7 +184,7 @@ function nv_xmlOutput( $content, $lastModified )
 	@Header( "Pragma: no-cache" );
 
 	$encoding = "none";
-	
+
 	if( nv_function_exists( 'gzencode' ) )
 	{
 		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
@@ -188,7 +194,7 @@ function nv_xmlOutput( $content, $lastModified )
 			if( ! strstr( $_SERVER['HTTP_USER_AGENT'], 'Opera' ) && preg_match( '/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches ) )
 			{
 				$version = floatval( $matches[1] );
-				
+
 				if( $version < 6 || ( $version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' ) ) ) $encoding = 'none';
 			}
 		}
@@ -420,7 +426,7 @@ function nv_xmlSitemapIndex_generate()
 	else
 	{
 		$site_mods = nv_site_mods();
-	
+
 		foreach( $site_mods as $modname => $values )
 		{
 			if( isset( $values['funcs'] ) and isset( $values['funcs']['Sitemap'] ) )

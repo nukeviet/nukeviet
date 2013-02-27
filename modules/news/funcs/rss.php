@@ -17,7 +17,7 @@ $items = array();
 
 $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-$channel['description'] = !empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
+$channel['description'] = ! empty( $module_info['description'] ) ? $module_info['description'] : $global_config['site_description'];
 
 $catid = 0;
 if( isset( $array_op[1] ) )
@@ -54,40 +54,31 @@ if( $module_info['rss'] )
 		if( ! empty( $catid ) ) $catid_i = $catid;
 		$catalias = $global_array_cat[$catid_i]['alias'];
 
-		if( ! empty( $homeimgthumb ) )
+		if( $homeimgthumb == 1 ) // image thumb
 		{
-			$array_img = explode( "|", $homeimgthumb );
+			$rimages = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		else
+		elseif( $homeimgthumb == 2 ) // image file
 		{
-			$array_img = array( "", "" );
+			$rimages = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-
-		if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
-		{
-			$rimages = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
-		}
-		elseif( nv_is_url( $homeimgfile ) )
+		elseif( $homeimgthumb == 3 ) // image url
 		{
 			$rimages = $homeimgfile;
 		}
-		elseif( $homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile ) )
+		else // no image
 		{
-			$rimages = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
-		}
-		else
-		{
-			$rimages = "";
+			$rimages = '';
 		}
 		$rimages = ( ! empty( $rimages ) ) ? "<img src=\"" . $rimages . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
 
-		$items[] = array( //
-			'title' => $title, //
+		$items[] = array(
+			'title' => $title,
 			'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id, //
-			'guid' => $module_name . '_' . $id, //
-			'description' => $rimages . $hometext, //
-			'pubdate' => $publtime //
-				);
+			'guid' => $module_name . '_' . $id,
+			'description' => $rimages . $hometext,
+			'pubdate' => $publtime
+		);
 	}
 }
 

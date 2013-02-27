@@ -16,94 +16,47 @@ define( 'NV_ADMIN', true );
 define( 'NV_MAINFILE', true );
 
 //Thoi gian bat dau phien lam viec
-define( 'NV_START_TIME', array_sum( explode( " ", microtime( ) ) ) );
+define( 'NV_START_TIME', array_sum( explode( " ", microtime() ) ) );
 
 //Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $select_options = $error_info = $countries = $newCountry = array( );
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $select_options = $error_info = $countries = $newCountry = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = "";
 $editor = false;
 
-$sys_info['disable_classes'] = (($disable_classes = ini_get( "disable_classes" )) != "" and $disable_classes != false) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array( );
-$sys_info['disable_functions'] = (($disable_functions = ini_get( "disable_functions" )) != "" and $disable_functions != false) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array( );
+$sys_info['disable_classes'] = ( ( $disable_classes = ini_get( "disable_classes" ) ) != "" and $disable_classes != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
+$sys_info['disable_functions'] = ( ( $disable_functions = ini_get( "disable_functions" ) ) != "" and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
 
 if( extension_loaded( 'suhosin' ) )
 {
 	$sys_info['disable_functions'] = array_merge( $sys_info['disable_functions'], array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
 }
 
-$sys_info['ini_set_support'] = (function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] )) ? true : false;
+$sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $sys_info['disable_functions'] ) ) ? true : false;
 
 //Xac dinh thu muc goc cua site
 define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
 
 //Ket noi voi cac file constants, config
-require_once ( realpath( NV_ROOTDIR . "/install/config.php" ));
-require (NV_ROOTDIR . "/includes/constants.php");
+require_once ( realpath( NV_ROOTDIR . "/install/config.php" ) );
+require ( NV_ROOTDIR . "/includes/constants.php" );
 
 if( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) )
 {
-	require ( realpath( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ));
+	require ( realpath( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) );
 }
 else
 {
 	die( 'sys not install' );
 }
-if( $global_config['sitekey'] != $sitekey OR empty( $global_config['sitekey'] ) )
+if( $global_config['sitekey'] != $sitekey or empty( $global_config['sitekey'] ) )
 {
 	die( 'error sitekey config' );
-
 }
 
-require (NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php");
+require ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
 
-$search = array(
-	'&amp;',
-	'&#039;',
-	'&quot;',
-	'&lt;',
-	'&gt;',
-	'&#x005C;',
-	'&#x002F;',
-	'&#40;',
-	'&#41;',
-	'&#42;',
-	'&#91;',
-	'&#93;',
-	'&#33;',
-	'&#x3D;',
-	'&#x23;',
-	'&#x25;',
-	'&#x5E;',
-	'&#x3A;',
-	'&#x7B;',
-	'&#x7D;',
-	'&#x60;',
-	'&#x7E;'
-);
-$replace = array(
-	'&',
-	'\'',
-	'"',
-	'<',
-	'>',
-	'\\',
-	'/',
-	'(',
-	')',
-	'*',
-	'[',
-	']',
-	'!',
-	'=',
-	'#',
-	'%',
-	'^',
-	':',
-	'{',
-	'}',
-	'`',
-	'~'
-);
+$search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
+$replace = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~' );
 $global_config['my_domains'] = str_replace( $search, $replace, $global_config['my_domains'] );
 $global_config['cookie_prefix'] = str_replace( $search, $replace, $global_config['cookie_prefix'] );
 $global_config['date_pattern'] = str_replace( $search, $replace, $global_config['date_pattern'] );
@@ -120,20 +73,19 @@ unset( $search, $replace );
 
 if( ! is_array( $global_config['allow_sitelangs'] ) )
 {
-	$global_config['allow_sitelangs'] = ! empty( $global_config['allow_sitelangs'] ) ? explode( ",", $global_config['allow_sitelangs'] ) : array( );
-	$global_config['allow_adminlangs'] = ! empty( $global_config['allow_adminlangs'] ) ? explode( ",", $global_config['allow_adminlangs'] ) : array( );
-	$global_config['openid_servers'] = ! empty( $global_config['openid_servers'] ) ? explode( ",", $global_config['openid_servers'] ) : array( );
+	$global_config['allow_sitelangs'] = ! empty( $global_config['allow_sitelangs'] ) ? explode( ",", $global_config['allow_sitelangs'] ) : array();
+	$global_config['allow_adminlangs'] = ! empty( $global_config['allow_adminlangs'] ) ? explode( ",", $global_config['allow_adminlangs'] ) : array();
+	$global_config['openid_servers'] = ! empty( $global_config['openid_servers'] ) ? explode( ",", $global_config['openid_servers'] ) : array();
 }
 
 // Xac dinh cac tags cho phep
 $global_config['allowed_html_tags'] = array_map( "trim", explode( ',', NV_ALLOWED_HTML_TAGS ) );
 
 //Xac dinh IP cua client
-require (NV_ROOTDIR . '/includes/class/ips.class.php');
-$ips = new ips( );
+require ( NV_ROOTDIR . '/includes/class/ips.class.php' );
+$ips = new ips();
 $client_info['ip'] = $ips->remote_ip;
-if( $client_info['ip'] == "none" )
-	die( 'Error: Your IP address is not correct' );
+if( $client_info['ip'] == "none" ) die( 'Error: Your IP address is not correct' );
 
 //Neu khong co IP
 //define( 'NV_SERVER_IP', $ips->server_ip );
@@ -146,12 +98,12 @@ if( NV_CLIENT_IP != $ip_update )
 }
 
 //Xac dinh Quoc gia
-require (NV_ROOTDIR . '/includes/countries.php');
+require ( NV_ROOTDIR . '/includes/countries.php' );
 $client_info['country'] = nv_getCountry_from_cookie( $client_info['ip'] );
 
 //Mui gio
-require (NV_ROOTDIR . '/includes/timezone.php');
-define( 'NV_CURRENTTIME', isset( $_SERVER['REQUEST_TIME'] ) ? $_SERVER['REQUEST_TIME'] : time( ) );
+require ( NV_ROOTDIR . '/includes/timezone.php' );
+define( 'NV_CURRENTTIME', isset( $_SERVER['REQUEST_TIME'] ) ? $_SERVER['REQUEST_TIME'] : time() );
 
 $global_config['log_errors_list'] = NV_LOG_ERRORS_LIST;
 $global_config['display_errors_list'] = NV_DISPLAY_ERRORS_LIST;
@@ -161,22 +113,19 @@ $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 //Ket noi voi class Error_handler
-require (NV_ROOTDIR . '/includes/class/error.class.php');
+require ( NV_ROOTDIR . '/includes/class/error.class.php' );
 $ErrorHandler = new Error( $global_config );
-set_error_handler( array(
-	&$ErrorHandler,
-	'error_handler'
-) );
+set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
 //Ket noi voi cac file cau hinh, function va template
-require (NV_ROOTDIR . '/includes/ini.php');
-require (NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php');
-require (NV_ROOTDIR . '/includes/utf8/utf8_functions.php');
-require (NV_ROOTDIR . '/includes/core/filesystem_functions.php');
-require (NV_ROOTDIR . '/includes/core/cache_functions.php');
-require (NV_ROOTDIR . '/includes/functions.php');
-require (NV_ROOTDIR . '/includes/core/theme_functions.php');
-require (NV_ROOTDIR . "/includes/class/xtemplate.class.php");
+require ( NV_ROOTDIR . '/includes/ini.php' );
+require ( NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php' );
+require ( NV_ROOTDIR . '/includes/utf8/utf8_functions.php' );
+require ( NV_ROOTDIR . '/includes/core/filesystem_functions.php' );
+require ( NV_ROOTDIR . '/includes/core/cache_functions.php' );
+require ( NV_ROOTDIR . '/includes/functions.php' );
+require ( NV_ROOTDIR . '/includes/core/theme_functions.php' );
+require ( NV_ROOTDIR . "/includes/class/xtemplate.class.php" );
 
 $global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map( "trim", explode( ",", NV_ALLOW_REQUEST_MODS ) ) : "request";
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim( NV_REQUEST_DEFAULT_MODE ) : 'request';
@@ -185,7 +134,7 @@ $global_config['session_save_path'] = NV_SESSION_SAVE_PATH;
 $language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 
 //Ket noi voi class xu ly request
-require (NV_ROOTDIR . '/includes/class/request.class.php');
+require ( NV_ROOTDIR . '/includes/class/request.class.php' );
 $nv_Request = new Request( $global_config, $client_info['ip'] );
 
 define( 'NV_SERVER_NAME', $nv_Request->server_name );
@@ -206,7 +155,7 @@ define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' );
 //vd: /ten_thu_muc_chua_site/admin/
 define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root );
 // D:/AppServ/www
-define( 'NV_EOL', (strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : (strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n")) );
+define( 'NV_EOL', ( strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? "\r\n" : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? "\r" : "\n" ) ) );
 //Ngat dong
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR );
 //Xac dinh duong dan thuc den thu muc upload
@@ -214,8 +163,8 @@ define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) );
 //Hau to cua file cache
 
 //Ngon ngu
-require (NV_ROOTDIR . '/includes/language.php');
-require (NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php");
+require ( NV_ROOTDIR . '/includes/language.php' );
+require ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
 
 $global_config['cookie_path'] = $nv_Request->cookie_path;
 //vd: /ten_thu_muc_chua_site/
@@ -256,15 +205,15 @@ if( NV_USER_AGENT == "none" )
 //Captcha
 if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 {
-	include_once (NV_ROOTDIR . "/includes/core/captcha.php");
+	include_once ( NV_ROOTDIR . "/includes/core/captcha.php" );
 }
 
 //Class ma hoa du lieu
-require (NV_ROOTDIR . '/includes/class/crypt.class.php');
+require ( NV_ROOTDIR . '/includes/class/crypt.class.php' );
 $crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
 
 //Bat dau phien lam viec cua MySQL
-require (NV_ROOTDIR . '/includes/class/mysql.class.php');
+require ( NV_ROOTDIR . '/includes/class/mysql.class.php' );
 $db_config['new_link'] = NV_MYSQL_NEW_LINK;
 $db_config['persistency'] = NV_MYSQL_PERSISTENCY;
 $db_config['collation'] = NV_MYSQL_COLLATION;
@@ -372,12 +321,13 @@ if( $is )
 	  DROP `fax`,
 	  DROP `mobile`" );
 }
+$db->sql_query( "ALTER TABLE `" . NV_USERS_GLOBALTABLE . "_reg` ADD `users_info` MEDIUMTEXT NOT NULL" );
 
 //9) Cấu hình đăng ký thành viên
 $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
 ('sys', 'global', 'cookie_httponly', '" . $global_config['cookie_httponly'] . "'),
 ('sys', 'global', 'admin_check_pass_time', '1800'),
-('sys', 'global', 'adminrelogin_max', '0'),
+('sys', 'global', 'adminrelogin_max', '3'),
 ('sys', 'global', 'cookie_secure', '" . $global_config['cookie_secure'] . "'),
 ('sys', 'global', 'nv_unick_type', '" . $global_config['nv_unick_type'] . "'),
 ('sys', 'global', 'nv_upass_type', '" . $global_config['nv_upass_type'] . "'),
@@ -386,6 +336,7 @@ $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, 
 ('sys', 'global', 'max_requests_300', '150'),
 ('sys', 'global', 'nv_display_errors_list', '1'),
 ('sys', 'global', 'display_errors_list', '1'),
+('sys', 'global', 'rewrite_op_mod', ''),
 ('sys', 'define', 'nv_unickmin', '" . NV_UNICKMIN . "'),
 ('sys', 'define', 'nv_unickmax', '" . NV_UNICKMAX . "'),
 ('sys', 'define', 'nv_upassmin', '" . NV_UPASSMIN . "'),
@@ -396,7 +347,11 @@ $db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, 
 ('sys', 'define', 'nv_max_width', '1500'),
 ('sys', 'define', 'nv_max_height', '1500'),
 ('sys', 'define', 'nv_live_cookie_time', '" . NV_LIVE_COOKIE_TIME . "'),
+('sys', 'define', 'nv_anti_iframe', '" . NV_ANTI_IFRAME . "'),
+('sys', 'define', 'nv_allowed_html_tags', '" . NV_ALLOWED_HTML_TAGS . "'),
 ('sys', 'define', 'nv_live_session_time', '0'),
+('sys', 'define', 'nv_auto_resize', '1'),
+('sys', 'define', 'cdn_url', ''),
 ('sys', 'define', 'dir_forum', '')" );
 
 //11) Thay đổi CSDL module users để phù hợp với chức năng tìm lại mật khẩu
@@ -438,7 +393,7 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 	$db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_module` SET `checksum` = '" . $checksum . "' WHERE `mid` = " . $row['mid'] );
 }
 //14) Mã hóa mật khẩu smtp, ftp
-$array_config = array( );
+$array_config = array();
 $array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $global_config['ftp_user_pass'] ) );
 $array_config['smtp_password'] = nv_base64_encode( $crypt->aes_encrypt( $global_config['smtp_password'] ) );
 foreach( $array_config as $config_name => $config_value )
@@ -449,11 +404,25 @@ foreach( $array_config as $config_name => $config_value )
 				AND `lang` = 'sys' AND `module`='global' 
 				LIMIT 1" );
 }
-require_once (NV_ROOTDIR . "/includes/core/admin_functions.php");
-if( ! nv_save_file_config_global( ) )
+//17) Thêm cấu hình thời gian lặp lại quá trình backup CSDL
+$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'dump_interval', '1')" );
+
+//20) Xóa các trường không sử dụng trong CSDL module bannner
+$db->sql_query( "ALTER TABLE `" . NV_BANNERS_ROWS_GLOBALTABLE . "`
+  DROP `file_name_tmp`,
+  DROP `file_alt_tmp`,
+  DROP `click_url_tmp`" );
+$db->sql_query( "ALTER TABLE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` ADD `imageforswf` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `file_alt`" );
+$db->sql_query( "ALTER TABLE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` ADD `target` VARCHAR( 10 ) NOT NULL DEFAULT '_blank' AFTER `click_url`" );
+
+require_once ( NV_ROOTDIR . "/modules/banners/admin.functions.php" );
+nv_CreateXML_bannerPlan();
+
+require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
+if( ! nv_save_file_config_global() )
 {
-	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/settings/banip.php" );
-	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/settings/uploadconfig.php" );
+	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/settings/banip.php" );
+	nv_deletefile( NV_ROOTDIR . "/" . NV_ADMINDIR . "/settings/uploadconfig.php" );
 	nv_deletefile( NV_ROOTDIR . "/includes/getloadavg.php" );
 	nv_deletefile( NV_ROOTDIR . "/includes/core/wysyiwyg_functions.php" );
 	nv_deletefile( NV_ROOTDIR . "/includes/ini/langs_multi.ini" );
@@ -465,11 +434,12 @@ if( ! nv_save_file_config_global( ) )
 	nv_deletefile( NV_ROOTDIR . "/themes/admin_default/modules/webtools/googlecode.tpl" );
 	nv_deletefile( NV_ROOTDIR . "/themes/admin_default/modules/webtools/main.tpl" );
 
-	require_once (NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/install.php");
+	require_once ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/install.php" );
 	die( sprintf( $lang_module['file_not_writable'], NV_DATADIR . "/config_global.php" ) );
 }
 
 $contents = "<meta http-equiv=\"refresh\" content=\"1;URL=" . NV_BASE_SITEURL . "update2.php?step=1\" />";
 
 die( 'Thực hiện nâng cấp CSDL thành công, Chương trình sẽ chuyển sang bước nâng cấp CSDL module Upload' . $contents );
+
 ?>

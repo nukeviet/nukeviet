@@ -89,7 +89,8 @@ foreach( $global_array_cat as $catid_i => $array_value )
 		$val_cat_content[] = array(
 			"value" => $catid_i,
 			"selected" => $sl,
-			"title" => $xtitle_i );
+			"title" => $xtitle_i
+		);
 		$array_cat_view[] = $catid_i;
 	}
 }
@@ -104,16 +105,10 @@ $array_search = array(
 	"bodytext" => $lang_module['search_bodytext'],
 	"author" => $lang_module['search_author'],
 	"admin_id" => $lang_module['search_admin'],
-	"sourcetext" => $lang_module['sources'] );
-$array_in_rows = array(
-	"title",
-	"bodytext",
-	"author",
-	"sourcetext" );
-$array_in_ordername = array(
-	"title",
-	"publtime",
-	"exptime" );
+	"sourcetext" => $lang_module['sources']
+);
+$array_in_rows = array( "title", "bodytext", "author", "sourcetext" );
+$array_in_ordername = array( "title", "publtime", "exptime" );
 $array_status_view = array(
 	"-" => "---",
 	"0" => $lang_module['status_0'],
@@ -121,8 +116,8 @@ $array_status_view = array(
 	"2" => $lang_module['status_2'],
 	"3" => $lang_module['status_3'],
 	"4" => $lang_module['status_4'],
-	"5" => $lang_module['status_5'],
-	);
+	"5" => $lang_module['status_5']
+);
 
 if( ! in_array( $stype, array_keys( $array_search ) ) )
 {
@@ -218,14 +213,16 @@ $global_array_cat[0] = array(
 	"subcatid" => 0,
 	"numlinks" => 3,
 	"description" => "",
-	"keywords" => "" );
+	"keywords" => ""
+);
 $search_type = array();
 foreach( $array_search as $key => $val )
 {
 	$search_type[] = array(
 		"key" => $key,
 		"value" => $val,
-		"selected" => ( $key == $stype ) ? " selected=\"selected\"" : "" );
+		"selected" => ( $key == $stype ) ? " selected=\"selected\"" : ""
+	);
 }
 $a = 0;
 foreach( $array_status_view as $key => $val )
@@ -242,7 +239,8 @@ foreach( $array_status_view as $key => $val )
 	$search_status[] = array(
 		"key" => $key,
 		"value" => $val,
-		"selected" => $sl );
+		"selected" => $sl
+	);
 }
 $i = 5;
 $search_per_page = array();
@@ -337,7 +335,8 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		"publtime" => $publtime,
 		"status" => $lang_module['status_' . $status],
 		"username" => $username,
-		"feature" => implode( "&nbsp;-&nbsp;", $admin_funcs ) );
+		"feature" => implode( "&nbsp;-&nbsp;", $admin_funcs )
+	);
 	++$a;
 }
 $array_list_action = array(
@@ -345,7 +344,9 @@ $array_list_action = array(
 	're-published' => $lang_module['re_published'],
 	'publtime' => $lang_module['publtime'],
 	'exptime' => $lang_module['exptime'],
-	'waiting' => $lang_module['status_action_0'] );//chuyen sang cho duyet
+	'waiting' => $lang_module['status_action_0']
+);
+//chuyen sang cho duyet
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$array_list_action['declined'] = $lang_module['declined'];

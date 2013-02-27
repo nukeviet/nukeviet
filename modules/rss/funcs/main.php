@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
 
 /**
  * nv_get_rss_link()
- * 
+ *
  * @return
  */
 function nv_get_rss_link()
@@ -44,14 +44,13 @@ function nv_get_rss_link()
 				}
 			}
 		}
-
 	}
 	return $contentrss;
 }
 
 /**
  * nv_get_sub_rss_link()
- * 
+ *
  * @param mixed $rssarray
  * @param mixed $id
  * @param mixed $image

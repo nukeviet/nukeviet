@@ -11,12 +11,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $contents = "";
-$array_point = array(
-	1,
-	2,
-	3,
-	4,
-	5 );
+$array_point = array( 1, 2, 3, 4, 5 );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 $point = $nv_Request->get_int( 'point', 'post', 0 );

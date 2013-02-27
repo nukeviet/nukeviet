@@ -3,7 +3,7 @@
 	<caption>{CAPTION}</caption>
 	<col span="2" valign="top" width="50%" />
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
+	<tbody {ROW.class}>
 		<tr>
 			<td>{ROW.key}</td>
 			<td>{ROW.value}</td>

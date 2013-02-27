@@ -17,4 +17,5 @@ $PHPMAILER_LANG['smtp_error'] = 'Lỗi máy chủ smtp ';
 $PHPMAILER_LANG['empty_message'] = 'Không có nội dung';
 $PHPMAILER_LANG['invalid_address'] = 'Đại chỉ emai không đúng';
 $PHPMAILER_LANG['variable_set'] = 'Không thể thiết lập hoặc thiết lập lại biến: ';
+
 ?>

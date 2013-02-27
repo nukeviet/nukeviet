@@ -7,8 +7,7 @@
  * @Createdate 1-27-2010 5:25
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 //Neu thay doi bat ky gia tri trong file nay ban can vao admin phan cau hinh he thong va luu lai
 
@@ -113,36 +112,8 @@ define( "NV_REQUEST_DEFAULT_MODE", "request" );
 
 //Hien thi, ghi loi
 /*
- E_ALL             - All errors and warnings (doesn't include E_STRICT)
- E_ERROR           - fatal run-time errors
- E_WARNING         - run-time warnings (non-fatal errors)
- E_PARSE           - compile-time parse errors
- E_NOTICE          - run-time notices (these are warnings which often result
- from a bug in your code, but it's possible that it was
- intentional (e.g., using an uninitialized variable and
- relying on the fact it's automatically initialized to an
- empty string)
- E_STRICT			- run-time notices, enable to have PHP suggest changes
- to your code which will ensure the best interoperability
- and forward compatibility of your code
- E_CORE_ERROR      - fatal errors that occur during PHP's initial startup
- E_CORE_WARNING    - warnings (non-fatal errors) that occur during PHP's
- initial startup
- E_COMPILE_ERROR   - fatal compile-time errors
- E_COMPILE_WARNING - compile-time warnings (non-fatal errors)
- E_USER_ERROR      - user-generated error message
- E_USER_WARNING    - user-generated warning message
- E_USER_NOTICE     - user-generated notice message
-
- Examples:
- - Show all errors, except for notices and coding standards warnings
- error_reporting = E_ALL & ~E_NOTICE
-
- - Show all errors, except for notices
- error_reporting = E_ALL & ~E_NOTICE | E_STRICT
-
- - Show only errors
- error_reporting = E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR
+ * E_ALL - All errors and warnings (doesn't include E_STRICT) E_ERROR - fatal run-time errors E_WARNING - run-time warnings (non-fatal errors) E_PARSE - compile-time parse errors E_NOTICE - run-time notices (these are warnings which often result from a bug in your code, but it's possible that it was intentional (e.g., using an uninitialized variable and relying on the fact it's automatically initialized to an empty string) E_STRICT			- run-time notices, enable to have PHP suggest changes to your code which will ensure the best interoperability and forward compatibility of your code E_CORE_ERROR - fatal errors that occur during PHP's initial startup E_CORE_WARNING - warnings (non-fatal errors) that occur during PHP's initial startup E_COMPILE_ERROR - fatal compile-time errors E_COMPILE_WARNING - compile-time warnings (non-fatal errors) E_USER_ERROR - user-generated error message E_USER_WARNING - user-generated warning message E_USER_NOTICE - user-generated notice message Examples: -
+ * Show all errors, except for notices and coding standards warnings error_reporting = E_ALL & ~E_NOTICE - Show all errors, except for notices error_reporting = E_ALL & ~E_NOTICE | E_STRICT - Show only errors error_reporting = E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR
  */
 define( "NV_DISPLAY_ERRORS_LIST", E_ALL );
 //Danh sach cac loi se hien thi
@@ -152,20 +123,14 @@ define( "NV_LOG_ERRORS_LIST", E_ALL | E_STRICT );
 define( "NV_SEND_ERRORS_LIST", E_USER_ERROR );
 //Danh sach cac loi se gui den email
 
-// Ma HTML duoc chap nhan
-define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul' );
-
 //Phan dau cua trang
 define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 3.x\n * @Author VINADES.,JSC (contact@vinades.vn)\n * @Copyright (C) " . gmdate( "Y" ) . " VINADES.,JSC. All rights reserved\n * @Createdate " . gmdate( "D, d M Y H:i:s" ) . " GMT\n */" );
 
 // Phien ban giao dien tu cao den thap - it nhat phai co hai kieu mac dinh khong duoc it hon
 define( "NV_THEME_TYPE", 'd,t' );
 
-//Chong IFRAME
-define( "NV_ANTI_IFRAME", 0 );
-
 $global_config['site_charset'] = "utf-8";
-$global_config['check_module'] = "/^[a-z0-9\-]+$/";
+$global_config['check_module'] = "/^[a-zA-Z0-9\-]+$/";
 $global_config['check_op'] = "/^[a-zA-Z0-9\-]+$/";
 $global_config['check_op_file'] = "/^([a-zA-Z0-9\-\_]+)\.php$/";
 $global_config['check_block_global'] = "/^global\.([a-zA-Z0-9\-\_]+)\.php$/";
@@ -177,4 +142,5 @@ $global_config['check_theme_admin'] = "/^(admin)\_[a-zA-Z0-9\-\_]+$/";
 $global_config['check_email'] = '/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/';
 $global_config['check_cron'] = "/^(cron)\_[a-zA-Z0-9\_]+$/";
 $global_config['check_op_layout'] = "/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/";
+
 ?>

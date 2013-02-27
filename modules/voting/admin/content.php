@@ -85,7 +85,7 @@ if( ! empty( $submit ) )
 	if( ! empty( $question ) and $number_answer > 1 )
 	{
 		$error = $lang_module['voting_error'];
-		
+
 		if( empty( $vid ) )
 		{
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` (`vid`, `question`, `link`, `acceptcm`, `admin_id`, `who_view`, `groups_view`, `publ_time`, `exp_time`, `act`) VALUES (NULL, " . $db->dbescape( $question ) . ", " . $db->dbescape( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
@@ -237,7 +237,11 @@ $emonth = $eday = $eyear = $emin = $ehour = 0;
 $who_view = $rowvote['who_view'];
 foreach( $array_who_view as $k => $w )
 {
-	$xtpl->assign( 'WHO_VIEW', array( "key" => $k, "title" => $w, "selected" => $who_view == $k ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'WHO_VIEW', array(
+		"key" => $k,
+		"title" => $w,
+		"selected" => $who_view == $k ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.who_view' );
 }
 
@@ -246,7 +250,11 @@ $xtpl->assign( 'SHOW_GROUPS_LIST', $who_view == 3 ? "visibility:visible;display:
 $groups_view = explode( ',', $rowvote['groups_view'] );
 foreach( $groups_list as $group_id => $grtl )
 {
-	$xtpl->assign( 'GROUPS_VIEW', array( "key" => $group_id, "title" => $grtl, "checked" => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : "" ) );
+	$xtpl->assign( 'GROUPS_VIEW', array(
+		"key" => $group_id,
+		"title" => $grtl,
+		"checked" => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : ""
+	) );
 	$xtpl->parse( 'main.groups_view' );
 }
 
@@ -256,14 +264,22 @@ list( $phour, $pmin ) = explode( "|", $tdate );
 
 // Thoi gian dang
 $xtpl->assign( 'PUBL_DATE', $publ_date );
-for( $i = 0; $i <= 23; ++ $i )
+for( $i = 0; $i <= 23; ++$i )
 {
-	$xtpl->assign( 'PHOUR', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $phour ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'PHOUR', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $phour ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.phour' );
 }
 for( $i = 0; $i < 60; ++$i )
 {
-	$xtpl->assign( 'PMIN', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $pmin ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'PMIN', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $pmin ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.pmin' );
 }
 
@@ -280,14 +296,22 @@ else
 	$exp_date = "";
 }
 $xtpl->assign( 'EXP_DATE', $exp_date );
-for( $i = 0; $i <= 23; ++ $i )
+for( $i = 0; $i <= 23; ++$i )
 {
-	$xtpl->assign( 'EHOUR', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $ehour ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'EHOUR', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $ehour ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.ehour' );
 }
-for( $i = 0; $i < 60; ++ $i )
+for( $i = 0; $i < 60; ++$i )
 {
-	$xtpl->assign( 'EMIN', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $emin ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'EMIN', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $emin ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.emin' );
 }
 
@@ -295,28 +319,28 @@ $items = 0;
 $j = 0;
 foreach( $array_answervote as $id => $title )
 {
-	++ $j;
-	
+	++$j;
+
 	$xtpl->assign( 'ITEM', array(
 		"class" => ( $j % 2 == 0 ) ? " class=\"second\"" : "",
-		"stt" => ++ $items,
+		"stt" => ++$items,
 		"id" => $id,
 		"title" => $title,
-		"link" => nv_htmlspecialchars( $array_urlvote[$id] ),
+		"link" => nv_htmlspecialchars( $array_urlvote[$id] )
 	) );
-	
+
 	$xtpl->parse( 'main.item' );
 }
 
-++ $j;
+++$j;
 $class = ( $j % 2 == 0 ) ? " class=\"second additem\"" : " class=\"additem\"";
 $xtpl->assign( 'NEW_CLASS', $class );
-$xtpl->assign( 'NEW_ITEM', ++ $items );
+$xtpl->assign( 'NEW_ITEM', ++$items );
 $xtpl->assign( 'NEW_ITEM_NUM', $items );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
-if( $vid ) $op = ''; 
+if( $vid ) $op = '';
 
 include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );

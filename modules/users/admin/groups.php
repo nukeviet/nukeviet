@@ -7,21 +7,20 @@
  * @Createdate 2-1-2010 15:5
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_global['mod_groups'];
 $contents = "";
 
 //Lay danh sach nhom
-$groupsList = groupList( );
+$groupsList = groupList();
 $groupcount = sizeof( $groupsList );
 
 //Neu khong co nhom => chuyen den trang tao nhom
 if( ! $groupcount and ! $nv_Request->isset_request( 'add', 'get' ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&add" );
-	die( );
+	die();
 }
 
 //Thay doi thu tu nhom
@@ -29,12 +28,11 @@ if( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
 {
 	$id = $nv_Request->get_int( 'id', 'post' );
 	$cWeight = $nv_Request->get_int( 'cWeight', 'post' );
-	if( ! isset( $groupsList[$id] ) )
-		die( "ERROR" );
+	if( ! isset( $groupsList[$id] ) ) die( "ERROR" );
 
 	$cWeight = min( $cWeight, $groupcount );
 
-	$query = array( );
+	$query = array();
 	$query[] = "WHEN `group_id` = " . $id . " THEN " . $cWeight;
 	unset( $groupsList[$id] );
 	--$groupcount;
@@ -42,8 +40,7 @@ if( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
 
 	for( $i = 0, $weight = 1; $i < $groupcount; ++$i, ++$weight )
 	{
-		if( $weight == $cWeight )
-			++$weight;
+		if( $weight == $cWeight ) ++$weight;
 		$query[] = "WHEN `group_id` = " . $idList[$i] . " THEN " . $weight;
 	}
 
@@ -59,8 +56,7 @@ if( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
 if( $nv_Request->isset_request( 'act', 'post' ) )
 {
 	$id = $nv_Request->get_int( 'act', 'post' );
-	if( ! isset( $groupsList[$id] ) )
-		die( "ERROR|" . $groupsList[$id]['act'] );
+	if( ! isset( $groupsList[$id] ) ) die( "ERROR|" . $groupsList[$id]['act'] );
 
 	$act = $groupsList[$id]['act'] ? 0 : 1;
 	$query = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `act`=" . $act . " WHERE `group_id`=" . $id . " LIMIT 1";
@@ -75,8 +71,7 @@ if( $nv_Request->isset_request( 'act', 'post' ) )
 if( $nv_Request->isset_request( 'pub', 'post' ) )
 {
 	$id = $nv_Request->get_int( 'pub', 'post' );
-	if( ! isset( $groupsList[$id] ) )
-		die( "ERROR|" . $groupsList[$id]['public'] );
+	if( ! isset( $groupsList[$id] ) ) die( "ERROR|" . $groupsList[$id]['public'] );
 
 	$pub = $groupsList[$id]['public'] ? 0 : 1;
 	$query = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `public`=" . $pub . " WHERE `group_id`=" . $id . " LIMIT 1";
@@ -91,19 +86,17 @@ if( $nv_Request->isset_request( 'pub', 'post' ) )
 if( $nv_Request->isset_request( 'del', 'post' ) )
 {
 	$id = $nv_Request->get_int( 'del', 'post', 0 );
-	if( ! isset( $groupsList[$id] ) )
-		die( $lang_module['error_group_not_found'] );
+	if( ! isset( $groupsList[$id] ) ) die( $lang_module['error_group_not_found'] );
 
 	if( ! empty( $groupsList[$id]['users'] ) )
 	{
 		$query = "SELECT `userid`, `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $groupsList[$id]['users'] . ")";
 		$result = $db->sql_query( $query );
-		$update = array( );
+		$update = array();
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			$in_groups = $row['in_groups'];
-			if( empty( $in_groups ) )
-				continue;
+			if( empty( $in_groups ) ) continue;
 			$in_groups = "," . $in_groups . ",";
 			$in_groups = str_replace( "," . $id . ",", ",", $in_groups );
 			$in_groups = trim( $in_groups, "," );
@@ -124,7 +117,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	--$groupcount;
 	$idList = array_keys( $groupsList );
 
-	$query = array( );
+	$query = array();
 	for( $i = 0, $weight = 1; $i < $groupcount; ++$i, ++$weight )
 	{
 		$query[] = "WHEN `group_id` = " . $idList[$i] . " THEN " . $weight;
@@ -146,22 +139,19 @@ if( $nv_Request->isset_request( 'gid,uid', 'post' ) )
 {
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 	$uid = $nv_Request->get_int( 'uid', 'post', 0 );
-	if( ! isset( $groupsList[$gid] ) )
-		die( $lang_module['error_group_not_found'] );
+	if( ! isset( $groupsList[$gid] ) ) die( $lang_module['error_group_not_found'] );
 
 	$sql = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $uid . " LIMIT 1";
 	$sql = $db->sql_query( $sql );
-	if( $db->sql_numrows( $sql ) == 0 )
-		die( $lang_module['search_not_result'] );
+	if( $db->sql_numrows( $sql ) == 0 ) die( $lang_module['search_not_result'] );
 	list( $in_groups ) = $db->sql_fetchrow( $sql );
-	$in_groups = $in_groups ? explode( ",", $in_groups ) : array( );
+	$in_groups = $in_groups ? explode( ",", $in_groups ) : array();
 
 	// Kiem tra neu thuoc nhom roi
-	if( in_array( $gid, $in_groups ) )
-		die( $lang_module['UserInGroup'] );
+	if( in_array( $gid, $in_groups ) ) die( $lang_module['UserInGroup'] );
 
 	$users = $groupsList[$gid]['users'];
-	$users = $users ? explode( ",", $users ) : array( );
+	$users = $users ? explode( ",", $users ) : array();
 	$users[] = $uid;
 	$users = implode( ",", array_filter( array_unique( array_map( "intval", $users ) ) ) );
 
@@ -185,15 +175,12 @@ if( $nv_Request->isset_request( 'gid,exclude', 'post' ) )
 {
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 	$uid = $nv_Request->get_int( 'exclude', 'post', 0 );
-	if( ! isset( $groupsList[$gid] ) )
-		die( $lang_module['error_group_not_found'] );
+	if( ! isset( $groupsList[$gid] ) ) die( $lang_module['error_group_not_found'] );
 	$sql = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $uid . " LIMIT 1";
 	$sql = $db->sql_query( $sql );
-	if( $db->sql_numrows( $sql ) == 0 )
-		die( $lang_module['search_not_result'] );
+	if( $db->sql_numrows( $sql ) == 0 ) die( $lang_module['search_not_result'] );
 	list( $in_groups ) = $db->sql_fetchrow( $sql );
-	if( empty( $in_groups ) or ! preg_match( "/\," . $gid . "\,/", "," . $in_groups . "," ) )
-		die( $lang_module['UserNotInGroup'] );
+	if( empty( $in_groups ) or ! preg_match( "/\," . $gid . "\,/", "," . $in_groups . "," ) ) die( $lang_module['UserNotInGroup'] );
 
 	$users = $groupsList[$gid]['users'];
 	$users = "," . $users . ",";
@@ -224,8 +211,7 @@ $xtpl->assign( 'OP', $op );
 if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 {
 	$id = $nv_Request->get_int( 'listUsers', 'get', 0 );
-	if( ! isset( $groupsList[$id] ) )
-		die( $lang_module['error_group_not_found'] );
+	if( ! isset( $groupsList[$id] ) ) die( $lang_module['error_group_not_found'] );
 
 	$users = ! empty( $groupsList[$id]['users'] ) ? sizeof( explode( ",", $groupsList[$id]['users'] ) ) : 0;
 	$xtpl->assign( 'PTITLE', sprintf( $lang_module['users_in_group_caption'], $groupsList[$id]['title'], $users ) );
@@ -248,7 +234,7 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 
 	$xtpl->parse( 'listUsers' );
 	$xtpl->out( 'listUsers' );
-	exit ;
+	exit();
 }
 
 //Danh sach thanh vien
@@ -258,7 +244,7 @@ if( $nv_Request->isset_request( 'userlist', 'get' ) )
 	if( ! isset( $groupsList[$id] ) )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
-		die( );
+		die();
 	}
 
 	$filtersql = " FIND_IN_SET('" . $id . "',`in_groups`)=0";
@@ -268,26 +254,25 @@ if( $nv_Request->isset_request( 'userlist', 'get' ) )
 	$xtpl->parse( 'userlist' );
 	$contents = $xtpl->text( 'userlist' );
 
-	include (NV_ROOTDIR . "/includes/header.php");
+	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
-	include (NV_ROOTDIR . "/includes/footer.php");
-	exit ;
+	include ( NV_ROOTDIR . "/includes/footer.php" );
+	exit();
 }
 
 //Them + sua nhom
 if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'edit, id', 'get' ) )
 {
-	if( defined( 'NV_EDITOR' ) )
-		require_once (NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php');
+	if( defined( 'NV_EDITOR' ) ) require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 
-	$post = array( );
+	$post = array();
 	if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		$post['id'] = $nv_Request->get_int( 'id', 'get' );
 		if( empty( $post['id'] ) or ! isset( $groupsList[$post['id']] ) )
 		{
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
-			die( );
+			die();
 		}
 
 		$xtpl->assign( 'PTITLE', $lang_module['nv_admin_edit'] );
@@ -310,8 +295,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		}
 
 		$_groupsList = $groupsList;
-		if( isset( $post['id'] ) )
-			unset( $_groupsList[$post['id']] );
+		if( isset( $post['id'] ) ) unset( $_groupsList[$post['id']] );
 
 		foreach( $_groupsList as $_group )
 		{
@@ -337,8 +321,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		}
 
 		$post['public'] = $nv_Request->get_int( 'public', 'post', 0 );
-		if( $post['public'] != 1 )
-			$post['public'] = 0;
+		if( $post['public'] != 1 ) $post['public'] = 0;
 
 		if( isset( $post['id'] ) )
 		{
@@ -357,7 +340,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
                 " . $db->dbescape( $post['content'] ) . ", 
                 " . NV_CURRENTTIME . ", 
                 " . $post['exp_time'] . ", 
-                '', " . $post['public'] . ", " . ($groupcount + 1) . ", 1);";
+                '', " . $post['public'] . ", " . ( $groupcount + 1 ) . ", 1);";
 			$ok = $post['id'] = $db->sql_query_insert_id( $query );
 		}
 		if( $ok )
@@ -385,14 +368,12 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		$post['public'] = "";
 	}
 
-	if( ! empty( $post['content'] ) )
-		$post['content'] = nv_htmlspecialchars( $post['content'] );
+	if( ! empty( $post['content'] ) ) $post['content'] = nv_htmlspecialchars( $post['content'] );
 
 	$xtpl->assign( 'DATA', $post );
 
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 	{
-		$xtpl->parse( 'add.is_editor' );
 		$_cont = nv_aleditor( 'content', '100%', '300px', $post['content'] );
 	}
 	else
@@ -405,10 +386,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 	$xtpl->parse( 'add' );
 	$contents = $xtpl->text( 'add' );
 
-	include (NV_ROOTDIR . "/includes/header.php");
+	include ( NV_ROOTDIR . "/includes/header.php" );
 	echo nv_admin_theme( $contents );
-	include (NV_ROOTDIR . "/includes/footer.php");
-	die( );
+	include ( NV_ROOTDIR . "/includes/footer.php" );
+	die();
 }
 
 //Danh sach nhom
@@ -430,10 +411,7 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 
 		for( $i = 1; $i <= $groupcount; $i++ )
 		{
-			$opt = array(
-				'value' => $i,
-				'selected' => $i == $values['weight'] ? " selected=\"selected\"" : ""
-			);
+			$opt = array( 'value' => $i, 'selected' => $i == $values['weight'] ? " selected=\"selected\"" : "" );
 			$xtpl->assign( 'NEWWEIGHT', $opt );
 			$xtpl->parse( 'list.loop.option' );
 		}
@@ -445,13 +423,14 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 
 	$xtpl->parse( 'list' );
 	$xtpl->out( 'list' );
-	exit ;
+	exit();
 }
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . "/includes/footer.php" );
+
 ?>

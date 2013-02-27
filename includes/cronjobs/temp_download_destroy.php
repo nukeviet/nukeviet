@@ -15,7 +15,7 @@ function cron_auto_del_temp_download()
 {
 	$dir = NV_ROOTDIR . "/" . NV_TEMP_DIR;
 	$result = true;
-	
+
 	if( $dh = opendir( $dir ) )
 	{
 		while( ( $file = readdir( $dh ) ) !== false )
@@ -42,11 +42,11 @@ function cron_auto_del_temp_download()
 				}
 			}
 		}
-		
+
 		closedir( $dh );
 		clearstatcache();
 	}
-	
+
 	return $result;
 }
 

@@ -6,20 +6,16 @@
 	<!-- BEGIN: viewcatloop -->
 	<div class="item fl" style="width: 33%">
 		<div class="item_content">
-			<a title="{CONTENT.title}" href="{CONTENT.link}">
-				<img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}"/>
-			</a>
+			<a title="{CONTENT.title}" href="{CONTENT.link}"> <img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}"/> </a>
 			<h2><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a></h2>
 			<!-- BEGIN: adminlink -->
-				<span class="admintab">
-					{ADMINLINK}
-				</span>
-			<!-- END: adminlink -->					
+			<span class="admintab"> {ADMINLINK} </span>
+			<!-- END: adminlink -->
 		</div>
 	</div>
 	<!-- END: viewcatloop -->
-	<div class="clear"></div>				
-</div>	
+	<div class="clear"></div>
+</div>
 <!-- BEGIN: generate_page -->
 <div class="generate_page">
 	{GENERATE_PAGE}

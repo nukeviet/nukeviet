@@ -7,7 +7,7 @@
  * @createdate 12/28/2009 23:50
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( $global_config['captcha_type'] == 1 )
 {
@@ -18,7 +18,6 @@ if( $global_config['captcha_type'] == 1 )
 	if( file_exists( NV_ROOTDIR . '/includes/keywords/ccaptcha_' . NV_LANG_INTERFACE . '.php' ) )
 	{
 		$captcha->wordsFile = 'keywords/ccaptcha_' . NV_LANG_INTERFACE . '.php';
-		
 	}
 	else
 	{
@@ -32,16 +31,16 @@ if( $global_config['captcha_type'] == 1 )
 	$captcha->minWordLength = NV_GFX_NUM;
 	$captcha->maxWordLength = NV_GFX_NUM;
 
-	$captcha->Yperiod    = 1;
+	$captcha->Yperiod = 1;
 	$captcha->Yamplitude = 0;
-	$captcha->Xperiod    = 1;
+	$captcha->Xperiod = 1;
 	$captcha->Xamplitude = 0;
 
 	$captcha->maxRotation = 30;
 	$captcha->scale = 3;
 	$captcha->debug = false;
 
-	$captcha->backgroundColor = array(228, 228, 228);
+	$captcha->backgroundColor = array( 228, 228, 228 );
 	$captcha->resourcesPath = NV_ROOTDIR . '/includes';
 
 	$captcha->CreateImage();
@@ -65,7 +64,7 @@ else
 
 	$text_color = ImageColorAllocate( $image, 50, 50, 50 );
 	/* output each character */
-	for ( $l = 0; $l < 5; ++$l )
+	for( $l = 0; $l < 5; ++$l )
 	{
 		$r = mt_rand( 120, 255 );
 		$g = mt_rand( 120, 255 );
@@ -86,7 +85,7 @@ else
 	$ff = mt_rand( 1, 15 );
 	$font = NV_ROOTDIR . "/includes/fonts/captcha/font" . $ff . ".ttf";
 
-	if ( file_exists( $font ) and nv_function_exists( 'imagettftext' ) )
+	if( file_exists( $font ) and nv_function_exists( 'imagettftext' ) )
 	{
 		imagettftext( $image, 15, 0, 5, NV_GFX_HEIGHT - 3, $text_color, $font, $code );
 	}
@@ -96,9 +95,9 @@ else
 	}
 
 	Header( "Content-type: image/jpeg" );
-	header("Cache-Control:");
-	header("Pragma:");
-	header("Set-Cookie:");
+	header( "Cache-Control:" );
+	header( "Pragma:" );
+	header( "Set-Cookie:" );
 	imagejpeg( $image, null, 80 );
 	imagedestroy( $image );
 	die();

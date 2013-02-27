@@ -17,7 +17,19 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	$month = $nv_Request->get_int( 'month', 'post,get' );
 	$ads = $nv_Request->get_int( 'ads', 'post,get' );
 	$year = ( int )date( 'Y' );
-	$month_array = array( '1' => 31, '3' => 31, '4' => 30, '5' > 31, '6' => 30, '7' => 31, '8' => 31, '9' => 30, '10' => 31, '11' => 30, '12' => 31 );
+	$month_array = array(
+		'1' => 31,
+		'3' => 31,
+		'4' => 30,
+		'5' > 31,
+		'6' => 30,
+		'7' => 31,
+		'8' => 31,
+		'9' => 30,
+		'10' => 31,
+		'11' => 30,
+		'12' => 31
+	);
 	$month_array['2'] = ( ( $year % 100 == 0 ) && ( $year % 400 == 0 ) ) ? 29 : 28;
 	$firstdate = mktime( 0, 0, 0, $month, 1, $year );
 	$enddate = mktime( 24, 60, 60, $month, $month_array[$month], $year );
@@ -38,9 +50,9 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 			$onetype = 'click_time';
 			break;
 	}
-	
+
 	$process = $data = array();
-	
+
 	require_once NV_ROOTDIR . '/includes/class/geturl.class.php';
 	$geturl = new UrlGetContents();
 
@@ -49,7 +61,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	if( $total )
 	{
 		$result = $db->sql_query( "SELECT a." . $onetype . " FROM `" . NV_BANNERS_CLICK_GLOBALTABLE . "` a INNER JOIN `" . NV_BANNERS_ROWS_GLOBALTABLE . "` b ON a.bid=b.id WHERE b.clid= " . $banner_client_info['id'] . " AND a.click_time <= " . $enddate . " AND a.click_time >= " . $firstdate . " AND a.bid=" . $ads . " ORDER BY `click_time` ASC" );
-	
+
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			if( $type == 'date' )
@@ -58,9 +70,9 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 			}
 			$data[] = $row[$onetype];
 		}
-	
+
 		$statics = array_count_values( $data );
-	
+
 		foreach( $statics as $country => $quantity )
 		{
 			if( $type == 'date' )
@@ -72,7 +84,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 				$process[$country . '(' . round( ( ( intval( $quantity ) * 100 ) / $total ), 2 ) . '%)'] = round( ( ( intval( $quantity ) * 100 ) / $total ), 2 );
 			}
 		}
-		
+
 		# google chart intergrated :|
 		$imagechart = 'http://chart.apis.google.com/chart?chs=700x350&cht=p3&chco=7777CC|76A4FB|3399CC|3366CC|000000|7D5F5F|A94A4A|13E9E9|526767|DBD6D6&chd=t:';
 		$imagechart .= implode( ',', array_values( $process ) );

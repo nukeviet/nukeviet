@@ -11,6 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_news_groups' ) )
 {
+
 	function nv_block_config_news_groups( $module, $data_block, $lang_block )
 	{
 		global $site_mods;
@@ -67,21 +68,17 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 			foreach( $list as $l )
 			{
 				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$l['catid']]['alias'] . "/" . $l['alias'] . "-" . $l['id'];
-				;
-				$l['thumb'] = "";
-				if( ! empty( $l['homeimgthumb'] ) )
+				if( $l['homeimgthumb'] == 1 )
 				{
-					$array_img = array();
-					$array_img = explode( "|", $l['homeimgthumb'] );
-					if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module . '/' . $array_img[0] ) )
-					{
-						$imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $array_img[0];
-						$l['thumb'] = $imgurl;
-					}
+					$l['thumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $array_img[0];
 				}
-				elseif( nv_is_url( $l['homeimgfile'] ) )
+				elseif( $l['homeimgthumb'] == 3 )
 				{
 					$l['thumb'] = $l['homeimgfile'];
+				}
+				else
+				{
+					$l['thumb'] = "";
 				}
 
 				$xtpl->assign( 'ROW', $l );
@@ -94,7 +91,6 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 			return $xtpl->text( 'main' );
 		}
 	}
-
 }
 if( defined( 'NV_SYSTEM' ) )
 {

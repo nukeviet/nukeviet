@@ -11,9 +11,10 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_message_about' ) )
 {
+
 	/**
 	 * nv_message_about()
-	 * 
+	 *
 	 * @return
 	 */
 	function nv_message_about( $block_config )
@@ -85,7 +86,7 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 			$xtpl->assign( 'LINK', $link );
 			$xtpl->assign( 'TITLE', $title );
 			$xtpl->assign( 'BODYTEXT', $bodytext );
-			
+
 			$xtpl->parse( 'main' );
 			return $xtpl->text( 'main' );
 		}

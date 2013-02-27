@@ -7,21 +7,21 @@
  * @createdate 10/03/2010 10:51
  */
 
-if ( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_USER' ) or defined( 'NV_IS_ADMIN' ) )
+if( ! defined( 'NV_IS_USER' ) or defined( 'NV_IS_ADMIN' ) )
 {
-    Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-    die();
+	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	die();
 }
 
-if ( defined( 'NV_IS_USER_FORUM' ) )
+if( defined( 'NV_IS_USER_FORUM' ) )
 {
-    require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/logout.php' );
+	require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/logout.php' );
 }
 else
 {
-    $nv_Request->unset_request( 'nvloginhash', 'cookie' );
+	$nv_Request->unset_request( 'nvloginhash', 'cookie' );
 }
 
 $page_title = $module_info['custom_title'];

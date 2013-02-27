@@ -9,31 +9,36 @@
 
 define( 'NV_SYSTEM', true );
 
-require( str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php' );
+require ( str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php' );
 
-//Check request url when active rewrite
+// Check request url when active rewrite
 if( $global_config['is_url_rewrite'] )
 {
-	if( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" ) . "/i", $_SERVER['REQUEST_URI'] ) )
+	if( $global_config['check_rewrite_file'] and preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" ) . "(.*)/i", $_SERVER['REQUEST_URI'], $m ) )
+	{
+		Header( "Location: " . NV_BASE_SITEURL . $m[1] );
+		die();
+	}
+	elseif( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" ) . "/i", $_SERVER['REQUEST_URI'] ) )
 	{
 		$url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
 		if( $url_rewrite != $_SERVER['REQUEST_URI'] )
 		{
 			Header( "Location: " . $url_rewrite );
-			die( );
+			die();
 		}
 	}
 	elseif( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI'] ) )
 	{
 		$url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
 		Header( "Location: " . $url_rewrite );
-		die( );
+		die();
 	}
 	elseif( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI'] ) )
 	{
 		$url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
 		Header( "Location: " . $url_rewrite );
-		die( );
+		die();
 	}
 }
 elseif( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
@@ -44,43 +49,43 @@ elseif( empty( $global_config['lang_multi'] ) and $global_config['rewrite_option
 		if( $url_rewrite != $_SERVER['REQUEST_URI'] )
 		{
 			Header( "Location: " . $url_rewrite );
-			die( );
+			die();
 		}
 	}
 }
 
-require( NV_ROOTDIR . "/includes/core/user_functions.php" );
+require ( NV_ROOTDIR . "/includes/core/user_functions.php" );
 
-//Google Sitemap
+// Google Sitemap
 if( $nv_Request->isset_request( NV_NAME_VARIABLE, 'get' ) and $nv_Request->get_string( NV_NAME_VARIABLE, 'get' ) == "SitemapIndex" )
 {
 	nv_xmlSitemapIndex_generate();
 	die();
 }
 
-//Check user
+// Check user
 if( defined( 'NV_IS_USER' ) ) trigger_error( 'Hacking attempt', 256 );
-require( NV_ROOTDIR . "/includes/core/is_user.php" );
+require ( NV_ROOTDIR . "/includes/core/is_user.php" );
 
-//Cap nhat trang thai online
+// Cap nhat trang thai online
 if( $global_config['online_upd'] and ! defined( 'NV_IS_AJAX' ) and ! defined( 'NV_IS_MY_USER_AGENT' ) )
 {
-	require( NV_ROOTDIR . "/includes/core/online.php" );
+	require ( NV_ROOTDIR . "/includes/core/online.php" );
 }
 
-//Thong ke
+// Thong ke
 if( $global_config['statistic'] and ! defined( 'NV_IS_AJAX' ) and ! defined( 'NV_IS_MY_USER_AGENT' ) )
 {
 	if( ! $nv_Request->isset_request( 'statistic_' . NV_LANG_DATA, 'session' ) )
 	{
-		require( NV_ROOTDIR . "/includes/core/stat.php" );
+		require ( NV_ROOTDIR . "/includes/core/stat.php" );
 	}
 }
 
-//Referer + Gqueries
+// Referer + Gqueries
 if( $client_info['is_myreferer'] === 0 and ! defined( 'NV_IS_MY_USER_AGENT' ) )
 {
-	require( NV_ROOTDIR . "/includes/core/referer.php" );
+	require ( NV_ROOTDIR . "/includes/core/referer.php" );
 }
 
 if( ! isset( $global_config['site_home_module'] ) or empty( $global_config['site_home_module'] ) ) $global_config['site_home_module'] = "news";
@@ -100,10 +105,18 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 {
 	$site_mods = nv_site_mods();
 
-	//IMG thong ke truy cap + online
+	// IMG thong ke truy cap + online
 	if( $global_config['statistic'] and isset( $site_mods['statistics'] ) and $nv_Request->get_string( 'second', 'get' ) == "statimg" )
 	{
-		include_once( NV_ROOTDIR . "/includes/core/statimg.php" );
+		include_once ( NV_ROOTDIR . "/includes/core/statimg.php" );
+	}
+
+	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
+	if( empty( $op ) ) $op = "main";
+	if( $global_config['rewrite_op_mod'] != '' and ! isset( $site_mods[$module_name] ) )
+	{
+		$op = ( $op == 'main' ) ? $module_name : $module_name . '/' . $op;
+		$module_name = $global_config['rewrite_op_mod'];
 	}
 
 	if( isset( $site_mods[$module_name] ) )
@@ -131,9 +144,6 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Xac dinh cac $op, $array_op
 			$array_op = array();
 
-			$op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
-			if( empty( $op ) ) $op = "main";
-
 			if( ! preg_match( "/^[a-z0-9\-\_\/]+$/i", $op ) )
 			{
 				Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
@@ -146,7 +156,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				$op = ( isset( $module_info['funcs'][$array_op[0]] ) ) ? $array_op[0] : 'main';
 			}
 
-			//Xac dinh quyen dieu hanh module
+			// Xac dinh quyen dieu hanh module
 			if( $module_info['is_modadmin'] )
 			{
 				define( 'NV_IS_MODADMIN', true );
@@ -172,14 +182,14 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				}
 			}
 
-			//Ket noi ngon ngu cua module
+			// Ket noi ngon ngu cua module
 			if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/" . NV_LANG_INTERFACE . ".php" ) )
 			{
-				require( NV_ROOTDIR . "/modules/" . $module_file . "/language/" . NV_LANG_INTERFACE . ".php" );
+				require ( NV_ROOTDIR . "/modules/" . $module_file . "/language/" . NV_LANG_INTERFACE . ".php" );
 			}
 			elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/en.php" ) )
 			{
-				require( NV_ROOTDIR . "/modules/" . $module_file . "/language/en.php" );
+				require ( NV_ROOTDIR . "/modules/" . $module_file . "/language/en.php" );
 			}
 
 			// Xac dinh giao dien chung
@@ -241,18 +251,18 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				nv_set_cache( $cache_file, $cache );
 			}
 
-            //Doc file cau hinh giao dien
-            $themeConfig = nv_object2array( simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini' ) );
-			require( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/theme.php" );
+			// Doc file cau hinh giao dien
+			$themeConfig = nv_object2array( simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini' ) );
+			require ( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/theme.php" );
 
 			// Ket noi ngon ngu theo theme
 			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/language/" . NV_LANG_INTERFACE . ".php" ) )
 			{
-				require( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/language/" . NV_LANG_INTERFACE . ".php" );
+				require ( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/language/" . NV_LANG_INTERFACE . ".php" );
 			}
 			elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/language/en.php" ) )
 			{
-				require( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/language/en.php" );
+				require ( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/language/en.php" );
 			}
 
 			// Xac dinh template module
@@ -265,19 +275,20 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				}
 			}
 
-			// Ket noi voi file functions.php, file chua cac function dung chung cho ca module
+			// Ket noi voi file functions.php, file chua cac function dung chung
+			// cho ca module
 			if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/functions.php" ) )
 			{
-				require( NV_ROOTDIR . "/modules/" . $module_file . "/functions.php" );
+				require ( NV_ROOTDIR . "/modules/" . $module_file . "/functions.php" );
 			}
 
 			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php" ) )
 			{
-				require( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php" );
+				require ( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php" );
 			}
 			elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/theme.php" ) )
 			{
-				require( NV_ROOTDIR . "/modules/" . $module_file . "/theme.php" );
+				require ( NV_ROOTDIR . "/modules/" . $module_file . "/theme.php" );
 			}
 
 			if( ! defined( 'NV_IS_AJAX' ) )
@@ -288,11 +299,11 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Ket noi voi cac op cua module de thuc hien
 			if( $is_mobile and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/mobile/" . $op . ".php" ) )
 			{
-				require( NV_ROOTDIR . "/modules/" . $module_file . "/mobile/" . $op . ".php" );
+				require ( NV_ROOTDIR . "/modules/" . $module_file . "/mobile/" . $op . ".php" );
 			}
 			else
 			{
-				require( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/" . $op . ".php" );
+				require ( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/" . $op . ".php" );
 			}
 			exit();
 		}

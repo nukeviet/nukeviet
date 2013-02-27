@@ -24,15 +24,10 @@ $list = nv_db_cache( $sql, '', 'modules' );
 foreach( $list as $row )
 {
 	$list_module[$row['title']] = array( "module_data" => $row['custom_title'] //
-			);
+);
 }
 
-$array_who_view = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2'],
-	$lang_global['who_view3']
-);
+$array_who_view = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] );
 
 // Loai lien ket
 $type_target = array();

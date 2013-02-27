@@ -31,15 +31,14 @@ if( $id )
 		$sql = "SELECT `type` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE `id`='" . $report_id . "'";
 		$result = $db->sql_query( $sql );
 		$rows = $db->sql_fetchrow( $result );
-		
+
 		$report = $nv_Request->get_int( 'report', 'post' );
 		$report_note = filter_text_input( 'report_note', 'post', '', 1, 255 );
-		
+
 		$row['report_note'] = $report_note;
 		if( $report == 0 and empty( $report_note ) )
 		{
 			$row['error'] = $lang_module['error'];
-
 		}
 		elseif( ! empty( $report_note ) and ! isset( $report_note{9} ) )
 		{

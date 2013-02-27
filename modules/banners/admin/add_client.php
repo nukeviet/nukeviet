@@ -81,14 +81,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	else
 	{
 		$pass_crypt = $crypt->hash( $pass );
-	
+
 		$sql = "INSERT INTO `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` (`id`, `login`, `pass`, `reg_time`, `full_name`, `email`, `website`, `location`, `yim`, `phone`, `fax`, `mobile`, `act`, `check_num`, `last_login`, `last_ip`, `last_agent`, `uploadtype`) VALUES 
         (NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( $pass_crypt ) . ", " . NV_CURRENTTIME . ", " . $db->dbescape( $full_name ) . ", 
         " . $db->dbescape( $email ) . ", " . $db->dbescape( $website ) . ", " . $db->dbescape( $location ) . ", " . $db->dbescape( $yim ) . ", 
         " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", " . $db->dbescape( $mobile ) . ", 1, '', 0, '', ''," . $db->dbescape( $uploadtype ) . ")";
-	
+
 		$id = $db->sql_query_insert_id( $sql );
-	
+
 		if( $id )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_client', "bannerid " . $id, $admin_info['userid'] );

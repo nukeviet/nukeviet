@@ -35,7 +35,7 @@ $data_month = $nv_Request->get_int( 'month', 'get' );
 if( $nv_Request->isset_request( 'month', 'get' ) and preg_match( "/^[0-9]{1,2}$/", $nv_Request->get_int( 'month', 'get' ) ) )
 {
 	$get_month = $nv_Request->get_int( 'month', 'get' );
-	
+
 	if( $get_month < $current_month )
 	{
 		if( $current_year != $publ_year )
@@ -69,7 +69,7 @@ if( $ext == 'country' )
 
 	$result = $db->sql_query( $sql );
 	$unknown = 0;
-	
+
 	if( ! empty( $result ) )
 	{
 		$result = $db->sql_query( $sql );
@@ -153,7 +153,7 @@ elseif( $ext == 'os' )
 	$sql = "SELECT `click_os_name` FROM `" . $table . "` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_os_name` DESC";
 	$result = $db->sql_query( $sql );
 	$bd = array();
-	
+
 	if( ! empty( $result ) )
 	{
 		while( $row = $db->sql_fetchrow( $result ) )
@@ -167,7 +167,7 @@ elseif( $ext == 'os' )
 	foreach( $bd as $shortname => $click_count )
 	{
 		$os_key = $os_name = $shortname;
-		
+
 		if( preg_match( "/^Robot\:/", $os_name ) )
 		{
 			$key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','" . $os_key . "','statistic',0);";
@@ -187,9 +187,9 @@ elseif( $ext == 'os' )
 			$unknown += $click_count;
 		}
 	}
-	
+
 	if( ! empty( $robots ) ) $cts = array_merge( $cts, $robots );
-	
+
 	if( ! empty( $unknown ) )
 	{
 		$key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unspecified','statistic',0);";
@@ -205,7 +205,7 @@ else
 	$sql = "SELECT `click_time`  FROM `" . $table . "` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_time` DESC";
 	$result = $db->sql_query( $sql );
 	$bd = array();
-	
+
 	if( ! empty( $result ) )
 	{
 		while( $row = $db->sql_fetchrow( $result ) )

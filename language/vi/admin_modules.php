@@ -1,14 +1,14 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -56,6 +56,7 @@ $lang_module['vmodule_file'] = 'Module gốc';
 $lang_module['vmodule_note'] = 'Ghi chú';
 $lang_module['vmodule_select'] = 'Chọn module';
 $lang_module['vmodule_blockquote'] = 'Ghi chú: Tên module mới chỉ gồm các chữ cái, số và dấu gạch ngang.';
+$lang_module['vmodule_exit'] = 'Lỗi: Module bạn đặt đã có trong hệ thống.';
 $lang_module['autoinstall'] = 'Cài đặt và đóng gói tự động';
 $lang_module['autoinstall_method'] = 'Lựa chọn tiến trình';
 $lang_module['autoinstall_method_none'] = 'Hãy lựa chọn: ';

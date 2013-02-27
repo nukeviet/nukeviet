@@ -11,6 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_bdown_news' ) )
 {
+
 	function nv_block_config_bdown_news( $module, $data_block, $lang_block )
 	{
 		global $db, $site_mods;

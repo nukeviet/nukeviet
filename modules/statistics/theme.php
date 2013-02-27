@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
 
 /**
  * referer()
- * 
+ *
  * @return
  */
 function referer()
@@ -63,7 +63,7 @@ function referer()
 
 /**
  * allreferers()
- * 
+ *
  * @return
  */
 function allreferers()
@@ -115,7 +115,7 @@ function allreferers()
 
 /**
  * allbots()
- * 
+ *
  * @return
  */
 function allbots()
@@ -166,7 +166,7 @@ function allbots()
 
 /**
  * allos()
- * 
+ *
  * @return
  */
 function allos()
@@ -202,7 +202,6 @@ function allos()
 				++$a;
 
 				$xtpl->parse( 'main.loop' );
-
 			}
 
 			if( ! empty( $cts['generate_page'] ) )
@@ -218,7 +217,7 @@ function allos()
 
 /**
  * allbrowsers()
- * 
+ *
  * @return
  */
 function allbrowsers()
@@ -269,7 +268,7 @@ function allbrowsers()
 
 /**
  * allcountries()
- * 
+ *
  * @return
  */
 function allcountries()
@@ -321,7 +320,7 @@ function allcountries()
 
 /**
  * main()
- * 
+ *
  * @return
  */
 function main()
@@ -399,7 +398,6 @@ function main()
 		}
 
 		$xtpl->parse( 'main.month.loop_1' );
-
 	}
 
 	$xtpl->parse( 'main.month' );

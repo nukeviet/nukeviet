@@ -16,15 +16,19 @@ $result = $db->sql_query( $sql );
 if( $db->sql_numrows( $result ) )
 {
 	$row = $db->sql_fetchrow( $result );
-	
-	if( ! empty( $row['file_name'] ) )
+
+	if( ! empty( $row['file_name'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'] ) )
 	{
 		nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'], false );
 	}
-	
+
+	if( ! empty( $row['imageforswf'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['imageforswf'] ) )
+	{
+		nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['imageforswf'], false );
+	}
 	$sql = "DELETE FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE id='$id'";
 	$result1 = $db->sql_query( $sql );
-	
+
 	$sql = "DELETE FROM `" . NV_BANNERS_CLICK_GLOBALTABLE . "` WHERE bid='$id'";
 	$result = $db->sql_query( $sql );
 

@@ -31,11 +31,11 @@ if( preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_\.\/]+)(" .
 	if( in_array( $request_uri_array[0], array_keys( $language_array ) ) )
 	{
 		$_GET[NV_LANG_VARIABLE] = $request_uri_array[0];
-	
+
 		if( isset( $request_uri_array[1] ) and ! empty( $request_uri_array[1] ) )
 		{
 			$_GET[NV_NAME_VARIABLE] = $request_uri_array[1];
-		
+
 			if( isset( $request_uri_array[2] ) and ! empty( $request_uri_array[2] ) )
 			{
 				$_GET[NV_OP_VARIABLE] = $request_uri_array[2];
@@ -45,7 +45,7 @@ if( preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_\.\/]+)(" .
 	elseif( ! empty( $request_uri_array[0] ) )
 	{
 		$_GET[NV_NAME_VARIABLE] = $request_uri_array[0];
-	
+
 		if( isset( $request_uri_array[1] ) and ! empty( $request_uri_array[1] ) )
 		{
 			$lop = strlen( $request_uri_array[0] ) + 1;
@@ -64,11 +64,23 @@ elseif( isset( $_GET[NV_OP_VARIABLE] ) )
 	if( preg_match( "/([a-z0-9\-\_\.\/]+)" . nv_preg_quote( $global_config['rewrite_exturl'] ) . "$/i", $_GET[NV_OP_VARIABLE], $matches ) )
 	{
 		$_GET[NV_OP_VARIABLE] = $matches[1];
-	
+
 		define( 'NV_REWRITE_EXTURL', true );
 	}
 }
-
+else
+{
+	if( ! $global_config['check_rewrite_file'] )
+	{
+		$request_uri = $_SERVER['REQUEST_URI'];
+	}
+	if( preg_match( "/^(" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_\.\/]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . "))\?(.*)$/i", $request_uri, $matches ) )
+	{
+		header( 'HTTP/1.1 301 Moved Permanently' );
+		Header( "Location: " . $matches[1] );
+		die();
+	}
+}
 unset( $base_siteurl, $request_uri, $request_uri_array, $matches, $lop );
 
 ?>

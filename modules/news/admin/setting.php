@@ -72,21 +72,33 @@ $xtpl->assign( 'DATA', $module_config[$module_name] );
 // Cach hien thi tren trang chu
 foreach( $array_viewcat_full as $key => $val )
 {
-	$xtpl->assign( 'INDEXFILE', array( "key" => $key, "title" => $val, "selected" => $key == $module_config[$module_name]['indexfile'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'INDEXFILE', array(
+		"key" => $key,
+		"title" => $val,
+		"selected" => $key == $module_config[$module_name]['indexfile'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.indexfile' );
 }
 
 // So bai viet tren mot trang
-for( $i = 5; $i <= 30; ++ $i )
+for( $i = 5; $i <= 30; ++$i )
 {
-	$xtpl->assign( 'PER_PAGE', array( "key" => $i, "title" => $i, "selected" => $i == $module_config[$module_name]['per_page'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'PER_PAGE', array(
+		"key" => $i,
+		"title" => $i,
+		"selected" => $i == $module_config[$module_name]['per_page'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.per_page' );
 }
 
 // Bai viet chi hien thi link
 for( $i = 0; $i <= 20; ++$i )
 {
-	$xtpl->assign( 'ST_LINKS', array( "key" => $i, "title" => $i, "selected" => $i == $module_config[$module_name]['st_links'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'ST_LINKS', array(
+		"key" => $i,
+		"title" => $i,
+		"selected" => $i == $module_config[$module_name]['st_links'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.st_links' );
 }
 
@@ -99,7 +111,11 @@ $xtpl->assign( 'MODULE_LOGO', $module_logo );
 // Thao luan mac dinh khi tao bai viet moi
 while( list( $comm_i, $title_i ) = each( $array_allowed_comm ) )
 {
-	$xtpl->assign( 'SETCOMM', array( "key" => $comm_i, "title" => $title_i, "selected" => $comm_i == $module_config[$module_name]['setcomm'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'SETCOMM', array(
+		"key" => $comm_i,
+		"title" => $title_i,
+		"selected" => $comm_i == $module_config[$module_name]['setcomm'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.setcomm' );
 }
 
@@ -123,7 +139,11 @@ $structure_image_upload = isset( $module_config[$module_name]['structure_upload'
 // Thu muc uploads
 foreach( $array_structure_image as $type => $dir )
 {
-	$xtpl->assign( 'STRUCTURE_UPLOAD', array( "key" => $type, "title" => $dir, "selected" => $type == $structure_image_upload ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'STRUCTURE_UPLOAD', array(
+		"key" => $type,
+		"title" => $dir,
+		"selected" => $type == $structure_image_upload ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.structure_upload' );
 }
 
@@ -131,14 +151,18 @@ foreach( $array_structure_image as $type => $dir )
 $array_config_source = array( $lang_module['config_source_title'], $lang_module['config_source_link'], $lang_module['config_source_logo'] );
 foreach( $array_config_source as $key => $val )
 {
-	$xtpl->assign( 'CONFIG_SOURCE', array( "key" => $key, "title" => $val, "selected" => $key == $module_config[$module_name]['config_source'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'CONFIG_SOURCE', array(
+		"key" => $key,
+		"title" => $val,
+		"selected" => $key == $module_config[$module_name]['config_source'] ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.config_source' );
 }
 
 $xtpl->assign( 'PATH', defined( "NV_IS_SPADMIN" ) ? "" : NV_UPLOADS_DIR . '/' . $module_name );
 $xtpl->assign( 'CURRENTPATH', defined( "NV_IS_SPADMIN" ) ? "images" : NV_UPLOADS_DIR . '/' . $module_name );
 
-$contents .= 'nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", "850", "420","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");';
+$contents .= 'nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", 850, 420,"resizable=no,scrollbars=no,toolbar=no,location=no,status=no");';
 $contents .= 'return false;';
 $contents .= '});';
 $contents .= "\n//]]>\n</script>\n";
@@ -199,24 +223,25 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 				"addcontent" => $addcontent,
 				"postcontent" => $postcontent,
 				"editcontent" => $editcontent,
-				"delcontent" => $delcontent );
+				"delcontent" => $delcontent
+			);
 		}
 		else
 		{
 			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` WHERE `pid` = " . $pid . " LIMIT 1" );
 		}
 	}
-	
+
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
-	
+
 	$a = 0;
 
 	foreach( $array_post_title as $member => $array_post_1 )
 	{
 		foreach( $array_post_1 as $group_id => $array_post_2 )
 		{
-			++ $a;
-			
+			++$a;
+
 			$pid = ( isset( $array_post_member[$member][$group_id] ) ) ? $array_post_member[$member][$group_id] : 0;
 			if( $pid > 0 )
 			{
@@ -230,7 +255,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 				$addcontent = $postcontent = $editcontent = $delcontent = 0;
 				$pid = $db->sql_query_insert_id( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` (`pid`,`member`, `group_id`,`addcontent`,`postcontent`,`editcontent`,`delcontent`) VALUES (NULL , '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "'  )" );
 			}
-			
+
 			$xtpl->assign( 'ROW', array(
 				"class" => ( $a % 2 == 0 ) ? "" : " class=\"second\"",
 				"array_post_2" => $array_post_2,
@@ -238,13 +263,13 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 				"addcontent" => $addcontent ? " checked=\"checked\"" : "",
 				"postcontent" => $postcontent ? " checked=\"checked\"" : "",
 				"editcontent" => $editcontent ? " checked=\"checked\"" : "",
-				"delcontent" => $delcontent ? " checked=\"checked\"" : "",
+				"delcontent" => $delcontent ? " checked=\"checked\"" : ""
 			) );
-			
+
 			$xtpl->parse( 'main.admin_config_post.loop' );
 		}
 	}
-	
+
 	$xtpl->parse( 'main.admin_config_post' );
 }
 

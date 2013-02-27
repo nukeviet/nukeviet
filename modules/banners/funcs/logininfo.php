@@ -7,16 +7,16 @@
  * @Createdate 3/24/2010 23:58
  */
 
-if ( ! defined( 'NV_IS_MOD_BANNERS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_BANNERS' ) ) die( 'Stop!!!' );
 
-if ( defined( 'NV_IS_BANNER_CLIENT' ) ) die( '&nbsp;' );
+if( defined( 'NV_IS_BANNER_CLIENT' ) ) die( '&nbsp;' );
 
-if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
+if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
 	$login = strip_tags( $nv_Request->get_string( 'login', 'post', '' ) );
 	$password = strip_tags( $nv_Request->get_string( 'password', 'post', '' ) );
 
-	if ( $global_config['gfx_chk'] )
+	if( $global_config['gfx_chk'] )
 	{
 		$seccode = strip_tags( $nv_Request->get_string( 'seccode', 'post', '' ) );
 	}
@@ -24,16 +24,16 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_login = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
 	$check_pass = nv_check_valid_pass( $password, NV_UPASSMAX, NV_UPASSMIN );
 
-	if ( ! empty( $check_login ) ) die( 'action' );
-	elseif ( ! empty( $check_pass ) ) die( 'action' );
-	elseif ( $global_config['gfx_chk'] and ! nv_capcha_txt( $seccode ) ) die( 'action' );
+	if( ! empty( $check_login ) ) die( 'action' );
+	elseif( ! empty( $check_pass ) ) die( 'action' );
+	elseif( $global_config['gfx_chk'] and ! nv_capcha_txt( $seccode ) ) die( 'action' );
 	else
 	{
 		$sql = "SELECT * FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `login` = " . $db->dbescape( $login ) . " AND `act`=1";
 		$result = $db->sql_query( $sql );
 		$numrows = $db->sql_numrows( $result );
-	
-		if ( $numrows != 1 )
+
+		if( $numrows != 1 )
 		{
 			die( 'action' );
 		}
@@ -42,7 +42,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$row = $db->sql_fetchrow( $result );
 			$db->sql_freeresult( $result );
 
-			if ( ! $crypt->validate( $password, $row['pass'] ) )
+			if( ! $crypt->validate( $password, $row['pass'] ) )
 			{
 				die( 'action' );
 			}
@@ -53,12 +53,21 @@ if ( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$id = intval( $row['id'] );
 				$agent = substr( NV_USER_AGENT, 0, 254 );
 				$sql = "UPDATE `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` SET `check_num` = " . $db->dbescape( $checknum ) . ", `last_login` = " . $current_login . ", `last_ip` = " . $db->dbescape( $client_info['ip'] ) . ", `last_agent` = " . $db->dbescape( $agent ) . " WHERE `id`=" . $id;
-				if ( ! $db->sql_query( $sql ) ) die( 'action' );
-				$client = array( 'login' => $login, 'checknum' => $checknum, 'current_agent' => $agent, 'last_agent' => $row['last_agent'], 'current_ip' => $client_info['ip'], 'last_ip' => $row['last_ip'], 'current_login' => $current_login, 'last_login' => intval( $row['last_login'] ) );
+				if( ! $db->sql_query( $sql ) ) die( 'action' );
+				$client = array(
+					'login' => $login,
+					'checknum' => $checknum,
+					'current_agent' => $agent,
+					'last_agent' => $row['last_agent'],
+					'current_ip' => $client_info['ip'],
+					'last_ip' => $row['last_ip'],
+					'current_login' => $current_login,
+					'last_login' => intval( $row['last_login'] )
+				);
 				$client = serialize( $client );
 				$nv_Request->set_Cookie( 'bncl', $client, NV_LIVE_COOKIE_TIME );
 				echo "OK";
-				exit;
+				exit();
 			}
 		}
 	}

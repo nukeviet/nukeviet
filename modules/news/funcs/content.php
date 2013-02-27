@@ -22,44 +22,18 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
 		// Create class instance.
-		$editortoolbar = array( array(
-				'Link',
-				'Unlink',
-				'Image',
-				'Table',
-				'Font',
-				'FontSize',
-				'RemoveFormat' ), array(
-				'Bold',
-				'Italic',
-				'Underline',
-				'StrikeThrough',
-				'-',
-				'Subscript',
-				'Superscript',
-				'-',
-				'JustifyLeft',
-				'JustifyCenter',
-				'JustifyRight',
-				'JustifyBlock',
-				'OrderedList',
-				'UnorderedList',
-				'-',
-				'Outdent',
-				'Indent',
-				'TextColor',
-				'BGColor',
-				'Source' ) );
+		$editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
 		$CKEditor = new CKEditor();
 		// Do not print the code directly to the browser, return it instead
 		$CKEditor->returnOutput = true;
 		$CKEditor->config['skin'] = 'kama';
 		$CKEditor->config['entities'] = false;
-		//$CKEditor->config['enterMode'] = 2;
+		// $CKEditor->config['enterMode'] = 2;
 		$CKEditor->config['language'] = NV_LANG_INTERFACE;
 		$CKEditor->config['toolbar'] = $editortoolbar;
-		// Path to CKEditor directory, ideally instead of relative dir, use an absolute path:
-		//   $CKEditor->basePath = '/ckeditor/'
+		// Path to CKEditor directory, ideally instead of relative dir, use an
+		// absolute path:
+		// $CKEditor->basePath = '/ckeditor/'
 		// If not set, CKEditor will try to detect the correct path.
 		$CKEditor->basePath = NV_BASE_SITEURL . '' . NV_EDITORSDIR . '/ckeditor/';
 		// Set global configuration (will be used by all instances of CKEditor).
@@ -76,13 +50,12 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 		$val = nv_unhtmlspecialchars( $val );
 		return $CKEditor->editor( $textareaname, $val );
 	}
-
 }
 
 $page_title = $lang_module['content'];
 $key_words = $module_info['keywords'];
 
-//check user post content
+// check user post content
 $array_post_config = array();
 $sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` ORDER BY `pid` ASC";
 $result = $db->sql_query( $sql );
@@ -92,7 +65,8 @@ while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, 
 		"addcontent" => $addcontent,
 		"postcontent" => $postcontent,
 		"editcontent" => $editcontent,
-		"delcontent" => $delcontent );
+		"delcontent" => $delcontent
+	);
 }
 
 if( isset( $array_post_config[0][0] ) )
@@ -105,7 +79,8 @@ else
 		"addcontent" => 0,
 		"postcontent" => 0,
 		"editcontent" => 0,
-		"delcontent" => 0 );
+		"delcontent" => 0
+	);
 }
 
 if( defined( 'NV_IS_USER' ) and isset( $array_post_config[1] ) )
@@ -166,7 +141,7 @@ if( $array_post_user['postcontent'] )
 {
 	$array_post_user['addcontent'] = 1;
 }
-//check user post content
+// check user post content
 
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 
@@ -260,12 +235,14 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 	$array_mod_title[] = array(
 		'catid' => 0,
 		'title' => $lang_module['add_content'],
-		'link' => $base_url );
+		'link' => $base_url
+	);
 
 	$array_imgposition = array(
 		0 => $lang_module['imgposition_0'],
 		1 => $lang_module['imgposition_1'],
-		2 => $lang_module['imgposition_2'] );
+		2 => $lang_module['imgposition_2']
+	);
 
 	$rowcontent = array(
 		"id" => "",
@@ -300,7 +277,8 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		"hitscm" => 0,
 		"total_rating" => 0,
 		"click_rating" => 0,
-		"keywords" => "" );
+		"keywords" => ""
+	);
 
 	$array_catid_module = array();
 	$sql = "SELECT catid, title, lev FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
@@ -311,7 +289,8 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		$array_catid_module[] = array(
 			"catid" => $catid_i,
 			"title" => $title_i,
-			"lev" => $lev_i );
+			"lev" => $lev_i
+		);
 	}
 
 	$sql = "SELECT topicid, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` ORDER BY `weight` ASC";
@@ -348,87 +327,27 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		$rowcontent['sourcetext'] = filter_text_input( 'sourcetext', 'post', '' );
 
 		// Xu ly anh minh hoa
-		$rowcontent['homeimgthumb'] = "";
+		$rowcontent['homeimgthumb'] = 0;
 		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and file_exists( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
 			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
-		}
-		elseif( ! nv_is_url( $rowcontent['homeimgfile'] ) )
-		{
-			$rowcontent['homeimgfile'] = "";
-		}
-
-		$check_thumb = false;
-
-		if( $rowcontent['id'] > 0 )
-		{
-			if( $rowcontent['homeimgfile'] != $rowcontent_old['homeimgfile'] )
+			if( file_exists( NV_ROOTDIR . "/" . NV_FILES_DIR . "/" . $module_name . "/" . $rowcontent['homeimgfile'] ) )
 			{
-				$check_thumb = true;
-
-				if( $rowcontent_old['homeimgthumb'] != "" and $rowcontent_old['homeimgthumb'] != "|" )
-				{
-					$rowcontent['homeimgthumb'] = "";
-					$homeimgthumb_arr = explode( "|", $rowcontent_old['homeimgthumb'] );
-
-					foreach( $homeimgthumb_arr as $homeimgthumb_i )
-					{
-						if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgthumb_i ) )
-						{
-							nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgthumb_i );
-						}
-					}
-				}
+				$rowcontent['homeimgthumb'] = 1;
 			}
 			else
 			{
-				$rowcontent['homeimgthumb'] = $rowcontent_old['homeimgfile'];
+				$rowcontent['homeimgthumb'] = 2;
 			}
 		}
-		elseif( ! empty( $rowcontent['homeimgfile'] ) )
+		elseif( nv_is_url( $rowcontent['homeimgfile'] ) )
 		{
-			$check_thumb = true;
+			$rowcontent['homeimgthumb'] = 3;
 		}
-
-		$homeimgfile = NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $rowcontent['homeimgfile'];
-
-		if( $check_thumb and file_exists( $homeimgfile ) )
+		else
 		{
-			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
-
-			$basename = basename( $homeimgfile );
-			$image = new image( $homeimgfile, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-
-			$thumb_basename = $basename;
-
-			$i = 1;
-			while( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/thumb/' . $thumb_basename ) )
-			{
-				$thumb_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
-				++$i;
-			}
-
-			$image->resizeXY( $module_config[$module_name]['homewidth'], $module_config[$module_name]['homeheight'] );
-			$image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/thumb', $thumb_basename );
-			$image_info = $image->create_Image_info;
-			$thumb_name = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/', '', $image_info['src'] );
-
-			$block_basename = $basename;
-
-			$i = 1;
-			while( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/block/' . $block_basename ) )
-			{
-				$block_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
-				++$i;
-			}
-			$image->resizeXY( $module_config[$module_name]['blockwidth'], $module_config[$module_name]['blockheight'] );
-			$image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/block', $block_basename );
-			$image_info = $image->create_Image_info;
-			$block_name = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/', '', $image_info['src'] );
-
-			$image->close();
-			$rowcontent['homeimgthumb'] = $thumb_name . "|" . $block_name;
+			$rowcontent['homeimgfile'] = "";
 		}
 
 		if( ! array_key_exists( $rowcontent['imgposition'], $array_imgposition ) )
@@ -463,12 +382,9 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		}
 		else
 		{
-			if (($array_post_user['postcontent']) && $nv_Request -> isset_request('status1', 'post'))
-				$rowcontent['status'] = 1;
-			elseif ($nv_Request -> isset_request('status0', 'post'))
-				$rowcontent['status'] = 0;
-			elseif ($nv_Request -> isset_request('status4', 'post'))
-				$rowcontent['status'] = 4;
+			if( ( $array_post_user['postcontent'] ) && $nv_Request->isset_request( 'status1', 'post' ) ) $rowcontent['status'] = 1;
+			elseif( $nv_Request->isset_request( 'status0', 'post' ) ) $rowcontent['status'] = 0;
+			elseif( $nv_Request->isset_request( 'status4', 'post' ) ) $rowcontent['status'] = 4;
 			$rowcontent['catid'] = in_array( $rowcontent['catid'], $catids ) ? $rowcontent['catid'] : $catids[0];
 			$rowcontent['bodytext'] = nv_news_get_bodytext( $rowcontent['bodyhtml'] );
 
@@ -486,7 +402,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 					{
 						list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources`" ) );
 						$weight = intval( $weight ) + 1;
-						$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_sources` (`sourceid`, `title`, `link`, `logo`, `weight`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $url_info['host'] ) . ", " . $db->dbescape( $sourceid_link ) . ", '', " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP( ), UNIX_TIMESTAMP( ))";
+						$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_sources` (`sourceid`, `title`, `link`, `logo`, `weight`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $url_info['host'] ) . ", " . $db->dbescape( $sourceid_link ) . ", '', " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
 						$rowcontent['sourceid'] = $db->sql_query_insert_id( $query );
 					}
 				}
@@ -583,7 +499,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
                            `allowed_comm`=" . intval( $rowcontent['allowed_comm'] ) . ", 
                            `allowed_rating`=" . intval( $rowcontent['allowed_rating'] ) . ", 
                            `keywords`=" . $db->dbescape_string( $rowcontent['keywords'] ) . ", 
-                           `edittime`=UNIX_TIMESTAMP( ) 
+                           `edittime`=UNIX_TIMESTAMP() 
                         WHERE `id` =" . $rowcontent['id'];
 
 				$db->sql_query( $query );
@@ -819,23 +735,21 @@ elseif( defined( 'NV_IS_USER' ) )
 
 	while( $item = $db->sql_fetchrow( $result ) )
 	{
-		$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
-
-		if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+		if( $item['homeimgthumb'] == 1 ) // image thumb
 		{
-			$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+			$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		elseif( nv_is_url( $item['homeimgfile'] ) )
-		{
-			$item['imghome'] = $item['homeimgfile'];
-		}
-		elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+		elseif( $item['homeimgthumb'] == 2 ) // image file
 		{
 			$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		else
+		elseif( $item['homeimgthumb'] == 3 ) // image url
 		{
-			$item['imghome'] = "";
+			$item['imghome'] = $item['homeimgfile'];
+		}
+		else // no image
+		{
+			$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 		}
 
 		$item['is_edit_content'] = ( empty( $item['status'] ) or $array_post_user['editcontent'] ) ? 1 : 0;
@@ -854,7 +768,7 @@ elseif( defined( 'NV_IS_USER' ) )
 	$a = 0;
 	foreach( $array_catpage as $array_row_i )
 	{
-		$array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
 		$xtpl->assign( 'CONTENT', $array_row_i );
 		$id = $array_row_i['id'];
 		$array_link_content = array();

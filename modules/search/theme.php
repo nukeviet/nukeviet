@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
 /**
  * main_theme()
- * 
+ *
  * @param mixed $is_search
  * @param mixed $search
  * @param mixed $array_modul
@@ -68,7 +68,7 @@ function main_theme( $is_search, $search, $array_modul )
 
 /**
  * result_theme()
- * 
+ *
  * @param mixed $result_array
  * @param mixed $mod
  * @param mixed $mod_custom_title

@@ -21,9 +21,9 @@ if( $id )
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=list_row" );
 		die();
 	}
-	
+
 	$frow = $db->sql_fetchrow( $result );
-	
+
 	$page_title = $frow['full_name'];
 	$action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id;
 }
@@ -142,7 +142,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
             `full_name`=" . $db->dbescape( $full_name ) . ", `phone` =  " . $db->dbescape( $phone ) . ", 
             `fax`=" . $db->dbescape( $fax ) . ", `email`=" . $db->dbescape( $email ) . ", 
             `note`=" . $db->dbescape( $note ) . ", `admins`=" . $db->dbescape( $admins_list ) . " WHERE `id` =" . $id;
-			
+
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_row', "rowid " . $id, $admin_info['userid'] );
 		}
 		else
@@ -150,7 +150,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
             NULL, " . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", 
             " . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
-			
+
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_row', " ", $admin_info['userid'] );
 		}
 
@@ -185,14 +185,14 @@ else
 				{
 					$l2 = array_map( "intval", explode( "/", $l ) );
 					$admid = intval( $l2[0] );
-					
+
 					if( isset( $adms[$admid] ) )
 					{
 						if( $adms[$admid]['level'] === 1 )
 						{
 							$view_level[] = $admid;
 							$reply_level[] = $admid;
-							
+
 							if( isset( $l2[3] ) and $l2[3] === 1 )
 							{
 								$obt_level[] = $admid;
@@ -204,12 +204,12 @@ else
 							{
 								$view_level[] = $admid;
 							}
-							
+
 							if( isset( $l2[2] ) and $l2[2] === 1 )
 							{
 								$reply_level[] = $admid;
 							}
-							
+
 							if( isset( $l2[3] ) and $l2[3] === 1 )
 							{
 								$obt_level[] = $admid;
@@ -224,7 +224,7 @@ else
 	{
 		$full_name = $phone = $fax = $email = $note = "";
 		$view_level = $reply_level = $obt_level = array();
-		
+
 		foreach( $adms as $admid => $values )
 		{
 			if( $values['level'] === 1 )
@@ -254,28 +254,28 @@ else
 }
 
 $xtpl->assign( 'DATA', array(
-	'full_name' => $full_name,  //
-	'phone' => $phone,  //
-	'fax' => $fax,  //
-	'email' => $email,  //
-	'note' => $note,  //
+	'full_name' => $full_name, //
+	'phone' => $phone, //
+	'fax' => $fax, //
+	'email' => $email, //
+	'note' => $note //
 ) );
 
 $a = 0;
 foreach( $adms as $admid => $values )
-{	
+{
 	$xtpl->assign( 'ADMIN', array(
-		'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",  //
-		'login' => $values['login'],  //
-		'fullname' => $values['fullname'],  //
-		'email' => $values['email'],  //
-		'admid' => $admid,  //
-		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? " checked=\"checked\"" : "",  //
-		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? " checked=\"checked\"" : "",  //
-		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? " checked=\"checked\"" : "",  //
-		'disabled' => $values['level'] === 1 ? " disabled=\"disabled\"" : "",  //
+		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "", //
+		'login' => $values['login'], //
+		'fullname' => $values['fullname'], //
+		'email' => $values['email'], //
+		'admid' => $admid, //
+		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? " checked=\"checked\"" : "", //
+		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? " checked=\"checked\"" : "", //
+		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? " checked=\"checked\"" : "", //
+		'disabled' => $values['level'] === 1 ? " disabled=\"disabled\"" : "" //
 	) );
-	
+
 	$xtpl->parse( 'main.admin' );
 }
 

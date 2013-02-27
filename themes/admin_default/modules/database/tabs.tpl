@@ -4,7 +4,7 @@
 		<caption>{CAPTION}</caption>
 		<col span="2" valign="top" width="50%" />
 		<!-- BEGIN: info -->
-		<tbody{INFO.class}>
+		<tbody {INFO.class}>
 			<tr>
 				<td>{INFO.val.0}</td>
 				<td>{INFO.val.1}</td>
@@ -29,14 +29,16 @@
 	<col span="5" valign="top" />
 	<thead>
 		<tr>
-			<!-- BEGIN: column --><td>{VALUE}</td>
+			<!-- BEGIN: column -->
+			<td>{VALUE}</td>
 			<!-- END: column -->
 		</tr>
 	</thead>
 	<!-- BEGIN: detail -->
-	<tbody{CLASS}>
+	<tbody {CLASS}>
 		<tr>
-			<!-- BEGIN: loop --><td>{VAL}</td>
+			<!-- BEGIN: loop -->
+			<td>{VAL}</td>
 			<!-- END: loop -->
 		</tr>
 	</tbody>

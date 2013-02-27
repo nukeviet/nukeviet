@@ -88,6 +88,55 @@ Cần sửa lại thành
 Trong đó vi: Là ngôn ngữ đang sử dụng của site
 
 8) Tùy biến trường dữ liệu thành viên
+Sửa file themes/my_theme/modules/users/register.tpl
+Tìm đến dòng
+<!-- BEGIN: captcha -->
+Thêm xuống dưới đoạn sau:
+		<!-- BEGIN: field -->
+		<!-- BEGIN: loop -->
+		<dl class="clearfix">
+			<dt class="fl">
+				<label>{FIELD.title} <!-- BEGIN: required --> <span class="error">(*)</span> <!-- END: required --> </label>
+				<br>
+				<i>{FIELD.description}</i>
+			</dt>
+			<dd class="fr">
+				<!-- BEGIN: textbox -->
+				<input class="{FIELD.required} {FIELD.class}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
+				<!-- END: textbox -->
+				<!-- BEGIN: date -->
+				<input class="datepicker {FIELD.required} {FIELD.class}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
+				<!-- END: date -->
+				<!-- BEGIN: textarea -->
+				<textarea name="custom_fields[{FIELD.field}]" class="{FIELD.class}">{FIELD.value}</textarea>
+				<!-- END: textarea -->
+				<!-- BEGIN: editor -->
+				{EDITOR}
+				<!-- END: editor -->
+				<!-- BEGIN: select -->
+				<select name="custom_fields[{FIELD.field}]" class="{FIELD.class}">
+					<!-- BEGIN: loop -->
+					<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
+					<!-- END: loop -->
+				</select>
+				<!-- END: loopselect -->
+				<!-- BEGIN: radio -->
+				<label for="lb_{FIELD_CHOICES.id}"> <input type="radio" name="custom_fields[{FIELD.field}]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" class="{FIELD.class}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
+				<!-- END: radio -->
+				<!-- BEGIN: checkbox -->
+				<label for="lb_{FIELD_CHOICES.id}"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" class="{FIELD.class}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
+				<!-- END: checkbox -->
+				<!-- BEGIN: multiselect -->
+				<select name="custom_fields[{FIELD.field}][]" multiple="multiple" class="{FIELD.class}">
+					<!-- BEGIN: loop -->
+					<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
+					<!-- END: loop -->
+				</select>
+				<!-- END: multiselect -->
+			</dd>
+		</dl>
+		<!-- END: loop -->
+		<!-- END: field -->
 
 9) Cấu hình đăng ký thành viên
 
@@ -106,6 +155,78 @@ Trong đó vi: Là ngôn ngữ đang sử dụng của site
 
 15) Chuyển CSDL của module file vào DataBase
 
+16) Cập nhật thêm trạng thái cho module News.
+Nếu theme không sử dụng default hoặc modern thì mở file content.tpl của themes/ten-theme/modules/news (nếu có) 
+tìm: 
+<input type="hidden" name="checkss" value="{CHECKSS}" /> 
+Thêm vào sau đoạn:
+<input type="submit" value="{LANG.save_draft}" name="status4">
+
+17) Thêm cấu hình thời gian lặp lại quá trình backup CSDL
+
+18) Sửa module news để dùng ảnh thumb do module upload tạo ra làm ảnh thumb cho bài viết, cần viết lại tất cả các block của module này
+
+Thí dụ lúc trước xác đụng ảnh thumb theo cách
+			$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
+
+			if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+			}
+			elseif( nv_is_url( $item['homeimgfile'] ) )
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+			}
+			else
+			{
+				$item['imghome'] = "";
+			}
+Giờ cần sửa lại code theo cách
+			if( $item['homeimgthumb'] == 1 ) //image thumb
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 2 ) //image file
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 3 ) //image url
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			else //no image
+			{
+				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
+Tool update, CSDL, ảnh của module  được viết tại file update3.php
+
+19) Sửa module download để dùng ảnh thumb do module upload tạo ra làm ảnh thumb cho bài viết, cần viết lại tất cả các block của module này nếu sử dụng ảnh minh họa
+Ảnh minh họa  = NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage']
+Sửa các file
+/themes/my_theme/modules/download/main_page.tpl
+/themes/my_theme/modules/download/viewcat_page.tpl
+
+tìm và thay thế
+itemcat.fileimage.orig_src hoặc itemcat.fileimage.src
+bằng
+itemcat.fileimage.imagesrc
+
+Xóa thư mục /uploads/download/thumb/
+
+20) Xóa các trường không sử dụng trong CSDL module bannner
+- cập nhật lại file xml của module banner
+- thêm cấu hình khi click vào banner
+Tìm và thay thế trong file /themes/my_theme/blocks/global.banners.tpl
+onclick="this.target='_blank'"
+Bằng
+onclick="this.target='{DATA.target}'"
+21) Thêm chức năng bỏ tên Module (mặc định) trong url
+##########################################################################
+
 Hướng dẫn nâng cấp
 - Upload các file thay đổi
 - Sửa các file theo hướng dẫn bên trên.
@@ -118,9 +239,3 @@ Sau đó truy cập site theo địa chỉ: http://mysite.com/update.php Thực 
 
 note: fix commit git push -f
 
-9. Cập nhật thêm trạng thái cho module News.
-Nếu theme không sử dụng default hoặc modern thì mở file content.tpl của themes/ten-theme/modules/news (nếu có) 
-tìm: 
-<input type="hidden" name="checkss" value="{CHECKSS}" /> 
-Thêm vào sau đoạn:
-<input type="submit" value="{LANG.save_draft}" name="status4">

@@ -27,23 +27,26 @@ if( $sys_info['ini_set_support'] )
 		ini_set( 'session.use_cookies', 1 );
 		ini_set( 'session.use_only_cookies', 1 );
 		ini_set( 'session.cookie_httponly', 1 );
-		ini_set( 'session.gc_probability', 1 ); //Kha nang chay Garbage Collection - trinh xoa session da het han truoc khi bat dau session_start();
-		ini_set( 'session.gc_divisor', 1000 ); //gc_probability / gc_divisor = phan tram (phan nghin) kha nang chay Garbage Collection
-		ini_set( 'session.gc_maxlifetime', 3600 ); //thoi gian sau khi het han phien lam viec de Garbage Collection tien hanh xoa, 60 phut
+		ini_set( 'session.gc_probability', 1 );
+		//Kha nang chay Garbage Collection - trinh xoa session da het han truoc khi bat dau session_start();
+		ini_set( 'session.gc_divisor', 1000 );
+		//gc_probability / gc_divisor = phan tram (phan nghin) kha nang chay Garbage Collection
+		ini_set( 'session.gc_maxlifetime', 3600 );
+		//thoi gian sau khi het han phien lam viec de Garbage Collection tien hanh xoa, 60 phut
 	}
 
 	ini_set( 'allow_url_fopen', 1 );
 	ini_set( "user_agent", 'NV3' );
 	ini_set( "default_charset", $global_config['site_charset'] );
 	ini_set( 'sendmail_from', $global_config['site_email'] );
-	
+
 	$memoryLimitMB = ( integer )ini_get( 'memory_limit' );
-	
+
 	if( $memoryLimitMB < 64 )
 	{
 		ini_set( "memory_limit", "64M" );
 	}
-	
+
 	ini_set( 'arg_separator.output', '&' );
 	ini_set( 'auto_detect_line_endings', 0 );
 }
@@ -98,29 +101,6 @@ if( ! function_exists( 'mcrypt_encrypt' ) )
 //Xac dinh tien ich mo rong lam viec voi string
 $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ( $sys_info['iconv_support'] ? 'iconv' : 'php' );
 
-//Kiem tra ho tro rewrite
-$sys_info['supports_rewrite'] = false;
-
-if( function_exists( 'apache_get_modules' ) )
-{
-	$apache_modules = apache_get_modules();
-	if( in_array( "mod_rewrite", $apache_modules ) )
-	{
-		$sys_info['supports_rewrite'] = "rewrite_mode_apache";
-	}
-}
-elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.' ) !== false )
-{
-	if( isset( $_SERVER['IIS_UrlRewriteModule'] ) && ( php_sapi_name() == 'cgi-fcgi' ) && class_exists( 'DOMDocument' ) )
-	{
-		$sys_info['supports_rewrite'] = "rewrite_mode_iis";
-	}
-}
-elseif( $sys_info['os'] == "LINUX" )
-{
-	$sys_info['supports_rewrite'] = "rewrite_mode_apache";
-}
-
 //Xac dinh function nen string
 $sys_info['str_compress'] = array();
 
@@ -135,8 +115,5 @@ if( $sys_info['zlib_support'] )
 		$sys_info['str_compress'] = array( 'gzdeflate', 'gzinflate' );
 	}
 }
-
-//Xac dinh tidy
-$sys_info['supports_tidy'] = ( class_exists( 'tidy' ) ) ? "class" : ( function_exists( 'tidy_parse_string' ) ? "func" : false );
 
 ?>

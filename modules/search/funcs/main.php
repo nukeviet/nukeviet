@@ -15,15 +15,15 @@ $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : 
 
 $array_modul = LoadModulesSearch();
 $is_search = false;
-$search = array( //
-	'key' => '', //
-	'len_key' => 0, //
-	'mod' => 'all', //
+$search = array(
+	'key' => '',
+	'len_key' => 0,
+	'mod' => 'all',
 	'logic' => 1, //OR
-	'page' => 0, //
-	'is_error' => false, //
-	'errorInfo' => '', //
-	'content' => '' //
+	'page' => 0,
+	'is_error' => false,
+	'errorInfo' => '',
+	'content' => ''
 );
 
 if( $nv_Request->isset_request( 'q', 'get' ) )
@@ -95,4 +95,4 @@ include ( NV_ROOTDIR . "/includes/header.php" );
 echo nv_site_theme( $contents );
 include ( NV_ROOTDIR . "/includes/footer.php" );
 
-?> 
+?>

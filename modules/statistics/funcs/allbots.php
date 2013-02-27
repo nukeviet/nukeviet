@@ -38,11 +38,7 @@ if( $all_page )
 	if( ! empty( $bot_list ) )
 	{
 		$cts = array();
-		$cts['thead'] = array(
-			$lang_module['bot'],
-			$lang_module['hits'],
-			$lang_module['last_visit']
-		);
+		$cts['thead'] = array( $lang_module['bot'], $lang_module['hits'], $lang_module['last_visit'] );
 		$cts['rows'] = $bot_list;
 		$cts['max'] = $max;
 		$cts['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page );

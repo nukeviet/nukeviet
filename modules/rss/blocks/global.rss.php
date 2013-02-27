@@ -11,9 +11,10 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 {
+
 	/**
 	 * nv_block_data_config_rss()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $data_block
 	 * @param mixed $lang_block
@@ -69,7 +70,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 
 	/**
 	 * nv_block_data_config_rss_submit()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $lang_block
 	 * @return
@@ -96,7 +97,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 
 	/**
 	 * nv_get_rss()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @return
 	 */
@@ -155,7 +156,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 
 	/**
 	 * nv_block_global_rss()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
@@ -213,9 +214,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		}
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
-
 	}
-
 }
 
 if( defined( 'NV_SYSTEM' ) )

@@ -4,6 +4,10 @@
 <!-- BEGIN: other -->
 <ul class="list">
 	<!-- BEGIN: loop -->
-	<li><a href="{OTHER.link}">{OTHER.title}</a></li><!-- END: loop -->
+	<li>
+		<a href="{OTHER.link}">{OTHER.title}</a>
+	</li>
+	<!-- END: loop -->
 </ul>
-<!-- END: other --><!-- END: main -->
+<!-- END: other -->
+<!-- END: main -->

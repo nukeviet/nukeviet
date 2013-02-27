@@ -17,12 +17,12 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 {
 	$upload_blocked = "";
 	$file_allowed_ext = array();
-	
+
 	if( preg_match( "/images/", $banner_client_info['uploadtype'] ) )
 	{
 		$file_allowed_ext[] = "images";
 	}
-	
+
 	if( preg_match( "/flash/", $banner_client_info['uploadtype'] ) )
 	{
 		$file_allowed_ext[] = "flash";
@@ -31,13 +31,13 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	if( empty( $file_allowed_ext ) )
 	{
 		$upload_blocked = $lang_module['upload_blocked'];
-		
+
 		include ( NV_ROOTDIR . "/includes/header.php" );
 		echo nv_site_theme( $upload_blocked );
 		include ( NV_ROOTDIR . "/includes/footer.php" );
 		exit();
 	}
-	
+
 	$xtpl = new XTemplate( "addads.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_BASE_URLSITE', NV_BASE_SITEURL );
@@ -61,7 +61,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		if( ! empty( $begintime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime ) ) $begintime = "";
 		if( ! empty( $endtime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime ) ) $endtime = "";
 		if( $url == "http://" ) $url = "";
-	
+
 		if( empty( $title ) )
 		{
 			$error[] = $lang_module['title_empty'];
@@ -84,7 +84,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 			$upload = new upload( $file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$upload_info = $upload->save_file( $_FILES['image'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 			@unlink( $_FILES['image']['tmp_name'] );
-		
+
 			if( ! empty( $upload_info['error'] ) )
 			{
 				$error[] = $upload_info['error'];
@@ -128,12 +128,12 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 
 			if( $endtime != 0 and $endtime <= $begintime ) $endtime = $begintime;
 
-			$sql = "INSERT INTO `" . NV_BANNERS_ROWS_GLOBALTABLE . "` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `click_url`, `file_name_tmp`, `file_alt_tmp`, `click_url_tmp`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES 
+			$sql = "INSERT INTO `" . NV_BANNERS_ROWS_GLOBALTABLE . "` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `imageforswf`, `click_url`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES 
             (NULL, " . $db->dbescape( $title ) . ", " . $blockid . ", " . $banner_client_info['id'] . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ", 
-            " . $width . ", " . $height . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $url ) . ", '', '', '', " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 
+            " . $width . ", " . $height . ", " . $db->dbescape( $description ) . ", '', " . $db->dbescape( $url ) . ", " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 
             0, 3,0)";
 			$id = $db->sql_query_insert_id( $sql );
-		
+
 			if( $id )
 			{
 				$xtpl->assign( 'pagetitle', $lang_module['addads_success'] . '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . '">' );
@@ -144,7 +144,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	{
 		$xtpl->assign( 'pagetitle', $lang_module['addads_pagetitle'] );
 	}
-	
+
 	$result = $db->sql_query( "SELECT `id`,`title`, `blang` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` ORDER BY `blang`, `title` ASC" );
 
 	while( $row = $db->sql_fetchrow( $result ) )

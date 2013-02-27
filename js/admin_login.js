@@ -7,7 +7,7 @@
 
 var seccodecheck = /^([a-zA-Z0-9])+$/;
 
-if (typeof (jsi) == 'undefined')
+if ( typeof (jsi) == 'undefined')
 	var jsi = new Array();
 if (!jsi[0])
 	jsi[0] = 'vi';
@@ -28,24 +28,18 @@ if (strHref.indexOf("?") > -1) {
 	var query_string = '';
 }
 
-// ---------------------------------------
-
 function nv_checkadminlogin_seccode(seccode) {
 	return (seccode.value.length == jsi[3] && seccodecheck.test(seccode.value)) ? true : false;
 }
 
-// ---------------------------------------
-
 function nv_randomPassword(plength) {
 	var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 	var pass = "";
-	for ( var z = 0; z < plength; z++) {
+	for (var z = 0; z < plength; z++) {
 		pass += chars.charAt(Math.floor(Math.random() * 62));
 	}
 	return pass;
 }
-
-// ---------------------------------------
 
 function nv_checkadminlogin_submit() {
 	if (jsi[2] == 1) {
@@ -58,15 +52,12 @@ function nv_checkadminlogin_submit() {
 	}
 	var login = document.getElementById('login');
 	var password = document.getElementById('password');
-	if (login.value!='' && password.value!=''){
+	if (login.value != '' && password.value != '') {
 		return true;
-	}
-	else{
+	} else {
 		return false;
 	}
 }
-
-// ---------------------------------------
 
 function nv_change_captcha() {
 	var vimg = document.getElementById('vimg');

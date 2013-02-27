@@ -9,28 +9,21 @@
 
 define( 'NV_SYSTEM', true );
 
-require (str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php');
+require ( str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php' );
 
-$array_hidefolders = array(
-	".",
-	"..",
-	"index.html",
-	".htaccess",
-	".tmp"
-);
+$array_hidefolders = array( ".", "..", "index.html", ".htaccess", ".tmp" );
 
 function nv_listUploadDir( $dir, $real_dirlist = array() )
 {
 	$real_dirlist[] = $dir;
 
-	if( ($dh = @opendir( NV_ROOTDIR . '/' . $dir )) !== false )
+	if( ( $dh = @opendir( NV_ROOTDIR . '/' . $dir ) ) !== false )
 	{
-		while( false !== ($subdir = readdir( $dh )) )
+		while( false !== ( $subdir = readdir( $dh ) ) )
 		{
 			if( preg_match( "/^[a-zA-Z0-9\-\_]+$/", $subdir ) )
 			{
-				if( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) )
-					$real_dirlist = nv_listUploadDir( $dir . '/' . $subdir, $real_dirlist );
+				if( is_dir( NV_ROOTDIR . '/' . $dir . '/' . $subdir ) ) $real_dirlist = nv_listUploadDir( $dir . '/' . $subdir, $real_dirlist );
 			}
 		}
 
@@ -44,16 +37,16 @@ function nv_getFileInfo( $pathimg, $file )
 {
 	global $array_images, $array_flash, $array_archives, $array_documents;
 
-	clearstatcache( );
+	clearstatcache();
 
 	unset( $matches );
 	preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $file, $matches );
 
-	$info = array( );
+	$info = array();
 	$info['name'] = $file;
 	if( isset( $file{17} ) )
 	{
-		$info['name'] = substr( $matches[1], 0, (13 - strlen( $matches[2] )) ) . "..." . $matches[2];
+		$info['name'] = substr( $matches[1], 0, ( 13 - strlen( $matches[2] ) ) ) . "..." . $matches[2];
 	}
 
 	$info['ext'] = $matches[2];
@@ -79,7 +72,7 @@ function nv_getFileInfo( $pathimg, $file )
 
 		if( $size[0] > 80 or $size[1] > 80 )
 		{
-			if( ($_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 )) !== false )
+			if( ( $_src = nv_get_viewImage( $pathimg . '/' . $file, 80, 80 ) ) !== false )
 			{
 				$info['src'] = $_src[0];
 				$info['srcwidth'] = $_src[1];
@@ -138,9 +131,15 @@ if( $step == 1 )
 		  `did` int(11) NOT NULL AUTO_INCREMENT,
 		  `dirname` varchar(255) NOT NULL,
 		  `time` int(11) NOT NULL DEFAULT '0',
+		  `thumb_type` tinyint(4) NOT NULL DEFAULT '0',
+		  `thumb_width` smallint(6) NOT NULL DEFAULT '0',
+		  `thumb_height` smallint(6) NOT NULL DEFAULT '0',
+		  `thumb_quality` tinyint(4) NOT NULL DEFAULT '0',
 		  PRIMARY KEY (`did`),
 		  UNIQUE KEY `name` (`dirname`)
 		) ENGINE=MyISAM" );
+	$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`, `thumb_type`, `thumb_width`, `thumb_height`, `thumb_quality`) VALUES ('-1', '', 0, 3, 100, 150, 90)" );
+	$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET `did` = '0' WHERE `did` = '-1'" );
 
 	$db->sql_query( "CREATE TABLE `" . NV_UPLOAD_GLOBALTABLE . "_file` (
 		  `name` varchar(255) NOT NULL,
@@ -159,15 +158,10 @@ if( $step == 1 )
 		  KEY `userid` (`userid`),
 		  KEY `type` (`type`)
 		) ENGINE=MyISAM" );
-	$db->sql_query( "TRUNCATE TABLE `" . NV_UPLOAD_GLOBALTABLE . "_dir`" );
-	$db->sql_query( "TRUNCATE TABLE `" . NV_UPLOAD_GLOBALTABLE . "_file`" );
 
 	$contents = "<br><br>";
-	$real_dirlist = array( );
-	$allow_upload_dir = array(
-		'images',
-		NV_UPLOADS_DIR
-	);
+	$real_dirlist = array();
+	$allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
 
 	foreach( $allow_upload_dir as $dir )
 	{
@@ -176,7 +170,7 @@ if( $step == 1 )
 
 	foreach( $real_dirlist as $info )
 	{
-		$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`) VALUES (NULL, '" . $info . "', 0)" );
+		$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`, `thumb_type`, `thumb_width`, `thumb_height`, `thumb_quality`) VALUES (NULL, '" . $info . "', '0', '0', '0', '0', '0')" );
 		$contents .= "<br>" . $info;
 	}
 	$contents = "<meta http-equiv=\"refresh\" content=\"1;URL=" . NV_BASE_SITEURL . "update2.php?step=2\" />";
@@ -188,7 +182,7 @@ elseif( $step == 2 )
 	if( $did )
 	{
 		$tempFile = NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache/" . md5( $pathimg );
-		$results = array( );
+		$results = array();
 		if( file_exists( $tempFile ) )
 		{
 			$results = file_get_contents( $tempFile );
@@ -198,33 +192,9 @@ elseif( $step == 2 )
 			{
 				$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
 				(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
-				VALUES ('" . $info[0] . "', '" . $info[1] . "', '" . $info[2] . "', " . $info[3] . ", '" . $info[4] . "', " . $info[5] . ", " . $info[6] . ", '" . $info[7] . "', " . $info[8] . ", " . $info[9] . ", " . $did . ", '" . $title . "')" );
+				VALUES ('" . $info[0] . "', '" . $info[1] . "', '" . $info[2] . "', " . $info[3] . ", '', " . $info[5] . ", " . $info[6] . ", '" . $info[7] . "', " . $info[8] . ", " . $info[9] . ", " . $did . ", '" . $title . "')" );
 			}
 			$dir_time = 1;
-		}
-		else
-		{
-			if( $dh = opendir( NV_ROOTDIR . "/" . $pathimg ) )
-			{
-				while( ($title = readdir( $dh )) !== false )
-				{
-					if( in_array( $title, $array_hidefolders ) )
-						continue;
-
-					if( preg_match( "/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $title, $m ) )
-					{
-						$info = nv_getFileInfo( $pathimg, $title );
-						$info['did'] = $did;
-						$info['title'] = $title;
-						// Thêm file mới
-						$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
-										(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
-										VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
-					}
-				}
-				closedir( $dh );
-			}
-			$dir_time = NV_CURRENTTIME;
 		}
 		$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET `time` = '" . $dir_time . "' WHERE `did` = " . $did );
 		$contents = ": " . $pathimg . "<meta http-equiv=\"refresh\" content=\"1;URL=" . NV_BASE_SITEURL . "update2.php?step=2\" />";
@@ -232,12 +202,15 @@ elseif( $step == 2 )
 	else
 	{
 		nv_deletefile( NV_ROOTDIR . "/" . NV_FILES_DIR . "/dcache", true );
+		nv_deletefile( NV_ROOTDIR . "/" . NV_FILES_DIR . "/images", true );
 		$contents = "<meta http-equiv=\"refresh\" content=\"1;URL=" . NV_BASE_SITEURL . "update2.php?step=3\" />";
 	}
 	die( 'Đang thực hiện nâng cấp CSDL cho module Upload' . $contents );
 }
 else
 {
+	$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET `time` = '0'" );
 	die( 'Thực hiện nâng cấp CSDL thành công, Bạn cần xóa các file update.php, update2.php ở thư mục gốc của site ngay lập tức' );
 }
+
 ?>

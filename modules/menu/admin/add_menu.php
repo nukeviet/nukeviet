@@ -25,10 +25,7 @@ $post['parentid'] = $nv_Request->get_int( 'parentid', 'get', 0 );
 
 // System groups user
 $groups_list = nv_groups_list();
-$array_who = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2'] );
+$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 if( ! empty( $groups_list ) )
 {
 	$array_who[] = $lang_global['who_view3'];
@@ -52,7 +49,7 @@ if( $post['mid'] != 0 )
 		'key' => 0, //
 		'title' => $lang_module['cat0'], //
 		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "" //
-			);
+	);
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
@@ -69,7 +66,7 @@ if( $post['mid'] != 0 )
 			'key' => $row['id'], //
 			'title' => $sp_title . $row['title'], //
 			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : "" //
-				);
+		);
 	}
 }
 
@@ -80,7 +77,7 @@ foreach( $list as $key => $title )
 	$list_module[] = array(
 		"key" => $key,
 		"title" => $title['module_data'],
-		"selected" => ( $key == $post['module_name'] ) ? " selected=\"selected\"" : "",
+		"selected" => ( $key == $post['module_name'] ) ? " selected=\"selected\"" : ""
 	);
 }
 
@@ -90,7 +87,7 @@ foreach( $type_target as $key => $target )
 	$list_target[] = array(
 		"key" => $key,
 		"title" => $target,
-		"selected" => ( $key == $post['target'] ) ? " selected=\"selected\"" : "",
+		"selected" => ( $key == $post['target'] ) ? " selected=\"selected\"" : ""
 	);
 }
 

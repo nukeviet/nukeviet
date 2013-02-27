@@ -62,13 +62,12 @@ if( $allowed )
 			{
 				$src = $alt = $note = "";
 				$width = $height = 0;
-				$array_img = explode( "|", $news_contents['homeimgthumb'] );
-				if( ! empty( $array_img[0] ) and $news_contents['imgposition'] == 1 and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+				if( $news_contents['homeimgthumb'] == 1 and $news_contents['imgposition'] == 1 )
 				{
-					$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+					$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
 					$width = $module_config[$module_name]['homewidth'];
 				}
-				elseif( nv_is_url( $news_contents['homeimgfile'] ) )
+				elseif( $news_contents['homeimgthumb'] == 3 )
 				{
 					$src = $news_contents['homeimgfile'];
 					$width = ( $news_contents['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
@@ -103,7 +102,8 @@ if( $allowed )
 					"width" => $width,
 					"alt" => $news_contents['homeimgalt'],
 					"note" => $news_contents['homeimgalt'],
-					"position" => $news_contents['imgposition'] );
+					"position" => $news_contents['imgposition']
+				);
 			}
 			if( $alias_url == $db->unfixdb( $news_contents['alias'] ) )
 			{
@@ -119,12 +119,12 @@ if( $allowed )
 	}
 	if( $catid != $news_contents['catid'] )
 	{
-		$canonicalUrl = NV_MY_DOMAIN.nv_url_rewrite(NV_BASE_SITEURL."index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$news_contents['catid']]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'],true);
+		$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$news_contents['catid']]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
 	}
 
-	$news_contents['url_sendmail'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'],true);
-	$news_contents['url_print'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'],true);
-	$news_contents['url_savefile'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=savefile/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'],true);
+	$news_contents['url_sendmail'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
+	$news_contents['url_print'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
+	$news_contents['url_savefile'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=savefile/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
 
 	$sql = "SELECT `title`, `link`, `logo` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` = '" . $news_contents['sourceid'] . "'";
 	$result = $db->sql_query( $sql );
@@ -135,7 +135,7 @@ if( $allowed )
 	$news_contents['newscheckss'] = md5( $news_contents['id'] . session_id() . $global_config['sitekey'] );
 	if( $module_config[$module_name]['config_source'] == 0 ) $news_contents['source'] = $sourcetext;
 	elseif( $module_config[$module_name]['config_source'] == 1 ) $news_contents['source'] = $source_link;
-	elseif( $module_config[$module_name]['config_source'] == 2 && !empty( $source_logo ) )  $news_contents['source'] = "<img width=\"100px\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $source_logo . "\">";
+	elseif( $module_config[$module_name]['config_source'] == 2 && ! empty( $source_logo ) ) $news_contents['source'] = "<img width=\"100px\" src=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $source_logo . "\">";
 	$news_contents['publtime'] = nv_date( "l - d/m/Y  H:i", $news_contents['publtime'] );
 
 	$related_new_array = array();
@@ -146,7 +146,8 @@ if( $allowed )
 		$related_new_array[] = array(
 			"title" => $row['title'],
 			"time" => nv_date( "d/m/Y", $row['publtime'] ),
-			"link" => $link );
+			"link" => $link
+		);
 	}
 	sort( $related_new_array, SORT_NUMERIC );
 
@@ -161,7 +162,8 @@ if( $allowed )
 		$related_array[] = array(
 			"title" => $row['title'],
 			"time" => nv_date( "d/m/Y", $row['publtime'] ),
-			"link" => $link );
+			"link" => $link
+		);
 	}
 	$db->sql_freeresult( $related );
 	unset( $related, $row );
@@ -188,7 +190,7 @@ if( $allowed )
 		unset( $topic, $rows );
 	}
 
-	//Check: comment
+	// Check: comment
 	$commentenable = 0;
 
 	if( $news_contents['allowed_comm'] and $module_config[$module_name]['activecomm'] )

@@ -7,9 +7,11 @@
 </div>
 <table summary="{CONTENTS.caption}" class="tab1">
 	<caption>{CONTENTS.caption}</caption>
-	<col style="width:50%;white-space:nowrap" />
+	<colgroup>
+		<col style="width:50%;white-space:nowrap" />
+	</colgroup>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
+	<tbody {ROW.class}>
 		<tr>
 			<td>{ROW.0}:</td>
 			<td>{ROW.1}</td>

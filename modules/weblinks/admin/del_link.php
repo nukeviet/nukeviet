@@ -29,7 +29,7 @@ if( ! empty( $submit ) )
 	if( $confirm == 1 )
 	{
 		$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE id=" . $id;
-		
+
 		if( $db->sql_query( $sql ) )
 		{
 			$db->sql_freeresult();
@@ -39,13 +39,13 @@ if( ! empty( $submit ) )
 		{
 			$msg = $lang_module['weblink_del_error'];
 		}
-		
+
 		if( $msg != '' )
 		{
 			$xtpl->assign( 'ERROR', $msg );
 			$xtpl->parse( 'main.error' );
 		}
-		
+
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weblink_del_link_title'], "id " . $id, $admin_info['userid'] );
 	}
 	else
@@ -54,7 +54,7 @@ if( ! empty( $submit ) )
 	}
 }
 else
-{	
+{
 	$xtpl->assign( 'ID', $id );
 	$xtpl->parse( 'main.confirm' );
 }
