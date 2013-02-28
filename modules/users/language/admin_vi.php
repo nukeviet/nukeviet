@@ -276,6 +276,16 @@ $lang_module['field_match_type_error'] = '%s không đúng quy tắc';
 $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
 $lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s ký tự';
 $lang_module['field_min_max_value'] = '%1$s cần nhập từ %2$s đến %3$s';
+$lang_module['field_choicetypes_title'] = 'Lựu chọn dữ liệu';
+$lang_module['field_choicetypes_sql'] = 'Lấy dữ liệu từ CSDL';
+$lang_module['field_choicetypes_text'] = 'Lấy dữ liệu từ nhập liệu';
+$lang_module['field_options_choicesql'] = 'Lựa chọn module, bảng dữ liệu và trường dữ liệu';
+$lang_module['field_options_choicesql_module'] = "Chọn module";
+$lang_module['field_options_choicesql_table'] = "Chọn bảng dữ liệu";
+$lang_module['field_options_choicesql_column'] = "Chọn cột dữ liệu";
+$lang_module['field_options_choicesql_key'] = "Chọn cột làm key";
+$lang_module['field_options_choicesql_val'] = "Chọn cột làm value";
+$lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệu từ CSDL không đầy đủ';
 
 $lang_module['facebook_config'] = 'Cấu hình đăng nhập, đăng kí bằng facebook';
 $lang_module['facebook_client_id'] = 'App ID/API Key';
