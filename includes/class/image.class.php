@@ -72,7 +72,7 @@ class image
      */
 	function image( $filename, $gmaxX = 0, $gmaxY = 0 )
 	{
-		if( preg_match( "/(http|https|ftp):\/\//i", $filename) )
+		if( preg_match( "/(http|https|ftp):\/\//i", $filename ) )
 		{
 			$this->is_url = true;
 			$this->filename = $this->set_tempnam( $filename );
