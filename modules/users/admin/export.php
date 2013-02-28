@@ -11,24 +11,27 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $data_field = array();
 $step = $nv_Request->get_int( 'step', 'get,post', 1 );
-if( $step == 1 AND file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
+
+require_once ( NV_ROOTDIR . "/includes/class/PHPExcel.php" );
+
+if( extension_loaded( 'zip' ) )
+{
+	$excel_ext = "xlsx";
+	$writerType = 'Excel2007';
+}
+else
+{
+	$excel_ext = "xls";
+	$writerType = 'Excel5';
+}
+
+if( $step == 1 and file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
 {
 	$example = $nv_Request->get_int( 'example', 'get', 0 );
 
 	$page_title = ( empty( $example ) ) ? $lang_module['export'] : $lang_module['export_example'];
 
-	require_once ( NV_ROOTDIR . "/includes/class/PHPExcel.php" );
-
-	if( extension_loaded( 'zip' ) )
-	{
-		$template_file = NV_ROOTDIR . '/modules/' . $module_file . '/template.xlsx';
-		$writerType = 'Excel2007';
-	}
-	else
-	{
-		$template_file = NV_ROOTDIR . '/modules/' . $module_file . '/template.xls';
-		$writerType = 'Excel5';
-	}
+	$template_file = NV_ROOTDIR . '/modules/' . $module_file . '/template.' . $excel_ext;
 
 	// Create new PHPExcel object
 	$objPHPExcel = PHPExcel_IOFactory::load( $template_file );
@@ -234,11 +237,6 @@ if( $step == 1 AND file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
 	if( $writerType == 'Excel2007' )
 	{
 		$objWriter->setOffice2003Compatibility( true );
-		$ext = '.xlsx';
-	}
-	else
-	{
-		$ext = '.xls';
 	}
 
 	if( $example == 1 )
@@ -251,7 +249,7 @@ if( $step == 1 AND file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
 		{
 			header( 'Content-Type: application/vnd.ms-excel' );
 		}
-		header( 'Content-Disposition: attachment;filename="' . basename( change_alias( $page_title ) . $ext ) . '"' );
+		header( 'Content-Disposition: attachment;filename="' . basename( change_alias( $page_title ) . $excel_ext ) . '"' );
 		header( 'Cache-Control: max-age=0' );
 		$objWriter->save( 'php://output' );
 		exit();
@@ -279,7 +277,7 @@ if( $step == 1 AND file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
 		$nv_Request->set_Session( $module_data . '_export_filename', $export_filename . "@" . $file_name );
 	}
 
-	$objWriter->save( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . $ext );
+	$objWriter->save( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . $excel_ext );
 	die( $result );
 }
 elseif( $step == 2 and $nv_Request->isset_request( $module_data . '_export_filename', 'session' ) )
@@ -289,9 +287,9 @@ elseif( $step == 2 and $nv_Request->isset_request( $module_data . '_export_filen
 	$arry_file_zip = array();
 	foreach( $array_filename as $file_name )
 	{
-		if( ! empty( $file_name ) and file_exists( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . ".xls" ) )
+		if( ! empty( $file_name ) and file_exists( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . "." . $excel_ext ) )
 		{
-			$arry_file_zip[] = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . ".xls";
+			$arry_file_zip[] = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . "." . $excel_ext;
 		}
 	}
 
