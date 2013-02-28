@@ -894,39 +894,30 @@ function news_print( $result )
 // Search
 function search_theme( $key, $check_num, $date_array, $array_cat_search )
 {
-	global $module_name, $module_info, $module_file, $lang_module, $module_name, $my_head;
-
+	global $module_name, $module_info, $module_file, $lang_module, $module_name;
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$base_url_site = NV_BASE_SITEURL . "?";
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
-	$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . "?" );
+	$xtpl->assign( 'BASE_URL_SITE', $base_url_site );
 	$xtpl->assign( 'TO_DATE', $date_array['to_date'] );
 	$xtpl->assign( 'FROM_DATE', $date_array['from_date'] );
 	$xtpl->assign( 'KEY', $key );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 	$xtpl->assign( 'OP_NAME', 'search' );
-
 	foreach( $array_cat_search as $search_cat )
 	{
 		$xtpl->assign( 'SEARCH_CAT', $search_cat );
 		$xtpl->parse( 'main.search_cat' );
 	}
-
 	for( $i = 0; $i <= 3; ++$i )
 	{
-		if( $check_num == $i )
-		{
-			$xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
-		}
-		else
-		{
-			$xtpl->assign( 'CHECK' . $i, "" );
-		}
+		if( $check_num == $i ) $xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
+		else  $xtpl->assign( 'CHECK' . $i, "" );
 	}
-
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

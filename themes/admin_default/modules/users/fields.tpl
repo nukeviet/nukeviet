@@ -217,8 +217,48 @@
 			</tr>
 		</tbody>
 	</table>
-
-	<table class="tab1" id="choiceitems" {DATAFORM.display_choiceitems} >
+    <table class="tab1" id="choicetypes" {DATAFORM.display_choicetypes} >
+        <tr>
+            <td style="width:150px">{LANG.field_choicetypes_title}</td>
+            <td>
+                <!-- BEGIN: choicetypes_add -->
+                <select name="choicetypes">
+                    <!-- BEGIN: choicetypes -->
+                    <option{CHOICE_TYPES.selected} value="{CHOICE_TYPES.key}">{CHOICE_TYPES.value}</option>
+                    <!-- END: choicetypes -->
+                </select>
+                <!-- END: choicetypes_add -->
+                {FIELD_TYPE_SQL}
+            </td>
+        </tr>
+    </table>
+    <table class="tab1" id="choicesql" {DATAFORM.display_choicesql} >
+		<caption>{LANG.field_options_choicesql}</caption>
+		<colgroup>
+			<col style="width: 250px;" />
+		</colgroup>
+		<thead>
+			<tr align="center">
+				<td>{LANG.field_options_choicesql_module}</td>
+				<td>{LANG.field_options_choicesql_table}</td>
+				<td>{LANG.field_options_choicesql_column}</td>
+			</tr>
+		</thead>
+		<tbody class="second">
+			<tr align="center">
+				<td>
+                    <span id="choicesql_module"></span>
+                </td>
+                <td>
+                    <span id="choicesql_table"></span>
+                </td>
+                <td>
+                    <span id="choicesql_column"></span>
+                </td>
+			</tr>
+		</tbody>
+	</table>      
+    <table class="tab1" id="choiceitems" {DATAFORM.display_choiceitems} >
 		<caption>{LANG.field_options_choice}</caption>
 		<colgroup>
 			<col style="width: 250px;" />
@@ -358,7 +398,9 @@
 		$("#textfields").hide();
 		$("#numberfields").hide();
 		$("#datefields").hide();
-		$("#choiceitems").hide();
+		$("#choicetypes").hide();
+        $("#choiceitems").hide();
+		$("#choicesql").hide();
 		$("#editorfields").hide();
 		if (field_type == 'textbox' || field_type == 'textarea' || field_type == 'editor') {
 			if (field_type == 'textbox') {
@@ -379,10 +421,11 @@
 		} else if (field_type == 'date') {
 			$("#datefields").show();
 		} else {
-			$("#choiceitems").show();
+			$("#choicetypes").show();
 			$("#textfields").hide();
 			$("#numberfields").hide();
 			$("#datefields").hide();
+            nv_users_check_choicetypes( "select[name=choicetypes]" );
 		}
 	});
 	$("input[name=required],input[name=show_register]").click(function() {
@@ -412,7 +455,9 @@
 	$("input[name=current_date]").click(function() {
 		nv_load_current_date();
 	});
-
+    $("select[name=choicetypes]").change(function() {
+		nv_users_check_choicetypes( this )
+	});
 	$(".datepicker").datepicker({
 		showOn : "both",
 		dateFormat : "dd/mm/yy",
@@ -421,7 +466,66 @@
 		showOtherMonths : true,
 		buttonImage : nv_siteroot + "images/calendar.gif",
 		buttonImageOnly : true
-	}); 
+	});
+    function nv_users_check_choicetypes( elemnet ){
+        var choicetypes_val = $(elemnet).val();
+        if( choicetypes_val == "field_choicetypes_text" )
+        {
+            $("#choiceitems").show();
+			$("#choicesql").hide();
+        }else{
+            $("#choiceitems").hide();
+			$("#choicesql").show();
+            nv_load_sqlchoice( 'module', '' )
+        }
+    }
+    function nv_load_sqlchoice( choice_name_select, choice_seltected ){
+        var getval = "";
+        if( choice_name_select == "table" )
+        {
+            var choicesql_module = $("select[name=choicesql_module]").val();
+            var module_selected = ( choicesql_module == "" || choicesql_module == undefined )? '{SQL_DATA_CHOICE.0}' : choicesql_module; 
+            getval = "&module=" + module_selected;
+            $("#choicesql_column").html("");
+        }
+        else if( choice_name_select == "column" )
+        {
+            var choicesql_module = $("select[name=choicesql_module]").val();
+            var module_selected = ( choicesql_module == "" || choicesql_module == undefined )? '{SQL_DATA_CHOICE.0}' : choicesql_module;
+            var choicesql_table = $("select[name=choicesql_table]").val();
+            var table_selected = ( choicesql_table == "" || choicesql_table == undefined )? '{SQL_DATA_CHOICE.1}' : choicesql_table;
+            getval = "&module=" + module_selected + "&table=" + table_selected;
+        }
+        nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&choicesql=1&choice=' + choice_name_select + getval + '&choice_seltected=' + choice_seltected + '&num=' + nv_randomPassword(8), 'choicesql_' + choice_name_select, '');
+    }
 </script>
 <!-- END: load -->
+<!-- BEGIN: nv_load_sqlchoice -->
+<script type="text/javascript">
+    nv_load_sqlchoice( 'module', '{SQL_DATA_CHOICE.0}' );
+    nv_load_sqlchoice( 'table', '{SQL_DATA_CHOICE.1}' );
+    nv_load_sqlchoice( 'column', '{SQL_DATA_CHOICE.2}|{SQL_DATA_CHOICE.3}' );
+</script>
+<!-- END: nv_load_sqlchoice -->
 <!-- END: main -->
+<!-- BEGIN: choicesql -->
+<select onchange="nv_load_sqlchoice( '{choicesql_next}', '' )" name="{choicesql_name}">
+    <!-- BEGIN: loop -->
+        <option{SQL.sl} value="{SQL.key}">{SQL.val}</option>
+    <!-- END: loop -->    
+</select>
+<!-- END: choicesql -->
+<!-- BEGIN: column -->
+{LANG.field_options_choicesql_key}:
+<select name="choicesql_column_key" id="choicesql_column_key">
+    <!-- BEGIN: loop1 -->
+        <option{SQL.sl_key} value="{SQL.key}">{SQL.val}</option>
+    <!-- END: loop1 -->    
+</select>
+{LANG.field_options_choicesql_val}:
+<select name="choicesql_column_val" id="choicesql_column_val">
+    <!-- BEGIN: loop2 -->
+        <option{SQL.sl_val} value="{SQL.key}">{SQL.val}</option>
+    <!-- END: loop2 -->    
+</select>
+<!-- END: column -->

@@ -99,7 +99,18 @@ while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 	$language = unserialize( $row_field['language'] );
 	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
 	$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
-	$row_field['field_choices'] = ( ! empty( $row_field['field_choices'] ) ) ? unserialize( $row_field['field_choices'] ) : array();
+	if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
+	else
+	{
+		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
+		$query = "SELECT `" . $row_field['sql_choices'][2] . "`, `" . $row_field['sql_choices'][3] . "` FROM `" . $row_field['sql_choices'][1] . "`";
+		$result = $db->sql_query( $query );
+		$weight = 0;
+		while( list( $key, $val ) = $db->sql_fetchrow( $result ) )
+		{
+			$row_field['field_choices'][$key] = $val;
+		}
+	}
 	$array_field_config[] = $row_field;
 }
 if( defined( 'NV_EDITOR' ) )
@@ -115,7 +126,34 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
 		// Create class instance.
-		$editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
+		$editortoolbar = array( array(
+				'Link',
+				'Unlink',
+				'Image',
+				'Table',
+				'Font',
+				'FontSize',
+				'RemoveFormat' ), array(
+				'Bold',
+				'Italic',
+				'Underline',
+				'StrikeThrough',
+				'-',
+				'Subscript',
+				'Superscript',
+				'-',
+				'JustifyLeft',
+				'JustifyCenter',
+				'JustifyRight',
+				'JustifyBlock',
+				'OrderedList',
+				'UnorderedList',
+				'-',
+				'Outdent',
+				'Indent',
+				'TextColor',
+				'BGColor',
+				'Source' ) );
 		$CKEditor = new CKEditor();
 		// Do not print the code directly to the browser, return it instead
 		$CKEditor->returnOutput = true;
@@ -150,6 +188,7 @@ $query = $db->sql_query( $sql );
 $row = $db->sql_fetchrow( $query );
 
 $array_data = array();
+$info = "";
 $array_data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
 $checkss = filter_text_input( 'checkss', 'post', '' );
 
@@ -183,7 +222,10 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 			{
 				$step = 2;
 
-				if( ! isset( $array_data['nv_password']{31} ) )
+				if( ! isset( $array_data['nv_password']
+				{
+					31}
+				) )
 				{
 					$array_data['nv_password'] = md5( $crypt->hash( $array_data['nv_password'] ) );
 				}
@@ -485,18 +527,15 @@ $array_data['gender_array'] = array();
 $array_data['gender_array']['N'] = array(
 	'value' => 'N',
 	'title' => 'N/A',
-	'selected' => ''
-);
+	'selected' => '' );
 $array_data['gender_array']['M'] = array(
 	'value' => 'M',
 	'title' => $lang_module['male'],
-	'selected' => ( $array_data['gender'] == 'M' ? " selected=\"selected\"" : "" )
-);
+	'selected' => ( $array_data['gender'] == 'M' ? " selected=\"selected\"" : "" ) );
 $array_data['gender_array']['F'] = array(
 	'value' => 'F',
 	'title' => $lang_module['female'],
-	'selected' => ( $array_data['gender'] == 'F' ? " selected=\"selected\"" : "" )
-);
+	'selected' => ( $array_data['gender'] == 'F' ? " selected=\"selected\"" : "" ) );
 
 $contents = user_info( $array_data, $array_field_config, $custom_fields, $info );
 

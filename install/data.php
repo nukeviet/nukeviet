@@ -153,6 +153,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_field` (
   `weight` int(10) unsigned NOT NULL DEFAULT '1',
   `field_type` enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
   `field_choices` mediumtext NOT NULL,
+  `sql_choices` text NOT NULL,
   `match_type` enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
   `match_regex` varchar(250) NOT NULL DEFAULT '',
   `func_callback` varchar(75) NOT NULL DEFAULT '',

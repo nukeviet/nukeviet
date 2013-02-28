@@ -39,6 +39,95 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	die( "OK" );
 }
 
+// lay du lieu sql
+if( $nv_Request->isset_request( 'choicesql', 'post' ) )
+{
+	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+
+	$array_choicesql = array( "module" => "table", "table" => "column" );
+	$choice = $nv_Request->get_string( 'choice', 'post', '' );
+	$choice_seltected = $nv_Request->get_string( 'choice_seltected', 'post', '' );
+
+	$xtpl = new XTemplate( "fields.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+
+	if( $choice == "module" )
+	{
+		$xtpl->assign( 'choicesql_name', "choicesql_" . $choice );
+		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
+		$xtpl->parse( 'choicesql.loop' );
+		foreach( $site_mods as $module )
+		{
+			$_temp_choice['sl'] = ( $choice_seltected == $module['module_data'] ) ? " selected='selected'" : "";
+			$_temp_choice['key'] = $module['module_data'];
+			$_temp_choice['val'] = $module['custom_title'];
+			$xtpl->assign( 'SQL', $_temp_choice );
+			$xtpl->parse( 'choicesql.loop' );
+			unset( $_temp_choice );
+		}
+		$xtpl->parse( 'choicesql' );
+		$contents = $xtpl->text( 'choicesql' );
+	}
+	elseif( $choice == "table" )
+	{
+		$module = $nv_Request->get_string( 'module', 'post', '' );
+		if( $module == "" ) exit( "" );
+		$result = $db->sql_query( "SHOW TABLE STATUS LIKE '%\_" . $module . "%'" );
+		$num_table = intval( $db->sql_numrows( $result ) );
+		$array_table_module = array();
+		$xtpl->assign( 'choicesql_name', "choicesql_" . $choice );
+		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
+
+		if( $num_table > 0 )
+		{
+			$xtpl->parse( 'choicesql.loop' );
+			while( $item = $db->sql_fetch_assoc( $result ) )
+			{
+				$_temp_choice['sl'] = ( $choice_seltected == $item['Name'] ) ? " selected='selected'" : "";
+				$_temp_choice['key'] = $item['Name'];
+				$_temp_choice['val'] = $item['Name'];
+				$xtpl->assign( 'SQL', $_temp_choice );
+				$xtpl->parse( 'choicesql.loop' );
+				unset( $_temp_choice );
+			}
+		}
+		$xtpl->parse( 'choicesql' );
+		$contents = $xtpl->text( 'choicesql' );
+	}
+	elseif( $choice == "column" )
+	{
+		$table = $nv_Request->get_string( 'table', 'post', '' );
+		if( $table == "" ) exit( "" );
+
+		$result = $db->sql_query( "SHOW COLUMNS FROM " . $table );
+		$num_table = intval( $db->sql_numrows( $result ) );
+		$array_table_module = array();
+		$xtpl->assign( 'choicesql_name', "choicesql_" . $choice );
+		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
+		if( $num_table > 0 )
+		{
+			$choice_seltected = explode( "|", $choice_seltected );
+			while( $item = $db->sql_fetch_assoc( $result ) )
+			{
+				$_temp_choice['sl_key'] = ( $choice_seltected[0] == $item['Field'] ) ? " selected='selected'" : "";
+				$_temp_choice['sl_val'] = ( $choice_seltected[1] == $item['Field'] ) ? " selected='selected'" : "";
+				$_temp_choice['key'] = $item['Field'];
+				$_temp_choice['val'] = $item['Field'];
+				$xtpl->assign( 'SQL', $_temp_choice );
+				$xtpl->parse( 'column.loop1' );
+				$xtpl->parse( 'column.loop2' );
+				unset( $_temp_choice );
+			}
+		}
+		$xtpl->parse( 'column' );
+		$contents = $xtpl->text( 'column' );
+	}
+
+	include ( NV_ROOTDIR . "/includes/header.php" );
+	echo $contents;
+	include ( NV_ROOTDIR . "/includes/footer.php" );
+}
+
 //ADD
 $error = '';
 $field_choices = array();
@@ -187,23 +276,43 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	else
 	{
+		$dataform['choicetypes'] = $nv_Request->get_string( 'choicetypes', 'post', '' );
 		$dataform['match_type'] = 'none';
 		$dataform['match_regex'] = $dataform['func_callback'] = '';
 		$dataform['min_length'] = 0;
 		$dataform['max_length'] = 255;
 		$dataform['default_value'] = $nv_Request->get_int( 'default_value_choice', 'post', 0 );
 
-		$field_choice_value = $nv_Request->get_array( 'field_choice', 'post' );
-		$field_choice_text = $nv_Request->get_array( 'field_choice_text', 'post' );
-		$field_choices = array_combine( array_map( 'strip_punctuation', $field_choice_value ), array_map( 'strip_punctuation', $field_choice_text ) );
-		if( sizeof( $field_choices ) )
+		if( $dataform['choicetypes'] == "field_choicetypes_text" )
 		{
-			unset( $field_choices[""] );
-			$dataform['field_choices'] = serialize( $field_choices );
+			$field_choice_value = $nv_Request->get_array( 'field_choice', 'post' );
+			$field_choice_text = $nv_Request->get_array( 'field_choice_text', 'post' );
+			$field_choices = array_combine( array_map( 'strip_punctuation', $field_choice_value ), array_map( 'strip_punctuation', $field_choice_text ) );
+			if( sizeof( $field_choices ) )
+			{
+				unset( $field_choices[""] );
+				$dataform['field_choices'] = serialize( $field_choices );
+			}
+			else
+			{
+				$error = $lang_module['field_choices_empty'];
+			}
 		}
 		else
 		{
-			$error = $lang_module['field_choices_empty'];
+			$choicesql_module = $nv_Request->get_string( 'choicesql_module', 'post', '' ); //module data
+			$choicesql_table = $nv_Request->get_string( 'choicesql_table', 'post', '' ); //table trong module
+			$choicesql_column_key = $nv_Request->get_string( 'choicesql_column_key', 'post', '' ); //cot value cho fields
+			$choicesql_column_val = $nv_Request->get_string( 'choicesql_column_val', 'post', '' ); //cot key cho fields
+			$dataform['sql_choices'] = "";
+			if( $choicesql_module != "" && $choicesql_table != "" && $choicesql_column_key != "" && $choicesql_column_val != "" )
+			{
+				$dataform['sql_choices'] = $choicesql_module . "|" . $choicesql_table . "|" . $choicesql_column_key . "|" . $choicesql_column_val;
+			}
+			else
+			{
+				$error = $lang_module['field_sql_choices_empty'];
+			}
 		}
 	}
 	if( empty( $error ) )
@@ -218,11 +327,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				$weight = intval( $weight ) + 1;
 
 				$dataform['fid'] = $db->sql_query_insert_id( "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_field` 
-				(`fid`, `field`, `weight`, `field_type`, `field_choices`, `match_type`, 
+				(`fid`, `field`, `weight`, `field_type`, `field_choices`, `sql_choices`, `match_type`, 
 				`match_regex`, `func_callback`, `min_length`, `max_length`, 
 				`required`, `show_register`, `user_editable`, 
 				`show_profile`, `class`, `language`, `default_value`) VALUES
-				(NULL, '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['match_type'] . "', 
+				(NULL, '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['sql_choices'] . "', '" . $dataform['match_type'] . "', 
 				'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "', 
 				" . $dataform['min_length'] . ", " . $dataform['max_length'] . ", 
 				" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable_save'] . "', 
@@ -264,7 +373,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				`match_regex`='" . $dataform['match_regex'] . "', `func_callback`='" . $dataform['func_callback'] . "', ";
 			}
 			$query .= " `max_length`=" . $dataform['max_length'] . ", `min_length`=" . $dataform['min_length'] . ",
-				`required` = '" . $dataform['required'] . "',  
+				`required` = '" . $dataform['required'] . "',
+                `sql_choices` = '" . $dataform['sql_choices'] . "',  
 				`show_register` = '" . $dataform['show_register'] . "',  
 				`user_editable` = '" . $dataform['user_editable_save'] . "',  
 				`show_profile` = '" . $dataform['show_profile'] . "',  
@@ -342,8 +452,9 @@ $array_field_type = array(
 	'select' => $lang_module['field_type_select'],
 	'radio' => $lang_module['field_type_radio'],
 	'checkbox' => $lang_module['field_type_checkbox'],
-	'multiselect' => $lang_module['field_type_multiselect']
-);
+	'multiselect' => $lang_module['field_type_multiselect'] );
+
+$array_choice_type = array( "field_choicetypes_sql" => $lang_module['field_choicetypes_sql'], "field_choicetypes_text" => $lang_module['field_choicetypes_text'] );
 
 $xtpl = new XTemplate( "fields.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
@@ -376,16 +487,14 @@ if( $nv_Request->isset_request( 'qlist', 'get' ) )
 				"field_type" => $array_field_type[$row['field_type']],
 				"required" => ( $row['required'] ) ? ' checked="checked"' : '',
 				"show_register" => ( $row['show_register'] ) ? ' checked="checked"' : '',
-				"show_profile" => ( $row['show_profile'] ) ? ' checked="checked"' : ''
-			) );
+				"show_profile" => ( $row['show_profile'] ) ? ' checked="checked"' : '' ) );
 
 			for( $i = 1; $i <= $num; ++$i )
 			{
 				$xtpl->assign( 'WEIGHT', array(
 					"key" => $i,
 					"title" => $i,
-					"selected" => $i == $row['weight'] ? " selected=\"selected\"" : ""
-				) );
+					"selected" => $i == $row['weight'] ? " selected=\"selected\"" : "" ) );
 				$xtpl->parse( 'main.data.loop.weight' );
 			}
 
@@ -466,7 +575,7 @@ else
 		}
 	}
 
-	$text_fields = $number_fields = $date_fields = $choice_fields = 0;
+	$text_fields = $number_fields = $date_fields = $choice_fields = $choice_type_sql = $choice_type_text = 0;
 	if( $dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea' || $dataform['field_type'] == 'editor' )
 	{
 		$text_fields = 1;
@@ -491,6 +600,14 @@ else
 	else
 	{
 		$choice_fields = 1;
+		if( ! empty( $dataform['sql_choices'] ) )
+		{
+			$choice_type_sql = 1;
+			$sql_data_choice = explode( "|", $dataform['sql_choices'] );
+			$xtpl->assign( 'SQL_DATA_CHOICE', $sql_data_choice );
+			$xtpl->parse( 'main.nv_load_sqlchoice' );
+		}
+		else  $choice_type_text = 1;
 	}
 	if( $fid == 0 or $text_fields == 0 )
 	{
@@ -504,8 +621,7 @@ else
 					"checked" => ( $number == $dataform['default_value'] ) ? ' checked="checked"' : '',
 					"number" => $number++,
 					"key" => $key,
-					"value" => $value
-				) );
+					"value" => $value ) );
 				$xtpl->parse( 'main.load.loop_field_choice' );
 			}
 		}
@@ -513,15 +629,16 @@ else
 			"class" => ( $number % 2 == 0 ) ? ' class="second"' : '',
 			"number" => $number,
 			"key" => '',
-			"value" => ''
-		) );
+			"value" => '' ) );
 		$xtpl->parse( 'main.load.loop_field_choice' );
 		$xtpl->assign( 'FIELD_CHOICES_NUMBER', $number );
 	}
 	$dataform['display_textfields'] = ( $text_fields ) ? '' : 'style="display: none;"';
 	$dataform['display_numberfields'] = ( $number_fields ) ? '' : 'style="display: none;"';
 	$dataform['display_datefields'] = ( $date_fields ) ? '' : 'style="display: none;"';
-	$dataform['display_choiceitems'] = ( $choice_fields ) ? '' : 'style="display: none;"';
+	$dataform['display_choicetypes'] = ( $choice_fields ) ? '' : 'style="display: none;"';
+	$dataform['display_choiceitems'] = ( $choice_type_text ) ? '' : 'style="display: none;"';
+	$dataform['display_choicesql'] = ( $choice_type_sql ) ? '' : 'style="display: none;"';
 
 	$dataform['editordisabled'] = ( $dataform['field_type'] != 'editor' ) ? ' style="display: none;"' : '';
 	$dataform['classdisabled'] = ( $dataform['field_type'] == 'editor' ) ? ' style="display: none;"' : '';
@@ -543,15 +660,24 @@ else
 			$xtpl->assign( 'FIELD_TYPE', array(
 				"key" => $key,
 				"value" => $value,
-				"checked" => ( $dataform['field_type'] == $key ) ? ' checked="checked"' : ''
-			) );
+				"checked" => ( $dataform['field_type'] == $key ) ? ' checked="checked"' : '' ) );
 			$xtpl->parse( 'main.load.field_type.loop' );
 		}
 		$xtpl->parse( 'main.load.field_type' );
+
+		foreach( $array_choice_type as $key => $value )
+		{
+			$xtpl->assign( 'CHOICE_TYPES', array(
+				"key" => $key,
+				"value" => $value,
+				"selected" => ( $dataform['match_type'] == $key ) ? ' selected="selected"' : '' ) );
+			$xtpl->parse( 'main.load.choicetypes' );
+		}
 	}
 	else
 	{
 		$xtpl->assign( 'FIELD_TYPE_TEXT', $array_field_type[$dataform['field_type']] );
+		$xtpl->assign( 'FIELD_TYPE_SQL', ( ! empty( $dataform['sql_choices'] ) ) ? $array_choice_type['field_choicetypes_sql'] : $array_choice_type['field_choicetypes_text'] );
 	}
 	$array_match_type = array();
 	$array_match_type['none'] = $lang_module['field_match_type_none'];
@@ -570,8 +696,7 @@ else
 			"value" => $value,
 			"match_value" => ( $key == 'regex' ) ? $dataform['match_regex'] : $dataform['func_callback'],
 			"checked" => ( $dataform['match_type'] == $key ) ? ' checked="checked"' : '',
-			"match_disabled" => ( $dataform['match_type'] != $key ) ? ' disabled="disabled"' : ''
-		) );
+			"match_disabled" => ( $dataform['match_type'] != $key ) ? ' disabled="disabled"' : '' ) );
 
 		if( $key == 'regex' or $key == 'callback' )
 		{
@@ -579,11 +704,13 @@ else
 		}
 		$xtpl->parse( 'main.load.match_type' );
 	}
+
 	if( ! empty( $error ) )
 	{
 		$xtpl->assign( 'ERROR', $error );
 		$xtpl->parse( 'main.load.error' );
 	}
+
 	$xtpl->parse( 'main.load' );
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
