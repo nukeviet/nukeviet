@@ -247,6 +247,18 @@ $lang_module['field_options_choice'] = 'Options for Choice Fields';
 $lang_module['field_number'] = 'STT';
 $lang_module['field_value'] = 'Value';
 $lang_module['field_text'] = 'Text';
-$lang_module['field_add_choice'] = 'Thêm lựa chọn';
+$lang_module['field_add_choice'] = 'More choices';
+
+$lang_module['field_choicetypes_title'] = 'Choose the type of data';
+$lang_module['field_choicetypes_sql'] = 'Retrieve data from database';
+$lang_module['field_choicetypes_text'] = 'Get data from input';
+$lang_module['field_options_choicesql'] = 'Module selection, data tables and data fields';
+$lang_module['field_options_choicesql_module'] = "Select the module";
+$lang_module['field_options_choicesql_table'] = "Select the data table";
+$lang_module['field_options_choicesql_column'] = "Select the column data";
+$lang_module['field_options_choicesql_key'] = "Select columns as key";
+$lang_module['field_options_choicesql_val'] = "Select column as value";
+$lang_module['field_sql_choices_empty'] = 'Error: Selection retrieve data from the database is not full';
+
 
 ?>

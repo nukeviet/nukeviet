@@ -20,7 +20,18 @@ while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 	$language = unserialize( $row_field['language'] );
 	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
 	$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
-	$row_field['field_choices'] = ( ! empty( $row_field['field_choices'] ) ) ? unserialize( $row_field['field_choices'] ) : array();
+	if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
+	else
+	{
+		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
+		$query = "SELECT `" . $row_field['sql_choices'][2] . "`, `" . $row_field['sql_choices'][3] . "` FROM `" . $row_field['sql_choices'][1] . "`";
+		$result = $db->sql_query( $query );
+		$weight = 0;
+		while( list( $key, $val ) = $db->sql_fetchrow( $result ) )
+		{
+			$row_field['field_choices'][$key] = $val;
+		}
+	}
 	$array_field_config[] = $row_field;
 }
 $custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
@@ -401,6 +412,7 @@ else
 				elseif( $row['field_type'] == 'multiselect' )
 				{
 					$valueselect = ( ! empty( $row['value'] ) ) ? explode( ',', $row['value'] ) : array();
+                    //print_r( $row['field_choices'] );die();
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
