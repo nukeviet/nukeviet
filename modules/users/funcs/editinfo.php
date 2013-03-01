@@ -100,7 +100,7 @@ while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
 	$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
 	if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
-	else
+	elseif(! empty( $row_field['sql_choices'] ))
 	{
 		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
 		$query = "SELECT `" . $row_field['sql_choices'][2] . "`, `" . $row_field['sql_choices'][3] . "` FROM `" . $row_field['sql_choices'][1] . "`";
