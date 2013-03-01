@@ -671,8 +671,9 @@ else
 				"key" => $key,
 				"value" => $value,
 				"selected" => ( $dataform['match_type'] == $key ) ? ' selected="selected"' : '' ) );
-			$xtpl->parse( 'main.load.choicetypes' );
+			$xtpl->parse( 'main.load.choicetypes_add.choicetypes' );
 		}
+        $xtpl->parse( 'main.load.choicetypes_add' );
 	}
 	else
 	{
