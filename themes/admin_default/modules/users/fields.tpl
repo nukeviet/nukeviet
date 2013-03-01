@@ -228,7 +228,9 @@
                     <!-- END: choicetypes -->
                 </select>
                 <!-- END: choicetypes_add -->
-                {FIELD_TYPE_SQL}
+                <!-- BEGIN: choicetypes_add_hidden -->
+                {FIELD_TYPE_SQL}<input type="hidden" name="choicetypes" value="{choicetypes_add_hidden}" />
+                <!-- END: choicetypes_add_hidden -->
             </td>
         </tr>
     </table>

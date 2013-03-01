@@ -411,13 +411,11 @@ else
 				}
 				elseif( $row['field_type'] == 'multiselect' )
 				{
-					$valueselect = ( ! empty( $row['value'] ) ) ? explode( ',', $row['value'] ) : array();
-                    //print_r( $row['field_choices'] );die();
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							"key" => $key,
-							"selected" => ( in_array( $key, $valueselect ) ) ? ' selected="selected"' : '',
+							"selected" => ( $key == $row['value'] ) ? ' selected="selected"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.edit_user.field.loop.multiselect.loop' );
