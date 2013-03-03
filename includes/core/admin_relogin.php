@@ -86,6 +86,11 @@ if( defined( "NV_IS_ADMIN" ) )
 
 			$info = ( ! empty( $error ) ) ? '<div class="error">' . sprintf( $lang_global['relogin_error_info'], $error, ( $global_config['adminrelogin_max'] - $check_hits + 1 ) ) . '</div>' : '<div class="normal">' . sprintf( $lang_global['relogin_info'], $global_config['adminrelogin_max'] - $check_hits + 1 ) . '</div>';
 			$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+			if( $size[0] > 490 )
+			{
+				$size[1] = ceil( 490 * $size[1] / $size[0] );
+				$size[0] = 490;
+			}
 
 			$dir_template = "";
 			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/relogin.tpl" ) )

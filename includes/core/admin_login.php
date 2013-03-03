@@ -174,6 +174,11 @@ elseif( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
 
 $info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
 $size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+if( $size[0] > 490 )
+{
+	$size[1] = ceil( 490 * $size[1] / $size[0] );
+	$size[0] = 490;
+}
 
 $dir_template = "";
 if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/login.tpl" ) )

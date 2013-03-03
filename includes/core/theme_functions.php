@@ -116,9 +116,13 @@ function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink =
 	}
 
 	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+	if( $size[0] > 400 )
+	{
+		$size[1] = ceil( 400 * $size[1] / $size[0] );
+		$size[0] = 400;
+	}
 
 	$xtpl = new XTemplate( "info_die.tpl", $tpl_path );
-
 	$xtpl->assign( 'SITE_CHERSET', $global_config['site_charset'] );
 	$xtpl->assign( 'PAGE_TITLE', $page_title );
 	$xtpl->assign( 'HOME_LINK', $global_config['site_url'] );
