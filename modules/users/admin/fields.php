@@ -671,13 +671,24 @@ else
 				"key" => $key,
 				"value" => $value,
 				"selected" => ( $dataform['match_type'] == $key ) ? ' selected="selected"' : '' ) );
-			$xtpl->parse( 'main.load.choicetypes' );
+			$xtpl->parse( 'main.load.choicetypes_add.choicetypes' );
 		}
+		$xtpl->parse( 'main.load.choicetypes_add' );
 	}
 	else
 	{
 		$xtpl->assign( 'FIELD_TYPE_TEXT', $array_field_type[$dataform['field_type']] );
-		$xtpl->assign( 'FIELD_TYPE_SQL', ( ! empty( $dataform['sql_choices'] ) ) ? $array_choice_type['field_choicetypes_sql'] : $array_choice_type['field_choicetypes_text'] );
+		if( ( ! empty( $dataform['sql_choices'] ) ) )
+		{
+			$xtpl->assign( 'choicetypes_add_hidden', "field_choicetypes_sql" );
+			$xtpl->assign( 'FIELD_TYPE_SQL', $array_choice_type['field_choicetypes_sql'] );
+		}
+		else
+		{
+			$xtpl->assign( 'choicetypes_add_hidden', "field_choicetypes_text" );
+			$xtpl->assign( 'FIELD_TYPE_SQL', $array_choice_type['field_choicetypes_text'] );
+		}
+		$xtpl->parse( 'main.load.choicetypes_add_hidden' );
 	}
 	$array_match_type = array();
 	$array_match_type['none'] = $lang_module['field_match_type_none'];
