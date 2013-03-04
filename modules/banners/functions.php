@@ -37,7 +37,7 @@ function nv_banner_client_checkdata( $cookie )
 		if( isset( $client['checknum'] ) and preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $client['checknum'] ) )
 		{
 			$login = $client['login'];
-			$query = "SELECT * FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `login` = " . $db->dbescape( $login ) . " AND `act`=1";
+			$query = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `login` = " . $db->dbescape( $login ) . " AND `act`=1";
 			$result = $db->sql_query( $query );
 
 			$numrows = $db->sql_numrows( $result );
@@ -47,9 +47,9 @@ function nv_banner_client_checkdata( $cookie )
 			$db->sql_freeresult( $result );
 
 			if( strcasecmp( $client['checknum'], $row['check_num'] ) == 0 and 			//checknum
-! empty( $client['current_agent'] ) and strcasecmp( $client['current_agent'], $row['last_agent'] ) == 0 and 			//user_agent
-! empty( $client['current_ip'] ) and strcasecmp( $client['current_ip'], $row['last_ip'] ) == 0 and 			//IP
-! empty( $client['current_login'] ) and strcasecmp( $client['current_login'], intval( $row['last_login'] ) ) == 0 )
+			! empty( $client['current_agent'] ) and strcasecmp( $client['current_agent'], $row['last_agent'] ) == 0 and 			//user_agent
+			! empty( $client['current_ip'] ) and strcasecmp( $client['current_ip'], $row['last_ip'] ) == 0 and 			//IP
+			! empty( $client['current_login'] ) and strcasecmp( $client['current_login'], intval( $row['last_login'] ) ) == 0 )
 			{
 				$banner_client_info['id'] = intval( $row['id'] );
 				$banner_client_info['login'] = $row['login'];

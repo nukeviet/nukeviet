@@ -41,8 +41,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( ! empty( $description ) ) $description = defined( 'NV_EDITOR' ) ? nv_nl2br( $description, '' ) : nv_nl2br( nv_htmlspecialchars( $description ), '<br />' );
 
-		$sql = "INSERT INTO `" . NV_BANNERS_PLANS_GLOBALTABLE . "` VALUES (NULL, " . $db->dbescape( $blang ) . ", " . $db->dbescape( $title ) . ", 
-        " . $db->dbescape( $description ) . ", " . $db->dbescape( $form ) . ", " . $width . ", " . $height . ", 1)";
+		$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_plans` VALUES (NULL, " . $db->dbescape( $blang ) . ", " . $db->dbescape( $title ) . ", 
+			" . $db->dbescape( $description ) . ", " . $db->dbescape( $form ) . ", " . $width . ", " . $height . ", 1)";
 
 		$id = $db->sql_query_insert_id( $sql );
 

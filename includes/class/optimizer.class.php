@@ -10,7 +10,7 @@
 /**
  * optimezer
  * 
- * @package   
+ * @package 
  * @author NUKEVIET 3.0
  * @copyright VINADES.,JSC
  * @version 2010
@@ -98,9 +98,9 @@ class optimezer
 
 		$this->base_siteurl = $base_siteurl . '/';
 
-		if( defined( 'NV_FILES_DIR' ) )
+		if( defined( 'SYSTEM_FILES_DIR' ) )
 		{
-			$this->cssDir = NV_FILES_DIR . '/css';
+			$this->cssDir = SYSTEM_FILES_DIR . '/css';
 		}
 
 		if( class_exists( 'tidy' ) )

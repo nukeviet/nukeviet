@@ -14,7 +14,7 @@ if( ! defined( 'NV_SITE_TIMEZONE_NAME' ) ) define( 'NV_SITE_TIMEZONE_NAME', '+00
 /**
  * sql_db
  * 
- * @package   
+ * @package 
  * @author NUKEVIET 3.0
  * @copyright VINADES
  * @version 2010
@@ -44,11 +44,11 @@ class sql_db
 	private $rowset = array();
 
 	/**
-     * sql_db::__construct()
-     * 
-     * @param mixed $db_config
-     * @return
-     */
+ * sql_db::__construct()
+ * 
+ * @param mixed $db_config
+ * @return
+ */
 	public function __construct( $db_config = array() )
 	{
 		if( isset( $db_config['dbhost'] ) and ! empty( $db_config['dbhost'] ) ) $this->server = $db_config['dbhost'];
@@ -66,10 +66,10 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_connect()
-     * 
-     * @return
-     */
+ * sql_db::sql_connect()
+ * 
+ * @return
+ */
 	private function sql_connect( $dbpass )
 	{
 		$function = ( $this->persistency ) ? 'mysql_pconnect' : 'mysql_connect';
@@ -109,10 +109,10 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_setdb()
-     * 
-     * @return
-     */
+ * sql_db::sql_setdb()
+ * 
+ * @return
+ */
 	private function sql_setdb()
 	{
 		if( $this->db_connect_id )
@@ -124,7 +124,7 @@ class sql_db
 				@mysql_query( "SET SESSION `time_zone`='" . NV_SITE_TIMEZONE_GMT_NAME . "'", $this->db_connect_id );
 
 				$result = @mysql_query( 'SELECT @@session.time_zone AS `time_zone`, @@session.character_set_database AS `character_set_database`, 
-                @@session.collation_database AS `collation_database`, @@session.sql_mode AS `sql_mode`', $this->db_connect_id );
+ @@session.collation_database AS `collation_database`, @@session.sql_mode AS `sql_mode`', $this->db_connect_id );
 				$row = @mysql_fetch_assoc( $result );
 				@mysql_free_result( $result );
 
@@ -136,7 +136,7 @@ class sql_db
 				{
 					@mysql_query( "ALTER DATABASE `" . $this->dbname . "` DEFAULT CHARACTER SET `utf8` COLLATE `" . $this->db_set_collation . "`", $this->db_connect_id );
 					$result = @mysql_query( 'SELECT @@session.character_set_database AS `character_set_database`, 
-                    @@session.collation_database AS `collation_database`', $this->db_connect_id );
+ @@session.collation_database AS `collation_database`', $this->db_connect_id );
 					$row = @mysql_fetch_assoc( $result );
 					@mysql_free_result( $result );
 
@@ -163,10 +163,10 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_close()
-     * 
-     * @return
-     */
+ * sql_db::sql_close()
+ * 
+ * @return
+ */
 	public function sql_close()
 	{
 		if( $this->db_connect_id )
@@ -186,11 +186,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_transaction()
-     * 
-     * @param string $status
-     * @return
-     */
+ * sql_db::sql_transaction()
+ * 
+ * @param string $status
+ * @return
+ */
 	function sql_transaction( $status = 'begin' )
 	{
 		switch( $status )
@@ -211,11 +211,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_query()
-     * 
-     * @param string $query
-     * @return
-     */
+ * sql_db::sql_query()
+ * 
+ * @param string $query
+ * @return
+ */
 	public function sql_query( $query = "" )
 	{
 		$this->query_result = false;
@@ -238,11 +238,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_query_insert_id()
-     * 
-     * @param string $query
-     * @return
-     */
+ * sql_db::sql_query_insert_id()
+ * 
+ * @param string $query
+ * @return
+ */
 	public function sql_query_insert_id( $query = "" )
 	{
 		if( empty( $query ) or ! preg_match( "/^INSERT\s/is", $query ) )
@@ -258,11 +258,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_numrows()
-     * 
-     * @param integer $query_id
-     * @return
-     */
+ * sql_db::sql_numrows()
+ * 
+ * @param integer $query_id
+ * @return
+ */
 	public function sql_numrows( $query_id = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -276,10 +276,10 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_affectedrows()
-     * 
-     * @return
-     */
+ * sql_db::sql_affectedrows()
+ * 
+ * @return
+ */
 	public function sql_affectedrows()
 	{
 		if( $this->db_connect_id )
@@ -291,11 +291,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_numfields()
-     * 
-     * @param integer $query_id
-     * @return
-     */
+ * sql_db::sql_numfields()
+ * 
+ * @param integer $query_id
+ * @return
+ */
 	public function sql_numfields( $query_id = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -309,12 +309,12 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_fieldname()
-     * 
-     * @param mixed $offset
-     * @param integer $query_id
-     * @return
-     */
+ * sql_db::sql_fieldname()
+ * 
+ * @param mixed $offset
+ * @param integer $query_id
+ * @return
+ */
 	public function sql_fieldname( $offset, $query_id = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -328,12 +328,12 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_fieldtype()
-     * 
-     * @param mixed $offset
-     * @param integer $query_id
-     * @return
-     */
+ * sql_db::sql_fieldtype()
+ * 
+ * @param mixed $offset
+ * @param integer $query_id
+ * @return
+ */
 	public function sql_fieldtype( $offset, $query_id = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -347,12 +347,12 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_fetchrow()
-     * 
-     * @param integer $query_id
-     * @param integer $type
-     * @return
-     */
+ * sql_db::sql_fetchrow()
+ * 
+ * @param integer $query_id
+ * @param integer $type
+ * @return
+ */
 	public function sql_fetchrow( $query_id = 0, $type = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -379,11 +379,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_fetchrowset()
-     * 
-     * @param integer $query_id
-     * @return
-     */
+ * sql_db::sql_fetchrowset()
+ * 
+ * @param integer $query_id
+ * @return
+ */
 	public function sql_fetchrowset( $query_id = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -402,13 +402,13 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_fetchfield()
-     * 
-     * @param mixed $field
-     * @param integer $rownum
-     * @param integer $query_id
-     * @return
-     */
+ * sql_db::sql_fetchfield()
+ * 
+ * @param mixed $field
+ * @param integer $rownum
+ * @param integer $query_id
+ * @return
+ */
 	public function sql_fetchfield( $field, $rownum = -1, $query_id = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -443,12 +443,12 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_rowseek()
-     * 
-     * @param mixed $rownum
-     * @param integer $query_id
-     * @return
-     */
+ * sql_db::sql_rowseek()
+ * 
+ * @param mixed $rownum
+ * @param integer $query_id
+ * @return
+ */
 	public function sql_rowseek( $rownum, $query_id = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -462,11 +462,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_fetch_assoc()
-     * 
-     * @param integer $query_id
-     * @return
-     */
+ * sql_db::sql_fetch_assoc()
+ * 
+ * @param integer $query_id
+ * @return
+ */
 	public function sql_fetch_assoc( $query_id = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -480,11 +480,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_freeresult()
-     * 
-     * @param integer $query_id
-     * @return
-     */
+ * sql_db::sql_freeresult()
+ * 
+ * @param integer $query_id
+ * @return
+ */
 	public function sql_freeresult( $query_id = 0 )
 	{
 		if( empty( $query_id ) ) $query_id = $this->query_result;
@@ -500,11 +500,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::sql_error()
-     * 
-     * @param string $message
-     * @return
-     */
+ * sql_db::sql_error()
+ * 
+ * @param string $message
+ * @return
+ */
 	public function sql_error( $message = '' )
 	{
 		if( ! $this->db_connect_id )
@@ -523,11 +523,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::fixdb()
-     * 
-     * @param mixed $value
-     * @return
-     */
+ * sql_db::fixdb()
+ * 
+ * @param mixed $value
+ * @return
+ */
 	public function fixdb( $value )
 	{
 		$value = str_replace( '\'', '&#039;', $value );
@@ -536,11 +536,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::unfixdb()
-     * 
-     * @param mixed $value
-     * @return
-     */
+ * sql_db::unfixdb()
+ * 
+ * @param mixed $value
+ * @return
+ */
 	function unfixdb( $value )
 	{
 		$value = preg_replace( array( "/(se)\-(lect)/i", "/(uni)\-(on)/i", "/(con)\-(cat)/i", "/(c)\-(har)/i", "/(out)\-(file)/i", "/(al)\-(ter)/i", "/(in)\-(sert)/i", "/(d)\-(rop)/i", "/(f)\-(rom)/i", "/(whe)\-(re)/i", "/(up)\-(date)/i", "/(de)\-(lete)/i", "/(cre)\-(ate)/i" ), "$1$2", $value );
@@ -548,11 +548,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::dbescape()
-     * 
-     * @param mixed $value
-     * @return
-     */
+ * sql_db::dbescape()
+ * 
+ * @param mixed $value
+ * @return
+ */
 	public function dbescape( $value )
 	{
 		if( is_array( $value ) )
@@ -571,11 +571,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::dbescape_string()
-     * 
-     * @param mixed $value
-     * @return
-     */
+ * sql_db::dbescape_string()
+ * 
+ * @param mixed $value
+ * @return
+ */
 	public function dbescape_string( $value )
 	{
 		if( is_array( $value ) )
@@ -591,11 +591,11 @@ class sql_db
 	}
 
 	/**
-     * sql_db::nv_dblikeescape()
-     * 
-     * @param mixed $value
-     * @return
-     */
+ * sql_db::nv_dblikeescape()
+ * 
+ * @param mixed $value
+ * @return
+ */
 	public function dblikeescape( $value )
 	{
 		if( is_array( $value ) )
@@ -610,6 +610,37 @@ class sql_db
 
 		return $value;
 	}
+
+	/**
+ * sql_db::sql_create_db()
+ * 
+ * @param mixed $dbnew
+ * @return
+ */
+	public function sql_create_db( $dbnew )
+	{
+		@mysql_query( "CREATE DATABASE " . $dbnew . "", $this->db_connect_id );
+		@mysql_query( "ALTER DATABASE `" . $dbnew . "` DEFAULT CHARACTER SET `utf8` COLLATE `" . $this->db_set_collation . "`", $this->db_connect_id );
+		return @mysql_select_db( $dbnew, $this->db_connect_id );
+	}
+
+	/**
+ * sql_db::sql_select_dbname()
+ * 
+ * @param mixed $dbname
+ * @return
+ */	
+	public function sql_select_dbname( $dbname )
+	{
+		$dbselect = @mysql_select_db( $dbname, $this->db_connect_id );
+		if( ! $dbselect )
+		{
+			$die = ! empty( $db->error['user_message'] ) ? $db->error['user_message'] : $db->error['message'];
+			$die .= ! empty( $db->error['code'] ) ? ' (Code: ' . $db->error['code'] . ')' : '';
+			trigger_error( $die, 256 );
+		}
+		return $dbselect;
+	}		
 }
 
 ?>

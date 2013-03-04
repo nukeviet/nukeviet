@@ -39,7 +39,7 @@ if( $row['lev'] == 1 or ( ! defined( "NV_IS_GODADMIN" ) and $row['lev'] == 2 ) )
 	die();
 }
 
-$row_user = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id . "" ) );
+$row_user = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id . "" ) );
 $susp_reason = array();
 $last_reason = array();
 
@@ -120,7 +120,7 @@ if( $allow_change )
 					);
 				}
 			}
-			$sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `edittime`=" . NV_CURRENTTIME . ",  `is_suspend`=" . $new_suspend . ", `susp_reason`=" . $db->dbescape( serialize( $susp_reason ) ) . " WHERE `admin_id`=" . $admin_id;
+			$sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `edittime`=" . NV_CURRENTTIME . ", `is_suspend`=" . $new_suspend . ", `susp_reason`=" . $db->dbescape( serialize( $susp_reason ) ) . " WHERE `admin_id`=" . $admin_id;
 			if( $db->sql_query( $sql ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['suspend' . $new_suspend] . " ", " Username : " . $row_user['username'], $admin_info['userid'] );
@@ -218,7 +218,7 @@ else
 
 	$ads = array_unique( $ads );
 	$ads = "'" . implode( "','", $ads ) . "'";
-	$query2 = "SELECT `userid`, `username`, `full_name` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $ads . ")";
+	$query2 = "SELECT `userid`, `username`, `full_name` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $ads . ")";
 	$result2 = $db->sql_query( $query2 );
 
 	$ads = array();

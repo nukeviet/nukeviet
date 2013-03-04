@@ -85,9 +85,12 @@ function viewdirtree( $dir, $currentpath )
 
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get,post', NV_UPLOADS_DIR ) );
 
-if( empty( $path ) and ! defined( 'NV_IS_SPADMIN' ) )
+if( empty( $path ) )
 {
-	$path = NV_UPLOADS_DIR;
+	if( $global_config['idsite'] OR ! defined( 'NV_IS_SPADMIN' ) )
+	{
+		$path = NV_UPLOADS_DIR;
+	}
 }
 
 $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'request', NV_UPLOADS_DIR ) );

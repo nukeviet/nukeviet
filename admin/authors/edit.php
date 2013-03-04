@@ -70,7 +70,7 @@ if( $row['lev'] == 3 )
 	}
 }
 
-$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
+$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
 $result = $db->sql_query( $sql );
 $row_user = $db->sql_fetchrow( $result );
 
@@ -153,8 +153,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 		$allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
 		$files_level = ( ! empty( $allow_files_type ) ? implode( ",", $allow_files_type ) : "" ) . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
 
-		$sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `editor` = " . $db->dbescape( $editor ) . ", `lev`=" . $lev . ",
-            `files_level`=" . $db->dbescape( $files_level ) . ", `position`=" . $db->dbescape( $position ) . " WHERE `admin_id`=" . $admin_id;
+		$sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `editor` = " . $db->dbescape( $editor ) . ", `lev`=" . $lev . ", `files_level`=" . $db->dbescape( $files_level ) . ", `position`=" . $db->dbescape( $position ) . " WHERE `admin_id`=" . $admin_id;
 		$db->sql_query( $sql );
 
 		$result = array();

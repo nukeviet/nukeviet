@@ -25,7 +25,7 @@ elseif( empty( $groups_list ) )
 else
 {
 	$groups = $in_group = $in = $gl = array();
-	$sql = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
+	$sql = "SELECT `in_groups` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
 	$result = $db->sql_query( $sql );
 	list( $in_groups ) = $db->sql_fetchrow( $result );
 	if( $in_groups != "" ) $in_group = explode( ',', $in_groups );
@@ -46,7 +46,7 @@ else
 
 		foreach( $groups_list as $key => $val )
 			$gl[] = $key;
-		$sql = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
+		$sql = "SELECT `in_groups` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
 		$result = $db->sql_query( $sql );
 		list( $in_groups ) = $db->sql_fetchrow( $result );
 		if( $in_groups != "" ) $in_group = explode( ',', $in_groups );
@@ -104,7 +104,7 @@ else
 		sort( $us );
 		$da_us = implode( ",", $us );
 
-		$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `in_groups`=" . $db->dbescape( $da_us ) . " WHERE `userid`=" . $user_info['userid'];
+		$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `in_groups`=" . $db->dbescape( $da_us ) . " WHERE `userid`=" . $user_info['userid'];
 		$db->sql_query( $sql );
 
 		$recomplete = true;

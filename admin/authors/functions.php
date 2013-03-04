@@ -11,7 +11,6 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 $allow_func = array( 'main', 'edit' );
 
-global $global_config;
 if( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) )
 {
 	$allow_func[] = "add";
@@ -177,6 +176,7 @@ if( $module_name == "authors" )
 
 		return "";
 	}
+
 }
 
 ?>

@@ -25,6 +25,23 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		{
 			$allowfolder[] = NV_ROOTDIR . '/modules/' . $modulename . '/';
 		}
+		elseif( file_exists( NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $modulename . '/' ) )
+		{
+			$allowfolder[] = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $modulename . '/';
+			if( file_exists( NV_ROOTDIR . '/js/admin_' . $modulename . '.js' ) )
+			{
+				$allowfolder[] = NV_ROOTDIR . '/js/admin_' . $modulename . '.js';
+			}
+
+			$langs_admin = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}$/" );
+			foreach( $langs_admin as $langi )
+			{
+				if( file_exists( NV_ROOTDIR . '/language/' . $langi . '/admin_' . $modulename . '.php' ) )
+				{
+					$allowfolder[] = NV_ROOTDIR . '/language/' . $langi . '/admin_' . $modulename . '.php';
+				}
+			}
+		}
 
 		// Theme folder
 		$theme_package = "";
@@ -122,6 +139,12 @@ else
 		$xtpl->parse( 'main.module_file' );
 	}
 
+	$modules_admin = nv_scandir( NV_ROOTDIR . "/" . NV_ADMINDIR, $global_config['check_module'] );
+	foreach( $modules_admin as $module )
+	{
+		$xtpl->assign( 'MODULE_FILE', $module );
+		$xtpl->parse( 'main.module_file' );
+	}
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 

@@ -1,4 +1,4 @@
-<!-- BEGIN: searchEngineList -->
+<!-- BEGIN: main -->
 <!-- BEGIN: is_ping -->
 <form action="" method="post">
 	<table class="tab1" style="width:auto">
@@ -26,6 +26,7 @@
 	</table>
 </form>
 <!-- END: is_ping -->
+<!-- BEGIN: searchEngineList -->
 <form action="" method="post">
 	<table class="tab1" style="width:auto">
 		<caption> {LANG.searchEngineConfig} </caption>
@@ -50,7 +51,9 @@
 		</tbody>
 		<!-- END: loop -->
 	</table>
-	<p><input type="submit" name="submit" value="{LANG.submit}" />
+	<p>
+		<input type="submit" name="submit" value="{LANG.submit}" />
 	</p>
 </form>
 <!-- END: searchEngineList -->
+<!-- END: main -->

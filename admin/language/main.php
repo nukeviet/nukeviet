@@ -24,7 +24,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$array_lang_setup[$row['lang']] = intval( $row['setup'] );
 }
 
-if( defined( 'NV_IS_GODADMIN' ) )
+if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( 'NV_IS_SPADMIN' ) ) )
 {
 	$checksess = filter_text_input( 'checksess', 'get', '' );
 	$keylang = filter_text_input( 'keylang', 'get', '', 1, 2 );
@@ -46,14 +46,48 @@ if( defined( 'NV_IS_GODADMIN' ) )
 
 		$allow_sitelangs = array_unique( $allow_sitelangs );
 
-		$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( implode( ",", $allow_sitelangs ) ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_sitelangs'";
+		$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = " . $db->dbescape( implode( ",", $allow_sitelangs ) ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_sitelangs'";
 		$result = $db->sql_query( $query );
 
 		$temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], " langkey : " . $keylang . " [ " . $temp . " ]", $admin_info['userid'] );
-		nv_save_file_config_global();
+		if( empty( $global_config['idsite'] ) )
+		{
+			nv_save_file_config_global();
+		}
+		else
+		{
+			$result = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` WHERE `idsite`=" . $global_config['idsite'] );
+			$row = $db->sql_fetchrow( $result );
 
+			$array_domains = array_map( "trim", explode( ",", $row['parked_domains'] ) );
+			$array_domains[] = NV_SERVER_NAME;
+			$array_domains[] = $row['domain'];
+			$array_domains = array_unique( $array_domains );
+			foreach( $array_domains as $domains )
+			{
+				if( ! empty( $domains ) )
+				{
+					$content_config = "<?php\n\n";
+					$content_config .= NV_FILEHEAD . "\n\n";
+					$content_config .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
+					$content_config .= "{\n";
+					$content_config .= "\tdie( 'Stop!!!' );\n";
+					$content_config .= "}\n\n";
+
+					$content_config .= "\$db_config['dbsite'] = '" . $db_config['dbsite'] . "';\n";
+					$content_config .= "\$global_config['idsite'] = " . $global_config['idsite'] . ";\n";
+					$content_config .= "\$global_config['site_dir'] = '" . $global_config['site_dir'] . "';\n";
+					$content_config .= "\$global_config['allow_sitelangs'] = '" . nv_unhtmlspecialchars( implode( ",", $allow_sitelangs ) ) . "';\n";
+					$content_config .= "\n";
+					$content_config .= "?>";
+
+					file_put_contents( NV_ROOTDIR . "/" . NV_CONFIG_DIR . "/" . $domains . '.php', $content_config, LOCK_EX );
+				}
+			}
+			nv_delete_all_cache();
+		}
 		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 
 		$xtpl->parse( 'activelang' );
@@ -157,15 +191,15 @@ if( defined( 'NV_IS_GODADMIN' ) )
 					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` WHERE `func_id` in (SELECT `func_id` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "'))";
 					$db->sql_query( $sql );
 
-					//xoa du lieu tai bang  nv3_vi_modfuncs
+					//xoa du lieu tai bang nv3_vi_modfuncs
 					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
 					$db->sql_query( $sql );
 
-					//xoa du lieu tai bang  nv3_vi_modules
+					//xoa du lieu tai bang nv3_vi_modules
 					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
 					$db->sql_query( $sql );
 
-					//xoa du lieu tai bang  nv3_setup_modules
+					//xoa du lieu tai bang nv3_setup_modules
 					$sql = "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
 					$db->sql_query( $sql );
 
@@ -267,7 +301,8 @@ foreach( $global_config['allow_adminlangs'] as $keylang )
 		'keylang' => $keylang,
 		'name' => $language_array[$keylang]['name']
 	) );
-	if( defined( 'NV_IS_GODADMIN' ) )
+
+	if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( 'NV_IS_SPADMIN' ) ) )
 	{
 		if( isset( $array_lang_setup[$keylang] ) and $array_lang_setup[$keylang] == 1 )
 		{
@@ -317,7 +352,7 @@ foreach( $global_config['allow_adminlangs'] as $keylang )
 	}
 	$xtpl->parse( 'main.loop' );
 }
-$contents .= "  </table>\n";
+$contents .= " </table>\n";
 
 $contents .= "<div class=\"quote\" style=\"width:97.5%;\">\n";
 $contents .= "<blockquote><span>" . $lang_module['nv_data_note'] . "</span></blockquote>\n";

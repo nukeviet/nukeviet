@@ -143,7 +143,7 @@ function nv_admin_checkfirewall()
  */
 function nv_admin_checkdata( $adm_session_value )
 {
-	global $db, $global_config;
+	global $db, $global_config, $db_config;
 
 	$strlen = ( NV_CRYPT_SHA1 == 1 ) ? 40 : 32;
 	$array_admin = unserialize( $adm_session_value );
@@ -151,17 +151,17 @@ function nv_admin_checkdata( $adm_session_value )
 	if( ! isset( $array_admin['admin_id'] ) or ! is_numeric( $array_admin['admin_id'] ) or $array_admin['admin_id'] <= 0 or ! isset( $array_admin['checknum'] ) or ! preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $array_admin['checknum'] ) ) return array();
 
 	$query = "SELECT a.admin_id AS `admin_id`, a.lev AS `lev`, a.position AS `position`, a.check_num AS `check_num`, a.last_agent AS `current_agent`, 
-    a.last_ip AS `current_ip`, a.last_login AS `current_login`, a.files_level AS `files_level`, a.editor AS `editor`, b.userid AS `userid`, 
-    b.username AS `username`, b.email AS `email`, b.full_name AS `full_name`, b.view_mail AS `view_mail`, b.regdate AS `regdate`, 
-    b.sig AS `sig`, b.gender AS `gender`, b.photo AS `photo`, b.birthday AS `birthday`, b.in_groups AS `in_groups`, b.last_openid AS `last_openid`, 
-    b.password AS `password`, b.question AS `question`, b.answer AS `answer` 
-    FROM `" . NV_AUTHORS_GLOBALTABLE . "` a, `" . NV_USERS_GLOBALTABLE . "` b 
-    WHERE a.admin_id = " . $array_admin['admin_id'] . " 
-    AND a.lev!=0 
-    AND a.is_suspend=0 
-    AND b.userid=a.admin_id 
-    AND b.active=1 
-    LIMIT 1";
+		a.last_ip AS `current_ip`, a.last_login AS `current_login`, a.files_level AS `files_level`, a.editor AS `editor`, b.userid AS `userid`, 
+		b.username AS `username`, b.email AS `email`, b.full_name AS `full_name`, b.view_mail AS `view_mail`, b.regdate AS `regdate`, 
+		b.sig AS `sig`, b.gender AS `gender`, b.photo AS `photo`, b.birthday AS `birthday`, b.in_groups AS `in_groups`, b.last_openid AS `last_openid`, 
+		b.password AS `password`, b.question AS `question`, b.answer AS `answer` 
+		FROM `" . NV_AUTHORS_GLOBALTABLE . "` a, `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` b 
+		WHERE a.admin_id = " . $array_admin['admin_id'] . " 
+		AND a.lev!=0 
+		AND a.is_suspend=0 
+		AND b.userid=a.admin_id 
+		AND b.active=1 
+		LIMIT 1";
 	$result = $db->sql_query( $query );
 	if( $db->sql_numrows( $result ) != 1 ) return array();
 
@@ -169,10 +169,10 @@ function nv_admin_checkdata( $adm_session_value )
 	$db->sql_freeresult( $result );
 
 	if( strcasecmp( $array_admin['checknum'], $admin_info['check_num'] ) != 0 or 	//check_num
-! isset( $array_admin['current_agent'] ) or empty( $array_admin['current_agent'] ) or strcasecmp( $array_admin['current_agent'], $admin_info['current_agent'] ) != 0 or 	//user_agent
-! isset( $array_admin['current_ip'] ) or empty( $array_admin['current_ip'] ) or strcasecmp( $array_admin['current_ip'], $admin_info['current_ip'] ) != 0 or 	//IP
-! isset( $array_admin['current_login'] ) or empty( $array_admin['current_login'] ) or strcasecmp( $array_admin['current_login'], intval( $admin_info['current_login'] ) ) != 0 ) 	//current_login
-return array();
+		! isset( $array_admin['current_agent'] ) or empty( $array_admin['current_agent'] ) or strcasecmp( $array_admin['current_agent'], $admin_info['current_agent'] ) != 0 or 	//user_agent
+		! isset( $array_admin['current_ip'] ) or empty( $array_admin['current_ip'] ) or strcasecmp( $array_admin['current_ip'], $admin_info['current_ip'] ) != 0 or 	//IP
+		! isset( $array_admin['current_login'] ) or empty( $array_admin['current_login'] ) or strcasecmp( $array_admin['current_login'], intval( $admin_info['current_login'] ) ) != 0 ) 	//current_login
+		return array();
 
 	if( empty( $admin_info['files_level'] ) )
 	{

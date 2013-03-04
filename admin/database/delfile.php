@@ -11,7 +11,14 @@ if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
 $filename = filter_text_input( 'filename', 'get', '' );
 $checkss = filter_text_input( 'checkss', 'get', '' );
-$path_filename = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup/" . $filename;
+
+$log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
+if( $global_config['idsite'] )
+{
+	$log_dir .= "/" . $global_config['site_dir'];
+}
+
+$path_filename = $log_dir . "/" . $filename;
 
 if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info['session_id'] . $global_config['sitekey'] ) )
 {

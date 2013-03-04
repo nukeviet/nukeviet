@@ -42,15 +42,15 @@ if( $row['lev'] == 1 or ( ! defined( "NV_IS_GODADMIN" ) and $row['lev'] == 2 ) )
 
 function nv_checkAdmpass( $adminpass )
 {
-	global $db, $admin_info, $crypt;
+	global $db, $admin_info, $crypt, $db_config;
 
-	$sql = "SELECT `password` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_info['userid'];
+	$sql = "SELECT `password` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_info['userid'];
 	$result = $db->sql_query( $sql );
 	list( $pass ) = $db->sql_fetchrow( $result );
 	return $crypt->validate( $adminpass, $pass );
 }
 
-list( $access_admin ) = $db->sql_fetchrow( $db->sql_query( "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='access_admin'" ) );
+list( $access_admin ) = $db->sql_fetchrow( $db->sql_query( "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='access_admin'" ) );
 $access_admin = unserialize( $access_admin );
 $level = $admin_info['level'];
 
@@ -65,7 +65,7 @@ if( isset( $access_admin['access_delus'][$level] ) and $access_admin['access_del
 	$array_action_account[2] = $lang_module['action_account_del'];
 }
 
-$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
+$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
 $result = $db->sql_query( $sql );
 $row_user = $db->sql_fetchrow( $result );
 
@@ -121,13 +121,13 @@ if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
 		$db->sql_query( $sql );
 		if( $action_account == 1 )
 		{
-			$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `active`='0' WHERE `userid`=" . $admin_id );
+			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `active`='0' WHERE `userid`=" . $admin_id );
 		}
 		elseif( $action_account == 2 )
 		{
-			$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id );
-			$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $admin_id );
-			$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`=" . $admin_id );
+			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id );
+			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $admin_id );
+			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`=" . $admin_id );
 			if( ! empty( $row_user['in_groups'] ) )
 			{
 				$result = $db->sql_query( "SELECT `group_id`, `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id` IN (" . $row_user['in_groups'] . ")" );

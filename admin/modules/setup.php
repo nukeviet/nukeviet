@@ -9,11 +9,21 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
+$array_site_cat_module = array();
+if( $global_config['idsite'] )
+{
+	$result = $db->sql_query( "SELECT module FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site_cat` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=" . $global_config['idsite'] );
+	$row = $db->sql_fetch_assoc( $result );
+	if( ! empty( $row['module'] ) )
+	{
+		$array_site_cat_module = explode( ',', $row['module'] );
+	}
+}
+
 $contents = "";
 
-$setmodule = filter_text_input( 'setmodule', 'get', '', 1 );
-
 // Thiet lap module moi
+$setmodule = filter_text_input( 'setmodule', 'get', '', 1 );
 if( ! empty( $setmodule ) )
 {
 	if( filter_text_input( 'checkss', 'get' ) == md5( "setmodule" . $setmodule . session_id() . $global_config['sitekey'] ) )
@@ -23,11 +33,18 @@ if( ! empty( $setmodule ) )
 
 		if( $db->sql_numrows( $result ) == 1 )
 		{
+
 			list( $module_file, $module_data ) = $db->sql_fetchrow( $result );
 
 			// Unfixdb
 			$module_file = $db->unfixdb( $module_file );
 			$module_data = $db->unfixdb( $module_data );
+
+			if( ! empty( $array_site_cat_module ) AND ! in_array( $module_file, $array_site_cat_module ) )
+			{
+				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+				die();
+			}
 
 			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM `" . NV_MODULES_TABLE . "`" ) );
 			$weight = intval( $weight ) + 1;
@@ -68,10 +85,9 @@ if( ! empty( $setmodule ) )
 	die();
 }
 
-$delmodule = filter_text_input( 'delmodule', 'get', '', 1 );
-
 // Xoa module
-if( ! empty( $delmodule ) )
+$delmodule = filter_text_input( 'delmodule', 'get', '', 1 );
+if( defined( "NV_IS_GODADMIN" ) AND ! empty( $delmodule ) )
 {
 	if( filter_text_input( 'checkss', 'get' ) == md5( "delmodule" . $delmodule . session_id() . $global_config['sitekey'] ) )
 	{
@@ -79,7 +95,6 @@ if( ! empty( $delmodule ) )
 
 		$sql = "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`='1'";
 		$result = $db->sql_query( $sql );
-
 		while( list( $lang_i ) = $db->sql_fetchrow( $result ) )
 		{
 			list( $nmd ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modules` WHERE `module_file`=" . $db->dbescape_string( $delmodule ) ) );
@@ -97,6 +112,25 @@ if( ! empty( $delmodule ) )
 			if( $nmd > 0 )
 			{
 				$module_exit = 1;
+			}
+		}
+
+		if( empty( $module_exit ) AND defined( 'NV_CONFIG_DIR' ) )
+		{
+			// kiem tra cac site con
+			$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` ORDER BY `domain` ASC";
+			$result = $db->sql_query( $sql );
+			while( $row = $db->sql_fetch_assoc( $result ) )
+			{
+				$result = $db->sql_query( "SELECT `lang` FROM `" . $row['dbsite'] . "`.`" . $db_config['prefix'] . "_setup_language` WHERE `setup`='1'" );
+				while( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+				{
+					list( $nmd ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $row['dbsite'] . "`.`" . $db_config['prefix'] . "_" . $lang_i . "_modules` WHERE `module_file`=" . $db->dbescape_string( $delmodule ) ) );
+					if( $nmd > 0 )
+					{
+						$module_exit[] = $row['title'] . ' :' . $lang_i;
+					}
+				}
 			}
 		}
 
@@ -218,13 +252,13 @@ foreach( $arr_module_news as $module_name_i => $arr )
 		{
 			$timestamp = NV_CURRENTTIME - date( 'Z', NV_CURRENTTIME );
 			$module_version = array(
-				"name" => $module_name_i, //
-				"modfuncs" => "main", //
-				"is_sysmod" => 0, //
-				"virtual" => 0, //
-				"version" => "3.0.01", //
-				"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
-				"author" => "", //
+				"name" => $module_name_i,
+				"modfuncs" => "main",
+				"is_sysmod" => 0,
+				"virtual" => 0,
+				"version" => "3.0.01",
+				"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT',
+				"author" => "",
 				"note" => ""
 			);
 		}
@@ -279,43 +313,45 @@ foreach( $modules_data as $row )
 {
 	if( in_array( $row['title'], $modules_exit ) )
 	{
-		$mod = array();
-		$mod['title'] = $row['title'];
-		$mod['is_sysmod'] = $row['is_sysmod'];
-		$mod['virtual'] = $row['virtual'];
-		$mod['module_file'] = $row['module_file'];
-		$mod['version'] = preg_replace_callback( "/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/", "nv_parse_vers", $row['mod_version'] );
-		$mod['addtime'] = nv_date( "H:i:s d/m/Y", $row['addtime'] );
-		$mod['author'] = $row['author'];
-		$mod['note'] = $row['note'];
-		$mod['setup'] = "";
-		$mod['delete'] = "";
+		if( ! empty( $array_site_cat_module ) AND ! in_array( $row['module_file'], $array_site_cat_module ) )
+		{
+			continue;
+		}
 
 		if( array_key_exists( $row['title'], $news_modules_for_lang ) )
 		{
+			$mod = array();
+			$mod['title'] = $row['title'];
+			$mod['is_sysmod'] = $row['is_sysmod'];
+			$mod['virtual'] = $row['virtual'];
+			$mod['module_file'] = $row['module_file'];
+			$mod['version'] = preg_replace_callback( "/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/", "nv_parse_vers", $row['mod_version'] );
+			$mod['addtime'] = nv_date( "H:i:s d/m/Y", $row['addtime'] );
+			$mod['author'] = $row['author'];
+			$mod['note'] = $row['note'];
 			$url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;setmodule=" . $row['title'] . "&amp;checkss=" . md5( "setmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
 			$mod['setup'] = "<span class=\"default_icon\"><a href=\"" . $url . "\">" . $lang_module['setup'] . "</a></span>";
-
-			if( ! in_array( $row['module_file'], $module_virtual_setup ) )
+			$mod['delete'] = "";
+			if( defined( "NV_IS_GODADMIN" ) AND ! in_array( $row['module_file'], $module_virtual_setup ) )
 			{
 				$url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delmodule=" . $row['title'] . "&amp;checkss=" . md5( "delmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
 				$mod['delete'] = " - <span class=\"delete_icon\"><a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a></span>";
 			}
-		}
-
-		if( $mod['module_file'] == $mod['title'] )
-		{
-			$array_modules[] = $mod;
-
-			if( $row['virtual'] )
+			if( $mod['module_file'] == $mod['title'] )
 			{
-				$mod_virtual[] = $mod['title'];
+				$array_modules[] = $mod;
+
+				if( $row['virtual'] )
+				{
+					$mod_virtual[] = $mod['title'];
+				}
+			}
+			else
+			{
+				$array_virtual_modules[] = $mod;
 			}
 		}
-		else
-		{
-			$array_virtual_modules[] = $mod;
-		}
+
 	}
 }
 

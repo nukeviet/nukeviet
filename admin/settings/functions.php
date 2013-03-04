@@ -9,10 +9,7 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-global $sys_info;
-
 $submenu['main'] = $lang_module['site_config'];
-
 if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$submenu['system'] = $lang_module['global_config'];
@@ -143,6 +140,7 @@ if( $module_name == "settings" )
 
 		return $xtpl->text( 'main' );
 	}
+
 }
 
 ?>

@@ -19,7 +19,7 @@ if( empty( $userid ) )
 	die();
 }
 
-$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid;
+$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 )
@@ -60,14 +60,14 @@ $_user = array();
 $groups_list = nv_groups_list();
 
 $array_field_config = array();
-$result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
+$result_field = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
 while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 {
 	$language = unserialize( $row_field['language'] );
 	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
 	$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
 	if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
-	elseif(! empty( $row_field['sql_choices'] ))
+	elseif( ! empty( $row_field['sql_choices'] ) )
 	{
 		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
 		$query = "SELECT `" . $row_field['sql_choices'][2] . "`, `" . $row_field['sql_choices'][3] . "` FROM `" . $row_field['sql_choices'][1] . "`";
@@ -126,19 +126,19 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_xemail;
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $userid . " AND `md5username`=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) ) ) != 0 )
+	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $userid . " AND `md5username`=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) ) ) != 0 )
 	{
 		$error = $lang_module['edit_error_username_exist'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $userid . " AND `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $userid . " AND `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`!=" . $userid . " AND `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`!=" . $userid . " AND `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
@@ -233,25 +233,25 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				}
 			}
 
-			$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET 
-	        `username`=" . $db->dbescape( $_user['username'] ) . ", 
-	        `md5username`=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) . ", 
-	        `password`=" . $db->dbescape( $password ) . ", 
-	        `email`=" . $db->dbescape( $_user['email'] ) . ", 
-	        `full_name`=" . $db->dbescape( $_user['full_name'] ) . ", 
-	        `gender`=" . $db->dbescape( $_user['gender'] ) . ", 
-	        `photo`=" . $db->dbescape( $photo ) . ", 
-	        `birthday`=" . $_user['birthday'] . ", 
-	        `sig`=" . $db->dbescape( $_user['sig'] ) . ", 
-	        `question`=" . $db->dbescape( $_user['question'] ) . ", 
-	        `answer`=" . $db->dbescape( $_user['answer'] ) . ", 
-	        `view_mail`=" . $_user['view_mail'] . ", 
-	        `in_groups`=" . $db->dbescape_string( $_user['in_groups'] ) . " 
-	        WHERE `userid`=" . $userid );
+			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET 
+				`username`=" . $db->dbescape( $_user['username'] ) . ", 
+				`md5username`=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) . ", 
+				`password`=" . $db->dbescape( $password ) . ", 
+				`email`=" . $db->dbescape( $_user['email'] ) . ", 
+				`full_name`=" . $db->dbescape( $_user['full_name'] ) . ", 
+				`gender`=" . $db->dbescape( $_user['gender'] ) . ", 
+				`photo`=" . $db->dbescape( $photo ) . ", 
+				`birthday`=" . $_user['birthday'] . ", 
+				`sig`=" . $db->dbescape( $_user['sig'] ) . ", 
+				`question`=" . $db->dbescape( $_user['question'] ) . ", 
+				`answer`=" . $db->dbescape( $_user['answer'] ) . ", 
+				`view_mail`=" . $_user['view_mail'] . ", 
+				`in_groups`=" . $db->dbescape_string( $_user['in_groups'] ) . " 
+				WHERE `userid`=" . $userid );
 
 			if( ! empty( $array_field_config ) )
 			{
-				$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . "  WHERE `userid`=" . $userid );
+				$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . " WHERE `userid`=" . $userid );
 			}
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', "userid " . $userid, $admin_info['userid'] );
@@ -261,14 +261,17 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				@require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
 
 				$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-				$upload_info = $upload->save_file( $_FILES['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
+				$upload_info = $upload->save_file( $_FILES['photo'], NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, false );
 
 				@unlink( $_FILES['photo']['tmp_name'] );
-
 				if( empty( $upload_info['error'] ) )
 				{
-					@chmod( $upload_info['name'], 0644 );
+					require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+					$_image = new image( $upload_info['name'], 80, 80 );
+					$_image->resizeXY( 80, 80 );
+					$_image->save( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, $upload_info['basename'] );
 
+					@chmod( $upload_info['name'], 0644 );
 					if( ! empty( $photo ) and is_file( NV_ROOTDIR . '/' . $photo ) )
 					{
 						@nv_deletefile( NV_ROOTDIR . '/' . $photo );
@@ -276,7 +279,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 					$file_name = str_replace( NV_ROOTDIR . "/", "", $upload_info['name'] );
 
-					$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape( $file_name ) . " WHERE `userid`=" . $userid;
+					$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape( $file_name ) . " WHERE `userid`=" . $userid;
 					$db->sql_query( $sql );
 				}
 			}
@@ -294,7 +297,7 @@ else
 	$_user['in_groups'] = ! empty( $_user['in_groups'] ) ? explode( ",", $_user['in_groups'] ) : array();
 	if( ! empty( $_user['sig'] ) ) $_user['sig'] = nv_br2nl( $_user['sig'] );
 
-	$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $userid;
+	$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $userid;
 	$result = $db->sql_query( $sql );
 	$custom_fields = $db->sql_fetch_assoc( $result );
 }
@@ -362,9 +365,9 @@ else
 	if( ! empty( $row['photo'] ) )
 	{
 		$size = @getimagesize( NV_ROOTDIR . '/' . $row['photo'] );
-		$img = array( //
-			'href' => $row['photo'], //
-			'height' => $size[1], //
+		$img = array(
+			'href' => $row['photo'],
+			'height' => $size[1],
 			'width' => $size[0]
 		);
 		$xtpl->assign( 'IMG', $img );

@@ -26,12 +26,36 @@ $number_theme = sizeof( $theme_list );
 
 $errorconfig = array();
 
+$array_site_cat_theme = array();
+if( $global_config['idsite'] )
+{
+	$result = $db->sql_query( "SELECT theme FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site_cat` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=" . $global_config['idsite'] );
+	$row = $db->sql_fetch_assoc( $result );
+	if( ! empty( $row['theme'] ) )
+	{
+		$array_site_cat_theme = explode( ',', $row['theme'] );
+
+		$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0";
+		$result = $db->sql_query( $sql );
+		while( list( $theme ) = $db->sql_fetchrow( $result ) )
+		{
+			$array_site_cat_theme[] = $theme;
+		}
+		$array_site_cat_theme = array_unique( $array_site_cat_theme );
+	}
+}
+
 foreach( $theme_list as $value )
 {
 	// Load thumbnail image
 	if( ! $xml = @simplexml_load_file( NV_ROOTDIR . '/themes/' . $value . '/config.ini' ) )
 	{
 		$errorconfig[] = $value;
+		continue;
+	}
+	//kiem tra giao dien co danh cho subsite hay ko
+	if( ! empty( $array_site_cat_theme ) AND ! in_array( $value, $array_site_cat_theme ) )
+	{
 		continue;
 	}
 
@@ -65,18 +89,20 @@ foreach( $theme_list as $value )
 	}
 
 	$xtpl->assign( 'POSITION', implode( ' | ', $pos ) );
-	if( in_array( $value, $theme_mobile_list ) )
+	$dash = 0;
+	if( ! in_array( $value, $theme_mobile_list ) AND $global_config['site_theme'] != $value )
 	{
+		$xtpl->parse( 'main.loop.link_active' );
+		$dash++;
+	}
+	if( defined( "NV_IS_GODADMIN" ) )
+	{
+		$dash++;
 		$xtpl->parse( 'main.loop.link_delete' );
 	}
-	else
+	if( $dash == 2 )
 	{
-		if( $global_config['site_theme'] != $value )
-		{
-			$xtpl->parse( 'main.loop.link_active' );
-			$xtpl->parse( 'main.loop.dash' );
-		}
-		$xtpl->parse( 'main.loop.link_delete' );
+		$xtpl->parse( 'main.loop.dash' );
 	}
 	if( $i % 2 == 0 and $i < $number_theme )
 	{

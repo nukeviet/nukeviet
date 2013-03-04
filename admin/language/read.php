@@ -81,7 +81,6 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			$lang_translator_save['info'] = isset( $lang_translator['info'] ) ? strip_tags( $lang_translator['info'] ) : "";
 			$lang_translator_save['langtype'] = $langtype;
 
-			//$author = base64_encode( serialize( $lang_translator_save ) );
 			$author = var_export( $lang_translator_save, true );
 
 			$idfile = $db->sql_query_insert_id( "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "_file` (`idfile`, `module`, `admin_file`, `langtype`, `author_" . $dirlang . "`) VALUES (NULL, " . $db->dbescape( $module ) . ", " . $db->dbescape( $admin_file ) . ", " . $db->dbescape( $langtype ) . ", '" . mysql_real_escape_string( $author ) . "')" );
@@ -103,7 +102,6 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			$lang_translator_save['info'] = isset( $lang_translator['info'] ) ? strip_tags( $lang_translator['info'] ) : "";
 			$lang_translator_save['langtype'] = $langtype;
 
-			//$author = base64_encode( serialize( $lang_translator_save ) );
 			$author = var_export( $lang_translator_save, true );
 
 			$sql = "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $dirlang . "` = '" . mysql_real_escape_string( $author ) . "' WHERE `idfile` = '" . $idfile . "'";
@@ -155,12 +153,12 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			$check_type_update = false;
 			$lang_key = trim( $lang_key );
 			$lang_value = nv_nl2br( $lang_value );
-			$lang_value = str_replace( '<br  />', '<br />', $lang_value );
-			$lang_value = str_replace( '<br />', '<br />', $lang_value );
+			$lang_value = preg_replace( '/<br\s*\/>/', '<br />', $lang_value );
+			$lang_value = preg_replace( '/<\/\s*br\s*>/', '<br />', $lang_value );
 
 			if( $read_type == 0 or $read_type == 1 )
 			{
-				$sql = "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`id`, `idfile`, `lang_key`, `lang_" . $dirlang . "`, `update_" . $dirlang . "` " . $string_lang_key . ") VALUES (NULL, '" . $idfile . "', '" . mysql_real_escape_string( $lang_key ) . "', '" . mysql_real_escape_string( $lang_value ) . "',  UNIX_TIMESTAMP() " . $string_lang_value . ")";
+				$sql = "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`id`, `idfile`, `lang_key`, `lang_" . $dirlang . "`, `update_" . $dirlang . "` " . $string_lang_key . ") VALUES (NULL, '" . $idfile . "', '" . mysql_real_escape_string( $lang_key ) . "', '" . mysql_real_escape_string( $lang_value ) . "', UNIX_TIMESTAMP() " . $string_lang_value . ")";
 
 				if( ! $db->sql_query_insert_id( $sql ) and $read_type == 0 )
 				{
@@ -170,7 +168,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 
 			if( $read_type == 2 or $check_type_update )
 			{
-				$sql = "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $dirlang . "` = '" . mysql_real_escape_string( $lang_value ) . "',  `update_" . $dirlang . "` =  UNIX_TIMESTAMP() WHERE `idfile` = '" . $idfile . "' AND `lang_key` = '" . mysql_real_escape_string( $lang_key ) . "' LIMIT 1";
+				$sql = "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $dirlang . "` = '" . mysql_real_escape_string( $lang_value ) . "', `update_" . $dirlang . "` = UNIX_TIMESTAMP() WHERE `idfile` = '" . $idfile . "' AND `lang_key` = '" . mysql_real_escape_string( $lang_key ) . "' LIMIT 1";
 				$db->sql_query( $sql );
 			}
 		}

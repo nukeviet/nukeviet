@@ -28,7 +28,7 @@ if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k'
 {
 	$contents = $lang_module['lostpass_active_error_link'];
 
-	$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $nv_Request->get_int( 'u', 'get' );
+	$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $nv_Request->get_int( 'u', 'get' );
 	$result = $db->sql_query( $sql );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows == 1 )
@@ -38,7 +38,7 @@ if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k'
 
 		if( ! empty( $row['passlostkey'] ) and $k == md5( $row['userid'] . $row['passlostkey'] . $global_config['sitekey'] ) )
 		{
-			$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `password`='" . $row['passlostkey'] . "', `passlostkey`='' WHERE `userid`=" . $row['userid'] );
+			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `password`='" . $row['passlostkey'] . "', `passlostkey`='' WHERE `userid`=" . $row['userid'] );
 			$contents = $lang_module['change_pass_ok'];
 		}
 	}
@@ -67,11 +67,11 @@ else
 				$check_email = nv_check_valid_email( $data['userField'] );
 				if( empty( $check_email ) )
 				{
-					$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `email`=" . $db->dbescape( $data['userField'] ) . " AND `active`=1";
+					$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `email`=" . $db->dbescape( $data['userField'] ) . " AND `active`=1";
 				}
 				else
 				{
-					$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username`='" . nv_md5safe( $data['userField'] ) . "' AND `active`=1";
+					$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `md5username`='" . nv_md5safe( $data['userField'] ) . "' AND `active`=1";
 				}
 				$result = $db->sql_query( $sql );
 				$numrows = $db->sql_numrows( $result );
@@ -136,7 +136,7 @@ else
 							$ok = nv_sendmail( $global_config['site_email'], $row['email'], $subject, $message );
 							if( $ok )
 							{
-								$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `passlostkey`='" . $password . "' WHERE `userid`=" . $row['userid'];
+								$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `passlostkey`='" . $password . "' WHERE `userid`=" . $row['userid'];
 								$db->sql_query( $sql );
 								if( ! empty( $check_email ) )
 								{

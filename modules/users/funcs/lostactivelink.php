@@ -63,11 +63,11 @@ if( $checkss == $data['checkss'] )
 				$exp = NV_CURRENTTIME - 86400;
 				if( empty( $check_email ) )
 				{
-					$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $data['userField'] ) . " AND `regdate`>" . $exp;
+					$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $data['userField'] ) . " AND `regdate`>" . $exp;
 				}
 				else
 				{
-					$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `username`=" . $db->dbescape( $data['userField'] ) . " AND `regdate`>" . $exp;
+					$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `username`=" . $db->dbescape( $data['userField'] ) . " AND `regdate`>" . $exp;
 				}
 				$result = $db->sql_query( $sql );
 				$numrows = $db->sql_numrows( $result );
@@ -126,7 +126,7 @@ if( $checkss == $data['checkss'] )
 							if( $ok )
 							{
 								$password = $crypt->hash( $password_new );
-								$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "_reg` SET `password`=" . $db->dbescape( $password ) . ", `checknum`=" . $db->dbescape( $checknum ) . " WHERE `userid`=" . $row['userid'];
+								$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` SET `password`=" . $db->dbescape( $password ) . ", `checknum`=" . $db->dbescape( $checknum ) . " WHERE `userid`=" . $row['userid'];
 								$db->sql_query( $sql );
 								$info = sprintf( $lang_module['lostactivelink_send'], $row['email'] );
 							}

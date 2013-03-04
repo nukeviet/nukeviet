@@ -6,11 +6,6 @@
 </div>
 <!-- END: error -->
 <table class="tab1">
-	<thead>
-		<tr>
-			<td colspan="2">{LANG.theme_recent}</td>
-		</tr>
-	</thead>
 	<tbody class="second">
 		<tr>
 			<!-- BEGIN: loop -->

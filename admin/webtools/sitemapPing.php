@@ -113,7 +113,7 @@ $xtpl = new XTemplate( "sitemap.tpl", NV_ROOTDIR . "/themes/" . $global_config['
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
-if( $nv_Request->isset_request( 'submit', 'post' ) )
+if( $nv_Request->isset_request( 'submit', 'post' ) AND empty( $global_config['idsite'] ) )
 {
 	$searchEngineName = $nv_Request->get_array( 'searchEngineName', 'post' );
 	$searchEngineValue = $nv_Request->get_array( 'searchEngineValue', 'post' );
@@ -153,7 +153,8 @@ else
 		if( $mt['searchEngine_item'] )
 		{
 			if( isset( $mt['searchEngine_item'][0] ) ) $searchEngines['searchEngine'] = $mt['searchEngine_item'];
-			else $searchEngines['searchEngine'][] = $mt['searchEngine_item'];
+			else
+				$searchEngines['searchEngine'][] = $mt['searchEngine_item'];
 		}
 	}
 
@@ -195,7 +196,7 @@ if( ! empty( $searchEngines['searchEngine'] ) )
 			{
 				$value['selected'] = $value['name'] == $searchEngine ? " selected=\"selected\"" : "";
 				$xtpl->assign( 'ENGINE', $value );
-				$xtpl->parse( 'searchEngineList.is_ping.Engine' );
+				$xtpl->parse( 'main.is_ping.Engine' );
 			}
 		}
 
@@ -204,39 +205,42 @@ if( ! empty( $searchEngines['searchEngine'] ) )
 			$xtpl->assign( 'MODULE_NAME', $name );
 			$xtpl->assign( 'MODULE_TITLE', $title );
 			$xtpl->assign( 'MODULE_SELECTED', ( $name == $module ? " selected=\"selected\"" : "" ) );
-			$xtpl->parse( 'searchEngineList.is_ping.Module' );
+			$xtpl->parse( 'main.is_ping.Module' );
 		}
 
 		if( ! empty( $info ) )
 		{
 			$xtpl->assign( 'INFO', $info );
-			$xtpl->parse( 'searchEngineList.is_ping.info' );
+			$xtpl->parse( 'main.is_ping.info' );
 		}
 
-		$xtpl->parse( 'searchEngineList.is_ping' );
+		$xtpl->parse( 'main.is_ping' );
 	}
 
 	foreach( $searchEngines['searchEngine'] as $value )
 	{
 		$value['selected'] = $value['active'] ? " selected=\"selected\"" : "";
 		$xtpl->assign( 'DATA', $value );
-		$xtpl->parse( 'searchEngineList.loop' );
+		$xtpl->parse( 'main.searchEngineList.loop' );
 	}
 }
 
-for( $i = 0; $i < 3; ++$i )
+if( empty( $global_config['idsite'] ) )
 {
-	$data = array(
-		'name' => '',
-		'value' => '',
-		'checked' => ''
-	);
-	$xtpl->assign( 'DATA', $data );
-	$xtpl->parse( 'searchEngineList.loop' );
+	for( $i = 0; $i < 2; ++$i )
+	{
+		$data = array(
+			'name' => '',
+			'value' => '',
+			'checked' => ''
+		);
+		$xtpl->assign( 'DATA', $data );
+		$xtpl->parse( 'main.searchEngineList.loop' );
+	}
+	$xtpl->parse( 'main.searchEngineList' );
 }
-
-$xtpl->parse( 'searchEngineList' );
-$contents = $xtpl->text( 'searchEngineList' );
+$xtpl->parse( 'main' );
+$contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['sitemapPing'];
 

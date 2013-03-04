@@ -99,7 +99,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$array['last_loginto1'] = "";
 	}
 
-	$sql = "FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=0";
+	$sql = "FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=0";
 
 	$is_null = true;
 	foreach( $array as $check )
@@ -182,23 +182,13 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		}
 
 		// Order data
-		$orderida = array(
-			"url" => ( $orderid == "ASC" ) ? $base_url . "&amp;orderid=DESC" : $base_url . "&amp;orderid=ASC", //
-			"class" => ( $orderid == "" ) ? "nooder" : strtolower( $orderid ) //
-		);
+		$orderida = array( "url" => ( $orderid == "ASC" ) ? $base_url . "&amp;orderid=DESC" : $base_url . "&amp;orderid=ASC", "class" => ( $orderid == "" ) ? "nooder" : strtolower( $orderid ) );
 
-		$orderusernamea = array( "url" => ( $orderusername == "ASC" ) ? $base_url . "&amp;orderusername=DESC" : $base_url . "&amp;orderusername=ASC", "class" => ( $orderusername == "" ) ? "nooder" : strtolower( $orderusername ) //
-);
+		$orderusernamea = array( "url" => ( $orderusername == "ASC" ) ? $base_url . "&amp;orderusername=DESC" : $base_url . "&amp;orderusername=ASC", "class" => ( $orderusername == "" ) ? "nooder" : strtolower( $orderusername ) );
 
-		$orderemaila = array(
-			"url" => ( $orderemail == "ASC" ) ? $base_url . "&amp;orderemail=DESC" : $base_url . "&amp;orderemail=ASC", //
-			"class" => ( $orderemail == "" ) ? "nooder" : strtolower( $orderemail ) //
-		);
+		$orderemaila = array( "url" => ( $orderemail == "ASC" ) ? $base_url . "&amp;orderemail=DESC" : $base_url . "&amp;orderemail=ASC", "class" => ( $orderemail == "" ) ? "nooder" : strtolower( $orderemail ) );
 
-		$orderregdatea = array(
-			"url" => ( $orderregdate == "ASC" ) ? $base_url . "&amp;orderregdate=DESC" : $base_url . "&amp;orderregdate=ASC", //
-			"class" => ( $orderregdate == "" ) ? "nooder" : strtolower( $orderregdate ) //
-		);
+		$orderregdatea = array( "url" => ( $orderregdate == "ASC" ) ? $base_url . "&amp;orderregdate=DESC" : $base_url . "&amp;orderregdate=ASC", "class" => ( $orderregdate == "" ) ? "nooder" : strtolower( $orderregdate ) );
 
 		// SQL data
 		if( ! empty( $orderid ) )
@@ -234,10 +224,10 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		while( $row = $db->sql_fetchrow( $query2 ) )
 		{
 			$array_user[$row['userid']] = array(
-				"userid" => $row['userid'], //
-				"username" => $row['username'], //
-				"email" => $row['email'], //
-				"regdate" => nv_date( "d/m/Y H:i", $row['regdate'] ) //
+				"userid" => $row['userid'],
+				"username" => $row['username'],
+				"email" => $row['email'],
+				"regdate" => nv_date( "d/m/Y H:i", $row['regdate'] )
 			);
 		}
 
@@ -281,19 +271,19 @@ else
 	$gender = isset( $array['gender'] ) ? $array['gender'] : "";
 	$array['gender'] = array();
 	$array['gender'][] = array(
-		"key" => "", //
-		"title" => $lang_module['select_gender'], //
-		"selected" => ( "" == $gender ) ? " selected=\"selected\"" : "" //
+		"key" => "",
+		"title" => $lang_module['select_gender'],
+		"selected" => ( "" == $gender ) ? " selected=\"selected\"" : ""
 	);
 	$array['gender'][] = array(
-		"key" => "M", //
-		"title" => $lang_module['select_gender_male'], //
-		"selected" => ( "M" == $gender ) ? " selected=\"selected\"" : "" //
+		"key" => "M",
+		"title" => $lang_module['select_gender_male'],
+		"selected" => ( "M" == $gender ) ? " selected=\"selected\"" : ""
 	);
 	$array['gender'][] = array(
-		"key" => "F", //
-		"title" => $lang_module['select_gender_female'], //
-		"selected" => ( "F" == $gender ) ? " selected=\"selected\"" : "" //
+		"key" => "F",
+		"title" => $lang_module['select_gender_female'],
+		"selected" => ( "F" == $gender ) ? " selected=\"selected\"" : ""
 	);
 
 	foreach( $array['gender'] as $gender )

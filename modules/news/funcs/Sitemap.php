@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) )
 }
 
 $url = array();
-$cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_data . "_Sitemap.cache";
+$cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_data . "_Sitemap_" . NV_CACHE_PREFIX . ".cache";
 $pa = NV_CURRENTTIME - 7200;
 
 if( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile ) >= $pa )

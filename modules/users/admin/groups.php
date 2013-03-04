@@ -90,7 +90,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( ! empty( $groupsList[$id]['users'] ) )
 	{
-		$query = "SELECT `userid`, `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $groupsList[$id]['users'] . ")";
+		$query = "SELECT `userid`, `in_groups` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $groupsList[$id]['users'] . ")";
 		$result = $db->sql_query( $query );
 		$update = array();
 		while( $row = $db->sql_fetchrow( $result ) )
@@ -105,7 +105,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 		if( ! empty( $update ) )
 		{
-			$update = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `in_groups` = CASE " . implode( " ", $update ) . " END";
+			$update = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `in_groups` = CASE " . implode( " ", $update ) . " END";
 			$db->sql_query( $query );
 		}
 	}
@@ -141,7 +141,7 @@ if( $nv_Request->isset_request( 'gid,uid', 'post' ) )
 	$uid = $nv_Request->get_int( 'uid', 'post', 0 );
 	if( ! isset( $groupsList[$gid] ) ) die( $lang_module['error_group_not_found'] );
 
-	$sql = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $uid . " LIMIT 1";
+	$sql = "SELECT `in_groups` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $uid . " LIMIT 1";
 	$sql = $db->sql_query( $sql );
 	if( $db->sql_numrows( $sql ) == 0 ) die( $lang_module['search_not_result'] );
 	list( $in_groups ) = $db->sql_fetchrow( $sql );
@@ -161,7 +161,7 @@ if( $nv_Request->isset_request( 'gid,uid', 'post' ) )
 	$in_groups[] = $gid;
 	$in_groups = implode( ",", array_filter( array_unique( array_map( "intval", $in_groups ) ) ) );
 
-	$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `in_groups` = " . $db->dbescape_string( $in_groups ) . " WHERE `userid`=" . $uid . " LIMIT 1";
+	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `in_groups` = " . $db->dbescape_string( $in_groups ) . " WHERE `userid`=" . $uid . " LIMIT 1";
 	$db->sql_query( $sql );
 
 	nv_del_moduleCache( $module_name );
@@ -176,7 +176,7 @@ if( $nv_Request->isset_request( 'gid,exclude', 'post' ) )
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 	$uid = $nv_Request->get_int( 'exclude', 'post', 0 );
 	if( ! isset( $groupsList[$gid] ) ) die( $lang_module['error_group_not_found'] );
-	$sql = "SELECT `in_groups` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $uid . " LIMIT 1";
+	$sql = "SELECT `in_groups` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $uid . " LIMIT 1";
 	$sql = $db->sql_query( $sql );
 	if( $db->sql_numrows( $sql ) == 0 ) die( $lang_module['search_not_result'] );
 	list( $in_groups ) = $db->sql_fetchrow( $sql );
@@ -192,7 +192,7 @@ if( $nv_Request->isset_request( 'gid,exclude', 'post' ) )
 	$in_groups = "," . $in_groups . ",";
 	$in_groups = str_replace( "," . $gid . ",", "", $in_groups );
 	$in_groups = trim( $in_groups, "," );
-	$query = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `in_groups` = " . $db->dbescape_string( $in_groups ) . " WHERE `userid`=" . $uid . " LIMIT 1";
+	$query = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `in_groups` = " . $db->dbescape_string( $in_groups ) . " WHERE `userid`=" . $uid . " LIMIT 1";
 	$db->sql_query( $query );
 
 	nv_del_moduleCache( $module_name );
@@ -219,7 +219,7 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 
 	if( ! empty( $groupsList[$id]['users'] ) )
 	{
-		$sql = "SELECT `userid`, `username`, `full_name`, `email` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $groupsList[$id]['users'] . ")";
+		$sql = "SELECT `userid`, `username`, `full_name`, `email` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $groupsList[$id]['users'] . ")";
 		$sql = $db->sql_query( $sql );
 		$a = 0;
 		while( $row = $db->sql_fetchrow( $sql, 2 ) )
@@ -326,21 +326,21 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		if( isset( $post['id'] ) )
 		{
 			$query = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET 
-                    `title`=" . $db->dbescape( $post['title'] ) . ", 
-                    `content`=" . $db->dbescape( $post['content'] ) . ", 
-                    `exp_time`='" . $post['exp_time'] . "', 
-                    `public`= " . $post['public'] . " 
-                    WHERE `group_id`=" . $post['id'] . " LIMIT 1";
+				`title`=" . $db->dbescape( $post['title'] ) . ", 
+				`content`=" . $db->dbescape( $post['content'] ) . ", 
+				`exp_time`='" . $post['exp_time'] . "', 
+				`public`= " . $post['public'] . " 
+				WHERE `group_id`=" . $post['id'] . " LIMIT 1";
 			$ok = $db->sql_query( $query );
 		}
 		else
 		{
 			$query = "INSERT INTO `" . NV_GROUPS_GLOBALTABLE . "` 
-                VALUES (NULL, " . $db->dbescape( $post['title'] ) . ", 
-                " . $db->dbescape( $post['content'] ) . ", 
-                " . NV_CURRENTTIME . ", 
-                " . $post['exp_time'] . ", 
-                '', " . $post['public'] . ", " . ( $groupcount + 1 ) . ", 1);";
+				VALUES (NULL, " . $db->dbescape( $post['title'] ) . ", 
+				" . $db->dbescape( $post['content'] ) . ", 
+				" . NV_CURRENTTIME . ", 
+				" . $post['exp_time'] . ", 
+				'', " . $post['public'] . ", " . ( $groupcount + 1 ) . ", 1, " . $global_config['idsite'] . ");";
 			$ok = $post['id'] = $db->sql_query_insert_id( $query );
 		}
 		if( $ok )
@@ -398,14 +398,14 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 	$a = 0;
 	foreach( $groupsList as $id => $values )
 	{
-		$loop = array( //
-			'id' => $id, //
-			'title' => $values['title'], //
-			'add_time' => nv_date( "d/m/Y H:i", $values['add_time'] ), //
-			'exp_time' => ! empty( $values['exp_time'] ) ? nv_date( "d/m/Y H:i", $values['exp_time'] ) : $lang_global['unlimited'], //
-			'public' => $values['public'] ? " checked=\"checked\"" : "", //
-			'users' => ! empty( $values['users'] ) ? sizeof( explode( ",", $values['users'] ) ) : 0, //
-			'act' => $values['act'] ? " checked=\"checked\"" : "" //
+		$loop = array(
+			'id' => $id,
+			'title' => $values['title'],
+			'add_time' => nv_date( "d/m/Y H:i", $values['add_time'] ),
+			'exp_time' => ! empty( $values['exp_time'] ) ? nv_date( "d/m/Y H:i", $values['exp_time'] ) : $lang_global['unlimited'],
+			'public' => $values['public'] ? " checked=\"checked\"" : "",
+			'users' => ! empty( $values['users'] ) ? sizeof( explode( ",", $values['users'] ) ) : 0,
+			'act' => $values['act'] ? " checked=\"checked\"" : ""
 		);
 		$xtpl->assign( 'LOOP', $loop );
 

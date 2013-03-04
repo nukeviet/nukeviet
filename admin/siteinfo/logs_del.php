@@ -58,8 +58,7 @@ else
 
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . ' ' . $lang_module['logs_title'], $number_del, $admin_info['userid'] );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+exit();
 
 ?>

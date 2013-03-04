@@ -9,21 +9,33 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$submenu['clearsystem'] = $lang_module['clearsystem'];
 $submenu['siteDiagnostic'] = $lang_module['siteDiagnostic'];
 $submenu['keywordRank'] = $lang_module['keywordRank'];
 $submenu['sitemapPing'] = $lang_module['sitemapPing'];
-$submenu['checkupdate'] = $lang_module['checkupdate'];
-$submenu['rpc'] = $lang_module['rpc_setting'];
-$submenu['config'] = $lang_module['config'];
-if( NV_LANG_INTERFACE == 'vi' )
+if( empty( $global_config['idsite'] ) )
 {
-	$submenu['mudim'] = $lang_module['mudim'];
+	$submenu['clearsystem'] = $lang_module['clearsystem'];
+	$submenu['checkupdate'] = $lang_module['checkupdate'];
+	$submenu['rpc'] = $lang_module['rpc_setting'];
+	$submenu['config'] = $lang_module['config'];
+	if( NV_LANG_INTERFACE == 'vi' )
+	{
+		$submenu['mudim'] = $lang_module['mudim'];
+	}
 }
 
 if( $module_name == "webtools" )
 {
-	$allow_func = array( 'main', 'rpc', 'clearsystem', 'sitemapPing', 'checkupdate', 'siteDiagnostic', 'keywordRank', 'config', 'mudim' );
+	$allow_func = array( 'main', 'sitemapPing', 'siteDiagnostic', 'keywordRank' );
+	if( empty( $global_config['idsite'] ) )
+	{
+		$allow_func[] = 'clearsystem';
+		$allow_func[] = 'checkupdate';
+		$allow_func[] = 'rpc';
+		$allow_func[] = 'config';
+		$allow_func[] = 'mudim';
+	}
+
 	$menu_top = array(
 		"title" => $module_name,
 		"module_file" => "",

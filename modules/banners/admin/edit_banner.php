@@ -17,7 +17,7 @@ if( empty( $id ) )
 	die();
 }
 
-$sql = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 ) die( 'Stop!!!' );
@@ -56,7 +56,7 @@ if( empty( $contents['file_allowed_ext'] ) )
 	exit();
 }
 
-$sql = "SELECT `id`,`login`,`full_name` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` ORDER BY `login` ASC";
+$sql = "SELECT `id`,`login`,`full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` ORDER BY `login` ASC";
 $result = $db->sql_query( $sql );
 
 $clients = array();
@@ -65,7 +65,7 @@ while( $cl_row = $db->sql_fetchrow( $result ) )
 	$clients[$cl_row['id']] = $cl_row['full_name'] . " (" . $cl_row['login'] . ")";
 }
 
-$sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` ORDER BY `blang`, `title` ASC";
+$sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` ORDER BY `blang`, `title` ASC";
 $result = $db->sql_query( $sql );
 
 $plans = array();
@@ -198,13 +198,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$exptime = 0;
 			}
 
-			list( $pid_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT `pid` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . intval( $id ) . "" ) );
+			list( $pid_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT `pid` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . intval( $id ) . "" ) );
 
-			$sql = "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `title`=" . $db->dbescape( $title ) . ", `pid`=" . $pid . ", `clid`=" . $clid . ", 
-            `file_name`=" . $db->dbescape( $file_name ) . ", `file_ext`=" . $db->dbescape( $file_ext ) . ", `file_mime`=" . $db->dbescape( $file_mime ) . ", 
-            `width`=" . $width . ", `height`=" . $height . ", `file_alt`=" . $db->dbescape( $file_alt ) . ", `imageforswf`=" . $db->dbescape( $imageforswf ) . ", 
-            `click_url`=" . $db->dbescape( $click_url ) . ", `target`=" . $db->dbescape( $target ) . ", 
-            `publ_time`=" . $publtime . ", `exp_time`=" . $exptime . " WHERE `id`=" . $id;
+			$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_rows` SET `title`=" . $db->dbescape( $title ) . ", `pid`=" . $pid . ", `clid`=" . $clid . ", 
+ `file_name`=" . $db->dbescape( $file_name ) . ", `file_ext`=" . $db->dbescape( $file_ext ) . ", `file_mime`=" . $db->dbescape( $file_mime ) . ", 
+ `width`=" . $width . ", `height`=" . $height . ", `file_alt`=" . $db->dbescape( $file_alt ) . ", `imageforswf`=" . $db->dbescape( $imageforswf ) . ", 
+ `click_url`=" . $db->dbescape( $click_url ) . ", `target`=" . $db->dbescape( $target ) . ", 
+ `publ_time`=" . $publtime . ", `exp_time`=" . $exptime . " WHERE `id`=" . $id;
 			$db->sql_query( $sql );
 
 			if( $pid_old != $pid )
