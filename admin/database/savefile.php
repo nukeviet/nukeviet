@@ -38,7 +38,13 @@ $contents['savetype'] = ( $ext != "sql" ) ? "gz" : "sql";
 
 $file_ext = ( $contents['savetype'] == "sql" ) ? "sql" : "sql.gz";
 $file_name = md5( $client_info['session_id'] ) . "_backupdata_" . date( "Y-m-d-H-i", time() ) . "." . $file_ext;
-$contents['filename'] = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup/" . $file_name;
+
+$log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
+if( $global_config['idsite'] )
+{
+	$log_dir .= "/" . $global_config['site_dir'];
+}
+$contents['filename'] = $log_dir . "/" . $file_name;
 
 include ( NV_ROOTDIR . "/includes/core/dump.php" );
 $result = nv_dump_save( $contents );

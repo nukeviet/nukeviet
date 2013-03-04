@@ -44,7 +44,7 @@ if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) 
 	}
 	else
 	{
-		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_theme', "theme  " . $theme, $admin_info['userid'] );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_theme', "theme " . $theme, $admin_info['userid'] );
 		$result = nv_deletefile( NV_ROOTDIR . '/themes/' . trim( $theme ), true );
 
 		if( ! empty( $result[0] ) )

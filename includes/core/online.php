@@ -29,11 +29,11 @@ function nv_online_upd()
 		$username = 'bot:' . $client_info['bot_info']['name'];
 	}
 	$query = "REPLACE INTO `" . NV_SESSIONS_GLOBALTABLE . "` VALUES (
-    " . $db->dbescape( $client_info['session_id'] ) . ", 
-    " . $userid . ", 
-    " . $db->dbescape( $username ) . ", 
-    " . NV_CURRENTTIME . "
-    )";
+		" . $db->dbescape( $client_info['session_id'] ) . ", 
+		" . $userid . ", 
+		" . $db->dbescape( $username ) . ", 
+		" . NV_CURRENTTIME . "
+		)";
 	$db->sql_query( $query );
 }
 

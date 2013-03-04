@@ -13,7 +13,7 @@ $bid = $nv_Request->get_int( 'bid', 'get', 0 );
 
 if( empty( $bid ) ) die( 'Stop!!!' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $bid;
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . $bid;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 ) die( 'Stop!!!' );
@@ -46,13 +46,11 @@ if( preg_match( "/^[0-9]{1,2}$/", $nv_Request->get_int( 'month', 'get' ) ) )
 	}
 }
 
-$table = NV_BANNERS_CLICK_GLOBALTABLE;
-
 $time = mktime( 0, 0, 0, $data_month, 15, $current_year );
 $day_max = ( $data_month == $current_month ) ? $current_day : date( "t", $time );
 $day_min = ( $current_month == $publ_month and $current_year == $publ_year ) ? $publ_day : 1;
 
-$sql = "SELECT COUNT(*) FROM `" . $table . "` WHERE `bid`=" . $bid . "";
+$sql = "SELECT COUNT(*) FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid`=" . $bid . "";
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=show_list_stat&amp;bid=" . $bid . "&amp;month=" . $data_month;
 $caption = sprintf( $lang_module['show_list_stat1'], nv_monthname( $data_month ), $current_year );

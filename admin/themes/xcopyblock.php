@@ -28,7 +28,7 @@ $xtpl->assign( 'OP', $op );
 
 $theme_list = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme'] );
 
-$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes`  WHERE `func_id`=0";
+$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0";
 $result = $db->sql_query( $sql );
 
 while( list( $theme ) = $db->sql_fetchrow( $result ) )
@@ -37,13 +37,10 @@ while( list( $theme ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'THEME_FROM', $theme );
 		$xtpl->parse( 'main.theme_from' );
-	}
-}
 
-foreach( $theme_list as $value )
-{
-	$xtpl->assign( 'THEME_TO', array( 'key' => $value, 'selected' => ( $selectthemes == $value and $selectthemes != "default" ) ? " selected=\"selected\"" : "" ) );
-	$xtpl->parse( 'main.theme_to' );
+		$xtpl->assign( 'THEME_TO', array( 'key' => $theme, 'selected' => ( $selectthemes == $theme and $selectthemes != "default" ) ? " selected=\"selected\"" : "" ) );
+		$xtpl->parse( 'main.theme_to' );
+	}
 }
 
 $xtpl->parse( 'main' );

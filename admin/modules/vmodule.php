@@ -9,6 +9,17 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
+$array_site_cat_module = array();
+if( $global_config['idsite'] )
+{
+	$result = $db->sql_query( "SELECT module FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site_cat` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=" . $global_config['idsite'] );
+	$row = $db->sql_fetch_assoc( $result );
+	if( ! empty( $row['module'] ) )
+	{
+		$array_site_cat_module = explode( ',', $row['module'] );
+	}
+}
+
 $title = $note = $modfile = $error = '';
 $modules_site = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
 if( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) )
@@ -27,13 +38,15 @@ if( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) 
 		$author = "";
 		$note = nv_nl2br( $note, '<br />' );
 		$module_data = preg_replace( '/(\W+)/i', '_', $title );
-
-		$ok = $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES (" . $db->dbescape( $title ) . ", '0', '0', " . $db->dbescape( $modfile ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $mod_version ) . ", '" . NV_CURRENTTIME . "', " . $db->dbescape( $author ) . ", " . $db->dbescape( $note ) . ")" );
-		if( $ok )
+		if( empty( $array_site_cat_module ) OR in_array( $modfile_i, $array_site_cat_module ) )
 		{
-			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['vmodule_add'] . ' "' . $module_data . '"', '', $admin_info['userid'] );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setup&setmodule=" . $title . "&checkss=" . md5( $title . session_id() . $global_config['sitekey'] ) );
-			die();
+			$ok = $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES (" . $db->dbescape( $title ) . ", '0', '0', " . $db->dbescape( $modfile ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $mod_version ) . ", '" . NV_CURRENTTIME . "', " . $db->dbescape( $author ) . ", " . $db->dbescape( $note ) . ")" );
+			if( $ok )
+			{
+				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['vmodule_add'] . ' "' . $module_data . '"', '', $admin_info['userid'] );
+				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setup&setmodule=" . $title . "&checkss=" . md5( $title . session_id() . $global_config['sitekey'] ) );
+				die();
+			}
 		}
 	}
 }
@@ -68,6 +81,10 @@ while( list( $modfile_i ) = $db->sql_fetchrow( $result ) )
 
 	if( in_array( $modfile_i, $modules_site ) )
 	{
+		if( ! empty( $array_site_cat_module ) AND ! in_array( $modfile_i, $array_site_cat_module ) )
+		{
+			continue;
+		}
 		$xtpl->assign( 'MODFILE', array( 'key' => $modfile_i, 'selected' => ( $modfile_i == $modfile ) ? " selected=\"selected\"" : "" ) );
 		$xtpl->parse( 'main.modfile' );
 	}

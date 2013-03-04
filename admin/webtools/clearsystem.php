@@ -62,8 +62,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 			$xtpl->assign( 'DELFILE', $file );
 			$xtpl->parse( 'main.delfile.loop' );
 		}
-		$cssDir = NV_ROOTDIR . '/' . NV_FILES_DIR . '/css';
-		$files = nv_clear_files( $cssDir, NV_FILES_DIR . '/css' );
+		$cssDir = NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css';
+		$files = nv_clear_files( $cssDir, SYSTEM_FILES_DIR . '/css' );
 		foreach( $files as $file )
 		{
 			$xtpl->assign( 'DELFILE', $file );

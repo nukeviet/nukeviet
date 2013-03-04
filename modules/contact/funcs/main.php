@@ -21,7 +21,7 @@ if( ! defined( 'NV_IS_MOD_CONTACT' ) ) die( 'Stop!!!' );
  */
 function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 {
-	global $db, $module_data;
+	global $db, $module_data, $db_config;
 
 	$email_list = array();
 
@@ -56,7 +56,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 		{
 			$a_l = implode( ",", $a_l );
 
-			$sql = "SELECT t2.email as admin_email FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (" . $a_l . ")";
+			$sql = "SELECT t2.email as admin_email FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (" . $a_l . ")";
 			$result = $db->sql_query( $sql );
 
 			while( $row = $db->sql_fetchrow( $result ) )
@@ -161,9 +161,9 @@ if( ! empty( $array_rows ) )
 			$sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_send` VALUES 
-            (NULL , " . $fpart . ", " . $db->dbescape( $ftitle ) . ", " . $db->dbescape( $fcon ) . ", 
-            " . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->dbescape( $fname ) . ", " . $db->dbescape( $femail ) . ", 
-            " . $db->dbescape( $fphone ) . ", " . $db->dbescape( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";
+				(NULL , " . $fpart . ", " . $db->dbescape( $ftitle ) . ", " . $db->dbescape( $fcon ) . ", 
+				" . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->dbescape( $fname ) . ", " . $db->dbescape( $femail ) . ", 
+				" . $db->dbescape( $fphone ) . ", " . $db->dbescape( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";
 			$db->sql_query( $sql );
 
 			$website = "<a href=\"" . $global_config['site_url'] . "\">" . $global_config['site_name'] . "</a>";
@@ -203,15 +203,15 @@ elseif( file_exists( $content_file ) )
 	$bodytext = file_get_contents( $content_file );
 }
 
-$array_content = array( //
-	"error" => $error, //
-	"fpart" => $fpart, //
-	"bodytext" => $bodytext, //
-	"fname" => $fname, //
-	"femail" => $femail, //
-	"fcon" => $fcon, //
-	"ftitle" => $ftitle, //
-	'fphone' => $fphone //
+$array_content = array(
+	"error" => $error,
+	"fpart" => $fpart,
+	"bodytext" => $bodytext,
+	"fname" => $fname,
+	"femail" => $femail,
+	"fcon" => $fcon,
+	"ftitle" => $ftitle,
+	'fphone' => $fphone
 );
 
 $checkss = md5( $client_info['session_id'] . $global_config['sitekey'] );

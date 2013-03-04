@@ -7,6 +7,7 @@ Kiểm tra lại link các trang web, các link để rewite được cần tuâ
 /index.php?language=[ngôn ngữ]&nv=[Tên module]
 /index.php?language=[ngôn ngữ]&nv=[Tên module]&op=[Tên op, các biến khác nên truyền hết vào biến này, cách nhau bởi dấu /]
 /index.php?language=[ngôn ngữ]&nv=[Tên module]&op=[Tên op, các biến khác nên truyền hết vào biến này, cách nhau bởi dấu /].html
+
 - Trong một số trường hợp link không rewite được (Do trong mã html không có dấu nháy đôi), cần gọi hàn xử lý như sau
 $link = '/index.php?language=[ngôn ngữ]&nv=[Tên module]'
 $link = nv_url_rewrite( $link, true );
@@ -73,9 +74,9 @@ Thêm lên trên nó đoạn sau
 
 6) Thêm chức năng Ping bài viết qua RPC
 - Chức năng này chỉ hoạt động nếu máy chủ support cURL cho php
-- Vào menu Dịch vụ PING để chọn các dịch vụ, sau đó lưu lại cấu hình đó.
+- Vào menu Công cụ web ->Cấu hình dịch vụ PING để chọn các dịch vụ, sau đó lưu lại cấu hình đó.
 - Khi thêm hoặc sửa bài viết, nếu bài viết ở chế độ kích hoạt, hệ thống sẽ chuyển đến trang Dịch vụ PING và ping tự động bài viết.
-- Để bổ sung proxies hãy sửa file modules/news/proxies.php, theo hướng dẫn trong file đó. 
+- Để bổ sung proxies hãy sửa file data\proxies.php, theo hướng dẫn trong file đó. 
 
 7) Thay thế jquery.validate
 Tìm tất cả các chỗ có jquery.validate để thay thế

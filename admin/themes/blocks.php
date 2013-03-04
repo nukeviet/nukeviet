@@ -11,6 +11,23 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $select_options = array();
 $theme_array = nv_scandir( NV_ROOTDIR . "/themes", array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
+if( $global_config['idsite'] )
+{
+	$result = $db->sql_query( "SELECT theme FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site_cat` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=" . $global_config['idsite'] );
+	$row = $db->sql_fetch_assoc( $result );
+	if( ! empty( $row['theme'] ) )
+	{
+		$array_site_cat_theme = explode( ',', $row['theme'] );
+
+		$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0";
+		$result = $db->sql_query( $sql );
+		while( list( $theme ) = $db->sql_fetchrow( $result ) )
+		{
+			$array_site_cat_theme[] = $theme;
+		}
+		$theme_array = array_intersect( $theme_array, $array_site_cat_theme );
+	}
+}
 
 if( ! defined( 'SHADOWBOX' ) )
 {

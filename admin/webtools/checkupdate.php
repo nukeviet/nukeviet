@@ -78,9 +78,9 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				if( isset( $onlineModules[$module_file]['pubtime'], $onlineModules[$module_file]['version'], $onlineModules[$module_file]['author'] ) and $onlineModules[$module_file]['version'] == $v and ( $onlineModules[$module_file]['pubtime'] != $p or $onlineModules[$module_file]['author'] != $author ) )
 				{
 					$sql2 = "UPDATE `" . $db_config['prefix'] . "_setup_modules` 
-		                SET `mod_version`=" . $db->dbescape( $v . ' ' . $onlineModules[$module_file]['pubtime'] ) . ", 
-		                `author`=" . $db->dbescape( $onlineModules[$module_file]['author'] ) . " 
-		                WHERE `module_file`=" . $db->dbescape( $module_file );
+		 SET `mod_version`=" . $db->dbescape( $v . ' ' . $onlineModules[$module_file]['pubtime'] ) . ", 
+		 `author`=" . $db->dbescape( $onlineModules[$module_file]['author'] ) . " 
+		 WHERE `module_file`=" . $db->dbescape( $module_file );
 					$db->sql_query( $sql2 );
 				}
 			}

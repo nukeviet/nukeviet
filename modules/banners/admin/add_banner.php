@@ -35,7 +35,7 @@ if( empty( $contents['file_allowed_ext'] ) )
 	exit();
 }
 
-$sql = "SELECT `id`,`login`,`full_name` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` ORDER BY `login` ASC";
+$sql = "SELECT `id`,`login`,`full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` ORDER BY `login` ASC";
 $result = $db->sql_query( $sql );
 
 $clients = array();
@@ -44,7 +44,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$clients[$row['id']] = $row['full_name'] . " (" . $row['login'] . ")";
 }
 
-$sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` ORDER BY `blang`, `title` ASC";
+$sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` ORDER BY `blang`, `title` ASC";
 $result = $db->sql_query( $sql );
 
 $plans = array();
@@ -144,10 +144,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			if( $exptime != 0 and $exptime <= $publtime ) $exptime = $publtime;
 
-			$sql = "INSERT INTO `" . NV_BANNERS_ROWS_GLOBALTABLE . "` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `imageforswf`, `click_url`, `target`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES 
-            (NULL, " . $db->dbescape( $title ) . ", " . $pid . ", " . $clid . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ", 
-            " . $width . ", " . $height . ", " . $db->dbescape( $file_alt ) . ", '', " . $db->dbescape( $click_url ) . ", " . $db->dbescape( $target ) . ", " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ", 
-            0, 1, 0)";
+			$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_rows` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `imageforswf`, `click_url`, `target`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES 
+				(NULL, " . $db->dbescape( $title ) . ", " . $pid . ", " . $clid . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ", 
+				" . $width . ", " . $height . ", " . $db->dbescape( $file_alt ) . ", '', " . $db->dbescape( $click_url ) . ", " . $db->dbescape( $target ) . ", " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ", 
+				0, 1, 0)";
 
 			$id = $db->sql_query_insert_id( $sql );
 

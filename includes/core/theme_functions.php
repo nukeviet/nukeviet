@@ -21,21 +21,21 @@ function nv_error_info()
 	if( ! defined( 'NV_IS_ADMIN' ) ) return;
 	if( empty( $error_info ) ) return;
 
-	$errortype = array( //
-		E_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
-		E_PARSE => array( $lang_global['error_error'], "bad.png" ), //
-		E_NOTICE => array( $lang_global['error_notice'], "comment.png" ), //
-		E_CORE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_CORE_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
-		E_COMPILE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_COMPILE_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
-		E_USER_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_USER_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
-		E_USER_NOTICE => array( $lang_global['error_notice'], "comment.png" ), //
-		E_STRICT => array( $lang_global['error_notice'], "comment.png" ), //
-		E_RECOVERABLE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_DEPRECATED => array( $lang_global['error_notice'], "comment.png" ), //
+	$errortype = array(
+		E_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_WARNING => array( $lang_global['error_warning'], "warning.png" ),
+		E_PARSE => array( $lang_global['error_error'], "bad.png" ),
+		E_NOTICE => array( $lang_global['error_notice'], "comment.png" ),
+		E_CORE_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_CORE_WARNING => array( $lang_global['error_warning'], "warning.png" ),
+		E_COMPILE_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_COMPILE_WARNING => array( $lang_global['error_warning'], "warning.png" ),
+		E_USER_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_USER_WARNING => array( $lang_global['error_warning'], "warning.png" ),
+		E_USER_NOTICE => array( $lang_global['error_notice'], "comment.png" ),
+		E_STRICT => array( $lang_global['error_notice'], "comment.png" ),
+		E_RECOVERABLE_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_DEPRECATED => array( $lang_global['error_notice'], "comment.png" ),
 		E_USER_DEPRECATED => array( $lang_global['error_warning'], "warning.png" )
 	);
 
@@ -417,7 +417,7 @@ function nv_xmlSitemapIndex_generate()
 	{
 		foreach( $global_config['allow_sitelangs'] as $lang )
 		{
-			$sql = "SELECT m.title FROM  `" . $db_config['prefix'] . '_' . $lang . "_modules` AS m LEFT JOIN `" . $db_config['prefix'] . '_' . $lang . "_modfuncs` AS f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='0' AND f.func_name = 'Sitemap' ORDER BY m.weight, f.subweight";
+			$sql = "SELECT m.title FROM `" . $db_config['prefix'] . '_' . $lang . "_modules` AS m LEFT JOIN `" . $db_config['prefix'] . '_' . $lang . "_modfuncs` AS f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='0' AND f.func_name = 'Sitemap' ORDER BY m.weight, f.subweight";
 			$result = $db->sql_query( $sql );
 			while( list( $modname ) = $db->sql_fetchrow( $result, 1 ) )
 			{

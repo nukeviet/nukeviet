@@ -90,6 +90,10 @@ function nv_save_file_config_global()
 {
 	global $db, $sys_info, $global_config;
 
+	if( $global_config['idsite'] )
+	{
+		return false;
+	}
 	$content_config = "<?php\n\n";
 	$content_config .= NV_FILEHEAD . "\n\n";
 	$content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
@@ -501,40 +505,40 @@ function nv_rewrite_change( $array_config_global )
 		$filename = NV_ROOTDIR . "/web.config";
 		$rulename = 0;
 		$rewrite_rule .= "\n";
-		$rewrite_rule .= "                <rule name=\"nv_rule_" . ++$rulename . "\">\n";
-		$rewrite_rule .= "                    <match url=\"^\" ignoreCase=\"false\" />\n";
-		$rewrite_rule .= "                    <conditions>\n";
-		$rewrite_rule .= "                    		<add input=\"{REQUEST_FILENAME}\" pattern=\"/robots.txt$\" />\n";
-		$rewrite_rule .= "                    </conditions>\n";
-		$rewrite_rule .= "                    <action type=\"Rewrite\" url=\"robots.php?action={HTTP_HOST}\" appendQueryString=\"false\" />\n";
-		$rewrite_rule .= "                </rule>\n";
-		$rewrite_rule .= "                <rule name=\"nv_rule_" . ++$rulename . "\">\n";
-		$rewrite_rule .= "                    <match url=\"^(.*?)Sitemap\.xml$\" ignoreCase=\"false\" />\n";
-		$rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=SitemapIndex\" appendQueryString=\"false\" />\n";
-		$rewrite_rule .= "                </rule>\n";
-		$rewrite_rule .= "                <rule name=\"nv_rule_" . ++$rulename . "\">\n";
-		$rewrite_rule .= "                    <match url=\"^(.*?)Sitemap\-([a-z]{2})\.xml$\" ignoreCase=\"false\" />\n";
-		$rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "=SitemapIndex\" appendQueryString=\"false\" />\n";
-		$rewrite_rule .= "                </rule>\n";
-		$rewrite_rule .= "                <rule name=\"nv_rule_" . ++$rulename . "\">\n";
-		$rewrite_rule .= "                    <match url=\"^(.*?)Sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />\n";
-		$rewrite_rule .= "                    <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=Sitemap\" appendQueryString=\"false\" />\n";
-		$rewrite_rule .= "                </rule>\n";
+		$rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+		$rewrite_rule .= " <match url=\"^\" ignoreCase=\"false\" />\n";
+		$rewrite_rule .= " <conditions>\n";
+		$rewrite_rule .= " 		<add input=\"{REQUEST_FILENAME}\" pattern=\"/robots.txt$\" />\n";
+		$rewrite_rule .= " </conditions>\n";
+		$rewrite_rule .= " <action type=\"Rewrite\" url=\"robots.php?action={HTTP_HOST}\" appendQueryString=\"false\" />\n";
+		$rewrite_rule .= " </rule>\n";
+		$rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+		$rewrite_rule .= " <match url=\"^(.*?)Sitemap\.xml$\" ignoreCase=\"false\" />\n";
+		$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=SitemapIndex\" appendQueryString=\"false\" />\n";
+		$rewrite_rule .= " </rule>\n";
+		$rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+		$rewrite_rule .= " <match url=\"^(.*?)Sitemap\-([a-z]{2})\.xml$\" ignoreCase=\"false\" />\n";
+		$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "=SitemapIndex\" appendQueryString=\"false\" />\n";
+		$rewrite_rule .= " </rule>\n";
+		$rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+		$rewrite_rule .= " <match url=\"^(.*?)Sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />\n";
+		$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=Sitemap\" appendQueryString=\"false\" />\n";
+		$rewrite_rule .= " </rule>\n";
 		if( $sys_info['zlib_support'] )
 		{
-			$rewrite_rule .= "                <rule name=\"nv_rule_" . ++$rulename . "\">\n";
-			$rewrite_rule .= "                    <match url=\"^((?!http(s?)|ftp\:\/\/).*)\.(css|js)$\" ignoreCase=\"false\" />\n";
-			$rewrite_rule .= "                    <action type=\"Rewrite\" url=\"CJzip.php?file={R:1}.{R:3}\" appendQueryString=\"false\" />\n";
-			$rewrite_rule .= "                </rule>\n";
+			$rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+			$rewrite_rule .= " <match url=\"^((?!http(s?)|ftp\:\/\/).*)\.(css|js)$\" ignoreCase=\"false\" />\n";
+			$rewrite_rule .= " <action type=\"Rewrite\" url=\"CJzip.php?file={R:1}.{R:3}\" appendQueryString=\"false\" />\n";
+			$rewrite_rule .= " </rule>\n";
 		}
-		$rewrite_rule .= "                <rule name=\"nv_rule_rewrite\">\n";
-		$rewrite_rule .= "                	<match url=\"(.*)(" . $endurl . ")$\" ignoreCase=\"false\" />\n";
-		$rewrite_rule .= "                	<conditions logicalGrouping=\"MatchAll\">\n";
-		$rewrite_rule .= "                		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsFile\" ignoreCase=\"false\" negate=\"true\" />\n";
-		$rewrite_rule .= "                 		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsDirectory\" ignoreCase=\"false\" negate=\"true\" />\n";
-		$rewrite_rule .= "                	</conditions>\n";
-		$rewrite_rule .= "                	<action type=\"Rewrite\" url=\"index.php\" />\n";
-		$rewrite_rule .= "                </rule>\n";
+		$rewrite_rule .= " <rule name=\"nv_rule_rewrite\">\n";
+		$rewrite_rule .= " 	<match url=\"(.*)(" . $endurl . ")$\" ignoreCase=\"false\" />\n";
+		$rewrite_rule .= " 	<conditions logicalGrouping=\"MatchAll\">\n";
+		$rewrite_rule .= " 		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsFile\" ignoreCase=\"false\" negate=\"true\" />\n";
+		$rewrite_rule .= " 		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsDirectory\" ignoreCase=\"false\" negate=\"true\" />\n";
+		$rewrite_rule .= " 	</conditions>\n";
+		$rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
+		$rewrite_rule .= " </rule>\n";
 		$rewrite_rule = nv_rewrite_rule_iis7( $rewrite_rule );
 	}
 	elseif( $sys_info['supports_rewrite'] == "rewrite_mode_apache" )

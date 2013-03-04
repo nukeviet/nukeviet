@@ -11,12 +11,12 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $theme = filter_text_input( 'theme', 'post', "", 1 );
 
-$sql = "SELECT `theme` FROM `" . NV_PREFIXLANG . "_modthemes`  WHERE `func_id`=0 AND `theme`=" . $db->dbescape_string( $theme ) . "";
+$sql = "SELECT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0 AND `theme`=" . $db->dbescape_string( $theme ) . "";
 $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) > 0 )
 {
-	$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET  config_value=" . $db->dbescape_string( $theme ) . " WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'" );
+	$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET config_value=" . $db->dbescape_string( $theme ) . " WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'" );
 	$global_config['site_theme'] = $theme;
 
 	nv_delete_all_cache();

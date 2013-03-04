@@ -56,7 +56,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	list( $count ) = $db->sql_fetchrow( $result );
 	if( $count ) die( $lang_module['add_error_exist'] );
 
-	$sql = "SELECT `userid`, `username`, `active` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid . " LIMIT 1";
+	$sql = "SELECT `userid`, `username`, `active` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid . " LIMIT 1";
 	$result = $db->sql_query( $sql );
 	list( $userid, $username, $active ) = $db->sql_fetchrow( $result );
 
@@ -97,12 +97,12 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	$files_level = ( ! empty( $allow_files_type ) ? implode( ",", $allow_files_type ) : "" ) . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
 
 	$sql = "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "` (`admin_id`, `editor`, `lev`, `files_level`, `position`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) VALUES (
-        " . $userid . ", 
-        " . $db->dbescape( $editor ) . ", 
-        " . $lev . ", 
-        " . $db->dbescape( $files_level ) . ", 
-        " . $db->dbescape( $position ) . ", 
-        0,'', '',0,'',''
+		" . $userid . ", 
+		" . $db->dbescape( $editor ) . ", 
+		" . $lev . ", 
+		" . $db->dbescape( $files_level ) . ", 
+		" . $db->dbescape( $position ) . ", 
+		0,'', '',0,'',''
 	)";
 
 	if( $db->sql_query( $sql ) )

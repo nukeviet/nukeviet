@@ -80,7 +80,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['deny_email'] = implode( "|", $array_config['deny_email'] );
 	}
 
-	$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "_config` SET `content`=" . $db->dbescape( $array_config['deny_email'] ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='deny_email'";
+	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET `content`=" . $db->dbescape( $array_config['deny_email'] ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='deny_email'";
 	$db->sql_query( $sql );
 	$array_config['deny_name'] = filter_text_input( 'deny_name', 'post', '', 1 );
 	if( ! empty( $array_config['deny_name'] ) )
@@ -88,7 +88,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['deny_name'] = valid_name_config( explode( ",", $array_config['deny_name'] ) );
 		$array_config['deny_name'] = implode( "|", $array_config['deny_name'] );
 	}
-	$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "_config` SET `content`=" . $db->dbescape( $array_config['deny_name'] ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='deny_name'";
+	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET `content`=" . $db->dbescape( $array_config['deny_name'] ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='deny_name'";
 	$db->sql_query( $sql );
 
 	$access_admin = array();
@@ -98,7 +98,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$access_admin['access_delus'] = $nv_Request->get_typed_array( 'access_delus', 'post', 'bool' );
 	$access_admin['access_passus'] = $nv_Request->get_typed_array( 'access_passus', 'post', 'bool' );
 	$access_admin['access_groups'] = $nv_Request->get_typed_array( 'access_groups', 'post', 'bool' );
-	$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "_config` SET `content`='" . serialize( $access_admin ) . "', `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='access_admin'";
+	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET `content`='" . serialize( $access_admin ) . "', `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='access_admin'";
 	$db->sql_query( $sql );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], "", $admin_info['userid'] );
@@ -132,7 +132,7 @@ if( ! empty( $openid_servers ) )
 		$array_config['openid_servers'][] = array( 'name' => $server, 'checked' => $checked );
 	}
 }
-$sql = "SELECT `config`, `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email' OR `config`='deny_name'";
+$sql = "SELECT `config`, `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email' OR `config`='deny_name'";
 $result = $db->sql_query( $sql );
 while( list( $config, $content ) = $db->sql_fetchrow( $result ) )
 {

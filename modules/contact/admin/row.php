@@ -39,17 +39,18 @@ $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
 
 $sql = "SELECT t1.admin_id as id, t1.lev as level, t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM 
-`" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0";
+	`" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid 
+	WHERE t1.lev!=0 AND t1.is_suspend=0";
 $result = $db->sql_query( $sql );
 
 $adms = array();
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$adms[$row['id']] = array(
-		'login' => $row['admin_login'], //
-		'fullname' => $row['admin_fullname'], //
-		'email' => $row['admin_email'], //
-		'level' => intval( $row['level'] ) //
+		'login' => $row['admin_login'],
+		'fullname' => $row['admin_fullname'],
+		'email' => $row['admin_email'],
+		'level' => intval( $row['level'] )
 	);
 }
 
@@ -139,17 +140,17 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		if( $id )
 		{
 			$sql = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET 
-            `full_name`=" . $db->dbescape( $full_name ) . ", `phone` =  " . $db->dbescape( $phone ) . ", 
-            `fax`=" . $db->dbescape( $fax ) . ", `email`=" . $db->dbescape( $email ) . ", 
-            `note`=" . $db->dbescape( $note ) . ", `admins`=" . $db->dbescape( $admins_list ) . " WHERE `id` =" . $id;
+				`full_name`=" . $db->dbescape( $full_name ) . ", `phone` = " . $db->dbescape( $phone ) . ", 
+				`fax`=" . $db->dbescape( $fax ) . ", `email`=" . $db->dbescape( $email ) . ", 
+				`note`=" . $db->dbescape( $note ) . ", `admins`=" . $db->dbescape( $admins_list ) . " WHERE `id` =" . $id;
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_row', "rowid " . $id, $admin_info['userid'] );
 		}
 		else
 		{
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
-            NULL, " . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", 
-            " . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
+				NULL, " . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", 
+				" . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_row', " ", $admin_info['userid'] );
 		}
@@ -254,26 +255,26 @@ else
 }
 
 $xtpl->assign( 'DATA', array(
-	'full_name' => $full_name, //
-	'phone' => $phone, //
-	'fax' => $fax, //
-	'email' => $email, //
-	'note' => $note //
+	'full_name' => $full_name,
+	'phone' => $phone,
+	'fax' => $fax,
+	'email' => $email,
+	'note' => $note
 ) );
 
 $a = 0;
 foreach( $adms as $admid => $values )
 {
 	$xtpl->assign( 'ADMIN', array(
-		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "", //
-		'login' => $values['login'], //
-		'fullname' => $values['fullname'], //
-		'email' => $values['email'], //
-		'admid' => $admid, //
-		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? " checked=\"checked\"" : "", //
-		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? " checked=\"checked\"" : "", //
-		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? " checked=\"checked\"" : "", //
-		'disabled' => $values['level'] === 1 ? " disabled=\"disabled\"" : "" //
+		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
+		'login' => $values['login'],
+		'fullname' => $values['fullname'],
+		'email' => $values['email'],
+		'admid' => $admid,
+		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? " checked=\"checked\"" : "",
+		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? " checked=\"checked\"" : "",
+		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? " checked=\"checked\"" : "",
+		'disabled' => $values['level'] === 1 ? " disabled=\"disabled\"" : ""
 	) );
 
 	$xtpl->parse( 'main.admin' );

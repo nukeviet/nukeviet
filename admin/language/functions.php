@@ -9,21 +9,21 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-global $global_config;
-
 $submenu['main'] = $lang_module['nv_lang_data'];
-
-if( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
+if( empty( $global_config['idsite'] ) )
 {
-	$submenu['countries'] = $lang_module['countries'];
-}
+	if( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
+	{
+		$submenu['countries'] = $lang_module['countries'];
+	}
 
-$submenu['interface'] = $lang_module['nv_lang_interface'];
-$submenu['check'] = $lang_module['nv_lang_check'];
-$submenu['copy'] = $lang_module['nv_admin_copy'];
-if( defined( 'NV_IS_GODADMIN' ) )
-{
-	$submenu['setting'] = $lang_global['mod_settings'];
+	$submenu['interface'] = $lang_module['nv_lang_interface'];
+	$submenu['check'] = $lang_module['nv_lang_check'];
+	$submenu['copy'] = $lang_module['nv_admin_copy'];
+	if( defined( 'NV_IS_GODADMIN' ) )
+	{
+		$submenu['setting'] = $lang_global['mod_settings'];
+	}
 }
 
 if( $module_name == "language" )
@@ -37,14 +37,23 @@ if( $module_name == "language" )
 		"custom_title" => $lang_global['mod_language']
 	);
 
-	$allow_func = array( 'main', 'read', 'copy', 'edit', 'download', 'interface', 'check', 'countries' );
-	if( defined( 'NV_IS_GODADMIN' ) )
+	$allow_func = array( 'main' );
+	if( empty( $global_config['idsite'] ) )
 	{
-		$allow_func[] = 'setting';
-		$allow_func[] = 'write';
-		$allow_func[] = 'delete';
+		$allow_func[] = 'read';
+		$allow_func[] = 'copy';
+		$allow_func[] = 'edit';
+		$allow_func[] = 'download';
+		$allow_func[] = 'interface';
+		$allow_func[] = 'check';
+		$allow_func[] = 'countries';
+		if( defined( 'NV_IS_GODADMIN' ) )
+		{
+			$allow_func[] = 'setting';
+			$allow_func[] = 'write';
+			$allow_func[] = 'delete';
+		}
 	}
-
 	define( 'ALLOWED_HTML_LANG', 'a, b, blockquote, br, em, h1, h2, h3, h4, h5, h6, hr, p, span, strong' );
 
 	$allowed_html_tags = array_map( "trim", explode( ",", ALLOWED_HTML_LANG ) );
@@ -88,6 +97,7 @@ if( $module_name == "language" )
 			}
 		}
 	}
+
 }
 
 ?>

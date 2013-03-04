@@ -81,10 +81,10 @@ function nv_referer_update()
 			file_put_contents( $tmp, NV_CURRENTTIME . '|' . $md5 );
 
 			$sql = "UPDATE `" . NV_REFSTAT_TABLE . "` SET 
-            total=total+1, 
-            month" . date( 'm', NV_CURRENTTIME ) . "=month" . date( 'm', NV_CURRENTTIME ) . "+1, 
-            last_update=" . NV_CURRENTTIME . " 
-            WHERE `host`=" . $db->dbescape( $host );
+				total=total+1, 
+				month" . date( 'm', NV_CURRENTTIME ) . "=month" . date( 'm', NV_CURRENTTIME ) . "+1, 
+				last_update=" . NV_CURRENTTIME . " 
+				WHERE `host`=" . $db->dbescape( $host );
 			$db->sql_query( $sql );
 			$mysql_info = @mysql_info();
 			unset( $matches );
@@ -92,8 +92,8 @@ function nv_referer_update()
 			if( $matches[1] == 0 )
 			{
 				$sql = "INSERT INTO `" . NV_REFSTAT_TABLE . "` 
-                (`host`, `total`, `month" . date( 'm', NV_CURRENTTIME ) . "`, `last_update`) 
-                VALUES (" . $db->dbescape( $host ) . ",1, 1," . NV_CURRENTTIME . ")";
+					(`host`, `total`, `month" . date( 'm', NV_CURRENTTIME ) . "`, `last_update`) 
+					VALUES (" . $db->dbescape( $host ) . ",1, 1," . NV_CURRENTTIME . ")";
 				$db->sql_query( $sql );
 			}
 
@@ -112,8 +112,8 @@ function nv_referer_update()
 					if( ! empty( $key ) )
 					{
 						$sql = "UPDATE `" . NV_SEARCHKEYS_TABLE . "` 
-                        SET total=total+1 WHERE `id`=" . $db->dbescape( $id ) . " 
-                        AND `search_engine`=" . $db->dbescape( $nv_Request->search_engine );
+							SET total=total+1 WHERE `id`=" . $db->dbescape( $id ) . " 
+							AND `search_engine`=" . $db->dbescape( $nv_Request->search_engine );
 						$db->sql_query( $sql );
 						$mysql_info = @mysql_info();
 						unset( $matches );
@@ -121,7 +121,7 @@ function nv_referer_update()
 						if( $matches[1] == 0 )
 						{
 							$sql = "INSERT INTO `" . NV_SEARCHKEYS_TABLE . "` 
-                            VALUES (" . $db->dbescape( $id ) . "," . $db->dbescape( $key ) . ",1," . $db->dbescape( $nv_Request->search_engine ) . ")";
+								VALUES (" . $db->dbescape( $id ) . "," . $db->dbescape( $key ) . ",1," . $db->dbescape( $nv_Request->search_engine ) . ")";
 							$db->sql_query( $sql );
 						}
 					}

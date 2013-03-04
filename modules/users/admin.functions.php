@@ -11,7 +11,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 define( 'NV_IS_FILE_ADMIN', true );
 
-list( $access_admin ) = $db->sql_fetchrow( $db->sql_query( "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='access_admin'" ) );
+list( $access_admin ) = $db->sql_fetchrow( $db->sql_query( "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='access_admin'" ) );
 $access_admin = unserialize( $access_admin );
 
 $allow_func = array( 'main', 'getuserid' );
@@ -87,15 +87,15 @@ function groupList()
  */
 function nv_fix_question()
 {
-	global $db;
+	global $db, $db_config;
 
-	$sql = "SELECT `qid` FROM `" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
+	$sql = "SELECT `qid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
 	$result = $db->sql_query( $sql );
 	$weight = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		++$weight;
-		$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "_question` SET `weight`=" . $weight . " WHERE `qid`=" . $row['qid'];
+		$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` SET `weight`=" . $weight . " WHERE `qid`=" . $row['qid'];
 		$db->sql_query( $sql );
 	}
 	$db->sql_freeresult();

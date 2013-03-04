@@ -12,10 +12,13 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$submenu['thumbconfig'] = $lang_module['thumbconfig'];
-	$submenu['config'] = $lang_module['configlogo'];
-	if( defined( 'NV_IS_GODADMIN' ) )
+	if( empty( $global_config['idsite'] ) )
 	{
-		$submenu['uploadconfig'] = $lang_module['uploadconfig'];
+		$submenu['config'] = $lang_module['configlogo'];
+		if( defined( 'NV_IS_GODADMIN' ) )
+		{
+			$submenu['uploadconfig'] = $lang_module['uploadconfig'];
+		}
 	}
 }
 
@@ -33,11 +36,14 @@ $allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renamei
 
 if( defined( 'NV_IS_SPADMIN' ) )
 {
-	$allow_func[] = 'config';
 	$allow_func[] = 'thumbconfig';
-	if( defined( 'NV_IS_GODADMIN' ) )
+	if( empty( $global_config['idsite'] ) )
 	{
-		$allow_func[] = 'uploadconfig';
+		$allow_func[] = 'config';
+		if( defined( 'NV_IS_GODADMIN' ) )
+		{
+			$allow_func[] = 'uploadconfig';
+		}
 	}
 }
 
@@ -140,7 +146,7 @@ function nv_check_allow_upload_dir( $dir )
  */
 function nv_check_path_upload( $path )
 {
-	global $allow_upload_dir;
+	global $allow_upload_dir, $global_config;
 
 	$path = htmlspecialchars( trim( $path ), ENT_QUOTES );
 	$path = rtrim( $path, "/" );
@@ -153,13 +159,23 @@ function nv_check_path_upload( $path )
 	$path = str_replace( NV_ROOTDIR . "/", "", $path );
 
 	$result = false;
-	foreach( $allow_upload_dir as $dir )
+	if( $global_config['idsite'] )
 	{
-		$dir = nv_preg_quote( $dir );
-		if( preg_match( "/^" . $dir . "/", $path ) )
+		if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "/", $path ) OR $path = NV_UPLOADS_DIR )
 		{
 			$result = true;
-			break;
+		}
+	}
+	else
+	{
+		foreach( $allow_upload_dir as $dir )
+		{
+			$dir = nv_preg_quote( $dir );
+			if( preg_match( "/^" . $dir . "/", $path ) )
+			{
+				$result = true;
+				break;
+			}
 		}
 	}
 
@@ -171,8 +187,6 @@ function nv_check_path_upload( $path )
  * nv_get_viewImage()
  *
  * @param mixed $fileName
- * @param integer $w
- * @param integer $h
  * @return
  */
 function nv_get_viewImage( $fileName )
@@ -386,8 +400,8 @@ function nv_filesListRefresh( $pathimg )
 						{
 							//Cập nhật CSDL file thay đổi
 							$db->sql_query( "REPLACE INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
-										(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
-										VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
+								(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
+								VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
 						}
 						unset( $results[$title] );
 					}
@@ -396,8 +410,8 @@ function nv_filesListRefresh( $pathimg )
 						$info['userid'] = $admin_info['userid'];
 						// Thêm file mới
 						$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
-										(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
-										VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
+							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
+							VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
 					}
 				}
 			}
@@ -449,7 +463,7 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 	return $real_dirlist;
 }
 
-$allow_upload_dir = array( 'images', NV_UPLOADS_DIR );
+$allow_upload_dir = array( 'images', SYSTEM_UPLOADS_DIR );
 $array_hidefolders = array( ".", "..", "index.html", ".htaccess", ".tmp" );
 
 $array_images = array( "gif", "jpg", "jpeg", "pjpeg", "png" );
@@ -481,9 +495,16 @@ unset( $array_dirname[''] );
 if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 {
 	$real_dirlist = array();
-	foreach( $allow_upload_dir as $dir )
+	if( $global_config['idsite'] )
 	{
-		$real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
+		$real_dirlist = nv_listUploadDir( NV_UPLOADS_DIR, $real_dirlist );
+	}
+	else
+	{
+		foreach( $allow_upload_dir as $dir )
+		{
+			$real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
+		}
 	}
 	$dirlist = array_keys( $array_dirname );
 	$result_no_exit = array_diff( $dirlist, $real_dirlist );

@@ -72,7 +72,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			if( $id )
 			{
-				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_add', "id  " . $id, $admin_info['userid'] );
+				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_add', "id " . $id, $admin_info['userid'] );
 
 				$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where `lang`!='" . NV_LANG_INTERFACE . "'";
 				$result = $db->sql_query( $sql );

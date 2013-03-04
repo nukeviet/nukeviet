@@ -44,15 +44,15 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 		}
 		if( $order == 1 )
 		{
-			$sql .= "  ORDER BY `mtime` ASC";
+			$sql .= " ORDER BY `mtime` ASC";
 		}
 		elseif( $order == 2 )
 		{
-			$sql .= "  ORDER BY `title` ASC";
+			$sql .= " ORDER BY `title` ASC";
 		}
 		else
 		{
-			$sql .= "  ORDER BY `mtime` DESC";
+			$sql .= " ORDER BY `mtime` DESC";
 		}
 	}
 	else
@@ -71,15 +71,15 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 		}
 		if( $order == 1 )
 		{
-			$sql .= "  ORDER BY t1.`mtime` ASC";
+			$sql .= " ORDER BY t1.`mtime` ASC";
 		}
 		elseif( $order == 2 )
 		{
-			$sql .= "  ORDER BY t1.`title` ASC";
+			$sql .= " ORDER BY t1.`title` ASC";
 		}
 		else
 		{
-			$sql .= "  ORDER BY t1.`mtime` DESC";
+			$sql .= " ORDER BY t1.`mtime` DESC";
 		}
 		$base_url .= "&amp;q=" . $q;
 	}

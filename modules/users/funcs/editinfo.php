@@ -29,7 +29,7 @@ if( defined( 'NV_IS_USER_FORUM' ) )
  */
 function nv_check_username_change( $login )
 {
-	global $db, $lang_module, $user_info;
+	global $db, $lang_module, $user_info, $db_config;
 
 	$error = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
 	if( $error != "" ) return preg_replace( "/\&(l|r)dquo\;/", "", strip_tags( $error ) );
@@ -38,17 +38,17 @@ function nv_check_username_change( $login )
 		return sprintf( $lang_module['account_deny_name'], $login );
 	}
 
-	$sql = "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_name'";
+	$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_name'";
 	$result = $db->sql_query( $sql );
 	list( $deny_name ) = $db->sql_fetchrow( $result );
 	$db->sql_freeresult();
 
 	if( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], $login );
 
-	$sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $user_info['userid'] . " AND `username`=" . $db->dbescape( $login );
+	$sql = "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $user_info['userid'] . " AND `username`=" . $db->dbescape( $login );
 	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], $login );
 
-	$sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`!=" . $user_info['userid'] . " AND `username`=" . $db->dbescape( $login );
+	$sql = "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`!=" . $user_info['userid'] . " AND `username`=" . $db->dbescape( $login );
 	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], $login );
 
 	return "";
@@ -62,12 +62,12 @@ function nv_check_username_change( $login )
  */
 function nv_check_email_change( $email )
 {
-	global $db, $lang_module, $user_info;
+	global $db, $lang_module, $user_info, $db_config;
 
 	$error = nv_check_valid_email( $email );
 	if( $error != "" ) return preg_replace( "/\&(l|r)dquo\;/", "", strip_tags( $error ) );
 
-	$sql = "SELECT `content` FROM `" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email'";
+	$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email'";
 	$result = $db->sql_query( $sql );
 	list( $deny_email ) = $db->sql_fetchrow( $result );
 	$db->sql_freeresult();
@@ -80,27 +80,27 @@ function nv_check_email_change( $email )
 	$pattern = implode( ".?", $pattern );
 	$pattern = "^" . $pattern . "@" . $right . "$";
 
-	$sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $user_info['userid'] . " AND `email` RLIKE " . $db->dbescape( $pattern );
+	$sql = "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=" . $user_info['userid'] . " AND `email` RLIKE " . $db->dbescape( $pattern );
 	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
 
-	$sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email` RLIKE " . $db->dbescape( $pattern );
+	$sql = "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email` RLIKE " . $db->dbescape( $pattern );
 	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
 
-	$sql = "SELECT `userid` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`!=" . $user_info['userid'] . " AND `email` RLIKE " . $db->dbescape( $pattern );
+	$sql = "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`!=" . $user_info['userid'] . " AND `email` RLIKE " . $db->dbescape( $pattern );
 	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
 
 	return "";
 }
 
 $array_field_config = array();
-$result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
+$result_field = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
 while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 {
 	$language = unserialize( $row_field['language'] );
 	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
 	$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
 	if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
-	elseif(! empty( $row_field['sql_choices'] ))
+	elseif( ! empty( $row_field['sql_choices'] ) )
 	{
 		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
 		$query = "SELECT `" . $row_field['sql_choices'][2] . "`, `" . $row_field['sql_choices'][3] . "` FROM `" . $row_field['sql_choices'][1] . "`";
@@ -126,34 +126,7 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
 		// Create class instance.
-		$editortoolbar = array( array(
-				'Link',
-				'Unlink',
-				'Image',
-				'Table',
-				'Font',
-				'FontSize',
-				'RemoveFormat' ), array(
-				'Bold',
-				'Italic',
-				'Underline',
-				'StrikeThrough',
-				'-',
-				'Subscript',
-				'Superscript',
-				'-',
-				'JustifyLeft',
-				'JustifyCenter',
-				'JustifyRight',
-				'JustifyBlock',
-				'OrderedList',
-				'UnorderedList',
-				'-',
-				'Outdent',
-				'Indent',
-				'TextColor',
-				'BGColor',
-				'Source' ) );
+		$editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
 		$CKEditor = new CKEditor();
 		// Do not print the code directly to the browser, return it instead
 		$CKEditor->returnOutput = true;
@@ -183,7 +156,7 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	}
 }
 
-$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
+$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
 $query = $db->sql_query( $sql );
 $row = $db->sql_fetchrow( $query );
 
@@ -255,10 +228,10 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 			}
 			else
 			{
-				$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` 
-			                SET `question`=" . $db->dbescape( $array_data['your_question'] ) . ", 
-			                `answer`=" . $db->dbescape( $array_data['answer'] ) . " 
-			                WHERE `userid`=" . $user_info['userid'];
+				$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` 
+					SET `question`=" . $db->dbescape( $array_data['your_question'] ) . ", 
+					`answer`=" . $db->dbescape( $array_data['answer'] ) . " 
+					WHERE `userid`=" . $user_info['userid'];
 				$db->sql_query( $sql );
 
 				$contents = user_info_exit( $lang_module['change_question_ok'] );
@@ -279,7 +252,7 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 	{
 		$array_data['questions'] = array();
 		$array_data['questions'][] = $lang_module['select_question'];
-		$sql = "SELECT `title` FROM `" . NV_USERS_GLOBALTABLE . "_question`  WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
+		$sql = "SELECT `title` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
 		$result = $db->sql_query( $sql );
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
@@ -296,7 +269,7 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 }
 else
 {
-	$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $user_info['userid'];
+	$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $user_info['userid'];
 	$result = $db->sql_query( $sql );
 	$custom_fields = $db->sql_fetch_assoc( $result );
 }
@@ -374,7 +347,7 @@ if( $checkss == $array_data['checkss'] )
 			$checknum = md5( $checknum . $email_new );
 			$md5_username = nv_md5safe( $array_data['username'] );
 
-			$sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `md5username`=" . $db->dbescape( $md5_username );
+			$sql = "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `md5username`=" . $db->dbescape( $md5_username );
 			$db->sql_query( $sql );
 			$error_email_change = nv_check_email_change( $email_new );
 			if( ! empty( $error_email_change ) )
@@ -383,17 +356,17 @@ if( $checkss == $array_data['checkss'] )
 			}
 			else
 			{
-				$sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_reg` VALUES (
-                NULL, 
-                'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "', 
-                " . $db->dbescape( $md5_username ) . ", 
-                '', 
-                " . $db->dbescape( $email_new ) . ", 
-                '', 
-                " . NV_CURRENTTIME . ", 
-                '', 
-                '', 
-                " . $db->dbescape( $checknum ) . ", '')";
+				$sql = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` VALUES (
+					NULL, 
+					'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "', 
+					" . $db->dbescape( $md5_username ) . ", 
+					'', 
+					" . $db->dbescape( $email_new ) . ", 
+					'', 
+					" . NV_CURRENTTIME . ", 
+					'', 
+					'', 
+					" . $db->dbescape( $checknum ) . ", '')";
 				$userid_check = $db->sql_query_insert_id( $sql );
 
 				if( $userid_check > 0 )
@@ -416,23 +389,23 @@ if( $checkss == $array_data['checkss'] )
 		}
 	}
 
-	$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET 
-    `username`=" . $db->dbescape_string( $array_data['username'] ) . ", 
-    `md5username`=" . $db->dbescape_string( nv_md5safe( $array_data['username'] ) ) . ", 
-    `email`=" . $db->dbescape_string( $array_data['email'] ) . ", 
-    `full_name`=" . $db->dbescape_string( $array_data['full_name'] ) . ", 
-    `gender`=" . $db->dbescape_string( $array_data['gender'] ) . ", 
-    `birthday`=" . $db->dbescape( $array_data['birthday'] ) . ", 
-    `view_mail`=" . $db->dbescape_string( $array_data['view_mail'] ) . " 
-    WHERE `userid`=" . $user_info['userid'];
+	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET 
+		`username`=" . $db->dbescape_string( $array_data['username'] ) . ", 
+		`md5username`=" . $db->dbescape_string( nv_md5safe( $array_data['username'] ) ) . ", 
+		`email`=" . $db->dbescape_string( $array_data['email'] ) . ", 
+		`full_name`=" . $db->dbescape_string( $array_data['full_name'] ) . ", 
+		`gender`=" . $db->dbescape_string( $array_data['gender'] ) . ", 
+		`birthday`=" . $db->dbescape( $array_data['birthday'] ) . ", 
+		`view_mail`=" . $db->dbescape_string( $array_data['view_mail'] ) . " 
+		WHERE `userid`=" . $user_info['userid'];
 	$db->sql_query( $sql );
 
 	if( isset( $_FILES['avatar'] ) and is_uploaded_file( $_FILES['avatar']['tmp_name'] ) )
 	{
 		require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
 
-		$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-		$upload_info = $upload->save_file( $_FILES['avatar'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
+		$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'] );
+		$upload_info = $upload->save_file( $_FILES['avatar'], NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, false );
 
 		@unlink( $_FILES['avatar']['tmp_name'] );
 
@@ -446,24 +419,21 @@ if( $checkss == $array_data['checkss'] )
 
 			$image = $upload_info['name'];
 			$basename = $upload_info['basename'];
-
-			$imginfo = nv_is_image( $image );
-
-			$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $user_info['userid'] . '-80-80\2', $basename );
+			$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $user_info['userid'] . '\2', $basename );
 
 			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 
 			$_image = new image( $image, 80, 80 );
 			$_image->resizeXY( 80, 80 );
-			$_image->save( NV_UPLOADS_REAL_DIR . '/' . $module_name, $basename );
-			$file_name = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $basename;
-			if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $basename ) )
+			$_image->save( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, $basename );
+			$file_name = NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name . '/' . $basename;
+			if( file_exists( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name . '/' . $basename ) )
 			{
 				//@chmod($file_name, 0644);
 				$file_name = str_replace( NV_ROOTDIR . "/", "", $file_name );
 				@nv_deletefile( $upload_info['name'] );
 			}
-			$sql = "UPDATE `" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape_string( $file_name ) . " WHERE `userid`=" . $user_info['userid'];
+			$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape_string( $file_name ) . " WHERE `userid`=" . $user_info['userid'];
 			$db->sql_query( $sql );
 		}
 		else
@@ -489,7 +459,7 @@ if( $checkss == $array_data['checkss'] )
 		require ( NV_ROOTDIR . "/modules/users/fields.check.php" );
 		if( empty( $error ) )
 		{
-			$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . "  WHERE `userid`=" . $user_info['userid'] );
+			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . " WHERE `userid`=" . $user_info['userid'] );
 			$contents = user_info_exit( $info );
 			$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
@@ -504,7 +474,7 @@ if( $checkss == $array_data['checkss'] )
 	}
 	else
 	{
-		$db->sql_query( "UPDATE `" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . "  WHERE `userid`=" . $user_info['userid'] );
+		$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . " WHERE `userid`=" . $user_info['userid'] );
 		$contents = user_info_exit( $info );
 		$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
@@ -527,15 +497,18 @@ $array_data['gender_array'] = array();
 $array_data['gender_array']['N'] = array(
 	'value' => 'N',
 	'title' => 'N/A',
-	'selected' => '' );
+	'selected' => ''
+);
 $array_data['gender_array']['M'] = array(
 	'value' => 'M',
 	'title' => $lang_module['male'],
-	'selected' => ( $array_data['gender'] == 'M' ? " selected=\"selected\"" : "" ) );
+	'selected' => ( $array_data['gender'] == 'M' ? " selected=\"selected\"" : "" )
+);
 $array_data['gender_array']['F'] = array(
 	'value' => 'F',
 	'title' => $lang_module['female'],
-	'selected' => ( $array_data['gender'] == 'F' ? " selected=\"selected\"" : "" ) );
+	'selected' => ( $array_data['gender'] == 'F' ? " selected=\"selected\"" : "" )
+);
 
 $contents = user_info( $array_data, $array_field_config, $custom_fields, $info );
 

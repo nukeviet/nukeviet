@@ -52,7 +52,15 @@ function nv_delete_all_cache()
  */
 function nv_del_moduleCache( $module_name, $lang = NV_LANG_DATA )
 {
-	$pattern = "/^" . $lang . "\_" . $module_name . "\_(.*)\.cache$/i";
+	global $site_mods;
+	if( isset( $site_mods[$module_name] ) )
+	{
+		$pattern = "/^" . $lang . "\_" . $module_name . "\_(.*)\_" . NV_CACHE_PREFIX . "\.cache$/i";
+	}
+	else
+	{
+		$pattern = "/^" . $lang . "\_" . $module_name . "\_(.*)\.cache$/i";
+	}
 
 	nv_delete_cache( $pattern );
 }

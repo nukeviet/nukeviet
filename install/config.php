@@ -25,6 +25,7 @@ $global_config['session_prefix'] = "";
 $global_config['cookie_secure'] = 0;
 $global_config['cookie_httponly'] = 1;
 $global_config['sitekey'] = "";
+$global_config['idsite'] = 0;
 
 $global_config['site_timezone'] = "byCountry";
 $global_config['statistics_timezone'] = "";

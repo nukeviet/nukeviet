@@ -67,7 +67,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			die( 'NO_' . $modname );
 		}
 
-		// Xoa du lieu tai bang  nv3_vi_modfuncs
+		// Xoa du lieu tai bang nv3_vi_modfuncs
 		$sql = "DELETE FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $modname );
 
 		if( ! $db->sql_query( $sql ) )
@@ -75,7 +75,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			die( 'NO_' . $modname );
 		}
 
-		// Xoa du lieu tai bang  nv3_vi_modules
+		// Xoa du lieu tai bang nv3_vi_modules
 		$sql = "DELETE FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $modname );
 
 		if( ! $db->sql_query( $sql ) )

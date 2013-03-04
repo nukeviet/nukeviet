@@ -14,7 +14,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 {
 	$userid = $nv_Request->get_int( 'userid', 'post', 0 );
 
-	$sql = "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $userid;
+	$sql = "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $userid;
 	$result = $db->sql_query( $sql );
 
 	if( ! $result )
@@ -36,7 +36,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		die();
 	}
 
-	$sql = "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $userid;
+	$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $userid;
 	$result = $db->sql_query( $sql );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 )
@@ -46,22 +46,22 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	}
 	$row = $db->sql_fetchrow( $result );
 
-	$sql = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "` (
-    `userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
-    `regdate`, `question`, 
-    `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, `active`, `checknum`, 
-    `last_login`, `last_ip`, `last_agent`, `last_openid`
-    ) VALUES (
-    NULL, 
-    " . $db->dbescape( $row['username'] ) . ", 
-    " . $db->dbescape( nv_md5safe( $row['username'] ) ) . ", 
-    " . $db->dbescape( $row['password'] ) . ", 
-    " . $db->dbescape( $row['email'] ) . ", 
-    " . $db->dbescape( $row['full_name'] ) . ", 
-    '', '', 0, " . $row['regdate'] . ",  
-    " . $db->dbescape( $row['question'] ) . ", 
-    " . $db->dbescape( $row['answer'] ) . ", 
-    '', 0, 0, '', 1, '', 0, '', '', '')";
+	$sql = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` (
+		`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
+		`regdate`, `question`, 
+		`answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, `active`, `checknum`, 
+		`last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`
+		) VALUES (
+		NULL, 
+		" . $db->dbescape( $row['username'] ) . ", 
+		" . $db->dbescape( nv_md5safe( $row['username'] ) ) . ", 
+		" . $db->dbescape( $row['password'] ) . ", 
+		" . $db->dbescape( $row['email'] ) . ", 
+		" . $db->dbescape( $row['full_name'] ) . ", 
+		'', '', 0, " . $row['regdate'] . ", 
+		" . $db->dbescape( $row['question'] ) . ", 
+		" . $db->dbescape( $row['answer'] ) . ", 
+		'', 0, 0, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
 
 	$userid = $db->sql_query_insert_id( $sql );
 	if( $userid )
@@ -69,14 +69,14 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
 		$query_field = array();
 		$query_field['`userid`'] = $userid;
-		$result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `fid` ASC" );
+		$result_field = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `fid` ASC" );
 		while( $row_f = $db->sql_fetch_assoc( $result_field ) )
 		{
 			$query_field["`" . $row_f['field'] . "`"] = ( isset( $users_info["`" . $row_f['field'] . "`"] ) ) ? $users_info["`" . $row_f['field'] . "`"] : $db->dbescape( $row_f['default_value'] );
 		}
-		if( $db->sql_query( "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_info` (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
+		if( $db->sql_query( "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
 		{
-			$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $row['userid'] );
+			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $row['userid'] );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid'] );
 			$full_name = ( ! empty( $row['full_name'] ) ) ? $row['full_name'] : $row['username'];
 			$subject = $lang_module['adduser_register'];
@@ -87,7 +87,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		}
 		else
 		{
-			$db->sql_query( "DELETE FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $row['userid'] );
+			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $row['userid'] );
 		}
 	}
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=user_waiting" );
@@ -96,30 +96,30 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 
 $page_title = $table_caption = $lang_module['member_wating'];
 
-$sql = "FROM `" . NV_USERS_GLOBALTABLE . "_reg`";
+$sql = "FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg`";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=user_waiting";
 
-$methods = array( //
+$methods = array(
 	'userid' => array(
 		'key' => 'userid',
 		'value' => $lang_module['search_id'],
 		'selected' => ''
-	), //
+	),
 	'username' => array(
 		'key' => 'username',
 		'value' => $lang_module['search_account'],
 		'selected' => ''
-	), //
+	),
 	'full_name' => array(
 		'key' => 'full_name',
 		'value' => $lang_module['search_name'],
 		'selected' => ''
-	), //
+	),
 	'email' => array(
 		'key' => 'email',
 		'value' => $lang_module['search_mail'],
 		'selected' => ''
-	) //
+	)
 );
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
 $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ( $nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '' );
@@ -156,12 +156,12 @@ $all_page = ( $numf ) ? $numf : 1;
 $users_list = array();
 while( $row = $db->sql_fetchrow( $query2 ) )
 {
-	$users_list[$row['userid']] = array( //
-		'userid' => ( int )$row['userid'], //
-		'username' => ( string )$row['username'], //
-		'full_name' => ( string )$row['full_name'], //
-		'email' => ( string )$row['email'], //
-		'regdate' => date( "d/m/Y H:i", $row['regdate'] ) //
+	$users_list[$row['userid']] = array(
+		'userid' => ( int )$row['userid'],
+		'username' => ( string )$row['username'],
+		'full_name' => ( string )$row['full_name'],
+		'email' => ( string )$row['email'],
+		'regdate' => date( "d/m/Y H:i", $row['regdate'] )
 	);
 }
 

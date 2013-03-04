@@ -17,7 +17,7 @@ if( empty( $id ) )
 	die();
 }
 
-$sql = "SELECT *  FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
@@ -29,12 +29,12 @@ if( $numrows != 1 )
 
 $row = $db->sql_fetchrow( $result );
 
-list( $ptitle, $plang ) = $db->sql_fetchrow( $db->sql_query( "SELECT `title`, `blang` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE id=" . $row['pid'] ) );
+list( $ptitle, $plang ) = $db->sql_fetchrow( $db->sql_query( "SELECT `title`, `blang` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE id=" . $row['pid'] ) );
 
 $ptitle = $ptitle . " (" . ( ! empty( $plang ) ? $language_array[$plang]['name'] : $lang_module['blang_all'] ) . ")";
 $ptitle = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'] . "\">" . $ptitle . "</a>";
 
-list( $cl_full_name, $cl_login ) = $db->sql_fetchrow( $db->sql_query( "SELECT `full_name`, `login` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE id=" . $row['clid'] ) );
+list( $cl_full_name, $cl_login ) = $db->sql_fetchrow( $db->sql_query( "SELECT `full_name`, `login` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE id=" . $row['clid'] ) );
 
 if( ! empty( $cl_full_name ) )
 {

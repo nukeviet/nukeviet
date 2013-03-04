@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` ORDER BY `login` ASC";
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` ORDER BY `login` ASC";
 $result = $db->sql_query( $sql );
 
 $contents = array();
