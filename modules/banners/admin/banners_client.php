@@ -14,7 +14,7 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( empty( $id ) ) die( 'Stop!!!' );
 
-$sql = "SELECT `full_name` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT `full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 ) die( 'Stop!!!' );
@@ -25,7 +25,7 @@ $full_name = $row['full_name'];
 $contents = array();
 $contents['info'] = "";
 
-$sql = "SELECT `full_name` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `clid`=" . $id;
+$sql = "SELECT `full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `clid`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 

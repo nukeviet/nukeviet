@@ -53,7 +53,7 @@ if( rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath ) )
 			{
 				$src2 = preg_replace( "/^" . nv_preg_quote( $dirname ) . "/", $dirname2, $src );
 			}
-			$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_file` SET `src` = '" . $src2 . "' WHERE `did` = " . $did . "  AND `title`='" . $title . "'" );
+			$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_file` SET `src` = '" . $src2 . "' WHERE `did` = " . $did . " AND `title`='" . $title . "'" );
 		}
 		$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET `dirname` = '" . $dirname2 . "' WHERE `did` = " . $did );
 	}

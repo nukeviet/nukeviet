@@ -50,7 +50,6 @@ else
 	}
 	die();
 }
-
 require ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
 
 //Xac dinh IP cua client
@@ -116,30 +115,83 @@ $nv_Request = new Request( $global_config, $client_info['ip'] );
 
 define( 'NV_SERVER_NAME', $nv_Request->server_name );
 //vd: mydomain1.com
+
 define( 'NV_SERVER_PROTOCOL', $nv_Request->server_protocol );
 //vd: http
+
 define( 'NV_SERVER_PORT', $nv_Request->server_port );
 //vd: 80
+
 define( 'NV_MY_DOMAIN', $nv_Request->my_current_domain );
 //vd: http://mydomain1.com:80
+
 define( 'NV_HEADERSTATUS', $nv_Request->headerstatus );
 //vd: HTTP/1.0
+
 define( 'NV_USER_AGENT', $nv_Request->user_agent );
-//HTTP_USER_AGENT
 define( "NV_BASE_SITEURL", $nv_Request->base_siteurl . '/' );
 //vd: /ten_thu_muc_chua_site/
+
 define( "NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/' );
 //vd: /ten_thu_muc_chua_site/admin/
+
 define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root );
 // D:/AppServ/www
-define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR );
-//Xac dinh duong dan thuc den thu muc upload
-define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) );
+
+define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_SERVER_NAME ) );
 //Hau to cua file cache
 
 //Ngon ngu
 require ( NV_ROOTDIR . '/includes/language.php' );
 require ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/global.php" );
+
+if( defined( 'NV_CONFIG_DIR' ) )
+{
+	if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . NV_SERVER_NAME . '.php' ) )
+	{
+		require ( NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . NV_SERVER_NAME . '.php' );
+		$db_config['dbname'] = $db_config['dbsite'];
+		$global_config['allow_sitelangs'] = explode( ",", $global_config['allow_sitelangs'] );
+	}
+	else
+	{
+		$domains = explode( ",", strtolower( $global_config['my_domains'] ) );
+		if( ! in_array( NV_SERVER_NAME, $domains ) )
+		{
+			$global_config['site_logo'] = 'images/logo.png';
+			$global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
+			trigger_error( $lang_global['error_404_content'], 256 );
+		}
+		$db_config['dbname'] = $db_config['dbsystem'];
+	}
+
+	//Thu muc uploads
+	define( "NV_UPLOADS_DIR", SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir'] );
+
+	//Thu muc files
+	define( "NV_FILES_DIR", SYSTEM_FILES_DIR . '/' . $global_config['site_dir'] );
+}
+else
+{
+	$domains = explode( ",", strtolower( $global_config['my_domains'] ) );
+	if( ! in_array( NV_SERVER_NAME, $domains ) )
+	{
+		$global_config['site_logo'] = 'images/logo.png';
+		$global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
+		trigger_error( $lang_global['error_404_content'], 256 );
+	}
+
+	$db_config['dbsystem'] = $db_config['dbname'];
+
+	//Thu muc uploads
+	define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
+
+	//Thu muc files
+	define( 'SYSTEM_FILES_DIR', NV_FILES_DIR );
+}
+
+//Xac dinh duong dan thuc den thu muc upload
+define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR );
 
 if( NV_LANG_DATA == "vi" )
 {
@@ -182,12 +234,13 @@ $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_
 $client_info['agent'] = $nv_Request->user_agent;
 
 if( preg_match( "/^[0-9]{10,}$/", $nv_Request->get_string( 'nocache', 'get', '' ) ) and //Xac dinh co phai AJAX hay khong
-$client_info['is_myreferer'] === 1 ) define( 'NV_IS_AJAX', true );
+	$client_info['is_myreferer'] === 1 )
+	define( 'NV_IS_AJAX', true );
 
 //Chan truy cap neu HTTP_USER_AGENT == 'none'
 if( NV_USER_AGENT == "none" )
 {
-	trigger_error( 'We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will  copy websites to your hard drive. If you feel you have gotten this message  in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256 );
+	trigger_error( 'We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256 );
 }
 
 //xac dinh co phai User_Agent cua NukeViet hay khong
@@ -274,15 +327,11 @@ define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
 define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
 define( 'NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language' );
 
-define( 'NV_BANNERS_CLIENTS_GLOBALTABLE', $db_config['prefix'] . '_banners_clients' );
-define( 'NV_BANNERS_PLANS_GLOBALTABLE', $db_config['prefix'] . '_banners_plans' );
-define( 'NV_BANNERS_ROWS_GLOBALTABLE', $db_config['prefix'] . '_banners_rows' );
-define( 'NV_BANNERS_CLICK_GLOBALTABLE', $db_config['prefix'] . '_banners_click' );
-
 define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
 define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );
 
 define( 'NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload' );
+define( 'NV_BANNERS_GLOBALTABLE', $db_config['prefix'] . '_banners' );
 
 define( 'NV_PREFIXLANG', $db_config['prefix'] . '_' . NV_LANG_DATA );
 define( 'NV_MODULES_TABLE', NV_PREFIXLANG . '_modules' );

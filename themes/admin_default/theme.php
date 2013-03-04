@@ -218,7 +218,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 	$xtpl->assign( 'NV_COPYRIGHT', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
 
-	if( defined( "NV_IS_SPADMIN" ) )
+	if( defined( "NV_IS_SPADMIN" ) AND $admin_info['level'] == 1 )
 	{
 		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
 		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
@@ -230,6 +230,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			$xtpl->parse( 'main.nv_show_queries.nv_show_queries_loop' );
 		}
 		$xtpl->parse( 'main.nv_show_queries' );
+		$xtpl->parse( 'main.nv_queries' );
 	}
 
 	$xtpl->parse( 'main' );

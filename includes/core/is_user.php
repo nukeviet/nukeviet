@@ -24,8 +24,8 @@ elseif( defined( 'NV_IS_USER_FORUM' ) )
 	if( isset( $user_info['userid'] ) and $user_info['userid'] > 0 )
 	{
 		$query = "SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, 
-        `view_mail`, `remember`, `in_groups`, `last_login` AS `current_login`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_openid`, `password` 
-        FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . intval( $user_info['userid'] ) . " AND `active`=1 LIMIT 1";
+			`view_mail`, `remember`, `in_groups`, `last_login` AS `current_login`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_openid`, `password` 
+			FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . intval( $user_info['userid'] ) . " AND `active`=1 LIMIT 1";
 		$result = $db->sql_query( $query );
 
 		if( $db->sql_numrows( $result ) == 1 )
@@ -66,9 +66,9 @@ else
 				if( isset( $user['checknum'] ) and preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $user['checknum'] ) )
 				{
 					$query = "SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, 
-                    `view_mail`, `remember`, `in_groups`, `checknum`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_login` AS `current_login`, 
-                    `last_openid` AS `current_openid`, `password`, `question`, `answer` 
-                    FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . $user['userid'] . " AND `active`=1 LIMIT 1";
+						`view_mail`, `remember`, `in_groups`, `checknum`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_login` AS `current_login`, 
+						`last_openid` AS `current_openid`, `password`, `question`, `answer` 
+						FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . $user['userid'] . " AND `active`=1 LIMIT 1";
 					$result = $db->sql_query( $query );
 
 					if( $db->sql_numrows( $result ) == 1 )
@@ -77,9 +77,9 @@ else
 						$db->sql_freeresult( $result );
 
 						if( strcasecmp( $user['checknum'], $user_info['checknum'] ) == 0 and 						//checknum
-isset( $user['current_agent'] ) and ! empty( $user['current_agent'] ) and strcasecmp( $user['current_agent'], $user_info['current_agent'] ) == 0 and 						//user_agent
-isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $user_info['current_ip'] ) == 0 and 						//current IP
-isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $user_info['current_login'] ) ) == 0 ) //current login
+						isset( $user['current_agent'] ) and ! empty( $user['current_agent'] ) and strcasecmp( $user['current_agent'], $user_info['current_agent'] ) == 0 and 						//user_agent
+						isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $user_info['current_ip'] ) == 0 and 						//current IP
+						isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $user_info['current_login'] ) ) == 0 ) //current login
 						{
 							if( empty( $user_info['full_name'] ) ) $user_info['full_name'] = $user_info['username'];
 
@@ -96,7 +96,7 @@ isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcas
 
 							if( ! empty( $user_info['current_openid'] ) )
 							{
-								$query = "SELECT `openid`, `email` FROM `" . NV_USERS_GLOBALTABLE . "_openid` WHERE `opid`=" . $db->dbescape( $user_info['current_openid'] ) . " LIMIT 1";
+								$query = "SELECT `openid`, `email` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` WHERE `opid`=" . $db->dbescape( $user_info['current_openid'] ) . " LIMIT 1";
 								$result = $db->sql_query( $query );
 
 								if( $db->sql_numrows( $result ) != 1 )

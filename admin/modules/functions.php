@@ -739,6 +739,7 @@ if( $module_name == "modules" )
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
+
 }
 
 ?>

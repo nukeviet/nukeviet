@@ -35,7 +35,6 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 	$lang_translator_save['info'] = isset( $lang_translator['info'] ) ? nv_htmlspecialchars( strip_tags( $lang_translator['info'] ) ) : "";
 	$lang_translator_save['langtype'] = $langtype;
 
-	//$author = base64_encode( serialize( $lang_translator_save ) );
 	$author = var_export( $lang_translator_save, true );
 
 	$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $dirlang . "`='" . $author . "' WHERE `idfile`=" . $idfile . "" );
@@ -68,7 +67,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 		if( $lang_key != "" and $lang_value != "" )
 		{
 			$lang_value = nv_nl2br( $lang_value );
-			$lang_value = str_replace( '<br  />', '<br />', $lang_value );
+			$lang_value = str_replace( '<br />', '<br />', $lang_value );
 			$sql = "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`id`, `idfile`, `lang_key`, `lang_" . $dirlang . "`) VALUES (NULL, '" . $idfile . "', '" . mysql_real_escape_string( $lang_key ) . "', '" . mysql_real_escape_string( $lang_value ) . "')";
 			$db->sql_query( $sql );
 		}

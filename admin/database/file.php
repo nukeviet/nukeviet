@@ -10,6 +10,10 @@
 if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
 $log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
+if( $global_config['idsite'] )
+{
+	$log_dir .= "/" . $global_config['site_dir'];
+}
 
 $xtpl = new XTemplate( "files.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );

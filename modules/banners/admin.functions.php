@@ -36,7 +36,8 @@ function nv_CreateXML_bannerPlan()
 {
 	global $db, $global_config;
 
-	$files = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, "/^bpl\_([0-9]+)\.xml$/" );
+	$pattern = ( $global_config['idsite'] ) ? '/^site\_' . $global_config['idsite'] . '\_bpl\_([0-9]+)\.xml$/' : '/^bpl\_([0-9]+)\.xml$/';
+	$files = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, $pattern );
 	if( ! empty( $files ) )
 	{
 		foreach( $files as $file )
@@ -47,14 +48,20 @@ function nv_CreateXML_bannerPlan()
 
 	include ( NV_ROOTDIR . '/includes/class/array2xml.class.php' );
 
-	$sql = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `act` = 1";
+	$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `act` = 1";
 	$result = $db->sql_query( $sql );
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$id = intval( $row['id'] );
-
-		$xmlfile = NV_ROOTDIR . '/' . NV_DATADIR . '/bpl_' . $id . '.xml';
+		if( $global_config['idsite'] )
+		{
+			$xmlfile = NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_bpl_' . $id . '.xml';
+		}
+		else
+		{
+			$xmlfile = NV_ROOTDIR . '/' . NV_DATADIR . '/bpl_' . $id . '.xml';
+		}
 
 		$plan = array();
 		$plan['id'] = $id;
@@ -70,7 +77,7 @@ function nv_CreateXML_bannerPlan()
 		$plan['width'] = $row['width'];
 		$plan['height'] = $row['height'];
 
-		$query2 = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `pid` = " . $id . " AND (`exp_time` > " . NV_CURRENTTIME . " OR `exp_time` = 0 ) AND `act` = 1";
+		$query2 = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `pid` = " . $id . " AND (`exp_time` > " . NV_CURRENTTIME . " OR `exp_time` = 0 ) AND `act` = 1";
 
 		if( $row['form'] == "sequential" )
 		{
@@ -90,20 +97,20 @@ function nv_CreateXML_bannerPlan()
 		while( $row2 = $db->sql_fetchrow( $result2 ) )
 		{
 			$plan['banners'][] = array(
-				'id' => $row2['id'], //
-				'title' => $row2['title'], //
-				'clid' => $row2['clid'], //
-				'file_name' => $row2['file_name'], //
-				'imageforswf' => $row2['imageforswf'], //
-				'file_ext' => $row2['file_ext'], //
-				'file_mime' => $row2['file_mime'], //
-				'file_width' => $row2['width'], //
-				'file_height' => $row2['height'], //
-				'file_alt' => $row2['file_alt'], //
-				'file_click' => $row2['click_url'], //
-				'target' => $row2['target'], //
-				'publ_time' => $row2['publ_time'], //
-				'exp_time' => $row2['exp_time'] //
+				'id' => $row2['id'],
+				'title' => $row2['title'],
+				'clid' => $row2['clid'],
+				'file_name' => $row2['file_name'],
+				'imageforswf' => $row2['imageforswf'],
+				'file_ext' => $row2['file_ext'],
+				'file_mime' => $row2['file_mime'],
+				'file_width' => $row2['width'],
+				'file_height' => $row2['height'],
+				'file_alt' => $row2['file_alt'],
+				'file_click' => $row2['click_url'],
+				'target' => $row2['target'],
+				'publ_time' => $row2['publ_time'],
+				'exp_time' => $row2['exp_time']
 			);
 		}
 
@@ -122,24 +129,24 @@ function nv_fix_banner_weight( $pid )
 {
 	global $db, $global_config;
 
-	list( $pid, $form ) = $db->sql_fetchrow( $db->sql_query( "SELECT `id`, `form` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . intval( $pid ) . "" ) );
+	list( $pid, $form ) = $db->sql_fetchrow( $db->sql_query( "SELECT `id`, `form` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id`=" . intval( $pid ) . "" ) );
 
 	if( $pid > 0 and $form == "sequential" )
 	{
-		$query_weight = "SELECT `id` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE  `pid`=" . $pid . " ORDER BY `weight` ASC, `id` DESC";
+		$query_weight = "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `pid`=" . $pid . " ORDER BY `weight` ASC, `id` DESC";
 		$result = $db->sql_query( $query_weight );
 
 		$weight = 0;
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			++$weight;
-			$sql = "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
+			$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_rows` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
 			$db->sql_query( $sql );
 		}
 	}
 	elseif( $pid > 0 and $form == "random" )
 	{
-		$sql = "UPDATE `" . NV_BANNERS_ROWS_GLOBALTABLE . "` SET `weight`='0' WHERE `pid`=" . $pid;
+		$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_rows` SET `weight`='0' WHERE `pid`=" . $pid;
 		$db->sql_query( $sql );
 	}
 }

@@ -287,7 +287,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 				// Cap nhat lai thu tu cho nhom cu
 				$func_id_old = $weight = 0;
-				$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme=" . $db->dbescape( $row_old['theme'] ) . " AND t2.position=" . $db->dbescape( $row_old['position'] ) . " ORDER BY t1.func_id ASC, t1.weight  ASC" );
+				$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme=" . $db->dbescape( $row_old['theme'] ) . " AND t2.position=" . $db->dbescape( $row_old['position'] ) . " ORDER BY t1.func_id ASC, t1.weight ASC" );
 
 				while( list( $bid_i, $func_id_i ) = $db->sql_fetchrow( $result ) )
 				{
@@ -320,18 +320,18 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			else
 			{
 				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET 
-                 `module`=" . $db->dbescape( $row['module'] ) . ", 
-                 `file_name`='" . mysql_real_escape_string( $row['file_name'] ) . "', 
-                 `title`=" . $db->dbescape( $row['title'] ) . ", 
-                 `link`=" . $db->dbescape( $row['link'] ) . ", 
-                 `template`=" . $db->dbescape( $row['template'] ) . ", 
-                 `position`=" . $db->dbescape( $row['position'] ) . ", 
-                 `exp_time`=" . $row['exp_time'] . ", 
-                 `active`=" . $row['active'] . ", 
-                 `groups_view`=" . $db->dbescape( $row['groups_view'] ) . ", 
-                 `all_func`=" . $row['all_func'] . ", 
-                 `config`='" . mysql_real_escape_string( $row['config'] ) . "'
-                WHERE `bid` =" . $row['bid'] );
+					`module`=" . $db->dbescape( $row['module'] ) . ", 
+					`file_name`='" . mysql_real_escape_string( $row['file_name'] ) . "', 
+					`title`=" . $db->dbescape( $row['title'] ) . ", 
+					`link`=" . $db->dbescape( $row['link'] ) . ", 
+					`template`=" . $db->dbescape( $row['template'] ) . ", 
+					`position`=" . $db->dbescape( $row['position'] ) . ", 
+					`exp_time`=" . $row['exp_time'] . ", 
+					`active`=" . $row['active'] . ", 
+					`groups_view`=" . $db->dbescape( $row['groups_view'] ) . ", 
+					`all_func`=" . $row['all_func'] . ", 
+					`config`='" . mysql_real_escape_string( $row['config'] ) . "'
+					WHERE `bid` =" . $row['bid'] );
 
 				if( isset( $site_mods[$module] ) )
 				{
@@ -421,9 +421,7 @@ while( list( $id_i, $func_custom_name_i, $in_module_i ) = $db->sql_fetchrow( $fu
 // Load position file
 $xml = @simplexml_load_file( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) or nv_info_die( $lang_global['error_404_title'], $lang_module['block_error_fileconfig_title'], $lang_module['block_error_fileconfig_content'] );
 $xmlpositions = $xml->xpath( 'positions' );
-// array
 $positions = $xmlpositions[0]->position;
-// object
 
 if( $row['bid'] != 0 ) // Canh bao tach block khoi nhom
 {

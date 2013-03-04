@@ -73,7 +73,9 @@
 			<td> {LANG.log_note} </td>
 			<td> {LANG.log_username} </td>
 			<td><a href="{DATA_ORDER.time.data.url}" title="{DATA_ORDER.user.data.title}" class="{DATA_ORDER.time.data.class}">{LANG.log_time}</a></td>
+			<!-- BEGIN: head_delete -->
 			<td align="center"> {LANG.log_feature} </td>
+			<!-- END: head_delete -->
 		</tr>
 	</thead>
 	<!-- BEGIN: row -->
@@ -86,15 +88,19 @@
 			<td> {DATA.note_action} </td>
 			<td> {DATA.username} </td>
 			<td> {DATA.time} </td>
+			<!-- BEGIN: delete -->
 			<td width="100" align="center"><span class="delete_icon"> <a href="{DEL_URL}" class = "delete">{GLANG.delete}</a> </span></td>
+			<!-- END: delete -->
 		</tr>
 	</tbody>
 	<!-- END: row -->
 	<tfoot>
 		<tr>
-			<td colspan="2"><input type="button" value="{GLANG.delete}" id="delall" /></td>
-			<td><input type="button" value="{LANG.log_empty}" id="logempty" /></td>
-			<td colspan="5">
+			<td colspan="8">
+			<!-- BEGIN: foot_delete -->
+			<input type="button" value="{GLANG.delete}" id="delall" /> 
+			<input type="button" value="{LANG.log_empty}" id="logempty" style="margin-right: 50px;" />
+			<!-- END: foot_delete -->
 			<!-- BEGIN: generate_page -->
 			{GENERATE_PAGE}
 			<!-- END: generate_page -->
@@ -147,9 +153,12 @@
 					data : '',
 					success : function(data) {
 						var s = data.split('_');
-						if (s[0] == 'OK')
+						if (s[0] == 'OK'){
 							window.location = '{BACK_URL}';
-						alert(s[1]);
+						}
+						else{
+							alert(s[1]);
+						}
 					}
 				});
 			}

@@ -31,10 +31,8 @@ if( $step == 1 and file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
 
 	$page_title = ( empty( $example ) ) ? $lang_module['export'] : $lang_module['export_example'];
 
-	$template_file = NV_ROOTDIR . '/modules/' . $module_file . '/template.' . $excel_ext;
-
 	// Create new PHPExcel object
-	$objPHPExcel = PHPExcel_IOFactory::load( $template_file );
+	$objPHPExcel = PHPExcel_IOFactory::load( NV_ROOTDIR . '/modules/' . $module_file . '/template.' . $excel_ext );
 	$objWorksheet = $objPHPExcel->getActiveSheet();
 
 	// Setting a spreadsheet’s metadata
@@ -110,7 +108,7 @@ if( $step == 1 and file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
 	$objComment->setWidth( '220pt' )->setHeight( '20pt' );
 
 	$user_field_info = array();
-	$result_field = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
+	$result_field = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
 	while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 	{
 		$language = unserialize( $row_field['language'] );
@@ -142,7 +140,7 @@ if( $step == 1 and file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
 		// Mỗi file ghi 1000 dòng
 		$limit_export_data = 1000;
 
-		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . NV_USERS_GLOBALTABLE . "` AS t1, `" . NV_USERS_GLOBALTABLE . "_info` AS t2 WHERE t1.`userid`=t2.`userid` AND t1.`userid`>" . $id_export . " ORDER BY t1.`userid` ASC LIMIT 0 , " . $limit_export_data;
+		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t1, `" . NV_USERS_GLOBALTABLE . "_info` AS t2 WHERE t1.`userid`=t2.`userid` AND t1.`userid`>" . $id_export . " ORDER BY t1.`userid` ASC LIMIT 0 , " . $limit_export_data;
 		$result = $db->sql_query( $sql );
 		list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
 

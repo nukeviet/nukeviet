@@ -10,7 +10,10 @@
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $submenu['file'] = $lang_module['file_backup'];
-$submenu['setting'] = $lang_global['mod_settings'];
+if( defined( "NV_IS_GODADMIN" ) )
+{
+	$submenu['setting'] = $lang_global['mod_settings'];
+}
 
 if( $module_name == "database" )
 {
@@ -20,7 +23,11 @@ if( $module_name == "database" )
 		"custom_title" => $lang_global['mod_database']
 	);
 
-	$allow_func = array( 'main', 'savefile', 'download', 'optimize', 'setting', 'file', 'getfile', 'delfile' );
+	$allow_func = array( 'main', 'savefile', 'download', 'optimize', 'file', 'getfile', 'delfile' );
+	if( defined( "NV_IS_GODADMIN" ) )
+	{
+		$allow_func[] = 'setting';
+	}
 	unset( $page_title, $select_options );
 
 	define( 'NV_IS_FILE_DATABASE', true );
@@ -317,6 +324,7 @@ if( $module_name == "database" )
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
+
 }
 
 ?>

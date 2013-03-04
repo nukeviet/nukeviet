@@ -154,7 +154,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 						$lang_value = str_replace( "\'", "'", $lang_value );
 						$lang_value = str_replace( "'", "\'", $lang_value );
 						$lang_value = nv_nl2br( $lang_value );
-						$lang_value = str_replace( '<br  />', '<br />', $lang_value );
+						$lang_value = str_replace( '<br />', '<br />', $lang_value );
 
 						$content_temp = "\$" . $langtype . "['" . $lang_key . "'] = '$lang_value';\n";
 						$content_temp .= "/*\n";
@@ -165,8 +165,8 @@ function nv_admin_write_lang( $dirlang, $idfile )
 							$lang_value_vi = str_replace( "\'", "'", $lang_value_vi );
 							$lang_value_vi = str_replace( "'", "\'", $lang_value_vi );
 							$lang_value_vi = nv_nl2br( $lang_value_vi );
-							$lang_value_vi = str_replace( '<br  />', '<br />', $lang_value_vi );
-							$content_temp .= "\t vietnam:\t  " . $lang_value_vi . "\n";
+							$lang_value_vi = str_replace( '<br />', '<br />', $lang_value_vi );
+							$content_temp .= "\t vietnam:\t " . $lang_value_vi . "\n";
 						}
 
 						if( $dirlang != "en" and ! empty( $lang_value_en ) )
@@ -175,8 +175,8 @@ function nv_admin_write_lang( $dirlang, $idfile )
 							$lang_value_en = str_replace( "\'", "'", $lang_value_en );
 							$lang_value_en = str_replace( "'", "\'", $lang_value_en );
 							$lang_value_en = nv_nl2br( $lang_value_en );
-							$lang_value_en = str_replace( '<br  />', '<br />', $lang_value_en );
-							$content_temp .= "\t english:\t  " . $lang_value_en . "\n";
+							$lang_value_en = str_replace( '<br />', '<br />', $lang_value_en );
+							$content_temp .= "\t english:\t " . $lang_value_en . "\n";
 						}
 
 						$content_temp .= "*/\n\n";
@@ -213,7 +213,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 						$lang_value = str_replace( "\'", "'", $lang_value );
 						$lang_value = str_replace( "'", "\'", $lang_value );
 						$lang_value = nv_nl2br( $lang_value );
-						$lang_value = str_replace( '<br  />', '<br />', $lang_value );
+						$lang_value = str_replace( '<br />', '<br />', $lang_value );
 						$content_lang .= "\$" . $langtype . "['" . $lang_key . "'] = '$lang_value';\n";
 					}
 				}
@@ -301,9 +301,6 @@ elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_st
 
 		if( empty( $content ) )
 		{
-			// Tam thoi bo qua cai nay
-			// $array_lang_no_check = array_unique( $array_lang_no_check );
-
 			$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting" );
 
 			$i = 0;

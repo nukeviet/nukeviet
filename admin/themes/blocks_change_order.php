@@ -18,7 +18,7 @@ list( $bid, $theme, $position ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bi
 if( $order > 0 and $bid > 0 )
 {
 	$weight = 0;
-	$result = $db->sql_query( "SELECT t1.bid FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE  t1.bid!=" . $bid . " AND t1.func_id='" . $func_id . "' AND t2.theme='" . $theme . "' AND t2.position='$position' ORDER BY t1.weight  ASC" );
+	$result = $db->sql_query( "SELECT t1.bid FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t1.bid!=" . $bid . " AND t1.func_id='" . $func_id . "' AND t2.theme='" . $theme . "' AND t2.position='$position' ORDER BY t1.weight ASC" );
 
 	while( list( $bid_i ) = $db->sql_fetchrow( $result ) )
 	{

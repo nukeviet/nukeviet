@@ -65,11 +65,11 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			}
 
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_comments` SET 
-            `subject`=" . $db->dbescape( $array['subject'] ) . ", 
-            `comment`=" . $db->dbescape( $array['comment'] ) . ", 
-            `admin_reply`=" . $db->dbescape( $array['admin_reply'] ) . ", 
-            `admin_id`=" . $array['admin_id'] . " 
-            WHERE `id`=" . $id;
+				`subject`=" . $db->dbescape( $array['subject'] ) . ", 
+				`comment`=" . $db->dbescape( $array['comment'] ) . ", 
+				`admin_reply`=" . $db->dbescape( $array['admin_reply'] ) . ", 
+				`admin_id`=" . $array['admin_id'] . " 
+				WHERE `id`=" . $id;
 			$result = $db->sql_query( $sql );
 
 			if( ! $result )
@@ -292,17 +292,17 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 			continue;
 		}
 
-		$st[$i] = array( //
-			'key' => $i, //
-			'value' => $lang_module['comment_status' . $i], //
-			'selected' => $i == ( int )$row['status'] ? " selected=\"selected\"" : "" //
+		$st[$i] = array(
+			'key' => $i,
+			'value' => $lang_module['comment_status' . $i],
+			'selected' => $i == ( int )$row['status'] ? " selected=\"selected\"" : ""
 		);
 	}
 
 	$admin_id = $row['admin_id'];
 	if( $admin_id )
 	{
-		$sql = "SELECT `username`, `full_name` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
+		$sql = "SELECT `username`, `full_name` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
 		$result = $db->sql_query( $sql );
 		$numrows = $db->sql_numrows( $result );
 		if( $numrows != 1 )
@@ -318,20 +318,20 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 	}
 
 	$array[] = array(
-		'id' => ( int )$row['id'], //
-		'subject' => nv_clean60( $row['subject'], 60 ), //
-		'file' => $file, //
-		'file_title' => $row['title'], //
-		'post_name' => $post_name, //
-		'post_email' => "<a href=\"mailto:" . $row['post_email'] . "\">" . $row['post_email'] . "</a>", //
-		'post_ip' => $row['post_ip'], //
-		'post_time' => nv_date( "d/m/Y H:i", $row['post_time'] ), //
-		'comment' => $row['comment'], //
-		'admin_reply' => $row['admin_reply'], //
-		'admin_id' => $admin_id, //
-		'st' => $st, //
-		'comments_of_file' => $comments_of_file, //
-		'edit_href' => $edit_href //
+		'id' => ( int )$row['id'],
+		'subject' => nv_clean60( $row['subject'], 60 ),
+		'file' => $file,
+		'file_title' => $row['title'],
+		'post_name' => $post_name,
+		'post_email' => "<a href=\"mailto:" . $row['post_email'] . "\">" . $row['post_email'] . "</a>",
+		'post_ip' => $row['post_ip'],
+		'post_time' => nv_date( "d/m/Y H:i", $row['post_time'] ),
+		'comment' => $row['comment'],
+		'admin_reply' => $row['admin_reply'],
+		'admin_id' => $admin_id,
+		'st' => $st,
+		'comments_of_file' => $comments_of_file,
+		'edit_href' => $edit_href
 	);
 }
 

@@ -30,17 +30,17 @@ if( $submit )
 	{
 		$array_config_global['dump_interval'] = $dump_interval;
 		$dump_interval = $dump_interval * 1440;
-		$db->sql_query( "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `interval`=" . $dump_interval . "  WHERE `run_file` = 'dump_autobackup.php' AND `run_func` = 'cron_dump_autobackup'" );
+		$db->sql_query( "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `interval`=" . $dump_interval . " WHERE `run_file` = 'dump_autobackup.php' AND `run_func` = 'cron_dump_autobackup'" );
 	}
 	$array_config_global['dump_backup_ext'] = ( in_array( $array_config_global['dump_backup_ext'], $array_sql_ext ) ) ? $array_config_global['dump_backup_ext'] : $array_sql_ext[0];
 
 	foreach( $array_config_global as $config_name => $config_value )
 	{
 		$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET 
-        `config_value`=" . $db->dbescape_string( $config_value ) . " 
-        WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
-        AND `lang` = 'sys' AND `module`='global' 
-        LIMIT 1" );
+			`config_value`=" . $db->dbescape_string( $config_value ) . " 
+			WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
+			AND `lang` = 'sys' AND `module`='global' 
+			LIMIT 1" );
 	}
 
 	nv_save_file_config_global();

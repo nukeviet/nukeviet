@@ -171,8 +171,10 @@
 
 	<div id="footer" class="clearfix">
 		<div class="copyright">
+			<!-- BEGIN: nv_queries -->
 			{NV_DB_NUM_QUERIES}: [COUNT_SHOW_QUERIES] <a href="#queries" onclick="nv_show_hidden('div_hide',2);">{NV_SHOW_QUERIES}</a>
 			<br/>
+			<!-- END: nv_queries -->
 			<strong>{NV_COPYRIGHT}</strong>
 		</div>
 		<div class="imgstat">

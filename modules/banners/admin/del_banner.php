@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $id = $nv_Request->get_int( 'id', 'post,get' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) )
@@ -26,10 +26,10 @@ if( $db->sql_numrows( $result ) )
 	{
 		nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['imageforswf'], false );
 	}
-	$sql = "DELETE FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE id='$id'";
+	$sql = "DELETE FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE id='$id'";
 	$result1 = $db->sql_query( $sql );
 
-	$sql = "DELETE FROM `" . NV_BANNERS_CLICK_GLOBALTABLE . "` WHERE bid='$id'";
+	$sql = "DELETE FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE bid='$id'";
 	$result = $db->sql_query( $sql );
 
 	nv_CreateXML_bannerPlan();

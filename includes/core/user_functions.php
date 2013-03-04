@@ -26,7 +26,7 @@ function nv_site_mods()
 	else
 	{
 		$site_mods = array();
-		$result = $db->sql_query( "SELECT * FROM  `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight" );
+		$result = $db->sql_query( "SELECT * FROM `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight" );
 		while( $row = $db->sql_fetch_assoc( $result ) )
 		{
 			$m_title = $db->unfixdb( $row['title'] );
@@ -224,7 +224,7 @@ function nv_blocks_content( $sitecontent )
 		$cache = array();
 
 		$in = array();
-		$sql = "SELECT * FROM  `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight";
+		$sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight";
 		$list = nv_db_cache( $sql, '', 'modules' );
 		foreach( $list as $row )
 		{
@@ -237,12 +237,12 @@ function nv_blocks_content( $sitecontent )
 		}
 
 		$_result = $db->sql_query( "SELECT t1.*, t2.func_id FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1 
-		    INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 
-		    ON t1.bid = t2.bid 
-		    WHERE t2.func_id IN (" . implode( ",", $in ) . ") 
-		    AND t1.theme ='" . $global_config['module_theme'] . "' 
-		    AND t1.active=1 
-		    ORDER BY t2.weight ASC" );
+			 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 
+			 ON t1.bid = t2.bid 
+			 WHERE t2.func_id IN (" . implode( ",", $in ) . ") 
+			 AND t1.theme ='" . $global_config['module_theme'] . "' 
+			 AND t1.active=1 
+			 ORDER BY t2.weight ASC" );
 
 		while( $_row = $db->sql_fetch_assoc( $_result ) )
 		{
@@ -357,13 +357,13 @@ function nv_blocks_content( $sitecontent )
 					if( defined( 'NV_IS_DRAG_BLOCK' ) )
 					{
 						$content = '<div class="portlet" id="bl_' . ( $_row['bid'] ) . '">
-                        <p>
-                        <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '">
-                            <img style="border:none" src="' . NV_BASE_SITEURL . 'images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '">
-                            <img style="border:none" src="' . NV_BASE_SITEURL . 'images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '">
-                            <img style="border:none" src="' . NV_BASE_SITEURL . 'images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
-                        </p>
-                        ' . $content . '</div>';
+							 <p>
+							 <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '">
+							 <img style="border:none" src="' . NV_BASE_SITEURL . 'images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '">
+							 <img style="border:none" src="' . NV_BASE_SITEURL . 'images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '">
+							 <img style="border:none" src="' . NV_BASE_SITEURL . 'images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
+							 </p>
+							 ' . $content . '</div>';
 					}
 
 					$_posReal[$_row['position']] .= $content;
@@ -595,7 +595,7 @@ function nv_html_site_js()
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\"></script>\n";
 		$return .= '<script type="text/javascript">
-        			//<![CDATA[
+ 			//<![CDATA[
 					var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {
 						$("a.delblock").click(function(){
@@ -621,17 +621,17 @@ function nv_html_site_js()
 							var bid = $(this).attr("name");
 							var tag = $(this).attr("id");
 							Shadowbox.open(
-						      {
-						         content : "<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:450px\'></iframe>",
-						         player : "html",
-						         height : 450,
-						         width : 780
-						      }
-						      );
-	            		});
+							{
+								content : "<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:450px\'></iframe>",
+								player : "html",
+								height : 450,
+								width : 780
+							}
+						 );
+	 		});
 
-	            		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
-	            		var post_order = false;
+	 		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
+	 		var post_order = false;
 						$(".column").sortable({
 							connectWith: \'.column\',
 							opacity: 0.8,
@@ -642,7 +642,7 @@ function nv_html_site_js()
 									var order = $(this).sortable("serialize");
 									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&position="+position+"&func_id="+func_id, function(theResponse){
 										if(theResponse=="OK_"+func_id){
-					    					$("div#toolbar>ul.info").html("<li><span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span></li>").fadeIn(1000);
+					 					$("div#toolbar>ul.info").html("<li><span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span></li>").fadeIn(1000);
 										}
 										else{
 											alert("' . $lang_global['blocks_saved_error'] . '");
@@ -654,7 +654,7 @@ function nv_html_site_js()
 									var order = $(this).sortable("serialize");
 									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&func_id="+func_id, function(theResponse){
 										if(theResponse=="OK_"+func_id){
-					    					$("div#toolbar>ul.info").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
+					 					$("div#toolbar>ul.info").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
 										}
 										else{
 											alert("' . $lang_global['blocks_saved_error'] . '");

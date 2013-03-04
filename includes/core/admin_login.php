@@ -75,7 +75,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 		}
 
 		$userid = 0;
-		$sql = "SELECT `userid`, `username`, `password` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` ='" . nv_md5safe( $nv_username ) . "'";
+		$sql = "SELECT `userid`, `username`, `password` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` ='" . nv_md5safe( $nv_username ) . "'";
 		$result = $db->sql_query( $sql );
 		if( $db->sql_numrows( $result ) == 1 )
 		{
@@ -92,7 +92,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 		$error = $lang_global['loginincorrect'];
 		if( $userid > 0 )
 		{
-			$query = "SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN  `" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id  = t2.userid WHERE t1.admin_id = " . $userid . " AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1";
+			$query = "SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid WHERE t1.admin_id = " . $userid . " AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1";
 			if( ( $result = $db->sql_query( $query ) ) !== false )
 			{
 				$numrows = $db->sql_numrows( $result );
@@ -174,6 +174,11 @@ elseif( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
 
 $info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
 $size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+if( $size[0] > 490 )
+{
+	$size[1] = ceil( 490 * $size[1] / $size[0] );
+	$size[0] = 490;
+}
 
 $dir_template = "";
 if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/login.tpl" ) )

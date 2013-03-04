@@ -39,10 +39,10 @@ if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
 	foreach( $array_config as $config_name => $config_value )
 	{
 		$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` 
-        SET `config_value`=" . $db->dbescape_string( $config_value ) . " 
-        WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
-        AND `lang` = 'sys' AND `module`='global' 
-        LIMIT 1" );
+			SET `config_value`=" . $db->dbescape_string( $config_value ) . " 
+			WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
+			AND `lang` = 'sys' AND `module`='global' 
+			LIMIT 1" );
 	}
 
 	nv_save_file_config_global();

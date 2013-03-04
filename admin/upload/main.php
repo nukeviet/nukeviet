@@ -42,9 +42,9 @@ if( $popup )
 	$xtpl->assign( "AREA", $area );
 	$xtpl->assign( "FUNNUM", $nv_Request->get_int( 'CKEditorFuncNum', 'get', 0 ) );
 
-	$sfile = ( $type == 'file' ) ? '  selected="selected"' : '';
-	$simage = ( $type == 'image' ) ? '  selected="selected"' : '';
-	$sflash = ( $type == 'flash' ) ? '  selected="selected"' : '';
+	$sfile = ( $type == 'file' ) ? ' selected="selected"' : '';
+	$simage = ( $type == 'image' ) ? ' selected="selected"' : '';
+	$sflash = ( $type == 'flash' ) ? ' selected="selected"' : '';
 
 	$xtpl->assign( "SFLASH", $sflash );
 	$xtpl->assign( "SIMAGE", $simage );

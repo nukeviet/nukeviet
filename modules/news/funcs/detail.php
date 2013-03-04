@@ -238,7 +238,7 @@ if( $allowed )
 	$key_words = $news_contents['keywords'];
 	$description = $news_contents['hometext'];
 
-	list( $post_username, $post_full_name ) = $db->sql_fetchrow( $db->sql_query( "SELECT `username`, `full_name` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = '" . $news_contents['admin_id'] . "' LIMIT 0,1 " ) );
+	list( $post_username, $post_full_name ) = $db->sql_fetchrow( $db->sql_query( "SELECT `username`, `full_name` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = '" . $news_contents['admin_id'] . "' LIMIT 0,1 " ) );
 	$news_contents['post_name'] = empty( $post_full_name ) ? $post_username : $post_full_name;
 
 	$contents = detail_theme( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable );

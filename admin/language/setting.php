@@ -22,7 +22,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . "seting" ) )
 {
 	$read_type = $nv_Request->get_int( 'read_type', 'post', 0 );
-	$sql = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  '" . $read_type . "' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'read_type'";
+	$sql = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = '" . $read_type . "' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'read_type'";
 	$result = $db->sql_query( $sql );
 
 	nv_save_file_config_global();
@@ -85,10 +85,10 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "s
 	$allow_sitelangs = implode( ",", $global_config['allow_sitelangs'] );
 	$allow_adminlangs = implode( ",", $global_config['allow_adminlangs'] );
 
-	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( $allow_sitelangs ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'allow_sitelangs'";
+	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = " . $db->dbescape( $allow_sitelangs ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_sitelangs'";
 	$result = $db->sql_query( $query );
 
-	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` =  " . $db->dbescape( $allow_adminlangs ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` =  'allow_adminlangs'";
+	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = " . $db->dbescape( $allow_adminlangs ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_adminlangs'";
 	$result = $db->sql_query( $query );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setting_save'], " allow sitelangs : " . $allow_sitelangs . ", allow adminlangs :" . $allow_adminlangs, $admin_info['userid'] );
