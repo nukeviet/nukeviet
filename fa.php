@@ -40,7 +40,7 @@ function nv_fomat_dir( $dirname, $all = false )
 		{
 			if( preg_match( '/^([a-zA-Z0-9\-\_\/\.]+)\.php$/', $file ) )
 			{
-				if( ! nv_fomat_file_php( NV_ROOTDIR . $dirname . '/' . $file ) )
+				if( ! nv_fomat_file_php( NV_ROOTDIR . '/' . $dirname . '/' . $file ) )
 				{
 					echo $dirname . '/' . $file . ' ---------------------- no change ----------------------<br>';
 				}
@@ -308,7 +308,7 @@ function nv_fomat_file_js( $filename )
 {
 	// ap dung cho Zend Studio 9.0.4
 	$contents = file_get_contents( $filename );
-	$output_data = preg_replace( '/\n([\t\n]+)\n/', "\n\n", $output_data );
+	$output_data = preg_replace( '/\n([\t\n]+)\n/', "\n\n", $contents );
 	//Xóa các dòng trống có tab, hoặc có nhiều hơn 1 dòng trống
 	$output_data = str_replace( '( var ', '(var ', $output_data );
 	if( $output_data != $contents )
