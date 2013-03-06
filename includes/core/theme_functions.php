@@ -116,19 +116,30 @@ function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink =
 	}
 
 	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
-	if( $size[0] > 400 )
-	{
-		$size[1] = ceil( 400 * $size[1] / $size[0] );
-		$size[0] = 400;
-	}
 
 	$xtpl = new XTemplate( "info_die.tpl", $tpl_path );
 	$xtpl->assign( 'SITE_CHERSET', $global_config['site_charset'] );
 	$xtpl->assign( 'PAGE_TITLE', $page_title );
 	$xtpl->assign( 'HOME_LINK', $global_config['site_url'] );
-	$xtpl->assign( 'LOGO', NV_BASE_SITEURL . $global_config['site_logo'] );
-	$xtpl->assign( 'WIDTH', $size[0] );
-	$xtpl->assign( 'HEIGHT', $size[1] );
+	if( isset( $size[1] ) )
+	{
+		if( $size[0] > 490 )
+		{
+			$size[1] = ceil( 490 * $size[1] / $size[0] );
+			$size[0] = 490;
+		}
+		$xtpl->assign( 'LOGO', NV_BASE_SITEURL . $global_config['site_logo'] );
+		$xtpl->assign( 'WIDTH', $size[0] );
+		$xtpl->assign( 'HEIGHT', $size[1] );
+		if( isset( $size['mime'] ) AND $size['mime'] == 'application/x-shockwave-flash' )
+		{
+			$xtpl->parse( 'main.swf' );
+		}
+		else
+		{
+			$xtpl->parse( 'main.image' );
+		}
+	}
 	$xtpl->assign( 'INFO_TITLE', $info_title );
 	$xtpl->assign( 'INFO_CONTENT', $info_content );
 	$xtpl->assign( 'GO_HOMEPAGE', $lang_global['go_homepage'] );

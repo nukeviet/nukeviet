@@ -49,6 +49,7 @@ Tìm và sửa đoạn sau trong file /themes/admin_my_theme/system/main.tpl
 Sửa thành
 [COUNT_SHOW_QUERIES]
 
+-----------------------------------
 Tìm và xóa đoạn sau trong file /themes/admin_my_theme/theme.php (giao diện admin)
 
 	$end_time = array_sum( explode( " ", microtime() ) );
@@ -64,14 +65,75 @@ Tìm và xóa đoạn sau trong file /themes/admin_my_theme/theme.php (giao di�
 	$xtpl->assign( 'COUNT_QUERY_STRS', sizeof( $db->query_strs ) );
 	$xtpl->assign( 'NV_COPYRIGHT', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
 
+-----------------------------------
 Tìm dòng sau trong file file /themes/admin_my_theme/theme.php (giao diện admin)
 		foreach( $db->query_strs as $key => $field )
 Thêm lên trên nó đoạn sau
 		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
 		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
 
-5) Xóa chức năng hiển thị các thông tin cập nhật từ google code
+-----------------------------------
+Tìm file nếu có: themes/my_theme/system/info_die.tpl (Cả giao diện admin và giao diện site)
+Tìm đến đoạn:
+			<a href="{HOME_LINK}"><img border="0" src="{LOGO}" width="{WIDTH}" height="{HEIGHT}" alt="" /></a>
+Thay bằng
+			<!-- BEGIN: image -->
+			<a href="{HOME_LINK}"><img border="0" src="{LOGO}" width="{WIDTH}" height="{HEIGHT}" alt="" /></a>
+			<!-- END: image -->
+			<!-- BEGIN: swf -->
+			<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="{WIDTH}" height="{HEIGHT}" >
+				<param name="wmode" value="transparent" />
+				<param name="movie" value="{LOGO}" />
+				<param name="quality" value="high" />
+				<param name="menu" value="false" />
+				<param name="seamlesstabbing" value="false" />
+				<param name="allowscriptaccess" value="samedomain" />
+				<param name="loop" value="true" />
+				<!--[if !IE]> <-->
+				<object type="application/x-shockwave-flash" width="{WIDTH}" height="{HEIGHT}" data="{LOGO}" >
+					<param name="wmode" value="transparent" />
+					<param name="pluginurl" value="http://www.adobe.com/go/getflashplayer" />
+					<param name="loop" value="true" />
+					<param name="quality" value="high" />
+					<param name="menu" value="false" />
+					<param name="seamlesstabbing" value="false" />
+					<param name="allowscriptaccess" value="samedomain" />
+				</object>
+				<!--> <![endif]-->
+			</object>
+			<!-- END: swf -->
 
+-----------------------------------
+Tìm file nếu có: themes/my_theme/system/login.tpl (Cả giao diện admin)
+Tìm đến đoạn:
+				<a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img alt="{SITE_NAME}" src="{LOGO_SRC}" width="{LOGO_WIDTH}" height="{LOGO_HEIGHT}" /></a>
+Thay bằng
+				<!-- BEGIN: image -->
+				<a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img border="0" src="{LOGO}" width="{WIDTH}" height="{HEIGHT}" alt="{SITE_NAME}" /></a>
+				<!-- END: image -->
+				<!-- BEGIN: swf -->
+				<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="{WIDTH}" height="{HEIGHT}" >
+					<param name="wmode" value="transparent" />
+					<param name="movie" value="{LOGO}" />
+					<param name="quality" value="high" />
+					<param name="menu" value="false" />
+					<param name="seamlesstabbing" value="false" />
+					<param name="allowscriptaccess" value="samedomain" />
+					<param name="loop" value="true" />
+					<!--[if !IE]> <-->
+					<object type="application/x-shockwave-flash" width="{WIDTH}" height="{HEIGHT}" data="{LOGO}" >
+						<param name="wmode" value="transparent" />
+						<param name="pluginurl" value="http://www.adobe.com/go/getflashplayer" />
+						<param name="loop" value="true" />
+						<param name="quality" value="high" />
+						<param name="menu" value="false" />
+						<param name="seamlesstabbing" value="false" />
+						<param name="allowscriptaccess" value="samedomain" />
+					</object>
+					<!--> <![endif]-->
+				</object>
+				<!-- END: swf -->
+ 
 6) Thêm chức năng Ping bài viết qua RPC
 - Chức năng này chỉ hoạt động nếu máy chủ support cURL cho php
 - Vào menu Công cụ web ->Cấu hình dịch vụ PING để chọn các dịch vụ, sau đó lưu lại cấu hình đó.
@@ -186,6 +248,7 @@ Thí dụ lúc trước xác đụng ảnh thumb theo cách
 			{
 				$item['imghome'] = "";
 			}
+
 Giờ cần sửa lại code theo cách
 			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
@@ -226,8 +289,8 @@ onclick="this.target='_blank'"
 Bằng
 onclick="this.target='{DATA.target}'"
 21) Thêm chức năng bỏ tên Module (mặc định) trong url
-##########################################################################
 
+##########################################################################
 Hướng dẫn nâng cấp
 - Upload các file thay đổi
 - Sửa các file theo hướng dẫn bên trên.
@@ -239,4 +302,3 @@ $ip_update = "";// IP của máy tính thực hiện nâng cấp
 Sau đó truy cập site theo địa chỉ: http://mysite.com/update.php Thực hiện theo hướng dẫn
 
 note: fix commit git push -f
-
