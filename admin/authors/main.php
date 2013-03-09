@@ -50,11 +50,11 @@ if( $numrows )
 		$level = intval( $row['lev'] );
 		if( $level == 1 )
 		{
-			$level_txt = '<b>' . $lang_module['level1'] . '</b>';
+			$level_txt = '<b>' . $lang_global['level1'] . '</b>';
 		}
 		elseif( $level == 2 )
 		{
-			$level_txt = '<b>' . $lang_module['level2'] . '</b>';
+			$level_txt = '<b>' . $lang_global['level2'] . '</b>';
 		}
 		else
 		{

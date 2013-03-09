@@ -16,9 +16,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['level1'] = 'Tối cao';
-$lang_module['level2'] = 'Điều hành chung';
-$lang_module['level3'] = 'Quản lý module';
 $lang_module['is_suspend0'] = 'Hoạt động';
 $lang_module['is_suspend1'] = 'Bị đình chỉ vào &ldquo;%1$s&rdquo; bởi &ldquo;%2$s&rdquo; với lý do &ldquo;%3$s&rdquo;';
 $lang_module['is_suspend2'] = 'Bị đình chỉ';
