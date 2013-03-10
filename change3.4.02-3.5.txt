@@ -277,7 +277,12 @@ Sửa các file
 tìm và thay thế
 itemcat.fileimage.orig_src hoặc itemcat.fileimage.src
 bằng
-itemcat.fileimage.imagesrc
+itemcat.imagesrc
+
+tìm và thay thế
+listpostcat.fileimage.orig_src
+bằng
+listpostcat.imagesrc
 
 Xóa thư mục /uploads/download/thumb/
 
