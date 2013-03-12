@@ -17,16 +17,16 @@
 		</tbody>
 		<tbody class="second">
 			<tr>
-				<td>{LANG.admin_del_reason}:</td>
-				<td>&nbsp;</td>
-				<td><input name="reason" type="text" value="{REASON1}" class="txt-half" maxlength="{REASON2}" /></td>
+				<td>{ADMIN_PASSWORD0}:</td>
+				<td><sup class="required">&lowast;</sup></td>
+				<td><input name="adminpass_iavim" type="password" autocomplete="off" value="{ADMIN_PASSWORD1}" style="width: 200px;" maxlength="{ADMIN_PASSWORD2}" /></td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
-				<td>{ADMIN_PASSWORD0}:</td>
-				<td><sup class="required">&lowast;</sup></td>
-				<td><input name="adminpass_iavim" type="password" autocomplete="off" value="{ADMIN_PASSWORD1}" class="txt-half" maxlength="{ADMIN_PASSWORD2}" /></td>
+				<td>{LANG.admin_del_reason}:</td>
+				<td>&nbsp;</td>
+				<td><input name="reason" type="text" value="{REASON1}" class="txt-half" maxlength="{REASON2}" /></td>
 			</tr>
 		</tbody>
 		<tbody class="second">
@@ -47,4 +47,7 @@
 		<tfoot>
 	</table>
 </form>
+<script type="text/javascript">
+	$("input[name='adminpass_iavim']").focus();
+</script>
 <!-- END: del -->

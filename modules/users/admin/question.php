@@ -103,7 +103,18 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		if( $db->sql_query( $query ) )
 		{
 			$db->sql_freeresult();
-			nv_fix_question();
+
+			// fix weight question
+			$sql = "SELECT `qid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
+			$result = $db->sql_query( $sql );
+			$weight = 0;
+			while( $row = $db->sql_fetchrow( $result ) )
+			{
+				++$weight;
+				$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` SET `weight`=" . $weight . " WHERE `qid`=" . $row['qid'];
+				$db->sql_query( $sql );
+			}
+			$db->sql_freeresult();
 			die( "OK" );
 		}
 	}

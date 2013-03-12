@@ -9,7 +9,7 @@
 	<form id="addCat" method="post" action="{ACTION_URL}">
 		<h3 class="myh3">{PTITLE}</h3>
 		<table class="tab1">
-			<col style="width:200px" />
+			<col style="width:300px" />
 			<tbody class="second">
 				<tr>
 					<td>{LANG.title} <span style="color:red">*</span>:</td>
@@ -28,6 +28,14 @@
 					<td><input title="{LANG.public}" type="checkbox" name="public" value="1"{DATA.public} /></td>
 				</tr>
 			</tbody>
+			<!-- BEGIN: siteus -->
+			<tbody>
+				<tr>
+					<td>{LANG.siteus}:</td>
+					<td><input title="{LANG.siteus}" type="checkbox" name="siteus" value="1"{DATA.siteus} /></td>
+				</tr>
+			</tbody>
+			<!-- END: siteus -->
 		</table>
 		<div>
 			{LANG.content}
@@ -78,39 +86,42 @@
 <!-- END: add -->
 <!-- BEGIN: list -->
 <table class="tab1" style="width:100%">
-	<col width="50" />
+	<col width="70" />
 	<thead>
-		<tr>
+		<tr align="center">
 			<td> {LANG.weight} </td>
 			<td> {LANG.title} </td>
 			<td> {LANG.add_time} </td>
 			<td> {LANG.exp_time} </td>
-			<td> {LANG.public} </td>
 			<td> {LANG.users} </td>
 			<td> {GLANG.active} </td>
 			<td> {GLANG.actions} </td>
 		</tr>
 	</thead>
 	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
-		<tr>
+	<tbody {LOOP.class}>
+		<tr align="center">
 			<td>
-			<select name="w_{LOOP.id}" class="newWeight">
+			<select name="w_{GROUP_ID}" class="newWeight">
 				<!-- BEGIN: option -->
 				<option value="{NEWWEIGHT.value}"{NEWWEIGHT.selected}>{NEWWEIGHT.value}</option>
 				<!-- END: option -->
 			</select></td>
-			<td> {LOOP.title} </td>
-			<td> {LOOP.add_time} </td>
-			<td> {LOOP.exp_time} </td>
-			<td><input name="p_{LOOP.id}" type="checkbox" class="public" value="1"{LOOP.public} /></td>
-			<td> {LOOP.users} </td>
-			<td><input name="a_{LOOP.id}" type="checkbox" class="act" value="1"{LOOP.act} /></td>
-			<td><a href="{MODULE_URL}={OP}&edit&id={LOOP.id}">{GLANG.edit}</a> | <a class="del" href="{LOOP.id}">{GLANG.delete}</a> | <a href="{MODULE_URL}={OP}&userlist={LOOP.id}">{LANG.users}</a></td>
+			<td align="left"><a title="{LANG.users}" href="{MODULE_URL}={OP}&userlist={GROUP_ID}">{LOOP.title}</a></td>
+			<td>{LOOP.add_time}</td>
+			<td>{LOOP.exp_time}</td>
+			<td>{LOOP.number}</td>
+			<td><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></td>
+			<td>
+			<!-- BEGIN: action -->
+			<span class="edit_icon"><a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a></span>&nbsp;-&nbsp;<span class="delete_icon"><a class="del" href="{GROUP_ID}">{GLANG.delete}</a></span>
+			<!-- END: action -->
+			</td>
 		</tr>
 	</tbody>
 	<!-- END: loop -->
 </table>
+<!-- BEGIN: action_js -->
 <script type="text/javascript">
 	//<![CDATA[
 	$("a.del").click(function() {
@@ -138,21 +149,7 @@
 		});
 		return false
 	});
-	$("input.public").change(function() {
-		var a = $(this).attr("name").split("_"), a = a[1], b = this;
-		$("#pageContent input, #pageContent select").attr("disabled", "disabled");
-		$.ajax({
-			type : "POST",
-			url : "{MODULE_URL}={OP}",
-			data : "pub=" + a + "&rand=" + nv_randomPassword(10),
-			success : function(a) {
-				a = a.split("|");
-				$("#pageContent input, #pageContent select").removeAttr("disabled");
-				a[0] == "ERROR" && (a[1] == "1" ? $(b).attr("checked", "checked") : $(b).removeAttr("checked"))
-			}
-		});
-		return false
-	});
+
 	$("input.act").change(function() {
 		var a = $(this).attr("name").split("_"), a = a[1], b = this;
 		$("#pageContent input, #pageContent select").attr("disabled", "disabled");
@@ -170,11 +167,14 @@
 	});
 	//]]>
 </script>
+<!-- END: action_js -->
 <!-- END: list -->
 <!-- BEGIN: main -->
+<!-- BEGIN: addnew -->
 <div id="ablist">
 	<input name="addNew" type="button" value="{LANG.nv_admin_add}" />
 </div>
+<!-- END: addnew -->
 <div class="myh3">
 	{GLANG.mod_groups}
 </div>
@@ -209,10 +209,14 @@
 	<tbody {CLASS}>
 		<tr>
 			<td> {LOOP.userid} </td>
-			<td> {LOOP.username} </td>
-			<td> {LOOP.full_name} </td>
+			<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+			<td>{LOOP.full_name}</td>
 			<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
-			<td><a href="{MODULE_URL}=edit&userid={LOOP.userid}">{LANG.detail}</a> | <a class="del" href="{LOOP.userid}">{LANG.exclude_user2}</a></td>
+			<td>
+			<!-- BEGIN: delete -->
+			<span class="delete_icon"><a class="del" href="{LOOP.userid}">{LANG.exclude_user2}</a></span>
+			<!-- END: delete -->
+			</td>
 		</tr>
 	</tbody>
 	<!-- END: loop -->
@@ -235,11 +239,13 @@
 <!-- END: ifExists -->
 <!-- END: listUsers -->
 <!-- BEGIN: userlist -->
+<!-- BEGIN: adduser -->
 <div id="ablist">
 	{LANG.search_id}: <input title="{LANG.search_id}" class="txt" type="text" name="uid" id="uid" value="" maxlength="11" style="width:50px" />
 	<input name="searchUser" type="button" value="{GLANG.search}" />
 	<input name="addUser" type="button" value="{LANG.addMemberToGroup}" />
 </div>
+<!-- END: adduser -->
 <div id="pageContent"></div>
 <script type="text/javascript">
 	//<![CDATA[

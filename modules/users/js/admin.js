@@ -107,7 +107,12 @@ function nv_row_del_result(res) {
 	if (res == 'OK') {
 		window.location.href = window.location.href;
 	} else {
-		alert(nv_is_del_confirm[2]);
+		var r_split = res.split("_");
+		if (r_split[0] == 'ERROR') {
+			alert(r_split[1]);
+		} else {
+			alert(nv_is_del_confirm[2]);
+		}
 	}
 	return false;
 }

@@ -63,13 +63,13 @@ function nv_site_mods()
  */
 function nv_groups_list()
 {
-	global $db;
-	$query = "SELECT `group_id`, `title` FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
+	global $db, $db_config, $global_config;
+	$query = "SELECT `group_id`, `title`, `idsite` FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` WHERE (`idsite` = " . $global_config['idsite'] . " OR (`idsite` =0 AND `siteus` = 1)) AND group_id > 3 ORDER BY `idsite`, `weight`";
 	$result = $db->sql_query( $query );
 	$groups = array();
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$groups[$row['group_id']] = $row['title'];
+		$groups[$row['group_id']] = ( $global_config['idsite'] > 0 AND empty( $row['idsite'] ) ) ? '<b>' . $row['title'] . '</b>' : $row['title'];
 	}
 	return $groups;
 }
@@ -94,7 +94,8 @@ function nv_save_file_config_global()
 	{
 		return false;
 	}
-	$content_config = "<?php\n\n";
+
+	$content_config = "<?php" . "\n\n";
 	$content_config .= NV_FILEHEAD . "\n\n";
 	$content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
 

@@ -27,7 +27,31 @@
 	<body>
 		<div id="wrapper">
 			<div id="logo">
-				<a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img alt="{SITE_NAME}" src="{LOGO_SRC}" width="{LOGO_WIDTH}" height="{LOGO_HEIGHT}" /></a>
+				<!-- BEGIN: image -->
+				<a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img border="0" src="{LOGO}" width="{WIDTH}" height="{HEIGHT}" alt="{SITE_NAME}" /></a>
+				<!-- END: image -->
+				<!-- BEGIN: swf -->
+				<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="{WIDTH}" height="{HEIGHT}" >
+					<param name="wmode" value="transparent" />
+					<param name="movie" value="{LOGO}" />
+					<param name="quality" value="high" />
+					<param name="menu" value="false" />
+					<param name="seamlesstabbing" value="false" />
+					<param name="allowscriptaccess" value="samedomain" />
+					<param name="loop" value="true" />
+					<!--[if !IE]> <-->
+					<object type="application/x-shockwave-flash" width="{WIDTH}" height="{HEIGHT}" data="{LOGO}" >
+						<param name="wmode" value="transparent" />
+						<param name="pluginurl" value="http://www.adobe.com/go/getflashplayer" />
+						<param name="loop" value="true" />
+						<param name="quality" value="high" />
+						<param name="menu" value="false" />
+						<param name="seamlesstabbing" value="false" />
+						<param name="allowscriptaccess" value="samedomain" />
+					</object>
+					<!--> <![endif]-->
+				</object>
+				<!-- END: swf -->
 			</div>
 			<div id="login-header">
 				<div id="login-header-left"></div>

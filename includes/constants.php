@@ -21,10 +21,10 @@ define( "NV_ADMINDIR", "admin" );
 define( "NV_EDITORSDIR", "editors" );
 
 //Thu muc uploads
-define( "NV_UPLOADS_DIR", "uploads" );
+define( "SYSTEM_UPLOADS_DIR", "uploads" );
 
 //Thu muc files
-define( "NV_FILES_DIR", "files" );
+define( "SYSTEM_FILES_DIR", "files" );
 
 //Thu muc uploads banner
 define( "NV_BANNER_DIR", "banners" );

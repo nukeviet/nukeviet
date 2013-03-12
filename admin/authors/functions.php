@@ -11,6 +11,12 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 $allow_func = array( 'main', 'edit' );
 
+if( empty( $global_config['spadmin_add_admin'] ) AND $global_config['idsite'] > 0 )
+{
+	// Fix add admin for subsite
+	$global_config['spadmin_add_admin'] = 1;
+}
+
 if( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) )
 {
 	$allow_func[] = "add";
@@ -54,7 +60,7 @@ if( $module_name == "authors" )
 		//parse content
 		$xtpl = new XTemplate( "add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
 
-		$lev = ( $result['lev'] == 2 ) ? $lang_module['level2'] : $lang_module['level3'];
+		$lev = ( $result['lev'] == 2 ) ? $lang_global['level2'] : $lang_global['level3'];
 		$contents = array();
 		$contents['admin_id'] = $result['admin_id'];
 		$contents['title'] = $lang_module['nv_admin_add_title'];

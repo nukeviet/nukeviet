@@ -156,6 +156,12 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 		$sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `editor` = " . $db->dbescape( $editor ) . ", `lev`=" . $lev . ", `files_level`=" . $db->dbescape( $files_level ) . ", `position`=" . $db->dbescape( $position ) . " WHERE `admin_id`=" . $admin_id;
 		$db->sql_query( $sql );
 
+		if( $lev != $row['lev'] )
+		{
+			nv_groups_add_user( $lev, $admin_id );
+			nv_groups_del_user( $row['lev'], $admin_id );
+		}
+
 		$result = array();
 		$result['admin_id'] = $admin_id;
 		$result['login'] = $row_user['username'];
@@ -182,11 +188,11 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 		}
 		if( $lev == 2 and $lev != $row['lev'] )
 		{
-			$result['change']['lev'] = array( $lang_module['lev'], $lang_module['level' . $row['lev']], $lang_module['level' . $lev] );
+			$result['change']['lev'] = array( $lang_module['lev'], $lang_global['level' . $row['lev']], $lang_global['level' . $lev] );
 		}
 		elseif( $lev == 3 and $lev != $row['lev'] )
 		{
-			$result['change']['lev'] = array( $lang_module['lev'], $lang_module['level' . $row['lev']], $lang_module['level' . $lev] );
+			$result['change']['lev'] = array( $lang_module['lev'], $lang_global['level' . $row['lev']], $lang_global['level' . $lev] );
 			$old = array();
 			if( ! empty( $old_modules ) )
 			{
@@ -279,7 +285,7 @@ if( defined( "NV_IS_SPADMIN" ) and $row['admin_id'] != $admin_info['admin_id'] )
 
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
-		array_push( $contents['lev'], $lev, $lang_module['level2'], $lang_module['level3'] );
+		array_push( $contents['lev'], $lev, $lang_global['level2'], $lang_global['level3'] );
 	}
 }
 if( defined( 'NV_IS_GODADMIN' ) or ( defined( 'NV_IS_SPADMIN' ) and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'] ) )
