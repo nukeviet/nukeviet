@@ -92,7 +92,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 		{
 			while( ( $file = readdir( $dh ) ) !== false )
 			{
-				if( preg_match( "/^(" . nv_preg_quote( NV_TEMPNAM_PREFIX ) . ")[a-zA-Z0-9\_\.]+$/", $file ) )
+				if( preg_match( "/^(" . nv_preg_quote( NV_TEMPNAM_PREFIX ) . ")[a-zA-Z0-9\-\_\.]+$/", $file ) )
 				{
 					if( is_file( $dir . '/' . $file ) )
 					{

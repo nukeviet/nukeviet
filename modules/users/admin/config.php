@@ -279,9 +279,9 @@ if( ! empty( $array_config['openid_servers'] ) )
 	}
 }
 $array_access = array(
-	array( 'id' => 1, 'title' => $lang_module['level1'] ),
-	array( 'id' => 2, 'title' => $lang_module['level2'] ),
-	array( 'id' => 3, 'title' => $lang_module['level3'] )
+	array( 'id' => 1, 'title' => $lang_global['level1'] ),
+	array( 'id' => 2, 'title' => $lang_global['level2'] ),
+	array( 'id' => 3, 'title' => $lang_global['level3'] )
 );
 $i = 0;
 

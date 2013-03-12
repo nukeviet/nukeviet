@@ -11,12 +11,16 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];
 $usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 1 );
-$usactive = ( int )$nv_Request->get_bool( 'usactive', 'post,get', $usactive_old );
+$usactive = $nv_Request->get_int( 'usactive', 'post,get', $usactive_old );
 if( $usactive_old != $usactive )
 {
 	$nv_Request->set_Cookie( 'usactive', $usactive );
 }
-$sql = "FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `active`=" . $usactive;
+$sql = "FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `active`=" . ( $usactive % 2 );
+if( $usactive > 1 )
+{
+	$sql .= " AND `idsite`=" . $global_config['idsite'];
+}
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&usactive=" . $usactive;
 
@@ -108,48 +112,46 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 		'level' => $lang_module['level0'],
 		'is_admin' => false
 	);
+	if( $global_config['idsite'] > 0 AND $row['idsite'] != $global_config['idsite'] )
+	{
+		$users_list[$row['userid']]['is_edit'] = false;
+		$users_list[$row['userid']]['is_delete'] = false;
+	}
 	$admin_in[] = $row['userid'];
 }
 
-if( $admin_in )
+if( ! empty( $admin_in ) )
 {
 	$admin_in = implode( ",", $admin_in );
 	$sql = "SELECT `admin_id`, `lev` FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id` IN (" . $admin_in . ")";
 	$query = $db->sql_query( $sql );
 	while( $row = $db->sql_fetchrow( $query ) )
 	{
-		$is_my = ( $admin_info['admin_id'] == $row['admin_id'] ) ? true : false;
-		$superadmin = ( $row['lev'] == 1 or $row['lev'] == 2 ) ? true : false;
-
 		$users_list[$row['admin_id']]['is_delete'] = false;
 		if( $row['lev'] == 1 )
 		{
-			$users_list[$row['admin_id']]['level'] = $lang_module['level1'];
+			$users_list[$row['admin_id']]['level'] = $lang_global['level1'];
 			$users_list[$row['admin_id']]['img'] = 'admin1';
 		}
 		elseif( $row['lev'] == 2 )
 		{
-			$users_list[$row['admin_id']]['level'] = $lang_module['level2'];
+			$users_list[$row['admin_id']]['level'] = $lang_global['level2'];
 			$users_list[$row['admin_id']]['img'] = 'admin2';
 		}
 		else
 		{
-			$users_list[$row['admin_id']]['level'] = $lang_module['level3'];
+			$users_list[$row['admin_id']]['level'] = $lang_global['level3'];
 			$users_list[$row['admin_id']]['img'] = 'admin3';
 		}
 
 		$users_list[$row['admin_id']]['is_admin'] = true;
-		if( $is_edit )
+		if( $users_list[$row['admin_id']]['is_edit'] )
 		{
 			if( defined( 'NV_IS_GODADMIN' ) )
 			{
 				$users_list[$row['admin_id']]['is_edit'] = true;
 			}
-			elseif( defined( 'NV_IS_SPADMIN' ) and ( $is_my or ! $superadmin ) )
-			{
-				$users_list[$row['admin_id']]['is_edit'] = true;
-			}
-			elseif( $is_my )
+			elseif( defined( 'NV_IS_SPADMIN' ) and ! ( $row['lev'] == 1 or $row['lev'] == 2 ) )
 			{
 				$users_list[$row['admin_id']]['is_edit'] = true;
 			}
@@ -158,10 +160,15 @@ if( $admin_in )
 				$users_list[$row['admin_id']]['is_edit'] = false;
 			}
 		}
-		if( ! ( $users_list[$row['admin_id']]['is_edit'] and ! $is_my ) )
+		if( ! $users_list[$row['admin_id']]['is_edit'] )
 		{
 			$users_list[$row['admin_id']]['disabled'] = " disabled=\"disabled\"";
 		}
+	}
+	if( isset( $users_list[$admin_info['admin_id']] ) )
+	{
+		$users_list[$admin_info['admin_id']]['disabled'] = " disabled=\"disabled\"";
+		$users_list[$admin_info['admin_id']]['is_edit'] = true;
 	}
 }
 
@@ -212,11 +219,12 @@ foreach( $methods as $m )
 	$xtpl->assign( 'METHODS', $m );
 	$xtpl->parse( 'main.method' );
 }
-for( $i = 1; $i >= 0; $i-- )
+$_bg = ( defined( "NV_CONFIG_DIR" ) ) ? 3 : 1;
+for( $i = $_bg; $i >= 0; $i-- )
 {
 	$m = array(
 		'key' => $i,
-		'selected' => ( $i == $usactive ) ? 'selected="seelected"' : '',
+		'selected' => ( $i == $usactive ) ? 'selected="selected"' : '',
 		'value' => $lang_module['usactive_' . $i]
 	);
 	$xtpl->assign( 'USACTIVE', $m );

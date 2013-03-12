@@ -174,11 +174,6 @@ elseif( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
 
 $info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
 $size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
-if( $size[0] > 490 )
-{
-	$size[1] = ceil( 490 * $size[1] / $size[0] );
-	$size[0] = 490;
-}
 
 $dir_template = "";
 if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/login.tpl" ) )
@@ -214,10 +209,27 @@ $xtpl->assign( 'LOGIN_ERROR_SECURITY', addslashes( sprintf( $lang_global['login_
 
 $xtpl->assign( 'V_LOGIN', $nv_username );
 $xtpl->assign( 'LANGINTERFACE', $lang_global['langinterface'] );
-$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
-$xtpl->assign( 'LOGO_WIDTH', $size[0] );
-$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
 
+if( isset( $size[1] ) )
+{
+	if( $size[0] > 490 )
+	{
+		$size[1] = ceil( 490 * $size[1] / $size[0] );
+		$size[0] = 490;
+	}
+	$xtpl->assign( 'LOGO', NV_BASE_SITEURL . $global_config['site_logo'] );
+	$xtpl->assign( 'WIDTH', $size[0] );
+	$xtpl->assign( 'HEIGHT', $size[1] );
+
+	if( isset( $size['mime'] ) AND $size['mime'] == 'application/x-shockwave-flash' )
+	{
+		$xtpl->parse( 'main.swf' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.image' );
+	}
+}
 $xtpl->assign( 'LANGLOSTPASS', $lang_global['lostpass'] );
 $xtpl->assign( 'LINKLOSTPASS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $global_config['site_lang'] . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=lostpass" );
 

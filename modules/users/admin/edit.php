@@ -28,7 +28,6 @@ if( $numrows != 1 )
 	die();
 }
 $row = $db->sql_fetchrow( $result );
-$array_old_groups = ( ! empty( $row['in_groups'] ) ) ? explode( ',', $row['in_groups'] ) : array();
 
 $allow = false;
 
@@ -49,6 +48,11 @@ else
 	}
 }
 
+if( $global_config['idsite'] > 0 AND $row['idsite'] != $global_config['idsite'] AND $admin_info['admin_id'] != $userid )
+{
+	$allow = false;
+}
+
 if( ! $allow )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
@@ -58,6 +62,13 @@ if( ! $allow )
 $_user = array();
 
 $groups_list = nv_groups_list();
+
+$array_old_groups = array();
+$result_gru = $db->sql_query( "SELECT `group_id` FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "_users` WHERE `userid`=" . $userid );
+while( $row_gru = $db->sql_fetch_assoc( $result_gru ) )
+{
+	$array_old_groups[] = $row_gru['group_id'];
+}
 
 $array_field_config = array();
 $result_field = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
@@ -182,42 +193,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			{
 				$_user['birthday'] = 0;
 			}
-			$array_in_groups = array_values( $_user['in_groups'] );
-			$array_all_groups = array_unique( array_merge( $array_old_groups, $array_in_groups ) );
-
-			$_user['in_groups'] = array();
-			if( ! empty( $array_all_groups ) )
-			{
-				foreach( $array_all_groups as $group_id_i )
-				{
-					$query = "SELECT `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id`=" . $group_id_i;
-					$result = $db->sql_query( $query );
-					$numrows = $db->sql_numrows( $result );
-					if( $numrows )
-					{
-						$row_users = $db->sql_fetchrow( $result );
-						$users = trim( $row_users['users'] );
-						$users = ! empty( $users ) ? explode( ",", $users ) : array();
-						if( in_array( $group_id_i, $array_in_groups ) )
-						{
-							$users = array_merge( $users, array( $userid ) );
-							$_user['in_groups'][] = $group_id_i;
-						}
-						else
-						{
-							$users = array_diff( $users, array( $userid ) );
-						}
-						$users = array_unique( $users );
-						sort( $users );
-						$users = array_values( $users );
-						$users = ! empty( $users ) ? implode( ",", $users ) : "";
-
-						$sql = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `users`=" . $db->dbescape_string( $users ) . " WHERE `group_id`=" . $group_id_i;
-						$db->sql_query( $sql );
-					}
-				}
-			}
-			$_user['in_groups'] = ( ! empty( $_user['in_groups'] ) ) ? implode( ',', $_user['in_groups'] ) : '';
 
 			$password = ! empty( $_user['password1'] ) ? $crypt->hash( $_user['password1'] ) : $row['password'];
 
@@ -230,6 +205,28 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					{
 						$photo = "";
 					}
+				}
+			}
+
+			$in_groups = array_intersect( $_user['in_groups'], array_keys( $groups_list ) );
+			$in_groups_hiden = array_diff( $array_old_groups, array_keys( $groups_list ) );
+			$in_groups = array_unique( array_merge( $in_groups, $in_groups_hiden ) );
+
+			$in_groups_del = array_diff( $array_old_groups, $in_groups );
+			if( ! empty( $in_groups_del ) )
+			{
+				foreach( $in_groups_del as $gid )
+				{
+					nv_groups_del_user( $gid, $userid );
+				}
+			}
+
+			$in_groups_add = array_diff( $in_groups, $array_old_groups );
+			if( ! empty( $in_groups_add ) )
+			{
+				foreach( $in_groups_add as $gid )
+				{
+					nv_groups_add_user( $gid, $userid );
 				}
 			}
 
@@ -246,7 +243,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				`question`=" . $db->dbescape( $_user['question'] ) . ", 
 				`answer`=" . $db->dbescape( $_user['answer'] ) . ", 
 				`view_mail`=" . $_user['view_mail'] . ", 
-				`in_groups`=" . $db->dbescape_string( $_user['in_groups'] ) . " 
+				`in_groups`='".implode( ',', $in_groups )."' 
 				WHERE `userid`=" . $userid );
 
 			if( ! empty( $array_field_config ) )
@@ -294,7 +291,7 @@ else
 	$_user = $row;
 	$_user['password1'] = $_user['password2'] = "";
 	$_user['birthday'] = ! empty( $_user['birthday'] ) ? date( "d/m/Y", $_user['birthday'] ) : "";
-	$_user['in_groups'] = ! empty( $_user['in_groups'] ) ? explode( ",", $_user['in_groups'] ) : array();
+	$_user['in_groups'] = $array_old_groups;
 	if( ! empty( $_user['sig'] ) ) $_user['sig'] = nv_br2nl( $_user['sig'] );
 
 	$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $userid;
@@ -332,7 +329,7 @@ if( ! empty( $groups_list ) )
 		$groups[] = array(
 			'id' => $group_id,
 			'title' => $grtl,
-			'checked' => ( ! empty( $_user['in_groups'] ) and in_array( $group_id, $_user['in_groups'] ) ) ? " checked=\"checked\"" : ""
+			'checked' => ( in_array( $group_id, $_user['in_groups'] ) ) ? " checked=\"checked\"" : ""
 		);
 	}
 }

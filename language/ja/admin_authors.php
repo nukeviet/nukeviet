@@ -16,9 +16,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = 'Language translated from http://translate.nukeviet.vn';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['level1'] = '最高権限';
-$lang_module['level2'] = '一般的な管理者';
-$lang_module['level3'] = 'モジュール管理者';
 $lang_module['is_suspend0'] = '有効にする';
 $lang_module['is_suspend1'] = '&ldquo;%2$s&rdquo; reason &ldquo;%3$s&rdquo;で、&ldquo;%1$s&rdquo;を一時停止されました。';
 $lang_module['last_login0'] = 'ネバー';

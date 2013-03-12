@@ -41,7 +41,7 @@ if( isset( $access_admin['access_groups'][$level] ) and $access_admin['access_gr
 	$submenu['groups'] = $lang_global['mod_groups'];
 	$allow_func[] = 'groups';
 }
-if( defined( 'NV_IS_SPADMIN' ) )
+if( defined( 'NV_IS_SPADMIN' ) AND empty( $global_config['idsite'] ) )
 {
 	$submenu['question'] = $lang_module['question'];
 	$submenu['siteterms'] = $lang_module['siteterms'];
@@ -57,48 +57,6 @@ if( defined( 'NV_IS_SPADMIN' ) )
 		$allow_func[] = 'import';
 		$allow_func[] = 'export';
 	}
-}
-
-/**
- * groupList()
- *
- * @return
- */
-function groupList()
-{
-	global $db;
-
-	$sql = "SELECT * FROM `" . NV_GROUPS_GLOBALTABLE . "` ORDER BY `weight`";
-	$result = $db->sql_query( $sql );
-
-	$groups = array();
-	while( $row = $db->sql_fetch_assoc( $result ) )
-	{
-		$groups[$row['group_id']] = $row;
-	}
-
-	return $groups;
-}
-
-/**
- * nv_fix_question()
- *
- * @return
- */
-function nv_fix_question()
-{
-	global $db, $db_config;
-
-	$sql = "SELECT `qid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
-	$result = $db->sql_query( $sql );
-	$weight = 0;
-	while( $row = $db->sql_fetchrow( $result ) )
-	{
-		++$weight;
-		$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` SET `weight`=" . $weight . " WHERE `qid`=" . $row['qid'];
-		$db->sql_query( $sql );
-	}
-	$db->sql_freeresult();
 }
 
 ?>

@@ -107,6 +107,8 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 
 	if( $db->sql_query( $sql ) )
 	{
+		nv_groups_add_user( $lev, $userid );
+
 		$result = array(
 			'admin_id' => $userid,
 			'editor' => $editor,
@@ -154,7 +156,7 @@ foreach( $array_keys as $mod )
 $contents = array();
 
 $contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add";
-$contents['lev'] = array( $lang_module['lev'], $lev, $lang_module['level2'], $lang_module['level3'] );
+$contents['lev'] = array( $lang_module['lev'], $lev, $lang_global['level2'], $lang_global['level3'] );
 
 $editors = array();
 
