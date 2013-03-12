@@ -26,7 +26,7 @@ if( $all_page )
 
 	while( list( $id, $tilterow, $alias, $content ) = $db->sql_fetchrow( $tmp_re ) )
 	{
-		$url = $link . $alias . "-" . $id;
+		$url = $link . $alias;
 
 		$result_array[] = array(
 			'link' => $url, //
