@@ -306,4 +306,6 @@ $ip_update = "";// IP của máy tính thực hiện nâng cấp
 
 Sau đó truy cập site theo địa chỉ: http://mysite.com/update.php Thực hiện theo hướng dẫn
 
-note: fix commit git push -f
+note: 
+fix commit: git push -f
+edit last commit message: git commit -a --amend -m "My new commit message"
