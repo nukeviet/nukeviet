@@ -17,21 +17,3 @@
 
 /includes/class/PHPExcel/
 /includes/class/PHPExcel.php
-
-/admin/site/
-/config/
-/data/site_*.xml
-/data/site_*.xml
-/language/vi/admin_site.php
-/js/admin_site.js
-/themes/admin_default/css/site.css
-/themes/admin_default/images/site/
-/themes/admin_default/modules/site/
-themes/netnam/
-themes/truonghoc/
-
-/uploads/gate/
-/files/gate/
-
-uploads/c1/
-files/c1/
