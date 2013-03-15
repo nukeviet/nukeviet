@@ -16,9 +16,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits r
 $lang_translator['info'] = 'Langue française pour NukeViet 3';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['level1'] = 'Administrateur suprême';
-$lang_module['level2'] = 'Administrateur général';
-$lang_module['level3'] = 'Administrateur de module';
 $lang_module['is_suspend0'] = 'Actif';
 $lang_module['is_suspend1'] = 'Suspendu au &ldquo;%1$s&rdquo; par &ldquo;%2$s&rdquo; en raison &ldquo;%3$s&rdquo;';
 $lang_module['last_login0'] = 'Jamais';

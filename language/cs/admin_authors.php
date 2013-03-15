@@ -16,9 +16,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights r
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['level1'] = 'Super';
-$lang_module['level2'] = 'Obecné podání';
-$lang_module['level3'] = 'Modul zařízení';
 $lang_module['is_suspend0'] = 'Aktivita';
 $lang_module['is_suspend1'] = 'Pozastavit "%1$s" Boi "%2$s" důvodem "%3$s"';
 $lang_module['last_login0'] = 'Nikdy';

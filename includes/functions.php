@@ -616,11 +616,11 @@ function nv_EncodeEmail( $strEmail, $strDisplay = '', $blnCreateLink = true )
  */
 function nv_user_groups( $in_groups )
 {
-	global $db;
+	global $db, $db_config, $global_config;
 
 	if( empty( $in_groups ) ) return "";
 
-	$query = "SELECT `group_id`, `title`, `exp_time`, `public` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `act`=1 ORDER BY `weight`";
+	$query = "SELECT `group_id`, `title`, `exp_time`, `public` FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` WHERE `act`=1 AND (`idsite` = " . $global_config['idsite'] . " OR (`idsite` =0 AND `siteus` = 1)) ORDER BY `idsite`, `weight`";
 	$list = nv_db_cache( $query, '', 'users' );
 
 	if( empty( $list ) ) return "";
@@ -643,7 +643,7 @@ function nv_user_groups( $in_groups )
 
 	if( $reload )
 	{
-		$sql = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `act`='0' WHERE `group_id` IN (" . implode( ",", $reload ) . ")";
+		$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` SET `act`='0' WHERE `group_id` IN (" . implode( ",", $reload ) . ")";
 		$db->sql_query( $sql );
 		nv_del_moduleCache( 'users' );
 	}
@@ -686,6 +686,86 @@ function nv_set_allow( $who, $groups )
 	if( $who == 3 and ! empty( $groups ) and defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups ) ) return true;
 
 	return false;
+}
+
+/**
+ * nv_groups_add_user()
+ *
+ * @param int $group_id
+ * @param int $userid
+ * @return
+ */
+function nv_groups_add_user( $group_id, $userid )
+{
+	global $db, $db_config, $global_config;
+	$query = $db->sql_query( "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $userid . " LIMIT 1" );
+	if( $db->sql_numrows( $query ) )
+	{
+		$is = $db->sql_query( "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "_users` (`group_id`, `userid`, `data`) VALUES ('" . $group_id . "', '" . $userid . "', '" . $global_config['idsite'] . "')" );
+		if( $is )
+		{
+			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` SET `number` = `number`+1 WHERE `group_id`=" . $group_id . " LIMIT 1" );
+			return true;
+		}
+		elseif( $group_id <= 3 )
+		{
+			list( $data ) = $db->sql_fetchrow( $db->sql_query( "SELECT `data` FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "_users` WHERE `group_id`=" . $group_id . " AND `userid`=" . $userid ) );
+
+			$data = ( $data != '' ) ? explode( ",", $data ) : array();
+			$data[] = $global_config['idsite'];
+			$data = implode( ",", array_unique( array_map( "intval", $data ) ) );
+			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "_users` SET `data` = '" . $data . "' WHERE `group_id`=" . $group_id . " AND `userid`=" . $userid . " LIMIT 1" );
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * nv_groups_del_user()
+ *
+ * @param int $group_id
+ * @param int $userid
+ * @return
+ */
+function nv_groups_del_user( $group_id, $userid )
+{
+	global $db, $db_config, $global_config;
+
+	$query = $db->sql_query( "SELECT `data` FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "_users` WHERE `group_id`=" . $group_id . " AND `userid`=" . $userid );
+	if( $db->sql_numrows( $query ) )
+	{
+		$set_number = false;
+		if( $group_id > 3 )
+		{
+			$set_number = true;
+		}
+		else
+		{
+			list( $data ) = $db->sql_fetchrow( $query );
+			$data = str_replace( "," . $global_config['idsite'] . ",", "", "," . $data . "," );
+			$data = trim( $data, "," );
+			if( $data == '' )
+			{
+				$set_number = true;
+			}
+			else
+			{
+				$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "_users` SET `data` = '" . $data . "' WHERE `group_id`=" . $group_id . " AND `userid`=" . $userid . " LIMIT 1" );
+			}
+		}
+
+		if( $set_number )
+		{
+			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "_users` WHERE `group_id` = " . $group_id . " AND `userid` = " . $userid . " LIMIT 1" );
+			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` SET `number` = `number`-1 WHERE `group_id`=" . $group_id . " LIMIT 1" );
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 /**
@@ -1456,7 +1536,7 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
 
 		if( $on_page < $total_pages )
 		{
-			$page_string .= "&nbsp;&nbsp;<span><a title=\"" . $title . " " . ( $on_page + 1 ) . "\"  href=\"" . $base_url . "/page-" . ( $on_page + 1 ) . "\">" . $lang_global['pagenext'] . "</a></span>";
+			$page_string .= "&nbsp;&nbsp;<span><a title=\"" . $title . " " . ( $on_page + 1 ) . "\" href=\"" . $base_url . "/page-" . ( $on_page + 1 ) . "\">" . $lang_global['pagenext'] . "</a></span>";
 		}
 	}
 

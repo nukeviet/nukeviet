@@ -53,7 +53,7 @@ function nv_delete_all_cache()
 function nv_del_moduleCache( $module_name, $lang = NV_LANG_DATA )
 {
 	global $site_mods;
-	if( isset( $site_mods[$module_name] ) )
+	if( isset( $site_mods[$module_name] ) AND $module_name != 'users' )
 	{
 		$pattern = "/^" . $lang . "\_" . $module_name . "\_(.*)\_" . NV_CACHE_PREFIX . "\.cache$/i";
 	}

@@ -125,20 +125,20 @@ if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
 		}
 		elseif( $action_account == 2 )
 		{
-			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id );
-			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $admin_id );
+			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` SET `number` = `number`-1 WHERE `group_id` IN (SELECT `group_id` FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "_users` WHERE `userid`=" . $admin_id . ")" );
+			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "_users` WHERE `userid`=" . $admin_id );
 			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` WHERE `userid`=" . $admin_id );
-			if( ! empty( $row_user['in_groups'] ) )
+			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` WHERE `userid`=" . $admin_id );
+			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id );
+			if( ! empty( $row_user['photo'] ) and is_file( NV_ROOTDIR . '/' . $row_user['photo'] ) )
 			{
-				$result = $db->sql_query( "SELECT `group_id`, `users` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `group_id` IN (" . $row_user['in_groups'] . ")" );
-				while( list( $group_id, $users ) = $db->sql_fetchrow( $result ) )
-				{
-					$users = "," . $users . ",";
-					$users = str_replace( "," . $admin_id . ",", ",", $users );
-					$users = trim( $users, "," );
-					$db->sql_query( "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `users` = '" . $users . "' WHERE `group_id`=" . $group_id );
-				}
+				@nv_deletefile( NV_ROOTDIR . '/' . $row_user['photo'] );
 			}
+		}
+
+		if( $action_account != 2 )
+		{
+			nv_groups_del_user( $row['lev'], $admin_id );
 		}
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_del'], "Username: " . $row_user['username'] . ", " . $array_action_account[$action_account], $admin_info['userid'] );
 

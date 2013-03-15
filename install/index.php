@@ -405,6 +405,7 @@ elseif( $step == 5 )
 		}
 		else
 		{
+			$db_config['dbsystem'] = $db_config['dbname'];
 			$tables = array();
 			$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
 			$num_table = intval( $db->sql_numrows( $result ) );
@@ -668,7 +669,7 @@ elseif( $step == 6 )
 			define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
 
 			$db->sql_query( "TRUNCATE TABLE `" . $db_config['prefix'] . "_users`" );
-			$sql = "INSERT INTO `" . $db_config['prefix'] . "_users` (`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `sig`, `regdate`, `question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`) 
+			$sql = "INSERT INTO `" . $db_config['prefix'] . "_users` (`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `sig`, `regdate`, `question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`)
 				VALUES(NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( nv_md5safe( $login ) ) . ", " . $db->dbescape( $password ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( $login ) . ", '', '', 0, NULL, " . NV_CURRENTTIME . ", " . $db->dbescape( $question ) . ", " . $db->dbescape( $answer_question ) . ", '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)";
 			$userid = $db->sql_query_insert_id( $sql );
 
@@ -678,6 +679,7 @@ elseif( $step == 6 )
 			if( $userid > 0 and $db->sql_query( $sql ) )
 			{
 				$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_users_info` (`userid`) VALUES (" . $userid . ")" );
+				$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_groups_users` (`group_id`, `userid`, `data`) VALUES(1, " . $userid . ", '0')" );
 
 				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'site_email', " . $db->dbescape_string( $global_config['site_email'] ) . ")" );
 				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'error_send_email', " . $db->dbescape_string( $global_config['site_email'] ) . ")" );
@@ -873,8 +875,7 @@ function nv_save_file_config()
 		$content .= "\$db_config['dbpass'] = '" . $db_config['dbpass'] . "';\n";
 		$content .= "\$db_config['prefix'] = '" . $db_config['prefix'] . "';\n";
 		$content .= "\n";
-		$content .= "\$db_config['idsite'] = 0;\n";
-		$content .= "\n";
+		$content .= "\$global_config['idsite'] = 0;\n";
 		$content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
 
 		if( $step < 7 )

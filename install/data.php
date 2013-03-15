@@ -136,7 +136,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
 	PRIMARY KEY (`userid`),
 	UNIQUE KEY `login` (`username`),
 	UNIQUE KEY `md5username` (`md5username`),
-UNIQUE KEY `email` (`email`)
+	UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_openid` (
@@ -207,16 +207,29 @@ $sql_create_table[] = "CREATE TABLE `" . NV_GROUPS_GLOBALTABLE . "` (
 	`content` mediumtext NOT NULL,
 	`add_time` int(11) NOT NULL,
 	`exp_time` int(11) NOT NULL,
-	`users` mediumtext NOT NULL,
 	`public` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`weight` int(11) unsigned NOT NULL DEFAULT '0',
 	`act` tinyint(1) unsigned NOT NULL,
-	`idsite` int(11) NOT NULL DEFAULT '0',
+	`idsite` int(11) unsigned NOT NULL DEFAULT '0',
+	`number` mediumint(9) unsigned NOT NULL DEFAULT '0',
+	`siteus` tinyint(4) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (`group_id`),
-	UNIQUE KEY `title` (`title`),
-	KEY `exp_time` (`exp_time`),
-	KEY `idsite` (`idsite`)	
+	UNIQUE KEY `ktitle` (`title`,`idsite`),
+	KEY `exp_time` (`exp_time`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10";
+
+$sql_create_table[] = "INSERT INTO `" . NV_GROUPS_GLOBALTABLE . "` 
+(`group_id`, `title`, `content`, `add_time`, `exp_time`, `public`, `weight`, `act`, `idsite`, `number`, `siteus`) VALUES
+(1, 'Super admin', '', " . NV_CURRENTTIME . ", 0, 0, 1, 1, 0, 1, 0),
+(2, 'General admin', '', " . NV_CURRENTTIME . ", 0, 0, 2, 1, 0, 0, 0),
+(3, 'Module admin', '', " . NV_CURRENTTIME . ", 0, 0, 3, 1, 0, 2, 0)";
+
+$sql_create_table[] = "CREATE TABLE `" . NV_GROUPS_GLOBALTABLE . "_users` (
+	`group_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+	`userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
+	`data` text NOT NULL,
+	PRIMARY KEY (`group_id`,`userid`)
+) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` (
 	`id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

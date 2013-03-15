@@ -39,7 +39,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
 	function nv_news_block_tophits( $block_config, $mod_data )
 	{
-		global $module_array_cat, $module_info, $db, $module_config;
+		global $module_array_cat, $module_info, $db, $module_config, $global_config;
 
 		$module = $block_config['module'];
 
@@ -47,25 +47,25 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
 
 		$array_block_news = array();
-		$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_rows` WHERE `status`= 1 AND `publtime` BETWEEN  " . $publtime . " AND " . NV_CURRENTTIME . " ORDER BY `hitstotal` DESC LIMIT 0 , " . $block_config['numrow'];
+		$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_rows` WHERE `status`= 1 AND `publtime` BETWEEN " . $publtime . " AND " . NV_CURRENTTIME . " ORDER BY `hitstotal` DESC LIMIT 0 , " . $block_config['numrow'];
 		$result = $db->sql_query( $sql );
 		while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
 		{
-			if( $item['homeimgthumb'] == 1 ) // image thumb
+			if( $homeimgthumb == 1 ) // image thumb
 			{
 				$imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $homeimgfile;
 			}
-			elseif( $item['homeimgthumb'] == 2 ) // image file
+			elseif( $homeimgthumb == 2 ) // image file
 			{
 				$imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $homeimgfile;
 			}
-			elseif( $item['homeimgthumb'] == 3 ) // image url
+			elseif( $homeimgthumb == 3 ) // image url
 			{
-				$imgurl = $item['homeimgfile'];
+				$imgurl = $homeimgfile;
 			}
 			else // no image
 			{
-				$imgurl = '';
+				$imgurl = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
 
 			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;

@@ -15,7 +15,7 @@ function nv_read_data_from_excel( $file_name )
 
 	require_once ( NV_ROOTDIR . "/includes/class/PHPExcel.php" );
 
-	$objPHPExcel = PHPExcel_IOFactory::load( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $file_name );
+	$objPHPExcel = PHPExcel_IOFactory::load( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . "/" . $module_name . "/" . $file_name );
 	$objWorksheet = $objPHPExcel->getActiveSheet();
 
 	$highestRow = $objWorksheet->getHighestRow();
@@ -85,19 +85,19 @@ if( $step == 1 )
 {
 	if( file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
 	{
-		$lang_module['import_note'] = sprintf( $lang_module['import_note'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=export&amp;example=1", NV_UPLOADS_DIR . '/' . $module_name );
+		$lang_module['import_note'] = sprintf( $lang_module['import_note'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=export&amp;example=1", SYSTEM_UPLOADS_DIR . '/' . $module_name );
 
 		$xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-		$array_file = nv_scandir( NV_UPLOADS_REAL_DIR . "/" . $module_name, "/^([0-9A-Za-z\/\_\.\@\(\)\~\-\%\\s]+)\.(xls|xlsx)$/" );
+		$array_file = nv_scandir( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . "/" . $module_name, "/^([0-9A-Za-z\/\_\.\@\(\)\~\-\%\\s]+)\.(xls|xlsx)$/" );
 		if( sizeof( $array_file ) )
 		{
 			foreach( $array_file as $file_name )
 			{
-				$file_size = filesize( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $file_name );
+				$file_size = filesize( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . "/" . $module_name . "/" . $file_name );
 				$array_data = array(
 					'file_name' => $file_name,
 					'file_size' => nv_convertfromBytes( $file_size ),

@@ -122,9 +122,6 @@ $lang_module['is_user_forum'] = 'Use forum\'s users';
 $lang_module['search_page_title'] = 'Result';
 $lang_module['click_to_view'] = 'Click to view';
 $lang_module['level0'] = 'User';
-$lang_module['level1'] = 'Super Administrator';
-$lang_module['level2'] = 'General Administrator';
-$lang_module['level3'] = 'Area Administrative';
 $lang_module['admin_add'] = 'Set to admin';
 $lang_module['nv_admin_add'] = 'Add group';
 $lang_module['nv_admin_edit'] = 'Edit group';
@@ -259,6 +256,5 @@ $lang_module['field_options_choicesql_column'] = "Select the column data";
 $lang_module['field_options_choicesql_key'] = "Select columns as key";
 $lang_module['field_options_choicesql_val'] = "Select column as value";
 $lang_module['field_sql_choices_empty'] = 'Error: Selection retrieve data from the database is not full';
-
 
 ?>
