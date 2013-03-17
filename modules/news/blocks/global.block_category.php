@@ -20,7 +20,7 @@ if( ! nv_function_exists( 'nv_news_category' ) )
 		{
 			$html .= "<option value=\"" . $i . "\" " . ( ( $data_block['title_length'] == $i ) ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
 		}
-		$html .= "</select></td>\n";
+		$html .= "</select>\n";
 		return '<tr><td>' . $lang_block['title_length'] . '</td><td>' . $html . '</td></tr>';
 	}
 
