@@ -55,7 +55,7 @@ function nv_create_table_sys( $lang )
 	  `submenu` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	  `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	  `admins` varchar(255) NOT NULL,
-	  `rss` tinyint(4) NOT NULL default '1',  
+	  `rss` tinyint(4) NOT NULL default '1',
 	  PRIMARY KEY (`title`)
 	) ENGINE=MyISAM";
 
@@ -78,14 +78,14 @@ function nv_create_table_sys( $lang )
 	  KEY `theme` (`theme`),
 	  KEY `module` (`module`),
 	  KEY `position` (`position`),
-	  KEY `exp_time` (`exp_time`)	 
+	  KEY `exp_time` (`exp_time`)
 	) ENGINE=MyISAM";
 
 	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_blocks_weight` (
 	  `bid` int(11) NOT NULL DEFAULT '0',
 	  `func_id` int(11) NOT NULL DEFAULT '0',
 	  `weight` int(11) NOT NULL DEFAULT '0',
-	  UNIQUE KEY `bid` (`bid`,`func_id`)	 
+	  UNIQUE KEY `bid` (`bid`,`func_id`)
 	) ENGINE=MyISAM";
 
 	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (
@@ -158,6 +158,11 @@ function nv_create_table_sys( $lang )
         ('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
         ('" . $lang . "', 'global', 'site_home_module', 'users'),
         ('" . $lang . "', 'global', 'switch_mobi_des', '1'),
+		('" . $lang . "', 'global', 'upload_logo', 'images/logo.png'),
+		('" . $lang . "', 'global', 'autologosize1', '50'),
+		('" . $lang . "', 'global', 'autologosize2', '40'),
+		('" . $lang . "', 'global', 'autologosize3', '30'),
+		('" . $lang . "', 'global', 'autologomod', ''),
         ('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!')";
 
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_language` (`lang`, `setup`) VALUES('" . $lang . "', 1)";

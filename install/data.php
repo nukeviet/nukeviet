@@ -59,7 +59,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_AUTHORS_GLOBALTABLE . "_module` (
 	UNIQUE KEY `module` (`module`)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "_module` 
+$sql_create_table[] = "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "_module`
 	(`mid`, `module`, `lang_key`, `weight`, `act_1`, `act_2`, `act_3`, `checksum`) VALUES
 	(1, 'siteinfo', 'mod_siteinfo', 1, 1, 1, 1, ''),
 	(2, 'authors', 'mod_authors', 2, 1, 1, 1, ''),
@@ -118,7 +118,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "` (
 	UNIQUE KEY `username` (`username`),
 	UNIQUE KEY `md5username` (`md5username`),
 	UNIQUE KEY `email` (`email`),
-	KEY `idsite` (`idsite`)	
+	KEY `idsite` (`idsite`)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
@@ -132,7 +132,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_reg` (
 	`question` varchar(255) NOT NULL,
 	`answer` varchar(255) NOT NULL DEFAULT '',
 	`checknum` varchar(50) NOT NULL DEFAULT '',
-	`users_info` mediumtext NOT NULL, 
+	`users_info` mediumtext NOT NULL,
 	PRIMARY KEY (`userid`),
 	UNIQUE KEY `login` (`username`),
 	UNIQUE KEY `md5username` (`md5username`),
@@ -218,7 +218,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_GROUPS_GLOBALTABLE . "` (
 	KEY `exp_time` (`exp_time`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10";
 
-$sql_create_table[] = "INSERT INTO `" . NV_GROUPS_GLOBALTABLE . "` 
+$sql_create_table[] = "INSERT INTO `" . NV_GROUPS_GLOBALTABLE . "`
 (`group_id`, `title`, `content`, `add_time`, `exp_time`, `public`, `weight`, `act`, `idsite`, `number`, `siteus`) VALUES
 (1, 'Super admin', '', " . NV_CURRENTTIME . ", 0, 0, 1, 1, 0, 1, 0),
 (2, 'General admin', '', " . NV_CURRENTTIME . ", 0, 0, 2, 1, 0, 0, 0),
@@ -242,7 +242,7 @@ $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` (
 $sql_create_table[] = "CREATE TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` (
 	`idfile` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	`module` varchar(50) NOT NULL,
-	`admin_file` varchar(255) NOT NULL DEFAULT '0', 
+	`admin_file` varchar(255) NOT NULL DEFAULT '0',
 	`langtype` varchar(50) NOT NULL,
 	PRIMARY KEY (`idfile`),
 	UNIQUE KEY `module` (`module`,`admin_file`)
@@ -361,7 +361,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_rows` 
 	`exp_time` int(11) unsigned NOT NULL DEFAULT '0',
 	`hits_total` mediumint(8) unsigned NOT NULL DEFAULT '0',
 	`act` tinyint(1) unsigned NOT NULL DEFAULT '0',
-	`weight` int(11) NOT NULL default '0', 
+	`weight` int(11) NOT NULL default '0',
 	PRIMARY KEY (`id`),
 	KEY `pid` (`pid`),
 	KEY `clid` (`clid`)
@@ -370,7 +370,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banners_rows` 
 $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_banip` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`ip` varchar(32) DEFAULT NULL,
-	`mask` tinyint(4) NOT NULL DEFAULT '0', 
+	`mask` tinyint(4) NOT NULL DEFAULT '0',
 	`area` tinyint(3) NOT NULL,
 	`begintime` int(11) DEFAULT NULL,
 	`endtime` int(11) DEFAULT NULL,
@@ -436,7 +436,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_upload_file` (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
-	('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462), 
+	('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462),
 	('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . "),
 	('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', " . NV_CURRENTTIME . ")";
 
@@ -461,7 +461,6 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 	('sys', 'global', 'forbid_mimes', ''),
 	('sys', 'global', 'nv_max_size', '" . min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) ) . "'),
 	('sys', 'global', 'upload_checking_mode', 'strong'),
-	('sys', 'global', 'upload_logo', 'images/logo.png'),
 	('sys', 'global', 'str_referer_blocker', '0'),
 	('sys', 'global', 'mailer_mode', ''),
 	('sys', 'global', 'smtp_host', 'smtp.gmail.com'),
@@ -485,10 +484,6 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 	('sys', 'global', 'rewrite_exturl', '" . $global_config['rewrite_exturl'] . "'),
 	('sys', 'global', 'rewrite_op_mod', ''),
 	('sys', 'global', 'autocheckupdate', '1'),
-	('sys', 'global', 'autologomod', ''),
-	('sys', 'global', 'autologosize1', '50'),
-	('sys', 'global', 'autologosize2', '40'),
-	('sys', 'global', 'autologosize3', '30'),
 	('sys', 'global', 'autoupdatetime', '24'),
 	('sys', 'global', 'gzip_method', '" . $global_config['gzip_method'] . "'),
 	('sys', 'global', 'is_user_forum', '0'),
@@ -567,12 +562,12 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` 
 	('rss', 1, 0, 'rss', 'rss', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_plans` VALUES
-	(1, '', 'Quang cao giua trang', '', 'sequential', 510, 100, 1), 
+	(1, '', 'Quang cao giua trang', '', 'sequential', 510, 100, 1),
 	(2, '', 'Quang cao trai', '', 'sequential', 190, 500, 1)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_rows` VALUES
-	(1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', '', 'http://www.mofa.gov.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1), 
-	(2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', '', 'http://vinades.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,2), 
+	(1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', '', 'http://www.mofa.gov.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1),
+	(2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', '', 'http://vinades.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,2),
 	(3, 'Quang cao giua trang', 1, 0, 'webnhanh_vn.gif', 'gif', 'image/gif', 510, 65, '', '', 'http://webnhanh.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
 
 ?>
