@@ -12,13 +12,10 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$submenu['thumbconfig'] = $lang_module['thumbconfig'];
-	if( empty( $global_config['idsite'] ) )
+	$submenu['config'] = $lang_module['configlogo'];
+	if( defined( 'NV_IS_GODADMIN' ) )
 	{
-		$submenu['config'] = $lang_module['configlogo'];
-		if( defined( 'NV_IS_GODADMIN' ) )
-		{
-			$submenu['uploadconfig'] = $lang_module['uploadconfig'];
-		}
+		$submenu['uploadconfig'] = $lang_module['uploadconfig'];
 	}
 }
 
@@ -37,13 +34,10 @@ $allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renamei
 if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$allow_func[] = 'thumbconfig';
-	if( empty( $global_config['idsite'] ) )
+	$allow_func[] = 'config';
+	if( defined( 'NV_IS_GODADMIN' ) )
 	{
-		$allow_func[] = 'config';
-		if( defined( 'NV_IS_GODADMIN' ) )
-		{
-			$allow_func[] = 'uploadconfig';
-		}
+		$allow_func[] = 'uploadconfig';
 	}
 }
 
@@ -399,8 +393,8 @@ function nv_filesListRefresh( $pathimg )
 						if( ! empty( $dif ) )
 						{
 							//Cập nhật CSDL file thay đổi
-							$db->sql_query( "REPLACE INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
-								(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
+							$db->sql_query( "REPLACE INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
+								(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`)
 								VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
 						}
 						unset( $results[$title] );
@@ -409,8 +403,8 @@ function nv_filesListRefresh( $pathimg )
 					{
 						$info['userid'] = $admin_info['userid'];
 						// Thêm file mới
-						$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
-							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) 
+						$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
+							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`)
 							VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
 					}
 				}
