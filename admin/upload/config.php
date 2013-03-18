@@ -39,19 +39,19 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$autologomod = implode( ',', $autologomod );
 	}
 
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'upload_logo', " . $db->dbescape_string( $upload_logo ) . ")" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize1', " . $autologosize1 . ")" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize2', " . $autologosize2 . ")" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologosize3', " . $autologosize3 . ")" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'autologomod', '" . $autologomod . "')" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'upload_logo', " . $db->dbescape_string( $upload_logo ) . ")" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize1', " . $autologosize1 . ")" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize2', " . $autologosize2 . ")" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize3', " . $autologosize3 . ")" );
+	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologomod', '" . $autologomod . "')" );
 
-	nv_save_file_config_global();
+	nv_delete_all_cache();
 
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	die();
 }
 
-$page_title = $lang_global['mod_settings'];
+$page_title = $lang_global['configlogo'];
 
 if( ! nv_is_url( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
 {
