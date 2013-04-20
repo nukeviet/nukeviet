@@ -22,43 +22,43 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 	{
 		global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $op, $lang_module, $catid, $lang_global;
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/menu_theme_modern.tpl" ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/menu_theme_modern.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
 		else
 		{
-			$block_theme = "default";
+			$block_theme = 'default';
 		}
 
-		$xtpl = new XTemplate( "menu_theme_modern.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/menu" );
+		$xtpl = new XTemplate( 'menu_theme_modern.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
 
 		$catid = empty( $catid ) ? 1 : $catid;
 		$array_cat_menu = array();
-		if( $module_file == "news" )
+		if( $module_file == 'news' )
 		{
-			$sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
+			$sql = 'SELECT catid, parentid, title, alias FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` ORDER BY `order` ASC';
 			$list = nv_db_cache( $sql, 'catid', $module_name );
 			foreach( $list as $l )
 			{
-				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
 				$array_cat_menu[$l['catid']] = $l;
 			}
 		}
-		elseif( $module_file == "shops" )
+		elseif( $module_file == 'shops' )
 		{
-			$sql = "SELECT catid, parentid, " . NV_LANG_DATA . "_title as title, " . NV_LANG_DATA . "_alias AS alias FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
+			$sql = 'SELECT catid, parentid, ' . NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias AS alias FROM `' . $db_config['prefix'] . '_' . $module_data . '_catalogs` ORDER BY `order` ASC';
 			$list = nv_db_cache( $sql, 'catid', $module_name );
 			foreach( $list as $l )
 			{
-				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
 				$array_cat_menu[$l['catid']] = $l;
 			}
 		}
-		elseif( $module_file == "message" )
+		elseif( $module_file == 'message' )
 		{
 			if( defined( 'NV_IS_USER' ) )
 			{
@@ -66,28 +66,28 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 					'catid' => 1,
 					'parentid' => 0,
 					'title' => $lang_global['your_account'],
-					'alias' => "",
-					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=config"
+					'alias' => '',
+					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=config'
 				);
 			}
 		}
-		elseif( $module_file == "weblinks" )
+		elseif( $module_file == 'weblinks' )
 		{
-			$sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `parentid` ASC, `weight` ASC";
+			$sql = 'SELECT catid, parentid, title, alias FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` ORDER BY `parentid` ASC, `weight` ASC';
 			$list = nv_db_cache( $sql, 'catid', $module_name );
 			foreach( $list as $l )
 			{
-				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
 				$array_cat_menu[$l['catid']] = $l;
 			}
 		}
-		elseif( $module_file == "download" )
+		elseif( $module_file == 'download' or $module_file == 'faq' or $module_file == 'saas')
 		{
-			$sql = "SELECT id, parentid, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` ORDER BY `weight` ASC";
+			$sql = 'SELECT id, parentid, title, alias FROM `' . NV_PREFIXLANG . '_' . $module_data . '_categories` ORDER BY `weight` ASC';
 			$list = nv_db_cache( $sql, 'id', $module_name );
 			foreach( $list as $l )
 			{
-				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
 				$l['catid'] = $l['id'];
 				$array_cat_menu[$l['id']] = $l;
 			}
@@ -96,16 +96,16 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		{
 			foreach( $module_info['funcs'] as $key => $sub_item )
 			{
-				if( $key == "main" ) continue;
+				if( $key == 'main' ) continue;
 
 				if( $sub_item['in_submenu'] == 1 )
 				{
 					$array_cat_menu[] = array(
-						"catid" => ( $op == $key ) ? 1 : 0,
-						"parentid" => 1,
-						"title" => $sub_item['func_custom_name'],
-						"alias" => '',
-						"link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $key
+						'catid' => ( $op == $key ) ? 1 : 0,
+						'parentid' => 1,
+						'title' => $sub_item['func_custom_name'],
+						'alias' => '',
+						'link' => '' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $key
 					);
 				}
 			}
@@ -113,23 +113,23 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 			if( ! empty( $array_cat_menu ) )
 			{
 				$array_cat_menu[] = array(
-					"catid" => 1,
-					"parentid" => 0,
-					"title" => $module_info['custom_title'],
-					"alias" => '',
-					"link" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name
+					'catid' => 1,
+					'parentid' => 0,
+					'title' => $module_info['custom_title'],
+					'alias' => '',
+					'link' => '' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
 				);
 			}
 		}
 
-		if( $module_name != "news" and empty( $array_cat_menu ) )
+		if( $module_name != 'news' and empty( $array_cat_menu ) )
 		{
-			$sql = "SELECT catid, parentid, title, alias FROM `" . NV_PREFIXLANG . "_news_cat` ORDER BY `order` ASC";
+			$sql = 'SELECT catid, parentid, title, alias FROM `' . NV_PREFIXLANG . '_news_cat` ORDER BY `order` ASC';
 			$list = nv_db_cache( $sql, 'catid', 'news' );
 
 			foreach( $list as $l )
 			{
-				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=news&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=news&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
 				$array_cat_menu[$l['catid']] = $l;
 			}
 		}
