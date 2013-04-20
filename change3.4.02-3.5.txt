@@ -221,8 +221,72 @@ Giao diện Site
 			</dl>
 			<!-- END: loop -->
 			<!-- END: field -->
+
 	----------------------------------
 	Sửa file themes/my_theme/modules/users/info.tpl
+	Tìm và xóa đoạn sau: (Liên quan đến: website, address, yahoo, phone, fax, mobile)
+            <dl class="clearfix">
+                <dt class="fl">
+                    <label>
+                        {LANG.website}
+                    </label>
+                </dt>
+                <dd class="fl">
+                    <input type="text" class="input" name="website" value="{DATA.website}" maxlength="255" />
+                </dd>
+            </dl>
+            <dl class="clearfix">
+                <dt class="fl">
+                    <label>
+                        {LANG.address}
+                    </label>
+                </dt>
+                <dd class="fl">
+                    <input type="text" class="input" name="address" value="{DATA.address}" maxlength="255" />
+                </dd>
+            </dl>
+            <dl class="clearfix">
+                <dt class="fl">
+                    <label>
+                        {LANG.yahoo}
+                    </label>
+                </dt>
+                <dd class="fl">
+                    <input type="text" class="input" name="yim" value="{DATA.yim}" maxlength="100" />
+                </dd>
+            </dl>
+            <dl class="clearfix">
+                <dt class="fl">
+                    <label>
+                        {LANG.phone}
+                    </label>
+                </dt>
+                <dd class="fl">
+                    <input type="text" class="input" name="telephone" value="{DATA.telephone}" maxlength="100" />
+                </dd>
+            </dl>
+            <dl class="clearfix">
+                <dt class="fl">
+                    <label>
+                        {LANG.fax}
+                    </label>
+                </dt>
+                <dd class="fl">
+                    <input type="text" class="input" name="fax" value="{DATA.fax}" maxlength="100" />
+                </dd>
+            </dl>
+            <dl class="clearfix">
+                <dt class="fl">
+                    <label>
+                        {LANG.mobile}
+                    </label>
+                </dt>
+                <dd class="fl">
+                    <input type="text" class="input" name="mobile" value="{DATA.mobile}" maxlength="100" />
+                </dd>
+            </dl>
+
+	---------------------
 	Tìm đến đoạn trước input submit
 		</div>
 		<div style="text-align:center">
@@ -280,6 +344,35 @@ Giao diện Site
 			</dl>
 			<!-- END: loop -->
 			<!-- END: field -->
+
+	----------------------------------
+	Sửa file themes/my_theme/modules/users/userinfo.tpl
+	Tìm và xóa đoạn sau: (Liên quan đến: website, address, yahoo, phone, fax, mobile)
+
+ 			<dl class="clearfix">
+        	   <dt class="fl">{LANG.address}:</dt>
+               <dd class="fl">{USER.location}</dd>
+            </dl>
+            <dl class="clearfix">
+        	   <dt class="fl">{LANG.website}:</dt>
+               <dd class="fl">{USER.website}</dd>
+            </dl>
+            <dl class="clearfix">
+        	   <dt class="fl">{LANG.yahoo}:</dt>
+               <dd class="fl">{USER.yim}</dd>
+            </dl>
+            <dl class="clearfix">
+        	   <dt class="fl">{LANG.phone}:</dt>
+               <dd class="fl">{USER.telephone}</dd>
+            </dl>
+            <dl class="clearfix">
+        	   <dt class="fl">{LANG.fax}:</dt>
+               <dd class="fl">{USER.fax}</dd>
+            </dl>
+            <dl class="clearfix">
+        	   <dt class="fl">{LANG.mobile}:</dt>
+               <dd class="fl">{USER.mobile}</dd>
+            </dl>
 ##########################################################################################
 
 Giao diện Admin Site
