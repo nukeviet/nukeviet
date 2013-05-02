@@ -1,50 +1,285 @@
-I. Chỉnh sửa phân trang module news:<br />
-Nếu giao diện của bạn không phải là giao diện mặc định thì mở file /themes/ten-theme/modulews/news/search.tpl tìm (nếu có) <br />
-<code>&lt;!-- END: pages_viewpages --&gt;</code><br />
-Thay lại thành<br />
-<code>&lt;!-- END: pages_result --&gt;</code><br /><br />
+Chỉnh sửa chức năng Url Search rewrite cho Module News và module Search
+1. Mở file Includes/request_uri.php Tìm đến dòng 70 thêm vào bên dưới đoạn
+elseif( $global_config['rewrite_optional'] and preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_]+)\/search\/([^\"]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . ")$/i", $request_uri, $matches ) )
+{
+	$_GET[NV_NAME_VARIABLE] = $matches[1];
+	$_GET[NV_OP_VARIABLE] = 'search';
+    if( isset( $matches[2] ) )
+	{
+		$matches[2] = urldecode( $matches[2] );
+		$_temp_array_op = explode( "/", $matches[2] );
+		foreach( $_temp_array_op as $_temp_array_op_i )
+		{
+			$_temp_array_op_i_exp = explode( "-", $_temp_array_op_i );
+			if( ! isset( $_temp_array_op_i_exp[1] ) || ! in_array( $_temp_array_op_i_exp[0], array( "choose", "catid", "from_date", "to_date", "page" ) ) )
+			{
+				$_GET['q'] = $_temp_array_op_i;
+			}else{
+			     $_GET[$_temp_array_op_i_exp[0]] = $_temp_array_op_i_exp[1];
+			}
+		}
+	}
+}
+elseif( $global_config['rewrite_optional'] == 0 and preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_]+)\/([a-z0-9\-\_]+)\/search\/([^\"]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . ")$/i", $request_uri, $matches ) )
+{
+	$_GET[NV_LANG_VARIABLE] = $matches[1];
+	$_GET[NV_NAME_VARIABLE] = $matches[2];
+	$_GET[NV_OP_VARIABLE] = 'search';
+    //print_r($matches);die();
+	if( isset( $matches[3] ) )
+	{
+		$matches[3] = urldecode( $matches[3] );
+		$_temp_array_op = explode( "/", $matches[3] );
+		foreach( $_temp_array_op as $_temp_array_op_i )
+		{
+			$_temp_array_op_i_exp = explode( "-", $_temp_array_op_i );
+			if( ! isset( $_temp_array_op_i_exp[1] ) || ! in_array( $_temp_array_op_i_exp[0], array( "choose", "catid", "from_date", "to_date", "page" ) ) )
+			{
+				$_GET['q'] = $_temp_array_op_i;
+			}else{
+			     $_GET[$_temp_array_op_i_exp[0]] = $_temp_array_op_i_exp[1];
+			}
+		}
+	}
+}
+elseif( $global_config['rewrite_optional'] and preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "search\/([^\"]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . ")$/i", $request_uri, $matches ) )
+{
+    $_GET[NV_NAME_VARIABLE] = 'search';
+	$_GET[NV_OP_VARIABLE] = 'main';
+    if( isset( $matches[1] ) )
+	{
+		$matches[1] = urldecode( $matches[1] );
+		$_temp_array_op = explode( "/", $matches[1] );
+		foreach( $_temp_array_op as $_temp_array_op_i )
+		{
+			$_temp_array_op_i_exp = explode( "-", $_temp_array_op_i );
+			if( ! isset( $_temp_array_op_i_exp[1] ) || ! in_array( $_temp_array_op_i_exp[0], array( "l", "m", "page" ) ) )
+			{
+				$_GET['q'] = $_temp_array_op_i;
+			}else{
+			     $_GET[$_temp_array_op_i_exp[0]] = $_temp_array_op_i_exp[1];
+			}
+		}
+	}
+}
+elseif( $global_config['rewrite_optional'] == 0 and preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_]+)\/search\/([^\"]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . ")$/i", $request_uri, $matches ) )
+{
+	$_GET[NV_LANG_VARIABLE] = $matches[1];
+	$_GET[NV_NAME_VARIABLE] = 'search';
+	$_GET[NV_OP_VARIABLE] = 'main';
+	if( isset( $matches[2] ) )
+	{
+		$matches[2] = urldecode( $matches[2] );
+		$_temp_array_op = explode( "/", $matches[2] );
+		foreach( $_temp_array_op as $_temp_array_op_i )
+		{
+			$_temp_array_op_i_exp = explode( "-", $_temp_array_op_i );
+			if( ! isset( $_temp_array_op_i_exp[1] ) || ! in_array( $_temp_array_op_i_exp[0], array( "l", "m", "page" ) ) )
+			{
+				$_GET['q'] = $_temp_array_op_i;
+			}else{
+			     $_GET[$_temp_array_op_i_exp[0]] = $_temp_array_op_i_exp[1];
+			}
+		}
+	}
+}
 
-II. Cập nhật chức năng xem danh sách thành viên và xem thông tin thành viên:<br />
-- Chú ý nếu giao diện đang dùng không phải mặc định (default hoặc modern) thì copy file viewdetailusers.tpl và memberslist.tpl từ hai theme gốc tương ứng vào theme đang dùng.<br />
-- Sau khi nâng cấp xong vào quản lý giao diện =&gt; thiết lập layout nhấp <b>Lưu lại</b> để hệ thống cập nhật giao diện mới cho chức năng xem danh sách thành viên.<br />
-- Từ r1841 hệ thống tạo thêm chức năng xem danh sách thành viên và đặt phân quyền ở mức quản trị được xem. Để thay đổi quyền xem, vào cấu hình module của module users và thay đổi giá trị đó thành <b>Tất cả</b> hoặc <b>Thành viên</b>.<br /><br />
+2. Mở file includes/rewrite.php Tìm đến dòng 18 thêm vào bên dưới đoạn
+$rewrite["#(\"" . NV_BASE_SITEURL . ")([a-zA-Z0-9-/]+)/search/([^\"]+)?\"#"] = "\\1\\2/search" . $global_config['rewrite_endurl'] . "\"";
+$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]+)\&[amp;]*" . NV_OP_VARIABLE . "=search\&[amp;]*q=([^\"]+)\"#"] = "\\1\\3/search/\\4" . $global_config['rewrite_endurl'] . "\"";
+$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]+)\&[amp;]*" . NV_OP_VARIABLE . "=search/([^\"]+)\"#"] = "\\1\\3/search/\\4" . $global_config['rewrite_endurl'] . "\"";//phan trang module news
+$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=search\&[amp;]*q=([^\"]+)?\"#"] = "\\1\\2/search/\\3" . $global_config['rewrite_endurl'] . "\"";
 
-III. Chỉnh sửa phần topic của module news:<br />
-Nếu bạn sử dụng giao diện không phải mặc định của NukeViet hãy thực hiện như sau.<br />
-1. Nếu theme của bạn làm từ theme default.<br />
-Mở file /themes/theme-cua-ban/modules/news/topic.tpl ra tìm<br />
-<code>&lt;!-- BEGIN: main --&gt;</code><br />
-thêm vào bên dưới<br />
-<code>
-&lt;div style=&quot;background:#F2F2F2;border : 1px solid #ccc; padding:5px&quot;&gt;<br />
-	&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &lt;a style=&quot;font-size:13px;&quot; title=&quot;{TOPPIC_TITLE}&quot; href=&quot;{TOPPIC_LINK}&quot;&gt;&lt;strong&gt;{TOPPIC_TITLE}&lt;/strong&gt;&lt;/a&gt;<br />
-	&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br />
-	&nbsp;&nbsp;&nbsp; &lt;!-- BEGIN: topicdescription --&gt;<br />
-	&nbsp;&nbsp;&nbsp; &lt;div style=&quot;background:#fff; padding:8px; border-bottom : 1px solid #ccc;&quot;&gt;<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {TOPPIC_DESCRIPTION}<br />
-	&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br />
-	&nbsp;&nbsp;&nbsp; &lt;!-- END: topicdescription --&gt;</code><br />
-2. Nếu theme của bạn làm từ theme modern.<br />
-Mở file /themes/theme-cua-ban/modules/news/topic.tpl ra tìm<br />
-<code>&lt;!-- BEGIN: main --&gt;</code><br />
-thêm vào bên dưới<br />
-<code>
-	&lt;div class=&quot;cat-nav&quot; style=&quot;border:1px solid #ccc;padding:4px;&quot;&gt;<br />
-	&lt;a href=&quot;{TOPPIC_LINK}&quot; class=&quot;current-cat&quot; title=&quot;{TOPPIC_TITLE}&quot;&gt;{TOPPIC_TITLE}&lt;/a&gt;<br />
-	&lt;/div&gt;<br />
-	&lt;!-- BEGIN: topicdescription --&gt;<br />
-	&lt;div style=&quot;border:1px solid #ccc;border-top:none;padding:4px;&quot;&gt;<br />
-	{TOPPIC_DESCRIPTION}<br />
-	&lt;/div&gt;<br />
-	&lt;!-- END: topicdescription --&gt;<br />
-	&lt;div class=&quot;clear&quot;&gt;&amp;nbsp;&lt;/div&gt;
-</code><br />
+Tìm đến dòng 35 thêm vào bên dưới đoạn
+$rewrite["#(\"" . NV_BASE_SITEURL . ")([a-z-]+)/([a-zA-Z0-9-/]+)/search/([^\"]+)\"#"] = "\\1\\2/\\3/search/\\4" . $global_config['rewrite_endurl'] . "\"";
+$rewrite["#(\"" . NV_BASE_SITEURL . ")(index.php)/([a-z-]+)/([a-zA-Z0-9-/]+)/search/([^\"]+)\"#"] = "\\1\\2/\\3/\\4/search/\\5" . $global_config['rewrite_endurl'] . "\"";
+$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]+)\&[amp;]*" . NV_OP_VARIABLE . "=search\&[amp;]*q=([^\"]+)\"#"] = "\\1\\2/\\3/search/\\4" . $global_config['rewrite_endurl'] . "\"";//module news
+$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]+)\&[amp;]*" . NV_OP_VARIABLE . "=search/([^\"]+)\"#"] = "\\1\\2/\\3/search/\\4" . $global_config['rewrite_endurl'] . "\"";//phan trang module news
+$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=search\&[amp;]*q=([^\"]+)\"#"] = "\\1\\2/search/\\3" . $global_config['rewrite_endurl'] . "\"";//module search
 
-3. Nếu theme của bạn có file /themes/theme-cua-ban/modules/news/theme.php mở nó ra tìm <br />
-<code>function topic_theme( $topic_array, $topic_other_array, $generate_page )</code><br />
-Thay lại bằng<br />
-<code>function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description )</code><br />
-Tìm <br />
-<code>$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );</code><br />
-Thêm vào bên dưới<br />
-<code>$xtpl-&gt;assign( &#39;TOPPIC_TITLE&#39;, $page_title ); <br />$xtpl-&gt;assign( &#39;TOPPIC_LINK&#39;, NV_BASE_SITEURL . &quot;index.php?&quot; . NV_LANG_VARIABLE . &quot;=&quot; . NV_LANG_DATA . &quot;&amp;&quot; . NV_NAME_VARIABLE . &quot;=&quot; . $module_name . &quot;&amp;&quot; . NV_OP_VARIABLE . &quot;=topic/&quot; . $topicalias ); <br />if( !empty( $description )){ $xtpl-&gt;assign( &#39;TOPPIC_DESCRIPTION&#39;, $description ); <br />$xtpl-&gt;parse( &#39;main.topicdescription&#39; ); }</code><br />
+3. Mở file includes/rewrite_index.php Tìm đến dòng 19 thêm vào bên trên đoạn
+$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]+)\&[amp;]*" . NV_OP_VARIABLE . "=search\&[amp;]*q=([^\"]+)\"#"] = "\\1index.php/\\3/search/\\4" . $global_config['rewrite_endurl'] . "\"";
+
+Tìm đến dòng 31 thêm vào bên trên đoạn
+$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-/]+)\&[amp;]*" . NV_OP_VARIABLE . "=search\&[amp;]*q=([^\"]+)\"#"] = "\\1index.php/\\2/\\3/search/\\4" . $global_config['rewrite_endurl'] . "\"";
+
+4. Mở file modules/news/funcs/search.php 
+Tìm đoạn
+$pages = $nv_Request->get_int( 'page', 'get', 0 );
+Thay lại thành
+$pages = $nv_Request->get_int( 'page', 'get', 1 );
+Tìm đoạn 
+LIMIT " . $pages . "," . $per_pages
+Thay lại thành
+LIMIT " . ( $pages - 1 ) * $per_pages . "," . $per_pages;
+
+5. Mở file modules/news/theme.php
+Tìm đến dòng 846 và tìm đoạn 
+$base_url_site = NV_BASE_SITEURL . "?";
+Thay lại thành
+$base_url_site = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=search";
+Tìm đến dòng 885 và tìm đoạn
+global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config;
+Thay lại thành
+global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
+Tìm đến dòng 920 - 928
+Thay lại thành
+if( $numRecord > $per_pages ) // show pages
+{
+	$url_link = $_SERVER['REQUEST_URI'];
+	$in = strpos( $url_link, 'page-' );
+	$length_rewrite_endurl = strlen( $global_config['rewrite_endurl'] );
+	if( $in != 0 ) $url_link = substr( $url_link, 0, $in + $length_rewrite_endurl );
+	else  $url_link = substr( $url_link, 0, strlen( $url_link ) + $length_rewrite_endurl );
+	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search";
+	preg_match( "/[a-z-0-9]*\/search([^\"]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . "|\/page[0-9-])$/i", $url_link, $matches_link );
+	$generate_page = nv_alias_page( '', $link . $matches_link[1], $numRecord, $per_pages, $pages );
+	$xtpl->assign( 'VIEW_PAGES', $generate_page );
+	$xtpl->parse( 'results.pages_result' );
+}
+
+6. Nếu site bạn có theme modern và có file themes/modern/modules/news/theme.php
+Tìm đến dòng 899 và tìm đoạn 
+global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config;
+Thay lại thành
+global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
+Tìm đến dòng 909 và tìm đoạn 
+$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . "?" );
+Thay lại thành
+$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=search" );
+Tìm đến dòng 979 -990
+Thay lại thành
+if( $numRecord > $per_pages ) // show pages
+{
+	$url_link = $_SERVER['REQUEST_URI'];
+	$in = strpos( $url_link, 'page-' );
+	$length_rewrite_endurl = strlen( $global_config['rewrite_endurl'] );
+	if( $in != 0 ) $url_link = substr( $url_link, 0, $in + $length_rewrite_endurl );
+	else  $url_link = substr( $url_link, 0, strlen( $url_link ) + $length_rewrite_endurl );
+	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search";
+	preg_match( "/[a-z-0-9]*\/search([^\"]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . "|\/page[0-9-])$/i", $url_link, $matches_link );
+	$generate_page = nv_alias_page( '', $link . $matches_link[1], $numRecord, $per_pages, $pages );
+	$xtpl->assign( 'VIEW_PAGES', $generate_page );
+	$xtpl->parse( 'results.pages_result' );
+}
+Với những bạn có file themes/ten-theme/modules/news/theme.php các bạn chỉnh sửa như hướng dẫn theme modern
+
+7. Mở file modules/search/theme.php
+Tìm đến dòng 30 hoặc đoạn
+$search['action'] .= "&page=0";
+Và xóa đi.
+Tìm đến dòng 97-98 hoặc đoạn
+if( $mod != "all" ) $base_url .= "&m=" . $mod;
+$base_url .= "&l=" . $search['logic'];
+Thay lại thành
+if( $mod != "all" ) $base_url .= "/m-" . $mod;
+$base_url .= "/l-" . $search['logic'];
+Tìm đến dòng 102 hoặc đoạn
+$generate_page = nv_generate_page( $base_url, $all_page, $limit, $search['page'] );
+Thay lại thành
+$generate_page = nv_alias_page( $mod_custom_title, $base_url, $all_page, $limit, $search['page'] );
+
+8. Mở file modules/news/js/user.js Thêm vào cuối đoạn
+function nv_news_search_submit( obj )
+{
+   var query = $("input[name=q]").val();
+   var query = formatStringAsUriComponent(query);query = (query != '')? query + "/" : "";
+   var choose = $("select[name=choose]").val(); choose = (choose > 0)? "choose-" + choose + "/" : "";
+   var catid = $("select[name=catid]").val(); catid = (catid > 0)? "catid-" + catid + "/" : "";
+   var to_date = $("input[name=to_date]").val(); to_date = (to_date !='' )? "to_date-" + to_date + "/" : "";
+   var from_date = $("input[name=from_date]").val(); from_date = (from_date != '')? "from_date-" + from_date + "/" : "";
+   var action = $(obj).attr("action");
+   var rewrite_endurl = action.split("search");
+   if( query != "" || choose != "" || catid != "" || to_date != "" || from_date != "" )window.location.href = rewrite_endurl[0] + "search" + query + choose + catid + to_date + from_date + rewrite_endurl[1];
+   return false;
+}
+
+9. Mở file themes/default/theme.php
+Tìm đến dòng 75 hoặc đoạn 
+$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_checkss', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
+Thay lại thành
+$link_search = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=search";
+$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('". $link_search ."', 'topmenu_search_query', 'topmenu_search_checkss', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
+
+
+10. Mở file themes/modern/theme.php
+Tìm đến dòng 75 hoặc đoạn 
+$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_checkss', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
+Thay lại thành
+$link_search = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=search";
+$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('". $link_search ."', 'topmenu_search_query', 'topmenu_search_checkss', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
+
+
+Đối với theme khác thay tương tự như hướng dẫn trên.
+
+11. Mở file js/global.js
+Tìm đến dòng 720 hoặc đoạn
+function nv_search_submit(search_query, topmenu_search_checkss, search_button, minlength, maxlength)
+Thay lại thành
+function nv_search_submit(form, search_query, topmenu_search_checkss, search_button, minlength, maxlength)
+Tìm đến dòng 737 hoặc đoạn
+window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable+'='+nv_sitelang+'&'+nv_name_variable + '=search&q=' + rawurlencode(format_query);
+Thay lại thành
+var rewrite_endurl = form.split("search");
+window.location.href = rewrite_endurl[0] + "search/" + rawurlencode(format_query) + rewrite_endurl[1];
+
+12. Mở file themes/default/modules/news/search.tpl
+tìm đến dòng 4 hoặc đoạn
+<form action="{BASE_URL_SITE}" name="fsea" method="get" id="fsea">
+Thay lại thành
+<form action="{BASE_URL_SITE}" name="fsea" method="get" onsubmit="return nv_news_search_submit('fsea');" "id="fsea">
+13. Nếu bạn có theme modern mở file themes/modern/modules/news/search.tpl
+Tìm đến dòng 4 hoặc đoạn
+<form action="{BASE_URL_SITE}" name="fsea" method="get" id="fsea">
+Thay lại thành
+<form action="{BASE_URL_SITE}" name="fsea" method="get" onsubmit="return nv_news_search_submit('fsea');" "id="fsea">
+Tương tự nếu sử dụng theme khác cũng thay thế các đoạn trên.
+
+14. Mở file themes/default/modules/search/form.tpl
+Tìm đến dòng 68-69 hoặc đoạn
+var b = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = formatStringAsUriComponent(a);
+{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = b + "&q=" + a);
+Thay lại thành
+var action = $("form[id=form_search]").attr("action");
+action = action.replace("search", b + "/search" );
+var b = action, a = $("#form_search #search_query").val(), a = formatStringAsUriComponent(a);
+var rewrite_endurl = b.split("search");
+{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = rewrite_endurl[0] + "search/" + a + rewrite_endurl[1]);
+  
+Tìm đến dòng 90-92 hoặc đoạn
+a = $(this).serialize();
+b = $(this).attr("action");
+window.location.href = b + "&" + a;
+Thay lại thành
+var a = "/" + a;
+var mod = $("#search_query_mod").val(); mod = (mod != "all")? "/" + "m-" + mod : "";
+var logic =  ( $("#search_logic_and:checked").val() == 1 )? "/" + "l-1" : "/" + "l-0";
+
+b =  $("form[id=form_search]").attr("action");
+var rewrite_endurl = b.split("search");
+window.location.href = rewrite_endurl[0] + "search" + a + mod + logic + rewrite_endurl[1];
+
+15. Nếu bạn có theme modern mở file themes/modern/modules/search/form.tpl
+Tìm đến dòng 56-57 hoặc đoạn
+var b = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = formatStringAsUriComponent(a);
+{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = b + "&q=" + a);
+Thay lại thành
+var action = $("form[id=form_search]").attr("action");
+action = action.replace("search", b + "/search" );
+var b = action, a = $("#form_search #search_query").val(), a = formatStringAsUriComponent(a);
+var rewrite_endurl = b.split("search");
+{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = rewrite_endurl[0] + "search/" + a + rewrite_endurl[1]);
+Tìm đến dòng 78-80 hoặc đoạn
+a = $(this).serialize();
+b = $(this).attr("action");
+window.location.href = b + "&" + a;
+Thay lại thành
+var a = "/" + a;
+var mod = $("#search_query_mod").val(); mod = (mod != "all")? "/" + "m-" + mod : "";
+var logic =  ( $("#search_logic_and:checked").val() == 1 )? "/" + "l-1" : "/" + "l-0";
+
+b =  $("form[id=form_search]").attr("action");
+var rewrite_endurl = b.split("search");
+window.location.href = rewrite_endurl[0] + "search" + a + mod + logic + rewrite_endurl[1];
+
+Tương tự tìm và chỉnh sửa ở các theme khác nếu có như hướng dẫn trên.
