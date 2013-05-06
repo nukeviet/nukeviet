@@ -92,7 +92,7 @@ else
 					{
 						$info = $lang_module['openid_lostpass_info'];
 					}
-					elseif( empty( $row['question'] ) or empty( $row['answer'] ) )
+					elseif( $global_config['allowquestion'] AND ( empty( $row['question'] ) or empty( $row['answer'] ) ) )
 					{
 						$info = $lang_module['lostpass_question_empty'];
 					}
@@ -121,7 +121,8 @@ else
 						{
 							$nv_Request->unset_request( 'lostpass_seccode', 'session' );
 
-							$rand = rand( NV_UPASSMIN, $rand );
+							$rand = rand( NV_UPASSMIN, NV_UPASSMAX );
+							if ( $rand < 6) $rand = 6;
 							$password_new = nv_genpass( $rand );
 
 							$password = $crypt->hash( $password_new );
