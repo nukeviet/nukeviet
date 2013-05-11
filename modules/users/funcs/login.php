@@ -145,9 +145,9 @@ function openidLogin_Res1( $attribs )
 	}
 	$opid = $crypt->hash( $attribs['id'] );
 
-	$query = "SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` a, `" . NV_USERS_GLOBALTABLE . "` b 
-		WHERE a.opid=" . $db->dbescape( $opid ) . " 
-		AND a.email=" . $db->dbescape( $email ) . " 
+	$query = "SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` a, `" . NV_USERS_GLOBALTABLE . "` b
+		WHERE a.opid=" . $db->dbescape( $opid ) . "
+		AND a.email=" . $db->dbescape( $email ) . "
 		AND a.userid=b.userid";
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
@@ -307,20 +307,20 @@ function openidLogin_Res1( $attribs )
 						$reg_attribs = set_reg_attribs( $attribs );
 
 						$sql = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` (
-							`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, 
-							`question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, 
+							`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`,
+							`question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`,
 							`active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`) VALUES (
-							NULL, 
-							" . $db->dbescape( $row['username'] ) . ", 
-							" . $db->dbescape( nv_md5safe( $row['username'] ) ) . ", 
-							" . $db->dbescape( $row['password'] ) . ", 
-							" . $db->dbescape( $row['email'] ) . ", 
-							" . $db->dbescape( ! empty( $row['full_name'] ) ? $row['full_name'] : $reg_attribs['full_name'] ) . ", 
-							" . $db->dbescape( $reg_attribs['gender'] ) . ", 
-							'', 0, 
-							" . $db->dbescape( $row['regdate'] ) . ", 
-							" . $db->dbescape( $row['question'] ) . ", 
-							" . $db->dbescape( $row['answer'] ) . ", 
+							NULL,
+							" . $db->dbescape( $row['username'] ) . ",
+							" . $db->dbescape( nv_md5safe( $row['username'] ) ) . ",
+							" . $db->dbescape( $row['password'] ) . ",
+							" . $db->dbescape( $row['email'] ) . ",
+							" . $db->dbescape( ! empty( $row['full_name'] ) ? $row['full_name'] : $reg_attribs['full_name'] ) . ",
+							" . $db->dbescape( $reg_attribs['gender'] ) . ",
+							'', 0,
+							" . $db->dbescape( $row['regdate'] ) . ",
+							" . $db->dbescape( $row['question'] ) . ",
+							" . $db->dbescape( $row['answer'] ) . ",
 							'', 1, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
 
 						$userid = $db->sql_query_insert_id( $sql );
@@ -500,19 +500,19 @@ function openidLogin_Res1( $attribs )
 
 		if( $option == 2 )
 		{
-			$sql = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` 
-				(`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, 
-				`regdate`, `question`, `answer`, `passlostkey`, 
-				`view_mail`, `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`) 
+			$sql = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "`
+				(`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`,
+				`regdate`, `question`, `answer`, `passlostkey`,
+				`view_mail`, `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`)
 				VALUES (
-				NULL, 
-				" . $db->dbescape( $reg_attribs['username'] ) . ", 
-				" . $db->dbescape( nv_md5safe( $reg_attribs['username'] ) ) . ", 
-				'', 
-				" . $db->dbescape( $reg_attribs['email'] ) . ", 
-				" . $db->dbescape( $reg_attribs['full_name'] ) . ", 
-				" . $db->dbescape( ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : "" ) ) . ", 
-				'', 0, " . NV_CURRENTTIME . ", 
+				NULL,
+				" . $db->dbescape( $reg_attribs['username'] ) . ",
+				" . $db->dbescape( nv_md5safe( $reg_attribs['username'] ) ) . ",
+				'',
+				" . $db->dbescape( $reg_attribs['email'] ) . ",
+				" . $db->dbescape( $reg_attribs['full_name'] ) . ",
+				" . $db->dbescape( ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : "" ) ) . ",
+				'', 0, " . NV_CURRENTTIME . ",
 				'', '', '', 0, 0, '', 1, '', 0, '', '', '', ".$global_config['idsite']."
 				)";
 			$userid = $db->sql_query_insert_id( $sql );
@@ -740,7 +740,7 @@ $contents = "";
 $error = "";
 if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 {
-	$nv_username = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
+	$nv_username = filter_text_input( 'nv_login', 'post', '', 1 );
 	$nv_password = filter_text_input( 'nv_password', 'post', '' );
 	$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
 

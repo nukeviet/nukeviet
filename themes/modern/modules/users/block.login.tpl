@@ -2,11 +2,11 @@
 <form action="{USER_LOGIN}" method="post">
 	<div class="block-login">
 		<div class="box clearfix">
-			<input id="block_login_iavim" name="nv_login" type="text" class="input fl" maxlength="{NICK_MAXLENGTH}" onblur="if(this.value=='')this.value='{LANG.username} ';" onclick="if(this.value=='{LANG.username} ')this.value='';" value="{LANG.username} " /><input id="block_password_iavim" type="password" name="nv_password" value="" class="input fr" maxlength="{PASS_MAXLENGTH}" />
+			<input id="block_login_iavim" name="nv_login" type="text" class="input fl" onblur="if(this.value=='')this.value='{LANG.username} ';" onclick="if(this.value=='{LANG.username} ')this.value='';" value="{LANG.username} " /><input id="block_password_iavim" type="password" name="nv_password" value="" class="input fr" maxlength="{PASS_MAXLENGTH}" />
 		</div>
 		<!-- BEGIN: captcha -->
 		<div class="box clearfix">
-			<input id="block_seccode_iavim" name="nv_seccode" type="text" class="input fl" maxlength="{GFX_MAXLENGTH}" onblur="if(this.value=='')this.value='{LANG.securitycode}';" onclick="if(this.value=='{LANG.securitycode}')this.value='';" value="{LANG.securitycode}" />
+			<input id="block_seccode_iavim" name="nv_seccode" type="text" class="input fl" onblur="if(this.value=='')this.value='{LANG.securitycode}';" onclick="if(this.value=='{LANG.securitycode}')this.value='';" value="{LANG.securitycode}" />
 			<img class="captcha fl" id="block_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" /><img src="{CAPTCHA_REFR_SRC}" class="refresh fl" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('block_vimg','block_seccode_iavim');"/>
 		</div>
 		<!-- END: captcha -->
