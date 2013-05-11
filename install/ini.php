@@ -77,11 +77,15 @@ if( function_exists( 'apache_get_modules' ) )
 		$sys_info['supports_rewrite'] = "rewrite_mode_apache";
 	}
 }
-elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.' ) !== false )
+elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS' ) !== false )
 {
 	if( isset( $_SERVER['IIS_UrlRewriteModule'] ) && ( php_sapi_name() == 'cgi-fcgi' ) && class_exists( 'DOMDocument' ) )
 	{
 		$sys_info['supports_rewrite'] = "rewrite_mode_iis";
+	}
+	elseif( isset( $_SERVER['HTTP_X_REWRITE_URL'] )  )
+	{
+			$sys_info['supports_rewrite'] = "rewrite_mode_apache";
 	}
 }
 
