@@ -3,11 +3,11 @@
 	<fieldset>
 		<p>
 			<label for="block_login_iavim"> {LANG.username} </label>
-			<input id="block_login_iavim" name="nv_login" value="" type="text" class="txt" maxlength="{NICK_MAXLENGTH}" />
+			<input id="block_login_iavim" name="nv_login" value="" type="text" class="txt" />
 		</p>
 		<p>
 			<label for="block_password_iavim"> {LANG.password} </label>
-			<input id="block_password_iavim" type="password" name="nv_password" value="" class="txt" maxlength="{PASS_MAXLENGTH}" />
+			<input id="block_password_iavim" type="password" name="nv_password" value="" class="txt" />
 		</p>
 		<!-- BEGIN: captcha -->
 		<p>

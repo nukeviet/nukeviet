@@ -78,11 +78,11 @@
 								<!-- END: lang_multi -->
 								<li>
 									<label>{N_LOGIN}:</label>
-									<input name="nv_login" type="text" id="login" value="{V_LOGIN}" maxlength="{NICKMAX}" />
+									<input name="nv_login" type="text" id="login" value="{V_LOGIN}" />
 								</li>
 								<li>
 									<label>{N_PASSWORD}:</label>
-									<input name="nv_password" type="password" id="password" maxlength="{PASSMAX}" />
+									<input name="nv_password" type="password" id="password" />
 								</li>
 								<!-- BEGIN: captcha -->
 								<li>

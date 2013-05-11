@@ -202,8 +202,6 @@ $xtpl->assign( 'N_PASSWORD', $lang_global['password'] );
 $xtpl->assign( 'SITEURL', $global_config['site_url'] );
 $xtpl->assign( 'N_SUBMIT', $lang_global['loginsubmit'] );
 $xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
-$xtpl->assign( 'NICKMAX', NV_UNICKMAX );
-$xtpl->assign( 'PASSMAX', NV_UPASSMAX );
 
 $xtpl->assign( 'LOGIN_ERROR_SECURITY', addslashes( sprintf( $lang_global['login_error_security'], NV_GFX_NUM ) ) );
 
