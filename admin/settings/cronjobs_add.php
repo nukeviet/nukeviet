@@ -66,7 +66,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			}
 
 			$sql = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`, `" . NV_LANG_INTERFACE . "_cron_name`) VALUES (
-				NULL, " . $start_time . ", " . $interval . ", " . $db->dbescape( $run_file ) . ", 
+				NULL, " . $start_time . ", " . $interval . ", " . $db->dbescape( $run_file ) . ",
 				" . $db->dbescape( $run_func ) . ", " . $db->dbescape( $params ) . ", " . $del . ", 0, 1, 0, 0, " . $db->dbescape( $cron_name ) . ")";
 			$id = $db->sql_query_insert_id( $sql );
 

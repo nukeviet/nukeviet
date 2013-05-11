@@ -106,7 +106,8 @@ foreach( $files as $file )
 	if( ! preg_match( "/^\.(.*)$/", $file ) )
 	{
 		if( is_dir( NV_ROOTDIR . '/' . $file ) ) $file = "/" . $file . "/";
-		else $file = "/" . $file;
+		else
+			$file = "/" . $file;
 
 		$data = array(
 			'number' => ++$number,

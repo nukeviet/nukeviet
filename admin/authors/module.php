@@ -7,7 +7,8 @@
  * @Createdate 16-12-2012 15:48
  */
 
-if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_AUTHORS' ) )
+	die( 'Stop!!!' );
 
 if( defined( 'NV_IS_AJAX' ) )
 {
@@ -22,7 +23,8 @@ if( defined( 'NV_IS_AJAX' ) )
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			++$weight;
-			if( $weight == $new_vid ) ++$weight;
+			if( $weight == $new_vid )
+				++$weight;
 			$sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_module` SET `weight`=" . $weight . " WHERE `mid`=" . $row['mid'];
 			$db->sql_query( $sql );
 		}
@@ -38,7 +40,7 @@ if( defined( 'NV_IS_AJAX' ) )
 		if( $db->sql_numrows( $result ) )
 		{
 			$row = $db->sql_fetch_assoc( $result );
-			if( ! ( ( $row['module'] == 'database' and $act > 1 ) or ( $row['module'] == 'settings' and $act > 2 ) ) )
+			if( ! ( $act == 3 AND ( $row['module'] == 'database' OR $row['module'] == 'settings' OR $row['module'] == 'site' ) ) )
 			{
 				$act_val = ( $row['act_' . $act] ) ? 0 : 1;
 				$checksum = md5( $row['module'] . "#" . $row['act_1'] . "#" . $row['act_2'] . "#" . $row['act_3'] . "#" . $global_config['sitekey'] );
@@ -67,7 +69,9 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 	$row['class'] = ( $a++ % 2 == 0 ) ? ' class="second"' : '';
 	for( $i = 1; $i <= $numrows; $i++ )
 	{
-		$xtpl->assign( 'WEIGHT', array( 'key' => $i, 'selected' => ( $i == $row['weight'] ) ? ' selected="selected"' : '' ) );
+		$xtpl->assign( 'WEIGHT', array(
+		'key' => $i,
+		'selected' => ( $i == $row['weight'] ) ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.loop.weight' );
 	}
 	$row['custom_title'] = isset( $lang_global[$row['lang_key']] ) ? $lang_global[$row['lang_key']] : '';
@@ -75,7 +79,7 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 	for( $i = 1; $i <= 3; $i++ )
 	{
 		$chang_act[$i] = ( $row['act_' . $i] ) ? ' checked="checked"' : '';
-		if( ( $row['module'] == 'database' and $i > 1 ) or ( $row['module'] == 'settings' and $i > 2 ) )
+		if( $i == 3 AND ( $row['module'] == 'database' OR $row['module'] == 'settings' OR $row['module'] == 'site' ) )
 		{
 			$chang_act[$i] .= ' disabled="disabled"';
 		}

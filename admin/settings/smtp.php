@@ -38,16 +38,11 @@ if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
 	$array_config['smtp_password'] = nv_base64_encode( $crypt->aes_encrypt( $smtp_password ) );
 	foreach( $array_config as $config_name => $config_value )
 	{
-		$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` 
-			SET `config_value`=" . $db->dbescape_string( $config_value ) . " 
-			WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
-			AND `lang` = 'sys' AND `module`='global' 
-			LIMIT 1" );
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('sys', 'site', " . $db->dbescape( $config_value ) . ", " . $db->dbescape( $config_name ) . ")" );
 	}
+	nv_del_moduleCache( 'settings' );
 
-	nv_save_file_config_global();
-
-	if( $array_config['smtp_ssl'] == 1 )
+	if( $array_config['smtp_ssl'] == 1 AND $array_config['mailer_mode'] == 'smtp' )
 	{
 		require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
 		$array_phpmod = phpinfo_array( 8, 1 );

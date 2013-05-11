@@ -167,7 +167,7 @@ function nv_save_file_config_global()
 	$content_config .= "\n";
 
 	$config_variable = array();
-	$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' ORDER BY `config_name` ASC";
+	$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND (`module`='global' OR `module`='define') ORDER BY `config_name` ASC";
 	$result = $db->sql_query( $sql );
 	while( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result, 1 ) )
 	{
@@ -187,6 +187,7 @@ function nv_save_file_config_global()
 			$config_variable[$c_config_name] = $c_config_value;
 		}
 	}
+
 	$nv_eol = strtoupper( substr( PHP_OS, 0, 3 ) == 'WIN' ) ? '"\r\n"' : ( strtoupper( substr( PHP_OS, 0, 3 ) == 'MAC' ) ? '"\r"' : '"\n"' );
 	$upload_max_filesize = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $config_variable['nv_max_size'] );
 
@@ -214,6 +215,7 @@ function nv_save_file_config_global()
 	$config_variable['error_log_path'] = NV_LOGS_DIR . '/error_logs';
 	$config_variable['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 	$config_variable['error_log_fileext'] = NV_LOGS_EXT;
+	$config_variable['error_send_email'] = $global_config['error_send_email'];
 
 	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_adminlangs', 'openid_servers', 'allow_request_mods' );
 

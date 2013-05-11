@@ -83,21 +83,35 @@ function nv_save_file_banip()
 }
 
 $proxy_blocker_array = array(
+
 	0 => $lang_module['proxy_blocker_0'],
+
 	1 => $lang_module['proxy_blocker_1'],
+
 	2 => $lang_module['proxy_blocker_2'],
+
 	3 => $lang_module['proxy_blocker_3']
+
 );
 
 $captcha_array = array(
+
 	0 => $lang_module['captcha_0'],
+
 	1 => $lang_module['captcha_1'],
+
 	2 => $lang_module['captcha_2'],
+
 	3 => $lang_module['captcha_3'],
+
 	4 => $lang_module['captcha_4'],
+
 	5 => $lang_module['captcha_5'],
+
 	6 => $lang_module['captcha_6'],
+
 	7 => $lang_module['captcha_7']
+
 );
 
 $captcha_type_array = array( 0 => $lang_module['captcha_type_0'], 1 => $lang_module['captcha_type_1'] );
@@ -354,17 +368,29 @@ $xtpl->assign( 'BANIP_AREA_ARRAY', $banip_area_array );
 $xtpl->assign( 'BANIP_TITLE', ( $cid ) ? $lang_module['banip_title_edit'] : $lang_module['banip_title_add'] );
 
 $xtpl->assign( 'DATA', array(
+
 	'cid' => $cid,
+
 	'ip' => $ip,
+
 	'selected3' => ( $mask == 3 ) ? ' selected="selected"' : '',
+
 	'selected2' => ( $mask == 2 ) ? ' selected="selected"' : '',
+
 	'selected1' => ( $mask == 1 ) ? ' selected="selected"' : '',
+
 	'selected_area_1' => ( $area == 1 ) ? ' selected="selected"' : '',
+
 	'selected_area_2' => ( $area == 2 ) ? ' selected="selected"' : '',
+
 	'selected_area_3' => ( $area == 3 ) ? ' selected="selected"' : '',
+
 	'begintime' => ! empty( $begintime ) ? date( 'd/m/Y', $begintime ) : '',
+
 	'endtime' => ! empty( $endtime ) ? date( 'd/m/Y', $endtime ) : '',
+
 	'endtime' => $notice
+
 ) );
 
 $xtpl->parse( 'main' );

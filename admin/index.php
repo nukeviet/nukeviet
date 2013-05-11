@@ -85,6 +85,11 @@ if( ! empty( $module_name ) )
 		}
 	}
 	$menu_top = array();
+	if( isset( $admin_mods['database'] ) AND ! ( defined( "NV_IS_GODADMIN" ) OR ( defined( "NV_IS_SPADMIN" ) AND $global_config['idsite'] > 0 ) ) )
+	{
+		unset( $admin_mods['database'] );
+	}
+
 	if( isset( $site_mods[$module_name] ) )
 	{
 		$module_info = $site_mods[$module_name];

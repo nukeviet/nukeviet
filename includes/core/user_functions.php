@@ -259,12 +259,12 @@ function nv_blocks_content( $sitecontent )
 			}
 		}
 
-		$_result = $db->sql_query( "SELECT t1.*, t2.func_id FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1 
-			 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 
-			 ON t1.bid = t2.bid 
-			 WHERE t2.func_id IN (" . implode( ",", $in ) . ") 
-			 AND t1.theme ='" . $global_config['module_theme'] . "' 
-			 AND t1.active=1 
+		$_result = $db->sql_query( "SELECT t1.*, t2.func_id FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1
+			 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2
+			 ON t1.bid = t2.bid
+			 WHERE t2.func_id IN (" . implode( ",", $in ) . ")
+			 AND t1.theme ='" . $global_config['module_theme'] . "'
+			 AND t1.active=1
 			 ORDER BY t2.weight ASC" );
 
 		while( $_row = $db->sql_fetch_assoc( $_result ) )
@@ -481,7 +481,15 @@ function nv_html_meta_tags( )
 
 	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
 
-	$file_metatags = NV_ROOTDIR . "/" . NV_DATADIR . "/metatags.xml";
+	if( $global_config['idsite'] )
+	{
+		$file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml';
+	}
+	else
+	{
+		$file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml';
+	}
+
 	if( file_exists( $file_metatags ) )
 	{
 		$mt = file_get_contents( $file_metatags );

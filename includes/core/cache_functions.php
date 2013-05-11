@@ -32,13 +32,20 @@ function nv_delete_cache( $pattern )
 
 /**
  * nv_delete_all_cache()
+ * @param mixed $sys
  *
  * @return
  */
-function nv_delete_all_cache()
+function nv_delete_all_cache( $sys = true)
 {
-	$pattern = "/(.*)\.cache/";
-
+	if( $sys )
+	{
+		$pattern = "/(.*)\.cache$/";
+	}
+	else
+	{
+		$pattern = "/(.*)\_" . NV_CACHE_PREFIX . "\.cache$/";
+	}
 	nv_delete_cache( $pattern );
 }
 

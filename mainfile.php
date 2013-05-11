@@ -304,7 +304,6 @@ if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 require ( NV_ROOTDIR . '/includes/class/crypt.class.php' );
 $crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
 $global_config['ftp_user_pass'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['ftp_user_pass'] ) );
-$global_config['smtp_password'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['smtp_password'] ) );
 
 //Bat dau phien lam viec cua MySQL
 require ( NV_ROOTDIR . '/includes/class/mysql.class.php' );
@@ -342,11 +341,11 @@ define( 'NV_COUNTER_TABLE', NV_PREFIXLANG . '_counter' );
 define( 'NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys' );
 define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 
-$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `module` ASC";
+$sql = "SELECT `lang`, `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='" . NV_LANG_DATA . "' OR (`lang`='sys' AND `module`='site') ORDER BY `module` ASC";
 $list = nv_db_cache( $sql, '', 'settings' );
 foreach( $list as $row )
 {
-	if( $row['module'] == "global" )
+	if( ( $row['lang'] == NV_LANG_DATA AND $row['module'] == 'global' ) OR ( $row['lang'] == 'sys' AND $row['module'] == 'site' ) )
 	{
 		$global_config[$row['config_name']] = $row['config_value'];
 	}
@@ -356,6 +355,11 @@ foreach( $list as $row )
 	}
 }
 
+$global_config['smtp_password'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['smtp_password'] ) );
+if( $sys_info['ini_set_support'] )
+{
+	ini_set( 'sendmail_from', $global_config['site_email'] );
+}
 if( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_config['upload_checking_mode'], array( "mild", "lite", "none" ) ) )
 {
 	$global_config['upload_checking_mode'] = "strong";
