@@ -65,6 +65,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
 	$array_config_site['date_pattern'] = filter_text_input( 'date_pattern', 'post', '', 0, 255, $preg_replace );
 	$array_config_site['time_pattern'] = filter_text_input( 'time_pattern', 'post', '', 0, 255, $preg_replace );
+
+	$array_config_site['searchEngineUniqueID'] = filter_text_input( 'searchEngineUniqueID', 'post', '' );
+	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = "";
+
 	foreach( $array_config_site as $config_name => $config_value )
 	{
 		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
@@ -96,9 +100,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		$array_config_global['my_domains'] = array_unique( $array_config_global['my_domains'] );
 		$array_config_global['my_domains'] = implode( ",", $array_config_global['my_domains'] );
-
-		$array_config_global['searchEngineUniqueID'] = filter_text_input( 'searchEngineUniqueID', 'post', '' );
-		if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_global['searchEngineUniqueID'] ) ) $array_config_global['searchEngineUniqueID'] = "";
 
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
@@ -186,7 +187,6 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$lang_multi = $array_config_global['lang_multi'];
 	$array_config_global['gzip_method'] = ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '';
 	$array_config_global['lang_multi'] = ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '';
-	$array_config_global['searchEngineUniqueID'] = isset( $array_config_global['searchEngineUniqueID'] ) ? $array_config_global['searchEngineUniqueID'] : "";
 
 	$xtpl->assign( 'CHECKED1', ( $array_config_global['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
