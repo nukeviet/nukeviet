@@ -7,8 +7,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_SETTINGS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $adminThemes = array( '' );
 $adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] ) );
@@ -63,9 +62,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_site['error_send_email'] = $error_send_email;
 	}
 
-	$preg_replace = array(
-'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i",
-'replacement' => '' );
+	$preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
 	$array_config_site['date_pattern'] = filter_text_input( 'date_pattern', 'post', '', 0, 255, $preg_replace );
 	$array_config_site['time_pattern'] = filter_text_input( 'time_pattern', 'post', '', 0, 255, $preg_replace );
 	foreach( $array_config_site as $config_name => $config_value )
@@ -101,8 +98,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['my_domains'] = implode( ",", $array_config_global['my_domains'] );
 
 		$array_config_global['searchEngineUniqueID'] = filter_text_input( 'searchEngineUniqueID', 'post', '' );
-		if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_global['searchEngineUniqueID'] ) )
-			$array_config_global['searchEngineUniqueID'] = "";
+		if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_global['searchEngineUniqueID'] ) ) $array_config_global['searchEngineUniqueID'] = "";
 
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
@@ -165,15 +161,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 $page_title = $lang_module['global_config'];
 
 $optActive_Modes = array(
-
 	'0' => $lang_module['optActive_no'],
-
 	'1' => $lang_module['optActive_all'],
-
 	'2' => $lang_module['optActive_site'],
-
 	'3' => $lang_module['optActive_admin']
-
 );
 $lang_module['rewrite_op_mod'] = sprintf( $lang_module['rewrite_op_mod'], $global_config['site_home_module'] );
 

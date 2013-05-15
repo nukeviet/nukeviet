@@ -46,7 +46,7 @@ else
 $admin_login_redirect = $nv_Request->get_string( 'admin_login_redirect', 'session', '' );
 if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 {
-	$nv_username = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
+	$nv_username = filter_text_input( 'nv_login', 'post', '', 1 );
 	$nv_password = filter_text_input( 'nv_password', 'post', '' );
 	if( $global_config['gfx_chk'] == 1 )
 	{
@@ -70,7 +70,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 		{
 			define( 'NV_IS_MOD_USER', true );
 			require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
-			if( empty( $nv_username ) ) $nv_username = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
+			if( empty( $nv_username ) ) $nv_username = filter_text_input( 'nv_login', 'post', '', 1 );
 			if( empty( $nv_password ) ) $nv_password = filter_text_input( 'nv_password', 'post', '' );
 		}
 

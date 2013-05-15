@@ -120,17 +120,11 @@ else
 }
 
 $value_setting = array(
-
 	"sitename" => $global_config['site_name'],
-
 	"site_logo" => $site_logo,
-
 	"site_keywords" => $global_config['site_keywords'],
-
 	"description" => $global_config['site_description'],
-
 	"switch_mobi_des" => $global_config['switch_mobi_des']
-
 );
 
 $module_array = array();
