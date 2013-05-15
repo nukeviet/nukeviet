@@ -58,16 +58,16 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 }
 else
 {
-	if( file_exists( $file_metatags ) )
+	if( ! file_exists( $file_metatags ) )
 	{
-		$mt = simplexml_load_file( $file_metatags );
-		$mt = nv_object2array( $mt );
-		if( $mt['meta_item'] )
-		{
-			if( isset( $mt['meta_item'][0] ) ) $metatags['meta'] = $mt['meta_item'];
-			else
-				$metatags['meta'][] = $mt['meta_item'];
-		}
+		$file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml';
+	}
+	$mt = simplexml_load_file( $file_metatags );
+	$mt = nv_object2array( $mt );
+	if( $mt['meta_item'] )
+	{
+		if( isset( $mt['meta_item'][0] ) ) $metatags['meta'] = $mt['meta_item'];
+		else $metatags['meta'][] = $mt['meta_item'];
 	}
 }
 
