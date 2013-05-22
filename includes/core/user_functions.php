@@ -138,7 +138,7 @@ function nv_site_mods( )
 				$user_ops[] = 'active';
 			}
 		}
-		if( ($global_config['whoviewuser'] == 2 and defined( "NV_IS_ADMIN" )) or ($global_config['whoviewuser'] == 1 and ! defined( 'NV_IS_USER' )) or $global_config['whoviewuser'] == 0 )
+		if( ($global_config['whoviewuser'] == 2 and defined( "NV_IS_ADMIN" )) or ($global_config['whoviewuser'] == 1 and defined( 'NV_IS_USER' )) or $global_config['whoviewuser'] == 0 )
 		{
 			$user_ops[] = 'memberlist';
 		}
