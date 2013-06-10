@@ -197,7 +197,26 @@ function nv_get_viewImage( $fileName )
 		else
 		{
 			$m[2] = rtrim( $m[2], '/' );
-			$thumb_config = ( isset( $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] ) ) ? $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] : $array_thumb_config[''];
+			if( isset( $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] ) )
+			{
+				$thumb_config = $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]];
+			}
+			else
+			{
+				$thumb_config = $array_thumb_config[''];
+				$_arr_path = explode( '/', NV_UPLOADS_DIR . '/' . $m[2] );
+				while( sizeof( $_arr_path ) > 1 )
+				{
+					array_pop( $_arr_path );
+					$_path = implode( '/', $_arr_path );
+					if( isset( $array_thumb_config[$_path] ) )
+					{
+						$thumb_config = $array_thumb_config[$_path];
+						break;
+					}
+				}
+			}
+
 			$viewDir = NV_FILES_DIR;
 			if( ! empty( $m[2] ) )
 			{
