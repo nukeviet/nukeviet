@@ -155,7 +155,7 @@ foreach( $array_field_config as $row_f )
 		}
 		elseif( $row_f['field_type'] == 'select' or $row_f['field_type'] == 'radio' )
 		{
-			if( isset( $row_f['field_choices'][$value_i] ) )
+			if( ! isset( $row_f['field_choices'][$value] ) )
 			{
 				$error = sprintf( $lang_module['field_match_type_error'], $row_f['title'] );
 			}
