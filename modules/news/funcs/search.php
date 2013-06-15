@@ -45,7 +45,7 @@ function BoldKeywordInStr( $str, $keyword )
 }
 
 $key = filter_text_input( 'q', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
-$pages = $nv_Request->get_int( 'page', 'get', 0 );
+$pages = $nv_Request->get_int( 'page', 'get', 1 );
 $from_date = filter_text_input( 'from_date', 'get', '', 0 );
 $to_date = filter_text_input( 'to_date', 'get', '', 0 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
@@ -117,7 +117,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	$sql = " SELECT SQL_CALC_FOUND_ROWS tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid
 	FROM `" . $table_search . "` as tb1 " . $tbl_src . " 
-	WHERE tb1.status=1 " . $where . " ORDER BY tb1.id DESC LIMIT " . $pages . "," . $per_pages;
+	WHERE tb1.status=1 " . $where . " ORDER BY tb1.id DESC LIMIT " . ( $pages - 1 ) * $per_pages . "," . $per_pages;
 
 	$result = $db->sql_query( $sql );
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
