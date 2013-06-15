@@ -98,7 +98,7 @@ if( $sys_info['ftp_support'] )
 			}
 			else
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR );
 
 				$list_files = $ftp->listDetail( $ftp_path, 'all' );
 

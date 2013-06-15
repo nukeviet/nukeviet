@@ -185,7 +185,7 @@ elseif( $step == 2 )
 			}
 			elseif( ftp_chdir( $conn_id, $global_config['ftp_path'] ) )
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "robots.txt", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "robots.txt", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR );
 
 				$list_files = ftp_nlist( $conn_id, "." );
 
