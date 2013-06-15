@@ -38,16 +38,16 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 
 		$module = $block_config['module'];
 		$blockwidth = $module_config[$module]['blockwidth'];
-		$array_block_news = array();
+		$numrow = ( isset( $block_config['numrow'] ) ) ? $block_config['numrow'] : 20;
 
-		$cache_file = NV_LANG_DATA . "_" . $module . "_block_news_" . NV_CACHE_PREFIX . ".cache";
+		$cache_file = NV_LANG_DATA . "_" . $module . "_block_news_" . $numrow . "_" . NV_CACHE_PREFIX . ".cache";
 		if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 		{
 			$array_block_news = unserialize( $cache );
 		}
 		else
 		{
-			$numrow = ( isset( $block_config['numrow'] ) ) ? $block_config['numrow'] : 20;
+			$array_block_news = array();
 			$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_rows` WHERE `status`= 1 ORDER BY `publtime` DESC LIMIT 0 , " . $numrow;
 			$result = $db->sql_query( $sql );
 			while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )

@@ -130,10 +130,10 @@ if( $sys_info['ftp_support'] )
 		$array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $ftp_user_pass ) );
 		foreach( $array_config as $config_name => $config_value )
 		{
-			$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` 
-				SET `config_value`=" . $db->dbescape_string( $config_value ) . " 
-				WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
-				AND `lang` = 'sys' AND `module`='global' 
+			$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "`
+				SET `config_value`=" . $db->dbescape_string( $config_value ) . "
+				WHERE `config_name` = " . $db->dbescape_string( $config_name ) . "
+				AND `lang` = 'sys' AND `module`='global'
 				LIMIT 1" );
 		}
 		if( empty( $error ) )

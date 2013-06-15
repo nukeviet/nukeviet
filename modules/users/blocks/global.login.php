@@ -67,8 +67,6 @@ if( $global_config['allowuserlogin'] and $module_name != "users" )
 		$xtpl->assign( 'USER_LOGIN', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login" );
 		$xtpl->assign( 'USER_REGISTER', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=register" );
 		$xtpl->assign( 'USER_LOSTPASS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=lostpass" );
-		$xtpl->assign( 'NICK_MAXLENGTH', NV_UNICKMAX );
-		$xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
 		$xtpl->assign( 'LANG', $lang_global );
 
 		if( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) )

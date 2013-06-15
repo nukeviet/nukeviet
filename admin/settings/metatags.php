@@ -9,7 +9,14 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$file_metatags = NV_ROOTDIR . "/" . NV_DATADIR . "/metatags.xml";
+if( $global_config['idsite'] )
+{
+	$file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml';
+}
+else
+{
+	$file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml';
+}
 
 $metatags = array();
 $metatags['meta'] = array();
@@ -24,7 +31,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	foreach( $metaGroupsName as $key => $name )
 	{
-		if( $name == "http-equiv" or $name == "name" )
+		if( $name == 'http-equiv' or $name == 'name' )
 		{
 			$value = strtolower( trim( strip_tags( $metaGroupsValue[$key] ) ) );
 			$content = trim( strip_tags( $metaContents[$key] ) );
@@ -51,33 +58,34 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 }
 else
 {
-	if( file_exists( $file_metatags ) )
+	if( ! file_exists( $file_metatags ) )
 	{
-		$mt = simplexml_load_file( $file_metatags );
-		$mt = nv_object2array( $mt );
-		if( $mt['meta_item'] )
-		{
-			if( isset( $mt['meta_item'][0] ) ) $metatags['meta'] = $mt['meta_item'];
-			else $metatags['meta'][] = $mt['meta_item'];
-		}
+		$file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml';
+	}
+	$mt = simplexml_load_file( $file_metatags );
+	$mt = nv_object2array( $mt );
+	if( $mt['meta_item'] )
+	{
+		if( isset( $mt['meta_item'][0] ) ) $metatags['meta'] = $mt['meta_item'];
+		else $metatags['meta'][] = $mt['meta_item'];
 	}
 }
 
 $page_title = $lang_module['metaTagsConfig'];
 
-$xtpl = new XTemplate( "metatags.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'metatags.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
-$xtpl->assign( 'NOTE', sprintf( $lang_module['metaTagsNote'], implode( ", ", $ignore ) ) );
-$xtpl->assign( 'VARS', $lang_module['metaTagsVar'] . ": " . implode( ", ", $vas ) );
+$xtpl->assign( 'NOTE', sprintf( $lang_module['metaTagsNote'], implode( ', ', $ignore ) ) );
+$xtpl->assign( 'VARS', $lang_module['metaTagsVar'] . ': ' . implode( ', ', $vas ) );
 
 if( ! empty( $metatags['meta'] ) )
 {
 	$number = 0;
 	foreach( $metatags['meta'] as $value )
 	{
-		$value['h_selected'] = $value['group'] == 'http-equiv' ? " selected=\"selected\"" : "";
-		$value['n_selected'] = $value['group'] == 'name' ? " selected=\"selected\"" : "";
+		$value['h_selected'] = $value['group'] == 'http-equiv' ? ' selected="selected"' : '';
+		$value['n_selected'] = $value['group'] == 'name' ? ' selected="selected"' : '';
 		$value['class'] = ( ++$number % 2 == 0 ) ? ' class="second"' : '';
 		$xtpl->assign( 'DATA', $value );
 		$xtpl->parse( 'main.loop' );
@@ -100,8 +108,8 @@ for( $i = 0; $i < 3; ++$i )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

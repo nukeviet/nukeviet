@@ -8,11 +8,11 @@
 			</div>
 			<div class="clearfix rows">
 				<label> {LANG.account} </label>
-				<input type="text" id="login_iavim" name="nv_login" value="{DATA.nv_login}" class="required" maxlength="{NICK_MAXLENGTH}" />
+				<input type="text" id="login_iavim" name="nv_login" value="{DATA.nv_login}" class="required" />
 			</div>
 			<div class="clearfix rows">
 				<label> {LANG.password} </label>
-				<input type="password" id="password_iavim" name="nv_password" value="{DATA.nv_password}" class="required password" maxlength="{PASS_MAXLENGTH}" />
+				<input type="password" id="password_iavim" name="nv_password" value="{DATA.nv_password}" class="required password" />
 			</div>
 			<!-- BEGIN: captcha -->
 			<div class="clearfix rows">

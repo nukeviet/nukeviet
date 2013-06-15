@@ -33,7 +33,7 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 			$html .= "<option value=\"" . $row_bpn['id'] . "\" " . $sel . ">" . $value . "</option>\n";
 		}
 
-		$html .= "</select></td>\n";
+		$html .= "</select>\n";
 		return '<tr><td>' . $lang_block['idplanbanner'] . '</td><td>' . $html . '</td></tr>';
 	}
 

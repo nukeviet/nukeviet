@@ -78,14 +78,15 @@ if( $submit )
 	}
 	else
 	{
-		$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` 
+		$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "`
  			WHERE `lang`='sys' OR `lang`='" . NV_LANG_DATA . "' ORDER BY `module` ASC";
 		$result = $db->sql_query( $sql );
 
 		while( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 		{
 			if( $c_module == "global" ) $global_config[$c_config_name] = $c_config_value;
-			else $module_config[$c_module][$c_config_name] = $c_config_value;
+			else
+				$module_config[$c_module][$c_config_name] = $c_config_value;
 		}
 	}
 }

@@ -8,32 +8,45 @@
  */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
-
 $submenu['main'] = $lang_module['site_config'];
-if( defined( 'NV_IS_GODADMIN' ) )
+if( defined( 'NV_IS_GODADMIN' ) OR ( defined( "NV_IS_SPADMIN" ) AND $global_config['idsite'] > 0 ) )
 {
 	$submenu['system'] = $lang_module['global_config'];
+}
+$submenu['smtp'] = $lang_module['smtp_config'];
+$submenu['pagetitle'] = $lang_module['pagetitle'];
+$submenu['metatags'] = $lang_module['metaTagsConfig'];
+$submenu['statistics'] = $lang_module['global_statistics'];
+if( defined( 'NV_IS_GODADMIN' ) )
+{
 	$submenu['security'] = $lang_module['security'];
 	$submenu['cronjobs'] = $lang_global['mod_cronjobs'];
-	$submenu['smtp'] = $lang_module['smtp_config'];
 	$submenu['ftp'] = $lang_module['ftp_config'];
-	$submenu['pagetitle'] = $lang_module['pagetitle'];
-	$submenu['metatags'] = $lang_module['metaTagsConfig'];
 	$submenu['robots'] = $lang_module['robots'];
 	$submenu['bots'] = $lang_module['bots_config'];
 	$submenu['variables'] = $lang_module['variables'];
-	$submenu['statistics'] = $lang_module['global_statistics'];
 }
 
 if( $module_name == "settings" )
 {
+	$allow_func = array( 'main', 'smtp', 'pagetitle', 'metatags', 'statistics' );
+	if( defined( 'NV_IS_GODADMIN' ) OR ( defined( "NV_IS_SPADMIN" ) AND $global_config['idsite'] > 0 ) )
+	{
+		$allow_func[] = 'system';
+	}
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
-		$allow_func = array( 'main', 'system', 'statistics', 'bots', 'robots', 'smtp', 'ftp', 'pagetitle', 'metatags', 'security', 'cronjobs', 'cronjobs_add', 'cronjobs_edit', 'cronjobs_del', 'cronjobs_act', 'variables', 'cdn' );
-	}
-	else
-	{
-		$allow_func = array( 'main' );
+		$allow_func[] = 'bots';
+		$allow_func[] = 'robots';
+		$allow_func[] = 'ftp';
+		$allow_func[] = 'security';
+		$allow_func[] = 'cronjobs';
+		$allow_func[] = 'cronjobs_add';
+		$allow_func[] = 'cronjobs_edit';
+		$allow_func[] = 'cronjobs_del';
+		$allow_func[] = 'cronjobs_act';
+		$allow_func[] = 'variables';
+		$allow_func[] = 'cdn';
 	}
 
 	$menu_top = array(

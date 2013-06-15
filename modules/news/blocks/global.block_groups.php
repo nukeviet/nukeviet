@@ -25,7 +25,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		{
 			$html .= "<option value=\"" . $l['bid'] . "\" " . ( ( $data_block['blockid'] == $l['bid'] ) ? " selected=\"selected\"" : "" ) . ">" . $l['title'] . "</option>\n";
 		}
-		$html .= "</select></td>\n";
+		$html .= "</select>\n";
 		$html .= "</tr>";
 		$html .= "<tr>";
 		$html .= "<td>" . $lang_block['numrow'] . "</td>";

@@ -284,9 +284,6 @@ function user_login( $gfx_chk, $array_login )
 	$xtpl->assign( 'USER_LOGIN', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login" );
 	$xtpl->assign( 'USER_REGISTER', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register" );
 	$xtpl->assign( 'USER_LOSTPASS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=lostpass" );
-	$xtpl->assign( 'NICK_MAXLENGTH', NV_UNICKMAX );
-	$xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
-
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array_login );
 

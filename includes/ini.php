@@ -38,7 +38,6 @@ if( $sys_info['ini_set_support'] )
 	ini_set( 'allow_url_fopen', 1 );
 	ini_set( "user_agent", 'NV3' );
 	ini_set( "default_charset", $global_config['site_charset'] );
-	ini_set( 'sendmail_from', $global_config['site_email'] );
 
 	$memoryLimitMB = ( integer )ini_get( 'memory_limit' );
 
