@@ -202,9 +202,9 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 					'title' => nv_clean60( $row['title'], $block_config['title_length'] ), //
 					'target' => $row['target'], //
 					'note' => ( $block_config['is_viewdes'] and $row['note'] ) ? $row['note'] : $row['title'], //
-					'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ), //
+					'link' => nv_url_rewrite( nv_unhtmlspecialchars( NV_BASE_SITEURL . $row['link'] ), true ), //
 					'html_class' => $row['css'], //
-					'current' => nv_bmenu_check_currit( $row['link'], ( int )$row['active_type'] ) //
+					'current' => nv_bmenu_check_currit( NV_BASE_SITEURL . $row['link'], ( int )$row['active_type'] ) //
 				);
 			}
 		}

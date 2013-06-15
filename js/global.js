@@ -552,7 +552,7 @@ function nv_DigitalClock(div_id) {
 	}
 }
 
-function nv_search_submit(search_query, topmenu_search_checkss, search_button, minlength, maxlength) {
+function nv_search_submit(form, search_query, topmenu_search_checkss, search_button, minlength, maxlength) {
 	var query = document.getElementById(search_query);
 	var format_query = formatStringAsUriComponent(query.value);
 	var allowed = (format_query != '' && format_query.length >= minlength && format_query.length <= maxlength) ? true : false;
@@ -565,7 +565,8 @@ function nv_search_submit(search_query, topmenu_search_checkss, search_button, m
 		var sbutton = document.getElementById(search_button);
 		sbutton.disabled = true;
 		var search_checkss = document.getElementById(topmenu_search_checkss).value;
-		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=search&q=' + rawurlencode(format_query);
+		var rewrite_endurl = form.split("search");
+		window.location.href = rewrite_endurl[0] + "search/" + rawurlencode(format_query) + rewrite_endurl[1];
 	}
 	return false;
 }

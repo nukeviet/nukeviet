@@ -142,7 +142,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	$post['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
 	$post['mid'] = $nv_Request->get_int( 'item_menu', 'post', 0 );
 	$post['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
-	$post['link'] = filter_text_input( 'link', 'post', '', 1, 255 );
+	$post['link'] = $nv_Request->get_string( 'link', 'post', '', 1, 255 );
 	$post['note'] = filter_text_input( 'note', 'post', '', 1, 255 );
 	$post['module_name'] = filter_text_input( 'module_name', 'post', '', 1, 255 );
 	$post['op'] = filter_text_input( 'op', 'post', '', 1, 255 );
@@ -153,7 +153,8 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 
 	$mid_old = $nv_Request->get_int( 'mid', 'post', 0 );
 	$pa_old = $nv_Request->get_int( 'pa', 'post', 0 );
-
+    $post['link'] = str_replace(NV_BASE_SITEURL, "", $post['link'] );
+    
 	if( empty( $post['title'] ) )
 	{
 		$error = $lang_module['error_menu_name'];
@@ -172,7 +173,6 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 		{
 			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . intval( $post['mid'] ) . " AND `parentid`=" . intval( $post['parentid'] . " AND `mid`=" . $post['mid'] ) ) );
 			$weight = intval( $weight ) + 1;
-
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
 				NULL, 
 				" . intval( $post['parentid'] ) . ", 
