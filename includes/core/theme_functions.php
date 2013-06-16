@@ -274,7 +274,7 @@ function nv_rss_generate( $channel, $items )
 	{
 		foreach( $items as $item )
 		{
-			if( ! empty( $item['title'] ) and ! empty( $item['link'] ) and ! empty( $item['description'] ) )
+			if( ! empty( $item['title'] ) and ! empty( $item['link'] ) )
 			{
 				$item['title'] = nv_htmlspecialchars( $item['title'] );
 
