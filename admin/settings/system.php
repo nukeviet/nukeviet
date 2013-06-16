@@ -185,8 +185,8 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	}
 
 	$lang_multi = $array_config_global['lang_multi'];
-	$array_config_global['gzip_method'] = ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '';
-	$array_config_global['lang_multi'] = ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '';
+	$xtpl->assign( 'CHECKED_GZIP_METHOD', ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '' );
+	$xtpl->assign( 'CHECKED_LANG_MULTI', ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '' );
 
 	$xtpl->assign( 'CHECKED1', ( $array_config_global['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
