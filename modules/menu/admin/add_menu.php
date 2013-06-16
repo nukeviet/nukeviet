@@ -153,8 +153,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 
 	$mid_old = $nv_Request->get_int( 'mid', 'post', 0 );
 	$pa_old = $nv_Request->get_int( 'pa', 'post', 0 );
-    $post['link'] = str_replace(NV_BASE_SITEURL, "", $post['link'] );
-    
+
 	if( empty( $post['title'] ) )
 	{
 		$error = $lang_module['error_menu_name'];
@@ -174,22 +173,22 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . intval( $post['mid'] ) . " AND `parentid`=" . intval( $post['parentid'] . " AND `mid`=" . $post['mid'] ) ) );
 			$weight = intval( $weight ) + 1;
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
-				NULL, 
-				" . intval( $post['parentid'] ) . ", 
-				" . intval( $post['mid'] ) . ", 
-				" . $db->dbescape( $post['title'] ) . ", 
-				" . $db->dbescape( $post['link'] ) . ", 
-				" . $db->dbescape( $post['note'] ) . ", 
-				" . intval( $weight ) . ", 
-				0, 0, '', 
-				" . intval( $post['who_view'] ) . ", 
-				" . $db->dbescape( $post['groups_view'] ) . ", 
-				" . $db->dbescape( $post['module_name'] ) . ", 
-				" . $db->dbescape( $post['op'] ) . ", 
-				" . intval( $post['target'] ) . ", 
-				" . $db->dbescape( $post['css'] ) . ", 
-				" . intval( $post['active_type'] ) . ", 
-				1 
+				NULL,
+				" . intval( $post['parentid'] ) . ",
+				" . intval( $post['mid'] ) . ",
+				" . $db->dbescape( $post['title'] ) . ",
+				" . $db->dbescape( $post['link'] ) . ",
+				" . $db->dbescape( $post['note'] ) . ",
+				" . intval( $weight ) . ",
+				0, 0, '',
+				" . intval( $post['who_view'] ) . ",
+				" . $db->dbescape( $post['groups_view'] ) . ",
+				" . $db->dbescape( $post['module_name'] ) . ",
+				" . $db->dbescape( $post['op'] ) . ",
+				" . intval( $post['target'] ) . ",
+				" . $db->dbescape( $post['css'] ) . ",
+				" . intval( $post['active_type'] ) . ",
+				1
 			)";
 
 			if( $db->sql_query_insert_id( $sql ) )
@@ -244,17 +243,17 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 		else
 		{
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
-				`parentid`=" . intval( $post['parentid'] ) . ", 
+				`parentid`=" . intval( $post['parentid'] ) . ",
 				`mid`=" . intval( $post['mid'] ) . ",
 				`title`=" . $db->dbescape( $post['title'] ) . ",
 				`link`=" . $db->dbescape( $post['link'] ) . ",
 				`note`=" . $db->dbescape( $post['note'] ) . ",
 				`who_view`=" . intval( $post['who_view'] ) . " ,
 				`groups_view`=" . $db->dbescape( $post['groups_view'] ) . ",
-				`module_name`=" . $db->dbescape( $post['module_name'] ) . ",	
+				`module_name`=" . $db->dbescape( $post['module_name'] ) . ",
 				`op`=" . $db->dbescape( $post['op'] ) . ",
 				`target`=" . intval( $post['target'] ) . ",
-				`css`=" . $db->dbescape( $post['css'] ) . ", 
+				`css`=" . $db->dbescape( $post['css'] ) . ",
 				`active_type`=" . intval( $post['active_type'] ) . "
 			WHERE `id`=" . intval( $post['id'] );
 
