@@ -6,7 +6,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
-<form action="{BASE_URL_SITE}" name="fsea" method="get" onsubmit="return nv_news_search_submit('fsea');" "id="fsea">
+<form action="{BASE_URL_SITE}" name="fsea" method="get" id="fsea">
 	<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP_NAME}" />
@@ -68,7 +68,7 @@
 			buttonImage : nv_siteroot + "images/calendar.gif",
 			buttonImageOnly : true
 		});
-	}); 
+	});
 </script>
 
 <!-- END: main -->

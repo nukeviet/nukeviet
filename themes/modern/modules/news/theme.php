@@ -894,30 +894,39 @@ function news_print( $result )
 // Search
 function search_theme( $key, $check_num, $date_array, $array_cat_search )
 {
-	global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
+	global $module_name, $module_info, $module_file, $lang_module, $module_name, $my_head;
+
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=search" );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
-	$xtpl->assign( 'BASE_URL_SITE', $base_url_site );
+	$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . "?" );
 	$xtpl->assign( 'TO_DATE', $date_array['to_date'] );
 	$xtpl->assign( 'FROM_DATE', $date_array['from_date'] );
 	$xtpl->assign( 'KEY', $key );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 	$xtpl->assign( 'OP_NAME', 'search' );
+
 	foreach( $array_cat_search as $search_cat )
 	{
 		$xtpl->assign( 'SEARCH_CAT', $search_cat );
 		$xtpl->parse( 'main.search_cat' );
 	}
+
 	for( $i = 0; $i <= 3; ++$i )
 	{
-		if( $check_num == $i ) $xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
-		else  $xtpl->assign( 'CHECK' . $i, "" );
+		if( $check_num == $i )
+		{
+			$xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
+		}
+		else
+		{
+			$xtpl->assign( 'CHECK' . $i, "" );
+		}
 	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -966,13 +975,12 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	if( $numRecord > $per_pages ) // show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
-		$in = strpos( $url_link, 'page-' );
-		$length_rewrite_endurl = strlen( $global_config['rewrite_endurl'] );
-		if( $in != 0 ) $url_link = substr( $url_link, 0, $in + $length_rewrite_endurl );
-		else  $url_link = substr( $url_link, 0, strlen( $url_link ) + $length_rewrite_endurl );
-		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search";
-		preg_match( "/[a-z-0-9]*\/search([^\"]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . "|\/page[0-9-])$/i", $url_link, $matches_link );
-		$generate_page = nv_alias_page( '', $link . $matches_link[1], $numRecord, $per_pages, $pages );
+		$in = strpos( $url_link, '&page' );
+
+		if( $in != 0 ) $url_link = substr( $url_link, 0, $in );
+
+		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $pages );
+
 		$xtpl->assign( 'VIEW_PAGES', $generate_page );
 		$xtpl->parse( 'results.pages_result' );
 	}

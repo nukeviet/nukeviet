@@ -27,6 +27,7 @@ function main_theme( $is_search, $search, $array_modul )
 	$xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
 
 	$search['action'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
+	$search['action'] .= "&page=0";
 	$search['andChecked'] = $search['logic'] == 1 ? " checked=\"checked\"" : "";
 	$search['orChecked'] = $search['logic'] == 1 ? "" : " checked=\"checked\"";
 
@@ -93,12 +94,12 @@ function result_theme( $result_array, $mod, $mod_custom_title, $search, $is_gene
 	}
 
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&q=" . urlencode( $search['key'] );
-	if( $mod != "all" ) $base_url .= "/m-" . $mod;
-	$base_url .= "/l-" . $search['logic'];
+	if( $mod != "all" ) $base_url .= "&m=" . $mod;
+	$base_url .= "&l=" . $search['logic'];
 
 	if( $is_generate_page )
 	{
-		$generate_page = nv_alias_page( $mod_custom_title, $base_url, $all_page, $limit, $search['page'] );
+		$generate_page = nv_generate_page( $base_url, $all_page, $limit, $search['page'] );
 		if( ! empty( $generate_page ) )
 		{
 			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
