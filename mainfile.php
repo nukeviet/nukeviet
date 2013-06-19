@@ -456,7 +456,7 @@ if( $nv_check_update and ! defined( 'NV_IS_UPDATE' ) )
 	if( ! defined( 'NV_ADMIN' ) and ! defined( 'NV_IS_GODADMIN' ) )
 	{
 		$disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content );
+		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, '', '', '', '' );
 	}
 }
 elseif( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
@@ -464,7 +464,7 @@ elseif( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
 	if( ! empty( $global_config['closed_site'] ) )
 	{
 		$disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content );
+		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, '', '', '', '' );
 	}
 	elseif( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
 	{

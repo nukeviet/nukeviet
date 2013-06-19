@@ -50,7 +50,9 @@
 			<!-- BEGIN: adminlink -->
 			<a href="{ADMIN_LINK}"><font color="#616161">{GO_ADMINPAGE}</font></a>&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp;&nbsp;
 			<!-- END: adminlink -->
-			<a href="{HOME_LINK}"><font color="#616161">{GO_HOMEPAGE}</font></a>
+			<!-- BEGIN: sitelink -->
+			<a href="{SITE_LINK}"><font color="#616161">{GO_SITEPAGE}</font></a>
+			<!-- END: sitelink -->
 		</div>
 	</body>
 </html>

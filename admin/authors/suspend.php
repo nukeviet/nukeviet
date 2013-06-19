@@ -169,7 +169,7 @@ if( $allow_change )
 
 					if( ! $send )
 					{
-						nv_info_die( $lang_global['error_info_caption'], $lang_global['site_info'], $lang_global['error_sendmail_admin'], 1 );
+						nv_info_die( $lang_global['error_info_caption'], $lang_global['site_info'], $lang_global['error_sendmail_admin'] );
 					}
 				}
 			}

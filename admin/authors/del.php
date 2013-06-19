@@ -188,7 +188,7 @@ if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
 			$send = nv_sendmail( $from, $to, nv_EncString( $title ), $content );
 			if( ! $send )
 			{
-				nv_info_die( $lang_global['error_info_caption'], $lang_global['site_info'], $lang_global['error_sendmail_admin'], 1 );
+				nv_info_die( $lang_global['error_info_caption'], $lang_global['site_info'], $lang_global['error_sendmail_admin'] );
 			}
 		}
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
