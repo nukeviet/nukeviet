@@ -43,32 +43,39 @@ if( empty( $contents ) )
 	{
 		$data_content = array();
 		$array_subcatid = explode( ",", $global_array_cat[$catid]['subcatid'] );
-		
+
 		foreach ( $array_subcatid as $catid_i )
 		{
 			$array_info_i = $global_array_cat[$catid_i];
-			
+
 			$array_cat = array();
 			$array_cat = GetCatidInParent( $catid_i );
-			
-			$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
+
+			$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
 			$result = $db->sql_query( $sql );
-			
+
 			$data_pro = array();
 			list( $num_pro ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
-			
-			while ( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit,$showprice ) = $db->sql_fetchrow( $result ) )
+
+			while ( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit,$showprice ) = $db->sql_fetchrow( $result ) )
 			{
-				$thumb = explode( "|", $homeimgthumb );
-				if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
+				if( $homeimgthumb == 1 ) //image thumb
 				{
-					$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
+					$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 				}
-				else
+				elseif( $homeimgthumb == 2 ) //image file
 				{
-					$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+					$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 				}
-				$data_pro[] = array( 
+				elseif( $homeimgthumb == 3 ) //image url
+				{
+					$thumb = $homeimgfile;
+				}
+				else //no image
+				{
+					$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+				}
+				$data_pro[] = array(
 					"id" => $id,
 					"publtime" => $publtime,
 					"title" => $title,
@@ -76,37 +83,38 @@ if( empty( $contents ) )
 					"hometext" => $hometext,
 					"address" => $address,
 					"homeimgalt" => $homeimgalt,
-					"homeimgthumb" => $thumb[0],
+					"homeimgthumb" => $thumb,
 					"product_code" => $product_code,
 					"product_price" => $product_price,
 					"product_discounts" => $product_discounts,
 					"money_unit" => $money_unit,
 					"showprice" => $showprice,
 					"link_pro" => $link . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id,
-					"link_order" => $link . "setcart&amp;id=" . $id 
+					"link_order" => $link . "setcart&amp;id=" . $id
 				);
 			}
-			$data_content[] = array( 
+
+			$data_content[] = array(
 				"catid" => $catid_i,
 				"title" => $array_info_i['title'],
 				"link" => $array_info_i['link'],
 				"data" => $data_pro,
 				"num_pro" => $num_pro,
-				"num_link" => $array_info_i['numlinks'] 
+				"num_link" => $array_info_i['numlinks']
 			);
 		}
-		
+
 		if( $page > 1 )
 		{
 			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
 			exit();
 		}
-		
+
 		$contents = call_user_func( 'view_home_cat', $data_content );
 	}
 	else
 	{
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE";
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE";
 		if ( $global_array_cat[$catid]['numsubcat'] == 0 )
 		{
 			$sql .= " `listcatid`=" . $catid;
@@ -121,21 +129,21 @@ if( empty( $contents ) )
 		$result = $db->sql_query( $sql );
 
 		list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
-		
+
 		$data_content = GetDataIn( $result, $catid );
 		$data_content['count'] = $all_page;
-		
+
 		$pages = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
-		
+
 		if( sizeof( $data_content['data'] ) < 1 and $page > 1 )
 		{
 			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
 			exit();
 		}
-		
+
 		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $pages );
 	}
-	
+
 	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )
 	{
 		nv_set_cache( $cache_file, $contents );

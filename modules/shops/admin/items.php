@@ -18,7 +18,7 @@ if ( ! defined( 'SHADOWBOX' ) )
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "Shadowbox.init();\n";
 	$my_head .= "</script>\n";
-	
+
 	define( 'SHADOWBOX', true );
 }
 
@@ -93,13 +93,13 @@ if( $checkss == md5( session_id() ) )
 	{
 		$sql = "SELECT `userid` FROM " . NV_USERS_GLOBALTABLE . " WHERE `userid` IN (SELECT `admin_id` FROM " . NV_AUTHORS_GLOBALTABLE . ") AND `username` LIKE '%" . $db->dblikeescape( $q ) . "%' OR `full_name` LIKE '%" . $db->dblikeescape( $q ) . "%'";
 		$result = $db->sql_query( $sql );
-		
+
 		$array_admin_id = array();
 		while( list( $admin_id ) = $db->sql_fetchrow( $result ) )
 		{
 			$array_admin_id[] = $admin_id;
 		}
-		
+
 		$arr_from = array();
 		$arr_from[] = "(`product_code` LIKE '%" . $db->dblikeescape( $q ) . "%')";
 		foreach( $array_in_rows as $val )
@@ -113,7 +113,7 @@ if( $checkss == md5( session_id() ) )
 		}
 		$from .= " )";
 	}
-	
+
 	// Tim theo loai san pham
 	if( ! empty( $catid ) )
 	{
@@ -125,7 +125,7 @@ if( $checkss == md5( session_id() ) )
 		{
 			$from .= " AND";
 		}
-		
+
 		if ( $global_array_cat[$catid]['numsubcat'] == 0 )
 		{
 			$from .= " `listcatid`=" . $catid;
@@ -156,7 +156,7 @@ foreach( $global_array_cat as $cat )
 	if( $cat['catid'] > 0 )
 	{
 		$cat['selected'] = $cat['catid'] == $catid ? " selected=\"selected\"" : "";
-		
+
 		$xtpl->assign( 'CATID', $cat );
 		$xtpl->parse( 'main.catid' );
 	}
@@ -216,46 +216,30 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 	{
 		$catid_i = $listcatid;
 	}
-	
+
 	// Xac dinh anh nho
-	$thumb = explode( "|", $homeimgthumb );
-	if ( ! empty( $thumb[1] ) and ! nv_is_url( $thumb[1] ) )
+	if( $homeimgthumb == 1 ) //image thumb
 	{
-		$thumb[1] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[1];
-	}
-	else
-	{
-		if( file_exists( NV_ROOTDIR . "/themes/" . $theme . "/images/" . $module_file . "/no-image.jpg" ) )
-		{
-			$thumb[1] = NV_BASE_SITEURL . "themes/" . $theme . "/images/" . $module_file . "/no-image.jpg";
-		}
-		else
-		{
-			$thumb[1] = NV_BASE_SITEURL . "themes/default/images/" . $module_file . "/no-image.jpg";
-		}
-	}
-	
-	// Xac dinh anh lon
-	if( nv_is_url( $homeimgfile ) )
-	{
-		$imghome = $homeimgfile;
-	}
-	elseif( $homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile ) )
-	{
+		$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		$imghome = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
+	elseif( $homeimgthumb == 2 ) //image file
+	{
+		$imghome = $thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+	}
+	elseif( $homeimgthumb == 3 ) //image url
+	{
+		$imghome = $thumb = $homeimgfile;
+	}
+	elseif( file_exists( NV_ROOTDIR . "/themes/" . $theme . "/images/" . $module_file . "/no-image.jpg" ) )
+	{
+		$imghome = $thumb = NV_BASE_SITEURL . "themes/" . $theme . "/images/" . $module_file . "/no-image.jpg";
+	}
 	else
 	{
-		if( file_exists( NV_ROOTDIR . "/themes/" . $theme . "/images/" . $module_file . "/no-image.jpg" ) )
-		{
-			$imghome = NV_BASE_SITEURL . "themes/" . $theme . "/images/" . $module_file . "/no-image.jpg";
-		}
-		else
-		{
-			$imghome = NV_BASE_SITEURL . "themes/default/images/" . $module_file . "/no-image.jpg";
-		}
+		$imghome = $thumb = NV_BASE_SITEURL . "themes/default/images/" . $module_file . "/no-image.jpg";
 	}
-	
+
 	$xtpl->assign( 'ROW', array(
 		"class" => ( $a % 2 == 0 ) ? "" : " class=\"second\"",
 		"id" => $id,
@@ -268,14 +252,14 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 		"product_number" => $product_number,
 		"product_price" => nv_fomart_money( $product_price, ",", "." ),
 		"money_unit" => $money_unit,
-		"thumb" => $thumb[1],
+		"thumb" => $thumb,
 		"imghome" => $imghome,
 		"product_discounts" => $product_discounts,
 		"link_edit" => nv_link_edit_page( $id ),
 		"link_delete" => nv_link_delete_page( $id ),
 	) );
 	$xtpl->parse( 'main.loop' );
-	
+
 	$a++;
 }
 

@@ -40,35 +40,42 @@ if ( ! empty( $_SESSION[$module_data . '_cart'] ) )
 	if ( ! empty( $arrayid ) )
 	{
 		$listid = implode( ",", $arrayid );
-		
-		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgthumb, t1.product_number, t1.product_price, t1.product_discounts, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $listid . ")  AND t1.status=1";
+
+		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.product_discounts, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $listid . ")  AND t1.status=1";
 		$result = $db->sql_query( $sql );
-		
-		while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $homeimgalt, $homeimgthumb, $product_number, $product_price, $product_discounts, $unit, $money_unit ) = $db->sql_fetchrow( $result ) )
+
+		while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_number, $product_price, $product_discounts, $unit, $money_unit ) = $db->sql_fetchrow( $result ) )
 		{
-			$thumb = explode( "|", $homeimgthumb );
-			if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
+			if( $homeimgthumb == 1 ) //image thumb
 			{
-				$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
+				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 			}
-			else
+			elseif( $homeimgthumb == 2 ) //image file
 			{
-				$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 			}
-			
+			elseif( $homeimgthumb == 3 ) //image url
+			{
+				$thumb = $homeimgfile;
+			}
+			else //no image
+			{
+				$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+			}
+
 			$number = $_SESSION[$module_data . '_cart'][$id]['num'];
 			if ( $number > $product_number and $number > 0 and empty( $pro_config['active_order_number'] ) )
 			{
 				$number = $_SESSION[$module_data . '_cart'][$id]['num'] = $product_number;
 				$array_error_product_number[] = sprintf( $lang_module['product_number_max'], $title, $product_number );
 			}
-			
+
 			if ( $pro_config['active_price'] == '0' )
 			{
 				$product_discounts = $product_price = 0;
 			}
-			
-			$data_content[] = array( 
+
+			$data_content[] = array(
 				"id" => $id,
 				"publtime" => $publtime,
 				"title" => $title,
@@ -76,18 +83,18 @@ if ( ! empty( $_SESSION[$module_data . '_cart'] ) )
 				"note" => $note,
 				"hometext" => $hometext,
 				"homeimgalt" => $homeimgalt,
-				"homeimgthumb" => $thumb[0],
+				"homeimgthumb" => $thumb,
 				"product_price" => $product_price,
 				"product_discounts" => $product_discounts,
 				"product_unit" => $unit,
 				"money_unit" => $money_unit,
 				"link_pro" => $link . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id,
 				"num" => $number,
-				"link_remove" => $link . "remove&id=" . $id 
+				"link_remove" => $link . "remove&id=" . $id
 			);
 			$_SESSION[$module_data . '_cart'][$id]['order'] = 1;
 		}
-		
+
 		if ( empty( $array_error_product_number ) and $nv_Request->isset_request( 'cart_order', 'post' ) )
 		{
 			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order", true ) );

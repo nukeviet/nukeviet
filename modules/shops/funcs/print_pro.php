@@ -25,21 +25,27 @@ if( empty( $data_content ) )
 $catid = $data_content['listcatid'];
 
 $result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` WHERE `id` = " .$data_content['product_unit'] );
-$data_unit = $db->sql_fetchrow( $result ); 
+$data_unit = $db->sql_fetchrow( $result );
 $data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
 
-$array_img = explode( "|", $data_content['homeimgthumb'] );
-if( ! empty( $array_img[0] ) and ! nv_is_url( $array_img[0] ) )
+$homeimgfile = $data_content['homeimgfile'];
+if( $data_content['homeimgthumb'] == 1 ) //image thumb
 {
-	$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" .$data_content['homeimgfile'];
-	$array_img[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_img[0];
+	$data_content['homeimgthumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+	$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 }
-else
+elseif( $data_content['homeimgthumb'] == 2 ) //image file
 {
-	$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/thumb/no_image.jpg";
-	$array_img[0] = NV_BASE_SITEURL . "themes/" . $module_info ['template'] . "/images/" . $module_name . "/no-image.jpg";
+	$data_content['homeimgthumb'] = $data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 }
-$data_content['homeimgthumb'] = $array_img[0];
+elseif( $data_content['homeimgthumb'] == 3 ) //image url
+{
+	$data_content['homeimgthumb'] = $data_content['homeimgfile'] = $homeimgfile;
+}
+else //no image
+{
+	$data_content['homeimgthumb'] = $data_content['homeimgfile'] = NV_BASE_SITEURL . "themes/" . $module_info ['template'] . "/images/" . $module_name . "/no-image.jpg";
+}
 
 $page_title = $data_content [NV_LANG_DATA . '_title'];
 

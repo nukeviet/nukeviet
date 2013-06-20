@@ -45,7 +45,7 @@ foreach( $list as $row )
 		"groups_view" => $row['groups_view'],
 		'lev' => $row['lev']
 	);
-	
+
 	if( $alias_cat_url == $row['alias'] )
 	{
 		$catid = $row['catid'];
@@ -80,7 +80,7 @@ foreach( $list as $row )
 		"lev" => $row['lev'],
 		"numpro" => $row['numpro']
 	);
-	
+
 	if( $alias_group_url == $row['alias'] )
 	{
 		$groupid = $row['groupid'];
@@ -106,7 +106,7 @@ if( $op == "main" )
 		{
 			$alias_url = preg_replace( "/^(.*?)\-([0-9]+)$/", '${1}', $array_op[1] );
 			$id = preg_replace( "/^(.*?)\-([0-9]+)$/", '${2}', $array_op[1] );
-			
+
 			$op = "detail";
 		}
 		else
@@ -115,7 +115,7 @@ if( $op == "main" )
 			{
 				$page = ( int ) $m[1];
 			}
-			
+
 			$op = "viewcat";
 		}
 		$parentid = $catid;
@@ -135,7 +135,7 @@ if( $op == "main" )
 
 /**
  * GetDataIn()
- * 
+ *
  * @param mixed $result
  * @param mixed $catid
  * @return
@@ -145,17 +145,25 @@ function GetDataIn( $result, $catid )
 	global $global_array_cat, $module_name, $db, $link, $module_info;
 	$data_content = array();
 	$data = array();
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
 	{
-		$thumb = explode( "|", $homeimgthumb );
-		if( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
+		if( $homeimgthumb == 1 ) //image thumb
 		{
-			$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
+			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		else
+		elseif( $homeimgthumb == 2 ) //image file
 		{
-			$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
+		elseif( $homeimgthumb == 3 ) //image url
+		{
+			$thumb = $homeimgfile;
+		}
+		else //no image
+		{
+			$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+		}
+
 		$data[] = array(
 			"id" => $id,
 			"publtime" => $publtime,
@@ -164,7 +172,7 @@ function GetDataIn( $result, $catid )
 			"hometext" => $hometext,
 			"address" => $address,
 			"homeimgalt" => $homeimgalt,
-			"homeimgthumb" => $thumb[0],
+			"homeimgthumb" => $thumb,
 			"product_code" => $product_code,
 			"product_price" => $product_price,
 			"product_discounts" => $product_discounts,
@@ -174,40 +182,48 @@ function GetDataIn( $result, $catid )
 			"link_order" => $link . "setcart&amp;id=" . $id
 		);
 	}
-	
+
 	$data_content['id'] = $catid;
 	$data_content['title'] = $global_array_cat[$catid]['title'];
 	$data_content['data'] = $data;
 	$data_content['alias'] = $global_array_cat[$catid]['alias'];
-	
+
 	return $data_content;
 }
 
 /**
  * GetDataInGroup()
- * 
+ *
  * @param mixed $result
  * @param mixed $groupid
  * @return
  */
 function GetDataInGroup( $result, $groupid )
 {
-	global $global_array_group, $module_name, $db, $link, $module_info, $global_array_cat;
-	
+	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_cat;
+
 	$data_content = array();
 	$data = array();
-	
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
+
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
 	{
-		$thumb = explode( "|", $homeimgthumb );
-		if( ! empty( $thumb[0] ) && ! nv_is_url( $thumb[0] ) )
+		if( $homeimgthumb == 1 ) //image thumb
 		{
-			$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
+			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		else
+		elseif( $homeimgthumb == 2 ) //image file
 		{
-			$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
+		elseif( $homeimgthumb == 3 ) //image url
+		{
+			$thumb = $homeimgfile;
+		}
+		else //no image
+		{
+			$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+		}
+
 		$data[] = array(
 			"id" => $id,
 			"publtime" => $publtime,
@@ -216,7 +232,7 @@ function GetDataInGroup( $result, $groupid )
 			"hometext" => $hometext,
 			"address" => $address,
 			"homeimgalt" => $homeimgalt,
-			"homeimgthumb" => $thumb[0],
+			"homeimgthumb" => $thumb,
 			"product_code" => $product_code,
 			"product_price" => $product_price,
 			"product_discounts" => $product_discounts,
@@ -226,18 +242,18 @@ function GetDataInGroup( $result, $groupid )
 			"link_order" => $link . "setcart&amp;id=" . $id
 		);
 	}
-	
+
 	$data_content['id'] = $groupid;
 	$data_content['title'] = $global_array_group[$groupid]['title'];
 	$data_content['data'] = $data;
 	$data_content['alias'] = $global_array_group[$groupid]['alias'];
-	
+
 	return $data_content;
 }
 
 /**
  * FormatNumber()
- * 
+ *
  * @param mixed $number
  * @param integer $decimals
  * @param string $thousand_separator
@@ -254,7 +270,7 @@ function FormatNumber( $number, $decimals = 0, $thousand_separator = '&nbsp;', $
 /*return string money eg: 100 000 000*/
 /**
  * CurrencyConversion()
- * 
+ *
  * @param mixed $price
  * @param mixed $currency_curent
  * @param mixed $currency_convert
@@ -288,7 +304,7 @@ function CurrencyConversion( $price, $currency_curent, $currency_convert )
 /*return double money eg: 100000000 */
 /**
  * CurrencyConversionToNumber()
- * 
+ *
  * @param mixed $price
  * @param mixed $currency_curent
  * @param mixed $currency_convert
@@ -315,7 +331,7 @@ function CurrencyConversionToNumber( $price, $currency_curent, $currency_convert
 
 /**
  * SetSessionProView()
- * 
+ *
  * @param mixed $id
  * @param mixed $title
  * @param mixed $alias

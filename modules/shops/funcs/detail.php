@@ -62,34 +62,29 @@ if( $allowed )
 	$data_unit = $db->sql_fetchrow( $sql );
 	$data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
 
-	$array_img = explode( "|", $data_content['homeimgthumb'] );
-	if ( ! empty( $array_img[0] ) and ! nv_is_url( $array_img[0] ) )
-	{
-		$array_img[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_img[0];
-	}
-	else
-	{
-		$array_img[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
-	}
-	$data_content['homeimgthumb'] = $array_img[0];
-
 	// Xac dinh anh lon
-	if( nv_is_url( $data_content['homeimgfile'] ) )
+	$homeimgfile = $data_content['homeimgfile'];
+	if( $data_content['homeimgthumb'] == 1 ) //image thumb
 	{
-		$data_content['homeimgfile'] = $data_content['homeimgfile'];
+		$data_content['homeimgthumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+		$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	elseif( $data_content['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['homeimgfile'] ) )
+	elseif( $data_content['homeimgthumb'] == 2 ) //image file
 	{
-		$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['homeimgfile'];
+		$data_content['homeimgthumb'] = $data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	else
+	elseif( $data_content['homeimgthumb'] == 3 ) //image url
 	{
-		$data_content['homeimgfile'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+		$data_content['homeimgthumb'] = $data_content['homeimgfile'] = $homeimgfile;
 	}
-	
+	else //no image
+	{
+		$data_content['homeimgthumb'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+	}
+
 	$data_content['comment'] = "";
 	$allow_comment = 0;
-	
+
 	if( nv_set_allow( $pro_config['who_comment'], $pro_config['groups_comment'] ) and ! empty( $pro_config['comment'] ) and ( ( $data_content['allowed_comm'] == 1 ) or ( $data_content['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
 	{
 		$data_comment = nv_comment_module( $data_content['id'], 0 );
@@ -105,27 +100,34 @@ if( $allowed )
 	$data_temp = $db->sql_fetchrow( $sql );
 	$data_content['source'] = $data_temp[NV_LANG_DATA . '_title'];
 
-	$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgthumb`, `addtime`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id!=" . $id . " AND `listcatid` = " . $data_content['listcatid'] . " AND `status`=1 ORDER BY ID DESC LIMIT " . ( $pro_config['per_row'] * 2 );
+	$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgfile`, `homeimgthumb`, `addtime`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id!=" . $id . " AND `listcatid` = " . $data_content['listcatid'] . " AND `status`=1 ORDER BY ID DESC LIMIT " . ( $pro_config['per_row'] * 2 );
 	$result = $db->sql_query( $sql );
 
 	$data_others = array();
-	while ( list( $_id, $title, $alias, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $db->sql_fetchrow( $result ) )
+	while ( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $db->sql_fetchrow( $result ) )
 	{
-		$thumb = explode( "|", $homeimgthumb );
-		if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
+		if( $homeimgthumb == 1 ) //image thumb
 		{
-			$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
+			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		else
+		elseif( $homeimgthumb == 2 ) //image file
 		{
-			$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		
-		$data_others[] = array( 
+		elseif( $homeimgthumb == 3 ) //image url
+		{
+			$thumb = $homeimgfile;
+		}
+		else //no image
+		{
+			$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+		}
+
+		$data_others[] = array(
 			"id" => $_id,
 			"title" => $title,
 			"alias" => $alias,
-			"homeimgthumb" => $thumb[0],
+			"homeimgthumb" => $thumb,
 			"hometext" => $hometext,
 			"addtime" => $addtime,
 			"product_code" => $product_code,
@@ -134,7 +136,7 @@ if( $allowed )
 			"money_unit" => $money_unit,
 			"showprice" => $showprice,
 			"link_pro" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $_id,
-			"link_order" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart&amp;id=" . $_id 
+			"link_order" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart&amp;id=" . $_id
 		);
 	}
 
@@ -150,27 +152,34 @@ if( $allowed )
 			}
 		}
 		$arrtempid = implode( ",", $arrid );
-		
-		$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgthumb`, `addtime`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` IN ( " . $arrtempid . ") AND `status`=1 ORDER BY `id` DESC LIMIT ".( $pro_config['per_row'] * 2 );
+
+		$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgfile`, `homeimgthumb`, `addtime`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` IN ( " . $arrtempid . ") AND `status`=1 ORDER BY `id` DESC LIMIT ".( $pro_config['per_row'] * 2 );
 		$result = $db->sql_query( $sql );
-		
-		while ( list( $_id, $title, $alias, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice,$hometext ) = $db->sql_fetchrow( $result ) )
+
+		while ( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice,$hometext ) = $db->sql_fetchrow( $result ) )
 		{
-			$thumb = explode( "|", $homeimgthumb );
-			if ( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
+			if( $homeimgthumb == 1 ) //image thumb
 			{
-				$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $thumb[0];
+				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 			}
-			else
+			elseif( $homeimgthumb == 2 ) //image file
 			{
-				$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 			}
-			
-			$array_other_view[] = array( 
+			elseif( $homeimgthumb == 3 ) //image url
+			{
+				$thumb = $homeimgfile;
+			}
+			else //no image
+			{
+				$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+			}
+
+			$array_other_view[] = array(
 				"id" => $_id,
 				"title" => $title,
 				"alias" => $alias,
-				"homeimgthumb" => $thumb[0],
+				"homeimgthumb" => $thumb,
 				"hometext" => $hometext,
 				"addtime" => $addtime,
 				"product_code" => $product_code,
@@ -179,7 +188,7 @@ if( $allowed )
 				"money_unit" => $money_unit,
 				"showprice" => $showprice,
 				"link_pro" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$data_content['listcatid']]['alias'] . "/" . $alias . "-" . $_id,
-				"link_order" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart&amp;id=" . $_id 
+				"link_order" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart&amp;id=" . $_id
 			);
 		}
 	}

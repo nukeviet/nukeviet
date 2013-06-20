@@ -13,7 +13,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 {
 	/**
 	 * nv_block_config_relates_blocks()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $data_block
 	 * @param mixed $lang_block
@@ -22,9 +22,9 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 	function nv_block_config_relates_blocks( $module, $data_block, $lang_block )
 	{
 		global $db_config, $site_mods;
-		
+
 		$html = "";
-		
+
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['blockid'] . "</td>";
 		$html .= "	<td><select name=\"config_blockid\">\n";
@@ -37,23 +37,23 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		}
 		$html .= "	</select></td>\n";
 		$html .= "</tr>";
-		
+
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['numrow'] . "</td>";
 		$html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
 		$html .= "</tr>";
-		
+
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['cut_num'] . "</td>";
 		$html .= "	<td><input type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></td>";
 		$html .= "</tr>";
-		
+
 		return $html;
 	}
 
 	/**
 	 * nv_block_config_relates_blocks_submit()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $lang_block
 	 * @return
@@ -74,7 +74,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 	{
 		/**
 		 * CurrencyConversion()
-		 * 
+		 *
 		 * @param mixed $price
 		 * @param mixed $currency_curent
 		 * @param mixed $currency_convert
@@ -110,20 +110,20 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 	/**
 	 * nv_relates_product()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
 	function nv_relates_product( $block_config )
 	{
 		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db_config, $my_head;
-		
+
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 		$mod_file = $site_mods[$module]['module_file'];
 		$pro_config = $module_config[$module];
 		$array_cat_shops = $global_array_cat;
-		
+
 		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $mod_file . "/block.others_product.tpl" ) )
 		{
 			$block_theme = $global_config['site_theme'];
@@ -132,7 +132,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		{
 			$block_theme = "default";
 		}
-		
+
 		if( $module != $module_name )
 		{
 			$sql = "SELECT `catid`, `parentid`, `lev`, `" . NV_LANG_DATA . "_title` AS `title`, `" . NV_LANG_DATA . "_alias` AS `alias`, `viewcat`, `numsubcat`, `subcatid`, `numlinks`, `" . NV_LANG_DATA . "_description` AS `description`, `inhome`, `" . NV_LANG_DATA . "_keywords` AS `keywords`, `who_view`, `groups_view` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_catalogs` ORDER BY `order` ASC";
@@ -159,40 +159,47 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 				);
 			}
 			unset( $list, $row );
-			
+
 			if( file_exists( NV_ROOTDIR . "/themes/" . $block_theme . "/css/" . $mod_file . ".css" ) )
 			{
 				$my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/css/' . $mod_file . '.css' . '" type="text/css" />';
 			}
 		}
-		
+
 		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=";
 
 		$xtpl = new XTemplate( "block.others_product.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
-		
-		$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS `title`, t1." . NV_LANG_DATA . "_alias AS `alias`, t1.addtime, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice FROM `" . $db_config['prefix'] . "_" . $module . "_rows` AS t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status=1 ORDER BY t1.addtime DESC, t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
+
+		$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS `title`, t1." . NV_LANG_DATA . "_alias AS `alias`, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice FROM `" . $db_config['prefix'] . "_" . $module . "_rows` AS t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status=1 ORDER BY t1.addtime DESC, t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
 		$list = nv_db_cache( $sql, "id", $module );
-		
+
 		$i = 1;
 		$cut_num = $block_config['cut_num'];
 
 		foreach( $list as $row )
 		{
-			$thumb = explode( "|", $row['homeimgthumb'] );
-			if( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
+			if( $row['homeimgthumb'] == 1 ) //image thumb
 			{
-				$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module . "/" . $thumb[0];
+				$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $row['homeimgfile'];
 			}
-			else
+			elseif( $row['homeimgthumb'] == 2 ) //image file
 			{
-				$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $mod_file . "/no-image.jpg";
+				$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $row['homeimgfile'];
 			}
-			
+			elseif( $row['homeimgthumb'] == 3 ) //image url
+			{
+				$src_img = $row['homeimgfile'];
+			}
+			else //no image
+			{
+				$src_img = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
+
 			$xtpl->assign( 'link', $link . $array_cat_shops[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] );
 			$xtpl->assign( 'title', nv_clean60( $row['title'], $cut_num ) );
-			$xtpl->assign( 'src_img', $thumb[0] );
+			$xtpl->assign( 'src_img', $src_img );
 			$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $row['addtime'] ) );
-			
+
 			if( $pro_config['active_price'] == '1' and $row['showprice'] == '1' )
 			{
 				$product_price = CurrencyConversion( $row['product_price'], $row['money_unit'], $pro_config['money_unit'], $block_config );
@@ -211,13 +218,13 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 				}
 				$xtpl->parse( 'main.loop.price' );
 			}
-			
+
 			$bg = ( $i % 2 == 0 ) ? "bg" : "";
 			$xtpl->assign( "bg", $bg );
 			$xtpl->parse( 'main.loop' );
 			$i++;
 		}
-		
+
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
