@@ -986,8 +986,6 @@ function nv_editor_nl2br( $text )
 {
 	if( empty( $text ) ) return '';
 
-	$replacement = defined( 'NV_EDITOR' ) ? '' : '<br />';
-
 	return nv_nl2br( $text, ( defined( 'NV_EDITOR' ) ? '' : '<br />' ) );
 }
 
