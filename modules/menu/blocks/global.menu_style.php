@@ -22,7 +22,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	 */
 	function nv_block_config_menu( $module, $data_block, $lang_block )
 	{
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['menu'] . "</td>";
 		$html .= "	<td><select name=\"menuid\">\n";
@@ -337,7 +337,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				}
 				else
 				{
-					$xtpl->assign( 'rel', "" );
+					$xtpl->assign( 'rel', '' );
 				}
 				$xtpl->parse( 'main.loopcat1' );
 			}
@@ -556,7 +556,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				{
 					if( $style == 'pro_dropdown' )
 					{
-						if( $list_cats[$catid]['subcats'] != "" )
+						if( $list_cats[$catid]['subcats'] != '' )
 						{
 							$xtpl->assign( 'cla', 'class="fly"' );
 						}

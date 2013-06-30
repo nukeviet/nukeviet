@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
-$tables = filter_text_input( 'tables', 'post' );
+$tables = $nv_Request->get_title( 'tables', 'post' );
 
 if( empty( $tables ) )
 {
@@ -20,7 +20,7 @@ else
 	$tables = explode( ",", $tables );
 }
 
-nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['optimize'], "", $admin_info['userid'] );
+nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['optimize'], '', $admin_info['userid'] );
 
 $totalfree = 0;
 $tabs = array();

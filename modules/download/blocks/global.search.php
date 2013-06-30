@@ -31,7 +31,7 @@ if( defined( 'NV_SYSTEM' ) )
 		$sql = "SELECT id, title, alias, parentid FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_categories` WHERE parentid=0 ORDER BY weight";
 		$list = nv_db_cache( $sql, '', $module );
 
-		$key = filter_text_input( 'q', 'post', '', 1, NV_MAX_SEARCH_LENGTH );
+		$key = nv_substr( $nv_Request->get_title( 'q', 'post', '', 1 ), 0, NV_MAX_SEARCH_LENGTH );
 		$cat = $nv_Request->get_int( 'cat', 'post' );
 
 		$path = NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $site_mods[$module]['module_file'];

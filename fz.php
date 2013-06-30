@@ -91,11 +91,11 @@ function nv_fomat_file_php( $filename )
 	$array_file_not_fomat[] = NV_ROOTDIR . '/includes/class/pclzip.class.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/includes/class/SimpleCaptcha.class.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/includes/class/xtemplate.class.php';
-	
+
 	$array_file_not_fomat[] = NV_ROOTDIR . '/includes/phpmailer/class.phpmailer.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/includes/phpmailer/class.pop3.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/includes/phpmailer/class.smtp.php';
-	
+
 	$array_file_not_fomat[] = NV_ROOTDIR . '/editors/ckeditor/plugins/ckeditor_wiris/integration/api.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/editors/ckeditor/plugins/ckeditor_wiris/integration/cas.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/editors/ckeditor/plugins/ckeditor_wiris/integration/ConfigurationUpdater.php';
@@ -107,33 +107,33 @@ function nv_fomat_file_php( $filename )
 	$array_file_not_fomat[] = NV_ROOTDIR . '/editors/ckeditor/plugins/ckeditor_wiris/integration/service.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/editors/ckeditor/plugins/ckeditor_wiris/integration/showcasimage.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/editors/ckeditor/plugins/ckeditor_wiris/integration/showimage.php';
-	
+
 	if( ! in_array( $filename, $array_file_not_fomat ) )
 	{
 		$contents = file_get_contents( $filename );
-		
+
 		// Thêm dòng trắng đầu file
 		$output_data = preg_replace( '/^\<\?php/', "<?php\n", trim( $contents ) );
-		
+
 		// Thêm dòng trắng ở cuối file
 		$output_data = preg_replace( '/\?\>$/', "\n?>", $output_data );
-		
+
 		//Xóa các dòng trống có tab, hoặc có nhiều hơn 1 dòng trống
 		$output_data = trim( preg_replace( '/\n([\t\n]+)\n/', "\n\n", $output_data ) );
 		$output_data = preg_replace( '/\,\s\-\s/', ', -', $output_data );
-		
+
 		//Xử lý mảng
 		$raw_tokens = token_get_all( $output_data );
-		
+
 		$array_tokend = array();
 		foreach( $raw_tokens as $rawToken )
 		{
 			$array_tokend[] = new Token( $rawToken );
 		}
-		
-		$output_data = "";
-		
-		$this_line_tab = "";
+
+		$output_data = '';
+
+		$this_line_tab = '';
 		// Thut dau dong dong hien tai
 		$is_in_array = 0;
 		// Trong array - array cap thu bao nhieu
@@ -143,10 +143,10 @@ function nv_fomat_file_php( $filename )
 		// Dem so dau )
 		$is_double_arrow = array();
 		// Array co xuong hang hay khong
-		
+
 
 		$total_tokend = sizeof( $array_tokend );
-		
+
 		foreach( $array_tokend as $key => $tokend )
 		{
 			// Xac dinh so tab
@@ -154,14 +154,14 @@ function nv_fomat_file_php( $filename )
 			{
 				$tab = array_filter( explode( "\n", $tokend->contents ) );
 				$tab = end( $tab );
-				
+
 				$this_line_tab = $tab;
 			}
 			elseif( $tokend->type == T_CATCH and $array_tokend[$key + 1]->type == T_WHITESPACE )
 			{
-				$array_tokend[$key + 1]->contents = "";
+				$array_tokend[$key + 1]->contents = '';
 			}
-			
+
 			// Danh dau array bat dau
 			if( $tokend->type == T_ARRAY )
 			{
@@ -169,36 +169,36 @@ function nv_fomat_file_php( $filename )
 				$is_double_arrow[$is_in_array] = 0;
 				// Mac dinh khong co mui ten hoac array con
 				$key_close_array = $key;
-				
+
 				// Tim trong array nay co mui ten => hay la array con hay khong
 				$j = $key;
 				$_num_open_parentheses = 0;
 				$_num_close_parentheses = 0;
-				
+
 				while( $j < $total_tokend )
 				{
 					$j++;
 					if( $array_tokend[$j]->contents == "(" ) $_num_open_parentheses++;
 					if( $array_tokend[$j]->contents == ")" ) $_num_close_parentheses++;
-					
+
 					if( $array_tokend[$j]->type == T_DOUBLE_ARROW or $array_tokend[$j]->type == T_ARRAY or ( $array_tokend[$j]->type == T_COMMENT and $array_tokend[$j - 2]->contents == "," ) )
 					{
 						$is_double_arrow[$is_in_array]++;
 					}
-					
+
 					if( $_num_open_parentheses > 0 and $_num_open_parentheses == $_num_close_parentheses )
 					{
 						$key_close_array = $j;
 						break;
 					}
 				}
-				
+
 				$is_double_arrow[$is_in_array] = $is_double_arrow[$is_in_array] > 2 ? true : false;
-				
+
 				$num_open_parentheses[$is_in_array] = 0;
 				$num_close_parentheses[$is_in_array] = 0;
 			}
-			
+
 			if( $is_in_array > 0 )
 			{
 				if( empty( $is_double_arrow[$is_in_array] ) and $tokend->type == T_WHITESPACE )
@@ -211,11 +211,11 @@ function nv_fomat_file_php( $filename )
 						""
 					), $tokend->contents );
 				}
-				
+
 				// Xoa dau , cuoi cung cua array
 				if( $key == ( $key_close_array - 2 ) and $tokend->contents == "," and $tokend->type == - 1 )
 				{
-					$tokend->contents = "";
+					$tokend->contents = '';
 				}
 				elseif( $tokend->type == T_WHITESPACE and preg_match( "/\n/", $tokend->contents ) and ! empty( $is_double_arrow[$is_in_array] ) )
 				{
@@ -225,11 +225,11 @@ function nv_fomat_file_php( $filename )
 						$tokend->contents .= "\t";
 					}
 				}
-				
+
 				// Dong mo array
 				if( $tokend->contents == "(" ) $num_open_parentheses[$is_in_array]++;
 				if( $tokend->contents == ")" ) $num_close_parentheses[$is_in_array]++;
-				
+
 				if( $num_open_parentheses[$is_in_array] > 0 and $num_open_parentheses[$is_in_array] == $num_close_parentheses[$is_in_array] )
 				{
 					if( ! empty( $is_double_arrow[$is_in_array] ) )
@@ -241,7 +241,7 @@ function nv_fomat_file_php( $filename )
 						}
 					}
 					$output_data .= ")";
-					
+
 					$is_in_array--;
 				}
 				else
@@ -254,11 +254,11 @@ function nv_fomat_file_php( $filename )
 				$output_data .= $tokend->contents;
 			}
 		}
-		
+
 		// Loại bỏ khoảng trắng ( )
 		$output_data = preg_replace( '/\([\s]+\)/', '()', $output_data );
 		$output_data = preg_replace( "/[ ]+/", " ", $output_data );
-		
+
 		if( $output_data != $contents )
 		{
 			return file_put_contents( $filename, trim( $output_data ), LOCK_EX );
@@ -290,7 +290,7 @@ function nv_fomat_file_tpl( $filename )
 	$contentssave = str_replace( '<tbody{', '<tbody {', $contentssave );
 	$contentssave = str_replace( '<li{', '<li {', $contentssave );
 	$contentssave = str_replace( '<blockquote{CLASS}>', '<blockquote {CLASS}>', $contentssave );
-	
+
 	$dom = new DOMDocument();
 	$dom->loadHTML( $contentssave );
 	$dom->preserveWhiteSpace = false;

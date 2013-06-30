@@ -42,7 +42,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 {
 	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head;
 
-	$dir_template = "";
+	$dir_template = '';
 
 	if( $head_site == 1 )
 	{
@@ -76,9 +76,9 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$global_config['site_name'] = empty( $global_config['site_name'] ) ? NV_SERVER_NAME : $global_config['site_name'];
 
 	$xtpl = new XTemplate( $file_name_tpl, $dir_template );
-	$xtpl->assign( 'NV_SITE_COPYRIGHT', "" . $global_config['site_name'] . " [" . $global_config['site_email'] . "] " );
+	$xtpl->assign( 'NV_SITE_COPYRIGHT', $global_config['site_name'] . " [" . $global_config['site_email'] . "] " );
 	$xtpl->assign( 'NV_SITE_NAME', $global_config['site_name'] );
-	$xtpl->assign( 'NV_SITE_TITLE', "" . $global_config['site_name'] . " " . NV_TITLEBAR_DEFIS . " " . $lang_global['admin_page'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['custom_title'] . "" );
+	$xtpl->assign( 'NV_SITE_TITLE', $global_config['site_name'] . " " . NV_TITLEBAR_DEFIS . " " . $lang_global['admin_page'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['custom_title'] . "" );
 	$xtpl->assign( 'NV_ADMIN_CHECK_PASS_TIME', $global_config['admin_check_pass_time'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );

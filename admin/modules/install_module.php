@@ -29,7 +29,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 
 	$allowfolder = array( 'modules', 'themes', 'uploads' );
 
-	$error = "";
+	$error = '';
 	$info = array();
 
 	if( is_uploaded_file( $_FILES['modulefile']['tmp_name'] ) )
@@ -62,7 +62,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 					}
 					else
 					{
-						$bytes = "";
+						$bytes = '';
 						$validfolder[] = $list[$i]['filename'];
 					}
 

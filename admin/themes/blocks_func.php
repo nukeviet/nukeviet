@@ -39,7 +39,7 @@ if( $selectthemes_old != $selectthemes )
 }
 
 $selectedmodule = '';
-$selectedmodule = filter_text_input( 'module', 'get', '', 1 );
+$selectedmodule = $nv_Request->get_title( 'module', 'get', '', 1 );
 $func_id = $nv_Request->get_int( 'func', 'get', 0 );
 
 if( $func_id > 0 )

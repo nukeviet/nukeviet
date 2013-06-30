@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-$contents = "";
+$contents = '';
 if( empty( $list_cats ) )
 {
 	$page_title = $module_info['custom_title'];

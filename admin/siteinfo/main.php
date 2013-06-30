@@ -163,7 +163,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		$new_version = array();
 	}
 
-	$info = "";
+	$info = '';
 	if( ! empty( $new_version ) )
 	{
 		$field[] = array(

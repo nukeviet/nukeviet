@@ -14,7 +14,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
 	function nv_block_config_tophits_blocks( $module, $data_block, $lang_block )
 	{
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['number_day'] . "</td>";
 		$html .= "	<td><input type=\"text\" name=\"config_number_day\" size=\"5\" value=\"" . $data_block['number_day'] . "\"/></td>";

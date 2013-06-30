@@ -116,14 +116,14 @@ function viewcat( $array_subcat, $array_cat, $items )
 			$xtpl->assign( 'SUB', $array_subcat_i );
 			if( ( $weblinks_config['showcatimage'] == 1 ) and ! empty( $array_subcat_i['catimage'] ) )
 			{
-				if( file_exists( NV_UPLOADS_REAL_DIR . NV_UPLOADS_DIR . "/" . $array_subcat_i['catimage'] ) && $array_subcat_i['catimage'] != "" )
+				if( file_exists( NV_UPLOADS_REAL_DIR . NV_UPLOADS_DIR . "/" . $array_subcat_i['catimage'] ) && $array_subcat_i['catimage'] != '' )
 				{
-					$xtpl->assign( "IMG", "" . NV_BASE_SITEURL . $array_subcat_i['catimage'] . "" );
+					$xtpl->assign( 'IMG', NV_BASE_SITEURL . $array_subcat_i['catimage'] );
 				}
 			}
 			else
 			{
-				$xtpl->assign( "IMG", "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
+				$xtpl->assign( 'IMG', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
 			}
 			$xtpl->parse( 'main.sub.loop' );
 			++$a;
@@ -179,7 +179,7 @@ function detail( $row )
 	$row['edit_time'] = nv_date( "H:i l - d/m/Y", $row['edit_time'] );
 	if( $weblinks_config['showlinkimage'] == '1' )
 	{
-		if( $row['urlimg'] != "" )
+		if( $row['urlimg'] != '' )
 		{
 			if( ! nv_is_url( $row['urlimg'] ) )
 			{
@@ -189,7 +189,7 @@ function detail( $row )
 		}
 		else
 		{
-			$xtpl->assign( 'IMG', "" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
+			$xtpl->assign( 'IMG', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no_image.gif" );
 		}
 		$xtpl->parse( 'main.img' );
 	}

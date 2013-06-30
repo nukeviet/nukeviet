@@ -52,7 +52,7 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
 {
 	global $module_data, $module_name, $module_info;
 
-	$sql = "SELECT `id`,`title`,`alias`,`description`,`who_view`,`groups_view`,`who_download`,`groups_download`, `parentid` 
+	$sql = "SELECT `id`,`title`,`alias`,`description`,`who_view`,`groups_view`,`who_download`,`groups_download`, `parentid`
     FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `status`=1 ORDER BY `parentid`,`weight` ASC";
 
 	$list = nv_db_cache( $sql, 'id' );
@@ -148,8 +148,8 @@ function nv_mod_down_config()
 
 if( $op == "main" )
 {
-	$catalias = "";
-	$filealias = "";
+	$catalias = '';
+	$filealias = '';
 	$catid = 0;
 	$nv_vertical_menu = array();
 

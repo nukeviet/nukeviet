@@ -28,7 +28,7 @@ $row = $db->sql_fetchrow( $result );
 $forms = nv_scandir( NV_ROOTDIR . '/modules/' . $module_name . '/forms', "/^form\_([a-zA-Z0-9\_\-]+)\.php$/" );
 $forms = preg_replace( "/^form\_([a-zA-Z0-9\_\-]+)\.php$/", "\\1", $forms );
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {

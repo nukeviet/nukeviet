@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $checkss = $nv_Request->get_string( 'checkss', 'post' );
 $vid = $nv_Request->get_int( 'vid', 'post', 0 );
-$contents = "";
+$contents = '';
 
 if( $vid > 0 and $checkss == md5( $vid . session_id() ) )
 {

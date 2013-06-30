@@ -26,7 +26,7 @@ foreach( $list as $row )
 	{
 		$image = NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $row['homeimgfile'];
 
-		if( $row['homeimgfile'] != "" and file_exists( $image ) )
+		if( $row['homeimgfile'] != '' and file_exists( $image ) )
 		{
 			$width = 183;
 			$height = 150;

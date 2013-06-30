@@ -150,7 +150,7 @@ function nv_check_path_upload( $path )
 	if( ( $path = realpath( $path ) ) === false ) return "";
 
 	$path = str_replace( "\\", "/", $path );
-	$path = str_replace( NV_ROOTDIR . "/", "", $path );
+	$path = str_replace( NV_ROOTDIR . '/', '', $path );
 
 	$result = false;
 	if( $global_config['idsite'] )

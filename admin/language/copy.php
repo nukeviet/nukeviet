@@ -42,8 +42,8 @@ if( empty( $array_lang_exit ) )
 
 if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_Request->get_string( 'checksess', 'post' ) == md5( session_id() ) )
 {
-	$newslang = filter_text_input( 'newslang', 'post', '' );
-	$typelang = filter_text_input( 'typelang', 'post', '' );
+	$newslang = $nv_Request->get_title( 'newslang', 'post', '' );
+	$typelang = $nv_Request->get_title( 'typelang', 'post', '' );
 
 	if( $typelang == "-vi" )
 	{

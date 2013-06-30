@@ -33,7 +33,7 @@ if( empty( $numrows ) )
 
 list( $month01, $month02, $month03, $month04, $month05, $month06, $month07, $month08, $month09, $month10, $month11, $month12 ) = $db->sql_fetchrow( $result );
 
-$contents = "";
+$contents = '';
 
 $current_month_num = date( 'n', NV_CURRENTTIME );
 

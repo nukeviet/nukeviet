@@ -165,9 +165,9 @@ function nv_fomat_file_php( $filename )
 			$array_tokend[] = new Token( $rawToken );
 		}
 
-		$output_data = "";
+		$output_data = '';
 
-		$this_line_tab = "";
+		$this_line_tab = '';
 		// Thut dau dong dong hien tai
 		$is_in_array = 0;
 		// Trong array - array cap thu bao nhieu
@@ -192,7 +192,7 @@ function nv_fomat_file_php( $filename )
 			}
 			elseif( $tokend->type == T_CATCH and $array_tokend[$key + 1]->type == T_WHITESPACE )
 			{
-				$array_tokend[$key + 1]->contents = "";
+				$array_tokend[$key + 1]->contents = '';
 			}
 
 			// Danh dau array bat dau
@@ -250,7 +250,7 @@ function nv_fomat_file_php( $filename )
 				// Xoa dau , cuoi cung cua array
 				if( $key == ($key_close_array - 2) and $tokend->contents == "," and $tokend->type == - 1 )
 				{
-					$tokend->contents = "";
+					$tokend->contents = '';
 				}
 				elseif( $tokend->type == T_WHITESPACE and preg_match( "/\n/", $tokend->contents ) and ! empty( $is_double_arrow[$is_in_array] ) )
 				{

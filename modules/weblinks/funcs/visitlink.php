@@ -15,7 +15,7 @@ $sql = "SELECT `url` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHER
 $result = $db->sql_query( $sql );
 $row = $db->sql_fetchrow( $result );
 
-if( $row['url'] != "" )
+if( $row['url'] != '' )
 {
 	if( ! preg_match( "/http:\/\//i", $row['url'] ) )
 	{

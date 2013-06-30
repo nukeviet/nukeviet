@@ -51,11 +51,11 @@ function set_reg_attribs( $attribs )
 
 	$reg_attribs = array();
 	$reg_attribs['server'] = $attribs['server'];
-	$reg_attribs['username'] = "";
+	$reg_attribs['username'] = '';
 	$reg_attribs['email'] = $attribs['contact/email'];
-	$reg_attribs['full_name'] = "";
-	$reg_attribs['gender'] = "";
-	$reg_attribs['yim'] = "";
+	$reg_attribs['full_name'] = '';
+	$reg_attribs['gender'] = '';
+	$reg_attribs['yim'] = '';
 	$reg_attribs['openid'] = $attribs['id'];
 	$reg_attribs['opid'] = $crypt->hash( $attribs['id'] );
 
@@ -136,7 +136,7 @@ function set_reg_attribs( $attribs )
 function openidLogin_Res1( $attribs )
 {
 	global $page_title, $key_words, $mod_title, $db, $crypt, $nv_Request, $lang_module, $lang_global, $module_name, $module_info, $global_config, $gfx_chk, $nv_redirect, $op, $db_config;
-	$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "" ) ? $attribs['contact/email'] : "";
+	$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == '' ) ? $attribs['contact/email'] : "";
 	if( empty( $email ) )
 	{
 		$nv_Request->unset_request( 'openid_attribs', 'session' );
@@ -218,7 +218,7 @@ function openidLogin_Res1( $attribs )
 		if( $nv_Request->isset_request( 'openid_account_confirm', 'post' ) )
 		{
 			$password = $nv_Request->get_string( 'password', 'post', '' );
-			$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
+			$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 			$nv_seccode = ! $gfx_chk ? 1 : ( nv_capcha_txt( $nv_seccode ) ? 1 : 0 );
 
 			$nv_Request->unset_request( 'openid_attribs', 'session' );
@@ -299,7 +299,7 @@ function openidLogin_Res1( $attribs )
 					$nv_Request->unset_request( 'openid_attribs', 'session' );
 
 					$password = $nv_Request->get_string( 'password', 'post', '' );
-					$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
+					$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 					$nv_seccode = ! $gfx_chk ? 1 : ( nv_capcha_txt( $nv_seccode ) ? 1 : 0 );
 
 					if( $crypt->validate( $password, $row['password'] ) and $nv_seccode )
@@ -389,15 +389,15 @@ function openidLogin_Res1( $attribs )
 		$option = 3;
 	}
 
-	$contents = "";
+	$contents = '';
 	if( $option == 3 )
 	{
-		$error = "";
+		$error = '';
 		if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		{
-			$nv_username = filter_text_input( 'nv_login', 'post', '', 1 );
-			$nv_password = filter_text_input( 'nv_password', 'post', '' );
-			$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
+			$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
+			$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
+			$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 
 			$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
 
@@ -436,7 +436,7 @@ function openidLogin_Res1( $attribs )
 							}
 							else
 							{
-								$error = "";
+								$error = '';
 								$sql = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` VALUES (" . intval( $row['userid'] ) . ", " . $db->dbescape( $attribs['id'] ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
 								$db->sql_query( $sql );
 								validUserLog( $row, 1, $opid );
@@ -569,7 +569,7 @@ function openidLogin_Res1( $attribs )
 	exit();
 }
 
-$nv_redirect = filter_text_input( 'nv_redirect', 'post,get', '' );
+$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
 
 //Dang nhap bang Open ID
 if( defined( 'NV_OPENID_ALLOWED' ) )
@@ -736,13 +736,13 @@ $page_title = $lang_module['login'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['login'];
 
-$contents = "";
-$error = "";
+$contents = '';
+$error = '';
 if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 {
-	$nv_username = filter_text_input( 'nv_login', 'post', '', 1 );
-	$nv_password = filter_text_input( 'nv_password', 'post', '' );
-	$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
+	$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
+	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
+	$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 
 	$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
 
@@ -781,7 +781,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 					}
 					else
 					{
-						$error = "";
+						$error = '';
 						validUserLog( $row, 1, '' );
 					}
 				}

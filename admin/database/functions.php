@@ -125,9 +125,9 @@ if( $module_name == "database" )
 
 	function nv_show_tab()
 	{
-		global $db, $db_config, $module_name, $page_title, $lang_module;
+		global $db, $db_config, $module_name, $page_title, $lang_module, $nv_Request;
 
-		$tab = filter_text_input( 'tab', 'get' );
+		$tab = $nv_Request->get_title( 'tab', 'get' );
 
 		$result = $db->sql_query( "SHOW TABLE STATUS WHERE `Name`=" . $db->dbescape( $tab ) );
 		$item = $db->sql_fetch_assoc( $result );
@@ -139,9 +139,9 @@ if( $module_name == "database" )
 			die();
 		}
 
-		if( in_array( filter_text_input( 'show_highlight', 'post' ), array( 'php', 'sql' ) ) )
+		if( in_array( $nv_Request->get_title( 'show_highlight', 'post' ), array( 'php', 'sql' ) ) )
 		{
-			$content = nv_highlight_string( $tab, filter_text_input( 'show_highlight', 'post' ) );
+			$content = nv_highlight_string( $tab, $nv_Request->get_title( 'show_highlight', 'post' ) );
 			include ( NV_ROOTDIR . "/includes/header.php" );
 			echo $content;
 			include ( NV_ROOTDIR . "/includes/footer.php" );

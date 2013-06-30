@@ -9,7 +9,7 @@
 
 /**
  * Get data from file as a URL
- * 
+ *
  * @package NUKEVIET 3.x
  * @author VINADES.,JSC
  * @copyright 2010
@@ -32,14 +32,14 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::__construct()
-     * 
+     *
      * @return
      */
 	function __construct( $global_config, $time_limit = 60 )
 	{
 		$this->user_agent = 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] );
 
-		$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -109,7 +109,7 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::check_url()
-     * 
+     *
      * @param integer $is_200
      * @return
      */
@@ -226,7 +226,7 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::generate_newUrl()
-     * 
+     *
      * @param mixed $url
      * @return
      */
@@ -248,7 +248,7 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::curl_Get()
-     * 
+     *
      * @param mixed $url
      * @param string $login
      * @param string $password
@@ -361,7 +361,7 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::fsockopen_Get()
-     * 
+     *
      * @param mixed $url
      * @param string $login
      * @param string $password
@@ -430,7 +430,7 @@ class UrlGetContents
 		@stream_set_timeout( $fp, 30 );
 		$in_f = @stream_get_meta_data( $fp );
 
-		$response = "";
+		$response = '';
 
 		while( ( ! @feof( $fp ) ) && ( ! $in_f['timed_out'] ) )
 		{
@@ -494,7 +494,7 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::fopen_Get()
-     * 
+     *
      * @param mixed $url
      * @return
      */
@@ -515,7 +515,7 @@ class UrlGetContents
 		}
 
 		$result = '';
-		while( ( $data = fread( $fd, 4096 ) ) != "" )
+		while( ( $data = fread( $fd, 4096 ) ) != '' )
 		{
 			$result .= $data;
 		}
@@ -526,7 +526,7 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::file_get_contents_Get()
-     * 
+     *
      * @param mixed $url
      * @return
      */
@@ -546,7 +546,7 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::file_Get()
-     * 
+     *
      * @param mixed $url
      * @return void
      */
@@ -569,7 +569,7 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::url_get_info()
-     * 
+     *
      * @param mixed $url
      * @return
      */
@@ -647,7 +647,7 @@ class UrlGetContents
 
 	/**
      * UrlGetContents::get()
-     * 
+     *
      * @param mixed $url
      * @param string $login
      * @param string $password

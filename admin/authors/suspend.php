@@ -66,10 +66,10 @@ if( $allow_change )
 {
 	$new_suspend = ( $old_suspend ) ? 0 : 1;
 
-	$error = "";
+	$error = '';
 	if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	{
-		$new_reason = ( ! empty( $new_suspend ) ) ? filter_text_input( 'new_reason', 'post', '', 1 ) : "";
+		$new_reason = ( ! empty( $new_suspend ) ) ? $nv_Request->get_title( 'new_reason', 'post', '', 1 ) : "";
 		$sendmail = $nv_Request->get_int( 'sendmail', 'post', 0 );
 		$clean_history = defined( "NV_IS_GODADMIN" ) ? $nv_Request->get_int( 'clean_history', 'post', 0 ) : 0;
 
@@ -178,7 +178,7 @@ if( $allow_change )
 	}
 	else
 	{
-		$adminpass = $new_reason = "";
+		$adminpass = $new_reason = '';
 		$clean_history = $sendmail = 0;
 	}
 
@@ -231,7 +231,7 @@ else
 	foreach( $susp_reason as $vals )
 	{
 		$start = sprintf( $lang_module['suspend_info'], nv_date( "d/m/Y H:i", $vals['starttime'] ), $ads[$vals['start_admin']] );
-		$end = "";
+		$end = '';
 		if( ! empty( $vals['endtime'] ) )
 		{
 			$end = sprintf( $lang_module['suspend_info'], nv_date( "d/m/Y H:i", $vals['endtime'] ), $ads[$vals['end_admin']] );

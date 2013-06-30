@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $contents = 'NO_' . $module_name;
-$modname = filter_text_input( 'mod', 'post' );
+$modname = $nv_Request->get_title( 'mod', 'post' );
 
 if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname ) )
 {

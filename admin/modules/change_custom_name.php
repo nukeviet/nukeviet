@@ -23,7 +23,7 @@ $row = $db->sql_fetchrow( $result );
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-	$func_custom_name = filter_text_input( 'func_custom_name', 'post', '', 1 );
+	$func_custom_name = $nv_Request->get_title( 'func_custom_name', 'post', '', 1 );
 
 	if( empty( $func_custom_name ) ) $func_custom_name = ucfirst( $row['func_name'] );
 

@@ -46,7 +46,7 @@ if( ! nv_function_exists( 'nv_news_category' ) )
 			$xtpl->assign( 'LANG', $lang_module );
 			$xtpl->assign( 'BLOCK_ID', $block_config['bid'] );
 			$xtpl->assign( 'TEMPLATE', $module_info['template'] );
-			$html = "";
+			$html = '';
 			foreach( $module_array_cat as $cat )
 			{
 				if( $cat['parentid'] == 0 )

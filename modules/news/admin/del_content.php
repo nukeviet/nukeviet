@@ -14,7 +14,7 @@ $checkss = $nv_Request->get_string( 'checkss', 'post', '' );
 $listid = $nv_Request->get_string( 'listid', 'post', '' );
 $contents = "NO_" . $id;
 
-if( $listid != "" and md5( $global_config['sitekey'] . session_id() ) == $checkss )
+if( $listid != '' and md5( $global_config['sitekey'] . session_id() ) == $checkss )
 {
 	$del_array = array_map( "intval", explode( ",", $listid ) );
 }

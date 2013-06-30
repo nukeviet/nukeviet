@@ -84,7 +84,7 @@ if( $id > 0 and $catid > 0 )
 
 			if( ! empty( $content['homeimgfile'] ) and $content['imgposition'] > 0 )
 			{
-				$src = $alt = $note = "";
+				$src = $alt = $note = '';
 				$width = $height = 0;
 				if( $content['homeimgthumb'] == 1 and $content['imgposition'] == 1 and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
 				{

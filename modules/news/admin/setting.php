@@ -15,7 +15,7 @@ $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
 if( ! empty( $savesetting ) )
 {
 	$array_config = array();
-	$array_config['indexfile'] = filter_text_input( 'indexfile', 'post', '', 1 );
+	$array_config['indexfile'] = $nv_Request->get_title( 'indexfile', 'post', '', 1 );
 	$array_config['per_page'] = $nv_Request->get_int( 'per_page', 'post', 0 );
 	$array_config['st_links'] = $nv_Request->get_int( 'st_links', 'post', 0 );
 	$array_config['homewidth'] = $nv_Request->get_int( 'homewidth', 'post', 0 );
@@ -28,10 +28,10 @@ if( ! empty( $savesetting ) )
 	$array_config['emailcomm'] = $nv_Request->get_int( 'emailcomm', 'post', 0 );
 	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
 	$array_config['setcomm'] = $nv_Request->get_int( 'setcomm', 'post', 0 );
-	$array_config['copyright'] = filter_text_input( 'copyright', 'post', '', 1 );
+	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
 	$array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
-	$array_config['module_logo'] = filter_text_input( 'module_logo', 'post', '', 0 );
-	$array_config['structure_upload'] = filter_text_input( 'structure_upload', 'post', '', 0 );
+	$array_config['module_logo'] = $nv_Request->get_title( 'module_logo', 'post', '', 0 );
+	$array_config['structure_upload'] = $nv_Request->get_title( 'structure_upload', 'post', '', 0 );
 	$array_config['config_source'] = $nv_Request->get_int( 'config_source', 'post', 0 );
 
 	if( ! nv_is_url( $array_config['module_logo'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['module_logo'] ) )

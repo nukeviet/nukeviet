@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 
 // Delete all log
-if( filter_text_input( 'logempty', 'post', '' ) == md5( "siteinfo_" . session_id() . "_" . $admin_info['userid'] ) )
+if( $nv_Request->get_title( 'logempty', 'post', '' ) == md5( "siteinfo_" . session_id() . "_" . $admin_info['userid'] ) )
 {
 	$sql = "TRUNCATE TABLE `" . $db_config['prefix'] . "_logs`";
 	if( $db->sql_query( $sql ) )

@@ -15,7 +15,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 	function nv_block_config_bdown_news( $module, $data_block, $lang_block )
 	{
 		global $db, $site_mods;
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['title_length'] . "</td>";
 		$html .= "	<td><input type=\"text\" name=\"config_title_length\" size=\"5\" value=\"" . $data_block['title_length'] . "\"/></td>";
@@ -43,8 +43,8 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 		$return['config'] = array();
 		$return['config']['title_length'] = $nv_Request->get_int( 'config_title_length', 'post', 24 );
 		$return['config']['numrow'] = $nv_Request->get_int( 'config_numrow', 'post', 5 );
-		$return['config']['class_name'] = filter_text_input( 'config_class_name', 'post', 'list_item' );
-		$return['config']['img_bullet'] = filter_text_input( 'config_img_bullet', 'post', '' );
+		$return['config']['class_name'] = $nv_Request->get_title( 'config_class_name', 'post', 'list_item' );
+		$return['config']['img_bullet'] = $nv_Request->get_title( 'config_img_bullet', 'post', '' );
 		return $return;
 	}
 

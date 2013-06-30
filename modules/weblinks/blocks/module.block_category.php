@@ -28,7 +28,7 @@ if( ! nv_function_exists( 'nv_weblink_category' ) )
 		if( ! empty( $global_array_cat ) )
 		{
 			$title_length = 20;
-			$html = "";
+			$html = '';
 
 			foreach( $global_array_cat as $cat )
 			{

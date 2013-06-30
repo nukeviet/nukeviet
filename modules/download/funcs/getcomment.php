@@ -33,11 +33,11 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 
 				if( nv_set_allow( $who_comment, $groups_comment ) )
 				{
-					$uname = filter_text_input( 'uname', 'post', '', 1 );
-					$uemail = filter_text_input( 'uemail', 'post', '' );
-					$subject = filter_text_input( 'subject', 'post', '', 1 );
-					$content = filter_text_textarea( 'content', '', NV_ALLOWED_HTML_TAGS );
-					$seccode = filter_text_input( 'seccode', 'post', '' );
+					$uname = $nv_Request->get_title( 'uname', 'post', '', 1 );
+					$uemail = $nv_Request->get_title( 'uemail', 'post', '' );
+					$subject = $nv_Request->get_title( 'subject', 'post', '', 1 );
+					$content = $nv_Request->get_textarea( 'content', '', NV_ALLOWED_HTML_TAGS );
+					$seccode = $nv_Request->get_title( 'seccode', 'post', '' );
 					$post_id = 0;
 
 					if( defined( 'NV_IS_USER' ) )
@@ -57,7 +57,7 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 						$error[] = $lang_module['comment_error3'];
 					}
 
-					if( ( $validemail = nv_check_valid_email( $uemail ) ) != "" )
+					if( ( $validemail = nv_check_valid_email( $uemail ) ) != '' )
 					{
 						$error[] = $validemail;
 					}
@@ -89,15 +89,15 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 					$content = nv_nl2br( $content, "<br />" );
 
 					$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_comments` VALUES (
-						NULL, 
-						" . $id . ", 
-						" . $db->dbescape( $subject ) . ", 
-						" . $post_id . ", 
-						" . $db->dbescape( $uname ) . ", 
-						" . $db->dbescape( $uemail ) . ", 
-						" . $db->dbescape( $client_info['ip'] ) . ", 
-						" . NV_CURRENTTIME . ", 
-						" . $db->dbescape( $content ) . ", 
+						NULL,
+						" . $id . ",
+						" . $db->dbescape( $subject ) . ",
+						" . $post_id . ",
+						" . $db->dbescape( $uname ) . ",
+						" . $db->dbescape( $uemail ) . ",
+						" . $db->dbescape( $client_info['ip'] ) . ",
+						" . NV_CURRENTTIME . ",
+						" . $db->dbescape( $content ) . ",
 						'', 0, " . $status . ")";
 
 					if( ! $db->sql_query_insert_id( $sql ) )
@@ -129,7 +129,7 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 }
 
 //list_comment
-$generate_page = "";
+$generate_page = '';
 if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 {
 	if( ! empty( $list_cats ) )
@@ -147,13 +147,13 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 			$page = $nv_Request->get_int( 'page', 'get', 0 );
 			$per_page = 15;
 
-			$query = "SELECT SQL_CALC_FOUND_ROWS a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email, 
-				a.post_ip AS post_ip, a.post_time AS post_time, a.comment AS comment, a.admin_reply AS admin_reply, a.admin_id AS admin_id, 
-				c.email as email, c.full_name as full_name, c.photo as photo, c.view_mail as view_mail 
-				FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` AS a 
-				INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "` AS b ON a.fid = b.id 
-				LEFT JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` as c ON a.post_id =c.userid	 
-				WHERE a.fid=" . $id . " AND a.status=1 AND b.catid IN (" . $in . ") AND b.status=1 AND b.comment_allow=1 
+			$query = "SELECT SQL_CALC_FOUND_ROWS a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email,
+				a.post_ip AS post_ip, a.post_time AS post_time, a.comment AS comment, a.admin_reply AS admin_reply, a.admin_id AS admin_id,
+				c.email as email, c.full_name as full_name, c.photo as photo, c.view_mail as view_mail
+				FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` AS a
+				INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "` AS b ON a.fid = b.id
+				LEFT JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` as c ON a.post_id =c.userid
+				WHERE a.fid=" . $id . " AND a.status=1 AND b.catid IN (" . $in . ") AND b.status=1 AND b.comment_allow=1
 				ORDER BY a.post_time DESC LIMIT " . $page . "," . $per_page;
 
 			$result = $db->sql_query( $query );
@@ -173,7 +173,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 					if( ! $row['post_id'] )
 					{
 						$post_name .= " (" . nv_EncodeEmail( $row['post_email'] ) . ", " . $row['post_ip'] . ")";
-						$row['photo'] = "";
+						$row['photo'] = '';
 					}
 					else
 					{
@@ -207,7 +207,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 						$post_time = nv_date( "d/m/Y H:i", $post_time );
 					}
 
-					$admin_reply = "";
+					$admin_reply = '';
 					if( ! empty( $row['admin_id'] ) and ! empty( $row['admin_reply'] ) )
 					{
 						if( defined( 'NV_IS_ADMIN' ) )
@@ -264,7 +264,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 								}
 								else
 								{
-									$array[$id]['post_email'] = "";
+									$array[$id]['post_email'] = '';
 								}
 							}
 						}

@@ -82,11 +82,11 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 	if( empty( $author_lang ) )
 	{
 		$array_translator = array();
-		$array_translator['author'] = "";
-		$array_translator['createdate'] = "";
-		$array_translator['copyright'] = "";
-		$array_translator['info'] = "";
-		$array_translator['langtype'] = "";
+		$array_translator['author'] = '';
+		$array_translator['createdate'] = '';
+		$array_translator['copyright'] = '';
+		$array_translator['info'] = '';
+		$array_translator['langtype'] = '';
 	}
 	else
 	{

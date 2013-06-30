@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $func_id = $nv_Request->get_int( 'funcid', 'post' );
-$layout = filter_text_input( 'layout', 'post', '', 1 );
+$layout = $nv_Request->get_title( 'layout', 'post', '', 1 );
 $selectthemes_old = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site_theme'] );
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'get', $selectthemes_old );
 $numfunc = $db->sql_numrows( $db->sql_query( "SELECT func_id FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`='" . $func_id . "' AND theme='" . $selectthemes . "'" ) );

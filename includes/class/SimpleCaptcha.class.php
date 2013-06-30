@@ -36,7 +36,7 @@ class SimpleCaptcha {
 
     /**
      * Max word length (for non-dictionary random text generation)
-     * 
+     *
      * Used for dictionary words indicating the word-length
      * for font-size modification purposes
      */
@@ -93,7 +93,7 @@ class SimpleCaptcha {
      */
     public $scale = 2;
 
-    /** 
+    /**
      * Blur effect for better image quality (but slower image processing).
      * Better image results with scale=3
      */
@@ -101,7 +101,7 @@ class SimpleCaptcha {
 
     /** Debug? */
     public $debug = false;
-    
+
     /** Image format: jpeg or png */
     public $imageFormat = 'jpeg';
 
@@ -117,10 +117,10 @@ class SimpleCaptcha {
 
         /** Initialization */
         $this->ImageAllocate();
-        
+
         /** Text insertion */
         $text = $this->GetCaptchaText();
-        $fontcfg  = $this->fonts[array_rand($this->fonts)];	
+        $fontcfg  = $this->fonts[array_rand($this->fonts)];
         $this->WriteText($text, $fontcfg);
 
         $_SESSION[$this->session_var] = $text;
@@ -205,7 +205,7 @@ class SimpleCaptcha {
         $words  = "abcdefghijlmnopqrstvwyz";
         $vocals = "aeiou";
 
-        $text  = "";
+        $text  = '';
         $vocal = rand(0, 1);
         for ($i=0; $i<$length; $i++) {
             if ($vocal) {

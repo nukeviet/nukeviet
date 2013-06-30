@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
-$contents = "";
+$contents = '';
 
 $file_name = $nv_Request->get_string( 'file_name', 'get' );
 

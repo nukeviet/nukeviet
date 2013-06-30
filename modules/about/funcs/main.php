@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_MOD_ABOUT' ) ) die( 'Stop!!!' );
 
-$contents = "";
+$contents = '';
 
 if( $id )
 {

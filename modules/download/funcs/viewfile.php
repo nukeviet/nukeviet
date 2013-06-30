@@ -9,28 +9,28 @@
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-$contents = "";
+$contents = '';
 
 $download_config = nv_mod_down_config();
 
-$today = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
+$today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 $yesterday = $today - 86400;
 
-if( ! preg_match( "/^([a-z0-9\-\_\.]+)$/i", $filealias ) )
+if( ! preg_match( '/^([a-z0-9\-\_\.]+)$/i', $filealias ) )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();
 }
 
-$query = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $filealias ) . " AND `catid`=" . $catid . " AND `status`=1";
+$query = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `alias`=' . $db->dbescape( $filealias ) . ' AND `catid`=' . $catid . ' AND `status`=1';
 if( ( $result = $db->sql_query( $query ) ) === false )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();
 }
 if( ( $row = $db->sql_fetch_assoc( $result ) ) === false )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();
 }
 
@@ -168,8 +168,8 @@ if( $row['is_download_allow'] )
 			{
 				$links = explode( "<br />", $links );
 
-				$host = "";
-				$scheme = "";
+				$host = '';
+				$scheme = '';
 
 				foreach( $links as $link )
 				{
@@ -180,7 +180,7 @@ if( $row['is_download_allow'] )
 							$host = @parse_url( $link );
 							$scheme = $host['scheme'];
 							$host = $host['host'];
-							$host = preg_replace( "/^www\./", "", $host );
+							$host = preg_replace( '/^www\./', '', $host );
 
 							$row['linkdirect'][$host] = array();
 						}
@@ -189,7 +189,7 @@ if( $row['is_download_allow'] )
 						$row['linkdirect'][$host][] = array(
 							'link' => $link,
 							'code' => $code,
-							'name' => isset( $link{70} ) ? $scheme . "://" . $host . "..." . substr( $link, -( 70 - strlen( $scheme . "://" . $host ) ) ) : $link
+							'name' => isset( $link{70} ) ? $scheme . '://' . $host . '...' . substr( $link, -( 70 - strlen( $scheme . '://' . $host ) ) ) : $link
 						);
 						$session_files['linkdirect'][$code] = array( 'link' => $link, 'id' => $row['id'] );
 					}
@@ -202,7 +202,7 @@ if( $row['is_download_allow'] )
 		$row['linkdirect'] = array();
 	}
 
-	$row['download_info'] = "";
+	$row['download_info'] = '';
 }
 else
 {
@@ -216,7 +216,7 @@ else
 	}
 	else
 	{
-		$row['download_info'] = sprintf( $lang_module['download_not_allow_info1'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users", NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=register" );
+		$row['download_info'] = sprintf( $lang_module['download_not_allow_info1'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register' );
 	}
 }
 
@@ -238,7 +238,7 @@ if( ! in_array( $row['id'], $dfile ) )
 	$dfile = serialize( $dfile );
 	$nv_Request->set_Session( 'dfile', $dfile );
 
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `view_hits`=view_hits+1 WHERE `id`=" . $row['id'];
+	$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '` SET `view_hits`=view_hits+1 WHERE `id`=' . $row['id'];
 	$db->sql_query( $sql );
 	++$row['view_hits'];
 }
@@ -248,7 +248,7 @@ $row['is_comment_allow'] = $row['comment_allow'] ? nv_set_allow( $row['who_comme
 $row['rating_point'] = 0;
 if( ! empty( $row['rating_detail'] ) )
 {
-	$row['rating_detail'] = explode( "|", $row['rating_detail'] );
+	$row['rating_detail'] = explode( '|', $row['rating_detail'] );
 	if( $row['rating_detail'][1] )
 	{
 		$row['rating_point'] = round( ( int )$row['rating_detail'][0] / ( int )$row['rating_detail'][1] );
@@ -257,23 +257,23 @@ if( ! empty( $row['rating_detail'] ) )
 $row['rating_string'] = $lang_module['file_rating' . $row['rating_point']];
 if( $row['rating_point'] )
 {
-	$row['rating_string'] = $lang_module['file_rating_note3'] . ": " . $row['rating_string'];
+	$row['rating_string'] = $lang_module['file_rating_note3'] . ': ' . $row['rating_string'];
 }
 
 $flrt = $nv_Request->get_string( 'flrt', 'session', '' );
 $flrt = ! empty( $flrt ) ? unserialize( $flrt ) : array();
 $row['rating_disabled'] = ! in_array( $row['id'], $flrt ) ? false : true;
 
-$row['edit_link'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'];
-$row['del_link'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+$row['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'];
+$row['del_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
 
-$row['disabled'] = "";
-$row['comment_uname'] = "";
-$row['comment_uemail'] = "";
-$row['comment_subject'] = $lang_module['file_comment_re'] . ": " . $row['title'];
+$row['disabled'] = '';
+$row['comment_uname'] = '';
+$row['comment_uemail'] = '';
+$row['comment_subject'] = $lang_module['file_comment_re'] . ': ' . $row['title'];
 if( defined( 'NV_IS_USER' ) )
 {
-	$row['disabled'] = " disabled=\"disabled\"";
+	$row['disabled'] = ' disabled="disabled"';
 	$row['comment_uname'] = ! empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'];
 	$row['comment_uemail'] = $user_info['email'];
 }
@@ -289,8 +289,8 @@ $description = $list_cats[$row['catid']]['description'];
 
 $contents = view_file( $row, $download_config );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

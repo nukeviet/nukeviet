@@ -9,8 +9,8 @@
 
 /**
  * optimezer
- * 
- * @package 
+ *
+ * @package
  * @author NUKEVIET 3.0
  * @copyright VINADES.,JSC
  * @version 2010
@@ -69,7 +69,7 @@ class optimezer
 
 	/**
 	 * optimezer::__construct()
-	 * 
+	 *
 	 * @param mixed $content
 	 * @return
 	 */
@@ -111,7 +111,7 @@ class optimezer
 
 	/**
 	 * optimezer::process()
-	 * 
+	 *
 	 * @return
 	 */
 	public function process()
@@ -193,7 +193,7 @@ class optimezer
 				}
 			}
 
-			$this->_content = preg_replace( $regex, "", $this->_content );
+			$this->_content = preg_replace( $regex, '', $this->_content );
 		}
 
 		if( ! empty( $this->_conditon ) )
@@ -241,7 +241,7 @@ class optimezer
 				}
 				else
 				{
-					$value = "";
+					$value = '';
 				}
 
 				$this->_content = preg_replace( "/\{\|js\_" . $key . "\|\}/", $value, $this->_content );
@@ -272,7 +272,7 @@ class optimezer
 
 	/**
 	 * optimezer::conditionCallback()
-	 * 
+	 *
 	 * @param mixed $matches
 	 * @return
 	 */
@@ -285,7 +285,7 @@ class optimezer
 
 	/**
 	 * optimezer::jsCallback()
-	 * 
+	 *
 	 * @param mixed $matches
 	 * @return
 	 */
@@ -298,7 +298,7 @@ class optimezer
 
 	/**
 	 * optimezer::newCssLink()
-	 * 
+	 *
 	 * @return
 	 */
 	private function newCssLink()
@@ -308,10 +308,10 @@ class optimezer
 
 		if( ! file_exists( $newCSSLinkPath ) )
 		{
-			$contents = "";
+			$contents = '';
 			foreach( $this->_cssLinks as $link => $media )
 			{
-				$link = preg_replace( "#^" . $this->base_siteurl . "#", "", $link );
+				$link = preg_replace( '#^' . $this->base_siteurl . '#', '', $link );
 
 				if( ! empty( $media ) and ! preg_match( "/all/", $media ) ) $contents .= "@media " . $media . "{" . $this->eol;
 				$contents .= $this->getCssContent( $link ) . $this->eol;
@@ -327,7 +327,7 @@ class optimezer
 
 	/**
 	 * optimezer::minifyJs()
-	 * 
+	 *
 	 * @param mixed $contents
 	 * @return
 	 */
@@ -339,7 +339,7 @@ class optimezer
 
 	/**
 	 * optimezer::minifyJsInline()
-	 * 
+	 *
 	 * @param mixed $jsInline
 	 * @return
 	 */
@@ -358,7 +358,7 @@ class optimezer
 
 	/**
 	 * optimezer::getCssContent()
-	 * 
+	 *
 	 * @param mixed $link
 	 * @return
 	 */
@@ -372,7 +372,7 @@ class optimezer
 
 	/**
 	 * optimezer::changeCssURL()
-	 * 
+	 *
 	 * @param mixed $matches
 	 * @return
 	 */
@@ -387,7 +387,7 @@ class optimezer
 			$url = $this->cssImgNewPath . $matches[1];
 			while( preg_match( "/([^\/(\.\.)]+)\/\.\.\//", $url ) )
 			{
-				$url = preg_replace( "/([^\/(\.\.)]+)\/\.\.\//", "", $url );
+				$url = preg_replace( '/([^\/(\.\.)]+)\/\.\.\//', '', $url );
 			}
 		}
 		return "url(" . $url . ")";
@@ -395,7 +395,7 @@ class optimezer
 
 	/**
 	 * optimezer::minifyCss()
-	 * 
+	 *
 	 * @param mixed $cssContent
 	 * @return
 	 */
@@ -427,7 +427,7 @@ class optimezer
 		preg_replace( '/\@(charset|import)(.*?)[\'|"|\)]\;/is', '', $cssContent );
 		if( ! empty( $matchs[0] ) )
 		{
-			$this->_cssImportCharset = "";
+			$this->_cssImportCharset = '';
 
 			foreach( $matchs[0] as $v )
 			{
@@ -443,7 +443,7 @@ class optimezer
 
 	/**
 	 * optimezer::commentCB()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -480,7 +480,7 @@ class optimezer
 
 	/**
 	 * optimezer::selectorsCB()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -491,7 +491,7 @@ class optimezer
 
 	/**
 	 * optimezer::fontFamilyCB()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -503,7 +503,7 @@ class optimezer
 
 	/**
 	 * optimezer::checkImg()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -518,7 +518,7 @@ class optimezer
 
 	/**
 	 * optimezer::minifyHTML()
-	 * 
+	 *
 	 * @param mixed $content
 	 * @return
 	 */
@@ -537,7 +537,7 @@ class optimezer
 
 	/**
 	 * optimezer::HTMLCommentCB()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -548,7 +548,7 @@ class optimezer
 
 	/**
 	 * optimezer::HTMLoutsideTagCB()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */

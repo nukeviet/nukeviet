@@ -23,7 +23,7 @@ $row = $db->sql_fetchrow( $result );
 $full_name = $row['full_name'];
 
 $contents = array();
-$contents['info'] = "";
+$contents['info'] = '';
 
 $sql = "SELECT `full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `clid`=" . $id;
 $result = $db->sql_query( $sql );

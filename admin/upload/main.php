@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['upload_manager'];
-$contents = "";
+$contents = '';
 
 $path = ( defined( 'NV_IS_SPADMIN' ) ) ? "" : NV_UPLOADS_DIR;
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', $path ) );

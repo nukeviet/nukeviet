@@ -7,26 +7,6 @@
  * @createdate 12/28/2009 14:30
  */
 
-/**
- * if(!file_exists(NV_ROOTDIR."/uploads/1237974658.jpg")) {
- * require_once(NV_ROOTDIR."/includes/class/image.class.php");
- * $image = new image(NV_ROOTDIR."/images/logo.png", $max_width,$max_height);
- * $image->resizePercent(200);
- * $image->cropFromCenter(150,200);
- * $image->cropFromLeft(50,50,300,300);
- * $image->addstring("nguyenanh tu", 'right', 'bottom', "", 8);
- * $image->addlogo(NV_ROOTDIR.'/images/logo.png','left','top');
- * $image->resizePercent(30);
- * $image->rotate(45);
- * $image->reflection();
- * $image->show();
- * $image->save(NV_ROOTDIR.'/'.NV_TEMP_DIR.'/');
- * $image->close();
- * print_r($image->create_Image_info);
- * exit;
- * }
- */
-
 if( defined( 'NV_CLASS_IMAGE_PHP' ) ) return;
 define( 'NV_CLASS_IMAGE_PHP', true );
 
@@ -55,7 +35,7 @@ class image
 	var $fileinfo = array();
 	var $gmaxX = 0;
 	var $gmaxY = 0;
-	var $error = "";
+	var $error = '';
 	var $createImage = false;
 	var $create_Image_info = array();
 	var $logoimg;
@@ -83,7 +63,7 @@ class image
 		}
 		$this->gmaxX = intval( $gmaxX );
 		$this->gmaxY = intval( $gmaxY );
-		$this->error = "";
+		$this->error = '';
 		$this->createImage = false;
 		$this->create_Image_info = array();
 		$this->fileinfo = $this->is_image( $this->filename );
@@ -146,7 +126,7 @@ class image
 		$tweakfactor = 1.8;
 		$memoryNeeded = round( ( $this->fileinfo['width'] * $this->fileinfo['height'] * $this->fileinfo['bits'] * $this->fileinfo['channels'] / 8 + $k64 ) * $tweakfactor );
 
-		$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -543,7 +523,7 @@ class image
      * @param integer $fsize
      * @return
      */
-	function addstring( $string, $align = 'right', $valign = 'bottom', $font = "", $fsize = 2 )
+	function addstring( $string, $align = 'right', $valign = 'bottom', $font = '', $fsize = 2 )
 	{
 		if( empty( $this->error ) )
 		{
@@ -552,11 +532,11 @@ class image
 				$this->get_createImage();
 			}
 
-			if( $string != "" )
+			if( $string != '' )
 			{
 				$this->set_memory_limit();
 
-				if( $font == "" ) $font = NV_ROOTDIR . '/includes/fonts/Pixelation.ttf';
+				if( $font == '' ) $font = NV_ROOTDIR . '/includes/fonts/Pixelation.ttf';
 				$bbox = imagettfbbox( $fsize, 0, $font, $string );
 				$string_width = $bbox[2] - $bbox[0];
 				$string_height = $bbox[1] - $bbox[7];

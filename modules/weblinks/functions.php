@@ -29,7 +29,7 @@ function adminlink( $id )
 
 $catid = 0;
 $parentid = 0;
-$set_viewcat = "";
+$set_viewcat = '';
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 $array_mod_title = array();
 $global_array_cat = array();
@@ -128,8 +128,8 @@ if( ! empty( $array_op ) )
 		{
 			$array_page = explode( "-", $array_op[1] );
 			$id = intval( end( $array_page ) );
-			$alias_url = str_replace( "-" . $id . "", "", $array_op[1] );
-			if( $id > 0 and $alias_url != "" )
+			$alias_url = str_replace( '-' . $id, '', $array_op[1] );
+			if( $id > 0 and $alias_url != '' )
 			{
 				$op = "detail";
 			}

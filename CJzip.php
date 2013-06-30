@@ -28,7 +28,7 @@ class CJzip
 	private $base_siteurl;
 	private $isOptimized = false;
 	private $root = false;
-	private $cssImgNewPath = "";
+	private $cssImgNewPath = '';
 
 	/**
 	 * CJzip::__construct()
@@ -42,11 +42,11 @@ class CJzip
 			$this->browseInfo( 404 );
 		}
 
-		if( extension_loaded( 'zlib' ) and ini_get( 'output_handler' ) == "" )
+		if( extension_loaded( 'zlib' ) and ini_get( 'output_handler' ) == '' )
 		{
 			if( strtolower( ini_get( 'zlib.output_compression' ) ) == "on" or ini_get( 'zlib.output_compression' ) == 1 )
 			{
-				$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+				$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 				if( extension_loaded( 'suhosin' ) )
 				{
 					$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -77,7 +77,7 @@ class CJzip
 		$this->base_siteurl = $base_siteurl . '/';
 
 		$filename = $_GET[$this->getName];
-		if( preg_match( "/^\//", $filename ) ) $filename = preg_replace( "#^" . $this->base_siteurl . "#", "", $filename );
+		if( preg_match( "/^\//", $filename ) ) $filename = preg_replace( '#^' . $this->base_siteurl . '#', '', $filename );
 
 		$this->file['path'] = $this->siteRoot . '/' . $filename;
 		$this->file['lastmod'] = @filemtime( $this->file['path'] );
@@ -94,7 +94,7 @@ class CJzip
 		}
 
 		$this->file['ext'] = $matches[2];
-		$this->file['contenttype'] = ( $this->file['ext'] == "css" ) ? "css" : "javascript";
+		$this->file['contenttype'] = ( $this->file['ext'] == 'css' ) ? 'css' : 'javascript';
 		if( preg_match( "/\.opt$/", $matches[1] ) )
 		{
 			$this->isOptimized = true;
@@ -183,7 +183,7 @@ class CJzip
 	 */
 	private function loadData()
 	{
-		$disable_functions = ( ( $disable_functions = ini_get( "disable_functions" ) ) != "" and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
+		$disable_functions = ( ( $disable_functions = ini_get( "disable_functions" ) ) != '' and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -298,9 +298,9 @@ class CJzip
 		else
 		{
 			$url = $this->cssImgNewPath . $matches[1];
-			while( preg_match( "/([^\/(\.\.)]+)\/\.\.\//", $url ) )
+			while( preg_match( '/([^\/(\.\.)]+)\/\.\.\//', $url ) )
 			{
-				$url = preg_replace( "/([^\/(\.\.)]+)\/\.\.\//", "", $url );
+				$url = preg_replace( '/([^\/(\.\.)]+)\/\.\.\//', '', $url );
 			}
 		}
 		return "url(" . $url . ")";

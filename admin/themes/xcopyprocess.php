@@ -9,10 +9,10 @@
 
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
-$theme1 = filter_text_input( 'theme1', 'post' );
-$theme2 = filter_text_input( 'theme2', 'post' );
+$theme1 = $nv_Request->get_title( 'theme1', 'post' );
+$theme2 = $nv_Request->get_title( 'theme2', 'post' );
 
-$position = filter_text_input( 'position', 'post' );
+$position = $nv_Request->get_title( 'position', 'post' );
 $position = explode( ',', $position );
 
 if( ! empty( $theme1 ) and ! empty( $theme2 ) and $theme1 != $theme2 and file_exists( NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini' ) and file_exists( NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini' ) and ! empty( $position ) )

@@ -19,7 +19,7 @@ $result = $db->sql_query( $sql );
 $row = $db->sql_fetchrow( $result );
 unset( $sql, $result );
 
-$row['error'] = "";
+$row['error'] = '';
 $row['action'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=reportlink-" . $row['alias'] . "-" . $id, true );
 $row['id'] = $id;
 
@@ -33,7 +33,7 @@ if( $id )
 		$rows = $db->sql_fetchrow( $result );
 
 		$report = $nv_Request->get_int( 'report', 'post' );
-		$report_note = filter_text_input( 'report_note', 'post', '', 1, 255 );
+		$report_note = nv_substr($nv_Request->get_title( 'report_note', 'post', '', 1) , 0, 255 );
 
 		$row['report_note'] = $report_note;
 		if( $report == 0 and empty( $report_note ) )

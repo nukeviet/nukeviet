@@ -66,8 +66,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 	if( ! isset( $new_modules[$mf] ) )
 	{
 		$row['act'] == 2;
-		$row['is_sysmod'] = "";
-		$row['mod_version'] = "";
+		$row['is_sysmod'] = '';
+		$row['mod_version'] = '';
 	}
 	else
 	{

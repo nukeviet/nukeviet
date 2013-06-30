@@ -10,13 +10,13 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 // Default variable
-$error = "";
+$error = '';
 $post['id'] = $post['parentid'] = $post['active_type'] = 0;
-$post['type_menu'] = $post['target'] = $post['who_view'] = $post['module_name'] = $post['css'] = "";
+$post['type_menu'] = $post['target'] = $post['who_view'] = $post['module_name'] = $post['css'] = '';
 $post['groups_view'] = array();
 $arr_item = array();
 $sp = '&nbsp;&nbsp;&nbsp;';
-$sp_title = "";
+$sp_title = '';
 
 //
 $post['mid'] = $nv_Request->get_int( 'mid', 'get', 0 );
@@ -53,7 +53,7 @@ if( $post['mid'] != 0 )
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$sp_title = "";
+		$sp_title = '';
 		if( $row['lev'] > 0 )
 		{
 			for( $i = 1; $i <= $row['lev']; ++$i )
@@ -141,15 +141,15 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	$post['id'] = $nv_Request->get_int( 'id', 'post', 0 );
 	$post['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
 	$post['mid'] = $nv_Request->get_int( 'item_menu', 'post', 0 );
-	$post['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
+	$post['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 	$post['link'] = $nv_Request->get_string( 'link', 'post', '', 1, 255 );
-	$post['note'] = filter_text_input( 'note', 'post', '', 1, 255 );
-	$post['module_name'] = filter_text_input( 'module_name', 'post', '', 1, 255 );
-	$post['op'] = filter_text_input( 'op', 'post', '', 1, 255 );
+	$post['note'] = nv_substr( $nv_Request->get_title( 'note', 'post', '', 1 ), 0, 255 );
+	$post['module_name'] = nv_substr( $nv_Request->get_title( 'module_name', 'post', '', 1 ), 0, 255 );
+	$post['op'] = nv_substr( $nv_Request->get_title( 'op', 'post', '', 1 ), 0, 255 );
 	$post['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
 	$post['target'] = $nv_Request->get_int( 'target', 'post', 0 );
 	$post['active_type'] = $nv_Request->get_int( 'active_type', 'post', 0 );
-	$post['css'] = filter_text_input( 'css', 'post', '', 1, 255 );
+	$post['css'] = nv_substr( $nv_Request->get_title( 'css', 'post', '', 1 ), 0, 255 );
 
 	$mid_old = $nv_Request->get_int( 'mid', 'post', 0 );
 	$pa_old = $nv_Request->get_int( 'pa', 'post', 0 );
@@ -368,7 +368,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	);
 }
 
-$link_title = "";
+$link_title = '';
 if( $post['parentid'] != 0 )
 {
 	$sql = "SELECT `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $post['parentid'];
@@ -429,7 +429,7 @@ if( $nv_Request->isset_request( 'item', 'post' ) )
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$sp_title = "";
+		$sp_title = '';
 		if( $row['lev'] > 0 )
 		{
 			for( $i = 1; $i <= $row['lev']; ++$i )
@@ -498,7 +498,7 @@ if( $nv_Request->isset_request( 'action', 'post' ) )
 
 if( $post['id'] != 0 )
 {
-	if( $post['op'] != "" )
+	if( $post['op'] != '' )
 	{
 		$arr_cat = array();
 
@@ -619,7 +619,7 @@ if( ! empty( $error ) )
 	$xtpl->parse( 'main.error' );
 }
 
-if( $link_title != "" )
+if( $link_title != '' )
 {
 	$xtpl->assign( 'link_title', $link_title );
 	$xtpl->parse( 'main.title' );

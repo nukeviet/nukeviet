@@ -10,7 +10,7 @@
 define( 'NV_ADMIN', true );
 
 // Ket noi den mainfile.php nam o thu muc goc.
-$realpath_mainfile = $set_active_op = "";
+$realpath_mainfile = $set_active_op = '';
 
 $temp_dir = str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) );
 $temp_path = "/../";
@@ -60,13 +60,13 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 	$admin_mods[$row['module']] = $row;
 }
 
-$module_name = strtolower( filter_text_input( NV_NAME_VARIABLE, 'post,get', 'siteinfo' ) );
+$module_name = strtolower( $nv_Request->get_title( NV_NAME_VARIABLE, 'post,get', 'siteinfo' ) );
 if( ! empty( $module_name ) )
 {
-	$include_functions = $include_file = $lang_file = $mod_theme_file = "";
+	$include_functions = $include_file = $lang_file = $mod_theme_file = '';
 	$module_data = $module_file = $module_name;
 
-	$op = filter_text_input( NV_OP_VARIABLE, 'post,get', 'main' );
+	$op = $nv_Request->get_title( NV_OP_VARIABLE, 'post,get', 'main' );
 	if( empty( $op ) or $op == "functions" )
 	{
 		$op = "main";
@@ -158,7 +158,7 @@ if( ! empty( $module_name ) )
 		require ( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/theme.php" );
 
 		// Ket noi giao dien cua module
-		$global_config['module_theme'] = "";
+		$global_config['module_theme'] = '';
 		if( is_dir( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/modules/" . $module_file . "/" ) )
 		{
 			$global_config['module_theme'] = $global_config['admin_theme'];

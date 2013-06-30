@@ -10,8 +10,8 @@
 if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
 $tables = $nv_Request->get_array( 'tables', 'post', array() );
-$type = filter_text_input( 'type', 'post', '' );
-$ext = filter_text_input( 'ext', 'post', '' );
+$type = $nv_Request->get_title( 'type', 'post', '' );
+$ext = $nv_Request->get_title( 'ext', 'post', '' );
 
 if( empty( $tables ) )
 {

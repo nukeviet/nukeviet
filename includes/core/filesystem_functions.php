@@ -38,7 +38,7 @@ function nv_parse_ini_file( $filename, $process_sections = false )
 		list( $key, $value ) = explode( "=", $line );
 		$key = trim( $key );
 		$value = trim( $value );
-		$value = str_replace( array( '"', "'" ), array( "", "" ), $value );
+		$value = str_replace( array( '"', "'" ), array( '', '' ), $value );
 
 		if( $process_sections && ! empty( $section ) )
 		{
@@ -416,7 +416,7 @@ function nv_mkdir( $path, $dir_name )
 	}
 	if( $ftp_check_login == 1 )
 	{
-		$dir = str_replace( NV_ROOTDIR . "/", "", str_replace( '\\', '/', $path . $dir_name ) );
+		$dir = str_replace( NV_ROOTDIR . '/', '', str_replace( '\\', '/', $path . $dir_name ) );
 		$res = ftp_mkdir( $conn_id, $dir );
 		if( substr( $sys_info['os'], 0, 3 ) != 'WIN' ) ftp_chmod( $conn_id, 0777, $dir );
 		ftp_close( $conn_id );
@@ -485,7 +485,7 @@ function nv_deletefile( $file, $delsub = false )
 		}
 	}
 
-	$filename = str_replace( NV_ROOTDIR . "/", "", str_replace( '\\', '/', $realpath ) );
+	$filename = str_replace( NV_ROOTDIR . '/', '', str_replace( '\\', '/', $realpath ) );
 	// Tinh chinh lai file cho phu hop voi chdir
 
 	if( $ftp_check_login == 1 )
@@ -523,7 +523,7 @@ function nv_deletefile( $file, $delsub = false )
 					$unlink = nv_deletefile( $realpath . '/' . $f, true );
 					if( empty( $unlink[0] ) )
 					{
-						$filename = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $realpath . '/' . $f ) );
+						$filename = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $realpath . '/' . $f ) );
 						return array( 0, sprintf( $lang_global['error_delete_failed'], $filename ) );
 					}
 				}
@@ -559,7 +559,7 @@ function nv_ftp_del_dir( $ftp, $dst_dir, $delsub )
 {
 	global $lang_global;
 
-	$dst_dir = preg_replace( "/\\/\$/", "", $dst_dir );
+	$dst_dir = preg_replace( '/\\/\$/', '', $dst_dir );
 	// Remove trailing slash
 	$ar_files = $ftp->listDetail( $dst_dir, 'all', true );
 	// Danh sach cac file (bao gom ca file an)

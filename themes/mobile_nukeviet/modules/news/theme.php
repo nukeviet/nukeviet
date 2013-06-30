@@ -31,7 +31,7 @@ function viewcat_grid_new( $array_catpage, $catid )
 			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
-		if( $array_row_i['imghome'] != "" )
+		if( $array_row_i['imghome'] != '' )
 		{
 			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
@@ -70,7 +70,7 @@ function viewcat_list_new( $array_catpage, $catid, $page )
 			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
-		if( $array_row_i['imghome'] != "" )
+		if( $array_row_i['imghome'] != '' )
 		{
 			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
@@ -100,7 +100,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other )
 			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
-		if( $array_row_i['imghome'] != "" )
+		if( $array_row_i['imghome'] != '' )
 		{
 			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
@@ -142,7 +142,7 @@ function viewcat_top( $array_catcontent )
 			$xtpl->assign( 'CONTENT', $array_catcontent_i );
 			if( $key == 0 )
 			{
-				if( $array_catcontent_i['imghome'] != "" )
+				if( $array_catcontent_i['imghome'] != '' )
 				{
 					$xtpl->assign( 'HOMEIMG0', $array_catcontent_i['imghome'] );
 					$xtpl->assign( 'HOMEIMGALT0', $array_catcontent_i['homeimgalt'] );
@@ -178,7 +178,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 		{
 			$xtpl->assign( 'CAT', $array_row_i );
 			$catid = intval( $array_row_i['catid'] );
-			if( $array_row_i['subcatid'] != "" )
+			if( $array_row_i['subcatid'] != '' )
 			{
 				$exl = 0;
 				$arrsubcat_s = explode( ",", $array_row_i['subcatid'] );
@@ -215,7 +215,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 				if( $a == 1 )
 				{
 					$xtpl->assign( 'CONTENT', $array_row_i );
-					if( $array_row_i['imghome'] != "" )
+					if( $array_row_i['imghome'] != '' )
 					{
 						$xtpl->assign( 'HOMEIMG', $array_row_i['imghome'] );
 						$xtpl->assign( 'HOMEIMGALT', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
@@ -281,7 +281,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$xtpl->assign( 'NEWSTOP', $array_content_i );
 			if( $key == 0 )
 			{
-				if( $array_content_i['imghome'] != "" )
+				if( $array_content_i['imghome'] != '' )
 				{
 					$xtpl->assign( 'HOMEIMG0', $array_content_i['imghome'] );
 					$xtpl->assign( 'HOMEIMGALT0', $array_content_i['homeimgalt'] );
@@ -321,7 +321,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$array_content_i = $array_catpage_i['content'][0];
 			$array_content_i['hometext'] = nv_clean60( $array_content_i['hometext'], 300 );
 			$xtpl->assign( 'CONTENT', $array_content_i );
-			if( $array_content_i['imghome'] != "" )
+			if( $array_content_i['imghome'] != '' )
 			{
 				$xtpl->assign( 'HOMEIMG01', $array_content_i['imghome'] );
 				$xtpl->assign( 'HOMEIMGALT01', ! empty( $array_content_i['homeimgalt'] ) ? $array_content_i['homeimgalt'] : $array_content_i['title'] );
@@ -474,9 +474,9 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 		}
 		else
 		{
-			$xtpl->assign( 'NAME', "" );
-			$xtpl->assign( 'EMAIL', "" );
-			$xtpl->assign( 'DISABLED', "" );
+			$xtpl->assign( 'NAME', '' );
+			$xtpl->assign( 'EMAIL', '' );
+			$xtpl->assign( 'DISABLED', '' );
 		}
 		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
@@ -594,7 +594,7 @@ function topic_theme( $topic_array, $topic_other_array, $page_title, $descriptio
 
 function comment_theme( $comment_array )
 {
-	$comment = "";
+	$comment = '';
 	global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config, $lang_module;
 	$xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -732,8 +732,14 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	}
 	for( $i = 0; $i <= 3; ++$i )
 	{
-		if( $check_num == $i ) $xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
-		else $xtpl->assign( 'CHECK' . $i, "" );
+		if( $check_num == $i )
+		{
+			$xtpl->assign( 'CHECK' . $i, 'selected="selected"' );
+		}
+		else
+		{
+			$xtpl->assign( 'CHECK' . $i, '' );
+		}
 	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );

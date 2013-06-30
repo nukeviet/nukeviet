@@ -42,7 +42,7 @@ define( '_ERROR_UPLOAD_URL_NOTFOUND', isset( $lang_global['error_upload_url_notf
 
 /**
  * upload
- * 
+ *
  * @package NUKEVIET 3.x
  * @author VINADES.,JSC
  * @copyright 2011
@@ -74,7 +74,7 @@ class upload
 
 	/**
      * upload::__construct()
-     * 
+     *
      * @param mixed $allowed_filetypes
      * @param mixed $forbid_extensions
      * @param mixed $forbid_mimes
@@ -98,14 +98,14 @@ class upload
 		$this->config['upload_checking_mode'] = UPLOAD_CHECKING_MODE;
 		$this->config['magic_path'] = $magic_path;
 
-		$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
 		}
 		$this->disable_functions = $disable_functions;
 
-		$this->disable_classes = ( ini_get( "disable_classes" ) != "" and ini_get( "disable_classes" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_classes" ) ) ) : array();
+		$this->disable_classes = ( ini_get( "disable_classes" ) != '' and ini_get( "disable_classes" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_classes" ) ) ) : array();
 		$this->safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
 
 		$userAgents = array( //
@@ -139,7 +139,7 @@ class upload
 
 	/**
      * upload::func_exists()
-     * 
+     *
      * @param mixed $funcName
      * @return
      */
@@ -150,7 +150,7 @@ class upload
 
 	/**
      * upload::cl_exists()
-     * 
+     *
      * @param mixed $clName
      * @return
      */
@@ -161,7 +161,7 @@ class upload
 
 	/**
      * upload::getextension()
-     * 
+     *
      * @param mixed $filename
      * @return
      */
@@ -175,7 +175,7 @@ class upload
 
 	/**
      * upload::get_ini()
-     * 
+     *
      * @param mixed $allowed_filetypes
      * @param mixed $forbid_extensions
      * @param mixed $forbid_mimes
@@ -203,7 +203,7 @@ class upload
 			list( $key, $value ) = explode( "=", $line );
 			$key = trim( $key );
 			$value = trim( $value );
-			$value = str_replace( array( '"', "'" ), array( "", "" ), $value );
+			$value = str_replace( array( '"', "'" ), array( '', '' ), $value );
 
 			if( preg_match( "/^(.*?)\[\]$/", $key, $match ) )
 			{
@@ -259,7 +259,7 @@ class upload
 
 	/**
      * upload::get_mime_from_iniFile()
-     * 
+     *
      * @return
      */
 	private function get_mime_from_iniFile()
@@ -269,7 +269,7 @@ class upload
 
 	/**
      * upload::get_mime_from_userFile()
-     * 
+     *
      * @param mixed $userfile
      * @return
      */
@@ -280,13 +280,13 @@ class upload
 
 	/**
      * upload::get_mime_finfo()
-     * 
+     *
      * @param mixed $userfile
      * @return
      */
 	private function get_mime_finfo( $userfile )
 	{
-		$mime = "";
+		$mime = '';
 		if( $this->func_exists( 'finfo_open' ) )
 		{
 			if( empty( $this->config['magic_path'] ) )
@@ -343,13 +343,13 @@ class upload
 
 	/**
      * upload::get_mime_exec()
-     * 
+     *
      * @param mixed $userfile
      * @return
      */
 	private function get_mime_exec( $userfile )
 	{
-		$mime = "";
+		$mime = '';
 
 		if( substr( PHP_OS, 0, 3 ) != 'WIN' )
 		{
@@ -380,13 +380,13 @@ class upload
 
 	/**
      * upload::get_mime_content_type()
-     * 
+     *
      * @param mixed $userfile
      * @return
      */
 	private function get_mime_content_type( $userfile )
 	{
-		$mime = "";
+		$mime = '';
 
 		if( $this->func_exists( 'mime_content_type' ) )
 		{
@@ -399,13 +399,13 @@ class upload
 
 	/**
      * upload::get_mime_image()
-     * 
+     *
      * @param mixed $userfile
      * @return
      */
 	private function get_mime_image( $userfile )
 	{
-		$mime = "";
+		$mime = '';
 
 		$img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
 		if( in_array( $this->file_extension, $img_exts ) )
@@ -432,7 +432,7 @@ class upload
 
 	/**
      * upload::check_mime_from_ext()
-     * 
+     *
      * @param mixed $mime
      * @return
      */
@@ -440,14 +440,14 @@ class upload
 	{
 		if( ! empty( $mime ) and ! in_array( $mime, $this->config['allowed_files'][$this->file_extension] ) )
 		{
-			$mime = "";
+			$mime = '';
 		}
 		return $mime;
 	}
 
 	/**
      * upload::mime_ign()
-     * 
+     *
      * @param mixed $mime
      * @return
      */
@@ -478,7 +478,7 @@ class upload
 
 	/**
      * upload::get_mime_type()
-     * 
+     *
      * @param mixed $userfile
      * @return
      */
@@ -486,45 +486,45 @@ class upload
 	{
 		if( $this->config['upload_checking_mode'] != "strong" and $this->config['upload_checking_mode'] != "mild" and $this->config['upload_checking_mode'] != "lite" )
 		{
-			if( ( $mime = $this->get_mime_finfo( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( ( $mime = $this->get_mime_exec( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( ( $mime = $this->get_mime_content_type( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( ( $mime = $this->get_mime_image( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( ( $mime = $this->get_mime_from_userFile( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( ( $mime = $this->get_mime_from_iniFile() ) != "" ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_finfo( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_exec( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_content_type( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_image( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_from_userFile( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_from_iniFile() ) != '' ) return $this->mime_ign( $mime );
 			return "";
 		}
 
 		if( $this->config['upload_checking_mode'] != "strong" and $this->config['upload_checking_mode'] != "mild" )
 		{
-			if( ( $mime = $this->get_mime_finfo( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( ( $mime = $this->get_mime_exec( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( ( $mime = $this->get_mime_content_type( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( ( $mime = $this->get_mime_image( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( ( $mime = $this->get_mime_from_userFile( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_finfo( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_exec( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_content_type( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_image( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( ( $mime = $this->get_mime_from_userFile( $userfile ) ) != '' ) return $this->mime_ign( $mime );
 			return "";
 		}
 
 		if( $this->config['upload_checking_mode'] != "strong" )
 		{
-			if( $this->check_mime_from_ext( $mime = $this->get_mime_finfo( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( $this->check_mime_from_ext( $mime = $this->get_mime_exec( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( $this->check_mime_from_ext( $mime = $this->get_mime_content_type( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( $this->check_mime_from_ext( $mime = $this->get_mime_image( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-			if( $this->check_mime_from_ext( $mime = $this->get_mime_from_userFile( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+			if( $this->check_mime_from_ext( $mime = $this->get_mime_finfo( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( $this->check_mime_from_ext( $mime = $this->get_mime_exec( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( $this->check_mime_from_ext( $mime = $this->get_mime_content_type( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( $this->check_mime_from_ext( $mime = $this->get_mime_image( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+			if( $this->check_mime_from_ext( $mime = $this->get_mime_from_userFile( $userfile ) ) != '' ) return $this->mime_ign( $mime );
 			return "";
 		}
 
-		if( $this->check_mime_from_ext( $mime = $this->get_mime_finfo( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-		if( $this->check_mime_from_ext( $mime = $this->get_mime_exec( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-		if( $this->check_mime_from_ext( $mime = $this->get_mime_content_type( $userfile ) ) != "" ) return $this->mime_ign( $mime );
-		if( $this->check_mime_from_ext( $mime = $this->get_mime_image( $userfile ) ) != "" ) return $this->mime_ign( $mime );
+		if( $this->check_mime_from_ext( $mime = $this->get_mime_finfo( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+		if( $this->check_mime_from_ext( $mime = $this->get_mime_exec( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+		if( $this->check_mime_from_ext( $mime = $this->get_mime_content_type( $userfile ) ) != '' ) return $this->mime_ign( $mime );
+		if( $this->check_mime_from_ext( $mime = $this->get_mime_image( $userfile ) ) != '' ) return $this->mime_ign( $mime );
 		return "";
 	}
 
 	/**
      * upload::verify_image()
-     * 
+     *
      * @param mixed $file
      * @return
      */
@@ -548,7 +548,7 @@ class upload
 
 	/**
      * upload::check_tmpfile()
-     * 
+     *
      * @param mixed $userfile
      * @return
      */
@@ -626,7 +626,7 @@ class upload
 
 	/**
      * upload::check_save_path()
-     * 
+     *
      * @param mixed $savepath
      * @return
      */
@@ -647,7 +647,7 @@ class upload
 
 	/**
      * upload::string_to_filename()
-     * 
+     *
      * @param mixed $word
      * @return
      */
@@ -664,7 +664,7 @@ class upload
 
 	/**
      * upload::save_file()
-     * 
+     *
      * @param mixed $userfile
      * @param mixed $savepath
      * @param bool $replace_if_exists
@@ -742,7 +742,7 @@ class upload
 
 	/**
      * upload::url_get_info()
-     * 
+     *
      * @param mixed $url
      * @return
      */
@@ -822,7 +822,7 @@ class upload
 
 	/**
      * upload::check_url()
-     * 
+     *
      * @param integer $is_200
      * @return
      */
@@ -917,7 +917,7 @@ class upload
 		if( ! $res ) return false;
 		if( preg_match( "/(200)/", $res[0] ) )
 		{
-			$ContentType = "";
+			$ContentType = '';
 			foreach( $res as $k => $v )
 			{
 				if( preg_match( "/content-type:\s(.*?)$/is", $v, $matches ) )
@@ -967,7 +967,7 @@ class upload
 
 	/**
      * upload::check_allow_methods()
-     * 
+     *
      * @return
      */
 	private function check_allow_methods()
@@ -1001,7 +1001,7 @@ class upload
 
 	/**
      * upload::check_mime()
-     * 
+     *
      * @param mixed $mime
      * @return
      */
@@ -1024,7 +1024,7 @@ class upload
 
 	/**
      * upload::curl_Download()
-     * 
+     *
      * @return
      */
 	private function curl_Download()
@@ -1061,7 +1061,7 @@ class upload
 
 	/**
      * upload::fopen_Download()
-     * 
+     *
      * @return
      */
 	private function fopen_Download()
@@ -1090,7 +1090,7 @@ class upload
 
 	/**
      * upload::file_get_contents_Download()
-     * 
+     *
      * @return
      */
 	private function file_get_contents_Download()
@@ -1102,7 +1102,7 @@ class upload
 
 	/**
      * upload::file_Download()
-     * 
+     *
      * @return
      */
 	private function file_Download()
@@ -1129,7 +1129,7 @@ class upload
 
 	/**
      * upload::save_urlfile()
-     * 
+     *
      * @param mixed $urlfile
      * @param mixed $savepath
      * @param bool $replace_if_exists
@@ -1145,7 +1145,7 @@ class upload
 		$this->img_info = array();
 
 		$return = array();
-		$return['error'] = "";
+		$return['error'] = '';
 
 		$this->url_info = $this->url_get_info( $urlfile );
 		if( empty( $this->url_info ) or ! isset( $this->url_info['scheme'] ) )

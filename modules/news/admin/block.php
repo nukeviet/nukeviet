@@ -78,7 +78,7 @@ $xtpl->assign( 'BLOCK_LIST', nv_show_block_list( $bid ) );
 
 $id_array = array();
 $listid = $nv_Request->get_string( 'listid', 'get', '' );
-if( $listid == "" )
+if( $listid == '' )
 {
 	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `status`=1 AND `id` NOT IN(SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . ") ORDER BY `publtime` DESC LIMIT 0,20";
 }

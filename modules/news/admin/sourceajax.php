@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$q = filter_text_input( 'q', 'get', "", 1 );
+$q = $nv_Request->get_title( 'q', 'get', '', 1 );
 if( empty( $q ) ) return;
 
 $sql = "SELECT title, link FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE  `title` LIKE '%" . $db->dblikeescape( $q ) . "%' OR `link` LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY `weight` ASC";

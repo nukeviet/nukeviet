@@ -24,7 +24,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 	{
 		global $lang_module;
 
-		$return = "";
+		$return = '';
 
 		$html = "<input name=\"config_url\" type=\"text\" value=\"" . $data_block['url'] . "\" style=\"width:500px\"/>";
 		$return .= '<tr><td>' . $lang_block['url'] . '</td><td>' . $html . '</td></tr>';
@@ -81,7 +81,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		$return = array();
 		$return['error'] = array();
 		$return['config'] = array();
-		$return['config']['url'] = filter_text_input( 'config_url', 'post', '', 0 );
+		$return['config']['url'] = $nv_Request->get_title( 'config_url', 'post', '', 0 );
 		$return['config']['number'] = $nv_Request->get_int( 'config_number', 'post', 0 );
 		$return['config']['isdescription'] = $nv_Request->get_int( 'config_isdescription', 'post', 0 );
 		$return['config']['ishtml'] = $nv_Request->get_int( 'config_ishtml', 'post', 0 );

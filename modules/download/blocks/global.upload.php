@@ -52,7 +52,7 @@ if( defined( 'NV_SYSTEM' ) )
 		}
 	}
 	global $site_mods, $module_name, $module_info, $lang_module, $nv_Request;
-	$content = "";
+	$content = '';
 	$module = $block_config['module'];
 	$mod_config = nv_mod_down_config( $module );
 	if( isset( $site_mods[$module] ) )

@@ -15,7 +15,7 @@ function GetSourceNews( $sourceid )
 
 	if( $sourceid > 0 )
 	{
-		$sql = "SELECT title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE sourceid = '" . $sourceid . "'";
+		$sql = 'SELECT title FROM `' . NV_PREFIXLANG . '_' . $module_data . '_sources` WHERE sourceid = '' . $sourceid . ''';
 		$re = $db->sql_query( $sql );
 
 		if( list( $title ) = $db->sql_fetchrow( $re ) )
@@ -23,33 +23,33 @@ function GetSourceNews( $sourceid )
 			return $title;
 		}
 	}
-	return "-/-";
+	return '-/-';
 }
 
 function BoldKeywordInStr( $str, $keyword )
 {
 	$str = nv_clean60( $str, 300 );
-	$tmp = explode( " ", $keyword );
+	$tmp = explode( ' ', $keyword );
 
 	foreach( $tmp as $k )
 	{
 		$tp = strtolower( $k );
-		$str = str_replace( $tp, "<span class=\"keyword\">" . $tp . "</span>", $str );
+		$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
 		$tp = strtoupper( $k );
-		$str = str_replace( $tp, "<span class=\"keyword\">" . $tp . "</span>", $str );
+		$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
 		$k[0] = strtoupper( $k[0] );
-		$str = str_replace( $k, "<span class=\"keyword\">" . $k . "</span>", $str );
+		$str = str_replace( $k, '<span class="keyword">' . $k . '</span>', $str );
 	}
 
 	return $str;
 }
 
-$key = filter_text_input( 'q', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
+$key = nv_substr( $nv_Request->get_title( 'q', 'get', '', 0 ), 0, NV_MAX_SEARCH_LENGTH );
 $pages = $nv_Request->get_int( 'page', 'get', 0 );
-$from_date = filter_text_input( 'from_date', 'get', '', 0 );
-$to_date = filter_text_input( 'to_date', 'get', '', 0 );
+$from_date = $nv_Request->get_title( 'from_date', 'get', '', 0 );
+$to_date = $nv_Request->get_title( 'to_date', 'get', '', 0 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
-$check_num = filter_text_input( 'choose', 'get', 1, 1, 1 );
+$check_num = $nv_Request->get_title( 'choose', 'get', 1, 1 );
 $date_array['from_date'] = $from_date;
 $date_array['to_date'] = $to_date;
 $per_pages = 20;
@@ -63,15 +63,15 @@ foreach( $global_array_cat as $arr_cat_i )
 	$array_cat_search[$arr_cat_i['catid']] = array(
 		'catid' => $arr_cat_i['catid'],
 		'title' => $arr_cat_i['title'],
-		'select' => ( $arr_cat_i['catid'] == $catid ) ? "selected" : ""
+		'select' => ( $arr_cat_i['catid'] == $catid ) ? 'selected' : ''
 	);
 }
 
 $array_cat_search[0]['title'] = $lang_module['search_all'];
 
-$contents = call_user_func( "search_theme", $key, $check_num, $date_array, $array_cat_search );
-$where = "";
-$tbl_src = "";
+$contents = call_user_func( 'search_theme', $key, $check_num, $date_array, $array_cat_search );
+$where = '';
+$tbl_src = '';
 
 if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 {
@@ -130,11 +130,11 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	{
 		if( ! empty( $homeimgthumb ) )
 		{
-			$array_img = explode( "|", $homeimgthumb );
+			$array_img = explode( '|', $homeimgthumb );
 		}
 		else
 		{
-			$array_img = array( "", "" );
+			$array_img = array( '', '' );
 		}
 
 		if( $homeimgthumb == 1 ) //image thumb
@@ -151,23 +151,23 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		}
 		else //no image
 		{
-			$img_src = "";
+			$img_src = '';
 		}
 
 		$array_content[] = array(
-			"id" => $id,
-			"title" => $title,
-			"alias" => $alias,
-			"catid" => $catid,
-			"hometext" => $hometext,
-			"author" => $author,
-			"publtime" => $publtime,
-			"homeimgfile" => $img_src,
-			"sourceid" => $sourceid
+			'id' => $id,
+			'title' => $title,
+			'alias' => $alias,
+			'catid' => $catid,
+			'hometext' => $hometext,
+			'author' => $author,
+			'publtime' => $publtime,
+			'homeimgfile' => $img_src,
+			'sourceid' => $sourceid
 		);
 	}
 
-	$contents .= call_user_func( "search_result_theme", $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );
+	$contents .= call_user_func( 'search_result_theme', $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );
 }
 
 if( empty( $key ) )
@@ -182,8 +182,8 @@ else
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

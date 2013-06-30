@@ -18,7 +18,7 @@ $content = "NO_" . $bid;
 
 if( $bid > 0 )
 {
-	if( $del_list != "" )
+	if( $del_list != '' )
 	{
 		$array_id = array_map( "intval", explode( ",", $del_list ) );
 		foreach( $array_id as $id )

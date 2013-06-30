@@ -511,7 +511,7 @@ class CKEditor
 
 		$documentRoot = substr($realPath, 0, strlen($realPath) - strlen($selfPath));
 		$fileUrl = substr($file, strlen($documentRoot));
-		$ckeditorUrl = str_replace("ckeditor_php5.php", "", $fileUrl);
+		$ckeditorUrl = str_replace('ckeditor_php5.php', '', $fileUrl);
 
 		return $ckeditorUrl;
 	}

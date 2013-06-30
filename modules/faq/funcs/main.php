@@ -13,7 +13,7 @@ $page_title = $mod_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $description = $lang_module['faq_welcome'];
 
-$contents = "";
+$contents = '';
 
 if( empty( $list_cats ) and ! $module_setting['type_main'] )
 {

@@ -27,7 +27,7 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 	foreach( $step_bar as $i => $step_bar_i )
 	{
 		$n = $i + 1;
-		$class = "";
+		$class = '';
 
 		if( $step >= $n )
 		{

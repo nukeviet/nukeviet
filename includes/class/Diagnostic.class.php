@@ -38,7 +38,7 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 
 /**
  * Diagnostic
- * 
+ *
  * @package NUKEVIET 3.x
  * @author VINADES.,JSC
  * @copyright 2010
@@ -66,7 +66,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::__construct()
-	 * 
+	 *
 	 * @param mixed $_pattern
 	 * @return
 	 */
@@ -79,7 +79,7 @@ class Diagnostic
 		if( isset( $_pattern['BingBackLink'] ) ) $this->$pattern['BingBackLink'] = $_pattern['BingBackLink'];
 		if( isset( $_pattern['BingIndexed'] ) ) $this->$pattern['BingIndexed'] = $_pattern['BingIndexed'];
 
-		$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -92,7 +92,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::strToNum()
-	 * 
+	 *
 	 * @param mixed $Str
 	 * @param mixed $Check
 	 * @param mixed $Magic
@@ -120,7 +120,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::hashURL()
-	 * 
+	 *
 	 * @param mixed $String
 	 * @return
 	 */
@@ -141,7 +141,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::checkHash()
-	 * 
+	 *
 	 * @param mixed $Hashnum
 	 * @return
 	 */
@@ -182,7 +182,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::getPageRank()
-	 * 
+	 *
 	 * @return
 	 */
 	public function getPageRank()
@@ -221,7 +221,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::getAlexaRank()
-	 * 
+	 *
 	 * @return
 	 */
 	public function getAlexaRank()
@@ -251,7 +251,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::getGoogleBackLink()
-	 * 
+	 *
 	 * @return
 	 */
 	public function getGoogleBackLink()
@@ -263,7 +263,7 @@ class Diagnostic
 
 		if( preg_match( "/\<div(.*?)\>About ([0-9\,]+) results(.*?)<\/div\>/isU", $content, $match ) )
 		{
-			$bl = preg_replace( "/\,/", "", $match[2] );
+			$bl = preg_replace( '/\,/', '', $match[2] );
 			return ( int )$bl;
 		}
 		else
@@ -274,7 +274,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::getGoogleIndexed()
-	 * 
+	 *
 	 * @return
 	 */
 	public function getGoogleIndexed()
@@ -286,7 +286,7 @@ class Diagnostic
 
 		if( preg_match( "/\<div(.*?)\>About ([0-9\,]+) results(.*?)\<\/div\>/isU", $content, $match ) )
 		{
-			$bl = preg_replace( "/\,/", "", $match[2] );
+			$bl = preg_replace( '/\,/', '', $match[2] );
 			return ( int )$bl;
 		}
 		else
@@ -297,7 +297,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::getBingBackLink()
-	 * 
+	 *
 	 * @return
 	 */
 	public function getBingBackLink()
@@ -309,7 +309,7 @@ class Diagnostic
 
 		if( preg_match( "/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match ) )
 		{
-			$bl = preg_replace( "/\,/", "", $match[1] );
+			$bl = preg_replace( '/\,/', '', $match[1] );
 			return ( int )$bl;
 		}
 		else
@@ -320,7 +320,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::getBingIndexed()
-	 * 
+	 *
 	 * @return
 	 */
 	public function getBingIndexed()
@@ -332,7 +332,7 @@ class Diagnostic
 
 		if( preg_match( "/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match ) )
 		{
-			$bl = preg_replace( "/\,/", "", $match[1] );
+			$bl = preg_replace( '/\,/', '', $match[1] );
 			return ( int )$bl;
 		}
 		else
@@ -343,7 +343,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::newGetInfo()
-	 * 
+	 *
 	 * @param mixed $content
 	 * @return
 	 */
@@ -385,7 +385,7 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::getInfo()
-	 * 
+	 *
 	 * @param mixed $time
 	 * @return
 	 */
@@ -448,12 +448,12 @@ class Diagnostic
 
 	/**
 	 * Diagnostic::process()
-	 * 
+	 *
 	 * @param integer $time
 	 * @param string $domain
 	 * @return
 	 */
-	public function process( $time = 0, $domain = "" )
+	public function process( $time = 0, $domain = '' )
 	{
 		if( empty( $domain ) )
 		{

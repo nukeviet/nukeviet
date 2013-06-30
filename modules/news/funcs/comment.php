@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-$contents = "";
+$contents = '';
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 $page = $nv_Request->get_int( 'page', 'get', 0 );

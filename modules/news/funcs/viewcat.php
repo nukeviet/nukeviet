@@ -9,8 +9,8 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-$cache_file = "";
-$contents = "";
+$cache_file = '';
+$contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 
 $set_view_page = ( $page > 1 and substr( $viewcat, 0, 13 ) == "viewcat_main_" ) ? true : false;
@@ -132,7 +132,7 @@ if( empty( $contents ) )
 
 		$array_cat_other = array();
 
-		if( $global_array_cat[$catid]['subcatid'] != "" )
+		if( $global_array_cat[$catid]['subcatid'] != '' )
 		{
 			$key = 0;
 			$array_catid = explode( ",", $global_array_cat[$catid]['subcatid'] );
@@ -296,7 +296,7 @@ if( empty( $contents ) )
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$item['imghome'] = "";
+			$item['imghome'] = '';
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catpage[] = $item;
 		}
@@ -306,7 +306,7 @@ if( empty( $contents ) )
 		$contents = call_user_func( $viewcat, $array_catpage, $catid, ( $page - 1 ) * $per_page, $generate_page );
 	}
 
-	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )
+	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' )
 	{
 		nv_set_cache( $cache_file, $contents );
 	}

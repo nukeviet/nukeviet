@@ -14,7 +14,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 
 	function nv_block_config_news( $module, $data_block, $lang_block )
 	{
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['numrow'] . "</td>";
 		$html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";

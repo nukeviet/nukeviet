@@ -117,8 +117,8 @@ class Request
 		}
 		if( isset( $config['cookie_secure'] ) and ! empty( $config['cookie_secure'] ) ) $this->secure = true;
 		if( isset( $config['cookie_httponly'] ) and ! empty( $config['cookie_httponly'] ) ) $this->httponly = true;
-		if( isset( $config['cookie_prefix'] ) and ! empty( $config['cookie_prefix'] ) ) $this->cookie_prefix = preg_replace( "/[^a-zA-Z0-9\_]+/", "", $config['cookie_prefix'] );
-		if( isset( $config['session_prefix'] ) and ! empty( $config['session_prefix'] ) ) $this->session_prefix = preg_replace( "/[^a-zA-Z0-9\_]+/", "", $config['session_prefix'] );
+		if( isset( $config['cookie_prefix'] ) and ! empty( $config['cookie_prefix'] ) ) $this->cookie_prefix = preg_replace( '/[^a-zA-Z0-9\_]+/', '', $config['cookie_prefix'] );
+		if( isset( $config['session_prefix'] ) and ! empty( $config['session_prefix'] ) ) $this->session_prefix = preg_replace( '/[^a-zA-Z0-9\_]+/', '', $config['session_prefix'] );
 		if( isset( $config['sitekey'] ) and ! empty( $config['sitekey'] ) ) $this->cookie_key = $config['sitekey'];
 		if( ! empty( $config['str_referer_blocker'] ) ) $this->str_referer_blocker = true;
 		$this->engine_allowed = ( array )$config['engine_allowed'];
@@ -324,7 +324,7 @@ class Request
 			$count = substr_count( $base_siteurl, '/' );
 			for( $i = 0; $i < $count; ++$i )
 			{
-				$doc_root = preg_replace( "#\/[^\/]+$#", "", $doc_root );
+				$doc_root = preg_replace( '#\/[^\/]+$#', '', $doc_root );
 			}
 			$_SERVER['DOCUMENT_ROOT'] = $doc_root;
 		}
@@ -454,7 +454,7 @@ class Request
 	private function get_cookie_save_path()
 	{
 		$this->cookie_path = $this->base_siteurl . '/';
-		$cookie_domain = preg_replace( "/^([w]{3})\./", "", $this->server_name );
+		$cookie_domain = preg_replace( '/^([w]{3})\./', '', $this->server_name );
 		$this->cookie_domain = ( preg_match( "/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/", $cookie_domain ) ) ? '.' . $cookie_domain : '';
 	}
 
@@ -466,8 +466,8 @@ class Request
 	 */
 	private function get_session_save_path( $path )
 	{
-		$save_path = "";
-		$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$save_path = '';
+		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -1283,15 +1283,14 @@ class Request
 	 * Request::get_editor()
 	 *
 	 * @param mixed $name
-	 * @param mixed $mode
 	 * @param mixed $default
 	 * @param bool $allowed_html_tags
 	 * @param mixed $save
 	 * @return
 	 */
-	public function get_editor( $name, $mode = 'post', $default = '', $allowed_html_tags = '', $save = false )
+	public function get_editor( $name, $default = '', $allowed_html_tags = '', $save = false )
 	{
-		$value = ( string )$this->get_value( $name, $mode, $default );
+		$value = ( string )$this->get_value( $name, 'post', $default );
 		if( ! empty( $allowed_html_tags ) )
 		{
 			$allowed_html_tags = array_map( "trim", explode( ",", $allowed_html_tags ) );
@@ -1313,15 +1312,14 @@ class Request
 	 * Request::get_textarea()
 	 *
 	 * @param mixed $name
-	 * @param mixed $mode
 	 * @param mixed $default
 	 * @param bool $allowed_html_tags
 	 * @param mixed $save
 	 * @return
 	 */
-	public function get_textarea( $name, $mode = 'post', $default = '', $allowed_html_tags = '', $save = false )
+	public function get_textarea( $name, $default = '', $allowed_html_tags = '', $save = false )
 	{
-		$value = ( string )$this->get_value( $name, $mode, $default );
+		$value = ( string )$this->get_value( $name, 'post', $default );
 		if( ! empty( $allowed_html_tags ) )
 		{
 			$allowed_html_tags = array_map( "trim", explode( ",", $allowed_html_tags ) );

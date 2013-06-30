@@ -15,7 +15,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 	function nv_block_config_news_groups( $module, $data_block, $lang_block )
 	{
 		global $site_mods;
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "<td>" . $lang_block['blockid'] . "</td>";
 		$html .= "<td><select name=\"config_blockid\">\n";
@@ -78,7 +78,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 				}
 				else
 				{
-					$l['thumb'] = "";
+					$l['thumb'] = '';
 				}
 
 				$xtpl->assign( 'ROW', $l );

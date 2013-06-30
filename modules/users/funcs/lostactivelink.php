@@ -32,16 +32,16 @@ $key_words = $module_info['keywords'];
 
 $data = array();
 $data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
-$data['userField'] = filter_text_input( 'userField', 'post', '', 1, 100 );
-$data['answer'] = filter_text_input( 'answer', 'post', '', 1, 255 );
+$data['userField'] = nv_substr( $nv_Request->get_title( 'userField', 'post', '', 1 ), 0, 100 );
+$data['answer'] = nv_substr( $nv_Request->get_title( 'answer', 'post', '', 1 ), 0, 255 );
 $data['send'] = $nv_Request->get_bool( 'send', 'post', false );
-$data['nv_seccode'] = filter_text_input( 'nv_seccode', 'post', '' );
-$checkss = filter_text_input( 'checkss', 'post', '' );
+$data['nv_seccode'] = $nv_Request->get_title( 'nv_seccode', 'post', '' );
+$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 
 $seccode = $nv_Request->get_string( 'lostactivelink_seccode', 'session', '' );
 
 $step = 1;
-$error = $question = "";
+$error = $question = '';
 
 if( $checkss == $data['checkss'] )
 {
@@ -83,7 +83,7 @@ if( $checkss == $data['checkss'] )
 
 					$question = $row['question'];
 
-					$info = "";
+					$info = '';
 					if( ! empty( $row['opid'] ) and empty( $row['password'] ) )
 					{
 						$info = $lang_module['openid_lostactivelink_info'];

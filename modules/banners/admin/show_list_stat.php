@@ -55,7 +55,7 @@ $sql = "SELECT COUNT(*) FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid`="
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=show_list_stat&amp;bid=" . $bid . "&amp;month=" . $data_month;
 $caption = sprintf( $lang_module['show_list_stat1'], nv_monthname( $data_month ), $current_year );
 
-$data_ext = $data_val = "";
+$data_ext = $data_val = '';
 
 if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'country', 'browse', 'os' ) ) )
 {
@@ -121,7 +121,7 @@ $sql = preg_replace( "/COUNT\(\*\)/", "*", $sql );
 $result = $db->sql_query( $sql );
 
 $contents = array();
-$replacement = "";
+$replacement = '';
 
 $a = 0;
 while( $row = $db->sql_fetchrow( $result ) )

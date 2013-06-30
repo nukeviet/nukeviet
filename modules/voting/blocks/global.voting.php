@@ -14,14 +14,14 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 	function nv_block_voting_select_config( $module, $data_block, $lang_block )
 	{
 		global $db, $language_array, $site_mods;
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "<td>" . $lang_block['vid'] . "</td>";
 		$html .= "<td>
         <select name=\"config_vid\">\n";
 
-		$sql = "SELECT `vid`, `question`,`acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` 
-        FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "` 
+		$sql = "SELECT `vid`, `question`,`acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time`
+        FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "`
         WHERE `act`=1";
 		$list = nv_db_cache( $sql, 'vid', $module );
 		foreach( $list as $l )
@@ -50,8 +50,8 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 
-		$sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` 
-        FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "` 
+		$sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time`
+        FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "`
         WHERE `act`=1";
 
 		$list = nv_db_cache( $sql, 'vid', 'voting' );
@@ -60,7 +60,7 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 			$current_voting = $list[$block_config['vid']];
 			if( $current_voting['publ_time'] <= NV_CURRENTTIME and nv_set_allow( $current_voting['who_view'], $current_voting['groups_view'] ) )
 			{
-				$sql = "SELECT `id`, `vid`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows` 
+				$sql = "SELECT `id`, `vid`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows`
                     WHERE `vid` = " . $block_config['vid'] . "  ORDER BY `id` ASC";
 
 				$list = nv_db_cache( $sql, '', 'voting' );

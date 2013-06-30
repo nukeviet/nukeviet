@@ -152,7 +152,7 @@ else
 	$array_id = array_diff( $array_id, array( 0 ) );
 	$count = sizeof( $array_id );
 
-	$note = "";
+	$note = '';
 
 	if( $count )
 	{

@@ -30,11 +30,11 @@ else
 	$row = array( 'content' => '' );
 }
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 {
-	$content = nv_editor_filter_textarea( 'content', '', NV_ALLOWED_HTML_TAGS );
+	$content = $nv_Request->get_editor( 'content', '', NV_ALLOWED_HTML_TAGS );
 
 	if( empty( $content ) )
 	{
@@ -45,14 +45,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$content = nv_editor_nl2br( $content );
 		if( $mode == "edit" )
 		{
-			$query = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET 
-				`content`=" . $db->dbescape( $content ) . ", 
-				`edit_time`='" . NV_CURRENTTIME . "' 
+			$query = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET
+				`content`=" . $db->dbescape( $content ) . ",
+				`edit_time`='" . NV_CURRENTTIME . "'
 				WHERE `config` ='siteterms_" . NV_LANG_DATA . "'";
 		}
 		else
 		{
-			$query = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` VALUES ( 
+			$query = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` VALUES (
 				'siteterms_" . NV_LANG_DATA . "', " . $db->dbescape( $content ) . ", " . NV_CURRENTTIME . ")";
 		}
 

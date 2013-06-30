@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
-$theme = filter_text_input( 'theme', 'post', "", 1 );
+$theme = $nv_Request->get_title( 'theme', 'post', '', 1 );
 
 if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) ) && $global_config['site_theme'] != trim( $theme ) && trim( $theme ) != "default" )
 {

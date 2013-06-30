@@ -38,7 +38,8 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 
 	function nv_block_data_config_html_submit( $module, $lang_block )
 	{
-		$xhtml = filter_text_textarea( 'htmlcontent', '', NV_ALLOWED_HTML_TAGS );
+		global $nv_Request;
+		$xhtml = $nv_Request->get_editor( 'htmlcontent', '', NV_ALLOWED_HTML_TAGS );
 
 		$return = array();
 		$return['error'] = array();

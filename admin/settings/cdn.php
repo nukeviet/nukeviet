@@ -73,7 +73,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 										$filename = $thisdir . '/' . $fimg;
 										while( preg_match( "/([^\/(\.\.)]+)\/\.\.\//", $filename ) )
 										{
-											$filename = preg_replace( "/([^\/(\.\.)]+)\/\.\.\//", "", $filename );
+											$filename = preg_replace( '/([^\/(\.\.)]+)\/\.\.\//', '', $filename );
 										}
 										if( file_exists( $filename ) )
 										{

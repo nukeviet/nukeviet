@@ -71,13 +71,13 @@ $row_user = $db->sql_fetchrow( $result );
 
 $action_account = $nv_Request->get_int( 'action_account', 'post', 0 );
 $action_account = ( isset( $array_action_account[$action_account] ) ) ? $action_account : 0;
-$error = "";
+$error = '';
 $checkss = md5( $admin_id . session_id() . $global_config['sitekey'] );
-if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
+if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 {
 	$sendmail = $nv_Request->get_int( 'sendmail', 'post', 0 );
-	$reason = filter_text_input( 'reason', 'post', '', 1 );
-	$adminpass = filter_text_input( 'adminpass_iavim', 'post' );
+	$reason = $nv_Request->get_title( 'reason', 'post', '', 1 );
+	$adminpass = $nv_Request->get_title( 'adminpass_iavim', 'post' );
 
 	if( empty( $adminpass ) )
 	{
@@ -86,7 +86,7 @@ if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
 	elseif( ! nv_checkAdmpass( $adminpass ) )
 	{
 		$error = sprintf( $lang_global['adminpassincorrect'], $adminpass );
-		$adminpass = "";
+		$adminpass = '';
 	}
 	else
 	{
@@ -198,7 +198,7 @@ if( $nv_Request->get_string( 'ok', 'post', 0 ) == $checkss )
 else
 {
 	$sendmail = 1;
-	$reason = $adminpass = "";
+	$reason = $adminpass = '';
 }
 
 $contents = array();

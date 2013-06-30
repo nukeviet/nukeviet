@@ -44,7 +44,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		}
 
 		// Theme folder
-		$theme_package = "";
+		$theme_package = '';
 		if( is_dir( NV_ROOTDIR . '/themes/default/modules/' . $modulename ) )
 		{
 			$theme_package = "default";

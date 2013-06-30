@@ -23,7 +23,7 @@ $catid = 0;
 if( isset( $array_op[1] ) )
 {
 	$alias_cat_url = $array_op[1];
-	$cattitle = "";
+	$cattitle = '';
 	foreach( $global_array_cat as $catid_i => $array_cat_i )
 	{
 		if( $alias_cat_url == $array_cat_i['alias'] )

@@ -36,7 +36,7 @@ else
 			$array_old_groups[] = $row_gru['group_id'];
 		}
 
-		if( $nv_Request->get_string( 'save', 'post' ) != "" )
+		if( $nv_Request->get_string( 'save', 'post' ) != '' )
 		{
 			$_sl_groups = $nv_Request->get_typed_array( 'group', 'post', 'int' );
 

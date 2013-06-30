@@ -35,7 +35,7 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 	exit();
 }
 
-if( $listid == "" )
+if( $listid == '' )
 {
 	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `inhome`=1 ORDER BY `id` DESC LIMIT 0,20";
 }

@@ -12,7 +12,7 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-$contents = "";
+$contents = '';
 
 if( ! $global_config['allowuserlogin'] )
 {

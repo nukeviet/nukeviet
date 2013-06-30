@@ -92,7 +92,7 @@ function nv_error_info()
  * @param string $site_title
  * @return
  */
-function nv_info_die( $page_title = "", $info_title, $info_content, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
+function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
 {
 	global $lang_global, $global_config;
 

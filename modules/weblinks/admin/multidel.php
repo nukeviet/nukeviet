@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_array( 'idcheck', 'post' );
-$msg = "";
+$msg = '';
 
 $sizeof = sizeof( $id );
 for( $i = 0; $i < $sizeof; ++$i )

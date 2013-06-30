@@ -96,7 +96,7 @@ class nv_Crypt
 	 * @param mixed $ky
 	 * @return
 	 */
-	public function aes_encrypt( $val, $ky = "" )
+	public function aes_encrypt( $val, $ky = '' )
 	{
 		if( empty( $ky ) )
 		{
@@ -118,7 +118,7 @@ class nv_Crypt
 	 * @param mixed $ky
 	 * @return
 	 */
-	public function aes_decrypt( $val, $ky = "" )
+	public function aes_decrypt( $val, $ky = '' )
 	{
 		if( empty( $ky ) )
 		{

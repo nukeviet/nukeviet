@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
-$mod = filter_text_input( 'mod', 'post' );
+$mod = $nv_Request->get_title( 'mod', 'post' );
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die( "NO_" . $mod );
 
 $sql = "SELECT `in_menu` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $mod );

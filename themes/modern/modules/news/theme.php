@@ -36,7 +36,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
-		if( $array_row_i['imghome'] != "" )
+		if( $array_row_i['imghome'] != '' )
 		{
 			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
@@ -86,7 +86,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
-		if( $array_row_i['imghome'] != "" )
+		if( $array_row_i['imghome'] != '' )
 		{
 			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
@@ -140,7 +140,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
-		if( $array_row_i['imghome'] != "" )
+		if( $array_row_i['imghome'] != '' )
 		{
 			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
@@ -195,7 +195,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 
 			if( $key == 0 )
 			{
-				if( $array_catcontent_i['imghome'] != "" )
+				if( $array_catcontent_i['imghome'] != '' )
 				{
 					$xtpl->assign( 'HOMEIMG0', $array_catcontent_i['imghome'] );
 					$xtpl->assign( 'HOMEIMGALT0', $array_catcontent_i['homeimgalt'] );
@@ -242,7 +242,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 			$xtpl->assign( 'CAT', $array_row_i );
 			$catid = intval( $array_row_i['catid'] );
 
-			if( $array_row_i['subcatid'] != "" )
+			if( $array_row_i['subcatid'] != '' )
 			{
 				$exl = 0;
 				$arrsubcat_s = explode( ",", $array_row_i['subcatid'] );
@@ -407,7 +407,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 
 			$xtpl->assign( 'CONTENT', $array_content_i );
 
-			if( $array_content_i['imghome'] != "" )
+			if( $array_content_i['imghome'] != '' )
 			{
 				$xtpl->assign( 'HOMEIMG01', $array_content_i['imghome'] );
 				$xtpl->assign( 'HOMEIMGALT01', ! empty( $array_content_i['homeimgalt'] ) ? $array_content_i['homeimgalt'] : $array_content_i['title'] );
@@ -601,7 +601,7 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 		{
 			$xtpl->assign( 'NAME', $lang_module['comment_name'] );
 			$xtpl->assign( 'EMAIL', $lang_module['comment_email'] );
-			$xtpl->assign( 'DISABLED', "" );
+			$xtpl->assign( 'DISABLED', '' );
 		}
 
 		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
@@ -923,7 +923,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 		}
 		else
 		{
-			$xtpl->assign( 'CHECK' . $i, "" );
+			$xtpl->assign( 'CHECK' . $i, '' );
 		}
 	}
 

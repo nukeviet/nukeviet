@@ -59,8 +59,8 @@ $language_check_type = array(
 	2 => $lang_module['nv_check_type_2']
 );
 
-$typelang = filter_text_input( 'typelang', 'post,get', '' );
-$sourcelang = filter_text_input( 'sourcelang', 'post,get', '' );
+$typelang = $nv_Request->get_title( 'typelang', 'post,get', '' );
+$sourcelang = $nv_Request->get_title( 'sourcelang', 'post,get', '' );
 
 $idfile = $nv_Request->get_int( 'idfile', 'post,get', 0 );
 $check_type = $nv_Request->get_int( 'check_type', 'post,get', 0 );
