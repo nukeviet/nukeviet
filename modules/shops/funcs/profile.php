@@ -17,8 +17,8 @@ if ( ! defined( 'NV_IS_USER' ) )
 
 $contents = call_user_func( "users_profile" );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -90,8 +90,8 @@ foreach( $data_group as $groupid_i => $groupinfo_i )
 	}
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents_temp_none . "<hr />" . $contents_temp_cate;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

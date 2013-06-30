@@ -154,9 +154,9 @@ if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . 
 	
 	$contents = call_user_func( "payment", $data, $data_pro, $url_checkout, $intro_pay );
 	
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 elseif ( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $nv_Request->isset_request( 'checksum', 'get' ) )
 {

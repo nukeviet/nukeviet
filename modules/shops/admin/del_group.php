@@ -149,9 +149,9 @@ if( $groupid > 0 )
 
 if( defined( 'NV_IS_AJAX' ) )
 {
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $contents;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 else
 {

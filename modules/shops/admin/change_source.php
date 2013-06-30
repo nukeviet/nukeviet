@@ -42,8 +42,8 @@ if( $mod == "weight" and $new_vid > 0 )
 	$content = "OK_" . $sourceid;
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $content;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

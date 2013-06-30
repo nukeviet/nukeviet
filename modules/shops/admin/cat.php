@@ -24,18 +24,18 @@ $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
 {
 	$field_lang = nv_file_table( $table_name );
-	
+
 	$data['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
 	$data['parentid_old'] = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$data['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
-	$data['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
-	$data['keywords'] = filter_text_input( 'keywords', 'post', '', 1, 255 );
-	$data['alias'] = filter_text_input( 'alias', 'post', '', 1, 255 );
+	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
+	$data['keywords'] = nv_substr( $nv_Request->get_title( 'keywords', 'post', '', 1 ), 0, 255 );
+	$data['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$data['description'] = $nv_Request->get_string( 'description', 'post', '' );
 	$data['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $data['description'] ) ), '<br />' );
-	
+
 	$data['alias'] = ( $data['alias'] == "" ) ? change_alias( $data['title'] ) : change_alias( $data['alias'] );
-	
+
 	// Cat mo ta cho chinh xac
 	if( strlen( $data['description'] ) > 255 )
 	{
@@ -53,15 +53,15 @@ if( ! empty( $savecat ) )
 	{
 		$error = $lang_module['error_cat_name'];
 	}
-	
+
 	list( $check_alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $table_name . "` WHERE `catid`!=" . $data['catid'] . " AND `" . NV_LANG_DATA . "_alias`=" . $db->dbescape( $data['alias'] ) ) );
-	
+
 	if( $check_alias and $data['parentid'] > 0 )
 	{
 		list( $parentid_alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT `" . NV_LANG_DATA . "_alias` FROM `" . $table_name . "` WHERE `catid`=" . $data['parentid'] ) );
 		$data['alias'] = $parentid_alias . "-" . $data['alias'];
 	}
-	
+
 	if( $data['catid'] == 0 and $data['title'] != "" and $error == "" )
 	{
 		$listfield = "";
@@ -80,15 +80,15 @@ if( ! empty( $savecat ) )
 			}
 		}
 		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . $table_name . "` WHERE `parentid`=" . $db->dbescape( $data['parentid'] ) ) );
-		
+
 		$weight = intval( $weight ) + 1;
-		
+
 		$viewcat = "viewcat_page_list";
 		$subcatid = "";
-		
-		$sql = "INSERT INTO `" . $table_name . "` (`catid`, `parentid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view` " . $listfield . " ) 
+
+		$sql = "INSERT INTO `" . $table_name . "` (`catid`, `parentid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view` " . $listfield . " )
          VALUES (NULL, " . $db->dbescape( $data['parentid'] ) . ",' ',' '," . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewcat ) . ", '0', " . $db->dbescape( $subcatid ) . ", '1', '4'," . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $db->dbescape( $data['who_view'] ) . "," . $db->dbescape( $groups_view ) . $listvalue . " )";
-		
+
 		$newcatid = intval( $db->sql_query_insert_id( $sql ) );
 		if( $newcatid > 0 )
 		{
@@ -108,11 +108,11 @@ if( ! empty( $savecat ) )
 	{
 		$sql = "UPDATE `" . $table_name . "` SET `parentid`=" . $db->dbescape( $data['parentid'] ) . ", `" . NV_LANG_DATA . "_title`=" . $db->dbescape( $data['title'] ) . ", `" . NV_LANG_DATA . "_alias` =  " . $db->dbescape( $data['alias'] ) . ", `" . NV_LANG_DATA . "_description`=" . $db->dbescape( $data['description'] ) . ", `" . NV_LANG_DATA . "_keywords`= " . $db->dbescape( $data['keywords'] ) . ", `who_view`=" . $db->dbescape( $data['who_view'] ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `catid` =" . $data['catid'];
 		$db->sql_query( $sql );
-		
+
 		if( $db->sql_affectedrows() > 0 )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_catalog', "id " . $data['catid'], $admin_info['userid'] );
-			
+
 			$db->sql_freeresult();
 			if( $data['parentid'] != $data['parentid_old'] )
 			{
@@ -215,8 +215,8 @@ $xtpl->assign( 'groups_list_html', $contents_html );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

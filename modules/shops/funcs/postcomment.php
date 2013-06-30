@@ -12,9 +12,9 @@ if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $difftimeout = 360;
 $id = $nv_Request->get_int( 'id', 'post', 0 );
-$content = filter_text_input( 'content', 'post', '', 1, 250 );
-$code = filter_text_input( 'code', 'post', '' );
-$checkss = filter_text_input( 'checkss', 'post' );
+$content = nv_substr( $nv_Request->get_title( 'content', 'post', '', 1 ), 0, 250 );
+$code = $nv_Request->get_title( 'code', 'post', '' );
+$checkss = $nv_Request->get_title( 'checkss', 'post' );
 $status = $pro_config['comment_auto'];
 $per_page_comment = 10;
 
@@ -92,8 +92,8 @@ else
 	$contents = "ERR_" . $lang_module['comment_unsuccess'];
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

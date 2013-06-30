@@ -112,8 +112,8 @@ $page_title = $lang_module['cart_title'];
 
 $contents = call_user_func( "cart_product", $data_content, $array_error_product_number );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -25,9 +25,9 @@ function redict_link( $lang_view, $lang_back, $nv_redirect )
 	$contents .= "<a href=\"" . $nv_redirect . "\">" . $lang_back . "</a>";
 	$contents .= "</div>";
 	$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 

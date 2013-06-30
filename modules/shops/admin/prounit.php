@@ -22,14 +22,14 @@ $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
 {
 	$field_lang = nv_file_table( $table_name );
-	$data['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
-	$data['note'] = filter_text_input( 'note', 'post', '', 1 );
-	
+	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
+	$data['note'] = $nv_Request->get_title( 'note', 'post', '', 1 );
+
 	if( $data['id'] == 0 )
 	{
 		$listfield = "";
 		$listvalue = "";
-		
+
 		foreach( $field_lang as $field_lang_i )
 		{
 			list( $flang, $fname ) = $field_lang_i;
@@ -43,14 +43,14 @@ if( ! empty( $savecat ) )
 				$listvalue .= ", " . $db->dbescape( $data[$fname] );
 			}
 		}
-		
+
 		$sql = "INSERT INTO `" . $table_name . "` (`id` " . $listfield . ") VALUES (NULL " . $listvalue . ")";
-		
+
 		if( $db->sql_query_insert_id( $sql ) )
 		{
 			$db->sql_freeresult();
 			nv_del_moduleCache( $module_name );
-			
+
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 			die();
 		}
@@ -63,12 +63,12 @@ if( ! empty( $savecat ) )
 	{
 		$sql = "UPDATE `" . $table_name . "` SET `" . NV_LANG_DATA . "_title`=" . $db->dbescape( $data['title'] ) . ", `" . NV_LANG_DATA . "_note` =  " . $db->dbescape( $data['note'] ) . " WHERE `id` =" . $data['id'];
 		$db->sql_query( $sql );
-		
+
 		if( $db->sql_affectedrows() > 0 )
 		{
 			$error = $lang_module['saveok'];
 			$db->sql_freeresult();
-			
+
 			nv_del_moduleCache( $module_name );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 			die();
@@ -107,7 +107,7 @@ while( list( $id, $title, $note ) = $db->sql_fetchrow( $result ) )
 	$xtpl->assign( 'id', $id );
 	$xtpl->assign( 'link_edit', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id );
 	$xtpl->assign( 'link_del', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delunit&id=" . $id );
-	
+
 	$xtpl->parse( 'main.data.row' );
 	$count++;
 }
@@ -121,8 +121,8 @@ if( $count > 0 ) $xtpl->parse( 'main.data' );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

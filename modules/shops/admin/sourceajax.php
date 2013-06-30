@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$q = filter_text_input( 'q', 'get', "", 1 );
+$q = $nv_Request->get_title( 'q', 'get', '', 1 );
 $searchs = array( 'http://www.', 'http://', 'https://www.', 'https://' );
 $replaces = array();
 $q = str_replace( $searchs, $replaces, $q );

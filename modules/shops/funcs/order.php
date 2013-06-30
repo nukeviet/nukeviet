@@ -70,11 +70,11 @@ if ( $post_order == 1 )
 		}
 	}
 
-	$data_order['order_name'] = filter_text_input( 'order_name', 'post', '', 1, 200 );
-	$data_order['order_email'] = filter_text_input( 'order_email', 'post', '', 1, 250 );
-	$data_order['order_address'] = filter_text_input( 'order_address', 'post', '', 1 );
-	$data_order['order_phone'] = filter_text_input( 'order_phone', 'post', '', 1, 20 );
-	$data_order['order_note'] = filter_text_input( 'order_note', 'post', '', 1, 2000 );
+	$data_order['order_name'] = nv_substr( $nv_Request->get_title( 'order_name', 'post', '', 1 ), 0, 200 );
+	$data_order['order_email'] = nv_substr( $nv_Request->get_title( 'order_email', 'post', '', 1 ), 0, 250 );
+	$data_order['order_address'] = $nv_Request->get_title( 'order_address', 'post', '', 1 );
+	$data_order['order_phone'] = nv_substr( $nv_Request->get_title( 'order_phone', 'post', '', 1 ), 0, 20 );
+	$data_order['order_note'] = nv_substr( $nv_Request->get_title( 'order_note', 'post', '', 1 ), 0, 2000 );
 	$check = $nv_Request->get_int( 'check', 'post', 0 );
 
 	$data_order['listid'] = $listid;
@@ -267,8 +267,8 @@ if ( $action == 0 )
 	}
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

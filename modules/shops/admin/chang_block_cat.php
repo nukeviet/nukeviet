@@ -50,8 +50,8 @@ elseif( $mod == "adddefault" and $bid > 0 )
 
 nv_del_moduleCache( $module_name );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $content;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

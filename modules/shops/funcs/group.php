@@ -53,8 +53,8 @@ if( $page > 1 )
 
 $contents = call_user_func( $global_array_group[$groupid]['viewgroup'] , $data_content, $pages );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

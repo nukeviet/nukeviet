@@ -22,7 +22,7 @@ if( $groupid > 0 )
 	{
 		$sql = "SELECT `groupid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`!=" . $groupid . " AND `parentid`=" . $parentid . " ORDER BY `weight` ASC";
 		$result = $db->sql_query( $sql );
-		
+
 		$weight = 0;
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
@@ -31,10 +31,10 @@ if( $groupid > 0 )
 			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `weight`=" . $weight . " WHERE `groupid`=" . intval( $row['groupid'] );
 			$db->sql_query( $sql );
 		}
-		
+
 		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `weight`=" . $new_vid . " WHERE `groupid`=" . intval( $groupid );
 		$db->sql_query( $sql );
-		
+
 		nv_fix_group_order();
 		$content = "OK_" . $parentid;
 	}
@@ -52,7 +52,7 @@ if( $groupid > 0 )
 	}
 	elseif( $mod == "viewgroup" and $nv_Request->isset_request( 'new_vid', 'post' ) )
 	{
-		$viewgroup = filter_text_input( 'new_vid', 'post' );
+		$viewgroup = $nv_Request->get_title( 'new_vid', 'post' );
 		$array_viewgroup = ( $numsubgroup > 0 ) ? $array_viewcat_full : $array_viewcat_nosub;
 		if( ! array_key_exists( $viewgroup, $array_viewgroup ) )
 		{
@@ -65,8 +65,8 @@ if( $groupid > 0 )
 	nv_del_moduleCache( $module_name );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $content;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

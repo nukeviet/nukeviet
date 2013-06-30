@@ -28,10 +28,10 @@ $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 if( ! empty( $savecat ) )
 {
-	$data['code'] = filter_text_input( 'code', 'post' );
-	$data['currency'] = filter_text_input( 'currency', 'post', '', 1 );
+	$data['code'] = $nv_Request->get_title( 'code', 'post' );
+	$data['currency'] = $nv_Request->get_title( 'currency', 'post', '', 1 );
 	$data['exchange'] = $nv_Request->get_float( 'exchange', 'post,get', 0 );
-	
+
 	if( isset( $currencies_array[$data['code']] ) )
 	{
 		$numeric = intval( $currencies_array[$data['code']]['numeric'] );
@@ -39,11 +39,11 @@ if( ! empty( $savecat ) )
 		{
 			$data['exchange'] = 1;
 		}
-		
+
 		$data['currency'] = ( empty( $data['currency'] ) ) ? $currencies_array[$data['code']]['currency'] : $data['currency'];
 		$sql = "REPLACE INTO `" . $table_name . "` (`id`, `code`, `currency`, `exchange`) VALUES (" . $numeric . ", " . $db->dbescape_string( $data['code'] ) . ", " . $db->dbescape_string( $data['currency'] ) . ", " . $db->dbescape_string( $data['exchange'] ) . ")";
 		$db->sql_query( $sql );
-		
+
 		if( $db->sql_affectedrows() > 0 )
 		{
 			$error = $lang_module['saveok'];
@@ -88,7 +88,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$row['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $row['id'];
 	$row['link_del'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delmoney&id=" . $row['id'];
 	$row['exchange'] = floatval( $row['exchange'] );
-	
+
 	if( intval( $row['exchange'] ) == floatval( $row['exchange'] ) )
 	{
 		$row['exchange'] = intval( $row['exchange'] );
@@ -113,10 +113,10 @@ while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$row['exchange'] = number_format( $row['exchange'], 10, '.', ' ' );
 	}
-	
+
 	$xtpl->assign( 'ROW', $row );
 	$xtpl->parse( 'main.data.row' );
-	
+
 	$count ++;
 }
 
@@ -139,9 +139,9 @@ foreach( $currencies_array as $code => $value )
 		$array_temp['value'] = $code;
 		$array_temp['title'] = $code . " - " . $value['currency'];
 		$array_temp['selected'] = ( $value['numeric'] == $data['id'] ) ? " selected=\"selected\"" : "";
-		
+
 		$xtpl->assign( 'DATAMONEY', $array_temp );
-		
+
 		$xtpl->parse( 'main.money' );
 	}
 }
@@ -176,8 +176,8 @@ $xtpl->assign( 'DATA', $data );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

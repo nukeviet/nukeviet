@@ -16,9 +16,9 @@ $data_content = $db->sql_fetchrow( $result );
 
 if( empty( $data_content ) )
 {
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo "Error Access!!!";
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -51,8 +51,8 @@ $page_title = $data_content [NV_LANG_DATA . '_title'];
 
 $contents = print_product( $data_content, $data_unit, $page_title );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

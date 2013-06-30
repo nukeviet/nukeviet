@@ -16,12 +16,12 @@ if ( ! defined( 'NV_IS_USER' ) and $pro_config['who_comment'] == "member" )
 
 $difftimeout = 360;
 $id = $nv_Request->get_int( 'id', 'post', 0 );
-$content = filter_text_input( 'content', 'post', '', 1 );
-$code = filter_text_input( 'code', 'post', '' );
+$content = $nv_Request->get_title( 'content', 'post', '', 1 );
+$code = $nv_Request->get_title( 'code', 'post', '' );
 $status = $pro_config['comment_auto'];
-$data = array( 
+$data = array(
 	"content" => $content,
-	"title" => "none" 
+	"title" => "none"
 );
 
 if ( $content != "" )
@@ -39,9 +39,9 @@ if ( $content != "" )
 			$user_info['userid'] = 0;
 		}
 		$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` (`cid`, `id`, `post_time`, `post_name`, `post_id`, `post_email`, `post_ip`, `status`, `photo`, `title`, `content`) VALUES (NULL, " . $id . ",'" . NV_CURRENTTIME . "', '" . $user_info['username'] . "', '" . $user_info['userid'] . "','" . $user_info['email'] . "'," . $db->dbescape( NV_CLIENT_IP ) . ", '" . $status . "','" . $user_info['photo'] . "'," . $db->dbescape( $data['title'] ) . ", " . $db->dbescape( $data['content'] ) . ")";
-		
+
 		$cid = $db->sql_query_insert_id( $sql );
-		
+
 		if ( $cid > 0 )
 		{
 			$contents = "OK_" . $lang_module['comment_success'];

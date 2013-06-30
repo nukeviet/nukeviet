@@ -23,8 +23,8 @@ foreach( $del_array as $cid )
 
 nv_del_moduleCache( $module_name );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $lang_module['comment_delete_success'];
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

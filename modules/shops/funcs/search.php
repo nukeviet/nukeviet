@@ -24,12 +24,12 @@ function BoldKeywordInStr ( $str, $keyword )
 	return $str;
 }
 
-$key = filter_text_input( 'q', 'get', '', 1, 1000 );
-$from_date = filter_text_input( 'from_date', 'get', '', 1, 1000 );
-$to_date = filter_text_input( 'to_date', 'get', '', 1, 100 );
+$key = nv_substr( $nv_Request->get_title( 'q', 'get', '', 1 ), 0, 100 );
+$from_date = $nv_Request->get_title( 'from_date', 'get', '', 1 );
+$to_date = $nv_Request->get_title( 'to_date', 'get', '', 1 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
-$check_num = filter_text_input( 'choose', 'get', 1, 1, 1 );
-$pages = filter_text_input( 'page', 'get', 0, 1, 1000 );
+$check_num = $nv_Request->get_int( 'choose', 'get', 1 );
+$pages = $nv_Request->get_int( 'page', 'get', 0 );
 $date_array['from_date'] = $from_date;
 $date_array['to_date'] = $to_date;
 $per_pages = 20;
@@ -150,8 +150,8 @@ else
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['main_title'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -136,29 +136,29 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 {
 	$field_lang = nv_file_table( $table_name );
 
-	$data_content['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
+	$data_content['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 
 	$bodytext = $nv_Request->get_string( 'bodytext', 'post', '' );
 	$data_content['bodytext'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $bodytext, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $bodytext ) ), '<br />' );
 
-	$data_content['hometext'] = filter_text_input( 'hometext', 'post', '' );
-	$data_content['product_code'] = filter_text_input( 'product_code', 'post', '', 1, 255 );
+	$data_content['hometext'] = $nv_Request->get_title( 'hometext', 'post', '' );
+	$data_content['product_code'] = nv_substr( $nv_Request->get_title( 'product_code', 'post', '', 1 ), 0, 255 );
 	$data_content['product_number'] = $nv_Request->get_int( 'product_number', 'post', 0 );
 	$data_content['product_price'] = $nv_Request->get_int( 'product_price', 'post', 0 );
-	$data_content['money_unit'] = filter_text_input( 'money_unit', 'post', 'VND', 1, 3 );
+	$data_content['money_unit'] = nv_substr( $nv_Request->get_title( 'money_unit', 'post', 'VND', 1 ), 0, 3 );
 	$data_content['product_unit'] = $nv_Request->get_int( 'product_unit', 'post', 0 );
-	$data_content['address'] = filter_text_input( 'address', 'post', '', 1, 255 );
+	$data_content['address'] = nv_substr( $nv_Request->get_title( 'address', 'post', '', 1 ), 0, 255 );
 	$data_content['listcatid'] = $nv_Request->get_int( 'catalogs', 'post', 0 );
-	$data_content['keywords'] = filter_text_input( 'keywords', 'post', '', 1, 255 );
-	$data_content['pstatus'] = filter_text_input( 'pstatus', 'post', '', 1, 255 );
-	$data_content['payment'] = filter_text_input( 'payment', 'post', '', 1, 255 );
-	$data_content['move'] = filter_text_input( 'move', 'post', '' );
+	$data_content['keywords'] = nv_substr( $nv_Request->get_title( 'keywords', 'post', '', 1 ), 0, 255 );
+	$data_content['pstatus'] = nv_substr( $nv_Request->get_title( 'pstatus', 'post', '', 1 ), 0, 255 );
+	$data_content['payment'] = nv_substr( $nv_Request->get_title( 'payment', 'post', '', 1 ), 0, 255 );
+	$data_content['move'] = $nv_Request->get_title( 'move', 'post', '' );
 
-	$alias = filter_text_input( 'alias', 'post', '', 1, 255 );
+	$alias = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$data_content['alias'] = ( $alias == "" ) ? change_alias( $data_content['title'] ) : change_alias( $alias );
 
 	$data_content['note'] = $data_content['pstatus'] . "|" . $data_content['payment'] . "|" . $data_content['move'];
-	$exp_date = filter_text_input( 'exp_date', 'post', '' );
+	$exp_date = $nv_Request->get_title( 'exp_date', 'post', '' );
 
 	if ( $data_content['title'] == "" ) $error = $lang_module['err_no_title'] . ".";
 	elseif ( $data_content['listcatid'] == 0 ) $error = $lang_module['err_no_catalogs'] . ".";
@@ -333,9 +333,9 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$contents .= $info;
 				$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 			else
@@ -400,9 +400,9 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$info .= "</div>";
 				$contents .= $info;
 				$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 			else
@@ -516,8 +516,8 @@ while ( list( $unitid_i, $title_i ) = $db->sql_fetchrow( $result_unit ) )
 
 $contents = call_user_func( "post_product", $data_content, $data_cata, $data_unit, $error, $lang_submit );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

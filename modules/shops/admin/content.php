@@ -123,7 +123,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	if( $rowcontent['source_id'] == 0 )
 	{
-		$rowcontent['sourcetext'] = filter_text_input( 'sourcetext', 'post', '', 1, 255 );
+		$rowcontent['sourcetext'] = nv_substr( $nv_Request->get_title( 'sourcetext', 'post', '', 1 ), 0, 255 );
 		if( ! empty( $rowcontent['sourcetext'] ) )
 		{
 			list( $rowcontent['source_id'] ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `" . NV_LANG_DATA . "_title`=" . $db->dbescape( $rowcontent['sourcetext'] ) . "" ) );
@@ -131,8 +131,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	}
 	if( intval( $rowcontent['source_id'] ) > 0 ) $rowcontent['sourcetext'] = "";
 
-	$publ_date = filter_text_input( 'publ_date', 'post', '' );
-	$exp_date = filter_text_input( 'exp_date', 'post', '' );
+	$publ_date = $nv_Request->get_title( 'publ_date', 'post', '' );
+	$exp_date = $nv_Request->get_title( 'exp_date', 'post', '' );
 
 	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = "";
 	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = "";
@@ -170,24 +170,24 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['archive'] = ( $rowcontent['exptime'] > NV_CURRENTTIME ) ? 1 : 2;
 	}
 
-	$rowcontent['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
-	$rowcontent['note'] = filter_text_input( 'note', 'post', '', 1 );
-	$rowcontent['warranty'] = filter_text_input( 'warranty', 'post', '', 1 );
-	$rowcontent['promotional'] = filter_text_input( 'promotional', 'post', '', 1 );
+	$rowcontent['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
+	$rowcontent['note'] = $nv_Request->get_title( 'note', 'post', '', 1 );
+	$rowcontent['warranty'] = $nv_Request->get_title( 'warranty', 'post', '', 1 );
+	$rowcontent['promotional'] = $nv_Request->get_title( 'promotional', 'post', '', 1 );
 
-	$alias = filter_text_input( 'alias', 'post', '', 1, 255 );
+	$alias = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$rowcontent['alias'] = ( $alias == "" ) ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
 
-	$rowcontent['hometext'] = filter_text_input( 'hometext', 'post', '' );
-	$rowcontent['product_code'] = filter_text_input( 'product_code', 'post', '', 1, 255 );
+	$rowcontent['hometext'] = $nv_Request->get_title( 'hometext', 'post', '' );
+	$rowcontent['product_code'] = nv_substr( $nv_Request->get_title( 'product_code', 'post', '', 1 ), 0, 255 );
 	$rowcontent['product_number'] = $nv_Request->get_int( 'product_number', 'post', 0 );
 	$rowcontent['product_price'] = $nv_Request->get_int( 'product_price', 'post', 0 );
 	$rowcontent['product_discounts'] = $nv_Request->get_int( 'product_discounts', 'post', 0 );
 	$rowcontent['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" );
 	$rowcontent['product_unit'] = $nv_Request->get_int( 'product_unit', 'post', 0 );
-	$rowcontent['homeimgfile'] = filter_text_input( 'homeimg', 'post', '' );
-	$rowcontent['homeimgalt'] = filter_text_input( 'homeimgalt', 'post', '', 1 );
-	$rowcontent['address'] = filter_text_input( 'address', 'post', '', 1 );
+	$rowcontent['homeimgfile'] = $nv_Request->get_title( 'homeimg', 'post', '' );
+	$rowcontent['homeimgalt'] = $nv_Request->get_title( 'homeimgalt', 'post', '', 1 );
+	$rowcontent['address'] = $nv_Request->get_title( 'address', 'post', '', 1 );
 
 	$bodytext = $nv_Request->get_string( 'bodytext', 'post', '' );
 	$rowcontent['bodytext'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $bodytext, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $bodytext ) ), '<br />' );
@@ -201,7 +201,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['allowed_send'] = ( int )$nv_Request->get_bool( 'allowed_send', 'post' );
 	$rowcontent['allowed_print'] = ( int )$nv_Request->get_bool( 'allowed_print', 'post' );
 	$rowcontent['allowed_save'] = ( int )$nv_Request->get_bool( 'allowed_save', 'post' );
-	$rowcontent['keywords'] = filter_text_input( 'keywords', 'post', '', 1 );
+	$rowcontent['keywords'] = $nv_Request->get_title( 'keywords', 'post', '', 1 );
 
 	// Xu ly anh minh hoa khac
 	$otherimage = $nv_Request->get_typed_array( 'otherimage', 'post', 'string' );
@@ -858,8 +858,8 @@ if( empty( $rowcontent['alias'] ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

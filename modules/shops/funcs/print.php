@@ -74,9 +74,9 @@ if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . 
 	
 	$contents = call_user_func( "print_pay", $data, $data_pro );
 	
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $contents;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 else
 {

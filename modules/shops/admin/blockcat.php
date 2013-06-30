@@ -27,22 +27,22 @@ $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
 {
 	$field_lang = nv_file_table( $table_name );
-	
+
 	$data['bid'] = $nv_Request->get_int( 'bid', 'post', 0 );
-	$data['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
-	$data['keywords'] = filter_text_input( 'keywords', 'post', '', 1, 255 );
-	$data['alias'] = filter_text_input( 'alias', 'post', '', 1, 255 );
+	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
+	$data['keywords'] = nv_substr( $nv_Request->get_title( 'keywords', 'post', '', 1 ), 0, 255 );
+	$data['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$data['description'] = $nv_Request->get_string( 'description', 'post', '' );
 	$data['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $data['description'] ) ), '<br />' );
-	
+
 	// Cat mo ta cho chinh xac
 	if( strlen( $data['description'] ) > 255 )
 	{
 		$data['description'] = nv_clean60( $data['description'], 250 );
 	}
-	
+
 	$data['alias'] = ( $data['alias'] == "" ) ? change_alias( $data['title'] ) : change_alias( $data['alias'] );
-	
+
 	// Kiem tra loi
 	if( empty( $data['title'] ) )
 	{
@@ -62,7 +62,7 @@ if( ! empty( $savecat ) )
 				$weight = intval( $weight ) + 1;
 				$listfield = "";
 				$listvalue = "";
-				
+
 				foreach( $field_lang as $field_lang_i )
 				{
 					list( $flang, $fname ) = $field_lang_i;
@@ -76,9 +76,9 @@ if( ! empty( $savecat ) )
 						$listvalue .= ", " . $db->dbescape( $data[$fname] );
 					}
 				}
-				
+
 				$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` (`bid`, `adddefault`,`image`, `thumbnail`, `weight`, `add_time`, `edit_time` " . $listfield . ") VALUES (NULL, 0, '', '', " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP( ), UNIX_TIMESTAMP( ) " . $listvalue . ")";
-				
+
 				if( $db->sql_query_insert_id( $sql ) )
 				{
 					$db->sql_freeresult();
@@ -102,7 +102,7 @@ if( ! empty( $savecat ) )
 			{
 				$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` SET `" . NV_LANG_DATA . "_title`=" . $db->dbescape( $data['title'] ) . ", `" . NV_LANG_DATA . "_alias` =  " . $db->dbescape( $data['alias'] ) . ", `" . NV_LANG_DATA . "_description`=" . $db->dbescape( $data['description'] ) . ", `" . NV_LANG_DATA . "_keywords`= " . $db->dbescape( $data['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `bid` =" . $data['bid'];
 				$db->sql_query( $sql );
-				
+
 				if( $db->sql_affectedrows() > 0 )
 				{
 					$error = $lang_module['saveok'];
@@ -155,8 +155,8 @@ if( $data['alias'] != "" )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

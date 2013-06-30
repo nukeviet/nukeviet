@@ -46,8 +46,8 @@ $contents = call_user_func( "history_order", $data_content, $link_check_order );
 
 $page_title = $lang_module['history_title'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>
