@@ -35,9 +35,9 @@ if( ! $global_config['allowuserreg'] )
 	$contents = user_info_exit( $lang_module['no_allowuserreg'] );
 	$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -242,9 +242,9 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 				$contents = user_info_exit( $lang_module['err_no_save_account'] );
 				$contents .= "<meta http-equiv=\"refresh\" content=\"3;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register&nv_redirect=" . $nv_redirect, true ) . "\" />";
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 
@@ -300,9 +300,9 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 
 	$contents = openid_register( $gfx_chk, $array_register, $siteterms, $data_questions );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -476,9 +476,9 @@ if( $checkss == $array_register['checkss'] )
 					$contents = user_info_exit( $lang_module['err_no_save_account'] );
 					$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register", true ) . "\" />";
 
-					include ( NV_ROOTDIR . "/includes/header.php" );
+					include ( NV_ROOTDIR . '/includes/header.php' );
 					echo nv_site_theme( $contents );
-					include ( NV_ROOTDIR . "/includes/footer.php" );
+					include ( NV_ROOTDIR . '/includes/footer.php' );
 					exit();
 				}
 
@@ -511,9 +511,9 @@ if( $checkss == $array_register['checkss'] )
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . " | " . $client_info['ip'] . " | Simple", 0 );
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 			else
@@ -540,9 +540,9 @@ if( $checkss == $array_register['checkss'] )
 					$contents = user_info_exit( $lang_module['err_no_save_account'] );
 					$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register", true ) . "\" />";
 
-					include ( NV_ROOTDIR . "/includes/header.php" );
+					include ( NV_ROOTDIR . '/includes/header.php' );
 					echo nv_site_theme( $contents );
-					include ( NV_ROOTDIR . "/includes/footer.php" );
+					include ( NV_ROOTDIR . '/includes/footer.php' );
 					exit();
 				}
 
@@ -564,9 +564,9 @@ if( $checkss == $array_register['checkss'] )
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . " | " . $client_info['ip'] . " | Simple", 0 );
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 		}
@@ -591,8 +591,8 @@ $db->sql_freeresult();
 
 $contents = user_register( $gfx_chk, $array_register, $siteterms, $data_questions, $array_field_config, $custom_fields );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

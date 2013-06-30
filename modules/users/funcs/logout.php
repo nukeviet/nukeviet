@@ -37,8 +37,8 @@ $info .= "[<a href=\"" . $url . "\">" . $lang_module['redirect_to_back'] . "</a>
 $contents = user_info_exit( $info );
 $contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( $url ) . "\" />";
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

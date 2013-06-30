@@ -29,9 +29,9 @@ if( empty( $contents['file_allowed_ext'] ) )
 {
 	$contents['upload_blocked'] = $lang_module['upload_blocked'];
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( nv_add_banner_theme( $contents ) );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -193,8 +193,8 @@ $contents['target'] = array( $lang_module['target'], 'target', $targets, $target
 $contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10 );
 $contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10 );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( nv_add_banner_theme( $contents ) );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

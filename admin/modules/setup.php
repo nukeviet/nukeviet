@@ -367,8 +367,8 @@ $array_virtual_head = array(
 
 $contents .= call_user_func( "setup_modules", $array_head, $array_modules, $array_virtual_head, $array_virtual_modules );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

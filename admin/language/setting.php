@@ -33,9 +33,9 @@ if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . 
 	$xtpl->parse( 'info' );
 	$contents = $xtpl->text( 'info' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -100,9 +100,9 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "s
 	$xtpl->parse( 'info' );
 	$contents = $xtpl->text( 'info' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -192,8 +192,8 @@ $xtpl->assign( 'CHECKSESSSETING', md5( session_id() . "seting" ) );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

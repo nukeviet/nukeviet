@@ -93,9 +93,9 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 		$xtpl->parse( 'activelang' );
 		$contents = $xtpl->text( 'activelang' );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	}
 	elseif( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $global_config['allow_adminlangs'] ) )
@@ -172,9 +172,9 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 					{
 						if( ! $db->sql_query( $query ) )
 						{
-							include ( NV_ROOTDIR . "/includes/header.php" );
+							include ( NV_ROOTDIR . '/includes/header.php' );
 							echo nv_admin_theme( "ERROR SETUP SQL: <br />" . $query );
-							include ( NV_ROOTDIR . "/includes/footer.php" );
+							include ( NV_ROOTDIR . '/includes/footer.php' );
 							exit();
 						}
 					}
@@ -238,9 +238,9 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 			$xtpl->parse( 'contents_setup' );
 			$contents = $xtpl->text( 'contents_setup' );
 
-			include ( NV_ROOTDIR . "/includes/header.php" );
+			include ( NV_ROOTDIR . '/includes/header.php' );
 			echo nv_admin_theme( $contents );
-			include ( NV_ROOTDIR . "/includes/footer.php" );
+			include ( NV_ROOTDIR . '/includes/footer.php' );
 			exit();
 		}
 	}
@@ -362,8 +362,8 @@ $contents .= "<div class=\"clear\"></div>\n";
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -42,8 +42,8 @@ if( $catid > 0 )
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weblink_del_title'], $title, $admin_info['userid'] );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

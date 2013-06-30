@@ -59,9 +59,9 @@ if( file_exists( $filename ) )
 		$xtpl->parse( 'exists' );
 		$contents = $xtpl->text( 'exists' );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo $contents;
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	}
 	else
@@ -197,9 +197,9 @@ if( file_exists( $filename ) )
 				$xtpl->parse( 'error_create_folder' );
 				$contents = $xtpl->text( 'error_create_folder' );
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo $contents;
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 			else
@@ -245,9 +245,9 @@ if( file_exists( $filename ) )
 					$xtpl->parse( 'complete' );
 					$contents = $xtpl->text( 'complete' );
 
-					include ( NV_ROOTDIR . "/includes/header.php" );
+					include ( NV_ROOTDIR . '/includes/header.php' );
 					echo $contents;
-					include ( NV_ROOTDIR . "/includes/footer.php" );
+					include ( NV_ROOTDIR . '/includes/footer.php' );
 					exit();
 				}
 				else
@@ -265,9 +265,9 @@ if( file_exists( $filename ) )
 					$xtpl->parse( 'error_move_folder' );
 					$contents = $xtpl->text( 'error_move_folder' );
 
-					include ( NV_ROOTDIR . "/includes/header.php" );
+					include ( NV_ROOTDIR . '/includes/header.php' );
 					echo $contents;
-					include ( NV_ROOTDIR . "/includes/footer.php" );
+					include ( NV_ROOTDIR . '/includes/footer.php' );
 					exit();
 				}
 			}
@@ -278,9 +278,9 @@ if( file_exists( $filename ) )
 			$xtpl->parse( 'nounzip' );
 			$contents = $xtpl->text( 'nounzip' );
 
-			include ( NV_ROOTDIR . "/includes/header.php" );
+			include ( NV_ROOTDIR . '/includes/header.php' );
 			echo $contents;
-			include ( NV_ROOTDIR . "/includes/footer.php" );
+			include ( NV_ROOTDIR . '/includes/footer.php' );
 			exit();
 		}
 	}

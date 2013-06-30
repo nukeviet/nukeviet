@@ -259,9 +259,9 @@ class NvUpdate
 			$message = sprintf( $this->lang['update_error_log_data'], NV_DATADIR );
 			$contents = $this->call_error( $message );
 
-			include ( NV_ROOTDIR . "/includes/header.php" );
+			include ( NV_ROOTDIR . '/includes/header.php' );
 			echo $this->template( $contents );
-			include ( NV_ROOTDIR . "/includes/footer.php" );
+			include ( NV_ROOTDIR . '/includes/footer.php' );
 			exit();
 		}
 	}
@@ -2024,8 +2024,8 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 	$contents = $NvUpdate->step3( $array );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $NvUpdate->template( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

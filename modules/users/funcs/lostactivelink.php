@@ -100,9 +100,9 @@ if( $checkss == $data['checkss'] )
 						$contents = user_info_exit( $info );
 						$contents .= "<meta http-equiv=\"refresh\" content=\"15;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-						include ( NV_ROOTDIR . "/includes/header.php" );
+						include ( NV_ROOTDIR . '/includes/header.php' );
 						echo nv_site_theme( $contents );
-						include ( NV_ROOTDIR . "/includes/footer.php" );
+						include ( NV_ROOTDIR . '/includes/footer.php' );
 						exit();
 					}
 
@@ -138,9 +138,9 @@ if( $checkss == $data['checkss'] )
 							$contents = user_info_exit( $info );
 							$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-							include ( NV_ROOTDIR . "/includes/header.php" );
+							include ( NV_ROOTDIR . '/includes/header.php' );
 							echo nv_site_theme( $contents );
-							include ( NV_ROOTDIR . "/includes/footer.php" );
+							include ( NV_ROOTDIR . '/includes/footer.php' );
 							exit();
 						}
 						else
@@ -186,8 +186,8 @@ else
 
 $contents = user_lostactivelink( $data, $question );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

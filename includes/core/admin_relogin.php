@@ -121,9 +121,9 @@ if( defined( "NV_IS_ADMIN" ) )
 			$xtpl->assign( 'NV_LOGOUT', $lang_global['admin_logout_title'] );
 
 			$xtpl->parse( 'main' );
-			include ( NV_ROOTDIR . "/includes/header.php" );
+			include ( NV_ROOTDIR . '/includes/header.php' );
 			$xtpl->out( 'main' );
-			include ( NV_ROOTDIR . "/includes/footer.php" );
+			include ( NV_ROOTDIR . '/includes/footer.php' );
 		}
 	}
 }

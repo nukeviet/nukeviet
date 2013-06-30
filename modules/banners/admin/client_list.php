@@ -17,8 +17,8 @@ $contents['aj'] = "nv_show_cl_list('client_list');";
 
 $contents = call_user_func( "nv_client_list_theme", $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

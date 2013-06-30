@@ -221,9 +221,9 @@ function nv_show_funcs()
 		}
 	}
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo aj_show_funcs_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 if( $nv_Request->isset_request( 'aj', 'get' ) )
@@ -266,8 +266,8 @@ $contents['ajax'][1] = $nv_Request->isset_request( 'func_id,pos', 'get' ) ? "nv_
 
 $contents = show_funcs_theme( $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

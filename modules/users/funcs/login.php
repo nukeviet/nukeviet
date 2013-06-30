@@ -34,9 +34,9 @@ function openidLogin_Res0( $info )
 	$contents = user_info_exit( $info );
 	$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
 	$contents .= "<meta http-equiv=\"refresh\" content=\"3;url=" . nv_url_rewrite( $nv_redirect ) . "\" />";
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 /**
@@ -273,9 +273,9 @@ function openidLogin_Res1( $attribs )
 		$lang_module['login_info'] = sprintf( $lang_module['openid_confirm_info'], $email );
 		$contents = openid_account_confirm( $gfx_chk, $attribs );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_site_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	}
 	if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
@@ -349,9 +349,9 @@ function openidLogin_Res1( $attribs )
 						$contents .= user_info_exit( $info );
 						$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-						include ( NV_ROOTDIR . "/includes/header.php" );
+						include ( NV_ROOTDIR . '/includes/header.php' );
 						echo nv_site_theme( $contents );
-						include ( NV_ROOTDIR . "/includes/footer.php" );
+						include ( NV_ROOTDIR . '/includes/footer.php' );
 						exit();
 					}
 					else
@@ -368,9 +368,9 @@ function openidLogin_Res1( $attribs )
 
 				$contents = openid_active_confirm( $gfx_chk, $attribs );
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 			else
@@ -457,9 +457,9 @@ function openidLogin_Res1( $attribs )
 				$contents .= user_info_exit( $info );
 				$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( $nv_redirect, true ) . "\" />";
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 
@@ -482,9 +482,9 @@ function openidLogin_Res1( $attribs )
 
 		$contents .= user_openid_login( $gfx_chk, $array_login, $attribs );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_site_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	}
 	elseif( $option == 1 or $option == 2 )
@@ -563,9 +563,9 @@ function openidLogin_Res1( $attribs )
 
 	$contents .= user_openid_login2( $attribs, $array_user_login );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -798,9 +798,9 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		$contents .= user_info_exit( $info );
 		$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( $nv_redirect ) . "\" />";
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_site_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	}
 	$lang_module['login_info'] = "<span style=\"color:#fb490b;\">" . $error . "</span>";
@@ -827,8 +827,8 @@ if( $global_config['allowuserreg'] == 2 )
 
 $contents .= user_login( $gfx_chk, $array_login );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

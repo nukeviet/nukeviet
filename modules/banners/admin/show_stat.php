@@ -227,8 +227,8 @@ else
 
 $contents = call_user_func( "nv_show_stat_theme", array( $caption, $sum, $cts ) );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

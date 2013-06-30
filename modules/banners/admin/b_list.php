@@ -140,8 +140,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$contents['rows'][$row['id']]['del'] = "nv_b_del(" . $row['id'] . ");";
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_b_list_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -46,8 +46,8 @@ $sql = "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `subweight`=" . $new_weight . " W
 $db->sql_query( $sql );
 nv_del_moduleCache( 'modules' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo 'OK|show_funcs';
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

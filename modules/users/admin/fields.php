@@ -123,9 +123,9 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 		$contents = $xtpl->text( 'column' );
 	}
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $contents;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 //ADD
@@ -737,8 +737,8 @@ else
 	$page_title = $lang_module['fields'];
 	$contents = nv_admin_theme( $contents );
 }
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -91,8 +91,8 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 
 $contents = call_user_func( "main_theme", $is_search, $search, $array_modul );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

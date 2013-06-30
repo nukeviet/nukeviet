@@ -243,8 +243,8 @@ foreach( $array_action_account as $key => $value )
 $xtpl->parse( 'del' );
 $contents = $xtpl->text( 'del' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

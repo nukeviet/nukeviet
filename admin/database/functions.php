@@ -97,9 +97,9 @@ if( $module_name == "database" )
 
 		$contents = call_user_func( "nv_show_tables_theme", $contents );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo $contents;
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 	}
 
 	function nv_highlight_string( $tab, $type = "sql" )
@@ -142,9 +142,9 @@ if( $module_name == "database" )
 		if( in_array( $nv_Request->get_title( 'show_highlight', 'post' ), array( 'php', 'sql' ) ) )
 		{
 			$content = nv_highlight_string( $tab, $nv_Request->get_title( 'show_highlight', 'post' ) );
-			include ( NV_ROOTDIR . "/includes/header.php" );
+			include ( NV_ROOTDIR . '/includes/header.php' );
 			echo $content;
-			include ( NV_ROOTDIR . "/includes/footer.php" );
+			include ( NV_ROOTDIR . '/includes/footer.php' );
 		}
 
 		$tablename = substr( $item['Name'], strlen( $db_config['prefix'] ) + 1 );
@@ -183,9 +183,9 @@ if( $module_name == "database" )
 
 		$page_title = sprintf( $lang_module['nv_show_tab'], $tablename );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 	}
 
 	function main_theme( $contents )

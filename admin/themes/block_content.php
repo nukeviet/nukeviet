@@ -381,9 +381,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$xtpl->parse( 'blockredirect' );
 				$contents = $xtpl->text( 'blockredirect' );
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo $contents;
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				die();
 			}
 		}
@@ -622,8 +622,8 @@ $contents = $xtpl->text( 'main' );
 $xtpl->parse( 'head' );
 $my_head = $xtpl->text( 'head' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents, 0 );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

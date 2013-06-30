@@ -171,9 +171,9 @@ if( ! $array_post_user['addcontent'] )
 	$xtpl->parse( 'mainrefresh' );
 	$contents = $xtpl->text( 'mainrefresh' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -182,9 +182,9 @@ if( $nv_Request->isset_request( 'get_alias', 'post' ) )
 	$title = $nv_Request->get_title( 'get_alias', 'post', '' );
 	$alias = change_alias( $title );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $alias;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 $contentid = $nv_Request->get_int( 'contentid', 'get,post', 0 );
@@ -587,9 +587,9 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 				$xtpl->parse( 'mainrefresh' );
 				$contents = $xtpl->text( 'mainrefresh' );
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 		}
@@ -844,8 +844,8 @@ elseif( $array_post_user['addcontent'] )
 	die();
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

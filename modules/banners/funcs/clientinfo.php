@@ -25,8 +25,8 @@ $page_title = $module_info['custom_title'] . " " . NV_TITLEBAR_DEFIS . " " . $mo
 
 $contents = clientinfo_theme( $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

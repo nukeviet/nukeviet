@@ -279,9 +279,9 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 					$user_post = defined( "NV_IS_USER" ) ? " | " . $user_info['username'] : "";
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_files_log'], $array['title'] . " | " . $client_info['ip'] . $user_post, 0 );
 
-					include ( NV_ROOTDIR . "/includes/header.php" );
+					include ( NV_ROOTDIR . '/includes/header.php' );
 					echo nv_site_theme( $contents );
-					include ( NV_ROOTDIR . "/includes/footer.php" );
+					include ( NV_ROOTDIR . '/includes/footer.php' );
 					exit();
 				}
 			}
@@ -313,8 +313,8 @@ $array['addfile'] = md5( $client_info['session_id'] );
 
 $contents = theme_upload( $array, $list_cats, $download_config, $error );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>
