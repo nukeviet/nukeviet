@@ -20,6 +20,7 @@ if( ! empty( $savesetting ) )
 	$array_config['st_links'] = $nv_Request->get_int( 'st_links', 'post', 0 );
 	$array_config['homewidth'] = $nv_Request->get_int( 'homewidth', 'post', 0 );
 	$array_config['homeheight'] = $nv_Request->get_int( 'homeheight', 'post', 0 );
+	$array_config['show_no_image'] = $nv_Request->get_int( 'show_no_image', 'post', 0 );
 	$array_config['blockwidth'] = $nv_Request->get_int( 'blockwidth', 'post', 0 );
 	$array_config['blockheight'] = $nv_Request->get_int( 'blockheight', 'post', 0 );
 	$array_config['imagefull'] = $nv_Request->get_int( 'imagefull', 'post', 0 );
@@ -103,6 +104,7 @@ for( $i = 0; $i <= 20; ++$i )
 }
 
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? " checked=\"checked\"" : "" );
+$xtpl->assign( 'SHOW_NO_IMAGE', $module_config[$module_name]['show_no_image'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'ACTIVECOMM', $module_config[$module_name]['activecomm'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'AUTO_POSTCOMM', $module_config[$module_name]['auto_postcomm'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'EMAILCOMM', $module_config[$module_name]['emailcomm'] ? " checked=\"checked\"" : "" );

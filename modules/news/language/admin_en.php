@@ -143,6 +143,7 @@ $lang_module['content_main'] = 'Back to management';
 $lang_module['redircet_title'] = 'Action well done';
 $lang_module['content_archive'] = 'Save after expire date';
 $lang_module['showhometext'] = 'Show hometext on view content';
+$lang_module['show_no_image'] = 'Display image No-Image if post has no illustrations';
 $lang_module['imgposition'] = 'Article image';
 $lang_module['imgposition_0'] = 'Not show';
 $lang_module['imgposition_1'] = 'To be shown based on modules configuration';

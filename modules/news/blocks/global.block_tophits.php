@@ -44,6 +44,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$module = $block_config['module'];
 
 		$blockwidth = $module_config[$module]['blockwidth'];
+		$show_no_image  = $module_config[$module]['show_no_image'];
 		$publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
 
 		$array_block_news = array();
@@ -63,11 +64,14 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 			{
 				$imgurl = $homeimgfile;
 			}
-			else // no image
+			elseif( $show_no_image ) // no image
 			{
 				$imgurl = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
-
+			else
+			{
+				$imgurl = '';				
+			}
 			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;
 
 			$array_block_news[] = array(

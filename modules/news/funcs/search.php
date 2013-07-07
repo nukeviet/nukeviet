@@ -125,18 +125,10 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	$array_content = array();
 	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
+	$show_no_image  = $module_config[$module_name]['show_no_image'];
 
 	while( list( $id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $db->sql_fetchrow( $result ) )
 	{
-		if( ! empty( $homeimgthumb ) )
-		{
-			$array_img = explode( '|', $homeimgthumb );
-		}
-		else
-		{
-			$array_img = array( '', '' );
-		}
-
 		if( $homeimgthumb == 1 ) //image thumb
 		{
 			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
@@ -149,11 +141,14 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		{
 			$img_src = $homeimgfile;
 		}
-		else //no image
+		elseif( $show_no_image ) //no image
 		{
 			$img_src = '';
 		}
-
+		else
+		{
+			$img_src = '';				
+		}
 		$array_content[] = array(
 			'id' => $id,
 			'title' => $title,

@@ -28,6 +28,7 @@ if( $topicid > 0 )
 
 	$topic_array = array();
 	$end_publtime = 0;
+	$show_no_image  = $module_config[$module_name]['show_no_image'];
 
 	while( $item = $db->sql_fetch_assoc( $query ) )
 	{
@@ -43,10 +44,14 @@ if( $topicid > 0 )
 		{
 			$item['src'] = $item['homeimgfile'];
 		}
-		else //no image
+		elseif( $show_no_image ) //no image
 		{
 			$item['src'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 		}
+		else
+		{
+			$item['imghome'] = '';				
+		}		
 		$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
 		$item['width'] = $module_config[$module_name]['homewidth'];
 

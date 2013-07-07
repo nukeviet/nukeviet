@@ -8,7 +8,7 @@
 				<td style="text-align: center;" colspan="2"><input type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting" /></td>
 			</tr>
 		</tfoot>
-		<tbody>
+		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.setting_indexfile}</strong></td>
 				<td>
@@ -19,25 +19,25 @@
 				</select></td>
 			</tr>
 		</tbody>
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td><strong>{LANG.setting_homesite}</strong></td>
 				<td><input type="text" value="{DATA.homewidth}" style="width: 40px;" name="homewidth" /> x <input type="text" value="{DATA.homeheight}" style="width: 40px;" name="homeheight" /></td>
 			</tr>
 		</tbody>
-		<tbody>
+		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.setting_thumbblock}</strong></td>
 				<td><input type="text" value="{DATA.blockwidth}" style="width: 40px;" name="blockwidth" /> x <input type="text" value="{DATA.blockheight}" style="width: 40px;" name="blockheight" /></td>
 			</tr>
 		</tbody>
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td><strong>{LANG.setting_imagefull}</strong></td>
 				<td><input type="text" value="{DATA.imagefull}" style="width: 50px;" name="imagefull" /></td>
 			</tr>
 		</tbody>
-		<tbody>
+		<tbody  class="second">
 			<tr>
 				<td><strong>{LANG.setting_per_page}</strong></td>
 				<td>
@@ -48,7 +48,7 @@
 				</select></td>
 			</tr>
 		</tbody>
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td><strong>{LANG.setting_st_links}</strong></td>
 				<td>
@@ -57,6 +57,12 @@
 					<option value="{ST_LINKS.key}"{ST_LINKS.selected}>{ST_LINKS.title}</option>
 					<!-- END: st_links -->
 				</select></td>
+			</tr>
+		</tbody>
+		<tbody  class="second">
+			<tr>
+				<td><strong>{LANG.show_no_image}</strong></td>
+				<td><input type="checkbox" value="1" name="show_no_image"{SHOW_NO_IMAGE}/></td>
 			</tr>
 		</tbody>
 		<tbody>

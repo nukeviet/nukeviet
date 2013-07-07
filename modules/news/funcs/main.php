@@ -27,6 +27,7 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 if( empty( $contents ) )
 {
 	$viewcat = $module_config[$module_name]['indexfile'];
+	$show_no_image  = $module_config[$module_name]['show_no_image'];
 	$array_catpage = array();
 	$array_cat_other = array();
 	$st_links = $st_links;
@@ -58,9 +59,13 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
+			else
+			{
+				$item['imghome'] = '';				
 			}
 
 			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
@@ -116,10 +121,15 @@ if( empty( $contents ) )
 					{
 						$item['imghome'] = $item['homeimgfile'];
 					}
-					else
+					elseif( $show_no_image )
 					{
 						$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 					}
+					else
+					{
+						$item['imghome'] = '';				
+					}
+					
 
 					$item['link'] = $array_cat_i['link'] . "/" . $item['alias'] . "-" . $item['id'];
 					$array_cat[$key]['content'][] = $item;
@@ -160,10 +170,14 @@ if( empty( $contents ) )
 					{
 						$item['imghome'] = $item['homeimgfile'];
 					}
-					else
+					elseif( $show_no_image )
 					{
 						$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 					}
+					else
+					{
+						$item['imghome'] = '';				
+					}					
 
 					$item['link'] = $array_cat_i['link'] . "/" . $item['alias'] . "-" . $item['id'];
 					$array_catpage[$key]['content'][] = $item;
@@ -199,10 +213,14 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else
+			elseif( $show_no_image )
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
+			else
+			{
+				$item['imghome'] = '';				
+			}			
 
 			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catpage[] = $item;

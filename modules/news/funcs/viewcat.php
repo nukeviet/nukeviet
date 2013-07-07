@@ -40,6 +40,7 @@ if( empty( $contents ) )
 	$array_catpage = array();
 	$array_cat_other = array();
 	$base_url = $global_array_cat[$catid]['link'];
+	$show_no_image  = $module_config[$module_name]['show_no_image'];
 
 	if( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old" or $set_view_page )
 	{
@@ -66,9 +67,13 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
+			else
+			{
+				$item['imghome'] = '';				
 			}
 
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
@@ -120,10 +125,14 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
+			else
+			{
+				$item['imghome'] = '';				
+			}			
 
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catcontent[] = $item;
@@ -157,10 +166,14 @@ if( empty( $contents ) )
 					{
 						$item['imghome'] = $item['homeimgfile'];
 					}
-					else //no image
+					elseif( $show_no_image ) //no image
 					{
 						$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 					}
+					else
+					{
+						$item['imghome'] = '';				
+					}					
 
 					$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 					$array_cat_other[$key]['content'][] = $item;
@@ -198,11 +211,14 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
-
+			else
+			{
+				$item['imghome'] = '';				
+			}
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catcontent[] = $item;
 		}
@@ -233,11 +249,14 @@ if( empty( $contents ) )
 				{
 					$item['imghome'] = $item['homeimgfile'];
 				}
-				else //no image
+				elseif( $show_no_image ) //no image
 				{
 					$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 				}
-
+				else
+				{
+					$item['imghome'] = '';				
+				}
 				$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 				$array_cat_other[$key]['content'][] = $item;
 			}
@@ -272,11 +291,14 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
-
+			else
+			{
+				$item['imghome'] = '';				
+			}
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catpage[] = $item;
 		}
