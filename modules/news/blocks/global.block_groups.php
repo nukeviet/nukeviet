@@ -15,7 +15,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 	function nv_block_config_news_groups( $module, $data_block, $lang_block )
 	{
 		global $site_mods;
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "<td>" . $lang_block['blockid'] . "</td>";
 		$html .= "<td><select name=\"config_blockid\">\n";
@@ -47,8 +47,9 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 
 	function nv_block_news_groups( $block_config )
 	{
-		global $module_array_cat, $module_info, $site_mods;
+		global $module_array_cat, $module_info, $site_mods, $module_config;
 		$module = $block_config['module'];
+		$show_no_image  = $module_config[$module]['show_no_image'];
 
 		$sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
 		$list = nv_db_cache( $sql, '', $module );
@@ -72,13 +73,21 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 				{
 					$l['thumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $l['homeimgfile'];
 				}
+				elseif( $l['homeimgthumb'] == 2 )
+				{
+					$l['thumb'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $l['homeimgfile'];
+				}
 				elseif( $l['homeimgthumb'] == 3 )
 				{
 					$l['thumb'] = $l['homeimgfile'];
 				}
+				elseif( $show_no_image )
+				{
+					$l['thumb'] = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/no_image.gif';
+				}
 				else
 				{
-					$l['thumb'] = "";
+					$l['thumb'] = '';				
 				}
 
 				$xtpl->assign( 'ROW', $l );

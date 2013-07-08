@@ -97,10 +97,10 @@ function nv_sitemapPing( $module, $link )
 }
 
 $file_searchEngines = NV_ROOTDIR . "/" . NV_DATADIR . "/search_engine_ping.xml";
-$searchEngine = $module = "";
+$searchEngine = $module = '';
 $searchEngines = array();
 $searchEngines['searchEngine'] = array();
-$info = "";
+$info = '';
 $sitemapFiles = array();
 $sql = "SELECT f.in_module as name, m.custom_title as title FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE m.act = 1 AND f.func_name='Sitemap' AND f.in_module = m.title";
 $result = $db->sql_query( $sql );
@@ -161,7 +161,7 @@ else
 	if( ! empty( $searchEngines['searchEngine'] ) and $nv_Request->isset_request( 'ping', 'post' ) )
 	{
 		$searchEngine = $nv_Request->get_string( 'searchEngine', 'post' );
-		$module = filter_text_input( 'in_module', 'post', "", 1, 255 );
+		$module = nv_substr( $nv_Request->get_title( 'in_module', 'post', '', 1 ), 0, 255 );
 
 		$a = false;
 		$b = false;
@@ -244,8 +244,8 @@ $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['sitemapPing'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

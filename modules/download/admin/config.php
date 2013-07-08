@@ -35,10 +35,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['groups_autocomment'] = $nv_Request->get_typed_array( 'groups_autocomment', 'post', 'int' );
 	$array_config['maxfilesize'] = $nv_Request->get_int( 'maxfilesize', 'post', 0 );
 	$array_config['upload_filetype'] = $nv_Request->get_typed_array( 'upload_filetype', 'post', 'string' );
-	$array_config['upload_dir'] = filter_text_input( 'upload_dir', 'post', '' );
-	$array_config['temp_dir'] = filter_text_input( 'temp_dir', 'post', '' );
+	$array_config['upload_dir'] = $nv_Request->get_title( 'upload_dir', 'post', '' );
+	$array_config['temp_dir'] = $nv_Request->get_title( 'temp_dir', 'post', '' );
 	$array_config['is_zip'] = $nv_Request->get_int( 'is_zip', 'post', 0 );
-	$array_config['readme'] = filter_text_textarea( 'readme', '' );
+	$array_config['readme'] = $nv_Request->get_textarea( 'readme', '' );
 	$array_config['readme'] = strip_tags( $array_config['readme'] );
 	$array_config['is_resume'] = $nv_Request->get_int( 'is_resume', 'post', 0 );
 	$array_config['max_speed'] = $nv_Request->get_int( 'max_speed', 'post', 0 );
@@ -140,12 +140,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 $array_config['is_addfile'] = 0;
 $array_config['who_addfile'] = 0;
-$array_config['groups_addfile'] = "";
+$array_config['groups_addfile'] = '';
 $array_config['is_upload'] = 0;
 $array_config['who_upload'] = 0;
-$array_config['groups_upload'] = "";
+$array_config['groups_upload'] = '';
 $array_config['who_autocomment'] = 0;
-$array_config['groups_autocomment'] = "";
+$array_config['groups_autocomment'] = '';
 $array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
 $array_config['upload_filetype'] = '';
 $array_config['upload_dir'] = 'files';
@@ -325,8 +325,8 @@ if( ! empty( $array_config['groups_autocomment'] ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

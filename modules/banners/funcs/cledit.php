@@ -29,7 +29,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_email = nv_check_valid_email( $email );
 	$check_pass = nv_check_valid_pass( $pass, NV_UPASSMAX, NV_UPASSMIN );
 
-	if( $website == "http://" ) $website = "";
+	if( $website == "http://" ) $website = '';
 
 	if( ! empty( $check_email ) ) die( strip_tags( $check_email ) . '|email_iavim' );
 	elseif( ! empty( $pass ) and ! empty( $check_pass ) ) die( strip_tags( $check_pass ) . '|pass_iavim' );
@@ -43,8 +43,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 	$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_clients` SET ";
 	if( ! empty( $pass ) ) $sql .= "`pass`=" . $db->dbescape( $crypt->hash( $pass ) ) . ", ";
-	$sql .= "`full_name`=" . $db->dbescape( $full_name ) . ", `email`=" . $db->dbescape( $email ) . ", `website`=" . $db->dbescape( $website ) . ", 
-		`location`=" . $db->dbescape( $location ) . ", `yim`=" . $db->dbescape( $yim ) . ", `phone`=" . $db->dbescape( $phone ) . ", `fax`=" . $db->dbescape( $fax ) . ", 
+	$sql .= "`full_name`=" . $db->dbescape( $full_name ) . ", `email`=" . $db->dbescape( $email ) . ", `website`=" . $db->dbescape( $website ) . ",
+		`location`=" . $db->dbescape( $location ) . ", `yim`=" . $db->dbescape( $yim ) . ", `phone`=" . $db->dbescape( $phone ) . ", `fax`=" . $db->dbescape( $fax ) . ",
 		`mobile`=" . $db->dbescape( $mobile ) . " WHERE `id`=" . $banner_client_info['id'];
 	$db->sql_query( $sql );
 	die( "OK|action" );
@@ -73,8 +73,8 @@ $contents['cancel_onclick'] = "nv_cl_info('action');";
 
 $contents = cledit_theme( $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

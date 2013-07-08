@@ -76,7 +76,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 							$openid = sprintf( $openid_servers[$server]['identity'], $data->id );
 							$attribs = $FaceBookAuth->getAttributes( $data, $openid_servers[$server]['required'] );
 
-							$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "" ) ? $attribs['contact/email'] : "";
+							$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == '' ) ? $attribs['contact/email'] : "";
 							if( empty( $openid ) or empty( $email ) )
 							{
 								$nv_Request->set_Session( 'openid_error', 3 );
@@ -175,7 +175,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 				{
 					$openid = $openid_class->identity;
 					$attribs = $openid_class->getAttributes();
-					$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == "" ) ? $attribs['contact/email'] : "";
+					$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == '' ) ? $attribs['contact/email'] : "";
 					if( empty( $openid ) or empty( $email ) )
 					{
 						$nv_Request->set_Session( 'openid_error', 3 );
@@ -294,8 +294,8 @@ switch( $error )
 
 $contents = user_openid_administrator( $data );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

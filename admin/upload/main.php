@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['upload_manager'];
-$contents = "";
+$contents = '';
 
 $path = ( defined( 'NV_IS_SPADMIN' ) ) ? "" : NV_UPLOADS_DIR;
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', $path ) );
@@ -54,10 +54,14 @@ if( $popup )
 	$xtpl->parse( 'main.footer' );
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
+	if ( $nv_Request->isset_request('nomudim', 'get') )
+	{
+		$global_config['mudim_active'] = 0;
+	}
 }
 else
 {
-	$xtpl->assign( "IFRAME_SRC", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=1" );
+	$xtpl->assign( "IFRAME_SRC", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=1&nomudim=1" );
 	$xtpl->parse( 'uploadPage' );
 	$contents = $xtpl->text( 'uploadPage' );
 	$contents = nv_admin_theme( $contents );
@@ -65,8 +69,8 @@ else
 	$contents = preg_replace( '/(<head>)/i', "\\1" . $my_meta, $contents, 1 );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

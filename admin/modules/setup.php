@@ -20,13 +20,13 @@ if( $global_config['idsite'] )
 	}
 }
 
-$contents = "";
+$contents = '';
 
 // Thiet lap module moi
-$setmodule = filter_text_input( 'setmodule', 'get', '', 1 );
+$setmodule = $nv_Request->get_title( 'setmodule', 'get', '', 1 );
 if( ! empty( $setmodule ) )
 {
-	if( filter_text_input( 'checkss', 'get' ) == md5( "setmodule" . $setmodule . session_id() . $global_config['sitekey'] ) )
+	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( "setmodule" . $setmodule . session_id() . $global_config['sitekey'] ) )
 	{
 		$sql = "SELECT `module_file`, `module_data` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=" . $db->dbescape( $setmodule );
 		$result = $db->sql_query( $sql );
@@ -86,10 +86,10 @@ if( ! empty( $setmodule ) )
 }
 
 // Xoa module
-$delmodule = filter_text_input( 'delmodule', 'get', '', 1 );
+$delmodule = $nv_Request->get_title( 'delmodule', 'get', '', 1 );
 if( defined( "NV_IS_GODADMIN" ) AND ! empty( $delmodule ) )
 {
-	if( filter_text_input( 'checkss', 'get' ) == md5( "delmodule" . $delmodule . session_id() . $global_config['sitekey'] ) )
+	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( "delmodule" . $delmodule . session_id() . $global_config['sitekey'] ) )
 	{
 		$module_exit = array();
 
@@ -331,7 +331,7 @@ foreach( $modules_data as $row )
 			$mod['note'] = $row['note'];
 			$url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;setmodule=" . $row['title'] . "&amp;checkss=" . md5( "setmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
 			$mod['setup'] = "<span class=\"default_icon\"><a href=\"" . $url . "\">" . $lang_module['setup'] . "</a></span>";
-			$mod['delete'] = "";
+			$mod['delete'] = '';
 			if( defined( "NV_IS_GODADMIN" ) AND ! in_array( $row['module_file'], $module_virtual_setup ) )
 			{
 				$url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;delmodule=" . $row['title'] . "&amp;checkss=" . md5( "delmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
@@ -357,18 +357,18 @@ foreach( $modules_data as $row )
 
 $array_head = array(
 	"caption" => $lang_module['module_sys'],
-	"head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['version'], $lang_module['settime'], $lang_module['author'], "" )
+	"head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['version'], $lang_module['settime'], $lang_module['author'], '' )
 );
 
 $array_virtual_head = array(
 	"caption" => $lang_module['vmodule'],
-	"head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['vmodule_file'], $lang_module['settime'], $lang_module['vmodule_note'], "" )
+	"head" => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['vmodule_file'], $lang_module['settime'], $lang_module['vmodule_note'], '' )
 );
 
 $contents .= call_user_func( "setup_modules", $array_head, $array_modules, $array_virtual_head, $array_virtual_modules );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

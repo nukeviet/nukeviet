@@ -12,17 +12,17 @@ if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 $page_title = sprintf( $lang_module['lang_site_config'], $language_array[NV_LANG_DATA]['name'] );
 
 $submit = $nv_Request->get_string( 'submit', 'post' );
-$errormess = "";
+$errormess = '';
 
 if( $submit )
 {
 	$array_config = array();
-	$array_config['site_theme'] = filter_text_input( 'site_theme', 'post', '', 1, 255 );
-	$array_config['site_name'] = filter_text_input( 'site_name', 'post', '', 1, 255 );
+	$array_config['site_theme'] = nv_substr( $nv_Request->get_title( 'site_theme', 'post', '', 1 ), 0, 255 );
+	$array_config['site_name'] = nv_substr( $nv_Request->get_title( 'site_name', 'post', '', 1 ), 0, 255 );
 	$array_config['switch_mobi_des'] = $nv_Request->get_int( 'switch_mobi_des', 'post', 0 );
-	$site_logo = filter_text_input( 'site_logo', 'post' );
+	$site_logo = $nv_Request->get_title( 'site_logo', 'post' );
 
-	$array_config['site_keywords'] = filter_text_input( 'site_keywords', 'post', '', 1, 255 );
+	$array_config['site_keywords'] = nv_substr( $nv_Request->get_title( 'site_keywords', 'post', '', 1 ), 0, 255 );
 
 	if( ! empty( $array_config['site_keywords'] ) )
 	{
@@ -53,9 +53,9 @@ if( $submit )
 		$array_config['site_logo'] = "images/logo.png";
 	}
 
-	$array_config['site_home_module'] = filter_text_input( 'site_home_module', 'post', '', 1, 255 );
-	$array_config['site_description'] = filter_text_input( 'site_description', 'post', '', 1, 255 );
-	$array_config['disable_site_content'] = nv_editor_filter_textarea( 'disable_site_content', '', NV_ALLOWED_HTML_TAGS );
+	$array_config['site_home_module'] = nv_substr( $nv_Request->get_title( 'site_home_module', 'post', '', 1 ), 0, 255 );
+	$array_config['site_description'] = nv_substr( $nv_Request->get_title( 'site_description', 'post', '', 1 ), 0, 255 );
+	$array_config['disable_site_content'] = $nv_Request->get_editor( 'disable_site_content', '', NV_ALLOWED_HTML_TAGS );
 
 	if( empty( $array_config['disable_site_content'] ) )
 	{
@@ -177,7 +177,7 @@ $xtpl->assign( 'DISABLE_SITE_CONTENT', $disable_site_content );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 
-if( $errormess != "" )
+if( $errormess != '' )
 {
 	$xtpl->assign( 'ERROR', $errormess );
 	$xtpl->parse( 'main.error' );
@@ -186,8 +186,8 @@ if( $errormess != "" )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

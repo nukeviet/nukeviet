@@ -29,7 +29,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 
 	$allowfolder = array( 'modules', 'themes', 'uploads' );
 
-	$error = "";
+	$error = '';
 	$info = array();
 
 	if( is_uploaded_file( $_FILES['modulefile']['tmp_name'] ) )
@@ -62,7 +62,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 					}
 					else
 					{
-						$bytes = "";
+						$bytes = '';
 						$validfolder[] = $list[$i]['filename'];
 					}
 
@@ -110,18 +110,18 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 	$xtpl->parse( 'info' );
 	$contents = $xtpl->text( 'info' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 else
 {
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 ?>

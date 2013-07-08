@@ -13,15 +13,15 @@ $page_title = $mod_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $description = $lang_module['faq_welcome'];
 
-$contents = "";
+$contents = '';
 
 if( empty( $list_cats ) and ! $module_setting['type_main'] )
 {
 	$page_title = $module_info['custom_title'];
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -58,9 +58,9 @@ if( ! empty( $alias ) and $catid )
 
 	$contents = theme_cat_faq( $list_cats, $catid, $faq, $mod_title );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 elseif( $module_setting['type_main'] == 0 )
@@ -93,8 +93,8 @@ else
 	nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

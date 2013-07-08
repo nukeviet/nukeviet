@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['categories'];
-$error = "";
+$error = '';
 
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $pid = $nv_Request->get_int( 'pid', 'get', 0 );
@@ -46,12 +46,12 @@ if( ! empty( $savecat ) )
 	$data_content['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
 	$data_content['parentid_old'] = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$data_content['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
-	$data_content['title'] = filter_text_input( 'title', 'post', "", 1, 100 );
-	$data_content['catimage'] = filter_text_input( 'catimage', 'post' );
-	$data_content['keywords'] = filter_text_input( 'keywords', 'post' );
-	$data_content['alias'] = filter_text_input( 'alias', 'post', '', 1, 100 );
-	$data_content['description'] = filter_text_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
-	$data_content['alias'] = ( $data_content['alias'] == "" ) ? change_alias( $data_content['title'] ) : change_alias( $data_content['alias'] );
+	$data_content['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 100 );
+	$data_content['catimage'] = $nv_Request->get_title( 'catimage', 'post' );
+	$data_content['keywords'] = $nv_Request->get_title( 'keywords', 'post' );
+	$data_content['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 100 );
+	$data_content['description'] = $nv_Request->get_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
+	$data_content['alias'] = ( $data_content['alias'] == '' ) ? change_alias( $data_content['title'] ) : change_alias( $data_content['alias'] );
 
 	if( empty( $data_content['title'] ) )
 	{
@@ -158,7 +158,7 @@ if( ! empty( $array_cat ) )
 {
 	foreach( $array_cat as $cat )
 	{
-		$xtitle = "";
+		$xtitle = '';
 
 		if( $cat['catid'] != $data_content['catid'] )
 		{
@@ -198,8 +198,8 @@ if( ! empty( $error ) )
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -13,7 +13,7 @@ $array_menu_type = array();
 $arr = array();
 
 $arr['id'] = $arr['type_name'] = 0;
-$arr['title'] = $array['description'] = "";
+$arr['title'] = $array['description'] = '';
 $arr['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 
 if( $arr['id'] != 0 )
@@ -66,8 +66,8 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 if( $nv_Request->get_int( 'save', 'post' ) )
 {
 	$arr_menu['id'] = $nv_Request->get_int( 'id', 'post', 0 );
-	$arr_menu['title'] = filter_text_input( 'title', 'post', '', 1 );
-	$arr_menu['description'] = filter_text_input( 'description', 'post', '', 1, 255 );
+	$arr_menu['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
+	$arr_menu['description'] = nv_substr( $nv_Request->get_title( 'description', 'post', '', 1 ), 0, 255 );
 
 	if( empty( $arr_menu['title'] ) )
 	{
@@ -76,9 +76,9 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	elseif( $arr_menu['id'] == 0 )
 	{
 		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_menu` (`id`, `title`,`menu_item`, `description`) VALUES (
-			NULL, 
+			NULL,
 			" . $db->dbescape( $arr_menu['title'] ) . ",
-			'', 
+			'',
 			" . $db->dbescape( $arr_menu['description'] ) . "
 		)";
 
@@ -95,9 +95,9 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET 
-			`title`=" . $db->dbescape( $arr_menu['title'] ) . ", 
-			`description` =  " . $db->dbescape( $arr_menu['description'] ) . " 
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET
+			`title`=" . $db->dbescape( $arr_menu['title'] ) . ",
+			`description` =  " . $db->dbescape( $arr_menu['description'] ) . "
 		WHERE `id` =" . $arr_menu['id'];
 
 		if( $db->sql_query( $sql ) )
@@ -121,7 +121,7 @@ $sql1 = "SELECT COUNT(*) " . $sql;
 $result1 = $db->sql_query( $sql1 );
 list( $all_page ) = $db->sql_fetchrow( $result1 );
 
-$error2 = "";
+$error2 = '';
 
 if( ! $all_page )
 {
@@ -145,7 +145,7 @@ else
 	{
 		$arr_items = array();
 		$b = 0;
-		if( $row['menu_item'] != "" )
+		if( $row['menu_item'] != '' )
 		{
 			$arr_item = explode( ",", $row['menu_item'] );
 			foreach( $arr_item as $key => $val )
@@ -157,7 +157,7 @@ else
 		}
 		else
 		{
-			$item = "";
+			$item = '';
 		}
 
 		++$a;
@@ -180,7 +180,7 @@ $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['mod
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'ADD_NEW', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;add=1" );
 
-if( $error2 != "" )
+if( $error2 != '' )
 {
 	$xtpl->assign( 'ERROR', $error2 );
 	$xtpl->parse( 'first.error' );
@@ -236,8 +236,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$contents = $xtpl->text( 'main' );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

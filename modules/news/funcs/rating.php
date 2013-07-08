@@ -10,12 +10,12 @@
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-$contents = "";
+$contents = '';
 $array_point = array( 1, 2, 3, 4, 5 );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 $point = $nv_Request->get_int( 'point', 'post', 0 );
-$checkss = filter_text_input( 'checkss', 'post' );
+$checkss = $nv_Request->get_title( 'checkss', 'post' );
 
 $time_set = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'session', 0 );
 

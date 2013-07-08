@@ -64,12 +64,12 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 if( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
 	$error = array();
-	$list_file_name = filter_text_input( 'file_name', 'post', '', 0 );
+	$list_file_name = $nv_Request->get_title( 'file_name', 'post', '', 0 );
 	$array_file_name = explode( "|", $list_file_name );
 
 	$file_name = $row['file_name'] = trim( $array_file_name[0] );
-	$module = $row['module'] = filter_text_input( 'module', 'post', '', 0, 55 );
-	$row['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
+	$module = $row['module'] = nv_substr( $nv_Request->get_title( 'module', 'post', '', 0 ), 0, 55 );
+	$row['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 
 	$path_file_php = $path_file_ini = $path_file_lang = '';
 
@@ -130,9 +130,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		$error[] = $lang_module['block_error_nsblock'];
 	}
 
-	$row['link'] = filter_text_input( 'link', 'post', '' );
-	$row['template'] = filter_text_input( 'template', 'post', '', 0, 55 );
-	$row['position'] = filter_text_input( 'position', 'post', '', 0, 55 );
+	$row['link'] = $nv_Request->get_title( 'link', 'post', '' );
+	$row['template'] = nv_substr( $nv_Request->get_title( 'template', 'post', '', 0 ), 0, 55 );
+	$row['position'] = nv_substr( $nv_Request->get_title( 'position', 'post', '', 0 ), 0, 55 );
 
 	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'exp_time', 'post' ), $m ) )
 	{
@@ -148,7 +148,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 	if( $who_view < 0 or $who_view > 3 ) $who_view = 0;
 
-	$groups_view = "";
+	$groups_view = '';
 
 	if( $who_view == 3 )
 	{
@@ -181,7 +181,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	}
 
 	$row['all_func'] = $all_func;
-	$row['config'] = "";
+	$row['config'] = '';
 
 	if( ! empty( $path_file_php ) and ! empty( $path_file_ini ) )
 	{
@@ -235,7 +235,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					}
 					else
 					{
-						$row['config'] = "";
+						$row['config'] = '';
 					}
 
 					if( ! empty( $array_config['error'] ) )
@@ -319,17 +319,17 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			}
 			else
 			{
-				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET 
-					`module`=" . $db->dbescape( $row['module'] ) . ", 
-					`file_name`='" . mysql_real_escape_string( $row['file_name'] ) . "', 
-					`title`=" . $db->dbescape( $row['title'] ) . ", 
-					`link`=" . $db->dbescape( $row['link'] ) . ", 
-					`template`=" . $db->dbescape( $row['template'] ) . ", 
-					`position`=" . $db->dbescape( $row['position'] ) . ", 
-					`exp_time`=" . $row['exp_time'] . ", 
-					`active`=" . $row['active'] . ", 
-					`groups_view`=" . $db->dbescape( $row['groups_view'] ) . ", 
-					`all_func`=" . $row['all_func'] . ", 
+				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET
+					`module`=" . $db->dbescape( $row['module'] ) . ",
+					`file_name`='" . mysql_real_escape_string( $row['file_name'] ) . "',
+					`title`=" . $db->dbescape( $row['title'] ) . ",
+					`link`=" . $db->dbescape( $row['link'] ) . ",
+					`template`=" . $db->dbescape( $row['template'] ) . ",
+					`position`=" . $db->dbescape( $row['position'] ) . ",
+					`exp_time`=" . $row['exp_time'] . ",
+					`active`=" . $row['active'] . ",
+					`groups_view`=" . $db->dbescape( $row['groups_view'] ) . ",
+					`all_func`=" . $row['all_func'] . ",
 					`config`='" . mysql_real_escape_string( $row['config'] ) . "'
 					WHERE `bid` =" . $row['bid'] );
 
@@ -381,9 +381,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$xtpl->parse( 'blockredirect' );
 				$contents = $xtpl->text( 'blockredirect' );
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo $contents;
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				die();
 			}
 		}
@@ -556,7 +556,7 @@ while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 		$i = 0;
 		foreach( $aray_mod_func[$m_title] as $aray_mod_func_i )
 		{
-			$sel = "";
+			$sel = '';
 
 			if( in_array( $aray_mod_func_i['id'], $func_list ) || $functionid == $aray_mod_func_i['id'] )
 			{
@@ -622,8 +622,8 @@ $contents = $xtpl->text( 'main' );
 $xtpl->parse( 'head' );
 $my_head = $xtpl->text( 'head' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents, 0 );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

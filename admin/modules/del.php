@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
-$modname = filter_text_input( 'mod', 'post' );
+$modname = $nv_Request->get_title( 'mod', 'post' );
 $contents = 'NO_' . $modname;
 
 if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname ) )
@@ -130,8 +130,8 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 
 nv_fix_module_weight();
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

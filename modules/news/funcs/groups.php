@@ -9,6 +9,7 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
+$show_no_image  = $module_config[$module_name]['show_no_image'];
 if( isset( $array_op[1] ) )
 {
 	$alias = trim( $array_op[1] );
@@ -48,10 +49,14 @@ if( isset( $array_op[1] ) )
 			{
 				$item['src'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['src'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
+			else
+			{
+				$item['src'] = '';				
+			}			
 
 			$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
 			$item['width'] = $module_config[$module_name]['homewidth'];
@@ -117,9 +122,13 @@ else
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
+			else
+			{
+				$item['imghome'] = '';				
 			}
 
 			$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
@@ -144,8 +153,8 @@ else
 	$key_words = $module_info['keywords'];
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

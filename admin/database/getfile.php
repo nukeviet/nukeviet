@@ -9,8 +9,8 @@
 
 if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
-$filename = filter_text_input( 'filename', 'get', '' );
-$checkss = filter_text_input( 'checkss', 'get', '' );
+$filename = $nv_Request->get_title( 'filename', 'get', '' );
+$checkss = $nv_Request->get_title( 'checkss', 'get', '' );
 
 $log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
 if( $global_config['idsite'] )
@@ -43,9 +43,9 @@ else
 {
 	$contents = 'File not exist !';
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 ?>

@@ -46,18 +46,18 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 	$array = array();
 	$is_error = false;
-	$error = "";
+	$error = '';
 
 	if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
-		$array['title'] = filter_text_input( 'title', 'post', '', 1 );
-		$array['description'] = nv_editor_filter_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
-		$array['introtext'] = filter_text_textarea( 'introtext', '', NV_ALLOWED_HTML_TAGS );
-		$array['user_name'] = filter_text_input( 'user_name', 'post', '', 1 );
-		$array['author_name'] = filter_text_input( 'author_name', 'post', '', 1 );
-		$array['author_email'] = filter_text_input( 'author_email', 'post', '' );
-		$array['author_url'] = filter_text_input( 'author_url', 'post', '' );
+		$array['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
+		$array['description'] = $nv_Request->get_editor( 'description', '', NV_ALLOWED_HTML_TAGS );
+		$array['introtext'] = $nv_Request->get_textarea( 'introtext', '', NV_ALLOWED_HTML_TAGS );
+		$array['user_name'] = $nv_Request->get_title( 'user_name', 'post', '', 1 );
+		$array['author_name'] = $nv_Request->get_title( 'author_name', 'post', '', 1 );
+		$array['author_email'] = $nv_Request->get_title( 'author_email', 'post', '' );
+		$array['author_url'] = $nv_Request->get_title( 'author_url', 'post', '' );
 		$array['fileupload'] = ! empty( $row['fileupload'] ) ? explode( "[NV]", $row['fileupload'] ) : array();
 
 		// Lay duong dan day du file tai len cu
@@ -77,7 +77,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		$array['fileupload2'] = $nv_Request->get_typed_array( 'fileupload2', 'post', 'string' );
 		$array['linkdirect'] = $nv_Request->get_typed_array( 'linkdirect', 'post', 'string' );
-		$array['version'] = filter_text_input( 'version', 'post', '', 1 );
+		$array['version'] = $nv_Request->get_title( 'version', 'post', '', 1 );
 		$array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
 		$array['fileimage'] = $row['fileimage'];
 
@@ -90,8 +90,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			}
 		}
 
-		$array['fileimage2'] = filter_text_input( 'fileimage2', 'post', '' );
-		$array['copyright'] = filter_text_input( 'copyright', 'post', '', 1 );
+		$array['fileimage2'] = $nv_Request->get_title( 'fileimage2', 'post', '' );
+		$array['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
 		$array['comment_allow'] = $nv_Request->get_int( 'comment_allow', 'post', 0 );
 		$array['who_comment'] = $nv_Request->get_int( 'who_comment', 'post', 0 );
 		$array['groups_comment'] = $nv_Request->get_typed_array( 'groups_comment', 'post', 'int' );
@@ -228,7 +228,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$is_error = true;
 			$error = $lang_module['file_title_exists'];
 		}
-		elseif( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
+		elseif( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != '' )
 		{
 			$is_error = true;
 			$error = $check_valid_email;
@@ -312,7 +312,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			}
 			else
 			{
-				$array['linkdirect'] = "";
+				$array['linkdirect'] = '';
 			}
 
 			if( ! empty( $array['fileimage2'] ) )
@@ -322,7 +322,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			elseif( ! empty( $array['fileimage'] ) )
 			{
 				$fileimage = NV_UPLOADS_DIR . $array['fileimage'];
-				$array['fileimage'] = "";
+				$array['fileimage'] = '';
 				if( file_exists( NV_ROOTDIR . '/' . $fileimage ) )
 				{
 					$newfile = basename( $fileimage );
@@ -348,34 +348,34 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			}
 
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
-                NULL, 
-                " . $array['catid'] . ", 
-                " . $db->dbescape( $array['title'] ) . ", 
-                " . $db->dbescape( $alias ) . ", 
-                " . $db->dbescape( $array['description'] ) . ", 
-                " . $db->dbescape( $array['introtext'] ) . ", 
-                " . $row['uploadtime'] . ", 
-                " . NV_CURRENTTIME . ", 
-                " . $row['user_id'] . ", 
-                " . $db->dbescape( $array['user_name'] ) . ", 
-                " . $db->dbescape( $array['author_name'] ) . ", 
-                " . $db->dbescape( $array['author_email'] ) . ", 
-                " . $db->dbescape( $array['author_url'] ) . ", 
-                " . $db->dbescape( $array['fileupload'] ) . ", 
-                " . $db->dbescape( $array['linkdirect'] ) . ", 
-                " . $db->dbescape( $array['version'] ) . ", 
-                " . $array['filesize'] . ", 
-                " . $db->dbescape( $array['fileimage'] ) . ", 
-                1, 
-                " . $db->dbescape( $array['copyright'] ) . ", 
-                0, 0, 
-                " . $array['comment_allow'] . ", 
-                " . $array['who_comment'] . ", 
-                " . $db->dbescape( $array['groups_comment'] ) . ", 
-                " . $array['who_view'] . ", 
-                " . $db->dbescape( $array['groups_view'] ) . ", 
-                " . $array['who_download'] . ", 
-                " . $db->dbescape( $array['groups_download'] ) . ", 
+                NULL,
+                " . $array['catid'] . ",
+                " . $db->dbescape( $array['title'] ) . ",
+                " . $db->dbescape( $alias ) . ",
+                " . $db->dbescape( $array['description'] ) . ",
+                " . $db->dbescape( $array['introtext'] ) . ",
+                " . $row['uploadtime'] . ",
+                " . NV_CURRENTTIME . ",
+                " . $row['user_id'] . ",
+                " . $db->dbescape( $array['user_name'] ) . ",
+                " . $db->dbescape( $array['author_name'] ) . ",
+                " . $db->dbescape( $array['author_email'] ) . ",
+                " . $db->dbescape( $array['author_url'] ) . ",
+                " . $db->dbescape( $array['fileupload'] ) . ",
+                " . $db->dbescape( $array['linkdirect'] ) . ",
+                " . $db->dbescape( $array['version'] ) . ",
+                " . $array['filesize'] . ",
+                " . $db->dbescape( $array['fileimage'] ) . ",
+                1,
+                " . $db->dbescape( $array['copyright'] ) . ",
+                0, 0,
+                " . $array['comment_allow'] . ",
+                " . $array['who_comment'] . ",
+                " . $db->dbescape( $array['groups_comment'] ) . ",
+                " . $array['who_view'] . ",
+                " . $db->dbescape( $array['groups_view'] ) . ",
+                " . $array['who_download'] . ",
+                " . $db->dbescape( $array['groups_download'] ) . ",
                 0, '')";
 
 			if( ! $db->sql_query_insert_id( $sql ) )
@@ -433,7 +433,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['version'] = $row['version'];
 		$array['filesize'] = ( int )$row['filesize'];
 		$array['fileimage'] = $row['fileimage'];
-		$array['fileimage2'] = "";
+		$array['fileimage2'] = '';
 		$array['copyright'] = $row['copyright'];
 		$array['comment_allow'] = 1;
 		$array['who_comment'] = $array['who_view'] = $array['who_download'] = 0;
@@ -485,8 +485,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		}
 	}
 
-	if( ! sizeof( $array['fileupload2'] ) ) array_push( $array['fileupload2'], "" );
-	if( ! sizeof( $array['linkdirect'] ) ) array_push( $array['linkdirect'], "" );
+	if( ! sizeof( $array['fileupload2'] ) ) array_push( $array['fileupload2'], '' );
+	if( ! sizeof( $array['linkdirect'] ) ) array_push( $array['linkdirect'], '' );
 
 	$array['fileupload2_num'] = sizeof( $array['fileupload2'] );
 	$array['linkdirect_num'] = sizeof( $array['linkdirect'] );
@@ -605,7 +605,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['description'] = "<textarea style=\"width:100%; height:300px\" name=\"description\" id=\"description\">" . $array['description'] . "</textarea>";
 	}
 
-	if( ! $array['filesize'] ) $array['filesize'] = "";
+	if( ! $array['filesize'] ) $array['filesize'] = '';
 
 	$xtpl = new XTemplate( "filequeue_edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;edit=1&amp;id=" . $id );
@@ -714,9 +714,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -830,9 +830,9 @@ if( ! $all_file )
 	$contents .= "</div>\n";
 	$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -880,8 +880,8 @@ if( ! empty( $array ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

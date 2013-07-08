@@ -31,21 +31,21 @@ $array_data['pass_empty'] = empty( $oldpassword ) ? true : false;
 $array_data['change_info'] = $lang_module['change_info'];
 $array_data['checkss'] = md5( session_id() . $global_config['sitekey'] );
 
-$array_data['nv_password'] = filter_text_input( 'nv_password', 'post', '' );
-$array_data['new_password'] = filter_text_input( 'new_password', 'post', '' );
-$array_data['re_password'] = filter_text_input( 're_password', 'post', '' );
-$checkss = filter_text_input( 'checkss', 'post', '' );
+$array_data['nv_password'] = $nv_Request->get_title( 'nv_password', 'post', '' );
+$array_data['new_password'] = $nv_Request->get_title( 'new_password', 'post', '' );
+$array_data['re_password'] = $nv_Request->get_title( 're_password', 'post', '' );
+$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 
 if( $checkss == $array_data['checkss'] )
 {
-	$error = "";
+	$error = '';
 
 	if( ! empty( $oldpassword ) and ! $crypt->validate( $array_data['nv_password'], $oldpassword ) )
 	{
 		$error = $lang_global['incorrect_password'];
 		$error = str_replace( $lang_global['password'], $lang_module['pass_old'], $error );
 	}
-	elseif( ( $check_new_password = nv_check_valid_pass( $array_data['new_password'], NV_UPASSMAX, NV_UPASSMIN ) ) != "" )
+	elseif( ( $check_new_password = nv_check_valid_pass( $array_data['new_password'], NV_UPASSMAX, NV_UPASSMIN ) ) != '' )
 	{
 		$error = $check_new_password;
 	}
@@ -64,9 +64,9 @@ if( $checkss == $array_data['checkss'] )
 		$contents = user_info_exit( $lang_module['change_pass_ok'] );
 		$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_site_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	}
 
@@ -75,8 +75,8 @@ if( $checkss == $array_data['checkss'] )
 
 $contents = user_changepass( $array_data );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

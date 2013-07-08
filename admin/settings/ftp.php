@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$error = "";
+$error = '';
 
 $page_title = $lang_module['ftp_config'];
 
@@ -20,11 +20,11 @@ if( $sys_info['ftp_support'] )
 {
 	$array_config = array();
 
-	$array_config['ftp_server'] = filter_text_input( 'ftp_server', 'post', $global_config['ftp_server'], 1, 255 );
-	$array_config['ftp_port'] = filter_text_input( 'ftp_port', 'post', $global_config['ftp_port'], 1, 255 );
-	$array_config['ftp_user_name'] = filter_text_input( 'ftp_user_name', 'post', $global_config['ftp_user_name'], 1, 255 );
-	$array_config['ftp_user_pass'] = filter_text_input( 'ftp_user_pass', 'post', $global_config['ftp_user_pass'], 0, 255 );
-	$array_config['ftp_path'] = filter_text_input( 'ftp_path', 'post', $global_config['ftp_path'], 1, 255 );
+	$array_config['ftp_server'] = $nv_Request->get_title( 'ftp_server', 'post', $global_config['ftp_server'], 1 );
+	$array_config['ftp_port'] = $nv_Request->get_title( 'ftp_port', 'post', $global_config['ftp_port'], 1 );
+	$array_config['ftp_user_name'] = $nv_Request->get_title( 'ftp_user_name', 'post', $global_config['ftp_user_name'], 1 );
+	$array_config['ftp_user_pass'] = $nv_Request->get_title( 'ftp_user_pass', 'post', $global_config['ftp_user_pass'], 0 );
+	$array_config['ftp_path'] = $nv_Request->get_title( 'ftp_path', 'post', $global_config['ftp_path'], 1 );
 	$array_config['ftp_check_login'] = $global_config['ftp_check_login'];
 
 	// Tu dong nhan dang Remove Path
@@ -98,7 +98,7 @@ if( $sys_info['ftp_support'] )
 			}
 			else
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR );
 
 				$list_files = $ftp->listDetail( $ftp_path, 'all' );
 
@@ -163,8 +163,8 @@ else
 	$contents = $xtpl->text( 'no_support' );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

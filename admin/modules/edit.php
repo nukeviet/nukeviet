@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $contents = array();
 
-$mod = filter_text_input( 'mod', 'get' );
+$mod = $nv_Request->get_title( 'mod', 'get' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
 {
@@ -76,18 +76,19 @@ $groups_list = nv_groups_list();
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-	$custom_title = filter_text_input( 'custom_title', 'post', 1 );
-	$admin_title = filter_text_input( 'admin_title', 'post', 1 );
-	$theme = filter_text_input( 'theme', 'post', '', 1 );
-	$mobile = filter_text_input( 'mobile', 'post', '', 1 );
-	$description = filter_text_input( 'description', 'post', '', 1, 255 );
-	$keywords = filter_text_input( 'keywords', 'post', '', 1 );
+	$custom_title = $nv_Request->get_title( 'custom_title', 'post', 1 );
+	$admin_title = $nv_Request->get_title( 'admin_title', 'post', 1 );
+	$theme = $nv_Request->get_title( 'theme', 'post', '', 1 );
+	$mobile = $nv_Request->get_title( 'mobile', 'post', '', 1 );
+	$description = $nv_Request->get_title( 'description', 'post', '', 1 );
+	$description = nv_substr( $description, 0, 255 );
+	$keywords = $nv_Request->get_title( 'keywords', 'post', '', 1 );
 	$act = $nv_Request->get_int( 'act', 'post', 0 );
 	$rss = $nv_Request->get_int( 'rss', 'post', 0 );
 
-	if( ! empty( $theme ) and ! in_array( $theme, $theme_list ) ) $theme = "";
+	if( ! empty( $theme ) and ! in_array( $theme, $theme_list ) ) $theme = '';
 
-	if( ! empty( $mobile ) and ! in_array( $mobile, $theme_mobile_list ) ) $mobile = "";
+	if( ! empty( $mobile ) and ! in_array( $mobile, $theme_mobile_list ) ) $mobile = '';
 
 	if( ! empty( $keywords ) )
 	{
@@ -102,7 +103,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $who_view < 0 or $who_view > 3 ) $who_view = 0;
 
-		$groups_view = "";
+		$groups_view = '';
 
 		if( $who_view == 3 )
 		{
@@ -121,7 +122,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		$groups_view = "0";
 	}
 
-	if( $groups_view != "" and $custom_title != "" )
+	if( $groups_view != '' and $custom_title != '' )
 	{
 		$array_layoutdefault = array();
 
@@ -179,7 +180,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$contents['error'] = sprintf( $lang_module['edit_error_update_theme'], implode( ", ", $contents['error'] ) );
 		}
 	}
-	elseif( $groups_view != "" )
+	elseif( $groups_view != '' )
 	{
 		$row['groups_view'] = $groups_view;
 	}
@@ -235,8 +236,8 @@ $contents['submit'] = $lang_global['submit'];
 
 $contents = edit_theme( $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

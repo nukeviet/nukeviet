@@ -61,7 +61,7 @@ if( ! empty( $groups_list ) )
 }
 
 $array = array();
-$error = "";
+$error = '';
 
 //them chu de
 if( $nv_Request->isset_request( 'add', 'get' ) )
@@ -73,8 +73,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
-		$array['title'] = filter_text_input( 'title', 'post', '', 1 );
-		$array['description'] = filter_text_input( 'description', 'post', '' );
+		$array['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
+		$array['description'] = $nv_Request->get_title( 'description', 'post', '' );
 		$array['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
 		$array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
 
@@ -130,14 +130,14 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 			++$new_weight;
 
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_categories` VALUES (
-            NULL, 
-            " . $array['parentid'] . ", 
-            " . $db->dbescape( $array['title'] ) . ", 
-            " . $db->dbescape( $alias ) . ", 
-            " . $db->dbescape( $array['description'] ) . ", 
-            " . $array['who_view'] . ", 
-            " . $db->dbescape( $array['groups_view'] ) . ", 
-            " . $new_weight . ", 
+            NULL,
+            " . $array['parentid'] . ",
+            " . $db->dbescape( $array['title'] ) . ",
+            " . $db->dbescape( $alias ) . ",
+            " . $db->dbescape( $array['description'] ) . ",
+            " . $array['who_view'] . ",
+            " . $db->dbescape( $array['groups_view'] ) . ",
+            " . $new_weight . ",
             1, '')";
 
 			$catid = $db->sql_query_insert_id( $sql );
@@ -158,8 +158,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	else
 	{
 		$array['parentid'] = 0;
-		$array['title'] = "";
-		$array['description'] = "";
+		$array['title'] = '';
+		$array['description'] = '';
 		$array['who_view'] = 0;
 		$array['groups_view'] = array();
 	}
@@ -234,9 +234,9 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 
 	exit();
 }
@@ -271,8 +271,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
-		$array['title'] = filter_text_input( 'title', 'post', '', 1 );
-		$array['description'] = filter_text_input( 'description', 'post', '' );
+		$array['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
+		$array['description'] = $nv_Request->get_title( 'description', 'post', '' );
 		$array['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
 		$array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
 
@@ -334,14 +334,14 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$new_weight = $row['weight'];
 			}
 
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET 
-            `parentid`=" . $array['parentid'] . ", 
-            `title`=" . $db->dbescape( $array['title'] ) . ", 
-            `alias`=" . $db->dbescape( $alias ) . ", 
-            `description`=" . $db->dbescape( $array['description'] ) . ", 
-            `who_view`=" . $array['who_view'] . ", 
-            `groups_view`=" . $db->dbescape( $array['groups_view'] ) . ", 
-            `weight`=" . $new_weight . " 
+			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET
+            `parentid`=" . $array['parentid'] . ",
+            `title`=" . $db->dbescape( $array['title'] ) . ",
+            `alias`=" . $db->dbescape( $alias ) . ",
+            `description`=" . $db->dbescape( $array['description'] ) . ",
+            `who_view`=" . $array['who_view'] . ",
+            `groups_view`=" . $db->dbescape( $array['groups_view'] ) . ",
+            `weight`=" . $new_weight . "
             WHERE `id`=" . $catid;
 			$result = $db->sql_query( $sql );
 
@@ -441,9 +441,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 
 	exit();
 }
@@ -576,7 +576,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	}
 	else
 	{
-		$numsub = "";
+		$numsub = '';
 	}
 
 	$weight = array();
@@ -626,8 +626,8 @@ foreach( $list as $row )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -28,6 +28,7 @@ if( $topicid > 0 )
 
 	$topic_array = array();
 	$end_publtime = 0;
+	$show_no_image  = $module_config[$module_name]['show_no_image'];
 
 	while( $item = $db->sql_fetch_assoc( $query ) )
 	{
@@ -43,10 +44,14 @@ if( $topicid > 0 )
 		{
 			$item['src'] = $item['homeimgfile'];
 		}
-		else //no image
+		elseif( $show_no_image ) //no image
 		{
 			$item['src'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 		}
+		else
+		{
+			$item['imghome'] = '';				
+		}		
 		$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
 		$item['width'] = $module_config[$module_name]['homewidth'];
 
@@ -69,7 +74,7 @@ if( $topicid > 0 )
 
 	unset( $query, $row, $arr_listcatid );
 
-	$base_url = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias;
+	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias;
 	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 	$contents = topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description );
 
@@ -84,8 +89,8 @@ else
 	exit();
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

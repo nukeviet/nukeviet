@@ -40,7 +40,7 @@ if( is_file( NV_ROOTDIR . '/' . $file_config_temp ) )
 	$db_config['collation'] = NV_MYSQL_COLLATION;
 }
 
-$contents = "";
+$contents = '';
 $step = $nv_Request->get_int( 'step', 'post,get', 1 );
 
 $maxstep = $nv_Request->get_int( 'maxstep', 'session', 1 );
@@ -86,10 +86,10 @@ elseif( $step == 2 )
 	// Tu dong nhan dang Remove Path
 	if( $nv_Request->isset_request( 'tetectftp', 'post' ) )
 	{
-		$ftp_server = nv_unhtmlspecialchars( filter_text_input( 'ftp_server', 'post', '', 1, 255 ) );
-		$ftp_port = intval( filter_text_input( 'ftp_port', 'post', '21', 1, 255 ) );
-		$ftp_user_name = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_name', 'post', '', 1, 255 ) );
-		$ftp_user_pass = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_pass', 'post', '', 1, 255 ) );
+		$ftp_server = nv_unhtmlspecialchars( $nv_Request->get_title( 'ftp_server', 'post', '', 1 ) );
+		$ftp_port = intval( $nv_Request->get_title( 'ftp_port', 'post', '21', 1 ) );
+		$ftp_user_name = nv_unhtmlspecialchars( $nv_Request->get_title( 'ftp_user_name', 'post', '', 1 ) );
+		$ftp_user_pass = nv_unhtmlspecialchars( $nv_Request->get_title( 'ftp_user_pass', 'post', '', 1 ) );
 
 		if( ! $ftp_server or ! $ftp_user_name or ! $ftp_user_pass )
 		{
@@ -185,7 +185,7 @@ elseif( $step == 2 )
 			}
 			elseif( ftp_chdir( $conn_id, $global_config['ftp_path'] ) )
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "robots.txt", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "robots.txt", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR );
 
 				$list_files = ftp_nlist( $conn_id, "." );
 
@@ -373,8 +373,8 @@ elseif( $step == 4 )
 elseif( $step == 5 )
 {
 	$nextstep = 0;
-	$db_config['dbport'] = "";
-	$db_config['error'] = "";
+	$db_config['dbport'] = '';
+	$db_config['error'] = '';
 	$db_config['dbhost'] = $nv_Request->get_string( 'dbhost', 'post', $db_config['dbhost'] );
 	$db_config['dbname'] = $nv_Request->get_string( 'dbname', 'post', $db_config['dbname'] );
 	$db_config['dbuname'] = $nv_Request->get_string( 'dbuname', 'post', $db_config['dbuname'] );
@@ -386,11 +386,11 @@ elseif( $step == 5 )
 
 	if( ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
 	{
-		$db_config['dbuname'] = preg_replace( array( "/[^a-z0-9]/", '/[\_]+/', "/^[\_]+/", "/[\_]+$/" ), array( "_", "_", "", "" ), strtolower( $db_config['dbuname'] ) );
+		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['dbuname'] ) );
 
-		$db_config['dbname'] = preg_replace( array( "/[^a-z0-9]/", '/[\_]+/', "/^[\_]+/", "/[\_]+$/" ), array( "_", "_", "", "" ), strtolower( $db_config['dbname'] ) );
+		$db_config['dbname'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['dbname'] ) );
 
-		$db_config['prefix'] = preg_replace( array( "/[^a-z0-9]/", '/[\_]+/', "/^[\_]+/", "/[\_]+$/" ), array( "_", "_", "", "" ), strtolower( $db_config['prefix'] ) );
+		$db_config['prefix'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['prefix'] ) );
 
 		if( substr( $sys_info['os'], 0, 3 ) == 'WIN' and $db_config['dbhost'] == 'localhost' )
 		{
@@ -431,7 +431,7 @@ elseif( $step == 5 )
 			if( $num_table == 0 )
 			{
 				nv_save_file_config();
-				$db_config['error'] = "";
+				$db_config['error'] = '';
 				$sql_create_table = array();
 
 				//cai dat du lieu cho he thong
@@ -454,14 +454,14 @@ elseif( $step == 5 )
 					define( 'NV_IS_MODADMIN', true );
 
 					$module_name = "modules";
-					$lang_module['modules'] = "";
-					$lang_module['vmodule_add'] = "";
-					$lang_module['autoinstall'] = "";
-					$lang_global['mod_modules'] = "";
+					$lang_module['modules'] = '';
+					$lang_module['vmodule_add'] = '';
+					$lang_module['autoinstall'] = '';
+					$lang_global['mod_modules'] = '';
 
 					require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/functions.php" );
 
-					$module_name = "";
+					$module_name = '';
 
 					require_once ( NV_ROOTDIR . '/includes/sqldata.php' );
 
@@ -598,21 +598,21 @@ elseif( $step == 6 )
 {
 	$nextstep = 0;
 	$array_data = array();
-	$error = $site_name = $login = $email = $password = $re_password = "";
+	$error = $site_name = $login = $email = $password = $re_password = '';
 
 	if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 	{
-		$site_name = filter_text_input( 'site_name', 'post', '', 1 );
-		$login = filter_text_input( 'nv_login', 'post', '', 1, NV_UNICKMAX );
-		$email = filter_text_input( 'nv_email', 'post', '' );
-		$password = filter_text_input( 'nv_password', 'post', '' );
-		$re_password = filter_text_input( 're_password', 'post', '' );
+		$site_name = $nv_Request->get_title( 'site_name', 'post', '', 1 );
+		$login = nv_substr( $nv_Request->get_title( 'nv_login', 'post', '', 1 ), 0, NV_UNICKMAX );
+		$email = $nv_Request->get_title( 'nv_email', 'post', '' );
+		$password = $nv_Request->get_title( 'nv_password', 'post', '' );
+		$re_password = $nv_Request->get_title( 're_password', 'post', '' );
 		$check_login = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
 		$check_pass = nv_check_valid_pass( $password, NV_UPASSMAX, NV_UPASSMIN );
 		$check_email = nv_check_valid_email( $email );
 
-		$question = filter_text_input( 'question', 'post', '', 1 );
-		$answer_question = filter_text_input( 'answer_question', 'post', '', 1 );
+		$question = $nv_Request->get_title( 'question', 'post', '', 1 );
+		$answer_question = $nv_Request->get_title( 'answer_question', 'post', '', 1 );
 
 		$array_data['site_name'] = $site_name;
 		$array_data['nv_login'] = $login;
@@ -861,7 +861,7 @@ function nv_save_file_config()
 		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? "" : $db_config['dbpass'];
 		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? "nv3" : $db_config['prefix'];
 
-		$content = "";
+		$content = '';
 		$content .= "<?php\n\n";
 		$content .= NV_FILEHEAD . "\n\n";
 		$content .= "if ( ! defined( 'NV_MAINFILE' ) )\n";

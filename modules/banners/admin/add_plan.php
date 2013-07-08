@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $forms = nv_scandir( NV_ROOTDIR . '/modules/' . $module_name . '/forms', "/^form\_([a-zA-Z0-9\_\-]+)\.php$/" );
 $forms = preg_replace( "/^form\_([a-zA-Z0-9\_\-]+)\.php$/", "\\1", $forms );
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
@@ -41,7 +41,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( ! empty( $description ) ) $description = defined( 'NV_EDITOR' ) ? nv_nl2br( $description, '' ) : nv_nl2br( nv_htmlspecialchars( $description ), '<br />' );
 
-		$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_plans` VALUES (NULL, " . $db->dbescape( $blang ) . ", " . $db->dbescape( $title ) . ", 
+		$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_plans` VALUES (NULL, " . $db->dbescape( $blang ) . ", " . $db->dbescape( $title ) . ",
 			" . $db->dbescape( $description ) . ", " . $db->dbescape( $form ) . ", " . $width . ", " . $height . ", 1)";
 
 		$id = $db->sql_query_insert_id( $sql );
@@ -53,7 +53,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 }
 else
 {
-	$blang = $title = $description = "";
+	$blang = $title = $description = '';
 	$form = "sequential";
 	$width = $height = 50;
 }
@@ -87,8 +87,8 @@ $contents = nv_add_plan_theme( $contents );
 
 $page_title = $lang_module['add_plan'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

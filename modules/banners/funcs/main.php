@@ -35,8 +35,8 @@ $contents['clientinfo_stats'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABL
 $page_title = $module_info['custom_title'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['funcs'][$op]['func_custom_name'];
 $contents = nv_banner_theme_main( $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

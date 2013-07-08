@@ -33,7 +33,7 @@ $imageforswf = $row['imageforswf'];
 $page_title = $lang_module['edit_banner'];
 
 $contents = array();
-$contents['upload_blocked'] = "";
+$contents['upload_blocked'] = '';
 $contents['file_allowed_ext'] = array();
 
 if( preg_match( "/images/", NV_ALLOW_FILES_TYPE ) )
@@ -50,9 +50,9 @@ if( empty( $contents['file_allowed_ext'] ) )
 {
 	$contents['upload_blocked'] = $lang_module['upload_blocked'];
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( nv_edit_banner_theme( $contents ) );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -80,7 +80,7 @@ if( empty( $plans ) )
 	die();
 }
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
@@ -97,11 +97,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		$target = '_blank';
 	}
 
-	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = "";
-	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = "";
+	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = '';
+	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = '';
 
 	if( ! empty( $clid ) and ! isset( $clients[$clid] ) ) $clid = 0;
-	if( $click_url == "http://" ) $click_url = "";
+	if( $click_url == "http://" ) $click_url = '';
 
 	if( empty( $title ) )
 	{
@@ -200,10 +200,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			list( $pid_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT `pid` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . intval( $id ) . "" ) );
 
-			$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_rows` SET `title`=" . $db->dbescape( $title ) . ", `pid`=" . $pid . ", `clid`=" . $clid . ", 
- `file_name`=" . $db->dbescape( $file_name ) . ", `file_ext`=" . $db->dbescape( $file_ext ) . ", `file_mime`=" . $db->dbescape( $file_mime ) . ", 
- `width`=" . $width . ", `height`=" . $height . ", `file_alt`=" . $db->dbescape( $file_alt ) . ", `imageforswf`=" . $db->dbescape( $imageforswf ) . ", 
- `click_url`=" . $db->dbescape( $click_url ) . ", `target`=" . $db->dbescape( $target ) . ", 
+			$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_rows` SET `title`=" . $db->dbescape( $title ) . ", `pid`=" . $pid . ", `clid`=" . $clid . ",
+ `file_name`=" . $db->dbescape( $file_name ) . ", `file_ext`=" . $db->dbescape( $file_ext ) . ", `file_mime`=" . $db->dbescape( $file_mime ) . ",
+ `width`=" . $width . ", `height`=" . $height . ", `file_alt`=" . $db->dbescape( $file_alt ) . ", `imageforswf`=" . $db->dbescape( $imageforswf ) . ",
+ `click_url`=" . $db->dbescape( $click_url ) . ", `target`=" . $db->dbescape( $target ) . ",
  `publ_time`=" . $publtime . ", `exp_time`=" . $exptime . " WHERE `id`=" . $id;
 			$db->sql_query( $sql );
 
@@ -262,8 +262,8 @@ $my_head .= "Shadowbox.init({\n";
 $my_head .= "});\n";
 $my_head .= "</script>\n";
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( nv_edit_banner_theme( $contents ) );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

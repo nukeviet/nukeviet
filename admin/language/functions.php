@@ -62,7 +62,7 @@ if( $module_name == "language" )
 	define( 'NV_ALLOWED_HTML_LANG', $allowed_html_tags );
 	define( 'NV_IS_FILE_LANG', true );
 
-	$dirlang = filter_text_input( 'dirlang', 'get', '' );
+	$dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
 
 	/**
 	 * nv_admin_add_field_lang()

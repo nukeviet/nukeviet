@@ -17,7 +17,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 function nv_save_file_admin_config()
 {
 	global $db;
-	$content_config_ip = $content_config_user = "";
+	$content_config_ip = $content_config_user = '';
 
 	$sql = "SELECT `keyname`, `mask`, `begintime`, `endtime`, `notice` FROM `" . NV_AUTHORS_GLOBALTABLE . "_config`";
 	$result = $db->sql_query( $sql );
@@ -76,7 +76,7 @@ if( ! empty( $delid ) )
 }
 
 $error = array();
-$contents = "";
+$contents = '';
 
 if( $nv_Request->isset_request( 'savesetting', 'post' ) )
 {
@@ -104,11 +104,11 @@ if( $nv_Request->isset_request( 'savesetting', 'post' ) )
 if( $nv_Request->isset_request( 'submituser', 'post' ) )
 {
 	$uid = $nv_Request->get_int( 'uid', 'post', 0 );
-	$username = filter_text_input( 'username', 'post', '', 1 );
-	$password = filter_text_input( 'password', 'post', '', 1 );
-	$password2 = filter_text_input( 'password2', 'post', '', 1 );
-	$begintime1 = filter_text_input( 'begintime1', 'post', 0, 1 );
-	$endtime1 = filter_text_input( 'endtime1', 'post', 0, 1 );
+	$username = $nv_Request->get_title( 'username', 'post', '', 1 );
+	$password = $nv_Request->get_title( 'password', 'post', '', 1 );
+	$password2 = $nv_Request->get_title( 'password2', 'post', '', 1 );
+	$begintime1 = $nv_Request->get_title( 'begintime1', 'post', 0, 1 );
+	$endtime1 = $nv_Request->get_title( 'endtime1', 'post', 0, 1 );
 
 	$errorlogin = nv_check_valid_login( $username, NV_UNICKMAX, NV_UNICKMIN );
 	if( ! empty( $errorlogin ) )
@@ -154,7 +154,7 @@ if( $nv_Request->isset_request( 'submituser', 'post' ) )
 	}
 	if( empty( $error ) )
 	{
-		if( $uid > 0 and $password != "" )
+		if( $uid > 0 and $password != '' )
 		{
 			$db->sql_query( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=" . $db->dbescape( $username ) . ", `mask`='-1',`begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . ", `notice`=" . $db->dbescape( md5( $password ) ) . " WHERE `id`=" . $uid . "" );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_edit'] . " username: " . $username, $admin_info['userid'] );
@@ -182,10 +182,10 @@ else
 if( $nv_Request->isset_request( 'submitip', 'post' ) )
 {
 	$cid = $nv_Request->get_int( 'cid', 'post', 0 );
-	$keyname = filter_text_input( 'keyname', 'post', '', 1 );
+	$keyname = $nv_Request->get_title( 'keyname', 'post', '', 1 );
 	$mask = $nv_Request->get_int( 'mask', 'post', 0 );
-	$begintime = filter_text_input( 'begintime', 'post', 0, 1 );
-	$endtime = filter_text_input( 'endtime', 'post', 0, 1 );
+	$begintime = $nv_Request->get_title( 'begintime', 'post', 0, 1 );
+	$endtime = $nv_Request->get_title( 'endtime', 'post', 0, 1 );
 
 	if( empty( $keyname ) || ! $ips->nv_validip( $keyname ) )
 	{
@@ -207,7 +207,7 @@ if( $nv_Request->isset_request( 'submitip', 'post' ) )
 	{
 		$endtime = 0;
 	}
-	$notice = filter_text_input( 'notice', 'post', '', 1 );
+	$notice = $nv_Request->get_title( 'notice', 'post', '', 1 );
 	if( empty( $error ) )
 	{
 		if( $cid > 0 )
@@ -299,7 +299,7 @@ if( ! empty( $uid ) )
 	list( $username, $begintime1, $endtime1 ) = $db->sql_fetchrow( $db->sql_query( "SELECT `keyname`, `begintime`, `endtime` FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` = '-1' AND id=" . $uid ) );
 
 	$lang_module['username_add'] = $lang_module['username_edit'];
-	$password2 = $password = "";
+	$password2 = $password = '';
 }
 
 $xtpl->assign( 'FIREWALLDATA', array(
@@ -367,8 +367,8 @@ $page_title = $lang_module['config'];
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -17,7 +17,7 @@ if( ! ( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_
 
 if( $nv_Request->get_int( 'result', 'get', 0 ) )
 {
-	$checksess = filter_text_input( 'checksess', 'get', '' );
+	$checksess = $nv_Request->get_title( 'checksess', 'get', '' );
 	if( $checksess != md5( $global_config['sitekey'] . session_id() ) )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
@@ -41,13 +41,13 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 {
 	$userid = $nv_Request->get_int( 'userid', 'post', 0 );
 	$lev = $nv_Request->get_int( 'lev', 'post', 0 );
-	$editor = filter_text_input( 'editor', 'post' );
+	$editor = $nv_Request->get_title( 'editor', 'post' );
 	$allow_files_type = $nv_Request->get_array( 'allow_files_type', 'post', array() );
 	$allow_create_subdirectories = $nv_Request->get_int( 'allow_create_subdirectories', 'post', 0 );
 	$allow_modify_files = $nv_Request->get_int( 'allow_modify_files', 'post', 0 );
 	$allow_modify_subdirectories = $nv_Request->get_int( 'allow_modify_subdirectories', 'post', 0 );
 	$modules = $nv_Request->get_array( 'modules', 'post', array() );
-	$position = filter_text_input( 'position', 'post', '', 1 );
+	$position = $nv_Request->get_title( 'position', 'post', '', 1 );
 
 	if( ! $userid ) die( $lang_module['add_error_choose'] );
 
@@ -97,11 +97,11 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	$files_level = ( ! empty( $allow_files_type ) ? implode( ",", $allow_files_type ) : "" ) . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
 
 	$sql = "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "` (`admin_id`, `editor`, `lev`, `files_level`, `position`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) VALUES (
-		" . $userid . ", 
-		" . $db->dbescape( $editor ) . ", 
-		" . $lev . ", 
-		" . $db->dbescape( $files_level ) . ", 
-		" . $db->dbescape( $position ) . ", 
+		" . $userid . ",
+		" . $db->dbescape( $editor ) . ",
+		" . $lev . ",
+		" . $db->dbescape( $files_level ) . ",
+		" . $db->dbescape( $position ) . ",
 		0,'', '',0,'',''
 	)";
 
@@ -134,7 +134,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 }
 else
 {
-	$position = "";
+	$position = '';
 	$userid = 0;
 	$editor = "ckeditor";
 	$lev = 3;
@@ -265,8 +265,8 @@ $xtpl->assign( 'SUBMIT', $contents['submit'] );
 $xtpl->parse( 'add' );
 $contents = $xtpl->text( 'add' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -48,15 +48,15 @@ else
 {
 	$data = array();
 	$data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
-	$data['userField'] = filter_text_input( 'userField', 'post', '', 1, 100 );
-	$data['answer'] = filter_text_input( 'answer', 'post', '', 1, 255 );
+	$data['userField'] = nv_substr( $nv_Request->get_title( 'userField', 'post', '', 1 ), 0, 100 );
+	$data['answer'] = nv_substr( $nv_Request->get_title( 'answer', 'post', '', 1 ), 0, 255 );
 	$data['send'] = $nv_Request->get_bool( 'send', 'post', false );
-	$data['nv_seccode'] = filter_text_input( 'nv_seccode', 'post', '' );
-	$checkss = filter_text_input( 'checkss', 'post', '' );
+	$data['nv_seccode'] = $nv_Request->get_title( 'nv_seccode', 'post', '' );
+	$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 	$seccode = $nv_Request->get_string( 'lostpass_seccode', 'session', '' );
 
 	$step = 1;
-	$error = $question = "";
+	$error = $question = '';
 
 	if( $checkss == $data['checkss'] )
 	{
@@ -87,7 +87,7 @@ else
 
 					$question = $row['question'];
 
-					$info = "";
+					$info = '';
 					if( ! empty( $row['opid'] ) and empty( $row['password'] ) )
 					{
 						$info = $lang_module['openid_lostpass_info'];
@@ -104,9 +104,9 @@ else
 						$contents = user_info_exit( $info );
 						$contents .= "<meta http-equiv=\"refresh\" content=\"15;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=lostpass", true ) . "\" />";
 
-						include ( NV_ROOTDIR . "/includes/header.php" );
+						include ( NV_ROOTDIR . '/includes/header.php' );
 						echo nv_site_theme( $contents );
-						include ( NV_ROOTDIR . "/includes/footer.php" );
+						include ( NV_ROOTDIR . '/includes/footer.php' );
 						exit();
 					}
 					if( $global_config['allowquestion'] == 0 )
@@ -153,9 +153,9 @@ else
 							$contents = user_info_exit( $info );
 							$contents .= "<meta http-equiv=\"refresh\" content=\"10;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-							include ( NV_ROOTDIR . "/includes/header.php" );
+							include ( NV_ROOTDIR . '/includes/header.php' );
 							echo nv_site_theme( $contents );
-							include ( NV_ROOTDIR . "/includes/footer.php" );
+							include ( NV_ROOTDIR . '/includes/footer.php' );
 							exit();
 						}
 						else
@@ -192,8 +192,8 @@ else
 	$contents = user_lostpass( $data, $question );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

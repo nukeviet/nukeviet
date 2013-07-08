@@ -13,7 +13,7 @@ $xtpl = new XTemplate( "delete.tpl", NV_ROOTDIR . "/themes/" . $global_config['m
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
-$dirlang = filter_text_input( 'dirlang', 'get', '' );
+$dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
 $page_title = $language_array[$dirlang]['name'] . ": " . $lang_module['nv_admin_read'];
 
 if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . session_id() ) )
@@ -124,9 +124,9 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 	}
 }
 

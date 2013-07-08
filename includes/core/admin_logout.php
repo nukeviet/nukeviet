@@ -14,7 +14,7 @@ if( $js )
 {
 	nv_insert_logs( NV_LANG_DATA, "login", "[" . $admin_info['username'] . "] " . strtolower( $lang_global['admin_logout_title'] ), " Client IP:" . NV_CLIENT_IP, 0 );
 	$nv_Request->unset_request( 'admin,online', 'session' );
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	die( "1" );
 }
 
@@ -28,7 +28,7 @@ if( $ok )
 }
 else
 {
-	$url = ( $client_info['referer'] != "" ) ? $client_info['referer'] : ( isset( $_SERVER['SCRIPT_URI'] ) ? $_SERVER['SCRIPT_URI'] : "" );
+	$url = ( $client_info['referer'] != '' ) ? $client_info['referer'] : ( isset( $_SERVER['SCRIPT_URI'] ) ? $_SERVER['SCRIPT_URI'] : "" );
 	$info = $lang_global['admin_logout_question'] . " ?<br /><br />\n";
 	$info .= "<a href=\"" . NV_BASE_SITEURL . "index.php?second=admin_logout&amp;ok=1\">" . $lang_global['ok'] . "</a> | \n";
 	$info .= "<a href=\"" . $url . "\">" . $lang_global['cancel'] . "</a>\n";

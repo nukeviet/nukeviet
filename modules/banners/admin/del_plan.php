@@ -64,8 +64,8 @@ $db->sql_query( "OPTIMIZE TABLE `" . NV_BANNERS_GLOBALTABLE. "_plans`" );
 
 nv_CreateXML_bannerPlan();
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo "OK|plans_list|plans_list";
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -11,13 +11,13 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $openid_servers, $lang_module;
 
-if( $module_name == 'users' ) return "";
+if( $module_name == 'users' ) return '';
 
-$content = "";
+$content = '';
 
 $groups_list = nv_groups_list_pub();
 
-if( $global_config['allowuserlogin'] and $module_name != "users" )
+if( $global_config['allowuserlogin'] and $module_name != 'users' )
 {
 	if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/users/block.login.tpl" ) )
 	{
@@ -36,7 +36,7 @@ if( $global_config['allowuserlogin'] and $module_name != "users" )
 
 	if( defined( 'NV_IS_USER' ) )
 	{
-		$avata = "";
+		$avata = '';
 		if( file_exists( NV_ROOTDIR . "/" . $user_info['photo'] ) && ! empty( $user_info['photo'] ) ) $avata = NV_BASE_SITEURL . $user_info['photo'];
 		else $avata = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/no_avatar.jpg";
 		$xtpl->assign( 'AVATA', $avata );
@@ -44,12 +44,12 @@ if( $global_config['allowuserlogin'] and $module_name != "users" )
 		$xtpl->assign( 'USER', $user_info );
 		if( ! defined( 'NV_IS_ADMIN' ) )
 		{
-			$xtpl->assign( 'LOGOUT_ADMIN', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=logout" );
+			$xtpl->assign( 'LOGOUT_ADMIN', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=logout" );
 			$xtpl->parse( 'signed.admin' );
 		}
-		$xtpl->assign( 'CHANGE_PASS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=changepass" );
-		$xtpl->assign( 'CHANGE_INFO', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users" );
-		$xtpl->assign( 'RE_GROUPS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=regroups" );
+		$xtpl->assign( 'CHANGE_PASS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=changepass" );
+		$xtpl->assign( 'CHANGE_INFO', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users" );
+		$xtpl->assign( 'RE_GROUPS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=regroups" );
 
 		if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
 		{
@@ -64,9 +64,9 @@ if( $global_config['allowuserlogin'] and $module_name != "users" )
 	else
 	{
 		$xtpl->assign( 'REDIRECT', nv_base64_encode( $client_info['selfurl'] ) );
-		$xtpl->assign( 'USER_LOGIN', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login" );
-		$xtpl->assign( 'USER_REGISTER', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=register" );
-		$xtpl->assign( 'USER_LOSTPASS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=lostpass" );
+		$xtpl->assign( 'USER_LOGIN', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login" );
+		$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=register" );
+		$xtpl->assign( 'USER_LOSTPASS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=lostpass" );
 		$xtpl->assign( 'LANG', $lang_global );
 
 		if( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) )

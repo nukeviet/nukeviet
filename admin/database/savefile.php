@@ -10,8 +10,8 @@
 if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
 $tables = $nv_Request->get_array( 'tables', 'post', array() );
-$type = filter_text_input( 'type', 'post', '' );
-$ext = filter_text_input( 'ext', 'post', '' );
+$type = $nv_Request->get_title( 'type', 'post', '' );
+$ext = $nv_Request->get_title( 'ext', 'post', '' );
 
 if( empty( $tables ) )
 {
@@ -72,8 +72,8 @@ $page_title = $lang_module['save_data'];
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

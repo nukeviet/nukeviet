@@ -18,8 +18,8 @@ function nv_save_file_banip()
 {
 	global $db, $db_config;
 
-	$content_config_site = "";
-	$content_config_admin = "";
+	$content_config_site = '';
+	$content_config_admin = '';
 
 	$sql = "SELECT `ip`, `mask`, `area`, `begintime`, `endtime` FROM `" . $db_config['prefix'] . "_banip`";
 	$result = $db->sql_query( $sql );
@@ -175,7 +175,7 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 
 $error = array();
-$contents = "";
+$contents = '';
 
 $cid = $nv_Request->get_int( 'id', 'get' );
 $del = $nv_Request->get_int( 'del', 'get' );
@@ -189,7 +189,7 @@ if( ! empty( $del ) and ! empty( $cid ) )
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$cid = $nv_Request->get_int( 'cid', 'post', 0 );
-	$ip = filter_text_input( 'ip', 'post', '', 1 );
+	$ip = $nv_Request->get_title( 'ip', 'post', '', 1 );
 	$area = $nv_Request->get_int( 'area', 'post', 0 );
 	$mask = $nv_Request->get_int( 'mask', 'post', 0 );
 
@@ -221,7 +221,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$endtime = 0;
 	}
 
-	$notice = filter_text_input( 'notice', 'post', '', 1 );
+	$notice = $nv_Request->get_title( 'notice', 'post', '', 1 );
 
 	if( empty( $error ) )
 	{
@@ -371,8 +371,8 @@ $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['security'];
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

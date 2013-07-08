@@ -20,7 +20,7 @@ define( 'NV_START_TIME', array_sum( explode( " ", microtime() ) ) );
 
 //Khong cho xac dinh tu do cac variables
 $db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $select_options = $error_info = $countries = $newCountry = array();
-$page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = "";
+$page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
 //Xac dinh thu muc goc cua site
@@ -456,7 +456,7 @@ if( $nv_check_update and ! defined( 'NV_IS_UPDATE' ) )
 	if( ! defined( 'NV_ADMIN' ) and ! defined( 'NV_IS_GODADMIN' ) )
 	{
 		$disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content );
+		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, '', '', '', '' );
 	}
 }
 elseif( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
@@ -464,7 +464,7 @@ elseif( ! defined( 'NV_ADMIN' ) and ! defined( "NV_IS_ADMIN" ) )
 	if( ! empty( $global_config['closed_site'] ) )
 	{
 		$disable_site_content = ( isset( $global_config['disable_site_content'] ) and ! empty( $global_config['disable_site_content'] ) ) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content );
+		nv_info_die( $global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, '', '', '', '' );
 	}
 	elseif( ! in_array( NV_LANG_DATA, $global_config['allow_sitelangs'] ) )
 	{

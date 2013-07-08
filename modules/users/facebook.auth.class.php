@@ -21,13 +21,13 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 class FaceBookAuth
 {
 	// ID ung dung
-	private $app_id = "";
+	private $app_id = '';
 
 	// Ma bi mat
-	private $app_secret = "";
+	private $app_secret = '';
 
 	// Url tra lai
-	private $return_url = "";
+	private $return_url = '';
 
 	// Url xac nhan
 	private $base_auth_url = "https://www.facebook.com/dialog/oauth?client_id=%s&redirect_uri=%s&scope=%s&state=%s";
@@ -120,7 +120,7 @@ class FaceBookAuth
 		{
 			if( ! isset( $data->$val ) )
 			{
-				$return[$key] = "";
+				$return[$key] = '';
 			}
 			else
 			{

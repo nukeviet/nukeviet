@@ -10,12 +10,12 @@
 if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['bots_config'];
-$errormess = "";
+$errormess = '';
 
 $file_bots = NV_ROOTDIR . "/" . NV_DATADIR . "/bots.config";
 
 $submit = $nv_Request->get_string( 'submit', 'post' );
-$errormess = "";
+$errormess = '';
 
 if( $submit )
 {
@@ -29,7 +29,7 @@ if( $submit )
 	{
 		$value = strip_tags( $value );
 		$agent = strip_tags( $bot_agent[$key] );
-		if( $value != "" and $agent != "" )
+		if( $value != '' and $agent != '' )
 		{
 			$ips = strip_tags( $bot_ips[$key] );
 			$allowed = ( isset( $bot_allowed[$key] ) and intval( $bot_allowed[$key] ) ) ? 1 : 0;
@@ -75,15 +75,15 @@ for( $index = 0; $index < 3; ++$index )
 	$array_data = array();
 	$array_data['class'] = ( $a % 2 == 0 ) ? "second" : "";
 	$array_data['id'] = ++$a;
-	$array_data['name'] = "";
-	$array_data['agent'] = "";
-	$array_data['ips'] = "";
-	$array_data['checked'] = "";
+	$array_data['name'] = '';
+	$array_data['agent'] = '';
+	$array_data['ips'] = '';
+	$array_data['checked'] = '';
 	$xtpl->assign( 'DATA', $array_data );
 	$xtpl->parse( 'main.loop' );
 }
 
-if( $errormess != "" )
+if( $errormess != '' )
 {
 	$xtpl->assign( 'ERROR', $errormess );
 	$xtpl->parse( 'main.error' );
@@ -92,8 +92,8 @@ if( $errormess != "" )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

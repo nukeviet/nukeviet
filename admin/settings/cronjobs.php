@@ -63,8 +63,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 $contents = call_user_func( "main_theme", $contents );
 $page_title = $lang_global['mod_cronjobs'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

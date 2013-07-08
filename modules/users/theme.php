@@ -32,7 +32,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 	$my_head .= " </script>\n";
 
 	$xtpl = new XTemplate( "register.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$xtpl->assign( 'USER_REGISTER', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register" );
+	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register" );
 	$xtpl->assign( 'NICK_MAXLENGTH', NV_UNICKMAX );
 	$xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -229,7 +229,7 @@ function openid_register( $gfx_chk, $array_register, $siteterms, $data_questions
 	$my_head .= " </script>\n";
 
 	$xtpl = new XTemplate( "openid_register.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$xtpl->assign( 'USER_REGISTER', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register&amp;openid=1" );
+	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register&amp;openid=1" );
 	$xtpl->assign( 'NICK_MAXLENGTH', NV_UNICKMAX );
 	$xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
 	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/openid.gif" );
@@ -281,9 +281,9 @@ function user_login( $gfx_chk, $array_login )
 		 });";
 	$my_head .= " </script>\n";
 
-	$xtpl->assign( 'USER_LOGIN', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login" );
-	$xtpl->assign( 'USER_REGISTER', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register" );
-	$xtpl->assign( 'USER_LOSTPASS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=lostpass" );
+	$xtpl->assign( 'USER_LOGIN', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login" );
+	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register" );
+	$xtpl->assign( 'USER_LOSTPASS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=lostpass" );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array_login );
 
@@ -401,8 +401,8 @@ function user_openid_login2( $attribs, $array_user_login )
 
 	$xtpl = new XTemplate( "openid_login2.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/users" );
 
-	$xtpl->assign( 'USER_REGISTER', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register&amp;nv_redirect=" . $nv_redirect );
-	$xtpl->assign( 'USER_LOSTPASS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=lostpass&amp;nv_redirect=" . $nv_redirect );
+	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=register&amp;nv_redirect=" . $nv_redirect );
+	$xtpl->assign( 'USER_LOSTPASS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=lostpass&amp;nv_redirect=" . $nv_redirect );
 	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/openid.gif" );
 	$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 	$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
@@ -547,7 +547,7 @@ function user_changepass( $array_data = array() )
 		 });";
 	$my_head .= " </script>\n";
 
-	$xtpl->assign( 'USER_CHANGEPASS', "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=changepass" );
+	$xtpl->assign( 'USER_CHANGEPASS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=changepass" );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array_data );
 	$xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
@@ -1102,11 +1102,11 @@ function user_openid_administrator( $data )
 		{
 			if( $key % 2 == 0 )
 			{
-				$xtpl->assign( 'OPENID_CLASS', " gray" );
+				$xtpl->assign( 'OPENID_CLASS', ' gray' );
 			}
 			else
 			{
-				$xtpl->assign( 'OPENID_CLASS', "" );
+				$xtpl->assign( 'OPENID_CLASS', '' );
 			}
 			$xtpl->assign( 'OPENID_LIST', $openid_list );
 			$xtpl->parse( 'main.openid_empty.openid_list' );
@@ -1261,9 +1261,9 @@ function user_info_exit_redirect( $info, $nv_redirect )
 
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 

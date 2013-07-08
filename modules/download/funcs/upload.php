@@ -28,7 +28,7 @@ if( empty( $list_cats ) )
 }
 
 $is_error = false;
-$error = "";
+$error = '';
 
 if( $nv_Request->isset_request( 'addfile', 'post' ) )
 {
@@ -45,19 +45,19 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 	$array = array();
 
 	$array['catid'] = $nv_Request->get_int( 'upload_catid', 'post', 0 );
-	$array['title'] = filter_text_input( 'upload_title', 'post', '', 1, 255 );
-	$array['description'] = filter_text_textarea( 'upload_description', '', NV_ALLOWED_HTML_TAGS );
-	$array['introtext'] = filter_text_textarea( 'upload_introtext', '', NV_ALLOWED_HTML_TAGS );
-	$array['author_name'] = filter_text_input( 'upload_author_name', 'post', '', 1, 100 );
-	$array['author_email'] = filter_text_input( 'upload_author_email', 'post', '', 60 );
-	$array['author_url'] = filter_text_input( 'upload_author_url', 'post', '', 0, 255 );
-	$array['linkdirect'] = filter_text_textarea( 'upload_linkdirect', '' );
-	$array['version'] = filter_text_input( 'upload_version', 'post', '', 1, 20 );
+	$array['title'] = nv_substr( $nv_Request->get_title( 'upload_title', 'post', '', 1 ), 0, 255 );
+	$array['description'] = $nv_Request->get_editor( 'upload_description', '', NV_ALLOWED_HTML_TAGS );
+	$array['introtext'] = $nv_Request->get_textarea( 'upload_introtext', '', NV_ALLOWED_HTML_TAGS );
+	$array['author_name'] = nv_substr( $nv_Request->get_title( 'upload_author_name', 'post', '', 1 ), 0, 100 );
+	$array['author_email'] = nv_substr( $nv_Request->get_title( 'upload_author_email', 'post', '' ), 0, 60 );
+	$array['author_url'] = nv_substr( $nv_Request->get_title( 'upload_author_url', 'post', '', 0 ), 0, 255 );
+	$array['linkdirect'] = $nv_Request->get_textarea( 'upload_linkdirect', '' );
+	$array['version'] = nv_substr( $nv_Request->get_title( 'upload_version', 'post', '', 1 ), 0, 20 );
 	$array['filesize'] = $nv_Request->get_int( 'upload_filesize', 'post', 0 );
-	$array['copyright'] = filter_text_input( 'upload_copyright', 'post', '', 1, 255 );
-	$array['user_name'] = filter_text_input( 'upload_user_name', 'post', '', 1, 100 );
+	$array['copyright'] = nv_substr( $nv_Request->get_title( 'upload_copyright', 'post', '', 1 ), 0, 255 );
+	$array['user_name'] = nv_substr( $nv_Request->get_title( 'upload_user_name', 'post', '', 1 ), 0, 100 );
 	$array['user_id'] = 0;
-	$seccode = filter_text_input( 'upload_seccode', 'post', '' );
+	$seccode = $nv_Request->get_title( 'upload_seccode', 'post', '' );
 
 	if( defined( 'NV_IS_USER' ) )
 	{
@@ -136,7 +136,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 		$is_error = true;
 		$error = $lang_module['file_catid_exists'];
 	}
-	elseif( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != "" )
+	elseif( ! empty( $array['author_email'] ) and ( $check_valid_email = nv_check_valid_email( $array['author_email'] ) ) != '' )
 	{
 		$is_error = true;
 		$error = $check_valid_email;
@@ -148,7 +148,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 	}
 	else
 	{
-		$fileupload = "";
+		$fileupload = '';
 		if( $download_config['is_upload_allow'] )
 		{
 			if( isset( $_FILES['upload_fileupload'] ) and is_uploaded_file( $_FILES['upload_fileupload']['tmp_name'] ) )
@@ -181,7 +181,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 						}
 
 						@chmod( $fileupload, 0644 );
-						$fileupload = str_replace( NV_ROOTDIR . "/" . NV_UPLOADS_DIR, "", $fileupload );
+						$fileupload = str_replace( NV_ROOTDIR . '/' . NV_UPLOADS_DIR, '', $fileupload );
 						$array['filesize'] = $upload_info['size'];
 					}
 					else
@@ -210,7 +210,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 			}
 			else
 			{
-				$fileimage = "";
+				$fileimage = '';
 				if( isset( $_FILES['upload_fileimage'] ) and is_uploaded_file( $_FILES['upload_fileimage']['tmp_name'] ) )
 				{
 					$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
@@ -239,32 +239,32 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 						}
 
 						@chmod( $fileimage, 0644 );
-						$fileimage = str_replace( NV_ROOTDIR . "/" . NV_UPLOADS_DIR, "", $fileimage );
+						$fileimage = str_replace( NV_ROOTDIR . '/' . NV_UPLOADS_DIR, '', $fileimage );
 					}
 				}
 
-				$array['description'] = nv_nl2br( $array['description'], "<br />" );
-				$array['introtext'] = nv_nl2br( $array['introtext'], "<br />" );
-				$array['linkdirect'] = nv_nl2br( $array['linkdirect'], "<br />" );
+				$array['description'] = nv_nl2br( $array['description'], '<br />' );
+				$array['introtext'] = nv_nl2br( $array['introtext'], '<br />' );
+				$array['linkdirect'] = nv_nl2br( $array['linkdirect'], '<br />' );
 
-				$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` VALUES (
-                NULL, 
-                " . $array['catid'] . ", 
-                " . $db->dbescape( $array['title'] ) . ", 
-                " . $db->dbescape( $array['description'] ) . ", 
-                " . $db->dbescape( $array['introtext'] ) . ", 
-                " . NV_CURRENTTIME . ", 
-                " . $array['user_id'] . ", 
-                " . $db->dbescape( $array['user_name'] ) . ", 
-                " . $db->dbescape( $array['author_name'] ) . ", 
-                " . $db->dbescape( $array['author_email'] ) . ", 
-                " . $db->dbescape( $array['author_url'] ) . ", 
-                " . $db->dbescape( $fileupload ) . ", 
-                " . $db->dbescape( $array['linkdirect'] ) . ", 
-                " . $db->dbescape( $array['version'] ) . ", 
-                " . $array['filesize'] . ", 
-                " . $db->dbescape( $fileimage ) . ", 
-                " . $db->dbescape( $array['copyright'] ) . ")";
+				$sql = 'INSERT INTO `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` VALUES (
+                NULL,
+                ' . $array['catid'] . ',
+                ' . $db->dbescape( $array['title'] ) . ',
+                ' . $db->dbescape( $array['description'] ) . ',
+                ' . $db->dbescape( $array['introtext'] ) . ',
+                ' . NV_CURRENTTIME . ',
+                ' . $array['user_id'] . ',
+                ' . $db->dbescape( $array['user_name'] ) . ',
+                ' . $db->dbescape( $array['author_name'] ) . ',
+                ' . $db->dbescape( $array['author_email'] ) . ',
+                ' . $db->dbescape( $array['author_url'] ) . ',
+                ' . $db->dbescape( $fileupload ) . ',
+                ' . $db->dbescape( $array['linkdirect'] ) . ',
+                ' . $db->dbescape( $array['version'] ) . ',
+                ' . $array['filesize'] . ',
+                ' . $db->dbescape( $fileimage ) . ',
+                ' . $db->dbescape( $array['copyright'] ) . ')';
 
 				if( ! $db->sql_query_insert_id( $sql ) )
 				{
@@ -279,9 +279,9 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 					$user_post = defined( "NV_IS_USER" ) ? " | " . $user_info['username'] : "";
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_files_log'], $array['title'] . " | " . $client_info['ip'] . $user_post, 0 );
 
-					include ( NV_ROOTDIR . "/includes/header.php" );
+					include ( NV_ROOTDIR . '/includes/header.php' );
 					echo nv_site_theme( $contents );
-					include ( NV_ROOTDIR . "/includes/footer.php" );
+					include ( NV_ROOTDIR . '/includes/footer.php' );
 					exit();
 				}
 			}
@@ -291,7 +291,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 else
 {
 	$array['catid'] = $array['filesize'] = 0;
-	$array['title'] = $array['description'] = $array['introtext'] = $array['author_name'] = $array['author_email'] = $array['author_url'] = $array['linkdirect'] = $array['version'] = $array['copyright'] = $array['user_name'] = "";
+	$array['title'] = $array['description'] = $array['introtext'] = $array['author_name'] = $array['author_email'] = $array['author_url'] = $array['linkdirect'] = $array['version'] = $array['copyright'] = $array['user_name'] = '';
 	if( defined( 'NV_IS_USER' ) )
 	{
 		$array['user_name'] = $user_info['username'];
@@ -304,7 +304,7 @@ if( ! $array['filesize'] ) $array['filesize'] = '';
 if( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
 if( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
 
-$array['disabled'] = "";
+$array['disabled'] = '';
 if( defined( 'NV_IS_USER' ) )
 {
 	$array['disabled'] = " disabled=\"disabled\"";
@@ -313,8 +313,8 @@ $array['addfile'] = md5( $client_info['session_id'] );
 
 $contents = theme_upload( $array, $list_cats, $download_config, $error );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

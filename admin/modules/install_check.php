@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
-$error = "";
+$error = '';
 $info_error = array();
 $info_error['errorfile'] = array();
 $info_error['errorfolder'] = array();
@@ -98,7 +98,7 @@ if( file_exists( $filename ) )
 			{
 				if( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
 				{
-					$cp = "";
+					$cp = '';
 					$e = explode( "/", $array_file['filename'] );
 
 					foreach( $e as $p )
@@ -119,7 +119,7 @@ if( file_exists( $filename ) )
 
 		foreach( $extract as $extract_i )
 		{
-			$filename_i = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $extract_i['filename'] ) );
+			$filename_i = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $extract_i['filename'] ) );
 
 			if( $extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory' )
 			{
@@ -131,7 +131,7 @@ if( file_exists( $filename ) )
 		{
 			foreach( $ziplistContent as $array_file )
 			{
-				$dir_name = "";
+				$dir_name = '';
 
 				if( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $array_file['filename'] ) )
 				{
@@ -144,7 +144,7 @@ if( file_exists( $filename ) )
 
 				if( ! empty( $dir_name ) )
 				{
-					$cp = "";
+					$cp = '';
 					$e = explode( "/", $dir_name );
 
 					foreach( $e as $p )
@@ -270,9 +270,9 @@ if( file_exists( $filename ) )
 		$xtpl->parse( 'complete' );
 		$contents = $xtpl->text( 'complete' );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo ( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	}
 }
@@ -331,8 +331,8 @@ if( ! empty( $info_error['errorfolder'] ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo ( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

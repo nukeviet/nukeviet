@@ -133,11 +133,11 @@ function nv_del_content_module( $id )
 {
 	global $db, $module_name, $module_data, $title, $lang_module;
 	$content_del = "NO_" . $id;
-	$title = "";
+	$title = '';
 	list( $id, $listcatid, $title, $homeimgfile, $homeimgthumb ) = $db->sql_fetchrow( $db->sql_query( "SELECT `id`, `listcatid`, `title`, `homeimgfile`, `homeimgthumb` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . intval( $id ) . "" ) );
 	if( $id > 0 )
 	{
-		if( $homeimgthumb != "" and $homeimgthumb != "|" )
+		if( $homeimgthumb != '' and $homeimgthumb != "|" )
 		{
 			$homeimgthumb_arr = explode( "|", $homeimgthumb );
 			foreach( $homeimgthumb_arr as $file )
@@ -254,7 +254,7 @@ function nv_news_get_bodytext( $bodytext )
 	{
 		foreach( $match[0] as $key => $_m )
 		{
-			$textimg = "";
+			$textimg = '';
 			if( strpos( $match[1][$key], 'data:image/png;base64' ) === false )
 			{
 				$textimg = " " . $match[1][$key];

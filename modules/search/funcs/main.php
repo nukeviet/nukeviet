@@ -30,9 +30,9 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 {
 	$is_search = true;
 
-	$search['key'] = filter_text_input( 'q', 'get', '', 0, NV_MAX_SEARCH_LENGTH );
+	$search['key'] = nv_substr( $nv_Request->get_title( 'q', 'get', '', 0 ), 0, NV_MAX_SEARCH_LENGTH );
 	$search['logic'] = $nv_Request->get_int( 'l', 'get', $search['logic'] );
-	$search['mod'] = filter_text_input( 'm', 'get', 'all', $search['mod'] );
+	$search['mod'] = $nv_Request->get_title( 'm', 'get', 'all', $search['mod'] );
 	$search['page'] = $nv_Request->get_int( 'page', 'get', 0 );
 
 	if( $search['logic'] != 1 ) $search['logic'] = 0;
@@ -91,8 +91,8 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 
 $contents = call_user_func( "main_theme", $is_search, $search, $array_modul );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

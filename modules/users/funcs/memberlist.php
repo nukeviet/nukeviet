@@ -34,7 +34,7 @@ else
 	//xem chi tiet thanh vien
 	if( isset( $array_op[1] ) && ! empty( $array_op[1] ) )
 	{
-		$md5 = "";
+		$md5 = '';
 		unset( $matches );
 		if( preg_match( "/^(.*)\-([a-z0-9]{32})$/", $array_op[1], $matches ) ) $md5 = $matches[2];
 		if( ! empty( $md5 ) )
@@ -66,9 +66,9 @@ else
 			}
 		}
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_site_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	} //danh sach thanh vien
 	else
@@ -159,8 +159,8 @@ else
 	}
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

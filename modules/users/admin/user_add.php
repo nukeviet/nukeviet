@@ -41,24 +41,24 @@ if( defined( 'NV_EDITOR' ) )
 }
 
 $_user = array();
-$error = "";
+$error = '';
 $userid = 0;
 if( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
-	$_user['username'] = filter_text_input( 'username', 'post', '', 1, NV_UNICKMAX );
-	$_user['email'] = filter_text_input( 'email', 'post', '', 1, 100 );
-	$_user['password1'] = filter_text_input( 'password1', 'post', '', 0, NV_UPASSMAX );
-	$_user['password2'] = filter_text_input( 'password2', 'post', '', 0, NV_UPASSMAX );
-	$_user['question'] = filter_text_input( 'question', 'post', '', 1, 255 );
-	$_user['answer'] = filter_text_input( 'answer', 'post', '', 1, 255 );
-	$_user['full_name'] = filter_text_input( 'full_name', 'post', '', 1, 255 );
-	$_user['gender'] = filter_text_input( 'gender', 'post', '', 1, 1 );
+	$_user['username'] = $nv_Request->get_title( 'username', 'post', '', 1 );
+	$_user['email'] = $nv_Request->get_title( 'email', 'post', '', 1 );
+	$_user['password1'] = $nv_Request->get_title( 'password1', 'post', '', 0 );
+	$_user['password2'] = $nv_Request->get_title( 'password2', 'post', '', 0 );
+	$_user['question'] = nv_substr( $nv_Request->get_title( 'question', 'post', '', 1 ), 0, 255 );
+	$_user['answer'] = nv_substr( $nv_Request->get_title( 'answer', 'post', '', 1 ), 0, 255 );
+	$_user['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
+	$_user['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
 	$_user['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
-	$_user['sig'] = filter_text_textarea( 'sig', '', NV_ALLOWED_HTML_TAGS );
-	$_user['birthday'] = filter_text_input( 'birthday', 'post', '', 1, 10 );
+	$_user['sig'] = $nv_Request->get_textarea( 'sig', '', NV_ALLOWED_HTML_TAGS );
+	$_user['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 1 ), 0, 10 );
 	$_user['in_groups'] = $nv_Request->get_typed_array( 'group', 'post', 'int' );
 
-	if( ( $error_username = nv_check_valid_login( $_user['username'], NV_UNICKMAX, NV_UNICKMIN ) ) != "" )
+	if( ( $error_username = nv_check_valid_login( $_user['username'], NV_UNICKMAX, NV_UNICKMIN ) ) != '' )
 	{
 		$error = $error_username;
 	}
@@ -66,7 +66,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = sprintf( $lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>' );
 	}
-	elseif( ( $error_xemail = nv_check_valid_email( $_user['email'] ) ) != "" )
+	elseif( ( $error_xemail = nv_check_valid_email( $_user['email'] ) ) != '' )
 	{
 		$error = $error_xemail;
 	}
@@ -86,7 +86,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( ( $check_pass = nv_check_valid_pass( $_user['password1'], NV_UPASSMAX, NV_UPASSMIN ) ) != "" )
+	elseif( ( $check_pass = nv_check_valid_pass( $_user['password1'], NV_UPASSMAX, NV_UPASSMIN ) ) != '' )
 	{
 		$error = $check_pass;
 	}
@@ -115,7 +115,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$_user['sig'] = nv_nl2br( $_user['sig'], "<br />" );
 			if( $_user['gender'] != "M" and $_user['gender'] != "F" )
 			{
-				$_user['gender'] = "";
+				$_user['gender'] = '';
 			}
 
 			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $_user['birthday'], $m ) )
@@ -132,11 +132,11 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$_user['in_groups'] = array_intersect( $_user['in_groups'], array_keys( $groups_list ) );
 
 			$sql = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` (
-				`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `birthday`, `sig`, `regdate`, 
-				`question`, `answer`, `passlostkey`, `view_mail`, 
-				`remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`) 
+				`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `birthday`, `sig`, `regdate`,
+				`question`, `answer`, `passlostkey`, `view_mail`,
+				`remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`)
 				VALUES (
-				NULL, 
+				NULL,
 				" . $db->dbescape( $_user['username'] ) . ",
 				" . $db->dbescape( nv_md5safe( $_user['username'] ) ) . ",
 				" . $db->dbescape( $password ) . ",
@@ -148,9 +148,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				" . NV_CURRENTTIME . ",
 				" . $db->dbescape( $_user['question'] ) . ",
 				" . $db->dbescape( $_user['answer'] ) . ",
-				'', 
-				 " . $_user['view_mail'] . ", 
-				 1, 
+				'',
+				 " . $_user['view_mail'] . ",
+				 1,
 				 '" . implode( ',', $_user['in_groups'] ) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
 			$userid = $db->sql_query_insert_id( $sql );
@@ -174,7 +174,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					{
 						@chmod( $upload_info['name'], 0644 );
 
-						$file_name = str_replace( NV_ROOTDIR . "/", "", $upload_info['name'] );
+						$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
 
 						$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape( $file_name ) . " WHERE `userid`=" . $userid;
 						$db->sql_query( $sql );
@@ -198,8 +198,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 }
 else
 {
-	$_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = "";
-	$_user['full_name'] = $_user['gender'] = $_user['sig'] = $_user['birthday'] = "";
+	$_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = '';
+	$_user['full_name'] = $_user['gender'] = $_user['sig'] = $_user['birthday'] = '';
 	$_user['view_mail'] = 0;
 	$_user['in_groups'] = array();
 }
@@ -417,8 +417,8 @@ else
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

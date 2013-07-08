@@ -52,7 +52,7 @@ function nv_fix_cat( $parentid )
  * @param string $func_onchange
  * @return
  */
-function drawselect_number( $select_name = "", $number_start = 0, $number_end = 1, $number_curent = 0, $func_onchange = "" )
+function drawselect_number( $select_name = '', $number_start = 0, $number_end = 1, $number_curent = 0, $func_onchange = '' )
 {
 	$html = "<select name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
 	for( $i = $number_start; $i <= $number_end; ++$i )
@@ -75,7 +75,7 @@ function drawselect_number( $select_name = "", $number_start = 0, $number_end = 
  */
 function getlevel( $pid, $array_cat, $numxtitle = 5, $xkey = "&nbsp;" )
 {
-	$html = "";
+	$html = '';
 	for( $i = 0; $i < $numxtitle; ++$i )
 	{
 		$html .= $xkey;
@@ -94,7 +94,7 @@ function getlevel( $pid, $array_cat, $numxtitle = 5, $xkey = "&nbsp;" )
  * @param string $func_onchange
  * @return
  */
-function drawselect_yesno( $select_name = "", $curent = 1, $lang_no = "", $lang_yes = "", $func_onchange = "" )
+function drawselect_yesno( $select_name = '', $curent = 1, $lang_no = '', $lang_yes = '', $func_onchange = '' )
 {
 	$html = "<select name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
 	$select_yes = ( $curent == 1 ) ? "selected=\"selected\"" : "";

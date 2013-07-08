@@ -71,7 +71,7 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 	elseif( $choice == "table" )
 	{
 		$module = $nv_Request->get_string( 'module', 'post', '' );
-		if( $module == "" ) exit( "" );
+		if( $module == '' ) exit( "" );
 		$result = $db->sql_query( "SHOW TABLE STATUS LIKE '%\_" . $module . "%'" );
 		$num_table = intval( $db->sql_numrows( $result ) );
 		$array_table_module = array();
@@ -97,7 +97,7 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 	elseif( $choice == "column" )
 	{
 		$table = $nv_Request->get_string( 'table', 'post', '' );
-		if( $table == "" ) exit( "" );
+		if( $table == '' ) exit();
 
 		$result = $db->sql_query( "SHOW COLUMNS FROM " . $table );
 		$num_table = intval( $db->sql_numrows( $result ) );
@@ -123,9 +123,9 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 		$contents = $xtpl->text( 'column' );
 	}
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $contents;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 //ADD
@@ -138,15 +138,15 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$dataform = array();
 	$dataform['fid'] = $nv_Request->get_int( 'fid', 'post', 0 );
 
-	$dataform['title'] = filter_text_input( 'title', 'post', '' );
-	$dataform['description'] = filter_text_input( 'description', 'post', '' );
+	$dataform['title'] = $nv_Request->get_title( 'title', 'post', '' );
+	$dataform['description'] = $nv_Request->get_title( 'description', 'post', '' );
 
 	$dataform['required'] = $nv_Request->get_int( 'required', 'post', 0 );
 	$dataform['show_register'] = ( $dataform['required'] ) ? 1 : $nv_Request->get_int( 'show_register', 'post', 0 );
 	$dataform['user_editable'] = $nv_Request->get_int( 'user_editable', 'post', 0 );
 	$dataform['user_editable_once'] = $nv_Request->get_int( 'user_editable_once', 'post', 0 );
 	$dataform['show_profile'] = $nv_Request->get_int( 'show_profile', 'post', 0 );
-	$dataform['class'] = filter_text_input( 'class', 'post', '', 0, 50, $preg_replace );
+	$dataform['class'] = nv_substr( $nv_Request->get_title( 'class', 'post', '', 0, $preg_replace ), 0, 50);
 	if( $dataform['user_editable'] )
 	{
 		$dataform['user_editable_save'] = ( $dataform['user_editable_once'] ) ? 'once' : 'yes';
@@ -155,7 +155,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$dataform['user_editable_save'] = 'never';
 	}
-	$dataform['field_type'] = filter_text_input( 'field_type', 'post', '', 0, 50, $preg_replace );
+	$dataform['field_type'] = nv_substr( $nv_Request->get_title( 'field_type', 'post', '', 0, $preg_replace ), 0, 50);
 
 	$save = 0;
 	$language = array();
@@ -167,17 +167,17 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$language = unserialize( $dataform['language'] );
 		}
-		$dataform['field'] = $dataform['fieldid'] = filter_text_input( 'fieldid', 'post', '', 0, 50, $preg_replace );
+		$dataform['field'] = $dataform['fieldid'] = nv_substr( $nv_Request->get_title( 'fieldid', 'post', '', 0, $preg_replace ), 0, 50);
 	}
 	else
 	{
-		$dataform['field'] = filter_text_input( 'field', 'post', '', 0, 50, $preg_replace );
+		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $preg_replace ), 0, 50);
 	}
 	$language[NV_LANG_DATA] = array( $dataform['title'], $dataform['description'] );
 	if( $dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea' || $dataform['field_type'] == 'editor' )
 	{
 		$text_fields = 1;
-		$dataform['match_type'] = filter_text_input( 'match_type', 'post', '', 0, 50, $preg_replace );
+		$dataform['match_type'] = nv_substr( $nv_Request->get_title( 'match_type', 'post', '', 0, $preg_replace ), 0, 50);
 		$dataform['match_regex'] = ( $dataform['match_type'] == 'regex' ) ? $nv_Request->get_string( 'match_regex', 'post', '', false ) : '';
 		$dataform['func_callback'] = ( $dataform['match_type'] == 'callback' ) ? $nv_Request->get_string( 'match_callback', 'post', '', false ) : '';
 		if( $dataform['func_callback'] != '' and ! function_exists( $dataform['func_callback'] ) )
@@ -201,7 +201,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		$dataform['min_length'] = $nv_Request->get_int( 'min_length', 'post', 255 );
 		$dataform['max_length'] = $nv_Request->get_int( 'max_length', 'post', 255 );
-		$dataform['default_value'] = filter_text_input( 'default_value', 'post', '' );
+		$dataform['default_value'] = $nv_Request->get_title( 'default_value', 'post', '' );
 		$dataform['field_choices'] = '';
 	}
 	elseif( $dataform['field_type'] == 'number' )
@@ -304,8 +304,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$choicesql_table = $nv_Request->get_string( 'choicesql_table', 'post', '' ); //table trong module
 			$choicesql_column_key = $nv_Request->get_string( 'choicesql_column_key', 'post', '' ); //cot value cho fields
 			$choicesql_column_val = $nv_Request->get_string( 'choicesql_column_val', 'post', '' ); //cot key cho fields
-			$dataform['sql_choices'] = "";
-			if( $choicesql_module != "" && $choicesql_table != "" && $choicesql_column_key != "" && $choicesql_column_val != "" )
+			$dataform['sql_choices'] = '';
+			if( $choicesql_module != '' && $choicesql_table != '' && $choicesql_column_key != '' && $choicesql_column_val != '' )
 			{
 				$dataform['sql_choices'] = $choicesql_module . "|" . $choicesql_table . "|" . $choicesql_column_key . "|" . $choicesql_column_val;
 			}
@@ -326,15 +326,15 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(`weight`) FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field`" ) );
 				$weight = intval( $weight ) + 1;
 
-				$dataform['fid'] = $db->sql_query_insert_id( "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` 
-					(`fid`, `field`, `weight`, `field_type`, `field_choices`, `sql_choices`, `match_type`, 
-					`match_regex`, `func_callback`, `min_length`, `max_length`, 
-					`required`, `show_register`, `user_editable`, 
+				$dataform['fid'] = $db->sql_query_insert_id( "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field`
+					(`fid`, `field`, `weight`, `field_type`, `field_choices`, `sql_choices`, `match_type`,
+					`match_regex`, `func_callback`, `min_length`, `max_length`,
+					`required`, `show_register`, `user_editable`,
 					`show_profile`, `class`, `language`, `default_value`) VALUES
-					(NULL, '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['sql_choices'] . "', '" . $dataform['match_type'] . "', 
-					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "', 
-					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ", 
-					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable_save'] . "', 
+					(NULL, '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['sql_choices'] . "', '" . $dataform['match_type'] . "',
+					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
+					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
+					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable_save'] . "',
 					" . $dataform['show_profile'] . ", '" . $dataform['class'] . "', '" . serialize( $language ) . "', " . $db->dbescape_string( $dataform['default_value'] ) . ")" );
 
 				if( $dataform['fid'] )
@@ -369,18 +369,18 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$query = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` SET";
 			if( $text_fields = 1 )
 			{
-				$query .= " `field_choices`='" . $dataform['field_choices'] . "', `match_type`='" . $dataform['match_type'] . "', 
+				$query .= " `field_choices`='" . $dataform['field_choices'] . "', `match_type`='" . $dataform['match_type'] . "',
 				`match_regex`='" . $dataform['match_regex'] . "', `func_callback`='" . $dataform['func_callback'] . "', ";
 			}
 			$query .= " `max_length`=" . $dataform['max_length'] . ", `min_length`=" . $dataform['min_length'] . ",
 				`required` = '" . $dataform['required'] . "',
-				`sql_choices` = '" . $dataform['sql_choices'] . "', 
-				`show_register` = '" . $dataform['show_register'] . "', 
-				`user_editable` = '" . $dataform['user_editable_save'] . "', 
-				`show_profile` = '" . $dataform['show_profile'] . "', 
-				`class` = '" . $dataform['class'] . "', 
-				`language`='" . serialize( $language ) . "', 
-				`default_value`=" . $db->dbescape_string( $dataform['default_value'] ) . " 
+				`sql_choices` = '" . $dataform['sql_choices'] . "',
+				`show_register` = '" . $dataform['show_register'] . "',
+				`user_editable` = '" . $dataform['user_editable_save'] . "',
+				`show_profile` = '" . $dataform['show_profile'] . "',
+				`class` = '" . $dataform['class'] . "',
+				`language`='" . serialize( $language ) . "',
+				`default_value`=" . $db->dbescape_string( $dataform['default_value'] ) . "
 				WHERE `fid` = " . $dataform['fid'];
 			$save = $db->sql_query( $query );
 			if( $save and $dataform['max_length'] != $dataform_old['max_length'] )
@@ -737,8 +737,8 @@ else
 	$page_title = $lang_module['fields'];
 	$contents = nv_admin_theme( $contents );
 }
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

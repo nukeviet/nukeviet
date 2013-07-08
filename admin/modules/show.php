@@ -16,9 +16,9 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
  */
 function nv_show_funcs()
 {
-	global $db, $lang_module, $global_config, $site_mods;
+	global $db, $lang_module, $global_config, $site_mods, $nv_Request;
 
-	$mod = filter_text_input( 'mod', 'get', '' );
+	$mod = $nv_Request->get_title( 'mod', 'get', '' );
 
 	if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die();
 
@@ -221,21 +221,21 @@ function nv_show_funcs()
 		}
 	}
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo aj_show_funcs_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 if( $nv_Request->isset_request( 'aj', 'get' ) )
 {
-	if( filter_text_input( 'aj', 'get' ) == 'show_funcs' )
+	if( $nv_Request->get_title( 'aj', 'get' ) == 'show_funcs' )
 	{
 		nv_show_funcs();
 		die();
 	}
 }
 
-$mod = filter_text_input( 'mod', 'get', '' );
+$mod = $nv_Request->get_title( 'mod', 'get', '' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
 {
@@ -262,12 +262,12 @@ $contents['div_id'][0] = "show_funcs";
 $contents['div_id'][1] = "action";
 
 $contents['ajax'][0] = "nv_show_funcs('show_funcs');";
-$contents['ajax'][1] = $nv_Request->isset_request( 'func_id,pos', 'get' ) ? "nv_bl_list(" . $nv_Request->get_int( 'func_id', 'get' ) . ",'" . filter_text_input( 'pos', 'get' ) . "','action');" : "";
+$contents['ajax'][1] = $nv_Request->isset_request( 'func_id,pos', 'get' ) ? "nv_bl_list(" . $nv_Request->get_int( 'func_id', 'get' ) . ",'" . $nv_Request->get_title( 'pos', 'get' ) . "','action');" : "";
 
 $contents = show_funcs_theme( $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

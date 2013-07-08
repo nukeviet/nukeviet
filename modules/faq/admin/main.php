@@ -73,14 +73,14 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 
 	$array = array();
 	$is_error = false;
-	$error = "";
+	$error = '';
 
 	if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
-		$array['title'] = filter_text_input( 'title', 'post', '', 1 );
-		$array['question'] = filter_text_textarea( 'question', '', NV_ALLOWED_HTML_TAGS );
-		$array['answer'] = nv_editor_filter_textarea( 'answer', '', NV_ALLOWED_HTML_TAGS );
+		$array['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
+		$array['question'] = $nv_Request->get_textarea( 'question', '', NV_ALLOWED_HTML_TAGS );
+		$array['answer'] = $nv_Request->get_editor( 'answer', '', NV_ALLOWED_HTML_TAGS );
 
 		$alias = change_alias( $array['title'] );
 
@@ -137,13 +137,13 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 					$new_weight = $row['weight'];
 				}
 
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET 
-                `catid`=" . $array['catid'] . ", 
-                `title`=" . $db->dbescape( $array['title'] ) . ", 
-                `alias`=" . $db->dbescape( $alias ) . ", 
-                `question`=" . $db->dbescape( $array['question'] ) . ", 
-                `answer`=" . $db->dbescape( $array['answer'] ) . ", 
-                `weight`=" . $new_weight . " 
+				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET
+                `catid`=" . $array['catid'] . ",
+                `title`=" . $db->dbescape( $array['title'] ) . ",
+                `alias`=" . $db->dbescape( $alias ) . ",
+                `question`=" . $db->dbescape( $array['question'] ) . ",
+                `answer`=" . $db->dbescape( $array['answer'] ) . ",
+                `weight`=" . $new_weight . "
                 WHERE `id`=" . $id;
 				$result = $db->sql_query( $sql );
 
@@ -175,13 +175,13 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 				++$new_weight;
 
 				$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
-                NULL, 
-                " . $array['catid'] . ", 
-                " . $db->dbescape( $array['title'] ) . ", 
-                " . $db->dbescape( $alias ) . ", 
-                " . $db->dbescape( $array['question'] ) . ", 
-                " . $db->dbescape( $array['answer'] ) . ", 
-                " . $new_weight . ", 
+                NULL,
+                " . $array['catid'] . ",
+                " . $db->dbescape( $array['title'] ) . ",
+                " . $db->dbescape( $alias ) . ",
+                " . $db->dbescape( $array['question'] ) . ",
+                " . $db->dbescape( $array['answer'] ) . ",
+                " . $new_weight . ",
                 1, " . NV_CURRENTTIME . ")";
 
 				if( ! $db->sql_query_insert_id( $sql ) )
@@ -211,7 +211,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		else
 		{
 			$array['catid'] = 0;
-			$array['title'] = $array['answer'] = $array['question'] = "";
+			$array['title'] = $array['answer'] = $array['question'] = '';
 		}
 	}
 
@@ -274,9 +274,9 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -422,10 +422,10 @@ if( ! $all_page )
 {
 	if( defined( 'NV_IS_CAT' ) )
 	{
-		$contents = "";
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		$contents = '';
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	}
 	else
@@ -507,8 +507,8 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

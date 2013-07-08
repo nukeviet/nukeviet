@@ -302,7 +302,7 @@ function nv_blocks_content( $sitecontent )
 			{
 				$block_config = $_row['block_config'];
 				$blockTitle = $_row['blockTitle'];
-				$content = "";
+				$content = '';
 
 				if( $_row['module'] == "global" and file_exists( NV_ROOTDIR . "/includes/blocks/" . $_row['file_name'] ) )
 				{
@@ -403,7 +403,7 @@ function nv_html_meta_tags()
 {
 	global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
 
-	$return = "";
+	$return = '';
 
 	if( $home )
 	{
@@ -463,7 +463,7 @@ function nv_html_meta_tags()
 		$patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
 		$patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
 		$mt = preg_replace( array_keys( $patters ), array_values( $patters ), $mt );
-		$mt = preg_replace( "/\{(.*)\}/", "", $mt );
+		$mt = preg_replace( '/\{(.*)\}/', '', $mt );
 		$mt = simplexml_load_string( $mt );
 		$mt = nv_object2array( $mt );
 
@@ -514,16 +514,16 @@ function nv_html_page_title()
 
 	if( $home )
 	{
-		return "<title>" . nv_htmlspecialchars( str_replace( $replace, "", strip_tags( $global_config['site_name'] ) ) ) . "</title>\n";
+		return "<title>" . nv_htmlspecialchars( str_replace( $replace, '', strip_tags( $global_config['site_name'] ) ) ) . "</title>\n";
 	}
 	else
 	{
 		if( ! isset( $global_config['pageTitleMode'] ) or empty( $global_config['pageTitleMode'] ) ) $global_config['pageTitleMode'] = "pagetitle " . NV_TITLEBAR_DEFIS . " sitename";
 
-		if( empty( $page_title ) and ! preg_match( "/(funcname|modulename|sitename)/i", $global_config['pageTitleMode'] ) ) return "<title>" . nv_htmlspecialchars( str_replace( $replace, "", strip_tags( $module_info['funcs'][$op]['func_custom_name'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['custom_title'] ) ) ) . "</title>\n";
+		if( empty( $page_title ) and ! preg_match( "/(funcname|modulename|sitename)/i", $global_config['pageTitleMode'] ) ) return "<title>" . nv_htmlspecialchars( str_replace( $replace, '', strip_tags( $module_info['funcs'][$op]['func_custom_name'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['custom_title'] ) ) ) . "</title>\n";
 
 		$_title = preg_replace( array( "/pagetitle/i", "/funcname/i", "/modulename/i", "/sitename/i" ), array( $page_title, $module_info['funcs'][$op]['func_custom_name'], $module_info['custom_title'], $global_config['site_name'] ), $global_config['pageTitleMode'] );
-		return "<title>" . nv_htmlspecialchars( str_replace( $replace, "", strip_tags( $_title ) ) ) . "</title>\n";
+		return "<title>" . nv_htmlspecialchars( str_replace( $replace, '', strip_tags( $_title ) ) ) . "</title>\n";
 	}
 }
 
@@ -553,7 +553,7 @@ function nv_html_site_rss()
 {
 	global $rss;
 
-	$return = "";
+	$return = '';
 	if( ! empty( $rss ) )
 	{
 		foreach( $rss as $rss_item )

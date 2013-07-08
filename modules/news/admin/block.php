@@ -78,7 +78,7 @@ $xtpl->assign( 'BLOCK_LIST', nv_show_block_list( $bid ) );
 
 $id_array = array();
 $listid = $nv_Request->get_string( 'listid', 'get', '' );
-if( $listid == "" )
+if( $listid == '' )
 {
 	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `status`=1 AND `id` NOT IN(SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . ") ORDER BY `publtime` DESC LIMIT 0,20";
 }
@@ -122,8 +122,8 @@ if( $db->sql_numrows( $result ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

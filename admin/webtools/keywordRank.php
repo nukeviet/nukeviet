@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['keywordRank'];
-$contents = "";
+$contents = '';
 
 $xtpl = new XTemplate( "keywordRank.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
@@ -25,14 +25,14 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 	if( $i == 'process' )
 	{
-		$keyword = filter_text_input( 'k', 'get', '', 0, 60 );
+		$keyword = nv_substr( $nv_Request->get_title( 'k', 'get', '', 0 ), 0, 60 );
 		$keyword = nv_unhtmlspecialchars( $keyword );
 		$keyword = strip_punctuation( $keyword );
 		$keyword = trim( $keyword );
 		$len_key = nv_strlen( $keyword );
 		//$keyword = nv_htmlspecialchars( $keyword );
-		$lang = filter_text_input( 'l', 'get', '' );
-		$accuracy = filter_text_input( 'a', 'get', '' );
+		$lang = $nv_Request->get_title( 'l', 'get', '' );
+		$accuracy = $nv_Request->get_title( 'a', 'get', '' );
 
 		if( $len_key < 3 or $len_key > 60 )
 		{
@@ -152,8 +152,8 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

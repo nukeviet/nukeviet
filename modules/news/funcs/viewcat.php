@@ -9,8 +9,8 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-$cache_file = "";
-$contents = "";
+$cache_file = '';
+$contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 
 $set_view_page = ( $page > 1 and substr( $viewcat, 0, 13 ) == "viewcat_main_" ) ? true : false;
@@ -40,6 +40,7 @@ if( empty( $contents ) )
 	$array_catpage = array();
 	$array_cat_other = array();
 	$base_url = $global_array_cat[$catid]['link'];
+	$show_no_image  = $module_config[$module_name]['show_no_image'];
 
 	if( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old" or $set_view_page )
 	{
@@ -66,9 +67,13 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
+			else
+			{
+				$item['imghome'] = '';				
 			}
 
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
@@ -120,10 +125,14 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
+			else
+			{
+				$item['imghome'] = '';				
+			}			
 
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catcontent[] = $item;
@@ -132,7 +141,7 @@ if( empty( $contents ) )
 
 		$array_cat_other = array();
 
-		if( $global_array_cat[$catid]['subcatid'] != "" )
+		if( $global_array_cat[$catid]['subcatid'] != '' )
 		{
 			$key = 0;
 			$array_catid = explode( ",", $global_array_cat[$catid]['subcatid'] );
@@ -157,10 +166,14 @@ if( empty( $contents ) )
 					{
 						$item['imghome'] = $item['homeimgfile'];
 					}
-					else //no image
+					elseif( $show_no_image ) //no image
 					{
 						$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 					}
+					else
+					{
+						$item['imghome'] = '';				
+					}					
 
 					$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 					$array_cat_other[$key]['content'][] = $item;
@@ -198,11 +211,14 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
-
+			else
+			{
+				$item['imghome'] = '';				
+			}
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catcontent[] = $item;
 		}
@@ -233,11 +249,14 @@ if( empty( $contents ) )
 				{
 					$item['imghome'] = $item['homeimgfile'];
 				}
-				else //no image
+				elseif( $show_no_image ) //no image
 				{
 					$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 				}
-
+				else
+				{
+					$item['imghome'] = '';				
+				}
 				$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 				$array_cat_other[$key]['content'][] = $item;
 			}
@@ -272,11 +291,14 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			else //no image
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
-
+			else
+			{
+				$item['imghome'] = '';				
+			}
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catpage[] = $item;
 		}
@@ -296,7 +318,7 @@ if( empty( $contents ) )
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$item['imghome'] = "";
+			$item['imghome'] = '';
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catpage[] = $item;
 		}
@@ -306,7 +328,7 @@ if( empty( $contents ) )
 		$contents = call_user_func( $viewcat, $array_catpage, $catid, ( $page - 1 ) * $per_page, $generate_page );
 	}
 
-	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )
+	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' )
 	{
 		nv_set_cache( $cache_file, $contents );
 	}
@@ -318,8 +340,8 @@ if( $page > 1 )
 	$description .= ' ' . $page;
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

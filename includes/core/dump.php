@@ -146,7 +146,7 @@ function nv_dump_save( $params )
 	{
 		return false;
 	}
-	$path_dump = "";
+	$path_dump = '';
 	if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/dump.tpl" ) )
 	{
 		$path_dump = NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/dump.tpl";
@@ -266,7 +266,7 @@ function nv_dump_restore( $file )
 	$ext = nv_getextension( end( $arr_file ) );
 	$str = ( $ext == "gz" ) ? @gzfile( $file ) : @file( $file );
 
-	$sql = $insert = "";
+	$sql = $insert = '';
 	$query_len = 0;
 	$execute = false;
 

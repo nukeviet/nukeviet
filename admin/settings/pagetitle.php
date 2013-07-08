@@ -14,7 +14,7 @@ $page_title = $lang_module['pagetitle'];
 $array_config = array();
 if( $nv_Request->isset_request( 'save', 'post' ) )
 {
-	$array_config['pageTitleMode'] = filter_text_input( 'pageTitleMode', 'post', '', 255 );
+	$array_config['pageTitleMode'] = nv_substr( $nv_Request->get_title( 'pageTitleMode', 'post', '', 1), 0, 255 );
 
 	foreach( $array_config as $config_name => $config_value )
 	{
@@ -34,8 +34,8 @@ $xtpl->assign( 'DATA', $global_config );
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

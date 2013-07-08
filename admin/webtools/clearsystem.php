@@ -37,9 +37,9 @@ function nv_clear_files( $dir, $base )
 		}
 		closedir( $dh );
 	}
-	if( ! file_exists( $dir . "/index.html" ) )
+	if( ! file_exists( $dir . '/index.html' ) )
 	{
-		file_put_contents( $dir . "/index.html", "" );
+		file_put_contents( $dir . '/index.html', '' );
 	}
 	return $dels;
 }
@@ -168,8 +168,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

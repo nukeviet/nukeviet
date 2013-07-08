@@ -17,7 +17,7 @@ if( $catid > 0 )
 {
 	if( ( defined( 'NV_IS_ADMIN_MODULE' ) or ( $parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) ) )
 	{
-		$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
+		$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', '' );
 		list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid` = '" . $catid . "'" ) );
 		if( intval( $check_parentid ) > 0 )
 		{
@@ -30,8 +30,8 @@ if( $catid > 0 )
 			{
 				if( $delallcheckss == md5( $catid . session_id() . $global_config['sitekey'] ) )
 				{
-					$delcatandrows = $nv_Request->get_string( 'delcatandrows', 'post', "" );
-					$movecat = $nv_Request->get_string( 'movecat', 'post', "" );
+					$delcatandrows = $nv_Request->get_string( 'delcatandrows', 'post', '' );
+					$movecat = $nv_Request->get_string( 'movecat', 'post', '' );
 					$catidnews = $nv_Request->get_int( 'catidnews', 'post', 0 );
 					if( empty( $delcatandrows ) and empty( $movecat ) )
 					{
@@ -41,7 +41,7 @@ if( $catid > 0 )
 						$array_cat_list[0] = "&nbsp;";
 						while( list( $catid_i, $title_i, $lev_i ) = $db->sql_fetchrow( $result ) )
 						{
-							$xtitle_i = "";
+							$xtitle_i = '';
 							if( $lev_i > 0 )
 							{
 								$xtitle_i .= "&nbsp;&nbsp;&nbsp;|";
@@ -188,9 +188,9 @@ if( $catid > 0 )
 
 if( defined( 'NV_IS_AJAX' ) )
 {
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $contents;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 else
 {

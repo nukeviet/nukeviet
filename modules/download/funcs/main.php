@@ -12,13 +12,13 @@ if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 if( empty( $list_cats ) )
 {
 	$page_title = $module_info['custom_title'];
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( '' );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
-$contents = "";
+$contents = '';
 
 $download_config = nv_mod_down_config();
 
@@ -113,9 +113,9 @@ foreach( $list_cats as $value )
 			$in = "`catid` IN (" . $in . ")";
 		}
 
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`, 
-			`author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits` 
-			FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE " . $in . " AND `status`=1 
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`,
+			`author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits`
+			FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE " . $in . " AND `status`=1
 			ORDER BY `uploadtime` DESC LIMIT 0, " . $new_page;
 
 		$result = $db->sql_query( $sql );
@@ -174,8 +174,8 @@ foreach( $list_cats as $value )
 
 $contents = theme_main_download( $array_cats, $list_cats, $download_config );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -37,8 +37,8 @@ $contents['aj'] = array( "nv_client_info(" . $id . ", 'client_info');", "nv_show
 
 $contents = call_user_func( "nv_info_client_theme", $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

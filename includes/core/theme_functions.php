@@ -86,9 +86,13 @@ function nv_error_info()
  * @param string $page_title
  * @param mixed $info_title
  * @param mixed $info_content
+ * @param string $admin_link
+ * @param string $admin_title
+ * @param string $site_link
+ * @param string $site_title
  * @return
  */
-function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink = 0 )
+function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
 {
 	global $lang_global, $global_config;
 
@@ -142,20 +146,26 @@ function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink =
 	}
 	$xtpl->assign( 'INFO_TITLE', $info_title );
 	$xtpl->assign( 'INFO_CONTENT', $info_content );
-	$xtpl->assign( 'GO_HOMEPAGE', $lang_global['go_homepage'] );
 
 	if( defined( 'NV_IS_ADMIN' ) )
 	{
-		$xtpl->assign( 'ADMIN_LINK', NV_BASE_SITEURL . NV_ADMINDIR . "/index.php" );
-		$xtpl->assign( 'GO_ADMINPAGE', $lang_global['admin_page'] );
+		$xtpl->assign( 'ADMIN_LINK', $admin_link );
+		$xtpl->assign( 'GO_ADMINPAGE', empty( $admin_title ) ? $lang_global['admin_page'] : $admin_title );
 		$xtpl->parse( 'main.adminlink' );
+	}
+	if( ! empty( $site_link ) )
+	{
+		$xtpl->assign( 'SITE_LINK', $site_link );
+		$xtpl->assign( 'GO_SITEPAGE', empty( $site_title ) ? $lang_global['go_homepage'] : $site_title );
+		$xtpl->parse( 'main.sitelink' );
 	}
 
 	$xtpl->parse( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	$global_config['mudim_active'] = 0;
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	$xtpl->out( 'main' );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	die();
 }
 

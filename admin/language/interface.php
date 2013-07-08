@@ -55,9 +55,9 @@ if( $db->sql_numrows( $result ) == 0 )
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -82,11 +82,11 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 	if( empty( $author_lang ) )
 	{
 		$array_translator = array();
-		$array_translator['author'] = "";
-		$array_translator['createdate'] = "";
-		$array_translator['copyright'] = "";
-		$array_translator['info'] = "";
-		$array_translator['langtype'] = "";
+		$array_translator['author'] = '';
+		$array_translator['createdate'] = '';
+		$array_translator['copyright'] = '';
+		$array_translator['info'] = '';
+		$array_translator['langtype'] = '';
 	}
 	else
 	{
@@ -113,8 +113,8 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

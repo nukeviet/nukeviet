@@ -11,7 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 /**
  * utf8_to_unicode()
- * Vie^.t Nam => Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 ) 
+ * Vie^.t Nam => Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 )
  * @param mixed $str
  * @return
  */
@@ -50,7 +50,7 @@ function utf8_to_unicode( $str )
 /**
  * unicode_to_entities()
  * Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 ) => &#86;&#105;&#7879;&#116;&#32;&#78;&#97;&#109;
- * 
+ *
  * @param mixed $unicode
  * @return
  */
@@ -67,7 +67,7 @@ function unicode_to_entities( $unicode )
 /**
  * unicode_to_entities_preserving_ascii()
  * Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 ) => Vi&#7879;t Nam
- * 
+ *
  * @param mixed $unicode
  * @return
  */
@@ -84,7 +84,7 @@ function unicode_to_entities_preserving_ascii( $unicode )
 /**
  * unicode_to_utf8()
  * Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 ) => Vie^.t Nam
- * 
+ *
  * @param mixed $str
  * @return
  */
@@ -116,7 +116,7 @@ function unicode_to_utf8( $str )
 
 /**
  * nv_str_split()
- * 
+ *
  * @param mixed $str
  * @param integer $split_len
  * @return
@@ -140,7 +140,7 @@ function nv_str_split( $str, $split_len = 1 )
 
 /**
  * nv_strspn()
- * 
+ *
  * @param mixed $str
  * @param mixed $mask
  * @param mixed $start
@@ -166,7 +166,7 @@ function nv_strspn( $str, $mask, $start = null, $length = null )
 
 /**
  * nv_ucfirst()
- * 
+ *
  * @param mixed $str
  * @return
  */
@@ -191,7 +191,7 @@ function nv_ucfirst( $str )
 
 /**
  * nv_ltrim()
- * 
+ *
  * @param mixed $str
  * @param bool $charlist
  * @return
@@ -207,7 +207,7 @@ function nv_ltrim( $str, $charlist = false )
 
 /**
  * nv_rtrim()
- * 
+ *
  * @param mixed $str
  * @param bool $charlist
  * @return
@@ -223,7 +223,7 @@ function nv_rtrim( $str, $charlist = false )
 
 /**
  * nv_trim()
- * 
+ *
  * @param mixed $str
  * @param bool $charlist
  * @return
@@ -237,7 +237,7 @@ function nv_trim( $str, $charlist = false )
 
 /**
  * nv_EncString()
- * 
+ *
  * @param mixed $str
  * @return
  */
@@ -250,19 +250,19 @@ function nv_EncString( $string )
 
 /**
  * change_alias()
- * 
+ *
  * @return
  */
 function change_alias( $alias )
 {
 	$search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
-	$alias = preg_replace( array( "/[^a-zA-Z0-9]/", '/[ ]+/', "/^[\-]+/", "/[\-]+$/" ), array( " ", "-", "", "" ), str_replace( $search, " ", nv_EncString( $alias ) ) );
+	$alias = preg_replace( array( '/[^a-zA-Z0-9]/', '/[ ]+/', '/^[\-]+/', '/[\-]+$/' ), array( ' ', '-', '', '' ), str_replace( $search, ' ', nv_EncString( $alias ) ) );
 	return $alias;
 }
 
 /**
  * nv_clean60()
- * 
+ *
  * @param mixed $string
  * @param integer $num
  * @return

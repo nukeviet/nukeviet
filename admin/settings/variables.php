@@ -15,8 +15,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$preg_replace = array( 'pattern' => "/[^a-zA-Z0-9\_]/", 'replacement' => '' );
 
 	$array_config_global = array();
-	$array_config_global['cookie_prefix'] = filter_text_input( 'cookie_prefix', 'post', '', 0, 255, $preg_replace );
-	$array_config_global['session_prefix'] = filter_text_input( 'session_prefix', 'post', '', 0, 255, $preg_replace );
+	$array_config_global['cookie_prefix'] = nv_substr( $nv_Request->get_title( 'cookie_prefix', 'post', '', 0, $preg_replace ), 0, 255);
+	$array_config_global['session_prefix'] = nv_substr( $nv_Request->get_title( 'session_prefix', 'post', '', 0, $preg_replace ), 0, 255);
 	$array_config_global['cookie_secure'] = ( int )$nv_Request->get_bool( 'cookie_secure', 'post', 0 );
 	$array_config_global['cookie_httponly'] = ( int )$nv_Request->get_bool( 'cookie_httponly', 'post', 0 );
 
@@ -52,7 +52,7 @@ $xtpl->assign( 'NV_LIVE_SESSION_TIME', round( NV_LIVE_SESSION_TIME / 60 ) );
 $xtpl->assign( 'CHECKBOX_COOKIE_SECURE', ( $global_config['cookie_secure'] == 1 ) ? ' checked="checked"' : '' );
 $xtpl->assign( 'CHECKBOX_COOKIE_HTTPONLY', ( $global_config['cookie_httponly'] == 1 ) ? ' checked="checked"' : '' );
 
-if( $errormess != "" )
+if( $errormess != '' )
 {
 	$xtpl->assign( 'ERROR', $errormess );
 	$xtpl->parse( 'main.error' );
@@ -60,8 +60,8 @@ if( $errormess != "" )
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

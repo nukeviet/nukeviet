@@ -63,8 +63,8 @@ $db->sql_query( $query );
 $db->sql_query( "REPAIR TABLE `" . NV_BANNERS_GLOBALTABLE. "_clients`" );
 $db->sql_query( "OPTIMIZE TABLE `" . NV_BANNERS_GLOBALTABLE. "_clients`" );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo "OK|client_list|client_list";
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

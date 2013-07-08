@@ -9,8 +9,8 @@
 
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
-$theme1 = filter_text_input( 'theme1', 'get' );
-$theme2 = filter_text_input( 'theme2', 'get' );
+$theme1 = $nv_Request->get_title( 'theme1', 'get' );
+$theme2 = $nv_Request->get_title( 'theme2', 'get' );
 
 $position1 = $position2 = array();
 
@@ -62,9 +62,9 @@ if( $theme1 != $theme2 and file_exists( NV_ROOTDIR . '/themes/' . $theme1 . '/co
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $contents;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 ?>

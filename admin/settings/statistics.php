@@ -18,7 +18,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_global['online_upd'] = $nv_Request->get_int( 'online_upd', 'post' );
 	$array_config_global['statistic'] = $nv_Request->get_int( 'statistic', 'post' );
 
-	$statistics_timezone = filter_text_input( 'statistics_timezone', 'post', '', 0, 255 );
+	$statistics_timezone = nv_substr( $nv_Request->get_title( 'statistics_timezone', 'post', '', 0 ), 0, 255 );
 
 	if( ! empty( $statistics_timezone ) and in_array( $statistics_timezone, $timezone_array ) )
 	{
@@ -29,9 +29,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['statistics_timezone'] = NV_SITE_TIMEZONE_NAME;
 	}
 
-	$array_config_global['googleAnalyticsID'] = filter_text_input( 'googleAnalyticsID', 'post', '', 1, 20 );
+	$array_config_global['googleAnalyticsID'] = nv_substr( $nv_Request->get_title( 'googleAnalyticsID', 'post', '', 1 ), 0, 20 );
 
-	if( ! preg_match( '/^UA-\d{4,}-\d+$/', $array_config_global['googleAnalyticsID'] ) ) $array_config_global['googleAnalyticsID'] = "";
+	if( ! preg_match( '/^UA-\d{4,}-\d+$/', $array_config_global['googleAnalyticsID'] ) ) $array_config_global['googleAnalyticsID'] = '';
 
 	$array_config_global['googleAnalyticsSetDomainName'] = $nv_Request->get_int( 'googleAnalyticsSetDomainName', 'post' );
 
@@ -76,8 +76,8 @@ for( $i = 0; $i < 3; ++$i )
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -85,13 +85,13 @@ else
 	$old_allow_files_type = ! empty( $old_allow_files_type ) ? explode( ",", $old_allow_files_type ) : array();
 }
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post', 0 ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'], "Username: " . $row_user['username'], $admin_info['userid'] );
 
-	$editor = filter_text_input( 'editor', 'post', '' );
+	$editor = $nv_Request->get_title( 'editor', 'post', '' );
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
 		$allow_files_type = $nv_Request->get_array( 'allow_files_type', 'post', array() );
@@ -109,7 +109,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 
 	$lev = ( defined( 'NV_IS_GODADMIN' ) and $row['admin_id'] != $admin_info['admin_id'] ) ? $nv_Request->get_int( 'lev', 'post', 0 ) : $row['lev'];
 	$modules = ( defined( 'NV_IS_SPADMIN' ) and $row['admin_id'] != $admin_info['admin_id'] ) ? $nv_Request->get_array( 'modules', 'post', array() ) : $old_modules;
-	$position = ( defined( 'NV_IS_GODADMIN' ) or ( defined( 'NV_IS_SPADMIN' ) and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'] ) ) ? filter_text_input( 'position', 'post' ) : $row['position'];
+	$position = ( defined( 'NV_IS_GODADMIN' ) or ( defined( 'NV_IS_SPADMIN' ) and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'] ) ) ? $nv_Request->get_title( 'position', 'post' ) : $row['position'];
 
 	if( $lev == 2 ) $modules = array();
 
@@ -411,8 +411,8 @@ $xtpl->assign( 'SUBMIT', $contents['submit'] );
 $xtpl->parse( 'edit' );
 $contents = $xtpl->text( 'edit' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

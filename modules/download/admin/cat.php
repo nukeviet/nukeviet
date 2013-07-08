@@ -91,7 +91,7 @@ if( ! empty( $groups_list ) )
 }
 
 $array = array();
-$error = "";
+$error = '';
 
 // Add cat
 if( $nv_Request->isset_request( 'add', 'get' ) )
@@ -101,14 +101,14 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
-		$array['title'] = filter_text_input( 'title', 'post', '', 1 );
-		$array['description'] = filter_text_input( 'description', 'post', '', 1, 255 );
+		$array['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
+		$array['description'] = $nv_Request->get_title( 'description', 'post', '', 1 );
 		$array['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
 		$array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
 		$array['who_download'] = $nv_Request->get_int( 'who_download', 'post', 0 );
 		$array['groups_download'] = $nv_Request->get_typed_array( 'groups_download', 'post', 'int' );
-		$array['alias'] = filter_text_input( 'alias', 'post', '' );
-		$array['alias'] = ( $array['alias'] == "" ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
+		$array['alias'] = $nv_Request->get_title( 'alias', 'post', '' );
+		$array['alias'] = ( $array['alias'] == '' ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
 		if( empty( $array['title'] ) )
 		{
 			$error = $lang_module['error_cat2'];
@@ -166,16 +166,16 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 			++$new_weight;
 
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_categories` VALUES (
-            NULL, 
-            " . $array['parentid'] . ", 
-            " . $db->dbescape( $array['title'] ) . ", 
-            " . $db->dbescape( $array['alias'] ) . ", 
-            " . $db->dbescape( $array['description'] ) . ", 
-            " . $array['who_view'] . ", 
-            " . $db->dbescape( $array['groups_view'] ) . ", 
-            " . $array['who_download'] . ", 
-            " . $db->dbescape( $array['groups_download'] ) . ", 
-            " . $new_weight . ", 
+            NULL,
+            " . $array['parentid'] . ",
+            " . $db->dbescape( $array['title'] ) . ",
+            " . $db->dbescape( $array['alias'] ) . ",
+            " . $db->dbescape( $array['description'] ) . ",
+            " . $array['who_view'] . ",
+            " . $db->dbescape( $array['groups_view'] ) . ",
+            " . $array['who_download'] . ",
+            " . $db->dbescape( $array['groups_download'] ) . ",
+            " . $new_weight . ",
             1)";
 
 			$catid = $db->sql_query_insert_id( $sql );
@@ -198,9 +198,9 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	else
 	{
 		$array['parentid'] = 0;
-		$array['title'] = "";
-		$array['alias'] = "";
-		$array['description'] = "";
+		$array['title'] = '';
+		$array['alias'] = '';
+		$array['description'] = '';
 		$array['who_view'] = 0;
 		$array['groups_view'] = array();
 		$array['who_download'] = 0;
@@ -220,10 +220,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$array['who_view'] = array();
 	foreach( $array_who as $key => $who )
 	{
-		$array['who_view'][] = array( //
-			'key' => $key, //
-			'title' => $who, //
-			'selected' => $key == $who_view ? " selected=\"selected\"" : "" //
+		$array['who_view'][] = array(
+			'key' => $key,
+			'title' => $who,
+			'selected' => $key == $who_view ? " selected=\"selected\"" : ""
 		);
 	}
 
@@ -233,10 +233,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	{
 		foreach( $groups_list as $key => $title )
 		{
-			$array['groups_view'][] = array( //
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : "" //
+			$array['groups_view'][] = array(
+				'key' => $key,
+				'title' => $title,
+				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""
 			);
 		}
 	}
@@ -245,10 +245,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$array['who_download'] = array();
 	foreach( $array_who as $key => $who )
 	{
-		$array['who_download'][] = array( //
-			'key' => $key, //
-			'title' => $who, //
-			'selected' => $key == $who_download ? " selected=\"selected\"" : "" //
+		$array['who_download'][] = array(
+			'key' => $key,
+			'title' => $who,
+			'selected' => $key == $who_download ? " selected=\"selected\"" : ""
 		);
 	}
 
@@ -258,10 +258,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	{
 		foreach( $groups_list as $key => $title )
 		{
-			$array['groups_download'][] = array( //
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : "" //
+			$array['groups_download'][] = array(
+				'key' => $key,
+				'title' => $title,
+				'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : ""
 			);
 		}
 	}
@@ -318,9 +318,9 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 
 	exit();
 }
@@ -355,15 +355,15 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
-		$array['title'] = filter_text_input( 'title', 'post', '', 1 );
-		$array['description'] = filter_text_input( 'description', 'post', '' );
+		$array['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
+		$array['description'] = $nv_Request->get_title( 'description', 'post', '' );
 		$array['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
 		$array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
 		$array['who_download'] = $nv_Request->get_int( 'who_download', 'post', 0 );
 		$array['groups_download'] = $nv_Request->get_typed_array( 'groups_download', 'post', 'int' );
 
-		$array['alias'] = filter_text_input( 'alias', 'post', '' );
-		$array['alias'] = ( $array['alias'] == "" ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
+		$array['alias'] = $nv_Request->get_title( 'alias', 'post', '' );
+		$array['alias'] = ( $array['alias'] == '' ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
 
 		if( empty( $array['title'] ) )
 		{
@@ -427,16 +427,16 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$new_weight = $row['weight'];
 			}
 
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET 
-            `parentid`=" . $array['parentid'] . ", 
-            `title`=" . $db->dbescape( $array['title'] ) . ", 
-            `alias`=" . $db->dbescape( $array['alias'] ) . ", 
-            `description`=" . $db->dbescape( $array['description'] ) . ", 
-            `who_view`=" . $array['who_view'] . ", 
-            `groups_view`=" . $db->dbescape( $array['groups_view'] ) . ", 
-            `who_download`=" . $array['who_download'] . ", 
-            `groups_download`=" . $db->dbescape( $array['groups_download'] ) . ", 
-            `weight`=" . $new_weight . " 
+			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET
+            `parentid`=" . $array['parentid'] . ",
+            `title`=" . $db->dbescape( $array['title'] ) . ",
+            `alias`=" . $db->dbescape( $array['alias'] ) . ",
+            `description`=" . $db->dbescape( $array['description'] ) . ",
+            `who_view`=" . $array['who_view'] . ",
+            `groups_view`=" . $db->dbescape( $array['groups_view'] ) . ",
+            `who_download`=" . $array['who_download'] . ",
+            `groups_download`=" . $db->dbescape( $array['groups_download'] ) . ",
+            `weight`=" . $new_weight . "
             WHERE `id`=" . $catid;
 			$result = $db->sql_query( $sql );
 
@@ -485,10 +485,10 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$array['who_view'] = array();
 	foreach( $array_who as $key => $who )
 	{
-		$array['who_view'][] = array( //
-			'key' => $key, //
-			'title' => $who, //
-			'selected' => $key == $who_view ? " selected=\"selected\"" : "" //
+		$array['who_view'][] = array(
+			'key' => $key,
+			'title' => $who,
+			'selected' => $key == $who_view ? " selected=\"selected\"" : ""
 		);
 	}
 
@@ -498,10 +498,10 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		foreach( $groups_list as $key => $title )
 		{
-			$array['groups_view'][] = array( //
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : "" //
+			$array['groups_view'][] = array(
+				'key' => $key,
+				'title' => $title,
+				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""
 			);
 		}
 	}
@@ -510,10 +510,10 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$array['who_download'] = array();
 	foreach( $array_who as $key => $who )
 	{
-		$array['who_download'][] = array( //
-			'key' => $key, //
-			'title' => $who, //
-			'selected' => $key == $who_download ? " selected=\"selected\"" : "" //
+		$array['who_download'][] = array(
+			'key' => $key,
+			'title' => $who,
+			'selected' => $key == $who_download ? " selected=\"selected\"" : ""
 		);
 	}
 
@@ -523,10 +523,10 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		foreach( $groups_list as $key => $title )
 		{
-			$array['groups_download'][] = array( //
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : "" //
+			$array['groups_download'][] = array(
+				'key' => $key,
+				'title' => $title,
+				'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : ""
 			);
 		}
 	}
@@ -583,9 +583,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 
 	exit();
 }
@@ -725,7 +725,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	}
 	else
 	{
-		$numsub = "";
+		$numsub = '';
 	}
 
 	$weight = array();
@@ -738,15 +738,15 @@ while( $row = $db->sql_fetchrow( $result ) )
 
 	$class = ( $a % 2 ) ? " class=\"second\"" : "";
 
-	$list[$row['id']] = array( //
-		'id' => ( int )$row['id'], //
-		'title' => $row['title'], //
-		'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['id'], //
-		'numsub' => $numsub, //
-		'parentid' => $parentid, //
-		'weight' => $weight, //
-		'status' => $row['status'] ? " checked=\"checked\"" : "", //
-		'class' => $class //
+	$list[$row['id']] = array(
+		'id' => ( int )$row['id'],
+		'title' => $row['title'],
+		'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['id'],
+		'numsub' => $numsub,
+		'parentid' => $parentid,
+		'weight' => $weight,
+		'status' => $row['status'] ? " checked=\"checked\"" : "",
+		'class' => $class
 	);
 
 	++$a;
@@ -775,8 +775,8 @@ foreach( $list as $row )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

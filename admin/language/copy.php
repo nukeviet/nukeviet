@@ -34,16 +34,16 @@ if( empty( $array_lang_exit ) )
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
 if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_Request->get_string( 'checksess', 'post' ) == md5( session_id() ) )
 {
-	$newslang = filter_text_input( 'newslang', 'post', '' );
-	$typelang = filter_text_input( 'typelang', 'post', '' );
+	$newslang = $nv_Request->get_title( 'newslang', 'post', '' );
+	$typelang = $nv_Request->get_title( 'typelang', 'post', '' );
 
 	if( $typelang == "-vi" )
 	{
@@ -86,9 +86,9 @@ if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_
 		$xtpl->parse( 'copyok' );
 		$contents = $xtpl->text( 'copyok' );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 	}
 }
 $lang_array_file = array();
@@ -139,8 +139,8 @@ foreach( $language_array as $key => $value )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

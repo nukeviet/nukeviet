@@ -259,9 +259,9 @@ class NvUpdate
 			$message = sprintf( $this->lang['update_error_log_data'], NV_DATADIR );
 			$contents = $this->call_error( $message );
 
-			include ( NV_ROOTDIR . "/includes/header.php" );
+			include ( NV_ROOTDIR . '/includes/header.php' );
 			echo $this->template( $contents );
-			include ( NV_ROOTDIR . "/includes/footer.php" );
+			include ( NV_ROOTDIR . '/includes/footer.php' );
 			exit();
 		}
 	}
@@ -304,7 +304,7 @@ class NvUpdate
 		// Bat dau tao thu muc
 		foreach( $files as $file_i )
 		{
-			$cp = "";
+			$cp = '';
 			$e = explode( "/", $file_i );
 			foreach( $e as $p )
 			{
@@ -435,7 +435,7 @@ class NvUpdate
 		foreach( $step_bar as $i => $step_bar_i )
 		{
 			$n = $i + 1;
-			$class = "";
+			$class = '';
 
 			if( $this->config['step'] >= $n )
 			{
@@ -960,7 +960,7 @@ $NvUpdate = new NvUpdate( $nv_update_config );
 if( ! empty( $nv_update_config['formodule'] ) ) $site_mods = nv_site_mods();
 
 // Trang chinh
-$contents = "";
+$contents = '';
 
 if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lieu
 {
@@ -993,7 +993,7 @@ if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lie
 				$result = $db->sql_query( $sql );
 				$row = $db->sql_fetchrow( $result );
 
-				$v = "";
+				$v = '';
 				$d = 0;
 				if( preg_match( "/^([^\s]+)\s+([\d]+)$/", $row['mod_version'], $matches ) )
 				{
@@ -1005,7 +1005,7 @@ if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lie
 			}
 			else
 			{
-				$array['current_version'] = "";
+				$array['current_version'] = '';
 			}
 		}
 		else
@@ -1055,10 +1055,10 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 		// Backup CSDL
 		if( $nv_Request->isset_request( 'dump', 'get' ) )
 		{
-			$checksess = filter_text_input( 'checksess', 'get', '' );
+			$checksess = $nv_Request->get_title( 'checksess', 'get', '' );
 			if( $checksess != md5( $global_config['sitekey'] . session_id() ) ) die( 'Error!!!' );
 
-			$type = filter_text_input( 'type', 'get', '' );
+			$type = $nv_Request->get_title( 'type', 'get', '' );
 
 			$current_day = mktime( 0, 0, 0, date( "n", NV_CURRENTTIME ), date( "j", NV_CURRENTTIME ), date( "Y", NV_CURRENTTIME ) );
 
@@ -1095,7 +1095,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 				}
 				else
 				{
-					$file = str_replace( NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup/", "", $dump[0] );
+					$file = str_replace( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup/', '', $dump[0] );
 
 					// Danh dau da sao luu CSDL
 					$nv_update_config['updatelog']['data_backuped'] = NV_CURRENTTIME;
@@ -1113,10 +1113,10 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 		// Download CODE thay doi
 		if( $nv_Request->isset_request( 'downfile', 'get' ) )
 		{
-			$checksess = filter_text_input( 'checksess', 'get', '' );
+			$checksess = $nv_Request->get_title( 'checksess', 'get', '' );
 			if( $checksess != md5( $global_config['sitekey'] . session_id() ) ) die( 'Error!!!' );
 
-			$file = filter_text_input( 'downfile', 'get', '' );
+			$file = $nv_Request->get_title( 'downfile', 'get', '' );
 
 			if( ! file_exists( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file ) )
 			{
@@ -1402,7 +1402,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 			// Tien trinh bat dau chay
 			if( $nv_Request->isset_request( 'load', 'get' ) )
 			{
-				$func = filter_text_input( 'load', 'get', '' );
+				$func = $nv_Request->get_title( 'load', 'get', '' );
 
 				$nv_update_baseurl = NV_BASE_SITEURL . 'install/update.php?step=2&substep=3&load=' . $func;
 				$old_module_version = $nv_update_config['updatelog']['old_version'];
@@ -1667,10 +1667,10 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 		// Tu dong nhan dien remove_path
 		if( $nv_Request->isset_request( 'tetectftp', 'post' ) )
 		{
-			$ftp_server = nv_unhtmlspecialchars( filter_text_input( 'ftp_server', 'post', '', 1, 255 ) );
-			$ftp_port = intval( filter_text_input( 'ftp_port', 'post', '21', 1, 255 ) );
-			$ftp_user_name = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_name', 'post', '', 1, 255 ) );
-			$ftp_user_pass = nv_unhtmlspecialchars( filter_text_input( 'ftp_user_pass', 'post', '', 1, 255 ) );
+			$ftp_server = nv_unhtmlspecialchars( $nv_Request->get_title( 'ftp_server', 'post', '', 1 ) );
+			$ftp_port = intval( $nv_Request->get_title( 'ftp_port', 'post', '21', 1 ) );
+			$ftp_user_name = nv_unhtmlspecialchars( $nv_Request->get_title( 'ftp_user_name', 'post', '', 1 ) );
+			$ftp_user_pass = nv_unhtmlspecialchars( $nv_Request->get_title( 'ftp_user_pass', 'post', '', 1 ) );
 
 			if( ! $ftp_server or ! $ftp_user_name or ! $ftp_user_pass )
 			{
@@ -1843,10 +1843,10 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 						// Luu lai cau hinh FTP
 						foreach( $array_config as $config_name => $config_value )
 						{
-							$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` 
-							SET `config_value`=" . $db->dbescape_string( $config_value ) . " 
-							WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
-							AND `lang` = 'sys' AND `module`='global' 
+							$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "`
+							SET `config_value`=" . $db->dbescape_string( $config_value ) . "
+							WHERE `config_name` = " . $db->dbescape_string( $config_name ) . "
+							AND `lang` = 'sys' AND `module`='global'
 							LIMIT 1" );
 						}
 
@@ -1881,7 +1881,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 	}
 	elseif( $nv_update_config['substep'] == 5 ) // Huong dan nang cap giao dien bang tay
 	{
-		$array['guide'] = "";
+		$array['guide'] = '';
 		$array['error'] = false;
 		if( file_exists( NV_ROOTDIR . '/install/update_docs_' . NV_LANG_UPDATE . '.html' ) )
 		{
@@ -1937,7 +1937,7 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 	// Lay thong tin phien ban va module
 	if( $nv_Request->isset_request( 'load', 'get' ) )
 	{
-		$type = filter_text_input( 'load', 'get', '' );
+		$type = $nv_Request->get_title( 'load', 'get', '' );
 
 		if( $type == 'ver' )
 		{
@@ -1979,7 +1979,7 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 				{
 					if( isset( $userModules[$row['module_file']] ) ) continue;
 
-					$v = "";
+					$v = '';
 					$p = 0;
 					if( preg_match( "/^([^\s]+)\s+([\d]+)$/", $row['mod_version'], $matches ) )
 					{
@@ -2024,8 +2024,8 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 	$contents = $NvUpdate->step3( $array );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $NvUpdate->template( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

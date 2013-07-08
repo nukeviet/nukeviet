@@ -44,7 +44,7 @@ $data_search = array(
 
 if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request( 'checksess', 'get' ) )
 {
-	$checksess = filter_text_input( 'checksess', 'get', '', 1 );
+	$checksess = $nv_Request->get_title( 'checksess', 'get', '' );
 
 	if( $checksess != md5( "siteinfo_" . session_id() . "_" . $admin_info['userid'] ) )
 	{
@@ -55,16 +55,16 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 	}
 
 	$data_search = array(
-		"q" => filter_text_input( 'q', 'get', '' ),
-		"from" => filter_text_input( 'from', 'get', '' ),
-		"to" => filter_text_input( 'to', 'get', '' ),
-		"lang" => filter_text_input( 'lang', 'get', '' ),
-		"module" => filter_text_input( 'module', 'get', '' ),
-		"user" => filter_text_input( 'user', 'get', '' )
+		"q" => $nv_Request->get_title( 'q', 'get', '' ),
+		"from" => $nv_Request->get_title( 'from', 'get', '' ),
+		"to" => $nv_Request->get_title( 'to', 'get', '' ),
+		"lang" => $nv_Request->get_title( 'lang', 'get', '' ),
+		"module" => $nv_Request->get_title( 'module', 'get', '' ),
+		"user" => $nv_Request->get_title( 'user', 'get', '' )
 	);
 
 	$base_url .= "&amp;filter=1&amp;checksess=" . $checksess;
-	$disabled = "";
+	$disabled = '';
 
 	if( ! empty( $data_search['q'] ) and $data_search['q'] != $lang_module['filter_enterkey'] )
 	{
@@ -137,9 +137,9 @@ $lang_order_2 = array(
 	"time" => strtolower( $lang_module['log_time'] )
 );
 
-$order['lang']['order'] = filter_text_input( 'order_lang', 'get', 'NO' );
-$order['module']['order'] = filter_text_input( 'order_module', 'get', 'NO' );
-$order['time']['order'] = filter_text_input( 'order_time', 'get', 'NO' );
+$order['lang']['order'] = $nv_Request->get_title( 'order_lang', 'get', 'NO' );
+$order['module']['order'] = $nv_Request->get_title( 'order_module', 'get', 'NO' );
+$order['time']['order'] = $nv_Request->get_title( 'order_time', 'get', 'NO' );
 
 foreach( $order as $key => $check )
 {
@@ -216,7 +216,7 @@ $array_lang = array();
 $array_lang[] = array(
 	"key" => "",
 	"title" => $lang_module['filter_lang'],
-	"selected" => ( $data_search['lang'] == "" ) ? " selected=\"selected\"" : ""
+	"selected" => ( $data_search['lang'] == '' ) ? " selected=\"selected\"" : ""
 );
 
 foreach( $list_lang as $lang )
@@ -233,7 +233,7 @@ $array_module = array();
 $array_module[] = array(
 	"key" => "",
 	"title" => $lang_module['filter_module'],
-	"selected" => ( $data_search['module'] == "" ) ? " selected=\"selected\"" : ""
+	"selected" => ( $data_search['module'] == '' ) ? " selected=\"selected\"" : ""
 );
 
 foreach( $list_module as $module )
@@ -250,7 +250,7 @@ $array_user = array();
 $array_user[] = array(
 	"key" => "",
 	"title" => $lang_module['filter_user'],
-	"selected" => ( $data_search['user'] == "" ) ? " selected=\"selected\"" : ""
+	"selected" => ( $data_search['user'] == '' ) ? " selected=\"selected\"" : ""
 );
 $array_user[] = array(
 	"key" => "system",
@@ -341,8 +341,8 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

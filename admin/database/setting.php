@@ -10,19 +10,18 @@
 if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_global['mod_settings'];
-$submit = $nv_Request->get_string( 'submit', 'post' );
 $array_sql_ext = array( "sql", "gz" );
 
-$errormess = "";
+$errormess = '';
 $array_config_global = array();
 $array_config_global['dump_backup_day'] = $global_config['dump_backup_day'];
 $array_config_global['dump_backup_ext'] = $global_config['dump_backup_ext'];
 $array_config_global['dump_interval'] = $global_config['dump_interval'];
 
-if( $submit )
+if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$array_config_global = array();
-	$array_config_global['dump_backup_ext'] = filter_text_input( 'dump_backup_ext', 'post', '', 1, 255 );
+	$array_config_global['dump_backup_ext'] = $nv_Request->get_title( 'dump_backup_ext', 'post', '', 1 );
 	$array_config_global['dump_autobackup'] = $nv_Request->get_int( 'dump_autobackup', 'post' );
 	$array_config_global['dump_backup_day'] = $nv_Request->get_int( 'dump_backup_day', 'post' );
 	$dump_interval = $nv_Request->get_int( 'dump_interval', 'post', 1 );
@@ -36,10 +35,10 @@ if( $submit )
 
 	foreach( $array_config_global as $config_name => $config_value )
 	{
-		$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET 
-			`config_value`=" . $db->dbescape_string( $config_value ) . " 
-			WHERE `config_name` = " . $db->dbescape_string( $config_name ) . " 
-			AND `lang` = 'sys' AND `module`='global' 
+		$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET
+			`config_value`=" . $db->dbescape_string( $config_value ) . "
+			WHERE `config_name` = " . $db->dbescape_string( $config_name ) . "
+			AND `lang` = 'sys' AND `module`='global'
 			LIMIT 1" );
 	}
 
@@ -79,8 +78,8 @@ for( $index = 2; $index < 100; ++$index )
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

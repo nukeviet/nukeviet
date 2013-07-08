@@ -7,7 +7,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <div class="box-border-shadow news-search content-box clearfix m-bottom">
 	<h3 class="title-search">{LANG.info_title}</h3>
-	<form action="{BASE_URL_SITE}" name="fsea" method="get" onsubmit="return nv_news_search_submit('fsea');" "id="fsea">
+	<form action="{BASE_URL_SITE}" name="fsea" method="get" id="fsea">
 		<div class="rows clearfix">
 			<label>{LANG.key_title} :</label>
 			<input type="text" name="q" value="{KEY}" class="input" id="key"/>
@@ -55,7 +55,7 @@
 			buttonImage : nv_siteroot + "images/calendar.gif",
 			buttonImageOnly : true
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->
 <!-- BEGIN: results -->

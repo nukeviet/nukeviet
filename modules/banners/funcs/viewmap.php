@@ -13,7 +13,7 @@ global $global_config, $module_name, $module_info, $lang_module, $banner_client_
 
 if( defined( 'NV_IS_BANNER_CLIENT' ) )
 {
-	$type = filter_text_input( 'type', 'post,get', 'country', 1 );
+	$type = $nv_Request->get_title( 'type', 'post,get', 'country', 1 );
 	$month = $nv_Request->get_int( 'month', 'post,get' );
 	$ads = $nv_Request->get_int( 'ads', 'post,get' );
 	$year = ( int )date( 'Y' );

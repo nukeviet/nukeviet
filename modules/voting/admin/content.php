@@ -17,14 +17,14 @@ $submit = $nv_Request->get_string( 'submit', 'post' );
 
 if( ! empty( $submit ) )
 {
-	$question = filter_text_input( 'question', 'post', '', 1 );
-	$link = filter_text_input( 'link', 'post', '', 1 );
+	$question = $nv_Request->get_title( 'question', 'post', '', 1 );
+	$link = $nv_Request->get_title( 'link', 'post', '', 1 );
 	$who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
 	$groups_view = $nv_Request->get_array( 'groups_view', 'post' );
 	$groups_view = implode( ',', $groups_view );
 
-	$publ_date = filter_text_input( 'publ_date', 'post', '' );
-	$exp_date = filter_text_input( 'exp_date', 'post', '' );
+	$publ_date = $nv_Request->get_title( 'publ_date', 'post', '' );
+	$exp_date = $nv_Request->get_title( 'exp_date', 'post', '' );
 	$maxoption = $nv_Request->get_int( 'maxoption', 'post', 1 );
 
 	$array_answervote = $nv_Request->get_array( 'answervote', 'post' );
@@ -59,7 +59,7 @@ if( ! empty( $submit ) )
 	foreach( $array_answervote as $title )
 	{
 		$title = trim( strip_tags( $title ) );
-		if( $title != "" )
+		if( $title != '' )
 		{
 			++$number_answer;
 		}
@@ -67,7 +67,7 @@ if( ! empty( $submit ) )
 	foreach( $answervotenews as $title )
 	{
 		$title = trim( strip_tags( $title ) );
-		if( $title != "" )
+		if( $title != '' )
 		{
 			++$number_answer;
 		}
@@ -98,7 +98,7 @@ if( ! empty( $submit ) )
 			foreach( $array_answervote as $id => $title )
 			{
 				$title = nv_htmlspecialchars( strip_tags( $title ) );
-				if( $title != "" )
+				if( $title != '' )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $array_urlvote[$id] ) );
 					$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `title` = " . $db->dbescape( $title ) . ", `url` = " . $db->dbescape( $url ) . " WHERE `id` ='" . intval( $id ) . "' AND `vid` =" . $vid . "" );
@@ -113,7 +113,7 @@ if( ! empty( $submit ) )
 			foreach( $answervotenews as $key => $title )
 			{
 				$title = nv_htmlspecialchars( strip_tags( $title ) );
-				if( $title != "" )
+				if( $title != '' )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $urlvotenews[$key] ) );
 
@@ -143,7 +143,7 @@ if( ! empty( $submit ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
-				$error = "";
+				$error = '';
 				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
 				die();
 			}
@@ -157,7 +157,7 @@ if( ! empty( $submit ) )
 	foreach( $answervotenews as $key => $title )
 	{
 		$title = trim( strip_tags( $title ) );
-		if( $title != "" )
+		if( $title != '' )
 		{
 			$array_answervote[] = $title;
 			$array_urlvote[] = $urlvotenews[$key];
@@ -220,7 +220,7 @@ $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE
 $rowvote['link'] = nv_htmlspecialchars( $rowvote['link'] );
 $xtpl->assign( 'DATA', $rowvote );
 
-if( $error != "" )
+if( $error != '' )
 {
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.error' );
@@ -293,7 +293,7 @@ if( $rowvote['exp_time'] > 0 )
 else
 {
 	$emin = $ehour = 0;
-	$exp_date = "";
+	$exp_date = '';
 }
 $xtpl->assign( 'EXP_DATE', $exp_date );
 for( $i = 0; $i <= 23; ++$i )
@@ -342,8 +342,8 @@ $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 if( $vid ) $op = '';
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

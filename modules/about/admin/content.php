@@ -33,20 +33,20 @@ else
 	$action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 }
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-	$title = filter_text_input( 'title', 'post', '', 1 );
-	$alias = filter_text_input( 'alias', 'post', '', 1 );
-	$bodytext = nv_editor_filter_textarea( 'bodytext', '', NV_ALLOWED_HTML_TAGS );
-	$keywords = nv_strtolower( filter_text_input( 'keywords', 'post', '', 0 ) );
+	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
+	$alias = $nv_Request->get_title( 'alias', 'post', '', 1 );
+	$bodytext = $nv_Request->get_editor( 'bodytext', '', NV_ALLOWED_HTML_TAGS );
+	$keywords = nv_strtolower( $nv_Request->get_title( 'keywords', 'post', '', 0 ) );
 
 	if( empty( $title ) )
 	{
 		$error = $lang_module['aabout9'];
 	}
-	elseif( strip_tags( $bodytext ) == "" )
+	elseif( strip_tags( $bodytext ) == '' )
 	{
 		$error = $lang_module['aabout10'];
 	}
@@ -70,8 +70,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET 
-            `title`=" . $db->dbescape( $title ) . ", `alias` =  " . $db->dbescape( $alias ) . ", 
+			$sql = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET
+            `title`=" . $db->dbescape( $title ) . ", `alias` =  " . $db->dbescape( $alias ) . ",
             `bodytext`=" . $db->dbescape( $bodytext ) . ", `keywords`=" . $db->dbescape( $keywords ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `id` =" . $id;
 			$db->sql_query( $sql );
 			$publtime = $row['add_time'];
@@ -82,7 +82,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$weight = intval( $weight ) + 1;
 
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
-            NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $bodytext ) . ", " . $db->dbescape( $keywords ) . ", 
+            NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $bodytext ) . ", " . $db->dbescape( $keywords ) . ",
             " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
 			$id = $db->sql_query_insert_id( $sql );
 			$publtime = NV_CURRENTTIME;
@@ -121,7 +121,7 @@ else
 	}
 	else
 	{
-		$title = $alias = $bodytext = $keywords = "";
+		$title = $alias = $bodytext = $keywords = '';
 	}
 }
 
@@ -161,8 +161,8 @@ if( $error )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -37,7 +37,7 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 
 /**
  * keywordRank
- * 
+ *
  * @package NUKEVIET 3.x
  * @author VINADES.,JSC
  * @copyright 2010
@@ -63,7 +63,7 @@ class keywordRank
 
 	/**
      * keywordRank::__construct()
-     * 
+     *
      * @param mixed $_pattern
      * @return
      */
@@ -77,7 +77,7 @@ class keywordRank
 
 	/**
      * keywordRank::getInfoFromGoogle()
-     * 
+     *
      * @return
      */
 	private function getInfoFromGoogle()
@@ -102,7 +102,7 @@ class keywordRank
 
 		if( preg_match( "/\<div\>About ([0-9,]+) results\<\/div\>/is", $content, $match ) )
 		{
-			$bl = preg_replace( "/\,/", "", $match[1] );
+			$bl = preg_replace( '/\,/', '', $match[1] );
 			$result['myPages'] = ( int )$bl;
 
 			unset( $links );
@@ -131,7 +131,7 @@ class keywordRank
 			{
 				if( preg_match( "/\<div\>About ([0-9,]+) results\<\/div\>/is", $content, $match ) )
 				{
-					$bl = preg_replace( "/\,/", "", $match[1] );
+					$bl = preg_replace( '/\,/', '', $match[1] );
 					$result['allPages'] = ( int )$bl;
 				}
 			}
@@ -157,7 +157,7 @@ class keywordRank
 
 	/**
      * keywordRank::process()
-     * 
+     *
      * @param mixed $_keyword
      * @param mixed $_lang
      * @param mixed $_accuracy
@@ -165,14 +165,14 @@ class keywordRank
      * @param string $domain
      * @return
      */
-	public function process( $_keyword, $_lang, $_accuracy, $from = "", $domain = "" )
+	public function process( $_keyword, $_lang, $_accuracy, $from = '', $domain = '' )
 	{
 		$this->keyword = $_keyword;
 
 		if( $_accuracy != "phrase" ) $_accuracy = "keyword";
 		$this->accuracy = $_accuracy;
 
-		if( ! in_array( $_lang, $this->langList ) ) $_lang = "";
+		if( ! in_array( $_lang, $this->langList ) ) $_lang = '';
 		$this->lang = $_lang;
 
 		if( empty( $domain ) )

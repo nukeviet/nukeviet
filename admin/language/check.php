@@ -35,9 +35,9 @@ if( empty( $array_lang_exit ) )
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 $lang_array_file = array();
@@ -59,8 +59,8 @@ $language_check_type = array(
 	2 => $lang_module['nv_check_type_2']
 );
 
-$typelang = filter_text_input( 'typelang', 'post,get', '' );
-$sourcelang = filter_text_input( 'sourcelang', 'post,get', '' );
+$typelang = $nv_Request->get_title( 'typelang', 'post,get', '' );
+$sourcelang = $nv_Request->get_title( 'sourcelang', 'post,get', '' );
 
 $idfile = $nv_Request->get_int( 'idfile', 'post,get', 0 );
 $check_type = $nv_Request->get_int( 'check_type', 'post,get', 0 );
@@ -243,8 +243,8 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

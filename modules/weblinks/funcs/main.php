@@ -60,8 +60,8 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 
 $contents = call_user_func( "main_theme", $array_cat, $array_cat_content );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

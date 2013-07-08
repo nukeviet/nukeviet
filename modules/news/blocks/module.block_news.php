@@ -14,7 +14,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 
 	function nv_block_config_news( $module, $data_block, $lang_block )
 	{
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['numrow'] . "</td>";
 		$html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
@@ -38,6 +38,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 
 		$module = $block_config['module'];
 		$blockwidth = $module_config[$module]['blockwidth'];
+		$show_no_image  = $module_config[$module]['show_no_image'];
 		$numrow = ( isset( $block_config['numrow'] ) ) ? $block_config['numrow'] : 20;
 
 		$cache_file = NV_LANG_DATA . "_" . $module . "_block_news_" . $numrow . "_" . NV_CACHE_PREFIX . ".cache";
@@ -65,9 +66,13 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 				{
 					$imgurl = $homeimgfile;
 				}
-				else //no image
+				elseif( $show_no_image ) //no image
 				{
 					$imgurl = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				}
+				else
+				{
+					$imgurl = '';				
 				}
 				$array_block_news[] = array(
 					'id' => $id,

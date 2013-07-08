@@ -73,7 +73,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 										$filename = $thisdir . '/' . $fimg;
 										while( preg_match( "/([^\/(\.\.)]+)\/\.\.\//", $filename ) )
 										{
-											$filename = preg_replace( "/([^\/(\.\.)]+)\/\.\.\//", "", $filename );
+											$filename = preg_replace( '/([^\/(\.\.)]+)\/\.\.\//', '', $filename );
 										}
 										if( file_exists( $filename ) )
 										{
@@ -130,9 +130,9 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 			asort( $value );
 			$contents .= "<b>" . $key . " </b><br>&nbsp;&nbsp;&nbsp;&nbsp; " . implode( "<br>&nbsp;&nbsp;&nbsp;&nbsp;", $value ) . "<br><br>";
 		}
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 	}
 }
 

@@ -15,14 +15,14 @@ $list_cats = nv_list_cats( true );
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
 $per_page = 15;
-$key = filter_text_input( 'q', 'post', '', 1, NV_MAX_SEARCH_LENGTH );
+$key = nv_substr( $nv_Request->get_title( 'q', 'post', '', 1 ), 0, NV_MAX_SEARCH_LENGTH );
 
 $page_title = $lang_module['search'] . ' ' . $key;
 
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=search";
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`, 
-`author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits` 
+$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`,
+`author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits`
 FROM `" . NV_PREFIXLANG . "_" . $module_data . "`";
 
 if( $nv_Request->isset_request( 'submit', 'post' ) and ! empty( $key ) )
@@ -107,7 +107,7 @@ if( ! empty( $all_page ) )
 	}
 	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 
-	$contents = theme_viewcat_download( $array, $download_config, "", $generate_page );
+	$contents = theme_viewcat_download( $array, $download_config, '', $generate_page );
 	if( $page > 1 )
 	{
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
@@ -118,8 +118,8 @@ else
 	$contents = $lang_module['search_noresult'];
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

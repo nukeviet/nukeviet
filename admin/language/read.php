@@ -20,7 +20,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 {
 	global $db, $global_config, $include_lang, $lang_module;
 
-	$include_lang = "";
+	$include_lang = '';
 	$modules_exit = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
 
 	if( $module == "global" and preg_match( "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/", $admin_file, $m ) )
@@ -59,7 +59,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 		$include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/admin_" . $module . ".php";
 	}
 
-	if( $include_lang != "" and file_exists( $include_lang ) )
+	if( $include_lang != '' and file_exists( $include_lang ) )
 	{
 		$lang_module_temp = $lang_module;
 		$lang_module = array();
@@ -132,14 +132,14 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			if( substr( $row['Field'], 0, 7 ) == "author_" and $row['Field'] != "author_" . $dirlang )
 			{
 				$array_lang_key[] = str_replace( "author_", "lang_", $row['Field'] );
-				$array_lang_value[] = "";
+				$array_lang_value[] = '';
 			}
 		}
 
 		$string_lang_key = implode( "`, `", $array_lang_key );
-		$string_lang_value = "";
+		$string_lang_value = '';
 
-		if( $string_lang_key != "" )
+		if( $string_lang_key != '' )
 		{
 			$string_lang_key = ", `" . $string_lang_key . "`";
 			$string_lang_value = implode( "', '", $array_lang_value );
@@ -178,12 +178,12 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 	}
 	else
 	{
-		$include_lang = "";
+		$include_lang = '';
 		return $lang_module['nv_error_exit_module'] . " : " . $module;
 	}
 }
 
-$dirlang = filter_text_input( 'dirlang', 'get', '' );
+$dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
 $page_title = $language_array[$dirlang]['name'] . ": " . $lang_module['nv_admin_read'];
 
 if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . session_id() ) )
@@ -196,16 +196,16 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 		nv_admin_read_lang( $dirlang, "global", 0 );
 		nv_admin_read_lang( $dirlang, "install", 0 );
 
-		$array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
+		$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 		nv_admin_read_lang( $dirlang, "global", 1 );
 
-		$array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
+		$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 		$dirs = nv_scandir( NV_ROOTDIR . "/" . NV_ADMINDIR, $global_config['check_module'] );
 
 		foreach( $dirs as $module )
 		{
 			nv_admin_read_lang( $dirlang, $module, 1 );
-			$array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
+			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 		}
 
 		$dirs = nv_scandir( NV_ROOTDIR . "/language/" . $dirlang, "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/" );
@@ -218,10 +218,10 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 		foreach( $dirs as $module )
 		{
 			nv_admin_read_lang( $dirlang, $module, 0 );
-			$array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
+			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 
 			nv_admin_read_lang( $dirlang, $module, 1 );
-			$array_filename[] = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $include_lang ) );
+			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 
 			$blocks = nv_scandir( NV_ROOTDIR . "/modules/" . $module . "/language/", "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
 			foreach( $blocks as $file_i )
@@ -249,9 +249,9 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 	}
 }
 

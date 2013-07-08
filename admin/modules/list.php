@@ -66,8 +66,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 	if( ! isset( $new_modules[$mf] ) )
 	{
 		$row['act'] == 2;
-		$row['is_sysmod'] = "";
-		$row['mod_version'] = "";
+		$row['is_sysmod'] = '';
+		$row['mod_version'] = '';
 	}
 	else
 	{
@@ -125,8 +125,8 @@ $contents['thead'] = array( $lang_module['weight'], $lang_module['module_name'],
 
 $contents = list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $weight_list );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -10,20 +10,20 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['block'];
 
-$error = "";
+$error = '';
 $savecat = 0;
-list( $bid, $title, $alias, $description, $keywords ) = array( 0, "", "", "", "" );
+list( $bid, $title, $alias, $description, $keywords ) = array( 0, '', '', '', '' );
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
 {
 	$bid = $nv_Request->get_int( 'bid', 'post', 0 );
-	$title = filter_text_input( 'title', 'post', '', 1 );
-	$keywords = filter_text_input( 'keywords', 'post', '', 1 );
-	$alias = filter_text_input( 'alias', 'post', '' );
+	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
+	$keywords = $nv_Request->get_title( 'keywords', 'post', '', 1 );
+	$alias = $nv_Request->get_title( 'alias', 'post', '' );
 	$description = $nv_Request->get_string( 'description', 'post', '' );
 	$description = nv_nl2br( nv_htmlspecialchars( strip_tags( $description ) ), '<br />' );
-	$alias = ( $alias == "" ) ? change_alias( $title ) : change_alias( $alias );
+	$alias = ( $alias == '' ) ? change_alias( $title ) : change_alias( $alias );
 
 	if( empty( $title ) )
 	{
@@ -105,8 +105,8 @@ if( empty( $alias ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

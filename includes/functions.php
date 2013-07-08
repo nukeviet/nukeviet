@@ -63,7 +63,7 @@ function nv_preg_quote( $a )
  * @param string $referer
  * @return
  */
-function nv_is_myreferer( $referer = "" )
+function nv_is_myreferer( $referer = '' )
 {
 	if( empty( $referer ) ) $referer = urldecode( nv_getenv( 'HTTP_REFERER' ) );
 	if( empty( $referer ) ) return 2;
@@ -109,7 +109,7 @@ function nv_is_banIp( $ip )
 
 	foreach( $banIp as $e => $f )
 	{
-		if( $f['begintime'] < NV_CURRENTTIME and ( $f['endtime'] == 0 or $f['endtime'] > NV_CURRENTTIME ) and ( preg_replace( $f['mask'], "", $ip ) == preg_replace( $f['mask'], "", $e ) ) ) return true;
+		if( $f['begintime'] < NV_CURRENTTIME and ( $f['endtime'] == 0 or $f['endtime'] > NV_CURRENTTIME ) and ( preg_replace( $f['mask'], '', $ip ) == preg_replace( $f['mask'], '', $e ) ) ) return true;
 	}
 
 	return false;
@@ -592,7 +592,7 @@ function nv_genpass( $length = 8 )
 function nv_EncodeEmail( $strEmail, $strDisplay = '', $blnCreateLink = true )
 {
 	$strMailto = "&#109;&#097;&#105;&#108;&#116;&#111;&#058;";
-	$strEncodedEmail = "";
+	$strEncodedEmail = '';
 	$strlen = strlen( $strEmail );
 
 	for( $i = 0; $i < $strlen; ++$i )
@@ -743,8 +743,8 @@ function nv_groups_del_user( $group_id, $userid )
 		else
 		{
 			list( $data ) = $db->sql_fetchrow( $query );
-			$data = str_replace( "," . $global_config['idsite'] . ",", "", "," . $data . "," );
-			$data = trim( $data, "," );
+			$data = str_replace( ',' . $global_config['idsite'] . ',', '', ',' . $data . ',' );
+			$data = trim( $data, ',' );
 			if( $data == '' )
 			{
 				$set_number = true;
@@ -986,8 +986,6 @@ function nv_editor_nl2br( $text )
 {
 	if( empty( $text ) ) return '';
 
-	$replacement = defined( 'NV_EDITOR' ) ? '' : '<br />';
-
 	return nv_nl2br( $text, ( defined( 'NV_EDITOR' ) ? '' : '<br />' ) );
 }
 
@@ -1007,116 +1005,12 @@ function nv_editor_br2nl( $text )
 }
 
 /**
- * filter_text_input()
- *
- * @param string $inputname
- * @param string $mode
- * @param string $default
- * @param bool $specialchars
- * @param integer $maxlength
- * @param mixed $preg_replace
- * @return
- */
-function filter_text_input( $inputname, $mode = 'request', $default = '', $specialchars = false, $maxlength = 0, $preg_replace = array() )
-{
-	global $nv_Request;
-
-	$value = $nv_Request->get_string( $inputname, $mode, $default );
-	$value = strip_tags( $value );
-
-	if( ( bool )$specialchars == true )
-	{
-		$value = nv_htmlspecialchars( $value );
-	}
-
-	if( ( int )$maxlength > 0 )
-	{
-		$value = nv_substr( $value, 0, $maxlength );
-	}
-
-	if( ! empty( $preg_replace ) )
-	{
-		if( isset( $preg_replace['pattern'] ) and ! empty( $preg_replace['pattern'] ) and isset( $preg_replace['replacement'] ) )
-		{
-			$value = preg_replace( $preg_replace['pattern'], $preg_replace['replacement'], $value );
-		}
-	}
-
-	return trim( $value );
-}
-
-/**
- * filter_text_textarea()
- *
- * @param string $inputname
- * @param string $default
- * @param string $allowed_html_tags
- * @param bool $save
- * @param string $nl2br_replacement
- * @return
- */
-function filter_text_textarea( $inputname, $default = '', $allowed_html_tags = '', $save = false, $nl2br_replacement = '<br />' )
-{
-	global $nv_Request;
-
-	$value = $nv_Request->get_string( $inputname, 'post', $default );
-
-	if( empty( $value ) ) return $value;
-
-	if( ! empty( $allowed_html_tags ) )
-	{
-		$allowed_html_tags = array_map( "trim", explode( ",", $allowed_html_tags ) );
-		$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
-		$value = strip_tags( $value, $allowed_html_tags );
-	}
-
-	if( ( bool )$save ) $value = nv_nl2br( $value, $nl2br_replacement );
-
-	return $value;
-}
-
-/**
- * nv_editor_filter_textarea()
- *
- * @param string $inputname
- * @param string $default
- * @param string $allowed_html_tags
- * @param bool $save
- * @param string $nl2br_replacement
- * @return
- */
-function nv_editor_filter_textarea( $inputname, $default = '', $allowed_html_tags = '', $save = false, $nl2br_replacement = '<br />' )
-{
-	global $nv_Request;
-
-	$value = $nv_Request->get_string( $inputname, 'post', $default );
-
-	if( empty( $value ) ) return '';
-
-	if( ! empty( $allowed_html_tags ) and ! defined( 'NV_EDITOR' ) )
-	{
-		$allowed_html_tags = array_map( "trim", explode( ",", $allowed_html_tags ) );
-		$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
-		$value = strip_tags( $value, $allowed_html_tags );
-	}
-
-	if( empty( $value ) ) return '';
-
-	if( ( bool )$save )
-	{
-		$value = nv_editor_nl2br( $value, $nl2br_replacement );
-	}
-
-	return $value;
-}
-
-/**
  * nv_get_keywords()
  *
  * @param string $content
  * @return
  */
-function nv_get_keywords( $content = "" )
+function nv_get_keywords( $content = '' )
 {
 	if( empty( $content ) ) return ( "" );
 
@@ -1361,7 +1255,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 		$base_url = $base_url['link'];
 	}
 
-	$page_string = "";
+	$page_string = '';
 
 	if( $total_pages > 10 )
 	{
@@ -1764,7 +1658,7 @@ function nv_change_buffer( $buffer )
 
 	if( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
 	{
-		$dp = "";
+		$dp = '';
 		if( $global_config['googleAnalyticsSetDomainName'] == 1 )
 		{
 			$dp .= "_gaq.push([\"_setDomainName\",\"" . $global_config['cookie_domain'] . "\"]);";
@@ -1832,7 +1726,7 @@ function nv_change_buffer( $buffer )
  * @param string $link_acess
  * @return
  */
-function nv_insert_logs( $lang = "", $module_name = "", $name_key = "", $note_action = "", $userid = 0, $link_acess = "" )
+function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_action = '', $userid = 0, $link_acess = '' )
 {
 	global $db_config, $db;
 

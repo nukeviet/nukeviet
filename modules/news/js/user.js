@@ -81,16 +81,3 @@ function nv_del_content_result(res) {
 	}
 	return false;
 }
-function nv_news_search_submit( obj )
-{
-   var query = $("input[name=q]").val();
-   var query = formatStringAsUriComponent(query);query = (query != '')? query + "/" : "";
-   var choose = $("select[name=choose]").val(); choose = (choose > 0)? "choose-" + choose + "/" : "";
-   var catid = $("select[name=catid]").val(); catid = (catid > 0)? "catid-" + catid + "/" : "";
-   var to_date = $("input[name=to_date]").val(); to_date = (to_date !='' )? "to_date-" + to_date + "/" : "";
-   var from_date = $("input[name=from_date]").val(); from_date = (from_date != '')? "from_date-" + from_date + "/" : "";
-   var action = $(obj).attr("action");
-   var rewrite_endurl = action.split("search");
-   if( query != "" || choose != "" || catid != "" || to_date != "" || from_date != "" )window.location.href = rewrite_endurl[0] + "search" + query + choose + catid + to_date + from_date + rewrite_endurl[1];
-   return false;
-}

@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-	$upload_logo = filter_text_input( 'upload_logo', 'post' );
+	$upload_logo = $nv_Request->get_title( 'upload_logo', 'post' );
 
 	if( ! nv_is_url( $upload_logo ) and file_exists( NV_DOCUMENT_ROOT . $upload_logo ) )
 	{
@@ -120,8 +120,8 @@ $xtpl->parse( 'main' );
 
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

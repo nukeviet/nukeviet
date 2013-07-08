@@ -13,9 +13,9 @@ define( 'NV_CLASS_IPS_PHP', true );
 
 /**
  * ips
- * 
- * @package   
- * @author 
+ *
+ * @package
+ * @author
  * @copyright anhtunguyen
  * @version 2009
  * @access public
@@ -31,7 +31,7 @@ class ips
 
 	/**
      * sql_db::__construct()
-     * 
+     *
      * @param mixed $db_config
      * @return
      */
@@ -45,7 +45,7 @@ class ips
 
 	/**
      * ips::nv_getenv()
-     * 
+     *
      * @param mixed $key
      * @return
      */
@@ -72,7 +72,7 @@ class ips
 
 	/**
      * ips::nv_validip()
-     * 
+     *
      * @param mixed $ip
      * @return
      */
@@ -83,7 +83,7 @@ class ips
 
 	/**
      * ips::server_ip()
-     * 
+     *
      * @return
      */
 	public function server_ip()
@@ -106,12 +106,12 @@ class ips
 
 	/**
      * ips::nv_get_clientip()
-     * 
+     *
      * @return
      */
 	private function nv_get_clientip()
 	{
-		$clientip = "";
+		$clientip = '';
 		if( $this->nv_getenv( "HTTP_CLIENT_IP" ) )
 		{
 			$clientip = $this->nv_getenv( "HTTP_CLIENT_IP" );
@@ -143,7 +143,7 @@ class ips
 
 	/**
      * ips::nv_get_forwardip()
-     * 
+     *
      * @return
      */
 	private function nv_get_forwardip()
@@ -172,7 +172,7 @@ class ips
 
 	/**
      * ips::nv_get_remote_addr()
-     * 
+     *
      * @return
      */
 	private function nv_get_remote_addr()
@@ -186,7 +186,7 @@ class ips
 
 	/**
      * ips::nv_getip()
-     * 
+     *
      * @return
      */
 	private function nv_getip()
@@ -229,7 +229,7 @@ class ips
 
 	/**
      * ips::nv_chech_proxy()
-     * 
+     *
      * @return
      */
 	public function nv_check_proxy()

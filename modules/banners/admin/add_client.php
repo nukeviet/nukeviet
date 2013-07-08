@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
@@ -30,22 +30,22 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_email = nv_check_valid_email( $email );
 	$check_pass = nv_check_valid_pass( $pass, NV_UPASSMAX, NV_UPASSMIN );
 
-	if( $website == "http://" ) $website = "";
+	if( $website == "http://" ) $website = '';
 
 	if( ! empty( $check_login ) )
 	{
 		$error = $check_login;
-		$login = "";
+		$login = '';
 	}
 	elseif( ! empty( $check_email ) )
 	{
 		$error = $check_email;
-		$email = "";
+		$email = '';
 	}
 	elseif( ! empty( $check_pass ) )
 	{
 		$error = $check_pass;
-		$pass = $re_pass = "";
+		$pass = $re_pass = '';
 	}
 	elseif( empty( $re_pass ) )
 	{
@@ -54,7 +54,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	elseif( $pass != $re_pass )
 	{
 		$error = sprintf( $lang_global['passwordsincorrect'], $pass, $re_pass );
-		$pass = $re_pass = "";
+		$pass = $re_pass = '';
 	}
 	elseif( empty( $full_name ) )
 	{
@@ -71,20 +71,20 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `login`=" . $db->dbescape( $login ) ) ) > 0 )
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
-		$login = "";
+		$login = '';
 	}
 	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `email`=" . $db->dbescape( $email ) ) ) > 0 )
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
-		$email = "";
+		$email = '';
 	}
 	else
 	{
 		$pass_crypt = $crypt->hash( $pass );
 
-		$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_clients` (`id`, `login`, `pass`, `reg_time`, `full_name`, `email`, `website`, `location`, `yim`, `phone`, `fax`, `mobile`, `act`, `check_num`, `last_login`, `last_ip`, `last_agent`, `uploadtype`) VALUES 
-			(NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( $pass_crypt ) . ", " . NV_CURRENTTIME . ", " . $db->dbescape( $full_name ) . ", 
-			" . $db->dbescape( $email ) . ", " . $db->dbescape( $website ) . ", " . $db->dbescape( $location ) . ", " . $db->dbescape( $yim ) . ", 
+		$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_clients` (`id`, `login`, `pass`, `reg_time`, `full_name`, `email`, `website`, `location`, `yim`, `phone`, `fax`, `mobile`, `act`, `check_num`, `last_login`, `last_ip`, `last_agent`, `uploadtype`) VALUES
+			(NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( $pass_crypt ) . ", " . NV_CURRENTTIME . ", " . $db->dbescape( $full_name ) . ",
+			" . $db->dbescape( $email ) . ", " . $db->dbescape( $website ) . ", " . $db->dbescape( $location ) . ", " . $db->dbescape( $yim ) . ",
 			" . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", " . $db->dbescape( $mobile ) . ", 1, '', 0, '', ''," . $db->dbescape( $uploadtype ) . ")";
 
 		$id = $db->sql_query_insert_id( $sql );
@@ -99,10 +99,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 }
 else
 {
-	$login = $pass = $re_pass = $full_name = $email = $website = $location = $yim = $phone = $fax = $mobile = $uploadtype = "";
+	$login = $pass = $re_pass = $full_name = $email = $website = $location = $yim = $phone = $fax = $mobile = $uploadtype = '';
 }
 
-if( $website == "" ) $website = "http://";
+if( $website == '' ) $website = 'http://';
 
 $info = ( ! empty( $error ) ) ? $error : $lang_module['add_client_info'];
 $is_error = ( ! empty( $error ) ) ? 1 : 0;
@@ -139,8 +139,8 @@ $contents .= "<script type=\"text/javascript\">
 
 $page_title = $lang_module['add_client'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

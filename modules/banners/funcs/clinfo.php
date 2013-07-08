@@ -59,8 +59,8 @@ $manament['clientinfo_stats'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABL
 
 $contents = clinfo_theme( $contents, $manament );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

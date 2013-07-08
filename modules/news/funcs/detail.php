@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-$contents = "";
+$contents = '';
 $publtime = 0;
 $func_who_view = $global_array_cat[$catid]['who_view'];
 $allowed = false;
@@ -60,7 +60,7 @@ if( $allowed )
 			$news_contents['homeimgalt'] = ( empty( $news_contents['homeimgalt'] ) ) ? $news_contents['title'] : $news_contents['homeimgalt'];
 			if( ! empty( $news_contents['homeimgfile'] ) and $news_contents['imgposition'] > 0 )
 			{
-				$src = $alt = $note = "";
+				$src = $alt = $note = '';
 				$width = $height = 0;
 				if( $news_contents['homeimgthumb'] == 1 and $news_contents['imgposition'] == 1 )
 				{
@@ -169,14 +169,14 @@ if( $allowed )
 	unset( $related, $row );
 
 	$topic_array = array();
-	$topic_a = "";
+	$topic_a = '';
 	if( $news_contents['topicid'] > 0 )
 	{
 		list( $topic_title, $topic_alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT `title`,`alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid` = '" . $news_contents['topicid'] . "'" ) );
 		$topic = $db->sql_query( "SELECT `id`, `catid`, `title`, `alias`,`publtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = '" . $news_contents['topicid'] . "' AND `id` != " . $id . " ORDER BY `id` DESC  LIMIT 0, " . $st_links . "" );
 		while( $row = $db->sql_fetch_assoc( $topic ) )
 		{
-			$topiclink = "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topic_alias;
+			$topiclink = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topic_alias;
 			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
 			$topic_array[] = array(
 				"title" => $row['title'],
@@ -208,7 +208,7 @@ if( $allowed )
 	}
 	else
 	{
-		$news_contents['comment'] = "";
+		$news_contents['comment'] = '';
 	}
 	if( $news_contents['allowed_rating'] )
 	{
@@ -248,8 +248,8 @@ else
 	$contents = no_permission( $func_who_view );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -45,8 +45,8 @@ $contents['act'] = array( "nv_chang_act2(" . $id . ");", $lang_module['change_ac
 
 $contents = call_user_func( "nv_info_cl_theme", $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -11,10 +11,10 @@ if( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
 $contents = "Error Access!!!";
 
-$checksess = filter_text_input( 'checksess', 'get', '' );
+$checksess = $nv_Request->get_title( 'checksess', 'get', '' );
 if( $checksess == md5( $global_config['sitekey'] . session_id() ) and file_exists( NV_ROOTDIR . '/install/update_data.php' ) )
 {
-	$contents = "";
+	$contents = '';
 	$list_file_docs = nv_scandir( NV_ROOTDIR . '/install', "/^update_docs_([a-z]{2})\.html$/" );
 
 	// Xoa cac file docs
@@ -60,10 +60,10 @@ if( $checksess == md5( $global_config['sitekey'] . session_id() ) and file_exist
 	clearstatcache();
 }
 
-if( $contents == "" ) $contents = "OK";
+if( $contents == '' ) $contents = 'OK';
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

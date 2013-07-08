@@ -50,24 +50,24 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_site['closed_site'] = $closed_site;
 	}
 
-	$site_email = filter_text_input( 'site_email', 'post', '', 1, 255 );
+	$site_email = nv_substr( $nv_Request->get_title( 'site_email', 'post', '', 1 ), 0, 255 );
 	if( nv_check_valid_email( $site_email ) == '' )
 	{
 		$array_config_site['site_email'] = $site_email;
 	}
 
-	$error_send_email = filter_text_input( 'error_send_email', 'post', '', 1, 255 );
+	$error_send_email = nv_substr( $nv_Request->get_title( 'error_send_email', 'post', '', 1 ), 0, 255 );
 	if( nv_check_valid_email( $error_send_email ) == '' )
 	{
 		$array_config_site['error_send_email'] = $error_send_email;
 	}
 
 	$preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
-	$array_config_site['date_pattern'] = filter_text_input( 'date_pattern', 'post', '', 0, 255, $preg_replace );
-	$array_config_site['time_pattern'] = filter_text_input( 'time_pattern', 'post', '', 0, 255, $preg_replace );
+	$array_config_site['date_pattern'] = nv_substr( $nv_Request->get_title( 'date_pattern', 'post', '', 0, $preg_replace ), 0, 255);
+	$array_config_site['time_pattern'] = nv_substr( $nv_Request->get_title( 'time_pattern', 'post', '', 0, $preg_replace ), 0, 255);
 
-	$array_config_site['searchEngineUniqueID'] = filter_text_input( 'searchEngineUniqueID', 'post', '' );
-	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = "";
+	$array_config_site['searchEngineUniqueID'] = $nv_Request->get_title( 'searchEngineUniqueID', 'post', '' );
+	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = '';
 
 	foreach( $array_config_site as $config_name => $config_value )
 	{
@@ -76,12 +76,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$array_config_global = array();
-		$site_timezone = filter_text_input( 'site_timezone', 'post', '', 0, 255 );
+		$site_timezone = $nv_Request->get_title( 'site_timezone', 'post', '', 0 );
 		if( empty( $site_timezone ) or ( ! empty( $site_timezone ) and ( in_array( $site_timezone, $timezone_array ) or $site_timezone == "byCountry" ) ) )
 		{
 			$array_config_global['site_timezone'] = $site_timezone;
 		}
-		$my_domains = filter_text_input( 'my_domains', 'post', '' );
+		$my_domains = $nv_Request->get_title( 'my_domains', 'post', '' );
 		$array_config_global['my_domains'] = array( NV_SERVER_NAME );
 
 		if( ! empty( $my_domains ) )
@@ -106,7 +106,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['optActive'] = $nv_Request->get_int( 'optActive', 'post' );
 		$array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post', 0 );
 
-		$site_lang = filter_text_input( 'site_lang', 'post', '', 1, 255 );
+		$site_lang = $nv_Request->get_title( 'site_lang', 'post', '', 1 );
 		if( ! empty( $site_lang ) and in_array( $site_lang, $allow_sitelangs ) )
 		{
 			$array_config_global['site_lang'] = $site_lang;
@@ -185,8 +185,8 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	}
 
 	$lang_multi = $array_config_global['lang_multi'];
-	$array_config_global['gzip_method'] = ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '';
-	$array_config_global['lang_multi'] = ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '';
+	$xtpl->assign( 'CHECKED_GZIP_METHOD', ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '' );
+	$xtpl->assign( 'CHECKED_LANG_MULTI', ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '' );
 
 	$xtpl->assign( 'CHECKED1', ( $array_config_global['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
@@ -236,7 +236,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$xtpl->parse( 'main.system' );
 }
 
-if( $errormess != "" )
+if( $errormess != '' )
 {
 	$xtpl->assign( 'ERROR', $errormess );
 	$xtpl->parse( 'main.error' );
@@ -260,8 +260,8 @@ foreach( $closed_site_Modes as $value => $name )
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

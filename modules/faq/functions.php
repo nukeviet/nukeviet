@@ -158,7 +158,7 @@ function update_keywords( $catid, $faq )
 	return $keywords;
 }
 
-$alias = "";
+$alias = '';
 if( ! empty( $array_op ) )
 {
 	$alias = isset( $array_op[0] ) ? $array_op[0] : "";

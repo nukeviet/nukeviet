@@ -132,8 +132,8 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Tuy chon kieu giao dien
 			if( $nv_Request->isset_request( 'nv' . NV_LANG_DATA . 'themever', 'get' ) )
 			{
-				$theme_type = filter_text_input( 'nv' . NV_LANG_DATA . 'themever', 'get', '', 1 );
-				$nv_redirect = filter_text_input( 'nv_redirect', 'get', '' );
+				$theme_type = $nv_Request->get_title( 'nv' . NV_LANG_DATA . 'themever', 'get', '', 1 );
+				$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
 
 				if( in_array( $theme_type, $global_config['array_theme_type'] ) and ! empty( $global_config['switch_mobi_des'] ) ) $nv_Request->set_Cookie( 'nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME );
 

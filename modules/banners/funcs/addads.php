@@ -15,7 +15,7 @@ global $global_config, $module_name, $module_info, $lang_module;
 
 if( defined( 'NV_IS_BANNER_CLIENT' ) )
 {
-	$upload_blocked = "";
+	$upload_blocked = '';
 	$file_allowed_ext = array();
 
 	if( preg_match( "/images/", $banner_client_info['uploadtype'] ) )
@@ -32,9 +32,9 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	{
 		$upload_blocked = $lang_module['upload_blocked'];
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_site_theme( $upload_blocked );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	}
 
@@ -51,16 +51,16 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	{
 
 		$error = array();
-		$title = filter_text_input( 'title', 'post', '', 1 );
-		$blockid = filter_text_input( 'block', 'post', '', 1 );
-		$description = filter_text_input( 'description', 'post', '', 1 );
-		$url = filter_text_input( 'url', 'post', '', 0 );
-		$begintime = filter_text_input( 'begintime', 'post', '', 1 );
-		$endtime = filter_text_input( 'endtime', 'post', '', 1 );
+		$title = $nv_Request->get_title( 'title', 'post', '', 1 );
+		$blockid = $nv_Request->get_title( 'block', 'post', '', 1 );
+		$description = $nv_Request->get_title( 'description', 'post', '', 1 );
+		$url = $nv_Request->get_title( 'url', 'post', '', 0 );
+		$begintime = $nv_Request->get_title( 'begintime', 'post', '', 1 );
+		$endtime = $nv_Request->get_title( 'endtime', 'post', '', 1 );
 
-		if( ! empty( $begintime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime ) ) $begintime = "";
-		if( ! empty( $endtime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime ) ) $endtime = "";
-		if( $url == "http://" ) $url = "";
+		if( ! empty( $begintime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime ) ) $begintime = '';
+		if( ! empty( $endtime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime ) ) $endtime = '';
+		if( $url == "http://" ) $url = '';
 
 		if( empty( $title ) )
 		{
@@ -128,9 +128,9 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 
 			if( $endtime != 0 and $endtime <= $begintime ) $endtime = $begintime;
 
-			$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_rows` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `imageforswf`, `click_url`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES 
-				(NULL, " . $db->dbescape( $title ) . ", " . $blockid . ", " . $banner_client_info['id'] . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ", 
-				" . $width . ", " . $height . ", " . $db->dbescape( $description ) . ", '', " . $db->dbescape( $url ) . ", " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 
+			$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_rows` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `imageforswf`, `click_url`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES
+				(NULL, " . $db->dbescape( $title ) . ", " . $blockid . ", " . $banner_client_info['id'] . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ",
+				" . $width . ", " . $height . ", " . $db->dbescape( $description ) . ", '', " . $db->dbescape( $url ) . ", " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ",
 				0, 3,0)";
 			$id = $db->sql_query_insert_id( $sql );
 
@@ -162,8 +162,8 @@ else
 	$contents .= $lang_module['addads_require_login'];
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -9,14 +9,14 @@
 
 /**
  * Example to use
- * 
+ *
  * include( ftp.class.php );
  * $ftp = new NVftp( '127.0.0.1', 'phantandung', '123456' );
- * 
+ *
  * detectFtpRoot( $list_valid, $path_root, true, CJzip.php ); // Auto detect ftp remove path
- * 
+ *
  * echo( $ftp->error ); // View error message
- * 
+ *
  * $ftp->close(); // Must close connection after use event failed to connect, login
  */
 
@@ -38,7 +38,7 @@ if( ! defined( 'FTP_BINARY' ) ) define( 'FTP_BINARY', 1 );
 if( ! defined( 'FTP_ASCII' ) ) define( 'FTP_ASCII', 0 );
 
 // Kiem tra thu vien FTP hoat dong
-$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 if( extension_loaded( 'suhosin' ) )
 {
 	$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -98,7 +98,7 @@ class NVftp
 
 	/**
 	 * NVftp::__construct()
-	 * 
+	 *
 	 * @param string $host
 	 * @param string $user
 	 * @param string $pass
@@ -177,7 +177,7 @@ class NVftp
 
 	/**
 	 * NVftp::check_login()
-	 * 
+	 *
 	 * @return
 	 */
 	private function check_login()
@@ -194,7 +194,7 @@ class NVftp
 
 	/**
 	 * NVftp::detectFtpRoot()
-	 * 
+	 *
 	 * @param mixed $list_valid
 	 * @param string $path_root
 	 * @param bool $read_buffer
@@ -268,7 +268,7 @@ class NVftp
 
 	/**
 	 * NVftp::listDetail()
-	 * 
+	 *
 	 * @param mixed $path
 	 * @param string $type
 	 * @return
@@ -431,7 +431,7 @@ class NVftp
 
 	/**
 	 * NVftp::read()
-	 * 
+	 *
 	 * @param mixed $remote
 	 * @param mixed $buffer
 	 * @return
@@ -480,7 +480,7 @@ class NVftp
 
 	/**
 	 * NVftp::pwd()
-	 * 
+	 *
 	 * @return
 	 */
 	public function pwd()
@@ -492,7 +492,7 @@ class NVftp
 
 	/**
 	 * NVftp::mkdir()
-	 * 
+	 *
 	 * @return
 	 */
 	public function mkdir( $dir )
@@ -504,7 +504,7 @@ class NVftp
 
 	/**
 	 * NVftp::unlink()
-	 * 
+	 *
 	 * @return
 	 */
 	public function unlink( $dir )
@@ -516,7 +516,7 @@ class NVftp
 
 	/**
 	 * NVftp::rmdir()
-	 * 
+	 *
 	 * @return
 	 */
 	public function rmdir( $dir )
@@ -528,7 +528,7 @@ class NVftp
 
 	/**
 	 * NVftp::rename()
-	 * 
+	 *
 	 * @return
 	 */
 	public function rename( $old, $new )
@@ -540,7 +540,7 @@ class NVftp
 
 	/**
 	 * NVftp::chdir()
-	 * 
+	 *
 	 * @param mixed $path
 	 * @return
 	 */
@@ -557,7 +557,7 @@ class NVftp
 
 	/**
 	 * NVftp::close()
-	 * 
+	 *
 	 * @return
 	 */
 	public function close()
@@ -569,7 +569,7 @@ class NVftp
 
 	/**
 	 * NVftp::DetectedMode()
-	 * 
+	 *
 	 * @param mixed $fileName
 	 * @return
 	 */

@@ -100,7 +100,7 @@ function nv_save_file_config_global()
 	$content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
 
 	//disable_classes
-	$sys_info['disable_classes'] = ( ( $disable_classes = ini_get( "disable_classes" ) ) != "" and $disable_classes != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
+	$sys_info['disable_classes'] = ( ( $disable_classes = ini_get( "disable_classes" ) ) != '' and $disable_classes != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_classes ) ) : array();
 	if( ! empty( $sys_info['disable_classes'] ) )
 	{
 		$disable_classes = "'" . implode( "','", $sys_info['disable_classes'] ) . "'";
@@ -112,7 +112,7 @@ function nv_save_file_config_global()
 	$content_config .= "\$sys_info['disable_classes']=array(" . $disable_classes . ");\n";
 
 	//disable_functions
-	$sys_info['disable_functions'] = ( ( $disable_functions = ini_get( "disable_functions" ) ) != "" and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
+	$sys_info['disable_functions'] = ( ( $disable_functions = ini_get( "disable_functions" ) ) != '' and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
 
 	if( extension_loaded( 'suhosin' ) )
 	{
@@ -547,7 +547,7 @@ function nv_rewrite_change( $array_config_global )
 	elseif( $sys_info['supports_rewrite'] == "rewrite_mode_apache" )
 	{
 		$filename = NV_ROOTDIR . "/.htaccess";
-		$htaccess = "";
+		$htaccess = '';
 
 		$rewrite_rule = "##################################################################################\n";
 		$rewrite_rule .= "#nukeviet_rewrite_start //Please do not change the contents of the following lines\n";
@@ -609,7 +609,7 @@ function nv_rewrite_change( $array_config_global )
  * @param mixed $rewrite_rule
  * @return
  */
-function nv_rewrite_rule_iis7( $rewrite_rule = "" )
+function nv_rewrite_rule_iis7( $rewrite_rule = '' )
 {
 	$filename = NV_ROOTDIR . "/web.config";
 	if( ! class_exists( 'DOMDocument' ) ) return false;

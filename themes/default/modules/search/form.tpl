@@ -6,7 +6,7 @@
 <script type="text/javascript" >
 	google.load('search', '1', {
 		language : nv_sitelang
-	}); 
+	});
 </script>
 <link rel="stylesheet" href="http://www.google.com/cse/style/look/default.css" type="text/css" />
 <div class="sea-frame">
@@ -64,12 +64,9 @@
 		if ("all" == b) {
 			return alert("{LANG.chooseModule}"), $("#form_search #search_query_mod").focus(), !1
 		}
-		var action = $("form[id=form_search]").attr("action");
-		action = action.replace("search", b + "/search" );
-		var b = action, a = $("#form_search #search_query").val(), a = formatStringAsUriComponent(a);
-		var rewrite_endurl = b.split("search");
-		{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = rewrite_endurl[0] + "search/" + a + rewrite_endurl[1]);
-		  
+		var b = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = formatStringAsUriComponent(a);
+		{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = b + "&q=" + a);
+
 		window.location.href = b;
 		return !1
 	});
@@ -89,14 +86,9 @@
 		if({NV_MIN_SEARCH_LENGTH} > a.length || {NV_MAX_SEARCH_LENGTH} < a.length) {
 			return $("#form_search [name=q]").select(), !1
 		}
-		var a = "/" + a;
-		var mod = $("#search_query_mod").val(); mod = (mod != "all")? "/" + "m-" + mod : "";
-		var logic =  ( $("#search_logic_and:checked").val() == 1 )? "/" + "l-1" : "/" + "l-0";
-		
-		b =  $("form[id=form_search]").attr("action");
-		var rewrite_endurl = b.split("search");
-		window.location.href = rewrite_endurl[0] + "search" + a + mod + logic + rewrite_endurl[1];
-
+		a = $(this).serialize();
+		b = $(this).attr("action");
+		window.location.href = b + "&" + a;
 		return !1
 	});
 	//]]>

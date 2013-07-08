@@ -61,7 +61,7 @@ function nv_getRPC( $url, $data )
 					$http_request .= "Proxy-Authorization: Basic " . base64_encode( "" . $proxy[3] . ":" . $proxy[4] . "" ) . "\r\n";
 				}
 				$http_request .= "\r\n";
-				$response = "";
+				$response = '';
 				fputs( $fp, $http_request );
 				fputs( $fp, $data );
 				while( ! feof( $fp ) )
@@ -100,7 +100,7 @@ function nv_getRPC( $url, $data )
 		$http_request .= "Content-Type: text/xml\r\n";
 		$http_request .= "Content-Length: " . strlen( $data ) . "\r\n";
 		$http_request .= "User-Agent: " . $agent . "\r\n\r\n";
-		$response = "";
+		$response = '';
 		fputs( $fp, $http_request );
 		fputs( $fp, $data );
 		while( ! feof( $fp ) )
@@ -185,7 +185,7 @@ function nv_getRPC( $url, $data )
 	return array( 3, $lang_module['rpc_error_unknown'] );
 }
 
-function nv_rpcXMLCreate( $webtitle, $webhome, $linkpage, $webrss = "", $method = "weblogUpdates.ping" )
+function nv_rpcXMLCreate( $webtitle, $webhome, $linkpage, $webrss = '', $method = 'weblogUpdates.ping' )
 {
 	if( $method != "weblogUpdates.ping" ) $method = "weblogUpdates.extendedPing";
 

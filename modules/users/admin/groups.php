@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_global['mod_groups'];
-$contents = "";
+$contents = '';
 //Lay danh sach nhom
 $sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` WHERE `idsite` = " . $global_config['idsite'] . " OR (`idsite` =0 AND group_id > 3 AND `siteus` = 1) ORDER BY `idsite`, `weight`";
 $result = $db->sql_query( $sql );
@@ -285,9 +285,9 @@ if( $nv_Request->isset_request( 'userlist', 'get' ) )
 	$xtpl->parse( 'userlist' );
 	$contents = $xtpl->text( 'userlist' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -322,7 +322,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 
 		if( $nv_Request->isset_request( 'save', 'post' ) )
 		{
-			$post['title'] = filter_text_input( 'title', 'post', '', 1 );
+			$post['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
 			if( empty( $post['title'] ) )
 			{
 				die( $lang_module['title_empty'] );
@@ -335,11 +335,11 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 				die( sprintf( $lang_module['error_title_exists'], $post['title'] ) );
 			}
 
-			$post['content'] = nv_editor_filter_textarea( 'content', '', NV_ALLOWED_HTML_TAGS );
+			$post['content'] = $nv_Request->get_editor( 'content', '', NV_ALLOWED_HTML_TAGS );
 			$test_content = trim( strip_tags( $post['content'] ) );
 			$post['content'] = ! empty( $test_content ) ? nv_editor_nl2br( $post['content'] ) : "";
 
-			$post['exp_time'] = filter_text_input( 'exp_time', 'post', '' );
+			$post['exp_time'] = $nv_Request->get_title( 'exp_time', 'post', '' );
 
 			if( preg_match( "/^([\d]{1,2})\/([\d]{1,2})\/([\d]{4})$/", $post['exp_time'], $matches ) )
 			{
@@ -358,12 +358,12 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 
 			if( isset( $post['id'] ) AND $post['id'] > 3 )
 			{
-				$query = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` SET 
-					`title`=" . $db->dbescape( $post['title'] ) . ", 
-					`content`=" . $db->dbescape( $post['content'] ) . ", 
-					`exp_time`='" . $post['exp_time'] . "', 
-					`public`='" . $post['public'] . "', 
-					`siteus`='" . $post['siteus'] . "' 
+				$query = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` SET
+					`title`=" . $db->dbescape( $post['title'] ) . ",
+					`content`=" . $db->dbescape( $post['content'] ) . ",
+					`exp_time`='" . $post['exp_time'] . "',
+					`public`='" . $post['public'] . "',
+					`siteus`='" . $post['siteus'] . "'
 					WHERE `group_id`=" . $post['id'] . " LIMIT 1";
 				$ok = $db->sql_query( $query );
 			}
@@ -371,9 +371,9 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			{
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` WHERE `idsite`=" . $global_config['idsite'] ) );
 				$weight = intval( $weight ) + 1;
-				$query = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` 
+				$query = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "`
 					(`group_id`, `title`, `content`, `add_time`, `exp_time`, `public`, `weight`, `act`, `idsite`, `number`, `siteus`)
-					VALUES (NULL, " . $db->dbescape( $post['title'] ) . ", " . $db->dbescape( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", 
+					VALUES (NULL, " . $db->dbescape( $post['title'] ) . ", " . $db->dbescape( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
 					" . $post['public'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ");";
 				$ok = $post['id'] = $db->sql_query_insert_id( $query );
 			}
@@ -399,8 +399,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		}
 		else
 		{
-			$post['title'] = $post['content'] = $post['exp_time'] = "";
-			$post['public'] = "";
+			$post['title'] = $post['content'] = $post['exp_time'] = '';
+			$post['public'] = '';
 		}
 
 		if( ! empty( $post['content'] ) ) $post['content'] = nv_htmlspecialchars( $post['content'] );
@@ -431,9 +431,9 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		$contents = $lang_global['admin_no_allow_func'];
 	}
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	die();
 }
 
@@ -496,8 +496,8 @@ if( defined( 'NV_IS_SPADMIN' ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

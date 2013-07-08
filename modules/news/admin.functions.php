@@ -857,7 +857,7 @@ function nv_array_cat_admin()
  * @param mixed $nv_redirect
  * @return
  */
-function redriect( $msg1 = "", $msg2 = "", $nv_redirect )
+function redriect( $msg1 = '', $msg2 = '', $nv_redirect )
 {
 	global $global_config, $module_file, $module_name;
 	$xtpl = new XTemplate( "redriect.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
@@ -874,9 +874,9 @@ function redriect( $msg1 = "", $msg2 = "", $nv_redirect )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 

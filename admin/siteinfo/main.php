@@ -163,7 +163,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		$new_version = array();
 	}
 
-	$info = "";
+	$info = '';
 	if( ! empty( $new_version ) )
 	{
 		$field[] = array(
@@ -200,8 +200,8 @@ if( defined( 'NV_IS_GODADMIN' ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

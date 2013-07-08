@@ -16,8 +16,8 @@ if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", 
 
 /**
  * Error
- * 
- * @package   
+ *
+ * @package
  * @author NUKEVIET 3.0
  * @copyright VINADES
  * @version 2010
@@ -67,7 +67,7 @@ class Error
 
 	/**
      * Error::__construct()
-     * 
+     *
      * @param mixed $config
      * @return
      */
@@ -133,12 +133,12 @@ class Error
 
 	/**
      * Error::nv_set_ini()
-     * 
+     *
      * @return
      */
 	public function nv_set_ini()
 	{
-		$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -156,7 +156,7 @@ class Error
 
 	/**
      * Error::get_Env()
-     * 
+     *
      * @param mixed $key
      * @return
      */
@@ -179,7 +179,7 @@ class Error
 
 	/**
      * Error::get_error_log_path()
-     * 
+     *
      * @param mixed $path
      * @return
      */
@@ -230,7 +230,7 @@ class Error
 
 	/**
      * Error::parse_error_num()
-     * 
+     *
      * @param mixed $num
      * @return
      */
@@ -316,7 +316,7 @@ class Error
 			file_put_contents( $error_file, $content, FILE_APPEND );
 		}
 
-		$strEncodedEmail = "";
+		$strEncodedEmail = '';
 		$strlen = strlen( $this->error_send_mail );
 		for( $i = 0; $i < $strlen; ++$i )
 		{
@@ -386,7 +386,7 @@ class Error
 
 	/**
      * Error::error_handler()
-     * 
+     *
      * @param mixed $errno
      * @param mixed $errstr
      * @param mixed $errfile
@@ -398,7 +398,7 @@ class Error
 		if( empty( $errno ) ) return;
 		if( ! empty( $errno ) ) $this->errno = $errno;
 		if( isset( $errstr ) and ! empty( $errstr ) ) $this->errstr = $errstr;
-		if( isset( $errfile ) and ! empty( $errfile ) ) $this->errfile = str_replace( NV_ROOTDIR, "", str_replace( '\\', '/', $errfile ) );
+		if( isset( $errfile ) and ! empty( $errfile ) ) $this->errfile = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $errfile ) );
 		if( isset( $errline ) and ! empty( $errline ) ) $this->errline = $errline;
 
 		$track_errors = $this->day . '_' . md5( $this->errno . ( string )$this->errfile . ( string )$this->errline . $this->ip );

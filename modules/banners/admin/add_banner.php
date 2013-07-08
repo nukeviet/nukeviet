@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['add_banner'];
 
 $contents = array();
-$contents['upload_blocked'] = "";
+$contents['upload_blocked'] = '';
 $contents['file_allowed_ext'] = array();
 
 if( preg_match( "/images/", NV_ALLOW_FILES_TYPE ) )
@@ -29,9 +29,9 @@ if( empty( $contents['file_allowed_ext'] ) )
 {
 	$contents['upload_blocked'] = $lang_module['upload_blocked'];
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( nv_add_banner_theme( $contents ) );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -59,7 +59,7 @@ if( empty( $plans ) )
 	die();
 }
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
@@ -76,11 +76,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$publ_date = strip_tags( $nv_Request->get_string( 'publ_date', 'post', '' ) );
 	$exp_date = strip_tags( $nv_Request->get_string( 'exp_date', 'post', '' ) );
 
-	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = "";
-	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = "";
+	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = '';
+	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = '';
 
 	if( ! empty( $clid ) and ! isset( $clients[$clid] ) ) $clid = 0;
-	if( $click_url == "http://" ) $click_url = "";
+	if( $click_url == "http://" ) $click_url = '';
 
 	if( empty( $title ) )
 	{
@@ -144,9 +144,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			if( $exptime != 0 and $exptime <= $publtime ) $exptime = $publtime;
 
-			$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_rows` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `imageforswf`, `click_url`, `target`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES 
-				(NULL, " . $db->dbescape( $title ) . ", " . $pid . ", " . $clid . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ", 
-				" . $width . ", " . $height . ", " . $db->dbescape( $file_alt ) . ", '', " . $db->dbescape( $click_url ) . ", " . $db->dbescape( $target ) . ", " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ", 
+			$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_rows` (`id`, `title`, `pid`, `clid`, `file_name`, `file_ext`, `file_mime`, `width`, `height`, `file_alt`, `imageforswf`, `click_url`, `target`, `add_time`, `publ_time`, `exp_time`, `hits_total`, `act`, `weight`) VALUES
+				(NULL, " . $db->dbescape( $title ) . ", " . $pid . ", " . $clid . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ",
+				" . $width . ", " . $height . ", " . $db->dbescape( $file_alt ) . ", '', " . $db->dbescape( $click_url ) . ", " . $db->dbescape( $target ) . ", " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
 				0, 1, 0)";
 
 			$id = $db->sql_query_insert_id( $sql );
@@ -163,7 +163,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 else
 {
 	$pid = $clid = 0;
-	$title = $file_alt = $click_url = $exp_date = "";
+	$title = $file_alt = $click_url = $exp_date = '';
 	$target = '_blank';
 	$publ_date = date( "d/m/Y", NV_CURRENTTIME );
 
@@ -193,8 +193,8 @@ $contents['target'] = array( $lang_module['target'], 'target', $targets, $target
 $contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10 );
 $contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10 );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( nv_add_banner_theme( $contents ) );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

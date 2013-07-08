@@ -67,7 +67,7 @@ if( $id > 0 and $catid > 0 )
 
 		if( ! empty( $content['homeimgfile'] ) and $content['imgposition'] > 0 )
 		{
-			$src = $alt = $note = "";
+			$src = $alt = $note = '';
 			$width = $height = 0;
 			if( $content['homeimgthumb'] == 1 and $content['imgposition'] == 1 )
 			{
@@ -95,9 +95,9 @@ if( $id > 0 and $catid > 0 )
 			);
 		}
 		$contents = call_user_func( "news_print", $result );
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo $contents;
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 	}
 }
 header( "Location: " . $global_config['site_url'] );

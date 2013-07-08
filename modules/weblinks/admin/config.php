@@ -50,7 +50,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 }
 
 // Set data adv
-$data_content['asc'] = $data_content['des'] = "";
+$data_content['asc'] = $data_content['des'] = '';
 ( $data_content['sort'] == "asc" ) ? $data_content['asc'] = 'checked' : $data_content['des'] = 'checked';
 $data_content['byid'] = ( $data_content['sortoption'] == 'byid' ) ? ' checked' : '';
 $data_content['byrand'] = ( $data_content['sortoption'] == 'byrand' ) ? ' checked' : '';
@@ -73,8 +73,8 @@ if( ! empty( $submit ) )
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

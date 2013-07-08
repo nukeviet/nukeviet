@@ -27,8 +27,8 @@ $sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_clients` SET `act`=" . $act . " WH
 $return = $db->sql_query( $sql );
 $return = $return ? "OK" : "NO";
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $return . '|act_' . $id . '|' . $id . '|client_info';
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

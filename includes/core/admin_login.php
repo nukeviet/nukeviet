@@ -31,8 +31,8 @@ if( ! nv_admin_checkfirewall() )
 	nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . "<meta http-equiv=\"Refresh\" content=\"5;URL=" . $global_config['site_url'] . "\" />" );
 }
 
-$error = "";
-$login = "";
+$error = '';
+$login = '';
 
 $array_gfx_chk = array( 1, 5, 6, 7 );
 if( in_array( $global_config['gfx_chk'], $array_gfx_chk ) )
@@ -46,11 +46,11 @@ else
 $admin_login_redirect = $nv_Request->get_string( 'admin_login_redirect', 'session', '' );
 if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 {
-	$nv_username = filter_text_input( 'nv_login', 'post', '', 1 );
-	$nv_password = filter_text_input( 'nv_password', 'post', '' );
+	$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
+	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
 	if( $global_config['gfx_chk'] == 1 )
 	{
-		$nv_seccode = filter_text_input( 'nv_seccode', 'post', '' );
+		$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 	}
 	if( empty( $nv_username ) )
 	{
@@ -70,8 +70,8 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 		{
 			define( 'NV_IS_MOD_USER', true );
 			require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php' );
-			if( empty( $nv_username ) ) $nv_username = filter_text_input( 'nv_login', 'post', '', 1 );
-			if( empty( $nv_password ) ) $nv_password = filter_text_input( 'nv_password', 'post', '' );
+			if( empty( $nv_username ) ) $nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
+			if( empty( $nv_password ) ) $nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
 		}
 
 		$userid = 0;
@@ -141,7 +141,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 							$redirect = $admin_login_redirect;
 							$nv_Request->unset_request( 'admin_login_redirect', 'session' );
 						}
-						$error = "";
+						$error = '';
 						nv_info_die( $global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />" );
 						die();
 					}
@@ -160,7 +160,7 @@ else
 	{
 		$nv_Request->set_Session( 'admin_login_redirect', $nv_Request->request_uri );
 	}
-	$nv_username = "";
+	$nv_username = '';
 }
 
 if( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_global.php" ) )
@@ -175,7 +175,7 @@ elseif( file_exists( NV_ROOTDIR . "/language/en/admin_global.php" ) )
 $info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
 $size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
-$dir_template = "";
+$dir_template = '';
 if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/login.tpl" ) )
 {
 	$dir_template = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
@@ -258,8 +258,8 @@ if( $global_config['lang_multi'] == 1 )
 }
 $xtpl->parse( 'main' );
 $global_config['mudim_active'] = 0;
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 $xtpl->out( 'main' );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

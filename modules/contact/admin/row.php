@@ -38,8 +38,8 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
 
-$sql = "SELECT t1.admin_id as id, t1.lev as level, t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM 
-	`" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid 
+$sql = "SELECT t1.admin_id as id, t1.lev as level, t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM
+	`" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid
 	WHERE t1.lev!=0 AND t1.is_suspend=0";
 $result = $db->sql_query( $sql );
 
@@ -54,7 +54,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	);
 }
 
-$error = "";
+$error = '';
 
 if( defined( 'NV_EDITOR' ) )
 {
@@ -63,11 +63,11 @@ if( defined( 'NV_EDITOR' ) )
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-	$full_name = filter_text_input( 'full_name', 'post', '', 1 );
-	$phone = filter_text_input( 'phone', 'post', '', 1 );
-	$fax = filter_text_input( 'fax', 'post', '', 1 );
-	$email = filter_text_input( 'email', 'post', '', 1 );
-	$note = nv_editor_filter_textarea( 'note', '', NV_ALLOWED_HTML_TAGS );
+	$full_name = $nv_Request->get_title( 'full_name', 'post', '', 1 );
+	$phone = $nv_Request->get_title( 'phone', 'post', '', 1 );
+	$fax = $nv_Request->get_title( 'fax', 'post', '', 1 );
+	$email = $nv_Request->get_title( 'email', 'post', '', 1 );
+	$note = $nv_Request->get_editor( 'note', '', NV_ALLOWED_HTML_TAGS );
 
 	$view_level = $nv_Request->get_array( 'view_level', 'post', array() );
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
@@ -139,9 +139,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET 
-				`full_name`=" . $db->dbescape( $full_name ) . ", `phone` = " . $db->dbescape( $phone ) . ", 
-				`fax`=" . $db->dbescape( $fax ) . ", `email`=" . $db->dbescape( $email ) . ", 
+			$sql = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
+				`full_name`=" . $db->dbescape( $full_name ) . ", `phone` = " . $db->dbescape( $phone ) . ",
+				`fax`=" . $db->dbescape( $fax ) . ", `email`=" . $db->dbescape( $email ) . ",
 				`note`=" . $db->dbescape( $note ) . ", `admins`=" . $db->dbescape( $admins_list ) . " WHERE `id` =" . $id;
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_row', "rowid " . $id, $admin_info['userid'] );
@@ -149,7 +149,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		else
 		{
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
-				NULL, " . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", 
+				NULL, " . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ",
 				" . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_row', " ", $admin_info['userid'] );
@@ -223,7 +223,7 @@ else
 	}
 	else
 	{
-		$full_name = $phone = $fax = $email = $note = "";
+		$full_name = $phone = $fax = $email = $note = '';
 		$view_level = $reply_level = $obt_level = array();
 
 		foreach( $adms as $admid => $values )
@@ -283,8 +283,8 @@ foreach( $adms as $admid => $values )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

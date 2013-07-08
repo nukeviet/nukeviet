@@ -20,11 +20,11 @@ if( ! function_exists( 'color_hex2rgb' ) )
 {
 
 	/**
- * color_hex2rgb()
- * 
- * @param mixed $hex
- * @return
- */
+	 * color_hex2rgb()
+	 *
+	 * @param mixed $hex
+	 * @return
+	 */
 	function color_hex2rgb( $hex )
 	{
 		if( preg_match( "/[^0-9ABCDEFabcdef]/", $hex[1] ) ) return $hex[0];
@@ -34,13 +34,14 @@ if( ! function_exists( 'color_hex2rgb' ) )
 		$l = $l / 3;
 		return "rgb(" . ( hexdec( substr( $color, 0, 1 * $l ) ) ) . ", " . ( hexdec( substr( $color, 1 * $l, 1 * $l ) ) ) . ", " . ( hexdec( substr( $color, 2 * $l, 1 * $l ) ) ) . ");";
 	}
+
 }
 
 /**
  * Request
- * 
- * @package 
- * @author 
+ *
+ * @package
+ * @author
  * @copyright VINADES.,JSC
  * @version 2010
  * @access public
@@ -93,12 +94,12 @@ class Request
 	private $disablecomannds = array( "base64_decode", "cmd", "passthru", "eval", "exec", "system", "fopen", "fsockopen", "file", "file_get_contents", "readfile", "unlink" );
 
 	/**
- * Request::__construct()
- * 
- * @param mixed $config
- * @param mixed $ip
- * @return
- */
+	 * Request::__construct()
+	 *
+	 * @param mixed $config
+	 * @param mixed $ip
+	 * @return
+	 */
 	public function __construct( $config, $ip )
 	{
 		if( isset( $config['allowed_html_tags'] ) and is_array( $config['allowed_html_tags'] ) )
@@ -116,8 +117,8 @@ class Request
 		}
 		if( isset( $config['cookie_secure'] ) and ! empty( $config['cookie_secure'] ) ) $this->secure = true;
 		if( isset( $config['cookie_httponly'] ) and ! empty( $config['cookie_httponly'] ) ) $this->httponly = true;
-		if( isset( $config['cookie_prefix'] ) and ! empty( $config['cookie_prefix'] ) ) $this->cookie_prefix = preg_replace( "/[^a-zA-Z0-9\_]+/", "", $config['cookie_prefix'] );
-		if( isset( $config['session_prefix'] ) and ! empty( $config['session_prefix'] ) ) $this->session_prefix = preg_replace( "/[^a-zA-Z0-9\_]+/", "", $config['session_prefix'] );
+		if( isset( $config['cookie_prefix'] ) and ! empty( $config['cookie_prefix'] ) ) $this->cookie_prefix = preg_replace( '/[^a-zA-Z0-9\_]+/', '', $config['cookie_prefix'] );
+		if( isset( $config['session_prefix'] ) and ! empty( $config['session_prefix'] ) ) $this->session_prefix = preg_replace( '/[^a-zA-Z0-9\_]+/', '', $config['session_prefix'] );
 		if( isset( $config['sitekey'] ) and ! empty( $config['sitekey'] ) ) $this->cookie_key = $config['sitekey'];
 		if( ! empty( $config['str_referer_blocker'] ) ) $this->str_referer_blocker = true;
 		$this->engine_allowed = ( array )$config['engine_allowed'];
@@ -163,11 +164,11 @@ class Request
 	}
 
 	/**
- * Request::get_Env()
- * 
- * @param mixed $key
- * @return
- */
+	 * Request::get_Env()
+	 *
+	 * @param mixed $key
+	 * @return
+	 */
 	private function get_Env( $key )
 	{
 		if( ! is_array( $key ) )
@@ -185,12 +186,12 @@ class Request
 	}
 
 	/**
- * Request::fixQuery()
- * 
- * @param mixed $var
- * @param mixed $mode
- * @return
- */
+	 * Request::fixQuery()
+	 *
+	 * @param mixed $var
+	 * @param mixed $mode
+	 * @return
+	 */
 	private function fixQuery( &$var, $mode )
 	{
 		$array_keys = array_keys( $var );
@@ -209,11 +210,11 @@ class Request
 	}
 
 	/**
- * Request::Initialize()
- * 
- * @param mixed $my_domains
- * @return
- */
+	 * Request::Initialize()
+	 *
+	 * @param mixed $my_domains
+	 * @return
+	 */
 	private function Initialize( $my_domains )
 	{
 		if( sizeof( $_GET ) )
@@ -305,7 +306,7 @@ class Request
 		{
 			$base_siteurl = preg_replace( "#/" . NV_EDITORSDIR . "(.*)$#", '', $base_siteurl );
 		}
-		elseif( defined( 'NV_IS_UPDATE' ) ) // Update se bao gom ca admin nen update phai dat truoc
+		elseif( defined( 'NV_IS_UPDATE' ) )// Update se bao gom ca admin nen update phai dat truoc
 		{
 			$base_siteurl = preg_replace( "#/install(.*)$#", '', $base_siteurl );
 		}
@@ -323,7 +324,7 @@ class Request
 			$count = substr_count( $base_siteurl, '/' );
 			for( $i = 0; $i < $count; ++$i )
 			{
-				$doc_root = preg_replace( "#\/[^\/]+$#", "", $doc_root );
+				$doc_root = preg_replace( '#\/[^\/]+$#', '', $doc_root );
 			}
 			$_SERVER['DOCUMENT_ROOT'] = $doc_root;
 		}
@@ -446,27 +447,27 @@ class Request
 	}
 
 	/**
- * Request::get_cookie_save_path()
- * 
- * @return
- */
+	 * Request::get_cookie_save_path()
+	 *
+	 * @return
+	 */
 	private function get_cookie_save_path()
 	{
 		$this->cookie_path = $this->base_siteurl . '/';
-		$cookie_domain = preg_replace( "/^([w]{3})\./", "", $this->server_name );
+		$cookie_domain = preg_replace( '/^([w]{3})\./', '', $this->server_name );
 		$this->cookie_domain = ( preg_match( "/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/", $cookie_domain ) ) ? '.' . $cookie_domain : '';
 	}
 
 	/**
- * Request::get_session_save_path()
- * 
- * @param mixed $path
- * @return
- */
+	 * Request::get_session_save_path()
+	 *
+	 * @param mixed $path
+	 * @return
+	 */
 	private function get_session_save_path( $path )
 	{
-		$save_path = "";
-		$disable_functions = ( ini_get( "disable_functions" ) != "" and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$save_path = '';
+		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
@@ -503,10 +504,10 @@ class Request
 	}
 
 	/**
- * Request::sessionStart()
- * 
- * @return
- */
+	 * Request::sessionStart()
+	 *
+	 * @return
+	 */
 	private function sessionStart()
 	{
 		if( headers_sent() || connection_status() != 0 || connection_aborted() )
@@ -553,11 +554,11 @@ class Request
 	}
 
 	/**
- * Request::unhtmlentities()
- * 
- * @param mixed $value
- * @return
- */
+	 * Request::unhtmlentities()
+	 *
+	 * @param mixed $value
+	 * @return
+	 */
 	private function unhtmlentities( $value )
 	{
 		$value = preg_replace( "/%3A%2F%2F/", '', $value );
@@ -575,11 +576,11 @@ class Request
 	}
 
 	/**
- * Request::filterAttr()
- * 
- * @param mixed $attrSet
- * @return
- */
+	 * Request::filterAttr()
+	 *
+	 * @param mixed $attrSet
+	 * @return
+	 */
 	private function filterAttr( $attrSet )
 	{
 		$newSet = array();
@@ -633,11 +634,11 @@ class Request
 	}
 
 	/**
- * Request::filterTags()
- * 
- * @param mixed $source
- * @return
- */
+	 * Request::filterTags()
+	 *
+	 * @param mixed $source
+	 * @return
+	 */
 	private function filterTags( $source )
 	{
 		$source = preg_replace( "/\<script([^\>]*)\>(.*)\<\/script\>/isU", "", $source );
@@ -772,11 +773,11 @@ class Request
 	}
 
 	/**
- * Request::security_get()
- * 
- * @param mixed $value
- * @return
- */
+	 * Request::security_get()
+	 *
+	 * @param mixed $value
+	 * @return
+	 */
 	private function security_get( $value, $decode = false )
 	{
 		if( is_array( $value ) )
@@ -811,11 +812,11 @@ class Request
 	}
 
 	/**
- * Request::security_post()
- * 
- * @param mixed $value
- * @return
- */
+	 * Request::security_post()
+	 *
+	 * @param mixed $value
+	 * @return
+	 */
 	public function security_post( $value )
 	{
 		if( is_array( $value ) )
@@ -841,33 +842,33 @@ class Request
 	}
 
 	/**
- * Request::security_cookie()
- * 
- * @param mixed $value
- * @return
- */
+	 * Request::security_cookie()
+	 *
+	 * @param mixed $value
+	 * @return
+	 */
 	private function security_cookie( $value )
 	{
 		return $value;
 	}
 
 	/**
- * Request::security_session()
- * 
- * @param mixed $value
- * @return
- */
+	 * Request::security_session()
+	 *
+	 * @param mixed $value
+	 * @return
+	 */
 	private function security_session( $value )
 	{
 		return $value;
 	}
 
 	/**
- * Request::parse_mode()
- * 
- * @param mixed $mode
- * @return
- */
+	 * Request::parse_mode()
+	 *
+	 * @param mixed $mode
+	 * @return
+	 */
 	private function parse_mode( $mode )
 	{
 		if( empty( $mode ) ) return array( $this->request_default_mode );
@@ -880,33 +881,33 @@ class Request
 	}
 
 	/**
- * Request::base64Encode()
- * 
- * @param mixed $input
- * @return
- */
+	 * Request::base64Encode()
+	 *
+	 * @param mixed $input
+	 * @return
+	 */
 	private function base64Encode( $input )
 	{
 		return strtr( base64_encode( $input ), '+/=', '-_,' );
 	}
 
 	/**
- * Request::base64Decode()
- * 
- * @param mixed $input
- * @return
- */
+	 * Request::base64Decode()
+	 *
+	 * @param mixed $input
+	 * @return
+	 */
 	private function base64Decode( $input )
 	{
 		return base64_decode( strtr( $input, '-_,', '+/=' ) );
 	}
 
 	/**
- * Request::encodeCookie()
- * 
- * @param mixed $string
- * @return
- */
+	 * Request::encodeCookie()
+	 *
+	 * @param mixed $string
+	 * @return
+	 */
 	private function encodeCookie( $string )
 	{
 		$result = '';
@@ -921,11 +922,11 @@ class Request
 	}
 
 	/**
- * Request::decodeCookie()
- * 
- * @param mixed $string
- * @return
- */
+	 * Request::decodeCookie()
+	 *
+	 * @param mixed $string
+	 * @return
+	 */
 	private function decodeCookie( $string )
 	{
 		$result = '';
@@ -941,14 +942,14 @@ class Request
 	}
 
 	/**
- * Request::get_value()
- * 
- * @param mixed $name
- * @param mixed $mode
- * @param mixed $default
- * @param bool $decode
- * @return
- */
+	 * Request::get_value()
+	 *
+	 * @param mixed $name
+	 * @param mixed $mode
+	 * @param mixed $default
+	 * @param bool $decode
+	 * @return
+	 */
 	private function get_value( $name, $mode = null, $default = null, $decode = true )
 	{
 		$modes = $this->parse_mode( $mode );
@@ -1029,14 +1030,14 @@ class Request
 	}
 
 	/**
- * Request::set_Cookie()
- * 
- * @param mixed $name
- * @param string $value
- * @param integer $expire
- * @param bool $encode
- * @return
- */
+	 * Request::set_Cookie()
+	 *
+	 * @param mixed $name
+	 * @param string $value
+	 * @param integer $expire
+	 * @param bool $encode
+	 * @return
+	 */
 	public function set_Cookie( $name, $value = '', $expire = 0, $encode = true )
 	{
 		if( is_array( $value ) ) return false;
@@ -1053,12 +1054,12 @@ class Request
 	}
 
 	/**
- * Request::set_Session()
- * 
- * @param mixed $name
- * @param string $value
- * @return
- */
+	 * Request::set_Session()
+	 *
+	 * @param mixed $name
+	 * @param string $value
+	 * @return
+	 */
 	public function set_Session( $name, $value = '' )
 	{
 		if( is_array( $value ) ) return false;
@@ -1071,12 +1072,12 @@ class Request
 	}
 
 	/**
- * Request::unset_request()
- * 
- * @param mixed $names
- * @param mixed $mode
- * @return
- */
+	 * Request::unset_request()
+	 *
+	 * @param mixed $names
+	 * @param mixed $mode
+	 * @return
+	 */
 	public function unset_request( $names, $mode )
 	{
 		if( empty( $names ) ) return array();
@@ -1125,13 +1126,13 @@ class Request
 	}
 
 	/**
- * Request::isset_request()
- * 
- * @param mixed $names
- * @param mixed $mode
- * @param bool $all
- * @return
- */
+	 * Request::isset_request()
+	 *
+	 * @param mixed $names
+	 * @param mixed $mode
+	 * @param bool $all
+	 * @return
+	 */
 	public function isset_request( $names, $mode, $all = true )
 	{
 		if( empty( $names ) ) return array();
@@ -1188,84 +1189,177 @@ class Request
 	}
 
 	/**
- * Request::get_bool()
- * 
- * @param mixed $name
- * @param mixed $mode
- * @param mixed $default
- * @param bool $decode
- * @return
- */
+	 * Request::get_bool()
+	 *
+	 * @param mixed $name
+	 * @param mixed $mode
+	 * @param mixed $default
+	 * @param bool $decode
+	 * @return
+	 */
 	public function get_bool( $name, $mode = null, $default = null, $decode = true )
 	{
 		return ( bool )$this->get_value( $name, $mode, $default, $decode );
 	}
 
 	/**
- * Request::get_int()
- * 
- * @param mixed $name
- * @param mixed $mode
- * @param mixed $default
- * @param bool $decode
- * @return
- */
+	 * Request::get_int()
+	 *
+	 * @param mixed $name
+	 * @param mixed $mode
+	 * @param mixed $default
+	 * @param bool $decode
+	 * @return
+	 */
 	public function get_int( $name, $mode = null, $default = null, $decode = true )
 	{
 		return ( int )$this->get_value( $name, $mode, $default, $decode );
 	}
 
 	/**
- * Request::get_float()
- * 
- * @param mixed $name
- * @param mixed $mode
- * @param mixed $default
- * @param bool $decode
- * @return
- */
+	 * Request::get_float()
+	 *
+	 * @param mixed $name
+	 * @param mixed $mode
+	 * @param mixed $default
+	 * @param bool $decode
+	 * @return
+	 */
 	public function get_float( $name, $mode = null, $default = null, $decode = true )
 	{
 		return ( float )$this->get_value( $name, $mode, $default, $decode );
 	}
 
 	/**
- * Request::get_string()
- * 
- * @param mixed $name
- * @param mixed $mode
- * @param mixed $default
- * @param bool $decode
- * @return
- */
+	 * Request::get_string()
+	 *
+	 * @param mixed $name
+	 * @param mixed $mode
+	 * @param mixed $default
+	 * @param bool $decode
+	 * @return
+	 */
 	public function get_string( $name, $mode = null, $default = null, $decode = true )
 	{
 		return ( string )$this->get_value( $name, $mode, $default, $decode );
 	}
 
 	/**
- * Request::get_array()
- * 
- * @param mixed $name
- * @param mixed $mode
- * @param mixed $default
- * @param bool $decode
- * @return
- */
+	 * Request::get_title()
+	 *
+	 * @param mixed $name
+	 * @param mixed $mode
+	 * @param mixed $default
+	 * @param bool $specialchars
+	 * @param mixed $preg_replace
+	 * @return
+	 */
+	public function get_title( $name, $mode = null, $default = null, $specialchars = false, $preg_replace = array() )
+	{
+		$value = ( string )$this->get_value( $name, $mode, $default );
+		$value = strip_tags( $value );
+		if( ( bool )$specialchars == true )
+		{
+			$search = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '%', '^', ':', '{', '}', '`', '~' );
+			$replace = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
+
+			$value = str_replace( $replace, $search, $value );
+			$value = str_replace( "&#x23;", "#", $value );
+			$value = str_replace( $search, $replace, $value );
+			$value = preg_replace( "/([^\&]+)\#/", "\\1&#x23;", $value );
+		}
+
+		if( ! empty( $preg_replace ) )
+		{
+			if( isset( $preg_replace['pattern'] ) and ! empty( $preg_replace['pattern'] ) and isset( $preg_replace['replacement'] ) )
+			{
+				$value = preg_replace( $preg_replace['pattern'], $preg_replace['replacement'], $value );
+			}
+		}
+		return trim( $value );
+	}
+
+	/**
+	 * Request::get_editor()
+	 *
+	 * @param mixed $name
+	 * @param mixed $default
+	 * @param bool $allowed_html_tags
+	 * @param mixed $save
+	 * @return
+	 */
+	public function get_editor( $name, $default = '', $allowed_html_tags = '', $save = false )
+	{
+		$value = ( string )$this->get_value( $name, 'post', $default );
+		if( ! empty( $allowed_html_tags ) )
+		{
+			$allowed_html_tags = array_map( "trim", explode( ",", $allowed_html_tags ) );
+			$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
+			$value = strip_tags( $value, $allowed_html_tags );
+		}
+		if( ( bool )$save )
+		{
+			$value = strtr( $value, array(
+					"\r\n" => '',
+					"\r" => '',
+					"\n" => ''
+				) );
+		}
+		return trim( $value );
+	}
+
+	/**
+	 * Request::get_textarea()
+	 *
+	 * @param mixed $name
+	 * @param mixed $default
+	 * @param bool $allowed_html_tags
+	 * @param mixed $save
+	 * @return
+	 */
+	public function get_textarea( $name, $default = '', $allowed_html_tags = '', $save = false )
+	{
+		$value = ( string )$this->get_value( $name, 'post', $default );
+		if( ! empty( $allowed_html_tags ) )
+		{
+			$allowed_html_tags = array_map( "trim", explode( ",", $allowed_html_tags ) );
+			$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
+			$value = strip_tags( $value, $allowed_html_tags );
+		}
+		if( ( bool )$save )
+		{
+			$value = strtr( $value, array(
+					"\r\n" => '<br />',
+					"\r" => '<br />',
+					"\n" => '<br />'
+				) );
+		}
+		return trim( $value );
+	}
+
+	/**
+	 * Request::get_array()
+	 *
+	 * @param mixed $name
+	 * @param mixed $mode
+	 * @param mixed $default
+	 * @param bool $decode
+	 * @return
+	 */
 	public function get_array( $name, $mode = null, $default = null, $decode = true )
 	{
 		return ( array )$this->get_value( $name, $mode, $default, $decode );
 	}
 
 	/**
- * Request::get_typed_array()
- * 
- * @param mixed $name
- * @param mixed $mode
- * @param mixed $type
- * @param mixed $default
- * @return
- */
+	 * Request::get_typed_array()
+	 *
+	 * @param mixed $name
+	 * @param mixed $mode
+	 * @param mixed $type
+	 * @param mixed $default
+	 * @return
+	 */
 	public function get_typed_array( $name, $mode = null, $type = null, $default = null )
 	{
 		$arr = $this->get_array( $name, $mode, $default );
@@ -1293,6 +1387,7 @@ class Request
 		}
 		return $arr;
 	}
+
 }
 
 ?>

@@ -63,8 +63,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
 
 	// Cau hinh cho facebook
-	$array_config['facebook_client_id'] = filter_text_input( 'facebook_client_id', 'post', '' );
-	$array_config['facebook_client_secret'] = filter_text_input( 'facebook_client_secret', 'post', '' );
+	$array_config['facebook_client_id'] = $nv_Request->get_title( 'facebook_client_id', 'post', '' );
+	$array_config['facebook_client_secret'] = $nv_Request->get_title( 'facebook_client_secret', 'post', '' );
 
 	foreach( $array_config as $config_name => $config_value )
 	{
@@ -72,7 +72,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$db->sql_query( $query );
 	}
 
-	$array_config['deny_email'] = filter_text_input( 'deny_email', 'post', '', 1 );
+	$array_config['deny_email'] = $nv_Request->get_title( 'deny_email', 'post', '', 1 );
 
 	if( ! empty( $array_config['deny_email'] ) )
 	{
@@ -82,7 +82,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET `content`=" . $db->dbescape( $array_config['deny_email'] ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='deny_email'";
 	$db->sql_query( $sql );
-	$array_config['deny_name'] = filter_text_input( 'deny_name', 'post', '', 1 );
+	$array_config['deny_name'] = $nv_Request->get_title( 'deny_name', 'post', '', 1 );
 	if( ! empty( $array_config['deny_name'] ) )
 	{
 		$array_config['deny_name'] = valid_name_config( explode( ",", $array_config['deny_name'] ) );
@@ -101,7 +101,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET `content`='" . serialize( $access_admin ) . "', `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='access_admin'";
 	$db->sql_query( $sql );
 
-	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], "", $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], '', $admin_info['userid'] );
 	nv_save_file_config_global();
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass() );
 	die();
@@ -304,8 +304,8 @@ $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['config'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

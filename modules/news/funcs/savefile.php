@@ -84,7 +84,7 @@ if( $id > 0 and $catid > 0 )
 
 			if( ! empty( $content['homeimgfile'] ) and $content['imgposition'] > 0 )
 			{
-				$src = $alt = $note = "";
+				$src = $alt = $note = '';
 				$width = $height = 0;
 				if( $content['homeimgthumb'] == 1 and $content['imgposition'] == 1 and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
 				{
@@ -114,9 +114,9 @@ if( $id > 0 and $catid > 0 )
 			$contents = call_user_func( "news_print", $result );
 			header( "Content-Type: text/x-delimtext; name=\"" . $result['alias'] . ".html\"" );
 			header( "Content-disposition: attachment; filename=" . $result['alias'] . ".html" );
-			include ( NV_ROOTDIR . "/includes/header.php" );
+			include ( NV_ROOTDIR . '/includes/header.php' );
 			echo preg_replace_callback( "/(src|href)\=\"([^\"]+)\"/", "nv_src_href_callback", $contents );
-			include ( NV_ROOTDIR . "/includes/footer.php" );
+			include ( NV_ROOTDIR . '/includes/footer.php' );
 		}
 	}
 }

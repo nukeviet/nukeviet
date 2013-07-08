@@ -70,7 +70,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 	}
 	if( $check_cat )
 	{
-		$xtitle_i = "";
+		$xtitle_i = '';
 		if( $lev_i > 0 )
 		{
 			$xtitle_i .= "&nbsp;&nbsp;&nbsp;|";
@@ -81,7 +81,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 			$xtitle_i .= ">&nbsp;";
 		}
 		$xtitle_i .= $array_value['title'];
-		$sl = "";
+		$sl = '';
 		if( $catid_i == $catid )
 		{
 			$sl = " selected=\"selected\"";
@@ -139,7 +139,7 @@ else
 {
 	$from = "`" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` as r";
 }
-$where = "";
+$where = '';
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != "-" )
@@ -179,7 +179,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != "-" )
 	}
 	if( $sstatus != "-" )
 	{
-		if( $where == "" )
+		if( $where == '' )
 		{
 			$where = " WHERE r.status = " . $sstatus;
 		}
@@ -234,7 +234,7 @@ foreach( $array_status_view as $key => $val )
 	}
 	else
 	{
-		$sl = "";
+		$sl = '';
 	}
 	$search_status[] = array(
 		"key" => $key,
@@ -251,11 +251,11 @@ while( $i <= 1000 )
 }
 $a = 0;
 $order2 = ( $order == "asc" ) ? "desc" : "asc";
-$base_url_id = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=id&amp;order=" . $order2 . "&amp;page=" . $page;
-$base_url_name = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=title&amp;order=" . $order2 . "&amp;page=" . $page;
-$base_url_publtime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=publtime&amp;order=" . $order2 . "&amp;page=" . $page;
-$base_url_exptime = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=exptime&amp;order=" . $order2 . "&amp;page=" . $page;
-$base_url = "" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;sstatus=" . $sstatus . "&amp;checkss=" . $checkss . "&amp;ordername=" . $ordername . "&amp;order=" . $order;
+$base_url_id = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=id&amp;order=" . $order2 . "&amp;page=" . $page;
+$base_url_name = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=title&amp;order=" . $order2 . "&amp;page=" . $page;
+$base_url_publtime = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=publtime&amp;order=" . $order2 . "&amp;page=" . $page;
+$base_url_exptime = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=exptime&amp;order=" . $order2 . "&amp;page=" . $page;
+$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;sstatus=" . $sstatus . "&amp;checkss=" . $checkss . "&amp;ordername=" . $ordername . "&amp;order=" . $order;
 $ord_sql = "ORDER BY r." . $ordername . " " . $order;
 $sql = "SELECT SQL_CALC_FOUND_ROWS r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, u.username FROM " . $from . " " . $where . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
 $result = $db->sql_query( $sql );
@@ -411,8 +411,8 @@ if( ! empty( $generate_page ) )
 }
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

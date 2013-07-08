@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['checkupdate'];
-$contents = "";
+$contents = '';
 
 $xtpl = new XTemplate( "checkupdate.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
@@ -63,7 +63,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 		while( list( $module_file, $mod_version, $author ) = $db->sql_fetchrow( $result ) )
 		{
 			$userModules[$module_file] = array();
-			$v = "";
+			$v = '';
 			$p = 0;
 			if( preg_match( "/^([^\s]+)\s+([\d]+)$/", $mod_version, $matches ) )
 			{
@@ -77,9 +77,9 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 				if( isset( $onlineModules[$module_file]['pubtime'], $onlineModules[$module_file]['version'], $onlineModules[$module_file]['author'] ) and $onlineModules[$module_file]['version'] == $v and ( $onlineModules[$module_file]['pubtime'] != $p or $onlineModules[$module_file]['author'] != $author ) )
 				{
-					$sql2 = "UPDATE `" . $db_config['prefix'] . "_setup_modules` 
-		 SET `mod_version`=" . $db->dbescape( $v . ' ' . $onlineModules[$module_file]['pubtime'] ) . ", 
-		 `author`=" . $db->dbescape( $onlineModules[$module_file]['author'] ) . " 
+					$sql2 = "UPDATE `" . $db_config['prefix'] . "_setup_modules`
+		 SET `mod_version`=" . $db->dbescape( $v . ' ' . $onlineModules[$module_file]['pubtime'] ) . ",
+		 `author`=" . $db->dbescape( $onlineModules[$module_file]['author'] ) . "
 		 WHERE `module_file`=" . $db->dbescape( $module_file );
 					$db->sql_query( $sql2 );
 				}
@@ -238,8 +238,8 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

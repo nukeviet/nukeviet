@@ -118,9 +118,9 @@ if( $step == 1 )
 
 	$page_title = $lang_module['import'];
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 elseif( $step == 2 )
 {

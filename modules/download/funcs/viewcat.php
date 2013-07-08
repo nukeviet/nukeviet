@@ -9,13 +9,13 @@
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-$contents = "";
+$contents = '';
 if( empty( $list_cats ) )
 {
 	$page_title = $module_info['custom_title'];
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( '' );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -150,8 +150,8 @@ if( empty( $all_page ) and empty( $subs ) )
 
 $contents = theme_viewcat_download( $array, $download_config, $subs, $generate_page );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

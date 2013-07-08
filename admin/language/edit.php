@@ -22,7 +22,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 	$numberfile = 0;
 
 	$idfile = $nv_Request->get_int( 'idfile', 'post', 0 );
-	$dirlang = filter_text_input( 'dirlang', 'post', '' );
+	$dirlang = $nv_Request->get_title( 'dirlang', 'post', '' );
 
 	$lang_translator = $nv_Request->get_array( 'pozauthor', 'post', array() );
 	$lang_translator_save = array();
@@ -64,7 +64,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 		$lang_key = strip_tags( $pozlangkey[$i] );
 		$lang_value = strip_tags( $pozlangval[$i], NV_ALLOWED_HTML_LANG );
 
-		if( $lang_key != "" and $lang_value != "" )
+		if( $lang_key != '' and $lang_value != '' )
 		{
 			$lang_value = nv_nl2br( $lang_value );
 			$lang_value = str_replace( '<br />', '<br />', $lang_value );
@@ -77,7 +77,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 	die();
 }
 
-$dirlang = filter_text_input( 'dirlang', 'get', '' );
+$dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
 $page_title = $lang_module['nv_admin_edit'] . ': ' . $language_array[$dirlang]['name'];
 
 if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get_string( 'checksess', 'get' ) == md5( $nv_Request->get_int( 'idfile', 'get' ) . session_id() ) )
@@ -91,11 +91,11 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 		if( empty( $author_lang ) )
 		{
 			$array_translator = array();
-			$array_translator['author'] = "";
-			$array_translator['createdate'] = "";
-			$array_translator['copyright'] = "";
-			$array_translator['info'] = "";
-			$array_translator['langtype'] = "";
+			$array_translator['author'] = '';
+			$array_translator['createdate'] = '';
+			$array_translator['copyright'] = '';
+			$array_translator['info'] = '';
+			$array_translator['langtype'] = '';
 		}
 		else
 		{
@@ -158,8 +158,8 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 	}
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

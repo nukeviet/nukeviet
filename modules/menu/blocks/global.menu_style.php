@@ -22,7 +22,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	 */
 	function nv_block_config_menu( $module, $data_block, $lang_block )
 	{
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['menu'] . "</td>";
 		$html .= "	<td><select name=\"menuid\">\n";
@@ -126,7 +126,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			if( preg_match( '#' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
 			return false;
 		}
-		elseif( $type == 1 ) //
+		elseif( $type == 1 )
 		{
 			if( preg_match( '#^' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
 			return false;
@@ -196,15 +196,15 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				}
 
 				$list_cats[$row['id']] = array(
-					'id' => $row['id'], //
-					'parentid' => $row['parentid'], //
-					'subcats' => $row['subitem'], //
-					'title' => nv_clean60( $row['title'], $block_config['title_length'] ), //
-					'target' => $row['target'], //
-					'note' => ( $block_config['is_viewdes'] and $row['note'] ) ? $row['note'] : $row['title'], //
-					'link' => nv_url_rewrite( nv_unhtmlspecialchars( NV_BASE_SITEURL . $row['link'] ), true ), //
-					'html_class' => $row['css'], //
-					'current' => nv_bmenu_check_currit( NV_BASE_SITEURL . $row['link'], ( int )$row['active_type'] ) //
+					'id' => $row['id'],
+					'parentid' => $row['parentid'],
+					'subcats' => $row['subitem'],
+					'title' => nv_clean60( $row['title'], $block_config['title_length'] ),
+					'target' => $row['target'],
+					'note' => ( $block_config['is_viewdes'] and $row['note'] ) ? $row['note'] : $row['title'],
+					'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ),
+					'html_class' => $row['css'],
+					'current' => nv_bmenu_check_currit( $row['link'], ( int )$row['active_type'] )
 				);
 			}
 		}
@@ -337,7 +337,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				}
 				else
 				{
-					$xtpl->assign( 'rel', "" );
+					$xtpl->assign( 'rel', '' );
 				}
 				$xtpl->parse( 'main.loopcat1' );
 			}
@@ -556,7 +556,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				{
 					if( $style == 'pro_dropdown' )
 					{
-						if( $list_cats[$catid]['subcats'] != "" )
+						if( $list_cats[$catid]['subcats'] != '' )
 						{
 							$xtpl->assign( 'cla', 'class="fly"' );
 						}

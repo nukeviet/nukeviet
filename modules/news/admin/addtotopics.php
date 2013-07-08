@@ -29,13 +29,13 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 
 	nv_del_moduleCache( $module_name );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $lang_module['topic_update_success'];
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
-if( $listid == "" )
+if( $listid == '' )
 {
 	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `inhome`=1 ORDER BY `id` DESC LIMIT 0,20";
 }
@@ -77,8 +77,8 @@ if( $db->sql_numrows( $result ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -39,8 +39,8 @@ $contents['act'] = array( "nv_pl_chang_act2(" . $id . ");", $lang_module['change
 
 $contents = call_user_func( "nv_info_pl_theme", $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -28,14 +28,14 @@ if( ! $db->sql_numrows( $result ) )
 
 $row = $db->sql_fetchrow( $result );
 
-$error = "";
+$error = '';
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_edit', "id " . $id, $admin_info['userid'] );
-	$cron_name = filter_text_input( 'cron_name', 'post', '', 1 );
-	$run_file = filter_text_input( 'run_file', 'post', '' );
-	$run_func = filter_text_input( 'run_func_iavim', 'post', '' );
-	$params = filter_text_input( 'params_iavim', 'post', '' );
+	$cron_name = $nv_Request->get_title( 'cron_name', 'post', '', 1 );
+	$run_file = $nv_Request->get_title( 'run_file', 'post', '' );
+	$run_func = $nv_Request->get_title( 'run_func_iavim', 'post', '' );
+	$params = $nv_Request->get_title( 'params_iavim', 'post', '' );
 	$interval = $nv_Request->get_int( 'interval_iavim', 'post', 0 );
 	$del = $nv_Request->get_int( 'del', 'post', 0 );
 
@@ -126,8 +126,8 @@ $contents = call_user_func( "nv_admin_add_theme", $contents );
 $page_title = $lang_global['mod_cronjobs'] . " -> " . $lang_module['nv_admin_edit'];
 $set_active_op = "cronjobs";
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

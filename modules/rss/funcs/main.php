@@ -17,7 +17,7 @@ if( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
 function nv_get_rss_link()
 {
 	global $db, $module_data, $global_config, $imgmid, $imgmid2, $iconrss, $site_mods;
-	$contentrss = "";
+	$contentrss = '';
 
 	foreach( $site_mods as $mod_name => $row )
 	{
@@ -77,14 +77,14 @@ function nv_get_sub_rss_link( $rssarray, $id, $image )
 
 $page_title = $module_info['custom_title'];
 
-$array = "";
+$array = '';
 $content_file = NV_ROOTDIR . "/" . NV_DATADIR . "/" . NV_LANG_DATA . "_" . $module_data . "Content.txt";
 if( file_exists( $content_file ) ) $array = file_get_contents( $content_file );
 
 $contents = nv_rss_main_theme( $array );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

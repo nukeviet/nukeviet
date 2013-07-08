@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
-$mod = filter_text_input( 'mod', 'post' );
+$mod = $nv_Request->get_title( 'mod', 'post' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die( "NO_" . $mod );
 
@@ -30,8 +30,8 @@ $db->sql_query( $sql );
 
 nv_del_moduleCache( 'modules' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo 'OK_' . $mod;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

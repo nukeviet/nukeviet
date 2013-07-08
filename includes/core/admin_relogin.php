@@ -20,12 +20,12 @@ if( defined( "NV_IS_ADMIN" ) )
 			++$check_hits;
 			$nv_Request->set_Session( 'online', '0|' . $admin_info['last_online'] . '|' . NV_CURRENTTIME . '|' . $check_hits );
 
-			$error = "";
-			$password = "";
+			$error = '';
+			$password = '';
 			if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			{
 				if( $client_info['is_myreferer'] != 1 ) trigger_error( "Wrong URL", 256 );
-				$nv_password = filter_text_input( 'nv_password', 'post', '', '', 50 );
+				$nv_password = $nv_Request->get_title( 'nv_password', 'post', '', '' );
 				if( empty( $nv_password ) )
 				{
 					$error = $lang_global['password_empty'];
@@ -92,7 +92,7 @@ if( defined( "NV_IS_ADMIN" ) )
 				$size[0] = 490;
 			}
 
-			$dir_template = "";
+			$dir_template = '';
 			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/relogin.tpl" ) )
 			{
 				$dir_template = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
@@ -121,9 +121,9 @@ if( defined( "NV_IS_ADMIN" ) )
 			$xtpl->assign( 'NV_LOGOUT', $lang_global['admin_logout_title'] );
 
 			$xtpl->parse( 'main' );
-			include ( NV_ROOTDIR . "/includes/header.php" );
+			include ( NV_ROOTDIR . '/includes/header.php' );
 			$xtpl->out( 'main' );
-			include ( NV_ROOTDIR . "/includes/footer.php" );
+			include ( NV_ROOTDIR . '/includes/footer.php' );
 		}
 	}
 }

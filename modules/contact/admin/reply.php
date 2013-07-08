@@ -58,16 +58,16 @@ if( ! $is_read )
 $admin_name = $admin_info['full_name'];
 if( empty( $admin_name ) ) $admin_name = $admin_info['username'];
 
-$mess_content = $error = "";
+$mess_content = $error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-	$mess_content = nv_editor_filter_textarea( 'mess_content', '', NV_ALLOWED_HTML_TAGS, true );
+	$mess_content = $nv_Request->get_editor( 'mess_content', '', NV_ALLOWED_HTML_TAGS, true );
 
-	if( strip_tags( $mess_content ) != "" )
+	if( strip_tags( $mess_content ) != '' )
 	{
 		list( $from ) = $db->sql_fetchrow( $db->sql_query( "SELECT `email` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $row['cid'] ) );
-		if( nv_check_valid_email( $from ) != "" )
+		if( nv_check_valid_email( $from ) != '' )
 		{
 			$from = $admin_info['email'];
 		}
@@ -132,8 +132,8 @@ if( ! empty( $error ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

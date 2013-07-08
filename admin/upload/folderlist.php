@@ -49,7 +49,7 @@ function viewdirtree( $dir, $currentpath )
 	$pattern = ! empty( $dir ) ? "/^(" . nv_preg_quote( $dir ) . ")\/([^\/]+)$/" : "/^([^\/]+)$/";
 	$_dirlist = preg_grep( $pattern, array_keys( $array_dirname ) );
 
-	$content = "";
+	$content = '';
 	foreach( $_dirlist as $_dir )
 	{
 		$check_allow_upload_dir = nv_check_allow_upload_dir( $_dir );
@@ -130,9 +130,9 @@ if( ! empty( $content ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 exit();
 
 ?>

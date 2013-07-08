@@ -22,11 +22,11 @@ if( $global_config['idsite'] )
 
 $title = $note = $modfile = $error = '';
 $modules_site = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
-if( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) )
+if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) )
 {
-	$title = filter_text_input( 'title', 'post', '', 1 );
-	$modfile = filter_text_input( 'module_file', 'post', '', 1 );
-	$note = filter_text_input( 'note', 'post', '', 1 );
+	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
+	$modfile = $nv_Request->get_title( 'module_file', 'post', '', 1 );
+	$note = $nv_Request->get_title( 'note', 'post', '', 1 );
 	$title = strtolower( change_alias( $title ) );
 
 	$modules_admin = nv_scandir( NV_ROOTDIR . "/" . NV_ADMINDIR, $global_config['check_module'] );
@@ -34,8 +34,8 @@ if( filter_text_input( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) 
 
 	if( ! empty( $title ) and ! empty( $modfile ) and ! in_array( $title, $modules_site ) and ! in_array( $title, $modules_admin ) and preg_match( $global_config['check_module'], $title ) and preg_match( $global_config['check_module'], $modfile ) )
 	{
-		$mod_version = "";
-		$author = "";
+		$mod_version = '';
+		$author = '';
 		$note = nv_nl2br( $note, '<br />' );
 		$module_data = preg_replace( '/(\W+)/i', '_', $title );
 		if( empty( $array_site_cat_module ) OR in_array( $modfile_i, $array_site_cat_module ) )
@@ -93,8 +93,8 @@ while( list( $modfile_i ) = $db->sql_fetchrow( $result ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

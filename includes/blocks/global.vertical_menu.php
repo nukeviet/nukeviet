@@ -11,7 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 global $nv_vertical_menu;
 
-$content = "";
+$content = '';
 
 if( ! empty( $nv_vertical_menu ) )
 {

@@ -61,7 +61,7 @@
 		<tbody>
 			<tr>
 				<td><strong>{LANG.lang_multi}</strong></td>
-				<td><input type="checkbox" value="1" name="lang_multi" {DATA.lang_multi} /></td>
+				<td><input type="checkbox" value="1" name="lang_multi" {CHECKED_LANG_MULTI} /></td>
 			</tr>
 		</tbody>
 		<!-- BEGIN: lang_multi -->
@@ -115,7 +115,7 @@
 		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.gzip_method}</strong></td>
-				<td><input type="checkbox" value="1" name="gzip_method" {DATA.gzip_method} /></td>
+				<td><input type="checkbox" value="1" name="gzip_method" {CHECKED_GZIP_METHOD} /></td>
 			</tr>
 		</tbody>
 		<tbody>

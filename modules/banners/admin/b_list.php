@@ -114,10 +114,10 @@ while( $row = $db->sql_fetchrow( $result ) )
 {
 	$client = ! empty( $row['clid'] ) ? $clients[$row['clid']] : "";
 
-	$weight_banner = "";
+	$weight_banner = '';
 	if( defined( 'NV_BANNER_WEIGHT' ) )
 	{
-		$weight_banner = "";
+		$weight_banner = '';
 		$weight_banner .= "<select id=\"id_weight_" . $row['id'] . "\" onchange=\"nv_chang_weight_banners('banners_list',0,'" . $pid . "',0,'" . $row['id'] . "');\">\n";
 
 		for( $i = 1; $i <= $num; ++$i )
@@ -140,8 +140,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$contents['rows'][$row['id']]['del'] = "nv_b_del(" . $row['id'] . ");";
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_b_list_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

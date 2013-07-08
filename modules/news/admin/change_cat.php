@@ -53,7 +53,7 @@ if( $catid > 0 )
 		}
 		elseif( $mod == "viewcat" and $nv_Request->isset_request( 'new_vid', 'post' ) )
 		{
-			$viewcat = filter_text_input( 'new_vid', 'post' );
+			$viewcat = $nv_Request->get_title( 'new_vid', 'post' );
 			$array_viewcat = ( $numsubcat > 0 ) ? $array_viewcat_full : $array_viewcat_nosub;
 			if( ! array_key_exists( $viewcat, $array_viewcat ) )
 			{
@@ -67,8 +67,8 @@ if( $catid > 0 )
 	nv_del_moduleCache( $module_name );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $content;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -17,14 +17,14 @@ if( $nv_Request->isset_request( 'edit', 'post' ) )
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 	$qid = $nv_Request->get_int( 'qid', 'post', 0 );
-	$title = filter_text_input( 'title', 'post', '', 1 );
+	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
 
 	if( empty( $title ) )
 	{
 		die( "NO" );
 	}
-	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` SET 
-		`title`=" . $db->dbescape( $title ) . ", `edit_time`=" . NV_CURRENTTIME . " 
+	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` SET
+		`title`=" . $db->dbescape( $title ) . ", `edit_time`=" . NV_CURRENTTIME . "
 		WHERE `qid`=" . $qid . " AND `lang`='" . NV_LANG_DATA . "'";
 	$db->sql_query( $sql );
 	if( ! $db->sql_affectedrows() )
@@ -39,7 +39,7 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 {
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-	$title = filter_text_input( 'title', 'post', '', 1 );
+	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
 	if( empty( $title ) )
 	{
 		die( "NO" );
@@ -48,7 +48,7 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 	$sql = "SELECT MAX(`weight`) FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "'";
 	list( $weight ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
 	$weight = intval( $weight ) + 1;
-	$query = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` 
+	$query = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question`
 		(`qid`, `title`, `lang`, `weight`, `add_time`, `edit_time`) VALUES (
 		NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( NV_LANG_DATA ) . ", " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 	if( ! $db->sql_query_insert_id( $query ) )
@@ -165,9 +165,9 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $contents;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -175,8 +175,8 @@ $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->parse( 'load' );
 $contents = $xtpl->text( 'load' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

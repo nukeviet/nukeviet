@@ -54,18 +54,18 @@ $data_content = array(
 	"status" => 1
 );
 
-$error = "";
+$error = '';
 $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 $submit = $nv_Request->get_string( 'submit', 'post' );
 if( ! empty( $submit ) )
 {
 	$error = 0;
 	$catid = $nv_Request->get_int( 'catid', 'post', 0 );
-	$title = filter_text_input( 'title', 'post', '', 1 );
-	$alias = filter_text_input( 'alias', 'post', '', 1 );
-	$alias = ( $alias == "" ) ? change_alias( $title ) : change_alias( $alias );
-	$url = filter_text_input( 'url', 'post', '' );
-	$image = filter_text_input( 'image', 'post', '' );
+	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
+	$alias = $nv_Request->get_title( 'alias', 'post', '', 1 );
+	$alias = ( $alias == '' ) ? change_alias( $title ) : change_alias( $alias );
+	$url = $nv_Request->get_title( 'url', 'post', '' );
+	$image = $nv_Request->get_title( 'image', 'post', '' );
 
 	if( ! nv_is_url( $image ) and file_exists( NV_DOCUMENT_ROOT . $image ) )
 	{
@@ -84,10 +84,10 @@ if( ! empty( $submit ) )
 		}
 	}
 
-	$admin_phone = "";
-	$admin_email = "";
-	$note = "";
-	$description = filter_text_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
+	$admin_phone = '';
+	$admin_email = '';
+	$note = '';
+	$description = $nv_Request->get_editor( 'description', '', NV_ALLOWED_HTML_TAGS );
 	$description = ( defined( 'NV_EDITOR' ) ) ? nv_editor_nl2br( $description ) : nv_nl2br( $description, '<br />' );
 
 	$status = ( $nv_Request->get_int( 'status', 'post' ) == 1 ) ? 1 : 0;
@@ -100,7 +100,7 @@ if( ! empty( $submit ) )
 	{
 		$error = $lang_module['error_title'];
 	}
-	elseif( strip_tags( $description ) == "" )
+	elseif( strip_tags( $description ) == '' )
 	{
 		$error = $lang_module['error_description'];
 	}
@@ -124,7 +124,7 @@ if( ! empty( $submit ) )
 		}
 		else
 		{
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `catid`, `title`, `alias`, `url`, `urlimg`, `admin_phone`, `admin_email`, `note`, `description`, `add_time`, `edit_time`, `hits_total`, `status`) 
+			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` (`id`, `catid`, `title`, `alias`, `url`, `urlimg`, `admin_phone`, `admin_email`, `note`, `description`, `add_time`, `edit_time`, `hits_total`, `status`)
             VALUES (NULL, '" . $catid . "', " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $url ) . ", " . $db->dbescape( $image ) . ", '" . $admin_phone . "', '" . $admin_email . "', " . $db->dbescape( $note ) . ", " . $db->dbescape( $description ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), '0', " . $status . ")";
 			if( $db->sql_query_insert_id( $sql ) )
 			{
@@ -208,7 +208,7 @@ if( ! empty( $array_cat ) )
 {
 	foreach( $array_cat as $cat )
 	{
-		$xtitle = "";
+		$xtitle = '';
 		if( $cat['parentid'] != 0 ) $xtitle = getlevel( $cat['parentid'], $array_cat );
 		$cat['title'] = $xtitle . $cat['title'];
 		$cat['sl'] = ( $cat['catid'] == $data_content['catid'] ) ? "selected=\"selected\"" : "";
@@ -230,8 +230,8 @@ if( ! empty( $error ) )
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

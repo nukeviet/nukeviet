@@ -19,7 +19,7 @@ if( defined( 'NV_IS_USER_FORUM' ) )
 }
 
 $userid = $nv_Request->get_int( 'userid', 'get', '', 1 );
-$checknum = filter_text_input( 'checknum', 'get', '', 1 );
+$checknum = $nv_Request->get_title( 'checknum', 'get', '', 1 );
 
 if( empty( $userid ) or empty( $checknum ) )
 {
@@ -66,19 +66,19 @@ if( $checknum == $row['checknum'] )
 	elseif( ! defined( 'NV_IS_USER' ) and $global_config['allowuserreg'] == 2 )
 	{
 		$sql = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` (
-					`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`, 
-					`question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, 
+					`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`,
+					`question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`,
 					`active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`) VALUES (
-					NULL, 
-					" . $db->dbescape( $row['username'] ) . ", 
-					" . $db->dbescape( nv_md5safe( $row['username'] ) ) . ", 
-					" . $db->dbescape( $row['password'] ) . ", 
-					" . $db->dbescape( $row['email'] ) . ", 
-					" . $db->dbescape( $row['full_name'] ) . ", 
-					'', '', 0, 
-					" . $db->dbescape( $row['regdate'] ) . ", 
-					" . $db->dbescape( $row['question'] ) . ", 
-					" . $db->dbescape( $row['answer'] ) . ", 
+					NULL,
+					" . $db->dbescape( $row['username'] ) . ",
+					" . $db->dbescape( nv_md5safe( $row['username'] ) ) . ",
+					" . $db->dbescape( $row['password'] ) . ",
+					" . $db->dbescape( $row['email'] ) . ",
+					" . $db->dbescape( $row['full_name'] ) . ",
+					'', '', 0,
+					" . $db->dbescape( $row['regdate'] ) . ",
+					" . $db->dbescape( $row['question'] ) . ",
+					" . $db->dbescape( $row['answer'] ) . ",
 					'', 1, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
 		$userid = $db->sql_query_insert_id( $sql );
 		if( $userid )
@@ -135,8 +135,8 @@ $info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "="
 $contents = user_info_exit( $info );
 $contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

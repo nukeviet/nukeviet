@@ -9,9 +9,9 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
-$filename = filter_text_input( 'filename', 'get', '' );
-$checkss = filter_text_input( 'checkss', 'get', '' );
-$mod = filter_text_input( 'mod', 'get', '' );
+$filename = $nv_Request->get_title( 'filename', 'get', '' );
+$checkss = $nv_Request->get_title( 'checkss', 'get', '' );
+$mod = $nv_Request->get_title( 'mod', 'get', '' );
 $path_filename = NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . $filename;
 
 if( ! empty( $mod ) and file_exists( $path_filename ) and $checkss == md5( $filename . $client_info['session_id'] . $global_config['sitekey'] ) )
@@ -25,9 +25,9 @@ if( ! empty( $mod ) and file_exists( $path_filename ) and $checkss == md5( $file
 else
 {
 	$contents = 'file not exist !';
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 ?>
