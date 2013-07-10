@@ -90,19 +90,27 @@ if ( $keyword != "" )
 {
 	$search = " AND (`" . NV_LANG_DATA . "_title` LIKE '%" . $db->dblikeescape( $keyword ) . "%' OR `product_code` LIKE '%" . $db->dblikeescape( $keyword ) . "%')";
 }
-if ( ( $price1 >= 0 and $price2 > 0 ) )
-{
-	$search .= " AND product_price-(product_discounts/100)*product_price BETWEEN " . $price1 . " AND " . $price2 . " ";
 
-}
-elseif ( $price2 == -1 and $price1 >= 0 )
+if( ( $price1 >= 0 and $price2 > 0 ) )
 {
-	$search .= " AND product_price-(product_discounts/100)*product_price >= " . $price1 . " ";
+	$search .= " HAVING product_saleproduct-(t1.product_discounts/100)*product_saleproduct BETWEEN " . $price1 . " AND " . $price2 . " ";
 }
-elseif ( $price1 == -1 and $price2 > 0 )
+elseif( $price2 == -1 and $price1 >= 0 )
 {
-	$search .= " AND product_price-(product_discounts/100)*product_price >= " . $price2 . " ";
+	$search .= " HAVING product_saleproduct-(t1.product_discounts/100)*product_saleproduct >= " . $price1 . " ";
 }
+elseif( $price1 == -1 and $price2 > 0 )
+{
+	$search .= " HAVING product_saleproduct-(t1.product_discounts/100)*product_saleproduct < " . $price2 . " ";
+}
+
+if( ! empty( $typemoney ) )
+{
+	$search .= " AND `money_unit` = " . $db->dbescape( $typemoney ) . "";
+}
+$sql_i = ", if(t1.`money_unit` ='" . $pro_config['money_unit'] . "', t1.`product_price` , t1.`product_price` * t2.`exchange` ) AS `product_saleproduct` ";
+$order_by = " `product_saleproduct` DESC ";
+
 if ( !empty( $typemoney ) )
 {
 	$search .= " AND `money_unit` = " . $db->dbescape( $typemoney ) . "";
@@ -131,7 +139,9 @@ if ( $pro_config['active_price'] )
 	if( ! empty( $price1_temp ) or ! empty( $price2_temp ) ) $show_price = "AND `showprice`=1";
 }
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=1 " . $search . " " . $show_price . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page;
+$table_search = "`" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1";
+$table_exchange = " LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` AS t2 ON t1.money_unit=t2.code";
+$sql = " SELECT SQL_CALC_FOUND_ROWS t1.`id`, t1.`listcatid`, t1.`publtime`, t1.`" . NV_LANG_DATA . "_title`, t1.`" . NV_LANG_DATA . "_alias`, t1.`" . NV_LANG_DATA . "_hometext`, t1.`" . NV_LANG_DATA . "_address`, t1.`homeimgalt`, t1.`homeimgfile`, t1.`homeimgthumb`, t1.`product_price`, t1.`product_discounts`, t1.`money_unit`, t1.`showprice`, t2.`exchange` " . $sql_i . " FROM " . $table_search . " " . $table_exchange . " WHERE t1.`status`=1 " . $search . " " . $show_price . " ORDER BY " . $order_by . " LIMIT " . $page . "," . $per_page;
 
 $result = $db->sql_query( $sql );
 list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
