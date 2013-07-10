@@ -51,7 +51,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	die();
 }
 
-$page_title = $lang_global['configlogo'];
+$page_title = $lang_module['configlogo'];
 
 if( ! nv_is_url( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
 {
