@@ -1,3 +1,5 @@
 <!-- BEGIN: mainblock -->
-{BLOCK_CONTENT}
+<div class="{BLOCK_CLASS}">
+	{BLOCK_CONTENT}
+</div>
 <!-- END: mainblock -->

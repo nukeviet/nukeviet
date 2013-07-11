@@ -91,6 +91,12 @@
 		</tbody>
 		<tbody class="second">
 			<tr>
+				<td>{LANG.block_class}:</td>
+				<td><input name="class" type="text" value="{ROW.class}" style="width:300px"/>{LANG.block_class_note}</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
 				<td>{LANG.block_pos}:</td>
 				<td>
 				<select name="position">
@@ -100,19 +106,19 @@
 				</select></td>
 			</tr>
 		</tbody>
-		<tbody>
+		<tbody class="second">
 			<tr>
 				<td>{LANG.block_exp_time}:</td>
 				<td class="exp_time"><input name="exp_time" id="exp_time" value="{ROW.exp_time}" style="width: 90px" maxlength="10" type="text" /> (dd/mm/yyyy) </td>
 			</tr>
 		</tbody>
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td>{LANG.block_active}:</td>
 				<td><input type="checkbox" name="active" value="1"{ROW.block_active}/> {LANG.block_yes}</td>
 			</tr>
 		</tbody>
-		<tbody>
+		<tbody class="second">
 			<tr>
 				<td>{LANG.block_group}:</td>
 				<td>

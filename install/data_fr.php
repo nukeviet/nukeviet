@@ -207,7 +207,7 @@ $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data
 (50, 'body', 'mobile_nukeviet')";
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES
+$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `class`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES
 (1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '0', 0, 1, 'a:1:{s:12:\"title_length\";i:25;}'),
 (2, 'default', 'statistics', 'global.counter.php', 'Statistiques', '', '', '[LEFT]', 0, 1, '0', 1, 2, ''),
 (3, 'default', 'banners', 'global.banners.php', 'Publicité à côté', '', '', '[LEFT]', 0, 1, '0', 1, 3, 'a:1:{s:12:\"idplanbanner\";i:2;}'),
