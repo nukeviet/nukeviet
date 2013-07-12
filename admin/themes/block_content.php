@@ -23,6 +23,7 @@ $row = array(
 	'link' => '',
 	'template' => '',
 	'position' => $nv_Request->get_string( 'tag', 'get', '' ),
+	'class' => '',
 	'exp_time' => 0,
 	'active' => 1,
 	'groups_view' => '',
@@ -133,7 +134,31 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$row['link'] = $nv_Request->get_title( 'link', 'post', '' );
 	$row['template'] = nv_substr( $nv_Request->get_title( 'template', 'post', '', 0 ), 0, 55 );
 	$row['position'] = nv_substr( $nv_Request->get_title( 'position', 'post', '', 0 ), 0, 55 );
+	$row['class'] = nv_substr( $nv_Request->get_title( 'class', 'post', '', 0 ), 0, 55 );
+	
+	if( preg_match( '/^[a-zA-Z0-9\_\-\s]+$/', $row['class'] ) == 1 )
+	{
+		$test = true;
+		$_class = explode(' ', $row['class']);
+		foreach( $_class as $lca )
+		{
+			if( preg_match( '/^[A-Za-z]+/', $lca ) == 0 )
+			{
+				$test = false;
+				break;
+			}
+		}
 
+	}
+	else
+	{
+		$test = false;
+	}
+	
+	if($test == false and !empty($row['class']))
+	{
+		$error[] = $lang_module['block_error_class'];
+	}
 	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'exp_time', 'post' ), $m ) )
 	{
 		$row['exp_time'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
@@ -246,7 +271,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			}
 		}
 	}
-
+	
 	if( ! empty( $error ) )
 	{
 		$xtpl->assign( 'ERROR', implode( '<br />', $error ) );
@@ -313,7 +338,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				list( $maxweight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme =" . $db->dbescape( $selectthemes ) . " AND `position`=" . $db->dbescape( $row['position'] ) ) );
 				$row['weight'] = intval( $maxweight ) + 1;
 
-				$row['bid'] = $db->sql_query_insert_id( "INSERT INTO `" . NV_BLOCKS_TABLE . "_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES ( NULL, " . $db->dbescape( $selectthemes ) . ", " . $db->dbescape( $row['module'] ) . ", '" . mysql_real_escape_string( $row['file_name'] ) . "', " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['link'] ) . ", " . $db->dbescape( $row['template'] ) . ", " . $db->dbescape( $row['position'] ) . ", '" . $row['exp_time'] . "', '" . $row['active'] . "', " . $db->dbescape( $row['groups_view'] ) . ", '" . $row['all_func'] . "', '" . $row['weight'] . "', '" . mysql_real_escape_string( $row['config'] ) . "' )" );
+				$row['bid'] = $db->sql_query_insert_id( "INSERT INTO `" . NV_BLOCKS_TABLE . "_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `class`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES ( NULL, " . $db->dbescape( $selectthemes ) . ", " . $db->dbescape( $row['module'] ) . ", '" . mysql_real_escape_string( $row['file_name'] ) . "', " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['link'] ) . ", " . $db->dbescape( $row['template'] ) . ", " . $db->dbescape( $row['position'] ) . ", " . $db->dbescape( $row['class'] ) . ", '" . $row['exp_time'] . "', '" . $row['active'] . "', " . $db->dbescape( $row['groups_view'] ) . ", '" . $row['all_func'] . "', '" . $row['weight'] . "', '" . mysql_real_escape_string( $row['config'] ) . "' )" );
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_add'], 'Name : ' . $row['title'], $admin_info['userid'] );
 			}
@@ -326,6 +351,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					`link`=" . $db->dbescape( $row['link'] ) . ",
 					`template`=" . $db->dbescape( $row['template'] ) . ",
 					`position`=" . $db->dbescape( $row['position'] ) . ",
+					`class`=" . $db->dbescape( $row['class'] ) . ",
 					`exp_time`=" . $row['exp_time'] . ",
 					`active`=" . $row['active'] . ",
 					`groups_view`=" . $db->dbescape( $row['groups_view'] ) . ",
@@ -447,6 +473,7 @@ while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
 
 $xtpl->assign( 'ROW', array(
 	'title' => $row['title'],
+	'class' => $row['class'],
 	'exp_time' => ( $row['exp_time'] > 0 ) ? date( 'd/m/Y', $row['exp_time'] ) : '',
 	'block_active' => ( intval( $row['active'] ) == 1 ) ? " checked=\"checked\"" : "",
 	'link' => $row['link'],

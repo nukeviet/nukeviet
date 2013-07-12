@@ -17,3 +17,5 @@
 
 /includes/class/PHPExcel/
 /includes/class/PHPExcel.php
+/web.config
+/sess

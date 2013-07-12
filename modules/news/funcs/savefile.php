@@ -14,7 +14,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) )
 
 function nv_src_href_callback( $matches )
 {
-	if( ! empty( $matches[2] ) and ! preg_match( "/^http\:\/\//", $matches[2] ) and ! preg_match( "/^javascript/", $matches[2] ) )
+	if( ! empty( $matches[2] ) and ! preg_match( "/^http\:\/\//", $matches[2] ) and ! preg_match( "/^https\:\/\//", $matches[2] ) and ! preg_match( "/^mailto\:/", $matches[2] ) and ! preg_match( "/^javascript/", $matches[2] ) )
 	{
 		if( preg_match( "/^\//", $matches[2] ) ) $_url = NV_MY_DOMAIN;
 		else $_url = NV_MY_DOMAIN . "/";

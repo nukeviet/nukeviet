@@ -1,0 +1,1 @@
+ALTER TABLE  `nv3_vi_blocks_groups` ADD  `class` VARCHAR( 255 ) NOT NULL DEFAULT  '' AFTER  `position`

@@ -250,6 +250,7 @@ function nv_blocks_content( $sitecontent )
 			$_row['file_name'] = $db->unfixdb( $_row['file_name'] );
 			$_row['template'] = $db->unfixdb( $_row['template'] );
 			$_row['position'] = $db->unfixdb( $_row['position'] );
+			$_row['class'] = $db->unfixdb( $_row['class'] );
 
 			// Cau hinh block
 			$block_config = ( ! empty( $_row['config'] ) ) ? unserialize( $_row['config'] ) : array();
@@ -265,6 +266,7 @@ function nv_blocks_content( $sitecontent )
 			$cache[$_row['func_id']][] = array(
 				'bid' => $_row['bid'],
 				'position' => $_row['position'],
+				'class' => $_row['class'],
 				'module' => $_row['module'],
 				'blockTitle' => $blockTitle,
 				'file_name' => $_row['file_name'],
@@ -343,6 +345,7 @@ function nv_blocks_content( $sitecontent )
 					{
 						$xtpl->assign( 'BLOCK_TITLE', $_row['blockTitle'] );
 						$xtpl->assign( 'BLOCK_CONTENT', $content );
+						$xtpl->assign( 'BLOCK_CLASS', $_row['class'] );
 						$xtpl->assign( 'TEMPLATE', $_template );
 						$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
