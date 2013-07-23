@@ -29,7 +29,7 @@ function referer()
 			if( ! empty( $m['count'] ) )
 			{
 				$proc = ceil( ( $m['count'] / $cts['max'] ) * 100 );
-
+				$m['count'] = number_format( $m['count'] );
 				$xtpl->assign( 'M', $m );
 				$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 				$xtpl->assign( 'HEIGHT', $proc * 2 );
@@ -84,7 +84,6 @@ function allreferers()
 				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
-				$xtpl->assign( 'VALUE', $value );
 				$xtpl->assign( 'KEY', $key );
 
 				if( $value[0] )
@@ -95,8 +94,9 @@ function allreferers()
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
+					$value[0] = number_format( $value[0] );
 				}
-
+				$xtpl->assign( 'VALUE', $value );
 				++$a;
 
 				$xtpl->parse( 'main.loop' );
@@ -137,7 +137,6 @@ function allbots()
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
-				$xtpl->assign( 'VALUE', $value );
 
 				if( $value[0] )
 				{
@@ -147,7 +146,9 @@ function allbots()
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
+					$value[0] = number_format( $value[0] );
 				}
+				$xtpl->assign( 'VALUE', $value );
 				++$a;
 
 				$xtpl->parse( 'main.loop' );
@@ -188,7 +189,6 @@ function allos()
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
-				$xtpl->assign( 'VALUE', $value );
 
 				if( $value[0] )
 				{
@@ -198,7 +198,9 @@ function allos()
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
+					$value[0] = number_format( $value[0] );
 				}
+				$xtpl->assign( 'VALUE', $value );
 				++$a;
 
 				$xtpl->parse( 'main.loop' );
@@ -239,7 +241,6 @@ function allbrowsers()
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
-				$xtpl->assign( 'VALUE', $value );
 
 				if( $value[0] )
 				{
@@ -249,7 +250,10 @@ function allbrowsers()
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
+					$value[0] = number_format( $value[0] );
 				}
+				$xtpl->assign( 'VALUE', $value );
+				
 				++$a;
 
 				$xtpl->parse( 'main.loop' );
@@ -289,10 +293,9 @@ function allcountries()
 				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
-				$xtpl->assign( 'VALUE', $value );
 				$xtpl->assign( 'KEY', $key );
 
-				if( $value[0] )
+				if( $value[1] )
 				{
 					$proc = ceil( ( $value[1] / $cts['max'] ) * 100 );
 
@@ -300,8 +303,9 @@ function allcountries()
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
+					$value[1] = number_format( $value[1] );
 				}
-
+				$xtpl->assign( 'VALUE', $value );
 				++$a;
 
 				$xtpl->parse( 'main.loop' );
@@ -335,7 +339,7 @@ function main()
 	{
 		if( ! empty( $m ) )
 		{
-			$xtpl->assign( 'M', $m );
+			$xtpl->assign( 'M', number_format( $m ) );
 			$proc = ceil( ( $m / $ctsy['max'] ) * 100 );
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
@@ -373,6 +377,7 @@ function main()
 		{
 			$contents .= $m['count'] . "<br />";
 			$proc = ceil( ( $m['count'] / $ctsm['max'] ) * 100 );
+			$m['count'] = number_format($m['count']);
 			$xtpl->assign( 'M', $m );
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
@@ -408,7 +413,7 @@ function main()
 
 	foreach( $ctsdm['rows'] as $key => $m )
 	{
-		$xtpl->assign( 'M', $m );
+		$xtpl->assign( 'M', number_format( $m ) );
 
 		if( ! empty( $m ) )
 		{
@@ -446,15 +451,14 @@ function main()
 
 	foreach( $ctsdw['rows'] as $key => $m )
 	{
-		$xtpl->assign( 'M', $m );
-
 		if( ! empty( $m['count'] ) )
 		{
 			$proc = ceil( ( $m['count'] / $ctsdw['max'] ) * 100 );
 
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
-
+			$m['count'] = number_format( $m['count'] );
+			$xtpl->assign( 'M', $m );
 			$xtpl->parse( 'main.day_k.loop.img' );
 		}
 
@@ -489,7 +493,7 @@ function main()
 		{
 			if( ! empty( $m ) )
 			{
-				$xtpl->assign( 'M', $m );
+				$xtpl->assign( 'M', number_format( $m ) );
 
 				$proc = ceil( ( $m / $ctsh['max'] ) * 100 );
 
@@ -530,7 +534,6 @@ function main()
 	{
 		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
-		$xtpl->assign( 'VALUE', $value );
 		$xtpl->assign( 'KEY', $key );
 
 		if( $value[1] )
@@ -541,7 +544,9 @@ function main()
 			$xtpl->assign( 'WIDTH', $proc * 3 );
 
 			$xtpl->parse( 'main.ct.loop.img' );
+			$value[1] = number_format( $value[1] );
 		}
+		$xtpl->assign( 'VALUE', $value );
 
 		++$a;
 		$xtpl->parse( 'main.ct.loop' );
@@ -568,7 +573,6 @@ function main()
 		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
-		$xtpl->assign( 'VALUE', $value );
 
 		if( $value[0] )
 		{
@@ -577,7 +581,9 @@ function main()
 			$xtpl->assign( 'WIDTH', $proc * 3 );
 
 			$xtpl->parse( 'main.br.loop.img' );
+			$value[0] = number_format( $value[0] );
 		}
+		$xtpl->assign( 'VALUE', $value );
 
 		$xtpl->parse( 'main.br.loop' );
 		++$a;
@@ -606,7 +612,6 @@ function main()
 
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
-		$xtpl->assign( 'VALUE', $value );
 
 		if( $value[0] )
 		{
@@ -616,7 +621,9 @@ function main()
 			$xtpl->assign( 'WIDTH', $proc * 3 );
 
 			$xtpl->parse( 'main.os.loop.img' );
+			$value[0] = number_format( $value[0] );
 		}
+		$xtpl->assign( 'VALUE', $value );
 		$xtpl->parse( 'main.os.loop' );
 		++$a;
 	}

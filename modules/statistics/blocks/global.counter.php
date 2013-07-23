@@ -40,15 +40,15 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 		{
 			if( $c_type == 'day' )
 			{
-				$xtpl->assign( 'COUNT_DAY', $c_count );
+				$xtpl->assign( 'COUNT_DAY', number_format( $c_count ) );
 			}
 			elseif( $c_type == 'month' )
 			{
-				$xtpl->assign( 'COUNT_MONTH', $c_count );
+				$xtpl->assign( 'COUNT_MONTH', number_format( $c_count ) );
 			}
 			elseif( $c_type == 'total' )
 			{
-				$xtpl->assign( 'COUNT_ALL', $c_count );
+				$xtpl->assign( 'COUNT_ALL', number_format( $c_count ) );
 			}
 		}
 
@@ -77,25 +77,25 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 			}
 		}
 
-		$xtpl->assign( 'COUNT_ONLINE', $count_online );
+		$xtpl->assign( 'COUNT_ONLINE', number_format( $count_online ) );
 
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
 		if( $users )
 		{
-			$xtpl->assign( 'COUNT_USERS', $users );
+			$xtpl->assign( 'COUNT_USERS', number_format( $users ) );
 			$xtpl->parse( 'main.users' );
 		}
 
 		if( $bots )
 		{
-			$xtpl->assign( 'COUNT_BOTS', $bots );
+			$xtpl->assign( 'COUNT_BOTS', number_format( $bots ) );
 			$xtpl->parse( 'main.bots' );
 		}
 
 		if( $guests and $guests != $count_online )
 		{
-			$xtpl->assign( 'COUNT_GUESTS', $guests );
+			$xtpl->assign( 'COUNT_GUESTS', number_format( $guests ) );
 			$xtpl->parse( 'main.guests' );
 		}
 

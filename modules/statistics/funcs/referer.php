@@ -72,7 +72,7 @@ if( $total )
 {
 	$cts['current_month'] = date( 'M', NV_CURRENTTIME );
 	$cts['max'] = max( $month01, $month02, $month03, $month04, $month05, $month06, $month07, $month08, $month09, $month10, $month11, $month12 );
-	$cts['total'] = array( $lang_global['total'], $total );
+	$cts['total'] = array( $lang_global['total'], number_format( $total ) );
 }
 
 $contents = call_user_func( "referer" );

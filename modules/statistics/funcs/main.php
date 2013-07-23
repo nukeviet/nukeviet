@@ -44,7 +44,7 @@ $ctsy['caption'] = $lang_module['statbyyear'];
 $ctsy['rows'] = $year_list;
 $ctsy['current_year'] = $current_year;
 $ctsy['max'] = $max;
-$ctsy['total'] = array( $lang_global['total'], $total );
+$ctsy['total'] = array( $lang_global['total'], number_format( $total ) );
 
 // theo thang
 $month_list = array();
@@ -86,7 +86,7 @@ $ctsm['caption'] = sprintf( $lang_module['statbymoth'], $current_year );
 $ctsm['rows'] = $month_list;
 $ctsm['current_month'] = date( 'M', NV_CURRENTTIME );
 $ctsm['max'] = $max;
-$ctsm['total'] = array( $lang_global['total'], $total );
+$ctsm['total'] = array( $lang_global['total'], number_format( $total ) );
 
 // ngay trong thang
 $sql = "SELECT `c_val`,`c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='day' AND `c_val` <= " . $current_number_of_days . " ORDER BY `c_val`";
@@ -111,7 +111,7 @@ $ctsdm['caption'] = sprintf( $lang_module['statbyday'], $current_month_num );
 $ctsdm['rows'] = $day_list;
 $ctsdm['current_day'] = $current_day;
 $ctsdm['max'] = $max;
-$ctsdm['total'] = array( $lang_global['total'], $total );
+$ctsdm['total'] = array( $lang_global['total'], number_format( $total ) );
 $ctsdm['numrows'] = $current_number_of_days;
 
 // ngay trong tuan
@@ -147,7 +147,7 @@ $ctsdw['caption'] = $lang_module['statbydayofweek'];
 $ctsdw['rows'] = $dayofweek_list;
 $ctsdw['current_dayofweek'] = $current_dayofweek;
 $ctsdw['max'] = $max;
-$ctsdw['total'] = array( $lang_global['total'], $total );
+$ctsdw['total'] = array( $lang_global['total'], number_format( $total ) );
 
 // gio trong ngay
 $sql = "SELECT `c_val`,`c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='hour' ORDER BY `c_val`";
@@ -172,7 +172,7 @@ $ctsh['caption'] = $lang_module['statbyhour'];
 $ctsh['rows'] = $hour_list;
 $ctsh['current_hour'] = date( 'H', NV_CURRENTTIME );
 $ctsh['max'] = $max;
-$ctsh['total'] = array( $lang_global['total'], $total );
+$ctsh['total'] = array( $lang_global['total'], number_format( $total ) );
 
 // quoc gia
 $sql = "SELECT `c_val`,`c_count`, `last_update` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='country' AND `c_count`!=0 ORDER BY `c_count` DESC LIMIT 10";
@@ -199,7 +199,7 @@ $ctsc['caption'] = $lang_module['statbycountry'];
 $ctsc['thead'] = array( $lang_module['country'], $lang_module['hits'], $lang_module['last_visit'] );
 $ctsc['rows'] = $countries_list;
 $ctsc['max'] = $max;
-$ctsc['others'] = array( $lang_module['others'], $others, $lang_module['viewall'] );
+$ctsc['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
 // trinh duyet
 $sql = "SELECT `c_val`,`c_count`, `last_update` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='browser' AND `c_count`!=0 ORDER BY `c_count` DESC LIMIT 10";
@@ -226,7 +226,7 @@ $ctsb['caption'] = $lang_module['statbybrowser'];
 $ctsb['thead'] = array( $lang_module['browser'], $lang_module['hits'], $lang_module['last_visit'] );
 $ctsb['rows'] = $browsers_list;
 $ctsb['max'] = $max;
-$ctsb['others'] = array( $lang_module['others'], $others, $lang_module['viewall'] );
+$ctsb['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
 // he dieu hanh
 $sql = "SELECT `c_val`,`c_count`, `last_update` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='os' AND `c_count`!=0 ORDER BY `c_count` DESC LIMIT 10";
@@ -253,7 +253,7 @@ $ctso['caption'] = $lang_module['statbyos'];
 $ctso['thead'] = array( $lang_module['os'], $lang_module['hits'], $lang_module['last_visit'] );
 $ctso['rows'] = $os_list;
 $ctso['max'] = $max;
-$ctso['others'] = array( $lang_module['others'], $others, $lang_module['viewall'] );
+$ctso['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
 $contents = call_user_func( "main" );
 include ( NV_ROOTDIR . '/includes/header.php' );
