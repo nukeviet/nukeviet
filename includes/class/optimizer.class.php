@@ -211,6 +211,14 @@ class optimezer
 		}
 
 		$meta = array();
+		if( ! empty( $this->_meta['name'] ) )
+		{
+			foreach( $this->_meta['name'] as $value => $content )
+			{
+				$meta[] = "<meta name=\"" . $value . "\" content=\"" . $content . "\" />";
+			}
+		}
+
 		if ( ! empty( $this->_meta['charset'] ) )
 		{
 			$meta[] = "<meta charset=\"" . $this->_meta['charset'] . "\" />";
@@ -220,14 +228,6 @@ class optimezer
 			foreach( $this->_meta['http-equiv'] as $value => $content )
 			{
 				$meta[] = "<meta http-equiv=\"" . $value . "\" content=\"" . $content . "\" />";
-			}
-		}
-
-		if( ! empty( $this->_meta['name'] ) )
-		{
-			foreach( $this->_meta['name'] as $value => $content )
-			{
-				$meta[] = "<meta name=\"" . $value . "\" content=\"" . $content . "\" />";
 			}
 		}
 
