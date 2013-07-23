@@ -404,31 +404,18 @@ function nv_html_meta_tags()
 	global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
 
 	$return = '';
-
-	if( $home )
-	{
-		$return .= "<meta name=\"description\" content=\"" . strip_tags( $global_config['site_description'] ) . "\" />\n";
-	}
-	else
-	{
-		if( ! empty( $description ) )
-		{
-			$return .= "<meta name=\"description\" content=\"" . strip_tags( $description ) . "\" />\n";
-		}
-		elseif( ! empty( $module_info['description'] ) )
-		{
-			$return .= "<meta name=\"description\" content=\"" . strip_tags( $module_info['description'] ) . "\" />\n";
-		}
-		else
-		{
-			$ds = array();
-			if( ! empty( $page_title ) ) $ds[] = $page_title;
-			if( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
-			$ds[] = $module_info['custom_title'];
-			$ds[] = $client_info['selfurl'];
-			$return .= "<meta name=\"description\" content=\"" . strip_tags( implode( " - ", $ds ) ) . "\" />\n";
-		}
-	}
+	
+	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
+	if ( empty( $site_description ) )
+    {
+        $ds = array();
+        if ( ! empty( $page_title ) ) $ds[] = $page_title;
+        if ( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
+        $ds[] = $module_info['custom_title'];
+        $ds[] = $client_info['selfurl'];
+        $site_description = implode( " - ", $ds );
+    }
+    $return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\" />\n";
 
 	$kw = array();
 	if( ! empty( $key_words ) ) $kw[] = $key_words;

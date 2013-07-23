@@ -132,7 +132,8 @@ class optimezer
 		}
 
 		$this->_meta['http-equiv'] = $this->_meta['name'] = array();
-
+		$this->_meta['charset'] = "";
+		
 		if( $this->opt_css_file )
 		{
 			$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
@@ -160,6 +161,11 @@ class optimezer
 						{
 							$this->_meta['name'][strtolower( $combine['name'] )] = $combine['content'];
 						}
+						elseif ( array_key_exists( 'charset', $combine ) )
+						{
+							$this->_meta['charset'] = $combine['charset'];
+						}
+						
 					}
 				}
 				elseif( preg_match( "/^<title>[^<]+<\/title>/is", $tag ) )
@@ -205,6 +211,10 @@ class optimezer
 		}
 
 		$meta = array();
+		if ( ! empty( $this->_meta['charset'] ) )
+		{
+			$meta[] = "<meta charset=\"" . $this->_meta['charset'] . "\" />";
+		}
 		if( ! empty( $this->_meta['http-equiv'] ) )
 		{
 			foreach( $this->_meta['http-equiv'] as $value => $content )
@@ -248,7 +258,11 @@ class optimezer
 			}
 		}
 
-		if( ! $this->_tidySupport ) $this->_content = $this->minifyHTML( $this->_content );
+		if ( $this->_tidySupport )
+		{
+			if ( strncasecmp( $this->_content, '<!DOCTYPE html>', 15 ) === 0 ) return $this->tidy5( $this->_content );
+			return tidy_repair_string( $this->_content, $this->tidy_options, 'utf8' );
+		}
 
 		$head = "<head>" . $this->eol . $this->_title . $this->eol;
 		if( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
@@ -565,7 +579,7 @@ class optimezer
 	{
 		$content = preg_replace_callback( '/<!--([\s\S]*?)-->/', array( $this, 'HTMLCommentCB' ), $content );
 		$content = preg_replace( '/<([^\>]+)\s+\/\s+\>/', '<$1 />', $content );
-		$content = preg_replace( '#<(br|hr|input|img|meta)([^>]+)>#', "<\\1 \\2 />", $content );
+		$content = preg_replace( '#<(br|hr|input|img|meta)([^>]+)>#', "<\\1\\2 />", $content );
 		$content = preg_replace( '#\s*\/\s*\/>#', " />", $content );
 		$content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
 		$content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
