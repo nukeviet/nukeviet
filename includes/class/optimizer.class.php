@@ -257,12 +257,8 @@ class optimezer
 				$this->_content = preg_replace( "/\{\|js\_" . $key . "\|\}/", $value, $this->_content );
 			}
 		}
-
-		if ( $this->_tidySupport )
-		{
-			if ( strncasecmp( $this->_content, '<!DOCTYPE html>', 15 ) === 0 ) return $this->tidy5( $this->_content );
-			return tidy_repair_string( $this->_content, $this->tidy_options, 'utf8' );
-		}
+		
+		if( ! $this->_tidySupport ) $this->_content = $this->minifyHTML( $this->_content );
 
 		$head = "<head>" . $this->eol . $this->_title . $this->eol;
 		if( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
@@ -274,13 +270,12 @@ class optimezer
 		if( ! $this->_tidySupport ) $head = $this->minifyHTML( $head );
 		$this->_content = preg_replace( '/<head>/i', $head, $this->_content, 1 );
 
-		if( $this->_tidySupport )
+		if ( $this->_tidySupport )
 		{
-			$tidy = new tidy();
-			$tidy->parseString( $this->_content, $this->tidy_options, 'utf8' );
-			$tidy->cleanRepair();
-			return $tidy;
+			if ( strncasecmp( $this->_content, '<!DOCTYPE html>', 15 ) === 0 ) return $this->tidy5( $this->_content );
+			return tidy_repair_string( $this->_content, $this->tidy_options, 'utf8' );
 		}
+
 		return $this->_content;
 	}
 
