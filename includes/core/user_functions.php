@@ -404,31 +404,18 @@ function nv_html_meta_tags()
 	global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
 
 	$return = '';
-
-	if( $home )
-	{
-		$return .= "<meta name=\"description\" content=\"" . strip_tags( $global_config['site_description'] ) . "\" />\n";
-	}
-	else
-	{
-		if( ! empty( $description ) )
-		{
-			$return .= "<meta name=\"description\" content=\"" . strip_tags( $description ) . "\" />\n";
-		}
-		elseif( ! empty( $module_info['description'] ) )
-		{
-			$return .= "<meta name=\"description\" content=\"" . strip_tags( $module_info['description'] ) . "\" />\n";
-		}
-		else
-		{
-			$ds = array();
-			if( ! empty( $page_title ) ) $ds[] = $page_title;
-			if( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
-			$ds[] = $module_info['custom_title'];
-			$ds[] = $client_info['selfurl'];
-			$return .= "<meta name=\"description\" content=\"" . strip_tags( implode( " - ", $ds ) ) . "\" />\n";
-		}
-	}
+	
+	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
+	if ( empty( $site_description ) )
+    {
+        $ds = array();
+        if ( ! empty( $page_title ) ) $ds[] = $page_title;
+        if ( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
+        $ds[] = $module_info['custom_title'];
+        $ds[] = $client_info['selfurl'];
+        $site_description = implode( " - ", $ds );
+    }
+    $return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\" />\n";
 
 	$kw = array();
 	if( ! empty( $key_words ) ) $kw[] = $key_words;
@@ -499,6 +486,95 @@ function nv_html_meta_tags()
 
 	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\" />\n";
 	return $return;
+}
+
+/**
+ * nv_html5_meta_tags()
+ *
+ * @return
+ */
+function nv_html5_meta_tags()
+{
+    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
+
+    $return = '';
+
+    $site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
+    if ( empty( $site_description ) )
+    {
+        $ds = array();
+        if ( ! empty( $page_title ) ) $ds[] = $page_title;
+        if ( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
+        $ds[] = $module_info['custom_title'];
+        $ds[] = $client_info['selfurl'];
+        $site_description = implode( " - ", $ds );
+    }
+    $return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\">\n";
+
+    $kw = array();
+    if ( ! empty( $key_words ) ) $kw[] = $key_words;
+    if ( ! empty( $module_info['keywords'] ) ) $kw[] = $module_info['keywords'];
+    if ( ! empty( $global_config['site_keywords'] ) ) $kw[] = $global_config['site_keywords'];
+    if ( ! empty( $kw ) )
+    {
+        $kw = array_unique( $kw );
+        $kw = implode( ",", $kw );
+        $kw = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ",", "," ), $kw );
+        $key_words = nv_strtolower( strip_tags( $kw ) );
+        $return .= "<meta name=\"keywords\" content=\"" . $key_words . "\">\n";
+    }
+
+    $return .= "<meta charset=\"" . $global_config['site_charset'] . "\">\n";
+
+    if ( $global_config['idsite'] and file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' ) )
+    {
+        $mt = file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' );
+        $patters = array();
+        $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
+        $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
+        $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
+        $patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
+        $mt = preg_replace( array_keys( $patters ), array_values( $patters ), $mt );
+        $mt = preg_replace( '/\{(.*)\}/', '', $mt );
+        $mt = simplexml_load_string( $mt );
+        $mt = nv_object2array( $mt );
+
+        if ( $mt['meta_item'] )
+        {
+            if ( isset( $mt['meta_item'][0] ) ) $metatags = $mt['meta_item'];
+            else  $metatags[] = $mt['meta_item'];
+            foreach ( $metatags as $meta )
+            {
+                if ( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
+                {
+                    $return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\">\n";
+                }
+            }
+        }
+    }
+    else
+    {
+        $return .= "<meta name=\"robots\" content=\"index,archive,follow,noodp\">\n";
+        $return .= "<meta name=\"googlebot\" content=\"index,archive,follow,noodp\">\n";
+        $return .= "<meta name=\"author\" content=\"" . $global_config['site_name'] . "\">\n";
+    }
+
+    $return .= "<meta name=\"generator\" content=\"NukeViet v3.x\">\n";
+    if ( defined( 'NV_IS_ADMIN' ) )
+    {
+        $return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\">\n";
+    }
+
+    if ( empty( $canonicalUrl ) ) $canonicalUrl = $client_info['selfurl'];
+
+    if ( substr( $canonicalUrl, 0, 4 ) != "http" )
+    {
+        if ( substr( $canonicalUrl, 0, 1 ) != "/" ) $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
+        $canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
+    }
+
+    $return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\">";
+    return $return;
 }
 
 /**
