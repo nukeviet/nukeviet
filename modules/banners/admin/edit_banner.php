@@ -256,11 +256,11 @@ $contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_da
 $contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10 );
 
 $my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_head .= "<script type=\"text/javascript\">\n";
-$my_head .= "Shadowbox.init({\n";
-$my_head .= "});\n";
-$my_head .= "</script>\n";
+$my_head = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+$my_footer .= "<script type=\"text/javascript\">\n";
+$my_footer .= "Shadowbox.init({\n";
+$my_footer .= "});\n";
+$my_footer .= "</script>\n";
 
 include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( nv_edit_banner_theme( $contents ) );

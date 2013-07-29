@@ -40,7 +40,7 @@ function nv_get_submenu( $mod )
 
 function nv_admin_theme( $contents, $head_site = 1 )
 {
-	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head;
+	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer;
 
 	$dir_template = '';
 
@@ -122,12 +122,6 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	{
 		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js() );
 		$xtpl->parse( 'main.nv_add_editor_js' );
-	}
-
-	if( ! empty( $my_head ) )
-	{
-		$xtpl->assign( 'NV_ADD_MY_HEAD', $my_head );
-		$xtpl->parse( 'main.nv_add_my_head' );
 	}
 
 	if( $head_site == 1 )
@@ -275,8 +269,12 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.nv_queries' );
 	}
 	$xtpl->parse( 'main' );
+	$sitecontent = $xtpl->text( 'main' );
 
-	return $xtpl->text( 'main' );
+	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1 );
+	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1 );
+
+	return $sitecontent;
 }
 
 ?>
