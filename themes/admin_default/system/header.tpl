@@ -15,6 +15,7 @@
 		<meta name="author" content="{NV_SITE_COPYRIGHT}" />
 		<meta name="generator" content="{NV_SITE_NAME}" />
 		<meta name="robots" content="noindex, nofollow" />
+		
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/normalize.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/main.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu.css"/>
@@ -23,8 +24,8 @@
 		<link rel="stylesheet" href="{NV_CSS_MODULE_THEME}" type="text/css" />
 		<!-- END: css_module -->
 
-		<script src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/modernizr-2.6.2.min.js"></script>
-		<script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}js/modernizr-2.6.2.min.js"></script>
+		<script type="text/javascript">
 			var nv_siteroot = '{NV_BASE_SITEURL}';
 			var nv_sitelang = '{NV_LANG_INTERFACE}';
 			var nv_name_variable = '{NV_NAME_VARIABLE}';
@@ -36,6 +37,18 @@
 			var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
 			var nv_area_admin = 1;
 		</script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/{NV_LANG_INTERFACE}.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}js/admin.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/main.js"></script>
+
+		<!-- BEGIN: module_js -->
+		<script type="text/javascript" src="{NV_JS_MODULE}"></script>
+		<!-- END: module_js -->
+		<!-- BEGIN: nv_add_editor_js -->
+		{NV_ADD_EDITOR_JS}
+		<!-- END: nv_add_editor_js -->
 	</head>
 	<body>
 		<!--[if lt IE 7]>

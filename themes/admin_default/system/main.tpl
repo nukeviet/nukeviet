@@ -147,5 +147,18 @@
 	<!-- #footer -->
 </div>
 <!-- #wrapper -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ddsmoothmenu.js"></script>
+<script type="text/javascript">
+	ddsmoothmenu.init({
+		arrowimages : {
+			down : ['downarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_down.png', 23],
+			right : ['rightarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_right.png']
+		},
+		mainmenuid : "smoothmenu",
+		orientation : 'h',
+		classname : 'ddsmoothmenu',
+		contentsource : "markup"
+	})
+</script>
 {FILE "footer.tpl"}
 <!-- END: main -->
