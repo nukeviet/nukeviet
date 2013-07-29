@@ -275,7 +275,7 @@ if( $step == 1 and file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
 		$nv_Request->set_Session( $module_data . '_export_filename', $export_filename . "@" . $file_name );
 	}
 
-	$objWriter->save( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . "/" . $excel_ext );
+	$objWriter->save( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . "." . $excel_ext );
 	die( $result );
 }
 elseif( $step == 2 and $nv_Request->isset_request( $module_data . '_export_filename', 'session' ) )
