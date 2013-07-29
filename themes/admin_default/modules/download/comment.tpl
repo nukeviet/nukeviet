@@ -4,7 +4,6 @@
 	<a class="button1" href="{COMMENT_STATUS1_HREF}"><span><span>{LANG.comment_st1}</span></span></a>
 	<a class="button1" href="{COMMENT_STATUS2_HREF}"><span><span>{LANG.comment_st2}</span></span></a>
 </div>
-<div class="clear"></div>
 <!-- BEGIN: row -->
 <table class="tab1" style="margin-bottom:5px">
 	<thead>
@@ -25,7 +24,7 @@
 		</tr>
 	</thead>
 
-	<tbody {CLASS}>
+	<tbody>
 		<tr>
 			<td style="width:25%;background-color:#DBDBDB;vertical-align:top"> {LANG.comment_post_name}: <strong>{ROW.post_name}</strong>
 			<br />

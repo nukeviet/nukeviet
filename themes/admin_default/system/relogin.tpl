@@ -62,7 +62,7 @@
 							<input name="save" id="save" type="hidden" value="1" />
 							<input class="submitform" type="submit" value="{N_SUBMIT}" />
 						</form>
-						<p align="right" style="padding:10px;">
+						<p class="right" style="padding:10px;">
 							<a class="lostpass" href="javascript:void(0);" onclick="nv_admin_logout();">{NV_LOGOUT}</a>
 						</p>
 					</div>

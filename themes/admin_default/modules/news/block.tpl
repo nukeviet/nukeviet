@@ -12,21 +12,13 @@
 			<caption>{LANG.addtoblock}</caption>
 			<thead>
 				<tr>
-					<td align="center" width="60"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>
+					<td class="w50 center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>
 					<td>{LANG.name}</td>
 				</tr>
 			</thead>
-			<!-- BEGIN: loop -->
-			<tbody {ROW.class}>
-				<tr>
-					<td align="center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]"{ROW.checked}/></td>
-					<td>{ROW.title}</td>
-				</tr>
-			</tbody>
-			<!-- END: loop -->
 			<tfoot>
-				<tr align="left">
-					<td align="center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>
+				<tr class="left">
+					<td class="center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>
 					<td>
 					<select name="bid">
 						<!-- BEGIN: bid -->
@@ -35,6 +27,14 @@
 					</select><input type="hidden" name ="checkss" value="{CHECKSESS}" /><input name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
+			<tbody>
+				<!-- BEGIN: loop -->
+				<tr>
+					<td class="center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]"{ROW.checked}/></td>
+					<td>{ROW.title}</td>
+				</tr>
+				<!-- END: loop -->
+			</tbody>
 		</table>
 	</form>
 	<!-- END: news -->

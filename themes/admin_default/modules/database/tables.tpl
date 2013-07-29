@@ -2,8 +2,6 @@
 <form name="myform" method="post" action="{ACTION}" onsubmit="nv_chsubmit(this,'tables[]');return false;">
 	<table class="tab1">
 		<caption>{CAPTIONS}</caption>
-		<col valign="middle" width="10px" />
-		<col span="10" valign="top" />
 		<thead>
 			<tr>
 				<td><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);" /></td>
@@ -32,17 +30,15 @@
 				</select><input name="Submit1" id="subm_form" type="submit" value="{SUBMIT}" /></td>
 			</tr>
 		</tfoot>
-		<!-- BEGIN: loop -->
-		<tbody {ROW.class}>
+		<tbody>
+			<!-- BEGIN: loop -->
 			<tr>
-				<{ROW.tag}><input name="tables[]" type="checkbox" value="{ROW.key}" onclick="nv_UncheckAll(this.form, 'tables[]', 'check_all[]', this.checked);" /></{ROW.tag}>
+				<td><input name="tables[]" type="checkbox" value="{ROW.key}" onclick="nv_UncheckAll(this.form, 'tables[]', 'check_all[]', this.checked);" /></td>
 				<!-- BEGIN: col -->
-				<{ROW.tag}>{VALUE}</{ROW.tag}>
+				<td>{VALUE}</td>
 				<!-- END: col -->
 			</tr>
-		</tbody>
-		<!-- END: loop -->
-		<tbody class="third">
+			<!-- END: loop -->
 			<tr>
 				<td><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);" /></td>
 				<td colspan="10"><strong>{THIRD}</strong></td>

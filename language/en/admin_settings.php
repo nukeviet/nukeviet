@@ -82,7 +82,6 @@ $lang_module['site_keywords'] = 'Keywords';
 $lang_module['site_logo'] = 'Site\'s logo';
 $lang_module['site_email'] = 'Site\'s email';
 $lang_module['error_send_email'] = 'Email receiving error notices';
-$lang_module['site_phone'] = 'Site\'s phone';
 $lang_module['lang_multi'] = 'Activate multi-language';
 $lang_module['site_lang'] = 'Default language';
 $lang_module['site_timezone'] = 'Site\'s timezone';

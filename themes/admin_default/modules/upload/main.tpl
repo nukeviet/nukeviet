@@ -1,5 +1,7 @@
 <!-- BEGIN: uploadPage -->
-<iframe src="{IFRAME_SRC}" width="100%" height="400px" frameborder="0"></iframe>
+<iframe src="{IFRAME_SRC}" style="border: 0; width: 100%; height:400px">
+	&nbsp;
+</iframe>
 <!-- END: uploadPage -->
 <!-- BEGIN: main -->
 <!-- BEGIN: header -->
@@ -282,7 +284,7 @@
 			<div class="notupload" style="display:none">
 				{LANG.notupload}
 			</div>
-			<div style="clear:both"></div>
+			<div class="clearfix"></div>
 		</div>
 
 		<input type="hidden" name="currentFileUpload" value=""/>
@@ -331,7 +333,7 @@
 					<img name="myFile2" alt="{LANG.clickSize}" style="border:2px solid #F0F0F0;" width="0" height="0" src="" />
 				</div>
 			</div>
-			<div style="clear:both"></div>
+			<div class="clearfix"></div>
 		</div>
 		<div id="filemove" style="display:none;padding:10px;font-size:11px;" title="{LANG.move}">
 			<div title="pathFileName" style="font-weight:800;margin-bottom:10px" class="dynamic"></div>
@@ -352,7 +354,7 @@
 					<select name="searchPath"></select>
 				</div>
 				{LANG.searchkey}:
-				<div style="margin:10px 0"><input name="q" type="text" class="dynamic" style="width:200px;"/>
+				<div style="margin:10px 0"><input name="q" type="text" class="w200 dynamic" />
 				</div>
 				<input style="margin-left:50px;width:100px;" type="submit" value="{LANG.search}" name="search" />
 			</form>

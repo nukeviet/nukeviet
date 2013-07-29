@@ -148,7 +148,9 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data_content );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 $xtpl->assign( 'module_name', $module_name );
 $xtpl->assign( 'PATH', NV_UPLOADS_DIR . '/' . $module_name );
 $xtpl->assign( 'catid', $data_content['catid'] );
@@ -164,15 +166,15 @@ if( ! empty( $array_cat ) )
 		{
 			if( $cat['parentid'] != 0 ) $xtitle = getlevel( $cat['parentid'], $array_cat );
 			$cat['xtitle'] = $xtitle . $cat['title'];
-			$cat['sl'] = ( $cat['catid'] == $data_content['parentid'] ) ? "selected=\"selected\"" : "";
+			$cat['sl'] = ( $cat['catid'] == $data_content['parentid'] ) ? ' selected="selected"' : '';
 			$xtpl->assign( 'CAT', $cat );
 			$xtpl->parse( 'main.loopcat' );
 		}
 
 		if( $cat['parentid'] == $data_content['parentid'] )
 		{
-			$cat['link_add'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;pid=" . $cat['catid'] . "";
-			$cat['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;catid=" . $cat['catid'] . "";
+			$cat['link_add'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;pid=" . $cat['catid'] . "";
+			$cat['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;catid=" . $cat['catid'] . "";
 			$cat['weight_select'] = drawselect_number( "change", 1, $numcat, $cat['weight'], "nv_chang_cat(this,'" . $cat['catid'] . "','weight');" );
 			$cat['inhome_select'] = drawselect_yesno( $select_name = "slinhome", $cat['inhome'], $lang_module['weblink_no'], $lang_module['weblink_yes'], "nv_chang_cat(this,'" . $cat['catid'] . "','inhome');" );
 			$xtpl->assign( 'ROW', $cat );
@@ -180,7 +182,7 @@ if( ! empty( $array_cat ) )
 		}
 	}
 
-	$xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&pid=" . $data_content['parentid'] . "" );
+	$xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;pid=" . $data_content['parentid'] . "" );
 	if( $numcat > 0 ) $xtpl->parse( 'main.data' );
 }
 

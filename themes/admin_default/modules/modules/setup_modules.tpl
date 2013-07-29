@@ -8,8 +8,8 @@
 			<!-- END: head -->
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>{ROW.stt}</td>
 			<td>{ROW.values.title}</td>
@@ -18,8 +18,8 @@
 			<td>{ROW.values.author}</td>
 			<td>{ROW.values.setup} {ROW.values.delete}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- BEGIN: vmodule -->
 <table class="tab1">
@@ -31,8 +31,8 @@
 			<!-- END: vhead -->
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {VROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>{VROW.stt}</td>
 			<td>{VROW.values.title}</td>
@@ -41,8 +41,8 @@
 			<td>{VROW.values.note}</td>
 			<td>{VROW.values.setup}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: vmodule -->
 <!-- END: main -->

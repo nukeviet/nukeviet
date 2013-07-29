@@ -30,7 +30,7 @@ $array_userid = array();
 $disabled = " disabled=\"disabled\"";
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . $db_config['prefix'] . "_logs` WHERE `id`!=0";
-$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op;
+$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 
 // Search data
 $data_search = array(
@@ -278,8 +278,8 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'checksess', md5( "siteinfo_" . session_id() . "_" . $admin_info['userid'] ) );
-$xtpl->assign( 'URL_DEL', $base_url . "&" . NV_OP_VARIABLE . "=logs_del" );
-$xtpl->assign( 'URL_CANCEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+$xtpl->assign( 'URL_DEL', $base_url . "&amp;" . NV_OP_VARIABLE . "=logs_del" );
+$xtpl->assign( 'URL_CANCEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
 $xtpl->assign( 'DISABLE', $disabled );
 $xtpl->assign( 'DATA_SEARCH', $data_search );
 $xtpl->assign( 'DATA_ORDER', $order );

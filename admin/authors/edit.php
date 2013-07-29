@@ -320,13 +320,12 @@ if( defined( 'NV_IS_SPADMIN' ) )
 	$contents['allow_modify_subdirectories'] = array( $lang_module['allow_modify_subdirectories'], $allow_modify_subdirectories );
 }
 
-$contents['submit'] = $lang_global['save'];
-
 // Parse content
 $xtpl = new XTemplate( "edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
 $xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );
 $xtpl->assign( 'INFO', $contents['info'] );
 $xtpl->assign( 'ACTION', $contents['action'] );
+$xtpl->assign( 'LANG',$lang_module );
 
 if( isset( $contents['editor'] ) )
 {
@@ -405,8 +404,6 @@ if( isset( $contents['position'] ) )
 	$xtpl->assign( 'POSITION2', $contents['position'][2] );
 	$xtpl->parse( 'edit.position' );
 }
-
-$xtpl->assign( 'SUBMIT', $contents['submit'] );
 
 $xtpl->parse( 'edit' );
 $contents = $xtpl->text( 'edit' );

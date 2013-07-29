@@ -133,7 +133,7 @@ class optimezer
 
 		$this->_meta['http-equiv'] = $this->_meta['name'] = array();
 		$this->_meta['charset'] = "";
-		
+
 		if( $this->opt_css_file )
 		{
 			$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
@@ -165,7 +165,7 @@ class optimezer
 						{
 							$this->_meta['charset'] = $combine['charset'];
 						}
-						
+
 					}
 				}
 				elseif( preg_match( "/^<title>[^<]+<\/title>/is", $tag ) )
@@ -257,7 +257,7 @@ class optimezer
 				$this->_content = preg_replace( "/\{\|js\_" . $key . "\|\}/", $value, $this->_content );
 			}
 		}
-		
+
 		if( ! $this->_tidySupport ) $this->_content = $this->minifyHTML( $this->_content );
 
 		$head = "<head>" . $this->eol . $this->_title . $this->eol;
@@ -268,7 +268,7 @@ class optimezer
 		if( ! empty( $this->_style ) ) $head .= "<style type=\"text/css\">" . $this->minifyCss( implode( $this->eol, $this->_style ) ) . "</style>" . $this->eol;
 		$head .= "<script type=\"text/javascript\" src=\"" . $this->base_siteurl . "js/jquery/jquery.min.js\"></script>" . $this->eol;
 		if( ! $this->_tidySupport ) $head = $this->minifyHTML( $head );
-		$this->_content = preg_replace( '/<head>/i', $head, $this->_content, 1 );
+		$this->_content = trim( preg_replace( '/<head>/i', $head, $this->_content, 1 ) );
 
 		if ( $this->_tidySupport )
 		{
@@ -281,7 +281,7 @@ class optimezer
 
 	/**
      * optimezer::tidy5()
-     * 
+     *
      * @param mixed $string
      * @return
      */
@@ -298,8 +298,8 @@ class optimezer
         }
 
         $this->tidy_options['doctype'] = 'omit';
-        $this->tidy_options['output-html'] = true;
-        $this->tidy_options['output-xhtml'] = false;
+        //$this->tidy_options['output-html'] = true;
+        //$this->tidy_options['output-xhtml'] = false;
         $this->tidy_options['drop-proprietary-attributes'] = false;
         $this->tidy_options['new-blocklevel-tags'] = 'article aside audio details dialog figcaption figure footer header hgroup menutidy nav section source summary track video';
 

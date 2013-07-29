@@ -11,8 +11,8 @@
 <!-- BEGIN: scontent -->
 <table class="tab1">
 	<caption> {LANG.EngineInfo} </caption>
-	<col width="30%" />
-	<col valign="top" span="7" width="10%" />
+	<col style="width: 30%"/>
+	<col class="top" span="7" style="width: 10%" />
 	<thead>
 		<tr>
 			<!-- BEGIN: thead -->
@@ -20,18 +20,18 @@
 			<!-- END: thead -->
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<!-- BEGIN: td -->
 			<td style="{TD.style}">
-			<div{TD.class}>
-				{TD.content}</div>
-			</td>
+			<div {TD.class}>
+				{TD.content}
+			</div></td>
 			<!-- END: td -->
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- BEGIN: ref -->
 <div style="text-align:right;">

@@ -29,9 +29,9 @@
 <!-- BEGIN: pendinginfo -->
 <table class="tab1">
 	<caption>{LANG.pendingInfo}</caption>
-	<col valign="top" width="20%" />
-	<col valign="top" />
-	<col valign="top" width="10%" />
+	<col style="width:20%"/>
+	<col />
+	<col style="width:10%"/>
 	<thead>
 		<tr>
 			<td>{LANG.moduleName}</td>
@@ -39,8 +39,8 @@
 			<td class="aright">{LANG.moduleValue}</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>{MODULE}</td>
 			<td>
@@ -53,16 +53,16 @@
 			</td>
 			<td class="aright">{VALUE}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: pendinginfo -->
 <!-- BEGIN: info -->
 <table class="tab1">
 	<caption>{LANG.moduleInfo}</caption>
-	<col valign="top" width="20%" />
-	<col valign="top" />
-	<col valign="top" width="10%" />
+	<col style="width:20%"/>
+	<col />
+	<col style="width:10%"/>
 	<thead>
 		<tr>
 			<td>{LANG.moduleName}</td>
@@ -70,8 +70,8 @@
 			<td class="aright">{LANG.moduleValue}</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>{MODULE}</td>
 			<td>
@@ -84,8 +84,8 @@
 			</td>
 			<td class="aright">{VALUE}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: info -->
 <!-- BEGIN: version -->
@@ -97,14 +97,14 @@
 			<td class="aright">{LANG.moduleValue}</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>{KEY}</td>
 			<td class="aright">{VALUE}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- BEGIN: inf -->
 <div class="newVesionInfo">

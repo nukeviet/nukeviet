@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<table summary="{CONTENT.caption}" class="tab1">
+<table class="tab1">
 	<col style="width:60px;white-space:nowrap" />
 	<thead>
 		<tr>
@@ -8,8 +8,8 @@
 			<!-- END: thead -->
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>
 			<select name="change_weight_{ROW.id}" id="change_weight_{ROW.id}" onchange="{ROW.js_onchange}">
@@ -22,7 +22,7 @@
 			<td><a href="#action" onclick="{ROW.name.2}">{ROW.name.1}</a></td>
 			<td>{ROW.layout.0}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: main -->

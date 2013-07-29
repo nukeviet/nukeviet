@@ -21,8 +21,13 @@
 			<td>&nbsp;</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tfoot>
+		<tr class="right">
+			<td colspan="8"><a class="edit_icon block_weight" href="javascript:void(0);">{LANG.block_weight}</a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="add_icon block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="delete_icon delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width:100px;display:inline-block">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
+		</tr>
+	</tfoot>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>
 			<select class="order" title="{ROW.bid}">
@@ -48,15 +53,10 @@
 			<br />
 			<!-- END: func_inmodule -->
 			</td>
-			<td class="center"><span class="edit_icon"><a class="block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a></span> &nbsp;-&nbsp; <span class="delete_icon"><a class="delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></span></td>
+			<td class="center"><a class="edit_icon block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp; <a class="delete_icon delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
 			<td><input type="checkbox" name="idlist" value="{ROW.bid}"/></td>
 		</tr>
-	</tbody>
-	<!-- END: loop -->
-	<tbody>
-		<tr align="right" class="tfoot_box">
-			<td colspan="8"><span class="edit_icon"><a class="block_weight" href="javascript:void(0);">{LANG.block_weight}</a></span>&nbsp;&nbsp;&nbsp;&nbsp; <span class="add_icon"><a class="block_content" href="javascript:void(0);">{LANG.block_add}</a></span>&nbsp;&nbsp;&nbsp;&nbsp; <span class="delete_icon"><a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a></span><span style="width:100px;display:inline-block">&nbsp;</span><span> <a name="checkall" id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a name="uncheckall" id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
-		</tr>
+		<!-- END: loop -->
 	</tbody>
 </table>
 <script type="text/javascript">

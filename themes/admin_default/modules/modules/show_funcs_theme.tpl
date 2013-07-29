@@ -12,7 +12,6 @@
 		</p>
 		<!-- END: loading1 -->
 	</div>
-	<div class="clear"></div>
 </div>
 <!-- BEGIN: ajax0 -->
 <script type="text/javascript">

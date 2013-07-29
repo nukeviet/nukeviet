@@ -442,7 +442,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`confi
 
 $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
 	('sys', 'site', 'closed_site', '0'),
-	('sys', 'site', 'admin_theme', 'admin_full'),
+	('sys', 'site', 'admin_theme', 'admin_default'),
 	('sys', 'site', 'date_pattern', 'l, d/m/Y'),
 	('sys', 'site', 'time_pattern', 'H:i'),
 	('sys', 'site', 'online_upd', '1'),

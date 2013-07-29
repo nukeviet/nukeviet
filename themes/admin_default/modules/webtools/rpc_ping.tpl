@@ -13,7 +13,7 @@
 			<div class="col3a">
 				{LANG.rpc_message}
 			</div>
-			<div class="clear"></div>
+			<div class="clearfix"></div>
 		</div>
 		<!-- BEGIN: service -->
 		<div class="service">
@@ -30,7 +30,7 @@
 				&nbsp;
 			</div>
 			<div class="col3" id="mes{SERVICE.id}" title=""></div>
-			<div class="clear"></div>
+			<div class="clearfix"></div>
 		</div>
 		<!-- END: service -->
 	</div>

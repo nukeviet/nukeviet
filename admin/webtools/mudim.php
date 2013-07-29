@@ -45,6 +45,11 @@ $mudim_method = array(
 $mudim_displaymode = array( '0' => 'Hiển thị đầy đủ', '1' => 'Hiển thị tối giản' );
 
 $xtpl = new XTemplate( "mudim.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'MUDIM_SHOWPANEL', ( $global_config['mudim_showpanel'] ) ? ' checked="checked"' : '' );
 

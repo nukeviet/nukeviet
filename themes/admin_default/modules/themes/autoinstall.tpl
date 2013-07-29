@@ -10,9 +10,14 @@
 <!-- BEGIN: main -->
 <div id="step1">
 	<table class="tab1">
-		<tbody class="second">
+		<tfoot>
 			<tr>
-				<td align="right"><strong>{LANG.autoinstall_theme_install}: </strong></td>
+				<td colspan="2" class="center"><input name="method" type="button" value="{LANG.autoinstall_continue}" /></td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<tr>
+				<td class="right"><strong>{LANG.autoinstall_theme_install}: </strong></td>
 				<td>
 				<select name="installtype">
 					<option value="0">{LANG.autoinstall_method_none}</option>
@@ -22,14 +27,11 @@
 				</select></td>
 			</tr>
 		</tbody>
-		<tbody>
-			<tr>
-				<td colspan="2" class="center"><input name="method" type="button" value="{LANG.autoinstall_continue}" /></td>
-			</tr>
-		</tbody>
 	</table>
 </div>
-<div id="content"></div>
+<div id="content">
+	&nbsp;
+</div>
 <script type="text/javascript">
 	//<![CDATA[
 	$(function() {

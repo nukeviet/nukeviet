@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: is_ping -->
-<form action="" method="post">
-	<table class="tab1" style="width:auto">
+<form action="{ACTION_FORM}" method="post">
+	<table class="tab1">
 		<caption> {LANG.sitemapPing} </caption>
 		<tr>
 			<td>
@@ -27,8 +27,8 @@
 </form>
 <!-- END: is_ping -->
 <!-- BEGIN: searchEngineList -->
-<form action="" method="post">
-	<table class="tab1" style="width:auto">
+<form action="{ACTION_FORM}" method="post">
+	<table class="tab1">
 		<caption> {LANG.searchEngineConfig} </caption>
 		<thead>
 			<tr>
@@ -37,19 +37,19 @@
 				<td>{LANG.searchEngineActive}</td>
 			</tr>
 		</thead>
-		<!-- BEGIN: loop -->
 		<tbody>
+			<!-- BEGIN: loop -->
 			<tr>
-				<td><input type="text" value="{DATA.name}" name="searchEngineName[]" style="width: 200px;" /></td>
-				<td><input type="text" value="{DATA.value}" name="searchEngineValue[]" style="width: 400px;" /></td>
+				<td><input class="w200" type="text" value="{DATA.name}" name="searchEngineName[]" /></td>
+				<td><input class="w400" type="text" value="{DATA.value}" name="searchEngineValue[]" /></td>
 				<td>
 				<select name="searchEngineActive[]">
 					<option value="0">{GLANG.no}</option>
 					<option value="1"{DATA.selected}>{GLANG.yes}</option>
 				</select></td>
 			</tr>
+			<!-- END: loop -->
 		</tbody>
-		<!-- END: loop -->
 	</table>
 	<p>
 		<input type="submit" name="submit" value="{LANG.submit}" />

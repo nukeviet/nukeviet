@@ -3,7 +3,6 @@
 <div class="quote" style="width:98%">
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <!-- BEGIN: result -->
 <table class="tab1">

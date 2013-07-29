@@ -6,7 +6,7 @@
 </div>
 <!-- END: error -->
 <table class="tab1">
-	<tbody class="second">
+	<tbody>
 		<tr>
 			<!-- BEGIN: loop -->
 			<!-- BEGIN: active -->
@@ -43,7 +43,6 @@
 			<!-- BEGIN: endtr -->
 			</td>
 		</tr>
-		&nbsp;
 		<tr>
 			<!-- END: endtr -->
 			<!-- BEGIN: endtd -->

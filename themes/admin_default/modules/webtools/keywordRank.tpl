@@ -120,54 +120,52 @@
 <!-- END: error -->
 <!-- BEGIN: result -->
 <table class="tab1">
-	<col width="50%" />
-	<col width="50%" />
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<col span="2" style="width: 50%" />
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td> {LOOP.key} </td>
 			<td> {LOOP.value} </td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: result -->
 <!-- BEGIN: MainResult -->
 <table class="tab1">
+	<col span="2" style="width: 50%" />
 	<thead>
 		<tr>
 			<td colspan="2"> {LANG.mainResult} </td>
 		</tr>
 	</thead>
-	<col width="50%" />
-	<col width="50%" />
-	<!-- BEGIN: tr -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: tr -->
 		<tr>
 			<td> {TR.key} </td>
 			<td> {TR.value} </td>
 		</tr>
+		<!-- END: tr -->
 	</tbody>
-	<!-- END: tr -->
 </table>
 <!-- END: MainResult -->
 <!-- BEGIN: TopPages -->
 <table class="tab1">
+	<col class="w50">
+	<col>
 	<thead>
 		<tr>
 			<td colspan="2"> {CAPTION} </td>
 		</tr>
 	</thead>
-	<col width="30" />
-	<col />
-	<!-- BEGIN: top -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: top -->
 		<tr>
 			<td style="text-align:right"> {ID} </td>
 			<td><a href="{URL}" target="_blank"{A_CLASS}><span>{URL}</span></a></td>
 		</tr>
+		<!-- END: top -->
 	</tbody>
-	<!-- END: top -->
 </table>
 <!-- END: TopPages -->
 <script type="text/javascript">
@@ -178,7 +176,6 @@
 		$("#accuracy").removeAttr('disabled');
 		$("#load_img").text("");
 		$("#fsubmit").show();
-
 	});
 	//]]>
 </script>

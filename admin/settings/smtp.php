@@ -70,7 +70,11 @@ $array_config['mailer_mode_smtpt_show'] = ( $array_config['mailer_mode'] == 'smt
 $xtpl = new XTemplate( "smtp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
-
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 foreach( $smtp_encrypted_array as $id => $value )
 {
 	$encrypted = array(

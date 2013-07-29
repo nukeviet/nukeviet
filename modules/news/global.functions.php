@@ -224,7 +224,7 @@ function nv_archive_content_module( $id, $listcatid )
 function nv_link_edit_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a></span>";
+	$link = "<a class=\"edit_icon\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a>";
 	return $link;
 }
 
@@ -237,7 +237,7 @@ function nv_link_edit_page( $id )
 function nv_link_delete_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a></span>";
+	$link = "<a class=\"delete_icon\" href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a>";
 	return $link;
 }
 

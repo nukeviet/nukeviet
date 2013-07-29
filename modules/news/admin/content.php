@@ -723,6 +723,9 @@ $xtpl->assign( 'rowcontent', $rowcontent );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
+
 $xtpl->assign( 'module_name', $module_name );
 
 foreach( $global_array_cat as $catid_i => $array_value )
@@ -862,7 +865,7 @@ $xtpl->assign( 'allowed_save_checked', $allowed_save_checked );
 
 $xtpl->assign( 'edit_bodytext', $edits );
 
-if( $error != '' )
+if( ! empty( $error ) )
 {
 	$xtpl->assign( 'error', implode( "<br />", $error ) );
 	$xtpl->parse( 'main.error' );

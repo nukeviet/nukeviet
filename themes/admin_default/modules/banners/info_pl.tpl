@@ -5,13 +5,13 @@
 	<a class="button2" href="{CONTENTS.add.0}"><span><span>{CONTENTS.add.1}</span></span></a>
 	<a class="button2" href="javascript:void(0);" onclick="{CONTENTS.del.0}"><span><span>{CONTENTS.del.1}</span></span></a>
 </div>
-<table summary = "{CONTENTS.caption}" class="tab1">
+<table class="tab1">
 	<caption>{CONTENTS.caption}</caption>
 	<colgroup>
 		<col style="width:50%;white-space:nowrap" />
 	</colgroup>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<!-- BEGIN: t1 -->
 			<td>{ROW.0}:</td>
@@ -21,8 +21,8 @@
 			<td colspan="2">{ROW.0}:</td>
 			<!-- END: t2 -->
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- BEGIN: description -->
 <div style="border:1px solid #dadada;margin:10px 0px 0px 0px;padding:10px">

@@ -1,7 +1,8 @@
 <!-- BEGIN: main -->
 <table class="tab1">
 	<caption>{DATA.title}</caption>
-	<col width="150px" />
+	<col class="w150"/>
+	<col/>
 	<tbody>
 		<tr>
 			<td style="vertical-align:top">{LANG.infor_user_send_title}</td>
@@ -15,14 +16,10 @@
 			<br />
 			{DATA.time} </td>
 		</tr>
-	</tbody>
-	<tbody class="second">
 		<tr>
 			<td>{LANG.part_row_title}</td>
 			<td>{DATA.part_row_title}</td>
 		</tr>
-	</tbody>
-	<tbody>
 		<tr>
 			<td colspan="2">{DATA.content}</td>
 		</tr>
@@ -42,7 +39,8 @@
 <!-- BEGIN: data_reply -->
 <table class="tab1">
 	<caption>Re: {DATA.title}</caption>
-	<col width="150px" />
+	<col class="w150"/>
+	<col />
 	<tbody>
 		<tr>
 			<td style="vertical-align:top">{LANG.infor_user_send_title}</td>
@@ -50,14 +48,10 @@
 			<br />
 			{REPLY.time} </td>
 		</tr>
-	</tbody>
-	<tbody class="second">
 		<tr>
 			<td>{LANG.reply_user_send_title}</td>
 			<td>{REPLY.sender_name} &lt;{DATA.sender_email}&gt;</td>
 		</tr>
-	</tbody>
-	<tbody>
 		<tr>
 			<td colspan="2">{DATA.reply_content}</td>
 		</tr>

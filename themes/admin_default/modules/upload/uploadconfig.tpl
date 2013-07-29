@@ -1,16 +1,20 @@
 <!-- BEGIN: main -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<form action="" method="post" id="frm">
-	<table class="tab1" style="auto">
-		<col width="230"/>
-		<tbody class="second">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
+	<table class="tab1">
+		<col style="width: 230px"/>
+		<col />
+		<tfoot>
+			<tr>
+				<td colspan="2" class="center"><input type="submit" value="{LANG.pubdate}" name="submit"/></td>
+			</tr>
+		</tfoot>
+		<tbody>
 			<tr>
 				<td><strong>{LANG.nv_max_width_height}</strong></td>
 				<td><input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_WIDTH}" name="nv_max_width" maxlength="4"/> x <input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_HEIGHT}" name="nv_max_height" maxlength="4"/><input type="checkbox" style="margin-left:40px;" name="nv_auto_resize" value="1" {NV_AUTO_RESIZE}/>{LANG.nv_auto_resize} </td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.nv_max_size}:</strong></td>
 				<td>
@@ -20,8 +24,6 @@
 					<!-- END: size -->
 				</select> ({LANG.sys_max_size}: {SYS_MAX_SIZE}) </td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.upload_checking_mode}:</strong></td>
 				<td>
@@ -31,8 +33,6 @@
 					<!-- END: upload_checking_mode -->
 				</select> {UPLOAD_CHECKING_NOTE} </td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.uploadconfig_types}</strong></td>
 				<td>
@@ -41,8 +41,6 @@
 				<!-- END: types -->
 				</td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td style="vertical-align:top"><strong>{LANG.uploadconfig_ban_ext}</strong></td>
 				<td>
@@ -51,8 +49,6 @@
 				<!-- END: exts -->
 				</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td style="vertical-align:top"><strong>{LANG.uploadconfig_ban_mime}</strong></td>
 				<td>
@@ -62,11 +58,6 @@
 				</td>
 			</tr>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="2" class="center"><input type="submit" value="{LANG.pubdate}" name="submit"/></td>
-			</tr>
-		</tfoot>
 	</table>
 </form>
 <script type="text/javascript">

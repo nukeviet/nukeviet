@@ -11,7 +11,7 @@
 	</div>
 </div>
 <!-- END: loopimg -->
-<div style="clear:both"></div>
+<div class="clearfix"></div>
 <!-- BEGIN: generate_page -->
 <div class="generate_page">
 	{GENERATE_PAGE}
@@ -76,7 +76,7 @@
 <!-- BEGIN: imgsel -->
 <script type="text/javascript">
 	$(".imgcontent.imgsel").attr('id', 'nv_imgsel_{NV_CURRENTTIME}');
-	window.location.href = "#nv_imgsel_{NV_CURRENTTIME}"; 
+	window.location.href = "#nv_imgsel_{NV_CURRENTTIME}";
 </script>
 <!-- END: imgsel -->
 <!-- END: main -->

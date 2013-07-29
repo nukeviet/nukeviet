@@ -60,9 +60,9 @@ function nv_list_menu()
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$list[$row['id']] = array(
-			'id' => ( int )$row['id'], //
-			'title' => $row['title'], //
-			'description' => $row['description'] //
+			'id' => ( int )$row['id'], 
+			'title' => $row['title'], 
+			'description' => $row['description'] 
 		);
 	}
 

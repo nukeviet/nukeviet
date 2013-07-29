@@ -78,7 +78,11 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NOTE', sprintf( $lang_module['metaTagsNote'], implode( ', ', $ignore ) ) );
 $xtpl->assign( 'VARS', $lang_module['metaTagsVar'] . ': ' . implode( ', ', $vas ) );
-
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 if( ! empty( $metatags['meta'] ) )
 {
 	$number = 0;

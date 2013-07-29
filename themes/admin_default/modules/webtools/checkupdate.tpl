@@ -21,13 +21,11 @@
 			<td> {LANG.checkValue} </td>
 		</tr>
 	</thead>
-	<tbody class="second">
+	<tbody>
 		<tr>
 			<td style="white-space:nowrap"> {LANG.userVersion} </td>
 			<td> {VALUE.userVersion} </td>
 		</tr>
-	</tbody>
-	<tbody>
 		<tr>
 			<td style="white-space:nowrap"> {LANG.onlineVersion} </td>
 			<td> {VALUE.onlineVersion}
@@ -60,9 +58,9 @@
 <!-- BEGIN: modUpd -->
 <table class="tab1">
 	<caption> {LANG.checkModules} </caption>
-	<col valign="top" width="120" />
-	<col valign="top" />
-	<col valign="top" width="200" />
+	<col class="top w150" />
+	<col class="top" />
+	<col class="top w150" />
 	<thead>
 		<tr>
 			<td> {LANG.moduleName} </td>
@@ -70,8 +68,8 @@
 			<td style="text-align:right"> {LANG.moduleNote} </td>
 		</tr>
 	</thead>
+	<tbody>
 	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
 		<tr>
 			<td style="vertical-align:top">
 			<div class="Note {MODCL}">
@@ -97,8 +95,8 @@
 			</div></td>
 			<td style="vertical-align:top;text-align:right"> {MODNOTE} </td>
 		</tr>
-	</tbody>
 	<!-- END: loop -->
+	</tbody>
 </table>
 <div style="text-align:right;">
 	{LANG.checkDate}: {MODUPDDATE} (<a id="modUpdRefresh" href="#">{LANG.reCheck}</a>)
@@ -147,17 +145,17 @@
 <!-- BEGIN: modsNew -->
 <table class="tab1">
 	<caption> {LANG.moduleNote2_link} </caption>
-	<col valign="top" width="120" />
-	<col valign="top" />
-	<col valign="top" width="200" />
+	<col class="top w150" />
+	<col class="top" />
+	<col class="top w200" />
 	<thead>
 		<tr>
 			<td> {LANG.moduleName} </td>
 			<td> {LANG.moduleInfo} </td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td style="vertical-align:top">
 			<div class="Note Note2">
@@ -178,8 +176,8 @@
 				</ul>
 			</div></td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <div style="text-align:right;">
 	{LANG.checkDate}: {MODUPDDATE} (<a id="modsNewRefresh" href="#">{LANG.reCheck}</a>)

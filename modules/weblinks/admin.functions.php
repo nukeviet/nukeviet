@@ -57,7 +57,7 @@ function drawselect_number( $select_name = '', $number_start = 0, $number_end = 
 	$html = "<select name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
 	for( $i = $number_start; $i <= $number_end; ++$i )
 	{
-		$select = ( $i == $number_curent ) ? "selected=\"selected\"" : "";
+		$select = ( $i == $number_curent ) ? " selected=\"selected\"" : "";
 		$html .= "<option value=\"" . $i . "\"" . $select . ">" . $i . "</option>";
 	}
 	$html .= "</select>";
@@ -97,8 +97,8 @@ function getlevel( $pid, $array_cat, $numxtitle = 5, $xkey = "&nbsp;" )
 function drawselect_yesno( $select_name = '', $curent = 1, $lang_no = '', $lang_yes = '', $func_onchange = '' )
 {
 	$html = "<select name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
-	$select_yes = ( $curent == 1 ) ? "selected=\"selected\"" : "";
-	$select_no = ( $curent == 0 ) ? "selected=\"selected\"" : "";
+	$select_yes = ( $curent == 1 ) ? " selected=\"selected\"" : "";
+	$select_no = ( $curent == 0 ) ? " selected=\"selected\"" : "";
 	$html .= "<option value=\"0\"" . $select_no . ">" . $lang_no . "</option>";
 	$html .= "<option value=\"1\"" . $select_yes . ">" . $lang_yes . "</option>";
 	$html .= "</select>";

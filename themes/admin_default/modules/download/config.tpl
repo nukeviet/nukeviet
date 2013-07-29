@@ -2,13 +2,20 @@
 <div id="users">
 	<form action="{FORM_ACTION}" method="post">
 		<table class="tab1">
+			<colgroup>
+				<col style="width: 260px" />
+				<col/>
+			</colgroup>
+			<tfoot>
+				<tr>
+					<td class="center" colspan="2"><input type="submit" name="submit" value="{LANG.config_confirm}" /></td>
+				</tr>
+			</tfoot>
 			<tbody>
 				<tr>
-					<td width="260">{LANG.config_is_addfile}</td>
+					<td>{LANG.config_is_addfile}</td>
 					<td><input name="is_addfile" value="1" type="checkbox"{DATA.is_addfile} /></td>
 				</tr>
-			</tbody>
-			<tbody class="second">
 				<tr>
 					<td>{LANG.config_whoaddfile}</td>
 					<td>
@@ -28,14 +35,10 @@
 					<!-- END: group3 -->
 					</td>
 				</tr>
-			</tbody>
-			<tbody>
 				<tr>
 					<td>{LANG.config_is_uploadfile}</td>
 					<td><input name="is_upload" value="1" type="checkbox"{DATA.is_upload} /></td>
 				</tr>
-			</tbody>
-			<tbody class="second">
 				<tr>
 					<td>{LANG.config_whouploadfile}</td>
 					<td>
@@ -55,10 +58,8 @@
 					<!-- END: group_empty -->
 					</td>
 				</tr>
-			</tbody>
-			<tbody>
 				<tr>
-					<td valign="top">{LANG.config_allowfiletype}</td>
+					<td class="top">{LANG.config_allowfiletype}</td>
 					<td>
 					<!-- BEGIN: upload_filetype -->
 					<input name="upload_filetype[]" value="{UPLOAD_FILETYPE.ext}" type="checkbox"{UPLOAD_FILETYPE.checked} /> {UPLOAD_FILETYPE.title}
@@ -66,28 +67,20 @@
 					<!-- END: upload_filetype -->
 					</td>
 				</tr>
-			</tbody>
-			<tbody class="second">
 				<tr>
 					<td>{LANG.config_maxfilesize}</td>
 					<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" /> {LANG.config_maxfilebyte}
 					<br />
 					{LANG.config_maxfilesizesys} {NV_UPLOAD_MAX_FILESIZE} {LANG.config_maxfilebyte} </td>
 				</tr>
-			</tbody>
-			<tbody>
 				<tr>
 					<td>{LANG.config_uploadedfolder}</td>
 					<td><input name="upload_dir" value="{DATA.upload_dir}" type="text" maxlength="100" /></td>
 				</tr>
-			</tbody>
-			<tbody class="second">
 				<tr>
 					<td>{LANG.config_queuefolder}</td>
 					<td><input name="temp_dir" value="{DATA.temp_dir}" type="text" maxlength="100" /></td>
 				</tr>
-			</tbody>
-			<tbody>
 				<tr>
 					<td>{LANG.file_who_autocomment}</td>
 					<td>
@@ -107,35 +100,24 @@
 					<!-- END: group2 -->
 					</td>
 				</tr>
-			</tbody>
-			<tbody class="second">
 				<tr>
 					<td>{LANG.is_resume}</td>
 					<td><input name="is_resume" value="1" type="checkbox"{DATA.is_resume} /></td>
 				</tr>
-			</tbody>
-			<tbody>
 				<tr>
 					<td>{LANG.max_speed}</td>
 					<td><input name="max_speed" value="{DATA.max_speed}" type="text" style="width:50px" maxlength="4" /> {LANG.kb_sec} </td>
 				</tr>
-			</tbody>
-			<tbody class="second">
 				<tr>
 					<td>{LANG.is_zip}</td>
 					<td><input name="is_zip" value="1" type="checkbox"{DATA.is_zip} /></td>
 				</tr>
-			</tbody>
-			<tbody>
 				<tr>
-					<td style="vertical-align: top">{LANG.zip_readme}</td>
+					<td class="top">{LANG.zip_readme}</td>
 					<td><textarea name="readme" cols="20" rows="2" style="width: 100%; height: 300px; overflow: auto">{DATA.readme}</textarea></td>
 				</tr>
 			</tbody>
 		</table>
-		<div style="textarea-align:center;padding-top:15px">
-			<input type="submit" name="submit" value="{LANG.config_confirm}" />
-		</div>
 	</form>
 </div>
 <!-- END: main -->

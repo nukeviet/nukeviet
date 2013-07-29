@@ -162,8 +162,8 @@ while( list( $key, $value ) = each( $language_array ) )
 		'language' => $value['language'],
 		'name' => $value['name'],
 		'arr_lang_func' => implode( " - ", $arr_lang_func ),
-		'allow_sitelangs' => ( $check_lang_exit and in_array( $key, $array_lang_setup ) ) ? ( in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled=\"disabled\"',
-		'allow_adminlangs' => ( $check_lang_exit ) ? ( in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled=\"disabled\"'
+		'allow_sitelangs' => ( $check_lang_exit and in_array( $key, $array_lang_setup ) ) ? ( in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled="disabled"',
+		'allow_adminlangs' => ( $check_lang_exit ) ? ( in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled="disabled"'
 	) );
 
 	$xtpl->parse( 'main.loop' );

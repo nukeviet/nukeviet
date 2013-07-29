@@ -30,13 +30,13 @@
 	<table class="tab1 fixtab">
 		<col style="width:40px" />
 		<col style="width:50%" />
-		<!-- BEGIN: loop -->
-		<tbody {CLASS}>
+		<tbody>
+			<!-- BEGIN: loop -->
 			<td>{FILE.stt}</td>
 			<td>{FILE.filename}</td>
 			<td>{FILE.size}</td>
+			<!-- END: loop -->
 		</tbody>
-		<!-- END: loop -->
 	</table>
 </div>
 <div id="message" style="display:none;text-align:center;color:red">
@@ -50,7 +50,6 @@
 		</tbody>
 	</table>
 </div>
-<div class="clear"></div>
 <div id="step1">
 	<table class="tab1 fixtab">
 		<tbody>
@@ -79,13 +78,11 @@
 <!-- BEGIN: main -->
 <form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="tab1">
-		<tbody class="second">
+		<tbody>
 			<tr>
-				<td align="right"><strong>{LANG.autoinstall_theme_select_file}: </strong></td>
+				<td class="right"><strong>{LANG.autoinstall_theme_select_file}: </strong></td>
 				<td><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/><input type="file" name="themefile"/></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /><input name="back" type="button" value="{LANG.autoinstall_back}" /></td>
 			</tr>

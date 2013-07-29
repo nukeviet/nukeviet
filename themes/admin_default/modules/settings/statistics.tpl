@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form action="" method="post">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<table class="tab1">
 		<tbody>
 			<tr>
@@ -11,26 +11,18 @@
 					<!-- END: timezone -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.online_upd}</strong></td>
 				<td><input type="checkbox" value="1" name="online_upd" {DATA.online_upd} /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.statistic}</strong></td>
 				<td><input type="checkbox" value="1" name="statistic" {DATA.statistic} /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.googleAnalyticsID}</strong></td>
 				<td><input type="text" name="googleAnalyticsID" value="{DATA.googleAnalyticsID}" style="width: 450px" maxlength="20" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.googleAnalyticsSetDomainName_title}</strong></td>
 				<td>

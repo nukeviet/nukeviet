@@ -1,13 +1,16 @@
 <!-- BEGIN: main -->
-<form action="" method="post">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<table class="tab1 fixtab">
-		<tbody class="second">
+		<tfoot>
 			<tr>
-				<td style="width:200px"><strong>{LANG.dump_autobackup}</strong></td>
+				<td colspan="2"><input type="submit" name="submit" value="{LANG.submit}"/></td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<tr>
+				<td class="w200"><strong>{LANG.dump_autobackup}</strong></td>
 				<td><input type="checkbox" value="1" name="dump_autobackup" {DATA.dump_autobackup} /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.dump_backup_ext}</strong></td>
 				<td>
@@ -17,8 +20,6 @@
 					<!-- END: dump_backup_ext -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.dump_interval}</strong></td>
 				<td>
@@ -28,8 +29,6 @@
 					<!-- END: dump_interval -->
 				</select> ({GLANG.day})</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.dump_backup_day}</strong></td>
 				<td>
@@ -40,11 +39,6 @@
 				</select> ({GLANG.day})</td>
 			</tr>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="2"><input type="submit" name="submit" value="{LANG.submit}"/></td>
-			</tr>
-		</tfoot>
 	</table>
 </form>
 <!-- END: main -->

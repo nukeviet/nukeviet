@@ -4,9 +4,9 @@
 <!-- BEGIN: main -->
 <form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="tab1">
-		<tbody class="second">
+		<tbody>
 			<tr>
-				<td align="center" colspan="2"><strong>{LANG.autoinstall_package_module_select}: </strong><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/>
+				<td class="center" colspan="2"><strong>{LANG.autoinstall_package_module_select}: </strong><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/>
 				<select name="themename">
 					<option value="0">{LANG.autoinstall_method_theme_none}</option>
 					<!-- BEGIN: theme -->
@@ -20,15 +20,14 @@
 					<!-- END: module -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /><input name="back" type="button" value="{LANG.autoinstall_back}" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
-				<td colspan="2" class="center"><p id="message" style="color: red;display:none"></p></td>
+				<td colspan="2" class="center">
+				<p id="message" style="color: red;display:none">
+					&nbsp;
+				</p></td>
 			</tr>
 		</tbody>
 	</table>

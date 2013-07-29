@@ -1,10 +1,10 @@
 <!-- BEGIN: main -->
-<form action="" method="post">
-	<table class="tab1" style="width:auto">
-		<tbody class="{DATA.class}">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
+	<table class="tab1">
+		<tbody>
 			<tr>
 				<td>{LANG.pagetitle2}</td>
-				<td><input type="text" value="{DATA.pageTitleMode}" name="pageTitleMode" style="width:500px;" /></td>
+				<td><input class="w500" type="text" value="{DATA.pageTitleMode}" name="pageTitleMode" /></td>
 			</tr>
 		</tbody>
 	</table>

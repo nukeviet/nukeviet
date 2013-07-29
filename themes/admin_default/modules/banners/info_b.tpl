@@ -5,23 +5,21 @@
 	<a class="button2" href="javascript:void(0);" onclick="{CONTENTS.act.0}"><span><span>{CONTENTS.act.1}</span></span></a>
 	<!-- END: act -->
 </div>
-<table summary="{CONTENTS.caption}" class="tab1">
+<table class="tab1">
 	<caption>{CONTENTS.caption}</caption>
-	<colgroup>
-		<col style="width:50%;white-space:nowrap" />
-	</colgroup>
-	<!-- BEGIN: loop1 -->
-	<tbody {ROW1.class}>
+	<col span="2" style="width:50%;white-space:nowrap" />
+	<tbody>
+		<!-- BEGIN: loop1 -->
 		<tr>
 			<td>{ROW1.0}:</td>
 			<td>{ROW1.1}</td>
 		</tr>
+		<!-- END: loop1 -->
 	</tbody>
-	<!-- END: loop1 -->
 </table>
-<table summary="{CONTENTS.stat.0}" class="tab1">
+<table class="tab1">
 	<caption>{CONTENTS.stat.0}</caption>
-	<tbody class="second">
+	<tbody>
 		<tr>
 			<td> {CONTENTS.stat.1}:
 			<select name="{CONTENTS.stat.2}" id="{CONTENTS.stat.2}">

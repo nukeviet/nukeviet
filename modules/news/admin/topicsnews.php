@@ -50,7 +50,7 @@ if( $db->sql_numrows( $result ) )
 		++$a;
 	}
 
-	$xtpl->assign( 'URL_DELETE', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=topicdelnews" );
+	$xtpl->assign( 'URL_DELETE', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topicdelnews" );
 	$xtpl->parse( 'main.data' );
 }
 else

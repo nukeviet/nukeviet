@@ -112,6 +112,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 $xtpl = new XTemplate( "sitemap.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'ACTION_FORM', NV_BASE_ADMINURL. "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$op);
 
 if( $nv_Request->isset_request( 'submit', 'post' ) AND empty( $global_config['idsite'] ) )
 {

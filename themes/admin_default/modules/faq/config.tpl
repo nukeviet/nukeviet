@@ -4,7 +4,7 @@
 		<table class="tab1">
 			<tbody>
 				<tr>
-					<td width="260">{LANG.config_type_main}</td>
+					<td class="w250">{LANG.config_type_main}</td>
 					<td>
 					<select name="type_main">
 						<!-- BEGIN: type_main -->
@@ -14,7 +14,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<div style="text-align:center;padding-top:15px">
+		<div style="padding-top:15px">
 			<input type="submit" name="submit" value="{LANG.faq_save}" />
 		</div>
 	</form>

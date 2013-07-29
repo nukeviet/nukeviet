@@ -1,15 +1,21 @@
 <!-- BEGIN: main -->
 <table class="tab1">
+	<colgroup>
+		<col class="w50">
+		<col>
+		<col class="w150">
+		<col class="w100">
+	</colgroup>
 	<thead>
-		<tr align="center">
-			<td style="width:90px">{LANG.aabout3}</td>
+		<tr class="center">
+			<td>{LANG.aabout3}</td>
 			<td>{LANG.aabout2}</td>
-			<td style="width:150px">{LANG.aabout4}</td>
-			<td style="width:100px">{LANG.feature}</td>
+			<td>{LANG.aabout4}</td>
+			<td>{LANG.feature}</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: row -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: row -->
 		<tr>
 			<td class="center">
 			<select id="change_weight_{ROW.id}" onchange="nv_chang_weight('{ROW.id}');">
@@ -24,9 +30,9 @@
 				<option value="{STATUS.key}"{STATUS.selected}>{STATUS.val}</option>
 				<!-- END: status -->
 			</select></td>
-			<td class="center"><span class="edit_icon"><a href="{ROW.url_edit}">{GLANG.edit}</a></span> &nbsp;&nbsp; <span class="delete_icon"><a href="javascript:void(0);" onclick="nv_module_del({ROW.id});">{GLANG.delete}</a></span></td>
+			<td class="center"><a class="edit_icon" href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;&nbsp; <a class="delete_icon" href="javascript:void(0);" onclick="nv_module_del({ROW.id});">{GLANG.delete}</a></td>
 		</tr>
+		<!-- END: row -->
 	</tbody>
-	<!-- END: row -->
 </table>
 <!-- END: main -->

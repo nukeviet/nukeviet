@@ -61,7 +61,7 @@ if( $popup )
 }
 else
 {
-	$xtpl->assign( "IFRAME_SRC", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=1&nomudim=1" );
+	$xtpl->assign( "IFRAME_SRC", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;popup=1&amp;nomudim=1" );
 	$xtpl->parse( 'uploadPage' );
 	$contents = $xtpl->text( 'uploadPage' );
 	$contents = nv_admin_theme( $contents );
