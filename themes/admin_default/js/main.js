@@ -18,12 +18,10 @@ function ver_menu_click() {
 	}
 }
 
-function ver_menu_show() {
-	var showmenu = ( nv_getCookie('ver_menu_show') ) ? ( nv_getCookie('ver_menu_show')) : '1';
-	if (showmenu == '0') {
-		$('#ver_menu').hide();
-		$('#left_menu').css("width", "0").css("left", "0");
-		$('#middle').css("margin-left", "0");
-		$('#cs_menu').removeClass("small").addClass("lage");
-	}
+var showmenu = ( nv_getCookie('ver_menu_show') ) ? ( nv_getCookie('ver_menu_show')) : '1';
+if (showmenu == '0') {
+	$('#ver_menu').hide();
+	$('#left_menu').css("width", "0").css("left", "0");
+	$('#middle').css("margin-left", "0");
+	$('#cs_menu').removeClass("small").addClass("lage");
 }

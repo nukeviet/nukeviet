@@ -306,18 +306,7 @@ buildsubheaders: function($, $headers, setting, method, prevobjs){
 
 init: function(setting){
 	if(this.detectie6 && parseFloat(jQuery.fn.jquery) > 1.3){
-		this.init = function(setting){
-			if (typeof setting.contentsource=="object"){ //if external ajax menu
-				jQuery(function($){ddsmoothmenu.getajaxmenu($, setting, 'nobuild');});
-			}
-			return false;
-		};
-		jQuery('link[href*="ddsmoothmenu"]').attr('disabled', true);
-		jQuery(function($){
-			alert('You Seriously Need to Update Your Browser!\n\nDynamic Drive Smooth Navigational Menu Showing Text Only Menu(s)\n\nDEVELOPER\'s NOTE: This script will run in IE 6 when using jQuery 1.3.2 or less,\nbut not real well.');
-				$('link[href*="ddsmoothmenu"]').attr('disabled', true);
-		});
-		return this.init(setting);
+		return false;
 	}
 	var mainmenuid = '#' + setting.mainmenuid, right, down, stylestring = ['</style>\n'], stylesleft = setting.arrowswap? 4 : 2;
 	function addstyles(){

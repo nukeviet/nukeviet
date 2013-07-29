@@ -109,9 +109,6 @@
 			<!-- END: vertical_menu -->
 		</aside>
 		<!-- #left_menu -->
-		<script type="text/javascript">
-			ver_menu_show();
-		</script>
 	</section>
 	<!-- #middle-->
 
