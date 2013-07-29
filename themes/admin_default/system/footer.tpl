@@ -4,7 +4,7 @@
 		<script src="{NV_BASE_SITEURL}js/admin.js"></script>
 		<script src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/main.js"></script>
 
-		<script src="{NV_BASE_SITEURL}/js/ddsmoothmenu.js"></script>
+		<script src="{NV_BASE_SITEURL}js/ddsmoothmenu.js"></script>
 		<script type="text/javascript">
 			ddsmoothmenu.init({
 				arrowimages : {
