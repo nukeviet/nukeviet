@@ -326,7 +326,6 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 	if( $check_permission_delete ) $admin_funcs[] = nv_link_delete_page( $id );
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
 	$data[] = array(
-		"class" => $class,
 		"id" => $id,
 		"link" => $link,
 		"title" => $title,

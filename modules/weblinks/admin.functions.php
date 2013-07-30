@@ -9,11 +9,6 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$submenu['content'] = $lang_module['weblink_add_link'];
-$submenu['cat'] = $lang_module['weblink_catlist'];
-$submenu['brokenlink'] = $lang_module['weblink_link_broken'];
-$submenu['config'] = $lang_module['weblink_config'];
-
 $allow_func = array( 'main', 'cat', 'change_cat', 'del_cat', 'content', 'del_link', 'config', 'multidel', 'checklink', 'brokenlink', 'delbroken' );
 
 define( 'NV_IS_FILE_ADMIN', true );

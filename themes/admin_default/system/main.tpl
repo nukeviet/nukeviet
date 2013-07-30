@@ -22,7 +22,7 @@
 	</header>
 	<!-- #header-->
 
-	<div id="smoothmenu" class="ddsmoothmenu clearfix">
+	<nav id="smoothmenu" class="ddsmoothmenu clearfix">
 		<ul>
 			<!-- BEGIN: top_menu_loop -->
 			<li>
@@ -39,7 +39,7 @@
 			</li>
 			<!-- END: top_menu_loop -->
 		</ul>
-	</div>
+	</nav>
 
 	<div id="top_message">
 		<div class="clock_container">
@@ -95,18 +95,28 @@
 		</div>
 		<!-- #container-->
 
-		<aside id="left_menu">
-			<!-- BEGIN: vertical_menu -->
-			<div id="ver_menu">
-				<!-- BEGIN: vertical_menu_loop -->
-				<a {VERTICAL_MENU_CURRENT}  href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={VERTICAL_MENU_HREF}">{VERTICAL_MENU_NAME} </a>
-				<!-- BEGIN: vertical_menu_sub_loop -->
-				<a {VERTICAL_MENU_SUB_CURRENT}
-				href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={VERTICAL_MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={VERTICAL_MENU_SUB_HREF1}"> {VERTICAL_MENU_SUB_NAME} </a>
-				<!-- END: vertical_menu_sub_loop -->
-				<!-- END: vertical_menu_loop -->
-			</div>
-			<!-- END: vertical_menu -->
+		<aside id="left_menu" class="ddsmoothmenu-v">
+			<ul id="ver_menu">
+				<!-- BEGIN: menu_loop -->
+				<li>
+					<a {MENU_CURRENT} href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
+					<!-- BEGIN: submenu -->
+					<ul>
+						<!-- BEGIN: submenu_loop -->
+						<li>
+							<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+						</li>
+						<!-- END: submenu_loop -->
+					</ul>
+					<!-- END: submenu -->
+				</li>
+				<!-- BEGIN: current -->
+				<li>
+					<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+				</li>
+				<!-- END: current -->
+				<!-- END: menu_loop -->
+			</ul>
 		</aside>
 		<!-- #left_menu -->
 	</section>
@@ -154,11 +164,23 @@
 			down : ['downarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_down.png', 23],
 			right : ['rightarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_right.png']
 		},
+		zindexvalue: 9999,
 		mainmenuid : "smoothmenu",
 		orientation : 'h',
 		classname : 'ddsmoothmenu',
 		contentsource : "markup"
-	})
+	});
+	ddsmoothmenu.init({
+		arrowimages : {
+			down : ['downarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_down.png', 23],
+			right : ['rightarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_right.png']
+		},
+		zindexvalue: 999,
+		mainmenuid : "left_menu",
+		orientation : 'v',
+		classname : 'ddsmoothmenu-v',
+		contentsource : "markup"
+	}); 
 </script>
 {FILE "footer.tpl"}
 <!-- END: main -->

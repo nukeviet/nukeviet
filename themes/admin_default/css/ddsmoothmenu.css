@@ -38,13 +38,13 @@
 }
 
 .ddsmoothmenu ul li a.selected {/*CSS class that's dynamically added to the currently active menu items' LI A element*/
-	background: black !important;
+	background: #ff5300 !important;
 	color: white;
 }
 
 .ddsmoothmenu ul li a:hover {
-	background: black; /*background of menu items during onmouseover (hover state)*/
-	color: white;
+	background: lightblue; /*background of menu items during onmouseover (hover state)*/
+	color: navy;
 }
 
 /* sub menus */
@@ -122,3 +122,73 @@
 	-moz-box-shadow: 5px 5px 5px #aaa;
 	-webkit-box-shadow: 5px 5px 5px #aaa;
 }
+
+.ddsmoothmenu-v ul {
+	margin: 0;
+	padding: 0;
+	width: 100%; /* Main Menu Item widths */
+	list-style-type: none;
+	font: bold 12px Verdana;
+}
+
+.ddsmoothmenu-v ul li {
+	position: relative;
+	float: none;
+}
+
+/* Top level menu links style */
+.ddsmoothmenu-v ul li a {
+	display: block;
+	overflow: auto; /*force hasLayout in IE7 */
+	color: white;
+	text-decoration: none;
+	padding: 6px 23px 6px 6px;
+	border-top: 1px solid #778;
+	border-right: 1px solid #778;
+}
+
+.ddsmoothmenu-v ul li a:link, .ddsmoothmenu-v ul li a:visited, .ddsmoothmenu-v ul li a:active {
+	background: #414141; /*background of menu items (default state)*/
+	color: white;
+}
+
+.ddsmoothmenu-v ul li a.selected {/*CSS class that's dynamically added to the currently active menu items' LI A element*/
+	background: #ff5300 !important;
+	color: navy;
+}
+
+.ddsmoothmenu-v ul li a.subcurrent {
+	background: #999999 !important;
+	color: #fff;
+}
+
+.ddsmoothmenu-v ul li a.subactive {
+	background: #999999 !important;
+	color: #ff0000;
+}
+
+.ddsmoothmenu-v ul li a:hover {
+	background: lightblue; /*background of menu items during onmouseover (hover state)*/
+	color: navy;
+}
+
+/*Sub level menu items */
+.ddsmoothmenu-v ul li ul {
+	position: absolute;
+	width: 185px; /*Sub Menu Items width */
+	top: 0;
+	font-weight: normal;
+	visibility: hidden;
+}
+
+/* Holly Hack for IE \*/
+* html .ddsmoothmenu-v ul li {
+	float: left;
+	height: 1%;
+}
+
+* html .ddsmoothmenu-v ul li a {
+	height: 1%;
+}
+
+/* End */

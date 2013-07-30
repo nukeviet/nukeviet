@@ -59,17 +59,6 @@ function nv_getAllowed()
 	return $contact_allowed;
 }
 
-if( defined( 'NV_IS_GODADMIN' ) )
-{
-	$submenu['list_row'] = $lang_module['list_row_title'];
-	$submenu['content'] = $lang_module['content'];
-	$allow_func = array( 'main', 'reply', 'del', 'list_row', 'row', 'del_row', 'content', 'view', 'change_status' );
-}
-else
-{
-	$allow_func = array( 'main', 'reply', 'del', 'view' );
-}
-
 define( 'NV_IS_FILE_ADMIN', true );
 
 ?>

@@ -9,13 +9,6 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$submenu['client_list'] = $lang_module['client_list'];
-$submenu['add_client'] = $lang_module['add_client'];
-$submenu['plans_list'] = $lang_module['plans_list'];
-$submenu['add_plan'] = $lang_module['add_plan'];
-$submenu['banners_list'] = $lang_module['banners_list'];
-$submenu['add_banner'] = $lang_module['add_banner'];
-
 $allow_func = array( 'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat', 'del_banner' );
 
 define( 'NV_IS_FILE_ADMIN', true );

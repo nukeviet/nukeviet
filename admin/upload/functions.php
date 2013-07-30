@@ -9,18 +9,6 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-if( defined( 'NV_IS_SPADMIN' ) )
-{
-	$submenu['thumbconfig'] = $lang_module['thumbconfig'];
-	$submenu['config'] = $lang_module['configlogo'];
-	if( defined( 'NV_IS_GODADMIN' ) )
-	{
-		$submenu['uploadconfig'] = $lang_module['uploadconfig'];
-	}
-}
-
-if( $module_name != "upload" ) return;
-
 $menu_top = array(
 	"title" => $module_name,
 	"module_file" => "",

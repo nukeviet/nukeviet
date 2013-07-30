@@ -7,34 +7,65 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 function nv_get_submenu( $mod )
 {
 	global $lang_global, $module_name, $global_config;
 
-	$submenu = array();
+	$submenu = array( );
 
-	if( $mod != $module_name and file_exists( NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $mod . "/functions.php" ) )
+	if( $mod != $module_name and file_exists( NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $mod . "/admin.menu.php" ) )
 	{
 		//ket noi voi file ngon ngu cua module
 		if( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $mod . ".php" ) )
 		{
-			include ( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $mod . ".php" );
+			include (NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $mod . ".php");
 		}
 		elseif( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $mod . ".php" ) )
 		{
-			include ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $mod . ".php" );
+			include (NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $mod . ".php");
 		}
 		elseif( file_exists( NV_ROOTDIR . "/language/en/admin_" . $mod . ".php" ) )
 		{
-			include ( NV_ROOTDIR . "/language/en/admin_" . $mod . ".php" );
+			include (NV_ROOTDIR . "/language/en/admin_" . $mod . ".php");
 		}
 
-		include ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $mod . "/functions.php" );
+		include (NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $mod . "/admin.menu.php");
 		unset( $lang_module );
 	}
 
+	return $submenu;
+}
+
+function nv_get_submenu_mod( $module_name )
+{
+	global $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config;
+
+	$submenu = array( );
+	$module_info = $site_mods[$module_name];
+	$module_file = $module_info['module_file'];
+	$module_data = $module_info['module_data'];
+	if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin.menu.php" ) )
+	{
+		//ket noi voi file ngon ngu cua module
+		if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php" ) )
+		{
+			include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php");
+		}
+		elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php" ) )
+		{
+			include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php");
+		}
+		elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php" ) )
+		{
+			include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php");
+		}
+
+		include (NV_ROOTDIR . "/modules/" . $module_file . "/admin.menu.php");
+		unset( $lang_module );
+	}
 	return $submenu;
 }
 
@@ -120,14 +151,14 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
 	{
-		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js() );
+		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js( ) );
 		$xtpl->parse( 'main.nv_add_editor_js' );
 	}
 
 	if( $head_site == 1 )
 	{
 		$xtpl->assign( 'NV_GO_CLIENTSECTOR', $lang_global['go_clientsector'] );
-		$lang_site = ( ! empty( $site_mods ) ) ? NV_LANG_DATA : $global_config['site_lang'];
+		$lang_site = ( ! empty( $site_mods )) ? NV_LANG_DATA : $global_config['site_lang'];
 		$xtpl->assign( 'NV_GO_CLIENTSECTOR_URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_site );
 		$xtpl->assign( 'NV_LOGOUT', $lang_global['logout'] );
 
@@ -137,7 +168,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 			foreach( $array_lang_admin as $lang_i => $lang_name )
 			{
-				$xtpl->assign( 'SELECTED', ( $lang_i == NV_LANG_DATA ) ? " selected=\"selected\"" : "" );
+				$xtpl->assign( 'SELECTED', ($lang_i == NV_LANG_DATA) ? " selected=\"selected\"" : "" );
 				$xtpl->assign( 'LANGVALUE', $lang_name );
 				$xtpl->assign( 'LANGOP', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_i );
 				$xtpl->parse( 'main.langdata.option' );
@@ -151,7 +182,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		{
 			if( ! empty( $v['custom_title'] ) )
 			{
-				$xtpl->assign( 'TOP_MENU_CURRENT', ( ( $module_name == $m ) ? " class=\"current\"" : "" ) );
+				$xtpl->assign( 'TOP_MENU_CURRENT', (($module_name == $m) ? " class=\"current\"" : "") );
 				$xtpl->assign( 'TOP_MENU_HREF', $m );
 				$xtpl->assign( 'TOP_MENU_NAME', $v['custom_title'] );
 				$array_submenu = nv_get_submenu( $m );
@@ -197,32 +228,42 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			$xtpl->parse( 'main.hello_admin2' );
 		}
 
-		if( ! empty( $admin_menu_mods ) )
+		//Vertical menu
+		foreach( $admin_menu_mods as $m => $v )
 		{
-			//Vertical menu
-			foreach( $admin_menu_mods as $m => $v )
-			{
-				$xtpl->assign( 'VERTICAL_MENU_CURRENT', ( ( $module_name == $m ) ? ' class="current"' : '' ) );
-				$xtpl->assign( 'VERTICAL_MENU_HREF', $m );
-				$xtpl->assign( 'VERTICAL_MENU_NAME', $v );
+			$xtpl->assign( 'MENU_CURRENT', (($module_name == $m) ? ' class="selected"' : '') );
+			$xtpl->assign( 'MENU_HREF', $m );
+			$xtpl->assign( 'MENU_NAME', $v );
 
-				if( $m == $module_name and ! empty( $submenu ) )
+			if( $m != $module_name )
+			{
+				$submenu = nv_get_submenu_mod( $m );
+				if( ! empty( $submenu ) )
 				{
 					foreach( $submenu as $n => $l )
 					{
-						$xtpl->assign( 'VERTICAL_MENU_SUB_CURRENT', ( ( ( ! empty( $op ) and $op == $n ) or ( ! empty( $set_active_op ) and $set_active_op == $n ) ) ? " class=\"sub_current\"" : " class=\"sub_normal\"" ) );
-						$xtpl->assign( 'VERTICAL_MENU_SUB_HREF', $m );
-						$xtpl->assign( 'VERTICAL_MENU_SUB_HREF1', $n );
-						$xtpl->assign( 'VERTICAL_MENU_SUB_NAME', $l );
-						$xtpl->parse( 'main.vertical_menu.vertical_menu_loop.vertical_menu_sub_loop' );
+						$xtpl->assign( 'MENU_SUB_HREF', $m );
+						$xtpl->assign( 'MENU_SUB_OP', $n );
+						$xtpl->assign( 'MENU_SUB_NAME', $l );
+						$xtpl->parse( 'main.menu_loop.submenu.submenu_loop' );
 					}
+					$xtpl->parse( 'main.menu_loop.submenu' );
 				}
-
-				$xtpl->parse( 'main.vertical_menu.vertical_menu_loop' );
 			}
-
-			$xtpl->parse( 'main.vertical_menu' );
+			elseif( ! empty( $submenu ) )
+			{
+				foreach( $submenu as $n => $l )
+				{
+					$xtpl->assign( 'MENU_SUB_CURRENT', ((( ! empty( $op ) and $op == $n) or ( ! empty( $set_active_op ) and $set_active_op == $n)) ? "subactive" : "subcurrent") );
+					$xtpl->assign( 'MENU_SUB_HREF', $m );
+					$xtpl->assign( 'MENU_SUB_OP', $n );
+					$xtpl->assign( 'MENU_SUB_NAME', $l );
+					$xtpl->parse( 'main.menu_loop.current' );
+				}
+			}
+			$xtpl->parse( 'main.menu_loop' );
 		}
+
 	}
 
 	if( ! empty( $select_options ) )
@@ -250,7 +291,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.empty_page_title' );
 	}
 
-	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info() );
+	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info( ) );
 	$xtpl->assign( 'MODULE_CONTENT', $contents );
 
 	$xtpl->assign( 'NV_COPYRIGHT', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
@@ -261,7 +302,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
 		foreach( $db->query_strs as $key => $field )
 		{
-			$xtpl->assign( 'NV_FIELD1', ( $field[1] ? 'good' : 'bad' ) );
+			$xtpl->assign( 'NV_FIELD1', ($field[1] ? 'good' : 'bad') );
 			$xtpl->assign( 'NV_FIELD', $field[0] );
 			$xtpl->parse( 'main.nv_show_queries.nv_show_queries_loop' );
 		}
@@ -271,10 +312,11 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->parse( 'main' );
 	$sitecontent = $xtpl->text( 'main' );
 
-	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1 );
-	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1 );
+	if( ! empty( $my_head ) )
+		$sitecontent = preg_replace( '/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1 );
+	if( ! empty( $my_footer ) )
+		$sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1 );
 
 	return $sitecontent;
 }
-
 ?>
