@@ -39,7 +39,6 @@ if( ! empty( $array['PHP Variables'] ) )
 	{
 		if( substr( $key, 0, 7 ) != "_COOKIE" and ! in_array( $key, $array_key_no_show ) )
 		{
-			$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 			$xtpl->assign( 'KEY', $key );
 			$xtpl->assign( 'VALUE', $value );
 			$xtpl->parse( 'main.loop' );

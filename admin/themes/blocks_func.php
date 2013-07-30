@@ -122,7 +122,6 @@ $result = $db->sql_query( $sql );
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'bid' => $row['bid'],
 		'title' => $row['title'],
 		'module' => $row['module'],

@@ -411,7 +411,6 @@ if( $module_name == "modules" )
 			foreach( $act_modules as $mod => $values )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'mod' => $mod,
 					'values' => $values,
 					'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
@@ -445,7 +444,6 @@ if( $module_name == "modules" )
 			foreach( $deact_modules as $mod => $values )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'mod' => $mod,
 					'values' => $values,
 					'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
@@ -479,7 +477,6 @@ if( $module_name == "modules" )
 			foreach( $bad_modules as $mod => $values )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'mod' => $mod,
 					'values' => $values,
 					'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
@@ -635,7 +632,6 @@ if( $module_name == "modules" )
 			foreach( $contents['rows'] as $id => $values )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'id' => $id,
 					'js_onchange' => $values['weight'][1],
 					'in_submenu_click' => $values['in_submenu'][1],
@@ -703,7 +699,6 @@ if( $module_name == "modules" )
 		foreach( $array_modules as $mod => $values )
 		{
 			$xtpl->assign( 'ROW', array(
-				'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 				'stt' => $a,
 				'values' => $values
 			) );
@@ -725,7 +720,6 @@ if( $module_name == "modules" )
 			foreach( $array_virtual_modules as $mod => $values )
 			{
 				$xtpl->assign( 'VROW', array(
-					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'stt' => $a,
 					'values' => $values
 				) );

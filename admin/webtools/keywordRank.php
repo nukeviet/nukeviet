@@ -82,7 +82,6 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				$loop[] = array( 'key' => $lang_module['updDate'], 'value' => nv_date( "d/m/Y H:i", $info['updtime'] ) );
 				foreach( $loop as $a => $l )
 				{
-					$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 					$xtpl->assign( 'LOOP', $l );
 					$xtpl->parse( 'process.result.loop' );
 				}
@@ -100,7 +99,6 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					{
 						foreach( $mainResult as $a => $r )
 						{
-							$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 							$xtpl->assign( 'TR', $r );
 							$xtpl->parse( 'process.MainResult.tr' );
 						}
@@ -113,7 +111,6 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					$xtpl->assign( 'CAPTION', $lang_module['Top10'] );
 					foreach( $info['detail']['top10MyPages'] as $key => $link )
 					{
-						$xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
 						$xtpl->assign( 'ID', $key + 1 );
 						$xtpl->assign( 'URL', $link );
 						$xtpl->parse( 'process.TopPages.top' );
@@ -127,7 +124,6 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					foreach( $info['detail']['top50AllPages'] as $key => $link )
 					{
 						$a_class = isset( $info['detail']['rank'][$key] ) ? " class=\"myLink\"" : "";
-						$xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
 						$xtpl->assign( 'ID', $key + 1 );
 						$xtpl->assign( 'A_CLASS', $a_class );
 						$xtpl->assign( 'URL', $link );

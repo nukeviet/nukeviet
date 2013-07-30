@@ -31,7 +31,6 @@ $array_status = array( $lang_module['aabout6'], $lang_module['aabout5'] );
 $i = 0;
 while( $row = $db->sql_fetchrow( $result ) )
 {
-	$row['class'] = ( ++$i % 2 ) ? " class=\"second\"" : "";
 	$row['url_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $row['id'];
 
 	for( $i = 1; $i <= $num; ++$i )

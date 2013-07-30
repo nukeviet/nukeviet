@@ -104,7 +104,6 @@ foreach( $site_mods as $mod => $value )
 		if( $a % 3 == 0 )
 		{
 			$xtpl->parse( 'main.loop1' );
-			$xtpl->assign( 'CLASS', ' class="second"' );
 		}
 	}
 }

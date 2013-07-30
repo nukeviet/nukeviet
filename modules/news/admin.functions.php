@@ -424,7 +424,6 @@ function nv_show_cat_list( $parentid = 0 )
 				}
 
 				$xtpl->assign( 'ROW', array(
-					"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 					"catid" => $catid,
 					"link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid,
 					"title" => $title,
@@ -541,13 +540,11 @@ function nv_show_topics_list()
 
 	if( $num > 0 )
 	{
-		$a = 0;
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `topicid`=" . $row['topicid'] . "" ) );
 
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 				"topicid" => $row['topicid'],
 				"description" => $row['description'],
 				"title" => $row['title'],
@@ -567,7 +564,6 @@ function nv_show_topics_list()
 			}
 
 			$xtpl->parse( 'main.loop' );
-			++$a;
 		}
 
 		$xtpl->parse( 'main' );
@@ -600,7 +596,6 @@ function nv_show_block_cat_list()
 
 	if( $num > 0 )
 	{
-		$a = 0;
 		$array_adddefault = array( $lang_global['no'], $lang_global['yes'] );
 
 		while( $row = $db->sql_fetchrow( $result ) )
@@ -608,7 +603,6 @@ function nv_show_block_cat_list()
 			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` where `bid`=" . $row['bid'] ) );
 
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 				"bid" => $row['bid'],
 				"title" => $row['title'],
 				"numnews" => $numnews ? " (" . $numnews . " " . $lang_module['topic_num_news'] . ")" : "",
@@ -647,7 +641,6 @@ function nv_show_block_cat_list()
 			}
 
 			$xtpl->parse( 'main.loop' );
-			++$a;
 		}
 
 		$xtpl->parse( 'main' );
@@ -683,12 +676,10 @@ function nv_show_sources_list()
 
 	if( $num > 0 )
 	{
-		$a = 0;
 		$result = $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` ORDER BY `weight` LIMIT $page, $per_page" );
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 				"sourceid" => $row['sourceid'],
 				"title" => $row['title'],
 				"link" => $row['link'],
@@ -706,7 +697,6 @@ function nv_show_sources_list()
 			}
 
 			$xtpl->parse( 'main.loop' );
-			++$a;
 		}
 
 		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
@@ -756,11 +746,9 @@ function nv_show_block_list( $bid )
 	$num = $db->sql_numrows( $result );
 	if( $num > 0 )
 	{
-		$a = 0;
 		while( list( $id, $catid_i, $title, $alias, $weight ) = $db->sql_fetchrow( $result ) )
 		{
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 				"id" => $id,
 				"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id,
 				"title" => $title
@@ -777,7 +765,6 @@ function nv_show_block_list( $bid )
 			}
 
 			$xtpl->parse( 'main.loop' );
-			++$a;
 		}
 
 		$xtpl->parse( 'main' );

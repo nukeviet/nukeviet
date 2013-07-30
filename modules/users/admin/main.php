@@ -237,10 +237,8 @@ foreach( $head_tds as $head_td )
 	$xtpl->parse( 'main.head_td' );
 }
 
-$a = 0;
 foreach( $users_list as $u )
 {
-	$u['class'] = ( ++$a % 2 == 0 ) ? ' class="second"' : '';
 	$xtpl->assign( 'CONTENT_TD', $u );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );

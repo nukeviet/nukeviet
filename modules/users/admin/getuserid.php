@@ -241,13 +241,10 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$xtpl->assign( 'ODER_EMAIL', $orderemaila );
 		$xtpl->assign( 'ODER_REGDATE', $orderregdatea );
 
-		$a = 0;
 		foreach( $array_user as $row )
 		{
-			$xtpl->assign( 'CLASS', ( $a % 2 == 1 ) ? " class=\"second\"" : "" );
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'resultdata.data.row' );
-			++$a;
 		}
 
 		if( ! empty( $generate_page ) )

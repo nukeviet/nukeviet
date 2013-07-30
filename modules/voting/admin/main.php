@@ -20,7 +20,6 @@ if( $db->sql_numrows( $result ) )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 
-	$a = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$sql1 = "SELECT SUM(hitstotal) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`='" . $row['vid'] . "'";
@@ -28,7 +27,6 @@ if( $db->sql_numrows( $result ) )
 		$totalvote = $db->sql_fetchrow( $result1 );
 
 		$xtpl->assign( 'ROW', array(
-			"class" => $a % 2 ? " class=\"second\"" : "",
 			"status" => $row['act'] == 1 ? $lang_module['voting_yes'] : $lang_module['voting_no'],
 			"vid" => $row['vid'],
 			"question" => $row['question'],
@@ -38,7 +36,6 @@ if( $db->sql_numrows( $result ) )
 		) );
 
 		$xtpl->parse( 'main.loop' );
-		++$a;
 	}
 
 	$xtpl->parse( 'main' );

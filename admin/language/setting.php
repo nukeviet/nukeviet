@@ -156,7 +156,6 @@ while( list( $key, $value ) = each( $language_array ) )
 	}
 
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'number' => $a,
 		'key' => $key,
 		'language' => $value['language'],

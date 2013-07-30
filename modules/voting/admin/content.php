@@ -316,13 +316,9 @@ for( $i = 0; $i < 60; ++$i )
 }
 
 $items = 0;
-$j = 0;
 foreach( $array_answervote as $id => $title )
 {
-	++$j;
-
 	$xtpl->assign( 'ITEM', array(
-		"class" => ( $j % 2 == 0 ) ? " class=\"second\"" : "",
 		"stt" => ++$items,
 		"id" => $id,
 		"title" => $title,
@@ -332,9 +328,6 @@ foreach( $array_answervote as $id => $title )
 	$xtpl->parse( 'main.item' );
 }
 
-++$j;
-$class = ( $j % 2 == 0 ) ? " class=\"second additem\"" : " class=\"additem\"";
-$xtpl->assign( 'NEW_CLASS', $class );
 $xtpl->assign( 'NEW_ITEM', ++$items );
 $xtpl->assign( 'NEW_ITEM_NUM', $items );
 

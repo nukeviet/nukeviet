@@ -140,7 +140,6 @@ if( $module_name == "settings" )
 			foreach( $values['detail'] as $key => $value )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 					'key' => $key,
 					'value' => $value
 				) );

@@ -283,12 +283,10 @@ $array_access = array(
 	array( 'id' => 2, 'title' => $lang_global['level2'] ),
 	array( 'id' => 3, 'title' => $lang_global['level3'] )
 );
-$i = 0;
 
 foreach( $array_access as $access )
 {
 	$level = $access['id'];
-	$access['class'] = ( ++$i % 2 == 0 ) ? ' class="second"' : '';
 	$access['checked_addus'] = ( isset( $access_admin['access_addus'][$level] ) and $access_admin['access_addus'][$level] == 1 ) ? ' checked="checked" ' : '';
 	$access['checked_waiting'] = ( isset( $access_admin['access_waiting'][$level] ) and $access_admin['access_waiting'][$level] == 1 ) ? ' checked="checked" ' : '';
 	$access['checked_editus'] = ( isset( $access_admin['access_editus'][$level] ) and $access_admin['access_editus'][$level] == 1 ) ? ' checked="checked" ' : '';

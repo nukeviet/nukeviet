@@ -90,7 +90,6 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 				foreach( $filelist as $i => $file )
 				{
 					$xtpl->assign( 'FILE', $file );
-					$xtpl->assign( 'CLASS', $i % 2 ? ' class="second"' : '' );
 					$xtpl->parse( 'autoinstall_theme_uploadedfile.loop' );
 				}
 

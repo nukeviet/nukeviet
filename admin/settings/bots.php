@@ -59,7 +59,6 @@ $xtpl->assign( 'LANG', $lang_module );
 foreach( $bots as $name => $values )
 {
 	$array_data = array();
-	$array_data['class'] = ( $a % 2 == 0 ) ? "second" : "";
 	$array_data['id'] = ++$a;
 	$array_data['name'] = $name;
 	$array_data['agent'] = $values['agent'];
@@ -73,7 +72,6 @@ foreach( $bots as $name => $values )
 for( $index = 0; $index < 3; ++$index )
 {
 	$array_data = array();
-	$array_data['class'] = ( $a % 2 == 0 ) ? "second" : "";
 	$array_data['id'] = ++$a;
 	$array_data['name'] = '';
 	$array_data['agent'] = '';

@@ -29,11 +29,9 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` ORDER BY `id` DESC LIMIT $page,$per_page";
 $result = $db->sql_query( $sql );
 
-$a = 0;
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$xtpl->assign( 'ROW', array(
-		"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 		"id" => $row['id'],
 		"title" => $row['title'],
 		"url" => $row['url'],
@@ -44,7 +42,6 @@ while( $row = $db->sql_fetchrow( $result ) )
 	) );
 
 	$xtpl->parse( 'main.loop' );
-	++$a;
 }
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );

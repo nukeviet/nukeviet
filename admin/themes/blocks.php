@@ -99,7 +99,6 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 			'bid' => $row['bid'],
 			'title' => $row['title'],
 			'module' => $row['module'],

@@ -116,8 +116,7 @@ foreach( $files as $file )
 
 		$data = array(
 			'number' => ++$number,
-			'filename' => $file,
-			'class' => ( $number % 2 == 0 ) ? ' class="second"' : ''
+			'filename' => $file
 		);
 
 		$type = isset( $robots_data[$file] ) ? $robots_data[$file] : 1;

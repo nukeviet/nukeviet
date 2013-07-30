@@ -168,14 +168,11 @@ $xtpl->assign( 'TABLE_CAPTION', $page_title );
 
 if( ! empty( $array ) )
 {
-	$a = 0;
 	foreach( $array as $row )
 	{
-		$xtpl->assign( 'CLASS', $a % 2 == 1 ? " class=\"second\"" : "" );
 		$xtpl->assign( 'ROW', $row );
 		$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . $row['id'] );
 		$xtpl->parse( 'main.row' );
-		++$a;
 	}
 }
 

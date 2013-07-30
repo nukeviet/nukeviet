@@ -83,7 +83,6 @@ if( $module_name == "authors" )
 		{
 			if( ! empty( $value[1] ) )
 			{
-				$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'VALUE0', $value[0] );
 				$xtpl->assign( 'VALUE1', $value[1] );
 				$xtpl->parse( 'add_result.loop' );
@@ -139,7 +138,6 @@ if( $module_name == "authors" )
 		$a = 0;
 		foreach( $contents['change'] as $key => $value )
 		{
-			$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 			$xtpl->assign( 'VALUE0', $value[0] );
 			$xtpl->assign( 'VALUE1', $value[1] );
 			$xtpl->assign( 'VALUE2', $value[2] );

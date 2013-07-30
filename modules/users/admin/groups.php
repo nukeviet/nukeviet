@@ -239,18 +239,15 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 
 	if( $numberusers )
 	{
-		$a = 0;
 		$idsite = ( $global_config['idsite'] == $groupsList[$group_id]['idsite'] ) ? 0 : $global_config['idsite'];
 		while( $row = $db->sql_fetchrow( $query, 2 ) )
 		{
 			$xtpl->assign( 'LOOP', $row );
-			$xtpl->assign( 'CLASS', $a % 2 ? " class=\"second\"" : "" );
 			if( $group_id > 3 AND ( $idsite == 0 OR $idsite == $row['idsite'] ) )
 			{
 				$xtpl->parse( 'listUsers.ifExists.loop.delete' );
 			}
 			$xtpl->parse( 'listUsers.ifExists.loop' );
-			++$a;
 		}
 		$xtpl->parse( 'listUsers.ifExists' );
 	}
@@ -440,7 +437,6 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 //Danh sach nhom
 if( $nv_Request->isset_request( 'list', 'get' ) )
 {
-	$a = 0;
 	foreach( $groupsList as $group_id => $values )
 	{
 		$xtpl->assign( 'GROUP_ID', $group_id );
@@ -450,8 +446,7 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 			'exp_time' => ! empty( $values['exp_time'] ) ? nv_date( "d/m/Y H:i", $values['exp_time'] ) : $lang_global['unlimited'],
 			'public' => $values['public'] ? " checked=\"checked\"" : "",
 			'number' => number_format( $values['number'] ),
-			'act' => $values['act'] ? " checked=\"checked\"" : "",
-			'class' => $a % 2 ? " class=\"second\"" : ""
+			'act' => $values['act'] ? " checked=\"checked\"" : ""
 		);
 
 		if( defined( 'NV_IS_SPADMIN' ) AND $group_id > 3 AND $values['idsite'] == $global_config['idsite'] )
@@ -479,7 +474,6 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 		}
 		$xtpl->assign( 'LOOP', $loop );
 		$xtpl->parse( 'list.loop' );
-		$a++;
 	}
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{

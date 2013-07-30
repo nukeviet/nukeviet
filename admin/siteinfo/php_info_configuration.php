@@ -29,8 +29,6 @@ if( ! empty( $array['PHP Core'] ) )
 	$a = 0;
 	foreach( $array['PHP Core'] as $key => $value )
 	{
-		$class = ( $a % 2 ) ? " class=\"second\"" : "";
-		$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $key );
 
 		if( ! is_array( $value ) )

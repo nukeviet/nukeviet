@@ -384,10 +384,8 @@ $xtpl->assign( 'DATA', $post );
 
 if( ! empty( $arr_table ) )
 {
-	$a = 0;
 	foreach( $arr_table as $rows )
 	{
-		$rows['class'] = ( ++$a % 2 == 0 ) ? ' class="second"' : '';
 		$xtpl->assign( 'ROW', $rows );
 
 		for( $i = 1; $i <= $num; ++$i )

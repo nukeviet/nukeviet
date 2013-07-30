@@ -117,7 +117,6 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				$xtpl->assign( 'TD', $td );
 				$xtpl->parse( 'scontent.loop.td' );
 			}
-			$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 			$xtpl->parse( 'scontent.loop' );
 			++$a;
 		}

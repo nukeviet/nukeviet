@@ -276,12 +276,10 @@ else
 
 	if( ! empty( $array_field_config ) )
 	{
-		$a = 0;
 		foreach( $array_field_config as $row )
 		{
 			if( ( $row['show_register'] and $userid == 0 ) or $userid > 0 )
 			{
-				$row['tbodyclass'] = ( $a % 2 ) ? " class=\"second\"" : "";
 				if( $userid == 0 and empty( $custom_fields ) )
 				{
 					if( ! empty( $row['field_choices'] ) )

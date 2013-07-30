@@ -30,10 +30,8 @@ $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $all_page ) = $db->sql_fetchrow( $result_all );
 
 $array = array();
-$a = 0;
 while( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $userid, $user_email ) = $db->sql_fetchrow( $result ) )
 {
-	++$a;
 	$arr_listcatid = explode( ",", $listcatid );
 	$catid_i = end( $arr_listcatid );
 
@@ -43,7 +41,6 @@ while( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $
 	}
 
 	$array[$cid] = array(
-		"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 		"cid" => $cid,
 		"email" => $email,
 		"content" => $content,

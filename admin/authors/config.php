@@ -280,7 +280,6 @@ if( $db->sql_numrows( $result ) )
 	while( list( $dbid, $keyname, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ++$i % 2 ? ' class="second"' : '',
 			'keyname' => $keyname,
 			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
 			'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : $lang_module['adminip_nolimit'],
@@ -328,7 +327,6 @@ if( $db->sql_numrows( $result ) )
 	while( list( $dbid, $keyname, $dbmask, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ++$i % 2 ? ' class="second"' : '',
 			'keyname' => $keyname,
 			'mask_text_array' => $mask_text_array[$dbmask],
 			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',

@@ -236,13 +236,10 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
 
-	$a = 0;
-
 	foreach( $array_post_title as $member => $array_post_1 )
 	{
 		foreach( $array_post_1 as $group_id => $array_post_2 )
 		{
-			++$a;
 
 			$pid = ( isset( $array_post_member[$member][$group_id] ) ) ? $array_post_member[$member][$group_id] : 0;
 			if( $pid > 0 )
@@ -259,7 +256,6 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 			}
 
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 == 0 ) ? "" : " class=\"second\"",
 				"array_post_2" => $array_post_2,
 				"pid" => $pid,
 				"addcontent" => $addcontent ? " checked=\"checked\"" : "",

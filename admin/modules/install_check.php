@@ -224,7 +224,6 @@ if( file_exists( $filename ) )
 			foreach( $no_extract as $tmp )
 			{
 				$xtpl->assign( 'FILENAME', $tmp );
-				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
 				$xtpl->parse( 'complete.no_extract.loop' );
 				++$i;
 			}
@@ -239,7 +238,6 @@ if( file_exists( $filename ) )
 			foreach( $error_create_folder as $tmp )
 			{
 				$xtpl->assign( 'FILENAME', $tmp );
-				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
 				$xtpl->parse( 'complete.error_create_folder.loop' );
 				++$i;
 			}
@@ -254,7 +252,6 @@ if( file_exists( $filename ) )
 			foreach( $error_move_folder as $tmp )
 			{
 				$xtpl->assign( 'FILENAME', $tmp );
-				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
 				$xtpl->parse( 'complete.error_move_folder.loop' );
 				++$i;
 			}
@@ -308,7 +305,6 @@ if( ! empty( $info_error['errorfile'] ) )
 	foreach( $info_error['errorfile'] as $tmp )
 	{
 		$xtpl->assign( 'FILENAME', $tmp );
-		$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
 		$xtpl->parse( 'main.errorfile.loop' );
 		++$i;
 	}
@@ -321,7 +317,6 @@ if( ! empty( $info_error['errorfolder'] ) )
 	foreach( $info_error['errorfolder'] as $tmp )
 	{
 		$xtpl->assign( 'FILENAME', $tmp );
-		$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
 		$xtpl->parse( 'main.errorfolder.loop' );
 		++$i;
 	}

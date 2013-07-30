@@ -34,7 +34,6 @@ if( ! empty( $array ) )
 		$a = 0;
 		foreach( $mod_vals as $key => $value )
 		{
-			$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 			$xtpl->assign( 'KEY', $key );
 
 			if( ! is_array( $value ) )

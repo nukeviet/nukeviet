@@ -28,7 +28,6 @@ if( ! empty( $array['Environment'] ) )
 	$a = 0;
 	foreach( $array['Environment'] as $key => $value )
 	{
-		$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $key );
 		$xtpl->assign( 'VALUE', $value );
 		$xtpl->parse( 'main.loop' );

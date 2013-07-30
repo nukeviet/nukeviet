@@ -297,7 +297,6 @@ foreach( $global_config['allow_adminlangs'] as $keylang )
 	$allow_sitelangs = '';
 
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'keylang' => $keylang,
 		'name' => $language_array[$keylang]['name']
 	) );

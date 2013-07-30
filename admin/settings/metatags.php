@@ -90,7 +90,6 @@ if( ! empty( $metatags['meta'] ) )
 	{
 		$value['h_selected'] = $value['group'] == 'http-equiv' ? ' selected="selected"' : '';
 		$value['n_selected'] = $value['group'] == 'name' ? ' selected="selected"' : '';
-		$value['class'] = ( ++$number % 2 == 0 ) ? ' class="second"' : '';
 		$xtpl->assign( 'DATA', $value );
 		$xtpl->parse( 'main.loop' );
 	}
@@ -102,8 +101,7 @@ for( $i = 0; $i < 3; ++$i )
 		'content' => '',
 		'value' => '',
 		'h_selected' => '',
-		'n_selected' => '',
-		'class' => ( ++$number % 2 == 0 ) ? ' class="second"' : ''
+		'n_selected' => ''
 	);
 	$xtpl->assign( 'DATA', $data );
 	$xtpl->parse( 'main.loop' );

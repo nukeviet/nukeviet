@@ -476,12 +476,10 @@ if( $nv_Request->isset_request( 'qlist', 'get' ) )
 	$num = $db->sql_numrows( $result );
 	if( $num )
 	{
-		$a = 0;
 		while( $row = $db->sql_fetch_assoc( $result ) )
 		{
 			$language = unserialize( $row['language'] );
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 				"fid" => $row['fid'],
 				"field" => $row['field'],
 				"field_lang" => ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : '',
@@ -502,7 +500,6 @@ if( $nv_Request->isset_request( 'qlist', 'get' ) )
 			}
 
 			$xtpl->parse( 'main.data.loop' );
-			++$a;
 		}
 
 		$xtpl->parse( 'main.data' );
@@ -620,7 +617,6 @@ else
 			foreach( $field_choices as $key => $value )
 			{
 				$xtpl->assign( 'FIELD_CHOICES', array(
-					"class" => ( $number % 2 == 0 ) ? ' class="second"' : '',
 					"checked" => ( $number == $dataform['default_value'] ) ? ' checked="checked"' : '',
 					"number" => $number++,
 					"key" => $key,
@@ -630,7 +626,6 @@ else
 			}
 		}
 		$xtpl->assign( 'FIELD_CHOICES', array(
-			"class" => ( $number % 2 == 0 ) ? ' class="second"' : '',
 			"number" => $number,
 			"key" => '',
 			"value" => ''

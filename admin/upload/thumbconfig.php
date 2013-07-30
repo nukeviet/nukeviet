@@ -84,7 +84,6 @@ while( $data = $db->sql_fetch_assoc( $result ) )
 	}
 	if( $data['thumb_type'] )
 	{
-		$data['class'] = ( ++$i % 2 == 0 ) ? ' class="second"' : '';
 		for( $id = $forid; $id < 5; $id++ )
 		{
 			$type = array(

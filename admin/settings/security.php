@@ -327,7 +327,6 @@ if( $db->sql_numrows( $result ) )
 	while( list( $dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ++$i % 2 ? ' class="second"' : '',
 			'dbip' => $dbip,
 			'dbmask' => $mask_text_array[$dbmask],
 			'dbarea' => $banip_area_array[$dbarea],

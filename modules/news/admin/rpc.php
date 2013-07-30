@@ -67,14 +67,11 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 						$xtpl->assign( 'LOAD_DATA', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id . "&checkss=" . md5( $id . $global_config['sitekey'] . session_id() ) . "&getdata=1" );
 
 						$xtpl->assign( 'HOME', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
-						$a = 0;
 						foreach( $services_active as $key => $service )
 						{
-							$a++;
 							$xtpl->assign( 'SERVICE', array(
 								'id' => $key,
 								'title' => $service[1],
-								'class' => ( $a % 2 == 0 ) ? 'class="second"' : '',
 								'icon' => ( isset( $service[3] ) ? $service[3] : "" )
 							) );
 

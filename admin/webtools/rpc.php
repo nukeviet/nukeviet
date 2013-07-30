@@ -43,7 +43,6 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 		$xtpl->assign( 'SERVICE', array(
 			'id' => $key,
 			'title' => $service[1],
-			'class' => ( $a % 2 == 0 ) ? 'class="second"' : '',
 			'checked' => ( ! isset( $module_config[$module_name]['prcservice'] ) or in_array( $service[1], $prcservice ) ) ? 'checked="checked"' : '',
 			'icon' => ( isset( $service[3] ) ? $service[3] : "" )
 		) );

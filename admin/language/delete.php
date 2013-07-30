@@ -113,7 +113,6 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 			{
 				if( empty( $name ) ) continue;
 
-				$xtpl->assign( 'CLASS', ++$i % 2 ? ' class="second"' : '' );
 				$xtpl->assign( 'NAME', $name );
 				$xtpl->parse( 'main.info.loop' );
 			}

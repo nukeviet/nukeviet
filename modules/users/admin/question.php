@@ -136,11 +136,9 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 
 	if( $num )
 	{
-		$a = 0;
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 				"qid" => $row['qid'],
 				"title" => $row['title']
 			) );
@@ -156,7 +154,6 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 			}
 
 			$xtpl->parse( 'main.data.loop' );
-			++$a;
 		}
 
 		$xtpl->parse( 'main.data' );

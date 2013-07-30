@@ -261,7 +261,6 @@ else
 	$a = 0;
 	foreach( $contents['suspend_info'][1] as $value )
 	{
-		$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'VALUE0', $value[0] );
 		$xtpl->assign( 'VALUE1', $value[1] );
 		$xtpl->assign( 'VALUE2', $value[2] );

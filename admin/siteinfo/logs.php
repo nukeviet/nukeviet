@@ -316,7 +316,6 @@ foreach( $data as $data_i )
 	}
 
 	$xtpl->assign( 'DATA', $data_i );
-	$xtpl->assign( 'CLASS', $a % 2 == 1 ? " class=\"second\"" : "" );
 	if( $logs_del )
 	{
 		$xtpl->assign( 'DEL_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=log&amp;" . NV_OP_VARIABLE . "=logs_del&amp;id=" . $data_i['id'] );

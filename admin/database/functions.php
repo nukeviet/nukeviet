@@ -200,7 +200,6 @@ if( $module_name == "database" )
 		foreach( $contents['database'] as $key => $value )
 		{
 			$xtpl->assign( 'ROW', array(
-				'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 				'key' => $key,
 				'value' => $value
 			) );
@@ -260,7 +259,6 @@ if( $module_name == "database" )
 		foreach( $contents['rows'] as $key => $values )
 		{
 			$xtpl->assign( 'ROW', array(
-				'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 				'tag' => ( empty( $values[3] ) ) ? "td" : "th",
 				'key' => $key
 			) );
@@ -291,8 +289,7 @@ if( $module_name == "database" )
 		$a = 0;
 		foreach( $contents['table']['info'] as $key => $value )
 		{
-			$xtpl->assign( 'INFO', array( 'class' => ( ++$a % 2 ) ? " class=\"second\"" : "", 'val' => $value ) );
-
+			$xtpl->assign( 'INFO', $value );
 			$xtpl->parse( 'main.info' );
 		}
 
@@ -310,8 +307,6 @@ if( $module_name == "database" )
 		$a = 0;
 		foreach( $contents['table']['row']['detail'] as $key => $values )
 		{
-			$xtpl->assign( 'CLASS', ( ++$a % 2 ) ? " class=\"second\"" : "" );
-
 			foreach( $values as $value )
 			{
 				$xtpl->assign( 'VAL', $value );

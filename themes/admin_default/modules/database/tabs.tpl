@@ -6,8 +6,8 @@
 		<tbody>
 			<!-- BEGIN: info -->
 			<tr>
-				<td>{INFO.val.0}</td>
-				<td>{INFO.val.1}</td>
+				<td>{INFO.0}</td>
+				<td>{INFO.1}</td>
 			</tr>
 			<!-- END: info -->
 		</tbody>

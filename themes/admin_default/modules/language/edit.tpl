@@ -22,9 +22,9 @@
 			<!-- END: array_translator -->
 			<!-- BEGIN: array_body -->
 			<tr>
-				<td class="center">{ARRAY_BODY.key}</td>
-				<td class="right"><input type="text" value="" name="pozlangkey[{ARRAY_BODY.key}]" size="10" /></td>
-				<td class="left"><input type="text" value="" name="pozlangval[{ARRAY_BODY.key}]" size="90" /></td>
+				<td class="center">{ARRAY_BODY}</td>
+				<td class="right"><input type="text" value="" name="pozlangkey[{ARRAY_BODY}]" size="10" /></td>
+				<td class="left"><input type="text" value="" name="pozlangval[{ARRAY_BODY}]" size="90" /></td>
 			</tr>
 			<!-- END: array_body -->
 			<!-- BEGIN: array_data -->
