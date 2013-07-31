@@ -157,30 +157,10 @@
 	<!-- #footer -->
 </div>
 <!-- #wrapper -->
+<div id="timeoutsess" class="chromeframe">
+	{LANG_TIMEOUTSESS_NOUSER}, <a onclick="timeoutsesscancel();" href="#">{LANG_TIMEOUTSESS_CLICK}</a>. {LANG_TIMEOUTSESS_TIMEOUT}: <span id="secField"> 60 </span> {LANG_TIMEOUTSESS_SEC}
+</div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ddsmoothmenu.js"></script>
-<script type="text/javascript">
-	ddsmoothmenu.init({
-		arrowimages : {
-			down : ['downarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_down.png', 23],
-			right : ['rightarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_right.png']
-		},
-		zindexvalue: 9999,
-		mainmenuid : "smoothmenu",
-		orientation : 'h',
-		classname : 'ddsmoothmenu',
-		contentsource : "markup"
-	});
-	ddsmoothmenu.init({
-		arrowimages : {
-			down : ['downarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_down.png', 23],
-			right : ['rightarrowclass', '{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/menu_right.png']
-		},
-		zindexvalue: 999,
-		mainmenuid : "left_menu",
-		orientation : 'v',
-		classname : 'ddsmoothmenu-v',
-		contentsource : "markup"
-	}); 
-</script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/main.js"></script>
 {FILE "footer.tpl"}
 <!-- END: main -->

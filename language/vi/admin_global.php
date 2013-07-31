@@ -8,7 +8,8 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -77,4 +78,8 @@ $lang_global['error_upload_writable'] = 'Lỗi: Thư mục %s không cho phép c
 $lang_global['error_upload_urlfile'] = 'Lỗi: URL mà bạn đưa ra không đúng';
 $lang_global['error_upload_url_notfound'] = 'Lỗi: Không thể tải file từ URL mà bạn đưa ra';
 
+$lang_global['msgbeforeunload'] = 'Bạn có chắc chắn chuyển sang trang khác, Nếu thực hiện dữ liệu sẽ không được lưu';
+$lang_global['timeoutsess_nouser'] = 'Bạn đã không sử dụng Site';
+$lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng thái đăng nhập';
+$lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
 ?>

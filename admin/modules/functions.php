@@ -681,7 +681,7 @@ function setup_modules( $array_head, $array_modules, $array_virtual_head, $array
 	foreach( $array_modules as $mod => $values )
 	{
 		$xtpl->assign( 'ROW', array(
-			'stt' => $a,
+			'stt' => ++$a,
 			'values' => $values
 		) );
 
@@ -702,7 +702,7 @@ function setup_modules( $array_head, $array_modules, $array_virtual_head, $array
 		foreach( $array_virtual_modules as $mod => $values )
 		{
 			$xtpl->assign( 'VROW', array(
-				'stt' => $a,
+				'stt' => ++$a,
 				'values' => $values
 			) );
 

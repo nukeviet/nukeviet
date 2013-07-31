@@ -7,20 +7,16 @@
  */
 
 /* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
+ Base styles: opinionated defaults
+ ========================================================================== */
 
-html,
-button,
-input,
-select,
-textarea {
-    color: #222;
+html, button, input, select, textarea {
+	color: #222;
 }
 
 body {
-    font-size: 1em;
-    line-height: 1.4;
+	font-size: 1em;
+	line-height: 1.4;
 }
 
 /*
@@ -30,13 +26,13 @@ body {
  */
 
 ::-moz-selection {
-    background: #b3d4fc;
-    text-shadow: none;
+	background: #b3d4fc;
+	text-shadow: none;
 }
 
 ::selection {
-    background: #b3d4fc;
-    text-shadow: none;
+	background: #b3d4fc;
+	text-shadow: none;
 }
 
 /*
@@ -44,12 +40,12 @@ body {
  */
 
 hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 1em 0;
-    padding: 0;
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #ccc;
+	margin: 1em 0;
+	padding: 0;
 }
 
 /*
@@ -57,7 +53,7 @@ hr {
  */
 
 img {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 /*
@@ -65,9 +61,9 @@ img {
  */
 
 fieldset {
-    border: 0;
-    margin: 0;
-    padding: 0;
+	border: 0;
+	margin: 0;
+	padding: 0;
 }
 
 /*
@@ -75,26 +71,33 @@ fieldset {
  */
 
 textarea {
-    resize: vertical;
+	resize: vertical;
 }
 
 /* ==========================================================================
-   Chrome Frame prompt
-   ========================================================================== */
-
+ Chrome Frame prompt
+ ========================================================================== */
 .chromeframe {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	width: 100%;
+	z-index: 9999;
+	background: #ffff00;
+	color: #000;
+	height: 25px;
+	line-height: 25px;
+	padding: 0.2em 0;
+	text-align: center;
 }
 
 /* ==========================================================================
-   NukeViet's custom styles
-   ========================================================================== */
+ NukeViet's custom styles
+ ========================================================================== */
 
 html {
-	background: #F0F0F0 url('../images/light_alu.png') ; /* 1 */
+	background: #F0F0F0 url('../images/light_alu.png'); /* 1 */
 }
 
 body {
@@ -191,6 +194,14 @@ sup.required {
 	min-width: 800px;
 	max-width: 1366px;
 	margin: 0 auto;
+}
+
+#timeoutsess {
+	display: none;
+}
+
+#timeoutsess a {
+	color: #0000FF;
 }
 
 /* Header
@@ -638,26 +649,26 @@ div.generate_page {
 }
 
 /* ==========================================================================
-   Helper classes
-   ========================================================================== */
+ Helper classes
+ ========================================================================== */
 
 /*
  * Image replacement
  */
 
 .ir {
-    background-color: transparent;
-    border: 0;
-    overflow: hidden;
-    /* IE 6/7 fallback */
-    *text-indent: -9999px;
+	background-color: transparent;
+	border: 0;
+	overflow: hidden;
+	/* IE 6/7 fallback */
+	*text-indent: -9999px;
 }
 
 .ir:before {
-    content: "";
-    display: block;
-    width: 0;
-    height: 150%;
+	content: "";
+	display: block;
+	width: 0;
+	height: 150%;
 }
 
 /*
@@ -665,8 +676,8 @@ div.generate_page {
  */
 
 .hidden {
-    display: none !important;
-    visibility: hidden;
+	display: none !important;
+	visibility: hidden;
 }
 
 /*
@@ -674,14 +685,14 @@ div.generate_page {
  */
 
 .visuallyhidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
 }
 
 /*
@@ -689,14 +700,13 @@ div.generate_page {
  * when navigated to via the keyboard: h5bp.com/p
  */
 
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
-    clip: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    position: static;
-    width: auto;
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+	clip: auto;
+	height: auto;
+	margin: 0;
+	overflow: visible;
+	position: static;
+	width: auto;
 }
 
 /*
@@ -704,7 +714,7 @@ div.generate_page {
  */
 
 .invisible {
-    visibility: hidden;
+	visibility: hidden;
 }
 
 /*
@@ -719,14 +729,13 @@ div.generate_page {
  *    `:before` to contain the top-margins of child elements.
  */
 
-.clearfix:before,
-.clearfix:after {
-    content: " "; /* 1 */
-    display: table; /* 2 */
+.clearfix:before, .clearfix:after {
+	content: " "; /* 1 */
+	display: table; /* 2 */
 }
 
 .clearfix:after {
-    clear: both;
+	clear: both;
 }
 
 /*
@@ -735,94 +744,69 @@ div.generate_page {
  */
 
 .clearfix {
-    *zoom: 1;
+	*zoom: 1;
 }
 
 /* ==========================================================================
-   EXAMPLE Media Queries for Responsive Design.
-   These examples override the primary ('mobile first') styles.
-   Modify as content requires.
-   ========================================================================== */
-
-@media only screen and (min-width: 35em) {
-    /* Style adjustments for viewports that meet the condition */
-}
-
-@media print,
-       (-o-min-device-pixel-ratio: 5/4),
-       (-webkit-min-device-pixel-ratio: 1.25),
-       (min-resolution: 120dpi) {
-    /* Style adjustments for high resolution devices */
-}
-
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid required HTTP connection: h5bp.com/r
-   ========================================================================== */
+ Print styles.
+ Inlined to avoid required HTTP connection: h5bp.com/r
+ ========================================================================== */
 
 @media print {
-    * {
-        background: transparent !important;
-        color: #000 !important; /* Black prints faster: h5bp.com/s */
-        box-shadow: none !important;
-        text-shadow: none !important;
-    }
+	* {
+		background: transparent !important;
+		color: #000 !important; /* Black prints faster: h5bp.com/s */
+		box-shadow: none !important;
+		text-shadow: none !important;
+	}
 
-    a,
-    a:visited {
-        text-decoration: underline;
-    }
+	a, a:visited {
+		text-decoration: underline;
+	}
 
-    a[href]:after {
-        content: " (" attr(href) ")";
-    }
+	a[href]:after {
+		content: " (" attr(href) ")";
+	}
 
-    abbr[title]:after {
-        content: " (" attr(title) ")";
-    }
+	abbr[title]:after {
+		content: " (" attr(title) ")";
+	}
 
-    /*
-     * Don't show links for images, or javascript/internal links
-     */
+	/*
+	 * Don't show links for images, or javascript/internal links
+	 */
 
-    .ir a:after,
-    a[href^="javascript:"]:after,
-    a[href^="#"]:after {
-        content: "";
-    }
+	.ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+		content: "";
+	}
 
-    pre,
-    blockquote {
-        border: 1px solid #999;
-        page-break-inside: avoid;
-    }
+	pre, blockquote {
+		border: 1px solid #999;
+		page-break-inside: avoid;
+	}
 
-    thead {
-        display: table-header-group; /* h5bp.com/t */
-    }
+	thead {
+		display: table-header-group; /* h5bp.com/t */
+	}
 
-    tr,
-    img {
-        page-break-inside: avoid;
-    }
+	tr, img {
+		page-break-inside: avoid;
+	}
 
-    img {
-        max-width: 100% !important;
-    }
+	img {
+		max-width: 100% !important;
+	}
 
-    @page {
-        margin: 0.5cm;
-    }
+	@page {
+		margin: 0.5cm;
+	}
 
-    p,
-    h2,
-    h3 {
-        orphans: 3;
-        widows: 3;
-    }
+	p, h2, h3 {
+		orphans: 3;
+		widows: 3;
+	}
 
-    h2,
-    h3 {
-        page-break-after: avoid;
-    }
+	h2, h3 {
+		page-break-after: avoid;
+	}
 }

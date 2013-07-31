@@ -13,8 +13,8 @@
 				<td colspan="3" class="center"><input type="submit" name="submit" value="{LANG.nv_admin_submit}" style="width: 100px;"/></td>
 			</tr>
 		</tfoot>
-		<!-- BEGIN: countries -->
 		<tbody>
+			<!-- BEGIN: countries -->
 			<tr>
 				<td>{NB}</td>
 				<td>{LANG_NAME}</td>
@@ -25,8 +25,8 @@
 					<!-- END: language -->
 				</select></td>
 			</tr>
+			<!-- END: countries -->
 		</tbody>
-		<!-- END: countries -->
 	</table>
 </form>
 <!-- END: main -->

@@ -156,7 +156,7 @@ while( list( $key, $value ) = each( $language_array ) )
 	}
 
 	$xtpl->assign( 'ROW', array(
-		'number' => $a,
+		'number' => ++$a,
 		'key' => $key,
 		'language' => $value['language'],
 		'name' => $value['name'],

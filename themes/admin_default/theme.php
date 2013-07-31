@@ -110,7 +110,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'NV_SITE_COPYRIGHT', $global_config['site_name'] . " [" . $global_config['site_email'] . "] " );
 	$xtpl->assign( 'NV_SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'NV_SITE_TITLE', $global_config['site_name'] . " " . NV_TITLEBAR_DEFIS . " " . $lang_global['admin_page'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['custom_title'] . "" );
-	$xtpl->assign( 'NV_ADMIN_CHECK_PASS_TIME', $global_config['admin_check_pass_time'] );
+	$xtpl->assign( 'NV_CHECK_PASS_MSTIME', (intval( $global_config['admin_check_pass_time'] ) - 62) * 1000 );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -133,7 +133,6 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'NV_SITE_TIMEZONE_OFFSET', round( NV_SITE_TIMEZONE_OFFSET / 3600 ) );
 	$xtpl->assign( 'NV_CURRENTTIME', nv_date( "T", NV_CURRENTTIME ) );
 	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
@@ -295,6 +294,12 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'MODULE_CONTENT', $contents );
 
 	$xtpl->assign( 'NV_COPYRIGHT', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
+
+	$xtpl->assign( 'LANG_TIMEOUTSESS_NOUSER', $lang_global['timeoutsess_nouser'] );
+	$xtpl->assign( 'LANG_TIMEOUTSESS_CLICK', $lang_global['timeoutsess_click'] );
+	$xtpl->assign( 'LANG_TIMEOUTSESS_SEC', $lang_global['sec'] );
+	$xtpl->assign( 'LANG_TIMEOUTSESS_TIMEOUT', $lang_global['timeoutsess_timeout'] );
+	$xtpl->assign( 'MSGBEFOREUNLOAD', $lang_global['msgbeforeunload'] );
 
 	if( defined( "NV_IS_SPADMIN" ) AND $admin_info['level'] == 1 )
 	{
