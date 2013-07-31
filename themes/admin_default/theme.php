@@ -300,6 +300,11 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'LANG_TIMEOUTSESS_SEC', $lang_global['sec'] );
 	$xtpl->assign( 'LANG_TIMEOUTSESS_TIMEOUT', $lang_global['timeoutsess_timeout'] );
 	$xtpl->assign( 'MSGBEFOREUNLOAD', $lang_global['msgbeforeunload'] );
+	
+	if( defined( 'CKEDITOR' ) )
+	{
+		$xtpl->parse( 'main.ckeditor' );		
+	}
 
 	if( defined( "NV_IS_SPADMIN" ) AND $admin_info['level'] == 1 )
 	{
