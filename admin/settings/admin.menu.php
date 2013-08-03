@@ -15,16 +15,11 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( defined( "NV_IS_SPADMIN" ) AND $global_conf
 	$submenu['system'] = $lang_module['global_config'];
 }
 $submenu['smtp'] = $lang_module['smtp_config'];
-$submenu['pagetitle'] = $lang_module['pagetitle'];
-$submenu['metatags'] = $lang_module['metaTagsConfig'];
-$submenu['statistics'] = $lang_module['global_statistics'];
 if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$submenu['security'] = $lang_module['security'];
 	$submenu['cronjobs'] = $lang_global['mod_cronjobs'];
 	$submenu['ftp'] = $lang_module['ftp_config'];
-	$submenu['robots'] = $lang_module['robots'];
-	$submenu['bots'] = $lang_module['bots_config'];
 	$submenu['variables'] = $lang_module['variables'];
 }
 

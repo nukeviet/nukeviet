@@ -7,7 +7,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['rpc_setting'];
 if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )

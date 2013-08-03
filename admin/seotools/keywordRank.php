@@ -7,7 +7,7 @@
  * @Createdate 25/12/2010, 1:5
  */
 
-if( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['keywordRank'];
 $contents = '';

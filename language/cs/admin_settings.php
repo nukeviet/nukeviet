@@ -3,12 +3,12 @@
 /**
 * @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2013 VINADES.,JSC. All rights reserved
 * @Language česky
 * @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
@@ -16,17 +16,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC.. All rights r
 $lang_translator['info'] = 'YM: datvietinfo2010 ';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['metaTagsConfig'] = 'Meta-Tags Config';
-$lang_module['metaTagsGroupName'] = 'Group type';
-$lang_module['metaTagsGroupValue'] = 'Group Name';
-$lang_module['metaTagsNote'] = 'The Meta-Tags: "%s" is determined automatically';
-$lang_module['metaTagsVar'] = 'Accept the following variables';
-$lang_module['metaTagsContent'] = 'Content';
-$lang_module['googleAnalyticsSetDomainName_title'] = 'Domain properties when declared with Google Analytics';
-$lang_module['googleAnalyticsSetDomainName_0'] = 'A single domain';
-$lang_module['googleAnalyticsSetDomainName_1'] = 'One domain with multiple subdomains';
-$lang_module['googleAnalyticsSetDomainName_2'] = 'Multiple top-level domains';
-$lang_module['googleAnalyticsID'] = 'Google Analytics ID<br />(UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>)';
 $lang_module['global_config'] = 'Systém Configurace';
 $lang_module['site_config'] = 'Konfigurace website';
 $lang_module['lang_site_config'] = 'Konfigurace website podle jazyk:%s';
@@ -82,15 +71,12 @@ $lang_module['site_keywords'] = 'Klíčová slova';
 $lang_module['site_logo'] = 'Webové logo';
 $lang_module['site_email'] = 'Webový e-mail';
 $lang_module['error_send_email'] = 'Email na přijetí chybu';
-$lang_module['site_phone'] = 'Telefon stránky';
 $lang_module['lang_multi'] = 'Aktivovat více jazyků';
 $lang_module['site_lang'] = 'Výchozí jazyk';
 $lang_module['site_timezone'] = 'Webové časové pásmo';
 $lang_module['date_pattern'] = 'Formát k zobrazení datum';
 $lang_module['time_pattern'] = 'Formát k zobrazení času';
-$lang_module['online_upd'] = 'Aktivujte k sledováním online uživatelům';
 $lang_module['gzip_method'] = 'Aktivovat gzip';
-$lang_module['statistic'] = 'Aktivovat statistiky';
 $lang_module['proxy_blocker'] = 'Blokovat proxy';
 $lang_module['proxy_blocker_0'] = 'Nekontrolovat';
 $lang_module['proxy_blocker_1'] = 'Lehce';
@@ -129,7 +115,6 @@ $lang_module['banip_delete'] = 'Smazat';
 $lang_module['banip_error_ip'] = 'Zadejte zakazany ip';
 $lang_module['banip_error_area'] = 'Musíte vybrat oblast';
 $lang_module['banip_error_validip'] = 'Chyba:Musíte zadat spravný ip';
-
 $lang_module['nv_admin_add'] = 'Přidat zaměstnání';
 $lang_module['nv_admin_edit'] = 'Upravit zaměstnání';
 $lang_module['nv_admin_del'] = 'Odstranit zaměstnání';

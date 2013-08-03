@@ -9,15 +9,13 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'smtp', 'pagetitle', 'metatags', 'statistics' );
+$allow_func = array( 'main', 'smtp' );
 if( defined( 'NV_IS_GODADMIN' ) OR ( defined( "NV_IS_SPADMIN" ) AND $global_config['idsite'] > 0 ) )
 {
 	$allow_func[] = 'system';
 }
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$allow_func[] = 'bots';
-	$allow_func[] = 'robots';
 	$allow_func[] = 'ftp';
 	$allow_func[] = 'security';
 	$allow_func[] = 'cronjobs';

@@ -3,7 +3,7 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$(document).ready(function() {
-		$("#siteDiagnostic").html('<p class="center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=siteDiagnostic&i=process&num=" + nv_randomPassword(10))
+		$("#siteDiagnostic").html('<p class="center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load("index.php?{NV_NAME_VARIABLE}=seotools&{NV_OP_VARIABLE}=siteDiagnostic&i=process&num=" + nv_randomPassword(10))
 	});
 	//]]>
 </script>
@@ -41,7 +41,7 @@
 	//<![CDATA[
 	$(document).ready(function() {
 		$("#diagnosticRefresh").click(function() {
-			$("#siteDiagnostic").text("").html('<p class="center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=siteDiagnostic&i=refresh&num=" + nv_randomPassword(10));
+			$("#siteDiagnostic").text("").html('<p class="center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load("index.php?{NV_NAME_VARIABLE}=seotools&{NV_OP_VARIABLE}=siteDiagnostic&i=refresh&num=" + nv_randomPassword(10));
 			return false
 		})
 	});
