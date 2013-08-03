@@ -72,7 +72,6 @@ $lang_module['robots_type'] = 'Mode';
 $lang_module['robots_type_0'] = 'No Access';
 $lang_module['robots_type_1'] = 'Not show in the robots.txt file';
 $lang_module['robots_error_writable'] = 'Error: The system can not write the robots.txt file, please create a file robots.txt with below content and put into the site parent folder';
-$lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>)';
 $lang_module['pagetitle2'] = 'Display tag "title" option';
 $lang_module['pagetitleNote'] = '<strong>Accept variables:</strong><br /><br />- <strong>pagetitle</strong>: Page title is determined in each specific case,<br />- <strong>funcname</strong>: Function,<br />- <strong>modulename</strong>: Module name,<br />- <strong>sitename</strong>: Site name';
 $lang_module['metaTagsGroupName'] = 'Group type';

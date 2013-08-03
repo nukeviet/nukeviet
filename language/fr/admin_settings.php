@@ -175,5 +175,6 @@ $lang_module['ftp_auto_detect_root'] = 'Détection automatique';
 $lang_module['ftp_error_full'] = 'Rentrer complètement les infos pour détecter automatiquement Remote path';
 $lang_module['ftp_error_detect_root'] = 'Il est impossible de déterminer, merci de vérifier l\'identifiant et le mot de passe';
 $lang_module['ftp_error_support'] = 'Votre hébergeur a bloqué FTP, veuillez leur contacter pour l\'activer';
+$lang_module['searchEngineUniqueID'] = 'ID de moteur de recherche Google<br />(forma 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">voir détails</a>)';
 
 ?>

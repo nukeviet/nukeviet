@@ -32,7 +32,7 @@ $lang_module['default_module'] = 'Module mặc định trên trang chủ';
 $lang_module['description'] = 'Mô tả của site';
 $lang_module['rewrite'] = 'Bật chức năng rewrite';
 $lang_module['rewrite_optional'] = 'Loại bỏ kí tự ngôn ngữ trên url';
-$lang_module['rewrite_op_mod'] = 'Loại bỏ tên module %s trên url';
+$lang_module['rewrite_op_mod'] = 'Loại bỏ tên module trên url';
 $lang_module['disable_content'] = 'Nội dung thông báo site ngưng hoạt động';
 $lang_module['submit'] = 'Lưu';
 $lang_module['err_writable'] = 'Lỗi hệ thống không ghi được file: %s bạn cần cấu hình server cho phép ghi file này.';
@@ -102,6 +102,7 @@ $lang_module['proxy_blocker_2'] = 'Kiểm tra vừa';
 $lang_module['proxy_blocker_3'] = 'Kiểm tra tuyệt đối';
 $lang_module['str_referer_blocker'] = 'Kích hoạt tiện ích kiểm tra và chuyển hướng các REFERER bên ngoài đến trang chủ';
 $lang_module['my_domains'] = 'Các domain chạy site, cách nhau bởi dấu phảy';
+$lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(Có dạng 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">xem chi tiết</a>)';
 
 $lang_module['variables'] = 'Cấu hình cookie session';
 $lang_module['cookie_prefix'] = 'Tiến tố cookie';

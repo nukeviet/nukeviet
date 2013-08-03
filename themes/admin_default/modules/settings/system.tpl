@@ -41,10 +41,6 @@
 				<td><strong>{LANG.time_pattern}</strong></td>
 				<td><input type="text" name="time_pattern" value="{DATA.time_pattern}" class="w150"/></td>
 			</tr>
-			<tr>
-				<td><strong>{LANG.searchEngineUniqueID}</strong></td>
-				<td><input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" style="width: 450px" maxlength="50" /></td>
-			</tr>
 			<!-- BEGIN: system -->
 			<tr>
 				<td><strong>{LANG.lang_multi}</strong></td>
@@ -76,7 +72,13 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.rewrite_op_mod}</strong></td>
-				<td><input type="checkbox" value="1" name="rewrite_op_mod" {CHECKED3} /></td>
+				<td>
+				<select name="rewrite_op_mod">
+					<option value="">&nbsp;</option>
+					<!-- BEGIN: rewrite_op_mod -->
+					<option value="{MODE_VALUE}"{MODE_SELECTED}>{MODE_NAME}</option>
+					<!-- END: rewrite_op_mod -->
+				</select></td>
 			</tr>
 			<!-- END: rewrite_optional -->
 			<tr>
@@ -111,6 +113,10 @@
 				<td><input type="text" name="cdn_url" value="{DATA.cdn_url}" style="width: 230px"/><input type="button" value="{LANG.cdn_download}"  id="cdn_download"/></td>
 			</tr>
 			<!-- END: system -->
+			<tr>
+				<td><strong>{LANG.searchEngineUniqueID}</strong></td>
+				<td><input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" style="width: 450px" maxlength="50" /></td>
+			</tr>
 		</tbody>
 	</table>
 	<div style="width: 200px; margin: 10px auto; text-align: center;">
@@ -120,6 +126,6 @@
 <script type="text/javascript">
 	$('#cdn_download').click(function() {
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl={CDNDL}';
-	});
+	}); 
 </script>
 <!-- END: main -->

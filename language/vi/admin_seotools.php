@@ -75,7 +75,6 @@ $lang_module['robots_type'] = 'Chế độ';
 $lang_module['robots_type_0'] = 'Cấm truy cập';
 $lang_module['robots_type_1'] = 'Không hiển thị trong file robots.txt';
 $lang_module['robots_error_writable'] = 'Lỗi: Hệ thống không ghi được file robots.txt, hãy tạo file robots.txt với nội dung bên dưới và đặt vào thư mục gốc của website';
-$lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(Có dạng 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">xem chi tiết</a>)';
 
 $lang_module['pagetitle2'] = 'Phương án hiển thị tag "title"';
 $lang_module['pagetitleNote'] = '<strong>Chấp nhận các biến:</strong><br /><br />- <strong>pagetitle</strong>: Tiêu đề trang được xác định trong từng trường hợp cụ thể,<br />- <strong>funcname</strong>: Tên function,<br />- <strong>modulename</strong>: Tên module,<br />- <strong>sitename</strong>: Tên của site';

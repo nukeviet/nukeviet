@@ -72,7 +72,6 @@ $lang_module['robots_type'] = 'モード';
 $lang_module['robots_type_0'] = 'アクセスを禁止';
 $lang_module['robots_type_1'] = 'robots.txtというファイルで表示しない';
 $lang_module['robots_error_writable'] = 'エラー：システムは、robots.txtファイルを書き込むことはありません。下記の内容を含むrobots.txtファイルを作成し、Webサイトのルートディレクトリに置いてください。';
-$lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>)';
 $lang_module['pagetitle2'] = 'tag "title"表示方法';
 $lang_module['pagetitleNote'] = '<strong>変数を受け入れる</strong><br /><br />- <strong>pagetitle</strong>:ページタイトルは、それぞれの特定のケースで決定される,<br />- <strong>funcname</strong>:機能名<br />- <strong>modulename</strong>:モジュール名,<br />- <strong>sitename</strong>:サイト名';
 $lang_module['metaTagsGroupName'] = 'グループのタイプ';

@@ -175,5 +175,6 @@ $lang_module['ftp_auto_detect_root'] = '自動検出';
 $lang_module['ftp_error_full'] = 'リモートパスを自動検出する為に<br />全てのパラメータを入力してください。';
 $lang_module['ftp_error_detect_root'] = '適当なパラメータを見つけることができません。あなたのユーザー名とパスワードをチェックしてください。';
 $lang_module['ftp_error_support'] = 'あなたのサーバーはブロックしているか、FTPライブラリをサポートしない。有効にするために、プロバイダーに連絡してください';
+$lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>)';
 
 ?>
