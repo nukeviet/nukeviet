@@ -1,5 +1,6 @@
 <!-- BEGIN: main -->
 {FILE "header.tpl"}
+<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu.css"/>
 <div id="wrapper">
 	<header id="header">
 		<div class="logo">
@@ -162,5 +163,16 @@
 </div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ddsmoothmenu.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/main.js"></script>
+<!-- BEGIN: ckeditor -->
+<script type="text/javascript">
+	for (var i in CKEDITOR.instances) {
+		CKEDITOR.instances[i].on('key', function(e) {
+			$(window).bind('beforeunload', function() {
+				return '{MSGBEFOREUNLOAD}';
+			});
+		});
+	}
+</script>
+<!-- END: ckeditor -->
 {FILE "footer.tpl"}
 <!-- END: main -->

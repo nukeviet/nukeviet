@@ -108,7 +108,7 @@ function insertvaluetofield() {
 	var c = $("input[name=selFile]").val();
 	var e = $("img[alt='" + c + "']").attr("name").split("|");
 	f = (e[7] == "") ? $("span#foldervalue").attr("title") : e[7];
-	d = nv_base_siteurl + f + "/" + c;
+	d = nv_siteroot + f + "/" + c;
 	if (a > 0) {
 		window.opener.CKEDITOR.tools.callFunction(a, d, "");
 		window.close()
@@ -147,8 +147,8 @@ function preview() {
 	if (d[3] == "image" || d[2] == "swf") {
 		var g = calSize(d[0], d[1], 360, 230);
 		e += d[0] + " x " + d[1] + " pixels (" + d[4] + ")<br />";
-		d[3] == "image" ? $("div#fileView").html('<img style="border:2px solid #F0F0F0;" width="' + g[0] + '" height="' + g[1] + '" src="' + nv_base_siteurl + b + "/" + a + '" />') : $("#fileView").flash({
-			src : nv_base_siteurl + b + "/" + a,
+		d[3] == "image" ? $("div#fileView").html('<img style="border:2px solid #F0F0F0;" width="' + g[0] + '" height="' + g[1] + '" src="' + nv_siteroot + b + "/" + a + '" />') : $("#fileView").flash({
+			src : nv_siteroot + b + "/" + a,
 			width : g[0],
 			height : g[1]
 		}, {
@@ -195,7 +195,7 @@ function create() {
 		var e = calSizeMax(d[0], d[1], nv_max_width, nv_max_height), g = calSizeMin(d[0], d[1], nv_min_width, nv_min_height);
 		$("div[title=createInfo]").html("Max: " + e[0] + " x " + e[1] + ", Min: " + g[0] + " x " + g[1] + " (pixels)");
 		e = calSize(d[0], d[1], 360, 230);
-		$("img[name=myFile2]").width(e[0]).height(e[1]).attr("src", nv_base_siteurl + b + "/" + a);
+		$("img[name=myFile2]").width(e[0]).height(e[1]).attr("src", nv_siteroot + b + "/" + a);
 		$("#fileInfoDetail2").html(LANG.origSize + ": " + d[0] + " x " + d[1] + " pixels");
 		$("#fileInfoName2").html(a);
 		$("div#imgcreate").dialog({
@@ -308,7 +308,7 @@ function folderClick(a) {
 		if ($(a).is(".view_dir")) {
 			a = $("select[name=imgtype]").val();
 			var d = $("input[name=selFile]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
-			$("div#imglist").html('<p style="padding:20px; text-align:center"><img src="' + nv_base_siteurl + 'images/load_bar.gif"/> please wait...</p>').load(nv_module_url + "imglist&path=" + b + "&imgfile=" + d + "&type=" + a + e + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+			$("div#imglist").html('<p style="padding:20px; text-align:center"><img src="' + nv_siteroot + 'images/load_bar.gif"/> please wait...</p>').load(nv_module_url + "imglist&path=" + b + "&imgfile=" + d + "&type=" + a + e + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
 		} else {
 			$("div#imglist").text("")
 		}
@@ -378,6 +378,22 @@ function deletefolder() {
 	}
 }
 
+function searchfile() {
+	a = $("select[name=searchPath]").val(), q = $("input[name=q]").val();
+	b = $("select[name=imgtype]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
+	$("div#filesearch").dialog("close");
+	$("#imglist").html('<p style="padding:20px; text-align:center"><img src="' + nv_siteroot + 'images/load_bar.gif"/> please wait...</p>').load(nv_module_url + 'imglist&path=' + a + '&type=' + b + e + '&q=' + rawurlencode(q) + '&order=' + $('select[name=order]').val() + '&random=' + nv_randomNum(10))
+	return false;
+}
+
+var ICON = [];
+ICON.select = nv_siteroot + 'js/contextmenu/icons/select.png';
+ICON.download = nv_siteroot + 'js/contextmenu/icons/download.png';
+ICON.preview = nv_siteroot + 'js/contextmenu/icons/view.png';
+ICON.create = nv_siteroot + 'js/contextmenu/icons/copy.png';
+ICON.move = nv_siteroot + 'js/contextmenu/icons/move.png';
+ICON.rename = nv_siteroot + 'js/contextmenu/icons/rename.png';
+ICON.filedelete = nv_siteroot + 'js/contextmenu/icons/delete.png';
 
 $(".vchange").change(function() {
 	var a = $("span#foldervalue").attr("title"), b = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $(this).val() == 1 ? "&author" : "";
@@ -435,7 +451,7 @@ $("#confirm").click(function() {
 				$("input[name=selFile]").val(k);
 				var ckf = $("input[name=CKEditorFuncNum]").val(), area = $("input[name=area]").val();
 				if (ckf > 0 || area != "") {
-					$("#cfile").html('<a href="javascript:void(0);" onclick="nv_selFile(\'' + nv_base_siteurl + b + '/' + k + '\')">' + k + '</a>');
+					$("#cfile").html('<a href="javascript:void(0);" onclick="nv_selFile(\'' + nv_siteroot + b + '/' + k + '\')">' + k + '</a>');
 				} else {
 					$("#cfile").html(k);
 				}

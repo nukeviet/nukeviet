@@ -17,7 +17,6 @@
 
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/normalize.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/main.css">
-		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu.css"/>
 
 		<!-- BEGIN: css_module -->
 		<link rel="stylesheet" href="{NV_CSS_MODULE_THEME}" type="text/css" />

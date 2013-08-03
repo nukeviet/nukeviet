@@ -62,6 +62,15 @@ jQuery(document).ready(function() {
 		classname : 'ddsmoothmenu-v',
 		contentsource : "markup"
 	});
+
+	$('form').change(function() {
+		$(window).bind('beforeunload', function() {
+			return '{MSGBEFOREUNLOAD}';
+		});
+	});
+	$('form').submit(function() {
+		$(window).unbind();
+	});
 });
 
 function ver_menu_click() {
