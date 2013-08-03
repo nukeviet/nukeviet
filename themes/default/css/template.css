@@ -324,21 +324,23 @@ div.bordersilver {
 	border: 1px solid #d9d9d9
 }
 
-div.box h3.header {
+div.box div.header {
 	border: 1px solid #0f69e2;
 	border-bottom: 2px solid #fff;
 	height: 28px;
 	line-height: 28px;
 	color: #fff;
+	font-size: 13px;
+	font-weight: 700;
 	text-indent: 10px;
-	background: #0B41A5 url(../images/h3.header.jpg) repeat-x
+	background: #0B41A5 url(../images/box.header.jpg) repeat-x
 }
 
-div.box h3.header a {
+div.box div.header a {
 	color: #fff
 }
 
-div.box h3.header strong, .box_silver strong, .box_orange strong {
+div.box div.header strong, .box_silver strong, .box_orange strong {
 	padding-right: 4px;
 	color: #0f0
 }
@@ -366,6 +368,8 @@ div.box h3.header strong, .box_silver strong, .box_orange strong {
 	height: 28px;
 	line-height: 28px;
 	color: #000;
+	font-size: 13px;
+	font-weight: 700;
 	text-indent: 10px
 }
 
