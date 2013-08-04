@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: nowrite -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"> {TITLE} </blockquote>
 </div>
 <div class="codecontent">

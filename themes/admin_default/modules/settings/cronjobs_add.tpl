@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote<!-- BEGIN: error --> class="error"<!-- END: error -->>
 		<span>{DATA.title}</span></blockquote>
 </div>

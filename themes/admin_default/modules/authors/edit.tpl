@@ -1,5 +1,5 @@
 <!-- BEGIN: edit -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote {CLASS}><span>{INFO}</span></blockquote>
 </div>
 <form method="post" action="{ACTION}">

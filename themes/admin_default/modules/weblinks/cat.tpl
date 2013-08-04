@@ -24,7 +24,7 @@
 <!-- END: data -->
 
 <!-- BEGIN: error -->
-<div class="quote" style="width:780px;">
+<div class="quote">
 	<blockquote class="error"><span>{error}</span></blockquote>
 </div>
 <!-- END: error -->

@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{LANG.thumb_note}</span></blockquote>
 </div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>

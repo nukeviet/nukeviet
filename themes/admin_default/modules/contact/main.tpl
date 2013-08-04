@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: empty -->
-<div style="width:98%" class="quote">
+<div class="quote">
 	<blockquote><span>{LANG.no_row_contact}</span></blockquote>
 </div>
 <!-- END: empty -->

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div style="width:98%" class="quote">
+<div class="quote">
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
 <!-- END: error -->

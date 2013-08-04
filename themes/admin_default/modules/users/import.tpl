@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{LANG.import_note}</span></blockquote>
 </div>
 <!-- BEGIN: read -->

@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="{CLASSERROR}"><span>{LANG.vmodule_blockquote}</span></blockquote>
 </div>
 

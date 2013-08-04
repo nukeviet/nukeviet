@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
 <div id="edit"></div>
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span id="message">ERROR! CONFIG FILE: {ERROR}</span></blockquote>
 </div>
 <!-- END: error -->

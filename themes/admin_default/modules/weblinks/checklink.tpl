@@ -25,7 +25,7 @@
 </table>
 <!-- END: check -->
 <!-- BEGIN: form -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{LANG.weblink_check_notice}</span></blockquote>
 </div>
 <table class="tab1">

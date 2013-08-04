@@ -12,7 +12,7 @@
 </script>
 <div id="users">
 	<!-- BEGIN: is_forum -->
-	<div class="quote" style="width:780px;">
+	<div class="quote">
 		<blockquote class="error"><span>{LANG.modforum}</span></blockquote>
 	</div>
 	<!-- END: is_forum -->

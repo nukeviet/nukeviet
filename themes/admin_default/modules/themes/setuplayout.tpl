@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: complete -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span>{LANG.setup_updated_layout}</span></blockquote>
 </div>
 <!-- END: complete -->

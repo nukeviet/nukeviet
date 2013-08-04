@@ -1,5 +1,5 @@
 <!-- BEGIN: del -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote {CLASS}><span>{TITLE}</span></blockquote>
 </div>
 <form method="post" action="{ACTION}">

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: info -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{CONTENTS.info}</span></blockquote>
 </div>
 <!-- END: info -->

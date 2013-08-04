@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{LANG.nv_lang_note_edit} : {ALLOWED_HTML_LANG}</span></blockquote>
 </div>
 <form action="{NV_BASE_ADMINURL}index.php" method="post">

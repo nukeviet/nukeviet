@@ -5,7 +5,7 @@
 <!-- END: no_support-->
 <!-- BEGIN: main-->
 <!-- BEGIN: error-->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
 <!-- END: error -->

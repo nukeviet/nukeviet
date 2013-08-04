@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote {CLASS}><span>{CONTENTS.info}</span></blockquote>
 </div>
 <form method="post" id="form_add_client" style="FLOAT:left;width:100%;margin-bottom:20px" action="{CONTENTS.action}">

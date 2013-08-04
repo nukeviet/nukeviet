@@ -45,7 +45,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- BEGIN: error -->
-<div style="width: 780px;" class="quote">
+<div class="quote">
 	<blockquote class="error">
 		<p>
 			<span>{ERROR}</span>

@@ -1,10 +1,10 @@
 <!-- BEGIN: upload_blocked -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{CONTENTS.upload_blocked}</span></blockquote>
 </div>
 <!-- END: upload_blocked -->
 <!-- BEGIN: main -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote {CLASS}><span>{CONTENTS.info}</span></blockquote>
 </div>
 

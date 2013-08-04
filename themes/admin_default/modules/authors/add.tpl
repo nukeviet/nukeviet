@@ -1,5 +1,5 @@
 <!-- BEGIN: add -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{INFO}</span></blockquote>
 </div>
 <form method="post" action="{ACTION}" id="addadmin">

@@ -56,7 +56,7 @@
 		<!-- END: loop -->
 	</tbody>
 </table>
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{LANG.nv_data_note}</span></blockquote>
 </div>
 <!-- END: main -->

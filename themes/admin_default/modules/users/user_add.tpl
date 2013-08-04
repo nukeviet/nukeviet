@@ -1,13 +1,13 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: is_forum -->
-<div class="quote" style="width:780px;">
+<div class="quote">
 	<blockquote class="error">
 		<span>{LANG.modforum}</span>
 	</blockquote>
 </div>
 <!-- END: is_forum -->
 <!-- BEGIN: error -->
-<div style="width: 780px;" class="quote">
+<div class="quote">
 	<blockquote class="error">
 		<p>
 			<span>{ERROR}</span>

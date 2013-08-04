@@ -130,12 +130,12 @@
 </table>
 <!-- END: listip -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"> {ERROR} </blockquote>
 </div>
 <!-- END: error -->
 <!-- BEGIN: manual_save -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"> {MESSAGE} </blockquote>
 </div>
 <div class="codecontent">

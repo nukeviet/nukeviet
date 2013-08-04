@@ -27,13 +27,13 @@
 <!-- END: head -->
 <!-- BEGIN: main -->
 <!-- BEGIN: block_group_notice -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span id="message">{LANG.block_group_notice}</span></blockquote>
 </div>
 <!-- END: block_group_notice -->
 <!-- BEGIN: error -->
 <div id="edit"></div>
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span id="message">{ERROR}</span></blockquote>
 </div>
 <!-- END: error -->

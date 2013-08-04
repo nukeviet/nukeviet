@@ -1,6 +1,6 @@
 <!-- BEGIN: suspend -->
 <!-- BEGIN: suspend_info -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{SUSPEND_INFO}</span></blockquote>
 </div>
 <!-- END: suspend_info -->
@@ -28,7 +28,7 @@
 </table>
 <!-- END: suspend_info1 -->
 <!-- BEGIN: change_suspend -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote {CLASS}><span>{NEW_SUSPEND_CAPTION}</span></blockquote>
 </div>
 <form method="post" action="{ACTION}">
