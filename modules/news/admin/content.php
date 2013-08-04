@@ -98,40 +98,41 @@ $array_imgposition = array(
 );
 
 $rowcontent = array(
-	"id" => "",
-	"catid" => $catid,
-	"listcatid" => "" . $catid . "," . $parentid . "",
-	"topicid" => "",
-	"admin_id" => $admin_id,
-	"author" => "",
-	"sourceid" => 0,
-	"addtime" => NV_CURRENTTIME,
-	"edittime" => NV_CURRENTTIME,
-	"status" => 0,
-	"publtime" => NV_CURRENTTIME,
-	"exptime" => 0,
-	"archive" => 1,
-	"title" => "",
-	"alias" => "",
-	"hometext" => "",
-	"sourcetext" => "",
-	"homeimgfile" => "",
-	"homeimgalt" => "",
-	"homeimgthumb" => "",
-	"imgposition" => 1,
-	"bodyhtml" => "",
-	"copyright" => 0,
-	"inhome" => 1,
-	"allowed_comm" => $module_config[$module_name]['setcomm'],
-	"allowed_rating" => 1,
-	"allowed_send" => 1,
-	"allowed_print" => 1,
-	"allowed_save" => 1,
-	"hitstotal" => 0,
-	"hitscm" => 0,
-	"total_rating" => 0,
-	"click_rating" => 0,
-	"keywords" => ""
+	'id' => '',
+	'catid' => $catid,
+	'listcatid' => $catid . ',' . $parentid,
+	'topicid' => '',
+	'admin_id' => $admin_id,
+	'author' => '',
+	'sourceid' => 0,
+	'addtime' => NV_CURRENTTIME,
+	'edittime' => NV_CURRENTTIME,
+	'status' => 0,
+	'publtime' => NV_CURRENTTIME,
+	'exptime' => 0,
+	'archive' => 1,
+	'title' => '',
+	'alias' => '',
+	'hometext' => '',
+	'sourcetext' => '',
+	'homeimgfile' => '',
+	'homeimgalt' => '',
+	'homeimgthumb' => '',
+	'imgposition' => 1,
+	'bodyhtml' => '',
+	'copyright' => 0,
+	'gid' => 0,
+	'inhome' => 1,
+	'allowed_comm' => $module_config[$module_name]['setcomm'],
+	'allowed_rating' => 1,
+	'allowed_send' => 1,
+	'allowed_print' => 1,
+	'allowed_save' => 1,
+	'hitstotal' => 0,
+	'hitscm' => 0,
+	'total_rating' => 0,
+	'click_rating' => 0,
+	'keywords' => ''
 );
 
 $rowcontent['topictext'] = '';
@@ -357,6 +358,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['allowed_send'] = ( int )$nv_Request->get_bool( 'allowed_send', 'post' );
 	$rowcontent['allowed_print'] = ( int )$nv_Request->get_bool( 'allowed_print', 'post' );
 	$rowcontent['allowed_save'] = ( int )$nv_Request->get_bool( 'allowed_save', 'post' );
+	$rowcontent['gid'] = $nv_Request->get_int( 'gid', 'post', 0 );
+
 	$rowcontent['keywords'] = $nv_Request->get_title( 'keywords', 'post', '', 1 );
 	if( empty( $rowcontent['title'] ) )
 	{
@@ -494,7 +497,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$ct_query = array();
 
 				$tbhtml = NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 );
-				$db->sql_query( "CREATE TABLE IF NOT EXISTS `" . $tbhtml . "` (`id` int(11) unsigned NOT NULL, `bodyhtml` longtext NOT NULL, `sourcetext` varchar(255) NOT NULL default '', `imgposition` tinyint(1) NOT NULL default '1', `copyright` tinyint(1) NOT NULL default '0', `allowed_send` tinyint(1) NOT NULL default '0', `allowed_print` tinyint(1) NOT NULL default '0', `allowed_save` tinyint(1) NOT NULL default '0', PRIMARY KEY (`id`)) ENGINE=MyISAM" );
+				$db->sql_query( "CREATE TABLE IF NOT EXISTS `" . $tbhtml . "` (`id` int(11) unsigned NOT NULL, `bodyhtml` longtext NOT NULL, `sourcetext` varchar(255) NOT NULL default '', `imgposition` tinyint(1) NOT NULL default '1', `copyright` tinyint(1) NOT NULL default '0', `allowed_send` tinyint(1) NOT NULL default '0', `allowed_print` tinyint(1) NOT NULL default '0', `allowed_save` tinyint(1) NOT NULL default '0', `gid` mediumint(9) NOT NULL DEFAULT '0', PRIMARY KEY (`id`)) ENGINE=MyISAM" );
 
 				$ct_query[] = ( int )$db->sql_query( "INSERT INTO `" . $tbhtml . "` VALUES
 					(" . $rowcontent['id'] . ",
@@ -504,8 +507,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					 " . intval( $rowcontent['copyright'] ) . ",
 					 " . intval( $rowcontent['allowed_send'] ) . ",
 					 " . intval( $rowcontent['allowed_print'] ) . ",
-					 " . intval( $rowcontent['allowed_save'] ) . "
-					)" );
+					 " . intval( $rowcontent['allowed_save'] ) . ", 
+					 " . intval( $rowcontent['gid'] ) . "
+					 )" );
 
 				foreach( $catids as $catid )
 				{
@@ -579,7 +583,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					`copyright`=" . intval( $rowcontent['copyright'] ) . ",
 					`allowed_send`=" . intval( $rowcontent['allowed_send'] ) . ",
 					`allowed_print`=" . intval( $rowcontent['allowed_print'] ) . ",
-					`allowed_save`=" . intval( $rowcontent['allowed_save'] ) . "
+					`allowed_save`=" . intval( $rowcontent['allowed_save'] ) . ", 
+					`gid`=" . intval( $rowcontent['gid'] ) . "
 				WHERE `id` =" . $rowcontent['id'] );
 
 				$array_cat_old = explode( ",", $rowcontent_old['listcatid'] );
@@ -705,20 +710,26 @@ if( empty( $array_cat_check_content ) )
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
 	die();
 }
-
 $contents = '';
 $my_head = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.css\" />\n";
 $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css\" rel=\"stylesheet\" />\n";
 $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
+$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.menu.css\" rel=\"stylesheet\" />\n";
+$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.autocomplete.css\" rel=\"stylesheet\" />\n";
 $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css\" rel=\"stylesheet\" />\n";
 
-$my_footer = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.js\"></script>\n";
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
+$my_footer = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.menu.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.autocomplete.min.js\"></script>\n";
 $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>\n";
 $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
+$lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
+$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 155 );
+
 $xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'rowcontent', $rowcontent );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
@@ -886,6 +897,25 @@ if( empty( $rowcontent['alias'] ) )
 $xtpl->assign( 'UPLOADS_DIR_USER', $uploads_dir_user );
 $xtpl->assign( 'UPLOAD_CURRENT', $currentpath );
 
+$sql = "SELECT * FROM `" . $db_config['prefix'] . "_googleplus` ORDER BY `weight` ASC";
+$result = $db->sql_query( $sql );
+if( $db->sql_numrows( $result ) )
+{
+	$array_googleplus = array();
+	$array_googleplus[] = array( 'gid' => - 1, 'title' => $lang_module['googleplus_1'] );
+	$array_googleplus[] = array( 'gid' => 0, 'title' => $lang_module['googleplus_0'] );
+	while( $row = $db->sql_fetch_assoc( $result ) )
+	{
+		$array_googleplus[] = $row;
+	}
+	foreach( $array_googleplus as $grow )
+	{
+		$grow['selected'] = ( $rowcontent['gid'] == $grow['gid'] ) ? " selected=\"selected\"" : "";
+		$xtpl->assign( 'GOOGLEPLUS', $grow );
+		$xtpl->parse( 'main.googleplus.gid' );
+	}
+	$xtpl->parse( 'main.googleplus' );
+}
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );
 

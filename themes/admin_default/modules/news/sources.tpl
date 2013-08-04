@@ -5,7 +5,7 @@
 <br />
 <a id="edit"></a>
 <!-- BEGIN: error -->
-<div class="quote" style="width:780px;">
+<div class="quote">
 	<blockquote class="error">
 		<span>{ERROR}</span>
 	</blockquote>

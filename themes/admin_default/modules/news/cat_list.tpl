@@ -34,7 +34,7 @@
 			</td>
 			<td><a href="{ROW.link}"><strong>{ROW.title}</strong>
 			<!-- BEGIN: numsubcat -->
-			<span style="color:#FF0101;">({NUMSUBCAT})</span>
+			<span class="red">({NUMSUBCAT})</span>
 			<!-- END: numsubcat -->
 			</a></td>
 			<td class="center">

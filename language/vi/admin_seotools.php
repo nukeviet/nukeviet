@@ -66,6 +66,7 @@ $lang_module['Top10'] = 'Top 10 trang của bạn';
 $lang_module['Top50'] = 'Top 50 trang có chứa từ khóa';
 $lang_module['isLocalhost'] = 'Công cụ không hỗ trợ Localhost';
 $lang_module['submit'] = 'Thực hiện';
+$lang_module['weight'] = 'Stt';
 
 $lang_module['online_upd'] = 'Kích hoạt tiện ích đếm số người online';
 $lang_module['robots'] = 'Cấu hình file robots.txt';
@@ -87,6 +88,20 @@ $lang_module['metaTagsContent'] = 'Nội dung';
 $lang_module['global_statistics'] = 'Cấu hình thống kê';
 $lang_module['statistic'] = 'Kích hoạt tiện ích thống kê';
 $lang_module['statistics_timezone'] = 'Múi giờ dùng khi thống kê truy cập';
+
+$lang_module['module'] = 'Module';
+$lang_module['custom_title'] = 'Tên gọi ngoài site';
+
+$lang_module['googleplus'] = 'Xác thực Google+';
+$lang_module['googleplus_page_title'] = 'Cấu hình xác thực Google+ (quyền tác giả)';
+$lang_module['googleplus_list'] = 'Danh sách tài khoản Google+';
+$lang_module['googleplus_module'] = 'Cấu hình tài khoản Google+ mặc định cho module';
+
+$lang_module['googleplus_title'] = 'Tên tài khoản profile Google+';
+$lang_module['googleplus_idprofile'] = 'ID profile Google+';
+$lang_module['googleplus_add'] = 'Thêm mới';
+$lang_module['googleplusNote1'] = 'Việc thiết lập xác minh quyền tác giả sẽ giúp bảo vệ bài viết gốc, tránh tình trạng bài copy TOP cao hơn bài gốc. Việc thiết lập này, sẽ được thiết lập cho toàn module. <br />Nếu trong module có chức năng Cấu hình xác thực Google+, thì chức năng đó được ưu tiên hơn';
+$lang_module['googleplusNote2'] = 'Nếu link Google+ là https://plus.google.com/105065032561530186108 thì chỉ cần nhập 105065032561530186108';
 
 $lang_module['googleAnalyticsSetDomainName_title'] = 'Đặc tính Domain khi khai báo với Google Analytics';
 $lang_module['googleAnalyticsSetDomainName_0'] = 'Domain duy nhất';
@@ -112,8 +127,8 @@ $lang_module['rpc_submit'] = "PING !";
 $lang_module['rpc_linkname'] = "Máy chủ";
 $lang_module['rpc_reruslt'] = "Kết quả";
 $lang_module['rpc_message'] = "Thông tin";
-$lang_module['rpc_ping'] = "PING  khi cập nhật dữ liệu";
-$lang_module['rpc_ping_page'] = "PING  bài viết";
+$lang_module['rpc_ping'] = "PING khi cập nhật dữ liệu";
+$lang_module['rpc_ping_page'] = "PING bài viết";
 $lang_module['rpc_finish'] = "Hoàn thành quá trình PING, bạn có muốn chuyển về trang quản lý bài viết ?";
 
 ?>

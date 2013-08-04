@@ -50,9 +50,9 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
 	  `title` varchar(255) NOT NULL,
 	  `titlesite` varchar(255) NOT NULL,
 	  `alias` varchar(255) NOT NULL DEFAULT '',
-	  `description` varchar(255) NOT NULL,
+	  `description` text NOT NULL,
 	  `image` varchar(255) NOT NULL DEFAULT '',
-	  `thumbnail` varchar(255) NOT NULL DEFAULT '',
+	  `viewdescription` tinyint(2) NOT NULL DEFAULT '0',
 	  `weight` smallint(4) unsigned NOT NULL DEFAULT '0',
 	  `order` mediumint(8) NOT NULL DEFAULT '0',
 	  `lev` smallint(4) NOT NULL DEFAULT '0',
@@ -194,7 +194,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS `" . $db_config['prefix'] . "
 	  `copyright` tinyint(1) NOT NULL default '0',
 	  `allowed_send` tinyint(1) NOT NULL default '0',
 	  `allowed_print` tinyint(1) NOT NULL default '0',
-	  `allowed_save` tinyint(1) NOT NULL default '0',	  
+	  `allowed_save` tinyint(1) NOT NULL default '0',
+	  `gid` mediumint(8) NOT NULL default '0',
 	  PRIMARY KEY  (`id`)
 	) ENGINE=MyISAM";
 

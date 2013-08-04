@@ -48,6 +48,7 @@ function nv_site_mods()
 				'submenu' => intval( $row['submenu'] ),
 				'act' => intval( $row['act'] ),
 				'admins' => $row['admins'],
+				'gid' => $row['gid'],
 				'rss' => $row['rss']
 			);
 		}

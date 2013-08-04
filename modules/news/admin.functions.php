@@ -47,27 +47,11 @@ require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/global.functions.php"
 
 global $global_array_cat;
 $global_array_cat = array();
-$sql = "SELECT catid, parentid, title, titlesite, alias, lev, viewcat,numsubcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
+$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
 $result = $db->sql_query( $sql );
-while( list( $catid_i, $parentid_i, $title_i, $titlesite_i, $alias_i, $lev_i, $viewcat_i, $numsubcat_i, $subcatid_i, $numlinks_i, $description_i, $inhome_i, $keywords_i, $who_view_i, $groups_view_i ) = $db->sql_fetchrow( $result ) )
+while( $row = $db->sql_fetch_assoc( $result ) )
 {
-	$global_array_cat[$catid_i] = array(
-		"catid" => $catid_i,
-		"parentid" => $parentid_i,
-		"title" => $title_i,
-		"titlesite" => $titlesite_i,
-		"alias" => $alias_i,
-		"numsubcat" => $numsubcat_i,
-		"lev" => $lev_i,
-		"viewcat" => $viewcat_i,
-		"subcatid" => $subcatid_i,
-		"numlinks" => $numlinks_i,
-		"description" => $description_i,
-		"inhome" => $inhome_i,
-		"keywords" => $keywords_i,
-		"who_view" => $who_view_i,
-		"groups_view" => $groups_view_i
-	);
+	$global_array_cat[$row['catid']] = $row;
 }
 
 /**

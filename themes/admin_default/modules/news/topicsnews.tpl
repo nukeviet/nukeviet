@@ -26,7 +26,7 @@
 	</table>
 	<!-- END: data -->
 	<!-- BEGIN: empty -->
-	<div class="quote" style="width:98%">
+	<div class="quote">
 		<blockquote>
 			<span>{LANG.topic_nonews}</span>
 		</blockquote>

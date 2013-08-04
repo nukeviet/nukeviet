@@ -435,6 +435,18 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_upload_file` (
 	KEY `type` (`type`)
 ) ENGINE=MyISAM";
 
+$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_googleplus` (
+	`gid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	`title` varchar(255) NOT NULL DEFAULT '',
+	`idprofile` varchar(25) NOT NULL DEFAULT '',
+	`weight` mediumint(8) unsigned NOT NULL DEFAULT '0',
+	`add_time` int(11) unsigned NOT NULL DEFAULT '0',
+	`edit_time` int(11) unsigned NOT NULL DEFAULT '0',
+	PRIMARY KEY (`gid`),
+	UNIQUE KEY `idprofile` (`idprofile`)
+) ENGINE=MyISAM";    
+
+
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
 	('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462),
 	('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . "),

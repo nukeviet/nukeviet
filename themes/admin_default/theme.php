@@ -44,27 +44,30 @@ function nv_get_submenu_mod( $module_name )
 	global $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config;
 
 	$submenu = array( );
-	$module_info = $site_mods[$module_name];
-	$module_file = $module_info['module_file'];
-	$module_data = $module_info['module_data'];
-	if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin.menu.php" ) )
+	if( isset( $site_mods[$module_name] ) )
 	{
-		//ket noi voi file ngon ngu cua module
-		if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php" ) )
+		$module_info = $site_mods[$module_name];
+		$module_file = $module_info['module_file'];
+		$module_data = $module_info['module_data'];
+		if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin.menu.php" ) )
 		{
-			include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php");
+			//ket noi voi file ngon ngu cua module
+			if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php" ) )
+			{
+				include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php");
+			}
+			elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php" ) )
+			{
+				include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php");
+			}
+			elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php" ) )
+			{
+				include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php");
+			}
+	
+			include (NV_ROOTDIR . "/modules/" . $module_file . "/admin.menu.php");
+			unset( $lang_module );
 		}
-		elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php" ) )
-		{
-			include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php");
-		}
-		elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php" ) )
-		{
-			include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php");
-		}
-
-		include (NV_ROOTDIR . "/modules/" . $module_file . "/admin.menu.php");
-		unset( $lang_module );
 	}
 	return $submenu;
 }

@@ -46,6 +46,7 @@ function nv_site_mods()
 					'submenu' => $row['submenu'],
 					'is_modadmin' => false,
 					'rss' => $row['rss'],
+					'gid' => $row['gid'],
 					'funcs' => array()
 				);
 			}
