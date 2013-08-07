@@ -9,6 +9,16 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
+//Open Graph protocol
+$meta_ogp = array(
+	'title' => '',
+	'type' => '',
+	'description' => '',
+	'site_name' => '',
+	'image' => '',
+	'url' => ''
+);
+
 /**
  * nv_site_mods()
  *
@@ -402,7 +412,7 @@ function nv_blocks_content( $sitecontent )
  */
 function nv_html_meta_tags( $html5 = false )
 {
-	global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
+	global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_ogp;
 
 	$return = '';
 	$self_close = ($html5) ? '' : ' /';
@@ -507,6 +517,23 @@ function nv_html_meta_tags( $html5 = false )
 		if( substr( $canonicalUrl, 0, 1 ) != "/" ) $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
 
 		$canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
+	}
+	
+	//Open Graph protocol http://ogp.me
+	if( $global_config['metaTagsOgp'] )
+	{
+		if( empty( $meta_ogp['title'] ) ) $meta_ogp['title'] = $page_title;
+		if( empty( $meta_ogp['description'] ) ) $meta_ogp['description'] = $site_description;
+		if( empty( $meta_ogp['type'] ) ) $meta_ogp['type'] = 'WebPage';
+		if( empty( $meta_ogp['url'] ) ) $meta_ogp['url'] = $canonicalUrl;
+		$meta_ogp['site_name'] = $global_config['site_name'];
+		foreach( $meta_ogp as $key => $value )
+		{
+			if( ! empty( $value ) )
+			{
+				$return .= "<meta property=\"og:" . $key . "\" content=\"" . $value . "\"" . $self_close . ">\n";
+			}
+		}
 	}
 
 	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\"" . $self_close . ">\n";

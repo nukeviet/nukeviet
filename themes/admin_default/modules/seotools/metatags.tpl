@@ -8,6 +8,11 @@
 				<td>{LANG.metaTagsContent} (**)</td>
 			</tr>
 		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="3" class="center"><input type="submit" name="submit" value="{LANG.submit}" /></td>
+			</tr>
+		</tfoot>
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
@@ -20,6 +25,10 @@
 				<td><input class="w400" type="text" value="{DATA.content}" name="metaContents[]" /></td>
 			</tr>
 			<!-- END: loop -->
+			<tr>
+				<td colspan="2" class="right">{LANG.metaTagsOgp}</td>
+				<td><input type="checkbox" value="1" name="metaTagsOgp" {METATAGSOGPCHECKED}/></td>
+			</tr>
 		</tbody>
 	</table>
 	<div style="margin: 10px auto;">
@@ -28,8 +37,8 @@
 	<div style="margin: 10px auto;">
 		**: {VARS}
 	</div>
-	<div style="width: 200px; margin: 10px auto; text-align: center;">
-		<input type="submit" name="submit" value="{LANG.submit}" />
+	<div style="margin: 10px auto;">
+		***: {LANG.metaTagsOgpNote}
 	</div>
 </form>
 <!-- END: main -->
