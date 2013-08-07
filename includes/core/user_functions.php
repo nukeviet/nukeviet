@@ -400,12 +400,12 @@ function nv_blocks_content( $sitecontent )
  *
  * @return
  */
-function nv_html_meta_tags()
+function nv_html_meta_tags( $html5 = false )
 {
 	global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
 
 	$return = '';
-	
+	$self_close = ($html5) ? '' : ' /';
 	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
 	if ( empty( $site_description ) )
     {
@@ -416,22 +416,34 @@ function nv_html_meta_tags()
         $ds[] = $client_info['selfurl'];
         $site_description = implode( " - ", $ds );
     }
-    $return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\" />\n";
+	$return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\"" . $self_close . ">\n";
 
 	$kw = array();
-	if( ! empty( $key_words ) ) $kw[] = $key_words;
-	if( ! empty( $module_info['keywords'] ) ) $kw[] = $module_info['keywords'];
-	if( ! empty( $global_config['site_keywords'] ) ) $kw[] = $global_config['site_keywords'];
+	if( ! empty( $key_words ) ) 
+	{
+		$kw[] = $key_words;
+	}
+	elseif( ! empty( $module_info['keywords'] ) )
+	{
+		$kw[] = $module_info['keywords'];
+	}
+	
+	if( $home AND ! empty( $global_config['site_keywords'] ) )
+	{
+		$kw[] = $global_config['site_keywords'];
+	}
+	
 	if( ! empty( $kw ) )
 	{
-		$kw = array_unique( $kw );
-		$kw = implode( ",", $kw );
-		$kw = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ", ", ", " ), $kw );
-		$key_words = nv_strtolower( strip_tags( $kw ) );
-		$return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />\n";
+		$kw = array_slice( array_unique( $kw ) , 0, 10);
+		$key_words = implode( ",", $kw );
+		$key_words = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ", ", ", " ), $key_words );
+		$key_words = nv_strtolower( strip_tags( $key_words ) );
+		$return .= "<meta name=\"keywords\" content=\"" . $key_words . "\"" . $self_close . ">\n";
+		$return .= "<meta name=\"news_keywords\" content=\"" . $key_words . "\"" . $self_close . ">\n";
 	}
 
-	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
+	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\"" . $self_close . ">\n";
 
 	if( $global_config['idsite'] AND file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' ) )
 	{
@@ -464,16 +476,16 @@ function nv_html_meta_tags()
 			{
 				if( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
 				{
-					$return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\" />\n";
+					$return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\"" . $self_close . ">\n";
 				}
 			}
 		}
 	}
 
-	$return .= "<meta name=\"generator\" content=\"NukeViet v3.x\" />\n";
+	$return .= "<meta name=\"generator\" content=\"NukeViet v3.x\"" . $self_close . ">\n";
 	if( defined( 'NV_IS_ADMIN' ) )
 	{
-		$return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\" />\n";
+		$return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\"" . $self_close . ">\n";
 	}
 
 	if( empty( $canonicalUrl ) ) $canonicalUrl = $client_info['selfurl'];
@@ -485,97 +497,8 @@ function nv_html_meta_tags()
 		$canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
 	}
 
-	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\" />\n";
+	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\"" . $self_close . ">\n";
 	return $return;
-}
-
-/**
- * nv_html5_meta_tags()
- *
- * @return
- */
-function nv_html5_meta_tags()
-{
-    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
-
-    $return = '';
-
-    $site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
-    if ( empty( $site_description ) )
-    {
-        $ds = array();
-        if ( ! empty( $page_title ) ) $ds[] = $page_title;
-        if ( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
-        $ds[] = $module_info['custom_title'];
-        $ds[] = $client_info['selfurl'];
-        $site_description = implode( " - ", $ds );
-    }
-    $return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\">\n";
-
-    $kw = array();
-    if ( ! empty( $key_words ) ) $kw[] = $key_words;
-    if ( ! empty( $module_info['keywords'] ) ) $kw[] = $module_info['keywords'];
-    if ( ! empty( $global_config['site_keywords'] ) ) $kw[] = $global_config['site_keywords'];
-    if ( ! empty( $kw ) )
-    {
-        $kw = array_unique( $kw );
-        $kw = implode( ",", $kw );
-        $kw = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ",", "," ), $kw );
-        $key_words = nv_strtolower( strip_tags( $kw ) );
-        $return .= "<meta name=\"keywords\" content=\"" . $key_words . "\">\n";
-    }
-
-    $return .= "<meta charset=\"" . $global_config['site_charset'] . "\">\n";
-
-    if ( $global_config['idsite'] and file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' ) )
-    {
-        $mt = file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' );
-        $patters = array();
-        $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
-        $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
-        $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
-        $patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
-        $mt = preg_replace( array_keys( $patters ), array_values( $patters ), $mt );
-        $mt = preg_replace( '/\{(.*)\}/', '', $mt );
-        $mt = simplexml_load_string( $mt );
-        $mt = nv_object2array( $mt );
-
-        if ( $mt['meta_item'] )
-        {
-            if ( isset( $mt['meta_item'][0] ) ) $metatags = $mt['meta_item'];
-            else  $metatags[] = $mt['meta_item'];
-            foreach ( $metatags as $meta )
-            {
-                if ( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
-                {
-                    $return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\">\n";
-                }
-            }
-        }
-    }
-    else
-    {
-        $return .= "<meta name=\"robots\" content=\"index,archive,follow,noodp\">\n";
-        $return .= "<meta name=\"googlebot\" content=\"index,archive,follow,noodp\">\n";
-        $return .= "<meta name=\"author\" content=\"" . $global_config['site_name'] . "\">\n";
-    }
-
-    $return .= "<meta name=\"generator\" content=\"NukeViet v3.x\">\n";
-    if ( defined( 'NV_IS_ADMIN' ) )
-    {
-        $return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\">\n";
-    }
-
-    if ( empty( $canonicalUrl ) ) $canonicalUrl = $client_info['selfurl'];
-
-    if ( substr( $canonicalUrl, 0, 4 ) != "http" )
-    {
-        if ( substr( $canonicalUrl, 0, 1 ) != "/" ) $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
-        $canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
-    }
-
-    $return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\">";
-    return $return;
 }
 
 /**
@@ -609,13 +532,14 @@ function nv_html_page_title()
  *
  * @return
  */
-function nv_html_css()
+function nv_html_css( $html5 = false )
 {
 	global $module_info, $module_file;
 
 	if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/css/" . $module_file . ".css" ) )
 	{
-		return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />\n";
+		$self_close = ($html5) ? '' : ' /';
+		return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\"" . $self_close . ">\n";
 	}
 
 	return "";
@@ -626,16 +550,17 @@ function nv_html_css()
  *
  * @return
  */
-function nv_html_site_rss()
+function nv_html_site_rss( $html5 = false )
 {
 	global $rss;
 
 	$return = '';
 	if( ! empty( $rss ) )
 	{
+		$self_close = ($html5) ? '' : ' /';
 		foreach( $rss as $rss_item )
 		{
-			$return .= "<link rel=\"alternate\" href=\"" . $rss_item['src'] . "\" title=\"" . strip_tags( $rss_item['title'] ) . "\" type=\"application/rss+xml\" />\n";
+			$return .= "<link rel=\"alternate\" href=\"" . $rss_item['src'] . "\" title=\"" . strip_tags( $rss_item['title'] ) . "\" type=\"application/rss+xml\"" . $self_close . ">\n";
 		}
 	}
 
@@ -647,9 +572,11 @@ function nv_html_site_rss()
  *
  * @return
  */
-function nv_html_site_js()
+function nv_html_site_js( $html5 = false )
 {
 	global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info;
+	
+	$self_close = ($html5) ? '' : ' /';
 
 	$return = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n";
@@ -673,7 +600,7 @@ function nv_html_site_js()
 	{
 		if( ! defined( 'SHADOWBOX' ) )
 		{
-			$return .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+			$return .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\"" . $self_close . ">\n";
 			$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 			$return .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
 			define( 'SHADOWBOX', true );
@@ -762,7 +689,7 @@ function nv_html_site_js()
  *
  * @return
  */
-function nv_admin_menu()
+function nv_admin_menu( $html5 = false )
 {
 	global $lang_global, $admin_info, $module_info, $module_name, $db, $my_head;
 
@@ -779,7 +706,9 @@ function nv_admin_menu()
 	{
 		if( ! defined( 'SHADOWBOX' ) )
 		{
-			$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+			$self_close = ($html5) ? '' : ' /';
+
+			$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\"" . $self_close . ">\n";
 			$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 			$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
 			define( 'SHADOWBOX', true );
