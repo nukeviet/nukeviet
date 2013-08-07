@@ -42,9 +42,9 @@ if( $all_page )
 		$cts['max'] = $max;
 		$cts['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page );
 	}
-	if( $pages > 1)
+	if( $page > 1)
 	{
-		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $pages;
+		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 	}
 }
 
