@@ -7,19 +7,19 @@
 	<!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title>{NV_SITE_TITLE}</title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width">
-		<meta name="author" content="{NV_SITE_COPYRIGHT}" />
-		<meta name="generator" content="{NV_SITE_NAME}" />
-		<meta name="robots" content="noindex, nofollow" />
+		<meta name="author" content="{NV_SITE_COPYRIGHT}">
+		<meta name="generator" content="{NV_SITE_NAME}">
+		<meta name="robots" content="noindex, nofollow">
 
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/normalize.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/main.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu.css">
 
 		<!-- BEGIN: css_module -->
-		<link rel="stylesheet" href="{NV_CSS_MODULE_THEME}" type="text/css" />
+		<link rel="stylesheet" href="{NV_CSS_MODULE_THEME}" type="text/css">
 		<!-- END: css_module -->
 
 		<script type="text/javascript" src="{NV_BASE_SITEURL}js/modernizr-2.6.2.min.js"></script>

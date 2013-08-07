@@ -1,6 +1,5 @@
 <!-- BEGIN: main -->
 {FILE "header.tpl"}
-<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu.css"/>
 <div id="wrapper">
 	<header id="header">
 		<div class="logo">

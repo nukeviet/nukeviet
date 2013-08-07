@@ -7,8 +7,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_get_submenu( $mod )
 {
@@ -108,7 +107,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	}
 
 	$global_config['site_name'] = empty( $global_config['site_name'] ) ? NV_SERVER_NAME : $global_config['site_name'];
-
+	
 	$xtpl = new XTemplate( $file_name_tpl, $dir_template );
 	$xtpl->assign( 'NV_SITE_COPYRIGHT', $global_config['site_name'] . " [" . $global_config['site_email'] . "] " );
 	$xtpl->assign( 'NV_SITE_NAME', $global_config['site_name'] );

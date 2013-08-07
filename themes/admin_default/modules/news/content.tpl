@@ -28,7 +28,7 @@
 							<td class="top">
 							<div style="padding:4px; height:130px;background:#FFFFFF; overflow:auto; border: 1px solid #CCCCCC">
 								<table class="tab1">
-									<col span="2" width="50%" />
+									<col span="2" style="width:50%">
 									<tbody>
 										<!-- BEGIN: catid -->
 										<tr>
