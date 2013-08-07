@@ -9,7 +9,6 @@
 
 if( ! defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
 
-//===========
 $page_title = $lang_module['bot'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['bot'];
@@ -18,7 +17,6 @@ $sql = "SELECT COUNT(*), MAX(`c_count`) FROM `" . NV_COUNTER_TABLE . "` WHERE `c
 $result = $db->sql_query( $sql );
 list( $all_page, $max ) = $db->sql_fetchrow( $result );
 
-//==========
 if( $all_page )
 {
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
@@ -43,9 +41,12 @@ if( $all_page )
 		$cts['max'] = $max;
 		$cts['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page );
 	}
+	if( $pages > 1)
+	{
+		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $pages;
+	}
 }
 
-//========
 $contents = call_user_func( "allbots" );
 
 include ( NV_ROOTDIR . '/includes/header.php' );

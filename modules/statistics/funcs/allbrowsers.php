@@ -41,6 +41,10 @@ if( $all_page )
 		$cts['max'] = $max;
 		$cts['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page );
 	}
+	if( $pages > 1)
+	{
+		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $pages;
+	}	
 }
 
 $contents = call_user_func( "allbrowsers" );
