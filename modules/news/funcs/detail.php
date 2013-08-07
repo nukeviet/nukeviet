@@ -96,7 +96,7 @@ if( $allowed )
 				if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] ) )
 				{
 					$news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
-					$meta_ogp['image'] = NV_MY_DOMAIN.$news_contents['homeimgfile'];
+					$meta_ogp['image'] = NV_MY_DOMAIN . $news_contents['homeimgfile'];
 				}
 				$news_contents['image'] = array(
 					"src" => $src,

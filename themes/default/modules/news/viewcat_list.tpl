@@ -1,11 +1,17 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: viewdescription -->
+<div class="news_column">
+	<div class="items clearfix">
+		<h1>{CONTENT.title}</h1>
+		<!-- BEGIN: image -->
+		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" />
+		<!-- END: image -->
+		<h2>{CONTENT.description}</h2>
+	</div>
+</div>
+<!-- END: viewdescription -->
 <table class="table-list-news">
 	<tbody>
-		<!-- BEGIN: cattitle -->
-		<tr>
-			<th colspan="2"><a title="{CAT.title}" href="{CAT.link}">{CAT.title}</a></th>
-		</tr>
-		<!-- END: cattitle -->
 		<!-- BEGIN: viewcatloop -->
 		<tr>
 			<td> {NUMBER} </td>

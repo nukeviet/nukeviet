@@ -1,8 +1,16 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: viewdescription -->
+<div class="news_column">
+	<div class="items clearfix">
+		<h1>{CONTENT.title}</h1>
+		<!-- BEGIN: image -->
+		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" />
+		<!-- END: image -->
+		<h2>{CONTENT.description}</h2>
+	</div>
+</div>
+<!-- END: viewdescription -->
 <div class="news_grid">
-	<!-- BEGIN: cattitle -->
-	<h3 class="cat"><a title="{CAT.title}" href="{CAT.link}">{CAT.title}</a></h3>
-	<!-- END: cattitle -->
 	<!-- BEGIN: viewcatloop -->
 	<div class="item fl" style="width: 33%">
 		<div class="item_content">

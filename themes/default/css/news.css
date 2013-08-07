@@ -90,6 +90,12 @@ div.news_column div.border_l {
 	border-left: 1px dotted #ccc
 }
 
+div.news_column div.items h1 {
+	color: #666;
+	font-size: 16px;
+	padding: 4px 0
+}
+
 div.news_column div.items h3 a {
 	color: #0e73e6;
 	font-weight: bold
@@ -571,8 +577,8 @@ a.more {
 	border-bottom: 1px solid #e5e5e5
 }
 
-.table-list-news tbody tr:nth-child ( even ) td {
-	background: #e5ecf9
+table.table-list-news tbody tr:nth-child(even) {
+	background-color: #e5ecf9
 }
 
 .table-list-news td {

@@ -122,3 +122,12 @@
 	font-weight: bold;
 	margin-bottom: .5em
 }
+
+.listz-news h1 {
+	font-size: 2em;
+	font-weight: bold;
+}
+.listz-news h2 {
+	font-size: 1.1em;
+	font-weight: bold;
+}
