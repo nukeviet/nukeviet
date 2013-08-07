@@ -171,10 +171,15 @@ if( empty( $key ) )
 }
 else
 {
-	$page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_module['search_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
+	$page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_module['search_title'];
+	if( $pages > 1)
+	{
+		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $pages;
+	}
+	$page_title .=' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 }
 
-$key_words = $module_info['keywords'];
+$key_words = $description = 'no';
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
 include ( NV_ROOTDIR . '/includes/header.php' );

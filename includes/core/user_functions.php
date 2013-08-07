@@ -407,6 +407,7 @@ function nv_html_meta_tags( $html5 = false )
 	$return = '';
 	$self_close = ($html5) ? '' : ' /';
 	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
+	
 	if ( empty( $site_description ) )
     {
         $ds = array();
@@ -416,12 +417,23 @@ function nv_html_meta_tags( $html5 = false )
         $ds[] = $client_info['selfurl'];
         $site_description = implode( " - ", $ds );
     }
-	$return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\"" . $self_close . ">\n";
+	elseif ( $site_description == 'no' )
+	{
+		$site_description = '';
+	}
+	
+	if ( ! empty( $site_description ) )
+	{
+		$return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\"" . $self_close . ">\n";
+	}
 
 	$kw = array();
 	if( ! empty( $key_words ) ) 
 	{
-		$kw[] = $key_words;
+		if ( $key_words != 'no' )
+		{
+			$kw[] = $key_words;
+		}
 	}
 	elseif( ! empty( $module_info['keywords'] ) )
 	{
@@ -435,7 +447,7 @@ function nv_html_meta_tags( $html5 = false )
 	
 	if( ! empty( $kw ) )
 	{
-		$kw = array_slice( array_unique( $kw ) , 0, 10);
+		$kw = array_unique( $kw );
 		$key_words = implode( ",", $kw );
 		$key_words = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ", ", ", " ), $key_words );
 		$key_words = nv_strtolower( strip_tags( $key_words ) );
