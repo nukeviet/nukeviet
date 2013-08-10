@@ -274,6 +274,9 @@ foreach( $arr_module_news as $module_name_i => $arr )
 		$note = $module_version['note'];
 		$author = $module_version['author'];
 		$module_data = preg_replace( '/(\W+)/i', '_', $module_name_i );
+		
+		// Chỉ cho phép ảo hóa module khi virtual = 1, Khi virtual = 2, chỉ đổi được tên các func
+		$module_version['virtual'] = ( $module_version['virtual']==1 ) ? 1 : 0; 
 
 		$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES (" . $db->dbescape( $module_name_i ) . ", " . $db->dbescape( $module_version['is_sysmod'] ) . ", " . $db->dbescape( $module_version['virtual'] ) . ", " . $db->dbescape( $module_name_i ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $mod_version ) . ", '" . NV_CURRENTTIME . "', " . $db->dbescape( $author ) . ", " . $db->dbescape( $note ) . ")" );
 	}

@@ -185,6 +185,17 @@ function nv_change_custom_name_submit(func_id, custom_name_id) {
 	return;
 }
 
+function nv_change_alias(func_id, containerid) {
+	nv_ajax("get", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_alias&id=' + func_id + '&num=' + nv_randomPassword(8), containerid);
+	return;
+}
+
+function nv_change_alias_submit(func_id, custom_name_id) {
+	var new_custom_name = rawurlencode(document.getElementById(custom_name_id).value);
+	nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_alias&id=' + func_id + '&save=1&fun_alias=' + new_custom_name + '&num=' + nv_randomPassword(8), '', 'nv_change_custom_name_res');
+	return;
+}
+
 function nv_change_custom_name_res(res) {
 	var r_split = res.split("|");
 	var sl = document.getElementById('chang_func_in_submenu_' + r_split[1]);

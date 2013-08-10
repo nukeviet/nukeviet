@@ -266,7 +266,7 @@ function nv_setup_data_module( $lang, $module_name )
 				}
 				else
 				{
-					$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `setting`) VALUES (NULL, " . $db->dbescape( $func ) . ", " . $db->dbescape( ucfirst( $func ) ) . ", " . $db->dbescape( $module_name ) . ", " . $show_func . ", 0, " . $weight . ", '')";
+					$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (`func_id`, `func_name`, `alias`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `setting`) VALUES (NULL, " . $db->dbescape( $func ) . ", " . $db->dbescape( $func ) . ", " . $db->dbescape( ucfirst( $func ) ) . ", " . $db->dbescape( $module_name ) . ", " . $show_func . ", 0, " . $weight . ", '')";
 					$arr_func_id[$func] = $db->sql_query_insert_id( $sql );
 				}
 			}
@@ -485,81 +485,6 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 }
 
 /**
- * edit_theme()
- *
- * @param mixed $contents
- * @return
- */
-function edit_theme( $contents )
-{
-	global $global_config, $module_file;
-
-	$xtpl = new XTemplate( "edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-	$xtpl->assign( 'CONTENT', $contents );
-
-	if( ! empty( $contents['error'] ) )
-	{
-		$xtpl->parse( 'main.error' );
-	}
-
-	foreach( $contents['theme'][2] as $tm )
-	{
-		$xtpl->assign( 'THEME', array( 'key' => $tm, 'selected' => $tm == $contents['theme'][3] ? " selected=\"selected\"" : "" ) );
-		$xtpl->parse( 'main.theme' );
-	}
-
-	if( ! empty( $contents['mobile'][2] ) )
-	{
-		foreach( $contents['mobile'][2] as $tm )
-		{
-			$xtpl->assign( 'MOBILE', array( 'key' => $tm, 'selected' => $tm == $contents['mobile'][3] ? " selected=\"selected\"" : "" ) );
-			$xtpl->parse( 'main.mobile.loop' );
-		}
-
-		$xtpl->parse( 'main.mobile' );
-	}
-
-	if( isset( $contents['who_view'] ) )
-	{
-		foreach( $contents['who_view'][1] as $k => $w )
-		{
-			$xtpl->assign( 'WHO_VIEW', array(
-				'key' => $k,
-				'selected' => $k == $contents['who_view'][2] ? " selected=\"selected\"" : "",
-				'title' => $w
-			) );
-			$xtpl->parse( 'main.who_view.loop' );
-		}
-
-		$xtpl->assign( 'DISPLAY', $contents['who_view'][2] == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" );
-
-		foreach( $contents['groups_view'][1] as $group_id => $grtl )
-		{
-			$xtpl->assign( 'GROUPS_VIEW', array(
-				'key' => $group_id,
-				'checked' => in_array( $group_id, $contents['groups_view'][2] ) ? " checked=\"checked\"" : "",
-				'title' => $grtl
-			) );
-
-			$xtpl->parse( 'main.who_view.groups_view' );
-		}
-
-		$xtpl->parse( 'main.who_view' );
-	}
-
-	$xtpl->assign( 'ACTIVE', ( $contents['act'][1] == 1 ) ? ' checked="checked"' : '' );
-
-	if( isset( $contents['rss'] ) )
-	{
-		$xtpl->assign( 'RSS', ( $contents['rss'][1] == 1 ) ? ' checked="checked"' : '' );
-		$xtpl->parse( 'main.rss' );
-	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-/**
  * show_funcs_theme()
  *
  * @param mixed $contents
@@ -583,54 +508,6 @@ function show_funcs_theme( $contents )
 	{
 		$xtpl->parse( 'main.ajax1' );
 		$xtpl->parse( 'main.loading1' );
-	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-/**
- * aj_show_funcs_theme()
- *
- * @param mixed $contents
- * @return
- */
-function aj_show_funcs_theme( $contents )
-{
-	global $global_config, $module_file;
-
-	$xtpl = new XTemplate( "aj_show_funcs_theme.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-	$xtpl->assign( 'CONTENT', $contents );
-
-	foreach( $contents['thead'] as $key => $thead )
-	{
-		$xtpl->assign( 'THEAD', $thead );
-		$xtpl->parse( 'main.thead' );
-	}
-
-	if( isset( $contents['rows'] ) )
-	{
-		$a = 0;
-		foreach( $contents['rows'] as $id => $values )
-		{
-			$xtpl->assign( 'ROW', array(
-				'id' => $id,
-				'js_onchange' => $values['weight'][1],
-				'in_submenu_click' => $values['in_submenu'][1],
-				'in_submenu_checked' => $values['in_submenu'][0] ? " checked=\"checked\"" : "",
-				'disabled' => $values['disabled'],
-				'name' => $values['name'],
-				'layout' => $values['layout']
-			) );
-
-			foreach( $contents['weight_list'] as $new_weight )
-			{
-				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) );
-				$xtpl->parse( 'main.loop.weight' );
-			}
-
-			$xtpl->parse( 'main.loop' );
-		}
 	}
 
 	$xtpl->parse( 'main' );

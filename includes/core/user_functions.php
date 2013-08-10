@@ -40,6 +40,8 @@ function nv_site_mods()
 		while( $row = $db->sql_fetch_assoc( $result ) )
 		{
 			$m_title = $db->unfixdb( $row['title'] );
+			$f_name = $db->unfixdb( $row['func_name'] );
+			$f_alias = $db->unfixdb( $row['alias'] );
 			if( ! isset( $site_mods[$m_title] ) )
 			{
 				$site_mods[$m_title] = array(
@@ -60,12 +62,14 @@ function nv_site_mods()
 					'funcs' => array()
 				);
 			}
-			$site_mods[$m_title]['funcs'][$db->unfixdb( $row['func_name'] )] = array(
+			$site_mods[$m_title]['funcs'][$f_alias] = array(
 				'func_id' => $row['func_id'],
+				'func_name' => $f_name,
 				'show_func' => $row['show_func'],
 				'func_custom_name' => $row['func_custom_name'],
 				'in_submenu' => $row['in_submenu']
 			);
+			$site_mods[$m_title]['alias'][$f_name] = $f_alias;
 		}
 		$cache = serialize( $site_mods );
 		nv_set_cache( $cache_file, $cache );
@@ -417,7 +421,7 @@ function nv_html_meta_tags( $html5 = false )
 	$return = '';
 	$self_close = ($html5) ? '' : ' /';
 	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
-	
+
 	if ( empty( $site_description ) )
     {
         $ds = array();
@@ -431,14 +435,14 @@ function nv_html_meta_tags( $html5 = false )
 	{
 		$site_description = '';
 	}
-	
+
 	if ( ! empty( $site_description ) )
 	{
 		$return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\"" . $self_close . ">\n";
 	}
 
 	$kw = array();
-	if( ! empty( $key_words ) ) 
+	if( ! empty( $key_words ) )
 	{
 		if ( $key_words != 'no' )
 		{
@@ -449,12 +453,12 @@ function nv_html_meta_tags( $html5 = false )
 	{
 		$kw[] = $module_info['keywords'];
 	}
-	
+
 	if( $home AND ! empty( $global_config['site_keywords'] ) )
 	{
 		$kw[] = $global_config['site_keywords'];
 	}
-	
+
 	if( ! empty( $kw ) )
 	{
 		$kw = array_unique( $kw );
@@ -518,7 +522,7 @@ function nv_html_meta_tags( $html5 = false )
 
 		$canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
 	}
-	
+
 	//Open Graph protocol http://ogp.me
 	if( $global_config['metaTagsOgp'] )
 	{
@@ -614,7 +618,7 @@ function nv_html_site_rss( $html5 = false )
 function nv_html_site_js( $html5 = false )
 {
 	global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info;
-	
+
 	$self_close = ($html5) ? '' : ' /';
 
 	$return = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>\n";

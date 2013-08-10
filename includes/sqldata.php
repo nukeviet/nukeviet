@@ -92,6 +92,7 @@ function nv_create_table_sys( $lang )
 	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (
 	  `func_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	  `func_name` varchar(55) NOT NULL,
+	  `alias` varchar(55) NOT NULL DEFAULT '',	  
 	  `func_custom_name` varchar(255) NOT NULL,
 	  `in_module` varchar(55) NOT NULL,
 	  `show_func` tinyint(4) NOT NULL DEFAULT '0',
@@ -99,7 +100,8 @@ function nv_create_table_sys( $lang )
 	  `subweight` smallint(2) unsigned NOT NULL DEFAULT '1',
 	  `setting` varchar(255) NOT NULL DEFAULT '',
 	  PRIMARY KEY (`func_id`),
-	  UNIQUE KEY `func_name` (`func_name`,`in_module`)
+	  UNIQUE KEY `func_name` (`func_name`,`in_module`),
+	  UNIQUE KEY `alias` (`alias`,`in_module`)
 	) ENGINE=MyISAM";
 
 	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_searchkeys` (
