@@ -57,6 +57,7 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 	{
 		die( "NO" );
 	}
+	nv_del_moduleCache( 'seotools' );
 	die( "OK" );
 }
 
@@ -120,6 +121,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 				$db->sql_query( $sql );
 			}
 			$db->sql_freeresult();
+			nv_del_moduleCache( 'seotools' );
 			die( "OK" );
 		}
 	}

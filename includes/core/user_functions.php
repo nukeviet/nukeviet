@@ -19,6 +19,9 @@ $meta_ogp = array(
 	'url' => ''
 );
 
+//tài khoản Google+
+$id_profile_googleplus = 0;
+
 /**
  * nv_site_mods()
  *
@@ -416,7 +419,7 @@ function nv_blocks_content( $sitecontent )
  */
 function nv_html_meta_tags( $html5 = false )
 {
-	global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_ogp;
+	global $global_config, $db_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_ogp, $id_profile_googleplus;
 
 	$return = '';
 	$self_close = ($html5) ? '' : ' /';
@@ -537,6 +540,19 @@ function nv_html_meta_tags( $html5 = false )
 			{
 				$return .= "<meta property=\"og:" . $key . "\" content=\"" . $value . "\"" . $self_close . ">\n";
 			}
+		}
+	}
+	//tài khoản Google+
+	if( $id_profile_googleplus == 0 )
+	{
+		$id_profile_googleplus = $module_info['gid'];
+	}
+	if( $id_profile_googleplus > 0 )
+	{
+		$dbgoogleplus = nv_db_cache( 'SELECT `gid`, `idprofile` FROM `' . $db_config['prefix'] . '_googleplus`', 'gid', 'seotools' );
+		if( isset( $dbgoogleplus[$id_profile_googleplus]['idprofile'] ) )
+		{
+			$return .= "<link rel=\"author\" href=\"https://plus.google.com/" . $dbgoogleplus[$id_profile_googleplus]['idprofile'] . "/\"" . $self_close . ">\n";
 		}
 	}
 

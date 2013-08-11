@@ -36,7 +36,7 @@ if( $allowed )
 	$news_contents = $db->sql_fetch_assoc( $query );
 	if( $news_contents['id'] > 0 )
 	{
-		$body_contents = $db->sql_fetch_assoc( $db->sql_query( "SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM `" . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $news_contents['id'] / 2000 ) . "` where `id`=" . $news_contents['id'] ) );
+		$body_contents = $db->sql_fetch_assoc( $db->sql_query( "SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $news_contents['id'] / 2000 ) . "` where `id`=" . $news_contents['id'] ) );
 		$news_contents = array_merge( $news_contents, $body_contents );
 		unset( $body_contents );
 
@@ -243,6 +243,7 @@ if( $allowed )
 	$news_contents['post_name'] = empty( $post_full_name ) ? $post_username : $post_full_name;
 
 	$contents = detail_theme( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable );
+	$id_profile_googleplus = $news_contents['gid'];
 }
 else
 {

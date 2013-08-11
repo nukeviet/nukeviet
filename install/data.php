@@ -8,7 +8,6 @@
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-
 // Ten cac table cua CSDL dung chung cho he thong
 define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
 define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
@@ -66,10 +65,11 @@ $sql_create_table[] = "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "_module`
 	(3, 'settings', 'mod_settings', 3, 1, 1, 0, ''),
 	(4, 'database', 'mod_database', 4, 1, 0, 0, ''),
 	(5, 'webtools', 'mod_webtools', 5, 1, 0, 0, ''),
-	(6, 'language', 'mod_language', 6, 1, 1, 0, ''),
-	(7, 'modules', 'mod_modules', 7, 1, 1, 0, ''),
-	(8, 'themes', 'mod_themes', 8, 1, 1, 0, ''),
-	(9, 'upload', 'mod_upload', 9, 1, 1, 1, '')";
+	(6, 'seotools', 'mod_seotools', 6, 1, 0, 0, ''),
+	(7, 'language', 'mod_language', 7, 1, 1, 0, ''),
+	(8, 'modules', 'mod_modules', 8, 1, 1, 0, ''),
+	(9, 'themes', 'mod_themes', 9, 1, 1, 0, ''),
+	(10, 'upload', 'mod_upload', 10, 1, 1, 1, '')";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_config` (
 	`config` varchar(100) NOT NULL,
@@ -444,7 +444,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_googleplus` (
 	`edit_time` int(11) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (`gid`),
 	UNIQUE KEY `idprofile` (`idprofile`)
-) ENGINE=MyISAM";    
+) ENGINE=MyISAM";
 
 
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES

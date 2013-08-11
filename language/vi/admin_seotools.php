@@ -103,7 +103,7 @@ $lang_module['googleplus_title'] = 'Tên tài khoản profile Google+';
 $lang_module['googleplus_idprofile'] = 'ID profile Google+';
 $lang_module['googleplus_add'] = 'Thêm mới';
 $lang_module['googleplusNote1'] = 'Việc thiết lập xác minh quyền tác giả sẽ giúp bảo vệ bài viết gốc, tránh tình trạng bài copy TOP cao hơn bài gốc. Việc thiết lập này, sẽ được thiết lập cho toàn module. <br />Nếu trong module có chức năng Cấu hình xác thực Google+, thì chức năng đó được ưu tiên hơn';
-$lang_module['googleplusNote2'] = 'Nếu link Google+ là https://plus.google.com/105065032561530186108 thì chỉ cần nhập 105065032561530186108';
+$lang_module['googleplusNote2'] = 'Nếu link Google+ là https://plus.google.com/105065032561530186108 thì ID profile Google+ chỉ cần nhập 105065032561530186108';
 
 $lang_module['googleAnalyticsSetDomainName_title'] = 'Đặc tính Domain khi khai báo với Google Analytics';
 $lang_module['googleAnalyticsSetDomainName_0'] = 'Domain duy nhất';
