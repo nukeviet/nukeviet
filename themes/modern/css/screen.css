@@ -321,7 +321,7 @@ a.rss {
 	margin: 0 5px
 }
 
-.cat-nav a.current-cat {
+.cat-nav a.current-cat, h1.current-cat {
 	background: url(../images/arrow-red2.gif) right 3px no-repeat;
 	color: #b93d00;
 	font-size: 1.1em;

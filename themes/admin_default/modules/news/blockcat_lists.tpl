@@ -25,7 +25,7 @@
 				<!-- END: weight -->
 			</select></td>
 			<td class="center"><b>{ROW.bid}</b></td>
-			<td><a href="{ROW.link}">{ROW.title}</a>{ROW.numnews}</td>
+			<td><a href="{ROW.link}">{ROW.title}</a> (<a href="{ROW.linksite}">{ROW.numnews} {LANG.topic_num_news}</a>)</td>
 			<td class="center">
 			<select id="id_adddefault_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','adddefault');">
 				<!-- BEGIN: adddefault -->

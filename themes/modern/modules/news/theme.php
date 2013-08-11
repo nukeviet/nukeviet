@@ -26,7 +26,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 		}
 		$xtpl->parse( 'main.viewdescription' );
 	}
-	
+
 	if( ! empty( $catid ) )
 	{
 		$xtpl->assign( 'CAT', $global_array_cat[$catid] );
@@ -270,7 +270,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 	{
 		if( isset( $array_cat[$key]['content'] ) )
 		{
-			$array_row_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_row_i['alias'] . "";
+			$array_row_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_row_i['alias'] . "";
 			$xtpl->assign( 'CAT', $array_row_i );
 			$catid = intval( $array_row_i['catid'] );
 
@@ -434,7 +434,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 
 		if( $number_content > 0 )
 		{
-			$array_catpage_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_catpage_i['alias'] . "";
+			$array_catpage_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_catpage_i['alias'] . "";
 
 			$xtpl->assign( 'CAT', $array_catpage_i );
 			$xtpl->assign( 'ID', ( $a + 1 ) );
@@ -734,7 +734,6 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 	$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TOPPIC_TITLE', $page_title );
-	$xtpl->assign( 'TOPPIC_LINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias );
 	if( ! empty( $description ) )
 	{
 		$xtpl->assign( 'TOPPIC_DESCRIPTION', $description );

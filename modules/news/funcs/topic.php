@@ -19,7 +19,7 @@ if( $topicid > 0 )
 	$array_mod_title[] = array(
 		'catid' => 0,
 		'title' => $page_title,
-		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias
+		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['topic'] . "/" . $topicalias
 	);
 
 	$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = '" . $topicid . "' ORDER BY `publtime` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page );
@@ -50,8 +50,8 @@ if( $topicid > 0 )
 		}
 		else
 		{
-			$item['imghome'] = '';				
-		}		
+			$item['imghome'] = '';
+		}
 		$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
 		$item['width'] = $module_config[$module_name]['homewidth'];
 
@@ -74,7 +74,7 @@ if( $topicid > 0 )
 
 	unset( $query, $row, $arr_listcatid );
 
-	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias;
+	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['topic'] . "/" . $topicalias;
 	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 	$contents = topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description );
 

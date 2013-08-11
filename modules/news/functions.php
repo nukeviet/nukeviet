@@ -55,7 +55,7 @@ if( $module_info['rss'] )
 {
 	$rss[] = array(
 		'title' => $module_info['custom_title'],
-		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss"
+		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss']
 	);
 }
 
@@ -91,7 +91,7 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 	{
 		$rss[] = array(
 			'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'],
-			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $array_cat_i['alias']
+			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_cat_i['alias']
 		);
 	}
 }

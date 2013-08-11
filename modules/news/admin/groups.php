@@ -75,7 +75,7 @@ if( $bid > 0 )
 	$lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
 }
 
-$xtpl = new XTemplate( "blockcat.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( "groups.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="cat-nav" style="border:1px solid #ccc;padding:4px;">
-	<a href="{TOPPIC_LINK}" class="current-cat" title="{TOPPIC_TITLE}">{TOPPIC_TITLE}</a>
+	<h1 class="current-cat">{TOPPIC_TITLE}</h1>
 </div>
 <!-- BEGIN: topicdescription -->
 <div style="border:1px solid #ccc;border-top:none;padding:4px;">

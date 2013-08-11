@@ -156,7 +156,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				$array_op = explode( "/", $op );
 				$op = ( isset( $module_info['funcs'][$array_op[0]] ) ) ? $array_op[0] : 'main';
 			}
-			$op_file = $module_info['funcs'][$op]['func_name'];
+			$op_file = $op;
 
 			// Xac dinh quyen dieu hanh module
 			if( $module_info['is_modadmin'] )
@@ -283,6 +283,9 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			{
 				require ( NV_ROOTDIR . "/modules/" . $module_file . "/functions.php" );
 			}
+
+			// Xac dinh op file
+			$op_file = $module_info['funcs'][$op]['func_name'];
 
 			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php" ) )
 			{

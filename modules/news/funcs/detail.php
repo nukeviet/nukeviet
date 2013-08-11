@@ -177,7 +177,7 @@ if( $allowed )
 		$topic = $db->sql_query( "SELECT `id`, `catid`, `title`, `alias`,`publtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = '" . $news_contents['topicid'] . "' AND `id` != " . $id . " ORDER BY `id` DESC  LIMIT 0, " . $st_links . "" );
 		while( $row = $db->sql_fetch_assoc( $topic ) )
 		{
-			$topiclink = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topic_alias;
+			$topiclink = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['topic'] . "/" . $topic_alias;
 			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
 			$topic_array[] = array(
 				"title" => $row['title'],

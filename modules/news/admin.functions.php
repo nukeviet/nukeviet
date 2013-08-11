@@ -441,7 +441,7 @@ function nv_show_cat_list( $parentid = 0 )
  */
 function nv_show_topics_list()
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $global_config, $module_file;
+	global $db, $lang_module, $lang_global, $module_name, $module_data, $global_config, $module_file, $module_info;
 
 	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` ORDER BY `weight` ASC";
 	$result = $db->sql_query( $sql );
@@ -462,7 +462,8 @@ function nv_show_topics_list()
 				"description" => $row['description'],
 				"title" => $row['title'],
 				"link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topicsnews&amp;topicid=" . $row['topicid'],
-				"numnews" => $numnews ? " (" . $numnews . " " . $lang_module['topic_num_news'] . ")" : "",
+				"linksite" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['topic'] . "/" . $row['alias'],
+				"numnews" => $numnews,
 				"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topics&amp;topicid=" . $row['topicid'] . "#edit"
 			) );
 
@@ -497,7 +498,7 @@ function nv_show_topics_list()
  */
 function nv_show_block_cat_list()
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config;
+	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
 
 	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
 	$result = $db->sql_query( $sql );
@@ -518,8 +519,9 @@ function nv_show_block_cat_list()
 			$xtpl->assign( 'ROW', array(
 				"bid" => $row['bid'],
 				"title" => $row['title'],
-				"numnews" => $numnews ? " (" . $numnews . " " . $lang_module['topic_num_news'] . ")" : "",
+				"numnews" => $numnews,
 				"link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=block&amp;bid=" . $row['bid'],
+				"linksite" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['groups'] . "/" . $row['alias'],
 				"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $row['bid'] . "#edit"
 			) );
 

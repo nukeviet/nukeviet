@@ -16,25 +16,25 @@ if( ! function_exists('nv_news_array_cat_admin') )
 	 *
 	 * @return
 	 */
-	function nv_news_array_cat_admin()
+	function nv_news_array_cat_admin( $module_data )
 	{
-		global $db, $module_data;
-	
+		global $db;
+
 		$array_cat_admin = array();
 		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_admins` ORDER BY `userid` ASC";
 		$result = $db->sql_query( $sql );
-	
+
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			$array_cat_admin[$row['userid']][$row['catid']] = $row;
 		}
-	
+
 		return $array_cat_admin;
 	}
 }
 
 $is_refresh = false;
-$array_cat_admin = nv_news_array_cat_admin();
+$array_cat_admin = nv_news_array_cat_admin( $module_data );
 
 if( ! empty( $module_info['admins'] ) )
 {
@@ -50,7 +50,7 @@ if( ! empty( $module_info['admins'] ) )
 }
 if( $is_refresh )
 {
-	$array_cat_admin = nv_news_array_cat_admin();
+	$array_cat_admin = nv_news_array_cat_admin( $module_data );
 }
 
 $admin_id = $admin_info['admin_id'];
@@ -82,7 +82,7 @@ $submenu['comment'] = $lang_module['comment'];
 if( $NV_IS_ADMIN_MODULE )
 {
 	$submenu['topics'] = $lang_module['topics'];
-	$submenu['blockcat'] = $lang_module['block'];
+	$submenu['groups'] = $lang_module['block'];
 	$submenu['sources'] = $lang_module['sources'];
 	$submenu['setting'] = $lang_module['setting'];
 
@@ -100,7 +100,7 @@ if( $NV_IS_ADMIN_MODULE )
 	$allow_func[] = 'del_source';
 
 	$allow_func[] = 'block';
-	$allow_func[] = 'blockcat';
+	$allow_func[] = 'groups';
 	$allow_func[] = 'del_block_cat';
 	$allow_func[] = 'list_block_cat';
 	$allow_func[] = 'chang_block_cat';

@@ -420,7 +420,7 @@ function nv_html_meta_tags( $html5 = false )
 
 	$return = '';
 	$self_close = ($html5) ? '' : ' /';
-	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
+	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? strip_tags( $description ) : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
 
 	if ( empty( $site_description ) )
     {

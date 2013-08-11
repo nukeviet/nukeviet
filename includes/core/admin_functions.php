@@ -17,43 +17,53 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 function nv_site_mods()
 {
 	global $db, $admin_info;
-	$site_mods = array();
-	$sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
-	$list = nv_db_cache( $sql, '', 'modules' );
-	foreach( $list as $row )
+	$cache_file = NV_LANG_DATA . "_modules_sitemods_" . NV_CACHE_PREFIX . ".cache";
+	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 	{
-		$allowed = false;
-		if( defined( 'NV_IS_SPADMIN' ) )
-		{
-			$allowed = true;
-		}
-		elseif( defined( 'NV_IS_ADMIN' ) and ! empty( $row['admins'] ) and in_array( $admin_info['admin_id'], explode( ",", $row['admins'] ) ) )
-		{
-			$allowed = true;
-		}
-		if( $allowed )
-		{
-			$row['title'] = $db->unfixdb( $row['title'] );
-
-			$site_mods[$row['title']] = array(
-				'module_file' => $db->unfixdb( $row['module_file'] ),
-				'module_data' => $db->unfixdb( $row['module_data'] ),
-				'custom_title' => empty( $row['admin_title'] ) ? $row['custom_title'] : $row['admin_title'],
-				'main_file' => $row['main_file'],
-				'admin_file' => $row['admin_file'],
-				'theme' => $db->unfixdb( $row['theme'] ),
-				'keywords' => $row['keywords'],
-				'groups_view' => $row['groups_view'],
-				'in_menu' => intval( $row['in_menu'] ),
-				'submenu' => intval( $row['submenu'] ),
-				'act' => intval( $row['act'] ),
-				'admins' => $row['admins'],
-				'gid' => $row['gid'],
-				'rss' => $row['rss']
-			);
-		}
+		$site_mods = unserialize( $cache );
 	}
-
+	else
+	{
+		$site_mods = array();
+		$result = $db->sql_query( "SELECT * FROM `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight" );
+		while( $row = $db->sql_fetch_assoc( $result ) )
+		{
+			$m_title = $db->unfixdb( $row['title'] );
+			$f_name = $db->unfixdb( $row['func_name'] );
+			$f_alias = $db->unfixdb( $row['alias'] );
+			if( ! isset( $site_mods[$m_title] ) )
+			{
+				$site_mods[$m_title] = array(
+					'module_file' => $db->unfixdb( $row['module_file'] ),
+					'module_data' => $db->unfixdb( $row['module_data'] ),
+					'custom_title' => $row['custom_title'],
+					'admin_file' => $row['admin_file'],
+					'theme' => $db->unfixdb( $row['theme'] ),
+					'mobile' => $row['mobile'],
+					'description' => $row['description'],
+					'keywords' => $row['keywords'],
+					'groups_view' => $row['groups_view'],
+					'in_menu' => $row['in_menu'],
+					'submenu' => $row['submenu'],
+					'is_modadmin' => false,
+					'rss' => $row['rss'],
+					'gid' => $row['gid'],
+					'funcs' => array()
+				);
+			}
+			$site_mods[$m_title]['funcs'][$f_alias] = array(
+				'func_id' => $row['func_id'],
+				'func_name' => $f_name,
+				'show_func' => $row['show_func'],
+				'func_custom_name' => $row['func_custom_name'],
+				'in_submenu' => $row['in_submenu']
+			);
+			$site_mods[$m_title]['alias'][$f_name] = $f_alias;
+		}
+		$cache = serialize( $site_mods );
+		nv_set_cache( $cache_file, $cache );
+		unset( $cache, $result );
+	}
 	return $site_mods;
 }
 
