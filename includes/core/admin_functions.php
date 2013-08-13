@@ -10,64 +10,6 @@
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 /**
- * nv_db_mods()
- *
- * @return
- */
-function nv_site_mods()
-{
-	global $db, $admin_info;
-	$cache_file = NV_LANG_DATA . "_modules_sitemods_" . NV_CACHE_PREFIX . ".cache";
-	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
-	{
-		$site_mods = unserialize( $cache );
-	}
-	else
-	{
-		$site_mods = array();
-		$result = $db->sql_query( "SELECT * FROM `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight" );
-		while( $row = $db->sql_fetch_assoc( $result ) )
-		{
-			$m_title = $db->unfixdb( $row['title'] );
-			$f_name = $db->unfixdb( $row['func_name'] );
-			$f_alias = $db->unfixdb( $row['alias'] );
-			if( ! isset( $site_mods[$m_title] ) )
-			{
-				$site_mods[$m_title] = array(
-					'module_file' => $db->unfixdb( $row['module_file'] ),
-					'module_data' => $db->unfixdb( $row['module_data'] ),
-					'custom_title' => $row['custom_title'],
-					'admin_file' => $row['admin_file'],
-					'theme' => $db->unfixdb( $row['theme'] ),
-					'mobile' => $row['mobile'],
-					'description' => $row['description'],
-					'keywords' => $row['keywords'],
-					'groups_view' => $row['groups_view'],
-					'in_menu' => $row['in_menu'],
-					'submenu' => $row['submenu'],
-					'is_modadmin' => false,
-					'rss' => $row['rss'],
-					'gid' => $row['gid'],
-					'funcs' => array()
-				);
-			}
-			$site_mods[$m_title]['funcs'][$f_alias] = array(
-				'func_id' => $row['func_id'],
-				'func_name' => $f_name,
-				'show_func' => $row['show_func'],
-				'func_custom_name' => $row['func_custom_name'],
-				'in_submenu' => $row['in_submenu']
-			);
-			$site_mods[$m_title]['alias'][$f_name] = $f_alias;
-		}
-		$cache = serialize( $site_mods );
-		nv_set_cache( $cache_file, $cache );
-		unset( $cache, $result );
-	}
-	return $site_mods;
-}
-
-/**
  * nv_groups_list()
  *
  * @return
