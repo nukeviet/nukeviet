@@ -183,6 +183,9 @@ function nv_del_content_module( $id )
 			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` WHERE `id` = " . $id );
 			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `id` = " . $id );
 			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `id` = " . $id );
+
+			$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_tags` SET `numnews` = `numnews`-1 WHERE `tid` IN (SELECT `tid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `id`=" . $id . ")" );
+			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `id` = " . $id );
 			$content_del = "OK_" . $id;
 		}
 		else

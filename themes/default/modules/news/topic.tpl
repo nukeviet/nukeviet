@@ -1,12 +1,17 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: topicdescription -->
 <div id="news_detail">
 	<h1>{TOPPIC_TITLE}</h1>
-	<!-- BEGIN: topicdescription -->
-	<h2 style="padding-bottom: 15px;">
-		{TOPPIC_DESCRIPTION}
-	</h2>
-	<!-- END: topicdescription -->
+	<div class="news_column">
+		<div class="items clearfix">
+			<!-- BEGIN: image -->
+			<img alt="{TOPPIC_TITLE}" src="{HOMEIMG1}" width="{IMGWIDTH1}" />
+			<!-- END: image -->
+			<h2> {TOPPIC_DESCRIPTION} </h2>
+		</div>
+	</div>
 </div>
+<!-- END: topicdescription -->
 <!-- BEGIN: topic -->
 <div class="news_column">
 	<div class="items clearfix">

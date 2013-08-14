@@ -622,6 +622,7 @@ elseif( $step == 6 )
 		$array_data['nv_login'] = $login;
 		$array_data['question'] = $question;
 		$array_data['answer_question'] = $answer_question;
+		$array_data['lang_multi'] = (int) $nv_Request->get_bool( 'lang_multi', 'post');
 
 		$global_config['site_email'] = $email;
 
@@ -715,7 +716,19 @@ elseif( $step == 6 )
 				{
 					$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = 'mild' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'upload_checking_mode'" );
 				}
-
+				if( empty( $array_data['lang_multi'] ) )
+				{
+					$global_config['rewrite_optional'] = 1;
+					$global_config['lang_multi'] = 0;
+					$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = '0' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'lang_multi'" );
+					$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = '1' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'rewrite_optional'" );
+					$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` where `title`='news'" );
+					if( $db->sql_numrows( $result ) )
+					{
+						$global_config['rewrite_op_mod'] = 'news';
+						$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = 'news' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'rewrite_op_mod'" );
+					}
+				}
 				nv_save_file_config();
 
 				$array_config_rewrite = array(

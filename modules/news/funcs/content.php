@@ -410,7 +410,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			if( $rowcontent['id'] == 0 )
 			{
 				$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows`
-						(`id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `inhome`, `allowed_comm`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords`) VALUES
+						(`id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `inhome`, `allowed_comm`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`) VALUES
 		                (NULL,
 		                " . intval( $rowcontent['catid'] ) . ",
 		                " . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
@@ -436,8 +436,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		                " . intval( $rowcontent['hitstotal'] ) . ",
 		                " . intval( $rowcontent['hitscm'] ) . ",
 		                " . intval( $rowcontent['total_rating'] ) . ",
-		                " . intval( $rowcontent['click_rating'] ) . ",
-		                " . $db->dbescape_string( $rowcontent['keywords'] ) . ")";
+		                " . intval( $rowcontent['click_rating'] ) . ")";
 
 				$rowcontent['id'] = $db->sql_query_insert_id( $query );
 				if( $rowcontent['id'] > 0 )
@@ -498,7 +497,6 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
                            `inhome`=" . intval( $rowcontent['inhome'] ) . ",
                            `allowed_comm`=" . intval( $rowcontent['allowed_comm'] ) . ",
                            `allowed_rating`=" . intval( $rowcontent['allowed_rating'] ) . ",
-                           `keywords`=" . $db->dbescape_string( $rowcontent['keywords'] ) . ",
                            `edittime`=UNIX_TIMESTAMP()
                         WHERE `id` =" . $rowcontent['id'];
 
@@ -727,7 +725,7 @@ elseif( defined( 'NV_IS_USER' ) )
 	}
 
 	$array_catpage = array();
-	$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+	$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
 	$result = $db->sql_query( $sql );
 
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );

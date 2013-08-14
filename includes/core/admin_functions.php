@@ -521,6 +521,7 @@ function nv_rewrite_change( $array_config_global )
 		$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
 		$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
 		$rewrite_rule .= "RewriteRule (.*)(" . $endurl . ")\$ index.php\n";
+		$rewrite_rule .= "RewriteRule (.*)tag\/(.*)$ index.php\n";
 		$rewrite_rule .= "</IfModule>\n\n";
 		$rewrite_rule .= "#nukeviet_rewrite_end\n";
 		$rewrite_rule .= "##################################################################################\n\n";

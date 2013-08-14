@@ -12,7 +12,7 @@ $page_title = $lang_module['block'];
 
 $error = '';
 $savecat = 0;
-list( $bid, $title, $alias, $description, $keywords ) = array( 0, '', '', '', '' );
+list( $bid, $title, $alias, $description, $image, $keywords ) = array( 0, '', '', '', '', '' );
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
@@ -25,6 +25,17 @@ if( ! empty( $savecat ) )
 	$description = nv_nl2br( nv_htmlspecialchars( strip_tags( $description ) ), '<br />' );
 	$alias = ( $alias == '' ) ? change_alias( $title ) : change_alias( $alias );
 
+	$image = $nv_Request->get_string( 'image', 'post', '' );
+	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	{
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
+		$image = substr( $image, $lu );
+	}
+	else
+	{
+		$image = '';
+	}
+
 	if( empty( $title ) )
 	{
 		$error = $lang_module['error_name'];
@@ -34,7 +45,7 @@ if( ! empty( $savecat ) )
 		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat`" ) );
 		$weight = intval( $weight ) + 1;
 
-		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` (`bid`, `adddefault`, `number`, `title`, `alias`, `description`, `image`, `thumbnail`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, 0, 4, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", '', '', " . $db->dbescape( $weight ) . ", " . $db->dbescape( $keywords ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
+		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` (`bid`, `adddefault`, `number`, `title`, `alias`, `description`, `image`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, 0, 4, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $keywords ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
 
 		if( $db->sql_query_insert_id( $sql ) )
 		{
@@ -50,7 +61,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `title`=" . $db->dbescape( $title ) . ", `alias` =  " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `bid` =" . $bid;
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `title`=" . $db->dbescape( $title ) . ", `alias` =  " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`= " . $db->dbescape( $image ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `bid` =" . $bid;
 		$db->sql_query( $sql );
 
 		if( $db->sql_affectedrows() > 0 )
@@ -71,9 +82,12 @@ if( ! empty( $savecat ) )
 $bid = $nv_Request->get_int( 'bid', 'get', 0 );
 if( $bid > 0 )
 {
-	list( $bid, $title, $alias, $description, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `title`, `alias`, `description`, `keywords`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` where `bid`=" . $bid . "" ) );
+	list( $bid, $title, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `title`, `alias`, `description`, `image`, `keywords`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` where `bid`=" . $bid . "" ) );
 	$lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
 }
+
+$lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
+$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 155 );
 
 $xtpl = new XTemplate( "groups.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -89,7 +103,14 @@ $xtpl->assign( 'bid', $bid );
 $xtpl->assign( 'title', $title );
 $xtpl->assign( 'alias', $alias );
 $xtpl->assign( 'keywords', $keywords );
-$xtpl->assign( 'description', $description );
+$xtpl->assign( 'description', nv_htmlspecialchars( nv_br2nl( $description ) ) );
+
+if( ! empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $image ) )
+{
+	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $image;
+}
+$xtpl->assign( 'image', $image );
+$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
 
 if( ! empty( $error ) )
 {

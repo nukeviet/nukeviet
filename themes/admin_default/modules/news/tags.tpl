@@ -1,9 +1,15 @@
 <!-- BEGIN: main -->
+<form action="{NV_BASE_ADMINURL}index.php" method="get" onsubmit="return nv_search_tag();">
+	<label><em>{LANG.search_note}</em></label>
+	<br />
+	{LANG.search_key}:
+	<input id="q" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
+	<input type="submit" value="{LANG.search}" />
+</form>
 <div id="module_show_list">
-	{BLOCK_CAT_LIST}
+	{TAGS_LIST}
 </div>
 <br />
-<a id="edit"></a>
 <!-- BEGIN: error -->
 <div class="quote">
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
@@ -12,10 +18,10 @@
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
-	<input type="hidden" name ="bid" value="{bid}" />
+	<input type="hidden" name ="tid" value="{tid}" />
 	<input name="savecat" type="hidden" value="1" />
-	<table class="tab1">
-		<caption>{LANG.add_block_cat}</caption>
+	<table id="edit" class="tab1">
+		<caption>{LANG.add_tags}</caption>
 		<tfoot>
 			<tr>
 				<td class="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
@@ -23,12 +29,8 @@
 		</tfoot>
 		<tbody>
 			<tr>
-				<td class="right"><strong>{LANG.name}: </strong></td>
-				<td><input class="w500" name="title" id="idtitle" type="text" value="{title}" maxlength="255" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
-			</tr>
-			<tr>
 				<td class="right"><strong>{LANG.alias}: </strong></td>
-				<td><input class="w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> &nbsp; <img src="{NV_BASE_SITEURL}images/refresh.png" width="16" style="cursor: pointer; vertical-align: middle;" onclick="get_alias('blockcat', {bid});" alt="" height="16" /></td>
+				<td><input class="w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> {GLANG.length_characters}: <span id="aliaslength" class="red">0</span>. {GLANG.title_suggest_max} </td>
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.keywords}: </strong></td>
@@ -38,7 +40,7 @@
 				<td class="right top">
 				<br />
 				<strong>{LANG.description}</strong></td>
-				<td><textarea class="w500" id="description" name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+				<td>				<textarea class="w500" id="description" name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.content_homeimg}</strong></td>
@@ -48,15 +50,16 @@
 	</table>
 </form>
 <script type="text/javascript">
-	$("#titlelength").html($("#idtitle").val().length);
-	$("#idtitle").keypress(function() {
-		$("#titlelength").html($(this).val().length);
+	$("#aliaslength").html($("#idalias").val().length);
+	$("#idalias").keypress(function() {
+		$("#aliaslength").html($(this).val().length);
 	});
 
 	$("#descriptionlength").html($("#description").val().length);
 	$("#description").keypress(function() {
 		$("#descriptionlength").html($(this).val().length);
 	});
+
 	$("input[name=selectimg]").click(function() {
 		var area = "image";
 		var path = "{UPLOAD_CURRENT}";
@@ -65,12 +68,19 @@
 		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
+
+	var load_bar = '<p class="center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>';
+
+	function nv_search_tag(tid) {
+		$("#module_show_list").html(load_bar).load("index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=tags&q=" + rawurlencode($("#q").val()) + "&num=" + nv_randomPassword(10))
+		return false;
+	}
+
+	function nv_del_tags(tid) {
+		if (confirm(nv_is_del_confirm[0])) {
+			$("#module_show_list").html(load_bar).load("index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=tags&del_tid=" + tid + "&num=" + nv_randomPassword(10))
+		}
+		return false;
+	}
 </script>
-<!-- BEGIN: getalias -->
-<script type="text/javascript">
-	$("#idtitle").change(function() {
-		get_alias("blockcat", '{bid}');
-	});
-</script>
-<!-- END: getalias -->
 <!-- END: main -->

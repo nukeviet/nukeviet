@@ -7,7 +7,8 @@
  * @createdate 12/31/2009 0:51
  */
 
-if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_NEWS' ) )
+	die( 'Stop!!!' );
 
 function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 {
@@ -37,7 +38,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	foreach( $array_catpage as $array_row_i )
 	{
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$xtpl->clear_autoreset();
+		$xtpl->clear_autoreset( );
 		$xtpl->assign( 'CONTENT', $array_row_i );
 
 		if( defined( 'NV_IS_MODADMIN' ) )
@@ -53,7 +54,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 			$xtpl->parse( 'main.viewcatloop.image' );
 		}
 
-		$xtpl->set_autoreset();
+		$xtpl->set_autoreset( );
 		$xtpl->parse( 'main.viewcatloop' );
 		++$a;
 	}
@@ -91,7 +92,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	foreach( $array_catpage as $array_row_i )
 	{
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$xtpl->clear_autoreset();
+		$xtpl->clear_autoreset( );
 		$xtpl->assign( 'NUMBER', ++$a );
 		$xtpl->assign( 'CONTENT', $array_row_i );
 
@@ -108,7 +109,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 			$xtpl->parse( 'main.viewcatloop.image' );
 		}
 
-		$xtpl->set_autoreset();
+		$xtpl->set_autoreset( );
 		$xtpl->parse( 'main.viewcatloop' );
 	}
 	if( ! empty( $generate_page ) )
@@ -148,14 +149,17 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 		$n = 1;
 		foreach( $array_row_i['listcatid'] as $listcatid )
 		{
-			$listcat = array( 'title' => $global_array_cat[$listcatid]['title'], "link" => $global_array_cat[$listcatid]['link'] );
+			$listcat = array(
+				'title' => $global_array_cat[$listcatid]['title'],
+				"link" => $global_array_cat[$listcatid]['link']
+			);
 			$xtpl->assign( 'CAT', $listcat );
-			( ( $n < $num_cat ) ? $xtpl->parse( 'main.viewcatloop.cat.comma' ) : '' );
+			(($n < $num_cat) ? $xtpl->parse( 'main.viewcatloop.cat.comma' ) : '');
 			$xtpl->parse( 'main.viewcatloop.cat' );
 			++$n;
 		}
 
-		$xtpl->clear_autoreset();
+		$xtpl->clear_autoreset( );
 		$xtpl->assign( 'CONTENT', $array_row_i );
 
 		if( defined( 'NV_IS_MODADMIN' ) )
@@ -171,7 +175,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 			$xtpl->parse( 'main.viewcatloop.image' );
 		}
 
-		$xtpl->set_autoreset();
+		$xtpl->set_autoreset( );
 		$xtpl->parse( 'main.viewcatloop' );
 		++$a;
 	}
@@ -283,20 +287,23 @@ function viewsubcat_main( $viewcat, $array_cat )
 				{
 					if( $global_array_cat[$subcatid_i]['inhome'] == 1 )
 					{
-						$xtpl->clear_autoreset();
+						$xtpl->clear_autoreset( );
 
 						if( $exl < 3 )
 						{
 							$xtpl->assign( 'SUBCAT', $global_array_cat[$subcatid_i] );
 							$xtpl->parse( 'main.listcat.subcatloop' );
-							$xtpl->set_autoreset();
+							$xtpl->set_autoreset( );
 						}
 						else
 						{
-							$more = array( 'title' => $lang_module['more'], 'link' => $global_array_cat[$catid]['link'] );
+							$more = array(
+								'title' => $lang_module['more'],
+								'link' => $global_array_cat[$catid]['link']
+							);
 							$xtpl->assign( 'MORE', $more );
 							$xtpl->parse( 'main.listcat.subcatmore' );
-							$xtpl->set_autoreset();
+							$xtpl->set_autoreset( );
 							break;
 						}
 						++$exl;
@@ -357,7 +364,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 					$xtpl->assign( 'BG', '' );
 				}
 
-				$xtpl->set_autoreset();
+				$xtpl->set_autoreset( );
 			}
 
 			if( $a > 1 )
@@ -437,7 +444,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$array_catpage_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_catpage_i['alias'] . "";
 
 			$xtpl->assign( 'CAT', $array_catpage_i );
-			$xtpl->assign( 'ID', ( $a + 1 ) );
+			$xtpl->assign( 'ID', ($a + 1) );
 
 			$k = 0;
 
@@ -488,7 +495,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 	return $xtpl->text( 'main' );
 }
 
-function detail_theme( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable )
+function detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $commentenable )
 {
 	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info;
 
@@ -592,24 +599,16 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 		}
 	}
 
-	if( ! empty( $news_contents['keywords'] ) )
+	if( ! empty( $array_keyword ) )
 	{
-		$news_contents['keywords'] = explode( ',', $news_contents['keywords'] );
-		$count = sizeof( $news_contents['keywords'] );
-
-		foreach( $news_contents['keywords'] as $i => $value )
+		$t = sizeof( $array_keyword ) - 1;
+		foreach( $array_keyword as $i => $value )
 		{
-			$value = trim( $value );
-			$value = trim( $value );
-
-			$keyword = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search&amp;q=" . urlencode( $value );
-
-			$xtpl->assign( 'KEYWORD', $value );
-			$xtpl->assign( 'LINK_KEYWORDS', $keyword );
-			$xtpl->assign( 'SLASH', ( ( $count - 1 ) == $i ) ? '' : ', ' );
+			$xtpl->assign( 'KEYWORD', $value['keyword'] );
+			$xtpl->assign( 'LINK_KEYWORDS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=tag/" . urlencode( $value['alias'] ) );
+			$xtpl->assign( 'SLASH', ($t == $i) ? '' : ', ' );
 			$xtpl->parse( 'main.keywords.loop' );
 		}
-
 		$xtpl->parse( 'main.keywords' );
 	}
 
@@ -727,16 +726,22 @@ function no_permission( $func_who_view )
 	return $xtpl->text( 'no_permission' );
 }
 
-function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description )
+function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image )
 {
-	global $lang_module, $module_info, $module_name, $module_file, $topicalias;
+	global $lang_module, $module_info, $module_name, $module_file, $topicalias, $module_config;
 
 	$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TOPPIC_TITLE', $page_title );
+	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
 	if( ! empty( $description ) )
 	{
 		$xtpl->assign( 'TOPPIC_DESCRIPTION', $description );
+		if(!empty($topic_image))
+		{
+			$xtpl->assign( 'HOMEIMG1', $topic_image );
+			$xtpl->parse( 'main.topicdescription.image' );
+		}
 		$xtpl->parse( 'main.topicdescription' );
 	}
 	if( ! empty( $topic_array ) )
@@ -805,7 +810,7 @@ function comment_theme( $comment_array )
 			$comment_array_i['photo'] = NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_avatar.jpg";
 		}
 
-		$comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
+		$comment_array_i['bg'] = ($k % 2) ? " bg" : "";
 
 		$xtpl->assign( 'COMMENT', $comment_array_i );
 
@@ -831,7 +836,7 @@ function sendmail_themme( $sendmail )
 {
 	global $module_info, $module_file, $global_config, $lang_module, $lang_global;
 
-	$script = nv_html_site_js();
+	$script = nv_html_site_js( );
 	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
@@ -1011,12 +1016,13 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		$xtpl->parse( 'results.noneresult' );
 	}
 
-	if( $numRecord > $per_pages ) // show pages
+	if( $numRecord > $per_pages )// show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
 		$in = strpos( $url_link, '&page' );
 
-		if( $in != 0 ) $url_link = substr( $url_link, 0, $in );
+		if( $in != 0 )
+			$url_link = substr( $url_link, 0, $in );
 
 		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $pages );
 
@@ -1030,5 +1036,4 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	$xtpl->parse( 'results' );
 	return $xtpl->text( 'results' );
 }
-
 ?>

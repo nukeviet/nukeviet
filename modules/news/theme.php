@@ -471,7 +471,7 @@ function viewcat_two_column( $array_content, $array_catpage )
  * @param mixed $commentenable
  * @return
  */
-function detail_theme( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable )
+function detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $commentenable )
 {
 	global $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info;
 
@@ -558,18 +558,14 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 		}
 	}
 
-	if( ! empty( $news_contents['keywords'] ) )
+	if( ! empty( $array_keyword ) )
 	{
-		$news_contents['keywords'] = explode( ',', $news_contents['keywords'] );
-		$count = sizeof( $news_contents['keywords'] );
-		foreach( $news_contents['keywords'] as $i => $value )
+		$t = sizeof( $array_keyword ) - 1;
+		foreach( $array_keyword as $i => $value )
 		{
-			$value = trim( $value );
-			$value = trim( $value );
-			$keyword = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search&amp;q=" . urlencode( $value );
-			$xtpl->assign( 'KEYWORD', $value );
-			$xtpl->assign( 'LINK_KEYWORDS', $keyword );
-			$xtpl->assign( 'SLASH', ( ( $count - 1 ) == $i ) ? '' : ', ' );
+			$xtpl->assign( 'KEYWORD', $value['keyword'] );
+			$xtpl->assign( 'LINK_KEYWORDS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=tag/" . urlencode( $value['alias'] ) );
+			$xtpl->assign( 'SLASH', ($t == $i) ? '' : ', ' );
 			$xtpl->parse( 'main.keywords.loop' );
 		}
 		$xtpl->parse( 'main.keywords' );
@@ -692,14 +688,20 @@ function no_permission( $func_who_view )
  * @param mixed $generate_page
  * @return
  */
-function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description )
+function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image )
 {
 	global $module_info, $module_name, $module_file, $topicalias, $module_config;
 	$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'TOPPIC_TITLE', $page_title );
+	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
 	if( ! empty( $description ) )
 	{
 		$xtpl->assign( 'TOPPIC_DESCRIPTION', $description );
+		if(!empty($topic_image))
+		{
+			$xtpl->assign( 'HOMEIMG1', $topic_image );
+			$xtpl->parse( 'main.topicdescription.image' );
+		}
 		$xtpl->parse( 'main.topicdescription' );
 	}
 	if( ! empty( $topic_array ) )

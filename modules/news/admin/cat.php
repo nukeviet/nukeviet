@@ -239,7 +239,7 @@ $xtpl->assign( 'titlesite', $titlesite );
 $xtpl->assign( 'alias', $alias );
 $xtpl->assign( 'parentid', $parentid );
 $xtpl->assign( 'keywords', $keywords );
-$xtpl->assign( 'description', $description );
+$xtpl->assign( 'description', nv_htmlspecialchars( nv_br2nl( $description ) ) );
 
 $xtpl->assign( 'CAT_LIST', nv_show_cat_list( $parentid ) );
 $xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );

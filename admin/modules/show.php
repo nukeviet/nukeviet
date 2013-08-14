@@ -158,7 +158,7 @@ function nv_show_funcs()
 		foreach( $array_keys as $func )
 		{
 			$show_func = in_array( $func, $modfuncs ) ? 1 : 0;
-			$sql = "INSERT INTO `" . NV_MODFUNCS_TABLE . "` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `setting`) VALUES (NULL, " . $db->dbescape( $func ) . ", " . $db->dbescape( ucfirst( $func ) ) . ", " . $db->dbescape( $mod ) . ", " . $show_func . ", 0, 0, '')";
+			$sql = "INSERT INTO `" . NV_MODFUNCS_TABLE . "` (`func_id`, `func_name`, `alias`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `setting`) VALUES (NULL, " . $db->dbescape( $func ) . ", " . $db->dbescape( $func ) . ", " . $db->dbescape( ucfirst( $func ) ) . ", " . $db->dbescape( $mod ) . ", " . $show_func . ", 0, 0, '')";
 			$func_id = $db->sql_query_insert_id( $sql );
 			if( $show_func )
 			{

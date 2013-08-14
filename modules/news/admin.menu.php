@@ -81,8 +81,9 @@ $submenu['comment'] = $lang_module['comment'];
 
 if( $NV_IS_ADMIN_MODULE )
 {
-	$submenu['topics'] = $lang_module['topics'];
+	$submenu['tags'] = $lang_module['tags'];
 	$submenu['groups'] = $lang_module['block'];
+	$submenu['topics'] = $lang_module['topics'];
 	$submenu['sources'] = $lang_module['sources'];
 	$submenu['setting'] = $lang_module['setting'];
 
@@ -106,6 +107,8 @@ if( $NV_IS_ADMIN_MODULE )
 	$allow_func[] = 'chang_block_cat';
 	$allow_func[] = 'change_block';
 	$allow_func[] = 'list_block';
+
+	$allow_func[] = 'tags';
 
 	$allow_func[] = 'setting';
 }
