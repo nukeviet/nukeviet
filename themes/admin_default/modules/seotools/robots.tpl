@@ -34,6 +34,17 @@
 				</select></td>
 			</tr>
 			<!-- END: loop -->
+			<!-- BEGIN: other -->
+			<tr>
+				<td class="center">{DATA.number}</td>
+				<td><input class="w300" type="text" value="{DATA.filename}" name="fileother[{DATA.number}]" /></td>
+				<td><select name="optionother[{DATA.number}]">
+					<!-- BEGIN: option -->
+					<option value="{OPTION.value}" {OPTION.selected}>{OPTION.title}</option>
+					<!-- END: option -->
+				</select></td>
+			</tr>
+			<!-- END: other -->
 		</tbody>
 	</table>
 </form>

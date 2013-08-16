@@ -7,7 +7,8 @@
  * @Createdate 5/12/2010, 1:34
  */
 
-if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) )
+	die( 'Stop!!!' );
 
 $xtpl = new XTemplate( "robots.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -23,21 +24,32 @@ $cache_file = NV_ROOTDIR . "/" . NV_DATADIR . "/robots.php";
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$robots_data = $nv_Request->get_array( 'filename', 'post' );
+	$fileother = $nv_Request->get_array( 'fileother', 'post' );
+	$optionother = $nv_Request->get_array( 'optionother', 'post' );
+	$robots_other = array( );
+	foreach( $fileother as $key => $value )
+	{
+		if( ! empty( $value ) )
+		{
+			$robots_other[$value] = intval( $optionother[$key] );
+		}
+	}
 
 	$content_config = "<?php\n\n";
 	$content_config .= NV_FILEHEAD . "\n\n";
 	$content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
-	$content_config .= "\$cache='" . serialize( $robots_data ) . "';\n\n";
+	$content_config .= "\$cache = '" . serialize( $robots_data ) . "';\n\n";
+	$content_config .= "\$cache_other = '" . serialize( $robots_other ) . "';\n\n";
 	$content_config .= "?>";
 
 	file_put_contents( $cache_file, $content_config, LOCK_EX );
 
-	$check_rewrite_file = nv_check_rewrite_file();
+	$check_rewrite_file = nv_check_rewrite_file( );
 
 	$redirect = false;
 	if( ! $check_rewrite_file )
 	{
-		$rbcontents = array();
+		$rbcontents = array( );
 		$rbcontents[] = "User-agent: *";
 
 		foreach( $robots_data as $key => $value )
@@ -66,23 +78,31 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		else
 		{
 			$xtpl->assign( 'TITLE', $lang_module['robots_error_writable'] );
-			$xtpl->assign( 'CONTENT', str_replace( array( "\n", "\t" ), array( "<br />", "&nbsp;&nbsp;&nbsp;&nbsp;" ), nv_htmlspecialchars( $rbcontents ) ) );
+			$xtpl->assign( 'CONTENT', str_replace( array(
+				"\n",
+				"\t"
+			), array(
+				"<br />",
+				"&nbsp;&nbsp;&nbsp;&nbsp;"
+			), nv_htmlspecialchars( $rbcontents ) ) );
 			$xtpl->parse( 'main.nowrite' );
 		}
 	}
 
 	if( $redirect )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
-		exit();
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
+		exit( );
 	}
 }
 
-$robots_data = array();
+$robots_data = array( );
+$robots_other = array( );
 if( file_exists( $cache_file ) )
 {
 	include $cache_file;
 	$robots_data = unserialize( $cache );
+	$robots_other = unserialize( $cache_other );
 }
 else
 {
@@ -100,17 +120,19 @@ else
 	$robots_data['/tmp/'] = 0;
 	$robots_data['/web.config'] = 0;
 }
+$robots_other[''] = 0;
 
 $files = scandir( NV_ROOTDIR, true );
 sort( $files );
-$contents = array();
+$contents = array( );
 $contents[] = "User-agent: *";
 $number = 0;
 foreach( $files as $file )
 {
 	if( ! preg_match( "/^\.(.*)$/", $file ) )
 	{
-		if( is_dir( NV_ROOTDIR . '/' . $file ) ) $file = "/" . $file . "/";
+		if( is_dir( NV_ROOTDIR . '/' . $file ) )
+			$file = "/" . $file . "/";
 		else
 			$file = "/" . $file;
 
@@ -126,7 +148,7 @@ foreach( $files as $file )
 			$option = array(
 				'value' => $i,
 				'title' => $lang_module['robots_type_' . $i],
-				'selected' => ( $type == $i ) ? ' selected="selected"' : ''
+				'selected' => ($type == $i) ? ' selected="selected"' : ''
 			);
 
 			$xtpl->assign( 'OPTION', $option );
@@ -137,14 +159,34 @@ foreach( $files as $file )
 		$xtpl->parse( 'main.loop' );
 	}
 }
+foreach( $robots_other as $file => $value )
+{
+	$data = array(
+		'number' => ++$number,
+		'filename' => $file
+	);
+	$xtpl->assign( 'DATA', $data );
+
+	for( $i = 0; $i < 2; $i++ )
+	{
+		$option = array(
+			'value' => $i,
+			'title' => $lang_module['robots_type_' . $i],
+			'selected' => ($value == $i) ? ' selected="selected"' : ''
+		);
+
+		$xtpl->assign( 'OPTION', $option );
+		$xtpl->parse( 'main.other.option' );
+	}
+	$xtpl->parse( 'main.other' );
+}
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['robots'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include (NV_ROOTDIR . '/includes/header.php');
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
+include (NV_ROOTDIR . '/includes/footer.php');
 ?>
