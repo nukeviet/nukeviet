@@ -279,12 +279,11 @@ function nv_blocks_content( $sitecontent )
  *
  * @return
  */
-function nv_html_meta_tags( $html5 = false )
+function nv_html_meta_tags()
 {
 	global $global_config, $db_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_ogp, $id_profile_googleplus;
 
 	$return = '';
-	$self_close = ($html5) ? '' : ' /';
 	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? strip_tags( $description ) : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
 
 	if ( empty( $site_description ) )
@@ -303,7 +302,7 @@ function nv_html_meta_tags( $html5 = false )
 
 	if ( ! empty( $site_description ) )
 	{
-		$return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\"" . $self_close . ">\n";
+		$return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\" />\n";
 	}
 
 	$kw = array();
@@ -330,11 +329,11 @@ function nv_html_meta_tags( $html5 = false )
 		$key_words = implode( ",", $kw );
 		$key_words = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ", ", ", " ), $key_words );
 		$key_words = nv_strtolower( strip_tags( $key_words ) );
-		$return .= "<meta name=\"keywords\" content=\"" . $key_words . "\"" . $self_close . ">\n";
-		$return .= "<meta name=\"news_keywords\" content=\"" . $key_words . "\"" . $self_close . ">\n";
+		$return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />\n";
+		$return .= "<meta name=\"news_keywords\" content=\"" . $key_words . "\" />\n";
 	}
 
-	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\"" . $self_close . ">\n";
+	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
 
 	if( $global_config['idsite'] AND file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' ) )
 	{
@@ -367,16 +366,16 @@ function nv_html_meta_tags( $html5 = false )
 			{
 				if( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
 				{
-					$return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\"" . $self_close . ">\n";
+					$return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\" />\n";
 				}
 			}
 		}
 	}
 
-	$return .= "<meta name=\"generator\" content=\"NukeViet v3.x\"" . $self_close . ">\n";
+	$return .= "<meta name=\"generator\" content=\"NukeViet v3.x\" />\n";
 	if( defined( 'NV_IS_ADMIN' ) )
 	{
-		$return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\"" . $self_close . ">\n";
+		$return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\" />\n";
 	}
 
 	if( empty( $canonicalUrl ) ) $canonicalUrl = $client_info['selfurl'];
@@ -400,7 +399,7 @@ function nv_html_meta_tags( $html5 = false )
 		{
 			if( ! empty( $value ) )
 			{
-				$return .= "<meta property=\"og:" . $key . "\" content=\"" . $value . "\"" . $self_close . ">\n";
+				$return .= "<meta property=\"og:" . $key . "\" content=\"" . $value . "\" />\n";
 			}
 		}
 	}
@@ -414,11 +413,11 @@ function nv_html_meta_tags( $html5 = false )
 		$dbgoogleplus = nv_db_cache( 'SELECT `gid`, `idprofile` FROM `' . $db_config['prefix'] . '_googleplus`', 'gid', 'seotools' );
 		if( isset( $dbgoogleplus[$id_profile_googleplus]['idprofile'] ) )
 		{
-			$return .= "<link rel=\"author\" href=\"https://plus.google.com/" . $dbgoogleplus[$id_profile_googleplus]['idprofile'] . "/\"" . $self_close . ">\n";
+			$return .= "<link rel=\"author\" href=\"https://plus.google.com/" . $dbgoogleplus[$id_profile_googleplus]['idprofile'] . "/\" />\n";
 		}
 	}
 
-	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\"" . $self_close . ">\n";
+	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\" />\n";
 	return $return;
 }
 
@@ -453,14 +452,13 @@ function nv_html_page_title()
  *
  * @return
  */
-function nv_html_css( $html5 = false )
+function nv_html_css()
 {
 	global $module_info, $module_file;
 
 	if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/css/" . $module_file . ".css" ) )
 	{
-		$self_close = ($html5) ? '' : ' /';
-		return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\"" . $self_close . ">\n";
+		return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />\n";
 	}
 
 	return "";
@@ -471,17 +469,16 @@ function nv_html_css( $html5 = false )
  *
  * @return
  */
-function nv_html_site_rss( $html5 = false )
+function nv_html_site_rss()
 {
 	global $rss;
 
 	$return = '';
 	if( ! empty( $rss ) )
 	{
-		$self_close = ($html5) ? '' : ' /';
 		foreach( $rss as $rss_item )
 		{
-			$return .= "<link rel=\"alternate\" href=\"" . $rss_item['src'] . "\" title=\"" . strip_tags( $rss_item['title'] ) . "\" type=\"application/rss+xml\"" . $self_close . ">\n";
+			$return .= "<link rel=\"alternate\" href=\"" . $rss_item['src'] . "\" title=\"" . strip_tags( $rss_item['title'] ) . "\" type=\"application/rss+xml\" />\n";
 		}
 	}
 
@@ -493,11 +490,9 @@ function nv_html_site_rss( $html5 = false )
  *
  * @return
  */
-function nv_html_site_js( $html5 = false )
+function nv_html_site_js()
 {
 	global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info;
-
-	$self_close = ($html5) ? '' : ' /';
 
 	$return = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n";
@@ -521,7 +516,7 @@ function nv_html_site_js( $html5 = false )
 	{
 		if( ! defined( 'SHADOWBOX' ) )
 		{
-			$return .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\"" . $self_close . ">\n";
+			$return .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
 			$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 			$return .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
 			define( 'SHADOWBOX', true );
@@ -610,7 +605,7 @@ function nv_html_site_js( $html5 = false )
  *
  * @return
  */
-function nv_admin_menu( $html5 = false )
+function nv_admin_menu()
 {
 	global $lang_global, $admin_info, $module_info, $module_name, $db, $my_head;
 
@@ -627,9 +622,7 @@ function nv_admin_menu( $html5 = false )
 	{
 		if( ! defined( 'SHADOWBOX' ) )
 		{
-			$self_close = ($html5) ? '' : ' /';
-
-			$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\"" . $self_close . ">\n";
+			$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
 			$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 			$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
 			define( 'SHADOWBOX', true );

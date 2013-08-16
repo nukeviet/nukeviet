@@ -47,7 +47,7 @@ class optimezer
 		'output-encoding' => 'utf8', //Bang ma dich
 		'output-xhtml' => true, // Chuan xhtml
 		'drop-empty-paras' => true, // Xoa cac tags p rong
-		'drop-proprietary-attributes' => true, // Xoa tat ca nhung attributes dac thu cua microsoft (vi du: tu word)
+		'drop-proprietary-attributes' => false, // Xoa tat ca nhung attributes dac thu cua microsoft (vi du: tu word)
 		'word-2000' => true, //Xoa tat ca nhung ma cua word khong phu hop voi chuan html
 		'enclose-block-text' => true, // Tat ca cac block-text duoc dong bang tag p
 		'enclose-text' => true, // Tat ca cac text nam trong khu vuc body nhung khong nam trong bat ky mot tag nao khac se duoc cho vao <p>text</p>
@@ -131,7 +131,7 @@ class optimezer
 			$this->_content = preg_replace_callback( $jsRegex, array( $this, 'jsCallback' ), $this->_content );
 		}
 
-		$this->_meta['http-equiv'] = $this->_meta['name'] = array();
+		$this->_meta['http-equiv'] = $this->_meta['name'] = $this->_meta['other'] = array();
 		$this->_meta['charset'] = "";
 
 		if( $this->opt_css_file )
@@ -164,6 +164,10 @@ class optimezer
 						elseif ( array_key_exists( 'charset', $combine ) )
 						{
 							$this->_meta['charset'] = $combine['charset'];
+						}
+						else
+						{
+							$this->_meta['other'][] = array( $matches2[1], $matches2[2] );
 						}
 
 					}
@@ -228,6 +232,13 @@ class optimezer
 			foreach( $this->_meta['http-equiv'] as $value => $content )
 			{
 				$meta[] = "<meta http-equiv=\"" . $value . "\" content=\"" . $content . "\" />";
+			}
+		}
+		if( ! empty( $this->_meta['other'] ) )
+		{
+			foreach( $this->_meta['other'] as $row )
+			{
+				$meta[] = "<meta " . $row[0][0] . "=\"" . $row[1][0] . "\" " . $row[0][1] . "=\"" . $row[1][1] . "\" />";
 			}
 		}
 
