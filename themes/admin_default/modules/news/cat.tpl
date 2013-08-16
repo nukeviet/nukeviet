@@ -30,7 +30,7 @@
 				</tr>
 				<tr>
 					<td class="right"><strong>Title Site: </strong></td>
-					<td><input class="w500" name="titlesite" type="text" value="{titlesite}" maxlength="255"/></td>
+					<td><input class="w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max}</td>
 				</tr>
 				<tr>
 					<td class="right"><strong>{LANG.cat_sub}: </strong></td>
@@ -106,6 +106,11 @@
 		$("#titlelength").html($(this).val().length);
 	});
 
+	$("#titlesitelength").html($("#titlesite").val().length);
+	$("#titlesite").keypress(function() {
+		$("#titlesitelength").html($(this).val().length);
+	});
+
 	$("#descriptionlength").html($("#description").val().length);
 	$("#description").keypress(function() {
 		$("#descriptionlength").html($(this).val().length);
@@ -117,14 +122,14 @@
 		var type = "image";
 		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
-	}); 
+	});
 </script>
 
 <!-- BEGIN: getalias -->
 <script type="text/javascript">
 	$("#idtitle").change(function() {
 		get_alias("cat", 0);
-	}); 
+	});
 </script>
 <!-- END: getalias -->
 <!-- END: content -->
