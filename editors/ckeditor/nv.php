@@ -44,7 +44,7 @@ function nv_aleditor( $textareaname, $width = '100%', $height = '450px', $val = 
 
 	$return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
 	$return .= "<script type=\"text/javascript\">
-		CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {";
+		CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {width: '" . $width . "',height: '" . $height . "',";
 	if( ! empty( $admin_info['allow_files_type'] ) )
 	{
 		$return .= "filebrowserUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=upload&editor=ckeditor&path=" . $currentpath . "',";

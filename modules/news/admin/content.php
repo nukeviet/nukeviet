@@ -906,7 +906,7 @@ $xtpl->assign( 'sourceid', $select );
 
 if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
-	$edits = nv_aleditor( 'bodyhtml', '100%', '300px', $rowcontent['bodyhtml'], $uploads_dir_user, $currentpath );
+	$edits = nv_aleditor( 'bodyhtml', '100%', '400px', $rowcontent['bodyhtml'], $uploads_dir_user, $currentpath );
 }
 else
 {
