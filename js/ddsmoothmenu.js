@@ -34,6 +34,8 @@
 //** Feb 23rd, 2013 move CSS3 shadow adjustment for IE 9+ to the script, add resize event for all browsers to reposition open toggle
 //** menus and shadows in window if they would have gone to a different position at the new window dimensions
 //** Feb 25th, 2013 (v2.0) All unofficial updates by John merged into official and now called v2.0. Changed "method" option's default value to "hover"
+//** May 14th, 2013 (v2.1) Adds class 'repositioned' to menus moved due to being too close to the browser's right edge
+//** May 30th, 2013 (v2.1) Change from version sniffing to means testing for jQuery versions which require added code for click toggle event handling
 
 var ddsmoothmenu = {
 
@@ -52,7 +54,6 @@ closeonmouseout: false, //when leaving a "toggle" menu, should all "toggle" menu
 
 overarrowre: /(?=\.(gif|jpg|jpeg|png|bmp))/i,
 overarrowaddtofilename: '_over',
-detecttouch: !!('ontouchstart' in window) || !!('ontouchstart' in document.documentElement) || !!window.ontouchstart || !!window.Touch || !!window.onmsgesturechange || (window.DocumentTouch && window.document instanceof window.DocumentTouch),
 detectwebkit: navigator.userAgent.toLowerCase().indexOf("applewebkit") > -1, //detect WebKit browsers (Safari, Chrome etc)
 idevice: /ipad|iphone/i.test(navigator.userAgent),
 detectie6: (function(){var ie; return (ie = /MSIE (\d+)/.exec(navigator.userAgent)) && ie[1] < 7;})(),
@@ -135,7 +136,7 @@ buildmenu: function($, setting){
 	var $mainparent = $("#"+setting.mainmenuid).removeClass("ddsmoothmenu ddsmoothmenu-v").addClass(setting.classname || "ddsmoothmenu");
 	//setting.$mainparent = $mainparent;
 	var $mainmenu = $mainparent.find('>ul'); //reference main menu UL
-	var method = smoothmenu.detecttouch? 'toggle' : setting.method === 'toggle'? 'toggle' : 'hover';
+	var method = setting.method === 'toggle'? 'toggle' : 'hover';
 	var $topheaders = $mainmenu.find('>li>ul').parent();//has('ul');
 	//$mainparent.data('$headers', $topheaders);
 	var orient = setting.orientation!='v'? 'down' : 'right', $parentshadow = $(document.body);
@@ -205,8 +206,11 @@ buildmenu: function($, setting){
 				$link.addClass('selected');
 				$subul.data('timers').showtimer=setTimeout(function(){
 					var menuleft = orient === 'down'? 0 : dimensions.w;
+					var menumoved = menuleft;
 					menuleft=($curobj.offset().left+menuleft+dimensions.subulw>$(window).width())? (orient === 'down'? -dimensions.subulw+dimensions.w : -dimensions.w) : menuleft; //calculate this sub menu's offsets from its parent
+					menumoved = menumoved !== menuleft;
 					$subul.css({left:menuleft, width:dimensions.subulw}).stop(true, true).animate({height:'show',opacity:'show'}, smoothmenu.transition.overtime, function(){this.style.removeAttribute && this.style.removeAttribute('filter');});
+					if(menumoved){$subul.addClass('repositioned');} else {$subul.removeClass('repositioned');}
 					if (setting.shadow){
 						if(!$curobj.data('$shadow')){
 							$curobj.data('$shadow', $('<div></div>').addClass('ddshadow toplevelshadow').prependTo($parentshadow).css({zIndex: $curobj.css('zIndex')}));  //insert shadow DIV and set it to parent node for the next shadow div
@@ -266,8 +270,11 @@ buildsubheaders: function($, $headers, setting, method, prevobjs){
 				$link.addClass('selected');
 				$subul.data('timers').showtimer=setTimeout(function(){
 					var menuleft= dimensions.w;
+					var menumoved = menuleft;
 					menuleft=($curobj.offset().left+menuleft+dimensions.subulw>$(window).width())? -dimensions.w : menuleft; //calculate this sub menu's offsets from its parent
+					menumoved = menumoved !== menuleft;
 					$subul.css({left:menuleft, width:dimensions.subulw}).stop(true, true).animate({height:'show',opacity:'show'}, smoothmenu.transition.overtime, function(){this.style.removeAttribute && this.style.removeAttribute('filter');});
+					if(menumoved){$subul.addClass('repositioned');} else {$subul.removeClass('repositioned');}
 					if (setting.shadow){
 						if(!$curobj.data('$shadow')){
 							$parentshadow = $curobj.parents("li:eq(0)").data('$shadow');
@@ -375,9 +382,17 @@ init: function(setting){
 }; //end ddsmoothmenu variable
 
 
-// Patch for jQuery 1.9+ which lack click toggle (deprecated in 1.8, removed in 1.9).
-// Will not run if using jQuery Migrate - v1.0.0 - 2013-01-14, which also takes care of this
-if(parseFloat(jQuery.fn.jquery) > 1.8 && !!!jQuery.migrateWarnings){
+// Patch for jQuery 1.9+ which lack click toggle (deprecated in 1.8, removed in 1.9)
+// Will not run if using another patch like jQuery Migrate, which also takes care of this
+if(
+	(function($){
+		var clicktogglable = false;
+		try {
+			$('<a href="#"></a>').toggle(function(){}, function(){clicktogglable = true;}).trigger('click').trigger('click');
+		} catch(e){}
+		return !clicktogglable;
+	})(jQuery)
+){
 	(function(){
 		var toggleDisp = jQuery.fn.toggle; // There's an animation/css method named .toggle() that toggles display. Save a reference to it.
 		jQuery.extend(jQuery.fn, {
