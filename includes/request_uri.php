@@ -70,10 +70,6 @@ elseif( isset( $_GET[NV_OP_VARIABLE] ) )
 }
 else
 {
-	if( ! $global_config['check_rewrite_file'] )
-	{
-		$request_uri = $_SERVER['REQUEST_URI'];
-	}
 	if( preg_match( "/^(" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_\.\/]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . "))\?(.*)$/i", $request_uri, $matches ) )
 	{
 		header( 'HTTP/1.1 301 Moved Permanently' );

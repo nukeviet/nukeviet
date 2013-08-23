@@ -117,7 +117,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post', 0 );
 			$array_config_global['lang_geo'] = 0;
 			$array_config_global['rewrite_op_mod'] = $nv_Request->get_title( 'rewrite_op_mod', 'post' );
-			if( ! isset( $site_mods[$array_config_global['rewrite_op_mod']] ) )
+			if( ! isset( $site_mods[$array_config_global['rewrite_op_mod']] ) OR $array_config_global['rewrite_optional'] ==0 )
 			{
 				$array_config_global['rewrite_op_mod'] = '';
 			}
@@ -199,7 +199,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$xtpl->assign( 'CHECKED1', ( $array_config_global['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
 
-	if( $lang_multi == 0 )
+	if( $array_config_global['is_url_rewrite'] AND $lang_multi == 0 )
 	{
 		$xtpl->assign( 'CHECKED2', ( $array_config_global['rewrite_optional'] == 1 ) ? ' checked ' : '' );
 

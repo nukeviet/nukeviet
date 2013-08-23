@@ -277,10 +277,6 @@ function nv_save_file_config_global()
 			require ( NV_ROOTDIR . "/includes/rewrite_index.php" );
 		}
 	}
-	elseif( empty( $config_variable['lang_multi'] ) and $config_variable['rewrite_optional'] )
-	{
-		require ( NV_ROOTDIR . "/includes/rewrite_language.php" );
-	}
 
 	$content_config .= "\n";
 
