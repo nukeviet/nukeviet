@@ -23,9 +23,12 @@ function nv_show_tags_list( $q = '' )
 	if( ! empty( $q ) )
 	{
 		$q = strip_punctuation( $q );
-		$sql .= " WHERE `keywords` LIKE '%" . $db->dblikeescape( $q ) . "%' ";
+		$sql .= " WHERE `keywords` LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY `alias` ASC";
 	}
-	$sql .= " ORDER BY `alias` ASC LIMIT 10";
+	else
+	{
+		$sql .= " ORDER BY `alias` ASC LIMIT 10";
+	}
 	$result = $db->sql_query( $sql );
 	$num = $db->sql_numrows( $result );
 
@@ -44,7 +47,10 @@ function nv_show_tags_list( $q = '' )
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'main.loop' );
 		}
-
+		if( empty( $q ) AND $number > 9)
+		{
+			$xtpl->parse( 'main.other' );
+		}
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
 	}
@@ -59,8 +65,12 @@ function nv_show_tags_list( $q = '' )
 
 if( $nv_Request->isset_request( 'del_tid', 'get' ) )
 {
-	$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags` WHERE `tid`=" . $nv_Request->get_int( 'del_tid', 'get', 0 ) );
-
+	$tid = $nv_Request->get_int( 'del_tid', 'get', 0 );
+	if( $tid )
+	{
+		$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags` WHERE `tid`=" . $tid );
+		$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `tid`=" . $tid );
+	}
 	include (NV_ROOTDIR . '/includes/header.php');
 	echo nv_show_tags_list( );
 	include (NV_ROOTDIR . '/includes/footer.php');

@@ -244,6 +244,7 @@ $lang_module['config_source_logo'] = 'Hiển thị logo của nguồn tin';
 $lang_module['tags'] = 'Quản lý Tags';
 $lang_module['add_tags'] = 'Thêm Tags';
 $lang_module['edit_tags']= 'Sửa Tags';
+$lang_module['alias_search']= 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
 
 $lang_module['googleplus'] = 'xác thực Google+ (quyền tác giả)';
 $lang_module['googleplus_1'] = 'Không sử dụng';

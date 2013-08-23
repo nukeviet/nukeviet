@@ -25,5 +25,12 @@
 		</tr>
 		<!-- END: loop -->
 	</tbody>
+	<!-- BEGIN: other -->
+	<tfoot>
+		<tr>
+			<td colspan="5">{LANG.alias_search}</td>
+		</tr>
+	</tfoot>
+	<!-- END: other -->
 </table>
 <!-- END: main -->
