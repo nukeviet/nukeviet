@@ -31,6 +31,10 @@ if( $sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get( 'ou
 @Header( "Content-Language: " . $lang_global['Content_Language'] );
 @Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", strtotime( "-1 day" ) ) . " GMT" );
 @Header( "Expires: " . gmdate( "D, d M Y H:i:s", NV_CURRENTTIME - 60 ) . " GMT" );
+@Header("X-Frame-Options: SAMEORIGIN");
+@Header("X-Content-Type-Options: nosniff");
+@Header("X-XSS-Protection: 1; mode=block");
+
 
 $server_software = $nv_Request->get_string( 'SERVER_SOFTWARE', 'server', '' );
 if( strstr( $server_software, 'Apache/2' ) )
